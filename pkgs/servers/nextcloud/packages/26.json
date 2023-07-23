@@ -60,9 +60,9 @@
     ]
   },
   "files_texteditor": {
-    "sha256": "0rmk14iw34pd81snp3lm01k07wm5j2nh9spcd4j0m43l20b7kxss",
-    "url": "https://github.com/nextcloud-releases/files_texteditor/releases/download/v2.15.0/files_texteditor.tar.gz",
-    "version": "2.15.0",
+    "sha256": "1irvxz29fj9ccplgizwkchc885fqvqsmk9rj4gfwgpa8bgkya1y6",
+    "url": "https://github.com/nextcloud-releases/files_texteditor/releases/download/v2.15.1/files_texteditor-v2.15.1.tar.gz",
+    "version": "2.15.1",
     "description": "This application enables Nextcloud users to open, save and edit text files in the web browser. If enabled, an entry called \"Text file\" in the \"New\" button menu at the top of the web browser appears. When clicked, a new text file opens in the browser and the file can be saved into the current Nextcloud directory. Further, when a text file is clicked in the web browser, it will be opened and editable. If the privileges allow, a user can also edit shared files and save these changes back into the web browser.\nMore information is available in the text editor documentation.",
     "homepage": "https://github.com/nextcloud/files_texteditor",
     "licenses": [
@@ -120,9 +120,9 @@
     ]
   },
   "maps": {
-    "sha256": "04mgk4g2262m3xkyrskq66vq8784pvv183ff1h3d6yilpy4ysjfy",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.0.2/maps-1.0.2.tar.gz",
-    "version": "1.0.2",
+    "sha256": "12dg1bklv2jhmj5dnz4ram6zvgf8kipfz77g1lcn77fyhzqw6y1z",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.1.0/maps-1.1.0.tar.gz",
+    "version": "1.1.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
     "licenses": [
@@ -210,9 +210,9 @@
     ]
   },
   "spreed": {
-    "sha256": "1khnbxifvs2w0xabc7ivsfzx845601f3dq5jg0nxbmrbigcdj7x2",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v16.0.4/spreed-v16.0.4.tar.gz",
-    "version": "16.0.4",
+    "sha256": "09jkq0fiw5h60qvjhld0nrralf2yrdcnpr9q4chw5hq0q710526n",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v16.0.5/spreed-v16.0.5.tar.gz",
+    "version": "16.0.5",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
