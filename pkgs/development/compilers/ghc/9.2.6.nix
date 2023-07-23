@@ -131,6 +131,7 @@ let
 
   buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
+  installCC = pkgsHostTarget.targetPackages.stdenv.cc;
 
   # Sometimes we have to dispatch between the bintools wrapper and the unwrapped
   # derivation for certain tools depending on the platform.
@@ -167,13 +168,6 @@ let
     else pkgsHostTarget.libffi;
 
 in
-
-# C compiler, bintools and LLVM are used at build time, but will also leak into
-# the resulting GHC's settings file and used at runtime. This means that we are
-# currently only able to build GHC if hostPlatform == buildPlatform.
-assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
-assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
-assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation (rec {
   version = "9.2.6";
@@ -370,6 +364,14 @@ stdenv.mkDerivation (rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   postInstall = ''
+    # Make the installed GHC use the host platform's tools.
+    sed -i $out/lib/${targetPrefix}${passthru.haskellCompilerName}/settings \
+      -e "s!$CC!${installCC}/bin/${installCC.targetPrefix}cc!g" \
+      -e "s!$CXX!${installCC}/bin/${installCC.targetPrefix}c++!g" \
+      -e "s!$LD!${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}!g" \
+      -e "s!$AR!${installCC.bintools.bintools}/bin/${installCC.bintools.targetPrefix}ar!g" \
+      -e "s!$RANLIB!${installCC.bintools.bintools}/bin/${installCC.bintools.targetPrefix}ranlib!g"
+
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
   '';
