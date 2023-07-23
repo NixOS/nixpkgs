@@ -39,6 +39,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Prometheus exporter for machine metrics";
     homepage = "https://github.com/prometheus/node_exporter";
+    changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin Frostman ];
   };
