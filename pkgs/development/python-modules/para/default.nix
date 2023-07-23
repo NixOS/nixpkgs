@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -14,9 +14,10 @@ buildPythonPackage rec {
     hash = "sha256-RsMjKunY6p2IbP0IzdESiSICvthkX0C2JVWXukz+8hc=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [ nose ];
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "para" ];
 
