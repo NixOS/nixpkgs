@@ -7,9 +7,9 @@ let
   cfg = config.services.stunnel;
   yesNo = val: if val then "yes" else "no";
 
-  verifyRequiredField = type: field: n: c: {
-    assertion = hasAttr field c;
-    message =  "stunnel: \"${n}\" ${type} configuration - Field ${field} is required.";
+  verifyRequiredField = type: fields: n: c: {
+    assertion = any (field: hasAttr field c) fields;
+    message =  "stunnel: \"${n}\" ${type} configuration - Field ${concatStringsSep " or " fields} is required.";
   };
 
   verifyChainPathAssert = n: c: {
@@ -144,11 +144,11 @@ in
       })
 
       (mapAttrsToList verifyChainPathAssert cfg.clients)
-      (mapAttrsToList (verifyRequiredField "client" "accept") cfg.clients)
-      (mapAttrsToList (verifyRequiredField "client" "connect") cfg.clients)
-      (mapAttrsToList (verifyRequiredField "server" "accept") cfg.servers)
-      (mapAttrsToList (verifyRequiredField "server" "cert") cfg.servers)
-      (mapAttrsToList (verifyRequiredField "server" "connect") cfg.servers)
+      (mapAttrsToList (verifyRequiredField "client" ["accept"]) cfg.clients)
+      (mapAttrsToList (verifyRequiredField "client" ["connect"]) cfg.clients)
+      (mapAttrsToList (verifyRequiredField "server" ["accept" "sni"]) cfg.servers)
+      (mapAttrsToList (verifyRequiredField "server" ["cert"]) cfg.servers)
+      (mapAttrsToList (verifyRequiredField "server" ["connect"]) cfg.servers)
     ];
 
     environment.systemPackages = [ pkgs.stunnel ];

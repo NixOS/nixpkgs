@@ -38,12 +38,13 @@ let
       '';
     };
   };
-  copyCert = src: dest: filename: ''
+  copyThisCert = waitfile: serverfile: src: dest: filename: ''
     from shlex import quote
-    ${src}.wait_for_file("/test-key-and-cert.pem")
-    server_cert = ${src}.succeed("cat /test-cert.pem")
+    ${src}.wait_for_file("${waitfile}")
+    server_cert = ${src}.succeed("cat ${serverfile}")
     ${dest}.succeed("echo %s > ${filename}" % quote(server_cert))
   '';
+  copyCert = copyThisCert "/test-key-and-cert.pem" "/test-cert.pem";
 
 in {
   basicServer = makeTest {
@@ -171,4 +172,56 @@ in {
       wrongclient.succeed('[[ "$(< out)" == "" ]]')
     '';
   };
+
+  sni = makeTest {
+    name = "sni";
+
+    nodes = {
+      client = { environment.systemPackages = with pkgs; [ openssl ]; };
+      server = {
+        imports = [ makeCert serverCommon stunnelCommon ];
+        environment.etc."webroot/index.html".text = "Christine!";
+        services.stunnel.servers.phantom = {
+          sni = "https:phantom";
+          connect = 80;
+          cert = "/phantom-key-and-cert.pem";
+        };
+      system.activationScripts.create-phantom-cert = stringAfter [ "users" ] ''
+        ${pkgs.openssl}/bin/openssl req -batch -x509 -newkey rsa -nodes -out /phantom-cert.pem -keyout /phantom-key.pem -subj /CN=phantom
+        ( umask 077; cat /phantom-key.pem /phantom-cert.pem > /phantom-key-and-cert.pem )
+        chown stunnel /phantom-key.pem /phantom-key-and-cert.pem
+      '';
+      };
+    };
+
+    testScript = ''
+      start_all()
+
+      ${copyThisCert "/test-key-and-cert.pem" "/test-cert.pem" "server" "client" "/authorized-server-cert.crt"}
+      ${copyThisCert "/phantom-key-and-cert.pem" "/phantom-cert.pem" "server" "client" "/phantom-server-cert.crt"}
+      client.succeed("cat /authorized-server-cert.crt /phantom-server-cert.crt > /both-server-certs.crt")
+
+      server.wait_for_unit("simple-webserver")
+      server.wait_for_unit("stunnel")
+
+      client.succeed("curl --fail --cacert /both-server-certs.crt https://server/ > out")
+      client.succeed('[[ "$(< out)" == "Christine!" ]]')
+
+      client.succeed("curl --fail --cacert /both-server-certs.crt --connect-to phantom:443:server:443 https://phantom/ > pout")
+      client.succeed('[[ "$(< pout)" == "Christine!" ]]')
+
+      client.succeed("openssl s_client -connect server:443 < /dev/null > tls-info-0 2>&1")
+      client.succeed("openssl s_client -connect server:443 -servername server < /dev/null > tls-info-server 2>&1")
+      client.succeed("openssl s_client -connect server:443 -servername phantom < /dev/null > tls-info-phantom 2>&1")
+
+      client.succeed("grep 'CN = server' tls-info-0")
+      client.succeed("grep 'CN = server' tls-info-server")
+      client.fail("grep 'CN = server' tls-info-phantom")
+
+      client.fail("grep 'CN = phantom' tls-info-0")
+      client.fail("grep 'CN = phantom' tls-info-server")
+      client.succeed("grep 'CN = phantom' tls-info-phantom")
+    '';
+  };
+
 }
