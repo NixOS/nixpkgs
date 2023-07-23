@@ -1912,6 +1912,8 @@ with pkgs;
 
   unflac = callPackage ../tools/audio/unflac { };
 
+  valeronoi = qt6Packages.callPackage ../tools/misc/valeronoi { };
+
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy = callPackage ../tools/cd-dvd/ventoy { };
