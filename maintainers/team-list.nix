@@ -821,9 +821,7 @@ with lib.maintainers; {
   };
 
   sphinx = {
-    members = [
-      SuperSandro2000
-    ];
+    members = [ ];
     scope = "Maintain Sphinx related packages.";
     shortName = "Sphinx";
   };

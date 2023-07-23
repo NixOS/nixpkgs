@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Typing stubs for typed-ast";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 veehaitch ];
+    maintainers = with maintainers; [ veehaitch ];
   };
 }

@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/duo-labs/py_webauthn";
     changelog = "https://github.com/duo-labs/py_webauthn/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }
