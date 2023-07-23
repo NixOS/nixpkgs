@@ -1047,6 +1047,9 @@ in
     # as it cannot work in the absence of a bootloader.
     boot.loader.directBoot.enable = cfg.directBoot.enable;
 
+    # A bootloader is not required if we are direct booting.
+    boot.enable = !cfg.directBoot.enable;
+
     boot.initrd.kernelModules = optionals (cfg.useNixStoreImage && !cfg.writableStore) [ "erofs" ];
 
     boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
