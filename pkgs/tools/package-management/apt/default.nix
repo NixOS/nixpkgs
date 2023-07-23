@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apt";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/a/apt/apt_${version}.tar.xz";
-    hash = "sha256-QDwBSnBjtrNMh76nesSwIVKYupvD9NzIcIY3kofp1f0=";
+    hash = "sha256-CVySyC/O/0zALdrcJHeFm4JjyI0wFdZ5mqcuMwE1my8=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://salsa.debian.org/apt-team/apt";
     description = "Command-line package management tools used on Debian-based systems";
+    changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${version}/debian/changelog";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];
