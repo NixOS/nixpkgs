@@ -1,0 +1,178 @@
+From ede6ce0deacf75fbda42b2c898666cbe0dcdc1c7 Mon Sep 17 00:00:00 2001
+From: Jacek Galowicz <jacek@galowicz.de>
+Date: Mon, 24 Jul 2023 13:16:07 +0200
+Subject: [PATCH 1/2] Fix include paths of pugixml
+
+---
+ es-app/src/CollectionSystemManager.cpp     | 2 +-
+ es-app/src/Gamelist.cpp                    | 2 +-
+ es-app/src/MetaData.cpp                    | 2 +-
+ es-app/src/SystemData.h                    | 2 +-
+ es-app/src/scrapers/GamesDBJSONScraper.cpp | 2 +-
+ es-app/src/scrapers/ScreenScraper.cpp      | 2 +-
+ es-core/src/InputConfig.cpp                | 2 +-
+ es-core/src/InputManager.cpp               | 2 +-
+ es-core/src/MameNames.cpp                  | 2 +-
+ es-core/src/Settings.cpp                   | 2 +-
+ es-core/src/ThemeData.cpp                  | 2 +-
+ external/pugixml                           | 2 +-
+ 12 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/es-app/src/CollectionSystemManager.cpp b/es-app/src/CollectionSystemManager.cpp
+index 52dca51007..30f62cd8f5 100644
+--- a/es-app/src/CollectionSystemManager.cpp
++++ b/es-app/src/CollectionSystemManager.cpp
+@@ -12,7 +12,7 @@
+ #include "Settings.h"
+ #include "SystemData.h"
+ #include "ThemeData.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+ #include <fstream>
+
+ std::string myCollectionsName = "collections";
+diff --git a/es-app/src/Gamelist.cpp b/es-app/src/Gamelist.cpp
+index 0dd89ca273..c74d14eaaf 100644
+--- a/es-app/src/Gamelist.cpp
++++ b/es-app/src/Gamelist.cpp
+@@ -8,7 +8,7 @@
+ #include "Log.h"
+ #include "Settings.h"
+ #include "SystemData.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+
+ FileData* findOrCreateFile(SystemData* system, const std::string& path, FileType type)
+ {
+diff --git a/es-app/src/MetaData.cpp b/es-app/src/MetaData.cpp
+index 4841030eaf..a71a500e90 100644
+--- a/es-app/src/MetaData.cpp
++++ b/es-app/src/MetaData.cpp
+@@ -2,7 +2,7 @@
+
+ #include "utils/FileSystemUtil.h"
+ #include "Log.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+
+ MetaDataDecl gameDecls[] = {
+ 	// key,         type,                   default,            statistic,  name in GuiMetaDataEd,  prompt in GuiMetaDataEd
+diff --git a/es-app/src/SystemData.h b/es-app/src/SystemData.h
+index 688bc80dc9..5a2e8fa0a2 100644
+--- a/es-app/src/SystemData.h
++++ b/es-app/src/SystemData.h
+@@ -9,7 +9,7 @@
+ #include <string>
+ #include <vector>
+
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+
+ class FileData;
+ class FileFilterIndex;
+diff --git a/es-app/src/scrapers/GamesDBJSONScraper.cpp b/es-app/src/scrapers/GamesDBJSONScraper.cpp
+index 9ca9f200e4..d92841c508 100644
+--- a/es-app/src/scrapers/GamesDBJSONScraper.cpp
++++ b/es-app/src/scrapers/GamesDBJSONScraper.cpp
+@@ -10,7 +10,7 @@
+ #include "Settings.h"
+ #include "SystemData.h"
+ #include "utils/TimeUtil.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+
+ /* When raspbian will get an up to date version of rapidjson we'll be
+    able to have it throw in case of error with the following:
+diff --git a/es-app/src/scrapers/ScreenScraper.cpp b/es-app/src/scrapers/ScreenScraper.cpp
+index 8cd59eba16..cb2f59496d 100644
+--- a/es-app/src/scrapers/ScreenScraper.cpp
++++ b/es-app/src/scrapers/ScreenScraper.cpp
+@@ -7,7 +7,7 @@
+ #include "PlatformId.h"
+ #include "Settings.h"
+ #include "SystemData.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+ #include <cstring>
+
+ using namespace PlatformIds;
+diff --git a/es-core/src/InputConfig.cpp b/es-core/src/InputConfig.cpp
+index 3a85ebbe08..56a6863b18 100644
+--- a/es-core/src/InputConfig.cpp
++++ b/es-core/src/InputConfig.cpp
+@@ -2,7 +2,7 @@
+
+ #include "Log.h"
+ #include "utils/StringUtil.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+
+ //some util functions
+ std::string inputTypeToString(InputType type)
+diff --git a/es-core/src/InputManager.cpp b/es-core/src/InputManager.cpp
+index 94e18ef96d..67a8901c47 100644
+--- a/es-core/src/InputManager.cpp
++++ b/es-core/src/InputManager.cpp
+@@ -6,7 +6,7 @@
+ #include "platform.h"
+ #include "Scripting.h"
+ #include "Window.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+ #include <SDL.h>
+ #include <iostream>
+ #include <assert.h>
+diff --git a/es-core/src/MameNames.cpp b/es-core/src/MameNames.cpp
+index e0dee5c4b6..f05e8646e4 100644
+--- a/es-core/src/MameNames.cpp
++++ b/es-core/src/MameNames.cpp
+@@ -3,7 +3,7 @@
+ #include "resources/ResourceManager.h"
+ #include "utils/FileSystemUtil.h"
+ #include "Log.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+ #include <string.h>
+
+ MameNames* MameNames::sInstance = nullptr;
+diff --git a/es-core/src/Settings.cpp b/es-core/src/Settings.cpp
+index d38bf951f2..d9a2ae057a 100644
+--- a/es-core/src/Settings.cpp
++++ b/es-core/src/Settings.cpp
+@@ -4,7 +4,7 @@
+ #include "Log.h"
+ #include "Scripting.h"
+ #include "platform.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+ #include <algorithm>
+ #include <vector>
+
+diff --git a/es-core/src/ThemeData.cpp b/es-core/src/ThemeData.cpp
+index 52a35c6af4..c223978352 100644
+--- a/es-core/src/ThemeData.cpp
++++ b/es-core/src/ThemeData.cpp
+@@ -7,7 +7,7 @@
+ #include "Log.h"
+ #include "platform.h"
+ #include "Settings.h"
+-#include <pugixml/src/pugixml.hpp>
++#include <pugixml.hpp>
+ #include <algorithm>
+
+ std::vector<std::string> ThemeData::sSupportedViews { { "system" }, { "basic" }, { "detailed" }, { "grid" }, { "video" } };
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index 03b743b7e7..4f932f3b5f 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -2,4 +2,9 @@
+ # package managers are included with the project (in the 'external' folder)
+
+ add_subdirectory("nanosvg")
+-add_subdirectory("pugixml")
++
++find_package(pugixml)
++
++if(NOT pugixml_FOUND)
++  add_subdirectory("pugixml")
++endif()

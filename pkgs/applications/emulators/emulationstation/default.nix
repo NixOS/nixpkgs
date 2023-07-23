@@ -1,39 +1,80 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, boost, eigen
-, freeimage, freetype, libGLU, libGL, SDL2, alsa-lib, libarchive
-, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, boost
+, cmake
+, curl
+, eigen
+, freeimage
+, freetype
+, libGL
+, libGLU
+, libarchive
+, pkg-config
+, pugixml
+, rapidjson
+, SDL2
+, vlc
+}:
 
+let
+
+  version = "2.11.2";
+in
 stdenv.mkDerivation {
   pname = "emulationstation";
-  version = "2.0.1a";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = "Aloshi";
+    owner = "RetroPie";
     repo = "EmulationStation";
-    rev = "646bede3d9ec0acf0ae378415edac136774a66c5";
-    sha256 = "0cm0sq2wri2l9cvab1l0g02za59q7klj0h3p028vr96n6njj4w9v";
+    rev = "v${version}";
+    hash = "sha256-f2gRkp+3Pp2qnvg2RBzaHPpzhAnwx0+5x1Pe3kD90xE=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/Aloshi/EmulationStation/commit/49ccd8fc7a7b1dfd974fc57eb13317c42842f22c.patch";
-      sha256 = "1v5d81l7bav0k5z4vybrc3rjcysph6lkm5pcfr6m42wlz7jmjw0p";
-    })
+    # TODO: remove when merged upstream
+    # (https://github.com/RetroPie/EmulationStation/pull/821)
+   ./fix-pugixml-detection.patch
   ];
 
   postPatch = ''
-    sed -i "7i #include <stack>" es-app/src/views/gamelist/ISimpleGameListView.h
+     substituteInPlace es-core/src/resources/ResourceManager.cpp \
+      --replace 'Utils::FileSystem::getExePath() + "/resources/"' "std::string{\"$out/resources/\"}"
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ alsa-lib boost curl eigen freeimage freetype libarchive libGLU libGL SDL2 ];
+  # project does find_package(RapidJson) instead of find_package(RapidJSON)
+  cmakeFlags = [ "-Wno-dev" ];
 
-  installPhase = ''
-    install -D ../emulationstation $out/bin/emulationstation
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    alsa-lib
+    boost
+    curl
+    eigen
+    freeimage
+    freetype
+    libGL
+    libGLU
+    libarchive
+    pugixml
+    rapidjson
+    SDL2
+    vlc
+  ];
+
+  postInstall = ''
+    cp -r $src/resources $out/
   '';
 
   meta = {
     description = "A flexible emulator front-end supporting keyboardless navigation and custom system themes";
-    homepage = "https://emulationstation.org";
+    homepage = "https://retropie.org/";
     maintainers = [ lib.maintainers.edwtjo ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
