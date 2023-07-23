@@ -239,6 +239,12 @@
 
 assert !enableNativeBignum -> gmp != null;
 
+# GHC does not support building when all 3 platforms are different.
+assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
+
+# It is currently impossible to cross-compile GHC with Hadrian.
+assert stdenv.buildPlatform == stdenv.hostPlatform;
+
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -358,13 +364,6 @@ let
   haskellCompilerName = "ghc-${version}";
 
 in
-
-# C compiler, bintools and LLVM are used at build time, but will also leak into
-# the resulting GHC's settings file and used at runtime. This means that we are
-# currently only able to build GHC if hostPlatform == buildPlatform.
-assert !targetPlatform.isGhcjs -> targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
-assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
-assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation ({
   pname = "${targetPrefix}ghc${variantSuffix}";
