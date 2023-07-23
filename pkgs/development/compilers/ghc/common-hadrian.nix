@@ -184,6 +184,12 @@
 
 assert !enableNativeBignum -> gmp != null;
 
+# GHC does not support building when all 3 platforms are different.
+assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
+
+# It is currently impossible to cross-compile GHC with Hadrian.
+assert stdenv.buildPlatform == stdenv.hostPlatform;
+
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
