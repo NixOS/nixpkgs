@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , cargo
 , fetchPypi
@@ -6,6 +7,7 @@
 , pythonOlder
 , rustc
 , rustPlatform
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -32,6 +34,10 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     cargo
     rustc
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   nativeCheckInputs = [

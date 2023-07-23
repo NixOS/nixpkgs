@@ -17,14 +17,6 @@ let
         };
         doCheck = false;
       });
-      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
-        version = "0.20.0";
-        src = oldAttrs.src.override {
-          rev = "refs/tags/v${version}";
-          hash = "sha256-op28CGpJBcCBiy0WXboaf4JeNRIMX6653QkAV6XW/yI=";
-        };
-        doCheck = false;
-      });
     };
   };
 in
