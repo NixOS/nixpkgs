@@ -443,18 +443,15 @@ in
           ];
       in requiredPackages ++ utils.removePackagesByName optionalPackages config.environment.plasma5.excludePackages;
 
-      systemd.user.services = {
-        plasma-run-with-systemd = {
-          description = "Run KDE Plasma via systemd";
-          wantedBy = [ "basic.target" ];
-          serviceConfig.Type = "oneshot";
-          script = ''
-            ${set_XDG_CONFIG_HOME}
+      systemd.user.services.plasma-run-without-systemd = lib.mkIf (!cfg.runUsingSystemd) {
+        description = "Disable KDE Plasma systemd startup";
+        wantedBy = [ "basic.target" ];
+        serviceConfig.Type = "oneshot";
+        script = ''
+          ${set_XDG_CONFIG_HOME}
 
-            ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
-              --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
-          '';
-        };
+          ${kdeFrameworks.kconfig}/bin/kwriteconfig5 --file startkderc --group General --key systemdBoot false
+        '';
       };
     })
 
