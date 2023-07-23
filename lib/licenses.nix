@@ -657,6 +657,13 @@ in mkLicense lset) ({
     redistributable = true;
   };
 
+  hl3 = {
+    fullName = "Hippocratic License v3.0";
+    url = "https://firstdonoharm.dev/version/3/0/core.txt";
+    free = false;
+    redistributable = true;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
