@@ -153,6 +153,7 @@
 , "git-ssb"
 , "git-standup"
 , "@gitbeaker/cli"
+, "gitmoji-changelog"
 , "gitmoji-cli"
 , "glob"
 , "gramma"
