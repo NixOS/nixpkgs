@@ -4628,6 +4628,8 @@ with pkgs;
 
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
+  wlr-which-key = callPackage ../tools/wayland/wlr-which-key { };
+
   wlrctl = callPackage ../tools/wayland/wlrctl { };
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
