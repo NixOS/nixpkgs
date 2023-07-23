@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
     breakpad
   ];
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DSENTRY_BREAKPAD_SYSTEM=On"
   ];
 

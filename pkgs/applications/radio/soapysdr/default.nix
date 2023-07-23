@@ -38,9 +38,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optional usePython python.pkgs.numpy;
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ] ++ lib.optional usePython "-DUSE_PYTHON_CONFIG=ON";
+  cmakeFlags = lib.optional usePython "-DUSE_PYTHON_CONFIG=ON";
 
   # https://github.com/pothosware/SoapySDR/issues/352
   postPatch = ''

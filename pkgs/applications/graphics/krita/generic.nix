@@ -47,10 +47,11 @@ mkDerivation rec {
       --replace 'PYTHONPATH=''${_krita_python_path}' 'PYTHONPATH=${pythonPath}'
   '';
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
     "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   ];
 
   preInstall = ''

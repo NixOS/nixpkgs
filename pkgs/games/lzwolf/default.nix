@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DGPL=ON"
   ];
 

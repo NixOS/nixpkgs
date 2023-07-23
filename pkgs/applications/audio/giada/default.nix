@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   nativeBuildInputs = [

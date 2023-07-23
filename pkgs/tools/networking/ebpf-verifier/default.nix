@@ -39,8 +39,6 @@ stdenv.mkDerivation {
     yaml-cpp
   ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   installPhase = ''
     runHook preInstall
 
