@@ -4,6 +4,7 @@
 , cacert
 , cached-property
 , cffi
+, fetchFromGitHub
 , fetchPypi
 , isPyPy
 , libgit2
@@ -11,6 +12,19 @@
 , pytestCheckHook
 , pythonOlder
 }:
+
+let
+  libgit2' = libgit2.overrideAttrs (_: rec {
+    version = "1.6.4";
+
+    src = fetchFromGitHub {
+      owner = "libgit2";
+      repo = "libgit2";
+      rev = "v${version}";
+      hash = "sha256-lW3mokVKsbknVj2xsxEbeZH4IdKZ0aIgGutzenS0Eh0=";
+    };
+  });
+in
 
 buildPythonPackage rec {
   pname = "pygit2";
@@ -29,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [
-    libgit2
+    libgit2'
   ];
 
   propagatedBuildInputs = [
@@ -57,14 +71,6 @@ buildPythonPackage rec {
   # Tests require certificates
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-  # setup.py check is broken
-  # https://github.com/libgit2/pygit2/issues/868
-  dontUseSetuptoolsCheck = true;
-
-  # TODO: Test collection is failing
-  # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582681068
-  doCheck = false;
 
   pythonImportsCheck = [
     "pygit2"
