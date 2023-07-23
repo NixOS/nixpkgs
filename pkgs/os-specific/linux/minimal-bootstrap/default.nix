@@ -15,6 +15,12 @@ lib.makeScope
 
     bash_2_05 = callPackage ./bash/2.nix { tinycc = tinycc-mes; };
 
+    bash = callPackage ./bash {
+      bootBash = bash_2_05;
+      gcc = gcc2;
+      glibc = glibc22;
+    };
+
     binutils = callPackage ./binutils {
       bash = bash_2_05;
       gcc = gcc2;
@@ -123,6 +129,7 @@ lib.makeScope
     inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
 
     test = kaem.runCommand "minimal-bootstrap-test" {} ''
+      echo ${bash.tests.get-version}
       echo ${bash_2_05.tests.get-version}
       echo ${binutils.tests.get-version}
       echo ${binutils-mes.tests.get-version}
