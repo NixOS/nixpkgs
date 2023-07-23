@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -69,10 +69,17 @@ in
         description = lib.mdDoc "Enable the XFCE screensaver.";
       };
     };
+
+    environment.xfce.excludePackages = mkOption {
+      default = [];
+      example = literalExpression "[ pkgs.xfce.xfce4-volumed-pulse ]";
+      type = types.listOf types.package;
+      description = lib.mdDoc "Which packages XFCE should exclude from the default environment";
+    };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs.xfce // pkgs; [
+    environment.systemPackages = utils.removePackagesByName (with pkgs.xfce // pkgs; [
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
@@ -121,7 +128,7 @@ in
       ] ++ optionals (!cfg.noDesktop) [
         xfce4-panel
         xfdesktop
-      ] ++ optional cfg.enableScreensaver xfce4-screensaver;
+      ] ++ optional cfg.enableScreensaver xfce4-screensaver) config.environment.xfce.excludePackages;
 
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
