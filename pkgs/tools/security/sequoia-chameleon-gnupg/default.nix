@@ -5,21 +5,22 @@
 , pkg-config
 , nettle
 , openssl
+, sqlite
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-chameleon-gnupg";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8aKT39gq6o7dnbhKbDxewd4R2e2IsbYU8vaDwYemes8=";
+    hash = "sha256-sxjWd02INP2Dr5RQR7+dHHIQkGoCx6CZmvrq9x9zVC8=";
   };
 
-  cargoHash = "sha256-Z6cXCHLrK+BcIeVCKH2l8n9SivZsZPhXGhaMObn6rjo=";
+  cargoHash = "sha256-+0MLfq2Gjs4oh9bC8OEQsx0RHxlzB/HlIgyXtwzvGUY=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     nettle
     openssl
+    sqlite
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];

@@ -25,6 +25,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  patches = [ ./disable-auto-update.patch ];
+
   preBuild = ''
     go generate ./...
   '';

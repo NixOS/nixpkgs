@@ -234,6 +234,8 @@ with pkgs;
 
   align = callPackage ../tools/text/align { };
 
+  alire = callPackage ../development/tools/build-managers/alire { };
+
   althttpd = callPackage ../servers/althttpd { };
 
   amqpcat = callPackage ../development/tools/amqpcat { };
@@ -5356,6 +5358,8 @@ with pkgs;
 
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
+  gorilla-cli = callPackage ../tools/llm/gorilla-cli { };
+
   godu = callPackage ../tools/misc/godu { };
 
   goss = callPackage ../tools/misc/goss { };
@@ -6575,7 +6579,7 @@ with pkgs;
 
   circleci-cli = callPackage ../development/tools/misc/circleci-cli { };
 
-  circus = callPackage ../tools/networking/circus { };
+  circus = with python3Packages; toPythonApplication circus;
 
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
 
@@ -14329,6 +14333,8 @@ with pkgs;
   xprintidle = callPackage ../tools/X11/xprintidle { };
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng { };
+
+  xssstate = callPackage ../tools/X11/xssstate { };
 
   xscast = callPackage ../applications/video/xscast { };
 
@@ -34748,7 +34754,7 @@ with pkgs;
 
   shavee = callPackage ../applications/misc/shavee { };
 
-  shell_gpt = callPackage ../tools/misc/shell_gpt { };
+  shell_gpt = callPackage ../tools/llm/shell_gpt { };
 
   shfmt = callPackage ../tools/text/shfmt { };
 
