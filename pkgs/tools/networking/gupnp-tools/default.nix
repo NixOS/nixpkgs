@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
     gtksourceview4
   ];
 
+  # new libxml2 version
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
