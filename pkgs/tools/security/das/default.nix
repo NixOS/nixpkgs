@@ -5,19 +5,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "das";
-  version = "0.3.6";
+  version = "0.3.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snovvcrash";
     repo = "DivideAndScan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UFuIy19OUiS8VmmfGm0F4hI4s4BU5b4ZVh40bFGiLfk=";
+    hash = "sha256-a9gnEBTvZshw42M/GrpCgjZh6FOzL45aZqGRyeHO0ec=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'networkx = "^2.8.4"' 'networkx = "*"'
+      --replace 'networkx = "^2.8.4"' 'networkx = "*"' \
+      --replace 'pandas = "^1.4.2"' 'pandas = "*"'
   '';
 
   nativeBuildInputs = with python3.pkgs; [
