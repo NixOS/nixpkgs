@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Type annotations for boto3.s3";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
