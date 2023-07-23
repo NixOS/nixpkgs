@@ -5,14 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "urlscan";
-  version = "0.9.10";
+  version = "1.0.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = pname;
-    rev = version;
-    hash = "sha256-lCOOVAdsr5LajBGY7XUi4J5pJqm5rOH5IMKhA6fju5w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IvCdc4f784hBM+TEa0zIACz/1/FUnEpGxHUGiS85tt8=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = with python3.pkgs; [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     urwid
