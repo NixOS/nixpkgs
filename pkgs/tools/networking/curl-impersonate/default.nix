@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , callPackage
 , buildGoModule
 , installShellFiles
@@ -144,7 +143,7 @@ let
         nativeBuildInputs = [ unzip ];
 
         proxyVendor = true;
-      }).go-modules;
+      }).goModules;
     };
 
     meta = with lib; {
