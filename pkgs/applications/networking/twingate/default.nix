@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://twingate.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ tonyshkurenko ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
