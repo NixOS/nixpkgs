@@ -5237,27 +5237,27 @@ self: super: with self; {
 
   jaraco-abode = callPackage ../development/python-modules/jaraco-abode { };
 
-  jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
+  jaraco-classes = callPackage ../development/python-modules/jaraco-classes { };
 
-  jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
+  jaraco-collections = callPackage ../development/python-modules/jaraco-collections { };
 
   jaraco-email = callPackage ../development/python-modules/jaraco-email { };
 
   jaraco-context = callPackage ../development/python-modules/jaraco-context { };
 
-  jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
+  jaraco-functools = callPackage ../development/python-modules/jaraco-functools { };
 
-  jaraco_itertools = callPackage ../development/python-modules/jaraco_itertools { };
+  jaraco-itertools = callPackage ../development/python-modules/jaraco-itertools { };
 
-  jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
+  jaraco-logging = callPackage ../development/python-modules/jaraco-logging { };
 
   jaraco-net = callPackage ../development/python-modules/jaraco-net { };
 
-  jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
+  jaraco-stream = callPackage ../development/python-modules/jaraco-stream { };
 
   jaraco-test = callPackage ../development/python-modules/jaraco-test { };
 
-  jaraco_text = callPackage ../development/python-modules/jaraco_text { };
+  jaraco-text = callPackage ../development/python-modules/jaraco-text { };
 
   jarowinkler = callPackage ../development/python-modules/jarowinkler { };
 

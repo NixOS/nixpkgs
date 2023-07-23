@@ -4,7 +4,7 @@
 , pythonOlder
 , autocommand
 , importlib-resources
-, jaraco_functools
+, jaraco-functools
 , jaraco-context
 , inflect
 , pathlib2
@@ -13,14 +13,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jaraco.text";
+  pname = "jaraco-text";
   version = "3.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jaraco.text";
+    inherit version;
     hash = "sha256-Mzpd8hSPcTlxhgfN81L+HZUWKXGnKZw4Dcwk2rAWiYA=";
   };
 
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     autocommand
     jaraco-context
-    jaraco_functools
+    jaraco-functools
     inflect
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources

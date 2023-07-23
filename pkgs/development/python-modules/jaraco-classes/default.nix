@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jaraco.classes";
+  pname = "jaraco-classes";
   version = "3.1.1";
   disabled = isPy27;
 
