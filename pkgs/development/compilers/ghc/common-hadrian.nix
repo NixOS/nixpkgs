@@ -165,9 +165,10 @@
 , #  Whether to build sphinx documentation.
   # TODO(@sternenseemann): Hadrian ignores the --docs flag if finalStage = Stage1
   enableDocs ? (
-    # Docs disabled if we are building on musl because it's a large task to keep
-    # all `sphinx` dependencies building in this environment.
-    !stdenv.buildPlatform.isMusl
+    # Docs disabled if we are building on musl or cross-building because it's a
+    # large task to keep all `sphinx` dependencies building in this environment.
+    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform)
+    && !stdenv.buildPlatform.isMusl
   )
 
 , # Whether to disable the large address space allocator
