@@ -31212,6 +31212,8 @@ with pkgs;
 
   globe-cli = callPackage ../applications/misc/globe-cli { };
 
+  gnmic = callPackage ../applications/networking/gnmic { };
+
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { };
 
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
