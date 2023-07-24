@@ -29,7 +29,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://webpy.org/";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ layus SuperSandro2000 ];
+    maintainers = with maintainers; [ layus ];
   };
 
 }

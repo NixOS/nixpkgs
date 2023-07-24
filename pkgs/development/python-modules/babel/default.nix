@@ -52,6 +52,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-babel/babel/releases/tag/v${version}";
     description = "Collection of internationalizing tools";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

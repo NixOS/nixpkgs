@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
-    maintainers = with maintainers; [ desiderius SuperSandro2000 ];
+    maintainers = with maintainers; [ desiderius ];
     license = licenses.bsd2;
   };
 }

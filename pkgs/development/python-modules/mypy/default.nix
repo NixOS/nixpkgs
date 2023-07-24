@@ -114,6 +114,6 @@ buildPythonPackage rec {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
+    maintainers = with maintainers; [ martingms lnl7 ];
   };
 }
