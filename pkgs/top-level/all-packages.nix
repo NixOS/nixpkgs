@@ -12504,6 +12504,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rustdesk-server = callPackage ../servers/rustdesk-server { };
+
   rustypaste = callPackage ../servers/rustypaste { };
 
   rustypaste-cli = callPackage ../tools/misc/rustypaste-cli { };
