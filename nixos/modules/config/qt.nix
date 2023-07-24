@@ -18,6 +18,8 @@ let
       pkgs.adwaita-qt
       pkgs.qgnomeplatform-qt6
       pkgs.adwaita-qt6
+      # https://github.com/FedoraQt/QGnomePlatform/commit/2c3bd4019b61e1abf46bdcc547cf4683e7b9e5ba
+      pkgs.libsForQt5.qqc2-desktop-style
     ]
     else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins pkgs.qt6Packages.qt6gtk2 ]
     else if isQt5ct then [ pkgs.libsForQt5.qt5ct pkgs.qt6Packages.qt6ct ]
