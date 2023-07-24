@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "USELIBCAP=1" "USELIBWRAP=1" ];
 
+  postInstall = ''
+    # install all flavours
+    install -p sslh-fork "$out/sbin/sslh-fork"
+    install -p sslh-select "$out/sbin/sslh-select"
+    ln -sf sslh-fork "$out/sbin/sslh"
+  '';
+
   installFlags = [ "PREFIX=$(out)" ];
 
   hardeningDisable = [ "format" ];
