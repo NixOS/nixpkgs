@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/src";
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
   buildInputs = [ gtk4 alsa-lib ];
+  patches = [ ./fix-desktop-integration.patch ];
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
