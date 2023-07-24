@@ -684,8 +684,8 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.30.0";
-          sha256 = "sha256-E/zgKNxKH05qzLkoyq66qBDbkNJ7liBvU+ZSxw825c0=";
+          version = "2023.32.0";
+          sha256 = "sha256-phyPQqDgsYunF5FLqPevw8ZZG4Tw9qxjTOU4/kNGKU8=";
         };
         meta = {
           license = lib.licenses.mit;
