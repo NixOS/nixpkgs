@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gitlab-elasticsearch-indexer";
-  version = "4.3.5";
+  version = "4.3.6";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
     rev = "v${version}";
-    sha256 = "sha256-2idvN92H4Cc1W71gADrsuUl3+f2weAvL2MOP19NO/3I=";
+    sha256 = "sha256-v+iV/ogPEkU7iWSzZDLkm9PdOY9E87Mo6tyce+4KNoo=";
   };
 
   vendorHash = "sha256-7LqzuBVYqpPI2thIJu4kQgCZGMlBlKI8L+j7AdUYrgQ=";
