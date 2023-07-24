@@ -1,22 +1,34 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
-  # Simular to types.enum of `attrNames attrset` but maps merged result to `attrset.${value}`
-  attrEnum = attrset:
-    types.enum (attrNames attrset) // {
+  # Similar to types.enum of `attrNames attrset` but maps merged result to `attrset.${value}`
+  attrEnum =
+    attrset:
+    types.enum (attrNames attrset)
+    // {
       merge = loc: defs: attrset.${mergeEqualOption loc defs};
-      functor = types.enum.functor // { type = attrEnum; payload = attrset; binOp = a: b: a // b; };
+      functor = types.enum.functor // {
+        type = attrEnum;
+        payload = attrset;
+        binOp = a: b: a // b;
+      };
     };
 
-  /* Credential handling pipeline:
-  *   # Buildtime
-  *     * User calls `mkSecret` for every credential he want to be substituted at runtime
-  *     * Credential placeholder (after `credential.finalize`) is propagated in config to `/nix/store`
-  *   # Runtime
-  *     * Systemd ensures that given path exists (`RequiresMountsFor` and `AssertPathExists`)
-  *     * Systemd reads credential to `$CREDENTIALS_DIRECTORY/<id>`
-  *     * Script copies config files from `/nix/store` to `/tmp` and tries to substitute credentials from `$CREDENTIALS_DIRECTORY`
+  /*
+    Credential handling pipeline:
+    *   # Buildtime
+    *     * User calls `mkSecret` for every credential he want to be substituted at runtime
+    *     * Credential placeholder (after `credential.finalize`) is propagated in config to `/nix/store`
+    *   # Runtime
+    *     * Systemd ensures that given path exists (`RequiresMountsFor` and `AssertPathExists`)
+    *     * Systemd reads credential to `$CREDENTIALS_DIRECTORY/<id>`
+    *     * Script copies config files from `/nix/store` to `/tmp` and tries to substitute credentials from `$CREDENTIALS_DIRECTORY`
   */
   credential = rec {
     attributeName = "_credentialFilePath";
@@ -32,13 +44,10 @@ let
     start = "@";
     stop = "@";
     # Substitute all credentials with placeholder
-    finalize =
-      mapAttrsRecursiveCond
-        (attrs: ! type.check attrs)
-        (_: attrs:
-          if isAttrs attrs && type.check attrs
-          then (start + attrs.${attributeName}.id + stop)
-          else attrs);
+    finalize = mapAttrsRecursiveCond (attrs: !type.check attrs) (
+      _: attrs:
+      if isAttrs attrs && type.check attrs then (start + attrs.${attributeName}.id + stop) else attrs
+    );
   };
 in
 {
@@ -50,14 +59,34 @@ in
       format = rec {
         type =
           with types;
-          let base = [ bool int str credential.type ]; in
-          attrsOf (nullOr (oneOf (base ++ [ (listOf (oneOf base)) type ])))
-          // { description = "nested (bool, int, string or list of bool, int or string)"; };
+          let
+            base = [
+              bool
+              int
+              str
+              credential.type
+            ];
+          in
+          attrsOf (
+            nullOr (
+              oneOf (
+                base
+                ++ [
+                  (listOf (oneOf base))
+                  type
+                ]
+              )
+            )
+          )
+          // {
+            description = "nested (bool, int, string or list of bool, int or string)";
+          };
       };
 
       # Hopefully helpful enum mappings
       templates = rec {
-        attrEnum' = attrset: description:
+        attrEnum' =
+          attrset: description:
           mkOption {
             type = with types; nullOr (either int (attrEnum attrset));
             default = null;
@@ -65,41 +94,37 @@ in
           };
         # https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#i2cp-parameters
         i2cp = {
-          leaseSetType = attrEnum'
-            {
-              "standard" = 3;
-              "encrypted" = 5;
-            }
-            "Type of LeaseSet to be sent";
-          leaseSetEncType = attrEnum'
-            {
-              "ELGAMAL" = 0;
-              "ECIES_P256_SHA256_AES256CBC" = 1;
-              "ECIES_X25519_AEAD" = 4;
-            }
-            "List of LeaseSet encryption types";
-          leaseSetAuthType = attrEnum'
-            {
-              "none" = 0;
-              "DH" = 1;
-              "PSK" = 2;
-            }
-            "Authentication type for encrypted LeaseSet";
+          leaseSetType = attrEnum' {
+            "standard" = 3;
+            "encrypted" = 5;
+          } "Type of LeaseSet to be sent";
+          leaseSetEncType = attrEnum' {
+            "ELGAMAL" = 0;
+            "ECIES_P256_SHA256_AES256CBC" = 1;
+            "ECIES_X25519_AEAD" = 4;
+          } "List of LeaseSet encryption types";
+          leaseSetAuthType = attrEnum' {
+            "none" = 0;
+            "DH" = 1;
+            "PSK" = 2;
+          } "Authentication type for encrypted LeaseSet";
         };
         # This option is part of both client and server tunnels but not documented as i2cp parameter
-        signaturetype = attrEnum'
-          {
-            "ECDSA-P256" = 1;
-            "ECDSA-P384" = 2;
-            "ECDSA-P521" = 3;
-            "ED25519-SHA512" = 7;
-            "GOSTR3410-A-GOSTR3411-256" = 9;
-            "GOSTR3410-TC26-A-GOSTR3411-512" = 10;
-            "RED25519-SHA512" = 11;
-          }
-          ''Signature type for new keys.
-          `ED25519-SHA512` is default.
-          `RED25519-SHA512` is recommended for encrypted leaseset.'';
+        signaturetype =
+          attrEnum'
+            {
+              "ECDSA-P256" = 1;
+              "ECDSA-P384" = 2;
+              "ECDSA-P521" = 3;
+              "ED25519-SHA512" = 7;
+              "GOSTR3410-A-GOSTR3411-256" = 9;
+              "GOSTR3410-TC26-A-GOSTR3411-512" = 10;
+              "RED25519-SHA512" = 11;
+            }
+            ''
+              Signature type for new keys.
+                        `ED25519-SHA512` is default.
+                        `RED25519-SHA512` is recommended for encrypted leaseset.'';
       };
     in
     {
@@ -120,52 +145,68 @@ in
         default = true;
         description = mdDoc "If true, i2pd will be restarted on failure (does not affect clean exit)";
       };
-      config =
-        mkOption {
-          description = mdDoc ''
-            Free-form main i2pd configuration. Options are passed to `i2pd.conf`.
-            See `https://i2pd.readthedocs.io/en/latest/user-guide/configuration/`
-          '';
-          type = types.submodule {
-            freeformType = format.type;
-            options = {
-              loglevel = mkOption {
-                type = types.enum [ "debug" "info" "warn" "error" ];
-                default = "error";
-                description = mdDoc "The log level";
-              };
-              bandwidth = mkOption {
-                type = with types; nullOr (oneOf [
-                  int
-                  (enum [ "L" "O" "P" "X" ])
-                  (attrEnum { "32KBps" = "L"; "256KBps" = "O"; "2048KBps" = "P"; "UNLIMITED" = "X"; })
-                ]);
-                default = null;
-                description = mdDoc ''
-                  Set a router bandwidth limit: integer in KBps or alias.
-                  Note that integer bandwith will be rounded.
-                  If not set, {command}`i2pd` defaults to `32KBps`.
-                '';
-              };
+      config = mkOption {
+        description = mdDoc ''
+          Free-form main i2pd configuration. Options are passed to `i2pd.conf`.
+          See `https://i2pd.readthedocs.io/en/latest/user-guide/configuration/`
+        '';
+        type = types.submodule {
+          freeformType = format.type;
+          options = {
+            loglevel = mkOption {
+              type = types.enum [
+                "debug"
+                "info"
+                "warn"
+                "error"
+              ];
+              default = "error";
+              description = mdDoc "The log level";
             };
-            config = mapAttrsRecursive (_: mkDefault) {
-              http.enabled = true;
-              httpproxy.enabled = true;
-              socksproxy.enabled = true;
-              sam.enabled = false;
-              bob.enabled = false;
-              i2cp.enabled = false;
-              i2pcontrol.enabled = false;
-
-              precomputation.elgamal = true;
+            bandwidth = mkOption {
+              type =
+                with types;
+                nullOr (oneOf [
+                  int
+                  (enum [
+                    "L"
+                    "O"
+                    "P"
+                    "X"
+                  ])
+                  (attrEnum {
+                    "32KBps" = "L";
+                    "256KBps" = "O";
+                    "2048KBps" = "P";
+                    "UNLIMITED" = "X";
+                  })
+                ]);
+              default = null;
+              description = mdDoc ''
+                Set a router bandwidth limit: integer in KBps or alias.
+                Note that integer bandwidth will be rounded.
+                If not set, {command}`i2pd` defaults to `32KBps`.
+              '';
             };
           };
-          example = ''
-            {
-              meshnets.yggdrasil = true; # Enable yggdrassil network support
-            }
-          '';
+          config = mapAttrsRecursive (_: mkDefault) {
+            http.enabled = true;
+            httpproxy.enabled = true;
+            socksproxy.enabled = true;
+            sam.enabled = false;
+            bob.enabled = false;
+            i2cp.enabled = false;
+            i2pcontrol.enabled = false;
+
+            precomputation.elgamal = true;
+          };
         };
+        example = ''
+          {
+            meshnets.yggdrasil = true; # Enable yggdrasil network support
+          }
+        '';
+      };
 
       # Server/generic tunnels
       serverTunnels = mkOption {
@@ -174,20 +215,25 @@ in
           Mnemonic: we serving some service to others.
           See `https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#servergeneric-tunnels`
         '';
-        type = types.attrsOf (types.submodule {
-          freeformType = format.type;
-          options = {
-            host = mkOption {
-              type = types.either types.str credential.type;
-              description = mdDoc "IP address of server (on this address i2pd will send data from I2P)";
+        type = types.attrsOf (
+          types.submodule {
+            freeformType = format.type;
+            options = {
+              host = mkOption {
+                type = types.either types.str credential.type;
+                description = mdDoc "IP address of server (on this address i2pd will send data from I2P)";
+              };
+              port = mkOption {
+                type = types.port;
+                description = mdDoc "Port of server tunnel (on this port i2pd will send data from I2P)";
+              };
+              inherit (templates) signaturetype;
+            }
+            // {
+              inherit (templates) i2cp;
             };
-            port = mkOption {
-              type = types.port;
-              description = mdDoc "Port of server tunnel (on this port i2pd will send data from I2P)";
-            };
-            inherit (templates) signaturetype;
-          } // templates.i2cp;
-        });
+          }
+        );
         default = { };
       };
 
@@ -198,60 +244,79 @@ in
           Mnemonic: we connect to someone as a client.
           See `https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#client-tunnels`
         '';
-        type = types.attrsOf (types.submodule {
-          freeformType = format.type;
-          options = {
-            port = mkOption {
-              type = types.port;
-              description = mdDoc "Port of client tunnel (on this port i2pd will receive data)";
+        type = types.attrsOf (
+          types.submodule {
+            freeformType = format.type;
+            options = {
+              port = mkOption {
+                type = types.port;
+                description = mdDoc "Port of client tunnel (on this port i2pd will receive data)";
+              };
+              destination = mkOption {
+                type = types.either types.str credential.type;
+                description = mdDoc "Remote endpoint, I2P hostname or b32.i2p address";
+              };
+              inherit (templates) signaturetype;
+            }
+            // {
+              inherit (templates) i2cp;
             };
-            destination = mkOption {
-              type = types.either types.str credential.type;
-              description = mdDoc "Remote endpoint, I2P hostname or b32.i2p address";
-            };
-            inherit (templates) signaturetype;
-          } // templates.i2cp;
-        });
+          }
+        );
         default = { };
       };
 
       # Interface function
       mkSecret = mkOption {
-        type = types.anything // { description = "Function that takes absolute path to runtime credential file"; };
+        type = types.anything // {
+          description = "Function that takes absolute path to runtime credential file";
+        };
         readOnly = true;
-        default = path:
-          if types.path.check path
-          then { "${credential.attributeName}" = path; }
-          else throw "Argument is not of type `lib.types.path`";
+        default =
+          path:
+          if types.path.check path then
+            { "${credential.attributeName}" = path; }
+          else
+            throw "Argument is not of type `lib.types.path`";
         description = mdDoc ''
           Pass content of a file to any free-formed option at runtime.
           Files are read before service starts by `systemd` daemon (with root privileges, so file permissions are ignored).
         '';
-        example =
-          ''
-            {
-              clientTunnels."example".destination = with config.services.i2pd; mkSecret "/run/secrets/example-tunnel-destination";
-            }
-          '';
+        example = ''
+          {
+            clientTunnels."example".destination = with config.services.i2pd; mkSecret "/run/secrets/example-tunnel-destination";
+          }
+        '';
       };
     };
 
   imports =
     let
       # Replicates `mkRemovedOptionModule`
-      deprecate = message: options:
-        [
-          ({ config, ... }: {
+      deprecate = message: options: [
+        (
+          { config, ... }:
+          {
             config.assertions = forEach options (option: {
-              assertion = ! hasAttrByPath (splitString "." option) config;
+              assertion = !hasAttrByPath (splitString "." option) config;
               message = "The option definition `config.${option}` no longer has any effect; please remove it.\n${message}";
             });
-          })
-        ];
+          }
+        )
+      ];
     in
-    deprecate "This option is defined by the `i2pd` module implementation."
-      (map (v: "services.i2pd.config.${v}")
-        [ "conf" "tunconf" "pidfile" "log" "logfile" "datadir" "daemon" "service" ]);
+    deprecate "This option is defined by the `i2pd` module implementation." (
+      map (v: "services.i2pd.config.${v}") [
+        "conf"
+        "tunconf"
+        "pidfile"
+        "log"
+        "logfile"
+        "datadir"
+        "daemon"
+        "service"
+      ]
+    );
 
   ###### Implementation ######
 
@@ -259,76 +324,88 @@ in
     let
       cfg = config.services.i2pd;
 
-      /* Configuration generator
-      *  Simular to `pkgs.formats.ini`, but with few distinctions:
-      *   * Out-of-section options are allowed and printed on top of a file.
-      *   * Nested sub-values (`a.b.c = ...`) coerced to (`"a.b.c" = ...`).
+      /*
+        Configuration generator
+        *  Similar to `pkgs.formats.ini`, but with few distinctions:
+        *   * Out-of-section options are allowed and printed on top of a file.
+        *   * Nested sub-values (`a.b.c = ...`) coerced to (`"a.b.c" = ...`).
       */
       format =
         let
-          print = v:
-            if isList v
-            then concatMapStringsSep "," print v
-            else generators.mkValueStringDefault { } v;
-          unwrapPrefixes = attrset:
+          print =
+            v: if isList v then concatMapStringsSep "," print v else generators.mkValueStringDefault { } v;
+          unwrapPrefixes =
+            attrset:
             let
-              unwrap = (prefix: attrset:
-                concatLists
-                  (mapAttrsToList
-                    (k: v:
-                      if isAttrs v
-                      then unwrap (prefix + k + ".") v
-                      else [{ name = prefix + k; value = v; }])
-                    attrset));
+              unwrap = (
+                prefix: attrset:
+                concatLists (
+                  mapAttrsToList (
+                    k: v:
+                    if isAttrs v then
+                      unwrap (prefix + k + ".") v
+                    else
+                      [
+                        {
+                          name = prefix + k;
+                          value = v;
+                        }
+                      ]
+                  ) attrset
+                )
+              );
             in
-            listToAttrs
-              (unwrap "" attrset);
+            listToAttrs (unwrap "" attrset);
           mkKeyValue = generators.mkKeyValueDefault { mkValueString = print; } " = ";
-          removeNulls = filterAttrsRecursive (_: v: ! isNull v);
+          removeNulls = filterAttrsRecursive (_: v: !isNull v);
         in
         {
-          config.generate = name: attrs:
+          config.generate =
+            name: attrs:
             let
-              toIni = attrset:
-                generators.toINI
-                  { inherit mkKeyValue; }
-                  (removeNulls attrset);
+              toIni = attrset: generators.toINI { inherit mkKeyValue; } (removeNulls attrset);
             in
-            pkgs.writeText name
-              (strings.removePrefix "[general]\n"
-                (toIni
-                  { "general" = filterAttrs (_: v: ! isAttrs v) attrs; }) + "\n"
-              + (toIni
-                (mapAttrs (_: v: unwrapPrefixes v) (filterAttrs (_: v: isAttrs v) attrs))));
+            pkgs.writeText name (
+              strings.removePrefix "[general]\n" (toIni {
+                "general" = filterAttrs (_: v: !isAttrs v) attrs;
+              })
+              + "\n"
+              + (toIni (mapAttrs (_: v: unwrapPrefixes v) (filterAttrs (_: v: isAttrs v) attrs)))
+            );
 
-          tunnels.generate = name: attrs:
-            (pkgs.formats.ini { listToValue = print; inherit mkKeyValue; }).generate name
+          tunnels.generate =
+            name: attrs:
+            (pkgs.formats.ini {
+              listToValue = print;
+              inherit mkKeyValue;
+            }).generate
+              name
               (mapAttrs (_: unwrapPrefixes) (removeNulls attrs));
         };
 
       # I2pd has no official config validator, but daemon prints an error and exits
       # if some option is misspelled. This approach is not great yet better than no check.
       # Note: Distortion of `tunnels.conf` brings no warnings
-      validate.config = configPath:
-        pkgs.runCommand "check-i2pd.conf"
-          { nativeBuildInputs = [ cfg.package ]; }
-          ''
-            ${cfg.package}/bin/i2pd --loglevel=error --datadir=/build --conf=${configPath} 2>&1 |
-              grep 'unrecognised option' |
-              tee /build/check-output &
-            sleep 2
-            [ -z "$(cat /build/check-output)" ] && (cp ${configPath} $out; exit 0) || exit 1
-          '';
+      validate.config =
+        configPath:
+        pkgs.runCommand "check-i2pd.conf" { nativeBuildInputs = [ cfg.package ]; } ''
+          ${cfg.package}/bin/i2pd --loglevel=error --datadir=/build --conf=${configPath} 2>&1 |
+            grep 'unrecognised option' |
+            tee /build/check-output &
+          sleep 2
+          [ -z "$(cat /build/check-output)" ] && (cp ${configPath} $out; exit 0) || exit 1
+        '';
 
       # List of all passed credentials: `[ { id = ...; path = ...; } ... ]`
       credentials =
         let
-          scan = attrs:
-            forEach
-              (collect (credential.type.check) attrs)
-              (getAttr credential.attributeName);
+          scan = attrs: forEach (collect (credential.type.check) attrs) (getAttr credential.attributeName);
         in
-        concatMap scan [ cfg.config cfg.clientTunnels cfg.serverTunnels ];
+        concatMap scan [
+          cfg.config
+          cfg.clientTunnels
+          cfg.serverTunnels
+        ];
 
     in
     mkIf cfg.enable {
@@ -350,44 +427,56 @@ in
 
           # Load credentials
           LoadCredential = forEach credentials (cred: "${cred.id}:${cred.path}");
-          ExecStartPre =
-            "${pkgs.writeShellScriptBin "i2pd-load-credentials"
-              ''
-                set -e -o errexit -o pipefail -o nounset -o errtrace
-                ids=($(ls "$CREDENTIALS_DIRECTORY"))
-                # For every cli argument
-                for arg in $@; do
-                  # Split argument at "=", assign first part to `out` and second part to `in`
-                  arg=(${"$"}{arg//=/ }); out="${"$"}{arg[0]}"; in="${"$"}{arg[1]}"
-                  # Clone file, assign permissions
-                  cp "$in" "$out"; chmod u=rw,g=,o= "$out"
-                  # Try substitute all known credentials
-                  for id in "${"$"}{ids[@]}"; do
-                    ${pkgs.replace-secret}/bin/replace-secret ${credential.start}"$id"${credential.stop} "$CREDENTIALS_DIRECTORY/$id" "$out"
-                  done
-                done
-              ''
-              }/bin/i2pd-load-credentials ${escapeShellArgs [
-                ("%T/conf=" + # "%T" is temporary directory (usually `/tmp`)
-                  validate.config
-                    (format.config.generate "i2pd.conf" (credential.finalize cfg.config)))
-                ("%T/tunconf=" +
-                  format.tunnels.generate "i2pd-tunnels.conf"
-                    (mapAttrs'
-                      (k: v: nameValuePair "client-${k}" (v // { "type" = "client"; }))
-                      (credential.finalize cfg.clientTunnels)
-                    // mapAttrs'
-                      (k: v: nameValuePair "server-${k}" (v // { "type" = "server"; }))
-                      (credential.finalize cfg.serverTunnels)))
-              ]
-            }";
+          ExecStartPre = "${pkgs.writeShellScriptBin "i2pd-load-credentials" ''
+            set -o errexit -o nounset
+
+            # If no credential declared, `CREDENTIALS_DIRECTORY` is unset
+            ids=(${"$"}{CREDENTIALS_DIRECTORY:+$(ls "$CREDENTIALS_DIRECTORY")})
+
+            # For every cli argument
+            for arg in "$@"; do
+              # Split argument at "=", assign first part to `out` and second part to `in`
+              arg=(${"$"}{arg//=/ })
+              out="${"$"}{arg[0]}"
+              in="${"$"}{arg[1]}"
+
+              # Copy file, set permissions
+              cp "$in" "$out"
+              chmod u=rw,g=,o= "$out"
+
+              # Try substitute all known credentials
+              for id in "${"$"}{ids[@]}"; do
+                ${pkgs.replace-secret}/bin/replace-secret ${credential.start}"$id"${credential.stop} "$CREDENTIALS_DIRECTORY/$id" "$out"
+              done
+            done
+          ''}/bin/i2pd-load-credentials ${
+            escapeShellArgs [
+              (
+                "%T/conf="
+                # "%T" is temporary directory (usually `/tmp`)
+                + validate.config (format.config.generate "i2pd.conf" (credential.finalize cfg.config))
+              )
+              (
+                "%T/tunconf="
+                + format.tunnels.generate "i2pd-tunnels.conf" (
+                  mapAttrs' (k: v: nameValuePair "client-${k}" (v // { "type" = "client"; })) (
+                    credential.finalize cfg.clientTunnels
+                  )
+                  // mapAttrs' (k: v: nameValuePair "server-${k}" (v // { "type" = "server"; })) (
+                    credential.finalize cfg.serverTunnels
+                  )
+                )
+              )
+            ]
+          }";
 
           ExecStart = "${cfg.package}/bin/i2pd ${
             cli.toGNUCommandLineShell { } {
               "datadir" = "%S/i2pd"; # "%S" is state directory (usually `/var/lib`)
-              "conf"    = "%T/conf";
+              "conf" = "%T/conf";
               "tunconf" = "%T/tunconf";
-            }}";
+            }
+          }";
           # Auto restart
           Restart = if cfg.autoRestart then "on-failure" else "no";
           # Graceful shutdown
@@ -423,4 +512,3 @@ in
       };
     };
 }
-
