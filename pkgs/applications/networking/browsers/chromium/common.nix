@@ -9,6 +9,7 @@
 , python3, perl
 , which
 , llvmPackages
+, rustc
 # postPatch:
 , pkgsBuildHost
 # configurePhase:
@@ -249,7 +250,7 @@ let
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
 
-    '' + lib.optionalString stdenv.isAarch64 ''
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64) ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     '' + lib.optionalString ungoogled ''
@@ -303,11 +304,16 @@ let
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
-      clang_base_path = "${llvmPackages.clang}";
+      clang_base_path = "${llvmPackages.stdenv.cc}";
       use_qt = false;
       # To fix the build as we don't provide libffi_pic.a
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
+    } // lib.optionalAttrs (chromiumVersionAtLeast "115") {
+      # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
+      # We do intentionally not set rustc_version as nixpkgs will never do incremental
+      # rebuilds, thus leaving this empty is fine.
+      rust_sysroot_absolute = "${rustc}";
     } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
