@@ -29,11 +29,11 @@ let
     folder.enable
   ) cfg.settings.folders);
 
-  updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
+  jq = "${pkgs.jq}/bin/jq";
+  updateConfig = pkgs.writers.writeBash "merge-syncthing-config" (''
     set -efu
 
     # be careful not to leak secrets in the filesystem or in process listings
-
     umask 0077
 
     # get the api key by parsing the config.xml
@@ -51,25 +51,85 @@ let
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
+  '' +
 
-    # query the old config
-    old_cfg=$(curl ${cfg.guiAddress}/rest/config)
-
-    # generate the new config by merging with the NixOS config options
-    new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c ${escapeShellArg ''. * ${builtins.toJSON cleanedConfig} * {
-        "devices": ('${escapeShellArg (builtins.toJSON devices)}'${optionalString (cfg.settings.devices == {} || ! cfg.overrideDevices) " + .devices"}),
-        "folders": ('${escapeShellArg (builtins.toJSON folders)}'${optionalString (cfg.settings.folders == {} || ! cfg.overrideFolders) " + .folders"})
-    }''})
-
-    # send the new config
-    curl -X PUT -d "$new_cfg" ${cfg.guiAddress}/rest/config
-
+  /* Syncthing's rest API for the folders and devices is almost identical.
+  Hence we iterate them using lib.pipe and generate shell commands for both at
+  the sime time. */
+  (lib.pipe {
+    # The attributes below are the only ones that are different for devices /
+    # folders.
+    devs = {
+      new_conf_IDs = map (v: v.id) devices;
+      GET_IdAttrName = "deviceID";
+      override = cfg.overrideDevices;
+      conf = devices;
+      baseAddress = "${cfg.guiAddress}/rest/config/devices";
+    };
+    dirs = {
+      new_conf_IDs = map (v: v.id) folders;
+      GET_IdAttrName = "id";
+      override = cfg.overrideFolders;
+      conf = folders;
+      baseAddress = "${cfg.guiAddress}/rest/config/folders";
+    };
+  } [
+    # Now for each of these attributes, write the curl commands that are
+    # identical to both folders and devices.
+    (mapAttrs (conf_type: s:
+      # We iterate the `conf` list now, and run a curl -X POST command for each, that
+      # should update that device/folder only.
+      lib.pipe s.conf [
+        # Quoting https://docs.syncthing.net/rest/config.html:
+        #
+        # > PUT takes an array and POST a single object. In both cases if a
+        # given folder/device already exists, it’s replaced, otherwise a new
+        # one is added.
+        #
+        # What's not documented, is that using PUT will remove objects that
+        # don't exist in the array given. That's why we use here `POST`, and
+        # only if s.override == true then we DELETE the relevant folders
+        # afterwards.
+        (map (new_cfg: ''
+          curl -d ${lib.escapeShellArg (builtins.toJSON new_cfg)} -X POST ${s.baseAddress}
+        ''))
+        (lib.concatStringsSep "\n")
+      ]
+      /* If we need to override devices/folders, we iterate all currently configured
+      IDs, via another `curl -X GET`, and we delete all IDs that are not part of
+      the Nix configured list of IDs
+      */
+      + lib.optionalString s.override ''
+        old_conf_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} --raw-output '.[].${s.GET_IdAttrName}')"
+        for id in ''${old_conf_${conf_type}_ids}; do
+          if echo ${lib.concatStringsSep " " s.new_conf_IDs} | grep -q $id; then
+            continue
+          else
+            curl -X DELETE ${s.baseAddress}/$id
+          fi
+        done
+      ''
+    ))
+    builtins.attrValues
+    (lib.concatStringsSep "\n")
+  ]) +
+  /* Now we update the other settings defined in cleanedConfig which are not
+  "folders" or "devices". */
+  (lib.pipe cleanedConfig [
+    builtins.attrNames
+    (lib.subtractLists ["folders" "devices"])
+    (map (subOption: ''
+      curl -X PUT -d ${lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})} \
+        ${cfg.guiAddress}/rest/config/${subOption}
+    ''))
+    (lib.concatStringsSep "\n")
+  ]) + ''
     # restart Syncthing if required
     if curl ${cfg.guiAddress}/rest/config/restart-required |
-       ${pkgs.jq}/bin/jq -e .requiresRestart > /dev/null; then
+       ${jq} -e .requiresRestart > /dev/null; then
         curl -X POST ${cfg.guiAddress}/rest/system/restart
     fi
-  '';
+  '');
 in {
   ###### interface
   options = {
