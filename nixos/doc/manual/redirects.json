@@ -527,6 +527,9 @@
   "module-services-nextcloud-basic-usage": [
     "index.html#module-services-nextcloud-basic-usage"
   ],
+  "module-services-nextcloud-external-database": [
+    "index.html#module-services-nextcloud-external-database"
+  ],
   "module-services-nextcloud-pitfalls-during-upgrade": [
     "index.html#module-services-nextcloud-pitfalls-during-upgrade"
   ],
