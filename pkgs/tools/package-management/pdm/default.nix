@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, fetchPypi }:
+{ lib, python3, fetchFromGitHub, fetchPypi, nix-update-script }:
 let
   python = python3.override {
     # override resolvelib due to
@@ -24,13 +24,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.7.0";
+  version = "2.7.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4dyu/neMFX/U1RuI0ZEBzdbONIHvdWyvpy1Gu5iMAcg=";
+    hash = "sha256-x3+N8cy31wHwBeOkMNpLihlqKCTiPmnS1avrr69uUM4=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,7 @@ buildPythonApplication rec {
     blinker
     cacheyou
     certifi
+    cachecontrol
     findpython
     installer
     packaging
@@ -88,6 +89,8 @@ buildPythonApplication rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://pdm.fming.dev";
