@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/src";
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
   buildInputs = [ gtk4 alsa-lib ];
+  postInstall = ''
+      sed -Ei "s/(Exec\s?=\s?).*/\1alsa-scarlett-gui\nTryExec=alsa-scarlett-gui/" $out/share/applications/vu.b4.${pname}.desktop
+  '';
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
