@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
       the LS_COLORS environment variable is set and output is to tty.
     '';
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
