@@ -313,3 +313,6 @@ nixos/lib/make-single-disk-zfs-image.nix  @raitobezarius
 nixos/lib/make-multi-disk-zfs-image.nix   @raitobezarius
 nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
 nixos/tests/zfs.nix                       @raitobezarius
+
+# Linux Kernel
+pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs
