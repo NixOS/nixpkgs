@@ -624,7 +624,7 @@ let
               unmatchedDefns = [];
             }
           else if optionDecls != [] then
-              if all (x: x.options.type.name == "submodule") optionDecls
+              if all (x: x.options.type.name or null == "submodule") optionDecls
               # Raw options can only be merged into submodules. Merging into
               # attrsets might be nice, but ambiguous. Suppose we have
               # attrset as a `attrsOf submodule`. User declares option

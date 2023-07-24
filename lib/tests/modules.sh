@@ -365,6 +365,9 @@ checkConfigError \
   config.set \
   ./declare-set.nix ./declare-enable-nested.nix
 
+# Check that that merging of option collisions doesn't depend on type being set
+checkConfigError 'The option .group..*would be a parent of the following options, but its type .<no description>. does not support nested options.\n\s*- option.s. with prefix .group.enable..*' config.group.enable ./merge-typeless-option.nix
+
 # Test that types.optionType merges types correctly
 checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
 checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix
