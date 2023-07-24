@@ -5215,7 +5215,6 @@ broken-packages:
   - sydtest-rabbitmq # test failure in job https://hydra.nixos.org/build/225569272 at 2023-06-28
   - sydtest-webdriver # test failure in job https://hydra.nixos.org/build/225552802 at 2023-06-28
   - syfco
-  - sym
   - symantic
   - symantic-cli
   - symantic-http-client

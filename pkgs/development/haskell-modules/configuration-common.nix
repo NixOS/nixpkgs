@@ -2794,4 +2794,7 @@ self: super: {
   # Flaky QuickCheck tests
   # https://github.com/Haskell-Things/ImplicitCAD/issues/441
   implicit = dontCheck super.implicit;
+
+  # The hackage source is somehow missing a file present in the repo (tests/ListStat.hs).
+  sym = dontCheck super.sym;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
