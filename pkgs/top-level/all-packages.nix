@@ -9068,6 +9068,10 @@ with pkgs;
 
   ike-scan = callPackage ../tools/security/ike-scan { };
 
+  ilspycmd = callPackage ../development/tools/ilspycmd {
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
   imapsync = callPackage ../tools/networking/imapsync { };
 
   imgur-screenshot = callPackage ../tools/graphics/imgur-screenshot { };
