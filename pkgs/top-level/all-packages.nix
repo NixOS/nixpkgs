@@ -7381,6 +7381,8 @@ with pkgs;
 
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix { };
 
+  a4term = callPackage ../tools/misc/a4term { };
+
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
   erofs-utils = callPackage ../tools/filesystems/erofs-utils { };
