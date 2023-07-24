@@ -1,24 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, libpng, openjpeg }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, libpng, openjpeg, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libicns";
-  version = "0.8.1";
+  version = "unstable-2022-04-10";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/icns/${pname}-${version}.tar.gz";
-    sha256 = "1hjm8lwap7bjyyxsyi94fh5817xzqhk4kb5y0b7mb6675xw10prk";
+  src = fetchgit {
+    name = "libicns";
+    url = "https://git.code.sf.net/p/icns/code";
+    rev = "921f972c461c505e5ac981aaddbdfdde97e8bb2b";
+    hash = "sha256-YeO0rlTujDNmrdJ3DRyl3TORswF2KFKA+wVUxJo8Dno";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/libi/libicns/0.8.1-3.1/debian/patches/support-libopenjp2.patch";
-      sha256 = "0ss298lyzvydxvaxsadi6kbbjpwykd86jw3za76brcsg2dpssgas";
-    })
-  ];
-
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libpng openjpeg ];
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${openjpeg.dev}/include/${openjpeg.incDir}" ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ libpng openjpeg zlib ];
 
   meta = with lib; {
     description = "Library for manipulation of the Mac OS icns resource format";
