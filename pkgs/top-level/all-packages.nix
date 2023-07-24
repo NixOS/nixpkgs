@@ -15597,14 +15597,12 @@ with pkgs;
 
   gbforth = callPackage ../development/compilers/gbforth { };
 
-  inherit (let
-      num =
-        if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
-        else 12;
-      numS = toString num;
-    in {
-      gcc = pkgs.${"gcc${numS}"};
-      gccFun = callPackage (../development/compilers/gcc + "/${numS}");
+  default-gcc-version =
+    if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
+    else 12;
+  inherit ({
+      gcc = pkgs.${"gcc${toString default-gcc-version}"};
+      gccFun = callPackage (../development/compilers/gcc + "/${toString default-gcc-version}");
     }) gcc gccFun;
   gcc-unwrapped = gcc.cc;
 
