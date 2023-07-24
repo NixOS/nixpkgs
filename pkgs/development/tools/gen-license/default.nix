@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     description = "Create licenses for your projects right from your terminal";
     homepage = "https://github.com/nexxeln/license-generator";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.ryanccn ];
   };
 }
