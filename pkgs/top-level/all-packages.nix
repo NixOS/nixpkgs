@@ -40317,6 +40317,8 @@ with pkgs;
 
   mnemonicode = callPackage ../misc/mnemonicode { };
 
+  moonfire-nvr = callPackage ../misc/moonfire-nvr { };
+
   mysql-workbench = callPackage ../applications/misc/mysql-workbench (let mysql = mysql80; in {
     gdal = gdal.override {
       libmysqlclient = mysql;
