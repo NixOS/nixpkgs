@@ -31,6 +31,13 @@ buildPythonPackage rec {
       url = "https://github.com/postmanlabs/httpbin/commit/5cc81ce87a3c447a127e4a1a707faf9f3b1c9b6b.patch";
       hash = "sha256-SbEWjiqayMFYrbgAPZtSsXqSyCDUz3z127XgcKOcrkE=";
     })
+    (fetchpatch {
+      # Fix auth incompatibility with Werkzeug 2.3.0+
+      url = "https://github.com/psf/httpbin/commit/b4e9808a628d1460346ec8790d810586f03bb4ba.patch";
+      hash = "sha256-rJdVQXMGrqphsiZqZrypt7Pe7FQgAgXcYELlsISAY/E=";
+    })
+    # Don't pass bytes into get() method in test
+    ./base-64-test.patch
   ];
 
   propagatedBuildInputs = [

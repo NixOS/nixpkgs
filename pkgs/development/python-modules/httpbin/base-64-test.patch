@@ -1,0 +1,24 @@
+From 7facfd8ea1983a4dd8e759d11155e81a682c16a1 Mon Sep 17 00:00:00 2001
+From: Theodore Ni <3806110+tjni@users.noreply.github.com>
+Date: Tue, 8 Aug 2023 17:23:31 -0700
+Subject: [PATCH] Don't pass bytes into get() method in test
+
+---
+ test_httpbin.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test_httpbin.py b/test_httpbin.py
+index 9bc90663..7e8e76a5 100755
+--- a/test_httpbin.py
++++ b/test_httpbin.py
+@@ -168,8 +168,8 @@ def test_anything(self):
+ 
+     def test_base64(self):
+         greeting = u'Здравствуй, мир!'
+-        b64_encoded = _string_to_base64(greeting)
+-        response = self.app.get(b'/base64/' + b64_encoded)
++        b64_encoded = _string_to_base64(greeting).decode('utf8')
++        response = self.app.get('/base64/' + b64_encoded)
+         content = response.data.decode('utf-8')
+         self.assertEqual(greeting, content)
+ 
