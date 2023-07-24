@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.xserver.desktopManager.xfce;
+  excludePackages = config.environment.xfce.excludePackages;
 
 in
 {
@@ -128,7 +129,7 @@ in
       ] ++ optionals (!cfg.noDesktop) [
         xfce4-panel
         xfdesktop
-      ] ++ optional cfg.enableScreensaver xfce4-screensaver) config.environment.xfce.excludePackages;
+      ] ++ optional cfg.enableScreensaver xfce4-screensaver) excludePackages;
 
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
@@ -172,9 +173,9 @@ in
     programs.zsh.vteIntegration = mkDefault true;
 
     # Systemd services
-    systemd.packages = with pkgs.xfce; [
+    systemd.packages = utils.removePackagesByName (with pkgs.xfce; [
       xfce4-notifyd
-    ];
+    ]) excludePackages;
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
   };
