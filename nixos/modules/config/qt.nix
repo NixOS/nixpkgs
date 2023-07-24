@@ -6,7 +6,7 @@ let
 
   cfg = config.qt;
 
-  isQGnome = cfg.platformTheme == "gnome" && builtins.elem cfg.style ["adwaita" "adwaita-dark"];
+  isQGnome = cfg.platformTheme == "gnome" && builtins.elem cfg.style ["adwaita" "adwaita-dark" "none"];
   isQtStyle = cfg.platformTheme == "gtk2" && !(builtins.elem cfg.style ["adwaita" "adwaita-dark"]);
   isQt5ct = cfg.platformTheme == "qt5ct";
   isLxqt = cfg.platformTheme == "lxqt";
@@ -80,6 +80,7 @@ in
           "gtk2"
           "motif"
           "plastique"
+          "none"
         ];
         example = "adwaita";
         relatedPackages = [
@@ -96,6 +97,8 @@ in
             [adwaita](https://github.com/FedoraQt/adwaita-qt)
           - `cleanlooks`, `gtk2`, `motif`, `plastique`: Use styles from
             [qtstyleplugins](https://github.com/qt/qtstyleplugins)
+          - `none`: Don't set QT_STYLE_OVERRIDE, can be useful when
+            theme engine handles the style for you
         '';
       };
     };
@@ -105,7 +108,7 @@ in
 
     environment.variables = {
       QT_QPA_PLATFORMTHEME = cfg.platformTheme;
-      QT_STYLE_OVERRIDE = mkIf (! (isQt5ct || isLxqt || isKde)) cfg.style;
+      QT_STYLE_OVERRIDE = mkIf (!(isQt5ct || isLxqt || isKde) && (cfg.style != "none")) cfg.style;
     };
 
     environment.profileRelativeSessionVariables = let
