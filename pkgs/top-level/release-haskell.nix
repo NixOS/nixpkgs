@@ -537,6 +537,7 @@ let
         compilerNames.ghc927
         compilerNames.ghc928
         compilerNames.ghc945
+        compilerNames.ghc962
       ];
     })
     {
