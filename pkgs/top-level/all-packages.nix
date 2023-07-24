@@ -24884,6 +24884,8 @@ with pkgs;
 
   stxxl = callPackage ../development/libraries/stxxl { };
 
+  sv-lang = callPackage ../applications/science/electronics/sv-lang { };
+
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
   unqlite = lowPrio (callPackage ../development/libraries/unqlite { });
