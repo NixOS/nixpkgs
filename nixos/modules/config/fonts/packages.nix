@@ -6,6 +6,7 @@ in
 {
   imports = [
     (lib.mkRemovedOptionModule [ "fonts" "enableCoreFonts" ] "Use fonts.packages = [ pkgs.corefonts ]; instead.")
+    (lib.mkRenamedOptionModule [ "fonts" "enableDefaultFonts " ] [ "fonts" "enableDefaultPackages" ])
     (lib.mkRenamedOptionModule [ "fonts" "fonts" ] [ "fonts" "packages" ])
   ];
 
@@ -18,7 +19,7 @@ in
         description = lib.mdDoc "List of primary font packages.";
       };
 
-      enableDefaultFonts = lib.mkOption {
+      enableDefaultPackages = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = lib.mdDoc ''
@@ -30,7 +31,7 @@ in
   };
 
   config = {
-    fonts.packages = lib.mkIf cfg.enableDefaultFonts (with pkgs; [
+    fonts.packages = lib.mkIf cfg.enableDefaultPackages (with pkgs; [
       dejavu_fonts
       freefont_ttf
       gyre-fonts # TrueType substitutes for standard PostScript fonts
