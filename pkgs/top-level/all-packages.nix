@@ -39971,11 +39971,11 @@ with pkgs;
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops {})
     mkKops
-    kops_1_24
     kops_1_25
     kops_1_26
+    kops_1_27
     ;
-  kops = kops_1_26;
+  kops = kops_1_27;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
