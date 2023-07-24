@@ -2453,6 +2453,7 @@ with pkgs;
   dlx = callPackage ../applications/emulators/dlx { };
 
   dosbox = callPackage ../applications/emulators/dosbox {
+    inherit (darwin.apple_sdk.frameworks ) OpenGL;
     SDL = if stdenv.isDarwin then SDL else SDL_compat;
   };
 

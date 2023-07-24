@@ -9,6 +9,7 @@
 , graphicsmagick
 , libGL
 , libGLU
+, OpenGL
 , libpng
 , makeDesktopItem
 }:
@@ -32,10 +33,13 @@ stdenv.mkDerivation rec {
     SDL
     SDL_net
     SDL_sound
+    libpng
+  ] ++ (if stdenv.hostPlatform.isDarwin then [
+    OpenGL
+  ] else [
     libGL
     libGLU
-    libpng
-  ];
+  ]);
 
   hardeningDisable = [ "format" ];
 
