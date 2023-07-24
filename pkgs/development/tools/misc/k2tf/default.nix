@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/sl1pm4t/k2tf";
     license = licenses.mpl20;
     maintainers = [ maintainers.flokli ];
+    broken = true; # vendor isn't reproducible with go > 1.20: nix-build -A k2tf.go-modules --check
   };
 }
