@@ -3,23 +3,23 @@
 { system ? builtins.currentSystem, pkgs, lib, fetchurl, installShellFiles }:
 let
   shaMap = {
-    i686-linux = "0nl770f9dkc430hfaral7z13fa6c2rmqf761sc338h26fsp89h8s";
-    x86_64-linux = "07534i39n4ldn74lq9lgff6fiymp35rk0qd53axavhqg43bqv7cp";
-    aarch64-linux = "0z8z0vd09pf4hz6wzxins8kd5dmwn93f1kjpyg7c3l2fkv3qp4zd";
-    x86_64-darwin = "05ibvxhm629i3lr4nvj8vqxd68rdjd64jn2h131a681njlm8zq1z";
-    aarch64-darwin = "1lzwm57901mrmqm7add1flzdb4fi667pfbd6sijias2wbsm96rq4";
+    i686-linux = "1cp47chc0vsh62vczkbr9m43zw3klwdkyn3bb10z9rkp38qhqx8c";
+    x86_64-linux = "0mkx2csj5sfwda79if58m46dzdbxzkf98h31294sg3lqpc8jgw47";
+    aarch64-linux = "188v4c24xdmjhcvb4hps42y324v8jqdmkwablgwwdbf5ykhvirlb";
+    x86_64-darwin = "1d38dqz99ird60k8c54isah3rw66jaiqhnaliv6x7ch37cx641m0";
+    aarch64-darwin = "0bg3wvvy37vr5plx83aclzj727yc9df3pn7arbgr19c20w14qila";
   };
 
   urlMap = {
-    i686-linux = "https://github.com/elwin/franz/releases/download/v1.0.6/franz_Linux_i386.tar.gz";
-    x86_64-linux = "https://github.com/elwin/franz/releases/download/v1.0.6/franz_Linux_x86_64.tar.gz";
-    aarch64-linux = "https://github.com/elwin/franz/releases/download/v1.0.6/franz_Linux_arm64.tar.gz";
-    x86_64-darwin = "https://github.com/elwin/franz/releases/download/v1.0.6/franz_Darwin_x86_64.tar.gz";
-    aarch64-darwin = "https://github.com/elwin/franz/releases/download/v1.0.6/franz_Darwin_arm64.tar.gz";
+    i686-linux = "https://github.com/elwin/franz/releases/download/v1.0.7/franz_Linux_i386.tar.gz";
+    x86_64-linux = "https://github.com/elwin/franz/releases/download/v1.0.7/franz_Linux_x86_64.tar.gz";
+    aarch64-linux = "https://github.com/elwin/franz/releases/download/v1.0.7/franz_Linux_arm64.tar.gz";
+    x86_64-darwin = "https://github.com/elwin/franz/releases/download/v1.0.7/franz_Darwin_x86_64.tar.gz";
+    aarch64-darwin = "https://github.com/elwin/franz/releases/download/v1.0.7/franz_Darwin_arm64.tar.gz";
   };
 in pkgs.stdenv.mkDerivation {
   pname = "franz";
-  version = "1.0.6";
+  version = "1.0.7";
   src = fetchurl {
     url = urlMap.${system};
     sha256 = shaMap.${system};
