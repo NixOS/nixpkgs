@@ -7015,6 +7015,8 @@ self: super: with self; {
 
   nine = callPackage ../development/python-modules/nine { };
 
+  ninja-python = callPackage ../development/python-modules/ninja { };
+
   nipy = callPackage ../development/python-modules/nipy { };
 
   nipype = callPackage ../development/python-modules/nipype {
@@ -7874,6 +7876,8 @@ self: super: with self; {
   picobox = callPackage ../development/python-modules/picobox { };
 
   picos = callPackage ../development/python-modules/picos { };
+
+  picosvg = callPackage ../development/python-modules/picosvg { };
 
   piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
 
