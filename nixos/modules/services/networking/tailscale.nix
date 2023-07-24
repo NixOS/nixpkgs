@@ -49,6 +49,15 @@ in {
         When set to `server` or `both`, IP forwarding will be enabled.
       '';
     };
+
+    authKeyFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/run/secrets/tailscale_key";
+      description = lib.mdDoc ''
+        A file containing the auth key.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -80,6 +89,21 @@ in {
       # version mismatches on restart for compatibility with other
       # linux distros.
       stopIfChanged = false;
+    };
+
+    systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
+      after = ["tailscale.service"];
+      wants = ["tailscale.service"];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+      };
+      script = with pkgs; ''
+        status=$(${config.systemd.package}/bin/systemctl show -P StatusText tailscaled.service)
+        if [[ $status != Connected* ]]; then
+          ${pkgs.tailscale}/bin/tailscale up --auth-key 'file:${cfg.authKeyFile}'
+        fi
+      '';
     };
 
     boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
