@@ -356,7 +356,7 @@ in
       qt = {
         enable = mkDefault true;
         platformTheme = mkDefault "gnome";
-        style = mkDefault "adwaita";
+        style = mkDefault "none";
       };
 
       networking.networkmanager.enable = mkDefault true;
