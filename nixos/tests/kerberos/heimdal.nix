@@ -7,7 +7,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
         "FOO.BAR".acl = [{principal = "admin"; access = ["add" "cpw"];}];
       };
     };
-    krb5 = {
+    security.krb5 = {
       enable = true;
       package = pkgs.heimdal;
       settings = {

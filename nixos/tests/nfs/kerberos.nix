@@ -1,7 +1,7 @@
 import ../make-test-python.nix ({ pkgs, lib, ... }:
 
 let
-  krb5 = {
+  security.krb5 = {
     enable = true;
     settings = {
       domain_realm."nfs.test" = "NFS.TEST";
@@ -34,7 +34,7 @@ in
 
   nodes = {
     client = { lib, ... }:
-      { inherit krb5 users;
+      { inherit security users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";
@@ -50,7 +50,7 @@ in
       };
 
     server = { lib, ...}:
-      { inherit krb5 users;
+      { inherit security users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";

@@ -5,11 +5,11 @@ let
 
   mkRemovedOptionModule' = name: reason: mkRemovedOptionModule ["krb5" name] reason;
   mkRemovedOptionModuleCfg = name: mkRemovedOptionModule' name ''
-    The option `krb5.${name}' has been removed. Use `krb5.settings.${name}' for
-    structured configuration.
+    The option `krb5.${name}' has been removed. Use
+    `security.krb5.settings.${name}' for structured configuration.
   '';
 
-  cfg = config.krb5;
+  cfg = config.security.krb5;
   format = import ./krb5-conf-format.nix { inherit pkgs lib; } { };
 in {
   imports = [
@@ -22,12 +22,12 @@ in {
     (mkRemovedOptionModuleCfg "config")
     (mkRemovedOptionModuleCfg "extraConfig")
     (mkRemovedOptionModule' "kerberos" ''
-      The option `krb5.kerberos' has been moved to `krb5.package'.
+      The option `krb5.kerberos' has been moved to `security.krb5.package'.
     '')
   ];
 
   options = {
-    krb5 = {
+    security.krb5 = {
       enable = mkOption {
         default = false;
         description = mdDoc "Enable and configure Kerberos utilities";

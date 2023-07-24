@@ -9,7 +9,7 @@ import ../make-test-python.nix ({ pkgs, ...} : {
 
   nodes.machine =
     { pkgs, ... }: {
-      krb5 = {
+      security.krb5 = {
         enable = true;
         package = pkgs.krb5;
         settings = {
