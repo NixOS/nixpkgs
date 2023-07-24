@@ -9168,6 +9168,12 @@
       fingerprint = "5A9A 1C9B 2369 8049 3B48  CF5B 81A1 5409 4816 2372";
     }];
   };
+  l0b0 = {
+    email = "victor@engmark.name";
+    github = "l0b0";
+    githubId = 168301;
+    name = "Victor Engmark";
+  };
   l3af = {
     email = "L3afMeAlon3@gmail.com";
     matrix = "@L3afMe:matrix.org";
@@ -14531,6 +14537,12 @@
     githubId = 889991;
     name = "Ryan Artecona";
   };
+  ryanccn = {
+    email = "hello@ryanccn.dev";
+    github = "ryanccn";
+    githubId = 70191398;
+    name = "Ryan Cao";
+  };
   ryane = {
     email = "ryanesc@gmail.com";
     github = "ryane";
@@ -14584,6 +14596,12 @@
     github = "ryneeverett";
     githubId = 3280280;
     name = "Ryne Everett";
+  };
+  ryota-ka = {
+    email = "ok@ryota-ka.me";
+    github = "ryota-ka";
+    githubId = 7309170;
+    name = "Ryota Kameoka";
   };
   rytone = {
     email = "max@ryt.one";
@@ -17603,6 +17621,12 @@
     github = "Vonfry";
     githubId = 3413119;
     name = "Vonfry";
+  };
+  votava = {
+    email = "votava@gmail.com";
+    github = "janvotava";
+    githubId = 367185;
+    name = "Jan Votava";
   };
   vq = {
     email = "vq@erq.se";

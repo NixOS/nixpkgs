@@ -13204,6 +13204,8 @@ self: super: with self; {
 
   vat-moss = callPackage ../development/python-modules/vat-moss { };
 
+  vcard = callPackage ../development/python-modules/vcard { };
+
   vcrpy = callPackage ../development/python-modules/vcrpy { };
 
   vcver = callPackage ../development/python-modules/vcver { };
