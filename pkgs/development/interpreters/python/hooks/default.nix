@@ -237,9 +237,7 @@ in {
       propagatedBuildInputs = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
 
-  wrapPython = callPackage ../wrap-python.nix {
-    inherit (pkgs.buildPackages) makeWrapper;
-  };
+  wrapPython = callPackage ../wrap-python.nix { };
 
   sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
