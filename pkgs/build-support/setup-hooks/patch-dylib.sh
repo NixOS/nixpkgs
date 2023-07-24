@@ -5,7 +5,7 @@
 # where library dependencies can be found.
 #
 # For example if a.dylib depended on /usr/lib/b.dylib, there's a chance the latter
-# does not actually exist and can be found somewhere in /nix/store/XXX-libb/lib/b.dylib.
+# does not actually exist and can be found somewhere in /nix/store/XXX-lib/lib/b.dylib.
 #
 # Dependencies:
 #  - ripgrep
