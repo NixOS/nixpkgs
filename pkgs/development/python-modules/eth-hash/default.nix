@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "The Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

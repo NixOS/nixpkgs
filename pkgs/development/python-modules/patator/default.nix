@@ -59,6 +59,6 @@ buildPythonPackage rec {
     description = "Multi-purpose brute-forcer";
     homepage = "https://github.com/lanjelot/patator";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ y0no SuperSandro2000 ];
+    maintainers = with maintainers; [ y0no ];
   };
 }

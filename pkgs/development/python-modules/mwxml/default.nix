@@ -4,8 +4,8 @@
 , jsonschema
 , mwcli
 , mwtypes
-, pytestCheckHook
 , nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -23,9 +23,10 @@ buildPythonPackage rec {
     mwtypes
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [ nose ];
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
 
   disabledTests = [
     "test_page_with_discussion"

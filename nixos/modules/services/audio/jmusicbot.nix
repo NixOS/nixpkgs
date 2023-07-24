@@ -44,5 +44,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ SuperSandro2000 ];
+  meta.maintainers = with maintainers; [ ];
 }

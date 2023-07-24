@@ -94,7 +94,7 @@ buildPythonPackage rec {
     description = "Python version of the Playwright testing and automation library";
     homepage = "https://github.com/microsoft/playwright-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ techknowlogick yrd SuperSandro2000 ];
+    maintainers = with maintainers; [ techknowlogick yrd ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

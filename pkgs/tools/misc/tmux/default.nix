@@ -102,6 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/tmux/tmux/raw/${finalAttrs.version}/CHANGES";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thammers fpletz SuperSandro2000 srapenne ];
+    maintainers = with lib.maintainers; [ thammers fpletz srapenne ];
   };
 })
