@@ -3,6 +3,8 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, setuptools
+, wheel
 , watchdog
 , ephemeral-port-reserve
 , pytest-timeout
@@ -15,16 +17,21 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.2.3";
-  format = "setuptools";
+  version = "2.3.6";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Werkzeug";
     inherit version;
-    hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+    hash = "sha256-mMd03y+RsFVQB4iR3uXw6wy3l6Uix1eiRSuc7lsgIzA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     markupsafe
