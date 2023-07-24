@@ -408,8 +408,8 @@ in
               This setting is propagated to newer and existing repositories.
             '';
             type = types.str;
-            default = "${cfg.python}/bin/hgsrht-hook-changegroup";
-            defaultText = "\${cfg.python}/bin/hgsrht-hook-changegroup";
+            default = "${pkgs.sourcehut.hgsrht}/bin/hgsrht-hook-changegroup";
+            defaultText = "\${pkgs.sourcehut.hgsrht}/bin/hgsrht-hook-changegroup";
           };
           repos = mkOption {
             description = lib.mdDoc ''
@@ -795,10 +795,11 @@ in
       environment.etc."ssh/sourcehut/subdir/srht-dispatch" = {
         # sshd_config(5): The program must be owned by root, not writable by group or others
         mode = "0755";
-        source = pkgs.writeShellScript "srht-dispatch" ''
+        source = pkgs.writeShellScript "srht-dispatch-wrapper" ''
           set -e
+          set -x
           cd /etc/ssh/sourcehut/subdir
-          ${cfg.python}/bin/gitsrht-dispatch "$@"
+          ${pkgs.sourcehut.gitsrht}/bin/gitsrht-dispatch "$@"
         '';
       };
       systemd.services.sshd = {
@@ -882,7 +883,7 @@ in
                 set -e
                 test -e "''$PWD"/config.ini ||
                 ln -s /run/sourcehut/hgsrht/config.ini "''$PWD"/config.ini
-                exec -a "$0" ${cfg.python}/bin/hgsrht-hook-changegroup "$@"
+                exec -a "$0" ${pkgs.sourcehut.hgsrht}/bin/hgsrht-hook-changegroup "$@"
               ''}:/usr/bin/hgsrht-hook-changegroup"
             ];
         };
@@ -1195,7 +1196,7 @@ in
       extraServices.listssrht-lmtp = {
         wants = [ "postfix.service" ];
         unitConfig.JoinsNamespaceOf = optional cfg.postfix.enable "postfix.service";
-        serviceConfig.ExecStart = "${cfg.python}/bin/listssrht-lmtp";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.listssrht}/bin/listssrht-lmtp";
         # Avoid crashing: os.chown(sock, os.getuid(), sock_gid)
         serviceConfig.PrivateUsers = mkForce false;
       };
@@ -1274,7 +1275,7 @@ in
             else
               # In order to load config.ini
               if cd /run/sourcehut/metasrht
-              then exec ${cfg.python}/bin/metasrht-manageuser "$@"
+              then exec ${pkgs.sourcehut.metasrht}/bin/metasrht-manageuser "$@"
               else cat <<EOF
                 Please run: sudo systemctl start metasrht
             EOF
@@ -1338,7 +1339,7 @@ in
       extraServices.todosrht-lmtp = {
         wants = [ "postfix.service" ];
         unitConfig.JoinsNamespaceOf = optional cfg.postfix.enable "postfix.service";
-        serviceConfig.ExecStart = "${cfg.python}/bin/todosrht-lmtp";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.todosrht}/bin/todosrht-lmtp";
         # Avoid crashing: os.chown(sock, os.getuid(), sock_gid)
         serviceConfig.PrivateUsers = mkForce false;
       };
