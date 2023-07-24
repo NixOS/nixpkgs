@@ -25,6 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/muesli/duf/";
     description = "Disk Usage/Free Utility";
     license = licenses.mit;
-    maintainers = with maintainers; [ penguwin SuperSandro2000 ];
+    maintainers = with maintainers; [ figsoda penguwin ];
   };
 }

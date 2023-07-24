@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     # unknown lint: `ffi_unwind_calls`
     # note: the `ffi_unwind_calls` lint is unstable
-    substituteInPlace src/main.rs src/{config,core,display,input,git,runtime,todo_file,view}/src/lib.rs \
+    substituteInPlace src/main.rs src/{config,core,display,input,git,runtime,todo_file,testutils,view}/src/lib.rs \
       --replace "ffi_unwind_calls," ""
   '';
 
@@ -27,14 +27,16 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  checkFlags = [
-    "--skip=external_editor::tests::edit_success"
-    "--skip=external_editor::tests::editor_non_zero_exit"
-    "--skip=external_editor::tests::empty_edit_abort_rebase"
-    "--skip=external_editor::tests::empty_edit_error"
-    "--skip=external_editor::tests::empty_edit_noop"
-    "--skip=external_editor::tests::empty_edit_re_edit_rebase_file"
-    "--skip=external_editor::tests::empty_edit_undo_and_edit"
+  # Compilation during tests fails if this env var is not set.
+  preCheck = "export GIRT_BUILD_GIT_HASH=${version}";
+  postCheck = "unset GIRT_BUILD_GIT_HASH";
+  cargoTestFlags = [
+    "--workspace"
+    # build everything except for doctests which are currently broken because
+    # `config::lib` expects the sourcetree to be a git repo.
+    "--tests"
+    "--lib"
+    "--bins"
   ];
 
   meta = with lib; {
@@ -42,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     description = "Native cross platform full feature terminal based sequence editor for git interactive rebase";
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 zowoq ];
+    maintainers = with maintainers; [ SuperSandro2000 zowoq ma27 ];
     mainProgram = "interactive-rebase-tool";
   };
 }

@@ -1895,7 +1895,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
           homepage = "https://github.com/jnoortheen/vscode-nix-ide";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.SuperSandro2000 ];
+          maintainers = [ ];
         };
       };
 

@@ -40,7 +40,7 @@ let
       description = "Core utilities for Python packages";
       homepage = "https://github.com/pypa/packaging";
       license = with licenses; [ bsd2 asl20 ];
-      maintainers = with maintainers; [ bennofs SuperSandro2000 ];
+      maintainers = with maintainers; [ bennofs ];
     };
   };
 in
