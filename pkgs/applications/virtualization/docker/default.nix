@@ -188,6 +188,14 @@ rec {
       ++ lib.optional withSeccomp libseccomp
       ++ plugins;
 
+    patches = [
+      (fetchpatch {
+        name = "fix-issue-with-go-1.20.6.patch";
+        url = "https://github.com/docker/cli/pull/4441.patch";
+        hash = "sha256-F4ueSbdBk1w8OqC4Dgh8+4Ql4zTjehaM368ET7k6Yx8=";
+      })
+    ];
+
     postPatch = ''
       patchShebangs man scripts/build/
       substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
