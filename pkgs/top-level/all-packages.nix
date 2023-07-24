@@ -24222,6 +24222,8 @@ with pkgs;
     buildPythonApplication click future six;
   };
 
+  pyp = callPackage ../tools/text/pyp { };
+
   pru = callPackage ../tools/text/pru { };
 
   prospector = callPackage ../development/tools/prospector { };
