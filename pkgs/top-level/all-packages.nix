@@ -34657,6 +34657,8 @@ with pkgs;
 
   retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
 
+  revanced-cli = callPackage ../applications/misc/revanced-cli { };
+
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
 
   ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet { };
