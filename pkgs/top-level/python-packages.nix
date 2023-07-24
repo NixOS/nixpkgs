@@ -7382,6 +7382,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation = callPackage ../development/python-modules/opentelemetry-instrumentation { };
 
+  opentelemetry-instrumentation-aiohttp-client = callPackage ../development/python-modules/opentelemetry-instrumentation-aiohttp-client { };
+
   opentelemetry-instrumentation-asgi = callPackage ../development/python-modules/opentelemetry-instrumentation-asgi { };
 
   opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
