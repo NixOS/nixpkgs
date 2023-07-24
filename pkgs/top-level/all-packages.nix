@@ -19981,6 +19981,8 @@ with pkgs;
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
+  terramate = callPackage ../development/tools/misc/terramate { };
+
   terrascan = callPackage ../tools/security/terrascan { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
