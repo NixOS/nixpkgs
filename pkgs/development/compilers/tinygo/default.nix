@@ -161,5 +161,8 @@ buildGoModule rec {
     description = "Go compiler for small places";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Madouura muscaln ];
+    # vendor can't be recreated and fails with:
+    #   error: illegal path references in fixed-output derivation '/nix/store/......-tinygo-0.26.0-go-modules.drv'
+    broken = true;
   };
 }
