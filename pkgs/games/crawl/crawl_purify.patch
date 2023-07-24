@@ -1,28 +1,21 @@
 diff --git a/crawl-ref/source/util/find_font b/crawl-ref/source/util/find_font
-index f8b576fd63..b95c21c0a1 100755
+index 9ba151e982..496e2cf2bf 100755
 --- a/crawl-ref/source/util/find_font
 +++ b/crawl-ref/source/util/find_font
-@@ -1,6 +1,6 @@
- #! /bin/sh
- 
+@@ -7,7 +7,7 @@
+ # some hard-coded font directories to check. Note: if you are using
+ # font-config with other directories, you don't need to edit this -- that case
+ # is handled by the `fc-list` call below.
 -FONTDIRS="/usr/share/fonts /usr/local/share/fonts /usr/*/lib/X11/fonts"
 +FONTDIRS="${fontsPath}/share/fonts"
  
  name=$1
  [ "$name" ] || { echo "Usage: $0 <fontname.ttf>" >&2; exit 100; }
-@@ -11,6 +11,6 @@ name=$1
-         for dir in $FONTDIRS; do
-             [ -d "$dir" ] && echo "$dir"
-         done
--    } | xargs -I% find % \( -type f -o -type l \) -iname "$name" -print \
-+    } | xargs -I% find -L % \( -type f -o -type l \) -iname "$name" -print \
-       | head -n1
- } 2>/dev/null
 diff --git a/crawl-ref/source/windowmanager-sdl.cc b/crawl-ref/source/windowmanager-sdl.cc
-index e29ccff507..9bf01e040a 100644
+index ade82e0595..5a8c86beb1 100644
 --- a/crawl-ref/source/windowmanager-sdl.cc
 +++ b/crawl-ref/source/windowmanager-sdl.cc
-@@ -20,7 +20,7 @@
+@@ -18,7 +18,7 @@
  # else
  #  include <SDL2/SDL.h>
  # endif
