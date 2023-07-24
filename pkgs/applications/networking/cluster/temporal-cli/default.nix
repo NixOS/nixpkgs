@@ -1,6 +1,13 @@
 { lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin }:
 
 let
+  metaCommon = with lib; {
+    description = "Command-line interface for running Temporal Server and interacting with Workflows, Activities, Namespaces, and other parts of Temporal";
+    homepage = "https://docs.temporal.io/cli";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aaronjheng ];
+  };
+
   overrideModAttrs = old: {
     # https://gitlab.com/cznic/libc/-/merge_requests/10
     postBuild = ''
@@ -44,6 +51,10 @@ let
     '';
 
     __darwinAllowLocalNetworking = true;
+
+    meta = metaCommon // {
+      mainProgram = "temporal";
+    };
   };
 
   tctl = buildGoModule rec {
@@ -78,6 +89,10 @@ let
     '';
 
     __darwinAllowLocalNetworking = true;
+
+    meta = metaCommon // {
+      mainProgram = "tctl";
+    };
   };
 in
 symlinkJoin rec {
@@ -92,11 +107,8 @@ symlinkJoin rec {
 
   passthru = { inherit tctl tctl-next; };
 
-  meta = with lib; {
-    description = "Temporal CLI";
-    homepage = "https://temporal.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aaronjheng ];
+  meta = metaCommon // {
     mainProgram = "temporal";
+    platforms = lib.unique (lib.concatMap (drv: drv.meta.platforms) paths);
   };
 }
