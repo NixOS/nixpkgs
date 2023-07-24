@@ -16,6 +16,7 @@
 , qtsensors
 , qtwebengine
 , qtwebchannel
+, quarto
 , libuuid
 , hunspellDicts
 , unzip
@@ -26,6 +27,7 @@
 , pandoc
 , llvmPackages
 , yaml-cpp
+, yarn
 , soci
 , postgresql
 , nodejs
@@ -39,17 +41,17 @@
 
 let
   pname = "RStudio";
-  version = "2022.07.1+554";
-  RSTUDIO_VERSION_MAJOR  = "2022";
-  RSTUDIO_VERSION_MINOR  = "07";
+  version = "2023.06.1+524";
+  RSTUDIO_VERSION_MAJOR  = "2023";
+  RSTUDIO_VERSION_MINOR  = "06";
   RSTUDIO_VERSION_PATCH  = "1";
-  RSTUDIO_VERSION_SUFFIX = "+554";
+  RSTUDIO_VERSION_SUFFIX = "+524";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "0rmdqxizxqg2vgr3lv066cjmlpjrxjlgi0m97wbh6iyhkfm2rrj1";
+    sha256 = "sha256-uXK456bnNMY3cTI6wvXHn3NY8IrppMqyyH4bitvfzSY=";
   };
 
   mathJaxSrc = fetchurl {
@@ -62,6 +64,13 @@ let
     repo = "rsconnect";
     rev = "e287b586e7da03105de3faa8774c63f08984eb3c";
     sha256 = "sha256-ULyWdSgGPSAwMt0t4QPuzeUE6Bo6IJh+5BMgW1bFN+Y=";
+  };
+
+  quartoSrc = fetchFromGitHub {
+    owner = "quarto-dev";
+    repo = "quarto";
+    rev = "a92906bbd004e3d8abc39b5f59346ca2a091d1e8";
+    sha256 = "sha256-ZpqOxwpqrFqwaR+SkEki9aZhTzsRLh9Rd1tYCC9uukk=";
   };
 
   panmirrorModules = mkYarnModules {
@@ -85,6 +94,7 @@ in
       makeWrapper
       pandoc
       nodejs
+      #yarn
     ] ++ lib.optionals (!server) [
       copyDesktopItems
     ];
@@ -98,6 +108,7 @@ in
       yaml-cpp
       soci
       postgresql
+      quarto
     ] ++ (if server then [
       sqlite.dev
       pam
@@ -115,7 +126,7 @@ in
       "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
       "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
       "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
-      "-DQUARTO_ENABLED=FALSE"
+      "-DQUARTO_ENABLED=TRUE"
       "-DPANDOC_VERSION=${pandoc.version}"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
     ] ++ lib.optionals (!server) [
@@ -126,21 +137,22 @@ in
     patches = [
       ./r-location.patch
       ./clang-location.patch
-      ./use-system-node.patch
+      #./use-system-node.patch
       ./fix-resources-path.patch
-      ./pandoc-nix-path.patch
-      ./remove-quarto-from-generator.patch
+      #./pandoc-nix-path.patch
+      #./remove-quarto-from-generator.patch
       ./do-not-install-pandoc.patch
     ];
 
     postPatch = ''
       substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}
 
-      substituteInPlace src/cpp/CMakeLists.txt \
-        --replace 'SOCI_LIBRARY_DIR "/usr/lib"' 'SOCI_LIBRARY_DIR "${soci}/lib"'
+#      substituteInPlace src/cpp/CMakeLists.txt \
+#        --replace 'SOCI_LIBRARY_DIR "/usr/lib"' 'SOCI_LIBRARY_DIR "${soci}/lib"'
 
       substituteInPlace src/gwt/build.xml \
-        --replace '@node@' ${nodejs}
+        --replace '../../dependencies/common/node/$\{node.version}' ${nodejs} \
+        --replace './lib/quarto' ${quartoSrc}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
         --replace '@libclang@' ${llvmPackages.libclang.lib} \
@@ -176,7 +188,7 @@ in
       cp -r ${rsconnectSrc} dependencies/rsconnect
       ( cd dependencies && ${R}/bin/R CMD build -d --no-build-vignettes rsconnect )
 
-      cp -r "${panmirrorModules}" src/gwt/panmirror/src/editor/node_modules
+      #cp -r "${panmirrorModules}" src/gwt/panmirror/src/editor/node_modules
     '';
 
     postInstall = ''
