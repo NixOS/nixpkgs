@@ -26,8 +26,8 @@ in {
           memcached = false;
         };
         database.createLocally = true;
+        settings.dbtype = "pgsql";
         config = {
-          dbtype = "pgsql";
           inherit adminuser;
           adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
             ${adminpass}

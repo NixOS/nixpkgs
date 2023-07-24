@@ -41,14 +41,12 @@ in
       "dbtype"
       "dbname"
       "dbuser"
-      "dbpassFile"
       "dbhost"
-      "dbport"
       "dbtableprefix"
     ] (
       opt: options.services.nextcloud.config.${opt} // {
-        default = config.services.nextcloud.config.${opt};
-        defaultText = "config.services.nextcloud.config.${opt}";
+        default = config.services.nextcloud.settings.${opt};
+        defaultText = "config.services.nextcloud.settings.${opt}";
       }
     )
   );
@@ -76,7 +74,6 @@ in
       script = let
         dbType = if cfg.dbtype == "pgsql" then "postgresql" else cfg.dbtype;
         dbUser = lib.optionalString (cfg.dbuser != null) cfg.dbuser;
-        dbPass = lib.optionalString (cfg.dbpassFile != null) ":$DATABASE_PASSWORD";
         isSocket = lib.hasPrefix "/" (toString cfg.dbhost);
         dbHost = lib.optionalString (cfg.dbhost != null) (if
           isSocket then
@@ -85,9 +82,10 @@ in
           else
             "@${cfg.dbhost}");
         dbName = lib.optionalString (cfg.dbname != null) "/${cfg.dbname}";
-        dbUrl = "${dbType}://${dbUser}${dbPass}${lib.optionalString (!isSocket) dbHost}${dbName}${lib.optionalString isSocket dbHost}";
-      in lib.optionalString (dbPass != "") ''
-        export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
+        dbUrl = "${dbType}://${dbUser}$dbPass${lib.optionalString (!isSocket) dbHost}${dbName}${lib.optionalString isSocket dbHost}";
+      in lib.optionalString (dbHost != "") ''
+        export DATABASE_PASSWORD="$(${lib.getExe pkgs.jq} -r '.dbpass // ""' "${toString cfgN.secretFile}")"
+        export dbPass=":$DATABASE_PASSWORD"
       '' + ''
         export DATABASE_URL="${dbUrl}"
         ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
