@@ -273,7 +273,7 @@ rec {
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline vdemeester periklis mikroskeem maxeaubrey ];
+      maintainers = with maintainers; [ offline vdemeester periklis maxeaubrey ];
     };
   });
 
