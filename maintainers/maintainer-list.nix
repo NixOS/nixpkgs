@@ -17610,6 +17610,12 @@
     githubId = 3413119;
     name = "Vonfry";
   };
+  votava = {
+    email = "votava@gmail.com";
+    github = "janvotava";
+    githubId = 367185;
+    name = "Jan Votava";
+  };
   vq = {
     email = "vq@erq.se";
     github = "vq";
