@@ -57,15 +57,15 @@ self: super: {
           # not solvable short of recompiling GHC. Instead of adding
           # allowInconsistentDependencies for all reverse dependencies of hspec-core,
           # just upgrade to an hspec version without the offending dependency.
-          hspec-core = cself.hspec-core_2_11_3;
-          hspec-discover = cself.hspec-discover_2_11_3;
-          hspec = cself.hspec_2_11_3;
+          hspec-core = cself.hspec-core_2_11_4;
+          hspec-discover = cself.hspec-discover_2_11_4;
+          hspec = cself.hspec_2_11_4;
 
           # hspec-discover and hspec-core depend on hspec-meta for testing which
           # we need to avoid since it depends on ghc as well. Since hspec*_2_11*
           # are overridden to take the versioned attributes as inputs, we need
           # to make sure to override the versioned attribute with this fix.
-          hspec-discover_2_11_3 = dontCheck csuper.hspec-discover_2_11_3;
+          hspec-discover_2_11_4 = dontCheck csuper.hspec-discover_2_11_4;
 
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc which depends on directory etc.
@@ -297,7 +297,7 @@ self: super: {
     })
     # Overriding the version pandoc dependency uses as the latest release has version bounds
     # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  ] (super.patat.override { pandoc = self.pandoc_3_1_5; });
+  ] (super.patat.override { pandoc = self.pandoc_3_1_6; });
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
@@ -1732,14 +1732,14 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give latest hspec correct dependency versions without overrideScope
-  hspec_2_11_3 = doDistribute (super.hspec_2_11_3.override {
-    hspec-discover = self.hspec-discover_2_11_3;
-    hspec-core = self.hspec-core_2_11_3;
+  hspec_2_11_4 = doDistribute (super.hspec_2_11_4.override {
+    hspec-discover = self.hspec-discover_2_11_4;
+    hspec-core = self.hspec-core_2_11_4;
   });
-  hspec-discover_2_11_3 = doDistribute super.hspec-discover_2_11_3;
-  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_3
+  hspec-discover_2_11_4 = doDistribute super.hspec-discover_2_11_4;
+  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_4
   # is overlayed to hspec-core.
-  hspec-core_2_11_3 = doDistribute (dontCheck (super.hspec-core_2_11_3.override {
+  hspec-core_2_11_4 = doDistribute (dontCheck (super.hspec-core_2_11_4.override {
     hspec-expectations = self.hspec-expectations_0_8_4;
   }));
 
@@ -1907,7 +1907,7 @@ self: super: {
   inherit (let
     pandoc-cli-overlay = self: super: {
       # pandoc-cli requires pandoc >= 3.1
-      pandoc = self.pandoc_3_1_5;
+      pandoc = self.pandoc_3_1_6;
 
       # pandoc depends on crypton-connection, which requires tls >= 1.7
       tls = self.tls_1_7_0;
@@ -1918,11 +1918,11 @@ self: super: {
     };
   in {
     pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
-    pandoc_3_1_5 = doDistribute (super.pandoc_3_1_5.overrideScope pandoc-cli-overlay);
+    pandoc_3_1_6 = doDistribute (super.pandoc_3_1_6.overrideScope pandoc-cli-overlay);
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
     pandoc-cli
-    pandoc_3_1_5
+    pandoc_3_1_6
     pandoc-lua-engine
     ;
 
