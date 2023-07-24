@@ -26113,6 +26113,8 @@ with pkgs;
 
   glabels = callPackage ../applications/graphics/glabels { };
 
+  glabels-qt = libsForQt5.callPackage ../applications/graphics/glabels-qt { };
+
   nats-server = callPackage ../servers/nats-server { };
 
   go-autoconfig = callPackage ../servers/go-autoconfig { };
