@@ -60,9 +60,9 @@
     ]
   },
   "files_texteditor": {
-    "sha256": "0rmk14iw34pd81snp3lm01k07wm5j2nh9spcd4j0m43l20b7kxss",
-    "url": "https://github.com/nextcloud-releases/files_texteditor/releases/download/v2.15.0/files_texteditor.tar.gz",
-    "version": "2.15.0",
+    "sha256": "1irvxz29fj9ccplgizwkchc885fqvqsmk9rj4gfwgpa8bgkya1y6",
+    "url": "https://github.com/nextcloud-releases/files_texteditor/releases/download/v2.15.1/files_texteditor-v2.15.1.tar.gz",
+    "version": "2.15.1",
     "description": "This application enables Nextcloud users to open, save and edit text files in the web browser. If enabled, an entry called \"Text file\" in the \"New\" button menu at the top of the web browser appears. When clicked, a new text file opens in the browser and the file can be saved into the current Nextcloud directory. Further, when a text file is clicked in the web browser, it will be opened and editable. If the privileges allow, a user can also edit shared files and save these changes back into the web browser.\nMore information is available in the text editor documentation.",
     "homepage": "https://github.com/nextcloud/files_texteditor",
     "licenses": [
@@ -210,9 +210,9 @@
     ]
   },
   "spreed": {
-    "sha256": "1b6v7jfvrkpyarz4zg1lvw938wv3hx6g0nhpdvsfnjqr03rrgywk",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v15.0.6/spreed-v15.0.6.tar.gz",
-    "version": "15.0.6",
+    "sha256": "0az92qmc24n91zh2vq4qs99zppph6bchknv5akw6c7iqpg8d12gk",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v15.0.7/spreed-v15.0.7.tar.gz",
+    "version": "15.0.7",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
