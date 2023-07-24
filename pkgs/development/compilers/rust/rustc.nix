@@ -75,7 +75,7 @@ in stdenv.mkDerivation rec {
     "--release-channel=stable"
     "--set=build.rustc=${rustc}/bin/rustc"
     "--set=build.cargo=${cargo}/bin/cargo"
-    "--tools=rustc"
+    "--tools=rustc,rust-analyzer-proc-macro-srv"
     "--enable-rpath"
     "--enable-vendor"
     "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
