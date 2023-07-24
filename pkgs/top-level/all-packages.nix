@@ -33669,7 +33669,7 @@ with pkgs;
 
   opcr-policy = callPackage ../development/tools/opcr-policy { };
 
-  opcua-client-gui = callPackage ../misc/opcua-client-gui { };
+  opcua-client-gui = libsForQt5.callPackage ../misc/opcua-client-gui { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
