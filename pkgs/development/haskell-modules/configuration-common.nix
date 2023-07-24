@@ -2546,8 +2546,11 @@ self: super: {
   # has been resolved.
   lucid-htmx = doJailbreak super.lucid-htmx;
 
-  # 2022-09-20: Restrictive upper bound on lsp
-  futhark = doJailbreak super.futhark;
+  # Needs lsp >= 2.1
+  futhark = super.futhark.overrideScope (fself: _: {
+    lsp = fself.lsp_2_1_0_0;
+    lsp-types = fself.lsp-types_2_0_1_0;
+  });
 
   # Too strict bounds on hspec
   # https://github.com/klapaucius/vector-hashtables/issues/11
