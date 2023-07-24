@@ -62,7 +62,7 @@ in
           Selects the platform theme to use for Qt applications.
 
           The options are
-          - `gtk`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
+          - `gtk2`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
           - `gnome`: Use GNOME theme with [qgnomeplatform](https://github.com/FedoraQt/QGnomePlatform)
           - `lxqt`: Use LXQt style set using the [lxqt-config-appearance](https://github.com/lxqt/lxqt-config)
              application.
