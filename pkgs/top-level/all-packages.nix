@@ -1856,6 +1856,10 @@ with pkgs;
 
   sitespeed-io = callPackage ../tools/networking/sitespeed-io { };
 
+  slipstream = callPackage ../tools/games/slipstream {
+    jdk = jdk8;
+  };
+
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
   smb3-foundry = callPackage ../applications/misc/smb3-foundry { };
@@ -3121,6 +3125,8 @@ with pkgs;
   oggvideotools = callPackage ../tools/misc/oggvideotools { };
 
   owl-lisp = callPackage ../development/compilers/owl-lisp { };
+
+  otus-lisp = callPackage ../development/compilers/otus-lisp { };
 
   ascii = callPackage ../tools/text/ascii { };
 
@@ -9857,6 +9863,8 @@ with pkgs;
   nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
   };
+
+  nanoemoji = python3Packages.callPackage ../tools/misc/nanoemoji { };
 
   nagelfar = callPackage ../development/tools/nagelfar { };
 

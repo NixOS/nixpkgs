@@ -54,7 +54,7 @@ let
 
   goModules = if (vendorHash == null) then "" else
   (stdenv.mkDerivation {
-    name = "${name}-goModules";
+    name = "${name}-go-modules";
 
     nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ go git cacert ];
 
