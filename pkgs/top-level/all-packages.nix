@@ -5455,7 +5455,10 @@ with pkgs;
 
   home-manager = callPackage ../tools/package-management/home-manager { };
 
-  homepage-dashboard = callPackage ../servers/homepage-dashboard { };
+  homepage-dashboard = callPackage ../servers/homepage-dashboard {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   hostsblock = callPackage ../tools/misc/hostsblock { };
 
