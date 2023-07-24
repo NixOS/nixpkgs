@@ -169,6 +169,15 @@ in
       description = lib.mdDoc "Web interface port.";
     };
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to open the paperless web interface port in the firewall. Uses
+        the port specified in {option}`services.paperless.port`.
+      '';
+    };
+
     # FIXME this should become an RFC42-style settings attr
     extraConfig = mkOption {
       type = types.attrs;
@@ -376,6 +385,8 @@ in
       # This is required to support uploading files via the web interface.
       unitConfig.JoinsNamespaceOf = "paperless-task-queue.service";
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     users = optionalAttrs (cfg.user == defaultUser) {
       users.${defaultUser} = {
