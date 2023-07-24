@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchFromGitHub
 , hatchling
 , opentelemetry-api
 , opentelemetry-sdk
@@ -10,18 +9,12 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit (opentelemetry-api) version src;
   pname = "opentelemetry-exporter-prometheus";
-  version = "1.18.0";
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "open-telemetry";
-    repo = "opentelemetry-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vWVLUt3Ett04kqUyoTOBNvRj51/M35X83saBBxeOTZI=";
-    sparseCheckout = [ "/exporter/${pname}" ];
-  } + "/exporter/${pname}";
+  sourceRoot = "source/exporter/opentelemetry-exporter-prometheus";
 
   format = "pyproject";
 
@@ -42,10 +35,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opentelemetry.exporter.prometheus" ];
 
-  meta = with lib; {
+  meta = opentelemetry-api.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/exporter/opentelemetry-exporter-prometheus";
     description = "Prometheus Metric Exporter for OpenTelemetry";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
   };
 }
