@@ -152,7 +152,7 @@ assert withRepart -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "254-rc2";
+  version = "254-rc3";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -168,8 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
-    rev = "v254-rc2";
-    hash = "sha256-vJJKwUn4Qa2P71+4ZeLHAYH+kJMrDCuiV9dERqZW6js=";
+    rev = "v254-rc3";
+    hash = "sha256-7f2yP2tJ15JRasq8JtDL8IFOOFiAJEuKzW5lKScdInM=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
