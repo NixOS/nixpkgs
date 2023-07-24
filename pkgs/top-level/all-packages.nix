@@ -10146,6 +10146,8 @@ with pkgs;
 
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
+  libtickit = callPackage ../development/libraries/libtickit { };
+
   libtins = callPackage ../development/libraries/libtins { };
 
   libtree = callPackage ../development/tools/misc/libtree { };
