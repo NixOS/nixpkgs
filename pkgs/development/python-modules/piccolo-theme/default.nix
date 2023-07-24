@@ -19,7 +19,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Clean and modern Sphinx theme";
     homepage = "https://piccolo-theme.readthedocs.io";
-    license = licenses.mit;
+    license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ loicreynier ];
     platforms = platforms.unix;
   };
