@@ -14537,6 +14537,8 @@ with pkgs;
 
   wolf-shaper = callPackage ../applications/audio/wolf-shaper { };
 
+  wp-notifyd = callPackage ../applications/audio/wp-notifyd { };
+
   wpgtk = callPackage ../tools/X11/wpgtk { };
 
   wrap = callPackage ../tools/text/wrap { };
