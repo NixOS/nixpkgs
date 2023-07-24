@@ -93,7 +93,7 @@ in
   inherit pname version src;
 
   # Override vendorHash with the output got from
-  # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).go-modules"
+  # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
   # or with `null` when using vendored source tarball.
   inherit vendorHash deleteVendor proxyVendor;
 

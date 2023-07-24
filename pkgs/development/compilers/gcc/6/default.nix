@@ -269,10 +269,7 @@ lib.pipe (stdenv.mkDerivation ({
         ))
     );
 
-  # kludge to prevent a mass-rebuild; will be removed in a PR sent to staging
-  crossStageStatic = withoutTargetLibc;
-
-  inherit noSysDirs staticCompiler langJava
+  inherit noSysDirs staticCompiler langJava withoutTargetLibc
     libcCross crossMingw;
 
   inherit (callFile ../common/dependencies.nix { })

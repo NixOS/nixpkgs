@@ -3,10 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, python
-, lsof
-, glibcLocales
-, coreutils
 , pytestCheckHook
  }:
 
@@ -47,6 +43,9 @@ buildPythonPackage rec {
     "test_unicode_path"
     # fails to import itself after modifying the environment
     "test_environment"
+    # timing sensitive through usage of sleep(1) and signal handling
+    # https://github.com/amoffat/sh/issues/684
+    "test_general_signal"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable tests that fail on Darwin sandbox
     "test_background_exception"
