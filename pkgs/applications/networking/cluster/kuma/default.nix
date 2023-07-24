@@ -61,5 +61,6 @@ buildGoModule rec {
     homepage = "https://kuma.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ zbioe ];
+    broken = true; # vendor isn't reproducible with go > 1.20: nix-build -A kuma-cp.go-modules --check
   };
 }
