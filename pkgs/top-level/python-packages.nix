@@ -13000,6 +13000,8 @@ self: super: with self; {
 
   uc-micro-py = callPackage ../development/python-modules/uc-micro-py { };
 
+  ucsmsdk = callPackage ../development/python-modules/ucsmsdk { };
+
   udatetime = callPackage ../development/python-modules/udatetime { };
 
   ueberzug = callPackage ../development/python-modules/ueberzug {
