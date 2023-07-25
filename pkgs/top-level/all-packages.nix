@@ -12303,6 +12303,8 @@ with pkgs;
 
   qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
 
+  qscintilla-qt6 = qt6Packages.callPackage ../development/libraries/qscintilla { };
+
   qrcp = callPackage ../tools/networking/qrcp { };
 
   qrscan = callPackage ../tools/misc/qrscan { };
