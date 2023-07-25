@@ -37,13 +37,13 @@
 
 let
   # update together with panel, which is not straightforward
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "bokeh";
     repo = "bokeh";
     rev = "refs/tags/${version}";
-    hash = "sha256-YgmGpMtIeuEHkWg7tx4ItBOQfdsVripXg+Aa3+KdsAA=";
+    hash = "sha256-Z9xmgxnmjC6tKyvhLQm1eIgXaPoMw+UBOW2iWlqkjWY=";
   };
 
   bokehjs = buildNpmPackage {
@@ -53,7 +53,7 @@ let
     inherit src;
     sourceRoot = "source/bokehjs";
 
-    npmDepsHash = "sha256-hUoofSZkFY/h5UoPVldYiQW8OtQ8W786ZUgpmIwTdeI=";
+    npmDepsHash = "sha256-BbSMLlrYzXjmmn4LSQGsMZMRtSdyouoN8aaHGYekgi0=";
 
     preInstall = ''
       # install files that are in the upstream tarball but not covered
