@@ -94,7 +94,7 @@ in
       makeWrapper
       pandoc
       nodejs
-      #yarn
+      yarn
     ] ++ lib.optionals (!server) [
       copyDesktopItems
     ];
@@ -188,7 +188,8 @@ in
       cp -r ${rsconnectSrc} dependencies/rsconnect
       ( cd dependencies && ${R}/bin/R CMD build -d --no-build-vignettes rsconnect )
 
-      #cp -r "${panmirrorModules}" src/gwt/panmirror/src/editor/node_modules
+      mkdir -p src/gwt/lib/quarto/apps/panmirror
+      cp -r "${panmirrorModules}" src/gwt/lib/quarto/apps/panmirror/node_modules
     '';
 
     postInstall = ''
