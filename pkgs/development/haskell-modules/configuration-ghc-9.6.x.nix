@@ -163,6 +163,25 @@ self: super: {
       hls-stylish-haskell-plugin = null;
     };
 
+  # Newer version of servant required for GHC 9.6
+  servant = self.servant_0_20;
+  servant-server = self.servant-server_0_20;
+  servant-client = self.servant-client_0_20;
+  servant-client-core = self.servant-client-core_0_20;
+  # Select versions compatible with servant_0_20
+  servant-docs = self.servant-docs_0_13;
+  servant-swagger = self.servant-swagger_1_2;
+  # Jailbreaks for servant <0.20
+  servant-lucid = doJailbreak super.servant-lucid;
+
+  # Jailbreak strict upper bounds: http-api-data <0.6
+  servant_0_20 = doJailbreak super.servant_0_20;
+  servant-server_0_20 = doJailbreak super.servant-server_0_20;
+  servant-client_0_20 = doJailbreak super.servant-client_0_20;
+  servant-client-core_0_20 = doJailbreak super.servant-client-core_0_20;
+  # Jailbreak strict upper bounds: doctest <0.22
+  servant-swagger_1_2 = doJailbreak super.servant-swagger_1_2;
+
   lifted-base = dontCheck super.lifted-base;
   hw-fingertree = dontCheck super.hw-fingertree;
   hw-prim = dontCheck (doJailbreak super.hw-prim);
