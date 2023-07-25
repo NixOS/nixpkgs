@@ -4029,6 +4029,12 @@
       fingerprint = "1C4E F4FE 7F8E D8B7 1E88 CCDF BAB1 D15F B7B4 D4CE";
     }];
   };
+  dgollings = {
+    email = "daniel.gollings+nixpkgs@gmail.com";
+    github = "dgollings";
+    githubId = 2032823;
+    name = "Daniel Gollings";
+  };
   dgonyeo = {
     email = "derek@gonyeo.com";
     github = "dgonyeo";
