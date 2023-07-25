@@ -103,6 +103,7 @@ mapAliases ({
   django_silk = django-silk; # added 2023-07-25
   django_tagging = django-tagging; # added 2023-07-25
   django_taggit = django-taggit; # added 2021-10-11
+  django_treebeard = django-treebeard; # added 2023-07-25
   dns = dnspython; # added 2017-12-10
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
