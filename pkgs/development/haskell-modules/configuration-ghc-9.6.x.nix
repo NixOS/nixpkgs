@@ -194,6 +194,13 @@ self: super: {
     xmonad-contrib              # mtl >=1 && <2.3
     dbus       # template-haskell >=2.18 && <2.20, transformers <0.6, unix <2.8
     gi-cairo-connector          # mtl <2.3
+    haskintex                   # text <2
+    lens-family-th              # template-haskell <2.19
+    ghc-prof                    # base <4.18
+    profiteur                   # vector <0.13
+    mfsolve                     # mtl <2.3
+    cubicbezier                 # mtl <2.3
+    dhall                       # template-haskell <2.20
   ;
 
   # Apply workaround for Cabal 3.9 bug https://github.com/haskell/cabal/issues/8455
