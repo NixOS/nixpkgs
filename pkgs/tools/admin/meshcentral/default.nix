@@ -1,4 +1,4 @@
-{ lib, fetchpatch, fetchzip, yarn2nix-moretea, nodejs_18, jq, dos2unix }:
+{ lib, fetchzip, yarn2nix-moretea, nodejs_18, dos2unix }:
 
 yarn2nix-moretea.mkYarnPackage {
   version = "1.1.6";
