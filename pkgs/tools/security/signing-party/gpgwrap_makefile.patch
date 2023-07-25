@@ -1,0 +1,16 @@
+--- a/gpgwrap/Makefile	2015-06-03 16:24:48.723129144 +0200
++++ b/gpgwrap/Makefile	2015-06-03 16:24:11.639744346 +0200
+@@ -1,9 +1,12 @@
+ MAKE=make
+ 
+-.PHONY: all clean
++.PHONY: all clean install
+ 
+ all:
+ 	cd src && ${MAKE} all DIET="${DIET}"
+ 
++install:
++
++
+ clean:
+ 	cd src && ${MAKE} clean

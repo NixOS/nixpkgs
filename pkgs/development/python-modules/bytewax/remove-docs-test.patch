@@ -1,0 +1,10 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 41b5c90..e7c7b2d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -50,6 +50,5 @@ doctest_optionflags = "NORMALIZE_WHITESPACE"
+ testpaths = [
+     "pytests",
+     "pysrc",
+-    "docs",
+ ]

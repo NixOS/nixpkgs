@@ -1,0 +1,34 @@
+For 5.7 the copyright header is different.
+
+From ad32de7f181acaffaba78d5c3d9e5aa6b84a741c Mon Sep 17 00:00:00 2001
+From: David Matthews <dm@prolingua.co.uk>
+Date: Sun, 7 Apr 2019 13:41:33 +0100
+Subject: [PATCH] Remove FFI_SYSV from abi table for X86/64 Unix.  It appears
+ that this has been removed in upstream versions of libffi and causes problems
+ when building using the system libffi.
+
+---
+ libpolyml/polyffi.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/libpolyml/polyffi.cpp b/libpolyml/polyffi.cpp
+index 5424dd84..3dc9cc7c 100644
+--- a/libpolyml/polyffi.cpp
++++ b/libpolyml/polyffi.cpp
+@@ -1,7 +1,7 @@
+ /*
+     Title:  New Foreign Function Interface
+
+-    Copyright (c) 2015  David C.J. Matthews
++    Copyright (c) 2015, 2019  David C.J. Matthews
+
+     This library is free software; you can redistribute it and/or
+     modify it under the terms of the GNU Lesser General Public
+@@ -109,7 +109,6 @@ static struct _abiTable { const char *abiName; ffi_abi abiCode; } abiTable[] =
+ #elif defined(X86_WIN64)
+     {"win64", FFI_WIN64},
+ #elif defined(X86_ANY)
+-    {"sysv", FFI_SYSV},
+     {"unix64", FFI_UNIX64},
+ #endif
+     { "default", FFI_DEFAULT_ABI}

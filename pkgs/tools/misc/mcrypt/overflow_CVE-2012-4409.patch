@@ -1,0 +1,24 @@
+From 3efb40e17ce4f76717ae17a1ce1e1f747ddf59fd Mon Sep 17 00:00:00 2001
+From: Alon Bar-Lev <alon.barlev@gmail.com>
+Date: Sat, 22 Dec 2012 22:37:06 +0200
+Subject: [PATCH] cleanup: buffer overflow
+
+---
+ mcrypt-2.6.8/src/extra.c |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/mcrypt-2.6.8/src/extra.c b/mcrypt-2.6.8/src/extra.c
+index 3082f82..c7a1ac0 100644
+--- a/src/extra.c
++++ b/src/extra.c
+@@ -241,6 +241,8 @@ int check_file_head(FILE * fstream, char *algorithm, char *mode,
+ 		if (m_getbit(6, flags) == 1) { /* if the salt bit is set */
+ 			if (m_getbit(0, sflag) != 0) { /* if the first bit is set */
+ 				*salt_size = m_setbit(0, sflag, 0);
++				if (*salt_size > sizeof(tmp_buf))
++					err_quit(_("Salt is too long\n"));
+ 				if (*salt_size > 0) {
+ 					fread(tmp_buf, 1, *salt_size,
+ 					      fstream);
+--
+1.7.8.6

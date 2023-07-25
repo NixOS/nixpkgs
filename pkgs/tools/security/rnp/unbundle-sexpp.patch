@@ -1,0 +1,38 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index bb6d40cb..30171e7c 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -176,11 +176,6 @@ if (ENABLE_FUZZERS)
+ endif()
+ add_subdirectory(src/common)
+
+-set(WITH_SEXP_CLI OFF)
+-set(WITH_SEXP_TESTS OFF)
+-set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME development)
+-add_subdirectory(src/libsexp EXCLUDE_FROM_ALL)
+-
+ add_subdirectory(src/lib)
+ add_subdirectory(src/rnp)
+ add_subdirectory(src/rnpkeys)
+diff --git i/src/lib/CMakeLists.txt w/src/lib/CMakeLists.txt
+index 086ac57d..b219ef06 100755
+--- i/src/lib/CMakeLists.txt
++++ w/src/lib/CMakeLists.txt
+@@ -433,7 +433,7 @@ install(TARGETS librnp
+       COMPONENT development
+   )
+
+-  install(TARGETS librnp-static sexp
++  install(TARGETS librnp-static
+     EXPORT rnp-targets
+     ARCHIVE
+       DESTINATION  "${CMAKE_INSTALL_LIBDIR}"
+@@ -441,7 +441,7 @@ install(TARGETS librnp
+   )
+ else(BUILD_SHARED_LIBS)
+ # static libraries only
+-install(TARGETS librnp sexp
++install(TARGETS librnp
+     EXPORT rnp-targets
+     ARCHIVE
+       DESTINATION  "${CMAKE_INSTALL_LIBDIR}"
