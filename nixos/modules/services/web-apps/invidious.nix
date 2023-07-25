@@ -7,6 +7,19 @@ let
 
   settingsFile = settingsFormat.generate "invidious-settings" cfg.settings;
 
+  hostConfig = {
+    users.users.invidious = {
+        isSystemUser = true;
+        group = "invidious";
+        # uid = config.ids.uids.invidious;
+        description = "Invidious web service user";
+    };
+
+    users.groups.invidious = {
+        # gid = config.ids.gids.invidious;
+    };
+  };
+
   serviceConfig = {
     systemd.services.invidious = {
       description = "Invidious (An alternative YouTube front-end)";
@@ -118,6 +131,7 @@ let
 
       serviceConfig = {
         User = "invidious";
+        Group = "invidious";
       };
     };
   };
@@ -257,6 +271,7 @@ in
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
+    hostConfig
     serviceConfig
     localDatabaseConfig
     nginxConfig
