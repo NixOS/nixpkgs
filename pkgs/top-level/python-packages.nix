@@ -510,6 +510,8 @@ self: super: with self; {
 
   ansible-runner = callPackage ../development/python-modules/ansible-runner { };
 
+  ansible-vault-rw = callPackage ../development/python-modules/ansible-vault-rw { };
+
   ansi = callPackage ../development/python-modules/ansi { };
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
@@ -7404,9 +7406,13 @@ self: super: with self; {
 
   opentelemetry-instrumentation = callPackage ../development/python-modules/opentelemetry-instrumentation { };
 
+  opentelemetry-instrumentation-aiohttp-client = callPackage ../development/python-modules/opentelemetry-instrumentation-aiohttp-client { };
+
   opentelemetry-instrumentation-asgi = callPackage ../development/python-modules/opentelemetry-instrumentation-asgi { };
 
   opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
+
+  opentelemetry-instrumentation-grpc = callPackage ../development/python-modules/opentelemetry-instrumentation-grpc { };
 
   opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
 
@@ -13097,6 +13103,8 @@ self: super: with self; {
   unrardll = callPackage ../development/python-modules/unrardll { };
 
   unrpa = callPackage ../development/python-modules/unrpa { };
+
+  unstructured = callPackage ../development/python-modules/unstructured { };
 
   unstructured-inference = callPackage ../development/python-modules/unstructured-inference { };
 

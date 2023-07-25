@@ -3804,6 +3804,8 @@ with pkgs;
 
   kavita = callPackage ../servers/web-apps/kavita { };
 
+  keka = callPackage ../tools/compression/keka { };
+
   kord = callPackage ../applications/misc/kord { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
@@ -4893,6 +4895,8 @@ with pkgs;
   disfetch = callPackage ../tools/misc/disfetch { };
 
   disk-filltest = callPackage ../tools/system/disk-filltest { };
+
+  disk-inventory-x = callPackage ../tools/filesystems/disk-inventory-x { };
 
   diskscan = callPackage ../tools/misc/diskscan { };
 
@@ -9234,9 +9238,7 @@ with pkgs;
     usePulseaudio = true;
   };
 
-  jaq = callPackage ../development/tools/jaq {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  jaq = callPackage ../development/tools/jaq { };
 
   jasmin-compiler = callPackage ../development/compilers/jasmin-compiler { };
 
@@ -9288,6 +9290,8 @@ with pkgs;
   jless = callPackage ../development/tools/jless {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
+
+  stalwart-mail = callPackage ../servers/mail/stalwart { };
 
   jmespath = callPackage ../development/tools/jmespath { };
 
@@ -12475,6 +12479,8 @@ with pkgs;
 
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
+  rtz = callPackage ../tools/misc/rtz { };
+
   rubber = callPackage ../tools/typesetting/rubber { };
 
   rubocop = rubyPackages.rubocop;
@@ -14342,6 +14348,8 @@ with pkgs;
 
   unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
 
+  unnaturalscrollwheels = callPackage ../tools/inputmethods/unnaturalscrollwheels { };
+
   unrar = callPackage ../tools/archivers/unrar { };
 
   unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
@@ -16044,6 +16052,10 @@ with pkgs;
   inherit (haxePackages) hxcpp;
 
   hop = callPackage ../development/compilers/hop { };
+
+  hop-cli = callPackage ../tools/admin/hop-cli {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
 
   falcon = callPackage ../development/interpreters/falcon {
     stdenv = gcc10Stdenv;
@@ -19790,6 +19802,8 @@ with pkgs;
 
   saleae-logic-2 = callPackage ../development/tools/misc/saleae-logic-2 { };
 
+  samply = callPackage ../development/tools/misc/samply { };
+
   sauce-connect = callPackage ../development/tools/sauce-connect { };
 
   sawjap = callPackage ../development/tools/java/sawjap { };
@@ -20177,6 +20191,8 @@ with pkgs;
   xcpretty = callPackage ../development/tools/xcpretty { };
 
   xeus = callPackage ../development/libraries/xeus { };
+
+  xeus-zmq = callPackage ../development/libraries/xeus-zmq { };
 
   xmlindent = callPackage ../development/web/xmlindent { };
 
@@ -30706,6 +30722,8 @@ with pkgs;
 
   cwm = callPackage ../applications/window-managers/cwm { };
 
+  cyberduck = callPackage ../applications/networking/cyberduck { };
+
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
 
   dablin = callPackage ../applications/radio/dablin { };
@@ -30794,6 +30812,8 @@ with pkgs;
   };
 
   dnd-tools = callPackage ../applications/misc/dnd-tools { };
+
+  dnglab = callPackage ../tools/graphics/dnglab { };
 
   inherit (callPackage ../applications/virtualization/docker {})
     docker_20_10;
@@ -31732,6 +31752,7 @@ with pkgs;
   gtk-pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { withGtk3 = true; };
 
   gum = callPackage ../applications/misc/gum { };
+  pop = callPackage ../applications/misc/pop { };
 
   hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
     inherit miniupnpc swftools;
@@ -35066,6 +35087,8 @@ with pkgs;
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
 
   soulseekqt = libsForQt5.callPackage ../applications/networking/p2p/soulseekqt { };
+
+  soundsource = callPackage ../applications/audio/soundsource { };
 
   sox = callPackage ../applications/misc/audio/sox {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
