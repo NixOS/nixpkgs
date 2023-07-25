@@ -2961,7 +2961,7 @@ self: super: with self; {
 
   django-tables2 = callPackage ../development/python-modules/django-tables2 { };
 
-  django_tagging = callPackage ../development/python-modules/django_tagging { };
+  django-tagging = callPackage ../development/python-modules/django-tagging { };
 
   django-taggit = callPackage ../development/python-modules/django-taggit { };
 

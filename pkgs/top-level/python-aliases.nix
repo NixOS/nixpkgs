@@ -101,6 +101,7 @@ mapAliases ({
   django_polymorphic = django-polymorphic; # added 2022-05-24
   django_redis = django-redis; # added 2021-10-11
   django_silk = django-silk; # added 2023-07-25
+  django_tagging = django-tagging; # added 2023-07-25
   django_taggit = django-taggit; # added 2021-10-11
   dns = dnspython; # added 2017-12-10
   dogpile_cache = dogpile-cache; # added 2021-10-28
