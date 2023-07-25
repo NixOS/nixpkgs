@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , python3
 , darwin
+, nixosTests
 }:
 
 let
@@ -35,6 +36,10 @@ in buildNpmPackage' rec {
   npmBuildScript = "build:prod";
 
   npmWorkspace = "apps/cli";
+
+  passthru.tests = {
+    vaultwarden = nixosTests.vaultwarden.sqlite;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
