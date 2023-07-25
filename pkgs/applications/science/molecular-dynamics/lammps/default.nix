@@ -84,9 +84,14 @@ stdenv.mkDerivation rec {
   ] ++ extraBuildInputs
   ;
 
-  # For backwards compatibility
   postInstall = ''
+    # For backwards compatibility
     ln -s $out/bin/lmp $out/bin/lmp_serial
+    # Install vim and neovim plugin
+    install -Dm644 ../../tools/vim/lammps.vim $out/share/vim-plugins/lammps/syntax/lammps.vim
+    install -Dm644 ../../tools/vim/filetype.vim $out/share/vim-plugins/lammps/ftdetect/lammps.vim
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/lammps $out/share/nvim/site
   '';
 
   meta = with lib; {
