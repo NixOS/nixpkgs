@@ -8145,6 +8145,14 @@
     githubId = 2588851;
     name = "Jan Solanti";
   };
+  janw4ld = {
+    github = "janw4ld";
+    githubId = 109631006;
+    keys = [{
+      fingerprint = "FDFE 3083 DB28 0948 6A90  9A75 1674 A3D6 104B 2892";
+    }];
+    name = "ورد";
+  };
   jappie = {
     email = "jappieklooster@hotmail.com";
     github = "jappeace";
