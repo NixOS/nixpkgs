@@ -1,5 +1,11 @@
 { stdenv }:
 
+#
+# A "response file" is a sequence of arguments that is passed via a
+# file, rather than via argv[].  These are used mainly for platforms
+# like Windows and Darwin that have awkwardly-small limits on the
+# amount of memory that argv[] can use.
+#
 stdenv.mkDerivation {
   name = "expand-response-params";
   src = ./expand-response-params.c;
