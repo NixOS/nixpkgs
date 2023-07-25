@@ -1302,17 +1302,6 @@ self: super: builtins.intersectAttrs super {
 
   halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
 
-  rest-rewrite =
-    overrideCabal
-      (oldAttrs: {
-        # Directory is needed for tests.
-        # https://github.com/zgrannan/rest/issues/37
-        postPatch = oldAttrs.postPatch or "" + ''
-          mkdir graphs
-        '';
-      })
-      super.rest-rewrite;
-
   # Sydtest has a brittle test suite that will only work with the exact
   # versions that it ships with.
   sydtest = dontCheck super.sydtest;
