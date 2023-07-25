@@ -76,10 +76,10 @@ let
   aws-sdk-cpp-nix = (aws-sdk-cpp.override {
     apis = [ "s3" "transfer" ];
     customMemoryManagement = false;
-  }).overrideAttrs (args: {
+  }).overrideAttrs {
     # only a stripped down version is build which takes a lot less resources to build
     requiredSystemFeatures = [ ];
-  });
+  };
 
 
   common = args:
