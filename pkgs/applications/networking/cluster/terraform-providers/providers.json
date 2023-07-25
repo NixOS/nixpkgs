@@ -264,13 +264,13 @@
     "vendorHash": "sha256-UJHDX/vx3n/RTuQ50Y6TAhpEEFk9yBoaz8yK02E8Fhw="
   },
   "consul": {
-    "hash": "sha256-UaTvFxwbLf9krUdsslFP6MXzpacnj/AKXiyUe7iSRCs=",
+    "hash": "sha256-2oujZd7tqvMnp48m3bs45p5dRC7U5a7hsiS5qBuPUHU=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/consul",
     "owner": "hashicorp",
     "repo": "terraform-provider-consul",
-    "rev": "v2.17.0",
+    "rev": "v2.18.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-v1RHxXYTvpyWzyph6qg3GW75OPYc5qYQ/yyDI8WkbNc="
+    "vendorHash": "sha256-0SRbKFKl1lfiiMDZW20ak9m09T3tSOH/fc+UwGeXmuk="
   },
   "ct": {
     "hash": "sha256-c1cqTfMlZ5fXDNMYLsk4447X0p/qIQYvRTqVY8cSs+E=",
