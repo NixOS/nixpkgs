@@ -3,7 +3,7 @@
 , fetchurl
 , unzip
 , qtbase
-, qtmacextras
+, qtmacextras ? null
 , qmake
 , fixDarwinDylibNames
 }:
