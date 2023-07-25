@@ -12,3 +12,8 @@ stdenv.md
 builders.md
 contributing.md
 ```
+
+```{=include=} appendix
+stdenv/platform-support-tiers.chapter.md
+```
+
