@@ -9853,6 +9853,15 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  luisdaranda = {
+    email = "luisdomingoaranda@gmail.com";
+    github = "propet";
+    githubId = 8515861;
+    name = "Luis D. Aranda Sánchez";
+    keys = [{
+      fingerprint = "AB7C 81F4 9E07 CC64 F3E7  BC25 DCAC C6F4 AAFC C04E";
+    }];
+  };
   luisnquin = {
     email = "lpaandres2020@gmail.com";
     matrix = "@luisnquin:matrix.org";
