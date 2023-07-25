@@ -59,10 +59,11 @@ in stdenv.mkDerivation {
     rustc
   ];
   buildInputs = [
-    iproute2
     lzo
     openssl
     zlib
+  ] ++ lib.optional stdenv.isLinux [
+    iproute2
   ];
 
   enableParallelBuilding = true;
