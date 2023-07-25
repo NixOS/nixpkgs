@@ -1825,6 +1825,8 @@ self: super: with self; {
     inherit (pkgs) secp256k1;
   };
 
+  comicon = callPackage ../development/python-modules/comicon { };
+
   connect-box = callPackage ../development/python-modules/connect_box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
