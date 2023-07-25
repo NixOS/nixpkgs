@@ -5,7 +5,7 @@ cd "$(dirname "$(readlink -f "$0")")" || exit
 repo="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git"
 
 # step 1: figure out the latest version from the tags
-if [ -z "$1" ]; then
+if [ -z "${1:-}" ]; then
   version="$(git ls-remote --refs --tags --sort refname "$repo" | tail -n1 | cut -f2 | cut -d '/' -f3)"
 else
   version=$1
