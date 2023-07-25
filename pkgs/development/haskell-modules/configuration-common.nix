@@ -1915,6 +1915,10 @@ self: super: {
       # pandoc depends on http-client-tls, which only starts depending
       # on crypton-connection in http-client-tls-0.3.6.2.
       http-client-tls = self.http-client-tls_0_3_6_2;
+
+      # pandoc and skylighting are developed in tandem
+      skylighting-core = self.skylighting-core_0_13_4_1;
+      skylighting = self.skylighting_0_13_4_1;
     };
   in {
     pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
