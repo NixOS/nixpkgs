@@ -160,3 +160,208 @@ Most contributions are based on and merged into these branches:
   and security fixes with a big impact on Hydra builds should be
   contributed to this branch. This branch is merged into master when
   deemed of sufficiently high quality
+
+## Coding conventions {#chap-conventions}
+
+### File naming and organisation {#sec-organisation}
+
+Names of files and directories should be in lowercase, with dashes between words — not in camel case. For instance, it should be `all-packages.nix`, not `allPackages.nix` or `AllPackages.nix`.
+
+### Syntax {#sec-syntax}
+
+- Use 2 spaces of indentation per indentation level in Nix expressions, 4 spaces in shell scripts.
+
+- Do not use tab characters, i.e. configure your editor to use soft tabs. For instance, use `(setq-default indent-tabs-mode nil)` in Emacs. Everybody has different tab settings so it’s asking for trouble.
+
+- Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in [](#sec-package-naming).
+
+- Function calls with attribute set arguments are written as
+
+  ```nix
+  foo {
+    arg = ...;
+  }
+  ```
+
+  not
+
+  ```nix
+  foo
+  {
+    arg = ...;
+  }
+  ```
+
+  Also fine is
+
+  ```nix
+  foo { arg = ...; }
+  ```
+
+  if it's a short call.
+
+- In attribute sets or lists that span multiple lines, the attribute names or list elements should be aligned:
+
+  ```nix
+  # A long list.
+  list = [
+    elem1
+    elem2
+    elem3
+  ];
+
+  # A long attribute set.
+  attrs = {
+    attr1 = short_expr;
+    attr2 =
+      if true then big_expr else big_expr;
+  };
+
+  # Combined
+  listOfAttrs = [
+    {
+      attr1 = 3;
+      attr2 = "fff";
+    }
+    {
+      attr1 = 5;
+      attr2 = "ggg";
+    }
+  ];
+  ```
+
+- Short lists or attribute sets can be written on one line:
+
+  ```nix
+  # A short list.
+  list = [ elem1 elem2 elem3 ];
+
+  # A short set.
+  attrs = { x = 1280; y = 1024; };
+  ```
+
+- Breaking in the middle of a function argument can give hard-to-read code, like
+
+  ```nix
+  someFunction { x = 1280;
+    y = 1024; } otherArg
+    yetAnotherArg
+  ```
+
+  (especially if the argument is very large, spanning multiple lines).
+
+  Better:
+
+  ```nix
+  someFunction
+    { x = 1280; y = 1024; }
+    otherArg
+    yetAnotherArg
+  ```
+
+  or
+
+  ```nix
+  let res = { x = 1280; y = 1024; };
+  in someFunction res otherArg yetAnotherArg
+  ```
+
+- The bodies of functions, asserts, and withs are not indented to prevent a lot of superfluous indentation levels, i.e.
+
+  ```nix
+  { arg1, arg2 }:
+  assert system == "i686-linux";
+  stdenv.mkDerivation { ...
+  ```
+
+  not
+
+  ```nix
+  { arg1, arg2 }:
+    assert system == "i686-linux";
+      stdenv.mkDerivation { ...
+  ```
+
+- Function formal arguments are written as:
+
+  ```nix
+  { arg1, arg2, arg3 }:
+  ```
+
+  but if they don't fit on one line they're written as:
+
+  ```nix
+  { arg1, arg2, arg3
+  , arg4, ...
+  , # Some comment...
+    argN
+  }:
+  ```
+
+- Functions should list their expected arguments as precisely as possible. That is, write
+
+  ```nix
+  { stdenv, fetchurl, perl }: ...
+  ```
+
+  instead of
+
+  ```nix
+  args: with args; ...
+  ```
+
+  or
+
+  ```nix
+  { stdenv, fetchurl, perl, ... }: ...
+  ```
+
+  For functions that are truly generic in the number of arguments (such as wrappers around `mkDerivation`) that have some required arguments, you should write them using an `@`-pattern:
+
+  ```nix
+  { stdenv, doCoverageAnalysis ? false, ... } @ args:
+
+  stdenv.mkDerivation (args // {
+    ... if doCoverageAnalysis then "bla" else "" ...
+  })
+  ```
+
+  instead of
+
+  ```nix
+  args:
+
+  args.stdenv.mkDerivation (args // {
+    ... if args ? doCoverageAnalysis && args.doCoverageAnalysis then "bla" else "" ...
+  })
+  ```
+
+- Unnecessary string conversions should be avoided. Do
+
+  ```nix
+  rev = version;
+  ```
+
+  instead of
+
+  ```nix
+  rev = "${version}";
+  ```
+
+- Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.
+
+  ```nix
+  buildInputs = lib.optional stdenv.isDarwin iconv;
+  ```
+
+  instead of
+
+  ```nix
+  buildInputs = if stdenv.isDarwin then [ iconv ] else null;
+  ```
+
+  As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
+  If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
+
+- Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
+
