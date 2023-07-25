@@ -1,8 +1,10 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , libsodium
+, Security
 , sqlite
 , nix-update-script
 , testers
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libsodium
     sqlite
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   passthru = {
