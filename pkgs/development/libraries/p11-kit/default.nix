@@ -9,6 +9,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gettext
+, mesonEmulatorHook
 , libffi
 , libintl
 }:
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_43
     gettext
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
