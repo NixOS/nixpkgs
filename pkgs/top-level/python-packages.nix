@@ -2943,7 +2943,7 @@ self: super: with self; {
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
-  django_silk = callPackage ../development/python-modules/django_silk { };
+  django-silk = callPackage ../development/python-modules/django-silk { };
 
   django-simple-captcha = callPackage ../development/python-modules/django-simple-captcha { };
 
