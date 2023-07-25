@@ -98,7 +98,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.11.1";
+  version = "2.13.0";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
 
