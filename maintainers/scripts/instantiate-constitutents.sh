@@ -11,7 +11,7 @@ set -euo pipefail
 #   make -j32 -f <(instantiate-constitutents.sh '<nixpkgs/nixos/release-small.nix>' tested 'supportedSystems = ["x86_64-linux"];')
 
 if [ ! "$#" -eq 3 ]; then
-    cat << EOF
+    cat << 'EOF'
     This script expects three arguments:
     1. A nix expression to instantiate (e.g. `<nixpkgs/nixos/release-small.nix>`)
     2. The name of the Hydra jobset attr within (1) (e.g. `tested`)
