@@ -1705,8 +1705,13 @@ self: super: {
   # https://github.com/adnelson/semver-range/issues/15
   semver-range = dontCheck super.semver-range;
 
-  # https://github.com/obsidiansystems/dependent-sum/issues/55
-  dependent-sum = doJailbreak super.dependent-sum;
+  # https://github.com/obsidiansystems/dependent-sum-template/issues/5
+  # https://github.com/obsidiansystems/dependent-sum-template/pull/2
+  dependent-sum-template = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/obsidiansystems/dependent-sum-template/pull/2.patch";
+    excludes = [ ".github/*" ];
+    hash = "sha256-9LGZ7a+9A2lYQPQ/COprak+XBUuJgkvgoyUFJJyYxYU=";
+  }) (dontCheck super.dependent-sum-template);
 
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
   reflex = doJailbreak (dontCheck super.reflex);
