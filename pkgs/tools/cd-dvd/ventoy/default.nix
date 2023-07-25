@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoPatchelfHook
 , bash
 , copyDesktopItems
