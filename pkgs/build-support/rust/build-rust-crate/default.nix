@@ -362,6 +362,10 @@ crate_: lib.makeOverridable
 
       meta = {
         mainProgram = crateName;
+        badPlatforms = [
+          # Rust is currently unable to target the n32 ABI
+          lib.systems.inspect.patterns.isMips64n32
+        ];
       };
     } // extraDerivationAttrs
     )
