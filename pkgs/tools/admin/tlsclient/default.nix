@@ -3,30 +3,32 @@
 , fetchFromSourcehut
 , pkg-config
 , openssl
-, installShellFiles
+, gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tlsclient";
-  version = "1.5";
+  version = "1.6.4";
 
   src = fetchFromSourcehut {
     owner = "~moody";
     repo = "tlsclient";
-    rev = "v${version}";
-    hash = "sha256-9LKx9x5Kx7Mo4EL/b89Mdsdu8NqVYxohn98XnF+IWXs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-36fhY9kO6tPUuRkpk3Jv9oBRYX/SnmdZg0Rzt/A6MQE=";
   };
 
   strictDeps = true;
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  makeFlags = [ "tlsclient" ];
-  installPhase = ''
-    install -Dm755 -t $out/bin tlsclient
-    installManPage tlsclient.1
-  '';
+  buildFlags = [ "tlsclient" ];
+  installFlags = [ "PREFIX=$(out)" ];
+  installTargets = "tlsclient.install";
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "tlsclient command line utility";
@@ -37,4 +39,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tlsclient";
     platforms = platforms.all;
   };
-}
+})

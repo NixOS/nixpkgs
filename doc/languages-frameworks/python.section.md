@@ -1514,11 +1514,11 @@ Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is in
 
 ### Tools {#tools}
 
-Packages inside nixpkgs are written by hand. However many tools exist in
-community to help save time. No tool is preferred at the moment.
+Packages inside nixpkgs must use the `buildPythonPackage` or `buildPythonApplication` function directly,
+because we can only provide security support for non-vendored dependencies.
 
-- [nixpkgs-pytools](https://github.com/nix-community/nixpkgs-pytools)
-- [poetry2nix](https://github.com/nix-community/poetry2nix)
+We recommend [nix-init](https://github.com/nix-community/nix-init) for creating new python packages within nixpkgs,
+as it already prefetches the source, parses dependencies for common formats and prefills most things in `meta`.
 
 ### Deterministic builds {#deterministic-builds}
 
