@@ -171,7 +171,9 @@ self: super: {
   rebase = doJailbreak super.rebase_1_20;
   rerebase = doJailbreak super.rerebase_1_20;
   hiedb = dontCheck super.hiedb;
-  retrie = dontCheck (super.retrie);
+  retrie = dontCheck super.retrie;
+  # https://github.com/kowainik/relude/issues/436
+  relude = dontCheck (doJailbreak super.relude);
 
   ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
    HUnit Diff data-default extra fail free ghc-paths ordered-containers silently syb
