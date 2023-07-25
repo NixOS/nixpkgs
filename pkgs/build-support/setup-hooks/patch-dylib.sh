@@ -8,7 +8,7 @@
 # does not actually exist and can be found somewhere in /nix/store/XXX-lib/lib/b.dylib.
 #
 # Dependencies:
-#  - ripgrep
+#  - grep
 #  - sed (probably in the gnused package)
 #
 # Arguments:
@@ -22,13 +22,18 @@ function patchDylib(){
   install_name_tool -id $targetLib $targetLib
   # Get all dependent shared libs
   libs="$(otool -L $targetLib \
-          | rg -N '^\s+(?P<lib>.+)\s\(.+\)' -r '$lib' \
-          | rg --invert-match '^(/nix/store|/System)'
+          | sed --regexp-extended \
+                --expression='s|^\s+(.+)\s\(.+\)|\1|g' \
+          | grep --extended-regexp \
+                 --invert-match '^(/nix/store|/System)'
         )"
 
   for libDep in $libs ; do
     # Get the name of a lib dependency from an absolute path like /usr/lib/abc.dylib
-    libName=$(echo "$libDep" | rg '/.+/(?P<lib>.+)$' --replace '$lib')
+    libName=$(echo "$libDep" \
+        | sed --regexp-extended \
+              --expression='s|/.+/(.+)$|\1|g'
+    )
     libInNix=$(findFile $libName "$libraryPaths")
     if [[ -n "$libInNix" ]]
     then
@@ -42,7 +47,7 @@ function patchDylib(){
 # Finds a file in given list directories
 function findFile(){
   local file="$1"
-  local paths="$(echo "$2" | sed -e "s/:/\n/g")"
+  local paths="$(echo "$2" | sed -e "s|:|\n|g")"
   for path in $paths
   do
     if [[ -e "$path/$file" ]]
@@ -52,4 +57,3 @@ function findFile(){
     fi
   done
 }
-
