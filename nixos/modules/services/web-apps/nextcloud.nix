@@ -63,27 +63,25 @@ let
 in {
 
   imports = [
-    (mkRemovedOptionModule [ "services" "nextcloud" "config" "adminpass" ] ''
-      Please use `services.nextcloud.config.adminpassFile' instead!
-    '')
-    (mkRemovedOptionModule [ "services" "nextcloud" "config" "dbpass" ] ''
-      Please use `services.nextcloud.config.dbpassFile' instead!
-    '')
-    (mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ] ''
-      The nextcloud module supports `nginx` as reverse-proxy by default and doesn't
-      support other reverse-proxies officially.
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "logLevel" ] [ "services" "nextcloud" "extraOptions" "loglevel" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "logType" ] [ "services" "nextcloud" "extraOptions" "log_type" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "defaultPhoneRegion" ] [ "services" "nextcloud" "extraOptions" "default_phone_region" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "overwriteProtocol" ] [ "services" "nextcloud" "extraOptions" "overwriteprotocol" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "skeletonDirectory" ] [ "services" "nextcloud" "extraOptions" "skeletondirectory" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "globalProfiles" ] [ "services" "nextcloud" "extraOptions" "profile.enabled" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "extraTrustedDomains" ] [ "services" "nextcloud" "extraOptions" "trusted_domains" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "trustedProxies" ] [ "services" "nextcloud" "extraOptions" "trusted_proxies" ])
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "config" "objectstore" ] [ "services" "nextcloud" "extraOptions" "objectstore" ])
 
-      However it's possible to use an alternative reverse-proxy by
-
-        * disabling nginx
-        * setting `listen.owner` & `listen.group` in the phpfpm-pool to a different value
-
-      Further details about this can be found in the `Nextcloud`-section of the NixOS-manual
-      (which can be opened e.g. by running `nixos-help`).
-    '')
-    (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
-      Use services.nextcloud.enableImagemagick instead.
-    '')
   ];
 
   options.services.nextcloud = {
@@ -185,20 +183,6 @@ in {
         Set to false to disable the installation of apps from the global appstore. App management is always enabled regardless of this setting.
       '';
     };
-    logLevel = mkOption {
-      type = types.ints.between 0 4;
-      default = 2;
-      description = lib.mdDoc "Log level value between 0 (DEBUG) and 4 (FATAL).";
-    };
-    logType = mkOption {
-      type = types.enum [ "errorlog" "file" "syslog" "systemd" ];
-      default = "syslog";
-      description = lib.mdDoc ''
-        Logging backend to use.
-        systemd requires the php-systemd package to be added to services.nextcloud.phpExtraExtensions.
-        See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
-      '';
-    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -224,16 +208,6 @@ in {
       description = lib.mdDoc ''
         Defines the upload limit for files. This changes the relevant options
         in php.ini and nginx if enabled.
-      '';
-    };
-
-    skeletonDirectory = mkOption {
-      default = "";
-      type = types.str;
-      description = lib.mdDoc ''
-        The directory where the skeleton files are located. These files will be
-        copied to the data directory of new users. Leave empty to not copy any
-        skeleton files.
       '';
     };
 
@@ -386,160 +360,6 @@ in {
         '';
       };
 
-      extraTrustedDomains = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
-          Trusted domains, from which the nextcloud installation will be
-          accessible.  You don't need to add
-          `services.nextcloud.hostname` here.
-        '';
-      };
-
-      trustedProxies = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
-          Trusted proxies, to provide if the nextcloud installation is being
-          proxied to secure against e.g. spoofing.
-        '';
-      };
-
-      overwriteProtocol = mkOption {
-        type = types.nullOr (types.enum [ "http" "https" ]);
-        default = null;
-        example = "https";
-
-        description = lib.mdDoc ''
-          Force Nextcloud to always use HTTPS i.e. for link generation. Nextcloud
-          uses the currently used protocol by default, but when behind a reverse-proxy,
-          it may use `http` for everything although Nextcloud
-          may be served via HTTPS.
-        '';
-      };
-
-      defaultPhoneRegion = mkOption {
-        default = null;
-        type = types.nullOr types.str;
-        example = "DE";
-        description = lib.mdDoc ''
-          ::: {.warning}
-          This option exists since Nextcloud 21! If older versions are used,
-          this will throw an eval-error!
-          :::
-
-          [ISO 3611-1](https://www.iso.org/iso-3166-country-codes.html)
-          country codes for automatic phone-number detection without a country code.
-
-          With e.g. `DE` set, the `+49` can be omitted for
-          phone-numbers.
-        '';
-      };
-
-      objectstore = {
-        s3 = {
-          enable = mkEnableOption (lib.mdDoc ''
-            S3 object storage as primary storage.
-
-            This mounts a bucket on an Amazon S3 object storage or compatible
-            implementation into the virtual filesystem.
-
-            Further details about this feature can be found in the
-            [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html).
-          '');
-          bucket = mkOption {
-            type = types.str;
-            example = "nextcloud";
-            description = lib.mdDoc ''
-              The name of the S3 bucket.
-            '';
-          };
-          autocreate = mkOption {
-            type = types.bool;
-            description = lib.mdDoc ''
-              Create the objectstore if it does not exist.
-            '';
-          };
-          key = mkOption {
-            type = types.str;
-            example = "EJ39ITYZEUH5BGWDRUFY";
-            description = lib.mdDoc ''
-              The access key for the S3 bucket.
-            '';
-          };
-          secretFile = mkOption {
-            type = types.str;
-            example = "/var/nextcloud-objectstore-s3-secret";
-            description = lib.mdDoc ''
-              The full path to a file that contains the access secret. Must be
-              readable by user `nextcloud`.
-            '';
-          };
-          hostname = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "example.com";
-            description = lib.mdDoc ''
-              Required for some non-Amazon implementations.
-            '';
-          };
-          port = mkOption {
-            type = types.nullOr types.port;
-            default = null;
-            description = lib.mdDoc ''
-              Required for some non-Amazon implementations.
-            '';
-          };
-          useSsl = mkOption {
-            type = types.bool;
-            default = true;
-            description = lib.mdDoc ''
-              Use SSL for objectstore access.
-            '';
-          };
-          region = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "REGION";
-            description = lib.mdDoc ''
-              Required for some non-Amazon implementations.
-            '';
-          };
-          usePathStyle = mkOption {
-            type = types.bool;
-            default = false;
-            description = lib.mdDoc ''
-              Required for some non-Amazon S3 implementations.
-
-              Ordinarily, requests will be made with
-              `http://bucket.hostname.domain/`, but with path style
-              enabled requests are made with
-              `http://hostname.domain/bucket` instead.
-            '';
-          };
-          sseCKeyFile = mkOption {
-            type = types.nullOr types.path;
-            default = null;
-            example = "/var/nextcloud-objectstore-s3-sse-c-key";
-            description = lib.mdDoc ''
-              If provided this is the full path to a file that contains the key
-              to enable [server-side encryption with customer-provided keys][1]
-              (SSE-C).
-
-              The file must contain a random 32-byte key encoded as a base64
-              string, e.g. generated with the command
-
-              ```
-              openssl rand 32 | base64
-              ```
-
-              Must be readable by user `nextcloud`.
-
-              [1]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html
-            '';
-          };
-        };
-      };
     };
 
     enableImagemagick = mkEnableOption (lib.mdDoc ''
@@ -618,30 +438,205 @@ in {
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
-    globalProfiles = mkEnableOption (lib.mdDoc "global profiles") // {
-      description = lib.mdDoc ''
-        Makes user-profiles globally available under `nextcloud.tld/u/user.name`.
-        Even though it's enabled by default in Nextcloud, it must be explicitly enabled
-        here because it has the side-effect that personal information is even accessible to
-        unauthenticated users by default.
-
-        By default, the following properties are set to “Show to everyone”
-        if this flag is enabled:
-        - About
-        - Full name
-        - Headline
-        - Organisation
-        - Profile picture
-        - Role
-        - Twitter
-        - Website
-
-        Only has an effect in Nextcloud 23 and later.
-      '';
-    };
 
     extraOptions = mkOption {
-      type = jsonFormat.type;
+      type = types.submodule {
+        freeformType = jsonFormat.type;
+        options = {
+
+          loglevel = mkOption {
+            type = types.ints.between 0 4;
+            default = 2;
+            description = lib.mdDoc "Log level value between 0 (DEBUG) and 4 (FATAL).";
+          };
+          log_type = mkOption {
+            type = types.enum [ "errorlog" "file" "syslog" "systemd" ];
+            default = "syslog";
+            description = lib.mdDoc ''
+              Logging backend to use.
+              systemd requires the php-systemd package to be added to services.nextcloud.phpExtraExtensions.
+              See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
+            '';
+          };
+          skeletondirectory = mkOption {
+            default = "";
+            type = types.str;
+            description = lib.mdDoc ''
+              The directory where the skeleton files are located. These files will be
+              copied to the data directory of new users. Leave empty to not copy any
+              skeleton files.
+            '';
+          };
+          trusted_domains = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = lib.mdDoc ''
+              Trusted domains, from which the nextcloud installation will be
+              accessible.  You don't need to add
+              `services.nextcloud.hostname` here.
+            '';
+          };
+          trusted_proxies = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = lib.mdDoc ''
+              Trusted proxies, to provide if the nextcloud installation is being
+              proxied to secure against e.g. spoofing.
+            '';
+          };
+          overwriteprotocol = mkOption {
+            type = types.nullOr (types.enum [ "http" "https" ]);
+            default = null;
+            example = "https";
+            description = lib.mdDoc ''
+              Force Nextcloud to always use HTTPS i.e. for link generation. Nextcloud
+              uses the currently used protocol by default, but when behind a reverse-proxy,
+              it may use `http` for everything although Nextcloud
+              may be served via HTTPS.
+            '';
+          };
+          default_phone_region = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            example = "DE";
+            description = lib.mdDoc ''
+              ::: {.warning}
+              This option exists since Nextcloud 21! If older versions are used,
+              this will throw an eval-error!
+              :::
+              [ISO 3611-1](https://www.iso.org/iso-3166-country-codes.html)
+              country codes for automatic phone-number detection without a country code.
+              With e.g. `DE` set, the `+49` can be omitted for
+              phone-numbers.
+            '';
+          };
+          profile = {
+            enable = mkEnableOption (lib.mdDoc "global profiles") // {
+              description = lib.mdDoc ''
+                Makes user-profiles globally available under `nextcloud.tld/u/user.name`.
+                Even though it's enabled by default in Nextcloud, it must be explicitly enabled
+                here because it has the side-effect that personal information is even accessible to
+                unauthenticated users by default.
+                By default, the following properties are set to “Show to everyone”
+                if this flag is enabled:
+                - About
+                - Full name
+                - Headline
+                - Organisation
+                - Profile picture
+                - Role
+                - Twitter
+                - Website
+                Only has an effect in Nextcloud 23 and later.
+              '';
+            };
+          };
+          objectstore = {
+            s3 = {
+              enable = mkEnableOption (lib.mdDoc ''
+                S3 object storage as primary storage.
+
+                This mounts a bucket on an Amazon S3 object storage or compatible
+                implementation into the virtual filesystem.
+
+                Further details about this feature can be found in the
+                [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html).
+              '');
+              bucket = mkOption {
+                type = types.str;
+                example = "nextcloud";
+                description = lib.mdDoc ''
+                  The name of the S3 bucket.
+                '';
+              };
+              autocreate = mkOption {
+                type = types.bool;
+                description = lib.mdDoc ''
+                  Create the objectstore if it does not exist.
+                '';
+              };
+              key = mkOption {
+                type = types.str;
+                example = "EJ39ITYZEUH5BGWDRUFY";
+                description = lib.mdDoc ''
+                  The access key for the S3 bucket.
+                '';
+              };
+              secretFile = mkOption {
+                type = types.str;
+                example = "/var/nextcloud-objectstore-s3-secret";
+                description = lib.mdDoc ''
+                  The full path to a file that contains the access secret. Must be
+                  readable by user `nextcloud`.
+                '';
+              };
+              hostname = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "example.com";
+                description = lib.mdDoc ''
+                  Required for some non-Amazon implementations.
+                '';
+              };
+              port = mkOption {
+                type = types.nullOr types.port;
+                default = null;
+                description = lib.mdDoc ''
+                  Required for some non-Amazon implementations.
+                '';
+              };
+              useSsl = mkOption {
+                type = types.bool;
+                default = true;
+                description = lib.mdDoc ''
+                  Use SSL for objectstore access.
+                '';
+              };
+              region = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "REGION";
+                description = lib.mdDoc ''
+                  Required for some non-Amazon implementations.
+                '';
+              };
+              usePathStyle = mkOption {
+                type = types.bool;
+                default = false;
+                description = lib.mdDoc ''
+                  Required for some non-Amazon S3 implementations.
+
+                  Ordinarily, requests will be made with
+                  `http://bucket.hostname.domain/`, but with path style
+                  enabled requests are made with
+                  `http://hostname.domain/bucket` instead.
+                '';
+              };
+              sseCKeyFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                example = "/var/nextcloud-objectstore-s3-sse-c-key";
+                description = lib.mdDoc ''
+                  If provided this is the full path to a file that contains the key
+                  to enable [server-side encryption with customer-provided keys][1]
+                  (SSE-C).
+
+                  The file must contain a random 32-byte key encoded as a base64
+                  string, e.g. generated with the command
+
+                  ```
+                  openssl rand 32 | base64
+                  ```
+
+                  Must be readable by user `nextcloud`.
+
+                  [1]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html
+                '';
+              };
+            };
+          };
+        };
+      };
       default = {};
       description = lib.mdDoc ''
         Extra options which should be appended to nextcloud's config.php file.
@@ -789,26 +784,7 @@ in {
 
         nextcloud-setup = let
           c = cfg.config;
-          writePhpArray = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
-          requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
-          objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
-            'objectstore' => [
-              'class' => '\\OC\\Files\\ObjectStore\\S3',
-              'arguments' => [
-                'bucket' => '${s3.bucket}',
-                'autocreate' => ${boolToString s3.autocreate},
-                'key' => '${s3.key}',
-                'secret' => nix_read_secret('${s3.secretFile}'),
-                ${optionalString (s3.hostname != null) "'hostname' => '${s3.hostname}',"}
-                ${optionalString (s3.port != null) "'port' => ${toString s3.port},"}
-                'use_ssl' => ${boolToString s3.useSsl},
-                ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
-                'use_path_style' => ${boolToString s3.usePathStyle},
-                ${optionalString (s3.sseCKeyFile != null) "'sse_c_key' => nix_read_secret('${s3.sseCKeyFile}'),"}
-              ],
-            ]
-          '';
-
+          requiresReadSecretFunction = c.dbpassFile != null || cfg.extraOptions.objectstore.s3.enable;
           showAppStoreSetting = cfg.appstoreEnable != null || cfg.extraApps != {};
           renderedAppStoreSetting =
             let
@@ -852,12 +828,6 @@ in {
                 [ 'path' => '${cfg.home}/store-apps', 'url' => '/store-apps', 'writable' => true ],
               ],
               ${optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
-              'datadirectory' => '${datadir}/data',
-              'skeletondirectory' => '${cfg.skeletonDirectory}',
-              ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
-              'log_type' => '${cfg.logType}',
-              'loglevel' => '${builtins.toString cfg.logLevel}',
-              ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
               ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
@@ -870,11 +840,6 @@ in {
                 ''
               }
               'dbtype' => '${c.dbtype}',
-              'trusted_domains' => ${writePhpArray ([ cfg.hostName ] ++ c.extraTrustedDomains)},
-              'trusted_proxies' => ${writePhpArray (c.trustedProxies)},
-              ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
-              ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles},"}
-              ${objectstoreConfig}
             ];
 
             $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
@@ -926,7 +891,7 @@ in {
             (i: v: ''
               ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
                 ${toString i} --value="${toString v}"
-            '') ([ cfg.hostName ] ++ cfg.config.extraTrustedDomains));
+            '') ([ cfg.hostName ] ++ cfg.extraOptions.trusted_domains));
 
         in {
           wantedBy = [ "multi-user.target" ];
@@ -1062,15 +1027,20 @@ in {
         user = "nextcloud";
       };
 
-      services.nextcloud = lib.mkIf cfg.configureRedis {
-        caching.redis = true;
+      services.nextcloud = {
+        caching.redis = lib.mkIf cfg.configureRedis true;
         extraOptions = {
+          datadirectory = lib.mkDefault "${datadir}/data";
+          trusted_domains = [ cfg.hostName ];
+        } // lib.mkIf cfg.configureRedis {
           "memcache.distributed" = ''\OC\Memcache\Redis'';
           "memcache.locking" = ''\OC\Memcache\Redis'';
           redis = {
             host = config.services.redis.servers.nextcloud.unixSocket;
             port = 0;
           };
+        } // lib.mkIf cfg.caching.apcu {
+          "memcache.local" = ''\\OC\\Memcache\\APCu'';
         };
       };
 
