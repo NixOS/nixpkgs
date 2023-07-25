@@ -449,6 +449,23 @@ let
         };
       };
 
+      batisteo.vscode-django = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "batisteo";
+          name = "vscode-django";
+          version = "1.10.0";
+          sha256 = "sha256-vTaE3KhG5i2jGc5o33u76RUUFYaW4s4muHvph48HeQ4=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/batisteo.vscode-django/changelog";
+          description = "Django extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=batisteo.vscode-django";
+          homepage = "https://github.com/vscode-django/vscode-django";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ azd325 ];
+        };
+      };
+
       bbenoist.nix = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Nix";
@@ -667,8 +684,8 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.30.0";
-          sha256 = "sha256-E/zgKNxKH05qzLkoyq66qBDbkNJ7liBvU+ZSxw825c0=";
+          version = "2023.32.0";
+          sha256 = "sha256-phyPQqDgsYunF5FLqPevw8ZZG4Tw9qxjTOU4/kNGKU8=";
         };
         meta = {
           license = lib.licenses.mit;

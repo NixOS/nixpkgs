@@ -5,7 +5,7 @@ _nixos-container() {
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="list create destroy start stop status update login root-login run show-ip show-host-key"
+    opts="list create destroy restart start stop status update login root-login run show-ip show-host-key"
     startstop_opts=$(nixos-container list)
     update_opts="--config"
 

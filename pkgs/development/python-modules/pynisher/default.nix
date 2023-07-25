@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pynisher";
-  version = "1.0.7";
+  version = "1.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cqgRoV3AJn96zAJDGbRJ5e3xOTuujmBu8HwZi2RQ6GY=";
+    hash = "sha256-BTH34zv7OAaVKc20VASfv3QaxAt/Y14Dkd/PBo/V6vo=";
   };
 
   propagatedBuildInputs = [
