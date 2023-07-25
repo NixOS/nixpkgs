@@ -510,6 +510,8 @@ self: super: with self; {
 
   ansible-runner = callPackage ../development/python-modules/ansible-runner { };
 
+  ansible-vault-rw = callPackage ../development/python-modules/ansible-vault-rw { };
+
   ansi = callPackage ../development/python-modules/ansi { };
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
