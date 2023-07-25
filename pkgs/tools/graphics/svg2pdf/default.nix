@@ -1,7 +1,6 @@
 { lib
-, stdenv
-, fetchCrate
 , rustPlatform
+, fetchCrate
 }:
 
 rustPlatform.buildRustPackage rec {

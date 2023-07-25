@@ -3,7 +3,6 @@
 , fetchzip
 , fetchFromGitHub
 , cmake
-, spirv-headers
 , vulkan-headers
 , vulkan-loader
 , glslang
