@@ -5,7 +5,8 @@ In the context of Nixpkgs, a *platform* can mean a CPU architecture, a
 
 Nixpkgs defines 7 platform *support tiers*, meaning levels of support for each platform.
 
-**TODO**: change build successfully to a definition of "work".
+- **TODO**: change "build successfully" to a definition of "work" that includes tests?
+- **TODO**: mention binary cache?
 
 ## Tier 1 {#platform-support-tier-1}
 
