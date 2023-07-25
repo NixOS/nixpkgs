@@ -1,6 +1,5 @@
-{ stdenv
-, lib
-, bashInteractive
+{ lib
+, stdenv
 , curl
 , fetchFromGitHub
 , json_c
