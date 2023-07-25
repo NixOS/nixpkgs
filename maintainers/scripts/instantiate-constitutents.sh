@@ -34,7 +34,7 @@ echo "default: build"
 ATTRS=$(nix eval --raw --impure --expr "let lib = import <nixpkgs/lib>; in lib.concatStringsSep \"\\n\" (with import $IMPORT {$ARGS}; $TOPLEVEL_ATTR.constituents)")
 for ATTR in $ATTRS; do
     cat << EOF
-$DEST/$ATTR:; @nix-instantiate --expr '(import $IMPORT {$ARGS}).$ATTR' --add-root $DEST/$ATTR
+$DEST/$ATTR:; @nix-instantiate --expr '(import '${IMPORT@Q}' {'${ARGS@Q}'}).'${ATTR@Q} --add-root $DEST/$ATTR
 drvs: $DEST/$ATTR
 build: $DEST/$ATTR
 DRVS += $DEST/$ATTR
