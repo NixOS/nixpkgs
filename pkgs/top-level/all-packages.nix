@@ -30813,6 +30813,8 @@ with pkgs;
 
   dnd-tools = callPackage ../applications/misc/dnd-tools { };
 
+  dnglab = callPackage ../tools/graphics/dnglab { };
+
   inherit (callPackage ../applications/virtualization/docker {})
     docker_20_10;
 
