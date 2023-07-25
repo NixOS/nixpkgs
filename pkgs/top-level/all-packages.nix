@@ -8465,6 +8465,8 @@ with pkgs;
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
+  googlefonts = callPackage ../data/fonts/googlefonts { };
+
   google-clasp = callPackage ../development/tools/google-clasp { };
 
   google-compute-engine = with python38.pkgs; toPythonApplication google-compute-engine;
