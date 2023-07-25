@@ -87,8 +87,7 @@ let
 
   isModular = config.isYes "MODULES";
 
-  kernelConf = stdenv.hostPlatform.linux-kernel;
-  target = kernelConf.target or "vmlinux";
+  kernelConf =  stdenv.hostPlatform.linux-kernel;
 
   buildDTBs = kernelConf.DTB or false;
 in
@@ -102,7 +101,7 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
-      ++ optional  (target == "uImage") buildPackages.ubootTools
+      ++ optional  (kernelConf.target == "uImage") buildPackages.ubootTools
       ++ optional  (lib.versionOlder version "5.8") libelf
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
@@ -298,8 +297,8 @@ stdenv.mkDerivation ({
   # Some image types need special install targets (e.g. uImage is installed with make uinstall)
   installTargets = [
     (kernelConf.installTarget or (
-      /**/ if target == "uImage" then "uinstall"
-      else if target == "zImage" || target == "Image.gz" then "zinstall"
+      /**/ if kernelConf.target == "uImage" then "uinstall"
+      else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
       else "install"))
   ];
 
