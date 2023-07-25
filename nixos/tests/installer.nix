@@ -422,6 +422,7 @@ let
           # The test cannot access the network, so any packages we
           # need must be included in the VM.
           system.extraDependencies = with pkgs; [
+            bintools
             brotli
             brotli.dev
             brotli.lib
