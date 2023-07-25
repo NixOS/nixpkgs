@@ -179,8 +179,7 @@ stdenv.mkDerivation ({
   configurePhase = ''
     runHook preConfigure
 
-    export buildRoot=$TMPDIR/kernel-buildroot
-    mkdir -p $buildRoot
+    export buildRoot=$(mktemp -d)
 
     echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
 
