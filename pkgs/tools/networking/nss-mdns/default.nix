@@ -1,4 +1,4 @@
-{ fetchurl, lib, autoreconfHook, pkg-config, stdenv, fetchpatch, fetchFromGitHub }:
+{ lib, autoreconfHook, pkg-config, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "nss-mdns";

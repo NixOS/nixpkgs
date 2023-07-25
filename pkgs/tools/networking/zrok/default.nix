@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, patchelf }:
+{ lib, stdenv, fetchzip }:
 
 let
   inherit (stdenv.hostPlatform) system;
