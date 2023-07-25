@@ -2871,7 +2871,7 @@ self: super: with self; {
 
   django-mysql = callPackage ../development/python-modules/django-mysql { };
 
-  django_nose = callPackage ../development/python-modules/django_nose { };
+  django-nose = callPackage ../development/python-modules/django-nose { };
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
