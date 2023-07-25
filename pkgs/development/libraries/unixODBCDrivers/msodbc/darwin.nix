@@ -26,6 +26,7 @@ in stdenv.mkDerivation {
   version = "17.10.4.1";
   src = fetchurl spec;
   nativeBuildInputs = [ gnused patchDylib];
+  dontBuild = true;
   installPhase = ''
     mkdir $out
     cp -r . $out
@@ -39,7 +40,6 @@ in stdenv.mkDerivation {
   '';
   fixupPhase = ''
     runHook preFixup
-
 
     patchDylib "$(ls -1 $out/lib/*.dylib)" "${lib.strings.makeLibraryPath [
         darwin.libiconv
