@@ -1,0 +1,29 @@
+diff --git a/meson.build b/meson.build
+index 2107c19ec..20ccdfd9f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -380,8 +380,8 @@ lilv_lib = dependency('lilv-0', required: get_option('lv2'))
+ summary({'lilv (for lv2 plugins)': lilv_lib.found()}, bool_yn: true)
+ cdata.set('HAVE_LILV', lilv_lib.found())
+ 
+-installed_tests_metadir = pipewire_datadir / 'installed-tests' / pipewire_name
+-installed_tests_execdir = pipewire_libexecdir / 'installed-tests' / pipewire_name
++installed_tests_metadir = get_option('installed_test_prefix') / 'share' / 'installed-tests' / pipewire_name
++installed_tests_execdir = get_option('installed_test_prefix') / 'libexec' / 'installed-tests' / pipewire_name
+ installed_tests_enabled = get_option('installed_tests').allowed()
+ installed_tests_template = files('template.test.in')
+ 
+diff --git a/meson_options.txt b/meson_options.txt
+index 961ae2a76..a36e9e45f 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -22,6 +22,9 @@ option('installed_tests',
+        description: 'Install manual and automated test executables',
+        type: 'feature',
+        value: 'disabled')
++option('installed_test_prefix',
++       description: 'Prefix for installed tests',
++       type: 'string')
+ option('gstreamer',
+        description: 'Build GStreamer plugins',
+        type: 'feature',

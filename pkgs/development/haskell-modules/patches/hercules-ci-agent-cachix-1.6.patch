@@ -1,0 +1,32 @@
+diff --git a/hercules-ci-agent/hercules-ci-agent/Hercules/Agent/Cachix.hs b/hercules-ci-agent/hercules-ci-agent/Hercules/Agent/Cachix.hs
+index 849d9bc..972bc90 100644
+--- hercules-ci-agent/hercules-ci-agent/Hercules/Agent/Cachix.hs
++++ hercules-ci-agent/hercules-ci-agent/Hercules/Agent/Cachix.hs
+@@ -17,6 +17,7 @@ import Hercules.Agent.Log
+ import Hercules.CNix.Store (StorePath)
+ import Hercules.Error
+ import qualified Hercules.Formats.CachixCache as CachixCache
++import qualified Data.Conduit as Conduit
+ import Protolude
+ 
+ push :: Text -> [StorePath] -> Int -> App ()
+@@ -36,6 +37,9 @@ push cache paths workers = withNamedContext "cache" cache $ do
+         Cachix.Push.PushParams
+           { pushParamsName = Agent.Cachix.pushCacheName pushCache,
+             pushParamsSecret = Agent.Cachix.pushCacheSecret pushCache,
++#if MIN_VERSION_cachix(1,6,0)
++            pushOnClosureAttempt = \_ missing -> return missing,
++#endif
+             pushParamsStore = nixStore,
+             pushParamsClientEnv = clientEnv,
+             pushParamsStrategy = \storePath ->
+@@ -59,6 +63,9 @@ push cache paths workers = withNamedContext "cache" cache $ do
+                       compressionLevel = 2,
+ #else
+                       withXzipCompressor = Cachix.Push.defaultWithXzipCompressor,
++#endif
++#if MIN_VERSION_cachix(1,6,0)
++                      onUncompressedNARStream = \_ _ -> Conduit.awaitForever Conduit.yield,
+ #endif
+                       omitDeriver = False
+                     }

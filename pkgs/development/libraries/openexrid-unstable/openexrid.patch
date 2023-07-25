@@ -1,0 +1,35 @@
+diff --git a/makefile b/makefile
+index 7a92771..31ef664 100644
+--- a/makefile
++++ b/makefile
+@@ -8,8 +8,8 @@ _openexrid:
+ _openfx:
+ 	make -C openfx
+ 
+-_test: _openexrid
+-	make -C test
++#_test: _openexrid
++#	make -C test
+ 
+ clean:
+ 	make -C openfx clean
+diff --git a/makefile.config b/makefile.config
+index 0c6cdfa..0166c4c 100644
+--- a/makefile.config
++++ b/makefile.config
+@@ -4,7 +4,7 @@
+ 
+ PREFIX ?= ~/openexrid
+ 
+-OFX_INCLUDE ?= /usr/include/openfx
++OFX_INCLUDE ?= /usr/include/OpenFX
+ EXR_INCLUDE ?= /usr/include/OpenEXR
+ EXR_LIB ?= /usr/lib
+ RE2_INCLUDE ?= /usr/include
+@@ -13,5 +13,5 @@ RE2_LIB ?= /usr/lib
+ VERSION ?= release
+ CPPFLAGS += -O3 -Wall -DNDEBUG -fPIC -I $(EXR_INCLUDE) -I $(OFX_INCLUDE) -I $(RE2_INCLUDE) -Dlinux
+ LDFLAGS += -L$(EXR_LIB) -L$(RE2_LIB) -L../openexrid/$(VERSION) -lpthread
+-LDFLAGS += -Wl,-Bstatic -lopenexrid -lIlmImf -lIlmThread -lIex -lImath -lHalf -lz -lre2 -Wl,-Bdynamic
++LDFLAGS += -lopenexrid -lIlmImf -lIlmThread -lIex -lImath -lHalf -lz -lre2 -Wl,-Bdynamic
+ 

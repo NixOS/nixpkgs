@@ -1,0 +1,148 @@
+diff --git a/src/Makefile.in b/src/Makefile.in
+index 3b19ca27..4d2e8e52 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -124,7 +124,7 @@ am_pgpool_OBJECTS = main/main.$(OBJEXT) main/pool_globals.$(OBJEXT) \
+ 	context/pool_query_context.$(OBJEXT) \
+ 	streaming_replication/pool_worker_child.$(OBJEXT) \
+ 	rewrite/pool_timestamp.$(OBJEXT) rewrite/pool_lobj.$(OBJEXT) \
+-	utils/pool_select_walker.$(OBJEXT) utils/strlcpy.$(OBJEXT) \
++	utils/pool_select_walker.$(OBJEXT) \
+ 	utils/psprintf.$(OBJEXT) utils/pool_params.$(OBJEXT) \
+ 	utils/ps_status.$(OBJEXT) utils/pool_shmem.$(OBJEXT) \
+ 	utils/pool_sema.$(OBJEXT) utils/pool_signal.$(OBJEXT) \
+@@ -469,7 +469,6 @@ pgpool_SOURCES = main/main.c \
+ 	rewrite/pool_timestamp.c \
+ 	rewrite/pool_lobj.c \
+ 	utils/pool_select_walker.c \
+-	utils/strlcpy.c \
+ 	utils/psprintf.c \
+ 	utils/pool_params.c \
+ 	utils/ps_status.c \
+@@ -762,7 +761,6 @@ utils/$(am__dirstamp):
+ 	@$(MKDIR_P) utils
+ 	@: > utils/$(am__dirstamp)
+ utils/pool_select_walker.$(OBJEXT): utils/$(am__dirstamp)
+-utils/strlcpy.$(OBJEXT): utils/$(am__dirstamp)
+ utils/psprintf.$(OBJEXT): utils/$(am__dirstamp)
+ utils/pool_params.$(OBJEXT): utils/$(am__dirstamp)
+ utils/ps_status.$(OBJEXT): utils/$(am__dirstamp)
+diff --git a/src/libs/pcp/Makefile.in b/src/libs/pcp/Makefile.in
+index 5ea3213a..5689fb33 100644
+--- a/src/libs/pcp/Makefile.in
++++ b/src/libs/pcp/Makefile.in
+@@ -129,7 +129,7 @@ libpcp_la_LIBADD =
+ am__dirstamp = $(am__leading_dot)dirstamp
+ dist_libpcp_la_OBJECTS = pcp.lo ../../utils/pool_path.lo \
+ 	../../tools/fe_port.lo ../../tools/fe_memutils.lo \
+-	../../utils/strlcpy.lo ../../utils/pool_health_check_stats.lo
++	../../utils/pool_health_check_stats.lo
+ nodist_libpcp_la_OBJECTS = pcp_stream.lo md5.lo json.lo
+ libpcp_la_OBJECTS = $(dist_libpcp_la_OBJECTS) \
+ 	$(nodist_libpcp_la_OBJECTS)
+@@ -347,7 +347,6 @@ dist_libpcp_la_SOURCES = pcp.c \
+ 					../../utils/pool_path.c \
+ 					../../tools/fe_port.c \
+ 					../../tools/fe_memutils.c \
+-					../../utils/strlcpy.c \
+ 					../../utils/pool_health_check_stats.c
+ 
+ nodist_libpcp_la_SOURCES = pcp_stream.c \
+@@ -437,7 +436,6 @@ clean-libLTLIBRARIES:
+ 	@: > ../../tools/$(am__dirstamp)
+ ../../tools/fe_port.lo: ../../tools/$(am__dirstamp)
+ ../../tools/fe_memutils.lo: ../../tools/$(am__dirstamp)
+-../../utils/strlcpy.lo: ../../utils/$(am__dirstamp)
+ ../../utils/pool_health_check_stats.lo: ../../utils/$(am__dirstamp)
+ 
+ libpcp.la: $(libpcp_la_OBJECTS) $(libpcp_la_DEPENDENCIES) $(EXTRA_libpcp_la_DEPENDENCIES) 
+diff --git a/src/tools/pgenc/Makefile.in b/src/tools/pgenc/Makefile.in
+index ad117a5e..5c5fc838 100644
+--- a/src/tools/pgenc/Makefile.in
++++ b/src/tools/pgenc/Makefile.in
+@@ -101,7 +101,7 @@ PROGRAMS = $(bin_PROGRAMS)
+ am__dirstamp = $(am__leading_dot)dirstamp
+ dist_pg_enc_OBJECTS = pg_enc.$(OBJEXT) ../fe_port.$(OBJEXT)
+ nodist_pg_enc_OBJECTS = ssl_utils.$(OBJEXT) md5.$(OBJEXT) \
+-	base64.$(OBJEXT) pool_passwd.$(OBJEXT) strlcpy.$(OBJEXT) \
++	base64.$(OBJEXT) pool_passwd.$(OBJEXT) \
+ 	regex_array.$(OBJEXT) pool_config_variables.$(OBJEXT) \
+ 	pool_config.$(OBJEXT) fe_memutils.$(OBJEXT) \
+ 	pool_path.$(OBJEXT)
+@@ -320,7 +320,6 @@ nodist_pg_enc_SOURCES = ssl_utils.c \
+ 		md5.c \
+ 		base64.c \
+ 		pool_passwd.c \
+-		strlcpy.c \
+ 		regex_array.c \
+ 		pool_config_variables.c \
+ 		pool_config.c \
+@@ -664,8 +663,6 @@ base64.h: ../../../src/include/utils/base64.h
+ 	rm -f $@ && ln -s $< .
+ ssl_utils.h: ../../../src/include/utils/ssl_utils.h
+ 	rm -f $@ && ln -s $< .
+-strlcpy.c: ../../../src/utils/strlcpy.c
+-	rm -f $@ && ln -s $< .
+ regex_array.c: ../../../src/utils/regex_array.c
+ 	rm -f $@ && ln -s $< .
+ pool_config_variables.c: ../../../src/config/pool_config_variables.c
+diff --git a/src/tools/pgmd5/Makefile.in b/src/tools/pgmd5/Makefile.in
+index 275f39e5..d3af1e25 100644
+--- a/src/tools/pgmd5/Makefile.in
++++ b/src/tools/pgmd5/Makefile.in
+@@ -101,7 +101,7 @@ PROGRAMS = $(bin_PROGRAMS)
+ am__dirstamp = $(am__leading_dot)dirstamp
+ dist_pg_md5_OBJECTS = pg_md5.$(OBJEXT) ../fe_port.$(OBJEXT)
+ nodist_pg_md5_OBJECTS = md5.$(OBJEXT) pool_passwd.$(OBJEXT) \
+-	strlcpy.$(OBJEXT) regex_array.$(OBJEXT) \
++	regex_array.$(OBJEXT) \
+ 	pool_config_variables.$(OBJEXT) pool_config.$(OBJEXT) \
+ 	fe_memutils.$(OBJEXT) pool_path.$(OBJEXT)
+ pg_md5_OBJECTS = $(dist_pg_md5_OBJECTS) $(nodist_pg_md5_OBJECTS)
+@@ -317,7 +317,6 @@ dist_pg_md5_SOURCES = pg_md5.c \
+ 
+ nodist_pg_md5_SOURCES = md5.c \
+ 		pool_passwd.c \
+-		strlcpy.c \
+ 		regex_array.c \
+ 		pool_config_variables.c \
+ 		pool_config.c \
+@@ -653,8 +652,6 @@ pool_passwd.c: ../../../src/auth/pool_passwd.c
+ 	rm -f $@ && ln -s $< .
+ pool_path.c: ../../../src/utils/pool_path.c
+ 	rm -f $@ && ln -s $< .
+-strlcpy.c: ../../../src/utils/strlcpy.c
+-	rm -f $@ && ln -s $< .
+ regex_array.c: ../../../src/utils/regex_array.c
+ 	rm -f $@ && ln -s $< .
+ pool_config_variables.c: ../../../src/config/pool_config_variables.c
+diff --git a/src/tools/watchdog/Makefile.in b/src/tools/watchdog/Makefile.in
+index 3e578b44..c7fbce4e 100644
+--- a/src/tools/watchdog/Makefile.in
++++ b/src/tools/watchdog/Makefile.in
+@@ -105,7 +105,7 @@ nodist_wd_cli_OBJECTS = ssl_utils.$(OBJEXT) wd_ipc_conn.$(OBJEXT) \
+ 	wd_commands.$(OBJEXT) json_writer.$(OBJEXT) json.$(OBJEXT) \
+ 	pool_config_variables.$(OBJEXT) pool_config.$(OBJEXT) \
+ 	pool_path.$(OBJEXT) fe_memutils.$(OBJEXT) stringinfo.$(OBJEXT) \
+-	strlcpy.$(OBJEXT) socket_stream.$(OBJEXT) \
++	socket_stream.$(OBJEXT) \
+ 	regex_array.$(OBJEXT) psprintf.$(OBJEXT) md5.$(OBJEXT)
+ wd_cli_OBJECTS = $(dist_wd_cli_OBJECTS) $(nodist_wd_cli_OBJECTS)
+ wd_cli_LDADD = $(LDADD)
+@@ -359,7 +359,6 @@ nodist_wd_cli_SOURCES = ssl_utils.c \
+ 		fe_memutils.c \
+ 		stringinfo.h \
+ 		stringinfo.c \
+-		strlcpy.c \
+ 		socket_stream.c \
+ 		regex_array.c \
+ 		psprintf.c \
+@@ -732,8 +731,6 @@ md5.h: ../../../src/include/auth/md5.h
+ 	rm -f $@ && ln -s $< .
+ socket_stream.c: ../../../src/utils/socket_stream.c
+ 	rm -f $@ && ln -s $< .
+-strlcpy.c: ../../../src/utils/strlcpy.c
+-	rm -f $@ && ln -s $< .
+ regex_array.c: ../../../src/utils/regex_array.c
+ 	rm -f $@ && ln -s $< .
+ wd_ipc_conn.c: ../../../src/watchdog/wd_ipc_conn.c

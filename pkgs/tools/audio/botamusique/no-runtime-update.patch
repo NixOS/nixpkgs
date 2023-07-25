@@ -1,0 +1,12 @@
+diff --git a/util.py b/util.py
+index bfec1ed..5147757 100644
+--- a/util.py
++++ b/util.py
+@@ -132,6 +132,7 @@ def check_update(current_version):
+ 
+ 
+ def update(current_version):
++    return "Can't update Nix installation at runtime"
+     global log
+ 
+     target = var.config.get('bot', 'target_version')

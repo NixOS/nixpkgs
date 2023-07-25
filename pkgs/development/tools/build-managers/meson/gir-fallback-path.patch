@@ -1,0 +1,21 @@
+diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
+index 1c6952df7..9466a0b7d 100644
+--- a/mesonbuild/modules/gnome.py
++++ b/mesonbuild/modules/gnome.py
+@@ -923,6 +923,16 @@ class GnomeModule(ExtensionModule):
+         if fatal_warnings:
+             scan_command.append('--warn-error')
+
++        if len(set(girtarget.get_custom_install_dir()[0] for girtarget in girtargets if girtarget.get_custom_install_dir())) > 1:
++            raise MesonException('generate_gir tries to build multiple libraries with different install_dir at once: {}'.format(','.join([str(girtarget) for girtarget in girtargets])))
++
++        if girtargets[0].get_custom_install_dir():
++            fallback_libpath = girtargets[0].get_custom_install_dir()[0]
++        else:
++            fallback_libpath = None
++        if fallback_libpath is not None and isinstance(fallback_libpath, str) and len(fallback_libpath) > 0 and fallback_libpath[0] == "/":
++            scan_command += ['--fallback-library-path=' + fallback_libpath]
++
+         generated_files = [f for f in libsources if isinstance(f, (GeneratedList, CustomTarget, CustomTargetIndex))]
+ 
+         scan_target = self._make_gir_target(state, girfile, scan_command, generated_files, depends, kwargs)

@@ -1,0 +1,41 @@
+From 408e6a5170bbe9f854bf46e1cbae21265cf25294 Mon Sep 17 00:00:00 2001
+From: Florian Bruhin <me@the-compiler.org>
+Date: Mon, 25 Apr 2022 18:39:07 +0200
+Subject: [PATCH] Add Collection SearchType
+
+Backport of https://github.com/ramsayleung/rspotify/pull/306
+---
+ src/senum.rs | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/senum.rs b/src/senum.rs
+index c94c31c..79d8730 100644
+--- a/src/senum.rs
++++ b/src/senum.rs
+@@ -87,6 +87,7 @@ pub enum Type {
+     User,
+     Show,
+     Episode,
++    Collection,
+ }
+ impl Type {
+     pub fn as_str(&self) -> &str {
+@@ -98,6 +99,7 @@ pub fn as_str(&self) -> &str {
+             Type::User => "user",
+             Type::Show => "show",
+             Type::Episode => "episode",
++            Type::Collection => "collection",
+         }
+     }
+ }
+@@ -112,6 +114,7 @@ fn from_str(s: &str) -> Result<Self, Self::Err> {
+             "user" => Ok(Type::User),
+             "show" => Ok(Type::Show),
+             "episode" => Ok(Type::Episode),
++            "collection" => Ok(Type::Collection),
+             _ => Err(Error::new(ErrorKind::NoEnum(s.to_owned()))),
+         }
+     }
+-- 
+2.35.3
+

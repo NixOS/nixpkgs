@@ -1,0 +1,13 @@
+{
+  "version": "3.166.9",
+  "deb": {
+    "x86_64-linux": {
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.166.9/standard-notes-3.166.9-linux-amd64.deb",
+      "hash": "sha512-D85W50K3jRBKhrPz3Wa9aClnHFMRPQ0YgP71uypfcCcuKVnKd3Ol1sFzsyMzl2uhB0aGOkpd2OB+OHceVFqmag=="
+    },
+    "aarch64-linux": {
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.166.9/standard-notes-3.166.9-linux-arm64.deb",
+      "hash": "sha512-pbBLqIaDjQoVGCOfpOxwjWRSMoQsefsYOHTRNTNlDDNO7DRUa/WeSbOYOgLJM5yGIBVXQoRmO7ycWfAWVAPIDQ=="
+    }
+  }
+}

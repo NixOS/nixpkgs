@@ -1,0 +1,25 @@
+commit c28527b1340c51f2b492a31e49127106cebbfc5d
+Author: Jeremy Huddleston <jeremyhu@apple.com>
+Date:   Fri Jun 1 10:38:37 2012 -0700
+
+    Fix a crash when minimizing windows without titles
+    
+    <rdar://problem/11575791>
+    
+    Regression-from: 21f210c923aa5d79400ce46275084f2636c92bd9
+    
+    Signed-off-by: Jeremy Huddleston <jeremyhu@apple.com>
+
+diff --git a/src/x-window.m b/src/x-window.m
+index a210c6a..e3b9066 100644
+--- a/src/x-window.m
++++ b/src/x-window.m
+@@ -2139,7 +2139,7 @@ - (void) do_collapse
+     if (wid == XP_NULL_NATIVE_WINDOW_ID)
+         return;
+ 
+-    title_c = strdup([_title UTF8String]);
++    title_c = strdup([[self title] UTF8String]);
+     assert(title_c);
+ 
+     err = qwm_dock_minimize_item_with_title_async (wid, title_c);

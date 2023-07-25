@@ -1,0 +1,9 @@
+diff --git i/scipy/datasets/meson.build w/scipy/datasets/meson.build
+index 101377253..eec2feea4 100644
+--- i/scipy/datasets/meson.build
++++ w/scipy/datasets/meson.build
+@@ -11,4 +11,3 @@ py3.install_sources(
+   subdir: 'scipy/datasets'
+ )
+ 
+-subdir('tests')

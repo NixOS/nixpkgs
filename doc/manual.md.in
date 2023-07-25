@@ -1,0 +1,14 @@
+# Nixpkgs Manual {#nixpkgs-manual}
+## Version @MANUAL_VERSION@
+
+```{=include=} chapters
+preface.chapter.md
+```
+
+```{=include=} parts
+using-nixpkgs.md
+lib.md
+stdenv.md
+builders.md
+contributing.md
+```

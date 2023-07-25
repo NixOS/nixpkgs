@@ -1,0 +1,28 @@
+diff -Nuar --exclude '*~' hddtemp-0.3-beta15.orig/src/sata.c hddtemp-0.3-beta15/src/sata.c
+--- hddtemp-0.3-beta15.orig/src/sata.c	2006-05-14 02:09:55.579437498 -0700
++++ hddtemp-0.3-beta15/src/sata.c	2006-05-14 02:06:08.495948437 -0700
+@@ -88,7 +88,9 @@
+     return strdup(_("unknown"));
+   else
+   {
++		//fprintf(stderr,"sata_model1=%s\n",identify + 54);
+     sata_fixstring(identify + 54, 24);
++		//fprintf(stderr,"sata_model2=%s\n",identify + 54);
+     return strdup(identify + 54);
+   }
+ }
+diff -Nuar --exclude '*~' hddtemp-0.3-beta15.orig/src/satacmds.c hddtemp-0.3-beta15/src/satacmds.c
+--- hddtemp-0.3-beta15.orig/src/satacmds.c	2006-05-14 02:09:40.983470339 -0700
++++ hddtemp-0.3-beta15/src/satacmds.c	2006-05-14 02:09:02.319557333 -0700
+@@ -98,7 +98,10 @@
+   /* convert from big-endian to host byte order */
+   for (p = end ; p != s;) {
+     unsigned short *pp = (unsigned short *) (p -= 2);
+-    *pp = ntohs(*pp);
++		char tmp = p[0];
++		p[0] = p[1];
++		p[1] = tmp;
++    //*pp = ntohs(*pp);
+   }
+ 
+   /* strip leading blanks */

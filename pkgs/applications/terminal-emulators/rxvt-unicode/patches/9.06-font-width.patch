@@ -1,0 +1,21 @@
+--- a/src/rxvtfont.C	2008-07-09 12:21:45.000000000 +0400
++++ b/src/rxvtfont.C	2009-10-30 14:32:53.000000000 +0300
+@@ -1195,12 +1195,14 @@
+           XGlyphInfo g;
+           XftTextExtents16 (disp, f, &ch, 1, &g);
+ 
+-          g.width -= g.x;
+-
++/*
++ * bukind: don't use g.width as a width of a character!
++ * instead use g.xOff, see e.g.: http://keithp.com/~keithp/render/Xft.tutorial
++ */
+           int wcw = WCWIDTH (ch);
+-          if (wcw > 0) g.width = (g.width + wcw - 1) / wcw;
++          if (wcw > 1) g.xOff = g.xOff / wcw;
++          if (width < g.xOff) width = g.xOff;
+ 
+-          if (width    < g.width       ) width    = g.width;
+           if (height   < g.height      ) height   = g.height;
+           if (glheight < g.height - g.y) glheight = g.height - g.y;
+         }

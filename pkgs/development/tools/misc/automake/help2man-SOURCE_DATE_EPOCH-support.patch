@@ -1,0 +1,41 @@
+From 2e3357d7f0d63f1caeb40d9644c2436a5cd0da5f Mon Sep 17 00:00:00 2001
+From: David Terry <me@xwvvvvwx.com>
+Date: Fri, 18 Oct 2019 10:23:11 +0200
+Subject: [PATCH] help2man: add support for SOURCE_DATE_EPOCH
+
+---
+ doc/help2man | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/doc/help2man b/doc/help2man
+index af4306f..4a64167 100755
+--- a/doc/help2man
++++ b/doc/help2man
+@@ -213,11 +213,23 @@ sub get_option_value;
+ my $help_text   = get_option_value $ARGV[0], $help_option;
+ $version_text ||= get_option_value $ARGV[0], $version_option;
+ 
++# By default the generated manual pages will include the current date.  This may
++# however be overriden by setting the environment variable $SOURCE_DATE_EPOCH
++# to an integer value of the seconds since the UNIX epoch.  This is primarily
++# intended to support reproducible builds (wiki.debian.org/ReproducibleBuilds)
++# and will additionally ensure that the output date string is UTC.
++my $epoch_secs = time;
++if (exists $ENV{SOURCE_DATE_EPOCH} and $ENV{SOURCE_DATE_EPOCH} =~ /^(\d+)$/)
++{
++    $epoch_secs = $1;
++    $ENV{TZ} = 'UTC';
++}
++
+ # Translators: the following message is a strftime(3) format string, which in
+ # the English version expands to the month as a word and the full year.  It
+ # is used on the footer of the generated manual pages.  If in doubt, you may
+ # just use %x as the value (which should be the full locale-specific date).
+-my $date = enc strftime _("%B %Y"), localtime;
++my $date = enc strftime _("%B %Y"), localtime $epoch_secs;
+ (my $program = $ARGV[0]) =~ s!.*/!!;
+ my $package = $program;
+ my $version;
+-- 
+2.23.0
+
