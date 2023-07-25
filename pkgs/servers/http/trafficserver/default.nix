@@ -64,6 +64,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/apache/trafficserver/commit/19d3af481cf74c91fbf713fc9d2f8b138ed5fbaf.diff";
       sha256 = "0z1ikgpp00rzrrcqh97931586yn9wbksgai9xlkcjd5cg8gq0150";
     })
+
+    (fetchpatch {
+      # included in case any non-nixos users base their configuration on the
+      # default ip_allow
+      name = "CVE-2022-47184.patch";
+      url = "https://github.com/apache/trafficserver/commit/c371b7b21a7e774f852af86b85c87d5d877a14bd.patch";
+      sha256 = "sha256-DVzDvdT0i48fA9zTP6iCDXCiy0/wr3LlcpGJU19tq6Q=";
+    })
+    ./9.1.4-CVE-2023-33933.patch
+    ./9.1.4-CVE-2023-30631.patch
   ];
 
   # NOTE: The upstream README indicates that flex is needed for some features,
