@@ -9804,8 +9804,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "folke";
       repo = "trouble.nvim";
-      rev = "e64578893e60dce2b8e1ca5c2e19c678c01260f1";
-      sha256 = "0ga8fgwdn36gi5d1zrark7idpq5ndqz8m7gqfymc5k2yf07nxfm1";
+      rev = "fc4bb22b1d2cd5eb46fe61a9f6d6416d742beb5c";
+      sha256 = "0mhhjl4q45bn0i22jqri6v3rp24d7l3k2q72ggx5i1xinxls3ap5";
     };
     meta.homepage = "https://github.com/folke/trouble.nvim/";
   };
