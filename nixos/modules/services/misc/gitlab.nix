@@ -1655,7 +1655,7 @@ in {
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart = concatStringsSep " " [
-          "${cfg.packages.gitlab.rubyEnv}/bin/puma"
+          "${cfg.packages.gitlab.rubyEnv}/bin/bundle" "exec" "puma"
           "-e production"
           "-C ${cfg.statePath}/config/puma.rb"
           "-w ${cfg.puma.workers}"
