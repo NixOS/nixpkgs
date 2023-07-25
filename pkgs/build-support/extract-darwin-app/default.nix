@@ -5,9 +5,12 @@
   undmg,
 }:
 
-/** A function to make a derivation from a darwin binary
+/** A function to make a derivation from a darwin bundle
   *
-  * It makes the assumption that the binary comes in a ".app" or ".dmg".
+  * It makes the assumption that the bundle passed to src is:
+  *  - an archive with a single folder: $appName.app
+  *  - a .dmg (pass the isDmg attribute)
+  *  - a folder containing a Contents/ folder e.g `src = ./AnApp.app`
   *
   * Information about the bundles can be found:
   * - https://en.wikipedia.org/wiki/Bundle_(macOS)
@@ -26,12 +29,15 @@
   version,
   /** a nix path or derivation to be used as mkDerivation.src */
   src,
-  /** is src a .dmg .
-    * These contain multiple folders after extraction
-    * which requires special treatment in the unpackPhase
-    * TODO: Detect this automatically someday
+  /** The unpackPhase fails with many subfolders!
+    * Also set this if `src` is a .dmg or another archive
+    *  that extracts to a folder containing multiple subfolders.
+    * The assumption is made a folder named "$appName.app" exists.
+    * Should you know the true name, use the `sourceRoot` option instead.
     */
-  isDmg ? false,
+  srcHasManySubfolders ? false,
+  /** See `srcHasManySubfolders` */
+  sourceRoot ? null,
   /** Whether to use makeWrapper for the binary.
     * For some packages symbolic links just don't work
     */
@@ -41,22 +47,30 @@
   /** Can use a custom function e.g stdenvNoCC.mkDerivation */
   derivationFunction ? stdenv.mkDerivation,
 }:
+let
+  # Prefer sourceRoot over srcHasManySubfolders (if both are set)
+  _sourceRoot = (lib.findFirst ( el: el.condition) { value = null; } [
+    { condition = sourceRoot != null; value = sourceRoot ;}
+    { condition = srcHasManySubfolders; value = "${appName}.app"; }
+  ]).value;
+in
 derivationFunction (
     # .dmg extracts have multiple folders
     # the unpack phase requires only one folder
-    (lib.attrsets.optionalAttrs isDmg {
-      sourceRoot = "${appName}.app";
+    (lib.attrsets.optionalAttrs (lib.isString _sourceRoot) {
+      sourceRoot = _sourceRoot;
     }) // {
     inherit pname version src;
-    nativeBuildInputs = (lib.optional wrapBinary makeWrapper) ++ (lib.optional isDmg undmg) ;
+    nativeBuildInputs = (lib.optional wrapBinary makeWrapper) ++ [ undmg ];
 
     installPhase = ''
     appDir="$out/Applications/${appName}.app"
     binDir="$appDir"/Contents/MacOS
 
     mkdir -p $out/bin
-    if [[ "${toString isDmg}" = "1" ]] ; then
+    if [[ -d Contents/ ]] ; then
       # .dmg uses sourceRoot, which means PWD is already in the sourceRoot
+      # Passing a .app folder also means we've already cd'ed into the folder
       mkdir -p $appDir
       cp -r Contents $appDir
     else
