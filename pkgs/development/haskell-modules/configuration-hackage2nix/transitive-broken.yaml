@@ -3781,7 +3781,6 @@ dont-distribute-packages:
  - sydtest-webdriver-yesod
  - sydtest-yesod
  - sylvia
- - sym-plot
  - symantic-atom
  - symantic-http-demo
  - symantic-http-test
