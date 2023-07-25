@@ -41,7 +41,7 @@ let
   desktop-native = rustPlatform.buildRustPackage {
     pname = "bitwarden-desktop-native";
     inherit src version;
-    sourceRoot = "source-patched/apps/desktop/desktop_native";
+    sourceRoot = "${src.name}/apps/desktop/desktop_native";
     cargoSha256 = "sha256-8U4E5q2OSZGXy2ZRn0y4Skm5Y+FiOJVU1mtzObO9UqY=";
 
     nativeBuildInputs = [

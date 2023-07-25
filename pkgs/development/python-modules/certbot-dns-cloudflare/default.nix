@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
 
-  sourceRoot = "source/certbot-dns-cloudflare";
+  sourceRoot = "${src.name}/certbot-dns-cloudflare";
 
   meta = certbot.meta // {
     description = "Cloudflare DNS Authenticator plugin for Certbot";

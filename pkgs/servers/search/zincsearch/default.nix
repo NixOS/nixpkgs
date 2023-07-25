@@ -17,7 +17,7 @@ let
     inherit src version;
     pname = "zinc-ui";
 
-    sourceRoot = "source/web";
+    sourceRoot = "${src.name}/web";
 
     npmDepsHash = "sha256-2AjUaEOn2Tj+X4f42SvNq1kX07WxkB1sl5KtGdCjbdw=";
 

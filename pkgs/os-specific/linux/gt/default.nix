@@ -2,7 +2,7 @@
 , asciidoc
 , libusbgx
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gt";
   version = "unstable-2022-05-08";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-km4U+t4Id2AZx6GpH24p2WNmvV5RVjJ14sy8tWLCQsk=";
   };
 
-  sourceRoot = "source/source";
+  sourceRoot = "${src.name}/source";
 
   preConfigure = ''
     cmakeFlagsArray+=("-DBASH_COMPLETION_COMPLETIONSDIR=$out/share/bash-completions/completions")

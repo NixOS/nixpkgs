@@ -10,7 +10,7 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ladybird";
   version = "unstable-2023-01-17";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     hash = "sha256-n2mLg9wNfdMGsJuGj+ukjto9qYjGOIz4cZjgvMGQUrY=";
   };
 
-  sourceRoot = "source/Ladybird";
+  sourceRoot = "${src.name}/Ladybird";
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

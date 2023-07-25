@@ -2,7 +2,7 @@
 , faad2, fftwFloat, zlib
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "dab_lib";
   version = "unstable-2023-03-02";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     hash = "sha256-KSkOg0a5iq+13kClQqj+TaEP/PsLUrm8bMmiJEAZ+C4=";
   };
 
-  sourceRoot = "source/library/";
+  sourceRoot = "${src.name}/library/";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ faad2 fftwFloat zlib ];

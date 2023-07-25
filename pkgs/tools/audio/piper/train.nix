@@ -15,7 +15,7 @@ python.pkgs.buildPythonPackage {
   pname = "piper-train";
   format = "setuptools";
 
-  sourceRoot = "source/src/python";
+  sourceRoot = "${piper-tts.src.name}/src/python";
 
   nativeBuildInputs = with python.pkgs; [
     cython

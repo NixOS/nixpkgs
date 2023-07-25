@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, libX11, xorgproto }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wmderlandc";
   version = "unstable-2020-07-17";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0npmlnybblp82mfpinjbz7dhwqgpdqc1s63wc1zs8mlcs19pdh98";
   };
 
-  sourceRoot = "source/ipc-client";
+  sourceRoot = "${src.name}/ipc-client";
 
   nativeBuildInputs = [
     cmake

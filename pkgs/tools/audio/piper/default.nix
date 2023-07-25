@@ -20,7 +20,7 @@ let
   pname = "piper";
   version = "1.2.0";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     hash = "sha256-6WNWqJt0PO86vnf+3iHaRRg2KwBOEj4aicmB+P2phlk=";
   };
 
-  sourceRoot = "source/src/cpp";
+  sourceRoot = "${src.name}/src/cpp";
 
   nativeBuildInputs = [
     cmake

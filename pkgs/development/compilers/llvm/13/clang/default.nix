@@ -10,7 +10,7 @@ let
     inherit version;
 
     inherit src;
-    sourceRoot = "source/clang";
+    sourceRoot = "${src.name}/clang";
 
     nativeBuildInputs = [ cmake python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx
