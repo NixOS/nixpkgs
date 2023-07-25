@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -36,6 +36,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-ebwh9WTooJuvYFIygDBn9lYC7+lx9P1HskvKU8EX9jw=";
   };
+
+  patches = [
+    # Fix closing confirmation dialogs not showing
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/raggesilver/blackbox/-/commit/3978c9b666d27adba835dd47cf55e21515b6d6d9.patch";
+      hash = "sha256-L/Ci4YqYNzb3F49bUwEWSjzr03MIPK9A5FEJCCct+7A=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
