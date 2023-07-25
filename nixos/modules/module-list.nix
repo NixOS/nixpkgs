@@ -49,6 +49,7 @@
   ./hardware/all-firmware.nix
   ./hardware/bladeRF.nix
   ./hardware/brillo.nix
+  ./hardware/busylight.nix
   ./hardware/ckb-next.nix
   ./hardware/corectrl.nix
   ./hardware/cpu/amd-microcode.nix
