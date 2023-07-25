@@ -161,5 +161,9 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       "x86_64-redox"
       "wasm32-wasi"
     ];
+    badPlatforms = [
+      # Rust is currently unable to target the n32 ABI
+      lib.systems.inspect.patterns.isMips64n32
+    ];
   } // meta;
 })
