@@ -6167,6 +6167,8 @@ self: super: with self; {
 
   mac-vendor-lookup = callPackage ../development/python-modules/mac-vendor-lookup { };
 
+  macaddress = callPackage ../development/python-modules/macaddress{ };
+
   macfsevents = callPackage ../development/python-modules/macfsevents {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
   };
@@ -10905,6 +10907,8 @@ self: super: with self; {
   repoze_who = callPackage ../development/python-modules/repoze_who { };
 
   reproject = callPackage ../development/python-modules/reproject { };
+
+  reprshed = callPackage ../development/python-modules/reprshed { };
 
   reqif = callPackage ../development/python-modules/reqif { };
 
