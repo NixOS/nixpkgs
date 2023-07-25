@@ -369,7 +369,7 @@ in
               PrivateDevices = true;
               PrivateMounts = true;
               PrivateNetwork = mkDefault false;
-              PrivateUsers = true;
+              PrivateUsers = mkDefault false;
               ProtectClock = true;
               ProtectControlGroups = true;
               ProtectHome = true;
