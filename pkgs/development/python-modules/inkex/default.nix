@@ -9,6 +9,7 @@
 , packaging
 , pillow
 , pygobject3
+, pyparsing
 , pyserial
 , scour
 , gobject-introspection
@@ -47,6 +48,7 @@ buildPythonPackage {
     gtk3
     packaging
     pillow
+    pyparsing
     scour
   ];
 
