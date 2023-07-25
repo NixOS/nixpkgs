@@ -67,7 +67,7 @@ in
       networking.networkmanager.enable = mkDefault true;
       programs.dconf.enable = mkDefault true;
 
-      fonts.fonts = with pkgs; [ noto-fonts ];
+      fonts.packages = with pkgs; [ noto-fonts ];
       xdg.mime.enable = true;
       xdg.menus.enable = true;
       xdg.icons.enable = true;
