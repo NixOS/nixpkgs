@@ -1,0 +1,21 @@
+diff --git a/gettext-runtime/src/gettext.sh.in b/gettext-runtime/src/gettext.sh.in
+index 1dfa3bb..d6ef8a8 100644
+--- a/gettext-runtime/src/gettext.sh.in
++++ b/gettext-runtime/src/gettext.sh.in
+@@ -86,14 +86,14 @@ fi
+ # looks up the translation of MSGID and substitutes shell variables in the
+ # result.
+ eval_gettext () {
+-  gettext "$1" | (export PATH `envsubst --variables "$1"`; envsubst "$1")
++  @out@/bin/gettext "$1" | (export PATH `@out@/bin/envsubst --variables "$1"`; @out@/bin/envsubst "$1")
+ }
+ 
+ # eval_ngettext MSGID MSGID-PLURAL COUNT
+ # looks up the translation of MSGID / MSGID-PLURAL for COUNT and substitutes
+ # shell variables in the result.
+ eval_ngettext () {
+-  ngettext "$1" "$2" "$3" | (export PATH `envsubst --variables "$1 $2"`; envsubst "$1 $2")
++  @out@/bin/ngettext "$1" "$2" "$3" | (export PATH `@out@/bin/envsubst --variables "$1 $2"`; @out@/bin/envsubst "$1 $2")
+ }
+ 
+ # Note: This use of envsubst is much safer than using the shell built-in 'eval'

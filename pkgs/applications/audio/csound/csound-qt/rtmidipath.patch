@@ -1,0 +1,17 @@
+diff --git a/src/src.pri b/src/src.pri
+index e5e0c896..9a9fa513 100644
+--- a/src/src.pri
++++ b/src/src.pri
+@@ -155,9 +155,9 @@ pythonqt {
+         "src/pyqcsobject.cpp"
+ }
+ rtmidi {
+-    HEADERS += "src/../$${RTMIDI_DIR}/RtMidi.h"
+-    SOURCES += "src/../$${RTMIDI_DIR}/RtMidi.cpp"
+-    INCLUDEPATH += src/../$${RTMIDI_DIR}
++    HEADERS += "$${RTMIDI_DIR}/RtMidi.h"
++    SOURCES += "$${RTMIDI_DIR}/RtMidi.cpp"
++    INCLUDEPATH += $${RTMIDI_DIR}
+ }
+ 
+ perfThread_build {

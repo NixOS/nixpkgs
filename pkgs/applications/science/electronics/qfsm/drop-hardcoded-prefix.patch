@@ -1,0 +1,20 @@
+diff -ubrw qfsm-0.53.0-Source-orig/CMakeLists.txt qfsm-0.53.0-Source-new/CMakeLists.txt
+--- qfsm-0.53.0-Source-orig/CMakeLists.txt	2012-11-11 20:13:01.935856229 +0100
++++ qfsm-0.53.0-Source-new/CMakeLists.txt	2012-11-11 20:13:24.962930007 +0100
+@@ -406,10 +406,6 @@
+ 
+ 
+ IF(UNIX AND NOT WIN32)
+-  SET(CMAKE_INSTALL_PREFIX "/usr")
+-ENDIF(UNIX AND NOT WIN32)
+-
+-IF(UNIX AND NOT WIN32)
+   ADD_DEFINITIONS(-DQFSM_LANGUAGE_DIR="${CMAKE_INSTALL_PREFIX}/share/qfsm/")
+   ADD_DEFINITIONS(-DQFSM_HELP_DIR="${CMAKE_INSTALL_PREFIX}/share/doc/qfsm/")
+ ELSE(UNIX AND NOT WIN32)
+@@ -472,5 +468,3 @@
+     )
+ 
+ ENDIF(UNIX AND NOT WIN32)
+-
+-

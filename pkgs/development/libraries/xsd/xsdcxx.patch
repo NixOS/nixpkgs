@@ -1,0 +1,126 @@
+--- xsd-4.0.0+dep/xsd/doc/xsd.1~	2014-09-14 12:25:36.862267587 +0000
++++ xsd-4.0.0+dep/xsd/doc/xsd.1	2014-09-14 12:28:25.728229892 +0000
+@@ -1,16 +1,16 @@
+ .\" Process this file with
+-.\" groff -man -Tascii xsd.1
++.\" groff -man -Tascii xsdcxx.1
+ .\"
+ .TH XSD 1 "July 2014" "XSD 4.0.0"
+ .SH NAME
+-xsd \- W3C XML Schema to C++ Compiler
++xsdcxx \- W3C XML Schema to C++ Compiler
+ .\"
+ .\"
+ .\"
+ .\"--------------------------------------------------------------------
+ .SH SYNOPSIS
+ .\"--------------------------------------------------------------------
+-.B xsd
++.B xsdcxx
+ .I command
+ .B [
+ .I options
+@@ -20,19 +20,19 @@
+ .I file
+ .B ...]
+ .in
+-.B xsd help
++.B xsdcxx help
+ .B [
+ .I command
+ .B ]
+ .in
+-.B xsd version
++.B xsdcxx version
+ .\"
+ .\"
+ .\"
+ .\"--------------------------------------------------------------------
+ .SH DESCRIPTION
+ .\"--------------------------------------------------------------------
+-.B xsd
++.B xsdcxx
+ generates vocabulary-specific, statically-typed C++ mapping from W3C XML
+ Schema definitions. Particular mapping to produce is selected by a
+ .IR command .
+@@ -96,7 +96,7 @@
+ .PP
+ .RS
+ .RS 3
+-.B xsd help
++.B xsdcxx help
+ .I command
+ .RE
+ .PP
+@@ -206,7 +206,7 @@
+ \fIfilename\fP \fInamespace\fP
+ 
+ For example, if you have file \fBhello\.xsd\fP with namespace
+-\fBhttp://example\.com/hello\fP and you run \fBxsd\fP on this file, then the
++\fBhttp://example\.com/hello\fP and you run \fBxsdcxx\fP on this file, then the
+ string in question will be:
+ 
+ \fBhello\.xsd\. http://example\.com/hello\fP
+@@ -1632,7 +1632,7 @@
+ .\"
+ .SH DIAGNOSTICS
+ If the input file is not a valid W3C XML Schema definition,
+-.B xsd
++.B xsdcxx
+ will issue diagnostic messages to
+ .B STDERR
+ and exit with non-zero exit code.
+--- xsd-4.0.0+dep/xsd/doc/xsd.xhtml~	2014-09-14 12:28:37.731513138 +0000
++++ xsd-4.0.0+dep/xsd/doc/xsd.xhtml	2014-09-14 12:30:11.277789610 +0000
+@@ -50,19 +50,19 @@
+ 
+   <h1>NAME</h1>
+ 
+-  <p>xsd - W3C XML Schema to C++ Compiler</p>
++  <p>xsdcxx - W3C XML Schema to C++ Compiler</p>
+ 
+   <h1>SYNOPSIS</h1>
+ 
+   <dl id="synopsis">
+-    <dt><code><b>xsd</b> <i>command</i> [<i>options</i>] <i>file</i> [<i>file</i> ...]</code></dt>
+-    <dt><code><b>xsd help</b> [<i>command</i>]</code></dt>
+-    <dt><code><b>xsd version</b></code></dt>
++    <dt><code><b>xsdcxx</b> <i>command</i> [<i>options</i>] <i>file</i> [<i>file</i> ...]</code></dt>
++    <dt><code><b>xsdcxx help</b> [<i>command</i>]</code></dt>
++    <dt><code><b>xsdcxx version</b></code></dt>
+   </dl>
+ 
+   <h1>DESCRIPTION</h1>
+ 
+-  <p><code><b>xsd</b></code> generates vocabulary-specific, statically-typed
++  <p><code><b>xsdcxx</b></code> generates vocabulary-specific, statically-typed
+   C++ mapping from W3C XML Schema definitions. Particular mapping to
+   produce is selected by a <code><i>command</i></code>. Each mapping has
+   a number of mapping-specific <code><i>options</i></code> that should
+@@ -104,7 +104,7 @@
+ 
+     <dt><code><b>help</b></code></dt>
+     <dd>Print usage information and exit. Use
+-      <p><code><b>xsd help</b> <i>command</i></code></p>
++      <p><code><b>xsdcxx help</b> <i>command</i></code></p>
+       for command-specific help.
+     </dd>
+ 
+@@ -219,7 +219,7 @@
+ 
+   <p>For example, if you have file <code><b>hello.xsd</b></code> with
+   namespace <code><b>http://example.com/hello</b></code> and you run
+-  <code><b>xsd</b></code> on this file, then the string in question will
++  <code><b>xsdcxx</b></code> on this file, then the string in question will
+   be:</p>
+ 
+   <p><code><b>hello.xsd. http://example.com/hello</b></code></p>
+@@ -1530,7 +1530,7 @@
+   <h1>DIAGNOSTICS</h1>
+ 
+   <p>If the input file is not a valid W3C XML Schema definition,
+-    <code><b>xsd</b></code> will issue diagnostic messages to STDERR
++    <code><b>xsdcxx</b></code> will issue diagnostic messages to STDERR
+     and exit with non-zero exit code.</p>
+ 
+   <h1>BUGS</h1>

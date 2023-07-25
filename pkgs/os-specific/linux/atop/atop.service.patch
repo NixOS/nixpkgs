@@ -1,0 +1,10 @@
+--- a/atop.service
++++ b/atop.service
+@@ -9,5 +9,6 @@
+ Environment=LOGPATH=/var/log/atop
+-EnvironmentFile=/etc/default/atop
++EnvironmentFile=-/etc/default/atop
+ ExecStartPre=/bin/sh -c 'test -n "$LOGINTERVAL" -a "$LOGINTERVAL" -eq "$LOGINTERVAL"'
+ ExecStartPre=/bin/sh -c 'test -n "$LOGGENERATIONS" -a "$LOGGENERATIONS" -eq "$LOGGENERATIONS"'
++ExecStartPre=/bin/sh -c 'mkdir -p "${LOGPATH}"'
+ ExecStart=/bin/sh -c 'exec @out@/bin/atop ${LOGOPTS} -w "${LOGPATH}/atop_$(date +%%Y%%m%%d)" ${LOGINTERVAL}'

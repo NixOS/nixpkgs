@@ -1,0 +1,10 @@
+#!@stdenv_shell@ -e
+
+source @dfInit@
+
+for p in soundsense/*; do
+  update_path "$p"
+done
+
+cd "$DF_DIR"
+PATH=@jre@/bin exec $DF_DIR/soundsense/soundSense.sh

@@ -1,0 +1,23 @@
+diff --git a/Makefile.am b/Makefile.am
+index 52dc7a8..407c056 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -2,4 +2,4 @@
+ # Copyright 2012 Google Inc. wrightt@google.com
+ 
+ AUTOMAKE_OPTIONS = foreign
+-SUBDIRS = src include examples
++SUBDIRS = src include
+diff --git a/configure.ac b/configure.ac
+index ac2a278..a4104b7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -82,7 +82,7 @@ fi
+ 
+ AC_CHECK_FUNCS([memmove memset regcomp select socket strcasecmp strncasecmp strchr strdup strndup strrchr strstr strtol strcasestr getline])
+ 
+-AC_CONFIG_FILES([Makefile src/Makefile include/Makefile examples/Makefile])
++AC_CONFIG_FILES([Makefile src/Makefile include/Makefile])
+ 
+ CFLAGS="${CFLAGS} -Wall -Werror"
+ 

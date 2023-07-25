@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 209f3ec39..c711af38b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -190,7 +190,7 @@ endif()
+ # Define macro used for building vk.xml generated files
+ function(run_vulkantools_vk_xml_generate dependency output)
+     add_custom_command(OUTPUT ${output}
+-        COMMAND ${PYTHON_CMD} -B ${VULKANTOOLS_SCRIPTS_DIR}/vt_genvk.py -registry ${VULKAN_HEADERS_REGISTRY_DIRECTORY}/vk.xml -scripts ${VULKAN_HEADERS_REGISTRY_DIRECTORY} ${output}
++        COMMAND ${PYTHON_CMD} -B ${VULKANTOOLS_SCRIPTS_DIR}/vt_genvk.py -registry ${VULKAN_HEADERS_REGISTRY_DIRECTORY}/vk.xml -scripts ${VULKAN_HEADERS_REGISTRY_DIRECTORY} ${output} -removeExtensions VK_QNX_external_memory_screen_buffer
+         DEPENDS ${VULKAN_HEADERS_REGISTRY_DIRECTORY}/vk.xml ${VULKAN_HEADERS_REGISTRY_DIRECTORY}/generator.py ${VULKANTOOLS_SCRIPTS_DIR}/${dependency} ${VULKANTOOLS_SCRIPTS_DIR}/vt_genvk.py ${VULKAN_HEADERS_REGISTRY_DIRECTORY}/reg.py
+     )
+ endfunction()

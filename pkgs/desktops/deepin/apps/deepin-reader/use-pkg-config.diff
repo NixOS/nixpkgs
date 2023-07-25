@@ -1,0 +1,46 @@
+diff --git a/3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium.pri b/3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium.pri
+index 3e04f340..894b0ac7 100755
+--- a/3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium.pri
++++ b/3rdparty/deepin-pdfium/src/3rdparty/pdfium/pdfium.pri
+@@ -20,13 +20,8 @@ DEFINES +=  USE_SYSTEM_LIBJPEG \
+             USE_SYSTEM_LIBOPENJPEG2 \
+             USE_SYSTEM_FREETYPE
+ 
+-INCLUDEPATH += /usr/include/openjpeg-2.3 \
+-               /usr/include/openjpeg-2.4 \
+-               /usr/include/freetype2 \
+-               /usr/include/freetype2/freetype \
+-               /usr/include/freetype2/freetype/config
+-
+-LIBS += -lopenjp2 -llcms2 -lfreetype
++CONFIG += link_pkgconfig
++PKGCONFIG += libopenjp2 lcms2 freetype2
+ 
+ #QMAKE_CXXFLAGS += "-Wc++11-narrowing"  #is_clang
+ #QMAKE_CXXFLAGS += "-Wno-inconsistent-missing-override"  #is_clang Suppress no override warning for overridden functions.
+diff --git a/3rdparty/deepin-pdfium/src/src.pro b/3rdparty/deepin-pdfium/src/src.pro
+index 196b91d3..bda71ff4 100755
+--- a/3rdparty/deepin-pdfium/src/src.pro
++++ b/3rdparty/deepin-pdfium/src/src.pro
+@@ -2,7 +2,9 @@ TARGET = $$PWD/../lib/deepin-pdfium
+ 
+ TEMPLATE = lib
+ 
+-CONFIG += c++14
++CONFIG += c++14 link_pkgconfig
++
++PKGCONFIG += chardet
+ 
+ ###安全漏洞检测
+ #QMAKE_CXX += -g -fsanitize=undefined,address -O2
+@@ -28,10 +30,6 @@ include($$PWD/3rdparty/pdfium/pdfium.pri)
+ 
+ INCLUDEPATH += $$PWD/../include
+ 
+-INCLUDEPATH += /usr/include/chardet
+-
+-LIBS += -lchardet
+-
+ public_headers += \
+     $$PWD/../include/dpdfglobal.h \
+     $$PWD/../include/dpdfdoc.h \

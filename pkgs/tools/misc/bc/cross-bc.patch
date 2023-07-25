@@ -1,0 +1,169 @@
+commit fdda59736ddc048cf38a2c7103f4f5d9eeaf995e
+Author: Ben Gamari <ben@smart-cactus.org>
+Date:   Tue Oct 17 10:51:34 2017 -0400
+
+    Try implementing cross-compilation
+
+diff --git a/bc/Makefile.am b/bc/Makefile.am
+index d9d412e..fdef633 100644
+--- a/bc/Makefile.am
++++ b/bc/Makefile.am
+@@ -17,6 +17,7 @@ MAINTAINERCLEANFILES = Makefile.in bc.c bc.h scan.c \
+ 
+ AM_CPPFLAGS = -I$(srcdir) -I$(srcdir)/../h
+ LIBBC = ../lib/libbc.a
++LIBBC_HOST = ../lib/libbc_host.a
+ LIBL = @LEXLIB@
+ LDADD = $(LIBBC) $(LIBL) @READLINELIB@
+ 
+@@ -29,12 +30,20 @@ $(PROGRAMS): libmath.h $(LIBBC)
+ scan.o: bc.h
+ global.o: libmath.h
++
++main_host.c : main.c
++	cp $< $@
+ 
+-fbcOBJ = main.o bc.o scan.o execute.o load.o storage.o util.o warranty.o
++fbcOBJ = $(addsuffix _host,main.o bc.o scan.o execute.o load.o storage.o util.o warranty.o)
++
++%.o_host : CC:=$(CC_FOR_BUILD)
++
++%.o_host : %.c
++	$(COMPILE) -c $(CFLAGS) $(INCLUDES) -o $@ $<
+ 
+-libmath.h: libmath.b $(fbcOBJ) $(LIBBC)
++libmath.h: libmath.b $(fbcOBJ) $(LIBBC_HOST)
+ 	echo '{0}' > libmath.h
+-	$(MAKE) global.o
+-	$(LINK) -o fbc $(fbcOBJ) global.o $(LIBBC) $(LIBL) $(READLINELIB) $(LIBS)
++	$(MAKE) global.o_host
++	$(CC_FOR_BUILD) -o fbc $(fbcOBJ) global.o_host $(LIBBC_HOST) $(LIBL) ${READLINELIB} $(LIBS)
+ 	./fbc -c $(srcdir)/libmath.b </dev/null >libmath.h
+ 	$(srcdir)/fix-libmath_h
+ 	rm -f ./fbc ./global.o
+diff --git a/configure.ac b/configure.ac
+index fc74573..5cabb73 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -20,6 +20,7 @@ m4_define([dc_version], 1.4.1)
+ 
+ AC_INIT([bc],[bc_version])
+ AC_CONFIG_SRCDIR(doc/bc.1)
++AC_CONFIG_MACRO_DIR([m4])
+ AM_INIT_AUTOMAKE([dist-bzip2])
+ AC_CONFIG_HEADERS(config.h)
+ 
+@@ -35,6 +36,7 @@ AC_DEFINE([DC_COPYRIGHT],
+ 	  [Define the dc copyright line.])
+ 
+ AC_PROG_CC
++AX_CC_FOR_BUILD
+ AC_USE_SYSTEM_EXTENSIONS
+ 
+ AM_PROG_LEX
+diff --git a/lib/Makefile.am b/lib/Makefile.am
+index ec4bf59..c670f5b 100644
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -1,5 +1,5 @@
+ ## Process this file with automake to produce Makefile.in
+-noinst_LIBRARIES = libbc.a
++noinst_LIBRARIES = libbc.a libbc_host.a
+ 
+ AM_CPPFLAGS = -I. -I.. -I$(srcdir)/../h
+ 
+@@ -24,3 +24,11 @@ testmul: testmul.o number.o
+ 
+ specialnumber: newnumber.o
+ 	cp newnumber.o number.o
++
++%.o_host : CC:=$(CC_FOR_BUILD)
++%.o_host : %.c
++	$(COMPILE) -c $(CFLAGS) $(INCLUDES) -o $@ $<
++
++libbc_host.a : $(addsuffix _host,$(libbc_a_OBJECTS))
++	ar cru $@ $+
++	ranlib $@
+diff --git a/m4/cc_for_build.m4 b/m4/cc_for_build.m4
+new file mode 100644
+index 0000000..c62ffad
+--- /dev/null
++++ b/m4/cc_for_build.m4
+@@ -0,0 +1,77 @@
++# ===========================================================================
++#     https://www.gnu.org/software/autoconf-archive/ax_cc_for_build.html
++# ===========================================================================
++#
++# SYNOPSIS
++#
++#   AX_CC_FOR_BUILD
++#
++# DESCRIPTION
++#
++#   Find a build-time compiler. Sets CC_FOR_BUILD and EXEEXT_FOR_BUILD.
++#
++# LICENSE
++#
++#   Copyright (c) 2010 Reuben Thomas <rrt@sc3d.org>
++#   Copyright (c) 1999 Richard Henderson <rth@redhat.com>
++#
++#   This program is free software: you can redistribute it and/or modify it
++#   under the terms of the GNU General Public License as published by the
++#   Free Software Foundation, either version 3 of the License, or (at your
++#   option) any later version.
++#
++#   This program is distributed in the hope that it will be useful, but
++#   WITHOUT ANY WARRANTY; without even the implied warranty of
++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
++#   Public License for more details.
++#
++#   You should have received a copy of the GNU General Public License along
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
++#
++#   As a special exception, the respective Autoconf Macro's copyright owner
++#   gives unlimited permission to copy, distribute and modify the configure
++#   scripts that are the output of Autoconf when processing the Macro. You
++#   need not follow the terms of the GNU General Public License when using
++#   or distributing such scripts, even though portions of the text of the
++#   Macro appear in them. The GNU General Public License (GPL) does govern
++#   all other use of the material that constitutes the Autoconf Macro.
++#
++#   This special exception to the GPL applies to versions of the Autoconf
++#   Macro released by the Autoconf Archive. When you make and distribute a
++#   modified version of the Autoconf Macro, you may extend this special
++#   exception to the GPL to apply to your modified version as well.
++
++#serial 3
++
++dnl Get a default for CC_FOR_BUILD to put into Makefile.
++AC_DEFUN([AX_CC_FOR_BUILD],
++[# Put a plausible default for CC_FOR_BUILD in Makefile.
++if test -z "$CC_FOR_BUILD"; then
++  if test "x$cross_compiling" = "xno"; then
++    CC_FOR_BUILD='$(CC)'
++  else
++    CC_FOR_BUILD=gcc
++  fi
++fi
++AC_SUBST(CC_FOR_BUILD)
++# Also set EXEEXT_FOR_BUILD.
++if test "x$cross_compiling" = "xno"; then
++  EXEEXT_FOR_BUILD='$(EXEEXT)'
++else
++  AC_CACHE_CHECK([for build system executable suffix], bfd_cv_build_exeext,
++    [rm -f conftest*
++     echo 'int main () { return 0; }' > conftest.c
++     bfd_cv_build_exeext=
++     ${CC_FOR_BUILD} -o conftest conftest.c 1>&5 2>&5
++     for file in conftest.*; do
++       case $file in
++       *.c | *.o | *.obj | *.ilk | *.pdb) ;;
++       *) bfd_cv_build_exeext=`echo $file | sed -e s/conftest//` ;;
++       esac
++     done
++     rm -f conftest*
++     test x"${bfd_cv_build_exeext}" = x && bfd_cv_build_exeext=no])
++  EXEEXT_FOR_BUILD=""
++  test x"${bfd_cv_build_exeext}" != xno && EXEEXT_FOR_BUILD=${bfd_cv_build_exeext}
++fi
++AC_SUBST(EXEEXT_FOR_BUILD)])dnl

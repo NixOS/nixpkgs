@@ -1,0 +1,25 @@
+From bdc66eace846edc8a7b435f7ca9f324427243ce4 Mon Sep 17 00:00:00 2001
+From: rewine <lhongxu@outlook.com>
+Date: Thu, 21 Jul 2022 17:30:22 +0800
+Subject: [PATCH 2/2] use pkgcofig to find libraries
+
+---
+ app/app.pro | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/app/app.pro b/app/app.pro
+index ab961cf..475487d 100644
+--- a/app/app.pro
++++ b/app/app.pro
+@@ -13,6 +13,8 @@ win32: QT += winextras
+ TARGET = cutemarked
+ TEMPLATE = app
+ CONFIG += c++11
++CONFIG += link_pkgconfig
++PKGCONFIG += QMarkdownTextedit hunspell md4c-html
+ 
+ unix:!macx {
+   CONFIG += link_pkgconfig
+-- 
+2.36.1
+

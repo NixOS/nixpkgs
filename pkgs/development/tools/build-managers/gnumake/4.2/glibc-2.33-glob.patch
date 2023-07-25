@@ -1,0 +1,17 @@
+diff --git glob/glob.c glob/glob.c
+index 924f2b3..d4ef0c5 100644
+--- glob/glob.c
++++ glob/glob.c
+@@ -212,8 +212,8 @@ my_realloc (p, n)
+ # define __alloca	alloca
+ 
+ 
+-#ifndef __GNU_LIBRARY__
+ # define __stat stat
++#ifndef __GNU_LIBRARY__
+ # ifdef STAT_MACROS_BROKEN
+ #  undef S_ISDIR
+ # endif
+-- 
+2.31.1
+

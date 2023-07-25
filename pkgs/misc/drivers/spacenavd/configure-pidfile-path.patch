@@ -1,0 +1,82 @@
+diff --git a/src/spnavd.c b/src/spnavd.c
+index 03080da..2d4eca6 100644
+--- a/src/spnavd.c
++++ b/src/spnavd.c
+@@ -42,12 +42,14 @@ static void cleanup(void);
+ static void daemonize(void);
+ static int write_pid_file(void);
+ static int find_running_daemon(void);
++static char *pidfile_path(void);
+ static void handle_events(fd_set *rset);
+ static void sig_handler(int s);
+ static char *fix_path(char *str);
+ 
+ static char *cfgfile = DEF_CFGFILE;
+ static char *logfile = DEF_LOGFILE;
++static char *pidpath = NULL;
+ 
+ int main(int argc, char **argv)
+ {
+@@ -270,7 +272,7 @@ static void cleanup(void)
+ 		remove_device(tmp);
+ 	}
+ 
+-	remove(PIDFILE);
++	remove(pidfile_path());
+ }
+ 
+ static void daemonize(void)
+@@ -314,7 +316,7 @@ static int write_pid_file(void)
+ 	FILE *fp;
+ 	int pid = getpid();
+ 
+-	if(!(fp = fopen(PIDFILE, "w"))) {
++	if(!(fp = fopen(pidfile_path(), "w"))) {
+ 		return -1;
+ 	}
+ 	fprintf(fp, "%d\n", pid);
+@@ -329,7 +331,7 @@ static int find_running_daemon(void)
+ 	struct sockaddr_un addr;
+ 
+ 	/* try to open the pid-file */
+-	if(!(fp = fopen(PIDFILE, "r"))) {
++	if(!(fp = fopen(pidfile_path(), "r"))) {
+ 		return -1;
+ 	}
+ 	if(fscanf(fp, "%d\n", &pid) != 1) {
+@@ -356,6 +358,22 @@ static int find_running_daemon(void)
+ 	return pid;
+ }
+ 
++char *pidfile_path(void)
++{
++	char *xdg_runtime_dir;
++	if((xdg_runtime_dir = getenv("XDG_RUNTIME_DIR"))) {
++		if ( pidpath == NULL ) {
++			pidpath = malloc(strlen(xdg_runtime_dir) + strlen("/spnavd.pid") + 1);
++			if ( pidpath != NULL ) {
++				sprintf(pidpath, "%s/spnavd.pid", xdg_runtime_dir);
++			}
++		};
++		return pidpath;
++	} else {
++		return DEFAULT_PIDFILE;
++	}
++}
++
+ static void handle_events(fd_set *rset)
+ {
+ 	int dev_fd, hotplug_fd;
+diff --git a/src/spnavd.h b/src/spnavd.h
+index 2d1c48b..17d22d3 100644
+--- a/src/spnavd.h
++++ b/src/spnavd.h
+@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #define DEF_CFGFILE		"/etc/spnavrc"
+ #define DEF_LOGFILE		"/var/log/spnavd.log"
+ 
+-#define PIDFILE		"/var/run/spnavd.pid"
++#define DEFAULT_PIDFILE		"/run/spnavd.pid"
+ #define DEFAULT_SOCK_NAME	"/run/spnav.sock"
+ #define SYSLOG_ID	"spnavd"
+ 

@@ -1,0 +1,38 @@
+--- a/app/app.pro	2023-06-24 19:10:00.653377668 +0800
++++ b/app/app.pro	2023-06-24 19:20:06.632188299 +0800
+@@ -49,19 +49,8 @@
+     INCLUDEPATH += $$PWD/../libs/windows/include
+     LIBS += ws2_32.lib winmm.lib dxva2.lib ole32.lib gdi32.lib user32.lib d3d9.lib dwmapi.lib dbghelp.lib
+ }
+-macx {
+-    INCLUDEPATH += $$PWD/../libs/mac/include
+-    INCLUDEPATH += $$PWD/../libs/mac/Frameworks/SDL2.framework/Versions/A/Headers
+-    INCLUDEPATH += $$PWD/../libs/mac/Frameworks/SDL2_ttf.framework/Versions/A/Headers
+-    LIBS += -L$$PWD/../libs/mac/lib -F$$PWD/../libs/mac/Frameworks
+-
+-    # QMake doesn't handle framework-style includes correctly on its own
+-    QMAKE_CFLAGS += -F$$PWD/../libs/mac/Frameworks
+-    QMAKE_CXXFLAGS += -F$$PWD/../libs/mac/Frameworks
+-    QMAKE_OBJECTIVE_CFLAGS += -F$$PWD/../libs/mac/Frameworks
+-}
+ 
+-unix:!macx {
++unix {
+     CONFIG += link_pkgconfig
+     PKGCONFIG += openssl sdl2 SDL2_ttf opus
+ 
+@@ -120,13 +109,12 @@
+     CONFIG += soundio discord-rpc
+ }
+ macx {
+-    LIBS += -lssl -lcrypto -lavcodec.59 -lavutil.57 -lopus -framework SDL2 -framework SDL2_ttf
+     LIBS += -lobjc -framework VideoToolbox -framework AVFoundation -framework CoreVideo -framework CoreGraphics -framework CoreMedia -framework AppKit -framework Metal
+ 
+     # For libsoundio
+     LIBS += -framework CoreAudio -framework AudioUnit
+ 
+-    CONFIG += ffmpeg soundio discord-rpc
++    CONFIG += ffmpeg soundio
+ }
+ 
+ SOURCES += \
