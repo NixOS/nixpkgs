@@ -28,13 +28,13 @@ let
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    version = "2023.03.21";
+    version = "2023.06.15";
 
     src = fetchFromGitHub {
       owner  = "eth-p";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "sha256-0Ged4qBeGi0p29unXrnQjoxWc6Fcl2oJThxkfL+t50A=";
+      sha256 = "sha256-dBrnUIG3EuEgDZBbzrspP5UReiUKjrMSYIe5QtZ0/tU=";
       fetchSubmodules = true;
     };
 
@@ -112,7 +112,7 @@ let
       dontBuild = true; # we've already built
 
       doCheck = true;
-      nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+      nativeCheckInputs = [ bat bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
       checkPhase = ''
         runHook preCheck
         bash ./test.sh --compiled --suite ${name}

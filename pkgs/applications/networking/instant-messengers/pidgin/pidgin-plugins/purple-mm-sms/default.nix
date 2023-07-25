@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "A libpurple plugin for sending and receiving SMS via Modemmanager";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -89,6 +89,7 @@ in {
     extra-python-packages = handleTest ./nixos-test-driver/extra-python-packages.nix {};
     lib-extend = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nixos-test-driver/lib-extend.nix {};
     node-name = runTest ./nixos-test-driver/node-name.nix;
+    busybox = runTest ./nixos-test-driver/busybox.nix;
   };
 
   # NixOS vm tests and non-vm unit tests

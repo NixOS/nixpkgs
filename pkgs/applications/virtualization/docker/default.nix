@@ -188,6 +188,14 @@ rec {
       ++ lib.optional withSeccomp libseccomp
       ++ plugins;
 
+    patches = [
+      (fetchpatch {
+        name = "fix-issue-with-go-1.20.6.patch";
+        url = "https://github.com/docker/cli/pull/4441.patch";
+        hash = "sha256-F4ueSbdBk1w8OqC4Dgh8+4Ql4zTjehaM368ET7k6Yx8=";
+      })
+    ];
+
     postPatch = ''
       patchShebangs man scripts/build/
       substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
@@ -265,7 +273,7 @@ rec {
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline vdemeester periklis mikroskeem maxeaubrey ];
+      maintainers = with maintainers; [ offline vdemeester periklis maxeaubrey ];
     };
   });
 

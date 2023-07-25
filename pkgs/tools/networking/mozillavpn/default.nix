@@ -46,11 +46,11 @@ let
     })
   ];
 
-  netfilter-go-modules = (buildGoModule {
+  netfilter-goModules = (buildGoModule {
     inherit pname version src patches;
     modRoot = "linux/netfilter";
     vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
-  }).go-modules;
+  }).goModules;
 
   extensionBridgeDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
@@ -132,7 +132,7 @@ stdenv.mkDerivation {
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
-    ln -s '${netfilter-go-modules}' linux/netfilter/vendor
+    ln -s '${netfilter-goModules}' linux/netfilter/vendor
 
     pushd extension/bridge
     cargoDepsCopy="$extensionBridgeDepsCopy" cargoSetupPostPatchHook

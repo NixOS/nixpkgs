@@ -13,6 +13,10 @@ let
           inherit version;
           hash = "sha256-RKZgUGCAzJdeHfpXdv5fYxXdxiane1C/Du4YsDieomU=";
         };
+        disabledTestPaths = [
+           "test/aaa_profiling"
+           "test/ext/mypy"
+        ];
       });
       moto = super.moto.overridePythonAttrs (oldAttrs: rec {
         # a lot of tests -> very slow, we already build them when building python packages

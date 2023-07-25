@@ -37,7 +37,7 @@ buildGoModule {
 
   vendorSha256 = "sha256-ENtTnDsz5WhRz1kiqnWQ5vyEpZtgi7ZeYvksffgW78k=";
 
-  # Override the go-modules fetcher derivation to apply
+  # Override the goModules fetcher derivation to apply
   # upstream's patch of the crypto/x509 library.
   modBuildPhase = ''
     go mod init github.com/namecoin/x509-compressed

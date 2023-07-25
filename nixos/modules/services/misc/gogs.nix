@@ -6,16 +6,16 @@ let
   cfg = config.services.gogs;
   opt = options.services.gogs;
   configFile = pkgs.writeText "app.ini" ''
-    APP_NAME = ${cfg.appName}
+    BRAND_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
 
     [database]
-    DB_TYPE = ${cfg.database.type}
+    TYPE = ${cfg.database.type}
     HOST = ${cfg.database.host}:${toString cfg.database.port}
     NAME = ${cfg.database.name}
     USER = ${cfg.database.user}
-    PASSWD = #dbpass#
+    PASSWORD = #dbpass#
     PATH = ${cfg.database.path}
 
     [repository]

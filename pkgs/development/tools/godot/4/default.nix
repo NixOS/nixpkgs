@@ -36,29 +36,20 @@
 assert lib.asserts.assertOneOf "withPrecision" withPrecision [ "single" "double" ];
 
 let
-  options = {
-    # Options from 'godot/SConstruct'
-    platform = withPlatform;
-    target = withTarget;
-    precision = withPrecision; # Floating-point precision level
-
-    # Options from 'godot/platform/linuxbsd/detect.py'
-    pulseaudio = withPulseaudio; # Use PulseAudio
-    dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
-    speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
-    fontconfig = withFontconfig; # Use fontconfig for system fonts support
-    udev = withUdev; # Use udev for gamepad connection callbacks
-    touch = withTouch; # Enable touch events
-  };
+  mkSconsFlagsFromAttrSet = lib.mapAttrsToList (k: v:
+    if builtins.isString v
+    then "${k}=${v}"
+    else "${k}=${builtins.toJSON v}");
 in
 stdenv.mkDerivation rec {
   pname = "godot";
   version = "4.1-stable";
+  commitHash = "970459615f6b2b4151742ec6d7ef8559f87fd5c5";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
-    rev = version;
+    rev = commitHash;
     hash = "sha256-v9qKrPYQz4c+xkSu/2ru7ZE5EzKVyXhmrxyHZQkng2U=";
   };
 
@@ -96,14 +87,43 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Options from 'godot/SConstruct' and 'godot/platform/linuxbsd/detect.py'
-  sconsFlags = [ "production=true" ];
+  # Set the build name which is part of the version. In official downloads, this
+  # is set to 'official'. When not specified explicitly, it is set to
+  # 'custom_build'. Other platforms packaging Godot (Gentoo, Arch, Flatpack
+  # etc.) usually set this to their name as well.
+  #
+  # See also 'methods.py' in the Godot repo and 'build' in
+  # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
+  BUILD_NAME = "nixpkgs";
+
+  # Required for the commit hash to be included in the version number.
+  #
+  # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
+  # refs. Since we just write the hash directly, there is no need to emulate any
+  # other parts of the .git directory.
+  #
+  # See also 'hash' in
+  # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
   preConfigure = ''
-    sconsFlags+=" ${
-      lib.concatStringsSep " "
-      (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)
-    }"
+    mkdir -p .git
+    echo ${commitHash} > .git/HEAD
   '';
+
+  sconsFlags = mkSconsFlagsFromAttrSet {
+    # Options from 'SConstruct'
+    production = true; # Set defaults to build Godot for use in production
+    platform = withPlatform;
+    target = withTarget;
+    precision = withPrecision; # Floating-point precision level
+
+    # Options from 'platform/linuxbsd/detect.py'
+    pulseaudio = withPulseaudio; # Use PulseAudio
+    dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
+    speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
+    fontconfig = withFontconfig; # Use fontconfig for system fonts support
+    udev = withUdev; # Use udev for gamepad connection callbacks
+    touch = withTouch; # Enable touch events
+  };
 
   outputs = [ "out" "man" ];
 
