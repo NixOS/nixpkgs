@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hop-cli";
-  version = "0.2.35";
+  version = "0.2.52";
 
   src = fetchFromGitHub {
     owner = "hopinc";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-TgPEcsv7/n+PzZXazozbgmX2tt4WDvyH3j6rY+M0AGE=";
+    hash = "sha256-xuOkW5jetl+8obeFJnbkVZa+wYWfTNiTOmcrzC8+wGE=";
   };
 
-  cargoHash = "sha256-HEUsyboZQ4j5IEOqiWEBSlJqmaNDHPg1kstnM9AgZBo=";
+  cargoHash = "sha256-ePUlw4UzsQ2lNuJ5g5OAYh6nKTIoHdDMb34Jzuqtas8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,6 +32,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   OPENSSL_NO_VENDOR = 1;
+
+  checkFlags = [
+    # This test fails on read-only filesystems
+    "--skip=commands::volumes::utils::test::test_parse_target_from_path_like"
+  ];
 
   meta = with lib; {
     mainProgram = "hop";
