@@ -85,6 +85,7 @@ mapAliases ({
   django-sampledatahelper = throw "django-sampledatahelper was removed because it is no longer compatible to latest Django version"; # added 2022-07-18
   django_2 = throw "Django 2 has reached it's projected EOL in 2022/04 and has therefore been removed."; # added 2022-03-05
   django_appconf = django-appconf; # added 2022-03-03
+  django_colorful = django-colorful; # added 2023-07-25
   django-discover-runner = throw "django-discover-runner was removed because it is no longer maintained."; # added 2022-11-21
   django_environ = django-environ; # added 2021-12-25
   django_extensions = django-extensions; # added 2022-01-09
