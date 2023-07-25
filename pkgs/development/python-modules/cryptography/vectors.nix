@@ -9,7 +9,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cryptography_vectors";
     inherit version;
-    hash = "sha256-I7CMOXd+x7J3ShH5RdF0YwGx6I7P8uUybX9Q6g9C1YA=";
+    hash = "sha256-Ao3/lKhSLKgYsRKV/xLfVfNI8zoZPAWX3f6COeU9FYI=";
   };
 
   nativeBuildInputs = [ setuptools ];
