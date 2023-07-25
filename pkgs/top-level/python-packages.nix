@@ -2771,7 +2771,7 @@ self: super: with self; {
 
   django-ckeditor = callPackage ../development/python-modules/django-ckeditor { };
 
-  django_classytags = callPackage ../development/python-modules/django_classytags { };
+  django-classy-tags = callPackage ../development/python-modules/django-classy-tags { };
 
   django-cleanup = callPackage ../development/python-modules/django-cleanup { };
 
