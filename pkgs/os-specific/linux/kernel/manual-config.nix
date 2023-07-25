@@ -409,11 +409,10 @@ stdenv.mkDerivation ({
   meta = {
     description =
       "The Linux kernel" +
-      (lib.optionalString (kernelPatches != []) (
+      (if kernelPatches == [] then "" else
         " (with patches: "
         + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
-        + ")"
-      ));
+        + ")");
     license = lib.licenses.gpl2Only;
     homepage = "https://www.kernel.org/";
     maintainers = lib.teams.linux-kernel.members ++ [
