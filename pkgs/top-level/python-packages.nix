@@ -2774,8 +2774,6 @@ self: super: with self; {
 
   django-colorful = callPackage ../development/python-modules/django-colorful { };
 
-  django-compat = callPackage ../development/python-modules/django-compat { };
-
   django-compressor = callPackage ../development/python-modules/django-compressor { };
 
   django-compression-middleware = callPackage ../development/python-modules/django-compression-middleware { };
