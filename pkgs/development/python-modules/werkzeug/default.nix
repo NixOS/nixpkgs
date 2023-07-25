@@ -1,62 +1,61 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
+, setuptools
 , watchdog
 , ephemeral-port-reserve
 , pytest-timeout
 , pytest-xprocess
 , pytestCheckHook
 , markupsafe
-# for passthru.tests
-, moto, sentry-sdk
+  # for passthru.tests
+, moto
+, sentry-sdk
 }:
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.2.3";
-  format = "setuptools";
+  version = "2.3.6";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "Werkzeug";
-    inherit version;
-    hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+  src = fetchFromGitHub {
+    owner = "pallets";
+    repo = "werkzeug";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+7WJJbeoVSzhbHn4mkoxIMnu6IHyTjfbK/N167Zv1mU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     markupsafe
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # watchdog requires macos-sdk 10.13+
-    watchdog
   ];
 
   nativeCheckInputs = [
     ephemeral-port-reserve
-    pytest-timeout
     pytest-xprocess
+    pytest-timeout
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_get_machine_id"
-  ];
+  ] ++ passthru.optional-dependencies.watchdog;
 
   disabledTestPaths = [
     # ConnectionRefusedError: [Errno 111] Connection refused
+    "tests/test_debug.py"
     "tests/test_serving.py"
-  ];
-
-  pytestFlagsArray = [
-    # don't run tests that are marked with filterwarnings, they fail with
-    # warnings._OptionError: unknown warning category: 'pytest.PytestUnraisableExceptionWarning'
-    "-m 'not filterwarnings'"
+    "tests/middleware/test_http_proxy.py"
   ];
 
   passthru.tests = {
     inherit moto sentry-sdk;
+  };
+
+  passthru.optional-dependencies = {
+    watchdog = [ watchdog ];
   };
 
   meta = with lib; {
