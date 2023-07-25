@@ -15,11 +15,11 @@ callPackage ./generic.nix args {
   #   zfs-2.1.9<=x<=2.1.10 is broken with aarch64-linux-6.2
   #   for future releases, please delete this condition.
   kernelCompatible = if stdenv'.isx86_64 || removeLinuxDRM
-    then kernel.kernelOlder "6.4"
+    then kernel.kernelOlder "6.5"
     else kernel.kernelOlder "6.2";
 
   latestCompatibleLinuxPackages = if stdenv'.isx86_64 || removeLinuxDRM then
-    linuxKernel.packages.linux_6_3
+    linuxKernel.packages.linux_6_4
   else
     linuxKernel.packages.linux_6_1;
 
@@ -27,9 +27,9 @@ callPackage ./generic.nix args {
   # IMPORTANT: Always use a tagged release candidate or commits from the
   # zfs-<version>-staging branch, because this is tested by the OpenZFS
   # maintainers.
-  version = "2.1.12";
+  version = "2.2.0-rc2";
 
-  sha256 = "eYUR5d4gpTrlFu6j1uL83DWL9uPGgAUDRdSEb73V5i4=";
+  sha256 = "rOgIp8ZvagPM2JVEPTdNInMd1jNsiHtEtGQvC317R0w=";
 
   isUnstable = true;
 }

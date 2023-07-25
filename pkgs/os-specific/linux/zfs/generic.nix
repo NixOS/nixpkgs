@@ -54,7 +54,7 @@ stdenv'.mkDerivation {
     inherit rev sha256;
   };
 
-  patches = [
+  patches = if isUnstable then [] else [
     (fetchpatch {
       name = "musl.patch";
       url = "https://github.com/openzfs/zfs/commit/1f19826c9ac85835cbde61a7439d9d1fefe43a4a.patch";
@@ -82,20 +82,24 @@ stdenv'.mkDerivation {
     substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
     substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d" \
                                                   --replace "/etc/default"            "$out/etc/default"
+
+    # ZFS 2.2.0-rc1 compat: these got consolidated, so symlink them.
+    for dir in etc/zfs etc/systemd etc/systemd/system contrib/initramfs/{hooks,scripts,conf.d,conf-hooks.d,scripts/local-top}; do
+      if [ ! -f "./$dir/Makefile.am" ]; then
+        (cd "./$dir" && ln -s ../Makefile.am)
+      fi
+    done
+
     substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
 
     substituteInPlace ./contrib/initramfs/hooks/Makefile.am \
       --replace "/usr/share/initramfs-tools/hooks" "$out/usr/share/initramfs-tools/hooks"
     substituteInPlace ./contrib/initramfs/Makefile.am \
       --replace "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
-    substituteInPlace ./contrib/initramfs/scripts/Makefile.am \
-      --replace "/usr/share/initramfs-tools/scripts" "$out/usr/share/initramfs-tools/scripts"
     substituteInPlace ./contrib/initramfs/scripts/local-top/Makefile.am \
       --replace "/usr/share/initramfs-tools/scripts/local-top" "$out/usr/share/initramfs-tools/scripts/local-top"
     substituteInPlace ./contrib/initramfs/scripts/Makefile.am \
       --replace "/usr/share/initramfs-tools/scripts" "$out/usr/share/initramfs-tools/scripts"
-    substituteInPlace ./contrib/initramfs/scripts/local-top/Makefile.am \
-      --replace "/usr/share/initramfs-tools/scripts/local-top" "$out/usr/share/initramfs-tools/scripts/local-top"
     substituteInPlace ./etc/systemd/system/Makefile.am \
       --replace '$(DESTDIR)$(systemdunitdir)' "$out"'$(DESTDIR)$(systemdunitdir)'
 
@@ -104,9 +108,12 @@ stdenv'.mkDerivation {
     substituteInPlace ./contrib/initramfs/conf-hooks.d/Makefile.am \
       --replace "/usr/share/initramfs-tools/conf-hooks.d" "$out/usr/share/initramfs-tools/conf-hooks.d"
 
-    substituteInPlace ./cmd/vdev_id/vdev_id \
-      --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
-      "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
+    # ZFS 2.2.0-rc1 compat: removed vdev_id
+    if [ -f ./cmd/vdev_id/vdev_id ]; then
+      substituteInPlace ./cmd/vdev_id/vdev_id \
+        --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
+        "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
+    fi
   '';
 
   nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
