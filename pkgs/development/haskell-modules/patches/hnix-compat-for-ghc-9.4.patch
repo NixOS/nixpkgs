@@ -1,0 +1,74 @@
+From daae423d339e820e3fe8c720bd568cc49eae3fde Mon Sep 17 00:00:00 2001
+From: Rodney Lorrimar <dev@rodney.id.au>
+Date: Tue, 25 Jul 2023 16:46:36 +0800
+Subject: [PATCH] GHC 9.4 compatibility
+
+---
+ src/Nix/Fresh.hs | 2 +-
+ src/Nix/Lint.hs  | 2 +-
+ src/Nix/Utils.hs | 2 +-
+ src/Nix/Value.hs | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/Nix/Fresh.hs b/src/Nix/Fresh.hs
+index fdd20c4a..4b55de4e 100644
+--- a/src/Nix/Fresh.hs
++++ b/src/Nix/Fresh.hs
+@@ -14,7 +14,7 @@ import           Control.Monad.Catch  ( MonadCatch
+                                       , MonadMask
+                                       , MonadThrow
+                                       )
+-import           Control.Monad.Except ( MonadFix )
++import           Control.Monad.Fix    ( MonadFix )
+ import           Control.Monad.Ref    ( MonadAtomicRef(..)
+                                       , MonadRef(Ref)
+                                       )
+diff --git a/src/Nix/Lint.hs b/src/Nix/Lint.hs
+index 2c207c91..3da8c298 100644
+--- a/src/Nix/Lint.hs
++++ b/src/Nix/Lint.hs
+@@ -498,7 +498,7 @@ instance MonadThrow (Lint s) where
+   throwM e = Lint $ ReaderT $ const (throw e)
+ 
+ instance MonadCatch (Lint s) where
+-  catch _m _h = Lint $ ReaderT $ const (fail "Cannot catch in 'Lint s'")
++  catch _m _h = Lint $ ReaderT $ const (error "Cannot catch in 'Lint s'")
+ 
+ runLintM :: Options -> Lint s a -> ST s a
+ runLintM opts action =
+diff --git a/src/Nix/Utils.hs b/src/Nix/Utils.hs
+index 8f53b3a7..af370c21 100644
+--- a/src/Nix/Utils.hs
++++ b/src/Nix/Utils.hs
+@@ -67,6 +67,7 @@ import           Relude                  hiding ( pass
+ import           Data.Binary                    ( Binary )
+ import           Data.Data                      ( Data )
+ import           Codec.Serialise                ( Serialise )
++import           Control.Monad                  ( foldM )
+ import           Control.Monad.Fix              ( MonadFix(..) )
+ import           Control.Monad.Free             ( Free(..) )
+ import           Control.Monad.Trans.Control    ( MonadTransControl(..) )
+@@ -84,7 +85,6 @@ import           Lens.Family2.Stock             ( _1
+                                                 , _2
+                                                 )
+ import qualified System.FilePath              as FilePath
+-import Control.Monad.List (foldM)
+ 
+ #if ENABLE_TRACING
+ import qualified Relude.Debug                 as X
+diff --git a/src/Nix/Value.hs b/src/Nix/Value.hs
+index aafdc25a..28b9508c 100644
+--- a/src/Nix/Value.hs
++++ b/src/Nix/Value.hs
+@@ -554,7 +554,7 @@ liftNValue
+   => (forall x . u m x -> m x)
+   -> NValue t f m
+   -> NValue t f (u m)
+-liftNValue = (`hoistNValue` lift)
++liftNValue f = hoistNValue f lift
+ 
+ 
+ -- *** MonadTransUnlift
+-- 
+2.40.1
+
