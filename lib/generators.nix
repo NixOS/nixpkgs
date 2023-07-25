@@ -81,9 +81,10 @@ rec {
    */
   toKeyValue = {
     mkKeyValue ? mkKeyValueDefault {} "=",
-    listsAsDuplicateKeys ? false
+    listsAsDuplicateKeys ? false,
+    indent ? ""
   }:
-  let mkLine = k: v: mkKeyValue k v + "\n";
+  let mkLine = k: v: indent + mkKeyValue k v + "\n";
       mkLines = if listsAsDuplicateKeys
         then k: v: map (mkLine k) (if lib.isList v then v else [v])
         else k: v: [ (mkLine k v) ];

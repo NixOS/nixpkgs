@@ -6,7 +6,7 @@ in
 {
   imports = [
     (lib.mkRemovedOptionModule [ "fonts" "enableCoreFonts" ] "Use fonts.packages = [ pkgs.corefonts ]; instead.")
-    (lib.mkRenamedOptionModule [ "fonts" "enableDefaultFonts " ] [ "fonts" "enableDefaultPackages" ])
+    (lib.mkRenamedOptionModule [ "fonts" "enableDefaultFonts" ] [ "fonts" "enableDefaultPackages" ])
     (lib.mkRenamedOptionModule [ "fonts" "fonts" ] [ "fonts" "packages" ])
   ];
 

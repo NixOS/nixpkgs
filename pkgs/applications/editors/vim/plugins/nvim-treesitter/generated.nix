@@ -513,12 +513,12 @@
   };
   fortran = buildGrammar {
     language = "fortran";
-    version = "0.0.0+rev=31552ac";
+    version = "0.0.0+rev=482bdb8";
     src = fetchFromGitHub {
       owner = "stadelmanma";
       repo = "tree-sitter-fortran";
-      rev = "31552ac43ecaffa443a12ebea68cc526d334892f";
-      hash = "sha256-6ywdhlQGjivA2RV5345A0BiybAJOn9cIM03GMHjVoiM=";
+      rev = "482bdb8b8fb7305b928937379820aa6449e359a7";
+      hash = "sha256-x2Cm1yUfhlkl8zgbQFPe/IxVNGpX050J3wjsqe7uOW8=";
     };
     meta.homepage = "https://github.com/stadelmanma/tree-sitter-fortran";
   };
