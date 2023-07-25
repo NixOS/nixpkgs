@@ -1,7 +1,7 @@
 # Checks derivation meta and attrs for problems (like brokenness,
 # licenses, etc).
 
-{ lib, config, hostPlatform }:
+{ lib, config, hostPlatform, buildPlatform, targetPlatform }:
 
 let
   # If we're in hydra, we can dispense with the more verbose error
@@ -58,7 +58,23 @@ let
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
   hasUnsupportedPlatform =
-    pkg: !(lib.meta.availableOn hostPlatform pkg);
+    attrs:
+    let
+      inherit (lib.meta) checkAvailability;
+      checkBuildPlatform = checkAvailability buildPlatform {
+        bad = attrs.meta.badBuildPlatforms or [];
+      };
+      checkHostPlatform = checkAvailability hostPlatform {
+        bad = (attrs.meta.badPlatforms or []) ++ (attrs.meta.badHostPlatforms or []);
+        only = lib.optionals (attrs?meta.platforms) [ attrs.meta.platforms ];
+      };
+      checkTargetPlatform = checkAvailability targetPlatform {
+        bad = attrs.meta.badTargetPlatforms or [];
+      };
+      checkBuildExecutesHost =
+        (attrs.meta.requiresBuildCanExecuteHost or false) ->
+        buildPlatform.canExecute hostPlatform;
+    in !(checkBuildPlatform && checkHostPlatform && checkTargetPlatform && checkBuildExecutesHost);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
 
@@ -303,13 +319,24 @@ let
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
-    available = unspecified;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
     isFcitxEngine = bool;
     isIbusEngine = bool;
     isGutenprint = bool;
     badPlatforms = platforms;
+    badHostPlatforms = platforms;  # alias for badPlatforms
+    badBuildPlatforms = platforms;
+    badTargetPlatforms = platforms;
+    requiresBuildCanExecuteHost = bool;
+
+    # automatically generated in check-meta
+    available = unspecified;
+    availability = unspecified;
+    #availability.build.bad = platforms;
+    #availability.host.bad = platforms;
+    #availability.host.only = listOf platforms;
+    #availability.target.bad = platforms;
   };
 
   checkMetaAttr = k: v:
@@ -398,7 +425,14 @@ let
   # Example:
   #   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
   #   validity = checkMeta.assertValidity { inherit meta attrs; };
-  commonMeta = { validity, attrs, pos ? null, references ? [ ] }:
+  commonMeta =
+    { validity
+    , attrs
+    , pos ? null
+    , references ? [ ]
+    , referencesOnBuild ? [ ]
+    , referencesOnHost ? [ ]
+    }:
     let
       outputs = attrs.outputs or [ "out" ];
     in
@@ -437,6 +471,50 @@ let
       && (if config.checkMetaRecursively or false
       then lib.all (d: d.meta.available or true) references
       else true);
+    } // {
+
+      # Each attrset meta.{build,host,target} is an availability
+      # (see lib.meta.checkAvailability for specification) which
+      # must match against the {buildPlatform, hostPlatform,
+      # targetPlatform}.  If any of these does not match, then the
+      # derivation is guaranteed not to build and therefore should
+      # not even be attempted.
+      #
+      availability = let meta = attrs.meta or {}; in {
+        build = {
+          bad = lexicographicUniques (
+            (map (pkg: pkg.meta.availability.host.bad or []) referencesOnBuild) ++
+            (map (pkg: pkg.meta.availability.build.bad or []) referencesOnHost) ++
+            [ (meta.badBuildPlatforms or []) ]
+          );
+        };
+        host = {
+          bad = lexicographicUniques (
+            (map (pkg: pkg.meta.availability.target.bad or []) referencesOnBuild) ++
+            (map (pkg: pkg.meta.availability.host.bad or []) referencesOnHost) ++
+            [ (meta.badPlatforms or []) ]
+          );
+
+          # "host.only" is needed to represent the (deprecated,
+          # legacy) meta.platforms attribute, which should be
+          # avoided in favor of meta.hydraPlatforms and
+          # meta.badPlatforms, since in order to set meta.platforms
+          # correctly you need to be able to see into the future and
+          # know what platforms nixpkgs might someday support.
+          # There are no build.only or target.only attrsets because
+          # we (thankfully) don't have meta.platforms equivalents
+          # for those.
+          only = (
+            (lib.optionals (meta?platforms && meta.platforms != lib.platforms.all) [ meta.platforms ])
+          );
+        };
+        target = {
+          bad = lexicographicUniques (
+            (map (pkg: pkg.meta.availability.target.bad or []) referencesOnHost) ++
+            [ (meta.badTargetPlatforms or []) ]
+          );
+        };
+      };
     };
 
   assertValidity = { meta, attrs }: let
@@ -452,5 +530,82 @@ let
         }.${validity.valid};
 
   };
+
+  # O(n log n)
+  # TODO(amjoseph@): possibly move to /lib/
+  lexicographicUniques = lists: lib.pipe lists [
+    builtins.concatLists                               # O(n)
+    (map (x: assert (lib.isAttrs x || lib.isString x); x))
+    (lib.sort (x: y: lexicographicCompare x y < 0))    # O(n log n)
+    sortedUnique                                       # O(n)
+  ];
+
+  # Given a list which is sorted according to some `==`-respecting
+  # comparison function (i.e. equal elements are already adjacent),
+  # return a new list with duplicate elements removed.  O(n).
+  # TODO(amjoseph@): possibly move to /lib/
+  sortedUnique =
+    list:
+    let elemAt = builtins.elemAt list;
+    in if lib.length list <= 1
+       then list # fast path
+       else lib.pipe list [
+         builtins.length
+
+         (builtins.genList
+           (idx:
+             if idx==0 then 0 else
+               if (elemAt (idx - 1)) == (elemAt idx)
+               then -1
+               else idx))
+
+         (lib.filter (idx: idx!=-1))
+         (map (idx: elemAt idx))
+       ];
+
+  # Comparison function; bools<ints<strings<attrs and attrsets are
+  # compared lexicographically.  All leaf attrvalues must be strings
+  # or booleans (this requirement may be weakened in the future).
+  # TODO(amjoseph@): possibly move to /lib/
+  lexicographicCompare =
+    let
+      inherit (lib) isBool isInt isAttrs isString compareLists;
+      compareInts = lib.compare;
+      compareStrings =
+        x: y: if x==y then 0   # fast path (pointer equality)
+              else if x<y then -1
+              else 1;
+      compareBools =
+        x: y: if x==y then 0
+              else if y then -1
+              else 1;
+    in
+    x: y:
+    if isAttrs x
+    then if isString y then 1
+         else if isBool y then 1
+         else if isInt y then 1
+         else if !(isAttrs y) then throw "invalid type: ${builtins.toJSON y}"
+         else compareLists
+           (namex: namey:
+             if namex == namey
+             then lexicographicCompare x.${namex} y.${namey}
+             else if namex < namey then -1
+             else 1)
+           (builtins.attrNames x)
+           (builtins.attrNames y)
+    else if isAttrs y then -1
+    else if isString x then
+      if isString y then compareStrings x y
+      else if isInt y || isBool y then 1
+      else throw "lexicographicCompare: invalid type: ${builtins.toJSON y}"
+    else if isInt x then
+      if isInt y then compareInts x y
+      else if isBool y then 1
+      else throw "lexicographicCompare: invalid type: ${builtins.toJSON y}"
+    else if isBool x then
+      if isBool y then compareBools x y
+      else throw "lexicographicCompare: invalid type: ${builtins.toJSON y}"
+    else throw "lexicographicCompare: invalid type: ${builtins.toJSON x}";
 
 in { inherit assertValidity commonMeta; }

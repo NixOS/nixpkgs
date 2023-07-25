@@ -164,6 +164,12 @@ let
 
       inherit cc hasCC;
 
+      isAvailable = pkg:
+        lib.meta.checkAvailability buildPlatform  pkg.meta.availability.build &&
+        lib.meta.checkAvailability hostPlatform   pkg.meta.availability.host &&
+        lib.meta.checkAvailability targetPlatform pkg.meta.availability.target &&
+        (pkg.meta.checkBuildExecutesHost or false) -> buildPlatform.canExecute hostPlatform;
+
       # Convenience for doing some very basic shell syntax checking by parsing a script
       # without running any commands. Because this will also skip `shopt -s extglob`
       # commands and extglob affects the Bash parser, we enable extglob always.

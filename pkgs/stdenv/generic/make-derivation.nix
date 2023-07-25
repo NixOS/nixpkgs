@@ -7,7 +7,7 @@ let
     inherit lib config;
     # Nix itself uses the `system` field of a derivation to decide where
     # to build it. This is a bit confusing for cross compilation.
-    inherit (stdenv) hostPlatform;
+    inherit (stdenv) hostPlatform buildPlatform targetPlatform;
   };
 
   # Based off lib.makeExtensible, with modifications:
@@ -232,6 +232,8 @@ else let
 
   outputs = outputs';
 
+  referencesOnBuild = nativeBuildInputs ++ propagatedNativeBuildInputs;
+  referencesOnHost = buildInputs ++ propagatedBuildInputs;
   references = nativeBuildInputs ++ buildInputs
             ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
 
@@ -473,7 +475,7 @@ else let
         lib.mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 
-  meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+  meta = checkMeta.commonMeta { inherit validity attrs pos references referencesOnBuild referencesOnHost; };
   validity = checkMeta.assertValidity { inherit meta attrs; };
 
   checkedEnv =

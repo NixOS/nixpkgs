@@ -100,10 +100,32 @@ rec {
           platform, or `meta.platforms` is not present.
 
        2. None of `meta.badPlatforms` pattern matches the given platform.
+
+     Note that because only one platform is provided (rather than
+     build, host, and target platforms) this check is imprecise.
+     You should use `stdenv.isAvailable pkg` instead.
   */
   availableOn = platform: pkg:
-    ((!pkg?meta.platforms) || lib.any (platformMatch platform) pkg.meta.platforms) &&
-    lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
+    checkAvailability platform (pkg.meta.availability.host or { bad = []; only = []; })
+  ;
+
+  /* Check a platform against an availability.
+
+     An availability is an attrset with two attributes:
+     - `bad`:  a list          of platform patterns accepted by platformMatch
+     - `only`: a list of lists of platform patterns accepted by platformMatch
+
+     To match the availability, both of the following must be true:
+     - The platform must not match any element of `bad`
+     - For each sublist of `only`, the platform must match at least one element of the sublist.
+  */
+  checkAvailability = platform: availability:
+    # Must not match any of availability.bad
+    !(lib.any                    (elem: platformMatch platform elem)          (availability.bad or []))
+
+    # For all sublists of availability.only, must match at least one sublist element
+    && lib.all (sublist: lib.any (elem: platformMatch platform elem) sublist) (availability.only or [])
+  ;
 
   /* Get the corresponding attribute in lib.licenses
      from the SPDX ID.
