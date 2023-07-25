@@ -96,6 +96,6 @@ in stdenv.mkDerivation {
     homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
     maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
