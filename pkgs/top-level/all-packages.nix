@@ -9663,6 +9663,8 @@ with pkgs;
     };
   };
 
+  jupyter-console = callPackage ../applications/editors/jupyter/console.nix { };
+
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
 
   justify = callPackage ../tools/text/justify { };
