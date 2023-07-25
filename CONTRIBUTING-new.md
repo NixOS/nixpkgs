@@ -144,10 +144,54 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
 - Security critical applications (E.g. `firefox`)
 
-## (Merging a pull request)
+## Reviewing contributions {#chap-reviewing-contributions}
+
+::: {.warning}
+The following section is a draft, and the policy for reviewing is still being discussed in issues such as [#11166](https://github.com/NixOS/nixpkgs/issues/11166) and [#20836](https://github.com/NixOS/nixpkgs/issues/20836).
+:::
+
+The Nixpkgs project receives a fairly high number of contributions via GitHub pull requests. Reviewing and approving these is an important task and a way to contribute to the project.
+
+The high change rate of Nixpkgs makes any pull request that remains open for too long subject to conflicts that will require extra work from the submitter or the merger. Reviewing pull requests in a timely manner and being responsive to the comments is the key to avoid this issue. GitHub provides sort filters that can be used to see the [most recently](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc) and the [least recently](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc) updated pull requests. We highly encourage looking at [this list of ready to merge, unreviewed pull requests](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+review%3Anone+status%3Asuccess+-label%3A%222.status%3A+work-in-progress%22+no%3Aproject+no%3Aassignee+no%3Amilestone).
+
+When reviewing a pull request, please always be nice and polite. Controversial changes can lead to controversial opinions, but it is important to respect every community member and their work.
+
+GitHub provides reactions as a simple and quick way to provide feedback to pull requests or any comments. The thumb-down reaction should be used with care and if possible accompanied with some explanation so the submitter has directions to improve their contribution.
+
+Pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
+
+All the review template samples provided in this section are generic and meant as examples. Their usage is optional and the reviewer is free to adapt them to their liking.
+
+### Other submissions {#reviewing-contributions-other-submissions}
+
+Other type of submissions requires different reviewing steps.
+
+If you consider having enough knowledge and experience in a topic and would like to be a long-term reviewer for related submissions, please contact the current reviewers for that topic. They will give you information about the reviewing process. The main reviewers for a topic can be hard to find as there is no list, but checking past pull requests to see who reviewed or git-blaming the code to see who committed to that topic can give some hints.
+
+Container system, boot system and library changes are some examples of the pull requests fitting this category.
+
+## (Merging a pull request) | Merging pull requests {#reviewing-contributions--merging-pull-requests}
 
 The *Nixpkgs committers* are people who have been given
 permission to merge.
+
+It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.
+
+In case the PR is stuck waiting for the original author to apply a trivial
+change (a typo, capitalisation change, etc.) and the author allowed the members
+to modify the PR, consider applying it yourself. (or commit the existing review
+suggestion) You should pay extra attention to make sure the addition doesn't go
+against the idea of the original PR and would not be opposed by the author.
+
+<!--
+The following paragraphs about how to deal with unactive contributors is just a proposition and should be modified to what the community agrees to be the right policy.
+
+Please note that contributors with commit rights unactive for more than three months will have their commit rights revoked.
+-->
+
+Please see the discussion in [GitHub nixpkgs issue #50105](https://github.com/NixOS/nixpkgs/issues/50105) for information on how to proceed to be granted this level of access.
+
+In a case a contributor definitively leaves the Nix community, they should create an issue or post on [Discourse](https://discourse.nixos.org) with references of packages and modules they maintain so the maintainership can be taken over by other contributors.
 
 ## (Flow of changes)
 

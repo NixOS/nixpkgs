@@ -595,3 +595,104 @@ stdenv.mkDerivation {
   ...
 }
 ```
+
+## (Reviewing contributions)
+
+### Package updates {#reviewing-contributions-package-updates}
+
+A package update is the most trivial and common type of pull request. These pull requests mainly consist of updating the version part of the package name and the source hash.
+
+It can happen that non-trivial updates include patches or more complex changes.
+
+Reviewing process:
+
+- Ensure that the package versioning fits the guidelines.
+- Ensure that the commit text fits the guidelines.
+- Ensure that the package maintainers are notified.
+  - [CODEOWNERS](https://help.github.com/articles/about-codeowners) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
+- Ensure that the meta field information is correct.
+  - License can change with version updates, so it should be checked to match the upstream license.
+  - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.
+- Ensure that the code contains no typos.
+- Building the package locally.
+  - pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
+  - It is possible to rebase the changes on nixos-unstable or nixpkgs-unstable for easier review by running the following commands from a nixpkgs clone.
+
+    ```ShellSession
+    $ git fetch origin nixos-unstable
+    $ git fetch origin pull/PRNUMBER/head
+    $ git rebase --onto nixos-unstable BASEBRANCH FETCH_HEAD
+    ```
+
+    - The first command fetches the nixos-unstable branch.
+    - The second command fetches the pull request changes, `PRNUMBER` is the number at the end of the pull request title and `BASEBRANCH` the base branch of the pull request.
+    - The third command rebases the pull request changes to the nixos-unstable branch.
+  - The [nixpkgs-review](https://github.com/Mic92/nixpkgs-review) tool can be used to review a pull request content in a single command. `PRNUMBER` should be replaced by the number at the end of the pull request title. You can also provide the full github pull request url.
+
+    ```ShellSession
+    $ nix-shell -p nixpkgs-review --run "nixpkgs-review pr PRNUMBER"
+    ```
+- Running every binary.
+
+Sample template for a package update review is provided below.
+
+```markdown
+##### Reviewed points
+
+- [ ] package name fits guidelines
+- [ ] package version fits guidelines
+- [ ] package build on ARCHITECTURE
+- [ ] executables tested on ARCHITECTURE
+- [ ] all depending packages build
+- [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
+- [ ] patches that are remotely available are fetched rather than vendored
+
+##### Possible improvements
+
+##### Comments
+```
+
+### New packages {#reviewing-contributions-new-packages}
+
+New packages are a common type of pull requests. These pull requests consists in adding a new nix-expression for a package.
+
+Review process:
+
+- Ensure that the package versioning fits the guidelines.
+- Ensure that the commit name fits the guidelines.
+- Ensure that the meta fields contain correct information.
+  - License must match the upstream license.
+  - Platforms should be set (or the package will not get binary substitutes).
+  - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
+- Report detected typos.
+- Ensure the package source:
+  - Uses mirror URLs when available.
+  - Uses the most appropriate functions (e.g. packages from GitHub should use `fetchFromGitHub`).
+- Building the package locally.
+- Running every binary.
+
+Sample template for a new package review is provided below.
+
+```markdown
+##### Reviewed points
+
+- [ ] package path fits guidelines
+- [ ] package name fits guidelines
+- [ ] package version fits guidelines
+- [ ] package build on ARCHITECTURE
+- [ ] executables tested on ARCHITECTURE
+- [ ] `meta.description` is set and fits guidelines
+- [ ] `meta.license` fits upstream license
+- [ ] `meta.platforms` is set
+- [ ] `meta.maintainers` is set
+- [ ] build time only dependencies are declared in `nativeBuildInputs`
+- [ ] source is fetched using the appropriate function
+- [ ] the list of `phases` is not overridden
+- [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
+- [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
+- [ ] patches that are remotely available are fetched rather than vendored
+
+##### Possible improvements
+
+##### Comments
+```
