@@ -78,7 +78,7 @@ in rec {
     gecko32 = fetchurl rec {
       version = "2.47.4";
       url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86.msi";
-      hash = "sha256-Ja7MR3BrCRkI9/gUvdsHTGG+uAYzGOnvxaf3iYV3k9Y=";
+      hash = "sha256-Js7MR3BrCRkI9/gUvdsHTGG+uAYzGOnvxaf3iYV3k9Y=";
     };
     gecko64 = fetchurl rec {
       version = "2.47.4";
@@ -117,7 +117,7 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    hash = "sha256-JuXTqD0lxUGMbA9USORD0gh2OiZDqrSw8a01KSKkwnU=";
+    hash = "sha256-5upC+IWHBJE5DeFv96lD1hr4LYYaqAAzfxIroK9KlOY=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
