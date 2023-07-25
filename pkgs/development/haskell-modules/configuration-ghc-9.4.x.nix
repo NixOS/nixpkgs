@@ -55,10 +55,6 @@ in {
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
 
-  # consequences of doctest breakage follow:
-
-  ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
-
   # Jailbreaks & Version Updates
 
   hashable-time = doJailbreak super.hashable-time;

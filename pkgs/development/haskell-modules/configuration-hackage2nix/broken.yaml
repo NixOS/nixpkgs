@@ -1781,6 +1781,7 @@ broken-packages:
   - ghc-plugs-out
   - ghc-proofs
   - ghc-simple
+  - ghc-source-gen
   - ghc-srcspan-plugin
   - ghc-syb
   - ghc-syb-utils

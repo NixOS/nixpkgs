@@ -180,4 +180,7 @@ self: super: {
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;
   apply-refact = self.apply-refact_0_9_3_0;
+
+  # Requires GHC < 9.4
+  ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
 }
