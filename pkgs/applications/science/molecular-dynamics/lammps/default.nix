@@ -106,5 +106,6 @@ stdenv.mkDerivation rec {
     # support.
     broken = (blas.isILP64 && lapack.isILP64);
     maintainers = [ maintainers.costrouc maintainers.doronbehar ];
+    mainProgram = "lmp";
   };
 }
