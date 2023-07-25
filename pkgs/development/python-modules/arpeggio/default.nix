@@ -6,18 +6,13 @@
 
 buildPythonPackage rec {
   pname = "arpeggio";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchPypi {
     pname = "Arpeggio";
     inherit version;
-    hash = "sha256-1rA4OQGbuKaHhfkpLuajaxlU64S5JbhKa4peHibT7T0=";
+    hash = "sha256-x5CysG4ibS3UaOT7+1t/UGzsZkFgMf3hRBzx3ioLpwA=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
 
   nativeCheckInputs = [ pytestCheckHook ];
 
