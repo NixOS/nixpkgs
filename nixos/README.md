@@ -1,4 +1,4 @@
-*** NixOS ***
+# NixOS
 
 NixOS is a Linux distribution based on the purely functional package
 management system Nix.  More information can be found at

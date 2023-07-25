@@ -1,5 +1,4 @@
-
-# Nixpkgs/doc
+# Contributing to the Nixpkgs manual
 
 This directory houses the sources files for the Nixpkgs manual.
 
