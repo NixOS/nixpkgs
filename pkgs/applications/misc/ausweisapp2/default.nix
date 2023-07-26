@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "AusweisApp2";
-  version = "1.26.4";
+  version = "1.26.5";
 
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp2";
     rev = version;
-    hash = "sha256-l/sPqXkr4rSMEbPi/ahl/74RYqNrjcb28v6/scDrh1w=";
+    hash = "sha256-6/acpPMHsMj/8GkLGNE8yg/apt8ynhN3O35lkA95HYQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
