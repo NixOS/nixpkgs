@@ -21,7 +21,7 @@ let
   osqueryi = pkgs.runCommand "osqueryi" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
     mkdir -p $out/bin
     makeWrapper ${pkgs.osquery}/bin/osqueryi $out/bin/osqueryi \
-      --add-flags "--flagfile ${flagfile}"
+      --add-flags "--flagfile ${flagfile} --disable-database"
   '';
 in
 {
