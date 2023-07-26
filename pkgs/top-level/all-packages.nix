@@ -13794,10 +13794,6 @@ with pkgs;
 
   wget2 = callPackage ../tools/networking/wget2 { };
 
-  wgpu-utils = callPackage ../tools/graphics/wgpu-utils {
-    inherit (darwin.apple_sdk.frameworks) QuartzCore;
-  };
-
   wg-bond = callPackage ../applications/networking/wg-bond { };
 
   wgcf = callPackage ../applications/networking/wgcf { };
