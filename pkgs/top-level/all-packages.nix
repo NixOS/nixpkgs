@@ -10329,6 +10329,8 @@ with pkgs;
 
   motrix = callPackage ../tools/networking/motrix { };
 
+  mount-zip = callPackage ../tools/filesystems/mount-zip { };
+
   mpage = callPackage ../tools/text/mpage { };
 
   mprime = callPackage ../tools/misc/mprime { };
