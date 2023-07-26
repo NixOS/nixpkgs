@@ -176,7 +176,7 @@ in
       description = lib.mdDoc ''
         Extra paperless config options.
 
-        See [the documentation](https://paperless-ngx.readthedocs.io/en/latest/configuration.html)
+        See [the documentation](https://docs.paperless-ngx.com/configuration/)
         for available options.
 
         Note that some options such as `PAPERLESS_CONSUMER_IGNORE_PATTERN` expect JSON values. Use `builtins.toJSON` to ensure proper quoting.
