@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "hist";
-  version = "2.6.3";
+  version = "2.7.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dede097733d50b273af9f67386e6dcccaab77e900ae702e1a9408a856e217ce9";
+    sha256 = "sha256-/74xTCvQPDQrnxaNznFa2PNigesjFyoAlwiCqTRP6Yg=";
   };
 
   buildInputs = [
