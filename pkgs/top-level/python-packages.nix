@@ -194,6 +194,8 @@ self: super: with self; {
 
   aiogithubapi = callPackage ../development/python-modules/aiogithubapi { };
 
+  aiogram = callPackage ../development/python-modules/aiogram { };
+
   aioharmony = callPackage ../development/python-modules/aioharmony { };
 
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
@@ -6182,6 +6184,8 @@ self: super: with self; {
   magic = callPackage ../development/python-modules/magic { };
 
   magicgui = callPackage ../development/python-modules/magicgui { };
+
+  magic-filter = callPackage ../development/python-modules/magic-filter { };
 
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
