@@ -135,14 +135,14 @@ self: super: {
   }) (doJailbreak super.language-haskell-extract);
 
   # Patch for support of mtl-2.3
-  monad-par = appendPatches [
+  monad-par = appendPatch
     (pkgs.fetchpatch {
       name = "monad-par-mtl-2.3.patch";
       url = "https://github.com/simonmar/monad-par/pull/75/commits/ce53f6c1f8246224bfe0223f4aa3d077b7b6cc6c.patch";
       sha256 = "1jxkl3b3lkjhk83f5q220nmjxbkmni0jswivdw4wfbzp571djrlx";
       stripLen = 1;
     })
-  ] (doJailbreak super.monad-par);
+    (doJailbreak super.monad-par);
 
   # 2023-04-03: plugins disabled for hls 1.10.0.0 based on
   #
