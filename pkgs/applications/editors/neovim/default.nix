@@ -4,6 +4,7 @@
 , libvterm-neovim
 , tree-sitter
 , fetchurl
+, buildPackages
 , treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
 , glibcLocales ? null, procps ? null
@@ -15,22 +16,32 @@
 }:
 
 let
-  neovimLuaEnv = lua.withPackages(ps:
-    (with ps; [ lpeg luabitop mpack ]
-    ++ lib.optionals doCheck [
-        nvim-client luv coxpcall busted luafilesystem penlight inspect
-      ]
-    ));
+  requiredLuaPkgs = ps: (with ps; [
+    lpeg
+    luabitop
+    mpack
+  ] ++ lib.optionals doCheck [
+    nvim-client
+    luv
+    coxpcall
+    busted
+    luafilesystem
+    penlight
+    inspect
+  ]
+  );
+  neovimLuaEnv = lua.withPackages requiredLuaPkgs;
+  neovimLuaEnvOnBuild = lua.luaOnBuild.withPackages requiredLuaPkgs;
   codegenLua =
-    if lua.pkgs.isLuaJIT
+    if lua.luaOnBuild.pkgs.isLuaJIT
       then
         let deterministicLuajit =
-          lua.override {
+          lua.luaOnBuild.override {
             deterministicStringIds = true;
             self = deterministicLuajit;
           };
         in deterministicLuajit.withPackages(ps: [ ps.mpack ps.lpeg ])
-      else lua;
+      else lua.luaOnBuild;
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 in
@@ -99,6 +110,11 @@ in
     # nvim --version output retains compilation flags and references to build tools
     postPatch = ''
       substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
+    '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      sed -i runtime/CMakeLists.txt \
+        -e "s|\".*/bin/nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
+      sed -i src/nvim/po/CMakeLists.txt \
+        -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
     '';
     # check that the above patching actually works
     disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
@@ -117,6 +133,7 @@ in
       cmakeFlagsArray+=(
         "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
         "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
+        "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
       )
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
