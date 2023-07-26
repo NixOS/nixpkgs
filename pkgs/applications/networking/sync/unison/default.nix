@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison";
-  version = "2.53.2";
+  version = "2.53.3";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-H+70NZZP0cUsxetFcsjWEx2kENsgMdo/41wBwwaX6zg=";
+    sha256 = "sha256-XKQKNc0YpYrtXGmbDBMkIqelegrcgGhQQYBb78PsMBY=";
   };
 
   strictDeps = true;
@@ -46,6 +46,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall = ''
     mkdir -p $out/bin
+  '';
+
+  installPhase = ''
+    install -D src/unison $out/bin/unison
+
+    if [ -f "src/unison-gui" ]; then
+       install -D src/unison-gui $out/bin/unison-gui
+    fi
+
+    if [ -f "src/unison-fsmonitor" ]; then
+       install -D src/unison-fsmonitor $out/bin/unison-fsmonitor
+    else
+      install -D src/fsmonitor.py $out/bin/fsmonitor.py
+    fi
   '';
 
   postInstall = lib.optionalString enableX11 ''
