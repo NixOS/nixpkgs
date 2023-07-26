@@ -10611,6 +10611,8 @@ with pkgs;
 
   mpw = callPackage ../tools/security/mpw { };
 
+  mqtt_cpp = callPackage ../development/libraries/mqtt_cpp { };
+
   mr = callPackage ../applications/version-management/mr { };
 
   mrsh = callPackage ../shells/mrsh { };
