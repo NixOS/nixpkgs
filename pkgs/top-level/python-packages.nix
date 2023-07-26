@@ -13890,8 +13890,6 @@ self: super: with self; {
 
   zodbpickle = callPackage ../development/python-modules/zodbpickle { };
 
-  zope_broken = callPackage ../development/python-modules/zope_broken { };
-
   zope-cachedescriptors = callPackage ../development/python-modules/zope-cachedescriptors { };
 
   zope_component = callPackage ../development/python-modules/zope_component { };
