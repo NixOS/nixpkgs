@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch2, pkg-config, python3Packages, makeWrapper
 , libsamplerate, libsndfile, readline, eigen, celt
 , wafHook
+, gitUpdater
 # Darwin Dependencies
 , aften, AudioUnit, CoreAudio, libobjc, Accelerate
 
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "$out/include" "$dev/include"
   '';
 
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
