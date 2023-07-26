@@ -26,14 +26,11 @@ let
     lib.mapAttrs (_: toString) cfg.extraConfig
   );
 
-  manage =
-    let
-      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
-    in
-    pkgs.writeShellScript "manage" ''
-      ${setupEnv}
-      exec ${pkg}/bin/paperless-ngx "$@"
-    '';
+  manage = pkgs.writeShellScript "manage" ''
+    set -o allexport # Export the following env vars
+    ${lib.toShellVars env}
+    exec ${pkg}/bin/paperless-ngx "$@"
+  '';
 
   # Secure the services
   defaultServiceConfig = {
@@ -172,6 +169,7 @@ in
       description = lib.mdDoc "Web interface port.";
     };
 
+    # FIXME this should become an RFC42-style settings attr
     extraConfig = mkOption {
       type = types.attrs;
       default = { };
@@ -180,11 +178,23 @@ in
 
         See [the documentation](https://paperless-ngx.readthedocs.io/en/latest/configuration.html)
         for available options.
+
+        Note that some options such as `PAPERLESS_CONSUMER_IGNORE_PATTERN` expect JSON values. Use `builtins.toJSON` to ensure proper quoting.
       '';
-      example = {
-        PAPERLESS_OCR_LANGUAGE = "deu+eng";
-        PAPERLESS_DBHOST = "/run/postgresql";
-      };
+      example = literalExpression ''
+        {
+          PAPERLESS_OCR_LANGUAGE = "deu+eng";
+
+          PAPERLESS_DBHOST = "/run/postgresql";
+
+          PAPERLESS_CONSUMER_IGNORE_PATTERN = builtins.toJSON [ ".DS_STORE/*" "desktop.ini" ];
+
+          PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
+            optimize = 1;
+            pdfa_image_compression = "lossless";
+          };
+        };
+      '';
     };
 
     user = mkOption {
