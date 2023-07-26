@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "lazydocker";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazydocker";
     rev = "v${version}";
-    sha256 = "sha256-P03L3UbXAlNUUwAwDqsIIs/ECB6s3GqCESbPK4AgnYg=";
+    sha256 = "sha256-CALMpedDCBlsYt31JOlwH1SOEhy/DFP6SdjoVkQ2KOs=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = ''
     rm -f pkg/config/app_config_test.go
