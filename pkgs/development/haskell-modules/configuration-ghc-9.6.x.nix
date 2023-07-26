@@ -153,6 +153,15 @@ self: super: {
     })
     (doJailbreak super.xmonad-contrib);
 
+  # Patch 0.12.0.1 for support of unix-2.8.0.0
+  arbtt = appendPatch
+    (pkgs.fetchpatch {
+      name = "arbtt-unix-2.8.0.0.patch";
+      url = "https://github.com/nomeata/arbtt/pull/168/commits/ddaac94395ac50e3d3cd34c133dda4a8e5a3fd6c.patch";
+      sha256 = "sha256-5Gmz23f4M+NfgduA5O+9RaPmnneAB/lAlge8MrFpJYs=";
+    })
+    super.arbtt;
+
   # 2023-04-03: plugins disabled for hls 1.10.0.0 based on
   #
   haskell-language-server =
