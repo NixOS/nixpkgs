@@ -1,32 +1,22 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
-, nodePackages
-, python3
 }:
 
 buildNpmPackage rec {
   pname = "polaris-web";
-  version = "build-55";
+  version = "67";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris-web";
-    rev = version;
-    sha256 = "2XqU4sExF7Or7RxpOK2XU9APtBujfPhM/VkOLKVDvF4=";
+    rev = "build-${version}";
+    hash = "sha256-mhrgHNbqxLhhLWP4eu1A3ytrx9Q3X0EESL2LuTfgsBE=";
   };
 
-  npmDepsHash = "sha256-sSd1WSS9xsaVr9mCQueAuqceOv5SkSzqsxX9kHYC8Xo=";
-
-  nativeBuildInputs = [
-    nodePackages.node-gyp-build
-    python3
-  ];
+  npmDepsHash = "sha256-lScXbxkJiRq5LLFkoz5oZsmKz8I/t1rZJVonfct9r+0=";
 
   env.CYPRESS_INSTALL_BINARY = "0";
-
-  # https://github.com/parcel-bundler/parcel/issues/8005
-  env.NODE_OPTIONS = "--no-experimental-fetch";
 
   npmBuildScript = "production";
 
