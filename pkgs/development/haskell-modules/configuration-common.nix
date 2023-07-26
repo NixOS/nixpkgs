@@ -471,7 +471,11 @@ self: super: {
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2022-11-24: jailbreak as it has too strict bounds on a bunch of things
-  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] (dontCheck (doJailbreak super.hnix));
+  # 2023-07-26: Cherry-pick GHC 9.4 changes from hnix master branch
+  hnix = appendPatches [
+    ./patches/hnix-compat-for-ghc-9.4.patch
+  ] (dontCheck (doJailbreak super.hnix));
+
   # Too strict bounds on algebraic-graphs and bytestring
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core = doJailbreak super.hnix-store-core;

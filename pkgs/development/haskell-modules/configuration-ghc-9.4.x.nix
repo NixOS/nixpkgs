@@ -68,11 +68,6 @@ in {
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
   hedgehog = dontHaddock super.hedgehog;
 
-  # Cherry-pick GHC 9.4 changes from hnix master branch
-  hnix = appendPatches [
-    ./patches/hnix-compat-for-ghc-9.4.patch
-  ] (doJailbreak super.hnix);
-
   hpack = overrideCabal (drv: {
     # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
     # 2021-10-10: 9.2.1 is not yet supported (also no issue)
