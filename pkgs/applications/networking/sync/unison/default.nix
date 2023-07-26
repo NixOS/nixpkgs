@@ -11,6 +11,7 @@
 , zlib
 , enableX11 ? true
 , Cocoa
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     startupNotify = true;
     startupWMClass = "Unison";
   });
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://www.cis.upenn.edu/~bcpierce/unison/";
