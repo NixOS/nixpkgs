@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     python3
     desktop-file-utils
     gtk3
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3
     python3.pkgs.gatt
-    gobject-introspection
   ];
 
   pythonPath = with python3.pkgs; [

@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gobject-introspection
     graphene
     orc
     libtheora

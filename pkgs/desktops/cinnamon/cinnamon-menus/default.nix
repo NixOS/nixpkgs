@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gobject-introspection
   ];
 
   nativeBuildInputs = [
@@ -30,6 +29,7 @@ stdenv.mkDerivation rec {
     ninja
     wrapGAppsHook
     pkg-config
+    gobject-introspection
   ];
 
   meta = with lib; {

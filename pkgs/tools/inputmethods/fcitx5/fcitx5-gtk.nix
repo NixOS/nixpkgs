@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     gtk3
     gtk4
     fmt
-    gobject-introspection
     fcitx5
     pcre
     libuuid
@@ -64,6 +63,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gobject-introspection
   ];
 
   meta = with lib; {

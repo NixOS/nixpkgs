@@ -58,7 +58,6 @@ python3.pkgs.buildPythonApplication rec {
     glib
     libmediaart
     gnome-online-accounts
-    gobject-introspection
     gdk-pixbuf
     python3
     grilo

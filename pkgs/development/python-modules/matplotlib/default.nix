@@ -121,6 +121,8 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     numpy
+  ] ++ lib.optionals enableGtk3 [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -131,7 +133,6 @@ buildPythonPackage rec {
     ghostscript
   ] ++ lib.optionals enableGtk3 [
     cairo
-    gobject-introspection
     gtk3
   ] ++ lib.optionals enableTk [
     libX11
