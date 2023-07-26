@@ -8,6 +8,10 @@
 
 self: super: with self; {
 
+  bootstrap = lib.recurseIntoAttrs {
+    flit-core = toPythonModule (callPackage ../development/python-modules/bootstrap/flit-core { });
+  };
+
   bootstrapped-pip = toPythonModule (callPackage ../development/python-modules/bootstrapped-pip { });
 
   setuptools = callPackage ../development/python-modules/setuptools { };
