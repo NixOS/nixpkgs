@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     description = "The modern media player for macOS";
     platforms = platforms.darwin;
     license = licenses.gpl3;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ arkivm stepbrobd ];
   };
 }
