@@ -6,7 +6,7 @@
 , withPcsc ? !enableMinimal, pcsclite
 , guiSupport ? stdenv.isDarwin, pinentry
 , withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
-, nixosTests
+, nixosTests, fetchpatch
 }:
 
 assert guiSupport -> enableMinimal == false;
@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     ./24-allow-import-of-previously-known-keys-even-without-UI.patch
     # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
     ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
+    # Patch for emacs easypg https://dev.gnupg.org/T6481
+    # It's merged to gnupg master so can be removed in the next major version
+    (fetchpatch {
+      url = "https://dev.gnupg.org/rG2f872fa68c6576724b9dabee9fb0844266f55d0d?diff=1";
+      sha256 = "sha256-irxxBBO0MqHaUj0a0qZ8yfhKp4wXRdQErj3eD/ZF66I=";
+    })
   ];
 
   postPatch = ''
