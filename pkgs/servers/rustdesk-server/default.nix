@@ -1,8 +1,10 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , libsodium
+, Security
 , sqlite
 , nix-update-script
 , testers
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libsodium
     sqlite
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   passthru = {
@@ -53,6 +57,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rustdesk/rustdesk-server/releases/tag/${version}";
     license = licenses.agpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gaelreyrol ];
+    maintainers = with maintainers; [ gaelreyrol tjni ];
   };
 }

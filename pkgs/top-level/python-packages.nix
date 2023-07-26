@@ -4718,6 +4718,8 @@ self: super: with self; {
 
   hexdump = callPackage ../development/python-modules/hexdump { };
 
+  hfst = callPackage ../development/python-modules/hfst { };
+
   hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
 
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
@@ -7281,6 +7283,8 @@ self: super: with self; {
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
+
+  omorfi = callPackage ../development/python-modules/omorfi { };
 
   omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
 
