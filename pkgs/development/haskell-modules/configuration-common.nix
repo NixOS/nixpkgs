@@ -1164,44 +1164,9 @@ self: super: {
       jailbreak = assert drv.version == "1.0.9" && drv.revision == "1"; true;
     }) super.dhall-nixpkgs);
 
-  stack_2_11_1 =
-    lib.pipe
-      super.stack_2_11_1
-      [
-        (self.generateOptparseApplicativeCompletions [ "stack" ])
-
-        # Seems to be an unnecessarily strict dep on ansi-terminal
-        doJailbreak
-
-        # The below patch has unix line endings, but the actual file
-        # has CRLF line endings.  The following override changes the
-        # file to unix line endings before applying the patch.
-        (overrideCabal (oldAttrs: {
-          prePatch = oldAttrs.prePatch or "" + ''
-            "${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix" src/main/BuildInfo.hs
-          '';
-        }))
-        # stack-2.11.1 has a bug when building without git.
-        # https://github.com/commercialhaskell/stack/pull/6127
-        (appendPatch
-          (fetchpatch {
-            name = "stack-fix-building-without-git.patch";
-            url = "https://github.com/commercialhaskell/stack/pull/6127/commits/086f93933d547736a7007fc4110f7816ef21f691.patch";
-            hash = "sha256-1nwzMoumWceVu8RNnH2mmSxYT24G1FAnFRJvUMeD3po=";
-            includes = [ "src/main/BuildInfo.hs" ];
-          })
-        )
-      ];
-
   stack =
     lib.pipe
-      (super.stack.override {
-        # stack needs to use an exact hpack version.  When changing or removing
-        # this override, double-check the upstream stack release to confirm
-        # that we are using the correct hpack version. See
-        # https://github.com/NixOS/nixpkgs/issues/223390 for more information.
-        hpack = assert self.hpack.version == "0.35.2"; self.hpack;
-      })
+      super.stack
       [
         (self.generateOptparseApplicativeCompletions [ "stack" ])
 

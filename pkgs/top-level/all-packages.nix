@@ -15997,7 +15997,7 @@ with pkgs;
 
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 
-  stack = haskell.lib.compose.justStaticExecutables haskellPackages.stack_2_11_1;
+  stack = haskell.lib.compose.justStaticExecutables haskellPackages.stack;
 
   hlint = haskell.lib.compose.justStaticExecutables haskellPackages.hlint;
 

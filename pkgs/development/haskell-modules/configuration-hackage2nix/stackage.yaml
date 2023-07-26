@@ -2357,7 +2357,6 @@ default-package-overrides:
   - srt ==0.1.2.0
   - srtree ==1.0.0.5
   - stache ==2.3.4
-  - stack ==2.9.3.1
   - stack-all ==0.4.1
   - stack-clean-old ==0.4.6
   - stack-templatizer ==0.1.1.0
