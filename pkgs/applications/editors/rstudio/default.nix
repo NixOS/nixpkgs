@@ -137,9 +137,9 @@ in
     patches = [
       ./r-location.patch
       ./clang-location.patch
-      #./use-system-node.patch
+      ./use-system-node.patch
       ./fix-resources-path.patch
-      #./pandoc-nix-path.patch
+      ./pandoc-nix-path.patch
       #./remove-quarto-from-generator.patch
       ./do-not-install-pandoc.patch
     ];
@@ -147,11 +147,11 @@ in
     postPatch = ''
       substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}
 
-#      substituteInPlace src/cpp/CMakeLists.txt \
-#        --replace 'SOCI_LIBRARY_DIR "/usr/lib"' 'SOCI_LIBRARY_DIR "${soci}/lib"'
+      substituteInPlace src/cpp/CMakeLists.txt \
+        --replace 'SOCI_LIBRARY_DIR "/usr/lib"' 'SOCI_LIBRARY_DIR "${soci}/lib"'
 
       substituteInPlace src/gwt/build.xml \
-        --replace '../../dependencies/common/node/$\{node.version}' ${nodejs} \
+        --replace '@node@' ${nodejs} \
         --replace './lib/quarto' ${quartoSrc}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
