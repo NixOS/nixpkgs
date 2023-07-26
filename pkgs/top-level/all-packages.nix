@@ -5740,6 +5740,8 @@ with pkgs;
 
   maxcso = callPackage ../tools/archivers/maxcso { };
 
+  measureme = callPackage ../development/tools/rust/measureme { };
+
   medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync {
