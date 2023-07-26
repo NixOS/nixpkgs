@@ -42,68 +42,51 @@ services.postgresql.dataDir = "/data/postgresql";
 ## Upgrading {#module-services-postgres-upgrading}
 
 ::: {.note}
-The steps below demonstrate how to upgrade from an older version to `pkgs.postgresql_13`.
+The steps below demonstrate how to upgrade from an older version to `pkgs.postgresql_15`.
 These instructions are also applicable to other versions.
 :::
 
-Major PostgreSQL upgrades require a downtime and a few imperative steps to be called. This is the case because
-each major version has some internal changes in the databases' state during major releases. Because of that,
+Major PostgreSQL upgrades require a downtime. This is the case because each major version
+has some internal changes in the databases' state during major releases. Because of that,
 NixOS places the state into {file}`/var/lib/postgresql/&lt;version&gt;` where each `version`
 can be obtained like this:
 ```
 $ nix-instantiate --eval -A postgresql_13.psqlSchema
 "13"
 ```
-For an upgrade, a script like this can be used to simplify the process:
+For an upgrade, the `services.postgresql.upgradeFrom` option can be used:
 ```
 { config, pkgs, ... }:
 {
-  environment.systemPackages = [
-    (let
-      # XXX specify the postgresql package you'd like to upgrade to.
-      # Do not forget to list the extensions you need.
-      newPostgres = pkgs.postgresql_13.withPackages (pp: [
-        # pp.plv8
-      ]);
-    in pkgs.writeScriptBin "upgrade-pg-cluster" ''
-      set -eux
-      # XXX it's perhaps advisable to stop all services that depend on postgresql
-      systemctl stop postgresql
+  services.postgresql = {
+    package = pkgs.postgresql_15;
 
-      export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
+    upgradeFrom = {
+      package = pkgs.postgresql_13;
 
-      export NEWBIN="${newPostgres}/bin"
+      # You may specify a different location of the old data directory
 
-      export OLDDATA="${config.services.postgresql.dataDir}"
-      export OLDBIN="${config.services.postgresql.package}/bin"
+      # If you had configured it elsewhere. The default is
+      # config.services.postgresql.dataDir
+      # settings.old-datadir = "/mnt/postgresql/13";
 
-      install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-      cd "$NEWDATA"
-      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+      # No other flags are specified by default.
+      # If you want to use the --link option, for instance:
+      # settings.link = true;
+    };
 
-      sudo -u postgres $NEWBIN/pg_upgrade \
-        --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-        --old-bindir $OLDBIN --new-bindir $NEWBIN \
-        "$@"
-    '')
-  ];
+    # pg_upgrade recommends a vacuum and analyze after an upgrade
+    # This is on by default, but it can be disabled:
+    # analyzeAfterUpgrade = false;
+  };
 }
 ```
 
-The upgrade process is:
+The next `nixos-rebuild switch` will restart the postgresql systemd service and do the upgrade during pre-start.
+Subsequent restarts of the systemd postgresql service will not attempt another upgrade.
+The previous data directory is kept intact and the upgraded state will be in `config.services.postgresql.dataDir`.
 
-  1. Rebuild nixos configuration with the configuration above added to your {file}`configuration.nix`. Alternatively, add that into separate file and reference it in `imports` list.
-  2. Login as root (`sudo su -`)
-  3. Run `upgrade-pg-cluster`. It will stop old postgresql, initialize a new one and migrate the old one to the new one. You may supply arguments like `--jobs 4` and `--link` to speedup migration process. See <https://www.postgresql.org/docs/current/pgupgrade.html> for details.
-  4. Change postgresql package in NixOS configuration to the one you were upgrading to via [](#opt-services.postgresql.package). Rebuild NixOS. This should start new postgres using upgraded data directory and all services you stopped during the upgrade.
-  5. After the upgrade it's advisable to analyze the new cluster.
-
-       - For PostgreSQL ≥ 14, use the `vacuumdb` command printed by the upgrades script.
-       - For PostgreSQL < 14, run (as `su -l postgres` in the [](#opt-services.postgresql.dataDir), in this example {file}`/var/lib/postgresql/13`):
-
-         ```
-         $ ./analyze_new_cluster.sh
-         ```
+`pg_upgrade` also provides the following means of removing the old state. The `upgradeFrom` postgresql option does not do this by default.
 
      ::: {.warning}
      The next step removes the old state-directory!

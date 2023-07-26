@@ -249,6 +249,7 @@ let
 
       tests = {
         postgresql = nixosTests.postgresql-wal-receiver.${thisAttr};
+        upgrade = nixosTests.postgresql-upgrade.${thisAttr};
       } // lib.optionalAttrs jitSupport {
         postgresql-jit = nixosTests.postgresql-jit.${thisAttr};
       };
