@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, tbb
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, boost, tbb
 , gmp, llvm, clang, sqlite, python3
 , ocamlPackages, mpfr, ppl, doxygen, graphviz
 }:
@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
     repo = "ikos";
     rev = "v${version}";
     sha256 = "0k3kp1af0qx3l1x6a4sl4fm8qlwchjvwkvs2ck0fhfnc62q2im5f";
+  };
+
+  patches = fetchpatch {
+    url = "https://github.com/NASA-SW-VnV/ikos/commit/2e647432427b3f0dbb639e0371d976ab6406f290.patch";
+    hash = "sha256-ffzjlqEp4qp76Kwl5zpyQlg/xUMt8aLDSSP4XA4ndS8=";
   };
 
   nativeBuildInputs = [ cmake ];
