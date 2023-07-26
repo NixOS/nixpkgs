@@ -130,9 +130,9 @@ in {
 
           This defaults to the singleton list [ca] when the {option}`ca` option is defined.
         '';
-        default = lib.optional (cfg.elasticsearch.ca != null) ca;
+        default = lib.optional (cfg.elasticsearch.ca != null) cfg.elasticsearch.ca;
         defaultText = literalExpression ''
-          lib.optional (config.${opt.elasticsearch.ca} != null) ca
+          lib.optional (config.${opt.elasticsearch.ca} != null) cfg.elasticsearch.ca
         '';
         type = types.listOf types.path;
       };
