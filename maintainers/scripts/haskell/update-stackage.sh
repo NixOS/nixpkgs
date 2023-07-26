@@ -66,6 +66,7 @@ sed -r \
     -e '/ hie-bios /d' \
     -e '/ ShellCheck /d' \
     -e '/ Agda /d' \
+    -e '/ stack /d' \
     < "${tmpfile_new}" >> $stackage_config
 # Explanations:
 # cabal2nix, distribution-nixpkgs, jailbreak-cabal, language-nix: These are our packages and we know what we are doing.
