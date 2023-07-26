@@ -5274,7 +5274,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration;
   };
 
-  fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
+  fx-cast-bridge = callPackage ../tools/misc/fx_cast { };
 
   fzf = callPackage ../tools/misc/fzf { };
 
