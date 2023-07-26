@@ -117,6 +117,12 @@ let
       '';
     };
 
+    cudaSupport = mkMassRebuild {
+      type = types.bool;
+      default = false;
+      feature = "build packages with CUDA support by default";
+    };
+
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
       default = [];

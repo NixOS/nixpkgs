@@ -5,7 +5,7 @@
 , cmake
 , gtest
 , doCheck ? true
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , ncclSupport ? false
 , rLibrary ? false
 , cudaPackages

@@ -4207,7 +4207,7 @@ with pkgs;
   libtensorflow = python3.pkgs.tensorflow.libtensorflow;
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix {
-    cudaSupport = config.cudaSupport or false;
+    inherit (config) cudaSupport;
   };
 
   tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
@@ -10904,7 +10904,7 @@ with pkgs;
 
   nvidia-thrust-intel = callPackage ../development/libraries/nvidia-thrust {
     hostSystem = "TBB";
-    deviceSystem = if config.cudaSupport or false then "CUDA" else "TBB";
+    deviceSystem = if config.cudaSupport then "CUDA" else "TBB";
   };
 
   nvidia-thrust-cuda = callPackage ../development/libraries/nvidia-thrust {
@@ -15169,7 +15169,7 @@ with pkgs;
 
   colm = callPackage ../development/compilers/colm { };
 
-  colmap = libsForQt5.callPackage ../applications/science/misc/colmap { cudaSupport = config.cudaSupport or false; };
+  colmap = libsForQt5.callPackage ../applications/science/misc/colmap { inherit (config) cudaSupport; };
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
   chickenPackages_4 = callPackage ../development/compilers/chicken/4 { };
@@ -39361,7 +39361,7 @@ with pkgs;
   ### SCIENCE / MATH
 
   caffe = callPackage ../applications/science/math/caffe ({
-    cudaSupport = config.cudaSupport or false;
+    inherit (config) cudaSupport;
     cudaPackages = cudaPackages_10_1;
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
     blas = openblas;
@@ -39376,7 +39376,7 @@ with pkgs;
     stdenv = gcc7Stdenv;
     inherit (linuxPackages) nvidia_x11;
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
-    cudaSupport = config.cudaSupport or false;
+    inherit (config) cudaSupport;
   };
 
   dap = callPackage ../applications/science/math/dap { };
