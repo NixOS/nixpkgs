@@ -1,30 +1,41 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, makeWrapper, vulkan-loader, QuartzCore }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, cmake
+, makeWrapper
+, vulkan-loader
+, freetype
+, fontconfig
+, QuartzCore
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
     rev = "v${version}";
-    hash = "sha256-tGjjjQDcN9zkxQSOrW/D1Pu6cycTKo/lh71mTEpZQIE=";
+    hash = "sha256-NFn7rCmg37/Vy8owZUNmdH1BQv+bU46bkZl0reMrjWI=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "d3d12-0.6.0" = "sha256-xCazXUriIQWMVa3DOI1aySBATmYwyDqsVYULRV2l/44=";
-      "naga-0.12.0" = "sha256-EZ8ZKixOFPT9ZTKIC/UGh2B3F09ENbCTUi+ASamJzMM=";
+      "naga-0.13.0" = "sha256-6GlUj1oIWeBmawdZ/IpC8SN9EJ6RyhA1K441tqN3HAM=";
     };
   };
 
   nativeBuildInputs = [
     pkg-config
+    cmake
     makeWrapper
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin QuartzCore;
+  buildInputs = [ freetype fontconfig ] ++ lib.optional stdenv.isDarwin QuartzCore;
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;
