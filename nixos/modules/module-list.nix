@@ -93,8 +93,8 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/ubertooth.nix
   ./hardware/uinput.nix
+  ./hardware/usb-modeswitch.nix
   ./hardware/usb-storage.nix
-  ./hardware/usb-wwan.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/capture/mwprocapture.nix
