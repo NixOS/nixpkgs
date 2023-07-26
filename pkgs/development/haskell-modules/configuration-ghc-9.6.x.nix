@@ -222,6 +222,8 @@ self: super: {
     mfsolve                     # mtl <2.3
     cubicbezier                 # mtl <2.3
     dhall                       # template-haskell <2.20
+    env-guard                   # doctest <0.21
+    package-version             # doctest <0.21, tasty-hedgehog <1.4
   ;
 
   # Apply workaround for Cabal 3.9 bug https://github.com/haskell/cabal/issues/8455
