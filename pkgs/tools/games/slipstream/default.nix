@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, stdenv, makeWrapper, buildMaven, maven, jdk }:
+{ lib, fetchFromGitHub, makeWrapper, maven, jdk }:
 let
   mavenWithJdk = maven.override { inherit jdk; };
 in
