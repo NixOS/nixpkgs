@@ -3252,6 +3252,10 @@ with pkgs;
 
   blanket = callPackage ../applications/audio/blanket { };
 
+  blisp = darwin.apple_sdk_11_0.callPackage ../development/embedded/blisp {
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit;
+  };
+
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
   brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
