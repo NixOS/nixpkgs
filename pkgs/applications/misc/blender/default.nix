@@ -15,6 +15,8 @@
 , potrace
 , openxr-loader
 , embree, gmp, libharu
+, mesa
+, runCommand
 }:
 
 let
@@ -26,7 +28,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "blender";
   version = "3.6.2";
 
@@ -184,7 +186,45 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru = { inherit python; };
+  passthru = {
+    inherit python;
+
+    tests = {
+      render = runCommand "${pname}-test" { } ''
+        set -euo pipefail
+
+        export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib/dri
+        export __EGL_VENDOR_LIBRARY_FILENAMES=${mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json
+
+        cat <<'PYTHON' > scene-config.py
+        import bpy
+        bpy.context.scene.eevee.taa_render_samples = 32
+        bpy.context.scene.cycles.samples = 32
+        if ${if stdenv.isAarch64 then "True" else "False"}:
+            bpy.context.scene.cycles.use_denoising = False
+        bpy.context.scene.render.resolution_x = 100
+        bpy.context.scene.render.resolution_y = 100
+        bpy.context.scene.render.threads_mode = 'FIXED'
+        bpy.context.scene.render.threads = 1
+        PYTHON
+
+        mkdir $out
+        for engine in BLENDER_EEVEE CYCLES; do
+          echo "Rendering with $engine..."
+          # Beware that argument order matters
+          ${finalAttrs.finalPackage}/bin/blender \
+            --background \
+            -noaudio \
+            --factory-startup \
+            --python-exit-code 1 \
+            --python scene-config.py \
+            --engine "$engine" \
+            --render-output "$out/$engine" \
+            --render-frame 1
+        done
+      '';
+    };
+  };
 
   meta = with lib; {
     description = "3D Creation/Animation/Publishing System";
@@ -198,4 +238,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ goibhniu veprbl ];
     mainProgram = "blender";
   };
-}
+})
