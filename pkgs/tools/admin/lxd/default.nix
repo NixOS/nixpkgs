@@ -18,14 +18,14 @@
 
 buildGoModule rec {
   pname = "lxd-unwrapped";
-  version = "5.15";
+  version = "5.16";
 
   src = fetchurl {
     urls = [
       "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
       "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
     ];
-    hash = "sha256-ez/875yu0XYu5ORf4ak6RN1jWGxuGk0n9023zJkoluM=";
+    hash = "sha256-evtNPZvnx8rzr/tJkEp0E7BhUBWHBSJdMtZJQk3VZI8=";
   };
 
   vendorHash = null;
