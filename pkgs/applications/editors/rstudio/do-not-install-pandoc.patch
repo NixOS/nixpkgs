@@ -1,5 +1,18 @@
 --- a/src/cpp/session/CMakeLists.txt
 +++ b/src/cpp/session/CMakeLists.txt
+@@ -43,12 +43,6 @@
+       set(RSTUDIO_DEPENDENCIES_MATHJAX_DIR "${RSTUDIO_DEPENDENCIES_DIR}/mathjax-27")
+    endif()
+ 
+-   if(EXISTS "${RSTUDIO_TOOLS_ROOT}/quarto")
+-      set(RSTUDIO_DEPENDENCIES_QUARTO_DIR "${RSTUDIO_TOOLS_ROOT}/quarto")
+-   else()
+-      set(RSTUDIO_DEPENDENCIES_QUARTO_DIR "${RSTUDIO_DEPENDENCIES_DIR}/quarto")
+-   endif()
+-
+ endif()
+
+
 @@ -66,11 +66,9 @@
  
  # validate our dependencies exist

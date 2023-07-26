@@ -62,8 +62,6 @@ let
   rsconnectSrc = fetchFromGitHub {
     owner = "rstudio";
     repo = "rsconnect";
-    #rev = "e287b586e7da03105de3faa8774c63f08984eb3c";
-    #sha256 = "sha256-ULyWdSgGPSAwMt0t4QPuzeUE6Bo6IJh+5BMgW1bFN+Y=";
     rev = "db2bcba0d82698aca6bc6aff4f639cc531060b4b";
     sha256 = "sha256-Lv3WBTb0oP0ibP3AB0v3+E+i2DJoADMZ6Ysfxnk3ZvE=";
   };
@@ -161,7 +159,8 @@ in
         --replace '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
 
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
-        --replace '@pandoc@' ${pandoc}/bin/pandoc
+        --replace '@pandoc@' ${pandoc}/bin/pandoc \
+        --replace '@quarto@' ${quarto}/bin/quarto
     '';
 
     hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
