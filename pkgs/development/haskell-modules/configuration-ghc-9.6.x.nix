@@ -144,6 +144,15 @@ self: super: {
     })
     (doJailbreak super.monad-par);
 
+  # Patch 0.17.1 for support of mtl-2.3
+  xmonad-contrib = appendPatch
+    (pkgs.fetchpatch {
+      name = "xmonad-contrib-mtl-2.3.patch";
+      url = "https://github.com/xmonad/xmonad-contrib/commit/8cb789af39e93edb07f1eee39c87908e0d7c5ee5.patch";
+      sha256 = "sha256-ehCvVy0N2Udii/0K79dsRSBP7/i84yMoeyupvO8WQz4=";
+    })
+    (doJailbreak super.xmonad-contrib);
+
   # 2023-04-03: plugins disabled for hls 1.10.0.0 based on
   #
   haskell-language-server =
@@ -212,7 +221,6 @@ self: super: {
     implicit-hie-cradle
     focus
     hie-compat
-    xmonad-contrib              # mtl >=1 && <2.3
     dbus       # template-haskell >=2.18 && <2.20, transformers <0.6, unix <2.8
     gi-cairo-connector          # mtl <2.3
     haskintex                   # text <2
