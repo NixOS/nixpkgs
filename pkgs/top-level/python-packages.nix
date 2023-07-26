@@ -5860,6 +5860,8 @@ self: super: with self; {
     (p: p.py)
   ];
 
+  librespot = callPackage ../development/python-modules/librespot { };
+
   libretranslate = callPackage ../development/python-modules/libretranslate { };
 
   librosa = callPackage ../development/python-modules/librosa { };
