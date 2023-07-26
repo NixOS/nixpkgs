@@ -12,6 +12,6 @@ if [[ ! -f "$DATA_FOLDER"/db.sqlite3 ]]; then
 fi
 
 sqlite3 "$DATA_FOLDER"/db.sqlite3 ".backup '$BACKUP_FOLDER/db.sqlite3'"
-cp "$DATA_FOLDER"/rsa_key.{der,pem,pub.der} "$BACKUP_FOLDER"
+cp "$DATA_FOLDER"/rsa_key.* "$BACKUP_FOLDER"
 cp -r "$DATA_FOLDER"/attachments "$BACKUP_FOLDER"
 cp -r "$DATA_FOLDER"/icon_cache "$BACKUP_FOLDER"

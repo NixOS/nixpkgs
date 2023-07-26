@@ -193,14 +193,43 @@ in {
         EnvironmentFile = [ configFile ] ++ optional (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${vaultwarden}/bin/vaultwarden";
         LimitNOFILE = "1048576";
-        PrivateTmp = "true";
-        PrivateDevices = "true";
-        ProtectHome = "true";
-        ProtectSystem = "strict";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         StateDirectory = "bitwarden_rs";
         StateDirectoryMode = "0700";
         Restart = "always";
+
+        # Hardening
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        UMask = "0007";
       };
       wantedBy = [ "multi-user.target" ];
     };
@@ -221,6 +250,28 @@ in {
         User = mkDefault user;
         Group = mkDefault group;
         ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
+
+        ReadOnlyDirectories = mkIf (!hasPrefix "/var/lib/bitwarden_rs" cfg.backupDir) [ "/var/lib/bitwarden_rs" ];
+        ReadWriteDirectories = [ "-${cfg.backupDir}" ];
+
+        # Hardening
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateNetwork = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
       };
       wantedBy = [ "multi-user.target" ];
     };
