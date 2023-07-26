@@ -22,7 +22,14 @@ const exec = async (...args) => {
 
 const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 	return new Promise((resolve, reject) => {
-		https.get(url, (res) => {
+		const get = (url, redirects = 0) => https.get(url, (res) => {
+			if(redirects > 10) {
+				reject('Too many redirects!');
+				return;
+			}
+			if(res.statusCode === 301 || res.statusCode === 302) {
+				return get(res.headers.location, redirects + 1)
+			}
 			const file = fs.createWriteStream(fileName)
 			const hash = crypto.createHash(hashType)
 			res.pipe(file)
@@ -35,6 +42,7 @@ const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 			})
                         res.on('error', e => reject(e))
 		})
+		get(url)
 	})
 }
 
