@@ -1,6 +1,6 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "mtr-exporter";
   version = "0.1.0";
 

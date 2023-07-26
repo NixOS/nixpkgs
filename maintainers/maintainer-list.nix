@@ -15636,6 +15636,10 @@
     githubId = 7669898;
     name = "Katharina Fey";
   };
+  spalf = {
+    email = "tom@tombarrett.xyz";
+    name = "tom barrett";
+  };
   spease = {
     email = "peasteven@gmail.com";
     github = "spease";

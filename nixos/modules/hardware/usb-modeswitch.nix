@@ -7,12 +7,15 @@ with lib;
 
   options = {
 
-    hardware.usbWwan = {
+    hardware.usb-modeswitch = {
       enable = mkOption {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Enable this option to support USB WWAN adapters.
+          Enable this option to support certain USB WLAN and WWAN adapters.
+
+          These network adapters initial present themselves as Flash Drives containing their drivers.
+          This option enables automatic switching to the networking mode.
         '';
       };
     };
@@ -20,7 +23,11 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.hardware.usbWwan.enable {
+  imports = [
+    (mkRenamedOptionModule ["hardware" "usbWwan" ] ["hardware" "usb-modeswitch" ])
+  ];
+
+  config = mkIf config.hardware.usb-modeswitch.enable {
     # Attaches device specific handlers.
     services.udev.packages = with pkgs; [ usb-modeswitch-data ];
 

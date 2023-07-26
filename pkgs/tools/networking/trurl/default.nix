@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, curl, python3, python3Packages, trurl, testers }:
+{ lib, stdenv, fetchFromGitHub, curl, python3, trurl, testers }:
 
 stdenv.mkDerivation rec {
   pname = "trurl";
