@@ -10265,6 +10265,8 @@ with pkgs;
 
   lmp = callPackage ../tools/security/lmp { };
 
+  localproxy = callPackage ../applications/networking/localproxy { };
+
   localstack = with python3Packages; toPythonApplication localstack;
 
   localtime = callPackage ../tools/system/localtime { };
