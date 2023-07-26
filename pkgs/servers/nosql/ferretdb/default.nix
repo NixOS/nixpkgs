@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "ferretdb";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
     rev = "v${version}";
-    hash = "sha256-HRU2s+i6Be0gRsU7kNfloouBLbgZtnn6OiXYaeUYtiQ=";
+    hash = "sha256-DRI05dGEzaQtI9+SEbFqK5i/8b4hmaoJubDI/6K8vUc=";
   };
 
   postPatch = ''
