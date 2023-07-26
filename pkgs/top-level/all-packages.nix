@@ -3055,9 +3055,7 @@ with pkgs;
 
   apksigner = callPackage ../development/tools/apksigner { };
 
-  apktool = callPackage ../development/tools/apktool {
-    inherit (androidenv.androidPkgs_9_0) build-tools;
-  };
+  apktool = callPackage ../development/tools/apktool { };
 
   appimage-run = callPackage ../tools/package-management/appimage-run { };
   appimage-run-tests = callPackage ../tools/package-management/appimage-run/test.nix {
@@ -39818,6 +39816,8 @@ with pkgs;
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
   aaphoto = callPackage ../tools/graphics/aaphoto { };
+
+  aapt = callPackage ../development/tools/aapt { };
 
   flam3 = callPackage ../tools/graphics/flam3 { };
 
