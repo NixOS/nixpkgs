@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ thoughtpolice AndersonTorres ];
     platforms = lib.platforms.unix;
+    broken = stdenv.isAarch64; # failure on gnulib-tests
   };
 })
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)
