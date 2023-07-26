@@ -94,6 +94,7 @@ in
     # Without --add-needed autoPatchelf forgets $ORIGIN on cuda>=8.0.5.
     postFixup = strings.optionalString (strings.versionAtLeast versionTriple "8.0.5") ''
       patchelf $out/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
+      patchelf $out/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
     '';
 
     passthru = {
