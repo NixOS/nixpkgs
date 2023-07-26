@@ -38001,8 +38001,6 @@ with pkgs;
 
   instead = callPackage ../games/instead { };
 
-  instead-launcher = callPackage ../games/instead-launcher { };
-
   iortcw = callPackage ../games/iortcw { };
   # used as base package for iortcw forks
   iortcw_sp = callPackage ../games/iortcw/sp.nix { };
