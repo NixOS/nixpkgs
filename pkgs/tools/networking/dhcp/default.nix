@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, perl, file, nettools, iputils, iproute2, makeWrapper
+{ stdenv, fetchurl, perl, file, nettools, iputils, iproute2, makeWrapper
 , coreutils, gnused, openldap ? null
 , buildPackages, lib
 

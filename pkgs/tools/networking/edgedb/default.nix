@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, runCommand
 , patchelf
 , fetchFromGitHub
 , rustPlatform
