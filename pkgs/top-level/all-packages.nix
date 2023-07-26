@@ -15570,7 +15570,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "4.8" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "4.8");
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
     cloog = if !stdenv.isDarwin then cloog else null;
@@ -15584,7 +15584,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "4.9" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "4.9");
 
     isl = if !stdenv.isDarwin then isl_0_11 else null;
 
@@ -15601,7 +15601,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "6" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "6");
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -15620,7 +15620,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "7" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "7");
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -15635,7 +15635,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "8" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "8");
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -15650,7 +15650,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "9" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "9");
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15662,7 +15662,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "10" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "10");
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15674,7 +15674,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "11" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "11");
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15686,7 +15686,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "12" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "12");
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -21371,8 +21371,7 @@ with pkgs;
 
   threadsCross = threadsCrossFor null;
   threadsCrossFor = cc_version:
-    if stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)
-    then {
+    lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
       # other possible values: win32 or posix
       model = "mcf";
       # For win32 or posix set this to null
@@ -21380,7 +21379,7 @@ with pkgs;
         if cc_version == null || lib.versionAtLeast cc_version "13"
         then targetPackages.windows.mcfgthreads or windows.mcfgthreads
         else targetPackages.windows.mcfgthreads_pre_gcc_13 or windows.mcfgthreads_pre_gcc_13;
-    } else { };
+    };
 
   wasilibc = callPackage ../development/libraries/wasilibc {
     stdenv = crossLibcStdenv;
