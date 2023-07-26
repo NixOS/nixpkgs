@@ -63,7 +63,7 @@ in
       touch $out
     '';
   };
-}).overrideAttrs (o: {
+}).overrideAttrs {
   inherit version;
   pname = "nixos-install-tools";
-})
+}

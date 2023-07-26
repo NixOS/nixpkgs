@@ -296,12 +296,12 @@ let
 
   nclasses = build-asdf-system {
     pname = "nclasses";
-    version = "0.5.0";
+    version = "0.6.0";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nclasses";
-      rev = "0.5.0";
-      sha256 = "sha256-UcavZ0fCA2hkVU/CqUZfyCqJ8gXKPpXTCP0WLUIF1Ss=";
+      rev = "0.6.0";
+      sha256 = "sha256-JupP+TIxavUoyOPnp57FqpEjWfgKspdFoSRnV2rk5U4=";
     };
     lispLibs = [ self.nasdf super.moptilities ];
   };
@@ -330,10 +330,12 @@ let
 
   nhooks = build-asdf-system {
     pname = "nhooks";
-    version = "20230214-git";
-    src = pkgs.fetchzip {
-      url = "http://beta.quicklisp.org/archive/nhooks/2023-02-14/nhooks-20230214-git.tgz";
-      sha256 = "0rapn9v942yd2snlskvlr1g22hmyhlsrclahxjsgn4pbvqc5gwyw";
+    version = "1.2.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nhooks";
+      rev = "1.2.1";
+      hash = "sha256-D61QHxHTceIu5mCGKf3hy53niQMfs0idEYQK1ZYn1YM=";
     };
     lispLibs = with self; [ bordeaux-threads closer-mop serapeum ];
   };
@@ -368,7 +370,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.4.0";
+    version = "3.5.0";
 
     lispLibs = (with super; [
       alexandria
@@ -437,8 +439,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.4.0";
-      sha256 = "sha256-o+GAMHKi+9q+EGY6SEZrxKCEO4IxdOiB4oPpJPGYO0w=";
+      rev = "3.5.0";
+      sha256 = "sha256-/x3S4qAvvHxUxDcs6MAuZvAtqLTQdwlH7r4zFlKIjY4=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -451,15 +453,17 @@ let
       pkgs.gnome.adwaita-icon-theme
     ];
 
-    # This is needed since asdf:make tries to write in the directory of the .asd file of the system it's compiling
-    postConfigure = ''
-      export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$(pwd)//
-    '';
+    # This patch removes the :build-operation component from the nyxt/gi-gtk-application system.
+    # This is done because if asdf:operate is used and the operation matches the system's :build-operation
+    # then output translations are ignored, causing the result of the operation to be placed where
+    # the .asd is located, which in this case is the nix store.
+    # see: https://gitlab.common-lisp.net/asdf/asdf/-/blob/master/doc/asdf.texinfo#L2582
+    patches = [ ./patches/nyxt-remove-build-operation.patch ];
 
     buildScript = pkgs.writeText "build-nyxt.lisp" ''
       (load "${super.alexandria.asdfFasl}/asdf.${super.alexandria.faslExt}")
-      ;; There's a weird error while copy/pasting in Nyxt that manifests with sb-ext:save-lisp-and-die, so we use asdf:make instead
-      (asdf:make :nyxt/gi-gtk-application)
+      ;; There's a weird error while copy/pasting in Nyxt that manifests with sb-ext:save-lisp-and-die, so we use asdf:operare :program-op instead
+      (asdf:operate :program-op :nyxt/gi-gtk-application)
     '';
 
     # TODO(kasper): use wrapGAppsHook

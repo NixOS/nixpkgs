@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    substituteInPlace dvc/analytics.py --replace 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
