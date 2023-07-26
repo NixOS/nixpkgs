@@ -225,7 +225,7 @@ stdenv'.mkDerivation {
       with lib.systems.inspect.patterns;
       map (p: p // isLinux) [ isx86_32 isx86_64 isPower isAarch64 isSparc ];
 
-    maintainers = with lib.maintainers; [ jcumming jonringer globin raitobezarius ];
+    maintainers = with lib.maintainers; [ raitobezarius ];
     mainProgram = "zfs";
     # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
     # On NixOS set the option boot.zfs.enableUnstable.
