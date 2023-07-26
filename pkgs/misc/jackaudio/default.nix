@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, python3Packages, makeWrapper
-, bash, libsamplerate, libsndfile, readline, eigen, celt
+, libsamplerate, libsndfile, readline, eigen, celt
 , wafHook
 # Darwin Dependencies
 , aften, AudioUnit, CoreAudio, libobjc, Accelerate
@@ -46,9 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     aften AudioUnit CoreAudio Accelerate libobjc
   ];
 
-  prePatch = ''
-    substituteInPlace svnversion_regenerate.sh \
-        --replace /bin/bash ${bash}/bin/bash
+  postPatch = ''
+    patchShebangs --build svnversion_regenerate.sh
   '';
 
   dontAddWafCrossFlags = true;
