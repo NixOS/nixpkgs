@@ -236,7 +236,11 @@ rec {
 
 
   */
-  writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
+  writeScriptBin = name: text: writeTextFile {
+    inherit name text;
+    executable = true;
+    destination = "/bin/${name}";
+  };
 
   /*
     Similar to writeScript. Writes a Shell script and checks its syntax.
@@ -368,6 +372,9 @@ rec {
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
+      meta = {
+        mainProgram = name;
+      };
     }
     ''
       n=$out/bin/$name
