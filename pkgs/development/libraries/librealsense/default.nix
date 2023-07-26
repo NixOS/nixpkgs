@@ -13,7 +13,7 @@
 , glfw
 , libGLU
 , curl
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , enablePython ? false, pythonPackages ? null
 , enableGUI ? false,
 }:

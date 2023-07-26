@@ -21,7 +21,7 @@
 , sox
 , vid-stab
 , darwin
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , enableJackrack ? stdenv.isLinux
 , ladspa-sdk

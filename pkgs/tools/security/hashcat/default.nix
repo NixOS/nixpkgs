@@ -2,7 +2,7 @@
 , addOpenGLRunpath
 , config
 , cudaPackages ? {}
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , fetchurl
 , makeWrapper
 , opencl-headers
