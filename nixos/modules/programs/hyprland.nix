@@ -60,7 +60,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.finalPackage ];
 
-    fonts.enableDefaultFonts = mkDefault true;
+    fonts.enableDefaultPackages = mkDefault true;
     hardware.opengl.enable = mkDefault true;
 
     programs = {

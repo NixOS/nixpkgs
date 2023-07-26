@@ -265,7 +265,7 @@ in
       qt.style = "adwaita";
 
       # Default Fonts
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         inter
         open-dyslexic
         open-sans
@@ -306,7 +306,7 @@ in
       ])) config.environment.pantheon.excludePackages;
 
       # needed by screenshot
-      fonts.fonts = [
+      fonts.packages = [
         pkgs.pantheon.elementary-redacted-script
       ];
     })

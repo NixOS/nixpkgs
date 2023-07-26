@@ -2,7 +2,7 @@
 , config
 , lib
 , cudaPackages
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , lang ? "en"
 , webdoc ? false
 , version ? null

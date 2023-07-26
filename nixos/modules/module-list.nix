@@ -4,8 +4,8 @@
   ./config/debug-info.nix
   ./config/fonts/fontconfig.nix
   ./config/fonts/fontdir.nix
-  ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
+  ./config/fonts/packages.nix
   ./config/gnu.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/i18n.nix
@@ -636,6 +636,7 @@
   ./services/misc/etcd.nix
   ./services/misc/etebase-server.nix
   ./services/misc/etesync-dav.nix
+  ./services/misc/evdevremapkeys.nix
   ./services/misc/felix.nix
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
