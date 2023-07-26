@@ -266,7 +266,6 @@ in {
         # Sandboxing
         ProtectSystem = "full";
         ProtectHome = "read-only";
-        PrivateTmp = true;
         ProtectControlGroups = true;
         PrivateMounts = true;
       } // (lib.optionalAttrs (cfg.claimTokenFile != null) {
