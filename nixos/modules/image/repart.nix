@@ -198,7 +198,10 @@ in
           image.raw
       '';
 
-    meta.maintainers = with lib.maintainers; [ nikstur ];
+    meta = {
+      maintainers = with lib.maintainers; [ nikstur ];
+      doc = ./repart.md;
+    };
 
   };
 }
