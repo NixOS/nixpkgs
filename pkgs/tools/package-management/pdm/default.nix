@@ -1,4 +1,10 @@
-{ lib, python3, fetchFromGitHub, fetchPypi, nix-update-script }:
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, fetchPypi
+, nix-update-script
+}:
 let
   python = python3.override {
     # override resolvelib due to
@@ -24,13 +30,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.7.4";
+  version = "2.8.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x3+N8cy31wHwBeOkMNpLihlqKCTiPmnS1avrr69uUM4=";
+    hash = "sha256-BgsWKP2kZfLEHgZNISyp66Yww0ajMF4RWuI6TCzwJNo=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +45,6 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     blinker
-    cacheyou
     certifi
     cachecontrol
     findpython
@@ -70,7 +75,7 @@ buildPythonApplication rec {
     pytest-rerunfailures
     pytest-xdist
     pytest-httpserver
-  ];
+  ] ++ lib.optional stdenv.isLinux first;
 
   pytestFlagsArray = [
     "-m 'not network'"
