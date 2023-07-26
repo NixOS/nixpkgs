@@ -10265,6 +10265,8 @@ with pkgs;
 
   lmp = callPackage ../tools/security/lmp { };
 
+  localproxy = callPackage ../applications/networking/localproxy { };
+
   localstack = with python3Packages; toPythonApplication localstack;
 
   localtime = callPackage ../tools/system/localtime { };
@@ -10606,6 +10608,8 @@ with pkgs;
   mosh = callPackage ../tools/networking/mosh { };
 
   motrix = callPackage ../tools/networking/motrix { };
+
+  mount-zip = callPackage ../tools/filesystems/mount-zip { };
 
   mpage = callPackage ../tools/text/mpage { };
 
@@ -28794,6 +28798,8 @@ with pkgs;
   baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
+
+  banana-cursor = callPackage ../data/icons/banana-cursor { };
 
   barlow = callPackage ../data/fonts/barlow { };
 

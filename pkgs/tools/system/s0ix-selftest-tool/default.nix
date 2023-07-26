@@ -12,7 +12,6 @@
   pciutils,
   powertop,
   resholve,
-  stdenv,
   util-linux,
   xorg,
   xxd,

@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     sha256 = "NMQE2zU858b6OZhdS2oZnGvLK+eb7yU0nFaMAcpNw04=";
   };
 
+  separateDebugInfo = true;
+
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ imagemagick pkg-config wayland-scanner ];
   buildInputs = [ wayland wayland-protocols ];

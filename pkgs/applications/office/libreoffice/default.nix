@@ -226,9 +226,10 @@ in
   # in the binary causing the closure size to blow up because of many unnecessary
   # dependencies to dev outputs. This behavior was patched away in nixpkgs
   # (see above), make sure these don't leak again by accident.
-  disallowedRequisites = lib.concatMap
-    (x: lib.optional (x?dev) x.dev)
-    buildInputs;
+  disallowedRequisites = lib.optionals (!kdeIntegration)
+    (lib.concatMap
+      (x: lib.optional (x?dev) x.dev)
+      buildInputs);
 
   ### QT/KDE
   #
