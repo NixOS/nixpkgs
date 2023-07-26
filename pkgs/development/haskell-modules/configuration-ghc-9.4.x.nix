@@ -115,7 +115,7 @@ in {
 
   # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
   # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
-  # the GHC 9.6 configuration may need similar overrides eventually.
+  # the GHC 9.6 configuration shall need similar overrides.
   X11-xft = __CabalEagerPkgConfigWorkaround super.X11-xft;
   # Jailbreaks for https://github.com/gtk2hs/gtk2hs/issues/323#issuecomment-1416723309
   glib = __CabalEagerPkgConfigWorkaround (doJailbreak super.glib);
@@ -144,7 +144,12 @@ in {
   gi-soup = __CabalEagerPkgConfigWorkaround super.gi-soup;
   gio = __CabalEagerPkgConfigWorkaround super.gio;
   gtk = __CabalEagerPkgConfigWorkaround super.gtk;
-
-  # Cabal 3.8 bug workaround for applications using haskell-gi family of libraries
   termonad = __CabalEagerPkgConfigWorkaround super.termonad;
+  gi-cairo-render = __CabalEagerPkgConfigWorkaround super.gi-cairo-render;
+  gi-dbusmenu = __CabalEagerPkgConfigWorkaround super.gi-dbusmenu;
+  gi-dbusmenugtk3 = __CabalEagerPkgConfigWorkaround super.gi-dbusmenugtk3;
+  gi-gdkx11 = __CabalEagerPkgConfigWorkaround super.gi-gdkx11;
+  gi-xlib = __CabalEagerPkgConfigWorkaround super.gi-xlib;
+  gtk-sni-tray = __CabalEagerPkgConfigWorkaround super.gtk-sni-tray;
+  taffybar = __CabalEagerPkgConfigWorkaround super.taffybar;
 }
