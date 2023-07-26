@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-SzdWyzdGhsaesv1VX5ZUfUnLHvRvW8buJTlOVxz6yOk=";
   };
 
-  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [
+    ./draco.patch
+  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs =
     [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev
@@ -165,6 +167,7 @@ stdenv.mkDerivation rec {
     mkdir $out/Applications
     mv $out/Blender.app $out/Applications
   '' + ''
+    mv $out/share/blender/${lib.versions.majorMinor version}/python{,-ext}
     buildPythonPath "$pythonPath"
     wrapProgram $blenderExecutable \
       --prefix PATH : $program_PATH \
