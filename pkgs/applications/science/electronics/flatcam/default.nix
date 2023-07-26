@@ -10,7 +10,7 @@
 , six
 , setuptools
 , dill
-, Rtree
+, rtree
 , pyopengl
 , vispy
 , ortools
@@ -55,7 +55,7 @@ buildPythonApplication rec {
     six
     setuptools
     dill
-    Rtree
+    rtree
     pyopengl
     vispy
     ortools
