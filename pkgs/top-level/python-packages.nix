@@ -10,6 +10,9 @@ self: super: with self; {
 
   bootstrap = lib.recurseIntoAttrs {
     flit-core = toPythonModule (callPackage ../development/python-modules/bootstrap/flit-core { });
+    installer = toPythonModule (callPackage ../development/python-modules/bootstrap/installer {
+      inherit (bootstrap) flit-core;
+    });
   };
 
   bootstrapped-pip = toPythonModule (callPackage ../development/python-modules/bootstrapped-pip { });
