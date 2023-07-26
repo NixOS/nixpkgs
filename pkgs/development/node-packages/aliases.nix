@@ -39,9 +39,11 @@ in
 
 mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
+  "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   manta = pkgs.node-manta; # Added 2023-05-06
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
