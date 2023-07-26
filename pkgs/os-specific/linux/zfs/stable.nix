@@ -13,10 +13,10 @@ callPackage ./generic.nix args {
   # check the release notes for compatible kernels
   kernelCompatible =
     if stdenv'.isx86_64 || removeLinuxDRM
-    then kernel.kernelOlder "6.4"
+    then kernel.kernelOlder "6.5"
     else kernel.kernelOlder "6.2";
   latestCompatibleLinuxPackages = if stdenv'.isx86_64 || removeLinuxDRM then
-    linuxKernel.packages.linux_6_3
+    linuxKernel.packages.linux_6_4
   else
     linuxKernel.packages.linux_6_1;
 
