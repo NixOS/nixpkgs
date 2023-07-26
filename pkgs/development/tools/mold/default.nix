@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "1.11.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dfdrXp05eJALTQnx2F3GxRWKMA+Icj0mRPcb72z7qMw=";
+    hash = "sha256-dEmwVgo9XiU3WtObVL5VbFW7rEzdFfnRepcbyGxX1JM=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/rui314/mold";
     changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
-    license = licenses.agpl3Plus;
+    license = licenses.mit;
     maintainers = with maintainers; [ azahi nitsky ];
     platforms = platforms.unix;
   };
