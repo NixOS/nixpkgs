@@ -243,37 +243,8 @@ self: super: {
     package-version             # doctest <0.21, tasty-hedgehog <1.4
   ;
 
-  # Apply workaround for Cabal 3.9 bug https://github.com/haskell/cabal/issues/8455
-  # by making `pkg-config --static` happy. Note: Cabal 3.8 is also affected, so
-  # the GHC 9.4 configuration needs similar overrides.
-  inherit (pkgs.lib.mapAttrs (_: __CabalEagerPkgConfigWorkaround) super)
-    X11-xft
-    cairo
-    gi-atk
-    gi-cairo
-    gi-cairo-render
-    gi-dbusmenu
-    gi-dbusmenugtk3
-    gi-gdk
-    gi-gdkpixbuf
-    gi-gdkx11
-    gi-gio
-    gi-glib
-    gi-gmodule
-    gi-gobject
-    gi-harfbuzz
-    gi-pango
-    gi-xlib
-    glib
-    gtk-sni-tray
-    haskell-gi
-    haskell-gi-base
-    pango
-    taffybar
-  ;
-
   # Avoid triggering an issue in ghc-9.6.2
-  gi-gtk = disableParallelBuilding (__CabalEagerPkgConfigWorkaround super.gi-gtk);
+  gi-gtk = disableParallelBuilding super.gi-gtk;
 
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
