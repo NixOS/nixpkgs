@@ -14,7 +14,7 @@
 , unstableGitUpdater
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "home-manager";
   version = "2023-05-30";
 
@@ -89,4 +89,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
-})
+}
