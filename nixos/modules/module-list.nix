@@ -59,6 +59,7 @@
   ./hardware/digitalbitbox.nix
   ./hardware/flipperzero.nix
   ./hardware/flirc.nix
+  ./hardware/fwenv.nix
   ./hardware/gkraken.nix
   ./hardware/gpgsmartcards.nix
   ./hardware/hackrf.nix
