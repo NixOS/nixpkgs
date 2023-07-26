@@ -327,8 +327,6 @@ package-maintainers:
     - tasty-expected-failure
     - lhs2tex
     - rec-def
-  pacien:
-    - ldgallery-compiler
   peti:
     - cabal2spec
     - funcmp
