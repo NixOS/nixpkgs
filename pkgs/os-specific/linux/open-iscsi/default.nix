@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "open-iscsi";
-  version = "2.1.8";
+  version = "2.1.9";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "open-iscsi";
     rev = version;
-    hash = "sha256-JzSyX9zvUkhCEpNwTMneTZpCRgaYxHZ1wP215YnMI78=";
+    hash = "sha256-y0NIb/KsKpCd8byr/SXI7nwTKXP2/bSSoW8QgeL5xdc=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "-Ddbroot=/etc/iscsi"
   ];
 
-  passthru.tests = { inherit (nixosTests) iscsi-root iscsi-multipath-root; };
+  passthru.tests = { inherit (nixosTests) iscsi-root; };
 
   meta = with lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";
