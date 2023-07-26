@@ -11,7 +11,7 @@
 
 */
 
-{ callPackage, lib }:
+{ callPackage, lib, stdenv }:
 let
   inherit (lib) recurseIntoAttrs;
 in
@@ -19,7 +19,11 @@ recurseIntoAttrs {
   concat = callPackage ./concat-test.nix {};
   linkFarm = callPackage ./link-farm.nix {};
   overriding = callPackage ../test-overriding.nix {};
-  references = callPackage ./references.nix {};
+  references =
+    # VM test not supported beyond linux yet
+    if stdenv.hostPlatform.isLinux
+    then callPackage ./references.nix {}
+    else null;
   writeCBin = callPackage ./writeCBin.nix {};
   writeScriptBin = callPackage ./writeScriptBin.nix {};
   writeShellScript = callPackage ./write-shell-script.nix {};
