@@ -214,6 +214,23 @@ in
     };
   };
 
+  ubootEnvTools = buildUBoot {
+    pname = "uboot-envtools-only_defconfig";
+    defconfig = "tools-only_defconfig";
+    installDir = "$out/bin";
+    hardeningDisable = [ ];
+    dontStrip = false;
+    extraMeta.platforms = lib.platforms.linux;
+    extraMakeFlags = [ "envtools" ];
+    filesToInstall = [ "tools/env/fw_printenv" ];
+    postInstall = ''
+      # from u-boot's tools/env/README:
+      # "You should then create a symlink from fw_setenv to fw_printenv. They
+      # use the same program and its function depends on its basename."
+      ln -sf fw_printenv $out/bin/fw_setenv
+    '';
+  };
+
   ubootPythonTools = lib.recurseIntoAttrs (callPackages ./python.nix { });
 
   ubootA20OlinuxinoLime = buildUBoot {
