@@ -3,6 +3,11 @@ From: Rodney Lorrimar <dev@rodney.id.au>
 Date: Tue, 25 Jul 2023 16:46:36 +0800
 Subject: [PATCH] GHC 9.4 compatibility
 
+This is commit b89eed9 from haskell-nix/hnix master branch,
+backported to 0.16.
+
+The patch should be removed once hnix-0.17 is released.
+
 ---
  src/Nix/Fresh.hs | 2 +-
  src/Nix/Lint.hs  | 2 +-
