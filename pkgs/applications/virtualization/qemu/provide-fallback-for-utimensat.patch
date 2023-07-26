@@ -1,0 +1,189 @@
+From 2ec149ea3f0046fa83e3be74aca192649a60be47 Mon Sep 17 00:00:00 2001
+From: Keno Fischer <keno@juliacomputing.com>
+Date: Sat, 16 Jun 2018 20:56:54 -0400
+Subject: [PATCH] 9p: darwin: Provide fallback impl for utimensat
+
+This function is new in Mac OS 10.13. Provide a fallback implementation
+when building against older SDKs. The complication in the definition comes
+having to separately handle the used SDK version and the target OS version.
+
+- If the SDK version is too low (__MAC_10_13 not defined), utimensat is not
+  defined in the header, so we must not try to use it (doing so would error).
+- Otherwise, if the targetted OS version is at least 10.13, we know this
+  function is available, so we can unconditionally call it.
+- Lastly, we check for the availability of the __builtin_available macro to
+  potentially insert a dynamic check for this OS version. However, __builtin_available
+  is only available with sufficiently recent versions of clang and while all
+  Apple clang versions that ship with Xcode versions that support the 10.13
+  SDK support with builtin, we want to allow building with compilers other
+  than Apple clang that may not support this builtin.
+
+Signed-off-by: Keno Fischer <keno@juliacomputing.com>
+Signed-off-by: Michael Roitzsch <reactorcontrol@icloud.com>
+Signed-off-by: Will Cohen <wwcohen@gmail.com>
+---
+ hw/9pfs/9p-local.c       |  2 +-
+ hw/9pfs/9p-util-darwin.c | 96 ++++++++++++++++++++++++++++++++++++++++
+ hw/9pfs/9p-util-linux.c  |  6 +++
+ hw/9pfs/9p-util.h        |  8 ++++
+ 4 files changed, 111 insertions(+), 1 deletion(-)
+
+diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
+index 9d07620235..9c77a431d5 100644
+--- a/hw/9pfs/9p-local.c
++++ b/hw/9pfs/9p-local.c
+@@ -1081,7 +1081,7 @@ static int local_utimensat(FsContext *s, V9fsPath *fs_path,
+         goto out;
+     }
+ 
+-    ret = qemu_utimensat(dirfd, name, buf, AT_SYMLINK_NOFOLLOW);
++    ret = utimensat_nofollow(dirfd, name, buf);
+     close_preserve_errno(dirfd);
+ out:
+     g_free(dirpath);
+diff --git a/hw/9pfs/9p-util-darwin.c b/hw/9pfs/9p-util-darwin.c
+index 95146e7354..74ab2a7f99 100644
+--- a/hw/9pfs/9p-util-darwin.c
++++ b/hw/9pfs/9p-util-darwin.c
+@@ -145,3 +145,99 @@ int qemu_mknodat(int dirfd, const char *filename, mode_t mode, dev_t dev)
+ }
+ 
+ #endif
++
++#ifndef __has_builtin
++#define __has_builtin(x) 0
++#endif
++
++static int update_times_from_stat(int fd, struct timespec times[2],
++                                  int update0, int update1)
++{
++    struct stat buf;
++    int ret = fstat(fd, &buf);
++    if (ret == -1) {
++        return ret;
++    }
++    if (update0) {
++        times[0] = buf.st_atimespec;
++    }
++    if (update1) {
++        times[1] = buf.st_mtimespec;
++    }
++    return 0;
++}
++
++int utimensat_nofollow(int dirfd, const char *filename,
++                       const struct timespec times_in[2])
++{
++    int ret, fd;
++    int special0, special1;
++    struct timeval futimes_buf[2];
++    struct timespec times[2];
++    memcpy(times, times_in, 2 * sizeof(struct timespec));
++
++/* Check whether we have an SDK version that defines utimensat */
++#if defined(__MAC_10_13)
++# if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_13
++#  define UTIMENSAT_AVAILABLE 1
++# elif __has_builtin(__builtin_available)
++#  define UTIMENSAT_AVAILABLE __builtin_available(macos 10.13, *)
++# else
++#  define UTIMENSAT_AVAILABLE 0
++# endif
++    if (UTIMENSAT_AVAILABLE) {
++        return utimensat(dirfd, filename, times, AT_SYMLINK_NOFOLLOW);
++    }
++#endif
++
++    /* utimensat not available. Use futimes. */
++    fd = openat_file(dirfd, filename, O_PATH_9P_UTIL | O_NOFOLLOW, 0);
++    if (fd == -1) {
++        return -1;
++    }
++
++    special0 = times[0].tv_nsec == UTIME_OMIT;
++    special1 = times[1].tv_nsec == UTIME_OMIT;
++    if (special0 || special1) {
++        /* If both are set, nothing to do */
++        if (special0 && special1) {
++            ret = 0;
++            goto done;
++        }
++
++        ret = update_times_from_stat(fd, times, special0, special1);
++        if (ret < 0) {
++            goto done;
++        }
++    }
++
++    special0 = times[0].tv_nsec == UTIME_NOW;
++    special1 = times[1].tv_nsec == UTIME_NOW;
++    if (special0 || special1) {
++        ret = futimes(fd, NULL);
++        if (ret < 0) {
++            goto done;
++        }
++
++        /* If both are set, we are done */
++        if (special0 && special1) {
++            ret = 0;
++            goto done;
++        }
++
++        ret = update_times_from_stat(fd, times, special0, special1);
++        if (ret < 0) {
++            goto done;
++        }
++    }
++
++    futimes_buf[0].tv_sec = times[0].tv_sec;
++    futimes_buf[0].tv_usec = times[0].tv_nsec / 1000;
++    futimes_buf[1].tv_sec = times[1].tv_sec;
++    futimes_buf[1].tv_usec = times[1].tv_nsec / 1000;
++    ret = futimes(fd, futimes_buf);
++
++done:
++    close_preserve_errno(fd);
++    return ret;
++}
+diff --git a/hw/9pfs/9p-util-linux.c b/hw/9pfs/9p-util-linux.c
+index db451b0784..320697f347 100644
+--- a/hw/9pfs/9p-util-linux.c
++++ b/hw/9pfs/9p-util-linux.c
+@@ -68,3 +68,9 @@ int qemu_mknodat(int dirfd, const char *filename, mode_t mode, dev_t dev)
+ {
+     return mknodat(dirfd, filename, mode, dev);
+ }
++
++int utimensat_nofollow(int dirfd, const char *filename,
++                       const struct timespec times[2])
++{
++    return utimensat(dirfd, filename, times, AT_SYMLINK_NOFOLLOW);
++}
+diff --git a/hw/9pfs/9p-util.h b/hw/9pfs/9p-util.h
+index c314cf381d..12d57f3398 100644
+--- a/hw/9pfs/9p-util.h
++++ b/hw/9pfs/9p-util.h
+@@ -101,6 +101,12 @@ static inline int errno_to_dotl(int err) {
+ #define qemu_utimensat  utimensat
+ #define qemu_unlinkat   unlinkat
+ 
++/* Compatibility with old SDK Versions for Darwin */
++#if defined(CONFIG_DARWIN) && !defined(UTIME_NOW)
++#define UTIME_NOW -1
++#define UTIME_OMIT -2
++#endif
++
+ static inline void close_preserve_errno(int fd)
+ {
+     int serrno = errno;
+@@ -163,6 +169,8 @@ ssize_t flistxattrat_nofollow(int dirfd, const char *filename,
+                               char *list, size_t size);
+ ssize_t fremovexattrat_nofollow(int dirfd, const char *filename,
+                                 const char *name);
++int utimensat_nofollow(int dirfd, const char *filename,
++                       const struct timespec times[2]);
+ 
+ /*
+  * Darwin has d_seekoff, which appears to function similarly to d_off.
+-- 
+2.39.2

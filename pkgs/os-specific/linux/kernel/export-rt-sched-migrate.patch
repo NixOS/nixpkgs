@@ -1,0 +1,11 @@
+Export linux-rt (PREEMPT_RT) specific symbols needed by ZFS.
+(Regular kernel provides them static inline in linux/preempt.h.)
+
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1812 +1812 @@ void migrate_disable(void)
+-EXPORT_SYMBOL_GPL(migrate_disable);
++EXPORT_SYMBOL(migrate_disable);
+@@ -1843 +1843 @@ void migrate_enable(void)
+-EXPORT_SYMBOL_GPL(migrate_enable);
++EXPORT_SYMBOL(migrate_enable);

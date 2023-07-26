@@ -1,0 +1,14 @@
+--- a/dist/Makefile.am
++++ b/dist/Makefile.am
+@@ -10,9 +10,9 @@ install-data-hook:
+ 	chmod 0755 $(shell find $(dist) -type d)
+ 	chmod 0644 $(shell find $(dist) -type f)
+ 	chmod 0755 $(shell find "scripts" -type f)
+-	test -z "$(DESTDIR)$(datadir)/dbus-1/services/" || /bin/mkdir -p "$(DESTDIR)$(datadir)/dbus-1/services/"
++	test -z "$(DESTDIR)$(datadir)/dbus-1/services/" || $(MKDIR_P) "$(DESTDIR)$(datadir)/dbus-1/services/"
+ 	cp "extra/com.libertyzero.gnome-encfs-manager.service" "$(DESTDIR)$(datadir)/dbus-1/services/"
+-	test -z "$(gencfsmdir)" || /bin/mkdir -p "$(gencfsmdir)"
++	test -z "$(gencfsmdir)" || $(MKDIR_P) "$(gencfsmdir)"
+ 	cp --parent -rf $(dist) "$(gencfsmdir)"
+ 	cp --parent -rf $(icons) $(DESTDIR)$(datadir)
+ 

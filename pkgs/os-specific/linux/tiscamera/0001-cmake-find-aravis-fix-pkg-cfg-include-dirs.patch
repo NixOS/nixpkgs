@@ -1,0 +1,25 @@
+From 90b540bd135de2587352719b14c385b20aa572be Mon Sep 17 00:00:00 2001
+From: Raymond Gauthier <jraygauthier@gmail.com>
+Date: Wed, 15 Jun 2022 16:09:58 -0400
+Subject: [PATCH] cmake-find-aravis: fix pkg cfg include dirs
+
+---
+ cmake/modules/FindAravis.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmake/modules/FindAravis.cmake b/cmake/modules/FindAravis.cmake
+index 5dab5431..811302b9 100644
+--- a/cmake/modules/FindAravis.cmake
++++ b/cmake/modules/FindAravis.cmake
+@@ -20,7 +20,7 @@ find_path(aravis_INCLUDE_DIR
+ 	arv.h
+ 	PATHS
+ 	${aravis_PKGCONF_INCLUDE_DIRS}
+-	${aravis0_6_PKGCONF_INCLUDE_DIRS}
++	${aravis0_8_PKGCONF_INCLUDE_DIRS}
+ 	/usr/local/include
+ 	# /usr/local/include/aravis-0.4
+ 	/usr/local/include/aravis-0.8
+-- 
+2.31.1
+

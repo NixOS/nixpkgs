@@ -1,0 +1,26 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2534,6 +2534,7 @@ dependencies = [
+  "typetag",
+  "winres",
+  "yaml-rust",
++ "zstd",
+ ]
+ 
+ [[package]]
+@@ -4113,4 +4114,5 @@ checksum = "9fd07cbbc53846d9145dbffdf6dd09a7a0aa52be46741825f5c97bdd4f73f12b"
+ dependencies = [
+  "cc",
+  "libc",
++ "pkg-config",
+ ]
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -51,6 +51,7 @@ tokei = "12.1.2"
+ typetag = "0.2"
+ yaml-rust = "0.4.5"
+ parking_lot = "0.12"
++zstd = { version = "*", features = ["pkg-config"] }
+ 
+ [dev-dependencies]
+ criterion = "0.5.1"

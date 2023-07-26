@@ -1,0 +1,41 @@
+diff --git a/electron/patches/chromium/axselectedtextmarkerrange_should_not_be_backwards.patch b/electron/patches/chromium/axselectedtextmarkerrange_should_not_be_backwards.patch
+index 2fd993bdd0..4b8bb86998 100644
+--- a/electron/patches/chromium/axselectedtextmarkerrange_should_not_be_backwards.patch
++++ b/electron/patches/chromium/axselectedtextmarkerrange_should_not_be_backwards.patch
+@@ -45,13 +45,3 @@ index 55cce7ff53b355cea2787abca6140f122f6a0369..202923773d7adb2fad5c15be4558bfd5
+  }
+  
+  - (NSString*)sortDirection {
+-diff --git a/content/test/data/accessibility/mac/selection/selectall-textarea-expected.txt b/content/test/data/accessibility/mac/selection/selectall-textarea-expected.txt
+-index f2638c5d03b16266e781bb74cfc08c65f7c0a60d..34036471ad01d0fcfc7bd9b7213f1b4edcded719 100644
+---- a/content/test/data/accessibility/mac/selection/selectall-textarea-expected.txt
+-+++ b/content/test/data/accessibility/mac/selection/selectall-textarea-expected.txt
+-@@ -1,4 +1,4 @@
+- textarea_range={anchor: {:3, 0, down}, focus: {:3, 19, down}}
+- textarea.AXSelectedTextMarkerRange={anchor: {:3, 0, down}, focus: {:3, 19, down}}
+- AXSelectedTextChanged on AXTextArea AXValue='The quick brown fox' AXTextSelectionDirection=AXTextSelectionDirectionUnknown AXTextSelectionGranularity=AXTextSelectionGranularityUnknown AXTextStateChangeType=AXTextStateChangeTypeSelectionMove
+--textarea.AXSelectedTextMarkerRange={anchor: {:3, 19, down}, focus: {:3, 0, down}}
+-+textarea.AXSelectedTextMarkerRange={anchor: {:3, 0, down}, focus: {:3, 19, down}}
+diff --git a/electron/patches/chromium/cherry-pick-26bfa5807606.patch b/electron/patches/chromium/cherry-pick-26bfa5807606.patch
+index 54805c0053..7942cb0edc 100644
+--- a/electron/patches/chromium/cherry-pick-26bfa5807606.patch
++++ b/electron/patches/chromium/cherry-pick-26bfa5807606.patch
+@@ -44,18 +44,3 @@ index 2c1bcba6022519c3a865ae8e3c2ffcd5bc385cf3..0cde402b49510514599201d2b3104e56
+      current_value = To<CSSValueList>(css_value)->Copy();
+    } else {
+      current_value = CssValueListForPropertyID(property_id);
+-diff --git a/third_party/blink/web_tests/external/wpt/css/css-typed-om/the-stylepropertymap/inline/append.tentative.html b/third_party/blink/web_tests/external/wpt/css/css-typed-om/the-stylepropertymap/inline/append.tentative.html
+-index ee9a9e4ddbcf78a7517d8d038d66844880719e63..f80875622366939f48a7471513fb6319f75be718 100644
+---- a/third_party/blink/web_tests/external/wpt/css/css-typed-om/the-stylepropertymap/inline/append.tentative.html
+-+++ b/third_party/blink/web_tests/external/wpt/css/css-typed-om/the-stylepropertymap/inline/append.tentative.html
+-@@ -56,4 +56,10 @@ test(t => {
+-   assert_style_value_array_equals(result, [CSS.s(5), CSS.s(10), CSS.s(1), CSS.s(2)]);
+- }, 'StylePropertyMap.append is case-insensitive');
+- 
+-+// https://crbug.com/1417176
+-+test(t => {
+-+  let styleMap = createInlineStyleMap(t, 'transition-duration: inherit');
+-+  assert_throws_js(TypeError, () => styleMap.append('transition-duration', '1s'));
+-+}, 'StylePropertyMap.append rejects appending to CSS-wide keywords');
+-+
+- </script>

@@ -1,0 +1,25 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 6e62347..34600a0 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -13,12 +13,14 @@ packages = [
+ 
+ [tool.poetry.dependencies]
+ python = ">=3.10,<3.12"
+-strictyaml = "^1.6.2"
+-lxml = "^4.9.2"
+-PySide6 = "^6.4.2"
+-validators = "^0.20.0"
+-alive-progress = "^3.0.1"
+-psutil = "^5.9.4"
++strictyaml = "*"
++lxml = "*"
++# ERROR: Could not find a version that satisfies the requirement PySide6 (from retool) (from versions: none)
++# ERROR: No matching distribution found for PySide6
++# PySide6 = "*"
++validators = "*"
++alive-progress = "*"
++psutil = "*"
+ 
+ [tool.poetry.scripts]
+ retool = "retool:main"

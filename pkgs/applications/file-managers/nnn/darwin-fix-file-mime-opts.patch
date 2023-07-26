@@ -1,0 +1,15 @@
+diff --git a/src/nnn.c b/src/nnn.c
+index b3c0f986..c74e1ec9 100644
+--- a/src/nnn.c
++++ b/src/nnn.c
+@@ -508,9 +508,7 @@ alignas(max_align_t) static char g_pipepath[TMP_LEN_MAX];
+ static runstate g_state;
+ 
+ /* Options to identify file MIME */
+-#if defined(__APPLE__)
+-#define FILE_MIME_OPTS "-bIL"
+-#elif !defined(__sun) /* no MIME option for 'file' */
++#if !defined(__sun) /* no MIME option for 'file' */
+ #define FILE_MIME_OPTS "-biL"
+ #endif
+ 

@@ -1,0 +1,13 @@
+diff --git a/src/util/externalcommandhelper.cpp b/src/util/externalcommandhelper.cpp
+index a879c8d..3d7863b 100644
+--- a/src/util/externalcommandhelper.cpp
++++ b/src/util/externalcommandhelper.cpp
+@@ -387,7 +387,7 @@ QVariantMap ExternalCommandHelper::RunCommand(const QString& command, const QStr
+     if (dirname == QStringLiteral("bin") || dirname == QStringLiteral("sbin")) {
+         prefix.cdUp();
+     }
+-    if (trustedPrefixes.find(prefix.path()) == trustedPrefixes.end()) { // TODO: C++20: replace with contains
++    if (!prefix.path().startsWith(QStringLiteral("/nix/store")) && !prefix.path().startsWith(QStringLiteral("/run/current-system/sw"))) { // TODO: C++20: replace with contains
+         qInfo() << prefix.path() << "prefix is not one of the trusted command prefixes";
+         reply[QStringLiteral("success")] = false;
+         return reply;

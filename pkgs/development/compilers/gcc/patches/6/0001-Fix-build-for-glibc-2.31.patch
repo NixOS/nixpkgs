@@ -1,0 +1,62 @@
+From 8b55f1047cf3491429c1af607e5dac08a81db6e1 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Thu, 20 Feb 2020 15:08:36 +0100
+Subject: [PATCH] Fix build for glibc 2.31
+
+---
+ .../sanitizer_platform_limits_posix.cc            |  5 +++--
+ .../sanitizer_platform_limits_posix.h             | 15 +--------------
+ 2 files changed, 4 insertions(+), 16 deletions(-)
+
+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
+index 069d8d557..c49c28c6e 100644
+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
+@@ -1130,8 +1130,9 @@ CHECK_SIZE_AND_OFFSET(ipc_perm, cgid);
+ #ifndef __GLIBC_PREREQ
+ #define __GLIBC_PREREQ(x, y) 0
+ #endif
+-#if !defined(__aarch64__) || !SANITIZER_LINUX || __GLIBC_PREREQ (2, 21)
+-/* On aarch64 glibc 2.20 and earlier provided incorrect mode field.  */
++#if !SANITIZER_LINUX || __GLIBC_PREREQ (2, 31)
++/* glibc 2.30 and earlier provided 16-bit mode field instead of 32-bit
++   on many architectures.  */
+ CHECK_SIZE_AND_OFFSET(ipc_perm, mode);
+ #endif
+ 
+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+index 304d04e39..568081a79 100644
+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
+@@ -200,27 +200,14 @@ namespace __sanitizer {
+     unsigned __seq;
+     u64 __unused1;
+     u64 __unused2;
+-#elif defined(__mips__) || defined(__aarch64__)
+-    unsigned int mode;
+-    unsigned short __seq;
+-    unsigned short __pad1;
+-    unsigned long __unused1;
+-    unsigned long __unused2;
+ #elif defined(__sparc__)
+-# if defined(__arch64__)
+     unsigned mode;
+-    unsigned short __pad1;
+-# else
+-    unsigned short __pad1;
+-    unsigned short mode;
+     unsigned short __pad2;
+-# endif
+     unsigned short __seq;
+     unsigned long long __unused1;
+     unsigned long long __unused2;
+ #else
+-    unsigned short mode;
+-    unsigned short __pad1;
++    unsigned int mode;
+     unsigned short __seq;
+     unsigned short __pad2;
+ #if defined(__x86_64__) && !defined(_LP64)
+-- 
+2.25.0
+

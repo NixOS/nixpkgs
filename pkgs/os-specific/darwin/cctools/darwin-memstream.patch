@@ -1,0 +1,17 @@
+--- a/cctools/include/stuff/diagnostics.h
++++ b/cctools/include/stuff/diagnostics.h
+@@ -60,13 +60,6 @@ void diagnostics_log_msg(enum diagnostic_level level, const char* message);
+  */
+ void diagnostics_write(void);
+ 
+-#if defined(__APPLE__ ) && defined(__has_builtin)
+-#  if __has_builtin(__builtin_available)
+-#    define HAVE_OPENMEMSTREAM_RUNTIME __builtin_available(macOS 10.13, *)
+-#  endif
+-#endif
+-#ifndef HAVE_OPENMEMSTREAM_RUNTIME
+-#  define HAVE_OPENMEMSTREAM_RUNTIME 1
+-#endif
++#define HAVE_OPENMEMSTREAM_RUNTIME 1
+ 
+ #endif /* diagnostics_h */

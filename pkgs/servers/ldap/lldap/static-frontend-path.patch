@@ -1,0 +1,43 @@
+diff --git a/server/src/infra/tcp_server.rs b/server/src/infra/tcp_server.rs
+index 43f65ea..e289f2a 100644
+--- a/server/src/infra/tcp_server.rs
++++ b/server/src/infra/tcp_server.rs
+@@ -26,7 +26,7 @@ use std::sync::RwLock;
+ use tracing::info;
+ 
+ async fn index() -> actix_web::Result<NamedFile> {
+-    let path = PathBuf::from(r"app/index.html");
++    let path = PathBuf::from(r"@frontend@/index.html");
+     Ok(NamedFile::open(path)?)
+ }
+ 
+@@ -68,12 +68,12 @@ pub(crate) fn error_to_http_response(error: TcpError) -> HttpResponse {
+ }
+ 
+ async fn wasm_handler() -> actix_web::Result<impl Responder> {
+-    Ok(actix_files::NamedFile::open_async("./app/pkg/lldap_app_bg.wasm").await?)
++    Ok(actix_files::NamedFile::open_async("@frontend@/pkg/lldap_app_bg.wasm").await?)
+ }
+ 
+ async fn wasm_handler_compressed() -> actix_web::Result<impl Responder> {
+     Ok(
+-        actix_files::NamedFile::open_async("./app/pkg/lldap_app_bg.wasm.gz")
++        actix_files::NamedFile::open_async("@frontend@/pkg/lldap_app_bg.wasm.gz")
+             .await?
+             .customize()
+             .insert_header(header::ContentEncoding::Gzip)
+@@ -118,11 +118,11 @@ fn http_config<Backend>(
+     )
+     .service(web::resource("/pkg/lldap_app_bg.wasm").route(web::route().to(wasm_handler)))
+     // Serve the /pkg path with the compiled WASM app.
+-    .service(Files::new("/pkg", "./app/pkg"))
++    .service(Files::new("/pkg", "@frontend@/pkg"))
+     // Serve static files
+-    .service(Files::new("/static", "./app/static"))
++    .service(Files::new("/static", "@frontend@/static"))
+     // Serve static fonts
+-    .service(Files::new("/static/fonts", "./app/static/fonts"))
++    .service(Files::new("/static/fonts", "@frontend@/static/fonts"))
+     // Default to serve index.html for unknown routes, to support routing.
+     .default_service(web::route().guard(guard::Get()).to(index));
+ }

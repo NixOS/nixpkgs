@@ -1,0 +1,31 @@
+diff -ur d/CoreFoundation/CMakeLists.txt e/CoreFoundation/CMakeLists.txt
+--- d/CoreFoundation/CMakeLists.txt	1969-12-31 19:00:01.000000000 -0500
++++ e/CoreFoundation/CMakeLists.txt	2023-06-29 19:13:15.561253229 -0400
+@@ -343,6 +343,7 @@
+ elseif(CMAKE_SYSTEM_NAME STREQUAL Darwin)
+   find_package(CURL REQUIRED)
+   target_include_directories(CoreFoundation PRIVATE ${CURL_INCLUDE_DIRS})
++  find_package(ICU COMPONENTS uc i18n data REQUIRED)
+   find_package(LibXml2 REQUIRED)
+   target_include_directories(CoreFoundation PRIVATE ${LIBXML2_INCLUDE_DIR})
+ else()
+@@ -377,6 +378,9 @@
+ elseif(CMAKE_SYSTEM_NAME STREQUAL Darwin)
+   target_link_libraries(CoreFoundation PRIVATE
+     ${CURL_LIBRARIES}
++    ICU::uc
++    ICU::i18n
++    ICU::data
+     ${LIBXML2_LIBRARIES})
+ else()
+   target_link_libraries(CoreFoundation
+@@ -408,9 +412,6 @@
+                         PROPERTIES LINK_FLAGS
+                           -Xlinker;@${CMAKE_SOURCE_DIR}/linux.ld;-Bsymbolic)
+ elseif(CMAKE_SYSTEM_NAME STREQUAL Darwin)
+-  target_link_libraries(CoreFoundation
+-                        PRIVATE
+-                          icucore)
+   target_link_options(CoreFoundation
+                       PUBLIC
+                       "LINKER:-alias_list,../Base.subproj/DarwinSymbolAliases"

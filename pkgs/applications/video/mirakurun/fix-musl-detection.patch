@@ -1,0 +1,29 @@
+diff --git a/packages/crc32/index.js b/packages/crc32/index.js
+index cdc7519..7b05930 100644
+--- a/packages/crc32/index.js
++++ b/packages/crc32/index.js
+@@ -5,7 +5,7 @@ const { platform, arch } = process
+ 
+ let nativeBinding = null
+ let localFileExisted = false
+-let isMusl = false
++let isMusl = @isMusl@
+ let loadError = null
+ 
+ switch (platform) {
+@@ -114,7 +114,6 @@ switch (platform) {
+   case 'linux':
+     switch (arch) {
+       case 'x64':
+-        isMusl = readFileSync('/usr/bin/ldd', 'utf8').includes('musl')
+         if (isMusl) {
+           localFileExisted = existsSync(join(__dirname, 'crc32.linux-x64-musl.node'))
+           try {
+@@ -140,7 +139,6 @@ switch (platform) {
+         }
+         break
+       case 'arm64':
+-        isMusl = readFileSync('/usr/bin/ldd', 'utf8').includes('musl')
+         if (isMusl) {
+           localFileExisted = existsSync(join(__dirname, 'crc32.linux-arm64-musl.node'))
+           try {

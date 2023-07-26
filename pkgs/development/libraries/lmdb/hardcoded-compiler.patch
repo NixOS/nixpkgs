@@ -1,0 +1,26 @@
+commit 029031a68873bc3784a8561bd8e049efbd34f9d0 (HEAD)
+Author: Vladimír Čunát <vcunat@gmail.com>
+Date:   Sun Apr 1 11:05:31 2018 +0200
+
+    make: gcc -> $(CC)
+
+diff --git a/libraries/liblmdb/Makefile b/libraries/liblmdb/Makefile
+index f254511..612484e 100644
+--- a/libraries/liblmdb/Makefile
++++ b/libraries/liblmdb/Makefile
+@@ -102,13 +102,13 @@ COV_OBJS=xmdb.o xmidl.o
+ 
+ coverage: xmtest
+ 	for i in mtest*.c [0-9]*.c; do j=`basename \$$i .c`; $(MAKE) $$j.o; \
+-		gcc -o x$$j $$j.o $(COV_OBJS) -pthread $(COV_FLAGS); \
++		$(CC) -o x$$j $$j.o $(COV_OBJS) -pthread $(COV_FLAGS); \
+ 		rm -rf testdb; mkdir testdb; ./x$$j; done
+ 	gcov xmdb.c
+ 	gcov xmidl.c
+ 
+ xmtest:	mtest.o xmdb.o xmidl.o
+-	gcc -o xmtest mtest.o xmdb.o xmidl.o -pthread $(COV_FLAGS)
++	$(CC) -o xmtest mtest.o xmdb.o xmidl.o -pthread $(COV_FLAGS)
+ 
+ xmdb.o: mdb.c lmdb.h midl.h
+ 	$(CC) $(CFLAGS) -fPIC $(CPPFLAGS) -O0 $(COV_FLAGS) -c mdb.c -o $@

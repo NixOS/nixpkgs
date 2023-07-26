@@ -1,0 +1,13 @@
+diff --git c/src/mod_video/crrc_animation.cpp i/src/mod_video/crrc_animation.cpp
+index ee7d7f4..855b106 100644
+--- c/src/mod_video/crrc_animation.cpp
++++ i/src/mod_video/crrc_animation.cpp
+@@ -84,7 +84,7 @@ void createAnimation(SimpleXMLTransfer *animation, ssgEntity* model)
+       else
+       {
+         std::cerr << "createAnimation: unknown animation type \'"
+-                  << type << "\'" << std::cerr;
++                  << type << "\'" << std::endl;
+       }
+       
+       if (anim != NULL)

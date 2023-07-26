@@ -1,0 +1,39 @@
+--- mupdf-1.14.0-source.orig/Makefile	2018-11-02 06:57:12.114012496 +0100
++++ mupdf-1.14.0-source/Makefile	2018-11-02 09:57:10.067945307 +0100
+@@ -20,7 +20,7 @@
+ # Do not specify CFLAGS or LIBS on the make invocation line - specify
+ # XCFLAGS or XLIBS instead. Make ignores any lines in the makefile that
+ # set a variable that was set on the command line.
+-CFLAGS += $(XCFLAGS) -Iinclude
++CFLAGS += $(XCFLAGS) -Iinclude -fPIC
+ LIBS += $(XLIBS) -lm
+ 
+ ifneq ($(threading),no)
+@@ -190,17 +190,21 @@
+ 
+ # --- Library ---
+ 
+-MUPDF_LIB = $(OUT)/libmupdf.a
+-THIRD_LIB = $(OUT)/libmupdf-third.a
+-THREAD_LIB = $(OUT)/libmupdf-threads.a
+-PKCS7_LIB = $(OUT)/libmupdf-pkcs7.a
++MUPDF_LIB = $(OUT)/libmupdf.so
++THIRD_LIB = $(OUT)/libmupdf-third.so
++THREAD_LIB = $(OUT)/libmupdf-threads.so
++PKCS7_LIB = $(OUT)/libmupdf-pkcs7.so
+ 
+-$(MUPDF_LIB) : $(MUPDF_OBJ)
++$(MUPDF_LIB) : $(MUPDF_OBJ) $(THIRD_LIB) $(THREAD_LIB)
++	$(LINK_CMD) $(THIRD_LIBS) -shared -Wl,-soname -Wl,libmupdf.so -Wl,--no-undefined
+ $(THIRD_LIB) : $(THIRD_OBJ)
++	$(LINK_CMD) -shared -Wl,-soname -Wl,libmupdf-third.so -Wl,--no-undefined
+ $(THREAD_LIB) : $(THREAD_OBJ)
++	$(LINK_CMD) -shared -Wl,-soname -Wl,libmupdf-threads.so -Wl,--no-undefined -lpthread
+ $(PKCS7_LIB) : $(PKCS7_OBJ)
++	$(LINK_CMD) -shared -Wl,-soname -Wl,libmupdf-pkcs7.so
+ 
+-INSTALL_LIBS := $(MUPDF_LIB) $(THIRD_LIB)
++INSTALL_LIBS := $(MUPDF_LIB) $(THIRD_LIB) $(THREAD_LIB) $(PKCS7_LIB)
+ 
+ # --- Main tools and viewers ---
+ 

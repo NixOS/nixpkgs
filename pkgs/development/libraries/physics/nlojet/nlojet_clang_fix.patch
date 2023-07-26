@@ -1,0 +1,30 @@
+diff -rupN nlojet++-4.1.3-orig/nlo-hep/hep-lorentz/bits/hep-lorentzvector_complex.h nlojet++-4.1.3/nlo-hep/hep-lorentz/bits/hep-lorentzvector_complex.h
+--- nlojet++-4.1.3-orig/nlo-hep/hep-lorentz/bits/hep-lorentzvector_complex.h	2010-05-11 11:06:00.000000000 -0400
++++ nlojet++-4.1.3/nlo-hep/hep-lorentz/bits/hep-lorentzvector_complex.h	2014-08-23 03:22:51.000000000 -0400
+@@ -26,8 +26,11 @@
+ namespace nlo {
+ 
+   //   Spacializations
++  template<>
+   class lorentzvector<std::complex<float> >;
++  template<>
+   class lorentzvector<std::complex<double> >;
++  template<>
+   class lorentzvector<std::complex<long double> >;
+   
+   template<>
+diff -rupN nlojet++-4.1.3-orig/nlo-hep/hep-lorentz/bits/hep-threevector_complex.h nlojet++-4.1.3/nlo-hep/hep-lorentz/bits/hep-threevector_complex.h
+--- nlojet++-4.1.3-orig/nlo-hep/hep-lorentz/bits/hep-threevector_complex.h	2010-05-11 11:06:00.000000000 -0400
++++ nlojet++-4.1.3/nlo-hep/hep-lorentz/bits/hep-threevector_complex.h	2014-08-23 03:23:09.000000000 -0400
+@@ -26,8 +26,11 @@
+ namespace nlo {
+   
+   //    Specializations
++  template<>
+   class threevector<std::complex<float> >;
++  template<>
+   class threevector<std::complex<double> >;
++  template<>
+   class threevector<std::complex<long double> >;
+   
+   template<>
