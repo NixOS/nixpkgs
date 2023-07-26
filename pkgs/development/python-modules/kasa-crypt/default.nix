@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast kasa crypt";
     homepage = "https://github.com/bdraco/kasa-crypt";
-    changelog = "https://github.com/bdraco/kasa-crypt/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/kasa-crypt/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
