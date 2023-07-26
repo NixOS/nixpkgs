@@ -163,6 +163,25 @@ self: super: {
       hls-stylish-haskell-plugin = null;
     };
 
+  # Newer version of servant required for GHC 9.6
+  servant = self.servant_0_20;
+  servant-server = self.servant-server_0_20;
+  servant-client = self.servant-client_0_20;
+  servant-client-core = self.servant-client-core_0_20;
+  # Select versions compatible with servant_0_20
+  servant-docs = self.servant-docs_0_13;
+  servant-swagger = self.servant-swagger_1_2;
+  # Jailbreaks for servant <0.20
+  servant-lucid = doJailbreak super.servant-lucid;
+
+  # Jailbreak strict upper bounds: http-api-data <0.6
+  servant_0_20 = doJailbreak super.servant_0_20;
+  servant-server_0_20 = doJailbreak super.servant-server_0_20;
+  servant-client_0_20 = doJailbreak super.servant-client_0_20;
+  servant-client-core_0_20 = doJailbreak super.servant-client-core_0_20;
+  # Jailbreak strict upper bounds: doctest <0.22
+  servant-swagger_1_2 = doJailbreak super.servant-swagger_1_2;
+
   lifted-base = dontCheck super.lifted-base;
   hw-fingertree = dontCheck super.hw-fingertree;
   hw-prim = dontCheck (doJailbreak super.hw-prim);
@@ -171,7 +190,9 @@ self: super: {
   rebase = doJailbreak super.rebase_1_20;
   rerebase = doJailbreak super.rerebase_1_20;
   hiedb = dontCheck super.hiedb;
-  retrie = dontCheck (super.retrie);
+  retrie = dontCheck super.retrie;
+  # https://github.com/kowainik/relude/issues/436
+  relude = dontCheck (doJailbreak super.relude);
 
   ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
    HUnit Diff data-default extra fail free ghc-paths ordered-containers silently syb
@@ -194,6 +215,15 @@ self: super: {
     xmonad-contrib              # mtl >=1 && <2.3
     dbus       # template-haskell >=2.18 && <2.20, transformers <0.6, unix <2.8
     gi-cairo-connector          # mtl <2.3
+    haskintex                   # text <2
+    lens-family-th              # template-haskell <2.19
+    ghc-prof                    # base <4.18
+    profiteur                   # vector <0.13
+    mfsolve                     # mtl <2.3
+    cubicbezier                 # mtl <2.3
+    dhall                       # template-haskell <2.20
+    env-guard                   # doctest <0.21
+    package-version             # doctest <0.21, tasty-hedgehog <1.4
   ;
 
   # Apply workaround for Cabal 3.9 bug https://github.com/haskell/cabal/issues/8455
@@ -252,9 +282,6 @@ self: super: {
     })];
   }) super.ConfigFile;
 
-  # Use newer version of warp with has the openFd signature change for
-  # compatibility with unix>=2.8.0.
-  warp = self.warp_3_3_28;
   # The curl executable is required for withApplication tests.
   warp_3_3_28 = addTestToolDepend pkgs.curl super.warp_3_3_28;
 }
