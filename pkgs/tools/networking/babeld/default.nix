@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "babeld";
-  version = "1.13";
+  version = "1.13.1";
 
   src = fetchurl {
     url = "https://www.irif.fr/~jch/software/files/${pname}-${version}.tar.gz";
-    hash = "sha256-0IXMzPsGoR1/pbVMUdnEEPXzsKk4n1hJUTNv8Xjyk7g=";
+    hash = "sha256-FfJNJtoMz8Bzq83vAwnygeRoTyqnESb4JlcsTIRejdk=";
   };
 
   outputs = [
