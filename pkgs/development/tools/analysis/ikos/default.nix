@@ -11,13 +11,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ikos";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "NASA-SW-VnV";
     repo = "ikos";
     rev = "v${version}";
-    sha256 = "0k3kp1af0qx3l1x6a4sl4fm8qlwchjvwkvs2ck0fhfnc62q2im5f";
+    hash = "sha256-scaFkUhCkIi41iR6CGPbEndzXkgqTKMb3PDNvhgVbCE=";
   };
 
   patches = fetchpatch {
