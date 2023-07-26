@@ -112,44 +112,4 @@ in {
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu);
-
-  # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
-  # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
-  # the GHC 9.6 configuration shall need similar overrides.
-  X11-xft = __CabalEagerPkgConfigWorkaround super.X11-xft;
-  # Jailbreaks for https://github.com/gtk2hs/gtk2hs/issues/323#issuecomment-1416723309
-  glib = __CabalEagerPkgConfigWorkaround (doJailbreak super.glib);
-  cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
-  pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
-
-  # Cabal 3.8 bug workaround for haskell-gi family of libraries
-  gi-atk = __CabalEagerPkgConfigWorkaround super.gi-atk;
-  gi-cairo = __CabalEagerPkgConfigWorkaround super.gi-cairo;
-  gi-gdk = __CabalEagerPkgConfigWorkaround super.gi-gdk;
-  gi-gdkpixbuf = __CabalEagerPkgConfigWorkaround super.gi-gdkpixbuf;
-  gi-gio = __CabalEagerPkgConfigWorkaround super.gi-gio;
-  gi-glib = __CabalEagerPkgConfigWorkaround super.gi-glib;
-  gi-gmodule = __CabalEagerPkgConfigWorkaround super.gi-gmodule;
-  gi-gobject = __CabalEagerPkgConfigWorkaround super.gi-gobject;
-  gi-gtk = __CabalEagerPkgConfigWorkaround super.gi-gtk;
-  gi-harfbuzz = __CabalEagerPkgConfigWorkaround super.gi-harfbuzz;
-  gi-pango = __CabalEagerPkgConfigWorkaround super.gi-pango;
-  gi-vte = __CabalEagerPkgConfigWorkaround super.gi-vte;
-  haskell-gi = __CabalEagerPkgConfigWorkaround super.haskell-gi;
-  haskell-gi-base = __CabalEagerPkgConfigWorkaround super.haskell-gi-base;
-  svgcairo = __CabalEagerPkgConfigWorkaround super.svgcairo;
-  gtk3 = __CabalEagerPkgConfigWorkaround super.gtk3;
-  webkit2gtk3-javascriptcore = __CabalEagerPkgConfigWorkaround super.webkit2gtk3-javascriptcore;
-  gi-javascriptcore = __CabalEagerPkgConfigWorkaround super.gi-javascriptcore;
-  gi-soup = __CabalEagerPkgConfigWorkaround super.gi-soup;
-  gio = __CabalEagerPkgConfigWorkaround super.gio;
-  gtk = __CabalEagerPkgConfigWorkaround super.gtk;
-  termonad = __CabalEagerPkgConfigWorkaround super.termonad;
-  gi-cairo-render = __CabalEagerPkgConfigWorkaround super.gi-cairo-render;
-  gi-dbusmenu = __CabalEagerPkgConfigWorkaround super.gi-dbusmenu;
-  gi-dbusmenugtk3 = __CabalEagerPkgConfigWorkaround super.gi-dbusmenugtk3;
-  gi-gdkx11 = __CabalEagerPkgConfigWorkaround super.gi-gdkx11;
-  gi-xlib = __CabalEagerPkgConfigWorkaround super.gi-xlib;
-  gtk-sni-tray = __CabalEagerPkgConfigWorkaround super.gtk-sni-tray;
-  taffybar = __CabalEagerPkgConfigWorkaround super.taffybar;
 }
