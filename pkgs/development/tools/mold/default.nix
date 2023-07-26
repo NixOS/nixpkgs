@@ -8,6 +8,7 @@
 , zlib
 , testers
 , mold
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +50,10 @@ stdenv.mkDerivation rec {
     "-faligned-allocation"
   ]);
 
-  passthru.tests.version = testers.testVersion { package = mold; };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = mold; };
+  };
 
   meta = with lib; {
     description = "A faster drop-in replacement for existing Unix linkers";
