@@ -13,6 +13,9 @@ self: super: with self; {
     installer = toPythonModule (callPackage ../development/python-modules/bootstrap/installer {
       inherit (bootstrap) flit-core;
     });
+    build = toPythonModule (callPackage ../development/python-modules/bootstrap/build {
+      inherit (bootstrap) flit-core installer;
+    });
   };
 
   bootstrapped-pip = toPythonModule (callPackage ../development/python-modules/bootstrapped-pip { });
