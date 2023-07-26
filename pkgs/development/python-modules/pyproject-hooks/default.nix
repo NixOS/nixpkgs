@@ -26,8 +26,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [
-  ] ++ lib.optionals (pythonOlder "3.11") [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 
@@ -52,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/pyproject-hooks";
     changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = teams.python.members;
   };
 }
