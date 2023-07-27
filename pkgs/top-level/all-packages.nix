@@ -13538,6 +13538,8 @@ with pkgs;
 
   tlsclient = callPackage ../tools/admin/tlsclient { };
 
+  tlsh = callPackage ../tools/security/tlsh { };
+
   tlsx = callPackage ../tools/security/tlsx { };
 
   tmate = callPackage ../tools/misc/tmate { };
