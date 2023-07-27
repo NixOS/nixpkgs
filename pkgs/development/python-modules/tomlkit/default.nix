@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "tomlkit";
-  version = "0.11.6";
+  version = "0.11.8";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cblS5XIWiJN/sCz501TbzweFBmFJ0oVeRFMevdK2XXM=";
+    hash = "sha256-kzD8f6odtntUGyjmIBjBfSC+czF30pChOyTGLRYU4MM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
