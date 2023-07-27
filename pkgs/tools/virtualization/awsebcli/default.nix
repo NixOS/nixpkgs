@@ -18,7 +18,7 @@ let
         cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "sha256-h2XtBSwGHXTk0Bia3cM9Jo3lRMohmyWdeXdB9yXkItI=";
         wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "sha256-7nOGKGKhVr93/5KwkDT8SCXdOvnPgbxbNgZo1CXzxfE=";
         semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "sha256-0sst4FWHYpNGebmhBOguynr0SMn0l00fPuzP9lHfilQ=";
-        pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        pyyaml = super.pyyaml.overridePythonAttrs rec {
           version = "5.4.1";
           checkPhase = ''
             runHook preCheck
@@ -30,7 +30,7 @@ let
             inherit version;
             hash = "sha256-YHd0y7oocyv6gCtUuqdIQhX1MJkQVbtWLvvtWy8gpF4=";
           };
-        });
+        };
       };
     };
 in

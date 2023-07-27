@@ -20,6 +20,7 @@ let
     concatMap
     foldl'
     take
+    drop
     ;
 
   inherit (lib.strings)
@@ -217,8 +218,109 @@ in /* No rec! Add dependencies on this file at the top. */ {
               second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
         take (length path1Deconstructed.components) path2Deconstructed.components == path1Deconstructed.components;
 
+  /*
+  Remove the first path as a component-wise prefix from the second path.
+  The result is a normalised subpath string, see `lib.path.subpath.normalise`.
+
+  Laws:
+
+  - Inverts `append` for normalised subpaths:
+
+        removePrefix p (append p s) == subpath.normalise s
+
+  Type:
+    removePrefix :: Path -> Path -> String
+
+  Example:
+    removePrefix /foo /foo/bar/baz
+    => "./bar/baz"
+    removePrefix /foo /foo
+    => "./."
+    removePrefix /foo/bar /foo
+    => <error>
+    removePrefix /. /foo
+    => "./foo"
+  */
+  removePrefix =
+    path1:
+    assert assertMsg
+      (isPath path1)
+      "lib.path.removePrefix: First argument is of type ${typeOf path1}, but a path was expected.";
+    let
+      path1Deconstructed = deconstructPath path1;
+      path1Length = length path1Deconstructed.components;
+    in
+      path2:
+      assert assertMsg
+        (isPath path2)
+        "lib.path.removePrefix: Second argument is of type ${typeOf path2}, but a path was expected.";
+      let
+        path2Deconstructed = deconstructPath path2;
+        success = take path1Length path2Deconstructed.components == path1Deconstructed.components;
+        components =
+          if success then
+            drop path1Length path2Deconstructed.components
+          else
+            throw ''
+              lib.path.removePrefix: The first path argument "${toString path1}" is not a component-wise prefix of the second path argument "${toString path2}".'';
+      in
+        assert assertMsg
+        (path1Deconstructed.root == path2Deconstructed.root) ''
+          lib.path.removePrefix: Filesystem roots must be the same for both paths, but paths with different roots were given:
+              first argument: "${toString path1}" with root "${toString path1Deconstructed.root}"
+              second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
+        joinRelPath components;
+
+  /*
+  Split the filesystem root from a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path).
+  The result is an attribute set with these attributes:
+  - `root`: The filesystem root of the path, meaning that this directory has no parent directory.
+  - `subpath`: The [normalised subpath string](#function-library-lib.path.subpath.normalise) that when [appended](#function-library-lib.path.append) to `root` returns the original path.
+
+  Laws:
+  - [Appending](#function-library-lib.path.append) the `root` and `subpath` gives the original path:
+
+        p ==
+          append
+            (splitRoot p).root
+            (splitRoot p).subpath
+
+  - Trying to get the parent directory of `root` using [`readDir`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readDir) returns `root` itself:
+
+        dirOf (splitRoot p).root == (splitRoot p).root
+
+  Type:
+    splitRoot :: Path -> { root :: Path, subpath :: String }
+
+  Example:
+    splitRoot /foo/bar
+    => { root = /.; subpath = "./foo/bar"; }
+
+    splitRoot /.
+    => { root = /.; subpath = "./."; }
+
+    # Nix neutralises `..` path components for all path values automatically
+    splitRoot /foo/../bar
+    => { root = /.; subpath = "./bar"; }
+
+    splitRoot "/foo/bar"
+    => <error>
+  */
+  splitRoot = path:
+    assert assertMsg
+      (isPath path)
+      "lib.path.splitRoot: Argument is of type ${typeOf path}, but a path was expected";
+    let
+      deconstructed = deconstructPath path;
+    in {
+      root = deconstructed.root;
+      subpath = joinRelPath deconstructed.components;
+    };
 
   /* Whether a value is a valid subpath string.
+
+  A subpath string points to a specific file or directory within an absolute base directory.
+  It is a stricter form of a relative path that excludes `..` components, since those could escape the base directory.
 
   - The value is a string
 

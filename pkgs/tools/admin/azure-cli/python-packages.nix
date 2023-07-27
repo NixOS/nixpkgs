@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchPypi, lib, src, version }:
+{ stdenv, python3, fetchPypi, src, version }:
 
 let
   buildAzureCliPackage = with py.pkgs; buildPythonPackage;
@@ -65,6 +65,7 @@ let
             --replace "requests[socks]~=2.25.1" "requests[socks]~=2.25" \
             --replace "cryptography>=3.2,<3.4" "cryptography" \
             --replace "msal-extensions>=0.3.1,<0.4" "msal-extensions" \
+            --replace "msal[broker]==1.22.0" "msal[broker]" \
             --replace "packaging>=20.9,<22.0" "packaging"
         '';
         nativeCheckInputs = with self; [ pytest ];
@@ -117,8 +118,8 @@ let
       azure-data-tables = overrideAzureMgmtPackage super.azure-data-tables "12.4.0" "zip"
         "sha256-3V/I3pHi+JCO+kxkyn9jz4OzBoqbpCYpjeO1QTnpZlw=";
 
-      azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "3.0.0" "zip"
-        "sha256-kmL1TtOH6wg9ja5m0yqN81ZHMZuQK9SYzcN29QoS0VQ=";
+      azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "4.0.0" "zip"
+        "sha256-AiTjLJ28g80xnrRFLfPUevJgeaxLpuGmvkd3+FskNiw=";
 
       azure-mgmt-batch = overrideAzureMgmtPackage super.azure-mgmt-batch "17.0.0" "zip"
         "sha256-hkM4WVLuwxj4qgXsY8Ya7zu7/v37gKdP0Xbf2EqrsWo=";
@@ -138,11 +139,11 @@ let
       azure-mgmt-policyinsights = overrideAzureMgmtPackage super.azure-mgmt-policyinsights "1.1.0b2" "zip"
         "sha256-e+I5MdbbX7WhxHCj1Ery3z2WUrJtpWGD1bhLbqReb58=";
 
-      azure-mgmt-rdbms = overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b8" "zip"
-        "sha256-OyA0O10UMx8BKUvxTQU6/eZupuKoxFQk2kvd/qINjFU=";
+      azure-mgmt-rdbms = overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b10" "zip"
+        "sha256-sM8oZdhv+5WCd4RnMtEmCikTBmzGsap5heKzSbHbRPI=";
 
-      azure-mgmt-recoveryservices = overrideAzureMgmtPackage super.azure-mgmt-recoveryservices "2.2.0" "zip"
-        "sha256-2rU5Mc5tcSHEaej4LeiJ/WwWjk3fZFdd7MIwqmHgRss=";
+      azure-mgmt-recoveryservices = overrideAzureMgmtPackage super.azure-mgmt-recoveryservices "2.4.0" "zip"
+        "sha256-2JeOvtNxx6Z3AY4GI9fBRKbMcYVHsbrhk8C+5t5eelk=";
 
       azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "6.0.0" "zip"
         "sha256-lIEYi/jvF9pYbnH+clUzfU0fExlY+dZojIyZRtTLQh8=";
@@ -162,8 +163,8 @@ let
       azure-mgmt-containerinstance = overrideAzureMgmtPackage super.azure-mgmt-containerinstance "10.1.0" "zip"
         "sha256-eNQ3rbKFdPRIyDjtXwH5ztN4GWCYBh3rWdn3AxcEwX4=";
 
-      azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "23.0.0" "zip"
-      "sha256-V8IUTQvbUSOpsqkGfBqLo4DVIB7fryYMVx6WpfWzOnc=";
+      azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "24.0.0" "zip"
+      "sha256-sUp3LDVsc1DmVf4HdaXGSDeEvmAE2weSHHTxL/BwRk8=";
 
       azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "9.2.0" "zip"
         "sha256-PAaBkR77Ho2YI5I+lmazR/8vxEZWpbvM427yRu1ET0k=";
@@ -272,8 +273,8 @@ let
       azure-mgmt-eventhub = overrideAzureMgmtPackage super.azure-mgmt-eventhub "10.1.0" "zip"
         "sha256-MZqhSBkwypvEefhoEWEPsBUFidWYD7qAX6edcBDDSSA=";
 
-      azure-mgmt-keyvault = overrideAzureMgmtPackage super.azure-mgmt-keyvault "10.2.0" "zip"
-        "sha256-QZbbdvgCbPleZnPpYTZI/Cgmeus8Kb5uyXuobnf6Ox4=";
+      azure-mgmt-keyvault = overrideAzureMgmtPackage super.azure-mgmt-keyvault "10.2.2" "zip"
+        "sha256-LG6oMTZepgT87KdJrwCpc4ZYEclUsEAHUitZrxFCkL4=";
 
       azure-mgmt-cdn = overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
         "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
@@ -308,8 +309,8 @@ let
       azure-mgmt-hdinsight = overrideAzureMgmtPackage super.azure-mgmt-hdinsight "9.0.0" "zip"
         "sha256-QevcacDR+B0l3TBDjBT/9DMfZmOfVYBbkYuWSer/54o=";
 
-      azure-multiapi-storage = overrideAzureMgmtPackage super.azure-multiapi-storage "1.1.0" "tar.gz"
-        "sha256-VvNI+mhi2nCFBAXUEL5ph3xj/cBRMf2Mo2uXIgKC+oc=";
+      azure-multiapi-storage = overrideAzureMgmtPackage super.azure-multiapi-storage "1.2.0" "tar.gz"
+        "sha256-CQuoWHeh0EMitTRsvifotrTwpWd/Q9LWWD7jZ2w9r8I=";
 
       azure-appconfiguration = super.azure-appconfiguration.overrideAttrs(oldAttrs: rec {
         version = "1.1.1";
@@ -523,12 +524,12 @@ let
       });
 
       argcomplete = super.argcomplete.overridePythonAttrs(oldAttrs: rec {
-        version = "2.0.0";
+        version = "3.1.1";
 
         src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          hash = "sha256-Y3KteMidZiA1EBQYriU2aERbORdVz+lOpS8bnSJCWyA=";
+          hash = "sha256-bExWPxTwFECq/6Pq4TRBxdsjV7Xuxjmr58CxUzRiff8=";
         };
       });
 
@@ -553,11 +554,11 @@ let
       });
 
       azure-mgmt-resource = super.azure-mgmt-resource.overridePythonAttrs(oldAttrs: rec {
-        version = "22.0.0";
+        version = "23.1.0b2";
 
         src = oldAttrs.src.override {
           inherit version;
-          hash = "sha256-/rXZeeGLUvLP0CO0oKM+VKb3bMaiUtyM117OLGMpjpQ=";
+          hash = "sha256-kMmiKVwjPgmsTIxxxDRNXE41jSTJkemnKhO+P/OcPZI=";
         };
       });
     };

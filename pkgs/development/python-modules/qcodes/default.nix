@@ -10,7 +10,6 @@
 , h5netcdf
 , h5py
 , importlib-metadata
-, importlib-resources
 , ipywidgets
 , ipykernel
 , jsonschema
@@ -35,6 +34,7 @@
 
   # optional
 , qcodes-loop
+, slack-sdk
 
   # test
 , pytestCheckHook
@@ -51,17 +51,20 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.38.1";
-
-  disabled = pythonOlder "3.8";
+  version = "0.39.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-whUGkRvYQOdYxWoj7qhv2kiiyTwq3ZLLipI424PBzFg=";
+    sha256 = "sha256-zKn9LN7FBxKUfYSxUV1O6fB2s/B5bQpGDZTrK4DcxmU=";
   };
 
-  nativeBuildInputs = [ setuptools versioningit ];
+  nativeBuildInputs = [
+    setuptools
+    versioningit
+  ];
 
   propagatedBuildInputs = [
     broadbean
@@ -90,20 +93,20 @@ buildPythonPackage rec {
     rsa
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
 
   passthru.optional-dependencies = {
     loop = [
       qcodes-loop
     ];
+    slack = [
+      slack-sdk
+    ];
   };
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    pytestCheckHook
     deepdiff
     hypothesis
     lxml
@@ -111,8 +114,14 @@ buildPythonPackage rec {
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
+    pytestCheckHook
     pyvisa-sim
     sphinx
+  ];
+
+  pytestFlagsArray = [
+    # Follow upstream with settings
+    "--durations=20"
   ];
 
   disabledTestPaths = [
@@ -120,16 +129,19 @@ buildPythonPackage rec {
     "qcodes/tests/dataset/measurement/test_load_legacy_data.py"
   ];
 
-  pythonImportsCheck = [ "qcodes" ];
+  pythonImportsCheck = [
+    "qcodes"
+  ];
 
   postInstall = ''
     export HOME="$TMPDIR"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://qcodes.github.io/Qcodes/";
     description = "Python-based data acquisition framework";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ evilmav ];
+    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ evilmav ];
   };
 }

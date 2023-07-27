@@ -12,7 +12,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.packages = [ cfg.package ];
     systemd.services.twingate = {
-      preStart = "cp -r -n ${cfg.package}/etc/twingate/. /etc/twingate/";
+      preStart = "cp -r --update=none ${cfg.package}/etc/twingate/. /etc/twingate/";
       wantedBy = [ "multi-user.target" ];
     };
 

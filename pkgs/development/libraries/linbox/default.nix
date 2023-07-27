@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     "--enable-sage"
   ];
 
+  # https://github.com/linbox-team/linbox/issues/304
+  hardeningDisable = [ "fortify3" ];
+
   doCheck = true;
 
   enableParallelBuilding = true;

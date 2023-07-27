@@ -149,6 +149,30 @@ self: super: {
     };
   };
 
+  # The GitHub repository returns 404, which breaks the update script
+  bitbake-vim = buildVimPluginFrom2Nix {
+    pname = "bitbake.vim";
+    version = "2021-02-06";
+    src = fetchFromGitHub {
+      owner = "sblumentritt";
+      repo = "bitbake.vim";
+      rev = "faddca1e8768b10c80ee85221fb51a560df5ba45";
+      sha256 = "1hfly2vxhhvjdiwgfz58hr3523kf9z71i78vk168n3kdqp5vkwrp";
+    };
+    meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
+  };
+
+  chadtree = super.chadtree.overrideAttrs {
+    passthru.python3Dependencies = ps: with ps; [
+      pynvim-pp
+      pyyaml
+      std2
+    ];
+
+    # We need some patches so it stops complaining about not being in a venv
+    patches = [ ./patches/chadtree/emulate-venv.patch ];
+  };
+
   ChatGPT-nvim = super.ChatGPT-nvim.overrideAttrs {
     dependencies = with self; [ nui-nvim plenary-nvim telescope-nvim ];
   };
@@ -335,45 +359,9 @@ self: super: {
 
   coq_nvim = super.coq_nvim.overrideAttrs {
     passthru.python3Dependencies = ps: with ps; [
-      pynvim
+      pynvim-pp
       pyyaml
-      (buildPythonPackage {
-        pname = "pynvim_pp";
-        version = "unstable-2023-05-17";
-        format = "pyproject";
-        propagatedBuildInputs = [ setuptools pynvim ];
-        src = fetchFromGitHub {
-          owner = "ms-jpq";
-          repo = "pynvim_pp";
-          rev = "91d91ec0cb173ce19d8c93c7999f5038cf08c046";
-          fetchSubmodules = false;
-          hash = "sha256-wycN9U3f3o0onmx60Z4Ws4DbBxsNwHjLTCB9UgjssLI=";
-        };
-        meta = with lib; {
-          homepage = "https://github.com/ms-jpq/pynvim_pp";
-          license = licenses.gpl3Plus;
-          maintainers = with maintainers; [ GaetanLepage ];
-        };
-      })
-      (buildPythonPackage {
-        pname = "std2";
-        version = "unstable-2023-05-17";
-        format = "pyproject";
-        propagatedBuildInputs = [ setuptools ];
-        src = fetchFromGitHub {
-          owner = "ms-jpq";
-          repo = "std2";
-          rev = "d6a7a719ef902e243b7bbd162defed762a27416f";
-          fetchSubmodules = false;
-          hash = "sha256-dtQaeB4Xkz+wcF0UkM+SajekSkVVPdoJs9n1hHQLR1k=";
-        };
-        doCheck = true;
-        meta = with lib; {
-          homepage = "https://github.com/ms-jpq/std2";
-          license = licenses.gpl3Plus;
-          maintainers = with maintainers; [ GaetanLepage ];
-        };
-      })
+      std2
     ];
 
     # We need some patches so it stops complaining about not being in a venv
@@ -944,7 +932,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-IRp4avOvM2tz2oC1Cwr4W/d4i0pzawcZLP+c1+jnm+I=";
+        cargoHash = "sha256-KhUCIAGSgf7TxabEzcjo582VgbSU79QSGlaEP7BbJCE=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -978,18 +966,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.3.4";
+      version = "1.3.5";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        hash = "sha256-H1PmjiNyUp+fTDqnfppFii+aDh8gPD/ALHFNWVXch3w=";
+        hash = "sha256-D2nHei7mc7Yn8rgFiWFyaR87wQuryv76B25BYOpyp2I=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoHash = "sha256-WXhH0zqGj/D83AoEfs0kPqW7UXIAkURTJ+/BKbuUvss=";
+        cargoHash = "sha256-TG84BeYm7K5Dn0CvMvv1gzqeX246JPks1qcwkfcsG8c=";
 
         nativeBuildInputs = [ makeWrapper ];
 

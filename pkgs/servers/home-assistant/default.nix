@@ -76,6 +76,16 @@ let
         doCheck = false;
       });
 
+      ha-av = super.av.overridePythonAttrs (oldAttrs: rec {
+        pname = "ha-av";
+        version = "10.1.0";
+
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-HjOu/A1U3CfoVq6VqxA621/9wXk8hFnTFWtdpnVoFr4=";
+        };
+      });
+
       jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
         version = "3.3.0";
         src = fetchFromGitHub {
@@ -287,7 +297,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.7.1";
+  hassVersion = "2023.7.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -303,7 +313,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YYuIVEAWLOIW1xiUGzq6TeFfCSj5rxn6H8W7XhgAhF8=";
+    hash = "sha256-wYS7G3AD1G7UzXfrJxrHGpQTBLJFa7Qln1VU0pdcNro=";
   };
 
   # Secondary source is git for tests
@@ -311,7 +321,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-ovboX1tixBDZEA2phmdE6LxnvpWDhdTeEWVw6xJiSMU=";
+    hash = "sha256-2m0RpEQ4Rds9+JVQj5/HTmOZzYd4yWL+MfjQs923VL0=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -347,6 +357,7 @@ in python.pkgs.buildPythonApplication rec {
       "pip"
       "PyJWT"
       "pyOpenSSL"
+      "PyYAML"
       "requests"
       "typing_extensions"
       "voluptuous-serialize"

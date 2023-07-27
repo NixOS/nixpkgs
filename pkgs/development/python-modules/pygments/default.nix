@@ -46,7 +46,7 @@ let pygments = buildPythonPackage
       description = "A generic syntax highlighter";
       mainProgram = "pygmentize";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ SuperSandro2000 ];
+      maintainers = with maintainers; [ ];
     };
   };
 in pygments

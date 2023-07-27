@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PeTiQLwutJSu3/l/iHXBXi5B05wDRzzJL+r9RDIZmPw=";
+    hash = "sha256-wK9nsek06T7hHdDmDKK9hY/4GcIOTtqGdoMujEEwb7g=";
   };
   vendorHash = "sha256-DYA6cu2KzEBZ4wsT7wjcdY1endQQOZlj2aOwu6iGLew=";
 
@@ -29,7 +29,7 @@ buildGoModule rec {
     rm pkg/cmd/resources_test.go
     rm pkg/cmd/root_test.go
 
-    # TODO: no clue why it's broken (1.15.0), remove for now.
+    # TODO: no clue why it's broken (1.16.0), remove for now.
     rm pkg/login/client_login_test.go
     rm pkg/git/editor_test.go
     rm pkg/rpcservice/sample_create_test.go

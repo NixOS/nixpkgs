@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
@@ -48,6 +49,9 @@ buildPythonPackage rec {
     # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
     "test_tracing_other_threads"
     "test_tracing_basic"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_multiprocessing_simple"
+    "test_evaluate_exception_trace"
   ];
 
   pythonImportsCheck = [

@@ -45,16 +45,17 @@ The attribute names in `haskellPackages` always correspond with their name on
 Hackage. Since Hackage allows names that are not valid Nix without escaping,
 you need to take care when handling attribute names like `3dmodels`.
 
-For packages that are part of [Stackage], we use the version prescribed by a
-Stackage solver (usually the current LTS one) as the default version. For all
-other packages we use the latest version from Hackage. See
-[below](#haskell-available-versions) to learn which versions are provided
-exactly.
+For packages that are part of [Stackage] (a curated set of known to be
+compatible packages), we use the version prescribed by a Stackage snapshot
+(usually the current LTS one) as the default version. For all other packages we
+use the latest version from [Hackage](https://hackage.org) (the repository of
+basically all open source Haskell packages). See [below](#haskell-available-
+versions) for a few more details on this.
 
-Roughly half of the 16K packages contained in `haskellPackages` don't actually
-build and are marked as broken semi-automatically. Most of those packages are
-deprecated or unmaintained, but sometimes packages that should build, do not
-build. Very often fixing them is not a lot of work.
+Roughly half of the 16K packages contained in `haskellPackages` don’t actually
+build and are [marked as broken semi-automatically](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml).
+Most of those packages are deprecated or unmaintained, but sometimes packages
+that should build, do not build. Very often fixing them is not a lot of work.
 
 <!--
 TODO(@sternenseemann):
@@ -126,19 +127,23 @@ Every package set also re-exposes the GHC used to build its packages as `haskell
 ### Available package versions {#haskell-available-versions}
 
 We aim for a “blessed” package set which only contains one version of each
-package, like Stackage (and based on it) but with more packages. Normally in
-nixpkgs the number of building Haskell packages is roughly two to three times
-the size of Stackage. For choosing the version to use for a certain package we
-use the following rules:
+package, like [Stackage], which is a curated set of known to be compatible
+packages. We use the version information from Stackage snapshots and extend it
+with more packages. Normally in Nixpkgs the number of building Haskell packages
+is roughly two to three times the size of Stackage. For choosing the version to
+use for a certain package we use the following rules:
 
-1. By default, for every package `haskellPackages.foo` is the newest version
-found on Hackage (at the time of the last update of our package set).
-2. If the Stackage snapshot that we use (usually the newest LTS snapshot)
-contains a package, we use the Stackage version as default version for that
-package.
-3. For some packages, which are not on Stackage, we have manual overrides to
-set the default version to a version older than the newest on Hackage. We do
-this to get them or their reverse dependencies to compile in our package set.
+1. By default, for `haskellPackages.foo` is the newest version of the package
+`foo` found on [Hackage](https://hackage.org), which is the central registry
+of all open source Haskell packages. Nixpkgs contains a reference to a pinned
+Hackage snapshot, thus we use the state of Hackage as of the last time we
+updated this pin.
+2. If the [Stackage] snapshot that we use (usually the newest LTS snapshot)
+contains a package, [we use instead the version in the Stackage snapshot as
+default version for that package.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/stackage.yaml)
+3. For some packages, which are not on Stackage, we have if necessary [manual
+overrides to set the default version to a version older than the newest on
+Hackage.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml)
 4. For all packages, for which the newest Hackage version is not the default
 version, there will also be a `haskellPackages.foo_x_y_z` package with the
 newest version. The `x_y_z` part encodes the version with dots replaced by
@@ -146,9 +151,12 @@ underscores. When the newest version changes by a new release to Hackage the
 old package will disappear under that name and be replaced by a newer one under
 the name with the new version. The package name including the version will
 also disappear when the default version e.g. from Stackage catches up with the
-newest version from Hackage.
-5. For some packages, we also manually add other `haskellPackages.foo_x_y_z`
-versions, if they are required for a certain build.
+newest version from Hackage. E.g. if `haskellPackages.foo` gets updated from
+1.0.0 to 1.1.0 the package `haskellPackages.foo_1_1_0` becomes obsolete and
+gets dropped.
+5. For some packages, we also [manually add other `haskellPackages.foo_x_y_z`
+versions](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml),
+if they are required for a certain build.
 
 Relying on `haskellPackages.foo_x_y_z` attributes in derivations outside
 nixpkgs is discouraged because they may change or disappear with every package

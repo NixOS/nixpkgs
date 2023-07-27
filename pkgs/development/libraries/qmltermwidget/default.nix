@@ -1,26 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, qtbase, qtquick1, qmake, qtmultimedia, utmp, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, qtbase
+, qtquick1
+, qmake
+, qtmultimedia
+, utmp
+}:
 
 stdenv.mkDerivation {
-  version = "2018-11-24";
-  pname = "qmltermwidget-unstable";
+  pname = "qmltermwidget";
+  version = "unstable-2022-01-09";
 
   src = fetchFromGitHub {
     repo = "qmltermwidget";
     owner = "Swordfish90";
-    rev = "48274c75660e28d44af7c195e79accdf1bd44963";
-    sha256 = "028nb1xp84jmakif5mmzx52q3rsjwckw27jdpahyaqw7j7i5znq6";
+    rev = "63228027e1f97c24abb907550b22ee91836929c5";
+    hash = "sha256-aVaiRpkYvuyomdkQYAgjIfi6a3wG2a6hNH1CfkA2WKQ=";
   };
 
-  buildInputs = [ qtbase qtquick1 qtmultimedia ]
-                ++ lib.optional stdenv.isDarwin utmp;
   nativeBuildInputs = [ qmake ];
 
+  buildInputs = [
+    qtbase
+    qtquick1
+    qtmultimedia
+  ] ++ lib.optional stdenv.isDarwin utmp;
+
   patches = [
-    (fetchpatch {
-      name = "fix-missing-includes.patch";
-      url = "https://github.com/Swordfish90/qmltermwidget/pull/27/commits/485f8d6d841b607ba49e55a791f7f587e4e193bc.diff";
-      sha256 = "186s8pv3642vr4lxsds919h0y2vrkl61r7wqq9mc4a5zk5vprinj";
-    })
+    # Some files are copied twice to the output which makes the build fails
+    ./do-not-copy-artifacts-twice.patch
   ];
 
   postPatch = ''
@@ -28,7 +37,7 @@ stdenv.mkDerivation {
       --replace '$$[QT_INSTALL_QML]' "/$qtQmlPrefix/"
   '';
 
-  installFlags = [ "INSTALL_ROOT=$(out)" ];
+  installFlags = [ "INSTALL_ROOT=${placeholder "out"}" ];
 
   dontWrapQtApps = true;
 

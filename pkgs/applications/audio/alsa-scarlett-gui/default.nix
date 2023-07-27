@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
   buildInputs = [ gtk4 alsa-lib ];
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   meta = with lib; {
     description = "GUI for alsa controls presented by Focusrite Scarlett Gen 2/3 Mixer Driver";
     homepage = "https://github.com/geoffreybennett/alsa-scarlett-gui";

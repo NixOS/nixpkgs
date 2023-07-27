@@ -85,17 +85,18 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
-      extensions = rec {
+      extensions = lib.optionalAttrs final.hasSharedLibraries {
         sharedLibrary =
-          /**/ if final.isDarwin  then ".dylib"
+          if      final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
           else                         ".so";
+      } // {
         staticLibrary =
           /**/ if final.isWindows then ".lib"
           else                         ".a";
         library =
-          /**/ if final.isStatic then staticLibrary
-          else                        sharedLibrary;
+          /**/ if final.isStatic then final.extensions.staticLibrary
+          else                        final.extensions.sharedLibrary;
         executable =
           /**/ if final.isWindows then ".exe"
           else                         "";
@@ -132,6 +133,25 @@ rec {
          # uname -r
          release = null;
       };
+
+      # It is important that hasSharedLibraries==false when the platform has no
+      # dynamic library loader.  Various tools (including the gcc build system)
+      # have knowledge of which platforms are incapable of dynamic linking, and
+      # will still build on/for those platforms with --enable-shared, but simply
+      # omit any `.so` build products such as libgcc_s.so.  When that happens,
+      # it causes hard-to-troubleshoot build failures.
+      hasSharedLibraries = with final;
+        (isAndroid || isGnu || isMusl                                  # Linux (allows multiple libcs)
+         || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
+         || isCygwin || isMinGW                                        # Windows
+        ) && !isStatic;
+
+      # The difference between `isStatic` and `hasSharedLibraries` is mainly the
+      # addition of the `staticMarker` (see make-derivation.nix).  Some
+      # platforms, like embedded machines without a libc (e.g. arm-none-eabi)
+      # don't support dynamic linking, but don't get the `staticMarker`.
+      # `pkgsStatic` sets `isStatic=true`, so `pkgsStatic.hostPlatform` always
+      # has the `staticMarker`.
       isStatic = final.isWasm || final.isRedox;
 
       # Just a guess, based on `system`

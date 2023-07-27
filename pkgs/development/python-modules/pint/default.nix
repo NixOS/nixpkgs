@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Physical quantities module";
     license = licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint/";
-    maintainers = with maintainers; [ costrouc doronbehar ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

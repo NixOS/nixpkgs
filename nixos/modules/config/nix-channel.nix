@@ -3,12 +3,13 @@
   configuration to work.
 
   See also
-   - ./nix.nix
-   - ./nix-flakes.nix
+  - ./nix.nix
+  - ./nix-flakes.nix
  */
 { config, lib, ... }:
 let
   inherit (lib)
+    mkDefault
     mkIf
     mkOption
     stringAfter
@@ -21,13 +22,42 @@ in
 {
   options = {
     nix = {
+      channel = {
+        enable = mkOption {
+          description = lib.mdDoc ''
+            Whether the `nix-channel` command and state files are made available on the machine.
+
+            The following files are initialized when enabled:
+              - `/nix/var/nix/profiles/per-user/root/channels`
+              - `/root/.nix-channels`
+              - `$HOME/.nix-defexpr/channels` (on login)
+
+            Disabling this option will not remove the state files from the system.
+          '';
+          type = types.bool;
+          default = true;
+        };
+      };
+
       nixPath = mkOption {
         type = types.listOf types.str;
-        default = [
-          "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-          "nixos-config=/etc/nixos/configuration.nix"
-          "/nix/var/nix/profiles/per-user/root/channels"
-        ];
+        default =
+          if cfg.channel.enable
+          then [
+            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+            "nixos-config=/etc/nixos/configuration.nix"
+            "/nix/var/nix/profiles/per-user/root/channels"
+          ]
+          else [ ];
+        defaultText = ''
+          if nix.channel.enable
+          then [
+            "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+            "nixos-config=/etc/nixos/configuration.nix"
+            "/nix/var/nix/profiles/per-user/root/channels"
+          ]
+          else [];
+        '';
         description = lib.mdDoc ''
           The default Nix expression search path, used by the Nix
           evaluator to look up paths enclosed in angle brackets
@@ -49,22 +79,30 @@ in
   config = mkIf cfg.enable {
 
     environment.extraInit =
-      ''
+      mkIf cfg.channel.enable ''
         if [ -e "$HOME/.nix-defexpr/channels" ]; then
           export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
         fi
       '';
 
+    environment.extraSetup = mkIf (!cfg.channel.enable) ''
+      rm --force $out/bin/nix-channel
+    '';
+
+    # NIX_PATH has a non-empty default according to Nix docs, so we don't unset
+    # it when empty.
     environment.sessionVariables = {
       NIX_PATH = cfg.nixPath;
     };
 
-    system.activationScripts.nix-channel = stringAfter [ "etc" "users" ]
-      ''
+    nix.settings.nix-path = mkIf (! cfg.channel.enable) (mkDefault "");
+
+    system.activationScripts.nix-channel = mkIf cfg.channel.enable
+      (stringAfter [ "etc" "users" ] ''
         # Subscribe the root user to the NixOS channel by default.
         if [ ! -e "/root/.nix-channels" ]; then
             echo "${config.system.defaultChannel} nixos" > "/root/.nix-channels"
         fi
-      '';
+      '');
   };
 }

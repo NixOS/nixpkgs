@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , cmake
 , expat
+, fetchpatch
 , fmt
 , proj
 , bzip2
@@ -13,7 +14,6 @@
 , luajit
 , libosmium
 , protozero
-, rapidjson
 , testers
 }:
 
@@ -27,6 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-8Jefd8dfoh/an7wd+8iTM0uOKA4UiUo8t2WzZs4r/Ck=";
   };
+
+  patches = [
+    # Fix compatiblity with fmt 10.0. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/openstreetmap/osm2pgsql/commit/37aae6c874b58cd5cd27e70b2b433d6624fd7498.patch";
+      hash = "sha256-Fv2zPqhRDoJXlqB1Q9q5iskn28iqq3TYPcdqfu/pvD4=";
+    })
+  ];
 
   postPatch = ''
     # Remove bundled libraries

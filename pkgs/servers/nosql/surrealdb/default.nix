@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
-, rocksdb
+, rocksdb_7_10
 , testers
 , surrealdb
 , SystemConfiguration
@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage rec {
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
-  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  ROCKSDB_INCLUDE_DIR = "${rocksdb_7_10}/include";
+  ROCKSDB_LIB_DIR = "${rocksdb_7_10}/lib";
 
   nativeBuildInputs = [
     pkg-config

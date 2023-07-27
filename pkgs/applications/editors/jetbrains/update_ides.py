@@ -4,12 +4,14 @@ import json
 import pathlib
 import logging
 import requests
+import subprocess
 import sys
 import xmltodict
 from packaging import version
 
 updates_url = "https://www.jetbrains.com/updates/updates.xml"
-versions_file_path = pathlib.Path(__file__).parent.joinpath("versions.json").resolve()
+current_path = pathlib.Path(__file__).parent
+versions_file_path = current_path.joinpath("versions.json").resolve()
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
@@ -98,3 +100,7 @@ for products in versions.values():
 with open(versions_file_path, "w") as versions_file:
     json.dump(versions, versions_file, indent=2)
     versions_file.write("\n")
+
+logging.info("#### Updating plugins ####")
+plugin_script = current_path.joinpath("plugins/update_plugins.py").resolve()
+subprocess.call(plugin_script)

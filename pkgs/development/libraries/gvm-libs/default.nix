@@ -60,6 +60,9 @@ stdenv.mkDerivation rec {
     "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm"
   ];
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   meta = with lib; {
     description = "Libraries module for the Greenbone Vulnerability Management Solution";
     homepage = "https://github.com/greenbone/gvm-libs";

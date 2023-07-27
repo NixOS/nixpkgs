@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , deprecated
 , rich
 , backoff
@@ -14,33 +15,106 @@
 , httpx
 , pandas
 , monotonic
-# test dependencies
-, pytestCheckHook
+# optional-dependencies
 , fastapi
-, sqlalchemy
 , opensearch-py
-, factory_boy
 , elasticsearch8
-, elastic-transport
-, luqum
-, pytest-asyncio
-, passlib
-, python-jose
-, alembic
 , uvicorn
+, smart-open
+, brotli-asgi
+, alembic
+, sqlalchemy
+, greenlet
+, aiosqlite
+, luqum
+, scikit-learn
+, aiofiles
+, pyyaml
+, python-multipart
+, python-jose
+, passlib
+, psutil
+# , segment-analytics-python
+, asyncpg
+, psycopg2
 , schedule
 , prodict
-, datasets
-, psutil
-, spacy
 , cleanlab
-, snorkel
-, transformers
+, datasets
+, huggingface-hub
+# , flair
 , faiss
+, flyingsquid
+, pgmpy
+, plotly
+, snorkel
+, spacy
+, transformers
+, evaluate
+, seqeval
+# , setfit
+# , span_marker
+, openai
+, peft
+# test dependencies
+, pytestCheckHook
+, pytest-cov
+, pytest-mock
+, pytest-asyncio
+, factory_boy
 }:
 let
   pname = "argilla";
-  version = "1.8.0";
+  version = "1.13.2";
+  optional-dependencies = {
+    server = [
+      fastapi
+      opensearch-py
+      elasticsearch8
+      uvicorn
+      smart-open
+      brotli-asgi
+      alembic
+      sqlalchemy
+      greenlet
+      aiosqlite
+      luqum
+      scikit-learn
+      aiofiles
+      pyyaml
+      python-multipart
+      python-jose
+      passlib
+      psutil
+      # segment-analytics-python
+    ] ++
+      elasticsearch8.optional-dependencies.async ++
+      uvicorn.optional-dependencies.standard ++
+      python-jose.optional-dependencies.cryptography ++
+      passlib.optional-dependencies.bcrypt;
+    postgresql = [ asyncpg psycopg2 ];
+    listeners = [ schedule prodict ];
+    integrations = [
+      pyyaml
+      cleanlab
+      datasets
+      huggingface-hub
+      # flair
+      faiss
+      flyingsquid
+      pgmpy
+      plotly
+      snorkel
+      spacy
+      transformers
+      evaluate
+      seqeval
+      # setfit
+      # span_marker
+      openai
+      peft
+    ] ++ transformers.optional-dependencies.torch;
+  };
 in
 buildPythonPackage {
   inherit pname version;
@@ -51,64 +125,57 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "argilla-io";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-pUfuwA/+fe1VVWyGxEkvSuJLNxw3sHmp8cQZecW8GWY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FCPlEbgViWZEyXpdtaa6pJxpgbSXmcfJX/1RUFF7Zs4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"rich <= 13.0.1"' '"rich"' \
-      --replace '"numpy < 1.24.0"' '"numpy"'
-  '';
+  pythonRelaxDeps = [
+    "typer"
+    "rich"
+    "numpy"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
+    httpx
     deprecated
-    rich
-    backoff
     packaging
+    pandas
     pydantic
-    typer
-    tqdm
     wrapt
     numpy
-    pandas
-    httpx
+    tqdm
+    backoff
     monotonic
+    rich
+    typer
   ];
+
+  # still quite a bit of optional dependencies missing
+  doCheck = false;
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  # tests require an opensearch instance running and flyingsquid to be packaged
-  doCheck = false;
-
   nativeCheckInputs = [
     pytestCheckHook
-    fastapi
-    sqlalchemy
-    opensearch-py
-    factory_boy
-    elasticsearch8
-    elastic-transport
-    luqum
+    pytest-cov
+    pytest-mock
     pytest-asyncio
-    passlib
-    python-jose
-    alembic
-    uvicorn
-    schedule
-    prodict
-    datasets
-    psutil
-    spacy
-    cleanlab
-    snorkel
-    transformers
-    faiss
-  ] ++ opensearch-py.optional-dependencies.async;
+    factory_boy
+  ]
+    ++ optional-dependencies.server
+    ++ optional-dependencies.postgresql
+    ++ optional-dependencies.listeners
+    ++ optional-dependencies.integrations;
 
   pytestFlagsArray = [ "--ignore=tests/server/datasets/test_dao.py" ];
+
+  passthru.optional-dependencies = optional-dependencies;
 
   meta = with lib; {
     description = "Argilla: the open-source data curation platform for LLMs";

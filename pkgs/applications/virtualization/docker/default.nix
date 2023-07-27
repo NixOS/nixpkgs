@@ -105,6 +105,11 @@ rec {
           url = "https://github.com/moby/moby/pull/43136.patch";
           hash = "sha256-1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
         })
+        (fetchpatch {
+          name = "fix-issue-with-go-1.20.6.patch";
+          url = "https://github.com/moby/moby/pull/45972.patch";
+          hash = "sha256-zxFh/bI6+INOYSg6QFs0S9rdl9Z21KUIZFmzpNVjpSA=";
+        })
       ];
 
       postPatch = ''
@@ -183,6 +188,14 @@ rec {
       ++ lib.optional withSeccomp libseccomp
       ++ plugins;
 
+    patches = [
+      (fetchpatch {
+        name = "fix-issue-with-go-1.20.6.patch";
+        url = "https://github.com/docker/cli/pull/4441.patch";
+        hash = "sha256-F4ueSbdBk1w8OqC4Dgh8+4Ql4zTjehaM368ET7k6Yx8=";
+      })
+    ];
+
     postPatch = ''
       patchShebangs man scripts/build/
       substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
@@ -260,22 +273,22 @@ rec {
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem maxeaubrey ];
+      maintainers = with maintainers; [ offline vdemeester periklis maxeaubrey ];
     };
   });
 
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.23";
+    version = "20.10.25";
     cliRev = "v${version}";
-    cliHash = "sha256-fNaRpstyG90Jzq3+U2A42Jj+ixb+m7tXLioIcsegPbQ=";
+    cliHash = "sha256-Wi/NHn8erqvKEVEJqkc99cO/sfPHptwMT44Savcuw2M=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-nBPw/M4VC9XeZ9S33HWdWSjY2J2mYpI/TPOzvLjSmJM=";
-    runcRev = "v1.1.4";
-    runcHash = "sha256-ougJHW1Z+qZ324P8WpZqawY1QofKnn8WezP7orzRTdA=";
-    containerdRev = "v1.6.15";
-    containerdHash = "sha256-Vlftq//mLYZPoT2R/lHJA6wLnqiuC+Cpy4lGQC8jCPA=";
+    mobyHash = "sha256-trJjQMYF/Uog7nvUlELyUYbsTPGz8Rn21v1/V5xhu+A=";
+    runcRev = "v1.1.5";
+    runcHash = "sha256-r5as3hb0zt+XPfxAPeH+YIc/n6IRlscPOZMGfhVE5C4=";
+    containerdRev = "v1.6.20";
+    containerdHash = "sha256-Nd3S6hmvA8LBFUN4XaQJMApbmwGIp6GTnFQimnYagZg=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

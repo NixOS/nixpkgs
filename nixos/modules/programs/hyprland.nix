@@ -6,10 +6,10 @@
 with lib; let
   cfg = config.programs.hyprland;
 
-  defaultHyprlandPackage = pkgs.hyprland.override {
-    enableXWayland = cfg.xwayland.enable;
-    hidpiXWayland = cfg.xwayland.hidpi;
-    nvidiaPatches = cfg.nvidiaPatches;
+  finalPortalPackage = cfg.portalPackage.override {
+    hyprland-share-picker = pkgs.hyprland-share-picker.override {
+      hyprland = cfg.finalPackage;
+    };
   };
 in
 {
@@ -25,23 +25,24 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.path;
-      default = defaultHyprlandPackage;
-      defaultText = literalExpression ''
-        pkgs.hyprland.override {
-          enableXWayland = config.programs.hyprland.xwayland.enable;
-          hidpiXWayland = config.programs.hyprland.xwayland.hidpi;
-          nvidiaPatches = config.programs.hyprland.nvidiaPatches;
-        }
-      '';
-      example = literalExpression "<Hyprland flake>.packages.<system>.default";
+    package = mkPackageOptionMD pkgs "hyprland" { };
+
+    finalPackage = mkOption {
+      type = types.package;
+      readOnly = true;
+      default = cfg.package.override {
+        enableXWayland = cfg.xwayland.enable;
+        hidpiXWayland = cfg.xwayland.hidpi;
+        nvidiaPatches = cfg.nvidiaPatches;
+      };
+      defaultText = literalExpression
+        "`wayland.windowManager.hyprland.package` with applied configuration";
       description = mdDoc ''
-        The Hyprland package to use.
-        Setting this option will make {option}`programs.hyprland.xwayland` and
-        {option}`programs.hyprland.nvidiaPatches` not work.
+        The Hyprland package after applying configuration.
       '';
     };
+
+    portalPackage = mkPackageOptionMD pkgs "xdg-desktop-portal-hyprland" { };
 
     xwayland = {
       enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
@@ -57,9 +58,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ cfg.finalPackage ];
 
-    fonts.enableDefaultFonts = mkDefault true;
+    fonts.enableDefaultPackages = mkDefault true;
     hardware.opengl.enable = mkDefault true;
 
     programs = {
@@ -69,13 +70,11 @@ in
 
     security.polkit.enable = true;
 
-    services.xserver.displayManager.sessionPackages = [ cfg.package ];
+    services.xserver.displayManager.sessionPackages = [ cfg.finalPackage ];
 
     xdg.portal = {
       enable = mkDefault true;
-      extraPortals = [
-        pkgs.xdg-desktop-portal-hyprland
-      ];
+      extraPortals = [ finalPortalPackage ];
     };
   };
 }

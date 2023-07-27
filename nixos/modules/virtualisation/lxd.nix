@@ -91,7 +91,7 @@ in {
           Enables the (experimental) LXD UI.
         '');
 
-        package = mkPackageOption pkgs.lxd "ui" { };
+        package = mkPackageOption pkgs.lxd-unwrapped "ui" { };
       };
     };
   };

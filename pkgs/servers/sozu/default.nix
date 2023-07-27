@@ -11,28 +11,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sozu";
-  version = "0.15.0";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "sozu-proxy";
     repo = pname;
     rev = version;
-    hash = "sha256-lbBwmi8MrcWr6AXzl9upnXw8ZEWyDGEWr+txE4dujWs=";
+    hash = "sha256-6CuBJUMymnqNx/675PeBuZNhYYh9HtU99J1LYO2+Rxc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-c/TC8Mn9UFIymkXxD02iB6E3kKyeuKDgvlgapiV0Nco=";
 
   nativeBuildInputs = [ protobuf ];
 
   buildInputs =
     lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
-
-  postPatch = ''
-    # update Cargo.lock to fix build
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
 
   doCheck = false;
 
@@ -49,6 +42,7 @@ rustPlatform.buildRustPackage rec {
     description =
       "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
+    changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
     license = licenses.agpl3;
     maintainers = with maintainers; [ Br1ght0ne gaelreyrol ];
     platforms = [ "x86_64-linux" ];

@@ -1,8 +1,11 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
+
 , bison
 , cmake
+, gtest
 , doxygen
 , graphviz
 , pkg-config
@@ -60,15 +63,15 @@
 , zstd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.6.4";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "v${version}";
-    hash = "sha256-pGdZmQBUuNCk9/scUvq4vduINu5gqtCRLaz7QE2e6WU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RXX21tCq0xJQli3NTertM9IweONrJfGeaFj3utMFjpM=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +91,8 @@ stdenv.mkDerivation rec {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ] ++ lib.optionals finalAttrs.doInstallCheck [
+    "-DBUILD_TESTING=ON"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
   ] ++ lib.optionals stdenv.isDarwin [
@@ -138,6 +143,7 @@ stdenv.mkDerivation rec {
     libspatialite
     sqlite
     libtiff
+    gtest
   ] ++ lib.optionals useTiledb [
     tiledb
   ] ++ [
@@ -163,14 +169,20 @@ stdenv.mkDerivation rec {
   # preCheck rather than preInstallCheck because this is what pytestCheckHook
   # calls (coming from the python world)
   preCheck = ''
-    pushd ../autotest
+    pushd autotest
 
     export HOME=$(mktemp -d)
     export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
+    export GDAL_DOWNLOAD_TEST_DATA=OFF
+    # allows to skip tests that fail because of file handle leak
+    # the issue was not investigated
+    # https://github.com/OSGeo/gdal/blob/v3.7.0/autotest/gdrivers/bag.py#L61
+    export BUILD_NAME=fedora
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-env
+    filelock
     lxml
   ];
   disabledTestPaths = [
@@ -187,7 +199,7 @@ stdenv.mkDerivation rec {
     "test_transformer_dem_overrride_srs"
     "test_osr_ct_options_area_of_interest"
     # ZIP does not support timestamps before 1980
-    " test_sentinel2_zipped"
+    "test_sentinel2_zipped"
     # tries to call unwrapped executable
     "test_SetPROJAuxDbPaths"
   ] ++ lib.optionals (!stdenv.isx86_64) [
@@ -200,17 +212,21 @@ stdenv.mkDerivation rec {
     "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
   ];
   postCheck = ''
-    popd # ../autotest
+    popd # autotest
   '';
+
+  passthru.tests = {
+    gdal = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
+  };
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    changelog = "https://github.com/OSGeo/gdal/blob/${src.rev}/NEWS.md";
+    changelog = "https://github.com/OSGeo/gdal/blob/v${finalAttrs.version}/NEWS.md";
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
     license = licenses.mit;
     maintainers = with maintainers; teams.geospatial.members ++ [ marcweber dotlambda ];
     platforms = platforms.unix;
   };
-}
+})

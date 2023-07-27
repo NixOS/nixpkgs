@@ -9,6 +9,7 @@
 , python3, perl
 , which
 , llvmPackages
+, rustc
 # postPatch:
 , pkgsBuildHost
 # configurePhase:
@@ -308,6 +309,10 @@ let
       # To fix the build as we don't provide libffi_pic.a
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
+      # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
+      # We do intentionally not set rustc_version as nixpkgs will never do incremental
+      # rebuilds, thus leaving this empty is fine.
+      rust_sysroot_absolute = "${rustc}";
     } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;

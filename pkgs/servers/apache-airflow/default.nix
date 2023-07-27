@@ -31,6 +31,10 @@ let
           rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
           hash = "sha256-qyD3uoxEnD2pdVvwpUlSqHB3drD4Zg/+ov4CzLFIlLs=";
         };
+        disabledTestPaths = [
+           "test/aaa_profiling"
+           "test/ext/mypy"
+        ];
       });
 
       apache-airflow = pySelf.callPackage ./python-package.nix { };

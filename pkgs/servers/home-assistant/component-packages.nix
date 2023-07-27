@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.7.1";
+  version = "2023.7.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -710,7 +710,6 @@
       aiodiscover
       aiohttp-cors
       async-upnp-client
-      av
       bleak
       bleak-retry-connector
       bluetooth-adapters
@@ -718,6 +717,7 @@
       bluetooth-data-tools
       dbus-fast
       fnv-hash-fast
+      ha-av
       hass-nabucasa
       hassil
       home-assistant-frontend
@@ -1364,7 +1364,7 @@
     ];
     "generic" = ps: with ps; [
       aiohttp-cors
-      av
+      ha-av
       pillow
     ];
     "generic_hygrostat" = ps: with ps; [
@@ -3882,7 +3882,7 @@
     ]; # missing inputs: stookwijzer
     "stream" = ps: with ps; [
       aiohttp-cors
-      av
+      ha-av
       numpy
       pyturbojpeg
     ];

@@ -11,7 +11,7 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       # sqlite3-to-mysql is incompatible with versions > 1.4.44 of sqlalchemy
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs rec {
         version = "1.4.44";
         format = "setuptools";
         src = fetchPypi {
@@ -19,7 +19,11 @@ let
           inherit version;
           hash = "sha256-LdpflnGa6Js+wPG3lpjYbrmuyx1U6ZCrs/3ZLAS0apA=";
         };
-      });
+        disabledTestPaths = [
+           "test/aaa_profiling"
+           "test/ext/mypy"
+        ];
+      };
     };
     self = py;
   };

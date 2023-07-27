@@ -15,7 +15,6 @@
 , CoreFoundation, Security, SystemConfiguration
 , pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
 , makeRustPlatform
-, llvmPackages_11
 , llvmPackages_16, llvm_16
 } @ args:
 
@@ -26,8 +25,6 @@ import ./default.nix {
   llvmSharedForBuild = pkgsBuildBuild.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };
   llvmSharedForHost = pkgsBuildHost.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };
   llvmSharedForTarget = pkgsBuildTarget.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };
-
-  llvmBootstrapForDarwin = llvmPackages_11;
 
   # For use at runtime
   llvmShared = llvm_16.override { enableSharedLibraries = true; };
@@ -60,4 +57,4 @@ import ./default.nix {
   rustcPatches = [ ];
 }
 
-(builtins.removeAttrs args [ "pkgsBuildHost" "llvmPackages_11" "llvmPackages_16" "llvm_16"])
+(builtins.removeAttrs args [ "pkgsBuildTarget" "pkgsBuildBuild" "pkgsBuildHost" "llvmPackages_16" "llvm_16"])

@@ -1,11 +1,9 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 
 # dependencies
 , cyrus_sasl
-, db
 , groff
 , libsodium
 , libtool
@@ -19,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.6.4";
+  version = "2.6.5";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-1RcE5QF4QwwGzz2KoXTaZrrfVZdHpH2SC7VLLUqkCZE=";
+    hash = "sha256-Lieo1PTCr4/oQLVzJxwgqhY+JJh/l2UhRkQpD1vrONk=";
   };
 
   # TODO: separate "out" and "bin"
@@ -46,7 +44,6 @@ stdenv.mkDerivation rec {
     (cyrus_sasl.override {
       inherit openssl;
     })
-    db
     libsodium
     libtool
     openssl

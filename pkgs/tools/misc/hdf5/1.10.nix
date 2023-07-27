@@ -9,7 +9,7 @@
 , jdk
 }:
 
-let inherit (lib) optional optionals; in
+let inherit (lib) optional; in
 
 stdenv.mkDerivation rec {
   version = "1.10.9";

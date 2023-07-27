@@ -130,7 +130,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-rs";
-  version = "0.10.9";
+  version = "0.10.10";
 
   outputs = [ "out" "dev" ];
 
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = version;
-    hash = "sha256-pUvcPazg6/SsD7sqML2tb+ZVWDqO1MRIcj3CQioePZY=";
+    hash = "sha256-ZsE1Pz2N0XSQFDyIeEUg9+eFN94mdSmge2Tvw57RLZ4=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
       "ffv1-0.0.0" = "sha256-af2VD00tMf/hkfvrtGrHTjVJqbl+VVpLaR0Ry+2niJE=";
       "flavors-0.2.0" = "sha256-zBa0X75lXnASDBam9Kk6w7K7xuH9fP6rmjWZBUB5hxk=";
       "gdk4-0.6.6" = "sha256-1WPXxsZJoYEQxVuP/CSpGs2XEZSJD//JJz4Ka2hxXHM=";
-      "gstreamer-0.20.6" = "sha256-nG+4nak0l1j29S5rddrMu38lfFq12Bjw16uaj61QiQs=";
+      "gstreamer-0.20.7" = "sha256-o4o4mPFAZOshNNkCkykjG/b+UtT2z6TNLOEzJsfs+Mk=";
     };
   };
 

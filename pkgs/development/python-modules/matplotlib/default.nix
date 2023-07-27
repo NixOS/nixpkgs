@@ -10,6 +10,7 @@
 # build-system
 , pkg-config
 , pybind11
+, setuptools
 , setuptools-scm
 
 # native libraries
@@ -117,6 +118,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pkg-config
     pybind11
+    setuptools
     setuptools-scm
     numpy
   ];

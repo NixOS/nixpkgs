@@ -1,7 +1,7 @@
 { stdenv, lib, python3, fetchPypi, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.49.0";
+  version = "2.50.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,12 +9,12 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-4R89RD4mDdhLdpgHQ8QT48cX+GzTLrSYPCwg0xWM8Ss=";
+    hash = "sha256-eKE/jdS5/PshCxn/4NXuW5rHh7jBsv2VQSWM3cjLHRw=";
   };
 
   # put packages that needs to be overridden in the py package scope
   py = import ./python-packages.nix {
-    inherit stdenv lib src version python3 fetchPypi;
+    inherit stdenv src version python3 fetchPypi;
   };
 in
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
@@ -270,7 +270,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     homepage = "https://github.com/Azure/azure-cli";
     description = "Next generation multi-platform command line experience for Azure";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ akechishiro jonringer ];
   };
 })
 

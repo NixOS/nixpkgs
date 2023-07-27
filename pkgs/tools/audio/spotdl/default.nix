@@ -20,7 +20,7 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.1.11";
+  version = "4.2.0";
 
   format = "pyproject";
 
@@ -28,7 +28,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I/53JapzTo6VXss82/F0qO/Etwd4i6ZP9FPjaFRHwV0=";
+    hash = "sha256-miIDasbOKmfYESiEIlMxEUfPkLLBz4s1rX2eMz3MrzA=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -56,6 +56,8 @@ in python.pkgs.buildPythonApplication rec {
     pykakasi
     syncedlyrics
     typing-extensions
+    soundcloud-v2
+    bandcamp-api
     setuptools # for pkg_resources
   ] ++ python-slugify.optional-dependencies.unidecode;
 

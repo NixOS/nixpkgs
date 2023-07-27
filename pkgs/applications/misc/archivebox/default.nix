@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchFromGitHub
 , fetchPypi
 }:
 
@@ -22,6 +23,16 @@ let
             "CVE-2022-28347"
             "CVE-2022-28346"
           ];
+        };
+      });
+      django-extensions = super.django-extensions.overridePythonAttrs (old: rec {
+        version = "3.1.5";
+        src = fetchFromGitHub {
+          inherit version;
+          owner = "django-extensions";
+          repo = "django-extensions";
+          rev = "e43f383dae3a35237e42f6acfe1207a8e7e7bdf5";
+          hash = "sha256-NAMa78KhAuoJfp0Cb0Codz84sRfRQ1JhSLNYRI4GBPM=";
         };
       });
     };

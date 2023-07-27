@@ -84,6 +84,10 @@ let
     homepage = "https://k3s.io";
     maintainers = with maintainers; [ euank mic92 yajo ];
     platforms = platforms.linux;
+
+    # resolves collisions with other installations of kubectl, crictl, ctr
+    # prefer non-k3s versions
+    priority = 5;
   };
 
   # https://github.com/k3s-io/k3s/blob/5fb370e53e0014dc96183b8ecb2c25a61e891e76/scripts/build#L19-L40
@@ -325,6 +329,9 @@ buildGoModule rec {
     wrapProgram $out/bin/k3s \
       --prefix PATH : ${lib.makeBinPath k3sRuntimeDeps} \
       --prefix PATH : "$out/bin"
+    ln -s $out/bin/k3s $out/bin/kubectl
+    ln -s $out/bin/k3s $out/bin/crictl
+    ln -s $out/bin/k3s $out/bin/ctr
   '';
 
   doInstallCheck = true;

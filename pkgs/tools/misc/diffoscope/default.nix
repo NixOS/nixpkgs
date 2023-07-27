@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , abootimg
-, acl
 , apksigcopier
 , apksigner
 , apktool
@@ -19,7 +18,6 @@
 , dtc
 , e2fsprogs
 , enableBloat ? true
-, enableUnfree ? false
 , enjarify
 , fetchurl
 , file
@@ -80,11 +78,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "243";
+  version = "245";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-lqI9MOZJxgHZ87kax343t6Wylzv1NWcQZ1cMWgmpnRo=";
+    hash = "sha256-VeA8+gdKDDyNI9ica3YjGFw2Nl7Lb/L6/I7XNa9FMek=";
   };
 
   outputs = [
@@ -175,6 +173,7 @@ python3.pkgs.buildPythonApplication rec {
       abootimg
       apksigcopier
       apksigner
+      apktool
       cbfstool
       colord
       enjarify
@@ -215,8 +214,6 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
     # This doesn't work on aarch64-darwin
     ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
-    # apktool depend on build-tools which requires Android SDK acceptance, therefore, the whole thing is unfree
-    ++ lib.optionals enableUnfree [ apktool ]
   ));
 
   nativeCheckInputs = with python3.pkgs; [

@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
     "WAYLAND_SCANNER=wayland-scanner"
     "PREFIX=$(out)"
-    "MANDIR=$(man)/share/man/man1"
+    "MANDIR=$(man)/share/man"
   ];
 
   preBuild = ''

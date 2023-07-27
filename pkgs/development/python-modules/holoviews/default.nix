@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Python data analysis and visualization seamless and simple";
     homepage = "https://www.holoviews.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

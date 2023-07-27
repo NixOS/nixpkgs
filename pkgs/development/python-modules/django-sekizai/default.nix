@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, django_classytags
+, django-classy-tags
 , pytestCheckHook
 , pytest-django
 }:
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    django_classytags
+    django-classy-tags
   ];
 
   checkInputs = [

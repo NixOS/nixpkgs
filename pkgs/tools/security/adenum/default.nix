@@ -1,11 +1,10 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , john
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "adenum";
   version = "unstable-2022-04-01";
   format = "other";

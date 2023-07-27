@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.40.0";
+  version = "0.40.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vZmZh/wD6Np/0ZxTm81Ai3zWZHrQ4qykDw/+xKBUUZg=";
+    hash = "sha256-nGLguMbenfKONcY1W5S+BZ6zHmnW/Sivs2/NpDqrEck=";
   };
 
   propagatedBuildInputs = [

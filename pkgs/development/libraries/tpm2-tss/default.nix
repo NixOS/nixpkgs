@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, fetchurl
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
 , cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
-, shadow
+, shadow, libuuid
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "3.2.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "1jijxnvjcsgz5yw4i9fj7ycdnnz90r3l0zicpwinswrw47ac3yy5";
+    sha256 = "sha256-75yiKVZrR1vcCwKp4tDO4A9JB0KDM0MXPJ1N85kAaRk=";
   };
 
   outputs = [ "out" "man" "dev" ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   # cmocka is checked / used(?) in the configure script
   # when unit and/or integration testing is enabled
-  buildInputs = [ openssl json_c curl libgcrypt uthash ]
+  buildInputs = [ openssl json_c curl libgcrypt uthash libuuid ]
     # cmocka doesn't build with pkgsStatic, and we don't need it anyway
     # when tests are not run
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
     # Do not rely on dynamic loader path
     # TCTI loader relies on dlopen(), this patch prefixes all calls with the output directory
     ./no-dynamic-loader-path.patch
+    (fetchurl {
+      name = "skip-test-fapi-fix-provisioning-with template-if-no-certificate-available.patch";
+      url = "https://github.com/tpm2-software/tpm2-tss/commit/218c0da8d9f675766b1de502a52e23a3aa52648e.patch";
+      sha256 = "sha256-dnl9ZAknCdmvix2TdQvF0fHoYeWp+jfCTg8Uc7h0voA=";
+    })
   ];
 
   postPatch = ''
@@ -61,8 +66,8 @@ stdenv.mkDerivation rec {
       --replace '@PREFIX@' $out/lib/
     substituteInPlace ./test/unit/tctildr-dl.c \
       --replace '@PREFIX@' $out/lib
-    substituteInPlace ./configure.ac \
-      --replace 'm4_esyscmd_s([git describe --tags --always --dirty])' '${version}'
+    substituteInPlace ./bootstrap \
+      --replace 'git describe --tags --always --dirty' 'echo "${version}"'
   '';
 
   configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [

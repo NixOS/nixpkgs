@@ -360,6 +360,17 @@ in
     };
   };
 
+  dosbox-pure = mkLibretroCore {
+    core = "dosbox-pure";
+    CXXFLAGS = "-std=gnu++11";
+    hardeningDisable = [ "format" ];
+    makefile = "Makefile";
+    meta = {
+      description = "Port of DOSBox to libretro aiming for simplicity and ease of use.";
+      license = lib.licenses.gpl2Only;
+    };
+  };
+
   eightyone = mkLibretroCore {
     core = "81";
     src = getCoreSrc "eightyone";
@@ -722,6 +733,10 @@ in
       # remove ccache
       substituteInPlace CMakeLists.txt --replace "ccache" ""
     '';
+
+    # causes redefinition of _FORTIFY_SOURCE
+    hardeningDisable = [ "fortify3" ];
+
     postBuild = "cd /build/source/build/pcsx2";
     meta = {
       description = "Port of PCSX2 to libretro";

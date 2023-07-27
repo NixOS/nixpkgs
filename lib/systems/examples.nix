@@ -37,6 +37,10 @@ rec {
     config = "armv6l-unknown-linux-gnueabihf";
   } // platforms.raspberrypi;
 
+  bluefield2 = {
+    config = "aarch64-unknown-linux-gnu";
+  } // platforms.bluefield2;
+
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
   } // platforms.zero-gravitas;

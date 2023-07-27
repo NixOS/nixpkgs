@@ -42,18 +42,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
-    (if (lib.versionOlder version "3.84") then
-      ./85_security_load_3.77+.patch
-    else
-      ./85_security_load_3.85+.patch
-    )
+    ./85_security_load_3.85+.patch
     ./fix-cross-compilation.patch
-  ] ++ lib.optionals (lib.versionOlder version "3.89") [
-    # Backport gcc-13 build fix:
-    #  https://bugzilla.mozilla.org/show_bug.cgi?id=1771273
-    #  https://hg.mozilla.org/projects/nss/raw-rev/21e7aaa1f7d94bca15d997e5b4c2329b32fad21a
-    ./gcc-13-esr.patch
-  ] ++ lib.optionals (lib.versionAtLeast version "3.90" && lib.versionOlder version "3.91") [
+  ] ++ lib.optionals (lib.versionOlder version "3.91") [
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1836925
     # https://phabricator.services.mozilla.com/D180068
     ./remove-c25519-support.patch

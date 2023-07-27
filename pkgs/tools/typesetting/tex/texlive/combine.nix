@@ -103,7 +103,7 @@ in (buildEnv {
   passthru = {
     # This is set primarily to help find-tarballs.nix to do its job
     packages = pkgList.all;
-    # useful for inclusion in the `fonts.fonts` nixos option or for use in devshells
+    # useful for inclusion in the `fonts.packages` nixos option or for use in devshells
     fonts = "${texmfroot}/texmf-dist/fonts";
   };
 

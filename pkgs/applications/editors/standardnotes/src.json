@@ -1,13 +1,13 @@
 {
-  "version": "3.162.8",
+  "version": "3.167.2",
   "deb": {
     "x86_64-linux": {
-      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.162.8/standard-notes-3.162.8-linux-amd64.deb",
-      "hash": "sha512-XxSz1ZXCVzNBqX5BQ4nytFla1igEttV/pQ40r3HW6BQfy6yprQqmQ94OMJSx7kpfeQpxnwBMOUsA58QM3W7y1w=="
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.167.2/standard-notes-3.167.2-linux-amd64.deb",
+      "hash": "sha512-xW08R1oZm8lw8Iap/TT29WJCagmcQNWXzdSDY8pArG9Fjv8nm+DcV6paVL35Hj35Dk9CJdf1KxeTRB9JW6u3dg=="
     },
     "aarch64-linux": {
-      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.162.8/standard-notes-3.162.8-linux-arm64.deb",
-      "hash": "sha512-Y1+89UaPfB+UKiVg3JWo3zwH1rFnjdKuU1CBwIjMblzf1775gEMXicU0n+6FpWTphcVmEeah9VISoq0oBHNHtg=="
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.167.2/standard-notes-3.167.2-linux-arm64.deb",
+      "hash": "sha512-ua0lg6aK++RDi4WyCYygHoQasYD4+I21ip5To9ImMN072vJSyAoz9gxs8HBF+uEl4/uUBdlMCQHEioYMeJCwbw=="
     }
   }
 }

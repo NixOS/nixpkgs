@@ -2,12 +2,13 @@
 , addOpenGLRunpath
 , config
 , cudaPackages ? {}
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , fetchurl
 , makeWrapper
 , opencl-headers
 , ocl-icd
 , xxHash
+, Foundation, IOKit, Metal, OpenCL, libiconv
 }:
 
 stdenv.mkDerivation rec {
@@ -19,13 +20,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sl4Qd7zzSQjMjxjBppouyYsEeyy88PURRNzzuh4Leyo=";
   };
 
+  postPatch = ''
+     # Remove hardcoded paths on darwin
+    substituteInPlace src/Makefile \
+      --replace "/usr/bin/ar" "ar" \
+      --replace "/usr/bin/sed" "sed" \
+      --replace '-i ""' '-i'
+  '';
+
   nativeBuildInputs = [
     makeWrapper
   ] ++ lib.optionals cudaSupport [
     addOpenGLRunpath
   ];
 
-  buildInputs = [ opencl-headers xxHash ];
+  buildInputs = [ opencl-headers xxHash ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation IOKit Metal OpenCL libiconv ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -34,6 +44,8 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_OPENCL=1"
     "USE_SYSTEM_XXHASH=1"
   ];
+
+  enableParallelBuilding = true;
 
   preFixup = ''
     for f in $out/share/hashcat/OpenCL/*.cl; do
@@ -63,7 +75,7 @@ stdenv.mkDerivation rec {
     description = "Fast password cracker";
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ kierdavis zimbatm ];
   };
 }

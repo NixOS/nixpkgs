@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
-  cudaSupport ? false, cudaPackages, magma,
+  config, cudaSupport ? config.cudaSupport, cudaPackages, magma,
   useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
@@ -207,6 +207,9 @@ in buildPythonPackage rec {
 
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
+
+  # causes possible redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   BUILD_NAMEDTENSOR = setBool true;
   BUILD_DOCS = setBool buildDocs;

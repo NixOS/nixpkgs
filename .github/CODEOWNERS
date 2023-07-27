@@ -23,7 +23,7 @@
 
 # Libraries
 /lib                        @edolstra @infinisil
-/lib/systems                @alyssais @ericson2314 @matthewbauer
+/lib/systems                @alyssais @ericson2314 @matthewbauer @amjoseph-nixpkgs
 /lib/generators.nix         @edolstra @Profpatsch
 /lib/cli.nix                @edolstra @Profpatsch
 /lib/debug.nix              @edolstra @Profpatsch
@@ -37,10 +37,10 @@
 /pkgs/top-level/stage.nix                        @Ericson2314 @matthewbauer
 /pkgs/top-level/splice.nix                       @Ericson2314 @matthewbauer
 /pkgs/top-level/release-cross.nix                @Ericson2314 @matthewbauer
-/pkgs/stdenv/generic                             @Ericson2314 @matthewbauer
+/pkgs/stdenv/generic                             @Ericson2314 @matthewbauer @amjoseph-nixpkgs
 /pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @matthewbauer @piegamesde
-/pkgs/stdenv/cross                               @Ericson2314 @matthewbauer
-/pkgs/build-support/cc-wrapper                   @Ericson2314
+/pkgs/stdenv/cross                               @Ericson2314 @matthewbauer @amjoseph-nixpkgs
+/pkgs/build-support/cc-wrapper                   @Ericson2314 @amjoseph-nixpkgs
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
@@ -124,7 +124,7 @@
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
 # C compilers
-/pkgs/development/compilers/gcc @matthewbauer
+/pkgs/development/compilers/gcc @matthewbauer @amjoseph-nixpkgs
 /pkgs/development/compilers/llvm @matthewbauer @RaitoBezarius
 
 # Compatibility stuff
@@ -195,6 +195,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/babeld.nix @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
+
+# Web servers
+/doc/builders/packages/nginx.section.md @raitobezarius
+/pkgs/servers/http/nginx/ @raitobezarius
+/nixos/modules/services/web-servers/nginx/ @raitobezarius
 
 # Dhall
 /pkgs/development/dhall-modules      @Gabriella439 @Profpatsch @ehmry
@@ -308,3 +313,6 @@ nixos/lib/make-single-disk-zfs-image.nix  @raitobezarius
 nixos/lib/make-multi-disk-zfs-image.nix   @raitobezarius
 nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
 nixos/tests/zfs.nix                       @raitobezarius
+
+# Linux Kernel
+pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs

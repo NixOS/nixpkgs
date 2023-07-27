@@ -39,6 +39,8 @@
 , nodePackages
 , nodejs_16
 , dart-sass-embedded
+, jq
+, moreutils
 
 , plugins ? []
 }@args:
@@ -225,6 +227,8 @@ let
       nodePackages.patch-package
       yarn
       nodejs_16
+      jq
+      moreutils
     ];
 
     outputs = [ "out" "javascripts" ];
@@ -266,9 +270,18 @@ let
 
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
+      find app/assets/javascripts -name package.json -print0 \
+        | xargs -0 -I {} bash -c "jq 'del(.scripts.postinstall)' -r <{} | sponge {}"
       yarn install --offline --cwd app/assets/javascripts/discourse
 
       patchShebangs app/assets/javascripts/node_modules/
+
+      # Run `patch-package` AFTER the corresponding shebang inside `.bin/patch-package`
+      # got patched. Otherwise this will fail with
+      #     /bin/sh: line 1: /build/source/app/assets/javascripts/node_modules/.bin/patch-package: cannot execute: required file not found
+      pushd app/assets/javascripts &>/dev/null
+        yarn run patch-package
+      popd &>/dev/null
 
       redis-server >/dev/null &
 

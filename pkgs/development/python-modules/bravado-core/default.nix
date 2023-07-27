@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "bravado-core";
-  version = "5.17.1";
+  version = "6.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7LnKNR1/YIzw2iIPYXAuoC6G7fdm4D3frkSl/wJhYG4=";
+    hash = "sha256-/ePs3znbwamMHHzb/PD4UHq+7v0j1r1X3J3Bnb4S2VU=";
   };
 
   propagatedBuildInputs = [

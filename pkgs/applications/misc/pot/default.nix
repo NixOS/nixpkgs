@@ -23,21 +23,16 @@
 
 stdenv.mkDerivation rec {
   pname = "pot";
-  version = "1.6.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = version;
-    hash = "sha256-AiDQleRMuLExaVuiLvubebobDaK2YJTWjZ00F5UptuQ=";
+    hash = "sha256-v5yx8pE8+m+5CDy7X3CwitYhFQMX8Ynt8Y2k1lEZKpg=";
   };
 
   sourceRoot = "source/src-tauri";
-
-  postUnpack = ''
-    sed -i -e 's/dev/v1/' source/src-tauri/Cargo.toml
-    cp ${./Cargo.lock} source/src-tauri/Cargo.lock
-  '';
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
@@ -81,10 +76,11 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tauri-plugin-single-instance-0.0.0" = "sha256-9eclolp+Gb8qF/KYIRiOoCJbMJLI8LyWLQu82npI7mQ=";
-      "tauri-plugin-autostart-0.0.0" = "sha256-9eclolp+Gb8qF/KYIRiOoCJbMJLI8LyWLQu82npI7mQ=";
+      "tauri-plugin-single-instance-0.0.0" = "sha256-Wb08d5Cpi8YhtngbnQ3ziy+zAwg5ZY+2xKejgE2oCNE=";
+      "tauri-plugin-autostart-0.0.0" = "sha256-Wb08d5Cpi8YhtngbnQ3ziy+zAwg5ZY+2xKejgE2oCNE=";
       "enigo-0.1.2" = "sha256-99VJ0WYD8jV6CYUZ1bpYJBwIE2iwOZ9SjOvyA2On12Q=";
-      "selection-0.1.0" = "sha256-85NUACRi7TjyMNKVz93G+W1EXKIVZZge/h/HtDwiW/Q=";
+      "selection-0.1.0" = "sha256-V4vixiyKqhpZeTXiFw0HKz5xr0zHd4DkC/hovJ8Y2a8=";
+      "screenshots-0.6.0" = "sha256-NHs7gqplg/eSUWYojayxeJtX7T4f8mt+akahi9LeukU=";
     };
   };
 

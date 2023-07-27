@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, meson, pkg-config, ninja, wayland-scanner
 , libdrm
-, minimal ? false, libva-minimal
+, minimal ? false
 , libX11, libXext, libXfixes, wayland, libffi, libGL
 , mesa
 # for passthru.tests
@@ -13,24 +13,24 @@
 
 stdenv.mkDerivation rec {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.18.0";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "sha256-VD+CTF0QLfzrUr4uFiyDlZux3MqsyyuJF/cXuhOFzwo=";
+    sha256 = "sha256-M6mAHvGl4d9EqdkDBSxSbpZUCUcrkpnf+hfo16L3eHs=";
   };
 
   outputs = [ "dev" "out" ];
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
+  nativeBuildInputs = [ meson pkg-config ninja ]
+    ++ lib.optional (!minimal) wayland-scanner;
 
   buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
-  # TODO: share libs between minimal and !minimal - perhaps just symlink them
+    ++ lib.optionals (!minimal) [ libX11 libXext libXfixes wayland libffi libGL ];
 
   mesonFlags = [
     # Add FHS and Debian paths for non-NixOS applications

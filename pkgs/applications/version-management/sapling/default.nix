@@ -38,7 +38,7 @@ let
   #
   # See https://github.com/NixOS/nixpkgs/pull/198311#issuecomment-1326894295
   myCargoSetupHook = rustPlatform.cargoSetupHook.overrideAttrs (old: {
-    cargoConfig = if stdenv.isDarwin then "" else old.cargoConfig;
+    cargoConfig = lib.optionalString (!stdenv.isDarwin) old.cargoConfig;
   });
 
   src = fetchFromGitHub {

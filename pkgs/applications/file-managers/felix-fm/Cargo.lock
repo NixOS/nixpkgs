@@ -323,7 +323,7 @@ checksum = "7fcaabb2fef8c910e7f4c7ce9f67a1283a1715879a7c230ca9d6d1ae31f16d91"
 
 [[package]]
 name = "felix"
-version = "2.4.1"
+version = "2.6.0"
 dependencies = [
  "chrono",
  "content_inspector",

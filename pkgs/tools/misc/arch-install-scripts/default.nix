@@ -7,7 +7,6 @@
 , gawk
 , gnugrep
 , gnum4
-, makeWrapper
 , pacman
 , util-linux
 , chrootPath ? [

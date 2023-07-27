@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyrosimple";
-  version = "2.9.0";
+  version = "2.9.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kannibalox";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KDQUSsotTpmnYq7kCRGIRWCZKxr2bxPKCvKy+OmoOm8=";
+    hash = "sha256-eRj9zHbopzwPvB3YxN5P8A/Dqwvh+FcIr+pEC0ov/xg=";
   };
 
   pythonRelaxDeps = [

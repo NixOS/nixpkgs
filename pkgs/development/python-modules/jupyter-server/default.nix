@@ -16,7 +16,6 @@
 , tornado
 , pyzmq
 , ipykernel
-, ipython_genutils
 , traitlets
 , jupyter-core
 , jupyter-client
@@ -30,7 +29,6 @@
 , anyio
 , websocket-client
 , requests
-, requests-unixsocket
 }:
 
 buildPythonPackage rec {
@@ -55,7 +53,6 @@ buildPythonPackage rec {
     jinja2
     tornado
     pyzmq
-    ipython_genutils
     traitlets
     jupyter-core
     jupyter-client
@@ -68,7 +65,6 @@ buildPythonPackage rec {
     prometheus-client
     anyio
     websocket-client
-    requests-unixsocket
   ];
 
   nativeCheckInputs = [

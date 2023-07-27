@@ -1268,6 +1268,7 @@ in {
           "AF_INET6"
           "AF_NETLINK"
           "AF_UNIX"
+          "AF_PACKET"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

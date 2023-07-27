@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dsmr-parser";
-  version = "1.2.3";
+  version = "1.2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ndokter";
     repo = "dsmr_parser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-M6ztqENIeD5foagKUXtJiGfFZPHsczlB0/AH4FMIsLY=";
+    hash = "sha256-R/4k6yZS96yAkjhO/Ay9MJ2KUlq9TFQvsUoqpjvZcKI=";
   };
 
   propagatedBuildInputs = [

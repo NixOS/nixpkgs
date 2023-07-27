@@ -127,7 +127,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -268,6 +267,7 @@ in {
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_3_hardened = hardenedKernelFor kernels.linux_6_3 { };
+    linux_6_4_hardened = hardenedKernelFor kernels.linux_6_4 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
@@ -348,6 +348,8 @@ in {
     exfat-nofuse = if lib.versionOlder kernel.version "5.8" then callPackage ../os-specific/linux/exfat { } else null;
 
     evdi = callPackage ../os-specific/linux/evdi { };
+
+    fanout = callPackage ../os-specific/linux/fanout { };
 
     fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
 
@@ -504,6 +506,8 @@ in {
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
 
+    trelay = callPackage ../os-specific/linux/trelay { };
+
     usbip = callPackage ../os-specific/linux/usbip { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
@@ -614,6 +618,7 @@ in {
     linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_3_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_3_hardened);
+    linux_6_4_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_4_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

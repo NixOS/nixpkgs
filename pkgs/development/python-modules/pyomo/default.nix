@@ -56,6 +56,6 @@ buildPythonPackage rec {
     homepage = "http://pyomo.org";
     changelog = "https://github.com/Pyomo/pyomo/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

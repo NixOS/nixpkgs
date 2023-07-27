@@ -1,6 +1,5 @@
 { lib
 , stdenvNoCC
-, callPackage
 , fetchurl
 , autoPatchelfHook
 , unzip
@@ -12,7 +11,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "0.6.13";
+  version = "0.7.0";
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
@@ -33,19 +32,19 @@ stdenvNoCC.mkDerivation rec {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        sha256 = "6d4pDuAJCgUIFpmp8gGLn2rHvpQ54I6vCXU2WmIYe0M=";
+        hash = "sha256-5PcDK1rSHu9WucCuxBclnEzB9DkbQNwzYnq0Moto9aw=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        sha256 = "Hr3c0840fz47jDNjigTsz7HEUSP6btXVDFUUtDtdO5I=";
+        hash = "sha256-9Kwqa3V/LMjuZSS00uPNkHAnWvBo/33kgzmwa903T80=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
-        sha256 = "H7pjr6ySoxYOGrOpLjzMb/b3BiG50XSmMi6atQooRN4=";
+        hash = "sha256-aH5ldcHKk3VzJ13qoHt9qt/TYZvg35jZG8NQ3GGnE9I=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        sha256 = "f3VysZdTfs4G4a48AahbaEACVpiKPG7OfbAYTCGHi1k=";
+        hash = "sha256-cczuQoE6LV9NPaHx14Z6va4QsXb3cUYL799SGzKTIYA=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -64,7 +63,7 @@ stdenvNoCC.mkDerivation rec {
   };
   meta = with lib; {
     homepage = "https://bun.sh";
-    changelog = "https://github.com/Jarred-Sumner/bun/releases/tag/bun-v${version}";
+    changelog = "https://bun.sh/blog/bun-v${version}";
     description = "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     longDescription = ''
@@ -74,7 +73,7 @@ stdenvNoCC.mkDerivation rec {
       mit # bun core
       lgpl21Only # javascriptcore and webkit
     ];
-    maintainers = with maintainers; [ DAlperin jk thilobillerbeck ];
+    maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman ];
     platforms = builtins.attrNames passthru.sources;
   };
 }

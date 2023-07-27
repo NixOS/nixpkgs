@@ -55,7 +55,17 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  preCheck = "patchShebangs tests/*.sh";
+  preCheck = ''
+    patchShebangs tests/*.sh
+    export RNGD_JITTER_TIMEOUT=10
+  '';
+  # After updating to jitterentropy 3.4.1 jitterentropy initialization seams
+  # to have increased. On some system rng-tools fail therefore to initialize the
+  # jitterentropy entropy source. You can increase the init timeout with a command-line
+  # option (-O jitter:timeout:SECONDS). The environment variable above only has effect
+  # for the test cases.
+  # Patching the timeout to a larger value was declined upstream,
+  # see (https://github.com/nhorman/rng-tools/pull/178).
   nativeCheckInputs = [ psmisc ]; # rngtestjitter.sh needs killall
 
   doInstallCheck = true;

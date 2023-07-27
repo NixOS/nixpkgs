@@ -11,7 +11,7 @@ mkYarnPackage {
   packageJSON = ./woodpecker-package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = "${common.src}/web/yarn.lock";
-    sha256 = common.yarnSha256;
+    hash = common.yarnHash;
   };
 
   buildPhase = ''

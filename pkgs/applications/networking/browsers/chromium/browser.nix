@@ -86,7 +86,7 @@ mkChromiumDerivation (base: rec {
       else "https://www.chromium.org/";
     maintainers = with lib.maintainers; if ungoogled
       then [ squalus primeos michaeladler networkexception ]
-      else [ primeos thefloweringash ];
+      else [ primeos thefloweringash networkexception ];
     license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     mainProgram = "chromium";

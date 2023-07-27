@@ -139,3 +139,111 @@ index 106b161..fc4de9d 100644
  		} else {
  			DB_ASSERT(env, sharecount > 0);
  			MEMBAR_EXIT();
+diff -ur a/dist/aclocal/clock.m4 b/dist/aclocal/clock.m4
+--- a/dist/aclocal/clock.m4	1969-12-31 19:00:01.000000000 -0500
++++ b/dist/aclocal/clock.m4	2023-06-05 19:14:02.007080500 -0400
+@@ -21,6 +21,7 @@
+ AC_CACHE_CHECK([for clock_gettime monotonic clock], db_cv_clock_monotonic, [
+ AC_TRY_RUN([
+ #include <sys/time.h>
++int
+ main() {
+ 	struct timespec t;
+ 	return (clock_gettime(CLOCK_MONOTONIC, &t) != 0);
+diff -ur a/dist/aclocal/mmap.m4 b/dist/aclocal/mmap.m4
+--- a/dist/aclocal/mmap.m4	1969-12-31 19:00:01.000000000 -0500
++++ b/dist/aclocal/mmap.m4	2023-06-05 19:14:02.007323624 -0400
+@@ -29,6 +29,8 @@
+      * system to system.
+      */
+     #include <stdio.h>
++    #include <stdlib.h>
++    #include <unistd.h>
+     #include <string.h>
+     #include <sys/types.h>
+     #include <sys/stat.h>
+@@ -42,12 +44,13 @@
+     #define MAP_FAILED (-1)
+     #endif
+
+-    int catch_sig(sig)
++    void catch_sig(sig)
+ 	    int sig;
+     {
+ 	    exit(1);
+     }
+
++    int
+     main() {
+ 	    const char *underlying;
+ 	    unsigned gapsize;
+@@ -88,8 +91,8 @@
+ 		    return (4);
+ 	    }
+
+-	    (void) signal(SIGSEGV, catch_sig);
+-	    (void) signal(SIGBUS, catch_sig);
++	    (void) signal(SIGSEGV, &catch_sig);
++	    (void) signal(SIGBUS, &catch_sig);
+
+ 	    for (i = sizeof(buf); i < total_size; i += gapsize)
+ 		    base[i] = 'A';
+diff -ur a/dist/aclocal/mutex.m4 b/dist/aclocal/mutex.m4
+--- a/dist/aclocal/mutex.m4	1969-12-31 19:00:01.000000000 -0500
++++ b/dist/aclocal/mutex.m4	2023-06-05 19:14:47.214158196 -0400
+@@ -5,6 +5,7 @@
+ AC_TRY_RUN([
+ #include <stdlib.h>
+ #include <pthread.h>
++int
+ main() {
+ 	pthread_cond_t cond;
+ 	pthread_mutex_t mutex;
+@@ -49,6 +50,7 @@
+ AC_TRY_RUN([
+ #include <stdlib.h>
+ #include <pthread.h>
++int
+ main() {
+ 	pthread_cond_t cond;
+ 	pthread_mutex_t mutex;
+@@ -89,6 +91,7 @@
+ AC_TRY_RUN([
+ #include <stdlib.h>
+ #include <pthread.h>
++int
+ main() {
+ 	pthread_cond_t cond;
+ 	pthread_condattr_t condattr;
+@@ -110,6 +113,7 @@
+ AC_TRY_RUN([
+ #include <stdlib.h>
+ #include <pthread.h>
++int
+ main() {
+ 	pthread_rwlock_t rwlock;
+ 	pthread_rwlockattr_t rwlockattr;
+diff -ur a/dist/aclocal/sequence.m4 b/dist/aclocal/sequence.m4
+--- a/dist/aclocal/sequence.m4	1969-12-31 19:00:01.000000000 -0500
++++ b/dist/aclocal/sequence.m4	2023-06-05 19:14:02.007869956 -0400
+@@ -43,6 +43,9 @@
+ 	# test, which won't test for the appropriate printf format strings.
+ 	if test "$db_cv_build_sequence" = "yes"; then
+ 		AC_TRY_RUN([
++		#include <string.h>
++		#include <stdio.h>
++		int
+ 		main() {
+ 			$db_cv_seq_type l;
+ 			unsigned $db_cv_seq_type u;
+@@ -59,7 +62,9 @@
+				return (1);
+ 			return (0);
+ 		}],, [db_cv_build_sequence="no"],
+-		AC_TRY_LINK(,[
++		AC_TRY_LINK([
++			#include <string.h>
++			#include <stdio.h>],[
+ 			$db_cv_seq_type l;
+ 			unsigned $db_cv_seq_type u;
+ 			char buf@<:@100@:>@;

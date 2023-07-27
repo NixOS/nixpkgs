@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, patchelf }:
+{ lib, stdenv, fetchzip }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -11,14 +11,14 @@ let
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-linux = "sha256-B2dK4yZPBitt6WT0wBJB2Wvly3ykDlFVZT5409XH7GY=";
-    aarch64-linux = "sha256-FQ+RvOmB4j3Y67tIx0OqkjFunkhYMNJASZUkTOMxKTU=";
-    armv7l-linux = "sha256-bRhaF3PaulcjzVxB3kalvHrJKK8sEOnmXJnjBI7yBbk=";
+    x86_64-linux = "sha256-sHQD8uN8Pm/LnayW1XdWXJ90gN4cCE4sGd+Or4TlhP8=";
+    aarch64-linux = "sha256-VJaVC+sfqdT0BnV1v8MjzftemP4Iuln1wy3BaCTbeYA=";
+    armv7l-linux = "sha256-7v9u7OtUbtnzvlTBvO5zuIuTgNqualxYsrv97TZGa9U=";
   }.${system} or throwSystem;
 in
 stdenv.mkDerivation rec {
   pname = "zrok";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchzip {
     url = "https://github.com/openziti/zrok/releases/download/v${version}/zrok_${version}_${plat}.tar.gz";

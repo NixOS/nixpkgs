@@ -71,6 +71,8 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     }
 
     rm -rf jbr
+    # When using the IDE as a remote backend using gateway, it expects the jbr directory to contain the jdk
+    ln -s ${jdk.home} jbr
 
     interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
     if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" && -e bin/fsnotifier64 ]]; then
@@ -81,6 +83,10 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       target_size=$(get_file_size bin/fsnotifier)
       patchelf --set-interpreter "$interpreter" bin/fsnotifier
       munge_size_hack bin/fsnotifier $target_size
+    fi
+
+    if [ -d "plugins/remote-dev-server" ]; then
+      patch -p1 < ${./JetbrainsRemoteDev.patch}
     fi
   '';
 
@@ -97,7 +103,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     jdk=${jdk.home}
     item=${desktopItem}
 
-    makeWrapper "$out/$pname/bin/${loName}.sh" "$out/bin/${pname}" \
+    wrapProgram  "$out/$pname/bin/${loName}.sh" \
       --prefix PATH : "$out/libexec/${pname}:${lib.makeBinPath [ jdk coreutils gnugrep which git python3 ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
         # Some internals want libstdc++.so.6
@@ -112,11 +118,14 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set ${hiName}_JDK "$jdk" \
       --set ${hiName}_VM_OPTIONS ${vmoptsFile}
 
+    ln -s "$out/$pname/bin/${loName}.sh" $out/bin/$pname
+    echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
+    chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh
+    ln -s "$out/$pname/bin/remote-dev-server-wrapped.sh" $out/bin/$pname-remote-dev-server
     ln -s "$item/share/applications" $out/share
 
     runHook postInstall
   '';
-
 } // lib.optionalAttrs (!(meta.license.free or true)) {
   preferLocalBuild = true;
 })

@@ -8,17 +8,18 @@
 , zlib
 , testers
 , mold
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "1.11.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dfdrXp05eJALTQnx2F3GxRWKMA+Icj0mRPcb72z7qMw=";
+    hash = "sha256-dEmwVgo9XiU3WtObVL5VbFW7rEzdFfnRepcbyGxX1JM=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,10 @@ stdenv.mkDerivation rec {
     mimalloc
   ];
 
+  patches = [
+    ./fix-debug-strip.patch # fix --debug-strip; https://github.com/rui314/mold/pull/1038
+  ];
+
   postPatch = ''
     sed -i CMakeLists.txt -e '/.*set(DEST\ .*/d'
   '';
@@ -45,7 +50,10 @@ stdenv.mkDerivation rec {
     "-faligned-allocation"
   ]);
 
-  passthru.tests.version = testers.testVersion { package = mold; };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = mold; };
+  };
 
   meta = with lib; {
     description = "A faster drop-in replacement for existing Unix linkers";
@@ -57,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/rui314/mold";
     changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
-    license = licenses.agpl3Plus;
+    license = licenses.mit;
     maintainers = with maintainers; [ azahi nitsky ];
     platforms = platforms.unix;
   };

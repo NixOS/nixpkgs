@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -27,15 +27,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blackbox";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "raggesilver";
     repo = "blackbox";
     rev = "v${version}";
-    hash = "sha256-qz1805HLG/Yexilw0YCkTzed1wqonUtJ+QrbMyhKHh8=";
+    hash = "sha256-ebwh9WTooJuvYFIygDBn9lYC7+lx9P1HskvKU8EX9jw=";
   };
+
+  patches = [
+    # Fix closing confirmation dialogs not showing
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/raggesilver/blackbox/-/commit/3978c9b666d27adba835dd47cf55e21515b6d6d9.patch";
+      hash = "sha256-L/Ci4YqYNzb3F49bUwEWSjzr03MIPK9A5FEJCCct+7A=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
@@ -63,6 +71,8 @@ stdenv.mkDerivation rec {
     librsvg
     libgee
   ];
+
+  mesonFlags = [ "-Dblackbox_is_flatpak=false" ];
 
   meta = with lib; {
     description = "Beautiful GTK 4 terminal";

@@ -72,6 +72,23 @@ CTAN and the various mirrors) and that the build recipe continues to produce
 the same output. Should those assumptions not hold, remove the previous fixed
 hashes for the relevant package, or for all packages.
 
+### Updating the licensing information
+
+The license of each package in texlive is automatically extracted from texlive's
+texlive.tlpdb into tlpdb.nix. The combined licenses of the schemes is stored
+separately in `default.nix` and must be kept in sync with the licenses of the
+actual contents of these schemes. Whether this is the case can be verified with the
+`pkgs.tests.texlive.licenses` test. In case of a mismatch, copy the “correct”
+license lists reported by the test into `default.nix`.
+
+### Running the testsuite
+
+There are a some other useful tests that haven't been mentioned before. Build them with
+```
+nix-build ../../../../.. -A tests.texlive --no-out-link
+```
+
+
 ### Commit changes
 
 Commit the updated `tlpdb.nix` and `fixed-hashes.nix` to the repository with

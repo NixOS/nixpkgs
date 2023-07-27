@@ -38,7 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ zlib bzip2 brotli libpng ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs = [ pkg-config which makeWrapper ]
+  nativeBuildInputs = [ pkg-config which ]
+    ++ lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ lib.optional (!stdenv.isLinux) gnumake;
 
@@ -63,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = glib.flattenInclude + ''
     substituteInPlace $dev/bin/freetype-config \
       --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
+  '' + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
 
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"

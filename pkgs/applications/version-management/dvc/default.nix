@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "3.4.0";
+  version = "3.5.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-dFwcVktK9EKKuAbY0xhRxtpCPld9+gFHnTd8wSmt1+4=";
+    hash = "sha256-1kVc7+36rvIpoSinpyxMMs1/nhZrwv1pPWJsruFd1N8=";
   };
 
   pythonRelaxDeps = [
@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    substituteInPlace dvc/analytics.py --replace 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';

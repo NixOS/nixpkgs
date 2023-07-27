@@ -2,6 +2,7 @@
 , black
 , boto3
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , isort
 , jinja2
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.14.5";
+  version = "7.15.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     rev = "refs/tags/${version}";
-    hash = "sha256-T8BIfopprCfcOpv92soTD3S4eYoAdT70pSMSHlFbBuE=";
+    hash = "sha256-pZBAzy1MK8Mm9QyUM5/t8JKs3q/cYOmzCWRC4H0aWjY=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     black
     boto3
+    cryptography
     isort
     jinja2
     md-toc

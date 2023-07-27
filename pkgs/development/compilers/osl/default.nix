@@ -4,6 +4,7 @@
 , cmake
 , clang
 , libclang
+, libxml2
 , zlib
 , openexr
 , openimageio
@@ -67,6 +68,8 @@ in stdenv.mkDerivation rec {
     python3.pkgs.pybind11
     util-linux # needed just for hexdump
     zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    libxml2
   ];
 
   postFixup = ''
@@ -79,6 +82,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://opensource.imageworks.com/osl.html";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -4,18 +4,18 @@
 , swtpm
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "age-plugin-tpm";
-  version = "unstable-2023-05-02";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "age-plugin-tpm";
-    rev = "c570739b05c067087c44f651efce6890eedc0647";
-    hash = "sha256-xlJtyNAYi/6vBWLsjymFLGfr30w80OplwG2xGTEB118=";
+    rev = "v${version}";
+    hash = "sha256-Gp7n2/+vgQbsm/En6PQ1to/W6lvFam4Wh3LHdCZnafc=";
   };
 
-  vendorHash = "sha256-S9wSxw0ZMibCOspgGt5vjzFhPL+bZncjTdIX2mkX5vE=";
+  vendorHash = "sha256-oZni/n2J0N3ZxNhf+RlUWyWeOFwL4+6KUIk6DQF8YpA=";
 
   postConfigure = ''
     substituteInPlace vendor/github.com/foxboron/swtpm_test/swtpm.go \
@@ -32,10 +32,10 @@ buildGoModule {
   ];
 
   meta = with lib; {
-    description = "TPM 2.0 plugin for age";
+    description = "TPM 2.0 plugin for age (This software is experimental, use it at your own risk)";
     homepage = "https://github.com/Foxboron/age-plugin-tpm";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes sgo ];
   };
 }

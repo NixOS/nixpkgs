@@ -26,7 +26,7 @@ mkYarnPackage rec {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     rev = data.version;
-    sha256 = data.srcHash;
+    hash = data.srcHash;
   };
 
   packageJSON = ./package.json;
@@ -39,7 +39,7 @@ mkYarnPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = data.cargoHash;
+    hash = data.cargoHash;
   };
 
   packageResolutions = {

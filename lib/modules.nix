@@ -539,59 +539,74 @@ let
 
   mergeModules' = prefix: options: configs:
     let
-     /* byName is like foldAttrs, but will look for attributes to merge in the
-        specified attribute name.
-
-        byName "foo" (module: value: ["module.hidden=${module.hidden},value=${value}"])
-        [
-          {
-            hidden="baz";
-            foo={qux="bar"; gla="flop";};
-          }
-          {
-            hidden="fli";
-            foo={qux="gne"; gli="flip";};
-          }
-        ]
-        ===>
-        {
-          gla = [ "module.hidden=baz,value=flop" ];
-          gli = [ "module.hidden=fli,value=flip" ];
-          qux = [ "module.hidden=baz,value=bar" "module.hidden=fli,value=gne" ];
-        }
-      */
-      byName = attr: f: modules:
-        zipAttrsWith (n: concatLists)
-          (map (module: let subtree = module.${attr}; in
+      # an attrset 'name' => list of submodules that declare ‘name’.
+      declsByName =
+        zipAttrsWith
+          (n: concatLists)
+          (map
+            (module: let subtree = module.options; in
               if !(builtins.isAttrs subtree) then
-                throw (if attr == "config" then ''
-                  You're trying to define a value of type `${builtins.typeOf subtree}'
-                  rather than an attribute set for the option
-                  `${builtins.concatStringsSep "." prefix}'!
-
-                  This usually happens if `${builtins.concatStringsSep "." prefix}' has option
-                  definitions inside that are not matched. Please check how to properly define
-                  this option by e.g. referring to `man 5 configuration.nix'!
-                '' else ''
+                throw ''
                   An option declaration for `${builtins.concatStringsSep "." prefix}' has type
                   `${builtins.typeOf subtree}' rather than an attribute set.
                   Did you mean to define this outside of `options'?
-                '')
+                ''
               else
-                mapAttrs (n: f module) subtree
-              ) modules);
-      # an attrset 'name' => list of submodules that declare ‘name’.
-      declsByName = byName "options" (module: option:
-          [{ inherit (module) _file; options = option; }]
-        ) options;
+                mapAttrs
+                  (n: option:
+                    [{ inherit (module) _file; options = option; }]
+                  )
+                  subtree
+              )
+            options);
+
+      # The root of any module definition must be an attrset.
+      checkedConfigs =
+        assert
+          lib.all
+            (c:
+              # TODO: I have my doubts that this error would occur when option definitions are not matched.
+              #       The implementation of this check used to be tied to a superficially similar check for
+              #       options, so maybe that's why this is here.
+              isAttrs c.config || throw ''
+                In module `${c.file}', you're trying to define a value of type `${builtins.typeOf c.config}'
+                rather than an attribute set for the option
+                `${builtins.concatStringsSep "." prefix}'!
+
+                This usually happens if `${builtins.concatStringsSep "." prefix}' has option
+                definitions inside that are not matched. Please check how to properly define
+                this option by e.g. referring to `man 5 configuration.nix'!
+              ''
+            )
+            configs;
+        configs;
+
       # an attrset 'name' => list of submodules that define ‘name’.
-      defnsByName = byName "config" (module: value:
-          map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
-        ) configs;
+      pushedDownDefinitionsByName =
+        zipAttrsWith
+          (n: concatLists)
+          (map
+            (module:
+              mapAttrs
+                (n: value:
+                  map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+                )
+              module.config
+            )
+            checkedConfigs);
       # extract the definitions for each loc
-      defnsByName' = byName "config" (module: value:
-          [{ inherit (module) file; inherit value; }]
-        ) configs;
+      rawDefinitionsByName =
+        zipAttrsWith
+          (n: concatLists)
+          (map
+            (module:
+              mapAttrs
+                (n: value:
+                  [{ inherit (module) file; inherit value; }]
+                )
+                module.config
+            )
+            checkedConfigs);
 
       # Convert an option tree decl to a submodule option decl
       optionTreeToOption = decl:
@@ -613,8 +628,8 @@ let
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
-          defns = defnsByName.${name} or [];
-          defns' = defnsByName'.${name} or [];
+          defns = pushedDownDefinitionsByName.${name} or [];
+          defns' = rawDefinitionsByName.${name} or [];
           optionDecls = filter (m: isOption m.options) decls;
         in
           if length optionDecls == length decls then
@@ -624,7 +639,7 @@ let
               unmatchedDefns = [];
             }
           else if optionDecls != [] then
-              if all (x: x.options.type.name == "submodule") optionDecls
+              if all (x: x.options.type.name or null == "submodule") optionDecls
               # Raw options can only be merged into submodules. Merging into
               # attrsets might be nice, but ambiguous. Suppose we have
               # attrset as a `attrsOf submodule`. User declares option
@@ -657,7 +672,7 @@ let
         # Propagate all unmatched definitions from nested option sets
         mapAttrs (n: v: v.unmatchedDefns) resultsByName
         # Plus the definitions for the current prefix that don't have a matching option
-        // removeAttrs defnsByName' (attrNames matchedOptions);
+        // removeAttrs rawDefinitionsByName (attrNames matchedOptions);
     in {
       inherit matchedOptions;
 

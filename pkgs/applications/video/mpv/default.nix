@@ -67,7 +67,7 @@
 , sdl2Support        ? true,           SDL2
 , sixelSupport       ? false,          libsixel
 , speexSupport       ? true,           speex
-, swiftSupport       ? stdenv.isDarwin && stdenv.isAarch64, swift
+, swiftSupport       ? stdenv.isDarwin, swift
 , theoraSupport      ? true,           libtheora
 , vaapiSupport       ? x11Support || waylandSupport, libva
 , vapoursynthSupport ? false,          vapoursynth
@@ -82,7 +82,20 @@ let
   inherit (darwin.apple_sdk_11_0.frameworks)
     AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer Accelerate;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
-in stdenv.mkDerivation (finalAttrs: {
+
+  overrideSDK = platform: version:
+    platform // lib.optionalAttrs (platform ? darwinMinVersion) {
+      darwinMinVersion = version;
+    };
+
+  stdenv' = if swiftSupport && stdenv.isDarwin && stdenv.isx86_64
+    then stdenv.override (old: {
+      buildPlatform = overrideSDK old.buildPlatform "10.15";
+      hostPlatform = overrideSDK old.hostPlatform "10.15";
+      targetPlatform = overrideSDK old.targetPlatform "10.15";
+    })
+    else stdenv;
+in stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
   version = "0.35.1";
 
@@ -201,6 +214,7 @@ in stdenv.mkDerivation (finalAttrs: {
     cp ../TOOLS/umpv $out/bin
     cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
     sed -i '/Icon=/ ! s/mpv/umpv/g; s/^Exec=.*/Exec=umpv %U/' $out/share/applications/umpv.desktop
+    printf "NoDisplay=true\n" >> $out/share/applications/umpv.desktop
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r mpv.app $out/Applications

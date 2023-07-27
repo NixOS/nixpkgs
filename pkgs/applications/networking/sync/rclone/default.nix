@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles, fetchpatch
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
 , makeWrapper
 , enableCmount ? true, fuse, macfuse-stubs
 , librclone
@@ -6,25 +6,16 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.63.0";
+  version = "1.63.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ojP1Uf9iP6kOlzW8qsUx1SnMRxFZLsgkjFD4LVH0oTI=";
+    hash = "sha256-H//Y7BFBr3VXAoKZZgjSgU4aA+Af7tvFozhpoj14ba0=";
   };
 
-  patches = [
-    # Fix build on aarch64-darwin. Remove with the next release.
-    # https://github.com/rclone/rclone/pull/7099
-    (fetchpatch {
-      url = "https://github.com/rclone/rclone/commit/fb5125ecee4ae1061ff933bb3b9b19243e022241.patch";
-      hash = "sha256-3SzU9iiQM8zeL7VQhmq0G6e0km8WBRz4BSplRLE1vpM=";
-    })
-  ];
-
-  vendorSha256 = "sha256-AXgyyI6ZbTepC/TGkHQvHiwpQOjzwG5ung71nKE5d1Y=";
+  vendorHash = "sha256-AXgyyI6ZbTepC/TGkHQvHiwpQOjzwG5ung71nKE5d1Y=";
 
   subPackages = [ "." ];
 

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timg";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "timg";
     rev = "v${version}";
-    hash = "sha256-1zv5+62roS0iSVXa1QXGKuO0Qd6D3e3tZD2HZ5czRRk=";
+    hash = "sha256-hGQL6MAsaSVV/w5fDKAcd4KIBuh2pvl3D2QUzi/aeG0=";
   };
 
   buildInputs = [

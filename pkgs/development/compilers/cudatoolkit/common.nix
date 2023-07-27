@@ -24,6 +24,7 @@ args@
 , libkrb5
 , krb5
 , makeWrapper
+, markForCudatoolkitRootHook
 , ncurses5
 , numactl
 , nss
@@ -31,6 +32,7 @@ args@
 , python3 # FIXME: CUDAToolkit 10 may still need python27
 , pulseaudio
 , requireFile
+, setupCudaHook
 , stdenv
 , backendStdenv # E.g. gcc11Stdenv, set in extension.nix
 , unixODBC
@@ -80,10 +82,14 @@ backendStdenv.mkDerivation rec {
     addOpenGLRunpath
     autoPatchelfHook
     autoAddOpenGLRunpathHook
+    markForCudatoolkitRootHook
   ] ++ lib.optionals (lib.versionOlder version "11") [
     libsForQt5.wrapQtAppsHook
   ] ++ lib.optionals (lib.versionAtLeast version "11.8") [
     qt6Packages.wrapQtAppsHook
+  ];
+  depsTargetTargetPropagated = [
+    setupCudaHook
   ];
   buildInputs = lib.optionals (lib.versionOlder version "11") [
     libsForQt5.qt5.qtwebengine
@@ -129,10 +135,10 @@ backendStdenv.mkDerivation rec {
     (lib.getLib libtiff)
     qt6Packages.qtwayland
     rdma-core
-    ucx
+    (ucx.override { enableCuda = false; }) # Avoid infinite recursion
     xorg.libxshmfence
     xorg.libxkbfile
-  ] ++ (lib.optionals (lib.versionAtLeast version "12.1") (map lib.getLib ([
+  ] ++ (lib.optionals (lib.versionAtLeast version "12") (map lib.getLib ([
     # Used by `/target-linux-x64/CollectX/clx` and `/target-linux-x64/CollectX/libclx_api.so` for:
     # - `libcurl.so.4`
     curlMinimal
@@ -177,7 +183,9 @@ backendStdenv.mkDerivation rec {
     "libcom_err.so.2"
   ];
 
-  preFixup = ''
+  preFixup = if lib.versionOlder version "11" then ''
+    patchelf $out/targets/*/lib/libnvrtc.so --add-needed libnvrtc-builtins.so
+  '' else ''
     patchelf $out/lib64/libnvrtc.so --add-needed libnvrtc-builtins.so
   '';
 
@@ -280,24 +288,12 @@ backendStdenv.mkDerivation rec {
     sed -i "1 i#define _BITS_FLOATN_H" "$out/include/host_defines.h"
   '' +
   # Point NVCC at a compatible compiler
-  # FIXME: redist cuda_nvcc copy-pastes this code
-  # Refer to comments in the overrides for cuda_nvcc for explanation
   # CUDA_TOOLKIT_ROOT_DIR is legacy,
   # Cf. https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
-  # NOTE: We unconditionally set -Xfatbin=-compress-all, which reduces the size of the compiled
-  #   binaries. If binaries grow over 2GB, they will fail to link. This is a problem for us, as
-  #   the default set of CUDA capabilities we build can regularly cause this to occur (for
-  #   example, with Magma).
   ''
     mkdir -p $out/nix-support
     cat <<EOF >> $out/nix-support/setup-hook
     cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'
-    cmakeFlags+=' -DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
-    cmakeFlags+=' -DCMAKE_CUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
-    if [ -z "\''${CUDAHOSTCXX-}" ]; then
-      export CUDAHOSTCXX=${backendStdenv.cc}/bin;
-    fi
-    export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${backendStdenv.cc}/bin -Xfatbin=-compress-all'
     EOF
 
     # Move some libraries to the lib output so that programs that

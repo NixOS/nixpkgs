@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "nitransforms";
-  version = "23.0.0";
+  version = "23.0.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Jzb0W3HHxkNPyPcAT2G9T8zLOfq7xQTwGA6IUO5a6KA=";
+    hash = "sha256-Lty4aPzSlwRJSqCXeIVICF+gudYqto1OS4cVZyrB2nY=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];

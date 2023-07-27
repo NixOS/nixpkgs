@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Provides a function install() which makes the mock module";
     homepage = "https://github.com/jaraco/backports.unittest_mock";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

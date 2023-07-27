@@ -2,17 +2,17 @@
 , stdenvNoCC
 , fetchurl
 , makeWrapper
-, jdk11_headless
+, jdk17_headless
 , nixosTests
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "komga";
-  version = "0.165.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://github.com/gotson/${pname}/releases/download/v${version}/${pname}-${version}.jar";
-    sha256 = "sha256-J8dpw7GzLJnLiiFSFVCoqZFQ6mI2z0zBZHdbmxMgmf8=";
+    sha256 = "sha256-+4At5of/jaol4c1eElpw/D9hDnWSkc8x4gCmqqg88as=";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   buildCommand = ''
-    makeWrapper ${jdk11_headless}/bin/java $out/bin/komga --add-flags "-jar $src"
+    makeWrapper ${jdk17_headless}/bin/java $out/bin/komga --add-flags "-jar $src"
   '';
 
   passthru.tests = {
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Free and open source comics/mangas server";
     homepage = "https://komga.org/";
     license = licenses.mit;
-    platforms = jdk11_headless.meta.platforms;
+    platforms = jdk17_headless.meta.platforms;
     maintainers = with maintainers; [ govanify ];
   };
 
