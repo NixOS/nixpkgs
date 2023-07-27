@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pecan";
-  version = "1.4.2";
+  version = "1.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SbJV5wHD8UYWBfWw6PVPDCGSLXhF1BTCTdZAn+aV1VA=";
+    hash = "sha256-YGMnLV+GB3P7tLSyrhsJ2oyVQGLvhxFQwGz9sjkdk1U=";
   };
 
   propagatedBuildInputs = [
