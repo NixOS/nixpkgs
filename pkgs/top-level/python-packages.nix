@@ -7315,6 +7315,8 @@ self: super: with self; {
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
 
+  onnxmltools = callPackage ../development/python-modules/onnxmltools { };
+
   onnxruntime = callPackage ../development/python-modules/onnxruntime {
     onnxruntime = pkgs.onnxruntime.override {
       python3Packages = self;
