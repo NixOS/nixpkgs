@@ -57,12 +57,10 @@ wlroots.overrideAttrs
         "${hyprland.src}/nix/patches/wlroots-nvidia.patch"
       ]);
 
-    postPatch =
-      (old.postPatch or "")
-      + (
-        lib.optionalString enableNvidiaPatches
-          ''substituteInPlace render/gles2/renderer.c --replace "glFlush();" "glFinish();"''
-      );
+    # don't need old.postPatch for hwdata's path in wlroots 0.16
+    postPatch = lib.optionalString enableNvidiaPatches ''
+      substituteInPlace render/gles2/renderer.c --replace "glFlush();" "glFinish();"
+    '';
 
     buildInputs = old.buildInputs ++ [
       hwdata
