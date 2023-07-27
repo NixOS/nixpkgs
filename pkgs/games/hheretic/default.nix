@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "hhexen";
-  version = "1.6.3";
+  pname = "hheretic";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "sezero";
-    repo = "hhexen";
-    rev = "hhexen-${finalAttrs.version}";
-    hash = "sha256-y3jKfU4e8R2pJQN/FN7W6KQ7D/P+7pmQkdmZug15ApI=";
+    repo = "hheretic";
+    rev = "hheretic-${finalAttrs.version}";
+    hash = "sha256-e9N869W8STZdLUBSscxEnF2Z+SrdVv8ARDL8AMe1SJ8=";
   };
 
   nativeBuildInputs = [
@@ -36,21 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 hhexen-gl -t $out/bin
+    install -Dm755 hheretic-gl -t $out/bin
 
     runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater {
-    rev-prefix = "hhexen-";
+    rev-prefix = "hheretic-";
   };
 
   meta = {
-    description = "Linux port of Raven Game's Hexen";
+    description = "Linux port of Raven Game's Heretic";
     homepage = "https://hhexen.sourceforge.net/hhexen.html";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ moody djanatyn ];
-    mainProgram = "hhexen-gl";
+    mainProgram = "hheretic-gl";
+    maintainers = with lib.maintainers; [ moody ];
     inherit (SDL.meta) platforms;
   };
 })

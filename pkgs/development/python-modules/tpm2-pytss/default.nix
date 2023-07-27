@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 , asn1crypto
 , cffi
@@ -27,6 +28,19 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-W1tLFFb9wa7vPSw5cL6qB4yPfyZIyXppvPYMWi+VyJc=";
   };
+
+  patches = [
+    # This patches the call to the C preprocessor not to include types
+    # pycparser does not handle.
+    # `hardeningDisable = [ "fortify" ]` would have the same effect but
+    # would also disable hardening from generated FFI objects.
+    #
+    # backport of https://github.com/tpm2-software/tpm2-pytss/pull/523
+    (fetchpatch {
+      url = "https://github.com/baloo/tpm2-pytss/commit/099c069f28cfcd0a3019adebfeafa976f9395221.patch";
+      sha256 = "sha256-wU2WfLYFDmkhGzYornZ386tB3zb3GYfGOTc+/QOFb1o=";
+    })
+  ];
 
   nativeBuildInputs = [
     cffi

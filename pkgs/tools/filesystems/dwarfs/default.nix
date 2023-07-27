@@ -9,7 +9,6 @@
 , double-conversion
 , fmt_8
 , fuse3
-, gflags
 , glog
 , gtest
 , jemalloc
