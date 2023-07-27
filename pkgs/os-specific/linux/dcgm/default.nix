@@ -105,7 +105,11 @@ in gcc11Stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    # autoAddOpenGLRunpathHook does not actually depend on or incur any dependency
+    # of cudaPackages. It merely adds an impure, non-Nix PATH to the RPATHs of
+    # executables that need to use cuda at runtime.
+    cudaPackages_12.autoAddOpenGLRunpathHook
+
     cmake
     git
     python3
@@ -123,16 +127,6 @@ in gcc11Stdenv.mkDerivation rec {
     fmt_9
     yaml-cpp
   ];
-
-  # libcuda.so must be found at runtime because it is supplied by the NVIDIA
-  # driver. autoAddOpenGLRunpathHook breaks on the statically linked exes.
-  postFixup = ''
-    find "$out/bin" "$out/lib" -type f -executable -print0 | while IFS= read -r -d "" f; do
-      if isELF "$f" && [[ $(patchelf --print-needed "$f" || true) == *libcuda.so* ]]; then
-        addOpenGLRunpath "$f"
-      fi
-    done
-  '';
 
   disallowedReferences = lib.concatMap (x: x.pkgSet) cudaPackageSetByVersion;
 
