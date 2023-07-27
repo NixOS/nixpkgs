@@ -19,9 +19,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A tool to simplify storing secrets that should be accessible in the shell environment in your git repo.";
