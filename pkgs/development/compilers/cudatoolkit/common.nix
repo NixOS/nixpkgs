@@ -138,7 +138,7 @@ backendStdenv.mkDerivation rec {
     (ucx.override { enableCuda = false; }) # Avoid infinite recursion
     xorg.libxshmfence
     xorg.libxkbfile
-  ] ++ (lib.optionals (lib.versionAtLeast version "12.1") (map lib.getLib ([
+  ] ++ (lib.optionals (lib.versionAtLeast version "12") (map lib.getLib ([
     # Used by `/target-linux-x64/CollectX/clx` and `/target-linux-x64/CollectX/libclx_api.so` for:
     # - `libcurl.so.4`
     curlMinimal
@@ -183,7 +183,9 @@ backendStdenv.mkDerivation rec {
     "libcom_err.so.2"
   ];
 
-  preFixup = ''
+  preFixup = if lib.versionOlder version "11" then ''
+    patchelf $out/targets/*/lib/libnvrtc.so --add-needed libnvrtc-builtins.so
+  '' else ''
     patchelf $out/lib64/libnvrtc.so --add-needed libnvrtc-builtins.so
   '';
 

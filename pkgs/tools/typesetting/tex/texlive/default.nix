@@ -43,6 +43,7 @@ let
       # it seems to need it to transform fonts
       xdvi.deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
 
+      # TODO: remove when updating to texlive-2023, metadata has been corrected in the TeX catalogue
       # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
       arabi-add.license = [  "lppl13c" ];
 
@@ -254,13 +255,38 @@ in
 
     # Pre-defined combined packages for TeX Live schemes,
     # to make nix-env usage more comfortable and build selected on Hydra.
-    combined = with lib; recurseIntoAttrs (
+    combined = with lib;
+      let
+        # these license lists should be the sorted union of the licenses of the packages the schemes contain.
+        # The correctness of this collation is tested by tests.texlive.licenses
+        licenses = with lib.licenses; {
+          scheme-basic = [ free gfl gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
+          scheme-context = [ bsd2 bsd3 cc-by-sa-40 free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21
+            lppl1 lppl13c mit ofl publicDomain x11 ];
+          scheme-full = [ artistic1 artistic1-cl8 asl20 bsd2 bsd3 bsdOriginal cc-by-10 cc-by-40 cc-by-sa-10 cc-by-sa-20
+            cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl1Plus gpl2 gpl2Plus gpl3 gpl3Plus isc knuth
+            lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+          scheme-gust = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2
+            gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+          scheme-infraonly = [ gpl2 lgpl21 ];
+          scheme-medium = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only
+            free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl
+            publicDomain x11 ];
+          scheme-minimal = [ free gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
+          scheme-small = [ asl20 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth
+            lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+          scheme-tetex = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-10 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0
+            fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a
+            lppl13c mit ofl publicDomain x11];
+        };
+      in recurseIntoAttrs (
       mapAttrs
         (pname: attrs:
           addMetaAttrs rec {
             description = "TeX Live environment for ${pname}";
             platforms = lib.platforms.all;
             maintainers = with lib.maintainers;  [ veprbl ];
+            license = licenses.${pname};
           }
           (combine {
             ${pname} = attrs;
