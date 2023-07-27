@@ -23,6 +23,7 @@ let
     "test_exec.py"
     "test_hooks.py"
     "test_hostname.py"
+    "test_oci_features"
     "test_paths.py"
     "test_pid.py"
     "test_pid_file.py"
@@ -38,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.8.5";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    hash = "sha256-T51dVNtqQbXoPshlAkBzJOGTNTPM+AlqRYbqS8GX2NE=";
+    hash = "sha256-qPbJ8h/s4E7EmNlgBdrNZ0AW0D/N7PkK57C1cXjuM9U=";
     fetchSubmodules = true;
   };
 

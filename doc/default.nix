@@ -3,6 +3,8 @@ let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
 
+  common = import ./common.nix;
+
   lib-docs = import ./doc-support/lib-function-docs.nix {
     inherit pkgs nixpkgs;
     libsets = [
@@ -132,15 +134,15 @@ in pkgs.stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    dest="$out/share/doc/nixpkgs"
+    dest="$out/${common.outputPath}"
     mkdir -p "$(dirname "$dest")"
     mv out "$dest"
-    mv "$dest/index.html" "$dest/manual.html"
+    mv "$dest/index.html" "$dest/${common.indexPath}"
 
     cp ${epub} "$dest/nixpkgs-manual.epub"
 
     mkdir -p $out/nix-support/
-    echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
+    echo "doc manual $dest ${common.indexPath}" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
 }
