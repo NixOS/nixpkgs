@@ -5,16 +5,10 @@ let
 
   format = pkgs.formats.ini { };
 
-  listOfDefinitions = lib.mapAttrsToList
-    (name: format.generate "${name}.conf")
-    (lib.filterAttrs (k: _: !(lib.hasPrefix "_" k)) cfg.transfers);
-
-  definitionsDirectory = pkgs.runCommand "sysupdate.d" { } ''
-    mkdir -p $out
-    ${(lib.concatStringsSep "\n"
-      (map (pkg: "cp ${pkg} $out/${pkg.name}") listOfDefinitions)
-    )}
-  '';
+  definitionsDirectory = utils.systemdUtils.lib.definitions
+    "sysupdate.d"
+    format
+    cfg.transfers;
 in
 {
   options.systemd.sysupdate = {
