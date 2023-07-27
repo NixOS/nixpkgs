@@ -36,6 +36,7 @@ CORES = {
     "desmume2015": {"repo": "desmume2015"},
     "dolphin": {"repo": "dolphin"},
     "dosbox": {"repo": "dosbox-libretro"},
+    "dosbox-pure": {"repo": "dosbox-pure", "owner": "schellingb"},
     "eightyone": {"repo": "81-libretro"},
     "fbalpha2012": {"repo": "fbalpha2012"},
     "fbneo": {"repo": "fbneo"},

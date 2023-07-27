@@ -80,9 +80,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "komikku";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
