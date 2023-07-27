@@ -104,6 +104,6 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
     inherit (edk2.meta) platforms;
-    maintainers = [ lib.maintainers.raitobezarius ];
+    maintainers = with lib.maintainers; [ adamcstephens raitobezarius ];
   };
 })
