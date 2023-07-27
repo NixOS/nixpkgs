@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    scdoc
     wayland-scanner
   ];
 
@@ -63,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     pixman
     pulseaudio
+    scdoc
     tllist
     udev
   ] ++ lib.optionals (waylandSupport) [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilwm
   ];
 
-  strictDeps = false;
+  strictDeps = true;
 
   mesonBuildType = "release";
 
