@@ -4,7 +4,7 @@
 , fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight, libiconv
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
-    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
+    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
