@@ -12,7 +12,7 @@
 , wayland-scanner
 , wayland
 , wayland-protocols
-, wlroots_0_16
+, wlroots
 , writeText
 , xcbutilwm
 , xwayland
@@ -20,9 +20,6 @@
 , conf ? null
 }:
 
-let
-  wlroots = wlroots_0_16;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
   version = "0.4";
