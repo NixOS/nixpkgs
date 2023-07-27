@@ -11,12 +11,16 @@ buildGoModule rec {
     sha256 = "sha256-Zx6yN3hQ3o2yvzNEJ65Q4dtnOvTg/tNa8MJvTZuwick=";
   };
 
+  patches = [
+    ./compose-fix-compat-go-1.20.6.patch
+  ];
+
   postPatch = ''
     # entirely separate package that breaks the build
     rm -rf e2e/
   '';
 
-  vendorHash = "sha256-RXxuHfNzJe+qLw4A+3jZQTJQgro5sXau4+Ff6OG0GtU=";
+  vendorHash = "sha256-Ch8P7O0c2XcfpiBUX64I5LOKeFVgnQ6TXsM4EbwouO8=";
 
   ldflags = [ "-X github.com/docker/compose/v2/internal.Version=${version}" "-s" "-w" ];
 
