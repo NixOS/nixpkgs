@@ -7,6 +7,7 @@
 , blas
 , lapack
 , cmake
+, cudaPackages
 , pkg-config
 # Available list of packages can be found near here:
 #
@@ -59,6 +60,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    # Although not always needed, it is needed if cmakeFlags include
+    # GPU_API=cuda, and it doesn't users that don't enable the GPU package.
+    cudaPackages.autoAddOpenGLRunpathHook
   ];
 
   passthru = {
