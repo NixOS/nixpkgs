@@ -1,17 +1,13 @@
-{ pkgs, config, lib }:
+{ config, lib, callPackages }:
 
 let
   aliases = if config.allowAliases then (import ./aliases.nix lib) else prev: {};
 
   # Writers for JSON-like data structures
-  dataWriters = import ./data.nix {
-    inherit lib; inherit (pkgs) runCommandNoCC dasel;
-  };
+  dataWriters = callPackages ./data.nix { };
 
   # Writers for scripts
-  scriptWriters = import ./scripts.nix {
-    inherit lib pkgs;
-  };
+  scriptWriters = callPackages ./scripts.nix { };
 
   writers = scriptWriters // dataWriters;
 in
