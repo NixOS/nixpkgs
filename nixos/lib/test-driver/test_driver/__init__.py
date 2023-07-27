@@ -106,7 +106,13 @@ def main() -> None:
         args.keep_vm_state,
     ) as driver:
         if args.interactive:
-            ptpython.repl.embed(driver.test_symbols(), {})
+            history_dir = os.getcwd()
+            history_path = os.path.join(history_dir, ".nixos-test-history")
+            ptpython.repl.embed(
+                driver.test_symbols(),
+                {},
+                history_filename=history_path,
+            )
         else:
             tic = time.time()
             driver.run_tests()
