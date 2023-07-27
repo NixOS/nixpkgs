@@ -25,13 +25,13 @@ let
 in
   mkDerivation rec {
   pname = "jamesdsp";
-  version = "2.4";
+  version = "2.5.1";
   src = fetchFromGitHub rec {
     owner = "Audio4Linux";
     repo = "JDSP4Linux";
     fetchSubmodules = true;
     rev = version;
-    hash = "sha256-wD1JZQD8dR24cBN4QJCSrEsS4aoMD+MQmqnOIFKOeoE=";
+    hash = "sha256-osbRiUa/CKq4l3pV2MZYKcECEfa1ee3SAQ8RsiimbA4=";
   };
 
   nativeBuildInputs = [
