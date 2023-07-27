@@ -9,7 +9,6 @@
 , gnome
 , vala
 , gobject-introspection
-, fetchpatch
 , glibcLocales
 , umockdev
 }:
@@ -44,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     glibcLocales
     umockdev
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = true;
