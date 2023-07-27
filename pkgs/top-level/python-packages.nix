@@ -736,6 +736,8 @@ self: super: with self; {
 
   async-dns = callPackage ../development/python-modules/async-dns { };
 
+  async-interrupt = callPackage ../development/python-modules/async-interrupt { };
+
   async-lru = callPackage ../development/python-modules/async-lru { };
 
   async-modbus = callPackage ../development/python-modules/async-modbus { };
