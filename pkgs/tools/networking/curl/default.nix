@@ -59,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
+
+    # Affected versions: 7.84.0 to and including 8.1.2
+    ./CVE-2023-32001.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
