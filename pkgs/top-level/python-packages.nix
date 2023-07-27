@@ -1837,6 +1837,9 @@ self: super: with self; {
   capstone = callPackage ../development/python-modules/capstone {
     inherit (pkgs) capstone;
   };
+  capstone_4 = callPackage ../development/python-modules/capstone/4.nix {
+    inherit (pkgs) capstone_4;
+  };
 
   captcha = callPackage ../development/python-modules/captcha { };
 
