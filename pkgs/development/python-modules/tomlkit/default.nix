@@ -6,16 +6,20 @@
 , functools32, typing ? null
 , pytestCheckHook
 , pyaml
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "tomlkit";
   version = "0.11.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-cblS5XIWiJN/sCz501TbzweFBmFJ0oVeRFMevdK2XXM=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs =
     lib.optionals isPy27 [ enum34 functools32 ]
