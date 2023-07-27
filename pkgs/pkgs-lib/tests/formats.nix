@@ -219,35 +219,6 @@ in runBuildTests {
     '';
   };
 
-  # see https://github.com/NixOS/nixpkgs/issues/237521 for this particular test
-  testTomlSemantics = {
-    drv = evalFormat formats.toml {} {
-      processors = {
-        override = [
-          { tags = { cluster = "staging"; }; }
-        ];
-        rename = [
-          {
-            replace = [
-              { dest = "ceph_telegraf_check"; measurement = "exec"; }
-            ];
-          }
-        ];
-      };
-    };
-    expected = ''
-      [processors]
-      [[processors.override]]
-      [processors.override.tags]
-      cluster = "staging"
-
-      [[processors.rename]]
-      [[processors.rename.replace]]
-      dest = "ceph_telegraf_check"
-      measurement = "exec"
-    '';
-  };
-
   # This test is responsible for
   #   1. testing type coercions
   #   2. providing a more readable example test

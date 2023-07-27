@@ -11,6 +11,7 @@
 , pytest-mock
 , pytestCheckHook
 , setuptools
+, tomlkit
 , virtualenv
 }:
 
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     setuptools
+    tomlkit
     virtualenv
   ];
 
