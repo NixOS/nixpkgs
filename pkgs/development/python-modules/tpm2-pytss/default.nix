@@ -6,7 +6,6 @@
 , asn1crypto
 , cffi
 , cryptography
-, ibm-sw-tpm2
 , pkgconfig # see nativeBuildInputs
 , pkg-config # see nativeBuildInputs
 , pycparser
@@ -15,6 +14,8 @@
 , pyyaml
 , setuptools-scm
 , tpm2-tss
+, tpm2-tools
+, swtpm
 }:
 
 buildPythonPackage rec {
@@ -40,7 +41,21 @@ buildPythonPackage rec {
       url = "https://github.com/baloo/tpm2-pytss/commit/099c069f28cfcd0a3019adebfeafa976f9395221.patch";
       sha256 = "sha256-wU2WfLYFDmkhGzYornZ386tB3zb3GYfGOTc+/QOFb1o=";
     })
+
+    # Lookup tcti via getinfo not system's ld_library_path
+    # https://github.com/tpm2-software/tpm2-pytss/pull/525
+    (fetchpatch {
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/97289a08ddf44f7bdccdd122d6055c69e12dc584.patch";
+      sha256 = "sha256-VFq3Hv4I8U8ifP/aSjyu0BiW/4jfPlRDKqRcqUGw6UQ=";
+    })
+
+    # Fix hardcoded `fapi-config.json` configuration path
+    ./fapi-config.patch
   ];
+
+  postPatch = ''
+    sed -i "s#@TPM2_TSS@#${tpm2-tss.out}#" src/tpm2_pytss/FAPI.py
+  '';
 
   nativeBuildInputs = [
     cffi
@@ -60,12 +75,12 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  # https://github.com/tpm2-software/tpm2-pytss/issues/341
-  doCheck = false;
+  doCheck = true;
 
   nativeCheckInputs = [
-    ibm-sw-tpm2
     pytestCheckHook
+    tpm2-tools
+    swtpm
   ];
 
   pythonImportsCheck = [
