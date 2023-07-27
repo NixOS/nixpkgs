@@ -8,15 +8,15 @@
 
 buildPythonApplication rec {
   pname = "firefox_decrypt";
-  version = "unstable-2023-07-06";
+  version = "unstable-2023-07-26";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "unode";
     repo = pname;
-    rev = "2c61b27e6754cdf6a518ea617d05433f5ccf9f39";
-    sha256 = "sha256-/Q6ET6NJ23eYo0ywYMY5TPYpzPHGDzH5+wEpFdsibh8=";
+    rev = "a3b981efa86ce53503ddbbbd9181ea430965d148";
+    sha256 = "sha256-DRkhx6NIZ/RRxxw3/R+kZ13+IAqytBt9endEW9RvCq4=";
   };
 
   nativeBuildInputs = [
