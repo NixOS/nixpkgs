@@ -126,7 +126,10 @@ let
         (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override { version = "3.11"; };
         }) // (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
-          ITree = self.ITree.override { version = "4.0.0"; };
+          ITree = self.ITree.override {
+            version = "4.0.0";
+            paco = self.paco.override { version = "4.1.2"; };
+          };
        }));
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
