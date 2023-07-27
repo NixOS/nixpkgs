@@ -8,6 +8,7 @@
 , numpy
 , pytestCheckHook
 , pytest-mpl
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,11 @@ buildPythonPackage rec {
   version = "2.7.1";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/74xTCvQPDQrnxaNznFa2PNigesjFyoAlwiCqTRP6Yg=";
+    hash = "sha256-/74xTCvQPDQrnxaNznFa2PNigesjFyoAlwiCqTRP6Yg=";
   };
 
   buildInputs = [
@@ -38,7 +41,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Histogramming for analysis powered by boost-histogram";
-    homepage = "https://hist.readthedocs.io/en/latest/";
+    homepage = "https://hist.readthedocs.io/";
+    changelog = "https://github.com/scikit-hep/hist/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ veprbl ];
   };
