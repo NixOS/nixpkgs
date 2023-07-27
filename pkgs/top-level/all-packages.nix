@@ -37964,7 +37964,7 @@ with pkgs;
   superTux = callPackage ../games/supertux { };
 
   superTuxKart = callPackage ../games/super-tux-kart {
-    inherit (darwin.apple_sdk.frameworks) Cocoa IOKit OpenAL;
+    inherit (darwin.apple_sdk.frameworks) Cocoa IOBluetooth IOKit OpenAL;
   };
 
   synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };

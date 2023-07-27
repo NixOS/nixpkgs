@@ -22,6 +22,7 @@
 , libopenglrecorder
 , sqlite
 , Cocoa
+, IOBluetooth
 , IOKit
 , libsamplerate
 , shaderc
@@ -111,7 +112,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
   ++ lib.optional stdenv.hostPlatform.isLinux openal
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL IOKit Cocoa libsamplerate ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa IOBluetooth IOKit OpenAL libsamplerate
+  ];
 
   cmakeFlags = [
     "-DBUILD_RECORDER=${if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) then "ON" else "OFF"}"
