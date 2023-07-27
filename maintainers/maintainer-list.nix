@@ -1401,6 +1401,12 @@
     githubId = 37193992;
     name = "Arthur Teisseire";
   };
+  arti5an = {
+    email = "artis4n@outlook.com";
+    github = "arti5an";
+    githubId = 14922630;
+    name = "Richard Smith";
+  };
   artturin = {
     email = "artturin@artturin.com";
     matrix = "@artturin:matrix.org";
@@ -9963,6 +9969,12 @@
     githubId = 782440;
     name = "Luna Nova";
   };
+  lurkki = {
+    email = "jussi.kuokkanen@protonmail.com";
+    github = "Lurkki14";
+    githubId = 44469719;
+    name = "Jussi Kuokkanen";
+  };
   lux = {
     email = "lux@lux.name";
     github = "luxzeitlos";
@@ -15639,6 +15651,8 @@
   spalf = {
     email = "tom@tombarrett.xyz";
     name = "tom barrett";
+    github = "70m6";
+    githubId = 105207964;
   };
   spease = {
     email = "peasteven@gmail.com";

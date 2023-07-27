@@ -194,6 +194,8 @@ self: super: with self; {
 
   aiogithubapi = callPackage ../development/python-modules/aiogithubapi { };
 
+  aiogram = callPackage ../development/python-modules/aiogram { };
+
   aioharmony = callPackage ../development/python-modules/aioharmony { };
 
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
@@ -4718,6 +4720,8 @@ self: super: with self; {
 
   hexdump = callPackage ../development/python-modules/hexdump { };
 
+  hfst = callPackage ../development/python-modules/hfst { };
+
   hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
 
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
@@ -6181,6 +6185,8 @@ self: super: with self; {
 
   magicgui = callPackage ../development/python-modules/magicgui { };
 
+  magic-filter = callPackage ../development/python-modules/magic-filter { };
+
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
   magic-wormhole-mailbox-server = callPackage ../development/python-modules/magic-wormhole-mailbox-server { };
@@ -7281,6 +7287,8 @@ self: super: with self; {
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
+
+  omorfi = callPackage ../development/python-modules/omorfi { };
 
   omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
 
@@ -13889,8 +13897,6 @@ self: super: with self; {
   zodb = callPackage ../development/python-modules/zodb { };
 
   zodbpickle = callPackage ../development/python-modules/zodbpickle { };
-
-  zope_broken = callPackage ../development/python-modules/zope_broken { };
 
   zope-cachedescriptors = callPackage ../development/python-modules/zope-cachedescriptors { };
 

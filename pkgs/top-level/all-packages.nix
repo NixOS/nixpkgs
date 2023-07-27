@@ -555,6 +555,8 @@ with pkgs;
 
   dbip-country-lite = callPackage ../data/misc/dbip-country-lite { };
 
+  dcgm = callPackage ../os-specific/linux/dcgm { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
@@ -3252,6 +3254,10 @@ with pkgs;
 
   blanket = callPackage ../applications/audio/blanket { };
 
+  blisp = darwin.apple_sdk_11_0.callPackage ../development/embedded/blisp {
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit;
+  };
+
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
   brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
@@ -5736,6 +5742,8 @@ with pkgs;
 
   maxcso = callPackage ../tools/archivers/maxcso { };
 
+  measureme = callPackage ../development/tools/rust/measureme { };
+
   medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync {
@@ -7384,6 +7392,8 @@ with pkgs;
   };
 
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix { };
+
+  a4term = callPackage ../tools/misc/a4term { };
 
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
@@ -10257,6 +10267,8 @@ with pkgs;
 
   lmp = callPackage ../tools/security/lmp { };
 
+  localproxy = callPackage ../applications/networking/localproxy { };
+
   localstack = with python3Packages; toPythonApplication localstack;
 
   localtime = callPackage ../tools/system/localtime { };
@@ -10598,6 +10610,8 @@ with pkgs;
   mosh = callPackage ../tools/networking/mosh { };
 
   motrix = callPackage ../tools/networking/motrix { };
+
+  mount-zip = callPackage ../tools/filesystems/mount-zip { };
 
   mpage = callPackage ../tools/text/mpage { };
 
@@ -12519,7 +12533,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rustdesk-server = callPackage ../servers/rustdesk-server { };
+  rustdesk-server = callPackage ../servers/rustdesk-server {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   rustypaste = callPackage ../servers/rustypaste { };
 
@@ -15564,7 +15580,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "4.8" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "4.8");
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
     cloog = if !stdenv.isDarwin then cloog else null;
@@ -15578,7 +15594,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "4.9" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "4.9");
 
     isl = if !stdenv.isDarwin then isl_0_11 else null;
 
@@ -15595,7 +15611,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "6" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "6");
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -15614,7 +15630,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "7" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "7");
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -15629,7 +15645,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "8" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "8");
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -15644,7 +15660,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "9" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "9");
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15656,7 +15672,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "10" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "10");
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15668,7 +15684,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "11" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "11");
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15680,7 +15696,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "12" else { };
+    threadsCross = lib.optionalAttrs (stdenv.targetPlatform != stdenv.buildPlatform) (threadsCrossFor "12");
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -19682,11 +19698,7 @@ with pkgs;
 
   qc = callPackage ../development/tools/qc { };
 
-  qtcreator = libsForQt5.callPackage ../development/tools/qtcreator {
-    inherit (linuxPackages) perf;
-  };
-
-  qtcreator-qt6 = qt6Packages.callPackage ../development/tools/qtcreator/qt6.nix {
+  qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
     inherit (linuxPackages) perf;
     stdenv = llvmPackages_14.stdenv;
     llvmPackages = llvmPackages_14;
@@ -19935,6 +19947,8 @@ with pkgs;
   };
 
   spruce = callPackage ../development/tools/misc/spruce { };
+
+  sqlboiler-crdb = callPackage ../development/tools/database/sqlboiler-crdb { };
 
   sqlc = callPackage ../development/tools/database/sqlc { };
 
@@ -21369,8 +21383,7 @@ with pkgs;
 
   threadsCross = threadsCrossFor null;
   threadsCrossFor = cc_version:
-    if stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)
-    then {
+    lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
       # other possible values: win32 or posix
       model = "mcf";
       # For win32 or posix set this to null
@@ -21378,7 +21391,7 @@ with pkgs;
         if cc_version == null || lib.versionAtLeast cc_version "13"
         then targetPackages.windows.mcfgthreads or windows.mcfgthreads
         else targetPackages.windows.mcfgthreads_pre_gcc_13 or windows.mcfgthreads_pre_gcc_13;
-    } else { };
+    };
 
   wasilibc = callPackage ../development/libraries/wasilibc {
     stdenv = crossLibcStdenv;
@@ -25006,7 +25019,11 @@ with pkgs;
 
   taskflow = callPackage ../development/libraries/taskflow { };
 
-  tclap = callPackage ../development/libraries/tclap { };
+  tclap = tclap_1_2;
+
+  tclap_1_2 = callPackage ../development/libraries/tclap/1.2.nix { };
+
+  tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
 
   tcllib = callPackage ../development/libraries/tcllib { };
 
@@ -26836,6 +26853,7 @@ with pkgs;
   prometheus-cloudflare-exporter = callPackage ../servers/monitoring/prometheus/cloudflare-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
+  prometheus-dcgm-exporter = callPackage ../servers/monitoring/prometheus/dcgm-exporter { };
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
   prometheus-dovecot-exporter = callPackage ../servers/monitoring/prometheus/dovecot-exporter.nix { };
   prometheus-domain-exporter = callPackage ../servers/monitoring/prometheus/domain-exporter.nix { };
@@ -28787,6 +28805,8 @@ with pkgs;
   baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
+
+  banana-cursor = callPackage ../data/icons/banana-cursor { };
 
   barlow = callPackage ../data/fonts/barlow { };
 
@@ -39915,6 +39935,10 @@ with pkgs;
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
+  helmfile-wrapped = callPackage ../applications/networking/cluster/helmfile {
+    inherit (kubernetes-helm-wrapped.passthru) pluginsDir;
+  };
+
   helm-dashboard = callPackage ../applications/networking/cluster/helm-dashboard { };
 
   helmsman = callPackage ../applications/networking/cluster/helmsman { };
@@ -41571,6 +41595,14 @@ with pkgs;
   reindeer = callPackage ../development/tools/reindeer { };
 
   charasay = callPackage ../tools/misc/charasay { };
+
+  libvoikko = callPackage ../development/libraries/libvoikko { };
+
+  hfst = callPackage ../development/libraries/hfst { };
+
+  omorfi = callPackage ../development/libraries/omorfi { };
+
+  hfst-ospell = callPackage ../development/libraries/hfst-ospell { };
 
   waylyrics = callPackage ../applications/audio/waylyrics { };
 
