@@ -102,6 +102,12 @@ core = stdenv.mkDerivation rec {
     perl
   ];
 
+  patches = [
+    # Fix implicit `int` on `main`, which results in an error when building with clang 16.
+    # This is fixed upstream and can be dropped with the 2023 release.
+    ./fix-implicit-int.patch
+  ];
+
   hardeningDisable = [ "format" ];
 
   preConfigure = ''
@@ -224,6 +230,9 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       stripLen = 1;
       extraPrefix = "libs/luajit/LuaJIT-src/";
     })
+    # Fix implicit `int` on `main`, which results in an error when building with clang 16.
+    # This is fixed upstream and can be dropped with the 2023 release.
+    ./fix-implicit-int.patch
   ];
 
   hardeningDisable = [ "format" ];
