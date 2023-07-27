@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fixDarwinDylibNames, which, dieHook
-, enableShared ? !(stdenv.hostPlatform.isStatic)
+, enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 # for passthru.tests
 , nix
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      inherit (stdenv.hostPlatform.extensions) sharedLibrary;
       soVersion = "3";
     in
 

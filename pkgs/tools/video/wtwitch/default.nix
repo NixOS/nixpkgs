@@ -10,12 +10,10 @@
 , makeWrapper
 , mplayer
 , mpv
-, ncurses
 , procps
 , scdoc
 , stdenv
 , streamlink
-, sudo
 , vlc
 }:
 

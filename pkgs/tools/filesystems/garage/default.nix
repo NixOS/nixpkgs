@@ -1,5 +1,5 @@
 { lib, stdenv, rustPlatform, fetchFromGitea, openssl, pkg-config, protobuf
-, cacert, testers, Security, garage, nixosTests }:
+, cacert, Security, garage, nixosTests }:
 let
   generic = { version, sha256, cargoSha256, eol ? false, broken ? false }: rustPlatform.buildRustPackage {
     pname = "garage";

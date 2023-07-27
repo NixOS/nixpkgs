@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchPypi, lib, src, version }:
+{ stdenv, python3, fetchPypi, src, version }:
 
 let
   buildAzureCliPackage = with py.pkgs; buildPythonPackage;
