@@ -14,14 +14,14 @@
 
 let
   pname = "pgadmin";
-  version = "7.4";
+  version = "7.5";
   yarnSha256 = "sha256-rEKMUZksmR2jPwtXy6drNwAJktK/3Dee6EZVFHPngWs=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-ksvSDySutTB9QX0Gh9jBjGlDyG/vEMhgadu91iNvznw=";
+    hash = "sha256-o8jPqp4jLF/lZ0frCzPDCSxCy51Nt0mbdeNB44ZwNHI=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -63,9 +63,13 @@ pythonPackages.buildPythonApplication rec {
 
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
-    #TODO: Can be removed once cryptography>=40 has been merged to master
+    #TODO: Can be removed once boto3>=1.28.0 and cryptography>=41 has been merged to master
     substituteInPlace requirements.txt \
-      --replace "cryptography>=40.0.*" "cryptography>=39.0.*"
+      --replace "boto3>=1.28.*" "boto3>=1.26.*"
+    substituteInPlace requirements.txt \
+      --replace "botocore>=1.31.*" "botocore>=1.29.*"
+    substituteInPlace requirements.txt \
+      --replace "cryptography>=41.0.*" "cryptography>=40.0.*"
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
