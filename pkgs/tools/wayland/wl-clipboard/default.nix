@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "bugaevc";
     repo = "wl-clipboard";
     rev = "v${version}";
-    sha256 = "sha256-L4k2jOZ2YtkFpDs2+LAUElYl5aNSC42QxkbMNJ2ZhWQ=";
+    hash = "sha256-L4k2jOZ2YtkFpDs2+LAUElYl5aNSC42QxkbMNJ2ZhWQ=";
   };
 
   strictDeps = true;
