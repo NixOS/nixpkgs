@@ -10,8 +10,13 @@
 
 let
   py = python3 // {
-    pkgs = python3.pkgs.overrideScope (self: super: {
-      # nothing right now
+    pkgs = python3.pkgs.overrideScope (final: prev: {
+      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
+        src = prev.src.override {
+          version = "0.17.21";
+          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
+        };
+      });
     });
   };
 
@@ -29,8 +34,8 @@ with py.pkgs; buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace requirements/bootstrap.txt \
-      --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
+    substituteInPlace pyproject.toml \
+      --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2'
   '';
 
   nativeBuildInputs = [
@@ -74,8 +79,6 @@ with py.pkgs; buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  doCheck = true;
-
   preCheck = ''
     export PATH=$PATH:$out/bin
     export HOME=$(mktemp -d)
@@ -107,7 +110,7 @@ with py.pkgs; buildPythonApplication rec {
     tests.version = testers.testVersion {
       package = awscli2;
       command = "aws --version";
-      version = version;
+      inherit version;
     };
   };
 

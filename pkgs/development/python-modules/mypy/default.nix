@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 
 # build-system
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.3.0";
+  version = "1.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -40,8 +41,16 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dfKuIyzgZo5hAZHighpXH78dHJ1PMbyCakyxF34CnMQ=";
+    hash = "sha256-2PeE/L9J6J0IuUpHZasemM8xxefNJrdzYnutgJjevWQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      # pytest 7.4 compat
+      url = "https://github.com/python/mypy/commit/0a020fa73cf5339a80d81c5b44e17116a5c5307e.patch";
+      hash = "sha256-3HQPo+V7T8Gr92clXAt5QJUJPmhjnGjQgFq0qR0whfw=";
+    })
+  ];
 
   nativeBuildInputs = [
     mypy-extensions
@@ -108,6 +117,8 @@ buildPythonPackage rec {
     "mypy/test/testdaemon.py"
     # fails to find setuptools
     "mypyc/test/test_commandline.py"
+    # fails to find hatchling
+    "mypy/test/testpep561.py"
   ];
 
   meta = with lib; {

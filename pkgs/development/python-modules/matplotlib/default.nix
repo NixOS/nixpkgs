@@ -76,7 +76,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.7.1";
+  version = "3.7.2";
   pname = "matplotlib";
   format = "pyproject";
 
@@ -84,7 +84,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e3MwXyXqtFQb1+4Llth+U66cnxgjvlZZuAbNhXhv6II=";
+    hash = "sha256-qM25Hd2wRDa9LwmLj99LgTUuaM9NLGdW/MQUeRB2Vps=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -121,6 +121,8 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     numpy
+  ] ++ lib.optionals enableGtk3 [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -131,7 +133,6 @@ buildPythonPackage rec {
     ghostscript
   ] ++ lib.optionals enableGtk3 [
     cairo
-    gobject-introspection
     gtk3
   ] ++ lib.optionals enableTk [
     libX11

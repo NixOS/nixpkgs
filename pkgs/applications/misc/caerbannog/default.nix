@@ -38,7 +38,6 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3
     atk
-    gobject-introspection
     libhandy
     libnotify
     pango

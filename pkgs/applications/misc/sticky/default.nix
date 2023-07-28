@@ -33,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
-    gobject-introspection
     cinnamon.xapp
     gspell
   ];

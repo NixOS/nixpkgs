@@ -22,8 +22,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-RehZ86XuFs1kbm9V3cgPz1SPG3izK7/6fHQjPTHOYZs=";
 
-  buildInputs = [ cairo gobject-introspection gtk3 gtk-layer-shell ];
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  buildInputs = [ cairo gtk3 gtk-layer-shell ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook gobject-introspection ];
 
   doCheck = false;
 

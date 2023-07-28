@@ -46,7 +46,6 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'boto3>=' 'boto3>=1.26.79 #' \
       --replace 'cfn-lint~=0.77.9' 'cfn-lint~=0.73.2' \
       --replace 'docker~=6.1.0' 'docker~=6.0.1' \
-      --replace 'pyopenssl~=23.2.0' 'pyopenssl~=23.1.0' \
       --replace 'ruamel_yaml~=0.17.32' 'ruamel_yaml~=0.17.21' \
       --replace 'tomlkit==0.11.8' 'tomlkit~=0.11.6' \
       --replace 'typing_extensions~=4.4.0' 'typing_extensions~=4.4' \

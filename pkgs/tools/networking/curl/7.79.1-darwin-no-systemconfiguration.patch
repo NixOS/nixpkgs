@@ -27,10 +27,10 @@ autoconf in the bootstrap loop just to regenerate a patched configure.ac.
  
  curl_includes_winsock2="\
 diff --git a/lib/curl_setup.h b/lib/curl_setup.h
-index 99048c489..19abfbbac 100644
+index 727d123e5..f78d8be4a 100644
 --- a/lib/curl_setup.h
 +++ b/lib/curl_setup.h
-@@ -247,19 +247,6 @@
+@@ -250,19 +250,6 @@
 
  #include <curl/system.h>
 
@@ -42,7 +42,7 @@ index 99048c489..19abfbbac 100644
 -#if defined(__APPLE__) && !defined(USE_ARES)
 -#include <TargetConditionals.h>
 -#define USE_RESOLVE_ON_IPS 1
--#  if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+-#  if !defined(TARGET_OS_OSX) || TARGET_OS_OSX
 -#    define CURL_OSX_CALL_COPYPROXIES 1
 -#  endif
 -#endif

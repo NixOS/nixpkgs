@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl, bzip2, zlib }:
+{ stdenv
+, lib
+, fetchurl
+, bzip2
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "cfitsio";
@@ -9,31 +14,41 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-66U9Gz9uNFYyuwmnt1LsfO09Y+xRU6hIOA84gMXWGIk=";
   };
 
-  buildInputs = [ bzip2 zlib ];
+  patches = [
+    ./darwin-rpath-universal.patch
+  ];
 
-  patches = [ ./darwin-rpath-universal.patch ];
+  buildInputs = [
+    bzip2
+    zlib
+  ];
 
-  configureFlags = [ "--with-bzip2=${bzip2.out}" "--enable-reentrant" ];
+  configureFlags = [
+    "--with-bzip2=${bzip2.out}"
+    "--enable-reentrant"
+  ];
 
   hardeningDisable = [ "format" ];
 
   # Shared-only build
   buildFlags = [ "shared" ];
-  postPatch = '' sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
-   '';
+
+  postPatch = ''
+    sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
+  '';
 
   meta = with lib; {
     homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
     description = "Library for reading and writing FITS data files";
-    longDescription =
-      '' CFITSIO is a library of C and Fortran subroutines for reading and
-         writing data files in FITS (Flexible Image Transport System) data
-         format.  CFITSIO provides simple high-level routines for reading and
-         writing FITS files that insulate the programmer from the internal
-         complexities of the FITS format.  CFITSIO also provides many
-         advanced features for manipulating and filtering the information in
-         FITS files.
-      '';
+    longDescription = ''
+      CFITSIO is a library of C and Fortran subroutines for reading and
+      writing data files in FITS (Flexible Image Transport System) data
+      format.  CFITSIO provides simple high-level routines for reading and
+      writing FITS files that insulate the programmer from the internal
+      complexities of the FITS format.  CFITSIO also provides many
+      advanced features for manipulating and filtering the information in
+      FITS files.
+    '';
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ xbreak hjones2199 ];
