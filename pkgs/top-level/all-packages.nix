@@ -3460,6 +3460,8 @@ with pkgs;
 
   boulder = callPackage ../tools/admin/boulder { };
 
+  btrfs-assistant = libsForQt5.callPackage ../tools/misc/btrfs-assistant { };
+
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
   bucklespring = bucklespring-x11;
