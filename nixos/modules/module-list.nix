@@ -1366,6 +1366,7 @@
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/gotosocial.nix
   ./services/web-apps/grocy.nix
+  ./services/web-apps/immich.nix
   ./services/web-apps/pixelfed.nix
   ./services/web-apps/guacamole-client.nix
   ./services/web-apps/guacamole-server.nix
