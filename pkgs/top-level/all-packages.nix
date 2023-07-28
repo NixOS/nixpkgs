@@ -11983,6 +11983,8 @@ with pkgs;
 
   psutils = callPackage ../tools/typesetting/psutils { };
 
+  psudohash = callPackage ../tools/security/psudohash { };
+
   psensor = callPackage ../tools/system/psensor {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
