@@ -15,7 +15,7 @@
 , pytz
 , requests
 , six
-, zope_component
+, zope-component
 , zope_interface
 , dialog
 , gnureadline
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytz
     requests
     six
-    zope_component
+    zope-component
     zope_interface
   ];
 

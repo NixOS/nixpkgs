@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zope.component";
+  pname = "zope-component";
   version = "5.1.0";
 
   src = fetchPypi {
