@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cfitsio";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${version}.tar.gz";
-    sha256 = "sha256-66U9Gz9uNFYyuwmnt1LsfO09Y+xRU6hIOA84gMXWGIk=";
+    sha256 = "sha256-/a3AHQnPn1QlOALF7IfrEN5RzkEwQRQVrojDCUBiG4s=";
   };
 
   buildInputs = [ bzip2 zlib ];
