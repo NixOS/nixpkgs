@@ -7757,6 +7757,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  zetta = callPackage ../tools/misc/zetta {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   exactaudiocopy = callPackage ../applications/audio/exact-audio-copy { };
 
   exempi = callPackage ../development/libraries/exempi { };
