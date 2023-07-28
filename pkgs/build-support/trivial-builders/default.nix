@@ -135,9 +135,15 @@ rec {
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     }:
+    let
+      matches = builtins.match "/bin/([^/]+)" destination;
+    in
     runCommand name
-      { inherit text executable checkPhase meta allowSubstitutes preferLocalBuild;
+      { inherit text executable checkPhase allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
+        meta = lib.optionalAttrs (toString executable != "" && matches != null) {
+          mainProgram = lib.head matches;
+        } // meta;
       }
       ''
         target=$out${lib.escapeShellArg destination}
@@ -230,7 +236,11 @@ rec {
 
 
   */
-  writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
+  writeScriptBin = name: text: writeTextFile {
+    inherit name text;
+    executable = true;
+    destination = "/bin/${name}";
+  };
 
   /*
     Similar to writeScript. Writes a Shell script and checks its syntax.
@@ -350,8 +360,6 @@ rec {
           runHook postCheck
         ''
         else checkPhase;
-
-      meta.mainProgram = name;
     };
 
   # Create a C binary
@@ -364,6 +372,9 @@ rec {
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
+      meta = {
+        mainProgram = name;
+      };
     }
     ''
       n=$out/bin/$name
