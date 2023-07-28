@@ -4,8 +4,11 @@
 , isPyPy
 , python
 , libev
+, cffi
+, cython
 , greenlet
 , setuptools
+, wheel
 , zope_event
 , zope_interface
 , pythonOlder
@@ -24,7 +27,11 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    cython
     setuptools
+    wheel
+  ] ++ lib.optionals (!isPyPy) [
+    cffi
   ];
 
   buildInputs = [
@@ -36,6 +43,11 @@ buildPythonPackage rec {
     zope_interface
   ] ++ lib.optionals (!isPyPy) [
     greenlet
+  ];
+
+  pypaBuildFlags = [
+    # Needed until cython is updated to v3
+    "--skip-dependency-check"
   ];
 
   # Bunch of failures.
