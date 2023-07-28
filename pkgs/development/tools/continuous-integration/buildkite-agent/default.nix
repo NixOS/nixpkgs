@@ -1,6 +1,16 @@
-{ fetchFromGitHub, lib, buildGoModule,
-  makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep, gitUpdater,
-  nixosTests }:
+{ fetchFromGitHub
+, lib
+, buildGoModule
+, makeWrapper
+, coreutils
+, git
+, openssh
+, bash
+, gnused
+, gnugrep
+, gitUpdater
+, nixosTests
+}:
 buildGoModule rec {
   pname = "buildkite-agent";
   version = "3.50.3";
