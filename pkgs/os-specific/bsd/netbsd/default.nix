@@ -28,8 +28,6 @@ let
 
 in makeScopeWithSplicing {
   otherSplices = generateSplicesForMkScope "netbsd";
-  keep = _: {};
-  extra = _: {};
   f = (self: let
     inherit (self) mkDerivation;
   in {

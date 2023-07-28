@@ -32,10 +32,7 @@ let
 
     steamcmd = callPackage ./steamcmd.nix { };
   };
-  keep = self: { };
-  extra = spliced0: { };
 in makeScopeWithSplicing {
   otherSplices = generateSplicesForMkScope "steamPackages";
-  inherit keep extra;
   f = steamPackagesFun;
 }

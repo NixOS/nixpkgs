@@ -279,7 +279,15 @@ rec {
 
   /* Like the above, but aims to support cross compilation. It's still ugly, but
      hopefully it helps a little bit. */
-  makeScopeWithSplicing = { splicePackages, newScope }: { otherSplices, keep, extra, f }:
+  makeScopeWithSplicing =
+    { splicePackages
+    , newScope
+    }:
+    { otherSplices
+    , keep ? (_self: {})
+    , extra ? (_spliced0: {})
+    , f
+    }:
     let
       spliced0 = splicePackages {
         pkgsBuildBuild = otherSplices.selfBuildBuild;

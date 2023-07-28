@@ -5,14 +5,8 @@
 , makeScopeWithSplicing
 }:
 
-let
-  keep = _self: { };
-  extra = _spliced0: { };
-
-in
 makeScopeWithSplicing {
   otherSplices = generateSplicesForMkScope "xfce";
-  inherit keep extra;
   f = (self:
     let
       inherit (self) callPackage;

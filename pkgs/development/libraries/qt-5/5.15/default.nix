@@ -336,7 +336,5 @@ let
 
 in makeScopeWithSplicing {
   otherSplices = generateSplicesForMkScope "qt5";
-  keep = _: {};
-  extra = _: {};
   f = addPackages;
 }

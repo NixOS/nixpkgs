@@ -17,7 +17,6 @@ in
 
 makeScopeWithSplicing {
   otherSplices = generateSplicesForMkScope "darwin";
-  keep = _: {};
   extra = spliced: spliced.apple_sdk.frameworks;
   f = (self: let
   inherit (self) mkDerivation callPackage;

@@ -39,15 +39,13 @@ let
             selfHostHost = luaOnHostForHost.pkgs;
             selfTargetTarget = luaOnTargetForTarget.pkgs or {};
           };
-          keep = self: { };
-          extra = spliced0: {};
           extensions = lib.composeManyExtensions [
             generatedPackages
             overriddenPackages
             overrides
           ];
         in makeScopeWithSplicing {
-          inherit otherSplices keep extra;
+          inherit otherSplices;
           f = lib.extends extensions luaPackagesFun;
         })
         {
