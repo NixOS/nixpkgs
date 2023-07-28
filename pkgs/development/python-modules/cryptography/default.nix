@@ -6,7 +6,7 @@
 , rustPlatform
 , cargo
 , rustc
-, setuptools-rust
+, setuptoolsRustBuildHook
 , openssl
 , Security
 , isPyPy
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    setuptools-rust
+    setuptoolsRustBuildHook
     cargo
     rustc
     pkg-config
