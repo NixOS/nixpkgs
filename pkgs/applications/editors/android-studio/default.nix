@@ -14,8 +14,8 @@ let
     sha256Hash = "sha256-X+ZuH4cHKfQtfvOF0kLk+QjQ5AR3pTEparczHEUk+uY=";
   };
   betaVersion = {
-    version = "2022.3.1.16"; # "Android Studio Giraffe (2022.3.1) Beta 5"
-    sha256Hash = "sha256-D+Hoa50fzvtO0/6DsExmGSDzcgDIT2Bg+HvI6mCle14=";
+    version = "2022.3.1.17"; # "Android Studio Giraffe (2022.3.1) RC 1"
+    sha256Hash = "sha256-Bpur9ytiwa0udiyYVxlfLT4M+ZcO5atQUQg/ForATP4=";
   };
   latestVersion = {
     version = "2023.1.1.14"; # Android Studio Hedgehog (2023.1.1) Canary 14
