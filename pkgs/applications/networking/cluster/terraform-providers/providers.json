@@ -119,11 +119,11 @@
     "vendorHash": "sha256-uBfZLiKLv60WoN+DXf6U62XnHxYt/jx2DRcWP58B6GA="
   },
   "azuread": {
-    "hash": "sha256-6LSvqMi79HW1GdEG0lSVwLF2nWft/JnKyj9EQO4pMW4=",
+    "hash": "sha256-aLckXkWxMsDS1ddPucAmjFS6+mkwHeAO1+BlPNaF6cI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azuread",
     "owner": "hashicorp",
     "repo": "terraform-provider-azuread",
-    "rev": "v2.40.0",
+    "rev": "v2.41.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
