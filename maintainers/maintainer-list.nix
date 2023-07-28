@@ -14181,6 +14181,12 @@
     githubId = 1810487;
     name = "Rika";
   };
+  rikudou = {
+    email = "me@rikudousage.com";
+    github = "RikudouSage";
+    githubId = 13106547;
+    name = "RikudouSage";
+  };
   rileyinman = {
     email = "rileyminman@gmail.com";
     github = "rileyinman";
