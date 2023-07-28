@@ -35492,6 +35492,8 @@ with pkgs;
 
   todiff = callPackage ../applications/misc/todiff { };
 
+  task-json-cli = callPackage ../applications/office/task-json-cli { };
+
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
   todofi-sh = callPackage ../applications/office/todofi.sh { };
