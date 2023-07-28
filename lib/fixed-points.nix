@@ -75,6 +75,10 @@ rec {
     Java. It may seem counter-intuitive to have the "base class" as the second
     argument, but it's nice this way if several uses of `extends` are cascaded.
 
+    In other words, the argument order for `extends g f` is the same as `g ∘ f`
+    in [mathematics](https://en.wikipedia.org/wiki/Function_composition) -- in
+    both cases the resulting function will perform `f` first, then perform `g`.
+
     To get a better understanding how `extends` turns a function with a fix
     point (the package set we start with) into a new function with a different fix
     point (the desired packages set) lets just see, how `extends g f`
