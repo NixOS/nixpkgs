@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, openssl, c-ares, libxml2, sqlite, zlib, libssh2
+, gnutls, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit, sphinx
 , Security
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
 
-  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
+  buildInputs = [ gnutls c-ares libxml2 sqlite zlib libssh2 ] ++
     lib.optional stdenv.isDarwin Security;
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
