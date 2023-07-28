@@ -7,20 +7,26 @@
 
 stdenv.mkDerivation rec {
   pname = "taglib";
-  version = "1.13";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "taglib";
     repo = "taglib";
     rev = "v${version}";
-    sha256 = "sha256-DRALRH+/7c2lBvCpLp8hop3Xxsf76F1q8L7F9qehqQA=";
+    hash = "sha256-QX0EpHGT36UsgIfRf5iALnwxe0jjLpZvCTbk8vSMFF4=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    # Workaround unconditional ${prefix} until upstream is fixed:
+    #   https://github.com/taglib/taglib/issues/1098
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ];
 
   meta = with lib; {
     homepage = "https://taglib.org/";
