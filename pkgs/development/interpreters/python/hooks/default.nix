@@ -66,11 +66,7 @@ in {
     makePythonHook {
       name = "pypa-build-hook.sh";
       propagatedBuildInputs = [ build ];
-      substitutions = {
-        inherit pythonInterpreter;
-      };
     } ./pypa-build-hook.sh) {};
-
 
   pipInstallHook = callPackage ({ makePythonHook, pip }:
     makePythonHook {
