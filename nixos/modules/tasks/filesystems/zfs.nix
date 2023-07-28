@@ -110,10 +110,11 @@ let
   createImportService = { pool, systemd, force, prefix ? "" }:
     nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
-      # we need systemd-udev-settle to ensure devices are available
+      # We wait for systemd-udev-settle to ensure devices are available,
+      # but don't *require* it, because mounts shouldn't be killed if it's stopped.
       # In the future, hopefully someone will complete this:
       # https://github.com/zfsonlinux/zfs/pull/4943
-      requires = [ "systemd-udev-settle.service" ];
+      wants = [ "systemd-udev-settle.service" ];
       after = [
         "systemd-udev-settle.service"
         "systemd-modules-load.service"
