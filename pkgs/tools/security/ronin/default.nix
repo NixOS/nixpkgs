@@ -15,6 +15,11 @@ bundlerEnv {
     };
   };
 
+  postBuild = ''
+    shopt -s extglob
+    rm $out/bin/!(ronin*)
+  '';
+
   passthru.updateScript = bundlerUpdateScript "ronin";
 
   meta = with lib; {

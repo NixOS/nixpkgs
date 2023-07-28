@@ -10,12 +10,12 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.38";
+  version = "0.4.39";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8TMDbkRyTkzULrBeO0SL/WXB240LD/iZLigE/zPum2A=";
+    hash = "sha256-KXYHeWwV9Tw1ZpO/vASHjDnceeb+1K0yIUohb7EcRAI=";
   };
 
   propagatedBuildInputs = [
