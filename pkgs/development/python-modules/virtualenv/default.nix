@@ -11,6 +11,7 @@
 , hatch-vcs
 , hatchling
 , importlib-metadata
+, pip
 , platformdirs
 , pytest-freezegun
 , pytest-mock
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cython
     flaky
+    pip
     pytest-freezegun
     pytest-mock
     pytest-timeout
