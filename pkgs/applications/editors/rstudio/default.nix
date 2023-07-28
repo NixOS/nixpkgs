@@ -120,6 +120,10 @@ in
       qtwebchannel
     ]);
 
+    propagatedBuildInputs = [
+      quarto
+    ];
+
     cmakeFlags = [
       "-DRSTUDIO_TARGET=${if server then "Server" else "Desktop"}"
       "-DCMAKE_BUILD_TYPE=Release"
