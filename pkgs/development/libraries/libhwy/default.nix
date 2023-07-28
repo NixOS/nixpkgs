@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
     rev = version;
-    hash = "sha256-bQtfye+gn7GOyzCtji4st5hsV40rPzuaYDP7N1tZ8wg=";
+    hash = "sha256-Gym2iHq5ws9kuG4HWSQndD8hVugV4USZt6dUFnEkLwY=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -29,6 +29,14 @@ stdenv.mkDerivation rec {
     "-DGTEST_MAIN_LIBRARY=${lib.getLib gtest}/lib/libgtest_main${libExt}"
   ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
     "-DHWY_CMAKE_ARM7=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_32 [
+    # Quoting CMakelists.txt:
+    #   This must be set on 32-bit x86 with GCC < 13.1, otherwise math_test will be
+    #   skipped. For GCC 13.1+, you can also build with -fexcess-precision=standard.
+    # Fixes tests:
+    #   HwyMathTestGroup/HwyMathTest.TestAllAtanh/EMU128
+    #   HwyMathTestGroup/HwyMathTest.TestAllLog1p/EMU128
+    "-DHWY_CMAKE_SSE2=ON"
   ];
 
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
