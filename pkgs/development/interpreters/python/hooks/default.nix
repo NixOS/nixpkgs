@@ -1,7 +1,8 @@
 self: dontUse: with self;
 
 let
-  pythonInterpreter = python.pythonForBuild.interpreter;
+  inherit (python) pythonForBuild;
+  pythonInterpreter = pythonForBuild.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
@@ -80,6 +81,17 @@ in {
         inherit pythonInterpreter pythonSitePackages;
       };
     } ./pip-install-hook.sh) {};
+
+  pypaInstallHook = callPackage ({ makePythonHook, installer }:
+    makePythonHook {
+      name = "pypa-install-hook";
+      propagatedBuildInputs = [ installer ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./pypa-install-hook.sh) {
+      inherit (pythonForBuild.pkgs) installer;
+    };
 
   pytestCheckHook = callPackage ({ makePythonHook, pytest }:
     makePythonHook {
