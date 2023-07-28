@@ -7308,6 +7308,8 @@ self: super: with self; {
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
 
+  onnxmltools = callPackage ../development/python-modules/onnxmltools { };
+
   onnxruntime = callPackage ../development/python-modules/onnxruntime {
     onnxruntime = pkgs.onnxruntime.override {
       python3Packages = self;
@@ -13121,6 +13123,8 @@ self: super: with self; {
   unrpa = callPackage ../development/python-modules/unrpa { };
 
   unstructured = callPackage ../development/python-modules/unstructured { };
+
+  unstructured-api-tools = callPackage ../development/python-modules/unstructured-api-tools { };
 
   unstructured-inference = callPackage ../development/python-modules/unstructured-inference { };
 
