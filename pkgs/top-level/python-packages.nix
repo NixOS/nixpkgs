@@ -1207,8 +1207,6 @@ self: super: with self; {
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
 
-  backports_tempfile = callPackage ../development/python-modules/backports_tempfile { };
-
   backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock { };
 
   backports_weakref = callPackage ../development/python-modules/backports_weakref { };
