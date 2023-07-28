@@ -182,7 +182,11 @@ rec {
     nativeBuildInputs = [
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
-    buildInputs = [ glibc glibc.static ] ++ plugins;
+
+    buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23") [
+      glibc
+      glibc.static
+    ];
 
     patches = lib.optionals (lib.versionOlder version "23.0.5") [
       (fetchpatch {
