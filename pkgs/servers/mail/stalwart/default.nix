@@ -9,10 +9,11 @@
 , zstd
 , stdenv
 , darwin
+, nix-update-script
 }:
 
 let
-  version = "0.3.1";
+  version = "0.3.2";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -22,7 +23,7 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "v${version}";
-    hash = "sha256-RLLKZ1nUYv8fCEd6SSIpy7o88Ee5vs5EaPcfulCXiIU=";
+    hash = "sha256-5+r1xWpxIwyvRUPw2X4vIvbvqUe6lBcYurbxwNySXAY=";
     fetchSubmodules = true;
   };
 
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage {
       "mail-builder-0.3.0" = "sha256-0o/fV7ZKiRKeitBBt8yOM/2nXIEgOGSMEMaBj+3i7Kw=";
       "mail-parser-0.8.2" = "sha256-XvKEgzQ+HDoLI16CmqE/RRgApg0q9Au9sqOOEpZz6W0=";
       "mail-send-0.4.0" = "sha256-bMPI871hBj/RvrW4kESGS9XzfnkSo8r2/9uUwgE12EU=";
-      "sieve-rs-0.3.1" = "sha256-0LE98L7JEc6FObygIsln4Enw2kx8FnLotJ/fXGpc4E8=";
+      "sieve-rs-0.3.1" = "sha256-FJBQorFRXQYhiCzprAqiv69Qae9YI5OAipjayooFDAw=";
       "smtp-proto-0.1.1" = "sha256-HhKZQHQv3tMEfRZgCoAtyxVzwHbcB4FSjKlMoU1PkHg=";
     };
   };
@@ -63,6 +64,8 @@ rustPlatform.buildRustPackage {
 
   # Tests require reading to /etc/resolv.conf
   doCheck = false;
+
+  passthru.update-script = nix-update-script { };
 
   meta = with lib; {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
