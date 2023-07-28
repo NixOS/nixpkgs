@@ -10,20 +10,20 @@
 
 buildGoModule rec {
   pname = "karma";
-  version = "0.114";
+  version = "0.115";
 
   src = fetchFromGitHub {
     owner = "prymitive";
     repo = "karma";
     rev = "v${version}";
-    hash = "sha256-ZstBumK2ywwdr1ksMN7P8mHdYUiMOpfpYnvt0v0Io4w=";
+    hash = "sha256-SW/nmJcSk/LmoKLuD5stsSaRGaJctl6hVSODNCT9i64=";
   };
 
-  vendorHash = "sha256-ZsXPA4KyKbc/bwkidyHNDg62mE8KlE+yIssOBZLmHVg=";
+  vendorHash = "sha256-Y55AaB8KRV+Tq/Trg1BOOwziyt+yJ2b3iVYA6bDebQY=";
 
   npmDeps = fetchNpmDeps {
     src = "${src}/ui";
-    hash = "sha256-gxsq+wwD+fUACkC07DWeVkvVtipZkEcPIR5RcPsPato=";
+    hash = "sha256-/L+eU0xwaopL2im9epiZiZ23dUqJ+3OwhWw/rIZC6hI=";
   };
 
   npmRoot = "ui";
@@ -60,6 +60,7 @@ buildGoModule rec {
   passthru.tests.karma = nixosTests.karma;
 
   meta = with lib; {
+    changelog = "https://github.com/prymitive/karma/blob/${src.rev}/CHANGELOG.md";
     description = "Alert dashboard for Prometheus Alertmanager";
     homepage = "https://karma-dashboard.io/";
     license = licenses.asl20;
