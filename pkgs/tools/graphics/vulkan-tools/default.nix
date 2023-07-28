@@ -22,17 +22,18 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.254";
+  version = "1.3.259";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "v${version}";
-    hash = "sha256-MyYngyoIGpGu1jFN1GDm9BcFye1JRz1cN6SaZue1ZGQ=";
+    hash = "sha256-MqFsbRUcPpfEEzvO+gh/cj4KqrJy13C8Ko8A0ih17E0=";
   };
 
   nativeBuildInputs = [
     cmake
+    glslang
     pkg-config
     python3
   ];
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
     "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
+    "-DGLSLANG_INSTALL_DIR=${glslang}"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ] ++ lib.optionals stdenv.isDarwin [
