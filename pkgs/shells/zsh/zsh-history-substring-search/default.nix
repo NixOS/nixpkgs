@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-history-substring-search";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-history-substring-search";
     rev = "v${version}";
-    sha256 = "0y8va5kc2ram38hbk2cibkk64ffrabfv1sh4xm7pjspsba9n5p1y";
+    sha256 = "0vjw4s0h4sams1a1jg9jx92d6hd2swq4z908nbmmm2qnz212y88r";
   };
 
   strictDeps = true;
