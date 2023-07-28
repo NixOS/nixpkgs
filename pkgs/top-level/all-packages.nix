@@ -9512,6 +9512,8 @@ with pkgs;
 
   klystrack = callPackage ../applications/audio/klystrack { };
 
+  knit = callPackage ../development/tools/build-managers/knit { };
+
   knockpy = callPackage ../tools/security/knockpy { };
 
   kool = callPackage ../development/tools/misc/kool { };
