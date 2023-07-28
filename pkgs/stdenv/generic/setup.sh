@@ -1216,7 +1216,7 @@ fixLibtool() {
     done
 
     sed -i "$1" \
-        -e "s^eval \(sys_lib_search_path=\).*^\1'$search_path'^" \
+        -e "s^eval \(sys_lib_search_path=\).*^\1'${search_path:-}'^" \
         -e 's^eval sys_lib_.+search_path=.*^^'
 }
 
