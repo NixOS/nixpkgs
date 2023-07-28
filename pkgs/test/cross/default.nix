@@ -133,6 +133,7 @@ let
     pkgs.pkgsMusl.stdenv
     pkgs.pkgsLLVM.stdenv
     pkgs.pkgsStatic.bash
+    pkgs.pkgsCross.powernv.linux_latest
     pkgs.pkgsCross.arm-embedded.stdenv
     pkgs.pkgsCross.m68k.stdenv
     pkgs.pkgsCross.aarch64-multiplatform.pkgsBuildTarget.gcc
