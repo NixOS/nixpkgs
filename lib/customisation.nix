@@ -279,15 +279,7 @@ rec {
 
   /* Like the above, but aims to support cross compilation. It's still ugly, but
      hopefully it helps a little bit. */
-  makeScopeWithSplicing =
-    { splicePackages
-    , newScope
-    }:
-    { otherSplices
-    , keep ? (_self: {})
-    , extra ? (_spliced0: {})
-    , f
-    }:
+  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: extra: f:
     let
       spliced0 = splicePackages {
         pkgsBuildBuild = otherSplices.selfBuildBuild;
@@ -303,11 +295,13 @@ rec {
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
         # overridden.
-        overrideScope = g: (makeScopeWithSplicing
-          { inherit splicePackages newScope; }
-          { inherit otherSplices keep extra;
-            f = lib.fixedPoints.extends g f;
-          });
+        overrideScope = g: makeScopeWithSplicing
+          splicePackages
+          newScope
+          otherSplices
+          keep
+          extra
+          (lib.fixedPoints.extends g f);
         packages = f;
       };
     in self;

@@ -334,7 +334,4 @@ let
       overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
     };
 
-in makeScopeWithSplicing {
-  otherSplices = generateSplicesForMkScope "qt5";
-  f = addPackages;
-}
+in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages

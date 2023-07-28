@@ -34,10 +34,13 @@ let
             selfHostHost = perlOnHostForHost.pkgs;
             selfTargetTarget = perlOnTargetForTarget.pkgs or {};
           };
-        in makeScopeWithSplicing {
-          inherit otherSplices;
-          f = perlPackagesFun;
-        })
+          keep = self: { };
+          extra = spliced0: {};
+        in makeScopeWithSplicing
+          otherSplices
+          keep
+          extra
+          perlPackagesFun)
         {
           perl = self;
         };
