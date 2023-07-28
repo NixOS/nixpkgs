@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pypitoken";
-  version = "6.0.3";
+  version = "7.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ewjoachim";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-1kPIVcxpFjqlAnPh71iS07n9M0qcFrwMRV8k38YxHBc=";
+    hash = "sha256-CjSENkk1VlzrCngwFoJuq31Iai60qTJXBGMoV5QkSsE=";
   };
 
   postPatch = ''
