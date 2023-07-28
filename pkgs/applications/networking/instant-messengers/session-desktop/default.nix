@@ -1,12 +1,9 @@
 { lib
-, makeDesktopItem
-, copyDesktopItems
 , stdenvNoCC
 , fetchurl
 , appimageTools
 , makeWrapper
 }:
-
 let
   version = "1.11.0";
   pname = "session-desktop";
@@ -18,7 +15,7 @@ let
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
   };
-  appimage-contents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extractType2 {
     inherit version pname src;
   };
 in
@@ -26,31 +23,24 @@ stdenvNoCC.mkDerivation {
   inherit version pname;
   src = appimage;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Session";
-      desktopName = "Session";
-      comment = "Onion routing based messenger";
-      exec = "${appimage}/bin/session-desktop-${version}";
-      icon = "${appimage-contents}/session-desktop.png";
-      terminal = false;
-      type = "Application";
-      categories = [ "Network" ];
-    })
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
 
-    mv bin/session-desktop-${version} bin/session-desktop
+    mv bin/${pname}-${version} bin/${pname}
 
     mkdir -p $out/
     cp -r bin $out/bin
 
-    wrapProgram $out/bin/session-desktop \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+    mkdir -p $out/share/${pname}
+    cp -a ${appimageContents}/usr/share/icons $out/share/
+    install -Dm 644 ${appimageContents}/${pname}.desktop -t $out/share/applications/
+
+    substituteInPlace $out/share/applications/${pname}.desktop --replace "AppRun" "${pname}"
+
+    wrapProgram $out/bin/${pname} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations,UseOzonePlatform}}"
 
     runHook postInstall
   '';
