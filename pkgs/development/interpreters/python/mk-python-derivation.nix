@@ -10,10 +10,13 @@
 , toPythonModule
 , namePrefix
 , update-python-libraries
+, bootstrap
 , setuptools
 , flitBuildHook
 , pipBuildHook
 , pipInstallHook
+, pypaBuildHook
+, pypaInstallHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
 , pythonNamespacesHook
@@ -161,6 +164,16 @@ let
 
     in inputs: builtins.map (checkDrv) inputs;
 
+  isBootstrapInstallPackage = builtins.elem (attrs.pname or null) [
+    "flit-core" "installer"
+  ];
+
+  isBootstrapPackage = isBootstrapInstallPackage || builtins.elem (attrs.pname or null) ([
+    "build" "packaging" "pyproject-hooks"
+  ] ++ lib.optionals (python.pythonOlder "3.11") [
+    "tomli"
+  ]);
+
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
@@ -174,7 +187,10 @@ let
       wrapPython
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRemoveTestsDirHook
-    ] ++ lib.optionals catchConflicts [
+    ] ++ lib.optionals (catchConflicts && !isBootstrapPackage) [
+      # When building a package that is also part of the bootstrap chain, we 
+      # must ignore conflicts after installation, because there will be one with 
+      # the package in the bootstrap.
       pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
@@ -184,15 +200,25 @@ let
       setuptoolsBuildHook
     ] ++ lib.optionals (format == "flit") [
       flitBuildHook
-    ] ++ lib.optionals (format == "pyproject") [
-      pipBuildHook
-    ] ++ lib.optionals (format == "wheel") [
+    ] ++ lib.optionals (format == "pyproject") [(
+      if python.isPy2 then
+        pipBuildHook
+      else if isBootstrapPackage then
+        pypaBuildHook.override { inherit (bootstrap) build; }
+      else
+        pypaBuildHook
+    )] ++ lib.optionals (format == "wheel") [
       wheelUnpackHook
     ] ++ lib.optionals (format == "egg") [
       eggUnpackHook eggBuildHook eggInstallHook
-    ] ++ lib.optionals (!(format == "other") || dontUsePipInstall) [
-      pipInstallHook
-    ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    ] ++ lib.optionals (format != "other") [(
+      if python.isPy2 then
+        pipInstallHook
+      else if isBootstrapInstallPackage then
+        pypaInstallHook.override { inherit (bootstrap) installer; }
+      else
+        pypaInstallHook
+    )] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
       # This is a test, however, it should be ran independent of the checkPhase and checkInputs
       pythonImportsCheckHook
     ] ++ lib.optionals (python.pythonAtLeast "3.3") [
