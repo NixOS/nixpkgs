@@ -101,6 +101,10 @@ buildPythonPackage rec {
     "test_async_with_session"
     "test_session_close_awaitable"
     "test_close_run_until_complete_not_deprecated"
+    # https://github.com/aio-libs/aiohttp/issues/7130
+    "test_static_file_if_none_match"
+    "test_static_file_if_match"
+    "test_static_file_if_modified_since_past_date"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [

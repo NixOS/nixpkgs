@@ -62,6 +62,16 @@ in {
       };
     } ./pip-build-hook.sh) {};
 
+  pypaBuildHook = callPackage ({ makePythonHook, build, wheel }:
+    makePythonHook {
+      name = "pypa-build-hook.sh";
+      propagatedBuildInputs = [ build wheel ];
+      substitutions = {
+        inherit pythonInterpreter;
+      };
+    } ./pypa-build-hook.sh) {};
+
+
   pipInstallHook = callPackage ({ makePythonHook, pip }:
     makePythonHook {
       name = "pip-install-hook";

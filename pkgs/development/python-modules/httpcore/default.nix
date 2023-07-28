@@ -13,11 +13,14 @@
 , pythonOlder
 , sniffio
 , socksio
+# for passthru.tests
+, httpx
+, httpx-socks
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.16.3";
+  version = "0.17.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +29,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-3bC97CTZi6An+owjoJF7Irtr7ONbP8RtNdTIGJRy0Ng=";
+    hash = "sha256-qAoORhzBbjXxgtzTqbAxWBxrohzfwDWm5mxxrgeXt48=";
   };
 
   propagatedBuildInputs = [
@@ -70,7 +73,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = {
+    inherit httpx httpx-socks;
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/encode/httpcore/releases/tag/${version}";
     description = "A minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;

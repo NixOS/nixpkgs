@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pdm-pep517";
-  version = "1.1.2";
+  version = "1.1.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1PpzWmRffpWmvrNKK19+jgDZPdBDnXPzHMguQLW4/c4=";
+    hash = "sha256-f0kSHnC0Lcopb6yWIhDdLaB6OVdfxWcxN61mFjOyzz8=";
   };
 
   preCheck = ''

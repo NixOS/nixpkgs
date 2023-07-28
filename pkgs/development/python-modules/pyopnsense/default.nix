@@ -4,10 +4,10 @@
 , fixtures
 , mock
 , pbr
-, pytest-cov
 , pytestCheckHook
 , pythonOlder
 , requests
+, testtools
 }:
 
 buildPythonPackage rec {
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fixtures
     mock
-    pytest-cov
     pytestCheckHook
+    testtools
   ];
 
   pythonImportsCheck = [

@@ -41,14 +41,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.24.2";
+  version = "1.25.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-ADqfUw6IDLLNF3y6GvciC5qkLe+cSvwqL8Pua+frKyI=";
+    hash = "sha256-mjqfOmFIDMCGEXtCaovYaGnCE/xAcuYG8BxOS2brkr8=";
   };
 
   patches = [
@@ -57,13 +57,6 @@ in buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/numpy/numpy/commit/609fee4324f3521d81a3454f5fcc33abb0d3761e.patch";
       hash = "sha256-6Dbmf/RWvQJPTIjvchVaywHGcKCsgap/0wAp5WswuCo=";
-    })
-
-    # Backport from 1.25. `platform.machine` returns `arm64` on aarch64-darwin, which causes
-    # differing results between `_selected_real_kind_func` and Fortran’s `selected_real_kind`.
-    (fetchpatch {
-      url = "https://github.com/numpy/numpy/commit/afcedf4b63f4a94187e6995c2adea0da3bb18e83.patch";
-      hash = "sha256-cxBoimX5a9wC2qUIGAo5o/M2E9+eV63bV2/wLmfDYKg=";
     })
 
     # Disable `numpy/core/tests/test_umath.py::TestComplexFunctions::test_loss_of_precision[complex256]`

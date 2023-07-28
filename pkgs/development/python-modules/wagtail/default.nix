@@ -24,19 +24,20 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "4.2.2";
+  version = "5.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s89gs3H//Dc3k6BLZUC4APyDgiWY9LetWAkI+kXQTf8=";
+    hash = "sha256-3r0h34el2zRF1l/94S7xTjBqJPWtSQFQvtVW8Mjq0rs=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "beautifulsoup4>=4.8,<4.12" "beautifulsoup4>=4.8"
+      --replace "beautifulsoup4>=4.8,<4.12" "beautifulsoup4>=4.8" \
+      --replace "Pillow>=4.0.0,<10.0.0" "Pillow>=9.1.0,<11.0.0"
   '';
 
   propagatedBuildInputs = [

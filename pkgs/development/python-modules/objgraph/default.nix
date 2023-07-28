@@ -4,7 +4,7 @@
 , graphviz
 , graphvizPkgs
 , isPyPy
-, pytestCheckHook
+, python
 , pythonOlder
 , substituteAll
 }:
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "3.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5" || isPyPy;
+  disabled = pythonOlder "3.7" || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
@@ -28,27 +28,27 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    graphviz
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  passthru.optional-dependencies = {
+    ipython = [
+      graphviz
+    ];
+  };
 
   pythonImportsCheck = [
     "objgraph"
   ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} tests.py
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Draws Python object reference graphs with graphviz";
     homepage = "https://mg.pov.lt/objgraph/";
     changelog = "https://github.com/mgedmin/objgraph/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

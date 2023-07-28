@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.16.2";
+  version = "2.17.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7.2";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xNCGf4CsxEKScIn6dl2Ka31P6bhMo5fTs9TIQz+vPiM=";
+    hash = "sha256-cmH6Q6/XJXx8EXDIsik1Aheu9hYGvvlNvWBUCdmC3P8=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,7 @@ buildPythonPackage rec {
     # implementation relies on the '__implements__'  attribute proposed
     # in PEP 245, which was rejected in 2006.
     "-W" "ignore::DeprecationWarning"
+    "-v"
   ];
 
   dontUseSetuptoolsCheck = true;
