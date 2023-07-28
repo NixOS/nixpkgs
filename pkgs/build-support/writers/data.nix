@@ -1,4 +1,4 @@
-{ lib, runCommandNoCC, dasel }:
+{ lib, runCommand, dasel }:
 let
   daselBin = lib.getExe dasel;
 
@@ -28,7 +28,7 @@ rec {
     let
       name = last (builtins.split "/" nameOrPath);
     in
-    runCommandNoCC name
+    runCommand name
       {
         input = input data;
         passAsFile = [ "input" ];
