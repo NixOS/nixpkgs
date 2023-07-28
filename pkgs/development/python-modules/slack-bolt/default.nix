@@ -32,6 +32,12 @@ buildPythonPackage rec {
     hash = "sha256-s9djd/MDNnyNkjkeApY6Fb1mhI6iop8RghaSJdi4eAs=";
   };
 
+  # The packaged pytest-runner version is too new as of 2023-07-27. It's not really needed anyway. Unfortunately,
+  # pythonRelaxDepsHook doesn't work on setup_requires packages.
+  postPatch = ''
+    substituteInPlace setup.py --replace "pytest-runner==5.2" ""
+  '';
+
   propagatedBuildInputs = [ slack-sdk ];
 
   nativeCheckInputs = [
@@ -68,6 +74,7 @@ buildPythonPackage rec {
     "test_interactions"
     "test_lazy_listener_calls"
     "test_lazy_listeners"
+    "test_failure"
   ];
 
   pythonImportsCheck = [ "slack_bolt" ];
