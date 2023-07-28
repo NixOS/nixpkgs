@@ -27121,6 +27121,9 @@ with pkgs;
   };
 
   xorg = let
+    keep = _self: { };
+    extra = _spliced0: { };
+
     # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
     # so as not to have the newly bound xorg items already in scope,  which would
     # have created a cycle.
@@ -27135,10 +27138,11 @@ with pkgs;
 
     generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix { };
 
-    xorgPackages = makeScopeWithSplicing {
-      otherSplices = generateSplicesForMkScope "xorg";
-      f = lib.extends overrides generatedPackages;
-    };
+    xorgPackages = makeScopeWithSplicing
+      (generateSplicesForMkScope "xorg")
+      keep
+      extra
+      (lib.extends overrides generatedPackages);
 
   in recurseIntoAttrs xorgPackages;
 

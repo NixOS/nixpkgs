@@ -15,10 +15,7 @@ let
                                         (stdenv.targetPlatform.config + "-");
 in
 
-makeScopeWithSplicing {
-  otherSplices = generateSplicesForMkScope "darwin";
-  extra = spliced: spliced.apple_sdk.frameworks;
-  f = (self: let
+makeScopeWithSplicing (generateSplicesForMkScope "darwin") (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
@@ -254,5 +251,4 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
 } // lib.optionalAttrs config.allowAliases {
   builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
-});
-}
+})

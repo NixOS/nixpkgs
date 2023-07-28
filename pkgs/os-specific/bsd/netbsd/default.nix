@@ -26,9 +26,11 @@ let
       else "no"}"
   ];
 
-in makeScopeWithSplicing {
-  otherSplices = generateSplicesForMkScope "netbsd";
-  f = (self: let
+in makeScopeWithSplicing
+  (generateSplicesForMkScope "netbsd")
+  (_: {})
+  (_: {})
+  (self: let
     inherit (self) mkDerivation;
   in {
 
@@ -1009,5 +1011,4 @@ in makeScopeWithSplicing {
   # END MISCELLANEOUS
   #
 
-});
-}
+})
