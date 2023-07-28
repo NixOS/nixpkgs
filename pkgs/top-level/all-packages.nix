@@ -577,6 +577,8 @@ with pkgs;
 
   dec-decode = callPackage ../development/tools/dec-decode { };
 
+  devour-flake = callPackage ../tools/nix/devour-flake { };
+
   dnf5 = callPackage ../tools/package-management/dnf5 { };
 
   dsq = callPackage ../tools/misc/dsq { };
@@ -4570,7 +4572,9 @@ with pkgs;
 
   cowsay = callPackage ../tools/misc/cowsay { };
 
-  czkawka = callPackage ../tools/misc/czkawka { };
+  czkawka = callPackage ../tools/misc/czkawka {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   cherrytree = callPackage ../applications/misc/cherrytree { };
 
@@ -9220,7 +9224,7 @@ with pkgs;
 
   ispike = callPackage ../development/libraries/science/robotics/ispike { };
 
-  isrcsubmit = callPackage ../tools/audio/isrcsubmit { stdenv = gcc10StdenvCompat; };
+  isrcsubmit = callPackage ../tools/audio/isrcsubmit { };
 
   isync = callPackage ../tools/networking/isync {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -33599,6 +33603,7 @@ with pkgs;
   } // (config.mplayer or {}));
 
   mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
+    stdenv = if stdenv.isDarwin then swiftPackages.stdenv else stdenv;
     inherit lua;
   };
 
@@ -35437,6 +35442,8 @@ with pkgs;
 
   tickrs = callPackage ../applications/misc/tickrs { };
 
+  tijolo = callPackage ../applications/editors/tijolo { };
+
   tilemaker = callPackage ../applications/misc/tilemaker { };
 
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
@@ -36005,21 +36012,19 @@ with pkgs;
 
   wapiti = callPackage ../tools/security/wapiti { };
 
-  wayfireApplications = wayfireApplications-unwrapped.withPlugins (plugins: [ plugins.wf-shell ]);
-  inherit (wayfireApplications) wayfire wcm;
-  wayfireApplications-unwrapped = recurseIntoAttrs (
-    (callPackage ../applications/window-managers/wayfire/applications.nix { }).
-    extend (_: _: { wlroots = wlroots_0_16; })
-  );
-  wayfirePlugins = recurseIntoAttrs (
-    callPackage ../applications/window-managers/wayfire/plugins.nix {
-      inherit (wayfireApplications-unwrapped) wayfire;
-    }
-  );
-
   weave-gitops = callPackage ../applications/networking/cluster/weave-gitops { };
 
+  wayfire = callPackage ../applications/window-managers/wayfire/default.nix {
+    wlroots = wlroots_0_16;
+  };
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
+
+  wayfirePlugins = recurseIntoAttrs (
+    callPackage ../applications/window-managers/wayfire/plugins.nix { }
+  );
+  wayfire-with-plugins = callPackage ../applications/window-managers/wayfire/wrapper.nix {
+    plugins = with wayfirePlugins; [ wcm wf-shell ];
+  };
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
 
@@ -38228,6 +38233,8 @@ with pkgs;
 
   hhexen = callPackage ../games/hhexen { };
 
+  hheretic = callPackage ../games/hheretic { };
+
   wyvern = callPackage ../games/wyvern { };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
@@ -40313,6 +40320,10 @@ with pkgs;
   nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
 
   alejandra = callPackage ../tools/nix/alejandra { };
+
+  nixci = callPackage ../tools/nix/nixci {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   nixfmt = haskellPackages.nixfmt.bin;
 

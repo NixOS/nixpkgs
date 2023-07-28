@@ -69,6 +69,34 @@ with lib;
           VM name
         '';
       };
+      additionalSpace = mkOption {
+        type = types.str;
+        default = "512M";
+        example = "2048M";
+        description = lib.mdDoc ''
+          additional disk space to be added to the image if diskSize "auto"
+          is used.
+        '';
+      };
+      bootSize = mkOption {
+        type = types.str;
+        default = "256M";
+        example = "512M";
+        description = lib.mdDoc ''
+          Size of the boot partition. Is only used if partitionTableType is
+          either "efi" or "hybrid".
+        '';
+      };
+      diskSize = mkOption {
+        type = types.str;
+        default = "auto";
+        example = "20480";
+        description = lib.mdDoc ''
+          The size of the disk, in megabytes.
+          if "auto" size is calculated based on the contents copied to it and
+          additionalSpace is taken into account.
+        '';
+      };
       net0 = mkOption {
         type = types.commas;
         default = "virtio=00:00:00:00:00:00,bridge=vmbr0,firewall=1";
@@ -236,6 +264,7 @@ with lib;
         mkdir -p $out/nix-support
         echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
       '';
+      inherit (cfg.qemuConf) additionalSpace diskSize bootSize;
       format = "raw";
       inherit config lib pkgs;
     };

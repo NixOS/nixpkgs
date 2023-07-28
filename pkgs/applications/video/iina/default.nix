@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iina";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "https://github.com/iina/iina/releases/download/v${version}/IINA.v${version}.dmg";
-    hash = "sha256-rF5yv2QHWVUUsyf/u78jWRn4C629GBJgB/i8YnaKHBk=";
+    hash = "sha256-Sz9sS+07t32+KcEr9tXQlZKEr7Ace1mjX9caOicIiZE=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     description = "The modern media player for macOS";
     platforms = platforms.darwin;
     license = licenses.gpl3;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ arkivm stepbrobd ];
   };
 }

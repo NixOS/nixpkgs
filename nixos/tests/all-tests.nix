@@ -112,6 +112,7 @@ in {
   anuko-time-tracker = handleTest ./anuko-time-tracker.nix {};
   apcupsd = handleTest ./apcupsd.nix {};
   apfs = runTest ./apfs.nix;
+  appliance-repart-image = runTest ./appliance-repart-image.nix;
   apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
