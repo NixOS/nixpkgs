@@ -397,8 +397,12 @@ In this scenario, the `checkPhase` will be ran in `debug` mode as well.
 
 Some packages may use custom scripts for building/installing, e.g. with a `Makefile`.
 In these cases, it's recommended to override the `buildPhase`/`installPhase`/`checkPhase`.
-
 Otherwise, some steps may fail because of the modified directory structure of `target/`.
+
+If you want to run targets from a `Makefile`, instead of overriding the phases,
+you can set `dontCargoBuild`/`dontCargoInstall`/`dontCargoCheck` to `true` to
+use the [default phases from `stdenv`](#sec-stdenv-phases), which execute make
+targets and can be controlled by various variables in the derivation.
 
 ### Building a crate with an absent or out-of-date Cargo.lock file {#building-a-crate-with-an-absent-or-out-of-date-cargo.lock-file}
 
