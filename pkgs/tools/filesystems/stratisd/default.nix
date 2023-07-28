@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.5.7";
+  version = "3.5.8";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JkGDik2RL+JnUJloV5597UlSnF5PncP3F6nzghJpGBg=";
+    rev = "refs/tags/stratisd-v${version}";
+    hash = "sha256-/Yqruz8gUyfL6zXYwlNvXa9feLBOOT4q4Gl/jxt1cMs=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     lvm2
   ];
 
-  outputs = ["out" "initrd"];
+  outputs = [ "out" "initrd" ];
 
   EXECUTABLES_PATHS = lib.makeBinPath ([
     xfsprogs
