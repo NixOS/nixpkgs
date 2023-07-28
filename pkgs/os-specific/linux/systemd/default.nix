@@ -88,6 +88,7 @@
 , withAnalyze ? true
 , withApparmor ? true
 , withAudit ? true
+, withBootloader ? true # compiles systemd-boot, assumes EFI is available.
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
@@ -148,6 +149,7 @@ assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
 assert withUkify -> withEfi;
 assert withRepart -> withCryptsetup;
+assert withBootloader -> withEfi;
 
 let
   wantCurl = withRemote || withImportd;
@@ -534,7 +536,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dman=true"
 
     "-Defi=${lib.boolToString withEfi}"
-    "-Dbootloader=${lib.boolToString withEfi}"
+    "-Dbootloader=${lib.boolToString withBootloader}"
 
     "-Dukify=${lib.boolToString withUkify}"
   ] ++ lib.optionals (withShellCompletions == false) [
