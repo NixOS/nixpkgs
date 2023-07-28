@@ -171,6 +171,10 @@ let
     "tomli"
   ]);
 
+  isSetuptoolsDependency = builtins.elem (attrs.pname or null) [
+    "setuptools" "wheel"
+  ];
+
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
@@ -184,10 +188,15 @@ let
       wrapPython
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRemoveTestsDirHook
-    ] ++ lib.optionals (catchConflicts && !isBootstrapPackage) [
-      # When building a package that is also part of the bootstrap chain, we 
-      # must ignore conflicts after installation, because there will be one with 
-      # the package in the bootstrap.
+    ] ++ lib.optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
+      #
+      # 1. When building a package that is also part of the bootstrap chain, we
+      #    must ignore conflicts after installation, because there will be one with
+      #    the package in the bootstrap.
+      #
+      # 2. When a package is a dependency of setuptools, we must ignore conflicts
+      #    because the hook that checks for conflicts uses setuptools.
+      #
       pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
