@@ -125,6 +125,7 @@
 , withResolved ? true
 , withShellCompletions ? true
 , withSysusers ? false # conflicts with the NixOS user management
+, withSysupdate ? true
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
@@ -497,6 +498,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dfirstboot=${lib.boolToString withFirstboot}"
     "-Dsysusers=${lib.boolToString withSysusers}"
     "-Drepart=${lib.boolToString withRepart}"
+    "-Dsysupdate=${lib.boolToString withSysupdate}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
