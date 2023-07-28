@@ -34,4 +34,8 @@ let
   };
   keep = self: { };
   extra = spliced0: { };
-in makeScopeWithSplicing (generateSplicesForMkScope "steamPackages") keep extra steamPackagesFun
+in makeScopeWithSplicing {
+  otherSplices = generateSplicesForMkScope "steamPackages";
+  inherit keep extra;
+  f = steamPackagesFun;
+}

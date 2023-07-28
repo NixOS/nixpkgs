@@ -60,12 +60,10 @@
         overrides
       ]);
       aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
-    in makeScopeWithSplicing
-      otherSplices
-      keep
-      extra
-      (lib.extends (lib.composeExtensions aliases extensions) keep))
-    {
+    in makeScopeWithSplicing {
+      inherit otherSplices keep extra;
+      f = lib.extends (lib.composeExtensions aliases extensions) keep;
+    }) {
       overrides = packageOverrides;
       python = self;
     });

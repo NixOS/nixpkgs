@@ -10,11 +10,10 @@ let
   extra = _spliced0: { };
 
 in
-makeScopeWithSplicing
-  (generateSplicesForMkScope "xfce")
-  keep
-  extra
-  (self:
+makeScopeWithSplicing {
+  otherSplices = generateSplicesForMkScope "xfce";
+  inherit keep extra;
+  f = (self:
     let
       inherit (self) callPackage;
     in
@@ -177,4 +176,5 @@ makeScopeWithSplicing
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
 
       xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
-    })
+    });
+}

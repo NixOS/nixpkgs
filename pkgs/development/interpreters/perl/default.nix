@@ -36,11 +36,10 @@ let
           };
           keep = self: { };
           extra = spliced0: {};
-        in makeScopeWithSplicing
-          otherSplices
-          keep
-          extra
-          perlPackagesFun)
+        in makeScopeWithSplicing {
+          inherit otherSplices keep extra;
+          f = perlPackagesFun;
+        })
         {
           perl = self;
         };

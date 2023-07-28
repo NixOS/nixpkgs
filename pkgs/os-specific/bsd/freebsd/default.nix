@@ -66,11 +66,11 @@ let
     done
   '';
 
-in makeScopeWithSplicing
-  (generateSplicesForMkScope "freebsd")
-  (_: {})
-  (_: {})
-  (self: let
+in makeScopeWithSplicing {
+  otherSplices = generateSplicesForMkScope "freebsd";
+  keep = _: {};
+  extra = _: {};
+  f = (self: let
     inherit (self) mkDerivation;
   in {
   inherit freebsdSrc;
@@ -898,4 +898,5 @@ in makeScopeWithSplicing
     '';
   });
 
-})
+});
+}
