@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake, python3, spirv-headers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spirv-tools";
-  version = "2023.3.rc1";
+  version = "unstable-2023-07-28";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "v${version}";
-    hash = "sha256-HV7jNvgTRRGnhurtT5pf5f5gzUOmr3iWNcDc8TE4ICQ=";
+    rev = "e68fe9be4e6ca63097ac4305d7552ad29afd5004";
+    hash = "sha256-mjtOCjSNtrEThvAJwYXpWhj7qppEx0wDkZe2UxAs8zk=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
