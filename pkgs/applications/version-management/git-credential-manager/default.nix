@@ -7,8 +7,11 @@
 , libSM
 , fontconfig
 , libsecret
+, git
+, git-credential-manager
 , gnupg
 , pass
+, testers
 , withGuiSupport ? true
 , withLibsecretSupport ? true
 , withGpgSupport ? true
@@ -17,34 +20,48 @@
 assert withLibsecretSupport -> withGuiSupport;
 buildDotnetModule rec {
   pname = "git-credential-manager";
-  version = "2.1.2";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
     rev = "v${version}";
-    hash = "sha256-PeQ9atSCgSvduAcqY2CnNJH3ucvoInduA5i8dPUJiHo=";
+    hash = "sha256-XXtir/sSjJ1rpv3UQHM3Kano/fMBch/sm8ZtYwGyFyQ=";
   };
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";
   nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-  dotnetInstallFlags = [ "--framework" "net6.0" ];
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnetInstallFlags = [ "--framework" "net7.0" ];
   executables = [ "git-credential-manager" ];
 
   runtimeDeps = [ fontconfig ]
     ++ lib.optionals withGuiSupport [ libX11 libICE libSM ]
     ++ lib.optional withLibsecretSupport libsecret;
-  makeWrapperArgs = lib.optionals withGpgSupport [ "--prefix" "PATH" ":" (lib.makeBinPath [ gnupg pass ]) ];
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath ([ git ] ++ lib.optionals withGpgSupport [ gnupg pass ])}"
+  ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests.version = testers.testVersion {
+      package = git-credential-manager;
+    };
+  };
 
   meta = with lib; {
-    description = "Secure, cross-platform Git credential storage with authentication to GitHub, Azure Repos, and other popular Git hosting services.";
+    description = "A secure, cross-platform Git credential storage with authentication to GitHub, Azure Repos, and other popular Git hosting services";
     homepage = "https://github.com/git-ecosystem/git-credential-manager";
     license = with licenses; [ mit ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ _999eagle ];
+    longDescription = ''
+      git-credential-manager is a secure, cross-platform Git credential storage with authentication to GitHub, Azure Repos, and other popular Git hosting services.
+
+      > requires sandbox to be disabled on MacOS, so that
+      .NET can find `/usr/bin/codesign` to sign the compiled binary.
+      This problem is common to all .NET packages on MacOS with Nix.
+    '';
   };
 }

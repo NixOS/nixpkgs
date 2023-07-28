@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "5.2";
+  version = "5.4";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    sha256 = "sha256-xUZ8HZb+QEw1t72dyE8rfp666w6rh8yMGYL4H2vJIwE=";
+    sha256 = "sha256-zKIFjplZtxOEPIH9PUw1gGPS4VSdgv2Zj1oOp3If9W0=";
   };
 
   preConfigure = "cd src";
