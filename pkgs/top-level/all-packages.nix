@@ -34698,6 +34698,8 @@ with pkgs;
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or {});
   rrsync = callPackage ../applications/networking/sync/rsync/rrsync.nix { };
 
+  rtfm = callPackage ../applications/misc/rtfm { };
+
   rtl_433 = callPackage ../applications/radio/rtl_433 { };
 
   rtl-ais = callPackage ../applications/radio/rtl-ais { };
