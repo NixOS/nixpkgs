@@ -1,10 +1,11 @@
 { lib
 , buildPythonPackage
-, bootstrapped-pip
 , fetchFromGitHub
 , mock
 , scripttest
+, setuptools
 , virtualenv
+, wheel
 , pretend
 , pytest
 
@@ -15,17 +16,14 @@
 buildPythonPackage rec {
   pname = "pip";
   version = "23.0.1";
-  format = "other";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = "refs/tags/${version}";
     hash = "sha256-BSonlwKmegrlrQTTIL0avPi61/TY2M0f7kOZpSzPRQk=";
-    name = "${pname}-${version}-source";
   };
-
-  nativeBuildInputs = [ bootstrapped-pip ];
 
   postPatch = ''
     # Remove vendored Windows PE binaries
@@ -33,11 +31,13 @@ buildPythonPackage rec {
     find -type f -name '*.exe' -delete
   '';
 
-  # pip detects that we already have bootstrapped_pip "installed", so we need
-  # to force it a little.
-  pipInstallFlags = [ "--ignore-installed" ];
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   nativeCheckInputs = [ mock scripttest virtualenv pretend pytest ];
+
   # Pip wants pytest, but tests are not distributed
   doCheck = false;
 
@@ -48,6 +48,5 @@ buildPythonPackage rec {
     license = with lib.licenses; [ mit ];
     homepage = "https://pip.pypa.io/";
     changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
-    priority = 10;
   };
 }
