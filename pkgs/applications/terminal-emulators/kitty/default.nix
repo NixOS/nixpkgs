@@ -29,14 +29,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.29.1";
+  version = "0.29.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-C7Km98N/ER+IJ964V+BFkVF8N7uRmraPIpHn8yJtb/Q=";
+    hash = "sha256-ureJHG6Jh4bsXqQZnGwY5Hlq7sXxYX3iTajb8ZkpZw8=";
   };
 
   goModules = (buildGoModule {
@@ -190,8 +190,8 @@ buildPythonApplication rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
-    mkdir -p $kitten/bin
+    mkdir -p "$out"
+    mkdir -p "$kitten/bin"
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
     ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
@@ -202,8 +202,8 @@ buildPythonApplication rec {
 
     installManPage 'docs/_build/man/kitty.1'
     '' else ''
-    cp -r linux-package/{bin,share,lib} $out
-    cp linux-package/bin/kitten $kitten/bin/kitten
+    cp -r linux-package/{bin,share,lib} "$out"
+    cp linux-package/bin/kitten "$kitten/bin/kitten"
     ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
@@ -220,7 +220,7 @@ buildPythonApplication rec {
     mkdir -p $terminfo/share
     mv "$terminfo_src" $terminfo/share/terminfo
 
-    mkdir -p $out/nix-support
+    mkdir -p "$out/nix-support"
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
     cp -r 'shell-integration' "$shell_integration"
