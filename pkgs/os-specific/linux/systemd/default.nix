@@ -151,6 +151,8 @@ assert withHomed -> withPam;
 assert withUkify -> withEfi;
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
+# passwdqc is not packaged in nixpkgs yet, if you want to fix this, please submit a PR.
+assert !withPasswordQuality;
 
 let
   wantCurl = withRemote || withImportd;
