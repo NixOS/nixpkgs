@@ -144,7 +144,7 @@ in
   newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
 
   # prefill 2 fields of the function for convenience
-  makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
+  makeScopeWithSplicing = lib.makeScopeWithSplicing { inherit splicePackages; inherit (pkgs) newScope; };
 
   # generate 'otherSplices' for 'makeScopeWithSplicing'
   generateSplicesForMkScope = attr:
