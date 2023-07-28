@@ -1,5 +1,4 @@
 { lib
-, backports_unittest-mock
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    backports_unittest-mock
     pytestCheckHook
   ];
 
