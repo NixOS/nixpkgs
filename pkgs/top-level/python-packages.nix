@@ -13901,7 +13901,7 @@ self: super: with self; {
 
   zope-cachedescriptors = callPackage ../development/python-modules/zope-cachedescriptors { };
 
-  zope_component = callPackage ../development/python-modules/zope_component { };
+  zope-component = callPackage ../development/python-modules/zope-component { };
 
   zope_configuration = callPackage ../development/python-modules/zope_configuration { };
 
