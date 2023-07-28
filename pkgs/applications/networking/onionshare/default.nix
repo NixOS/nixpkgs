@@ -138,6 +138,13 @@ rec {
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
+    postInstall = ''
+      mkdir -p $out/share/{appdata,applications,icons}
+      cp $src/org.onionshare.OnionShare.desktop $out/share/applications
+      cp $src/org.onionshare.OnionShare.svg $out/share/icons
+      cp $src/org.onionshare.OnionShare.appdata.xml $out/share/appdata
+    '';
+
     preFixup = ''
       wrapQtApp $out/bin/onionshare
     '';
