@@ -1,30 +1,41 @@
 { lib
 , stdenv
-, aiofiles
-, beautifulsoup4
 , buildPythonPackage
-, doCheck ? !stdenv.isDarwin # on Darwin, tests fail but pkg still works
 , fetchFromGitHub
-, gunicorn
+
+# build-system
+, setuptools
+
+# propagates
+, aiofiles
+, html5tagger
 , httptools
 , multidict
+, sanic-routing
+, tracerite
+, typing-extensions
+, ujson
+, uvloop
+, websockets
+
+# optionals
+, aioquic
+
+# tests
+, doCheck ? !stdenv.isDarwin # on Darwin, tests fail but pkg still works
+
+, beautifulsoup4
+, gunicorn
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, pythonAtLeast
-, sanic-routing
 , sanic-testing
-, setuptools
-, ujson
 , uvicorn
-, uvloop
-, websockets
-, aioquic
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "22.12.0";
+  version = "23.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -33,7 +44,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vj780rP5rJ+YsMWlb3BR9LTKT/nTt0C2H3J0X9sysj8=";
+    hash = "sha256-Ffw92mlYNV+ikb6299uw24EI1XPpl3Ju2st1Yt/YHKw=";
   };
 
   nativeBuildInputs = [
@@ -42,14 +53,25 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiofiles
-    aioquic
     httptools
+    html5tagger
     multidict
     sanic-routing
+    tracerite
+    typing-extensions
     ujson
     uvloop
     websockets
   ];
+
+  passthru.optional-dependencies = {
+    ext = [
+      # TODO: sanic-ext
+    ];
+    http3 = [
+      aioquic
+    ];
+  };
 
   nativeCheckInputs = [
     beautifulsoup4
@@ -58,7 +80,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
     uvicorn
-  ];
+  ] ++ passthru.optional-dependencies.http3;
 
   inherit doCheck;
 
@@ -112,6 +134,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # We are not interested in benchmarks
     "benchmark/"
+    # We are also not interested in typing
+    "typing/test_typing.py"
     # unable to create async loop
     "test_app.py"
     "test_asgi.py"
