@@ -1199,23 +1199,13 @@ self: super: with self; {
 
   backports-cached-property = callPackage ../development/python-modules/backports-cached-property { };
 
-  backports_csv = callPackage ../development/python-modules/backports_csv { };
-
   backports-datetime-fromisoformat = callPackage ../development/python-modules/backports-datetime-fromisoformat { };
 
   backports-entry-points-selectable = callPackage ../development/python-modules/backports-entry-points-selectable { };
 
-  backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
-
   backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
-
-  backports_tempfile = callPackage ../development/python-modules/backports_tempfile { };
-
-  backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock { };
-
-  backports_weakref = callPackage ../development/python-modules/backports_weakref { };
 
   backports-zoneinfo = callPackage ../development/python-modules/backports-zoneinfo { };
 
