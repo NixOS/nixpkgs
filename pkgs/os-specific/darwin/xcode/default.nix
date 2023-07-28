@@ -43,7 +43,8 @@ let requireXcode = version: sha256:
       fi
 
       echo "Importing $xc into the nix store..."
-      mv $xc $tmp/Xcode-${version}.app
+      mv $xc $tmp/_Xcode.app
+      mv $tmp/_Xcode.app $tmp/Xcode-${version}.app
       finalPath=$(nix-store --add-fixed --recursive sha256 "$tmp/Xcode-${version}.app")
 
       echo "Done! Xcode.app is at $finalPath"
