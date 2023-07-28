@@ -7,6 +7,9 @@ let
   packages = self: let
     inherit (self) callPackage;
   in {
+    #### Data
+    lomiri-schemas = callPackage ./data/lomiri-schemas { };
+
     #### Development tools / libraries
     cmake-extras = callPackage ./development/cmake-extras { };
     deviceinfo = callPackage ./development/deviceinfo { };
