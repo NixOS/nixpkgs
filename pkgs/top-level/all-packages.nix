@@ -21273,6 +21273,8 @@ with pkgs;
 
   graphinder = callPackage ../tools/security/graphinder { };
 
+  hnswlib = callPackage ../development/libraries/hnswlib { };
+
   httplib = callPackage ../development/libraries/httplib { };
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
