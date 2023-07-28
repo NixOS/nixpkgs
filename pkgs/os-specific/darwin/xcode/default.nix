@@ -1,34 +1,82 @@
-{ stdenv, requireFile, lib }:
+{ lib
+, stdenv
+, requireFile
+, writeShellScriptBin
+, coreutils
+, xcodes
+, nix
+}:
 
 let requireXcode = version: sha256:
   let
+    fetch-xcode = writeShellScriptBin "fetch-xcode-${version}" ''
+      set -euo pipefail
+
+      export PATH=${lib.makeBinPath [ coreutils xcodes nix ]}
+      tmp=$(mktemp -d)
+      clean_up() {
+        rm -rf "$tmp"
+      }
+      trap clean_up EXIT
+
+      echo 'Downloading Xcode.app ${version} with `xcodes` - ${xcodes.meta.homepage}'
+      echo "You may be prompted to enter your Apple ID credentials. A paid developer account is NOT required."
+      xcodes install \
+        ${version} \
+        --directory $tmp \
+        --empty-trash \
+        --no-superuser \
+        --experimental-unxip \
+        "$@"
+
+      xc=$(echo $tmp/Xcode*.app)
+      if [ ! -d "$xc" ]; then
+        echo "Something went wrong. Failed to download Xcode.app"
+        exit 1
+      fi
+
+      echo "Verifying checksum..."
+      xcHash=$(nix-hash --type sha256 --sri "$xc")
+      if [ "$xcHash" != "${sha256}" ]; then
+        echo "Something went wrong. Hash mismatch. Got $xcHash, expected ${sha256}."
+        exit 1
+      fi
+
+      echo "Importing $xc into the nix store..."
+      mv $xc $tmp/Xcode-${version}.app
+      finalPath=$(nix-store --add-fixed --recursive sha256 "$tmp/Xcode-${version}.app")
+
+      echo "Done! Xcode.app is at $finalPath"
+    '';
+
     xip = "Xcode_" + version +  ".xip";
     # TODO(alexfmpe): Find out how to validate the .xip signature in Linux
     unxip = if stdenv.buildPlatform.isDarwin
-            then ''
-              open -W ${xip}
-              rm -rf ${xip}
-            ''
-            else ''
-              xar -xf ${xip}
-              rm -rf ${xip}
-              pbzx -n Content | cpio -i
-              rm Content Metadata
-            '';
+            then ''open -W ${xip}
+  rm -rf ${xip}''
+            else ''xar -xf ${xip}
+  rm -rf ${xip}
+  pbzx -n Content | cpio -i
+  rm Content Metadata'';
     app = requireFile rec {
-      name     = "Xcode.app";
+      name     = "Xcode-${version}.app";
       url      = "https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_${version}/${xip}";
       hashMode = "recursive";
       inherit sha256;
       message  = ''
-        Unfortunately, we cannot download ${name} automatically.
-        Please go to ${url}
+        Unfortunately, we cannot download ${name} automatically. You may use the
+        following command to fetch it with your Apple ID
+
+          nix run nixpkgs#darwin.xcode_${lib.replaceStrings ["."] ["_"] version}.fetch-xcode
+
+        Alternatively please go to ${url}
         to download it yourself, and add it to the Nix store by running the following commands.
         Note: download (~ 5GB), extraction and storing of Xcode will take a while
 
-        ${unxip}
-        nix-store --add-fixed --recursive sha256 Xcode.app
-        rm -rf Xcode.app
+          ${unxip}
+          mv Xcode.app ${name}
+          nix-store --add-fixed --recursive sha256 ${name}
+          rm -rf ${name}
       '';
     };
     meta = with lib; {
@@ -38,7 +86,10 @@ let requireXcode = version: sha256:
       platforms = platforms.darwin ++ platforms.linux;
     };
 
-  in app.overrideAttrs ( oldAttrs: oldAttrs // { inherit meta; });
+  in app.overrideAttrs ( oldAttrs: oldAttrs // {
+    inherit meta;
+    passthru.fetch-xcode = fetch-xcode;
+  });
 
 in lib.makeExtensible (self: {
   xcode_8_1 = requireXcode "8.1" "sha256-VuAovU/b4rcLh+xMtcsZmbTWwTk35VGfMSp+fqPbsqM=";
