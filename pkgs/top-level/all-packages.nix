@@ -5968,6 +5968,10 @@ with pkgs;
 
   ondir = callPackage ../tools/misc/ondir { };
 
+  opencomposite = callPackage ../development/libraries/opencomposite { };
+
+  opencomposite-helper = callPackage ../development/libraries/opencomposite/helper.nix { };
+
   osdlyrics = callPackage ../applications/audio/osdlyrics { };
 
   ossutil = callPackage ../tools/admin/ossutil { };
