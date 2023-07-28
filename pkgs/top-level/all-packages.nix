@@ -41527,4 +41527,6 @@ with pkgs;
 
   wttrbar = callPackage ../applications/misc/wttrbar { };
 
+  gog-downloader = callPackage ../tools/games/gog-downloader { };
+
 }
