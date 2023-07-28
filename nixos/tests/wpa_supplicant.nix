@@ -34,6 +34,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
               ssid = "nixos-test-mixed";
               authentication = {
                 mode = "wpa3-sae-transition";
+                saeAddToMacAllow = true;
                 saePasswordsFile = pkgs.writeText "password" "reproducibility";
                 wpaPasswordFile = pkgs.writeText "password" "reproducibility";
               };
