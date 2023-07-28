@@ -23,6 +23,8 @@ buildGoModule rec {
   # Some tests require running Kubernetes instance
   doCheck = false;
 
+  passthru.updateScript = ./update.sh;
+
   ldflags = [
     "-s"
     "-w"
