@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, utils, ... }:
 with lib;
 let
   cfg = config.services.lemmy;
@@ -41,6 +41,30 @@ in
         default = null;
         description = lib.mdDoc "The connection URI to use. Takes priority over the configuration file if set.";
       };
+
+      uriFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = lib.mdDoc "File which contains the database uri.";
+      };
+    };
+
+    pictrsApiKeyFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      description = lib.mdDoc "File which contains the value of `pictrs.api_key`.";
+    };
+
+    smtpPasswordFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      description = lib.mdDoc "File which contains the value of `email.smtp_password`.";
+    };
+
+    adminPasswordFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      description = lib.mdDoc "File which contains the value of `setup.admin_password`.";
     };
 
     settings = mkOption {
@@ -76,17 +100,20 @@ in
         };
       };
     };
-
-    secretFile = mkOption {
-      type = with types; nullOr path;
-      default = null;
-      description = lib.mdDoc "Path to a secret JSON configuration file which is merged at runtime with the one generated from {option}`services.lemmy.settings`.";
-    };
   };
 
   config =
+    let
+      secretOptions = {
+        pictrsApiKeyFile = { setting = [ "pictrs" "api_key" ]; path = cfg.pictrsApiKeyFile; };
+        smtpPasswordFile = { setting = [ "email" "smtp_password" ]; path = cfg.smtpPasswordFile; };
+        adminPasswordFile = { setting = [ "setup" "admin_password" ]; path = cfg.adminPasswordFile; };
+        uriFile = { setting = [ "database" "uri" ]; path = cfg.database.uriFile; };
+      };
+      secrets = lib.filterAttrs (option: data: data.path != null) secretOptions;
+    in
     lib.mkIf cfg.enable {
-      services.lemmy.settings = (mapAttrs (name: mkDefault)
+      services.lemmy.settings = lib.attrsets.recursiveUpdate (mapAttrs (name: mkDefault)
         {
           bind = "127.0.0.1";
           tls_enabled = true;
@@ -104,14 +131,15 @@ in
           rate_limit.image = 6;
           rate_limit.image_per_second = 3600;
         } // {
-        database = mapAttrs (name: mkDefault) {
-          user = "lemmy";
-          host = "/run/postgresql";
-          port = 5432;
-          database = "lemmy";
-          pool_size = 5;
-        };
-      });
+          database = mapAttrs (name: mkDefault) {
+            user = "lemmy";
+            host = "/run/postgresql";
+            port = 5432;
+            database = "lemmy";
+            pool_size = 5;
+          };
+        }) (lib.foldlAttrs (acc: option: data: acc // lib.setAttrByPath data.setting { _secret = option; }) {} secrets);
+        # the option name is the id of the credential loaded by LoadCredential
 
       services.postgresql = mkIf cfg.database.createLocally {
         enable = true;
@@ -202,16 +230,19 @@ in
           assertion = (!(hasAttrByPath ["federation"] cfg.settings)) && (!(hasAttrByPath ["federation" "enabled"] cfg.settings));
           message = "`services.lemmy.settings.federation` was removed in 0.17.0 and no longer has any effect";
         }
+        {
+          assertion = cfg.database.uriFile != null -> cfg.database.uri == null && !cfg.database.createLocally;
+          message = "specifying a database uri while also specifying a database uri file is not allowed";
+        }
       ];
 
       systemd.services.lemmy = let
-        configFile = settingsFormat.generate "config.hjson" cfg.settings;
-        mergedConfig = "/run/lemmy/config.hjson";
+        substitutedConfig = "/run/lemmy/config.hjson";
       in {
         description = "Lemmy server";
 
         environment = {
-          LEMMY_CONFIG_LOCATION = if cfg.secretFile == null then configFile else mergedConfig;
+          LEMMY_CONFIG_LOCATION = if secrets == {} then settingsFormat.generate "config.hjson" cfg.settings else substitutedConfig;
           LEMMY_DATABASE_URL = if cfg.database.uri != null then cfg.database.uri else (mkIf (cfg.database.createLocally) "postgres:///lemmy?host=/run/postgresql&user=lemmy");
         };
 
@@ -226,21 +257,20 @@ in
 
         requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
 
-        path = mkIf (cfg.secretFile != null) [ pkgs.jq ];
-
-        # merge the two configs and prevent others from reading the result
+        # substitute secrets and prevent others from reading the result
         # if somehow $CREDENTIALS_DIRECTORY is not set we fail
-        preStart = mkIf (cfg.secretFile != null) ''
+        preStart = mkIf (secrets != {}) ''
           set -u
-          umask 177
-          jq --slurp '.[0] * .[1]' ${lib.escapeShellArg configFile} "$CREDENTIALS_DIRECTORY/secretFile" > ${lib.escapeShellArg mergedConfig}
+          umask u=rw,g=,o=
+          cd "$CREDENTIALS_DIRECTORY"
+          ${utils.genJqSecretsReplacementSnippet cfg.settings substitutedConfig}
         '';
 
         serviceConfig = {
           DynamicUser = true;
           RuntimeDirectory = "lemmy";
           ExecStart = "${cfg.server.package}/bin/lemmy_server";
-          LoadCredential = mkIf (cfg.secretFile != null) "secretFile:${toString cfg.secretFile}";
+          LoadCredential = lib.foldlAttrs (acc: option: data: acc ++ [ "${option}:${toString data.path}" ]) [] secrets;
           PrivateTmp = true;
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
