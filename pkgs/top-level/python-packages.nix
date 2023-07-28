@@ -4776,6 +4776,8 @@ self: super: with self; {
 
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
+  hnswlib = callPackage ../development/python-modules/hnswlib { };
+
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
 
   hole = callPackage ../development/python-modules/hole { };
