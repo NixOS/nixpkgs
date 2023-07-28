@@ -428,6 +428,7 @@ in {
   i3wm = handleTest ./i3wm.nix {};
   icingaweb2 = handleTest ./icingaweb2.nix {};
   iftop = handleTest ./iftop.nix {};
+  immich = handleTest ./web-apps/immich.nix {};
   incron = handleTest ./incron.nix {};
   incus = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; inherit (pkgs) incus; });
   incus-lts = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; });
