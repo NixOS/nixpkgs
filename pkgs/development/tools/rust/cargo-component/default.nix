@@ -1,47 +1,38 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, curl
 , pkg-config
-, libgit2
 , openssl
-, zlib
 , stdenv
 , darwin
 }:
 
 rustPlatform.buildRustPackage {
   pname = "cargo-component";
-  version = "unstable-2023-07-05";
+  version = "unstable-2023-07-28";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "cargo-component";
-    rev = "84ad1dc2c383dd3335953f9d1b059aeef9a5833e";
-    hash = "sha256-C066dXuGpl9bwKRh5kgN0DOjaEke84cj5ustYrM867I=";
+    rev = "b58f10c867f666c1c799b766fb8cd1941ede8ed7";
+    hash = "sha256-BwrbenOg+Q6BAy/Mn8AHB0VvvIZ0cYvq4r791QEFTdo=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "warg-api-0.1.0" = "sha256-ElLwaOv0ifi8og2SJ6XZkjZX83IXoveicAUPBok/MLE=";
+      "warg-api-0.1.0" = "sha256-A5FQ/nbuzV8ockV6vOMKUEoJKeaId3oyZU1QeNpd1Zc=";
     };
   };
 
   nativeBuildInputs = [
-    curl
     pkg-config
   ];
 
   buildInputs = [
-    curl
-    libgit2
     openssl
-    zlib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   # requires the wasm32-wasi target
