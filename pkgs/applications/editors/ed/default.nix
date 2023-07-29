@@ -10,4 +10,5 @@ lib.makeScope pkgs.newScope (self:
     };
 
     ed = callPackage (self.sources.ed) { };
+    edUnstable = callPackage (self.sources.edUnstable) { };
   })

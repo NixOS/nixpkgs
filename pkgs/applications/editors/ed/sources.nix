@@ -31,4 +31,15 @@ in
   in import ./generic.nix {
     inherit pname version src meta;
   };
+
+  edUnstable = let
+    pname = "ed";
+    version = "1.20-pre2";
+    src = fetchurl {
+      url = "http://download.savannah.gnu.org/releases/ed/ed-${version}.tar.lz";
+      hash = "sha256-bHTDeMhVNNo3qqDNoBNaBA+DHDa4WJpfQNcTvAUPgsY=";
+    };
+  in import ./generic.nix {
+    inherit pname version src meta;
+  };
 }
