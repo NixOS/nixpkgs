@@ -5737,6 +5737,7 @@ with pkgs;
   maple-mono-SC-NF = (callPackage ../data/fonts/maple-font { }).SC-NF;
   maple-mono-otf = (callPackage ../data/fonts/maple-font { }).opentype;
   maple-mono-woff2 = (callPackage ../data/fonts/maple-font { }).woff2;
+  maple-mono-autohint = (callPackage ../data/fonts/maple-font { }).autohint;
 
   marl = callPackage ../development/libraries/marl { };
 
