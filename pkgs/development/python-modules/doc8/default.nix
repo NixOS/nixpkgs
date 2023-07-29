@@ -8,8 +8,11 @@
 , pytestCheckHook
 , pythonOlder
 , restructuredtext_lint
+, setuptools
 , setuptools-scm
+, setuptools-scm-git-archive
 , stevedore
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -25,7 +28,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+    setuptools-scm-git-archive
+    wheel
   ];
 
   buildInputs = [
