@@ -169,6 +169,8 @@ package-maintainers:
     - ghc-vis
     - patat
     - svgcairo
+  danielrolls:
+    - shellify
   domenkozar:
     - cachix
     - cachix-api
