@@ -114,7 +114,7 @@ let
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
 
   # TODO: figure out what must be done about this upstream - related lu-zero/cargo-c#323 lu-zero/cargo-c#138
-  cargo-c' = cargo-c.overrideAttrs (oldAttrs: {
+  cargo-c' = (cargo-c.__spliced.buildHost or cargo-c).overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or []) ++ [
       (fetchpatch {
         name = "cargo-c-test-rlib-fix.patch";
