@@ -11,6 +11,7 @@
 , pythonOlder
 , pytestCheckHook
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -31,12 +32,18 @@ buildPythonPackage rec {
     cython
     poetry-core
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
     ifaddr
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
+  ];
+
+  pypaBuildFlags = [
+    # needed until poetry-core is updated to v1.5.2 in nixpkgs
+    "--skip-dependency-check"
   ];
 
   nativeCheckInputs = [
