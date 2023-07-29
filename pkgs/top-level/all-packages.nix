@@ -37411,6 +37411,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
+  jfsw = callPackage ../games/jfsw { };
+
   katago = callPackage ../games/katago { };
 
   katagoWithCuda = katago.override {
