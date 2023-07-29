@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XxDW1xikpRwX7RsysDHU+bgLBh6CdlNbK+MeWsS3Xm8=";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   nativeBuildInputs = [
     autoreconfHook
     perl
