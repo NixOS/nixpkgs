@@ -244,6 +244,10 @@ Unfree package that cannot be redistributed. You can build it yourself, but you 
 
 This package supplies unfree, redistributable firmware. This is a separate value from `unfree-redistributable` because not everybody cares whether firmware is free.
 
+## Categories {#sec-meta-categories}
+
+The `meta.categories` attribute of the package should contain a value from `lib.categories` set defined in [`nixpkgs/lib/categories-set.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/categories-set.nix).
+
 ## Source provenance {#sec-meta-sourceProvenance}
 
 The value of a package's `meta.sourceProvenance` attribute specifies the provenance of the package's derivation outputs.
