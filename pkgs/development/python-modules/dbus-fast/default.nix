@@ -1,12 +1,14 @@
 { lib
 , async-timeout
 , buildPythonPackage
+, cython
 , fetchFromGitHub
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -24,8 +26,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    cython
     poetry-core
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
