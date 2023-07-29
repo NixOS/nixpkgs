@@ -135,6 +135,9 @@ qtModule {
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
     ../patches/qtwebengine-xkb-includes.patch
+
+    # Override locales install path so they go to QtWebEngine's $out
+    ../patches/qtwebengine-locales-path.patch
   ];
 
   postPatch = ''
