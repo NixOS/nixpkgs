@@ -9667,6 +9667,12 @@
       fingerprint = "1763 9903 2D7C 5B82 5D5A  0EAD A2BC 3C6F 1435 1991";
     }];
   };
+  locochoco = {
+    email = "contact@locochoco.dev";
+    github = "loco-choco";
+    githubId = 58634087;
+    name = "Ivan Pancheniak";
+  };
   lodi = {
     email = "anthony.lodi@gmail.com";
     github = "lodi";

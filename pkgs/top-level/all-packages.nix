@@ -40321,6 +40321,10 @@ with pkgs;
     jre = openjdk19; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   });
 
+  owmods-cli = callPackage ../applications/misc/owmods-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   r128gain = callPackage ../applications/audio/r128gain { };
 
   resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
