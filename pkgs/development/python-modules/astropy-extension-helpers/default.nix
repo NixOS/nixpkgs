@@ -4,7 +4,9 @@
 , findutils
 , pytestCheckHook
 , pythonOlder
+, pip
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -21,6 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    wheel
   ];
 
   patches = [ ./permissions.patch ];
@@ -28,6 +31,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     findutils
     pytestCheckHook
+    pip
   ];
 
   # avoid import mismatch errors, as conftest.py is copied to build dir
