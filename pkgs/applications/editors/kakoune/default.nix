@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "kakoune-unwrapped";
-  version = "2022.10.31";
+  version = "2023.07.29";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
     rev = "v${version}";
-    sha256 = "sha256-vmzGaGl0KSjseSD/s6DXxvMUTmAle+Iv/ZP9llaFnXk=";
+    sha256 = "sha256-v+TX1fGzhBJvym3lLr8K9pWwwMlf1Lt6EiT1Xl3pRPI=";
   };
   makeFlags = [ "debug=no" "PREFIX=${placeholder "out"}" ];
 
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     mainProgram = "kak";
     maintainers = with maintainers; [ vrthra srapenne ];
     platforms = platforms.unix;
+    broken = stdenv.cc.isClang; # https://github.com/mawww/kakoune/issues/4944
   };
 }
