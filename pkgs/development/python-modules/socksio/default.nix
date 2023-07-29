@@ -19,6 +19,11 @@ buildPythonPackage {
     hash = "sha256-+IvrPaW1w4uYkEad5n0MsPnUlLeLEGyhhF+WwQuRxKw=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'flit_core >=2,<3' 'flit_core >=2'
+  '';
+
   nativeBuildInputs = [
     flit-core
   ];
