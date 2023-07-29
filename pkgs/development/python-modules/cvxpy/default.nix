@@ -11,6 +11,7 @@
 , scipy
 , scs
 , setuptools
+, wheel
 , useOpenmp ? (!stdenv.isDarwin)
 }:
 
@@ -25,6 +26,16 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-8Hv+k2d6dVqFVMT9piLvAeIkes6Zs6eBB6qQcODQo8s=";
   };
+
+  # we need to patch out numpy version caps from upstream
+  postPatch = ''
+    sed -i 's/\(numpy>=[0-9.]*\),<[0-9.]*;/\1;/g' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     cvxopt
