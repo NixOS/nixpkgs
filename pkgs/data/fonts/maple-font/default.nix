@@ -67,6 +67,12 @@ in
     sha256 = "sha256-4akpZGGth4yZjI5wjO3ZXrXcWNxb7/6YChU7T5fNVKs=";
     desc = "WOFF2.0";
   };
+
+  autohint = maple-font {
+    pname = "MapleMono-ttf-autohint";
+    sha256 = "sha256-rSYIC42Bt+KFgxhwRhXS4sbh4etKYkCOo5nP2J2BHt4=";
+    desc = "ttf autohint";
+  };
 }
 
 
