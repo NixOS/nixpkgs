@@ -7,7 +7,6 @@
 , importlib-metadata
 , importlib-resources
 , lib
-, ninja
 , numpy
 , pybind11
 , pytestCheckHook
@@ -62,9 +61,13 @@ buildPythonPackage rec {
     gym
   ];
 
+  # 1. We don't need the cmake PyPI package.
+  # 2. We build using cmake instead of ninja.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace 'dynamic = ["version"]' 'version = "${version}"' \
+      --replace '"cmake~=3.22",' "" \
+      --replace "\"ninja; sys_platform != 'win32' and platform_machine != 'arm64'\"," ""
     substituteInPlace setup.py \
       --replace 'subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=here)' 'b"${src.rev}"'
   '';
