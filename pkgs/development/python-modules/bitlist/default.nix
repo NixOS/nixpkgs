@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, wheel
 , nose
 , parts
 , pytestCheckHook
@@ -20,8 +21,15 @@ buildPythonPackage rec {
     hash = "sha256-eViakuhgSe9E8ltxzeg8m6/ze7QQvoKBtYZoBZzHxlA=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>=' \
+      --replace "--doctest-modules --ignore=docs --cov=bitlist --cov-report term-missing" ""
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -36,11 +44,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "bitlist"
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--doctest-modules --ignore=docs --cov=bitlist --cov-report term-missing" ""
-  '';
 
   meta = with lib; {
     description = "Python library for working with little-endian list representation of bit strings";
