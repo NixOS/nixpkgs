@@ -16,8 +16,8 @@ let
 
   sha256 = {
     x86_64-linux = "sha256-USljQ/cnbSabzsZWXlZ0eeZSqkTr3wVP0ktXqZ7Fw4U=";
-    x86_64-darwin = "sha256-VB5075VfQRtlLoG3lfkVz8ASoODiwleTYC2JJR51LtI=";
-    aarch64-darwin = "sha256-VB5075VfQRtlLoG3lfkVz8ASoODiwleTYC2JJR51LtI=";
+    x86_64-darwin = "sha256-NWzJPB+HzlsB6yTcEMwTg8pioonGWPOU96jyIpiZiTY=";
+    aarch64-darwin = "sha256-NWzJPB+HzlsB6yTcEMwTg8pioonGWPOU96jyIpiZiTY=";
   }.${system} or throwSystem;
 
   version = "16.7.6";
