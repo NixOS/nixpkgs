@@ -4,6 +4,8 @@
 , pytestCheckHook
 , dotnetCorePackages
 , setuptools
+, setuptools-scm
+, wheel
 , buildDotnetModule
 , cffi
 }:
@@ -36,6 +38,8 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
     dotnetCorePackages.sdk_6_0
   ];
 
