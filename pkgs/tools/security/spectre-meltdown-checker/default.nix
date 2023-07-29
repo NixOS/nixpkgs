@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spectre-meltdown-checker";
-  version = "0.45";
+  version = "0.46";
 
   src = fetchFromGitHub {
     owner = "speed47";
     repo = "spectre-meltdown-checker";
     rev = "v${version}";
-    sha256 = "sha256-yGrsiPBux4YeiQ3BL2fnne5P55R/sQZ4FwzSkE6BqPc=";
+    sha256 = "sha256-M4ngdtp2esZ+CSqZAiAeOnKtaK8Ra+TmQfMsr5q5gkg=";
   };
 
   prePatch = ''
