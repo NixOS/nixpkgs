@@ -19,7 +19,9 @@ python3.pkgs.buildPythonPackage rec {
 
   nativeBuildInputs = with python3.pkgs; [
     cython
+    pip
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = with python3.pkgs; [ numpy ];
