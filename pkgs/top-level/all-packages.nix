@@ -30924,7 +30924,7 @@ with pkgs;
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
   inherit (recurseIntoAttrs (callPackage ../applications/editors/ed { }))
-    ed;
+    ed edUnstable;
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
 
