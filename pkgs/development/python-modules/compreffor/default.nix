@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, cython
 , setuptools-scm
+, wheel
 , fonttools
 , pytestCheckHook
 }:
@@ -17,8 +19,18 @@ buildPythonPackage rec {
     hash = "sha256-MGulQEUGPrQ30T3VYzwRRlvzvWkFqNzqsNzAjtjX9xU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools_git_ls_files",' ""
+
+    substituteInPlace setup.py \
+      --replace '"setuptools_git_ls_files"' ""
+  '';
+
   nativeBuildInputs = [
+    cython
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
