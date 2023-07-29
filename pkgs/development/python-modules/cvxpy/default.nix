@@ -11,6 +11,7 @@
 , scipy
 , scs
 , setuptools
+, wheel
 , useOpenmp ? (!stdenv.isDarwin)
 }:
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-C2heUEDxmfPXA/MPXSLR+GVZdiNFUVPR3ddwJFrvCXU=";
   };
 
+  nativeBuildInputs = [
+    wheel
+  ];
+
   propagatedBuildInputs = [
     cvxopt
     ecos
@@ -34,6 +39,11 @@ buildPythonPackage rec {
     scipy
     scs
     setuptools
+  ];
+
+  pypaBuildFlags = [
+    # needed until numpy constraint is updated upstream
+    "--skip-dependency-check"
   ];
 
   nativeCheckInputs = [
