@@ -9,10 +9,11 @@
 , pythonOlder
 , requests
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
-  pname = "iterative-telemtry";
+  pname = "iterative-telemetry";
   version = "0.0.7";
   format = "pyproject";
 
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
