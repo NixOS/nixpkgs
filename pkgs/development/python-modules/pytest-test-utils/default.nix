@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
+, setuptools-scm
+, wheel
 , pytestCheckHook
 , pytest
 , pythonOlder
@@ -23,7 +25,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     pytest
