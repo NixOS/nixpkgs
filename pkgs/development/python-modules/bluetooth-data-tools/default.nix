@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, cython
 , poetry-core
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,8 +24,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    cython
     poetry-core
     setuptools
+    wheel
   ];
 
   nativeCheckInputs = [
