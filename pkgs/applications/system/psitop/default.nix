@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "psitop";
-  version = "1.0.0";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "jamespwilliams";
     repo = "psitop";
     rev = version;
-    hash = "sha256-C8WEbA7XXohKFz7QgII0LPU1eJ4Z7CSlmEOamgo4wQI=";
+    hash = "sha256-TD+NTlfmBtz+m2w2FnTcUIJQakpvVBCK/MAHfCrOue4=";
   };
 
   vendorHash = "sha256-oLtKpBvTsM5TbzfWIDfqgb7DL5D3Mldu0oimVeiUeSc=";
