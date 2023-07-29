@@ -1163,6 +1163,8 @@ with pkgs;
 
   fetchFromGitiles = callPackage ../build-support/fetchgitiles { };
 
+  fetchFrom9Front = callPackage ../build-support/fetch9front { };
+
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz { };
 
   fetchgx = callPackage ../build-support/fetchgx { };
