@@ -5,6 +5,7 @@
 , dask
 , numpy
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-8iZ+wcSfh5ACTb3/iQAf2qQpwZ6wExWwcdJoLmCEjB0=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  # We use nixpkg's numpy instead of PyPI's oldest-supported-numpy.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "oldest-supported-numpy" "numpy"
+  '';
+
+  nativeBuildInputs = [ setuptools-scm wheel ];
 
   propagatedBuildInputs = [ astropy dask numpy ];
 
