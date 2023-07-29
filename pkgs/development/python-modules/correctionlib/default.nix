@@ -6,6 +6,7 @@
 , scikit-build
 , setuptools
 , setuptools-scm
+, wheel
 , pybind11
 , pydantic
 , pytestCheckHook
@@ -24,6 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-h3eggtPLSF/8ShQ5xzowZW1KSlcI/YBsPu3lsSyzHkw=";
   };
 
+  # 1. We use native cmake instead of the cmake module from PyPI.
+  # 2. We don't need make
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"cmake>=3.11.0",' "" \
+      --replace '"make"' ""
+  '';
+
   nativeBuildInputs = [
     cmake
     numpy
@@ -31,6 +40,7 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     pybind11
+    wheel
   ];
 
   buildInputs = [
