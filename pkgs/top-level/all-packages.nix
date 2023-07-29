@@ -29955,6 +29955,8 @@ with pkgs;
 
   abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
 
+  acpic = callPackage ../applications/misc/acpic/default.nix { };
+
   adguardian = callPackage ../applications/networking/adguardian { };
 
   aeolus = callPackage ../applications/audio/aeolus { };
