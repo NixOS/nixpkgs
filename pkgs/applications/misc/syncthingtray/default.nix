@@ -70,7 +70,8 @@ mkDerivation rec {
   cmakeFlags = [
     "-DAUTOSTART_EXEC_PATH=${autostartExecPath}"
     # See https://github.com/Martchus/syncthingtray/issues/42
-    "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"
+    "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+    "-DBUILD_SHARED_LIBS=ON"
   ] ++ lib.optionals (!plasmoidSupport) ["-DNO_PLASMOID=ON"]
     ++ lib.optionals (!kioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
