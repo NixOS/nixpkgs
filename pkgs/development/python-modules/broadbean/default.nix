@@ -4,6 +4,7 @@
 , pythonOlder
 , setuptools
 , versioningit
+, wheel
 , numpy
 , matplotlib
 , schema
@@ -23,7 +24,12 @@ buildPythonPackage rec {
     sha256 = "sha256-e+LAcmWxT+SkaWtToPgg+x3QRu5fCSm+w4dLCcyZrw8=";
   };
 
-  nativeBuildInputs = [ setuptools versioningit ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'versioningit ~=' 'versioningit >='
+  '';
+
+  nativeBuildInputs = [ setuptools versioningit wheel ];
 
   propagatedBuildInputs = [
     numpy
