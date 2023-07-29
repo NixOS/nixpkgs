@@ -12,6 +12,7 @@
 , pybind11
 , setuptools
 , setuptools-scm
+, wheel
 
 # native libraries
 , ffmpeg-headless
@@ -113,6 +114,13 @@ buildPythonPackage rec {
       echo "[libs]
       system_freetype=true
       system_qhull=true" > mplsetup.cfg
+    '' +
+    # 1. We can use numpy directly instead of oldest-supported-numpy.
+    # 2. The certify dependency seems to be unnecessary.
+    ''
+      substituteInPlace pyproject.toml \
+        --replace 'oldest-supported-numpy' 'numpy' \
+        --replace '"certifi>=2020.06.20",' ""
     '';
 
   nativeBuildInputs = [
@@ -121,6 +129,7 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     numpy
+    wheel
   ] ++ lib.optionals enableGtk3 [
     gobject-introspection
   ];
