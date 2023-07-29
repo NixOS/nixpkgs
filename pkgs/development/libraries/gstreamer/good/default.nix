@@ -45,7 +45,7 @@
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
-# MMAL is not support on aarch64, see:
+# MMAL is not supported on aarch64, see:
 # https://github.com/raspberrypi/userland/issues/688
 assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 

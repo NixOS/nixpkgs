@@ -26,17 +26,11 @@ in
             admin_email = "mightyiam@example.com";
           };
         };
-        secretFile = /etc/lemmy-config.hjson;
+        adminPasswordFile = /etc/lemmy-admin-password.txt;
         caddy.enable = true;
       };
 
-      environment.etc."lemmy-config.hjson".text = ''
-        {
-          "setup": {
-            "admin_password": "ThisIsWhatIUseEverywhereTryIt"
-          }
-        }
-      '';
+      environment.etc."lemmy-admin-password.txt".text = "ThisIsWhatIUseEverywhereTryIt";
 
       networking.firewall.allowedTCPPorts = [ 80 ];
 

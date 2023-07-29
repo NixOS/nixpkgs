@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ pkgs, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gixy }:
 let
   inherit (lib)
     concatMapStringsSep
@@ -9,15 +9,6 @@ let
     stringLength
     strings
     types
-    ;
-
-  inherit (pkgs)
-    buildPackages
-    gixy
-    libiconv
-    mkNugetDeps
-    mkNugetSource
-    stdenv
     ;
 in
 rec {

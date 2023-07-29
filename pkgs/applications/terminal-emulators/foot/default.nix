@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitea
 , fetchurl
+, fetchpatch
 , runCommand
 , fcft
 , freetype
@@ -100,6 +101,17 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-YCwmPSn+XtF7HkMOFJft7j/2vr+8UE59yu/iGZ1dT8A=";
   };
+
+  patches = [
+    # Check viewporter protocol support before using it, fixes crash under Mir
+    # Remove when https://codeberg.org/dnkl/foot/pulls/1445 in version > 1.15.1
+    (fetchpatch {
+      name = "0001-foot-dont-try-to-use-a-non-existing-viewporter-interface.patch";
+      url = "https://codeberg.org/dnkl/foot/commit/9d75c551465fa3dbb3cd20ae87d6de294fcebce1.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-sVfGbudsmwh7phbbobBgSXoGe1lKJ8s1UdyBnVLmLYQ=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     passlib
     requests
     sqlalchemy
-    zope_component
+    zope-component
     zope_configuration
   ];
 
