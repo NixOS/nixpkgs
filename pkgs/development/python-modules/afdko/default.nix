@@ -22,6 +22,7 @@
 , tqdm
 , setuptools-scm
 , scikit-build
+, wheel
 , cmake
 , antlr4_9
 , libxml2
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     setuptools-scm
     scikit-build
     cmake
+    wheel
   ];
 
   buildInputs = [
@@ -61,6 +63,14 @@ buildPythonPackage rec {
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
   ];
+
+  # 1. We don't need the cmake PyPI package.
+  # 2. We build using cmake instead of ninja.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"cmake",' "" \
+      --replace '"ninja"' ""
+  '';
 
   # setup.py will always (re-)execute cmake in buildPhase
   dontConfigure = true;
