@@ -27,6 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-H/HFEpg1bkgaC+AJzN/ySYMs5T8wVZwTOPIqDg0XJQw=";
   };
 
+  # This project doesn't seem to actually need setuptools.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools>=59,<70"' ""
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
