@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl
-, bison, cmake, flex, pkg-config
-, boost, icu, libstemmer, mariadb-connector-c, re2
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, cmake
+, flex
+, pkg-config
+, boost
+, icu
+, libstemmer
+, mariadb-connector-c
+, re2
 , nlohmann_json
 }:
+
 let
-  columnar = stdenv.mkDerivation rec {
+  columnar = stdenv.mkDerivation (finalAttrs: {
     pname = "columnar";
     version = "c18-s6"; # see NEED_COLUMNAR_API/NEED_SECONDARY_API in Manticore's GetColumnar.cmake
     src = fetchFromGitHub {
       owner = "manticoresoftware";
       repo = "columnar";
-      rev = version;
-      sha256 = "sha256-/HGh1Wktb65oXKCjGxMl+8kNwEEfPzGT4UxGoGS4+8c=";
+      rev = finalAttrs.version;
+      hash = "sha256-/HGh1Wktb65oXKCjGxMl+8kNwEEfPzGT4UxGoGS4+8c=";
     };
     nativeBuildInputs = [ cmake ];
     cmakeFlags = [ "-DAPI_ONLY=ON" ];
@@ -21,17 +31,17 @@ let
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;
     };
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "manticoresearch";
   version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "manticoresoftware";
     repo = "manticoresearch";
-    rev = version;
-    sha256 = "sha256-enSK3hlGUtrPVA/qF/AFiDJN8CbaTHCzYadBorZLE+c=";
+    rev = finalAttrs.version;
+    hash = "sha256-enSK3hlGUtrPVA/qF/AFiDJN8CbaTHCzYadBorZLE+c=";
   };
 
   nativeBuildInputs = [
@@ -66,12 +76,12 @@ stdenv.mkDerivation rec {
     "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use open source fast database for search";
     homepage = "https://manticoresearch.com";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "searchd";
-    maintainers = with maintainers; [ jdelStrother ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.jdelStrother ];
+    platforms = lib.platforms.all;
   };
-}
+})
