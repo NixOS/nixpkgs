@@ -269,6 +269,7 @@ let
       licenseType = either (attrsOf anything) str; # TODO disallow `str` licenses, use a module
     in either licenseType (listOf licenseType);
     sourceProvenance = listOf lib.types.attrs;
+    categories = listOf lib.types.attrs;
     maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
     pkgConfigModules = listOf str;
