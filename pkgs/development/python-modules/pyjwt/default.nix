@@ -4,8 +4,10 @@
 , cryptography
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , sphinxHook
 , sphinx-rtd-theme
+, wheel
 , zope_interface
 }:
 
@@ -32,8 +34,10 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     sphinxHook
     sphinx-rtd-theme
+    wheel
     zope_interface
   ];
 
