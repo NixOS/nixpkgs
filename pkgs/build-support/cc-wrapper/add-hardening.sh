@@ -46,22 +46,29 @@ fi
 for flag in "${!hardeningEnableMap[@]}"; do
   case $flag in
     fortify | fortify3)
-      # Use -U_FORTIFY_SOURCE to avoid warnings on toolchains that explicitly
-      # set -D_FORTIFY_SOURCE=0 (like 'clang -fsanitize=address').
-      hardeningCFlags+=('-O2' '-U_FORTIFY_SOURCE')
-      case $flag in
-        fortify)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
-          hardeningCFlags+=('-D_FORTIFY_SOURCE=2')
-        ;;
-        fortify3)
-          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify3 >&2; fi
-          hardeningCFlags+=('-D_FORTIFY_SOURCE=3')
-        ;;
-        *)
-          # Ignore unsupported.
+      if [[ " ${params[*]} " =~ " -D_FORTIFY_SOURCE=" ]]; then
+        # because hardeningCFlags are always *prepended* to supplied params, a
+        # supplied -D_FORTIFY_SOURCE= will override our value anyway, so skip
+        # adding ours here to avoid the redefinition warning (fatal if -Werror)
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: NOT enabling fortify: already present in params >&2; fi
+      else
+        # Use -U_FORTIFY_SOURCE to avoid warnings on toolchains that explicitly
+        # set -D_FORTIFY_SOURCE=0 (like 'clang -fsanitize=address').
+        hardeningCFlags+=('-O2' '-U_FORTIFY_SOURCE')
+        case $flag in
+          fortify)
+            if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
+            hardeningCFlags+=('-D_FORTIFY_SOURCE=2')
           ;;
-      esac
+          fortify3)
+            if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify3 >&2; fi
+            hardeningCFlags+=('-D_FORTIFY_SOURCE=3')
+          ;;
+          *)
+            # Ignore unsupported.
+            ;;
+        esac
+      fi
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
