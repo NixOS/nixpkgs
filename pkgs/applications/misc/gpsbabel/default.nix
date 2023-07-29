@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, pkg-config, which
-, qtbase, qmake, qttools, qttranslations, wrapQtAppsHook
+, qmake, qttools, wrapQtAppsHook
 , libusb1, shapelib, zlib
 , withGUI ? false, qtserialport
 , withMapPreview ? (!stdenv.isDarwin), qtwebengine
@@ -21,11 +21,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs testo
-  '' + lib.optionalString withGUI ''
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    substituteInPlace gui/mainwindow.cc \
-      --replace 'QLibraryInfo::location(QLibraryInfo::TranslationsPath)' \
-                'QLatin1String("${qttranslations}/translations")'
   '' + lib.optionalString withDoc ''
     substituteInPlace gbversion.h.qmake.in \
       --replace /usr/share/doc $doc/share/doc

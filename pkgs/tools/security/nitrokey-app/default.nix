@@ -3,10 +3,10 @@
 , cmake
 , fetchFromGitHub
 , pkg-config
-, qttranslations
 , wrapQtAppsHook
 , libnitrokey
 , cppcodec
+, qttools
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     wrapQtAppsHook
-    qttranslations
+    qttools
   ];
 
   cmakeFlags = [
