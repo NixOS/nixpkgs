@@ -79,6 +79,12 @@ let
             adjusted as required.
           '';
         };
+        port = mkOption {
+          type = types.int;
+          default = 80;
+          example = 8080;
+          description = lib.mdDoc "Port for Caddy to listen on";
+        };
 
         database = {
           host = mkOption {
@@ -343,7 +349,7 @@ in
     services.caddy = {
       enable = true;
       virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair "http://${hostName}" {
+        nameValuePair "http://${hostName}:${cfg.port}" {
           extraConfig = ''
             root * ${pkg hostName cfg}
             file_server
