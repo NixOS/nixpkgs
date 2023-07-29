@@ -46,11 +46,11 @@ let
   inherit (python3.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.33";
+  version = "8.0.34";
 
   src = fetchurl {
     url = "https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "a6c9b05ee6f8accd45203d8234a43415da65ddc8118d427dd1a2ef2a209261bc";
+    sha256 = "sha256-ub/D6HRtXOvX+lai71t1UjMmMzBsz5ljCrJCuf9aq7U=";
   };
 
   patches = [
