@@ -82,7 +82,9 @@ in buildPythonPackage {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "pybind11>=2.10.4,<2.11.0" "pybind11>=2.10.4,<2.12.0"
+      --replace 'numpy==' 'numpy>=' \
+      --replace "pybind11>=2.10.4,<2.11.0" "pybind11>=2.10.4,<2.12.0" \
+      --replace 'wheel<0.41.0' 'wheel'
   '';
 
   nativeBuildInputs = [ pypaBuildHook pipInstallHook cython gfortran meson-python pythran pkg-config wheel ];
