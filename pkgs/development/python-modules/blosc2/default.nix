@@ -8,6 +8,7 @@
 , cython
 , cmake
 , ninja
+, wheel
 
 # propagates
 , msgpack
@@ -35,7 +36,14 @@ buildPythonPackage rec {
     hash = "sha256-nbPMLkTye0/Q05ubE35LssN677sUIQErPTxjAtSuGgI=";
   };
 
+  # 1. We can use numpy directly instead of oldest-supported-numpy.
+  # 2. The build doesn't need the ninja or cmake PyPI packages.
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy' \
+      --replace '"ninja", ' "" \
+      --replace '"cmake", ' ""
+
     substituteInPlace requirements-runtime.txt \
       --replace "pytest" ""
   '';
@@ -47,6 +55,7 @@ buildPythonPackage rec {
     numpy
     scikit-build
     setuptools
+    wheel
   ];
 
   dontUseCmakeConfigure = true;
