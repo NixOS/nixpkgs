@@ -46,7 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     pygments
     python-multipart
     reqif
-    setuptools
     textx
     toml
     uvicorn
