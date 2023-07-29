@@ -33716,6 +33716,8 @@ with pkgs;
 
   novnc = callPackage ../applications/networking/novnc { };
 
+  ns-usbloader = callPackage ../applications/misc/ns-usbloader { };
+
   nwg-bar = callPackage ../applications/misc/nwg-bar { };
 
   nwg-dock = callPackage ../applications/misc/nwg-dock { };
