@@ -616,7 +616,10 @@ in
       xz = tlpdbxz;
     };
 
-    bin = assert assertions; bin;
+    bin = assert assertions; bin // {
+      # for backward compatibility
+      latexindent = lib.findFirst (p: p.tlType == "bin") tl.latexindent.pkgs;
+    };
     combine = assert assertions; combine;
 
     # Pre-defined combined packages for TeX Live schemes,
