@@ -2,7 +2,7 @@
 #!nix-shell -I nixpkgs=../../../../. -i bash -p curl jq nix gnused
 # shellcheck shell=bash
 
-set -euo pipefail
+set -Eeuo pipefail
 
 release () {
   local content="$1"
@@ -64,6 +64,11 @@ generate_package_list() {
         local url hash
         url="${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg"
         hash="$(nix-prefetch-url "$url")"
+        if [[ -z "$hash" ]]; then
+            echo "Failed to fetch hash for $url" >&2
+            exit 1
+        fi
+
         echo "      (fetchNuGet { pname = \"${pkg}\"; version = \"${version}\"; sha256 = \"${hash}\"; })"
     done
 }
@@ -319,6 +324,10 @@ Examples:
 
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
+
+    result=$(mktemp)
+    trap "rm -f $result" TERM INT EXIT
+
     echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
 # v$channel_version ($support_phase)
@@ -341,7 +350,9 @@ $(aspnetcore_packages "${aspnetcore_version}")
 $(sdk_packages "${runtime_version}")
     ];
   };
-}" > "./versions/${sem_version}.nix"
+}" > "${result}"
+
+    cp "${result}" "./versions/${sem_version}.nix"
     echo "Generated ./versions/${sem_version}.nix"
   done
 }
