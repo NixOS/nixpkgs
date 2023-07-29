@@ -5,6 +5,7 @@
 , fonttools
 , pytestCheckHook
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,17 @@ buildPythonPackage rec {
     sha256 = "azFBLc9JyPqEZkvahn4u3cVbb+b6aW/yU8TxOp/y/Fw=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools-git-ls-files",' ""
+
+    substituteInPlace setup.py \
+      --replace '"setuptools-git-ls-files",' ""
+  '';
+
   nativeBuildInputs = [
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
