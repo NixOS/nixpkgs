@@ -31462,6 +31462,8 @@ with pkgs;
     imlib2 = imlib2Full;
   };
 
+  feishin = callPackage ../applications/audio/feishin { };
+
   feishu = callPackage ../applications/networking/instant-messengers/feishu { };
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
