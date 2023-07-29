@@ -7,11 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zope.i18nmessageid";
+  pname = "zope-i18nmessageid";
   version = "5.1.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "zope.i18nmessageid";
+    inherit version;
     hash = "sha256-R7djR7gOCytmxIbuZvP4bFdJOiB1uFqfuAJpD6cwvZI=";
   };
 
