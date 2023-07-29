@@ -5898,6 +5898,8 @@ self: super: with self; {
     (p: p.py)
   ];
 
+  librespot = callPackage ../development/python-modules/librespot { };
+
   libretranslate = callPackage ../development/python-modules/libretranslate { };
 
   librosa = callPackage ../development/python-modules/librosa { };
@@ -6755,6 +6757,8 @@ self: super: with self; {
   muscima = callPackage ../development/python-modules/muscima { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
+
+  music-tag = callPackage ../development/python-modules/music-tag { };
 
   mutag = callPackage ../development/python-modules/mutag { };
 
