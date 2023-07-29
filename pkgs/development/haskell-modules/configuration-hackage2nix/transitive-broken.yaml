@@ -108,7 +108,6 @@ dont-distribute-packages:
  - FComp
  - FM-SBLEX
  - FTPLine
- - Facts
  - FailureT
  - FermatsLastMargin
  - FieldTrip
@@ -279,6 +278,7 @@ dont-distribute-packages:
  - MonadLab
  - Monaris
  - Monatron-IO
+ - Mondrian
  - Monocle
  - MuCheck-HUnit
  - MuCheck-Hspec
@@ -675,13 +675,9 @@ dont-distribute-packages:
  - ascii
  - ascii-cows
  - ascii-numbers
- - ascii-numbers_1_2_0_1
  - ascii-superset
- - ascii-superset_1_3_0_1
  - ascii-table
  - ascii-th
- - ascii-th_1_2_0_1
- - ascii_1_7_0_1
  - asic
  - assert4hs-hspec
  - assert4hs-tasty
@@ -694,7 +690,6 @@ dont-distribute-packages:
  - atom-msp430
  - atomic-primops-foreign
  - atp
- - ats-format
  - attoparsec-enumerator
  - attoparsec-iteratee
  - attoparsec-text-enumerator
@@ -1109,7 +1104,6 @@ dont-distribute-packages:
  - crf-chain2-generic
  - crf-chain2-tiers
  - criu-rpc
- - crockford
  - cron-compat
  - crypto-classical
  - crypto-conduit
@@ -1217,7 +1211,6 @@ dont-distribute-packages:
  - dia-functions
  - diagrams-haddock
  - diagrams-html5
- - diagrams-input
  - diagrams-pandoc
  - diagrams-reflex
  - diagrams-wx
@@ -1263,6 +1256,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
+ - dl-fedora_0_9_5_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1489,7 +1483,6 @@ dont-distribute-packages:
  - fmt-for-rio
  - foldable1
  - follower
- - fontconfig-pure
  - foo
  - format
  - format-status
@@ -1539,8 +1532,6 @@ dont-distribute-packages:
  - fused-effects-squeal
  - fwgl-glfw
  - fwgl-javascript
- - g2
- - g2q
  - gact
  - galois-fft
  - gargoyle-postgresql-connect
@@ -1955,6 +1946,7 @@ dont-distribute-packages:
  - hascat-setup
  - hascat-system
  - hashable-accelerate
+ - hasherize
  - hashflare
  - hask-home
  - haskdeep
@@ -2059,7 +2051,6 @@ dont-distribute-packages:
  - hback
  - hbayes
  - hbb
- - hbcd
  - hbf
  - hbro
  - hbro-contrib
@@ -2351,7 +2342,6 @@ dont-distribute-packages:
  - inferno-core
  - inferno-lsp
  - inferno-vc
- - infernu
  - infinity
  - inline-java
  - inspector-wrecker
@@ -2562,7 +2552,6 @@ dont-distribute-packages:
  - leksah
  - leksah-server
  - lens-accelerate
- - lens-toml-parser
  - lens-utils
  - levmar-chart
  - lex-applicative
@@ -2598,16 +2587,6 @@ dont-distribute-packages:
  - linux-ptrace
  - lio-eci11
  - lio-simple
- - liquid-base
- - liquid-bytestring
- - liquid-containers
- - liquid-fixpoint
- - liquid-ghc-prim
- - liquid-parallel
- - liquid-platform
- - liquid-prelude
- - liquid-vector
- - liquidhaskell
  - liquidhaskell-cabal-demo
  - list-t-attoparsec
  - list-t-html-parser
@@ -2663,7 +2642,6 @@ dont-distribute-packages:
  - luachunk
  - lucid-colonnade
  - lucienne
- - luhn
  - lui
  - luminance-samples
  - lvish
@@ -3446,7 +3424,6 @@ dont-distribute-packages:
  - rv
  - s-expression
  - safe-coloured-text-layout-gen
- - safe-coupling
  - safe-plugins
  - safer-file-handles
  - safer-file-handles-bytestring
@@ -3754,8 +3731,6 @@ dont-distribute-packages:
  - structured-mongoDB
  - stunts
  - stutter
- - stylist
- - stylist-traits
  - subhask
  - substring-parser
  - sugar-data
@@ -3813,7 +3788,6 @@ dont-distribute-packages:
  - tamarin-prover-term
  - tamarin-prover-theory
  - tar-bytestring
- - target
  - task
  - task-distribution
  - tasty-bdd
@@ -4168,7 +4142,6 @@ dont-distribute-packages:
  - xhb-atom-cache
  - xhb-ewmh
  - xml-catalog
- - xml-conduit-stylist
  - xml-enumerator
  - xml-enumerator-combinators
  - xml-isogen
