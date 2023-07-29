@@ -4,6 +4,7 @@
 , pythonOlder
 , pytestCheckHook
 , setuptools
+, wheel
 , numpy
 , pandas
 }:
@@ -16,13 +17,18 @@ buildPythonPackage rec {
 
   # `tests/data` dir missing from PyPI dist
   src = fetchFromGitHub {
-     owner = "ANCPLabOldenburg";
-     repo = pname;
-     rev = "refs/tags/${version}";
-     hash = "sha256-Nu9pulVSZysgm/F7jl+VpoqMCiHeysZjQDQ1dT7AnpE=";
+    owner = "ANCPLabOldenburg";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-Nu9pulVSZysgm/F7jl+VpoqMCiHeysZjQDQ1dT7AnpE=";
   };
 
-  nativeBuildInputs = [ setuptools ] ;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'wheel==' 'wheel>='
+  '';
+
+  nativeBuildInputs = [ setuptools wheel ] ;
 
   checkInputs = [ numpy pandas pytestCheckHook ];
   pythonImportsCheck = [
