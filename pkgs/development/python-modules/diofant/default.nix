@@ -5,9 +5,11 @@
 , isort
 , mpmath
 , numpy
+, pip
 , pythonOlder
 , scipy
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -24,7 +26,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     isort
+    pip
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
