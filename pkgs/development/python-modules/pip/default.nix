@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "23.0.1";
+  version = "23.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-BSonlwKmegrlrQTTIL0avPi61/TY2M0f7kOZpSzPRQk=";
+    hash = "sha256-mUlzfYmq1FE3X1/2o7sYJzMgwHRI4ib4EMhpg83VvrI=";
   };
 
   postPatch = ''
