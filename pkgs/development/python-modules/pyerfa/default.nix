@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
+, wheel
 , liberfa
 , packaging
 , numpy
@@ -19,9 +20,18 @@ buildPythonPackage rec {
     sha256 = "2fd4637ffe2c1e6ede7482c13f583ba7c73119d78bef90175448ce506a0ede30";
   };
 
+  # 1. We can use numpy directly instead of oldest-supported-numpy.
+  # 2. The build doesn't seem to need jinja2.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy' \
+      --replace '"jinja2>=2.10.3", ' ""
+  '';
+
   nativeBuildInputs = [
     packaging
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
