@@ -14,6 +14,8 @@ in {
 
   markad = callPackage ./markad {};
 
+  nopacity = callPackage ./nopacity {};
+
   softhddevice = callPackage ./softhddevice {};
 
   streamdev = callPackage ./streamdev {};

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "MarkAd marks advertisements in VDR recordings.";
+    description = "Plugin for VDR that marks advertisements";
     maintainers = [ maintainers.ck3d ];
     license = licenses.gpl2;
     inherit (vdr.meta) platforms;
