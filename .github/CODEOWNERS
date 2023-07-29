@@ -231,11 +231,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # VsCode Extensions
 /pkgs/applications/editors/vscode/extensions   @jonringer
 
-# Prometheus exporter modules and tests
-/nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz
-/nixos/modules/services/monitoring/prometheus/exporters.xml  @WilliButz
-/nixos/tests/prometheus-exporters.nix                        @WilliButz
-
 # PHP interpreter, packages, extensions, tests and documentation
 /doc/languages-frameworks/php.section.md          @aanderse @drupol @etu @globin @ma27 @talyz
 /nixos/tests/php                                  @aanderse @drupol @etu @globin @ma27 @talyz
