@@ -124,3 +124,25 @@ Additional syntax extensions are available, all of which can be used in NixOS op
   > :   green fruit with red flesh
 
 For contributing to the legacy parts, please see [DocBook: The Definitive Guide](https://tdg.docbook.org/) or the [DocBook rocks! primer](https://web.archive.org/web/20200816233747/https://docbook.rocks/).
+
+## Diagrams
+
+The diagrams in this manual are generated using [Plantuml].
+Their sources are available in [`/doc/diagrams`][diagrams].
+
+Currently there is no automated process to render images from those sources and include them in the manual.
+Therefore, rendered images have to be added and updated by hand.
+
+When making a pull request to change a diagram, to ease review, please provide a link to a rendering of the updated diagram in the pull request description.
+Generate a link with the [Plantuml web interface] or [Planttext].
+
+[diagrams]: https://github.com/NixOS/nixpkgs/tree/master/doc/diagrams
+[Plantuml]: https://plantuml.com/
+[Plantuml web interface]: https://www.plantuml.com/plantuml/
+[Planttext]: https://planttext.com/
+
+To render diagrams locally, run the following command in your copy of the `nixpkgs` Git repository:
+
+```shell
+nix-shell '<nixpkgs>' --pure -p plantuml --run "plantuml doc/diagrams/*.plantuml"
+```
