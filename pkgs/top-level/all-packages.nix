@@ -9313,6 +9313,8 @@ with pkgs;
 
   juicefs = callPackage ../tools/filesystems/juicefs { };
 
+  juicity = callPackage ../tools/networking/juicity { };
+
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
