@@ -8,7 +8,9 @@
 , pytestCheckHook
 , pytest-doctestplus
 , pythonOlder
+, setuptools
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,8 +24,16 @@ buildPythonPackage rec {
     hash = "sha256-fH290QRhhglkhkMrpwHUkqVuYvZ6w/MDIYo9V0queVY=";
   };
 
+  # We use numpy in nixpkgs instead of oldest-supported-numpy.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
+
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
