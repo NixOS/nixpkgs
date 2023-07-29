@@ -9,6 +9,7 @@
 , cython
 , jinja2
 , setuptools-scm
+, wheel
 
 # runtime
 , numpy
@@ -32,6 +33,14 @@ buildPythonPackage {
     hash = "sha256-9q4noHf46oSQPvp2x5C5hWFzQaAISw0hw5H3o/MyrCM=";
   };
 
+  # 1. We can use numpy directly instead of oldest-supported-numpy.
+  # 2. Relax the cython constraint since we update it often in nixpkgs.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy' \
+      --replace 'cython==' 'cython>='
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
@@ -40,6 +49,7 @@ buildPythonPackage {
     cython
     jinja2
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
