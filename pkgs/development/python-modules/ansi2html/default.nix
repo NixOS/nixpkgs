@@ -1,4 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, six, mock, pytestCheckHook, setuptools, setuptools-scm }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, six
+, mock
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, setuptools-scm-git-archive
+, wheel
+}:
 
 buildPythonPackage rec {
   pname = "ansi2html";
@@ -12,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-OLgqKYSCofomE/D5yb6z23Ko+DLurFjrLke/Ms039tU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm setuptools-scm-git-archive wheel ];
   propagatedBuildInputs = [ six setuptools ];
 
   preCheck = "export PATH=$PATH:$out/bin";
