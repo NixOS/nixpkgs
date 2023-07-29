@@ -40,7 +40,7 @@ let
         description = "C++ library for developing web applications";
         platforms = platforms.linux;
         license = licenses.gpl2;
-        maintainers = with maintainers; [ juliendehos willibutz ];
+        maintainers = with maintainers; [ juliendehos ];
       };
     };
 in {
