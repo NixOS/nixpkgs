@@ -8974,6 +8974,12 @@
     githubId = 3287933;
     name = "Josef Kemetmüller";
   };
+  knightpp = {
+    email = "knightpp@proton.me";
+    github = "knightpp";
+    githubId = 28928944;
+    name = "Danylo Kondratiev";
+  };
   knl = {
     email = "nikola@knezevic.co";
     github = "knl";
