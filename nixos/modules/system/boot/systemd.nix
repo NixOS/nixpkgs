@@ -597,6 +597,11 @@ in
       # drop-in in /etc, it does apply.
       overrideStrategy = "asDropin";
     };
+    systemd.services."systemd-mkswap@" = {
+      restartIfChanged = false;
+      path = [ pkgs.util-linux ];
+      overrideStrategy = "asDropin";
+    };
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
