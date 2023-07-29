@@ -18358,6 +18358,12 @@
     github = "ymeister";
     githubId = 47071325;
   };
+  yoavlavi = {
+    email = "yoav@yoavlavi.com";
+    github = "yoav-lavi";
+    githubId = 14347895;
+    name = "Yoav Lavi";
+  };
   yochai = {
     email = "yochai@titat.info";
     github = "yochai";
