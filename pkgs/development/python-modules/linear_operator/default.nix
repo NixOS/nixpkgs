@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , scipy
+, setuptools
+, setuptools-scm
 , torch
+, wheel
 , pytestCheckHook
 }:
 
@@ -22,6 +25,14 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace 'find_version("linear_operator", "version.py")' \"$version\"
   '';
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     scipy
