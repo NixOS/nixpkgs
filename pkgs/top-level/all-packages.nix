@@ -30956,6 +30956,8 @@ with pkgs;
 
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
+  multiviewer-for-f1 = callPackage ../applications/video/multiviewer-for-f1 { };
+
   pattypan = callPackage ../applications/misc/pattypan {
     jdk = jdk.override { enableJavaFX = true; };
   };
