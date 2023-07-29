@@ -4,7 +4,9 @@
 , python
 , cython
 , setuptools
+, setuptools-scm
 , substituteAll
+, wheel
 , numpy
 , pandas
 , cramjam
@@ -30,9 +32,13 @@ buildPythonPackage rec {
     hash = "sha256-1hWiwXjTgflQlmy0Dk2phUa1cgYBvvH99tb0TdUmDRI=";
   };
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
     cython
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   patches = [
@@ -43,6 +49,10 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"pytest-runner"' "" \
+      --replace "oldest-supported-numpy" "numpy"
+
     substituteInPlace setup.py \
       --replace "'pytest-runner'," "" \
       --replace "oldest-supported-numpy" "numpy"
