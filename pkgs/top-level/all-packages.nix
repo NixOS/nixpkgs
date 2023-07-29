@@ -30321,6 +30321,8 @@ with pkgs;
 
   blogc = callPackage ../applications/misc/blogc { };
 
+  bloodhound = callPackage ../applications/misc/bloodhound { };
+
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
   };
