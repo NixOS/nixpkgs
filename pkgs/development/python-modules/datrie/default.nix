@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, wheel
 , cython
 , pytestCheckHook
 , hypothesis
@@ -17,9 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-UlsI9jjVz2EV32zNgY5aASmM0jCy2skcj/LmSZ0Ydl0=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner",' ""
+  '';
+
   nativeBuildInputs = [
     setuptools
     cython
+    wheel
   ];
 
   nativeCheckInputs = [
