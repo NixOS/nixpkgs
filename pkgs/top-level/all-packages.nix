@@ -7789,6 +7789,10 @@ with pkgs;
 
   expliot = callPackage ../tools/security/expliot { };
 
+  eza = callPackage ../tools/misc/eza {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
   Fabric = with python3Packages; toPythonApplication fabric;
