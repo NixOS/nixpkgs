@@ -1,23 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
 , zope_testrunner
 , unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "zope-i18nmessageid";
-  version = "5.1.1";
+  version = "6.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "zope.i18nmessageid";
     inherit version;
-    hash = "sha256-R7djR7gOCytmxIbuZvP4bFdJOiB1uFqfuAJpD6cwvZI=";
+    hash = "sha256-LVvOb7MfHOoO+iZEZJvIZ9KXIwPx272f/vzlsuueAXY=";
   };
-
-  propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [
     unittestCheckHook
