@@ -9,7 +9,7 @@ let
   webserver = config.services.${cfg.webserver};
 
   invoiceplane-config = hostName: cfg: pkgs.writeText "ipconfig.php" ''
-    IP_URL=http://${hostName}
+    IP_URL=http://${hostName}${if cfg.port != 80 then ":" + (toString cfg.port) else ""}
     ENABLE_DEBUG=false
     DISABLE_SETUP=false
     REMOVE_INDEXPHP=false
@@ -349,7 +349,7 @@ in
     services.caddy = {
       enable = true;
       virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair "http://${hostName}:${cfg.port}" {
+        nameValuePair "http://${hostName}:${toString cfg.port}" {
           extraConfig = ''
             root * ${pkg hostName cfg}
             file_server
