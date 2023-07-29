@@ -25305,8 +25305,6 @@ with pkgs;
 
   xedit = callPackage ../applications/editors/xedit { };
 
-  xine-lib = callPackage ../development/libraries/xine-lib { };
-
   xautolock = callPackage ../misc/screensavers/xautolock { };
 
   xercesc = callPackage ../development/libraries/xercesc { };
@@ -36218,7 +36216,8 @@ with pkgs;
 
   xfractint = callPackage ../applications/graphics/xfractint { };
 
-  xine-ui = callPackage ../applications/video/xine-ui { };
+  xine-ui = callPackage ../applications/video/xine/ui.nix { };
+  xine-lib = callPackage ../applications/video/xine/lib.nix { };
 
   xlsxgrep = callPackage ../applications/search/xlsxgrep { };
 
