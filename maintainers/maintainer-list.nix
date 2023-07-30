@@ -1666,6 +1666,12 @@
       fingerprint = "6FBC A462 4EAF C69C A7C4  98C1 F044 3098 48A0 7CAC";
     }];
   };
+  babeuh = {
+    name = "Raphael Le Goaller";
+    email = "babeuh@rlglr.fr";
+    github = "babeuh";
+    githubId = 60193302;
+  };
   bachp = {
     email = "pascal.bach@nextrem.ch";
     matrix = "@bachp:matrix.org";
