@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, cmake, gtest }:
 stdenv.mkDerivation rec {
   pname = "xsimd";
-  version = "9.0.1";
+  version = "11.1.0";
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
     rev = version;
-    sha256 = "sha256-onALN6agtrHWigtFlCeefD9CiRZI4Y690XTzy2UDnrk=";
+    sha256 = "sha256-l6IRzndjb95hIcFCCm8zmlNHWtKduqy2t/oml/9Xp+w=";
   };
 
   nativeBuildInputs = [ cmake ];
