@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitHub, fetchpatch
 , cmake
 , enableShared ? !stdenv.hostPlatform.isStatic
 
@@ -69,5 +69,12 @@ in
   fmt_10 = generic {
     version = "10.0.0";
     sha256 = "sha256-sVY2TVPS/Zx32p5XIYR6ghqN4kOZexzH7Cr+y8sZXK8=";
+    patches = [
+      # fixes a test failure on pkgsMusl.fmt
+      (fetchpatch {
+        url = "https://github.com/fmtlib/fmt/commit/eaa6307691a9edb9e2f2eacf70500fc6989b416c.diff";
+        hash = "sha256-PydnmOn/o9DexBViFGUUAO9KFjVS6CN8GVDHcl/+K8g=";
+      })
+    ];
   };
 }
