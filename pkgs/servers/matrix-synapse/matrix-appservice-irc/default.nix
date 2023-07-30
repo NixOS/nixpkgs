@@ -14,7 +14,7 @@ mkYarnPackage rec {
 
   src = fetchFromGitHub {
     owner = "matrix-org";
-    repo = pname;
+    repo = "matrix-appservice-irc";
     rev = version;
     hash = "sha256-IlTW9OK9E7HZJVO+z2aG1z8wipwJ/FJrvmRbg2UNYX0=";
   };
