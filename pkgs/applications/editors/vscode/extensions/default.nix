@@ -1234,6 +1234,22 @@ let
         };
       };
 
+      emroussel.atomize-atom-one-dark-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "atomize-atom-one-dark-theme";
+          publisher = "emroussel";
+          version = "2.0.2";
+          sha256 = "sha256-GwuFtBVj0Z2rHryst/7cegskvZIMPsrAH12+K942+JA=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/emroussel.atomize-atom-one-dark-theme/changelog";
+          description = "A detailed and accurate Atom One Dark theme for VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=emroussel.atomize-atom-one-dark-theme";
+          homepage = "https://github.com/emroussel/atomize/blob/main/README.md";
+          license = lib.licenses.mit;
+        };
+      };
+
       equinusocio.vsc-material-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vsc-material-theme";
