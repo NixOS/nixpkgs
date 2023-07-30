@@ -1,8 +1,7 @@
 { buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , lib
-, python
 , pytestCheckHook
 }:
 
@@ -10,30 +9,27 @@ buildPythonPackage rec {
   pname = "pycodestyle";
   version = "2.11.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JZvMF4V9ios7SiMnMkt55fAgoTwWB0Zw+cjI+HLqdtA=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "pycodestyle";
+    rev = "refs/tags/${version}";
+    hash = "sha256-a+PkSTMGd5rhzC8YANqXTmpgvjRP6d5julunFdVRh+g=";
   };
 
   pythonImportsCheck = [
     "pycodestyle"
   ];
 
-  nativCheckInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  # https://github.com/PyCQA/pycodestyle/blob/2.11.0/tox.ini#L16
-  postCheck = ''
-    ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
-  '';
-
   meta = with lib; {
-    changelog = "https://github.com/PyCQA/pycodestyle/blob/${version}/CHANGES.txt";
+    changelog = "https://github.com/PyCQA/pycodestyle/blob/${src.rev}/CHANGES.txt";
     description = "Python style guide checker";
     homepage = "https://pycodestyle.pycqa.org/";
     license = licenses.mit;
