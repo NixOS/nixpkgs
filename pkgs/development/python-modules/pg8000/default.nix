@@ -7,6 +7,8 @@
 , pythonOlder
 , scramp
 , setuptools
+, versioningit
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -23,6 +25,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    versioningit
+    wheel
   ];
 
   propagatedBuildInputs = [
