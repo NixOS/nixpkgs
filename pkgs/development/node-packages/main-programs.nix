@@ -58,7 +58,6 @@
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";
-  markdownlint-cli = "markdownlint";
   near-cli = "near";
   neovim = "neovim-node-host";
   parcel-bundler = "parcel";
