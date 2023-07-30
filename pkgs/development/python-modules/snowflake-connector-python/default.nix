@@ -17,6 +17,7 @@
 , requests
 , setuptools
 , typing-extensions
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -32,10 +33,17 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"cython",' "" \
+      --replace '"pyarrow>=10.0.1,<10.1.0",' ""
+
     substituteInPlace setup.cfg \
-      --replace "charset_normalizer>=2,<3" "charset_normalizer" \
-      --replace "pyOpenSSL>=16.2.0,<23.0.0" "pyOpenSSL"
+      --replace "charset_normalizer>=2,<3" "charset_normalizer"
   '';
+
+  nativeBuildInputs = [
+    wheel
+  ];
 
   propagatedBuildInputs = [
     asn1crypto
