@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Instrumentation Tools & Auto Instrumentation for OpenTelemetry Python";
     changelog = "https://github.com/open-telemetry/opentelemetry-python-contrib/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
   };
 }
