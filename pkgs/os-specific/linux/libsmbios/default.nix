@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
     cp -a out/public-include/smbios_c $out/include/
   '';
 
-  preFixup = ''rm -rf "$(pwd)" ''; # Hack to avoid TMPDIR in RPATHs
+  preFixup = ''
+    patchelf --set-rpath $out/lib:${stdenv.cc.libc}/lib "$out/sbin/smbios-sys-info-lite"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/dell/libsmbios";
