@@ -3649,6 +3649,21 @@ let
         };
       };
 
+      wmaurer.change-case = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "change-case";
+          publisher = "wmaurer";
+          version = "1.0.0";
+          sha256 = "sha256-tN/jlG2PzuiCeERpgQvdqDoa3UgrUaM7fKHv6KFqujc=";
+        };
+        meta = {
+          description = "A VSCode extension for quickly changing the case (camelCase, CONSTANT_CASE, snake_case, etc) of the current selection or current word";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=wmaurer.change-case";
+          homepage = "https://github.com/wmaurer/vscode-change-case";
+          license = lib.licenses.mit;
+        };
+      };
+
       xadillax.viml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "viml";
