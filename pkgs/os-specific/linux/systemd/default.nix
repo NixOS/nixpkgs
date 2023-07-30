@@ -82,6 +82,9 @@
 , bpftools
 , libbpf
 
+  # Needed to produce a ukify that works for cross compiling UKIs.
+, targetPackages
+
 , withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
@@ -235,6 +238,16 @@ stdenv.mkDerivation (finalAttrs: {
     # BPF does not work with stack protector
     substituteInPlace src/core/bpf/meson.build \
       --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
+  '' + lib.optionalString withUkify ''
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'readelf'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'"
+    # The objcopy dependency is removed in v254
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'objcopy'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -724,6 +737,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
+  '' + lib.optionalString withUkify ''
+    # To cross compile a derivation that builds a UKI with ukify, we need to wrap
+    # ukify with the correct binutils. When wrapping, no splicing happens so we
+    # have to explicitly pull binutils from targetPackages.
+    wrapProgram $out/lib/systemd/ukify --set PATH ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }
   '';
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
