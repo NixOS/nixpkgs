@@ -3410,6 +3410,22 @@ let
         };
       };
 
+      unifiedjs.vscode-mdx = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-mdx";
+          publisher = "unifiedjs";
+          version = "1.4.0";
+          sha256 = "sha256-qqqq0QKTR0ZCLdPltsnQh5eTqGOh9fV1OSOZMjj4xXg=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/unifiedjs.vscode-mdx/changelog";
+          description = "VSCode language support for MDX";
+          downloadPage = "https://github.com/mdx-js/mdx-analyzer";
+          homepage = "https://github.com/mdx-js/mdx-analyzer#readme";
+          license = lib.licenses.mit;
+        };
+      };
+
       usernamehw.errorlens = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "errorlens";
