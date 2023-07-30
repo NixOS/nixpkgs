@@ -6679,6 +6679,12 @@
     githubId = 41522204;
     name = "hexchen";
   };
+  hexclover = {
+    email = "hexclover@outlook.com";
+    github = "hexclover";
+    githubId = 47456195;
+    name = "hexclover";
+  };
   heyimnova = {
     email = "git@heyimnova.dev";
     github = "heyimnova";
