@@ -95,8 +95,8 @@ with lib;
         '';
       };
 
-      additionalDiskSize = mkOption {
-        type = types.str;
+      additionalDiskSize = lib.mkOption {
+        type = lib.types.str;
         default = "512M";
         description = lib.mdDoc ''
           Additional disk space to be added to the image.
