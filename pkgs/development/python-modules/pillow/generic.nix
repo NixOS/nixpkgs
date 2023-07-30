@@ -34,6 +34,11 @@ buildPythonPackage rec {
     "test_save"
   ];
 
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
   propagatedBuildInputs = [ olefile ]
     ++ lib.optionals (lib.versionAtLeast version "8.2.0") [ defusedxml ];
 

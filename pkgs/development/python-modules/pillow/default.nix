@@ -5,6 +5,8 @@
 , fetchPypi
 , fetchpatch
 , isPyPy
+, setuptools
+, wheel
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
 # for passthru.tests
@@ -23,6 +25,10 @@ import ./generic.nix (rec {
     inherit version;
     hash = "sha256-nIK1s+BDx68NlXktDSDM9o9hof7Gs1MOcYtohCJyc5Y=";
   };
+
+  nativeBuildInputs = [
+
+  ];
 
   passthru.tests = {
     inherit imageio matplotlib pilkit pydicom reportlab;
