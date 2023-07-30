@@ -26000,6 +26000,8 @@ with pkgs;
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
+  pgcat = callPackage ../servers/sql/pgcat {};
+
   pgpool = callPackage ../servers/sql/pgpool { };
 
   tang = callPackage ../servers/tang {
@@ -30955,6 +30957,8 @@ with pkgs;
   moe =  callPackage ../applications/editors/moe { };
 
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
+
+  multiviewer-for-f1 = callPackage ../applications/video/multiviewer-for-f1 { };
 
   pattypan = callPackage ../applications/misc/pattypan {
     jdk = jdk.override { enableJavaFX = true; };
