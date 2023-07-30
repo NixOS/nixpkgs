@@ -4586,6 +4586,8 @@ with pkgs;
 
   chopchop = callPackage ../tools/security/chopchop { };
 
+  clapboard = callPackage ../tools/wayland/clapboard { };
+
   cliphist = callPackage ../tools/wayland/cliphist { };
 
   clipman = callPackage ../tools/wayland/clipman { };
