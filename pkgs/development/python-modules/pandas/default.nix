@@ -8,6 +8,7 @@
 , cython
 , setuptools
 , versioneer
+, wheel
 
 # propagates
 , numpy
@@ -71,11 +72,17 @@ buildPythonPackage rec {
     hash = "sha256-wC83Kojg0X820wk6ZExzz8F4jodqfEvLQCCndRLiBDw=";
   };
 
+  # remove upstream's numpy version constraint (we don't want it)
+  postPatch = ''
+    sed -i '/oldest-supported-numpy/d' pyproject.toml
+  '';
+
   nativeBuildInputs = [
     setuptools
     cython
     numpy
     versioneer
+    wheel
   ] ++ versioneer.optional-dependencies.toml;
 
   enableParallelBuilding = true;
