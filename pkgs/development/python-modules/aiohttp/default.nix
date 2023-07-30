@@ -49,6 +49,8 @@ buildPythonPackage rec {
       url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
       hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
     })
+    # https://github.com/aio-libs/aiohttp/pull/7454 but does not merge cleanly
+    ./setuptools-67.5.0-compatibility.diff
   ];
 
   postPatch = ''
