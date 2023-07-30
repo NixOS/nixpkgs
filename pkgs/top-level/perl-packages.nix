@@ -9171,19 +9171,15 @@ with self; {
     };
   };
 
-  FileBaseDir = buildPerlModule {
-    version = "0.08";
+  FileBaseDir = buildPerlPackage {
+    version = "0.09";
     pname = "File-BaseDir";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KI/KIMRYAN/File-BaseDir-0.08.tar.gz";
-      hash = "sha256-wGX80+LyKudpk3vMlxuR+AKU1QCfrBQL+6g799NTBeM=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-BaseDir-0.09.tar.gz";
+      hash = "sha256-bab3KBVirI8R7xo69q7bUcQRgrYPHxIs7QB579kpZ9k=";
     };
-    configurePhase = ''
-      runHook preConfigure
-      perl Build.PL PREFIX="$out" prefix="$out"
-    '';
     propagatedBuildInputs = [ IPCSystemSimple ];
-    buildInputs = [ FileWhich ];
+    nativeCheckInputs = [ FileWhich ];
     meta = {
       description = "Use the Freedesktop.org base directory specification";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
