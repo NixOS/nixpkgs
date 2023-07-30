@@ -4458,6 +4458,8 @@ self: super: with self; {
 
   gpt-2-simple = callPackage ../development/python-modules/gpt-2-simple { };
 
+  gptcache = callPackage ../development/python-modules/gptcache { };
+
   gql = callPackage ../development/python-modules/gql { };
 
   grad-cam = callPackage ../development/python-modules/grad-cam { };
@@ -4582,6 +4584,8 @@ self: super: with self; {
   guestfs = callPackage ../development/python-modules/guestfs { };
 
   gudhi = callPackage ../development/python-modules/gudhi { };
+
+  guidance = callPackage ../development/python-modules/guidance { };
 
   gumath = callPackage ../development/python-modules/gumath { };
 
