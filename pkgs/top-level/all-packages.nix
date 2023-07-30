@@ -13591,6 +13591,8 @@ with pkgs;
 
   tncattach = callPackage ../applications/radio/tncattach { };
 
+  to-html = callPackage ../tools/text/to-html { };
+
   toilet = callPackage ../tools/misc/toilet { };
 
   tokei = callPackage ../development/tools/misc/tokei {
