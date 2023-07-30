@@ -736,11 +736,11 @@
     "vendorHash": "sha256-QxbZv6YMa5/I4bTeQBNdmG3EKtLEmstnH7HMiZzFJrI="
   },
   "minio": {
-    "hash": "sha256-B/3hT/R5tdbJ8IYScCLSklDD8aRnmSgX48DeM3DGGOw=",
+    "hash": "sha256-BsOSImEMgxjldAQ014M25Y/JuxxaJLRdOOOHNAtm/Bg=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v1.17.0",
+    "rev": "v1.17.1",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-Pr5YNDMVNccjQRC5WXUY+0pMTMbuxKqkqtd/Z/z0cXc="
   },
