@@ -12562,6 +12562,8 @@ self: super: with self; {
 
   thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 
+  timple = callPackage ../development/python-modules/timple { };
+
   tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override { x11Support=true; };
   };
