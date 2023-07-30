@@ -18188,6 +18188,8 @@ with pkgs;
 
   espup = callPackage ../development/tools/espup { };
 
+  karma-runner = callPackage ../development/tools/karma-runner { };
+
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
   teller = callPackage ../development/tools/teller { };
