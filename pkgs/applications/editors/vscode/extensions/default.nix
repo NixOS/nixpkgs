@@ -1107,6 +1107,22 @@ let
         };
       };
 
+      dotenv.dotenv-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "dotenv-vscode";
+          publisher = "dotenv";
+          version = "0.28.0";
+          sha256 = "sha256-KiQgFvbfLsA/ADROoG6y6c/i0XHuTNH2AN+6mWEm0P8=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/dotenv.dotenv-vscode/changelog";
+          description = "Official Dotenv extension for VSCode. Offers syntax highlighting, auto-cloaking, auto-completion, in-code secret peeking, and optionally dotenv-vault";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dotenv.dotenv-vscode";
+          homepage = "https://github.com/dotenv-org/dotenv-vscode";
+          license = lib.licenses.mit;
+        };
+      };
+
       dotjoshjohnson.xml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "xml";
