@@ -30,7 +30,7 @@ let
   clientConfig."m.homeserver".base_url = "https://${fqdn}";
   serverConfig."m.server" = "${fqdn}:443";
   mkWellKnown = data: ''
-    add_header Content-Type application/json;
+    default_type application/json;
     add_header Access-Control-Allow-Origin *;
     return 200 '${builtins.toJSON data}';
   '';
