@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,16 @@ buildPythonPackage rec {
     hash = "sha256-WOyv1fLSXG7p+WKs2QSwlsh8FSK/lxp6I1hPY0VIkKo=";
   };
 
+  postPatch = ''
+    # Upstream uses versioningit to set the version
+    sed -i '/versioningit.*/d' pyproject.toml
+    sed -i '/^name =.*/a version = "${version}"' pyproject.toml
+    sed -i "/dynamic =/d" pyproject.toml
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -37,12 +46,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # Upstream uses versioningit to set the version
-    sed -i '/^name =.*/a version = "${version}"' pyproject.toml
-    sed -i "/dynamic =/d" pyproject.toml
-  '';
 
   pythonImportsCheck = [
     "scramp"
