@@ -507,6 +507,22 @@ let
         };
       };
 
+       bierner.docs-view = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "docs-view";
+          publisher = "bierner";
+          version = "0.0.11";
+          sha256 = "sha256-3njIL2SWGFp87cvQEemABJk2nXzwI1Il/WG3E0ZYZxw=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bierner.docs-view/changelog";
+          description = "A VSCode extension that displays documentation in the sidebar or panel";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.docs-view";
+          homepage = "https://github.com/mattbierner/vscode-docs-view#readme";
+          license = lib.licenses.mit;
+        };
+      };
+
       bierner.emojisense = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "emojisense";
