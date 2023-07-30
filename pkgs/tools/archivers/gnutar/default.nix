@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
   doInstallCheck = false; # fails
 
+  # *** buffer overflow detected ***: terminated
+  hardeningDisable = [ "fortify3" ];
+
   meta = {
     description = "GNU implementation of the `tar' archiver";
     longDescription = ''
