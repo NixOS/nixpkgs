@@ -13639,6 +13639,8 @@ self: super: with self; {
 
   xdis = callPackage ../development/python-modules/xdis { };
 
+  xdoctest = callPackage ../development/python-modules/xdoctest { };
+
   xdot = callPackage ../development/python-modules/xdot {
     inherit (pkgs) graphviz;
   };
