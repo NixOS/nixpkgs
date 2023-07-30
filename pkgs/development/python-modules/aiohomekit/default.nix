@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "2.6.11";
+  version = "2.6.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-oTH/YM21l9N03F9zFTOAvxgdG6SyL6qXeeA28jLAOq8=";
+    hash = "sha256-a1qxj/6VCnTqfcCfvjjnfM53JjJXP672wumGCvXwxUY=";
   };
 
   nativeBuildInputs = [

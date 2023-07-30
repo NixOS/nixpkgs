@@ -22,6 +22,7 @@
 , libnotify
 , libX11
 , libxcb
+, headless ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
+    sqlite
+    patchelf
+  ] ++ lib.optionals (!headless) [
     libGLU
     libGL
     libXmu
@@ -47,17 +51,15 @@ stdenv.mkDerivation rec {
     freeglut
     libjpeg
     wxGTK32
-    sqlite
     gtk3
     libXScrnSaver
     libnotify
-    patchelf
     libX11
     libxcb
     xcbutil
   ];
 
-  NIX_LDFLAGS = "-lX11";
+  NIX_LDFLAGS = lib.optionalString (!headless) "-lX11";
 
   preConfigure = ''
     ./_autosetup
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--disable-server" ];
+  configureFlags = [ "--disable-server" ] ++ lib.optionals headless [ "--disable-manager" ];
 
   postInstall = ''
     install --mode=444 -D 'client/scripts/boinc-client.service' "$out/etc/systemd/system/boinc.service"

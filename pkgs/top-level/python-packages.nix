@@ -4764,6 +4764,10 @@ self: super: with self; {
 
   hlk-sw16 = callPackage ../development/python-modules/hlk-sw16 { };
 
+  hnswlib = callPackage ../development/python-modules/hnswlib {
+    inherit (pkgs) hnswlib;
+  };
+
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
@@ -5100,6 +5104,8 @@ self: super: with self; {
   inscriptis = callPackage ../development/python-modules/inscriptis { };
 
   insegel = callPackage ../development/python-modules/insegel { };
+
+  insightface = callPackage ../development/python-modules/insightface { };
 
   installer = callPackage ../development/python-modules/installer { };
 
@@ -5897,6 +5903,8 @@ self: super: with self; {
     (p: p.override { inherit python; })
     (p: p.py)
   ];
+
+  librespot = callPackage ../development/python-modules/librespot { };
 
   libretranslate = callPackage ../development/python-modules/libretranslate { };
 
@@ -6755,6 +6763,8 @@ self: super: with self; {
   muscima = callPackage ../development/python-modules/muscima { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
+
+  music-tag = callPackage ../development/python-modules/music-tag { };
 
   mutag = callPackage ../development/python-modules/mutag { };
 

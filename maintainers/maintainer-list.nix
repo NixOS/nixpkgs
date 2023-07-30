@@ -3915,6 +3915,12 @@
     githubId = 75067;
     name = "Daniel Duan";
   };
+  de11n = {
+    email = "nixpkgs-commits@deshaw.com";
+    github = "de11n";
+    githubId = 130508846;
+    name = "Elliot Cameron";
+  };
   dearrude = {
     name = "Ebrahim Nejati";
     email = "dearrude@tfwno.gf";
@@ -7243,6 +7249,12 @@
       fingerprint = "5CB5 9AA0 D180 1997 2FB3  E0EC 943A 1DE9 372E BE4E";
     }];
   };
+  invokes-su = {
+    email = "nixpkgs-commits@deshaw.com";
+    github = "invokes-su";
+    githubId = 88038050;
+    name = "Souvik Sen";
+  };
   ionutnechita = {
     email = "ionut_n2001@yahoo.com";
     github = "ionutnechita";
@@ -9660,6 +9672,12 @@
     keys = [{
       fingerprint = "1763 9903 2D7C 5B82 5D5A  0EAD A2BC 3C6F 1435 1991";
     }];
+  };
+  locochoco = {
+    email = "contact@locochoco.dev";
+    github = "loco-choco";
+    githubId = 58634087;
+    name = "Ivan Pancheniak";
   };
   lodi = {
     email = "anthony.lodi@gmail.com";
@@ -18357,6 +18375,12 @@
     name = "Yuri Meister";
     github = "ymeister";
     githubId = 47071325;
+  };
+  yoavlavi = {
+    email = "yoav@yoavlavi.com";
+    github = "yoav-lavi";
+    githubId = 14347895;
+    name = "Yoav Lavi";
   };
   yochai = {
     email = "yochai@titat.info";
