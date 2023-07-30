@@ -70,6 +70,8 @@ self: super: {
   # ghc versions which don’t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+  # Too strict lower bound on base
+  ghc-lib-parser = doJailbreak super.ghc-lib-parser;
 
   # Needs to use ghc-lib due to incompatible GHC
   ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
