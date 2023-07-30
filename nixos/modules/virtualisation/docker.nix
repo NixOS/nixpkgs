@@ -236,8 +236,8 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
-          message = "Option enableNvidia requires 32bit support libraries";
+        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or pkgs.stdenv.system == "aarch64-linux";
+          message = "Option enableNvidia on x86_64 requires 32bit support libraries";
         }];
 
       virtualisation.docker.daemon.settings = {
