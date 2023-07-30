@@ -24,15 +24,15 @@
 }:
 
 let
-  id = "118976581";
+  id = "119283326";
 in
 stdenvNoCC.mkDerivation rec {
   pname = "multiviewer-for-f1";
-  version = "1.24.2";
+  version = "1.25.0";
 
   src = fetchurl {
     url = "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
-    sha256 = "sha256-zll639fQFdrNvIj/4ECqEGxQw4VgfERGlti7opSmSi0=";
+    sha256 = "sha256-dHR6XppKndcmQKxGUg2clij8ElfccLQ6AIVtf/AF3qs=";
   };
 
   nativeBuildInputs = [
