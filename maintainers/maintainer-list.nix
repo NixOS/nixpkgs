@@ -2158,6 +2158,12 @@
     githubId = 7346933;
     name = "betaboon";
   };
+  betodealmeida = {
+    email = "roberto@dealmeida.net";
+    github = "betodealmeida";
+    githubId = 1534870;
+    name = "Beto Dealmeida";
+  };
   bew = {
     email = "benoit.dechezelles@gmail.com";
     github = "bew";
