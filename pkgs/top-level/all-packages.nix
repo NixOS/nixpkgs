@@ -33621,6 +33621,8 @@ with pkgs;
 
   nix-ld = callPackage ../os-specific/linux/nix-ld { };
 
+  nix-software-center = callPackage ../applications/system/nix-software-center { };
+
   noaa-apt = callPackage ../applications/radio/noaa-apt { };
 
   node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
