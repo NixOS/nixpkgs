@@ -1266,6 +1266,22 @@ let
         };
       };
 
+      enkia.tokyo-night = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "tokyo-night";
+          publisher = "enkia";
+          version = "1.0.0";
+          sha256 = "sha256-/fM+aUDUzVJ6P38i+GrxhLv2eLJNa8OFkKsM4yPBy4c=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/enkia.tokyo-night/changelog";
+          description = "A clean Visual Studio Code theme that celebrates the lights of Downtown Tokyo at night";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=enkia.tokyo-night";
+          homepage = "https://github.com/enkia/tokyo-night-vscode-theme";
+          license = lib.licenses.mit;
+        };
+      };
+
       equinusocio.vsc-material-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vsc-material-theme";
