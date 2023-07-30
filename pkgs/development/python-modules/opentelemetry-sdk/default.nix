@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchFromGitHub
 , flaky
 , hatchling
 , opentelemetry-api
@@ -14,17 +13,11 @@
 
 let
   self = buildPythonPackage {
+    inherit (opentelemetry-api) version src;
     pname = "opentelemetry-sdk";
-    version = "1.18.0";
     disabled = pythonOlder "3.7";
 
-    src = fetchFromGitHub {
-      owner = "open-telemetry";
-      repo = "opentelemetry-python";
-      rev = "refs/tags/v${self.version}";
-      hash = "sha256-YMFSmzuvm/VA9Fpe7pbF9mnGQHOQpobWMb1iGRt+d3w=";
-      sparseCheckout = [ "/${self.pname}" ];
-    } + "/${self.pname}";
+    sourceRoot = "source/opentelemetry-sdk";
 
     format = "pyproject";
 
@@ -56,11 +49,9 @@ let
     # Enable tests via passthru to avoid cyclic dependency with opentelemetry-test-utils.
     passthru.tests.${self.pname} = self.overridePythonAttrs { doCheck = true; };
 
-    meta = with lib; {
-      homepage = "https://opentelemetry.io";
-      description = "OpenTelemetry Python API and SDK";
-      license = licenses.asl20;
-      maintainers = teams.deshaw.members;
+    meta = opentelemetry-api.meta // {
+      homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-sdk";
+      description = "OpenTelemetry Python SDK";
     };
   };
 in self

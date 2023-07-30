@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchFromGitHub
 , hatchling
 , opentelemetry-api
 , opentelemetry-instrumentation
@@ -12,21 +11,13 @@
 , pytestCheckHook
 , aiohttp
 }:
-let
-  pname = "opentelemetry-instrumentation-aiohttp-client";
-  version = "0.39b0";
-in
+
 buildPythonPackage {
-  inherit pname version;
+  inherit (opentelemetry-instrumentation) version src;
+  pname = "opentelemetry-instrumentation-aiohttp-client";
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "open-telemetry";
-    repo = "opentelemetry-python-contrib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HFDebR3d1osFAIlNuIbs5s+uPeTTJ1xkz+BpE5BpciU=";
-    sparseCheckout = [ "/instrumentation/${pname}" ];
-  } + "/instrumentation/${pname}";
+  sourceRoot = "source/instrumentation/opentelemetry-instrumentation-aiohttp-client";
 
   format = "pyproject";
 
@@ -54,10 +45,8 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.aiohttp_client" ];
 
-  meta = with lib; {
+  meta = opentelemetry-instrumentation.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/blob/main/instrumentation/opentelemetry-instrumentation-aiohttp-client";
     description = "OpenTelemetry Instrumentation for aiohttp-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
   };
 }
