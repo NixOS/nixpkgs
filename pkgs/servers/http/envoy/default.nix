@@ -24,8 +24,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.26.1";
-    rev = "c7e8e7356d3a969c1b8e4e1f2687699acd91c6a1";
+    version = "1.26.3";
+    rev = "ea9d25e93cef74b023c95ca1a3f79449cdf7fa9a";
   };
 in
 buildBazelPackage rec {
@@ -36,7 +36,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     inherit (srcVer) rev;
-    sha256 = "sha256-WHedup6z/9t/Jg6CBrwtDy9xv6IwO3gUuBqos4h+k2s=";
+    sha256 = "sha256-ZZAVuelcPzFQRqh9SwRxt+odEjF0jTNh/KkLWHKiZ3o=";
 
     postFetch = ''
       chmod -R +w $out
@@ -80,8 +80,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-mw3k2r4heoAcBdcc7uYdnotUBrF1nM5Vmqbay+2DkjI=";
-      aarch64-linux = "sha256-2gSxzm7SXvrGEgwZnp5KdEpbV/+zdosf8Z5lrkK3QiI=";
+      x86_64-linux = "sha256-7CB6mRe+q1LMryh50dEjgR+RWU//tbaedgipuB4B+S4=";
+      aarch64-linux = "sha256-kdc1vMPueONOaT8w0Gbkz7OUOcPMMHHdwQ+ABTIL8xs=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
