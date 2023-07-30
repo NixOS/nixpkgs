@@ -4583,6 +4583,8 @@ self: super: with self; {
 
   gudhi = callPackage ../development/python-modules/gudhi { };
 
+  guidance = callPackage ../development/python-modules/guidance { };
+
   gumath = callPackage ../development/python-modules/gumath { };
 
   gunicorn = callPackage ../development/python-modules/gunicorn { };
