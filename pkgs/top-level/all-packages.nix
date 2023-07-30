@@ -13208,6 +13208,8 @@ with pkgs;
 
   stabber = callPackage ../misc/stabber { };
 
+  stacer = libsForQt5.callPackage ../tools/system/stacer { };
+
   starcharts = callPackage ../servers/misc/starcharts { };
 
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
