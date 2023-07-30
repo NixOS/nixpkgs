@@ -10691,12 +10691,6 @@
     githubId = 10420834;
     name = "Mihai-Drosi Caju";
   };
-  mcbeth = {
-    email = "mcbeth@broggs.org";
-    github = "mcbeth";
-    githubId = 683809;
-    name = "Jeffrey Brent McBeth";
-  };
   mccurdyc = {
     email = "mccurdyc22@gmail.com";
     github = "mccurdyc";
