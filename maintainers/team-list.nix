@@ -411,6 +411,14 @@ with lib.maintainers; {
     shortName = "Jitsi";
   };
 
+  jupyter = {
+    members = [
+      natsukium
+    ];
+    scope = "Maintain Jupyter and related packages.";
+    shortName = "Jupyter";
+  };
+
   kubernetes = {
     members = [
       johanot

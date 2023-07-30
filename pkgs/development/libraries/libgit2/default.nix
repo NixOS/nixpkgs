@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , python3
@@ -28,6 +29,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-3ZVBGd2T5DQKsDEc5a7pS0yz01+rDCszU9ZK0zxvfyQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "darwin-errSSLNetworkTimeout.patch";
+      url = "https://github.com/libgit2/libgit2/commit/3e15292d8863da316a57be23fede04f443460686.patch";
+      hash = "sha256-N314YK7osO9L3hCXb+FcMoDM8iBW9Bt8D5O2Szdz7YA=";
+    })
+  ];
 
   cmakeFlags = [
     "-DUSE_HTTP_PARSER=system"

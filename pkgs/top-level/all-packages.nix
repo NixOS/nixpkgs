@@ -1163,6 +1163,8 @@ with pkgs;
 
   fetchFromGitiles = callPackage ../build-support/fetchgitiles { };
 
+  fetchFrom9Front = callPackage ../build-support/fetch9front { };
+
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz { };
 
   fetchgx = callPackage ../build-support/fetchgx { };
@@ -5735,6 +5737,7 @@ with pkgs;
   maple-mono-SC-NF = (callPackage ../data/fonts/maple-font { }).SC-NF;
   maple-mono-otf = (callPackage ../data/fonts/maple-font { }).opentype;
   maple-mono-woff2 = (callPackage ../data/fonts/maple-font { }).woff2;
+  maple-mono-autohint = (callPackage ../data/fonts/maple-font { }).autohint;
 
   marl = callPackage ../development/libraries/marl { };
 
@@ -9313,6 +9316,8 @@ with pkgs;
 
   juicefs = callPackage ../tools/filesystems/juicefs { };
 
+  juicity = callPackage ../tools/networking/juicity { };
+
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
@@ -11136,6 +11141,8 @@ with pkgs;
   onetun = callPackage ../tools/networking/onetun {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  onthespot = libsForQt5.callPackage ../applications/misc/onthespot { };
 
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
@@ -17055,6 +17062,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   rusty-man = callPackage ../development/tools/rust/rusty-man { };
+  rustycli = callPackage ../development/tools/rust/rustycli { };
   typeshare = callPackage ../development/tools/rust/typeshare { };
 
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme { };
@@ -26700,6 +26708,8 @@ with pkgs;
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
+  pgcat = callPackage ../servers/sql/pgcat {};
+
   pgpool = callPackage ../servers/sql/pgpool { };
 
   tang = callPackage ../servers/tang {
@@ -28867,6 +28877,8 @@ with pkgs;
 
   combinatorial_designs = callPackage ../data/misc/combinatorial_designs { };
 
+  commit-mono = callPackage ../data/fonts/commit-mono { };
+
   conway_polynomials = callPackage ../data/misc/conway_polynomials { };
 
   cooper-hewitt = callPackage ../data/fonts/cooper-hewitt { };
@@ -29947,6 +29959,8 @@ with pkgs;
 
   abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
 
+  acpic = callPackage ../applications/misc/acpic/default.nix { };
+
   adguardian = callPackage ../applications/networking/adguardian { };
 
   aeolus = callPackage ../applications/audio/aeolus { };
@@ -30306,6 +30320,8 @@ with pkgs;
   blflash = callPackage ../tools/misc/blflash { };
 
   blogc = callPackage ../applications/misc/blogc { };
+
+  bloodhound = callPackage ../applications/misc/bloodhound { };
 
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
@@ -31456,6 +31472,8 @@ with pkgs;
     imlib2 = imlib2Full;
   };
 
+  feishin = callPackage ../applications/audio/feishin { };
+
   feishu = callPackage ../applications/networking/instant-messengers/feishu { };
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
@@ -32215,7 +32233,6 @@ with pkgs;
   super-productivity = callPackage ../applications/office/super-productivity { };
 
   inherit (callPackages ../development/libraries/wlroots {})
-    wlroots_0_14
     wlroots_0_15
     wlroots_0_16
     wlroots;
@@ -33470,6 +33487,8 @@ with pkgs;
   rofi-pulse-select = callPackage ../applications/audio/rofi-pulse-select { };
 
   rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw { };
+
+  rofi-screenshot = callPackage ../applications/misc/rofi-screenshot { };
 
   rofi-top = callPackage ../applications/misc/rofi-top { };
 
@@ -37158,6 +37177,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL Security;
   };
 
+  ddns-go = callPackage ../tools/networking/ddns-go { };
+
   devilutionx = callPackage ../games/devilutionx {
     fmt = fmt_9;
     SDL2 = SDL2.override {
@@ -37404,6 +37425,8 @@ with pkgs;
   ja2-stracciatella = callPackage ../games/ja2-stracciatella {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
+
+  jfsw = callPackage ../games/jfsw { };
 
   katago = callPackage ../games/katago { };
 
@@ -39404,6 +39427,8 @@ with pkgs;
 
   boinc = callPackage ../applications/science/misc/boinc { };
 
+  boinc-headless = callPackage ../applications/science/misc/boinc { headless = true; };
+
   celestia = callPackage ../applications/science/astronomy/celestia {
     autoreconfHook = buildPackages.autoreconfHook269;
     inherit (gnome2) gtkglext;
@@ -40299,6 +40324,10 @@ with pkgs;
     pcre = pcre-cpp;
     jre = openjdk19; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   });
+
+  owmods-cli = callPackage ../applications/misc/owmods-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   r128gain = callPackage ../applications/audio/r128gain { };
 

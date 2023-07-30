@@ -261,23 +261,6 @@ let
 
       ${proxyCachePathConfig}
 
-      ${optionalString cfg.statusPage ''
-        server {
-          listen ${toString cfg.defaultHTTPListenPort};
-          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
-
-          server_name localhost;
-
-          location /nginx_status {
-            stub_status on;
-            access_log off;
-            allow 127.0.0.1;
-            ${optionalString enableIPv6 "allow ::1;"}
-            deny all;
-          }
-        }
-      ''}
-
       ${vhosts}
 
       ${cfg.appendHttpConfig}
@@ -1176,6 +1159,21 @@ in
 
     services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
+
+    services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
+      listenAddresses = lib.mkDefault ([
+        "0.0.0.0"
+      ] ++ lib.optional enableIPv6 "[::]");
+      locations."/nginx_status" = {
+        extraConfig = ''
+          stub_status on;
+          access_log off;
+          allow 127.0.0.1;
+          ${optionalString enableIPv6 "allow ::1;"}
+          deny all;
+        '';
+      };
+    };
 
     systemd.services.nginx = {
       description = "Nginx Web Server";

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-mixins";
-  version = "2.0.3";
+  version = "2.0.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "absent1706";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DOQlG86VJEV1Eqqo+KLwmRo2tNePq+Na05s1eDhBjcQ=";
+    hash = "sha256-soashrkokHveEI9YXAAPBPHydhoToJhCHx+g7bunhLE=";
   };
 
   propagatedBuildInputs = [

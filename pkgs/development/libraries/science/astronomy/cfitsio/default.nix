@@ -2,16 +2,17 @@
 , lib
 , fetchurl
 , bzip2
+, curl
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cfitsio";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchurl {
-    url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${version}.tar.gz";
-    sha256 = "sha256-66U9Gz9uNFYyuwmnt1LsfO09Y+xRU6hIOA84gMXWGIk=";
+    url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${finalAttrs.version}.tar.gz";
+    hash = "sha256-/a3AHQnPn1QlOALF7IfrEN5RzkEwQRQVrojDCUBiG4s=";
   };
 
   patches = [
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2
+    curl
     zlib
   ];
 
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
     sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
     description = "Library for reading and writing FITS data files";
     longDescription = ''
@@ -50,8 +52,8 @@ stdenv.mkDerivation rec {
       FITS files.
     '';
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xbreak hjones2199 ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xbreak hjones2199 ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

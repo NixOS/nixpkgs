@@ -73,11 +73,11 @@
     "vendorHash": "sha256-LSAxibOYXxyIAsprMzbW+mnUXX7gHtYjMZYaUrGLtD4="
   },
   "argocd": {
-    "hash": "sha256-pEcByit+xTBuJXCqhDOgHoc4lmCpbDptVocylcTqgz4=",
+    "hash": "sha256-t1WGa9pfsLn5uB7/LSYIcmb/kfQCHysIcUKHwn6y8GU=",
     "homepage": "https://registry.terraform.io/providers/oboukili/argocd",
     "owner": "oboukili",
     "repo": "terraform-provider-argocd",
-    "rev": "v6.0.0",
+    "rev": "v6.0.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-q9PO9tMbaXTs3nBLElwU05GcDZMZqNmLVVGDmiSRSfo="
   },
@@ -736,11 +736,11 @@
     "vendorHash": "sha256-QxbZv6YMa5/I4bTeQBNdmG3EKtLEmstnH7HMiZzFJrI="
   },
   "minio": {
-    "hash": "sha256-B/3hT/R5tdbJ8IYScCLSklDD8aRnmSgX48DeM3DGGOw=",
+    "hash": "sha256-BsOSImEMgxjldAQ014M25Y/JuxxaJLRdOOOHNAtm/Bg=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v1.17.0",
+    "rev": "v1.17.1",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-Pr5YNDMVNccjQRC5WXUY+0pMTMbuxKqkqtd/Z/z0cXc="
   },
