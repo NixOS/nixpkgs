@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, doctest }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doctest
+}:
+
 stdenv.mkDerivation rec {
   pname = "xsimd";
   version = "11.1.0";
@@ -9,14 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-l6IRzndjb95hIcFCCm8zmlNHWtKduqy2t/oml/9Xp+w=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   cmakeFlags = [
     "-DBUILD_TESTS=${if (doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ doctest ];
+  nativeCheckInputs = [
+    doctest
+  ];
   checkTarget = "xtest";
 
   meta = with lib; {
