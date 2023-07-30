@@ -50,12 +50,12 @@ in
 
   emacs29 = import ./generic.nix {
     pname = "emacs";
-    version = "29.1-rc1";
+    version = "29.1";
     variant = "mainline";
     src = fetchFromSavannah {
       repo = "emacs";
-      rev = "29.1-rc1";
-      hash = "sha256-p0lBSKsHrFwYTqO5UVIF/PgiqwdhYQE4oUVcPtd+gsU=";
+      rev = "29.1";
+      hash = "sha256-KYy0T/wEMEE0NdiIjzVQB1vTkmtwJGdJ0w28tLyf0sw=";
     };
 
     meta = mainlineMeta;
