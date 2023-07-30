@@ -114,6 +114,7 @@ in buildPythonPackage {
     # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
     # https://github.com/scipy/scipy/pull/17965#issuecomment-1560759962
     export XDG_CACHE_HOME=$PWD; mkdir scipy-data
+    export HOME="$(mktemp -d)"
   '' + (lib.concatStringsSep "\n" (lib.mapAttrsToList (d: dpath:
     # Actually copy the datasets
     "cp ${dpath} scipy-data/${d}.dat"
