@@ -20,7 +20,7 @@ let
   } ''
     # The schema is given as yaml, we need to convert it to json
     python -c 'import json; import yaml; import sys; json.dump(yaml.safe_load(sys.stdin), sys.stdout)' \
-      < ${pkg}/lib/node_modules/matrix-appservice-irc/config.schema.yml \
+      < ${pkg}/libexec/matrix-appservice-irc/deps/matrix-appservice-irc/config.schema.yml \
       > config.schema.json
     python -m jsonschema config.schema.json -i $configPath
     cp "$configPath" "$out"
