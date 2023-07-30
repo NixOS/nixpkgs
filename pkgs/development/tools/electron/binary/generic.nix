@@ -82,25 +82,22 @@ let
       wrapGAppsHook
     ];
 
-    dontWrapGApps = true; # electron is in lib, we need to wrap it manually
-
     dontUnpack = true;
     dontBuild = true;
 
     installPhase = ''
-      mkdir -p $out/lib/electron $out/bin
-      unzip -d $out/lib/electron $src
-      ln -s $out/lib/electron/electron $out/bin
+      mkdir -p $out/libexec/electron $out/bin
+      unzip -d $out/libexec/electron $src
+      ln -s $out/libexec/electron/electron $out/bin
+      chmod u-x $out/libexec/electron/*.so*
     '';
 
     postFixup = ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/lib/electron" \
-        $out/lib/electron/electron \
-        ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/lib/electron/chrome_crashpad_handler" }
-
-      wrapProgram $out/lib/electron/electron "''${gappsWrapperArgs[@]}"
+        --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/libexec/electron" \
+        $out/libexec/electron/.electron-wrapped \
+        ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/libexec/electron/.chrome_crashpad_handler-wrapped" }
     '';
   };
 

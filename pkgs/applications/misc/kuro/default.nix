@@ -38,7 +38,7 @@ mkYarnPackage rec {
 
     yarn --offline run electron-builder \
       --dir \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     popd
