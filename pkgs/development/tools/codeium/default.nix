@@ -4,14 +4,14 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
   pname = "codeium";
-  version = "1.2.40";
+  version = "1.2.44";
   bin = "$out/bin/codeium_language_server";
   name = "${pname}-${version}.gz";
   srcs = {
     x86_64-linux =  fetchurl {
       inherit name;
       url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${version}/language_server_linux_x64.gz";
-      hash = "sha256-86IK46teZDksP6ko1E24uf2EH7rwYJV110udGUGf7Bg=";
+      hash = "sha256-YptZzj+ZtMLk5d3/wDcEyKnV+DfhOeh/CeR+rGv0+Hg=";
     };
     aarch64-linux =  fetchurl {
       inherit name;
