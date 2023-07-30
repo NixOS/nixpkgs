@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchFromGitHub
 , hatchling
 , opentelemetry-api
 , opentelemetry-instrumentation
@@ -13,18 +12,12 @@
 , grpcio
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
+  inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-grpc";
-  version = "0.39b0";
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "open-telemetry";
-    repo = "opentelemetry-python-contrib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DkDAE0MsF9HdywxlFzqJaqNor4O/jpnSqINsKTuiVqU=";
-    sparseCheckout = [ "/instrumentation/${pname}" ];
-  } + "/instrumentation/${pname}";
+  sourceRoot = "source/instrumentation/opentelemetry-instrumentation-grpc";
 
   format = "pyproject";
 
@@ -52,10 +45,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.grpc" ];
 
-  meta = with lib; {
+  meta = opentelemetry-instrumentation.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation/opentelemetry-instrumentation-grpc";
     description = "OpenTelemetry Instrumentation for grpc";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
   };
 }
