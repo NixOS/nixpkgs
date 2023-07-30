@@ -7,6 +7,7 @@
 , pkg-config
 , ninja
 , alsa-lib
+, alsa-plugins
 , freetype
 , libjack2
 , lame
@@ -85,6 +86,8 @@ in stdenv'.mkDerivation rec {
   qtWrapperArgs = [
     # MuseScore JACK backend loads libjack at runtime.
     "--prefix ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
+  ] ++ lib.optionals (stdenv.isLinux) [
+    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     # There are some issues with using the wayland backend, see:
     # https://musescore.org/en/node/321936

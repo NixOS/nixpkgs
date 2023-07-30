@@ -9,13 +9,13 @@
 
 mkDerivation rec {
   pname = "kzones";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "gerritdevriese";
     repo = "kzones";
     rev = "v${version}";
-    sha256 = "sha256-E5pi2ttar6bAt7s0m/NCw66Qgg5fL5p5QpXROWuUTvM=";
+    sha256 = "sha256-0f7Fv5cvRvqNrKjHpU/tLpjiBPN0ExwTDq1p9sdLd4o=";
   };
 
   buildInputs = [

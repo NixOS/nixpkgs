@@ -12516,6 +12516,8 @@ with pkgs;
 
   rubocop = rubyPackages.rubocop;
 
+  ruby-lsp = rubyPackages.ruby-lsp;
+
   runningx = callPackage ../tools/X11/runningx { };
 
   rund = callPackage ../development/tools/rund { };
@@ -13207,6 +13209,8 @@ with pkgs;
   ssss = callPackage ../tools/security/ssss { };
 
   stabber = callPackage ../misc/stabber { };
+
+  stacer = libsForQt5.callPackage ../tools/system/stacer { };
 
   starcharts = callPackage ../servers/misc/starcharts { };
 
@@ -32507,7 +32511,7 @@ with pkgs;
     lua = lua5_1;
   };
 
-  ipe = libsForQt5.callPackage ../applications/graphics/ipe {
+  ipe = qt6Packages.callPackage ../applications/graphics/ipe {
     ghostscript = ghostscriptX;
     texlive = texlive.combine { inherit (texlive) scheme-small; };
     lua5 = lua5_3;
