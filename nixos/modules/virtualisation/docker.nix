@@ -236,7 +236,7 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or pkgs.stdenv.system == "aarch64-linux";
+        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit || pkgs.stdenv.isAarch64;
           message = "Option enableNvidia on x86_64 requires 32bit support libraries";
         }];
 
