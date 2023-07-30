@@ -24105,12 +24105,11 @@ with self; {
 
   TestFile = buildPerlPackage {
     pname = "Test-File";
-    version = "1.443";
+    version = "1.993";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-File-1.443.tar.gz";
-      hash = "sha256-YbSmq49hfIx7WXUWTPYZRo3DBLa6quo1J4KShvpYvNU=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-File-1.993.tar.gz";
+      hash = "sha256-7y/+Gq7HtC2HStQR7GR1R7m5vC9fuT5J4zmUiEVq/Ho=";
     };
-    buildInputs = [ Testutf8 ];
     meta = {
       description = "Test file attributes";
       homepage = "https://github.com/briandfoy/test-file";
