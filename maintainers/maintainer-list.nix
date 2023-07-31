@@ -10265,6 +10265,12 @@
     githubId = 1651325;
     name = "maralorn";
   };
+  marcovergueira = {
+    email = "vergueira.marco@gmail.com";
+    github = "marcovergueira";
+    githubId = 929114;
+    name = "Marco Vergueira";
+  };
   marcus7070 = {
     email = "marcus@geosol.com.au";
     github = "marcus7070";
