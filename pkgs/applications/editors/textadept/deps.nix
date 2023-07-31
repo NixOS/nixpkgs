@@ -1,7 +1,7 @@
 {
-  "scintilla534.tgz" = {
-    url = "https://www.scintilla.org/scintilla534.tgz";
-    sha256 = "sha256-PwGxrvK36Y9iivLP+WWHb10V7igB2d+W3TrO2PCHy0Y=";
+  "scintilla536.tgz" = {
+    url = "https://www.scintilla.org/scintilla536.tgz";
+    sha256 = "sha256-ib6CeKg+eBOSWq/il32quH0r1r69F7AXn+cq/dVIyyQ=";
   };
   "lexilla510.tgz" = {
     url = "https://www.scintilla.org/lexilla510.tgz";
@@ -11,18 +11,17 @@
     url = "https://github.com/orbitalquark/scinterm/archive/scinterm_5.0.zip";
     sha256 = "sha256-l1qeLMCrhyoZA/GfmXFR20rY5EsUoO5e+1vZJtYdb24=";
   };
-  # scintillua
-  "61900949800f9acc1238b45f4683250bd5c60755.zip" = {
-    url = "https://github.com/orbitalquark/scintillua/archive/61900949800f9acc1238b45f4683250bd5c60755.zip";
-    sha256 = "sha256-Zwg2MANNuQMW3JKY4XB1YBjGviiAIwDdrWRB5WtTPTI=";
+  "scintillua_6.2.zip" = {
+    url = "https://github.com/orbitalquark/scintillua/archive/scintillua_6.2.zip";
+    sha256 = "sha256-vjlN6MBz0xjBwWd8dpx/ks37WvdXt2vE1A71YM3uDik=";
   };
-  "lua-5.4.4.tar.gz" = {
-    url = "http://www.lua.org/ftp/lua-5.4.4.tar.gz";
-    sha256 = "sha256-Fkx4SWU7gK5nvsS3RzuIS/XMjS3KBWU0dewu0nuev2E=";
+  "lua-5.4.6.tar.gz" = {
+    url = "http://www.lua.org/ftp/lua-5.4.6.tar.gz";
+    sha256 = "sha256-fV6huctqoLWco93hxq3LV++DobqOVDLA7NBr9DmzrYg=";
   };
-  "lpeg-1.0.2.tar.gz" = {
-    url = "http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.0.2.tar.gz";
-    sha256 = "sha256-SNZldgUbbHg4j6rQm3BJMJMmRYj80PJY3aqxzdShX/4=";
+  "lpeg-1.1.0.tar.gz" = {
+    url = "http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.1.0.tar.gz";
+    sha256 = "sha256-SxVdZ9IkbB/6ete8RmweqJm7xA/vAlfMnAPOy67UNSo=";
   };
   "v1_8_0.zip" = {
     url = "https://github.com/keplerproject/luafilesystem/archive/v1_8_0.zip";
@@ -35,6 +34,11 @@
   "libtermkey-0.22.tar.gz" = {
     url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-0.22.tar.gz";
     sha256 = "sha256-aUW9PEqqg9qD2AoEXFVj2k7dfQN0xiwNNa7AnrMBRgA=";
+  };
+  # lua-std-regex
+  "1.0.zip" = {
+    url = "https://github.com/orbitalquark/lua-std-regex/archive/1.0.zip";
+    sha256 = "sha256-W2hKHOfqYyo3qk+YvPJlzZfZ1wxZmMVphSlcaql+dOE=";
   };
 }
 

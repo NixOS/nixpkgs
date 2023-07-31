@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     owner = "orbitalquark";
     repo = "textadept";
 #    rev = "textadept_${version}";
-    rev = "d17aa1435d684daea25619e8f37a1cb0a8edf83c"; # TODO: WHEN PACKAGE RELEASE, UNCOMMENT PREVIOUS LINE AND REMOVE THIS ONE.
-    sha256 = "sha256-zyFHqXNL5E++ESX9DddfaYiVI41mk/b0tIVxd5a8WTo=";
+    rev = "19cfa3ce0c7d2f981d2b8cbbee4f8e603be9b5db"; # TODO: WHEN PACKAGE RELEASE, UNCOMMENT PREVIOUS LINE AND REMOVE THIS ONE.
+    sha256 = "sha256-FkqoODP2nIOCBy2DqelAdGInizhADpc3ZdzbrRTnSdA=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
