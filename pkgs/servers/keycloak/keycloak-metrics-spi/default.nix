@@ -13,8 +13,6 @@ maven.buildMavenPackage rec {
 
   mvnHash = "sha256-rwAc2KtKo4vJ0JWwPquMyt+FHVNTmMpzBPbo8lWDN/A=";
 
-  nativeBuildInputs = [ maven ];
-
   installPhase = ''
     runHook preInstall
     install -Dm444 -t "$out" target/keycloak-metrics-spi-*.jar
