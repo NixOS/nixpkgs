@@ -12,13 +12,12 @@
 
 (callPackage ./common.nix { inherit stdenv; } {
   pname = "glibc-locales";
+  extraNativeBuildInputs = [ glibc ];
 }).overrideAttrs(finalAttrs: previousAttrs: {
 
   builder = ./locales-builder.sh;
 
   outputs = [ "out" ];
-
-  extraNativeBuildInputs = [ glibc ];
 
   LOCALEDEF_FLAGS = [
     (if stdenv.hostPlatform.isLittleEndian
