@@ -5,6 +5,7 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , typing-extensions
 }:
 
@@ -24,6 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
