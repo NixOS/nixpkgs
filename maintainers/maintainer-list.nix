@@ -7178,12 +7178,6 @@
       fingerprint = "F5B2 BE1B 9AAD 98FE 2916  5597 3665 FFF7 9D38 7BAA";
     }];
   };
-  imsofi = {
-    email = "sofi+git@mailbox.org";
-    github = "imsofi";
-    githubId = 20756843;
-    name = "Sofi";
-  };
   imuli = {
     email = "i@imu.li";
     github = "imuli";
@@ -15675,6 +15669,12 @@
     github = "sorpaas";
     githubId = 6277322;
     name = "Wei Tang";
+  };
+  soupglasses = {
+    email = "sofi+git@mailbox.org";
+    github = "soupglasses";
+    githubId = 20756843;
+    name = "Sofi";
   };
   soywod = {
     name = "Clément DOUIN";
