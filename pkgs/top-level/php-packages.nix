@@ -49,6 +49,12 @@ lib.makeScope pkgs.newScope (self: with self; {
     inherit (pkgs) stdenv autoreconfHook fetchurl re2c nix-update-script;
   };
 
+  buildComposerEnv = import ../build-support/build-composer {
+    inherit php lib;
+    inherit (pkgs) stdenv makeWrapper writeTextFile fetchurl unzip;
+    inherit (pkgs.php81Packages) composer;
+  };
+
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
   mkDerivation = origArgs:
@@ -170,6 +176,10 @@ lib.makeScope pkgs.newScope (self: with self; {
     box = callPackage ../development/php-packages/box { };
 
     composer = callPackage ../development/php-packages/composer { };
+
+    composer2nix = pkgs.callPackage ../development/php-packages/composer2nix {
+      inherit php buildComposerEnv;
+    };
 
     deployer = callPackage ../development/php-packages/deployer { };
 
