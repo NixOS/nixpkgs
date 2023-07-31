@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, ninja, gtest, fetchFromGitHub }:
+{ lib, stdenv, cmake, ninja, gtest, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-Gym2iHq5ws9kuG4HWSQndD8hVugV4USZt6dUFnEkLwY=";
   };
+  patches = [
+    # backport for compilation issue on aarch64
+    # https://github.com/google/highway/issues/1613
+    (fetchpatch {
+      url = "https://github.com/google/highway/commit/7ad89efa911cb906ccf3f78fe510db415e921801.diff";
+      hash = "sha256-hTSkeCh2QLMqeIKG/CAqJXaPqD/66Z02gjGXk591f+U=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ninja ];
 
