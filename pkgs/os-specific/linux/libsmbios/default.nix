@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
     cp -a out/public-include/smbios_c $out/include/
   '';
 
-  # Avoid TMPDIR in RPATH
+  # remove forbidden reference to $TMPDIR
   preFixup = ''
-    patchelf --set-rpath $out/lib:${stdenv.cc.libc}/lib "$out/sbin/smbios-sys-info-lite"
+    patchelf --shrink-rpath --allowed-rpath-prefixes "/nix/store" "$out/sbin/smbios-sys-info-lite"
   '';
 
   meta = with lib; {
