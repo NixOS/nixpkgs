@@ -9,6 +9,7 @@
 , pythonOlder
 , scipy
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,16 @@ buildPythonPackage rec {
     hash = "sha256-aHXH1onpZtlI8V64FqtWFvSShwaxgM9HD9WQerb2R6Q=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy' \
+      --replace 'setuptools_scm[toml]~=' 'setuptools_scm[toml]>='
+  '';
+
   nativeBuildInputs = [
     cython
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
