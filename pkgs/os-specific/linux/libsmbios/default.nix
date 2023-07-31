@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     cp -a out/public-include/smbios_c $out/include/
   '';
 
+  # Avoid TMPDIR in RPATH
   preFixup = ''
     patchelf --set-rpath $out/lib:${stdenv.cc.libc}/lib "$out/sbin/smbios-sys-info-lite"
   '';
