@@ -47,6 +47,7 @@ buildPythonPackage rec {
     homepage = "https://google.github.io/tensorstore";
     changelog = "https://github.com/google/tensorstore/releases/tag/v${version}";
     license = licenses.asl20;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
     maintainers = with maintainers; [ samuela ];
   };
 }
