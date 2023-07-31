@@ -32124,7 +32124,7 @@ with pkgs;
 
   hue-cli = callPackage ../tools/networking/hue-cli { };
 
-  inherit (nodePackages) hueadm;
+  hueadm = callPackage ../tools/misc/hueadm { };
 
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
