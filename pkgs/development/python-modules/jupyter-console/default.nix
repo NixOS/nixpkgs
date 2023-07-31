@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-console";
-  version = "6.6.1";
+  version = "6.6.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyter_console";
     inherit version;
-    hash = "sha256-WTEhLVy8H5Vvb9YVdVteFfOJqOqmlyiNu+Q3cBdhXsw=";
+    hash = "sha256-VmpL8xyHrb+t8izfhG4wabWace1dpx1rpNiqrRSlNTk=";
   };
 
   nativeBuildInputs = [
