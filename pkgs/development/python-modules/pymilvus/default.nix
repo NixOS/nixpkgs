@@ -13,6 +13,7 @@
 , scikit-learn
 , setuptools-scm
 , ujson
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-NTzdbmI2vNvNBFhN+xyZewH4b6l1BbKkDDE7rLNJ4IE=";
   };
 
+  # gitpython doesn't seem to be needed
+  postPatch = ''
+    sed -i '/"gitpython"/d' pyproject.toml
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
@@ -38,6 +44,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pythonRelaxDepsHook
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
