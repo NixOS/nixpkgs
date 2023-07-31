@@ -69,6 +69,48 @@ let
     extras = wantedExtras;
     inherit (cfg) plugins;
   };
+
+  logConfig = logName: {
+    version = 1;
+    formatters.journal_fmt.format = "%(name)s: [%(request)s] %(message)s";
+    handlers.journal = {
+      class = "systemd.journal.JournalHandler";
+      formatter = "journal_fmt";
+      SYSLOG_IDENTIFIER = logName;
+    };
+    root = {
+      level = "INFO";
+      handlers = [ "journal" ];
+    };
+    disable_existing_loggers = false;
+  };
+  logConfigText = logName:
+    let
+      expr = ''
+        {
+          version = 1;
+          formatters.journal_fmt.format = "%(name)s: [%(request)s] %(message)s";
+          handlers.journal = {
+            class = "systemd.journal.JournalHandler";
+            formatter = "journal_fmt";
+            SYSLOG_IDENTIFIER = "${logName}";
+          };
+          root = {
+            level = "INFO";
+            handlers = [ "journal" ];
+          };
+          disable_existing_loggers = false;
+        };
+      '';
+    in
+    lib.literalMD ''
+      Path to a yaml file generated from this Nix expression:
+
+      ```
+      ${expr}
+      ```
+    '';
+  genLogConfigFile = logName: format.generate "synapse-log-${logName}.yaml" (logConfig logName);
 in {
 
   imports = [
@@ -448,8 +490,8 @@ in {
 
             log_config = mkOption {
               type = types.path;
-              default = ./synapse-log_config.yaml;
-              defaultText = lib.literalExpression "nixos/modules/services/matrix/synapse-log_config.yaml";
+              default = genLogConfigFile "synapse";
+              defaultText = logConfigText "synapse";
               description = lib.mdDoc ''
                 The file that holds the logging configuration.
               '';
@@ -814,7 +856,7 @@ in {
               '';
             };
             config = lib.mkOption {
-              type = types.attrsOf (types.submodule {
+              type = types.attrsOf (types.submodule ({name, ...}: {
                 freeformType = format.type;
                 options = {
                   worker_app = lib.mkOption {
@@ -832,8 +874,20 @@ in {
                       List of ports that this worker should listen on, their purpose and their configuration.
                     '';
                   };
+                  worker_log_config = lib.mkOption {
+                    type = types.path;
+                    default = genLogConfigFile "synapse-${name}";
+                    defaultText = logConfigText "synapse-${name}";
+                    description = lib.mdDoc ''
+                      The file for log configuration.
+
+                      See the [python documentation](https://docs.python.org/3/library/logging.config.html#configuration-dictionary-schema)
+                      for the schema and the [upstream repository](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_log_config.yaml)
+                      for an example.
+                    '';
+                  };
                 };
-              });
+              }));
               default = { };
               description = lib.mdDoc ''
                 List of workers to configure. See the
