@@ -19984,6 +19984,8 @@ with pkgs;
 
   terrascan = callPackage ../tools/security/terrascan { };
 
+  tesh = callPackage ../tools/text/tesh {};
+
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
