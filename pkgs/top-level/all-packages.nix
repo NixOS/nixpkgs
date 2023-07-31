@@ -27923,6 +27923,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  libraqm = callPackage ../development/libraries/libraqm { };
+
   libraw = callPackage ../development/libraries/libraw { };
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
