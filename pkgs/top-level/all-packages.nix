@@ -12407,7 +12407,7 @@ with pkgs;
 
   reuse = callPackage ../tools/package-management/reuse { };
 
-  inherit (nodePackages) reveal-md;
+  reveal-md = callPackage ../tools/text/reveal-md { };
 
   rewritefs = callPackage ../os-specific/linux/rewritefs { };
 

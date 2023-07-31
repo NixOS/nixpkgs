@@ -49,6 +49,7 @@ mapAliases {
   gtop = pkgs.gtop; # added 2023-07-31
   manta = pkgs.node-manta; # Added 2023-05-06
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
+  reveal-md = pkgs.reveal-md; # added 2023-07-31
   thelounge = pkgs.thelounge; # Added 2023-05-22
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
