@@ -118,7 +118,7 @@ rec {
             sed "s|${ide.outPath}|$out|" \
               -i $(realpath $out/bin/${meta.mainProgram}-remote-dev-server)
           fi
-          autoPatchelf $out/${meta.mainProgram}/bin
+          ${patchElfCmd}
         '';
     };
 }
