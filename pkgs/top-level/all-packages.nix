@@ -250,6 +250,8 @@ with pkgs;
 
   ani-cli = callPackage ../applications/video/ani-cli { };
 
+  anisette-server = callPackage ../tools/misc/anisette-server { };
+
   dra-cla = callPackage ../applications/video/dra-cla { };
 
   anime-downloader = callPackage ../applications/video/anime-downloader { };
