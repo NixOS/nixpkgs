@@ -21,6 +21,16 @@ buildPythonPackage rec {
     hash = "sha256-gTO7rxgkjdUgSkF6Ztq5bhti5VUpsrhocOLz7L6xllE=";
   };
 
+  # scikit-build-core includes ninja as a required dependency during build-time
+  # dependency validation in its get_requires_for_build_wheel method, but it
+  # seems to default to whatever CMake's default generator is, which for our
+  # CMake is "Unix Makefiles".
+  #
+  # Setting this environment variable will tell scikit-build-core that we are
+  # not using ninja even when it computes its required build dependencies.
+  #
+  env.CMAKE_GENERATOR = "Unix Makefiles";
+
   nativeBuildInputs = [
     cmake
     pybind11
