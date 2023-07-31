@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "A highly customizable macOS status bar replacement";
     homepage = "https://github.com/FelixKratz/SketchyBar";
     platforms = platforms.darwin;
-    maintainers = [ maintainers.azuwis ];
+    maintainers = with maintainers; [ azuwis khaneliman ];
     license = licenses.gpl3;
   };
 }
