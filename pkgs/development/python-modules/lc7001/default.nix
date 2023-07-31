@@ -3,8 +3,8 @@
 , cryptography
 , fetchPypi
 , pythonOlder
-, poetry-core
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    poetry-core
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
