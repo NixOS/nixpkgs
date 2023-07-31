@@ -2,11 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# build-sytem
+# build-system
 , cython_3
 , numpy
 , setuptools
 , setuptools-scm
+, wheel
 , gnutar
 
 # native
@@ -28,6 +29,12 @@ buildPythonPackage rec {
     fetchSubmodules = true;
     hash = "sha256-q/K7XlqvDHAna+fqN6iiJ9wD8efsuwHiEfKjXS46jz8=";
   };
+  
+  # update constraint to accept numpy from nixpkgs
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -37,6 +44,7 @@ buildPythonPackage rec {
     numpy
     setuptools
     setuptools-scm
+    wheel
   ];
 
   pythonImportsCheck = [
