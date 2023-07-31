@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,8 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-oOvrfRSpvwfCcmpV7FOxcBOW8Ex89d2+otjORrzX4o0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--doctest-modules --ignore=docs --cov=ge25519 --cov-report term-missing" "" \
+      --replace 'setuptools~=' 'setuptools>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -36,11 +44,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--doctest-modules --ignore=docs --cov=ge25519 --cov-report term-missing" ""
-  '';
 
   pythonImportsCheck = [
     "ge25519"
