@@ -17,6 +17,7 @@
 , pytools
 , setuptools
 , six
+, wheel
 }:
 
 let
@@ -33,7 +34,13 @@ in buildPythonPackage rec {
     hash = "sha256-CtkleKlKC+De3Vyk/Lbie1p13k5frHV/BMkES9nUJEQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  # update constraint to accept numpy from nixpkgs
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
+
+  nativeBuildInputs = [ setuptools wheel ];
 
   buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 
