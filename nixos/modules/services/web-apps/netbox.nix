@@ -180,6 +180,8 @@ in {
         REPORTS_ROOT = "${cfg.dataDir}/reports";
         SCRIPTS_ROOT = "${cfg.dataDir}/scripts";
 
+        GIT_PATH = "${pkgs.gitMinimal}/bin/git";
+
         DATABASE = {
           NAME = "netbox";
           USER = "netbox";
