@@ -15,7 +15,6 @@ fi
 
 ROOT="$(dirname "$(readlink -f "$0")")"
 NIXPKGS_ROOT="$ROOT/../../../.."
-NIX_DRV="$ROOT/default.nix"
 
 COMMON_FILE="$ROOT/common.nix"
 
@@ -59,7 +58,7 @@ fetchPypi rec {
   version = \"$VERSION\";
   format = \"wheel\";
   dist = python;
-  python = \"cp37.cp38.cp39.py37.py38.py39\";
+  python = \"cp37.cp38.cp39.cp310.cp311.py37.py38.py39.py310.py311\";
   platform = \"$PLATFORM\";
 }
 "
@@ -130,8 +129,6 @@ nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.pas
       echo "$SUBMODULE already up to date"
       continue
     fi
-
-    NEW_URL=$(instantiateClean semgrep.passthru.submodulesSubset."$SUBMODULE".url | sed "s@$OLD_REV@$NEW_REV@g")
 
     TMP_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     replace "$OLD_REV" "$NEW_REV" "$COMMON_FILE"
