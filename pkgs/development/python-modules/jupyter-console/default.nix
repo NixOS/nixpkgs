@@ -18,14 +18,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jupyter_console";
+  pname = "jupyter-console";
   version = "6.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jupyter_console";
+    inherit version;
     hash = "sha256-WTEhLVy8H5Vvb9YVdVteFfOJqOqmlyiNu+Q3cBdhXsw=";
   };
 
