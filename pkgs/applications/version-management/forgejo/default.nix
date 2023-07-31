@@ -23,7 +23,7 @@ let
     pname = "forgejo-frontend";
     inherit (forgejo) src version;
 
-    npmDepsHash = "sha256-dB/uBuS0kgaTwsPYnqklT450ejLHcPAqBdDs3JT8Uxg=";
+    npmDepsHash = "sha256-YZzVw+WWqTmJafqnZ5vrzb7P6V4DTMNQwW1/+wvZEM8=";
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -38,17 +38,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.19.4-0";
+  version = "1.20.1-0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-pTcnST8A4gADPBkNago9uwRFEmTx8vNONL/Emer4xLI=";
+    hash = "sha256-3L43hm6Tx4h5UHm3jGTGiOWBgAGx49zVGB0D6om6ayk=";
   };
 
-  vendorHash = "sha256-LKxhNbSIRaP4EGWX6mE26G9CWfoFTrPRjrL4ShpRHWo=";
+  vendorHash = "sha256-n2fqqQ6jqHEAWLlaY9t6nd6Ty0viOuTwDWDhTECve+Q=";
 
   subPackages = [ "." ];
 
@@ -88,7 +88,7 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
-  # $data is not available in go-modules.drv and preBuild isn't needed
+  # $data is not available in goModules.drv and preBuild isn't needed
   overrideModAttrs = (_: {
     postPatch = null;
     preBuild = null;

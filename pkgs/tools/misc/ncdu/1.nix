@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     homepage = "https://dev.yorhel.nl/ncdu";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub SuperSandro2000 ];
+    maintainers = with maintainers; [ pSub ];
   };
 }

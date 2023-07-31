@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p nix-update nix-prefetch-github python3Packages.requests
+#!nix-shell -i python3 -p nix-update python3Packages.requests
 
 from nix_prefetch_github import *
 import requests

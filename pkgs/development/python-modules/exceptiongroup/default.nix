@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.1.0";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "exceptiongroup";
     rev = version;
-    hash = "sha256-XQcYYz4MOxWj9QlgM6KuwBaCHjYzGRkQw3cN5WBSnAo=";
+    hash = "sha256-19taP6adzmO4zH2As1OTXeYNFj6KwjhxBr09X+SrZRk=";
   };
 
   nativeBuildInputs = [
@@ -32,12 +32,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  disabledTests = if (pythonAtLeast "3.11") then [
-    # regression in 3.11.4
-    # https://github.com/agronholm/exceptiongroup/issues/64
-    "test_catch_handler_raises"
-  ] else null;
 
   pythonImportsCheck = [
     "exceptiongroup"

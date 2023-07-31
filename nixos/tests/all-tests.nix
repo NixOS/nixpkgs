@@ -89,6 +89,7 @@ in {
     extra-python-packages = handleTest ./nixos-test-driver/extra-python-packages.nix {};
     lib-extend = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nixos-test-driver/lib-extend.nix {};
     node-name = runTest ./nixos-test-driver/node-name.nix;
+    busybox = runTest ./nixos-test-driver/busybox.nix;
   };
 
   # NixOS vm tests and non-vm unit tests
@@ -111,6 +112,7 @@ in {
   anuko-time-tracker = handleTest ./anuko-time-tracker.nix {};
   apcupsd = handleTest ./apcupsd.nix {};
   apfs = runTest ./apfs.nix;
+  appliance-repart-image = runTest ./appliance-repart-image.nix;
   apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
@@ -138,6 +140,7 @@ in {
   borgbackup = handleTest ./borgbackup.nix {};
   botamusique = handleTest ./botamusique.nix {};
   bpf = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bpf.nix {};
+  bpftune = handleTest ./bpftune.nix {};
   breitbandmessung = handleTest ./breitbandmessung.nix {};
   brscan5 = handleTest ./brscan5.nix {};
   btrbk = handleTest ./btrbk.nix {};
@@ -202,6 +205,7 @@ in {
   couchdb = handleTest ./couchdb.nix {};
   cri-o = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cri-o.nix {};
   cups-pdf = handleTest ./cups-pdf.nix {};
+  curl-impersonate = handleTest ./curl-impersonate.nix {};
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
   darling = handleTest ./darling.nix {};
@@ -531,11 +535,12 @@ in {
   nginx-http3 = handleTest ./nginx-http3.nix {};
   nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
   nginx-njs = handleTest ./nginx-njs.nix {};
+  nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
   nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
   nginx-sandbox = handleTestOn ["x86_64-linux"] ./nginx-sandbox.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
+  nginx-status-page = handleTest ./nginx-status-page.nix {};
   nginx-variants = handleTest ./nginx-variants.nix {};
-  nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
   nifi = handleTestOn ["x86_64-linux"] ./web-apps/nifi.nix {};
   nitter = handleTest ./nitter.nix {};
   nix-ld = handleTest ./nix-ld.nix {};
@@ -576,6 +581,7 @@ in {
   openvscode-server = handleTest ./openvscode-server.nix {};
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
+  osquery = handleTestOn ["x86_64-linux"] ./osquery.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
   overlayfs = handleTest ./overlayfs.nix {};
   pacemaker = handleTest ./pacemaker.nix {};
@@ -597,6 +603,7 @@ in {
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
   peroxide = handleTest ./peroxide.nix {};
   pgadmin4 = handleTest ./pgadmin4.nix {};
+  pgbouncer = handleTest ./pgbouncer.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   phosh = handleTest ./phosh.nix {};
@@ -726,6 +733,7 @@ in {
   switchTest = handleTest ./switch-test.nix {};
   sympa = handleTest ./sympa.nix {};
   syncthing = handleTest ./syncthing.nix {};
+  syncthing-no-settings = handleTest ./syncthing-no-settings.nix {};
   syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
@@ -766,6 +774,7 @@ in {
   systemd-portabled = handleTest ./systemd-portabled.nix {};
   systemd-repart = handleTest ./systemd-repart.nix {};
   systemd-shutdown = handleTest ./systemd-shutdown.nix {};
+  systemd-sysupdate = runTest ./systemd-sysupdate.nix;
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-user-tmpfiles-rules = handleTest ./systemd-user-tmpfiles-rules.nix {};
   systemd-misc = handleTest ./systemd-misc.nix {};
@@ -804,6 +813,7 @@ in {
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
   tuxguitar = handleTest ./tuxguitar.nix {};
   twingate = runTest ./twingate.nix;
+  typesense = handleTest ./typesense.nix {};
   ucarp = handleTest ./ucarp.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   ulogd = handleTest ./ulogd.nix {};

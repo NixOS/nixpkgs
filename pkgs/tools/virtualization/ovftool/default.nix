@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, system ? builtins.currentSystem, ovftoolBundles ? {}
-, requireFile, autoPatchelfHook, makeWrapper, unzip
+, autoPatchelfHook, makeWrapper, unzip
 , glibc, c-ares, libxcrypt-legacy, expat, icu60, xercesc, zlib
 }:
 

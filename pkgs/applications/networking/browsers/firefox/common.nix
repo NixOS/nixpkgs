@@ -187,7 +187,6 @@ let
       # These values are exposed through telemetry
       "app.distributor" = "nixos";
       "app.distributor.channel" = "nixpkgs";
-      "app.partner.nixos" = "nixos";
     };
   });
 

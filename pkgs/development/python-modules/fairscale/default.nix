@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 # build inputs
 , torch
 , numpy
@@ -19,7 +20,7 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.10";
 
@@ -30,10 +31,16 @@ buildPythonPackage {
     hash = "sha256-L2Rl/qL6l0OLAofygzJBGQdp/2ZrgDFarwZRjyAR3dw=";
   };
 
-  nativeBuildInputs = [ ninja ];
-  dontUseNinjaBuild = true;
-  dontUseNinjaInstall = true;
-  dontUseNinjaCheck = true;
+  # setup.py depends on ninja python dependency, but we have the binary in nixpkgs
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'setup_requires=["ninja"]' 'setup_requires=[]'
+  '';
+
+  nativeBuildInputs = [
+    ninja
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     torch

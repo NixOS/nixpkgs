@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "This library helps you quickly implement an interactive command-based application";
     homepage = "https://github.com/NetApp/recline";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

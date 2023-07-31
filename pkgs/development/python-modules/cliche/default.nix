@@ -32,6 +32,6 @@ buildPythonPackage {
     description = "Build a simple command-line interface from your functions :computer:";
     homepage = "https://github.com/kootenpv/cliche";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

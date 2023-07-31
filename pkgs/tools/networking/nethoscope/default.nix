@@ -1,7 +1,6 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , rustPlatform
+, fetchFromGitHub
 , pkg-config
 , alsa-lib
 , libpcap

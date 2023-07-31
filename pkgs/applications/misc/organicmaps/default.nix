@@ -67,7 +67,6 @@ mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script {
-      attrPath = pname;
       extraArgs = [ "-vr" "(.*)-android" ];
     };
   };

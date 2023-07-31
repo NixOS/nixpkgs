@@ -5,14 +5,14 @@
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.6.0";
+  version = "1.6.1";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "sha256-Aw1tdaiyr3wv3Ti3CFn2T80WRjEZaACwotKKJGY9I6Y=";
+    sha256 = "sha256-BCZLMSJP/63N+pZsK8er87Zem7IFGdkyruDs6UVDZSM=";
   };
 
   vendorHash = "sha256-hn2cMKhLl5qsm4sZErs6PXTs8yajowxw9a9vtHe5cAk=";
@@ -39,6 +39,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Prometheus exporter for machine metrics";
     homepage = "https://github.com/prometheus/node_exporter";
+    changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin Frostman ];
   };

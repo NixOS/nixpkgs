@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchzip
-, fetchpatch
 , makeWrapper
 , nixosTests
 , pkg-config
@@ -50,21 +49,12 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.1.4";
+  version = "9.2.1";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    sha256 = "sha256-+iq+z+1JE6JE6OLcUwRRAe2/EISqb6Ax6pNm8GcB7bc=";
+    hash = "sha256-Uq6CmbEJfN8ajpVmIutkDy2b8fZcT4wtprcWbMkaNkQ=";
   };
-
-  patches = [
-    # Adds support for NixOS
-    # https://github.com/apache/trafficserver/pull/7697
-    (fetchpatch {
-      url = "https://github.com/apache/trafficserver/commit/19d3af481cf74c91fbf713fc9d2f8b138ed5fbaf.diff";
-      sha256 = "0z1ikgpp00rzrrcqh97931586yn9wbksgai9xlkcjd5cg8gq0150";
-    })
-  ];
 
   # NOTE: The upstream README indicates that flex is needed for some features,
   # but it actually seems to be unnecessary as of this commit[1]. The detection

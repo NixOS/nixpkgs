@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "An implementation of a multiset";
     homepage = "https://github.com/wheerd/multiset";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

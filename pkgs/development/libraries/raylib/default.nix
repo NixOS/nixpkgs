@@ -37,6 +37,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = [ raylib-games ];
 
+  patches = [
+    # Patch version in CMakeList to 4.5.0
+    # Remove this when updating to a new revision
+    (fetchpatch {
+      url = "https://github.com/raysan5/raylib/commit/0d4db7ad7f6fd442ed165ebf8ab8b3f4033b04e7.patch";
+      hash = "sha256-RGokbQAwJAZm2FU2VNwraE3xko8E+RLLFjUfDRXeKhA=";
+    })
+  ];
+
+  # fix libasound.so/libpulse.so not being found
+  preFixup = ''
+    ${lib.optionalString alsaSupport "patchelf --add-needed ${alsa-lib}/lib/libasound.so $out/lib/libraylib.so.${finalAttrs.version}"}
+    ${lib.optionalString pulseSupport "patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/libraylib.so.${finalAttrs.version}"}
+  '';
+
   meta = with lib; {
     description = "A simple and easy-to-use library to enjoy videogames programming";
     homepage = "https://www.raylib.com/";

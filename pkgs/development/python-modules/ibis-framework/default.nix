@@ -210,6 +210,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ibis-project/ibis";
     changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc cpcloud ];
+    maintainers = with maintainers; [ cpcloud ];
   };
 }

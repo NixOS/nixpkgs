@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , meson
-, cmake
 , ninja
 , wlroots
 , wayland

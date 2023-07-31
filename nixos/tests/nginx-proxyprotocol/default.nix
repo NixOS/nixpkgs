@@ -4,6 +4,10 @@ in
 import ../make-test-python.nix ({ pkgs, ... }: {
   name = "nginx-proxyprotocol";
 
+  meta = {
+    maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+  };
+
   nodes = {
     webserver = { pkgs, lib, ... }: {
       environment.systemPackages = [ pkgs.netcat ];

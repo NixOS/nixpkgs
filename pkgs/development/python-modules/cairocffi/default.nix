@@ -75,7 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/SimonSapin/cairocffi";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
     description = "cffi-based cairo bindings for Python";
   };
 }

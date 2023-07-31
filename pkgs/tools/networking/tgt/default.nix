@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
-, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
+, docbook_xsl, coreutils, lsof, makeWrapper, sg3_utils
 }:
 
 stdenv.mkDerivation rec {

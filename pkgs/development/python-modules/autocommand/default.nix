@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = " Autocommand turns a python function into a CLI program ";
     homepage = "https://github.com/Lucretiel/autocommand";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

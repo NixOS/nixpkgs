@@ -1,28 +1,15 @@
-{ config, pkgs, lib, utils, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 let
   cfg = config.systemd.repart;
   initrdCfg = config.boot.initrd.systemd.repart;
 
-  writeDefinition = name: partitionConfig: pkgs.writeText
-    "${name}.conf"
-    (lib.generators.toINI { } { Partition = partitionConfig; });
+  format = pkgs.formats.ini { };
 
-  listOfDefinitions = lib.mapAttrsToList
-    writeDefinition
-    (lib.filterAttrs (k: _: !(lib.hasPrefix "_" k)) cfg.partitions);
-
-  # Create a directory in the store that contains a copy of all definition
-  # files. This is then passed to systemd-repart in the initrd so it can access
-  # the definition files after the sysroot has been mounted but before
-  # activation. This needs a hard copy of the files and not just symlinks
-  # because otherwise the files do not show up in the sysroot.
-  definitionsDirectory = pkgs.runCommand "systemd-repart-definitions" { } ''
-    mkdir -p $out
-    ${(lib.concatStringsSep "\n"
-      (map (pkg: "cp ${pkg} $out/${pkg.name}") listOfDefinitions)
-    )}
-  '';
+  definitionsDirectory = utils.systemdUtils.lib.definitions
+    "repart.d"
+    format
+    (lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions);
 in
 {
   options = {

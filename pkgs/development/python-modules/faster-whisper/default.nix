@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "faster-whisper";
-  version = "0.6.0";
+  version = "0.7.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "guillaumekln";
     repo = "faster-whisper";
     rev = "v${version}";
-    hash = "sha256-tBajxrAhV7R9VnAzUr7ONAYH9h8Uh/UUeu2YZAAotBo=";
+    hash = "sha256-NTk0S+dMChygnC7Wix62AFO4NNSPJuKXyqoEyWiQhII=";
   };
 
   postPatch = ''

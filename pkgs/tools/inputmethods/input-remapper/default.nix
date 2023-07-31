@@ -1,5 +1,4 @@
 { lib
-, python3
 , pkgconfig
 , wrapGAppsHook
 , gettext

@@ -91,7 +91,7 @@ let
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
   extraUtils = pkgs.runCommand "extra-utils"
-    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
+    { nativeBuildInputs = with pkgs.buildPackages; [ nukeReferences bintools ];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -122,7 +122,7 @@ let
         # code, using default options and effectively ignore security relevant
         # ZFS properties such as `setuid=off` and `exec=off` (unless manually
         # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
-        copy_bin_and_libs ${pkgs.util-linux}/bin/mount
+        copy_bin_and_libs ${lib.getOutput "mount" pkgs.util-linux}/bin/mount
         copy_bin_and_libs ${pkgs.zfs}/bin/mount.zfs
       ''}
 

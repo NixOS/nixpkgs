@@ -261,23 +261,6 @@ let
 
       ${proxyCachePathConfig}
 
-      ${optionalString cfg.statusPage ''
-        server {
-          listen ${toString cfg.defaultHTTPListenPort};
-          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
-
-          server_name localhost;
-
-          location /nginx_status {
-            stub_status on;
-            access_log off;
-            allow 127.0.0.1;
-            ${optionalString enableIPv6 "allow ::1;"}
-            deny all;
-          }
-        }
-      ''}
-
       ${vhosts}
 
       ${cfg.appendHttpConfig}
@@ -362,7 +345,9 @@ let
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
-        acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
+        # The acme-challenge location doesn't need to be added if we are not using any automated
+        # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
+        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
@@ -1174,6 +1159,21 @@ in
 
     services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
+
+    services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
+      listenAddresses = lib.mkDefault ([
+        "0.0.0.0"
+      ] ++ lib.optional enableIPv6 "[::]");
+      locations."/nginx_status" = {
+        extraConfig = ''
+          stub_status on;
+          access_log off;
+          allow 127.0.0.1;
+          ${optionalString enableIPv6 "allow ::1;"}
+          deny all;
+        '';
+      };
+    };
 
     systemd.services.nginx = {
       description = "Nginx Web Server";

@@ -71,18 +71,18 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.14.1`
-  commit = "5c199629305a0b935b4388b7db549f77eae82b5a";
+  commit = "5c511237970f4be0f1e5785feaa254da951bc367";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.14.1";
+  version = "4.15.0";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-j7pFh731C8HUGT+M/JvnJoDZoPH9AdfA9TxxSx1vuBM=";
+    hash = "sha256-2/zIfeCROPrlwHuKk0ySPMLdI504aNLNZge+XUSrZB8=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -92,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     nativeBuildInputs = [ yarn' git cacert ];
 
     buildPhase = ''
+      runHook preBuild
+
       export HOME=$PWD
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
 
@@ -106,11 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
       find ./lib/vscode -name "yarn.lock" -printf "%h\n" | \
         xargs -I {} yarn --cwd {} \
           --ignore-scripts --ignore-engines
+
+      runHook postBuild
     '';
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-J5ME9Nc7GWVoKeV908BR9ib9yH5KNmBOtltRvJcpZIY=";
+    outputHash = "sha256-vkju+oxEYrEXFAnjz/Mf1g0ZhxBALLAaRuWE0swSWwM=";
   };
 
   nativeBuildInputs = [

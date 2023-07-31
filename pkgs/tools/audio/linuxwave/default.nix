@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linuxwave";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "linuxwave";
     rev = "v${version}";
-    hash = "sha256-JWVQSMJNtZvs8Yg8bUM6Sb9YMt8KGElunQVIK2mUrhE=";
+    hash = "sha256-5c8h9bAe3Qv7PJ3PPcwMJYKPlWsmnqshe6vLIgtdDiQ=";
     fetchSubmodules = true;
   };
 

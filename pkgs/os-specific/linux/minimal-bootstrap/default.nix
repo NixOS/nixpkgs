@@ -15,6 +15,12 @@ lib.makeScope
 
     bash_2_05 = callPackage ./bash/2.nix { tinycc = tinycc-mes; };
 
+    bash = callPackage ./bash {
+      bootBash = bash_2_05;
+      gcc = gcc2;
+      glibc = glibc22;
+    };
+
     binutils = callPackage ./binutils {
       bash = bash_2_05;
       gcc = gcc2;
@@ -36,9 +42,16 @@ lib.makeScope
 
     coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
 
+    diffutils = callPackage ./diffutils {
+      bash = bash_2_05;
+      gcc = gcc2;
+      glibc = glibc22;
+    };
+
     gawk = callPackage ./gawk {
       bash = bash_2_05;
       tinycc = tinycc-mes;
+      gnused = gnused-mes;
     };
 
     gcc2 = callPackage ./gcc/2.nix {
@@ -56,6 +69,7 @@ lib.makeScope
 
     inherit (callPackage ./glibc {
       bash = bash_2_05;
+      gnused = gnused-mes;
     }) glibc22;
 
     gnugrep = callPackage ./gnugrep {
@@ -69,17 +83,26 @@ lib.makeScope
 
     gnused = callPackage ./gnused {
       bash = bash_2_05;
+      gcc = gcc2;
+      glibc = glibc22;
+      gnused = gnused-mes;
+    };
+    gnused-mes = callPackage ./gnused {
+      bash = bash_2_05;
       tinycc = tinycc-mes;
+      mesBootstrap = true;
     };
 
     gnutar = callPackage ./gnutar {
       bash = bash_2_05;
       tinycc = tinycc-mes;
+      gnused = gnused-mes;
     };
 
     gzip = callPackage ./gzip {
       bash = bash_2_05;
       tinycc = tinycc-mes;
+      gnused = gnused-mes;
     };
 
     heirloom = callPackage ./heirloom {
@@ -112,15 +135,18 @@ lib.makeScope
     inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
 
     test = kaem.runCommand "minimal-bootstrap-test" {} ''
+      echo ${bash.tests.get-version}
       echo ${bash_2_05.tests.get-version}
       echo ${binutils.tests.get-version}
       echo ${binutils-mes.tests.get-version}
       echo ${bzip2.tests.get-version}
+      echo ${diffutils.tests.get-version}
       echo ${gawk.tests.get-version}
       echo ${gcc2.tests.get-version}
       echo ${gcc2-mes.tests.get-version}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
+      echo ${gnused-mes.tests.get-version}
       echo ${gnutar.tests.get-version}
       echo ${gzip.tests.get-version}
       echo ${heirloom.tests.get-version}

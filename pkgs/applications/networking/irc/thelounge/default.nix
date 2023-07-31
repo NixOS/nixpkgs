@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thelounge";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "thelounge";
     repo = "thelounge";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2MHq71lKkFe1uHEENgUiYsO99bPyLmEZZIdcdgsZfSM=";
+    hash = "sha256-4FdNYP9VLgv/rfvT7KHCF+ABFsZvPbJjfz6IvvDkRNA=";
   };
 
   # Allow setting package path for the NixOS module.
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-OKLsNGl94EDyLgP2X2tiwihgRQFXGvf5XgXwgX+JEpk=";
+    hash = "sha256-MM6SgVT7Pjdu96A4eWRucEzT7uNPxBqUDgHKl8mH2C0=";
   };
 
   nativeBuildInputs = [ nodejs yarn fixup_yarn_lock python3 npmHooks.npmInstallHook ] ++ lib.optional stdenv.isDarwin darwin.cctools;

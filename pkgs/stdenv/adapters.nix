@@ -67,7 +67,7 @@ rec {
             "--disable-shared" # brrr...
           ];
       }));
-    } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "libc") {
+    } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "glibc") {
       extraBuildInputs = (old.extraBuildInputs or []) ++ [
         pkgs.glibc.static
       ];
@@ -121,9 +121,6 @@ rec {
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeStaticBinaries
-
-    # Glibc doesn’t come with static runtimes by default.
-    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.glibc.static ])
   );
 
 

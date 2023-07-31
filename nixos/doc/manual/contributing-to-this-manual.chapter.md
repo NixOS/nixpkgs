@@ -11,6 +11,8 @@ $ nix-build nixos/release.nix -A manual.x86_64-linux
 
 If the build succeeds, the manual will be in `./result/share/doc/nixos/index.html`.
 
+There's also [a convenient development daemon](https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-devmode).
+
 **Contributing to the man pages**
 
 The man pages are written in [DocBook] which is XML.

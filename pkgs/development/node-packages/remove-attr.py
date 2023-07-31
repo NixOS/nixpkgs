@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p
+#!nix-shell -i python3 -p python3
 
 import collections.abc
 import fileinput

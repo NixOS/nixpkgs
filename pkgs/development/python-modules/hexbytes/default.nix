@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ethereum/hexbytes";
     changelog = "https://github.com/ethereum/hexbytes/blob/v${version}/docs/release_notes.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

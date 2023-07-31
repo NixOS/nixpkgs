@@ -309,7 +309,6 @@ let
       # To fix the build as we don't provide libffi_pic.a
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
-    } // lib.optionalAttrs (chromiumVersionAtLeast "115") {
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
       # We do intentionally not set rustc_version as nixpkgs will never do incremental
       # rebuilds, thus leaving this empty is fine.

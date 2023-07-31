@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -33,6 +34,13 @@ stdenv.mkDerivation rec {
   patches = [
     # Bring .pc file in line with our patched pkg-config.
     ./0001-pkg-config-Declare-header-dependencies-as-public.patch
+
+    # Fix build against libxml2 2.11
+    # https://gitlab.gnome.org/GNOME/gupnp/-/merge_requests/34
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gupnp/-/commit/bc56f02b0f89e96f2bd74af811903d9931965f58.patch";
+      hash = "sha256-KCHlq7Es+WLIWKgIgGVTaHarVQIiZPEi5r6nMAhXTgY=";
+    })
   ];
 
   depsBuildBuild = [

@@ -416,6 +416,10 @@ class Machine:
         return answer
 
     def send_monitor_command(self, command: str) -> str:
+        """
+        Send a command to the QEMU monitor. This allows attaching
+        virtual USB disks to a running machine, among other things.
+        """
         self.run_callbacks()
         message = f"{command}\n".encode()
         assert self.monitor is not None
@@ -425,9 +429,10 @@ class Machine:
     def wait_for_unit(
         self, unit: str, user: Optional[str] = None, timeout: int = 900
     ) -> None:
-        """Wait for a systemd unit to get into "active" state.
-        Throws exceptions on "failed" and "inactive" states as well as
-        after timing out.
+        """
+        Wait for a systemd unit to get into "active" state.
+        Throws exceptions on "failed" and "inactive" states as well as after
+        timing out.
         """
 
         def check_active(_: Any) -> bool:
@@ -476,6 +481,19 @@ class Machine:
         )
 
     def systemctl(self, q: str, user: Optional[str] = None) -> Tuple[int, str]:
+        """
+        Runs `systemctl` commands with optional support for
+        `systemctl --user`
+
+        ```py
+        # run `systemctl list-jobs --no-pager`
+        machine.systemctl("list-jobs --no-pager")
+
+        # spawn a shell for `any-user` and run
+        # `systemctl --user list-jobs --no-pager`
+        machine.systemctl("list-jobs --no-pager", "any-user")
+        ```
+        """
         if user is not None:
             q = q.replace("'", "\\'")
             return self.execute(
@@ -520,6 +538,38 @@ class Machine:
         check_output: bool = True,
         timeout: Optional[int] = 900,
     ) -> Tuple[int, str]:
+        """
+        Execute a shell command, returning a list `(status, stdout)`.
+
+        Commands are run with `set -euo pipefail` set:
+
+        -   If several commands are separated by `;` and one fails, the
+            command as a whole will fail.
+
+        -   For pipelines, the last non-zero exit status will be returned
+            (if there is one; otherwise zero will be returned).
+
+        -   Dereferencing unset variables fails the command.
+
+        -   It will wait for stdout to be closed.
+
+        If the command detaches, it must close stdout, as `execute` will wait
+        for this to consume all output reliably. This can be achieved by
+        redirecting stdout to stderr `>&2`, to `/dev/console`, `/dev/null` or
+        a file. Examples of detaching commands are `sleep 365d &`, where the
+        shell forks a new process that can write to stdout and `xclip -i`, where
+        the `xclip` command itself forks without closing stdout.
+
+        Takes an optional parameter `check_return` that defaults to `True`.
+        Setting this parameter to `False` will not check for the return code
+        and return -1 instead. This can be used for commands that shut down
+        the VM and would therefore break the pipe that would be used for
+        retrieving the return code.
+
+        A timeout for the command can be specified (in seconds) using the optional
+        `timeout` parameter, e.g., `execute(cmd, timeout=10)` or
+        `execute(cmd, timeout=None)`. The default is 900 seconds.
+        """
         self.run_callbacks()
         self.connect()
 
@@ -533,7 +583,7 @@ class Machine:
         # While sh is bash on NixOS, this is not the case for every distro.
         # We explicitly call bash here to allow for the driver to boot other distros as well.
         out_command = (
-            f"{timeout_str} bash -c {shlex.quote(command)} | (base64 --wrap 0; echo)\n"
+            f"{timeout_str} bash -c {shlex.quote(command)} | (base64 -w 0; echo)\n"
         )
 
         assert self.shell
@@ -555,10 +605,11 @@ class Machine:
         return (rc, output.decode(errors="replace"))
 
     def shell_interact(self, address: Optional[str] = None) -> None:
-        """Allows you to interact with the guest shell for debugging purposes.
-
-        @address string passed to socat that will be connected to the guest shell.
-        Check the `Running Tests interactivly` chapter of NixOS manual for an example.
+        """
+        Allows you to directly interact with the guest shell. This should
+        only be used during test development, not in production tests.
+        Killing the interactive session with `Ctrl-d` or `Ctrl-c` also ends
+        the guest session.
         """
         self.connect()
 
@@ -577,12 +628,14 @@ class Machine:
             pass
 
     def console_interact(self) -> None:
-        """Allows you to interact with QEMU's stdin
-
-        The shell can be exited with Ctrl+D. Note that Ctrl+C is not allowed to be used.
-        QEMU's stdout is read line-wise.
-
-        Should only be used during test development, not in the production test."""
+        """
+        Allows you to directly interact with QEMU's stdin, by forwarding
+        terminal input to the QEMU process.
+        This is for use with the interactive test driver, not for production
+        tests, which run unattended.
+        Output from QEMU is only read line-wise. `Ctrl-c` kills QEMU and
+        `Ctrl-d` closes console and returns to the test runner.
+        """
         self.log("Terminal is ready (there is no prompt):")
 
         assert self.process
@@ -599,7 +652,12 @@ class Machine:
             self.send_console(char.decode())
 
     def succeed(self, *commands: str, timeout: Optional[int] = None) -> str:
-        """Execute each command and check that it succeeds."""
+        """
+        Execute a shell command, raising an exception if the exit status is
+        not zero, otherwise returning the standard output. Similar to `execute`,
+        except that the timeout is `None` by default. See `execute` for details on
+        command execution.
+        """
         output = ""
         for command in commands:
             with self.nested(f"must succeed: {command}"):
@@ -611,7 +669,10 @@ class Machine:
         return output
 
     def fail(self, *commands: str, timeout: Optional[int] = None) -> str:
-        """Execute each command and check that it fails."""
+        """
+        Like `succeed`, but raising an exception if the command returns a zero
+        status.
+        """
         output = ""
         for command in commands:
             with self.nested(f"must fail: {command}"):
@@ -622,7 +683,11 @@ class Machine:
         return output
 
     def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
-        """Wait until a command returns success and return its output.
+        """
+        Repeat a shell command with 1-second intervals until it succeeds.
+        Has a default timeout of 900 seconds which can be modified, e.g.
+        `wait_until_succeeds(cmd, timeout=10)`. See `execute` for details on
+        command execution.
         Throws an exception on timeout.
         """
         output = ""
@@ -637,8 +702,8 @@ class Machine:
             return output
 
     def wait_until_fails(self, command: str, timeout: int = 900) -> str:
-        """Wait until a command returns failure.
-        Throws an exception on timeout.
+        """
+        Like `wait_until_succeeds`, but repeating the command until it fails.
         """
         output = ""
 
@@ -690,12 +755,19 @@ class Machine:
             retry(tty_matches)
 
     def send_chars(self, chars: str, delay: Optional[float] = 0.01) -> None:
+        """
+        Simulate typing a sequence of characters on the virtual keyboard,
+        e.g., `send_chars("foobar\n")` will type the string `foobar`
+        followed by the Enter key.
+        """
         with self.nested(f"sending keys {repr(chars)}"):
             for char in chars:
                 self.send_key(char, delay, log=False)
 
     def wait_for_file(self, filename: str) -> None:
-        """Waits until the file exists in machine's file system."""
+        """
+        Waits until the file exists in the machine's file system.
+        """
 
         def check_file(_: Any) -> bool:
             status, _ = self.execute(f"test -e {filename}")
@@ -705,6 +777,11 @@ class Machine:
             retry(check_file)
 
     def wait_for_open_port(self, port: int, addr: str = "localhost") -> None:
+        """
+        Wait until a process is listening on the given TCP port and IP address
+        (default `localhost`).
+        """
+
         def port_is_open(_: Any) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status == 0
@@ -713,6 +790,11 @@ class Machine:
             retry(port_is_open)
 
     def wait_for_closed_port(self, port: int, addr: str = "localhost") -> None:
+        """
+        Wait until nobody is listening on the given TCP port and IP address
+        (default `localhost`).
+        """
+
         def port_is_closed(_: Any) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status != 0
@@ -751,6 +833,9 @@ class Machine:
             # TODO: do we want to bail after a set number of attempts?
             while not shell_ready(timeout_secs=30):
                 self.log("Guest root shell did not produce any data yet...")
+                self.log(
+                    "  To debug, enter the VM and run 'systemctl status backdoor.service'."
+                )
 
             while True:
                 chunk = self.shell.recv(1024)
@@ -766,6 +851,10 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
+        """
+        Take a picture of the display of the virtual machine, in PNG format.
+        The screenshot will be available in the derivation output.
+        """
         if "." not in filename:
             filename += ".png"
         if "/" not in filename:
@@ -795,8 +884,21 @@ class Machine:
             )
 
     def copy_from_host(self, source: str, target: str) -> None:
-        """Copy a file from the host into the guest via the `shared_dir` shared
-        among all the VMs (using a temporary directory).
+        """
+        Copies a file from host to machine, e.g.,
+        `copy_from_host("myfile", "/etc/my/important/file")`.
+
+        The first argument is the file on the host. Note that the "host" refers
+        to the environment in which the test driver runs, which is typically the
+        Nix build sandbox.
+
+        The second argument is the location of the file on the machine that will
+        be written to.
+
+        The file is copied via the `shared_dir` directory which is shared among
+        all the VMs (using a temporary directory).
+        The access rights bits will mimic the ones from the host file and
+        user:group will be root:root.
         """
         host_src = Path(source)
         vm_target = Path(target)
@@ -848,12 +950,41 @@ class Machine:
             return _perform_ocr_on_screenshot(screenshot_path, model_ids)
 
     def get_screen_text_variants(self) -> List[str]:
+        """
+        Return a list of different interpretations of what is currently
+        visible on the machine's screen using optical character
+        recognition. The number and order of the interpretations is not
+        specified and is subject to change, but if no exception is raised at
+        least one will be returned.
+
+        ::: {.note}
+        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
+        :::
+        """
         return self._get_screen_text_variants([0, 1, 2])
 
     def get_screen_text(self) -> str:
+        """
+        Return a textual representation of what is currently visible on the
+        machine's screen using optical character recognition.
+
+        ::: {.note}
+        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
+        :::
+        """
         return self._get_screen_text_variants([2])[0]
 
     def wait_for_text(self, regex: str) -> None:
+        """
+        Wait until the supplied regular expressions matches the textual
+        contents of the screen by using optical character recognition (see
+        `get_screen_text` and `get_screen_text_variants`).
+
+        ::: {.note}
+        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
+        :::
+        """
+
         def screen_matches(last: bool) -> bool:
             variants = self.get_screen_text_variants()
             for text in variants:
@@ -870,12 +1001,9 @@ class Machine:
 
     def wait_for_console_text(self, regex: str, timeout: int | None = None) -> None:
         """
-        Wait for the provided regex to appear on console.
-        For each reads,
-
-        If timeout is None, timeout is infinite.
-
-        `timeout` is in seconds.
+        Wait until the supplied regular expressions match a line of the
+        serial console output.
+        This method is useful when OCR is not possible or inaccurate.
         """
         # Buffer the console output, this is needed
         # to match multiline regexes.
@@ -903,6 +1031,13 @@ class Machine:
     def send_key(
         self, key: str, delay: Optional[float] = 0.01, log: Optional[bool] = True
     ) -> None:
+        """
+        Simulate pressing keys on the virtual keyboard, e.g.,
+        `send_key("ctrl-alt-delete")`.
+
+        Please also refer to the QEMU documentation for more information on the
+        input syntax: https://en.wikibooks.org/wiki/QEMU/Monitor#sendkey_keys
+        """
         key = CHAR_TO_KEY.get(key, key)
         context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
         with context:
@@ -911,12 +1046,21 @@ class Machine:
                 time.sleep(delay)
 
     def send_console(self, chars: str) -> None:
+        r"""
+        Send keys to the kernel console. This allows interaction with the systemd
+        emergency mode, for example. Takes a string that is sent, e.g.,
+        `send_console("\n\nsystemctl default\n")`.
+        """
         assert self.process
         assert self.process.stdin
         self.process.stdin.write(chars.encode())
         self.process.stdin.flush()
 
     def start(self, allow_reboot: bool = False) -> None:
+        """
+        Start the virtual machine. This method is asynchronous --- it does
+        not wait for the machine to finish booting.
+        """
         if self.booted:
             return
 
@@ -974,6 +1118,9 @@ class Machine:
         rootlog.log("if you want to keep the VM state, pass --keep-vm-state")
 
     def shutdown(self) -> None:
+        """
+        Shut down the machine, waiting for the VM to exit.
+        """
         if not self.booted:
             return
 
@@ -982,6 +1129,9 @@ class Machine:
         self.wait_for_shutdown()
 
     def crash(self) -> None:
+        """
+        Simulate a sudden power failure, by telling the VM to exit immediately.
+        """
         if not self.booted:
             return
 
@@ -999,8 +1149,8 @@ class Machine:
         self.connected = False
 
     def wait_for_x(self) -> None:
-        """Wait until it is possible to connect to the X server.  Note that
-        testing the existence of /tmp/.X11-unix/X0 is insufficient.
+        """
+        Wait until it is possible to connect to the X server.
         """
 
         def check_x(_: Any) -> bool:
@@ -1023,6 +1173,10 @@ class Machine:
         ).splitlines()
 
     def wait_for_window(self, regexp: str) -> None:
+        """
+        Wait until an X11 window has appeared whose name matches the given
+        regular expression, e.g., `wait_for_window("Terminal")`.
+        """
         pattern = re.compile(regexp)
 
         def window_is_visible(last_try: bool) -> bool:
@@ -1043,20 +1197,26 @@ class Machine:
         self.succeed(f"sleep {secs}")
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
-        """Forward a TCP port on the host to a TCP port on the guest.
+        """
+        Forward a TCP port on the host to a TCP port on the guest.
         Useful during interactive testing.
         """
         self.send_monitor_command(f"hostfwd_add tcp::{host_port}-:{guest_port}")
 
     def block(self) -> None:
-        """Make the machine unreachable by shutting down eth1 (the multicast
-        interface used to talk to the other VMs).  We keep eth0 up so that
-        the test driver can continue to talk to the machine.
+        """
+        Simulate unplugging the Ethernet cable that connects the machine to
+        the other machines.
+        This happens by shutting down eth1 (the multicast interface used to talk
+        to the other VMs). eth0 is kept online to still enable the test driver
+        to communicate with the machine.
         """
         self.send_monitor_command("set_link virtio-net-pci.1 off")
 
     def unblock(self) -> None:
-        """Make the machine reachable."""
+        """
+        Undo the effect of `block`.
+        """
         self.send_monitor_command("set_link virtio-net-pci.1 on")
 
     def release(self) -> None:

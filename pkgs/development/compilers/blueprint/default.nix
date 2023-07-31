@@ -1,10 +1,8 @@
 { dbus
 , fetchFromGitLab
 , gobject-introspection
-, gtk4
 , lib
 , libadwaita
-, makeFontsConf
 , meson
 , ninja
 , python3
@@ -14,14 +12,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueprint-compiler";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jwestman";
     repo = "blueprint-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3lj9BMN5aNujbhhZjObdTOCQfH5ERQCgGqIAw5eZIQc=";
+    hash = "sha256-pPrQc2ID84N+50j/A6VAJAOK+D1hjaokhFckOnOaeTw=";
   };
 
   nativeBuildInputs = [
@@ -42,22 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    xvfb-run
     dbus
-    gtk4
+    xvfb-run
   ];
 
-  env = {
-    # Fontconfig error: Cannot load default config file: No such file: (null)
-    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
-  };
-
   doCheck = true;
-
-  preBuild = ''
-    # Fontconfig error: No writable cache directories
-    export XDG_CACHE_HOME="$(mktemp -d)"
-  '';
 
   checkPhase = ''
     runHook preCheck
@@ -77,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A markup language for GTK user interface files";
     homepage = "https://gitlab.gnome.org/jwestman/blueprint-compiler";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ benediktbroich ranfdev ];
+    maintainers = with maintainers; [ benediktbroich paveloom ranfdev ];
     platforms = platforms.linux;
   };
 })

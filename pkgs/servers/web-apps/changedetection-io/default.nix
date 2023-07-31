@@ -73,6 +73,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/dgtlmoon/changedetection.io";
     description = "Simplest self-hosted free open source website change detection tracking, monitoring and notification service";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

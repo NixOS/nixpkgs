@@ -131,8 +131,8 @@ bash.runCommand "${pname}-${version}" {
   ${lib.optionalString mesBootstrap "ar x ${tinycc.libs}/lib/libtcc1.a"}
   ar r $out/lib/gcc-lib/${hostPlatform.config}/${version}/libgcc.a *.o
   cd ..
+  cp gcc/libgcc2.a $out/lib/libgcc2.a
   ${lib.optionalString mesBootstrap ''
-    cp gcc/libgcc2.a $out/lib/libgcc2.a
     ar x ${tinycc.libs}/lib/libtcc1.a
     ar x ${tinycc.libs}/lib/libc.a
     ar r $out/lib/gcc-lib/${hostPlatform.config}/${version}/libc.a libc.o libtcc1.o

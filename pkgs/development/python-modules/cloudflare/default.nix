@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cloudflare/python-cloudflare";
     changelog = "https://github.com/cloudflare/python-cloudflare/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -21,7 +21,8 @@ in
         ../virtualisation/nixos-containers.nix
         ../services/x11/desktop-managers/xterm.nix
       ];
-      config = { };
+      # swraid's default depends on stateVersion
+      config.boot.swraid.enable = false;
       options.boot.isContainer = lib.mkOption { default = false; internal = true; };
     }
   ];

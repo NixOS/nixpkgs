@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-#
+
 # This script is used to test that the module system is working as expected.
+# Executing it runs tests for `lib.modules`, `lib.options` and `lib.types`.
 # By default it test the version of nixpkgs which is defined in the NIX_PATH.
+#
+# Run:
+# [nixpkgs]$ lib/tests/modules.sh
+# or:
+# [nixpkgs]$ nix-build lib/tests/release.nix
 
 set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
@@ -364,6 +370,9 @@ checkConfigError \
   'The option .set. in module .*/declare-set.nix. would be a parent of the following options, but its type .attribute set of signed integer. does not support nested options.\n\s*- option[(]s[)] with prefix .set.enable. in module .*/declare-enable-nested.nix.' \
   config.set \
   ./declare-set.nix ./declare-enable-nested.nix
+
+# Check that that merging of option collisions doesn't depend on type being set
+checkConfigError 'The option .group..*would be a parent of the following options, but its type .<no description>. does not support nested options.\n\s*- option.s. with prefix .group.enable..*' config.group.enable ./merge-typeless-option.nix
 
 # Test that types.optionType merges types correctly
 checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix

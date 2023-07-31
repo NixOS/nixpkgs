@@ -72,6 +72,9 @@ let tests = {
       qterminal.pkg = p: p.lxqt.qterminal;
       qterminal.kill = true;
 
+      rio.pkg = p: p.rio;
+      rio.cmd = "rio -e $command";
+
       roxterm.pkg = p: p.roxterm;
       roxterm.cmd = "roxterm -e $command";
 

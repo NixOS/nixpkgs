@@ -214,6 +214,23 @@ in
     tar -xf ${srcs.translations}
   '';
 
+  # Remove build config to reduce the amount of `-dev` outputs in the
+  # runtime closure. This was introduced in upstream commit
+  # cbfac11330882c7d0a817b6c37a08b2ace2b66f4, so the patch doesn't apply
+  # for 7.4.
+  patches = lib.optionals (lib.versionAtLeast version "7.5") [
+    ./0001-Strip-away-BUILDCONFIG.patch
+  ];
+
+  # libreoffice tries to reference the BUILDCONFIG (e.g. PKG_CONFIG_PATH)
+  # in the binary causing the closure size to blow up because of many unnecessary
+  # dependencies to dev outputs. This behavior was patched away in nixpkgs
+  # (see above), make sure these don't leak again by accident.
+  disallowedRequisites = lib.optionals (!kdeIntegration)
+    (lib.concatMap
+      (x: lib.optional (x?dev) x.dev)
+      buildInputs);
+
   ### QT/KDE
   #
   # configure.ac assumes that the first directory that contains headers and
@@ -395,7 +412,7 @@ in
   dontWrapQtApps = true;
 
   configureFlags = [
-    (if withHelp then "" else "--without-help")
+    (lib.optionalString (!withHelp) "--without-help")
     "--with-boost=${getDev boost}"
     "--with-boost-libdir=${getLib boost}/lib"
     "--with-beanshell-jar=${bsh}"

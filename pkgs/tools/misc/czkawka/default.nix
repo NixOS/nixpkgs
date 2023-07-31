@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -8,6 +9,7 @@
 , gdk-pixbuf
 , atk
 , gtk4
+, Foundation
 , wrapGAppsHook4
 , gobject-introspection
 , xvfb-run
@@ -41,6 +43,8 @@ rustPlatform.buildRustPackage rec {
     gdk-pixbuf
     atk
     gtk4
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Foundation
   ];
 
   nativeCheckInputs = [
@@ -52,6 +56,9 @@ rustPlatform.buildRustPackage rec {
     xvfb-run cargo test
     runHook postCheck
   '';
+
+  doCheck = stdenv.hostPlatform.isLinux
+          && (stdenv.hostPlatform == stdenv.buildPlatform);
 
   passthru.tests.version = testers.testVersion {
     package = czkawka;

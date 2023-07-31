@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E V miangraham ];
+    maintainers = with maintainers; [ jb55 MP2E V ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";

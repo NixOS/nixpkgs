@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "casbin";
-  version = "1.21.0";
+  version = "1.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "pycasbin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Zp1JNAm1BpbgsctKDOcoDds5hEHtqi9+a5srZqE7288=";
+    hash = "sha256-+DoXjIRbXhX3lAOWnDEwG3e0bF9T3dVEU33JMLMAO6Y=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/casbin/pycasbin";
     changelog = "https://github.com/casbin/pycasbin/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

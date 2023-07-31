@@ -7,7 +7,7 @@
 , django-filter
 , django-modelcluster
 , django-taggit
-, django_treebeard
+, django-treebeard
 , djangorestframework
 , draftjs-exporter
 , fetchPypi
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     anyascii
     beautifulsoup4
     django
-    django_treebeard
+    django-treebeard
     django-filter
     django-modelcluster
     django-taggit

@@ -18,7 +18,7 @@
 , chafa
 , enableOpencv ? stdenv.isLinux
 , opencv
-, enableSway ? stdenv.isLinux
+, enableWayland ? stdenv.isLinux
 , extra-cmake-modules
 , wayland
 , wayland-protocols
@@ -30,19 +30,20 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.8";
+  version = "2.8.9";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-HvcH8ysH43i87so758m6QD+AuNfTiOdo5knI+3PBO8U=";
+    hash = "sha256-RW2dKueidFM/RkGfOAorHukGVm1srbuAlyUP/r+JWi0=";
   };
 
   # error: no member named 'ranges' in namespace 'std'
   postPatch = lib.optionalString withoutStdRanges ''
-    for f in src/canvas/chafa.cpp src/canvas/iterm2/iterm2.cpp; do
+    for f in src/canvas/chafa.cpp src/canvas/iterm2/iterm2.cpp src/terminal.cpp; do
       sed -i "1i #include <range/v3/algorithm/for_each.hpp>" $f
+      sed -i "2i #include <range/v3/algorithm/reverse.hpp>" $f
       substituteInPlace $f \
         --replace "#include <ranges>" "" \
         --replace "std::ranges" "ranges"
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
     cli11
   ] ++ lib.optionals enableOpencv [
     opencv
-  ] ++ lib.optionals enableSway [
+  ] ++ lib.optionals enableWayland [
     extra-cmake-modules
     wayland
     wayland-protocols
@@ -85,8 +86,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals (!enableOpencv) [
     "-DENABLE_OPENCV=OFF"
-  ] ++ lib.optionals enableSway [
-    "-DENABLE_SWAY=ON"
+  ] ++ lib.optionals enableWayland [
+    "-DENABLE_WAYLAND=ON"
   ] ++ lib.optionals (!enableX11) [
     "-DENABLE_X11=OFF"
   ];

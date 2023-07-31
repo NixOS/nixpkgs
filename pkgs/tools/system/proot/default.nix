@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , talloc
 , pkg-config
-, git
 , ncurses
 , docutils, swig, python3, coreutils, enablePython ? true }:
 

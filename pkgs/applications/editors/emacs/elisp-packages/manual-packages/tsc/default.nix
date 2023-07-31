@@ -55,7 +55,7 @@ let
       rm -r $out/lib
     '';
 
-    inherit (srcMeta) cargoSha256;
+    inherit (srcMeta) cargoHash;
   };
 
 in symlinkJoin {

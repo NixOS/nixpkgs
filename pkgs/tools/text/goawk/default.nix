@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "goawk";
-  version = "1.23.3";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = "goawk";
     rev = "v${version}";
-    hash = "sha256-E7oxi0rwVCzA/pBJ9SS6t+zR+J+dF7SW+oP+vXXN2FQ=";
+    hash = "sha256-pce7g0MI23244t5ZK4UDOfQNt1m3tRpCahne0s+NRRE=";
   };
 
   vendorHash = null;

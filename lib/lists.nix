@@ -3,7 +3,7 @@
 { lib }:
 let
   inherit (lib.strings) toInt;
-  inherit (lib.trivial) compare min;
+  inherit (lib.trivial) compare min id;
   inherit (lib.attrsets) mapAttrs;
 in
 rec {
@@ -180,18 +180,18 @@ rec {
       else if len != 1 then multiple
       else head found;
 
-  /* Find the first element in the list matching the specified
+  /* Find the first index in the list matching the specified
      predicate or return `default` if no such element exists.
 
-     Type: findFirst :: (a -> bool) -> a -> [a] -> a
+     Type: findFirstIndex :: (a -> Bool) -> b -> [a] -> (Int | b)
 
      Example:
-       findFirst (x: x > 3) 7 [ 1 6 4 ]
-       => 6
-       findFirst (x: x > 9) 7 [ 1 6 4 ]
-       => 7
+       findFirstIndex (x: x > 3) null [ 0 6 4 ]
+       => 1
+       findFirstIndex (x: x > 9) null [ 0 6 4 ]
+       => null
   */
-  findFirst =
+  findFirstIndex =
     # Predicate
     pred:
     # Default value to return
@@ -229,7 +229,33 @@ rec {
     if resultIndex < 0 then
       default
     else
-      elemAt list resultIndex;
+      resultIndex;
+
+  /* Find the first element in the list matching the specified
+     predicate or return `default` if no such element exists.
+
+     Type: findFirst :: (a -> bool) -> a -> [a] -> a
+
+     Example:
+       findFirst (x: x > 3) 7 [ 1 6 4 ]
+       => 6
+       findFirst (x: x > 9) 7 [ 1 6 4 ]
+       => 7
+  */
+  findFirst =
+    # Predicate
+    pred:
+    # Default value to return
+    default:
+    # Input list
+    list:
+    let
+      index = findFirstIndex pred null list;
+    in
+    if index == null then
+      default
+    else
+      elemAt list index;
 
   /* Return true if function `pred` returns true for at least one
      element of `list`.
@@ -636,6 +662,32 @@ rec {
       (if start >= len then 0
        else if start + count > len then len - start
        else count);
+
+  /* The common prefix of two lists.
+
+  Type: commonPrefix :: [a] -> [a] -> [a]
+
+  Example:
+    commonPrefix [ 1 2 3 4 5 6 ] [ 1 2 4 8 ]
+    => [ 1 2 ]
+    commonPrefix [ 1 2 3 ] [ 1 2 3 4 5 ]
+    => [ 1 2 3 ]
+    commonPrefix [ 1 2 3 ] [ 4 5 6 ]
+    => [ ]
+  */
+  commonPrefix =
+    list1:
+    list2:
+    let
+      # Zip the lists together into a list of booleans whether each element matches
+      matchings = zipListsWith (fst: snd: fst != snd) list1 list2;
+      # Find the first index where the elements don't match,
+      # which will then also be the length of the common prefix.
+      # If all elements match, we fall back to the length of the zipped list,
+      # which is the same as the length of the smaller list.
+      commonPrefixLength = findFirstIndex id (length matchings) matchings;
+    in
+    take commonPrefixLength list1;
 
   /* Return the last element of a list.
 

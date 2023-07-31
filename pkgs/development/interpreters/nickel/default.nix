@@ -3,13 +3,14 @@
 , fetchFromGitHub
 , python3
 , nix-update-script
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
   version = "1.1.1";
 
-  src  = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
     rev = "refs/tags/${version}";
@@ -23,6 +24,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     python3
   ];
+
+  # Disable checks on Darwin because of issue described in https://github.com/tweag/nickel/pull/1454
+  doCheck = !stdenv.isDarwin;
 
   passthru.updateScript = nix-update-script { };
 

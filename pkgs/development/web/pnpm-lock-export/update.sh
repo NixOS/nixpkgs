@@ -28,7 +28,7 @@ fi
 version="${version#v}"
 
 # pnpm-lock-export repository
-src_hash=$(nix-prefetch-github cvent pnpm-lock-export --rev "v${version}" | jq -r .sha256)
+src_hash=$(nix-prefetch-github cvent pnpm-lock-export --rev "v${version}" | jq -r .hash)
 
 # Front-end dependencies
 upstream_src="https://raw.githubusercontent.com/cvent/pnpm-lock-export/v$version"
@@ -39,7 +39,6 @@ npm install --package-lock-only
 deps_hash=$(prefetch-npm-deps package-lock.json)
 
 # Use friendlier hashes
-src_hash=$(nix hash to-sri --type sha256 "$src_hash")
 deps_hash=$(nix hash to-sri --type sha256 "$deps_hash")
 
 sed -i -E -e "s#version = \".*\"#version = \"$version\"#" default.nix

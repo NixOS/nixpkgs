@@ -2,6 +2,9 @@
 , fetchFromGitHub
 , nodePackages
 , python3
+, stdenv
+, cctools
+, IOKit
 , lib
 , fetchpatch
 , makeBinaryWrapper
@@ -10,24 +13,16 @@
 
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.6.21";
+  version = "0.6.23";
 
   src = fetchFromGitHub {
     owner = "benphelps";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-kjxA02hJj/GAQ0fM1xTtXAnZSQgVyE+EMRrXis1Vr+o=";
+    hash = "sha256-Nr090221lTW7luuzh/URdDPByILnjMChyZcV2+AUG3o=";
   };
 
-  npmDepsHash = "sha256-O6SQYx5vxscMsbWv0ynUYqdUkOp/nMtdvlZ/Mp95sBY=";
-
-  patches = [
-    (fetchpatch {
-      name = "env-config-dir.patch";
-      url = "https://github.com/benphelps/homepage/commit/ca396ce96bce52f6c06a321f292aa94a66ceeb97.patch";
-      hash = "sha256-eNnW/ce4ytoKR6jH1Ztc4UTWOmL0uGRdY6nYBIVYM6k=";
-    })
-  ];
+  npmDepsHash = "sha256-l6kVmKXAQMqpzu/GTrz92WeDorLhunfcUrbMVfUwR9U=";
 
   preBuild = ''
     mkdir -p config
@@ -39,8 +34,14 @@ buildNpmPackage rec {
     patchShebangs .next/standalone/server.js
   '';
 
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+    cctools
+  ];
+
   buildInputs = [
     nodePackages.node-gyp-build
+  ] ++ lib.optionals stdenv.isDarwin [
+    IOKit
   ];
 
   env.PYTHON = "${python3}/bin/python";
@@ -68,7 +69,7 @@ buildNpmPackage rec {
   doDist = false;
 
   passthru.tests = {
-    inherit (nixosTests) homepage;
+    inherit (nixosTests) homepage-dashboard;
   };
 
   meta = {

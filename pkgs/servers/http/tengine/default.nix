@@ -10,14 +10,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.4.1";
+  version = "3.0.0";
   pname = "tengine";
 
   src = fetchFromGitHub {
     owner = "alibaba";
     repo = pname;
     rev = version;
-    hash = "sha256-h9PFzJc/29WFe4mW+xpJAL1Z2XqBxMEtQeN5DMgOVBA=";
+    hash = "sha256-nUwPT7374dfE/T6yuCUynObq6LxBHDp90Dj2JGwJ4+M=";
   };
 
   buildInputs =

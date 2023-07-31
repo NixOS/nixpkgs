@@ -18,6 +18,8 @@
 let
   version = "2.1.1";
   prebuilt_server = fetchurl {
+    name = "scrcpy-server";
+    inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
     sha256 = "sha256-lVjbbFZ0Oh3AOzj1mAH7QOkcyJH4/AyJ5bCwZ3YfFI4=";
   };

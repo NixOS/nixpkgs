@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "sshfs";
-  version = "2023.4.1";
+  version = "2023.7.0";
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-qoOqKXtmavKgfbg6bBEeZb+n1RVyZSxqhKIQsToxDUU=";
+    hash = "sha256-XKBpB3ackquVKsdF8b/45Kaz5Y2ussOl0o0HkD+k9tM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

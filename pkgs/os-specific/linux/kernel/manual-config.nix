@@ -232,7 +232,10 @@ stdenv.mkDerivation ({
     # replicated here to apply to older versions.
     # Makes __FILE__ relative to the build directory.
     "KCPPFLAGS=-fmacro-prefix-map=$(sourceRoot)/="
-  ] ++ extraMakeFlags;
+    kernelConf.target
+  ] ++ optional isModular "modules"
+    ++ optional buildDTBs "dtbs"
+    ++ extraMakeFlags;
 
   installFlags = [
     "INSTALL_PATH=$(out)"
@@ -373,11 +376,20 @@ stdenv.mkDerivation ({
 
     # Remove reference to kmod
     sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
+  ''
+  # unfortunately linux/arch/mips/Makefile does not understand installkernel
+  # and simply copies to $(INSTALL_PATH)/vmlinux-$(KERNELRELEASE)
+  + lib.optionalString stdenv.hostPlatform.isMips ''
+    mv $out/vmlinux-* $out/vmlinux || true
+    mv $out/vmlinuz-* $out/vmlinuz || true
+    mv $out/System.map-* $out/System.map
   '';
 
   preFixup = ''
     # Don't strip $dev/lib/modules/*/vmlinux
     stripDebugList="$(cd $dev && echo lib/modules/*/build/*/)"
+  '' + lib.optionalString (stdenv.hostPlatform.isMips) ''
+    $STRIP -s $out/vmlinux || true
   '';
 
   enableParallelBuilding = true;
@@ -397,10 +409,11 @@ stdenv.mkDerivation ({
   meta = {
     description =
       "The Linux kernel" +
-      (if kernelPatches == [] then "" else
+      (lib.optionalString (kernelPatches != []) (
         " (with patches: "
         + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
-        + ")");
+        + ")"
+      ));
     license = lib.licenses.gpl2Only;
     homepage = "https://www.kernel.org/";
     maintainers = lib.teams.linux-kernel.members ++ [

@@ -196,6 +196,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
 
+# Web servers
+/doc/builders/packages/nginx.section.md @raitobezarius
+/pkgs/servers/http/nginx/ @raitobezarius
+/nixos/modules/services/web-servers/nginx/ @raitobezarius
+
 # Dhall
 /pkgs/development/dhall-modules      @Gabriella439 @Profpatsch @ehmry
 /pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch @ehmry
@@ -225,11 +230,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # VsCode Extensions
 /pkgs/applications/editors/vscode/extensions   @jonringer
-
-# Prometheus exporter modules and tests
-/nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz
-/nixos/modules/services/monitoring/prometheus/exporters.xml  @WilliButz
-/nixos/tests/prometheus-exporters.nix                        @WilliButz
 
 # PHP interpreter, packages, extensions, tests and documentation
 /doc/languages-frameworks/php.section.md          @aanderse @drupol @etu @globin @ma27 @talyz
@@ -308,3 +308,6 @@ nixos/lib/make-single-disk-zfs-image.nix  @raitobezarius
 nixos/lib/make-multi-disk-zfs-image.nix   @raitobezarius
 nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
 nixos/tests/zfs.nix                       @raitobezarius
+
+# Linux Kernel
+pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs

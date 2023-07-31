@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-resource-manager";
     changelog = "https://github.com/googleapis/python-resource-manager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

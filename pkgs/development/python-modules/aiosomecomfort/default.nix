@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiosomecomfort";
-  version = "0.0.14";
+  version = "0.0.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "mkmer";
     repo = "AIOSomecomfort";
     rev = "refs/tags/${version}";
-    hash = "sha256-YVZSqTynlAH7y6vH07wsFCLMWnde/cBx4jjfJ4ZV3LA=";
+    hash = "sha256-G7A5XXAElPFkuRM5bEcKqqn14tjJLn2lkYyqBtm5giM=";
   };
 
   propagatedBuildInputs = [

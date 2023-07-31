@@ -86,29 +86,6 @@ let
     # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
     "${minArch'}0";
 
-  cuda-common-redist = with cudaPackages; [
-    libcublas # cublas_v2.h
-    libcusparse # cusparse.h
-  ];
-
-  # Build-time dependencies
-  cuda-native-redist = symlinkJoin {
-    name = "cuda-native-redist-${cudaVersion}";
-    paths = with cudaPackages; [
-      cuda_cudart # cuda_runtime.h
-      cuda_nvcc
-    ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
-      cuda_nvprof # <cuda_profiler_api.h>
-    ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
-      cuda_profiler_api # <cuda_profiler_api.h>
-    ] ++ cuda-common-redist;
-  };
-
-  # Run-time dependencies
-  cuda-redist = symlinkJoin {
-    name = "cuda-redist-${cudaVersion}";
-    paths = cuda-common-redist;
-  };
 in
 
 assert (builtins.match "[^[:space:]]*" gpuTargetString) != null;
@@ -128,16 +105,22 @@ stdenv.mkDerivation {
     ninja
     gfortran
   ] ++ lists.optionals cudaSupport [
-    cuda-native-redist
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
     libpthreadstubs
     lapack
     blas
-  ] ++ lists.optionals cudaSupport [
-    cuda-redist
-  ] ++ lists.optionals rocmSupport [
+  ] ++ lists.optionals cudaSupport (with cudaPackages; [
+    cuda_cudart
+    libcublas # cublas_v2.h
+    libcusparse # cusparse.h
+  ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
+    cuda_nvprof # <cuda_profiler_api.h>
+  ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
+    cuda_profiler_api # <cuda_profiler_api.h>
+  ]) ++ lists.optionals rocmSupport [
     hip
     hipblas
     hipsparse

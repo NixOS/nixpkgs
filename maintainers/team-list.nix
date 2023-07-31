@@ -193,10 +193,11 @@ with lib.maintainers; {
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
-      limeytexan
+      de11n
+      invokes-su
     ];
     scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
-    shortName = "Shaw employees";
+    shortName = "D. E. Shaw employees";
   };
 
   determinatesystems = {
@@ -410,6 +411,14 @@ with lib.maintainers; {
     shortName = "Jitsi";
   };
 
+  jupyter = {
+    members = [
+      natsukium
+    ];
+    scope = "Maintain Jupyter and related packages.";
+    shortName = "Jupyter";
+  };
+
   kubernetes = {
     members = [
       johanot
@@ -570,6 +579,7 @@ with lib.maintainers; {
       ralith
       dandellion
       sumnerevans
+      nickcao
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
     shortName = "Matrix";
@@ -820,9 +830,7 @@ with lib.maintainers; {
   };
 
   sphinx = {
-    members = [
-      SuperSandro2000
-    ];
+    members = [ ];
     scope = "Maintain Sphinx related packages.";
     shortName = "Sphinx";
   };

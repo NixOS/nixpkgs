@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , setuptools-scm
 , ansible-core
 , paramiko
@@ -51,6 +52,9 @@ buildPythonPackage rec {
     "test_user_connection"
     "test_sudo"
     "test_docker_encoding"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # broken because salt package only built for python 3.10
+    "test_backend_importables"
   ];
 
   disabledTestPaths = [

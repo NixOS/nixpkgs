@@ -1,16 +1,10 @@
 { lib
 , bubblewrap
 , cacert
-, callPackage
 , fetchFromGitLab
-, fetchurl
-, fetchzip
 , git
 , imagemagick
-, jre
-, makeWrapper
 , openmw
-, perlPackages
 , python3Packages
 , rustPlatform
 , tes3cmd

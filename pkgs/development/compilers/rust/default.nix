@@ -5,7 +5,6 @@
 , bootstrapHashes
 , selectRustPackage
 , rustcPatches ? []
-, llvmBootstrapForDarwin
 , llvmShared
 , llvmSharedForBuild
 , llvmSharedForHost
@@ -16,7 +15,6 @@
 , buildPackages
 , newScope, callPackage
 , CoreFoundation, Security, SystemConfiguration
-, pkgsBuildTarget, pkgsBuildBuild
 , makeRustPlatform
 }:
 
@@ -69,11 +67,6 @@ in
 
         # Use boot package set to break cycle
         inherit (bootstrapRustPackages) cargo rustc;
-      } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
-        stdenv = llvmBootstrapForDarwin.stdenv;
-        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
-        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
-        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
       });
       rustfmt = self.callPackage ./rustfmt.nix {
         inherit Security;

@@ -40,7 +40,10 @@ let
       backgroundColor = f cfg.backgroundColor;
       entryOptions = f cfg.entryOptions;
       subEntryOptions = f cfg.subEntryOptions;
-      grub = f grub;
+      # PC platforms (like x86_64-linux) have a non-EFI target (`grubTarget`), but other platforms
+      # (like aarch64-linux) have an undefined `grubTarget`. Avoid providing the path to a non-EFI
+      # GRUB on those platforms.
+      grub = f (if (grub.grubTarget or "") != "" then grub else "");
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
       fullName = lib.getName realGrub;
@@ -65,8 +68,8 @@ let
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
         ++ optional cfg.efiSupport efibootmgr
         ++ optionals cfg.useOSProber [ busybox os-prober ]);
-      font = if cfg.font == null then ""
-        else (if lib.last (lib.splitString "." cfg.font) == "pf2"
+      font = lib.optionalString (cfg.font != null) (
+             if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
              else "${convertedFont}");
     });

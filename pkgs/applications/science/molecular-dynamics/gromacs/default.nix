@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit
 , singlePrec ? true
+, config
 , enableMpi ? false
-, enableCuda ? false
+, enableCuda ? config.cudaSupport
 , cpuAcceleration ? null
 }:
 
@@ -19,11 +20,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2023.1";
+  version = "2023.2";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "sha256-7vK7Smy2MUz52kfybfKg0nr0v3swmXI9Q2AQc6sKQvQ=";
+    sha256 = "sha256-vOFIByfksruQBBO3XZmjJm81B4d9pPWy1JHfeY+fza4=";
   };
 
   nativeBuildInputs = [ cmake ];

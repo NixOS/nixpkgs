@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${finalAttrs.version}";
-    sha256 = desktopSrcHash;
+    hash = desktopSrcHash;
   };
 
   offlineCache = fetchYarnDeps {

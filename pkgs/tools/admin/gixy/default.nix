@@ -3,7 +3,7 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      pyparsing = super.pyparsing.overridePythonAttrs (oldAttrs: rec {
+      pyparsing = super.pyparsing.overridePythonAttrs rec {
         version = "2.4.7";
         src = fetchFromGitHub {
           owner = "pyparsing";
@@ -14,7 +14,7 @@ let
         nativeBuildInputs = [
           super.setuptools
         ];
-      });
+      };
     };
   };
 in

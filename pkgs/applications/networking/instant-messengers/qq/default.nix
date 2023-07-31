@@ -19,6 +19,7 @@
 , at-spi2-core
 , autoPatchelfHook
 , wrapGAppsHook
+, makeWrapper
 }:
 
 let
@@ -42,7 +43,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    # makeBinaryWrapper not support shell wrapper specifically for `NIXOS_OZONE_WL`.
+    (wrapGAppsHook.override { inherit makeWrapper; })
     dpkg
   ];
 
@@ -87,7 +89,10 @@ stdenv.mkDerivation {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ gjs ]}")
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ gjs ]}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+    )
   '';
 
   meta = with lib; {

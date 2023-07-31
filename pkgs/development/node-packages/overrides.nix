@@ -93,21 +93,6 @@ final: prev: {
     '';
   };
 
-  bitwarden-cli = prev."@bitwarden/cli".override {
-    name = "bitwarden-cli";
-    nativeBuildInputs = with pkgs; [
-      pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.CoreText
-    ];
-    buildInputs = with pkgs; [
-      pixman
-      cairo
-      pango
-      giflib
-    ];
-  };
-
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -188,7 +173,8 @@ final: prev: {
 
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
-    nativeBuildInputs = [ pkgs.installShellFiles ];
+    nativeBuildInputs = with pkgs; [ installShellFiles pkg-config ];
+    buildInputs = with pkgs; [ cairo pango pixman ];
     # 'gt completion' auto-detects zshell from environment variables:
     # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
     postInstall = ''
@@ -404,11 +390,12 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha512-L9mqjnSmvWIRCYJ9mQkwCtj4+JDYYTdhoyo8hlsHNDXaZLh/b4hR0IoKIBbTKxZuyHQzLopb/+0Rvb69uGV7uA==";
+      hash = "sha256-0NxYp+W2KbR3xEV2OCXCIL3RqkvLfJHNKgl/PxapVbI=";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
-        --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
+        --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
+        --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
         --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
         --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
         --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt

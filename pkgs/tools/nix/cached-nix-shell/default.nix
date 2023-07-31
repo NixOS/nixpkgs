@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, nix, openssl, pkg-config, ronn, rustPlatform }:
+{ lib, fetchFromGitHub, nix, ronn, rustPlatform }:
 
 let
   blake3-src = fetchFromGitHub {

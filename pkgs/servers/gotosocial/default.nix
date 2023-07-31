@@ -9,9 +9,9 @@ let
   owner = "superseriousbusiness";
   repo = "gotosocial";
 
-  version = "0.9.0";
-  source-hash = "sha256-UZRIQTdVESCYv2KW7HUS2c4bS5qnB7wdwiYAgEJ60fU=";
-  web-assets-hash = "sha256-OvgAr3obsK1JndLKmnjNY06dEbQKyP4xG/viBjCivvs=";
+  version = "0.10.0";
+  source-hash = "sha256-SE+u89xAV6jJulU8XETlzTrqtwBYeMdNGyjk648b7h8=";
+  web-assets-hash = "sha256-tYqnGqII8gf+aVd/J5lvhurhCrH8ihWYn7noBJbEgqA=";
 
   web-assets = fetchurl {
     url = "https://github.com/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";

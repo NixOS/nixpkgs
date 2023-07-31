@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.8.1";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-N/g5//yIVot2vHPD/staVneO9eWPx0jT5dnYpcs1SZU=";
+    hash = "sha256-AImLYRRCL6IvoSeMFH2mbkNOvUmLwIvhWB3cOoqDljk=";
   };
 
-  cargoSha256 = "hjkCvyzsBzfP4FGSli0acrVCfbRC0V7uBecV5VSiClI=";
+  cargoSha256 = "deJZPaZW6rb7A6wOL3vcphBXu0F7EXc1xRwSDY/v8l4=";
 
   nativeBuildInputs = lib.optional (installManPages || installShellCompletions) installShellFiles;
 

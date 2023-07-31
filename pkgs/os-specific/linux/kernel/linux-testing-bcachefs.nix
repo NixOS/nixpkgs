@@ -20,7 +20,13 @@
   extraMeta = {
     branch = "master";
     broken = stdenv.isAarch64;
-    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc ];
+    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc raitobezarius ];
+  };
+
+  structuredExtraConfig = with lib.kernel; {
+    BCACHEFS_FS = module;
+    BCACHEFS_QUOTA = option yes;
+    BCACHEFS_POSIX_ACL = option yes;
   };
 
   kernelPatches = [ {
@@ -31,7 +37,5 @@
         url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${currentCommit}&id2=v${lib.versions.majorMinor kernel.version}";
         sha256 = diffHash;
       };
-
-      extraConfig = "BCACHEFS_FS m";
     } ] ++ kernelPatches;
 }))

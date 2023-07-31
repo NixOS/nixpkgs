@@ -2963,9 +2963,7 @@ lib.composeManyExtensions [
           });
 
       wcwidth = super.wcwidth.overridePythonAttrs (old: {
-        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++
-          lib.optional self.isPy27 (self.backports-functools-lru-cache or self.backports_functools_lru_cache)
-        ;
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]);
       });
 
       wtforms = super.wtforms.overridePythonAttrs (old: {

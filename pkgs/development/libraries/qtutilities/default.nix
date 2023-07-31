@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase cpp-utilities ];
   nativeBuildInputs = [ cmake qttools ];
 
+  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
+
   dontWrapQtApps = true;
 
   meta = with lib; {

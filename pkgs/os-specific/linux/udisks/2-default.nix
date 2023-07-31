@@ -83,7 +83,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.tests.vm = nixosTests.udisks2;
+  passthru = {
+    inherit libblockdev;
+    tests.vm = nixosTests.udisks2;
+  };
 
   meta = with lib; {
     description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";

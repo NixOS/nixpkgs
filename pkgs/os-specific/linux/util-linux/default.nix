@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   # the greater util-linux toolset.
   # Compatibility is maintained by symlinking the binaries from the
   # smaller outputs in the bin output.
-  outputs = [ "bin" "dev" "out" "lib" "man" "mount" "login" "swap" ];
+  outputs = [ "bin" "dev" "out" "lib" "man" ] ++ lib.optionals stdenv.isLinux [ "mount" ] ++ [ "login" ] ++ lib.optionals stdenv.isLinux [ "swap" ];
   separateDebugInfo = true;
 
   postPatch = ''
@@ -110,20 +110,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     moveToOutput bin/mount "$mount"
     moveToOutput bin/umount "$mount"
     ln -svf "$mount/bin/"* $bin/bin/
+    '' + ''
 
     moveToOutput sbin/nologin "$login"
     moveToOutput sbin/sulogin "$login"
     prefix=$login _moveSbin
     ln -svf "$login/bin/"* $bin/bin/
+    '' + lib.optionalString stdenv.isLinux ''
 
     moveToOutput sbin/swapon "$swap"
     moveToOutput sbin/swapoff "$swap"
     prefix=$swap _moveSbin
     ln -svf "$swap/bin/"* $bin/bin/
+    '' + ''
 
     installShellCompletion --bash bash-completion/*
   '';

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -31,6 +32,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "NzFt9DypmJzlOdVM9CmnaMKLs4oLNJUL6t0EIYJ+31U=";
   };
+
+  patches = [
+    # Fix implicit declaration of `strcasecmp`, which is an error on clang 16.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/at-spi2-core/-/merge_requests/147.patch";
+      hash = "sha256-UU2n//Z9F1SyUGyuDKsiwZDyThsp/tJprz/zolDDTyw=";
+    })
+  ];
 
   nativeBuildInputs = [
     glib

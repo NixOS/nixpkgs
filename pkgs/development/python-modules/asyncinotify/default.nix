@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "asyncinotify";
-  version = "4.0.1";
+  version = "4.0.2";
   format = "flit";
 
   src = fetchFromGitLab {
     owner = "Taywee";
     repo = "asyncinotify";
     rev = "v${version}";
-    hash = "sha256-DMRuj16KjO+0uAB33UCVPdUiQGzri1b/z9KVqQYp2Po=";
+    hash = "sha256-Q7b406UENCmD9SGbaml+y2YLDi7VLZBmDkYMo8CLuVw=";
   };
 
   checkPhase = ''

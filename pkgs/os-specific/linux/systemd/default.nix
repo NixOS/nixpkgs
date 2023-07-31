@@ -82,6 +82,9 @@
 , bpftools
 , libbpf
 
+  # Needed to produce a ukify that works for cross compiling UKIs.
+, targetPackages
+
 , withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
@@ -145,7 +148,7 @@ assert withUkify -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "253.5";
+  version = "253.6";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -162,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-B3A9AvpfZ8SYsiZvHnWO4RHs1/6EdczWF2NmrSqxQ7c=";
+    hash = "sha256-LZs6QuBe23W643bTuz+MD2pzHiapsBJBHoFXi/QjzG4=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -190,13 +193,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-bootctl-also-print-efi-files-not-owned-by-systemd-in.patch
-
-    # https://github.com/systemd/systemd/pull/28000
-    (fetchpatch {
-      name = "fix-service-exit";
-      url = "https://github.com/systemd/systemd/commit/5f7f82ba625ee48d662c1f0286f44b8b0918d05d.patch";
-      sha256 = "sha256-pFRXpZjeVl5ZG/mOjHEuMg9zXq4Orwvdp+/LYTbR09I=";
-    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -216,7 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
       (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
       (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
       (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
       (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
       (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
@@ -242,6 +237,16 @@ stdenv.mkDerivation (finalAttrs: {
     # BPF does not work with stack protector
     substituteInPlace src/core/bpf/meson.build \
       --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
+  '' + lib.optionalString withUkify ''
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'readelf'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'"
+    # The objcopy dependency is removed in v254
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'objcopy'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -517,8 +522,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     "-Dsulogin-path=${util-linux.login}/bin/sulogin"
     "-Dnologin-path=${util-linux.login}/bin/nologin"
-    "-Dmount-path=${util-linux.mount}/bin/mount"
-    "-Dumount-path=${util-linux.mount}/bin/umount"
+    "-Dmount-path=${lib.getOutput "mount" util-linux}/bin/mount"
+    "-Dumount-path=${lib.getOutput "mount" util-linux}/bin/umount"
     "-Dcreate-log-dirs=false"
 
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
@@ -569,8 +574,8 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-makefs@.service.xml"
           ];
         }
-        { search = "/sbin/swapon"; replacement = "${util-linux.swap}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
-        { search = "/sbin/swapoff"; replacement = "${util-linux.swap}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        { search = "/sbin/swapon"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
+        { search = "/sbin/swapoff"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
@@ -731,6 +736,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
+  '' + lib.optionalString withUkify ''
+    # To cross compile a derivation that builds a UKI with ukify, we need to wrap
+    # ukify with the correct binutils. When wrapping, no splicing happens so we
+    # have to explicitly pull binutils from targetPackages.
+    wrapProgram $out/lib/systemd/ukify --set PATH ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }
   '';
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)

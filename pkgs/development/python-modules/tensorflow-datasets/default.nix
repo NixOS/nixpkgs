@@ -1,4 +1,5 @@
 { apache-beam
+, array-record
 , attrs
 , beautifulsoup4
 , buildPythonPackage
@@ -19,6 +20,7 @@
 , lxml
 , matplotlib
 , mwparserfromhell
+, mwxml
 , networkx
 , nltk
 , numpy
@@ -46,13 +48,13 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.8.2";
+  version = "4.9.2";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FYFk53WKNQTSrnGGiA6cn9LffbMJkZtjlGuOF52Og7c=";
+    hash = "sha256-FKquhuk5hVBH9Im2RrIwgmosgqkoJHj0ESR2BmAOlbI=";
   };
 
   patches = [
@@ -61,6 +63,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    array-record
     attrs
     dill
     dm-tree
@@ -95,6 +98,7 @@ buildPythonPackage rec {
     lxml
     matplotlib
     mwparserfromhell
+    mwxml
     networkx
     nltk
     opencv4
@@ -120,6 +124,7 @@ buildPythonPackage rec {
     "tensorflow_datasets/core/registered_test.py"
     "tensorflow_datasets/core/utils/gcs_utils_test.py"
     "tensorflow_datasets/import_without_tf_test.py"
+    "tensorflow_datasets/proto/build_tf_proto_test.py"
     "tensorflow_datasets/scripts/cli/build_test.py"
 
     # Requires `pretty_midi` which is not packaged in `nixpkgs`.

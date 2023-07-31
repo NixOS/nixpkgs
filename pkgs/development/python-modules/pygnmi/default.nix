@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Pure Python gNMI client to manage network functions and collect telemetry";
     homepage = "https://github.com/akarneliuk/pygnmi";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

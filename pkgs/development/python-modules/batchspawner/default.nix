@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "A spawner for Jupyterhub to spawn notebooks using batch resource managers";
     homepage = "https://jupyter.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

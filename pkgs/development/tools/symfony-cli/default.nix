@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.5.6";
-  vendorHash = "sha256-AfgDsd4W8wV0GeymD9SLeHtOeFP9qbFy+GTdMxQSkDA=";
+  version = "5.5.7";
+  vendorHash = "sha256-OXV/hTSHJvYfe2SiFamkedC01J/DOgd8I60yIpQToos=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    sha256 = "sha256-lE8RBjBXucL0DJjEnBLbHqOVE6g358rwmaEUqU6QhOw=";
+    hash = "sha256-LC6QQIVHllBRu8B6XfV8SuTB3O+FmqYr+LQnVmLj2nU=";
   };
 
   ldflags = [
@@ -27,11 +27,11 @@ buildGoModule rec {
     $GOPATH/bin/symfony-cli
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Symfony CLI";
     homepage = "https://github.com/symfony-cli/symfony-cli";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ drupol ];
+    license = lib.licenses.agpl3Plus;
     mainProgram = "symfony";
+    maintainers = with lib.maintainers; [ drupol ];
   };
 }

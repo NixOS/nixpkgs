@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.1.8";
+  version = "0.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+0daPPZGVkqfZw0gOZwIl+knL/zZki9fs5kA3dYqPpE=";
+    hash = "sha256-VcV/WyDY1UN2TcuvNRQRIh5YIlewGQXf6fcTZihvftQ=";
   };
 
   propagatedBuildInputs = [

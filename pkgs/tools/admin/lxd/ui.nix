@@ -33,8 +33,7 @@ mkYarnPackage rec {
 
   meta = {
     description = "Web user interface for LXD.";
-    homepage = "https://linuxcontainers.org/lxd/";
-    changelog = "https://github.com/canonical/lxd-ui";
+    homepage = "https://github.com/canonical/lxd-ui";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

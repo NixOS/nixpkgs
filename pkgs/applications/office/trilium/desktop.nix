@@ -42,6 +42,7 @@ let
         comment = meta.description;
         desktopName = "Trilium Notes";
         categories = [ "Office" ];
+        startupWMClass = "trilium notes";
       })
     ];
 

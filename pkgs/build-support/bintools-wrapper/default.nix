@@ -59,12 +59,12 @@ let
   bintoolsVersion = lib.getVersion bintools;
   bintoolsName = lib.removePrefix targetPrefix (lib.getName bintools);
 
-  libc_bin = if libc == null then "" else getBin libc;
-  libc_dev = if libc == null then "" else getDev libc;
-  libc_lib = if libc == null then "" else getLib libc;
-  bintools_bin = if nativeTools then "" else getBin bintools;
+  libc_bin = lib.optionalString (libc != null) (getBin libc);
+  libc_dev = lib.optionalString (libc != null) (getDev libc);
+  libc_lib = lib.optionalString (libc != null) (getLib libc);
+  bintools_bin = lib.optionalString (!nativeTools) (getBin bintools);
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
-  coreutils_bin = if nativeTools then "" else getBin coreutils;
+  coreutils_bin = lib.optionalString (!nativeTools) (getBin coreutils);
 
   # See description in cc-wrapper.
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
@@ -103,7 +103,7 @@ in
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${bintoolsName}-wrapper");
-  version = if bintools == null then "" else bintoolsVersion;
+  version = lib.optionalString (bintools != null) bintoolsVersion;
 
   preferLocalBuild = true;
 
@@ -265,7 +265,7 @@ stdenv.mkDerivation {
     # install the wrapper, you get tools like objdump (same for any
     # binaries of libc).
     + optionalString (!nativeTools) ''
-      printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+      printWords ${bintools_bin} ${lib.optionalString (libc != null) libc_bin} > $out/nix-support/propagated-user-env-packages
     ''
 
     ##
@@ -381,7 +381,7 @@ stdenv.mkDerivation {
     # for substitution in utils.bash
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     shell = getBin shell + shell.shellPath or "";
-    gnugrep_bin = if nativeTools then "" else gnugrep;
+    gnugrep_bin = lib.optionalString (!nativeTools) gnugrep;
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
     inherit bintools_bin libc_bin libc_dev libc_lib;

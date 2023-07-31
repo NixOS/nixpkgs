@@ -5,11 +5,12 @@
 , pycryptodome
 , pythonOlder
 , setuptools
+, solc-select
 }:
 
 buildPythonPackage rec {
   pname = "crytic-compile";
-  version = "0.3.0";
+  version = "0.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,18 +19,22 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "crytic-compile";
     rev = "refs/tags/${version}";
-    hash = "sha256-4iTvtu2TmxvLTyWm4PV0+yV1fRLYpJHZNBgjy1MFLjM=";
+    hash = "sha256-Nx3eKy/0BLg82o3qDHjxcHXtpX3KDdnBKYwCuTLWRUE=";
   };
 
   propagatedBuildInputs = [
     cbor2
     pycryptodome
     setuptools
+    solc-select
   ];
 
   # Test require network access
   doCheck = false;
 
+  # required for import check to work
+  # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
+  env.HOME = "/tmp";
   pythonImportsCheck = [
     "crytic_compile"
   ];
@@ -39,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/crytic/crytic-compile";
     changelog = "https://github.com/crytic/crytic-compile/releases/tag/${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 arturcygan ];
+    maintainers = with maintainers; [ arturcygan hellwolf ];
   };
 }

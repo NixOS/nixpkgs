@@ -19,18 +19,19 @@
 , libsoup_3
 , libsecret
 , libwebp
+, libspelling
 , gst_all_1
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.3.2";
+  version = "0.4.0";
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-PSEPpJn/lYpeI6AN2AY73NpOcDkMm0zNqeSdELn5HvY=";
+    hash = "sha256-sLdkSIevz2spL+Q5sS+ugqEbqJTXrLxmszzijtKvY6k=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     libadwaita
     libsecret
     libwebp
+    libspelling
   ] ++ (with gst_all_1; [
     gstreamer
     gst-libav
@@ -64,9 +66,7 @@ stdenv.mkDerivation rec {
   ]);
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "tuba";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

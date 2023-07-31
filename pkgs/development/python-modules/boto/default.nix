@@ -51,6 +51,6 @@ buildPythonPackage rec {
       future infrastructural services offered by Amazon Web
       Services.  This includes S3, SQS, EC2, among others.
     '';
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

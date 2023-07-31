@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv

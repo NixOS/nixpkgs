@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "An async GitHub API library";
     homepage = "https://github.com/brettcannon/gidgethub";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

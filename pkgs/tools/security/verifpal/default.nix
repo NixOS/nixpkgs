@@ -31,6 +31,5 @@ buildGoModule rec {
     description = "Cryptographic protocol analysis for students and engineers";
     maintainers = with lib.maintainers; [ zimbatm ];
     license = with lib.licenses; [ gpl3 ];
-    platforms = [ "x86_64-linux" ];
   };
 }

@@ -24,12 +24,12 @@ let
 
 in buildPythonPackage rec {
   pname = "cython";
-  version = "0.29.34";
+  version = "0.29.36";
 
   src = fetchPypi {
     pname = "Cython";
     inherit version;
-    hash = "sha256-GQloj117Uhpgw5bSC7qeR6Gy0nhL+whUAeHh59KaKag=";
+    hash = "sha256-QcDP0tdU44PJ7rle/8mqSrhH0Ml0cHfd18Dctow7wB8=";
   };
 
   nativeBuildInputs = [

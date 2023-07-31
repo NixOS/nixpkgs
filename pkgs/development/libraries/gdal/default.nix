@@ -1,6 +1,8 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
+
 , bison
 , cmake
 , gtest
@@ -61,15 +63,15 @@
 , zstd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
-    rev = "v${version}";
-    hash = "sha256-hAuhftIuF9W0bQx73Mz8bAEegrX9g40ippqwv9mdstg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RXX21tCq0xJQli3NTertM9IweONrJfGeaFj3utMFjpM=";
   };
 
   nativeBuildInputs = [
@@ -89,7 +91,7 @@ stdenv.mkDerivation rec {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ] ++ lib.optionals doInstallCheck [
+  ] ++ lib.optionals finalAttrs.doInstallCheck [
     "-DBUILD_TESTING=ON"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
@@ -213,14 +215,18 @@ stdenv.mkDerivation rec {
     popd # autotest
   '';
 
+  passthru.tests = {
+    gdal = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
+  };
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    changelog = "https://github.com/OSGeo/gdal/blob/${src.rev}/NEWS.md";
+    changelog = "https://github.com/OSGeo/gdal/blob/v${finalAttrs.version}/NEWS.md";
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
     license = licenses.mit;
     maintainers = with maintainers; teams.geospatial.members ++ [ marcweber dotlambda ];
     platforms = platforms.unix;
   };
-}
+})

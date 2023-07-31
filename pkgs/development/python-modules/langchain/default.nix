@@ -62,7 +62,7 @@
 , chardet
 , requests-toolbelt
 , neo4j
-, langchainplus-sdk
+, langsmith
   # test dependencies
 , pytest-vcr
 , pytest-asyncio
@@ -80,7 +80,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.229";
+  version = "0.0.240";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -89,8 +89,10 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9hPF+0bEcFGH2oop3e513kBp6UeUEBlPXD+2pZ4dCi0=";
+    hash = "sha256-7UwAdOzEgu3K/Gfq8D/GHNGxD6KhSx0xGMxtmpdnYxQ=";
   };
+
+  sourceRoot = "source/libs/langchain";
 
   postPatch = ''
     substituteInPlace langchain/utilities/bash.py \
@@ -227,7 +229,7 @@ buildPythonPackage rec {
       # azure-ai-formrecognizer
       # azure-ai-vision
       # azure-cognitiveservices-speech
-      langchainplus-sdk
+      langsmith
     ];
   };
 

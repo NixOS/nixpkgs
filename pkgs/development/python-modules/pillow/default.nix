@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , isPyPy
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
@@ -12,7 +13,7 @@
 
 import ./generic.nix (rec {
   pname = "pillow";
-  version = "9.4.0";
+  version = "9.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +21,16 @@ import ./generic.nix (rec {
   src = fetchPypi {
     pname = "Pillow";
     inherit version;
-    hash = "sha256-ocLXeARI65P7zDeJvzkWqlcg2ULjeUX0BWaAMX8c0j4=";
+    hash = "sha256-v1SEedM2cm16Ds6252fhefveN4M65CeUYCYxoHDWMPE=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fixed type handling for include and lib directories; Remove with 10.0.0
+      url = "https://github.com/python-pillow/Pillow/commit/0ec0a89ead648793812e11739e2a5d70738c6be5.patch";
+      hash = "sha256-m5R5fLflnbJXbRxFlTjT2X3nKdC05tippMoJUDsJmy0=";
+    })
+  ];
 
   passthru.tests = {
     inherit imageio matplotlib pilkit pydicom reportlab;
@@ -37,6 +46,6 @@ import ./generic.nix (rec {
       processing and graphics capabilities.
     '';
     license = licenses.hpnd;
-    maintainers = with maintainers; [ goibhniu prikhi SuperSandro2000 ];
+    maintainers = with maintainers; [ goibhniu prikhi ];
   };
 } // args )

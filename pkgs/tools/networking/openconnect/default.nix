@@ -1,4 +1,4 @@
-{ callPackage, fetchFromGitLab, fetchurl, darwin }:
+{ callPackage, fetchurl, darwin }:
 let
   common = opts: callPackage (import ./common.nix opts) {
     inherit (darwin.apple_sdk.frameworks) PCSC;

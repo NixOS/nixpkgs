@@ -149,6 +149,19 @@ self: super: {
     };
   };
 
+  # The GitHub repository returns 404, which breaks the update script
+  bitbake-vim = buildVimPluginFrom2Nix {
+    pname = "bitbake.vim";
+    version = "2021-02-06";
+    src = fetchFromGitHub {
+      owner = "sblumentritt";
+      repo = "bitbake.vim";
+      rev = "faddca1e8768b10c80ee85221fb51a560df5ba45";
+      sha256 = "1hfly2vxhhvjdiwgfz58hr3523kf9z71i78vk168n3kdqp5vkwrp";
+    };
+    meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
+  };
+
   chadtree = super.chadtree.overrideAttrs {
     passthru.python3Dependencies = ps: with ps; [
       pynvim-pp
@@ -919,7 +932,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-IRp4avOvM2tz2oC1Cwr4W/d4i0pzawcZLP+c1+jnm+I=";
+        cargoHash = "sha256-KhUCIAGSgf7TxabEzcjo582VgbSU79QSGlaEP7BbJCE=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -953,18 +966,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.3.4";
+      version = "1.3.5";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        hash = "sha256-H1PmjiNyUp+fTDqnfppFii+aDh8gPD/ALHFNWVXch3w=";
+        hash = "sha256-D2nHei7mc7Yn8rgFiWFyaR87wQuryv76B25BYOpyp2I=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoHash = "sha256-WXhH0zqGj/D83AoEfs0kPqW7UXIAkURTJ+/BKbuUvss=";
+        cargoHash = "sha256-TG84BeYm7K5Dn0CvMvv1gzqeX246JPks1qcwkfcsG8c=";
 
         nativeBuildInputs = [ makeWrapper ];
 

@@ -37,9 +37,25 @@ let
           package = giteaPackage;
           settings.service.DISABLE_REGISTRATION = true;
           settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
+          settings.actions.ENABLED = true;
         };
         environment.systemPackages = [ giteaPackage pkgs.gnupg pkgs.jq ];
         services.openssh.enable = true;
+
+        specialisation.runner = {
+          inheritParentConfig = true;
+
+          configuration.services.gitea-actions-runner.instances."test" = {
+            enable = true;
+            name = "ci";
+            url = "http://localhost:3000";
+            labels = [
+              # don't require docker/podman
+              "native:host"
+            ];
+            tokenFile = "/var/lib/gitea/runner_token";
+          };
+        };
       };
       client1 = { config, pkgs, ... }: {
         environment.systemPackages = [ pkgs.git ];
@@ -49,8 +65,9 @@ let
       };
     };
 
-    testScript = let
+    testScript = { nodes, ... }: let
       inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+      serverSystem = nodes.server.system.build.toplevel;
     in ''
       GIT_SSH_COMMAND = "ssh -i $HOME/.ssh/privk -o StrictHostKeyChecking=no"
       REPO = "gitea@server:test/repo"
@@ -121,14 +138,18 @@ let
       client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO}")
       client2.succeed('test "$(cat repo/testfile | xargs echo -n)" = "hello world"')
 
-      server.succeed(
+      server.wait_until_succeeds(
           'test "$(curl http://localhost:3000/api/v1/repos/test/repo/commits '
           + '-H "Accept: application/json" | jq length)" = "1"'
       )
 
-      client1.shutdown()
-      client2.shutdown()
-      server.shutdown()
+      with subtest("Testing runner registration"):
+          server.succeed(
+              "su -l gitea -c 'GITEA_WORK_DIR=/var/lib/gitea gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/gitea/runner_token"
+          )
+          server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
+          server.wait_for_unit("gitea-runner-test.service")
+          server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
     '';
   });
 in

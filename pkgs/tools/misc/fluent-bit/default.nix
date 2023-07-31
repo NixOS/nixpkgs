@@ -1,14 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, systemd, postgresql, openssl, libyaml }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, flex
+, bison
+, systemd
+, postgresql
+, openssl
+, libyaml
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "2.1.6";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
-    rev = "v${version}";
-    hash = "sha256-PPpdGLzyivsLd6I7ER9llp6fdLgtWRwEkKzLko/ehro=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iWbWkKd0Rpg0EU3H//sAxth1v1S52yPwGn1AzeC9xkA=";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
@@ -34,12 +44,12 @@ stdenv.mkDerivation rec {
       --replace /lib/systemd $out/lib/systemd
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/fluent/fluent-bit/releases/tag/v${finalAttrs.version}";
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
-    changelog = "https://github.com/fluent/fluent-bit/releases/tag/v${version}";
-    maintainers = with maintainers; [ samrose fpletz ];
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.samrose lib.maintainers.fpletz ];
+    platforms = lib.platforms.linux;
   };
-}
+})

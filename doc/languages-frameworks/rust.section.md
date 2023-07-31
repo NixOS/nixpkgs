@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
-    maintainers = [ maintainers.tailhook ];
+    maintainers = [];
   };
 }
 ```
@@ -926,7 +926,7 @@ rustPlatform.buildRustPackage rec {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ mit unlicense ];
-    maintainers = with maintainers; [ tailhook ];
+    maintainers = with maintainers; [];
   };
 }
 ```

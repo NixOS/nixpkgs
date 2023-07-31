@@ -12,22 +12,9 @@ in
     services.nexus = {
       enable = mkEnableOption (lib.mdDoc "Sonatype Nexus3 OSS service");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nexus;
-        defaultText = literalExpression "pkgs.nexus";
-        description = lib.mdDoc "Package which runs Nexus3";
-      };
+      package = lib.mkPackageOption pkgs "nexus" { };
 
-      jdkPackage = mkOption {
-        type = types.package;
-        default = pkgs.openjdk8;
-        defaultText = literalExample "pkgs.openjdk8";
-        example = literalExample "pkgs.openjdk8";
-        description = ''
-          The JDK package to use.
-        '';
-      };
+      jdkPackage = lib.mkPackageOption pkgs "openjdk8" { };
 
       user = mkOption {
         type = types.str;
@@ -114,8 +101,7 @@ in
   config = mkIf cfg.enable {
     users.users.${cfg.user} = {
       isSystemUser = true;
-      group = cfg.group;
-      home = cfg.home;
+      inherit (cfg) group home;
       createHome = true;
     };
 
@@ -132,7 +118,7 @@ in
         NEXUS_USER = cfg.user;
         NEXUS_HOME = cfg.home;
 
-        INSTALL4J_JAVA_HOME = "${cfg.jdkPackage}";
+        INSTALL4J_JAVA_HOME = cfg.jdkPackage;
         VM_OPTS_FILE = pkgs.writeText "nexus.vmoptions" cfg.jvmOpts;
       };
 

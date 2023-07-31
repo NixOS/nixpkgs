@@ -73,7 +73,7 @@ let
         homepage = "https://github.com/wasmerio/wasmer-python";
         license = licenses.mit;
         platforms = platforms.unix;
-        maintainers = with maintainers; [ SuperSandro2000 ];
+        maintainers = with maintainers; [ ];
       };
     };
 in

@@ -1,7 +1,6 @@
-{ fetchFromGitHub
-, fetchpatch
-, lib
+{ lib
 , rustPlatform
+, fetchFromGitHub
 , withCmd ? false
 }:
 

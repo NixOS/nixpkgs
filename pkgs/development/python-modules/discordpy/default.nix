@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
@@ -33,7 +34,7 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace "discord/opus.py" \
-      --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus.so.0'"
+      --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '' + lib.optionalString withVoice ''
     substituteInPlace "discord/player.py" \
       --replace "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"

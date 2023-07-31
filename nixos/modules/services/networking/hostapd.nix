@@ -921,9 +921,7 @@ in {
                 };
 
                 config = let
-                  bss = bssSubmod.name;
                   bssCfg = bssSubmod.config;
-
                   pairwiseCiphers =
                     concatStringsSep " " (unique (bssCfg.authentication.pairwiseCiphers
                       ++ optionals bssCfg.authentication.enableRecommendedPairwiseCiphers ["CCMP" "CCMP-256" "GCMP" "GCMP-256"]));
@@ -964,9 +962,9 @@ in {
                   } // optionalAttrs (bssCfg.bssid != null) {
                     bssid = bssCfg.bssid;
                   } // optionalAttrs (bssCfg.macAllow != [] || bssCfg.macAllowFile != null || bssCfg.authentication.saeAddToMacAllow) {
-                    accept_mac_file = "/run/hostapd/${bss}.mac.allow";
+                    accept_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.allow";
                   } // optionalAttrs (bssCfg.macDeny != [] || bssCfg.macDenyFile != null) {
-                    deny_mac_file = "/run/hostapd/${bss}.mac.deny";
+                    deny_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.deny";
                   } // optionalAttrs (bssCfg.authentication.mode == "none") {
                     wpa = mkDefault 0;
                   } // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae") {
@@ -1051,7 +1049,6 @@ in {
           };
 
           config.settings = let
-            radio = radioSubmod.name;
             radioCfg = radioSubmod.config;
           in {
             driver = radioCfg.driver;
@@ -1268,6 +1265,7 @@ in {
           "AF_INET6"
           "AF_NETLINK"
           "AF_UNIX"
+          "AF_PACKET"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

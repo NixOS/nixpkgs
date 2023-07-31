@@ -1,7 +1,6 @@
 { curl
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , glib
 , json-glib
 , lib

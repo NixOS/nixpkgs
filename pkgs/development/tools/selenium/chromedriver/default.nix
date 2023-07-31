@@ -14,12 +14,12 @@ let
     };
 
     x86_64-darwin = {
-      system = "mac64";
+      system = "mac-x64";
       sha256 = upstream-info.sha256_darwin;
     };
 
     aarch64-darwin = {
-      system = "mac_arm64";
+      system = "mac-arm64";
       sha256 = upstream-info.sha256_darwin_aarch64;
     };
   };
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   version = upstream-info.version;
 
   src = fetchurl {
-    url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
+    url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${version}/${spec.system}/chromedriver-${spec.system}.zip";
     sha256 = spec.sha256;
   };
 
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
   unpackPhase = "unzip $src";
 
   installPhase = ''
-    install -m755 -D chromedriver $out/bin/chromedriver
+    install -m755 -D "chromedriver-${spec.system}/chromedriver" $out/bin/chromedriver
   '' + lib.optionalString (!stdenv.isDarwin) ''
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
     wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}"

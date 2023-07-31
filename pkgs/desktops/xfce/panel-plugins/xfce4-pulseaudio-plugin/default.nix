@@ -3,6 +3,7 @@
 , automakeAddFlags
 , exo
 , gtk3
+, libcanberra
 , libpulseaudio
 , libnotify
 , libxfce4ui
@@ -32,6 +33,7 @@ mkXfceDerivation {
     glib
     gtk3
     keybinder3
+    libcanberra
     libnotify
     libpulseaudio
     libxfce4ui

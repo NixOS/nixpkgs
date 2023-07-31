@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , setuptools
 }:
@@ -10,14 +10,19 @@ buildPythonPackage rec {
   version = "2.5.1";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-9p0xo7Vu7hGdHsYGPpxzLdRPu6NS73OMsi2WmfxACf4=";
+  src = fetchFromGitHub {
+    owner = "thombashi";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0wzoQDHB7Tt80ZTlKrNxFutztsgUuin5D2eb80c4PBI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    setuptools
   ];
 
   pythonImportsCheck = [
@@ -29,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thombashi/allpairspy";
     changelog = "https://github.com/thombashi/allpairspy/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

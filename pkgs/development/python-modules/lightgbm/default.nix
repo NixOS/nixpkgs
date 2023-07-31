@@ -73,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Microsoft/LightGBM";
     changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh costrouc ];
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

@@ -55,6 +55,17 @@ stdenv.mkDerivation rec {
   ++ optional (uilib == "gtk3") gtk3
   ;
 
+  # Since at least 2018 AD, GCC and other compilers run in `-fno-common` mode as
+  # default, in order to comply with C standards and also get rid of some bad
+  # quality code. Because of this, many codebases that weren't updated need to
+  # be patched -- or the `-fcommon` flag should be explicitly passed to the
+  # compiler
+
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85678
+  # https://github.com/NixOS/nixpkgs/issues/54506
+
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
+
   preConfigure = ''
     cat <<EOF > Makefile.conf
     override NETSURF_GTK_RES_PATH  := $out/share/

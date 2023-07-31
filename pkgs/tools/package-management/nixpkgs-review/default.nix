@@ -43,6 +43,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Mic92/nixpkgs-review";
     changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda mic92 SuperSandro2000 ];
+    maintainers = with maintainers; [ figsoda mic92 ];
   };
 }

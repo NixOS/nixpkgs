@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, darwin, networkmanager, iw, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, networkmanager, iw, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ifwifi";

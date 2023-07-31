@@ -3541,6 +3541,22 @@ with self; {
     };
   };
 
+  ClassRefresh = buildPerlPackage {
+    pname = "Class-Refresh";
+    version = "0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DO/DOY/Class-Refresh-0.07.tar.gz";
+      hash = "sha256-47ADU1XLs1oq7j8iNojVeJRqenxXCs05iyjN2x/UvrM=";
+    };
+    buildInputs = [ TestFatal TestRequires ];
+    propagatedBuildInputs = [ ClassLoad ClassUnload DevelOverrideGlobalRequire TryTiny ];
+    meta = {
+      homepage = "http://metacpan.org/release/Class-Refresh";
+      description = "Refresh your classes during runtime";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ClassReturnValue = buildPerlPackage {
     pname = "Class-ReturnValue";
     version = "0.55";
@@ -19753,6 +19769,20 @@ with self; {
     };
   };
 
+  PerlLanguageServer = buildPerlPackage {
+    pname = "Perl-LanguageServer";
+    version = "2.5.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GRICHTER/Perl-LanguageServer-2.5.0.tar.gz";
+      hash = "sha256-LQYcIkepqAT1JMkSuIN6mxivz6AZkpShcRsVD1oTmQQ=";
+    };
+    propagatedBuildInputs = [ AnyEvent AnyEventAIO ClassRefresh CompilerLexer Coro DataDump HashSafeKeys IOAIO JSON Moose PadWalker ];
+    meta = {
+      description = "Language Server and Debug Protocol Adapter for Perl";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   perlldap = buildPerlPackage {
     pname = "perl-ldap";
     version = "0.68";
@@ -27578,14 +27608,18 @@ with self; {
 
   XMLLibXML = buildPerlPackage {
     pname = "XML-LibXML";
-    version = "2.0207";
+    version = "2.0208";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0207.tar.gz";
-      hash = "sha256-kDQ2yYWYdb71WTJDquhc7TKa0PtLV7v0WXXjJUfFDBU=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0208.tar.gz";
+      hash = "sha256-DABrA7+NDrUx+1a9o64VdUylbYiN17noBauesZ1f1lM=";
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ AlienBuild AlienLibxml2 ]
       ++ lib.optionals stdenv.isDarwin (with pkgs; [ libiconv zlib ]);
+    # Remove test that fails after LibXML 2.11 upgrade
+    postPatch = ''
+      rm t/35huge_mode.t
+    '';
     propagatedBuildInputs = [ XMLSAX ];
     meta = {
       description = "Perl Binding for libxml2";

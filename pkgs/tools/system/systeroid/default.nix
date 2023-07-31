@@ -34,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     description = "More powerful alternative to sysctl(8) with a terminal user interface";
     homepage = "https://github.com/orhun/systeroid";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

@@ -64,6 +64,6 @@ buildPythonPackage rec {
     description = "Common API for Ethereum key operations";
     homepage = "https://github.com/ethereum/eth-keys";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

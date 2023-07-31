@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "vegeta";
-  version = "12.8.4";
+  version = "12.10.0";
   rev = "e04d9c0df8177e8633bff4afe7b39c2f3a9e7dea";
 
   src = fetchFromGitHub {
     owner = "tsenart";
     repo = "vegeta";
     rev = "v${version}";
-    sha256 = "sha256-FAb7nf6jZju95YEZR1GjPnfbsA5M8NcIKQyc8cgEgWs=";
+    sha256 = "sha256-lBJXMI/OVxgi4AqAFKE6cXLBagUZzUTRzvcJBr0Wh/c=";
   };
 
-  vendorSha256 = "sha256-v9Hu9eQJSmm4Glt49F7EN40rKjrg4acyll9Bfgey+Mw=";
+  vendorHash = "sha256-QWI2T1yJBATgCyGlR2dPbnBLn9KHQgfc30mPdMKzGsQ=";
 
   subPackages = [ "." ];
 

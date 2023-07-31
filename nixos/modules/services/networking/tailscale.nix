@@ -29,12 +29,7 @@ in {
       description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.tailscale;
-      defaultText = literalExpression "pkgs.tailscale";
-      description = lib.mdDoc "The package to use for tailscale";
-    };
+    package = lib.mkPackageOptionMD pkgs "tailscale" {};
 
     useRoutingFeatures = mkOption {
       type = types.enum [ "none" "client" "server" "both" ];
@@ -48,6 +43,22 @@ in {
         When set to `client` or `both`, reverse path filtering will be set to loose instead of strict.
         When set to `server` or `both`, IP forwarding will be enabled.
       '';
+    };
+
+    authKeyFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/run/secrets/tailscale_key";
+      description = lib.mdDoc ''
+        A file containing the auth key.
+      '';
+    };
+
+    extraUpFlags = mkOption {
+      description = lib.mdDoc "Extra flags to pass to {command}`tailscale up`.";
+      type = types.listOf types.str;
+      default = [];
+      example = ["--ssh"];
     };
   };
 
@@ -80,6 +91,21 @@ in {
       # version mismatches on restart for compatibility with other
       # linux distros.
       stopIfChanged = false;
+    };
+
+    systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
+      after = ["tailscale.service"];
+      wants = ["tailscale.service"];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+      };
+      script = ''
+        status=$(${config.systemd.package}/bin/systemctl show -P StatusText tailscaled.service)
+        if [[ $status != Connected* ]]; then
+          ${cfg.package}/bin/tailscale up --auth-key 'file:${cfg.authKeyFile}' ${escapeShellArgs cfg.extraUpFlags}
+        fi
+      '';
     };
 
     boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {

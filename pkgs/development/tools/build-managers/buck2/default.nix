@@ -1,5 +1,4 @@
 { fetchurl, lib, stdenv, zstd
-, autoPatchelfHook, gcc-unwrapped
 , testers, buck2 # for passthru.tests
 }:
 
@@ -27,15 +26,11 @@ let
   suffix = {
     x86_64-darwin  = "x86_64-apple-darwin";
     aarch64-darwin = "aarch64-apple-darwin";
-    # TODO (aseipp): there's an aarch64-linux musl build of buck2, but not a
-    # x86_64-linux musl build. keep things consistent for now and use glibc
-    # builds for both; but we should fix this in the future to be less fragile;
-    # we can then remove autoPatchelfHook.
-    x86_64-linux   = "x86_64-unknown-linux-gnu";
-    aarch64-linux  = "aarch64-unknown-linux-gnu";
+    x86_64-linux   = "x86_64-unknown-linux-musl";
+    aarch64-linux  = "aarch64-unknown-linux-musl";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  buck2-version = "2023-07-11";
+  buck2-version = "2023-07-18";
   src =
     let
       hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
@@ -48,23 +43,19 @@ stdenv.mkDerivation {
   version = "unstable-${buck2-version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
   inherit src;
 
-  buildInputs = lib.optionals stdenv.isLinux [ gcc-unwrapped ]; # need libgcc_s.so.1 for patchelf
-  nativeBuildInputs = [ zstd ]
-    # TODO (aseipp): move to musl build and nuke this?
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ zstd ];
 
+  doCheck = true;
   dontConfigure = true;
+  dontStrip = true;
+
   unpackPhase = "unzstd ${src} -o ./buck2";
   buildPhase = "chmod +x ./buck2";
+  checkPhase = "./buck2 --version";
   installPhase = ''
     mkdir -p $out/bin
     install -D buck2 $out/bin/buck2
   '';
-
-  # NOTE (aseipp): use installCheckPhase instead of checkPhase so that
-  # autoPatchelfHook kicks in first.
-  doInstallCheck = true;
-  installCheckPhase = "$out/bin/buck2 --version";
 
   passthru = {
     updateScript = ./update.sh;

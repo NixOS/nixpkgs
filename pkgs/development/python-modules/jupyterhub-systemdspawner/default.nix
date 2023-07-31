@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "JupyterHub Spawner using systemd for resource isolation";
     homepage = "https://github.com/jupyterhub/systemdspawner";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

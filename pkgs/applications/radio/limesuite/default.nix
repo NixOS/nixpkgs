@@ -2,7 +2,7 @@
 , sqlite, wxGTK32, libusb1, soapysdr
 , mesa_glu, libX11, gnuplot, fltk
 , GLUT
-, withGui ? true
+, withGui ? !stdenv.isDarwin # withGui transitively depends on mesa, which is broken on darwin
 }:
 
 stdenv.mkDerivation rec {

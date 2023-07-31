@@ -115,6 +115,6 @@ buildPythonPackage rec {
       - epylint: Emacs and Flymake compatible Pylint
     '';
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

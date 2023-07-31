@@ -168,14 +168,16 @@ in
 
     systemd.packages = [ nixPackage ];
 
-    systemd.tmpfiles =
-      if (isNixAtLeast "2.8") then {
+    systemd.tmpfiles = mkMerge [
+      (mkIf (isNixAtLeast "2.8") {
         packages = [ nixPackage ];
-      } else {
+      })
+      (mkIf (!isNixAtLeast "2.8") {
         rules = [
           "d /nix/var/nix/daemon-socket 0755 root root - -"
         ];
-      };
+      })
+    ];
 
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 

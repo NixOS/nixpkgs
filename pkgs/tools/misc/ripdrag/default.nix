@@ -1,17 +1,17 @@
-{ lib, rustPlatform, fetchCrate, pkg-config, gtk4 }:
+{ lib, rustPlatform, fetchCrate, pkg-config, wrapGAppsHook4, gtk4 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ripdrag";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-D4WB1RdMPJfSLbJ96h3OuFhokfyY8Gamctm0XY694YM=";
+    hash = "sha256-vxAAAFLTIfLqYD7E/nwsHgFLhzMRF7DspIaWqAMZcXk=";
   };
 
-  cargoSha256 = "sha256-C2I26E/dd18A4DDgOYGR8aS1RBrrNUwaXI4ZJHcrKy0=";
+  cargoHash = "sha256-6GKLBnG1p6iaFvnEQgfNlGpZwEG93tI256DCMLuJjOU=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
 
   buildInputs = [ gtk4 ];
 

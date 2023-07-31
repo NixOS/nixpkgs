@@ -44,6 +44,6 @@ python3Packages.buildPythonApplication rec {
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ domenkozar carlosdagos SuperSandro2000 ];
+    maintainers = with maintainers; [ domenkozar carlosdagos ];
   };
 }

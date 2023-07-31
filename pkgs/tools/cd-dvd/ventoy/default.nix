@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoPatchelfHook
 , bash
 , copyDesktopItems
@@ -51,7 +50,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy";
-  version = "1.0.93";
+  version = "1.0.94";
 
   src =
     let
@@ -59,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-      hash = "sha256-oz5IVq0QsPX90N4EBold2QQ8/CY4XF+KcQ41L+TR4iI=";
+      hash = "sha256-dVcr0qDG95QC9ay1Sbhs9IxCGzpLvej2XRmje29fWhQ=";
     };
 
   patches = [

@@ -326,8 +326,8 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "1.0.6";
-          sha256 = "sha256-/gpZtOO8MA/MJ1o9eG4qmPqhWRZ5E+elA9Rr/kpOprI=";
+          version = "2.1.1";
+          sha256 = "sha256-UVZOpkOHbLiwA4VfTgXxuIU8EtJLnqRa5zUVha6xQJY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
@@ -446,6 +446,23 @@ let
           homepage = "https://github.com/bartosz-antosik/vscode-spellright";
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ onedragon ];
+        };
+      };
+
+      batisteo.vscode-django = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "batisteo";
+          name = "vscode-django";
+          version = "1.10.0";
+          sha256 = "sha256-vTaE3KhG5i2jGc5o33u76RUUFYaW4s4muHvph48HeQ4=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/batisteo.vscode-django/changelog";
+          description = "Django extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=batisteo.vscode-django";
+          homepage = "https://github.com/vscode-django/vscode-django";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ azd325 ];
         };
       };
 
@@ -667,8 +684,8 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.30.0";
-          sha256 = "sha256-E/zgKNxKH05qzLkoyq66qBDbkNJ7liBvU+ZSxw825c0=";
+          version = "2023.32.0";
+          sha256 = "sha256-phyPQqDgsYunF5FLqPevw8ZZG4Tw9qxjTOU4/kNGKU8=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1895,7 +1912,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
           homepage = "https://github.com/jnoortheen/vscode-nix-ide";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.SuperSandro2000 ];
+          maintainers = [ ];
         };
       };
 

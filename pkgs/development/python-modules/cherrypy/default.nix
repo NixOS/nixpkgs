@@ -3,7 +3,7 @@
 , buildPythonPackage
 , cheroot
 , fetchPypi
-, jaraco_collections
+, jaraco-collections
 , more-itertools
 , objgraph
 , path
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     portend
     more-itertools
     zc_lockfile
-    jaraco_collections
+    jaraco-collections
   ];
 
   nativeCheckInputs = [
