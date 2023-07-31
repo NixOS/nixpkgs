@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     for bin in ${matrix-synapse-unwrapped}/bin/*; do
       echo $bin
       makeWrapper "$bin" "$out/bin/$(basename $bin)" \
-        --set PYTHONPATH=${searchPath}
+        --set PYTHONPATH ${searchPath}
     done;
   '';
 
