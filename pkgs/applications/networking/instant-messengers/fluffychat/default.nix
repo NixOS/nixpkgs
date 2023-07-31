@@ -7,8 +7,8 @@
 }:
 
 flutter.buildFlutterApplication rec {
+  pname = "fluffychat";
   version = "1.12.1";
-  name = "fluffychat";
 
   src = fetchFromGitLab {
     owner = "famedly";
