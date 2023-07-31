@@ -306,4 +306,30 @@ rec {
       };
     in self;
 
+
+
+  /* Apply a function to an attrset of potential args, automatically filtering
+     the set to those the function can accept.
+     NOTE: This is strictly meant to be used with functions that accept attrsets
+     as their argument, and is best suited for use with `setFunctionArgs'.
+
+     nix-repl> lib.applyArgs ( { x, y }: x + y ) { x = 1; y = 2; z = -1; }
+     3
+  */
+  applyArgs = f: args: let
+    fn = if lib.isFunction f then f else import f;
+  in fn ( builtins.intersectAttrs ( lib.functionArgs fn ) args );
+
+
+  /* Non-overridable form of `callPackageWith'.
+     Applying matching args from `auto' with `args' to function/file `f'.
+
+     nix-repl> f = lib.callWith { x = 1; y = 2; z = -1; } ( { x, y }: x + y )
+     nix-repl> f { x = 3; }
+     5
+  */
+  callWith = auto: f: args: let
+    fn = if lib.isFunction f then f else import f;
+  in fn ( ( builtins.intersectAttrs ( lib.functionArgs fn ) auto ) // args );
+
 }

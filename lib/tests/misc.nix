@@ -1734,4 +1734,33 @@ runTests {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
   };
+
+  testApplyArgsFormal = {
+    expr = applyArgs ( { x, y }: x + y ) { x = 1; y = 2; z = -1; };
+    expected = 3;
+  };
+
+  testApplyArgsInformal = {
+    expr = applyArgs ( args: ( args.x or 1 ) + ( args.y or 2 ) ) {
+      x = 3;
+      y = 4;
+      z = -1;
+    };
+    expected = 3;
+  };
+
+  testCallWithFormal = {
+    expr = callWith { x = 1; y = 2; z = -1; } ( { x, y }: x + y ) { x = 3; };
+    expected = 5;
+  };
+
+  testCallWithInformal = {
+    expr = callWith { x = 1; y = 2; z = -1; } ( args: args.x + args.y ) {
+      x = 3;
+      y = 4;
+      z = -2;
+    };
+    expected = 7;
+  };
+
 }
