@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
+, wheel
 , pythonOlder
 , gsl
 , numpy
@@ -24,8 +25,15 @@ buildPythonPackage rec {
     hash = "sha256-YAJa2f0w2CenKubnYLbP8HodDhabLB2hAkyw/CPkp6o=";
   };
 
+  # update constraint to accept numpy from nixpkgs
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
+
   nativeBuildInputs = [
     setuptools-scm
+    wheel
     gsl
   ];
 
