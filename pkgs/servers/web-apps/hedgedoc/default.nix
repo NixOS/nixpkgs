@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchzip
+, fetchpatch
 , makeWrapper
 , which
 , nodejs
@@ -21,6 +22,14 @@ mkYarnPackage rec {
     url = "https://github.com/hedgedoc/hedgedoc/releases/download/${version}/hedgedoc-${version}.tar.gz";
     hash = "sha256-tPkhnnKDS5TICsW66YCOy7xWFj5usLyDMbYMYQ3Euoc=";
   };
+
+  patches = [
+    # https://github.com/hedgedoc/hedgedoc/security/advisories/GHSA-7494-7hcf-vxpg
+    (fetchpatch {
+      url = "https://github.com/hedgedoc/hedgedoc/commit/cd26aaa86ec58b6480c8a5efb017622fdc945b52.diff";
+      hash = "sha256-IhX074rp+Ffols92d2qbbVt2vBzGTxlysH1eYeIJCq4=";
+    })
+  ];
 
   nativeBuildInputs = [ which makeWrapper ];
   extraBuildInputs = [ python3 ];
