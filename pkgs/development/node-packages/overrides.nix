@@ -112,15 +112,6 @@ final: prev: {
     meta = oldAttrs.meta // { broken = since "12"; };
   });
 
-  castnow = prev.castnow.override {
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-
-    postInstall = ''
-      wrapProgram "$out/bin/castnow" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.ffmpeg ]}
-    '';
-  };
-
   eask = prev."@emacs-eask/cli".override {
     name = "eask";
   };
