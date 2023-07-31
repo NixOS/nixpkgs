@@ -246,7 +246,7 @@ if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
 fi
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    exec @prog@ @<(printf "%q\n" \
+    exec @prog@ @<(echo \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
        ${extraAfter+"${extraAfter[@]}"})

@@ -257,7 +257,7 @@ PATH="$path_backup"
 # Old bash workaround, see above.
 
 if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    @prog@ @<(printf "%q\n" \
+    @prog@ @<(echo \
         ${extraBefore+"${extraBefore[@]}"} \
         ${params+"${params[@]}"} \
         ${extraAfter+"${extraAfter[@]}"})
