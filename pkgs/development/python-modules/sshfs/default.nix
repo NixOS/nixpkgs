@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , asyncssh
 , bcrypt
 , buildPythonPackage
@@ -33,10 +34,16 @@ buildPythonPackage rec {
     fsspec
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     mock-ssh-server
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_checksum" # fails in darwin sandbox
   ];
 
   pythonImportsCheck = [
