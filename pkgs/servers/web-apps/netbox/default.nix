@@ -17,7 +17,10 @@ in
       })
     ];
 
-    tests.netbox = nixosTests.netbox_3_3;
+    tests = {
+      netbox = nixosTests.netbox_3_3;
+      inherit (nixosTests) netbox-upgrade;
+    };
     maintainers = with lib.maintainers; [ n0emis raitobezarius ];
     eol = true;
   };
@@ -30,7 +33,7 @@ in
       ./config.patch
     ];
     tests = {
-      inherit (nixosTests) netbox;
+      inherit (nixosTests) netbox netbox-upgrade;
     };
 
     maintainers = with lib.maintainers; [ minijackson n0emis raitobezarius ];
