@@ -14,6 +14,7 @@
 , flitBuildHook
 , pipBuildHook
 , pipInstallHook
+, pypaBuildHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
 , pythonNamespacesHook

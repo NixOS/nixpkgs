@@ -1,9 +1,12 @@
 { lib
 , stdenv
 , fetchPypi
+, pypaBuildHook
 , python
 , pythonOlder
 , buildPythonPackage
+, blas
+, lapack
 , cython
 , gfortran
 , meson-python
@@ -18,6 +21,8 @@
 , pooch
 , libxcrypt
 }:
+
+assert blas.provider == numpy.blas;
 
 buildPythonPackage rec {
   pname = "scipy";
@@ -36,10 +41,33 @@ buildPythonPackage rec {
     ./disable-datasets-tests.patch
   ];
 
-  nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
+  # The pybind11 issue seems to have already been address by 2.10.3
+  # https://github.com/pybind/pybind11/issues/4420
+  #
+  # We should update pythran
+  #
+  # Numpy is pinned at patch versions, probably as a way to choose from a set
+  # of wheels published in pypi?
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "pybind11==2.10.1" "pybind11>=2.10.3" \
+      --replace '"pythran>=0.12.0,<0.13.0",' "" \
+      --replace "numpy==" "numpy>="
+  '';
+
+  nativeBuildInputs = [
+    pypaBuildHook
+    cython
+    gfortran
+    meson-python
+    pythran
+    pkg-config
+    wheel
+  ];
 
   buildInputs = [
-    numpy.blas
+    blas
+    lapack
     pybind11
     pooch
   ] ++ lib.optionals (pythonOlder "3.9") [
@@ -67,6 +95,15 @@ buildPythonPackage rec {
   #
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
+  dontUsePipBuild = true;
+  pypaBuildFlags = [
+    # Skip sdist
+    "--wheel"
+
+    "-Csetup-args=-Dblas=cblas"
+    "-Csetup-args=-Dlapack=lapacke"
+  ];
+
   checkPhase = ''
     runHook preCheck
     pushd "$out"
@@ -81,8 +118,6 @@ buildPythonPackage rec {
   passthru = {
     blas = numpy.blas;
   };
-
-  setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
