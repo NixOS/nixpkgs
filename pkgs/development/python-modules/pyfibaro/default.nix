@@ -6,6 +6,7 @@
 , requests
 , requests-mock
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,8 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-dAC+jW+Ky+uPsgBXpp81+bxytWYeZbd+zWzEXkmM198=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
