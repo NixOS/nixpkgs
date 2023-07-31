@@ -770,7 +770,7 @@ in {
     services.matrix-synapse.package = wrapped;
 
     # default them, so they are additive
-    services.matrix-synapse.settings.extras = defaultExtras;
+    services.matrix-synapse.extras = defaultExtras;
 
     users.users.matrix-synapse = {
       group = "matrix-synapse";
