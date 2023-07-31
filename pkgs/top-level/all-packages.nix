@@ -20502,9 +20502,7 @@ with pkgs;
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix { };
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix { };
 
-  cegui = callPackage ../development/libraries/cegui {
-    ogre = ogre1_10;
-  };
+  cegui = callPackage ../development/libraries/cegui { };
 
   certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
 
@@ -23906,7 +23904,6 @@ with pkgs;
   ogre = callPackage ../development/libraries/ogre {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
-  ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix { };
 
   olm = callPackage ../development/libraries/olm { };
 
@@ -37621,9 +37618,7 @@ with pkgs;
 
   openarena = callPackage ../games/openarena { };
 
-  opendungeons = callPackage ../games/opendungeons {
-    ogre = ogre1_10;
-  };
+  opendungeons = callPackage ../games/opendungeons { };
 
   openlierox = callPackage ../games/openlierox { };
 
