@@ -16,6 +16,8 @@
 , numba
 , pybind11
 , scikit-build
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -30,6 +32,12 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-9o3EDhgmne2J1QfzjjNQc1mUcyCzoVrCnWXqjWkiZU0=";
   };
+
+  # we don't need cmake or ninja PyPI packages to get the tools
+  postPatch = ''
+    sed -i '/ninja/d' pyproject.toml
+    sed -i '/cmake/d' pyproject.toml
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -55,6 +63,8 @@ buildPythonPackage rec {
     cmake
     ninja
     scikit-build
+    setuptools
+    wheel
   ];
 
   pythonImportsCheck = [ "phik" ];
