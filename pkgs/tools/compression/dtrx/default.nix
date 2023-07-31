@@ -31,16 +31,16 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-LB3F6jcqQPRsjFO4L2fPAPnacDAdtcaadgGbwXA9LAw=";
   };
 
-  postInstall =
+  makeWrapperArgs =
     let
       archivers = lib.makeBinPath (
         [ gnutar lhasa rpm binutils cpio gzip p7zip cabextract unshield bzip2 xz lzip ]
         ++ lib.optional (unzipSupport) unzip
         ++ lib.optional (unrarSupport) unrar
       );
-    in ''
-      wrapProgram "$out/bin/dtrx" --prefix PATH : "${archivers}"
-    '';
+    in [
+      ''--prefix PATH : "${archivers}"''
+    ];
 
   nativeBuildInputs = [ python3Packages.invoke ];
 
