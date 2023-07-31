@@ -18153,6 +18153,8 @@ with pkgs;
 
   doq = callPackage ../development/tools/misc/doq { };
 
+  espup = callPackage ../development/tools/espup { };
+
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
   teller = callPackage ../development/tools/teller { };
@@ -41567,5 +41569,4 @@ with pkgs;
   gitrs = callPackage ../tools/misc/gitrs { };
 
   wttrbar = callPackage ../applications/misc/wttrbar { };
-
 }
