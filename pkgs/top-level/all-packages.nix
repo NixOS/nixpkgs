@@ -41793,4 +41793,6 @@ with pkgs;
   gitrs = callPackage ../tools/misc/gitrs { };
 
   wttrbar = callPackage ../applications/misc/wttrbar { };
+
+  icloudpd = callPackage ../applications/networking/icloudpd { };
 }
