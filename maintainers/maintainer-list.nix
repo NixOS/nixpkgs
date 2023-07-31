@@ -14489,6 +14489,15 @@
     }];
     name = "Rahul Butani";
   };
+  rs0vere = {
+    email = "rs0vere@outlook.com";
+    github = "rs0vere";
+    githubId = 140035635;
+    keys = [{
+      fingerprint = "C6D8 B5C2 FA79 901B DCCF  95E1 FEC4 5C5A ED00 C58D";
+    }];
+    name = "Red Star Over Earth";
+  };
   rski = {
     name = "rski";
     email = "rom.skiad+nix@gmail.com";
