@@ -3,6 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -17,8 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-R+P4pgKbLvf0mwpSDoujCvlJe/yS+nvSJ7ewLVOOg/0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>=' \
+      --replace 'wheel~=' 'wheel>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   # upstream has no tests
