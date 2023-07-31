@@ -16019,6 +16019,12 @@
     githubId = 1694705;
     name = "Sam Stites";
   };
+  stonks3141 = {
+    email = "sam@samnystrom.dev";
+    github = "Stonks3141";
+    githubId = 82178396;
+    name = "Sam Nystrom";
+  };
   strager = {
     email = "strager.nds@gmail.com";
     github = "strager";
