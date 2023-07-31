@@ -11,6 +11,7 @@
 , setuptools
 , voluptuous
 , websocket-client
+, wheel
 , xmltodict
 }:
 
@@ -28,8 +29,15 @@ buildPythonPackage rec {
     hash = "sha256-5J/arrr8ymODSqtATJZuKsuOsCDKV9P2v8vN6D22FuE=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>=' \
+      --replace 'wheel~=' 'wheel>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
