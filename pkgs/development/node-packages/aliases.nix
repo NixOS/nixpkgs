@@ -45,6 +45,7 @@ mapAliases {
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
+  gtop = pkgs.gtop; # added 2023-07-31
   manta = pkgs.node-manta; # Added 2023-05-06
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   thelounge = pkgs.thelounge; # Added 2023-05-22
