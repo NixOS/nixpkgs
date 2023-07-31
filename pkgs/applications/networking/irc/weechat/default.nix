@@ -95,6 +95,7 @@ let
         '';
         license = lib.licenses.gpl3;
         maintainers = with lib.maintainers; [ ncfavier ];
+        mainProgram = "weechat";
         platforms = lib.platforms.unix;
       };
     }
