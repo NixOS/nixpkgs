@@ -12,7 +12,9 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, setuptools-scm-git-archive
 , typing-extensions
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -40,6 +42,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    setuptools-scm-git-archive
+    wheel
   ];
 
   propagatedBuildInputs = [
