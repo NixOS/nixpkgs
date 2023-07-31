@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , qmake
 , qt5compat ? null
@@ -24,6 +25,18 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     hash = "sha256-Ymi1tjJCgStF0Rtseelq/YuTtBs2PrbF898TlbjyYUw=";
   };
+
+  patches = lib.optionals (lib.versionAtLeast rtaudio.version "6") [
+    # RtAudio 6.0.0 is a breaking API change, this commit makes a hard switch to the new API
+    # Remove when BambooTracker > 0.6.1, RtAudio >= 6.0.0
+    # Maybe revert the patch if BambooTracker is bumped before RtAudio bump is merged?
+    (fetchpatch {
+      name = "0001-bambootracker-RtAudio-6.0.0-support.patch";
+      url = "https://github.com/BambooTracker/BambooTracker/commit/cac47862a4d77d62d5d6fc488946b2e312c8f5af.patch";
+      includes = [ "BambooTracker/audio/audio_stream_rtaudio.cpp" ];
+      hash = "sha256-JK6MoPit9UXlSepKO5PldzQPgGvnqS171YiCwAKyUJc=";
+    })
+  ];
 
   postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
     # Work around lrelease finding in qmake being broken by using pre-Qt5.12 code path
