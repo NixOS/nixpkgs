@@ -35530,6 +35530,8 @@ with pkgs;
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
+  trzsz-go = callPackage ../tools/networking/trzsz-go { };
+
   ttyper = callPackage ../applications/misc/ttyper { };
 
   tuba = callPackage ../applications/misc/tuba { };
