@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
       substituteInPlace $out/share/applications/vu.b4.${pname}.desktop \
         --replace "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/${pname}" \
-        --replace "Icon=alsa-scarlett-gui" "Icon=$out/share/icons/hicolor/256x256/apps/${pname}.png"
+        --replace "Icon=alsa-scarlett-gui" "Icon=${pname}"
   '';
 
   # causes redefinition of _FORTIFY_SOURCE
