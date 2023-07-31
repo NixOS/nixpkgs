@@ -725,6 +725,8 @@ with pkgs;
 
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
 
+  protoc-gen-grpc-java = callPackage ../development/tools/protoc-gen-grpc-java { };
+
   protoc-gen-connect-go = callPackage ../development/tools/protoc-gen-connect-go { };
 
   protoc-gen-prost = callPackage ../development/tools/protoc-gen-prost { };
@@ -26167,6 +26169,9 @@ with pkgs;
 
   https-dns-proxy = callPackage ../servers/dns/https-dns-proxy { };
 
+  hugegraph-unwrapped = callPackage ../servers/nosql/hugegraph/unwrapped.nix { };
+  hugegraph = callPackage ../servers/nosql/hugegraph { };
+
   hydron = callPackage ../servers/hydron { };
 
   hyprspace = callPackage ../applications/networking/hyprspace {
@@ -26204,6 +26209,7 @@ with pkgs;
 
   janus-gateway = callPackage ../servers/janus-gateway { };
 
+  janusgraph-unwrapped = callPackage ../servers/nosql/janusgraph/unwrapped.nix { };
   janusgraph = callPackage ../servers/nosql/janusgraph { };
 
   jboss = callPackage ../servers/http/jboss { };
