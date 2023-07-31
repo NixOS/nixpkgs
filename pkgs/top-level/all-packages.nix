@@ -7543,6 +7543,10 @@ with pkgs;
 
   timeline = callPackage ../applications/office/timeline { };
 
+  tmcbeans = callPackage ../applications/editors/tmcbeans {
+    jdk = jdk11;
+  };
+
   tsm-client = callPackage ../tools/backup/tsm-client { };
   tsm-client-withGui = callPackage ../tools/backup/tsm-client { enableGui = true; };
 
