@@ -14,6 +14,7 @@
 , pytest-subprocess
 , pytestCheckHook
 , tomli
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -29,7 +30,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'minversion = "7.2"' "" \
       --replace '"error",' '"error", "ignore::DeprecationWarning", "ignore::UserWarning",'
   '';
 
@@ -60,6 +60,7 @@ buildPythonPackage rec {
     cmake
     pytest-subprocess
     pytestCheckHook
+    wheel
   ] ++ passthru.optional-dependencies.pyproject;
 
   disabledTestPaths = [
