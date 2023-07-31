@@ -1,7 +1,15 @@
 { lib }:
 
 let
-  inherit (lib) throwIfNot;
+  inherit (lib)
+    concatStringsSep
+    filterAttrs
+    getDerivationsChildStrict
+    isAttrs
+    isDerivation
+    mapAttrs
+    throwIfNot
+    ;
 in
 {
   /*
@@ -98,4 +106,71 @@ in
       # `lazyDerivation` caller knew a shortcut, be taken from there.
       meta = args.meta or checked.meta;
     } // passthru;
+
+  /*
+    getDerivationsChildStrict :: attrs -> (let tree = either package (attrsOf tree); in tree)
+
+    NOTE: This function evaluates too much and should usually be avoided.
+
+    Traverses a potentially nested attribute set of derivations and
+    non-derivations in approximately the way `nix-build` would.
+    Notably, this does not take into account restrictions on the attribute name.
+
+    "Child strict" refers to an unfortunate but required property of this function.
+    In order to determine whether any attribute should be returned at all, it must
+    evaluate the value of the attribute.
+    This lack of laziness is a performance risk, so it is best to specify your
+    packages and package sets in a way that does not require this function.
+
+    The `recurseForDerivations` attribute gets removed from the returned tree,
+    as it does not contain a derivation, or any information that can't be
+    recovered from `(attrs.type or null) == "derivation"`.
+  */
+  getDerivationsChildStrict = v0:
+    if isDerivation v0
+    then v0
+    else
+      lib.concatMapAttrs
+        (k: v:
+          if isDerivation v
+          then { ${k} = v; }
+          else if v.recurseForDerivations or false
+          then { ${k} = mapAttrs (k: lib.getDerivationsChildStrict) (filterAttrs (k: isAttrs) v); }
+          else { }
+        )
+        v0;
+
+  /*
+    `joinDerivationsLeafStrictSep <sep> <v>` turns the tree of derivations `<v>`
+    into an attribute set of derivations.
+
+    NOTE: This function evaluates too much and should usually be avoided.
+          Specifically it always evaluates all the packages (leaves), even if
+          only a single package was needed. See `getDerivationsChildStrict`.
+
+          A better alternative is to use `//` and perhaps `lib.mapAttrs'` to
+          rename or prefix the attributes.
+
+    If the root of the tree is a derivation, the attribute name `default` will
+    be used.
+
+    If the derivation is one attribute deep, the attribute path is trivially
+    an attribute name. If the derivation is at least one level deep, the
+    function `concatStringsSep <sep>` is used to create the path name.
+
+    If an attribute in `<v>` collides with a generated attribute name, the
+    attribute in the original `<v>` wins.
+  */
+  joinDerivationsLeafStrictSep = sep: v:
+    let
+      isLeaf = _path: isDerivation;
+      joinPath = path:
+        if path == []
+        then "default"
+        else concatStringsSep sep path;
+    in
+      lib.joinAttrsRecursive
+        joinPath
+        isLeaf
+        (getDerivationsChildStrict v);
 }

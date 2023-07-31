@@ -129,6 +129,44 @@ rec {
         (mapAttrs f v)
       );
 
+  /*
+    `joinAttrsRecursive <joinPath> <upTo>` flattens nested attribute sets by
+    joining the attribute paths using the user-supplied `<joinPath>` function,
+    up to paths where `<upTo>` returns `true`.
+
+    Type:
+      joinAttrsRecursive ::
+        (listOf str -> str) ->
+        (listOf str -> attrs -> bool) ->
+        attrs ->
+        attrs
+
+    Example:
+      joinAttrsRecursive
+        (concatStringsSep ".")
+        (_path: isDerivation)
+        {
+          a.b.c = pkg "one";
+          a.b.d = pkg "two";
+          a.e = pkg "three" // { f = pkg "four"; };
+        };
+      => {
+        "a.b.c" = pkg "one";
+        "a.b.d" = pkg "two";
+        "a.e" = pkg "three" // { f = pkg "four"; };
+      };
+
+  */
+  joinAttrsRecursive = joinNames: stop:
+    let
+      go = prefix: v:
+        if (!isAttrs v) || stop prefix v then
+          { ${joinNames prefix} = v; }
+        else
+          concatMapAttrs
+            (name: value: go (prefix ++ [name]) value)
+            v;
+    in go [];
 
   /* Update or set specific paths of an attribute set.
 
