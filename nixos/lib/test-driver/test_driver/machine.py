@@ -833,6 +833,9 @@ class Machine:
             # TODO: do we want to bail after a set number of attempts?
             while not shell_ready(timeout_secs=30):
                 self.log("Guest root shell did not produce any data yet...")
+                self.log(
+                    "  To debug, enter the VM and run 'systemctl status backdoor.service'."
+                )
 
             while True:
                 chunk = self.shell.recv(1024)
