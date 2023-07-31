@@ -3,6 +3,7 @@
 , fetchPypi
 , setuptools
 , setuptools-scm
+, wheel
 , pytestCheckHook
 }:
 
@@ -16,15 +17,19 @@ buildPythonPackage rec {
     hash = "sha256-5FZxyug4Wo5iSKmwejqDKAwtDMQxJxMFjPus3F7Jlz4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
-
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools_scm[toml]>=3.4,<6' 'setuptools_scm[toml]>=3.4'
+
     # Drop broken version specifier
     sed -i '/python_requires/d' setup.cfg
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   pythonImportsCheck = [
     "multiset"
