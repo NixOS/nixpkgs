@@ -5213,6 +5213,8 @@ with pkgs;
 
   blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
 
+  context = callPackage ../tools/typesetting/tex/context { };
+
   dblatex = callPackage ../tools/typesetting/tex/dblatex { };
 
   dblatexFull = dblatex.override { enableAllFeatures = true; };
@@ -5224,6 +5226,8 @@ with pkgs;
   latexrun = callPackage ../tools/typesetting/tex/latexrun { };
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
+
+  luametatex = callPackage ../tools/typesetting/tex/luametatex { };
 
   mftrace = callPackage ../tools/typesetting/tex/mftrace { };
 
