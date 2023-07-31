@@ -3,10 +3,12 @@
 , fetchFromGitHub
 , fetchurl
 , cmake
+, setuptools
 , setuptools-scm
 , scikit-build
 , pytestCheckHook
 , pytest-virtualenv
+, wheel
 }:
 let
   # these must match NinjaUrls.cmake
@@ -53,7 +55,9 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+    wheel
     scikit-build
     cmake
   ];
