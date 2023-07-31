@@ -26,7 +26,7 @@ maven.buildMavenPackage rec {
   mvnParameters = "-DskipTests";
   mvnHash = "sha256-bzYBSrCS9Kp+qnVO60h915Or1VWabphwLEu6lcBULuc=";
 
-  nativeBuildInputs = [ maven jdk makeWrapper ];
+  nativeBuildInputs = [ jdk makeWrapper ];
 
   dontConfigure = true;
   preBuild = ''
@@ -56,6 +56,5 @@ maven.buildMavenPackage rec {
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ hqurve ];
-    platforms = platforms.all;
   };
 }

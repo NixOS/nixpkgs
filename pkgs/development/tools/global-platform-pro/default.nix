@@ -19,7 +19,7 @@ mavenJdk8.buildMavenPackage rec {
 
   mvnHash = "sha256-rRLsCTY3fEAvGRDvNXqpjac2Gb5fdlyhK2wTK5CVN9k=";
 
-  nativeBuildInputs = [ jdk8 mavenJdk8 makeWrapper ];
+  nativeBuildInputs = [ jdk8 makeWrapper ];
 
   installPhase = ''
     mkdir -p "$out/lib/java" "$out/share/java"
@@ -41,11 +41,10 @@ mavenJdk8.buildMavenPackage rec {
     homepage = "https://github.com/martinpaljak/GlobalPlatformPro";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = with licenses; [ lgpl3 ];
     maintainers = with maintainers; [ ekleog ];
     mainProgram = "gp";
-    platforms = platforms.all;
   };
 }

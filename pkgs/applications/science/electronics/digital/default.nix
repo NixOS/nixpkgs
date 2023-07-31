@@ -41,7 +41,7 @@ maven.buildMavenPackage rec {
   inherit mvnParameters;
   mvnHash = "sha256-Ej/JePvd9Ieni8FqSaXBDc2T6Cwr8WP54iko8wYiT68=";
 
-  nativeBuildInputs = [ copyDesktopItems maven makeWrapper ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
