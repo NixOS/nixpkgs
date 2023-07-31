@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, wheel
 , bitlist
 , pythonOlder
 }:
@@ -18,8 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-gYVguXMVrXxra/xy+R4RXVk9yDGKiKE8u3qWUk8sjt4=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
