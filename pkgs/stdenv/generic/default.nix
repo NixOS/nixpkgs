@@ -70,10 +70,7 @@ let
       ../../build-support/setup-hooks/prune-libtool-files.sh
       ../../build-support/setup-hooks/reproducible-builds.sh
       ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
-      (with buildPlatform; if isAarch64 && isLinux
-        then ../../build-support/setup-hooks/strip-tmp-aarch64.sh
-        else ../../build-support/setup-hooks/strip.sh
-      )
+      ../../build-support/setup-hooks/strip.sh
     ] ++ lib.optionals hasCC [ cc ];
 
   defaultBuildInputs = extraBuildInputs;
