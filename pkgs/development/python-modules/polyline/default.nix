@@ -4,6 +4,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,11 +23,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>=' \
+      --replace 'wheel~=' 'wheel>=' \
       --replace " --cov=polyline --cov-report term-missing" ""
   '';
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   nativeCheckInputs = [
