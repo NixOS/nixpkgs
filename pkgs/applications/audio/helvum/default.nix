@@ -12,8 +12,10 @@
 , pipewire
 , pkg-config
 , rustPlatform
+, rust
 , rustc
 , stdenv
+, writeText
 }:
 
 stdenv.mkDerivation rec {
@@ -43,14 +45,25 @@ stdenv.mkDerivation rec {
     cargo
     rustc
     rustPlatform.bindgenHook
+    gtk4 # for native gtk-update-icon-cache
+    desktop-file-utils # update-desktop-database
   ];
 
   buildInputs = [
-    desktop-file-utils
     glib
     gtk4
     pipewire
   ];
+
+  mesonFlags =
+    let
+      # ERROR: 'rust' compiler binary not defined in cross or native file
+      crossFile = writeText "cross-file.conf" ''
+        [binaries]
+        rust = [ 'rustc', '--target', '${rust.toRustTargetSpec stdenv.hostPlatform}' ]
+      '';
+    in
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
 
   meta = with lib; {
     description = "A GTK patchbay for pipewire";
