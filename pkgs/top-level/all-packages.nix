@@ -13465,7 +13465,7 @@ with pkgs;
 
   texmaker = libsForQt5.callPackage ../applications/editors/texmaker { };
 
-  texstudio = libsForQt5.callPackage ../applications/editors/texstudio { };
+  texstudio = qt6Packages.callPackage ../applications/editors/texstudio { };
 
   textadept = callPackage ../applications/editors/textadept { };
 
@@ -19984,6 +19984,8 @@ with pkgs;
 
   terrascan = callPackage ../tools/security/terrascan { };
 
+  tesh = callPackage ../tools/text/tesh {};
+
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
@@ -23907,9 +23909,10 @@ with pkgs;
 
   ode = callPackage ../development/libraries/ode { };
 
-  ogre = callPackage ../development/libraries/ogre {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
+  inherit (callPackages ../development/libraries/ogre { })
+    ogre_13 ogre_14;
+
+  ogre = ogre_14;
 
   olm = callPackage ../development/libraries/olm { };
 
@@ -37411,6 +37414,8 @@ with pkgs;
   };
 
   hikounomizu = callPackage ../games/hikounomizu { };
+
+  hmcl = callPackage ../games/hmcl { };
 
   hyperrogue = callPackage ../games/hyperrogue { };
 
