@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -16,8 +17,14 @@ buildPythonPackage rec {
     hash = "sha256-MeurZ6731qjeBK6HTwXYLVs6+nXF9Hf1p8/NNwxmae4=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   pythonImportsCheck = [
