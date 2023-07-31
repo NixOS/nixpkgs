@@ -4586,6 +4586,8 @@ with pkgs;
 
   chopchop = callPackage ../tools/security/chopchop { };
 
+  clapboard = callPackage ../tools/wayland/clapboard { };
+
   cliphist = callPackage ../tools/wayland/cliphist { };
 
   clipman = callPackage ../tools/wayland/clipman { };
@@ -25315,8 +25317,6 @@ with pkgs;
 
   xedit = callPackage ../applications/editors/xedit { };
 
-  xine-lib = callPackage ../development/libraries/xine-lib { };
-
   xautolock = callPackage ../misc/screensavers/xautolock { };
 
   xercesc = callPackage ../development/libraries/xercesc { };
@@ -25704,17 +25704,17 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/bootstrap.nix {};
     faslExt = "fasl";
   };
-  sbcl_2_3_5 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.5"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_3_6 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.6"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_3_6;
+  sbcl_2_3_7 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.7"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_3_7;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -28205,6 +28205,8 @@ with pkgs;
   pcstat = callPackage ../tools/system/pcstat { };
 
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
+
+  pgrok = callPackage ../tools/networking/pgrok { };
 
   picoprobe-udev-rules = callPackage ../os-specific/linux/picoprobe-udev-rules { };
 
@@ -36234,7 +36236,8 @@ with pkgs;
 
   xfractint = callPackage ../applications/graphics/xfractint { };
 
-  xine-ui = callPackage ../applications/video/xine-ui { };
+  xine-ui = callPackage ../applications/video/xine/ui.nix { };
+  xine-lib = callPackage ../applications/video/xine/lib.nix { };
 
   xlsxgrep = callPackage ../applications/search/xlsxgrep { };
 
