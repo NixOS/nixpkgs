@@ -15370,6 +15370,22 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  crosstool-ng = callPackage ../development/compilers/crosstool-ng { };
+
+  crosstool-ng-fetcher = callPackage ../development/compilers/crosstool-ng/fetcher.nix { };
+
+  crosstoolNgToolchains = callPackage ../development/compilers/crosstool-ng/toolchains.nix { };
+
+  crosstoolNgGcc = builtins.mapAttrs (name: value: wrapCCWith {
+    cc = value;
+    libc = value;
+    bintools = bintools.override {
+      libc = value;
+      # do not override dynamic linker
+      sharedLibraryLoader = null;
+    };
+  }) crosstoolNgToolchains;
+
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = llvmPackages_13;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
