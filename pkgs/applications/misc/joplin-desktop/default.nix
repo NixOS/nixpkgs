@@ -11,6 +11,7 @@ let
   suffix = {
     x86_64-linux = "AppImage";
     x86_64-darwin = "dmg";
+    aarch64-darwin = "dmg";
   }.${system} or throwSystem;
 
   src = fetchurl {
@@ -18,6 +19,7 @@ let
     sha256 = {
       x86_64-linux = "sha256-r64+y+LfMrJnUdabVdak5+LQB50YLOuMXftlZ4s3C/w=";
       x86_64-darwin = "sha256-/dvaYHa7PT6FA63kmtjrErJZI9O+hIlKvHnf5RnfeZg=";
+      aarch64-darwin = "sha256-/dvaYHa7PT6FA63kmtjrErJZI9O+hIlKvHnf5RnfeZg=";
     }.${system} or throwSystem;
   };
 
@@ -37,7 +39,7 @@ let
     homepage = "https://joplinapp.org";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ hugoreeves qjoly ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin"];
   };
 
   linux = appimageTools.wrapType2 rec {
