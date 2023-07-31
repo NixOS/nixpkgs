@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , docbook-xsl-nons
 , gtk-doc
@@ -24,6 +25,15 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-paLiRYgYshuedgDgW2nEsv4/Loq6qFyQMjfBJwqtHzw=";
   };
+
+  patches = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # backport fix for "cannot run test program while cross compiling"
+    # remove on next release
+    (fetchpatch {
+      url = "https://github.com/p11-glue/p11-kit/pull/529.diff";
+      hash = "sha256-b+Zfq5/iFAYKTqTfJ0brPsKQy0bUcRq7X+fZNsxFMLI=";
+    })
+  ];
 
   outputs = [ "out" "bin" "dev"];
 
