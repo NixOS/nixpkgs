@@ -8,6 +8,8 @@
 , pkg-config
 , numpy
 , openblas
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,6 +24,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'numpy==' 'numpy>='
+
     patchShebangs .
   '';
 
@@ -31,6 +36,8 @@ buildPythonPackage rec {
     git
     meson-python
     pkg-config
+    setuptools
+    wheel
   ];
 
   buildInputs = [
