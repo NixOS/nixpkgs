@@ -5,12 +5,12 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
   "ptime is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation rec {
-  version = "1.0.0";
+  version = "1.1.0";
   pname = "ocaml${ocaml.version}-ptime";
 
   src = fetchurl {
     url = "https://erratique.ch/software/ptime/releases/ptime-${version}.tbz";
-    sha256 = "sha256-RByDjAFiyDdR8G663/MxabuSHTTuwVn7urtw7Z3iEQs=";
+    sha256 = "sha256-y/WxVFT7JxBeLDNAI+HhHY+TnXF4hw9cvo7SbfcBPrE=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
