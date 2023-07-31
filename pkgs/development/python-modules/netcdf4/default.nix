@@ -4,6 +4,7 @@
 , isPyPy
 , python
 , setuptools
+, wheel
 , numpy
 , zlib
 , netcdf
@@ -26,7 +27,13 @@ buildPythonPackage rec {
     hash = "sha256-A4KwL/aiiEGfb/7IXexA9FH0G4dVVHFUxXXd2fD0rlM=";
   };
 
-  nativeBuildInputs = [ setuptools cython ];
+  # update constraint to accept numpy from nixpkgs
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
+
+  nativeBuildInputs = [ setuptools cython wheel ];
 
   propagatedBuildInputs = [
     cftime
