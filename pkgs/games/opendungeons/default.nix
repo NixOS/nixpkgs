@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, ogre
+, ogre_13
 , cegui
 , boost
 , sfml
@@ -12,7 +12,7 @@
 }:
 
 let
-  ogre' = ogre.overrideAttrs (old: {
+  ogre' = ogre_13.overrideAttrs (old: {
     cmakeFlags = old.cmakeFlags ++ [
       "-DOGRE_RESOURCEMANAGER_STRICT=0"
     ];
