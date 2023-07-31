@@ -25,6 +25,12 @@ buildPythonPackage rec {
     })
   ];
 
+  # https://github.com/imageio/imageio-ffmpeg/issues/59
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'setup_requires=["pip>19"]' 'setup_requires=[]'
+  '';
+
   checkPhase = ''
     runHook preCheck
 
@@ -44,5 +50,4 @@ buildPythonPackage rec {
     license = licenses.bsd2;
     maintainers = [ maintainers.pmiddend ];
   };
-
 }
