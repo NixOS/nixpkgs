@@ -11,6 +11,8 @@ let
   # might not support the withSystemd option.
   procpsWithoutSystemd = procps.override { withSystemd = false; };
   procps_pkg = if stdenv.isLinux then procpsWithoutSystemd else procps;
+
+  runTests = (stdenv.buildPlatform == stdenv.hostPlatform);
 in
 
 stdenv.mkDerivation rec {
@@ -29,6 +31,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook autoconf-archive pkg-config doxygen perl
     shadow
+  ] ++ lib.optionals runTests [
+    # Technically check inputs, but would be required even if doCheck is disabled
+    iproute2 ibm-sw-tpm2
   ];
 
   # cmocka is checked / used(?) in the configure script
@@ -36,12 +41,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl json_c curl libgcrypt uthash libuuid ]
     # cmocka doesn't build with pkgsStatic, and we don't need it anyway
     # when tests are not run
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    ++ lib.optionals runTests [
     cmocka
   ];
 
   nativeCheckInputs = [
-    cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
+    cmocka which openssl procps_pkg
   ];
 
   strictDeps = true;
@@ -70,7 +75,7 @@ stdenv.mkDerivation rec {
       --replace 'git describe --tags --always --dirty' 'echo "${version}"'
   '';
 
-  configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+  configureFlags = lib.optionals runTests [
     "--enable-unit"
     "--enable-integration"
   ];
