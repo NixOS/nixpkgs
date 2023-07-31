@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -20,8 +22,17 @@ buildPythonPackage rec {
     hash = "sha256-klFSt3Od7xYgenpMP4DBFoZeQanGrmtJxDm5qeZ1Psc=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "relax-wheel-dependency-constraint.patch";
+      url = "https://github.com/jwodder/entry-points-txt/commit/8f5235fe4d1c0d73d07e8f4ee8f6a76b29ca6434.patch";
+      hash = "sha256-ssePCVlJuHPJpPyFET3FnnWRlslLnZbnfn42g52yVN4=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   nativeCheckInputs = [
