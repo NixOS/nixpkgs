@@ -61,8 +61,6 @@ buildPythonPackage rec {
     npmHooks.npmConfigHook
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
     babel
     click
