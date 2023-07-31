@@ -6151,6 +6151,8 @@ with pkgs;
 
   smokeqt = callPackage ../development/libraries/smokeqt { };
 
+  sn-cli = callPackage ../applications/misc/sn-cli { };
+
   snazy = callPackage ../development/tools/snazy { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
