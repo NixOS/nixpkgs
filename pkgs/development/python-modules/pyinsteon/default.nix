@@ -11,6 +11,7 @@
 , pythonOlder
 , setuptools
 , voluptuous
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -27,8 +28,15 @@ buildPythonPackage rec {
     hash = "sha256-KKF+XYQgdmLbbicyMFyZBG4ol69xAWCF2W/r15gH2Mo=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>=' \
+      --replace 'wheel~=' 'wheel>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
