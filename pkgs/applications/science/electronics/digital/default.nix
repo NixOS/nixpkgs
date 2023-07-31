@@ -39,7 +39,7 @@ maven.buildMavenPackage rec {
   };
 
   inherit mvnParameters;
-  mvnHash = "sha256-Ej/JePvd9Ieni8FqSaXBDc2T6Cwr8WP54iko8wYiT68=";
+  mvnHash = "sha256-wm/axWJucoW9P98dKqHI4bjrUnmBTfosCOdJg9VBJ+4=";
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
