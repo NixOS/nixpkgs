@@ -5,6 +5,7 @@
 , nixos
 , testers
 , hello
+, autoconfCache
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   doCheck = true;
+  buildInputs = [ autoconfCache ];
 
   passthru.tests = {
     version = testers.testVersion { package = hello; };
