@@ -12,7 +12,7 @@
 }:
 
 let
-  extraPackages = lib.concatMap (extra: matrix-synapse-unwrapped.optional-dependencies.${extra}) extras;
+  extraPackages = lib.concatMap (extra: matrix-synapse-unwrapped.optional-dependencies.${extra}) (lib.unique extras);
 
   pluginsEnv = matrix-synapse-unwrapped.python.buildEnv.override {
     extraLibs = plugins;

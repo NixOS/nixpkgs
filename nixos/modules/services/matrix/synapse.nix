@@ -212,6 +212,10 @@ in {
 
           Extras will automatically be enabled, when the relevant
           configuration sections are present.
+
+          Please note that this option is additive: i.e. when adding a new item
+          to this list, the defaults are still kept. To override the defaults as well,
+          use `lib.mkForce`.
         '';
       };
 
