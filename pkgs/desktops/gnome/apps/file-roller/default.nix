@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members ++ teams.pantheon.members;
+    mainProgram = "file-roller";
   };
 }

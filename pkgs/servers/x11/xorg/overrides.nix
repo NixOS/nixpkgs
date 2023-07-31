@@ -161,6 +161,9 @@ self: super:
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
     '';
+    meta = attrs.meta // {
+      mainProgram = "xdpyinfo";
+    };
   });
 
   xdm = super.xdm.overrideAttrs (attrs: {
@@ -939,6 +942,12 @@ self: super:
     postInstall = ''
       rm $out/bin/xkeystone
     '';
+  });
+
+  xset = super.xset.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      mainProgram = "xset";
+    };
   });
 
   # convert Type1 vector fonts to OpenType fonts
