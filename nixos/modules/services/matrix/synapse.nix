@@ -65,7 +65,6 @@ let
     ++ lib.optional (cfg.settings.database.name == "psycopg2") "postgres";
 
   wrapped = pkgs.matrix-synapse.override {
-    matrix-synapse-unwrapped = cfg.package.unwrapped;
     extras = wantedExtras;
     inherit (cfg) plugins;
   };
@@ -170,18 +169,27 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.matrix-synapse;
-        defaultText = literalExpression "pkgs.matrix-synapse";
         readOnly = true;
         description = lib.mdDoc ''
-          Wrapper package that gets configured through the module.
+          Reference to the `matrix-synapse` wrapper with all extras
+          (e.g. for `oidc` or `saml2`) added to the `PYTHONPATH` of all executables.
 
-          If you want to override the unwrapped package use an overlay.
+          This option is useful to reference the "final" `matrix-synapse` package that's
+          actually used by `matrix-synapse.service`. For instance, when using
+          workers, it's possible to run
+          `''${config.services.matrix-synapse.package}/bin/synapse_worker` and
+          no additional PYTHONPATH needs to be specified for extras or plugins configured
+          via `services.matrix-synapse`.
+
+          However, this means that this option is supposed to be only declared
+          by the `services.matrix-synapse` module itself and is thus read-only.
+          In order to modify `matrix-synapse` itself, use an overlay to override
+          `pkgs.matrix-synapse-unwrapped`.
         '';
       };
 
       extras = mkOption {
-        type = types.listOf (types.enum (lib.attrNames cfg.package.unwrapped.optional-dependencies));
+        type = types.listOf (types.enum (lib.attrNames pkgs.matrix-synapse-unwrapped.optional-dependencies));
         default = defaultExtras;
         example = literalExpression ''
           [
@@ -242,7 +250,7 @@ in {
         default = {};
         description = mdDoc ''
           The primary synapse configuration. See the
-          [sample configuration](https://github.com/matrix-org/synapse/blob/v${cfg.package.unwrapped.version}/docs/sample_config.yaml)
+          [sample configuration](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_config.yaml)
           for possible values.
 
           Secrets should be passed in by using the `extraConfigFiles` option.
@@ -755,6 +763,7 @@ in {
     ];
 
     services.matrix-synapse.configFile = configFile;
+    services.matrix-synapse.package = wrapped;
 
     # default them, so they are additive
     services.matrix-synapse.settings.extras = defaultExtras;
@@ -776,7 +785,7 @@ in {
       after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        ${wrapped}/bin/synapse_homeserver \
+        ${cfg.package}/bin/synapse_homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
@@ -794,7 +803,7 @@ in {
           chmod 0600 ${cfg.settings.signing_key_path}
         '')) ];
         ExecStart = ''
-          ${wrapped}/bin/synapse_homeserver \
+          ${cfg.package}/bin/synapse_homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
