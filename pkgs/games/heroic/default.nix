@@ -10,23 +10,24 @@
 , electron
 , gogdl
 , legendary-gl
+, nile
 }:
 
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.8.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-AZwJRBkWuzBPT+ADVHabiK2KRXe6clZFa0IO99BO2Wk=";
+    hash = "sha256-1FtAcp6cG2qRfWrAgCOQ87DzMvszqqhObfSzepezBGc=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-xiLK0D9+oL2UMD7b/9htOQJEpYCNayKW+KJ/vNVCgsw=";
+    hash = "sha256-KEzTjtoBcHNJxC/7W/Bft75JZuZUSHieOOAwhbr5d3s=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +75,11 @@ in stdenv.mkDerivation rec {
     chmod -R u+w "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
     rm -rf "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
     mkdir -p "$out/share/${appName}/build/bin/${binPlatform}"
-    ln -s "${gogdl}/bin/gogdl" "${legendary-gl}/bin/legendary" "$out/share/${appName}/build/bin/${binPlatform}"
+    ln -s \
+      "${gogdl}/bin/gogdl" \
+      "${legendary-gl}/bin/legendary" \
+      "${nile}"/bin/nile \
+      "$out/share/${appName}/build/bin/${binPlatform}"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
@@ -92,7 +97,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Native GOG and Epic Games Launcher for Linux, Windows and Mac";
+    description = "A Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
     changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
     license = licenses.gpl3Only;
