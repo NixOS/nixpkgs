@@ -35,6 +35,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+
+    systemd.tmpfiles.rules = [
+      "d /run/fireqos 0755 root root -"
+    ];
+
     systemd.services.fireqos = {
       description = "FireQOS";
       after = [ "network.target" ];
