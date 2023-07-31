@@ -4,20 +4,24 @@
 , buildPythonApplication
 , pythonOlder
 , requests
+, filelock
 }:
 
 buildPythonApplication rec {
   pname = "legendary-gl"; # Name in pypi
-  version = "0.20.32";
+  version = "0.20.33";
 
   src = fetchFromGitHub {
     owner = "derrod";
     repo = "legendary";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-MsvhVS3lqhgBJ+S/cjXFP70I3rM5WBYT7TyVlRWhNWw=";
+    sha256 = "sha256-fEQUChkxrKV2IkFGORUolZE2qTzA10Xxogjl5Va4TcE=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+    filelock
+  ];
 
   disabled = pythonOlder "3.8";
 
