@@ -147,11 +147,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
 
     mkdir -p "$out/share/bash-completion/completions/"
-    $out/bin/rsvg-convert --completion bash > "$out/share/bash-completion/completions/rsvg-convert"
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/rsvg-convert --completion bash > "$out/share/bash-completion/completions/rsvg-convert"
     mkdir -p "$out/share/zsh/site-functions/"
-    $out/bin/rsvg-convert --completion zsh > "$out/share/zsh/site-functions/_rsvg-convert"
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/rsvg-convert --completion zsh > "$out/share/zsh/site-functions/_rsvg-convert"
     mkdir -p "$out/share/fish/vendor_completions.d/"
-    $out/bin/rsvg-convert --completion fish > "$out/share/fish/vendor_completions.d/rsvg-convert.fish"
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/rsvg-convert --completion fish > "$out/share/fish/vendor_completions.d/rsvg-convert.fish"
   '';
 
   postFixup = lib.optionalString withIntrospection ''
