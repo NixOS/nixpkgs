@@ -91,15 +91,25 @@ rec {
       passthru.plugins = plugins ++ (ide.plugins or [ ]);
       newPlugins = plugins;
       disallowedReferences = [ ide ];
-      nativeBuildInputs = [ autoPatchelfHook ] ++ (ide.nativeBuildInputs or [ ]);
+      nativeBuildInputs = (lib.optional stdenv.isLinux autoPatchelfHook) ++ (ide.nativeBuildInputs or [ ]);
       buildInputs = lib.unique ((ide.buildInputs or [ ]) ++ [ glib ]);
 
       inherit (ide) meta;
 
       buildPhase =
         let
-          pluginCmdsLines = map (plugin: "ln -s ${plugin} \"$out\"/${meta.mainProgram}/plugins/${baseNameOf plugin}") plugins;
+          rootDir=if !stdenv.isDarwin then meta.mainProgram else "Applications/${ide.product}.app/Contents";
+          pluginCmdsLines = map (plugin: "ln -s ${plugin} \"$out/${rootDir}/plugins/${baseNameOf plugin}\"") plugins;
           pluginCmds = builtins.concatStringsSep "\n" pluginCmdsLines;
+          extraBuildPhase = rec {
+            clion = ''
+              sed "s|${ide}|$out|" -i $out/bin/.clion-wrapped
+            '';
+            goland = ''
+              sed "s|${ide}|$out|" -i $out/bin/.goland-wrapped
+            '';
+          };
+          patchElfCmd = lib.optionalString stdenv.isLinux "autoPatchelf \"$out/${meta.mainProgram}/bin\"";
         in
         ''
           cp -r ${ide} $out
@@ -107,7 +117,7 @@ rec {
           IFS=' ' read -ra pluginArray <<< "$newPlugins"
           for plugin in "''${pluginArray[@]}"
           do
-            ln -s "$plugin" -t $out/${meta.mainProgram}/plugins/
+            ln -s "$plugin" -t "$out/${rootDir}/plugins/"
           done
           sed "s|${ide.outPath}|$out|" \
             -i $(realpath $out/bin/${meta.mainProgram}) \

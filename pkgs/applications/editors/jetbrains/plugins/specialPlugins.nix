@@ -4,17 +4,17 @@
 {
   "631" = {
     # Python
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = lib.optional stdenv.isLinux autoPatchelfHook;
     buildInputs = [ stdenv.cc.cc.lib ];
   };
   "7322" = {
     # Python community edition
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = lib.optional stdenv.isLinux autoPatchelfHook;
     buildInputs = [ stdenv.cc.cc.lib ];
   };
   "8182" = {
     # Rust
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = lib.optional stdenv.isLinux autoPatchelfHook;
     buildInputs = [ stdenv.cc.cc.lib ];
     buildPhase = ''
       runHook preBuild

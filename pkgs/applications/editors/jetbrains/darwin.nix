@@ -19,8 +19,9 @@ let
   loname = lib.toLower productShort;
 in
 stdenvNoCC.mkDerivation {
-  inherit pname meta src version plugins;
+  inherit pname src version plugins product;
   passthru.buildNumber = buildNumber;
+  meta = meta // { mainProgram = loname; };
   desktopName = product;
   installPhase = ''
     runHook preInstall
