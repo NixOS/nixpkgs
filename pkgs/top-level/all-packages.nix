@@ -262,6 +262,8 @@ with pkgs;
 
   alterx = callPackage ../tools/security/alterx { };
 
+  alt-server = callPackage ../tools/misc/alt-server { };
+
   asciicam = callPackage ../applications/video/asciicam { };
 
   asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
@@ -1775,6 +1777,8 @@ with pkgs;
   kanata-with-cmd = kanata.override { withCmd = true; };
 
   kaufkauflist = callPackage ../applications/misc/kaufkauflist { };
+
+  kdocker = libsForQt5.callPackage ../tools/X11/kdocker { };
 
   kicli = callPackage ../tools/misc/kicli { };
 
@@ -12879,7 +12883,7 @@ with pkgs;
   sixpair = callPackage ../tools/misc/sixpair { };
 
   sketchybar = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/sketchybar {
-    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa CoreWLAN DisplayServices SkyLight;
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa CoreWLAN DisplayServices MediaRemote SkyLight;
   };
 
   skippy-xd = callPackage ../tools/X11/skippy-xd { };
@@ -18149,6 +18153,8 @@ with pkgs;
 
   doq = callPackage ../development/tools/misc/doq { };
 
+  espup = callPackage ../development/tools/espup { };
+
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
   teller = callPackage ../development/tools/teller { };
@@ -20502,9 +20508,7 @@ with pkgs;
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix { };
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix { };
 
-  cegui = callPackage ../development/libraries/cegui {
-    ogre = ogre1_10;
-  };
+  cegui = callPackage ../development/libraries/cegui { };
 
   certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
 
@@ -23906,7 +23910,6 @@ with pkgs;
   ogre = callPackage ../development/libraries/ogre {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
-  ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix { };
 
   olm = callPackage ../development/libraries/olm { };
 
@@ -33643,6 +33646,8 @@ with pkgs;
 
   novnc = callPackage ../applications/networking/novnc { };
 
+  ns-usbloader = callPackage ../applications/misc/ns-usbloader { };
+
   nwg-bar = callPackage ../applications/misc/nwg-bar { };
 
   nwg-dock = callPackage ../applications/misc/nwg-dock { };
@@ -37621,9 +37626,7 @@ with pkgs;
 
   openarena = callPackage ../games/openarena { };
 
-  opendungeons = callPackage ../games/opendungeons {
-    ogre = ogre1_10;
-  };
+  opendungeons = callPackage ../games/opendungeons { };
 
   openlierox = callPackage ../games/openlierox { };
 
@@ -41344,9 +41347,7 @@ with pkgs;
 
   dapper = callPackage ../development/tools/dapper { };
 
-  k3d = callPackage ../applications/networking/cluster/k3d {
-    buildGoModule = buildGo118Module; # tests fail with 1.19
-  };
+  k3d = callPackage ../applications/networking/cluster/k3d { };
 
   zfs-prune-snapshots = callPackage ../tools/backup/zfs-prune-snapshots { };
 
@@ -41568,5 +41569,4 @@ with pkgs;
   gitrs = callPackage ../tools/misc/gitrs { };
 
   wttrbar = callPackage ../applications/misc/wttrbar { };
-
 }

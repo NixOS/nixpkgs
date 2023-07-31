@@ -22,7 +22,7 @@
 }:
 
 let
-  version = "0.83.0";
+  version = "0.83.1";
 in
 
 rustPlatform.buildRustPackage {
@@ -33,10 +33,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     rev = version;
-    hash = "sha256-+/y4gtcrn6pM+LrzRQuHPACszZpYHCXMLbPlaIi4SAY=";
+    hash = "sha256-WMMGsJFgUkascCja7v0VA3spaOb5QmMFXQ2JOT9beO4=";
   };
 
-  cargoHash = "sha256-amDSzsDeG4ABlFLlytcfJV0xA9Rl7Udb/nWEz64pWi0=";
+  cargoHash = "sha256-/0+k3qOM9/rY6XmeVjqQWkjv19yZTkmfMK51z4+ppJU=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
