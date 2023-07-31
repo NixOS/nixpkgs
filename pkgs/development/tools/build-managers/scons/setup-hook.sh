@@ -1,3 +1,18 @@
+sconsConfigurePhase() {
+    runHook preConfigure
+
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "scons/setup-hook: enabled parallel building"
+    fi
+
+    runHook postConfigure
+}
+
+if [ -z "${dontUseSconsConfigure-}" -a -z "${configurePhase-}" ]; then
+    configurePhase=sconsConfigurePhase
+fi
+
 sconsBuildPhase() {
     runHook preBuild
 
