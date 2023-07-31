@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     # https://github.com/xtensor-stack/xsimd/issues/807
     # https://github.com/xtensor-stack/xsimd/issues/917
     ./disable-darwin-failing-tests.patch
+
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # https://github.com/xtensor-stack/xsimd/issues/798
+    ./disable-musl-failing-tests.patch
   ];
 
   nativeBuildInputs = [
