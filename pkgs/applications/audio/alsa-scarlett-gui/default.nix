@@ -26,8 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk4 alsa-lib ];
   postInstall = ''
       substituteInPlace $out/share/applications/vu.b4.${pname}.desktop \
-        --replace "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/${pname}" \
-        --replace "Icon=alsa-scarlett-gui" "Icon=${pname}"
+        --replace "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/${pname}"
   '';
 
   # causes redefinition of _FORTIFY_SOURCE
