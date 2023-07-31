@@ -32718,6 +32718,8 @@ with pkgs;
 
   krabby = callPackage ../applications/misc/krabby { };
 
+  kraft = callPackage ../applications/virtualization/kraft { };
+
   krane = callPackage ../applications/networking/cluster/krane { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita { };
