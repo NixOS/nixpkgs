@@ -5,6 +5,8 @@
 , cython
 , packaging
 , setuptools
+, setuptools-scm
+, wheel
 , numpy
 , pytestCheckHook
 }:
@@ -22,10 +24,18 @@ buildPythonPackage rec {
     hash = "sha256-tCta57LRWx1N7mOBDqeYo5IX6Kdre0nA62OoTg/ZAP4=";
   };
 
+  # update constraint to accept numpy from nixpkgs
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
+
   nativeBuildInputs = [
     cython
     packaging
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
