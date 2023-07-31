@@ -43,7 +43,7 @@ let
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
       exec = "${executableName} %F";
-      icon = "code";
+      icon = "vs${executableName}";
       startupNotify = true;
       startupWMClass = shortName;
       categories = [ "Utility" "TextEditor" "Development" "IDE" ];
@@ -52,7 +52,7 @@ let
       actions.new-empty-window = {
         name = "New Empty Window";
         exec = "${executableName} --new-window %F";
-        icon = "code";
+        icon = "vs${executableName}";
       };
     };
 
@@ -62,7 +62,7 @@ let
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
       exec = executableName + " --open-url %U";
-      icon = "code";
+      icon = "vs${executableName}";
       startupNotify = true;
       categories = [ "Utility" "TextEditor" "Development" "IDE" ];
       mimeTypes = [ "x-scheme-handler/vscode" ];
@@ -103,8 +103,9 @@ let
       ln -s "$desktopItem/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
       ln -s "$urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
 
+      # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
       mkdir -p "$out/share/pixmaps"
-      cp "$out/lib/vscode/resources/app/resources/linux/code.png" "$out/share/pixmaps/code.png"
+      cp "$out/lib/vscode/resources/app/resources/linux/code.png" "$out/share/pixmaps/vs${executableName}.png"
 
       # Override the previously determined VSCODE_PATH with the one we know to be correct
       sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}"

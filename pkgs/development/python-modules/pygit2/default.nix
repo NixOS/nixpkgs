@@ -23,6 +23,8 @@ let
       rev = "v${version}";
       hash = "sha256-lW3mokVKsbknVj2xsxEbeZH4IdKZ0aIgGutzenS0Eh0=";
     };
+
+    patches = [];
   });
 in
 

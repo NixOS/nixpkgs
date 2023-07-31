@@ -124,6 +124,7 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+      ./fix-qrcode-gui.patch
     ];
 
     disable = !isPy3k;

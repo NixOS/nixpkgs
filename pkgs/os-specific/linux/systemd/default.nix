@@ -212,7 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
       (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
       (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
       (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
       (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
       (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
