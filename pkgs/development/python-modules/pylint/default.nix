@@ -13,6 +13,7 @@
 , tomli
 , tomlkit
 , typing-extensions
+, wheel
 , gitpython
 , py
 , pytest-timeout
@@ -34,8 +35,15 @@ buildPythonPackage rec {
     hash = "sha256-cmH6Q6/XJXx8EXDIsik1Aheu9hYGvvlNvWBUCdmC3P8=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>=' \
+      --replace 'wheel~=' 'wheel>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
