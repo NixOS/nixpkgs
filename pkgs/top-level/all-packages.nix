@@ -4488,6 +4488,8 @@ with pkgs;
 
   map-cmd = callPackage ../tools/misc/map { };
 
+  map-machine = callPackage ../tools/graphics/map-machine {};
+
   clash = callPackage ../tools/networking/clash { };
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
