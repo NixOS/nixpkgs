@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-sR/Gjk50kLej5oJzDH1I6/V+7OIRiwtyeg5tEE3fmHk=";
   };
 
+  patches = [
+    ./5.5.4-CVE-2023-3724.patch
+  ];
+
   postPatch = ''
     patchShebangs ./scripts
     # ocsp tests require network access
