@@ -13,5 +13,6 @@ buildGoModule {
 
   meta = common.meta // {
     description = "Woodpecker Continuous Integration agent";
+    mainProgram = "woodpecker-agent";
   };
 }

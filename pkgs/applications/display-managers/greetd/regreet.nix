@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;
+    mainProgram = "regreet";
   };
 }

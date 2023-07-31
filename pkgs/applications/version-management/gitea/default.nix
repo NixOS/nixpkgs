@@ -88,5 +88,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ disassembler kolaente ma27 techknowlogick ];
     broken = stdenv.isDarwin;
+    mainProgram = "gitea";
   };
 }

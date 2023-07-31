@@ -73,5 +73,6 @@ in stdenv.mkDerivation rec {
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # ChromeDriver.
     platforms = attrNames allSpecs;
+    mainProgram = "chromedriver";
   };
 }

@@ -98,5 +98,6 @@ buildGoModule rec {
     homepage = "https://www.pufferpanel.com/";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ ckie tie ];
+    mainProgram = "pufferpanel";
   };
 }

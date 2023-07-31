@@ -814,6 +814,7 @@ self: super:
         --replace '_X_NORETURN' '__attribute__((noreturn))' \
         --replace 'n_dirs--;' ""
     '';
+    meta.mainProgram = "lndir";
   });
 
   twm = super.twm.overrideAttrs (attrs: {

@@ -40,5 +40,6 @@ buildGoModule rec {
     homepage = "https://github.com/MetaCubeX/Clash.Meta";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ oluceps ];
+    mainProgram = "clash-meta";
   };
 }
