@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , setuptools
+, wheel
 , six
 , pytestCheckHook
 , python-dateutil
@@ -16,11 +18,20 @@ buildPythonPackage rec {
     owner = "jwodder";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16rcdw5gd4a21v2xb1j166lc9z2dqcv68gqvk5mvpnm0x6nwadgp";
+    hash = "sha256-9zXFremg2rtrmRs/ZDbDTfzEqDFBhtXFDkKR9gpvLJs=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "remove-wheel-dependency-constraint.patch";
+      url = "https://github.com/jwodder/javaproperties/commit/e588c4f4e6c6255ed4ca2d9fcdec8ebaf0fa4613.patch";
+      hash = "sha256-ssePCVlJuHPJpPyFET3FnnWRlslLnZbnfn42g52yVN4=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
