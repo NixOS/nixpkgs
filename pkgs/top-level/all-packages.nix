@@ -19152,6 +19152,10 @@ with pkgs;
 
   halfempty = callPackage ../development/tools/halfempty { };
 
+  haredo = callPackage ../development/tools/build-managers/haredo {
+    inherit (harePackages) hare;
+  };
+
   hcloud = callPackage ../development/tools/hcloud { };
 
   hclfmt = callPackage ../development/tools/hclfmt { };
