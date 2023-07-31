@@ -28,6 +28,13 @@ buildPythonPackage rec {
     hash = "sha256-j+ZabVsiVitNkTPhGjDg72XogjvPaL453lTW45ITm90=";
   };
 
+  # it's broken since cython 3.0.0b1 due to https://github.com/cython/cython/pull/4670
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'scikit-build==' 'scikit-build>=' \
+      --replace 'Cython==3.0.0a11' 'Cython<=3.0.0b1'
+  '';
+
   nativeBuildInputs = [
     cmake
     cython
