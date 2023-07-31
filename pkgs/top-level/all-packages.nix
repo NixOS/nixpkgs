@@ -3944,8 +3944,8 @@ with pkgs;
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
 
-  skhd = callPackage ../os-specific/darwin/skhd {
-    inherit (darwin.apple_sdk.frameworks) Carbon;
+  skhd = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/skhd {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa;
   };
 
   qes = callPackage ../os-specific/darwin/qes {
