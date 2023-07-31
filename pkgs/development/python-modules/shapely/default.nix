@@ -8,6 +8,7 @@
 , setuptools
 , numpy
 , pytestCheckHook
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,10 +23,17 @@ buildPythonPackage rec {
     hash = "sha256-Zqaxo+cuzpf8hVNqKBR2+bd5TeLmRsqKRRfi48FEaJM=";
   };
 
+  # update constraint to accept numpy from nixpkgs
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
+
   nativeBuildInputs = [
     cython
     geos # for geos-config
     setuptools
+    wheel
   ];
 
   buildInputs = [
