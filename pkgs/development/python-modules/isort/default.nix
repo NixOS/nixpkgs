@@ -2,7 +2,6 @@
 , colorama
 , hypothesis
 , poetry-core
-, setuptools
 , pylama
 , pytestCheckHook
 }:
@@ -21,7 +20,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    setuptools
   ];
 
   nativeCheckInputs = [
