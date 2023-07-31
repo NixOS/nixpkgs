@@ -23111,6 +23111,10 @@ with pkgs;
 
   libslirp = callPackage ../development/libraries/libslirp { };
 
+  libsmu = callPackage ../development/libraries/libsmu {
+    python = python3;
+  };
+
   libsndfile = callPackage ../development/libraries/libsndfile {
     inherit (darwin.apple_sdk.frameworks) Carbon AudioToolbox;
   };
@@ -39307,6 +39311,8 @@ with pkgs;
   openboardview = callPackage ../applications/science/electronics/openboardview { };
 
   pcb = callPackage ../applications/science/electronics/pcb { };
+
+  pixelpulse2 = callPackage ../applications/science/electronics/pixelpulse2 { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
