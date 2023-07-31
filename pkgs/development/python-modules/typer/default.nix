@@ -28,6 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-UJIv15rqL0dRqOBAj/ENJmK9DIu/qEdVppnzutopeLI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'flit_core >=2,<3' 'flit_core >=2'
+  '';
+
   nativeBuildInputs = [
     flit-core
   ];
