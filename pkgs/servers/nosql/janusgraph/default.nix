@@ -1,36 +1,70 @@
-{ lib, stdenv, fetchzip, jdk11, makeWrapper }:
+{ stdenv
+, lib
+, coreutils
+, fetchzip
+, findutils
+, gawk
+, gnugrep
+, gnused
+, jdk11_headless
+, makeWrapper
+}:
 
-stdenv.mkDerivation rec {
+let
+  binPath = lib.makeBinPath [
+    coreutils
+    findutils
+    gawk
+    gnugrep
+    gnused
+  ];
+in
+
+stdenv.mkDerivation (finalAttr: {
   pname = "janusgraph";
   version = "0.6.3";
 
   src = fetchzip {
-    url = "https://github.com/JanusGraph/janusgraph/releases/download/v${version}/janusgraph-${version}.zip";
+    url = "https://github.com/JanusGraph/janusgraph/releases/download/v${finalAttr.version}/janusgraph-${finalAttr.version}.zip";
     sha256 = "sha256-KpGvDfQExU6pHheqmcOFoAhHdF4P+GBQu779h+/L5mE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/janusgraph
-    install -D $src/lib/*.jar $out/share/janusgraph
-    cd $src
-    find conf scripts -type f -exec install -D {} $out/share/janusgraph/{} \;
+  installPhase =
+    ''
+      runHook preInstall
 
-    JANUSGRAPH_LIB=$out/share/janusgraph
-    classpath=""
-    # Add the slf4j-log4j12 binding
-    classpath="$classpath":$(find -L $JANUSGRAPH_LIB -name 'slf4j-log4j12*.jar' | sort | tr '\n' ':')
-    # Add the jars in $JANUSGRAPH_LIB that start with "janusgraph"
-    classpath="$classpath":$(find -L $JANUSGRAPH_LIB -name 'janusgraph*.jar' | sort | tr '\n' ':')
-    # Add the remaining jars in $JANUSGRAPH_LIB.
-    classpath="$classpath":$(find -L $JANUSGRAPH_LIB -name '*.jar' \
-                    \! -name 'janusgraph*' \
-                    \! -name 'slf4j-log4j12*.jar' | sort | tr '\n' ':')
+      mkdir -p $out/bin
 
-    makeWrapper ${jdk11}/bin/java $out/bin/janusgraph-server \
-      --add-flags "-classpath $classpath org.janusgraph.graphdb.server.JanusGraphServer"
-  '';
+      cp -r $src/{conf,data,ext,lib,scripts} $out
+      cp $src/bin/janusgraph-server.sh $out/bin/janusgraph-server
+      cp $src/bin/gremlin.sh $out/bin/gremlin
+
+      sed -i '1 a set -o errexit -o pipefail' $out/bin/janusgraph-server
+
+      wrapProgram $out/bin/janusgraph-server \
+        --set JAVA_HOME ${jdk11_headless} \
+        --prefix PATH : ${binPath}
+
+      wrapProgram $out/bin/gremlin \
+        --set JAVA_HOME ${jdk11_headless} \
+        --prefix PATH : ${binPath}
+
+      runHook postInstall
+    '';
+
+  doInstallCheck = true;
+
+  installCheckPhase =
+    ''
+      runHook preInstallCheck
+
+      (export PATH="${binPath}"
+      $out/bin/janusgraph-server config)
+
+      runHook postInstallCheck
+    '';
 
   meta = with lib; {
     description = "An open-source, distributed graph database";
@@ -40,5 +74,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.ners ];
   };
-}
-
+})
