@@ -264,39 +264,39 @@ in {
         RestartSec = 30;
       };
     in {
-      netbox-migration = {
-        description = "NetBox migrations";
-        wantedBy = [ "netbox.target" ];
-
-        environment = {
-          PYTHONPATH = pkg.pythonPath;
-        };
-
-        serviceConfig = defaultServiceConfig // {
-          Type = "oneshot";
-          ExecStart = ''
-            ${pkg}/bin/netbox migrate
-          '';
-          PrivateTmp = true;
-        };
-      };
-
       netbox = {
         description = "NetBox WSGI Service";
         documentation = [ "https://docs.netbox.dev/" ];
 
         wantedBy = [ "netbox.target" ];
 
-        after = [ "network-online.target" "netbox-migration.service" ];
+        after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
 
+        environment.PYTHONPATH = pkg.pythonPath;
+
         preStart = ''
+          # On the first run, or on upgrade / downgrade, run migrations and related.
+          # This mostly correspond to upstream NetBox's 'upgrade.sh' script.
+          versionFile="${cfg.dataDir}/version"
+
+          if [[ -e "$versionFile" && "$(cat "$versionFile")" == "${cfg.package.version}" ]]; then
+            exit 0
+          fi
+
+          ${pkg}/bin/netbox migrate
           ${pkg}/bin/netbox trace_paths --no-input
           ${pkg}/bin/netbox collectstatic --no-input
           ${pkg}/bin/netbox remove_stale_contenttypes --no-input
-        '';
+          # TODO: remove the condition when we remove netbox_3_3
+          ${lib.optionalString
+            (lib.versionAtLeast cfg.package.version "3.5.0")
+            "${pkg}/bin/netbox reindex --lazy"}
+          ${pkg}/bin/netbox clearsessions
+          ${pkg}/bin/netbox clearcache
 
-        environment.PYTHONPATH = pkg.pythonPath;
+          echo "${cfg.package.version}" > "$versionFile"
+        '';
 
         serviceConfig = defaultServiceConfig // {
           ExecStart = ''
@@ -331,7 +331,7 @@ in {
 
         wantedBy = [ "multi-user.target" ];
 
-        after = [ "network-online.target" ];
+        after = [ "network-online.target" "netbox.service" ];
         wants = [ "network-online.target" ];
 
         environment.PYTHONPATH = pkg.pythonPath;
@@ -351,7 +351,7 @@ in {
 
       wantedBy = [ "multi-user.target" ];
 
-      after = [ "network-online.target" ];
+      after = [ "network-online.target" "netbox.service" ];
       wants = [ "network-online.target" ];
 
       timerConfig = {
