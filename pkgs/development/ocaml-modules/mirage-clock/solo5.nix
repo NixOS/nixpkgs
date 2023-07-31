@@ -4,13 +4,11 @@
 }:
 
 buildDunePackage {
-  pname = "mirage-clock-freestanding";
+  pname = "mirage-clock-solo5";
 
   inherit (mirage-clock)
     version
     src
-    useDune2
-    minimumOCamlVersion
     ;
 
   propagatedBuildInputs = [
