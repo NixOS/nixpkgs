@@ -14075,10 +14075,10 @@ with self; {
 
   LogLog4perl = buildPerlPackage {
     pname = "Log-Log4perl";
-    version = "1.53";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/Log-Log4perl-1.53.tar.gz";
-      hash = "sha256-j7+0jQFu7HNEpTnzrXCHC0rEY45JZmv6cNEPb/1Kw44=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Log-Log4perl-1.57.tar.gz";
+      hash = "sha256-D4/Ldjio89tMeX35T9vFYBN0kULy+Uy8lbQ8n8oJahM=";
     };
     meta = {
       description = "Log4j implementation for Perl";
