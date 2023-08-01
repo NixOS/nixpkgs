@@ -87,7 +87,7 @@ in
 
 {
   imports = [
-    ./grub-efi-image.nix
+    ./systemd-boot-efi-image.nix
   ];
 
   options = {

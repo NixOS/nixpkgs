@@ -369,14 +369,12 @@ let
 in
 
 {
-  config = {
+  config = mkIf config.isoImage.grub.enable {
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
-      ++ optional (config.isoImage.makeBiosBootable) pkgs.syslinux
-    ;
+    environment.systemPackages = [ grubPkgs.grub2 grubPkgs.grub2_efi ];
 
     # Individual files to be included on the CD, outside of the Nix
     # store on the CD.
@@ -399,7 +397,7 @@ in
         }
       ];
 
-    boot.loader.timeout = 10;
+    boot.loader.timeout = lib.mkDefault 10;
   };
 
 }
