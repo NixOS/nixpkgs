@@ -3,22 +3,31 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools
+, hatchling
 }:
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "22.2.0";
-  disabled = pythonOlder "3.6";
+  version = "23.1.0";
+  disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ySJ7/C8BmTwD9o2zfR0VyWkBiDI8BnxkHxo1ylgYX5k=";
+    hash = "sha256-YnmDbVgVE6JvG/I1+azTM7yRFWg/FPfo+uRsmPxQ4BU=";
   };
 
+  patches = [
+    # hatch-vcs and hatch-fancy-pypi-readme depend on pytest, which depends on attrs
+    ./remove-hatch-plugins.patch
+  ];
+
+  postPatch = ''
+    substituteAllInPlace pyproject.toml
+  '';
+
   nativeBuildInputs = [
-    setuptools
+    hatchling
   ];
 
   outputs = [
@@ -47,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/python-attrs/attrs";
+    changelog = "https://github.com/python-attrs/attrs/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
