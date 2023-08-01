@@ -115,8 +115,8 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set-default ANDROID_JAVA_HOME "$jdk" \
       --set-default JAVA_HOME "$jdk" \
       --set-default JETBRAINSCLIENT_JDK "$jdk" \
-      --set ${hiName}_JDK "$jdk" \
-      --set ${hiName}_VM_OPTIONS ${vmoptsFile}
+      --set-default ${hiName}_JDK "$jdk" \
+      --set-default ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$out/$pname/bin/${loName}.sh" $out/bin/$pname
     echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
