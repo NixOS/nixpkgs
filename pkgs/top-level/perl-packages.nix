@@ -8826,6 +8826,9 @@ with self; {
       url = "mirror://cpan/authors/id/N/NW/NWCLARK/ExtUtils-Constant-0.25.tar.gz";
       hash = "sha256-aTPQ6WO2IoHvdWEGjmrsrIxKwrR2srugmrC5D7rJ11c=";
     };
+    patches = [
+      ../development/perl-modules/ExtUtils-Constant-fix-indirect-method-call-in-test.patch
+    ];
     meta = {
       description = "Generate XS code to import C header constants";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
