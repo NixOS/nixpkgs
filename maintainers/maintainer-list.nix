@@ -965,17 +965,17 @@
     githubId = 638836;
     name = "Andreas Rammhold";
   };
-  andr-ec = {
-    email = "andre.gh@carrera.red";
-    github = "andr-ec";
-    githubId = 16169185;
-    name = "Andre Carrera";
-  };
   andreasfelix = {
     email = "fandreas@physik.hu-berlin.de";
     github = "andreasfelix";
     githubId = 24651767;
     name = "Felix Andreas";
+  };
+  andr-ec = {
+    email = "andre.gh@carrera.red";
+    github = "andr-ec";
+    githubId = 16169185;
+    name = "Andre Carrera";
   };
   andres = {
     email = "ksnixos@andres-loeh.de";
