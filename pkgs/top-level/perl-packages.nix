@@ -5562,6 +5562,9 @@ with self; {
       hash = "sha256-L+XheYgqa5Jt/vChCLSiyHof+waJK88vuI5Mj0uEODw=";
     };
     buildInputs = [ TestRequires ];
+    patches = [
+      ../development/perl-modules/Data-Clone-fix-apostrophe-package-separator.patch
+    ];
     meta = {
       description = "Polymorphic data cloning";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
