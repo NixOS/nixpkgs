@@ -15,6 +15,7 @@ pkgs.runCommand "lib-path-tests" {
     nix
     jq
     bc
+    pkgs.cacert
   ];
 } ''
   # Needed to make Nix evaluation work

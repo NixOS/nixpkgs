@@ -23,6 +23,7 @@ let
         })
       ];
       nativeBuildInputs = [
+        pkgs.cacert
         nix
       ];
       strictDeps = true;
