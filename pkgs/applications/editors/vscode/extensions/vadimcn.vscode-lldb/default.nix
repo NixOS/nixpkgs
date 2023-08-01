@@ -124,7 +124,6 @@ in stdenv.mkDerivation {
 
   passthru = {
     inherit lldb adapter;
-    updateScript = ./update.sh;
   };
 
   meta = {
