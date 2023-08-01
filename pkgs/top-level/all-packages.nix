@@ -10818,6 +10818,8 @@ with pkgs;
 
   netlify-cli = callPackage ../development/web/netlify-cli { };
 
+  nhost = callPackage ../development/web/nhost { };
+
   netpbm = callPackage ../tools/graphics/netpbm { };
 
   netproc = callPackage ../tools/networking/netproc { };
