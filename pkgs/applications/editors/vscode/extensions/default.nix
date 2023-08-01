@@ -3462,8 +3462,8 @@ let
         mktplcRef = {
           name = "errorlens";
           publisher = "usernamehw";
-          version = "3.8.0";
-          sha256 = "sha256-T2YTEbeC22/B5BlBBrBATLv95HQC5xGab+KnCMzI1vc=";
+          version = "3.12.0";
+          sha256 = "sha256-G5+We49/f5UwYqoBovegRK+UOT6KPZo85cvoDjD1Mu4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/usernamehw.errorlens/changelog";
