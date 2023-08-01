@@ -8668,6 +8668,9 @@ with self; {
       hash = "sha256-VyPdePSsC00mKgXqRq9mPqANgJay6cCkNRXCEHYOHnU=";
     };
     buildInputs = [ TestUnitLite ];
+    patches = [
+      ../development/perl-modules/Exception-Base-remove-smartmatch-when-5.38.0.patch
+    ];
     meta = {
       description = "Lightweight exceptions";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
