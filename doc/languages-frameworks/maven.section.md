@@ -24,7 +24,7 @@ maven.buildMavenPackage rec {
 
   mvnHash = "sha256-kLpjMj05uC94/5vGMwMlFzLKNFOKeyNvq/vmB6pHTAo=";
 
-  nativeBuildInputs = [ maven makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/jd-cli
@@ -37,18 +37,48 @@ maven.buildMavenPackage rec {
   meta = with lib; {
     description = "Simple command line wrapper around JD Core Java Decompiler project";
     homepage = "https://github.com/intoolswetrust/jd-cli";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ majiir ];
   };
 }:
 ```
 
-This package calls `maven.buildMavenPackage` to do its work. The primary difference from `stenv.mkDerivation` is the `mvnHash` variable, which is a hash of all of the Maven dependencies.
+This package calls `maven.buildMavenPackage` to do its work. The primary difference from `stdenv.mkDerivation` is the `mvnHash` variable, which is a hash of all of the Maven dependencies.
 
 ::: {.tip}
 After setting `maven.buildMavenPackage`, we then do standard Java `.jar` installation by saving the `.jar` to `$out/share/java` and then making a wrapper which allows executing that file; see [](#sec-language-java) for additional generic information about packaging Java applications.
 :::
+
+### Stable Maven plugins {#stable-maven-plugins}
+
+Maven defines default versions for its core plugins, e.g. `maven-compiler-plugin`. If your project does not override these versions, an upgrade of Maven will change the version of the used plugins, and therefore the derivation and hash.
+
+When `maven` is upgraded, `mvnHash` for the derivation must be updated as well: otherwise, the project will simply be built on the derivation of old plugins, and fail because the requested plugins are missing.
+
+This clearly prevents automatic upgrades of Maven: a manual effort must be made throughout nixpkgs by any maintainer wishing to push the upgrades.
+
+To make sure that your package does not add extra manual effort when upgrading Maven, explicitly define versions for all plugins. You can check if this is the case by adding the following plugin to your (parent) POM:
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-enforcer-plugin</artifactId>
+  <version>3.3.0</version>
+  <executions>
+    <execution>
+      <id>enforce-plugin-versions</id>
+      <goals>
+        <goal>enforce</goal>
+      </goals>
+      <configuration>
+        <rules>
+          <requirePluginVersions />
+        </rules>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+```
 
 ## Manually using `mvn2nix` {#maven-mvn2nix}
 ::: {.warning}
