@@ -6,8 +6,9 @@
 , pandas
 , pytestCheckHook
 , pythonOlder
-, setuptoolsBuildHook
+, setuptools
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -25,8 +26,9 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    setuptoolsBuildHook
+    setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
