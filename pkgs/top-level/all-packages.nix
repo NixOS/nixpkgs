@@ -5652,6 +5652,8 @@ with pkgs;
 
   lexicon = callPackage ../tools/admin/lexicon { };
 
+  lexbor = callPackage ../development/libraries/lexbor { };
+
   lenpaste = callPackage ../servers/lenpaste { };
 
   lief = callPackage ../development/libraries/lief {
