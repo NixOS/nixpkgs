@@ -60,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     python3
-    gtk-doc
     docbook-xsl-nons
     gettext
     gobject-introspection
@@ -68,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     rsync
+  ] ++ lib.optionals withDocs [
+    gtk-doc
   ];
 
   buildInputs = [
