@@ -14,6 +14,7 @@
 , pythonOlder
 , setuptools
 , tox
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -29,10 +30,19 @@ buildPythonPackage rec {
     hash = "sha256-sLUGQoDba3iiYvqUFwMbIktSdZBb0OLhccfQ++FFRP0=";
   };
 
+  postPatch = ''
+    # cython is not used
+    sed -i '/"cython"/d' pyproject.toml
+
+    # ninja is provided by nixpxgs, not as a python package
+    sed -i '/"ninja"/d' pyproject.toml
+  '';
+
   nativeBuildInputs = [
     meson-python
     pkg-config
     setuptools
+    wheel
   ];
 
   buildInputs = [
