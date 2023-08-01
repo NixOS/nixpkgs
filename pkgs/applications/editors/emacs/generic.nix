@@ -393,6 +393,6 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
   };
 
   meta = meta // {
-    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    requiresBuildCanExecuteHost = true;
   };
 }))
