@@ -7349,10 +7349,10 @@ with self; {
 
   DevelFindPerl = buildPerlPackage {
     pname = "Devel-FindPerl";
-    version = "0.015";
+    version = "0.016";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.015.tar.gz";
-      hash = "sha256-UnW33CJv5/Fstp/G+Z9eKahSxqTTt4arGIajE4Z0Pfw=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.016.tar.gz";
+      hash = "sha256-Q6K/L3h6PxuIEXkGMWKyqj58sET25eduxkZq6QqGETg=";
     };
     meta = {
       description = "Find the path to your perl";
