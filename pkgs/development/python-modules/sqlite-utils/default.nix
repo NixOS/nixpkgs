@@ -8,8 +8,11 @@
 , python-dateutil
 , sqlite-fts4
 , tabulate
+, pluggy
 , pytestCheckHook
 , hypothesis
+, testers
+, sqlite-utils
 }:
 
 buildPythonPackage rec {
@@ -35,6 +38,7 @@ buildPythonPackage rec {
     python-dateutil
     sqlite-fts4
     tabulate
+    pluggy
   ];
 
   nativeCheckInputs = [
@@ -45,6 +49,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "sqlite_utils"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = sqlite-utils;
+  };
 
   meta = with lib; {
     description = "Python CLI utility and library for manipulating SQLite databases";
