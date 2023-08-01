@@ -142,7 +142,7 @@ in buildPythonPackage {
     runHook preCheck
     pushd "$out"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
-    ${python.interpreter} -c "import scipy; scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES)"
+    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES) != True)"
     popd
     runHook postCheck
   '';
