@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flitBuildHook
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "rkm-codes";
   version = "0.5";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
@@ -16,10 +17,10 @@ buildPythonPackage rec {
     hash = "sha256-r4F72iHxH7BoPtgYm1RD6BeSZszKRrpeBQccmT4wzuw=";
   };
 
-  format = "pyproject";
   nativeBuildInputs = [
-    flitBuildHook
+    wheel
   ];
+
   propagatedBuildInputs = [
     setuptools
   ];
