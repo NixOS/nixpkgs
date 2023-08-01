@@ -21,7 +21,18 @@ python3.pkgs.buildPythonApplication rec {
     ./skip-network-tests.patch
   ];
 
-  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools<' 'setuptools>=' \
+      --replace 'wheel==' 'wheel>='
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [ 
+    pythonRelaxDepsHook
+    setuptools
+    wheel
+  ];
+
   pythonRelaxDeps = [
     "psutil"
     "exif"
