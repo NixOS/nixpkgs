@@ -38,6 +38,12 @@ in stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  patches = [
+    # Reverts part of upstream PR 2761 so that we don't have to use a non-free Electron fork.
+    # https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/2761
+    ./remove-drm-support.patch
+  ];
+
   configurePhase = ''
     runHook preConfigure
 
