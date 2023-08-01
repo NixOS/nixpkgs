@@ -15,7 +15,10 @@
 , pythonOlder
 , reproject
 , scikit-image
+, setuptools
+, setuptools-scm
 , shapely
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -33,6 +36,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     astropy-helpers
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
