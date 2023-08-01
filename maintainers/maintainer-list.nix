@@ -1154,6 +1154,9 @@
     githubId = 48802534;
     name = "Anselm Schüler";
     matrix = "@schuelermine:matrix.org";
+    keys = [{
+      fingerprint = "CDBF ECA8 36FE E340 1CEB  58FF BA34 EE1A BA3A 0955";
+    }];
   };
   anthonyroussel = {
     email = "anthony@roussel.dev";
