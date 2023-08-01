@@ -29,7 +29,7 @@ maven.buildMavenPackage {
   mvnParameters = "-DskipTests";
   mvnHash = "sha256-ajrHnaiJS7ZnR9BjLaXK2bnAKCp5UWQqYpjWbz3z6bw=";
 
-  nativeBuildInputs = [ maven makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -59,7 +59,6 @@ maven.buildMavenPackage {
   meta = with lib; {
     description = "Magic: the Gathering card game with rules enforcement";
     homepage = "https://www.slightlymagic.net/forum/viewforum.php?f=26";
-    platforms = openjdk.meta.platforms;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ eigengrau ];
   };

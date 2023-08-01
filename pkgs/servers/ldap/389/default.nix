@@ -37,20 +37,20 @@
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-LoM2iztWC/HEq0jBKzzi+T6euXcNIDqsEzAeWfQSr90=";
+    hash = "sha256-3wePHYA2z4qwW0KTECTDN8X9yJuUB0n14KjKbWN0Knk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "source/src";
     name = "${pname}-${version}";
-    hash = "sha256-+eJgWeLVoJ8j8J2QNM91EY3DBy4zicTwKAU1rcLr8R4=";
+    hash = "sha256-972tJ8aKNxC3O8VxbAau7OSej873IBXsP3isMXAXKcU=";
   };
 
   nativeBuildInputs = [
