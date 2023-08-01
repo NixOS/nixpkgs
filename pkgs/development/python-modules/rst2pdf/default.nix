@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, setuptools-scm
+, wheel
 , docutils
 , importlib-metadata
 , jinja2
@@ -31,6 +33,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
