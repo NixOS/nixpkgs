@@ -67,6 +67,7 @@
 , bash
 , libmicrohttpd
 , libfido2
+, withP11kit ? !p11-kit.meta.broken
 , p11-kit
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to be available during build time.
@@ -322,7 +323,7 @@ stdenv.mkDerivation (finalAttrs: {
           { name = "libdw.so.1"; pkg = opt withCoredump elfutils; }
 
           # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
-          { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
+          { name = "libp11-kit.so.0"; pkg = opt ((withHomed || withCryptsetup) && withP11kit) p11-kit; }
         ];
 
       patchDlOpen = dl:
@@ -430,7 +431,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
-    ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
+    ++ lib.optionals ((withHomed || withCryptsetup) && withP11kit) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
     ++ lib.optional withTpm2Tss tpm2-tss

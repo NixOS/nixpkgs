@@ -100,5 +100,8 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
     license = licenses.bsd3;
+
+    # configure: error: cannot run test program while cross compiling
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 }
