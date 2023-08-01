@@ -247,5 +247,8 @@ in stdenv.mkDerivation rec {
       "i686-openbsd" "x86_64-openbsd"
       "i686-windows" "x86_64-windows"
     ];
+    badTargetPlatforms = [
+      lib.systems.inspect.patterns.isMips64n32
+    ];
   };
 }
