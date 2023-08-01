@@ -2,6 +2,8 @@
 , fetchFromGitHub
 , buildPythonApplication
 , setuptools
+, setuptools-scm
+, wheel
 , nss
 , nix-update-script
 }:
@@ -21,6 +23,8 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   makeWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ nss ]) ];
