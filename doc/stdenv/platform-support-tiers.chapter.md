@@ -1,7 +1,6 @@
 # Platform Support Tiers {#platform-support-tiers}
 
-In the context of Nixpkgs, a *platform* can mean a CPU architecture, a
-[cross-compilation](#chap-cross) target or a C library option.
+In the context of Nixpkgs, a *platform* means an attrset which typechecks against `lib.systems.parsed.types.parsedPlatform`.  This includes a CPU architecture, bitwidth, and endianness and may also include: an OS kernel, environment (also called "C library"), choice of compiler and linker, option to link statically, and other data.
 
 Nixpkgs defines 7 platform *support tiers*, meaning levels of support for each platform.
 
@@ -14,7 +13,7 @@ These platforms receive the highest level of support, meaning that every
 platform-compatible package in Nixpkgs must successfully build in the Hydra and OfBorg CIs.
 **TODO**: this seems to not be entirely true for Hydra, but true for OfBorg.
 
-- `x86_64-linux`, `gcc` + `glibc`
+- `x86_64-linux-gnu` using `gcc`
 
 ## Tier 2 {#platform-support-tier-2}
 
@@ -29,12 +28,12 @@ Many of the packages are required to build successfully on these platforms in CI
 None of the packages for these platforms are required to build successfully in
 CI, but it is expected that most of them will build successfully.
 
-- `i686-linux`, `gcc`+`glibc`
-- `armv{6,7,8}*-linux`, `gcc`+`glibc`
-- `armv{6,7,8}*-linux`, `gcc`+`glibc`, cross-compilation
-- `aarch64-linux`, `gcc`+`glibc`, cross-compilation
-- `mipsel-linux`, `gcc`+`glibc`
-- `x86_64-linux`, `gcc`+`musl`
+- `i686-linux-gnu`, `gcc`
+- `armv{6,7,8}*-linux-gnu`, `gcc`
+- `armv{6,7,8}*-linux-gnu`, `gcc`, cross-compilation
+- `aarch64-linux-gnu`, `gcc`, cross-compilation
+- `mipsel-linux-gnu`, `gcc`
+- `x86_64-linux-musl`, `gcc`
 
 ## Tier 4 {#platform-support-tier-4}
 
@@ -50,28 +49,29 @@ responsible for this platform.
 - `x86_64-none`
 - `powerpc-none`
 - `powerpcle-none`
+- `powerpc64le-linux-gnu`
+- `mips64el-linux-gnuabi64`
 - `x86_64-mingw32`
 - `i686-mingw32`
-- `x86_64-linux`, `gcc`+`musl` — static
-- `x86_64-linux`, `clang`+`glibc`
-- `x86_64-linux`, `clang`+`glibc` — `llvm` linker
-- `x86_64-linux` — Android
-- `aarch64-linux` — Android
-- `armv{7,8}-linux` — Android
+- `x86_64-linux-musl`, `gcc` — static
+- `x86_64-linux-gnu`, `clang`
+- `x86_64-linux-gnu`, `clang` — `llvm` linker
+- `x86_64-linux-android`
+- `aarch64-linux-android`
+- `armv{7,8}-linux-android`
 
 ## Tier 5 {#platform-support-tier-5}
 
 A small number of packages might build successfully on these platforms.
 
 - `x86_64-linux`, `gcc`+`glibc` — static
-- `x86_64-linux`, `gcc`+`glibc` — `llvm` linker
+- `x86_64-linux-gnu`, `gcc` `llvm` linker
 
 ## Tier 6 {#platform-support-tier-6}
 
 These platforms are defined in Nixpkgs, but no packages are expected to build on them.
 
 - `wasm-wasi`
-- `powerpc64le-linux`, `gcc`+`glibc`
 
 ## Tier 7 {#platform-support-tier-7}
 
