@@ -5,6 +5,7 @@
 
 # build
 , setuptools
+, wheel
 
 # propagates
 , aiohttp
@@ -39,8 +40,15 @@ buildPythonPackage rec {
     hash = "sha256-xtxbZS8CPCkgyFX08THn7hGurFj8dQV+KIZ6VvTY7hA=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>=' \
+      --replace 'wheel~=' 'wheel>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
