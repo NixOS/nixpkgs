@@ -22,6 +22,7 @@
 , setuptools
 , shapely
 , snuggs
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,16 @@ buildPythonPackage rec {
     hash = "sha256-8kPzUvTZ/jRDXlYMAZkG1xdLAQuzxnvHXBzwWizMOTo=";
   };
 
+  # update constraint to accept numpy from nixpkgs
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
+
   nativeBuildInputs = [
     cython
     gdal
+    wheel
   ];
 
   propagatedBuildInputs = [
