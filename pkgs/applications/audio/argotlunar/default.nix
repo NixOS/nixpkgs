@@ -20,12 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-U20ZUFrck/Y3GwqEnPZewnUN1YIFucgNsJJTMtWY3wE=";
   };
 
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
   buildInputs = [
     alsa-lib
     freetype
     curl
-    pkg-config
-    cmake
     xorg.libX11
     xorg.libXrandr
     xorg.libXinerama
@@ -55,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/lib/vst3
-    mv /build/.vst3/Argotlunar.vst3 $out/lib/vst3/
+    cd cmake-build/Argotlunar_artefacts
+    cp -r VST3/Argotlunar.vst3 $out/lib/vst3/
 
     runHook postInstall
   '';
