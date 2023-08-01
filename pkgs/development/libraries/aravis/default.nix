@@ -29,13 +29,13 @@ assert enableViewer -> wrapGAppsHook != null;
 
 stdenv.mkDerivation rec {
   pname = "aravis";
-  version = "0.8.27";
+  version = "0.8.28";
 
   src = fetchFromGitHub {
     owner = "AravisProject";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QxI/+2mtX9d4UTkbFFVh5N4JqTMqygGUgz08XWxAQac=";
+    sha256 = "sha256-EgKZcylg3Nx320BdeEz8PVadwo2pE6a3h0vt7YT4LVA=";
   };
 
   outputs = [ "bin" "dev" "out" "lib" ];
