@@ -24852,6 +24852,8 @@ with pkgs;
 
   rubberband = callPackage ../development/libraries/rubberband { };
 
+  rutabaga_gfx = callPackage ../development/libraries/rutabaga_gfx { };
+
   rure = callPackage ../development/libraries/rure { };
 
   rustc-demangle = callPackage ../development/libraries/rustc-demangle { };
