@@ -1,12 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flitBuildHook
+, flit-core
 , pytestCheckHook
 , pythonOlder
 , inform
 , parametrize-from-file
-, setuptools
 , voluptuous
 , quantiphy-eval
 , rkm-codes
@@ -27,7 +26,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    flitBuildHook
+    flit-core
   ];
 
   propagatedBuildInputs = [
@@ -39,7 +38,6 @@ buildPythonPackage rec {
     inform
     parametrize-from-file
     pytestCheckHook
-    setuptools
     voluptuous
   ];
 
