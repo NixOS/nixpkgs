@@ -8710,6 +8710,11 @@
     githubId = 762421;
     name = "Pierre Thierry";
   };
+  keto = {
+    github = "TheRealKeto";
+    githubId = 24854941;
+    name = "Keto";
+  };
   ketzacoatl = {
     email = "ketzacoatl@protonmail.com";
     github = "ketzacoatl";

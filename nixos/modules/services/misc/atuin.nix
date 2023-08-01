@@ -1,14 +1,12 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
+  inherit (lib) mkOption types mdDoc mkIf;
   cfg = config.services.atuin;
 in
 {
   options = {
     services.atuin = {
-      enable = mkEnableOption (mdDoc "Enable server for shell history sync with atuin");
+      enable = lib.mkEnableOption (mdDoc "Enable server for shell history sync with atuin");
 
       openRegistration = mkOption {
         type = types.bool;
@@ -50,16 +48,28 @@ in
         createLocally = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc "Create the database and database user locally.";
+          description = mdDoc "Create the database and database user locally.";
+        };
+
+        uri = mkOption {
+          type = types.str;
+          default = "postgresql:///atuin?host=/run/postgresql";
+          example = "postgresql://atuin@localhost:5432/atuin";
+          description = mdDoc "URI to the database";
         };
       };
     };
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.database.createLocally -> config.services.postgresql.enable;
+        message = "Postgresql must be enabled to create a local database";
+      }
+    ];
 
-    # enable postgres to host atuin db
-    services.postgresql = {
+    services.postgresql = mkIf cfg.database.createLocally {
       enable = true;
       ensureUsers = [{
         name = "atuin";
@@ -73,7 +83,7 @@ in
     systemd.services.atuin = {
       description = "atuin server";
       requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
-      after = [ "network.target" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ] ;
+      after = [ "network.target" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -81,20 +91,55 @@ in
         RuntimeDirectory = "atuin";
         RuntimeDirectoryMode = "0700";
         DynamicUser = true;
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        MemoryDenyWriteExecute = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          # Required for connecting to database sockets,
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        UMask = "0077";
       };
 
       environment = {
         ATUIN_HOST = cfg.host;
         ATUIN_PORT = toString cfg.port;
         ATUIN_MAX_HISTORY_LENGTH = toString cfg.maxHistoryLength;
-        ATUIN_OPEN_REGISTRATION = boolToString cfg.openRegistration;
-        ATUIN_DB_URI =  mkIf cfg.database.createLocally "postgresql:///atuin";
+        ATUIN_OPEN_REGISTRATION = lib.boolToString cfg.openRegistration;
+        ATUIN_DB_URI = cfg.database.uri;
         ATUIN_PATH = cfg.path;
         ATUIN_CONFIG_DIR = "/run/atuin"; # required to start, but not used as configuration is via environment variables
       };
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
-
   };
 }

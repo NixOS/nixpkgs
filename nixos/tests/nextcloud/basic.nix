@@ -14,12 +14,12 @@ in {
     client = { ... }: {
       services.davfs2.enable = true;
       system.activationScripts.davfs2-secrets = ''
-        echo "http://nextcloud/remote.php/webdav/ ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
+        echo "http://nextcloud/remote.php/dav/files/${adminuser} ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
         chmod 600 /tmp/davfs2-secrets
       '';
       virtualisation.fileSystems = {
         "/mnt/dav" = {
-          device = "http://nextcloud/remote.php/webdav/";
+          device = "http://nextcloud/remote.php/dav/files/${adminuser}";
           fsType = "davfs";
           options = let
             davfs2Conf = (pkgs.writeText "davfs2.conf" "secrets /tmp/davfs2-secrets");
@@ -70,7 +70,7 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"

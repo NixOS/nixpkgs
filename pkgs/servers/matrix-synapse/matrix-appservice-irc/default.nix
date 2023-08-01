@@ -31,6 +31,8 @@ in
 stdenv.mkDerivation {
   inherit pname version src yarnOfflineCache;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     prefetch-yarn-deps
     nodejs-slim
@@ -62,6 +64,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir $out
+    cp package.json $out
     cp app.js config.schema.yml $out
     cp -r bin lib public $out
 

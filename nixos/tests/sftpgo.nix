@@ -12,8 +12,6 @@
 # would be a nice to have for the future.
 { pkgs, lib, ...  }:
 
-with lib;
-
 let
   inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 
@@ -54,7 +52,7 @@ let
       # inside the dataprovider they will be automatically created.
       # You have to create the folder on the filesystem yourself
       virtual_folders =
-        optional (isMemberOf config sharedFolderName user) {
+        lib.optional (lib.isMemberOf config sharedFolderName user) {
           name = sharedFolderName;
           mapped_path = "${config.services.sftpgo.dataDir}/${sharedFolderName}";
           virtual_path = "/${sharedFolderName}";
@@ -62,10 +60,10 @@ let
 
       # Defines the ACL on the virtual filesystem
       permissions =
-        recursiveUpdate {
+        lib.recursiveUpdate {
           "/" = [ "list" ];     # read-only top level directory
           "/private" = [ "*" ]; # private subdirectory, not shared with others
-        } (optionalAttrs (isMemberOf config "shared" user) {
+        } (lib.optionalAttrs (lib.isMemberOf config "shared" user) {
           "/shared" = [ "*" ];
         });
 
@@ -91,7 +89,7 @@ let
   # of users and folders to import to SFTPGo.
   loadDataJson = config: pkgs.writeText "users-and-folders.json" (builtins.toJSON {
     users =
-      mapAttrsToList (name: user: generateUserAttrSet config user) (normalUsers config);
+      lib.mapAttrsToList (name: user: lib.generateUserAttrSet config user) (normalUsers config);
 
     folders = [
       {

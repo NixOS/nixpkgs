@@ -51,7 +51,7 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.30.2";
+  version = "4.31.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -60,14 +60,13 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-S1jQsBObKGZY9tlbcNcgchwUs/eeaohYxOtbN1cPa2Q=";
+    hash = "sha256-YbLI/CkRto8G4bV7ijUkB/0cc7LkfNBQxL1iNv8aWW4=";
   };
 
   propagatedBuildInputs = [
     filelock
     huggingface-hub
     numpy
-    protobuf
     packaging
     pyyaml
     regex
@@ -91,8 +90,11 @@ buildPythonPackage rec {
     ja = [
       # fugashi
       # ipadic
-      # unidic_lite
+      # rhoknp
+      # sudachidict_core
+      # sudachipy
       # unidic
+      # unidic_lite
     ];
     sklearn = [
       scikit-learn
@@ -122,6 +124,7 @@ buildPythonPackage rec {
       onnxconverter-common
       tf2onnx
       onnxruntime
+      onnxruntime-tools
     ];
     modelcreation = [
       cookiecutter

@@ -113,7 +113,7 @@ in buildPythonPackage {
     # library where these files are cached. See also:
     # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
     # https://github.com/scipy/scipy/pull/17965#issuecomment-1560759962
-    export XDG_CACHE_HOME=$PWD; mkdir scipy-data
+    export XDG_CACHE_HOME=$PWD; export HOME=$(mktemp -d); mkdir scipy-data
   '' + (lib.concatStringsSep "\n" (lib.mapAttrsToList (d: dpath:
     # Actually copy the datasets
     "cp ${dpath} scipy-data/${d}.dat"
@@ -142,7 +142,7 @@ in buildPythonPackage {
     runHook preCheck
     pushd "$out"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
-    ${python.interpreter} -c "import scipy; scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES)"
+    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES) != True)"
     popd
     runHook postCheck
   '';
