@@ -2,6 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, setuptools-scm
+, setuptools-scm-git-archive
+, wheel
 , numpy
 , tqdm
 , pytestCheckHook
@@ -17,8 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-2HWO/iJ9RCWNVmw2slu9F/+Mchk3evB5/F8EfbuMI/Y=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools_scm[toml] >= 4, <6' 'setuptools_scm[toml] >= 4'
+  '';
+
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    setuptools-scm-git-archive
+    wheel
   ];
 
   propagatedBuildInputs = [
