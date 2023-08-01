@@ -186,5 +186,11 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = teams.golang.members;
     platforms = platforms.darwin ++ platforms.linux;
+    badHostPlatforms = [
+      lib.systems.inspect.patterns.isMips  # no bootstrap binaries
+    ];
+    badTargetPlatforms = [
+      lib.systems.inspect.patterns.isMips64n32
+    ];
   };
 }
