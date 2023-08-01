@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , docbook-xsl-nons
 , gtk-doc
@@ -48,6 +49,20 @@ stdenv.mkDerivation rec {
     libiconv
     libintl
     libtasn1
+  ];
+
+  # p11-kit fixed cross-compiling after release 0.25.0 upstream, remove patches when bumping the next time
+  patches = [
+    (fetchpatch {
+      name = "strerror-compiler-check";
+      url = "https://github.com/p11-glue/p11-kit/commit/3ba2c55dfdc8ff20de369f07f6c57d08718d3add.patch";
+      sha256 = "sha256-2TYukpRg+pcqPJQzDsjGbTccFh40w5fiitcFsQvKkZg=";
+    })
+    (fetchpatch {
+      name = "strerror-gnu-source-check";
+      url = "https://github.com/p11-glue/p11-kit/commit/7aa6251bf4ce36d027d53c9c96bb05f90ef7eb5b.patch";
+      sha256 = "sha256-NfZcePjuDoeU0zKar3CezqXKIr9/vyg5Z3wCJd2bxOk=";
+    })
   ];
 
   autoreconfPhase = ''
