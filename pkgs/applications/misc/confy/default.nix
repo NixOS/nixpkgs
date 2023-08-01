@@ -1,6 +1,6 @@
 { blueprint-compiler
 , desktop-file-utils
-, fetchurl
+, fetchzip
 , gobject-introspection
 , gtk4
 , lib
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   pname = "confy";
   version = "0.7.0";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://git.sr.ht/~fabrixxm/confy/archive/${version}.tar.gz";
-    hash = "sha256-ZvIzgCMDfUW9g+qmY0ZIUoEF0PeVmINjOPwilmFzWDk=";
+    hash = "sha256-q8WASTNbiBuKb2tPQBmUL9ji60PRAPnYOTYxnUn0MAw=";
   };
 
   nativeBuildInputs = [
