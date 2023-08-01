@@ -208,7 +208,7 @@ in {
         '';
         description = lib.mdDoc ''
           Explicitly install extras provided by matrix-synapse. Most
-          will reconfigure some additional configuration.
+          will require some additional configuration.
 
           Extras will automatically be enabled, when the relevant
           configuration sections are present.
