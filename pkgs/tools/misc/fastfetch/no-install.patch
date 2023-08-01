@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3b777ba..e618db8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -759,12 +759,6 @@ install(
+     DESTINATION "${CMAKE_INSTALL_BINDIR}"
+ )
+ 
+-install(
+-    FILES "${CMAKE_SOURCE_DIR}/src/data/config_system.txt"
+-    DESTINATION "${CMAKE_INSTALL_SYSCONFDIR}/${CMAKE_PROJECT_NAME}"
+-    RENAME "config.conf"
+-)
+-
+ install(
+     FILES "${CMAKE_SOURCE_DIR}/completions/bash"
+     DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/bash-completion/completions"
