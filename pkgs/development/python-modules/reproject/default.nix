@@ -11,6 +11,7 @@
 , pythonOlder
 , scipy
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -25,10 +26,19 @@ buildPythonPackage rec {
     hash = "sha256-OKxPPKcVVrEVUGR8Zaphn7ur9HOuqQKa9gnMo2RQQME=";
   };
 
+  # relax cython version
+  # update constraint to accept numpy from nixpkgs
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'cython==' 'cython>=' \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
+
   nativeBuildInputs = [
     astropy-extension-helpers
     cython
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
