@@ -25,6 +25,7 @@
 , pyqtgraph
 , pyqt5
 , setuptools
+, wheel
 , pytestCheckHook
 , pytest-cov
 }:
@@ -43,8 +44,9 @@ buildPythonPackage rec {
     hash = "sha256-cTvWNfIs2bAOYpXDg6ghZA4tRXlaNbUZwcaZMjCi/YY=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
