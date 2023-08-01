@@ -19,7 +19,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace '"poetry-dynamic-versioning"' ""
   '';
 
   nativeBuildInputs = with python3.pkgs; [
