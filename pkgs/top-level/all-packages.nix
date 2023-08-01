@@ -40449,6 +40449,8 @@ with pkgs;
 
   qperf = callPackage ../os-specific/linux/qperf { };
 
+  qzdl = libsForQt5.callPackage ../games/qzdl { };
+
   rates = callPackage ../tools/misc/rates {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
