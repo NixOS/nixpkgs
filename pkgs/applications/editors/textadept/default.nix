@@ -1,15 +1,14 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, cmake, qtbase, wrapQtAppsHook }:
 stdenv.mkDerivation rec {
-  version = "11.4.15"; # TODO: THAT'S A DUMMY VERSION NUMBER; CHANGE TO 12.0 WHEN RELEASED.
+  version = "12.0";
   pname = "textadept";
 
   src = fetchFromGitHub {
     name = "textadept11";
     owner = "orbitalquark";
     repo = "textadept";
-#    rev = "textadept_${version}";
-    rev = "19cfa3ce0c7d2f981d2b8cbbee4f8e603be9b5db"; # TODO: WHEN PACKAGE RELEASE, UNCOMMENT PREVIOUS LINE AND REMOVE THIS ONE.
-    sha256 = "sha256-FkqoODP2nIOCBy2DqelAdGInizhADpc3ZdzbrRTnSdA=";
+    rev = "textadept_${version}";
+    sha256 = "sha256-KziVN0Fl/IvSnIJKK5s7UikXi3iP5mTauP0YxffKy9c=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
