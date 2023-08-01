@@ -143,7 +143,7 @@ let
       perl
       python
       libapparmor
-      libapparmor.python
+      (libapparmor.python or null)
     ];
 
     prePatch = prePatchCommon +
