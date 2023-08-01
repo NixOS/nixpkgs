@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "pytest-recording";
   version = "0.12.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kiwicom";
@@ -32,6 +33,8 @@ buildPythonPackage rec {
     vcrpy
     attrs
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   checkInputs = [
     pytestCheckHook
