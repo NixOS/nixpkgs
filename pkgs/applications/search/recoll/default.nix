@@ -170,6 +170,6 @@ mkDerivation rec {
     maintainers = with maintainers; [ jcumming ehmry ];
 
     # `Makefile.am` assumes the ability to run the hostPlatform's python binary at build time
-    broken = withPython && (with stdenv; !buildPlatform.canExecute hostPlatform);
+    requiresBuildCanExecuteHost = withPython;
   };
 }
