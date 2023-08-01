@@ -123,7 +123,7 @@ in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}
     maintainers = [ jjjollyjim ];
   };
 
-  machine = { pkgsInner, ... }:
+  nodes.machine = { pkgsInner, ... }:
 
   {
     imports = [ ./common/x11.nix ./common/user-account.nix ];

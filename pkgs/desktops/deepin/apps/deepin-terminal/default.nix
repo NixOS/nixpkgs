@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
+, nixosTests
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
@@ -17,7 +18,6 @@
 , libsecret
 , chrpath
 , lxqt
-, nixosTests
 }:
 
 stdenv.mkDerivation rec {
