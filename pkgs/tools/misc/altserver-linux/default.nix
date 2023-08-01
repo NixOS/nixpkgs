@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "AltServer-Linux";
+  pname = "altserver-linux";
   version = "0.0.5";
 
   src = fetchurl {

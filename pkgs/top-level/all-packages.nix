@@ -262,7 +262,7 @@ with pkgs;
 
   alterx = callPackage ../tools/security/alterx { };
 
-  alt-server = callPackage ../tools/misc/alt-server { };
+  altserver-linux = callPackage ../tools/misc/altserver-linux { };
 
   asciicam = callPackage ../applications/video/asciicam { };
 
