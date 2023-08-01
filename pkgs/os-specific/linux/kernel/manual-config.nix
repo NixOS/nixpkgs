@@ -335,6 +335,11 @@ let
 
         # Remove reference to kmod
         sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
+      ''
+      # The `make install` part of the kernel build process is
+      # highly architecture-specific.
+      + lib.optionalString (stdenv.isMips && (kernelConf.target == "vmlinux" || kernelConf.target == "vmlinuz")) ''
+        mv $out/${kernelConf.target}-${version} $out/${kernelConf.target}
       '';
 
       requiredSystemFeatures = [ "big-parallel" ];
