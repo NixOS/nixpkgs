@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "laspy";
-  version = "2.4.1";
+  version = "2.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E8rsxzJcsiQsslOUmE0hs7X3lsiLy0S8LtLTzxuXKsQ=";
+    hash = "sha256-uqPJxswVVjbxYRSREfnPwkPb0U9synKclLNWsxxmjy4=";
   };
 
   propagatedBuildInputs = [
