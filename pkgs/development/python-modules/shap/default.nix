@@ -24,6 +24,7 @@
 , slicer
 , tqdm
 , transformers
+, wheel
 , xgboost
 }:
 
@@ -41,8 +42,15 @@ buildPythonPackage rec {
     hash = "sha256-Ezq6WS6QnoM5uEfo2DgDAEo1HkQ1KjmfgIyVWh3RM94=";
   };
 
+  # update constraint to accept numpy from nixpkgs
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'oldest-supported-numpy' 'numpy'
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
