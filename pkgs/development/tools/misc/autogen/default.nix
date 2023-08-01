@@ -10,23 +10,39 @@ stdenv.mkDerivation rec {
   };
 
   patches = let
-    dp = { ver ? "1%255.18.16-4", pname, name ? (pname + ".diff"), sha256 }: fetchurl {
+    dp = { ver ? "1%255.18.16-5", name, sha256 }: fetchurl {
       url = "https://salsa.debian.org/debian/autogen/-/raw/debian/${ver}"
-          + "/debian/patches/${pname}.diff?inline=false";
+          + "/debian/patches/${name}?inline=false";
       inherit name sha256;
     };
   in [
     (dp {
-      pname = "20_no_Werror";
+      name = "20_no_Werror.diff";
       sha256 = "08z4s2ifiqyaacjpd9pzr59w8m4j3548kkaq1bwvp2gjn29m680x";
     })
     (dp {
-      pname = "30_ag_macros.m4_syntax_error";
+      name = "30_ag_macros.m4_syntax_error.diff";
       sha256 = "1z8vmbwbkz3505wd33i2xx91mlf8rwsa7klndq37nw821skxwyh3";
     })
     (dp {
-      pname = "31_allow_overriding_AGexe_for_crossbuild";
+      name = "31_allow_overriding_AGexe_for_crossbuild.diff";
       sha256 = "0h9wkc9bqb509knh8mymi43hg6n6sxg2lixvjlchcx7z0j7p8xkf";
+    })
+    (dp {
+      name = "40_suse_01-autogen-catch-race-error.patch";
+      sha256 = "1cfkym2zds1f85md1m74snxzqmzlj7wd5jivgmyl342856848xav";
+    })
+    (dp {
+      name = "40_suse_03-gcc9-fix-wrestrict.patch";
+      sha256 = "1ifdwi6gf96jc78jw7q4bfi5fgdldlf2nl55y20h6xb78kv0pznd";
+    })
+    (dp {
+      name = "40_suse_05-sprintf-overflow.patch";
+      sha256 = "136m62k68w1h5k7iapynvbyipidw35js6pq21lsc6rpxvgp0n469";
+    })
+    (dp {
+      name = "40_suse_06-autogen-avoid-GCC-code-analysis-bug.patch";
+      sha256 = "1d65zygzw2rpa00s0jy2y1bg29vkbhnjwlb5pv22rfv87zbk6z9q";
     })
     # Next upstream release will contain guile-3 support. We apply non-invasive
     # patch meanwhile.
