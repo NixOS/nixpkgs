@@ -6,6 +6,7 @@
 , pythonOlder
 , pyzipper
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,8 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-ZLBvhuLXEOgqS7tRwP/e1Dv1/EMqxqXgpAZtLQGIt/o=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
