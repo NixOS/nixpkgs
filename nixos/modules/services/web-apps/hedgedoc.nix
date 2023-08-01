@@ -108,6 +108,13 @@ in
           {option}`protocolUseSSL`.
         '';
       };
+      enableStatsApi = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Enables or disables the /status and /metrics endpoint.
+        '';
+      };
       hsts = {
         enable = mkOption {
           type = types.bool;
