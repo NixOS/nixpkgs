@@ -21,10 +21,19 @@ stdenv.mkDerivation rec {
     # interfer with the Linux implementations.
     ./fix-darwin-exp10-implementation.patch
   ] ++ lib.optionals stdenv.isDarwin [
-    # Upstream reports:
     # https://github.com/xtensor-stack/xsimd/issues/807
-    # https://github.com/xtensor-stack/xsimd/issues/917
-    ./disable-darwin-failing-tests.patch
+    ./disable-test_error_gamma-test.patch
+  ] ++ lib.optionals (stdenv.isDarwin || stdenv.hostPlatform.isMusl) [
+    # - Darwin report: https://github.com/xtensor-stack/xsimd/issues/917
+    # - Musl   report: https://github.com/xtensor-stack/xsimd/issues/798
+    ./disable-exp10-test.patch
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # https://github.com/xtensor-stack/xsimd/issues/798
+    ./disable-polar-test.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # Fix suggested here: https://github.com/xtensor-stack/xsimd/issues/798#issuecomment-1356884601
+    # Upstream didn't merge that from some reason.
+    ./fix-atan-test.patch
   ];
 
   nativeBuildInputs = [
