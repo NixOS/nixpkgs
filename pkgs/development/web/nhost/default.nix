@@ -1,4 +1,5 @@
-{ buildGoModule
+{ 
+  buildGoModule
 , fetchFromGitHub
 , lib
 }:
@@ -21,7 +22,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The Nhost CLI is used to get a local development environment.";
+    description = "The Nhost CLI is used to get a local development environment";
     homepage = "https://github.com/nhost/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ andr-ec ];
