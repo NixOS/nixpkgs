@@ -204,8 +204,22 @@ let
         ${lib.getExe cfg.tpm.package} \
           socket \
           --tpmstate dir="$NIX_SWTPM_DIR" \
-          --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket \
-          "--tpm2" 1>"$NIX_SWTPM_DIR"/stdout 2>"$NIX_SWTPM_DIR"/stderr &
+          --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket,terminate \
+          --pid file="$NIX_SWTPM_DIR"/pid --daemon \
+          --tpm2 \
+          --log file="$NIX_SWTPM_DIR"/stdout,level=6
+
+        # leave a dangling subprocess
+        # because the swtpm ctrl socket has "terminate" when the last
+        # connection disconnects, it stops swtpm.
+        # When qemu stop, or if the main shell process ends, the coproc
+        # will get signaled by virtue of the pipe between main and coproc
+        # ending. Which in turns triggers a socat connect-disconnect to swtpm
+        # which will stops it.
+        coproc waitingswtpm {
+          read || :
+          echo "" | ${lib.getExe hostPkgs.socat} STDIO UNIX-CONNECT:"$NIX_SWTPM_DIR"/socket
+        }
       ''}
 
       cd "$TMPDIR"
