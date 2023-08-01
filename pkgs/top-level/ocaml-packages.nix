@@ -1433,7 +1433,10 @@ let
 
     psq = callPackage ../development/ocaml-modules/psq { };
 
-    ptime = callPackage ../development/ocaml-modules/ptime { };
+    ptime =
+      if lib.versionAtLeast ocaml.version "4.08"
+      then callPackage ../development/ocaml-modules/ptime { }
+      else null;
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 

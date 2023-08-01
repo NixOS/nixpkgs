@@ -6685,6 +6685,12 @@
     githubId = 41522204;
     name = "hexchen";
   };
+  hexclover = {
+    email = "hexclover@outlook.com";
+    github = "hexclover";
+    githubId = 47456195;
+    name = "hexclover";
+  };
   heyimnova = {
     email = "git@heyimnova.dev";
     github = "heyimnova";
@@ -7177,12 +7183,6 @@
     keys = [{
       fingerprint = "F5B2 BE1B 9AAD 98FE 2916  5597 3665 FFF7 9D38 7BAA";
     }];
-  };
-  imsofi = {
-    email = "sofi+git@mailbox.org";
-    github = "imsofi";
-    githubId = 20756843;
-    name = "Sofi";
   };
   imuli = {
     email = "i@imu.li";
@@ -8355,6 +8355,12 @@
     name = "John Soo";
     githubId = 10039785;
   };
+  jtbx = {
+    email = "jtbx@duck.com";
+    name = "Jeremy Baxter";
+    github = "jtbx";
+    githubId = 92071952;
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
@@ -8980,6 +8986,12 @@
     githubId = 3287933;
     name = "Josef Kemetmüller";
   };
+  knightpp = {
+    email = "knightpp@proton.me";
+    github = "knightpp";
+    githubId = 28928944;
+    name = "Danylo Kondratiev";
+  };
   knl = {
     email = "nikola@knezevic.co";
     github = "knl";
@@ -9034,6 +9046,12 @@
     github = "k0ral";
     githubId = 524268;
     name = "Koral";
+  };
+  koralowiec = {
+    email = "qnlgzyrw@anonaddy.me";
+    github = "koralowiec";
+    githubId = 36413794;
+    name = "Arek Kalandyk";
   };
   koslambrou = {
     email = "koslambrou@gmail.com";
@@ -10529,6 +10547,12 @@
     keys = [{
       fingerprint = "CAEC A12D CE23 37A6 6DFD  17B0 7AC7 631D 70D6 C898";
     }];
+  };
+  max-amb = {
+    email = "maxpeterambaum@gmail.com";
+    github = "max-amb";
+    githubId = 137820334;
+    name = "Max Ambaum";
   };
   maxbrunet = {
     email = "max@brnt.mx";
@@ -14495,6 +14519,15 @@
     }];
     name = "Rahul Butani";
   };
+  rs0vere = {
+    email = "rs0vere@outlook.com";
+    github = "rs0vere";
+    githubId = 140035635;
+    keys = [{
+      fingerprint = "C6D8 B5C2 FA79 901B DCCF  95E1 FEC4 5C5A ED00 C58D";
+    }];
+    name = "Red Star Over Earth";
+  };
   rski = {
     name = "rski";
     email = "rom.skiad+nix@gmail.com";
@@ -15669,6 +15702,12 @@
     github = "sorpaas";
     githubId = 6277322;
     name = "Wei Tang";
+  };
+  soupglasses = {
+    email = "sofi+git@mailbox.org";
+    github = "soupglasses";
+    githubId = 20756843;
+    name = "Sofi";
   };
   soywod = {
     name = "Clément DOUIN";

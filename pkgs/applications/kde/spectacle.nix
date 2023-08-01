@@ -5,11 +5,21 @@
 , knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi
 , qtx11extras, knewstuff, kwayland, qttools, kcolorpicker, kimageannotator
 , qcoro, qtquickcontrols2, wayland, plasma-wayland-protocols, kpurpose, kpipewire
-, wrapGAppsHook
+, wrapGAppsHook, fetchpatch
 }:
 
 mkDerivation {
   pname = "spectacle";
+
+  patches = [
+    # backport fix for region capture with multi-display high-dpi setups
+    # FIXME: remove in 23.08
+    (fetchpatch {
+      url = "https://invent.kde.org/graphics/spectacle/-/commit/d0886c85445fad227b256152a549cb33bd97b776.patch";
+      hash = "sha256-t0+X1pzjlS2OWduMwQBoYbjh+o/SF4hOkAqzz/MJw3E=";
+    })
+  ];
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications

@@ -16,10 +16,6 @@ maven.buildMavenPackage rec {
 
   mvnHash = "sha256-MWxm2q6tx8YcdEsleC2h+s+lp9whi11VQ1yFr8AZUyQ=";
 
-  nativeBuildInputs = [
-    maven
-  ];
-
   installPhase = ''
     EAR=$(find -iname "*.ear")
     install -D "$EAR" "$out/$(basename $EAR)"

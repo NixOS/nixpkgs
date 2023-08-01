@@ -11,13 +11,13 @@
 }:
 crystal.buildCrystalPackage rec {
   pname = "tijolo";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "tijolo";
     rev = "v${version}";
-    hash = "sha256-15not/B+O+wIZ/fvLFy26/dyvq0E+bZUeoSZ6HxMMKg=";
+    hash = "sha256-3TfXvRVP3lu43qF3RWCHnZ3czTaSl5EzrhuTlpnMfKo=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ]
@@ -27,7 +27,7 @@ crystal.buildCrystalPackage rec {
   buildTargets = [ "all" ];
   doCheck = false;
 
-  shardsFile = ./tijolo-shards.nix;
+  shardsFile = ./shards.nix;
 
   installTargets = [ "install" "install-fonts"];
   doInstallCheck = false;

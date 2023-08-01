@@ -67,7 +67,6 @@ maven.buildMavenPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    maven
     makeShellWrapper
     wrapGAppsHook
     jdk
