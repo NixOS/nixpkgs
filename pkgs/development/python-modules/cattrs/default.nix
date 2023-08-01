@@ -94,6 +94,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python custom class converters for attrs";
     homepage = "https://github.com/python-attrs/cattrs";
+    changelog = "https://github.com/python-attrs/cattrs/blob/${src.rev}/HISTORY.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
