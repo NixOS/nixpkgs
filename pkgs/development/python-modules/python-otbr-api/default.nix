@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 , voluptuous
 }:
 
@@ -23,9 +24,16 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-oLqgjTuC5rpAzXTJO+KFn+uQ0TV7rNPWHOAJtRI4otk=";
   };
+  
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>=' \
+      --replace 'wheel~=' 'wheel>='
+  '';
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
