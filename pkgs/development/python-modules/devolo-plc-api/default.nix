@@ -44,6 +44,8 @@ buildPythonPackage rec {
     zeroconf
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytest-asyncio
     pytest-httpx

@@ -36,6 +36,8 @@ buildPythonPackage rec {
     cached-property
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     flask
     pytest-httpserver

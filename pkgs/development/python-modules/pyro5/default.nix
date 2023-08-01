@@ -24,6 +24,8 @@ buildPythonPackage rec {
     serpent
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
   ];

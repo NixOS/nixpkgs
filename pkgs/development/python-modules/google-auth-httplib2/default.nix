@@ -27,6 +27,8 @@ buildPythonPackage rec {
     httplib2
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     flask
     mock
