@@ -17079,6 +17079,7 @@ with pkgs;
   };
   rusty-man = callPackage ../development/tools/rust/rusty-man { };
   rustycli = callPackage ../development/tools/rust/rustycli { };
+  specr-transpile = callPackage ../development/tools/rust/specr-transpile { };
   typeshare = callPackage ../development/tools/rust/typeshare { };
 
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme { };
