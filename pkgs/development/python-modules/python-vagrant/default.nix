@@ -2,6 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, setuptools-scm
+, setuptools-scm-git-archive
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -16,6 +19,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    setuptools-scm-git-archive
+    wheel
   ];
 
   # The tests try to connect to qemu
