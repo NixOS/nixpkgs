@@ -3,6 +3,8 @@
 , pythonOlder
 , fetchPypi
 , fetchpatch
+, setuptools
+, wheel
 
 # docs
 , python
@@ -29,8 +31,10 @@ buildPythonPackage rec {
   outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [
+    setuptools
     sphinx
     sphinx-rtd-theme
+    wheel
   ];
 
   patches = [
