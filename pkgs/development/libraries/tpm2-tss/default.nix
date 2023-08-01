@@ -68,6 +68,10 @@ stdenv.mkDerivation rec {
       --replace '@PREFIX@' $out/lib
     substituteInPlace ./bootstrap \
       --replace 'git describe --tags --always --dirty' 'echo "${version}"'
+
+    # without this building on nix 2.3 will fail
+    substituteInPlace ./test/integration/main-fapi.c \
+      --replace "/tmp/fapi_tmpdir.XXXXXX" "/build/fapi_tmpdir.XXXXXX"
   '';
 
   configureFlags = lib.optionals doInstallCheck [
