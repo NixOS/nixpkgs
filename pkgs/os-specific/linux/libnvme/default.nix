@@ -11,13 +11,14 @@
 , stdenv
 , swig
 , systemd
+, withDocs ? stdenv.hostPlatform.canExecute stdenv.buildPlatform
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnvme";
   version = "1.4";
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  mesonFlags = [
+  mesonFlags = lib.optionals withDocs [
     "-Ddocs=man"
     "-Ddocs-build=true"
   ];
