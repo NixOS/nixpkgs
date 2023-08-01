@@ -12,4 +12,10 @@ openttd.overrideAttrs (oldAttrs: rec {
   };
 
   buildInputs = oldAttrs.buildInputs ++ [ zstd ];
+
+  meta = {
+    homepage = "https://github.com/JGRennison/OpenTTD-patches";
+    changelog = "https://github.com/JGRennison/OpenTTD-patches/blob/jgrpp-${version}/jgrpp-changelog.md";
+  };
+
 })
