@@ -33,7 +33,7 @@ in {
     withRcloneEnv = host: pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://${host}/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://${host}/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
