@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-nmPOYiozt5mDvFmEkRTIblECcGjV5650wZGGq+iSMPQ=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'Cython==' 'Cython>='
+  '';
+
   nativeBuildInputs = [
     cmake
     cython_3
