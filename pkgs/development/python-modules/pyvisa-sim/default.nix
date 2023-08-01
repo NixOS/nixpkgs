@@ -4,9 +4,12 @@
 , buildPythonPackage
 , pyvisa
 , pyyaml
+, setuptools
+, setuptools-scm
 , stringparser
 , typing-extensions
 , pytestCheckHook
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -21,6 +24,12 @@ buildPythonPackage rec {
     inherit version;
     sha256 = "sha256-vWxW941/1e58pqL/Rzq+eoZJpwsvLphgIe48SuJtohY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     pyvisa
