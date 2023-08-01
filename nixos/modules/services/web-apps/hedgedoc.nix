@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) literalExpression mdDoc mkEnableOption mkIf mkOption mkPackageOptionMD mkRenamedOptionModule types versionAtLeast;
+
   cfg = config.services.hedgedoc;
 
   # 21.03 will not be an official release - it was instead 21.05.  This
