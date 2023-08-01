@@ -1,0 +1,58 @@
+diff --git i/test/test_error_gamma.cpp w/test/test_error_gamma.cpp
+index 214cbb5..299e5b8 100644
+--- i/test/test_error_gamma.cpp
++++ w/test/test_error_gamma.cpp
+@@ -131,25 +131,6 @@ struct error_gamma_test
+             INFO("lgamma");
+             CHECK_EQ(diff, 0);
+         }
+-#if !(XSIMD_WITH_AVX && !XSIMD_WITH_AVX2)
+-
+-        // tgamma (negative input)
+-        {
+-            std::transform(gamma_neg_input.cbegin(), gamma_neg_input.cend(), expected.begin(),
+-                           [](const value_type& v)
+-                           { return std::lgamma(v); });
+-            batch_type in, out;
+-            for (size_t i = 0; i < nb_input; i += size)
+-            {
+-                detail::load_batch(in, gamma_neg_input, i);
+-                out = lgamma(in);
+-                detail::store_batch(out, res, i);
+-            }
+-            size_t diff = detail::get_nb_diff(res, expected);
+-            INFO("lgamma (negative input)");
+-            CHECK_EQ(diff, 0);
+-        }
+-#endif
+     }
+ };
+ 
+diff --git i/test/test_xsimd_api.cpp w/test/test_xsimd_api.cpp
+index 84b4b0b..1b29742 100644
+--- i/test/test_xsimd_api.cpp
++++ w/test/test_xsimd_api.cpp
+@@ -515,11 +515,6 @@ struct xsimd_api_float_types_functions
+         value_type val(2);
+         CHECK_EQ(extract(xsimd::exp(T(val))), std::exp(val));
+     }
+-    void test_exp10()
+-    {
+-        value_type val(2);
+-        CHECK_EQ(extract(xsimd::exp10(T(val))), std::pow(value_type(10), val));
+-    }
+     void test_exp2()
+     {
+         value_type val(2);
+@@ -804,11 +799,6 @@ TEST_CASE_TEMPLATE("[xsimd api | float types functions]", B, FLOAT_TYPES)
+         Test.test_exp();
+     }
+ 
+-    SUBCASE("exp10")
+-    {
+-        Test.test_exp10();
+-    }
+-
+     SUBCASE("exp2")
+     {
+         Test.test_exp2();

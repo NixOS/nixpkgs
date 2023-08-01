@@ -10,6 +10,7 @@
 , six
 , numpy
 , beniget
+, xsimd
 , isPy3k
 , substituteAll
 }:
@@ -35,6 +36,12 @@ in buildPythonPackage rec {
       gomp = "${if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib}/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
+
+  # xsimd: unvendor this header-only C++ lib
+  postPatch = ''
+    rm -r third_party/xsimd
+    ln -s '${lib.getDev xsimd}'/include/xsimd third_party/
+  '';
 
   propagatedBuildInputs = [
     ply
