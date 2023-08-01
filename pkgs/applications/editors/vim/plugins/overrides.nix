@@ -883,6 +883,21 @@ self: super: {
     dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
   };
 
+  overseer-nvim = super.overseer-nvim.overrideAttrs {
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+
+      plugins=.testenv/data/nvim/site/pack/plugins/start
+      mkdir -p "$plugins"
+      ln -s ${self.plenary-nvim} "$plugins/plenary.nvim"
+      bash run_tests.sh
+      rm -r .testenv
+
+      runHook postCheck
+    '';
+  };
+
   inherit parinfer-rust;
 
   phpactor = buildVimPluginFrom2Nix {
