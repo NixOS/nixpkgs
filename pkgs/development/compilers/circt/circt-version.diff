@@ -1,0 +1,34 @@
+diff --git a/cmake/modules/GenVersionFile.cmake b/cmake/modules/GenVersionFile.cmake
+index 570088f39..700399173 100644
+--- a/cmake/modules/GenVersionFile.cmake
++++ b/cmake/modules/GenVersionFile.cmake
+@@ -6,27 +6,8 @@
+ #   DRY_RUN             - If true, make the version unknown.
+ #   SOURCE_ROOT         - Path to root directory of source
+ 
+-set(GIT_DESCRIBE_DEFAULT "unknown git version")
+-if (DRY_RUN)
+-  set(GIT_DESCRIBE_OUTPUT "${GIT_DESCRIBE_DEFAULT}")
+-else ()
+-  message(STATUS "Generating ${OUT_FILE} from ${IN_FILE} by `git describe --dirty --tags --match ${RELEASE_PATTERN}`")
+-  find_package(Git QUIET)
+-  if (Git_FOUND)
+-    execute_process(COMMAND ${GIT_EXECUTABLE} describe --dirty --tags --match ${RELEASE_PATTERN}
+-      WORKING_DIRECTORY "${SOURCE_ROOT}"
+-      RESULT_VARIABLE GIT_OUTPUT_RESULT
+-      OUTPUT_VARIABLE GIT_DESCRIBE_OUTPUT
+-      OUTPUT_STRIP_TRAILING_WHITESPACE)
+-    if (NOT ${GIT_OUTPUT_RESULT} EQUAL 0)
+-      message(WARNING "git describe failed, set version to ${GIT_DESCRIBE_DEFAULT}")
+-      set(GIT_DESCRIBE_OUTPUT "${GIT_DESCRIBE_DEFAULT}")
+-    endif ()
+-  else ()
+-    message(WARNING "Git not found: ${GIT_EXECUTABLE}, set version to ${GIT_DESCRIBE_DEFAULT}")
+-    set(GIT_DESCRIBE_OUTPUT "${GIT_DESCRIBE_DEFAULT}")
+-  endif ()
+-endif()
++message(WARNING "Git can't be used in the nix build system, set version to ${GIT_DESCRIBE_OUTPUT}")
++set(GIT_DESCRIBE_OUTPUT "@version@")
+ 
+ # This command will prepend CMAKE_CURRENT_{SOURCE,BINARY}_DIR if <input> or <output> is relative,
+ # that's why I need IN_FILE and OUT_FILE to be absolute path.

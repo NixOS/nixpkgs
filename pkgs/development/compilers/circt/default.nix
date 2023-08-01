@@ -6,6 +6,7 @@
 , git
 , fetchFromGitHub
 , ninja
+, substituteAll
 }:
 
 let
@@ -21,6 +22,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8mqh3PPfB50ZkiJ+1OjclWw19t6OLv1mNiVkBnDz5jQ=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # circt uses git to check its version,
+    # but when cloned on nix it can't access git.
+    # So this patch hard codes the version.
+    (substituteAll { src = ./circt-version.diff; version = src.rev; })
+  ];
 
   requiredSystemFeatures = [ "big-parallel" ];
 
