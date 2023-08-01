@@ -342,7 +342,7 @@ with pkgs;
 
   beyond-identity = callPackage ../tools/security/beyond-identity { };
 
-  bibtex-tidy = nodePackages.bibtex-tidy;
+  bibtex-tidy = callPackage ../tools/typesetting/bibtex-tidy { };
 
   binbloom = callPackage ../tools/security/binbloom { };
 
