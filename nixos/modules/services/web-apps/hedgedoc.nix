@@ -32,6 +32,7 @@ in
   ];
 
   options.services.hedgedoc = {
+    package = mkPackageOptionMD pkgs "hedgedoc" { };
     enable = mkEnableOption (lib.mdDoc "the HedgeDoc Markdown Editor");
 
     groups = mkOption {
@@ -1018,16 +1019,6 @@ in
         `HedgeDoc` is running.
       '';
     };
-
-    package = mkOption {
-      type = types.package;
-      default = pkgs.hedgedoc;
-      defaultText = literalExpression "pkgs.hedgedoc";
-      description = lib.mdDoc ''
-        Package that provides HedgeDoc.
-      '';
-    };
-
   };
 
   config = mkIf cfg.enable {
@@ -1060,7 +1051,7 @@ in
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
         StateDirectory = [ cfg.workDir cfg.settings.uploadsPath ];
-        ExecStart = "${cfg.package}/bin/hedgedoc";
+        ExecStart = "${lib.getExe cfg.package}";
         EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
           "CMD_CONFIG_FILE=${cfg.workDir}/config.json"
