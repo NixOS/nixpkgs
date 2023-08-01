@@ -428,6 +428,34 @@ let
 
   certConfigs = mapAttrs certToConfig cfg.certs;
 
+  accountGroupedCerts = (groupBy (conf: conf.accountHash) (attrValues certConfigs));
+
+  # Concurrency control for renewal services.
+  # L = maxConcurrentRenewals
+  # Every Nth cert is "paired" with an After= condition
+  # with the N+Lth cert in front of it.
+  # If <= N certs are configured, no limiting is applied.
+  # Leader certs for a given account target are excluded from the logic.
+  maxConcurrentRenewals = cfg.maxConcurrentRenewals;
+  certNames = builtins.attrNames certConfigs;
+  certServices = builtins.listToAttrs (
+    imap0 (i: cert: let
+      iPaired = i + maxConcurrentRenewals;
+      pairedCert = builtins.elemAt certNames iPaired;
+      conf = certConfigs."${cert}";
+      # Same logic for leader as in accountTargets definition
+      leader = builtins.head accountGroupedCerts."${conf.accountHash}";
+    in {
+      name = "acme-${cert}";
+      value = mkMerge [
+        conf.renewService
+        (optionalAttrs (iPaired < numCerts && leader.cert != cert) {
+          after = [ "acme-${pairedCert}.service" ];
+        })
+      ];
+    }) certNames
+  );
+
   # These options can be specified within
   # security.acme.defaults or security.acme.certs.<name>
   inheritableModule = isDefaults: { config, ... }: let
@@ -721,6 +749,19 @@ in {
         '';
       };
 
+      maxConcurrentRenewals = mkOption {
+        type = types.int;
+        default = 5;
+        description = lib.mdDoc ''
+          The maximum number of certificate renewals to run in parallel.
+          This is achieved by chaining the services together with Systemd unit
+          After= dependencies, meaning it only affects renewal when they are queued
+          together, such as when rebuilding the system configuration.
+          Decrease this number if you experience high CPU load during nixos-rebuild.
+          Increase this number if system resources permit it for faster nixos-rebuild.
+        '';
+      };
+
       defaults = mkOption {
         type = types.submodule (inheritableModule true);
         description = lib.mdDoc ''
@@ -877,7 +918,7 @@ in {
 
       systemd.services = {
         "acme-fixperms" = userMigrationService;
-      } // (mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewService) certConfigs)
+      } // certServices
         // (optionalAttrs (cfg.preliminarySelfsigned) ({
         "acme-selfsigned-ca" = selfsignCAService;
       } // (mapAttrs' (cert: conf: nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs)));
@@ -909,7 +950,7 @@ in {
           before = dependantServices;
           requires = [ leader ];
           after = [ leader ];
-        }) (groupBy (conf: conf.accountHash) (attrValues certConfigs));
+        }) accountGroupedCerts;
       in finishedTargets // accountTargets;
     })
   ];
