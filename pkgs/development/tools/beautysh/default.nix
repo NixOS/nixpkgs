@@ -8,7 +8,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "6.2.1";
   format = "pyproject";
 
-
   src = fetchFromGitHub {
     owner = "lovesegfault";
     repo = pname;
@@ -33,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace '"poetry"' '"poetry-core"' \
       --replace 'types-setuptools = "^57.4.0"' 'types-setuptools = "*"'
   '';
 
