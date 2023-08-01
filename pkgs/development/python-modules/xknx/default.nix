@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -24,8 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-rKvHb0wkWVuZO8M8uIQdOiY1N6DmGSpqUgz4YYbUfSM=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools~=' 'setuptools>='
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
