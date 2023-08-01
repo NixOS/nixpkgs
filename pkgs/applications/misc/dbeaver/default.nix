@@ -40,7 +40,6 @@ mavenJdk17.buildMavenPackage rec {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-    mavenJdk17
   ];
 
   buildInputs = [

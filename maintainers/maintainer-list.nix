@@ -8349,6 +8349,12 @@
     name = "John Soo";
     githubId = 10039785;
   };
+  jtbx = {
+    email = "jtbx@duck.com";
+    name = "Jeremy Baxter";
+    github = "jtbx";
+    githubId = 92071952;
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
@@ -9034,6 +9040,12 @@
     github = "k0ral";
     githubId = 524268;
     name = "Koral";
+  };
+  koralowiec = {
+    email = "qnlgzyrw@anonaddy.me";
+    github = "koralowiec";
+    githubId = 36413794;
+    name = "Arek Kalandyk";
   };
   koslambrou = {
     email = "koslambrou@gmail.com";
