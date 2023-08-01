@@ -1,4 +1,4 @@
-{ 
+{
   buildGoModule
 , fetchFromGitHub
 , lib
