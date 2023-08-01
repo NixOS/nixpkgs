@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
 , fetchpatch
 , static ? stdenv.hostPlatform.isStatic
 }:
@@ -51,6 +54,11 @@ stdenv.mkDerivation rec {
       Libs: -L$out/lib -lsnappy
       Cflags: -I$dev/include
     EOF
+  '';
+
+  # need to manually fixup when cross-compiling on darwin
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    ${stdenv.cc.targetPrefix}install_name_tool -change "@rpath/libsnappy.1.dylib" "$out/lib/libsnappy.1.dylib" $out/lib/libsnappy.dylib
   '';
 
   #checkTarget = "test";

@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     mkdir -p $tools/bin
     cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
   '' + lib.optionalString stdenv.isDarwin ''
-    ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.7.dylib" $out/lib/librocksdb.dylib {}
+    ls -1 $tools/bin/* | xargs -I{} ${stdenv.cc.targetPrefix}install_name_tool -change "@rpath/librocksdb.7.dylib" $out/lib/librocksdb.dylib {}
   '' + lib.optionalString (stdenv.isLinux && enableShared) ''
     ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
   '';
@@ -88,6 +88,8 @@ stdenv.mkDerivation rec {
       substituteInPlace "$out"/lib/pkgconfig/rocksdb.pc \
         --replace '="''${prefix}//' '="/'
     fi
+  '' + lib.optionalString stdenv.isDarwin ''
+    ${stdenv.cc.targetPrefix}install_name_tool -change "@rpath/librocksdb.7.dylib" "$out/lib/librocksdb.7.dylib" $out/lib/librocksdb.dylib
   '';
 
   meta = with lib; {
