@@ -204,8 +204,31 @@ let
         ${lib.getExe cfg.tpm.package} \
           socket \
           --tpmstate dir="$NIX_SWTPM_DIR" \
-          --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket \
-          "--tpm2" 1>"$NIX_SWTPM_DIR"/stdout 2>"$NIX_SWTPM_DIR"/stderr &
+          --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket,terminate \
+          --pid file="$NIX_SWTPM_DIR"/pid --daemon \
+          --tpm2 \
+          --log file="$NIX_SWTPM_DIR"/stdout,level=6
+
+        # Enable `fdflags` builtin in Bash
+        # We will need it to perform surgical modification of the file descriptor
+        # passed in the coprocess to remove `FD_CLOEXEC`, i.e. close the file descriptor
+        # on exec.
+        # If let alone, it will trigger the coprocess to read EOF when QEMU is `exec`
+        # at the end of this script. To work around that, we will just clear
+        # the `FD_CLOEXEC` bits as a first step.
+        enable -f ${hostPkgs.bash}/lib/bash/fdflags fdflags
+        # leave a dangling subprocess because the swtpm ctrl socket has
+        # "terminate" when the last connection disconnects, it stops swtpm.
+        # When qemu stops, or if the main shell process ends, the coproc will
+        # get signaled by virtue of the pipe between main and coproc ending.
+        # Which in turns triggers a socat connect-disconnect to swtpm which
+        # will stop it.
+        coproc waitingswtpm {
+          read || :
+          echo "" | ${lib.getExe hostPkgs.socat} STDIO UNIX-CONNECT:"$NIX_SWTPM_DIR"/socket
+        }
+        # Clear `FD_CLOEXEC` on the coprocess' file descriptor stdin.
+        fdflags -s-cloexec ''${waitingswtpm[1]}
       ''}
 
       cd "$TMPDIR"
