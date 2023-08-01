@@ -17863,6 +17863,11 @@ with pkgs;
 
   rbenv = callPackage ../development/ruby-modules/rbenv { };
 
+  rubyfmt = callPackage ../development/tools/rubyfmt {
+    inherit (darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (darwin) libobjc;
+  };
+
   inherit (darwin.apple_sdk_11_0.callPackage ../development/interpreters/ruby {
     inherit (darwin) libobjc libunwind;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
@@ -25433,6 +25438,8 @@ with pkgs;
   };
   zig = zig_0_10;
 
+  zigHook = callPackage ../development/compilers/zig/hook.nix { };
+
   zimlib = callPackage ../development/libraries/zimlib { };
 
   zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
@@ -30722,6 +30729,8 @@ with pkgs;
     extraIntegrations = extras;
   };
 
+  dayon = callPackage ../applications/networking/remote/dayon { };
+
   ddgr = callPackage ../applications/misc/ddgr { };
 
   deadbeef = callPackage ../applications/audio/deadbeef { };
@@ -31516,7 +31525,7 @@ with pkgs;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
   firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
   firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
-  firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
+  firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped { };
@@ -31524,7 +31533,7 @@ with pkgs;
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
-  firefox-esr = firefox-esr-102;
+  firefox-esr = firefox-esr-115;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
   firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
 
@@ -41482,6 +41491,8 @@ with pkgs;
   ldid = callPackage ../development/tools/ldid {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+
+  ldid-procursus = callPackage ../development/tools/ldid-procursus { };
 
   xcolor = callPackage ../tools/graphics/xcolor { };
 
