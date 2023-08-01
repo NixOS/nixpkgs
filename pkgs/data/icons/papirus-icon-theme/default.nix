@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "papirus-icon-theme";
-  version = "20230601";
+  version = "20230801";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
-    sha256 = "sha256-p47Vt1nR94bXtpWjNaIWJNKbdgFFMc0qCBeh2V98CJg=";
+    hash = "sha256-sEfJKlGdogM0rOqg3Buytgd7vm0zEkmkSR343ZgGI2I=";
   };
 
   nativeBuildInputs = [ gtk3 papirus-folders ];
