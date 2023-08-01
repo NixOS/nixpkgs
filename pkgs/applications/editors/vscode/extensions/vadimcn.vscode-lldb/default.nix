@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, runCommand, rustPlatform, makeWrapper, llvmPackages
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, lldb
 , buildNpmPackage, cmake, nodejs, unzip, python3, pkg-config, libsecret, darwin
 }:
 assert lib.versionAtLeast python3.version "3.5";
@@ -17,9 +17,6 @@ let
     rev = "v${version}";
     hash = "sha256-6QmYRlSv8jY3OE3RcYuZt+c3z6GhFc8ESETVfCfF5RI=";
   };
-
-  # need to build a custom version of lldb and llvm for enhanced rust support
-  lldb = (import ./lldb.nix { inherit fetchFromGitHub runCommand llvmPackages; });
 
   adapter = rustPlatform.buildRustPackage {
     pname = "${pname}-adapter";
