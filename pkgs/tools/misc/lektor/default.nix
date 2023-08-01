@@ -1,44 +1,17 @@
 { lib
-, babel
-, buildPythonPackage
-, click
-, exifread
 , fetchFromGitHub
 , fetchNpmDeps
-, filetype
-, flask
-, hatch-vcs
-, hatchling
-, importlib-metadata
-, inifile
-, jinja2
-, markupsafe
-, marshmallow
-, marshmallow-dataclass
-, mistune
 , nodejs
 , npmHooks
-, pillow
-, pip
-, pytest-click
-, pytest-mock
-, pytest-pylint
-, pytestCheckHook
-, python
-, pythonOlder
-, python-slugify
-, pytz
-, requests
-, watchfiles
-, werkzeug
+, python3
 }:
 
-buildPythonPackage rec {
+let
+  python = python3;
+in python.pkgs.buildPythonApplication rec {
   pname = "lektor";
   version = "3.4.0b8";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lektor";
@@ -55,15 +28,15 @@ buildPythonPackage rec {
   npmRoot = "frontend";
 
   nativeBuildInputs = [
-    hatch-vcs
-    hatchling
+    python.pkgs.hatch-vcs
+    python.pkgs.hatchling
     nodejs
     npmHooks.npmConfigHook
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python.pkgs; [
     babel
     click
     exifread
@@ -81,13 +54,9 @@ buildPythonPackage rec {
     requests
     watchfiles
     werkzeug
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    pytz
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python.pkgs; [
     pytest-click
     pytest-mock
     pytestCheckHook
