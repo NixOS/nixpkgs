@@ -1,8 +1,32 @@
 { config, options, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    all
+    concatMap
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    escapeShellArg
+    flip
+    foldr
+    forEach
+    hasPrefix
+    mapAttrsToList
+    literalExpression
+    makeBinPath
+    mkDefault
+    mkIf
+    mkMerge
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optional
+    optionals
+    optionalString
+    replaceStrings
+    types
+  ;
 
   cfg = config.boot.loader.grub;
 
@@ -150,7 +174,7 @@ in
           (as opposed to external files) will be copied into the Nix store, and
           will be visible to all local users.
         '';
-        type = with types; attrsOf (submodule {
+        type = types.attrsOf (types.submodule {
           options = {
             hashedPasswordFile = mkOption {
               example = "/path/to/file";
