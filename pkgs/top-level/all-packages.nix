@@ -32144,6 +32144,8 @@ with pkgs;
 
   marker = callPackage ../applications/editors/marker { };
 
+  matcha-rss-digest = callPackage ../applications/misc/matcha-rss-digest { };
+
   meek = callPackage ../tools/networking/meek { };
 
   meerk40t = callPackage ../applications/misc/meerk40t { };
