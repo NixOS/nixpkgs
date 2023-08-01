@@ -42,8 +42,12 @@ buildPythonPackage rec {
     ./pyqt5-confirm-license.patch
   ];
 
-  # be more verbose
   postPatch = ''
+    # remove when pyqt-builder is updated
+    substituteInPlace pyproject.toml \
+      --replace 'PyQt-builder >=1.15' 'PyQt-builder >=1.14'
+
+    # be more verbose
     cat >> pyproject.toml <<EOF
     [tool.sip.project]
     verbose = true
