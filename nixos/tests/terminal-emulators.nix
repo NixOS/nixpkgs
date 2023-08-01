@@ -35,6 +35,8 @@ let tests = {
 
       darktile.pkg = p: p.darktile;
 
+      deepin-terminal.pkg = p: p.deepin.deepin-terminal;
+
       eterm.pkg = p: p.eterm;
       eterm.executable = "Eterm";
       eterm.pinkValue = "#D40055";

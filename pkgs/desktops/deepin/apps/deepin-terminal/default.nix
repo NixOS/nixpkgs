@@ -17,6 +17,7 @@
 , libsecret
 , chrpath
 , lxqt
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+
+  passthru.tests.test = nixosTests.terminal-emulators.deepin-terminal;
 
   meta = with lib; {
     description = "Terminal emulator with workspace, multiple windows, remote management, quake mode and other features";
