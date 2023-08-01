@@ -162,6 +162,10 @@ in
         --replace '@libclang@' ${llvmPackages.libclang.lib} \
         --replace '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
 
+      substituteInPlace src/cpp/session/CMakeLists.txt \
+        --replace '@pandoc@' ${pandoc} \
+        --replace '@quarto@' ${quarto}
+
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
         --replace '@pandoc@' ${pandoc}/bin/pandoc \
         --replace '@quarto@' ${quarto}/bin/quarto
