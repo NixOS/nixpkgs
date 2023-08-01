@@ -12670,6 +12670,8 @@ self: super: with self; {
 
   pymitv = callPackage ../development/python-modules/pymitv { };
 
+  pymisp = callPackage ../development/python-modules/pymisp { };
+
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
   pymodbus-repl = callPackage ../development/python-modules/pymodbus-repl { };
