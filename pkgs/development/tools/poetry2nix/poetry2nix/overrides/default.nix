@@ -2754,20 +2754,6 @@ lib.composeManyExtensions [
         }
       );
 
-      packaging =
-        let
-          old = super.packaging;
-        in
-        # From 20.5 until 20.7, packaging used flit for packaging (heh)
-          # See https://github.com/pypa/packaging/pull/352 and https://github.com/pypa/packaging/pull/367
-        if (lib.versionAtLeast old.version "20.5" && lib.versionOlder old.version "20.8") then
-          addBuildSystem
-            {
-              inherit self;
-              drv = old;
-              attr = "flit-core";
-            } else old;
-
       psutil = super.psutil.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++
