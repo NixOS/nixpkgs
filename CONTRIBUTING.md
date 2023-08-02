@@ -373,7 +373,8 @@ However, many changes are able to be backported, including:
 - Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
 - Security critical applications (E.g. `firefox`)
 
-## Coding conventions {#chap-conventions}
+
+## Code conventions
 
 ### File naming and organisation {#sec-organisation}
 
