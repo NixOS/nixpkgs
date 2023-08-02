@@ -1031,23 +1031,6 @@ Each interpreter has the following attributes:
 - `executable`. Name of the interpreter executable, e.g. `python3.10`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
-### Optimizations {#optimizations}
-
-The Python interpreters are by default not built with optimizations enabled, because
-the builds are in that case not reproducible. To enable optimizations, override the
-interpreter of interest, e.g using
-
-```
-let
-  pkgs = import ./. {};
-  mypython = pkgs.python3.override {
-    enableOptimizations = true;
-    reproducibleBuild = false;
-    self = mypython;
-  };
-in mypython
-```
-
 ### Building packages and applications {#building-packages-and-applications}
 
 Python libraries and applications that use `setuptools` or
@@ -1949,6 +1932,23 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 * `setup_requires` corresponds to `nativeBuildInputs`
 * `install_requires` corresponds to `propagatedBuildInputs`
 * `tests_require` corresponds to `nativeCheckInputs`
+
+### How to enable interpreter optimizations? {#optimizations}
+
+The Python interpreters are by default not built with optimizations enabled, because
+the builds are in that case not reproducible. To enable optimizations, override the
+interpreter of interest, e.g using
+
+```
+let
+  pkgs = import ./. {};
+  mypython = pkgs.python3.override {
+    enableOptimizations = true;
+    reproducibleBuild = false;
+    self = mypython;
+  };
+in mypython
+```
 
 ## Contributing {#contributing}
 
