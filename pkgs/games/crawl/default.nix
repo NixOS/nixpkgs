@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , which
 , sqlite
 , lua5_1
@@ -28,35 +27,43 @@
 , darwin ? null
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crawl${lib.optionalString tileMode "-tiles"}";
   version = "0.30.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
-    rev = version;
-    sha256 = "sha256-9IbuAXQCFZUDS0kNUcN3lwhsLYFkuaGUOjv+Y8NHl+Y=";
+    rev = finalAttrs.version;
+    hash = "sha256-9IbuAXQCFZUDS0kNUcN3lwhsLYFkuaGUOjv+Y8NHl+Y=";
   };
 
-  # Patch hard-coded paths and remove force library builds
-  patches = [ ./crawl_purify.patch ];
+  patches = [
+    # Patch hard-coded paths and remove force library builds
+    ./crawl_purify.patch
+  ];
 
-  nativeBuildInputs = [ pkg-config which perl pngcrush advancecomp ];
+  nativeBuildInputs = [
+    advancecomp
+    perl
+    pkg-config
+    pngcrush
+    which
+  ];
 
   # Still unstable with luajit
-  buildInputs = [ lua5_1 zlib sqlite ncurses ]
+  buildInputs = [ lua5_1 ncurses sqlite zlib ]
     ++ (with python3.pkgs; [ pyyaml ])
-    ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU libGL ]
+    ++ lib.optionals tileMode [ freetype libGL libGLU libpng SDL2 SDL2_image  ]
     ++ lib.optional enableSound SDL2_mixer
     ++ (lib.optionals stdenv.isDarwin (
     assert (lib.assertMsg (darwin != null) "Must have darwin frameworks available for darwin builds");
     with darwin.apple_sdk.frameworks; [
       AppKit
       AudioUnit
+      Carbon
       CoreAudio
       ForceFeedback
-      Carbon
       IOKit
       OpenGL
     ]
@@ -64,7 +71,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd crawl-ref/source
-    echo "${version}" > util/release_ver
+    echo "${finalAttrs.version}" > util/release_ver
     patchShebangs 'util'
     patchShebangs util/gen-mi-enum
     rm -rf contrib
@@ -85,7 +92,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableSound "SOUND=y";
 
   postInstall = ''
-    make install-xdg-data ${builtins.concatStringsSep " " makeFlags}
+    make install-xdg-data ${builtins.concatStringsSep " " finalAttrs.makeFlags}
     ${lib.optionalString tileMode ''
       mv $out/bin/crawl $out/bin/crawl-tiles
       sed -i 's/bin\/crawl/bin\/crawl-tiles/' \
@@ -95,17 +102,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open-source, single-player, role-playing roguelike game";
     homepage = "http://crawl.develz.org/";
+    license = with lib.licenses; [ gpl2Plus bsd2 bsd3 mit zlib cc0 ];
     longDescription = ''
       Dungeon Crawl: Stone Soup, an open-source, single-player, role-playing
       roguelike game of exploration and treasure-hunting in dungeons filled
       with dangerous and unfriendly monsters in a quest to rescue the
       mystifyingly fabulous Orb of Zot.
     '';
-    platforms = platforms.linux ++ platforms.darwin;
-    license = with licenses; [ gpl2Plus bsd2 bsd3 mit licenses.zlib cc0 ];
-    maintainers = [ maintainers.abbradar ];
+    maintainers = with lib.maintainers; [ abbradar ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
