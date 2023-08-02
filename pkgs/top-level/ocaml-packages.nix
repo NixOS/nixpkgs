@@ -799,6 +799,8 @@ let
 
     kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix { };
 
+    kcas = callPackage ../development/ocaml-modules/kcas { };
+
     ke = callPackage ../development/ocaml-modules/ke { };
 
     kicadsch = callPackage ../development/ocaml-modules/kicadsch { };
