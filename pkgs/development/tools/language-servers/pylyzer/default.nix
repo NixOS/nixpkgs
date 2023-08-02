@@ -5,6 +5,7 @@
 , git
 , python3
 , makeWrapper
+, writeScriptBin
 , darwin
 , which
 }:
@@ -26,6 +27,8 @@ rustPlatform.buildRustPackage rec {
     git
     python3
     makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [
+    (writeScriptBin "diskutil" "")
   ];
 
   buildInputs = [
