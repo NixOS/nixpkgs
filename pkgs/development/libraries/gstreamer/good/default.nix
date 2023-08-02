@@ -52,13 +52,13 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.4";
+  version = "1.22.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-1xIMEUap1yPVPVv+gHTaJXWoHwWYQ4dSk385u3yDO2o=";
+    hash = "sha256-tnsxMTpUxpKbgpadQdPP3y9Y21c/tfSR5rul2ErqB3g=";
   };
 
   strictDeps = true;
