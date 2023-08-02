@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, installShellFiles
 , python3
 }:
 
@@ -16,7 +17,9 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3.pythonForBuild.pkgs; [
+    argcomplete
     hatchling
+    installShellFiles
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -25,6 +28,13 @@ python3.pkgs.buildPythonApplication rec {
     platformdirs
     userpath
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd pipx \
+      --bash <(register-python-argcomplete --shell bash pipx) \
+      --fish <(register-python-argcomplete --shell fish pipx) \
+      --zsh <(register-python-argcomplete --shell zsh pipx)
+  '';
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
