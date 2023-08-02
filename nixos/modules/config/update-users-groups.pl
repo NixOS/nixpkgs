@@ -316,8 +316,10 @@ foreach my $u (values %usersOut) {
     next if defined $shadowSeen{$u->{name}};
     my $hashedPassword = "!";
     $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword};
+    my $expires = "";
+    $expires = dateToDays($u->{expires}) if defined $u->{expires};
     # FIXME: set correct value for sp_lstchg.
-    push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::::") . "\n";
+    push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::", $expires, "") . "\n";
 }
 
 updateFile("/etc/shadow", \@shadowNew, 0640);
