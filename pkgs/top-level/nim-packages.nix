@@ -46,7 +46,7 @@ lib.makeScope newScope (self:
 
     hashlib = callPackage ../development/nim-packages/hashlib { };
 
-    hts-nim = callPackage ../development/nim-packages/hts-nim { };
+    hts = callPackage ../development/nim-packages/hts { };
 
     illwill = callPackage ../development/nim-packages/illwill { };
 
