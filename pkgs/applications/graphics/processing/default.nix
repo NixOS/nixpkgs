@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, javaPackages, rsync, ffmpeg, batik, gsettings-desktop-schemas, xorg, wrapGAppsHook }:
 let
-  buildNumber = "1289";
+  buildNumber = "1292";
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.1.1";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-OjTqANxzcW/RrAdqmVYAegrlLPu6w2pjzSyZyvUYIt4=";
+    sha256 = "sha256-wdluhrtliLN4T2dcmwvUWZhOARC3Lst7+hWWwZjafmU=";
   };
 
   nativeBuildInputs = [ ant unzip makeWrapper wrapGAppsHook ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     echo "tarring jdk"
-    tar --checkpoint=10000 -czf build/linux/jdk-17.0.5-amd64.tgz ${jdk}
+    tar --checkpoint=10000 -czf build/linux/jdk-17.0.6-amd64.tgz ${jdk}
     cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
     mkdir -p core/library
     ln -s ${javaPackages.jogl_2_3_2}/share/java/* core/library/
