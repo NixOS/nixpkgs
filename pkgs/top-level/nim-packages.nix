@@ -31,6 +31,8 @@ lib.makeScope newScope (self:
 
     coap = callPackage  ../development/nim-packages/coap { };
 
+    db_connector = callPackage ../development/nim-packages/db_connector { };
+
     docopt = callPackage ../development/nim-packages/docopt { };
 
     eris = callPackage ../development/nim-packages/eris { };
