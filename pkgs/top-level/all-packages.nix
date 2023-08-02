@@ -38988,7 +38988,7 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  mosdepth = callPackage ../applications/science/biology/mosdepth { };
+  mosdepth = nim2Packages.callPackage ../applications/science/biology/mosdepth { };
 
   niftyreg = callPackage ../applications/science/biology/niftyreg { };
 

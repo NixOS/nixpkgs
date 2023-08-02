@@ -13,6 +13,7 @@ nimPackages.buildNimPackage rec {
   };
 
   buildInputs = [ docopt hts pcre ];
+  nimFlags = hts.nimFlags ++ [ "--threads:off" ];
 
   meta = with lib; {
     description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";
