@@ -343,6 +343,8 @@ let
 
     domain-local-await = callPackage ../development/ocaml-modules/domain-local-await { };
 
+    domain-local-timeout = callPackage ../development/ocaml-modules/domain-local-timeout { };
+
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
     domainslib = callPackage ../development/ocaml-modules/domainslib { };
