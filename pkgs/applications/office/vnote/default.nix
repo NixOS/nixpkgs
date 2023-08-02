@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://vnotex.github.io/vnote";
     description = "A pleasant note-taking platform";
-    changelog = "https://github.com/vnotex/vnote/releases/tag/v${finalAttrs.src.rev}";
+    changelog = "https://github.com/vnotex/vnote/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
