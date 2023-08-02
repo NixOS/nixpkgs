@@ -5865,7 +5865,7 @@ with pkgs;
 
   mq-cli = callPackage ../tools/system/mq-cli { };
 
-  mrkd = with python3Packages; toPythonApplication mrkd;
+  mrkd = callPackage ../tools/text/mrkd { };
 
   naproche = callPackage ../applications/science/logic/naproche { };
 

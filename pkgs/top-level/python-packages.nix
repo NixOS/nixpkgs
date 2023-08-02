@@ -6704,8 +6704,6 @@ self: super: with self; {
 
   mrjob = callPackage ../development/python-modules/mrjob { };
 
-  mrkd = callPackage ../development/python-modules/mrkd { };
-
   ms-active-directory = callPackage ../development/python-modules/ms-active-directory { };
 
   ms-cv = callPackage ../development/python-modules/ms-cv { };
