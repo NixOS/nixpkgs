@@ -1,21 +1,28 @@
 { useLua ? true
 , usePcre ? true
 , withPrometheusExporter ? true
-, stdenv, lib, fetchurl, nixosTests
-, openssl, zlib, libxcrypt
-, lua5_3 ? null, pcre ? null, systemd ? null
+, stdenv
+, lib
+, fetchurl
+, nixosTests
+, openssl
+, zlib
+, libxcrypt
+, lua5_3 ? null
+, pcre ? null
+, systemd ? null
 }:
 
 assert useLua -> lua5_3 != null;
 assert usePcre -> pcre != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
   version = "2.8.1";
 
   src = fetchurl {
-    url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SFVS/NnV1fQarQRvEx/Ap+hJvvJaNJoEB1CvDG/FaAc=";
+    url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
+    hash = "sha256-SFVS/NnV1fQarQRvEx/Ap+hJvvJaNJoEB1CvDG/FaAc=";
   };
 
   buildInputs = [ openssl zlib libxcrypt ]
@@ -26,10 +33,10 @@ stdenv.mkDerivation rec {
   # TODO: make it work on bsd as well
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    ("TARGET=" + (if stdenv.isSunOS  then "solaris"
-             else if stdenv.isLinux  then "linux-glibc"
-             else if stdenv.isDarwin then "osx"
-             else "generic"))
+    ("TARGET=" + (if stdenv.isSunOS then "solaris"
+    else if stdenv.isLinux then "linux-glibc"
+    else if stdenv.isDarwin then "osx"
+    else "generic"))
   ];
 
   buildFlags = [
@@ -54,8 +61,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.haproxy = nixosTests.haproxy;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/CHANGELOG";
     description = "Reliable, high performance TCP/HTTP load balancer";
+    homepage = "https://haproxy.org";
+    license = with lib.licenses; [ gpl2Plus lgpl21Only ];
     longDescription = ''
       HAProxy is a free, very fast and reliable solution offering high
       availability, load balancing, and proxying for TCP and HTTP-based
@@ -64,10 +74,7 @@ stdenv.mkDerivation rec {
       tens of thousands of connections is clearly realistic with todays
       hardware.
     '';
-    homepage = "https://haproxy.org";
-    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
-    license = with licenses; [ gpl2Plus lgpl21Only ];
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

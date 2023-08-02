@@ -1565,11 +1565,11 @@ with self; {
 
   BerkeleyDB = buildPerlPackage {
     pname = "BerkeleyDB";
-    version = "0.64";
+    version = "0.65";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.64.tar.gz";
-      hash = "sha256-U1yF6FScGsQ6IBYP3ALwpABhQVb9dhV//yiqM/2jdEs=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.65.tar.gz";
+      hash = "sha256-QQqonnIylB1JEGyeBI1jN0dVQ+wdIz6nzbcly1uWNQQ=i";
     };
 
     preConfigure = ''
@@ -5515,10 +5515,10 @@ with self; {
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.076";
+    version = "0.078";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.076.tar.gz";
-      hash = "sha256-u4SsASQ4x87NtRpab/+08f7jsOrgAi6WzrwuFnUiYhw=";
+      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.078.tar.gz";
+      hash = "sha256-kxYLEkL31XQ8s8kxuO/HyzmCHQ4y+U+Wkz8eiOYYvL0=";
     };
     meta = {
       description = "Cryptographic toolkit";
@@ -5562,6 +5562,9 @@ with self; {
       hash = "sha256-L+XheYgqa5Jt/vChCLSiyHof+waJK88vuI5Mj0uEODw=";
     };
     buildInputs = [ TestRequires ];
+    patches = [
+      ../development/perl-modules/Data-Clone-fix-apostrophe-package-separator.patch
+    ];
     meta = {
       description = "Polymorphic data cloning";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -6604,10 +6607,10 @@ with self; {
 
   DevelCaller = buildPerlPackage {
     pname = "Devel-Caller";
-    version = "2.06";
+    version = "2.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RC/RCLAMP/Devel-Caller-2.06.tar.gz";
-      hash = "sha256-anOuaikoNCVbkNqUCSBUJTBfz+mUsUjcttLW72KNt98=";
+      url = "mirror://cpan/authors/id/R/RC/RCLAMP/Devel-Caller-2.07.tar.gz";
+      hash = "sha256-tnmisYA0sLcg3oLDcIckw2SxCmyhZMvGfNw68oPzUD8=";
     };
     propagatedBuildInputs = [ PadWalker ];
     meta = {
@@ -7349,10 +7352,10 @@ with self; {
 
   DevelFindPerl = buildPerlPackage {
     pname = "Devel-FindPerl";
-    version = "0.015";
+    version = "0.016";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.015.tar.gz";
-      hash = "sha256-UnW33CJv5/Fstp/G+Z9eKahSxqTTt4arGIajE4Z0Pfw=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.016.tar.gz";
+      hash = "sha256-Q6K/L3h6PxuIEXkGMWKyqj58sET25eduxkZq6QqGETg=";
     };
     meta = {
       description = "Find the path to your perl";
@@ -7403,10 +7406,10 @@ with self; {
 
   DevelNYTProf = buildPerlPackage {
     pname = "Devel-NYTProf";
-    version = "6.10";
+    version = "6.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JK/JKEENAN/Devel-NYTProf-6.10.tar.gz";
-      hash = "sha256-JKxBdPHwEyIGP6ThGbJH03HTJg3cpud4xsGg4/kF9Y4=";
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/Devel-NYTProf-6.12.tar.gz";
+      hash = "sha256-qDtZheTalr24X1McFqtvPUkHGnM80JSqMPqF+2pLAsQ=";
     };
     propagatedBuildInputs = [ FileWhich JSONMaybeXS ];
     buildInputs = [ CaptureTiny TestDifferences ];
@@ -8668,6 +8671,9 @@ with self; {
       hash = "sha256-VyPdePSsC00mKgXqRq9mPqANgJay6cCkNRXCEHYOHnU=";
     };
     buildInputs = [ TestUnitLite ];
+    patches = [
+      ../development/perl-modules/Exception-Base-remove-smartmatch-when-5.38.0.patch
+    ];
     meta = {
       description = "Lightweight exceptions";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -8823,6 +8829,9 @@ with self; {
       url = "mirror://cpan/authors/id/N/NW/NWCLARK/ExtUtils-Constant-0.25.tar.gz";
       hash = "sha256-aTPQ6WO2IoHvdWEGjmrsrIxKwrR2srugmrC5D7rJ11c=";
     };
+    patches = [
+      ../development/perl-modules/ExtUtils-Constant-fix-indirect-method-call-in-test.patch
+    ];
     meta = {
       description = "Generate XS code to import C header constants";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11276,10 +11285,10 @@ with self; {
 
   HTMLMason = buildPerlPackage {
     pname = "HTML-Mason";
-    version = "1.59";
+    version = "1.60";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTML-Mason-1.59.tar.gz";
-      hash = "sha256-lb7SpsSINwBGqjFL5LWSvWWmUi+IRdqLNqav+ai0OdA=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTML-Mason-1.60.tar.gz";
+      hash = "sha256-qgu9WmtjxiyJVfjFXsCF43DXktZSZrbDtcXweIu8d+Y=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ CGI CacheCache ClassContainer ExceptionClass LogAny ];
@@ -14069,10 +14078,10 @@ with self; {
 
   LogLog4perl = buildPerlPackage {
     pname = "Log-Log4perl";
-    version = "1.53";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/Log-Log4perl-1.53.tar.gz";
-      hash = "sha256-j7+0jQFu7HNEpTnzrXCHC0rEY45JZmv6cNEPb/1Kw44=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Log-Log4perl-1.57.tar.gz";
+      hash = "sha256-D4/Ldjio89tMeX35T9vFYBN0kULy+Uy8lbQ8n8oJahM=";
     };
     meta = {
       description = "Log4j implementation for Perl";

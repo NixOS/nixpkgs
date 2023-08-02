@@ -285,9 +285,6 @@ in {
 
         "--set NIM_CONFIG_PATH ${placeholder "out"}/etc/nim"
         # Use the custom configuration
-
-        ''--set NIX_HARDENING_ENABLE "''${NIX_HARDENING_ENABLE/fortify}"''
-        # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
       ];
 
       installPhase = ''
