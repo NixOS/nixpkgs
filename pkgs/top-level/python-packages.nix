@@ -268,6 +268,8 @@ self: super: with self; {
 
   aiomodernforms = callPackage ../development/python-modules/aiomodernforms { };
 
+  aiomqtt = callPackage ../development/python-modules/aiomqtt { };
+
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
 
   aiomusiccast = callPackage ../development/python-modules/aiomusiccast { };
