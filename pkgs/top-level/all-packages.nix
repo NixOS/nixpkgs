@@ -9228,6 +9228,8 @@ with pkgs;
 
   irrd = callPackage ../servers/misc/irrd { };
 
+  iris-cli = callPackage ../tools/misc/iris-cli { };
+
   ised = callPackage ../tools/misc/ised { };
 
   isl = isl_0_20;
