@@ -48,6 +48,10 @@
 
         ( cd jogl/make
 
+          # prevent looking for native libraries in /usr/lib
+          substituteInPlace build-*.xml \
+            --replace 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
+
           # force way to do disfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
           # if arm/aarch64 support will be added, this block might be commented out on those platforms
           # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
@@ -63,16 +67,16 @@
 
       installPhase = ''
         mkdir -p $out/share/java
-        cp -v $NIX_BUILD_TOP/gluegen/build/gluegen-rt{,-natives-linux-amd64}.jar $out/share/java/
-        cp -v $NIX_BUILD_TOP/jogl/build/jar/jogl-all{,-natives-linux-amd64}.jar  $out/share/java/
-        cp -v $NIX_BUILD_TOP/jogl/build/nativewindow/nativewindow{,-awt,-natives-linux-amd64,-os-drm,-os-x11}.jar  $out/share/java/
+        cp -v $NIX_BUILD_TOP/gluegen/build/gluegen-rt{,-natives-linux-*}.jar $out/share/java/
+        cp -v $NIX_BUILD_TOP/jogl/build/jar/jogl-all{,-natives-linux-*}.jar  $out/share/java/
+        cp -v $NIX_BUILD_TOP/jogl/build/nativewindow/nativewindow{,-awt,-natives-linux-*,-os-drm,-os-x11}.jar  $out/share/java/
       '';
 
       meta = with lib; {
         description = "Java libraries for 3D Graphics, Multimedia and Processing";
         homepage = "https://jogamp.org/";
         license = licenses.bsd3;
-        platforms = [ "x86_64-linux" ];
+        platforms = platforms.linux;
       };
     };
 
