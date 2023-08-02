@@ -4,7 +4,7 @@
 
   # Build-time dependencies:
 , addOpenGLRunpath
-, bazel_6
+, bazel_5
 , binutils
 , buildBazelPackage
 , buildPythonPackage
@@ -26,7 +26,6 @@
   # Python dependencies:
 , absl-py
 , flatbuffers
-, ml-dtypes
 , numpy
 , scipy
 , six
@@ -36,6 +35,7 @@
 , giflib
 , grpc
 , libjpeg_turbo
+, protobuf
 , python
 , snappy
 , zlib
@@ -53,7 +53,7 @@ let
   inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.4.12";
+  version = "0.4.4";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -138,15 +138,14 @@ let
   bazel-build = buildBazelPackage rec {
     name = "bazel-build-${pname}-${version}";
 
-    # See https://github.com/google/jax/blob/main/.bazelversion for the latest.
-    bazel = bazel_6;
+    bazel = bazel_5;
 
     src = fetchFromGitHub {
       owner = "google";
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
       rev = "refs/tags/${pname}-v${version}";
-      hash = "sha256-2JwEpzB5RwmBjGktppKhCpiaBM0AR20wfsRoQ33lh8Y=";
+      hash = "sha256-DP68UwS9bg243iWU4MLHN0pwl8LaOcW3Sle1ZjsLOHo=";
     };
 
     nativeBuildInputs = [
@@ -170,7 +169,7 @@ let
       numpy
       openssl
       pkgs.flatbuffers
-      pkgs.protobuf
+      protobuf
       pybind11
       scipy
       six
@@ -189,8 +188,7 @@ let
       rm -f .bazelversion
     '';
 
-    bazelRunTarget = "//build:build_wheel";
-    runTargetFlags = [ "--output_path=$out" "--cpu=${arch}" ];
+    bazelTargets = [ "//build:build_wheel" ];
 
     removeRulesCC = false;
 
@@ -209,11 +207,7 @@ let
       build --action_env=PYENV_ROOT
       build --python_path="${python}/bin/python"
       build --distinct_host_configuration=false
-      build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
-    '' + lib.optionalString (stdenv.targetPlatform.avxSupport && stdenv.targetPlatform.isUnix) ''
-      build --config=avx_posix
-    '' + lib.optionalString mklSupport ''
-      build --config=mkl_open_source_only
+      build --define PROTOBUF_INCLUDE_PATH="${protobuf}/include"
     '' + lib.optionalString cudaSupport ''
       build --action_env CUDA_TOOLKIT_PATH="${cudatoolkit_joined}"
       build --action_env CUDNN_INSTALL_PATH="${cudnn}"
@@ -240,7 +234,7 @@ let
     fetchAttrs = {
       TF_SYSTEM_LIBS = lib.concatStringsSep "," tf_system_libs;
       # we have to force @mkl_dnn_v1 since it's not needed on darwin
-      bazelTargets = [ bazelRunTarget "@mkl_dnn_v1//:mkl_dnn" ];
+      bazelTargets = bazelTargets ++ [ "@mkl_dnn_v1//:mkl_dnn" ];
       bazelFlags = bazelFlags ++ [
         "--config=avx_posix"
       ] ++ lib.optionals cudaSupport [
@@ -255,9 +249,9 @@ let
 
       sha256 =
         if cudaSupport then
-          "sha256-wpucplv03HQHZ2gWhVq4R798ouPH99T3X4hbu7IRxj4="
+          "sha256-O6bM7Lc8eaFyO4Xzl5/hvBrbPioI+Yeqx9yNC97fvKk="
         else
-          "sha256-v2tCFifMBJbqweZQ2rsw707Zxehu+B+YtxFk1iHdDgc=";
+          "sha256-gLMJfJSQIdGGY2Ivx4IgDWg0hc+mxzlqY11CUkSWcjI=";
     };
 
     buildAttrs = {
@@ -267,13 +261,25 @@ let
         "nsync" # fails to build on darwin
       ]);
 
+      bazelFlags = bazelFlags ++ lib.optionals (stdenv.targetPlatform.isx86_64 && stdenv.targetPlatform.isUnix) [
+        "--config=avx_posix"
+      ] ++ lib.optionals cudaSupport [
+        "--config=cuda"
+      ] ++ lib.optionals mklSupport [
+        "--config=mkl_open_source_only"
+      ];
       # Note: we cannot do most of this patching at `patch` phase as the deps are not available yet.
-      # 1) Link protobuf from nixpkgs (through TF_SYSTEM_LIBS when using gcc) to prevent crashes on
+      # 1) Fix pybind11 include paths.
+      # 2) Link protobuf from nixpkgs (through TF_SYSTEM_LIBS when using gcc) to prevent crashes on
       #    loading multiple extensions in the same python program due to duplicate protobuf DBs.
-      # 2) Patch python path in the compiler driver.
-      preBuild = lib.optionalString cudaSupport ''
+      # 3) Patch python path in the compiler driver.
+      preBuild = ''
+        for src in ./jaxlib/*.{cc,h} ./jaxlib/cuda/*.{cc,h}; do
+          sed -i 's@include/pybind11@pybind11@g' $src
+        done
+      '' + lib.optionalString cudaSupport ''
         export NIX_LDFLAGS+=" -L${backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
-        patchShebangs ../output/external/xla/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+        patchShebangs ../output/external/org_tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
       '' + lib.optionalString stdenv.isDarwin ''
         # Framework search paths aren't added by bintools hook
         # https://github.com/NixOS/nixpkgs/pull/41914
@@ -283,12 +289,16 @@ let
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
           --replace "/usr/bin/libtool" "${cctools}/bin/libtool"
       '' + (if stdenv.cc.isGNU then ''
-        sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
       '' else if stdenv.cc.isClang then ''
-        sed -i 's@-lprotobuf@${pkgs.protobuf}/lib/libprotobuf.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@${pkgs.protobuf}/lib/libprotoc.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotobuf@${protobuf}/lib/libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotoc@${protobuf}/lib/libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
       '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
+
+      installPhase = ''
+        ./bazel-bin/build/build_wheel --output_path=$out --cpu=${arch}
+      '';
     };
 
     inherit meta;
@@ -335,19 +345,13 @@ buildPythonPackage {
     grpc
     jsoncpp
     libjpeg_turbo
-    ml-dtypes
     numpy
     scipy
     six
     snappy
   ];
 
-  pythonImportsCheck = [
-    "jaxlib"
-    # `import jaxlib` loads surprisingly little. These imports are actually bugs that appeared in the 0.4.11 upgrade.
-    "jaxlib.cpu_feature_guard"
-    "jaxlib.xla_client"
-  ];
+  pythonImportsCheck = [ "jaxlib" ];
 
   # Without it there are complaints about libcudart.so.11.0 not being found
   # because RPATH path entries added above are stripped.
