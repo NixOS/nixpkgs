@@ -1,5 +1,26 @@
 # Contributing to Nixpkgs packages
 
+This document is for people wanting to contribute specifically to the package collection in Nixpkgs.
+See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general information.
+
+## Overview
+
+- [`top-level`](./top-level): Entrypoints, package set aggregations
+  - [`impure.nix`](./top-level/impure.nix), [`default.nix`](./top-level/default.nix), [`config.nix`](./top-level/config.nix): Definitions for the evaluation entry point of `import <nixpkgs>`
+  - [`stage.nix`](./top-level/stage.nix), [`all-packages.nix`](./top-level/all-packages.nix), [`splice.nix`](./top-level/splice.nix): Definitions for the top-level attribute set made available through `import <nixpkgs> {…}`
+  - `*-packages.nix`, [`linux-kernels.nix`](./top-level/linux-kernels.nix), [`unixtools.nix`](./top-level/unixtools.nix): Aggregations of nested package sets defined in `development`
+  - [`aliases.nix`](./top-level/aliases.nix), [`python-aliases.nix`](./top-level/python-aliases.nix): Aliases for package definitions that have been renamed or removed
+  - `release*.nix`, [`make-tarball.nix`](./top-level/make-tarball.nix), [`packages-config.nix`](./top-level/packages-config.nix), [`metrics.nix`](./top-level/metrics.nix), [`nixpkgs-basic-release-checks.nix`](./top-level/nixpkgs-basic-release-checks.nix): Entry-points and utilities used by Hydra for continuous integration
+- [`development`](./development)
+  - `*-modules`, `*-packages`, `*-pkgs`: Package definitions for nested package sets
+  - All other directories loosely categorise top-level package definitions, see [category hierarchy](#category-hierarchy)
+- [`build-support`](./build-support): [Builders](https://nixos.org/manual/nixpkgs/stable/#part-builders)
+  - `fetch*`: [Fetchers](https://nixos.org/manual/nixpkgs/stable/#chap-pkgs-fetchers)
+- [`stdenv`](./stdenv): [Standard environment](https://nixos.org/manual/nixpkgs/stable/#part-stdenv)
+- [`pkgs-lib`](./pkgs-lib): Definitions for utilities that need packages but are not needed for packages
+- [`test`](./test): Tests not directly associated with any specific packages
+- All other directories loosely categorise top-level packages definitions, see [category hierarchy](#category-hierarchy)
+
 ## Quick Start to Adding a Package {#chap-quick-start}
 
 To add a package to Nixpkgs:
@@ -78,7 +99,7 @@ To add a package to Nixpkgs:
 
 7. Optionally commit the new package and open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
 
-## Hierarchy {#sec-hierarchy}
+## Category Hierarchy
 
 Each package should be stored in its own directory somewhere in the `pkgs/` tree, i.e. in `pkgs/category/subcategory/.../pkgname`. Below are some rules for picking the right category for a package. Many packages fall under several categories; what matters is the _primary_ purpose of a package. For example, the `libxml2` package builds both a library and some tools; but it’s a library foremost, so it goes under `pkgs/development/libraries`.
 
