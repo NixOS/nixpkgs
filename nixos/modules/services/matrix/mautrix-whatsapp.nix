@@ -67,6 +67,10 @@ in {
       example = {
         settings = {
           homeserver.address = "https://matrix.myhomeserver.org";
+          appservice.database = {
+            type = "postgres";
+            uri = "postgresql:///mautrix_whatsapp?host=/run/postgresql";
+          };
           bridge.permissions = {
             "@admin:myhomeserver.org" = "admin";
           };
