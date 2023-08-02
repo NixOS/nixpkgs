@@ -46,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     umockdev
   ];
 
+  mesonFlags = [
+    # to build with non-udev libudev providers (e.g. libudev-zero), tests must be disabled
+    (lib.mesonEnable "tests" finalAttrs.doCheck)
+  ];
+
   doCheck = true;
   mesonFlags = lib.optional (!finalAttrs.finalPackage.doCheck) "-Dtests=disabled";
 
