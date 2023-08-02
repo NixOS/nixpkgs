@@ -2,6 +2,8 @@
 
 python3.override {
   packageOverrides = self: super: {
+    django = super.django_3;
+
     # does not find tests
     alembic = super.alembic.overridePythonAttrs (oldAttrs: {
       doCheck = false;
