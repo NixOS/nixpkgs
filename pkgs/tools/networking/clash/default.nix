@@ -40,5 +40,6 @@ buildGoModule rec {
     changelog = "https://github.com/Dreamacro/clash/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ contrun Br1ght0ne ];
+    mainProgram = "clash";
   };
 }

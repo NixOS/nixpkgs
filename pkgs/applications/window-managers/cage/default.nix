@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+    mainProgram = "cage";
   };
 }

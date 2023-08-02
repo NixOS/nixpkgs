@@ -73,5 +73,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ misterio77 ];
+    mainProgram = "kavita";
   };
 })
