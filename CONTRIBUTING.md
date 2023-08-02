@@ -16,29 +16,74 @@ This file contains general contributing information, but individual parts also h
 - [`doc`](./doc): Sources and infrastructure for the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/)
 - [`nixos`](./nixos): Implementation of [NixOS](https://nixos.org/manual/nixos/stable/)
 
-## (Proposing a change) | Submitting changes
+## How to propose a change
 
-Note: contributing implies licensing those contributions
-under the terms of [COPYING](COPYING), which is an MIT-like license.
+This section describes in some detail how changes can be made and proposed with pull requests.
+
+> **Note**
+> Be aware that contributing implies licensing those contributions under the terms of [COPYING](./COPYING), an MIT-like license.
+
+0. Set up a local version of Nixpkgs to work with using GitHub and Git
+   1. [Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) the [Nixpkgs repository](https://github.com/nixos/nixpkgs/).
+   1. [Clone the forked repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) into a local `nixpkgs` directory.
+   1. [Configure the upstream Nixpkgs repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo#configuring-git-to-sync-your-fork-with-the-upstream-repository).
+
+1. Create and switch to a new Git branch, ideally such that:
+   - The name of the branch hints at the change you'd like to implement, e.g. `update-hello`.
+   - The base of the branch includes the most recent changes on the `master` branch.
+     > **Note**
+     > Depending on the change you may want to use a different branch, see <!-- TODO link to branch section -->
+
+   ```bash
+   # Make sure you have the latest changes from upstream Nixpkgs
+   git fetch upstream
+
+   # Create and switch to a new branch based off the master branch in Nixpkgs
+   git switch --create update-hello upstream/master
+   ```
+
+   To avoid having to download and build potentially many derivations, at the expense of using a potentially outdated version, you can base the branch off a specific [Git commit](https://www.git-scm.com/docs/gitglossary#def_commit) instead:
+   - The commit of the latest `nixpkgs-unstable` channel, available [here](https://channels.nixos.org/nixpkgs-unstable/git-revision).
+   - The commit of a local Nixpkgs downloaded using [nix-channel](https://nixos.org/manual/nix/stable/command-ref/nix-channel), available using `nix-instantiate --eval --expr '(import <nixpkgs/lib>).trivial.revisionWithDefault null'`
+   - If you're using NixOS, the commit of your NixOS installation, available with `nixos-version --revision`.
+
+   Once you have an appropriate commit you can use it instead of `upstream/master` in the above command:
+   ```bash
+   git switch --create update-hello <the desired base commit>
+   ```
+
+2. Make the desired changes in the local Nixpkgs repository using an editor of your choice.
+   Make sure to:
+   - Adhere to both the [general code conventions](#code-conventions), and the code conventions specific to the part you're making changes to.
+     See the [overview section](#overview) for more specific information.
+   - Test the changes.
+     See the [overview section](#overview) for more specific information.
+   - If necessary, document the change.
+     See the [overview section](#overview) for more specific information.
+
+3. Commit your changes using `git commit`.
+   Make sure to adhere to the [commit conventions](#commit-conventions).
+
+   Repeat the steps 2 and 3 as many times as necessary.
+   Advance to the next step if all the commits (viewable with `git log`) make sense together.
+
+4. Push your commits to your fork of Nixpkgs.
+   ```
+   git push --set-upstream origin HEAD
+   ```
+
+   The above command will output a link that allows you to directly quickly do the next step:
+   ```
+   remote: Create a pull request for 'update-hello' on GitHub by visiting:
+   remote:      https://github.com/myUser/nixpkgs/pull/new/update-hello
+   ```
+
+5. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
+   Generally you should use `master` as the pull requests base branch.
+   See <!-- TODO branch section link --> for when a different branch should be used instead.
+   Make sure to go through the [pull request template](#pull-request-template) in the pre-filled default description.
 
 ### Making patches {#submitting-changes-making-patches}
-
-- Read [Manual (How to write packages for Nix)](https://nixos.org/nixpkgs/manual/).
-
-- Fork [the Nixpkgs repository](https://github.com/nixos/nixpkgs/) on GitHub.
-
-- Create a branch for your future fix.
-
-  - You can make branch from a commit of your local `nixos-version`. That will help you to avoid additional local compilations. Because you will receive packages from binary cache. For example
-
-    ```ShellSession
-    $ nixos-version --hash
-    0998212
-    $ git checkout 0998212
-    $ git checkout -b 'fix/pkg-name-update'
-    ```
-
-  - Please avoid working directly on the `master` branch.
 
 - If you removed pkgs or made some major NixOS changes, write about it in the release notes for the next stable release. For example `nixos/doc/manual/release-notes/rl-2003.xml`.
 
@@ -63,10 +108,6 @@ under the terms of [COPYING](COPYING), which is an MIT-like license.
 
 
 ### (Creating a pull request)
-
-- Push your changes to your fork of nixpkgs.
-- Create the pull request
-- Follow [the contribution guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#submitting-changes).
 
 When pull requests are made, our tooling automation bot,
 [OfBorg](https://github.com/NixOS/ofborg) will perform various checks
