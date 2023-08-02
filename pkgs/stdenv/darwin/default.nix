@@ -464,6 +464,10 @@ in
           inherit (selfDarwin) sigtool;
         };
 
+        postLinkSignHook = prevStage.darwin.postLinkSignHook.override {
+          inherit (selfDarwin) sigtool;
+        };
+
         binutils = superDarwin.binutils.override {
           inherit (self) coreutils;
           inherit (selfDarwin) postLinkSignHook signingUtils;
