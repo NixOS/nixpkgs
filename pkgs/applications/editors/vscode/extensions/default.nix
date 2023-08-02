@@ -1640,8 +1640,8 @@ let
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they can require insider versions
           # of VS Code
-          version = "0.66.0";
-          sha256 = "sha256-rhAFNX+/BoKkQeFlVdoHzA8UmZeQofq7+UPooWleYVw=";
+          version = "0.68.1";
+          sha256 = "sha256-d60ZxWQLZa2skOB3Iv9K04aGNZA1d1A82N7zRaxAzlI=";
         };
         meta = { license = lib.licenses.mit; };
       };
