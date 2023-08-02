@@ -374,7 +374,12 @@ let
         gn = gnChromium;
       };
     };
-  };
+  }
+  # overwrite `version` with the exact same `version` from the same source,
+  # except it internally points to `upstream-info.nix` for
+  # `builtins.unsafeGetAttrPos`, which is used by ofborg to decide
+  # which maintainers need to be pinged.
+  // builtins.removeAttrs upstream-info (builtins.filter (e: e != "version") (builtins.attrNames upstream-info));
 
 # Remove some extraAttrs we supplied to the base attributes already.
 in stdenv.mkDerivation (base // removeAttrs extraAttrs [
