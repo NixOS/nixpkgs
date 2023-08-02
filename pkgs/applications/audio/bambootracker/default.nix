@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, gitUpdater
 , pkg-config
 , qmake
 , qt5compat ? null
@@ -13,14 +14,14 @@
 
 assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bambootracker";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-Ymi1tjJCgStF0Rtseelq/YuTtBs2PrbF898TlbjyYUw=";
   };
@@ -64,6 +65,12 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/Applications/BambooTracker.app/Contents/MacOS/BambooTracker
   '';
 
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
+
   meta = with lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
     homepage = "https://bambootracker.github.io/BambooTracker/";
@@ -71,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ OPNA2608 ];
   };
-}
+})
