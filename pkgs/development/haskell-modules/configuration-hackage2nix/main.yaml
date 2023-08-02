@@ -352,6 +352,7 @@ package-maintainers:
     - binrep
     - bytepatch
     - heystone
+    - refined
   roberth:
     - arion-compose
     - cabal-pkg-config-version-hook
