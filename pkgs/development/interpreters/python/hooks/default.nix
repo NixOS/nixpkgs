@@ -143,9 +143,8 @@ in {
   pythonRelaxDepsHook = callPackage ({ makePythonHook, wheel }:
     makePythonHook {
       name = "python-relax-deps-hook";
-      propagatedBuildInputs = [ wheel ];
       substitutions = {
-        inherit pythonInterpreter;
+        inherit pythonInterpreter pythonSitePackages wheel;
       };
     } ./python-relax-deps-hook.sh) {};
 
