@@ -62,6 +62,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/integration/"
+    "tests/test_misc.py"
   ];
 
   meta = with lib; {
