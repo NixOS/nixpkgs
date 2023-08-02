@@ -4,37 +4,8 @@ with lib;
 
 let
   systemBuilder =
-    let
-      kernelPath = "${config.boot.kernelPackages.kernel}/" +
-        "${config.system.boot.loader.kernelFile}";
-      initrdPath = "${config.system.build.initialRamdisk}/" +
-        "${config.system.boot.loader.initrdFile}";
-    in ''
+    ''
       mkdir $out
-
-      # Containers don't have their own kernel or initrd.  They boot
-      # directly into stage 2.
-      ${optionalString config.boot.kernel.enable ''
-        if [ ! -f ${kernelPath} ]; then
-          echo "The bootloader cannot find the proper kernel image."
-          echo "(Expecting ${kernelPath})"
-          false
-        fi
-
-        ln -s ${kernelPath} $out/kernel
-        ln -s ${config.system.modulesTree} $out/kernel-modules
-        ${optionalString (config.hardware.deviceTree.package != null) ''
-          ln -s ${config.hardware.deviceTree.package} $out/dtbs
-        ''}
-
-        echo -n "$kernelParams" > $out/kernel-params
-
-        ln -s ${initrdPath} $out/initrd
-
-        ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
-
-        ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
-      ''}
 
       ${if config.boot.initrd.systemd.enable then ''
         cp ${config.system.build.bootStage2} $out/prepare-root
@@ -83,7 +54,6 @@ let
 
     systemd = config.systemd.package;
 
-    kernelParams = config.boot.kernelParams;
     nixosLabel = config.system.nixos.label;
 
     inherit (config.system) extraDependencies;
