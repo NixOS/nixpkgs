@@ -2087,6 +2087,8 @@ self: super: with self; {
 
   coreapi = callPackage ../development/python-modules/coreapi { };
 
+  coredis = callPackage ../development/python-modules/coredis { };
+
   coreschema = callPackage ../development/python-modules/coreschema { };
 
   cornice = callPackage ../development/python-modules/cornice { };
@@ -6899,6 +6901,8 @@ self: super: with self; {
   py-ecc = callPackage ../development/python-modules/py-ecc { };
 
   py-eth-sig-utils = callPackage ../development/python-modules/py-eth-sig-utils { };
+
+  py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
