@@ -21,6 +21,7 @@
 , xorg
 , pkg-config
 , libvlc
+, libGL
 , mbedtls
 , wrapGAppsHook
 , scriptingSupport ? true
@@ -135,7 +136,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
   preFixup = ''
     qtWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath [ xorg.libX11 libvlc ]}"
+      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath [ xorg.libX11 libvlc libGL ]}"
       ''${gappsWrapperArgs[@]}
     )
   '';
