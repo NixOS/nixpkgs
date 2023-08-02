@@ -2752,4 +2752,10 @@ self: super: {
 
   # The hackage source is somehow missing a file present in the repo (tests/ListStat.hs).
   sym = dontCheck super.sym;
+
+  # version bounds for text in the test suite (but not the libraries) are too low
+  # upstream issue: https://github.com/ludat/conferer/issues/115
+  conferer = doJailbreak super.conferer;
+  conferer-aeson = doJailbreak super.conferer-aeson;
+  conferer-hedis = doJailbreak super.conferer-hedis;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
