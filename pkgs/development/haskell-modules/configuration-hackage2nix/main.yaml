@@ -353,6 +353,7 @@ package-maintainers:
     - bytepatch
     - heystone
     - refined
+    - refined1
   roberth:
     - arion-compose
     - cabal-pkg-config-version-hook
