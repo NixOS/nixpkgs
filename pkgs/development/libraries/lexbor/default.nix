@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "liblexbor";
+  pname = "lexbor";
   version = "unstable-2021-12-20";
 
   src = fetchFromGitHub {
