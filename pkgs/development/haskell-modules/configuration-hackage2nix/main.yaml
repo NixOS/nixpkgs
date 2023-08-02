@@ -351,6 +351,7 @@ package-maintainers:
     - generic-data-functions
     - binrep
     - bytepatch
+    - heystone
   roberth:
     - arion-compose
     - cabal-pkg-config-version-hook
