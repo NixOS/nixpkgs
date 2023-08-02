@@ -15347,6 +15347,12 @@
     githubId = 3789764;
     name = "skykanin";
   };
+  slbtty = {
+    email = "shenlebantongying@gmail.com";
+    github = "shenlebantongying";
+    githubId = 20123683;
+    name = "Shenleban Tongying";
+  };
   sleexyz = {
     email = "freshdried@gmail.com";
     github = "sleexyz";
