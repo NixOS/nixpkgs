@@ -48,9 +48,6 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontUnpack = true;
 
-  # Additional flags passed to pkg-config.
-  addFlags = lib.optional stdenv.targetPlatform.isStatic "--static";
-
   installPhase =
     ''
       mkdir -p $out/bin $out/nix-support
@@ -116,6 +113,9 @@ stdenv.mkDerivation {
     shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";
     wrapperName = "PKG_CONFIG_WRAPPER";
     inherit targetPrefix suffixSalt baseBinName;
+
+    # Additional flags passed to pkg-config.
+    addFlags = lib.optionalString stdenv.targetPlatform.isStatic "--static";
   };
 
   meta =
