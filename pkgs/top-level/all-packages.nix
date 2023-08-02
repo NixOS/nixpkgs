@@ -28989,6 +28989,9 @@ with pkgs;
 
   fira-code = callPackage ../data/fonts/fira-code { };
   fira-code-symbols = callPackage ../data/fonts/fira-code/symbols.nix { };
+  fira-code-nerdfont = nerdfonts.override {
+    fonts = [ "FiraCode" ];
+  };
 
   fira-go = callPackage ../data/fonts/fira-go { };
 
