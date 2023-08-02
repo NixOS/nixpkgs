@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "matrix-sliding-sync";
-  version = "0.99.4";
+  version = "0.99.5";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "sliding-sync";
     rev = "v${version}";
-    hash = "sha256-s7hQ4qCOhkNS8Mc2HZjFqedtj0KqXMAxVMZRIjPyvOA=";
+    hash = "sha256-L2cWKPVclurOCpyQezHPB+5zYD91EREBXjRYBzjxkII=";
   };
 
   vendorHash = "sha256-447P2TbBUEHmHubHiiZCrFVCj2/tmEuYFzLo27UyCk4=";
