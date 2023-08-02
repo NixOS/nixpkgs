@@ -34,10 +34,10 @@
 
 let
   # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "15372-38a5313ed";
-  rpcs3Version = "0.0.28-15372-38a5313ed";
-  rpcs3Revision = "38a5313ed2c4ebb626017a4f7f28ed0c0a89f931";
-  rpcs3Hash = "sha256-tiByoxPf++TK/Xowo2VQ+OEojoYIpX/B8caDyaMZ3Qc=";
+  rpcs3GitVersion = "15409-fd6829f75";
+  rpcs3Version = "0.0.28-15409-fd6829f75";
+  rpcs3Revision = "fd6829f7576da07e3bb90de8821834d3ce44610c";
+  rpcs3Hash = "sha256-I/CYDE7te8xxKjTyH1Mb45uemya5Sfjb96MQWlkFAbk=";
 in
 stdenv.mkDerivation {
   pname = "rpcs3";
