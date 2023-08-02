@@ -1,6 +1,18 @@
-{ appimageTools, lib, fetchurl, makeDesktopItem }:
+{ lib
+, stdenv
+, appimageTools
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, alsa-utils
+, electron
+, libappindicator-gtk3
+, libdrm
+, libpulseaudio
+, pipewire
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "rambox";
   version = "2.1.5";
 
@@ -20,15 +32,35 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
-  extraInstallCommands = ''
-    mkdir -p $out/share/applications $out/share/icons/hicolor/256x256/apps
-    ln -sf rambox-${version} $out/bin/${pname}
-    install -Dm644 ${appimageContents}/usr/share/icons/hicolor/256x256/apps/rambox*.png $out/share/icons/hicolor/256x256/apps/${pname}.png
-    install -Dm644 ${desktopItem}/share/applications/* $out/share/applications
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/${pname} $out/share/applications
+    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
+    cp -a ${appimageContents}/usr/share/icons $out/share
+    cp -a ${appimageContents}/rambox.desktop $out/share/applications/${pname}.desktop
+
+    substituteInPlace $out/share/applications/${pname}.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/resources/app.asar \
+       ${lib.optionalString stdenv.isLinux ''
+        --prefix PATH : ${lib.makeBinPath [ alsa-utils ]} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc libappindicator-gtk3 libdrm libpulseaudio pipewire ]} \
+      ''} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
   '';
 
   meta = with lib; {
