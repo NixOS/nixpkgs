@@ -195,7 +195,9 @@ in
           --seed="${cfg.seed}" \
           --definitions="$amendedRepartDefinitions" \
           --split="${lib.boolToString cfg.split}" \
-          image.raw
+          --json=pretty \
+          image.raw \
+          | tee repart-output.json
       '';
 
     meta = {
