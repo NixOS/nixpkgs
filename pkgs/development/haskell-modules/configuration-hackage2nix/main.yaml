@@ -348,6 +348,7 @@ package-maintainers:
     - shakespeare
   raehik:
     - strongweak
+    - generic-data-functions
     - binrep
     - bytepatch
   roberth:
