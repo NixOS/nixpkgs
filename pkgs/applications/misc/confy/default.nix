@@ -1,6 +1,6 @@
 { blueprint-compiler
 , desktop-file-utils
-, fetchzip
+, fetchFromSourcehut
 , gobject-introspection
 , gtk4
 , lib
@@ -18,8 +18,10 @@ stdenv.mkDerivation rec {
   pname = "confy";
   version = "0.7.0";
 
-  src = fetchzip {
-    url = "https://git.sr.ht/~fabrixxm/confy/archive/${version}.tar.gz";
+  src = fetchFromSourcehut {
+    owner = "~fabrixxm";
+    repo = "confy";
+    rev = version;
     hash = "sha256-q8WASTNbiBuKb2tPQBmUL9ji60PRAPnYOTYxnUn0MAw=";
   };
 
