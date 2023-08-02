@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.12.0";
+  version = "1.12.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "kbr";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-1giXmmyuy+qrY6xV3yZn4kcDd6w6l8uCL4ozcZE4N00=";
+    hash = "sha256-e+w3ce6KdvbYzH48XPEQTiBgtjbKWNdQj8ie4yw0rzE=";
   };
 
   propagatedBuildInputs = [
