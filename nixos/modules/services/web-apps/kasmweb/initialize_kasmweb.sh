@@ -30,37 +30,40 @@ else
     mkdir -p @datastorePath@/certs
     openssl req -x509 -nodes -days 1825 -newkey rsa:2048 -keyout @datastorePath@/certs/kasm_nginx.key -out @datastorePath@/certs/kasm_nginx.crt -subj "/C=US/ST=VA/L=None/O=None/OU=DoFu/CN=$(hostname)/emailAddress=none@none.none" 2> /dev/null
 
+    mkdir -p @datastorePath@/file_mappings
+
     docker volume create kasmweb_db
     rm @datastorePath@/.done_initing_data
     cat >@datastorePath@/init_seeds.sh <<EOF
 #!/bin/bash
 if [ ! -e /opt/kasm/current/.done_initing_data ]; then
-  sleep 4
-  /usr/bin/kasm_server.so --initialize-database --cfg \
-    /opt/kasm/current/conf/app/api.app.config.yaml \
-    --populate-production \
-    --seed-file \
-    /opt/kasm/current/conf/database/seed_data/default_properties.yaml \
-    2>&1 | grep -v UserWarning
-  /usr/bin/kasm_server.so --cfg \
+  while true; do
+      sleep 45;
+      /usr/bin/kasm_server.so --initialize-database --cfg \
+        /opt/kasm/current/conf/app/api.app.config.yaml \
+        --seed-file \
+        /opt/kasm/current/conf/database/seed_data/default_properties.yaml \
+        --populate-production \
+        && break
+  done
+
+  && /usr/bin/kasm_server.so --cfg \
     /opt/kasm/current/conf/app/api.app.config.yaml \
     --populate-production \
     --seed-file \
     /opt/kasm/current/conf/database/seed_data/default_agents.yaml \
-    2>&1 | grep -v UserWarning
-  /usr/bin/kasm_server.so --cfg \
+  && /usr/bin/kasm_server.so --cfg \
     /opt/kasm/current/conf/app/api.app.config.yaml \
     --populate-production \
     --seed-file \
     /opt/kasm/current/conf/database/seed_data/default_connection_proxies.yaml \
-    2>&1 | grep -v UserWarning
-  /usr/bin/kasm_server.so --cfg \
+  && /usr/bin/kasm_server.so --cfg \
     /opt/kasm/current/conf/app/api.app.config.yaml \
     --populate-production \
     --seed-file \
     /opt/kasm/current/conf/database/seed_data/default_images_amd64.yaml \
-    2>&1 | grep -v UserWarning
-  touch /opt/kasm/current/.done_initing_data
+  && touch /opt/kasm/current/.done_initing_data
+
   while true; do sleep 10 ; done
 else
  echo "skipping database init"
@@ -77,11 +80,14 @@ if [ -e @sslCertificate@ ]; then
     cp @sslCertificateKey@ @datastorePath@/certs/kasm_nginx.key
 fi
 
+yq -i '(.server.zone_name = "'default'"' @datastorePath@/conf/app/api.app.config.yaml
+yq -i '(.zones.[0]) .zone_name = "'default'"' @datastorePath@/conf/database/seed_data/default_properties.yaml
+
 sed -i -e "s/username.*/username: @postgresUser@/g" \
     -e "s/password.*/password: @postgresPassword@/g" \
     -e "s/host.*db/host: kasm_db/g" \
     -e "s/ssl: true/ssl: false/g" \
-    -e "s/redisPassword.*/redisPassword: @redisPassword@/g" \
+    -e "s/redis_password.*/redis_password: @redisPassword@/g" \
     -e "s/server_hostname.*/server_hostname: kasm_api/g" \
     -e "s/server_id.*/server_id: $API_SERVER_ID/g" \
     -e "s/manager_id.*/manager_id: $MANAGER_ID/g" \
@@ -93,12 +99,23 @@ sed -i -e "s/ token:.*/ token: \"@defaultManagerToken@\"/g" \
     -e "s/server_id.*/server_id: $SERVER_ID/g" \
     @datastorePath@/conf/app/agent.app.config.yaml
 
+# Generate a salt and hash for the desired passwords. Update the yaml
+ADMIN_SALT=$(cat /proc/sys/kernel/random/uuid)
+ADMIN_HASH=$(printf @defaultAdminPassword@${ADMIN_SALT} | sha256sum | cut -c-64)
+USER_SALT=$(cat /proc/sys/kernel/random/uuid)
+USER_HASH=$(printf @defaultUserPassword@${USER_SALT} | sha256sum | cut -c-64)
 
-sed -i -e "s/password: admin.*/password: \"@defaultAdminPassword@\"/g" \
-    -e "s/password: user.*/password: \"@defaultUserPassword@\"/g" \
-    -e "s/default-manager-token/@defaultManagerToken@/g" \
-    -e "s/default-registration-token/@defaultRegistrationToken@/g" \
-    -e "s/upstream_auth_address:.*/upstream_auth_address: 'proxy'/g" \
+yq -i  '(.users.[] | select(.username=="admin@kasm.local") | .salt) = "'${ADMIN_SALT}'"'  @datastorePath@/conf/database/seed_data/default_properties.yaml
+yq -i  '(.users.[] | select(.username=="admin@kasm.local") | .pw_hash) = "'${ADMIN_HASH}'"'  @datastorePath@/conf/database/seed_data/default_properties.yaml
+
+yq -i  '(.users.[] | select(.username=="user@kasm.local") | .salt) = "'${USER_SALT}'"'  @datastorePath@/conf/database/seed_data/default_properties.yaml
+yq -i  '(.users.[] | select(.username=="user@kasm.local") | .pw_hash) = "'${USER_HASH}'"'  @datastorePath@/conf/database/seed_data/default_properties.yaml
+
+yq -i   '(.settings.[] | select(.name=="token") | select(.category == "manager")) .value = "'@defaultManagerToken@'"'   @datastorePath@/conf/database/seed_data/default_properties.yaml
+
+yq -i   '(.settings.[] | select(.name=="registration_token") | select(.category == "auth")) .value = "'@defaultRegistrationToken@'"'   @datastorePath@/conf/database/seed_data/default_properties.yaml
+
+sed -i -e "s/upstream_auth_address:.*/upstream_auth_address: 'proxy'/g" \
     @datastorePath@/conf/database/seed_data/default_properties.yaml
 
 sed -i -e "s/GUACTOKEN/@defaultGuacToken@/g" \
@@ -111,4 +128,3 @@ sed -i -e "s/GUACTOKEN/@defaultGuacToken@/g" \
 
 sed -i "s/00000000-0000-0000-0000-000000000000/$SERVER_ID/g" \
     @datastorePath@/conf/database/seed_data/default_agents.yaml
-
