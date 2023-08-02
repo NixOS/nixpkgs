@@ -37,7 +37,7 @@ let
   babelfishTranslate = path: name:
     pkgs.runCommandLocal "${name}.fish" {
       nativeBuildInputs = [ pkgs.babelfish ];
-    } "${pkgs.babelfish}/bin/babelfish < ${path} > $out;";
+    } "babelfish < ${path} > $out;";
 
 in
 

@@ -1,7 +1,5 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }:
 
-with lib;
-
 let
   config_refresh = "10";
   nullvalue = "NULL";
@@ -9,9 +7,7 @@ let
 in
 {
   name = "osquery";
-  meta = with maintainers; {
-    maintainers = [ znewman01 lewo ];
-  };
+  meta.maintainers = with lib.maintainers; [ znewman01 lewo ];
 
   nodes.machine = { config, pkgs, ... }: {
     services.osquery = {

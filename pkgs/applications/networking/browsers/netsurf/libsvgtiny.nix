@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, pkg-config, gperf
+{ lib
+, stdenv
+, fetchurl
+, gperf
+, pkg-config
 , buildsystem
 , libdom
 , libhubbub
@@ -6,34 +10,37 @@
 , libwapcaplet
 }:
 
-stdenv.mkDerivation rec {
-  pname = "netsurf-${libname}";
-  libname = "libsvgtiny";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "netsurf-libsvgtiny";
   version = "0.1.7";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "sha256-LA3PlS8c2ILD6VQB75RZ8W27U8XT5FEjObL563add4E=";
+    url = "http://download.netsurf-browser.org/libs/releases/libsvgtiny-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-LA3PlS8c2ILD6VQB75RZ8W27U8XT5FEjObL563add4E=";
   };
 
-  nativeBuildInputs = [ pkg-config gperf ];
+  nativeBuildInputs = [
+    gperf
+    pkg-config
+  ];
+
   buildInputs = [
+    buildsystem
     libdom
     libhubbub
     libparserutils
     libwapcaplet
-    buildsystem ];
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  meta = with lib; {
-    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
+  meta = {
+    homepage = "https://www.netsurf-browser.org/projects/libsvgtiny/";
     description = "NetSurf SVG decoder";
-    license = licenses.mit;
-    maintainers = [ maintainers.samueldr maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    inherit (buildsystem.meta) maintainers platforms;
   };
-}
+})

@@ -1154,6 +1154,9 @@
     githubId = 48802534;
     name = "Anselm Schüler";
     matrix = "@schuelermine:matrix.org";
+    keys = [{
+      fingerprint = "CDBF ECA8 36FE E340 1CEB  58FF BA34 EE1A BA3A 0955";
+    }];
   };
   anthonyroussel = {
     email = "anthony@roussel.dev";
@@ -8463,6 +8466,12 @@
     githubId = 662666;
     name = "Justinas Stankevičius";
   };
+  justinlime = {
+    email = "justinlime1999@gmail.com";
+    github = "justinlime";
+    githubId = 119710965;
+    name = "Justin Fields";
+  };
   justinlovinger = {
     email = "git@justinlovinger.com";
     github = "JustinLovinger";
@@ -8706,6 +8715,11 @@
     github = "kephas";
     githubId = 762421;
     name = "Pierre Thierry";
+  };
+  keto = {
+    github = "TheRealKeto";
+    githubId = 24854941;
+    name = "Keto";
   };
   ketzacoatl = {
     email = "ketzacoatl@protonmail.com";
@@ -10696,12 +10710,6 @@
     github = "CajuM";
     githubId = 10420834;
     name = "Mihai-Drosi Caju";
-  };
-  mcbeth = {
-    email = "mcbeth@broggs.org";
-    github = "mcbeth";
-    githubId = 683809;
-    name = "Jeffrey Brent McBeth";
   };
   mccurdyc = {
     email = "mccurdyc22@gmail.com";
