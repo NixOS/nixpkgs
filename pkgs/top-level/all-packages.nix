@@ -31305,6 +31305,7 @@ with pkgs;
   };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
+  goldendict-ng = qt6Packages.callPackage ../applications/misc/goldendict-ng { };
 
   gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
 
