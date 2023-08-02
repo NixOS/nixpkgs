@@ -37530,10 +37530,7 @@ with pkgs;
   };
 
   maptool = callPackage ../games/maptool {
-    # MapTool is fussy about which JRE it uses; OpenJDK will leave it hanging
-    # at launch in a class initialization deadlock. MapTool ships Temurin with
-    # their pre-built releases so we might as well use it too.
-    jre = temurin-bin-17;
+    jre = graalvmCEPackages.graalvm17-ce-full;
     openjfx = openjfx17;
   };
 
