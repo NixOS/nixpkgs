@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vgm2x";
-  version = "0.0.0-unstable-2023-05-10";
+  version = "0.0.0-unstable-2023-08-27";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "vgm2x";
-    rev = "c46c63c84d79aaa274f5259b5d7967181282cc0b";
-    hash = "sha256-Y5O82Y1882Dokz6tuEPqbkKvzoZbUiJlj6lFK9GCUuY=";
+    rev = "5128055ab2b356e173b53e2afd31202a59505a39";
+    hash = "sha256-DwDcSUdfOsDlajYtzg5xM5P9QPOqLp8b0sEpE18kfzA=";
   };
 
   postPatch = ''
@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "VGM file extraction tools";
     homepage = "https://github.com/vampirefrog/vgm2x";
     license = licenses.gpl3Only;
+    mainProgram = "vgm2opm";
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
   };
