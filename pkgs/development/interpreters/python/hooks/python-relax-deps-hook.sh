@@ -84,7 +84,8 @@ pythonRelaxDepsHook() {
 
     # We generally shouldn't have multiple wheel files, but let's be safer here
     for wheel in "$pkg_name"*".whl"; do
-        @pythonInterpreter@ -m wheel unpack --dest "$unpack_dir" "$wheel"
+        PYTHONPATH="@wheel@/@pythonSitePackages@:$PYTHONPATH" \
+            @pythonInterpreter@ -m wheel unpack --dest "$unpack_dir" "$wheel"
         rm -rf "$wheel"
 
         _pythonRelaxDeps "$metadata_file"
@@ -95,7 +96,8 @@ pythonRelaxDepsHook() {
             cat "$unpack_dir/$pkg_name/$pkg_name.dist-info/METADATA"
         fi
 
-        @pythonInterpreter@ -m wheel pack "$unpack_dir/$pkg_name"
+        PYTHONPATH="@wheel@/@pythonSitePackages@:$PYTHONPATH" \
+            @pythonInterpreter@ -m wheel pack "$unpack_dir/$pkg_name"*
     done
 
     # Remove the folder since it will otherwise be in the dist output.
