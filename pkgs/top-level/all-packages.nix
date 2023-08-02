@@ -40055,6 +40055,8 @@ with pkgs;
 
   mongoc = darwin.apple_sdk_11_0.callPackage ../development/libraries/mongoc { };
 
+  mongocxx = callPackage ../development/libraries/mongocxx/default.nix { };
+
   mongoose = callPackage ../development/libraries/science/math/mongoose { };
 
   morph = callPackage ../tools/package-management/morph { };
