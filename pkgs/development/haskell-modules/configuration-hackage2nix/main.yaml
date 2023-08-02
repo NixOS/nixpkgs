@@ -354,6 +354,7 @@ package-maintainers:
     - heystone
     - refined
     - refined1
+    - flatparse
   roberth:
     - arion-compose
     - cabal-pkg-config-version-hook
