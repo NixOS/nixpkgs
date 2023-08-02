@@ -7,6 +7,15 @@ As such, a GitHub account is required, which you can sign up for [here](https://
 Additionally this document assumes that you already know how to use GitHub and Git.
 If that's not the case, we recommend learning about it first [here](https://docs.github.com/en/get-started/quickstart/hello-world).
 
+## Overview
+
+This file contains general contributing information, but individual parts also have more specific information to them in their respective `README.md` files, linked here:
+- [`lib`](./lib): Sources and documentation of the [library functions](https://nixos.org/manual/nixpkgs/stable/#chap-functions)
+- [`maintainers`](./maintainers): Nixpkgs maintainer and team listings, maintainer scripts
+- [`pkgs`](./pkgs): Package and [builder](https://nixos.org/manual/nixpkgs/stable/#part-builders) definitions
+- [`doc`](./doc): Sources and infrastructure for the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/)
+- [`nixos`](./nixos): Implementation of [NixOS](https://nixos.org/manual/nixos/stable/)
+
 ## (Proposing a change) | Submitting changes
 
 Note: contributing implies licensing those contributions
