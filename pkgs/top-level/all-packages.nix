@@ -30686,13 +30686,13 @@ with pkgs;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
   firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
   firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
-  firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
+  firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped { };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
-  firefox-esr = firefox-esr-102;
+  firefox-esr = firefox-esr-115;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
   firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
 
