@@ -11,7 +11,7 @@
 , ipuVersion ? "ipu6"
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${ipuVersion}-camera-bin";
   version = "unstable-2023-02-08";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-QnedM2UBbGyd2wIF762Mi+VkDZYtC6MifK4XGGxlUzw=";
   };
 
-  sourceRoot = "${src.name}/${ipuVersion}";
+  sourceRoot = "${finalAttrs.src.name}/${ipuVersion}";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

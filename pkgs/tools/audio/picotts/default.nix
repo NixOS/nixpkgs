@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, popt }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "picotts";
   version = "unstable-2018-10-19";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ autoconf automake ];
   buildInputs = [ libtool popt ];
-  sourceRoot = "${src.name}/pico";
+  sourceRoot = "${finalAttrs.src.name}/pico";
   preConfigure = "./autogen.sh";
   meta = {
     description = "Text to speech voice sinthesizer from SVox";
@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.canndrew ];
     platforms = lib.platforms.linux;
   };
-}
+})
