@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
       free = false;
     };
     maintainers = with maintainers; [ lhvwb lukegb atemu ];
+    mainProgram = "ts3client";
     platforms = [ "x86_64-linux" ];
   };
 }

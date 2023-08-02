@@ -30,7 +30,7 @@ let
     aarch64-linux  = "aarch64-unknown-linux-musl";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  buck2-version = "2023-07-18";
+  buck2-version = "2023-08-01";
   src =
     let
       hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
