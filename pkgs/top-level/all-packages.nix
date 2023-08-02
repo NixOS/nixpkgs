@@ -21235,6 +21235,7 @@ with pkgs;
       rev = "v${version}";
       hash = "sha256-KzBMwpqn6wUFhgB3KDclBS0BvZSVcasM5AG/y+L91xM=";
     };
+    patches = [];
   };
 
   libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
