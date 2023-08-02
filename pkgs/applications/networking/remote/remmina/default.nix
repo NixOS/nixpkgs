@@ -41,17 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
     ++ lib.optionals withVte [ vte ];
 
-  cmakeFlags = let
-    sharedLibraryExt = if stdenv.isDarwin then "dylib" else "so";
-  in [
+  cmakeFlags = [
     "-DWITH_VTE=${if withVte then "ON" else "OFF"}"
     "-DWITH_TELEPATHY=OFF"
     "-DWITH_AVAHI=OFF"
     "-DWITH_KF5WALLET=${if withKf5Wallet then "ON" else "OFF"}"
     "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
-    "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.${sharedLibraryExt}"
-    "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.${sharedLibraryExt}"
-    "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2.${sharedLibraryExt}"
+    "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DWINPR_INCLUDE_DIR=${freerdp}/include/winpr2"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DHAVE_LIBAPPINDICATOR=OFF"
