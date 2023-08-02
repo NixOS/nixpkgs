@@ -7973,8 +7973,6 @@ self: super: with self; {
 
   pip-requirements-parser = callPackage ../development/python-modules/pip-requirements-parser { };
 
-  pipx = callPackage ../development/python-modules/pipx { };
-
   pivy = callPackage ../development/python-modules/pivy {
     inherit (pkgs.qt5) qtbase qmake;
     inherit (pkgs.libsForQt5) soqt;
