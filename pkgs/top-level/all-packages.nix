@@ -10892,7 +10892,7 @@ with pkgs;
 
   nifi = callPackage ../servers/web-apps/nifi { };
 
-  nitter = callPackage ../servers/nitter { };
+  nitter = nim2Packages.callPackage ../servers/nitter { };
 
   noip = callPackage ../tools/networking/noip { };
 
