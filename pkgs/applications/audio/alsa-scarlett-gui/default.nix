@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
   buildInputs = [ gtk4 alsa-lib ];
   postInstall = ''
-    substituteInPlace $out/share/applications/vu.b4.${pname}.desktop \
+    substituteInPlace $out/share/applications/vu.b4.alsa-scarlett-gui.desktop \
       --replace "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/alsa-scarlett-gui"
   '';
 
