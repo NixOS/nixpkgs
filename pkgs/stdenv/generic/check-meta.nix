@@ -66,7 +66,7 @@ let
       };
       checkHostPlatform = checkAvailability hostPlatform {
         bad = (attrs.meta.badPlatforms or []) ++ (attrs.meta.badHostPlatforms or []);
-        only = lib.optionals (attrs?meta.platforms) [ attrs.meta.platforms ];
+        only = lib.optionals (attrs?meta.platforms && attrs.meta.platforms != lib.platforms.all) attrs.meta.platforms;
       };
       checkTargetPlatform = checkAvailability targetPlatform {
         bad = attrs.meta.badTargetPlatforms or [];
@@ -483,16 +483,17 @@ let
       availability = let meta = attrs.meta or {}; in {
         build = {
           bad = lexicographicUniques (
-            (map (pkg: pkg.meta.availability.host.bad or []) referencesOnBuild) ++
-            (map (pkg: pkg.meta.availability.build.bad or []) referencesOnHost) ++
-            [ (meta.badBuildPlatforms or []) ]
+            (meta.badBuildPlatforms or []) ++
+            (builtins.concatMap (pkg: pkg.meta.availability.build.bad or []) referencesOnHost) ++
+            (builtins.concatMap (pkg: pkg.meta.availability.host.bad or []) referencesOnBuild)
           );
         };
         host = {
           bad = lexicographicUniques (
-            (map (pkg: pkg.meta.availability.target.bad or []) referencesOnBuild) ++
-            (map (pkg: pkg.meta.availability.host.bad or []) referencesOnHost) ++
-            [ (meta.badPlatforms or []) ]
+            (meta.badPlatforms or []) ++
+            (meta.badHostPlatforms or []) ++
+            (builtins.concatMap (pkg: pkg.meta.availability.host.bad or []) referencesOnHost) ++
+            (builtins.concatMap (pkg: pkg.meta.availability.target.bad or []) referencesOnBuild)
           );
 
           # "host.only" is needed to represent the (deprecated,
@@ -504,14 +505,12 @@ let
           # There are no build.only or target.only attrsets because
           # we (thankfully) don't have meta.platforms equivalents
           # for those.
-          only = (
-            (lib.optionals (meta?platforms && meta.platforms != lib.platforms.all) [ meta.platforms ])
-          );
+          only = lib.optionals (meta?platforms && meta.platforms != lib.platforms.all) meta.platforms;
         };
         target = {
           bad = lexicographicUniques (
-            (map (pkg: pkg.meta.availability.target.bad or []) referencesOnHost) ++
-            [ (meta.badTargetPlatforms or []) ]
+            (meta.badTargetPlatforms or []) ++
+            (builtins.concatMap (pkg: pkg.meta.availability.target.bad or []) referencesOnHost)
           );
         };
       };
@@ -534,7 +533,6 @@ let
   # O(n log n)
   # TODO(amjoseph@): possibly move to /lib/
   lexicographicUniques = lists: lib.pipe lists [
-    builtins.concatLists                               # O(n)
     (map (x: assert (lib.isAttrs x || lib.isString x); x))
     (lib.sort (x: y: lexicographicCompare x y < 0))    # O(n log n)
     sortedUnique                                       # O(n)

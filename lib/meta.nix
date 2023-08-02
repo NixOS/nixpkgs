@@ -111,20 +111,20 @@ rec {
 
   /* Check a platform against an availability.
 
-     An availability is an attrset with two attributes:
-     - `bad`:  a list          of platform patterns accepted by platformMatch
-     - `only`: a list of lists of platform patterns accepted by platformMatch
+     An availability is an attrset with two attributes `bad` and
+     `only`; each is a list of platform patterns accepted by
+     platformMatch.
 
      To match the availability, both of the following must be true:
      - The platform must not match any element of `bad`
-     - For each sublist of `only`, the platform must match at least one element of the sublist.
+     - If `only` is nonempty, the platform must match at least one element of the sublist.
   */
   checkAvailability = platform: availability:
     # Must not match any of availability.bad
     !(lib.any                    (elem: platformMatch platform elem)          (availability.bad or []))
 
-    # For all sublists of availability.only, must match at least one sublist element
-    && lib.all (sublist: lib.any (elem: platformMatch platform elem) sublist) (availability.only or [])
+    # If availability.only is non-empty, must match at least one sublist element
+    && availability?only -> ((builtins.length availability.only != 0) -> lib.any (elem: platformMatch platform elem) availability.only)
   ;
 
   /* Get the corresponding attribute in lib.licenses
