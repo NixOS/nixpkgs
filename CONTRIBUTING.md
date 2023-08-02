@@ -21,28 +21,6 @@ This file contains general contributing information, but individual parts also h
 Note: contributing implies licensing those contributions
 under the terms of [COPYING](COPYING), which is an MIT-like license.
 
-* Format the commit messages in the following way:
-
-  ```
-  (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
-
-  (Motivation for change. Link to release notes. Additional information.)
-  ```
-
-  For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
-
-  Examples:
-
-  * nginx: init at 2.0.1
-  * firefox: 54.0.1 -> 55.0
-    https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
-  * nixos/hydra: add bazBaz option
-
-    Dual baz behavior is needed to do foo.
-  * nixos/nginx: refactor config generation
-
-    The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
-
 ### Making patches {#submitting-changes-making-patches}
 
 - Read [Manual (How to write packages for Nix)](https://nixos.org/nixpkgs/manual/).
@@ -62,24 +40,7 @@ under the terms of [COPYING](COPYING), which is an MIT-like license.
 
   - Please avoid working directly on the `master` branch.
 
-- Make commits of logical units.
-
 - If you removed pkgs or made some major NixOS changes, write about it in the release notes for the next stable release. For example `nixos/doc/manual/release-notes/rl-2003.xml`.
-
-- Check for unnecessary whitespace with `git diff --check` before committing.
-
-- Format the commit in a following way:
-
-  ```
-  (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
-  Additional information.
-  ```
-
-  - Examples:
-    - `nginx: init at 2.0.1`
-    - `firefox: 54.0.1 -> 55.0`
-    - `nixos/hydra: add bazBaz option`
-    - `nixos/nginx: refactor config generation`
 
 - Test your changes. If you work with
 
@@ -97,19 +58,9 @@ under the terms of [COPYING](COPYING), which is an MIT-like license.
   - NixOS and its modules:
     - You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
 
-- If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
 
 - [Rebase](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) your branch against current `master`.
 
-### Writing good commit messages
-
-In addition to writing properly formatted commit messages, it's important to include relevant information so other developers can later understand *why* a change was made. While this information usually can be found by digging code, mailing list/Discourse archives, pull request discussions or upstream changes, it may require a lot of work.
-
-Package version upgrades usually allow for simpler commit messages, including attribute name, old and new version, as well as a reference to the relevant release notes/changelog. Every once in a while a package upgrade requires more extensive changes, and that subsequently warrants a more verbose message.
-
-Pull requests should not be squash merged in order to keep complete commit messages and GPG signatures intact and must not be when the change doesn't make sense as a single commit.
-This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
-Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`. For more details consult the git man pages or online resources like [git-rebase.io](https://git-rebase.io/) or [The Pro Git Book](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
 
 ### (Creating a pull request)
 
@@ -625,6 +576,47 @@ Names of files and directories should be in lowercase, with dashes between words
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
 
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
+
+## Commit conventions
+
+- Create a commit for each logical unit.
+
+- Check for unnecessary whitespace with `git diff --check` before committing.
+
+- If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
+
+- Format the commit messages in the following way:
+
+  ```
+  (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
+
+  (Motivation for change. Link to release notes. Additional information.)
+  ```
+
+  For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
+
+  Examples:
+
+  * nginx: init at 2.0.1
+  * firefox: 54.0.1 -> 55.0
+
+    https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
+  * nixos/hydra: add bazBaz option
+
+    Dual baz behavior is needed to do foo.
+  * nixos/nginx: refactor config generation
+
+    The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
+
+### Writing good commit messages
+
+In addition to writing properly formatted commit messages, it's important to include relevant information so other developers can later understand *why* a change was made. While this information usually can be found by digging code, mailing list/Discourse archives, pull request discussions or upstream changes, it may require a lot of work.
+
+Package version upgrades usually allow for simpler commit messages, including attribute name, old and new version, as well as a reference to the relevant release notes/changelog. Every once in a while a package upgrade requires more extensive changes, and that subsequently warrants a more verbose message.
+
+Pull requests should not be squash merged in order to keep complete commit messages and GPG signatures intact and must not be when the change doesn't make sense as a single commit.
+This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
+Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`. For more details consult the git man pages or online resources like [git-rebase.io](https://git-rebase.io/) or [The Pro Git Book](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
 
 ## Pull Request Template {#submitting-changes-pull-request-template}
 
