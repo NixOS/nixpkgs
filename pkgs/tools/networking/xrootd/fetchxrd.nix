@@ -23,7 +23,7 @@
   }
   ''
     for u in $urls; do
-      xrdcp --force "$u" "$out"
+      xrdcp --verbose --force "$u" "$out"
       ret=$?
       (( ret != 0 )) || break
     done
