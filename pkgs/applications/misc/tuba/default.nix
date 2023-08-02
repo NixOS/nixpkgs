@@ -66,9 +66,7 @@ stdenv.mkDerivation rec {
   ]);
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "tuba";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

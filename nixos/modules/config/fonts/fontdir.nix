@@ -9,7 +9,7 @@ let
   x11Fonts = pkgs.runCommand "X11-fonts" { preferLocalBuild = true; } ''
     mkdir -p "$out/share/X11/fonts"
     font_regexp='.*\.\(ttf\|ttc\|otb\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
-    find ${toString config.fonts.fonts} -regex "$font_regexp" \
+    find ${toString config.fonts.packages} -regex "$font_regexp" \
       -exec ln -sf -t "$out/share/X11/fonts" '{}' \;
     cd "$out/share/X11/fonts"
     ${optionalString cfg.decompressFonts ''

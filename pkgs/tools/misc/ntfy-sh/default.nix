@@ -1,6 +1,6 @@
-{ lib, pkgs, stdenv, buildGoModule, fetchFromGitHub, buildNpmPackage
+{ lib, buildGoModule, fetchFromGitHub, buildNpmPackage
 , nixosTests, debianutils, mkdocs, python3, python3Packages
-, pkg-config, pixman, cairo, pango }:
+}:
 
 
 buildGoModule rec {

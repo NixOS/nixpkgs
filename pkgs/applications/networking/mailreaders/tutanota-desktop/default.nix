@@ -3,12 +3,12 @@ electron, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "tutanota-desktop";
-  version = "3.113.3";
+  version = "3.115.2";
 
   src = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/${pname}-${version}-unpacked-linux.tar.gz";
     name = "tutanota-desktop-${version}.tar.gz";
-    sha256 = "sha256-d4yvz0BE0YeZjcH9X/2eGAk5CmJI4CQWblVoU5CO77k=";
+    sha256 = "sha256-PdVvrb+sC8LF4tZXAHt2CevyoXhxTXJB01Fe64YI6BI=";
   };
 
   nativeBuildInputs = [

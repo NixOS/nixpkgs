@@ -2,7 +2,7 @@
 python3, rsync, cron, openssh, sshfs-fuse, encfs }:
 
 let
-  python' = python3.withPackages (ps: with ps; [ dbus-python keyring ]);
+  python' = python3.withPackages (ps: with ps; [ dbus-python keyring packaging ]);
 
   apps = lib.makeBinPath [ openssh python' cron rsync sshfs-fuse encfs ];
 in stdenv.mkDerivation rec {

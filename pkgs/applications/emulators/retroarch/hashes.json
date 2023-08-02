@@ -1,9 +1,9 @@
 {
     "2048": {
-      "owner": "libretro",
-      "repo": "libretro-2048",
-      "rev": "331c1de588ed8f8c370dcbc488e5434a3c09f0f2",
-      "hash": "sha256-gPrAmoBnfuTnW6t699pqS43vE6t0ca3jZcqTNRaJipA="
+        "owner": "libretro",
+        "repo": "libretro-2048",
+        "rev": "331c1de588ed8f8c370dcbc488e5434a3c09f0f2",
+        "hash": "sha256-gPrAmoBnfuTnW6t699pqS43vE6t0ca3jZcqTNRaJipA="
     },
     "atari800": {
         "owner": "libretro",
@@ -143,6 +143,12 @@
         "repo": "dosbox-libretro",
         "rev": "b7b24262c282c0caef2368c87323ff8c381b3102",
         "hash": "sha256-PG2eElenlEpu0U/NIh53p0uLqewnEdaq6Aoak5E1P3I="
+    },
+    "dosbox-pure": {
+        "owner": "schellingb",
+        "repo": "dosbox-pure",
+        "rev": "035e01e43623f83a9e71f362364fd74091379455",
+        "hash": "sha256-j7Or4yTK5l+ZVC5UFeym9sLx+88PRlofoBT1tMuf31A="
     },
     "eightyone": {
         "owner": "libretro",

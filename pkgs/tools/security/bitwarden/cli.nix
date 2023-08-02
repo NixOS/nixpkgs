@@ -5,22 +5,23 @@
 , fetchFromGitHub
 , python3
 , darwin
+, nixosTests
 }:
 
 let
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
 in buildNpmPackage' rec {
   pname = "bitwarden-cli";
-  version = "2023.5.0";
+  version = "2023.7.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-ELKpGSY4ZbgSk4vJnTiB+IOa8RQU8Ahy3A1mYsKtthU=";
+    hash = "sha256-Xnfjp+qRJWvxvgSODbajLxYsP2DtOYK9CXBMfIn+qwA=";
   };
 
-  npmDepsHash = "sha256-G8DEYPjEP3L4s0pr5n2ZTj8kkT0E7Po1BKhZ2hUdJuY=";
+  npmDepsHash = "sha256-vz7erDhh3BpHNadPwIXkD2PRCnbxM7e7lE0rvBEXGyc=";
 
   nativeBuildInputs = [
     python3
@@ -35,6 +36,10 @@ in buildNpmPackage' rec {
   npmBuildScript = "build:prod";
 
   npmWorkspace = "apps/cli";
+
+  passthru.tests = {
+    vaultwarden = nixosTests.vaultwarden.sqlite;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";

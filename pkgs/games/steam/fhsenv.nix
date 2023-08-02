@@ -140,6 +140,7 @@ in buildFHSEnv rec {
 
     # SteamVR
     udev
+    dbus
 
     # Other things from runtime
     glib
@@ -199,7 +200,6 @@ in buildFHSEnv rec {
 
     # screeps dependencies
     gtk3
-    dbus
     zlib
     atk
     cairo

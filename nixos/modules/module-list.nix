@@ -4,8 +4,8 @@
   ./config/debug-info.nix
   ./config/fonts/fontconfig.nix
   ./config/fonts/fontdir.nix
-  ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
+  ./config/fonts/packages.nix
   ./config/gnu.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/i18n.nix
@@ -93,8 +93,8 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/ubertooth.nix
   ./hardware/uinput.nix
+  ./hardware/usb-modeswitch.nix
   ./hardware/usb-storage.nix
-  ./hardware/usb-wwan.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/capture/mwprocapture.nix
@@ -221,6 +221,7 @@
   ./programs/nncp.nix
   ./programs/noisetorch.nix
   ./programs/npm.nix
+  ./programs/ns-usbloader.nix
   ./programs/oblogout.nix
   ./programs/oddjobd.nix
   ./programs/openvpn3.nix
@@ -264,6 +265,7 @@
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/waybar.nix
+  ./programs/wayland/wayfire.nix
   ./programs/weylus.nix
   ./programs/wireshark.nix
   ./programs/xastir.nix
@@ -636,6 +638,7 @@
   ./services/misc/etcd.nix
   ./services/misc/etebase-server.nix
   ./services/misc/etesync-dav.nix
+  ./services/misc/evdevremapkeys.nix
   ./services/misc/felix.nix
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
@@ -1397,6 +1400,7 @@
   ./system/boot/systemd/oomd.nix
   ./system/boot/systemd/repart.nix
   ./system/boot/systemd/shutdown.nix
+  ./system/boot/systemd/sysupdate.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
   ./system/boot/systemd/userdbd.nix

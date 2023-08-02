@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "2.11.1";
+  version = "2.11.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9H5LQX6uXWr9pQ/WosNl1LrcbR+MAwVtZv8Cdb+WFvg=";
+    hash = "sha256-rKvHb0wkWVuZO8M8uIQdOiY1N6DmGSpqUgz4YYbUfSM=";
   };
 
   nativeBuildInputs = [

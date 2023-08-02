@@ -7,7 +7,6 @@
 , cmake
 , pkg-config
 , fetchFromGitHub
-, git
 , python3
 , Accelerate
 , _experimental-update-script-combinators
@@ -88,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
         updateSource
         updateOpenfst
       ];
-    };
+  };
 
   meta = with lib; {
     description = "Speech Recognition Toolkit";

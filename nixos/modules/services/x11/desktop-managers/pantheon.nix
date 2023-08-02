@@ -199,6 +199,7 @@ in
         gnome.adwaita-icon-theme
         gtk3.out # for gtk-launch program
         onboard
+        orca # elementary/greeter#668
         qgnomeplatform
         sound-theme-freedesktop
         xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
@@ -265,7 +266,7 @@ in
       qt.style = "adwaita";
 
       # Default Fonts
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         inter
         open-dyslexic
         open-sans
@@ -306,7 +307,7 @@ in
       ])) config.environment.pantheon.excludePackages;
 
       # needed by screenshot
-      fonts.fonts = [
+      fonts.packages = [
         pkgs.pantheon.elementary-redacted-script
       ];
     })

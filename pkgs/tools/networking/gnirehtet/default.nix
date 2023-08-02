@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , fetchzip
 , androidenv
 , makeWrapper

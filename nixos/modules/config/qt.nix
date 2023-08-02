@@ -19,7 +19,7 @@ let
       pkgs.qgnomeplatform-qt6
       pkgs.adwaita-qt6
     ]
-    else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
+    else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins pkgs.qt6Packages.qt6gtk2 ]
     else if isQt5ct then [ pkgs.libsForQt5.qt5ct pkgs.qt6Packages.qt6ct ]
     else if isLxqt then [ pkgs.lxqt.lxqt-qtplugin pkgs.lxqt.lxqt-config ]
     else if isKde then [ pkgs.libsForQt5.plasma-integration pkgs.libsForQt5.systemsettings ]
@@ -86,6 +86,7 @@ in
           "adwaita-qt"
           "adwaita-qt6"
           ["libsForQt5" "qtstyleplugins"]
+          ["qt6Packages" "qt6gtk2"]
         ];
         description = lib.mdDoc ''
           Selects the style to use for Qt applications.

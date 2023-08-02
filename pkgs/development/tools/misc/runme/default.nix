@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nodejs
 , runtimeShell
 , stdenv
 , testers
@@ -10,19 +11,23 @@
 
 buildGoModule rec {
   pname = "runme";
-  version = "1.5.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-upcwNxCtGFsLQsl4quXiEYX8R9DWrm9tWTwvCw5C4QI=";
+    hash = "sha256-vtlsa+XdsE33oR5MH1zaHUIJ4Rsn/RqtryTgNGgEHJw=";
   };
 
-  vendorHash = "sha256-BJhda5mE5f4kvi8CLjgMJYjdUS3vsUSwmHhTW/AVKCI=";
+  vendorHash = "sha256-5FMrz4I/i/uJDI4vK9hiet4zMRf0CSbc/YJAFi8hlEM=";
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    nodejs
   ];
 
   subPackages = [

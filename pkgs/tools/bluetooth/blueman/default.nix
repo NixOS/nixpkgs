@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
-, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
+, obex_data_server, xdg-utils, dnsmasq, dhcp, iproute2
 , gnome, librsvg, wrapGAppsHook, gobject-introspection
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 

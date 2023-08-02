@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
-, fetchpatch
 , legacySupport ? false
 , static ? stdenv.hostPlatform.isStatic
 # these need to be ran on the host, thus disable when cross-compiling

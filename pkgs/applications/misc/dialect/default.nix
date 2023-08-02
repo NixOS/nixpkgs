@@ -70,9 +70,7 @@ python3.pkgs.buildPythonApplication rec {
   # handle setup hooks better
   strictDeps = false;
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/dialect-app/dialect";

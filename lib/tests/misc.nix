@@ -500,6 +500,39 @@ runTests {
     expected = { a = [ 2 3 ]; b = [7]; c = [8];};
   };
 
+  testListCommonPrefixExample1 = {
+    expr = lists.commonPrefix [ 1 2 3 4 5 6 ] [ 1 2 4 8 ];
+    expected = [ 1 2 ];
+  };
+  testListCommonPrefixExample2 = {
+    expr = lists.commonPrefix [ 1 2 3 ] [ 1 2 3 4 5 ];
+    expected = [ 1 2 3 ];
+  };
+  testListCommonPrefixExample3 = {
+    expr = lists.commonPrefix [ 1 2 3 ] [ 4 5 6 ];
+    expected = [ ];
+  };
+  testListCommonPrefixEmpty = {
+    expr = lists.commonPrefix [ ] [ 1 2 3 ];
+    expected = [ ];
+  };
+  testListCommonPrefixSame = {
+    expr = lists.commonPrefix [ 1 2 3 ] [ 1 2 3 ];
+    expected = [ 1 2 3 ];
+  };
+  testListCommonPrefixLazy = {
+    expr = lists.commonPrefix [ 1 ] [ 1 (abort "lib.lists.commonPrefix shouldn't evaluate this")];
+    expected = [ 1 ];
+  };
+  # This would stack overflow if `commonPrefix` were implemented using recursion
+  testListCommonPrefixLong =
+    let
+      longList = genList (n: n) 100000;
+    in {
+      expr = lists.commonPrefix longList longList;
+      expected = longList;
+    };
+
   testSort = {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
     expected = [2 30 40 42];
@@ -530,45 +563,55 @@ runTests {
     expected = false;
   };
 
-  testFindFirstExample1 = {
-    expr = findFirst (x: x > 3) 7 [ 1 6 4 ];
-    expected = 6;
+  testFindFirstIndexExample1 = {
+    expr = lists.findFirstIndex (x: x > 3) (abort "index found, so a default must not be evaluated") [ 1 6 4 ];
+    expected = 1;
   };
 
-  testFindFirstExample2 = {
-    expr = findFirst (x: x > 9) 7 [ 1 6 4 ];
-    expected = 7;
+  testFindFirstIndexExample2 = {
+    expr = lists.findFirstIndex (x: x > 9) "a very specific default" [ 1 6 4 ];
+    expected = "a very specific default";
   };
 
-  testFindFirstEmpty = {
-    expr = findFirst (abort "when the list is empty, the predicate is not needed") null [];
+  testFindFirstIndexEmpty = {
+    expr = lists.findFirstIndex (abort "when the list is empty, the predicate is not needed") null [];
     expected = null;
   };
 
-  testFindFirstSingleMatch = {
-    expr = findFirst (x: x == 5) null [ 5 ];
-    expected = 5;
+  testFindFirstIndexSingleMatch = {
+    expr = lists.findFirstIndex (x: x == 5) null [ 5 ];
+    expected = 0;
   };
 
-  testFindFirstSingleDefault = {
-    expr = findFirst (x: false) null [ (abort "if the predicate doesn't access the value, it must not be evaluated") ];
+  testFindFirstIndexSingleDefault = {
+    expr = lists.findFirstIndex (x: false) null [ (abort "if the predicate doesn't access the value, it must not be evaluated") ];
     expected = null;
   };
 
-  testFindFirstNone = {
-    expr = builtins.tryEval (findFirst (x: x == 2) null [ 1 (throw "the last element must be evaluated when there's no match") ]);
+  testFindFirstIndexNone = {
+    expr = builtins.tryEval (lists.findFirstIndex (x: x == 2) null [ 1 (throw "the last element must be evaluated when there's no match") ]);
     expected = { success = false; value = false; };
   };
 
   # Makes sure that the implementation doesn't cause a stack overflow
-  testFindFirstBig = {
-    expr = findFirst (x: x == 1000000) null (range 0 1000000);
+  testFindFirstIndexBig = {
+    expr = lists.findFirstIndex (x: x == 1000000) null (range 0 1000000);
     expected = 1000000;
   };
 
-  testFindFirstLazy = {
-    expr = findFirst (x: x == 1) 7 [ 1 (abort "list elements after the match must not be evaluated") ];
-    expected = 1;
+  testFindFirstIndexLazy = {
+    expr = lists.findFirstIndex (x: x == 1) null [ 1 (abort "list elements after the match must not be evaluated") ];
+    expected = 0;
+  };
+
+  testFindFirstExample1 = {
+    expr = lists.findFirst (x: x > 3) 7 [ 1 6 4 ];
+    expected = 6;
+  };
+
+  testFindFirstExample2 = {
+    expr = lists.findFirst (x: x > 9) 7 [ 1 6 4 ];
+    expected = 7;
   };
 
 # ATTRSETS

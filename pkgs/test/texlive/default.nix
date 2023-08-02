@@ -321,4 +321,54 @@
         echo "tested $binCount binCount: $ignoredCount ignored, $brokenCount broken, $failedCount failed"
         [[ $failedCount = 0 ]]
       '';
+
+  # verify that the precomputed licensing information in default.nix
+  # does indeed match the metadata of the individual packages.
+  #
+  # This is part of the test suite (and not the normal evaluation) to save
+  # time for "normal" evaluations. To be more in line with the other tests, this
+  # also builds a derivation, even though it is essentially an eval-time assertion.
+  licenses =
+    let
+        concatLicenses = builtins.foldl' (acc: el: if builtins.elem el acc then acc else acc ++ [ el ]);
+        # converts a license to its attribute name in lib.licenses
+        licenseToAttrName = license:
+          builtins.head (builtins.attrNames
+            (lib.filterAttrs (n: v: license == v) lib.licenses));
+        lt = (a: b: a < b);
+
+        savedLicenses = scheme: scheme.meta.license;
+        savedLicensesAttrNames = scheme: map licenseToAttrName (savedLicenses scheme);
+
+        correctLicenses = scheme: builtins.foldl'
+                (acc: pkg: concatLicenses acc (lib.toList (pkg.meta.license or [])))
+                []
+                scheme.passthru.packages;
+        correctLicensesAttrNames = scheme:
+          lib.sort lt
+            (map licenseToAttrName (correctLicenses scheme));
+
+        hasLicenseMismatch = scheme:
+          (lib.isDerivation scheme) &&
+          (savedLicensesAttrNames scheme) != (correctLicensesAttrNames scheme);
+        incorrectSchemes = lib.filterAttrs
+          (n: hasLicenseMismatch)
+          texlive.combined;
+        prettyPrint = name: scheme:
+          ''
+            license info for ${name} is incorrect! Note that order is enforced.
+            saved: [ ${lib.concatStringsSep " " (savedLicensesAttrNames scheme)} ]
+            correct: [ ${lib.concatStringsSep " " (correctLicensesAttrNames scheme)} ]
+          '';
+        errorText = lib.concatStringsSep "\n\n" (lib.mapAttrsToList prettyPrint incorrectSchemes);
+      in
+        runCommand "texlive-test-license" {
+          inherit errorText;
+        }
+        (if (incorrectSchemes == {})
+        then "echo everything is fine! > $out"
+        else ''
+          echo "$errorText"
+          false
+        '');
 }

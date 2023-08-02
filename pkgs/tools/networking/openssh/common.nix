@@ -13,7 +13,6 @@
 # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
 , pkgs
 , fetchurl
-, fetchpatch
 , zlib
 , openssl
 , libedit
@@ -30,7 +29,7 @@
 , linkOpenssl ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version src;
 
   patches = [

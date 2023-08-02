@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  mesonFlags = lib.optional (!finalAttrs.finalPackage.doCheck) "-Dtests=disabled";
 
   passthru = {
     updateScript = gnome.updateScript {

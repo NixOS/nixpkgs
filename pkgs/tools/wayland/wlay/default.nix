@@ -15,7 +15,7 @@
 , wayland-scanner
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "wlay";
   version = "unstable-2022-01-26";
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
-})
+}

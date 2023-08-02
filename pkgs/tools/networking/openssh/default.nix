@@ -1,4 +1,4 @@
-{ callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
+{ callPackage, lib, fetchurl, fetchpatch, autoreconfHook }:
 let
   common = opts: callPackage (import ./common.nix opts) { };
 in

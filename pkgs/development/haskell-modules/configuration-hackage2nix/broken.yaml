@@ -3061,7 +3061,6 @@ broken-packages:
   - l-bfgs-b
   - LC3
   - lcs
-  - ldgallery-compiler
   - ldif
   - ld-intervals
   - leaf

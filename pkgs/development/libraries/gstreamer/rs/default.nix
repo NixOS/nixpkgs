@@ -114,7 +114,7 @@ let
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
 
   # TODO: figure out what must be done about this upstream - related lu-zero/cargo-c#323 lu-zero/cargo-c#138
-  cargo-c' = cargo-c.overrideAttrs (oldAttrs: {
+  cargo-c' = (cargo-c.__spliced.buildHost or cargo-c).overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or []) ++ [
       (fetchpatch {
         name = "cargo-c-test-rlib-fix.patch";
@@ -130,7 +130,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-rs";
-  version = "0.10.10";
+  version = "0.10.11";
 
   outputs = [ "out" "dev" ];
 
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = version;
-    hash = "sha256-ZsE1Pz2N0XSQFDyIeEUg9+eFN94mdSmge2Tvw57RLZ4=";
+    hash = "sha256-oOoUGzbg/ib1pA0T81hxgLlHnTRlNCWH5qZUNAutn8U=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'

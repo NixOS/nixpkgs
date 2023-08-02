@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitea
 , fetchurl
+, fetchpatch
 , runCommand
 , fcft
 , freetype
@@ -26,7 +27,7 @@
 }:
 
 let
-  version = "1.15.1";
+  version = "1.15.2";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = "foot";
     rev = version;
-    hash = "sha256-YCwmPSn+XtF7HkMOFJft7j/2vr+8UE59yu/iGZ1dT8A=";
+    hash = "sha256:1iz9l01fpryc335pb0c3qi67fmmfplizv5pbc9s578mxl5j9dxg4";
   };
 
   depsBuildBuild = [

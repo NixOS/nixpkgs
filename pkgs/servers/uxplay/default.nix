@@ -11,15 +11,15 @@
 , gst_all_1
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uxplay";
-  version = "1.65";
+  version = "1.65.3";
 
   src = fetchFromGitHub {
     owner = "FDH2";
     repo = "UxPlay";
-    rev = "v${version}";
-    sha256 = "sha256-EpYSKD5nQsbA4l7nw1RdKpJWCjTWrPkYxVIZrQdusCQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ghimxgukQHBc0yVSpttF5lEVE6BTf9OL7RWmR5izxCo=";
   };
 
   postPatch = ''
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-libav
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/FDH2/UxPlay";
+  meta = {
     description = "AirPlay Unix mirroring server";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ azuwis ];
-    platforms = platforms.unix;
+    homepage = "https://github.com/FDH2/UxPlay";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.azuwis ];
+    platforms = lib.platforms.unix;
   };
-}
+})

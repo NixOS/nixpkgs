@@ -2,6 +2,7 @@
 , lib
 , pkg-config
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , ffmpeg_6
 
@@ -90,7 +91,15 @@ stdenv.mkDerivation rec {
         hash = "sha256-QeD2o6uz9r5vc3Scs1oRKYZ+aNH+01TSxLBj71ssfj4=";
       };
 
-      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
+      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches)) ++ [
+        (fetchpatch {
+          name = "CVE-2023-27585.patch";
+          url = "https://github.com/pjsip/pjproject/commit/d1c5e4da5bae7f220bc30719888bb389c905c0c5.patch";
+          hash = "sha256-+yyKKTKG2FnfyLWnc4S80vYtDzmiu9yRmuqb5eIulPg=";
+        })
+      ];
+
+      patchFlags = [ "-p1" "-l" ];
 
       configureFlags = (readLinesToList ./config/pjsip_args_common)
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/pjsip_args_linux);

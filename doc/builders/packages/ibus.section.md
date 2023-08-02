@@ -34,5 +34,7 @@ The `ibus-engines.typing-booster` package contains a program named `emoji-picker
 On NixOS, it can be installed using the following expression:
 
 ```nix
-{ pkgs, ... }: { fonts.fonts = with pkgs; [ noto-fonts-emoji ]; }
+{ pkgs, ... }: {
+  fonts.packages = with pkgs; [ noto-fonts-emoji ];
+}
 ```

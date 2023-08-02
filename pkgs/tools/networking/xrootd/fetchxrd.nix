@@ -33,10 +33,10 @@
       echo "xrdcp failed trying to download any of the urls" >&2
       exit $ret
     fi
-  '').overrideAttrs (finalAttrs: prevAttrs:
+  '').overrideAttrs (finalAttrs:
 if (pname != "" && version != "") then {
   inherit pname version;
-  name = with finalAttrs; "${pname}-${version}";
+  name = "${pname}-${version}";
 } else {
   name = if (name != "") then name else (baseNameOf finalAttrs.url);
 })

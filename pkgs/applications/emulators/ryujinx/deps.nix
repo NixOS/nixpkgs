@@ -133,7 +133,7 @@
   (fetchNuGet { pname = "Ryujinx.Graphics.Vulkan.Dependencies.MoltenVK"; version = "1.2.0"; sha256 = "1qkas5b6k022r57acpc4h981ddmzz9rwjbgbxbphrjd8h7lz1l5x"; })
   (fetchNuGet { pname = "Ryujinx.GtkSharp"; version = "3.24.24.59-ryujinx"; sha256 = "0dri508x5kca2wk0mpgwg6fxj4n5n3kplapwdmlcpfcbwbmrrnyr"; })
   (fetchNuGet { pname = "Ryujinx.PangoSharp"; version = "3.24.24.59-ryujinx"; sha256 = "1bdxm5k54zs0h6n2dh20j5jlyn0yml9r8qr828ql0k8zl7yhlq40"; })
-  (fetchNuGet { pname = "Ryujinx.SDL2-CS"; version = "2.26.3-build25"; sha256 = "190gqalpkhw1zb3pvb92dxrciyn1giznl125vxxx9gsy8a6cipka"; })
+  (fetchNuGet { pname = "Ryujinx.SDL2-CS"; version = "2.28.1-build28"; sha256 = "0kn7f6cgvb2rsybiif6g7xkw1srmfr306zpv029lvi264dv6aj6l"; })
   (fetchNuGet { pname = "shaderc.net"; version = "0.1.0"; sha256 = "0f35s9h0vj9f1rx9bssj66hibc3j9bzrb4wgb5q2jwkf5xncxbpq"; })
   (fetchNuGet { pname = "SharpZipLib"; version = "1.4.2"; sha256 = "0ijrzz2szxjmv2cipk7rpmg14dfaigdkg7xabjvb38ih56m9a27y"; })
   (fetchNuGet { pname = "ShimSkiaSharp"; version = "0.5.18"; sha256 = "1i97f2zbsm8vhcbcfj6g4ml6g261gijdh7s3rmvwvxgfha6qyvkg"; })

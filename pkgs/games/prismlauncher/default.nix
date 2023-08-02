@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "prismlauncher-unwrapped";
-  version = "7.1";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = version;
-    sha256 = "sha256-ri4oaeJKmvjJapUASPX10nl4JcLPjA3SgTp2EyaEPWg=";
+    sha256 = "sha256-RArg60S91YKp1Mt97a5JNfBEOf2cmuX4pK3VAx2WfqM=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja ];
@@ -46,7 +46,10 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  cmakeFlags = lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
+  cmakeFlags = [
+    # downstream branding
+    "-DLauncher_BUILD_PLATFORM=nixpkgs"
+  ] ++ lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
     ++ lib.optionals (lib.versionOlder qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ];
 
   postUnpack = ''

@@ -4,7 +4,7 @@
 , buildPythonPackage
 , chardet
 , django
-, django_contrib_comments
+, django-contrib-comments
 , fetchPypi
 , filebrowser_safe
 , future
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     bleach
     chardet
     django
-    django_contrib_comments
+    django-contrib-comments
     filebrowser_safe
     future
     grappelli_safe

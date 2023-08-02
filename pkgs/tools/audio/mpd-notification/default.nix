@@ -2,7 +2,6 @@
 , stdenv
 , pkg-config
 , fetchFromGitHub
-, systemd
 , file
 , iniparser
 , ffmpeg
@@ -33,9 +32,9 @@ stdenv.mkDerivation rec {
     ffmpeg
     libmpdclient
     discount
-   ];
+  ];
 
-   installPhase = ''
+  installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
@@ -48,10 +47,10 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-   substituteInPlace systemd/mpd-notification.service --replace /usr $out
- '';
+    substituteInPlace systemd/mpd-notification.service --replace /usr $out
+  '';
 
-   meta = with lib; {
+  meta = with lib; {
     description = "Notifications for mpd";
     homepage = "https://github.com/eworm-de/mpd-notification";
     license = licenses.gpl3Plus;

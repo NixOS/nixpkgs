@@ -18,10 +18,10 @@
 , wheel
 , jax
 , opt-einsum
-, backports_weakref
 , tensorflow-estimator-bin
 , tensorboard
-, cudaSupport ? false
+, config
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 , zlib
 , python
@@ -82,8 +82,7 @@ in buildPythonPackage {
     keras-applications
     keras-preprocessing
     h5py
-  ] ++ lib.optional (!isPy3k) mock
-    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
+  ] ++ lib.optional (!isPy3k) mock;
 
   nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 

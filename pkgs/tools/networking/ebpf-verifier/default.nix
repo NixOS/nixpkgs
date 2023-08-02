@@ -9,7 +9,7 @@
 , yaml-cpp
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "ebpf-verifier";
   version = "unstable-2023-07-15";
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = with maintainers; [ gaelreyrol ];
   };
-})
+}

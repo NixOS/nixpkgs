@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , webtest
-, zope_component
+, zope-component
 , hupper
 , pastedeploy
 , plaster
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     webtest
-    zope_component
+    zope-component
   ];
 
   pythonImportsCheck = [

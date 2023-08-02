@@ -40,7 +40,6 @@ let
     runc
     crun
     conmon
-    slirp4netns
     fuse-overlayfs
     util-linux
     iptables
@@ -57,18 +56,19 @@ let
       aardvark-dns
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       netavark
+      slirp4netns
     ];
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "4.5.1";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-PG2/iMsr/shLqhuYSvhT1I1kPDh0g0ebnGUHHzA7u5A=";
+    hash = "sha256-8cfEZBYhR5CWkHEpIZ0j011gyV6lnY7z4KgJPJr0MfQ=";
   };
 
   patches = [

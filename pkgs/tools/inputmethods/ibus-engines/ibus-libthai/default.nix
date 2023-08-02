@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, ibus, gtk3, libthai }:
+{ lib, stdenv, fetchurl, pkg-config, ibus, gtk3, libthai }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-libthai";

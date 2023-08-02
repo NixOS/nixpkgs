@@ -1,8 +1,8 @@
 {
   "stable": {
-    "version": "115.0.5790.102",
-    "sha256": "0sxhhsrn4cg9akpnb2qpn7kkgp286rh8y2mmypm2409s5grf1xh6",
-    "sha256bin64": "18n7xqbvcdd68856wmbrxx1f5lqj61g9cyiir9dzlfmf0a9wxvml",
+    "version": "115.0.5790.110",
+    "sha256": "0wgp44qnvmdqf2kk870ndm51rcvar36li2qq632ay4n8gfpbrm79",
+    "sha256bin64": "1w2jl92x78s4vxv4p1imkz7qaq51yvs0wiz2bclbjz0hjlw9akr3",
     "deps": {
       "gn": {
         "version": "2023-05-19",
@@ -19,15 +19,15 @@
     }
   },
   "beta": {
-    "version": "115.0.5790.98",
-    "sha256": "1wbasmwdqkg5jcmzpidvzjsq2n2dr73bxz85pr8a5j4grw767gpz",
-    "sha256bin64": "0xbizb3d539h1cw1kj9ahd8azmkcdfjdmqb5bpp8cr21bh2qbqp5",
+    "version": "116.0.5845.50",
+    "sha256": "0r5m2bcrh2zpl2m8wnzyl4afh8s0dh2m2fnfjf50li94694vy4jz",
+    "sha256bin64": "047wsszg4c23vxq93a335iymiqpy7lw5izzz4f0zk1a4sijafd59",
     "deps": {
       "gn": {
-        "version": "2023-05-19",
+        "version": "2023-06-09",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "e9e83d9095d3234adf68f3e2866f25daf766d5c7",
-        "sha256": "0y07c18xskq4mclqiz3a63fz8jicz2kqridnvdhqdf75lhp61f8a"
+        "rev": "4bd1a77e67958fb7f6739bd4542641646f264e5d",
+        "sha256": "14h9jqspb86sl5lhh6q0kk2rwa9zcak63f8drp7kb3r4dx08vzsw"
       }
     }
   },
@@ -45,9 +45,9 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "115.0.5790.102",
-    "sha256": "0sxhhsrn4cg9akpnb2qpn7kkgp286rh8y2mmypm2409s5grf1xh6",
-    "sha256bin64": "18n7xqbvcdd68856wmbrxx1f5lqj61g9cyiir9dzlfmf0a9wxvml",
+    "version": "115.0.5790.110",
+    "sha256": "0wgp44qnvmdqf2kk870ndm51rcvar36li2qq632ay4n8gfpbrm79",
+    "sha256bin64": "1w2jl92x78s4vxv4p1imkz7qaq51yvs0wiz2bclbjz0hjlw9akr3",
     "deps": {
       "gn": {
         "version": "2023-05-19",
@@ -56,8 +56,8 @@
         "sha256": "0y07c18xskq4mclqiz3a63fz8jicz2kqridnvdhqdf75lhp61f8a"
       },
       "ungoogled-patches": {
-        "rev": "115.0.5790.102-1",
-        "sha256": "0g3igkca75d4h1ydzhh2xsp4lw6i6420pvhv71f92msppmsz83n8"
+        "rev": "115.0.5790.110-1",
+        "sha256": "1jahy4jl5bnnzl6433hln0dj3b39v5zqd90n8zf7ss45wqrff91b"
       }
     }
   }

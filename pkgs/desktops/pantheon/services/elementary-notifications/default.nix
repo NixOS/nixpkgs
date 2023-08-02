@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -26,6 +27,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-i7fSKnP4W12cfax5IXm/Zgy5vP5z7S43S80gvzWpFCE=";
   };
+
+  patches = [
+    # Fix broken notification filter
+    # https://github.com/elementary/notifications/pull/207
+    (fetchpatch {
+      url = "https://github.com/elementary/notifications/commit/4691ec869316be94598d8e55e1cd3bd525e8e149.patch";
+      sha256 = "sha256-4x/Us92Mgws5v+ZQiKvjQ4ixfBnU8oTQ92rc+nf8Zdg=";
+    })
+  ];
 
   nativeBuildInputs = [
     glib # for glib-compile-schemas

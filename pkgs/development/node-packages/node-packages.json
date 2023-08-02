@@ -39,7 +39,6 @@
 , "awesome-lint"
 , "balanceofsatoshis"
 , "bash-language-server"
-, "bibtex-tidy"
 , "bower"
 , "bower2nix"
 , "browserify"
@@ -164,7 +163,6 @@
 , "makam"
 , "meshcommander"
 , "gqlint"
-, "gtop"
 , "gulp"
 , "gulp-cli"
 , "he"
@@ -397,5 +395,4 @@
 , "yarn"
 , "yo"
 , "@zwave-js/server"
-, "zx"
 ]

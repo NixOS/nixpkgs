@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, fetchpatch, lib, coreutils, makeWrapper
+{ buildGoModule, fetchFromGitHub, lib, coreutils, makeWrapper
 , google-guest-configs, google-guest-oslogin, iproute2, dhcp, procps
 }:
 

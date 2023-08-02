@@ -7,7 +7,7 @@
 , opencv
 , pcre
 , pkg-config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages
 }:
 

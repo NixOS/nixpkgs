@@ -223,7 +223,7 @@ stdenv.mkDerivation rec {
 
   # Additional tests that check bazel’s functionality. Execute
   #
-  #     nix-build . -A bazel_5.tests
+  #     nix-build . -A bazel_6.tests
   #
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests =

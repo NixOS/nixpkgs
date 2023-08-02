@@ -11,7 +11,7 @@
 
 let
   pname = "edge-runtime";
-  version = "1.6.7";
+  version = "1.8.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Jq9UXFgbTDKe1AWyg4fxn62ODqWu0AUqzlUOo+JUYpo=";
+    hash = "sha256-B8XsH2aOvd87nxUGpSpaNnpTIY0tKDWh7RkXoJcBjrs=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-fOqo9aPgpW6oAEHtZIE7iHjTIRrgDPbdSFBaq4s0r94=";
+  cargoHash = "sha256-I8BC13WUlBdT6OxTD2t0Aw5qYXpUyOa0MYUB8H2XNx8=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 

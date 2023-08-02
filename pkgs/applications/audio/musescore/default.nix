@@ -7,6 +7,7 @@
 , pkg-config
 , ninja
 , alsa-lib
+, alsa-plugins
 , freetype
 , libjack2
 , lame
@@ -47,13 +48,13 @@ let
   } else portaudio;
 in stdenv'.mkDerivation rec {
   pname = "musescore";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${version}";
-    sha256 = "sha256-CqW1f0VsF2lW79L3FY2ev+6FoHLbYOJ9LWHeBlWegeU=";
+    sha256 = "sha256-jXievVIA0tqLdKLy6oPaOHPIbDoFstveEQBri9M0Aoo=";
   };
   patches = [
     # Upstream from some reason wants to install qml files from qtbase in
@@ -85,6 +86,8 @@ in stdenv'.mkDerivation rec {
   qtWrapperArgs = [
     # MuseScore JACK backend loads libjack at runtime.
     "--prefix ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
+  ] ++ lib.optionals (stdenv.isLinux) [
+    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     # There are some issues with using the wayland backend, see:
     # https://musescore.org/en/node/321936

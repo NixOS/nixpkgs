@@ -5,7 +5,7 @@
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , hipSupport ? false, hip # comes with a significantly larger closure size
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-SzdWyzdGhsaesv1VX5ZUfUnLHvRvW8buJTlOVxz6yOk=";
   };
 
-  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [
+    ./draco.patch
+  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs =
     [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev
@@ -165,6 +167,7 @@ stdenv.mkDerivation rec {
     mkdir $out/Applications
     mv $out/Blender.app $out/Applications
   '' + ''
+    mv $out/share/blender/${lib.versions.majorMinor version}/python{,-ext}
     buildPythonPath "$pythonPath"
     wrapProgram $blenderExecutable \
       --prefix PATH : $program_PATH \
