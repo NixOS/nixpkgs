@@ -102,7 +102,9 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   nativeCheckInputs = [
     which dtach openssl bash
-    gdb man emacs
+    gdb man
+  ] ++ lib.optionals withEmacs [
+    emacs
   ]
   # for the test T-850.sh for notmuch-git, which is skipped when notmuch is
   # built without sexp-support
