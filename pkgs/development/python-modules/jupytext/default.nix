@@ -85,6 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
     homepage = "https://github.com/mwouts/jupytext";
+    changelog = "https://github.com/mwouts/jupytext/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ timokau ];
   };
