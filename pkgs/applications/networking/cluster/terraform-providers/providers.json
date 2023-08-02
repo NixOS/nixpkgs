@@ -390,11 +390,11 @@
     "vendorHash": null
   },
   "flexibleengine": {
-    "hash": "sha256-Y7rplfN7acrDWNO9Q4K3WaM5reFxi5ms012+wTm+EF0=",
+    "hash": "sha256-9qwGI7JBhX2WDX7u3SY2l9RJeiDffEpkE16f8/qqlI8=",
     "homepage": "https://registry.terraform.io/providers/FlexibleEngineCloud/flexibleengine",
     "owner": "FlexibleEngineCloud",
     "repo": "terraform-provider-flexibleengine",
-    "rev": "v1.39.0",
+    "rev": "v1.40.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-RqYzqKPzb5GcrzHnEDZC7GaBt1zP8g28Wo3WNAe07Ck="
   },
