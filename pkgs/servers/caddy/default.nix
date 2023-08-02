@@ -7,7 +7,7 @@
 , installShellFiles
 }:
 let
-  version = "2.6.4";
+  version = "2.7.2";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
@@ -23,10 +23,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    hash = "sha256-3a3+nFHmGONvL/TyQRqgJtrSDIn0zdGy9YwhZP17mU0=";
+    hash = "sha256-3a756+3HNEassOCQ6HFDi9GQJIo5sD9F3zkdzDUn3Uo=";
   };
 
-  vendorHash = "sha256-toi6efYZobjDV3YPT9seE/WZAzNaxgb1ioVG4txcuXM=";
+  vendorHash = "sha256-lLPI5OkTNJn697cvVR/O+FpHOBCn7e6Ef/BP0jlVY3E=";
 
   subPackages = [ "cmd/caddy" ];
 
