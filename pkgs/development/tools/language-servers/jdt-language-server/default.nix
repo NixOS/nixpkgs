@@ -97,5 +97,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl20;
     maintainers = with maintainers; [ matt-snider ];
+    platforms = platforms.all;
   };
 }

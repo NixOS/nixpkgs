@@ -8983,6 +8983,8 @@ self: super: with self; {
 
   pyglet = callPackage ../development/python-modules/pyglet { };
 
+  pyglm = callPackage ../development/python-modules/pyglm { };
+
   pygls = callPackage ../development/python-modules/pygls { };
 
   pygmars = callPackage ../development/python-modules/pygmars { };
