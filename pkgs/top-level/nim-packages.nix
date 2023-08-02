@@ -107,6 +107,8 @@ lib.makeScope newScope (self:
 
     nimraylib-now = callPackage ../development/nim-packages/nimraylib-now { };
 
+    smtp = callPackage ../development/nim-packages/smtp { };
+
     spry = callPackage ../development/nim-packages/spry { };
 
     spryvm = callPackage ../development/nim-packages/spryvm { };
