@@ -1500,14 +1500,6 @@ nix-shell -p pythonPackages.pyramid zlib libjpeg git
 
 Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
 
-### Tools {#tools}
-
-Packages inside nixpkgs must use the `buildPythonPackage` or `buildPythonApplication` function directly,
-because we can only provide security support for non-vendored dependencies.
-
-We recommend [nix-init](https://github.com/nix-community/nix-init) for creating new python packages within nixpkgs,
-as it already prefetches the source, parses dependencies for common formats and prefills most things in `meta`.
-
 ### Deterministic builds {#deterministic-builds}
 
 The Python interpreters are now built deterministically. Minor modifications had
@@ -1949,6 +1941,14 @@ propagatedBuildInputs = [
 Note this method is preferred over adding parameters to builders, as that can
 result in packages depending on different variants and thereby causing
 collisions.
+
+### How to contribute a Python package to nixpkgs? {#tools}
+
+Packages inside nixpkgs must use the `buildPythonPackage` or `buildPythonApplication` function directly,
+because we can only provide security support for non-vendored dependencies.
+
+We recommend [nix-init](https://github.com/nix-community/nix-init) for creating new python packages within nixpkgs,
+as it already prefetches the source, parses dependencies for common formats and prefills most things in `meta`.
 
 ## Contributing {#contributing}
 
