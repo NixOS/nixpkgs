@@ -3906,6 +3906,11 @@
     githubId = 14032;
     name = "Daniel Brockman";
   };
+  DCsunset = {
+    github = "DCsunset";
+    githubId = 23468812;
+    name = "DCsunset";
+  };
   ddelabru = {
     email = "ddelabru@redhat.com";
     github = "ddelabru";
