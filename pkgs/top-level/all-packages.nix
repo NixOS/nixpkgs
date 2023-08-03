@@ -14209,6 +14209,8 @@ with pkgs;
 
   wasmi = callPackage ../development/tools/wasmi { };
 
+  wasmserve = callPackage ../development/tools/wasmserve {};
+
   welkin = callPackage ../tools/graphics/welkin { };
 
   wemux = callPackage ../tools/misc/wemux { };
