@@ -67,5 +67,6 @@ buildPythonApplication rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ srghma ];
     platforms = platforms.linux;
+    mainProgram = "safeeyes";
   };
 }
