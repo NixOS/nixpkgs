@@ -1,4 +1,4 @@
-# given a pakcage with a $name.desktop file, makes a copy
+# given a package with a $name.desktop file, makes a copy
 # as autostart item.
 
 {stdenv, lib}:
