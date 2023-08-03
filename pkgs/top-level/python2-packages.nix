@@ -83,6 +83,10 @@ with self; with super; {
     doCheck = false;  # circular dependency with pytest
   });
 
+  wcwidth = callPackage ../development/python2-modules/wcwidth {
+    inherit wcwidth;
+  };
+
   wheel = callPackage ../development/python2-modules/wheel { };
 
   zeek = disabled super.zeek;
