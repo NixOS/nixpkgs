@@ -1,6 +1,6 @@
 {
   "name": "lemmy-ui",
-  "version": "0.18.2",
+  "version": "0.18.3",
   "description": "An isomorphic UI for lemmy",
   "repository": "https://github.com/LemmyNet/lemmy-ui",
   "license": "AGPL-3.0",
@@ -8,7 +8,7 @@
   "scripts": {
     "analyze": "webpack --mode=none",
     "prebuild:dev": "yarn clean && node generate_translations.js",
-    "build:dev": "webpack --env LEMMY_UI_DISABLE_CSP=true --env COMMIT_HASH=$(git rev-parse --short HEAD) --mode=development",
+    "build:dev": "webpack --env COMMIT_HASH=$(git rev-parse --short HEAD) --mode=development",
     "prebuild:prod": "yarn clean && node generate_translations.js",
     "build:prod": "webpack --env COMMIT_HASH=$(git rev-parse --short HEAD) --mode=production",
     "clean": "yarn run rimraf dist",
@@ -69,7 +69,6 @@
     "jwt-decode": "^3.1.2",
     "lemmy-js-client": "0.18.1",
     "lodash.isequal": "^4.5.0",
-    "lodash.merge": "^4.6.2",
     "markdown-it": "^13.0.1",
     "markdown-it-container": "^3.0.0",
     "markdown-it-emoji": "^2.0.2",
