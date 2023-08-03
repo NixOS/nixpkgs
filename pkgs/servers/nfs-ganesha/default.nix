@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     "-DSYSSTATEDIR=/var"
     "-DENABLE_VFS_POSIX_ACL=ON"
     "-DUSE_ACL_MAPPING=ON"
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
   ];
 
   nativeBuildInputs = [
