@@ -5,6 +5,11 @@
 , librsvg
 , libiconv
 , bash
+
+# for passthru.tests
+, imagemagick
+, okular
+, evince
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +36,11 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit evince okular;
+    imagemagick = imagemagick.override { djvulibreSupport = true; };
+  };
 
   meta = with lib; {
     description = "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
