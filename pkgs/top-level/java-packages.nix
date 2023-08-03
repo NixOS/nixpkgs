@@ -223,6 +223,6 @@ in {
     ) {});
   };
 
-  inherit (callPackage ../development/java-modules/jogl { })
+  inherit (pkgs.darwin.apple_sdk_11_0.callPackage ../development/java-modules/jogl { })
     jogl_2_4_0;
 }

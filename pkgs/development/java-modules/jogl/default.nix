@@ -1,4 +1,4 @@
-{ coreutils, lib, stdenv, fetchgit, ant, jdk8, jdk11, git, xorg, udev, libGL, libGLU, mesa, xmlstarlet }:
+{ coreutils, lib, stdenv, fetchgit, ant, jdk8, jdk11, git, xorg, udev, libGL, libGLU, mesa, xmlstarlet, xcbuild, darwin }:
 
 {
   jogl_2_4_0 =
@@ -27,8 +27,15 @@
 
       unpackCmd = "cp -r $curSrc \${curSrc##*-}";
 
-      nativeBuildInputs = [ ant jdk11 git xmlstarlet ];
-      buildInputs = [ udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXi xorg.libXt xorg.libXxf86vm xorg.libXrender mesa ];
+      postPatch = lib.optionalString stdenv.isDarwin ''
+        sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
+        rm -r jogl/oculusvr-sdk
+      '';
+
+      nativeBuildInputs = [ ant jdk11 git xmlstarlet ]
+        ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+      buildInputs = lib.optionals stdenv.isLinux [ udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXi xorg.libXt xorg.libXxf86vm xorg.libXrender mesa ]
+        ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.AppKit darwin.apple_sdk_11_0.frameworks.Cocoa ];
 
       # Workaround build failure on -fno-common toolchains:
       #   ld: ../obj/Bindingtest1p1Impl_JNI.o:(.bss+0x8): multiple definition of
@@ -76,7 +83,7 @@
         description = "Java libraries for 3D Graphics, Multimedia and Processing";
         homepage = "https://jogamp.org/";
         license = licenses.bsd3;
-        platforms = platforms.linux;
+        platforms = platforms.all;
       };
     };
 }
