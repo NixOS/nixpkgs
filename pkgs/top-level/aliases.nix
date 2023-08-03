@@ -1278,6 +1278,10 @@ mapAliases ({
   pg_tmp = throw "'pg_tmp' has been renamed to/replaced by 'ephemeralpg'"; # Converted to throw 2022-02-22
   phantomjs = throw "phantomjs 1.9.8 has been dropped due to lack of maintenance and security issues"; # Added 2022-02-20
   phantomjs2 = throw "phantomjs2 has been dropped due to lack of maintenance"; # Added 2022-04-22
+  pharo-spur64 = pharo; # Added 2022-08-03
+  pharo-spur32 = throw "pharo on 32bits is currently not supported due to lack of maintenance"; # Added 2022-08-03
+  pharo-cog32 = throw "the cog32 VM has been outdated for about a decade now, time to move on"; # Added 2022-08-03
+  pharo-launcher = throw "pharo launcher has been dropped due to lack of maintenance"; # Added 2022-08-03
   philter = throw "philter has been removed: abandoned by upstream"; # Added 2022-04-26
   phodav_2_0 = throw "'phodav_2_0' has been renamed to/replaced by 'phodav'"; # Added 2023-02-21
   photoflow = throw "photoflow was removed because it was broken and unmaintained by upstream"; # Added 2023-03-10
