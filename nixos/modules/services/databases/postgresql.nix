@@ -377,6 +377,16 @@ in
         '';
       };
 
+      pythonPackages = mkOption {
+        type = types.nullOr (types.listOf types.path);
+        default = null;
+        example = literalExpression "with pkgs.python3.pkgs; [ numpy ]";
+        description = ''
+          Adds additional python packages to PYTHONPATH for postgresql.
+          Has no effect unless you set package with plpython language support.
+        '';
+      };
+
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool float int str ]);
         default = {};
@@ -483,6 +493,7 @@ in
         after = [ "network.target" ];
 
         environment.PGDATA = cfg.dataDir;
+        environment.PYTHONPATH = lib.mkIf (cfg.pythonPackages != null) pkgs.python3Packages.makePythonPath cfg.pythonPackages;
 
         path = [ postgresql ];
 
