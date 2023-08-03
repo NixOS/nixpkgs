@@ -61,25 +61,22 @@ buildPythonPackage rec {
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
 
+  ] ++ lib.optionals stdenv.isDarwin [
     # failing on macos
-    "check_regressors_train"
     "check_classifiers_train"
-    "xfail_ignored_in_check_estimator"
-  ] ++ lib.optionals (stdenv.isDarwin) [
+    "check_regressors_train"
     "test_graphical_lasso"
+    "xfail_ignored_in_check_estimator"
+  ] ++ lib.optionals (numpy.blasImplementation == "mkl") [
+    # div-by-0 warnings are apparently not issued with MKL
+    "test_tfidf_no_smoothing"
+    "test_qda_regularization"
   ];
 
   pytestFlagsArray = [
     # verbose build outputs needed to debug hard-to-reproduce hydra failures
     "-v"
     "--pyargs" "sklearn"
-
-    # NuSVC memmap tests causes segmentation faults in certain environments
-    # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
-    # (https://github.com/joblib/joblib/issues/563). See also:
-    # https://github.com/scikit-learn/scikit-learn/issues/17582
-    # Since we are overriding '-k' we need to include the 'disabledTests' from above manually.
-    "-k" "'not (NuSVC and memmap) ${toString (lib.forEach disabledTests (t: "and not ${t}"))}'"
   ];
 
   preCheck = ''
