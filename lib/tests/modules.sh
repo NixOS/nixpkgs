@@ -439,6 +439,12 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
 checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
 
+# types.enumMap
+checkConfigOutput "bar" config.map ./enumMap.nix
+checkConfigError "The option \`multiple\' has conflicting definition values" config.multiple ./enumMap.nix
+checkConfigOutput "foo" config.merge ./enumMap.nix
+checkConfigOutput "foo" config.priorities ./enumMap.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

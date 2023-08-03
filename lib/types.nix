@@ -848,6 +848,14 @@ rec {
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
       };
 
+    # Similar to `enum (attrNames mapping)` but merges to `mapping.${name}`
+    enumMap = mapping:
+      enum (attrNames mapping) // rec {
+        name = "enumMap";
+        merge = loc: defs: mapping.${mergeEqualOption loc defs};
+        functor = (defaultFunctor name) // { type = enumMap; payload = mapping; binOp = a: b: a // b; };
+      };
+
     # Either value of type `t1` or `t2`.
     either = t1: t2: mkOptionType rec {
       name = "either";
