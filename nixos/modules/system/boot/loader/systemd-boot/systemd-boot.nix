@@ -9,7 +9,7 @@ let
 
   python3 = pkgs.python3.withPackages (ps: [ ps.packaging ]);
 
-  systemdBootBuilder = pkgs.substituteAll {
+  systemdBootBuilder = mountPoint: pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
@@ -28,7 +28,9 @@ let
 
     inherit (cfg) consoleMode graceful;
 
-    inherit (efi) efiSysMountPoint canTouchEfiVariables;
+    inherit (efi) canTouchEfiVariables;
+
+    inherit mountPoint;
 
     inherit (config.system.nixos) distroName;
 
@@ -40,21 +42,21 @@ let
       empty_file=$(${pkgs.coreutils}/bin/mktemp)
 
       ${concatStrings (mapAttrsToList (n: v: ''
-        ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -Dp "${v}" "${mountPoint}/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${mountPoint}/efi/nixos/.extra-files/"${escapeShellArg n}
       '') cfg.extraFiles)}
 
       ${concatStrings (mapAttrsToList (n: v: ''
-        ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${efi.efiSysMountPoint}/loader/entries/"${escapeShellArg n}
-        ${pkgs.coreutils}/bin/install -D $empty_file "${efi.efiSysMountPoint}/efi/nixos/.extra-files/loader/entries/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -Dp "${pkgs.writeText n v}" "${mountPoint}/loader/entries/"${escapeShellArg n}
+        ${pkgs.coreutils}/bin/install -D $empty_file "${mountPoint}/efi/nixos/.extra-files/loader/entries/"${escapeShellArg n}
       '') cfg.extraEntries)}
     '';
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
+  checkedSystemdBootBuilder = mountPoint: pkgs.runCommand "systemd-boot" {
     nativeBuildInputs = [ pkgs.mypy python3 ];
   } ''
-    install -m755 ${systemdBootBuilder} $out
+    install -m755 ${systemdBootBuilder mountPoint} $out
     mypy \
       --no-implicit-optional \
       --disallow-untyped-calls \
@@ -62,11 +64,16 @@ let
       $out
   '';
 
-  finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
-    #!${pkgs.runtimeShell}
-    ${checkedSystemdBootBuilder} "$@"
-    ${cfg.extraInstallCommands}
-  '';
+  finalSystemdBootBuilder = let
+    installDirs =
+      if cfg.mirroredBoots != []
+      then cfg.mirroredBoots
+      else [efi.efiSysMountPoint];
+  in
+    pkgs.writeShellScript "install-systemd-boot.sh"
+      (lib.concatMapStrings (x: "${checkedSystemdBootBuilder x} \"$@\"\n") installDirs)
+      + cfg.extraInstallCommands;
+
 in {
 
   imports =
@@ -235,6 +242,17 @@ in {
 
         Only enable this option if `systemd-boot` otherwise fails to install, as the
         scope or implication of the `--graceful` option may change in the future.
+      '';
+    };
+
+    mirroredBoots = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [];
+      example = ''
+        [ "/boot1" "/boot2" ]
+      '';
+      description = lib.mdDoc ''
+        Mirror the boot configuration to multiple locations.
       '';
     };
 
