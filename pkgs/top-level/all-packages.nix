@@ -5518,6 +5518,8 @@ with pkgs;
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
     cairo = cairo.override { xcbSupport = true; };  };
 
+  hyprdim = callPackage ../applications/misc/hyprdim { };
+
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
     wlroots = pkgs.callPackage ../applications/window-managers/hyprwm/hyprland/wlroots.nix { };
     udis86 = pkgs.callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
