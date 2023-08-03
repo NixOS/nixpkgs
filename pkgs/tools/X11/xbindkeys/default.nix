@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libX11, guile }:
+{ lib, stdenv, fetchurl, pkg-config, libX11, guile_2_2 }:
 
 stdenv.mkDerivation rec {
   pname = "xbindkeys";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 guile ];
+  buildInputs = [ libX11 guile_2_2 ];
 
   meta = {
     homepage = "https://www.nongnu.org/xbindkeys/xbindkeys.html";
