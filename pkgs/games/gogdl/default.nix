@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , writeScript
 , buildPythonApplication
 , fetchFromGitHub
@@ -25,6 +26,13 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     setuptools
     requests
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Heroic-Games-Launcher/heroic-gogdl/pull/37.patch";
+      hash = "sha256-oZLetPoWzsEDrL0Bh89HB4hTn70FTh8aXj9mKGr4Dqw=";
+    })
   ];
 
   pythonImportsCheck = [ "gogdl" ];
