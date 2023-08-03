@@ -27102,10 +27102,10 @@ with self; {
 
   VariableMagic = buildPerlPackage {
     pname = "Variable-Magic";
-    version = "0.62";
+    version = "0.63";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VP/VPIT/Variable-Magic-0.62.tar.gz";
-      hash = "sha256-P5oYUX4z8AapwvxPQ/AbVKv+b/Lq5zIkJPMQaSlrYVw=";
+      url = "mirror://cpan/authors/id/V/VP/VPIT/Variable-Magic-0.63.tar.gz";
+      hash = "sha256-ukCDssMf8mlPI3EzPVVMgmqvJLTZjQPki1tKQ6Kg5nk=";
     };
     meta = {
       description = "Associate user-defined magic to variables from Perl";
