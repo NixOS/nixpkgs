@@ -233,6 +233,7 @@ stdenv.mkDerivation (rec {
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
     priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
+    mainProgram = "perl";
   };
 } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
   crossVersion = "1.5"; # Jul 03, 2023

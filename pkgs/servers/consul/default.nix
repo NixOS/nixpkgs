@@ -42,5 +42,6 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
     maintainers = with maintainers; [ pradeepchhetri vdemeester nh2 techknowlogick];
+    mainProgram = "consul";
   };
 }

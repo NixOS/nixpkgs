@@ -425,6 +425,8 @@ with pkgs;
 
   catppuccin-plymouth = callPackage ../data/themes/catppuccin-plymouth { };
 
+  catppuccin-sddm-corners = callPackage ../data/themes/catppuccin-sddm-corners { };
+
   btdu = callPackage ../tools/misc/btdu { };
 
   ccal = callPackage ../tools/misc/ccal { };
@@ -786,6 +788,8 @@ with pkgs;
   onesixtyone = callPackage ../tools/security/onesixtyone { };
 
   oletools = with python3.pkgs; toPythonApplication oletools;
+
+  ollama = callPackage ../tools/misc/ollama {  };
 
   ots = callPackage ../tools/security/ots {  };
 
@@ -2632,6 +2636,8 @@ with pkgs;
   };
 
   stella = callPackage ../applications/emulators/stella { };
+
+  tamatool = callPackage ../applications/emulators/tamatool { };
 
   termtekst = callPackage ../applications/emulators/termtekst { };
 
@@ -27383,6 +27389,8 @@ with pkgs;
   cpustat = callPackage ../os-specific/linux/cpustat { };
 
   cockroachdb = callPackage ../servers/sql/cockroachdb { };
+
+  cockroachdb-bin = callPackage ../servers/sql/cockroachdb/cockroachdb-bin.nix { };
 
   coconutbattery = callPackage ../os-specific/darwin/coconutbattery { };
 

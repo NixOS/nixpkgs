@@ -73,5 +73,6 @@ buildGoModule rec {
     homepage = "https://grafana.com/products/cloud";
     changelog = "https://github.com/grafana/agent/blob/${src.rev}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ flokli emilylange ];
+    mainProgram = "grafana-agent";
   };
 }

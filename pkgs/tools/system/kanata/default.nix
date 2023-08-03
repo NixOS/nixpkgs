@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ linj ];
     platforms = platforms.linux;
+    mainProgram = "kanata";
   };
 }

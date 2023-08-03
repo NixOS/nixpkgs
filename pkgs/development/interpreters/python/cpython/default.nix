@@ -573,5 +573,6 @@ in with passthru; stdenv.mkDerivation {
     license = licenses.psfl;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ fridh ];
+    mainProgram = "python3";
   };
 }
