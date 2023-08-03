@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-+GhYeQ27uwg9JOv1qbf1+UbMd+vPXJ05nsXZD9OakzI=";
   };
 
-  sourceRoot = "source/cmd/tar2ext4";
+  sourceRoot = "${src.name}/cmd/tar2ext4";
   vendorHash = null;
 
   meta = with lib; {

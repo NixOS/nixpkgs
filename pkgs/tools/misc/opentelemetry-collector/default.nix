@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-yywmnJUTigDYeiAuK0f2511vh6sS4oD4hJLPozAlWz4=";
   };
   # there is a nested go.mod
-  sourceRoot = "source/cmd/otelcorecol";
+  sourceRoot = "${src.name}/cmd/otelcorecol";
   vendorHash = "sha256-BNIQ0pTHGgwWw1cy7au6hUeECC8oGsSkxaX5BUCRG9Y=";
 
   # upstream strongly recommends disabling CGO

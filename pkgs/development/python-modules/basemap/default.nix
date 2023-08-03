@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-oWKCUARTMCiXDp4SCOOrOUQLUDU4DIzwsmUXCXoDvx0=";
   };
 
-  sourceRoot = "source/packages/basemap";
+  sourceRoot = "${src.name}/packages/basemap";
 
   nativeBuildInputs = [
     cython

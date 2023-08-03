@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-v5yx8pE8+m+5CDy7X3CwitYhFQMX8Ynt8Y2k1lEZKpg=";
   };
 
-  sourceRoot = "source/src-tauri";
+  sourceRoot = "${src.name}/src-tauri";
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \

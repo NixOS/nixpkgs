@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "zxing_cpp";
   inherit (zxing-cpp) src version;
 
-  sourceRoot = "source/wrappers/python";
+  sourceRoot = "${src.name}/wrappers/python";
   patches = [
     ./use-nixpkgs-pybind11.patch
   ];

@@ -16,21 +16,18 @@
 , piper-train
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "piper";
   version = "1.2.0";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-6WNWqJt0PO86vnf+3iHaRRg2KwBOEj4aicmB+P2phlk=";
   };
 
-  sourceRoot = "source/src/cpp";
+  sourceRoot = "${finalAttrs.src.name}/src/cpp";
 
   nativeBuildInputs = [
     cmake
@@ -63,10 +60,10 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/rhasspy/piper/releases/tag/v${version}";
+    changelog = "https://github.com/rhasspy/piper/releases/tag/v${finalAttrs.version}";
     description = "A fast, local neural text to speech system";
     homepage = "https://github.com/rhasspy/piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
-}
+})

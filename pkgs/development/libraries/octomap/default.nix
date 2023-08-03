@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-qE5i4dGugm7tR5tgDCpbla/R7hYR/PI8BzrZQ4y6Yz8=";
   };
 
-  sourceRoot = "source/octomap";
+  sourceRoot = "${src.name}/octomap";
 
   nativeBuildInputs = [ cmake ];
 

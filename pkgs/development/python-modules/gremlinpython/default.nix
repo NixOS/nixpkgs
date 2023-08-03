@@ -27,7 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-SQ+LcHeHDB1Hd5wXGDJBZmBG4KEZ3NsV4+4X9WgPb9E=";
   };
 
-  sourceRoot = "source/gremlin-python/src/main/python";
+  sourceRoot = "${src.name}/gremlin-python/src/main/python";
 
   postPatch = ''
     sed -i '/pytest-runner/d' setup.py

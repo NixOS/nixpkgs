@@ -25,7 +25,7 @@ let
           hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
         };
 
-        sourceRoot = "source/premium/backend";
+        sourceRoot = "${src.name}/premium/backend";
 
         doCheck = false;
       };
@@ -45,7 +45,7 @@ with python.pkgs; buildPythonApplication rec {
     hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
   };
 
-  sourceRoot = "source/backend";
+  sourceRoot = "${src.name}/backend";
 
   postPatch = ''
     # remove dependency constraints

@@ -51,7 +51,7 @@ let
     inherit src version;
     name = "datadog-integration-${pname}-${version}";
 
-    sourceRoot = "source/${args.sourceRoot or pname}";
+    sourceRoot = "${src.name}/${args.sourceRoot or pname}";
     doCheck = false;
   });
 
