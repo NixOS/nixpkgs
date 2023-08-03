@@ -997,7 +997,7 @@ and in this case the `python3` interpreter is automatically used.
 
 ### Interpreters {#interpreters}
 
-| Packages   | Aliases         | Interpeters |
+| Packages   | Aliases         | Interpreters |
 |------------|-----------------|------------|
 | python27   | python2, python | CPython 2.7 |
 | python38   | ` `             | CPython 3.8 |
@@ -1006,7 +1006,7 @@ and in this case the `python3` interpreter is automatically used.
 | python311  | ` `             | CPython 3.11 |
 | python312  | ` `             | CPython 3.12 |
 | pypy27     | pypy2, pypy     | PyPy2.7 |
-| pypy3      | pypy2, pypy     | PyPy2.7 |
+| pypy39     | pypy3           | PyPy 3.9 |
 
 The Nix expressions for the interpreters can be found in
 `pkgs/development/interpreters/python`.
