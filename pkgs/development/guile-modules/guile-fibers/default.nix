@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , guile
+, libevent
 , pkg-config
 , texinfo
 }:
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     guile
+    libevent
     texinfo
   ];
 
@@ -34,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "Concurrent ML-like concurrency for Guile";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }
