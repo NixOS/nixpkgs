@@ -18,13 +18,14 @@ in
         default = [ "share/man" ];
         example = lib.literalExpression "[ \"share/man\" \"share/man/fr\" ]";
         description = lib.mdDoc ''
-          Change the manpath, i. e. the directories where
-          {manpage}`man(1)`
+          Change the paths included in MANPATH environment variable,
+          i. e. the directories where {manpage}`man(1)`
           looks for section-specific directories of man pages.
           You only need to change this setting if you want extra man pages
           (e. g. in non-english languages). All values must be strings that
           are a valid path from the target prefix (without including it).
-          The first value given takes priority.
+          The first value given takes priority. Note that this is not
+          adding manpath in {manpage}`man.conf(5)`.
         '';
       };
 
@@ -37,6 +38,14 @@ in
           configuration options used for the package.
         '';
       };
+
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = lib.mdDoc ''
+          Configuration to write to {manpage}`man.conf(5)`.
+        '';
+      };
     };
   };
 
@@ -44,10 +53,7 @@ in
     environment = {
       systemPackages = [ cfg.package ];
 
-      # tell mandoc about man pages
-      etc."man.conf".text = lib.concatMapStrings (path: ''
-        manpath /run/current-system/sw/${path}
-      '') cfg.manPath;
+      etc."man.conf".text = cfg.extraConfig;
 
       # create mandoc.db for whatis(1), apropos(1) and man(1) -k
       # TODO(@sternenseemman): fix symlinked directories not getting indexed,
@@ -58,6 +64,9 @@ in
           [[ -d "$man_path" ]] && ${makewhatis} -T utf8 $man_path
         done
       '';
+
+      # tell mandoc the paths containing man pages
+      profileRelativeSessionVariables."MANPATH" = map (path: "/${path}") cfg.manPath;
     };
   };
 }
