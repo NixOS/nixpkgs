@@ -3,23 +3,35 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "faadelays";
-  version = "0.0.7";
-  disabled = pythonOlder "3.6";
+  version = "2023.8.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-osZqfSYlKPYZMelBR6YB331iRB4DTjCUlmX7pcrIiGk=";
+    hash = "sha256-VAQQI9cMRKGe7RAUxoI1bBojzRq6cRz2jpeDA+GMuUI=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    aiohttp
+  ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "faadelays" ];
+
+  pythonImportsCheck = [
+    "faadelays"
+  ];
 
   meta = with lib; {
     description = "Python package to retrieve FAA airport status";
