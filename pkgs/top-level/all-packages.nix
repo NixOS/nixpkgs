@@ -21757,6 +21757,10 @@ with pkgs;
 
   htmlcxx = callPackage ../development/libraries/htmlcxx { };
 
+  hts-engine = callPackage ../development/libraries/hts-engine { };
+
+  hts-voice-nitech-jp-atr503-m001 = callPackage ../data/misc/hts-voice-nitech-jp-atr503-m001 { };
+
   http-parser = callPackage ../development/libraries/http-parser { };
 
   httpref = callPackage ../development/tools/misc/httpref { };
@@ -34085,6 +34089,8 @@ with pkgs;
   openfx = callPackage ../development/libraries/openfx { };
 
   openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio { };
+
+  open-jtalk = callPackage ../applications/audio/open-jtalk { };
 
   openjump = callPackage ../applications/misc/openjump { };
 
