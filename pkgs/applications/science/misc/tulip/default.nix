@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tulip";
-  version = "5.6.1";
+  version = "5.7.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/auber/${pname}-${version}_src.tar.gz";
-    sha256 = "1fy3nvgxv3igwc1d23zailcgigj1d0f2kkh7a5j24c0dyqz5zxmw";
+    sha256 = "sha256-b+XFCS6Ks+EpwxgYFzWdRomfCpHXmZHXnrQM+ZSLN/0=";
   };
 
   buildInputs = [ libxml2 freetype glew libGLU libGL libjpeg qtbase python3 ];
