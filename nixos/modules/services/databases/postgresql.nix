@@ -493,7 +493,7 @@ in
         after = [ "network.target" ];
 
         environment.PGDATA = cfg.dataDir;
-        environment.PYTHONPATH = lib.mkIf (cfg.pythonPackages != null) pkgs.python3Packages.makePythonPath cfg.pythonPackages;
+        environment.PYTHONPATH = lib.mkIf (cfg.pythonPackages != null) (pkgs.python3Packages.makePythonPath cfg.pythonPackages);
 
         path = [ postgresql ];
 
