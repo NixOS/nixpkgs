@@ -32354,6 +32354,10 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar { };
 
+  waybar-hyprland = callPackage ../applications/misc/waybar {
+    hyprlandSupport = true;
+  };
+
   waycorner = callPackage ../applications/misc/waycorner { };
 
   waylock = callPackage ../applications/misc/waylock {
