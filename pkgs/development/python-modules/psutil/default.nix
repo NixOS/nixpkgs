@@ -43,7 +43,7 @@ buildPythonPackage rec {
   # - the other disabled tests are likely due to sanboxing (missing specific errors)
   pytestFlagsArray = [
     # Note: $out must be referenced as test import paths are relative
-    "$out/${python.sitePackages}/psutil/tests/test_system.py"
+    "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"
   ];
 
   disabledTests = [
