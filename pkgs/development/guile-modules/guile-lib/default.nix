@@ -6,8 +6,6 @@
 , texinfo
 }:
 
-assert stdenv ? cc && stdenv.cc.isGNU;
-
 stdenv.mkDerivation rec {
   pname = "guile-lib";
   version = "0.2.7";
@@ -24,6 +22,8 @@ stdenv.mkDerivation rec {
     guile
     texinfo
   ];
+
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   doCheck = true;
 
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }
