@@ -5179,6 +5179,8 @@ self: super: with self; {
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
+  ipynbname = callPackage ../development/python-modules/ipynbname { };
+
   ipyniivue = callPackage ../development/python-modules/ipyniivue { };
 
   ipykernel = callPackage ../development/python-modules/ipykernel { };
