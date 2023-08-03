@@ -259,11 +259,12 @@ let
         "--config=mkl_open_source_only"
       ];
 
-      sha256 =
-        if cudaSupport then
-          "sha256-8QaXoZq6oITRsYn4RdLUXcKQv3PJ4Q3ItX9PkBwxGBI="
-        else
-          "sha256-M/h5EZmyiV4QvzgKRjdz7V1LHENUJlc/ig1QAItnWVQ=";
+      sha256 = (if cudaSupport then {
+        x86_64-linux = "sha256-8QaXoZq6oITRsYn4RdLUXcKQv3PJ4Q3ItX9PkBwxGBI=";
+      } else {
+        x86_64-linux = "sha256-M/h5EZmyiV4QvzgKRjdz7V1LHENUJlc/ig1QAItnWVQ=";
+        aarch64-linux = "sha256-edkYcdlvOLNGRSanch1fGCZwq8SFn3TzcUNt1LhzG/E=";
+      }).${stdenv.system} or (throw "jaxlib: unsupported system: ${stdenv.system}");
     };
 
     buildAttrs = {
