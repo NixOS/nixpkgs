@@ -5,6 +5,7 @@
 , fasteners
 , fetchFromGitLab
 , qgrid
+, ipynbname
 , ipywidgets
 , odfpy
 , scipy
@@ -28,6 +29,10 @@ buildPythonPackage rec {
     hash = "sha256-zjmmLUpGjUhpw2+stLJE6cImesnBSvrcid5bHMftX/Q=";
   };
 
+  patches = [
+    ./unvendor-ipynbname.patch
+  ];
+
   # This dependency constraint (<=7.6.5) was due to a bug in qgrid that has been patched in its
   # owned derivation
   postPatch = ''
@@ -39,6 +44,7 @@ buildPythonPackage rec {
     cloudpickle
     dill
     fasteners
+    ipynbname
     ipywidgets
     odfpy
     plotly
