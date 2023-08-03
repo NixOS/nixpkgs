@@ -13,6 +13,8 @@
 , qttools
 , wrapQtAppsHook
 , gitUpdater
+
+, qt5Kvantum ? null
 }:
 let
   isQt6 = lib.versionAtLeast qtbase.version "6";
@@ -57,6 +59,12 @@ stdenv.mkDerivation rec {
     # Fix plugin dir
     substituteInPlace style/style.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+  '';
+
+  postInstall = lib.optionalString isQt6 ''
+    # make default Kvantum themes available for Qt 6 apps
+    mkdir -p "$out/share"
+    ln -s "${qt5Kvantum}/share/Kvantum" "$out/share/Kvantum"
   '';
 
   passthru.updateScript = gitUpdater {
