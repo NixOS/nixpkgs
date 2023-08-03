@@ -18058,7 +18058,9 @@ with pkgs;
 
   guile-reader = callPackage ../development/guile-modules/guile-reader { };
 
-  guile-sdl = callPackage ../development/guile-modules/guile-sdl { };
+  guile-sdl = callPackage ../development/guile-modules/guile-sdl {
+    guile = guile_2_2;
+  };
 
   guile-sdl2 = callPackage ../development/guile-modules/guile-sdl2 { };
 
