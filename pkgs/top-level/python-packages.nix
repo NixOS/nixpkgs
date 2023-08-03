@@ -7970,8 +7970,6 @@ self: super: with self; {
     piper-phonemize-native = pkgs.piper-phonemize;
   };
 
-  piper-train = callPackage ../development/python-modules/piper-train { };
-
   pip-api = callPackage ../development/python-modules/pip-api { };
 
   pip-tools = callPackage ../development/python-modules/pip-tools { };
