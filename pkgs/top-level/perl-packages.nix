@@ -20259,10 +20259,10 @@ with self; {
 
   PPR = buildPerlPackage {
     pname = "PPR";
-    version = "0.000028";
+    version = "0.001008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.000028.tar.gz";
-      hash = "sha256-032ndHxDN+TH11jHuO1dEsuXN2Q2krCfC9TZnFBouak=";
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.001008.tar.gz";
+      hash = "sha256-EQ5xwF8uLJDrAfCgaU5VqdvpHIV+SBJeF0LRflzbHkk=";
     };
     meta = {
       description = "Pattern-based Perl Recognizer";
