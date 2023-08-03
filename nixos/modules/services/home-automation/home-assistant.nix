@@ -451,6 +451,7 @@ in {
           "eufylife_ble"
           "esphome"
           "fjaraskupan"
+          "gardena_bluetooth"
           "govee_ble"
           "homekit_controller"
           "inkbird"

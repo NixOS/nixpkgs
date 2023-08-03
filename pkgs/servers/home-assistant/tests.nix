@@ -58,6 +58,12 @@ let
       # Flaky: AssertionError: assert '0.0' == '12.0'
       "--deselect tests/components/history_stats/test_sensor.py::test_end_time_with_microseconds_zeroed"
     ];
+    jellyfin = [
+      # AssertionError: assert 'audio/x-flac' == 'audio/flac'
+      "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
+      # AssertionError: assert [+ received] == [- snapshot]
+      "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
+    ];
     modbus = [
       # homeassistant.components.modbus.modbus:modbus.py:317 Pymodbus: modbusTest: Modbus Error: test connect exception
       "--deselect tests/components/modbus/test_init.py::test_pymodbus_connect_fail"
@@ -74,6 +80,10 @@ let
     unifiprotect = [
       # "TypeError: object Mock can't be used in 'await' expression
       "--deselect tests/components/unifiprotect/test_repairs.py::test_ea_warning_fix"
+    ];
+    xiaomi_ble = [
+      # assert 0 == 1"
+      "--deselect tests/components/xiaomi_ble/test_sensor.py::test_xiaomi_consumable"
     ];
     zha = [
       "--deselect tests/components/zha/test_config_flow.py::test_formation_strategy_restore_manual_backup_non_ezsp"

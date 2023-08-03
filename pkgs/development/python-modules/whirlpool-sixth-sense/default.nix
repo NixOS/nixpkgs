@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "whirlpool-sixth-sense";
-  version = "0.18.3";
+  version = "0.18.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "abmantis";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-GvebWPO+jKDJk7yuMgEctlvKLXeo95GlJUSuI+FMCRU=";
+    hash = "sha256-9dwkylr+aCTGw/VIY90nxq8IkqBASeEfdr5JGz7pZrc=";
   };
 
   nativeBuildInputs = [
