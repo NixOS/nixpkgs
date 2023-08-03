@@ -69,6 +69,28 @@ checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
 checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
 
+# Check that a module argument is passed, also when a default is available
+# (but not needed)
+#
+# When the default is needed, we currently fail to do what the users expect, as
+# we pass our own argument anyway, even if it *turns out* not to exist.
+#
+# The reason for this is that we don't know at invocation time what is in the
+# _module.args option. That value is only available *after* all modules have been
+# invoked.
+#
+# Hypothetically, Nix could help support this by giving access to the default
+# values, through a new built-in function.
+# However the default values are allowed to depend on other arguments, so those
+# would have to be passed in somehow, making this not just a getter but
+# something more complicated.
+#
+# At that point we have to wonder whether the extra complexity is worth the cost.
+# Another - subjective - reason not to support it is that default values
+# contradict the notion that an option has a single value, where _module.args
+# is the option.
+checkConfigOutput '^true$' config.result ./module-argument-default.nix
+
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
 checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix

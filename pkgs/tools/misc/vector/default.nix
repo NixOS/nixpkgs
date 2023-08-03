@@ -126,5 +126,6 @@ rustPlatform.buildRustPackage {
     license = licenses.mpl20;
     maintainers = with maintainers; [ thoughtpolice happysalada ];
     platforms = with platforms; all;
+    mainProgram = "vector";
   };
 }

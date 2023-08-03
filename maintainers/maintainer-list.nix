@@ -2595,7 +2595,7 @@
   };
   cafkafk = {
     email = "christina@cafkafk.com";
-    matrix = "@cafkafk:m.cafkafk.com";
+    matrix = "@cafkafk:nixos.dev";
     name = "Christina Sørensen";
     github = "cafkafk";
     githubId = 89321978;
@@ -2604,7 +2604,7 @@
         fingerprint = "7B9E E848 D074 AE03 7A0C  651A 8ED4 DEF7 375A 30C8";
       }
       {
-        fingerprint = "208A 2A66 8A2F CDE7 B5D3 8F64 CDDC 792F 6552 51ED";
+        fingerprint = "208A 2A66 8A2F CDE7 B5D3  8F64 CDDC 792F 6552 51ED";
       }
     ];
   };
@@ -2777,6 +2777,12 @@
     github = "avdv";
     githubId = 3471749;
     name = "Claudio Bley";
+  };
+  cbourjau = {
+    email = "christianb@posteo.de";
+    github = "cbourjau";
+    githubId = 3288058;
+    name = "Christian Bourjau";
   };
   cbrewster = {
     email = "cbrewster@hey.com";
@@ -7732,6 +7738,13 @@
     github = "jensbin";
     githubId = 1608697;
     name = "Jens Binkert";
+  };
+  jeremiahs = {
+    email = "jeremiah@secrist.xyz";
+    github = "JeremiahSecrist";
+    githubId = 26032621;
+    matrix = "@jeremiahs:matrix.org";
+    name = "Jeremiah Secrist";
   };
   jeremyschlatter = {
     email = "github@jeremyschlatter.com";

@@ -44,5 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/harmonia";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
+    mainProgram = "harmonia";
   };
 }

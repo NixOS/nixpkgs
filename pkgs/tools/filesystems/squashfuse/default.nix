@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
 
   pname = "squashfuse";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "vasi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-agapkSl4KEK+7MA2+gcfaXv6+rpG0MQAhAG5At9rXqk=";
+    sha256 = "sha256-gK1k1Ooue3HLtBmPFMZdW4h2Ee1Uy4T26EOBeQICQpM=";
   };
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];

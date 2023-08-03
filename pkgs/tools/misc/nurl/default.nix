@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/nix-community/nurl/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "nurl";
   };
 }

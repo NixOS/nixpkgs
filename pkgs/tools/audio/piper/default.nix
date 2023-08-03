@@ -25,6 +25,10 @@ stdenv.mkDerivation {
 
   sourceRoot = "source/src/cpp";
 
+  patches = [
+    ./fix-compilation-with-newer-onnxruntime.patch
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "/usr/local/include/onnxruntime" "${onnxruntime}"

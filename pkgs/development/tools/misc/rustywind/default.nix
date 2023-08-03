@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustywind";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "avencera";
     repo = "rustywind";
     rev = "v${version}";
-    hash = "sha256-xDpRS8WrFu5uPtbXJGXrxElJinxl1lkpYZ1tGrNrBHA=";
+    hash = "sha256-cRQdPOiERvxBZzaS26op1bDba9sCn3TyBIhlwI5XCro=";
   };
 
-  cargoHash = "sha256-2bo6KkHVw1lyLD4iWidAyxZzQMRTO5DWvYmqUQld15g=";
+  cargoHash = "sha256-hw9DUe4iJ0DLX4P48ZpvZr6Xmq5rQ5rGmT13fO5uRoY=";
 
   meta = with lib; {
     description = "CLI for organizing Tailwind CSS classes";

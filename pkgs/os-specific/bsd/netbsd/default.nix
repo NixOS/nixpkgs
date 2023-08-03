@@ -212,7 +212,7 @@ in makeScopeWithSplicing
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # GNU objcopy produces broken .a libs which won't link into dependers.
       # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
-      "OBJCOPY=${buildPackages.darwin.cctools}/bin/strip"
+      "OBJCOPY=${buildPackages.darwin.cctools-port}/bin/strip"
     ];
     RENAME = "-D";
 

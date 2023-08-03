@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
+, nixosTests
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+
+  passthru.tests.test = nixosTests.terminal-emulators.deepin-terminal;
 
   meta = with lib; {
     description = "Terminal emulator with workspace, multiple windows, remote management, quake mode and other features";

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2023.6.3";
+  version = "2023.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "dask-contrib";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2Ejt1fyh8Z81WI+oIFWZxr4M1vfgs6tB4jCCMxBz2Rc=";
+    hash = "sha256-2nF2G6bpwHeMlB0+/DRW4I7W6mK3wfXkuqCSRQusJu4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

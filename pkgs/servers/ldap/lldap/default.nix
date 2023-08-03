@@ -110,5 +110,6 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ emilylange bendlas ];
+    mainProgram = "lldap";
   };
 })

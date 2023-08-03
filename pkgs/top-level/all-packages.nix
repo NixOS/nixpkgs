@@ -425,6 +425,8 @@ with pkgs;
 
   catppuccin-plymouth = callPackage ../data/themes/catppuccin-plymouth { };
 
+  catppuccin-sddm-corners = callPackage ../data/themes/catppuccin-sddm-corners { };
+
   btdu = callPackage ../tools/misc/btdu { };
 
   ccal = callPackage ../tools/misc/ccal { };
@@ -786,6 +788,8 @@ with pkgs;
   onesixtyone = callPackage ../tools/security/onesixtyone { };
 
   oletools = with python3.pkgs; toPythonApplication oletools;
+
+  ollama = callPackage ../tools/misc/ollama {  };
 
   ots = callPackage ../tools/security/ots {  };
 
@@ -2508,9 +2512,7 @@ with pkgs;
 
   fusesoc = python3Packages.callPackage ../tools/package-management/fusesoc { };
 
-  fw = callPackage ../tools/misc/fw {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  fw = callPackage ../tools/misc/fw { };
 
   g810-led = callPackage ../misc/g810-led { };
 
@@ -2634,6 +2636,8 @@ with pkgs;
   };
 
   stella = callPackage ../applications/emulators/stella { };
+
+  tamatool = callPackage ../applications/emulators/tamatool { };
 
   termtekst = callPackage ../applications/emulators/termtekst { };
 
@@ -5952,7 +5956,7 @@ with pkgs;
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
   onnxruntime = callPackage ../development/libraries/onnxruntime {
-    protobuf = protobuf3_19;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   xkbd = callPackage ../applications/misc/xkbd { };
@@ -11814,6 +11818,8 @@ with pkgs;
 
   plotinus = callPackage ../tools/misc/plotinus { };
 
+  plots = callPackage ../applications/misc/plots { };
+
   plotutils = callPackage ../tools/graphics/plotutils { };
 
   plowshare = callPackage ../tools/misc/plowshare { };
@@ -11949,10 +11955,7 @@ with pkgs;
 
   prototypejs = callPackage ../development/libraries/prototypejs { };
 
-  inherit (callPackages ../tools/security/proxmark3 { gcc-arm-embedded = gcc-arm-embedded-8; })
-    proxmark3 proxmark3-unstable;
-
-  proxmark3-rrg = libsForQt5.callPackage ../tools/security/proxmark3/proxmark3-rrg.nix {
+  proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
   };
 
@@ -17083,6 +17086,7 @@ with pkgs;
   };
   rusty-man = callPackage ../development/tools/rust/rusty-man { };
   rustycli = callPackage ../development/tools/rust/rustycli { };
+  specr-transpile = callPackage ../development/tools/rust/specr-transpile { };
   typeshare = callPackage ../development/tools/rust/typeshare { };
 
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme { };
@@ -19196,7 +19200,8 @@ with pkgs;
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { };
 
   ikos = callPackage ../development/tools/analysis/ikos {
-    inherit (llvmPackages_9) stdenv clang llvm;
+    inherit (llvmPackages_14) stdenv clang llvm;
+    tbb = tbb_2021_8;
   };
 
   img = callPackage ../development/tools/img { };
@@ -27384,6 +27389,8 @@ with pkgs;
 
   cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
+  cockroachdb-bin = callPackage ../servers/sql/cockroachdb/cockroachdb-bin.nix { };
+
   coconutbattery = callPackage ../os-specific/darwin/coconutbattery { };
 
   conky = callPackage ../os-specific/linux/conky ({
@@ -34991,6 +34998,8 @@ with pkgs;
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
   insync = callPackage ../applications/networking/insync { };
+
+  lemurs = callPackage ../applications/display-managers/lemurs { };
 
   libstrangle = callPackage ../tools/X11/libstrangle {
     stdenv = stdenv_32bit;

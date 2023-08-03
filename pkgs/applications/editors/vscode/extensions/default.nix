@@ -575,8 +575,8 @@ let
         mktplcRef = {
           name = "vscode-fish";
           publisher = "bmalehorn";
-          version = "1.0.33";
-          sha256 = "sha256-ZQlG+HrjU4DFfpyiY8o0/ayDms6MGEObW8pV1Lmr5/Y=";
+          version = "1.0.35";
+          sha256 = "sha256-V51Qe6M1CMm9fLOSFEwqeZiC8tWCbVH0AzkLe7kR2vY=";
         };
         meta.license = lib.licenses.mit;
       };
@@ -1161,8 +1161,8 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "13.4.0";
-          sha256 = "sha256-CYI62sWPlJNRP2KIkg4vQutIMC6gaCxtTVoOWZIS8Lw=";
+          version = "14.1.1";
+          sha256 = "sha256-eSN48IudpHYzT4u+S4b2I2pyEPyOwBCSL49awT/mzEE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1319,8 +1319,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.19.0";
-          sha256 = "sha256-ymIlBzCcssj+J8hHOokVWUpxKTEkzkhNr80uCblhkFs=";
+          version = "10.1.0";
+          sha256 = "sha256-SQuf15Jq84MKBVqK6UviK04uo7gQw9yuw/WEBEXcQAc=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1640,8 +1640,8 @@ let
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they can require insider versions
           # of VS Code
-          version = "0.66.0";
-          sha256 = "sha256-rhAFNX+/BoKkQeFlVdoHzA8UmZeQofq7+UPooWleYVw=";
+          version = "0.68.1";
+          sha256 = "sha256-d60ZxWQLZa2skOB3Iv9K04aGNZA1d1A82N7zRaxAzlI=";
         };
         meta = { license = lib.licenses.mit; };
       };
@@ -1742,8 +1742,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.224";
-          sha256 = "sha256-ObFmzAaOlbtWC31JRYR/1y+JK1h22SVDPPRWWqPzrQs=";
+          version = "0.0.226";
+          sha256 = "sha256-Fj9cw+VJ2jkTGUclB1TLvURhzQsaryFQs/+f2RZOLHs=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1967,8 +1967,8 @@ let
         mktplcRef = {
           name = "nix-ide";
           publisher = "jnoortheen";
-          version = "0.2.1";
-          sha256 = "sha256-yC4ybThMFA2ncGhp8BYD7IrwYiDU3226hewsRvJYKy4=";
+          version = "0.2.2";
+          sha256 = "sha256-jwOM+6LnHyCkvhOTVSTUZvgx77jAg6hFCCpBqY8AxIg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
@@ -2594,6 +2594,22 @@ let
         };
       };
 
+      mskelton.npm-outdated = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "npm-outdated";
+          publisher = "mskelton";
+          version = "2.2.0";
+          sha256 = "sha256-kHItIlTW+PIVXrLgzdGAoPeR6sWKuKl/QyJ5+TIv3/E=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/mskelton.npm-outdated/changelog";
+          description = "Shows which packages are outdated in an npm project";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mskelton.npm-outdated";
+          homepage = "https://github.com/mskelton/vscode-npm-outdated";
+          license = lib.licenses.isc;
+        };
+      };
+
       mvllow.rose-pine = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "mvllow";
@@ -2763,8 +2779,8 @@ let
         mktplcRef = {
           name = "material-icon-theme";
           publisher = "PKief";
-          version = "4.25.0";
-          sha256 = "sha256-/lD3i7ZdF/XOi7RduS3HIYHFXhkoW2+PJW249gQxcyk=";
+          version = "4.29.0";
+          sha256 = "sha256-YqleqYSpZuhGFGkNo3FRLjiglxX+iUCJl69CRCY/oWM=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3298,8 +3314,8 @@ let
         mktplcRef = {
           name = "even-better-toml";
           publisher = "tamasfe";
-          version = "0.19.0";
-          sha256 = "sha256-MqSQarNThbEf1wHDTf1yA46JMhWJN46b08c7tV6+1nU=";
+          version = "0.19.2";
+          sha256 = "sha256-JKj6noi2dTe02PxX/kS117ZhW8u7Bhj4QowZQiJKP2E=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3434,8 +3450,8 @@ let
         mktplcRef = {
           name = "sort-lines";
           publisher = "Tyriar";
-          version = "1.9.1";
-          sha256 = "0dds99j6awdxb0ipm15g543a5b6f0hr00q9rz961n0zkyawgdlcb";
+          version = "1.10.2";
+          sha256 = "sha256-AI16YBmmfZ3k7OyUrh4wujhu7ptqAwfI5jBbAc6MhDk=";
         };
         meta = {
           license = lib.licenses.mit;
