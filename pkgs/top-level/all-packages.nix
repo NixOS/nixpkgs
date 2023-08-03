@@ -8305,7 +8305,7 @@ with pkgs;
   github-backup = callPackage ../tools/misc/github-backup { };
 
   github-runner = callPackage ../development/tools/continuous-integration/github-runner {
-     inherit (darwin) autoSignDarwinBinariesHook;
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   gitkraken = callPackage ../applications/version-management/gitkraken { };
@@ -8374,8 +8374,8 @@ with pkgs;
   gnome-desktop = callPackage ../development/libraries/gnome-desktop { };
 
   gnome-decoder = callPackage ../applications/graphics/gnome-decoder {
-     inherit (gst_all_1) gstreamer gst-plugins-base;
-     gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+    gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
   };
 
   gnome-epub-thumbnailer = callPackage ../applications/misc/gnome-epub-thumbnailer { };
@@ -15786,7 +15786,7 @@ with pkgs;
     # If we are cross-compiling GNAT, we may as well do the same.
     gnat-bootstrap =
       if stdenv.hostPlatform == stdenv.targetPlatform
-         && stdenv.buildPlatform == stdenv.hostPlatform
+        && stdenv.buildPlatform == stdenv.hostPlatform
       then buildPackages.gnat-bootstrap11
       else buildPackages.gnat11;
   });
@@ -15802,14 +15802,14 @@ with pkgs;
     # If we are cross-compiling GNAT, we may as well do the same.
     gnat-bootstrap =
       if stdenv.hostPlatform == stdenv.targetPlatform
-         && stdenv.buildPlatform == stdenv.hostPlatform
+        && stdenv.buildPlatform == stdenv.hostPlatform
       then buildPackages.gnat-bootstrap12
       else buildPackages.gnat12;
     stdenv =
       if stdenv.hostPlatform == stdenv.targetPlatform
-         && stdenv.buildPlatform == stdenv.hostPlatform
-         && stdenv.buildPlatform.isDarwin
-         && stdenv.buildPlatform.isx86_64
+        && stdenv.buildPlatform == stdenv.hostPlatform
+        && stdenv.buildPlatform.isDarwin
+        && stdenv.buildPlatform.isx86_64
       then overrideCC stdenv gnat-bootstrap12
       else stdenv;
   });
@@ -15825,14 +15825,14 @@ with pkgs;
     # If we are cross-compiling GNAT, we may as well do the same.
     gnat-bootstrap =
       if stdenv.hostPlatform == stdenv.targetPlatform
-         && stdenv.buildPlatform == stdenv.hostPlatform
+        && stdenv.buildPlatform == stdenv.hostPlatform
       then buildPackages.gnat-bootstrap12
       else buildPackages.gnat13;
     stdenv =
       if stdenv.hostPlatform == stdenv.targetPlatform
-         && stdenv.buildPlatform == stdenv.hostPlatform
-         && stdenv.buildPlatform.isDarwin
-         && stdenv.buildPlatform.isx86_64
+        && stdenv.buildPlatform == stdenv.hostPlatform
+        && stdenv.buildPlatform.isDarwin
+        && stdenv.buildPlatform.isx86_64
       then overrideCC stdenv gnat-bootstrap12
       else stdenv;
   });
@@ -15932,11 +15932,11 @@ with pkgs;
   haskellPackages = dontRecurseIntoAttrs
     # JS backend is only available for GHC >= 9.6
     (if stdenv.hostPlatform.isGhcjs
-     then haskell.packages.native-bignum.ghc96
-     # Prefer native-bignum to avoid linking issues with gmp
-     else if stdenv.hostPlatform.isStatic
-     then haskell.packages.native-bignum.ghc92
-     else haskell.packages.ghc92);
+      then haskell.packages.native-bignum.ghc96
+      # Prefer native-bignum to avoid linking issues with gmp
+      else if stdenv.hostPlatform.isStatic
+      then haskell.packages.native-bignum.ghc92
+      else haskell.packages.ghc92);
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
@@ -15949,8 +15949,8 @@ with pkgs;
   ghc = targetPackages.haskellPackages.ghc or
     # Prefer native-bignum to avoid linking issues with gmp
     (if stdenv.targetPlatform.isStatic
-       then haskell.compiler.native-bignum.ghc92
-       else haskell.compiler.ghc92);
+      then haskell.compiler.native-bignum.ghc92
+      else haskell.compiler.ghc92);
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
@@ -19518,7 +19518,7 @@ with pkgs;
   openai = with python3Packages; toPythonApplication openai;
 
   openai-full = with python3Packages; toPythonApplication (openai.override {
-   withOptionalDependencies = true;
+    withOptionalDependencies = true;
   });
 
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
@@ -20951,7 +20951,7 @@ with pkgs;
   };
 
   ffmpeg_6 = callPackage ../development/libraries/ffmpeg/6.nix {
-     inherit (darwin.apple_sdk.frameworks)
+    inherit (darwin.apple_sdk.frameworks)
       Cocoa CoreServices CoreAudio CoreMedia AVFoundation MediaToolbox
       VideoDecodeAcceleration VideoToolbox;
   };
@@ -22288,8 +22288,8 @@ with pkgs;
 
   libcxxrt = callPackage ../development/libraries/libcxxrt {
     stdenv = if stdenv.hostPlatform.useLLVM or false
-             then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
-             else stdenv;
+              then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
+              else stdenv;
   };
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
@@ -24502,8 +24502,8 @@ with pkgs;
       owner = "facebook";
       repo = pname;
       rev = "v${version}";
-     sha256 = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
-   };
+      sha256 = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
+    };
   };
 
   rocksdb_6_23 = rocksdb.overrideAttrs rec {
@@ -24513,8 +24513,8 @@ with pkgs;
       owner = "facebook";
       repo = pname;
       rev = "v${version}";
-     sha256 = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
-   };
+      sha256 = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
+    };
   };
 
   rotate-backups = callPackage ../tools/backup/rotate-backups { };
@@ -35234,7 +35234,7 @@ with pkgs;
   inherit (callPackages ../applications/networking/syncthing {
     inherit (darwin) autoSignDarwinBinariesHook;
     buildGoModule = buildGo119Module; # go 1.20 build failure
-   })
+  })
     syncthing
     syncthing-discovery
     syncthing-relay;
