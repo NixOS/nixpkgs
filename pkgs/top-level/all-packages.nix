@@ -491,6 +491,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
+  commit-and-tag-version = callPackage ../development/tools/commit-and-tag-version { };
+
   conftest = callPackage ../development/tools/conftest { };
 
   coldsnap = callPackage ../tools/admin/coldsnap {
