@@ -12,17 +12,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "renoise";
-  version = "3.3.2";
+  version = "3.4.2";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
         if releasePath == null then
         fetchurl {
           urls = [
-              "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
-              "https://web.archive.org/web/https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
+              "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux_x86_64.tar.gz"
+              "https://web.archive.org/web/https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux_x86_64.tar.gz"
           ];
-          sha256 = "0d9pnrvs93d4bwbfqxwyr3lg3k6gnzmp81m95gglzwdzczxkw38k";
+          hash = "sha256-qhSVhZmLEJciJdzO34rDQVy2/6UYSB8FljPsi6RaTQU=";
         }
         else
           releasePath
