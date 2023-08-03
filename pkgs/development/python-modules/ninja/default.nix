@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "A small build system with a focus on speed";
     homepage = "https://github.com/scikit-build/ninja-python-distributions";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle ];
+    maintainers = with maintainers; [ _999eagle tjni ];
   };
 }
