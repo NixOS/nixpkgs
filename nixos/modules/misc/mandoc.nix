@@ -5,7 +5,8 @@ let
 
   cfg = config.documentation.man.mandoc;
 
-in {
+in
+{
   meta.maintainers = [ lib.maintainers.sternenseemann ];
 
   options = {
@@ -52,11 +53,10 @@ in {
       # TODO(@sternenseemman): fix symlinked directories not getting indexed,
       # see: https://inbox.vuxu.org/mandoc-tech/20210906171231.GF83680@athene.usta.de/T/#e85f773c1781e3fef85562b2794f9cad7b2909a3c
       extraSetup = lib.mkIf config.documentation.man.generateCaches ''
-        ${makewhatis} -T utf8 ${
-          lib.concatMapStringsSep " " (path:
-            "$out/" + lib.escapeShellArg path
-          ) cfg.manPath
-        }
+        for man_path in ${lib.escapeShellArg (map (path: "$out/${path}") cfg.manPath)}
+        do
+          [[ -d "$man_path" ]] && ${makewhatis} -T utf8 $man_path
+        done
       '';
     };
   };
