@@ -335,7 +335,7 @@ let
           + ";"))
           + "
             listen ${addr}:${toString port} "
-          + optionalString (ssl && vhost.http2) "http2 "
+          + optionalString (ssl && vhost.http2 && oldHTTP2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
@@ -380,6 +380,9 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString (hasSSL && vhost.http2 && !oldHTTP2) ''
+            http2 on;
+          ''}
           ${optionalString (hasSSL && vhost.quic) ''
             http3 ${if vhost.http3 then "on" else "off"};
             http3_hq ${if vhost.http3_hq then "on" else "off"};
@@ -463,6 +466,8 @@ let
   );
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+
+  oldHTTP2 = versionOlder cfg.package.version "1.25.1";
 in
 
 {
