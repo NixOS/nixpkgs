@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/oxalica/nil/releases/tag/${version}";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ figsoda oxalica ];
+    mainProgram = "nil";
   };
 }

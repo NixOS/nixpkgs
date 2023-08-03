@@ -44,6 +44,5 @@ mavenJdk11.buildMavenPackage rec {
     ];
     license = licenses.gpl3;
     maintainers = [ maintainers.taeer ];
-    platforms = [ "x86_64-linux" ];
   };
 }

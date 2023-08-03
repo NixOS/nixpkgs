@@ -64,5 +64,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/jdxcode/rtx/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
+    mainProgram = "rtx";
   };
 }

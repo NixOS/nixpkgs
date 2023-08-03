@@ -37,6 +37,9 @@ let
     sha256 = "sha256-N4U04znm5tULFzb7Ort28cFdG+P0wTzsbVNkEuI9pgM=";
   };
 
+  arch = {
+    x86_64 = "amd64";
+  }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   pname = "processing";
@@ -50,16 +53,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ant unzip makeWrapper wrapGAppsHook ];
-  buildInputs = [ jdk javaPackages.jogl_2_3_2 ant rsync ffmpeg batik ];
+  buildInputs = [ jdk javaPackages.jogl_2_4_0 ant rsync ffmpeg batik ];
 
   dontWrapGApps = true;
 
   buildPhase = ''
     echo "tarring jdk"
-    tar --checkpoint=10000 -czf build/linux/jdk-17.0.6-amd64.tgz ${jdk}
+    tar --checkpoint=10000 -czf build/linux/jdk-17.0.6-${arch}.tgz ${jdk}
     cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
     mkdir -p core/library
-    ln -s ${javaPackages.jogl_2_3_2}/share/java/* core/library/
+    ln -s ${javaPackages.jogl_2_4_0}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
     ln -s ${lsp4j} java/mode/org.eclipse.lsp4j.jar
