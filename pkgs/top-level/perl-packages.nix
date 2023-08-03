@@ -18636,10 +18636,10 @@ with self; {
 
   NumberFormat = buildPerlPackage {
     pname = "Number-Format";
-    version = "1.75";
+    version = "1.76";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WR/WRW/Number-Format-1.75.tar.gz";
-      hash = "sha256-gtZZyxZGF2T9RNEanOnmpPXodn3BBp6wNGfG5V3iV/M=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Number-Format-1.76.tar.gz";
+      hash = "sha256-DgBg6zY2NaiFcGxqJvX8qv6udZ97Ksrkndpw4ZXdRNY=";
     };
     meta = {
       description = "Perl extension for formatting numbers";
