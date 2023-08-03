@@ -1,14 +1,16 @@
-{ stdenv, lib, requireFile, fetchpatch, kernel }:
+{ stdenv
+, lib
+, blackmagic-desktop-video
+, kernel
+}:
 
 stdenv.mkDerivation rec {
   pname = "decklink";
-  version = "12.2a12";
 
-  src = requireFile {
-    name = "Blackmagic_Desktop_Video_Linux_${lib.versions.majorMinor version}.tar.gz";
-    url = "https://www.blackmagicdesign.com/support/download/33abc1034cd54cf99101f9acd2edd93d/Linux";
-    sha256 = "62954a18b60d9040aa4a959dff30ac9c260218ef78d6a63cbb243788f7abc05f";
-  };
+  # the download is a horrible curl mess. we reuse it between the kernel module
+  # and desktop service, since the version of the two have to match anyways.
+  # See pkgs/tools/video/blackmagic-desktop-video/default.nix for more.
+  inherit (blackmagic-desktop-video) src version;
 
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   INSTALL_MOD_PATH = placeholder "out";
