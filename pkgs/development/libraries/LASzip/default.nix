@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   version = "3.4.3";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   meta = {
