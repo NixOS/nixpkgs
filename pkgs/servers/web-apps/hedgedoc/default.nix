@@ -99,11 +99,12 @@ in stdenv.mkDerivation {
     tests = { inherit (nixosTests) hedgedoc; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Realtime collaborative markdown notes on all platforms";
-    license = licenses.agpl3;
+    license = lib.licenses.agpl3;
     homepage = "https://hedgedoc.org";
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.linux;
+    mainProgram = "hedgedoc";
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.linux;
   };
 }

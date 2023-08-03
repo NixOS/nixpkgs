@@ -4,16 +4,16 @@
 , click
 , dnspython
 , fetchFromGitHub
-, mock
 , poetry-core
 , pytest-asyncio
+, pytest-rerunfailures
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "10.0.3";
+  version = "11.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,14 @@ buildPythonPackage rec {
     owner = "py-mine";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-LHcLqP9IGqi0YmjgFoTwojyS+IZmBOBujYWMPuqNc6w=";
+    hash = "sha256-+r6WL59T9rNAKl3r4Hef75uJoD7DRYA23uS/OlzRyRk=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -36,18 +42,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mock
     pytest-asyncio
+    pytest-rerunfailures
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" "" \
-      --replace 'asyncio-dgram = "2.1.2"' 'asyncio-dgram = ">=2.1.2"' \
-      --replace 'dnspython = "2.2.1"' 'dnspython = ">=2.2.0"'
-  '';
 
   pythonImportsCheck = [
     "mcstatus"
