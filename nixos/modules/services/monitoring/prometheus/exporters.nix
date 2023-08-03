@@ -29,6 +29,7 @@ let
     "blackbox"
     "buildkite-agent"
     "collectd"
+    "dcgm"
     "dmarc"
     "dnsmasq"
     "domain"

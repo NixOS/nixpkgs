@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
@@ -161,6 +163,15 @@ installPhase() {
     if [ -n "$firmware" ]; then
         # Install the GSP firmware
         install -Dm644 -t $firmware/lib/firmware/nvidia/$version firmware/gsp*.bin
+    fi
+
+    # Test for, and install, the NSCQ libraries.
+    echo "Checking for NSCQ libraries..."
+    echo "The variable libnvidia_nscq is: ${libnvidia_nscq-}"
+    if [ -d "${libnvidia_nscq-}" ]; then
+        echo "Installing NSCQ libraries..."
+        cp "$libnvidia_nscq"/*.so* "$out"/lib/
+        echo "Installing NSCQ libraries... done"
     fi
 
     # All libs except GUI-only are installed now, so fixup them.

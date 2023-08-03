@@ -8,6 +8,9 @@
 , settingsVersion ? version
 , persistencedSha256
 , persistencedVersion ? version
+, nscqVersion ? null
+, nscqSha256_64bit ? null
+, nscqSha256_aarch64 ? null
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
@@ -22,7 +25,7 @@
 , brokenOpen ? broken
 }@args:
 
-{ lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
+{ lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl, fetchzip
 , kernel ? null, perl, nukeReferences, which, libarchive
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -117,6 +120,27 @@ let
 
     nativeBuildInputs = [ perl nukeReferences which libarchive ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
+
+    env.libnvidia_nscq = let
+      inherit (stdenv.hostPlatform) isAarch64 isLinux isx86_64;
+      args =
+        if isx86_64
+        then {
+          arch = "x86_64";
+          hash = nscqSha256_64bit;
+        }
+        else if isAarch64
+        then {
+          arch = "aarch64";
+          hash = nscqSha256_aarch64;
+        }
+        else throw "libnvidia_nscq is not supported on ${stdenv.hostPlatform.system}";
+      src = fetchzip {
+        inherit (args) hash;
+        url = "https://developer.download.nvidia.com/compute/nvidia-driver/redist/libnvidia_nscq/linux-${args.arch}/libnvidia_nscq-linux-${args.arch}-${nscqVersion}-archive.tar.xz";
+      };
+    in
+      lib.optionalString isLinux "${src}";
 
     disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
 

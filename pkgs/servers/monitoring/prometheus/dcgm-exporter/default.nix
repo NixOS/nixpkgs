@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, cudaPackages
-, dcgm
-, linuxPackages
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  cudaPackages,
+  dcgm,
 }:
 buildGoModule rec {
   pname = "dcgm-exporter";
@@ -35,12 +35,24 @@ buildGoModule rec {
 
   # gonvml and go-dcgm do not work with ELF BIND_NOW hardening because not all
   # symbols are available on startup.
-  hardeningDisable = [ "bindnow" ];
+  hardeningDisable = ["bindnow"];
 
   # Copy the modified go.mod we got from the vendoring process.
   preBuild = ''
     cp vendor/go.mod go.mod
   '';
+
+  postInstall =
+    # Copy the configurations into $out/share, mirroring the Makefile's binary install.
+    ''
+      mkdir -p "$out/share/etc/dcgm-exporter"
+      cp "$src/etc"/* "$out/share/etc/dcgm-exporter/"
+    ''
+    # Copy the Grafana dashboard into $out/share so it is available to the user.
+    + ''
+      mkdir -p "$out/share/grafana"
+      cp "$src/grafana"/* "$out/share/grafana/"
+    '';
 
   vendorHash = "sha256-KMCV79kUY1sNYysH0MmB7pVU98r7v+DpLIoYHxyyG4U=";
 

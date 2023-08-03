@@ -33,6 +33,9 @@ rec {
     openSha256 = "sha256-qCYEQP54cT7G+VrLmuMT+RWIwuGdBhlbYTrCDcztfNs=";
     settingsSha256 = "sha256-0NAxQosC+zPz5STpELuRKDMap4KudoPGWKL4QlFWjLQ=";
     persistencedSha256 = "sha256-Ak4Wf59w9by08QJ0x15Zs5fHOhiIatiJfjBQfnY65Mg=";
+    nscqVersion = "535.54.03";
+    nscqSha256_64bit = "sha256-NDPytGxH7+7FT8Hu+ZCFmwcIAa+d/ctTBXgzgOMi6DM=";
+    nscqSha256_aarch64 = "sha256-juUrT3YwYuaKtB7Qr3sNryzp1MC9PSeusUBZWEcD6RU=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -42,6 +45,9 @@ rec {
     openSha256 = "sha256-etbtw6LMRUcFoZC9EDDRrTDekV8JFRYmkp3idLaMk5g=";
     settingsSha256 = "sha256-8KB6T9f+gWl8Ni+uOyrJKiiH5mNx9eyfCcW/RjPTQQA=";
     persistencedSha256 = "sha256-zrstlt/0YVGnsPGUuBbR9ULutywi2wNDVxh7OhJM7tM=";
+    nscqVersion = "535.54.03";
+    nscqSha256_64bit = "sha256-NDPytGxH7+7FT8Hu+ZCFmwcIAa+d/ctTBXgzgOMi6DM=";
+    nscqSha256_aarch64 = "sha256-juUrT3YwYuaKtB7Qr3sNryzp1MC9PSeusUBZWEcD6RU=";
 
     patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [
@@ -60,6 +66,9 @@ rec {
     openSha256 = "sha256-W1fwbbEEM7Z/S3J0djxGTtVTewbSALqX1G1OSpdajCM=";
     settingsSha256 = "sha256-j0sSEbtF2fapv4GSthVTkmJga+ycmrGc1OnGpV6jEkc=";
     persistencedSha256 = "sha256-M0ovNaJo8SZwLW4CQz9accNK79Z5JtTJ9kKwOzicRZ4=";
+    nscqVersion = "535.54.03";
+    nscqSha256_64bit = "sha256-NDPytGxH7+7FT8Hu+ZCFmwcIAa+d/ctTBXgzgOMi6DM=";
+    nscqSha256_aarch64 = "sha256-juUrT3YwYuaKtB7Qr3sNryzp1MC9PSeusUBZWEcD6RU=";
   });
 
   # Vulkan developer beta driver
@@ -72,6 +81,9 @@ rec {
     openSha256 = "sha256-/qkCMybr8sC/Da9zi2KbSkLBeQcSbVURnAg1IbjZiBk=";
     settingsSha256 = "sha256-qNjfsT9NGV151EHnG4fgBonVFSKc4yFEVomtXg9uYD4=";
     persistencedSha256 = "sha256-ci86XGlno6DbHw6rkVSzBpopaapfJvk0+lHcR4LDq50=";
+    nscqVersion = "525.60.13";
+    nscqSha256_64bit = "sha256-EzVXORfgKg/bAy0tlZ06glmEmGgKeqOjLrEFnbdbu1Q=";
+    nscqSha256_aarch64 = "sha256-ilxWz5nfkxsvcIjjrQ/ZYkN7DdXltmqK885pLIa+RPI=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
   };
 
@@ -86,6 +98,9 @@ rec {
     sha256_aarch64 = "sha256-UmF7LszdrO2d+bOaoQYrTVKXUwDqzMy1UDBW5SPuZy4=";
     settingsSha256 = "sha256-FkKPE4QV5IiVizGYUNUYoEXRpEhojt/cbH/I8iCn3hw=";
     persistencedSha256 = "sha256-JP71wt3uCNOgheLNlQbW3DqVFQNTC5vj4y4COWKQzAs=";
+    nscqVersion = "470.199.02";
+    nscqSha256_64bit = "sha256-j7rvVACuQTbr633S7HkyunrrcjCZduaed6WLxdN1T3E=";
+    nscqSha256_aarch64 = null; # Unsupported
 
     patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [
