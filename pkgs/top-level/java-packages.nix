@@ -224,6 +224,5 @@ in {
   };
 
   inherit (callPackage ../development/java-modules/jogl { })
-    jogl_2_3_2
     jogl_2_4_0;
 }
