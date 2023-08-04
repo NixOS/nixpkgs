@@ -195,7 +195,7 @@ let
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
-    "disabledTestPaths" "outputs" "stdenv"
+    "outputs" "stdenv"
   ]) // {
 
     name = namePrefix + name_;
@@ -293,8 +293,6 @@ let
     # If given use the specified checkPhase, otherwise use the setup hook.
     # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
     installCheckPhase = attrs.checkPhase;
-  } //  lib.optionalAttrs (disabledTestPaths != []) {
-      disabledTestPaths = lib.escapeShellArgs disabledTestPaths;
   }));
 
   passthru.updateScript = let
