@@ -157,30 +157,52 @@ branch allows the Hydra operators to batch groups of commits to
 separate from `staging`, this batching does not block
 developers from merging changes into `staging`.
 
-```{.graphviz caption="Staging workflow"}
-digraph {
-    master [color="green" fontcolor=green]
-    "staging-next" [color="green" fontcolor=green]
-    staging [color="red" fontcolor=red]
+```mermaid
+%%{init: {
+    'theme': 'base',
+    'themeVariables': {
+        'gitInv0': '#ff0000',
+        'gitInv1': '#ff0000',
+        'git2': '#ff4444',
+        'commitLabelFontSize': '15px'
+    },
+    'gitGraph': {
+        'showCommitLabel':true,
+        'mainBranchName': 'master',
+        'rotateCommitLabel': true
+    }
+} }%%
+gitGraph
+    commit id:" "
+    branch staging-next
+    branch staging
 
-    "small changes" [fontcolor=green shape=none]
-    "small changes" -> master [color=green]
+    checkout master
+    checkout staging
+    checkout master
+    commit id:"    "
+    checkout staging-next
+    merge master id:"automatic"
+    checkout staging
+    merge staging-next id:"automatic "
 
-    "mass-rebuilds and other large changes" [fontcolor=red shape=none]
-    "mass-rebuilds and other large changes" -> staging [color=red]
+    checkout staging-next
+    merge staging type:HIGHLIGHT id:"manual"
+    commit id:"fixup"
 
-    "critical security fixes" [fontcolor=green shape=none]
-    "critical security fixes" -> master [color=green]
+    checkout master
+    checkout staging
+    checkout master
+    commit id:"       "
+    checkout staging-next
+    merge master id:"automatic  "
+    checkout staging
+    merge staging-next id:"automatic   "
 
-    "staging fixes which do not cause staging to mass-rebuild" [fontcolor=green shape=none]
-    "staging fixes which do not cause staging to mass-rebuild" -> "staging-next" [color=green]
-
-    "staging-next" -> master [color="red"] [label="manual merge"] [fontcolor="red"]
-    "staging" -> "staging-next" [color="red"] [label="manual merge"] [fontcolor="red"]
-
-    master -> "staging-next" [color="green"] [label="automatic merge (GitHub Action)"] [fontcolor="green"]
-    "staging-next" -> staging [color="green"] [label="automatic merge (GitHub Action)"] [fontcolor="green"]
-}
+    checkout staging-next
+    commit id:"fixup "
+    checkout master
+    merge staging-next type:HIGHLIGHT id:"manual (PR)"
 ```
 
 [This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the green arrows in the diagram above.  The red arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
