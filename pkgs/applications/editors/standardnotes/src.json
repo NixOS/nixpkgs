@@ -1,5 +1,5 @@
 {
-  "version": "3.173.4",
+  "version": "3.173.20",
   "deb": {
     "x86_64-linux": {
       "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.173.4/standard-notes-3.173.4-linux-amd64.deb",
@@ -8,6 +8,16 @@
     "aarch64-linux": {
       "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.173.4/standard-notes-3.173.4-linux-arm64.deb",
       "hash": "sha512-yJ8yZK+RkPUzkjbscCXT5yv9BxeHGQsZsCrKwOJRdd/XbcVPnKWQm00JVZmMuz17d8rhm8Km/EW81JufZByM0Q=="
+    }
+  },
+  "appimage": {
+    "x86_64-linux": {
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.173.20/standard-notes-3.173.20-linux-x86_64.AppImage",
+      "hash": "sha512-NvdFt91FFIaaibUjfn5dfI/pbpeRrB/krhHIrbNGYV3uAtOrOh0PPqShp4UNQPzP0Itj3wnFVgNyKHZ9juvWUw=="
+    },
+    "aarch64-linux": {
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.173.20/standard-notes-3.173.20-linux-arm64.AppImage",
+      "hash": "sha512-Md7y/9+luaBtjYgBb+oav+4JjyImrpM6D8vqA6b8jWKtf75hFIWhs+ug0IaYklZNooKlSIAsZuY92c+E8U9/iQ=="
     }
   }
 }

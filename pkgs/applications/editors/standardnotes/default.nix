@@ -1,45 +1,34 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, electron, libsecret
-, desktop-file-utils , callPackage }:
+{ callPackage, lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
+, fetchurl, libsecret  }:
 
 let
-
   srcjson = builtins.fromJSON (builtins.readFile ./src.json);
-
+  version = srcjson.version;
+  pname = "standardnotes";
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-in
+  src = fetchurl (srcjson.appimage.${stdenv.hostPlatform.system} or throwSystem);
 
-stdenv.mkDerivation rec {
+  appimageContents = appimageTools.extract {
+    inherit pname version src;
+  };
 
-  pname = "standardnotes";
+  nativeBuildInputs = [ autoPatchelfHook desktop-file-utils ];
 
-  src = fetchurl (srcjson.deb.${stdenv.hostPlatform.system} or throwSystem);
+in appimageTools.wrapType2 rec {
+  inherit pname version src;
 
-  inherit (srcjson) version;
+  extraPkgs = pkgs: with pkgs; [
+    libsecret
+  ];
 
-  dontConfigure = true;
-
-  dontBuild = true;
-
-  nativeBuildInputs = [ makeWrapper dpkg desktop-file-utils ];
-
-  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin $out/share/standardnotes
-    cp -R usr/share/{applications,icons} $out/share
-    cp -R opt/Standard\ Notes/resources/app.asar $out/share/standardnotes/
-
-    makeWrapper ${electron}/bin/electron $out/bin/standardnotes \
-      --add-flags $out/share/standardnotes/app.asar \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret stdenv.cc.cc.lib ]}
+  extraInstallCommands = ''
+    chmod -R +w $out
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
 
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value standardnotes usr/share/applications/standard-notes.desktop
-
-    runHook postInstall
+      --set-key Exec --set-value ${pname} ${appimageContents}/standard-notes.desktop
+    ln -s ${appimageContents}/usr/share/icons $out/share
   '';
 
   passthru.updateScript = callPackage ./update.nix {};
@@ -54,6 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     maintainers = with maintainers; [ mgregoire chuangzhu squalus ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    platforms = builtins.attrNames srcjson.deb;
+    platforms = builtins.attrNames srcjson.appimage;
   };
 }
