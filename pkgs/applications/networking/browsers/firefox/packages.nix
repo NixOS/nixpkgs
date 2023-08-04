@@ -30,11 +30,11 @@
 
   firefox-beta = buildMozillaMach rec {
     pname = "firefox-beta";
-    version = "116.0b8";
+    version = "117.0b3";
     applicationName = "Mozilla Firefox Beta";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "5e34b3eed2ee54de4209af85be80f240c674d22ace072fba5e4cf14a7d733edc0cfd0feafc80b23898ef8c43e5e950b5e683f536d84f12a8a7fcee0120479701";
+      sha512 = "d051aa1f7bce063eae2f9885c3d4a54ba4234075a46ab903b0c74a343e7c6e8834a629e21b48f6d9440515bbc4780690e46e79ed8e379e3dbba953ffabc12aac";
     };
 
     meta = {
