@@ -6563,7 +6563,9 @@ with pkgs;
 
   cdpr = callPackage ../tools/networking/cdpr { };
 
-  cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
+  cdrdao = callPackage ../tools/cd-dvd/cdrdao {
+    inherit (darwin.apple_sdk.frameworks) CoreServices IOKit;
+  };
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
@@ -7809,6 +7811,10 @@ with pkgs;
   exportarr = callPackage ../servers/monitoring/prometheus/exportarr { };
 
   expliot = callPackage ../tools/security/expliot { };
+
+  eza = callPackage ../tools/misc/eza {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
