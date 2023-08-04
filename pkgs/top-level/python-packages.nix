@@ -7291,6 +7291,8 @@ self: super: with self; {
 
   okta = callPackage ../development/python-modules/okta { };
 
+  oldest-supported-numpy = callPackage ../development/python-modules/oldest-supported-numpy { };
+
   olefile = callPackage ../development/python-modules/olefile { };
 
   oletools = callPackage ../development/python-modules/oletools { };
