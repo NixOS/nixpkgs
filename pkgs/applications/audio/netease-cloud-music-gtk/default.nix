@@ -79,5 +79,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ diffumist ];
     mainProgram = "netease-cloud-music-gtk4";
+    platforms = platforms.linux;
   };
 }
