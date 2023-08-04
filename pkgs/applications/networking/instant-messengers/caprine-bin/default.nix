@@ -21,5 +21,6 @@ in
   passthru = (oldAttrs.passthru or { }) // { inherit x86_64-appimage x86_64-dmg; };
   meta = oldAttrs.meta // {
     platforms = x86_64-appimage.meta.platforms ++ x86_64-dmg.meta.platforms;
+    mainProgram = "caprine";
   };
 })
