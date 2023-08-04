@@ -77,6 +77,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pipxproject/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "pipx";
     maintainers = with maintainers; [ yshym ];
   };
 }
