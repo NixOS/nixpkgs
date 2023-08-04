@@ -1,4 +1,14 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, git, pkg-config, openssl, Security, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, git
+, pkg-config
+, openssl
+, Security
+, libiconv
+, nix-update-script
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
@@ -18,6 +28,8 @@ rustPlatform.buildRustPackage rec {
 
 
   cargoHash = "sha256-CkMUconCw94Jvy7FhrOZvBbA8DAi91Ae5GFxGFBcEew=";
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.updateScript = nix-update-script { };
 
