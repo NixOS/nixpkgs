@@ -6442,7 +6442,9 @@ self: super: with self; {
 
   mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
 
-  meson-python = callPackage ../development/python-modules/meson-python { };
+  meson-python = callPackage ../development/python-modules/meson-python {
+    inherit (pkgs) ninja;
+  };
 
   messagebird = callPackage ../development/python-modules/messagebird { };
 
