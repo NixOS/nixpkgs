@@ -7036,7 +7036,7 @@ self: super: with self; {
 
   nine = callPackage ../development/python-modules/nine { };
 
-  ninja-python = callPackage ../development/python-modules/ninja { };
+  ninja = callPackage ../development/python-modules/ninja { inherit (pkgs) ninja; };
 
   nipy = callPackage ../development/python-modules/nipy { };
 
