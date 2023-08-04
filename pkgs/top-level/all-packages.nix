@@ -22920,10 +22920,7 @@ with pkgs;
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
-  libmatheval = callPackage ../development/libraries/libmatheval {
-    autoconf = buildPackages.autoconf269;
-    guile = guile_2_0;
-  };
+  libmatheval = callPackage ../development/libraries/libmatheval { };
 
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
