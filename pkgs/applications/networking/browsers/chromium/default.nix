@@ -16,11 +16,17 @@
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
+, pkgsBuildTarget
+, pkgsBuildBuild
+, pkgs
 }:
 
 let
-  llvmPackages = llvmPackages_16;
-  stdenv = llvmPackages.stdenv;
+  # Sometimes we access `llvmPackages` via `pkgs`, and other times
+  # via `pkgsFooBar`, so a string (attrname) is the only way to have
+  # a single point of control over the LLVM version used.
+  llvmPackages_attrName = "llvmPackages_16";
+  stdenv = pkgs.${llvmPackages_attrName}.stdenv;
 
   upstream-info = (import ./upstream-info.nix).${channel};
 
@@ -42,7 +48,7 @@ let
   callPackage = newScope chromium;
 
   chromium = rec {
-    inherit stdenv llvmPackages upstream-info;
+    inherit stdenv llvmPackages_attrName upstream-info;
 
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel chromiumVersionAtLeast versionRange;
@@ -60,7 +66,12 @@ let
       inherit channel chromiumVersionAtLeast enableWideVine ungoogled;
     };
 
-    ungoogled-chromium = callPackage ./ungoogled.nix {};
+    # ungoogled-chromium is, contrary to its name, not a build of
+    # chromium.  It is a patched copy of chromium's *source code*.
+    # Therefore, it needs to come from buildPackages, because it
+    # contains python scripts which get /nix/store/.../bin/python3
+    # patched into their shebangs.
+    ungoogled-chromium = pkgsBuildBuild.callPackage ./ungoogled.nix {};
   };
 
   pkgSuffix = if channel == "dev" then "unstable" else
@@ -209,8 +220,10 @@ in stdenv.mkDerivation {
 
     export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
 
+  '' + lib.optionalString (!xdg-utils.meta.broken) ''
     # Mainly for xdg-open but also other xdg-* tools (this is only a fallback; \$PATH is suffixed so that other implementations can be used):
     export PATH="\$PATH\''${PATH:+:}${xdg-utils}/bin"
+  '' + ''
 
     .
     w
