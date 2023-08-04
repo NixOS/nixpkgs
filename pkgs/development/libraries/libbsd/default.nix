@@ -26,6 +26,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
+
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libmd ];
 
