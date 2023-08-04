@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "pgrok";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
     rev = "v${version}";
-    hash = "sha256-0b7d3wyhRuTxZmpx9oJnZN88yYn+TsR82KrktPAx9P4=";
+    hash = "sha256-lhcaJVIqZK7GnC/Q/+RDxTVFmgTana3vugDHr/SStFE=";
   };
-  vendorHash = "sha256-laSfyHFkJJkv4EPMIVcai7RXaGIpUp+0tOpt5vhcLkA=";
+  vendorHash = "sha256-UzNx361cg4IDSQGlX5N9AxYZ8cYA0zsF5JF4Fe7efqM=";
 
   outputs = [ "out" "server" ];
 
