@@ -45,7 +45,7 @@ in
       };
 
       services.udev.extraRules = with cfg; ''
-        KERNEL=="sev", OWNER="${user}", GROUP="${group}", MODE="${mode}"
+        KERNEL=="sev", OWNER="${user}", GROUP="${group}", MODE="${mode}", TAG+="systemd"
       '';
     };
   }
