@@ -30,7 +30,7 @@ let
 
   nixosRules = ''
     # Miscellaneous devices.
-    KERNEL=="kvm",                  MODE="0666"
+    KERNEL=="kvm", MODE="0666", TAG+="systemd"
 
     # Needed for gpm.
     SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
