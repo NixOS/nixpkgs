@@ -132,10 +132,9 @@ rec {
         { shortName = licstr; }
       );
 
-  /* Get the path to the main program of a derivation with either
-     meta.mainProgram or pname or name
+  /* Get the path to the main program of a package based on meta.mainProgram
 
-     Type: getExe :: derivation -> string
+     Type: getExe :: package -> string
 
      Example:
        getExe pkgs.hello
