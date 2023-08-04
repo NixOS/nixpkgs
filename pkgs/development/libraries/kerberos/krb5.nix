@@ -63,6 +63,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace config/shlib.conf \
         --replace "'ld " "'${stdenv.cc.targetPrefix}ld "
+
+    if [ -z "$__structuredAttrs" ]; then
+      libFolders=(''${libFolders[*]})
+    fi
   '';
 
   libFolders = [ "util" "include" "lib" "build-tools" ];
@@ -71,7 +75,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     MAKE="make -j $NIX_BUILD_CORES"
-    for folder in $libFolders; do
+    for folder in "''${libFolders[@]}"; do
       $MAKE -C $folder
     done
 
@@ -83,7 +87,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out"/{bin,sbin,lib/pkgconfig,share/{et,man/man1}} \
       "$dev"/include/{gssapi,gssrpc,kadm5,krb5}
-    for folder in $libFolders; do
+
+    for folder in "''${libFolders[@]}"; do
       $MAKE -C $folder install
     done
 
