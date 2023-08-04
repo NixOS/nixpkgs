@@ -106,6 +106,151 @@ This section describes in some detail how changes can be made and proposed with 
    git push --force-with-lease
    ```
 
+## (Flow of changes) | Commit policy {#submitting-changes-commit-policy}
+
+Most contributions are based on and merged into these branches:
+
+* `master` is the main branch where all small contributions go
+* `staging` is branched from master, changes that have a big impact on
+  Hydra builds go to this branch
+* `staging-next` is branched from staging and only fixes to stabilize
+  and security fixes with a big impact on Hydra builds should be
+  contributed to this branch. This branch is merged into master when
+  deemed of sufficiently high quality
+
+- Commits must be sufficiently tested before being merged, both for the master and staging branches.
+- Hydra builds for master and staging should not be used as testing platform, it’s a build farm for changes that have been already tested.
+- When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
+
+### Branches {#submitting-changes-branches}
+
+The `nixpkgs` repository has three major branches:
+- `master`
+- `staging`
+- `staging-next`
+
+The most important distinction between them is that `staging`
+(colored red in the diagram below) can receive commits which cause
+a mass-rebuild (for example, anything that changes the `drvPath` of
+`stdenv`).  The other two branches `staging-next` and `master`
+(colored green in the diagram below) can *not* receive commits which
+cause a mass-rebuild.
+
+Arcs between the branches show possible merges into these branches,
+either from other branches or from independently submitted PRs.  The
+colors of these edges likewise show whether or not they could
+trigger a mass rebuild (red) or must not trigger a mass rebuild
+(green).
+
+Hydra runs automatic builds for the green branches.
+
+Notice that the automatic merges are all green arrows.  This is by
+design.  Any merge which might cause a mass rebuild on a branch
+which has automatic builds (`staging-next`, `master`) will be a
+manual merge to make sure it is good use of compute power.
+
+Nixpkgs has two branches so that there is one branch (`staging`)
+which accepts mass-rebuilding commits, and one fast-rebuilding
+branch which accepts independent PRs (`master`).  The `staging-next`
+branch allows the Hydra operators to batch groups of commits to
+`staging` to be built.  By keeping the `staging-next` branch
+separate from `staging`, this batching does not block
+developers from merging changes into `staging`.
+
+```{.graphviz caption="Staging workflow"}
+digraph {
+    master [color="green" fontcolor=green]
+    "staging-next" [color="green" fontcolor=green]
+    staging [color="red" fontcolor=red]
+
+    "small changes" [fontcolor=green shape=none]
+    "small changes" -> master [color=green]
+
+    "mass-rebuilds and other large changes" [fontcolor=red shape=none]
+    "mass-rebuilds and other large changes" -> staging [color=red]
+
+    "critical security fixes" [fontcolor=green shape=none]
+    "critical security fixes" -> master [color=green]
+
+    "staging fixes which do not cause staging to mass-rebuild" [fontcolor=green shape=none]
+    "staging fixes which do not cause staging to mass-rebuild" -> "staging-next" [color=green]
+
+    "staging-next" -> master [color="red"] [label="manual merge"] [fontcolor="red"]
+    "staging" -> "staging-next" [color="red"] [label="manual merge"] [fontcolor="red"]
+
+    master -> "staging-next" [color="green"] [label="automatic merge (GitHub Action)"] [fontcolor="green"]
+    "staging-next" -> staging [color="green"] [label="automatic merge (GitHub Action)"] [fontcolor="green"]
+}
+```
+
+[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the green arrows in the diagram above.  The red arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
+
+
+#### Master branch {#submitting-changes-master-branch}
+
+The `master` branch is the main development branch. It should only see non-breaking commits that do not cause mass rebuilds.
+
+#### Staging branch {#submitting-changes-staging-branch}
+
+The `staging` branch is a development branch where mass-rebuilds go. Mass rebuilds are commits that cause rebuilds for many packages, like more than 500 (or perhaps, if it's 'light' packages, 1000). It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
+
+During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
+
+#### Staging-next branch {#submitting-changes-staging-next-branch}
+
+The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds must go via the `staging` branch. It must only see non-breaking commits that are fixing issues blocking it from being merged into the `master` branch.
+
+If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days and then merge into master.
+
+During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
+
+#### Stable release branches {#submitting-changes-stable-release-branches}
+
+The same staging workflow applies to stable release branches, but the main branch is called `release-*` instead of `master`.
+
+Example branch names: `release-21.11`, `staging-21.11`, `staging-next-21.11`.
+
+Most changes added to the stable release branches are cherry-picked (“backported”) from the `master` and staging branches.
+
+#### Automatically backporting a Pull Request {#submitting-changes-stable-release-branches-automatic-backports}
+
+Assign label `backport <branch>` (e.g. `backport release-21.11`) to the PR and a backport PR is automatically created after the PR is merged.
+
+#### Manually backporting changes {#submitting-changes-stable-release-branches-manual-backports}
+
+Cherry-pick changes via `git cherry-pick -x <original commit>` so that the original commit id is included in the commit message.
+
+Add a reason for the backport when it is not obvious from the original commit message. You can do this by cherry picking with `git cherry-pick -xe <original commit>`, which allows editing the commit message. This is not needed for minor version updates that include security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
+
+Here is an example of a cherry-picked commit message with good reason description:
+
+```
+zfs: Keep trying root import until it works
+
+Works around #11003.
+
+(cherry picked from commit 98b213a11041af39b39473906b595290e2a4e2f9)
+
+Reason: several people cannot boot with ZFS on NVMe
+```
+
+Other examples of reasons are:
+
+- Previously the build would fail due to, e.g., `getaddrinfo` not being defined
+- The previous download links were all broken
+- Crash when starting on some X11 systems
+
+#### Acceptable backport criteria {#acceptable-backport-criteria}
+
+The stable branch does have some changes which cannot be backported. Most notable are breaking changes. The desire is to have stable users be uninterrupted when updating packages.
+
+However, many changes are able to be backported, including:
+- New Packages / Modules
+- Security / Patch updates
+- Version updates which include new functionality (but no breaking changes)
+- Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
+- Security critical applications (E.g. `firefox`)
+
 #### Rebasing between branches (i.e. from master to staging)
 
 From time to time, changes between branches must be rebased, for example, if the
@@ -261,151 +406,6 @@ Please note that contributors with commit rights unactive for more than three mo
 Please see the discussion in [GitHub nixpkgs issue #50105](https://github.com/NixOS/nixpkgs/issues/50105) for information on how to proceed to be granted this level of access.
 
 In a case a contributor definitively leaves the Nix community, they should create an issue or post on [Discourse](https://discourse.nixos.org) with references of packages and modules they maintain so the maintainership can be taken over by other contributors.
-
-## (Flow of changes) | Commit policy {#submitting-changes-commit-policy}
-
-Most contributions are based on and merged into these branches:
-
-* `master` is the main branch where all small contributions go
-* `staging` is branched from master, changes that have a big impact on
-  Hydra builds go to this branch
-* `staging-next` is branched from staging and only fixes to stabilize
-  and security fixes with a big impact on Hydra builds should be
-  contributed to this branch. This branch is merged into master when
-  deemed of sufficiently high quality
-
-- Commits must be sufficiently tested before being merged, both for the master and staging branches.
-- Hydra builds for master and staging should not be used as testing platform, it’s a build farm for changes that have been already tested.
-- When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
-
-### Branches {#submitting-changes-branches}
-
-The `nixpkgs` repository has three major branches:
-- `master`
-- `staging`
-- `staging-next`
-
-The most important distinction between them is that `staging`
-(colored red in the diagram below) can receive commits which cause
-a mass-rebuild (for example, anything that changes the `drvPath` of
-`stdenv`).  The other two branches `staging-next` and `master`
-(colored green in the diagram below) can *not* receive commits which
-cause a mass-rebuild.
-
-Arcs between the branches show possible merges into these branches,
-either from other branches or from independently submitted PRs.  The
-colors of these edges likewise show whether or not they could
-trigger a mass rebuild (red) or must not trigger a mass rebuild
-(green).
-
-Hydra runs automatic builds for the green branches.
-
-Notice that the automatic merges are all green arrows.  This is by
-design.  Any merge which might cause a mass rebuild on a branch
-which has automatic builds (`staging-next`, `master`) will be a
-manual merge to make sure it is good use of compute power.
-
-Nixpkgs has two branches so that there is one branch (`staging`)
-which accepts mass-rebuilding commits, and one fast-rebuilding
-branch which accepts independent PRs (`master`).  The `staging-next`
-branch allows the Hydra operators to batch groups of commits to
-`staging` to be built.  By keeping the `staging-next` branch
-separate from `staging`, this batching does not block
-developers from merging changes into `staging`.
-
-```{.graphviz caption="Staging workflow"}
-digraph {
-    master [color="green" fontcolor=green]
-    "staging-next" [color="green" fontcolor=green]
-    staging [color="red" fontcolor=red]
-
-    "small changes" [fontcolor=green shape=none]
-    "small changes" -> master [color=green]
-
-    "mass-rebuilds and other large changes" [fontcolor=red shape=none]
-    "mass-rebuilds and other large changes" -> staging [color=red]
-
-    "critical security fixes" [fontcolor=green shape=none]
-    "critical security fixes" -> master [color=green]
-
-    "staging fixes which do not cause staging to mass-rebuild" [fontcolor=green shape=none]
-    "staging fixes which do not cause staging to mass-rebuild" -> "staging-next" [color=green]
-
-    "staging-next" -> master [color="red"] [label="manual merge"] [fontcolor="red"]
-    "staging" -> "staging-next" [color="red"] [label="manual merge"] [fontcolor="red"]
-
-    master -> "staging-next" [color="green"] [label="automatic merge (GitHub Action)"] [fontcolor="green"]
-    "staging-next" -> staging [color="green"] [label="automatic merge (GitHub Action)"] [fontcolor="green"]
-}
-```
-
-[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the green arrows in the diagram above.  The red arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
-
-
-#### Master branch {#submitting-changes-master-branch}
-
-The `master` branch is the main development branch. It should only see non-breaking commits that do not cause mass rebuilds.
-
-#### Staging branch {#submitting-changes-staging-branch}
-
-The `staging` branch is a development branch where mass-rebuilds go. Mass rebuilds are commits that cause rebuilds for many packages, like more than 500 (or perhaps, if it's 'light' packages, 1000). It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
-
-During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
-
-#### Staging-next branch {#submitting-changes-staging-next-branch}
-
-The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds must go via the `staging` branch. It must only see non-breaking commits that are fixing issues blocking it from being merged into the `master` branch.
-
-If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days and then merge into master.
-
-During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
-
-#### Stable release branches {#submitting-changes-stable-release-branches}
-
-The same staging workflow applies to stable release branches, but the main branch is called `release-*` instead of `master`.
-
-Example branch names: `release-21.11`, `staging-21.11`, `staging-next-21.11`.
-
-Most changes added to the stable release branches are cherry-picked (“backported”) from the `master` and staging branches.
-
-#### Automatically backporting a Pull Request {#submitting-changes-stable-release-branches-automatic-backports}
-
-Assign label `backport <branch>` (e.g. `backport release-21.11`) to the PR and a backport PR is automatically created after the PR is merged.
-
-#### Manually backporting changes {#submitting-changes-stable-release-branches-manual-backports}
-
-Cherry-pick changes via `git cherry-pick -x <original commit>` so that the original commit id is included in the commit message.
-
-Add a reason for the backport when it is not obvious from the original commit message. You can do this by cherry picking with `git cherry-pick -xe <original commit>`, which allows editing the commit message. This is not needed for minor version updates that include security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
-
-Here is an example of a cherry-picked commit message with good reason description:
-
-```
-zfs: Keep trying root import until it works
-
-Works around #11003.
-
-(cherry picked from commit 98b213a11041af39b39473906b595290e2a4e2f9)
-
-Reason: several people cannot boot with ZFS on NVMe
-```
-
-Other examples of reasons are:
-
-- Previously the build would fail due to, e.g., `getaddrinfo` not being defined
-- The previous download links were all broken
-- Crash when starting on some X11 systems
-
-#### Acceptable backport criteria {#acceptable-backport-criteria}
-
-The stable branch does have some changes which cannot be backported. Most notable are breaking changes. The desire is to have stable users be uninterrupted when updating packages.
-
-However, many changes are able to be backported, including:
-- New Packages / Modules
-- Security / Patch updates
-- Version updates which include new functionality (but no breaking changes)
-- Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
-- Security critical applications (E.g. `firefox`)
 
 
 ## Code conventions
