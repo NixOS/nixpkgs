@@ -18069,7 +18069,7 @@ with pkgs;
   guile-ssh = callPackage ../development/guile-modules/guile-ssh { };
 
   guile-xcb = callPackage ../development/guile-modules/guile-xcb {
-    guile = guile_2_0;
+    guile = guile_2_2;
   };
 
   inav-blackbox-tools = callPackage ../tools/misc/inav-blackbox-tools { };
