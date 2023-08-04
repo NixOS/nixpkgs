@@ -2399,6 +2399,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
+  merge-fmt = callPackage ../applications/version-management/merge-fmt {
+    inherit (ocamlPackages) buildDunePackage cmdliner base stdio;
+   };
+
   pass-git-helper = python3Packages.callPackage ../applications/version-management/pass-git-helper { };
 
   qgit = qt5.callPackage ../applications/version-management/qgit { };
