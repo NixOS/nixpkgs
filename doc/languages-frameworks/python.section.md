@@ -1500,45 +1500,6 @@ nix-shell -p pythonPackages.pyramid zlib libjpeg git
 
 Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
 
-### Automatic tests {#automatic-tests}
-
-It is recommended to test packages as part of the build process.
-Source distributions (`sdist`) often include test files, but not always.
-
-By default the command `python setup.py test` is run as part of the
-`checkPhase`, but often it is necessary to pass a custom `checkPhase`. An
-example of such a situation is when `py.test` is used.
-
-#### Common issues {#common-issues}
-
-* Non-working tests can often be deselected. By default `buildPythonPackage`
-  runs `python setup.py test`. which is deprecated. Most Python modules however
-  do follow the standard test protocol where the pytest runner can be used
-  instead. `pytest` supports the `-k` and `--ignore` parameters to ignore test
-  methods or classes as well as whole files. For `pytestCheckHook` these are
-  conveniently exposed as `disabledTests` and `disabledTestPaths` respectively.
-
-  ```nix
-  buildPythonPackage {
-    # ...
-    nativeCheckInputs = [
-      pytestCheckHook
-    ];
-
-    disabledTests = [
-      "function_name"
-      "other_function"
-    ];
-
-    disabledTestPaths = [
-      "this/file.py"
-    ];
-  }
-  ```
-
-* Tests that attempt to access `$HOME` can be fixed by using the following
-  work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
-
 ## FAQ {#faq}
 
 ### How to solve circular dependencies? {#how-to-solve-circular-dependencies}
@@ -1949,6 +1910,45 @@ When the environment variable `DETERMINISTIC_BUILD` is set, all bytecode will
 have timestamp 1. The `buildPythonPackage` function sets `DETERMINISTIC_BUILD=1`
 and [PYTHONHASHSEED=0](https://docs.python.org/3.11/using/cmdline.html#envvar-PYTHONHASHSEED).
 Both are also exported in `nix-shell`.
+
+### How to provide automatic tests to Python packages? {#automatic-tests}
+
+It is recommended to test packages as part of the build process.
+Source distributions (`sdist`) often include test files, but not always.
+
+By default the command `python setup.py test` is run as part of the
+`checkPhase`, but often it is necessary to pass a custom `checkPhase`. An
+example of such a situation is when `py.test` is used.
+
+#### Common issues {#common-issues}
+
+* Non-working tests can often be deselected. By default `buildPythonPackage`
+  runs `python setup.py test`. which is deprecated. Most Python modules however
+  do follow the standard test protocol where the pytest runner can be used
+  instead. `pytest` supports the `-k` and `--ignore` parameters to ignore test
+  methods or classes as well as whole files. For `pytestCheckHook` these are
+  conveniently exposed as `disabledTests` and `disabledTestPaths` respectively.
+
+  ```nix
+  buildPythonPackage {
+    # ...
+    nativeCheckInputs = [
+      pytestCheckHook
+    ];
+
+    disabledTests = [
+      "function_name"
+      "other_function"
+    ];
+
+    disabledTestPaths = [
+      "this/file.py"
+    ];
+  }
+  ```
+
+* Tests that attempt to access `$HOME` can be fixed by using the following
+  work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
 
 ## Contributing {#contributing}
 
