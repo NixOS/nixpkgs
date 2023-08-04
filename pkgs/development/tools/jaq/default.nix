@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/01mf02/jaq/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda siraben ];
+    mainProgram = "jaq";
   };
 }

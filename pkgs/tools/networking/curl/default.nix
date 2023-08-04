@@ -196,5 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
     pkgConfigModules = [ "libcurl" ];
+    mainProgram = "curl";
   };
 })

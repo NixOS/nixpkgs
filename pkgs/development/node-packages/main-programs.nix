@@ -71,6 +71,7 @@
   s3http = "s3http.js";
   svelte-language-server = "svelteserver";
   teck-programmer = "teck-firmware-upgrade";
+  typescript-language-server = "typescript-language-server";
   uglify-js = "uglifyjs";
   undollar = "$";
   vsc-leetcode-cli = "leetcode";

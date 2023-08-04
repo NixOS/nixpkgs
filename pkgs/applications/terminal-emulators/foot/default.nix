@@ -219,5 +219,6 @@ stdenv.mkDerivation rec {
     # TERMINFO to a store path, but allows installing foot.terminfo
     # on remote systems for proper foot terminfo support.
     priority = (ncurses.meta.priority or 5) + 3 + 1;
+    mainProgram = "foot";
   };
 }
