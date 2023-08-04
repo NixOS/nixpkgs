@@ -2033,6 +2033,8 @@ self: super: with self; {
 
   cmaes = callPackage ../development/python-modules/cmaes { };
 
+  cmake = callPackage ../development/python-modules/cmake { inherit (pkgs) cmake; };
+
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
   cmd2 = callPackage ../development/python-modules/cmd2 { };
