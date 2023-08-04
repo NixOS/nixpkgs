@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , accountsservice
 , alsa-lib
 , budgie-screensaver
@@ -23,6 +24,7 @@
 , libpulseaudio
 , libuuid
 , libwnck
+, magpie
 , mesa
 , meson
 , ninja
@@ -47,6 +49,20 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Drop all Vapi files that are already included with Vala
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/commit/5f641489a00cc244e50aa1ceae04f952d58389d2
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/5f641489a00cc244e50aa1ceae04f952d58389d2.patch";
+      hash = "sha256-Cyj/+G1dx0DKCTtzVESzFZ+I5o7INopGvw7bq5o/abo=";
+    })
+
+    # Add support for Magpie
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/387
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/84ccb505160322536043717c3b8f970ab91b0103.patch";
+      hash = "sha256-4nd7Tk4ajyVy8cGDNIINpW9jlyRNywPYMrhBCtJVHZk=";
+    })
+
     ./plugins.patch
   ];
 
@@ -70,7 +86,6 @@ stdenv.mkDerivation rec {
     gnome-menus
     gnome.gnome-bluetooth_1_0
     gnome.gnome-settings-daemon
-    gnome.mutter
     gnome.zenity
     graphene
     gtk3
@@ -83,6 +98,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libuuid
     libwnck
+    magpie
     mesa
     polkit
     sassc
