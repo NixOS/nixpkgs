@@ -79,5 +79,6 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ bbigras enorris thoughtpolice piperswe ];
+    mainProgram = "cloudflared";
   };
 }
