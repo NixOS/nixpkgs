@@ -578,6 +578,17 @@ in rec {
     };
   };
 
+  t-smart-tmux-session-manager = mkTmuxPlugin {
+    pluginName = "t-smart-tmux-session-manager";
+    version = "2023-08-04";
+    src = fetchFromGitHub {
+      owner = "joshmedeski";
+      repo = "t-smart-tmux-session-manager";
+      rev = "8c887534d0f59cdde2aef873052d59efacdb7b2a";
+      sha256 = "sha256-PGemYYjyWbHmNvEflK51PdY8oKI/1DZMU5OBjKH9DLw=";
+    };
+  };
+
   tilish = mkTmuxPlugin {
     pluginName = "tilish";
     version = "2020-08-12";
