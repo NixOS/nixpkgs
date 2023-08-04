@@ -55,5 +55,6 @@ python310Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    mainProgram = "nwg-displays";
   };
 }
