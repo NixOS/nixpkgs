@@ -97,6 +97,7 @@ buildPythonPackage rec {
     homepage = "https://0xacab.org/jvoisin/mat2";
     changelog = "https://0xacab.org/jvoisin/mat2/-/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl3Plus;
+    mainProgram = "mat2";
     maintainers = with maintainers; [ dotlambda ];
   };
 }
