@@ -1373,6 +1373,18 @@ final: prev:
     meta.homepage = "https://github.com/winston0410/cmd-parser.nvim/";
   };
 
+  cmp-async-path = buildVimPluginFrom2Nix {
+    pname = "cmp-async-path";
+    version = "2023-01-16";
+    src = fetchFromGitHub {
+      owner = "FelipeLema";
+      repo = "cmp-async-path";
+      rev = "d8229a93d7b71f22c66ca35ac9e6c6cd850ec61d";
+      sha256 = "18z548v4ypby32jydq439zdi6gv7zybp8gk957iai22cnxaj403n";
+    };
+    meta.homepage = "https://github.com/FelipeLema/cmp-async-path/";
+  };
+
   cmp-beancount = buildVimPluginFrom2Nix {
     pname = "cmp-beancount";
     version = "2022-11-27";
