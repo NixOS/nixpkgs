@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ primeos AndersonTorres ];
     platforms = lib.platforms.unix;
+    mainProgram = "scdoc";
   };
 })
