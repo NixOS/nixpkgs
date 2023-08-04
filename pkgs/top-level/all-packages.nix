@@ -10088,7 +10088,7 @@ with pkgs;
   lact = callPackage ../tools/system/lact { };
 
   ledit = callPackage ../tools/misc/ledit {
-    inherit (ocaml-ng.ocamlPackages_4_12) ocaml camlp5;
+    inherit (ocaml-ng.ocamlPackages_4_11) ocaml camlp5;
   };
 
   ledmon = callPackage ../tools/system/ledmon { };
