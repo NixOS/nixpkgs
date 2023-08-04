@@ -1500,18 +1500,6 @@ nix-shell -p pythonPackages.pyramid zlib libjpeg git
 
 Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
 
-### Deterministic builds {#deterministic-builds}
-
-The Python interpreters are now built deterministically. Minor modifications had
-to be made to the interpreters in order to generate deterministic bytecode. This
-has security implications and is relevant for those using Python in a
-`nix-shell`.
-
-When the environment variable `DETERMINISTIC_BUILD` is set, all bytecode will
-have timestamp 1. The `buildPythonPackage` function sets `DETERMINISTIC_BUILD=1`
-and [PYTHONHASHSEED=0](https://docs.python.org/3.11/using/cmdline.html#envvar-PYTHONHASHSEED).
-Both are also exported in `nix-shell`.
-
 ### Automatic tests {#automatic-tests}
 
 It is recommended to test packages as part of the build process.
@@ -1949,6 +1937,18 @@ because we can only provide security support for non-vendored dependencies.
 
 We recommend [nix-init](https://github.com/nix-community/nix-init) for creating new python packages within nixpkgs,
 as it already prefetches the source, parses dependencies for common formats and prefills most things in `meta`.
+
+### Are Python interpreters built deterministically? {#deterministic-builds}
+
+The Python interpreters are now built deterministically. Minor modifications had
+to be made to the interpreters in order to generate deterministic bytecode. This
+has security implications and is relevant for those using Python in a
+`nix-shell`.
+
+When the environment variable `DETERMINISTIC_BUILD` is set, all bytecode will
+have timestamp 1. The `buildPythonPackage` function sets `DETERMINISTIC_BUILD=1`
+and [PYTHONHASHSEED=0](https://docs.python.org/3.11/using/cmdline.html#envvar-PYTHONHASHSEED).
+Both are also exported in `nix-shell`.
 
 ## Contributing {#contributing}
 
