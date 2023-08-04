@@ -380,6 +380,12 @@ def main():
 
     write_result(result)
 
+    # Commit the result
+    commitMessage = "jetbrains.plugins: update"
+    print("#### Committing changes... ####")
+    run(['git', 'add', PLUGINS_FILE], check=True)
+    run(['git', 'commit', '--file=-'], input=commitMessage.encode(), check=True)
+
 
 if __name__ == '__main__':
     main()
