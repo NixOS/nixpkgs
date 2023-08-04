@@ -54,13 +54,6 @@ cfgbootnone = """  # Disable bootloader.
 
 """
 
-cfgbootcrypt = """  # Setup keyfile
-  boot.initrd.secrets = {
-    "/crypto_keyfile.bin" = null;
-  };
-
-"""
-
 cfgbootgrubcrypt = """  # Enable grub cryptodisk
   boot.loader.grub.enableCryptodisk=true;
 
@@ -374,30 +367,36 @@ def run():
     else:
         cfg += cfgbootnone
 
+    # Don't use keyfile if no encrypted extra encrypted partitions
+    needkeyfile = False
+    for part in gs.value("partitions"):
+        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and not part["mountPoint"] == "/":
+            needkeyfile = True
+            break
+
     # Check partitions
     for part in gs.value("partitions"):
         if part["claimed"] == True and part["fsName"] == "luks":
-            cfg += cfgbootcrypt
             if fw_type != "efi":
                 cfg += cfgbootgrubcrypt
             status = _("Setting up LUKS")
             libcalamares.job.setprogress(0.15)
-            try:
-                # Create /crypto_keyfile.bin
-                libcalamares.utils.host_env_process_output(
-                    ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], None)
-                libcalamares.utils.host_env_process_output(
-                    ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], None)
-            except subprocess.CalledProcessError:
-                libcalamares.utils.error(
-                    "Failed to create /crypto_keyfile.bin")
-                return (_("Failed to create /crypto_keyfile.bin"), _("Check if you have enough free space on your partition."))
+            if needkeyfile:
+                try:
+                    # Create /crypto_keyfile.bin
+                    libcalamares.utils.host_env_process_output(
+                        ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], None)
+                    libcalamares.utils.host_env_process_output(
+                        ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], None)
+                except subprocess.CalledProcessError:
+                    libcalamares.utils.error(
+                        "Failed to create /crypto_keyfile.bin")
+                    return (_("Failed to create /crypto_keyfile.bin"), _("Check if you have enough free space on your partition."))
             break
 
-    # Setup keys in /crypto_keyfile. If we use systemd-boot (EFI), don't add /
-    # Goal is to have one password prompt when booted
+    # Setup keys in /crypto_keyfile. Do not add rootfs
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and not (fw_type == "efi" and part["mountPoint"] == "/"):
+        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and not part["mountPoint"] == "/":
             if part["fs"] == "linuxswap":
                 cfg += cfgswapcrypt
                 catenate(variables, "swapdev", part["luksMapperName"])
