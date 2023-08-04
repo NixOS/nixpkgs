@@ -132,8 +132,7 @@ rec {
         { shortName = licstr; }
       );
 
-  /* Get the path to the main program of a derivation with either
-     meta.mainProgram or pname or name
+  /* Get the path to the main program of a derivation based on meta.mainProgram
 
      Type: getExe :: derivation -> string
 
@@ -149,4 +148,18 @@ rec {
       lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, specify the full path to the program, such as \"\${lib.getBin foo}/bin/bar\"."
       lib.getName x
     )}";
+
+  /* Get the path to the main program of a derivation with either
+     meta.mainProgram or pname or name
+
+     Type: getExe' :: derivation -> string
+
+     Example:
+       getExe' pkgs.hello
+       => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
+       getExe' pkgs.mustache-go
+       => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
+  */
+  getExe' = x:
+    "${lib.getBin x}/bin/${x.meta.mainProgram or (lib.getName x)}";
 }
