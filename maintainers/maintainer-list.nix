@@ -18714,6 +18714,12 @@
     github = "zeri42";
     githubId = 68825133;
   };
+  zestsystem = {
+    email = "mk337337@gmail.com";
+    github = "zestsystem";
+    githubId = 39456023;
+    name = "Mike Yim";
+  };
   zfnmxt = {
     name = "zfnmxt";
     email = "zfnmxt@zfnmxt.com";
