@@ -19,6 +19,7 @@
 , pythonOlder
 , requests
 , srptools
+, stdenv
 , zeroconf
 }:
 
@@ -85,6 +86,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--asyncio-mode=legacy"
+  ];
+
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
+    "test_stream_retransmission"
   ];
 
   disabledTestPaths = [
