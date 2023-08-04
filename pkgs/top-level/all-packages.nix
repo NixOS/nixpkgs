@@ -3652,7 +3652,7 @@ with pkgs;
     readline = readline63;
   };
 
-  flood = nodePackages.flood;
+  flood = callPackage ../applications/networking/p2p/flood { };
 
   font-config-info = callPackage ../tools/misc/font-config-info { };
 

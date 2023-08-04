@@ -162,10 +162,6 @@ final: prev: {
     nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
   };
 
-  flood = prev.flood.override {
-    buildInputs = [ final.node-pre-gyp ];
-  };
-
   git-ssb = prev.git-ssb.override (oldAttrs: {
     buildInputs = [ final.node-gyp-build ];
     meta = oldAttrs.meta // { broken = since "10"; };
