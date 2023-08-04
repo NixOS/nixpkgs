@@ -46,6 +46,8 @@
 , nlohmann_json
 , websocketpp
 , asio
+, decklinkSupport ? false
+, blackmagic-desktop-video
 }:
 
 let
@@ -134,9 +136,17 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapGApps = true;
-  preFixup = ''
+  preFixup = let
+    wrapperLibraries = [
+      xorg.libX11
+      libvlc
+      libGL
+    ] ++ optionals decklinkSupport [
+      blackmagic-desktop-video
+    ];
+  in ''
     qtWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath [ xorg.libX11 libvlc libGL ]}"
+      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
       ''${gappsWrapperArgs[@]}
     )
   '';
