@@ -997,8 +997,8 @@ and in this case the `python3` interpreter is automatically used.
 
 ### Interpreters {#interpreters}
 
-| Packages   | Aliases         | Interpreters |
-|------------|-----------------|------------|
+| Package    | Aliases         | Interpreter |
+|------------|-----------------|-------------|
 | python27   | python2, python | CPython 2.7 |
 | python38   | ` `             | CPython 3.8 |
 | python39   | ` `             | CPython 3.9 |
