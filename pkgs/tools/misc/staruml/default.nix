@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     };
 
   nativeBuildInputs = [ wrapGAppsHook dpkg ];
-  buildInputs = [ glib hicolor-icon-theme xorg.libxshmfence ];
+  buildInputs = [ glib hicolor-icon-theme ];
 
   unpackPhase = ''
     mkdir pkg
