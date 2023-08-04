@@ -120,7 +120,7 @@ let
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
     in
-      pkgs.symlinkJoin {
+      configEvaled.pkgs.symlinkJoin {
         name = "netboot";
         paths = [
           build.netbootRamdisk
