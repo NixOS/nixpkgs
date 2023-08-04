@@ -46,7 +46,6 @@
   firebase-tools = "firebase";
   fkill-cli = "fkill";
   fleek-cli = "fleek";
-  flood = "flood";
   git-run = "gr";
   gitmoji-cli = "gitmoji";
   graphql-cli = "graphql";
