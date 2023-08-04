@@ -43,5 +43,6 @@ mkDerivation rec {
     description = "Norton/Total Commander clone for KDE";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sander turion ];
+    mainProgram = "krusader";
   };
 }

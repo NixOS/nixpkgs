@@ -78,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau Br1ght0ne ];
+    mainProgram = "nnn";
   };
 })
