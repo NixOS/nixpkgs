@@ -1,0 +1,305 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-05-12 15:08:39.233546717 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-05-12 15:08:39.325546612 +0000
+@@ -0,0 +1 @@
++pow_general
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-05-12 15:06:11.885721962 +0000
++++ mpfr-4.2.0-b/VERSION	2023-05-12 15:08:39.325546612 +0000
+@@ -1 +1 @@
+-4.2.0-p6
++4.2.0-p7
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-05-12 15:06:11.877721972 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-05-12 15:08:39.321546616 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p6"
++#define MPFR_VERSION_STRING "4.2.0-p7"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/pow.c mpfr-4.2.0-b/src/pow.c
+--- mpfr-4.2.0-a/src/pow.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/src/pow.c	2023-05-12 15:08:39.309546630 +0000
+@@ -131,7 +131,6 @@
+   /* Declaration of the size variable */
+   mpfr_prec_t Nz = MPFR_PREC(z);               /* target precision */
+   mpfr_prec_t Nt;                              /* working precision */
+-  mpfr_exp_t err;                              /* error */
+   MPFR_ZIV_DECL (ziv_loop);
+ 
+   MPFR_LOG_FUNC
+@@ -171,12 +170,14 @@
+   MPFR_ZIV_INIT (ziv_loop, Nt);
+   for (;;)
+     {
++      mpfr_exp_t err, exp_t;
+       MPFR_BLOCK_DECL (flags1);
+ 
+       /* compute exp(y*ln|x|), using MPFR_RNDU to get an upper bound, so
+          that we can detect underflows. */
+       mpfr_log (t, absx, MPFR_IS_NEG (y) ? MPFR_RNDD : MPFR_RNDU); /* ln|x| */
+       mpfr_mul (t, y, t, MPFR_RNDU);                              /* y*ln|x| */
++      exp_t = MPFR_GET_EXP (t);
+       if (k_non_zero)
+         {
+           MPFR_LOG_MSG (("subtract k * ln(2)\n", 0));
+@@ -188,14 +189,16 @@
+           MPFR_LOG_VAR (t);
+         }
+       /* estimate of the error -- see pow function in algorithms.tex.
+-         The error on t is at most 1/2 + 3*2^(EXP(t)+1) ulps, which is
+-         <= 2^(EXP(t)+3) for EXP(t) >= -1, and <= 2 ulps for EXP(t) <= -2.
++         The error on t before the subtraction of k*log(2) is at most
++         1/2 + 3*2^(EXP(t)+1) ulps, which is <= 2^(EXP(t)+3) for EXP(t) >= -1,
++         and <= 2 ulps for EXP(t) <= -2.
+          Additional error if k_no_zero: treal = t * errk, with
+          1 - |k| * 2^(-Nt) <= exp(-|k| * 2^(-Nt)) <= errk <= 1,
+          i.e., additional absolute error <= 2^(EXP(k)+EXP(t)-Nt).
+-         Total error <= 2^err1 + 2^err2 <= 2^(max(err1,err2)+1). */
+-      err = MPFR_NOTZERO (t) && MPFR_GET_EXP (t) >= -1 ?
+-        MPFR_GET_EXP (t) + 3 : 1;
++         Total ulp error <= 2^err1 + 2^err2 <= 2^(max(err1,err2)+1),
++         where err1 = EXP(t)+3 for EXP(t) >= -1, and 1 otherwise,
++         and err2 = EXP(k). */
++      err = MPFR_NOTZERO (t) && exp_t >= -1 ? exp_t + 3 : 1;
+       if (k_non_zero)
+         {
+           if (MPFR_GET_EXP (k) > err)
+@@ -328,11 +331,17 @@
+        */
+       if (rnd_mode == MPFR_RNDN && inexact < 0 && lk < 0 &&
+           MPFR_GET_EXP (z) == __gmpfr_emin - 1 - lk && mpfr_powerof2_raw (z))
+-        /* Rounding to nearest, real result > z * 2^k = 2^(emin - 2),
+-         * underflow case: we will obtain the correct result and exceptions
+-         *  by replacing z by nextabove(z).
+-         */
+-        mpfr_nextabove (z);
++        /* Rounding to nearest, exact result > z * 2^k = 2^(emin - 2),
++         * and underflow case because the rounded result assuming an
++         * unbounded exponent range is 2^(emin - 2). We need to round
++         * to 2^(emin - 1), i.e. to round toward +inf.
++         * Note: the old code was using "mpfr_nextabove (z);" instead of
++         * setting rnd_mode to MPFR_RNDU for the call to mpfr_mul_2si, but
++         * this was incorrect in precision 1 because in this precision,
++         * mpfr_nextabove gave 2^(emin - 1), which is representable,
++         * so that mpfr_mul_2si did not generate the wanted underflow
++         * (the value was correct, but the underflow flag was missing). */
++        rnd_mode = MPFR_RNDU;
+       MPFR_CLEAR_FLAGS ();
+       inex2 = mpfr_mul_2si (z, z, lk, rnd_mode);
+       if (inex2)  /* underflow or overflow */
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-05-12 15:06:11.885721962 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-05-12 15:08:39.325546612 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p6";
++  return "4.2.0-p7";
+ }
+diff -Naurd mpfr-4.2.0-a/tests/texp10.c mpfr-4.2.0-b/tests/texp10.c
+--- mpfr-4.2.0-a/tests/texp10.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/tests/texp10.c	2023-05-12 15:08:39.309546630 +0000
+@@ -190,6 +190,187 @@
+   mpfr_clear (y);
+ }
+ 
++/* Bug in mpfr_pow_general found by ofuf_thresholds (on 2023-02-13 for
++   a 32-bit exponent, changed on 2023-03-06 for a 64-bit exponent too),
++   fixed in commit b62966df913f73f08b3c5252e1d0c702bc20442f.
++   With a 32-bit exponent, failure for i=0.
++     expected 0.1111E1073741823
++     got      @Inf@
++     expected flags = inexact (8)
++     got flags      = overflow inexact (10)
++   With a 64-bit exponent, failure for i=1.
++     expected 0.11111111111111111111111E4611686018427387903
++     got      @Inf@
++     expected flags = inexact (8)
++     got flags      = overflow inexact (10)
++   Note: ofuf_thresholds was added to the master branch, but for the
++   time being, there are issues with these tests.
++*/
++static void
++bug20230213 (void)
++{
++  const char *s[2] = {
++    "0x1.34413504b3ccdbd5dd8p+28",
++    "0x1.34413509f79fef2c4e0dd14a7ae0ecfbacdbp+60"
++  };
++  mpfr_t x1, x2, y1, y2;
++  mpfr_prec_t px[2] = { 74, 147 };
++  mpfr_prec_t py[2] = { 4, 23 };
++  mpfr_exp_t old_emax, emax;
++  mpfr_flags_t flags1, flags2;
++  int i;
++
++  old_emax = mpfr_get_emax ();
++
++  for (i = 0; i < 2; i++)
++    {
++      if (i != 0)
++        set_emax (MPFR_EMAX_MAX);
++
++      emax = mpfr_get_emax ();
++
++      mpfr_inits2 (px[i], x1, x2, (mpfr_ptr) 0);
++      mpfr_inits2 (py[i], y1, y2, (mpfr_ptr) 0);
++
++      mpfr_setmax (y1, emax);
++      mpfr_log10 (x1, y1, MPFR_RNDD);
++      mpfr_set_str (x2, s[i], 0, MPFR_RNDN);
++      /* For i == 0, emax == 2^30, so that the value can be checked.
++         For i != 0, check the value for the case emax == 2^62.
++         The "0UL" ensures that the shifts are valid. */
++      if (i == 0 || (((0UL + MPFR_EMAX_MAX) >> 31) >> 30) == 1)
++        {
++          /* printf ("Checking x1 for i=%d\n", i); */
++          MPFR_ASSERTN (mpfr_equal_p (x1, x2));
++        }
++
++      /* Let MAXF be the maximum finite value (y1 above).
++         Since x1 < log10(MAXF), one should have exp10(x1) < MAXF, and
++         therefore, y2 = RU(exp10(x1)) <= RU(MAXF) = MAXF (no overflow). */
++      flags1 = MPFR_FLAGS_INEXACT;
++      mpfr_clear_flags ();
++      mpfr_exp10 (y2, x1, MPFR_RNDU);
++      flags2 = __gmpfr_flags;
++
++      if (! (mpfr_lessequal_p (y2, y1) && flags2 == flags1))
++        {
++          printf ("Error in bug20230213 for i=%d\n", i);
++          printf ("emax = %" MPFR_EXP_FSPEC "d\n", (mpfr_eexp_t) emax);
++          printf ("expected "); mpfr_dump (y1);
++          printf ("got      "); mpfr_dump (y2);
++          printf ("expected flags =");
++          flags_out (flags1);
++          printf ("got flags      =");
++          flags_out (flags2);
++          exit (1);
++        }
++
++      mpfr_clears (x1, x2, y1, y2, (mpfr_ptr) 0);
++    }
++
++  set_emax (old_emax);
++}
++
++/* Bug in mpfr_pow_general in precision 1 in the particular case of
++   rounding to nearest, z * 2^k = 2^(emin - 2) and real result larger
++   than this value; fixed in ff5012b61d5e5fee5156c57b8aa8fc1739c2a771
++   (which is simplified in 4f5de980be290687ac1409aa02873e9e0dd1a030);
++   initially found by ofuf_thresholds (though the test was incorrect).
++   With a 32-bit exponent, failure for i=0.
++   With a 64-bit exponent, failure for i=1.
++   The result was correct, but the underflow flag was missing.
++   Note: ofuf_thresholds was added to the master branch, but for the
++   time being, there are issues with these tests.
++*/
++static void
++bug20230427 (void)
++{
++  const char *s[2] = {
++    "-0.1001101000100000100110101000011E29",
++    "-0.100110100010000010011010100001001111101111001111111101111001101E61"
++  };
++  mpfr_t x, y, z, t1, t2;
++  mpfr_exp_t old_emin;
++  mpfr_flags_t flags, ex_flags;
++  int i, inex;
++
++  old_emin = mpfr_get_emin ();
++
++  mpfr_init2 (x, 63);
++  mpfr_inits2 (1, y, z, (mpfr_ptr) 0);
++  mpfr_inits2 (128, t1, t2, (mpfr_ptr) 0);
++
++  for (i = 0; i < 2; i++)
++    {
++      if (i == 0)
++        {
++          /* Basic check: the default emin should be -2^30 (exactly). */
++          if (mpfr_get_emin () != -1073741823)
++            abort ();
++        }
++      else
++        {
++          /* This test assumes that MPFR_EMIN_MIN = -2^62 (exactly).
++             The "0UL" ensures that the shifts are valid. */
++          if ((((0UL - MPFR_EMIN_MIN) >> 31) >> 30) != 1)
++            break;
++
++          set_emin (MPFR_EMIN_MIN);
++        }
++
++      mpfr_set_str_binary (x, s[i]);
++
++      /* We will test 10^x rounded to nearest in precision 1.
++         Check that 2^(emin - 2) < 10^x < (3/2) * 2^(emin - 2).
++         This is approximate, but by outputting the values, one can check
++         that one is not too close to the boundaries:
++           emin - 2              = -4611686018427387905
++           log2(10^x)           ~= -4611686018427387904.598
++           emin - 2 + log2(3/2) ~= -4611686018427387904.415
++         Thus the result should be the smallest positive number 2^(emin - 1)
++         because 10^x is closer to this number than to 0, the midpoint being
++         2^(emin - 2). And there should be an underflow in precision 1 because
++         the result rounded to nearest in an unbounded exponent range should
++         have been 2^(emin - 2), the midpoint being (3/2) * 2^(emin - 2).
++      */
++      mpfr_set_ui (t1, 10, MPFR_RNDN);
++      mpfr_log2 (t2, t1, MPFR_RNDN);
++      mpfr_mul (t1, t2, x, MPFR_RNDN);
++      inex = mpfr_set_exp_t (t2, mpfr_get_emin () - 2, MPFR_RNDN);
++      MPFR_ASSERTN (inex == 0);
++      MPFR_ASSERTN (mpfr_greater_p (t1, t2));  /* log2(10^x) > emin - 2 */
++      inex = mpfr_sub (t1, t1, t2, MPFR_RNDN);
++      MPFR_ASSERTN (inex == 0);
++      mpfr_set_ui (t2, 3, MPFR_RNDN);
++      mpfr_log2 (t2, t2, MPFR_RNDN);
++      mpfr_sub_ui (t2, t2, 1, MPFR_RNDN);  /* log2(3/2) */
++      MPFR_ASSERTN (mpfr_less_p (t1, t2));
++
++      mpfr_clear_flags ();
++      mpfr_exp10 (y, x, MPFR_RNDN);
++      flags = __gmpfr_flags;
++      ex_flags = MPFR_FLAGS_UNDERFLOW | MPFR_FLAGS_INEXACT;
++
++      mpfr_setmin (z, mpfr_get_emin ());  /* z = 0.1@emin */
++      if (! (mpfr_equal_p (y, z) && flags == ex_flags))
++        {
++          printf ("Error in bug20230427 for i=%d\n", i);
++          printf ("expected "); mpfr_dump (z);
++          printf ("got      "); mpfr_dump (y);
++          printf ("emin =       %" MPFR_EXP_FSPEC "d\n",
++                  (mpfr_eexp_t) mpfr_get_emin ());
++          printf ("expected flags =");
++          flags_out (ex_flags);
++          printf ("got flags      =");
++          flags_out (flags);
++          exit (1);
++        }
++    }
++
++  mpfr_clears (x, y, z, t1, t2, (mpfr_ptr) 0);
++  set_emin (old_emin);
++}
++
+ int
+ main (int argc, char *argv[])
+ {
+@@ -199,6 +380,9 @@
+ 
+   tests_start_mpfr ();
+ 
++  bug20230213 ();
++  bug20230427 ();
++
+   special_overflow ();
+   emax_m_eps ();
+   exp_range ();

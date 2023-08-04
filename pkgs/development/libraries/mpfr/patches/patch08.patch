@@ -1,0 +1,636 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-05-17 17:17:28.512360351 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-05-17 17:17:28.600360192 +0000
+@@ -0,0 +1 @@
++compound
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-05-12 15:08:39.325546612 +0000
++++ mpfr-4.2.0-b/VERSION	2023-05-17 17:17:28.600360192 +0000
+@@ -1 +1 @@
+-4.2.0-p7
++4.2.0-p8
+diff -Naurd mpfr-4.2.0-a/src/compound.c mpfr-4.2.0-b/src/compound.c
+--- mpfr-4.2.0-a/src/compound.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/src/compound.c	2023-05-17 17:17:28.588360213 +0000
+@@ -55,9 +55,9 @@
+ mpfr_compound_si (mpfr_ptr y, mpfr_srcptr x, long n, mpfr_rnd_t rnd_mode)
+ {
+   int inexact, compared, k, nloop;
+-  mpfr_t t;
+-  mpfr_exp_t e;
+-  mpfr_prec_t prec;
++  mpfr_t t, u;
++  mpfr_prec_t py, prec, extra;
++  mpfr_rnd_t rnd1;
+   MPFR_ZIV_DECL (loop);
+   MPFR_SAVE_EXPO_DECL (expo);
+ 
+@@ -136,64 +136,185 @@
+ 
+   MPFR_SAVE_EXPO_MARK (expo);
+ 
+-  prec = MPFR_PREC(y);
+-  prec += MPFR_INT_CEIL_LOG2 (prec) + 6;
++  py = MPFR_GET_PREC (y);
++  prec = py + MPFR_INT_CEIL_LOG2 (py) + 6;
+ 
+   mpfr_init2 (t, prec);
++  mpfr_init2 (u, prec);
+ 
+   k = MPFR_INT_CEIL_LOG2(SAFE_ABS (unsigned long, n));  /* thus |n| <= 2^k */
+ 
++  /* We compute u=log2p1(x) with prec+extra bits, since we lose some bits
++     in 2^u. */
++  extra = 0;
++  rnd1 = VSIGN (n) == MPFR_SIGN (x) ? MPFR_RNDD : MPFR_RNDU;
++
+   MPFR_ZIV_INIT (loop, prec);
+   for (nloop = 0; ; nloop++)
+     {
+-      /* we compute (1+x)^n as 2^(n*log2p1(x)) */
+-      inexact = mpfr_log2p1 (t, x, MPFR_RNDN) != 0;
+-      e = MPFR_GET_EXP(t);
+-      /* |t - log2(1+x)| <= 1/2*ulp(t) = 2^(e-prec-1) */
+-      inexact |= mpfr_mul_si (t, t, n, MPFR_RNDN) != 0;
+-      /* |t - n*log2(1+x)| <= 2^(e2-prec-1) + |n|*2^(e-prec-1)
+-                           <= 2^(e2-prec-1) + 2^(e+k-prec-1) <= 2^(e+k-prec)
+-                          where |n| <= 2^k, and e2 is the new exponent of t. */
+-      MPFR_ASSERTD(MPFR_GET_EXP(t) <= e + k);
+-      e += k;
+-      /* |t - n*log2(1+x)| <= 2^(e-prec) */
+-      /* detect overflow */
+-      if (nloop == 0 && mpfr_cmp_si (t, __gmpfr_emax) >= 0)
++      unsigned int inex;
++      mpfr_exp_t e, e2, ex;
++      mpfr_prec_t precu = MPFR_ADD_PREC (prec, extra);
++      mpfr_prec_t new_extra;
++      mpfr_rnd_t rnd2;
++
++      /* We compute (1+x)^n as 2^(n*log2p1(x)),
++         and we round toward 1, thus we round n*log2p1(x) toward 0,
++         thus for x*n > 0 we round log2p1(x) toward -Inf, and for x*n < 0
++         we round log2p1(x) toward +Inf. */
++      inex = mpfr_log2p1 (u, x, rnd1) != 0;
++      e = MPFR_GET_EXP (u);
++      /* |u - log2(1+x)| <= ulp(t) = 2^(e-precu) */
++      inex |= mpfr_mul_si (u, u, n, MPFR_RNDZ) != 0;
++      e2 = MPFR_GET_EXP (u);
++      /* |u - n*log2(1+x)| <= 2^(e2-precu) + |n|*2^(e-precu)
++                           <= 2^(e2-precu) + 2^(e+k-precu) <= 2^(e+k+1-precu)
++                          where |n| <= 2^k, and e2 is the new exponent of u. */
++      MPFR_ASSERTD (e2 <= e + k);
++      e += k + 1;
++      MPFR_ASSERTN (e2 <= MPFR_PREC_MAX);
++      new_extra = e2 > 0 ? e2 : 0;
++      /* |u - n*log2(1+x)| <= 2^(e-precu) */
++      /* detect overflow: since we rounded n*log2p1(x) toward 0,
++         if n*log2p1(x) >= __gmpfr_emax, we are sure there is overflow. */
++      if (mpfr_cmp_si (u, __gmpfr_emax) >= 0)
+         {
+           MPFR_ZIV_FREE (loop);
+           mpfr_clear (t);
++          mpfr_clear (u);
+           MPFR_SAVE_EXPO_FREE (expo);
+           return mpfr_overflow (y, rnd_mode, 1);
+         }
+-      /* detect underflow */
+-      if (nloop == 0 && mpfr_cmp_si (t, __gmpfr_emin - 1) <= 0)
++      /* detect underflow: similarly, since we rounded n*log2p1(x) toward 0,
++         if n*log2p1(x) < __gmpfr_emin-1, we are sure there is underflow. */
++      if (mpfr_cmp_si (u, __gmpfr_emin - 1) < 0)
+         {
+           MPFR_ZIV_FREE (loop);
+           mpfr_clear (t);
++          mpfr_clear (u);
+           MPFR_SAVE_EXPO_FREE (expo);
+           return mpfr_underflow (y,
+-                            (rnd_mode == MPFR_RNDN) ? MPFR_RNDZ : rnd_mode, 1);
++                            rnd_mode == MPFR_RNDN ? MPFR_RNDZ : rnd_mode, 1);
+         }
+       /* Detect cases where result is 1 or 1+ulp(1) or 1-1/2*ulp(1):
+-         |2^t - 1| = |exp(t*log(2)) - 1| <= |t|*log(2) < |t| */
+-      if (nloop == 0 && MPFR_GET_EXP(t) < - (mpfr_exp_t) MPFR_PREC(y))
++         |2^u - 1| = |exp(u*log(2)) - 1| <= |u|*log(2) < |u| */
++      if (nloop == 0 && MPFR_GET_EXP(u) < - py)
+         {
+-          /* since ulp(1) = 2^(1-PREC(y)), we have |t| < 1/4*ulp(1) */
++          /* since ulp(1) = 2^(1-py), we have |u| < 1/4*ulp(1) */
+           /* mpfr_compound_near_one must be called in the extended
+              exponent range, so that 1 is representable. */
+-          inexact = mpfr_compound_near_one (y, MPFR_SIGN (t), rnd_mode);
++          inexact = mpfr_compound_near_one (y, MPFR_SIGN (u), rnd_mode);
+           goto end;
+         }
+-      inexact |= mpfr_exp2 (t, t, MPFR_RNDA) != 0;
+-      /* |t - (1+x)^n| <= ulp(t) + |t|*log(2)*2^(e-prec)
+-                       < 2^(EXP(t)-prec) + 2^(EXP(t)+e-prec) */
+-      e = (e >= 0) ? e + 1 : 1;
++      /* FIXME: mpfr_exp2 could underflow to the smallest positive number
++         since MPFR_RNDA is used, and this case will not be detected by
++         MPFR_CAN_ROUND (see BUGS). Either fix that, or do early underflow
++         detection (which may be necessary). */
++      /* round 2^u toward 1 */
++      rnd2 = MPFR_IS_POS (u) ? MPFR_RNDD : MPFR_RNDU;
++      inex |= mpfr_exp2 (t, u, rnd2) != 0;
++      /* we had |u - n*log2(1+x)| < 2^(e-precu)
++         thus u = n*log2(1+x) + delta with |delta| < 2^(e-precu)
++         then 2^u = (1+x)^n * 2^delta with |delta| < 2^(e-precu).
++         For |delta| < 0.5, |2^delta - 1| <= |delta| thus
++         |t - (1+x)^n| <= ulp(t) + |t|*2^(e-precu)
++                       < 2^(EXP(t)-prec) + 2^(EXP(t)+e-precu) */
++      e = (precu - prec >= e) ? 1 : e + 1 - (precu - prec);
+       /* now |t - (1+x)^n| < 2^(EXP(t)+e-prec) */
+ 
+-      if (MPFR_LIKELY (inexact == 0 ||
+-                       MPFR_CAN_ROUND (t, prec - e, MPFR_PREC(y), rnd_mode)))
++      if (MPFR_LIKELY (!inex || MPFR_CAN_ROUND (t, prec - e, py, rnd_mode)))
+         break;
+ 
++      /* If t fits in the target precision (or with 1 more bit), then we can
++         round, assuming the working precision is large enough, but the above
++         MPFR_CAN_ROUND() will fail because we cannot determine the ternary
++         value. However since we rounded t toward 1, we can determine it.
++         Since the error in the approximation t is at most 2^e ulp(t),
++         this error should be less than 1/2 ulp(y), thus we should have
++         prec - py >= e + 1. */
++      if (mpfr_min_prec (t) <= py + 1 && prec - py >= e + 1)
++        {
++          /* we add/subtract one ulp to get the correct rounding */
++          if (rnd2 == MPFR_RNDD) /* t was rounded downwards */
++            mpfr_nextabove (t);
++          else
++            mpfr_nextbelow (t);
++          break;
++        }
++
++      /* Detect particular cases where Ziv's strategy may take too much
++         memory and be too long, i.e. when x^n fits in the target precision
++         (+ 1 additional bit for rounding to nearest) and the exact result
++         (1+x)^n is very close to x^n.
++         Necessarily, x is a large even integer and n > 0 (thus n > 1).
++         Since this does not depend on the working precision, we only
++         check this at the first iteration (nloop == 0).
++         Hence the first "if" below and the kx < ex test of the second "if"
++         (x is an even integer iff its least bit 1 has exponent >= 1).
++         The second test of the second "if" corresponds to another simple
++         condition that implies that x^n fits in the target precision.
++         Here are the details:
++         Let k be the minimum length of the significand of x, and x' the odd
++         (integer) significand of x. This means  that 2^(k-1) <= x' < 2^k.
++         Thus 2^(n*(k-1)) <= (x')^n < 2^(k*n), and x^n has between n*(k-1)+1
++         and k*n bits. So x^n can fit into p bits only if p >= n*(k-1)+1,
++         i.e. n*(k-1) <= p-1.
++         Note that x >= 2^k, so that x^n >= 2^(k*n). Since raw overflow
++         has already been detected, k*n cannot overflow if computed with
++         the mpfr_exp_t type. Hence the second test of the second "if",
++         which cannot overflow. */
++      MPFR_ASSERTD (n < 0 || n > 1);
++      if (nloop == 0 && n > 1 && (ex = MPFR_GET_EXP (x)) >= 17)
++        {
++          mpfr_prec_t kx = mpfr_min_prec (x);
++          mpfr_prec_t p = py + (rnd_mode == MPFR_RNDN);
++
++          MPFR_LOG_MSG (("Check if x^n fits... n=%ld kx=%Pd p=%Pd\n",
++                         n, kx, p));
++          if (kx < ex && n * (mpfr_exp_t) (kx - 1) <= p - 1)
++            {
++              mpfr_t v;
++
++              /* Check whether x^n really fits into p bits. */
++              mpfr_init2 (v, p);
++              inexact = mpfr_pow_ui (v, x, n, MPFR_RNDZ);
++              if (inexact == 0)
++                {
++                  MPFR_LOG_MSG (("x^n fits into p bits\n", 0));
++                  /* (x+1)^n = x^n * (1 + 1/x)^n
++                     For directed rounding, we can round when (1 + 1/x)^n
++                     < 1 + 2^-p, and then the result is x^n,
++                     except for rounding up. Indeed, if (1 + 1/x)^n < 1 + 2^-p,
++                     1 <= (x+1)^n < x^n * (1 + 2^-p) = x^n + x^n/2^p
++                     < x^n + ulp(x^n).
++                     For rounding to nearest, we can round when (1 + 1/x)^n
++                     < 1 + 2^-p, and then the result is x^n when x^n fits
++                     into p-1 bits, and nextabove(x^n) otherwise. */
++                  mpfr_ui_div (t, 1, x, MPFR_RNDU);
++                  mpfr_add_ui (t, t, 1, MPFR_RNDU);
++                  mpfr_pow_ui (t, t, n, MPFR_RNDU);
++                  mpfr_sub_ui (t, t, 1, MPFR_RNDU);
++                  /* t cannot be zero */
++                  if (MPFR_GET_EXP(t) < - py)
++                    {
++                      mpfr_set (y, v, MPFR_RNDZ);
++                      if ((rnd_mode == MPFR_RNDN && mpfr_min_prec (v) == p)
++                          || rnd_mode == MPFR_RNDU || rnd_mode == MPFR_RNDA)
++                        {
++                          /* round up */
++                          mpfr_nextabove (y);
++                          inexact = 1;
++                        }
++                      else
++                        inexact = -1;
++                      mpfr_clear (v);
++                      goto end;
++                    }
++                }
++              mpfr_clear (v);
++            }
++        }
++
+       /* Exact cases like compound(0.5,2) = 9/4 must be detected, since
+          except for 1+x power of 2, the log2p1 above will be inexact,
+          so that in the Ziv test, inexact != 0 and MPFR_CAN_ROUND will
+@@ -211,6 +332,8 @@
+ 
+       MPFR_ZIV_NEXT (loop, prec);
+       mpfr_set_prec (t, prec);
++      extra = new_extra;
++      mpfr_set_prec (u, MPFR_ADD_PREC (prec, extra));
+     }
+ 
+   inexact = mpfr_set (y, t, rnd_mode);
+@@ -218,6 +341,7 @@
+  end:
+   MPFR_ZIV_FREE (loop);
+   mpfr_clear (t);
++  mpfr_clear (u);
+ 
+   MPFR_SAVE_EXPO_FREE (expo);
+   return mpfr_check_range (y, inexact, rnd_mode);
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-05-12 15:08:39.321546616 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-05-17 17:17:28.596360199 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p7"
++#define MPFR_VERSION_STRING "4.2.0-p8"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-05-12 15:08:39.325546612 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-05-17 17:17:28.600360192 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p7";
++  return "4.2.0-p8";
+ }
+diff -Naurd mpfr-4.2.0-a/tests/tcompound.c mpfr-4.2.0-b/tests/tcompound.c
+--- mpfr-4.2.0-a/tests/tcompound.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/tests/tcompound.c	2023-05-17 17:17:28.588360213 +0000
+@@ -238,18 +238,263 @@
+   mpfr_clear (y);
+ }
+ 
+-static int
+-mpfr_compound2 (mpfr_ptr y, mpfr_srcptr x, mpfr_rnd_t rnd_mode)
++/* Failure with mpfr_compound_si from 2021-02-15 due to
++   incorrect underflow detection. */
++static void
++bug_20230206 (void)
+ {
+-  return mpfr_compound_si (y, x, 2, rnd_mode);
++  if (MPFR_PREC_MIN == 1)
++    {
++      mpfr_t x, y1, y2;
++      int inex1, inex2;
++      mpfr_flags_t flags1, flags2;
++#if MPFR_PREC_BITS >= 64
++      mpfr_exp_t emin;
++#endif
++
++      mpfr_inits2 (1, x, y1, y2, (mpfr_ptr) 0);
++      mpfr_set_ui_2exp (x, 1, -1, MPFR_RNDN);  /* x = 1/2 */
++
++      /* This first test is useful mainly for a 32-bit mpfr_exp_t type
++         (no failure with a 64-bit mpfr_exp_t type since the underflow
++         threshold in the extended exponent range is much lower). */
++
++      mpfr_set_ui_2exp (y1, 1, -1072124363, MPFR_RNDN);
++      inex1 = -1;
++      flags1 = MPFR_FLAGS_INEXACT;
++      mpfr_clear_flags ();
++      /* -1832808704 ~= -2^30 / log2(3/2) */
++      inex2 = mpfr_compound_si (y2, x, -1832808704, MPFR_RNDN);
++      flags2 = __gmpfr_flags;
++      if (!(mpfr_equal_p (y1, y2) &&
++            SAME_SIGN (inex1, inex2) &&
++            flags1 == flags2))
++        {
++          printf ("Error in bug_20230206 (1):\n");
++          printf ("Expected ");
++          mpfr_dump (y1);
++          printf ("  with inex = %d, flags =", inex1);
++          flags_out (flags1);
++          printf ("Got      ");
++          mpfr_dump (y2);
++          printf ("  with inex = %d, flags =", inex2);
++          flags_out (flags2);
++          exit (1);
++        }
++
++      /* This second test is for a 64-bit mpfr_exp_t type
++         (it is disabled with a 32-bit mpfr_exp_t type). */
++
++      /* The "#if" makes sure that 64-bit constants are supported, avoiding
++         a compilation failure. The "if" makes sure that the constant is
++         representable in a long (this would not be the case with 32-bit
++         unsigned long and 64-bit limb). It also ensures that mpfr_exp_t
++         has at least 64 bits. */
++#if MPFR_PREC_BITS >= 64
++      emin = mpfr_get_emin ();
++      set_emin (MPFR_EMIN_MIN);
++      mpfr_set_ui_2exp (y1, 1, -4611686018427366846, MPFR_RNDN);
++      inex1 = 1;
++      flags1 = MPFR_FLAGS_INEXACT;
++      mpfr_clear_flags ();
++      /* -7883729320669216768 ~= -2^62 / log2(3/2) */
++      inex2 = mpfr_compound_si (y2, x, -7883729320669216768, MPFR_RNDN);
++      flags2 = __gmpfr_flags;
++      if (!(mpfr_equal_p (y1, y2) &&
++            SAME_SIGN (inex1, inex2) &&
++            flags1 == flags2))
++        {
++          printf ("Error in bug_20230206 (2):\n");
++          printf ("Expected ");
++          mpfr_dump (y1);
++          printf ("  with inex = %d, flags =", inex1);
++          flags_out (flags1);
++          printf ("Got      ");
++          mpfr_dump (y2);
++          printf ("  with inex = %d, flags =", inex2);
++          flags_out (flags2);
++          exit (1);
++        }
++      set_emin (emin);
++#endif
++
++      mpfr_clears (x, y1, y2, (mpfr_ptr) 0);
++    }
+ }
+ 
++/* Reported by Patrick Pelissier on 2023-02-11 for the master branch
++   (tgeneric_ui.c with GMP_CHECK_RANDOMIZE=1412991715).
++   On a 32-bit host, one gets Inf (overflow) instead of 0.1E1071805703.
++*/
++static void
++bug_20230211 (void)
++{
++  mpfr_t x, y1, y2;
++  int inex1, inex2;
++  mpfr_flags_t flags1, flags2;
++
++  mpfr_inits2 (1, x, y1, y2, (mpfr_ptr) 0);
++  mpfr_set_ui_2exp (x, 1, -1, MPFR_RNDN);  /* x = 1/2 */
++  mpfr_set_ui_2exp (y1, 1, 1071805702, MPFR_RNDN);
++  inex1 = 1;
++  flags1 = MPFR_FLAGS_INEXACT;
++  mpfr_clear_flags ();
++  inex2 = mpfr_compound_si (y2, x, 1832263949, MPFR_RNDN);
++  flags2 = __gmpfr_flags;
++  if (!(mpfr_equal_p (y1, y2) &&
++        SAME_SIGN (inex1, inex2) &&
++        flags1 == flags2))
++    {
++      printf ("Error in bug_20230211:\n");
++      printf ("Expected ");
++      mpfr_dump (y1);
++      printf ("  with inex = %d, flags =", inex1);
++      flags_out (flags1);
++      printf ("Got      ");
++      mpfr_dump (y2);
++      printf ("  with inex = %d, flags =", inex2);
++      flags_out (flags2);
++      exit (1);
++    }
++  mpfr_clears (x, y1, y2, (mpfr_ptr) 0);
++}
++
++/* Integer overflow with compound.c d04caeae04c6a83276916c4fbac1fe9b0cec3c8b
++   (2023-02-23) or 952fb0f5cc2df1fffde3eb54c462fdae5f123ea6 in the 4.2 branch
++   on "n * (kx - 1) + 1". Note: if the only effect is just a random value,
++   this probably doesn't affect the result (one might enter the "if" while
++   one shouldn't, but the real check is done inside the "if"). This test
++   fails if -fsanitize=undefined -fno-sanitize-recover is used or if the
++   processor emits a signal in case of integer overflow.
++   This test has been made obsolete by the "kx < ex" condition
++   in 2cb3123891dd46fe0258d4aec7f8655b8ec69aaf (master branch)
++   or f5cb40571bc3d1559f05b230cf4ffecaf0952852 (4.2 branch). */
++static void
++bug_20230517 (void)
++{
++  mpfr_exp_t old_emax;
++  mpfr_t x;
++
++  old_emax = mpfr_get_emax ();
++  set_emax (MPFR_EMAX_MAX);
++
++  mpfr_init2 (x, 123456);
++  mpfr_set_ui (x, 65536, MPFR_RNDN);
++  mpfr_nextabove (x);
++  mpfr_compound_si (x, x, LONG_MAX >> 16, MPFR_RNDN);
++  mpfr_clear (x);
++
++  set_emax (old_emax);
++}
++
++/* Inverse function on non-special cases...
++   One has x = (1+y)^n with y > -1 and x > 0. Thus y = x^(1/n) - 1.
++   The inverse function is useful
++     - to build and check hard-to-round cases (see bad_cases() in tests.c);
++     - to test the behavior close to the overflow and underflow thresholds.
++   The case x = 0 actually needs to be handled as it may occur with
++   bad_cases() due to rounding.
++*/
+ static int
+-mpfr_compound3 (mpfr_ptr y, mpfr_srcptr x, mpfr_rnd_t rnd_mode)
++inv_compound (mpfr_ptr y, mpfr_srcptr x, long n, mpfr_rnd_t rnd_mode)
+ {
+-  return mpfr_compound_si (y, x, 3, rnd_mode);
++  mpfr_t t;
++  int inexact;
++  mpfr_prec_t precy, prect;
++  MPFR_ZIV_DECL (loop);
++  MPFR_SAVE_EXPO_DECL (expo);
++
++  MPFR_ASSERTN (n != 0);
++
++  if (MPFR_UNLIKELY (MPFR_IS_ZERO (x)))
++    {
++      if (n > 0)
++        return mpfr_set_si (y, -1, rnd_mode);
++      else
++        {
++          MPFR_SET_INF (y);
++          MPFR_SET_POS (y);
++          MPFR_RET (0);
++        }
++    }
++
++  MPFR_SAVE_EXPO_MARK (expo);
++
++  if (mpfr_equal_p (x, __gmpfr_one))
++    {
++      MPFR_SAVE_EXPO_FREE (expo);
++      mpfr_set_zero (y, 1);
++      MPFR_RET (0);
++    }
++
++  precy = MPFR_GET_PREC (y);
++  prect = precy + 20;
++  mpfr_init2 (t, prect);
++
++  MPFR_ZIV_INIT (loop, prect);
++  for (;;)
++    {
++      mpfr_exp_t expt1, expt2, err;
++      unsigned int inext;
++
++      if (mpfr_rootn_si (t, x, n, MPFR_RNDN) == 0)
++        {
++          /* With a huge t, this case would yield inext != 0 and a
++             MPFR_CAN_ROUND failure until a huge precision is reached
++             (as the result is very close to an exact point). Fortunately,
++             since t is exact, we can obtain the correctly rounded result
++             by doing the second operation to the target precision directly.
++          */
++          inexact = mpfr_sub_ui (y, t, 1, rnd_mode);
++          goto end;
++        }
++      expt1 = MPFR_GET_EXP (t);
++      /* |error| <= 2^(expt1-prect-1) */
++      inext = mpfr_sub_ui (t, t, 1, MPFR_RNDN);
++      if (MPFR_UNLIKELY (MPFR_IS_ZERO (t)))
++        goto cont;  /* cannot round yet */
++      expt2 = MPFR_GET_EXP (t);
++      err = 1;
++      if (expt2 < expt1)
++        err += expt1 - expt2;
++      /* |error(rootn)| <= 2^(err+expt2-prect-2)
++         and if mpfr_sub_ui is inexact:
++         |error| <= 2^(err+expt2-prect-2) + 2^(expt2-prect-1)
++                 <= (2^(err-1) + 1) * 2^(expt2-prect-1)
++                 <= 2^((err+1)+expt2-prect-2) */
++      if (inext)
++        err++;
++      /* |error| <= 2^(err+expt2-prect-2) */
++      if (MPFR_CAN_ROUND (t, prect + 2 - err, precy, rnd_mode))
++        break;
++
++    cont:
++      MPFR_ZIV_NEXT (loop, prect);
++      mpfr_set_prec (t, prect);
++    }
++
++  inexact = mpfr_set (y, t, rnd_mode);
++
++ end:
++  MPFR_ZIV_FREE (loop);
++  mpfr_clear (t);
++  MPFR_SAVE_EXPO_FREE (expo);
++  return mpfr_check_range (y, inexact, rnd_mode);
+ }
+ 
++#define DEFN(N)                                                         \
++  static int mpfr_compound##N (mpfr_ptr y, mpfr_srcptr x, mpfr_rnd_t r) \
++  { return mpfr_compound_si (y, x, N, r); }                             \
++  static int inv_compound##N (mpfr_ptr y, mpfr_srcptr x, mpfr_rnd_t r)  \
++  { return inv_compound (y, x, N, r); }
++
++DEFN(2)
++DEFN(3)
++DEFN(4)
++DEFN(5)
++DEFN(17)
++DEFN(120)
++
+ #define TEST_FUNCTION mpfr_compound2
+ #define test_generic test_generic_compound2
+ #include "tgeneric.c"
+@@ -258,17 +503,55 @@
+ #define test_generic test_generic_compound3
+ #include "tgeneric.c"
+ 
++#define TEST_FUNCTION mpfr_compound4
++#define test_generic test_generic_compound4
++#include "tgeneric.c"
++
++#define TEST_FUNCTION mpfr_compound5
++#define test_generic test_generic_compound5
++#include "tgeneric.c"
++
++#define TEST_FUNCTION mpfr_compound17
++#define test_generic test_generic_compound17
++#include "tgeneric.c"
++
++#define TEST_FUNCTION mpfr_compound120
++#define test_generic test_generic_compound120
++#include "tgeneric.c"
++
+ int
+ main (void)
+ {
+   tests_start_mpfr ();
+ 
+   check_ieee754 ();
++  bug_20230206 ();
++  bug_20230211 ();
++  bug_20230517 ();
+ 
+   test_generic_si (MPFR_PREC_MIN, 100, 100);
+ 
+   test_generic_compound2 (MPFR_PREC_MIN, 100, 100);
+   test_generic_compound3 (MPFR_PREC_MIN, 100, 100);
++  test_generic_compound4 (MPFR_PREC_MIN, 100, 100);
++  test_generic_compound5 (MPFR_PREC_MIN, 100, 100);
++  test_generic_compound17 (MPFR_PREC_MIN, 100, 100);
++  test_generic_compound120 (MPFR_PREC_MIN, 100, 100);
++
++  /* Note: For small n, we need a psup high enough to avoid too many
++     "f exact while f^(-1) inexact" occurrences in bad_cases(). */
++  bad_cases (mpfr_compound2, inv_compound2, "mpfr_compound2",
++             0, -256, 255, 4, 128, 240, 40);
++  bad_cases (mpfr_compound3, inv_compound3, "mpfr_compound3",
++             0, -256, 255, 4, 128, 120, 40);
++  bad_cases (mpfr_compound4, inv_compound4, "mpfr_compound4",
++             0, -256, 255, 4, 128, 80, 40);
++  bad_cases (mpfr_compound5, inv_compound5, "mpfr_compound5",
++             0, -256, 255, 4, 128, 80, 40);
++  bad_cases (mpfr_compound17, inv_compound17, "mpfr_compound17",
++             0, -256, 255, 4, 128, 80, 40);
++  bad_cases (mpfr_compound120, inv_compound120, "mpfr_compound120",
++             0, -256, 255, 4, 128, 80, 40);
+ 
+   tests_end_mpfr ();
+   return 0;
+diff -Naurd mpfr-4.2.0-a/tests/tests.c mpfr-4.2.0-b/tests/tests.c
+--- mpfr-4.2.0-a/tests/tests.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/tests/tests.c	2023-05-17 17:17:28.588360213 +0000
+@@ -1086,10 +1086,9 @@
+                 }
+               if (inex_inv)
+                 {
+-                  printf ("bad_cases: f exact while f^(-1) inexact,\n"
+-                          "due to a poor choice of the parameters.\n");
+-                  exit (1);
+-                  /* alternatively, goto next_i */
++                  if (dbg)
++                    printf ("bad_cases: f exact while f^(-1) inexact\n");
++                  goto does_not_match;
+                 }
+               inex = 0;
+               break;
+@@ -1112,6 +1111,10 @@
+           if (mpfr_nanflag_p () || mpfr_overflow_p () || mpfr_underflow_p ()
+               || ! mpfr_equal_p (z, y))
+             {
++              /* This may occur when psup is not large enough: evaluating
++                 x = (f^(-1))(y) then z = f(x) may not give back y if the
++                 precision of x is too small. */
++            does_not_match:
+               if (dbg)
+                 {
+                   printf ("bad_cases: inverse doesn't match for %s\ny = ",

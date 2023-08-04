@@ -1,0 +1,114 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-04-17 21:18:26.860579184 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-04-17 21:18:26.904579122 +0000
+@@ -0,0 +1 @@
++multibyte-decimal_point
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-04-17 21:18:00.512616059 +0000
++++ mpfr-4.2.0-b/VERSION	2023-04-17 21:18:26.904579122 +0000
+@@ -1 +1 @@
+-4.2.0-p2
++4.2.0-p3
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-04-17 21:18:00.508616065 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-04-17 21:18:26.900579128 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p2"
++#define MPFR_VERSION_STRING "4.2.0-p3"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-04-17 21:18:00.512616059 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-04-17 21:18:26.904579122 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p2";
++  return "4.2.0-p3";
+ }
+diff -Naurd mpfr-4.2.0-a/tests/tfprintf.c mpfr-4.2.0-b/tests/tfprintf.c
+--- mpfr-4.2.0-a/tests/tfprintf.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/tests/tfprintf.c	2023-04-17 21:18:26.896579133 +0000
+@@ -61,6 +61,12 @@
+       exit (1);                                                         \
+     }
+ 
++#if MPFR_LCONV_DPTS
++#define DPLEN ((int) strlen (localeconv()->decimal_point))
++#else
++#define DPLEN 1
++#endif
++
+ /* limit for random precision in random() */
+ const int prec_max_printf = 5000;
+ 
+@@ -195,12 +201,12 @@
+                   lo, &ulo);
+   check_length (2, ulo, 36, lu);
+   check_vfprintf (fout, "a. %hi, b. %*f, c. %Re%hn", ush, 3, f, mpfr, &ush);
+-  check_length (3, ush, 46, hu);
++  check_length (3, ush, 45 + DPLEN, hu);
+   check_vfprintf (fout, "a. %hi, b. %f, c. %#.2Rf%n", sh, d, mpfr, &i);
+-  check_length (4, i, 29, d);
++  check_length (4, i, 28 + DPLEN, d);
+   check_vfprintf (fout, "a. %R*A, b. %Fe, c. %i%zn", rnd, mpfr, mpf, sz,
+                   &sz);
+-  check_length (5, (unsigned long) sz, 34, lu); /* no format specifier "%zu" in C90 */
++  check_length (5, (unsigned long) sz, 33 + DPLEN, lu); /* no format specifier "%zu" in C90 */
+   check_vfprintf (fout, "a. %Pu, b. %c, c. %Zi%Zn", prec, ch, mpz, &mpz);
+   check_length_with_cmp (6, mpz, 17, mpz_cmp_ui (mpz, 17), Zi);
+   check_vfprintf (fout, "%% a. %#.0RNg, b. %Qx%Rn, c. %p", mpfr, mpq, &mpfr,
+@@ -224,7 +230,7 @@
+ 
+ #ifdef PRINTF_L
+   check_vfprintf (fout, "a. %RA, b. %Lf, c. %QX%zn", mpfr, ld, mpq, &sz);
+-  check_length (9, (unsigned long) sz, 30, lu); /* no format specifier "%zu" in C90 */
++  check_length (9, (unsigned long) sz, 29 + DPLEN, lu); /* no format specifier "%zu" in C90 */
+ #endif
+ 
+ #ifndef NPRINTF_HH
+diff -Naurd mpfr-4.2.0-a/tests/tprintf.c mpfr-4.2.0-b/tests/tprintf.c
+--- mpfr-4.2.0-a/tests/tprintf.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/tests/tprintf.c	2023-04-17 21:18:26.896579133 +0000
+@@ -68,6 +68,12 @@
+       exit (1);                                                         \
+     }
+ 
++#if MPFR_LCONV_DPTS
++#define DPLEN ((int) strlen (localeconv()->decimal_point))
++#else
++#define DPLEN 1
++#endif
++
+ /* limit for random precision in random() */
+ const int prec_max_printf = 5000;
+ /* boolean: is stdout redirected to a file ? */
+@@ -316,11 +322,11 @@
+   check_vprintf ("a. %c, b. %Rb, c. %u, d. %li%ln", i, mpfr, i, lo, &ulo);
+   check_length (2, ulo, 36, lu);
+   check_vprintf ("a. %hi, b. %*f, c. %Re%hn", ush, 3, f, mpfr, &ush);
+-  check_length (3, ush, 46, hu);
++  check_length (3, ush, 45 + DPLEN, hu);
+   check_vprintf ("a. %hi, b. %f, c. %#.2Rf%n", sh, d, mpfr, &i);
+-  check_length (4, i, 29, d);
++  check_length (4, i, 28 + DPLEN, d);
+   check_vprintf ("a. %R*A, b. %Fe, c. %i%zn", rnd, mpfr, mpf, sz, &sz);
+-  check_length (5, (unsigned long) sz, 34, lu); /* no format specifier '%zu' in C90 */
++  check_length (5, (unsigned long) sz, 33 + DPLEN, lu); /* no format specifier '%zu' in C90 */
+   check_vprintf ("a. %Pu, b. %c, c. %RUG, d. %Zi%Zn", prec, ch, mpfr, mpz, &mpz);
+   check_length_with_cmp (6, mpz, 24, mpz_cmp_ui (mpz, 24), Zi);
+   check_vprintf ("%% a. %#.0RNg, b. %Qx%Rn c. %p",
+@@ -344,7 +350,7 @@
+ 
+ #ifdef PRINTF_L
+   check_vprintf ("a. %RA, b. %Lf, c. %QX%zn", mpfr, ld, mpq, &sz);
+-  check_length (9, (unsigned long) sz, 30, lu); /* no format specifier '%zu' in C90 */
++  check_length (9, (unsigned long) sz, 29 + DPLEN, lu); /* no format specifier '%zu' in C90 */
+ #endif
+ 
+ #ifndef NPRINTF_HH

@@ -1,0 +1,269 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-04-17 21:18:00.464616127 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-04-17 21:18:00.512616059 +0000
+@@ -0,0 +1 @@
++ui_pow_ui-overflow
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-04-17 21:17:39.792645218 +0000
++++ mpfr-4.2.0-b/VERSION	2023-04-17 21:18:00.512616059 +0000
+@@ -1 +1 @@
+-4.2.0-p1
++4.2.0-p2
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-04-17 21:17:39.788645224 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-04-17 21:18:00.508616065 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p1"
++#define MPFR_VERSION_STRING "4.2.0-p2"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/ui_pow_ui.c mpfr-4.2.0-b/src/ui_pow_ui.c
+--- mpfr-4.2.0-a/src/ui_pow_ui.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/src/ui_pow_ui.c	2023-04-17 21:18:00.504616070 +0000
+@@ -23,7 +23,7 @@
+ #include "mpfr-impl.h"
+ 
+ int
+-mpfr_ui_pow_ui (mpfr_ptr x, unsigned long int y, unsigned long int n,
++mpfr_ui_pow_ui (mpfr_ptr x, unsigned long int k, unsigned long int n,
+                 mpfr_rnd_t rnd)
+ {
+   mpfr_exp_t err;
+@@ -35,22 +35,28 @@
+   MPFR_ZIV_DECL (loop);
+   MPFR_SAVE_EXPO_DECL (expo);
+ 
++  MPFR_LOG_FUNC
++    (("k=%lu n=%lu rnd=%d", k, n, rnd),
++     ("y[%Pu]=%.*Rg inexact=%d",
++      mpfr_get_prec (x), mpfr_log_prec, x, inexact));
++
+   if (MPFR_UNLIKELY (n <= 1))
+     {
+       if (n == 1)
+-        return mpfr_set_ui (x, y, rnd);     /* y^1 = y */
++        return mpfr_set_ui (x, k, rnd);     /* k^1 = k */
+       else
+-        return mpfr_set_ui (x, 1, rnd);     /* y^0 = 1 for any y */
++        return mpfr_set_ui (x, 1, rnd);     /* k^0 = 1 for any k */
+     }
+-  else if (MPFR_UNLIKELY (y <= 1))
++  else if (MPFR_UNLIKELY (k <= 1))
+     {
+-      if (y == 1)
++      if (k == 1)
+         return mpfr_set_ui (x, 1, rnd);     /* 1^n = 1 for any n > 0 */
+       else
+         return mpfr_set_ui (x, 0, rnd);     /* 0^n = 0 for any n > 0 */
+     }
+ 
+-  for (size_n = 0, m = n; m; size_n++, m >>= 1);
++  for (size_n = 0, m = n; m != 0; size_n++, m >>= 1)
++    ;
+ 
+   MPFR_SAVE_EXPO_MARK (expo);
+   prec = MPFR_PREC (x) + 3 + size_n;
+@@ -60,23 +66,55 @@
+   for (;;)
+     {
+       int i = size_n;
++      unsigned int inex_res;
+ 
+-      inexact = mpfr_set_ui (res, y, MPFR_RNDU);
++      inex_res = mpfr_set_ui (res, k, MPFR_RNDU);
+       err = 1;
+       /* now 2^(i-1) <= n < 2^i: i=1+floor(log2(n)) */
+       for (i -= 2; i >= 0; i--)
+         {
+-          inexact |= mpfr_sqr (res, res, MPFR_RNDU);
++          inex_res |= mpfr_sqr (res, res, MPFR_RNDU);
+           err++;
+           if (n & (1UL << i))
+-            inexact |= mpfr_mul_ui (res, res, y, MPFR_RNDU);
++            inex_res |= mpfr_mul_ui (res, res, k, MPFR_RNDU);
+         }
++
++      if (MPFR_UNLIKELY (MPFR_IS_INF (res)))
++        {
++          mpfr_t kf;
++          mpz_t z;
++          int size_k;
++          MPFR_BLOCK_DECL (flags);
++
++          /* Let's handle the overflow by calling mpfr_pow_z.
++             Alternatively, we could call mpfr_pow_ui; this would
++             need a bit shorter code below, but mpfr_pow_ui handles
++             the overflow by calling mpfr_pow_z, so that calling
++             mpfr_pow_z directly should be a bit more efficient. */
++
++          MPFR_ZIV_FREE (loop);
++          mpfr_clear (res);
++          for (size_k = 0, m = k; m != 0; size_k++, m >>= 1)
++            ;
++          mpfr_init2 (kf, size_k);
++          inexact = mpfr_set_ui (kf, k, MPFR_RNDN);
++          MPFR_ASSERTD (inexact == 0);
++          mpz_init (z);
++          mpz_set_ui (z, n);
++          MPFR_BLOCK (flags, inexact = mpfr_pow_z (x, kf, z, rnd););
++          mpz_clear (z);
++          mpfr_clear (kf);
++          MPFR_SAVE_EXPO_UPDATE_FLAGS (expo, flags);
++          goto end;
++        }
++
+       /* since the loop is executed floor(log2(n)) times,
+          we have err = 1+floor(log2(n)).
+          Since prec >= MPFR_PREC(x) + 4 + floor(log2(n)), prec > err */
+       err = prec - err;
+ 
+-      if (MPFR_LIKELY (inexact == 0
++      MPFR_LOG_VAR (res);
++      if (MPFR_LIKELY (!inex_res
+                        || MPFR_CAN_ROUND (res, err, MPFR_PREC (x), rnd)))
+         break;
+ 
+@@ -90,6 +128,7 @@
+ 
+   mpfr_clear (res);
+ 
++ end:
+   MPFR_SAVE_EXPO_FREE (expo);
+   return mpfr_check_range (x, inexact, rnd);
+ }
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-04-17 21:17:39.792645218 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-04-17 21:18:00.512616059 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p1";
++  return "4.2.0-p2";
+ }
+diff -Naurd mpfr-4.2.0-a/tests/tlog10.c mpfr-4.2.0-b/tests/tlog10.c
+--- mpfr-4.2.0-a/tests/tlog10.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/tests/tlog10.c	2023-04-17 21:18:00.504616070 +0000
+@@ -49,6 +49,60 @@
+ #define TEST_RANDOM_POS 8
+ #include "tgeneric.c"
+ 
++/* On 2023-02-13, one gets an infinite loop in mpfr_log10 on both
++   32-bit and 64-bit hosts when the precision is not large enough
++   (precision 12 and below). */
++static void
++bug20230213 (void)
++{
++  mpfr_exp_t old_emin, old_emax, e;
++  mpfr_t t, x, y0, y1, y2;
++  int prec;
++
++  old_emin = mpfr_get_emin ();
++  old_emax = mpfr_get_emax ();
++
++  set_emin (MPFR_EMIN_MIN);
++  set_emax (MPFR_EMAX_MAX);
++  e = mpfr_get_emax () - 1;
++
++  /* The precisions of t and y0 should be large enough to avoid
++     a hard-to-round case for the target precisions. */
++  mpfr_inits2 (64, t, y0, (mpfr_ptr) 0);
++  mpfr_set_exp_t (y0, e, MPFR_RNDN);
++  mpfr_log_ui (t, 10, MPFR_RNDN);
++  mpfr_div (y0, y0, t, MPFR_RNDN);
++  mpfr_log_ui (t, 2, MPFR_RNDN);
++  mpfr_mul (y0, y0, t, MPFR_RNDN);
++
++  for (prec = 16; prec >= MPFR_PREC_MIN; prec--)
++    {
++      mpfr_inits2 (prec, x, y1, y2, (mpfr_ptr) 0);
++      mpfr_set (y1, y0, MPFR_RNDN);
++
++      mpfr_set_ui_2exp (x, 1, e, MPFR_RNDN);
++      mpfr_log10 (y2, x, MPFR_RNDN);
++      MPFR_ASSERTN (MPFR_IS_PURE_FP (y2));
++      MPFR_ASSERTN (MPFR_IS_POS (y2));
++
++      if (! mpfr_equal_p (y1, y2))
++        {
++          printf ("Error in bug20230213.\n");
++          printf ("Expected ");
++          mpfr_dump (y1);
++          printf ("Got      ");
++          mpfr_dump (y2);
++          exit (1);
++        }
++      mpfr_clears (x, y1, y2, (mpfr_ptr) 0);
++    }
++
++  mpfr_clears (t, y0, (mpfr_ptr) 0);
++
++  set_emin (old_emin);
++  set_emax (old_emax);
++}
++
+ int
+ main (int argc, char *argv[])
+ {
+@@ -112,6 +166,8 @@
+   mpfr_clear (x);
+   mpfr_clear (y);
+ 
++  bug20230213 ();
++
+   data_check ("data/log10", mpfr_log10, "mpfr_log10");
+ 
+   tests_end_mpfr ();
+diff -Naurd mpfr-4.2.0-a/tests/tui_pow.c mpfr-4.2.0-b/tests/tui_pow.c
+--- mpfr-4.2.0-a/tests/tui_pow.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/tests/tui_pow.c	2023-04-17 21:18:00.504616070 +0000
+@@ -142,6 +142,37 @@
+   mpfr_clear (t);
+ }
+ 
++static void
++huge (void)
++{
++  mpfr_exp_t old_emin, old_emax;
++  mpfr_t x;
++
++  old_emin = mpfr_get_emin ();
++  old_emax = mpfr_get_emax ();
++
++  set_emin (MPFR_EMIN_MIN);
++  set_emax (MPFR_EMAX_MAX);
++
++  mpfr_init2 (x, 8);
++
++  /* The purpose of this test is more to check that mpfr_ui_pow_ui
++     terminates (without taking much memory) rather than checking
++     the value of x. On 2023-02-13, the +Inf case was not handled
++     in the Ziv iteration, yielding an infinite loop, affecting
++     mpfr_log10 in particular. See
++       commit 90de094f0d9c309daca707aa227470d810866616
++  */
++  mpfr_ui_pow_ui (x, 5, ULONG_MAX, MPFR_RNDN);
++  if (MPFR_EMAX_MAX <= ULONG_MAX)  /* true with default _MPFR_EXP_FORMAT */
++    MPFR_ASSERTN (MPFR_IS_INF (x));
++
++  mpfr_clear (x);
++
++  set_emin (old_emin);
++  set_emax (old_emax);
++}
++
+ int
+ main (int argc, char *argv[])
+ {
+@@ -180,6 +211,7 @@
+     }
+ 
+   test1 ();
++  huge ();
+ 
+   {
+   mpfr_t z, t;

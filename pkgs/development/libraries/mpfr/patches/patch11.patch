@@ -1,0 +1,52 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-07-17 13:56:17.375566485 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-07-17 13:56:17.415565464 +0000
+@@ -0,0 +1 @@
++inp_str-nullchar
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-07-17 13:54:11.170788387 +0000
++++ mpfr-4.2.0-b/VERSION	2023-07-17 13:56:17.415565464 +0000
+@@ -1 +1 @@
+-4.2.0-p10
++4.2.0-p11
+diff -Naurd mpfr-4.2.0-a/src/inp_str.c mpfr-4.2.0-b/src/inp_str.c
+--- mpfr-4.2.0-a/src/inp_str.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/src/inp_str.c	2023-07-17 13:56:17.407565669 +0000
+@@ -69,6 +69,15 @@
+       if (c == EOF || isspace (c))
+         break;
+       str[str_size++] = (unsigned char) c;
++      /* If c is '\0' (while not being a whitespace character), the word will
++         not have a valid format. But in the context of a string in memory,
++         '\0' is a terminating null character. So, to avoid ending with a
++         valid string format (like "1" with ignored characters after the
++         terminating null character), we need to make sure that the string
++         does not have a valid format; so let's start it with '*'. Note
++         that we should read the full word, so we cannot break. */
++      if (MPFR_UNLIKELY (c == '\0'))
++        str[0] = '*';
+       if (str_size == (size_t) -1)
+         break;
+       c = getc (stream);
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-07-17 13:54:11.170788387 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-07-17 13:56:17.411565566 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p10"
++#define MPFR_VERSION_STRING "4.2.0-p11"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-07-17 13:54:11.170788387 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-07-17 13:56:17.415565464 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p10";
++  return "4.2.0-p11";
+ }

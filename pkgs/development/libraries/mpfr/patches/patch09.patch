@@ -1,0 +1,105 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-05-17 17:19:35.484201703 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-05-17 17:19:35.596201603 +0000
+@@ -0,0 +1 @@
++printf_large_prec_for_g
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-05-17 17:17:28.600360192 +0000
++++ mpfr-4.2.0-b/VERSION	2023-05-17 17:19:35.596201603 +0000
+@@ -1 +1 @@
+-4.2.0-p8
++4.2.0-p9
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-05-17 17:17:28.596360199 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-05-17 17:19:35.592201606 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p8"
++#define MPFR_VERSION_STRING "4.2.0-p9"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/vasprintf.c mpfr-4.2.0-b/src/vasprintf.c
+--- mpfr-4.2.0-a/src/vasprintf.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/src/vasprintf.c	2023-05-17 17:19:35.576201620 +0000
+@@ -1888,7 +1888,7 @@
+              precision T-1.
+              where T is the threshold computed below and X is the exponent
+              that would be displayed with style 'e' and precision T-1. */
+-          int threshold;
++          mpfr_intmax_t threshold;
+           mpfr_exp_t x, e, k;
+           struct decimal_info dec_info;
+ 
+@@ -1920,9 +1920,15 @@
+           e = e <= 0 ? k : (e + 2) / 3 + (k <= 0 ? 0 : k);
+           MPFR_ASSERTD (e >= 1);
+ 
++          if (e > threshold)
++            e = threshold;
++
++          /* error if e does not fit in size_t (for mpfr_get_str) */
++          if (e > (size_t) -1)
++            goto error;
++
+           dec_info.str = mpfr_get_str (NULL, &dec_info.exp, 10,
+-                                       e < threshold ? e : threshold,
+-                                       p, spec.rnd_mode);
++                                       e, p, spec.rnd_mode);
+           register_string (np->sl, dec_info.str);
+           /* mpfr_get_str corresponds to a significand between 0.1 and 1,
+              whereas here we want a significand between 1 and 10. */
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-05-17 17:17:28.600360192 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-05-17 17:19:35.592201606 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p8";
++  return "4.2.0-p9";
+ }
+diff -Naurd mpfr-4.2.0-a/tests/tsprintf.c mpfr-4.2.0-b/tests/tsprintf.c
+--- mpfr-4.2.0-a/tests/tsprintf.c	2023-04-17 21:17:39.784645229 +0000
++++ mpfr-4.2.0-b/tests/tsprintf.c	2023-05-17 17:19:35.576201620 +0000
+@@ -1620,6 +1620,30 @@
+   mpfr_clear (x);
+ }
+ 
++/* On 2023-03-22, on a 64-bit Linux machine (thus with 32-bit int),
++   the case %.2147483648Rg yields an incorrect size computation and
++   MPFR wants to allocate 18446744071562070545 bytes. With assertion
++   checking (--enable-assert), one gets:
++     vasprintf.c:1908: MPFR assertion failed: threshold >= 1
++
++   This case should either succeed or fail as reaching an environmental limit
++   like with glibc (note that the precision does not fit in an int).
++*/
++static void
++large_prec_for_g (void)
++{
++  mpfr_t x;
++  int r;
++
++  mpfr_init2 (x, 128);
++  mpfr_set_ui (x, 1, MPFR_RNDN);
++  r = mpfr_snprintf (NULL, 0, "%.2147483647Rg\n", x);
++  MPFR_ASSERTN (r == 2);
++  r = mpfr_snprintf (NULL, 0, "%.2147483648Rg\n", x);
++  MPFR_ASSERTN (r == 2 || r < 0);
++  mpfr_clear (x);
++}
++
+ #if defined(HAVE_LOCALE_H) && defined(HAVE_SETLOCALE)
+ 
+ /* The following tests should be equivalent to those from test_locale()
+@@ -1793,6 +1817,7 @@
+   percent_n ();
+   mixed ();
+   check_length_overflow ();
++  large_prec_for_g ();
+   test_locale ();
+ 
+   if (getenv ("MPFR_CHECK_LIBC_PRINTF"))

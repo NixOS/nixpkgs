@@ -1,0 +1,48 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-07-17 13:54:11.126789510 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-07-17 13:54:11.170788387 +0000
+@@ -0,0 +1 @@
++gcc-pr106155-workaround
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-05-17 17:19:35.596201603 +0000
++++ mpfr-4.2.0-b/VERSION	2023-07-17 13:54:11.170788387 +0000
+@@ -1 +1 @@
+-4.2.0-p9
++4.2.0-p10
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-05-17 17:19:35.592201606 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-07-17 13:54:11.170788387 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p9"
++#define MPFR_VERSION_STRING "4.2.0-p10"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-05-17 17:19:35.592201606 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-07-17 13:54:11.170788387 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p9";
++  return "4.2.0-p10";
+ }
+diff -Naurd mpfr-4.2.0-a/tests/tfpif.c mpfr-4.2.0-b/tests/tfpif.c
+--- mpfr-4.2.0-a/tests/tfpif.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/tests/tfpif.c	2023-07-17 13:54:11.162788591 +0000
+@@ -277,7 +277,10 @@
+ 
+   for (i = 0; i < BAD; i++)
+     {
+-      mpfr_exp_t emax;
++      mpfr_exp_t INITIALIZED(emax);
++      /* The INITIALIZED() is a workaround for GCC bug 106155:
++         https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106155 */
++
+       /* For i == 6, mpfr_prec_t needs at least a 65-bit precision
+          (64 value bits + 1 sign bit) to avoid a failure. */
+       if (i == 6 && MPFR_PREC_BITS > 64)

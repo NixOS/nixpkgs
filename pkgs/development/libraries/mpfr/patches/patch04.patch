@@ -1,0 +1,75 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-04-17 21:19:01.988530337 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-04-17 21:19:02.032530276 +0000
+@@ -0,0 +1 @@
++rec_sqrt-zivloop
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-04-17 21:18:26.904579122 +0000
++++ mpfr-4.2.0-b/VERSION	2023-04-17 21:19:02.032530276 +0000
+@@ -1 +1 @@
+-4.2.0-p3
++4.2.0-p4
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-04-17 21:18:26.900579128 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-04-17 21:19:02.032530276 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p3"
++#define MPFR_VERSION_STRING "4.2.0-p4"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/rec_sqrt.c mpfr-4.2.0-b/src/rec_sqrt.c
+--- mpfr-4.2.0-a/src/rec_sqrt.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/src/rec_sqrt.c	2023-04-17 21:19:02.024530287 +0000
+@@ -463,6 +463,7 @@
+   int s, cy, inex;
+   mpfr_limb_ptr x;
+   MPFR_TMP_DECL(marker);
++  MPFR_ZIV_DECL (loop);
+ 
+   MPFR_LOG_FUNC
+     (("x[%Pu]=%.*Rg rnd=%d", mpfr_get_prec (u), mpfr_log_prec, u, rnd_mode),
+@@ -530,6 +531,7 @@
+   wp = rp + 11;
+   if (wp < rn * GMP_NUMB_BITS)
+     wp = rn * GMP_NUMB_BITS;
++  MPFR_ZIV_INIT (loop, wp);
+   for (;;)
+     {
+       MPFR_TMP_MARK (marker);
+@@ -561,8 +563,9 @@
+         }
+       MPFR_TMP_FREE(marker);
+ 
+-      wp += GMP_NUMB_BITS;
++      MPFR_ZIV_NEXT (loop, wp);
+     }
++  MPFR_ZIV_FREE (loop);
+   cy = mpfr_round_raw (MPFR_MANT(r), x, wp, 0, rp, rnd_mode, &inex);
+   MPFR_EXP(r) = - (MPFR_EXP(u) - 1 - s) / 2;
+   if (MPFR_UNLIKELY(cy != 0))
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-04-17 21:18:26.904579122 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-04-17 21:19:02.032530276 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p3";
++  return "4.2.0-p4";
+ }
+diff -Naurd mpfr-4.2.0-a/tests/trec_sqrt.c mpfr-4.2.0-b/tests/trec_sqrt.c
+--- mpfr-4.2.0-a/tests/trec_sqrt.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/tests/trec_sqrt.c	2023-04-17 21:19:02.028530282 +0000
+@@ -242,6 +242,8 @@
+   data_check ("data/rec_sqrt", mpfr_rec_sqrt, "mpfr_rec_sqrt");
+   bad_cases (mpfr_rec_sqrt, pm2, "mpfr_rec_sqrt", 0, -256, 255, 4, 128,
+              800, 50);
++  bad_cases (mpfr_rec_sqrt, pm2, "mpfr_rec_sqrt", 0, -256, 255, 9999, 9999,
++             120000, 1);
+ 
+  end:
+   tests_end_mpfr ();

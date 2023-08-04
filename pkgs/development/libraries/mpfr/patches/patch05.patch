@@ -1,0 +1,90 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-05-12 15:05:00.989811960 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-05-12 15:05:01.085811835 +0000
+@@ -0,0 +1 @@
++reldiff
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-04-17 21:19:02.032530276 +0000
++++ mpfr-4.2.0-b/VERSION	2023-05-12 15:05:01.085811835 +0000
+@@ -1 +1 @@
+-4.2.0-p4
++4.2.0-p5
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-04-17 21:19:02.032530276 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-05-12 15:05:01.077811846 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p4"
++#define MPFR_VERSION_STRING "4.2.0-p5"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/reldiff.c mpfr-4.2.0-b/src/reldiff.c
+--- mpfr-4.2.0-a/src/reldiff.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/src/reldiff.c	2023-05-12 15:05:01.069811856 +0000
+@@ -30,31 +30,25 @@
+ 
+   if (MPFR_ARE_SINGULAR (b, c))
+     {
+-      if (MPFR_IS_NAN(b) || MPFR_IS_NAN(c))
+-        {
+-          MPFR_SET_NAN(a);
+-          return;
+-        }
+-      else if (MPFR_IS_INF(b))
++      if (MPFR_IS_NAN (b) || MPFR_IS_INF (b) || MPFR_IS_NAN (c) ||
++          (MPFR_IS_ZERO (b) && MPFR_IS_ZERO (c)))
+         {
+-          if (MPFR_IS_INF (c) && (MPFR_SIGN (c) == MPFR_SIGN (b)))
+-            MPFR_SET_ZERO(a);
+-          else
+-            MPFR_SET_NAN(a);
++          MPFR_SET_NAN (a);
+           return;
+         }
+-      else if (MPFR_IS_INF(c))
++      if (MPFR_IS_ZERO (b) || MPFR_IS_INF (c))
+         {
+           MPFR_SET_SAME_SIGN (a, b);
+           MPFR_SET_INF (a);
+           return;
+         }
+-      else if (MPFR_IS_ZERO(b)) /* reldiff = abs(c)/c = sign(c) */
+-        {
+-          mpfr_set_si (a, MPFR_INT_SIGN (c), rnd_mode);
+-          return;
+-        }
+-      /* Fall through */
++      /* The case c = 0 with b regular, which should give sign(b) exactly,
++         cannot be optimized here as it is documented in the MPFR manual
++         that this function just computes abs(b-c)/b using the precision
++         of a and the rounding mode rnd_mode for all operations. So let's
++         prefer the potentially "incorrect" result. Note that the correct
++         result is not necessarily better because if could break properties
++         (like monotonicity?) implied by the documentation. */
+     }
+ 
+   if (a == b)
+@@ -64,8 +58,8 @@
+     }
+ 
+   mpfr_sub (a, b, c, rnd_mode);
+-  mpfr_abs (a, a, rnd_mode); /* for compatibility with MPF */
+-  mpfr_div (a, a, (a == b) ? b_copy : b, rnd_mode);
++  MPFR_SET_SIGN (a, 1);
++  mpfr_div (a, a, a == b ? b_copy : b, rnd_mode);
+ 
+   if (a == b)
+     mpfr_clear (b_copy);
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-04-17 21:19:02.032530276 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-05-12 15:05:01.081811839 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p4";
++  return "4.2.0-p5";
+ }

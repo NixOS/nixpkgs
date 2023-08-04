@@ -1,0 +1,48 @@
+diff -Naurd mpfr-4.2.0-a/PATCHES mpfr-4.2.0-b/PATCHES
+--- mpfr-4.2.0-a/PATCHES	2023-07-17 13:57:28.913739912 +0000
++++ mpfr-4.2.0-b/PATCHES	2023-07-17 13:57:28.961738687 +0000
+@@ -0,0 +1 @@
++strtofr-nullchar
+diff -Naurd mpfr-4.2.0-a/VERSION mpfr-4.2.0-b/VERSION
+--- mpfr-4.2.0-a/VERSION	2023-07-17 13:56:17.415565464 +0000
++++ mpfr-4.2.0-b/VERSION	2023-07-17 13:57:28.961738687 +0000
+@@ -1 +1 @@
+-4.2.0-p11
++4.2.0-p12
+diff -Naurd mpfr-4.2.0-a/src/mpfr.h mpfr-4.2.0-b/src/mpfr.h
+--- mpfr-4.2.0-a/src/mpfr.h	2023-07-17 13:56:17.411565566 +0000
++++ mpfr-4.2.0-b/src/mpfr.h	2023-07-17 13:57:28.957738789 +0000
+@@ -27,7 +27,7 @@
+ #define MPFR_VERSION_MAJOR 4
+ #define MPFR_VERSION_MINOR 2
+ #define MPFR_VERSION_PATCHLEVEL 0
+-#define MPFR_VERSION_STRING "4.2.0-p11"
++#define MPFR_VERSION_STRING "4.2.0-p12"
+ 
+ /* User macros:
+    MPFR_USE_FILE:        Define it to make MPFR define functions dealing
+diff -Naurd mpfr-4.2.0-a/src/strtofr.c mpfr-4.2.0-b/src/strtofr.c
+--- mpfr-4.2.0-a/src/strtofr.c	2023-01-05 17:09:48.000000000 +0000
++++ mpfr-4.2.0-b/src/strtofr.c	2023-07-17 13:57:28.949738993 +0000
+@@ -242,7 +242,10 @@
+   pstr->mantissa = NULL;
+ 
+   /* Optional leading whitespace */
+-  while (isspace((unsigned char) *str)) str++;
++  /* For non-"C" locales, the ISO C standard allows isspace(0) to
++     return true. So we need to stop explicitly on '\0'. */
++  while (*str != '\0' && isspace ((unsigned char) *str))
++    str++;
+ 
+   /* An optional sign `+' or `-' */
+   pstr->negative = (*str == '-');
+diff -Naurd mpfr-4.2.0-a/src/version.c mpfr-4.2.0-b/src/version.c
+--- mpfr-4.2.0-a/src/version.c	2023-07-17 13:56:17.415565464 +0000
++++ mpfr-4.2.0-b/src/version.c	2023-07-17 13:57:28.961738687 +0000
+@@ -25,5 +25,5 @@
+ const char *
+ mpfr_get_version (void)
+ {
+-  return "4.2.0-p11";
++  return "4.2.0-p12";
+ }
