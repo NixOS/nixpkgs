@@ -206,6 +206,7 @@ rec {
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";
+    rustc.config = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
