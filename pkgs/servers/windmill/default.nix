@@ -40,7 +40,7 @@ let
     pname = "windmill-ui";
     src = fullSrc;
 
-    sourceRoot = "source/frontend";
+    sourceRoot = "${fullSrc.name}/frontend";
 
     npmDepsHash = "sha256-nRx/UQ7GU1iwhddTotCTG08RoOmdbP66zGKYsEp9XOE=";
 

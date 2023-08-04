@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sourceRoot = "source/SP";
+  sourceRoot = "${src.name}/SP";
 
   makeFlags = [
     "USE_INTERNAL_LIBS=0"

@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-s4JFFmawokdC4qoqNvZDhuJSinhQ3YKSIfAYi79VTTA=";
   };
 
-  sourceRoot = "source/python/legion_linux";
+  sourceRoot = "${src.name}/python/legion_linux";
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 

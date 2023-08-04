@@ -14,9 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aci5SFBRNRrSub4XVJ2luHNZ2pAUegjgQ6pD9kpkaTY=";
   };
 
-  preBuild = ''
-    cd c
-  '';
+  sourceRoot = "${finalAttrs.src.name}/c";
 
   nativeBuildInputs = lib.optionals stdenv.cc.isClang [
     stdenv.cc.cc.libllvm.out

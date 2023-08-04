@@ -96,7 +96,7 @@ python3Packages.buildPythonApplication {
   pname = "sapling";
   inherit src version;
 
-  sourceRoot = "source/eden/scm";
+  sourceRoot = "${src.name}/eden/scm";
 
   # Upstream does not commit Cargo.lock
   cargoDeps = rustPlatform.importCargoLock {

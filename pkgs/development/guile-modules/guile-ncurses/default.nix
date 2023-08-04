@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # Undefined symbols for architecture arm64: "_u32_conv_from_encoding"
+  env.NIX_LDFLAGS = "-lunistring";
+
   # XXX: 1 of 65 tests failed.
   doCheck = false;
 
@@ -50,6 +53,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }

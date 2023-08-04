@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
 
-  sourceRoot = "source/certbot-dns-route53";
+  sourceRoot = "${src.name}/certbot-dns-route53";
 
   meta = certbot.meta // {
     description = "Route53 DNS Authenticator plugin for Certbot";

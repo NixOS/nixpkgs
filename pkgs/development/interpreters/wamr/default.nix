@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  sourceRoot = "source/product-mini/platforms/linux";
+  sourceRoot = "${finalAttrs.src.name}/product-mini/platforms/linux";
 
   meta = with lib; {
     description = "WebAssembly Micro Runtime";

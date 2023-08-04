@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
-  sourceRoot = "source/tooling/cli";
+  sourceRoot = "${src.name}/tooling/cli";
 
   cargoHash = "sha256-ErUzhmPA2M1H4B4SrEt4FRWHcWLA1UzQqVA1gkrmdJQ=";
 
