@@ -83,6 +83,7 @@ in python.pkgs.buildPythonApplication rec {
     homepage = "https://www.getlektor.com/";
     changelog = "https://github.com/lektor/lektor/blob/v${version}/CHANGES.md";
     license = licenses.bsd0;
+    mainProgram = "lektor";
     maintainers = with maintainers; [ ];
   };
 }
