@@ -100,6 +100,24 @@ rec {
     };
   };
 
+  nineish-solarized-light = mkNixBackground {
+    name = "nineish-solarized-light-2021-07-20";
+    description = "Nix background inspired by simpler times, based on the Solarized color palette";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/f99638d8d1a11d97a99ff7e0e1e7df58c28643ff/wallpapers/nix-wallpaper-nineish-solarized-light.png";
+      sha256 = "sha256-gb5s5ePdw7kuIL3SI8VVhOcLcHu0cHMJJ623vg1kz40=";
+    };
+  };
+
+  nineish-solarized-dark = mkNixBackground {
+    name = "nineish-solarized-dark-2021-07-20";
+    description = "Dark Nix background inspired by simpler times, based on the Solarized color palette";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/f99638d8d1a11d97a99ff7e0e1e7df58c28643ff/wallpapers/nix-wallpaper-nineish-solarized-dark.png";
+      sha256 = "sha256-ZBrk9izKvsY4Hzsr7YovocCbkRVgUN9i/y1B5IzOOKo=";
+    };
+  };
+
   simple-blue = mkNixBackground {
     name = "simple-blue-2016-02-19";
     description = "Simple blue background for Nix";
