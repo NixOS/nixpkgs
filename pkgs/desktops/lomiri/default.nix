@@ -22,6 +22,7 @@ let
 
     #### QML / QML-related
     lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
+    lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
     lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
 
     #### Services
