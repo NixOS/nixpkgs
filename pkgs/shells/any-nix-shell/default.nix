@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://github.com/haslersn/any-nix-shell";
     maintainers = with maintainers; [ haslersn ];
+    mainProgram = "any-nix-shell";
   };
 }
