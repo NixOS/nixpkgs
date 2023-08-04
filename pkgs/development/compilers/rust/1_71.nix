@@ -19,8 +19,8 @@
 } @ args:
 
 import ./default.nix {
-  rustcVersion = "1.71.0";
-  rustcSha256 = "sha256-pmfkq9xViOv+o1w4HjGdhA/7+NLb+3l3FzBXNkIDTJY=";
+  rustcVersion = "1.71.1";
+  rustcSha256 = "sha256-b6kNUNHVKadfbMNJeE3lfX7AuiQZsJvefTNcJb1ORy4=";
 
   llvmSharedForBuild = pkgsBuildBuild.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };
   llvmSharedForHost = pkgsBuildHost.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };
