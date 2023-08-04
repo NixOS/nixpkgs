@@ -650,6 +650,13 @@
     githubId = 82811;
     name = "Aldo Borrero";
   };
+  alejandrosame = {
+    email = "alejandrosanchzmedina@gmail.com";
+    matrix = "@alejandrosame:matrix.org";
+    github = "alejandrosame";
+    githubId = 1078000;
+    name = "Alejandro Sánchez Medina";
+  };
   aleksana = {
     email = "me@aleksana.moe";
     github = "Aleksanaa";
