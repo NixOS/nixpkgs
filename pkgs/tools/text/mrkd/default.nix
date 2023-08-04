@@ -46,6 +46,7 @@ in python.pkgs.buildPythonApplication rec {
     description = "Write man pages using Markdown, and convert them to Roff or HTML";
     homepage = "https://github.com/refi64/mrkd";
     license = licenses.bsd2;
+    mainProgram = "mrkd";
     maintainers = with maintainers; [ prusnak ];
   };
 }
