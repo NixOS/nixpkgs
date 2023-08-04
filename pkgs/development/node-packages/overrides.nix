@@ -416,19 +416,6 @@ final: prev: {
     '';
   };
 
-  reveal-md = prev.reveal-md.override (
-    lib.optionalAttrs (!stdenv.isDarwin) {
-      nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-      prePatch = ''
-        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      '';
-      postInstall = ''
-        wrapProgram $out/bin/reveal-md \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-      '';
-    }
-  );
-
   rush = prev."@microsoft/rush".override {
     name = "rush";
   };
