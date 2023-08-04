@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ megheaiulian ];
     platforms = platforms.linux;
+    mainProgram = "brightnessctl";
   };
 
 }
