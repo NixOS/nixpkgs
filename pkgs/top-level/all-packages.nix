@@ -6251,6 +6251,8 @@ with pkgs;
 
   tsduck = callPackage ../tools/video/tsduck { };
 
+  turso-cli = callPackage ../development/tools/turso-cli {};
+
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
