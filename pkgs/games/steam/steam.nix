@@ -49,5 +49,6 @@ in stdenv.mkDerivation {
     homepage = "https://store.steampowered.com/";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ jagajaga jonringer ];
+    mainProgram = "steam";
   };
 }
