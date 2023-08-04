@@ -14,6 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
+
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
