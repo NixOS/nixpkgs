@@ -11,7 +11,6 @@ buildPythonPackage rec {
   };
 
   # the source zip has no prefix, so everything gets unpacked to /build otherwise
-  sourceRoot = "source";
   unpackPhase = ''
     runHook preUnpack
     mkdir source
@@ -20,6 +19,8 @@ buildPythonPackage rec {
     popd
     runHook postUnpack
   '';
+
+  sourceRoot = "source";
 
   pythonImportsCheck = [ "hexdump" ];
 

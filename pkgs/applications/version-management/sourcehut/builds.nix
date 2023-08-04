@@ -30,7 +30,7 @@ let
 
   buildsrht-worker = buildGoModule {
     inherit src version;
-    sourceRoot = "source/worker";
+    sourceRoot = "${src.name}/worker";
     pname = "buildsrht-worker";
     vendorHash = "sha256-y5RFPbtaGmgPpiV2Q3njeWORGZF1TJRjAbY6VgC1hek=";
   };

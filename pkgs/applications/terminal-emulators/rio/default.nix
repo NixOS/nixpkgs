@@ -43,16 +43,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.9";
+  version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-faK0KShbMUuvFbR2m9oCeWSwwrSxyXNWreODtHFyp5U=";
+    hash = "sha256-jyfobmwDCsvhpKcAD0ivxfRENaTVjjauRBMDNPgvjVY=";
   };
 
-  cargoHash = "sha256-54uyqk6fW3pHCK7JC5T7c8C/0Hcq0K/PBn71tNwnA0g=";
+  cargoHash = "sha256-efMw07KH8Nic76MWTyf16Gg/8PyM9gZKSNs5cuIKBJQ=";
 
   nativeBuildInputs = [
     autoPatchelfHook

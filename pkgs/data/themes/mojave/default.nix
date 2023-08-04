@@ -21,8 +21,27 @@
 }:
 
 let
+
   pname = "mojave-gtk-theme";
+  version = "2023-06-13";
+
+  main_src = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = pname;
+    rev = version;
+    hash = "sha256-0jb/VQ6Z0BGaEka57BWM0pBweP08cr4jfPRdEN/BJ1M=";
+  };
+
+  wallpapers_src = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = pname;
+    rev = "0c4ae6ddff7e3fab4959469461c4d4042deb1b2f";
+    hash = "sha256-7LSZSsRt6zTVPLWzuBgwRC1q1MHp5pN/pMl3x2wR8Ow=";
+    name = "wallpapers";
+  };
+
 in
+
 lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] buttonSizeVariants
 lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVariants
 lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
@@ -30,29 +49,11 @@ lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityV
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
 
 stdenvNoCC.mkDerivation rec {
-  inherit pname;
-  version = "2023-06-13";
+  inherit pname version;
 
-  srcs = [
-    (fetchFromGitHub {
-      owner = "vinceliuice";
-      repo = pname;
-      rev = version;
-      hash = "sha256-0jb/VQ6Z0BGaEka57BWM0pBweP08cr4jfPRdEN/BJ1M=";
-    })
-  ]
-  ++
-  lib.optional wallpapers
-    (fetchFromGitHub {
-      owner = "vinceliuice";
-      repo = pname;
-      rev = "0c4ae6ddff7e3fab4959469461c4d4042deb1b2f";
-      hash = "sha256-7LSZSsRt6zTVPLWzuBgwRC1q1MHp5pN/pMl3x2wR8Ow=";
-      name = "wallpapers";
-    })
-  ;
+  srcs = [ main_src ] ++ lib.optional wallpapers wallpapers_src;
 
-  sourceRoot = "source";
+  sourceRoot = main_src.name;
 
   nativeBuildInputs = [
     glib

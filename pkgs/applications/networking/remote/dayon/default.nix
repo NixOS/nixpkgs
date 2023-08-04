@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dayon";
-  version = "11.0.7";
+  version = "12.0.1";
 
   src = fetchFromGitHub {
     owner = "RetGal";
     repo = "dayon";
     rev = "v${version}";
-    hash = "sha256-3TbJVM5po4aUAOsY7JJs/b5tUzH3WGnca/H83IeMQ2s=";
+    hash = "sha256-SCInonMTvBXtiDxWlN8QWNS+8MFB52vloonqfLcAEis=";
   };
 
   # https://github.com/RetGal/Dayon/pull/66

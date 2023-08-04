@@ -23,7 +23,7 @@ buildPythonPackage {
     then "${toString (lib.toInt versionMajor + 1)}.${versionMinor}.${versionPatch}"
     else protobuf.version;
 
-  sourceRoot = "source/python";
+  sourceRoot = "${protobuf.src.name}/python";
 
   patches = lib.optionals (pythonAtLeast "3.11") [
     (fetchpatch {

@@ -12,7 +12,7 @@ let
       hash = "sha256-xhBIJcEtxDdMXSgQtLAV0UWzPtrvKEil0WV76K5ycBc=";
     };
 
-    sourceRoot = "source/frontend";
+    sourceRoot = "${src.name}/frontend";
 
     npmDepsHash = "sha256-acNIMKHc4q7eiFLPBtKZBNweEsrt+//0VR6dqwXHTvA=";
 

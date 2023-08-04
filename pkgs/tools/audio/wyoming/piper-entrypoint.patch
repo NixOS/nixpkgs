@@ -1,8 +1,8 @@
 diff --git a/setup.py b/setup.py
-index 1355313..3b144c1 100644
+index 05e42c1..8347acb 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -35,4 +35,9 @@ setup(
+@@ -41,4 +41,9 @@ setup(
          "Programming Language :: Python :: 3.10",
      ],
      keywords="rhasspy wyoming piper",
@@ -13,18 +13,20 @@ index 1355313..3b144c1 100644
 +    }
  )
 diff --git a/wyoming_piper/__main__.py b/wyoming_piper/__main__.py
-index f60cf13..a0a15f7 100755
+index ab1580b..4c0a143 100755
 --- a/wyoming_piper/__main__.py
 +++ b/wyoming_piper/__main__.py
-@@ -143,5 +143,9 @@ async def main() -> None:
+@@ -143,8 +143,12 @@ def get_description(voice_info: Dict[str, Any]):
  
  # -----------------------------------------------------------------------------
  
--if __name__ == "__main__":
 +def run():
-     asyncio.run(main())
++    asyncio.run(main())
 +
 +
-+if __name__ == "__main__":
-+    run()
-\ No newline at end of file
+ if __name__ == "__main__":
+     try:
+-        asyncio.run(main())
++        run()
+     except KeyboardInterrupt:
+         pass

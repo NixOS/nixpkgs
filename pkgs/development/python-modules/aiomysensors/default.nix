@@ -27,6 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-hLUITEPUoUKGqN3AnacahnKwoKdfGN3mp34df74gsbE=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=src --cov-report=term-missing:skip-covered" "" \
+      --replace 'marshmallow = "^3.17"' 'marshmallow = "*"' \
+      --replace 'awesomeversion = "^22.6"' 'awesomeversion = "*"'
+  '';
   nativeBuildInputs = [
     poetry-core
   ];
@@ -44,12 +50,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=src --cov-report=term-missing:skip-covered" "" \
-      --replace 'marshmallow = "^3.17"' 'marshmallow = "*"'
-  '';
 
   pythonImportsCheck = [
     "aiomysensors"

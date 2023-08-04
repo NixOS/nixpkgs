@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     echo '#define GIT_REVISION "${finalAttrs.version}-NixOS"' > git-rev.h

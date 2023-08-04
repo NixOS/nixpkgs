@@ -865,7 +865,6 @@
   ./services/networking/croc.nix
   ./services/networking/dante.nix
   ./services/networking/dhcpcd.nix
-  ./services/networking/dhcpd.nix
   ./services/networking/dnscache.nix
   ./services/networking/dnscrypt-proxy2.nix
   ./services/networking/dnscrypt-wrapper.nix

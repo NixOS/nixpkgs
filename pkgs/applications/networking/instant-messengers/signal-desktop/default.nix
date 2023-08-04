@@ -1,8 +1,8 @@
 { callPackage }: builtins.mapAttrs (pname: attrs: callPackage ./generic.nix (attrs // { inherit pname; })) {
   signal-desktop = {
     dir = "Signal";
-    version = "6.23.0";
-    hash = "sha256-WZe1fJ6H+h7QcXn+gR7OJ+KSOgd9NxTDLMs7UOFeq70=";
+    version = "6.27.1";
+    hash = "sha256-nEOt6bep6SqhAab8yD9NlRrDGU2IvZeOxSqPj2u1bio=";
   };
   signal-desktop-beta = {
     dir = "Signal Beta";

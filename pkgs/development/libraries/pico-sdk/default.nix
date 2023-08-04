@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   # SDK contains libraries and build-system to develop projects for RP2040 chip
   # We only need to compile pioasm binary
-  sourceRoot = "source/tools/pioasm";
+  sourceRoot = "${src.name}/tools/pioasm";
 
   installPhase = ''
     runHook preInstall
