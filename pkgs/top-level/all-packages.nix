@@ -39317,7 +39317,7 @@ with pkgs;
   fparser = callPackage ../applications/science/electronics/fparser { };
 
   geda = callPackage ../applications/science/electronics/geda {
-    guile = guile_2_0;
+    guile = guile_2_2;
   };
 
   gedit = callPackage ../applications/editors/gedit { };
