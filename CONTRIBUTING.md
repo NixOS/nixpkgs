@@ -83,35 +83,28 @@ This section describes in some detail how changes can be made and proposed with 
    See <!-- TODO branch section link --> for when a different branch should be used instead.
    Make sure to go through the [pull request template](#pull-request-template) in the pre-filled default description.
 
-### Making patches {#submitting-changes-making-patches}
+6. Respond to review comments, potential CI failures and potential merge conflicts by updating the pull request.
+   Always keep the pull request in a mergeable state.
 
-- If you removed pkgs or made some major NixOS changes, write about it in the release notes for the next stable release. For example `nixos/doc/manual/release-notes/rl-2003.xml`.
+   To add new commits, repeat steps 2-3 and push the result using
+   ```
+   git push
+   ```
 
-- Test your changes. If you work with
+   To change existing commits you will have to [rewrite Git history](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
+   Useful Git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`.
+   With a rewritten history you need to force-push the commits using
+   ```
+   git push --force-with-lease
+   ```
 
-  - nixpkgs:
-
-    - update pkg
-      - `nix-env -iA pkg-attribute-name -f <path to your local nixpkgs folder>`
-    - add pkg
-      - Make sure it’s in `pkgs/top-level/all-packages.nix`
-      - `nix-env -iA pkg-attribute-name -f <path to your local nixpkgs folder>`
-    - _If you don’t want to install pkg in you profile_.
-      - `nix-build -A pkg-attribute-name <path to your local nixpkgs folder>` and check results in the folder `result`. It will appear in the same directory where you did `nix-build`.
-    - If you installed your package with `nix-env`, you can run `nix-env -e pkg-name` where `pkg-name` is as reported by `nix-env -q` to uninstall it from your system.
-
-  - NixOS and its modules:
-    - You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
-
-
-- [Rebase](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) your branch against current `master`.
-
-
-### (Creating a pull request)
-
-When pull requests are made, our tooling automation bot,
-[OfBorg](https://github.com/NixOS/ofborg) will perform various checks
-to help ensure expression quality.
+   In case of merge conflicts you will also have to [rebasing the branch](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) on top of current `master`.
+   Sometimes this can be done [on GitHub directly](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch), but if not you will have to rebase locally using
+   ```
+   git fetch upstream
+   git rebase upstream/master
+   git push --force-with-lease
+   ```
 
 #### Rebasing between branches (i.e. from master to staging)
 
@@ -417,6 +410,10 @@ However, many changes are able to be backported, including:
 
 ## Code conventions
 
+### Release notes
+
+If you removed pkgs or made some major NixOS changes, write about it in the release notes for the next stable release. For example `nixos/doc/manual/release-notes/rl-2003.xml`.
+
 ### File naming and organisation {#sec-organisation}
 
 Names of files and directories should be in lowercase, with dashes between words — not in camel case. For instance, it should be `all-packages.nix`, not `allPackages.nix` or `AllPackages.nix`.
@@ -657,8 +654,6 @@ In addition to writing properly formatted commit messages, it's important to inc
 Package version upgrades usually allow for simpler commit messages, including attribute name, old and new version, as well as a reference to the relevant release notes/changelog. Every once in a while a package upgrade requires more extensive changes, and that subsequently warrants a more verbose message.
 
 Pull requests should not be squash merged in order to keep complete commit messages and GPG signatures intact and must not be when the change doesn't make sense as a single commit.
-This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
-Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`. For more details consult the git man pages or online resources like [git-rebase.io](https://git-rebase.io/) or [The Pro Git Book](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
 
 ## Pull Request Template {#submitting-changes-pull-request-template}
 

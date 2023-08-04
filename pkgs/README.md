@@ -544,6 +544,15 @@ This is how the pull request looks like in this case: [https://github.com/NixOS/
 
 ## Testing changes | Package tests {#sec-package-tests}
 
+- update pkg
+  - `nix-env -iA pkg-attribute-name -f <path to your local nixpkgs folder>`
+- add pkg
+  - Make sure it’s in `pkgs/top-level/all-packages.nix`
+  - `nix-env -iA pkg-attribute-name -f <path to your local nixpkgs folder>`
+- _If you don’t want to install pkg in you profile_.
+  - `nix-build -A pkg-attribute-name <path to your local nixpkgs folder>` and check results in the folder `result`. It will appear in the same directory where you did `nix-build`.
+- If you installed your package with `nix-env`, you can run `nix-env -e pkg-name` where `pkg-name` is as reported by `nix-env -q` to uninstall it from your system.
+
 To run the main types of tests locally:
 
 - Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`

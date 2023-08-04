@@ -4,6 +4,10 @@ NixOS is a Linux distribution based on the purely functional package
 management system Nix.  More information can be found at
 https://nixos.org/nixos and in the manual in doc/manual.
 
+## Testing changes
+
+You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
+
 ## (Reviewing contributions)
 
 ### Module updates {#reviewing-contributions-module-updates}
