@@ -11382,7 +11382,9 @@ self: super: with self; {
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
-  scikit-build-core = callPackage ../development/python-modules/scikit-build-core { };
+  scikit-build-core = callPackage ../development/python-modules/scikit-build-core {
+    inherit (pkgs) cmake;
+  };
 
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
