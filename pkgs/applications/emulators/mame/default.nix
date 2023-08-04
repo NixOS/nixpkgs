@@ -196,5 +196,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
+    mainProgram = "mame";
   };
 }
