@@ -182,7 +182,8 @@ stdenv.mkDerivation rec {
   ++ optionals withQt5 [ wrapQtAppsHook ]
   ++ optionals waylandSupport [ wayland wayland-protocols ];
 
-  enableParallelBuilding = true;
+  # libvlc could could fail with "ld: cannot find -lvlc_vdpau"
+  enableParallelBuilding = false;
 
   LIVE555_PREFIX = if stdenv.hostPlatform.isAarch then null else live555;
 
