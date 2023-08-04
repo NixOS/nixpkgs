@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit-feh;
     maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
+    mainProgram = "feh";
   };
 }

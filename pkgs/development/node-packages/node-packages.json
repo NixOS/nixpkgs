@@ -140,7 +140,6 @@
 , "fixjson"
 , "fkill-cli"
 , "fleek-cli"
-, "flood"
 , "forever"
 , "fx"
 , "ganache"
@@ -272,7 +271,6 @@
 , "redoc-cli"
 , "remod-cli"
 , "reveal.js"
-, "reveal-md"
 , "rimraf"
 , "rollup"
 , {"rust-analyzer-build-deps": "../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps"}

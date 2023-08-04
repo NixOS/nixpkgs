@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, fetchpatch, autoreconfHook, which, pkg-config, perl, guile, libxml2 }:
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, autoreconfHook, which, pkg-config, perl, guile_2_2, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "autogen";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     buildPackages.buildPackages.autogen buildPackages.texinfo
   ];
   buildInputs = [
-    guile libxml2
+    guile_2_2 libxml2
   ];
 
   preConfigure = ''

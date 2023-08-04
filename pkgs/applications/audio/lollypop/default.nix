@@ -106,5 +106,6 @@ python3.pkgs.buildPythonApplication rec  {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
+    mainProgram = "lollypop";
   };
 }

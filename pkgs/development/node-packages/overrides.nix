@@ -162,10 +162,6 @@ final: prev: {
     nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
   };
 
-  flood = prev.flood.override {
-    buildInputs = [ final.node-pre-gyp ];
-  };
-
   git-ssb = prev.git-ssb.override (oldAttrs: {
     buildInputs = [ final.node-gyp-build ];
     meta = oldAttrs.meta // { broken = since "10"; };
@@ -419,19 +415,6 @@ final: prev: {
       ]}
     '';
   };
-
-  reveal-md = prev.reveal-md.override (
-    lib.optionalAttrs (!stdenv.isDarwin) {
-      nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-      prePatch = ''
-        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      '';
-      postInstall = ''
-        wrapProgram $out/bin/reveal-md \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-      '';
-    }
-  );
 
   rush = prev."@microsoft/rush".override {
     name = "rush";

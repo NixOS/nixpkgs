@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/str4d/rage/raw/v${version}/rage/CHANGELOG.md";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ marsam ryantm ];
+    mainProgram = "rage";
   };
 }

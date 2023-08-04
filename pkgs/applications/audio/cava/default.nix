@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ offline mirrexagon ];
     platforms = platforms.linux;
+    mainProgram = "cava";
   };
 }
