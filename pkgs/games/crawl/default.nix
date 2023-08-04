@@ -24,7 +24,7 @@
 , buildPackages
 
   # MacOS / Darwin builds
-, darwin ? null
+, darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals tileMode [ freetype libGL libGLU libpng SDL2 SDL2_image  ]
     ++ lib.optional enableSound SDL2_mixer
     ++ (lib.optionals stdenv.isDarwin (
-    assert (lib.assertMsg (darwin != null) "Must have darwin frameworks available for darwin builds");
     with darwin.apple_sdk.frameworks; [
       AppKit
       AudioUnit
