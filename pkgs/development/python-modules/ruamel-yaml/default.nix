@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , ruamel-base
 , ruamel-yaml-clib
 , isPyPy
@@ -9,6 +10,9 @@
 buildPythonPackage rec {
   pname = "ruamel-yaml";
   version = "0.17.32";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "ruamel.yaml";
