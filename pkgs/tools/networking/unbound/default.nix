@@ -145,7 +145,11 @@ stdenv.mkDerivation rec {
     # Build libunbound again, but only against nettle instead of openssl.
     # This avoids gnutls.out -> unbound.lib -> lib.getLib openssl.
     ''
-      configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
+      if [ -n "$__structuredAttrs" ]; then
+        configureFlags=("''${configureFlags[@]}" "--with-nettle=${nettle.dev}" "--with-libunbound-only")
+      else
+        configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
+      fi
       configurePhase
       buildPhase
       if [ -n "$doCheck" ]; then
