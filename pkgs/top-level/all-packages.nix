@@ -37764,11 +37764,15 @@ with pkgs;
 
   principia = callPackage ../games/principia { };
 
-  prismlauncher-qt5-unwrapped = libsForQt5.callPackage ../games/prismlauncher { };
+  prismlauncher-qt5-unwrapped = libsForQt5.callPackage ../games/prismlauncher {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   prismlauncher-qt5 = libsForQt5.callPackage ../games/prismlauncher/wrapper.nix { prismlauncher-unwrapped = prismlauncher-qt5-unwrapped; };
 
-  prismlauncher-unwrapped = qt6Packages.callPackage ../games/prismlauncher { };
+  prismlauncher-unwrapped = qt6Packages.callPackage ../games/prismlauncher {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   prismlauncher = qt6Packages.callPackage ../games/prismlauncher/wrapper.nix { };
 
@@ -41494,9 +41498,9 @@ with pkgs;
 
   zalgo = callPackage ../tools/misc/zalgo { };
 
-  zettlr = callPackage ../applications/misc/zettlr {
+  inherit (callPackage ../applications/misc/zettlr {
     texlive = texlive.combined.scheme-medium;
-  };
+  }) zettlr zettlr-beta;
 
   unpoller = callPackage ../servers/monitoring/unpoller { };
 
