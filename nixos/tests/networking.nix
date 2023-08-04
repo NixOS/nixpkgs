@@ -1051,7 +1051,7 @@ let
       testScript = ''
         machine.succeed("udevadm settle")
         print(machine.succeed("ip link show dev enCustom"))
-        machine.wait_until_succeeds("ip link show dev enCustom | grep -q '52:54:00:12:0b:01")
+        machine.wait_until_succeeds("ip link show dev enCustom | grep -q 52:54:00:12:0b:01")
       '';
     };
   };
