@@ -52,7 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     # make meson use the provided dependencies instead of the git submodules
     "${finalAttrs.src}/nix/patches/meson-build.patch"
     # look into $XDG_DESKTOP_PORTAL_DIR instead of /usr; runtime checks for conflicting portals
-    "${finalAttrs.src}/nix/patches/portals.patch"
+    # NOTE: revert back to the patch inside SRC on the next version bump
+    # "${finalAttrs.src}/nix/patches/portals.patch"
+    ./portals.patch
   ];
 
   postPatch = ''
