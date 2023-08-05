@@ -22,8 +22,6 @@
 , tileMode ? false
 , enableSound ? tileMode
 , buildPackages
-
-  # MacOS / Darwin builds
 , darwin
 }:
 
@@ -54,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Still unstable with luajit
   buildInputs = [ lua5_1 ncurses sqlite zlib ]
     ++ (with python3.pkgs; [ pyyaml ])
-    ++ lib.optionals tileMode [ freetype libGL libGLU libpng SDL2 SDL2_image  ]
+    ++ lib.optionals tileMode [ freetype libGL libGLU libpng SDL2 SDL2_image ]
     ++ lib.optional enableSound SDL2_mixer
     ++ (lib.optionals stdenv.isDarwin (
     with darwin.apple_sdk.frameworks; [
@@ -92,11 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     make install-xdg-data ${builtins.concatStringsSep " " finalAttrs.makeFlags}
-    ${lib.optionalString tileMode ''
-      mv $out/bin/crawl $out/bin/crawl-tiles
-      sed -i 's/bin\/crawl/bin\/crawl-tiles/' \
-        $out/share/applications/org.develz.Crawl_tiles.desktop
-    ''}
+  '' + lib.optionalString tileMode ''
+    mv $out/bin/crawl $out/bin/crawl-tiles
+    sed -i 's/bin\/crawl/bin\/crawl-tiles/' \
+      $out/share/applications/org.develz.Crawl_tiles.desktop
   '';
 
   enableParallelBuilding = true;
