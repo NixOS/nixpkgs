@@ -1962,6 +1962,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  vrrtest = callPackage ../tools/video/vrrtest { };
+
   winbox = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.staging;
   };
