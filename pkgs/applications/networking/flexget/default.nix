@@ -22,8 +22,10 @@ python3.pkgs.buildPythonApplication rec {
     sed 's/[~<>=][^;]*//' -i requirements.txt
   '';
 
-  # ~400 failures
-  doCheck = false;
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
@@ -42,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     psutil
     pynzb
+    pyrsistent
     pyrss2gen
     python-dateutil
     pyyaml
@@ -72,6 +75,9 @@ python3.pkgs.buildPythonApplication rec {
     "flexget"
     "flexget.plugins.clients.transmission"
   ];
+
+  # ~400 failures
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://flexget.com/";
