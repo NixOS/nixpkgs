@@ -19859,16 +19859,9 @@ with pkgs;
 
   schemaspy = callPackage ../development/tools/database/schemaspy { };
 
-  scenebuilder = callPackage ../development/tools/scenebuilder {
-    jre = jre.override { enableJavaFX = true; };
-  };
+  scenebuilder = callPackage ../development/tools/scenebuilder { };
 
-  scenic-view = callPackage ../development/tools/scenic-view {
-    jdk = jdk.override {
-      enableJavaFX = true;
-      openjfx = openjfx.override { withWebKit = true; };
-    };
-  };
+  scenic-view = callPackage ../development/tools/scenic-view { };
 
   shncpd = callPackage ../tools/networking/shncpd { };
 

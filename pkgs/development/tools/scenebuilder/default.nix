@@ -1,22 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, jre, maven, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
-maven.buildMavenPackage rec {
+{ lib, stdenv, fetchFromGitHub, openjdk20, maven, makeDesktopItem, copyDesktopItems, makeWrapper, glib, wrapGAppsHook }:
+
+let
+  jdk = openjdk20.override (lib.optionalAttrs stdenv.isLinux {
+    enableJavaFX = true;
+  });
+  maven' = maven.override {
+    inherit jdk;
+  };
+  selectSystem = attrs:
+    attrs.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
+maven'.buildMavenPackage rec {
   pname = "scenebuilder";
-  version = "19.0.0"; # 20.0.0 already available but needs java20 which is not available in nixpkgs yet
+  version = "20.0.0";
 
   src = fetchFromGitHub {
     owner = "gluonhq";
     repo = pname;
     rev = version;
-    hash = "sha256-No0yMAVmM5T++h74ZZIufaHmJBOzYhI0EtfOEGWGzis=";
+    hash = "sha256-Og+dzkJ6+YH0fD4HJw8gUKGgvQuNw17BxgzZMP/bEA0=";
   };
-
-  inherit jre;
 
   buildDate = "2022-10-07T00:00:00+01:00"; # v20.0.0 release date
   mvnParameters = "-Dmaven.test.skip -Dproject.build.outputTimestamp=${buildDate} -DbuildTimestamp=${buildDate}";
-  mvnHash = "sha256-G4WjQVRawNITSGh/e+fb6fVe80WSd0swT3uPIQOlif4=";
+  mvnHash = selectSystem {
+    x86_64-linux = "sha256-3SFCQ+hyQPtAEx1jSbe/Qtq4dYkfVvU/Kmekzv53o3U=";
+    aarch64-linux = "sha256-AZ1NXzSRyT77W+EjLIb7eWxf7Ztu6XuKjSImRg1lNcw=";
+  };
 
-  nativeBuildInputs = [ copyDesktopItems maven makeWrapper glib wrapGAppsHook ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper glib wrapGAppsHook ];
 
   dontWrapGApps = true; # prevent double wrapping
 
@@ -32,7 +45,7 @@ maven.buildMavenPackage rec {
   '';
 
   postFixup = ''
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${jdk}/bin/java $out/bin/${pname} \
       --add-flags "--add-modules javafx.web,javafx.fxml,javafx.swing,javafx.media" \
       --add-flags "--add-opens=javafx.fxml/javafx.fxml=ALL-UNNAMED" \
       --add-flags "-cp $out/share/java/${pname}.jar" \
