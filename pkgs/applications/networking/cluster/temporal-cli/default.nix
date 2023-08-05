@@ -1,6 +1,13 @@
 { lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin }:
 
 let
+  overrideModAttrs = old: {
+    # https://gitlab.com/cznic/libc/-/merge_requests/10
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
+
   tctl-next = buildGoModule rec {
     pname = "tctl-next";
     version = "0.9.0";
@@ -12,7 +19,9 @@ let
       hash = "sha256-zgi1wNx7fWf/iFGKaVffcXnC90vUz+mBT6HhCGdXMa0=";
     };
 
-    vendorHash = "sha256-muTNwK2Sb2+0df/6DtAzT14gwyuqa13jkG6eQaqhSKg=";
+    vendorHash = "sha256-EX1T3AygarJn4Zae2I8CHQrZakmbNF1OwE4YZFF+nKc=";
+
+    inherit overrideModAttrs;
 
     nativeBuildInputs = [ installShellFiles ];
 
@@ -33,6 +42,8 @@ let
         --bash <($out/bin/temporal completion bash) \
         --zsh <($out/bin/temporal completion zsh)
     '';
+
+    __darwinAllowLocalNetworking = true;
   };
 
   tctl = buildGoModule rec {
@@ -46,7 +57,9 @@ let
       hash = "sha256-LcBKkx3mcDOrGT6yJx98CSgxbwskqGPWqOzHWOu6cig=";
     };
 
-    vendorHash = "sha256-BUYEeC5zli++OxVFgECJGqJkbDwglLppSxgo+4AqOb0=";
+    vendorHash = "sha256-5wCIY95mJ6+FCln4yBu+fM4ZcsxBGcXkCvxjGzt0+dM=";
+
+    inherit overrideModAttrs;
 
     nativeBuildInputs = [ installShellFiles ];
 
@@ -63,6 +76,8 @@ let
         --bash <($out/bin/tctl completion bash) \
         --zsh <($out/bin/tctl completion zsh)
     '';
+
+    __darwinAllowLocalNetworking = true;
   };
 in
 symlinkJoin rec {
@@ -74,6 +89,8 @@ symlinkJoin rec {
     tctl-next
     tctl
   ];
+
+  passthru = { inherit tctl tctl-next; };
 
   meta = with lib; {
     description = "Temporal CLI";
