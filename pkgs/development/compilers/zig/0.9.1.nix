@@ -54,9 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     llvm
   ]);
 
-  preBuild = ''
-    export HOME=$TMPDIR;
-  '';
+  env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
@@ -66,12 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DZIG_TARGET_MCPU=baseline"
   ];
 
-  doCheck = true;
+  doInstallCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-    ./zig test --cache-dir "$TMPDIR" -I $src/test $src/test/behavior.zig
-    runHook postCheck
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/zig test --cache-dir "$TMPDIR/cache-dir" -I $src/test $src/test/behavior.zig
+
+    runHook postInstallCheck
   '';
 
   meta = {
