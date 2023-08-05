@@ -2757,6 +2757,8 @@ self: super: with self; {
 
   django-bootstrap4 = callPackage ../development/python-modules/django-bootstrap4 { };
 
+  django-bootstrap5 = callPackage ../development/python-modules/django-bootstrap5 { };
+
   django-cachalot = callPackage ../development/python-modules/django-cachalot { };
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
