@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pkg-config
 , libgit2
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,12 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libgit2 ];
+
+  buildInputs = [
+    libgit2
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
   cargoHash = "sha256-28sMY47LAdaGmPNmxeu/w1Pn6AV3JlWbxFcit5pLkI0";
 
