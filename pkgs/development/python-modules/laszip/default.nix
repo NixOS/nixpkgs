@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , scikit-build-core
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "laszip-python";
-  version = "0.2.1";
+  version = "0.2.3";
 
   format = "pyproject";
 
@@ -20,8 +21,10 @@ buildPythonPackage rec {
     owner = "tmontaigu";
     repo = pname;
     rev = version;
-    hash = "sha256-ujKoUm2Btu25T7ZrSGqjRc3NR1qqsQU8OwHQDSx8grY=";
+    hash = "sha256-MiPzL9TDCf1xnCv7apwdfcpkFnBRi4PO/atTQxqL8cw=";
   };
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=c++17";
 
   nativeBuildInputs = [
     cmake
