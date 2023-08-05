@@ -4,29 +4,13 @@
 , cacert
 , cached-property
 , cffi
-, fetchFromGitHub
 , fetchPypi
 , isPyPy
-, libgit2
+, libgit2_1_6
 , pycparser
 , pytestCheckHook
 , pythonOlder
 }:
-
-let
-  libgit2' = libgit2.overrideAttrs (_: rec {
-    version = "1.6.4";
-
-    src = fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      hash = "sha256-lW3mokVKsbknVj2xsxEbeZH4IdKZ0aIgGutzenS0Eh0=";
-    };
-
-    patches = [];
-  });
-in
 
 buildPythonPackage rec {
   pname = "pygit2";
@@ -41,11 +25,11 @@ buildPythonPackage rec {
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="${libgit2}/lib"
+    export DYLD_LIBRARY_PATH="${libgit2_1_6}/lib"
   '';
 
   buildInputs = [
-    libgit2'
+    libgit2_1_6
   ];
 
   propagatedBuildInputs = [
