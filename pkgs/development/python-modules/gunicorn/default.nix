@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, packaging
 , pythonOlder
 , eventlet
 , gevent
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     setuptools
+    packaging
   ];
 
   nativeCheckInputs = [
