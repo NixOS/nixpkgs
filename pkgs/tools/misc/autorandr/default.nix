@@ -41,7 +41,10 @@ python3.pkgs.buildPythonApplication rec {
     # see https://github.com/phillipberndt/autorandr/issues/197
     installShellCompletion --cmd autorandr \
         --bash contrib/bash_completion/autorandr \
-        --zsh contrib/zsh_completion/_autorandr
+        --zsh contrib/zsh_completion/_autorandr \
+        --fish contrib/fish_copletion/autorandr.fish
+    # In the line above there's a typo that needs to be fixed in the next
+    # release
 
     make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
 

@@ -1643,6 +1643,10 @@ let
       inherit (pkgs.python3Packages) torch;
     };
 
+    trace = callPackage ../development/ocaml-modules/trace { };
+
+    trace-tef = callPackage ../development/ocaml-modules/trace/tef.nix { };
+
     trie = callPackage ../development/ocaml-modules/trie { };
 
     tsdl = callPackage ../development/ocaml-modules/tsdl {

@@ -31,5 +31,6 @@ buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ equirosa dit7ya ];
     platforms = platforms.linux;
+    mainProgram = "rofi-rbw";
   };
 }
