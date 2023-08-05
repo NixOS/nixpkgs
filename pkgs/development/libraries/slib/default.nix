@@ -1,25 +1,35 @@
-{ fetchurl, lib, stdenv, unzip, scheme, texinfo }:
+{ lib, stdenv, fetchurl, scheme, texinfo, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "slib";
-  version = "3b5";
+  version = "3b7";
 
   src = fetchurl {
     url = "https://groups.csail.mit.edu/mac/ftpdir/scm/${pname}-${version}.zip";
-    sha256 = "0q0p2d53p8qw2592yknzgy2y1p5a9k7ppjx0cfrbvk6242c4mdpq";
+    hash = "sha256-9dXNrTNTlaWlqjfv/iiqgHiyFuo5kR9lGSlnjxrCKLY=";
   };
 
-  patches = [ ./catalog-in-library-vicinity.patch ];
+  patches = [
+    ./catalog-in-library-vicinity.patch
+  ];
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ scheme texinfo ];
+  # slib:require unsupported feature color-database
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace " clrnamdb.scm" ""
+  '';
+
+  nativeBuildInputs = [ scheme texinfo unzip ];
+  buildInputs = [ scheme ];
 
   postInstall = ''
     ln -s mklibcat{.scm,}
     SCHEME_LIBRARY_PATH="$out/lib/slib" make catalogs
 
-    sed -i "$out/bin/slib" \
-        -e "/^SCHEME_LIBRARY_PATH/i export PATH=\"${scheme}/bin:\$PATH\""
+    sed -i \
+      -e '2i export PATH="${scheme}/bin:$PATH"' \
+      -e '3i export GUILE_AUTO_COMPILE=0' \
+      $out/bin/slib
   '';
 
   # There's no test suite (?!).
