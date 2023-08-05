@@ -104,6 +104,8 @@ in gcc11Stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     # autoAddOpenGLRunpathHook does not actually depend on or incur any dependency
     # of cudaPackages. It merely adds an impure, non-Nix PATH to the RPATHs of
@@ -113,18 +115,16 @@ in gcc11Stdenv.mkDerivation rec {
     cmake
     git
     python3
-
-    jsoncpp-static
-    jsoncpp-static.dev
-    libevent-nossl-static
-    libevent-nossl-static.dev
-    plog.dev # header-only
-    tclap_1_4 # header-only
   ];
 
   buildInputs = [
+    plog.dev # header-only
+    tclap_1_4 # header-only
+
     catch2
     fmt_9
+    jsoncpp-static
+    libevent-nossl-static
     yaml-cpp
   ];
 
