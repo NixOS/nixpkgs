@@ -22,19 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = if experimental then "1.18.6" else "1.18.6";
+  version = if experimental then "1.18.8-rc.1" else "1.18.7";
 
   src =
     if experimental
     then
       (fetchurl {
-        url = "https://cdn.vintagestory.at/gamefiles/net7/vs_client_linux-x64_${version}.tar.gz";
-        sha256 = "sha256-h4TyMDFid3eB6oPJix92/tmS0v+Ox6CFSRyn/JRNbxg=";
+        url = "https://cdn.vintagestory.at/gamefiles/unstable/vs_client_linux-x64_${version}.tar.gz";
+        hash = "sha256-FxyAJTiLENTp5QxPKRgsiOhkMXz88CTn3QRvIHtOH+A=";
       })
     else
       (fetchurl {
         url = "https://cdn.vintagestory.at/gamefiles/stable/vs_archive_${version}.tar.gz";
-        sha256 = "sha256-Sa5R/Msg36pKRpZJXXJgM4lcCADJX9x81fMnTD3tjAI=";
+        hash = "sha256-geJoNxBxODXQeTExLdTOaH84asjo2yg2xFm8Pj0IMc0=";
       });
 
 
