@@ -648,24 +648,26 @@ in
             fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a
             lppl13c mit ofl publicDomain x11];
         };
-      in recurseIntoAttrs (
-      mapAttrs
-        (pname: attrs:
+      in recurseIntoAttrs (foldl mergeAttrs { } (map
+      (withDocs: mapAttrs'
+        (pname: attrs: nameValuePair (pname + lib.optionalString withDocs "-with-docs") (
           addMetaAttrs rec {
-            description = "TeX Live environment for ${pname}";
+            description = "TeX Live environment for ${pname}" + lib.optionalString withDocs " (with documentation)";
             platforms = lib.platforms.all;
             maintainers = with lib.maintainers;  [ veprbl ];
             license = licenses.${pname};
           }
-          (combine {
+          (combine ({
             ${pname} = attrs;
-            extraName = "combined" + lib.removePrefix "scheme" pname;
+            extraName = "combined" + lib.removePrefix "scheme" pname + lib.optionalString withDocs "-with-docs";
             extraVersion = with version; if final then "-final" else ".${year}${month}${day}";
-          })
-        )
+          } // lib.optionalAttrs withDocs {
+            pkgFilter = pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.tlType == "doc" || pkg.pname == "core";
+          }))
+        ))
         { inherit (tl)
             scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
             scheme-medium scheme-minimal scheme-small scheme-tetex;
         }
-    );
+    ) [ false true ]));
   }
