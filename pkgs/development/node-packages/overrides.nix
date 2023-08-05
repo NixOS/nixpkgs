@@ -83,16 +83,6 @@ final: prev: {
     meta = oldAttrs.meta // { platforms = lib.platforms.linux; };
   });
 
-  balanceofsatoshis = prev.balanceofsatoshis.override {
-    nativeBuildInputs = [ pkgs.installShellFiles ];
-    postInstall = ''
-      installShellCompletion --cmd bos\
-        --bash <($out/bin/bos completion bash)\
-        --zsh <($out/bin/bos completion zsh)\
-        --fish <($out/bin/bos completion fish)
-    '';
-  };
-
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -121,15 +111,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
     meta = oldAttrs.meta // { broken = since "12"; };
   });
-
-  castnow = prev.castnow.override {
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-
-    postInstall = ''
-      wrapProgram "$out/bin/castnow" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.ffmpeg ]}
-    '';
-  };
 
   eask = prev."@emacs-eask/cli".override {
     name = "eask";

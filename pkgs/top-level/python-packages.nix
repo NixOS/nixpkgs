@@ -5813,8 +5813,6 @@ self: super: with self; {
     igraph-c = pkgs.igraph;
   };
 
-  lektor = callPackage ../development/python-modules/lektor { };
-
   leveldb = callPackage ../development/python-modules/leveldb { };
 
   levenshtein = callPackage ../development/python-modules/levenshtein { };
@@ -6711,8 +6709,6 @@ self: super: with self; {
   mpyq = callPackage ../development/python-modules/mpyq { };
 
   mrjob = callPackage ../development/python-modules/mrjob { };
-
-  mrkd = callPackage ../development/python-modules/mrkd { };
 
   ms-active-directory = callPackage ../development/python-modules/ms-active-directory { };
 
