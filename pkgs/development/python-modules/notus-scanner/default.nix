@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , paho-mqtt
 , poetry-core
 , psutil
@@ -25,6 +26,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-h+jZWjDvTfW9XjoGhWYX08hgJ/Qp64MEaqHHwnahnC4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "update-packaging-dependency.patch";
+      url = "https://github.com/greenbone/notus-scanner/commit/bfa7d3d2e63e250ff25a66c60b782eb9da0e89e7.patch";
+      hash = "sha256-hzS8TYBXDEq+cgWlp6fSOtSbyeX9EX2rURmnFMF5jN0=";
+    })
+  ];
 
   pythonRelaxDeps = [
     "python-gnupg"
