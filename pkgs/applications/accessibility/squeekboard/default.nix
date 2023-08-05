@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, cargo
 , meson
 , ninja
 , pkg-config
@@ -14,6 +15,7 @@
 , libxml2
 , libxkbcommon
 , rustPlatform
+, rustc
 , feedbackd
 , wrapGAppsHook
 , fetchpatch
@@ -54,11 +56,10 @@ stdenv.mkDerivation rec {
     glib
     wayland
     wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     gtk3

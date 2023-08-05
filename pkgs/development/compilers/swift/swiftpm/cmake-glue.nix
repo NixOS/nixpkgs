@@ -57,9 +57,6 @@ in lib.mapAttrs mkInstallScript {
   '';
 
   Yams = ''
-    add_library(CYaml SHARED IMPORTED)
-    set_property(TARGET CYaml PROPERTY IMPORTED_LOCATION "@out@/lib/libCYaml@sharedLibExt@")
-
     add_library(Yams SHARED IMPORTED)
     set_property(TARGET Yams PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libYams@sharedLibExt@")
   '';

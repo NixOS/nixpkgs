@@ -2,11 +2,11 @@
 
 let
   pname = "youtube-music";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "https://github.com/th-ch/youtube-music/releases/download/v${version}/YouTube-Music-${version}.AppImage";
-    sha256 = "sha256-o/a+6EKPEcE9waXQK3hxtp7FPqokteoUAt0iOJk8bYw=";
+    hash = "sha256-eTPWLD9KUs2ZsLbYRkknnx5uDyrNSbFHPyv6gU+wL/c=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -34,5 +34,6 @@ appimageTools.wrapType2 rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     maintainers = [ maintainers.aacebedo ];
+    mainProgram = "youtube-music";
   };
 }

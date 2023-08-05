@@ -103,6 +103,7 @@ in mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
 

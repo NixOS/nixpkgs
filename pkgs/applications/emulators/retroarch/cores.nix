@@ -42,7 +42,7 @@
 }:
 
 let
-  hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
+  hashesFile = lib.importJSON ./hashes.json;
 
   getCoreSrc = core:
     fetchFromGitHub (builtins.getAttr core hashesFile);
@@ -360,6 +360,17 @@ in
     };
   };
 
+  dosbox-pure = mkLibretroCore {
+    core = "dosbox-pure";
+    CXXFLAGS = "-std=gnu++11";
+    hardeningDisable = [ "format" ];
+    makefile = "Makefile";
+    meta = {
+      description = "Port of DOSBox to libretro aiming for simplicity and ease of use.";
+      license = lib.licenses.gpl2Only;
+    };
+  };
+
   eightyone = mkLibretroCore {
     core = "81";
     src = getCoreSrc "eightyone";
@@ -422,6 +433,14 @@ in
     makefile = "Makefile";
     meta = {
       description = "FreeIntv libretro port";
+      license = lib.licenses.gpl3Only;
+    };
+  };
+
+  fuse = mkLibretroCore {
+    core = "fuse";
+    meta = {
+      description = "A port of the Fuse Unix Spectrum Emulator to libretro";
       license = lib.licenses.gpl3Only;
     };
   };
@@ -714,6 +733,10 @@ in
       # remove ccache
       substituteInPlace CMakeLists.txt --replace "ccache" ""
     '';
+
+    # causes redefinition of _FORTIFY_SOURCE
+    hardeningDisable = [ "fortify3" ];
+
     postBuild = "cd /build/source/build/pcsx2";
     meta = {
       description = "Port of PCSX2 to libretro";
@@ -967,6 +990,14 @@ in
     meta = {
       description = "Port of TIC-80 to libretro";
       license = lib.licenses.mit;
+    };
+  };
+
+  twenty-fortyeight = mkLibretroCore {
+    core = "2048";
+    meta = {
+      description = "Port of 2048 puzzle game to the libretro API";
+      license = lib.licenses.unlicense;
     };
   };
 

@@ -22,7 +22,7 @@ in mkYarnPackage rec {
     owner = "matrix-org";
     repo = "matrix-appservice-discord";
     rev = "v${version}";
-    sha256 = pin.srcSha256;
+    hash = pin.srcHash;
   };
 
   packageJSON = ./package.json;

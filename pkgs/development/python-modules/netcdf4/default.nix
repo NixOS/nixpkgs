@@ -50,7 +50,7 @@ buildPythonPackage rec {
   CURL_DIR = curl.dev;
   JPEG_DIR = libjpeg.dev;
 
-  pythonImportsCheckHook = [ "netcdf4" ];
+  pythonImportsCheck = [ "netCDF4" ];
 
   meta = with lib; {
     description = "Interface to netCDF library (versions 3 and 4)";

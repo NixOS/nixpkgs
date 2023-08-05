@@ -1,0 +1,54 @@
+From 47952eb3dfeea945a070496ef6f77e8446d42f86 Mon Sep 17 00:00:00 2001
+From: rewine <lhongxu@outlook.com>
+Date: Tue, 21 Mar 2023 10:36:20 +0800
+Subject: [PATCH] chore: dont set PATH env
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Log: dbus 环境缺失环境变量应该由 dbus-update-activation-environment 处理 ,不应该由 dde-api 设置 PATH
+---
+ device/main.go        | 2 --
+ locale-helper/main.go | 2 --
+ 2 files changed, 4 deletions(-)
+
+diff --git a/device/main.go b/device/main.go
+index 6c5404c..261f109 100644
+--- a/device/main.go
++++ b/device/main.go
+@@ -5,7 +5,6 @@
+ package main
+ 
+ import (
+-	"os"
+ 	"time"
+ 
+ 	"github.com/linuxdeepin/go-lib/dbusutil"
+@@ -15,7 +14,6 @@ import (
+ var logger = log.NewLogger(dbusServiceName)
+ 
+ func main() {
+-	os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+ 	service, err := dbusutil.NewSystemService()
+ 	if err != nil {
+ 		logger.Fatal("failed to new system service:", err)
+diff --git a/locale-helper/main.go b/locale-helper/main.go
+index 92e1ddb..5e3a2ff 100644
+--- a/locale-helper/main.go
++++ b/locale-helper/main.go
+@@ -5,7 +5,6 @@
+ package main
+ 
+ import (
+-	"os"
+ 	"os/exec"
+ 	"sync"
+ 	"time"
+@@ -45,7 +44,6 @@ var (
+ )
+ 
+ func main() {
+-	os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+ 	logger.BeginTracing()
+ 	defer logger.EndTracing()
+ 

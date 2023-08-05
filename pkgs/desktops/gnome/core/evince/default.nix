@@ -7,6 +7,7 @@
 , gettext
 , libxml2
 , appstream
+, desktop-file-utils
 , glib
 , gtk3
 , pango
@@ -42,17 +43,18 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "43.1";
+  version = "44.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "bXXKYrc7+7YA9xigmBA9xrgT+QULlZS+kp4ptFidIzU=";
+    sha256 = "O4uhWBpHpun1f2tqoI8PtnVJxgEhqiTjEUDpOUe4NiI=";
   };
 
   nativeBuildInputs = [
     appstream
+    desktop-file-utils
     gettext
     gobject-introspection
     gi-docgen
@@ -135,7 +137,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 }

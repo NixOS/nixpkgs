@@ -1,5 +1,5 @@
 { stdenv, bazel_5, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
-, addOpenGLRunpath, fetchpatch, patchelfUnstable
+, addOpenGLRunpath, fetchpatch
 # Python deps
 , buildPythonPackage, pythonOlder, python
 # Python libraries
@@ -17,7 +17,8 @@
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
-, cudaSupport ? false
+, config
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
 , mklSupport ? false, mkl
@@ -98,7 +99,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.11.0";
+  version = "2.11.1";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
 
@@ -207,7 +208,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "refs/tags/v${version}";
-      hash = "sha256-OYh61/83yv+ycivylfdS8yFUIUAk8euAPvmfjPzldGs=";
+      hash = "sha256-q59cUW6613byHk4LGl+sefO5czLSWxOrSyLbJ1pkNEY=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -394,11 +395,11 @@ let
     fetchAttrs = {
       sha256 = {
       x86_64-linux = if cudaSupport
-        then "sha256-/wB9EpaDPg3TrD9qggdA4vPgzvmaKc6dDnLjoYTJC5o="
-        else "sha256-QgOaUaq0V5HG9BOv9nEw8OTSlzINNFvbnyP8Vx+r9Xw=";
-      aarch64-linux = "sha256-zjnRtTG1j9cZTbP0Xnk2o/zWTNsP8T0n4Ai8IiAT3PE=";
-      x86_64-darwin = "sha256-RBLox9rzBKcZMm4NwnT7vQ/EjapWQJkqxuQ0LIdaM1E=";
-      aarch64-darwin = "sha256-tTk2KPFK4+0wA22xzb2C6qODgAbSxVbue0xk9JOjU04=";
+        then "sha256-lURiR0Ra4kynDXyfuONG+A7CpxnAsfKzIdFTExKzp1o="
+        else "sha256-lDvRgj+UlaneRGZOO9UVCb6uyxcbRJfUhABf/sgKPi0=";
+      aarch64-linux = "sha256-z2d45fqHz5HW+qkv3fR9hMg3sEwUzJfxF54vng85bHk=";
+      x86_64-darwin = "sha256-AAvuz8o6ZRkaSYMgaep74lDDQcxOupDCX4vRaK/jnCU=";
+      aarch64-darwin = "sha256-kexRSvfQqb92ZRuUqAO070RnUUBidAqghiA7Y8do9vc=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
@@ -447,28 +448,7 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
-      broken = !(xlaSupport -> cudaSupport);
-      knownVulnerabilities = [
-        "CVE-2023-27579"
-        "CVE-2023-25801"
-        "CVE-2023-25676"
-        "CVE-2023-25675"
-        "CVE-2023-25674"
-        "CVE-2023-25673"
-        "CVE-2023-25671"
-        "CVE-2023-25670"
-        "CVE-2023-25669"
-        "CVE-2023-25668"
-        "CVE-2023-25667"
-        "CVE-2023-25665"
-        "CVE-2023-25666"
-        "CVE-2023-25664"
-        "CVE-2023-25663"
-        "CVE-2023-25662"
-        "CVE-2023-25660"
-        "CVE-2023-25659"
-        "CVE-2023-25658"
-      ];
+      broken = !(xlaSupport -> cudaSupport) || python.pythonVersion == "3.11";
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s
@@ -530,8 +510,7 @@ in buildPythonPackage {
     tensorboard
   ];
 
-  # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
-  nativeBuildInputs = lib.optionals cudaSupport [ addOpenGLRunpath patchelfUnstable ];
+  nativeBuildInputs = lib.optionals cudaSupport [ addOpenGLRunpath ];
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do

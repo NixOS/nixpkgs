@@ -6,6 +6,9 @@
 # - Make a separate section for each GNOME version. Collisions will come back eventually
 #   as the extensions are updated.
 {
+
+  # ####### GNOME 44 #######
+
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
 
@@ -18,6 +21,24 @@
   "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
   "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
 
+  "vbox-applet@gs.eros2.info" = "virtualbox-applet";
+  "vbox-applet@buba98" = "virtualbox-applet-2";
+
+  "panel-date-format@keiii.github.com" = "panel-date-format";
+  "panel-date-format@atareao.es" = "panel-date-format-2";
+
+  "batime@martin.zurowietz.de" = "battery-time";
+  "batterytime@typeof.pw" = "battery-time-2";
+
+  # ############################################################################
+  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
+  # Make sure to move them up once they are updated
+
+  # ####### GNOME 43 #######
+
+  "lockkeys@vaina.lt" = "lock-keys";
+  "lockkeys@fawtytoo" = "lock-keys-2";
+
   # DEPRECATED: Use "Caffeine" instead
   "KeepAwake@jepfa.de" = "keep-awake";
   "awake@vixalien.com" = null;
@@ -25,36 +46,26 @@
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
-  "vbox-applet@gs.eros2.info" = "virtualbox-applet";
-  "vbox-applet@buba98" = "virtualbox-applet-2";
-
-  "batime@martin.zurowietz.de" = "battery-time";
-  "batterytime@typeof.pw" = "battery-time-2";
+  "volume_scroller@trflynn89.pm.me" = "volume-scroller";
+  "volume_scroller@francislavoie.github.io" = "volume-scroller-2";
 
   # no source repository can be found for this extension
   "floating-panel@aylur" = "floating-panel";
   "floating-panel-usedbymyself@wpism" = null;
 
-  # ############################################################################
-  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
-  # Make sure to move them up once they are updated
-
   # ####### GNOME 42 #######
-
-  "lockkeys@vaina.lt" = "lock-keys";
-  "lockkeys@fawtytoo" = "lock-keys-2";
-
-  "panel-date-format@keiii.github.com" = "panel-date-format";
-  "panel-date-format@atareao.es" = "panel-date-format-2";
-
-  "volume_scroller@trflynn89.pm.me" = "volume-scroller";
-  "volume_scroller@noskoski" = "volume-scroller-2";
 
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";
 
   "auto-activities@acedron.github.io" = "auto-activities-2";
   "auto-activities@CleoMenezesJr.github.io" = "auto-activities";
+
+  "true-color-invert@jackkenney" = "true-color-invert";
+  "true-color-window-invert@lynet101" = "true-color-window-invert";
+
+  "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
+  "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
 
   # ####### GNOME 41 #######
 
@@ -81,9 +92,6 @@
 
   "Hide_Activities@shay.shayel.org" = "hide-activities-button";
   "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-2";
-
-  "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
-  "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
 
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug

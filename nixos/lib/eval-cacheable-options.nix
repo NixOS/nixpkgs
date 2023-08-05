@@ -33,6 +33,7 @@ let
     ];
     specialArgs = {
       inherit config pkgs utils;
+      class = "nixos";
     };
   };
   docs = import "${nixosPath}/doc/manual" {

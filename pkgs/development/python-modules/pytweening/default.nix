@@ -4,11 +4,11 @@
 }:
 buildPythonPackage rec {
   pname = "pytweening";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hTMoLPcLMd6KBJnhz0IJMLABPHhxGIcrLsiZOCeS4uY=";
+    hash = "sha256-dnE08b9Xt2wc6faS3Rz8d22aJ53mck6NBIVFCP1+3ts=";
   };
 
   pythonImportsCheck = [ "pytweening" ];

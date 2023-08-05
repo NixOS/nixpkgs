@@ -1,6 +1,4 @@
 { stdenv
-, fetchzip
-, fetchurl
 , fetchFromGitHub
 , lib
 , gradle_7
@@ -9,23 +7,21 @@
 , openjdk17
 , unzip
 , makeDesktopItem
-, autoPatchelfHook
 , icoutils
 , xcbuild
-, protobuf3_17
-, libredirect
+, protobuf
 }:
 
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.2.3";
+  version = "10.3.2";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    sha256 = "sha256-YhjKRlFlF89H05NsTS69SB108rNiiWijvZZY9fR+Ebc=";
+    hash = "sha256-CVnEHtSF3DVTH+8qwUsABJq/lRkg6xulEWU+Q5C9ajo=";
   };
 
   gradle = gradle_7;
@@ -45,7 +41,14 @@ let
     cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
 protobuf {
   protoc {
-    path = '${protobuf3_17}/bin/protoc'
+    path = '${protobuf}/bin/protoc'
+  }
+}
+HERE
+    cat >>Ghidra/Debug/Debugger-isf/build.gradle <<HERE
+protobuf {
+  protoc {
+    path = '${protobuf}/bin/protoc'
   }
 }
 HERE
@@ -106,10 +109,10 @@ HERE
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-Z4RS3IzDP8V3SrrwOuX/hTlX7fs3woIhR8GPK/tFAzs=";
+    outputHash = "sha256-HveS3f8XHpJqefc4djYmnYfd01H2OBFK5PLNOsHAqlc=";
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [
@@ -164,13 +167,14 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     homepage = "https://ghidra-sre.org/";
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode  # deps
     ];
     license = licenses.asl20;
     maintainers = with maintainers; [ roblabla ];
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 
 }

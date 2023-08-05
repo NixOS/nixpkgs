@@ -1,17 +1,12 @@
 { bash
 , brotli
 , buildGoModule
-, common-updater-scripts
-, coreutils
-, curl
-, fetchurl
 , forgejo
 , git
 , gzip
-, jq
 , lib
 , makeWrapper
-, nix
+, nix-update-script
 , nixosTests
 , openssh
 , pam
@@ -20,19 +15,41 @@
 , xorg
 , runCommand
 , stdenv
-, writeShellApplication
+, fetchFromGitea
+, buildNpmPackage
 }:
 
+let
+  frontend = buildNpmPackage {
+    pname = "forgejo-frontend";
+    inherit (forgejo) src version;
+
+    npmDepsHash = "sha256-YZzVw+WWqTmJafqnZ5vrzb7P6V4DTMNQwW1/+wvZEM8=";
+
+    patches = [
+      ./package-json-npm-build-frontend.patch
+    ];
+
+    # override npmInstallHook
+    installPhase = ''
+      mkdir $out
+      cp -R ./public $out/
+    '';
+  };
+in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.19.0-3";
+  version = "1.20.2-0";
 
-  src = fetchurl {
-    url = "https://codeberg.org/forgejo/forgejo/releases/download/v${version}/forgejo-src-${version}.tar.gz";
-    hash = "sha256-u27DDw3JUtVJ2nvkKfaGzpYP8bpRnwc1LUVra8Epkjc=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "forgejo";
+    repo = "forgejo";
+    rev = "v${version}";
+    hash = "sha256-8mFI5Zt2J6EQZqu/qcirFp8WMz+IlrkvHeA+oUb0X5U=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-ZoFs2T3NNixrbTDdp7fqTgjJ+G8DpkxHW8K6BM8tZ9w=";
 
   subPackages = [ "." ];
 
@@ -59,16 +76,29 @@ buildGoModule rec {
     "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
   ];
 
+  preBuild = ''
+    go run build/merge-forgejo-locales.go
+  '';
+
   postInstall = ''
     mkdir $data
-    cp -R ./{public,templates,options} $data
+    cp -R ./{templates,options} ${frontend}/public $data
     mkdir -p $out
     cp -R ./options/locale $out/locale
     wrapProgram $out/bin/gitea \
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
+  # $data is not available in goModules.drv and preBuild isn't needed
+  overrideModAttrs = (_: {
+    postPatch = null;
+    preBuild = null;
+  });
+
   passthru = {
+    # allow nix-update to handle npmDepsHash
+    inherit (frontend) npmDeps;
+
     data-compressed = runCommand "forgejo-data-compressed" {
       nativeBuildInputs = [ brotli xorg.lndir ];
     } ''
@@ -82,52 +112,15 @@ buildGoModule rec {
     '';
 
     tests = nixosTests.forgejo;
-
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-forgejo";
-      runtimeInputs = [
-        common-updater-scripts
-        coreutils
-        curl
-        jq
-        nix
-      ];
-      text = ''
-        releases=$(curl "https://codeberg.org/api/v1/repos/forgejo/forgejo/releases?draft=false&pre-release=false&limit=1" \
-          --silent \
-          --header "accept: application/json")
-
-        stable=$(jq '.[0]
-          | .tag_name[1:] as $version
-          | ("forgejo-src-\($version).tar.gz") as $filename
-          | { $version, html_url } + (.assets | map(select(.name | startswith($filename)) | {(.name | split(".") | last): .browser_download_url}) | add)' \
-          <<< "$releases")
-
-        checksum_url=$(jq -r .sha256 <<< "$stable")
-        release_url=$(jq -r .html_url <<< "$stable")
-        version=$(jq -r .version <<< "$stable")
-
-        if [[ "${version}" = "$version" ]]; then
-          echo "No new version found (already at $version)"
-          exit 0
-        fi
-
-        echo "Release: $release_url"
-
-        sha256=$(curl "$checksum_url" --silent | cut --delimiter " " --fields 1)
-        sri_hash=$(nix hash to-sri --type sha256 "$sha256")
-
-        update-source-version "${pname}" "$version" "$sri_hash"
-      '';
-    });
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "A self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
-    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ indeednotjames urandom ];
+    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

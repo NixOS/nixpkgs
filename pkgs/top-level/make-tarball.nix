@@ -19,7 +19,7 @@ pkgs.releaseTools.sourceTarball {
   versionSuffix = "pre${
     if nixpkgs ? lastModified
     then builtins.substring 0 8 (nixpkgs.lastModifiedDate or nixpkgs.lastModified)
-    else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
+    else toString (nixpkgs.revCount or 0)}.${nixpkgs.shortRev or "dirty"}";
 
   buildInputs = with pkgs; [ nix.out jq lib-tests brotli ];
 
@@ -31,6 +31,8 @@ pkgs.releaseTools.sourceTarball {
     echo "release name is $releaseName"
     echo "git-revision is $(cat .git-revision)"
   '';
+
+  requiredSystemFeatures = [ "big-parallel" ]; # 1 thread but ~36G RAM (!) see #227945
 
   nixpkgs-basic-release-checks = import ./nixpkgs-basic-release-checks.nix
    { inherit nix pkgs nixpkgs supportedSystems; };

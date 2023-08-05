@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , nix-update-script
 , meson
-, python3
 , ninja
 , pkg-config
 , vala
@@ -21,20 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.4.1";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-k8IQumV8rjV3U4ACm5FxCqzSdwqKBaGAqsv45hsP/7c=";
+    sha256 = "sha256-2eQ89FpEMF85UmqVu9FJUvSlaVGmsrRBnhAW7oUiUqg=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
   ];
 
@@ -50,11 +48,6 @@ stdenv.mkDerivation rec {
     switchboard
     zeitgeist
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

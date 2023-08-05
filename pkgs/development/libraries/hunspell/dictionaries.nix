@@ -914,4 +914,14 @@ rec {
     # the README doesn't specify versions of licenses :/
     license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
   };
+
+  # Portugese
+  pt_BR = pt-br;
+  pt-br = mkDictFromLibreOffice {
+    shortName = "pt-br";
+    dictFileName = "pt_BR";
+    shortDescription = "Brazillian Portugese (Brazil)";
+    readmeFile = "README_pt_BR.txt";
+    license = with lib.licenses; [ lgpl3 ];
+  };
 }

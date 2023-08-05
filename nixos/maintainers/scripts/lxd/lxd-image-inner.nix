@@ -4,8 +4,6 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
   imports =
     [ # Include the default lxd configuration.

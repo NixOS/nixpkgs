@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pkgconf";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchurl {
     url = "https://distfiles.dereferenced.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-2szxu+WjDRSbVWx9L//+r9dte1FOJJJxq91QFTPB2K4=";
+    hash = "sha256-GsFlbeuydJdWMDb3v/woFJD4P5uEV8DWC8+2OPtrYXE=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "doc" ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # reason, but in this case the dev output is for the `libpkgconf` library,
   # while the aclocal stuff is for the tool. The tool is already for use during
   # development, so there is no reason to have separate "dev-bin" and "dev-lib"
-  # outputs or someting.
+  # outputs or something.
   + ''
     mv ${placeholder "dev"}/share ${placeholder "out"}
   '';

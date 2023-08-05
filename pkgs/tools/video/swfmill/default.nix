@@ -4,15 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "swfmill";
-  version = "0.3.3";
+  version = "0.3.6";
 
   src = fetchurl {
     url = "http://swfmill.org/releases/swfmill-${version}.tar.gz";
-    sha256 = "15mcpql448vvgsbxs7wd0vdk1ln6rdcpnif6i2zjm5l4xng55s7r";
+    sha256 = "sha256-2yT2OWOVf67AK7FLi2HNr3CWd0+M/eudNXPi4ZIxVI4=";
   };
-
-  # Fixes build with GCC 6
-  env.NIX_CFLAGS_COMPILE = "-std=c++03";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxslt freetype libpng libxml2 ];

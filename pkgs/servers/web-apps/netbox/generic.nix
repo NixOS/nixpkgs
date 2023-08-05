@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3
 , version
 , hash
@@ -13,6 +14,23 @@
     py = python3 // {
       pkgs = python3.pkgs.overrideScope (self: super: {
         django = super.django_4;
+        drf-nested-routers = super.drf-nested-routers.overridePythonAttrs (_oldAttrs: {
+          patches = [
+            # all for django 4 compat
+            (fetchpatch {
+              url = "https://github.com/alanjds/drf-nested-routers/commit/59764cc356f7f593422b26845a9dfac0ad196120.diff";
+              hash = "sha256-mq3vLHzQlGl2EReJ5mVVQMMcYgGIVt/T+qi1STtQ0aI=";
+            })
+            (fetchpatch {
+              url = "https://github.com/alanjds/drf-nested-routers/commit/723a5729dd2ffcb66fe315f229789ca454986fa4.diff";
+              hash = "sha256-UCbBjwlidqsJ9vEEWlGzfqqMOr0xuB2TAaUxHsLzFfU=";
+            })
+            (fetchpatch {
+              url = "https://github.com/alanjds/drf-nested-routers/commit/38e49eb73759bc7dcaaa9166169590f5315e1278.diff";
+              hash = "sha256-IW4BLhHHhXDUZqHaXg46qWoQ89pMXv0ZxKjOCTnDcI0=";
+            })
+          ];
+        });
       });
     };
 
@@ -35,6 +53,7 @@
 
       propagatedBuildInputs = with py.pkgs; [
         bleach
+        boto3
         django_4
         django-cors-headers
         django-debug-toolbar
@@ -49,8 +68,12 @@
         django-taggit
         django-timezone-field
         djangorestframework
+        drf-spectacular
+        drf-spectacular-sidecar
         drf-yasg
+        dulwich
         swagger-spec-validator # from drf-yasg[validation]
+        feedparser
         graphene-django
         jinja2
         markdown

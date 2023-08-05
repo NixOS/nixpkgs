@@ -101,7 +101,7 @@ let
     };
 
   trivialBuilders = self: super:
-    import ../build-support/trivial-builders.nix {
+    import ../build-support/trivial-builders {
       inherit lib;
       inherit (self) runtimeShell stdenv stdenvNoCC haskell;
       inherit (self.pkgsBuildHost) shellcheck;
@@ -259,10 +259,12 @@ let
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
-    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
         isStatic = true;
-        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
+        parsed =
+          if stdenv.isLinux
+          then makeMuslParsedPlatform stdenv.hostPlatform.parsed
+          else stdenv.hostPlatform.parsed;
       } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
         gcc.abi = "elfv2";
       };

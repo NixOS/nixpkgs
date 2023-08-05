@@ -1,7 +1,7 @@
 { lib, stdenv
 , targetPackages
 
-, crossStageStatic, libcCross
+, withoutTargetLibc, libcCross
 , threadsCross
 , version
 
@@ -44,6 +44,9 @@ let
   inherit (stdenv)
     buildPlatform hostPlatform targetPlatform;
 
+  # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
+  disableBootstrap' = disableBootstrap && !langFortran && !langGo;
+
   crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
@@ -56,14 +59,14 @@ let
       "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
       "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
-    ++ (if crossStageStatic then [
+    ++ (if withoutTargetLibc then [
       "--disable-libssp"
       "--disable-nls"
       "--without-headers"
       "--disable-threads"
       "--disable-libgomp"
       "--disable-libquadmath"
-      "--disable-shared"
+      (lib.enableFeature enableShared "shared")
       "--disable-libatomic" # requires libc
       "--disable-decimal-float" # requires libc
       "--disable-libmpx" # requires libc
@@ -109,7 +112,7 @@ let
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
     ]
-    ++ lib.optionals (!crossStageStatic) [
+    ++ lib.optionals (!withoutTargetLibc) [
       (if libcCross == null
        then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
        else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
@@ -214,10 +217,9 @@ let
     ++ lib.optional javaAwtGtk "--enable-java-awt=gtk"
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
-    # TODO: aarch64-darwin has clang stdenv and its arch and cpu flag values are incompatible with gcc
-    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
+    ++ import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; }
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
-    ++ lib.optional disableBootstrap "--disable-bootstrap"
+    ++ lib.optional disableBootstrap' "--disable-bootstrap"
 
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"

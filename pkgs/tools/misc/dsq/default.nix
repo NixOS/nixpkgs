@@ -1,10 +1,7 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildGoModule
-, runCommand
 , nix-update-script
-, fetchurl
 , testers
 , python3
 , curl

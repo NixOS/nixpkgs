@@ -2,7 +2,7 @@
 , glib
 , gobject-introspection
 , python3
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , lib
 }:
 
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication {
   strictDeps = false;
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
     gobject-introspection
   ];
 

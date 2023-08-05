@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , check
 , flex
@@ -12,31 +11,19 @@
 , libffi
 , llvm
 , zlib
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.9.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "nickg";
-    repo = pname;
+    repo = "nvc";
     rev = "r${version}";
-    hash = "sha256-hsoEAFSXI2bvzZV33jdg1849fipPQlUu3MZVvht54fI=";
+    hash = "sha256-7Kw9irZltNE8VRnIvVX786/u0QQtmRhV8pzpba0h1JY=";
   };
-
-  patches = [
-    # TODO: remove me on next release
-    (fetchpatch {
-      url = "https://github.com/nickg/nvc/commit/c857e16c33851f8a5386b97bc0dada2836b5db83.patch";
-      hash = "sha256-rvZHI1iQXT9zLpCugg5mGmMZBRbTe9PSHtDG7FVZ67Q=";
-    })
-  ];
-
-  # TODO: recheck me on next release
-  postPatch = lib.optionalString stdenv.isLinux ''
-    sed -i "/vhpi4/d" test/regress/testlist.txt
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -50,6 +37,7 @@ stdenv.mkDerivation rec {
     libffi
     llvm
     zlib
+    zstd
   ] ++ lib.optionals stdenv.isLinux [
     elfutils
   ] ++ lib.optionals (!stdenv.isLinux) [

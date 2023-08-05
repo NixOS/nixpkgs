@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "4.0.1";
+  version = "4.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "scott-griffiths";
     repo = pname;
     rev = "bitstring-${version}";
-    hash = "sha256-eHP20F9PRe9ZNXjcDcsI3iFVswA6KtRWhBMAT7dkCv0=";
+    hash = "sha256-LghfDjf/Z1dEU0gjH1cqMb04ChnW+aGDjmN+RAhMWW8=";
   };
 
   nativeBuildInputs = [

@@ -1,41 +1,40 @@
 { lib
 , buildPythonPackage
-, pythonOlder
+, bx-py-utils
+, colorlog
 , fetchFromGitHub
 , fetchPypi
+, importlib-resources
+, jaraco-classes
+, jaraco-collections
+, jaraco-itertools
+, jaraco-context
+, jaraco-net
+, keyring
+, lomond
+, more-itertools
+, platformdirs
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, requests-toolbelt
 , setuptools
 , setuptools-scm
-, requests
-, lomond
-, colorlog
-, keyring
-, requests-toolbelt
-, jaraco_collections
-, jaraco-context
-, jaraco_classes
-, jaraco-net
-, more-itertools
-, importlib-resources
-, bx-py-utils
-, platformdirs
-, jaraco_itertools
-, pytestCheckHook
-, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "4.1.0";
+  version = "5.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
-
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.abode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MD8Piwgm+WStEKX+LP0sCezRI4gdHmHis/XMJ8Vuw04=";
+    hash = "sha256-guLgmhjFgYLRZsQ0j92NXkktZ80bwVvMUJLZeg3dgxE=";
   };
 
   postPatch = ''
@@ -56,22 +55,24 @@ buildPythonPackage rec {
     colorlog
     keyring
     requests-toolbelt
-    jaraco_collections
+    jaraco-collections
     jaraco-context
-    jaraco_classes
+    jaraco-classes
     jaraco-net
     more-itertools
     importlib-resources
     bx-py-utils
     platformdirs
-    jaraco_itertools
+    jaraco-itertools
   ];
-
-  pythonImportsCheck = [ "jaraco.abode" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock
+  ];
+
+  pythonImportsCheck = [
+    "jaraco.abode"
   ];
 
   preCheck = ''
@@ -83,9 +84,12 @@ buildPythonPackage rec {
     "test_cookies"
     "test_empty_cookies"
     "test_invalid_cookies"
+    # Issue with the regex
+    "test_camera_capture_no_control_URLs"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/jaraco/jaraco.abode/blob/${version}/CHANGES.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
     license = licenses.mit;

@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
-, fetchpatch
 , legacySupport ? false
 , static ? stdenv.hostPlatform.isStatic
 # these need to be ran on the host, thus disable when cross-compiling
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "sha256-2blY4hY4eEcxY8K9bIhYPbfb//rt/+J2TmvxABPG78A=";
+    sha256 = "sha256-tHHHIsQU7vJySrVhJuMKUSq11MzkmC+Pcsj00uFJdnQ=";
   };
 
   nativeBuildInputs = [ cmake ]

@@ -16,13 +16,15 @@ buildPythonApplication {
   pname = "yubioath-flutter-helper";
   inherit src version meta;
 
-  sourceRoot = "source/helper";
+  sourceRoot = "${src.name}/helper";
   format = "pyproject";
 
   postPatch = ''
     sed -i \
       -e 's,zxing-cpp = .*,zxing-cpp = "*",g' \
       -e 's,mss = .*,mss = "*",g' \
+      -e 's,yubikey-manager = .*,yubikey-manager = "*",g' \
+      -e 's,Pillow = .*,Pillow = "*",g' \
       pyproject.toml
   '';
 

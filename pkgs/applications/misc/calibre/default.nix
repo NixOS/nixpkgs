@@ -30,27 +30,27 @@
 , unrarSupport ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "6.15.1";
+  version = "6.23.0";
 
   src = fetchurl {
-    url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-t9fG1hBlQmDh0i5ezBoqk9C9oliNNF0peKDz1YH7RBo=";
+    url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
+    hash = "sha256-XX511kUtL4lpSsp9JTuHrGJd4M6ChA6PwY5enn2zf8I=";
   };
 
-  # https://sources.debian.org/patches/calibre/${version}+dfsg-1
+  # https://sources.debian.org/patches/calibre/${finalAttrs.version}+dfsg-1
   patches = [
     #  allow for plugin update check, but no calibre version check
     (fetchpatch {
       name = "0001-only-plugin-update.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}-1/debian/patches/0001-only-plugin-update.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}-1/debian/patches/0001-only-plugin-update.patch";
       hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
     })
     (fetchpatch {
-      name = "0006-Hardening-Qt-code.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}-1/debian/patches/0006-Hardening-Qt-code.patch";
-      hash = "sha256-9P1kGrQbWAWDzu5EUiQr7TiCPHRWUA8hxPpEvFpK20k=";
+      name = "0007-Hardening-Qt-code.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+      hash = "sha256-WBm0dWDXoPT6alEdK5dVMrVTOxG7Z8bq1s0iO2HTy/Q=";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
 
   disallowedReferences = [ podofo.dev ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://calibre-ebook.com";
     description = "Comprehensive e-book software";
     longDescription = ''
@@ -200,8 +200,12 @@ stdenv.mkDerivation rec {
       it takes things a step beyond normal e-book software. It’s also completely
       free and open source and great for both casual users and computer experts.
     '';
-    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3Plus;
-    maintainers = with maintainers; [ pSub AndersonTorres ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
+    license = if unrarSupport
+              then lib.licenses.unfreeRedistributable
+              else lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub AndersonTorres ];
+    platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
-}
+})

@@ -11,8 +11,8 @@
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
-  python3 = pkgs.python3.override {
-    packageOverrides = self: super: {
+  python3 = pkgs.python3 // {
+    pkgs = pkgs.python3.pkgs.overrideScope (self: super: {
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint arb;
@@ -29,7 +29,7 @@ let
       sage-setup = self.callPackage ./python-modules/sage-setup.nix {
         inherit sage-src;
       };
-    };
+    });
   };
 
   jupyter-kernel-definition = {
@@ -128,7 +128,7 @@ let
 
   singular = pkgs.singular.override { inherit flint; };
 
-  maxima = pkgs.maxima-ecl-5_45.override {
+  maxima = pkgs.maxima-ecl.override {
     lisp-compiler = pkgs.ecl.override {
       # "echo syntax error | ecl > /dev/full 2>&1" segfaults in
       # ECL. We apply a patch to fix it (write_error.patch), but it

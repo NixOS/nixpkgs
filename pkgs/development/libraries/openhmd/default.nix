@@ -60,6 +60,5 @@ stdenv.mkDerivation rec {
     license = licenses.boost;
     maintainers = with maintainers; [ oxij ];
     platforms = platforms.unix;
-    broken = true;
   };
 }

@@ -80,7 +80,7 @@ in rec {
       description = lib.mdDoc ''
         Units that want (i.e. depend on) this unit. The default method for
         starting a unit by default at boot time is to set this option to
-        '["multi-user.target"]' for system services. Likewise for user units
+        `["multi-user.target"]` for system services. Likewise for user units
         (`systemd.user.<name>.*`) set it to `["default.target"]` to make a unit
         start by default when the user `<name>` logs on.
 

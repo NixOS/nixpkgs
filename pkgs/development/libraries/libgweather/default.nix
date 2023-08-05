@@ -16,13 +16,14 @@
 , geocode-glib_2
 , vala
 , gnome
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
   version = "4.2.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -45,10 +46,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    vala
+    glib
+    (python3.pythonForBuild.withPackages (ps: [ ps.pygobject3 ]))
+  ] ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection
-    (python3.pythonForBuild.withPackages (ps: [ ps.pygobject3 ]))
+    vala
   ];
 
   buildInputs = [
@@ -61,8 +64,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
-    "-Denable_vala=true"
-    "-Dgtk_doc=true"
+    (lib.mesonBool "introspection" withIntrospection)
   ];
 
   postPatch = ''

@@ -3,6 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , wrapGAppsHook
+, makeWrapper
 , gnome
 , libsecret
 , git
@@ -20,16 +21,16 @@
 
 stdenv.mkDerivation rec {
   pname = "github-desktop";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://github.com/shiftkey/desktop/releases/download/release-${version}-linux1/GitHubDesktop-linux-${version}-linux1.deb";
-    hash = "sha256-R8t0y7b2upMOsWebIBr9+qT2GqQ/ahzWLcFIWwK4JTs=";
+    hash = "sha256-OdvebRvOTyadgNjzrv6CGDPkljfpo4RVvVAc+X9hjSo=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    (wrapGAppsHook.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
@@ -59,6 +60,12 @@ stdenv.mkDerivation rec {
     cp -R $TMP/${pname}/usr/share $out/
     cp -R $TMP/${pname}/usr/lib/${pname}/* $out/opt/
     ln -sf $out/opt/${pname} $out/bin/${pname}
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+    )
   '';
 
   runtimeDependencies = [

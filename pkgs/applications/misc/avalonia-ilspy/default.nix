@@ -10,7 +10,7 @@
 , libkrb5
 , zlib
 , fontconfig
-, openssl_1_1
+, openssl
 , libX11
 , libICE
 , libSM
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   libraryPath = lib.makeLibraryPath [
-    openssl_1_1
+    openssl
     libX11
     libICE
     libSM
@@ -95,5 +95,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ AngryAnt ];
+    mainProgram = "ILSpy";
   };
 }

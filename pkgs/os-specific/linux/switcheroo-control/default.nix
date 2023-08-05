@@ -12,7 +12,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "switcheroo-control";
-  version = "2.3";
+  version = "2.6";
 
   format = "other";
 
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "hadess";
     repo = pname;
     rev = version;
-    hash = "sha256-1Pze2TJ9mggfcpiLFwJ7/9WhsdJx4G3GoA7+Z47shuc=";
+    hash = "sha256-F+5HhMxM8pcnAGmVBARKWNCL0rIEzHW/jsGHHqYZJug=";
   };
 
   nativeBuildInputs = [

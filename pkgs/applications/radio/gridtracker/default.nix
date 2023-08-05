@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, nix-update-script
-, nwjs
-}:
+{ lib, stdenv, fetchFromGitLab, nix-update-script, nwjs, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gridtracker";
@@ -15,6 +10,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-6SQuFN8Fi0fbWCYrQIIeSaXR2haI7uux4txCPKEoJvo=";
   };
+
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   postPatch = ''
     substituteInPlace Makefile \

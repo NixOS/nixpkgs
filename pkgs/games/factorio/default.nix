@@ -19,13 +19,13 @@
 , stdenv
 , wayland
 
-, mods ? [ ]
 , mods-dat ? null
 , versionsJson ? ./versions.json
 , username ? ""
 , token ? "" # get/reset token at https://factorio.com/profile
 , experimental ? false # true means to always use the latest branch
-}:
+, ...
+} @ args:
 
 assert releaseType == "alpha"
   || releaseType == "headless"
@@ -34,6 +34,8 @@ assert releaseType == "alpha"
 let
 
   inherit (lib) importJSON;
+
+  mods = args.mods or [ ];
 
   helpMsg = ''
 

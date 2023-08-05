@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sonic-pi";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-R+nmjIIDLoGOoCkDvJqejE1DaweHSAV8M2RvdwN5qAQ=";
+    hash = "sha256-rXMCaI9zvWIXmT7ZqIArsvZmEkEEbs+5jYDYsSGeCXc=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     pname = "mix-deps-${pname}";
     mixEnv = "test";
     src = "${src}/app/server/beam/tau";
-    sha256 = "sha256-MvwUyVTS23vQKLpGxz46tEVCs/OyYk5dDaBlv+kYg1M=";
+    hash = "sha256-YbYe+hljnoWFgV72OQ2YaUcnhucEtVb+TCLcMYzqUWU=";
   };
 
   strictDeps = true;

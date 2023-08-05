@@ -30,7 +30,7 @@ let
 
   # these config files will be merged one after the other to build the final config
   configFiles = [
-    "${pkgs.mjolnir}/share/mjolnir/config/default.yaml"
+    "${pkgs.mjolnir}/libexec/mjolnir/deps/mjolnir/config/default.yaml"
     moduleConfigFile
   ];
 
@@ -200,7 +200,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = ''${pkgs.mjolnir}/bin/mjolnir'';
+        ExecStart = ''${pkgs.mjolnir}/bin/mjolnir --mjolnir-config ./config/default.yaml'';
         ExecStartPre = [ generateConfig ];
         WorkingDirectory = cfg.dataPath;
         StateDirectory = "mjolnir";

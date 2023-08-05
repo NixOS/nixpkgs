@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "webauthn";
-  version = "1.7.2";
+  version = "1.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "duo-labs";
     repo = "py_webauthn";
     rev = "refs/tags/v${version}";
-    hash = "sha256-B8GdtaufMMl0gHywZ00wNyYZ+rojrExKuQsA/vmbYRI=";
+    hash = "sha256-ivPLS+kh/H8qLojgc5qh1ndPzSZbzbnm9E+LQGq8+Xs=";
   };
 
   propagatedBuildInputs = [
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/duo-labs/py_webauthn";
     changelog = "https://github.com/duo-labs/py_webauthn/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

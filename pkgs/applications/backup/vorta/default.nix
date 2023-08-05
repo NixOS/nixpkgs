@@ -4,23 +4,27 @@
 , wrapQtAppsHook
 , borgbackup
 , qt5
+, stdenv
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.8.10";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-okxZ1kALB5l94ShStAJLfzD37MLhob8MCzhbqfVISkw=";
+    rev = "v${version}";
+    hash = "sha256-nLdLTh1qSKvOR2cE9HWQrIWQ9L+ynX4qF+lTtKn/Ubs=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
+  buildInputs = lib.optionals stdenv.isLinux [
+    qt5.qtwayland
+  ];
+
   propagatedBuildInputs = with python3Packages; [
-    paramiko
     peewee
     pyqt5
     python-dateutil
@@ -29,6 +33,7 @@ python3Packages.buildPythonApplication rec {
     secretstorage
     appdirs
     setuptools
+    platformdirs
   ];
 
   postPatch = ''
@@ -37,12 +42,12 @@ python3Packages.buildPythonApplication rec {
     --replace pytest-runner ""
 
     substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
-    --replace Exec=vorta "Exec=$out/bin/vorta" \
     --replace com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
   '';
 
   postInstall = ''
     install -Dm644 src/vorta/assets/metadata/com.borgbase.Vorta.desktop $out/share/applications/com.borgbase.Vorta.desktop
+    install -Dm644 src/vorta/assets/icons/icon.svg $out/share/pixmaps/com.borgbase.Vorta-symbolic.svg
   '';
 
   preFixup = ''

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fig2dev
 , gettext
 , ghostscript
 , guile
@@ -9,40 +10,40 @@
 , imagemagick
 , makeWrapper
 , pkg-config
-, ploticus
-, fig2dev
 , enableEmacs ? false, emacs
-, enableLout ? true, lout
+, enableLout ? stdenv.isLinux, lout
+, enablePloticus ? stdenv.isLinux, ploticus
 , enableTex ? true, tex
 }:
 
 let
   inherit (lib) optional;
-in stdenv.mkDerivation rec{
+in stdenv.mkDerivation (finalAttrs: {
   pname = "skribilo";
-  version = "0.9.5";
+  version = "0.10.0";
 
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/skribilo/${pname}-${version}.tar.gz";
-    sha256 = "sha256-AIJqIcRjT7C0EO6J60gGjERdgAglh0ZU49U9XKPwvwk=";
+    url = "http://download.savannah.nongnu.org/releases/skribilo/skribilo-${finalAttrs.version}.tar.gz";
+    hash = "sha256-jP9I7hds7f1QMmSaNJpGlSvqUOwGcg+CnBzMopIS9Q4=";
   };
 
   nativeBuildInputs = [
-    pkg-config
     makeWrapper
+    pkg-config
   ];
+
   buildInputs = [
+    fig2dev
     gettext
     ghostscript
     guile
     guile-lib
     guile-reader
     imagemagick
-    ploticus
-    fig2dev
   ]
   ++ optional enableEmacs emacs
   ++ optional enableLout lout
+  ++ optional enablePloticus ploticus
   ++ optional enableTex tex;
 
   postInstall =
@@ -55,7 +56,7 @@ in stdenv.mkDerivation rec{
         --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/skribilo/";
     description = "The Ultimate Document Programming Framework";
     longDescription = ''
@@ -70,9 +71,8 @@ in stdenv.mkDerivation rec{
       "markup-less" format that borrows from Emacs' outline mode and from other
       conventions used in emails, Usenet and text.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
-# TODO: Better Emacs and TeX integration
+})

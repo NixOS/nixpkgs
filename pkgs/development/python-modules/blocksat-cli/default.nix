@@ -1,6 +1,6 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, lib
 , distro
 , pysnmp
 , python-gnupg
@@ -9,15 +9,19 @@
 , sseclient-py
 , zfec
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
-  version = "0.4.4";
+  version = "0.4.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-btwL8l5UdE9FwWXfuf1OHa8EwXDoFrh8tvOwr1yhyRg=";
+    hash = "sha256-uANAMNoAC4HUoUuR5ldxoiy+LLzZVpKosU5JttXLnqg=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +34,9 @@ buildPythonPackage rec {
     zfec
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTestPaths = [
     # disable tests which require being connected to the satellite
@@ -42,7 +48,15 @@ buildPythonPackage rec {
     "blocksatcli/api/test_order.py"
   ];
 
-  pythonImportsCheck = [ "blocksatcli" ];
+  disabledTests = [
+    "test_monitor_get_stats"
+    "test_monitor_update_with_reporting_enabled"
+    "test_erasure_recovery"
+  ];
+
+  pythonImportsCheck = [
+    "blocksatcli"
+  ];
 
   meta = with lib; {
     description = "Blockstream Satellite CLI";

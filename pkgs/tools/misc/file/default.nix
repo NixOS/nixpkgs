@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-N1HH+6jbyDHLjXzIr/IQNUWbjOUVXviwiAon0ChHXzs=";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   patches = [
     # Backport fix to identification for pyzip files.
     # Needed for strip-nondeterminism.
@@ -48,5 +50,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.bsd2;
     platforms = platforms.all;
+    mainProgram = "file";
   };
 }

@@ -6,7 +6,7 @@
 , python
 , boost
 , cppunit
-, log4cpp
+, logLib
 , osmosdr
 , gmp
 , mpir
@@ -41,7 +41,7 @@ mkDerivation rec {
     cppunit
     osmosdr
     boost
-    log4cpp
+    logLib
     gmp
     mpir
     fftwFloat

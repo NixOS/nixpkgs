@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
+, ruby_3_0, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
 , fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 }:
@@ -17,7 +17,7 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    inherit ruby;
+    ruby = ruby_3_0;
     gemdir = ./rubyEnv;
     gemset =
       let x = import (gemdir + "/gemset.nix") src;
@@ -70,10 +70,10 @@ let
       ./remove-hardcoded-locations.patch
 
       # Gitlab edited the default database config since [1] and the
-      # installer complains about valid keywords only being "main" and "ci".
+      # installer now complains about valid keywords only being "main", "ci" and "embedded".
       #
       # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
-      ./Remove-geo-from-database.yml.patch
+      ./Remove-unsupported-database-names.patch
     ];
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
@@ -211,7 +211,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin krav talyz yayayayaka yuka ];
+    maintainers = teams.gitlab.members;
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

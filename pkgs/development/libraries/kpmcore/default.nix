@@ -1,16 +1,22 @@
-{ stdenv, lib, fetchurl, extra-cmake-modules
-, qca-qt5, kauth, kio, polkit-qt
+{ stdenv
+, lib
+, fetchurl
+, extra-cmake-modules
+, qca-qt5
+, kauth
+, kio
+, polkit-qt
 , util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "kpmcore";
   # NOTE: When changing this version, also change the version of `partition-manager`.
-  version = "22.12.1";
+  version = "23.04.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-ZJ179jHCLEB0kFMWfCe+U6c7k7yZ3MztwqAcUd25t40=";
+    hash = "sha256-NFIq8CZwYvpqDOOYLlBqoGdgfNPsyf15FkB3dToDCB8=";
   };
 
   patches = [

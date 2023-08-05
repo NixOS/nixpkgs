@@ -8,7 +8,7 @@
 , doxygen
 , swig
 , python
-, log4cpp
+, logLib
 , mpir
 , boost
 , gmp
@@ -42,7 +42,7 @@ in mkDerivation {
     python
   ];
   buildInputs = [
-    log4cpp
+    logLib
     mpir
     boost
     gmp

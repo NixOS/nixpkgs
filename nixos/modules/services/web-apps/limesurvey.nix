@@ -226,7 +226,7 @@ in
 
     services.phpfpm.pools.limesurvey = {
       inherit user group;
-      phpPackage = pkgs.php80;
+      phpPackage = pkgs.php81;
       phpEnv.DBENGINE = "${cfg.database.dbEngine}";
       phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
       settings = {
@@ -288,8 +288,8 @@ in
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
-        ${pkgs.php80}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
-        ${pkgs.php80}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+        ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
+        ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
       '';
       serviceConfig = {
         User = user;

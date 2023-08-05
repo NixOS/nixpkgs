@@ -1,29 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, fetchNuGet, linkFarmFromDrvs, buildDotnetModule, ffmpeg-full, msbuild, dotnetCorePackages }:
+{ lib, fetchFromGitHub, buildDotnetModule, ffmpeg-full, dotnetCorePackages }:
 
-let
-  nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./nuget-deps.nix { inherit fetchNuGet; }
-  );
-
-in buildDotnetModule rec {
+buildDotnetModule rec {
   pname = "tone";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "sandreas";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z3cumXAIJhUB3/EbzB08MfBCrga1JHtDKr44TmRQuno=";
+    sha256 = "sha256-HhXyOPoDtraT7ef0kpE7SCQbvGFLrTddzS6Kdu0LxW4=";
   };
 
   projectFile = "tone/tone.csproj";
   executables = [ "tone" ];
   nugetDeps = ./nuget-deps.nix;
-  dotnetBuildFlags = [ "--no-self-contained" ];
+
   dotnetInstallFlags = [
     "-p:PublishSingleFile=false"
-    "-p:PublishTrimmed=false"
-    "-p:PublishReadyToRun=false"
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
@@ -31,7 +24,7 @@ in buildDotnetModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/sandreas/tone";
-    description = "tone is a cross platform utility to dump and modify audio metadata for a wide variety of formats";
+    description = "A cross platform utility to dump and modify audio metadata for a wide variety of formats";
     license = licenses.asl20;
     maintainers = [ maintainers.jvanbruegge ];
     platforms = platforms.linux;

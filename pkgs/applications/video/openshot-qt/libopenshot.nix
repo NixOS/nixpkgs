@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenshot";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${version}";
-    sha256 = "sha256-qe866gFhcbd7yCNXDiZ9Aj0TAiWoJ+r7C5BjtWBKSGA=";
+    sha256 = "sha256-axFGNq+Kg8atlaSlG8EKvxj/FwLfpDR8/e4otmnyosM=";
   };
 
   postPatch = ''

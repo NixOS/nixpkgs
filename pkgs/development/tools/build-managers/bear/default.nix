@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , grpc
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EiAGM2tfzHp2rTAsf+mrfQ7VfX0NTFakcLVpT/plqh8=";
+    sha256 = "sha256-x46BS+By5Zj5xeYRD45eXRDCAOqwpkkivVyJPnhkAMc=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -43,6 +44,12 @@ stdenv.mkDerivation rec {
   patches = [
     # Default libexec would be set to /nix/store/*-bear//nix/store/*-bear/libexec/...
     ./no-double-relative.patch
+
+    # Fix compatiblity with fmt 10.0. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/rizsotto/Bear/commit/46a032fa0fc8131779ece13f26735ec84be891e8.patch";
+      hash = "sha256-zYKwQ5PLSTJ1hROGnTfP8xPoM0cBw6abAZLx6GxmdfI=";
+    })
   ];
 
   meta = with lib; {

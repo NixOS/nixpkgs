@@ -22,6 +22,9 @@ qmakePrePhase() {
         qmakeFlags+=( "CONFIG+=release" )
     fi
 
+    # do the stripping ourselves (needed for separateDebugInfo)
+    qmakeFlags+=( "CONFIG+=nostrip" )
+
     qmakeFlags+=( "${qmakeFlags_orig[@]}" )
 }
 prePhases+=" qmakePrePhase"

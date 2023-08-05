@@ -12,15 +12,16 @@ let
     libudev0-shim
     nghttp2
     openssl
+    stdenv.cc.cc.lib
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "2022.7.5";
+  version = "2023.4.0";
 
   src = fetchurl {
     url =
       "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
-    sha256 = "sha256-BJAiDv+Zg+wU6ovAkuMVTGN9WElOlC96m/GEYrg6exE=";
+    sha256 = "sha256-7tkd0HaJeDdCvX1t1XCHrrQ23xFrcMsy1nhJJEp6klk=";
   };
 
   nativeBuildInputs = [

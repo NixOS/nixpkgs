@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, musl-fts
 , musl-obstack, m4, zlib, zstd, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs
 , argp-standalone
-, enableDebuginfod ? false, sqlite, curl, libmicrohttpd, libarchive
+, enableDebuginfod ? true, sqlite, curl, libmicrohttpd, libarchive
 , gitUpdater
 }:
 

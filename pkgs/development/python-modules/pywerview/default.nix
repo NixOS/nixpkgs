@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pywerview";
-  version = "0.4.1";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "the-useless-one";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5/Cn70qQaUp38qko1Wq+gZMCcQtcAPtZwt7Zrx8MFc4=";
+    hash = "sha256-0vL1kMg4XRFq1CWR/2x5YYyfjm8YzjJaXkezehsT4hg=";
   };
 
   propagatedBuildInputs = [

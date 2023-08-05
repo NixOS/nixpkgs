@@ -1,21 +1,19 @@
 { lib, fetchFromGitHub, buildDunePackage
-, seq
 , containers, qcheck
 }:
 
 buildDunePackage rec {
-  version = "0.4";
+  version = "0.5";
   pname = "oseq";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FoCBvvPwa/dUCrgDEd0clEKAO7EcpedjaO4v+yUO874=";
+    hash = "sha256-JMIcRyciNvLOE1Gpin7CpcDNSmGYFxZWsDN0X6D/NVI=";
   };
 
-  propagatedBuildInputs = [ seq ];
-
+  minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   doCheck = true;

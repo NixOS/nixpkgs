@@ -27,9 +27,12 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p "$out/bin"
-    mv OttoMatic Data ReadMe.txt "$out/"
-    makeWrapper $out/OttoMatic $out/bin/OttoMatic --chdir "$out"
-
+    mkdir -p "$out/share/OttoMatic"
+    mv Data ReadMe.txt "$out/share/OttoMatic/"
+    install -Dm755 {.,$out/bin}/OttoMatic
+    wrapProgram $out/bin/OttoMatic --chdir "$out/share/OttoMatic"
+    install -Dm644 $src/packaging/io.jor.ottomatic.desktop $out/share/applications/io.jor.ottomatic.desktop
+    install -Dm644 $src/packaging/io.jor.ottomatic.png $out/share/pixmaps/io.jor.ottomatic.png
     runHook postInstall
   '';
 

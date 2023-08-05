@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "httpie";
-  version = "3.2.1";
+  version = "3.2.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
     rev = version;
-    hash = "sha256-WEe8zSlNckl7bPBi6u8mHQ1/xPw3kE81F8Xr15TchgM=";
+    hash = "sha256-hPsjEpvT6tnPm68AUB2Tv3Gon4DfSzO2VYCGqP8ozSI=";
   };
 
   nativeBuildInputs = [

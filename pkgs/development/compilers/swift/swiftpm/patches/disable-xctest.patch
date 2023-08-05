@@ -1,21 +1,21 @@
 XCTest is not fully open-source, only the Swift library parts. We don't have a
 command-line runner available, so disable support.
 
---- a/Sources/Commands/TestingSupport.swift
-+++ b/Sources/Commands/TestingSupport.swift
-@@ -60,7 +60,7 @@ enum TestingSupport {
+--- a/Sources/Commands/Utilities/TestingSupport.swift
++++ b/Sources/Commands/Utilities/TestingSupport.swift
+@@ -72,7 +72,7 @@ enum TestingSupport {
      /// - Returns: Array of TestSuite
-     static func getTestSuites(fromTestAt path: AbsolutePath, swiftTool: SwiftTool, swiftOptions: SwiftToolOptions) throws -> [TestSuite] {
+     static func getTestSuites(fromTestAt path: AbsolutePath, swiftTool: SwiftTool, enableCodeCoverage: Bool, sanitizers: [Sanitizer]) throws -> [TestSuite] {
          // Run the correct tool.
 -        #if os(macOS)
 +        #if false
          let data: String = try withTemporaryFile { tempFile in
-             let args = [try TestingSupport.xctestHelperPath(swiftTool: swiftTool).pathString, path.pathString, tempFile.path.pathString]
-             var env = try TestingSupport.constructTestEnvironment(toolchain: try swiftTool.getToolchain(), options: swiftOptions, buildParameters: swiftTool.buildParametersForTest())
+             let args = [try Self.xctestHelperPath(swiftTool: swiftTool).pathString, path.pathString, tempFile.path.pathString]
+             var env = try Self.constructTestEnvironment(
 --- a/Sources/swiftpm-xctest-helper/main.swift
 +++ b/Sources/swiftpm-xctest-helper/main.swift
-@@ -9,8 +9,11 @@
- */
+@@ -11,8 +11,11 @@
+ //===----------------------------------------------------------------------===//
  
  #if os(macOS)
 -import XCTest
@@ -27,7 +27,7 @@ command-line runner available, so disable support.
  
  /// A helper tool to get list of tests from a XCTest Bundle on macOS.
  ///
-@@ -132,6 +135,7 @@ do {
+@@ -134,6 +137,7 @@ do {
      exit(1)
  }
  
@@ -35,14 +35,3 @@ command-line runner available, so disable support.
  #else
  
  #if os(Windows)
---- a/Sources/PackageModel/Destination.swift
-+++ b/Sources/PackageModel/Destination.swift
-@@ -174,7 +174,7 @@ public struct Destination: Encodable, Equatable {
-             arguments: ["/usr/bin/xcrun", "--sdk", "macosx", "--show-sdk-platform-path"],
-             environment: environment).spm_chomp()
-
--        if let platformPath = platformPath, !platformPath.isEmpty {
-+        if let platformPath = platformPath, !platformPath.isEmpty && !platformPath.starts(with: "@storeDir@") {
-             // For XCTest framework.
-             let fwk = AbsolutePath(platformPath).appending(
-                 components: "Developer", "Library", "Frameworks")

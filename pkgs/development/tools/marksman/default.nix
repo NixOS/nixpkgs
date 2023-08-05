@@ -18,7 +18,7 @@ buildDotnetModule rec {
   };
 
   projectFile = "Marksman/Marksman.fsproj";
-  dotnetBuildFlags = "-p:VersionString=${version}";
+  dotnetBuildFlags = [ "-p:VersionString=${version}" ];
 
   doCheck = true;
   testProjectFile = "Tests/Tests.fsproj";

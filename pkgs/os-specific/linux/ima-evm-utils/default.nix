@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ima-evm-utils";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchgit {
     url = "git://git.code.sf.net/p/linux-ima/ima-evm-utils";
     rev = "v${version}";
-    sha256 = "1zmyv82232lzqk52m0s7fap9zb9hb1x6nsi5gznk0cbsnq2m67pc";
+    sha256 = "sha256-WPBG7v29JHZ+ZGeLgA2gtLzZmaG0Xdvpq+BZ6NriY+A=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

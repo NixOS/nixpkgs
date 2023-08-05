@@ -4,19 +4,18 @@
 , typing-inspect
 , marshmallow-enum
 , hypothesis
-, mypy
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.5.7";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "lidatong";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1xv9br6mm5pcwfy10ykbc1c0n83fqyj1pa81z272kqww7wpkkp6j";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-2/J+d7SQvUs7nXw1n+qwy0DQCplK28eUrbP7+yQPB7g=";
   };
 
   propagatedBuildInputs = [
@@ -26,14 +25,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    mypy
     pytestCheckHook
   ];
 
-  disabledTests = [
+  disabledTestPaths = [
+    # fails with the following error and avoid dependency on mypy
     # mypy_main(None, text_io, text_io, [__file__], clean_exit=True)
     # TypeError: main() takes at most 4 arguments (5 given)
-    "test_type_hints"
+    "tests/test_annotations.py"
   ];
 
   pythonImportsCheck = [ "dataclasses_json" ];

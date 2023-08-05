@@ -1,7 +1,7 @@
 { lib, stdenv, requireFile, avahi, obs-studio-plugins }:
 
 let
-  versionJSON = builtins.fromJSON (builtins.readFile ./version.json);
+  versionJSON = lib.importJSON ./version.json;
 in
 stdenv.mkDerivation rec {
   pname = "ndi";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ avahi ];
 
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     echo y | ./${installerName}.sh
     sourceRoot="NDI SDK for Linux";
   '';

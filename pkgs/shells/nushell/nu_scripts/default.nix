@@ -1,17 +1,18 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, unstableGitUpdater
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "nu_scripts";
-  version = "unstable-2023-03-16";
+  version = "unstable-2023-07-29";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = pname;
-    rev = "00b0039653be5dd2e6567ce8feea82064d27ae11";
-    sha256 = "0m17cj5wzp94f01kwgs1dh76zwsl2irr7b06i9sb5skqxmmdnjnz";
+    rev = "3ee56c6ec31fcc8dbffee85e1c73eb6fe0bbba8d";
+    hash = "sha256-luGIvcKOfhDorPfGfL449+eD+58MGo5jMCsNwIRJWt4=";
   };
 
   installPhase = ''
@@ -22,6 +23,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "A place to share Nushell scripts with each other";

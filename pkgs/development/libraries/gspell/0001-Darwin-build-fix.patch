@@ -11,14 +11,6 @@ diff --git a/gspell/Makefile.am b/gspell/Makefile.am
 index 69ee421..7c58973 100644
 --- a/gspell/Makefile.am
 +++ b/gspell/Makefile.am
-@@ -95,6 +95,7 @@ nodist_libgspell_core_la_SOURCES = \
- 	$(BUILT_SOURCES)
- 
- libgspell_core_la_LIBADD =	\
-+	$(GTK_MAC_LIBS)           \
- 	$(CODE_COVERAGE_LIBS)
- 
- libgspell_core_la_CFLAGS =			\
 @@ -161,6 +162,12 @@ gspell_private_headers += \
  gspell_private_c_files += \
  	gspell-osx.c

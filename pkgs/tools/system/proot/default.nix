@@ -1,19 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , talloc
 , pkg-config
-, git
 , ncurses
 , docutils, swig, python3, coreutils, enablePython ? true }:
 
 stdenv.mkDerivation rec {
   pname = "proot";
-  version = "5.3.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
     rev = "v${version}";
-    sha256 = "sha256-uN31wDJjuQmDWeHaZHHQpmXQeQ/TYeS9HNYWEC0shaA=";
+    sha256 = "sha256-Z9Y7ccWp5KEVuo9xfHcgo58XqYVdFo7ck1jH7cnT2KA=";
   };
 
   postPatch = ''

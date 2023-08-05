@@ -1,8 +1,8 @@
 {
   "EncConv": {
     "owner": "Alexey-T",
-    "rev": "2023.01.02",
-    "hash": "sha256-4/ih4sBDel2wm+YFpNcwHoOrK8AgHe3Jbqxl+CYrQFM="
+    "rev": "2023.04.16",
+    "hash": "sha256-6KaYv4OO6Ctk+vgow67LKGkbEEd1+lFJ9B1wSk4m3pc="
   },
   "ATBinHex-Lazarus": {
     "owner": "Alexey-T",
@@ -11,33 +11,33 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2023.03.22",
-    "hash": "sha256-cUuoB9hPA04MmurtCbzkMuozc79Dj0rRnqE0ms2jJGs="
+    "rev": "2023.05.31",
+    "hash": "sha256-/CN6wa5XN5ERdFnqOXxxtT08ObtlToqe3YsLpiog40w="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.04.08",
-    "hash": "sha256-FBrb/2VwmpM6FCUvHXZTJCsn/a9r3qPNBYVWyN5CS5o="
+    "rev": "2023.07.05",
+    "hash": "sha256-+FZjmrB8t7WM3XALqT+jvTSbBYIVLav4zSSCvMr5r+U="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2023.04.08",
-    "hash": "sha256-xm2fMAm0DF0hILxBQ2m+OSodQQgl5a4rkW0pgTDjuoo="
+    "rev": "2023.05.31",
+    "hash": "sha256-QXu/p3o0RSwMyntFYrjIQBtOBGvL9rAsINaglG3fZvo="
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2023.04.04",
-    "hash": "sha256-BLj37uTHB4T0ek97u7hYqxbUjW71efGBKGG35CEyLR8="
+    "rev": "2023.05.31",
+    "hash": "sha256-sejyNiPmTboP6HlXao+RaMaEf67tAv4mXDHVkkMErPE="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2023.04.04",
-    "hash": "sha256-bqNq1tzZjzwMw3I6G5kuFeh7qp33DGo4gu4BVd4pONk="
+    "rev": "2023.07.05",
+    "hash": "sha256-dvo4lariMl/FMSp6VJEAk/Zhaz2fdBxe7aKw229DxKw="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2023.01.02",
-    "hash": "sha256-NnPrQAqmKg3Lh16Qp/LZVS4JRtAxXi3qRovLTbzUyYQ="
+    "rev": "2023.05.15",
+    "hash": "sha256-8dWitKZB4nLcJ3fIN40jfNnyAGcRPLfA0iKNZ0zWFWo="
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
@@ -51,7 +51,7 @@
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",
-    "rev": "v11.5.3",
-    "hash": "sha256-qjBD9TVZQy1tKWHFWkuu6vdLjASzQb3+HRy0FLdd9a8="
+    "rev": "v11.5.4",
+    "hash": "sha256-Js7MQ1JYAl2cpnjgDOXeLcWBCrjjCnDORayRpSFoFhM="
   }
 }

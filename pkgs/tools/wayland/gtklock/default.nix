@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkgs
 , pam
 , scdoc
 , gtk3
@@ -14,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtklock";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-W+GyeGxlfp1YZtSFEZYXuHmvTVZ8mU1oBcsrWN1yvjU=";
+    sha256 = "sha256-Jh+BmtKGaLgAcTXc44ydV83dp/W4wzByehUWyeyBoFI=";
   };
 
   strictDeps = true;
@@ -53,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ dit7ya ];
     platforms = platforms.linux;
+    mainProgram = "gtklock";
   };
 }

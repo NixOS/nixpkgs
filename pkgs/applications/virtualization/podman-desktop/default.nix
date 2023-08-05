@@ -12,19 +12,19 @@
 , makeDesktopItem
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-desktop";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gEjcI+bfETYZB/pHDXRcNxNVDsbwuqQL1E22fMkIJHI=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${self.src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     sha256 = "sha256-x0hqNxi6r1i3vBe1tJQl+Oht2St9VIH3Eq27MZLkojA=";
   };
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation (self: {
       icon = "podman-desktop";
       desktopName = "Podman Desktop";
       genericName = "Desktop client for podman";
-      comment = self.meta.description;
+      comment = finalAttrs.meta.description;
       categories = [ "Utility" ];
       startupWMClass = "Podman Desktop";
     })
@@ -112,7 +112,7 @@ stdenv.mkDerivation (self: {
   meta = with lib; {
     description = "A graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
-    changelog = "https://github.com/containers/podman-desktop/releases/tag/v${self.version}";
+    changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ panda2134 ];
     inherit (electron.meta) platforms;

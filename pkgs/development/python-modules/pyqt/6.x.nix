@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildPythonPackage
-, isPy27
 , fetchPypi
 , pkg-config
 , dbus
@@ -15,23 +14,23 @@
 , pythonOlder
 , withMultimedia ? true
 , withWebSockets ? true
-# FIXME: Once QtLocation is available for Qt6 enable this
-# https://bugreports.qt.io/browse/QTBUG-96795
-#, withLocation ? true
+, withLocation ? true
 # Not currently part of PyQt6
 #, withConnectivity ? true
+, withPrintSupport ? true
+, cups
 }:
 
 buildPythonPackage rec {
   pname = "PyQt6";
-  version = "6.4.2";
+  version = "6.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dAJE9gj+Fe4diWlcQ/MaFMrspBxPAqw2yG37pKXVgT0=";
+    hash = "sha256-FIfuc1D5/7ZtYKtBdlGSUsKzcXYsvo+DQP2VH2OAEoA=";
   };
 
   patches = [
@@ -59,7 +58,7 @@ buildPythonPackage rec {
   # pkgs/development/interpreters/python/hooks/pip-build-hook.sh
   # does not use the enableParallelBuilding flag
   postUnpack = ''
-    export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
+    export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
   '';
 
   outputs = [ "out" "dev" ];
@@ -81,7 +80,7 @@ buildPythonPackage rec {
   # ++ lib.optional withConnectivity qtconnectivity
   ++ lib.optional withMultimedia qtmultimedia
   ++ lib.optional withWebSockets qtwebsockets
-  # ++ lib.optional withLocation qtlocation
+  ++ lib.optional withLocation qtlocation
   ;
 
   buildInputs = with qt6Packages; [
@@ -95,13 +94,17 @@ buildPythonPackage rec {
   ]
   # ++ lib.optional withConnectivity qtconnectivity
   ++ lib.optional withWebSockets qtwebsockets
-  # ++ lib.optional withLocation qtlocation
+  ++ lib.optional withLocation qtlocation
   ;
 
   propagatedBuildInputs = [
     dbus-python
     pyqt6-sip
     setuptools
+  ]
+  # ld: library not found for -lcups
+  ++ lib.optionals (withPrintSupport && stdenv.isDarwin) [
+    cups
   ];
 
   passthru = {
@@ -126,7 +129,7 @@ buildPythonPackage rec {
   ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
   ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
   # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
-  # ++ lib.optional withLocation "PyQt6.QtPositioning"
+  ++ lib.optional withLocation "PyQt6.QtPositioning"
   ;
 
   meta = with lib; {

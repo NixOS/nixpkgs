@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "3.1.1";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z3ZzIOlxN09wGhdapZq9OlVHIwOdOfrpCOctFjMNZIs=";
+    hash = "sha256-MUCaMPhI/8azJUBpfoLVoKG4TcwycWynTni8xLRXxFM=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +92,5 @@ buildPythonPackage rec {
     description = "Tools for diffing and merging of Jupyter notebooks.";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tbenst ];
-    # https://github.com/jupyter/nbdime/issues/645
-    broken = lib.versionAtLeast jupyter-server.version "2";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, ppxlib, ounit
+{ lib, buildDunePackage, fetchFromGitHub, ocaml, ppxlib, ounit
 , ppx_deriving, yojson
 }:
 
@@ -27,7 +27,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ppxlib ppx_deriving yojson ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit ];
 
   meta = {

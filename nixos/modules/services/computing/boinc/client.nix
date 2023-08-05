@@ -6,7 +6,7 @@ let
   cfg = config.services.boinc;
   allowRemoteGuiRpcFlag = optionalString cfg.allowRemoteGuiRpc "--allow_remote_gui_rpc";
 
-  fhsEnv = pkgs.buildFHSUserEnv {
+  fhsEnv = pkgs.buildFHSEnv {
     name = "boinc-fhs-env";
     targetPkgs = pkgs': [ cfg.package ] ++ cfg.extraEnvPackages;
     runScript = "/bin/boinc_client";
@@ -31,6 +31,7 @@ in
         type = types.package;
         default = pkgs.boinc;
         defaultText = literalExpression "pkgs.boinc";
+        example = literalExpression "pkgs.boinc-headless";
         description = lib.mdDoc ''
           Which BOINC package to use.
         '';

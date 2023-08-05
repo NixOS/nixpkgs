@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "7.14.2";
+  version = "7.29.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4XduybmDmlux3zvjbN1ouaJ1PkNO8h6vHuxgZ3YLBrw=";
+    hash = "sha256-UfUzvDo5OE1LGCBBGoDpxG96RKOaShbqu5TOOILG3AY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -21,22 +21,20 @@ python3.pkgs.buildPythonApplication rec {
     connection-pool
     datrie
     docutils
-    filelock
     gitpython
+    humanfriendly
     jinja2
     jsonschema
     nbformat
-    networkx
     psutil
     pulp
-    pygraphviz
     pyyaml
-    ratelimiter
     requests
-    retry
+    reretry
     smart-open
     stopit
     tabulate
+    throttler
     toposort
     wrapt
     yte
@@ -44,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # See
   # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
-  # for the current basic test suite. Tibanna and Tes require extra
+  # for the current basic test suite. Slurm, Tibanna and Tes require extra
   # setup.
 
   nativeCheckInputs = with python3.pkgs; [
@@ -54,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTestPaths = [
+    "tests/test_slurm.py"
     "tests/test_tes.py"
     "tests/test_tibanna.py"
     "tests/test_linting.py"

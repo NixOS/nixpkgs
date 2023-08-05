@@ -82,7 +82,7 @@ buildBazelPackage rec {
       rm -rf $bazelOut/external/com_google_protobuf
     '';
 
-    sha256 = "sha256-le8IepS+IGVX45Gj1aicPjYOkuUA+VVUy/PEeKLNYss=";
+    sha256 = "sha256-lC9e5Z2cxLAeWXkiFGmcB6aOaurMvwrP/k5jl3gCfAc=";
   };
 
   buildAttrs = {

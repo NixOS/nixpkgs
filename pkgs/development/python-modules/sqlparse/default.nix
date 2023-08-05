@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , installShellFiles
 , pytestCheckHook
 , isPy3k
@@ -8,16 +9,18 @@
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.4.3";
+  version = "0.4.4";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-acqASEa7EU0uw4DkNgqKNA24PwzPOvzusUBN8Cj1cmg=";
+    hash = "sha256-1EYYPoS4NJ+jBh8P5/BsqUumW0JpRv/r5uPoKVMyQgw=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  format = "pyproject";
+
+  nativeBuildInputs = [ flit-core installShellFiles ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

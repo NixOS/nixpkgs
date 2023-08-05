@@ -77,6 +77,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    mainProgram = "pyproject-build";
     description = "Simple, correct PEP517 package builder";
     longDescription = ''
       build will invoke the PEP 517 hooks to build a distribution package. It

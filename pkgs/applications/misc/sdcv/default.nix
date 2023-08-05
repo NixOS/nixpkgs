@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sdcv";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "Dushistov";
     repo = "sdcv";
     rev = "v${version}";
-    sha256 = "sha256-i6odmnkoSqDIQAor7Dn26Gu+td9aeMIkwsngF7beBtE=";
+    sha256 = "sha256-EyvljVXhOsdxIYOGTzD+T16nvW7/RNx3DuQ2OdhjXJ4=";
   };
 
   hardeningDisable = [ "format" ];

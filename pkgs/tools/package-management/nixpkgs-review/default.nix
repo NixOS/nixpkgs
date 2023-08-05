@@ -14,13 +14,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.9.1";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     rev = version;
-    sha256 = "sha256-9fdoTKaYfqsAXysRwgLq44UrmOGlr5rjF5Ge93PcHDk=";
+    sha256 = "sha256-Pcyhrw6oR+tLf/qgLnb7qx3003ldv3KuDVg6QsEhQp0=";
   };
 
   makeWrapperArgs =
@@ -43,6 +43,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Mic92/nixpkgs-review";
     changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda mic92 SuperSandro2000 ];
+    maintainers = with maintainers; [ figsoda mic92 ];
   };
 }

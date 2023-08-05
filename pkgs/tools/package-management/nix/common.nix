@@ -1,11 +1,11 @@
 { lib, fetchFromGitHub
 , version
 , suffix ? ""
-, sha256 ? null
-, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit sha256; }
+, hash ? null
+, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
 }:
-assert (sha256 == null) -> (src != null);
+assert (hash == null) -> (src != null);
 let
   atLeast24 = lib.versionAtLeast version "2.4pre";
   atLeast25 = lib.versionAtLeast version "2.5pre";
@@ -132,6 +132,10 @@ self = stdenv.mkDerivation {
     (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
   ];
 
+  postPatch = ''
+    patchShebangs --build tests
+  '';
+
   preConfigure =
     # Copy libboost_context so we don't get all of Boost in our closure.
     # https://github.com/NixOS/nixpkgs/issues/45462
@@ -237,6 +241,7 @@ self = stdenv.mkDerivation {
     maintainers = with maintainers; [ eelco lovesegfault artturin ];
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+    mainProgram = "nix";
   };
 };
 in self

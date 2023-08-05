@@ -5,7 +5,6 @@ let
 in
 py.toPythonApplication
   (py.mlflow.overridePythonAttrs(old: rec {
-    pname = "mlflow-server";
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
       py.boto3

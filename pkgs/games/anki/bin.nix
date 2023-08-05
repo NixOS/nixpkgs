@@ -1,24 +1,24 @@
-{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? [] }:
+{ fetchurl, stdenv, lib, buildFHSEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? [] }:
 
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.61";
+  version = "2.1.65";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      sha256 = "sha256-f+PneP2vB7HFxI3mvkrm/kyvdBZgKbu5pYPUNR5XEO4=";
+      sha256 = "sha256-JBqW/aCMUyR0H52WMYuVkcE3/t/joLxfvFho64IzvDg=";
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
-      sha256 = "sha256-BctUHyy0U1frXRgZ3y8cpiWGnTm8XZdL018RjzhaJDg=";
+      sha256 = "sha256-zmCI77yLdoJm/znUgy+xZ8Jd77F3CPlzq3ceBzckA4U=";
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
-      sha256 = "sha256-lZ4HoVqbIouTmHkxV51mNI5EAfGJd3UmNG5Lqeiu0ys=";
+      sha256 = "sha256-1owbeL28dnOYD7nR9uZt9EHvFK75GFGRe6S9oV85Eoo=";
     };
   };
 
@@ -50,17 +50,20 @@ let
 
   passthru = { inherit sources; };
 
-  fhsUserEnvAnki = buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
-    name = "anki";
+  fhsEnvAnki = buildFHSEnv (appimageTools.defaultFhsEnvArgs // {
+    inherit pname version;
+    name = null; # Appimage sets it to "appimage-env"
 
     # Dependencies of anki
-    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
+    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 ]);
 
     runScript = writeShellScript "anki-wrapper.sh" ''
       exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs }
     '';
 
     extraInstallCommands = ''
+      ln -s ${pname} $out/bin/anki
+
       mkdir -p $out/share
       cp -R ${unpacked}/share/applications \
         ${unpacked}/share/man \
@@ -70,17 +73,9 @@ let
 
     inherit meta passthru;
   });
-
-  fhsUserEnvAnkiWithVersion = fhsUserEnvAnki.overrideAttrs (oldAttrs: {
-    # buildFHSUserEnv doesn't have an easy way to set the version of the
-    # resulting derivation, so we manually override it here.  This makes
-    # it clear to end users the version of anki-bin.  Without this, users
-    # might assume anki-bin is an old version of Anki.
-    name = "${pname}-${version}";
-  });
 in
 
-if stdenv.isLinux then fhsUserEnvAnkiWithVersion
+if stdenv.isLinux then fhsEnvAnki
 else stdenv.mkDerivation {
   inherit pname version passthru;
 

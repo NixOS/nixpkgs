@@ -1,5 +1,4 @@
-{ lib
-, buildFHSUserEnvBubblewrap
+{ buildFHSEnv
 , symlinkJoin
 , bottles-unwrapped
 , gst_all_1
@@ -8,6 +7,9 @@
 }:
 
 let fhsEnv = {
+  # Many WINE games need 32bit
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
     bottles-unwrapped
     # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)
@@ -99,8 +101,8 @@ in
 symlinkJoin {
   name = "bottles";
   paths = [
-    (buildFHSUserEnvBubblewrap (fhsEnv // { name = "bottles"; runScript = "bottles"; }))
-    (buildFHSUserEnvBubblewrap (fhsEnv // { name = "bottles-cli"; runScript = "bottles-cli"; }))
+    (buildFHSEnv (fhsEnv // { name = "bottles"; runScript = "bottles"; }))
+    (buildFHSEnv (fhsEnv // { name = "bottles-cli"; runScript = "bottles-cli"; }))
   ];
   postBuild = ''
     mkdir -p $out/share

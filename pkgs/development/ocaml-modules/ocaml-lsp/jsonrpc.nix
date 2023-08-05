@@ -40,7 +40,7 @@ buildDunePackage rec {
     inherit (params) sha256;
   };
 
-  duneVersion = if lib.versionAtLeast version "1.10.0" then "3" else "2";
+  duneVersion = "3";
   minimalOCamlVersion = "4.06";
 
   buildInputs =

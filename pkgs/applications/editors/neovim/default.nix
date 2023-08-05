@@ -1,9 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
-, fetchpatch
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack-c, libtermkey, libiconv
 , libuv, lua, ncurses, pkg-config
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
+, fetchurl
+, buildPackages
+, treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
 , glibcLocales ? null, procps ? null
 
@@ -14,34 +16,44 @@
 }:
 
 let
-  neovimLuaEnv = lua.withPackages(ps:
-    (with ps; [ lpeg luabitop mpack ]
-    ++ lib.optionals doCheck [
-        nvim-client luv coxpcall busted luafilesystem penlight inspect
-      ]
-    ));
+  requiredLuaPkgs = ps: (with ps; [
+    lpeg
+    luabitop
+    mpack
+  ] ++ lib.optionals doCheck [
+    nvim-client
+    luv
+    coxpcall
+    busted
+    luafilesystem
+    penlight
+    inspect
+  ]
+  );
+  neovimLuaEnv = lua.withPackages requiredLuaPkgs;
+  neovimLuaEnvOnBuild = lua.luaOnBuild.withPackages requiredLuaPkgs;
   codegenLua =
-    if lua.pkgs.isLuaJIT
+    if lua.luaOnBuild.pkgs.isLuaJIT
       then
         let deterministicLuajit =
-          lua.override {
+          lua.luaOnBuild.override {
             deterministicStringIds = true;
             self = deterministicLuajit;
           };
         in deterministicLuajit.withPackages(ps: [ ps.mpack ps.lpeg ])
-      else lua;
+      else lua.luaOnBuild;
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.8.3";
+    version = "0.9.1";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      hash = "sha256-ItJ8aX/WUfcAovxRsXXyWKBAI92hFloYIZiv7viPIdQ=";
+      hash = "sha256-G51qD7GklEn0JrneKSSqDDx0Odi7W2FjdQc0ZDE9ZK4=";
     };
 
     patches = [
@@ -49,13 +61,6 @@ in
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
-      # make the build reproducible, rebased version of
-      # https://github.com/neovim/neovim/pull/21586
-      (fetchpatch {
-        name = "neovim-build-make-generated-source-files-reproducible.patch";
-        url = "https://github.com/raboof/neovim/commit/485dd2af3efbfd174163583c46e0bb2a01ff04f1.patch";
-        hash = "sha256-9aRVK4lDkL/W4RVjeKptrZFY7rYYBx6/RGR4bQSbCsM=";
-      })
     ];
 
     dontFixCmake = true;
@@ -72,7 +77,7 @@ in
       # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
       # and it's definition at: pkgs/development/lua-modules/overrides.nix
       lua.pkgs.libluv
-      msgpack
+      msgpack-c
       ncurses
       neovimLuaEnv
       tree-sitter
@@ -105,6 +110,11 @@ in
     # nvim --version output retains compilation flags and references to build tools
     postPatch = ''
       substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
+    '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      sed -i runtime/CMakeLists.txt \
+        -e "s|\".*/bin/nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
+      sed -i src/nvim/po/CMakeLists.txt \
+        -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
     '';
     # check that the above patching actually works
     disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
@@ -123,14 +133,28 @@ in
       cmakeFlagsArray+=(
         "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
         "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
+        "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
       )
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '';
+    '' + ''
+      mkdir -p $out/lib/nvim/parser
+    '' + lib.concatStrings (lib.mapAttrsToList
+      (language: src: ''
+        ln -s \
+          ${tree-sitter.buildGrammar {
+            inherit language src;
+            version = "neovim-${version}";
+          }}/parser \
+          $out/lib/nvim/parser/${language}.so
+      '')
+      treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
     '';
+
+    separateDebugInfo = true;
 
     meta = with lib; {
       description = "Vim text editor fork focused on extensibility and agility";

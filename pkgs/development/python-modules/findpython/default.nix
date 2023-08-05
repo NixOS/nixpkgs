@@ -4,7 +4,7 @@
 , pythonOlder
 
 # build time
-, pdm-pep517
+, pdm-backend
 
 # runtime
 , packaging
@@ -15,7 +15,7 @@
 
 let
   pname = "findpython";
-  version = "0.2.4";
+  version = "0.3.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,11 +25,11 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YfF2jN2EPcL4pFlxJyxYwlZBpQsZ2pEwLiSS4ypmc2I=";
+    hash = "sha256-diH4qcGZpw0hmDHN2uuEyn6D4guDWBcr/0eHGhil7aQ=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [

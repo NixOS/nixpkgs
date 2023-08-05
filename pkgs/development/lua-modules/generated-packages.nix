@@ -1121,6 +1121,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+lua-curl = callPackage({ lua, buildLuarocksPackage, fetchzip, luaOlder, luaAtLeast }:
+buildLuarocksPackage {
+  pname = "lua-curl";
+  version = "0.3.13-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lua-curl-0.3.13-1.rockspec";
+    sha256 = "0lz534sm35hxazf1w71hagiyfplhsvzr94i6qyv5chjfabrgbhjn";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/Lua-cURL/Lua-cURLv3/archive/v0.3.13.zip";
+    sha256 = "0gn59bwrnb2mvl8i0ycr6m3jmlgx86xlr9mwnc85zfhj7zhi5anp";
+  };
+
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/Lua-cURL";
+    description = "Lua binding to libcurl";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
 lua-iconv = callPackage({ fetchurl, lua, buildLuarocksPackage, luaOlder }:
 buildLuarocksPackage {
   pname = "lua-iconv";
@@ -2390,6 +2413,37 @@ buildLuarocksPackage {
     description = "libYAML binding for Lua";
     maintainers = with lib.maintainers; [ lblasc ];
     license.fullName = "MIT/X11";
+  };
+}) {};
+
+magick = callPackage({ fetchgit, buildLuarocksPackage, lua }:
+buildLuarocksPackage {
+  pname = "magick";
+  version = "1.6.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/magick-1.6.0-1.rockspec";
+    sha256 = "1pg150xsxnqvlhxpiy17s9hm4dkc84v46mlwi9rhriynqz8qks9w";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/leafo/magick.git",
+  "rev": "6971fa700c4d392130492a3925344b51c7cc54aa",
+  "date": "2022-03-10T20:02:11-08:00",
+  "path": "/nix/store/fpl99q09zg3qnk4kagxk1djabl1dm47l-magick",
+  "sha256": "01b9qsz27f929rz5z7vapqhazxak74sichdwkjwb219nlhrwfncm",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = (lua.luaversion != "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "git://github.com/leafo/magick.git";
+    description = "Lua bindings to ImageMagick & GraphicsMagick for LuaJIT using FFI";
+    license.fullName = "MIT";
   };
 }) {};
 

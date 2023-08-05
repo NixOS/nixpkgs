@@ -1,21 +1,22 @@
 { lib, fetchFromGitHub }:
 let
-  version = "0.15.7";
-  srcSha256 = "sha256-Y6ew9CychStC26A7uyjChvkR+oDis3GZq8kYLHS7AXQ=";
-  yarnSha256 = "sha256-PY0BIBbjyi2DG+n5x/IPc0AwrFSwII4huMDU+FeZ/Sc=";
+  version = "1.0.0";
+  srcHash = "sha256-1HSSHR3myn1x75kO/70w1p21a7dHwFiC7iAH/KRoYsE=";
+  vendorHash = "sha256-UFTK3EK8eYB3/iKxycCIkSHdLsKGnDkYCpoFJSajm5M=";
+  yarnHash = "sha256-QNeQwWU36A05zaARWmqEOhfyZRW68OgF4wTonQLYQfs=";
 in
 {
-  inherit version yarnSha256;
+  inherit version yarnHash vendorHash;
 
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "woodpecker";
     rev = "v${version}";
-    sha256 = srcSha256;
+    hash = srcHash;
   };
 
-  postBuild = ''
-    cd $GOPATH/bin
+  postInstall = ''
+    cd $out/bin
     for f in *; do
       mv -- "$f" "woodpecker-$f"
     done

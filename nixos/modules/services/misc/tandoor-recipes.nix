@@ -9,6 +9,7 @@ let
   env = {
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
     DEBUG = "0";
+    DEBUG_TOOLBAR = "0";
     MEDIA_ROOT = "/var/lib/tandoor-recipes";
   } // optionalAttrs (config.time.timeZone != null) {
     TIMEZONE = config.time.timeZone;

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jwasm";
-  version = "2.16";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "Baron-von-Riedesel";
     repo  = "JWasm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-X2qqS4ev0+PeA1Gcsi8nivKAGZv7jxThxmQL/Jf5oB0=";
+    hash = "sha256-22eNtHXF+RQT4UbXIVjn1JP/s6igp5O1oQT7sVl7c1U=";
   };
 
   outputs = [ "out" "doc" ];

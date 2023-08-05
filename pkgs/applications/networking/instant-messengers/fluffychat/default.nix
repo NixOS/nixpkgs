@@ -1,33 +1,24 @@
 { lib
-, stdenv
-, fetchzip
+, fetchFromGitLab
 , imagemagick
-, autoPatchelfHook
-, gtk3
-, libsecret
-, jsoncpp
-, wrapGAppsHook
+, flutter
 , makeDesktopItem
-, openssl
-, olm
+, gnome
 }:
 
-let
-  # map of nix platform -> expected url platform
-  platformMap = {
-    x86_64-linux = "linux-x86";
-    aarch64-linux = "linux-arm64";
-  };
-in
-stdenv.mkDerivation rec {
-  version = "1.10.0";
-  name = "fluffychat";
+flutter.buildFlutterApplication rec {
+  pname = "fluffychat";
+  version = "1.12.1";
 
-  src = fetchzip {
-    url = "https://gitlab.com/api/v4/projects/16112282/packages/generic/fluffychat/${version}/fluffychat-${platformMap.${stdenv.hostPlatform.system}}.tar.gz";
-    stripRoot = false;
-    sha256 = "sha256-SbzTEMeJRFEUN0nZF9hL0UEzTWl1VtHVPIx/AGgQvM8=";
+  src = fetchFromGitLab {
+    owner = "famedly";
+    repo = "fluffychat";
+    rev = "v${version}";
+    hash = "sha256-F4oVscw5L8iQZtz5K+yo4tlPYYv1wfs88oyq5Uds20I=";
   };
+
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-u0cQ5ejyxhw4du3jXRB8oWsAlMtbw5nX+SMUUCuwklE=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
@@ -37,18 +28,11 @@ stdenv.mkDerivation rec {
     genericName = "Chat with your friends (matrix client)";
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
-  buildInputs = [ gtk3 libsecret jsoncpp ];
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook imagemagick ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share
-    mv * $out/share
-
-    makeWrapper "$out/share/fluffychat" "$out/bin/fluffychat" \
-      --prefix "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ openssl olm ]}"
-
-    FAV=$out/share/data/flutter_assets/assets/favicon.png
+  nativeBuildInputs = [ imagemagick ];
+  extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
+  postInstall = ''
+    FAV=$out/app/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/fluffychat.png
@@ -69,6 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ mkg20001 gilice ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.fromSource ];
   };
 }

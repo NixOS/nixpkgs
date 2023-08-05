@@ -2,6 +2,7 @@
 , aiomisc
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 }:
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiomisc
+    pytest-aiohttp
     pytestCheckHook
   ];
 

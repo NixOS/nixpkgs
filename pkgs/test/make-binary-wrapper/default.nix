@@ -52,7 +52,7 @@ let
     "prefix"
     "suffix"
   ] makeGoldenTest // lib.optionalAttrs (! stdenv.isDarwin) {
-    cross = pkgsCross.aarch64-multiplatform.callPackage ./cross.nix { };
+    cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.callPackage ./cross.nix { };
   };
 in
 

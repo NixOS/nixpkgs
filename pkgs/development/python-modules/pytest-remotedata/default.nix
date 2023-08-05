@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/astropy/pytest-remotedata";
     changelog = "https://github.com/astropy/pytest-remotedata/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

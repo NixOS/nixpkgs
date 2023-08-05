@@ -5,21 +5,20 @@
 , glib
 , gobject-introspection
 , pkg-config
-, go
 }:
 
 buildGoModule rec {
   pname = "gotktrix";
-  version = "unstable-2022-09-29";
+  version = "unstable-2023-04-05";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = pname;
-    rev = "3d9e8ac4810f7cb9d9ead7b4b13ffa6f5da8927f"; # compound
-    sha256 = "sha256-VIV4vSntu3oCIE23f5fiYj8cxcKY1n4M4Xkf0MGhvxI=";
+    rev = "a8f876a383cc34dac18edddbe22be2dd494b8d0c"; # compound
+    hash = "sha256-BuiA9UajdMhSrEfaXdu5DZlVhC4GVUdUpQDLMvKGrEk=";
   };
 
-  vendorSha256 = "sha256-R55tfTJL/bgNWTgmuBFRxIQleKS9zeDqvfez2VyzqjI=";
+  vendorHash = "sha256-oo/j6i7slXILqyvj/EHojsyCZzJMGd10PTZaLvI1xoc=";
 
   buildInputs = [
     gtk4

@@ -12,7 +12,7 @@
 , gdbm
 , gnutls
 , gss
-, guile
+, guile_2_2
 , libmysqlclient
 , mailcap
 , nettools
@@ -23,6 +23,7 @@
 , sasl
 , system-sendmail
 , libxcrypt
+, mkpasswd
 
 , pythonSupport ? true
 , guileSupport ? true
@@ -30,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
-  version = "3.15";
+  version = "3.16";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-t9DChsNS/MfaeXjP1hfMZnNrIfqJGqT4iFX1FjVPLds=";
+    hash = "sha256-BB0VjTCMA3YYQ4jpyTbPqEGlHNwl1Nt1mEp3Gj+gAsA=";
   };
 
   separateDebugInfo = true;
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     libxcrypt
   ] ++ lib.optionals stdenv.isLinux [ nettools ]
   ++ lib.optionals pythonSupport [ python3 ]
-  ++ lib.optionals guileSupport [ guile ];
+  ++ lib.optionals guileSupport [ guile_2_2 ];
 
   patches = [
     ./fix-build-mb-len-max.patch
@@ -79,6 +80,9 @@ stdenv.mkDerivation rec {
       url = "https://lists.gnu.org/archive/html/bug-mailutils/2020-11/txtiNjqcNpqOk.txt";
       sha256 = "0ghzqb8qx2q8cffbvqzw19mivv7r5f16whplzhm7hdj0j2i6xf6s";
     })
+    # https://github.com/NixOS/nixpkgs/issues/223967
+    # https://lists.gnu.org/archive/html/bug-mailutils/2023-04/msg00000.html
+    ./don-t-use-descrypt-password-in-the-test-suite.patch
   ];
 
   enableParallelBuilding = true;
@@ -94,7 +98,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional (!guileSupport) "--without-guile";
 
-  nativeCheckInputs = [ dejagnu ];
+  nativeCheckInputs = [ dejagnu mkpasswd ];
   doCheck = !stdenv.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
   doInstallCheck = false; # fails
 

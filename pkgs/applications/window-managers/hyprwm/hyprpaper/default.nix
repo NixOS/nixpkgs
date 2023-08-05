@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "unstable-2023-04-05";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = "hyprpaper";
-    rev = "9182de9ffc8c76fbf24d16dec0ea7a9430597a06";
-    hash = "sha256-LqvhYx1Gu+rlkF4pA1NYZzwRQwz3FeWBqXqmQq86m8o=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/ehJbAtSJS86NlqHVOeR2ViBKlImKH4guFVPacTmCr8=";
   };
 
   nativeBuildInputs = [
@@ -59,5 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ wozeparrot fufexan ];
     inherit (wayland.meta) platforms;
+    broken = stdenv.isDarwin;
+    mainProgram = "hyprpaper";
   };
 })

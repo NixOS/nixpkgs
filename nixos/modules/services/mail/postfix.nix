@@ -234,7 +234,7 @@ let
 
   headerChecks = concatStringsSep "\n" (map (x: "${x.pattern} ${x.action}") cfg.headerChecks) + cfg.extraHeaderChecks;
 
-  aliases = let separator = if cfg.aliasMapType == "hash" then ":" else ""; in
+  aliases = let separator = optionalString (cfg.aliasMapType == "hash") ":"; in
     optionalString (cfg.postmasterAlias != "") ''
       postmaster${separator} ${cfg.postmasterAlias}
     ''

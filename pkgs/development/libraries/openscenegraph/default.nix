@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen,
   libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
-  AGL, Carbon, Cocoa, Foundation,
+  AGL, Accelerate, Carbon, Cocoa, Foundation,
   boost,
   jpegSupport ? true, libjpeg,
   exrSupport ? false, openexr,
@@ -39,8 +39,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake doxygen ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (!stdenv.isDarwin) [
     libX11 libXinerama libXrandr libGLU libGL
+  ] ++ [
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
     ++ lib.optional exrSupport openexr
@@ -62,7 +63,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional sdlSupport SDL2
     ++ lib.optional restSupport asio
     ++ lib.optionals withExamples [ fltk ]
-    ++ lib.optionals stdenv.isDarwin [ AGL Carbon Cocoa Foundation ]
+    ++ lib.optionals (!stdenv.isDarwin) [  ]
+    ++ lib.optionals stdenv.isDarwin [ AGL Accelerate Carbon Cocoa Foundation ]
     ++ lib.optional (restSupport || colladaSupport) boost
   ;
 

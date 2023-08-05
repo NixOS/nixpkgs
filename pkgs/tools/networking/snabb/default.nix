@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snabb";
-  version = "2022.12";
+  version = "2023.06";
 
   src = fetchFromGitHub {
     owner = "snabbco";
     repo = "snabb";
     rev = "v${version}";
-    sha256 = "sha256-DPJ1GrqZQyiW2s5JBZszcB/Is0Is2f/O/6Riz/M3wAs=";
+    sha256 = "sha256-MLEBT1UpyFiIGqI9W2bw2I2j4JanJ0MAV8nwcL/1QBM=";
   };
 
   installPhase = ''

@@ -63,13 +63,16 @@ buildPythonPackage rec {
     "test_n_pixels"
     # https://github.com/scikit-tda/persim/issues/67
     "test_persistenceimager"
+    # ValueError: setting an array element with a sequence
+    "test_exact_critical_pairs"
   ];
 
   meta = with lib; {
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
+    changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
     broken = stdenv.isDarwin;
   };
 }

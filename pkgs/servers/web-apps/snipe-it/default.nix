@@ -4,11 +4,14 @@
 , fetchFromGitHub
 , dataDir ? "/var/lib/snipe-it"
 , mariadb
+, nixosTests
+, php
+, phpPackages
 }:
 
 let
   package = (import ./composition.nix {
-    inherit pkgs;
+    inherit pkgs php phpPackages;
     inherit (stdenv.hostPlatform) system;
     noDev = true; # Disable development dependencies
   }).overrideAttrs (attrs : {
@@ -33,14 +36,17 @@ let
 
 in package.override rec {
   pname = "snipe-it";
-  version = "6.0.14";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-c2hzuNOpvVl+ZriCo3TRl/GHY+LCrIb2GO2U894S2yk=";
+    sha256 = "0kqrq0blamqbfh8dxfyvn2m4q7yphamh4yvpfs7iyb3lb7z7a75i";
   };
+
+  passthru.tests = nixosTests.snipe-it;
+  passthru.phpPackage = php;
 
   meta = with lib; {
     description = "A free open source IT asset/license management system";

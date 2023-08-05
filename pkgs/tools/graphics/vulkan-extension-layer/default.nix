@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
-  version = "1.3.239.0";
+  version = "1.3.254";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ExtensionLayer";
-    rev = "sdk-${version}";
-    hash = "sha256-0t9HGyiYk3twYQLFCcWsrPiXY1dqjdCadjP4yMLoFwA=";
+    rev = "v${version}";
+    hash = "sha256-YWJk0sAvhmfVbJ6Nv24kzFL4SltQnggNjZ+NjaUO1Io=";
   };
 
   nativeBuildInputs = [ cmake jq ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''
-    export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
+    addToSearchPath XDG_DATA_DIRS @out@/share
   '';
 
   # Tests are not for gpu-less and headless environments
@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = with maintainers; [ expipiplus1 ];
-    broken = (version != vulkan-headers.version);
   };
 }

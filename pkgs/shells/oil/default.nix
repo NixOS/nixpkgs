@@ -7,18 +7,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.14.2";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    hash = "sha256-I/r/DhELLpKMnZqUh847F/uVPiCYF5b574cjP59+ZG0=";
+    hash = "sha256-cRHIqFcdGm0dYgExvGfzd92P5iJO2+/ySeHV1o8d1WY=";
   };
 
   postPatch = ''
     patchShebangs build
-    # TODO: workaround for https://github.com/oilshell/oil/issues/1467
-    #       check for removability on updates :)
-    substituteInPlace configure --replace "echo '#define HAVE_READLINE 1'" "echo '#define HAVE_READLINE 1' && return 0"
   '';
 
   preInstall = ''

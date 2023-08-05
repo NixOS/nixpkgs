@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper, nixosTests }:
+{ lib, stdenv, fetchurl, bundlerEnv, ruby, defaultGemConfig, makeWrapper, nixosTests }:
 
 let
-  version = "4.2.10";
+  version = "5.0.5";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
     inherit ruby;
     gemdir = ./.;
-    groups = [ "development" "ldap" "markdown" "minimagick" "openid" "test" ];
+    groups = [ "development" "ldap" "markdown" "common_mark" "minimagick" "test" ];
   };
 in
   stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ in
 
     src = fetchurl {
       url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
-      sha256 = "sha256-byY4jCOJKWJVLKSR1e/tq9QtrIiGHdnYC8M0WPZb4ek=";
+      sha256 = "sha256-qJrRxLub8CXmUnx3qxjI+vd0nJSpdcryz9u6AOsSpIE=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -47,7 +47,7 @@ in
     meta = with lib; {
       homepage = "https://www.redmine.org/";
       platforms = platforms.linux;
-      maintainers = with maintainers; [ aanderse felixsinger ];
+      maintainers = with maintainers; [ aanderse felixsinger megheaiulian ];
       license = licenses.gpl2;
     };
   }

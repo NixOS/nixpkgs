@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, copyDesktopItems, makeWrapper
-, jre, maven, git
+{ lib, fetchFromGitHub, makeDesktopItem, copyDesktopItems, makeWrapper
+, jre, maven
 }:
 
 let
@@ -25,54 +25,29 @@ let
   # provide that version number manually as a property.
   # (see https://github.com/hneemann/Digital/issues/289#issuecomment-513721481)
   # Also use the commit date as a build and output timestamp.
-  mvnOptions = "-Pno-git-rev -Dgit.commit.id.describe=${version} -Dproject.build.outputTimestamp=${buildDate} -DbuildTimestamp=${buildDate}";
+  mvnParameters = "-Pno-git-rev -Dgit.commit.id.describe=${version} -Dproject.build.outputTimestamp=${buildDate} -DbuildTimestamp=${buildDate}";
 in
-stdenv.mkDerivation rec {
+maven.buildMavenPackage rec {
   pname = "digital";
   inherit version jre;
 
   src = fetchFromGitHub {
     owner = "hneemann";
     repo = "Digital";
-    rev = "932791eb6486d04f2ea938d83bcdb71b56d3a3f6";
-    sha256 = "cDykYlcFvDLFBy9UnX07iCR2LCq28SNU+h9vRT/AoJM=";
+    rev = "v${version}";
+    hash = "sha256-cDykYlcFvDLFBy9UnX07iCR2LCq28SNU+h9vRT/AoJM=";
   };
 
-  # Fetching maven dependencies from "central" needs the network at build phase,
-  # we do that in this extra derivation that explicitely specifies its
-  # outputHash to ensure determinism.
-  mavenDeps = stdenv.mkDerivation {
-    name = "${pname}-${version}-maven-deps";
-    inherit src nativeBuildInputs version;
-    dontFixup = true;
-    buildPhase = ''
-      mvn package ${mvnOptions} -Dmaven.repo.local=$out
-    '';
-    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with
-    # lastModified timestamps inside
-    installPhase = ''
-      find $out -type f \
-        -name \*.lastUpdated -or \
-        -name resolver-status.properties -or \
-        -name _remote.repositories \
-        -delete
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "1Cgw+5V2E/RENMRMm368+2yvY7y6v9gTlo+LRgrCXcE=";
-  };
+  inherit mvnParameters;
+  mvnHash = "sha256-wm/axWJucoW9P98dKqHI4bjrUnmBTfosCOdJg9VBJ+4=";
 
-  nativeBuildInputs = [ copyDesktopItems maven makeWrapper ];
-
-  buildPhase = ''
-    mvn package --offline ${mvnOptions} -Dmaven.repo.local=${mavenDeps}
-  '';
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/java
 
-    classpath=$(find ${mavenDeps} -name "*.jar" -printf ':%h/%f');
+    classpath=$(find $mvnDeps/.m2 -name "*.jar" -printf ':%h/%f');
     install -Dm644 target/Digital.jar $out/share/java
 
     makeWrapper ${jre}/bin/java $out/bin/${pname} \

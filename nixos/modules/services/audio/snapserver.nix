@@ -275,9 +275,9 @@ in {
 
     warnings =
       # https://github.com/badaix/snapcast/blob/98ac8b2fb7305084376607b59173ce4097c620d8/server/streamreader/stream_manager.cpp#L85
-      filter (w: w != "") (mapAttrsToList (k: v: if v.type == "spotify" then ''
+      filter (w: w != "") (mapAttrsToList (k: v: optionalString (v.type == "spotify") ''
         services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
-      '' else "") cfg.streams);
+      '') cfg.streams);
 
     systemd.services.snapserver = {
       after = [ "network.target" ];

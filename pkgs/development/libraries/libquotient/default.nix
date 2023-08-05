@@ -1,17 +1,17 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, olm, openssl, qtmultimedia, qtkeychain }:
+{ stdenv, lib, fetchFromGitHub, cmake, olm, openssl, qtbase, qtmultimedia, qtkeychain }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-3xnv1dcyeX3Kl5EH2Tlf6nXobLG1zXsFmYstnvmSAXA=";
+    hash = "sha256-Lq404O2VjZ8vlXOW+rhsvWDvZsNd3APNbv6AadQCjhk=";
   };
 
-  buildInputs = [ olm openssl qtmultimedia qtkeychain ];
+  buildInputs = [ olm openssl qtbase qtmultimedia qtkeychain ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -25,6 +25,8 @@ mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "A Qt5/Qt6 library to write cross-platform clients for Matrix";

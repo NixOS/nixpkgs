@@ -31,10 +31,10 @@ index da1a15302da..c846db93e5c 100644
    ## Webpack settings
    # If enabled, this will tell rails to serve frontend assets from the webpack-dev-server running
 diff --git a/config/initializers/1_settings.rb b/config/initializers/1_settings.rb
-index 99335321f28..9d9d1c48af4 100644
+index d096174fca3a..02d0f689c523 100644
 --- a/config/initializers/1_settings.rb
 +++ b/config/initializers/1_settings.rb
-@@ -185,7 +185,7 @@
+@@ -206,7 +206,7 @@
  Settings.gitlab['user_home'] ||= begin
    Etc.getpwnam(Settings.gitlab['user']).dir
  rescue ArgumentError # no user configured
@@ -43,17 +43,17 @@ index 99335321f28..9d9d1c48af4 100644
  end
  Settings.gitlab['time_zone'] ||= nil
  Settings.gitlab['signup_enabled'] ||= true if Settings.gitlab['signup_enabled'].nil?
-@@ -794,7 +794,7 @@
+@@ -959,7 +959,7 @@
  # Git
  #
- Settings['git'] ||= Settingslogic.new({})
+ Settings['git'] ||= {}
 -Settings.git['bin_path'] ||= '/usr/bin/git'
 +Settings.git['bin_path'] ||= 'git'
- 
+
  # Important: keep the satellites.path setting until GitLab 9.0 at
  # least. This setting is fed to 'rm -rf' in
 diff --git a/config/puma.rb.example b/config/puma.rb.example
-index 9fc354a8fe8..2352ca9b58c 100644
+index 07a6f6a25015..14a718a43202 100644
 --- a/config/puma.rb.example
 +++ b/config/puma.rb.example
 @@ -5,12 +5,8 @@
@@ -71,7 +71,7 @@ index 9fc354a8fe8..2352ca9b58c 100644
  
  # Configure "min" to be the minimum number of threads to use to answer
  # requests and "max" the maximum.
-@@ -31,12 +27,12 @@ queue_requests false
+@@ -31,11 +27,11 @@ queue_requests false
  
  # Bind the server to "url". "tcp://", "unix://" and "ssl://" are the only
  # accepted protocols.
@@ -81,14 +81,12 @@ index 9fc354a8fe8..2352ca9b58c 100644
  workers 3
  
 -require_relative "/home/git/gitlab/lib/gitlab/cluster/lifecycle_events"
--require_relative "/home/git/gitlab/lib/gitlab/cluster/puma_worker_killer_initializer"
 +require_relative ENV['GITLAB_PATH'] + "lib/gitlab/cluster/lifecycle_events"
-+require_relative ENV['GITLAB_PATH'] + "lib/gitlab/cluster/puma_worker_killer_initializer"
  
  on_restart do
    # Signal application hooks that we're about to restart
-@@ -80,7 +76,7 @@ if defined?(nakayoshi_fork)
- end
+@@ -74,7 +70,7 @@ worker_timeout 60
+ wait_for_less_busy_worker ENV.fetch('PUMA_WAIT_FOR_LESS_BUSY_WORKER', 0.001).to_f
  
  # Use json formatter
 -require_relative "/home/git/gitlab/lib/gitlab/puma_logging/json_formatter"

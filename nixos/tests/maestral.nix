@@ -52,7 +52,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = { nodes, ... }:
     let
-      user = nodes.cli.config.users.users.alice;
+      user = nodes.cli.users.users.alice;
     in
     ''
       start_all()
@@ -65,7 +65,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       with subtest("GUI"):
         gui.wait_for_x()
-        gui.succeed("xauth merge ${user.home}/.Xauthority")
+        gui.wait_for_file("/tmp/xauth_*")
+        gui.succeed("xauth merge /tmp/xauth_*")
         gui.wait_for_window("^Desktop ")
         gui.wait_for_unit("maestral.service", "${user.name}")
     '';

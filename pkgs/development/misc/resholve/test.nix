@@ -20,7 +20,7 @@
 , runDemo ? false
 , binlore
 , sqlite
-, util-linux
+, unixtools
 , gawk
 , rlwrap
 , gnutar
@@ -29,7 +29,7 @@
 
 let
   default_packages = [ bash file findutils gettext ];
-  parsed_packages = [ coreutils sqlite util-linux gnused gawk findutils rlwrap gnutar bc ];
+  parsed_packages = [ coreutils sqlite unixtools.script gnused gawk findutils rlwrap gnutar bc ];
 in
 rec {
   module1 = resholve.mkDerivation {

@@ -1,4 +1,10 @@
-{ lib, python3, fetchFromGitHub, fetchurl }:
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, fetchPypi
+, nix-update-script
+}:
 let
   python = python3.override {
     # override resolvelib due to
@@ -7,24 +13,15 @@ let
     # 3. Ansible being unable to upgrade to a later version of resolvelib
     # see here for more details: https://github.com/NixOS/nixpkgs/pull/155380/files#r786255738
     packageOverrides = self: super: {
-      installer = super.installer.overridePythonAttrs (attrs: rec {
-        version = "0.6.0";
-        src = fetchFromGitHub {
-          owner = "pradyunsg";
-          repo = "installer";
-          rev = version;
-          hash = "sha256-IXznSrc/4LopgZDGFSC6cAOCbts+siKpdl5SvN1FFvA=";
-        };
-      });
-      resolvelib = super.resolvelib.overridePythonAttrs (attrs: rec {
-        version = "0.9.0";
+      resolvelib = super.resolvelib.overridePythonAttrs rec {
+        version = "1.0.1";
         src = fetchFromGitHub {
           owner = "sarugaku";
           repo = "resolvelib";
           rev = "/refs/tags/${version}";
-          hash = "sha256-xzu8sMNMihJ80vezMdGkOT5Etx08qy3T/TkEn5EAY48=";
+          hash = "sha256-oxyPn3aFPOyx/2aP7Eg2ThtPbyzrFT1JzWqy6GqNbzM=";
         };
-      });
+      };
     };
     self = python;
   };
@@ -33,23 +30,23 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.4.6";
+  version = "2.8.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g+fQxq2kwhNXXEJG2n5n4f9GMkmmLsjpHoay152fcVQ=";
+    hash = "sha256-BgsWKP2kZfLEHgZNISyp66Yww0ajMF4RWuI6TCzwJNo=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
     blinker
-    cachecontrol
     certifi
+    cachecontrol
     findpython
     installer
     packaging
@@ -77,7 +74,8 @@ buildPythonApplication rec {
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
-  ];
+    pytest-httpserver
+  ] ++ lib.optional stdenv.isLinux first;
 
   pytestFlagsArray = [
     "-m 'not network'"
@@ -96,6 +94,8 @@ buildPythonApplication rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://pdm.fming.dev";

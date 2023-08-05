@@ -4,10 +4,9 @@
 , fetchFromGitHub
 , curl
 , installShellFiles
-, makeWrapper
 , pkg-config
 , bzip2
-, libgit2_1_5
+, libgit2
 , openssl
 , zlib
 , zstd
@@ -26,28 +25,27 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
-  version = "0.2.1";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     rev = "v${version}";
-    hash = "sha256-SvoKw0Ep8NGknu+6qd6xW6hfH261kFD6DjZhPXQpzs0=";
+    hash = "sha256-VP0UwJhiY6gDF3tBI1DOW0B4XAl9CzTHzgIP68iF4VM=";
   };
 
-  cargoHash = "sha256-lm4Y/ZTRMiBp3ECKnHZBvwM8Qso+rilT3BDxzfcnpHQ=";
+  cargoHash = "sha256-x1zRQGWN2NOvDDrQgkeObf6eNoCGMSw3DVgwVqfbI48=";
 
   nativeBuildInputs = [
     curl
     installShellFiles
-    makeWrapper
     pkg-config
   ];
 
   buildInputs = [
     bzip2
     curl
-    libgit2_1_5
+    libgit2
     openssl
     zlib
     zstd
@@ -76,14 +74,16 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/nix-init \
-      --prefix PATH : ${lib.makeBinPath [ nix nurl ]}
     installManPage artifacts/nix-init.1
     installShellCompletion artifacts/nix-init.{bash,fish} --zsh artifacts/_nix-init
   '';
 
-  GEN_ARTIFACTS = "artifacts";
-  ZSTD_SYS_USE_PKG_CONFIG = true;
+  env = {
+    GEN_ARTIFACTS = "artifacts";
+    NIX = lib.getExe nix;
+    NURL = lib.getExe nurl;
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   meta = with lib; {
     description = "Command line tool to generate Nix packages from URLs";

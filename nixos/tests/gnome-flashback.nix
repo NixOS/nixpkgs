@@ -1,12 +1,11 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gnome-flashback";
-  meta = with lib; {
-    maintainers = teams.gnome.members ++ [ maintainers.chpatrick ];
-  };
+  meta.maintainers = lib.teams.gnome.members ++ [ lib.maintainers.chpatrick ];
 
-  nodes.machine = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-  in
+  nodes.machine = { nodes, ... }:
+    let
+      user = nodes.machine.users.users.alice;
+    in
 
     { imports = [ ./common/user-account.nix ];
 
@@ -28,12 +27,20 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     };
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
+    user = nodes.machine.users.users.alice;
     uid = toString user.uid;
     xauthority = "/run/user/${uid}/gdm/Xauthority";
   in ''
       with subtest("Login to GNOME Flashback with GDM"):
-          machine.wait_for_x()
+          # wait_for_x() checks graphical-session.target, which is expected to be
+          # inactive on gnome-flashback before #228946 (i.e. systemd managed
+          # gnome-session) is done.
+          # https://github.com/NixOS/nixpkgs/pull/208060
+          #
+          # Previously this was unconditionally touched by xsessionWrapper but was
+          # changed in #233981 (we have GNOME-Flashback:GNOME in XDG_CURRENT_DESKTOP).
+          # machine.wait_for_x()
+          machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
           # Wait for alice to be logged in"
           machine.wait_for_unit("default.target", "${user.name}")
           machine.wait_for_file("${xauthority}")

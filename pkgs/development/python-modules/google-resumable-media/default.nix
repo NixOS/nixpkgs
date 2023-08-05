@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "2.4.1";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fbii5130LcZQLRMG2wvOJke6YBP5zQO24XNowIhu6Qo=";
+    hash = "sha256-IYkx6OKypzpY6zVKKI4DoP1fscRYMmGsbkwHhmZGjJM=";
   };
 
   propagatedBuildInputs = [
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GoogleCloudPlatform/google-resumable-media-python";
     changelog = "https://github.com/googleapis/google-resumable-media-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

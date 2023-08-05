@@ -4,15 +4,15 @@
     "version": "16.30.0"
   },
   "asterisk_18": {
-    "sha256": "2d280794ae7505ed3dfc58b3190774cb491aa74c339fbde1a11740e6be79b466",
-    "version": "18.16.0"
+    "sha256": "66f0e55d84f9e5bf4e79a56255d35a034448acce00d219c3bf4930b1ebb0e88e",
+    "version": "18.17.1"
   },
   "asterisk_19": {
     "sha256": "f0c56d1f8e39e0427455edfe25d24ff088c756bdc32dd1278c9f7a320815cbaa",
     "version": "19.8.0"
   },
   "asterisk_20": {
-    "sha256": "4364dc762652e2fd4d3e7dc8428c83550ebae090b8a0e9d4820583e081778883",
-    "version": "20.1.0"
+    "sha256": "df12e47000fbac42bb780bb06172aa8bb8ac26faf77cc9f95184695b0cec69c3",
+    "version": "20.2.1"
   }
 }

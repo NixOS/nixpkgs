@@ -1,5 +1,5 @@
 /* An environment for development that bundles ruby, bundler and bundix
-   together. This avoids version conflicts where each is using a diferent
+   together. This avoids version conflicts where each is using a different
    version of each-other.
 */
 { buildEnv, ruby, bundler, bundix }:

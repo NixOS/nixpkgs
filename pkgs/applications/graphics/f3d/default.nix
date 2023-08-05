@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "1.3.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
-    rev = "v${version}";
-    hash = "sha256-dOpiX7xJWDKHqPLGvlgv7NHgfzyeZhJd898+KzAmD4Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2LDHIeKgLUS2ujJUx2ZerXmZYB9rrT3PYvrtzV4vcHM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast and minimalist 3D viewer using VTK";
     homepage = "https://f3d-app.github.io/f3d";
+    changelog = "https://github.com/f3d-app/f3d/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
     platforms = with platforms; unix;

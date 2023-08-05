@@ -16,7 +16,7 @@ index 5591853b..838c06cb 100644
              ormConfig.charset = config.mysql.charset;
          }
 +        if (config.mysql.socketPath) {
-+            ormConfig.socketPath = config.mysql.socketPath;
++            ormConfig.extra = { socketPath: config.mysql.socketPath };
 +        } else {
 +            ormConfig.host = config.mysql.host;
 +            ormConfig.port = config.mysql.port;

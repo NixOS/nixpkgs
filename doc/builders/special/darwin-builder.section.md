@@ -1,11 +1,12 @@
-# darwin.builder {#sec-darwin-builder}
+# darwin.linux-builder {#sec-darwin-builder}
 
-`darwin.builder` provides a way to bootstrap a Linux builder on a macOS machine.
+`darwin.linux-builder` provides a way to bootstrap a Linux builder on a macOS machine.
 
 This requires macOS version 12.4 or later.
 
-This also requires that port 22 on your machine is free (since Nix does not
-permit specifying a non-default SSH port for builders).
+The builder runs on host port 31022 by default.
+You can change it by overriding `virtualisation.darwin-builder.hostPort`.
+See the [example](#sec-darwin-builder-example-flake).
 
 You will also need to be a trusted user for your Nix installation.  In other
 words, your `/etc/nix/nix.conf` should have something like:
@@ -17,7 +18,7 @@ extra-trusted-users = <your username goes here>
 To launch the builder, run the following flake:
 
 ```ShellSession
-$ nix run nixpkgs#darwin.builder
+$ nix run nixpkgs#darwin.linux-builder
 ```
 
 That will prompt you to enter your `sudo` password:
@@ -50,10 +51,19 @@ To delegate builds to the remote builder, add the following options to your
 ```
 # - Replace ${ARCH} with either aarch64 or x86_64 to match your host machine
 # - Replace ${MAX_JOBS} with the maximum number of builds (pick 4 if you're not sure)
-builders = ssh-ng://builder@localhost ${ARCH}-linux /etc/nix/builder_ed25519 ${MAX_JOBS} - - - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUpCV2N4Yi9CbGFxdDFhdU90RStGOFFVV3JVb3RpQzVxQkorVXVFV2RWQ2Igcm9vdEBuaXhvcwo=
+builders = ssh-ng://builder@linux-builder ${ARCH}-linux /etc/nix/builder_ed25519 ${MAX_JOBS} - - - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUpCV2N4Yi9CbGFxdDFhdU90RStGOFFVV3JVb3RpQzVxQkorVXVFV2RWQ2Igcm9vdEBuaXhvcwo=
 
 # Not strictly necessary, but this will reduce your disk utilization
 builders-use-substitutes = true
+```
+
+To allow Nix to connect to a builder not running on port 22, you will also need to create a new file at `/etc/ssh/ssh_config.d/100-linux-builder.conf`:
+
+```
+Host linux-builder
+  Hostname localhost
+  HostKeyAlias linux-builder
+  Port 31022
 ```
 
 … and then restart your Nix daemon to apply the change:
@@ -62,7 +72,7 @@ builders-use-substitutes = true
 $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 ```
 
-## Example flake usage
+## Example flake usage {#sec-darwin-builder-example-flake}
 
 ```
 {
@@ -120,7 +130,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 }
 ```
 
-## Reconfiguring the builder
+## Reconfiguring the builder {#sec-darwin-builder-reconfiguring}
 
 Initially you should not change the builder configuration else you will not be
 able to use the binary cache. However, after you have the builder running locally

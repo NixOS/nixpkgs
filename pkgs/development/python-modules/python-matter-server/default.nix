@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "3.2.0";
+  version = "3.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-T2DB3oWePYR8qKfUeVDMUA5JGdMk/onbpjBt2fWhCuw=";
+    hash = "sha256-t++7jQreibGpJRjJawicxjFIye5X6R1dpFqiM6yvRf0=";
   };
 
   nativeBuildInputs = [

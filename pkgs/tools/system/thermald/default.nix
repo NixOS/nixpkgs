@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "thermald";
-  version = "2.5.2";
+  version = "2.5.3";
 
   outputs = [ "out" "devdoc" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "sha256-Ex3HSGJJDPPciX0Po9TpySVPUL257wz1ZjaLCa2igCM=";
+    sha256 = "sha256-rYhf+mbELNmm6gVS7eH1EEY73Dsw1vZLFUbaTOU980I=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
     "--enable-gtk-doc"
     "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "--disable-werror"
   ];
 
   preConfigure = "NO_CONFIGURE=1 ./autogen.sh";

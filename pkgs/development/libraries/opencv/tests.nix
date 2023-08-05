@@ -39,7 +39,7 @@ let
     "stitching"
     "video"
   ] ++ lib.optionals (!stdenv.isAarch64 && enableGStreamer) [ "gapi" ];
-  testRunner = if stdenv.isDarwin then "" else "${lib.getExe xvfb-run} -a ";
+  testRunner = lib.optionalString (!stdenv.isDarwin) "${lib.getExe xvfb-run} -a ";
   testsPreparation = ''
     touch $out
     # several tests want a write access, so we have to copy files
@@ -57,7 +57,7 @@ let
       (map (test: "${testRunner}${opencv4.package_tests}/opencv_test_${test} --test_threads=$NIX_BUILD_CORES --gtest_filter=$GTEST_FILTER" ) testNames)
     }
   '';
-  perfomanceTests = lib.optionalString runPerformanceTests ''
+  performanceTests = lib.optionalString runPerformanceTests ''
     ${ builtins.concatStringsSep "\n"
       (map (test: "${testRunner}${opencv4.package_tests}/opencv_perf_${test} --perf_impl=plain --perf_min_samples=10 --perf_force_samples=10 --perf_verify_sanity --skip_unstable=1 --gtest_filter=$GTEST_FILTER") perfTestNames)
     }
@@ -67,4 +67,4 @@ runCommand "opencv4-tests"
 {
   nativeBuildInputs = lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ]);
 }
-  (testsPreparation + accuracyTests + perfomanceTests)
+  (testsPreparation + accuracyTests + performanceTests)

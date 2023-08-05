@@ -6,22 +6,23 @@
 , ninja
 , pkg-config
 , cli11
+, eigen
 , hidrd
 , inih
-, microsoft_gsl
+, microsoft-gsl
 , spdlog
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
-  version = "1.1.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IwvoqmqJTM6xtEp7AzLgT4dZgRsmXYmu6Zivx3oSm+Q=";
+    hash = "sha256-06KGMXkp5lR05iNQOll1h0q+Z+XWMberqG1C9Cs7VfA=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +36,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cli11
+    eigen
     hidrd
     inih
-    microsoft_gsl
+    microsoft-gsl
     spdlog
     systemd
   ];
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
     substituteInPlace etc/meson.build \
       --replace "install_dir: unitdir" "install_dir: '$out/etc/systemd/system'" \
       --replace "install_dir: rulesdir" "install_dir: '$out/etc/udev/rules.d'"
-    substituteInPlace etc/udev/50-ipts.rules \
+    substituteInPlace etc/udev/50-iptsd.rules.in \
       --replace "/bin/systemd-escape" "${systemd}/bin/systemd-escape"
   '';
 

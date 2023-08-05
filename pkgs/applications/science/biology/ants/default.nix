@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ANTs";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
-    owner  = "ANTsX";
-    repo   = "ANTs";
-    rev    = "refs/tags/v${version}";
-    sha256 = "sha256-S4HYhsqof27UXEYjKvbod8N7PkZDmwLdwcEAvJD0W5g=";
+    owner = "ANTsX";
+    repo = "ANTs";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GQndI8ayBvqujb2/qXT6RBAfr8hNPCI5IbwYkPlyNg0=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

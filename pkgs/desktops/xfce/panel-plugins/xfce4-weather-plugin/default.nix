@@ -1,17 +1,32 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxml2, libsoup, upower,
-  libxfce4ui, xfce4-panel, xfconf, hicolor-icon-theme, gitUpdater }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, glib
+, gtk3
+, libxml2
+, libsoup
+, upower
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+, xfconf
+, hicolor-icon-theme
+, gitUpdater
+}:
 
 let
   category = "panel-plugins";
 in
 
 stdenv.mkDerivation rec {
-  pname  = "xfce4-weather-plugin";
-  version = "0.11.0";
+  pname = "xfce4-weather-plugin";
+  version = "0.11.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-4yQuqVHVG8D97R0CpPH2Yr7Bah+xDIVfcb2mVBoRU/w=";
+    sha256 = "sha256-pFFG+aDc3JXRkcCcZK0nmuKJz4+BHEQz4I4xplaEUjk=";
   };
 
   nativeBuildInputs = [
@@ -20,10 +35,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glib
+    gtk3
     libxml2
     libsoup
     upower
     libxfce4ui
+    libxfce4util
     xfce4-panel
     xfconf
     hicolor-icon-theme

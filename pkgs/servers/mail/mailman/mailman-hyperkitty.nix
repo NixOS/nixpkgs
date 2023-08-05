@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , mailman
 }:
 

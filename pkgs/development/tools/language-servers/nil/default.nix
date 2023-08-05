@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nil";
-  version = "2023-04-03";
+  version = "2023-05-09";
 
   src = fetchFromGitHub {
     owner = "oxalica";
     repo = pname;
     rev = version;
-    hash = "sha256-d/TusDXmIo8IT5DNRA21lN+nOVSER8atIx9TJteR6LQ=";
+    hash = "sha256-Xg3Cux5wQDatXRvQWsVD0YPfmxfijjG8+gxYqgoT6JE=";
   };
 
-  cargoHash = "sha256-DIar3idK+wajMU2sw1pX9j9IxfO+QnGogSFndDNu8R8=";
+  cargoHash = "sha256-N7flQRIc0CXTuKjy9tVZapu+CXUT4rg66VLLT/vMUoc=";
 
   CFG_RELEASE = version;
 
@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/oxalica/nil/releases/tag/${version}";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ figsoda oxalica ];
+    mainProgram = "nil";
   };
 }

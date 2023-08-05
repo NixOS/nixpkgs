@@ -1,10 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, pkg-config, rustPlatform, llvmPackages, libiconv, fetchpatch, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, pkg-config, rustPlatform, libiconv, fetchpatch, nixosTests }:
 
 let
   libflux_version = "0.170.1";
 
   # This is copied from influxdb2 with flux version matching the needed by thi
-  flux = rustPlatform.buildRustPackage {
+  flux = rustPlatform.buildRustPackage rec {
     pname = "libflux";
     version = "v${libflux_version}";
     src = fetchFromGitHub {
@@ -23,11 +23,10 @@ let
         sha256 = "sha256-Fb4CuH9ZvrPha249dmLLI8MqSNQRKqKPxPbw2pjqwfY=";
       })
     ];
-    sourceRoot = "source/libflux";
+    sourceRoot = "${src.name}/libflux";
     cargoSha256 = "sha256-kYiZ5ZRiFHRf1RQeeUGjIhnEkTvhNSZ0t4tidpRIDyk=";
-    nativeBuildInputs = [ llvmPackages.libclang ];
+    nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
-    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}

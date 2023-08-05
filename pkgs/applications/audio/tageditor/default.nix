@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tageditor";
-  version = "3.7.8";
+  version = "3.7.9";
 
   src = fetchFromGitHub {
     owner = "martchus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/34KS6nxpIsKEklSRpO+AmGAdpJhapoGe24DCCodU38=";
+    hash = "sha256-QQvc9S+9h0Qy/qBROwJMZIALf/Rbj/9my4PZGxQzlnM=";
   };
 
   nativeBuildInputs = [
@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.linux;
+    mainProgram = "tageditor";
   };
 }

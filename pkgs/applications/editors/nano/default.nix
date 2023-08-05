@@ -75,5 +75,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ joachifm nequissimus ];
     platforms = platforms.all;
+    mainProgram = "nano";
   };
 }

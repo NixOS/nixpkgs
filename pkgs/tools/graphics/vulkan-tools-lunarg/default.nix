@@ -24,14 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  # The version must match that in vulkan-headers
-  version = "1.3.239.0";
+  version = "1.3.250";
 
   src = fetchFromGitHub {
    owner = "LunarG";
    repo = "VulkanTools";
-   rev = "sdk-${version}";
-   hash = "sha256-zgkuTy9ccg8D/riA1CM/PnbXW1R0jWEINtcEVilETwk=";
+   rev = "v${version}";
+   hash = "sha256-oI2ITvciuE/f8ojFpIwcH+HnYCasz43nKkER3wJxX+c=";
    fetchSubmodules = true;
  };
 
@@ -82,7 +81,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  patches = [ ./gtest.patch ];
+  patches = [
+    # Redefine an internal macro removed in vulkan-validation-layers
+    # FIXME: remove when fixed upstream
+    ./add-missing-macro-definition.patch
+
+    # Skip QNX-specific extension causing build failures
+    # FIXME: remove when fixed upstream
+    ./skip-qnx-extension.patch
+
+    ./gtest.patch
+  ];
 
   # Same as vulkan-validation-layers
   dontPatchELF = true;
@@ -102,6 +111,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = [ maintainers.expipiplus1 ];
-    broken = (version != vulkan-headers.version);
   };
 }

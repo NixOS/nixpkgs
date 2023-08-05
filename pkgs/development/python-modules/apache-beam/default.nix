@@ -87,7 +87,7 @@ buildPythonPackage rec {
     "pyarrow"
   ];
 
-  sourceRoot = "source/sdks/python";
+  sourceRoot = "${src.name}/sdks/python";
 
   nativeBuildInputs = [
     cython

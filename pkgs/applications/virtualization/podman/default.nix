@@ -15,6 +15,7 @@
 , nixosTests
 , python3
 , makeWrapper
+, runtimeShell
 , symlinkJoin
 , extraPackages ? [ ]
 , runc
@@ -39,7 +40,6 @@ let
     runc
     crun
     conmon
-    slirp4netns
     fuse-overlayfs
     util-linux
     iptables
@@ -56,18 +56,19 @@ let
       aardvark-dns
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       netavark
+      slirp4netns
     ];
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "4.4.4";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-rLXq+sveSxeoD3gyXSnfgGFx6alOBKSRCdDHGwwvPm4=";
+    hash = "sha256-8cfEZBYhR5CWkHEpIZ0j011gyV6lnY7z4KgJPJr0MfQ=";
   };
 
   patches = [
@@ -99,6 +100,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
+    substituteInPlace Makefile --replace "/bin/bash" "${runtimeShell}"
     ${if stdenv.isDarwin then ''
       make podman-remote # podman-mac-helper uses FHS paths
     '' else ''

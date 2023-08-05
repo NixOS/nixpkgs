@@ -69,6 +69,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
       start_all()
 
       server.wait_for_unit("shadowsocks-libev.service")
+      server.wait_for_unit("nginx.service")
       client.wait_for_unit("shadowsocks-client.service")
 
       client.fail(

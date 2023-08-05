@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-datatransfer";
-  version = "3.11.0";
+  version = "3.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AXBFNLF39+H/KLrWQ/rXQAAMC6hMsGXQ5XFTDs4Y3EY=";
+    hash = "sha256-5jxcN69FPuAZ7xiBcBu5+aE+q4OU9OlM+i9bd6vMnJI=";
   };
 
   propagatedBuildInputs = [
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigquery-datatransfer";
     changelog = "https://github.com/googleapis/python-bigquery-datatransfer/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

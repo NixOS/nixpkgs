@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-ncurses";
-  version = "1.7";
+  version = "3.1";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-JZPNoQuIl5XayUpm0RdWNg8TT2LZGDOuFoae9crZe5Q=";
+    hash = "sha256-7onozq/Kud0O8/wazJsQ9NIbpLJW0ynYQtYYPmP41zM=";
   };
 
   nativeBuildInputs = [
@@ -25,16 +25,20 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  preConfigure = ''
-    configureFlags="$configureFlags --with-guilesitedir=$out/share/guile/site"
-  '';
+  configureFlags = [
+    "--with-gnu-filesystem-hierarchy"
+  ];
 
-  postFixup = ''
-    for f in $out/share/guile/site/ncurses/**.scm; do \
-      substituteInPlace $f \
-        --replace "libguile-ncurses" "$out/lib/libguile-ncurses"; \
-    done
-  '';
+  postFixup =
+    let
+      guileVersion = lib.versions.majorMinor guile.version;
+    in
+    ''
+      for f in $out/share/guile/site/ncurses/**.scm; do \
+        substituteInPlace $f \
+          --replace "libguile-ncurses" "$out/lib/guile/${guileVersion}/libguile-ncurses"; \
+      done
+    '';
 
   # XXX: 1 of 65 tests failed.
   doCheck = false;
@@ -50,6 +54,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }

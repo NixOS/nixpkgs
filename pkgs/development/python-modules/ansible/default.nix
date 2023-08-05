@@ -20,17 +20,17 @@
 
 let
   pname = "ansible";
-  version = "7.2.0";
+  version = "8.1.0";
 in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YOLBpY8c6zShkLfDgPezOG0ec2kGGVSx+LjKPfdgY8w=";
+    hash = "sha256-kfILW/z18phTPBdKk4geALyea0FBFGT0TAVKONcWpWo=";
   };
 
   postPatch = ''

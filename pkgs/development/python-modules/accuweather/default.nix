@@ -12,24 +12,17 @@
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "0.5.0";
+  version = "1.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-v4mFvW+p0g+5IeZT8o0Z60MafHyYZ62d4lNH27wlAeI=";
+    hash = "sha256-CWPhdu0lttYhAS6hzyKPL3vtNRVqbDexxY6nvMya3jA=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-    substituteInPlace setup.cfg \
-      --replace "--cov --cov-report term-missing" ""
-  '';
 
   propagatedBuildInputs = [
     aiohttp

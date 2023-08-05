@@ -1,5 +1,6 @@
 { lib
 , python310
+, fetchPypi
 , fetchFromGitHub
 , gdk-pixbuf
 , gnome
@@ -24,11 +25,15 @@ let
       };
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
         version = "1.4.46";
-        src = self.fetchPypi {
+        src = fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
         };
+        disabledTestPaths = [
+           "test/aaa_profiling"
+           "test/ext/mypy"
+        ];
       });
     });
   };

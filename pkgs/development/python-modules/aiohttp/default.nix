@@ -4,6 +4,8 @@
 , fetchPypi
 , fetchpatch
 , pythonOlder
+# build_requires
+, setuptools
 # install_requires
 , attrs
 , charset-normalizer
@@ -46,6 +48,12 @@ buildPythonPackage rec {
       url = "https://github.com/aio-libs/aiohttp/commit/5718879cdb6a98bf48810a994b78bc02abaf3e07.patch";
       hash = "sha256-4UynkTZOzWzusQ2+MPZszhFA8I/PJNLeT/hHF/fASy8=";
     })
+    (fetchpatch {
+      # https://github.com/aio-libs/aiohttp/pull/7260
+      # Merged upstream, should likely be dropped post-3.8.4
+      url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
+      hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
+    })
   ];
 
   postPatch = ''
@@ -54,6 +62,10 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg \
       --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -74,6 +86,7 @@ buildPythonPackage rec {
     idna-ssl
   ];
 
+  # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
     async_generator
     freezegun
@@ -116,7 +129,7 @@ buildPythonPackage rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
-   '';
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";

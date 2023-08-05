@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.8";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-X7Pv+yEQaKPdWTiKq67kSAyimyKvLSCYr4EjLlw+J0U=";
+    sha256 = "sha256-wft9T0XzTJhN/85kV+pIAUqTvcIBClbj+nHPQK0ncVE=";
   };
 
   outputs = [ "out" "man" ];
@@ -31,9 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Linux it uses objdump. We don't have dwarfdump packaged for
     # Darwin, so this patch updates the test to also use objdump on
     # Darwin.
+    # Additionally, when cross compiling, the correct target prefix
+    # needs to be set.
     (substituteAll {
-      src = ./force-objdump-on-darwin.patch;
-      objdump = "${binutils.bintools}/bin/objdump";
+      src = ./fix-objdump-path.patch;
+      objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];
 
@@ -59,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
         "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
       ] ++ lib.optionals stdenv.isDarwin [
         "test.basedir"
+        "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
         "test.multi_arch"
         "test.nocpp2"
       ];
@@ -74,10 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
     links = { unwrappedCC, extraConfig }: stdenv.mkDerivation {
-      name = "ccache-links";
+      pname = "ccache-links";
+      inherit (finalAttrs) version;
       passthru = {
         isClang = unwrappedCC.isClang or false;
         isGNU = unwrappedCC.isGNU or false;
+        isCcache = true;
       };
       inherit (unwrappedCC) lib;
       nativeBuildInputs = [ makeWrapper ];

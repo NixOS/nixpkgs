@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , fetchpatch
 , fetchFromGitHub
 , python
 , django
+, packaging
 , nodejs
 , js2py
 , six
@@ -11,26 +13,19 @@
 
 buildPythonPackage rec {
   pname = "django-js-reverse";
-  # Support for Django 4.0 not yet released
-  version = "unstable-2022-09-16";
+  version = "0.10.1-b1";
 
   src = fetchFromGitHub {
-    owner = "ierror";
+    owner = "BITSOLVER";
     repo = "django-js-reverse";
-    rev = "7cab78c4531780ab4b32033d5104ccd5be1a246a";
-    hash = "sha256-oA4R5MciDMcSsb+GAgWB5jhj+nl7E8t69u0qlx2G93E=";
+    rev = version;
+    hash = "sha256-i78UsxVwxyDAc8LrOVEXLG0tdidoQhvUx7GvPDaH0KY=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-requires_system_checks-list-or-tuple";
-      url = "https://github.com/ierror/django-js-reverse/commit/1477ba44b62c419d12ebec86e56973f1ae56f712.patch";
-      hash = "sha256-xUtCziewVhnCOaNWddJBH4/Vvhwjjq/wcQDvh2YzWMQ=";
-    })
-  ];
 
   propagatedBuildInputs = [
     django
+  ] ++ lib.optionals (pythonAtLeast "3.7") [
+    packaging
   ];
 
   nativeCheckInputs = [

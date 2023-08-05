@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
   version = "0.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (variant != "qt5") "devdoc";
 
   src = fetchFromGitHub {
     owner = "flatpak";
@@ -62,18 +63,23 @@ stdenv.mkDerivation rec {
     gtk4
   ] ++ lib.optionals (variant == "qt5") [
     libsForQt5.qtbase
+    libsForQt5.qtx11extras
   ];
 
   mesonFlags = [
     "-Dbackends=${lib.optionalString (variant != null) variant}"
     "-Dvapi=${if variant != "qt5" then "true" else "false"}"
     "-Dintrospection=${if variant != "qt5" then "true" else "false"}"
+    "-Ddocs=${if variant != "qt5" then "true" else "false"}" # requires introspection=true
   ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
+
+  # we don't have any binaries
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Flatpak portal library";

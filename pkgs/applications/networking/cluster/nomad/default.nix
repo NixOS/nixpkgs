@@ -3,6 +3,7 @@
 , buildGo120Module
 , fetchFromGitHub
 , nixosTests
+, installShellFiles
 }:
 
 let
@@ -23,15 +24,21 @@ let
         inherit sha256;
       };
 
+      nativeBuildInputs = [ installShellFiles ];
+
       # ui:
       #  Nomad release commits include the compiled version of the UI, but the file
       #  is only included if we build with the ui tag.
       tags = [ "ui" ];
 
+      postInstall = ''
+        echo "complete -C $out/bin/nomad nomad" > nomad.bash
+        installShellCompletion nomad.bash
+      '';
+
       meta = with lib; {
         homepage = "https://www.nomadproject.io/";
         description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
-        platforms = platforms.unix;
         license = licenses.mpl20;
         maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes maxeaubrey techknowlogick ];
       };
@@ -44,7 +51,7 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_4;
+  nomad = nomad_1_5;
 
   nomad_1_2 = generic {
     buildGoModule = buildGo120Module;
@@ -66,5 +73,27 @@ rec {
     sha256 = "sha256-l4GvQIS5JSSgjBjPivAKAb7gKlVLw4WoZpPR8LxnLNc=";
     vendorSha256 = "sha256-05BhKF6kx0wbu74cidpTFhUN668R/AxV6qWmchCm/WE=";
     passthru.tests.nomad = nixosTests.nomad;
+  };
+
+  nomad_1_5 = generic {
+    buildGoModule = buildGo120Module;
+    version = "1.5.8";
+    sha256 = "sha256-5VAUNunQz4s1Icd+s5i8Kx6u1P0By+ikl4C5wXM1oho=";
+    vendorSha256 = "sha256-y3WiQuoQn6SdwTgtPWuB6EBtsJC+YleQPzownZQNkno=";
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:/build/go/bin"
+    '';
+  };
+
+  nomad_1_6 = generic {
+    buildGoModule = buildGo120Module;
+    version = "1.6.1";
+    sha256 = "sha256-RsyGUaLteGiNf0PTkKLcjHTevhKb/mNx2JORpXhHJMw=";
+    vendorSha256 = "sha256-Y3O7ADzZPlLWFbXSYBcI6b5MAhMD0UnkhQxO9VJMpOY=";
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:/build/go/bin"
+    '';
   };
 }

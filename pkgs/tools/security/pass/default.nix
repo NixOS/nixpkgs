@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
 , coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
-, which, openssh, procps, qrencode, makeWrapper, pass, symlinkJoin
+, which, openssh, procps, qrencode, makeWrapper, pass
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
@@ -29,8 +29,7 @@ let
       selected = [ pass ] ++ extensions passExtensions
         ++ lib.optional tombPluginSupport passExtensions.tomb;
     in buildEnv {
-      # lib.getExe looks for name, so we keep it the same as mainProgram
-      name = "pass";
+      name = "pass-env";
       paths = selected;
       nativeBuildInputs = [ makeWrapper ];
       buildInputs = lib.concatMap (x: x.buildInputs) selected;
@@ -51,6 +50,7 @@ let
         wrapProgram $out/bin/pass \
           --set SYSTEM_EXTENSION_DIR "$out/lib/password-store/extensions"
       '';
+      meta.mainProgram = "pass";
     };
 in
 

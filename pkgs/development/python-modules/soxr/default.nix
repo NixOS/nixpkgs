@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "soxr";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     repo = "python-soxr";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-/NFGzOF1X9c0yccgtVNUO+1aIWoNdJqP/OKcNj+uKpk=";
+    hash = "sha256-q/K7XlqvDHAna+fqN6iiJ9wD8efsuwHiEfKjXS46jz8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

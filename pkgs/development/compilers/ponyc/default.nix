@@ -1,8 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, callPackage
-, cc ? stdenv.cc
 , cmake
 , coreutils
 , libxml2
@@ -32,8 +30,8 @@ stdenv.mkDerivation (rec {
   ponygbenchmark = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
-    rev = "v1.7.1";
-    hash = "sha256-gg3g/0Ki29FnGqKv9lDTs5oA9NjH23qQ+hTdVtSU+zo=";
+    rev = "v1.8.0";
+    hash = "sha256-pUW9YVaujs/y00/SiPqDgK4wvVsaM7QUp/65k0t7Yr0=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper which python3 ];

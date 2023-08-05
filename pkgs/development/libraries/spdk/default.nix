@@ -55,6 +55,11 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+
+    # glibc-2.36 adds arc4random, so we don't need the custom implementation
+    # here anymore. Fixed upstream in https://github.com/spdk/spdk/commit/43a3984c6c8fde7201d6c8dfe1b680cb88237269,
+    # but the patch doesn't apply here.
+    sed -i -e '1i #define HAVE_ARC4RANDOM 1' lib/iscsi/iscsi.c
   '';
 
   enableParallelBuilding = true;

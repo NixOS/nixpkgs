@@ -8,16 +8,19 @@
 , pyyaml
 , setuptools-scm
 , subprocess-tee
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "3.0.1";
+  version = "4.1.5";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-19xeS3+t6bc3XFaKJEdbe+gQJMrCogyu8yYO8LUSh7Q=";
+    hash = "sha256-WXyDahhMETH+62sOI82iNsQf7N7mRCc3Unj7aSD9LnQ=";
   };
 
   nativeBuildInputs = [
@@ -55,11 +58,14 @@ buildPythonPackage rec {
     "test_runtime"
   ];
 
-  pythonImportsCheck = [ "ansible_compat" ];
+  pythonImportsCheck = [
+    "ansible_compat"
+  ];
 
   meta = with lib; {
-    description = "A python package containing functions that help interacting with various versions of Ansible";
+    description = "Function collection that help interacting with various versions of Ansible";
     homepage = "https://github.com/ansible/ansible-compat";
+    changelog = "https://github.com/ansible/ansible-compat/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

@@ -7,11 +7,10 @@
 , testscenarios
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "os-service-types-tests";
-  inherit (os-service-types) version;
-
-  src = os-service-types.src;
+  inherit (os-service-types) version src;
+  format = "other";
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

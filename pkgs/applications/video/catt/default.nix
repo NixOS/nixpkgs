@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchPypi
 , python3
 }:
 

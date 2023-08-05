@@ -2,7 +2,6 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {

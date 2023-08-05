@@ -20,24 +20,24 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-image-viewer";
-  version = "5.9.11";
+  version = "5.9.13";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-IkjAW4bqQLEWF2tgccYCVnQgcEp9DJoXrEx2HDC25gs=";
+    sha256 = "sha256-T/hbygnbao5rbw0gHH0ULHOz/2j70ktyzYGWXPDCJoQ=";
   };
 
   patches = [
     ./0001-fix-install-path-for-nix.patch
     (fetchpatch {
-      name = "chore: use GNUInstallDirs in CmakeLists";
+      name = "chore-use-GNUInstallDirs-in-CmakeLists.patch";
       url = "https://github.com/linuxdeepin/deepin-image-viewer/commit/4a046e6207fea306e592fddc33c1285cf719a63d.patch";
       sha256 = "sha256-aIgYmq6WDfCE+ZcD0GshxM+QmBWZGjh9MzZcTMrhBJ0=";
     })
     (fetchpatch {
-      name = "fix build with libraw 0.21";
+      name = "fix-build-with-libraw-0_21.patch";
       url = "https://raw.githubusercontent.com/archlinux/svntogit-community/2ff11979704dd7156a7e7c3bae9b30f08894063d/trunk/libraw-0.21.patch";
       sha256 = "sha256-I/w4uiANT8Z8ud/F9WCd3iRHOfplu3fpqnu8ZIs4C+w=";
     })

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, jdk, gradle, bash, coreutils
+{ lib, stdenv, fetchurl, fetchFromGitHub, jdk, jre, gradle, bash, coreutils
 , substituteAll, nixosTests, perl, fetchpatch, writeText }:
 
 let
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   wrapper = substituteAll {
     src = ./freenetWrapper;
-    inherit bash coreutils jdk seednodes;
+    inherit bash coreutils jre seednodes;
   };
 
   # https://github.com/freenet/fred/blob/next/build-offline.sh

@@ -4,10 +4,13 @@ if lib.versionOlder (lib.getVersion cppo) "1.6"
 then cppo
 else
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "cppo_ocamlbuild";
 
-  inherit (cppo) version useDune2 src;
+  inherit (cppo) version src;
+
+  minimalOCamlVersion = "4.03";
+  duneVersion = "3";
 
   propagatedBuildInputs = [ ocamlbuild ];
 

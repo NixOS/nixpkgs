@@ -1,13 +1,11 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
-, pythonAtLeast
 
 , coqpit
 , fsspec
 , torch-bin
-, tensorboardx
+, tensorboard
 , protobuf
 , psutil
 
@@ -18,7 +16,7 @@
 
 let
   pname = "trainer";
-  version = "0.0.24";
+  version = "0.0.29";
 in
 buildPythonPackage {
   inherit pname version;
@@ -28,7 +26,7 @@ buildPythonPackage {
     owner = "coqui-ai";
     repo = "Trainer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+Wr8kmHo3rWxknSN/jJVzXow95hNgth/j4OSj96gScE=";
+    hash = "sha256-ISEIIJReYKT3tEAF9/pckPg2+aYkBJyRWo6fvWZ/asI=";
   };
 
   postPatch = ''
@@ -41,7 +39,7 @@ buildPythonPackage {
     protobuf
     psutil
     soundfile
-    tensorboardx
+    tensorboard
     torch-bin
   ];
 

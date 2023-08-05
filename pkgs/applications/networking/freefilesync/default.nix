@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , fetchpatch
 , copyDesktopItems
 , pkg-config
@@ -12,28 +12,36 @@
 , libssh2
 , openssl
 , wxGTK32
-, gitUpdater
 , makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
   pname = "freefilesync";
-  version = "12.2";
+  version = "12.5";
 
-  src = fetchFromGitHub {
-    owner = "hkneptune";
-    repo = "FreeFileSync";
-    rev = "v${version}";
-    hash = "sha256-pCXMpK+NF06vgEgX31wyO24+kPhvPhdTeRk1j84nYd0=";
+  src = fetchurl {
+    url = "https://freefilesync.org/download/FreeFileSync_${version}_Source.zip";
+    # The URL only redirects to the file on the second attempt
+    postFetch = ''
+      rm -f $out
+      tryDownload "$url"
+    '';
+    hash = "sha256-KTN/HbNLP/+z5rryp3wDRo6c7l03vi6tUxCXZPMGUoM=";
   };
+
+  sourceRoot = ".";
 
   # Patches from Debian
   patches = [
     # Disable loading of the missing Animal.dat
     (fetchpatch {
       url = "https://sources.debian.org/data/main/f/freefilesync/12.0-2/debian/patches/ffs_devuan.patch";
+      postFetch = ''
+        substituteInPlace $out \
+          --replace "-std=c++2b" "-std=c++23"
+      '';
       excludes = [ "FreeFileSync/Source/ffs_paths.cpp" ];
-      hash = "sha256-6pHr5txabMTpGMKP7I5oe1lGAmgb0cPW8ZkPv/WXN74=";
+      hash = "sha256-CtUC94AoYTxoqSMWZrzuO3jTD46rj11JnbNyXtWckCo=";
     })
     # Fix build with GTK 3
     (fetchpatch {
@@ -111,10 +119,6 @@ stdenv.mkDerivation rec {
       categories = [ "Utility" "FileTools" ];
     })
   ];
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
 
   meta = with lib; {
     description = "Open Source File Synchronization & Backup Software";

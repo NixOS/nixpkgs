@@ -29,6 +29,7 @@ in {
           };
 
           appservice = rec {
+            id = "facebook";
             address = "http://${hostname}:${toString port}";
             hostname = "localhost";
             port = 29319;
@@ -171,7 +172,7 @@ in {
 
     services.mautrix-facebook = {
       registrationData = {
-        id = "mautrix-facebook";
+        id = cfg.settings.appservice.id;
 
         namespaces = {
           users = [

@@ -2,11 +2,12 @@
 , stdenv
 , fetchFromGitHub
 , ponyc
+, nix-update-script
 }:
 
 stdenv.mkDerivation ( rec {
   pname = "corral";
-  version = "unstable-2023-02-11";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
@@ -18,6 +19,8 @@ stdenv.mkDerivation ( rec {
   buildInputs = [ ponyc ];
 
   installFlags = [ "prefix=${placeholder "out"}" "install" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Corral is a dependency management tool for ponylang (ponyc)";

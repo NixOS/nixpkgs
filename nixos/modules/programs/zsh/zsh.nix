@@ -236,6 +236,9 @@ in
           setopt ${concatStringsSep " " cfg.setOptions}
         ''}
 
+        # Alternative method of determining short and full hostname.
+        HOST=${config.networking.fqdnOrHostName}
+
         # Setup command line history.
         # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
         SAVEHIST=${toString cfg.histSize}

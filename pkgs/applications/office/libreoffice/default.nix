@@ -214,6 +214,23 @@ in
     tar -xf ${srcs.translations}
   '';
 
+  # Remove build config to reduce the amount of `-dev` outputs in the
+  # runtime closure. This was introduced in upstream commit
+  # cbfac11330882c7d0a817b6c37a08b2ace2b66f4, so the patch doesn't apply
+  # for 7.4.
+  patches = lib.optionals (lib.versionAtLeast version "7.5") [
+    ./0001-Strip-away-BUILDCONFIG.patch
+  ];
+
+  # libreoffice tries to reference the BUILDCONFIG (e.g. PKG_CONFIG_PATH)
+  # in the binary causing the closure size to blow up because of many unnecessary
+  # dependencies to dev outputs. This behavior was patched away in nixpkgs
+  # (see above), make sure these don't leak again by accident.
+  disallowedRequisites = lib.optionals (!kdeIntegration)
+    (lib.concatMap
+      (x: lib.optional (x?dev) x.dev)
+      buildInputs);
+
   ### QT/KDE
   #
   # configure.ac assumes that the first directory that contains headers and
@@ -356,6 +373,9 @@ in
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/ooxmlexport/ooxmlencryption.cxx"
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/odfexport/odfexport.cxx"
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/unowriter/unowriter.cxx"
+
+      # testReqIfTable fails since libxml2: 2.10.3 -> 2.10.4
+      sed -e 's@.*"/html/body/div/table/tr/th".*@//&@' -i sw/qa/extras/htmlexport/htmlexport.cxx
     ''
     # This to avoid using /lib:/usr/lib at linking
     + ''
@@ -392,7 +412,7 @@ in
   dontWrapQtApps = true;
 
   configureFlags = [
-    (if withHelp then "" else "--without-help")
+    (lib.optionalString (!withHelp) "--without-help")
     "--with-boost=${getDev boost}"
     "--with-boost-libdir=${getLib boost}/lib"
     "--with-beanshell-jar=${bsh}"

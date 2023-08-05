@@ -1,33 +1,33 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pexpect
+, fetchFromGitHub
 , pythonOlder
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "2.1.1";
-  format = "setuptools";
+  version = "3.1.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cuCDQIUtMlREWcDBmq0bSKosOpbejG5XQkVrT1OMpS8=";
+  src = fetchFromGitHub {
+    owner = "kislyuk";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-N1Us/dpF/y638qIuwTzBiuv4vXfBMtWxmQnMBxNTUuc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"coverage",' "" \
-      --replace " + lint_require" ""
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  propagatedBuildInputs = [
-    pexpect
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
   ];
 
-  # tries to build and install test packages which fails
+  # Tries to build and install test packages which fails
   doCheck = false;
 
   pythonImportsCheck = [

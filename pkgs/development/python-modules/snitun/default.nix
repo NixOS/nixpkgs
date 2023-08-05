@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.34.0";
+  version = "0.35.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "NabuCasa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7UGsziNUI4dxdMGuJWrvsQiwl+IvcO/rQqEOjl9wS1Y=";
+    hash = "sha256-sZMmou9uHThl7AIMnuBxABnWTF1CCFsDj1I7FYxgJ3Y=";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "test_snitun_single_runner_throttling"
     # ConnectionResetError: [Errno 54] Connection reset by peer
     "test_peer_listener_timeout"
-  ] ++ lib.optional (pythonAtLeast "3.11") [
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
     # TypeError: Passing coroutines is forbidden, use tasks explicitly.
     "test_snitun_runner_updown"
   ];

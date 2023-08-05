@@ -1,14 +1,16 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, dtkgui
-, pkg-config
 , cmake
+, pkg-config
 , qttools
+, doxygen
+, wrapQtAppsHook
+, dtkgui
+, qtbase
 , qtmultimedia
 , qtsvg
 , qtx11extras
-, wrapQtAppsHook
 , cups
 , gsettings-qt
 , libstartup_notification
@@ -17,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkwidget";
-  version = "5.6.3";
+  version = "5.6.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-APk2p8pdLsaKvPp95HtEI1F1LM4ySUL+fhGsC5vHasU=";
+    sha256 = "sha256-PhVK/lUFrDW1bn9lUhLuKWLAVj7E7+/YC5USShrg3ds=";
   };
 
   postPatch = ''
@@ -35,11 +37,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qttools
+    doxygen
     pkg-config
     wrapQtAppsHook
   ];
 
   buildInputs = [
+    qtbase
     qtmultimedia
     qtsvg
     qtx11extras
@@ -53,9 +57,18 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DDVERSION=${version}"
-    "-DBUILD_DOCS=OFF"
+    "-DBUILD_DOCS=ON"
+    "-DQCH_INSTALL_DESTINATION=${qtbase.qtDocPrefix}"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
+
+  preConfigure = ''
+    # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
+    # A workaround is to set QT_PLUGIN_PATH explicitly
+    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+  '';
 
   meta = with lib; {
     description = "Deepin graphical user interface library";

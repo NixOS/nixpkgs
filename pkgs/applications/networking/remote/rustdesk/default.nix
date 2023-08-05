@@ -20,7 +20,6 @@
 , libyuv
 , libopus
 , libsciter
-, llvmPackages
 , wrapGAppsHook
 , writeText
 }:
@@ -40,8 +39,6 @@ rustPlatform.buildRustPackage rec {
     # based on https://github.com/rustdesk/rustdesk/pull/1900
     ./fix-for-rust-1.65.diff
   ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -64,7 +61,7 @@ rustPlatform.buildRustPackage rec {
     ./cargo.patch
   ];
 
-  # Manually simulate a vcpkg installation so that it can link the libaries
+  # Manually simulate a vcpkg installation so that it can link the libraries
   # properly.
   postUnpack =
     let
@@ -98,7 +95,7 @@ rustPlatform.buildRustPackage rec {
       ln -s ${libyuv.out}/lib/* $VCPKG_ROOT/installed/${vcpkg_target}/lib/
     '';
 
-  nativeBuildInputs = [ pkg-config cmake makeWrapper copyDesktopItems yasm nasm clang wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config cmake makeWrapper copyDesktopItems yasm nasm clang wrapGAppsHook rustPlatform.bindgenHook ];
   buildInputs = [ alsa-lib pulseaudio libXfixes libxcb xdotool gtk3 libvpx libopus libXtst libyuv ];
 
   # Checks require an active X display.

@@ -1,52 +1,53 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      packaging = super.packaging.overridePythonAttrs (oldAttrs: rec {
+        version = "21.3";
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-3UfEKSfYmrkR5gZRiQfMLTofOLvQJjhZcGQ/nFuOz+s=";
+        };
+        nativeBuildInputs = with python3.pkgs; [ setuptools ];
+        propagatedBuildInputs = with python3.pkgs; [ pyparsing six ];
+      });
+    };
+  };
+in
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "skjold";
-  version = "0.4.1";
+  version = "0.6.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "twu";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xz6N7/LS3wOymh9tet8OLgsSaretzuMU4hQd+LeUPJ4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rsdstzNZvokYfTjEyPrWR+0SJpf9wL0HAesq8+A+tPY=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with py.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     click
     packaging
     pyyaml
     toml
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     pytest-mock
     pytest-watch
     pytestCheckHook
   ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/twu/skjold/pull/91
-    (fetchpatch {
-      name = "switch-poetry-core.patch";
-      url = "https://github.com/twu/skjold/commit/b341748c9b11798b6a5182d659a651b0f200c6f5.patch";
-      sha256 = "sha256-FTZTbIudO6lYO9tLD4Lh1h5zsTeKYtflR2tbbHZ5auM=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'packaging = "^21.0"' 'packaging = "*"' \
-      --replace 'pyyaml = "^5.3"' 'pyyaml = "*"'
-  '';
 
   disabledTestPaths = [
     # Too sensitive to pass
@@ -73,6 +74,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to Python dependencies against security advisory databases";
     homepage = "https://github.com/twu/skjold";
+    changelog = "https://github.com/twu/skjold/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

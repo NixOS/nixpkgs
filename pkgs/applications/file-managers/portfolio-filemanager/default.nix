@@ -67,9 +67,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "portfolio-filemanager";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

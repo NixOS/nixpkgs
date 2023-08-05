@@ -113,6 +113,7 @@ in
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
+            true
             ${concatMapStrings (p: ''
               if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
                 export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
@@ -198,6 +199,7 @@ in
         gnome.adwaita-icon-theme
         gtk3.out # for gtk-launch program
         onboard
+        orca # elementary/greeter#668
         qgnomeplatform
         sound-theme-freedesktop
         xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
@@ -227,11 +229,16 @@ in
       xdg.icons.enable = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = with pkgs.pantheon; [
+      xdg.portal.extraPortals = [
+        # Some Pantheon apps enforce portal usage, we need this for e.g. notifications.
+        # Currently we have buildPortalsInGnome enabled, if you run into issues related
+        # to https://github.com/flatpak/xdg-desktop-portal/issues/656 please report to us.
+        pkgs.xdg-desktop-portal-gtk
+      ] ++ (with pkgs.pantheon; [
         elementary-files
         elementary-settings-daemon
         xdg-desktop-portal-pantheon
-      ];
+      ]);
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -259,7 +266,7 @@ in
       qt.style = "adwaita";
 
       # Default Fonts
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         inter
         open-dyslexic
         open-sans
@@ -288,7 +295,7 @@ in
         elementary-music
         elementary-photos
         elementary-screenshot
-        # elementary-tasks
+        elementary-tasks
         elementary-terminal
         elementary-videos
         epiphany
@@ -300,7 +307,7 @@ in
       ])) config.environment.pantheon.excludePackages;
 
       # needed by screenshot
-      fonts.fonts = [
+      fonts.packages = [
         pkgs.pantheon.elementary-redacted-script
       ];
     })
@@ -309,7 +316,6 @@ in
       environment.systemPackages = with pkgs.pantheon; [
         contractor
         file-roller-contract
-        gnome-bluetooth-contract
       ];
 
       environment.pathsToLink = [

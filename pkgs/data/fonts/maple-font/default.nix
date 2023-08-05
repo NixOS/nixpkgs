@@ -9,7 +9,7 @@ let
     rec{
 
       inherit pname desc;
-      version = "6.2";
+      version = "6.4";
       src = fetchurl {
         url = "https://github.com/subframe7536/Maple-font/releases/download/v${version}/${pname}.zip";
         inherit sha256;
@@ -21,6 +21,8 @@ let
       nativeBuildInputs = [ unzip ];
       installPhase = ''
         find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;
+        find . -name '*.otf'    -exec install -Dt $out/share/fonts/opentype {} \;
+        find . -name '*.woff2'  -exec install -Dt $out/share/fonts/woff2 {} \;
       '';
 
       meta = with lib; {
@@ -37,23 +39,40 @@ let
 in
 {
   Mono = maple-font {
-    pname = "MapleMono";
-    sha256 = "sha256-KhG0gQRnHFvpoxdcySSEYWDtOgG4xIm8X0Ua9o1aGTw=";
-    desc = "monospace";
+    pname = "MapleMono-ttf";
+    sha256 = "sha256-a06JLIP5aVb9SeEz6kw+LqKy0ydCgaUlPDFWA2Y0G8Q=";
+    desc = "monospace TrueType";
   };
 
   NF = maple-font {
     pname = "MapleMono-NF";
-    sha256 = "sha256-Ov6AEaLy80cwrFtmKWUceI809SwBlHsQf2F86/sc/6A=";
+    sha256 = "sha256-fy+hdUYZDW5nkMVirhkmys3tIkWezPDrlpNxnRMl4WU=";
     desc = "Nerd Font";
   };
 
   SC-NF = maple-font {
     pname = "MapleMono-SC-NF";
-    sha256 = "sha256-bb62YGzdE9qvlyuZG7YI16gOxWC+AijlRLY8ET+q5Rg=";
+    sha256 = "sha256-SbXWkrpLJUrq+Jt1h3GBP9md5TbYpPchdiR0oEDMAgY=";
     desc = "Nerd Font SC";
   };
 
+  opentype = maple-font {
+    pname = "MapleMono-otf";
+    sha256 = "sha256-fwfFlNbaWXFCjcno7NK3dZqAzsHLh9rdGkSq26xc9qw=";
+    desc = "OpenType";
+  };
+
+  woff2 = maple-font {
+    pname = "MapleMono-woff2";
+    sha256 = "sha256-4akpZGGth4yZjI5wjO3ZXrXcWNxb7/6YChU7T5fNVKs=";
+    desc = "WOFF2.0";
+  };
+
+  autohint = maple-font {
+    pname = "MapleMono-ttf-autohint";
+    sha256 = "sha256-rSYIC42Bt+KFgxhwRhXS4sbh4etKYkCOo5nP2J2BHt4=";
+    desc = "ttf autohint";
+  };
 }
 
 

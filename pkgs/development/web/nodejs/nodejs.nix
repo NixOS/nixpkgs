@@ -96,6 +96,14 @@ let
 
     enableParallelBuilding = true;
 
+    # Don't allow enabling content addressed conversion as `nodejs`
+    # checksums it's image before conversion happens and image loading
+    # breaks:
+    #   $ nix build -f. nodejs --arg config '{ contentAddressedByDefault = true; }'
+    #   $ ./result/bin/node
+    #   Check failed: VerifyChecksum(blob).
+    __contentAddressed = false;
+
     passthru.interpreterName = "nodejs";
 
     passthru.pkgs = callPackage ../../node-packages/default.nix {
@@ -152,9 +160,14 @@ let
       ${if stdenv.buildPlatform.isGnu then ''
         ar -cqs $libv8/lib/libv8.a @files
       '' else ''
-        cat files | while read -r file; do
-          ar -cqS $libv8/lib/libv8.a $file
-        done
+        # llvm-ar supports response files, so take advantage of it if it’s available.
+        if [ "$(basename $(readlink -f $(command -v ar)))" = "llvm-ar" ]; then
+          ar -cqs $libv8/lib/libv8.a @files
+        else
+          cat files | while read -r file; do
+            ar -cqS $libv8/lib/libv8.a $file
+          done
+        fi
       ''}
       popd
 
@@ -170,7 +183,7 @@ let
       Name: v8
       Description: V8 JavaScript Engine
       Version: $major.$minor.$patch
-      Libs: -L$libv8/lib -lv8 -pthread -licui18n
+      Libs: -L$libv8/lib -lv8 -pthread -licui18n -licuuc
       Cflags: -I$libv8/include
       EOF
     '';
@@ -189,7 +202,7 @@ let
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
-      knownVulnerabilities = optional (versionOlder version "14") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+      knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version

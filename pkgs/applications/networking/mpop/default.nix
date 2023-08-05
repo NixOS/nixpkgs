@@ -2,11 +2,17 @@
 , stdenv
 , fetchurl
 , gnutls
+, openssl
 , gsasl
 , libidn
 , pkg-config
 , Security
+, nlsSupport ? true
+, idnSupport ? true
+, gsaslSupport ? true
+, sslLibrary ? "gnutls"
 }:
+assert lib.assertOneOf "sslLibrary" sslLibrary ["gnutls" "openssl" "no"];
 
 stdenv.mkDerivation rec {
   pname = "mpop";
@@ -21,17 +27,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    gnutls
-    gsasl
-    libidn
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    lib.optional stdenv.isDarwin Security
+    ++ lib.optional gsaslSupport gsasl
+    ++ lib.optional idnSupport libidn
+    ++ lib.optional (sslLibrary == "gnutls") gnutls
+    ++ lib.optional (sslLibrary == "openssl") openssl;
 
-  configureFlags = lib.optionals stdenv.isDarwin [
-    "--with-macosx-keyring"
-  ];
+  configureFlags = [
+    (lib.enableFeature nlsSupport "nls")
+    (lib.withFeature idnSupport "idn")
+    (lib.withFeature gsaslSupport "gsasl")
+    "--with-tls=${sslLibrary}"
+  ] ++ lib.optional stdenv.isDarwin "--with-macosx-keyring";
 
   meta = with lib;{
     description = "POP3 mail retrieval agent";

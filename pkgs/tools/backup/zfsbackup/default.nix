@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, zfs
 }:
 
 buildGoModule rec {

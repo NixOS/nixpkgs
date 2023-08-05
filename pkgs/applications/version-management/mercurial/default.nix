@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
+, rustSupport ? stdenv.hostPlatform.isLinux, cargo, rustPlatform, rustc
 , fullBuild ? false
 , gitSupport ? fullBuild
 , guiSupport ? fullBuild, tk
@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.4";
+    version = "6.5";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-6Iv7y5kR52kEoxuXLlf4bajmzliSuYw53VHTuVmcE0c=";
+      sha256 = "sha256-pWA9DTlev2f+XSeruzvTf8wBhx7POUx5NnLSweaL5+c=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-jgB9UMuZ9v+euGN2LPzg0vNK0KeEa8GpQxLJYgQzzbw=";
+      sha256 = "sha256-umjOU3OmTdPmLS4IWncqmKxSa6J4KXwTlGhylFt6TQo=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -44,11 +44,11 @@ let
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
     nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
-      ++ lib.optionals rustSupport (with rustPlatform; [
-           cargoSetupHook
-           rust.cargo
-           rust.rustc
-         ]);
+      ++ lib.optionals rustSupport [
+           rustPlatform.cargoSetupHook
+           cargo
+           rustc
+         ];
     buildInputs = [ docutils ]
       ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
@@ -110,22 +110,6 @@ let
       gnupg
     ];
 
-    patches = [
-      # remove dependency over packaging for test runner
-      # https://bz.mercurial-scm.org/show_bug.cgi?id=6805
-      (fetchpatch {
-        url = "https://foss.heptapod.net/mercurial/mercurial-devel/-/commit/5e5e3733082a25856038f0fde66d4e08d8881539.patch";
-        hash = "sha256-JNxESWpWZW3AENz57tNJTV/ALnJjkmG1ZnTWSvTr4qY=";
-      })
-
-      # sligthly different test output matching
-      # https://bz.mercurial-scm.org/show_bug.cgi?id=6807
-      (fetchpatch {
-        url = "https://foss.heptapod.net/mercurial/mercurial-devel/-/commit/2231f7d8a60266bb6907b1708400c970ed799017.patch";
-        hash = "sha256-Lm5qXvM9nbmTpuMuvDoWhY4cQQQN7PFZtmu5e7mQVw4=";
-      })
-    ];
-
     postPatch = ''
       patchShebangs .
 
@@ -168,10 +152,6 @@ let
     # Python 3.10-3.12 deprecation warning: asyncore
     # https://bz.mercurial-scm.org/show_bug.cgi?id=6727
     test-patchbomb-tls.t
-
-    # Test wanting TLS 1.0 and 1.1, not available with OpenSSL v3.
-    # https://bz.mercurial-scm.org/show_bug.cgi?id=6760
-    test-https.t
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"

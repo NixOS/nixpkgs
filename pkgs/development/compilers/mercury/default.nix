@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, gcc, flex, bison, texinfo, jdk, erlang, makeWrapper
+{ lib, stdenv, fetchurl, gcc, flex, bison, texinfo, jdk_headless, erlang, makeWrapper
 , readline }:
 
 stdenv.mkDerivation rec {
   pname = "mercury";
-  version = "22.01.5";
+  version = "22.01.6";
 
   src = fetchurl {
     url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
-    sha256 = "sha256-fhstGxMMCvxlVCvjwuSDmc8sJdegStPEJ+AicVsJig8=";
+    sha256 = "sha256-dpRW+DRGJZPIvUv6/y1TLAFjrPOldKBtpwn87nOgIt8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gcc flex bison texinfo jdk erlang readline ];
+  buildInputs = [ gcc flex bison texinfo jdk_headless erlang readline ];
 
   patchPhase = ''
     # Fix calls to programs in /bin
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     for e in $(ls $out/bin) ; do
       wrapProgram $out/bin/$e \
         --prefix PATH ":" "${gcc}/bin" \
-        --prefix PATH ":" "${jdk}/bin" \
+        --prefix PATH ":" "${jdk_headless}/bin" \
         --prefix PATH ":" "${erlang}/bin"
     done
   '';

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-stack";
-  version = "0.10.14";
+  version = "0.10.16";
 
   src = fetchFromGitHub {
     owner = "gitext-rs";
     repo = "git-stack";
     rev = "v${version}";
-    hash = "sha256-DAvvVI3npHM7ln/EAr0RjtUCqCoKx9QHsCw69F8C8p4=";
+    hash = "sha256-QpRgAcbaZP5pgqMCoYAUybp8NkSkfGqNsZYXZp3Zdtc=";
   };
 
-  cargoHash = "sha256-KDVHSCQx7qIS/Gwx/wlpdIMgirPSfG535dvu33gjF7c=";
+  cargoHash = "sha256-L+GtqbPQCgw0n1aW/2rU8ba+acC5n0sdEl9C6lveb1I=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security

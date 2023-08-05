@@ -1,9 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "budgie";
 
-  meta = with lib; {
-    maintainers = [ maintainers.federicoschonborn ];
-  };
+  meta.maintainers = [ lib.maintainers.federicoschonborn ];
 
   nodes.machine = { ... }: {
     imports = [
@@ -20,7 +18,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
-    services.xserver.desktopManager.budgie.enable = true;
+    services.xserver.desktopManager.budgie = {
+      enable = true;
+      extraPlugins = [
+        pkgs.budgiePlugins.budgie-analogue-clock-applet
+      ];
+    };
   };
 
   testScript = { nodes, ... }:
@@ -29,7 +32,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     in
     ''
       with subtest("Wait for login"):
-          machine.wait_for_x()
+          # wait_for_x() checks graphical-session.target, which is expected to be
+          # inactive on Budgie before #228946 (i.e. systemd managed gnome-session) is
+          # done on upstream.
+          # https://github.com/BuddiesOfBudgie/budgie-desktop/blob/v10.7.2/src/session/budgie-desktop.in#L16
+          #
+          # Previously this was unconditionally touched by xsessionWrapper but was
+          # changed in #233981 (we have Budgie:GNOME in XDG_CURRENT_DESKTOP).
+          # machine.wait_for_x()
+          machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
           machine.wait_for_file("${user.home}/.Xauthority")
           machine.succeed("xauth merge ${user.home}/.Xauthority")
 

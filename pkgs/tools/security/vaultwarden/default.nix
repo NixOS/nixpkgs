@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
+{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, nixosTests
 , pkg-config, openssl
 , libiconv, Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
@@ -9,17 +9,20 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.28.1";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    hash = "sha256-YIR8if6lFJ+534qBN9k1ltFp5M7KBU5qYaI1KppTYwI=";
+    hash = "sha256-uASoPZRBQ9IKJHtMGeeZzmr0fCYDWl56EzaJVj6LwMk=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rocket-0.5.0-rc.3" = "sha256-E71cktkHCbmQyjkjWWJ20KfCm3B/h3jQ2TMluYhvCQw=";
+    };
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitLab
 , cairo
+, cargo
 , desktop-file-utils
 , gettext
 , glib
@@ -11,14 +12,14 @@
 , ninja
 , pango
 , pkg-config
-, python3
 , rustPlatform
+, rustc
 , wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "contrast";
-  version = "0.0.5";
+  version = "0.0.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -26,13 +27,13 @@ stdenv.mkDerivation rec {
     owner = "design";
     repo = "contrast";
     rev = version;
-    sha256 = "cypSbqLwSmauOoWOuppWpF3hvrxiqmkLspxAWzvlUC0=";
+    hash = "sha256-5OFmLsP+Xk3sKJcUG/s8KwedvfS8ri+JoinliyJSmrY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-W4FyqwJpimf0isQRCq9TegpTQPQfsumx40AFQCFG5VQ=";
+    hash = "sha256-8WukhoKMyApkwqPQ6KeWMsL40sMUcD4I4l7UqXf2Ld0=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +42,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
-    glib # for glib-compile-resources
   ];
 
   buildInputs = [
@@ -57,21 +56,13 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  postPatch = ''
-    patchShebangs build-aux/meson_post_install.py
-    # https://gitlab.gnome.org/World/design/contrast/-/merge_requests/23
-    substituteInPlace build-aux/meson_post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-  '';
-
   meta = with lib; {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
     homepage = "https://gitlab.gnome.org/World/design/contrast";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin;
   };
 }
-

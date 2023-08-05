@@ -2,14 +2,13 @@
 {
   workspaceStateFile = ./workspace-state.json;
   hashes = {
-    "swift-argument-parser" = "070gip241dgn3d0nxgwxva4vp6kbnf11g01q5yaq6kmflcmz58f2";
-    "swift-cmark" = "0xfchdgls3070z16in8ks69y8fpiajmyk7lmp5h7ym7164isa6bb";
-    "swift-crypto" = "0h054rq14jyg94aiymmp37vqz60a13dlczp5g09pln724j4ypv92";
+    "swift-argument-parser" = "1jph9w7lk9nr20fsv2c8p4hisx3dda817fh7pybd0r0j1jwa9nmw";
+    "swift-cmark" = "1qswlh6j9mlfq8qj7xfqspla7w7rrzvplgcs4mgllgi012yfgwnp";
+    "swift-crypto" = "020b8q4ss2k7a65r5dgh59z40i6sn7ij1allxkh8c8a9d0jzn313";
     "swift-docc-plugin" = "11d6nhi139yzk1lxxrixsbgyj1bnvmh40wj30y725q83nqq49ljh";
-    "swift-docc-symbolkit" = "14hb2wc09hisf2r2yny17z28z0m58cf4lnqaczad2x2hk4s1iayi";
-    "swift-lmdb" = "1m5y6x2vs1wflcv2c57rx87gh12sy0hkwy5iy9inxmda2mcs8qcb";
-    "swift-markdown" = "09270bfrwlp904cma29hsbhr1p25v8kwgvhcfi7lg2av7aaknd97";
+    "swift-docc-symbolkit" = "14w37wzbx1mygfwm4iv0ypj120n1axhk627rg5a7v8j0ln511r7s";
+    "swift-lmdb" = "0azmc24mnxn4pbda8w8v7hy3h0gqqm4br43pnr7lc4sfj3dcv43m";
+    "swift-markdown" = "1l4ydc0xyv88gnyc33p61qavdh8cv98c548n1icphrfd6i78yygw";
     "swift-nio" = "04bvay94b34ynmlvgyl9a7f431l3cf8k2zr483spv8mvyh1hxiqn";
-    "swift-nio-ssl" = "1ak4aldilmz0pnfgbwq1x4alr38nfyvx2pz7p2vi2plf82da80g5";
   };
 }

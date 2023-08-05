@@ -37,7 +37,7 @@ in {
 
         serviceConfig.ExecStart = [
           ""
-          "${lib.getExe pkgs.auto-cpufreq} --config ${cfgFile}"
+          "${lib.getExe pkgs.auto-cpufreq} --daemon --config ${cfgFile}"
         ];
       };
     };

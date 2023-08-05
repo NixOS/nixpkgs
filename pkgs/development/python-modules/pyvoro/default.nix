@@ -19,6 +19,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/joe-jordan/pyvoro";
     description = "2D and 3D Voronoi tessellations: a python entry point for the voro++ library";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

@@ -1,0 +1,26 @@
+From f52f3c2cb1703592eaeb43e80f585a24ce8402d7 Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Fri, 14 Apr 2023 09:34:46 +0800
+Subject: [PATCH 3/6] qtbase: qmake: fix includedir in generated pkg-config
+
+---
+ qmake/generators/makefile.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
+index cc985a878b4..4e3b383d812 100644
+--- a/qmake/generators/makefile.cpp
++++ b/qmake/generators/makefile.cpp
+@@ -3403,8 +3403,7 @@ MakefileGenerator::writePkgConfigFile()
+       << varGlue("QMAKE_PKGCONFIG_CFLAGS", "", " ", " ")
+         //      << varGlue("DEFINES","-D"," -D"," ")
+          ;
+-    if (!project->values("QMAKE_DEFAULT_INCDIRS").contains(includeDir))
+-        t << "-I${includedir}";
++    t << "-I${includedir}";
+     if (target_mode == TARG_MAC_MODE && project->isActiveConfig("lib_bundle")
+         && libDir != QLatin1String("/Library/Frameworks")) {
+             t << " -F${libdir}";
+-- 
+2.39.2
+

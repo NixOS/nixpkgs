@@ -4,6 +4,7 @@
 , fetchurl
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
+, markForCudatoolkitRootHook
 }:
 
 pname:
@@ -28,6 +29,7 @@ backendStdenv.mkDerivation {
     # directory to the rpath of all ELF binaries.
     # Check e.g. with `patchelf --print-rpath path/to/my/binary
     autoAddOpenGLRunpathHook
+    markForCudatoolkitRootHook
   ];
 
   buildInputs = [
@@ -36,6 +38,12 @@ backendStdenv.mkDerivation {
     # nvcc forces us to use an older gcc
     # NB: We don't actually know if this is the right thing to do
     stdenv.cc.cc.lib
+  ];
+
+  # Picked up by autoPatchelf
+  # Needed e.g. for libnvrtc to locate (dlopen) libnvrtc-builtins
+  appendRunpaths = [
+    "$ORIGIN"
   ];
 
   dontBuild = true;
@@ -54,6 +62,7 @@ backendStdenv.mkDerivation {
   meta = {
     description = attrs.name;
     license = lib.licenses.unfree;
+    maintainers = lib.teams.cuda.members;
     platforms = lib.optionals (lib.hasAttr arch attrs) [ "x86_64-linux" ];
   };
 }

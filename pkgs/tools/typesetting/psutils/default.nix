@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "17";
 
   src = fetchurl {
-    url = "ftp://ftp.knackered.org/pub/psutils/psutils-p${version}.tar.gz";
-    sha256 = "1r4ab1fvgganm02kmm70b2r1azwzbav2am41gbigpa2bb1wynlrq";
+    url = "http://knackered.knackered.org/angus/download/${pname}/${pname}-p${version}.tar.gz";
+    hash = "sha256-OFPreVhLqPvieoFUJbZan38Vsljg1DoFqFa9t11YiuQ=";
   };
 
   configurePhase = ''
@@ -15,13 +15,16 @@ stdenv.mkDerivation rec {
       Makefile.unix > Makefile
   '';
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   preInstall = ''
     mkdir -p $out/bin $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of useful utilities for manipulating PS documents";
     homepage = "http://knackered.knackered.org/angus/psutils/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

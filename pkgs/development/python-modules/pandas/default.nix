@@ -8,11 +8,6 @@
 , numpy
 , python-dateutil
 , pytz
-, scipy
-, sqlalchemy
-, tables
-, xlrd
-, xlwt
 # Test inputs
 , glibcLocales
 , hypothesis
@@ -49,8 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     glibcLocales
-    # hypothesis indirectly depends on pandas to build its documentation
-    (hypothesis.override { enableDocumentation = false; })
+    hypothesis
     jinja2
     pytest-asyncio
     pytest-xdist

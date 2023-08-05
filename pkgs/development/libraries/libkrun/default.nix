@@ -3,12 +3,14 @@
 , fetchFromGitHub
 , fetchurl
 , rustPlatform
+, cargo
 , pkg-config
 , dtc
 , glibc
 , openssl
 , libiconv
 , libkrunfw
+, rustc
 , Hypervisor
 , sevVariant ? false
 }:
@@ -32,10 +34,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-nbtp7FP+ObVGfDOEzTt4Z7TZwcNlREczTKIAXGSflZU=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ] ++ lib.optional sevVariant pkg-config;
 
   buildInputs = [

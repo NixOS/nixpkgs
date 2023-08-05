@@ -36,10 +36,14 @@ _separateDebugInfo() {
         # architecture than we're building for.  (This happens with
         # firmware blobs in QEMU.)
         (
+            if [ -f "$dst/${id:0:2}/${id:2}.debug" ]
+            then
+                echo "separate-debug-info: warning: multiple files with build id $id found, overwriting"
+            fi
             $OBJCOPY --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
 
             # Also a create a symlink <original-name>.debug.
             ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
         ) || rmdir -p "$dst/${id:0:2}"
-    done < <(find "$prefix" -type f -print0)
+    done < <(find "$prefix" -type f -print0 | sort -z)
 }

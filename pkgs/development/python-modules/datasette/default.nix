@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.64.2";
+  version = "0.64.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AxIJUJzFEAvAV59hYDB3pb5/1rS9d7T0ltl6lVWTCrE=";
+    hash = "sha256-hUMaveScSGbiELvN2oo8Nf/jFvYXeLpxTONl1R4UOZU=";
   };
 
   postPatch = ''
@@ -102,6 +102,6 @@ buildPythonPackage rec {
     description = "Multi-tool for exploring and publishing data";
     homepage = "https://datasette.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -2,40 +2,25 @@
 , lib
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , installShellFiles
-, tinycc
 , libiconv
-, libobjc
-, Security
-, CoreServices
-, Metal
-, Foundation
-, QuartzCore
+, darwin
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.31.1";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0S5BSXWnv4DMcc8cijRQx6NyDReg5aJJT65TeNFlkkw=";
+    hash = "sha256-PV0Q/OtO4AkY3NMwIQIwU0DCkFqXifJFuHb+Q3rIQLI=";
   };
-  cargoHash = "sha256-7Xfnc91yQiAwAF5fvtiwnELUDb7LJeye3GtXNzYkUo8=";
 
-  cargoPatches = [
-    # resolved in 1.31.2
-    (fetchpatch {
-      name = "CVE-2023-28446.patch";
-      url = "https://github.com/denoland/deno/commit/78d430103a8f6931154ddbbe19d36f3b8630286d.patch";
-      hash = "sha256-kXwr9wWxk1OaaubCr8pfmSp3TrJMQkbAg72nIHp/seA=";
-    })
-  ];
+  cargoHash = "sha256-w0Wr/mwn4Hdfxr7eBdZtpj3MbsMHDwAK2F7XaYEaMCk=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -44,32 +29,16 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin
-    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
+  buildInputs = lib.optionals stdenv.isDarwin (
+    [ libiconv darwin.libobjc ] ++
+    (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
+  );
 
   buildAndTestSubdir = "cli";
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   RUSTY_V8_ARCHIVE = librusty_v8;
-
-  # The deno_ffi package currently needs libtcc.a on linux and macos and will try to compile it at build time
-  # To avoid this we point it to our copy (dir)
-  # In the future tinycc will be replaced with asm
-  libtcc = tinycc.overrideAttrs (oa: {
-    makeFlags = [ "libtcc.a" ];
-    # tests want tcc binary
-    doCheck = false;
-    outputs = [ "out" ];
-    installPhase = ''
-      mkdir -p $out/lib/
-      mv libtcc.a $out/lib/
-    '';
-    # building the whole of tcc on darwin is broken in nixpkgs
-    # but just building libtcc.a works fine so mark this as unbroken
-    meta.broken = false;
-  });
-  TCC_PATH = "${libtcc}/lib";
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , asn1crypto
 , buildPythonPackage
 , defusedxml
@@ -16,6 +17,7 @@
 , dissect-ntfs
 , dissect-regf
 , dissect-sql
+, dissect-shellitem
 , dissect-thumbcache
 , dissect-util
 , dissect-volume
@@ -37,16 +39,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.8";
+  version = "3.10";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-CPN8g6LDeS77fveFOK6gExIJq9g+5qXhwDhjw3tWuJc=";
+    hash = "sha256-zAcNkRwCnU/53h8/WsaGjCpgPovPb+5VOu/6SHXu31g=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -80,6 +82,7 @@ buildPythonPackage rec {
       dissect-extfs
       dissect-fat
       dissect-ffs
+      dissect-shellitem
       dissect-sql
       dissect-thumbcache
       dissect-xfs
@@ -107,7 +110,11 @@ buildPythonPackage rec {
     "test_tar_sensitive_drive_letter"
     # Tests compare dates and times
     "yum"
-  ];
+    # Filesystem access, windows defender tests
+    "test_defender_quarantine_recovery"
+  ] ++
+  # test is broken on Darwin
+  lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
 
   disabledTestPaths = [
     # Tests are using Windows paths

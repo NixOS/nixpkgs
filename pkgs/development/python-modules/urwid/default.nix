@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "A full-featured console (xterm et al.) user interface library";
     homepage = "https://urwid.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

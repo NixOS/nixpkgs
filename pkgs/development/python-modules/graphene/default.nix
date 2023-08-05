@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "graphene";
-  version = "3.2.1";
+  version = "3.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = "graphene";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XnrzgPkkFsTgNE9J+eSkD8f5MokKjtZhbbE/dxNZryk=";
+    hash = "sha256-DGxicCXZp9kW/OFkr0lAWaQ+GaECx+HD8+X4aW63vgQ=";
   };
 
   propagatedBuildInputs = [
@@ -60,6 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/graphql-python/graphene";
     changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

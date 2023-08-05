@@ -59,12 +59,12 @@ let
   bintoolsVersion = lib.getVersion bintools;
   bintoolsName = lib.removePrefix targetPrefix (lib.getName bintools);
 
-  libc_bin = if libc == null then "" else getBin libc;
-  libc_dev = if libc == null then "" else getDev libc;
-  libc_lib = if libc == null then "" else getLib libc;
-  bintools_bin = if nativeTools then "" else getBin bintools;
+  libc_bin = lib.optionalString (libc != null) (getBin libc);
+  libc_dev = lib.optionalString (libc != null) (getDev libc);
+  libc_lib = lib.optionalString (libc != null) (getLib libc);
+  bintools_bin = lib.optionalString (!nativeTools) (getBin bintools);
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
-  coreutils_bin = if nativeTools then "" else getBin coreutils;
+  coreutils_bin = lib.optionalString (!nativeTools) (getBin coreutils);
 
   # See description in cc-wrapper.
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
@@ -88,6 +88,7 @@ let
     else if targetPlatform.isMips                     then "${sharedLibraryLoader}/lib/ld.so.1"
     # `ld-linux-riscv{32,64}-<abi>.so.1`
     else if targetPlatform.isRiscV                    then "${sharedLibraryLoader}/lib/ld-linux-riscv*.so.1"
+    else if targetPlatform.isLoongArch64              then "${sharedLibraryLoader}/lib/ld-linux-loongarch*.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
@@ -102,7 +103,7 @@ in
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${bintoolsName}-wrapper");
-  version = if bintools == null then null else bintoolsVersion;
+  version = lib.optionalString (bintools != null) bintoolsVersion;
 
   preferLocalBuild = true;
 
@@ -166,7 +167,7 @@ stdenv.mkDerivation {
 
     # If we are asked to wrap `gas` and this bintools has it,
     # then symlink it (`as` will be symlinked next).
-    # This is mainly for the wrapped gnatboot on x86-64 Darwin,
+    # This is mainly for the wrapped gnat-bootstrap on x86-64 Darwin,
     # as it must have both the GNU assembler from cctools (installed as `gas`)
     # and the Clang integrated assembler (installed as `as`).
     # See pkgs/os-specific/darwin/binutils/default.nix for details.
@@ -264,7 +265,7 @@ stdenv.mkDerivation {
     # install the wrapper, you get tools like objdump (same for any
     # binaries of libc).
     + optionalString (!nativeTools) ''
-      printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+      printWords ${bintools_bin} ${lib.optionalString (libc != null) libc_bin} > $out/nix-support/propagated-user-env-packages
     ''
 
     ##
@@ -380,15 +381,15 @@ stdenv.mkDerivation {
     # for substitution in utils.bash
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     shell = getBin shell + shell.shellPath or "";
-    gnugrep_bin = if nativeTools then "" else gnugrep;
+    gnugrep_bin = lib.optionalString (!nativeTools) gnugrep;
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
     inherit bintools_bin libc_bin libc_dev libc_lib;
   };
 
   meta =
-    let bintools_ = if bintools != null then bintools else {}; in
-    (if bintools_ ? meta then removeAttrs bintools.meta ["priority"] else {}) //
+    let bintools_ = lib.optionalAttrs (bintools != null) bintools; in
+    (lib.optionalAttrs (bintools_ ? meta) (removeAttrs bintools.meta ["priority"])) //
     { description =
         lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";

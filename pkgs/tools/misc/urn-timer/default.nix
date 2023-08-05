@@ -11,18 +11,14 @@
 
 stdenv.mkDerivation {
   pname = "urn-timer";
-  version = "unstable-2023-03-18";
+  version = "unstable-2023-07-31";
 
   src = fetchFromGitHub {
     owner = "paoloose";
     repo = "urn";
-    rev = "09c075607a6e26307665b45095e133d6805f0aeb";
-    hash = "sha256-0/V1KQxwHhpcruEsll0+JNtgT/6vEkpt+ff3SlsHYr8=";
+    rev = "2dad51949aa21e0e66a3d34e916fb66689c6be2e";
+    hash = "sha256-0pZjgKW4kyBgMGKEa8ZMhKtzbJX2MoXKID++iy16m2A=";
   };
-
-  postPatch = ''
-    substituteInPlace Makefile --replace 'rsync -a --exclude=".*"' 'cp -r'
-  '';
 
   nativeBuildInputs = [
     xxd

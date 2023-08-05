@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.30.0";
+  version = "3.40.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GwQtIivEho0/nuDABMdAlOQLc2zstGQ/9xJCeHMQX60=";
+    hash = "sha256-+dBve2hfb9paeIPlqY//VdXvnBq3tze4NiShNfrXgM0=";
   };
 
   propagatedBuildInputs = [
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-spanner";
     changelog = "https://github.com/googleapis/python-spanner/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

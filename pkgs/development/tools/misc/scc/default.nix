@@ -21,6 +21,5 @@ buildGoModule rec {
     description = "A very fast accurate code counter with complexity calculations and COCOMO estimates written in pure Go";
     maintainers = with maintainers; [ sigma Br1ght0ne ];
     license = with licenses; [ unlicense /* or */ mit ];
-    platforms = platforms.unix;
   };
 }

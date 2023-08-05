@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "rancher";
-  version = "2.6.11";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner  = "rancher";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "sha256-1hIYFQ9Uwrm6chPXka0yK2XoZYHqv5lJoyENZmgMAwc=";
+    sha256 = "sha256-co4LVd5A0bJ4CIuCfv6WyV8XCMbPCFAAcV12WekYrw4=";
   };
 
   ldflags = [

@@ -15,4 +15,4 @@ cp -u -- @seednodes@ $FREENET_HOME/seednodes.fref
 chmod u+rw -- $FREENET_HOME/seednodes.fref
 
 cd -- $FREENET_HOME
-exec @jdk@/bin/java -Xmx1024M freenet.node.NodeStarter "$@"
+exec @jre@/bin/java -Xmx1024M freenet.node.NodeStarter "$@"

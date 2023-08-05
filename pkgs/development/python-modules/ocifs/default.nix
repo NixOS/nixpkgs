@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "ocifs";
-  version = "1.1.4";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "oracle";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zZREWEFWQj4G2RyEMH0X3oPr5Yu5/96UX6nm9HDmJCY=";
+    hash = "sha256-HY2LTm3JckAzNMVuAJNs/0LixBwiG/QKa7ILquY0Q+c=";
   };
 
   propagatedBuildInputs = [

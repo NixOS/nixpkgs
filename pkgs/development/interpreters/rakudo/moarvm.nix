@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , perl
 , CoreServices
 , ApplicationServices
@@ -8,11 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2023.02";
+  version = "2023.06";
 
-  src = fetchurl {
-    url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    hash = "sha256-Z+IU1E1fYmeHyn8EQkBDpjkwikOnd3tvpBkmtyQODcU=";
+  src = fetchFromGitHub {
+    owner = "moarvm";
+    repo = "moarvm";
+    rev = version;
+    hash = "sha256-dMh1KwKh89ZUqIUPHOH9DPgxLWq37kW3hTTwsFe1imM=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''

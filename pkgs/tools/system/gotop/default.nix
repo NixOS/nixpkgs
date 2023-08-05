@@ -27,6 +27,9 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 
+  # prevent `error: 'TARGET_OS_MAC' is not defined`
+  env.CGO_CFLAGS = "-Wno-undef-prefix";
+
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];

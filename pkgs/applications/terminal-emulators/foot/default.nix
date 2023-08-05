@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitea
 , fetchurl
+, fetchpatch
 , runCommand
 , fcft
 , freetype
@@ -23,11 +24,10 @@
 # for clang stdenv check
 , foot
 , llvmPackages
-, llvmPackages_latest
 }:
 
 let
-  version = "1.14.0";
+  version = "1.15.2";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -40,7 +40,7 @@ let
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
+      hash = "sha256-NvkKJ75n/OzgEd2WHX1NQIXPn9R0Z+YI1rpFmNxaDhk=";
     };
 
     dontUnpack = true;
@@ -97,9 +97,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
-    repo = pname;
+    repo = "foot";
     rev = version;
-    sha256 = "1187805pxygyl547w75i4cl37kaw8y8ng11r5qqldv6fm74k31mk";
+    hash = "sha256:1iz9l01fpryc335pb0c3qi67fmmfplizv5pbc9s578mxl5j9dxg4";
   };
 
   depsBuildBuild = [
@@ -187,10 +187,6 @@ stdenv.mkDerivation rec {
       inherit (llvmPackages) stdenv;
     };
 
-    clang-latest-compilation = foot.override {
-      inherit (llvmPackages_latest) stdenv;
-    };
-
     noPgo = foot.override {
       allowPgo = false;
     };
@@ -223,5 +219,6 @@ stdenv.mkDerivation rec {
     # TERMINFO to a store path, but allows installing foot.terminfo
     # on remote systems for proper foot terminfo support.
     priority = (ncurses.meta.priority or 5) + 3 + 1;
+    mainProgram = "foot";
   };
 }

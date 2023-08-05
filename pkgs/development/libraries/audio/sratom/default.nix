@@ -1,20 +1,65 @@
-{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, wafHook }:
+{ lib
+, stdenv
+, fetchurl
+, lv2
+, meson
+, ninja
+, pkg-config
+, serd
+, sord
+, writeScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "sratom";
-  version = "0.6.8";
+  version = "0.6.14";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Ossysa3Forf6za3i4IGLzWxx8j+EoevBeBW7eg0tAt8=";
+    url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
+    hash = "sha256-mYL69A24Ou3Zs4UOSZ/s1oUri0um3t5RQBNlXP+soeY=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook python3 ];
-  buildInputs = [ lv2 serd sord ];
-  dontAddWafCrossFlags = true;
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    lv2
+    serd
+    sord
+  ];
+
+  postPatch = ''
+    patchShebangs --build scripts/dox_to_sphinx.py
+  '';
+
+  mesonFlags = [
+    "-Ddocs=disabled"
+  ];
+
+  passthru = {
+    updateScript = writeScript "update-sratom" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of 'download.drobilla.net/sratom-0.30.16.tar.xz">'
+      new_version="$(curl -s https://drobilla.net/category/sratom/ |
+          pcregrep -o1 'download.drobilla.net/sratom-([0-9.]+).tar.xz' |
+          head -n1)"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
-    homepage = "http://drobilla.net/software/sratom";
+    homepage = "https://drobilla.net/software/sratom";
     description = "A library for serialising LV2 atoms to/from RDF";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];

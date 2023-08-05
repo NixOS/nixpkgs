@@ -2,14 +2,14 @@
 
 let
   pname = "box";
-  version = "4.2.0";
+  version = "4.3.8";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/box-project/box/releases/download/${version}/box.phar";
-    sha256 = "sha256-9pPhqFq9t3MKI/y6/7iCYB8ddWFrafGVcV/k+Exb+KQ=";
+    sha256 = "sha256-g9Y92yTsyXU4NWuQwyB3PRrKJxLRSBO9J77jumXPOxg=";
   };
 
   dontUnpack = true;
@@ -30,6 +30,6 @@ mkDerivation {
     description = "An application for building and managing Phars";
     license = licenses.mit;
     homepage = "https://github.com/box-project/box";
-    maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
+    maintainers = with maintainers; [ ] ++ teams.php.members;
   };
 }

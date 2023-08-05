@@ -2,14 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "artyFX";
-  # Fix build with lv2 1.18: https://github.com/openAVproductions/openAV-ArtyFX/pull/41/commits/492587461b50d140455aa3c98d915eb8673bebf0
-  version = "unstable-2020-04-28";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "openAVproductions";
     repo = "openAV-ArtyFX";
-    rev = "8c542627d936a01b1d97825e7f26a8e95633f7aa";
-    sha256 = "0wwg8ivnpyy0235bapjy4g0ij85zq355jwi6c1nkrac79p4z9ail";
+    rev = "release-${version}";
+    hash = "sha256-GD9nwXdXSJX5OvAMxEAnngkvRW+E1jrNfWXK122bsTM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

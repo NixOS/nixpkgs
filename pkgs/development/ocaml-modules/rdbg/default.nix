@@ -4,9 +4,7 @@ buildDunePackage rec {
   pname = "rdbg";
   version = "1.199.0";
 
-  duneVersion = "3";
-
-  minimalOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/rdbg.v${version}.tgz";

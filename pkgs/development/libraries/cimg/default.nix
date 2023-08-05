@@ -5,15 +5,15 @@
 , gmic-qt
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cimg";
-  version = "3.2.3";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "CImg";
-    rev = "v.${version}";
-    hash = "sha256-DFTqx4v3Hf2HyT02yBLo4n1yKPuPVz1oa2C5LsIeyCY=";
+    rev = "v.${finalAttrs.version}";
+    hash = "sha256-HEqjvL16Ca3Al3I6VK50CU6zHFj9Nn/SAXXCfRU4rgo=";
   };
 
   outputs = [ "out" "doc" ];
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    # Need to update in lockstep.
+    # Needs to update them all in lockstep.
     inherit gmic gmic-qt;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cimg.eu/";
     description = "A small, open source, C++ toolkit for image processing";
     longDescription = ''
@@ -44,8 +44,11 @@ stdenv.mkDerivation rec {
       C++. Due to its generic conception, it can cover a wide range of image
       processing applications.
     '';
-    license = licenses.cecill-c;
-    maintainers = [ maintainers.AndersonTorres maintainers.lilyinstarlight ];
-    platforms = platforms.unix;
+    license = lib.licenses.cecill-c;
+    maintainers = [
+      lib.maintainers.AndersonTorres
+      lib.maintainers.lilyinstarlight
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,67 +1,56 @@
 { lib
-, nixosTests
-, stdenv
+, mkYarnPackage
 , fetchFromGitHub
+, fetchYarnDeps
+, matrix-sdk-crypto-nodejs
 , makeWrapper
 , nodejs
-, pkgs
+, nixosTests
 }:
 
-stdenv.mkDerivation rec {
+mkYarnPackage rec {
   pname = "mjolnir";
-  version = "1.5.0";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
-    rev = "v${version}";
-    sha256 = "YmP+r9W5e63Aw66lSQeTTbYwSF/vjPyHkoehJxtcRNw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/vnojWLpu/fktqPUhAdL1QTESxDwFrBVYAkyF79Fj9w=";
   };
 
-  nativeBuildInputs = [
-    nodejs
-    makeWrapper
-  ];
+  packageJSON = ./package.json;
 
-  buildPhase =
-    let
-      nodeDependencies = ((import ./node-composition.nix {
-        inherit pkgs nodejs;
-        inherit (stdenv.hostPlatform) system;
-      }).nodeDependencies.override (old: {
-        # access to path '/nix/store/...-source' is forbidden in restricted mode
-        src = src;
-        dontNpmInstall = true;
-      }));
-    in
-    ''
-      runHook preBuild
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    hash = "sha256-B4s0CYr5Ihoh4gkckwZ3z0Nb4LMET48WvRXuhk3fpQM=";
+  };
 
-      ln -s ${nodeDependencies}/lib/node_modules .
-      export HOME=$(mktemp -d)
-      export PATH="${nodeDependencies}/bin:$PATH"
-      npm run build
+  packageResolutions = {
+    "@matrix-org/matrix-sdk-crypto-nodejs" = "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
+  };
 
-      runHook postBuild
-    '';
+  nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
+  buildPhase = ''
+    runHook preBuild
 
-    mkdir -p $out/share
-    cp -a . $out/share/mjolnir
+    pushd deps/${pname}
+    yarn run build
+    popd
 
-    makeWrapper ${nodejs}/bin/node $out/bin/mjolnir \
-      --add-flags $out/share/mjolnir/lib/index.js
+    runHook postBuild
+  '';
 
-    runHook postInstall
+  postInstall = ''
+    makeWrapper ${nodejs}/bin/node "$out/bin/mjolnir" \
+      --add-flags "$out/libexec/mjolnir/deps/mjolnir/lib/index.js"
   '';
 
   passthru = {
     tests = {
       inherit (nixosTests) mjolnir;
     };
-    updateScript = ./update.sh;
   };
 
   meta = with lib; {

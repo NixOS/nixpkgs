@@ -1,12 +1,13 @@
-{ buildFHSUserEnv
-, electron_22
+{ buildFHSEnv
+, electron_24
 , fetchFromGitHub
 , fetchYarnDeps
+, fetchurl
 , fixup_yarn_lock
 , git
 , lib
 , makeDesktopItem
-, nodejs-16_x
+, nodejs_18
 , stdenvNoCC
 , util-linux
 , zip
@@ -14,21 +15,29 @@
 
 let
   pname = "electron-fiddle";
-  version = "0.32.1";
-  electron = electron_22;
-  nodejs = nodejs-16_x;
+  version = "0.32.6";
+  electron = electron_24;
+  nodejs = nodejs_18;
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
     rev = "v${version}";
-    hash = "sha256-k+cbg03mwvobyazIUqm+TO9OMYVFQICy4CtkUZmvkr8=";
+    hash = "sha256-Iuss2xwts1aWy2rKYG7J2EvFdH8Bbedn/uZG2bi9UHw=";
+  };
+
+  # As of https://github.com/electron/fiddle/pull/1316 this is fetched
+  # from the network and has no stable hash.  Grab an old version from
+  # the repository.
+  releasesJson = fetchurl {
+    url = "https://raw.githubusercontent.com/electron/fiddle/v0.32.4~18/static/releases.json";
+    hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
   };
 
   inherit (nodejs.pkgs) yarn;
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-3vM+YPIA3zeWBaEFXU5lFl+VaGmAY0Qdg4pSA6mIKl0=";
+    hash = "sha256-dwhwUWwv6RYKEMdhRBvKVXvM8n1r+Qo0D3/uFsWIOpw=";
   };
 
   electronDummyMirror = "https://electron.invalid/";
@@ -55,6 +64,8 @@ let
       cp -ra '${electron}/lib/electron' "$TMPDIR/electron"
       chmod -R u+w "$TMPDIR/electron"
       (cd "$TMPDIR/electron" && zip -0Xr ~/.cache/electron/${electronDummyHash}/${electronDummyFilename} .)
+
+      ln -s ${releasesJson} static/releases.json
     '';
 
     buildPhase = ''
@@ -86,7 +97,7 @@ let
   };
 
 in
-buildFHSUserEnv {
+buildFHSEnv {
   name = "electron-fiddle";
   runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
 

@@ -26,14 +26,15 @@ let
       platforms = platforms.all;
       maintainers = [ ];
       license = [ licenses.asl20 ];
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
     };
   });
 
 in {
   tomcat9 = common {
     versionMajor = "9";
-    versionMinor = "0.68";
-    sha256 = "sha256-rxsv8zEIIbTel4CqIuncS5pellGwgHamKRa0KgzsOF0=";
+    versionMinor = "0.75";
+    sha256 = "sha256-VWfKg789z+ns1g3hDsCZFYQ+PsdqUEBeBHCihkGZelk=";
   };
 
   tomcat10 = common {

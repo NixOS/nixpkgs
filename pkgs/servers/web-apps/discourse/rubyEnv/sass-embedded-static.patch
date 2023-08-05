@@ -1,0 +1,21 @@
+diff --git a/ext/sass/Rakefile b/ext/sass/Rakefile
+index 77ced01..1e60ab0 100644
+--- a/ext/sass/Rakefile
++++ b/ext/sass/Rakefile
+@@ -18,15 +18,7 @@ file 'protoc.exe' do |t|
+ end
+ 
+ file 'sass_embedded' do |t|
+-  archive = fetch(ENV.fetch(t.name.upcase) { Configuration.default_sass_embedded })
+-  unarchive archive
+-  rm archive
+-
+-  if ENV.key?('NIX_BINTOOLS')
+-    sh 'patchelf',
+-       '--set-interpreter', File.read("#{ENV.fetch('NIX_BINTOOLS')}/nix-support/dynamic-linker").chomp,
+-       (['sass_embedded/src/dart', 'sass_embedded/dart-sass-embedded'].find { |exe| File.exist?(exe) })
+-  end
++  symlink(ENV.fetch(t.name.upcase), 'sass_embedded')
+ end
+ 
+ file 'embedded.rb' => %w[sass_embedded] do |t|

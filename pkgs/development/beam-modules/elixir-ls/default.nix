@@ -1,26 +1,27 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
+{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
 # Based on the work of Hauleth
 # None of this would have happened without him
 
 let
   pname = "elixir-ls";
-  pinData = lib.importJSON ./pin.json;
-  version = pinData.version;
+  version = "0.15.1";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    sha256 = pinData.sha256;
+    hash = "sha256-bWR5wKOVE9qPQyFjiaBumsWwG7vv9pFCVvXO4N8a3HA=";
     fetchSubmodules = true;
   };
 in
 mixRelease  {
   inherit pname version src elixir;
 
+  stripDebug = true;
+
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    sha256 = pinData.depsSha256;
+    hash = "sha256-7AE6RUD7DLo5uTxPMiUDm9MIBYcrNatrIuILK9jinNk=";
   };
 
   # elixir-ls is an umbrella app
@@ -71,5 +72,5 @@ mixRelease  {
     platforms = platforms.unix;
     maintainers = teams.beam.members;
   };
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 }

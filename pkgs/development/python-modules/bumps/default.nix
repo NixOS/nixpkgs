@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "bumps";
-  version = "0.9.0";
+  version = "0.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BY9kg0ksKfrpQgsl1aDDJJ+zKJmURqwTtKxlITxse+o=";
+    hash = "sha256-J8NeV9FCUC5dLkosBzVrovxiJJbeuj8Xc50NGEI9Bms=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Data fitting with bayesian uncertainty analysis";
     homepage = "https://bumps.readthedocs.io/";
+    changelog = "https://github.com/bumps/bumps/releases/tag/v${version}";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ rprospero ];
   };

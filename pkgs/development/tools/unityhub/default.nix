@@ -1,15 +1,20 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, buildFHSEnv
 , extraPkgs ? pkgs: [ ]
 , extraLibs ? pkgs: [ ]
 }:
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    sha256 = "sha256-/P6gPLSRGfwEN801cyNrZTpHyZKO+4tU6cFvLz8ERuo=";
+    sha256 = "sha256-d5TUUhGqchkrCRqJWHEewurjsHxbfZ+5hv9w9Yv2EQ4=";
   };
 
   nativeBuildInputs = [
@@ -17,15 +22,14 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  fhsEnv = buildFHSUserEnv {
+  fhsEnv = buildFHSEnv {
     name = "${pname}-fhs-env";
     runScript = "";
 
-    # Seems to be needed for GTK filepickers to work in FHSUserEnv
-    profile = "XDG_DATA_DIRS=\"\$XDG_DATA_DIRS:/usr/share/\"";
-
     targetPkgs = pkgs: with pkgs; [
+      # Unity Hub binary dependencies
       xorg.libXrandr
+      xdg-utils
 
       # GTK filepicker
       gsettings-desktop-schemas
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
       lttng-ust_2_12
       krb5
       alsa-lib
-      nss_latest
+      nss
       libdrm
       mesa
       nspr
@@ -65,9 +69,8 @@ stdenv.mkDerivation rec {
 
       # Unity Hub additional dependencies
       libva
-      openssl_1_1
+      openssl
       cairo
-      xdg-utils
       libnotify
       libuuid
       libsecret
@@ -78,7 +81,7 @@ stdenv.mkDerivation rec {
       icu
       libpulseaudio
 
-      # Editor dependencies
+      # Unity Editor dependencies
       libglvnd # provides ligbl
       xorg.libX11
       xorg.libXcursor
@@ -88,6 +91,12 @@ stdenv.mkDerivation rec {
       zlib
       clang
       git # for git-based packages in unity package manager
+
+      # Unity Editor 2019 specific dependencies
+      xorg.libXi
+      xorg.libXrender
+      gnome2.GConf
+      libcap
     ] ++ extraLibs pkgs;
   };
 
@@ -119,11 +128,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Official Unity3D app to download and manage Unity Projects and installations";
-    homepage = "https://unity3d.com/";
+    homepage = "https://unity.com/";
+    downloadPage = "https://unity.com/unity-hub";
+    changelog = "https://unity.com/unity-hub/release-notes";
     license = licenses.unfree;
     maintainers = with maintainers; [ tesq0 huantian ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

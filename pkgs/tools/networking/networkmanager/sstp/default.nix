@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitLab
+, autoreconfHook
 , file
 , glib
 , gnome
@@ -19,15 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-sstp";
-  version = "1.3.1";
+  version = "unstable-2023-03-09";
   name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "fQMSawiaCk/2ZeMHVVcM7PaFEKbP7bUS9Lh+htrGHX0=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "network-manager-sstp";
+    rev = "852db07dc7d19c37e398d831410bd94c8659a210";
+    hash = "sha256-DxgcuTza2G5a7F2mBtDaEuynu7F1Ex9pnAESAjyoRq8=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     file
     gettext
     pkg-config
@@ -54,6 +59,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-pppd-plugin-dir=$(out)/lib/pppd/2.5.0"
     "--enable-absolute-paths"
   ];
 

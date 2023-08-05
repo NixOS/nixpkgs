@@ -461,6 +461,8 @@ in {
       "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
 
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+      # ppp isn't able to mkdir that directory at runtime
+      "d /run/pppd/lock 0700 root root -"
     ];
 
     systemd.services.NetworkManager = {

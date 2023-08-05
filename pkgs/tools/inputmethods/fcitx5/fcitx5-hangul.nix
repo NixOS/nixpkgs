@@ -6,6 +6,7 @@
 , gettext
 , fcitx5
 , libhangul
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
     fcitx5
     libhangul
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) fcitx5;
+  };
 
   meta = with lib; {
     description = "Hangul wrapper for Fcitx5";

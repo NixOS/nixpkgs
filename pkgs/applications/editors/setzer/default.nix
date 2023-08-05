@@ -11,20 +11,22 @@
 , gobject-introspection
 , gtksourceview4
 , gspell
+, libhandy
 , poppler_gi
-, webkitgtk
+, webkitgtk_4_1
 , librsvg
+, libportal
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.4.8";
+  version = "56";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    hash = "sha256-7NPyvAof0xObYZws3KFAbdue/GpIRthzdX00jc9GhYs=";
+    hash = "sha256-YCJu8EU+8RD09QNVT/RYF2ZJZ7cp+oawXThqTzg8ENQ=";
   };
 
   format = "other";
@@ -43,9 +45,11 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtksourceview4
     gspell
+    libhandy
     poppler_gi
-    webkitgtk
+    webkitgtk_4_1
     librsvg
+    libportal
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -54,6 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     pdfminer-six
     pycairo
     pexpect
+    bibtexparser
   ];
 
   checkPhase = ''

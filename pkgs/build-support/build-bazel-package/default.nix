@@ -67,7 +67,6 @@ let
         --output_user_root="$bazelUserRoot" \
         ${cmd} \
         --curses=no \
-        -j $NIX_BUILD_CORES \
         "''${copts[@]}" \
         "''${host_copts[@]}" \
         "''${linkopts[@]}" \
@@ -131,7 +130,7 @@ stdenv.mkDerivation (fBuildAttrs // {
             # https://github.com/bazelbuild/bazel/issues/6502
             "--loading_phase_threads=1"
             "$bazelFetchFlags"
-          ];
+          ] ++ (if fetchConfigured then ["--jobs" "$NIX_BUILD_CORES"] else []);
           targets = fFetchAttrs.bazelTargets ++ fFetchAttrs.bazelTestTargets;
         }
       }
@@ -139,7 +138,7 @@ stdenv.mkDerivation (fBuildAttrs // {
       runHook postBuild
     '';
 
-    installPhase = fFetchAttrs.installPhase or ''
+    installPhase = fFetchAttrs.installPhase or (''
       runHook preInstall
 
       # Remove all built in external workspaces, Bazel will recreate them when building
@@ -183,7 +182,7 @@ stdenv.mkDerivation (fBuildAttrs // {
       (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
       runHook postInstall
-    '';
+    '');
 
     dontFixup = true;
     allowedRequisites = [];
@@ -252,14 +251,14 @@ stdenv.mkDerivation (fBuildAttrs // {
       bazelCmd {
         cmd = "test";
         additionalFlags =
-          ["--test_output=errors"] ++ fBuildAttrs.bazelTestFlags;
+          ["--test_output=errors"] ++ fBuildAttrs.bazelTestFlags ++ ["--jobs" "$NIX_BUILD_CORES"];
         targets = fBuildAttrs.bazelTestTargets;
       }
     }
     ${
       bazelCmd {
         cmd = "build";
-        additionalFlags = fBuildAttrs.bazelBuildFlags;
+        additionalFlags = fBuildAttrs.bazelBuildFlags ++ ["--jobs" "$NIX_BUILD_CORES"];
         targets = fBuildAttrs.bazelTargets;
       }
     }

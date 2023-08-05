@@ -12,7 +12,7 @@ When reviewing a pull request, please always be nice and polite. Controversial c
 
 GitHub provides reactions as a simple and quick way to provide feedback to pull requests or any comments. The thumb-down reaction should be used with care and if possible accompanied with some explanation so the submitter has directions to improve their contribution.
 
-pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
+Pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
 
 All the review template samples provided in this section are generic and meant as examples. Their usage is optional and the reviewer is free to adapt them to their liking.
 
@@ -62,6 +62,8 @@ Sample template for a package update review is provided below.
 - [ ] package build on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] all depending packages build
+- [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
+- [ ] patches that are remotely available are fetched rather than vendored
 
 ##### Possible improvements
 
@@ -105,7 +107,8 @@ Sample template for a new package review is provided below.
 - [ ] source is fetched using the appropriate function
 - [ ] the list of `phases` is not overridden
 - [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
-- [ ] patches that are remotely available are fetched with `fetchpatch`
+- [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
+- [ ] patches that are remotely available are fetched rather than vendored
 
 ##### Possible improvements
 
@@ -201,7 +204,7 @@ checks should be performed:
     them to either recommit using that key or to remove their key
     information.
 
-    Given a maintainter entry like this:
+    Given a maintainer entry like this:
 
     ``` nix
     {

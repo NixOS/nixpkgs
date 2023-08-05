@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "abcl";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-pbxnfJRB9KgzwgpUG93Rb/+SZIRmkd6aHa9mmfj/EeI=";
+    sha256 = "sha256-Ti9Lj4Xi2V2V5b282foXrWExoX4vzxK8Gf+5e0i8HTg=";
   };
 
   configurePhase = ''
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "A JVM-based Common Lisp implementation";
     license = lib.licenses.gpl3 ;
     maintainers = lib.teams.lisp.members;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     homepage = "https://common-lisp.net/project/armedbear/";
   };
 }

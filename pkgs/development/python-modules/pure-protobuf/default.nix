@@ -12,17 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "2.2.3";
+  version = "2.3.0";
 
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
-  # PyPi lacks tests.
   src = fetchFromGitHub {
     owner = "eigenein";
     repo = "protobuf";
-    rev = version;
-    hash = "sha256-FsVWlYPav4uusdEPXc5hScLeNJWfbSjGOLuZ7yZXyCw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nJ3F8dUrqMeWqTV9ErGqrMvofJwBKwNUDfxWIqFh4nY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -44,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of Protocol Buffers with dataclass-based schemas";
     homepage = "https://github.com/eigenein/protobuf";
+    changelog = "https://github.com/eigenein/protobuf/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ chuangzhu ];
   };

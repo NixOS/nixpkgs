@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -47,13 +46,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.10";
-  minor = "6";
+  minor = "7";
   patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-WLxb9vJBlRfo9bKWEIsCI0Zb040XkLNjYw84j6ivOrk=";
+  sourceSha256 = "sha256-7fIQMcx90wI4mAZmR26/rkBKPKhNxgu3oWpJTV3C+Ek=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -143,6 +142,10 @@ let
     };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
+      runtime = [
+        # Required to compile wavfile blocks.
+        libsndfile
+      ];
     };
     gr-fec = {
       cmakeEnableFlag = "GR_FEC";
@@ -278,7 +281,7 @@ let
   inherit (shared) hasFeature; # function
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname;
   inherit (shared)
     version
@@ -302,8 +305,10 @@ stdenv.mkDerivation rec {
     inherit
       boost
       volk
-      spdlog
     ;
+    # Used by many gnuradio modules, the same attribute is present in
+    # previous gnuradio versions where there it's log4cpp.
+    logLib = spdlog;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-pdu") {

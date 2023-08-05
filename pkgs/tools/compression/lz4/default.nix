@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   ]
     # TODO make full dictionary
     ++ lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
+    ++ lib.optional stdenv.hostPlatform.isLinux "TARGET_OS=Linux"
     ;
 
   doCheck = false; # tests take a very long time

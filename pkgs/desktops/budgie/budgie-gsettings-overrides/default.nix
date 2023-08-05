@@ -31,24 +31,23 @@ let
     font-name="Noto Sans 10"
     document-font-name="Noto Sans 10"
     monospace-font-name="Hack 10"
-    enable-hot-corners=true
 
     [org.gnome.desktop.wm.preferences:Budgie]
     titlebar-font="Noto Sans Bold 10"
 
-    [org.gnome.mutter:Budgie]
-    workspaces-only-on-primary=true
+    [com.solus-project.budgie-menu:Budgie]
+    use-default-menu-icon=true
 
     [com.solus-project.budgie-panel:Budgie]
     dark-theme=false
     builtin-theme=false
 
     [com.solus-project.icon-tasklist:Budgie]
-    pinned-launchers=["nemo.desktop", "vlc.desktop", "mate-terminal.desktop"]
+    pinned-launchers=["nemo.desktop", "firefox.desktop", "vlc.desktop"]
 
     [org.buddiesofbudgie.budgie-desktop-view:Budgie]
     show=true
-    click-policy="double"
+    show-active-mounts=true
     terminal="${mate.mate-terminal}/bin/mate-terminal"
 
     ${extraGSettingsOverrides}

@@ -5,12 +5,13 @@
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , hipSupport ? false, hip # comes with a significantly larger closure size
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, waylandSupport ? stdenv.isLinux, pkg-config, wayland, wayland-protocols, libffi, libdecor, libxkbcommon, dbus
 , potrace
 , openxr-loader
 , embree, gmp, libharu
@@ -27,17 +28,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.4.1";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-JHxMEignDJAQ9HIcmFy1tiirUKvPnyZ4Ywc3FC7rkcM=";
+    hash = "sha256-SzdWyzdGhsaesv1VX5ZUfUnLHvRvW8buJTlOVxz6yOk=";
   };
 
-  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [
+    ./draco.patch
+  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
-    ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  nativeBuildInputs =
+    [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev
+    ]
+    ++ lib.optionals cudaSupport [ addOpenGLRunpath ]
+    ++ lib.optionals waylandSupport [ pkg-config ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
@@ -51,7 +57,10 @@ stdenv.mkDerivation rec {
       libharu
       libepoxy
     ]
-    ++ lib.optional (!stdenv.isAarch64) [
+    ++ lib.optionals waylandSupport [
+      wayland wayland-protocols libffi libdecor libxkbcommon dbus
+    ]
+    ++ lib.optionals (!stdenv.isAarch64) [
       openimagedenoise
       embree
     ]
@@ -73,8 +82,6 @@ stdenv.mkDerivation rec {
   pythonPath = with python310Packages; [ numpy requests ];
 
   postPatch = ''
-    # allow usage of dynamically linked embree
-    rm build_files/cmake/Modules/FindEmbree.cmake
   '' +
     (if stdenv.isDarwin then ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake
@@ -124,6 +131,12 @@ stdenv.mkDerivation rec {
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
     ]
+    ++ lib.optionals waylandSupport [
+      "-DWITH_GHOST_WAYLAND=ON"
+      "-DWITH_GHOST_WAYLAND_DBUS=ON"
+      "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
+      "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
+    ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       "-DWITH_CYCLES_EMBREE=OFF"
     ]
@@ -154,6 +167,7 @@ stdenv.mkDerivation rec {
     mkdir $out/Applications
     mv $out/Blender.app $out/Applications
   '' + ''
+    mv $out/share/blender/${lib.versions.majorMinor version}/python{,-ext}
     buildPythonPath "$pythonPath"
     wrapProgram $blenderExecutable \
       --prefix PATH : $program_PATH \
@@ -170,6 +184,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru = { inherit python; };
+
   meta = with lib; {
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
@@ -178,6 +194,8 @@ stdenv.mkDerivation rec {
     # OptiX, enabled with cudaSupport, is non-free.
     license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ goibhniu veprbl ];
+    mainProgram = "blender";
   };
 }

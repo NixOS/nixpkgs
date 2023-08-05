@@ -1,5 +1,4 @@
-{ lib
-, buildGoModule
+{ buildGoModule
 , pulumi
 , nodejs
 }:
@@ -8,13 +7,9 @@ buildGoModule rec {
 
   pname = "pulumi-language-nodejs";
 
-  sourceRoot = "${src.name}/sdk";
+  sourceRoot = "${src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
 
-  vendorHash = sdkVendorHash;
-
-  subPackages = [
-    "nodejs/cmd/pulumi-language-nodejs"
-  ];
+  vendorHash = "sha256-3kDWb+1aebV2D+Nm5bkhKrJZMe/lD0ltFQ7p+Bfk644=";
 
   ldflags = [
     "-s"
@@ -25,9 +20,4 @@ buildGoModule rec {
   nativeCheckInputs = [
     nodejs
   ];
-
-  postInstall = ''
-    cp nodejs/dist/pulumi-resource-pulumi-nodejs $out/bin
-    cp nodejs/dist/pulumi-analyzer-policy $out/bin
-  '';
 }

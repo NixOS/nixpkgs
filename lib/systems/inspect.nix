@@ -9,6 +9,14 @@ let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis
 rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
   patterns = rec {
+    # The patterns below are lists in sum-of-products form.
+    #
+    # Each attribute is list of product conditions; non-list values are treated
+    # as a singleton list.  If *any* product condition in the list matches then
+    # the predicate matches.  Each product condition is tested by
+    # `lib.attrsets.matchAttrs`, which requires a match on *all* attributes of
+    # the product.
+
     isi686         = { cpu = cpuTypes.i686; };
     isx86_32       = { cpu = { family = "x86"; bits = 32; }; };
     isx86_64       = { cpu = { family = "x86"; bits = 64; }; };
@@ -49,6 +57,7 @@ rec {
     isM68k         = { cpu = { family = "m68k"; }; };
     isS390         = { cpu = { family = "s390"; }; };
     isS390x        = { cpu = { family = "s390"; bits = 64; }; };
+    isLoongArch64  = { cpu = { family = "loongarch"; bits = 64; }; };
     isJavaScript   = { cpu = cpuTypes.javascript; };
 
     is32bit        = { cpu = { bits = 32; }; };
@@ -78,7 +87,7 @@ rec {
     isNone         = { kernel = kernels.none; };
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
-    isGnu          = with abis; map (a: { abi = a; }) [ gnuabi64 gnu gnueabi gnueabihf gnuabielfv1 gnuabielfv2 ];
+    isGnu          = with abis; map (a: { abi = a; }) [ gnuabi64 gnuabin32 gnu gnueabi gnueabihf gnuabielfv1 gnuabielfv2 ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf muslabin32 muslabi64 ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 

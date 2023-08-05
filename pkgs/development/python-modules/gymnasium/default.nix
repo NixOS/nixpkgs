@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "gymnasium";
-  version = "0.28.1";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-7rRF21H3IxbgmqxvtC370kr0exLgfg3e2tA3J49xuao=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4YaEFEWSOTEdGgO1kSOleZQp7OrcOf+WAT/E0BWeoKI=";
   };
 
   format = "pyproject";

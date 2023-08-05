@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
@@ -7,6 +8,7 @@
 , pydantic
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , rstcheck-core
 , typer
 , types-docutils
@@ -27,8 +29,13 @@ buildPythonPackage rec {
     hash = "sha256-UMByfnnP1va3v1IgyQL0f3kC+W6HoiWScb7U2FAvWkU=";
   };
 
+  pythonRelaxDeps = [
+    "typer"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -45,6 +52,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Disabled until https://github.com/rstcheck/rstcheck-core/issues/19 is resolved.
+    "test_error_without_config_file_macos"
+    "test_file_1_is_bad_without_config_macos"
   ];
 
   pythonImportsCheck = [

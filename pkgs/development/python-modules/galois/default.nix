@@ -2,6 +2,7 @@
 , buildPythonPackage
 , setuptools-scm
 , pythonOlder
+, pythonRelaxDepsHook
 , fetchFromGitHub
 , pytestCheckHook
 , pytest-xdist
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.3.3";
+  version = "0.3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,13 +22,14 @@ buildPythonPackage rec {
     owner = "mhostetter";
     repo = "galois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nlNy4+GwStyuCD8f47w07NhNmepxBRtu6PXiL31vzwA=";
+    hash = "sha256-4eYDaQwjnYCTnobXRtFrToRyxxH2N2n9sh8z7oPC2Wc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -41,19 +43,16 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  postPatch = ''
-     substituteInPlace pyproject.toml \
-       --replace "numpy >= 1.18.4, < 1.24" "numpy >= 1.18.4" \
-       --replace "numba >= 0.53, < 0.57" "numba >= 0.53" \
-    '';
+  pythonRelaxDeps = [ "numpy" "numba" ];
 
   pythonImportsCheck = [ "galois" ];
 
-  meta = {
-    description = "A Python 3 package that extends NumPy arrays to operate over finite fields";
+  meta = with lib; {
+    description = "Python package that extends NumPy arrays to operate over finite fields";
     homepage = "https://github.com/mhostetter/galois";
-    downloadPage = "https://github.com/mhostetter/galois/releases";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chrispattison ];
+    changelog = "https://github.com/mhostetter/galois/releases/tag/v${version}";
+    downloadPage = "https://github.com/mhostetter/galois/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ chrispattison ];
   };
 }

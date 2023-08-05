@@ -92,12 +92,12 @@ in rec {
 
   catppuccin = mkTmuxPlugin {
     pluginName = "catppuccin";
-    version = "unstable-2022-12-14";
+    version = "unstable-2023-07-15";
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "tmux";
-      rev = "e2561decc2a4e77a0f8b7c05caf8d4f2af9714b3";
-      sha256 = "sha256-6UmFGkUDoIe8k+FrzdzsKrDHHMNfkjAk0yyc+HV199M=";
+      rev = "e7b50832f9bc59b0b5ef5316ba2cd6f61e4e22fc";
+      hash = "sha256-9ZfUqEKEexSh06QyR5C+tYd4tNfBi3PsA+STzUv4+/s=";
     };
     postInstall = ''
       sed -i -e 's|''${PLUGIN_DIR}/catppuccin-selected-theme.tmuxtheme|''${TMUX_TMPDIR}/catppuccin-selected-theme.tmuxtheme|g' $target/catppuccin.tmux
@@ -198,12 +198,12 @@ in rec {
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "2.0.0";
+    version = "2.1.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       rev = "v${version}";
-      sha256 = "ILs+GMltb2AYNUecFMyQZ/AuETB0PCFF2InSnptVBos=";
+      sha256 = "89S8LHTx2gYWj+Ejws5f6YRQgoj0rYE7ITtGtZibl30=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
@@ -611,12 +611,12 @@ in rec {
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";
-    version = "unstable-2022-08-02";
+    version = "unstable-2023-07-06";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "3e261309ad367c3fe56c0ef14af00078684b1035";
-      sha256 = "13wlcq3f7944v74lcnfbmabcy2c0ca83ya21s3qn3j0lw3wqj6vj";
+      rev = "51081a2688579228d860b3cb410f4437e857fc6e";
+      sha256 = "sha256-qElRHAbnZ+qRasvkfo+lKNahRHklvLOH0BmbQ1oyN6A=";
     };
     postInstall = ''
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
@@ -690,6 +690,25 @@ in rec {
       repo = "vim-tmux-navigator";
       rev = "afb45a55b452b9238159047ce7c6e161bd4a9907";
       hash = "sha256-8A+Yt9uhhAP76EiqUopE8vl7/UXkgU2x000EOcF7pl0=";
+    };
+  };
+
+  weather = mkTmuxPlugin {
+    pluginName = "weather";
+    version = "unstable-2020-02-08";
+    src = fetchFromGitHub {
+      owner = "xamut";
+      repo = "tmux-weather";
+      rev = "28a5fbe75bb25a408193d454304e28ddd75e9338";
+      hash = "sha256-of9E/npEsF1JVc9ttwrbC5WkIAwCNBJAgTfExfj79i4=";
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/xamut/tmux-weather";
+      description = "Shows weather in the status line";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ jfvillablanca ];
     };
   };
 

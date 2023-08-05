@@ -110,11 +110,13 @@ in stdenv.mkDerivation {
       cp -a resources/icons $out/share
 
       interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper,op-ssh-sign}
-      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper,op-ssh-sign}
+      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-HIDHelper,1Password-KeyringHelper,1Password-LastPass-Exporter,op-ssh-sign}
+      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-HIDHelper,1Password-KeyringHelper,1Password-LastPass-Exporter,op-ssh-sign}
       for file in $(find $out -type f -name \*.so\* ); do
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done
+
+      ln -s $out/share/1password/op-ssh-sign $out/bin/op-ssh-sign
 
       runHook postInstall
     '';
@@ -129,7 +131,11 @@ in stdenv.mkDerivation {
     makeShellWrapper $out/share/1password/1password $out/bin/1password \
       "''${gappsWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
+      # Currently half broken on wayland (e.g. no copy functionality)
+      # See: https://github.com/NixOS/nixpkgs/pull/232718#issuecomment-1582123406
+      # Remove this comment when upstream fixes:
+      # https://1password.community/discussion/comment/624011/#Comment_624011
+      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
   '';
 }

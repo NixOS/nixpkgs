@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , makeDesktopItem
 , fetchurl
 , pkg-config
@@ -14,21 +14,22 @@
 , lua5
 , qtbase
 , texlive
+, wrapQtAppsHook
 , zlib
+, withTeXLive ? true
+, buildPackages
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ipe";
-  version = "7.2.24";
+  version = "7.2.27";
 
   src = fetchurl {
     url = "https://github.com/otfried/ipe/releases/download/v${version}/ipe-${version}-src.tar.gz";
-    sha256 = "sha256-/rh58k0dziWRB5B3BEbVCwPkbuLr19KBV7FwWXFkT28=";
+    sha256 = "sha256-wx/bZy8kB7dpZsz58BeRGdS1BzbrIoafgEmLyFg7wZU=";
   };
 
-  sourceRoot = "${pname}-${version}/src";
-
-  nativeBuildInputs = [ pkg-config copyDesktopItems ];
+  nativeBuildInputs = [ pkg-config copyDesktopItems wrapQtAppsHook ];
 
   buildInputs = [
     cairo
@@ -40,15 +41,20 @@ mkDerivation rec {
     libspiro
     lua5
     qtbase
-    texlive
     zlib
+  ] ++ (lib.optionals withTeXLive [
+    texlive
+  ]);
+
+  makeFlags = [
+    "-C src"
+    "IPEPREFIX=${placeholder "out"}"
+    "LUA_PACKAGE=lua"
+    "MOC=${buildPackages.qt6Packages.qtbase}/libexec/moc"
+    "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
   ];
 
-  IPEPREFIX = placeholder "out";
-  URWFONTDIR = "${texlive}/texmf-dist/fonts/type1/urw/";
-  LUA_PACKAGE = "lua";
-
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
+  qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
 
   enableParallelBuilding = true;
 

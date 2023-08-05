@@ -1,5 +1,5 @@
 { atk
-, buildFHSUserEnv
+, buildFHSEnv
 , cairo
 , dpkg
 , gdk-pixbuf
@@ -56,7 +56,7 @@ let
       ${(wrapBinary libs) attrs.toolName}
     '';
   });
-in buildFHSUserEnv {
+in buildFHSEnv {
   name = "${attrs.toolName}-${attrs.version}";
   runScript = "${pkg.outPath}/bin/${attrs.toolName}";
 } // { inherit (pkg) meta name; }

@@ -14,7 +14,6 @@
 , mnemonic
 , pillow
 , protobuf
-, pyblake2
 , requests
 , shamir-mnemonic
 , simple-rlp
@@ -25,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.5";
+  version = "0.13.7";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jhUBca/+rDge/bFHgpKQhNZBTsd8zNyHHW8NZE/1e9g=";
+    hash = "sha256-dodeWIYBfclPUbu0Efkn8QO9nj7L8HVNXkSjU4mBSeA=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     mnemonic
     pillow
     protobuf
-    pyblake2
     requests
     shamir-mnemonic
     simple-rlp

@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
+, cmake
 , makeWrapper
 , iptables
 }:
@@ -16,18 +18,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-mchSaqw6sOJ7+dydCM8juP7QMOVUrPL4MFA79Rvyjdo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  patches = [
+    # Add install target to CMakeLists.txt
+    # https://github.com/wangyu-/udp2raw/pull/469
+    (fetchpatch {
+      url = "https://github.com/wangyu-/udp2raw/commit/4559e6d47bb69fda0fbd3fb4b7d04ddb1cf5e2ae.patch";
+      hash = "sha256-2csZdXmMW89tjXhN5QIK0rnMSXlFjLvwGnmieeKRX90=";
+    })
+  ];
 
-  makeFlags = [ "dynamic" ];
+  postPatch = ''
+    echo 'const char *gitversion = "${version}";' > git_version.h
+    # Adress sanitization crashes the application, reported upstream at https://github.com/wangyu-/udp2raw/issues/474
+    substituteInPlace CMakeLists.txt --replace "sanitize=address," "sanitize="
+  '';
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
 
-    mkdir -p $out/bin
-    cp udp2raw_dynamic $out/bin/udp2raw
-    wrapProgram $out/bin/udp2raw --prefix PATH : "${lib.makeBinPath [ iptables ]}"
-
-    runHook postInstall
+  postInstall = ''
+    wrapProgram "$out/bin/udp2raw" --prefix PATH : "${lib.makeBinPath [ iptables ]}"
   '';
 
   meta = with lib; {

@@ -2,35 +2,35 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, makeWrapper
+, makeBinaryWrapper
 , stdenv
 , darwin
 , gitMinimal
 , mercurial
-, nix
+, nixVersions
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nurl";
-  version = "0.3.10";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";
     rev = "v${version}";
-    hash = "sha256-GMTVv4x5f59FRqdRIOfg92a5JYC+9hiTHiGu5zJKmxg=";
+    hash = "sha256-rVqF+16esE27G7GS55RT91tD4x/GAzfVlIR0AgSknz0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "nix-compat-0.1.0" = "sha256-ZfVPV4/MXiu+ekYRmntPiyjyQ7Bln1Djd383x9LXcZc=";
+      "nix-compat-0.1.0" = "sha256-xHwBlmTggcZBFSh4EOY888AbmGQxhwvheJSStgpAj48=";
     };
   };
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -42,12 +42,14 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/nurl \
-      --prefix PATH : ${lib.makeBinPath [ gitMinimal mercurial nix ]}
+      --prefix PATH : ${lib.makeBinPath [ gitMinimal mercurial nixVersions.unstable ]}
     installManPage artifacts/nurl.1
     installShellCompletion artifacts/nurl.{bash,fish} --zsh artifacts/_nurl
   '';
 
-  GEN_ARTIFACTS = "artifacts";
+  env = {
+    GEN_ARTIFACTS = "artifacts";
+  };
 
   meta = with lib; {
     description = "Command-line tool to generate Nix fetcher calls from repository URLs";
@@ -55,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/nix-community/nurl/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "nurl";
   };
 }

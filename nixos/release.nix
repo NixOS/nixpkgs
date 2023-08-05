@@ -405,6 +405,12 @@ in rec {
         services.xserver.desktopManager.pantheon.enable = true;
       });
 
+    deepin = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.lightdm.enable = true;
+        services.xserver.desktopManager.deepin.enable = true;
+      });
+
     # Linux/Apache/PostgreSQL/PHP stack.
     lapp = makeClosure ({ pkgs, ... }:
       { services.httpd.enable = true;

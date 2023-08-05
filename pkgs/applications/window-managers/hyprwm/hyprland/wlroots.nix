@@ -49,8 +49,8 @@ assert (lib.assertMsg (hidpiXWayland -> enableXWayland) ''
       domain = "gitlab.freedesktop.org";
       owner = "wlroots";
       repo = "wlroots";
-      rev = "7abda952d0000b72d240fe1d41457b9288f0b6e5";
-      hash = "sha256-LmI/4Yp/pOOoI4RxLRx9I90NBsiqdRLVOfbATKlgpkg=";
+      rev = "7e7633abf09b362d0bad9e3fc650fd692369291d";
+      hash = "sha256-KovjVFwcuoUO0eu/UiWrnD3+m/K+SHSAVIz4xF9K1XA=";
     };
 
     pname =
@@ -79,7 +79,7 @@ assert (lib.assertMsg (hidpiXWayland -> enableXWayland) ''
       ])
       ++ (lib.optionals nvidiaPatches [
         (fetchpatch {
-          url = "https://aur.archlinux.org/cgit/aur.git/plain/nvidia.patch?h=hyprland-nvidia-git&id=757614af7729352fda534abe9eb1a88fe77dfe04";
+          url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-nvidia-format-workaround.patch?h=hyprland-nvidia-screenshare-git&id=2830d3017d7cdd240379b4cc7e5dd6a49cf3399a";
           sha256 = "A9f1p5EW++mGCaNq8w7ZJfeWmvTfUm4iO+1KDcnqYX8=";
         })
       ]);

@@ -107,8 +107,9 @@ in
     ldap = {
       package = mkOption {
         type = types.package;
-        default = pkgs.openldap;
-        defaultText = lib.literalExpression "pkgs.openldap";
+        # needs openldap built with a libxcrypt that support crypt sha256 until https://github.com/majewsky/portunus/issues/2 is solved
+        default = pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; };
+        defaultText = lib.literalExpression "pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; }";
         description = lib.mdDoc "The OpenLDAP package to use.";
       };
 

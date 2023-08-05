@@ -1,8 +1,12 @@
-{ runCommand }:
+{ runCommand, lib }:
 
 firmware:
 
-runCommand "${firmware.name}-xz" {} ''
+let
+  args = lib.optionalAttrs (firmware ? meta) { inherit (firmware) meta; };
+in
+
+runCommand "${firmware.name}-xz" args ''
   mkdir -p $out/lib
   (cd ${firmware} && find lib/firmware -type d -print0) |
       (cd $out && xargs -0 mkdir -v --)

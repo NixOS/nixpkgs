@@ -1,6 +1,7 @@
 { version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
+, gnulib
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -30,6 +31,12 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs tp/maintain
+  ''
+  # This patch is needed for IEEE-standard long doubles on
+  # powerpc64; it does not apply cleanly to texinfo 5.x or
+  # earlier.  It is merged upstream in texinfo 6.8.
+  + lib.optionalString (version == "6.7") ''
+    patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
   '';
 
   # ncurses is required to build `makedoc'
@@ -82,6 +89,8 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra oxij ];
+    # see comment above in patches section
+    broken = stdenv.hostPlatform.isPower64 && lib.strings.versionOlder version "6.0";
 
     longDescription = ''
       Texinfo is the official documentation format of the GNU project.

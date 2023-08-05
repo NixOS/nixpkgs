@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "qrcp";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "claudiodangelis";
     repo = "qrcp";
     rev = version;
-    sha256 = "sha256-pGFqKnOZhwuyN0lHmQPLQ4bJhMsMYoxbh0oEJdK1wAQ=";
+    sha256 = "sha256-3GPZ6+gx5i/xULM3lq7D+b0onBC6clgeZsI1CvZ943s=";
   };
 
   vendorSha256 = "sha256-XVBDPhQsnUdftS+jZ1zWZlfSbFXxXrKSqiGTPpLq5i0=";
@@ -41,7 +41,7 @@ buildGoModule rec {
       complete.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ fgaz SuperSandro2000 ];
+    maintainers = with maintainers; [ fgaz ];
     broken = stdenv.isDarwin; # needs golang.org/x/sys bump
   };
 }

@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "wallutils";
-  version = "5.12.5";
+  version = "5.12.7";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
-    hash = "sha256-qC+AF+NFXSrUZAYaiFPwvfZtsAGhKE4XFDOUcfXUAbM=";
+    hash = "sha256-7UqZr/DEiHDgg3XwvsKk/gc6FNtLh3aj5NWVz/A3J4o=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   patches = [
     ./000-add-nixos-dirs-to-default-wallpapers.patch

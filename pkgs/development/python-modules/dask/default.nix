@@ -10,6 +10,7 @@
 , fetchFromGitHub
 , fetchpatch
 , fsspec
+, importlib-metadata
 , jinja2
 , numpy
 , packaging
@@ -22,13 +23,15 @@
 , pythonOlder
 , pyyaml
 , scipy
+, setuptools
 , toolz
+, versioneer
 , zarr
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.2.1";
+  version = "2023.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,9 +39,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
-    rev = version;
-    hash = "sha256-7cuTxJ5SxOEf0v+SvSiaz7x8YYTx/qIS+KktbtubiDU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-PkEFXF6OFZU+EMFBUopv84WniQghr5Q6757Qx6D5MyE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    versioneer
+  ];
 
   propagatedBuildInputs = [
     click
@@ -47,6 +55,7 @@ buildPythonPackage rec {
     packaging
     partd
     pyyaml
+    importlib-metadata
     toolz
   ];
 
@@ -91,8 +100,9 @@ buildPythonPackage rec {
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
 
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace " --durations=10" "" \
+      --replace " --cov-config=pyproject.toml" "" \
       --replace " -v" ""
   '';
 

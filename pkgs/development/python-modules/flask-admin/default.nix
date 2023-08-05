@@ -108,6 +108,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/flask-admin/flask-admin/";
     changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

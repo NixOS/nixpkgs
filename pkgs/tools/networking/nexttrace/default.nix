@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "nexttrace";
-  version = "1.1.3";
+  version = "1.1.7-1";
 
   src = fetchFromGitHub {
     owner = "sjlleo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sOTQBh6j8od24s36J0e2aKW1mWmAD/ThfY6pd1SsSlY=";
+    sha256 = "sha256-ZMbX37gi9aGamDtoTdfUMiCPieP4DhjBSE5CIJLK6Z0=";
   };
-  vendorHash = "sha256-ckGoDV4GNp0mG+bkCKoLBO+ap53R5zrq/ZSKiFmVf9U=";
+  vendorHash = "sha256-u5EIzYWr81tmMmImoRH0wT7aD3/0tx+W3CXeymWVACM=";
 
   doCheck = false; # Tests require a network connection.
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/xgadget-lab/nexttrace/printer.version=v${version}"
+    "-X github.com/xgadget-lab/nexttrace/config.Version=v${version}"
   ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, buildFHSUserEnv
+{ lib, stdenv, fetchurl, dpkg, buildFHSEnv
 , glibc, glib, openssl, tpm2-tss
 , gtk3, gnome, polkit, polkit_gnome
 }:
@@ -70,7 +70,7 @@ let
     '';
   };
 # /usr/bin/pkcheck is hardcoded in binary - we need FHS
-in buildFHSUserEnv {
+in buildFHSEnv {
    inherit meta;
    name = pname;
 

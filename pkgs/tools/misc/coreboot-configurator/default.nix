@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , inkscape
 , meson

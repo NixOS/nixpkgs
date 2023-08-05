@@ -63,6 +63,7 @@ in
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "cadvisorPort" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "allowPrivileged" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "networkPlugin" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "containerRuntime" ] "")
   ];
 
   ###### interface
@@ -132,12 +133,6 @@ in
         type = nullOr path;
         default = null;
       };
-    };
-
-    containerRuntime = mkOption {
-      description = lib.mdDoc "Which container runtime type to use";
-      type = enum ["docker" "remote"];
-      default = "remote";
     };
 
     containerRuntimeEndpoint = mkOption {
@@ -331,7 +326,6 @@ in
             ${optionalString (cfg.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.tlsKeyFile}"} \
             ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-            --container-runtime=${cfg.containerRuntime} \
             --container-runtime-endpoint=${cfg.containerRuntimeEndpoint} \
             --cgroup-driver=systemd \
             ${cfg.extraOpts}
@@ -343,7 +337,7 @@ in
         };
       };
 
-      # Allways include cni plugins
+      # Always include cni plugins
       services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins pkgs.cni-plugin-flannel];
 
       boot.kernelModules = ["br_netfilter" "overlay"];

@@ -4,6 +4,49 @@ with lib;
 
 let
   cfg = config.services.bird-lg;
+
+  stringOrConcat = sep: v: if builtins.isString v then v else concatStringsSep sep v;
+
+  frontend_args = let
+    fe = cfg.frontend;
+  in {
+    "--servers" = concatStringsSep "," fe.servers;
+    "--domain" = fe.domain;
+    "--listen" = fe.listenAddress;
+    "--proxy-port" = fe.proxyPort;
+    "--whois" = fe.whois;
+    "--dns-interface" = fe.dnsInterface;
+    "--bgpmap-info" = concatStringsSep "," cfg.frontend.bgpMapInfo;
+    "--title-brand" = fe.titleBrand;
+    "--navbar-brand" = fe.navbar.brand;
+    "--navbar-brand-url" = fe.navbar.brandURL;
+    "--navbar-all-servers" = fe.navbar.allServers;
+    "--navbar-all-url" = fe.navbar.allServersURL;
+    "--net-specific-mode" = fe.netSpecificMode;
+    "--protocol-filter" = concatStringsSep "," cfg.frontend.protocolFilter;
+  };
+
+  proxy_args = let
+    px = cfg.proxy;
+  in {
+    "--allowed" = concatStringsSep "," px.allowedIPs;
+    "--bird" = px.birdSocket;
+    "--listen" = px.listenAddress;
+    "--traceroute_bin" = px.traceroute.binary;
+    "--traceroute_flags" = concatStringsSep " " px.traceroute.flags;
+    "--traceroute_raw" = px.traceroute.rawOutput;
+  };
+
+  mkArgValue = value:
+    if isString value
+      then escapeShellArg value
+      else if isBool value
+        then boolToString value
+        else toString value;
+
+  filterNull = filterAttrs (_: v: v != "" && v != null && v != []);
+
+  argsAttrToList = args: mapAttrsToList (name: value: "${name} " + mkArgValue value ) (filterNull args);
 in
 {
   options = {
@@ -44,14 +87,12 @@ in
 
         domain = mkOption {
           type = types.str;
-          default = "";
           example = "dn42.lantian.pub";
           description = lib.mdDoc "Server name domain suffixes.";
         };
 
         servers = mkOption {
           type = types.listOf types.str;
-          default = [ ];
           example = [ "gigsgigscloud" "hostdare" ];
           description = lib.mdDoc "Server name prefixes.";
         };
@@ -134,10 +175,14 @@ in
         };
 
         extraArgs = mkOption {
-          type = types.lines;
-          default = "";
+          type = with types; either lines (listOf str);
+          default = [ ];
           description = lib.mdDoc ''
             Extra parameters documented [here](https://github.com/xddxdd/bird-lg-go#frontend).
+
+            :::{.note}
+            Passing lines (plain strings) is deprecated in favour of passing lists of strings.
+            :::
           '';
         };
       };
@@ -160,8 +205,7 @@ in
 
         birdSocket = mkOption {
           type = types.str;
-          default = "/run/bird.ctl";
-          example = "/var/run/bird/bird.ctl";
+          default = "/var/run/bird/bird.ctl";
           description = lib.mdDoc "Bird control socket path.";
         };
 
@@ -173,6 +217,12 @@ in
             description = lib.mdDoc "Traceroute's binary path.";
           };
 
+          flags = mkOption {
+            type = with types; listOf str;
+            default = [ ];
+            description = lib.mdDoc "Flags for traceroute process";
+          };
+
           rawOutput = mkOption {
             type = types.bool;
             default = false;
@@ -181,10 +231,14 @@ in
         };
 
         extraArgs = mkOption {
-          type = types.lines;
-          default = "";
+          type = with types; either lines (listOf str);
+          default = [ ];
           description = lib.mdDoc ''
             Extra parameters documented [here](https://github.com/xddxdd/bird-lg-go#proxy).
+
+            :::{.note}
+            Passing lines (plain strings) is deprecated in favour of passing lists of strings.
+            :::
           '';
         };
       };
@@ -194,6 +248,16 @@ in
   ###### implementation
 
   config = {
+
+    warnings =
+      lib.optional (cfg.frontend.enable  && builtins.isString cfg.frontend.extraArgs) ''
+        Passing strings to `services.bird-lg.frontend.extraOptions' is deprecated. Please pass a list of strings instead.
+      ''
+      ++ lib.optional (cfg.proxy.enable  && builtins.isString cfg.proxy.extraArgs) ''
+        Passing strings to `services.bird-lg.proxy.extraOptions' is deprecated. Please pass a list of strings instead.
+      ''
+    ;
+
     systemd.services = {
       bird-lg-frontend = mkIf cfg.frontend.enable {
         enable = true;
@@ -211,23 +275,8 @@ in
         };
         script = ''
           ${cfg.package}/bin/frontend \
-            --servers ${concatStringsSep "," cfg.frontend.servers } \
-            --domain ${cfg.frontend.domain} \
-            --listen ${cfg.frontend.listenAddress} \
-            --proxy-port ${toString cfg.frontend.proxyPort} \
-            --whois ${cfg.frontend.whois} \
-            --dns-interface ${cfg.frontend.dnsInterface} \
-            --bgpmap-info ${concatStringsSep "," cfg.frontend.bgpMapInfo } \
-            --title-brand ${cfg.frontend.titleBrand} \
-            --navbar-brand ${cfg.frontend.navbar.brand} \
-            --navbar-brand-url ${cfg.frontend.navbar.brandURL} \
-            --navbar-all-servers ${cfg.frontend.navbar.allServers} \
-            --navbar-all-url ${cfg.frontend.navbar.allServersURL} \
-            --net-specific-mode ${cfg.frontend.netSpecificMode} \
-            --protocol-filter ${concatStringsSep "," cfg.frontend.protocolFilter } \
-            --name-filter ${cfg.frontend.nameFilter} \
-            --time-out ${toString cfg.frontend.timeout} \
-            ${cfg.frontend.extraArgs}
+            ${concatStringsSep " \\\n  " (argsAttrToList frontend_args)} \
+            ${stringOrConcat " " cfg.frontend.extraArgs}
         '';
       };
 
@@ -247,12 +296,8 @@ in
         };
         script = ''
           ${cfg.package}/bin/proxy \
-          --allowed ${concatStringsSep "," cfg.proxy.allowedIPs } \
-          --bird ${cfg.proxy.birdSocket} \
-          --listen ${cfg.proxy.listenAddress} \
-          --traceroute_bin ${cfg.proxy.traceroute.binary}
-          --traceroute_raw ${boolToString cfg.proxy.traceroute.rawOutput}
-          ${cfg.proxy.extraArgs}
+            ${concatStringsSep " \\\n  " (argsAttrToList proxy_args)} \
+            ${stringOrConcat " " cfg.proxy.extraArgs}
         '';
       };
     };
@@ -266,4 +311,9 @@ in
       };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [
+    e1mo
+    tchekda
+  ];
 }

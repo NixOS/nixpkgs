@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   inherit (gprbuild-boot)
     version
     src
-    setupHook
+    setupHooks
     meta
     ;
 

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "niaclass";
-  version = "0.1.3";
+  version = "0.1.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lukapecnik";
     repo = "NiaClass";
-    rev = version;
-    sha256 = "sha256-BDGDcIlunnaH3J9sEuDrwWsBR4Wjcy6Kxpxy9Dr6BlM=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-md1e/cOIOQKoB760E5hjzjCsC5tS1CzgqAPTeVtrmuo=";
   };
 
   nativeBuildInputs = [

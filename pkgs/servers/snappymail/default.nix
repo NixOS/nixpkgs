@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snappymail";
-  version = "2.27.2";
+  version = "2.28.4";
 
   src = fetchurl {
     url = "https://github.com/the-djmaze/snappymail/releases/download/v${version}/snappymail-${version}.tar.gz";
-    sha256 = "sha256-Br28cDw9XxXR0UA57oOQ+KwptAcPndH+XK2gFhuVOB4=";
+    sha256 = "sha256-tXP7jxpqBASNShNe9rHiewSgdW/KgkH80V24VgJlXZE=";
   };
 
   sourceRoot = "snappymail";

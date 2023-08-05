@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "godns";
-  version = "2.9.4";
+  version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7AIr35vsjI5jamvdA1EwTwkr8MiEOjTntFeeg4b7RCw=";
+    hash = "sha256-Nfw3pDqdCeaUKi+MzNIuRTwJHSoUbkJfWRJTAGvkBOQ=";
   };
 
-  vendorHash = "sha256-+wnaTrY7Mt6bCNTRZbJDFD75RCHyz5gtFi4DN0ng0/M=";
+  vendorHash = "sha256-iAU62/0MjzxwuMvIobhIZEqDJUpRqwEabnazH7jBRTE=";
 
   # Some tests require internet access, broken in sandbox
   doCheck = false;

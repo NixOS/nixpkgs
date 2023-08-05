@@ -58,6 +58,9 @@ stdenv.mkDerivation rec {
     "-DDISABLE_LTO=ON"
   ];
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   meta = with lib; {
     description = "yubihsm-shell and libyubihsm";
     homepage = "https://github.com/Yubico/yubihsm-shell";

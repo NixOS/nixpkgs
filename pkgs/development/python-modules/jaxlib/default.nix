@@ -40,8 +40,9 @@
 , snappy
 , zlib
 
+, config
   # CUDA flags:
-, cudaSupport ? false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 
   # MKL:
@@ -49,10 +50,10 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
+  inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.3.22";
+  version = "0.4.4";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -63,7 +64,7 @@ let
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    broken = stdenv.isAarch64;
+    broken = stdenv.isDarwin;
   };
 
   cudatoolkit_joined = symlinkJoin {
@@ -81,7 +82,7 @@ let
   cudatoolkit_cc_joined = symlinkJoin {
     name = "${cudatoolkit.cc.name}-merged";
     paths = [
-      cudatoolkit.cc
+      backendStdenv.cc
       binutils.bintools # for ar, dwp, nm, objcopy, objdump, strip
     ];
   };
@@ -129,6 +130,11 @@ let
     "zlib"
   ];
 
+  arch =
+    # KeyError: ('Linux', 'arm64')
+    if stdenv.targetPlatform.isLinux && stdenv.targetPlatform.linuxArch == "arm64" then "aarch64"
+    else stdenv.targetPlatform.linuxArch;
+
   bazel-build = buildBazelPackage rec {
     name = "bazel-build-${pname}-${version}";
 
@@ -137,8 +143,9 @@ let
     src = fetchFromGitHub {
       owner = "google";
       repo = "jax";
-      rev = "${pname}-v${version}";
-      hash = "sha256-bnczJ8ma/UMKhA5MUQ6H4az+Tj+By14ZTG6lQQwptQs=";
+      # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
+      rev = "refs/tags/${pname}-v${version}";
+      hash = "sha256-DP68UwS9bg243iWU4MLHN0pwl8LaOcW3Sle1ZjsLOHo=";
     };
 
     nativeBuildInputs = [
@@ -242,9 +249,9 @@ let
 
       sha256 =
         if cudaSupport then
-          "sha256-4yu4y4SwSQoeaOz9yojhvCRGSC6jp61ycVDIKyIK/l8="
+          "sha256-O6bM7Lc8eaFyO4Xzl5/hvBrbPioI+Yeqx9yNC97fvKk="
         else
-          "sha256-CyRfPfJc600M7VzR3/SQX/EAyeaXRJwDQWot5h2XnFU=";
+          "sha256-gLMJfJSQIdGGY2Ivx4IgDWg0hc+mxzlqY11CUkSWcjI=";
     };
 
     buildAttrs = {
@@ -271,6 +278,7 @@ let
           sed -i 's@include/pybind11@pybind11@g' $src
         done
       '' + lib.optionalString cudaSupport ''
+        export NIX_LDFLAGS+=" -L${backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
         patchShebangs ../output/external/org_tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
       '' + lib.optionalString stdenv.isDarwin ''
         # Framework search paths aren't added by bintools hook
@@ -289,7 +297,7 @@ let
       '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
 
       installPhase = ''
-        ./bazel-bin/build/build_wheel --output_path=$out --cpu=${stdenv.targetPlatform.linuxArch}
+        ./bazel-bin/build/build_wheel --output_path=$out --cpu=${arch}
       '';
     };
 
@@ -297,11 +305,11 @@ let
   };
   platformTag =
     if stdenv.targetPlatform.isLinux then
-      "manylinux2014_${stdenv.targetPlatform.linuxArch}"
+      "manylinux2014_${arch}"
     else if stdenv.system == "x86_64-darwin" then
-      "macosx_10_9_${stdenv.targetPlatform.linuxArch}"
+      "macosx_10_9_${arch}"
     else if stdenv.system == "aarch64-darwin" then
-      "macosx_11_0_${stdenv.targetPlatform.linuxArch}"
+      "macosx_11_0_${arch}"
     else throw "Unsupported target platform: ${stdenv.targetPlatform}";
 
 in

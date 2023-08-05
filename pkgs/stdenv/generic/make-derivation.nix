@@ -41,7 +41,7 @@ let
               else x;
         in
           makeDerivationExtensible
-            (self: let super = rattrs self; in super // f self super);
+            (self: let super = rattrs self; in super // (if builtins.isFunction f0 || f0?__functor then f self super else f0));
 
       finalPackage =
         mkDerivationSimple overrideAttrs args;
@@ -62,7 +62,7 @@ let
                 f0 self super
               else x;
         in
-          makeDerivationExtensible (self: attrs // f self attrs))
+          makeDerivationExtensible (self: attrs // (if builtins.isFunction f0 || f0?__functor then f self attrs else f0)))
       attrs;
 
   mkDerivationSimple = overrideAttrs:
@@ -195,16 +195,13 @@ let
   # Musl-based platforms will keep "pie", other platforms will not.
   # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
   # in the nixpkgs manual to inform users about the defaults.
-  defaultHardeningFlags = let
-    # not ready for this by default
-    supportedHardeningFlags' = lib.remove "fortify3" supportedHardeningFlags;
-  in if stdenv.hostPlatform.isMusl &&
+  defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
       # Except when:
       #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
       #    - static armv7l, where compilation fails.
       !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
-    then supportedHardeningFlags'
-    else lib.remove "pie" supportedHardeningFlags';
+    then supportedHardeningFlags
+    else lib.remove "pie" supportedHardeningFlags;
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []
@@ -214,7 +211,7 @@ let
 
   checkDependencyList = checkDependencyList' [];
   checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
-    if lib.isDerivation dep || dep == null || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
+    if lib.isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
     else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
     else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
@@ -294,6 +291,7 @@ else let
       (["meta" "passthru" "pos"
        "checkInputs" "installCheckInputs"
        "nativeCheckInputs" "nativeInstallCheckInputs"
+       "__contentAddressed"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
        "sandboxProfile" "propagatedSandboxProfile"]
@@ -309,6 +307,7 @@ else let
           hostSuffix = lib.optionalString
             (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
             "-${stdenv.hostPlatform.config}";
+
           # Disambiguate statically built packages. This was originally
           # introduce as a means to prevent nix-env to get confused between
           # nix and nixStatic. This should be also achieved by moving the
@@ -319,7 +318,10 @@ else let
         lib.strings.sanitizeDerivationName (
           if attrs ? name
           then attrs.name + hostSuffix
-          else "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
+          else
+            # we cannot coerce null to a string below
+            assert lib.assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
+            "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
     }) // lib.optionalAttrs __structuredAttrs { env = checkedEnv; } // {
       builder = attrs.realBuilder or stdenv.shell;
@@ -354,57 +356,31 @@ else let
 
       # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
       configureFlags = let inherit (lib) optional elem; in
-        (/**/ if lib.isString configureFlags then lib.warn "String 'configureFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}" [configureFlags]
-         else if configureFlags == null      then lib.warn "Null 'configureFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}" []
-         else                                     configureFlags)
+        configureFlags
         ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
         ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
       cmakeFlags =
-        let
-          explicitFlags =
-            if lib.isString cmakeFlags then lib.warn
-                "String 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                [cmakeFlags]
-            else if cmakeFlags == null then
-              lib.warn
-                "Null 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                []
-            else
-              cmakeFlags;
-
-          crossFlags = [
-            "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
-          ] ++ lib.optionals (stdenv.hostPlatform.uname.processor != null) [
-            "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-          ] ++ lib.optionals (stdenv.hostPlatform.uname.release != null) [
-            "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-            "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-          ] ++ lib.optionals (stdenv.buildPlatform.uname.system != null) [
-            "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-          ] ++ lib.optionals (stdenv.buildPlatform.uname.processor != null) [
-            "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-          ] ++ lib.optionals (stdenv.buildPlatform.uname.release != null) [
-            "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
-          ];
-        in
-          explicitFlags ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) crossFlags;
+        cmakeFlags
+        ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+          "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
+        ] ++ lib.optionals (stdenv.hostPlatform.uname.processor != null) [
+          "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+        ] ++ lib.optionals (stdenv.hostPlatform.uname.release != null) [
+          "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
+        ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+          "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+        ] ++ lib.optionals (stdenv.buildPlatform.uname.system != null) [
+          "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
+        ] ++ lib.optionals (stdenv.buildPlatform.uname.processor != null) [
+          "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
+        ] ++ lib.optionals (stdenv.buildPlatform.uname.release != null) [
+          "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+        ]);
 
       mesonFlags =
         let
-          explicitFlags =
-            if lib.isString mesonFlags then lib.warn
-                "String 'mesonFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                [mesonFlags]
-            else if mesonFlags == null then
-              lib.warn
-                "Null 'mesonFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                []
-            else
-              mesonFlags;
-
           # See https://mesonbuild.com/Reference-tables.html#cpu-families
           cpuFamily = platform: with platform;
             /**/ if isAarch32 then "arm"
@@ -425,7 +401,7 @@ else let
             llvm-config = 'llvm-config-native'
           '';
           crossFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
-        in crossFlags ++ explicitFlags;
+        in crossFlags ++ mesonFlags;
 
       inherit patches;
 
@@ -497,46 +473,8 @@ else let
         lib.mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 
-  validity = checkMeta { inherit meta attrs; };
-
-  # The meta attribute is passed in the resulting attribute set,
-  # but it's not part of the actual derivation, i.e., it's not
-  # passed to the builder and is not a dependency.  But since we
-  # include it in the result, it *is* available to nix-env for queries.
-  meta = {
-      # `name` above includes cross-compilation cruft,
-      # is under assert, and is sanitized.
-      # Let's have a clean always accessible version here.
-      name = attrs.name or "${attrs.pname}-${attrs.version}";
-
-      # If the packager hasn't specified `outputsToInstall`, choose a default,
-      # which is the name of `p.bin or p.out or p` along with `p.man` when
-      # present.
-      #
-      # If the packager has specified it, it will be overridden below in
-      # `// meta`.
-      #
-      #   Note: This default probably shouldn't be globally configurable.
-      #   Services and users should specify outputs explicitly,
-      #   unless they are comfortable with this default.
-      outputsToInstall =
-        let
-          hasOutput = out: builtins.elem out outputs;
-        in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )]
-          ++ lib.optional (hasOutput "man") "man";
-    }
-    // attrs.meta or {}
-    # Fill `meta.position` to identify the source location of the package.
-    // lib.optionalAttrs (pos != null) {
-      position = pos.file + ":" + toString pos.line;
-    } // {
-      # Expose the result of the checks for everyone to see.
-      inherit (validity) unfree broken unsupported insecure;
-      available = validity.valid != "no"
-               && (if config.checkMetaRecursively or false
-                   then lib.all (d: d.meta.available or true) references
-                   else true);
-    };
+  meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+  validity = checkMeta.assertValidity { inherit meta attrs; };
 
   checkedEnv =
     let
@@ -578,16 +516,25 @@ lib.extendDerivation
        # binaries). By writing this to $out, Nix can find and register
        # them as runtime dependencies (since Nix greps for store paths
        # through $out to find them)
-       args = [ "-c" "export > $out" ];
+       args = [ "-c" ''
+         export > $out
+         for var in $passAsFile; do
+             pathVar="''${var}Path"
+             printf "%s" "$(< "''${!pathVar}")" >> $out
+         done
+       '' ];
 
        # inputDerivation produces the inputs; not the outputs, so any
        # restrictions on what used to be the outputs don't serve a purpose
        # anymore.
+       allowedReferences = null;
+       allowedRequisites = null;
        disallowedReferences = [ ];
        disallowedRequisites = [ ];
      });
 
-     inherit meta passthru overrideAttrs;
+     inherit passthru overrideAttrs;
+     inherit meta;
    } //
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the

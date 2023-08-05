@@ -36,4 +36,4 @@
     maintainers = with maintainers; [ siraben ];
     license = licenses.lgpl21Plus;
   };
-}).overrideAttrs({version, ...}: if lib.versions.isGe "9.0" version then { repo =  "topology"; } else {})
+}).overrideAttrs({version, ...}: lib.optionalAttrs (lib.versions.isGe "9.0" version) { repo =  "topology"; })

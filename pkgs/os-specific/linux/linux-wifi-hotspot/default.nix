@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-wifi-hotspot";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "lakinduakash";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XCgYWOX7QSdANG6DqYk0yZZqnvZGDl3GaF9KtYRmpJ0=";
+    sha256 = "sha256-cCVJPEAZZzOGCf45oo1J7wWtYn/IJfcASHnKR+R0Ge4=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/scripts/Makefile \
       --replace "etc" "$out/etc"
     substituteInPlace ./src/scripts/wihotspot \
+      --replace "/usr" "$out"
+    substituteInPlace ./src/desktop/wifihotspot.desktop \
+      --replace "/usr" "$out"
+    substituteInPlace ./src/scripts/policies/polkit.policy \
       --replace "/usr" "$out"
   '';
 

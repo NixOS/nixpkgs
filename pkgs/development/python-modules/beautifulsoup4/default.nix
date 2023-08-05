@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , chardet
+, hatchling
 , html5lib
 , lxml
 , pytestCheckHook
@@ -12,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.11.2";
-  format = "setuptools";
+  version = "4.12.2";
+  format = "pyproject";
 
   outputs = ["out" "doc"];
 
@@ -21,23 +22,31 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vEvdpnF95aKYdDb7jXL0XckN2Fa9/VEqExTOkDSaAQY=";
+    hash = "sha256-SSu8adyjXRLarHHE2xv/8Mh2wA70ov+sziJtRjjrcto=";
   };
 
   nativeBuildInputs = [
+    hatchling
     sphinxHook
   ];
 
   propagatedBuildInputs = [
     chardet
-    html5lib
-    lxml
     soupsieve
   ];
 
+  passthru.optional-dependencies = {
+    html5lib = [
+      html5lib
+    ];
+    lxml = [
+      lxml
+    ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "bs4"
@@ -45,8 +54,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://git.launchpad.net/beautifulsoup/tree/CHANGELOG?h=${version}";
-    homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     description = "HTML and XML parser";
+    homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };

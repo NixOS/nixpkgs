@@ -25,15 +25,15 @@ let
   # versions may be used in multiple places in this Nix expression.
   android = {
     versions = {
-      cmdLineToolsVersion = "8.0";
-      platformTools = "33.0.3";
-      buildTools = "30.0.3";
+      cmdLineToolsVersion = "9.0";
+      platformTools = "34.0.1";
+      buildTools = "33.0.2";
       ndk = [
         "25.1.8937393" # LTS NDK
-        "24.0.8215888"
+        "25.2.9519653"
       ];
-      cmake = "3.22.1";
-      emulator = "31.3.14";
+      cmake = "3.6.4111459";
+      emulator = "33.1.6";
     };
 
     platforms = ["23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33"];
@@ -165,7 +165,7 @@ pkgs.mkShell rec {
       installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
       packages=(
-        "build-tools;30.0.3" "platform-tools" \
+        "build-tools;33.0.2" "platform-tools" \
         "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
         "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
         "platforms;android-31" "platforms;android-32" "platforms;android-33" \

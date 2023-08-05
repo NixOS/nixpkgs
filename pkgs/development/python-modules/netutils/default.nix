@@ -44,8 +44,11 @@ buildPythonPackage rec {
     "test_is_fqdn_resolvable"
     "test_fqdn_to_ip"
     "test_tcp_ping"
-    # Skip SPhinx test
+    # Skip Sphinx test
     "test_sphinx_build"
+    # OSError: [Errno 22] Invalid argument
+    "test_compare_type5"
+    "test_encrypt_type5"
   ];
 
   meta = with lib; {

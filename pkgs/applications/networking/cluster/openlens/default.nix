@@ -1,12 +1,12 @@
-{ lib, fetchurl, appimageTools, wrapGAppsHook }:
+{ lib, fetchurl, appimageTools }:
 
 let
   pname = "openlens";
-  version = "6.4.5";
+  version = "6.5.2-366";
 
   src = fetchurl {
     url = "https://github.com/MuhammedKalkan/OpenLens/releases/download/v${version}/OpenLens-${version}.x86_64.AppImage";
-    sha256 = "sha256-Lwl4unhXSyYCEImiPncAnmIQt26CD4horsREMyi6nuA=";
+    sha256 = "sha256-ZAltAS/U/xh4kCT7vQ+NHAzWV7z0uE5GMQICHKSdj8k=";
   };
 
   appimageContents = appimageTools.extractType2 {

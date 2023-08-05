@@ -234,11 +234,11 @@ in
           ln -sfn ${tomcat}/conf/$i ${cfg.baseDir}/conf/`basename $i`
         done
 
-        ${if cfg.extraConfigFiles != [] then ''
+        ${optionalString (cfg.extraConfigFiles != []) ''
           for i in ${toString cfg.extraConfigFiles}; do
             ln -sfn $i ${cfg.baseDir}/conf/`basename $i`
           done
-        '' else ""}
+        ''}
 
         # Create a modified catalina.properties file
         # Change all references from CATALINA_HOME to CATALINA_BASE and add support for shared libraries
@@ -345,7 +345,7 @@ in
 
           # Symlink all the given web applications files or paths into the webapps/ directory
           # of this virtual host
-          for i in "${if virtualHost ? webapps then toString virtualHost.webapps else ""}"; do
+          for i in "${optionalString (virtualHost ? webapps) (toString virtualHost.webapps)}"; do
             if [ -f $i ]; then
               # If the given web application is a file, symlink it into the webapps/ directory
               ln -sfn $i ${cfg.baseDir}/virtualhosts/${virtualHost.name}/webapps/`basename $i`

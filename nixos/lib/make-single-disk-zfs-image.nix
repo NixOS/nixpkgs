@@ -244,7 +244,7 @@ let
             ${if formatOpt == "raw" then ''
             mv $rootDiskImage $out/${rootFilename}
           '' else ''
-            ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
+            ${pkgs.qemu_kvm}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
           ''}
             rootDiskImage=$out/${rootFilename}
             set -x

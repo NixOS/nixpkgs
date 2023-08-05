@@ -3,6 +3,8 @@
 , fetchurl
 , pkg-config
 , hidapi
+, jimtcl
+, libjaylink
 , libusb1
 , libgpiod
 
@@ -22,11 +24,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ hidapi libftdi1 libusb1 ]
+  buildInputs = [ hidapi jimtcl libftdi1 libjaylink libusb1 ]
     ++ lib.optional stdenv.isLinux libgpiod;
 
   configureFlags = [
     "--disable-werror"
+    "--disable-internal-jimtcl"
+    "--disable-internal-libjaylink"
     "--enable-jtag_vpi"
     "--enable-buspirate"
     "--enable-remote-bitbang"

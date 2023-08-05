@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "layan-gtk-theme";
-  version = "2021-06-30";
+  version = "2023-05-23";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FI8+AJlcPHGOzxN6HUKLtPGLe8JTfTQ9Az9NsvVUK7g=";
+    sha256 = "sha256-R8QxDMOXzDIfioAvvescLAu6NjJQ9zhf/niQTXZr+yA=";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];

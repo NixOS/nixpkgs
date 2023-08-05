@@ -16,6 +16,7 @@
 , kcodecs
 , ffmpeg
 , libvlc
+, libpulseaudio
 , libcue
 , taglib
 , gsettings-qt
@@ -27,21 +28,18 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-music";
-  version = "6.2.21";
+  version = "6.2.28";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-sN611COCWy1gF/BZZqZ154uYuRo9HsbJw2wXe9OJ+iQ=";
+    sha256 = "sha256-rSaB8kIbpyPuhw3vWLWlXgY6xJpxLL8DktgcBoca0L0=";
   };
 
   postPatch = ''
     substituteInPlace src/music-player/CMakeLists.txt \
-      --replace "/usr/include/vlc" "${libvlc}/include/vlc" \
-      --replace "/usr/share" "$out/share"
-    substituteInPlace src/libmusic-plugin/CMakeLists.txt \
-      --replace "/usr/lib/deepin-aiassistant" "$out/lib/deepin-aiassistant"
+      --replace "/usr/include/vlc" "${libvlc}/include/vlc"
     substituteInPlace src/music-player/data/deepin-music.desktop \
       --replace "/usr/bin/deepin-music" "$out/bin/deepin-music"
   '';
@@ -65,6 +63,7 @@ stdenv.mkDerivation rec {
     kcodecs
     ffmpeg
     libvlc
+    libpulseaudio
     libcue
     taglib
     gsettings-qt

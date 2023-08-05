@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildDunePackage
 , fetchurl
 , cstruct
@@ -48,7 +49,8 @@ buildDunePackage rec {
     mirage-time
   ];
 
-  doCheck = true;
+  ## NOTE: As of 18 april 2023 and ARP version 3.0.0, tests fail on Darwin.
+  doCheck = ! stdenv.isDarwin;
   checkInputs = [
     alcotest
     mirage-clock-unix

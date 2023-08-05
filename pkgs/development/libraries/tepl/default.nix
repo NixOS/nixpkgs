@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tepl";
     description = "Text editor product line";
-    maintainers = teams.gnome.members ++ [ maintainers.manveru ];
+    maintainers = [ maintainers.manveru ];
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
   };

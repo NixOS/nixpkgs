@@ -40,6 +40,7 @@ lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
+lua-curl,,,,,,
 lua-iconv,,,,,,
 lua-lsp,,,,,,
 lua-messagepack,,,,,,
@@ -85,6 +86,7 @@ luuid,,,,,,
 luv,,,,1.44.2-1,,
 lush.nvim,https://github.com/rktjmp/lush.nvim,,,,,teto
 lyaml,,,,,,lblasc
+magick,,,,,,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,
 mpack,,,,,,

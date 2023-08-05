@@ -19,6 +19,6 @@ buildGoModule rec {
     description = "go test with colors";
     homepage = "https://github.com/rakyll/gotest";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

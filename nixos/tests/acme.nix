@@ -407,7 +407,7 @@ in {
       # Ensures the issuer of our cert matches the chain
       # and matches the issuer we expect it to be.
       # It's a good validation to ensure the cert.pem and fullchain.pem
-      # are not still selfsigned afer verification
+      # are not still selfsigned after verification
       def check_issuer(node, cert_name, issuer):
           for fname in ("cert.pem", "fullchain.pem"):
               actual_issuer = node.succeed(

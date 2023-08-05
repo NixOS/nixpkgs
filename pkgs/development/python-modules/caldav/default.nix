@@ -32,12 +32,12 @@ buildPythonPackage rec {
     requests
     icalendar
     recurring-ical-events
+    pytz
+    tzlocal
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    tzlocal
-    pytz
   ];
 
   # xandikos and radicale are only optional test dependencies, not available for python3

@@ -100,10 +100,7 @@ rec {
     name: mkOption {
     default = false;
     example = true;
-    description =
-      if name ? _type && name._type == "mdDoc"
-      then lib.mdDoc "Whether to enable ${name.text}."
-      else "Whether to enable ${name}.";
+    description = "Whether to enable ${name}.";
     type = lib.types.bool;
   };
 
@@ -155,6 +152,8 @@ rec {
       # Name for the package, shown in option description
       name:
       {
+        # Whether the package can be null, for example to disable installing a package altogether.
+        nullable ? false,
         # The attribute path where the default package is located (may be omitted)
         default ? name,
         # A string or an attribute path to use as an example (may be omitted)
@@ -164,24 +163,29 @@ rec {
       }:
       let
         name' = if isList name then last name else name;
+      in mkOption ({
+        type = with lib.types; (if nullable then nullOr else lib.id) package;
+        description = "The ${name'} package to use."
+          + (if extraDescription == "" then "" else " ") + extraDescription;
+      } // (if default != null then let
         default' = if isList default then default else [ default ];
         defaultPath = concatStringsSep "." default';
         defaultValue = attrByPath default'
           (throw "${defaultPath} cannot be found in pkgs") pkgs;
-      in mkOption {
+      in {
+        default = defaultValue;
         defaultText = literalExpression ("pkgs." + defaultPath);
-        type = lib.types.package;
-        description = "The ${name'} package to use."
-          + (if extraDescription == "" then "" else " ") + extraDescription;
-        ${if default != null then "default" else null} = defaultValue;
-        ${if example != null then "example" else null} = literalExpression
+      } else if nullable then {
+        default = null;
+      } else { }) // lib.optionalAttrs (example != null) {
+        example = literalExpression
           (if isList example then "pkgs." + concatStringsSep "." example else example);
-      };
+      });
 
-  /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
-  mkPackageOptionMD = pkgs: name: extra:
-    let option = mkPackageOption pkgs name extra;
-    in option // { description = lib.mdDoc option.description; };
+  /* Alias of mkPackageOption. Previously used to create options with markdown
+     documentation, which is no longer required.
+  */
+  mkPackageOptionMD = mkPackageOption;
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -261,7 +265,7 @@ rec {
     concatMap (opt:
       let
         name = showOption opt.loc;
-        docOption = rec {
+        docOption = {
           loc = opt.loc;
           inherit name;
           description = opt.description or null;
@@ -280,9 +284,9 @@ rec {
               renderOptionValue opt.example
             );
         }
-        // optionalAttrs (opt ? default) {
+        // optionalAttrs (opt ? defaultText || opt ? default) {
           default =
-            builtins.addErrorContext "while evaluating the default value of option `${name}`" (
+            builtins.addErrorContext "while evaluating the ${if opt?defaultText then "defaultText" else "default value"} of option `${name}`" (
               renderOptionValue (opt.defaultText or opt.default)
             );
         }
@@ -337,26 +341,12 @@ rec {
     if ! isString text then throw "literalExpression expects a string."
     else { _type = "literalExpression"; inherit text; };
 
-  literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalDocBook for a non-Nix description." literalExpression;
-
-
-  /* For use in the `defaultText` and `example` option attributes. Causes the
-     given DocBook text to be inserted verbatim in the documentation, for when
-     a `literalExpression` would be too hard to read.
-  */
-  literalDocBook = text:
-    if ! isString text then throw "literalDocBook expects a string."
-    else
-      lib.warnIf (lib.isInOldestRelease 2211)
-        "literalDocBook is deprecated, use literalMD instead"
-        { _type = "literalDocBook"; inherit text; };
+  literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalMD for a non-Nix description." literalExpression;
 
   /* Transition marker for documentation that's already migrated to markdown
-     syntax.
+     syntax. This is a no-op and no longer needed.
   */
-  mdDoc = text:
-    if ! isString text then throw "mdDoc expects a string."
-    else { _type = "mdDoc"; inherit text; };
+  mdDoc = lib.id;
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
      given MD text to be inserted verbatim in the documentation, for when

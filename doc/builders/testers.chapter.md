@@ -1,5 +1,5 @@
 # Testers {#chap-testers}
-This chapter describes several testing builders which are available in the <literal>testers</literal> namespace.
+This chapter describes several testing builders which are available in the `testers` namespace.
 
 ## `hasPkgConfigModule` {#tester-hasPkgConfigModule}
 
@@ -162,6 +162,26 @@ tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
   rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
   hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
 };
+```
+
+## `runNixOSTest` {#tester-runNixOSTest}
+
+A helper function that behaves exactly like the NixOS `runTest`, except it also assigns this Nixpkgs package set as the `pkgs` of the test and makes the `nixpkgs.*` options read-only.
+
+If your test is part of the Nixpkgs repository, or if you need a more general entrypoint, see ["Calling a test" in the NixOS manual](https://nixos.org/manual/nixos/stable/index.html#sec-calling-nixos-tests).
+
+Example:
+
+```nix
+pkgs.testers.runNixOSTest ({ lib, ... }: {
+  name = "hello";
+  nodes.machine = { pkgs, ... }: {
+    environment.systemPackages = [ pkgs.hello ];
+  };
+  testScript = ''
+    machine.succeed("hello")
+  '';
+})
 ```
 
 ## `nixosTest` {#tester-nixosTest}

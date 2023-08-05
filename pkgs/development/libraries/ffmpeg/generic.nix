@@ -34,7 +34,7 @@
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
 , withCrystalhd ? withFullDeps
-, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch))
+, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
@@ -52,13 +52,14 @@
 , withIlbc ? withFullDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLibplacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.targetPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
-, withNvdec ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
-, withNvenc ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
+, withNvdec ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
+, withNvenc ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
@@ -79,6 +80,7 @@
 , withSsh ? withHeadlessDeps # SFTP protocol
 , withSvg ? withFullDeps # SVG protocol
 , withSvtav1 ? withFullDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
+, withTensorflow ? false # Tensorflow dnn backend support
 , withTheora ? withHeadlessDeps # Theora encoder
 , withV4l2 ? withFullDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
@@ -124,7 +126,6 @@
 , withMultithread ? true # Multithreading via pthreads/win32 threads
 , withNetwork ? withHeadlessDeps # Network support
 , withPixelutils ? withHeadlessDeps # Pixel utils in libavutil
-, withLTO ? false # build with link-time optimization
 /*
  *  Program options
  */
@@ -209,8 +210,10 @@
 , libogg
 , libopenmpt
 , libopus
+, libplacebo
 , librsvg
 , libssh
+, libtensorflow
 , libtheora
 , libv4l
 , libva
@@ -288,7 +291,7 @@
  */
 
 let
-  inherit (lib) optional optionals optionalString enableFeature;
+  inherit (lib) optional optionals optionalString enableFeature versionAtLeast;
 in
 
 
@@ -327,7 +330,7 @@ assert buildPostproc -> buildAvutil;
 assert buildSwscale -> buildAvutil;
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ffmpeg" + (if ffmpegVariant == "small" then "" else "-${ffmpegVariant}");
+  pname = "ffmpeg" + (optionalString (ffmpegVariant != "small") "-${ffmpegVariant}");
   inherit version;
 
   src = fetchgit {
@@ -380,7 +383,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     (enableFeature withSmallBuild "small")
     (enableFeature withRuntimeCPUDetection "runtime-cpudetect")
-    (enableFeature withLTO "lto")
     (enableFeature withGrayscale "gray")
     (enableFeature withSwscaleAlpha "swscale-alpha")
     (enableFeature withHardcodedTables "hardcoded-tables")
@@ -469,9 +471,11 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withModplug "libmodplug")
     (enableFeature withMysofa "libmysofa")
     (enableFeature withOpus "libopus")
+    (optionalString (versionAtLeast version "5.0" && withLibplacebo) "--enable-libplacebo")
     (enableFeature withSvg "librsvg")
     (enableFeature withSrt "libsrt")
     (enableFeature withSsh "libssh")
+    (enableFeature withTensorflow "libtensorflow")
     (enableFeature withTheora "libtheora")
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
@@ -538,9 +542,10 @@ stdenv.mkDerivation (finalAttrs: {
   # outputs where we don't want them. Patch the generated config.h to remove all
   # such references except for data.
   postConfigure = let
-    toStrip = lib.remove "data" finalAttrs.outputs; # We want to keep references to the data dir.
+    toStrip = map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
+      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc;
   in
-    "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${placeholder o}") toStrip)} config.h";
+    "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
 
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ];
 
@@ -571,6 +576,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLibplacebo [ libplacebo vulkan-headers ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
@@ -596,6 +602,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withSsh [ libssh ]
   ++ optionals withSvg [ librsvg ]
   ++ optionals withSvtav1 [ svt-av1 ]
+  ++ optionals withTensorflow [ libtensorflow ]
   ++ optionals withTheora [ libtheora ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]

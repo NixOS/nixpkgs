@@ -332,7 +332,7 @@ in
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
-      fonts.fonts = with pkgs; [ cfg.notoPackage hack-font ];
+      fonts.packages = with pkgs; [ cfg.notoPackage hack-font ];
       fonts.fontconfig.defaultFonts = {
         monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];
@@ -429,7 +429,8 @@ in
             dolphin-plugins
             ffmpegthumbs
             kdegraphics-thumbnailers
-            pkgs.kio-admin
+            kde-inotify-survey
+            kio-admin
             kio-extras
           ];
           optionalPackages = [

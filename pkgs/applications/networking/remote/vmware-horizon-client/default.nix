@@ -1,15 +1,16 @@
 { stdenv
 , lib
-, buildFHSUserEnv
+, buildFHSEnvChroot
 , fetchurl
 , gsettings-desktop-schemas
 , makeDesktopItem
 , makeWrapper
+, opensc
 , writeTextDir
 , configText ? ""
 }:
 let
-  version = "2206";
+  version = "2306";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -18,9 +19,12 @@ let
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
   # exists and is owned by you. Then run vmware-usbarbitrator as root.
-  bins = [ "vmware-view" "vmware-view-legacy" "vmware-usbarbitrator" ];
+  bins = [
+    "vmware-view"
+    "vmware-usbarbitrator"
+  ];
 
-  mainProgram = "vmware-view-legacy";
+  mainProgram = "vmware-view";
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
@@ -35,14 +39,17 @@ let
     pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART23FQ2_LIN_2206_TARBALL/VMware-Horizon-Client-Linux-2206-8.6.0-20094634.tar.gz";
-      sha256 = "9819eae5708bf0d71156b81283e3a70100e2e22de9db827a8956ca8e83b2414a";
+      url = "https://download3.vmware.com/software/CART24FQ2_LIN_2306_TARBALL/VMware-Horizon-Client-Linux-2306-8.10.0-21964631.tar.gz";
+      sha256 = "6051f6f1617385b3c211b73ff42dad27e2d22362df6ffd2f3d9f559d0b5743ea";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
-      mkdir ext $out
+      mkdir ext
       find ${sysArch} -type f -print0 | xargs -0n1 tar -Cext --strip-components=1 -xf
-      mv ext/bin ext/lib ext/share "$out"/
+
+      chmod -R u+w ext/usr/lib
+      mv ext/usr $out
+      cp -r ext/bin ext/lib $out/
 
       # Horizon includes a copy of libstdc++ which is loaded via $LD_LIBRARY_PATH
       # when it cannot detect a new enough version already present on the system.
@@ -50,14 +57,16 @@ let
       # Deleting the bundled library is the simplest way to force it to use our version.
       rm "$out/lib/vmware/gcc/libstdc++.so.6"
 
-      # This library causes the program to core-dump occasionally. Use ours instead.
-      rm -r $out/lib/vmware/view/crtbora
+      # This opensc library is required to support smartcard authentication during the
+      # initial connection to Horizon.
+      mkdir $out/lib/vmware/view/pkcs11
+      ln -s ${opensc}/lib/pkcs11/opensc-pkcs11.so $out/lib/vmware/view/pkcs11/libopenscpkcs11.so
 
       ${lib.concatMapStrings wrapBinCommands bins}
     '';
   };
 
-  vmwareFHSUserEnv = name: buildFHSUserEnv {
+  vmwareFHSUserEnv = name: buildFHSEnvChroot {
     inherit name;
 
     runScript = "${vmwareHorizonClientFiles}/bin/${name}_wrapper";
@@ -67,6 +76,7 @@ let
       atk
       cairo
       dbus
+      file
       fontconfig
       freetype
       gdk-pixbuf
@@ -87,6 +97,7 @@ let
       pixman
       vmwareHorizonClientFiles
       xorg.libX11
+      xorg.libXau
       xorg.libXcursor
       xorg.libXext
       xorg.libXi

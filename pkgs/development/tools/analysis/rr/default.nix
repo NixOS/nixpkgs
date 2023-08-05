@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto
+, cmake, pkg-config, which, makeWrapper
+, libpfm, zlib, python3Packages, procps, gdb, capnproto
 }:
 
 stdenv.mkDerivation rec {
@@ -38,11 +39,11 @@ stdenv.mkDerivation rec {
   # See also https://github.com/NixOS/nixpkgs/pull/110846
   preConfigure = ''substituteInPlace CMakeLists.txt --replace "-flto" ""'';
 
-  nativeBuildInputs = [ cmake pkg-config which ];
+  nativeBuildInputs = [ cmake pkg-config which makeWrapper ];
   buildInputs = [
     libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
+    libpfm zlib python3Packages.python python3Packages.pexpect procps capnproto
   ];
-  propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
   cmakeFlags = [
     "-Ddisable32bit=ON"
   ];
@@ -56,6 +57,14 @@ stdenv.mkDerivation rec {
   #doCheck = true;
 
   preCheck = "export HOME=$TMPDIR";
+
+  # needs GDB to replay programs at runtime
+  preFixup = ''
+    wrapProgram "$out/bin/rr" \
+      --prefix PATH ":" "${lib.makeBinPath [
+        gdb
+      ]}";
+  '';
 
   meta = {
     homepage = "https://rr-project.org/";

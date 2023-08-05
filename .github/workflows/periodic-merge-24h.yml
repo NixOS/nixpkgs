@@ -34,10 +34,10 @@ jobs:
         pairs:
           - from: master
             into: haskell-updates
-          - from: release-22.11
-            into: staging-next-22.11
-          - from: staging-next-22.11
-            into: staging-22.11
+          - from: release-23.05
+            into: staging-next-23.05
+          - from: staging-next-23.05
+            into: staging-23.05
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
       - uses: actions/checkout@v3

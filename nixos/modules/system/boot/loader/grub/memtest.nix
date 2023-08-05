@@ -84,15 +84,11 @@ in
     })
 
     (mkIf (cfg.enable && !efiSupport) {
-      boot.loader.grub.extraEntries =
-        if config.boot.loader.grub.version == 2 then
-          ''
-            menuentry "Memtest86+" {
-              linux16 @bootRoot@/memtest.bin ${toString cfg.params}
-            }
-          ''
-        else
-          throw "Memtest86+ is not supported with GRUB 1.";
+      boot.loader.grub.extraEntries = ''
+        menuentry "Memtest86+" {
+          linux16 @bootRoot@/memtest.bin ${toString cfg.params}
+        }
+      '';
 
       boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
     })

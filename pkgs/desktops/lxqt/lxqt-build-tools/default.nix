@@ -1,7 +1,5 @@
 { lib
-, stdenv
 , mkDerivation
-, fetchpatch
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -14,13 +12,13 @@
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "18+xSHBjYmtENGJuTf8yJh4C4QTNYttr8ucRU8KK1HU=";
+    sha256 = "4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
   };
 
   postPatch = ''

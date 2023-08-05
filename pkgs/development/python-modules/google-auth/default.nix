@@ -1,41 +1,40 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, cachetools
-, pyasn1-modules
-, rsa
-, six
+{ lib
+, stdenv
 , aiohttp
-, cryptography
-, pyopenssl
-, pyu2f
-, requests
-, pythonOlder
 , aioresponses
-, asynctest
+, buildPythonPackage
+, cachetools
+, cryptography
+, fetchPypi
 , flask
 , freezegun
 , grpcio
 , mock
 , oauth2client
+, pyasn1-modules
+, pyopenssl
 , pytest-asyncio
 , pytest-localserver
 , pytestCheckHook
+, pythonOlder
+, pyu2f
+, requests
 , responses
+, rsa
+, six
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.16.1";
+  version = "2.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X9FwmGvOa/17tchFxLg2LtseDLqQHgYhlug/i7XV0yw=";
+    hash = "sha256-so6ASOV3J+fPDlvY5ydrISrvR2ZUoJURNUqoJ1O0XGY=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +42,7 @@ buildPythonPackage rec {
     pyasn1-modules
     rsa
     six
+    urllib3
   ];
 
   passthru.optional-dependencies = {
@@ -67,7 +67,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
-    asynctest
     flask
     freezegun
     grpcio
@@ -77,7 +76,6 @@ buildPythonPackage rec {
     pytest-localserver
     pytestCheckHook
     responses
-    urllib3
   ] ++ passthru.optional-dependencies.aiohttp
   # `cryptography` is still required on `aarch64-darwin` for `tests/crypt/*`
   ++ (if (stdenv.isDarwin && stdenv.isAarch64) then [ cryptography ] else passthru.optional-dependencies.enterprise_cert)
@@ -107,6 +105,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

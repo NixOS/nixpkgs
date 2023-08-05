@@ -5,12 +5,12 @@
 , ncurses
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moe";
   version = "1.13";
 
   src = fetchurl {
-    url = "mirror://gnu/moe/moe-${self.version}.tar.lz";
+    url = "mirror://gnu/moe/moe-${finalAttrs.version}.tar.lz";
     hash = "sha256-Q6VXvFEvidbHGOX0ECnP46BVaCYg642+zmMC80omFGs=";
   };
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, writeShellScript, buildFHSUserEnv, steam, glxinfo-i686
+{ lib, stdenv, writeShellScript, buildFHSEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
@@ -29,6 +29,9 @@ let
     procps
     usbutils
 
+    # It tries to execute xdg-user-dir and spams the log with command not founds
+    xdg-user-dirs
+
     # electron based launchers need newer versions of these libraries than what runtime provides
     mesa
     sqlite
@@ -55,11 +58,14 @@ let
 
   envScript = lib.toShellVars extraEnv;
 
-in buildFHSUserEnv rec {
+in buildFHSEnv rec {
   name = "steam";
 
+  # Steam still needs 32bit and various native games do too
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
-    steamPackages.steam
+    steam
     # License agreement
     gnome.zenity
   ] ++ commonTargetPkgs pkgs;
@@ -113,6 +119,7 @@ in buildFHSUserEnv rec {
     SDL2
     libusb1
     dbus-glib
+    gsettings-desktop-schemas
     ffmpeg
     libudev0-shim
 
@@ -130,6 +137,10 @@ in buildFHSUserEnv rec {
     libidn
     tbb
     zlib
+
+    # SteamVR
+    udev
+    dbus
 
     # Other things from runtime
     glib
@@ -161,6 +172,13 @@ in buildFHSUserEnv rec {
     librsvg
     xorg.libXft
     libvdpau
+
+    # required by coreutils stuff to run correctly
+    # Steam ends up with LD_LIBRARY_PATH=<bunch of runtime stuff>:/usr/lib:<etc>
+    # which overrides DT_RUNPATH in our binaries, so it tries to dynload the
+    # very old versions of stuff from the runtime.
+    # FIXME: how do we even fix this correctly
+    attr
   ] ++ lib.optionals withGameSpecificLibraries [
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -174,15 +192,14 @@ in buildFHSUserEnv rec {
     libvorbis # Dead Cells
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
+    ncurses # Crusader Kings III
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
-    udev # Shadow of the Tomb Raider
     icu # dotnet runtime, e.g. Stardew Valley
 
     # screeps dependencies
     gtk3
-    dbus
     zlib
     atk
     cairo
@@ -200,12 +217,13 @@ in buildFHSUserEnv rec {
     libidn2
     libpsl
     nghttp2.lib
-    openssl_1_1
     rtmpdump
-  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs
+  ]
+  # This needs to come from pkgs as the passed-in steam-runtime-wrapped may not be the same architecture
+  ++ pkgs.steamPackages.steam-runtime-wrapped.overridePkgs
   ++ extraLibraries pkgs;
 
-  extraInstallCommands = ''
+  extraInstallCommands = lib.optionalString (steam != null) ''
     mkdir -p $out/share/applications
     ln -s ${steam}/share/icons $out/share
     ln -s ${steam}/share/pixmaps $out/share
@@ -257,9 +275,15 @@ in buildFHSUserEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
-  meta = steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
-    description = steam.meta.description + " (without game specific libraries)";
-  };
+  meta =
+    if steam != null
+    then
+      steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
+        description = steam.meta.description + " (without game specific libraries)";
+      }
+    else {
+      description = "Steam dependencies (dummy package, do not use)";
+    };
 
   # allows for some gui applications to share IPC
   # this fixes certain issues where they don't render correctly
@@ -270,11 +294,11 @@ in buildFHSUserEnv rec {
   # breaks the ability for application to reference shared memory.
   unsharePid = false;
 
-  passthru.run = buildFHSUserEnv {
+  passthru.run = buildFHSEnv {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
-    inherit multiPkgs profile extraInstallCommands;
+    inherit multiArch multiPkgs profile extraInstallCommands;
     inherit unshareIpc unsharePid;
 
     runScript = writeShellScript "steam-run" ''
@@ -293,7 +317,7 @@ in buildFHSUserEnv rec {
       exec -- "$run" "$@"
     '';
 
-    meta = steam.meta // {
+    meta = (steam.meta or {}) // {
       description = "Run commands in the same FHS environment that is used for Steam";
       name = "steam-run";
     };

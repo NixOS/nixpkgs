@@ -1,23 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, perl, flex, bison, python3, autoconf
-, which, cmake, help2man
-}:
+{ lib, stdenv, fetchFromGitHub, perl, flex, bison, python3, autoconf,
+  which, cmake, ccache, help2man, makeWrapper, glibcLocales,
+  systemc, git, numactl }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "5.006";
+  version = "5.012";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PA8hbE6XECapuaO5YcgEodOoxSDqpMucdijJBBb7fZg=";
+    hash = "sha256-Y6GkIgkauayJmGhOQg2kWjbcxYVIob6InMopv555Lb8=";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ perl ];
-  nativeBuildInputs = [ flex bison python3 autoconf help2man ];
-  nativeCheckInputs = [ which ];
+  buildInputs = [ perl python3 systemc ];  # ccache
+  nativeBuildInputs = [ makeWrapper flex bison autoconf help2man git ];
+  nativeCheckInputs = [ which numactl ];  # cmake
 
   doCheck = stdenv.isLinux; # darwin tests are broken for now...
   checkTarget = "test";
@@ -25,14 +24,24 @@ stdenv.mkDerivation rec {
   preConfigure = "autoconf";
 
   postPatch = ''
-    patchShebangs bin/* src/{flexfix,vlcovgen} test_regress/{driver.pl,t/*.pl}
+    patchShebangs bin/* src/* nodist/* docs/bin/* examples/xml_py/* \
+    test_regress/{driver.pl,t/*.{pl,pf}} \
+    ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
+  '';
+  # grep '^#!/' -R . | grep -v /nix/store | less
+  # (in nix-shell after patchPhase)
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    for x in $(ls $out/bin/verilator*); do
+      wrapProgram "$x" --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+    done
   '';
 
   meta = with lib; {
-    description = "Fast and robust (System)Verilog simulator/compiler";
-    homepage    = "https://www.veripool.org/wiki/verilator";
+    description = "Fast and robust (System)Verilog simulator/compiler and linter";
+    homepage    = "https://www.veripool.org/verilator";
     license     = with licenses; [ lgpl3Only artistic2 ];
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice amiloradovsky ];
   };
 }

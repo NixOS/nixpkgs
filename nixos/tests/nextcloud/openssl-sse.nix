@@ -9,6 +9,7 @@ args@{ pkgs, nextcloudVersion ? 25, ... }:
     services.nextcloud = {
       enable = true;
       config.adminpassFile = "${pkgs.writeText "adminpass" adminpass}";
+      database.createLocally = true;
       package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
     };
   };
@@ -32,7 +33,7 @@ in {
     withRcloneEnv = host: pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://${host}/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://${host}/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -72,7 +73,7 @@ in {
         nextcloudwithopenssl1.succeed("nextcloud-occ status")
 
     with subtest("Existing encrypted files cannot be read, but new files can be added"):
-        # This will succed starting NC26 because of their custom implementation of openssl_seal
+        # This will succeed starting NC26 because of their custom implementation of openssl_seal
         read_existing_file_test = nextcloudwithopenssl1.fail if nextcloud_version < 26 else nextcloudwithopenssl1.succeed
         read_existing_file_test("${withRcloneEnv3} ${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file >&2")
         nextcloudwithopenssl1.succeed("nextcloud-occ encryption:disable")

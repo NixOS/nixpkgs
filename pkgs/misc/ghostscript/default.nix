@@ -1,8 +1,39 @@
-{ config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
-, libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs, lcms2, callPackage, bash, buildPackages, openjpeg
-, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups
-, x11Support ? cupsSupport, xorg # with CUPS, X11 only adds very little
+{ config
+, stdenv
+, lib
+, fetchurl
+, pkg-config
+, zlib
+, expat
+, openssl
+, autoconf
+, libjpeg
+, libpng
+, libtiff
+, freetype
+, fontconfig
+, libpaper
+, jbig2dec
+, libiconv
+, ijs
+, lcms2
+, callPackage
+, bash
+, buildPackages
+, openjpeg
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin)
+, cups
+, x11Support ? cupsSupport
+, xorg # with CUPS, X11 only adds very little
+, dynamicDrivers ? true
+
+# for passthru.tests
+, graphicsmagick
+, imagemagick
+, libspectre
+, lilypond
+, pstoedit
+, python3
 }:
 
 let
@@ -29,12 +60,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "ghostscript${lib.optionalString (x11Support) "-with-X"}";
-  version = "9.56.1";
+  pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
+  version = "10.01.2";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/ghostscript-${version}.tar.xz";
-    sha512 = "22ysgdprh960rxmxyk2fy2my47cdrhfhbrwar1955hvad54iw79l916drp92wh3qzbxw6z40i70wk00vz8bn2ryig7qgpc1q01m2npy";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
+    hash = "sha512-7iDw4S9VOj0EV45xoNRd7+vHERfOTcLBQEOYW/5zSK1/iy/pj8m09bk17LMuUNw0C+Z9bvWBkFQuxtD52h3jgA==";
   };
 
   patches = [
@@ -77,11 +108,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-system-libtiff"
-    "--enable-dynamic"
     "--without-tesseract"
-  ]
-  ++ lib.optional x11Support "--with-x"
-  ++ lib.optionals cupsSupport [
+  ] ++ lib.optionals dynamicDrivers [
+    "--enable-dynamic"
+    "--disable-hidden-visibility"
+  ] ++ lib.optionals x11Support [
+    "--with-x"
+  ] ++ lib.optionals cupsSupport [
     "--enable-cups"
   ];
 
@@ -108,6 +141,7 @@ stdenv.mkDerivation rec {
   dylib_version = lib.versions.majorMinor version;
   preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
+    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
   '';
 
   # validate dynamic linkage
@@ -116,6 +150,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     $out/bin/gs --version
+    $out/bin/gsx --version
     pushd examples
     for f in *.{ps,eps,pdf}; do
       echo "Rendering $f"
@@ -133,7 +168,11 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  passthru.tests.test-corpus-render = callPackage ./test-corpus-render.nix {};
+  passthru.tests = {
+    test-corpus-render = callPackage ./test-corpus-render.nix {};
+    inherit graphicsmagick imagemagick libspectre lilypond pstoedit;
+    inherit (python3.pkgs) matplotlib;
+  };
 
   meta = {
     homepage = "https://www.ghostscript.com/";

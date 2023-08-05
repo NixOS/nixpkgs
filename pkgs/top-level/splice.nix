@@ -45,9 +45,6 @@ let
             valueHostTarget = pkgsHostTarget.${name} or { };
             valueTargetTarget = pkgsTargetTarget.${name} or { };
             augmentedValue = defaultValue
-              # TODO(@Artturin): remove before release 23.05 and only have __spliced.
-              // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { nativeDrv = lib.warn "use ${name}.__spliced.buildHost instead of ${name}.nativeDrv" valueBuildHost; })
-              // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { crossDrv = lib.warn "use ${name}.__spliced.hostTarget instead of ${name}.crossDrv" valueHostTarget; })
               // {
               __spliced =
                 (lib.optionalAttrs (pkgsBuildBuild ? ${name}) { buildBuild = valueBuildBuild; })

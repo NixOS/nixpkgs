@@ -21,9 +21,16 @@ stdenv.mkDerivation rec {
     # Fix warnings from preprocessor instructions.
     # https://github.com/NixOS/nixpkgs/issues/59929
     ./preprocessor-warnings.patch
+    # `configure` defines a test `main` with an implicit `int` return, which clang 16 disallows.
+    ./fix-configure-main.patch
   ];
 
   enableParallelBuilding = true;
+  # Lacks dependencies:
+  #   mkdir ...-libelf-0.8.13/lib
+  #   mkdir ...-libelf-0.8.13/lib
+  # mkdir: cannot create directory '...-libelf-0.8.13/lib': File exists
+  enableParallelInstalling = false;
 
   doCheck = true;
 
@@ -50,7 +57,13 @@ stdenv.mkDerivation rec {
        # cross-compiling, but `autoreconfHook` brings in `makeWrapper` which
        # doesn't work with the bootstrapTools bash, so can only do this for
        # cross builds when `stdenv.shell` is a newer bash.
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) autoreconfHook;
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform
+       # The provided `configure` script fails on clang 16 because some tests have a `main`
+       # returning an implicit `int`, which clang 16 treats as an error. Running `autoreconf` fixes
+       # the test and allows `configure` to detect clang properly.
+       # This is done only for clang on Darwin because the Darwin stdenv bootstrap does not use
+       # libelf, so should be safe because it will always be run with a compatible version of bash.
+       || (stdenv.cc.isClang && stdenv.isDarwin)) autoreconfHook;
 
   meta = {
     description = "ELF object file access library";

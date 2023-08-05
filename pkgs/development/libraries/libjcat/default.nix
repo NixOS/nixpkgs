@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjcat";
-  version = "0.1.13";
+  version = "0.1.14";
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
-    sha256 = "sha256-VfI40dfZzNqR5sqTY4KvkYL8+3sLV0Z0u7w+QA34uek=";
+    sha256 = "sha256-XN7/ZtWCCO7lSspXM4vNowoWN1U0NGQPUTM9KjTEHjY=";
   };
 
   patches = [

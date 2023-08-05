@@ -1,12 +1,23 @@
-{ borgbackup, coreutils, lib, python3Packages, systemd, installShellFiles, borgmatic, testers }:
+{ lib
+, stdenv
+, borgbackup
+, coreutils
+, python3Packages
+, fetchPypi
+, systemd
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, installShellFiles
+, borgmatic
+, testers
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.7.9";
+  version = "1.7.15";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v3Qxwy7V6rqX90G4/Xp6mVTUkrqDXmudgh3th0GCjuk=";
+    sha256 = "sha256-esTvcybCPTayA9LCSukNc9ba8eGCTyjB883eZYy91II=";
   };
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
@@ -23,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     borgbackup
     colorama
     jsonschema
+    packaging
     ruamel-yaml
     requests
     setuptools
@@ -31,7 +43,7 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --cmd borgmatic \
       --bash <($out/bin/borgmatic --bash-completion)
-
+  '' + lib.optionalString enableSystemd ''
     mkdir -p $out/lib/systemd/system
     cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
     # there is another "sleep", so choose the one with the space after it
@@ -45,11 +57,13 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = borgmatic; };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Simple, configuration-driven backup software for servers and workstations";
     homepage = "https://torsion.org/borgmatic/";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ imlonghao ];
   };
 }

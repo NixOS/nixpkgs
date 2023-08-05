@@ -29,5 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/netlify/esbuild";
     license = licenses.mit;
     maintainers = with maintainers; [ roberth ];
+    mainProgram = "esbuild";
   };
 }

@@ -1,13 +1,14 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchPypi
 , groff
 , less
 }:
 let
   py = python3.override {
     packageOverrides = self: super: {
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+      pyyaml = super.pyyaml.overridePythonAttrs rec {
         version = "5.4.1";
         src = fetchFromGitHub {
           owner = "yaml";
@@ -20,7 +21,7 @@ let
           PYTHONPATH="tests/lib3:$PYTHONPATH" ${self.python.interpreter} -m test_all
           runHook postCheck
         '';
-      });
+      };
     };
     self = py;
   };

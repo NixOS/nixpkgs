@@ -32,8 +32,6 @@ EOF
 sort -iu "$tmpfile" >> "$broken_config"
 clear="env -u HOME -u NIXPKGS_CONFIG"
 $clear maintainers/scripts/haskell/regenerate-hackage-packages.sh
-$clear maintainers/scripts/haskell/regenerate-transitive-broken-packages.sh
-$clear maintainers/scripts/haskell/regenerate-hackage-packages.sh
 evalline=$(maintainers/scripts/haskell/hydra-report.hs eval-info)
 
 if [[ "${1:-}" == "--do-commit" ]]; then

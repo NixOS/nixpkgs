@@ -1,9 +1,11 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , django
 , django-stubs-ext
 , fetchPypi
-, lib
 , mypy
+, pytestCheckHook
+, pythonOlder
 , tomli
 , types-pytz
 , types-pyyaml
@@ -12,26 +14,35 @@
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "1.15.0";
+  version = "4.2.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C7+esXLFsG7M/y1wTHw5BuSixhRt+MMu6fOlHikmVYE=";
+    hash = "sha256-2tqzm0bZro83qOh5xZDzmp4EK1ZcA/oMWo91S0QbHyM=";
   };
 
   propagatedBuildInputs = [
     django
     django-stubs-ext
     mypy
-    tomli
     types-pytz
     types-pyyaml
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   meta = with lib; {
     description = "PEP-484 stubs for Django";
     homepage = "https://github.com/typeddjango/django-stubs";
+    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ elohmeier ];
   };

@@ -203,11 +203,31 @@ let
       patches = [ ./patches/math-no-compile-time-directory.patch ];
       nativeLibs = [ pkgs.fontconfig ];
     });
+    mcclim-fonts = super.mcclim-fonts.overrideLispAttrs (o: {
+      lispLibs = o.lispLibs ++ [
+        super.cl-dejavu
+        super.zpb-ttf
+        super.cl-vectors
+        super.cl-paths-ttf
+        super.flexi-streams
+      ];
+      systems = [ "mcclim-fonts" "mcclim-fonts/truetype" ];
+    });
+    mcclim-render = super.mcclim-render.overrideLispAttrs (o: {
+      lispLibs = o.lispLibs ++ [
+        self.mcclim-fonts
+      ];
+    });
+    mcclim-layouts = super.mcclim-layouts.overrideLispAttrs (o: {
+      systems = [ "mcclim-layouts" "mcclim-layouts/tab" ];
+      lispLibs = o.lispLibs ++ [
+        self.mcclim
+      ];
+});
   });
 
   qlpkgs =
-    if builtins.pathExists ./imported.nix
-    then pkgs.callPackage ./imported.nix { inherit build-asdf-system; }
-    else {};
+    lib.optionalAttrs (builtins.pathExists ./imported.nix)
+      (pkgs.callPackage ./imported.nix { inherit build-asdf-system; });
 
 in qlpkgs.overrideScope' overrides

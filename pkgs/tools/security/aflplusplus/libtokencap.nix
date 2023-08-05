@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = aflplusplus.src;
   postUnpack = "chmod -R +w ${aflplusplus.src.name}";
-  sourceRoot = "${aflplusplus.src.name}/libtokencap";
+  sourceRoot = "${aflplusplus.src.name}/utils/libtokencap";
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/vanhauser-thc/AFLplusplus";
+    homepage = "https://github.com/AFLplusplus/AFLplusplus";
     description = "strcmp & memcmp token capture library";
     license = lib.licenses.asl20;
     maintainers = with maintainers; [ ris ];

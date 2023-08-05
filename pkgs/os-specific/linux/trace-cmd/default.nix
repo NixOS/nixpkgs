@@ -1,12 +1,12 @@
 { lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "3.1.6";
+  version = "3.2";
 
   src = fetchgit {
     url    = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
     rev    = "trace-cmd-v${version}";
-    sha256 = "sha256-qjfeomeExjsx/6XrUaGm5szbL7XVlekGd4Hsuncv8NY=";
+    sha256 = "sha256-KlykIYF4uy1phgWRG5j76FJqgO7XhNnyrTDVTs8YOXY=";
   };
 
   # Don't build and install html documentation
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libtraceevent libtracefs zstd ];
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [ "out" "lib" "dev" "man" "devman" ];
 
   MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.trace-cmd.org/";
     license     = with licenses; [ lgpl21Only gpl2Only ];
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice basvandijk ];
+    maintainers = with maintainers; [ thoughtpolice basvandijk wentasah ];
   };
 }

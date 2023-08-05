@@ -20,16 +20,16 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-  releaseTag = "2023-03-06";
+  releaseTag = "2023-07-31";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = releaseTag;
-    sha256 = "sha256-Njlus+vY3N++qWE0JXrGjwcXY2QDFuOV/7NruBBMETY=";
+    sha256 = "sha256-PWEdqI+iiHbx4dkIwWHZCGJuTpRfJI3MLSHf3gQEJt4=";
   };
 
-  build-deps = nodePackages."rust-analyzer-build-deps-../../applications/editors/vscode/extensions/rust-analyzer/build-deps";
+  build-deps = nodePackages."rust-analyzer-build-deps-../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps";
   # FIXME: Making a new derivation to link `node_modules` and run `npm run package`
   # will cause a build failure.
   vsix = build-deps.override {
@@ -88,3 +88,4 @@ vscode-utils.buildVscodeExtension {
     platforms = lib.platforms.all;
   };
 }
+

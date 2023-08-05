@@ -1,9 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, opencl-clhpp, ocl-icd, fftw, fftwFloat
-, blas, lapack, boost, mesa, libGLU, libGL
-, freeimage, python3, clfft, clblas
-, doxygen, buildDocs ? false
-, cudaSupport ? false, cudatoolkit
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, opencl-clhpp
+, ocl-icd
+, fftw
+, fftwFloat
+, blas
+, lapack
+, boost
+, mesa
+, libGLU
+, libGL
+, freeimage
+, python3
+, clfft
+, clblas
+, doxygen
+, buildDocs ? false
+, config
+, cudaSupport ? config.cudaSupport
+, cudatoolkit
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -48,14 +67,26 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = [
-    opencl-clhpp fftw fftwFloat
-    blas lapack
-    libGLU libGL
-    mesa freeimage
-    boost.out boost.dev
-  ] ++ (lib.optional stdenv.isLinux ocl-icd)
-    ++ (lib.optional cudaSupport cudatoolkit)
-    ++ (lib.optional buildDocs doxygen);
+    opencl-clhpp
+    fftw
+    fftwFloat
+    blas
+    lapack
+    libGLU
+    libGL
+    mesa
+    freeimage
+    boost.out
+    boost.dev
+  ] ++ lib.optionals stdenv.isLinux [
+    ocl-icd
+  ] ++ lib.optionals cudaSupport [
+    cudatoolkit
+  ] ++ lib.optionals buildDocs [
+    doxygen
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Accelerate
+  ];
 
   meta = with lib; {
     description = "A general-purpose library for parallel and massively-parallel computations";

@@ -1,0 +1,14 @@
+diff --git i/sensors.js w/sensors.js
+index 5ab7068..00cfa19 100644
+--- i/sensors.js
++++ w/sensors.js
+@@ -29,6 +29,9 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
+ const FileModule = Me.imports.helpers.file;
+ const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+ const _ = Gettext.gettext;
++
++imports.gi.GIRepository.Repository.prepend_search_path('@gtop_path@');
++
+ const NM = imports.gi.NM;
+ 
+ let GTop, hasGTop = true;

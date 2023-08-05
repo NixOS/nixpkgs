@@ -1,5 +1,6 @@
 { lib
 , aiohttp
+, awesomeversion
 , buildPythonPackage
 , fetchPypi
 , hatchling
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tplink-omada-client";
-  version = "1.1.5";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "tplink_omada_client";
     inherit version;
-    hash = "sha256-fx954JstCdvJQY1xgoqcfJpB8fZSS4kST/f3yiJZ7lA=";
+    hash = "sha256-+6HEJBMYaw/8VTdl3YK5uaAYTiyhqe1Zvuxsk2ltci8=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    awesomeversion
   ];
 
   # Module have no tests

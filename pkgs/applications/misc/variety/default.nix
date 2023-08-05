@@ -75,10 +75,9 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace variety_lib/varietyconfig.py \
       --replace "__variety_data_directory__ = \"../data\"" \
                 "__variety_data_directory__ = \"$out/share/variety\""
-    substituteInPlace data/scripts/set_wallpaper \
-      --replace /bin/bash ${runtimeShell}
-    substituteInPlace data/scripts/get_wallpaper \
-      --replace /bin/bash ${runtimeShell}
+    substituteInPlace variety/VarietyWindow.py \
+      --replace '[script,' '["${runtimeShell}", script,' \
+      --replace 'check_output(script)' 'check_output(["${runtimeShell}", script])'
   '';
 
   meta = with lib; {

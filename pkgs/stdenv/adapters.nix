@@ -67,7 +67,7 @@ rec {
             "--disable-shared" # brrr...
           ];
       }));
-    } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "libc") {
+    } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "glibc") {
       extraBuildInputs = (old.extraBuildInputs or []) ++ [
         pkgs.glibc.static
       ];
@@ -95,18 +95,21 @@ rec {
   makeStaticDarwin = stdenv: stdenv.override (old: {
     # extraBuildInputs are dropped in cross.nix, but darwin still needs them
     extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
-    mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
+    mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
+    (mkDerivationSuper args).overrideAttrs (finalAttrs: {
+      NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [
-        (pkgs.buildPackages.makeSetupHook {
-          name = "darwin-portable-libSystem-hook";
-          substitutions = {
-            libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-          };
-        } ./darwin/portable-libsystem.sh)
-      ];
-    });
+      nativeBuildInputs = (finalAttrs.nativeBuildInputs or [])
+        ++ lib.optionals stdenv.hasCC [
+          (pkgs.buildPackages.makeSetupHook {
+            name = "darwin-portable-libSystem-hook";
+            substitutions = {
+              libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
+              targetPrefix = stdenv.cc.bintools.targetPrefix;
+            };
+          } ./darwin/portable-libsystem.sh)
+        ];
+    }));
   });
 
   # Puts all the other ones together
@@ -118,9 +121,6 @@ rec {
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeStaticBinaries
-
-    # Glibc doesn’t come with static runtimes by default.
-    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.glibc.static ])
   );
 
 
@@ -176,7 +176,7 @@ rec {
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
         dontStrip = true;
-        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og"; };
       });
     });
 
@@ -219,7 +219,8 @@ rec {
   impureUseNativeOptimizations = stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -march=native"; };
+
         NIX_ENFORCE_NO_NATIVE = false;
 
         preferLocalBuild = true;
@@ -244,7 +245,7 @@ rec {
   withCFlags = compilerFlags: stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}"; };
       });
     });
 }

@@ -16,7 +16,7 @@ assert extraSessionCommands != "" -> withBaseWrapper;
 with lib;
 
 let
-  sway = sway-unwrapped.override { inherit isNixOS enableXWayland; };
+  sway = sway-unwrapped.overrideAttrs (oa: { inherit isNixOS enableXWayland; });
   baseWrapper = writeShellScriptBin "sway" ''
      set -o errexit
      if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
@@ -28,7 +28,7 @@ let
        export DBUS_SESSION_BUS_ADDRESS
        exec ${sway}/bin/sway "$@"
      else
-       exec ${if !dbusSupport then "" else "${dbus}/bin/dbus-run-session"} ${sway}/bin/sway "$@"
+       exec ${lib.optionalString dbusSupport "${dbus}/bin/dbus-run-session"} ${sway}/bin/sway "$@"
      fi
    '';
 in symlinkJoin {

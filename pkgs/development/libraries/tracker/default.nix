@@ -1,22 +1,24 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , gettext
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , asciidoc
 , gobject-introspection
 , buildPackages
 , withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, vala
 , python3
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+, gi-docgen
+, graphviz
 , libxml2
 , glib
 , wrapGAppsNoGuiHook
 , sqlite
-, libxslt
 , libstemmer
 , gnome
 , icu
@@ -31,18 +33,24 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.4.2";
+  version = "3.5.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Tm3xQqT3BIePypjrtaIkdQ5epUaqKqq6pyanNUC9FzE=";
+    sha256 = "FGbIsIl75dngVth+EK1YkntYgDPwGvLxplaokhw6KO4=";
   };
 
-  postPatch = ''
-    patchShebangs utils/data-generators/cc/generate
-  '';
+  patches = [
+    # Backport sqlite-3.42.0 compatibility:
+    #   https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/600
+    (fetchpatch {
+      name = "sqlite-3.42.0.patch";
+      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/4cbbd1773a7367492fa3b3e3804839654e18a12a.patch";
+      hash = "sha256-w5D9I0P1DdyILhpjslh6ifojmlUiBoeFnxHPIr0rO3s=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -57,13 +65,15 @@ stdenv.mkDerivation rec {
     asciidoc
     gettext
     glib
-    libxslt
     wrapGAppsNoGuiHook
-    docbook-xsl-nons
-    docbook_xml_dtd_45
+    gi-docgen
+    graphviz
     (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
+    vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -88,6 +98,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocs=true"
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
     (lib.mesonBool "test_utils" withIntrospection)
   ] ++ (
     let
@@ -104,7 +115,21 @@ stdenv.mkDerivation rec {
     "-Dsystemd_user_services=false"
   ];
 
-  doCheck = true;
+  doCheck =
+    # https://gitlab.gnome.org/GNOME/tracker/-/issues/402
+    !stdenv.isDarwin
+    # https://gitlab.gnome.org/GNOME/tracker/-/issues/398
+    && !stdenv.is32bit;
+
+  postPatch = ''
+    chmod +x \
+      docs/reference/libtracker-sparql/embed-files.py \
+      docs/reference/libtracker-sparql/generate-svgs.sh
+    patchShebangs \
+      utils/data-generators/cc/generate \
+      docs/reference/libtracker-sparql/embed-files.py \
+      docs/reference/libtracker-sparql/generate-svgs.sh
+  '';
 
   preCheck =
     let
@@ -139,6 +164,11 @@ stdenv.mkDerivation rec {
   postCheck = ''
     # Clean up out symlinks
     rm -r $out/lib
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

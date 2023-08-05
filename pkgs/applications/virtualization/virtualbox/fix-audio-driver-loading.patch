@@ -7,7 +7,7 @@ index cfcb0abbf..2ce564f6f 100644
  
      RTLDRMOD hMod = NIL_RTLDRMOD;
 -    int rc = RTLdrLoadSystemEx(VBOX_ALSA_LIB, RTLDRLOAD_FLAGS_NO_UNLOAD, &hMod);
-+    int rc = RTLdrLoad(VBOX_ALSA_LIB, &hMod);
++    int rc = RTLdrLoadEx(VBOX_ALSA_LIB, &hMod, RTLDRLOAD_FLAGS_NO_UNLOAD, nullptr);
      if (RT_SUCCESS(rc))
      {
          for (uintptr_t i = 0; i < RT_ELEMENTS(SharedFuncs); i++)
@@ -20,7 +20,7 @@ index a17fc93f9..148f5c39a 100644
  
      RTLDRMOD hMod = NIL_RTLDRMOD;
 -    int rc = RTLdrLoadSystemEx(VBOX_PULSE_LIB, RTLDRLOAD_FLAGS_NO_UNLOAD, &hMod);
-+    int rc = RTLdrLoad(VBOX_PULSE_LIB, &hMod);
++    int rc = RTLdrLoadEx(VBOX_PULSE_LIB, &hMod, RTLDRLOAD_FLAGS_NO_UNLOAD, nullptr);
      if (RT_SUCCESS(rc))
      {
          for (unsigned i = 0; i < RT_ELEMENTS(g_aImportedFunctions); i++)

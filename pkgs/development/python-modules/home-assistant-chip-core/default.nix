@@ -8,12 +8,16 @@
 , autoPatchelfHook
 
 # runtime
+, libnl
 , openssl_1_1
 
 # propagates
+, aenum
 , coloredlogs
 , construct
+, cryptography
 , dacite
+, ecdsa
 , rich
 , pyyaml
 , ipdb
@@ -24,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
-  version = "2023.2.2";
+  version = "2023.6.0";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -33,11 +37,11 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
-        hash = "sha256-e3OIpTGPMj+YSx/pqzGi5paUAIpDhI94prhHL3DkM18=";
+        hash = "sha256-fR+ea25SqOMksBJXgSjuVvv2xSBoadZmPWP0IwxpiMA=";
       };
       "x86_64-linux" = {
         name = "x86_64";
-        hash = "sha256-15olERnpfe4PbDsDfw47vsYsqjFe8P8IDmSSGxGLtx8=";
+        hash = "sha256-bRP82jTVSJS46WuO8MVWFvte+2mCOSsGFDBaXdmdPHI=";
       };
     }.${stdenv.system} or (throw "Unsupported system");
   in fetchPypi {
@@ -55,13 +59,17 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    libnl
     openssl_1_1
   ];
 
   propagatedBuildInputs = [
+    aenum
     coloredlogs
     construct
+    cryptography
     dacite
+    ecdsa
     rich
     pyyaml
     ipdb

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , callPackage
+, pkg-config
 , swift
 , swiftpm
 , swiftpm2nix
@@ -27,14 +28,13 @@ stdenv.mkDerivation {
   inherit (sources) version;
   src = sources.sourcekit-lsp;
 
-  nativeBuildInputs = [ swift swiftpm ];
+  nativeBuildInputs = [ pkg-config swift swiftpm ];
   buildInputs = [
     Foundation
     XCTest
     sqlite
     ncursesInput
-  ]
-    ++ lib.optionals stdenv.isDarwin [ CryptoKit LocalAuthentication ];
+  ] ++ lib.optionals stdenv.isDarwin [ CryptoKit LocalAuthentication ];
 
   configurePhase = generated.configure + ''
     swiftpmMakeMutable indexstore-db

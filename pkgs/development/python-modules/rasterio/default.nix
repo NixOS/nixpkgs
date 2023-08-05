@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.3.6";
+  version = "1.3.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "rasterio";
     repo = "rasterio";
     rev = "refs/tags/${version}";
-    hash = "sha256-C5jenXcONNYiUNa5GQ7ATBi8m0JWvg8Dyp9+ejGX+Fs=";
+    hash = "sha256-8kPzUvTZ/jRDXlYMAZkG1xdLAQuzxnvHXBzwWizMOTo=";
   };
 
   nativeBuildInputs = [
@@ -68,12 +68,19 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    boto3
     hypothesis
     packaging
     pytest-randomly
     pytestCheckHook
     shapely
   ];
+
+  doCheck = true;
+
+  preCheck = ''
+    rm -r rasterio # prevent importing local rasterio
+  '';
 
   pytestFlagsArray = [
     "-m 'not network'"
@@ -86,12 +93,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "rasterio"
   ];
-
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    $out/bin/rio --version | grep ${version} > /dev/null
-  '';
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";

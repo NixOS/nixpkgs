@@ -10,21 +10,27 @@
 , shadow
 , systemd
 , coreutils
+, gitUpdater
+, busybox
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "22.4";
+  version = "23.2.2";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = "refs/tags/${version}";
-    hash = "sha256-MsT5t2da79Eb9FlTLPr2893JcF0ujNnToJTCQRT1QEo=";
+    hash = "sha256-lOeLVgT/qTB6JhRcLv9QIfNLMnMyNlUp3dMCqva9Tes=";
   };
 
-  patches = [ ./0001-add-nixos-support.patch ];
+  patches = [
+    ./0001-add-nixos-support.patch
+    # upstream: https://github.com/canonical/cloud-init/pull/4190
+    ./0002-Add-Udhcpc-support.patch
+  ];
 
   prePatch = ''
     substituteInPlace setup.py \
@@ -72,7 +78,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest ]}/bin"
+    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest busybox ]}/bin"
   ];
 
   disabledTests = [
@@ -82,6 +88,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_path_env_gets_set_from_main"
     # tries to read from /etc/ca-certificates.conf while inside the sandbox
     "test_handler_ca_certs"
+    "TestRemoveDefaultCaCerts"
     # Doesn't work in the sandbox
     "TestEphemeralDhcpNoNetworkSetup"
     "TestHasURLConnectivity"
@@ -112,13 +119,17 @@ python3.pkgs.buildPythonApplication rec {
     "cloudinit"
   ];
 
-  passthru.tests = { inherit (nixosTests) cloud-init cloud-init-hostname; };
+  passthru = {
+    tests = { inherit (nixosTests) cloud-init cloud-init-hostname; };
+    updateScript = gitUpdater { ignoredVersions = ".ubuntu.*"; };
+  };
 
   meta = with lib; {
-    homepage = "https://cloudinit.readthedocs.org";
+    homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
+    changelog = "https://github.com/canonical/cloud-init/raw/${version}/ChangeLog";
     license = with licenses; [ asl20 gpl3Plus ];
-    maintainers = with maintainers; [ illustris ];
+    maintainers = with maintainers; [ illustris jfroche ];
     platforms = platforms.all;
   };
 }

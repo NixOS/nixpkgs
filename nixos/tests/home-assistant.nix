@@ -61,6 +61,11 @@ in {
         # https://www.home-assistant.io/integrations/frontend/
         frontend = {};
 
+        # include some popular integrations, that absolutely shouldn't break
+        knx = {};
+        shelly = {};
+        zha = {};
+
         # set up a wake-on-lan switch to test capset capability required
         # for the ping suid wrapper
         # https://www.home-assistant.io/integrations/wake_on_lan/
@@ -107,7 +112,7 @@ in {
     # Cause a configuration change that requires a service restart as we added a new runtime dependency
     specialisation.newFeature = {
       inheritParentConfig = true;
-      configuration.services.home-assistant.config.esphome = {};
+      configuration.services.home-assistant.config.backup = {};
     };
   };
 
@@ -192,7 +197,7 @@ in {
 
     with subtest("Check that new components get setup after restart"):
         journal = get_journal_since(cursor)
-        for domain in ["esphome"]:
+        for domain in ["backup"]:
             assert f"Setup of domain {domain} took" in journal, f"{domain} setup missing"
 
     with subtest("Check that no errors were logged"):

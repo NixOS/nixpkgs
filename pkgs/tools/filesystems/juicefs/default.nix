@@ -26,6 +26,10 @@ buildGoModule rec {
     rm $out/bin/libjfs
   '';
 
+  postInstall = ''
+    ln -s $out/bin/juicefs $out/bin/mount.juicefs
+  '';
+
   meta = with lib; {
     description = "A distributed POSIX file system built on top of Redis and S3";
     homepage = "https://www.juicefs.com/";

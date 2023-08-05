@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile
+{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile_2_2
 , python3, gettext, flex, perl, bison, pkg-config, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
+, freefont_ttf, makeFontsConf
 , makeWrapper, t1utils, boehmgc, rsync
 , texlive, tex ? texlive.combine {
     inherit (texlive) scheme-small lh metafont epsf fontinst;
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook bison flex makeWrapper pkg-config ];
 
   buildInputs =
-    [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
+    [ ghostscript texinfo imagemagick texi2html guile_2_2 dblatex tex zip netpbm
       python3 gettext perl fontconfig freetype pango
       fontforge help2man groff t1utils boehmgc rsync
     ];
@@ -62,4 +63,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ marcweber yurrriq ];
     platforms = platforms.all;
   };
+
+  FONTCONFIG_FILE = lib.optional stdenv.isDarwin (makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
+  });
 }

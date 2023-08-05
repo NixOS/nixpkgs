@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
+import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "odoo";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ mkg20001 ];
-  };
+  meta.maintainers = with lib.maintainers; [ mkg20001 ];
 
   nodes = {
     server = { ... }: {

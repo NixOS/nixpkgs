@@ -16,14 +16,14 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pekwm";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "pekdon";
     repo = "pekwm";
-    rev = "release-${self.version}";
+    rev = "release-${finalAttrs.version}";
     hash= "sha256-hA+TBAs9NMcc5DKIkzyUHWck3Xht+yeCO54xJ6oXXuQ=";
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation (self: {
         they should when starting applications.
       - Chainable Keygrabber, usability for everyone.
     '';
-    changelog = "https://raw.githubusercontent.com/pekwm/pekwm/release-${self.version}/NEWS.md";
+    changelog = "https://raw.githubusercontent.com/pekwm/pekwm/release-${finalAttrs.version}/NEWS.md";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.linux;

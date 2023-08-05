@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fuse3, bzip2, zlib, attr, cmake }:
+{ lib, stdenv, fetchFromGitHub, fuse, fuse3, bzip2, zlib, attr, cmake }:
 
 stdenv.mkDerivation {
   pname = "apfs-fuse-unstable";
@@ -12,8 +12,22 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ fuse3 bzip2 zlib attr ];
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "/usr/local/lib/libosxfuse.dylib" "fuse"
+  '';
+
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    (if stdenv.isDarwin then fuse else fuse3)
+    bzip2
+    zlib
+  ] ++ lib.optional stdenv.isLinux attr;
+
+  cmakeFlags = lib.optional stdenv.isDarwin "-DUSE_FUSE3=OFF";
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DUSE_FUSE2";
 
   postFixup = ''
     ln -s $out/bin/apfs-fuse $out/bin/mount.fuse.apfs-fuse
@@ -24,7 +38,7 @@ stdenv.mkDerivation {
     description = "FUSE driver for APFS (Apple File System)";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ealasu ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 
 }

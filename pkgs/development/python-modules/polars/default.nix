@@ -4,15 +4,18 @@
 , pythonOlder
 , rustPlatform
 , libiconv
-, fetchzip
+, fetchFromGitHub
 , typing-extensions
+, darwin
 }:
 let
   pname = "polars";
-  version = "0.15.13";
-  rootSource = fetchzip {
-    url = "https://github.com/pola-rs/${pname}/archive/refs/tags/py-${version}.tar.gz";
-    hash = "sha256-bk2opNLN3L+fkzXVfUU5O37UmA27ijmnAElCHjsuI+o=";
+  version = "0.18.0"; # Can't update to >0.18.0 until we get rust 1.71
+  rootSource = fetchFromGitHub {
+    owner = "pola-rs";
+    repo = "polars";
+    rev = "refs/tags/py-${version}";
+    hash = "sha256-uzo8KPEegaVuzrfKUmsHheQfmm9hVMgkNJMWdfqDrw8=";
   };
 in
 buildPythonPackage {
@@ -21,32 +24,33 @@ buildPythonPackage {
   disabled = pythonOlder "3.6";
   src = rootSource;
 
-  # Cargo.lock files is sometimes behind actual release which throws an error,
+  # Cargo.lock file is sometimes behind actual release which throws an error,
   # thus the `sed` command
   # Make sure to check that the right substitutions are made when updating the package
   preBuild = ''
-      cd py-polars
-      sed -i 's/version = "0.15.11"/version = "${version}"/g' Cargo.lock
+    cd py-polars
+    #sed -i 's/version = "0.18.0"/version = "${version}"/g' Cargo.lock
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    src = rootSource;
-    preBuild = ''
-        cd py-polars
-    '';
-    name = "${pname}-${version}";
-    hash = "sha256-u7ascftUPz8K+gWwjjxdXXFJf++M+8P9QE/KVJkO5DM=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
+    };
   };
   cargoRoot = "py-polars";
 
   # Revisit this whenever package or Rust is upgraded
   RUSTC_BOOTSTRAP = 1;
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   pythonImportsCheck = [ "polars" ];
   # nativeCheckInputs = [
@@ -60,7 +64,6 @@ buildPythonPackage {
   # ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Fast multi-threaded DataFrame library in Rust | Python | Node.js ";
     homepage = "https://github.com/pola-rs/polars";
     license = licenses.asl20;

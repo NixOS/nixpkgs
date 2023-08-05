@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "llhttp";
-  version = "8.1.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
     rev = "release/v${version}";
-    hash = "sha256-pBGjcT5MiCSJI12TiH1XH5eAzIeylCdP/82L3o38BJo=";
+    hash = "sha256-srAHKyYvdEGtjV7BwcKQArwAChRoZqTCfa/RefI/8wQ=";
   };
 
   nativeBuildInputs = [

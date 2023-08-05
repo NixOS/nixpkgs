@@ -62,8 +62,6 @@ in {
 
   ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
 
-  lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
-
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
   # Tests fail in GHC 9.2
@@ -83,8 +81,8 @@ in {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = doDistribute self.ghc-lib-parser_9_4_4_20221225;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_4_20221225;
+  ghc-lib = doDistribute self.ghc-lib_9_4_5_20230430;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_5_20230430;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_4_0_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable-time = doJailbreak super.hashable-time;
@@ -108,14 +106,6 @@ in {
   # generically needs base-orphans for 9.4 only
   base-orphans = dontCheck (doDistribute super.base-orphans);
   generically = addBuildDepend self.base-orphans super.generically;
-
-  # Note: Any compilation fixes need to be done on the versioned attributes,
-  # since those are used for the internal dependencies between the versioned
-  # hspec packages in configuration-common.nix.
-  hspec = self.hspec_2_10_10;
-  hspec-core = self.hspec-core_2_10_10;
-  hspec-meta = self.hspec-meta_2_10_5;
-  hspec-discover = self.hspec-discover_2_10_10;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
@@ -182,7 +172,7 @@ in {
   ghc-exactprint = overrideCabal (drv: {
     libraryHaskellDepends = with self; [ HUnit data-default fail filemanip free ghc-paths ordered-containers silently syb Diff ];
   })
-    self.ghc-exactprint_1_6_1_1;
+    self.ghc-exactprint_1_6_1_3;
 
   # needed to build servant
   http-api-data = super.http-api-data_0_5_1;
@@ -197,21 +187,14 @@ in {
   servant-swagger = doJailbreak super.servant-swagger;
   servant-client-core = doJailbreak super.servant-client-core;
   servant-client = doJailbreak super.servant-client;
-  relude = doJailbreak super.relude;
+  # https://github.com/kowainik/relude/issues/436
+  relude = dontCheck (doJailbreak super.relude);
 
-  # Fixes compilation failure with GHC >= 9.4 on aarch64-* due to an API change
-  cborg = appendPatch (pkgs.fetchpatch {
-    name = "cborg-support-ghc-9.4.patch";
-    url = "https://github.com/well-typed/cborg/pull/304.diff";
-    sha256 = "sha256-W4HldlESKOVkTPhz9nkFrvbj9akCOtF1SbIt5eJqtj8=";
-    relative = "cborg";
-  }) super.cborg;
-
-  # https://github.com/tweag/ormolu/issues/941
   ormolu = doDistribute self.ormolu_0_5_3_0;
+  # https://github.com/tweag/ormolu/issues/941
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_0_0);
+  }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
 
   # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
   # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
@@ -222,9 +205,6 @@ in {
   cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
   pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
 
-  # The gtk2hs setup hook provided by this package lacks the ppOrdering field that
-  # recent versions of Cabal require. This leads to builds like cairo and glib
-  # failing during the Setup.hs phase: https://github.com/gtk2hs/gtk2hs/issues/323.
-  gtk2hs-buildtools = appendPatch ./patches/gtk2hs-buildtools-fix-ghc-9.4.x.patch super.gtk2hs-buildtools;
-
+  # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
+  gtk = doJailbreak super.gtk;
 }

@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zookeeper";
-  version = "3.6.3";
+  version = "3.7.1";
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${pname}-${version}/apache-${pname}-${version}-bin.tar.gz";
-    sha512 = "3f7b1b7d9cf5647d52ad0076c922e108fa956e986b5624667c493cf6d8ff09d3ca88f623c79a799fe49c72e868cb3c9d0f77cb69608de74a183b2cbad10bc827";
+    sha512 = "sha512-kQNiilB0X6GiibymZv2kqcCOwXxVzxPmaIfnunbpPbrmCh8f/WwQeYvjoWBpNE7LwAzrspvwPZzXCWzNCY7QEQ==";
   };
 
   nativeBuildInputs = [ makeWrapper ];

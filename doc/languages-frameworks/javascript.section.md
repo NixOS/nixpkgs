@@ -143,7 +143,7 @@ To update NPM packages in nixpkgs, run the same `generate.sh` script:
 #### Git protocol error {#javascript-git-error}
 
 Some packages may have Git dependencies from GitHub specified with `git://`.
-GitHub has [disabled unecrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
+GitHub has [disabled unencrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
 
 ```
 The unauthenticated git protocol on port 9418 is no longer supported
@@ -196,10 +196,14 @@ buildNpmPackage rec {
 * `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
 * `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 * `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
+* `npmWorkspace`: The workspace directory within the project to build and install.
+* `dontNpmBuild`: Option to disable running the build script. Set to `true` if the package does not have a build script. Defaults to `false`. Alternatively, setting `buildPhase` explicitly also disables this.
+* `dontNpmInstall`: Option to disable running `npm install`. Defaults to `false`. Alternatively, setting `installPhase` explicitly also disables this.
 * `npmFlags`: Flags to pass to all npm commands.
-* `npmInstallFlags`: Flags to pass to `npm ci` and `npm prune`.
+* `npmInstallFlags`: Flags to pass to `npm ci`.
 * `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
 * `npmPackFlags`: Flags to pass to `npm pack`.
+* `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 
@@ -229,7 +233,7 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 #### Pitfalls {#javascript-node2nix-pitfalls}
 
 - If upstream package.json does not have a "version" attribute, `node2nix` will crash. You will need to add it like shown in [the package.json section](#javascript-upstream-package-json).
-- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs-16_x`.
+- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs_16`.
 - `node2nix` does not like missing packages from NPM. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of NPM.
 
 ### yarn2nix {#javascript-yarn2nix}

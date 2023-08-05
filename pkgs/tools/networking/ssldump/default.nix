@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ssldump";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "adulau";
     repo = "ssldump";
     rev = "v${version}";
-    sha256 = "sha256-mK8n+Dn7fUzmclUzlIqGjO2zzIVKQEhSRvYeuFwVJx8=";
+    sha256 = "sha256-BFE42wWqnGGTTjwej3LkH4XW2M4jP7XNSKHLnF2GFJo=";
   };
 
   nativeBuildInputs = [

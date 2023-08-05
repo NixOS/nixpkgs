@@ -31,7 +31,7 @@ mkDerivation rec {
 
   cmakeFlags = [
     # adding qt6 to buildInputs would result in error: detected mismatched Qt dependencies
-    "-DCMAKE_PREFIX_PATH=${qt6.qtbase.dev}"
+    "-DCMAKE_PREFIX_PATH=${qt6.qtbase}"
     "-DENABLE_QT4=0"
     "-DENABLE_QT6=1"
   ];
@@ -47,6 +47,8 @@ mkDerivation rec {
     libxcb
     libXdmcp
   ];
+
+  qtWrapperArgs = [ "--prefix" "FCITX_ADDON_DIRS" ":" "${placeholder "out"}/lib/fcitx5" ];
 
   meta = with lib; {
     description = "Fcitx5 Qt Library";

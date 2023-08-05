@@ -27,6 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-+SZICysgSC4XeXC9CCl6Yxb47V9c1eMp7KcpH8J7kK0=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=__version__," 'version="${version}",'
+  '';
+
   propagatedBuildInputs = [
     certifi
     charset-normalizer

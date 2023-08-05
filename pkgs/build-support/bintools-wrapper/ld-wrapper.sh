@@ -55,10 +55,12 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
             # produces '-syslibroot //' linker flag. It's a no-op,
             # which does not introduce impurities.
             n+=1; skip "$p2"
-        elif [ "${p:0:1}" = / ] && badPath "$p"; then
-            # We cannot skip this; barf.
-            echo "impure path \`$p' used in link" >&2
-            exit 1
+        elif [ "${p:0:10}" = /LIBPATH:/ ] && badPath "${p:9}"; then
+            reject "${p:9}"
+        # We need to not match LINK.EXE-style flags like
+        # /NOLOGO or /LIBPATH:/nix/store/foo
+        elif [[ $p =~ ^/[^:]*/ ]] && badPath "$p"; then
+            reject "$p"
         elif [ "${p:0:9}" = --sysroot ]; then
             # Our ld is not built with sysroot support (Can we fix that?)
             :

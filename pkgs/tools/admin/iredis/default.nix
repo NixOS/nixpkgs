@@ -1,25 +1,27 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "iredis";
-  version = "1.13.0";
+  version = "1.13.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1e4e7936d0be456f70a39abeb1c97d931f66ccd60e891f4fd796ffb06dfeaf9";
+    sha256 = "sha256-MWzbmuxUKh0yBgar1gk8QGJQwbHtINsbCsbTM+RLmQo=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'click = "^7.0"' 'click = "*"' \
-      --replace 'wcwidth = "0.1.9"' 'wcwidth = "*"'
-  '';
+  pythonRelaxDeps = [
+    "configobj"
+    "wcwidth"
+    "click"
+    "packaging"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -48,6 +50,9 @@ buildPythonApplication rec {
     "--deselect=tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
     # Only execute unittests, because cli tests require a running Redis
     "tests/unittests/"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Flaky test
+    "--deselect=tests/unittests/test_utils.py::test_timer"
   ];
 
   pythonImportsCheck = [ "iredis" ];

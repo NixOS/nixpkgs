@@ -3,7 +3,6 @@
   "arcmenu@arcmenu.com" = callPackage ./arcmenu { };
   "argos@pew.worldwidemann.com" = callPackage ./argos { };
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
-  "dash-to-dock@micxgx.gmail.com" = callPackage ./dash-to-dock { };
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
   "gsconnect@andyholmes.github.io" = callPackage ./gsconnect { };
@@ -18,5 +17,6 @@
   "taskwhisperer-extension@infinicode.de" = callPackage ./taskwhisperer { };
   "tilingnome@rliang.github.com" = callPackage ./tilingnome { };
   "TopIcons@phocean.net" = callPackage ./topicons-plus { };
+  "valent@andyholmes.ca" = callPackage ./valent { };
   "window-corner-preview@fabiomereu.it" = callPackage ./window-corner-preview { };
 }

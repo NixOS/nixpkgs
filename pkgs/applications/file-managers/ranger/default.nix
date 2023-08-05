@@ -55,5 +55,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ toonn magnetophon ];
+    mainProgram = "ranger";
   };
 }

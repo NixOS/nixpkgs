@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, callPackage
 , makeWrapper
 , clang
 , llvm
@@ -35,6 +34,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  postInstall = ''
+    mkdir -p $out/lib
+    cp libhfuzz/libhfuzz.a $out/lib
+    cp libhfuzz/libhfuzz.so $out/lib
+    cp libhfcommon/libhfcommon.a $out/lib
+    cp libhfnetdriver/libhfnetdriver.a $out/lib
+  '';
+
   meta = {
     description =
       "A security oriented, feedback-driven, evolutionary, easy-to-use fuzzer";
@@ -53,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://honggfuzz.dev/";
     license = lib.licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ cpu chivay ];
   };
 }

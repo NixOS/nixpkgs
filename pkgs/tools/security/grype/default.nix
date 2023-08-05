@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.61.0";
+  version = "0.65.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PPCeEhV4+iSGDBUIN89wlEUEX20bkcX3B7LxU7JDZQc=";
+    hash = "sha256-hmjg1W1E1pdrHxPA7qbEJP0R1mEiV0P54+y+RXxKH4c=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-L77tzgcshTNAvg6fKkgN6zdDws76wWoJvygAdArscVI=";
+  vendorHash = "sha256-VxsXhNOFj7Iwq7Sa2J8ADcfLt9Bz+D0RHwEGawveryU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,16 +38,16 @@ buildGoModule rec {
     openssl
   ];
 
-  subPackages = [ "." ];
+  subPackages = [ "cmd/grype" ];
 
   excludedPackages = "test/integration";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/anchore/grype/internal/version.version=${version}"
-    "-X github.com/anchore/grype/internal/version.gitDescription=v${version}"
-    "-X github.com/anchore/grype/internal/version.gitTreeState=clean"
+    "-X=github.com/anchore/grype/internal/version.version=${version}"
+    "-X=github.com/anchore/grype/internal/version.gitDescription=v${version}"
+    "-X=github.com/anchore/grype/internal/version.gitTreeState=clean"
   ];
 
   preBuild = ''
@@ -80,8 +80,7 @@ buildGoModule rec {
       --replace "TestRegistryAuth" "SkipRegistryAuth"
     substituteInPlace test/cli/sbom_input_test.go \
       --replace "TestSBOMInput_FromStdin" "SkipSBOMInput_FromStdin" \
-      --replace "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument" \
-      --replace "TestAttestationInput_AsArgument" "SkipAttestationInput_AsArgument"
+      --replace "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument"
     substituteInPlace test/cli/subprocess_test.go \
       --replace "TestSubprocessStdin" "SkipSubprocessStdin"
 

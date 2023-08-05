@@ -12,12 +12,13 @@ let
           ln -s ${config.environment.usrbinenv} $out/env
           ln -s ${config.environment.binsh} $out/sh
         '' + cfg.extraFallbackPathCommands)}"
+        "nofail"
       ];
     };
     "/bin" = {
       device = "/usr/bin";
       fsType = "none";
-      options = [ "bind" ];
+      options = [ "bind" "nofail" ];
     };
   };
 in {

@@ -5,7 +5,7 @@ Subject: [PATCH 3/3] akonadi revert make relocatable
 
 ---
  CMakeLists.txt            | 3 ---
- KF5AkonadiConfig.cmake.in | 6 +++---
+ KPimAkonadiConfig.cmake.in | 6 +++---
  2 files changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -13,8 +13,8 @@ index 4e8cc81..63161b7 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -368,9 +368,6 @@ configure_package_config_file(
-     "${CMAKE_CURRENT_SOURCE_DIR}/KF5AkonadiConfig.cmake.in"
-     "${CMAKE_CURRENT_BINARY_DIR}/KF5AkonadiConfig.cmake"
+     "${CMAKE_CURRENT_SOURCE_DIR}/KPimAkonadiConfig.cmake.in"
+     "${CMAKE_CURRENT_BINARY_DIR}/KPimAkonadiConfig.cmake"
      INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
 -    PATH_VARS AKONADI_DBUS_INTERFACES_INSTALL_DIR
 -              AKONADI_INCLUDE_DIR
@@ -22,10 +22,10 @@ index 4e8cc81..63161b7 100644
  )
  
  install(FILES
-diff --git a/KF5AkonadiConfig.cmake.in b/KF5AkonadiConfig.cmake.in
+diff --git a/KPimAkonadiConfig.cmake.in b/KPimAkonadiConfig.cmake.in
 index bcf7320..1574319 100644
---- a/KF5AkonadiConfig.cmake.in
-+++ b/KF5AkonadiConfig.cmake.in
+--- a/KPimAkonadiConfig.cmake.in
++++ b/KPimAkonadiConfig.cmake.in
 @@ -1,10 +1,10 @@
  @PACKAGE_INIT@
  

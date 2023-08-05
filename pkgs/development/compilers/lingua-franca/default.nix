@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lfc";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchzip {
-    url = "https://github.com/lf-lang/lingua-franca/releases/download/v${version}/lfc_${version}.zip";
-    sha256 = "sha256-jSINlwHfSOPbti3LJTXpSk6lcUtwKfz7CMLtq2OuNns=";
+    url = "https://github.com/lf-lang/lingua-franca/releases/download/v${version}/lf-cli-${version}.zip";
+    sha256 = "sha256-LrAm77iPUlqVfRdYy2bZ4mim7DHIr5JxPdbrgxokGvc=";
   };
 
   buildInputs = [ jdk17_headless ];

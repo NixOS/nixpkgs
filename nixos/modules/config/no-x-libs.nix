@@ -26,7 +26,12 @@ with lib;
 
     fonts.fontconfig.enable = false;
 
-    nixpkgs.overlays = singleton (const (super: {
+    nixpkgs.overlays = singleton (self: super: let
+      packageOverrides = const (python-prev: {
+        # tk feature requires wayland which fails to compile
+        matplotlib = python-prev.matplotlib.override { enableGtk3 = false; enableTk = false; enableQt = false; };
+      });
+    in {
       beam = super.beam_nox;
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
@@ -38,7 +43,9 @@ with lib;
       gpsd = super.gpsd.override { guiSupport = false; };
       graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {
-        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableX11 = false; };
+        gst-plugins-bad = super.gst_all_1.gst-plugins-bad.override { guiSupport = false; };
+        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableWayland = false; enableX11 = false; };
+        gst-plugins-good = super.gst_all_1.gst-plugins-good.override { enableX11 = false; };
       };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
@@ -47,7 +54,7 @@ with lib;
       libva = super.libva-minimal;
       limesuite = super.limesuite.override { withGui = false; };
       mc = super.mc.override { x11Support = false; };
-      mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; };
+      mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; waylandSupport = false; };
       msmtp = super.msmtp.override { withKeyring = false; };
       neofetch = super.neofetch.override { x11Support = false; };
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
@@ -59,6 +66,9 @@ with lib;
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       pango = super.pango.override { x11Support = false; };
       pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
+      pipewire = super.pipewire.override { x11Support = false; };
+      python3 = super.python3.override { inherit packageOverrides; };
+      python3Packages = self.python3.pkgs; # required otherwise overlays from above are not forwarded
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
       qt5 = super.qt5.overrideScope (const (super': {
@@ -69,6 +79,6 @@ with lib;
       util-linux = super.util-linux.override { translateManpages = false; };
       vim-full = super.vim-full.override { guiSupport = false; };
       zbar = super.zbar.override { enableVideo = false; withXorg = false; };
-    }));
+    });
   };
 }

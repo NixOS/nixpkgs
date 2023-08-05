@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "deploy-rs";
-  version = "unstable-2023-01-19";
+  version = "unstable-2023-06-04";
 
   src = fetchFromGitHub {
     owner = "serokell";
     repo = "deploy-rs";
-    rev = "8c9ea9605eed20528bf60fae35a2b613b901fd77";
-    hash = "sha256-QO1xF7stu5ZMDLbHN30LFolMAwY6TVlzYvQoUs1RD68=";
+    rev = "65211db63ba1199f09b4c9f27e5eba5ec50d76ac";
+    hash = "sha256-1FldJ059so0X/rScdbIiOlQbjjSNCCTdj2cUr5pHU4A=";
   };
 
-  cargoHash = "sha256-UKiG2Muw3cT17TCl0pZQGfzVdN5tajSZ1ULyGRaZ9tQ=";
+  cargoHash = "sha256-iUYtLH01YGxsDQbSnQrs4jw2eJxsOn2v3HOIfhsZbdQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices

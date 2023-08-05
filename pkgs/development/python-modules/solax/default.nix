@@ -6,22 +6,31 @@
 , pytest-cov
 , pytest-httpserver
 , pytestCheckHook
+, pythonOlder
 , setuptools-scm
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "solax";
-  version = "0.3.0";
+  version = "0.3.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lqzFY2Rfmc/9KUuFfq07DZkIIS2cJ1JqZ/8gP3+pu5U=";
+    hash = "sha256-7UDTG8rw9XJd5LPqcAe2XyE7DQa96dBj9YOcgW+/aFc=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ aiohttp voluptuous ];
+  propagatedBuildInputs = [
+    aiohttp
+    voluptuous
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -30,7 +39,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "solax" ];
+  pythonImportsCheck = [
+    "solax"
+  ];
 
   meta = with lib; {
     description = "Python wrapper for the Solax Inverter API";

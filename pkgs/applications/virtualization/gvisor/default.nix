@@ -33,7 +33,7 @@ buildGoModule rec {
   subPackages = [ "runsc" "shim" ];
 
   postInstall = ''
-    # Needed for the 'runsc do' subcomand
+    # Needed for the 'runsc do' subcommand
     wrapProgram $out/bin/runsc \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
     mv $out/bin/shim $out/bin/containerd-shim-runsc-v1

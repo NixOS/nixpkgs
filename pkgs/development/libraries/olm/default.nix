@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "olm";
-  version = "3.2.14";
+  version = "3.2.15";
 
   src = fetchFromGitLab {
     domain = "gitlab.matrix.org";
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Bcdl3myzWZb8vu3crYDKt8hEXD9QcZGOphT2KIZ+R14=";
+    sha256 = "sha256-1mT0mcwssqe+DN502ExkcC/q3w9uBmlTil2gVJsMvvc=";
   };
 
   nativeBuildInputs = [ cmake ];

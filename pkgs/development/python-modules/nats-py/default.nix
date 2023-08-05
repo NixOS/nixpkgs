@@ -45,6 +45,7 @@ buildPythonPackage rec {
     "test_pull_subscribe_limits"
     "test_fetch_n"
     "test_subscribe_no_echo"
+    "test_stream_management"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_subscribe_iterate_next_msg"
     "test_buf_size_force_flush_timeout"
@@ -57,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for NATS.io";
     homepage = "https://github.com/nats-io/nats.py";
+    changelog = "https://github.com/nats-io/nats.py/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
