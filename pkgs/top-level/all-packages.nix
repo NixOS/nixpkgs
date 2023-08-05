@@ -1816,6 +1816,8 @@ with pkgs;
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
 
+  markdownlint-cli = callPackage ../tools/text/markdownlint-cli { };
+
   mbidled = callPackage ../tools/networking/mbidled { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };

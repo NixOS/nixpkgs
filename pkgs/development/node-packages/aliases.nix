@@ -49,6 +49,7 @@ mapAliases {
   flood = pkgs.flood; # Added 2023-07-25
   gtop = pkgs.gtop; # added 2023-07-31
   manta = pkgs.node-manta; # Added 2023-05-06
+  markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   thelounge = pkgs.thelounge; # Added 2023-05-22
