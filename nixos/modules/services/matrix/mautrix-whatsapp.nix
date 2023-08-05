@@ -3,91 +3,60 @@
   config,
   pkgs,
   ...
-}:
-with lib; let
+}: let
   cfg = config.services.mautrix-whatsapp;
   dataDir = "/var/lib/mautrix-whatsapp";
   registrationFile = "${dataDir}/whatsapp-registration.yaml";
   settingsFile = "${dataDir}/config.json";
   settingsFileUnsubstituted = settingsFormat.generate "mautrix-whatsapp-config-unsubstituted.json" cfg.settings;
   settingsFormat = pkgs.formats.json {};
+  appservicePort = 29318;
 in {
+  imports = [];
   options.services.mautrix-whatsapp = {
-    enable = mkEnableOption "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp.";
+    enable = lib.mkEnableOption "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp.";
 
-    settings = mkOption rec {
-      apply = recursiveUpdate default;
-      inherit (settingsFormat) type;
-
-      default = {
-        homeserver = {
-          domain = config.services.matrix-synapse.settings.server_name;
-        };
-        appservice = rec {
-          address = "http://localhost:${toString port}";
-          hostname = "[::]";
-          port = 29318;
-          database = {
-            type = "sqlite3";
-            uri = "${dataDir}/mautrix-whatsapp.db";
-          };
-          id = "whatsapp";
-          bot = {
-            username = "whatsappbot";
-            displayname = "WhatsApp Bridge Bot";
-          };
-          as_token = "";
-          hs_token = "";
-        };
-        bridge = {
-          username_template = "whatsapp_{{.}}";
-          displayname_template = "{{if .BusinessName}}{{.BusinessName}}{{else if .PushName}}{{.PushName}}{{else}}{{.JID}}{{end}} (WA)";
-          double_puppet_server_map = {};
-          login_shared_secret_map = {};
-          command_prefix = "!wa";
-          permissions."*" = "relay";
-          relay = {
-            enabled = true;
-          };
-        };
-        logging = {
-          min_level = "info";
-          writers = [
-            {
-              type = "stdout";
-              format = "pretty-colored";
-            }
-            {
-              type = "file";
-              format = "json";
-            }
-          ];
-        };
-      };
-      example = {
-        settings = {
-          homeserver.address = "https://matrix.myhomeserver.org";
-          appservice.database = {
-            type = "postgres";
-            uri = "postgresql:///mautrix_whatsapp?host=/run/postgresql";
-          };
-          bridge.permissions = {
-            "@admin:myhomeserver.org" = "admin";
-          };
-        };
-      };
+    settings = lib.mkOption {
+      type = settingsFormat.type;
+      default = {};
       description = lib.mdDoc ''
         {file}`config.yaml` configuration as a Nix attribute set.
         Configuration options should match those described in
         [example-config.yaml](https://github.com/mautrix/whatsapp/blob/master/example-config.yaml).
-
         Secret tokens should be specified using {option}`environmentFile`
         instead of this world-readable attribute set.
       '';
+      example = {
+        appservice = {
+          database = {
+            type = "postgres";
+            uri = "postgresql:///mautrix_whatsapp?host=/run/postgresql";
+          };
+          id = "whatsapp";
+          ephemeral_events = false;
+        };
+        bridge = {
+          history_sync = {
+            request_full_sync = true;
+          };
+          private_chat_portal_meta = true;
+          mute_bridging = true;
+          encryption = {
+            allow = true;
+            default = true;
+            require = true;
+          };
+          provisioning = {
+            shared_secret = "disable";
+          };
+          permissions = {
+            "example.com" = "user";
+          };
+        };
+      };
     };
-
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = lib.mdDoc ''
         File containing environment variables to be passed to the mautrix-whatsapp service,
@@ -96,10 +65,10 @@ in {
       '';
     };
 
-    serviceDependencies = mkOption {
-      type = with types; listOf str;
-      default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
-      defaultText = literalExpression ''
+    serviceDependencies = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = lib.optional config.services.matrix-synapse.enable "matrix-synapse.service";
+      defaultText = lib.literalExpression ''
         optional config.services.matrix-synapse.enable "matrix-synapse.service"
       '';
       description = lib.mdDoc ''
@@ -108,7 +77,51 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+    services.mautrix-whatsapp.settings = {
+      homeserver = {
+        domain = lib.mkDefault config.services.matrix-synapse.settings.server_name;
+      };
+      appservice = {
+        address = lib.mkDefault "http://localhost:${toString appservicePort}";
+        hostname = lib.mkDefault "[::]";
+        port = lib.mkDefault appservicePort;
+        database = {
+          type = lib.mkDefault "sqlite3";
+          uri = lib.mkDefault "${dataDir}/mautrix-whatsapp.db";
+        };
+        id = lib.mkDefault "whatsapp";
+        bot = {
+          username = lib.mkDefault "whatsappbot";
+          displayname = lib.mkDefault "WhatsApp Bridge Bot";
+        };
+        as_token = lib.mkDefault "";
+        hs_token = lib.mkDefault "";
+      };
+      bridge = {
+        username_template = lib.mkDefault "whatsapp_{{.}}";
+        displayname_template = lib.mkDefault "{{if .BusinessName}}{{.BusinessName}}{{else if .PushName}}{{.PushName}}{{else}}{{.JID}}{{end}} (WA)";
+        double_puppet_server_map = lib.mkDefault {};
+        login_shared_secret_map = lib.mkDefault {};
+        command_prefix = lib.mkDefault "!wa";
+        permissions."*" = lib.mkDefault "relay";
+        relay.enabled = lib.mkDefault true;
+      };
+      logging = {
+        min_level = lib.mkDefault "info";
+        writers = [
+          {
+            type = lib.mkDefault "stdout";
+            format = lib.mkDefault "pretty-colored";
+          }
+          {
+            type = lib.mkDefault "file";
+            format = lib.mkDefault "json";
+          }
+        ];
+      };
+    };
+
     systemd.services.mautrix-whatsapp = {
       description = "Mautrix-WhatsApp Service - A WhatsApp bridge for Matrix";
 
@@ -182,4 +195,5 @@ in {
       restartTriggers = [settingsFileUnsubstituted];
     };
   };
+  meta.maintainers = with lib.maintainers; [frederictobiasc];
 }
