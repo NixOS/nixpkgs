@@ -52,6 +52,12 @@ python3Packages.buildPythonApplication {
 
   patches = extraPatches;
 
+  postPatch = ''
+    # https://github.com/beetbox/beets/pull/4868
+    substituteInPlace beets/util/artresizer.py \
+      --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
+  '';
+
   propagatedBuildInputs = with python3Packages; [
     confuse
     gst-python
