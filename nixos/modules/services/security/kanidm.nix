@@ -122,8 +122,8 @@ in
           };
           log_level = lib.mkOption {
             description = lib.mdDoc "Log level of the server.";
-            default = "default";
-            type = lib.types.enum [ "default" "verbose" "perfbasic" "perffull" ];
+            default = "info";
+            type = lib.types.enum [ "info" "debug" "trace" ];
           };
           role = lib.mkOption {
             description = lib.mdDoc "The role of this server. This affects the replication relationship and thereby available features.";
@@ -236,9 +236,15 @@ in
         {
           StateDirectory = "kanidm";
           StateDirectoryMode = "0700";
+          RuntimeDirectory = "kanidmd";
           ExecStart = "${pkgs.kanidm}/bin/kanidmd server -c ${serverConfigFile}";
           User = "kanidm";
           Group = "kanidm";
+
+          BindPaths = [
+            # To create the socket
+            "/run/kanidmd:/run/kanidmd"
+          ];
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
@@ -246,7 +252,7 @@ in
           PrivateUsers = lib.mkForce false;
           # Port needs to be exposed to the host network
           PrivateNetwork = lib.mkForce false;
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
           TemporaryFileSystem = "/:ro";
         }
       ];
@@ -273,6 +279,8 @@ in
             "-/etc/static/kanidm"
             "-/etc/ssl"
             "-/etc/static/ssl"
+            "-/etc/passwd"
+            "-/etc/group"
           ];
           BindPaths = [
             # To create the socket
@@ -327,6 +335,9 @@ in
 
     # These paths are hardcoded
     environment.etc = lib.mkMerge [
+      (lib.mkIf cfg.enableServer {
+        "kanidm/server.toml".source = serverConfigFile;
+      })
       (lib.mkIf options.services.kanidm.clientSettings.isDefined {
         "kanidm/config".source = clientConfigFile;
       })

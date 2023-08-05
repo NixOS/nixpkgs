@@ -8,6 +8,21 @@ let
 
   jsonFormat = pkgs.formats.json {};
 
+  defaultPHPSettings = {
+    short_open_tag = "Off";
+    expose_php = "Off";
+    error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
+    display_errors = "stderr";
+    "opcache.enable_cli" = "1";
+    "opcache.interned_strings_buffer" = "8";
+    "opcache.max_accelerated_files" = "10000";
+    "opcache.memory_consumption" = "128";
+    "opcache.revalidate_freq" = "1";
+    "opcache.fast_shutdown" = "1";
+    "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
+    catch_workers_output = "yes";
+  };
+
   inherit (cfg) datadir;
 
   phpPackage = cfg.phpPackage.buildEnv {
@@ -26,21 +41,12 @@ let
         ++ optional cfg.caching.memcached memcached
       )
       ++ cfg.phpExtraExtensions all; # Enabled by user
-    extraConfig = toKeyValue phpOptions;
+    extraConfig = toKeyValue cfg.phpOptions;
   };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
   };
-
-  phpOptions = {
-    upload_max_filesize = cfg.maxUploadSize;
-    post_max_size = cfg.maxUploadSize;
-    memory_limit = cfg.maxUploadSize;
-  } // cfg.phpOptions
-    // optionalAttrs cfg.caching.apcu {
-      "apc.enable_cli" = "1";
-    };
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
@@ -263,22 +269,33 @@ in {
 
     phpOptions = mkOption {
       type = types.attrsOf types.str;
-      default = {
-        short_open_tag = "Off";
-        expose_php = "Off";
-        error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
-        display_errors = "stderr";
-        "opcache.enable_cli" = "1";
-        "opcache.interned_strings_buffer" = "8";
-        "opcache.max_accelerated_files" = "10000";
-        "opcache.memory_consumption" = "128";
-        "opcache.revalidate_freq" = "1";
-        "opcache.fast_shutdown" = "1";
-        "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
-        catch_workers_output = "yes";
-      };
+      defaultText = literalExpression (generators.toPretty { } defaultPHPSettings);
       description = lib.mdDoc ''
         Options for PHP's php.ini file for nextcloud.
+
+        Please note that this option is _additive_ on purpose while the
+        attribute values inside the default are option defaults: that means that
+
+        ```nix
+        {
+          services.nextcloud.phpOptions."opcache.interned_strings_buffer" = "23";
+        }
+        ```
+
+        will override the `php.ini` option `opcache.interned_strings_buffer` without
+        discarding the rest of the defaults.
+
+        Overriding all of `phpOptions` (including `upload_max_filesize`, `post_max_size`
+        and `memory_limit` which all point to [](#opt-services.nextcloud.maxUploadSize)
+        by default) can be done like this:
+
+        ```nix
+        {
+          services.nextcloud.phpOptions = lib.mkForce {
+            /* ... */
+          };
+        }
+        ```
       '';
     };
 
@@ -750,6 +767,18 @@ in {
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "26" then pkgs.php81
         else pkgs.php82;
+
+      services.nextcloud.phpOptions = mkMerge [
+        (mapAttrs (const mkOptionDefault) defaultPHPSettings)
+        {
+          upload_max_filesize = cfg.maxUploadSize;
+          post_max_size = cfg.maxUploadSize;
+          memory_limit = cfg.maxUploadSize;
+        }
+        (mkIf cfg.caching.apcu {
+          "apc.enable_cli" = "1";
+        })
+      ];
     }
 
     { assertions = [

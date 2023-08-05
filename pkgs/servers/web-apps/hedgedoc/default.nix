@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "1.9.8";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     rev = version;
-    hash = "sha256-gp1TeYHwH7ffaSMifdURb2p+U8u6Xs4JU4b4qACEIDw=";
+    hash = "sha256-6eKTgEZ+YLoSmPQWBS95fJ+ioIxeTVlT+moqslByPPw=";
   };
 
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
@@ -42,7 +42,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-/jsBFGH/rYSovidmvIf7xpuHpxdW8QFYC08PNi38LH8=";
+    outputHash = "sha256-Ga+tl4oZlum43tdfez1oWGMHZAfyePGl47S+9NRRvW8=";
   };
 
 in stdenv.mkDerivation {
@@ -99,11 +99,12 @@ in stdenv.mkDerivation {
     tests = { inherit (nixosTests) hedgedoc; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Realtime collaborative markdown notes on all platforms";
-    license = licenses.agpl3;
+    license = lib.licenses.agpl3;
     homepage = "https://hedgedoc.org";
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.linux;
+    mainProgram = "hedgedoc";
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.linux;
   };
 }

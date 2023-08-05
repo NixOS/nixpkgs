@@ -45,7 +45,7 @@ buildPythonPackage rec {
     hash = "sha256-5j4hbG95KRfRQTyyZgoNp/eHIcy0FphyEhbYnzyUMO4=";
   };
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   patches = [
     # https://github.com/quantumlib/Cirq/pull/5991

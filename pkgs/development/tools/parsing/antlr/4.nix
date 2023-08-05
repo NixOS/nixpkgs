@@ -81,7 +81,7 @@ let
         pname = "antlr-runtime-cpp";
         inherit version;
         src = source;
-        sourceRoot = "source/runtime/Cpp";
+        sourceRoot = "${source.name}/runtime/Cpp";
 
         outputs = [ "out" "dev" "doc" ];
 

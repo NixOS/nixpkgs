@@ -16,7 +16,7 @@
 # originally extracted from dbeaver
 # created to allow using maven packages in the same style as rust
 
-stdenv.mkDerivation (rec {
+let
   fetchedMavenDeps = stdenv.mkDerivation ({
     name = "${pname}-${version}-maven-deps";
     inherit src patches;
@@ -44,6 +44,13 @@ stdenv.mkDerivation (rec {
     outputHashMode = "recursive";
     outputHash = mvnHash;
   } // mvnFetchExtraArgs);
+in
+stdenv.mkDerivation (builtins.removeAttrs args [ "mvnFetchExtraArgs" ] // {
+  inherit fetchedMavenDeps;
+
+  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
+    maven
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -53,4 +60,8 @@ stdenv.mkDerivation (rec {
 
     runHook postBuild
   '';
-} // builtins.removeAttrs args [ "mvnFetchExtraArgs" ])
+
+  meta = args.meta or { } // {
+    platforms = args.meta.platforms or maven.meta.platforms;
+  };
+})

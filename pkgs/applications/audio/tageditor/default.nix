@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.linux;
+    mainProgram = "tageditor";
   };
 }

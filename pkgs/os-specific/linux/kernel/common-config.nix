@@ -715,7 +715,7 @@ let
       MEDIA_PCI_SUPPORT        = yes;
       MEDIA_USB_SUPPORT        = yes;
       MEDIA_ANALOG_TV_SUPPORT  = yes;
-      VIDEO_STK1160_COMMON     = module;
+      VIDEO_STK1160_COMMON     = whenOlder "6.5" module;
     };
 
     "9p" = {

@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "nclib";
-  version = "1.0.2";
+  version = "1.0.3";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rA8oeYvMhw8HURxPLBRqpMHnAez/xBjyPFoKXIIvBjg=";
+    hash = "sha256-26KjYMxJMj5ANb2ej9hVl689sAcGHp89QUkH2xiLhZk=";
   };
 
   # Project has no tests

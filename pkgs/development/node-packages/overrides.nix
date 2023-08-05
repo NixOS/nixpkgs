@@ -83,16 +83,6 @@ final: prev: {
     meta = oldAttrs.meta // { platforms = lib.platforms.linux; };
   });
 
-  balanceofsatoshis = prev.balanceofsatoshis.override {
-    nativeBuildInputs = [ pkgs.installShellFiles ];
-    postInstall = ''
-      installShellCompletion --cmd bos\
-        --bash <($out/bin/bos completion bash)\
-        --zsh <($out/bin/bos completion zsh)\
-        --fish <($out/bin/bos completion fish)
-    '';
-  };
-
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -121,15 +111,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
     meta = oldAttrs.meta // { broken = since "12"; };
   });
-
-  castnow = prev.castnow.override {
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-
-    postInstall = ''
-      wrapProgram "$out/bin/castnow" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.ffmpeg ]}
-    '';
-  };
 
   eask = prev."@emacs-eask/cli".override {
     name = "eask";
@@ -160,10 +141,6 @@ final: prev: {
 
   firebase-tools = prev.firebase-tools.override {
     nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
-  };
-
-  flood = prev.flood.override {
-    buildInputs = [ final.node-pre-gyp ];
   };
 
   git-ssb = prev.git-ssb.override (oldAttrs: {
@@ -419,19 +396,6 @@ final: prev: {
       ]}
     '';
   };
-
-  reveal-md = prev.reveal-md.override (
-    lib.optionalAttrs (!stdenv.isDarwin) {
-      nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-      prePatch = ''
-        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      '';
-      postInstall = ''
-        wrapProgram $out/bin/reveal-md \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-      '';
-    }
-  );
 
   rush = prev."@microsoft/rush".override {
     name = "rush";

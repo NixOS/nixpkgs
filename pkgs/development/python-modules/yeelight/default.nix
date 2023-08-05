@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitLab
 , flit-core
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "yeelight";
-  version = "0.7.11";
+  version = "0.7.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "stavros";
     repo = "python-yeelight";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NKW8f0Xi8kACot+qunJp+tz3ioSa5UGoeLmbPfjBaXg=";
+    hash = "sha256-oTlfrx3YN6mPxu7+xzTmYG2L7KulFDlB3+oOhVOFSA8=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -27,6 +28,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     future
     ifaddr
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [

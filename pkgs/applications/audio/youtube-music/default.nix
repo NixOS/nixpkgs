@@ -34,5 +34,6 @@ appimageTools.wrapType2 rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     maintainers = [ maintainers.aacebedo ];
+    mainProgram = "youtube-music";
   };
 }

@@ -11,6 +11,7 @@
 , file
 , protobufc
 , libiconv
+, pcre2
 , nixosTests
 }:
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dOs1bj+F8UIzeRATNgiBtnSPeAgcxoj/nW8PZzp2LRM=";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
+  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
                 ++ lib.optional stdenv.isDarwin libiconv;
   nativeBuildInputs = [ perl pkg-config ] ++ lib.optional postgresql.jitSupport postgresql.llvm;
   dontDisableStatic = true;
@@ -34,9 +35,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
+    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --docdir=$doc/share/doc/${pname} --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
 
-    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin"
+    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin docdir=$doc/share/doc/${pname}"
   '';
   postConfigure = ''
     sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;

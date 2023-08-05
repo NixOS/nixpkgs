@@ -60,5 +60,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ zendo ];
+    mainProgram = "clash-verge";
   };
 }

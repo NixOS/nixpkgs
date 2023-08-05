@@ -152,5 +152,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra fpletz ];
     platforms = platforms.unix;
+    mainProgram = "mupdf";
   };
 }

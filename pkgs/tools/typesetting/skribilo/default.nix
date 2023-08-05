@@ -10,9 +10,9 @@
 , imagemagick
 , makeWrapper
 , pkg-config
-, ploticus
 , enableEmacs ? false, emacs
-, enableLout ? true, lout
+, enableLout ? stdenv.isLinux, lout
+, enablePloticus ? stdenv.isLinux, ploticus
 , enableTex ? true, tex
 }:
 
@@ -40,10 +40,10 @@ in stdenv.mkDerivation (finalAttrs: {
     guile-lib
     guile-reader
     imagemagick
-    ploticus
   ]
   ++ optional enableEmacs emacs
   ++ optional enableLout lout
+  ++ optional enablePloticus ploticus
   ++ optional enableTex tex;
 
   postInstall =

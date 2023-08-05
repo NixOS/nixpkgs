@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
   makeFlags = [ "DESTDIR=\${out}" "PREFIX=''" ];
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
   buildInputs = [ gtk4 alsa-lib ];
+  postInstall = ''
+      substituteInPlace $out/share/applications/vu.b4.${pname}.desktop \
+        --replace "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/${pname}"
+  '';
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];

@@ -1,11 +1,11 @@
-{ appstream-glib
+{ blueprint-compiler
 , desktop-file-utils
-, fetchurl
+, fetchFromSourcehut
 , gobject-introspection
-, gtk3
+, gtk4
 , lib
+, libadwaita
 , libnotify
-, libhandy
 , meson
 , ninja
 , pkg-config
@@ -16,14 +16,17 @@
 
 stdenv.mkDerivation rec {
   pname = "confy";
-  version = "0.6.5";
+  version = "0.7.0";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~fabrixxm/confy/archive/${version}.tar.gz";
-    sha256 = "sha256-zfuwOZBSGQzJUc36M6C5wSHarLbPFqayQVFo+WbVo7k=";
+  src = fetchFromSourcehut {
+    owner = "~fabrixxm";
+    repo = "confy";
+    rev = version;
+    hash = "sha256-q8WASTNbiBuKb2tPQBmUL9ji60PRAPnYOTYxnUn0MAw=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     meson
     ninja
@@ -33,8 +36,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gobject-introspection
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     libnotify
     (python3.withPackages (ps: with ps; [
       icalendar
@@ -43,8 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Remove executable bits so that meson runs the script with our Python interpreter
-    chmod -x build-aux/meson/postinstall.py
+    patchShebangs build-aux/meson/postinstall.py
   '';
 
   meta = with lib; {

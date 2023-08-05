@@ -6,6 +6,7 @@
 , gzip
 , lib
 , makeWrapper
+, nix-update-script
 , nixosTests
 , openssh
 , pam
@@ -38,17 +39,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.20.1-0";
+  version = "1.20.2-0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-3L43hm6Tx4h5UHm3jGTGiOWBgAGx49zVGB0D6om6ayk=";
+    hash = "sha256-8mFI5Zt2J6EQZqu/qcirFp8WMz+IlrkvHeA+oUb0X5U=";
   };
 
-  vendorHash = "sha256-n2fqqQ6jqHEAWLlaY9t6nd6Ty0viOuTwDWDhTECve+Q=";
+  vendorHash = "sha256-ZoFs2T3NNixrbTDdp7fqTgjJ+G8DpkxHW8K6BM8tZ9w=";
 
   subPackages = [ "." ];
 
@@ -95,6 +96,9 @@ buildGoModule rec {
   });
 
   passthru = {
+    # allow nix-update to handle npmDepsHash
+    inherit (frontend) npmDeps;
+
     data-compressed = runCommand "forgejo-data-compressed" {
       nativeBuildInputs = [ brotli xorg.lndir ];
     } ''
@@ -108,6 +112,7 @@ buildGoModule rec {
     '';
 
     tests = nixosTests.forgejo;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -115,7 +120,7 @@ buildGoModule rec {
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emilylange urandom bendlas ];
+    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

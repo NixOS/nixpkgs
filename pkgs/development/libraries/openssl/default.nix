@@ -142,7 +142,19 @@ let
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
       ++ lib.optional withZlib "zlib"
-      ;
+      ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
+      # This is necessary in order to avoid openssl adding -march
+      # flags which ultimately conflict with those added by
+      # cc-wrapper.  Openssl assumes that it can scan CFLAGS to
+      # detect any -march flags, using this perl code:
+      #
+      #   && !grep { $_ =~ /-m(ips|arch=)/ } (@{$config{CFLAGS}})
+      #
+      # The following bogus CFLAGS environment variable triggers the
+      # the code above, inhibiting `./Configure` from adding the
+      # conflicting flags.
+      "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
+    ];
 
     makeFlags = [
       "MANDIR=$(man)/share/man"
@@ -224,8 +236,8 @@ in {
   # the permitted insecure version to ensure it gets cached for our users
   # and backport this to stable release (23.05).
   openssl_1_1 = common {
-    version = "1.1.1u";
-    sha256 = "sha256-4vjYS1I+7NBse+diaDA3AwD7zBU4a/UULXJ1j2lj68Y=";
+    version = "1.1.1v";
+    sha256 = "sha256-1ml+KHHncjhGBALpNi1H0YOCsV758karpse9eA04prA=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 

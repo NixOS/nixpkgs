@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ wozeparrot fufexan ];
     inherit (wayland.meta) platforms;
     broken = stdenv.isDarwin;
+    mainProgram = "hyprpaper";
   };
 })

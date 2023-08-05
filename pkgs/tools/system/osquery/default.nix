@@ -51,7 +51,9 @@ buildStdenv.mkDerivation rec {
     # which provides the ARC4RANDOM_BUF function
     substituteInPlace libraries/cmake/source/libarchive/CMakeLists.txt --replace "  target_compile_definitions(thirdparty_libarchive PRIVATE" "  target_compile_definitions(thirdparty_libarchive PRIVATE HAVE_ARC4RANDOM_BUF"
     # We need to override this hash because we use our own openssl 1.1 version
-    substituteInPlace libraries/cmake/formula/openssl/CMakeLists.txt --replace "d7939ce614029cdff0b6c20f0e2e5703158a489a72b2507b8bd51bf8c8fd10ca" "e2f8d84b523eecd06c7be7626830370300fbcc15386bf5142d72758f6963ebc6"
+    substituteInPlace libraries/cmake/formula/openssl/CMakeLists.txt --replace \
+      "d7939ce614029cdff0b6c20f0e2e5703158a489a72b2507b8bd51bf8c8fd10ca" \
+      "$(sha256sum ${openssl_1_1.src} | cut -f1 '-d ')"
     cat libraries/cmake/formula/openssl/CMakeLists.txt
   '';
 

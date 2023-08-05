@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   dontConfigure = true;
-  sourceRoot = "source/ProjectGenerator";
+  sourceRoot = "${src.name}/ProjectGenerator";
 
   nativeBuildInputs = [ makeWrapper ];
 
