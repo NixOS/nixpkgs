@@ -1,9 +1,11 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , libgit2
 , zlib
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libgit2
     zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   meta = with lib; {

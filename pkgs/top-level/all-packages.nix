@@ -8593,7 +8593,9 @@ with pkgs;
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
-  gql = callPackage ../applications/version-management/gql { };
+  gql = callPackage ../applications/version-management/gql {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   grafterm = callPackage ../tools/misc/grafterm { };
 
