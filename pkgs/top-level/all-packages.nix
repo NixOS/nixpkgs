@@ -509,6 +509,12 @@ with pkgs;
 
   colorpicker = callPackage ../tools/misc/colorpicker { };
 
+  colorstorm = callPackage ../applications/misc/colorstorm {
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_9;
+    };
+  };
+
   comedilib = callPackage ../development/libraries/comedilib {  };
 
   commix = callPackage ../tools/security/commix { };
@@ -6118,7 +6124,9 @@ with pkgs;
   river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro {
-    zig = buildPackages.zig_0_9;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_9;
+    };
   };
 
   river-luatile = callPackage ../applications/misc/river-luatile{ };
@@ -18267,7 +18275,9 @@ with pkgs;
   vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
 
   zls = callPackage ../development/tools/language-servers/zls {
-    zig = buildPackages.zig_0_10;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
   };
 
   ansible-later = callPackage ../tools/admin/ansible/later.nix { };
@@ -32342,7 +32352,9 @@ with pkgs;
   waycorner = callPackage ../applications/misc/waycorner { };
 
   waylock = callPackage ../applications/misc/waylock {
-    zig = buildPackages.zig_0_10;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
   };
 
   wayshot = callPackage ../tools/misc/wayshot { };
@@ -33316,7 +33328,10 @@ with pkgs;
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
   mepo = callPackage ../applications/misc/mepo {
-    zig = buildPackages.zig_0_9;
+    inherit (gnome) zenity;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_9;
+    };
   };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
@@ -33982,7 +33997,9 @@ with pkgs;
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
   ncdu = callPackage ../tools/misc/ncdu {
-    zig = buildPackages.zig_0_10;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
   };
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
@@ -37146,7 +37163,9 @@ with pkgs;
   };
 
   blackshades = callPackage ../games/blackshades {
-    zig = buildPackages.zig_0_9;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_9;
+    };
   };
 
   blobby = callPackage ../games/blobby { };
