@@ -11007,6 +11007,8 @@ with pkgs;
 
   mtm = callPackage ../tools/misc/mtm { };
 
+  optimism = callPackage ../applications/blockchains/optimism { };
+
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
   pandoc-acro = python3Packages.callPackage ../tools/misc/pandoc-acro { };
