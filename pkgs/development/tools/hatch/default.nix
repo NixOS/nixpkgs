@@ -68,6 +68,11 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/NixOS/nixpkgs/issues/209358
     "test_scripts_no_environment"
+
+    # This test assumes it is running on macOS with a system shell on the PATH.
+    # It is not possible to run it in a nix build using a /nix/store shell.
+    # See https://github.com/pypa/hatch/pull/709 for the relevant code.
+    "test_populate_default_popen_kwargs_executable"
   ];
 
   meta = with lib; {
