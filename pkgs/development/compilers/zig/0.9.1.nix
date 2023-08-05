@@ -8,8 +8,10 @@
 , coreutils
 }@args:
 
-import ./generic.nix args "sha256-x2c4c9RSrNWGqEngio4ArW7dJjW0gg+8nqBwPcR721k=" {
+import ./generic.nix args {
   version = "0.9.1";
+
+  hash = "sha256-x2c4c9RSrNWGqEngio4ArW7dJjW0gg+8nqBwPcR721k=";
 
   patches = [
     # Fix index out of bounds reading RPATH (cherry-picked from 0.10-dev)

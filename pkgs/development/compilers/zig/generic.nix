@@ -9,7 +9,7 @@
 , ...
 }:
 
-hash: args:
+args:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ziglang";
     repo = "zig";
     rev = finalAttrs.version;
-    inherit hash;
+    inherit (args) hash;
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     llvm
   ]);
 
-  doInstallCheck = true;
+  env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";
 
   # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
   # work in Nix's sandbox. Use env from our coreutils instead.
@@ -44,10 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
-  preBuild = ''
-    export ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
-  '';
-
+  doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -64,4 +61,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ aiotter andrewrk AndersonTorres figsoda ];
     platforms = lib.platforms.unix;
   };
-} // args)
+} // removeAttrs args [ "hash" ])

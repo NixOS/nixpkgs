@@ -9,17 +9,11 @@
 }@args:
 
 import ./generic.nix args {
-  version = "0.10.1";
+  version = "0.11.0";
 
-  hash = "sha256-69QIkkKzApOGfrBdgtmxFMDytRkSh+0YiaJQPbXsBeo=";
+  hash = "sha256-iuU1fzkbJxI+0N1PiLQM013Pd1bzrgqkbIyTxo5gB2I=";
 
   outputs = [ "out" "doc" ];
-
-  patches = [
-    # Backport alignment related panics from zig-master to 0.10.
-    # Upstream issue: https://github.com/ziglang/zig/issues/14559
-    ./zig_14559.patch
-  ];
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
@@ -33,10 +27,10 @@ import ./generic.nix args {
   ];
 
   postBuild = ''
-    ./zig2 run ../doc/docgen.zig -- ./zig2 ../doc/langref.html.in langref.html
+    stage3/bin/zig run ../tools/docgen.zig -- ../doc/langref.html.in langref.html --zig $PWD/stage3/bin/zig
   '';
 
   postInstall = ''
-    install -Dm644 -t $doc/share/doc/zig-$version/html ./langref.html
+    install -Dm444 -t $doc/share/doc/zig-$version/html langref.html
   '';
 }
