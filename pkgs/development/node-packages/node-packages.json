@@ -29,7 +29,6 @@
 , {"@webassemblyjs/wast-refmt": "1.11.1"}
 , "alex"
 , "alloy"
-, "antennas"
 , "asar"
 , "audiosprite"
 , "autoprefixer"
