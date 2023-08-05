@@ -79,6 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mwouts/jupytext";
     changelog = "https://github.com/mwouts/jupytext/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.jupyter.members;
   };
 }
