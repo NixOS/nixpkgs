@@ -37,7 +37,6 @@
 , "aws-azure-login"
 , "aws-cdk"
 , "awesome-lint"
-, "balanceofsatoshis"
 , "bash-language-server"
 , "bower"
 , "bower2nix"
