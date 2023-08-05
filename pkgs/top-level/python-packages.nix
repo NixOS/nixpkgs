@@ -5807,8 +5807,6 @@ self: super: with self; {
     igraph-c = pkgs.igraph;
   };
 
-  lektor = callPackage ../development/python-modules/lektor { };
-
   leveldb = callPackage ../development/python-modules/leveldb { };
 
   levenshtein = callPackage ../development/python-modules/levenshtein { };

@@ -1806,6 +1806,8 @@ with pkgs;
 
   kubevirt = callPackage ../tools/virtualization/kubevirt { };
 
+  lektor = callPackage ../tools/misc/lektor { };
+
   licenseclassifier = callPackage ../development/tools/misc/licenseclassifier { };
 
   license-cli = callPackage ../tools/misc/license-cli { };
