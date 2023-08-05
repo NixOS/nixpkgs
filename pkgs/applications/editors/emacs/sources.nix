@@ -32,6 +32,7 @@ let
       matthewbauer
     ];
     platforms = lib.platforms.all;
+    mainProgram = "emacs";
   };
 in
 {

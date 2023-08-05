@@ -241,6 +241,7 @@ self = stdenv.mkDerivation {
     maintainers = with maintainers; [ eelco lovesegfault artturin ];
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+    mainProgram = "nix";
   };
 };
 in self

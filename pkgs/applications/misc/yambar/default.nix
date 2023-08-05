@@ -44,12 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "man" ];
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     bison
     flex
     meson
     ninja
     pkg-config
+    scdoc
     wayland-scanner
   ];
 
@@ -62,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     pixman
     pulseaudio
-    scdoc
     tllist
     udev
   ] ++ lib.optionals (waylandSupport) [

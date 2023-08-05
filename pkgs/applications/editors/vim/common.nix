@@ -27,5 +27,6 @@ rec {
     license     = licenses.vim;
     maintainers = with maintainers; [ das_j equirosa ];
     platforms   = platforms.unix;
+    mainProgram = "vim";
   };
 }

@@ -108,6 +108,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
     license = licenses.mit;
+    mainProgram = "black";
     maintainers = with maintainers; [ sveitser autophagy ];
   };
 }

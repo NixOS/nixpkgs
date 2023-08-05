@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-RyAQh1uXw3bEZ6vuh8+mEf8T4l3ZIFAaFJ6dGMoANys=";
 
-  sourceRoot = "source/cmd/jwx";
+  sourceRoot = "${src.name}/cmd/jwx";
 
   meta = with lib; {
     description = " Implementation of various JWx (Javascript Object Signing and Encryption/JOSE) technologies";

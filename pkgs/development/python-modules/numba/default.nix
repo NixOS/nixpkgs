@@ -2,7 +2,7 @@
 , stdenv
 , pythonAtLeast
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , python
 , buildPythonPackage
 , setuptools
@@ -27,22 +27,18 @@
 let
   inherit (cudaPackages) cudatoolkit;
 in buildPythonPackage rec {
-  version = "0.56.4";
+  # Using an untagged version, with numpy 1.25 support
+  version = "unstable-2023-08-02";
   pname = "numba";
   format = "setuptools";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Mtn+9BLIFIPX7+DOts9NMxD96LYkqc7MoA95BXOslu4=";
+  src = fetchFromGitHub {
+    owner = "numba";
+    repo = "numba";
+    rev = "fcf94205335dcc6135d2e19c07bbef968d13610d";
+    hash = "sha256-9YmIX+ydDA7xcPqjDus1LSrAhsgv6eVpKLZVzX8Cv0w=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'max_numpy_run_version = "1.24"' 'max_numpy_run_version = "1.25"'
-    substituteInPlace numba/__init__.py \
-      --replace "elif numpy_version > (1, 23):" "elif numpy_version > (1, 24):"
-  '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
@@ -63,17 +59,7 @@ in buildPythonPackage rec {
     cudatoolkit.lib
   ];
 
-  patches = [
-    # fix failure in test_cache_invalidate (numba.tests.test_caching.TestCache)
-    # remove when upgrading past version 0.56
-    (fetchpatch {
-      name = "fix-test-cache-invalidate-readonly.patch";
-      url = "https://github.com/numba/numba/commit/993e8c424055a7677b2755b184fc9e07549713b9.patch";
-      hash = "sha256-IhIqRLmP8gazx+KWIyCxZrNLMT4jZT8CWD3KcH4KjOo=";
-    })
-    # Backport numpy 1.24 support from https://github.com/numba/numba/pull/8691
-    ./numpy-1.24.patch
-  ] ++ lib.optionals cudaSupport [
+  patches = lib.optionals cudaSupport [
     (substituteAll {
       src = ./cuda_path.patch;
       cuda_toolkit_path = cudatoolkit;

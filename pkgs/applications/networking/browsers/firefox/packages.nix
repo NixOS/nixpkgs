@@ -3,10 +3,10 @@
 {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "116.0";
+    version = "116.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "4370c65a99bf8796524aca11ea8e99fa4f875176a5805ad49f35ae149080eb54be42e7eae84627e87e17b88b262649e48f3b30b317170ac7c208960200d1005d";
+      sha512 = "2f67a129ec3bcb47d66cbf29ab23c1c29bfbe752a4703cb0d95f4f3e5a48044901bb79fea94e35f8a9d4dfbfa71aa6721b2988770c1dc33b4412b993bb88da09";
     };
 
     meta = {
@@ -20,6 +20,7 @@
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox ];
     updateScript = callPackage ./update.nix {
@@ -46,6 +47,7 @@
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox-beta ];
     updateScript = callPackage ./update.nix {
@@ -74,6 +76,7 @@
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox-devedition ];
     updateScript = callPackage ./update.nix {
@@ -104,6 +107,7 @@
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox-esr-102 ];
     updateScript = callPackage ./update.nix {
@@ -132,6 +136,7 @@
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
+      mainProgram = "firefox";
     };
     tests = [ nixosTests.firefox-esr-115 ];
     updateScript = callPackage ./update.nix {

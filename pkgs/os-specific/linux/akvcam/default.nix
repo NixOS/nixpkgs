@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1f0vjia2d7zj3y5c63lx1r537bdjx6821yxy29ilbrvsbjq2szj8";
   };
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   makeFlags = kernel.makeFlags ++ [

@@ -131,6 +131,7 @@ EOF
     homepage = "https://www.zsh.org/";
     maintainers = with lib.maintainers; [ pSub artturin ];
     platforms = lib.platforms.unix;
+    mainProgram = "zsh";
   };
 
   passthru = {

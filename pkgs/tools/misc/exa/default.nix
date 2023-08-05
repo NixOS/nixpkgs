@@ -58,5 +58,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://the.exa.website";
     license = licenses.mit;
     maintainers = with maintainers; [ ehegnes lilyball globin fortuneteller2k ];
+    mainProgram = "exa";
   };
 }

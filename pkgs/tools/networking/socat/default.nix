@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ eelco ];
+    mainProgram = "socat";
   };
 }

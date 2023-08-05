@@ -18636,10 +18636,10 @@ with self; {
 
   NumberFormat = buildPerlPackage {
     pname = "Number-Format";
-    version = "1.75";
+    version = "1.76";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WR/WRW/Number-Format-1.75.tar.gz";
-      hash = "sha256-gtZZyxZGF2T9RNEanOnmpPXodn3BBp6wNGfG5V3iV/M=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Number-Format-1.76.tar.gz";
+      hash = "sha256-DgBg6zY2NaiFcGxqJvX8qv6udZ97Ksrkndpw4ZXdRNY=";
     };
     meta = {
       description = "Perl extension for formatting numbers";
@@ -18763,12 +18763,12 @@ with self; {
 
   ObjectPad = buildPerlModule {
     pname = "Object-Pad";
-    version = "0.68";
+    version = "0.79";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.68.tar.gz";
-      hash = "sha256-xN5jBIQxMJZNrskozF99HphTnu/X7azHvn4Yg0XhnXE=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.79.tar.gz";
+      hash = "sha256-+wsQ+J5i1UFlvWqyHbVfYLVT+gCPyOddNJhwwafiKtY=";
     };
-    buildInputs = [ TestFatal TestRefcount ];
+    buildInputs = [ Test2Suite TestFatal TestRefcount ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     propagatedBuildInputs = [ XSParseKeyword XSParseSublike ];
     meta = {
@@ -19218,10 +19218,10 @@ with self; {
 
   Parent = buildPerlPackage {
     pname = "parent";
-    version = "0.238";
+    version = "0.241";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CO/CORION/parent-0.238.tar.gz";
-      hash = "sha256-OPWP3vPiihlMnI0NxdAmcvr5PAafQMW8sfq+rbvE0tE=";
+      url = "mirror://cpan/authors/id/C/CO/CORION/parent-0.241.tar.gz";
+      hash = "sha256-sQs5YKs5l9q3Vx/+l1ukYtl50IZFB0Ch4Is5WedRKP4=";
     };
     meta = {
       description = "Establish an ISA relationship with base classes at compile time";
@@ -20259,10 +20259,10 @@ with self; {
 
   PPR = buildPerlPackage {
     pname = "PPR";
-    version = "0.000028";
+    version = "0.001008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.000028.tar.gz";
-      hash = "sha256-032ndHxDN+TH11jHuO1dEsuXN2Q2krCfC9TZnFBouak=";
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.001008.tar.gz";
+      hash = "sha256-EQ5xwF8uLJDrAfCgaU5VqdvpHIV+SBJeF0LRflzbHkk=";
     };
     meta = {
       description = "Pattern-based Perl Recognizer";
@@ -21449,10 +21449,10 @@ with self; {
 
   ScopeUpper = buildPerlPackage {
     pname = "Scope-Upper";
-    version = "0.33";
+    version = "0.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VP/VPIT/Scope-Upper-0.33.tar.gz";
-      hash = "sha256-XzO+Aa1o/L7G74HusDs1EaL18HUq1RPZk6TBOl+xpkg=";
+      url = "mirror://cpan/authors/id/V/VP/VPIT/Scope-Upper-0.34.tar.gz";
+      hash = "sha256-WB2LxRDevQxFal/HlSy3E4rmZ78486d+ltdz3DGWpB4=";
     };
     meta = {
       description = "Act on upper scopes";
@@ -23681,10 +23681,10 @@ with self; {
 
   Test2Suite = buildPerlPackage {
     pname = "Test2-Suite";
-    version = "0.000138";
+    version = "0.000155";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Suite-0.000138.tar.gz";
-      hash = "sha256-DPct8s7RFkhTW/2I6lSjxwBnhqfFlSkOOPMU41E7CHU=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Suite-0.000155.tar.gz";
+      hash = "sha256-x45rxNabwJeDaXaGM4K1K54MMe4YUGbOYMVL10uq1T0=";
     };
     propagatedBuildInputs = [ ModulePluggable ScopeGuard SubInfo TermTable TestSimple13 ];
     meta = {
@@ -27102,10 +27102,10 @@ with self; {
 
   VariableMagic = buildPerlPackage {
     pname = "Variable-Magic";
-    version = "0.62";
+    version = "0.63";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VP/VPIT/Variable-Magic-0.62.tar.gz";
-      hash = "sha256-P5oYUX4z8AapwvxPQ/AbVKv+b/Lq5zIkJPMQaSlrYVw=";
+      url = "mirror://cpan/authors/id/V/VP/VPIT/Variable-Magic-0.63.tar.gz";
+      hash = "sha256-ukCDssMf8mlPI3EzPVVMgmqvJLTZjQPki1tKQ6Kg5nk=";
     };
     meta = {
       description = "Associate user-defined magic to variables from Perl";

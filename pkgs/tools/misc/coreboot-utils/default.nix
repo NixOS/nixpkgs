@@ -65,6 +65,7 @@ let
     nvramtool = generic {
       pname = "nvramtool";
       meta.description = "Read and write coreboot parameters and display information from the coreboot table in CMOS/NVRAM";
+      meta.mainProgram = "nvramtool";
     };
     superiotool = generic {
       pname = "superiotool";

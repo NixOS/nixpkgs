@@ -142,5 +142,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ FlorianFranzen minijackson synthetica lovesegfault rodrgz ];
     platforms = platforms.unix;
     homepage = "https://github.com/alexays/waybar";
+    mainProgram = "waybar";
   };
 }

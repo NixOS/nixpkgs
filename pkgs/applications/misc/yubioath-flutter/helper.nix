@@ -16,7 +16,7 @@ buildPythonApplication {
   pname = "yubioath-flutter-helper";
   inherit src version meta;
 
-  sourceRoot = "source/helper";
+  sourceRoot = "${src.name}/helper";
   format = "pyproject";
 
   postPatch = ''

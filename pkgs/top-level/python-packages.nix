@@ -270,6 +270,8 @@ self: super: with self; {
 
   aiomodernforms = callPackage ../development/python-modules/aiomodernforms { };
 
+  aiomqtt = callPackage ../development/python-modules/aiomqtt { };
+
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
 
   aiomusiccast = callPackage ../development/python-modules/aiomusiccast { };
@@ -5808,8 +5810,6 @@ self: super: with self; {
     igraph-c = pkgs.igraph;
   };
 
-  lektor = callPackage ../development/python-modules/lektor { };
-
   leveldb = callPackage ../development/python-modules/leveldb { };
 
   levenshtein = callPackage ../development/python-modules/levenshtein { };
@@ -6065,7 +6065,7 @@ self: super: with self; {
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
     # llvmlite always requires a specific version of llvm.
-    llvm = pkgs.llvm_11;
+    llvm = pkgs.llvm_14;
   };
 
   lmdb = callPackage ../development/python-modules/lmdb {
@@ -6706,8 +6706,6 @@ self: super: with self; {
   mpyq = callPackage ../development/python-modules/mpyq { };
 
   mrjob = callPackage ../development/python-modules/mrjob { };
-
-  mrkd = callPackage ../development/python-modules/mrkd { };
 
   ms-active-directory = callPackage ../development/python-modules/ms-active-directory { };
 
@@ -7963,7 +7961,10 @@ self: super: with self; {
 
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
 
-  piper-train = callPackage ../development/python-modules/piper-train { };
+  piper-phonemize = callPackage ../development/python-modules/piper-phonemize {
+    onnxruntime-native = pkgs.onnxruntime;
+    piper-phonemize-native = pkgs.piper-phonemize;
+  };
 
   pip-api = callPackage ../development/python-modules/pip-api { };
 

@@ -13,7 +13,7 @@ buildDartApplication rec {
     rev = "protobuf-v${version}";
     sha256 = "sha256-uBQ8s1NBSWm88mpLfZwobTe/BDDT6UymSra88oUuPIA=";
   };
-  sourceRoot = "source/protoc_plugin";
+  sourceRoot = "${src.name}/protoc_plugin";
 
   pubspecLockFile = ./pubspec.lock;
   vendorHash = "sha256-jyhHZ1OUFo6ce3C5jEQPqmtRL4hr2nTfgVMR0k6AXtM=";

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (lib.versionOlder qtbase.version "6") [ qtx11extras kwindowsystem ]
     ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland;
 
-  sourceRoot = "source/Kvantum";
+  sourceRoot = "${src.name}/Kvantum";
 
   patches = [
     (fetchpatch {

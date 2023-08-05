@@ -6,7 +6,7 @@
 }:
 
 let
-  upstream-info = (lib.importJSON ../../../../applications/networking/browsers/chromium/upstream-info.json).stable.chromedriver;
+  upstream-info = (import ../../../../applications/networking/browsers/chromium/upstream-info.nix).stable.chromedriver;
   allSpecs = {
     x86_64-linux = {
       system = "linux64";
@@ -73,5 +73,6 @@ in stdenv.mkDerivation rec {
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # ChromeDriver.
     platforms = attrNames allSpecs;
+    mainProgram = "chromedriver";
   };
 }

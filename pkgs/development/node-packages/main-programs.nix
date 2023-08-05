@@ -1,5 +1,4 @@
-# Use this file to add `meta.mainProgram` to packages in `nodePackages`, that don't provide an
-# executable that matches that packages name, so that they'll work with `nix run`.
+# Use this file to add `meta.mainProgram` to packages in `nodePackages`.
 {
   # Packages that provide multiple executables where one is clearly the `mainProgram`.
   "@antfu/ni" = "ni";
@@ -11,7 +10,7 @@
   vue-cli = "vue";
   "@withgraphite/graphite-cli" = "gt";
 
-  # Packages that provide a single executable whose name differs from the package's `name`.
+  # Packages that provide a single executable.
   "@angular/cli" = "ng";
   "@antora/cli" = "antora";
   "@astrojs/language-server" = "astro-ls";
@@ -31,7 +30,6 @@
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
   "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
-  balanceofsatoshis = "bos";
   carbon-now-cli = "carbon-now";
   cdk8s-cli = "cdk8s";
   cdktf-cli = "cdktf";
@@ -58,13 +56,13 @@
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";
-  markdownlint-cli = "markdownlint";
   near-cli = "near";
   neovim = "neovim-node-host";
   parcel-bundler = "parcel";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
+  prettier = "prettier";
   purescript-psa = "psa";
   react-native-cli = "react-native";
   react-tools = "jsx";
@@ -72,6 +70,7 @@
   s3http = "s3http.js";
   svelte-language-server = "svelteserver";
   teck-programmer = "teck-firmware-upgrade";
+  typescript-language-server = "typescript-language-server";
   uglify-js = "uglifyjs";
   undollar = "$";
   vsc-leetcode-cli = "leetcode";
