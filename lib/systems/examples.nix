@@ -124,22 +124,22 @@ rec {
   riscv32 = riscv "32";
 
   riscv64-embedded = {
-    config = "riscv64-none-elf";
+    config = "riscv64-unknown-none-elf";
     libc = "newlib";
   };
 
   riscv32-embedded = {
-    config = "riscv32-none-elf";
+    config = "riscv32-unknown-none-elf";
     libc = "newlib";
   };
 
   mips64-embedded = {
-    config = "mips64-none-elf";
+    config = "mips64-unknown-none-elf";
     libc = "newlib";
   };
 
   mips-embedded = {
-    config = "mips-none-elf";
+    config = "mips-unknown-none-elf";
     libc = "newlib";
   };
 
@@ -153,7 +153,7 @@ rec {
   };
 
   rx-embedded = {
-    config = "rx-none-elf";
+    config = "rx-unknown-none-elf";
     libc = "newlib";
   };
 
@@ -189,11 +189,11 @@ rec {
   };
 
   arm-embedded = {
-    config = "arm-none-eabi";
+    config = "arm-unknown-none-eabi";
     libc = "newlib";
   };
   armhf-embedded = {
-    config = "arm-none-eabihf";
+    config = "arm-unknown-none-eabihf";
     libc = "newlib";
     # GCC8+ does not build without this
     # (https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg552339.html):
@@ -204,22 +204,22 @@ rec {
   };
 
   aarch64-embedded = {
-    config = "aarch64-none-elf";
+    config = "aarch64-unknown-none-elf";
     libc = "newlib";
   };
 
   aarch64be-embedded = {
-    config = "aarch64_be-none-elf";
+    config = "aarch64_be-unknown-none-elf";
     libc = "newlib";
   };
 
   ppc-embedded = {
-    config = "powerpc-none-eabi";
+    config = "powerpc-unknown-none-eabi";
     libc = "newlib";
   };
 
   ppcle-embedded = {
-    config = "powerpcle-none-eabi";
+    config = "powerpcle-unknown-none-eabi";
     libc = "newlib";
   };
 
