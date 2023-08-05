@@ -35979,6 +35979,8 @@ with pkgs;
 
   watershot = callPackage ../applications/misc/watershot { };
 
+  watt-toolkit = callPackage ../applications/misc/watt-toolkit { };
+
   w3m = callPackage ../applications/networking/browsers/w3m { };
 
   # Should always be the version with the most features
