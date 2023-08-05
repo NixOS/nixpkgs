@@ -7,41 +7,26 @@
 
 { lib, fetchurl, unzip, glibcLocalesUtf8 }:
 
-{ # Optionally move the contents of the unpacked tree up one level.
-  stripRoot ? true
-, url ? ""
-, urls ? []
-, extraPostFetch ? ""
-, postFetch ? ""
-, name ? "source"
-, pname ? ""
-, version ? ""
-, nativeBuildInputs ? [ ]
-, # Allows to set the extension for the intermediate downloaded
-  # file. This can be used as a hint for the unpackCmdHooks to select
-  # an appropriate unpacking tool.
-  extension ? null
+{ name ? "source"
+
+# Optionally move the contents of the unpacked tree up one level.
+#, stripRoot ? true
+
+# This allows to set the extension for the intermediate downloaded
+# file. This can be used as a hint for the unpackCmdHooks to select
+# an appropriate unpacking tool.
+#, extension ? null
+
+# the rest are given to fetchurl as is
 , ... } @ args:
 
+assert (args ? extraPostFetch)
+       -> (lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'." true);
 
-lib.warnIf (extraPostFetch != "") "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'."
-
-(let
-  tmpFilename =
-    if extension != null
-    then "download.${extension}"
-    else baseNameOf (if url != "" then url else builtins.head urls);
-in
-
-fetchurl ((
-  if (pname != "" && version != "") then
-    {
-      name = "${pname}-${version}";
-      inherit pname version;
-    }
-  else
-    { inherit name; }
-) // {
+fetchurl (removeAttrs args [
+  "stripRoot" "extraPostFetch" "extension"
+] // {
+  name = if (args ? pname && args ? version) then "${args.pname}-${args.version}" else name;
   recursiveHash = true;
 
   downloadToTemp = true;
@@ -49,7 +34,7 @@ fetchurl ((
   # Have to pull in glibcLocalesUtf8 for unzip in setup-hook.sh to handle
   # UTF-8 aware locale:
   #   https://github.com/NixOS/nixpkgs/issues/176225#issuecomment-1146617263
-  nativeBuildInputs = [ unzip glibcLocalesUtf8 ] ++ nativeBuildInputs;
+  nativeBuildInputs = [ unzip glibcLocalesUtf8 ] ++ (args.nativeBuildInputs or []);
 
   postFetch =
     ''
@@ -57,12 +42,14 @@ fetchurl ((
       mkdir "$unpackDir"
       cd "$unpackDir"
 
-      renamed="$TMPDIR/${tmpFilename}"
+      renamed="$TMPDIR/${if args ? extension
+        then "download.${args.extension}"
+        else baseNameOf (args.url or (builtins.head args.urls))}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
       chmod -R +w "$unpackDir"
     ''
-    + (if stripRoot then ''
+    + (if args.stripRoot or true then ''
       if [ $(ls -A "$unpackDir" | wc -l) != 1 ]; then
         echo "error: zip file must contain a single file or directory."
         echo "hint: Pass stripRoot=false; to fetchzip to assume flat list of files."
@@ -77,9 +64,8 @@ fetchurl ((
       mv "$unpackDir" "$out"
     '')
     + ''
-      ${postFetch}
-    '' + ''
-      ${extraPostFetch}
+      ${args.postFetch or ""}
+      ${args.extraPostFetch or ""}
     ''
 
     # Remove non-owner write permissions
@@ -87,4 +73,4 @@ fetchurl ((
     + ''
       chmod 755 "$out"
     '';
-} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" ]))
+})
