@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , gettext
 , pkg-config
 , vala
@@ -26,6 +27,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./timeshift-launcher.patch
+
+    # Use /usr/bin/env bash for shebang
+    # On nixos-unstable this is fixed via 23.07.1 bump
+    # https://github.com/linuxmint/timeshift/pull/209
+    (fetchpatch {
+      url = "https://github.com/linuxmint/timeshift/commit/bb8b2a2020be8c9919310de22f547b46177ed327.patch";
+      hash = "sha256-DyGMxMiUfmm5FCEQD9L7LLj2LxxNVRt+aTNFl4jrH4Y=";
+    })
   ];
 
   postPatch = ''
