@@ -93,5 +93,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ leenaars ];
+    mainProgram = "todo";
   };
 }
