@@ -206,14 +206,7 @@ let
       ${lib.optionalString (conf != null) "cat ${conf} > $etc/etc/ssl/openssl.cnf"}
     '';
 
-    postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-      # Check to make sure the main output and the static runtime dependencies
-      # don't depend on perl
-      if grep -r '${buildPackages.perl}' $out $etc; then
-        echo "Found an erroneous dependency on perl ^^^" >&2
-        exit 1
-      fi
-    '';
+    disallowedReferences = [ buildPackages.perl ];
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
