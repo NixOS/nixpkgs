@@ -2,27 +2,19 @@
 , stdenv
 , cmake
 , fetchFromGitHub
-, fetchpatch
 , fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation rec {
   pname = "capstone";
-  version = "5.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "capstone-engine";
     repo = "capstone";
     rev = version;
-    sha256 = "sha256-+CdGp05TCnxPeNG69BFaQEkjcn3Zb7SSyHlnHEWlei0=";
+    sha256 = "sha256-XMwQ7UaPC8YYu4yxsE4bbR3leYPfBHu5iixSLz05r3g=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/capstone-engine/capstone/commit/b0d1725379a65b31fb5f637f81f1c12a1a2e840c.patch";
-      sha256 = "sha256-65xPXKv0apL5TFGiUnS/lcKX3mz7Yne1W/kLX252fCU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
