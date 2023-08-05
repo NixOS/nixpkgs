@@ -3532,6 +3532,8 @@ self: super: with self; {
 
   exifread = callPackage ../development/python-modules/exifread { };
 
+  expandvars = callPackage ../development/python-modules/expandvars { };
+
   expects = callPackage ../development/python-modules/expects { };
 
   expecttest = callPackage ../development/python-modules/expecttest { };
