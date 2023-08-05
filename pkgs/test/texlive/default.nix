@@ -1,4 +1,4 @@
-{ lib, stdenv, runCommand, fetchurl, file, texlive, writeShellScript, writeText }:
+{ lib, stdenv, buildEnv, runCommand, fetchurl, file, texlive, writeShellScript, writeText }:
 
 {
 
@@ -210,6 +210,16 @@
     mkdir "$out"
   '';
 
+  # verify that the restricted mode gets enabled when
+  # needed (detected by checking if it disallows --gscmd)
+  rpdfcrop = runCommand "texlive-test-rpdfcrop" {
+    nativeBuildInputs = [ (texlive.combine { inherit (texlive) scheme-infraonly pdfcrop; }) ];
+  } ''
+    ! (pdfcrop --gscmd echo $(command -v pdfcrop) 2>&1 || true) | grep 'restricted mode' >/dev/null
+    (rpdfcrop --gscmd echo $(command -v pdfcrop) 2>&1 || true) | grep 'restricted mode' >/dev/null
+    mkdir "$out"
+  '';
+
   # check that all binaries run successfully, in the following sense:
   # (1) run --version, -v, --help, -h successfully; or
   # (2) run --help, -h, or no argument with error code but show help text; or
@@ -218,58 +228,140 @@
   # compiled binaries or trivial shell wrappers
   binaries = let
       # TODO known broken binaries
-      broken = [ "albatross" "arara" "bbl2bib" "bib2gls" "bibdoiadd" "bibmradd" "bibzbladd" "citeproc" "convbkmk"
-        "convertgls2bib" "ctan-o-mat" "ctanify" "ctanupload" "dtxgen" "ebong" "epspdftk" "exceltex" "gsx" "htcontext"
-        "installfont-tl" "kanji-fontmap-creator" "ketcindy" "latex-git-log" "latex2nemeth" "ltxfileinfo" "match_parens"
-        "pdfannotextractor" "purifyeps" "pythontex" "svn-multi" "texexec" "texosquery" "texosquery-jre5"
-        "texosquery-jre8" "texplate" "tlcockpit" "tlmgr" "tlshell" "ulqda" "xhlatex" ];
+      broken = [
+        # *.inc files in source container rather than run
+        "texaccents"
+
+        # 'Error initialising QuantumRenderer: no suitable pipeline found'
+        "tlcockpit"
+
+        # 'tlmgr: config.guess script does not exist, goodbye'
+        "tlshell"
+      ] ++ lib.optional stdenv.isDarwin "epspdftk";  # wish shebang is a script, not a binary!
+
       # (1) binaries requiring -v
       shortVersion = [ "devnag" "diadia" "pmxchords" "ptex2pdf" "simpdftex" "ttf2afm" ];
       # (1) binaries requiring --help or -h
       help = [ "arlatex" "bundledoc" "cachepic" "checklistings" "dvipos" "extractres" "fig4latex" "fragmaster"
-        "kpsewhere" "mendex" "pn2pdf" "psbook" "psnup" "psresize" "simpdftex" "tex2xindy" "texluac" "texluajitc"
-        "urlbst" "yplan" ];
-      shortHelp = [ "adhocfilelist" "authorindex" "biburl2doi" "disdvi" "dvibook" "dviconcat" "getmapdl" "latex2man"
-        "lprsetup.sh" "pygmentex" ];
+        "kpsewhere" "latex-git-log" "ltxfileinfo" "mendex" "perltex" "pn2pdf" "psbook" "psnup" "psresize" "purifyeps"
+        "simpdftex" "tex2xindy" "texluac" "texluajitc" "urlbst" "yplan" ];
+      shortHelp = [ "adhocfilelist" "authorindex" "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "ctanupload"
+        "disdvi" "dvibook" "dviconcat" "getmapdl" "latex2man" "listings-ext.sh" "pygmentex" ];
       # (2) binaries that return non-zero exit code even if correctly asked for help
       ignoreExitCode = [ "authorindex" "dvibook" "dviconcat" "dvipos" "extractres" "fig4latex" "fragmaster" "latex2man"
-        "lprsetup.sh" "pdf2dsc" "psbook" "psnup" "psresize" "tex2xindy" "texluac" "texluajitc" ];
+        "latex-git-log" "listings-ext.sh" "psbook" "psnup" "psresize" "purifyeps" "tex2xindy"  "texluac"
+        "texluajitc" ];
       # (2) binaries that print help on no argument, returning non-zero exit code
       noArg = [ "a2ping" "bg5+latex" "bg5+pdflatex" "bg5latex" "bg5pdflatex" "cef5latex" "cef5pdflatex" "ceflatex"
-        "cefpdflatex" "cefslatex" "cefspdflatex" "chkdvifont" "dvi2fax" "dvipdf" "dvired" "dviselect"
-        "dvitodvi" "eps2eps" "epsffit" "findhyph" "gbklatex" "gbkpdflatex" "komkindex" "kpsepath" "listbib"
-        "listings-ext" "mag" "mathspic" "mf2pt1" "mk4ht" "mkt1font" "mkgrkindex" "musixflx" "pdf2ps" "pdftosrc"
-        "pdfxup" "pedigree" "pfb2pfa" "pfbtopfa" "pk2bm" "pphs" "prepmx" "ps2pk" "ps2pdf*" "ps2ps*" "psselect" "pstops"
-        "rubibtex" "rubikrotation" "sjislatex" "sjispdflatex" "srcredact" "t4ht" "tex4ht" "texdiff" "texdirflatten"
-        "texplate" "tie" "ttf2kotexfont" "ttfdump" "vlna" "vpl2ovp" "vpl2vpl" "yplan" ];
-      # (3) binary requiring a .tex file
-      tex = [ "de-macro" "e2pall" "makeindex" "pslatex" "rumakeindex" "tpic2pdftex" "wordcount" ];
+        "cefpdflatex" "cefslatex" "cefspdflatex" "chkdvifont" "dvi2fax" "dvired" "dviselect" "dvitodvi" "epsffit"
+        "findhyph" "gbklatex" "gbkpdflatex" "komkindex" "kpsepath" "listbib" "listings-ext" "mag" "mathspic" "mf2pt1"
+        "mk4ht" "mkt1font" "mkgrkindex" "musixflx" "pdf2ps" "pdftosrc" "pdfxup" "pedigree" "pfb2pfa" "pk2bm" "prepmx"
+        "ps2pk" "psselect" "pstops" "rubibtex" "rubikrotation" "sjislatex" "sjispdflatex" "srcredact" "t4ht" "tex4ht"
+        "texdiff" "texdirflatten" "texplate" "tie" "ttf2kotexfont" "ttfdump" "vlna" "vpl2ovp" "vpl2vpl" "yplan" ];
+      # (3) binaries requiring a .tex file
+      contextTest = [ "htcontext" ];
+      latexTest = [ "de-macro" "e2pall" "htlatex" "htxelatex" "makeindex" "pslatex" "rumakeindex" "tpic2pdftex"
+        "wordcount" "xhlatex" ];
+      texTest = [ "fontinst" "htmex" "httex" "httexi" "htxetex" ];
       # tricky binaries or scripts that are obviously working but are hard to test
       # (e.g. because they expect user input no matter the arguments)
       # (printafm comes from ghostscript, not texlive)
-      ignored = [ "dt2dv" "dv2dt" "dvi2tty" "dvidvi" "dvispc" "fontinst" "ht" "htlatex" "htmex" "httex" "httexi"
-        "htxelatex" "htxetex" "otp2ocp" "outocp" "pmxab" "printafm" ];
-      testTex = writeText "test.tex" ''
+      ignored = [
+        # compiled binaries
+        "dt2dv" "dv2dt" "dvi2tty" "dvidvi" "dvispc" "otp2ocp" "outocp" "pmxab"
+
+        # GUI scripts that accept no argument or crash without a graphics server; please test manualy
+        "epspdftk" "texdoctk" "xasy"
+
+        # requires Cinderella, not open source and not distributed via Nixpkgs
+        "ketcindy"
+      ];
+      # binaries that need a combined scheme and cannot work standalone
+      needScheme = [
+        # pfarrei: require working kpse to find lua module
+        "a5toa4"
+
+        # bibexport: requires kpsewhich
+        "bibexport"
+
+        # crossrefware: require bibtexperllibs under TEXMFROOT
+        "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "checkcites" "ltx2crossrefxml"
+
+        # require other texlive binaries in PATH
+        "allcm" "allec" "chkweb" "fontinst" "ht*" "installfont-tl" "kanji-config-updmap-sys" "kanji-config-updmap-user"
+        "kpse*" "latexfileversion" "mkocp" "mkofm" "mtxrunjit" "pdftex-quiet" "pslatex" "rumakeindex" "texconfig"
+        "texconfig-sys" "texexec" "texlinks" "texmfstart" "typeoutfileinfo" "wordcount" "xdvi" "xhlatex"
+
+        # misc luatex binaries searching for luatex in PATH
+        "citeproc-lua" "context" "contextjit" "ctanbib" "digestif" "epspdf" "l3build" "luafindfont" "luaotfload-tool"
+        "luatools" "make4ht" "pmxchords" "tex4ebook" "texdoc" "texlogsieve" "xindex"
+
+        # requires full TEXMFROOT (e.g. for config)
+        "mktexfmt" "mktexmf" "mktexpk" "mktextfm" "psnup" "psresize" "pstops" "tlmgr" "updmap" "webquiz"
+
+        # texlive-scripts: requires texlive.infra's TeXLive::TLUtils under TEXMFROOT
+        "fmtutil" "fmtutil-sys" "fmtutil-user"
+
+        # texlive-scripts: not used in nixpkgs, need updmap in PATH
+        "updmap-sys" "updmap-user"
+      ];
+
+      # simple test files
+      contextTestTex = writeText "context-test.tex" ''
+        \starttext
+          A simple test file.
+        \stoptext
+      '';
+      latexTestTex = writeText "latex-test.tex" ''
         \documentclass{article}
         \begin{document}
           A simple test file.
         \end{document}
       '';
+      texTestTex = writeText "tex-test.tex" ''
+        Hello.
+        \bye
+      '';
+
+      # link all binaries in single derivation
+      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
+      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+      binaries = buildEnv { name = "texlive-binaries"; paths = binPackages; };
     in
-    runCommand "texlive-test-binaries" { inherit testTex; }
+    runCommand "texlive-test-binaries"
+      {
+        inherit binaries contextTestTex latexTestTex texTestTex;
+        texliveScheme = texlive.combined.scheme-full;
+      }
       ''
+        loadables="$(command -v bash)"
+        loadables="''${loadables%/bin/bash}/lib/bash"
+        enable -f "$loadables/realpath" realpath
         mkdir -p "$out"
         export HOME="$(mktemp -d)"
         declare -i binCount=0 ignoredCount=0 brokenCount=0 failedCount=0
-        cp "$testTex" test.tex
+        cp "$contextTestTex" context-test.tex
+        cp "$latexTestTex" latex-test.tex
+        cp "$texTestTex" tex-test.tex
 
         testBin () {
+          path="$(realpath "$bin")"
+          path="''${path##*/}"
           if [[ -z "$ignoreExitCode" ]] ; then
-            "$bin" $args >"$out/$base.log" 2>&1
-            return $?
-          else
-            "$bin" $args >"$out/$base.log" 2>&1
+            PATH="$path" "$bin" $args >"$out/$base.log" 2>&1
             ret=$?
+            if [[ $ret == 0 ]] && grep -i 'command not found' "$out/$base.log" >/dev/null ; then
+              echo "command not found when running '$base''${args:+ $args}'"
+              return 1
+            fi
+            return $ret
+          else
+            PATH="$path" "$bin" $args >"$out/$base.log" 2>&1
+            ret=$?
+            if [[ $ret == 0 ]] && grep -i 'command not found' "$out/$base.log" >/dev/null ; then
+              echo "command not found when running '$base''${args:+ $args}'"
+              return 1
+            fi
             if ! grep -Ei '(Example:|Options:|Syntax:|Usage:|improper command|SYNOPSIS)' "$out/$base.log" >/dev/null ; then
               echo "did not find usage info when running '$base''${args:+ $args}'"
               return $ret
@@ -277,7 +369,7 @@
           fi
         }
 
-        for bin in ${texlive.combined.scheme-full}/bin/* ; do
+        for bin in "$binaries"/bin/* ; do
           base="''${bin##*/}"
           args=
           ignoreExitCode=
@@ -295,10 +387,19 @@
               args=-h ;;
             ${lib.concatStringsSep "|" noArg})
               ;;
-            ${lib.concatStringsSep "|" tex})
-              args=test.tex ;;
+            ${lib.concatStringsSep "|" contextTest})
+              args=context-test.tex ;;
+            ${lib.concatStringsSep "|" latexTest})
+              args=latex-test.tex ;;
+            ${lib.concatStringsSep "|" texTest})
+              args=tex-test.tex ;;
             ${lib.concatStringsSep "|" shortVersion})
               args=-v ;;
+            ebong)
+              touch empty
+              args=empty ;;
+            ht)
+              args='latex latex-test.tex' ;;
             pdf2dsc)
               args='--help --help --help' ;;
             typeoutfileinfo)
@@ -312,15 +413,56 @@
               ignoreExitCode=1 ;;
           esac
 
+          case "$base" in
+            ${lib.concatStringsSep "|" needScheme})
+              bin="$texliveScheme/bin/$base"
+              if [[ ! -f "$bin" ]] ; then
+                ignoredCount=$((ignoredCount + 1))
+                continue
+              fi ;;
+          esac
+
           if testBin ; then : ; else # preserve exit code
             echo "failed '$base''${args:+ $args}' (exit code: $?)"
+            sed 's/^/  > /' < "$out/$base.log"
             failedCount=$((failedCount + 1))
           fi
         done
 
-        echo "tested $binCount binCount: $ignoredCount ignored, $brokenCount broken, $failedCount failed"
+        echo "tested $binCount binaries: $ignoredCount ignored, $brokenCount broken, $failedCount failed"
         [[ $failedCount = 0 ]]
       '';
+
+  # check that all scripts have a Nix shebang
+  shebangs = let
+      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
+      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+    in
+    runCommand "texlive-test-shebangs" { }
+      (''
+        echo "checking that all texlive scripts shebangs are in '$NIX_STORE'"
+        declare -i scriptCount=0 invalidCount=0
+      '' +
+      (lib.concatMapStrings
+        (pkg: ''
+          for bin in '${pkg.outPath}'/bin/* ; do
+            grep -I -q . "$bin" || continue  # ignore binary files
+            scriptCount=$((scriptCount + 1))
+            read -r cmdline < "$bin"
+            read -r interp <<< "$cmdline"
+            if [[ "$interp" != "#!$NIX_STORE"/* && "$interp" != "#! $NIX_STORE"/* ]] ; then
+              echo "error: non-nix shebang '$interp' in script '$bin'"
+              invalidCount=$((invalidCount + 1))
+            fi
+          done
+        '')
+        binPackages)
+      + ''
+        echo "checked $scriptCount scripts, found $invalidCount non-nix shebangs"
+        [[ $invalidCount -gt 0 ]] && exit 1
+        mkdir -p "$out"
+      ''
+      );
 
   # verify that the precomputed licensing information in default.nix
   # does indeed match the metadata of the individual packages.
