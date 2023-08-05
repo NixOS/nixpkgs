@@ -1,9 +1,9 @@
-self: super: with self;
+self: dontUse: with self;
 
 let
-  pythonInterpreter = super.python.pythonForBuild.interpreter;
-  pythonSitePackages = super.python.sitePackages;
-  pythonCheckInterpreter = super.python.interpreter;
+  pythonInterpreter = python.pythonForBuild.interpreter;
+  pythonSitePackages = python.sitePackages;
+  pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in {
   makePythonHook = args: pkgs.makeSetupHook ({passthru.provides.setupHook = true; } // args);
