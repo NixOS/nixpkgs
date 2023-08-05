@@ -24,11 +24,8 @@ in stdenv.mkDerivation {
   version = "2023-01-21";
 
   buildCommand = ''
-    mkdir -p $out
-    cp ${configGuess} $out/config.guess
-    cp ${configSub} $out/config.sub
-
-    chmod +x $out/config.*
+    install -Dm755 ${configGuess} $out/config.guess
+    install -Dm755 ${configSub} $out/config.sub
   '';
 
   meta = with lib; {
