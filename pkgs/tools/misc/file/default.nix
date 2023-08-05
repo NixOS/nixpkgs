@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Upstream patch to fix 32-bit tests.
-    # WIll be included in 5.46+ releases.
+    # Will be included in 5.46+ releases.
     ./32-bit-time_t.patch
   ];
 
