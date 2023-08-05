@@ -3854,6 +3854,8 @@ with pkgs;
 
   leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
 
+  leetup = callPackage ../applications/misc/leetup { };
+
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
   livebook = callPackage ../servers/web-apps/livebook { };
