@@ -37,6 +37,8 @@ buildPythonPackage rec {
     lxml
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     hypothesis
     pytest-vcr

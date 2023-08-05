@@ -37,6 +37,8 @@ buildPythonPackage rec {
     async-timeout
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-aiohttp
