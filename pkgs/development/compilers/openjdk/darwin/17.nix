@@ -5,23 +5,22 @@ let
   dist = {
     x86_64-darwin = {
       arch = "x64";
-      zuluVersion = "17.34.19";
-      jdkVersion = "17.0.3";
-      sha256 = "sha256-qImyxVC2y2QhxuVZwamKPyo46+n+7ytIFXpYI0e6w2c=";
+      zuluVersion = "17.44.15";
+      jdkVersion = "17.0.8";
+      hash = "sha256-Ci18gBkAv/UUIQw9KlnfibcQMXwQRGx6K7L/NBB7b7Q=";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "17.34.19";
-      jdkVersion = "17.0.3";
-      sha256 = "sha256-eaRX8Qa/Mqr9JhpHSEcf0Q9c4qmqLMgWqRhkEEwAjf8=";
+      zuluVersion = "17.44.15";
+      jdkVersion = "17.0.8";
+      hash = "sha256-8b81QY6DGXVOsTKM8QDzJnYjXV0ipCbYWaaz6oF2A6k=";
     };
   }."${stdenv.hostPlatform.system}";
 
   jce-policies = fetchurl {
-    # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
-    url = "http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
-    sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
+    url = "https://web.archive.org/web/20211126120343/http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
+    hash = "sha256-gCGii4ysQbRPFCH9IQoKCCL8r4jWLS5wo1sv9iioZ1o=";
   };
 
   jdk = stdenv.mkDerivation rec {
@@ -30,7 +29,7 @@ let
 
     src = fetchurl {
       url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-ca-jdk${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
-      inherit (dist) sha256;
+      inherit (dist) hash;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 
