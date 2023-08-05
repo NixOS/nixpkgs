@@ -24025,6 +24025,8 @@ with pkgs;
 
   opencv = opencv4;
 
+  opencv-mobile = callPackage ../development/libraries/opencv-mobile { };
+
   imath = callPackage ../development/libraries/imath { };
 
   openexr = openexr_2;
