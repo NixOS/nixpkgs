@@ -12,10 +12,10 @@
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot, commandLineArgs
-, executableName, longName, shortName, pname, updateScript, sourceExecutableName
+, executableName, longName, shortName, pname, updateScript
 , dontFixup ? false
 , rev ? null, vscodeServer ? null
-
+, sourceExecutableName ? executableName
 , useVSCodeRipgrep ? false
 , ripgrep
 }:
