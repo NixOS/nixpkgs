@@ -1847,6 +1847,7 @@ mapAliases ({
   wxGTK30 = throw "wxGTK30 has been removed from nixpkgs as it has reached end of life"; # Added 2023-03-22
   wxGTK30-gtk2 = wxGTK30; # Added 2022-12-03
   wxGTK30-gtk3 = wxGTK30; # Added 2022-12-03
+  wxGTK31 = throw "wxGTK31 has been removed from nixpkgs as it has reached end of life"; # Added 2023-08-05
   wxGTK31-gtk2 = throw "'wxGTK31-gtk2' has been removed from nixpkgs as it depends on deprecated GTK2"; # Added 2022-10-27
   wxGTK31-gtk3 = throw "'wxGTK31-gtk3' has been renamed to/replaced by 'wxGTK31'"; # Added 2022-10-27
   wxmac = wxGTK30; # Added 2023-03-22
