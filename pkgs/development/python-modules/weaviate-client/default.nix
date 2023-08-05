@@ -10,21 +10,21 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "3.21.0";
+  version = "3.22.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7JSsVUiDx2XpTaiylHxPD6SgN47Tu+nzZT3zpbF0Wm0=";
+    hash = "sha256-r/Yb0/XXTfIKYjKEQ+OqnIYNUzD9+xnE2N3ETLYEAy8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "validators>=0.18.2,<0.20.0" "validators>=0.18.2" \
+      --replace "validators>=0.18.2,<=0.21.0" "validators>=0.18.2" \
       --replace "requests>=2.28.0,<2.29.0" "requests>=2.28.0"
   '';
 

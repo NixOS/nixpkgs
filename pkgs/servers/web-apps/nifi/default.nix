@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jdk11 ];
 
   installPhase = ''
-    mv ../$sourceRoot $out
+    cp -r ../$sourceRoot $out
     rm -f $out/bin/*bat
     rm -rf $out/extensions
     mkdir -p $out/share/nifi
