@@ -14,9 +14,9 @@ mkDerivation rec {
   propagatedBuildInputs = [ glib libaccounts-glib ];
   nativeBuildInputs = [ doxygen pkg-config qmake ];
 
-  # remove forbidden reference to $TMPDIR
+  # remove forbidden references to $TMPDIR
   preFixup = ''
-    patchelf --shrink-rpath --allowed-rpath-prefixes "/nix/store" "$out"/bin/*
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
   '';
 
   meta = with lib; {
