@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bjesus/wttrbar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
+    mainProgram = "wttrbar";
   };
 }

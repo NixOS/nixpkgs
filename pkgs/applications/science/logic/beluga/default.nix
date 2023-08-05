@@ -8,7 +8,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "Beluga-lang";
     repo = "Beluga";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GN4ZOlhs8ktAcCu7iE4lh6HxhTu+KCJJbIvcI4MGcr0=";
+    hash = "sha256-0E7rmiLmQPfOAQ1qKiqxeLdqviVl+Thkl6KfOWkGZRc=";
   };
 
   duneVersion = "3";

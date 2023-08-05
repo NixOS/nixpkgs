@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.mupen64plus.org/";
     maintainers = [ maintainers.sander ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "mupen64plus";
   };
 }

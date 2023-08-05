@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jonringer ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "openrgb";
   };
 }

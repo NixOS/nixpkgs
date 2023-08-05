@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];
+    mainProgram = "mediainfo";
   };
 }
