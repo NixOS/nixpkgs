@@ -228,6 +228,7 @@
   ./programs/pantheon-tweaks.nix
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
+  ./programs/pop-launcher.nix
   ./programs/proxychains.nix
   ./programs/qdmr.nix
   ./programs/qt5ct.nix
