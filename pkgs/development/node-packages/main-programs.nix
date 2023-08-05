@@ -62,6 +62,7 @@
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
+  prettier = "prettier";
   purescript-psa = "psa";
   react-native-cli = "react-native";
   react-tools = "jsx";
