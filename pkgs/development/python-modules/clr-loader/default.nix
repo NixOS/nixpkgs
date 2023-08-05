@@ -9,10 +9,11 @@
 }:
 
 let
-  pname = "clr_loader";
+  pname = "clr-loader";
   version = "0.2.5";
   src = fetchPypi {
-    inherit pname version;
+    pname = "clr_loader";
+    inherit version;
     sha256 = "sha256-gu1ftlRynRT9iCludLtrhOss+5dv9LfUnU5En9eKIms=";
   };
 
