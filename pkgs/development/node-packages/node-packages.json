@@ -42,7 +42,6 @@
 , "browserify"
 , "browser-sync"
 , "btc-rpc-explorer"
-, "castnow"
 , "carbon-now-cli"
 , "carto"
 , "cdk8s-cli"

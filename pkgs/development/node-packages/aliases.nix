@@ -47,6 +47,7 @@ mapAliases {
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
+  castnow = pkgs.castnow; # added 2023-07-30
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   flood = pkgs.flood; # Added 2023-07-25
   gtop = pkgs.gtop; # added 2023-07-31
