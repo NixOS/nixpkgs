@@ -7,7 +7,7 @@
 , qttools
 , pkg-config
 , wrapQtAppsHook
-, opencv
+, opencv-mobile
 , freeimage
 , libmediainfo
 , ffmpegthumbnailer
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
-    opencv
+    opencv-mobile
     freeimage
     libmediainfo
     ffmpegthumbnailer

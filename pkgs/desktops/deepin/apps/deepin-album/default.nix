@@ -15,7 +15,7 @@
 , image-editor
 , glibmm
 , freeimage
-, opencv
+, opencv-mobile
 , ffmpeg
 , ffmpegthumbnailer
 }:
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     image-editor
     glibmm
     freeimage
-    opencv
+    opencv-mobile
     ffmpeg
     ffmpegthumbnailer
   ];
