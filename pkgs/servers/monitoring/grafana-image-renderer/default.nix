@@ -1,8 +1,8 @@
-{ lib, mkYarnPackage, fetchFromGitHub, nodejs, runtimeShell }:
+{ lib, mkYarnPackage, fetchFromGitHub, fetchYarnDeps, nodejs, runtimeShell }:
 
 # Notes for the upgrade:
 # * Download the tarball of the new version to use.
-# * Replace new `package.json`, `yarn.nix`, `yarn.lock` here.
+# * Replace new `package.json` here.
 # * Update `version`+`hash` and rebuild.
 
 mkYarnPackage rec {
@@ -13,8 +13,15 @@ mkYarnPackage rec {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    sha256 = "sha256-I5UHNt4vOsXqgeQ96CxJwxuD/MiGK1NEAFJItN1CkwA=";
+    hash = "sha256-I5UHNt4vOsXqgeQ96CxJwxuD/MiGK1NEAFJItN1CkwA=";
   };
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    hash = "sha256-YT2tHvLtn4Z2CxH9utmsT8r/UM4/OdPFXByp9pBHDqU=";
+  };
+
+  packageJSON = ./package.json;
 
   buildPhase = ''
     runHook preBuild
@@ -27,10 +34,6 @@ mkYarnPackage rec {
   '';
 
   dontInstall = true;
-
-  packageJSON = ./package.json;
-  yarnNix = ./yarn.nix;
-  yarnLock = ./yarn.lock;
 
   distPhase = ''
     runHook preDist
@@ -59,6 +62,6 @@ mkYarnPackage rec {
     description = "A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
     license = licenses.asl20;
     maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
