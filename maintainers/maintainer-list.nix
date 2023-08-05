@@ -6315,6 +6315,11 @@
     githubId = 6893840;
     name = "Yacine Hmito";
   };
+  gracicot = {
+    github = "gracicot";
+    githubId = 2906673;
+    name = "Guillaume Racicot";
+  };
   graham33 = {
     email = "graham@grahambennett.org";
     github = "graham33";
