@@ -10,10 +10,12 @@ let
 
   # Don't use fetchgit as this is needed during Aarch64 bootstrapping
   configGuess = fetchurl {
+    name = "config.guess-${builtins.substring 0 7 rev}";
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.guess?id=${rev}";
     sha256 = "049qgfh4xjd4fxd7ygm1phd5faqphfvhfcv8dsdldprsp86lf55v";
   };
   configSub = fetchurl {
+    name = "config.sub-${builtins.substring 0 7 rev}";
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.sub?id=${rev}";
     sha256 = "1rk30y27mzls49wyfdb5jhzjr08hkxl7xqhnxmhcmkvqlmpsjnxl";
   };
