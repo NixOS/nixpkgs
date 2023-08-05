@@ -45,14 +45,14 @@
 
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
-  version = "23Jun2022_update4";
+  version = "2Aug2023";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = "stable_${version}";
-    hash = "sha256-zGztc+iUFNIa0KKtfpAhwitInvMmXeTHp1XsOLibfzM=";
+    hash = "sha256-6T4YAa4iN3pJpODGPW+faR16xxyYYdkHLavtiPUbZ4o=";
   };
   preConfigure = ''
     cd cmake
