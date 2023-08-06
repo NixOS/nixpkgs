@@ -577,6 +577,8 @@ in
       };
 
       boot.initrd = mkIf inInitrd {
+        services.udev.packages = [ cfgZfs.package ]; # /dev/zfs needs to be made 0666 in stage 1.
+
         kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
         extraUtilsCommands =
           ''
