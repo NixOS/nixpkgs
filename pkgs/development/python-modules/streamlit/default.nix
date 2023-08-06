@@ -1,38 +1,43 @@
 { lib
+, stdenv
 , altair
 , blinker
-, buildPythonApplication
+, buildPythonPackage
 , cachetools
 , click
 , fetchPypi
 , gitpython
 , importlib-metadata
-, jinja2
+, numpy
+, packaging
+, pandas
 , pillow
 , protobuf3
 , pyarrow
 , pydeck
 , pympler
+, python-dateutil
+, pythonOlder
 , requests
 , rich
-, semver
-, setuptools
 , tenacity
 , toml
-, tornado
+, typing-extensions
 , tzlocal
 , validators
 , watchdog
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.24.0";
+  version = "1.24.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-NSX6zpTHh5JzPFbWOja0iEUVDjume7UKGa20xZdagiU=";
+    hash = "sha256-/V8LZHmOlwY2RAj7WJt3WVMUpjFdE7LXULljx66X82I=";
   };
 
   propagatedBuildInputs = [
@@ -42,21 +47,23 @@ buildPythonApplication rec {
     click
     gitpython
     importlib-metadata
-    jinja2
+    numpy
+    packaging
+    pandas
     pillow
     protobuf3
     pyarrow
     pydeck
     pympler
+    python-dateutil
     requests
     rich
-    semver
-    setuptools
     tenacity
     toml
-    tornado
+    typing-extensions
     tzlocal
     validators
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     watchdog
   ];
 
@@ -75,7 +82,7 @@ buildPythonApplication rec {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "The fastest way to build custom ML tools";
-    maintainers = with maintainers; [ yrashk ];
+    maintainers = with maintainers; [ natsukium yrashk ];
     license = licenses.asl20;
   };
 }

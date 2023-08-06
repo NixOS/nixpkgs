@@ -13294,7 +13294,7 @@
   };
   piturnah = {
     email = "peterhebden6@gmail.com";
-    github = "piturnah";
+    github = "Piturnah";
     githubId = 20472367;
     name = "Peter Hebden";
   };
