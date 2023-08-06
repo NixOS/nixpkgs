@@ -4182,6 +4182,8 @@ self: super: with self; {
 
   georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
 
+  getjump = callPackage ../development/python-modules/getjump { };
+
   getmac = callPackage ../development/python-modules/getmac { };
 
   getkey = callPackage ../development/python-modules/getkey { };
@@ -9574,6 +9576,8 @@ self: super: with self; {
 
   pyrad = callPackage ../development/python-modules/pyrad { };
 
+  pyradiomics = callPackage ../development/python-modules/pyradiomics { };
+
   pyradios = callPackage ../development/python-modules/pyradios { };
 
   pyrainbird = callPackage ../development/python-modules/pyrainbird { };
@@ -12172,6 +12176,8 @@ self: super: with self; {
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
 
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
+
+  streamlit = callPackage ../development/python-modules/streamlit { };
 
   streamz = callPackage ../development/python-modules/streamz { };
 

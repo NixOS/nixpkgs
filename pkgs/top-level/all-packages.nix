@@ -1786,6 +1786,8 @@ with pkgs;
 
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };
 
+  heh = callPackage ../applications/editors/heh { };
+
   hexdiff = callPackage ../tools/misc/hexdiff { };
 
   httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
@@ -3710,10 +3712,7 @@ with pkgs;
 
   github-copilot-intellij-agent = callPackage ../development/tools/github-copilot-intellij-agent { };
 
-  github-desktop = callPackage ../applications/version-management/github-desktop {
-    openssl = openssl_1_1;
-    curl = curl.override { openssl = openssl_1_1; };
-  };
+  github-desktop = callPackage ../applications/version-management/github-desktop { };
 
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
@@ -15422,19 +15421,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  inherit (callPackages ../development/compilers/crystal {
-    llvmPackages = llvmPackages_13;
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  })
+  inherit (darwin.apple_sdk_11_0.callPackage ../development/compilers/crystal { })
     crystal_1_2
-    crystal_1_7;
-
-  inherit (callPackages ../development/compilers/crystal {
-    llvmPackages = llvmPackages_15;
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  })
-    crystal_1_9
+    crystal_1_7
     crystal_1_8
+    crystal_1_9
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
@@ -16610,6 +16601,8 @@ with pkgs;
   blaze = callPackage ../development/libraries/blaze { };
 
   pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
+
+  prqlc = callPackage ../development/tools/database/prqlc { };
 
   qbe = callPackage ../development/compilers/qbe { };
 
@@ -38025,8 +38018,6 @@ with pkgs;
 
   stone-kingdoms = callPackage ../games/stone-kingdoms { };
 
-  streamlit = python3Packages.callPackage ../applications/science/machine-learning/streamlit { };
-
   stt = callPackage ../tools/audio/stt { };
 
   stuntrally = callPackage ../games/stuntrally
@@ -38760,6 +38751,8 @@ with pkgs;
   nengo-gui = callPackage ../applications/science/machine-learning/nengo-gui { };
 
   sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless { };
+
+  streamlit = with python3Packages; toPythonApplication streamlit;
 
   uarmsolver = callPackage ../applications/science/machine-learning/uarmsolver { };
 
