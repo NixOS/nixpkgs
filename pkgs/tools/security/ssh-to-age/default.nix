@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/Mic92/ssh-to-age";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
+    mainProgram = "ssh-to-age";
   };
 }
