@@ -20,12 +20,16 @@ let packages = self:
           pname = "wordpress-${type}-${pname}";
           version = filterWPString version;
 
+          outputs = [ "out" "i18n" ];
+
           dontConfigure = true;
           dontBuild = true;
 
           installPhase = ''
             runHook preInstall
             cp -R ./. $out
+            mkdir -p $i18n
+            cp ${./.}/jetpack-de_DE*.{json,po,mo} $i18n/
             runHook postInstall
           '';
 
@@ -73,8 +77,6 @@ let packages = self:
         "https://i18n.svn.wordpress.org/core/" + data.version + "/" + data.path
       else if type == "pluginLanguage" then
         "https://i18n.svn.wordpress.org/plugins/" + data.path
-      else if type == "themeLanguage" then
-        "https://i18n.svn.wordpress.org/themes/" + data.path
       else
         throw "fetchWordpress: invalid package type ${type}";
     }) {};
