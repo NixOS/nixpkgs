@@ -24,12 +24,13 @@ in writeScript "update-${pname}" ''
   set -eux
   pushd ${basePath}
 
-  HOME=`mktemp -d`
-  export GNUPGHOME=`mktemp -d`
+  HOME=$(mktemp -d)
+  GNUPGHOME=$(mktemp -d)
+  export GNUPGHOME
 
   gpg --receive-keys ADD7079479700DCADFDD5337E36D3B13F3D93274
 
-  tmpfile=`mktemp`
+  tmpfile=$(mktemp)
   url=${baseUrl}
 
   # retrieving latest released version
@@ -42,23 +43,23 @@ in writeScript "update-${pname}" ''
   #    versions or removes release versions if we are looking for beta
   #    versions
   # - this line pick up latest release
-  version=`xidel -s $url --extract "//a" | \
-           sed s"/.$//" | \
-           grep "^[0-9]" | \
-           sort --version-sort | \
-           grep -v "funnelcake" | \
-           grep -e "${lib.optionalString isBeta "b"}\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${lib.optionalString (!isBeta) "grep -v \"b\" |"} \
-           tail -1`
+  version=$(xidel -s $url --extract "//a" | \
+            sed s"/.$//" | \
+            grep "^[0-9]" | \
+            sort --version-sort | \
+            grep -v "funnelcake" | \
+            grep -e "${lib.optionalString isBeta "b"}\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${lib.optionalString (!isBeta) "grep -v \"b\" |"} \
+            tail -1)
 
-  curl --silent -o $HOME/shasums "$url$version/SHA256SUMS"
-  curl --silent -o $HOME/shasums.asc "$url$version/SHA256SUMS.asc"
-  gpgv --keyring=$GNUPGHOME/pubring.kbx $HOME/shasums.asc $HOME/shasums
+  curl --silent -o "$HOME"/shasums "$url$version/SHA256SUMS"
+  curl --silent -o "$HOME"/shasums.asc "$url$version/SHA256SUMS.asc"
+  gpgv --keyring="$GNUPGHOME"/pubring.kbx "$HOME"/shasums.asc "$HOME"/shasums
 
   # this is a list of sha256 and tarballs for both arches
   # Upstream files contains python repr strings like b'somehash', hence the sed dance
-  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep "\(tar.bz2\|dmg\)" | grep -v mac-EME-free`
+  shasums=$(sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ "$HOME"/shasums | grep "\(tar.bz2\|dmg\)" | grep -v mac-EME-free)
 
-  cat > $tmpfile <<EOF
+  cat > "$tmpfile" <<EOF
   {
     version = "$version";
     sources = [
@@ -75,27 +76,27 @@ in writeScript "update-${pname}" ''
     #  - only select tarballs for current version
     #  - rename space with colon so that for loop doesnt
     #  - inteprets sha and path as 2 lines
-    for line in `echo "$shasums" | \
-                 grep $arch | \
-                 grep -i "${baseName}$suffix$" | \
-                 sed "s/Firefox /Firefox%20/" | \
-                 tr " " ":"`; do
+    for line in $(echo "$shasums" | \
+                  grep $arch | \
+                  grep -i "${baseName}$suffix$" | \
+                  sed "s/Firefox /Firefox%20/" | \
+                  tr " " ":"); do
       # create an entry for every locale
-      cat >> $tmpfile <<EOF
-      { url = "$url$version/`echo "$line" | cut -d":" -f3`";
-        locale = "`echo "$line" | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
+      cat >> "$tmpfile" <<EOF
+      { url = "$url$version/$(echo "$line" | cut -d":" -f3)";
+        locale = "$(echo "$line" | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//")";
         arch = "$arch";
-        sha256 = "`echo "$line" | cut -d":" -f1`";
+        sha256 = "$(echo "$line" | cut -d":" -f1)";
       }
   EOF
     done
   done
-  cat >> $tmpfile <<EOF
+  cat >> "$tmpfile" <<EOF
       ];
   }
   EOF
 
-  mv $tmpfile ${channel}_sources.nix
+  mv "$tmpfile" ${channel}_sources.nix
 
   popd
 ''
