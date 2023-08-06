@@ -5488,6 +5488,13 @@
       }
     ];
   };
+  fernsehmuell = {
+    email = "fernsehmuel@googlemail.com";
+    matrix = "@fernsehmuell:matrix.org";
+    github = "fernsehmuell";
+    githubId = 5198058;
+    name = "Udo Sauer";
+  };
   ffinkdevs = {
     email = "fink@h0st.space";
     github = "ffinkdevs";
