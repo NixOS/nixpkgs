@@ -31595,40 +31595,56 @@ with pkgs;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
   firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
 
-  firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    inherit (gnome) adwaita-icon-theme;
+  firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin/linux.nix {
     channel = "release";
     generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
+    inherit (gnome) adwaita-icon-theme;
   };
 
-  firefox-bin = wrapFirefox firefox-bin-unwrapped {
-    pname = "firefox-bin";
-  };
+  firefox-bin = if stdenv.isDarwin then
+    callPackage ../applications/networking/browsers/firefox-bin/darwin.nix {
+      channel = "release";
+      generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
+    }
+  else
+    wrapFirefox firefox-bin-unwrapped {
+      pname = "firefox-bin";
+    };
 
   firefox-beta-bin-unwrapped = firefox-bin-unwrapped.override {
-    inherit (gnome) adwaita-icon-theme;
     channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
   };
 
-  firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
-    pname = "firefox-beta-bin";
-    desktopName = "Firefox Beta";
-    wmClass = "firefox-beta";
-  };
+  firefox-beta-bin = if stdenv.isDarwin then
+    firefox-bin.override {
+      channel = "beta";
+      generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
+    }
+  else
+    res.wrapFirefox firefox-beta-bin-unwrapped {
+      pname = "firefox-beta-bin";
+      desktopName = "Firefox Beta";
+      wmClass = "firefox-beta";
+    };
 
-  firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    inherit (gnome) adwaita-icon-theme;
+  firefox-devedition-bin-unwrapped = firefox-bin-unwrapped.override {
     channel = "devedition";
     generated = import ../applications/networking/browsers/firefox-bin/devedition_sources.nix;
   };
 
-  firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
-    nameSuffix = "-devedition";
-    pname = "firefox-devedition-bin";
-    desktopName = "Firefox DevEdition";
-    wmClass = "firefox-devedition";
-  };
+  firefox-devedition-bin = if stdenv.isDarwin then
+    firefox-bin.override {
+      channel = "devedition";
+      generated = import ../applications/networking/browsers/firefox-bin/devedition_sources.nix;
+    }
+  else
+    res.wrapFirefox firefox-devedition-bin-unwrapped {
+      nameSuffix = "-devedition";
+      pname = "firefox-devedition-bin";
+      desktopName = "Firefox DevEdition";
+      wmClass = "firefox-devedition";
+    };
 
   librewolf-unwrapped = callPackage ../applications/networking/browsers/librewolf { };
 

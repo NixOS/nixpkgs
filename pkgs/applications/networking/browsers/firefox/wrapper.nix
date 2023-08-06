@@ -406,6 +406,7 @@ let
       meta = browser.meta // {
         inherit (browser.meta) description;
         hydraPlatforms = [];
+        broken = stdenv.isDarwin;
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };
     };
