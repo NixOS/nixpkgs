@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, cython
+, cython_3
 , pkg-config
 , fuse3
 , trio
@@ -14,9 +14,9 @@
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.2.3";
+  version = "3.3.0";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   format = "setuptools";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "libfuse";
     repo = "pyfuse3";
     rev = "refs/tags/${version}";
-    hash = "sha256-2YrVapCojcFRaljqNeWPMWz3hEgSutKPy2u8FXp0fME=";
+    hash = "sha256-GLGuTFdTA16XnXKSBD7ET963a8xH9EG/JfPNu6/3DOg=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
+    cython_3
     pkg-config
   ];
 
