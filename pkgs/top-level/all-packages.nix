@@ -3006,6 +3006,12 @@ with pkgs;
 
   pikchr = callPackage ../tools/graphics/pikchr { };
 
+  poop = callPackage ../tools/misc/poop {
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_11;
+    };
+  };
+
   popl = callPackage ../development/libraries/popl { };
 
   popsicle = callPackage ../tools/misc/popsicle { };
