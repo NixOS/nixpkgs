@@ -28,7 +28,7 @@ buildPythonPackage rec {
     description = "Python wrapper for librtlsdr (a driver for Realtek RTL2832U based SDR's)";
     homepage = "https://github.com/roger-/pyrtlsdr";
     changelog = "https://github.com/pyrtlsdr/pyrtlsdr/releases/tag/v${version}";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
   };
