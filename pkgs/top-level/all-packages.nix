@@ -36923,6 +36923,8 @@ with pkgs;
 
   eternity = callPackage ../games/doom-ports/eternity-engine { };
 
+  gorched = callPackage ../games/gorched { };
+
   gzdoom = callPackage ../games/doom-ports/gzdoom { };
 
   odamex = callPackage ../games/doom-ports/odamex { };
