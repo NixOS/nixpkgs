@@ -12350,6 +12350,8 @@ with pkgs;
 
   richgo = callPackage ../development/tools/richgo {  };
 
+  risor = callPackage ../development/interpreters/risor { };
+
   rlci = callPackage ../development/interpreters/rlci { };
 
   rs = callPackage ../tools/text/rs { };
