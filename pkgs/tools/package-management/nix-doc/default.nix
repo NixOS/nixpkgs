@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-doc";
-  version = "0.5.8";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "lf-";
     repo = "nix-doc";
-    sha256 = "sha256-murez5uHLv1YXIaDDaFXCDPPggK1GAXjaSmZJhlqN80=";
+    sha256 = "sha256-uilVJz1MnMF3i/ZXY0bIoSK3uAzfxWuHfhoOSmQgY/I=";
   };
 
   doCheck = true;
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config nix ];
 
-  cargoSha256 = "sha256-+6I6+LZs84OcyebAIg/9KeAxV1UdK9IgaT7UsPJ5rWQ=";
+  cargoSha256 = "sha256-02noJcbtml4MxRCjaWtjOWLTUNOQnKy3GCsil31J6F8=";
 
   meta = with lib; {
     description = "An interactive Nix documentation tool";
