@@ -3710,10 +3710,7 @@ with pkgs;
 
   github-copilot-intellij-agent = callPackage ../development/tools/github-copilot-intellij-agent { };
 
-  github-desktop = callPackage ../applications/version-management/github-desktop {
-    openssl = openssl_1_1;
-    curl = curl.override { openssl = openssl_1_1; };
-  };
+  github-desktop = callPackage ../applications/version-management/github-desktop { };
 
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
