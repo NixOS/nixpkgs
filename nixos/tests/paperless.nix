@@ -30,20 +30,27 @@ import ./make-test-python.nix ({ lib, ... }: {
     with subtest("Task-queue gets ready"):
         machine.wait_for_unit("paperless-task-queue.service")
 
-    with subtest("Add a document via the web interface"):
+    with subtest("Add a png document via the web interface"):
         machine.succeed(
             "convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 -fill black "
             "-annotate +5+20 'hello web 16-10-2005' /tmp/webdoc.png"
         )
         machine.wait_until_succeeds("curl -u admin:admin -F document=@/tmp/webdoc.png -fs localhost:28981/api/documents/post_document/")
 
+    with subtest("Add a txt document via the web interface"):
+        machine.succeed(
+            "echo 'hello web 16-10-2005' > /tmp/webdoc.txt"
+        )
+        machine.wait_until_succeeds("curl -u admin:admin -F document=@/tmp/webdoc.txt -fs localhost:28981/api/documents/post_document/")
+
     with subtest("Documents are consumed"):
         machine.wait_until_succeeds(
-            "(($(curl -u admin:admin -fs localhost:28981/api/documents/ | jq .count) == 2))"
+            "(($(curl -u admin:admin -fs localhost:28981/api/documents/ | jq .count) == 3))"
         )
         docs = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/"))['results']
         assert "2005-10-16" in docs[0]['created']
         assert "2005-10-16" in docs[1]['created']
+        assert "2005-10-16" in docs[2]['created']
 
     # Detects gunicorn issues, see PR #190888
     with subtest("Document metadata can be accessed"):
@@ -51,6 +58,9 @@ import ./make-test-python.nix ({ lib, ... }: {
         assert "original_checksum" in metadata
 
         metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/2/metadata/"))
+        assert "original_checksum" in metadata
+
+        metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/3/metadata/"))
         assert "original_checksum" in metadata
   '';
 })

@@ -262,7 +262,7 @@ with pkgs;
 
   alterx = callPackage ../tools/security/alterx { };
 
-  alt-server = callPackage ../tools/misc/alt-server { };
+  altserver-linux = callPackage ../tools/misc/altserver-linux { };
 
   asciicam = callPackage ../applications/video/asciicam { };
 
@@ -12402,7 +12402,7 @@ with pkgs;
 
   remind = callPackage ../tools/misc/remind { };
 
-  remmina = callPackage ../applications/networking/remote/remmina { };
+  remmina = darwin.apple_sdk_11_0.callPackage ../applications/networking/remote/remmina { };
 
   rename = callPackage ../tools/misc/rename { };
 
@@ -18968,7 +18968,9 @@ with pkgs;
 
   electron-fiddle = callPackage ../development/tools/electron-fiddle { };
 
-  elf2uf2-rs = callPackage ../development/embedded/elf2uf2-rs { };
+  elf2uf2-rs = darwin.apple_sdk_11_0.callPackage ../development/embedded/elf2uf2-rs {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation DiskArbitration Foundation;
+  };
 
   elfinfo = callPackage ../development/tools/misc/elfinfo { };
 
@@ -19875,7 +19877,7 @@ with pkgs;
 
   scenebuilder = callPackage ../development/tools/scenebuilder { };
 
-  scenic-view = callPackage ../development/tools/scenic-view { jdk = jdk11; };
+  scenic-view = callPackage ../development/tools/scenic-view { };
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
@@ -23905,6 +23907,8 @@ with pkgs;
   ntk = callPackage ../development/libraries/audio/ntk { };
 
   ntrack = callPackage ../development/libraries/ntrack { };
+
+  numcpp = callPackage ../development/libraries/numcpp { };
 
   nuraft = callPackage ../development/libraries/nuraft { };
 
@@ -38022,8 +38026,8 @@ with pkgs;
 
   superTux = callPackage ../games/supertux { };
 
-  superTuxKart = callPackage ../games/super-tux-kart {
-    inherit (darwin.apple_sdk.frameworks) Cocoa IOKit OpenAL;
+  superTuxKart = darwin.apple_sdk_11_0.callPackage ../games/super-tux-kart {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit OpenAL IOBluetooth;
   };
 
   synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };
