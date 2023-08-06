@@ -29,16 +29,12 @@ stdenv.mkDerivation rec {
     "--with-gnu-filesystem-hierarchy"
   ];
 
-  postFixup =
-    let
-      guileVersion = lib.versions.majorMinor guile.version;
-    in
-    ''
-      for f in $out/share/guile/site/ncurses/**.scm; do \
-        substituteInPlace $f \
-          --replace "libguile-ncurses" "$out/lib/guile/${guileVersion}/libguile-ncurses"; \
-      done
-    '';
+  postFixup = ''
+    for f in $out/${guile.siteDir}/ncurses/**.scm; do \
+      substituteInPlace $f \
+        --replace "libguile-ncurses" "$out/lib/guile/${guile.effectiveVersion}/libguile-ncurses"; \
+    done
+  '';
 
   # XXX: 1 of 65 tests failed.
   doCheck = false;

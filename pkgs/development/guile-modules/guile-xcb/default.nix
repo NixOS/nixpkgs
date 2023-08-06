@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-guile-site-dir=$out/share/guile/site"
-    "--with-guile-site-ccache-dir=$out/share/guile/site"
+    "--with-guile-site-dir=$(out)/${guile.siteDir}"
+    "--with-guile-site-ccache-dir=$(out)/${guile.siteCcacheDir}"
   ];
 
   makeFlags = [

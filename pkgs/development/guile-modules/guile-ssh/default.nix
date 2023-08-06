@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-P29U88QrCjoyl/wdTPZbiMoykd/v6ul6CW/IJn9UAyw=";
   };
 
-  configureFlags = [ "--with-guilesitedir=\${out}/share/guile/site" ];
+  configureFlags = [ "--with-guilesitedir=\${out}/${guile.siteDir}" ];
 
   postFixup = ''
-    for f in $out/share/guile/site/ssh/**.scm; do \
+    for f in $out/${guile.siteDir}/ssh/**.scm; do \
       substituteInPlace $f \
         --replace "libguile-ssh" "$out/lib/libguile-ssh"; \
     done

@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "restish";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "restish";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sXktiYCymoqZgEWQJHYn9KAUxtZYNCSyDyPC8D/X+Mw=";
+    hash = "sha256-DvI1pe4ONuIhSecJOhv6GKRzOYHo+jePqT8oYVvcKnM=";
   };
 
-  vendorHash = "sha256-quDHEoHVAEAnw+M0xiAd07s/EOhVUgH0T1z8TaBcbj0=";
+  vendorHash = "sha256-sUBqeLhpWUu1NfAmFQCKFHm8DQaB8LYRrFexvuF8vC8=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
