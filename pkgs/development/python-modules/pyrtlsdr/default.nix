@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+z5YO6BzuGHo4LxeYvZvBzZekUf102SR3krWLyPkU2I=";
+    hash = "sha256-+z5YO6BzuGHo4LxeYvZvBzZekUf102SR3krWLyPkU2I=";
   };
 
   propagatedBuildInputs = [ setuptools ];
@@ -27,6 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for librtlsdr (a driver for Realtek RTL2832U based SDR's)";
     homepage = "https://github.com/roger-/pyrtlsdr";
+    changelog = "https://github.com/pyrtlsdr/pyrtlsdr/releases/tag/v${version}";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
