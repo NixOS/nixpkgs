@@ -18,6 +18,7 @@
 , pyturbojpeg
 , tifffile
 , lmdb
+, mmengine
 , symlinkJoin
 }:
 
@@ -48,16 +49,16 @@ let
 in
 buildPythonPackage rec {
   pname = "mmcv";
-  version = "1.7.1";
+  version = "2.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-b4MLBPNRCcPq1osUvqo71PCWVX7lOjAH+dXttd4ZapU";
+    hash = "sha256-36PcvoB0bM0VoNb2psURYFo3krmgHG47OufU6PVjHyw=";
   };
 
   preConfigure = ''
@@ -100,6 +101,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook torchvision lmdb onnx onnxruntime scipy pyturbojpeg tifffile ];
 
   propagatedBuildInputs = [
+    mmengine
     torch
     opencv4
     yapf

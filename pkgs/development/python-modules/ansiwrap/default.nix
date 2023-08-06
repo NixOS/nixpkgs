@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jonathaneunice/ansiwrap";
     changelog = "https://github.com/jonathaneunice/ansiwrap/blob/master/CHANGES.yml";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

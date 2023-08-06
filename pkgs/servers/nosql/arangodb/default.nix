@@ -1,5 +1,5 @@
 {
-  # gcc 11.2 suggested on 3.10.3.
+  # gcc 11.2 suggested on 3.10.5.2.
   # gcc 11.3.0 unsupported yet, investigate gcc support when upgrading
   # See https://github.com/arangodb/arangodb/issues/17454
   gcc10Stdenv
@@ -32,13 +32,13 @@ in
 
 gcc10Stdenv.mkDerivation rec {
   pname = "arangodb";
-  version = "3.10.3";
+  version = "3.10.5.2";
 
   src = fetchFromGitHub {
     repo = "arangodb";
     owner = "arangodb";
     rev = "v${version}";
-    sha256 = "sha256-Jp2rvapTe0CtyYfh1YLJ5eUngh8V+BCUQ/OgH3nE2Ro=";
+    sha256 = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
     fetchSubmodules = true;
   };
 

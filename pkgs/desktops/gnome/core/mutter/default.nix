@@ -66,13 +66,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "44.1";
+  version = "44.3";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "lzrq+rQvBvk0oJlPyEh4lYzbTSdmpMhnpczcVH3VcFY=";
+    sha256 = "GFy+vyFQ0+RQVQ43G9sTqLTbCWl4sU+ZUh6WbqzHBVE=";
   };
 
   mesonFlags = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtests=false"
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
-    "-Dxwayland_path=${xwayland}/bin/Xwayland"
+    "-Dxwayland_path=${lib.getExe xwayland}"
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"

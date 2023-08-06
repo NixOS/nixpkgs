@@ -81,11 +81,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "12.0.0";
+  version = "12.0.1";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-3dg0eIJ3XlOvfQlloZArfY/NCgMP0U94PU+F6CE1LVI=";
+    hash = "sha256-NIHEETk6oVx16I2Tz4MV+vf0PhgP4HkBKNOEDUF96Fg=";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";

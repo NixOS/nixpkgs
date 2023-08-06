@@ -6,10 +6,7 @@
 , wrapGAppsHook
 }:
 
-let
-  inherit (python3.pkgs) buildPythonApplication buildPythonPackage fetchPypi;
-in
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "MeerK40t";
   version = "0.8.1000";
   format = "setuptools";

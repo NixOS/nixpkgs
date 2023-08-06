@@ -5,7 +5,6 @@
 , buildPythonPackage
 , events
 , fetchFromGitHub
-, fetchpatch
 , freezegun
 , home-assistant-bluetooth
 , poetry-core
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pysnooz";
-  version = "0.8.3";
+  version = "0.8.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -27,18 +26,8 @@ buildPythonPackage rec {
     owner = "AustinBrunkhorst";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-K99sE9vxJo6grkp04DmTKOVqdfpQI0kUzJjSR6gnSew=";
+    hash = "sha256-X7RjI4KytJI9raHAJHLygV3J4zHKuHk8Kq+3JfktPeg=";
   };
-
-  patches = [
-    (fetchpatch {
-      # fix tests against bleak 0.20.0+
-      # https://github.com/AustinBrunkhorst/pysnooz/pull/9
-      name = "pysnooz-bleak-0.20.0-compat.patch";
-      url = "https://github.com/AustinBrunkhorst/pysnooz/commit/594951051ceb40003975e61d64cfc683188d87d3.patch";
-      hash = "sha256-cWQt9V9IOB0YoW5zUR0PBTqS0a30fMTHpXH6CxWKRcc=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

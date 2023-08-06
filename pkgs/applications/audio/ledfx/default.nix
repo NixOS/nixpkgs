@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -7,14 +8,13 @@ python3.pkgs.buildPythonPackage rec {
   version = "2.0.67";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-lFxAMjglQZXCySr83PtvStU6hw2ucQu+rSjIHo1yZBk=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"openrgb-python~=0.2.10",' "" \
       --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
       --replace '"sentry-sdk==1.14.0",' "" \
       --replace "~=" ">="
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonPackage rec {
     icmplib
     multidict
     numpy
-    # openrgb-python # not packaged
+    openrgb-python
     paho-mqtt
     pillow
     psutil

@@ -1,4 +1,4 @@
-{ lib, pythonPackages }:
+{ lib, pythonPackages, fetchPypi }:
 
 with pythonPackages;
 

@@ -72,13 +72,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.6.8";
+  version = "5.8.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-qL8GaEH/0d4yEwwdaR55fTp0RitbyptoxKOBO3nmbic=";
+    hash = "sha256-34kOSDIU56cSZ4j0FadVfr9HLQytnK4ys88DFF7LTiM=";
   };
 
   patches = [
@@ -155,20 +155,21 @@ stdenv.mkDerivation rec {
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
       {} +
 
-    sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
+    # All optional and may introduce circular dependency.
+    find ./files/usr/share/cinnamon/applets -type f -exec sed -i \
+      -e '/^#/!s,/usr/bin,/run/current-system/sw/bin,g' \
+      {} +
 
-    sed "s|'python3'|'${pythonEnv.interpreter}'|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/CinnamonGtkSettings.py
+    pushd ./files/usr/share/cinnamon/cinnamon-settings
+      substituteInPlace ./bin/capi.py                     --replace '"/usr/lib"' '"${cinnamon-control-center}/lib"'
+      substituteInPlace ./bin/CinnamonGtkSettings.py      --replace "'python3'" "'${pythonEnv.interpreter}'"
+      substituteInPlace ./bin/SettingsWidgets.py          --replace "/usr/share/sounds" "/run/current-system/sw/share/sounds"
+      substituteInPlace ./bin/Spices.py                   --replace "msgfmt" "${gettext}/bin/msgfmt"
+      substituteInPlace ./modules/cs_info.py              --replace "lspci" "${pciutils}/bin/lspci"
+      substituteInPlace ./modules/cs_themes.py            --replace "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
+    popd
 
-    sed "s|/usr/bin/cinnamon-screensaver-command|/run/current-system/sw/bin/cinnamon-screensaver-command|g" \
-      -i ./files/usr/share/cinnamon/applets/menu@cinnamon.org/applet.js -i ./files/usr/share/cinnamon/applets/user@cinnamon.org/applet.js
-
-    sed "s|\"/usr/lib\"|\"${cinnamon-control-center}/lib\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/capi.py
-
-    sed 's|"lspci"|"${pciutils}/bin/lspci"|g' -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
-
-    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
-
-    sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/Spices.py
+    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d}
 
     patchShebangs src/data-to-c.pl
   '';
@@ -179,9 +180,16 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
     )
 
+    buildPythonPath "$out ${python3.pkgs.xapp}"
+
+    # https://github.com/NixOS/nixpkgs/issues/200397
+    patchPythonScript $out/bin/cinnamon-spice-updater
+
     # https://github.com/NixOS/nixpkgs/issues/129946
-    buildPythonPath "${python3.pkgs.xapp}"
     patchPythonScript $out/share/cinnamon/cinnamon-desktop-editor/cinnamon-desktop-editor.py
+
+    # Called as `pkexec cinnamon-settings-users.py`.
+    wrapGApp $out/share/cinnamon/cinnamon-settings-users/cinnamon-settings-users.py
   '';
 
   passthru = {

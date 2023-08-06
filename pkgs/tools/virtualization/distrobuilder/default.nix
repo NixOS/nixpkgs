@@ -38,7 +38,7 @@ buildGoModule rec {
 
   patches = [
     # go.mod update: needed to to include a newer lxd which contains
-    # https://github.com/lxc/lxd/commit/d83f061a21f509d42b7a334b97403d2a019a7b52
+    # https://github.com/canonical/lxd/commit/d83f061a21f509d42b7a334b97403d2a019a7b52
     # which is needed to fix the build w/glibc-2.36.
     (fetchpatch {
       url = "https://github.com/lxc/distrobuilder/commit/5346bcc77dd7f141a36a8da851f016d0b929835e.patch";

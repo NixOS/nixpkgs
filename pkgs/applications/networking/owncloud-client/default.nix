@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "owncloud-client";
-  version = "3.2.1";
+  version = "4.1.0";
 
   libregraph = callPackage ./libre-graph-api-cpp-qt-client.nix { };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "owncloud";
     repo = "client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-39tpvzlTy3KRxg8DzCQW2VnsaLqJ+dNQRur2TqRZytE=";
+    hash = "sha256-L0xeLYzlonzNClOcijyucGdwgQHTS7TlczIyJGbVQ5E=";
   };
 
   nativeBuildInputs = [ pkg-config cmake extra-cmake-modules wrapQtAppsHook qttools ];
@@ -33,9 +33,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-UCMAKE_INSTALL_LIBDIR"
     "-DNO_SHIBBOLETH=1"
-    # https://github.com/owncloud/client/issues/10537#issuecomment-1447965096
-    # NB! From 4.0 it may be turned off by default
-    "-DWITH_AUTO_UPDATER=OFF"
   ];
 
   meta = with lib; {
@@ -43,6 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://owncloud.org";
     maintainers = with maintainers; [ qknight hellwolf ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     license = licenses.gpl2Plus;
     changelog = "https://github.com/owncloud/client/releases/tag/v${version}";
   };

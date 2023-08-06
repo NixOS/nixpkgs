@@ -2,44 +2,47 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, darwin
 , makeWrapper
 , shared-mime-info
-, wxGTK32
 , boost
-, Cocoa
+, wxGTK32
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxFormBuilder";
-  version = "unstable-2022-09-26";
+  version = "unstable-2023-04-21";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";
     repo = "wxFormBuilder";
-    rev = "e2e4764f1f4961c654733287c6e84d7738b4ba2b";
+    rev = "f026a8e1a7f68e794638f637e53845f8f04869ef";
     fetchSubmodules = true;
-    sha256 = "sha256-DLdwQH3s/ZNVq+A/qtZRy7dA/Ctp2qkOmi6M+rSb4MM=";
+    hash = "sha256-48J8osSBb5x9b8MYWZ5QGF6rWgwtcJ0PLLAYViDr50M=";
   };
+
+  postPatch = ''
+    substituteInPlace .git-properties \
+      --replace "\$Format:%h\$" "${builtins.substring 0 7 finalAttrs.src.rev}" \
+      --replace "\$Format:%(describe)\$" "${builtins.substring 0 7 finalAttrs.src.rev}"
+    sed -i '/fixup_bundle/d' cmake/macros.cmake
+  '';
 
   nativeBuildInputs = [
     cmake
   ] ++ lib.optionals stdenv.isDarwin [
+    darwin.sigtool
     makeWrapper
   ] ++ lib.optionals stdenv.isLinux [
     shared-mime-info
   ];
 
   buildInputs = [
-    wxGTK32
     boost
+    wxGTK32
   ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
+    darwin.apple_sdk.frameworks.Cocoa
   ];
-
-  preConfigure = ''
-    sed -i 's/FATAL_ERROR/WARNING/' cmake/revision-git*.cmake
-    sed -i '/fixup_bundle/d;/codesign/d' cmake/macros.cmake
-  '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications,bin}
@@ -54,4 +57,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ matthuszagh wegank ];
     platforms = platforms.unix;
   };
-}
+})

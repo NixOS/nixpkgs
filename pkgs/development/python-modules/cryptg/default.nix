@@ -3,7 +3,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, cargo
 , rustPlatform
+, rustc
 , setuptools-rust
 , libiconv
 }:
@@ -27,11 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-AqSVFOB9Lfvk9h3GtoYlEOXBEt7YZYLhCDNKM9upQ2U=";
   };
 
-  nativeBuildInputs = with rustPlatform;[
+  nativeBuildInputs = [
     setuptools-rust
-    cargoSetupHook
-    rust.rustc
-    rust.cargo
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [

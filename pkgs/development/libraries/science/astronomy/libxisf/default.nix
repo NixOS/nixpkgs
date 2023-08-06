@@ -10,15 +10,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxisf";
-  version = "0.2.3";
+  version = "0.2.8";
 
   src = fetchFromGitea {
     domain = "gitea.nouspiro.space";
     owner = "nou";
     repo = "libXISF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-u5EYnRO2rUV8ofLL9qfACeVvVbWXEXpkqh2Q4OOxpaQ=";
+    hash = "sha256-YB97vMz2+cFRYq8x2Su3Eh952U6kGIVLYV7kDEd5S8g=";
   };
+
+  patches = [
+    ./0001-Fix-pkg-config-paths.patch
+  ];
 
   nativeBuildInputs = [
     cmake

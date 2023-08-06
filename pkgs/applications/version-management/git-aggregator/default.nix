@@ -1,10 +1,10 @@
-{ lib, git, python3Packages }:
+{ lib, python3Packages, fetchPypi, git }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-aggregator";
   version = "2.1.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-79xNPzYP1j71sU5wZM5e2xTqQExqQEdxXPxbk4T/Scw=";
   };

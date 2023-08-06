@@ -18,18 +18,20 @@
 , libgee
 , libsoup_3
 , libsecret
+, libwebp
+, libspelling
 , gst_all_1
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.2.0";
+  version = "0.4.0";
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-LPhGGIHvN/hc71PL50TBw1Q0ysubdtJaEiUEI29HRrE=";
+    hash = "sha256-sLdkSIevz2spL+Q5sS+ugqEbqJTXrLxmszzijtKvY6k=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libsecret
+    libwebp
+    libspelling
   ] ++ (with gst_all_1; [
     gstreamer
     gst-libav
@@ -62,9 +66,7 @@ stdenv.mkDerivation rec {
   ]);
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "tuba";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -73,6 +75,6 @@ stdenv.mkDerivation rec {
     mainProgram = "dev.geopjr.Tuba";
     license = licenses.gpl3Only;
     changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [ chuangzhu aleksana ];
   };
 }

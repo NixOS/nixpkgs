@@ -1,5 +1,6 @@
 { buildPythonPackage
 , lib
+, stdenv
 , libsixel
 }:
 
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   prePatch = ''
     substituteInPlace libsixel/__init__.py --replace \
       'from ctypes.util import find_library' \
-      'find_library = lambda _x: "${lib.getLib libsixel}/lib/libsixel.so"'
+      'find_library = lambda _x: "${lib.getLib libsixel}/lib/libsixel${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   # no tests

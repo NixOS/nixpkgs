@@ -12,7 +12,7 @@
 , ocl-icd
 , opencl-headers
 , boost
-, gpuSupport ? true
+, gpuSupport ? stdenv.isLinux
 }:
 
 buildPythonPackage rec {
@@ -48,7 +48,11 @@ buildPythonPackage rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     ${python.pythonForBuild.interpreter} setup.py bdist_wheel ${lib.optionalString gpuSupport "--gpu"}
+
+    runHook postBuild
   '';
 
   postConfigure = ''
@@ -69,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Microsoft/LightGBM";
     changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh costrouc ];
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

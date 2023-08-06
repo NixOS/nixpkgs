@@ -1,13 +1,11 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 let
   port = toString 4321;
 in
 {
   name = "mpv";
-  meta.maintainers = with maintainers; [ zopieux ];
+  meta.maintainers = with lib.maintainers; [ zopieux ];
 
   nodes.machine =
     { pkgs, ... }:

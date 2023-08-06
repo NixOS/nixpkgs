@@ -91,14 +91,10 @@ rec {
     microblaze   = { bits = 32; significantByte = bigEndian;    family = "microblaze"; };
     microblazeel = { bits = 32; significantByte = littleEndian; family = "microblaze"; };
 
-    mips          = { bits = 32; significantByte = bigEndian;    family = "mips"; };
-    mipsel        = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    mipsisa32r6   = { bits = 32; significantByte = bigEndian;    family = "mips"; };
-    mipsisa32r6el = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    mips64        = { bits = 64; significantByte = bigEndian;    family = "mips"; };
-    mips64el      = { bits = 64; significantByte = littleEndian; family = "mips"; };
-    mipsisa64r6   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
-    mipsisa64r6el = { bits = 64; significantByte = littleEndian; family = "mips"; };
+    mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
 
     mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
 

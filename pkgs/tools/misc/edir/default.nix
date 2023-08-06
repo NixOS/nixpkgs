@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "edir";
   version = "2.16";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "ro1GZkJ6xDZcMRaWTAW/a2qhFbZAxsduvGO3C4sOI+A=";
   };

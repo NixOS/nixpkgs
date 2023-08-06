@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "userpath";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BCM9L8/lz/kRweT7cYl1VkDhUk/4ekuCq51rh1/uV4c=";
+    hash = "sha256-heMnRUMXRHfGLVcB7UOj7xBRgkqd13aWitxBHlhkDdE=";
   };
 
   nativeBuildInputs = [

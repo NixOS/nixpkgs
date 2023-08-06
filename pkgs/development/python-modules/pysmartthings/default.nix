@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysmartthings";
-  version = "0.7.7";
+  version = "0.7.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "andrewsayre";
     repo = pname;
     rev = version;
-    hash = "sha256-AzAiMn88tRRPwMpwSnKoS1XUERHbKz0sVm/TjcbTsGs=";
+    hash = "sha256-r+f2+vEXJdQGDlbs/MhraFgEmsAf32PU282blLRLjzc=";
   };
 
   propagatedBuildInputs = [

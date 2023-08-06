@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , rustPlatform
 , substituteAll
+, cargo
 , desktop-file-utils
 , git
 , itstool
@@ -10,6 +11,7 @@
 , ninja
 , pkg-config
 , python3
+, rustc
 , wrapGAppsHook4
 , borgbackup
 , gtk4
@@ -55,11 +57,10 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     gtk4

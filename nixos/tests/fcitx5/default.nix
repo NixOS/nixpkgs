@@ -1,7 +1,8 @@
-import ../make-test-python.nix ({ pkgs, ... }:
-# copy_from_host works only for store paths
+import ../make-test-python.nix ({ lib, ... }:
 rec {
   name = "fcitx5";
+  meta.maintainers = with lib.maintainers; [ nevivurn ];
+
   nodes.machine = { pkgs, ... }:
   {
     imports = [
@@ -30,8 +31,10 @@ rec {
     i18n.inputMethod = {
       enabled = "fcitx5";
       fcitx5.addons = [
-        pkgs.fcitx5-m17n
         pkgs.fcitx5-chinese-addons
+        pkgs.fcitx5-hangul
+        pkgs.fcitx5-m17n
+        pkgs.fcitx5-mozc
       ];
     };
   };
@@ -43,11 +46,16 @@ rec {
       fcitx_confdir = "${user.home}/.config/fcitx5";
     in
       ''
-            # We need config files before login session
-            # So copy first thing
+            start_all()
 
-            # Point and click would be expensive,
-            # So configure using files
+            machine.wait_for_x()
+            machine.wait_for_file("${xauth}")
+            machine.succeed("xauth merge ${xauth}")
+            machine.sleep(5)
+
+            machine.succeed("su - ${user.name} -c 'kill $(pgrep fcitx5)'")
+            machine.sleep(1)
+
             machine.copy_from_host(
                 "${./profile}",
                 "${fcitx_confdir}/profile",
@@ -57,15 +65,8 @@ rec {
                 "${fcitx_confdir}/config",
             )
 
-            start_all()
-
-            machine.wait_for_file("${xauth}}")
-            machine.succeed("xauth merge ${xauth}")
-
-            machine.sleep(5)
-
-            machine.succeed("su - ${user.name} -c 'alacritty&'")
-            machine.succeed("su - ${user.name} -c 'fcitx5&'")
+            machine.succeed("su - ${user.name} -c 'alacritty >&2 &'")
+            machine.succeed("su - ${user.name} -c 'fcitx5 >&2 &'")
             machine.sleep(10)
 
             ### Type on terminal
@@ -74,7 +75,6 @@ rec {
 
             ### Start fcitx Unicode input
             machine.send_key("ctrl-alt-shift-u")
-            machine.sleep(5)
             machine.sleep(1)
 
             ### Search for smiling face
@@ -94,9 +94,15 @@ rec {
             machine.sleep(1)
 
             ### Default wubi, enter 一下
-            machine.send_chars("gggh")
+            machine.send_chars("gggh ")
             machine.sleep(1)
-            machine.send_key("\n")
+
+            ### Switch to Hangul
+            machine.send_key("alt-shift")
+            machine.sleep(1)
+
+            ### Enter 한
+            machine.send_chars("gks")
             machine.sleep(1)
 
             ### Switch to Harvard Kyoto
@@ -104,10 +110,15 @@ rec {
             machine.sleep(1)
 
             ### Enter क
-            machine.send_chars("ka ")
+            machine.send_chars("ka")
             machine.sleep(1)
 
+            ### Switch to Mozc
             machine.send_key("alt-shift")
+            machine.sleep(1)
+
+            ### Enter か
+            machine.send_chars("ka\n")
             machine.sleep(1)
 
             ### Turn off Fcitx
@@ -121,7 +132,7 @@ rec {
 
             ### Verify that file contents are as expected
             file_content = machine.succeed("cat ${user.home}/fcitx_test.out")
-            assert file_content == "☺一下क\n"
-            ''
+            assert file_content == "☺一下한कか\n"
+      ''
   ;
 })

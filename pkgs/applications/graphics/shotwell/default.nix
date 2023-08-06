@@ -34,18 +34,17 @@
 , libsecret
 , libportal-gtk3
 , gsettings-desktop-schemas
-, python3
 }:
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.32.0";
+  version = "0.32.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-F3Ky+h56VHnVKAKLyaMD8oVeHZWaWzyReSLmOpipCxk=";
+    sha256 = "sha256-pd5T6HMhbfj1mWyWgnvtlj1sY1TgReF5bf0ybGGIwmM=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +55,6 @@ stdenv.mkDerivation rec {
     itstool
     gettext
     desktop-file-utils
-    python3
     wrapGAppsHook
     gobject-introspection
   ];
@@ -90,11 +88,6 @@ stdenv.mkDerivation rec {
     libsecret
     libportal-gtk3
   ];
-
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py # patchShebangs requires executable file
-    patchShebangs build-aux/meson/postinstall.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {

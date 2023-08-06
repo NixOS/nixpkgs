@@ -5,7 +5,6 @@
 , fetchpatch
 , pkg-config
 , cmake
-, llvmPackages
 , expat
 , freetype
 , libxcb
@@ -45,14 +44,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = [ llvmPackages.libclang expat freetype fira-code fontconfig harfbuzz ]
+  buildInputs = [ expat freetype fira-code fontconfig harfbuzz ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
     ++ lib.optionals stdenv.isDarwin [ libiconv AppKit CoreText Security ];
 
-  nativeBuildInputs = [ cmake pkg-config ]
+  nativeBuildInputs = [ cmake pkg-config rustPlatform.bindgenHook ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   preCheck = ''
     export HOME=$TMPDIR

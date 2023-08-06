@@ -1,42 +1,39 @@
 { lib
 , buildPythonPackage
-, pythonOlder
+, cxxfilt
 , fetchPypi
-, wrapQtAppsHook
-
-# propagates
+, msgpack
 , pyasn1
 , pyasn1-modules
-, cxxfilt
-, msgpack
 , pycparser
-
-# extras: gui
 , pyqt5
+, pythonRelaxDepsHook
 , pyqtwebengine
-
-# knobs
+, pythonOlder
 , withGui ? false
+, wrapQtAppsHook
 }:
 
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tAIhsHFds3qwPngfOsR1+xDKgi29ACnvFAYoklRnCAI=";
+    hash = "sha256-URRBEZelw4s43zqtb/GrLxIksvrqHbqQWntT9jVonhU=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'cxxfilt>=0.2.1,<0.3.0' 'cxxfilt'
-  '';
+  pythonRelaxDeps = [
+    "cxxfilt"
+    "pyasn1"
+    "pyasn1-modules"
+  ];
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     wrapQtAppsHook
   ];
 
@@ -65,7 +62,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Pure python disassembler, debugger, emulator, and static analysis framework";
+    description = "Python disassembler, debugger, emulator, and static analysis framework";
     homepage = "https://github.com/vivisect/vivisect";
     changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;

@@ -7,19 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "1.0.0";
+  version = "1.0.9";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-nPkUGUcekZ2fvQgiVTNvt8vfQsNMyqsrkT2zqEfu/bE=";
+    hash = "sha256-dO0GzbMopX84AKOtJYYW6vojcs4kYcZ8LQ4tXEgUN7I=";
   };
 
-  cargoSha256 = "sha256-EaZTpKFZPfDlP/2XylhJHznvlah7VNw4snrKDmT7ecw=";
+  cargoHash = "sha256-RQnyVRHWrqnKcI3Jy593jDTydG1nGyrScsqSNyJTDJk=";
 
-  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    darwin.apple_sdk.frameworks.IOKit
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    darwin.apple_sdk_11_0.frameworks.Foundation
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.IOKit
   ];
 
   # tests are broken
@@ -30,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A pure functional compile target that is lazy, non-garbage-collected, and parallel";
-    homepage = "https://github.com/kindelia/hvm";
+    homepage = "https://github.com/higherorderco/hvm";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

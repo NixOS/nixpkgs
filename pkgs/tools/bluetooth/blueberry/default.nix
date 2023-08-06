@@ -5,7 +5,7 @@
 , cinnamon
 , gnome
 , gobject-introspection
-, intltool
+, libnotify
 , pavucontrol
 , python3Packages
 , util-linux
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     bluez-tools
     cinnamon.xapp
     gnome.gnome-bluetooth_1_0
+    libnotify
     python3Packages.python
     util-linux
   ];

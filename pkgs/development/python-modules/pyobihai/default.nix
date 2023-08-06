@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
 , defusedxml
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "pyobihai";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  # GitHub release, https://github.com/dshokouhi/pyobihai/issues/10
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-L/AQy9IxsBDeSlu+45j+/86jjMFzTjAkPGwZoa1QYho=";
+  src = fetchFromGitHub {
+    owner = "ejpenney";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-tDPu/ceH7+7AnxokADDfl+G56B0+ri8RxXxXEyWa61Q=";
   };
 
   propagatedBuildInputs = [
@@ -24,16 +26,18 @@ buildPythonPackage rec {
     requests
   ];
 
-  # Project has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pyobihai"
   ];
 
   meta = with lib; {
-    description = "Python package to interact with Obihai devices";
-    homepage = "https://github.com/dshokouhi/pyobihai";
+    description = "Module to interact with Obihai devices";
+    homepage = "https://github.com/ejpenney/pyobihai";
+    changelog = "https://github.com/ejpenney/pyobihai/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

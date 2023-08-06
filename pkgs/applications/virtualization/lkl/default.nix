@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
 
     # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
     sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
+  '' + lib.optionalString stdenv.isi686 ''
+    echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
+    echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
   '' + lib.optionalString firewallSupport ''
     cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
   '';
@@ -51,6 +54,10 @@ stdenv.mkDerivation rec {
     cp tools/lkl/liblkl.a \
        tools/lkl/lib/liblkl.so \
        tools/lkl/lib/hijack/liblkl-hijack.so $lib/lib
+  '';
+
+  postFixup = ''
+    ln -s $out/bin/lklfuse $out/bin/mount.fuse.lklfuse
   '';
 
   # We turn off format and fortify because of these errors (fortify implies -O2, which breaks the jitter entropy code):

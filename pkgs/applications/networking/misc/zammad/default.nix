@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, nixosTests
 , fetchFromGitHub
 , applyPatches
 , bundlerEnv
@@ -7,7 +8,7 @@
 , callPackage
 , writeText
 , procps
-, ruby_2_7
+, ruby
 , postgresql
 , imlib2
 , jq
@@ -21,18 +22,21 @@
 
 let
   pname = "zammad";
-  version = "5.1.1";
+  version = "5.4.1";
 
   src = applyPatches {
 
     src = fetchFromGitHub (lib.importJSON ./source.json);
 
-    patches = [ ./0001-nulldb.patch ];
+    patches = [
+      ./0001-nulldb.patch
+      ./fix-sendmail-location.diff
+    ];
 
     postPatch = ''
-      sed -i -e "s|ruby '2.7.4'|ruby '${ruby_2_7.version}'|" Gemfile
-      sed -i -e "s|ruby 2.7.4p191|ruby ${ruby_2_7.version}|" Gemfile.lock
-      sed -i -e "s|2.7.4|${ruby_2_7.version}|" .ruby-version
+      sed -i -e "s|ruby '3.1.[0-9]\+'|ruby '${ruby.version}'|" Gemfile
+      sed -i -e "s|ruby 3.1.[0-9]\+p[0-9]\+|ruby ${ruby.version}|" Gemfile.lock
+      sed -i -e "s|3.1.[0-9]\+|${ruby.version}|" .ruby-version
       ${jq}/bin/jq '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
     '';
   };
@@ -53,7 +57,7 @@ let
 
     # Which ruby version to select:
     #   https://docs.zammad.org/en/latest/prerequisites/software.html#ruby-programming-language
-    inherit ruby_2_7;
+    inherit ruby;
 
     gemdir = src;
     gemset = ./gemset.nix;
@@ -94,6 +98,12 @@ let
     yarnLock = ./yarn.lock;
     yarnNix = ./yarn.nix;
     packageJSON = ./package.json;
+
+    yarnPreBuild = ''
+      mkdir -p deps/Zammad
+      cp -r ${src}/.eslint-plugin-zammad deps/Zammad/.eslint-plugin-zammad
+      chmod -R +w deps/Zammad/.eslint-plugin-zammad
+    '';
   };
 
 in
@@ -129,13 +139,14 @@ stdenv.mkDerivation {
   passthru = {
     inherit rubyEnv yarnEnv;
     updateScript = [ "${callPackage ./update.nix {}}/bin/update.sh" pname (toString ./.) ];
+    tests = { inherit (nixosTests) zammad; };
   };
 
   meta = with lib; {
     description = "Zammad, a web-based, open source user support/ticketing solution.";
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ n0emis garbas taeer ];
   };
 }

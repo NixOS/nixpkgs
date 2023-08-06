@@ -432,7 +432,7 @@ in
         isSystem = true;
       };
 
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         cantarell-fonts
         dejavu_fonts
         source-code-pro # Default monospace font in 3.32

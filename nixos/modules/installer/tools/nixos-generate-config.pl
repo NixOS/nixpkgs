@@ -85,7 +85,7 @@ sub debug {
 
 
 # nixpkgs.system
-push @attrs, "nixpkgs.hostPlatform = lib.mkDefault \"@system@\";";
+push @attrs, "nixpkgs.hostPlatform = lib.mkDefault \"@hostPlatformSystem@\";";
 
 
 my $cpuinfo = read_file "/proc/cpuinfo";
@@ -335,7 +335,7 @@ sub findStableDevPath {
 
     my $st = stat($dev) or return $dev;
 
-    foreach my $dev2 (glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+    foreach my $dev2 (glob("/dev/stratis/*/*"), glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
         my $st2 = stat($dev2) or next;
         return $dev2 if $st->rdev == $st2->rdev;
     }
@@ -381,6 +381,7 @@ sub in {
 
 my $fileSystems;
 my %fsByDev;
+my $useSwraid = 0;
 foreach my $fs (read_file("/proc/self/mountinfo")) {
     chomp $fs;
     my @fields = split / /, $fs;
@@ -467,6 +468,17 @@ EOF
         }
     }
 
+    # is this a stratis fs?
+    my $stableDevPath = findStableDevPath $device;
+    my $stratisPool;
+    if ($stableDevPath =~ qr#/dev/stratis/(.*)/.*#) {
+        my $poolName = $1;
+        my ($header, @lines) = split "\n", qx/stratis pool list/;
+        my $uuidIndex = index $header, 'UUID';
+        my ($line) = grep /^$poolName /, @lines;
+        $stratisPool = substr $line, $uuidIndex - 32, 36;
+    }
+
     # Don't emit tmpfs entry for /tmp, because it most likely comes from the
     # boot.tmp.useTmpfs option in configuration.nix (managed declaratively).
     next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
@@ -474,13 +486,19 @@ EOF
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
-    { device = \"${\(findStableDevPath $device)}\";
+    { device = \"$stableDevPath\";
       fsType = \"$fsType\";
 EOF
 
     if (scalar @extraOptions > 0) {
         $fileSystems .= <<EOF;
       options = \[ ${\join " ", map { "\"" . $_ . "\"" } uniq(@extraOptions)} \];
+EOF
+    }
+
+    if ($stratisPool) {
+        $fileSystems .= <<EOF;
+      stratis.poolUuid = "$stratisPool";
 EOF
     }
 
@@ -493,8 +511,8 @@ EOF
     # boot.initrd.luks.devices entry.
     if (-e $device) {
         my $deviceName = basename(abs_path($device));
-        if (-e "/sys/class/block/$deviceName"
-            && read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet') =~ /^CRYPT-LUKS/)
+        my $dmUuid = read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet');
+        if ($dmUuid =~ /^CRYPT-LUKS/)
         {
             my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
             if (scalar @slaves == 1) {
@@ -510,7 +528,13 @@ EOF
                 }
             }
         }
+        if (-e "/sys/class/block/$deviceName/md/uuid") {
+            $useSwraid = 1;
+        }
     }
+}
+if ($useSwraid) {
+    push @attrs, "boot.swraid.enable = true;\n\n";
 }
 
 

@@ -3,34 +3,40 @@
 , buildPythonPackage
 , cython
 , gfortran
-, pytestCheckHook
-, numpy }:
+, git
+, meson-python
+, pkg-config
+, numpy
+, openblas
+}:
 
 buildPythonPackage rec {
   pname = "scikit-misc";
-  version = "0.1.4";
+  version = "0.2.0";
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-93RqA0eBEGPh7PkSHflINXhQA5U8OLW6hPY/xQjCKRE=";
+    pname = "scikit_misc";
+    inherit version;
+    hash = "sha256-rBTdTpNeRC/DSrHFg7ZhHUYD0G9IgoqFx+A+LCxYK7w=";
   };
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov --cov-report=xml" ""
+    patchShebangs .
   '';
 
   nativeBuildInputs = [
+    cython
     gfortran
+    git
+    meson-python
+    pkg-config
   ];
 
   buildInputs = [
-    cython
     numpy
+    openblas
   ];
-
-  # Tests fail because of infinite recursion error
-  doCheck = false;
 
   pythonImportsCheck = [
     "skmisc"

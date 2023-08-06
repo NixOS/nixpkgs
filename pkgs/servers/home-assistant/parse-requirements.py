@@ -40,10 +40,9 @@ PKG_SET = "home-assistant.python.pkgs"
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
-    "ha-av": "av",
     "HAP-python": "hap-python",
     "tensorflow": "tensorflow",
-    "youtube_dl": "youtube-dl-light",
+    "yt-dlp": "yt-dlp",
 }
 
 # Some dependencies are loaded dynamically at runtime, and are not
@@ -263,13 +262,13 @@ def main() -> None:
             available, extras, missing = deps
             f.write(f'    "{component}" = ps: with ps; [')
             if available:
-                f.write("\n      " + "\n      ".join(available))
+                f.write("\n      " + "\n      ".join(sorted(available)))
             f.write("\n    ]")
             if extras:
-                f.write("\n    ++ " + "\n    ++ ".join(extras))
+                f.write("\n    ++ " + "\n    ++ ".join(sorted(extras)))
             f.write(";")
             if len(missing) > 0:
-                f.write(f" # missing inputs: {' '.join(missing)}")
+                f.write(f" # missing inputs: {' '.join(sorted(missing))}")
             f.write("\n")
         f.write("  };\n")
         f.write("  # components listed in tests/components for which all dependencies are packaged\n")

@@ -4,18 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "1.6.4";
+  version = "2.0.1";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    sha256 = "sha256-gp1KwmjfB4U2CdZ8/H9HbpqnNssqaKYwvpno+tGXvgo=";
+    hash = "sha256-tu2lU1YWCo5zkG49SOlZ74EpZ4fXZJdbEPJX6WYGaOk=";
   };
-
-  patches = [
-    # cross compiling fix
-    # https://github.com/brgl/libgpiod/pull/45
-    ./0001-Drop-AC_FUNC_MALLOC-and-_REALLOC-and-check-for-them-.patch
-  ];
 
   buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
   nativeBuildInputs = [

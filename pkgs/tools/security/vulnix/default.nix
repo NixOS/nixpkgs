@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 , nix
 , ronn
 }:
@@ -8,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   pname = "vulnix";
   version = "1.10.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "07v3ddvvhi3bslwrlin45kz48i3va2lzd6ny0blj5i2z8z40qcfm";
   };

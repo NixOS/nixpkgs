@@ -64,6 +64,9 @@
   - pkgs/build-support/kernel/**/*
   - pkgs/os-specific/linux/kernel/**/*
 
+"6.topic: lib":
+  - lib/**
+
 "6.topic: lua":
   - pkgs/development/interpreters/lua-5/**/*
   - pkgs/development/interpreters/luajit/**/*
@@ -83,6 +86,13 @@
   - nixos/tests/mate.nix
   - pkgs/desktops/mate/**/*
 
+"6.topic: module system":
+  - lib/modules.nix
+  - lib/types.nix
+  - lib/options.nix
+  - lib/tests/modules.sh
+  - lib/tests/modules/**
+
 "6.topic: nixos":
   - nixos/**/*
   - pkgs/os-specific/linux/nixos-rebuild/**/*
@@ -92,6 +102,14 @@
   - pkgs/development/compilers/nim/*
   - pkgs/development/nim-packages/**/*
   - pkgs/top-level/nim-packages.nix
+
+"6.topic: nodejs":
+  - doc/languages-frameworks/javascript.section.md
+  - pkgs/build-support/node/**/*
+  - pkgs/development/node-packages/**/*
+  - pkgs/development/tools/yarn/*
+  - pkgs/development/tools/yarn2nix-moretea/**/*
+  - pkgs/development/web/nodejs/*
 
 "6.topic: ocaml":
   - doc/languages-frameworks/ocaml.section.md

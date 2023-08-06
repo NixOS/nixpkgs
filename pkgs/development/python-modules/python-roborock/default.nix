@@ -1,5 +1,7 @@
 { lib
+, stdenv
 , aiohttp
+, alexapy
 , async-timeout
 , buildPythonPackage
 , click
@@ -9,30 +11,38 @@
 , paho-mqtt
 , poetry-core
 , pycryptodome
+, pycryptodomex
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "0.15.0";
+  version = "0.32.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Cyp/uCSQTDB21v+nRu73gfJgTGm3qvdkyXXMPXMsMVA=";
+    hash = "sha256-DojIfAmYW/asvpAkcBj/pN1rdCPFD4nwkEqpGVBkMoE=";
   };
+
+  pythonRelaxDeps = [
+    "pycryptodome"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
+    alexapy
     aiohttp
     async-timeout
     click
@@ -40,6 +50,8 @@ buildPythonPackage rec {
     dacite
     paho-mqtt
     pycryptodome
+  ] ++ lib.optionals stdenv.isDarwin [
+    pycryptodomex
   ];
 
   nativeCheckInputs = [

@@ -3,6 +3,7 @@
 , generateSplicesForMkScope, makeScopeWithSplicing
 , stdenv
 , preLibcCrossHeaders
+, config
 }:
 
 let
@@ -100,11 +101,17 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  cctools = callPackage ../os-specific/darwin/cctools/port.nix {
+  cctools = self.cctools-llvm;
+
+  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
-  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
+  cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+  };
+
+  cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
@@ -223,7 +230,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
   # See doc/builders/special/darwin-builder.section.md
-  builder =
+  linux-builder = lib.makeOverridable ({ modules }:
     let
       toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
 
@@ -231,7 +238,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
         configuration = {
           imports = [
             ../../nixos/modules/profiles/macos-builder.nix
-          ];
+          ] ++ modules;
 
           virtualisation.host = { inherit pkgs; };
         };
@@ -240,5 +247,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
       };
 
     in
-      nixos.config.system.build.macos-builder-installer;
+      nixos.config.system.build.macos-builder-installer) { modules = [ ]; };
+
+} // lib.optionalAttrs config.allowAliases {
+  builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
 })

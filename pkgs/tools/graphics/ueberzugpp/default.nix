@@ -14,28 +14,47 @@
 , vips
 , nlohmann_json
 , libsixel
+, microsoft-gsl
+, chafa
+, enableOpencv ? stdenv.isLinux
 , opencv
+, enableWayland ? stdenv.isLinux
+, extra-cmake-modules
+, wayland
+, wayland-protocols
+, enableX11 ? stdenv.isLinux
 , xorg
-, withOpencv ? true
-, withX11 ? true
+, withoutStdRanges ? stdenv.isDarwin
+, range-v3
 }:
-
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.0";
+  version = "2.8.9";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-PTI+jIsXq4yh8TBAT1p1CLbBMDW1U323WgPoASz2pwA=";
+    hash = "sha256-RW2dKueidFM/RkGfOAorHukGVm1srbuAlyUP/r+JWi0=";
   };
+
+  # error: no member named 'ranges' in namespace 'std'
+  postPatch = lib.optionalString withoutStdRanges ''
+    for f in src/canvas/chafa.cpp src/canvas/iterm2/iterm2.cpp src/terminal.cpp; do
+      sed -i "1i #include <range/v3/algorithm/for_each.hpp>" $f
+      sed -i "2i #include <range/v3/algorithm/reverse.hpp>" $f
+      substituteInPlace $f \
+        --replace "#include <ranges>" "" \
+        --replace "std::ranges" "ranges"
+    done
+  '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    cli11
   ];
 
   buildInputs = [
@@ -49,26 +68,40 @@ stdenv.mkDerivation rec {
     vips
     nlohmann_json
     libsixel
-  ] ++ lib.optionals withOpencv [
+    microsoft-gsl
+    chafa
+    cli11
+  ] ++ lib.optionals enableOpencv [
     opencv
-  ] ++ lib.optionals withX11 [
+  ] ++ lib.optionals enableWayland [
+    extra-cmake-modules
+    wayland
+    wayland-protocols
+  ] ++ lib.optionals enableX11 [
     xorg.libX11
     xorg.xcbutilimage
+  ] ++ lib.optionals withoutStdRanges [
+    range-v3
   ];
 
-  cmakeFlags = lib.optionals (!withOpencv) [
+  cmakeFlags = lib.optionals (!enableOpencv) [
     "-DENABLE_OPENCV=OFF"
-  ] ++ lib.optionals (!withX11) [
+  ] ++ lib.optionals enableWayland [
+    "-DENABLE_WAYLAND=ON"
+  ] ++ lib.optionals (!enableX11) [
     "-DENABLE_X11=OFF"
   ];
+
+  # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.14 or newer
+  preBuild = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
+    export MACOSX_DEPLOYMENT_TARGET=10.14
+  '';
 
   meta = with lib; {
     description = "Drop in replacement for ueberzug written in C++";
     homepage = "https://github.com/jstkdng/ueberzugpp";
     license = licenses.gpl3Plus;
-    mainProgram = "ueberzug";
-    maintainers = with maintainers; [ aleksana ];
+    maintainers = with maintainers; [ aleksana wegank ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

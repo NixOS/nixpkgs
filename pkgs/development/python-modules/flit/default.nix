@@ -43,12 +43,17 @@ buildPythonPackage rec {
   disabledTests = [
     # needs some ini file.
     "test_invalid_classifier"
+    # calls pip directly. disabled for PEP 668
+    "test_install_data_dir"
+    "test_install_module_pep621"
+    "test_symlink_data_dir"
+    "test_symlink_module_pep621"
   ];
 
   meta = with lib; {
     description = "A simple packaging tool for simple packages";
     homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh SuperSandro2000 ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

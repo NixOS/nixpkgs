@@ -1,4 +1,4 @@
-{ lib, stdenv, makeDesktopItem, copyDesktopItems, icoutils, fdupes, imagemagick, jdk11, fetchzip }:
+{ lib, stdenv, makeDesktopItem, icoutils, fdupes, imagemagick, jdk11, fetchzip }:
 # TODO: JDK16 causes STM32CubeMX to crash right now, so we fixed the version to JDK11
 # This may be fixed in a future version of STM32CubeMX. This issue has been reported to ST:
 # https://community.st.com/s/question/0D53W00000jnOzPSAU/stm32cubemx-crashes-on-launch-with-openjdk16
@@ -9,30 +9,36 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "stm32cubemx";
-  version = "6.8.0";
+  version = "6.8.1";
 
   src = fetchzip {
     url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
-    sha256 = "sha256-jJeJTg2cCO6fqQ4vFq2dXsfsWmlN5ncZJWMoekJXkLQ=";
+    sha256 = "sha256-0WzdyRP09rRZzVZhwMOxA/SwHrQOYGBnv8UwvjMT22Q=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems];
-  desktopItems = [
-    (makeDesktopItem {
-      name = "stm32CubeMX";
-      exec = "stm32cubemx";
-      desktopName = "STM32CubeMX";
-      categories = [ "Development" ];
-      comment = "STM32Cube initialization code generator";
-      icon = "stm32cubemx";
-    })
-  ];
+  nativeBuildInputs = [ icoutils fdupes imagemagick ];
+  desktopItem = makeDesktopItem {
+    name = "STM32CubeMX";
+    exec = "stm32cubemx";
+    desktopName = "STM32CubeMX";
+    categories = [ "Development" ];
+    icon = "stm32cubemx";
+    comment = meta.description;
+    terminal = false;
+    startupNotify = false;
+    mimeTypes = [
+      "x-scheme-handler/sgnl"
+      "x-scheme-handler/signalcaptcha"
+    ];
+  };
 
   buildCommand = ''
-    mkdir -p $out/{bin,opt/STM32CubeMX}
+    mkdir -p $out/{bin,opt/STM32CubeMX,share/applications}
+
     cp -r $src/MX/. $out/opt/STM32CubeMX/
     chmod +rx $out/opt/STM32CubeMX/STM32CubeMX
+
     cat << EOF > $out/bin/${pname}
     #!${stdenv.shell}
     ${jdk11}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX
@@ -52,6 +58,8 @@ stdenv.mkDerivation rec {
           $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
       fi
     done;
+
+    cp ${desktopItem}/share/applications/*.desktop $out/share/applications
   '';
 
   meta = with lib; {

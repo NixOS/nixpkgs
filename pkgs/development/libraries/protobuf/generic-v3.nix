@@ -33,7 +33,7 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook buildPackages.which buildPackages.stdenv.cc buildProtobuf ];
 
   buildInputs = [ zlib ];
-  configureFlags = if buildProtobuf == null then [] else [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
+  configureFlags = lib.optional (buildProtobuf != null) "--with-protoc=${buildProtobuf}/bin/protoc";
 
   enableParallelBuilding = true;
 

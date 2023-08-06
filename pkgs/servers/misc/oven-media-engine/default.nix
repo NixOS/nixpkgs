@@ -19,16 +19,16 @@
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.15.10";
+  version = "0.15.14";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "sha256-gQ9Z8VMu5v4zEo4vtViNFG0QP5JooHsQxJPMOnZmVZM=";
+    sha256 = "sha256-pLLnk0FXJ6gb0WSdWGEzJSEbKdOpjdWECIRzrHvi8HQ=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
   makeFlags = [ "release" "CONFIG_LIBRARY_PATHS=" "CONFIG_PKG_PATHS=" "GLOBAL_CC=$(CC)" "GLOBAL_CXX=$(CXX)" "GLOBAL_LD=$(CXX)" "SHELL=${stdenv.shell}" ];
   enableParallelBuilding = true;
 
@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://ovenmediaengine.com";
     license     = licenses.agpl3Only;
     maintainers = with maintainers; [ lukegb ];
-    platforms   = [ "x86_64-linux" ];
+    platforms   = platforms.linux;
   };
 }

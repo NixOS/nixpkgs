@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -14,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "0.12.1";
+  version = "0.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fjNbNY/Dr7lgVGPrHJTvPGuhyPR6IVS7ohBQMI+J1+k=";
+    hash = "sha256-/d0s0N40W18uGfVbD9VEbhbWfduoo+TBqDjmTkjMUxs=";
   };
 
   propagatedBuildInputs = [ numpy torch scikit-learn scipy tabulate tqdm ];
@@ -37,10 +38,19 @@ buildPythonPackage rec {
     "test_load_cuda_params_to_cpu"
     # failing tests
     "test_pickle_load"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # there is a problem with the compiler selection
+    "test_fit_and_predict_with_compile"
   ];
 
-  # tries to import `transformers` and download HuggingFace data
-  disabledTestPaths = [ "skorch/tests/test_hf.py" ];
+  disabledTestPaths = [
+    # tries to import `transformers` and download HuggingFace data
+    "skorch/tests/test_hf.py"
+  ] ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
+    # torch.distributed is disabled by default in darwin
+    # aarch64-linux also failed these tests
+    "skorch/tests/test_history.py"
+  ];
 
   pythonImportsCheck = [ "skorch" ];
 

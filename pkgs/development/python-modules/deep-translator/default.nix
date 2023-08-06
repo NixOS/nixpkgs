@@ -5,20 +5,25 @@
 , requests
 , click
 , pythonOlder
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "deep-translator";
-  version = "1.10.1";
-  format = "setuptools";
+  version = "1.11.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "deep_translator";
     inherit version;
-    hash = "sha256-6ZQ42rcOO+vNqTLj9ehv09MrQ/h9Zu2fi2gW2xRvHZ8=";
+    hash = "sha256-gBJgxpIxE4cH6oiglV5ITbfUDiEMngrg93Ny/9pfS/U=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -38,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tool to translate between different languages by using multiple translators";
     homepage = "https://deep-translator.readthedocs.io";
-    changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v1.10.0";
+    changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ wolfangaukang ];
   };

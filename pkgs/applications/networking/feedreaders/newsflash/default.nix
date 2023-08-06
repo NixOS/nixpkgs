@@ -2,9 +2,11 @@
 , stdenv
 , rustPlatform
 , fetchFromGitLab
+, cargo
 , meson
 , ninja
 , pkg-config
+, rustc
 , wrapGAppsHook4
 , gdk-pixbuf
 , glib
@@ -65,11 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Provides glib-compile-resources to compile gresources
     glib
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     gtk4

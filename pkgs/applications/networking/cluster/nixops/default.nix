@@ -31,6 +31,7 @@ let
                   maintainers = with lib.maintainers; [ adisbladis aminechikhaoui eelco rob domenkozar ];
                   platforms = lib.platforms.unix;
                   license = lib.licenses.lgpl3;
+                  mainProgram = "nixops";
                 };
 
               }

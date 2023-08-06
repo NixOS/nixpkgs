@@ -1,11 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, cargo
 , cmake
 , ninja
 , pkg-config
 , rustPlatform
+, rustc
 , curl
 , freetype
 , libGLU
@@ -33,27 +34,27 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "16.9";
+  version = "17.1.1";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-DOP2v82346YQtL55Ix0gn9cTpvbO1ooeCIGRpgEMFpA=";
+    hash = "sha256-igvEo80wFYso7I4aaCWgOebsKbGLgBaY4PQy142+Yiw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-xTB8wg4PIdg7MB3545zN83/41fUsqFE2Sk5aTXrGhps=";
+    hash = "sha256-ykTeVggLUTY1PPFrGMQDJh8FNQwBlBU7LxbHbMdjD4I=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
-    rustPlatform.rust.rustc
-    rustPlatform.rust.cargo
+    rustc
+    cargo
     rustPlatform.cargoSetupHook
   ];
 

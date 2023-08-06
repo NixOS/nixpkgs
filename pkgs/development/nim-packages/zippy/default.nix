@@ -13,8 +13,6 @@ buildNimPackage rec {
     hash = "sha256-w64ENRyP3mNTtESSt7CDDxUkjYSfziNVVedkO4HIuJ8=";
   };
 
-  doCheck = true;
-
   meta = with lib;
     src.meta // {
       description = "Pure Nim implementation of deflate, zlib, gzip and zip";

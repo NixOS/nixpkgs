@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/digitalocean/bind_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ rtreffer ];
-    platforms = platforms.unix;
   };
 }

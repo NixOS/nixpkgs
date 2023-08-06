@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pciutils";
-  version = "3.9.0"; # with release-date database
+  version = "3.10.0"; # with release-date database
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/pciutils-${version}.tar.xz";
-    sha256 = "sha256-zep66XI53uIySaCcaKGaKHo/EJ++ssIy67YWyzhZkBI=";
+    sha256 = "sha256-I4ouJxZnMOU6F/4Hv60ingf6ObYYEX5ZRLbX7an7sOk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

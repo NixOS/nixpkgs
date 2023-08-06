@@ -4,10 +4,11 @@
 , avxSupport ? stdenv.hostPlatform.avxSupport
 , avx2Support ? stdenv.hostPlatform.avx2Support
 , avx512Support ? stdenv.hostPlatform.avx512Support
+, config
 # Enable NIVIA GPU support
 # Note, that this needs to be built on a system with a GPU
 # present for the tests to succeed.
-, enableCuda ? false
+, enableCuda ? config.cudaSupport
 # type of GPU architecture
 , nvidiaArch ? "sm_60"
 , cudatoolkit
@@ -18,13 +19,13 @@ assert blas.isILP64 == scalapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "elpa";
-  version = "2022.11.001";
+  version = "2023.05.001";
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "sha256-NeOX18CvlbtDvHvvf/8pQlwdpAD6DNhq6NO9L/L52Zk=";
+    sha256 = "sha256-7GS+XWUigQ1gGjuOajFyDjw+tK8zpDTYpkVw125kYrY=";
   };
 
   patches = [

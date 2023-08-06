@@ -13,13 +13,13 @@
 stdenv.mkDerivation rec {
 
   pname = "savvycan";
-  version = "208";
+  version = "213";
 
   src = fetchFromGitHub {
     owner = "collin80";
     repo = "SavvyCAN";
     rev = "V${version}";
-    hash = "sha256-agvCl8c7LqGyIKe0K3PdzuBUqTJZtUr434134olbUMw=";
+    hash = "sha256-duITY6s/uadeBCFuG42JbLCaq7yaYv1qB8Q3GA8UJ0A=";
   };
 
   buildInputs = [ qtbase qttools qtserialbus qtserialport qtdeclarative ];

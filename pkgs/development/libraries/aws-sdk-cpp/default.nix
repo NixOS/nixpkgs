@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
 
     # Flaky on Hydra
     rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/aws/client/AwsConfigTest.cpp
     # Includes aws-c-auth private headers, so only works with submodule build
     rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
     # TestRandomURLMultiThreaded fails
@@ -87,10 +89,6 @@ stdenv.mkDerivation rec {
     # openssl 3 generates several deprecation warnings
     "-Wno-error=deprecated-declarations"
   ];
-
-  # aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
-  # seem to have a datarace
-  enableParallelChecking = false;
 
   postFixupHooks = [
     # This bodge is necessary so that the file that the generated -config.cmake file

@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "PyUtilib: A collection of Python utilities";
     homepage = "https://github.com/PyUtilib/pyutilib";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

@@ -13,14 +13,14 @@
 , Cocoa
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unison";
   version = "2.53.2";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-H+70NZZP0cUsxetFcsjWEx2kENsgMdo/41wBwwaX6zg=";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   dontStrip = !ocamlPackages.ocaml.nativeCompilers;
 
   desktopItems = lib.optional enableX11 (makeDesktopItem {
-    name = pname;
+    name = finalAttrs.pname;
     desktopName = "Unison";
     comment = "Bidirectional file synchronizer";
     genericName = "File synchronization tool";
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
   };
-}
+})

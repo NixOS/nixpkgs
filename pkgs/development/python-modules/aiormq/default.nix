@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiormq";
-  version = "6.7.4";
+  version = "6.7.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vORo5Kqy+Rg8WCyFU5lyQHS4EALYkycY4XxYhABV/4A=";
+    hash = "sha256-X5Uy1DGxvsyEFR1UgVYqxOX6mESLnNzQl7sVkvzjcw4=";
   };
 
   nativeBuildInputs = [

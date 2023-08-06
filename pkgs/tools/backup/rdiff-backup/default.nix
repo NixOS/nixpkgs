@@ -1,4 +1,4 @@
-{ lib, python3Packages, librsync }:
+{ lib, python3Packages, fetchPypi, librsync }:
 
 let
   pypkgs = python3Packages;
@@ -8,7 +8,7 @@ pypkgs.buildPythonApplication rec {
   pname = "rdiff-backup";
   version = "2.0.5";
 
-  src = pypkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-VNFgOOYgFO2RbHHIMDsH0vphpqaAOMoYn8LTFTSw84s=";
   };

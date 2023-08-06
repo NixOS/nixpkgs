@@ -1,7 +1,7 @@
 { lib
 , python3
+, fetchPypi
 , ffmpeg
-, makeWrapper
 , nix-update-script
 }:
 

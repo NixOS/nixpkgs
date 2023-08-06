@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit
 , singlePrec ? true
+, config
 , enableMpi ? false
-, enableCuda ? false
+, enableCuda ? config.cudaSupport
 , cpuAcceleration ? null
 }:
 
@@ -19,11 +20,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2023.1";
+  version = "2023.2";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "sha256-7vK7Smy2MUz52kfybfKg0nr0v3swmXI9Q2AQc6sKQvQ=";
+    sha256 = "sha256-vOFIByfksruQBBO3XZmjJm81B4d9pPWy1JHfeY+fza4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -71,7 +72,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gromacs.org";
-    license = licenses.gpl2;
+    license = licenses.lgpl21Plus;
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
@@ -90,7 +91,7 @@ in stdenv.mkDerivation rec {
       reference or manual for details), but there are also quite a
       few features that make it stand out from the competition.
 
-      See: https://www.gromacs.org/About_Gromacs for details.
+      See: https://www.gromacs.org/about.html for details.
     '';
     platforms = platforms.unix;
     maintainers = with maintainers; [ sheepforce markuskowa ];

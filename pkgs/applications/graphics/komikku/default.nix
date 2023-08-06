@@ -19,7 +19,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.19.0";
+  version = "1.22.0";
 
   format = "other";
 
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-4XhcmK9Dgk82ExzugY4SGRfWYC+IgCAxWS+cBURgT2o=";
+    hash = "sha256-6Pqa3qNnH8WF/GK4CLyEmLoPm4A6Q3Gri2x0whf6WTY=";
   };
 
   nativeBuildInputs = [
@@ -81,9 +81,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "komikku";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

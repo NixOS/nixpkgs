@@ -18,14 +18,14 @@ let
     owner = "plausible";
     repo = "analytics";
     rev = "v${version}";
-    sha256 = "1ckw5cd4z96jkjhmzjq7k3kzjj7bvj38i5xq9r43cz0sn7w3470k";
+    hash = "sha256-Exwy+LEafDZITriXiIbc60j555gHy1+hnNKkTxorfLI=";
   };
 
   # TODO consider using `mix2nix` as soon as it supports git dependencies.
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "${pname}-deps";
     inherit src version;
-    sha256 = "1ikcskp4gvvdprl65x1spijdc8dz6klnrnkvgy2jbk0b3d7yn1v5";
+    hash = "sha256-ZQfrTxsLzCWFf3vabOk0vyHWZLw69GJovm3vR+7UbMY=";
   };
 
   yarnDeps = mkYarnModules {
@@ -49,9 +49,6 @@ beamPackages.mixRelease {
 
   nativeBuildInputs = [ nodejs ];
 
-  # https://github.com/whitfin/cachex/issues/205
-  stripDebug = false;
-
   passthru = {
     tests = { inherit (nixosTests) plausible; };
     updateScript = ./update.sh;
@@ -61,6 +58,7 @@ beamPackages.mixRelease {
     export HOME=$TMPDIR
     export NODE_OPTIONS=--openssl-legacy-provider # required for webpack compatibility with OpenSSL 3 (https://github.com/webpack/webpack/issues/14532)
     ln -sf ${yarnDeps}/node_modules assets/node_modules
+    substituteInPlace assets/package.json --replace '$(npm bin)/' 'npx '
     npm run deploy --prefix ./assets
 
     # for external task you need a workaround for the no deps check flag
@@ -70,8 +68,6 @@ beamPackages.mixRelease {
 
   meta = with lib; {
     license = licenses.agpl3Plus;
-    # broken since the deprecation of nodejs_16
-    broken = true;
     homepage = "https://plausible.io/";
     description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.";
     maintainers = with maintainers; [ ];

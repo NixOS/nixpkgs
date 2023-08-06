@@ -12,6 +12,7 @@
 , minizip
 , pkg-config
 , libsForQt5
+, wrapGAppsHook
 }:
 
 let
@@ -36,8 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapGAppsHook
     wrapQtAppsHook
   ];
+
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   buildInputs = [
     SDL2
@@ -74,5 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mpl20;
     maintainers = with maintainers; [ MP2E AndersonTorres ];
     platforms = platforms.linux;
+    mainProgram = "mgba";
   };
 })

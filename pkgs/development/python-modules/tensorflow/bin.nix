@@ -18,10 +18,10 @@
 , wheel
 , jax
 , opt-einsum
-, backports_weakref
 , tensorflow-estimator-bin
 , tensorboard
-, cudaSupport ? false
+, config
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 , zlib
 , python
@@ -53,7 +53,7 @@ in buildPythonPackage {
   disabled = pythonAtLeast "3.11";
 
   src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
+    pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyVerNoDot}_${unit}";
@@ -82,8 +82,7 @@ in buildPythonPackage {
     keras-applications
     keras-preprocessing
     h5py
-  ] ++ lib.optional (!isPy3k) mock
-    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
+  ] ++ lib.optional (!isPy3k) mock;
 
   nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
@@ -201,7 +200,7 @@ in buildPythonPackage {
     homepage = "http://tensorflow.org";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ jyp abbradar cdepillabout ];
+    maintainers = with maintainers; [ jyp abbradar ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

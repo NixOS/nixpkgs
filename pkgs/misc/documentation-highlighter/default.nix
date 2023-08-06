@@ -9,12 +9,12 @@ runCommand "documentation-highlighter" {
   };
   src = lib.sources.cleanSourceWith {
     src = ./.;
-    filter = path: type: lib.elem path (map toString [
-      ./highlight.pack.js
-      ./LICENSE
-      ./loader.js
-      ./mono-blue.css
-      ./README.md
+    filter = path: type: lib.elem (baseNameOf path) ([
+      "highlight.pack.js"
+      "LICENSE"
+      "loader.js"
+      "mono-blue.css"
+      "README.md"
     ]);
   };
 } ''

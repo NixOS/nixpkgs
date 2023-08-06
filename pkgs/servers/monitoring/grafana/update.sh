@@ -16,7 +16,7 @@ replaceHash() {
 }
 extractVendorHash() {
   original="${1?original hash missing}"
-  result="$(nix-build -A grafana.go-modules 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
+  result="$(nix-build -A grafana.goModules 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
   [ -z "$result" ] && { echo "$original"; } || { echo "$result"; }
 }
 

@@ -1,44 +1,62 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
 , click
 , colorlog
 , gitpython
+, pluggy
 , pyelftools
 , pytablewriter
-, pytest
+, pytestCheckHook
 , pyyaml
 , ruamel-yaml
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "riscv-isac";
-  version = "0.16.1";
+  version = "0.18.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = pname;
-    rev = version;
-    hash = "sha256-Krjr9bvpoOeNfMbYj/QbJ+Y+AVLjwrzj8KKMUXCfnMA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7CWUyYwzynFq/Qk5SzQB+ljsVVI98kPPDT63Emhqihw=";
   };
 
-  postPatch = "substituteInPlace riscv_isac/requirements.txt --replace 'pyelftools==0.26' pyelftools";
+  postPatch = ''
+    substituteInPlace riscv_isac/requirements.txt \
+      --replace "pyelftools==0.26" "pyelftools" \
+      --replace "pytest" ""
+  '';
 
   propagatedBuildInputs = [
     click
     colorlog
     gitpython
+    pluggy
     pyelftools
     pytablewriter
-    pytest
     pyyaml
     ruamel-yaml
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "riscv_isac"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/riscv/riscv-isac";
     description = "An ISA coverage extraction tool";
-    maintainers = with maintainers; [ genericnerdyusername ];
+    homepage = "https://github.com/riscv/riscv-isac";
+    changelog = "https://github.com/riscv-software-src/riscv-isac/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ genericnerdyusername ];
   };
 }

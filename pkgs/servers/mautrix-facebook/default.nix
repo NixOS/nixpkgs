@@ -1,20 +1,19 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , python3
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-facebook";
-  version = "0.4.1";
+  version = "unstable-2023-07-16";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "facebook";
-    rev = "v${version}";
-    hash = "sha256-MlT8jNUpJMgaUO9ZIYjpv8l3evdFjfEOSvdAdSlOUvg=";
+    rev = "543b50e73918918d1fabac67891dd80d97080942";
+    hash = "sha256-Y6nwryPenNQa68Rh2KPUHQrv6rnapj8x19FdgLXutm8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

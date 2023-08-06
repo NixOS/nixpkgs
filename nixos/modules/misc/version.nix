@@ -9,10 +9,10 @@ let
     literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
 
   needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
-  escapeIfNeccessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
+  escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
   attrsToText = attrs:
     concatStringsSep "\n" (
-      mapAttrsToList (n: v: ''${n}=${escapeIfNeccessary (toString v)}'') attrs
+      mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs
     ) + "\n";
 
   osReleaseContents = {
@@ -32,7 +32,7 @@ let
     VARIANT_ID = cfg.variant_id;
   };
 
-  initrdReleaseContents = osReleaseContents // {
+  initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
     PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
   };
   initrdRelease = pkgs.writeText "initrd-release" (attrsToText initrdReleaseContents);
@@ -138,13 +138,6 @@ in
         or have migrated all state on your system which is affected
         by this option.
       '';
-    };
-
-    defaultChannel = mkOption {
-      internal = true;
-      type = types.str;
-      default = "https://nixos.org/channels/nixos-unstable";
-      description = lib.mdDoc "Default NixOS channel to which the root user is subscribed.";
     };
 
     configurationRevision = mkOption {

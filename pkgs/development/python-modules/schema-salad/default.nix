@@ -6,22 +6,24 @@
 , cachecontrol
 , lockfile
 , mistune
+, mypy
 , rdflib
 , ruamel-yaml
+, setuptools
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.4.20230213094415";
+  version = "8.4.20230606143604";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x2co8WjL+e4nBZd0pGUwv39nzNkO5G3dYrYJZeqP31o=";
+    hash = "sha256-8Zo9ZhS0r+zsk7nHEh0x7gHYwaoWmyctQYRMph09mvY=";
   };
 
   nativeBuildInputs = [
@@ -32,8 +34,10 @@ buildPythonPackage rec {
     cachecontrol
     lockfile
     mistune
+    mypy
     rdflib
     ruamel-yaml
+    setuptools # needs pkg_resources at runtime
   ];
 
   nativeCheckInputs = [

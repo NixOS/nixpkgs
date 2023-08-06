@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

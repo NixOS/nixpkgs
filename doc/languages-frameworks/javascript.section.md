@@ -143,7 +143,7 @@ To update NPM packages in nixpkgs, run the same `generate.sh` script:
 #### Git protocol error {#javascript-git-error}
 
 Some packages may have Git dependencies from GitHub specified with `git://`.
-GitHub has [disabled unecrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
+GitHub has [disabled unencrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
 
 ```
 The unauthenticated git protocol on port 9418 is no longer supported
@@ -196,10 +196,14 @@ buildNpmPackage rec {
 * `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
 * `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 * `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
+* `npmWorkspace`: The workspace directory within the project to build and install.
+* `dontNpmBuild`: Option to disable running the build script. Set to `true` if the package does not have a build script. Defaults to `false`. Alternatively, setting `buildPhase` explicitly also disables this.
+* `dontNpmInstall`: Option to disable running `npm install`. Defaults to `false`. Alternatively, setting `installPhase` explicitly also disables this.
 * `npmFlags`: Flags to pass to all npm commands.
-* `npmInstallFlags`: Flags to pass to `npm ci` and `npm prune`.
+* `npmInstallFlags`: Flags to pass to `npm ci`.
 * `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
 * `npmPackFlags`: Flags to pass to `npm pack`.
+* `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 

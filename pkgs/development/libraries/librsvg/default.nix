@@ -30,30 +30,32 @@
 , nix
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.55.1";
+  version = "2.56.2";
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "a69IqdOlb9E7v7ufH3Z1myQLcKH6Ig/SOEdNZqkm+Yw=";
+    url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
+    sha256 = "PsPE2Pc+C6S5EwAmlp6DccCStzQpjTbi/bPrSvzsEgA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-nRmOB9Jo+mmB0+wXrQvoII4e0ucV7bNCDeuk6CbcPdk=";
+    inherit (finalAttrs) src;
+    name = "librsvg-deps-${finalAttrs.version}";
+    hash = "sha256-GIEpZ5YMvmYQLcaLXseXQ6gIF7ICtUKq28JCVJ3PEYk=";
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
 
   strictDeps = true;
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gdk-pixbuf
@@ -100,6 +102,12 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (stdenv.hostPlatform.emulator buildPackages)} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders
   '';
 
+  # librsvg only links Foundation, but it also requiers libobjc. The Framework.tbd in the 11.0 SDK
+  # reexports libobjc, but the one in the 10.12 SDK does not, so link it manually.
+  env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    NIX_LDFLAGS = "-lobjc";
+  };
+
   preConfigure = ''
     PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"
     export PKG_CONFIG_VAPIGEN_VAPIGEN
@@ -137,6 +145,13 @@ stdenv.mkDerivation rec {
     # Merge gdkpixbuf and librsvg loaders
     cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
     mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
+
+    mkdir -p "$out/share/bash-completion/completions/"
+    $out/bin/rsvg-convert --completion bash > "$out/share/bash-completion/completions/rsvg-convert"
+    mkdir -p "$out/share/zsh/site-functions/"
+    $out/bin/rsvg-convert --completion zsh > "$out/share/zsh/site-functions/_rsvg-convert"
+    mkdir -p "$out/share/fish/vendor_completions.d/"
+    $out/bin/rsvg-convert --completion fish > "$out/share/fish/vendor_completions.d/rsvg-convert.fish"
   '';
 
   postFixup = lib.optionalString withIntrospection ''
@@ -189,4 +204,4 @@ stdenv.mkDerivation rec {
     mainProgram = "rsvg-convert";
     platforms = platforms.unix;
   };
-}
+})

@@ -51,7 +51,7 @@ in
 rustPlatform.buildRustPackage {
   inherit version src pname;
 
-  sourceRoot = "source/src-tauri";
+  sourceRoot = "${src.name}/src-tauri";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -73,8 +73,8 @@ rustPlatform.buildRustPackage {
     substituteInPlace tauri.conf.json --replace '"distDir": "../out/src",' '"distDir": "frontend-build/src",'
   '';
 
-  buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk cmake ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk ];
 
   checkFlags = [
     # tries to mutate the parent directory

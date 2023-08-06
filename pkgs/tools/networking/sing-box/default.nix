@@ -4,21 +4,23 @@
 , fetchFromGitHub
 , installShellFiles
 , buildPackages
+, coreutils
 , nix-update-script
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "sing-box";
-  version = "1.2.6";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RSRhxsTbwYEho1+1ar2kX8gmQGOWIULlZcb84qNMMF8=";
+    hash = "sha256-fSQuVvV2dL+cdPIAqyXbDB8OSW77gxaYaOHKElEbq6o=";
   };
 
-  vendorHash = "sha256-BdM+uK7ouCzDKWlifyaHK+GqbIpODVfjiXnyvmKKKrk=";
+  vendorHash = "sha256-AMtDAAKNbKRFcu9OEW9E+S73gGgXK7HaroEdidrXS4Y=";
 
   tags = [
     "with_quic"
@@ -50,9 +52,17 @@ buildGoModule rec {
       --bash <(${emulator} $out/bin/sing-box completion bash) \
       --fish <(${emulator} $out/bin/sing-box completion fish) \
       --zsh  <(${emulator} $out/bin/sing-box completion zsh )
+
+    substituteInPlace release/config/sing-box{,@}.service \
+      --replace "/usr/bin/sing-box" "$out/bin/sing-box" \
+      --replace "/bin/kill" "${coreutils}/bin/kill"
+    install -Dm444 -t "$out/lib/systemd/system/" release/config/sing-box{,@}.service
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) sing-box; };
+  };
 
   meta = with lib;{
     homepage = "https://sing-box.sagernet.org";

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.14.3";
+  version = "0.14.4";
 
   format = "wheel";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # tries to fetch even more artifacts
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-XOu17oydXwfyowYUmCKF7/RC0RQ0Uf1Ixmn+VTa85Lo=";
+    hash = "sha256-3U/PL8cnbNPw3xEM56YZesQEDXTE79yMCSsjdxwfUU0=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

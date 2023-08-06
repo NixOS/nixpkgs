@@ -4,6 +4,7 @@
 , deprecation
 , fetchFromGitHub
 , ghostscript
+, hypothesis
 , img2pdf
 , importlib-resources
 , jbig2enc
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "14.1.0";
+  version = "14.3.0";
 
   disabled = pythonOlder "3.8";
 
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-Jyx9FPXNjcA04s+l2wY/LVX83RqExt78/EAHsL1VNMU=";
+    hash = "sha256-OUz19N2YIl7iwayjulx0v1K00jB5SdWo8m5XiJ9BDSs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -85,6 +86,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    hypothesis
     pytest-xdist
     pytestCheckHook
   ];

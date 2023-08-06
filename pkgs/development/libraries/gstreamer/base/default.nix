@@ -45,7 +45,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.22.2";
+  version = "1.22.4";
 
   outputs = [ "out" "dev" ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-62USDE7nm3oVPDwZctXAFYwhUYd8xR7Hclu6V0lnnUk=";
+    hash = "sha256-KSQk6C3qFwUoxCtFb2KolTK8q8BQjxkuNGcvuG9o5bg=";
   };
 
   strictDeps = true;
@@ -87,9 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libjpeg
     tremor
-    libGL
     pango
   ] ++ lib.optionals (!stdenv.isDarwin) [
+    libGL
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
     OpenGL
@@ -168,6 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
       "gstreamer-video-1.0"
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
   };
 })

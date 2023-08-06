@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "jira-cli-go";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "ankitpokhrel";
     repo = "jira-cli";
     rev = "v${version}";
-    hash = "sha256-T7EAlHHjoACJOra47zp5tXrkYWQ8o9Qame6QmiTrIXY=";
+    hash = "sha256-+8OPXyOTEnX864Lr8IugHh890XtmRtUr1pEN1/QxMz4=";
   };
 
-  vendorSha256 = "sha256-b/z2oSWY33XSxpHi+Tit2ThnNrdk5QNI4oZWPMBKmd0=";
+  vendorSha256 = "sha256-sG/ZKQRVxBfaMKnLk2+HdmRhojI6BZVob1XDIAYMfY0=";
 
   ldflags = [
     "-s" "-w"
@@ -49,5 +49,6 @@ buildGoModule rec {
     changelog = "https://github.com/ankitpokhrel/jira-cli/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bryanasdev000 anthonyroussel ];
+    mainProgram = "jira";
   };
 }

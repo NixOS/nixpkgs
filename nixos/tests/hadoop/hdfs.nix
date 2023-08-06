@@ -1,6 +1,5 @@
 # Test a minimal HDFS cluster with no HA
 import ../make-test-python.nix ({ package, lib, ... }:
-with lib;
 {
   name = "hadoop-hdfs";
 
@@ -22,7 +21,7 @@ with lib;
           };
           httpfs = {
             # The NixOS hadoop module only support webHDFS on 3.3 and newer
-            enable = mkIf (versionAtLeast package.version "3.3") true;
+            enable = lib.mkIf (lib.versionAtLeast package.version "3.3") true;
             openFirewall = true;
           };
         };
@@ -57,7 +56,7 @@ with lib;
 
     datanode.wait_for_unit("hdfs-datanode")
     datanode.wait_for_unit("network.target")
-  '' + ( if versionAtLeast package.version "3" then ''
+  '' + (if lib.versionAtLeast package.version "3" then ''
     datanode.wait_for_open_port(9864)
     datanode.wait_for_open_port(9866)
     datanode.wait_for_open_port(9867)
@@ -76,7 +75,7 @@ with lib;
     datanode.succeed("echo testfilecontents | sudo -u hdfs hdfs dfs -put - /testfile")
     assert "testfilecontents" in datanode.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
 
-  '' + optionalString ( versionAtLeast package.version "3.3" ) ''
+  '' + lib.optionalString (lib.versionAtLeast package.version "3.3" ) ''
     namenode.wait_for_unit("hdfs-httpfs")
     namenode.wait_for_open_port(14000)
     assert "testfilecontents" in datanode.succeed("curl -f \"http://namenode:14000/webhdfs/v1/testfile?user.name=hdfs&op=OPEN\" 2>&1")

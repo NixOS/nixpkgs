@@ -6,20 +6,20 @@
 
 buildGoModule rec {
   pname = "gut";
-  version = "0.2.7";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "julien040";
     repo = "gut";
     rev = version;
-    sha256 = "sha256-qmp6QWmyharyTzUVXlX/oJZWbeyegX/u8/vzi/pTSaA=";
+    hash = "sha256-y6GhLuTqOaxAQjDgqh1ivDwGhpYY0a6ZNDdE3Pox3is=";
   };
 
-  vendorSha256 = "sha256-E4jr+dskBdVXj/B5RW1AKyxxr+f/+ZW42OTO9XbCLuw=";
+  vendorHash = "sha256-91iyAFD/RPEkMarKKVwJ4t92qosP2Db1aQ6dmNZNDwU=";
 
   ldflags = [ "-s" "-w" "-X github.com/julien040/gut/src/telemetry.gutVersion=${version}" ];
 
-  # Checks if `/home` exists
+  # Depends on `/home` existing
   doCheck = false;
 
   passthru.updateScript = nix-update-script { };

@@ -1,31 +1,34 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , asn1crypto
+, buildPythonPackage
 , certvalidator
+, fetchFromGitHub
+, mscerts
 , oscrypto
 , pyasn1
 , pyasn1-modules
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "signify";
-  version = "0.4.0";
-  disabled = pythonOlder "3.6";
+  version = "0.5.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ralphje";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-YJc9RIqkEL7dd1ahE4IbxyyZgsZWBDqbXZAvI/nK24M=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+UhZF+QYuv8pq/sTu7GDPUrlPNNixFgVZL+L0ulj/ko=";
   };
 
   propagatedBuildInputs = [
     asn1crypto
     certvalidator
+    mscerts
     oscrypto
     pyasn1
     pyasn1-modules
@@ -46,9 +49,12 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/ralphje/signify";
     description = "library that verifies PE Authenticode-signed binaries";
+    homepage = "https://github.com/ralphje/signify";
     license = licenses.mit;
     maintainers = with maintainers; [ baloo ];
+    # No support for pyasn1 > 0.5
+    # https://github.com/ralphje/signify/issues/37
+    broken = true;
   };
 }

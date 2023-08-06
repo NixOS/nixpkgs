@@ -179,7 +179,7 @@ Each interpreter has the following attributes:
 
 #### `buildLuarocksPackage` function {#buildluarockspackage-function}
 
-The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-lua-package.nix`
+The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-luarocks-package.nix`
 The following is an example:
 ```nix
 luaposix = buildLuarocksPackage {

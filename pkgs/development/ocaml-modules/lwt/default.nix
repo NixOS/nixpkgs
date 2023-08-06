@@ -16,6 +16,8 @@ buildDunePackage rec {
   };
 
   postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "5.0") ''
+    substituteInPlace src/core/dune \
+      --replace "(libraries bytes)" ""
     substituteInPlace src/unix/dune \
       --replace "libraries bigarray lwt" "libraries lwt"
   '';

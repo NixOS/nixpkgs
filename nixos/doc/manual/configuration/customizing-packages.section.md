@@ -12,6 +12,29 @@ Unfortunately, Nixpkgs currently lacks a way to query available
 configuration options.
 :::
 
+::: {.note}
+Alternatively, many packages come with extensions one might add.
+Examples include:
+- [`passExtensions.pass-otp`](https://search.nixos.org/packages/query=passExtensions.pass-otp)
+- [`python310Packages.requests`](https://search.nixos.org/packages/query=python310Packages.requests)
+
+You can use them like this:
+```nix
+environment.systemPackages = with pkgs; [
+  sl
+  (pass.withExtensions (subpkgs: with subpkgs; [
+    pass-audit
+    pass-otp
+    pass-genphrase
+  ]))
+  (python3.withPackages (subpkgs: with subpkgs; [
+      requests
+  ]))
+  cowsay
+];
+```
+:::
+
 Apart from high-level options, it's possible to tweak a package in
 almost arbitrary ways, such as changing or disabling dependencies of a
 package. For instance, the Emacs package in Nixpkgs by default has a

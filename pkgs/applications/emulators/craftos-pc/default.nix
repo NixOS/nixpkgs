@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
+, callPackage
 , patchelf
 , unzip
 , poco
@@ -14,18 +16,18 @@
 }:
 
 let
-  version = "2.7.3";
+  version = "2.7.5";
   craftos2-lua = fetchFromGitHub {
     owner = "MCJack123";
     repo = "craftos2-lua";
     rev = "v${version}";
-    sha256 = "sha256-lMqYfSA3sI7+glRE+eUf03uLfbf7lipmoqgt74FUaJQ=";
+    hash = "sha256-JMBsSoO/yTLw7K1Ri3BzKr5bz5UirXiPr/Q0YoMumhY=";
   };
   craftos2-rom = fetchFromGitHub {
     owner = "McJack123";
     repo = "craftos2-rom";
-    rev = "v${version}";
-    sha256 = "sha256-t76Yltx7vHNoAAFvNpYLKuwFja4On6M20upmG6w3C1M=";
+    rev = "v${version}.1"; # Author released a hotfix; remove trailing '.1' on next update
+    hash = "sha256-WZs/KIdpqLLzvpH2hiJpe/AehluoQMtewBbAb4htz8k=";
   };
 in
 
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "MCJack123";
     repo = "craftos2";
     rev = "v${version}";
-    sha256 = "sha256-a7oMLfjZUkEWPjxDDywlSW4qLhcQrCXPPY2BEOgiafU=";
+    hash = "sha256-t2yhSuNPFCF2NaQFWuN9Nos5ZPinAvecV6EZNO0Cy9I=";
   };
 
   buildInputs = [ patchelf poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
@@ -58,6 +60,11 @@ stdenv.mkDerivation rec {
     cp -R api $out/include/CraftOS-PC
     cp -R ${craftos2-rom}/* $out/share/craftos
   '';
+
+  passthru.tests = {
+    eval-hello-world = callPackage ./test-eval-hello-world { };
+    eval-periphemu = callPackage ./test-eval-periphemu { };
+  };
 
   meta = with lib; {
     description = "An implementation of the CraftOS-PC API written in C++ using SDL";

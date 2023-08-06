@@ -15,6 +15,7 @@
 , discord-rpc
 , doxygen
 , enet
+, fetchurl
 , ffmpeg
 , fmt
 , glslang
@@ -47,7 +48,13 @@
 , zstd
 }:
 
-stdenv.mkDerivation {
+let
+  tzinfoVersion = "220816";
+  tzinfo = fetchurl {
+    url = "https://github.com/lat9nq/tzdb_to_nx/releases/download/${tzinfoVersion}/${tzinfoVersion}.zip";
+    hash = "sha256-yv8ykEYPu9upeXovei0u16iqQ7NasH6873KnQy4+KwI=";
+  };
+in stdenv.mkDerivation {
   pname = "yuzu-${branch}";
 
   inherit version src;
@@ -103,7 +110,7 @@ stdenv.mkDerivation {
   # This changes `ir/opt` to `ir/var/empty` in `externals/dynarmic/src/dynarmic/CMakeLists.txt`
   # making the build fail, as that path does not exist
   dontFixCmake = true;
-
+  patches = [./vulkan_version.patch];
   cmakeFlags = [
     # actually has a noticeable performance impact
     "-DYUZU_ENABLE_LTO=ON"
@@ -141,6 +148,10 @@ stdenv.mkDerivation {
       "-DTITLE_BAR_FORMAT_IDLE=yuzu | ${branch} ${version} (nixpkgs) {}"
       "-DTITLE_BAR_FORMAT_RUNNING=yuzu | ${branch} ${version} (nixpkgs) | {}"
     )
+
+    # provide pre-downloaded tz data
+    mkdir -p build/externals/nx_tzdb
+    ln -sf ${tzinfo} build/externals/nx_tzdb/${tzinfoVersion}.zip
   '';
 
   # This must be done after cmake finishes as it overwrites the file

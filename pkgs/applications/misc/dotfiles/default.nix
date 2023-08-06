@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dotfiles";
   version = "0.6.4";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version pname;
     sha256 = "03qis6m9r2qh00sqbgwsm883s4bj1ibwpgk86yh4l235mdw8jywv";
   };

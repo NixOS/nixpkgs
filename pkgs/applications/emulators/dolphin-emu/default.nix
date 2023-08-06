@@ -55,23 +55,32 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-18498";
+  version = "5.0-19368";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "46b99671d9158e0ca840c1d8ef249db0f321ced7";
-    sha256 = "sha256-K+OF8o8I1XDLQQcsWC8p8jUuWeb+RoHlBG3cEZ1aWIU=";
+    rev = "dadbeb4bae7e7fa23af2b46e0add4143094dc107";
+    sha256 = "sha256-XLtFn2liONPizvrKyySZx0mY7qC2fpwhAWaRZLlEzh8=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    stdenv.cc
     cmake
     pkg-config
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreBluetooth
+    ForceFeedback
+    IOBluetooth
+    IOKit
+    moltenvk
+    OpenGL
+    VideoToolbox
+  ] ++ [
     bzip2
     cubeb
     curl
@@ -79,7 +88,6 @@ stdenv.mkDerivation rec {
     ffmpeg
     fmt_8
     hidapi
-    libGL
     libiconv
     libpulseaudio
     libspng
@@ -99,19 +107,13 @@ stdenv.mkDerivation rec {
     alsa-lib
     bluez
     libevdev
+    libGL
     libXext
     libXrandr
-    mgba # Derivation doesn't support Darwin
+    # FIXME: Remove comment on next mgba version
+    #mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreBluetooth
-    ForceFeedback
-    IOBluetooth
-    IOKit
-    moltenvk
-    OpenGL
-    VideoToolbox
   ];
 
   cmakeFlags = [
@@ -123,10 +125,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
     "-DUSE_BUNDLED_MOLTENVK=OFF"
+    "-DMACOS_CODE_SIGNING=OFF"
     # Bundles the application folder into a standalone executable, so we cannot devendor libraries
     "-DSKIP_POSTPROCESS_BUNDLE=ON"
     # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
-    # Note: The updater isn't available on linux, so we dont need to disable it there.
+    # Note: The updater isn't available on linux, so we don't need to disable it there.
     "-DENABLE_AUTOUPDATE=OFF"
   ];
 
@@ -183,7 +186,5 @@ stdenv.mkDerivation rec {
       xfix
       ivar
     ];
-    # Requires both LLVM and SDK bump
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

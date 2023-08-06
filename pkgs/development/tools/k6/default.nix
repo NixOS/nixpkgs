@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "k6";
-  version = "0.44.0";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U7/PJzjIKIKKC3Ao7HtiSDaRK1L7ZGUz/KP2SIoZXfo=";
+    sha256 = "sha256-nZXNUAS5HZTEMQ/sjetE30s/etpX/Hwp7QqgtOl3Rqs=";
   };
 
   subPackages = [ "./" ];

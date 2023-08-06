@@ -173,7 +173,8 @@ stdenv.mkDerivation {
 
       for executable in \
         thunderbird thunderbird-bin plugin-container \
-        updater crashreporter webapprt-stub
+        updater crashreporter webapprt-stub \
+        glxtest vaapitest
       do
         if [ -e "$out/usr/lib/thunderbird-bin-${version}/$executable" ]; then
           patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

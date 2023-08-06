@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "libdecor";
     repo = "libdecor";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-8b6qCqOSDDbhYwAeAaUyI71tSopTkGtCJaxZaJw1vQQ=";
   };
 

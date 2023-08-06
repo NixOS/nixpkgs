@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchPypi
 
 , cairo
 , ffmpeg
@@ -42,7 +43,30 @@ let
     fundus-calligra microtype wasysym physics dvisvgm jknapltx wasy cm-super
     babel-english gnu-freefont mathastext cbfonts-fd;
   };
-in python3.pkgs.buildPythonApplication rec {
+
+  python = python3.override {
+    packageOverrides = self: super: {
+      networkx = super.networkx.overridePythonAttrs (oldAttrs: rec {
+        pname = "networkx";
+        version = "2.8.8";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-Iw04gRevhw/OVkejxSQB/PdT6Ucg5uprQZelNVZIiF4=";
+        };
+      });
+
+      watchdog = super.watchdog.overridePythonAttrs (oldAttrs: rec{
+        pname = "watchdog";
+        version = "2.3.1";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-2fntJu0iqdMxggqEMsNoBwfqi1QSHdzJ3H2fLO6zaQY=";
+        };
+      });
+    };
+  };
+
+in python.pkgs.buildPythonApplication rec {
   pname = "manim";
   format = "pyproject";
   version = "0.16.0.post0";
@@ -55,8 +79,8 @@ in python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-iXiPnI6lTP51P1X3iLp75ArRP66o8WAANBLoStPrz4M=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
+  nativeBuildInputs = with python.pkgs; [
+    poetry-core
   ];
 
   postPatch = ''
@@ -69,7 +93,7 @@ in python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [ cairo ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     click
     click-default-group
     cloup
@@ -106,14 +130,13 @@ in python3.pkgs.buildPythonApplication rec {
     ])
   ];
 
-
   nativeCheckInputs = [
-    python3.pkgs.pytest-xdist
-    python3.pkgs.pytestCheckHook
-
     ffmpeg
     (texlive.combine manim-tinytex)
-  ];
+  ] ++ (with python.pkgs; [
+    pytest-xdist
+    pytestCheckHook
+  ]);
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;

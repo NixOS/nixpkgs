@@ -1,27 +1,25 @@
 { lib, beamPackages
 , fetchFromGitHub, fetchFromGitLab, fetchHex
 , file, cmake
-, libxcrypt-legacy
 , nixosTests, writeText
 , ...
 }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-3iG2s7jVEnhq1kLLgtaHnFmLYBO2Xr5M5jjZfSNA9z4=";
+    sha256 = "sha256-5qxop/hJj1hIsEcK6vJnI2RnAcLf3tO43B0e0FcNZcA=";
   };
-  stripDebug = false;
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
-    overrides = (final: prev: {
+    overrides = final: prev: {
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
       gettext = beamPackages.buildMix rec {
@@ -137,7 +135,7 @@ beamPackages.mixRelease rec {
 
         src = fetchHex {
           pkg = "${name}";
-          version = "${version}";
+          inherit version;
           sha256 = "120znzz0yw1994nk6v28zql9plgapqpv51n9g6qm6md1f4x7gj0z";
         };
 
@@ -161,14 +159,7 @@ beamPackages.mixRelease rec {
           cp ${cfgFile} config/config.exs
         '';
       };
-
-      crypt = let
-        version = prev.crypt.version;
-      in prev.crypt.override {
-        buildInputs = [ libxcrypt-legacy ];
-        postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{hex-source-crypt-${version},crypt}.so";
-      };
-    });
+    };
   };
 
   passthru = {

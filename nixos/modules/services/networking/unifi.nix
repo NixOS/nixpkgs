@@ -42,10 +42,10 @@ in
 
     services.unifi.mongodbPackage = mkOption {
       type = types.package;
-      default = pkgs.mongodb-4_2;
+      default = pkgs.mongodb-4_4;
       defaultText = literalExpression "pkgs.mongodb";
       description = lib.mdDoc ''
-        The mongodb package to use. Please note: unifi7 officially only supports mongodb up until 3.6 but works with 4.2.
+        The mongodb package to use. Please note: unifi7 officially only supports mongodb up until 3.6 but works with 4.4.
       '';
     };
 
@@ -193,6 +193,4 @@ in
     (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data" )
     (mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
-
-  meta.maintainers = with lib.maintainers; [ pennae ];
 }

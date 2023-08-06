@@ -34,14 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
           + lib.optionalString enableQt "-qt"
           + lib.optionalString (!enableQt) "-sdl"
           + lib.optionalString forceWayland "-wayland";
-  version = "1.15.3";
+  version = "1.15.4";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-5IICMP7KEniAnuxdDPECN+8jXA0ZKgPsdIL6Og2xyX4=";
+    sha256 = "sha256-D94PLJfWalLk2kbS0PEHTMDdWxZW4YXwp3VQDHNZlRU=";
   };
 
   postPatch = ''
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
-      mkdir -p $out/share/{applications,ppsspp}
+      mkdir -p $out/share/{applications,ppsspp,icons}
     '' + (if enableQt then ''
       install -Dm555 PPSSPPQt $out/bin/ppsspp
       wrapProgram $out/bin/ppsspp \
@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix LD_LIBRARY_PATH : ${vulkanPath} \
     '' + "\n" + ''
       mv assets $out/share/ppsspp
+      mv ../icons/hicolor $out/share/icons
 
       runHook postInstall
     '';

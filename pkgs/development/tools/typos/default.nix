@@ -1,22 +1,23 @@
-{ fetchFromGitHub, rustPlatform, lib }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typos";
-  version = "1.14.9";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dfUXH7MRTnHYSqNJzlT0fUn/Er0wrTARq3ZuOdWToow=";
+    hash = "sha256-1s9wN72QnlvtcB8W26Mw4uC8c6/txUfv6QBpqcWzYZQ=";
   };
 
-  cargoHash = "sha256-+u/3XtC/HxtAsX4dRf74u0BLh872Y2kK+BnbWqUnUdo=";
+  cargoHash = "sha256-0bzW34QuD0OJLXDzrVRPzVTyCZHWiQZh6MUP5Wix+Tg=";
 
   meta = with lib; {
     description = "Source code spell checker";
-    homepage = "https://github.com/crate-ci/typos/";
+    homepage = "https://github.com/crate-ci/typos";
+    changelog = "https://github.com/crate-ci/typos/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = [ maintainers.mgttlinger ];
+    maintainers = with maintainers; [ figsoda mgttlinger ];
   };
 }

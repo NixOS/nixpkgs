@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , appdirs
+, azure-containerregistry
 , azure-core
+, azure-identity
+, azure-storage-blob
 , bokeh
 , boto3
 , buildPythonPackage
@@ -11,6 +14,7 @@
 , flask
 , git
 , gitpython
+, google-cloud-artifact-registry
 , google-cloud-compute
 , google-cloud-storage
 , hypothesis
@@ -29,6 +33,7 @@
 , protobuf
 , psutil
 , pydantic
+, pyfakefs
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
@@ -50,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.15.0";
+  version = "0.15.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -59,7 +64,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UULsvvk9BsWUrJ8eD7uD2UnUJqmPrmjrJvCA7WRC/Cw=";
+    hash = "sha256-etS1NkkskA5Lg/38QIdzCVWgqZpjpT2LwaWF1k7WVXs=";
   };
 
   patches = [
@@ -93,10 +98,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    azure-containerregistry
     azure-core
+    azure-identity
+    azure-storage-blob
     bokeh
     boto3
     flask
+    google-cloud-artifact-registry
     google-cloud-compute
     google-cloud-storage
     hypothesis
@@ -111,6 +120,7 @@ buildPythonPackage rec {
     pandas
     parameterized
     pydantic
+    pyfakefs
     pytest-mock
     pytest-xdist
     pytestCheckHook
@@ -131,6 +141,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
+    "tests/pytest_tests/system_tests/test_notebooks/test_notebooks.py"
     "tests/pytest_tests/unit_tests_old/test_cli.py"
     "tests/pytest_tests/unit_tests_old/test_data_types.py"
     "tests/pytest_tests/unit_tests_old/test_file_stream.py"
@@ -156,7 +167,6 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_docker.py"
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_kubernetes.py"
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch.py"
-    "tests/pytest_tests/unit_tests_old/tests_s_nb/test_notebooks.py"
     "tests/pytest_tests/unit_tests/test_cli.py"
     "tests/pytest_tests/unit_tests/test_data_types.py"
     "tests/pytest_tests/unit_tests/test_internal_api.py"
@@ -206,19 +216,22 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_importers/test_import_mlflow.py"
     "tests/pytest_tests/system_tests/test_sweep/test_public_api.py"
     "tests/pytest_tests/system_tests/test_sweep/test_sweep_scheduler.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_sweep_utils.py"
     "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent_full.py"
     "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent.py"
     "tests/pytest_tests/system_tests/test_sweep/test_wandb_sweep.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_github_reference.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_job.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_add.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_cli.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_kubernetes.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_local_container.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_run.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_sweep.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_wandb_reference.py"
+    "tests/pytest_tests/system_tests/test_system_metrics/test_open_metrics.py"
+    "tests/pytest_tests/system_tests/test_launch/test_github_reference.py"
+    "tests/pytest_tests/system_tests/test_launch/test_job.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_add.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_cli.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_kubernetes.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_local_container.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_run.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_sweep_cli.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_sweep.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch.py"
+    "tests/pytest_tests/system_tests/test_launch/test_wandb_reference.py"
 
     # Tries to access /homeless-shelter
     "tests/pytest_tests/unit_tests/test_tables.py"
@@ -246,14 +259,17 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     # Same as above
     "tests/pytest_tests/unit_tests/test_artifacts/test_storage.py"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals stdenv.isDarwin [
     # Same as above
     "tests/pytest_tests/unit_tests/test_lib/test_filesystem.py"
   ];
 
-  # Disable test that fails on darwin due to issue with python3Packages.psutil:
-  # https://github.com/giampaolo/psutil/issues/1219
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # Timing sensitive
+    "test_login_timeout"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Disable test that fails on darwin due to issue with python3Packages.psutil:
+    # https://github.com/giampaolo/psutil/issues/1219
     "test_tpu_system_stats"
   ];
 

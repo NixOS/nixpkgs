@@ -4,8 +4,7 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
-, llvmPackages
-, rocksdb
+, rocksdb_7_10
 , testers
 , surrealdb
 , SystemConfiguration
@@ -25,18 +24,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-eLJ+sxsK45pkgNUYrNuUOAqutwIjvEhGGjsvwGzfVKI=";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
 
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
-  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  ROCKSDB_INCLUDE_DIR = "${rocksdb_7_10}/include";
+  ROCKSDB_LIB_DIR = "${rocksdb_7_10}/lib";
 
   nativeBuildInputs = [
     pkg-config
-    # needed on top of LIBCLANG_PATH to compile rquickjs
-    llvmPackages.clang
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [ openssl ]

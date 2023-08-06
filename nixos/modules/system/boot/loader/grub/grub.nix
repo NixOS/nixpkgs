@@ -40,7 +40,10 @@ let
       backgroundColor = f cfg.backgroundColor;
       entryOptions = f cfg.entryOptions;
       subEntryOptions = f cfg.subEntryOptions;
-      grub = f grub;
+      # PC platforms (like x86_64-linux) have a non-EFI target (`grubTarget`), but other platforms
+      # (like aarch64-linux) have an undefined `grubTarget`. Avoid providing the path to a non-EFI
+      # GRUB on those platforms.
+      grub = f (if (grub.grubTarget or "") != "" then grub else "");
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
       fullName = lib.getName realGrub;
@@ -65,8 +68,8 @@ let
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
         ++ optional cfg.efiSupport efibootmgr
         ++ optionals cfg.useOSProber [ busybox os-prober ]);
-      font = if cfg.font == null then ""
-        else (if lib.last (lib.splitString "." cfg.font) == "pf2"
+      font = lib.optionalString (cfg.font != null) (
+             if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
              else "${convertedFont}");
     });
@@ -352,10 +355,6 @@ in
         default = "";
         type = types.lines;
         example = ''
-          # GRUB 1 example (not GRUB 2 compatible)
-          title Windows
-            chainloader (hd0,1)+1
-
           # GRUB 2 example
           menuentry "Windows 7" {
             chainloader (hd0,4)+1
@@ -410,14 +409,6 @@ in
           Set to `null` to run GRUB in text mode.
 
           ::: {.note}
-          For grub 1:
-          It must be a 640x480,
-          14-colour image in XPM format, optionally compressed with
-          {command}`gzip` or {command}`bzip2`.
-          :::
-
-          ::: {.note}
-          For grub 2:
           File must be one of .png, .tga, .jpg, or .jpeg. JPEG images must
           not be progressive.
           The image will be scaled if necessary to fit the screen.
@@ -431,10 +422,6 @@ in
         default = null;
         description = lib.mdDoc ''
           Background color to be used for GRUB to fill the areas the image isn't filling.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -443,10 +430,6 @@ in
         type = types.nullOr types.str;
         description = lib.mdDoc ''
           Options applied to the primary NixOS menu entry.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -455,10 +438,6 @@ in
         type = types.nullOr types.str;
         description = lib.mdDoc ''
           Options applied to the secondary NixOS submenu entry.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -468,10 +447,6 @@ in
         default = null;
         description = lib.mdDoc ''
           Grub theme to be used.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -480,10 +455,6 @@ in
         default = "stretch";
         description = lib.mdDoc ''
           Whether to stretch the image or show the image in the top-left corner unstretched.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -592,8 +563,6 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether GRUB should be built against libzfs.
-          ZFS support is only available for GRUB v2.
-          This option is ignored for GRUB v1.
         '';
       };
 
@@ -602,8 +571,6 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether GRUB should be built with EFI support.
-          EFI support is only available for GRUB v2.
-          This option is ignored for GRUB v1.
         '';
       };
 

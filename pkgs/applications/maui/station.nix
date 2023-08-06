@@ -8,7 +8,9 @@
 , kirigami2
 , mauikit
 , mauikit-filebrowsing
+, mauikit-terminal
 , qmltermwidget
+, qtmultimedia
 }:
 
 mkDerivation {
@@ -26,7 +28,9 @@ mkDerivation {
     kirigami2
     mauikit
     mauikit-filebrowsing
+    mauikit-terminal
     qmltermwidget
+    qtmultimedia
   ];
 
   meta = with lib; {

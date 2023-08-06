@@ -1,19 +1,19 @@
-{ buildGoModule, fetchFromGitHub, fetchpatch, lib, coreutils, makeWrapper
-, google-guest-configs, google-guest-oslogin, iproute2, dhcp, procps
+{ buildGoModule, fetchFromGitHub, lib, coreutils, makeWrapper
+, google-guest-configs, google-guest-oslogin, iproute2, procps
 }:
 
 buildGoModule rec {
   pname = "guest-agent";
-  version = "20230221.00";
+  version = "20230726.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AObN9vyEMJeGBmAMyUz7H0pHPtGf5I/oeDzYuZs4KpE=";
+    sha256 = "sha256-p+gjiaUaBBGhCVkbXrubfV/xZWvanC8ktlfIfjyUQSA=";
   };
 
-  vendorHash = "sha256-ioejOtmsi0QnID3V5JxwAz399I5Jp5nHZqpzU9DjpQE=";
+  vendorHash = "sha256-Xw/5yHW9DRtZFC6cECLI0RncgzSGB5/Y0yjW7hz247s=";
 
   patches = [ ./disable-etc-mutation.patch ];
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   '';
 
   # We don't add `shadow` here; it's added to PATH if `mutableUsers` is enabled.
-  binPath = lib.makeBinPath [ google-guest-configs google-guest-oslogin iproute2 dhcp procps ];
+  binPath = lib.makeBinPath [ google-guest-configs google-guest-oslogin iproute2 procps ];
 
   # Skip tests which require networking.
   preCheck = ''

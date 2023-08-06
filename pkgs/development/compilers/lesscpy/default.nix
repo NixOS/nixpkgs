@@ -1,10 +1,10 @@
-{ stdenv, lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname   = "lesscpy";
   version = "0.13.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "1bbjag13kawnjdn7q4flfrkd0a21rgn9ycfqsgfdmg658jsx1ipk";
   };

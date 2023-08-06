@@ -16,11 +16,18 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-dArR1z3wkGDd3Y1WHK0sLjhuaKHAcsx6cCH2rgVdUGs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "mlflow-skinny>=1.28.0,<3.0.0" "mlflow" \
-      --replace "rich==12.6.0" "rich"
-  '';
+  pythonRelaxDeps = [
+    "rich"
+    "typer"
+  ];
+
+  pythonRemoveDeps = [
+    "mlflow-skinny"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp

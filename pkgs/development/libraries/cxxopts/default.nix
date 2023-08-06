@@ -9,17 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cxxopts";
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "jarro2783";
     repo = "cxxopts";
     rev = "v${version}";
-    sha256 = "08x7j168l1xwj0r3rv89cgghmfhsx98lpq35r3vkh504m1pd55a6";
+    sha256 = "sha256-lJPMaXBfrCeUhhXha5f7zmOGtyEDzU3oPTMirPTFZzQ=";
   };
-
-  # CMake does not set CMAKE_LIBRARY_ARCHITECTURE variable in Nix, which breaks architecture-independent library path generation
-  patches = [ ./fix-install-path.patch ];
 
   buildInputs = lib.optionals enableUnicodeHelp [ icu.dev ];
   cmakeFlags = [ "-DCXXOPTS_BUILD_EXAMPLES=OFF" ]

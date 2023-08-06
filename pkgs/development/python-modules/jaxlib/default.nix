@@ -40,8 +40,9 @@
 , snappy
 , zlib
 
+, config
   # CUDA flags:
-, cudaSupport ? false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 
   # MKL:
@@ -63,7 +64,7 @@ let
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    broken = stdenv.isAarch64 || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 
   cudatoolkit_joined = symlinkJoin {
@@ -128,6 +129,11 @@ let
     "wrapt"
     "zlib"
   ];
+
+  arch =
+    # KeyError: ('Linux', 'arm64')
+    if stdenv.targetPlatform.isLinux && stdenv.targetPlatform.linuxArch == "arm64" then "aarch64"
+    else stdenv.targetPlatform.linuxArch;
 
   bazel-build = buildBazelPackage rec {
     name = "bazel-build-${pname}-${version}";
@@ -243,9 +249,9 @@ let
 
       sha256 =
         if cudaSupport then
-          "sha256-cgsiloW77p4+TKRrYequZ/UwKwfO2jsHKtZ+aA30H7E="
+          "sha256-O6bM7Lc8eaFyO4Xzl5/hvBrbPioI+Yeqx9yNC97fvKk="
         else
-          "sha256-D7WYG3YUaWq+4APYx8WpA191VVtoHG0fth3uEHXOeos=";
+          "sha256-gLMJfJSQIdGGY2Ivx4IgDWg0hc+mxzlqY11CUkSWcjI=";
     };
 
     buildAttrs = {
@@ -291,7 +297,7 @@ let
       '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
 
       installPhase = ''
-        ./bazel-bin/build/build_wheel --output_path=$out --cpu=${stdenv.targetPlatform.linuxArch}
+        ./bazel-bin/build/build_wheel --output_path=$out --cpu=${arch}
       '';
     };
 
@@ -299,11 +305,11 @@ let
   };
   platformTag =
     if stdenv.targetPlatform.isLinux then
-      "manylinux2014_${stdenv.targetPlatform.linuxArch}"
+      "manylinux2014_${arch}"
     else if stdenv.system == "x86_64-darwin" then
-      "macosx_10_9_${stdenv.targetPlatform.linuxArch}"
+      "macosx_10_9_${arch}"
     else if stdenv.system == "aarch64-darwin" then
-      "macosx_11_0_${stdenv.targetPlatform.linuxArch}"
+      "macosx_11_0_${arch}"
     else throw "Unsupported target platform: ${stdenv.targetPlatform}";
 
 in

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, pythonRelaxDepsHook
 , poetry-core
 , httpx
 , pydicom
@@ -22,9 +23,13 @@ buildPythonPackage rec {
     hash = "sha256-RZJ7BuQRJ+yaHFv9iq4uFvMtH8NvGvmpjmgmyvw9rGk=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ pythonRelaxDepsHook poetry-core ];
 
   propagatedBuildInputs = [ httpx pydicom ];
+
+  pythonRelaxDeps = [
+    "httpx"
+  ];
 
   doCheck = false;  # requires orthanc server (not in Nixpkgs)
 

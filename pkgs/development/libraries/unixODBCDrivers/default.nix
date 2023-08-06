@@ -52,6 +52,8 @@
     '';
 
     cmakeFlags = [
+      "-DODBC_LIB_DIR=${lib.getLib unixODBC}/lib"
+      "-DODBC_INCLUDE_DIR=${lib.getDev unixODBC}/include"
       "-DWITH_OPENSSL=ON"
       # on darwin this defaults to ON but we want to build against unixODBC
       "-DWITH_IODBC=OFF"

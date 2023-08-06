@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zN9FI4emOAlz0pJzY+nLuTn6IGiRWm+Tf/nSRSICRoM=";
   };
 
-  outputs = [ "out" "dev" ];
+  # vlock is moved into its own output, since it depends on pam. This
+  # reduces closure size for most use cases.
+  outputs = [ "out" "vlock" "dev" ];
 
   configureFlags = [
     "--enable-optional-progs"
@@ -55,6 +57,12 @@ stdenv.mkDerivation rec {
         --replace 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
         --replace 'xz '    '${xz.bin}/bin/xz ' \
         --replace 'zstd '  '${zstd.bin}/bin/zstd '
+
+      sed -i '
+        1i prefix:=$(vlock)
+        1i bindir := $(vlock)/bin' \
+        src/vlock/Makefile.in \
+        src/vlock/Makefile.am
     '';
 
   postInstall = ''

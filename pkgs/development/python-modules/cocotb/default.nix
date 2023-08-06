@@ -5,6 +5,7 @@
 , setuptools
 , setuptools-scm
 , cocotb-bus
+, find-libpython
 , pytestCheckHook
 , swig
 , verilog
@@ -24,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [ setuptools ];
+  buildInputs = [ setuptools find-libpython ];
 
   postPatch = ''
     patchShebangs bin/*.py

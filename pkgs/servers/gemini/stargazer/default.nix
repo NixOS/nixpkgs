@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , fetchFromSourcehut
 , rustPlatform
 , installShellFiles
 , scdoc
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,6 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles scdoc ];
 
+  buildInputs = lib.optional stdenv.isDarwin Security;
+
   postInstall = ''
     scdoc < doc/stargazer.scd  > stargazer.1
     scdoc < doc/stargazer-ini.scd  > stargazer.ini.5
@@ -36,6 +40,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.agpl3Plus;
     changelog = "https://git.sr.ht/~zethra/stargazer/refs/${version}";
     maintainers = with maintainers; [ gaykitty ];
-    platforms = platforms.linux;
   };
 }

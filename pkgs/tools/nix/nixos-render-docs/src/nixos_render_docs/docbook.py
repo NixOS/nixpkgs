@@ -1,7 +1,6 @@
 from collections.abc import Mapping, Sequence
-from typing import Any, cast, Optional, NamedTuple
+from typing import cast, Optional, NamedTuple
 
-import markdown_it
 from markdown_it.token import Token
 from xml.sax.saxutils import escape, quoteattr
 
@@ -197,7 +196,7 @@ class DocBookRenderer(Renderer):
         spacing = ' spacing="compact"' if token.meta.get('compact', False) else ''
         return f"<orderedlist{start}{spacing}>"
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return f"</orderedlist>"
+        return "</orderedlist>"
     def heading_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         hlevel = int(token.tag[1:])
         result = self._close_headings(hlevel)

@@ -1,10 +1,10 @@
-{ lib, python3Packages, python3, xvfb-run }:
+{ lib, python3Packages, fetchPypi, xvfb-run }:
 
 python3Packages.buildPythonApplication rec {
   pname = "keepmenu";
   version = "1.2.2";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "SeVNtONH1bn2hb2pBOVM3Oafrb+jARgfvRe7vUu6Gto=";
   };

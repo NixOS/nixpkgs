@@ -7,7 +7,7 @@
 , numpy
 , psutil
 , qiskit-terra
-, retworkx
+, rustworkx
 , scikit-learn
 , scipy
 , withPyscf ? false
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     numpy
     psutil
     qiskit-terra
-    retworkx
+    rustworkx
     scikit-learn
     scipy
   ] ++ lib.optional withPyscf pyscf;

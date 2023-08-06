@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

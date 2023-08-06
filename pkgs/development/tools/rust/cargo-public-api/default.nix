@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
+, curl
 , openssl
 , stdenv
 , darwin
@@ -9,18 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-public-api";
-  version = "0.29.1";
+  version = "0.31.3";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-4UaLzYwOhVK3Ca4EqQTdi/cMozAeXLWALB5yTQCNi/k=";
+    hash = "sha256-oSjfNbId5jEHeLiJ3FMoNqwLZg6iyr3ZqpcfKvEnpac=";
   };
 
-  cargoHash = "sha256-zDgohGKu7jbaWNkb/Nr6ZVkQFEiXzNdEReVBsVuvKDA=";
+  cargoHash = "sha256-VHHEQafQfRqmdscuWpN+NdcfEc1sTt+lKLg26aM9QQE=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
+  buildInputs = [ curl openssl ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # Tests fail

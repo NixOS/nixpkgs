@@ -6,6 +6,7 @@
 , asyauth
 , asysocks
 , buildPythonPackage
+, cargo
 , colorama
 , fetchFromGitHub
 , iconv
@@ -14,6 +15,7 @@
 , pyperclip
 , pythonOlder
 , rustPlatform
+, rustc
 , setuptools-rust
 , tqdm
 , unicrypto
@@ -36,7 +38,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/aardwolf/utils/rlers";
+    sourceRoot = "${src.name}/aardwolf/utils/rlers";
     name = "${pname}-${version}";
     hash = "sha256-JGXTCCyC20EuUX0pP3xSZG3qFB5jRL7+wW2YRC3EiCc=";
   };
@@ -46,10 +48,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform.rust; [
     cargo
     rustc
-  ]);
+  ];
 
   propagatedBuildInputs = [
     arc4

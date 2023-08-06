@@ -1,5 +1,5 @@
 { lib
-, flutter
+, flutter37
 , python3
 , fetchFromGitHub
 , pcre2
@@ -8,7 +8,7 @@
 , removeReferencesTo
 }:
 
-flutter.buildFlutterApplication rec {
+flutter37.buildFlutterApplication rec {
   pname = "yubioath-flutter";
   version = "6.1.0";
 
@@ -62,7 +62,7 @@ flutter.buildFlutterApplication rec {
       --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
 
     # Remove unnecessary references to Flutter.
-    remove-references-to -t ${flutter.unwrapped} $out/app/data/flutter_assets/shaders/ink_sparkle.frag
+    remove-references-to -t ${flutter37.unwrapped} $out/app/data/flutter_assets/shaders/ink_sparkle.frag
   '';
 
   nativeBuildInputs = [
@@ -75,8 +75,8 @@ flutter.buildFlutterApplication rec {
   ];
 
   disallowedReferences = [
-    flutter
-    flutter.unwrapped
+    flutter37
+    flutter37.unwrapped
   ];
 
   meta = with lib; {

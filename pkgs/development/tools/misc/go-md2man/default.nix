@@ -18,6 +18,5 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/cpuguy83/go-md2man";
     maintainers = with maintainers; [offline];
-    platforms = platforms.unix;
   };
 }

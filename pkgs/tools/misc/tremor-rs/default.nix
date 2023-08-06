@@ -2,7 +2,6 @@
 , rustPlatform
 , pkg-config
 , cmake
-, llvmPackages
 , openssl
 , fetchFromGitHub
 , installShellFiles
@@ -33,10 +32,18 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
+  nativeBuildInputs = [ cmake pkg-config installShellFiles rustPlatform.bindgenHook ];
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
+
+  # relax lints to fix an error caused by invalid macro_export
+  # error: `log_error` isn't a valid `#[macro_export]` argument
+  # note: `#[deny(invalid_macro_export_arguments)]` implied by `#[deny(warnings)]`
+  postPatch = ''
+    substituteInPlace src/lib.rs \
+      --replace '#![deny(' '#![warn('
+  '';
 
   # TODO export TREMOR_PATH($out/lib) variable
   postInstall = ''
@@ -49,14 +56,19 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/tremor completions zsh)
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-
   # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
+
+  env = lib.optionalAttrs (stdenv.system == "x86_64-darwin") {
+    RUSTFLAGS = "-C target-feature=+avx,+avx2,+sse4.2";
+  };
+
+  # tests failed on x86_64-darwin with SIGILL: illegal instruction
+  doCheck = !(stdenv.system == "x86_64-darwin");
 
   checkFlags = [
     # all try to make a network access
@@ -72,14 +84,12 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p tremor-cli" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = ''
       Early stage event processing system for unstructured data with rich
       support for structural pattern matching, filtering and transformation
     '';
     homepage = "https://www.tremor.rs/";
     license = licenses.asl20;
-    platforms = platforms.x86_64;
     maintainers = with maintainers; [ humancalico happysalada ];
   };
 }

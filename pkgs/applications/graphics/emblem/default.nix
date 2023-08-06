@@ -3,11 +3,13 @@
 , fetchFromGitLab
 , rustPlatform
 , appstream-glib
+, cargo
 , desktop-file-utils
 , glib
 , meson
 , ninja
 , pkg-config
+, rustc
 , wrapGAppsHook4
 , gtk4
 , libadwaita
@@ -43,11 +45,10 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     gtk4

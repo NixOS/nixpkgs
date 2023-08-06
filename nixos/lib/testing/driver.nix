@@ -12,7 +12,9 @@ let
   };
 
 
-  vlans = map (m: m.virtualisation.vlans) (lib.attrValues config.nodes);
+  vlans = map (m: (
+    m.virtualisation.vlans ++
+    (lib.mapAttrsToList (_: v: v.vlan) m.virtualisation.interfaces))) (lib.attrValues config.nodes);
   vms = map (m: m.system.build.vm) (lib.attrValues config.nodes);
 
   nodeHostNames =
@@ -63,7 +65,8 @@ let
           echo "${builtins.toString vlanNames}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
 
-          cat -n testScriptWithTypes
+          echo "Running type check (enable/disable: config.skipTypeCheck)"
+          echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipTypeCheck"
 
           mypy  --no-implicit-optional \
                 --pretty \
@@ -77,6 +80,9 @@ let
 
         ${testDriver}/bin/generate-driver-symbols
         ${lib.optionalString (!config.skipLint) ''
+          echo "Linting test script (enable/disable: config.skipLint)"
+          echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipLint"
+
           PYFLAKES_BUILTINS="$(
             echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedNames)},
             < ${lib.escapeShellArg "driver-symbols"}

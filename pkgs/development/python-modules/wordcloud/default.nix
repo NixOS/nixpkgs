@@ -2,7 +2,6 @@
 , buildPythonPackage
 , cython
 , fetchFromGitHub
-, fetchpatch
 , matplotlib
 , mock
 , numpy
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "wordcloud";
-  version = "unstable-2023-01-04";
+  version = "1.9.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amueller";
     repo = "word_cloud";
-    rev = "dbf7ab7753a36e1c12c0e1b36aeeece5023f39f9";
-    hash = "sha256-ogSkVcPUth7bh7mxwdDmF/Fc2ySDxbLA8ArmBNnPvw8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Tcle9otT1eBN/RzajwKZDUq8xX0Lhi2t74OvhUrvHZE=";
   };
 
   nativeBuildInputs = [

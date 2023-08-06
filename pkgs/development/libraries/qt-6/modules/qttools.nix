@@ -4,11 +4,17 @@
 , qtbase
 , qtdeclarative
 , cups
-, substituteAll
+, llvmPackages
+# clang-based c++ parser for qdoc and lupdate
+, withClang ? false
 }:
 
 qtModule {
   pname = "qttools";
+  buildInputs = lib.optionals withClang [
+    llvmPackages.libclang
+    llvmPackages.llvm
+  ];
   qtInputs = [ qtbase qtdeclarative ];
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ cups ];
   patches = [

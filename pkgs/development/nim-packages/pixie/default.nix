@@ -14,7 +14,6 @@ buildNimPackage rec {
 
   propagatedBuildInputs = [ bumpy chroma flatty nimsimd vmath zippy ];
 
-  doCheck = true;
 
   meta = with lib;
     src.meta // {

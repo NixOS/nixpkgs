@@ -1,6 +1,11 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, stdenv
+, libpcap
+# Cann't be build with both pcap and rawsocket tags
+, withPcap ? (!stdenv.isLinux && !withRawsocket)
+, withRawsocket ? (stdenv.isLinux && !withPcap)
 }:
 
 buildGoModule rec {
@@ -15,6 +20,13 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-c0NQfZuMMWz1ASwFBcpMNjxZwXLo++gMYBiNgvT8ZLQ=";
+
+  ldflags = [
+    "-s" "-w"
+  ];
+  buildInputs = lib.optional withPcap libpcap;
+  tags = lib.optional withPcap "pcap"
+    ++ lib.optional withRawsocket "rawsocket";
 
   meta = with lib;{
     homepage = "https://github.com/macronut/phantomsocks";

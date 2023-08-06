@@ -13,6 +13,8 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
+  beancount = callPackage ./manual-packages/beancount { };
+
   cask = callPackage ./manual-packages/cask { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
@@ -34,8 +36,6 @@ in
   git-undo = callPackage ./manual-packages/git-undo { };
 
   haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
-
-  header-file-mode = callPackage ./manual-packages/header-file-mode { };
 
   helm-words = callPackage ./manual-packages/helm-words { };
 
@@ -74,6 +74,8 @@ in
   sv-kalender = callPackage ./manual-packages/sv-kalender { };
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
+
+  treesit-grammars = callPackage ./manual-packages/treesit-grammars { };
 
   tsc = callPackage ./manual-packages/tsc { };
 

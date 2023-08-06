@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , func-timeout
-, jaraco_itertools
+, jaraco-itertools
 , pythonOlder
 , setuptools-scm
 }:
@@ -28,7 +28,7 @@ let zipp = buildPythonPackage rec {
 
   nativeCheckInputs = [
     func-timeout
-    jaraco_itertools
+    jaraco-itertools
   ];
 
   pythonImportsCheck = [
@@ -43,6 +43,6 @@ let zipp = buildPythonPackage rec {
     description = "Pathlib-compatible object wrapper for zip files";
     homepage = "https://github.com/jaraco/zipp";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }; in zipp

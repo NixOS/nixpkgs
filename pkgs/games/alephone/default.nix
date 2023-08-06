@@ -1,23 +1,24 @@
-{ lib, stdenv, fetchurl, boost, curl, ffmpeg_4, icoutils, libGLU, libmad, libogg
-, libpng, libsndfile, libvorbis, lua, pkg-config, SDL2, SDL2_image, SDL2_net
-, SDL2_ttf, smpeg, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip
-, alephone }:
+{ lib, stdenv, fetchurl, alsa-lib, boost, curl, ffmpeg_4, icoutils, libGLU
+, libmad, libogg, libpng, libsndfile, libvorbis, lua, miniupnpc, pkg-config
+, SDL2, SDL2_image, SDL2_net, SDL2_ttf, speex, zziplib, zlib, makeWrapper
+, makeDesktopItem, unzip, alephone }:
 
 let
   self = stdenv.mkDerivation rec {
     outputs = [ "out" "icons" ];
     pname = "alephone";
-    version = "1.4";
+    version = "1.6.2";
 
     src = fetchurl {
-      url = let date = "20210408";
+      url = let date = "20230529";
       in "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-      sha256 = "sha256-tMwATUhUpo8W2oSWxGSZcAHVkj1PWEvUR/rpMZwWCWA=";
+      sha256 = "sha256-UqhZvOMOxU4W0eLRRTQvGXaqTpWD5KIdXULClHW7Iyc=";
     };
 
     nativeBuildInputs = [ pkg-config icoutils ];
 
     buildInputs = [
+      alsa-lib
       boost
       curl
       ffmpeg_4
@@ -28,17 +29,17 @@ let
       libpng
       libvorbis
       lua
+      miniupnpc
       SDL2
       SDL2_image
       SDL2_net
       SDL2_ttf
-      smpeg
       speex
       zziplib
       zlib
     ];
 
-    configureFlags = [ "--with-boost=${boost}" ];
+    configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
     makeFlags = [ "AR:=$(AR)" ];
 
     enableParallelBuilding = true;

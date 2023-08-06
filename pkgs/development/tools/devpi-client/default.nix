@@ -3,6 +3,7 @@
 , git
 , glibcLocales
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-csdQUxnopH+kYtoqdvyXKNW3fGkQNSREJYxjes9Dgi8=";
   };

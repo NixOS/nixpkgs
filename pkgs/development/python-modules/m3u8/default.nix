@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "m3u8";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "globocom";
     repo = pname;
-    rev = version;
-    hash = "sha256-jfCmvAb7bF6nYFNUPXVG61x0RiO4vcyR+x7WzgPRLxI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9Xmbc1aL7SI24FFn0/5KJtAM3+Xyvd3bwUh8DU1wGKE=";
   };
 
   propagatedBuildInputs = [

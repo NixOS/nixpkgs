@@ -18,7 +18,7 @@ let
     owner = "chriskohlhoff";
     repo = "asio";
     rev = "refs/tags/asio-1-22-1";
-    sha256 = "sha256-UDLhx2yI6Txg0wP5H4oNIhgKIB2eMxUGCyT2x/7GgVg=";
+    hash = "sha256-UDLhx2yI6Txg0wP5H4oNIhgKIB2eMxUGCyT2x/7GgVg=";
   };
 
   # Derived from subprojects/bitsery.wrap
@@ -26,7 +26,7 @@ let
     owner = "fraillt";
     repo = "bitsery";
     rev = "refs/tags/v5.2.2";
-    sha256 = "sha256-VwzVtxt+E/SVcxqIJw8BKPO2q7bu/hkhY+nB7FHrZpY=";
+    hash = "sha256-VwzVtxt+E/SVcxqIJw8BKPO2q7bu/hkhY+nB7FHrZpY=";
   };
 
   # Derived from subprojects/clap.wrap
@@ -34,7 +34,7 @@ let
     owner = "free-audio";
     repo = "clap";
     rev = "refs/tags/1.1.7";
-    sha256 = "sha256-WcMTxE+QCzlp4lhFdghZI8UI/5mdVeRvrl24Xynd0qk=";
+    hash = "sha256-WcMTxE+QCzlp4lhFdghZI8UI/5mdVeRvrl24Xynd0qk=";
   };
 
   # Derived from subprojects/function2.wrap
@@ -42,7 +42,7 @@ let
     owner = "Naios";
     repo = "function2";
     rev = "refs/tags/4.2.0";
-    sha256 = "sha256-wrt+fCcM6YD4ZRZYvqqB+fNakCNmltdPZKlNkPLtgMs=";
+    hash = "sha256-wrt+fCcM6YD4ZRZYvqqB+fNakCNmltdPZKlNkPLtgMs=";
   };
 
   # Derived from subprojects/ghc_filesystem.wrap
@@ -50,7 +50,7 @@ let
     owner = "gulrak";
     repo = "filesystem";
     rev = "refs/tags/v1.5.12";
-    sha256 = "sha256-j4RE5Ach7C7Kef4+H9AHSXa2L8OVyJljDwBduKcC4eE=";
+    hash = "sha256-j4RE5Ach7C7Kef4+H9AHSXa2L8OVyJljDwBduKcC4eE=";
   };
 
   # Derived from subprojects/tomlplusplus.wrap
@@ -58,7 +58,7 @@ let
     owner = "marzer";
     repo = "tomlplusplus";
     rev = "refs/tags/v3.3.0";
-    sha256 = "sha256-INX8TOEumz4B5coSxhiV7opc3rYJuQXT2k1BJ3Aje1M=";
+    hash = "sha256-INX8TOEumz4B5coSxhiV7opc3rYJuQXT2k1BJ3Aje1M=";
   };
 
   # Derived from vst3.wrap
@@ -67,19 +67,19 @@ let
     repo = "vst3sdk";
     rev = "refs/tags/v3.7.7_build_19-patched";
     fetchSubmodules = true;
-    sha256 = "sha256-LsPHPoAL21XOKmF1Wl/tvLJGzjaCLjaDAcUtDvXdXSU=";
+    hash = "sha256-LsPHPoAL21XOKmF1Wl/tvLJGzjaCLjaDAcUtDvXdXSU=";
   };
 in
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "yabridge";
-  version = "5.0.4";
+  version = "5.0.5";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "yabridge";
     rev = "refs/tags/${finalAttrs.version}";
-    sha256 = "sha256-15WTCXMvghoU5TkE8yuQJrxj9cwVjczDKGKWjoUS6SI=";
+    hash = "sha256-SB2/zKxj9GDOOb3Zn4kWj7dXhDg/wbx6nPKYbQ041Cs=";
   };
 
   # Unpack subproject sources

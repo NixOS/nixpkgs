@@ -32,5 +32,6 @@ writeTextFile {
       directory.
     '';
     maintainers = with maintainers; [ qyliss tfc ];
+    mainProgram = "drawio";
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, ubootTools
 , fetchpatch
 }:
 
@@ -87,7 +87,8 @@ let
 
   isModular = config.isYes "MODULES";
 
-  kernelConf =  stdenv.hostPlatform.linux-kernel;
+  kernelConf = stdenv.hostPlatform.linux-kernel;
+  target = kernelConf.target or "vmlinux";
 
   buildDTBs = kernelConf.DTB or false;
 in
@@ -100,13 +101,13 @@ stdenv.mkDerivation ({
   inherit version src;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
-      ++ optional  (kernelConf.target == "uImage") buildPackages.ubootTools
-      ++ optional  (lib.versionOlder version "5.8") libelf
-      ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-      ++ optional  (lib.versionAtLeast version "5.8")  elfutils
-      ;
+  nativeBuildInputs = [
+    bc gmp libmpc mpfr nettools openssl perl python3Minimal rsync ubootTools
+    zstd
+  ] ++ optional  (lib.versionOlder version "5.8") libelf
+    ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+    ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
+    ++ optional  (lib.versionAtLeast version "5.8")  elfutils;
 
   patches =
     map (p: p.patch) kernelPatches
@@ -141,7 +142,7 @@ stdenv.mkDerivation ({
   postPatch = ''
     sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
 
-    # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
+    # fixup for pre-4.15 kernels using the $(cd $foo && /bin/pwd) pattern
     # FIXME: remove when no longer needed
     substituteInPlace Makefile tools/scripts/Makefile.include --replace /bin/pwd pwd
 
@@ -179,7 +180,8 @@ stdenv.mkDerivation ({
   configurePhase = ''
     runHook preConfigure
 
-    export buildRoot=$(mktemp -d)
+    export buildRoot=$TMPDIR/kernel-buildroot
+    mkdir -p $buildRoot
 
     echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
 
@@ -230,7 +232,10 @@ stdenv.mkDerivation ({
     # replicated here to apply to older versions.
     # Makes __FILE__ relative to the build directory.
     "KCPPFLAGS=-fmacro-prefix-map=$(sourceRoot)/="
-  ] ++ extraMakeFlags;
+    kernelConf.target
+  ] ++ optional isModular "modules"
+    ++ optional buildDTBs "dtbs"
+    ++ extraMakeFlags;
 
   installFlags = [
     "INSTALL_PATH=$(out)"
@@ -296,8 +301,8 @@ stdenv.mkDerivation ({
   # Some image types need special install targets (e.g. uImage is installed with make uinstall)
   installTargets = [
     (kernelConf.installTarget or (
-      /**/ if kernelConf.target == "uImage" then "uinstall"
-      else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
+      /**/ if target == "uImage" then "uinstall"
+      else if target == "zImage" || target == "Image.gz" then "zinstall"
       else "install"))
   ];
 
@@ -371,11 +376,20 @@ stdenv.mkDerivation ({
 
     # Remove reference to kmod
     sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
+  ''
+  # unfortunately linux/arch/mips/Makefile does not understand installkernel
+  # and simply copies to $(INSTALL_PATH)/vmlinux-$(KERNELRELEASE)
+  + lib.optionalString stdenv.hostPlatform.isMips ''
+    mv $out/vmlinux-* $out/vmlinux || true
+    mv $out/vmlinuz-* $out/vmlinuz || true
+    mv $out/System.map-* $out/System.map
   '';
 
   preFixup = ''
     # Don't strip $dev/lib/modules/*/vmlinux
     stripDebugList="$(cd $dev && echo lib/modules/*/build/*/)"
+  '' + lib.optionalString (stdenv.hostPlatform.isMips) ''
+    $STRIP -s $out/vmlinux || true
   '';
 
   enableParallelBuilding = true;
@@ -395,16 +409,20 @@ stdenv.mkDerivation ({
   meta = {
     description =
       "The Linux kernel" +
-      (if kernelPatches == [] then "" else
+      (lib.optionalString (kernelPatches != []) (
         " (with patches: "
         + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
-        + ")");
+        + ")"
+      ));
     license = lib.licenses.gpl2Only;
     homepage = "https://www.kernel.org/";
     maintainers = lib.teams.linux-kernel.members ++ [
       maintainers.thoughtpolice
     ];
     platforms = platforms.linux;
+    badPlatforms =
+      lib.optionals (lib.versionOlder version "4.15") [ "riscv32-linux" "riscv64-linux" ] ++
+      lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
     timeout = 14400; # 4 hours
   } // extraMeta;
 } // optionalAttrs (pos != null) {

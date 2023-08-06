@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , dtkwidget
 , deepin-gettext-tools
 , qt5integration
@@ -16,25 +15,20 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-device-formatter";
-  version = "unstable-2022-09-05";
+  version = "0.0.1.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = "9b8489cb2bb7c85bd62557d16a5eabc94100512e";
-    sha256 = "sha256-Mi48dSDCoKhr8CGt9z64/9d7+r9QSrPPICv+R5VDuaU=";
+    rev = version;
+    hash = "sha256-M0XKvo/Qph09GIlqXTdYyPWilWyQhvFAF3c9Yf1Z9m0=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "chore-do-not-use-hardcode-path.patch";
-      url = "https://github.com/linuxdeepin/dde-device-formatter/commit/b836a498b8e783e0dff3820302957f15ee8416eb.patch";
-      sha256 = "sha256-i/VqJ6EmCyhE6weHKUB66bW6b51gLyssIAzb5li4aJM=";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace dde-device-formatter.pro --replace "/usr" "$out"
+    substituteInPlace translate_desktop2ts.sh translate_ts2desktop.sh \
+      --replace "/usr/bin/deepin-desktop-ts-convert" "deepin-desktop-ts-convert"
+    substituteInPlace dde-device-formatter.pro dde-device-formatter.desktop \
+      --replace "/usr" "$out"
     patchShebangs *.sh
   '';
 

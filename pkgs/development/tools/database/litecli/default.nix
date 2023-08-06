@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -7,7 +8,7 @@ python3Packages.buildPythonApplication rec {
   version = "1.9.0";
   disabled = python3Packages.pythonOlder "3.4";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-Ia8s+gg91N8ePMqiohFxKbXxchJ1b1luoJDilndsJ6E=";
   };

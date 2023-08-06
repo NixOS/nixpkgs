@@ -34,13 +34,13 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "NXPmicro";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-KJUtAWENS3+VAs3Iai1aKYzMYtfetMeI0MHeQ6NraNY=";
+    hash = "sha256-2UTgVHqFJqizJ6mDT7+PFec3bQexcBG6v8X0E5Ai4Hc=";
   };
 
   nativeBuildInputs = [

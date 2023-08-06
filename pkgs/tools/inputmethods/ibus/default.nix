@@ -79,6 +79,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/ibus/ibus/commit/7c8abbe89403c2fcb08e3fda42049a97187e53ab.patch";
       hash = "sha256-59HzAdLq8ahrF7K+tFGLjTodwIiTkJGEkFe8quqIkhU=";
     })
+    # fix SIGABRT in X11 https://github.com/ibus/ibus/issues/2484
+    (fetchpatch {
+      url = "https://github.com/ibus/ibus/commit/8f706d160631f1ffdbfa16543a38b9d5f91c16ad.patch";
+      hash = "sha256-YzS9TmUWW0OmheDeCeU00kFK2U2QEmKYMSRJAbu14ec=";
+    })
   ];
 
   outputs = [ "out" "dev" "installedTests" ];

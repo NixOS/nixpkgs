@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "5.1";
+  version = "5.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fHWJWgy/Ven5m2Cf81rG/ZKmFFWiLJsIPVxFe+rr+ms=";
+    hash = "sha256-fiNd+11hqMHgzSMNT7fgne3pTeJ4nu5krA48LCgIaIQ=";
   };
 
   propagatedBuildInputs = [

@@ -1,8 +1,5 @@
 { lib, stdenv, fetchFromGitHub }:
 
-# To make use of this derivation, use
-# `programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel9k}/share/zsh-powerlevel9k/powerlevel9k.zsh-theme";`
-
 stdenv.mkDerivation {
   pname = "powerlevel9k";
   version = "2017-11-10";
@@ -21,6 +18,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A beautiful theme for zsh";
+    longDescription = ''
+      To make use of this derivation, use
+      `programs.zsh.promptInit = "source ''${pkgs.zsh-powerlevel9k}/share/zsh-powerlevel9k/powerlevel9k.zsh-theme";`
+    '';
     homepage = "https://github.com/bhilburn/powerlevel9k";
     license = lib.licenses.mit;
 

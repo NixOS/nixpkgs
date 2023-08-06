@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  pythonimportsCheck = [ "apt-offline" ];
+  pythonImportsCheck = [ "apt_offline_core" ];
 
   passthru.updateScript = nix-update-script { };
 

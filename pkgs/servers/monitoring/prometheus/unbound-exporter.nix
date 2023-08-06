@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     description = "Prometheus exporter for Unbound DNS resolver";
     homepage = "https://github.com/svartalf/unbound-telemetry";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

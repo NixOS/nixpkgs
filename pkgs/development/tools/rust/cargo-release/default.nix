@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2_1_5
+, libgit2
 , openssl
 , stdenv
 , curl
@@ -12,19 +12,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
-  version = "0.24.10";
+  version = "0.24.11";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3kOis5C0XOdp0CCCSZ8PoGtePqW7ozwzSTA9TGe7kAg=";
+    hash = "sha256-VF0jVk94DncSNB1EnYHGUolVYvykEwluHJiHQShcqQo=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cargo-test-macro-0.1.0" = "sha256-nlFhe1q0D60dljAi6pFNaz+ssju2Ymtx/PNUl5kJmWo=";
+      "cargo-test-macro-0.1.0" = "sha256-jXWdCc3wxcF02uL2OyMepJ+DmINAHRYtAUH6L16bCjI=";
     };
   };
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2_1_5
+    libgit2
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     curl

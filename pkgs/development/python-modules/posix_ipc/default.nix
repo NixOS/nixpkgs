@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-xK5CkThqVFVMIxBtgUfHIRNRfmBxKa/DWBYQg7QHl/M=";
   };
 
-  pythonImportsCheckHook = [
+  pythonImportsCheck = [
     "posix_ipc"
   ];
 

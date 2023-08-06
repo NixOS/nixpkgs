@@ -67,8 +67,9 @@ let
     ghc925
     ghc926
     ghc927
+    ghc928
     ghc945
-    ghc961
+    ghc962
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -330,7 +331,6 @@ let
         nvfetcher
         ormolu
         pandoc
-        pakcs
         petrinizer
         place-cursor-at
         pinboard-notes-backup
@@ -437,8 +437,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc927 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc927)
+            haskell.packages.native-bignum.ghc928 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc928)
                 hello
                 lens
                 random
@@ -486,31 +486,31 @@ let
       Cabal_3_10_1_0 = released;
       Cabal-syntax_3_10_1_0 = released;
       cabal2nix = lib.subtractLists [
-        compilerNames.ghc961
+        compilerNames.ghc962
       ] released;
       cabal2nix-unstable = lib.subtractLists [
-        compilerNames.ghc961
+        compilerNames.ghc962
       ] released;
       funcmp = lib.subtractLists [
-        compilerNames.ghc961
+        compilerNames.ghc962
       ] released;
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 1.9.0.0
         compilerNames.ghc884
       ] released;
       hoogle = lib.subtractLists [
-        compilerNames.ghc961
+        compilerNames.ghc962
       ] released;
       hlint = lib.subtractLists [
-        compilerNames.ghc961
+        compilerNames.ghc962
       ] released;
       hpack = lib.subtractLists [
-        compilerNames.ghc961
+        compilerNames.ghc962
       ] released;
       hsdns = released;
       jailbreak-cabal = released;
       language-nix = lib.subtractLists [
-        compilerNames.ghc961
+        compilerNames.ghc962
       ] released;
       nix-paths = released;
       titlecase = released;
@@ -533,6 +533,7 @@ let
         compilerNames.ghc925
         compilerNames.ghc926
         compilerNames.ghc927
+        compilerNames.ghc928
         compilerNames.ghc945
       ];
       weeder = [
@@ -542,6 +543,7 @@ let
         compilerNames.ghc925
         compilerNames.ghc926
         compilerNames.ghc927
+        compilerNames.ghc928
         compilerNames.ghc945
       ];
     })
@@ -623,6 +625,7 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc925
           jobs.pkgsMusl.haskell.compiler.ghc926
           jobs.pkgsMusl.haskell.compiler.ghc927
+          jobs.pkgsMusl.haskell.compiler.ghc928
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
@@ -630,6 +633,7 @@ let
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc928
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -645,7 +649,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc927
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc928
         ];
       };
     }

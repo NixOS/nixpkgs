@@ -1,20 +1,20 @@
-{ lib, stdenv, pkgs, buildFishPlugin, fetchFromGitHub, fd, util-linux, procps, clownfish, fishtape_3, }:
+{ lib, stdenv, pkgs, buildFishPlugin, fetchFromGitHub, fd, unixtools, procps, clownfish, fishtape_3, }:
 let
   # we want `pkgs.fzf`, not `fishPlugins.fzf`
   inherit (pkgs) fzf;
 in
 buildFishPlugin rec {
   pname = "fzf.fish";
-  version = "9.7";
+  version = "9.9";
 
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
     rev = "v${version}";
-    sha256 = "sha256-haNSqXJzLL3JGvD4JrASVmhLJz6i9lna6/EdojXdFOo=";
+    sha256 = "sha256-Aqr6+DcOS3U1R8o9Mlbxszo5/Dy9viU4KbmRGXo95R8=";
   };
 
-  nativeCheckInputs = [ fzf fd util-linux procps ];
+  nativeCheckInputs = [ fzf fd unixtools.script procps ];
   checkPlugins = [ clownfish fishtape_3 ];
   checkFunctionDirs = [ "./functions" ];
   checkPhase = ''

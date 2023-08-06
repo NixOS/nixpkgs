@@ -12,22 +12,24 @@
 , libXxf86vm
 , go-licenses
 , pkg-config
+, zip
+, advancecomp
 , nixosTests
 }:
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.3.524";
+  version = "1.4.39";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9g0wTvG6XSKI7e3RP6e3RoYyvE5UjOYxI5hVINI9Fq8=";
+    hash = "sha256-eawsTvPJwWKDSZd/2XBneitoydSRxEAU5RAPZgE6NSo=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-slvBpweXRLsDegJDQ0ysZ0pugx5fdOOnD/OxWUfUnno=";
+  vendorHash = "sha256-uHTYp8PBXdQ2w+kjxLVvUOzOvDfXF53lcBriK8sif7A=";
 
   buildInputs = [
     alsa-lib
@@ -39,6 +41,8 @@ buildGoModule rec {
   nativeBuildInputs = [
     go-licenses
     pkg-config
+    zip
+    advancecomp
   ];
 
   outputs = [ "out" "testing_infra" ];

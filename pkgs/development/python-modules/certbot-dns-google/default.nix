@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
 
-  sourceRoot = "source/certbot-dns-google";
+  sourceRoot = "${src.name}/certbot-dns-google";
 
   meta = certbot.meta // {
     description = "Google Cloud DNS Authenticator plugin for Certbot";

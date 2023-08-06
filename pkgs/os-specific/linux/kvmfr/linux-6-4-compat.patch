@@ -1,0 +1,16 @@
+diff --git a/kvmfr.c b/kvmfr.c
+index 121aae5b..2f4c9e1a 100644
+--- a/kvmfr.c
++++ b/kvmfr.c
+@@ -539,7 +539,11 @@ static int __init kvmfr_module_init(void)
+   if (kvmfr->major < 0)
+     goto out_free;
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 4, 0)
+   kvmfr->pClass = class_create(THIS_MODULE, KVMFR_DEV_NAME);
++#else
++  kvmfr->pClass = class_create(KVMFR_DEV_NAME);
++#endif
+   if (IS_ERR(kvmfr->pClass))
+     goto out_unreg;
+ 

@@ -4,11 +4,11 @@
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
+, cargo
+, rustc
 , setuptools-rust
 , openssl
 , Security
-, packaging
-, six
 , isPyPy
 , cffi
 , pkg-config
@@ -52,13 +52,15 @@ buildPythonPackage rec {
 
   cargoRoot = "src/rust";
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-    pkg-config
-  ] ++ [
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+    cargo
+    rustc
+    pkg-config
+  ] ++ lib.optionals (!isPyPy) [
+    cffi
+  ];
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv ]
@@ -70,8 +72,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cryptography-vectors
-    # "hypothesis" indirectly depends on cryptography to build its documentation
-    (hypothesis.override { enableDocumentation = false; })
+    hypothesis
     iso8601
     pretend
     py

@@ -17,7 +17,7 @@
 , nlohmann_json
 , msgpack
 , sqlite
-, oneDNN
+, oneDNN_2
 , blaze
 , texlive
 , doxygen
@@ -91,7 +91,7 @@ in stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
     msgpack
     sqlite
-    oneDNN
+    oneDNN_2
     blaze
     python3Packages.pybind11
     python3Packages.onnx

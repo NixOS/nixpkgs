@@ -404,8 +404,8 @@ in
           {
             log_connections = true;
             log_statement = "all";
-            logging_collector = true
-            log_disconnections = true
+            logging_collector = true;
+            log_disconnections = true;
             log_destination = lib.mkForce "syslog";
           }
         '';
@@ -489,7 +489,7 @@ in
      "/share/postgresql"
     ];
 
-    system.extraDependencies = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
+    system.checks = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
 
     systemd.services.postgresql =
       { description = "PostgreSQL Server";

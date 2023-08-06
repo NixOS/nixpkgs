@@ -19,6 +19,6 @@ buildGoModule rec {
     description = "Top-like interface for container metrics";
     homepage = "https://ctop.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ apeyroux marsam SuperSandro2000 ];
+    maintainers = with maintainers; [ apeyroux marsam ];
   };
 }

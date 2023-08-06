@@ -7,18 +7,21 @@
 , lxml
 , jinja2
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.27";
+  version = "0.0.35";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-K+su1fhXf/fzL+AI/me2imCNI9aWMcv9Qo1dDRNypso=";
+    hash = "sha256-3yOLOflPqzJRv3qCQXFK3rIFftBq8FkYy7XhOfWH82Y=";
   };
 
   postPatch = ''
@@ -49,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for ReqIF format";
     homepage = "https://github.com/strictdoc-project/reqif";
+    changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ yuu ];
   };

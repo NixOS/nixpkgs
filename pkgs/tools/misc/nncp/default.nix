@@ -1,5 +1,5 @@
 { lib, stdenv, go, fetchurl, redo-apenwarr, curl, perl, genericUpdater
-, writeShellScript, nixosTests, cfgPath ? "/etc/nncp.hjson" }:
+, writeShellScript, cfgPath ? "/etc/nncp.hjson" }:
 
 stdenv.mkDerivation rec {
   pname = "nncp";

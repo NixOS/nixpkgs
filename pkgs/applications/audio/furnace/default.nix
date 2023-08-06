@@ -10,6 +10,7 @@
 , fftw
 , fmt_8
 , libsndfile
+, libX11
 , rtmidi
 , SDL2
 , zlib
@@ -21,15 +22,22 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6pre4-hotfix";
+  version = "0.6pre7";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-lJtV/0GnWN5mSjv2LaPEMnkuThaNeijBMjLGFPOJX4k=";
+    sha256 = "sha256-Gr4XDfYaRUFdtnCJ6i0oRDszwAZYVW6Mbj4Sp7El5+8=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    # To offer scaling detection on X11, furnace checks if libX11.so is available via dlopen and uses some of its functions
+    # But it's being linked against a versioned libX11.so.VERSION via SDL, so the unversioned one is not on the rpath
+    substituteInPlace src/gui/scaling.cpp \
+      --replace 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -97,6 +105,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multi-system chiptune tracker compatible with DefleMask modules";
     homepage = "https://github.com/tildearrow/furnace";
+    changelog = "https://github.com/tildearrow/furnace/releases/tag/v${version}";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;

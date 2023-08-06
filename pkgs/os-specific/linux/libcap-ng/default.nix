@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vtb2hI4iuy+Dtfdksq7w7TkwVOgDqOOocRyyo55rSS0=";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   configureFlags = [
     "--without-python"
   ];

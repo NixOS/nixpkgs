@@ -1,6 +1,6 @@
 {
   mkDerivation, fetchurl, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  extra-cmake-modules, kdoctools,
   kconfig, kcrash, kinit
 }:
 

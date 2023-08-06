@@ -1,4 +1,4 @@
-{ buildPackages, callPackage, cargo-auditable, stdenv, runCommand }@prev:
+{ lib, buildPackages, callPackage, cargo-auditable, stdenv, runCommand }@prev:
 
 { rustc
 , cargo
@@ -9,7 +9,8 @@
 
 rec {
   rust = {
-    inherit rustc cargo;
+    rustc = lib.warn "rustPlatform.rust.rustc is deprecated. Use rustc instead." rustc;
+    cargo = lib.warn "rustPlatform.rust.cargo is deprecated. Use cargo instead." cargo;
   };
 
   fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-tarball {

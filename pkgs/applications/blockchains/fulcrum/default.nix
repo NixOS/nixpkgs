@@ -5,7 +5,7 @@
 , qmake
 , python3
 , qtbase
-, rocksdb
+, rocksdb_7_10
 , zeromq
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true; # no GUI
 
-  buildInputs = [ python3 qtbase rocksdb zeromq ];
+  buildInputs = [ python3 qtbase rocksdb_7_10 zeromq ];
 
   meta = with lib; {
     description = "Fast & nimble SPV server for Bitcoin Cash & Bitcoin BTC";

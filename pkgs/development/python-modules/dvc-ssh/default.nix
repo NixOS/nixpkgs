@@ -1,6 +1,7 @@
 { lib
 , bcrypt
 , buildPythonPackage
+, dvc-objects
 , fetchPypi
 , pythonRelaxDepsHook
 , setuptools-scm
@@ -22,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm pythonRelaxDepsHook ];
 
-  propagatedBuildInputs = [ bcrypt sshfs ];
+  propagatedBuildInputs = [ bcrypt dvc-objects sshfs ];
 
   # bcrypt is enabled for sshfs in nixpkgs
   postPatch = ''
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   # Network access is needed for tests
   doCheck = false;
 
-  pythonCheckImports = [ "dvc_ssh" ];
+  pythonImportsCheck = [ "dvc_ssh" ];
 
   meta = with lib; {
     description = "ssh plugin for dvc";

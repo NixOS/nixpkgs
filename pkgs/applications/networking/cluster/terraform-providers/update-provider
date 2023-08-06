@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils curl git jq moreutils nix nix-prefetch
+#! nix-shell -i bash -p coreutils curl git jq moreutils nix nurl
 # shellcheck shell=bash
 # vim: ft=sh
 #
@@ -90,8 +90,7 @@ update_attr() {
 repo_root=$(git rev-parse --show-toplevel)
 
 generate_hash() {
-  nix-prefetch -I nixpkgs="${repo_root}" \
-    "{ sha256 }: (import ${repo_root} {}).terraform-providers.${provider}.$1.overrideAttrs (_: { inherit sha256; })"
+  nurl --expr "(import ${repo_root} {}).terraform-providers.${provider}.$1"
 }
 
 echo_provider() {
@@ -108,6 +107,7 @@ if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
   # create empty stings so nix-prefetch works
   update_attr hash ""
   update_attr vendorHash ""
+  update_attr spdx ""
 fi
 
 homepage="$(read_attr homepage)"
@@ -137,8 +137,11 @@ repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
 update_attr repo "${repo}"
 
 if [[ ${spdx} == 1 ]]; then
-  spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
-  update_attr spdx "${spdx}"
+  old_spdx="$(read_attr spdx)"
+  if [[ ${old_spdx} != null ]]; then
+    spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
+    update_attr spdx "${spdx}"
+  fi
 fi
 
 echo_provider "calculating hash"
@@ -148,7 +151,7 @@ update_attr hash "${hash}"
 old_vendor_hash="$(read_attr vendorHash)"
 if [[ ${old_vendor_hash} != null ]]; then
   echo_provider "calculating vendorHash"
-  vendorHash=$(generate_hash go-modules)
+  vendorHash=$(generate_hash goModules)
   update_attr vendorHash "${vendorHash}"
 fi
 

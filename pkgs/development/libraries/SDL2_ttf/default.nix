@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ SDL2 freetype libGL ]
+  buildInputs = [ SDL2 freetype ]
+    ++ lib.optional (!stdenv.isDarwin) libGL
     ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
   meta = with lib; {

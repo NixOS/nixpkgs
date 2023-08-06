@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.17.1";
+  version = "3.17.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-C5bc32XbAqJtzUbITj1U1ItaY2ZMEXM9z+B7dQadoIs=";
+    hash = "sha256-5RL4DkWcQRxzi1dhSJlGgoU0BU3aUWOfBNINFKiOwLg=";
   };
 
   postPatch = ''

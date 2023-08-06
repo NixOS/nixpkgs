@@ -1,10 +1,6 @@
-import ./make-test-python.nix ({ lib, ... }:
-
-with lib;
-
-{
+import ./make-test-python.nix ({ lib, ... }: {
   name = "readarr";
-  meta.maintainers = with maintainers; [ jocelynthode ];
+  meta.maintainers = with lib.maintainers; [ jocelynthode ];
 
   nodes.machine =
     { pkgs, ... }:

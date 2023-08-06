@@ -5,14 +5,16 @@
 , meson
 , ninja
 , windows
-, dxvkVersion
+, dxvkVersion ? "default"
 , spirv-headers
 , vulkan-headers
 , SDL2
 , glfw
 , pkgsBuildHost
+, gitUpdater
 , sdl2Support ? true
 , glfwSupport ? false
+, enableMoltenVKCompat ? false
 }:
 
 # SDL2 and GLFW support are mutually exclusive.
@@ -34,7 +36,7 @@ let
         hash = "sha256-T93ZylxzJGprrP+j6axZwl2d3hJowMCUOKNjIyNzkmE=";
       };
       # These patches are required when using DXVK with Wine on Darwin.
-      patches = lib.optionals stdenv.buildPlatform.isDarwin [
+      patches = lib.optionals enableMoltenVKCompat [
         # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
         # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
         ./darwin-dxvk-compat.patch
@@ -43,13 +45,13 @@ let
         ./darwin-thread-primitives.patch
       ];
     };
-    "2.1" = rec {
-      version = "2.1";
+    "default" = rec {
+      version = "2.2";
       src = fetchFromGitHub {
         owner = "doitsujin";
         repo = "dxvk";
         rev = "v${version}";
-        hash = "sha256-A4KR11brfQbR56dGt371MRwMN/H6HFAU8TlFC97/bRs=";
+        hash = "sha256-GKRd66DvcA+7p3/wDqAUi02ZLRSVZ/fvJM0PQDEKVMA=";
         fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
       };
       patches = [ ];
@@ -59,7 +61,7 @@ let
   isWindows = stdenv.targetPlatform.uname.system == "Windows";
   isCross = stdenv.hostPlatform != stdenv.targetPlatform;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs:  {
   pname = "dxvk";
   inherit (srcs.${dxvkVersion}) version src patches;
 
@@ -95,6 +97,12 @@ stdenv.mkDerivation {
 
   doCheck = isDxvk2 && !isCross;
 
+  passthru = lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "2.0") {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
+
   meta = {
     description = "A Vulkan-based translation layer for Direct3D 9/10/11";
     homepage = "https://github.com/doitsujin/dxvk";
@@ -103,4 +111,4 @@ stdenv.mkDerivation {
     license = lib.licenses.zlib;
     platforms = lib.platforms.windows ++ lib.optionals isDxvk2 lib.platforms.linux;
   };
-}
+})

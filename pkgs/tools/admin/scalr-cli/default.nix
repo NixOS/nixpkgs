@@ -38,6 +38,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ dylanmtaylor ];
     mainProgram = "scalr";
-    platforms = platforms.unix;
   };
 }

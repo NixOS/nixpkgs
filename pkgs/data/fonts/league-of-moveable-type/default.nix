@@ -57,6 +57,6 @@ symlinkJoin {
     license = lib.licenses.ofl;
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ bergey minijackson Profpatsch ];
+    maintainers = with lib.maintainers; [ bergey minijackson ];
   };
 }

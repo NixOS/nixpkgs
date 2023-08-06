@@ -1,6 +1,6 @@
-{lib, stdenv, fetchurl, gmp}:
+{ lib, stdenv, fetchurl, gmp }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lrs";
   version = "7.2";
 
@@ -11,14 +11,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
-  preBuild = ''
-    export makeFlags="$makeFlags prefix=$out";
-  '';
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CC:=$(CC)"
+  ];
 
   meta = {
     description = "Implementation of the reverse search algorithm for vertex enumeration/convex hull problems";
-    license = lib.licenses.gpl2 ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "http://cgm.cs.mcgill.ca/~avis/C/lrs.html";
   };

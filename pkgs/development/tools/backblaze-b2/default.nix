@@ -1,10 +1,10 @@
-{ fetchFromGitHub, lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
   version = "3.7.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "b2";
     sha256 = "sha256-sW6gaZWUh3WX+0+qHRlQ4gZzKU4bL8ePPNKWo9rdF84=";

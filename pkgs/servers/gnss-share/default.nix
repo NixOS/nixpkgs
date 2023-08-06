@@ -1,14 +1,14 @@
 { buildGoModule, fetchFromGitLab, lib }:
 buildGoModule rec {
   pname = "gnss-share";
-  version = "0.6";
+  version = "0.7.1";
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "gnss-share";
     rev = version;
-    hash = "sha256-vVmQlhzRISMBcYZh/9GQmOGzDgTzu2jSyIiEWdXPqOQ=";
+    hash = "sha256-HlaT4TeVAyGN95cWUw1XgVNfGa+cUibh8nkBt/Eb7Yo=";
   };
-  vendorHash = "sha256-hS/xSxZSMHP+qlvpJYV6EvXtWx9ESamJ8lOf926CqOw=";
+  vendorHash = "sha256-a5CZxh92MW3yP/ZhwGI9UWUT8hwJ0/zeTyPNC+c2R9U=";
   meta = with lib; {
     description = "share GNSS data between multiple clients";
     longDescription = ''

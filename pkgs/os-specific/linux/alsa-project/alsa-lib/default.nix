@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-lib";
-  version = "1.2.8";
+  version = "1.2.9";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-GrAbdOM0JcqZwuNsCET9aIgnMZO9iYJA/o+TrMvL80c=";
+    hash = "sha256-3JxkP9xMz9BXLMaFhY3UHgivtYPzBGCzF+QYgnX2FbI=";
   };
 
   patches = [

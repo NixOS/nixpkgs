@@ -1,7 +1,7 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
-, darwin, cmake, rust, rustPlatform
+, darwin, cargo, cmake, rust, rustc
 , pkg-config, openssl, xz
 , libiconv
 , which, libffi
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = toString (
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
        optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
-    ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
+    ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
 
   # Increase codegen units to introduce parallelism within the compiler.
@@ -73,8 +73,8 @@ in stdenv.mkDerivation rec {
     cxxForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}c++";
   in [
     "--release-channel=stable"
-    "--set=build.rustc=${rustPlatform.rust.rustc}/bin/rustc"
-    "--set=build.cargo=${rustPlatform.rust.cargo}/bin/cargo"
+    "--set=build.rustc=${rustc}/bin/rustc"
+    "--set=build.cargo=${cargo}/bin/cargo"
     "--enable-rpath"
     "--enable-vendor"
     "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
@@ -180,7 +180,7 @@ in stdenv.mkDerivation rec {
   depsBuildBuild = [ pkgsBuildHost.stdenv.cc pkg-config ];
 
   nativeBuildInputs = [
-    file python3 rustPlatform.rust.rustc cmake
+    file python3 rustc cmake
     which libffi removeReferencesTo pkg-config xz
   ];
 
@@ -238,9 +238,10 @@ in stdenv.mkDerivation rec {
       "x86_64-darwin" "i686-darwin" "aarch64-darwin"
       "i686-freebsd13" "x86_64-freebsd13"
       "x86_64-solaris"
-      "aarch64-linux" "armv7l-linux" "i686-linux" "mipsel-linux"
-      "mips64el-linux" "powerpc64-linux" "powerpc64le-linux"
-      "riscv64-linux" "s390x-linux" "x86_64-linux"
+      "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
+      "loongarch64-linux" "mipsel-linux" "mips64el-linux"
+      "powerpc64-linux" "powerpc64le-linux" "riscv64-linux"
+      "s390x-linux" "x86_64-linux"
       "aarch64-netbsd" "armv7l-netbsd" "i686-netbsd" "powerpc-netbsd"
       "x86_64-netbsd"
       "i686-openbsd" "x86_64-openbsd"

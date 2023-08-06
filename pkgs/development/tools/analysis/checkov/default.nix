@@ -22,14 +22,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.3.234";
+  version = "2.3.318";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PLeqYD9aIv/nmFvfW2QjDz1xDD2PIFUvr9lkQ2Rh6k8=";
+    hash = "sha256-E1PSwbEmTTHsYbRlLUJ2HLqiJJuQO/aN73xWHTaQdBY=";
   };
 
   patches = [
@@ -37,11 +37,12 @@ buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "dpath"
     "bc-detect-secrets"
     "bc-python-hcl2"
-    "pycep-parser"
+    "dpath"
+    "license-expression"
     "networkx"
+    "pycep-parser"
   ];
 
   nativeBuildInputs = [
@@ -74,6 +75,7 @@ buildPythonApplication rec {
     jmespath
     jsonschema
     junit-xml
+    license-expression
     networkx
     openai
     packaging
@@ -82,6 +84,7 @@ buildPythonApplication rec {
     pycep-parser
     pyyaml
     semantic-version
+    spdx-tools
     tabulate
     termcolor
     tqdm
@@ -121,6 +124,7 @@ buildPythonApplication rec {
     "test_secret_value_in_keyword"
     "test_runner_verify_secrets_skip_invalid_suppressed"
     "test_runner_verify_secrets_skip_all_no_effect"
+    "test_runner"
   ];
 
   disabledTestPaths = [

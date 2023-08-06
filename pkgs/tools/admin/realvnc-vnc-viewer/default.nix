@@ -1,49 +1,14 @@
 { lib
 , stdenv
-, fetchurl
-, autoPatchelfHook
-, rpmextract
-, libX11
-, libXext
+, callPackage
 }:
-
-stdenv.mkDerivation rec {
+let
   pname = "realvnc-vnc-viewer";
-  version = "7.1.0";
-
-  src = {
-    "x86_64-linux" = fetchurl {
-      url = "https://downloads.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x64.rpm";
-      sha256 = "sha256-Mn4K2HICK7owHcXH85IJUncnpPZ56zNybkHZNiqYkHY=";
-    };
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  nativeBuildInputs = [ autoPatchelfHook rpmextract ];
-  buildInputs = [ libX11 libXext stdenv.cc.cc.libgcc or null ];
-
-  unpackPhase = ''
-    rpmextract $src
-  '';
-
-  postPatch = ''
-    substituteInPlace ./usr/share/applications/realvnc-vncviewer.desktop \
-      --replace /usr/share/icons/hicolor/48x48/apps/vncviewer48x48.png vncviewer48x48.png
-    substituteInPlace ./usr/share/mimelnk/application/realvnc-vncviewer-mime.desktop \
-      --replace /usr/share/icons/hicolor/48x48/apps/vncviewer48x48.png vncviewer48x48.png
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mv usr $out
-
-    runHook postInstall
-  '';
+  version = "7.5.1";
 
   meta = with lib; {
     description = "VNC remote desktop client software by RealVNC";
     homepage = "https://www.realvnc.com/en/connect/download/viewer/";
-    mainProgram = "vncviewer";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {
       fullName = "VNC Connect End User License Agreement";
@@ -51,6 +16,8 @@ stdenv.mkDerivation rec {
       free = false;
     };
     maintainers = with maintainers; [ emilytrau onedragon ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
   };
-}
+in
+if stdenv.isDarwin then callPackage ./darwin.nix { inherit pname version meta; }
+else callPackage ./linux.nix { inherit pname version meta; }

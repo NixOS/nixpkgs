@@ -1,19 +1,19 @@
 { lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
-, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
+, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn2, libxml2, notmuch, openssl
 , lua, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib, lndir
 , pkg-config, zstd, enableZstd ? true, enableMixmaster ? false, enableLua ? false
 , withContrib ? true
 }:
 
 stdenv.mkDerivation rec {
-  version = "20230407";
+  version = "20230517";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "sha256-cTZua1AbLMjkMhlUk2aMttj6HdwpJYnRYPuvukSxfwc=";
+    sha256 = "sha256-1i0STaJulJP0LWdNfLLIEKVapfkcguYRnbc+psWlVE4=";
   };
 
   patches = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cyrus_sasl gss gpgme libkrb5 libidn ncurses
+    cyrus_sasl gss gpgme libkrb5 libidn2 ncurses
     notmuch openssl perl lmdb
     mailcap sqlite
   ]

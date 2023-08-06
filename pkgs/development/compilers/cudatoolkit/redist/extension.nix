@@ -15,6 +15,7 @@ final: prev: let
     "11.8" = ./manifests/redistrib_11.8.0.json;
     "12.0" = ./manifests/redistrib_12.0.1.json;
     "12.1" = ./manifests/redistrib_12.1.1.json;
+    "12.2" = ./manifests/redistrib_12.2.0.json;
   };
 
   # Function to build a single cudatoolkit redist package
@@ -26,9 +27,7 @@ final: prev: let
   in lib.mapAttrs buildCudaToolkitRedistPackage attrs;
 
   # All cudatoolkit redist packages for the current cuda version
-  cudaToolkitRedistPackages = if
-    lib.hasAttr cudaVersion cudaToolkitRedistManifests
-  then buildCudaToolkitRedistPackages { version = cudaVersion; manifest = cudaToolkitRedistManifests.${cudaVersion}; }
-  else {};
+  cudaToolkitRedistPackages = lib.optionalAttrs (lib.hasAttr cudaVersion cudaToolkitRedistManifests)
+    (buildCudaToolkitRedistPackages { version = cudaVersion; manifest = cudaToolkitRedistManifests.${cudaVersion}; });
 
 in cudaToolkitRedistPackages

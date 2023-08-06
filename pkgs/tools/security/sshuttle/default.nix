@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , python3Packages
+, fetchPypi
 , makeWrapper
 , coreutils
 , iptables
@@ -13,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
   version = "1.1.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-9aPtHlqxITx6bfhgr0HxqQOrLK+/73Hzcazc/yHmnuY=";
   };
@@ -43,6 +44,6 @@ python3Packages.buildPythonApplication rec {
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ domenkozar carlosdagos SuperSandro2000 ];
+    maintainers = with maintainers; [ domenkozar carlosdagos ];
   };
 }

@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustls-ffi";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-urDC/Tm+ZwEbf0orZzKSET5ljQGVcKPGxscctKOM/FU=";
+    hash = "sha256-IDIWN5g1aaE6SDdXSm4WYK6n+BpuypPYQITuDj1WJEc=";
   };
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ Security ];

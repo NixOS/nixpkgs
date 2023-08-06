@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, buildDunePackage, pkg-config, gsl, darwin, dune-configurator }:
+{ lib, stdenv, ocaml, fetchFromGitHub, fetchpatch, buildDunePackage, pkg-config, gsl, darwin, dune-configurator }:
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "gsl is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "gsl";
@@ -35,8 +38,6 @@ buildDunePackage rec {
       sha256 = "sha256-bsIKkvj9W8oAYSvP6ZfbqSgt5fSirc780O08WBhVRmI=";
     })
   ];
-
-  duneVersion = "3";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator gsl ];

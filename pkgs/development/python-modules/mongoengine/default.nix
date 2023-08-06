@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB";
     homepage = "http://mongoengine.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

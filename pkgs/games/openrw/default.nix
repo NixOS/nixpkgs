@@ -48,5 +48,6 @@ stdenv.mkDerivation {
     '';
     maintainers = with maintainers; [ kragniz ];
     platforms = platforms.all;
+    mainProgram = "rwgame";
   };
 }

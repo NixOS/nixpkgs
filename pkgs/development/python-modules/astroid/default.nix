@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "An abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

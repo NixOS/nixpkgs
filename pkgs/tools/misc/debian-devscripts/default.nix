@@ -11,12 +11,12 @@ let
     exec ''${EDITOR-${nano}/bin/nano} "$@"
   '';
 in stdenv.mkDerivation rec {
-  version = "2.22.2";
+  version = "2.23.5";
   pname = "debian-devscripts";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    hash = "sha256-Fflalt2JxqLS0gq0wy88pXCqiNvHj7sfP7fLwdSmUCs=";
+    hash = "sha256-j0fUVTS/lPKFdgeMhksiJz2+E5koB07IK2uEj55EWG0=";
   };
 
   postPatch = ''
@@ -76,6 +76,6 @@ in stdenv.mkDerivation rec {
     description = "Debian package maintenance scripts";
     license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
     maintainers = with maintainers; [raskin];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }

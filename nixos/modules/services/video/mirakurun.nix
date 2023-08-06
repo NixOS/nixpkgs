@@ -154,6 +154,9 @@ in
         description = "Mirakurun user";
         group = "video";
         isSystemUser = true;
+
+        # NPM insists on creating ~/.npm
+        home = "/var/cache/mirakurun";
       };
 
       services.mirakurun.serverSettings = {
@@ -171,9 +174,10 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${mirakurun}/bin/mirakurun-start";
+          ExecStart = "${mirakurun}/bin/mirakurun start";
           User = username;
           Group = groupname;
+          CacheDirectory = "mirakurun";
           RuntimeDirectory="mirakurun";
           StateDirectory="mirakurun";
           Nice = -10;

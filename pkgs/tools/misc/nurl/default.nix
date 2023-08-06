@@ -12,19 +12,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nurl";
-  version = "0.3.11";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";
     rev = "v${version}";
-    hash = "sha256-erIC7JAluPs/ToXxjpSpSI6vB1hJVXywQTT+aARenOc=";
+    hash = "sha256-rVqF+16esE27G7GS55RT91tD4x/GAzfVlIR0AgSknz0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "nix-compat-0.1.0" = "sha256-J9MedxcVcH5DdRxdqD8cb5YRC/SjZ0vQTCFBMLVMQPo=";
+      "nix-compat-0.1.0" = "sha256-xHwBlmTggcZBFSh4EOY888AbmGQxhwvheJSStgpAj48=";
     };
   };
 
@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/nix-community/nurl/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "nurl";
   };
 }

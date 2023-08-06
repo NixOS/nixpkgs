@@ -1,11 +1,11 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 let
   inherit (python3.pkgs)
     buildPythonApplication
-    fetchPypi
     pythonOlder;
 in
 buildPythonApplication rec {

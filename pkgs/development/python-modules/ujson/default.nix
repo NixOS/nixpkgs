@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Ultra fast JSON encoder and decoder";
     homepage = "https://github.com/ultrajson/ultrajson";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

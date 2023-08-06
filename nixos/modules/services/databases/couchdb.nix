@@ -141,7 +141,7 @@ in {
         type = types.lines;
         default = "";
         description = lib.mdDoc ''
-          Extra configuration. Overrides any other cofiguration.
+          Extra configuration. Overrides any other configuration.
         '';
       };
 

@@ -45,6 +45,8 @@ lib.makeScope newScope (self:
     getdns = callPackage ../development/nim-packages/getdns {
       inherit (pkgs) getdns; };
 
+    hashlib = callPackage ../development/nim-packages/hashlib { };
+
     hts-nim = callPackage ../development/nim-packages/hts-nim { };
 
     illwill = callPackage ../development/nim-packages/illwill { };
@@ -129,6 +131,8 @@ lib.makeScope newScope (self:
     unicodeplus = callPackage ../development/nim-packages/unicodeplus { };
 
     vmath = callPackage ../development/nim-packages/vmath { };
+
+    ws = callPackage ../development/nim-packages/ws { };
 
     x11 = callPackage ../development/nim-packages/x11 { };
 

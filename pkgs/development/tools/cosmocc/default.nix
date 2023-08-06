@@ -1,17 +1,16 @@
-{ runCommand, lib, cosmopolitan }:
+{ runCommand, cosmopolitan }:
 
 let
+  inherit (cosmopolitan) version;
+
   cosmocc =
-    runCommand "cosmocc"
+    runCommand "cosmocc-${version}"
       {
         pname = "cosmocc";
-        inherit (cosmopolitan) version;
+        inherit version;
 
-        meta = with lib; {
-          homepage = "https://justine.lol/cosmopolitan/";
+        meta = cosmopolitan.meta // {
           description = "compilers for Cosmopolitan C/C++ programs";
-          license = licenses.mit;
-          maintainers = teams.cosmopolitan.members;
         };
         passthru.tests = {
           cc = runCommand "c-test" { } ''

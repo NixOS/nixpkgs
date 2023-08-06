@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "44.1";
+  version = "44.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Fa/TuxX/s4/sqzTCM1CVCtJwqwOoW5TjM9ndfuanQxQ=";
+    sha256 = "O4uhWBpHpun1f2tqoI8PtnVJxgEhqiTjEUDpOUe4NiI=";
   };
 
   nativeBuildInputs = [
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 }

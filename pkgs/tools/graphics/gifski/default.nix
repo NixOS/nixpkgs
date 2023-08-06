@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , stdenv
 , pkg-config
+, ffmpeg
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +24,16 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    ffmpeg
+  ];
+
+  buildFeatures = [ "video" ];
 
   # error: the crate `gifski` is compiled with the panic strategy `abort` which is incompatible with this crate's strategy of `unwind`
   doCheck = !stdenv.isDarwin;

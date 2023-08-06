@@ -60,12 +60,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "ghostscript${lib.optionalString (x11Support) "-with-X"}";
-  version = "10.01.1";
+  pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
+  version = "10.01.2";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
-    hash = "sha512-2US+norvaNEXbWTEDbb6htVdDJ4wBH8hR8AoBqthz+msLLANTlshj/PFHMbtR87/4brE3Z1MwXYLeXTzDGwnNQ==";
+    hash = "sha512-7iDw4S9VOj0EV45xoNRd7+vHERfOTcLBQEOYW/5zSK1/iy/pj8m09bk17LMuUNw0C+Z9bvWBkFQuxtD52h3jgA==";
   };
 
   patches = [
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals dynamicDrivers [
     "--enable-dynamic"
     "--disable-hidden-visibility"
-  ] ++ lib.optional x11Support [
+  ] ++ lib.optionals x11Support [
     "--with-x"
   ] ++ lib.optionals cupsSupport [
     "--enable-cups"
@@ -141,6 +141,7 @@ stdenv.mkDerivation rec {
   dylib_version = lib.versions.majorMinor version;
   preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
+    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
   '';
 
   # validate dynamic linkage
@@ -149,6 +150,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     $out/bin/gs --version
+    $out/bin/gsx --version
     pushd examples
     for f in *.{ps,eps,pdf}; do
       echo "Rendering $f"

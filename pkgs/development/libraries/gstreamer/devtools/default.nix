@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-devtools";
-  version = "1.22.2";
+  version = "1.22.4";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-62JybT4nqHgjaaJP1jZKiIXtJGKzu9qwkd/8gTnuBtg=";
+    hash = "sha256-TFIFPOjB33L9gXIen1PeOxRu3PLeKPYHvnBbzkz5CdE=";
   };
 
   outputs = [
@@ -65,5 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }

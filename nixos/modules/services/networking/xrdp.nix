@@ -121,7 +121,7 @@ in
       icons.enable = true;
     };
 
-    fonts.enableDefaultFonts = mkDefault true;
+    fonts.enableDefaultPackages = mkDefault true;
 
     systemd = {
       services.xrdp = {

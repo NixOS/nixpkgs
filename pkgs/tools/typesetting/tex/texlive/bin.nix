@@ -5,7 +5,7 @@
 , perl, perlPackages, python3Packages, pkg-config
 , libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
-, makeWrapper, shortenPerlShebang
+, makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
 }:
 
 # Useful resource covering build options:
@@ -16,6 +16,10 @@ let
 
   year = toString ((import ./tlpdb.nix)."00texlive.config").year;
   version = year; # keep names simple for now
+
+  # detect and stop redundant rebuilds that may occur when building new fixed hashes
+  assertFixedHash = name: src:
+    if ! useFixedHashes || src ? outputHash then src else throw "The TeX Live package '${src.pname}' must have a fixed hash before building '${name}'.";
 
   common = {
     src = fetchurl {
@@ -96,6 +100,12 @@ core = stdenv.mkDerivation rec {
     /*teckit*/ zziplib mpfr gmp
     pixman gd freetype libpng libpaper zlib
     perl
+  ];
+
+  patches = [
+    # Fix implicit `int` on `main`, which results in an error when building with clang 16.
+    # This is fixed upstream and can be dropped with the 2023 release.
+    ./fix-implicit-int.patch
   ];
 
   hardeningDisable = [ "format" ];
@@ -202,6 +212,27 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=reproducible_exception_strings.patch;msg=5";
       sha256 = "sha256-RNZoEeTcWnrLaltcYrhNIORh42fFdwMzBfxMRWVurbk=";
     })
+    # fixes a security-issue in luatex that allows arbitrary code execution even with shell-escape disabled, see https://tug.org/~mseven/luatex.html
+    (fetchpatch {
+      name = "CVE-2023-32700.patch";
+      url = "https://tug.org/~mseven/luatex-files/2022/patch";
+      hash = "sha256-o9ENLc1ZIIOMX6MdwpBIgrR/Jdw6tYLmAyzW8i/FUbY=";
+      excludes = [  "build.sh" ];
+      stripLen = 1;
+    })
+    # Fixes texluajitc crashes on aarch64, backport of the upstream fix
+    # https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
+    # to the version vendored by texlive (2.1.0-beta3)
+    (fetchpatch {
+      name = "luajit-fix-aarch64-linux.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/master/srcpkgs/LuaJIT/patches/e9af1abec542e6f9851ff2368e7f196b6382a44c.patch";
+      hash = "sha256-ysSZmfpfCFMukfHmIqwofAZux1e2kEq/37lfqp7HoWo=";
+      stripLen = 1;
+      extraPrefix = "libs/luajit/LuaJIT-src/";
+    })
+    # Fix implicit `int` on `main`, which results in an error when building with clang 16.
+    # This is fixed upstream and can be dropped with the 2023 release.
+    ./fix-implicit-int.patch
   ];
 
   hardeningDisable = [ "format" ];
@@ -304,7 +335,8 @@ chktex = stdenv.mkDerivation {
   inherit (common) src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core/*kpathsea*/ ];
+  # perl used in shebang of script bin/deweb
+  buildInputs = [ core/*kpathsea*/ perl ];
 
   preConfigure = "cd texk/chktex";
 
@@ -355,44 +387,12 @@ dvipng = stdenv.mkDerivation {
   enableParallelBuilding = true;
 };
 
-
-latexindent = perlPackages.buildPerlPackage rec {
-  pname = "latexindent";
-  inherit (src) version;
-
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs);
-
-  outputs = [ "out" ];
-
-  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-  propagatedBuildInputs = with perlPackages; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ];
-
-  postPatch = ''
-    substituteInPlace scripts/latexindent/LatexIndent/GetYamlSettings.pm \
-      --replace '$FindBin::RealBin/defaultSettings.yaml' ${src}/scripts/latexindent/defaultSettings.yaml
-  '';
-
-  # Dirty hack to apply perlFlags, but do no build
-  preConfigure = ''
-    touch Makefile.PL
-  '';
-  dontBuild = true;
-  installPhase = ''
-    install -D ./scripts/latexindent/latexindent.pl "$out"/bin/latexindent
-    mkdir -p "$out"/${perl.libPrefix}
-    cp -r ./scripts/latexindent/LatexIndent "$out"/${perl.libPrefix}/
-  '' + lib.optionalString stdenv.isDarwin ''
-    shortenPerlShebang "$out"/bin/latexindent
-  '';
-};
-
-
 pygmentex = python3Packages.buildPythonApplication rec {
   pname = "pygmentex";
   inherit (src) version;
   format = "other";
 
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
+  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs));
 
   propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
@@ -424,27 +424,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   };
 };
 
-
-texlinks = stdenv.mkDerivation rec {
-  name = "texlinks";
-
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
-
-  dontBuild = true;
-  doCheck = false;
-
-  installPhase = ''
-    runHook preInstall
-
-    # Patch texlinks.sh back to 2015 version;
-    # otherwise some bin/ links break, e.g. xe(la)tex.
-    patch --verbose -R scripts/texlive-extra/texlinks.sh < '${./texlinks.diff}'
-    install -Dm555 scripts/texlive-extra/texlinks.sh "$out"/bin/texlinks
-
-    runHook postInstall
-  '';
-};
-
+inherit asymptote;
 
 inherit biber;
 bibtexu = bibtex8;

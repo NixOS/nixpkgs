@@ -1,6 +1,12 @@
-{ lib, stdenv, callPackage }:
+{ lib
+, stdenv
+, callPackage
+, ...
+}@args:
 
 let
+  extraArgs = removeAttrs args [ "callPackage" ];
+
   pname = "spotify";
 
   meta = with lib; {
@@ -9,8 +15,9 @@ let
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "spotify";
   };
 
 in if stdenv.isDarwin
-then callPackage ./darwin.nix { inherit pname meta; }
-else callPackage ./linux.nix { inherit pname meta; }
+then callPackage ./darwin.nix (extraArgs // { inherit pname meta; })
+else callPackage ./linux.nix (extraArgs // { inherit pname meta; })

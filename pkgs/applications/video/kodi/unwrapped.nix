@@ -38,15 +38,15 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20230312";
-  kodiVersion = "20.1";
+  kodiReleaseDate = "20230629";
+  kodiVersion = "20.2";
   rel = "Nexus";
 
   kodi_src = fetchFromGitHub {
     owner = "xbmc";
     repo = "xbmc";
     rev = "${kodiVersion}-${rel}";
-    hash = "sha256-2nwjW0MYrMVk+dllrAv9yn+YNA6/loZzoK8mbFIZ8Xs=";
+    hash = "sha256-nNdBjqY9gkpv3g/hcyjWPENHFwOlxrKs2cT4IvRPuXs=";
   };
 
   # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.14.4";
+  version = "0.15.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AkHmEflRvjJFlycI5adpuxg6+/zu7Dzy7vbYCvd1b70=";
+    hash = "sha256-vkgfO9WGKMuaL5SxcwMQWKG6FEYxLgRbkvftUkMwg4s=";
   };
 
   propagatedBuildInputs = [
@@ -98,6 +98,6 @@ buildPythonPackage rec {
     description = "Data visualization toolchain based on aggregating into a grid";
     homepage = "https://datashader.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

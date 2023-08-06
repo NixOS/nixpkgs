@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "nlpcloud";
-  version = "1.0.41";
+  version = "1.0.43";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LtwN1fF/lfvXrB30P0VvuVGnsG8p1ZAalDCYL/a9uGE=";
+    hash = "sha256-WLbmPFBiZ7utFo0cqiBKsetlhtgun/YMGTEIvMUhRnc=";
   };
 
   propagatedBuildInputs = [

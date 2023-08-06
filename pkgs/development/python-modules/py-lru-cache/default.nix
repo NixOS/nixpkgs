@@ -17,7 +17,7 @@ buildPythonPackage rec {
     description = "An in-memory LRU cache for python";
     homepage = "https://github.com/stucchio/Python-LRU-cache";
     license = licenses.gpl3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 
 }

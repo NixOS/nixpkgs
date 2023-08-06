@@ -97,8 +97,6 @@ stdenv.mkDerivation {
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'set(ARM64 arm64 arm64e)' 'set(ARM64)'
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (useLLVM) ''

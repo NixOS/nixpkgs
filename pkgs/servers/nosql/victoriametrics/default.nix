@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.89.1";
+  version = "1.92.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-s5Fo0Bsy9cAoNLRMAYjNrSLJ0vX4HdbQ+T3cj6ebNPE=";
+    hash = "sha256-s4OxOyOfPd98ZTdn/VYr9Z12zrQM5ZCsoJBx6nwz1Ww=";
   };
 
   vendorHash = null;
@@ -33,6 +33,8 @@ buildGoModule rec {
     # `lib/querytracer/tracer_test.go` expects `buildinfo.Version` to be unset
     export ldflags=''${ldflags//=${version}/=}
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = { inherit (nixosTests) victoriametrics; };
 

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "lazy-loader";
-  version = "0.2";
+  version = "0.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "scientific-python";
     repo = "lazy_loader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QiRJt2aR2mY1f9ci/p6jOyMeyrHPqRdh43l4Th5PYf8=";
+    hash = "sha256-Ky9EwPYt/wBqWXopH5WFjlVG+/Rd2gc+mlCeWqG7mZg=";
   };
 
   nativeBuildInputs = [

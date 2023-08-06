@@ -11,18 +11,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "0.14.17";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-Qvk9Pde1xmQ/lqU6KCda+F6UV7b414TDswP5Cwrh4jc=";
+    hash = "sha256-UH+qOKKQdWXQZZMtrihbWmKaUoSy1NciGh9UTtS/W5E=";
   };
 
-  cargoHash = "sha256-mPpM8jVDA9TbdNR1AdAzVP6sd2glUpDKhyVaaCcQzKE=";
+  cargoHash = "sha256-EGgVPRaofia+AwXSr6X4Aa8jbk5qDkXg1XvMoEp0qMQ=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.isLinux [ dbus ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage rec {
       Python and can upload them to PyPI.
     '';
     homepage = "https://github.com/PyO3/maturin";
-    license = licenses.asl20;
+    changelog = "https://github.com/PyO3/maturin/blob/v${version}/Changelog.md";
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ ];
   };
 }

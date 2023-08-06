@@ -10,14 +10,13 @@ let cross = if crossSystem != null
     custom-bootstrap = if bootstrapFiles != null
       then { stdenvStages = args:
               let args' = args // { bootstrapFiles = bootstrapFiles; };
-              in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
+              in (import "${pkgspath}/pkgs/stdenv/darwin" args');
            }
       else {};
 in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
 
 let
   llvmPackages = llvmPackages_11;
-  storePrefixLen = builtins.stringLength builtins.storeDir;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -54,7 +53,7 @@ in rec {
       chmod -R u+w $out/include
       cp -rL ${darwin.ICU}/include* $out/include
       cp -rL ${libiconv}/include/* $out/include
-      cp -rL ${lib.getDev gnugrep.pcre}/include/* $out/include
+      cp -rL ${lib.getDev gnugrep.pcre2}/include/* $out/include
       mv $out/include $out/include-Libsystem
 
       # Copy coreutils, bash, etc.
@@ -86,7 +85,7 @@ in rec {
       cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
       cp -d ${lib.getLib openssl}/lib/*.dylib $out/lib
 
-      cp -d ${gnugrep.pcre.out}/lib/libpcre*.dylib $out/lib
+      cp -d ${gnugrep.pcre2.out}/lib/libpcre2*.dylib $out/lib
       cp -d ${lib.getLib libiconv}/lib/lib*.dylib $out/lib
       cp -d ${lib.getLib gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
@@ -151,7 +150,7 @@ in rec {
 
       # Strip executables even further
       for i in $out/bin/*; do
-        if [[ ! -L $i ]]; then
+        if [[ ! -L $i ]] && isMachO "$i"; then
           chmod +w $i
           ${stdenv.cc.targetPrefix}strip $i || true
         fi
@@ -164,7 +163,7 @@ in rec {
       done
 
       for i in $out/bin/*; do
-        if [[ ! -L "$i" ]]; then
+        if [[ ! -L "$i" ]] && isMachO "$i"; then
           ${stdenv.cc.targetPrefix}install_name_tool -add_rpath '@executable_path/../lib' $i
         fi
       done
@@ -206,8 +205,6 @@ in rec {
       echo "file tools ${build}/on-server/bootstrap-tools.nar.xz" >> $out/nix-support/hydra-build-products
     '';
   };
-
-  bootstrapLlvmVersion = llvmPackages.llvm.version;
 
   bootstrapFiles = {
     tools = "${build}/pack";
@@ -313,13 +310,16 @@ in rec {
   };
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
+  # TODO: uncomment once https://github.com/NixOS/nixpkgs/issues/222717 is resolved
+  /*
   test-pkgs = import test-pkgspath {
     # if the bootstrap tools are for another platform, we should be testing
     # that platform.
     localSystem = if crossSystem != null then crossSystem else localSystem;
 
     stdenvStages = args: let
-        args' = args // { inherit bootstrapLlvmVersion bootstrapFiles; };
-      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
+        args' = args // { inherit bootstrapFiles; };
+      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
   };
+  */
 }

@@ -35,16 +35,16 @@ in
 assert lib.subtractLists [ "ncurses" "qt5" ] uiToolkits == [];
 # Minimal, bootstrap cmake does not have toolkits
 assert isBootstrap -> (uiToolkits == []);
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmake"
     + lib.optionalString isBootstrap "-boot"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.25.3";
+  version = "3.26.4";
 
   src = fetchurl {
-    url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
-    sha256 = "sha256-zJlXAdWQym3rxCRemYmTkJnKUoJ91GtdNZLwk6/hkBw=";
+    url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
+    hash = "sha256-MTtogMKRvU/jHAqlHW5iZZKCpSHmlfMNXMDSWrvVwgg=";
   };
 
   patches = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = setupHooks ++ [
+  nativeBuildInputs = finalAttrs.setupHooks ++ [
     pkg-config
   ]
   ++ lib.optionals buildDocs [ texinfo ]
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "CXXFLAGS=-Wno-elaborated-enum-base"
-    "--docdir=share/doc/${pname}${version}"
+    "--docdir=share/doc/${finalAttrs.pname}-${finalAttrs.version}"
   ] ++ (if useSharedLibraries
         then [ "--no-system-jsoncpp" "--system-libs" ]
         else [ "--no-system-libs" ]) # FIXME: cleanup
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cmake.org/";
     description = "Cross-platform, open-source build system generator";
     longDescription = ''
@@ -164,10 +164,10 @@ stdenv.mkDerivation rec {
       configuration files, and generate native makefiles and workspaces that can
       be used in the compiler environment of your choice.
     '';
-    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/release/${lib.versions.majorMinor version}.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ttuegel lnl7 AndersonTorres ];
-    platforms = platforms.all;
+    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor finalAttrs.version}/release/${lib.versions.majorMinor finalAttrs.version}.html";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ttuegel lnl7 AndersonTorres ];
+    platforms = lib.platforms.all;
     broken = (qt5UI && stdenv.isDarwin);
   };
-}
+})

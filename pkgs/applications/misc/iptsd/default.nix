@@ -7,23 +7,22 @@
 , pkg-config
 , cli11
 , eigen
-, fmt
 , hidrd
 , inih
-, microsoft_gsl
+, microsoft-gsl
 , spdlog
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8RE93pIg5fVAYOOq8zHlWy0uTxep7hrJlowPu48beTs=";
+    hash = "sha256-06KGMXkp5lR05iNQOll1h0q+Z+XWMberqG1C9Cs7VfA=";
   };
 
   nativeBuildInputs = [
@@ -38,10 +37,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cli11
     eigen
-    fmt
     hidrd
     inih
-    microsoft_gsl
+    microsoft-gsl
     spdlog
     systemd
   ];

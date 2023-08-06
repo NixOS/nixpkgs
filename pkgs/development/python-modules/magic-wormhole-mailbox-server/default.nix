@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/warner/magic-wormhole-mailbox-server";
     changelog = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server/blob/${version}/NEWS.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

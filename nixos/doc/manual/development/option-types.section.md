@@ -20,6 +20,11 @@ merging is handled.
     coerced to a string. Even if derivations can be considered as
     paths, the more specific `types.package` should be preferred.
 
+`types.pathInStore`
+
+:   A path that is contained in the Nix store. This can be a top-level store
+    path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
+
 `types.package`
 
 :   A top-level store path. This can be an attribute set pointing
@@ -98,6 +103,10 @@ merging is handled.
     `types.attrsOf types.anything` instead which doesn't have these
     problems.
     :::
+
+`types.pkgs`
+
+:   A type for the top level Nixpkgs package set.
 
 ### Numeric types {#sec-option-types-numeric}
 

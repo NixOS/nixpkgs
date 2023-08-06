@@ -20,6 +20,7 @@ let
     "ghc925"
     "ghc926"
     "ghc927"
+    "ghc928"
     "ghc92"
     "ghc942"
     "ghc943"
@@ -27,7 +28,7 @@ let
     "ghc945"
     "ghc94"
     "ghc96"
-    "ghc961"
+    "ghc962"
     "ghcHEAD"
   ];
 
@@ -39,13 +40,14 @@ let
     "ghc925"
     "ghc926"
     "ghc927"
+    "ghc928"
     "ghc94"
     "ghc942"
     "ghc943"
     "ghc944"
     "ghc945"
     "ghc96"
-    "ghc961"
+    "ghc962"
     "ghcHEAD"
   ];
 
@@ -78,8 +80,7 @@ in {
 
   package-list = callPackage ../development/haskell-modules/package-list.nix {};
 
-  compiler = rec {
-
+  compiler = {
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix {
       llvmPackages = pkgs.llvmPackages_6;
     };
@@ -125,7 +126,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
-    ghc88 = ghc884;
+    ghc88 = compiler.ghc884;
     ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
       bootPkgs =
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
@@ -146,7 +147,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc810 = ghc8107;
+    ghc810 = compiler.ghc8107;
     ghc902 = callPackage ../development/compilers/ghc/9.0.2.nix {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
@@ -162,7 +163,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc90 = ghc902;
+    ghc90 = compiler.ghc902;
     ghc924 = callPackage ../development/compilers/ghc/9.2.4.nix {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
@@ -231,7 +232,24 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc92 = ghc927;
+    ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
+      bootPkgs =
+        # aarch64 ghc8107Binary exceeds max output size on hydra
+        if stdenv.hostPlatform.isAarch then
+          packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc810
+        else
+          packages.ghc8107Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc92 = compiler.ghc928;
     ghc942 = callPackage ../development/compilers/ghc/9.4.2.nix {
       bootPkgs =
         # Building with 9.2 is broken due to
@@ -328,8 +346,8 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc94 = ghc945;
-    ghc961 = callPackage ../development/compilers/ghc/9.6.1.nix {
+    ghc94 = compiler.ghc945;
+    ghc962 = callPackage ../development/compilers/ghc/9.6.2.nix {
       bootPkgs =
         # For GHC 9.2 no armv7l bindists are available.
         if stdenv.hostPlatform.isAarch32 then
@@ -345,11 +363,11 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      # Support range >= 10 && < 15
-      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_14;
-      llvmPackages = pkgs.llvmPackages_14;
+      # Support range >= 11 && < 16
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
+      llvmPackages = pkgs.llvmPackages_15;
     };
-    ghc96 = ghc961;
+    ghc96 = compiler.ghc962;
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs =
         # For GHC 9.2 no armv7l bindists are available.
@@ -403,7 +421,7 @@ in {
   packageOverrides = self : super : {};
 
   # Always get compilers from `buildPackages`
-  packages = let bh = buildPackages.haskell; in rec {
+  packages = let bh = buildPackages.haskell; in {
 
     ghc865Binary = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc865Binary;
@@ -452,19 +470,19 @@ in {
       ghc = bh.compiler.ghc884;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
     };
-    ghc88 = ghc884;
+    ghc88 = packages.ghc884;
     ghc8107 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc8107;
       ghc = bh.compiler.ghc8107;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
     };
-    ghc810 = ghc8107;
+    ghc810 = packages.ghc8107;
     ghc902 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc902;
       ghc = bh.compiler.ghc902;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
     };
-    ghc90 = ghc902;
+    ghc90 = packages.ghc902;
     ghc924 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc924;
       ghc = bh.compiler.ghc924;
@@ -485,7 +503,12 @@ in {
       ghc = bh.compiler.ghc927;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
     };
-    ghc92 = ghc927;
+    ghc928 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc928;
+      ghc = bh.compiler.ghc928;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+    };
+    ghc92 = packages.ghc928;
     ghc942 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc942;
       ghc = bh.compiler.ghc942;
@@ -506,13 +529,13 @@ in {
       ghc = bh.compiler.ghc945;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
     };
-    ghc94 = ghc945;
-    ghc961 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc961;
-      ghc = bh.compiler.ghc961;
+    ghc94 = packages.ghc945;
+    ghc962 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc962;
+      ghc = bh.compiler.ghc962;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
     };
-    ghc96 = ghc961;
+    ghc96 = packages.ghc962;
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;

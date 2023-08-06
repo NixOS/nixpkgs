@@ -3,23 +3,27 @@
 , fetchzip
 , cimg
 , cmake
+, coreutils
 , curl
 , fftw
 , gimp
 , gimpPlugins
 , gmic
+, gnugrep
+, gnused
 , graphicsmagick
 , libjpeg
 , libpng
 , libtiff
 , ninja
-, nix-update-script
+, nix-update
 , opencv3
 , openexr
 , pkg-config
 , qtbase
 , qttools
 , wrapQtAppsHook
+, writeShellScript
 , zlib
 , variant ? "standalone"
 }:
@@ -51,11 +55,11 @@ assert lib.assertMsg
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.4";
+  version = "3.2.6";
 
   src = fetchzip {
     url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
-    hash = "sha256-FJ2zlsah/3Jf5ie4UhQsPvMoxDMc6iHl3AkhKsZSuqE=";
+    hash = "sha256-asB1YftHfdb7JG87WJ+ggyMCu7qb0f+aCanl5LLi9VE=";
   };
 
   nativeBuildInputs = [
@@ -108,7 +112,23 @@ stdenv.mkDerivation (finalAttrs: {
       inherit cimg gmic;
     };
 
-    updateScript = nix-update-script { };
+    updateScript = writeShellScript "gmic-qt-update-script" ''
+      set -euo pipefail
+
+      export PATH="${lib.makeBinPath [ coreutils curl gnugrep gnused nix-update ]}:$PATH"
+
+      latestVersion=$(curl 'https://gmic.eu/files/source/' \
+                       | grep -E 'gmic_[^"]+\.tar\.gz' \
+                       | sed -E 's/.+<a href="gmic_([^"]+)\.tar\.gz".+/\1/g' \
+                       | sort --numeric-sort --reverse | head -n1)
+
+      if [[ '${finalAttrs.version}' = "$latestVersion" ]]; then
+          echo "The new version same as the old version."
+          exit 0
+      fi
+
+      nix-update --version "$latestVersion"
+    '';
   };
 
   meta = {

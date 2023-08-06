@@ -1,18 +1,49 @@
-{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, fetchYarnDeps, nixosTests
-, brotli, fixup_yarn_lock, jq, nodejs, which, yarn
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, fetchFromGitHub
+, fetchYarnDeps
+, nixosTests
+, brotli
+, fixup_yarn_lock
+, jq
+, nodejs
+, which
+, yarn
 }:
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
-    else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
-
-  bcrypt_version = "5.1.0";
-  bcrypt_lib = fetchurl {
-    url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
-    hash = "sha256-I1ceMi7h6flvKBmMIU1qjAU1S6z5MzguHDul3g1zMKw=";
+  bcryptHostPlatformAttrs = {
+    x86_64-linux = {
+      arch = "linux-x64";
+      libc = "glibc";
+      hash = "sha256-I1ceMi7h6flvKBmMIU1qjAU1S6z5MzguHDul3g1zMKw=";
+    };
+    aarch64-linux = {
+      arch = "linux-arm64";
+      libc = "glibc";
+      hash = "sha256-q8BR7kILYV8i8ozDkpcuKarf4s1TgRqOrUeLqjdWEQ0=";
+    };
+    x86_64-darwin = {
+      arch = "darwin-x64";
+      libc = "unknown";
+      hash = "sha256-ONnXtRxcYFuFz+rmVTg+yEKe6J/vfKahX2i6k8dQStg=";
+    };
+    aarch64-darwin = {
+      arch = "darwin-arm64";
+      libc = "unknown";
+      hash = "sha256-VesAcT/IF2cvJVncJoqZcAvFxw32SN70C60GLU2kmVI=";
+    };
   };
-
-in stdenv.mkDerivation rec {
+  bcryptAttrs = bcryptHostPlatformAttrs."${stdenv.hostPlatform.system}" or
+    (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
+  bcryptVersion = "5.1.0";
+  bcryptLib = fetchurl {
+    url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcryptVersion}/bcrypt_lib-v${bcryptVersion}-napi-v3-${bcryptAttrs.arch}-${bcryptAttrs.libc}.tar.gz";
+    inherit (bcryptAttrs) hash;
+  };
+in
+stdenv.mkDerivation rec {
   pname = "peertube";
   version = "5.1.0";
 
@@ -62,11 +93,11 @@ in stdenv.mkDerivation rec {
 
     # Fix bcrypt node module
     cd ~/node_modules/bcrypt
-    if [ "${bcrypt_version}" != "$(cat package.json | jq -r .version)" ]; then
+    if [ "${bcryptVersion}" != "$(cat package.json | jq -r .version)" ]; then
       echo "Mismatching version please update bcrypt in derivation"
       exit
     fi
-    mkdir -p ./lib/binding && tar -C ./lib/binding -xf ${bcrypt_lib}
+    mkdir -p ./lib/binding && tar -C ./lib/binding -xf ${bcryptLib}
 
     # Return to home directory
     cd ~
@@ -122,7 +153,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ immae izorkin mohe2015 stevenroose ];
   };
 }

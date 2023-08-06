@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
@@ -15,6 +16,7 @@
 , numpy
 , pandas
 , pillow
+, memorymappingHook
 }:
 let
   external = {
@@ -40,7 +42,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2023.03.1";
+  version = "2023.03.2";
   format = "other";
 
   src =
@@ -51,7 +53,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-hiDaPWDAWzALRf3+SAfzghu2K706rcajeZ69tMFplhU=";
+      hash = "sha256-p1zJLMtIlO+0qKMO7ghDLrONNZFPTuc2QtOtB1LJPtc=";
     };
 
   unpackPhase = ''
@@ -82,6 +84,8 @@ buildPythonPackage rec {
   buildInputs = [
     boost
     cairo
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
+    memorymappingHook
   ];
 
   propagatedBuildInputs = [
@@ -149,8 +153,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";
-    maintainers = [ maintainers.rmcgibbo ];
+    maintainers = with maintainers; [ rmcgibbo natsukium ];
     license = licenses.bsd3;
     homepage = "https://www.rdkit.org";
+    changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";
   };
 }

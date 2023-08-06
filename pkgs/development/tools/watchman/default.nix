@@ -1,4 +1,5 @@
 { boost
+, cargo
 , cmake
 , config
 , CoreServices
@@ -25,6 +26,7 @@
 , pkg-config
 , python3
 , rustPlatform
+, rustc
 , stateDir ? "/tmp"
 , stdenv
 , wangle
@@ -56,11 +58,10 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     ensureNewerSourcesForZipFilesHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     pcre

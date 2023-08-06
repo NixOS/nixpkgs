@@ -1,14 +1,15 @@
 { lib
-, stdenv
+, cudaPackages
 , fetchFromGitHub
 , fetchpatch
 , addOpenGLRunpath
 , cudatoolkit
 , pkg-config
 , sha256
+, glfw3
+, freeimage
 }:
-
-stdenv.mkDerivation rec {
+cudaPackages.backendStdenv.mkDerivation rec {
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkg-config addOpenGLRunpath ];
+  nativeBuildInputs = [ pkg-config addOpenGLRunpath glfw3 freeimage ];
 
   buildInputs = [ cudatoolkit ];
 
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin bin/${stdenv.hostPlatform.parsed.cpu.name}/${stdenv.hostPlatform.parsed.kernel.name}/release/*
+    install -Dm755 -t $out/bin bin/${cudaPackages.backendStdenv.hostPlatform.parsed.cpu.name}/${cudaPackages.backendStdenv.hostPlatform.parsed.kernel.name}/release/*
 
     runHook postInstall
   '';

@@ -135,7 +135,7 @@ if test "$noSysDirs" = "1"; then
         )
     fi
 
-    if test "$crossStageStatic" == 1; then
+    if test "$withoutTargetLibc" == 1; then
         # We don't want the gcc build to assume there will be a libc providing
         # limits.h in this stage
         makeFlagsArray+=(
@@ -167,7 +167,7 @@ preConfigure() {
         rm -Rf zlib
     fi
 
-    if test -n "$crossMingw" -a -n "$crossStageStatic"; then
+    if test -n "$crossMingw" -a -n "$withoutTargetLibc"; then
         mkdir -p ../mingw
         # --with-build-sysroot expects that:
         cp -R $libcCross/include ../mingw
@@ -185,8 +185,9 @@ preConfigure() {
 
 
 postConfigure() {
-    # Don't store the configure flags in the resulting executables.
-    sed -e '/TOPLEVEL_CONFIGURE_ARGUMENTS=/d' -i Makefile
+    # Avoid store paths when embedding ./configure flags into gcc.
+    # Mangled arguments are still useful when reporting bugs upstream.
+    sed -e "/TOPLEVEL_CONFIGURE_ARGUMENTS=/ s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i Makefile
 }
 
 

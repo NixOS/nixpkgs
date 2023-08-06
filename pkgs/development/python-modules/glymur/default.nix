@@ -7,7 +7,7 @@
 , openjpeg
 , pytestCheckHook
 , pythonOlder
-, scikitimage
+, scikit-image
 , setuptools
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     lxml
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
   postConfigure = ''
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/quintusdias/glymur";
     changelog = "https://github.com/quintusdias/glymur/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

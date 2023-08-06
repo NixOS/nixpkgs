@@ -11,11 +11,11 @@ let
     };
 
   # Only allow the demo data to be used (only if it's unfreeRedistributable).
-  unfreePredicate = pkg: with lib; let
+  unfreePredicate = pkg: let
     allowPackageNames = [ "quake3-demodata" "quake3-pointrelease" ];
     allowLicenses = [ lib.licenses.unfreeRedistributable ];
-  in elem pkg.pname allowPackageNames &&
-     elem (pkg.meta.license or null) allowLicenses;
+  in lib.elem pkg.pname allowPackageNames &&
+     lib.elem (pkg.meta.license or null) allowLicenses;
 
   client =
     { pkgs, ... }:

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-i1txeUE/ZSRggwLDtpS8dd4uuZfHX9w3zRH0gBgGXnk=";
   };
-  sourceRoot = "source/fuzzylite";
+  sourceRoot = "${src.name}/fuzzylite";
 
   outputs = [ "out" "dev" ];
 

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.26.0";
+  version = "0.32.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,14 +22,12 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-p5JYBVvKvqKdYIYFh8ZiEgepJips9jg/6ao5yZ/fbcs=";
+    hash = "sha256-rPh4FtcigZzscm3y/BJ/0Q0wURlumowlHY15MiQw2B8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
       --replace 'license = "ISC"' 'license = {file = "LICENSE"}' \
-      --replace 'version = {source = "scm"}' 'license-expression = "ISC"'
   '';
 
   nativeBuildInputs = [

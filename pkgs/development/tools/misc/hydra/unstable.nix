@@ -4,10 +4,8 @@
 , perlPackages
 , buildEnv
 , makeWrapper
-, libtool
 , unzip
 , pkg-config
-, sqlite
 , libpqxx
 , top-git
 , mercurial
@@ -22,7 +20,6 @@
 , prometheus-cpp
 , nukeReferences
 , git
-, boehmgc
 , nlohmann_json
 , docbook_xsl
 , openssh
@@ -126,13 +123,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-03-27";
+  version = "2023-07-17";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "082495e34e094cae1eb49dbfc5648938e23c6355";
-    sha256 = "sha256-Nj9U0V7Zv7XoRDdO7ECphTk6jHfOgeZe6G0x4FQLpJ0=";
+    rev = "d135b123cde78576e99e919a5db0428cb70fcd1e";
+    sha256 = "sha256-wjHHcJr1liYKESUtCjIdvC+USjd9EWjEFssvIKiEuVU=";
   };
 
   buildInputs = [

@@ -3,9 +3,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
 {
   name = "pantheon";
 
-  meta = with lib; {
-    maintainers = teams.pantheon.members;
-  };
+  meta.maintainers = lib.teams.pantheon.members;
 
   nodes.machine = { ... }:
 

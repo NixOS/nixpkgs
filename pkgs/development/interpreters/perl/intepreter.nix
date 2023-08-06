@@ -195,9 +195,11 @@ stdenv.mkDerivation (rec {
       substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
         --replace "${libcInc}" /no-such-path \
         --replace "${
-            if stdenv.hasCC then stdenv.cc.cc else "/no-such-path"
+            if stdenv.hasCC then stdenv.cc else "/no-such-path"
           }" /no-such-path \
-        --replace "${stdenv.cc}" /no-such-path \
+        --replace "${
+            if stdenv.hasCC && stdenv.cc.cc != null then stdenv.cc.cc else "/no-such-path"
+        }" /no-such-path \
         --replace "$man" /no-such-path
     '' + lib.optionalString crossCompiling
       ''
@@ -225,11 +227,12 @@ stdenv.mkDerivation (rec {
 
   meta = with lib; {
     homepage = "https://www.perl.org/";
-    description = "The standard implementation of the Perl 5 programmming language";
+    description = "The standard implementation of the Perl 5 programming language";
     license = licenses.artistic1;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
     priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
+    mainProgram = "perl";
   };
 } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
   crossVersion = "c876045741f5159318085d2737b0090f35a842ca"; # June 5, 2022

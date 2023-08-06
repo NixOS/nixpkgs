@@ -5,7 +5,7 @@
 , stdenv
 , cmake
 , cudaPackages ? { }
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , nvidia-thrust
 , useThrustSourceBuild ? true
 , pythonSupport ? true
@@ -131,7 +131,7 @@ stdenv.mkDerivation {
   '';
 
   # Need buildPythonPackage for this one
-  # pythonCheckImports = [
+  # pythonImportsCheck = [
   #   "faiss"
   # ];
 

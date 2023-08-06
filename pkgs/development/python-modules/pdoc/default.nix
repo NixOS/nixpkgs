@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -14,17 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "13.0.0";
-  disabled = pythonOlder "3.7";
+  version = "14.0.0";
+  disabled = pythonOlder "3.8";
 
   format = "pyproject";
 
-  # the Pypi version does not include tests
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    hash = "sha256-UzUAprvBimk2POi0QZdFuRWEeGDp+MLmdUYR0UiIubs=";
+    hash = "sha256-rMHp0diXvWIOyucuTAXO/IOljKhDYOZKtkih5+rUJCM=";
   };
 
   nativeBuildInputs = [
@@ -42,13 +40,13 @@ buildPythonPackage rec {
     hypothesis
   ];
   disabledTestPaths = [
-    # "test_snapshots" tries to match generated output against stored snapshots.
-    # They are highly sensitive dep versions, which we unlike upstream do not pin.
+    # "test_snapshots" tries to match generated output against stored snapshots,
+    # which are highly sensitive to dep versions.
     "test/test_snapshot.py"
   ];
 
   pytestFlagsArray = [
-    ''-m "not slow"'' # skip tests marked slow
+    ''-m "not slow"'' # skip slow tests
   ];
 
   __darwinAllowLocalNetworking = true;

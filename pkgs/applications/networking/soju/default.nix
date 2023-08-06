@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "soju";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "soju";
     rev = "v${version}";
-    hash = "sha256-e3yA8gXuLxRzJIQQIjhajIOWVtikd+gNVxbhzfy56b0=";
+    hash = "sha256-Icz6oIXLnLe75zuB8Q862I1ado5GpGZBJezrH7F7EJs=";
   };
 
   vendorHash = "sha256-iT/QMm6RM6kvw69Az+aLTtBuaCX7ELAiYlj5wXAtBd4=";

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.54.2";
+  version = "0.57.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Zjh4rWnpzzBZFQRZIoceeIn4DYn0/HqLLZFhc57yhLQ=";
+    hash = "sha256-EqKjDPSjhI03ZwkHyNG4ZbIdrzn7wrjpGfze1Qkk0lk=";
   };
 
   propagatedBuildInputs = [
@@ -47,6 +47,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "setup_requires=SETUP_REQUIRED," "setup_requires=[]," \
       --replace "tests_require=TEST_REQUIRED," "tests_require=[],"
+    substituteInPlace requirements.txt \
+      --replace "requests~=2.29.0" "requests"
     substituteInPlace image_extra_requirements.txt \
       --replace "pillow~=" "pillow>=" \
       --replace "ascii_magic~=" "ascii_magic>="

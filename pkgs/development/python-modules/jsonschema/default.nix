@@ -7,6 +7,7 @@
 , hatchling
 , importlib-metadata
 , importlib-resources
+, pkgutil-resolve-name
 , pyrsistent
 , pythonOlder
 , twisted
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
+    pkgutil-resolve-name
   ];
 
   passthru.optional-dependencies = {

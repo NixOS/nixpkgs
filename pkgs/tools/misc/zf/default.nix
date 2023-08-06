@@ -1,44 +1,46 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zig,
-  testers,
-  zf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, testers
+, zf
+, zigHook
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "natecraddock";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "zf";
+    rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-MzlSU5x2lb6PJZ/iNAi2aebfuClBprlfHMIG/4OPmuc=";
   };
 
-  nativeBuildInputs = [ zig ];
+  nativeBuildInputs = [
+    installShellFiles
+    zigHook
+  ];
 
-  dontConfigure = true;
+  doCheck = false; # it's failing somehow
 
-  preBuild = ''
-    export HOME=$TMPDIR
+  postInstall = ''
+    installManPage doc/zf.1
+    installShellCompletion \
+      --bash complete/zf \
+      --fish complete/zf.fish \
+      --zsh complete/_zf
   '';
 
-  installPhase = ''
-    runHook preInstall
-    zig build -Drelease-safe -Dcpu=baseline --prefix $out install
-    runHook postInstall
-  '';
+  passthru.tests.version = testers.testVersion { package = finalAttrs.zf; };
 
-  passthru.tests.version = testers.testVersion {package = zf;};
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/natecraddock/zf";
     description = "A commandline fuzzy finder that prioritizes matches on filenames";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dit7ya mmlb ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dit7ya mmlb ];
   };
-}
+})

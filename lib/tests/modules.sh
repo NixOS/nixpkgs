@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-#
+
 # This script is used to test that the module system is working as expected.
+# Executing it runs tests for `lib.modules`, `lib.options` and `lib.types`.
 # By default it test the version of nixpkgs which is defined in the NIX_PATH.
+#
+# Run:
+# [nixpkgs]$ lib/tests/modules.sh
+# or:
+# [nixpkgs]$ nix-build lib/tests/release.nix
 
 set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
@@ -60,6 +66,40 @@ checkConfigError() {
 
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
+
+checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
+
+# Check that a module argument is passed, also when a default is available
+# (but not needed)
+#
+# When the default is needed, we currently fail to do what the users expect, as
+# we pass our own argument anyway, even if it *turns out* not to exist.
+#
+# The reason for this is that we don't know at invocation time what is in the
+# _module.args option. That value is only available *after* all modules have been
+# invoked.
+#
+# Hypothetically, Nix could help support this by giving access to the default
+# values, through a new built-in function.
+# However the default values are allowed to depend on other arguments, so those
+# would have to be passed in somehow, making this not just a getter but
+# something more complicated.
+#
+# At that point we have to wonder whether the extra complexity is worth the cost.
+# Another - subjective - reason not to support it is that default values
+# contradict the notion that an option has a single value, where _module.args
+# is the option.
+checkConfigOutput '^true$' config.result ./module-argument-default.nix
+
+# types.pathInStore
+checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathInStore.ok3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ""' config.pathInStore.bad1 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store"' config.pathInStore.bad2 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/"' config.pathInStore.bad3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
 
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
@@ -182,6 +222,11 @@ checkConfigOutput '^true$' config.enableAlias ./alias-with-priority.nix
 checkConfigOutput '^false$' config.enable ./alias-with-priority-can-override.nix
 checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-override.nix
 
+# Check mkPackageOption
+checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
+checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
+checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
+
 # submoduleWith
 
 ## specialArgs should work
@@ -190,7 +235,7 @@ checkConfigOutput '^"foo"$' config.submodule.foo ./declare-submoduleWith-special
 ## shorthandOnlyDefines config behaves as expected
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
-checkConfigError "You're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError "In module ..*define-submoduleWith-shorthand.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
 
 ## submoduleWith should merge all modules in one swoop
@@ -348,6 +393,9 @@ checkConfigError \
   config.set \
   ./declare-set.nix ./declare-enable-nested.nix
 
+# Check that that merging of option collisions doesn't depend on type being set
+checkConfigError 'The option .group..*would be a parent of the following options, but its type .<no description>. does not support nested options.\n\s*- option.s. with prefix .group.enable..*' config.group.enable ./merge-typeless-option.nix
+
 # Test that types.optionType merges types correctly
 checkConfigOutput '^10$' config.theOption.int ./optionTypeMerging.nix
 checkConfigOutput '^"hello"$' config.theOption.str ./optionTypeMerging.nix
@@ -373,7 +421,7 @@ checkConfigOutput '^{ }$' config.sub.nixosOk ./class-check.nix
 checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.sub.nixosFail.config ./class-check.nix
 
 # submoduleWith type merge with different class
-checkConfigError 'error: A submoduleWith option is declared multiple times with conflicting class values "darwin" and "nixos".' config.sub.mergeFail.config ./class-check.nix
+checkConfigError 'A submoduleWith option is declared multiple times with conflicting class values "darwin" and "nixos".' config.sub.mergeFail.config ./class-check.nix
 
 # _type check
 checkConfigError 'Could not load a value as a module, because it is of type "flake", in file .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix

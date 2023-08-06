@@ -1,4 +1,4 @@
-commit 363c5be465dd6dde35c3d31abd7b5cca9b1f3a9f
+commit 05666e70f1ef63632aea8b1aed84351a6e30d0d5
 Author: Jan Tojnar <jtojnar@gmail.com>
 Date:   Thu Jul 23 18:49:03 2020 +0200
 
@@ -22,7 +22,7 @@ Date:   Thu Jul 23 18:49:03 2020 +0200
     https://gitlab.freedesktop.org/pwithnall/malcontent/merge_requests/38#note_437946
 
 diff --git a/meson.build b/meson.build
-index 6e1dfa5..196350b 100644
+index 038dd35..e3c77f0 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -123,9 +123,8 @@ test_env = [
@@ -36,8 +36,8 @@ index 6e1dfa5..196350b 100644
    subdir('libmalcontent')
  else
    libmalcontent_api_version = '0'
-@@ -136,11 +135,16 @@ endif
- if get_option('ui').enabled()
+@@ -143,14 +142,19 @@ if get_option('ui').enabled()
+   )
    subdir('libmalcontent-ui')
  endif
 -subdir('malcontent-client')
@@ -47,12 +47,15 @@ index 6e1dfa5..196350b 100644
  if get_option('ui').enabled()
    subdir('malcontent-control')
 +  subdir('help')
-+endif
-+if not get_option('use_system_libmalcontent')
-+  subdir('pam')
-+  subdir('po')
+ 
+   gnome.post_install(
+     gtk_update_icon_cache: true,
+     update_desktop_database: true,
+   )
  endif
 -subdir('pam')
 -subdir('po')
- 
- meson.add_install_script('build-aux/meson_post_install.py')
++if not get_option('use_system_libmalcontent')
++  subdir('pam')
++  subdir('po')
++endif

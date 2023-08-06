@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
 
   OMP_NUM_THREADS = 2; # required for check phase
 
+  # With "fortify3", there are test failures, such as:
+  # Testing cnof CAMB3LYP/6-31G using FMM
+  # *** buffer overflow detected ***: terminated
+  # ./test_fmm_camb3lyp.sh: line 81: 1061289 Aborted                 (core dumped) ./ergo <<EOINPUT > /dev/null
+  hardeningDisable = [ "fortify3" ];
+
   doCheck = true;
 
   meta = with lib; {

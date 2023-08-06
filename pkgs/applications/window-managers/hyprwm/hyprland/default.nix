@@ -38,18 +38,20 @@ in
 assert assertXWayland;
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.25.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Npf48UUfywneFYGEc7NQ59xudwvw7EJjwweT4tHguIY=";
+    hash = "sha256-mEKF6Wcx+wSF/eos/91A7LxhFLDYhSnQnLpwZF13ntg=";
   };
 
   patches = [
     # make meson use the provided dependencies instead of the git submodules
     "${finalAttrs.src}/nix/meson-build.patch"
+    # look into $XDG_DESKTOP_PORTAL_DIR instead of /usr; runtime checks for conflicting portals
+    "${finalAttrs.src}/nix/portals.patch"
   ];
 
   postPatch = ''

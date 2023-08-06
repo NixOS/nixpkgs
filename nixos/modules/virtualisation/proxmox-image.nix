@@ -69,6 +69,34 @@ with lib;
           VM name
         '';
       };
+      additionalSpace = mkOption {
+        type = types.str;
+        default = "512M";
+        example = "2048M";
+        description = lib.mdDoc ''
+          additional disk space to be added to the image if diskSize "auto"
+          is used.
+        '';
+      };
+      bootSize = mkOption {
+        type = types.str;
+        default = "256M";
+        example = "512M";
+        description = lib.mdDoc ''
+          Size of the boot partition. Is only used if partitionTableType is
+          either "efi" or "hybrid".
+        '';
+      };
+      diskSize = mkOption {
+        type = types.str;
+        default = "auto";
+        example = "20480";
+        description = lib.mdDoc ''
+          The size of the disk, in megabytes.
+          if "auto" size is calculated based on the contents copied to it and
+          additionalSpace is taken into account.
+        '';
+      };
       net0 = mkOption {
         type = types.commas;
         default = "virtio=00:00:00:00:00:00,bridge=vmbr0,firewall=1";
@@ -98,10 +126,12 @@ with lib;
     qemuExtraConf = mkOption {
       type = with types; attrsOf (oneOf [ str int ]);
       default = {};
-      example = literalExpression ''{
-        cpu = "host";
-        onboot = 1;
-      }'';
+      example = literalExpression ''
+        {
+          cpu = "host";
+          onboot = 1;
+        }
+      '';
       description = lib.mdDoc ''
         Additional options appended to qemu-server.conf
       '';
@@ -167,7 +197,7 @@ with lib;
     ];
     system.build.VMA = import ../../lib/make-disk-image.nix {
       name = "proxmox-${cfg.filenameSuffix}";
-      inherit partitionTableType;
+      inherit (cfg) partitionTableType;
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
         vma = (pkgs.qemu_kvm.override {
@@ -187,20 +217,20 @@ with lib;
           guestAgentSupport = false;
         }).overrideAttrs ( super: rec {
 
-          version = "7.0.0";
+          version = "7.2.1";
           src = pkgs.fetchurl {
             url= "https://download.qemu.org/qemu-${version}.tar.xz";
-            sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
+            sha256 = "sha256-jIVpms+dekOl/immTN1WNwsMLRrQdLr3CYqCTReq1zs=";
           };
           patches = [
             # Proxmox' VMA tool is published as a particular patch upon QEMU
             (pkgs.fetchpatch {
               url =
                 let
-                  rev = "1976ca460796f28447b41e3618e5c1e234035dd5";
-                  path = "debian/patches/pve/0026-PVE-Backup-add-vma-backup-format-code.patch";
+                  rev = "abb04bb6272c1202ca9face0827917552b9d06f6";
+                  path = "debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch";
                 in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
-              hash = "sha256-2Dz+ceTwrcyYYxi76RtyY3v15/2pwGcDhFuoZWlgbjc=";
+              hash = "sha256-3d0HHdvaExCry6zcULnziYnWIAnn24vECkI4sjj2BMg=";
             })
 
             # Proxmox' VMA tool uses O_DIRECT which fails on tmpfs
@@ -220,6 +250,7 @@ with lib;
           ];
 
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
+          nativeBuildInputs = super.nativeBuildInputs ++ [ pkgs.perl ];
 
         });
       in
@@ -233,6 +264,7 @@ with lib;
         mkdir -p $out/nix-support
         echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
       '';
+      inherit (cfg.qemuConf) additionalSpace diskSize bootSize;
       format = "raw";
       inherit config lib pkgs;
     };

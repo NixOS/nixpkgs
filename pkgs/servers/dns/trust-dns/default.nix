@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trust-dns";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "bluejekyll";
     repo = "trust-dns";
     rev = "v${version}";
-    sha256 = "sha256-b9tK1JbTwB3ZuRPh0wb3cOFj9dMW7URXIaFzUq0Yipw=";
+    sha256 = "sha256-YjwzU/mYKiHL2xB/oczkP/4i5XYIvSNyqDLmmrRQPhM=";
   };
-  cargoHash = "sha256-mpobdeTRWJzIEmhwtcM6UE66qRD5ot/0yLeQM6Tec+0=";
+  cargoHash = "sha256-uAmszVOlRttmn6b3Rv2Y5ZuP3qBIVjIFJ42BJro+K8s=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];

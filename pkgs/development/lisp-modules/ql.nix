@@ -164,9 +164,6 @@ let
     cl-readline = super.cl-readline.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.readline ];
     });
-    log4cl = super.log4cl.overrideLispAttrs (o: {
-      patches = [ ./patches/log4cl-fix-build.patch ];
-    });
     md5 = super.md5.overrideLispAttrs (o: {
       lispLibs = [ super.flexi-streams ];
     });
@@ -230,8 +227,7 @@ let
   });
 
   qlpkgs =
-    if builtins.pathExists ./imported.nix
-    then pkgs.callPackage ./imported.nix { inherit build-asdf-system; }
-    else {};
+    lib.optionalAttrs (builtins.pathExists ./imported.nix)
+      (pkgs.callPackage ./imported.nix { inherit build-asdf-system; });
 
 in qlpkgs.overrideScope' overrides

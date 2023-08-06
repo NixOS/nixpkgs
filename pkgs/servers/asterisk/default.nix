@@ -28,7 +28,7 @@
 , libtool
 , automake
 , fetchpatch
-, python39
+, python3
 , writeScript
 , withOpus ? true
 , ldapSupport ? false
@@ -47,6 +47,11 @@ let
       name = "CVE-2022-23547.patch";
       url = "https://github.com/pjsip/pjproject/commit/bc4812d31a67d5e2f973fbfaf950d6118226cf36.patch";
       sha256 = "sha256-bpc8e8VAQpfyl5PX96G++6fzkFpw3Or1PJKNPKl7N5k=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-27585.patch";
+      url = "https://github.com/pjsip/pjproject/commit/d1c5e4da5bae7f220bc30719888bb389c905c0c5.patch";
+      hash = "sha256-+yyKKTKG2FnfyLWnc4S80vYtDzmiu9yRmuqb5eIulPg=";
     })
   ];
 
@@ -193,7 +198,7 @@ let
       })
     (lib.importJSON ./versions.json);
 
-  updateScript_python = python39.withPackages (p: with p; [ packaging beautifulsoup4 requests ]);
+  updateScript_python = python3.withPackages (p: with p; [ packaging beautifulsoup4 requests ]);
   updateScript = writeScript "asterisk-update" ''
     #!/usr/bin/env bash
     exec ${updateScript_python}/bin/python ${toString ./update.py}

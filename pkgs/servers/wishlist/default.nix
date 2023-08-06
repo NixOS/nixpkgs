@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "wishlist";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "wishlist";
     rev = "v${version}";
-    sha256 = "sha256-O2ciXaWH2QSoqDTnDxmqwgK/BM5WHye8JHfw9+zZxZ4=";
+    sha256 = "sha256-NOR7YCLcwjf+oAi46qL6NteKLMSvJpqu9UzO6UvgcVQ=";
   };
 
-  vendorHash = "sha256-wZugmCP3IouZ9pw3NEAZcoqdABMGTVi/IcithQjVFW4=";
+  vendorHash = "sha256-v8R0e52CpyLKiuYcEZFWAY64tgCBZE2dY0vgqsHWeAc=";
 
   doCheck = false;
 
@@ -22,6 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/wishlist";
     changelog = "https://github.com/charmbracelet/wishlist/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ penguwin ];
+    maintainers = with maintainers; [ caarlos0 penguwin ];
   };
 }

@@ -30,7 +30,7 @@
 , javaAwtGtk ? false
 , langAda ? false
 , langGo ? false
-, crossStageStatic ? null
+, withoutTargetLibc ? null
 , threadsCross ? null
 }:
 
@@ -88,5 +88,5 @@ in
   ;
 
   # threadsCross.package after gcc6 so i assume its okay for 4.8 and 4.9 too
-  depsTargetTarget = optionals (!crossStageStatic && threadsCross != { } && threadsCross.package != null) [ threadsCross.package ];
+  depsTargetTarget = optionals (!withoutTargetLibc && threadsCross != { } && threadsCross.package != null) [ threadsCross.package ];
 }

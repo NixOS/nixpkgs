@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "cwl-upgrader";
-  version = "1.2.6";
+  version = "1.2.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-lVIy0aa+hqbi46NfwXCKWDRzszneyuyo6KXxAcr/xIA=";
+    hash = "sha256-DwXwzhsv92t6PU4emmG7xlIU7uj3rcHh4+o9NqBMA+A=";
   };
 
   postPatch = ''

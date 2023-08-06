@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , fetchFromGitHub
 , withE2BE ? true
 }:
@@ -8,11 +9,11 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.28.0a3";
+        version = "1.29.0a2";
         pname = "tulir-telethon";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit pname version;
-          hash = "sha256-N1XQGpjfyUqcT+bsSBxC5Purvnd/+4NzVzMhiaq5yDo=";
+          hash = "sha256-pTN8mJxbXvnhL11PCH/ZLeSqW0GV124Y3JnDcLek8JE=";
         };
         doCheck = false;
       });
@@ -21,14 +22,14 @@ let
 in
 python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.13.0";
+  version = "0.14.1";
   disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AfCo2uHOcSNCWXgrCLzJwl0Dj8n9Asdqm19wk0OeXgQ=";
+    hash = "sha256-n3gO8R5lVl/8Tgo2tPzM64O2BRhoitsuPIC87bfxczc=";
   };
 
   format = "setuptools";

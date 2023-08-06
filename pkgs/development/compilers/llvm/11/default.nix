@@ -146,8 +146,13 @@ let
       inherit llvm_meta;
     };
 
-    lldb = callPackage ./lldb {
-      inherit llvm_meta;
+    lldb = callPackage ../common/lldb.nix {
+      src = fetch "lldb" "1vlyg015dyng43xqb8cg2l6r9ix8klibxsajazbfnckdnh54hwxj";
+      patches = [
+        ./lldb/procfs.patch
+        ./lldb/gnu-install-dirs.patch
+      ];
+      inherit llvm_meta release_version;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a

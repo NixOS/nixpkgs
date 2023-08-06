@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "6.4.0";
+  version = "6.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-YNzZ/wQz5s5J5ctXekNo0FksRoX03rZE1wXIghYcck4=";
+    hash = "sha256-ZEO7YJBkCMgsD9MnwBn/X3qt39+IiecM453bjDgZDls=";
   };
 
   propagatedBuildInputs = [

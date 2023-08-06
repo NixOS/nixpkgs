@@ -110,17 +110,18 @@ let
   createImportService = { pool, systemd, force, prefix ? "" }:
     nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
-      # we need systemd-udev-settle to ensure devices are available
+      # We wait for systemd-udev-settle to ensure devices are available,
+      # but don't *require* it, because mounts shouldn't be killed if it's stopped.
       # In the future, hopefully someone will complete this:
       # https://github.com/zfsonlinux/zfs/pull/4943
-      requires = [ "systemd-udev-settle.service" ];
+      wants = [ "systemd-udev-settle.service" ];
       after = [
         "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
       ];
-      wantedBy = (getPoolMounts prefix pool) ++ [ "local-fs.target" ];
-      before = (getPoolMounts prefix pool) ++ [ "local-fs.target" ];
+      requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
+      before = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
       unitConfig = {
         DefaultDependencies = "no";
       };
@@ -137,14 +138,15 @@ let
         awkCmd = "${pkgs.gawk}/bin/awk";
         inherit cfgZfs;
       }) + ''
-        poolImported "${pool}" && exit
-        echo -n "importing ZFS pool \"${pool}\"..."
-        # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
-        for trial in `seq 1 60`; do
-          poolReady "${pool}" && poolImport "${pool}" && break
-          sleep 1
-        done
-        poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
+        if ! poolImported "${pool}"; then
+          echo -n "importing ZFS pool \"${pool}\"..."
+          # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
+          for trial in `seq 1 60`; do
+            poolReady "${pool}" && poolImport "${pool}" && break
+            sleep 1
+          done
+          poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
+        fi
         if poolImported "${pool}"; then
           ${optionalString keyLocations.hasKeys ''
             ${keyLocations.command} | while IFS=$'\t' read ds kl ks; do
@@ -159,7 +161,7 @@ let
                   tries=3
                   success=false
                   while [[ $success != true ]] && [[ $tries -gt 0 ]]; do
-                    ${systemd}/bin/systemd-ask-password "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
+                    ${systemd}/bin/systemd-ask-password --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
                       && success=true \
                       || tries=$((tries - 1))
                   done
@@ -310,6 +312,40 @@ in
           are requested. To only decrypt selected datasets supply a list of dataset
           names instead. For root pools the encryption key can be supplied via both
           an interactive prompt (keylocation=prompt) and from a file (keylocation=file://).
+        '';
+      };
+
+      passwordTimeout = mkOption {
+        type = types.int;
+        default = 0;
+        description = lib.mdDoc ''
+          Timeout in seconds to wait for password entry for decrypt at boot.
+
+          Defaults to 0, which waits forever.
+        '';
+      };
+
+      removeLinuxDRM = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Linux 6.2 dropped some kernel symbols required on aarch64 required by zfs.
+          Enabling this option will bring them back to allow this kernel version.
+          Note that in some jurisdictions this may be illegal as it might be considered
+          removing copyright protection from the code.
+          See https://www.ifross.org/?q=en/artikel/ongoing-dispute-over-value-exportsymbolgpl-function for further information.
+
+          If configure your kernel package with `zfs.latestCompatibleLinuxPackages`, you will need to also pass removeLinuxDRM to that package like this:
+
+          ```
+          { pkgs, ... }: {
+            boot.kernelPackages = (pkgs.zfs.override {
+              removeLinuxDRM = pkgs.hostPlatform.isAarch64;
+            }).latestCompatibleLinuxPackages;
+
+            boot.zfs.removeLinuxDRM = true;
+          }
+          ```
         '';
       };
     };
@@ -512,6 +548,15 @@ in
           assertion = cfgZfs.allowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
           message = "boot.zfs.allowHibernation while force importing is enabled will cause data corruption";
         }
+        {
+          assertion = !(elem "" allPools);
+          message = ''
+            Automatic pool detection found an empty pool name, which can't be used.
+            Hint: for `fileSystems` entries with `fsType = zfs`, the `device` attribute
+            should be a zfs dataset name, like `device = "pool/data/set"`.
+            This error can be triggered by using an absolute path, such as `"/dev/disk/..."`.
+          '';
+        }
       ];
 
       boot = {
@@ -521,11 +566,13 @@ in
         # https://github.com/NixOS/nixpkgs/issues/106093
         kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
-        extraModulePackages = [
-          (if config.boot.zfs.enableUnstable then
+        extraModulePackages = let
+          kernelPkg = if config.boot.zfs.enableUnstable then
             config.boot.kernelPackages.zfsUnstable
            else
-            config.boot.kernelPackages.zfs)
+            config.boot.kernelPackages.zfs;
+        in [
+          (kernelPkg.override { inherit (cfgZfs) removeLinuxDRM; })
         ];
       };
 
@@ -582,6 +629,8 @@ in
             force = cfgZfs.forceImportRoot;
             prefix = "/sysroot";
           }) rootPools);
+          targets.zfs-import.wantedBy = [ "zfs.target" ];
+          targets.zfs.wantedBy = [ "initrd.target" ];
           extraBin = {
             # zpool and zfs are already in thanks to fsPackages
             awk = "${pkgs.gawk}/bin/awk";
@@ -643,6 +692,21 @@ in
       services.udev.packages = [ cfgZfs.package ]; # to hook zvol naming, etc.
       systemd.packages = [ cfgZfs.package ];
 
+      # Export kernel_neon_* symbols again.
+      # This change is necessary until ZFS figures out a solution
+      # with upstream or in their build system to fill the gap for
+      # this symbol.
+      # In the meantime, we restore what was once a working piece of code
+      # in the kernel.
+      boot.kernelPatches = lib.optional (cfgZfs.removeLinuxDRM && pkgs.stdenv.hostPlatform.system == "aarch64-linux") {
+        name = "export-neon-symbols-as-gpl";
+        patch = pkgs.fetchpatch {
+          url = "https://github.com/torvalds/linux/commit/aaeca98456431a8d9382ecf48ac4843e252c07b3.patch";
+          hash = "sha256-L2g4G1tlWPIi/QRckMuHDcdWBcKpObSWSRTvbHRIwIk=";
+          revert = true;
+        };
+      };
+
       systemd.services = let
         createImportService' = pool: createImportService {
           inherit pool;
@@ -678,15 +742,7 @@ in
                       map createSyncService allPools ++
                       map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
-      systemd.targets.zfs-import =
-        let
-          services = map (pool: "zfs-import-${pool}.service") dataPools;
-        in
-          {
-            requires = services;
-            after = services;
-            wantedBy = [ "zfs.target" ];
-          };
+      systemd.targets.zfs-import.wantedBy = [ "zfs.target" ];
 
       systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })

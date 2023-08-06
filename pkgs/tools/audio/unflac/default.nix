@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "unflac";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromSourcehut {
     owner = "~ft";
     repo = pname;
     rev = version;
-    sha256 = "1vlwlm895mcvmxaxcid3vfji1zi9wjchz7divm096na4whj35cc4";
+    sha256 = "sha256-gDgmEEOvsudSYdLUodTuE50+2hZpMqlnaVGanv/rg+U=";
   };
 
-  vendorSha256 = "sha256-QqLjz1X4uVpxhYXb/xIBwuLUhRaqwz2GDUPjBTS4ut0=";
+  vendorSha256 = "sha256-X3cMhzaf1t+x7D8BVBfQy00rAACDEPmIOezIhKzqOZ8=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''

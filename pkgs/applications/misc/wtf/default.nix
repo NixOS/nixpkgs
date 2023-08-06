@@ -17,7 +17,8 @@ buildGoModule rec {
     sha256 = "sha256-DFrA4bx+wSOxmt1CVA1oNiYVmcWeW6wpfR5F1tnhyDY=";
   };
 
-  vendorHash = "sha256-f82ibPnauUOuZ5D6Rz3Yyt0jiAXvjN8Or3gud+ri6FA=";
+  vendorHash = "sha256-9uuLidieBMoKz/FLcBnp9wenyveOIzB0IvRBRasulZk=";
+  proxyVendor = true;
 
   doCheck = false;
 
@@ -40,6 +41,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ kalbasit ];
     mainProgram = "wtfutil";
     platforms = platforms.linux ++ platforms.darwin;
-    broken = stdenv.isDarwin;
   };
 }

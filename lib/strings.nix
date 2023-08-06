@@ -18,6 +18,7 @@ rec {
     elemAt
     filter
     fromJSON
+    genList
     head
     isInt
     isList
@@ -264,7 +265,8 @@ rec {
         lib.strings.hasPrefix: The first argument (${toString pref}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
             This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
+            This behavior is deprecated and will throw an error in the future.
+            You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
       (substring 0 (stringLength pref) str == pref);
 
   /* Determine whether a string has given suffix.
@@ -345,7 +347,7 @@ rec {
        => [ "�" "�" "�" "�" ]
   */
   stringToCharacters = s:
-    map (p: substring p 1 s) (lib.range 0 (stringLength s - 1));
+    genList (p: substring p 1 s) (stringLength s);
 
   /* Manipulate a string character by character and replace them by
      strings before concatenating the results.

@@ -16,6 +16,7 @@
 , chrome-trace
 , dune_3
 , csexp
+, result
 , pp
 , cmdliner
 , ordering
@@ -101,6 +102,7 @@ buildDunePackage rec {
       jsonrpc
       pp
       ppx_yojson_conv_lib
+      result
       uutf
     ] else [
       csexp

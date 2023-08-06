@@ -1,31 +1,39 @@
+GIT
+  remote: https://github.com/ytti/oxidized-script.git
+  revision: 988cded5d89f52e274afb545bd3e011e19d5d22d
+  ref: 988cded5d89f52e274afb545bd3e011e19d5d22d
+  specs:
+    oxidized-script (0.6.0)
+      oxidized (~> 0.28)
+      slop (~> 4.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    asetus (0.3.0)
-    backports (3.14.0)
-    charlock_holmes (0.7.6)
+    asetus (0.4.0)
+    backports (3.24.1)
+    bcrypt_pbkdf (1.1.0)
+    charlock_holmes (0.7.7)
+    ed25519 (1.3.0)
     emk-sinatra-url-for (0.2.1)
       sinatra (>= 0.9.1.1)
-    ffi (1.10.0)
-    git (1.5.0)
-    haml (5.0.4)
+    ffi (1.15.5)
+    haml (5.2.2)
       temple (>= 0.8.0)
       tilt
     htmlentities (4.3.4)
-    json (2.2.0)
-    multi_json (1.13.1)
-    net-ssh (5.2.0)
-    net-telnet (0.1.1)
-    oxidized (0.26.3)
+    json (2.6.3)
+    multi_json (1.15.0)
+    net-ssh (7.1.0)
+    net-telnet (0.2.0)
+    oxidized (0.29.1)
       asetus (~> 0.1)
-      git (~> 1)
-      net-ssh (~> 5)
-      net-telnet (~> 0.1.1)
-      rugged (~> 0.21, >= 0.21.4)
-      slop (~> 3.5)
-    oxidized-script (0.6.0)
-      oxidized (~> 0.25)
-      slop (~> 3.5)
+      bcrypt_pbkdf (~> 1.0)
+      ed25519 (~> 1.2)
+      net-ssh (~> 7.1)
+      net-telnet (~> 0.2)
+      rugged (~> 1.6)
+      slop (~> 4.6)
     oxidized-web (0.13.1)
       charlock_holmes (~> 0.7.5)
       emk-sinatra-url-for (~> 0.2)
@@ -38,16 +46,17 @@ GEM
       sass (~> 3.3)
       sinatra (~> 1.4, >= 1.4.6)
       sinatra-contrib (~> 1.4, >= 1.4.6)
+    psych (3.3.4)
     puma (3.11.4)
-    rack (1.6.11)
+    rack (1.6.13)
     rack-protection (1.5.5)
       rack
     rack-test (0.7.0)
       rack (>= 1.0, < 3)
-    rb-fsevent (0.10.3)
-    rb-inotify (0.10.0)
+    rb-fsevent (0.11.2)
+    rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rugged (0.28.1)
+    rugged (1.6.3)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -64,17 +73,18 @@ GEM
       rack-test
       sinatra (~> 1.4.0)
       tilt (>= 1.3, < 3)
-    slop (3.6.0)
-    temple (0.8.1)
-    tilt (2.0.9)
+    slop (4.10.1)
+    temple (0.10.1)
+    tilt (2.1.0)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
-  oxidized (= 0.26.3)
-  oxidized-script (= 0.6.0)
+  oxidized (= 0.29.1)
+  oxidized-script!
   oxidized-web (= 0.13.1)
+  psych (~> 3.3.2)
 
 BUNDLED WITH
-   2.1.4
+   2.3.26

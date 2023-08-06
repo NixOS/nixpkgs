@@ -6,8 +6,6 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.03";
 
-  duneVersion = "3";
-
   src = fetchFromGitHub {
     owner = "aantron";
     repo = pname;
@@ -17,7 +15,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ camlp-streams markup ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.04";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit2 ];
 
   meta = {

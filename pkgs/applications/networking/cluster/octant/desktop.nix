@@ -27,7 +27,7 @@ let
       export LC_ALL=C.UTF-8
     '';
 
-    multiPkgs = null; # no 32bit needed
+    multiArch = false; # no 32bit needed
     extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands =
       let appimageContents = appimageTools.extractType2 { inherit name src; }; in

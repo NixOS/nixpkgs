@@ -86,12 +86,12 @@ in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.6.12";
+    version = "1.6.14";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-rO8LCrdzYE1Nc5S2hRntt0+zD0aRIpSyi8J+DHtLTcI=";
+      hash = "sha256-0HDS8oriQA33/kpJ7OufRc1TmQaxB0gYVqCveo+oLck=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
@@ -103,6 +103,9 @@ in {
 
       ./nixbuild.patch
       # Load libraries at runtime by absolute path
+
+      ./extra-mangling.patch
+      # Mangle store paths of modules to prevent runtime dependence.
     ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
 
     configurePhase = ''
@@ -148,6 +151,7 @@ in {
       description = "Statically typed, imperative programming language";
       homepage = "https://nim-lang.org/";
       license = licenses.mit;
+      mainProgram = "nim";
       maintainers = with maintainers; [ ehmry ];
     };
   };
@@ -281,9 +285,6 @@ in {
 
         "--set NIM_CONFIG_PATH ${placeholder "out"}/etc/nim"
         # Use the custom configuration
-
-        ''--set NIX_HARDENING_ENABLE "''${NIX_HARDENING_ENABLE/fortify}"''
-        # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
       ];
 
       installPhase = ''

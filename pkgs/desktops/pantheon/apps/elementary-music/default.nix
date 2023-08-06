@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
-  version = "7.0.1";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "music";
     rev = version;
-    sha256 = "sha256-PttmC1Z3rX2XWCECc320HMs692hSBsxkmnh1Q8a/Mg8=";
+    sha256 = "sha256-L+E5gDtIgVkfmOIhzS7x8vtyMJYqx/UQpYMChrt2Tgo=";
   };
 
   nativeBuildInputs = [

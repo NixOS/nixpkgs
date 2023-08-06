@@ -238,9 +238,12 @@ in {
           path = [ cfg.package ]
             ++ optional cfg.database.postgres.setup config.services.postgresql.package;
           script = ''
-            export CONFIG_DIR=$CREDENTIALS_DIRECTORY
-
             export RELEASE_COOKIE="$(< $CREDENTIALS_DIRECTORY/RELEASE_COOKIE )"
+            export ADMIN_USER_PWD="$(< $CREDENTIALS_DIRECTORY/ADMIN_USER_PWD )"
+            export SECRET_KEY_BASE="$(< $CREDENTIALS_DIRECTORY/SECRET_KEY_BASE )"
+
+            ${lib.optionalString (cfg.mail.smtp.passwordFile != null)
+              ''export SMTP_USER_PWD="$(< $CREDENTIALS_DIRECTORY/SMTP_USER_PWD )"''}
 
             # setup
             ${cfg.package}/createdb.sh

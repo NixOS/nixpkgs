@@ -82,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "ROCm LAPACK implementation";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocSOLVER";

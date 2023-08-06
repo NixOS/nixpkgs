@@ -57,8 +57,8 @@
 
   # GCC
   gcc = [
-    "https://bigsearcher.com/mirrors/gcc/"
     "https://mirror.koddos.net/gcc/"
+    "https://bigsearcher.com/mirrors/gcc/"
     "ftp://ftp.nluug.nl/mirror/languages/gcc/"
     "ftp://ftp.fu-berlin.de/unix/languages/gcc/"
     "ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/"
@@ -175,12 +175,6 @@
     "https://download.qt.io/"
   ];
 
-  # Roy marples mirrors
-  roy = [
-    "https://roy.marples.name/downloads/"
-    "https://cflags.cc/roy/"
-  ];
-
   # Sage mirrors (https://www.sagemath.org/mirrors.html)
   sageupstream = [
     # Africa (HTTPS)
@@ -269,7 +263,6 @@
     "https://versaweb.dl.sourceforge.net/sourceforge/"
     "https://freefr.dl.sourceforge.net/sourceforge/"
     "https://osdn.dl.sourceforge.net/sourceforge/"
-    "https://kent.dl.sourceforge.net/sourceforge/"
   ];
 
   # Steam Runtime

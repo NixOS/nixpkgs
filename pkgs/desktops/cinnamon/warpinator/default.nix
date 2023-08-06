@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-H8bFSgx3IysHCoKrMZ9gbwRl9forEjY90a/PIC68E6k=";
+    hash = "sha256-BKptTQbSBTQyc5V6WWdsPdC76sH0CFMXOyahfRmvQzc=";
   };
 
   nativeBuildInputs = [
@@ -77,11 +77,6 @@ stdenv.mkDerivation rec {
       --replace '"/bin/python3"' '"${pythonEnv.interpreter}"' \
       --replace "/bin/bwrap" "${bubblewrap}/bin/bwrap" \
       --replace 'GLib.find_program_in_path("bwrap")' "True"
-
-    # Typo fix that can be removed on next update
-    # https://github.com/linuxmint/warpinator/pull/174
-    substituteInPlace src/remote.py \
-      --replace "receiver.remaining_count" "op.remaining_count"
   '';
 
   passthru.updateScript = gitUpdater {

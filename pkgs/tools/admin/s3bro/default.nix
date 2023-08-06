@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -7,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "2.8";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-+OqcLbXilbY4h/zRAkvRd8taVIOPyiScOAcDyPZ4RUw=";
   };

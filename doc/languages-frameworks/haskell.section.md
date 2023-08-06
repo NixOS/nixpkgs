@@ -23,7 +23,7 @@ installing and using them.
 
 All of these packages are originally defined in the `haskellPackages` package
 set and are re-exposed with a reduced dependency closure for convenience.
-(see `justStaticExecutables` below)
+(see `justStaticExecutables` or `separateBinOutput` below)
 
 The `haskellPackages` set includes at least one version of every package from
 Hackage as well as some manually injected packages. This amounts to a lot of
@@ -45,16 +45,17 @@ The attribute names in `haskellPackages` always correspond with their name on
 Hackage. Since Hackage allows names that are not valid Nix without escaping,
 you need to take care when handling attribute names like `3dmodels`.
 
-For packages that are part of [Stackage], we use the version prescribed by a
-Stackage solver (usually the current LTS one) as the default version. For all
-other packages we use the latest version from Hackage. See
-[below](#haskell-available-versions) to learn which versions are provided
-exactly.
+For packages that are part of [Stackage] (a curated set of known to be
+compatible packages), we use the version prescribed by a Stackage snapshot
+(usually the current LTS one) as the default version. For all other packages we
+use the latest version from [Hackage](https://hackage.org) (the repository of
+basically all open source Haskell packages). See [below](#haskell-available-
+versions) for a few more details on this.
 
-Roughly half of the 16K packages contained in `haskellPackages` don't actually
-build and are marked as broken semi-automatically. Most of those packages are
-deprecated or unmaintained, but sometimes packages that should build, do not
-build. Very often fixing them is not a lot of work.
+Roughly half of the 16K packages contained in `haskellPackages` don’t actually
+build and are [marked as broken semi-automatically](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml).
+Most of those packages are deprecated or unmaintained, but sometimes packages
+that should build, do not build. Very often fixing them is not a lot of work.
 
 <!--
 TODO(@sternenseemann):
@@ -126,19 +127,23 @@ Every package set also re-exposes the GHC used to build its packages as `haskell
 ### Available package versions {#haskell-available-versions}
 
 We aim for a “blessed” package set which only contains one version of each
-package, like Stackage (and based on it) but with more packages. Normally in
-nixpkgs the number of building Haskell packages is roughly two to three times
-the size of Stackage. For choosing the version to use for a certain package we
-use the following rules:
+package, like [Stackage], which is a curated set of known to be compatible
+packages. We use the version information from Stackage snapshots and extend it
+with more packages. Normally in Nixpkgs the number of building Haskell packages
+is roughly two to three times the size of Stackage. For choosing the version to
+use for a certain package we use the following rules:
 
-1. By default, for every package `haskellPackages.foo` is the newest version
-found on Hackage (at the time of the last update of our package set).
-2. If the Stackage snapshot that we use (usually the newest LTS snapshot)
-contains a package, we use the Stackage version as default version for that
-package.
-3. For some packages, which are not on Stackage, we have manual overrides to
-set the default version to a version older than the newest on Hackage. We do
-this to get them or their reverse dependencies to compile in our package set.
+1. By default, for `haskellPackages.foo` is the newest version of the package
+`foo` found on [Hackage](https://hackage.org), which is the central registry
+of all open source Haskell packages. Nixpkgs contains a reference to a pinned
+Hackage snapshot, thus we use the state of Hackage as of the last time we
+updated this pin.
+2. If the [Stackage] snapshot that we use (usually the newest LTS snapshot)
+contains a package, [we use instead the version in the Stackage snapshot as
+default version for that package.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/stackage.yaml)
+3. For some packages, which are not on Stackage, we have if necessary [manual
+overrides to set the default version to a version older than the newest on
+Hackage.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml)
 4. For all packages, for which the newest Hackage version is not the default
 version, there will also be a `haskellPackages.foo_x_y_z` package with the
 newest version. The `x_y_z` part encodes the version with dots replaced by
@@ -146,9 +151,12 @@ underscores. When the newest version changes by a new release to Hackage the
 old package will disappear under that name and be replaced by a newer one under
 the name with the new version. The package name including the version will
 also disappear when the default version e.g. from Stackage catches up with the
-newest version from Hackage.
-5. For some packages, we also manually add other `haskellPackages.foo_x_y_z`
-versions, if they are required for a certain build.
+newest version from Hackage. E.g. if `haskellPackages.foo` gets updated from
+1.0.0 to 1.1.0 the package `haskellPackages.foo_1_1_0` becomes obsolete and
+gets dropped.
+5. For some packages, we also [manually add other `haskellPackages.foo_x_y_z`
+versions](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml),
+if they are required for a certain build.
 
 Relying on `haskellPackages.foo_x_y_z` attributes in derivations outside
 nixpkgs is discouraged because they may change or disappear with every package
@@ -276,6 +284,15 @@ Defaults to `true`.
 : Whether to generate an index for interactive navigation of the HTML documentation.
 Defaults to `true` if supported.
 
+`doInstallIntermediates`
+: Whether to install intermediate build products (files written to `dist/build`
+by GHC during the build process). With `enableSeparateIntermediatesOutput`,
+these files are instead installed to [a separate `intermediates`
+output.][multiple-outputs] The output can then be passed into a future build of
+the same package with the `previousIntermediates` argument to support
+incremental builds. See [“Incremental builds”](#haskell-incremental-builds) for
+more information. Defaults to `false`.
+
 `enableLibraryProfiling`
 : Whether to enable [profiling][profiling] for libraries contained in the
 package. Enabled by default if supported.
@@ -371,6 +388,12 @@ Defaults to `false`.
 : Whether to install documentation to a separate `doc` output.
 Is automatically enabled if `doHaddock` is `true`.
 
+`enableSeparateIntermediatesOutput`
+: When `doInstallIntermediates` is true, whether to install intermediate build
+products to a separate `intermediates` output. See [“Incremental
+builds”](#haskell-incremental-builds) for more information. Defaults to
+`false`.
+
 `allowInconsistentDependencies`
 : If enabled, allow multiple versions of the same Haskell package in the
 dependency tree at configure time. Often in such a situation compilation would
@@ -380,6 +403,11 @@ later fail because of type mismatches. Defaults to `false`.
 : Build and install a special object file for GHCi. This improves performance
 when loading the library in the REPL, but requires extra build time and
 disk space. Defaults to `false`.
+
+`previousIntermediates`
+: If non-null, intermediate build artifacts are copied from this input to
+`dist/build` before performing compiling. See [“Incremental
+builds”](#haskell-incremental-builds) for more information. Defaults to `null`.
 
 `buildTarget`
 : Name of the executable or library to build and install.
@@ -495,6 +523,54 @@ the [Meta-attributes section](#chap-meta) for their documentation.
     * `maintainers`
     * `broken`
     * `hydraPlatforms`
+
+### Incremental builds {#haskell-incremental-builds}
+
+`haskellPackages.mkDerivation` supports incremental builds for GHC 9.4 and
+newer with the `doInstallIntermediates`, `enableSeparateIntermediatesOutput`,
+and `previousIntermediates` arguments.
+
+The basic idea is to first perform a full build of the package in question,
+save its intermediate build products for later, and then copy those build
+products into the build directory of an incremental build performed later.
+Then, GHC will use those build artifacts to avoid recompiling unchanged
+modules.
+
+For more detail on how to store and use incremental build products, see
+[Gabriella Gonzalez’ blog post “Nixpkgs support for incremental Haskell
+builds”.][incremental-builds] motivation behind this feature.
+
+An incremental build for [the `turtle` package][turtle] can be performed like
+so:
+
+```nix
+let
+  pkgs = import <nixpkgs> {};
+  inherit (pkgs) haskell;
+  inherit (haskell.lib.compose) overrideCabal;
+
+  # Incremental builds work with GHC >=9.4.
+  turtle = haskell.packages.ghc944.turtle;
+
+  # This will do a full build of `turtle`, while writing the intermediate build products
+  # (compiled modules, etc.) to the `intermediates` output.
+  turtle-full-build-with-incremental-output = overrideCabal (drv: {
+    doInstallIntermediates = true;
+    enableSeparateIntermediatesOutput = true;
+  }) turtle;
+
+  # This will do an incremental build of `turtle` by copying the previously
+  # compiled modules and intermediate build products into the source tree
+  # before running the build.
+  #
+  # GHC will then naturally pick up and reuse these products, making this build
+  # complete much more quickly than the previous one.
+  turtle-incremental-build = overrideCabal (drv: {
+    previousIntermediates = turtle-full-build-with-incremental-output.intermediates;
+  }) turtle;
+in
+  turtle-incremental-build
+```
 
 ## Development environments {#haskell-development-environments}
 
@@ -989,7 +1065,7 @@ benchmark component.
 `dontBenchmark drv`
 : Set `doBenchmark` to `false` for `drv`.
 
-`setBuildTargets list drv`
+`setBuildTargets drv list`
 : Sets the `buildTarget` argument for `drv` so that the targets specified in `list` are built.
 
 `doCoverage drv`
@@ -997,6 +1073,18 @@ benchmark component.
 
 `dontCoverage drv`
 : Sets the `doCoverage` argument to `false` for `drv`.
+
+`enableExecutableProfiling drv`
+: Sets the `enableExecutableProfiling` argument to `true` for `drv`.
+
+`disableExecutableProfiling drv`
+: Sets the `enableExecutableProfiling` argument to `false` for `drv`.
+
+`enableLibraryProfiling drv`
+: Sets the `enableLibraryProfiling` argument to `true` for `drv`.
+
+`disableLibraryProfiling drv`
+: Sets the `enableLibraryProfiling` argument to `false` for `drv`.
 
 #### Library functions in the Haskell package sets {#haskell-package-set-lib-functions}
 
@@ -1072,6 +1160,124 @@ covered in the old [haskell4nix docs](https://haskell4nix.readthedocs.io/).
 If you feel any important topic is not documented at all, feel free to comment
 on the issue linked above.
 
+### How to enable or disable profiling builds globally? {#haskell-faq-override-profiling}
+
+By default, Nixpkgs builds a profiling version of each Haskell library. The
+exception to this rule are some platforms where it is disabled due to concerns
+over output size. You may want to…
+
+* …enable profiling globally so that you can build a project you are working on
+  with profiling ability giving you insight in the time spent across your code
+  and code you depend on using [GHC's profiling feature][profiling].
+
+* …disable profiling (globally) to reduce the time spent building the profiling
+  versions of libraries which a significant amount of build time is spent on
+  (although they are not as expensive as the “normal” build of a Haskell library).
+
+::: {.note}
+The method described below affects the build of all libraries in the
+respective Haskell package set as well as GHC. If your choices differ from
+Nixpkgs' default for your (host) platform, you will lose the ability to
+substitute from the official binary cache.
+
+If you are concerned about build times and thus want to disable profiling, it
+probably makes sense to use `haskell.lib.compose.disableLibraryProfiling` (see
+[](#haskell-trivial-helpers)) on the packages you are building locally while
+continuing to substitute their dependencies and GHC.
+:::
+
+Since we need to change the profiling settings for the desired Haskell package
+set _and_ GHC (as the core libraries like `base`, `filepath` etc. are bundled
+with GHC), it is recommended to use overlays for Nixpkgs to change them.
+Since the interrelated parts, i.e. the package set and GHC, are connected
+via the Nixpkgs fixpoint, we need to modify them both in a way that preserves
+their connection (or else we'd have to wire it up again manually). This is
+achieved by changing GHC and the package set in seperate overlays to prevent
+the package set from pulling in GHC from `prev`.
+
+The result is two overlays like the ones shown below. Adjustable parts are
+annotated with comments, as are any optional or alternative ways to achieve
+the desired profiling settings without causing too many rebuilds.
+
+<!-- TODO(@sternenseemann): buildHaskellPackages != haskellPackages with this overlay,
+affected by https://github.com/NixOS/nixpkgs/issues/235960 which needs to be fixed
+properly still.
+-->
+
+```nix
+let
+  # Name of the compiler and package set you want to change. If you are using
+  # the default package set `haskellPackages`, you need to look up what version
+  # of GHC it currently uses (note that this is subject to change).
+  ghcName = "ghc92";
+  # Desired new setting
+  enableProfiling = true;
+in
+
+[
+  # The first overlay modifies the GHC derivation so that it does or does not
+  # build profiling versions of the core libraries bundled with it. It is
+  # recommended to only use such an overlay if you are enabling profiling on a
+  # platform that doesn't by default, because compiling GHC from scratch is
+  # quite expensive.
+  (final: prev:
+  let
+    inherit (final) lib;
+  in
+
+  {
+    haskell = lib.recursiveUpdate prev.haskell {
+      compiler.${ghcName} = prev.haskell.compiler.${ghcName}.override {
+        # Unfortunately, the GHC setting is named differently for historical reasons
+        enableProfiledLibs = enableProfiling;
+      };
+    };
+  })
+
+  (final: prev:
+  let
+    inherit (final) lib;
+    haskellLib = final.haskell.lib.compose;
+  in
+
+  {
+    haskell = lib.recursiveUpdate prev.haskell {
+      packages.${ghcName} = prev.haskell.packages.${ghcName}.override {
+        overrides = hfinal: hprev: {
+          mkDerivation = args: hprev.mkDerivation (args // {
+            # Since we are forcing our ideas upon mkDerivation, this change will
+            # affect every package in the package set.
+            enableLibraryProfiling = enableProfiling;
+
+            # To actually use profiling on an executable, executable profiling
+            # needs to be enabled for the executable you want to profile. You
+            # can either do this globally or…
+            enableExecutableProfiling = enableProfiling;
+          });
+
+          # …only for the package that contains an executable you want to profile.
+          # That saves on unnecessary rebuilds for packages that you only depend
+          # on for their library, but also contain executables (e.g. pandoc).
+          my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
+
+          # If you are disabling profiling to save on build time, but want to
+          # retain the ability to substitute from the binary cache. Drop the
+          # override for mkDerivation above and instead have an override like
+          # this for the specific packages you are building locally and want
+          # to make cheaper to build.
+          my-library = haskellLib.disableLibraryProfiling hprev.my-library;
+        };
+      };
+    };
+  })
+]
+```
+
+<!-- TODO(@sternenseemann): write overriding mkDerivation, overriding GHC, and
+overriding the entire package set sections and link to them from here where
+relevant.
+-->
+
 [Stackage]: https://www.stackage.org
 [cabal-project-files]: https://cabal.readthedocs.io/en/latest/cabal-project.html
 [cabal2nix]: https://github.com/nixos/cabal2nix
@@ -1083,8 +1289,11 @@ on the issue linked above.
 [haskell.nix]: https://input-output-hk.github.io/haskell.nix/index.html
 [HLS user guide]: https://haskell-language-server.readthedocs.io/en/latest/configuration.html#configuring-your-editor
 [hoogle]: https://wiki.haskell.org/Hoogle
+[incremental-builds]: https://www.haskellforall.com/2022/12/nixpkgs-support-for-incremental-haskell.html
 [jailbreak-cabal]: https://github.com/NixOS/jailbreak-cabal/
+[multiple-outputs]: https://nixos.org/manual/nixpkgs/stable/#chap-multiple-output
 [optparse-applicative-completions]: https://github.com/pcapriotti/optparse-applicative/blob/7726b63796aa5d0df82e926d467f039b78ca09e2/README.md#bash-zsh-and-fish-completions
 [profiling-detail]: https://cabal.readthedocs.io/en/latest/cabal-project.html#cfg-field-profiling-detail
 [profiling]: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html
 [search.nixos.org]: https://search.nixos.org
+[turtle]: https://hackage.haskell.org/package/turtle

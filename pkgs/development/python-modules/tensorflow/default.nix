@@ -17,7 +17,8 @@
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
-, cudaSupport ? false
+, config
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
 , mklSupport ? false, mkl
@@ -394,11 +395,11 @@ let
     fetchAttrs = {
       sha256 = {
       x86_64-linux = if cudaSupport
-        then "sha256-rcTPOMoBfmKFuuCanMlhmtFtOQzOICfEXTZey/rQEdM="
-        else "sha256-JGLH64F81xwSUl9RCWJhBLNRBQandImsVafEF5s+ap0=";
-      aarch64-linux = "sha256-g6JUZQQalCTSjvAarkI7+gq13cPhFg/O9LPQDGNvrII=";
-      x86_64-darwin = "sha256-7O0zPs+damAjWXZn5C5SSWBp35C8QX3y4kCM7tYkM7s=";
-      aarch64-darwin = "sha256-US7uunEBDo2NKI9UHvgThbQ7rA05HjQlUthw0gIINaI=";
+        then "sha256-lURiR0Ra4kynDXyfuONG+A7CpxnAsfKzIdFTExKzp1o="
+        else "sha256-lDvRgj+UlaneRGZOO9UVCb6uyxcbRJfUhABf/sgKPi0=";
+      aarch64-linux = "sha256-z2d45fqHz5HW+qkv3fR9hMg3sEwUzJfxF54vng85bHk=";
+      x86_64-darwin = "sha256-AAvuz8o6ZRkaSYMgaep74lDDQcxOupDCX4vRaK/jnCU=";
+      aarch64-darwin = "sha256-kexRSvfQqb92ZRuUqAO070RnUUBidAqghiA7Y8do9vc=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
@@ -447,7 +448,7 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
-      broken = !(xlaSupport -> cudaSupport);
+      broken = !(xlaSupport -> cudaSupport) || python.pythonVersion == "3.11";
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s

@@ -81,9 +81,10 @@ rec {
    */
   toKeyValue = {
     mkKeyValue ? mkKeyValueDefault {} "=",
-    listsAsDuplicateKeys ? false
+    listsAsDuplicateKeys ? false,
+    indent ? ""
   }:
-  let mkLine = k: v: mkKeyValue k v + "\n";
+  let mkLine = k: v: indent + mkKeyValue k v + "\n";
       mkLines = if listsAsDuplicateKeys
         then k: v: map (mkLine k) (if lib.isList v then v else [v])
         else k: v: [ (mkLine k v) ];
@@ -168,7 +169,7 @@ rec {
     mkKeyValue    ? mkKeyValueDefault {} "=",
     # allow lists as values for duplicate keys
     listsAsDuplicateKeys ? false
-  }: { globalSection, sections }:
+  }: { globalSection, sections ? {} }:
     ( if globalSection == {}
       then ""
       else (toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } globalSection)
@@ -431,7 +432,7 @@ ${expr "" v}
 
   /*
    Translate a simple Nix expression to Lua representation with occasional
-   Lua-inlines that can be construted by mkLuaInline function.
+   Lua-inlines that can be constructed by mkLuaInline function.
 
    Configuration:
      * multiline - by default is true which results in indented block-like view.

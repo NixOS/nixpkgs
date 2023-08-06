@@ -2,10 +2,11 @@
 , stdenv
 , hostPlatform
 , engineVersion
+, fetchurl
 , fetchzip
 , autoPatchelfHook
-
 , gtk3
+, unzip
 }:
 
 let
@@ -30,7 +31,7 @@ let
                 variants = lib.genAttrs [ "profile" "release" ]
                   (variant: [
                     { archive = "artifacts.zip"; }
-                    { archive = "${lib.toLower hostPlatform.uname.system}-x64.zip"; }
+                    { subdirectory = true; archive = "${lib.toLower hostPlatform.uname.system}-x64.zip"; }
                   ]);
               })) //
           {
@@ -44,6 +45,56 @@ let
             };
           };
 
+        darwin = {
+          "arm64" = {
+            base = [
+              { archive = "artifacts.zip"; }
+              { archive = "font-subset.zip"; }
+            ];
+            variants = lib.genAttrs [ "profile" "release" ]
+              (variant: [
+                { archive = "artifacts.zip"; }
+              ]);
+          };
+          "x64" = {
+            base = [
+              { archive = "FlutterEmbedder.framework.zip"; }
+              { archive = "FlutterMacOS.framework.zip"; }
+              { archive = "artifacts.zip"; }
+              { archive = "font-subset.zip"; }
+              { archive = "gen_snapshot.zip"; }
+            ];
+            variants.profile = [
+              { archive = "FlutterMacOS.framework.zip"; }
+              { archive = "artifacts.zip"; }
+              { archive = "gen_snapshot.zip"; }
+            ];
+            variants.release = [
+              { archive = "FlutterMacOS.dSYM.zip"; }
+              { archive = "FlutterMacOS.framework.zip"; }
+              { archive = "artifacts.zip"; }
+              { archive = "gen_snapshot.zip"; }
+            ];
+          };
+        };
+
+        ios =
+          (lib.genAttrs
+            [ "" ]
+            (arch:
+              {
+                base = [
+                  { archive = "artifacts.zip"; }
+                ];
+                variants.profile = [
+                  { archive = "artifacts.zip"; }
+                ];
+                variants.release = [
+                  { archive = "artifacts.zip"; }
+                  { archive = "Flutter.dSYM.zip"; }
+                ];
+              }));
+
         linux = lib.genAttrs
           [ "arm64" "x64" ]
           (arch:
@@ -56,22 +107,23 @@ let
             {
               base = [
                 ({ archive = "artifacts.zip"; } // lib.optionalAttrs (arch == "arm64") {
-                  # For some reason, the arm64 artifacts are missing shader code.
+                  # For some reason, the arm64 artifacts are missing shader code in Flutter < 3.10.0.
                   postPatch = ''
-                    if [ -d shader_lib ]; then
-                      The shader_lib directory has been included in the artifact archive.
-                      This patch should be removed.
+                    if [ ! -d shader_lib ]; then
+                      ln -s ${lib.findSingle
+                        (pkg: lib.getName pkg == "flutter-artifact-linux-x64-artifacts")
+                        (throw "Could not find the x64 artifact archive.")
+                        (throw "Could not find the correct x64 artifact archive.")
+                        artifactDerivations.platform.linux.x64.base
+                      }/shader_lib .
                     fi
-                    ln -s ${lib.findSingle
-                      (pkg: lib.getName pkg == "flutter-artifact-linux-x64-artifacts")
-                      (throw "Could not find the x64 artifact archive.")
-                      (throw "Could not find the correct x64 artifact archive.")
-                      artifactDerivations.platform.linux.x64.base
-                    }/shader_lib .
                   '';
                 })
                 { archive = "font-subset.zip"; }
-                linux-flutter-gtk
+                (linux-flutter-gtk // {
+                  # https://github.com/flutter/flutter/commit/9d94a51b607600a39c14470c35c676eb3e30eed6
+                  variant = "debug";
+                })
               ];
               variants = lib.genAttrs [ "debug" "profile" "release" ] (variant: [
                 linux-flutter-gtk
@@ -80,24 +132,42 @@ let
       };
     };
 
-  mkArtifactDerivation = { platform ? null, variant ? null, archive, ... }@args:
+  mkArtifactDerivation = { platform ? null, variant ? null, subdirectory ? null, archive, ... }@args:
     let
       artifactDirectory = if platform == null then null else "${platform}${lib.optionalString (variant != null) "-${variant}"}";
       archiveBasename = lib.removeSuffix ".${(lib.last (lib.splitString "." archive))}" archive;
+      overrideUnpackCmd = builtins.elem archive [ "FlutterEmbedder.framework.zip" "FlutterMacOS.framework.zip" ];
     in
     stdenv.mkDerivation ({
       pname = "flutter-artifact${lib.optionalString (platform != null) "-${artifactDirectory}"}-${archiveBasename}";
       version = engineVersion;
 
-      src = fetchzip {
-        url = "https://storage.googleapis.com/flutter_infra_release/flutter/${engineVersion}${lib.optionalString (platform != null) "/${artifactDirectory}"}/${archive}";
-        stripRoot = false;
-        hash = (if artifactDirectory == null then hashes else hashes.${artifactDirectory}).${archive};
-      };
+      nativeBuildInputs = [ unzip ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-      nativeBuildInputs = [ autoPatchelfHook ];
+      src =
+        if overrideUnpackCmd then
+          (fetchurl {
+            url = "https://storage.googleapis.com/flutter_infra_release/flutter/${engineVersion}${lib.optionalString (platform != null) "/${artifactDirectory}"}/${archive}";
+            hash = (if artifactDirectory == null then hashes else hashes.${artifactDirectory}).${archive};
+          }) else
+          (fetchzip {
+            url = "https://storage.googleapis.com/flutter_infra_release/flutter/${engineVersion}${lib.optionalString (platform != null) "/${artifactDirectory}"}/${archive}";
+            stripRoot = false;
+            hash = (if artifactDirectory == null then hashes else hashes.${artifactDirectory}).${archive};
+          });
 
-      installPhase = "cp -r . $out";
+      setSourceRoot = if overrideUnpackCmd then "sourceRoot=`pwd`" else null;
+      unpackCmd = if overrideUnpackCmd then "unzip -o $src -d $out" else null;
+
+      installPhase =
+        let
+          destination = "$out/${if subdirectory == true then archiveBasename else if subdirectory != null then subdirectory else "."}";
+        in
+        ''
+          mkdir -p "${destination}"
+          cp -r . "${destination}"
+        '';
     } // args);
 
   artifactDerivations = {
@@ -109,13 +179,13 @@ let
             (architecture: variants: {
               base = map
                 (args: mkArtifactDerivation ({
-                  platform = "${os}-${architecture}";
+                  platform = "${os}${lib.optionalString (architecture != "") "-${architecture}"}";
                 } // args))
                 variants.base;
               variants = builtins.mapAttrs
                 (variant: variantArtifacts: map
                   (args: mkArtifactDerivation ({
-                    platform = "${os}-${architecture}";
+                    platform = "${os}${lib.optionalString (architecture != "") "-${architecture}"}";
                     inherit variant;
                   } // args))
                   variantArtifacts)

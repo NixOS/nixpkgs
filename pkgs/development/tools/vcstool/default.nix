@@ -1,4 +1,4 @@
-{ lib, python3Packages
+{ lib, python3Packages, fetchPypi
 , git, breezy, subversion }:
 
 with python3Packages;

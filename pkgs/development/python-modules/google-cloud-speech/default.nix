@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "2.19.0";
+  version = "2.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+k5exHjJt9bSdbeVWgTWx+IaYlJ55JrTV0wofoVWCpU=";
+    hash = "sha256-Zhw5u7bysha6VqzjsIcmDpd43Rmt6e+jcAre6SWACa0=";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-speech";
     changelog = "https://github.com/googleapis/python-speech/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

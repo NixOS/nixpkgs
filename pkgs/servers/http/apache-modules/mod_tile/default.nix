@@ -50,16 +50,16 @@ stdenv.mkDerivation rec {
   ];
 
   # the install script wants to install mod_tile.so into apache's modules dir
+  # also mapnik pkg-config config is missing this patch: https://github.com/mapnik/mapnik/commit/692c2faa0ef168a8c908d262c2bbfe51a74a8336.patch
   postPatch = ''
     sed -i "s|\''${HTTPD_MODULES_DIR}|$out/modules|" CMakeLists.txt
+    sed -i -e "s|@MAPNIK_FONTS_DIR@|$(mapnik-config --fonts)|" -e "s|@MAPNIK_PLUGINS_DIR@|$(mapnik-config --input-plugins)|" tests/renderd.conf.in
   '';
 
   enableParallelBuilding = true;
 
-  # We need to either disable the `render_speedtest` and `download_tile` tests
-  # or fix the URLs they try to download from
-  #cmakeFlags = [ "-DENABLE_TESTS=1" ];
-  #doCheck = true;
+  cmakeFlags = [ "-DENABLE_TESTS=1" ];
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/openstreetmap/mod_tile";

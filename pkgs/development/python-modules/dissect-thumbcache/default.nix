@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
-  version = "1.3";
+  version = "1.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.thumbcache";
     rev = "refs/tags/${version}";
-    hash = "sha256-HO2s9AxDRmL4TNRYCdkYpWry3i4GNR0K9i5D2Pz3mVQ=";
+    hash = "sha256-xWwmkvBKKVCISL5RKzPkdPGo/ganNydymp4FaE9Mr7w=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

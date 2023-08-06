@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "drms";
-  version = "0.6.3";
+  version = "0.6.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-crPVo7ALErZWvNcsaJ/BuBa0VkfCsZ+C929x4kEZHKw=";
+    hash = "sha256-fH290QRhhglkhkMrpwHUkqVuYvZ6w/MDIYo9V0queVY=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Access HMI, AIA and MDI data with Python";
     homepage = "https://github.com/sunpy/drms";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

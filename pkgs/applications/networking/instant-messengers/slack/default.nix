@@ -45,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.29.149";
-  x86_64-darwin-sha256 = "sha256-E0YnOPnaWFe17gCpFywxu5uHs1pEktA1tUu4QqvKhYw=";
+  x86_64-darwin-version = "4.33.73";
+  x86_64-darwin-sha256 = "0y8plkl3pm8250xpavc91kn5b9gcdwr7bqzd3i79n48395lx11ka";
 
-  x86_64-linux-version = "4.29.149";
-  x86_64-linux-sha256 = "sha256-ulXIGLp2ql47ZS6IeaMuqye39deDtukOB1dxy5BNCwI=";
+  x86_64-linux-version = "4.33.73";
+  x86_64-linux-sha256 = "007i8sjnm1ikjxvgw6nisj4nmv99bwk0r4sfpvc2j4w4wk68sx3m";
 
-  aarch64-darwin-version = "4.29.149";
-  aarch64-darwin-sha256 = "sha256-Nn+dFD3H/By+aBPLDxnPneNXuFl+tHdLhxJXeYBMORg=";
+  aarch64-darwin-version = "4.33.73";
+  aarch64-darwin-sha256 = "15s3ss15yawb04dyzn82xmk1gs70sg2i3agsj2aw0xdx73yjl34p";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -85,6 +85,7 @@ let
     license = licenses.unfree;
     maintainers = with maintainers; [ mmahut maxeaubrey ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
+    mainProgram = "slack";
   };
 
   linux = stdenv.mkDerivation rec {

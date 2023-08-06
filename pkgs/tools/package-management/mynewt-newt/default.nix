@@ -33,6 +33,5 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ pjones ];
-    platforms = platforms.unix;
   };
 }

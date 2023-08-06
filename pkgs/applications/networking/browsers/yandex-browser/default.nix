@@ -51,11 +51,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yandex-browser";
-  version = "23.3.1.906-1";
+  version = "23.5.4.682-1";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-browser/deb/pool/main/y/${pname}-beta/${pname}-beta_${version}_amd64.deb";
-    sha256 = "sha256-hQwAHtPUcGSDKD7SmWa8H1f/T4Imu9061tIvenw0KWQ=";
+    sha256 = "sha256-ZhPX4K9huCO2uyjfUsWEkaspdvUurB7jNfUMqqIFO4U=";
   };
 
   nativeBuildInputs = [
@@ -136,12 +136,5 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ dan4ik605743 ionutnechita ];
     platforms = [ "x86_64-linux" ];
-
-    knownVulnerabilities = [
-      ''
-      Trusts a Russian government issued CA certificate for some websites.
-      See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
-      ''
-    ];
   };
 }

@@ -1,27 +1,38 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , nixosTests
 }:
 
 buildGoModule rec {
   pname = "mattermost";
-  version = "7.8.3";
+  version = "7.10.3";
 
   src = fetchFromGitHub {
     owner = "mattermost";
-    repo = "mattermost-server";
+    repo = "mattermost";
     rev = "v${version}";
-    hash = "sha256-MJAYKBMQEf82YkDOpLHnL7Jxlz6i0K0B8E99pRxGHgc=";
+    hash = "sha256-nzQUkcCFEZYvqMLRv1d81pfoz/MDYjWetGLtFXf8H/Q=";
   };
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    hash = "sha256-4VOEDrCKZI5HR5U2m49Dfbs5Mc+i8l4N41jIy8+5D1k=";
+    hash = "sha256-oD67sTyTvB0DVcw3e6x79Y4K8xlX75YreRwnc9olTy4=";
   };
 
-  vendorHash = "sha256-VvGLYOESyoBpFmIibHWxazliHcscMxf3KcQ46NQ4syk=";
+  vendorHash = "sha256-7YxbBmkKeb20a3BNllB3RtvjAJLZzoC2OBK4l1Ud1bw=";
+
+  patches = [
+    (fetchpatch {
+      # Current version was set to 7.10.4 in the v7.10.3 tag, reverting it so `mattermost version` exposes the correct version
+      # and to make smoke tests happy
+      url = "https://github.com/mattermost/mattermost/commit/fbdadeacc85ae47145f69ffb766d4105aede69d5.patch";
+      hash = "sha256-9BNEc5VefRuPKb3/rQNiekNbAIBRsjAtdCKUVrh9BuY=";
+      revert = true;
+    })
+  ];
 
   subPackages = [ "cmd/mattermost" ];
 

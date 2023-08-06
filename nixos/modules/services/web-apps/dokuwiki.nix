@@ -173,7 +173,7 @@ let
             }
             {
               assertion = config.usersFile != null -> config.mergedConfig.useacl != false;
-              message = "${showPath [ "settings" "useacl" ]} is required when ${showPath [ "usersFile" ]} is set (Currently defiend as `${config.usersFile}' in ${showFiles options.usersFile.files}).";
+              message = "${showPath [ "settings" "useacl" ]} is required when ${showPath [ "usersFile" ]} is set (Currently defined as `${config.usersFile}' in ${showFiles options.usersFile.files}).";
             }
           ];
         })
@@ -337,7 +337,7 @@ let
 
         phpPackage = mkOption {
           type = types.package;
-          relatedPackages = [ "php80" "php81" ];
+          relatedPackages = [ "php81" "php82" ];
           default = pkgs.php81;
           defaultText = "pkgs.php81";
           description = lib.mdDoc ''

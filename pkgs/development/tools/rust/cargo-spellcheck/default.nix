@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, libclang
 , stdenv
 , Security
 }:
@@ -19,9 +18,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-hYCDpSKi7HlqwdnMnfnKw46VpO+bhsV11kIu/4yMaBw=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  LIBCLANG_PATH = "${libclang.lib}/lib";
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   preCheck = "HOME=$(mktemp -d)";
 

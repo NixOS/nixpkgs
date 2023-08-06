@@ -10,7 +10,7 @@
 
 let
   sqitch = perlPackages.AppSqitch;
-  modules = with perlPackages; [ ]
+  modules = with perlPackages; [ AlgorithmBackoff ]
     ++ lib.optional mysqlSupport DBDmysql
     ++ lib.optional postgresqlSupport DBDPg
     ++ lib.optional templateToolkitSupport TemplateToolkit;

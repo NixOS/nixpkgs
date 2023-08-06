@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   configurePhase = ''
     runHook preConfigure
-    dart pub get --offline
+    doPubGet dart pub get --offline
     mkdir build
     ln -s ${embedded-protocol} build/embedded-protocol
     runHook postConfigure

@@ -2,10 +2,10 @@
 
 let
   pname = "framesh";
-  version = "0.6.2";
+  version = "0.6.6";
   src = fetchurl {
     url = "https://github.com/floating/frame/releases/download/v${version}/Frame-${version}.AppImage";
-    sha256 = "sha256-nN5+6SwfHcwhePlbsXjT3qNd/d6Xqnd85NVC8vw3ehk=";
+    sha256 = "sha256-5LLnITQP9m2lMdnB/rrK/M+p3AA3rYZ9GOrDdCFA/r4=";
   };
 
   appimageContents = appimageTools.extractType2 {

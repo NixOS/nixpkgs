@@ -16,7 +16,7 @@
 
 let
   pname = "xonotic";
-  version = "0.8.5";
+  version = "0.8.6";
   name = "${pname}-${version}";
   variant =
     if withSDL && withGLX then
@@ -61,7 +61,7 @@ let
 
     src = fetchurl {
       url = "https://dl.xonotic.org/xonotic-${version}-source.zip";
-      sha256 = "sha256-oagbpVqxUb8JdY5/WWFLLlFQ6EIkdT53lQvNB6KC6l0=";
+      hash = "sha256-i5KseBz/SuicEhoj6s197AWiqr7azMI6GdGglYtAEqg=";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -97,10 +97,17 @@ let
     enableParallelBuilding = true;
 
     installPhase = (''
-      for size in 16x16 24x24 32x32 48x48 64x64 72x72 96x96 128x128 192x192 256x256 512x512 1024x1024 scalable; do
-        install -Dm644 ../../misc/logos/xonotic_icon.svg \
-          $out/share/icons/hicolor/$size/xonotic.svg
+      install -Dm644 ../../misc/logos/xonotic_icon.svg \
+        $out/share/icons/hicolor/scalable/apps/xonotic.svg
+      pushd ../../misc/logos/icons_png
+      for img in *.png; do
+        size=''${img#xonotic_}
+        size=''${size%.png}
+        dimensions="''${size}x''${size}"
+        install -Dm644 $img \
+          $out/share/icons/hicolor/$dimensions/apps/xonotic.png
       done
+      popd
     '' + lib.optionalString withDedicated ''
       install -Dm755 darkplaces-dedicated "$out/bin/xonotic-dedicated"
     '' + lib.optionalString withGLX ''
@@ -145,7 +152,7 @@ in rec {
   xonotic-data = fetchzip {
     name = "xonotic-data";
     url = "https://dl.xonotic.org/xonotic-${version}.zip";
-    sha256 = "sha256-/malKGbDdUnqG+bJOJ2f3zHb7hAGiNZdprczr2Fgb5E=";
+    hash = "sha256-Lhjpyk7idmfQAVn4YUb7diGyyKZQBfwNXxk2zMOqiZQ=";
     postFetch = ''
       cd $out
       rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")

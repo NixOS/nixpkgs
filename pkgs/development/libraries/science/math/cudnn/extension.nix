@@ -11,29 +11,23 @@
 final: prev: let
   inherit (final) callPackage;
   inherit (prev) cudaVersion;
-  inherit (prev.lib) attrsets lists versions strings trivial;
-
-  # Utilities
-  # majorMinorPatch :: String -> String
-  majorMinorPatch = (trivial.flip trivial.pipe) [
-    (versions.splitVersion)
-    (lists.take 3)
-    (strings.concatStringsSep ".")
-  ];
+  inherit (prev.lib) attrsets lists versions;
+  inherit (prev.lib.strings) replaceStrings versionAtLeast versionOlder;
 
   # Compute versioned attribute name to be used in this package set
+  # Patch version changes should not break the build, so we only use major and minor
   # computeName :: String -> String
-  computeName = version: "cudnn_${strings.replaceStrings ["."] ["_"] (majorMinorPatch version)}";
+  computeName = version: "cudnn_${replaceStrings ["."] ["_"] (versions.majorMinor version)}";
 
   # Check whether a CUDNN release supports our CUDA version
   # Thankfully we're able to do lexicographic comparison on the version strings
   # isSupported :: Release -> Bool
   isSupported = release:
-    strings.versionAtLeast cudaVersion release.minCudaVersion
-    && strings.versionAtLeast release.maxCudaVersion cudaVersion;
+    versionAtLeast cudaVersion release.minCudaVersion
+    && versionAtLeast release.maxCudaVersion cudaVersion;
 
   # useCudatoolkitRunfile :: Bool
-  useCudatoolkitRunfile = strings.versionOlder cudaVersion "11.3.999";
+  useCudatoolkitRunfile = versionOlder cudaVersion "11.3.999";
 
   # buildCuDnnPackage :: Release -> Derivation
   buildCuDnnPackage = callPackage ./generic.nix {inherit useCudatoolkitRunfile;};

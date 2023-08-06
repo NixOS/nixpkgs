@@ -8,17 +8,19 @@
 , wayland
 , xorg
 , darwin
+, nix-update-script
+, alsa-lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    hash = "sha256-+1GgIa0kIOliI0ACiU9zQe24R6488xWEZ7n9nuxv3dY";
+    hash = "sha256-UlN2BjtzS54oImAGM2Kl+j/LwfAyDXtbEMhsijBh/yg=";
   };
 
   postPatch = ''
@@ -35,6 +37,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
     wayland
     xorg.libX11
+    alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
@@ -44,6 +47,12 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf $out/bin/cb --add-rpath $out/lib
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";

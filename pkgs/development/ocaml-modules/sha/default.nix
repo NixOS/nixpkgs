@@ -1,9 +1,8 @@
-{ lib, fetchurl, buildDunePackage, stdlib-shims, ounit2 }:
+{ lib, fetchurl, buildDunePackage, ocaml, stdlib-shims, ounit2 }:
 
 buildDunePackage rec {
   pname = "sha";
   version = "1.15.4";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/djs55/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
@@ -14,7 +13,7 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [
     ounit2
   ];

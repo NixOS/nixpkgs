@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 }:
 
 let
@@ -9,7 +10,7 @@ in
 python3Packages.buildPythonApplication {
   inherit pname version;
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "${lib.replaceStrings ["-"] ["_"] pname}";
     hash = "sha256-retnbxjdjo+NeA1B0+jpM9kToAX/Rh0ze0yNF9AfDiU=";

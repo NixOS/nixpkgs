@@ -6,57 +6,65 @@
 , git
 , libdbusmenu-gtk3
 , runtimeShell
-, thunderbird-unwrapped
+, thunderbirdPackages
 }:
 
-((buildMozillaMach rec {
+let
+  thunderbird-unwrapped = thunderbirdPackages.thunderbird-102;
+
+  version = "102.12.0";
+  majVer = lib.versions.major version;
+
+  betterbird-patches = fetchFromGitHub {
+    owner = "Betterbird";
+    repo = "thunderbird-patches";
+    rev = "${version}-bb37";
+    postFetch = ''
+      echo "Retrieving external patches"
+
+      echo "#!${runtimeShell}" > external.sh
+      # if no external patches need to be downloaded, don't fail
+      { grep " # " $out/${majVer}/series-M-C || true ; } >> external.sh
+      { grep " # " $out/${majVer}/series || true ; } >> external.sh
+      sed -i -e '/^#/d' external.sh
+      sed -i -e 's/\/rev\//\/raw-rev\//' external.sh
+      sed -i -e 's|\(.*\) # \(.*\)|curl \2 -o $out/${majVer}/external/\1|' external.sh
+      chmod 700 external.sh
+
+      mkdir $out/${majVer}/external
+      SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+      . ./external.sh
+      rm external.sh
+    '';
+    sha256 = "sha256-LH0dgWqariutfaOCPIUZrHzZ8oCbZF1VaaKQIQS4aL8=";
+  };
+in ((buildMozillaMach {
   pname = "betterbird";
-  version = "102.8.0";
+  inherit version;
 
   applicationName = "Betterbird";
   binaryName = "betterbird";
   inherit (thunderbird-unwrapped) application extraPatches;
 
   src = fetchurl {
-    # https://download.cdn.mozilla.net/pub/mozilla.org/thunderbird/releases/
+    # https://download.cdn.mozilla.net/pub/thunderbird/releases/
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "2431eb8799184b261609c96bed3c9368bec9035a831aa5f744fa89e48aedb130385b268dd90f03bbddfec449dc3e5fad1b5f8727fe9e11e1d1f123a81b97ddf8";
+    sha512 = "303787a8f22a204e48784d54320d5f4adaeeeedbe4c2294cd26ad75792272ffc9453be7f0ab1434214b61a2cc46982c23c4fd447c4d80d588df4a7800225ddee";
   };
 
-  extraPostPatch = let
-    majVer = lib.versions.major version;
-    betterbird = fetchFromGitHub {
-      owner = "Betterbird";
-      repo = "thunderbird-patches";
-      rev = "${version}-bb30";
-      postFetch = ''
-        echo "Retrieving external patches"
-
-        echo "#!${runtimeShell}" > external.sh
-        grep " # " $out/${majVer}/series-M-C >> external.sh
-        grep " # " $out/${majVer}/series >> external.sh
-        sed -i -e 's/\/rev\//\/raw-rev\//' external.sh
-        sed -i -e 's|\(.*\) # \(.*\)|curl \2 -o $out/${majVer}/external/\1|' external.sh
-        chmod 700 external.sh
-
-        mkdir $out/${majVer}/external
-        SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-        . ./external.sh
-        rm external.sh
-      '';
-      sha256 = "sha256-ouJSFz/5shNR9puVjrZRJq90DHTeSx7hAnDpuhkBsDo=";
-    };
-  in thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
+  extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
     PATH=$PATH:${lib.makeBinPath [ git ]}
     patches=$(mktemp -d)
     for dir in branding bugs external features misc; do
-      cp -r ${betterbird}/${majVer}/$dir/*.patch $patches/
+      cp -r ${betterbird-patches}/${majVer}/$dir/*.patch $patches/
+      # files is not in series file and duplicated with external patch
+      [[ $dir == bugs ]] && rm $patches/1820504-optimise-grapheme-m-c.patch
     done
-    cp ${betterbird}/${majVer}/series* $patches/
+    cp ${betterbird-patches}/${majVer}/series* $patches/
     chmod -R +w $patches
 
     cd $patches
-    patch -p1 < ${./betterbird.diff}
+    # fix FHS paths to libdbusmenu
     substituteInPlace 12-feature-linux-systray.patch \
       --replace "/usr/include/libdbusmenu-glib-0.4/" "${lib.getDev libdbusmenu-gtk3}/include/libdbusmenu-glib-0.4/" \
       --replace "/usr/include/libdbusmenu-gtk3-0.4/" "${lib.getDev libdbusmenu-gtk3}/include/libdbusmenu-gtk3-0.4/"
@@ -103,7 +111,7 @@
   webrtcSupport = false;
 
   pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
-}).overrideAttrs(oldAttrs: {
+}).overrideAttrs (oldAttrs: {
   postInstall = oldAttrs.postInstall or "" + ''
     mv $out/lib/thunderbird/* $out/lib/betterbird
     rmdir $out/lib/thunderbird/
@@ -112,5 +120,8 @@
   '';
 
   doInstallCheck = false;
-  requiredSystemFeatures = [];
+
+  passthru = oldAttrs.passthru // {
+    inherit betterbird-patches;
+  };
 })

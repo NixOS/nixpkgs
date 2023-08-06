@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.6.8";
+  version = "0.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7A9wuuOQyGhdGj6T5VY+NrZjEOf/y8dCzSkHuPhNsKI=";
+    hash = "sha256-2LUblA8eVCOfVJ6BJayralNiv6EFt6MzR5ptKksVNA4=";
   };
 
   propagatedBuildInputs = [
@@ -121,6 +121,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ContinuumIO/intake";
     changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

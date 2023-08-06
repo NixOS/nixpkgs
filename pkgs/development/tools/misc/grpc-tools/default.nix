@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  sourceRoot = "source/packages/grpc-tools";
+  sourceRoot = "${src.name}/packages/grpc-tools";
 
   nativeBuildInputs = [ cmake ];
 

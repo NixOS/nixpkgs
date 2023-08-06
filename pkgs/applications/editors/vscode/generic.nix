@@ -2,6 +2,7 @@
 , unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
 , atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSEnv, wayland
+, libglvnd
 
 # Populate passthru.tests
 , tests
@@ -13,13 +14,17 @@
 , version, src, meta, sourceRoot, commandLineArgs
 , executableName, longName, shortName, pname, updateScript
 , dontFixup ? false
+, rev ? null, vscodeServer ? null
+
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
 , sourceExecutableName ? executableName
+
+, useVSCodeRipgrep ? false
+, ripgrep
 }:
 
 let
-  inherit (stdenv.hostPlatform) system;
   unwrapped = stdenv.mkDerivation {
 
     inherit pname version src sourceRoot dontFixup;
@@ -28,6 +33,8 @@ let
       inherit executableName longName tests updateScript;
       fhs = fhs {};
       fhsWithPackages = f: fhs { additionalPkgs = f; };
+    } // lib.optionalAttrs (vscodeServer != null) {
+      inherit rev vscodeServer;
     };
 
     desktopItem = makeDesktopItem {
@@ -36,7 +43,7 @@ let
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
       exec = "${executableName} %F";
-      icon = "code";
+      icon = "vs${executableName}";
       startupNotify = true;
       startupWMClass = shortName;
       categories = [ "Utility" "TextEditor" "Development" "IDE" ];
@@ -45,7 +52,7 @@ let
       actions.new-empty-window = {
         name = "New Empty Window";
         exec = "${executableName} --new-window %F";
-        icon = "code";
+        icon = "vs${executableName}";
       };
     };
 
@@ -55,7 +62,7 @@ let
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
       exec = executableName + " --open-url %U";
-      icon = "code";
+      icon = "vs${executableName}";
       startupNotify = true;
       categories = [ "Utility" "TextEditor" "Development" "IDE" ];
       mimeTypes = [ "x-scheme-handler/vscode" ];
@@ -96,12 +103,21 @@ let
       ln -s "$desktopItem/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
       ln -s "$urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
 
+      # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
       mkdir -p "$out/share/pixmaps"
-      cp "$out/lib/vscode/resources/app/resources/linux/code.png" "$out/share/pixmaps/code.png"
+      cp "$out/lib/vscode/resources/app/resources/linux/code.png" "$out/share/pixmaps/vs${executableName}.png"
 
       # Override the previously determined VSCODE_PATH with the one we know to be correct
       sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}"
       grep -q "VSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}" # check if sed succeeded
+
+      # Remove native encryption code, as it derives the key from the executable path which does not work for us.
+      # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
+      # in the first place.
+      rm -rf $out/lib/vscode/resources/app/node_modules/vscode-encrypt
+
+      # Unbundle libglvnd as VSCode doesn't include libGLESv2.so.2 which is necessary for GPU acceleration
+      rm -rf $out/lib/vscode/libGLESv2.so
     '') + ''
       runHook postInstall
     '';
@@ -110,6 +126,7 @@ let
       gappsWrapperArgs+=(
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
         --add-flags ${lib.escapeShellArg commandLineArgs}
       )
@@ -132,13 +149,17 @@ let
       # and the window immediately closes which renders VSCode unusable
       # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
       ln -rs "$unpacked" "$packed"
-
-      # this fixes bundled ripgrep
-      chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
-    '' + lib.optionalString (lib.versionOlder version "1.78.0" && stdenv.isLinux) ''
-      # see https://github.com/gentoo/gentoo/commit/4da5959
-      chmod +x resources/app/node_modules/node-pty/build/Release/spawn-helper
-    '';
+    '' + (let
+      vscodeRipgrep = if stdenv.isDarwin then
+        "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
+      else
+        "resources/app/node_modules/@vscode/ripgrep/bin/rg";
+    in if !useVSCodeRipgrep then ''
+      rm ${vscodeRipgrep}
+      ln -s ${ripgrep}/bin/rg ${vscodeRipgrep}
+    '' else ''
+      chmod +x ${vscodeRipgrep}
+    '');
 
     inherit meta;
   };
@@ -196,7 +217,7 @@ let
 
     meta = meta // {
       description = ''
-        Wrapped variant of ${pname} which launches in a FHS compatible envrionment.
+        Wrapped variant of ${pname} which launches in a FHS compatible environment.
         Should allow for easy usage of extensions without nix-specific modifications.
       '';
     };

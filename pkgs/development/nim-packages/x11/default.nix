@@ -11,8 +11,6 @@ buildNimPackage rec {
     hash = "sha256-2XRyXiBxAc9Zx/w0zRBHRZ240qww0FJvIvOKZ8YH50A=";
   };
 
-  doCheck = true;
-
   meta = with lib;
     src.meta // {
       description = "X11 library for nim";

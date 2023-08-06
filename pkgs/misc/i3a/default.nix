@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "i3a";
   version = "2.0.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-2k1HYtgJ76qXLvX6RmOSKtMMg+K722n8U9YmBANvQvE=";
   };

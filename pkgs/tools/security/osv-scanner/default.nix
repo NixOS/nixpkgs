@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "osv-scanner";
-  version = "1.3.2";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xgSRaGS09a1d1qepzvkTuMtaUHh8QsKxF7RWD+0Sepg=";
+    hash = "sha256-mvR4LqUPtmLBH9RSfVge4anwun1wHJMCuGyHGQvA56s=";
   };
 
-  vendorHash = "sha256-9tNEPgJJ4mp4DPNgIzezS9Axed3XoJV9cyTYCOGMvgA=";
+  vendorHash = "sha256-oxAvpiNrdst7Y8EbSTrTEebX6+G/8K5UFwdKG+wiDQE=";
 
   subPackages = [
     "cmd/osv-scanner"

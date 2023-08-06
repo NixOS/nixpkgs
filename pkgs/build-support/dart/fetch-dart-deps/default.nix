@@ -1,6 +1,7 @@
 { stdenvNoCC
 , lib
 , makeSetupHook
+, writeShellScriptBin
 , dart
 , git
 , cacert
@@ -159,7 +160,7 @@ let
 
     configurePhase = ''
       runHook preConfigure
-      dart pub get --offline
+      doPubGet dart pub get --offline
       runHook postConfigure
     '';
 
@@ -168,14 +169,28 @@ let
       dart pub deps --json | jq .packages > $out
       runHook postBuild
     '';
-  } // buildDrvInheritArgs);
+  } // (removeAttrs buildDrvInheritArgs [ "name" "pname" ]));
+
+  # As of Dart 3.0.0, Pub checks the revision of cached Git-sourced packages.
+  # Git must be wrapped to return a positive result, as the real .git directory is wiped
+  # to produce a deteministic dependency derivation output.
+  # https://github.com/dart-lang/pub/pull/3791/files#diff-1639c4669c428c26e68cfebd5039a33f87ba568795f2c058c303ca8528f62b77R631
+  gitSourceWrapper = writeShellScriptBin "git" ''
+    args=("$@")
+    if [[ "''${args[0]}" == "rev-list" && "''${args[1]}" == "--max-count=1" ]]; then
+      revision="''${args[''${#args[@]}-1]}"
+      echo "$revision"
+    else
+      ${git}/bin/git "''${args[@]}"
+    fi
+  '';
 
   hook = (makeSetupHook {
     # The setup hook should not be part of the fixed-output derivation.
     # Updates to the hook script should not change vendor hashes, and it won't
     # work at all anyway due to https://github.com/NixOS/nix/issues/6660.
     name = "${name}-dart-deps-setup-hook";
-    substitutions = { inherit deps; };
+    substitutions = { inherit gitSourceWrapper deps; };
     propagatedBuildInputs = [ dart git ];
     passthru = {
       files = deps.outPath;

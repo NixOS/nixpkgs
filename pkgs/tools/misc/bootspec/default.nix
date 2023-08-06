@@ -4,16 +4,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bootspec";
-  version = "0.2.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6hgC/bOtzmVu+/pSVMpW4IkwNNemI2k/ykzxCibQUok=";
+    hash = "sha256-5IGSMHeL0eKfl7teDejAckYQjc8aeLwfwIQSzQ8YaAg=";
   };
 
-  cargoHash = "sha256-l9W7MzeL1kiTvNe7QbP2bt8vqbnGrqK44UTlRRNRcYw=";
+  cargoHash = "sha256-eGSKVHjPnHK7WyGkO5LIjocNGHawahYQR3H5Lgk1C9s=";
 
   meta = with lib; {
     description = "Implementation of RFC-0125's datatype and synthesis tooling";

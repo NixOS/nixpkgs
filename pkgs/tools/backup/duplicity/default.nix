@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitLab
-, fetchpatch
 , python3
 , librsync
 , ncftp
@@ -14,8 +13,6 @@
 }:
 let
   pythonPackages = python3.pkgs;
-  inherit (lib.versions) majorMinor splitVersion;
-  majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
 in
 pythonPackages.buildPythonApplication rec {
   pname = "duplicity";

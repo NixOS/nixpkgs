@@ -45,24 +45,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "kodelife";
-  version = "1.0.8.170";
+  version = "1.1.0.173";
 
   suffix = {
     aarch64-linux = "linux-arm64";
     armv7l-linux  = "linux-armhf";
-    x86_64-linux  = "linux-x86_64";
+    x86_64-linux  = "linux-x64";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-FHE87B34QSc7rcKHE3wkZq1VzcZeKWh68rlIIMDRmm8=";
-      armv7l-linux  = "sha256-OqomlL7IFHyQQULbdbf5I0dRXdy3lDHY4ej2P1OZgzo=";
-      x86_64-linux  = "sha256-QNcWMVZ4bTXPLFEtD35hP2LbuNntvF2e9Wk2knt4TBY=";
+      aarch64-linux = "sha256-WPUWvgVZR+2Dg4zpk+iUemMBGlGBDtaGkUGrWuF5LBs=";
+      armv7l-linux  = "sha256-tOPqP40e0JrXg92OluMZrurWHXZavGwTkJiNN1IFVEE=";
+      x86_64-linux  = "sha256-ZA8BlUtKaiSnXGncYwb2BbhBlULuGz7SWuXL0RAgQLI=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
-
-  unpackCmd = "mkdir root; dpkg-deb -x $curSrc root";
 
   strictDeps = true;
 

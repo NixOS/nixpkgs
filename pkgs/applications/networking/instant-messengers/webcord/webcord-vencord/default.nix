@@ -1,13 +1,15 @@
 { webcord
 , substituteAll
-, callPackage
 , lib
+, vencord-web-extension
+, electron_24
 }:
-webcord.overrideAttrs (old: {
+
+(webcord.overrideAttrs (old: {
   patches = (old.patches or [ ]) ++ [
     (substituteAll {
       src = ./add-extension.patch;
-      vencord = callPackage ./vencord-web-extension { };
+      vencord = vencord-web-extension;
     })
   ];
 
@@ -15,4 +17,8 @@ webcord.overrideAttrs (old: {
     description = "Webcord with Vencord web extension";
     maintainers = with maintainers; [ FlafyDev NotAShelf ];
   };
-})
+})).override {
+  # Webcord has updated to electron 25, but that causes a segfault
+  # when launching webcord-vencord on wayland, so downgrade it for now.
+  electron_25 = electron_24;
+}

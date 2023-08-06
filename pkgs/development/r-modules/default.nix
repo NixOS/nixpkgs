@@ -327,7 +327,7 @@ let
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = with pkgs; [ openbabel pkg-config ];
     curl = [ pkgs.curl.dev ];
-    data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+    data_table = with pkgs; [ pkg-config zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = with pkgs; [ xorg.libXft.dev ];
     diversitree = with pkgs; [ gsl fftw ];
     exactextractr = [ pkgs.geos ];
@@ -357,6 +357,7 @@ let
     kza = [ pkgs.fftw.dev ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
+    rvg = [ pkgs.libpng.dev ];
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
@@ -370,7 +371,7 @@ let
     pander = with pkgs; [ pandoc which ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
-    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
+    pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
@@ -502,7 +503,7 @@ let
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
-    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
+    pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     bigmemory = lib.optionals stdenv.isLinux [ pkgs.libuuid.dev ];
     clustermq = [  pkgs.pkg-config ];
     RMark = [ pkgs.which ];
@@ -1339,6 +1340,12 @@ let
 
     textshaping = old.textshaping.overrideAttrs (attrs: {
       env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
+    });
+
+    torch = old.torch.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
     });
   };
 in

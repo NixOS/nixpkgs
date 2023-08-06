@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${common.src}/vue/yarn.lock";
-    sha256 = common.yarnSha256;
+    hash = common.yarnHash;
   };
 
   nativeBuildInputs = [

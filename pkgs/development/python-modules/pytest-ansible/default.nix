@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , ansible-core
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "3.0.0";
+  version = "3.1.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kxOp7ScpIIzEbM4VQa+3ByHzkPS8pzdYq82rggF9Fpk=";
+    hash = "sha256-stsgVJseZ02C7nG0Hm0wfAnhoLpM3qRZ2Lkr1N5hODw=";
   };
 
   postPatch = ''
@@ -55,6 +56,17 @@ buildPythonPackage rec {
     # [Errno -3] Temporary failure in name resolution
     "test_connection_failure_v2"
     "test_connection_failure_extra_inventory_v2"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "test_ansible_facts"
+    "test_func"
+    "test_param_override_with_marker"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "tests/test_adhoc.py"
+    "tests/test_adhoc_result.py"
   ];
 
   pythonImportsCheck = [
@@ -66,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jlaska/pytest-ansible";
     changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -30,7 +30,7 @@ let
   ]));
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
 
-  srcVersion = "3.86";
+  srcVersion = "3.90";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
@@ -45,7 +45,7 @@ let
 
     src = if nssOverride != null then nssOverride.src else fetchurl {
       url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-      sha256 = "sha256-PzhfxoZHa7uoEQNfpoIbVCR11VdHsYwgwiHU1mVzuXU=";
+      hash = "sha256-ms1lNMQdjq0Z/Kb8s//+0vnwnEN8PXn+5qTuZoqqk7Y=";
     };
 
     dontBuild = true;

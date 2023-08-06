@@ -51,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.5";
+  version = "43.7";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "/JAP4ahA2aeTyOLSDUTJCqCH1fv9x5Su5wluHYoJZxo=";
+    sha256 = "NBrLmwNUyytflewz32aZtKAHaNydIi1rYAtW4kKGlmc=";
   };
 
   patches = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dinstalled_tests=false" # TODO: enable these
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
-    "-Dxwayland_path=${xwayland}/bin/Xwayland"
+    "-Dxwayland_path=${lib.getExe xwayland}"
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"

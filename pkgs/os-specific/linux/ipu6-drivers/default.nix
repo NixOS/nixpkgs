@@ -5,21 +5,16 @@
 , kernel
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ipu6-drivers";
-  version = "unstable-2023-02-20";
+  version = "unstable-2023-06-02";
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = pname;
-    rev = "dfedab03f3856010d37968cb384696038c73c984";
-    hash = "sha256-TKo04+fqY64SdDuWApuzRXBnaAW2DReubwFRsdfJMWM=";
+    repo = "ipu6-drivers";
+    rev = "8e410803b5d31c2c5bf32961f786d205ba6acc5d";
+    hash = "sha256-6GiDSGqVBTQrVMd+Rz/Lckvec+mtbuQ1w/ymC4Cie4I=";
   };
-
-  patches = [
-    # https://github.com/intel/ipu6-drivers/pull/84
-    ./pr-84-unpatched-upstream-compatiblity.patch
-  ];
 
   postPatch = ''
     cp --no-preserve=mode --recursive --verbose \
@@ -53,7 +48,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hexa ];
     platforms = [ "x86_64-linux" ];
     # requires 6.1.7 https://github.com/intel/ipu6-drivers/pull/84
-    # fails to build on 6.3 https://github.com/intel/ipu6-drivers/issues/140
-    broken = kernel.kernelOlder "6.1.7" || kernel.kernelAtLeast "6.3";
+    broken = kernel.kernelOlder "6.1.7";
   };
 }

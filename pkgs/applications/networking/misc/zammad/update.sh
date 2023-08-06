@@ -8,7 +8,7 @@ if [ "$#" -gt 2 ] || [[ "$1" == -* ]]; then
   exit 1
 fi
 
-VERSION=$(curl -s https://ftp.zammad.com/ | grep -v latest | grep tar.gz | sed "s/<a href=\".*\">zammad-//" | sort -h | tail -n 1 | awk '{print $1}' | sed 's/.tar.gz<\/a>//')
+VERSION=$(xidel -s https://ftp.zammad.com/ --extract "//a" | grep -E "zammad-[0-9.]*.tar.gz" | sort --version-sort | tail -n 1 | sed -e 's/zammad-//' -e 's/.tar.gz//')
 TARGET_DIR="$2"
 WORK_DIR=$(mktemp -d)
 SOURCE_DIR=$WORK_DIR/zammad-$VERSION

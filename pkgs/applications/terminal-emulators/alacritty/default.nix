@@ -35,6 +35,7 @@ let
     expat
     fontconfig
     freetype
+  ] ++ lib.optionals stdenv.isLinux [
     libGL
     xorg.libX11
     xorg.libXcursor
@@ -42,23 +43,22 @@ let
     xorg.libXrandr
     xorg.libXxf86vm
     xorg.libxcb
-  ] ++ lib.optionals stdenv.isLinux [
     libxkbcommon
     wayland
   ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.12.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2MiFsOZpAlDVC4h3m3HHlMr2ytL/z47vrTwUMoHdegI=";
+    hash = "sha256-X3Z+f5r8surBW9FSsmWKZ/fr82ThXBUkS8fr/sTYR50=";
   };
 
-  cargoSha256 = "sha256-4liPfNJ2JGniz8Os4Np+XSXCJBHND13XLPWDy3Gc/F8=";
+  cargoHash = "sha256-JOmDmJl/y4WNsBnCixJykl4PgYgb5cSyo6MCdYmQAzQ=";
 
   nativeBuildInputs = [
     cmake
@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage rec {
       # As a workaround, strip manually before running patchelf.
       $STRIP -S $out/bin/alacritty
 
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+      patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
     ''
   ) + ''
 

@@ -138,10 +138,12 @@ in
             "~@privileged"
           ];
           StateDirectory = "matrix-conduit";
+          StateDirectoryMode = "0700";
           ExecStart = "${cfg.package}/bin/conduit";
           Restart = "on-failure";
           RestartSec = 10;
           StartLimitBurst = 5;
+          UMask = "077";
         };
       };
     };

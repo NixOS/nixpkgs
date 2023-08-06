@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.5.0";
+  version = "3.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8RVEoh6jVW9w66x7wzj/qKGXkTg07N2IU9F2uHCCOqo=";
+    hash = "sha256-QhNCI5VoUN3WSHfIgELTH3hljnsGelqOPdKCNrcfPDI=";
   };
 
   propagatedBuildInputs = [
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-logging";
     changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

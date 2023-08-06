@@ -66,6 +66,8 @@
 , mysofaSupport ? true
 , libmysofa
 , tinycompress
+, ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, ffado
 }:
 
 let
@@ -73,7 +75,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.70";
+    version = "0.3.74";
 
     outputs = [
       "out"
@@ -91,7 +93,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-xhJzE6JcfNcLMm+TqTIPaBEnEthEqUZiTqhWz1fO5Ng=";
+      sha256 = "sha256-ZV66niKeR4PDaqUuVqiosY7LSDLmIjrDsmCZyQkR72Y=";
     };
 
     patches = [
@@ -99,6 +101,8 @@ let
       ./0040-alsa-profiles-use-libdir.patch
       # Change the path of the pipewire-pulse binary in the service definition.
       ./0050-pipewire-pulse-path.patch
+      # Load libjack from a known location
+      ./0060-libjack-path.patch
       # Move installed tests into their own output.
       ./0070-installed-tests-path.patch
       # Add option for changing the config install directory
@@ -147,7 +151,8 @@ let
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
     ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
-    ++ lib.optional mysofaSupport libmysofa;
+    ++ lib.optional mysofaSupport libmysofa
+    ++ lib.optional ffadoSupport ffado;
 
     # Valgrind binary is required for running one optional test.
     nativeCheckInputs = lib.optional withValgrind valgrind;
@@ -161,6 +166,7 @@ let
       "-Dlibjack-path=${placeholder "jack"}/lib"
       "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
+      "-Dlibffado=${mesonEnableFeature ffadoSupport}"
       "-Droc=${mesonEnableFeature rocSupport}"
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
       "-Davahi=${mesonEnableFeature zeroconfSupport}"
@@ -184,6 +190,8 @@ let
       "-Dsession-managers="
       "-Dvulkan=enabled"
       "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dx11-xfixes=${mesonEnableFeature x11Support}"
+      "-Dlibcanberra=${mesonEnableFeature x11Support}"
       "-Dlibmysofa=${mesonEnableFeature mysofaSupport}"
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
       "-Drlimits-install=false" # installs to /etc, we won't use this anyway
@@ -217,10 +225,11 @@ let
 
     meta = with lib; {
       description = "Server and user space API to deal with multimedia pipelines";
+      changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${version}";
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar kranzes k900 ];
+      maintainers = with maintainers; [ kranzes k900 ];
     };
   };
 

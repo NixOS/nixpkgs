@@ -29,7 +29,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.40.1";
+  version = "2.41.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-SJO4uY7vyf3EsOfKJJ40AAT6p4BKQz0XQp4xHh/vIdI=";
+    hash = "sha256-50i6/UJM/oCyEsvG8bvMw6R9SGL7HreYiHd1BHhWgEA=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -186,14 +186,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Fix references to the perl, sed, awk and various coreutil binaries used by
       # shell scripts that git calls (e.g. filter-branch)
-      # and completion scripts
       SCRIPT="$(cat <<'EOS'
         BEGIN{
           @a=(
             '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
-            '${coreutils}/bin/wc', '${coreutils}/bin/tr',
-            '${coreutils}/bin/ls'
+            '${coreutils}/bin/wc', '${coreutils}/bin/tr'
             ${lib.optionalString perlSupport ", '${perlPackages.perl}/bin/perl'"}
           );
         }
@@ -204,8 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
       EOS
       )"
       perl -0777 -i -pe "$SCRIPT" \
-        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse} \
-        $out/share/bash-completion/completions/{git,gitk}
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse}
 
 
       # Also put git-http-backend into $PATH, so that we can use smart

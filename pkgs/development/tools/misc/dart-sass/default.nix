@@ -1,54 +1,50 @@
 { lib
-, stdenvNoCC
 , fetchFromGitHub
-, dart
-, callPackage
+, buildDartApplication
+, buf
+, protoc-gen-dart
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: rec {
+let
+  sass-language = fetchFromGitHub {
+    owner = "sass";
+    repo = "sass";
+    rev = "refs/tags/embedded-protocol-2.0.0";
+    hash = "sha256-3qk3XbI/DpNj4oa/3ar5hqEY8LNmQsokinuKt4xV7ck=";
+  };
+in
+buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.62.1";
+  version = "1.64.1";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
-    rev = finalAttrs.version;
-    hash = "sha256-U6enz8yJcc4Wf8m54eYIAnVg/jsGi247Wy8lp1r1wg4=";
+    rev = version;
+    hash = "sha256-JIw1I60Av5hUSRyqhc4nK5x9gHJcHTUIdYBTfQf8ob4=";
   };
 
+  pubspecLockFile = ./pubspec.lock;
+  vendorHash = "sha256-kGeQIlNTHhlIEFH4MdWF5smc9lLg4YHx11bZS4BTPgI=";
+
   nativeBuildInputs = [
-    dart
-    (callPackage ../../../../build-support/dart/fetch-dart-deps { } {
-      buildDrvArgs = finalAttrs;
-      pubspecLockFile = ./pubspec.lock;
-      vendorHash = "sha256-Atm7zfnDambN/BmmUf4BG0yUz/y6xWzf0reDw3Ad41s=";
-    })
+    buf
+    protoc-gen-dart
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-    dart pub get --offline
-    runHook postConfigure
+  preConfigure = ''
+    mkdir -p build
+    ln -s ${sass-language} build/language
+    HOME="$TMPDIR" buf generate
   '';
 
-  buildPhase = ''
-    runHook preBuild
-    dart compile exe --define=version=${finalAttrs.version} ./bin/sass.dart
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    install -D ./bin/sass.exe $out/bin/sass
-    runHook postInstall
-  '';
+  dartCompileFlags = [ "--define=version=${version}" ];
 
   meta = with lib; {
-    inherit (dart.meta) platforms;
     homepage = "https://github.com/sass/dart-sass";
     description = "The reference implementation of Sass, written in Dart";
     mainProgram = "sass";
     license = licenses.mit;
     maintainers = with maintainers; [ lelgenio ];
   };
-})
+}

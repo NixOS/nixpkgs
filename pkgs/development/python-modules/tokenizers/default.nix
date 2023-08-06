@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, cargo
 , datasets
 , fetchFromGitHub
 , fetchurl
@@ -12,6 +13,7 @@
 , pythonOlder
 , requests
 , rustPlatform
+, rustc
 , Security
 , setuptools-rust
 }:
@@ -77,16 +79,15 @@ buildPythonPackage rec {
     lockFile = ./Cargo.lock;
   };
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
     pkg-config
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     openssl

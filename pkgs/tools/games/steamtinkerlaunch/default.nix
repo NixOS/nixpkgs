@@ -3,7 +3,6 @@
 , git
 , gnugrep
 , fetchFromGitHub
-, installShellFiles
 , lib
 , makeWrapper
 , stdenv

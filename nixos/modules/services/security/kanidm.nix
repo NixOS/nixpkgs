@@ -10,14 +10,14 @@ let
   certPaths = builtins.map builtins.dirOf [ cfg.serverSettings.tls_chain cfg.serverSettings.tls_key ];
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
-  # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is alread in the mount
+  # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
   hasPrefixInList = list: newPath: lib.any (path: lib.hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
   mergePaths = lib.foldl' (merged: newPath: let
       # If the new path is a prefix to some existing path, we need to filter it out
       filteredPaths = lib.filter (p: !lib.hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
       # If a prefix of the new path is already in the list, do not add it
-      filteredNew = if hasPrefixInList filteredPaths newPath then [] else [ newPath ];
+      filteredNew = lib.optional (!hasPrefixInList filteredPaths newPath) newPath;
     in filteredPaths ++ filteredNew) [];
 
   defaultServiceConfig = {
@@ -122,8 +122,8 @@ in
           };
           log_level = lib.mkOption {
             description = lib.mdDoc "Log level of the server.";
-            default = "default";
-            type = lib.types.enum [ "default" "verbose" "perfbasic" "perffull" ];
+            default = "info";
+            type = lib.types.enum [ "info" "debug" "trace" ];
           };
           role = lib.mkOption {
             description = lib.mdDoc "The role of this server. This affects the replication relationship and thereby available features.";
@@ -236,9 +236,15 @@ in
         {
           StateDirectory = "kanidm";
           StateDirectoryMode = "0700";
+          RuntimeDirectory = "kanidmd";
           ExecStart = "${pkgs.kanidm}/bin/kanidmd server -c ${serverConfigFile}";
           User = "kanidm";
           Group = "kanidm";
+
+          BindPaths = [
+            # To create the socket
+            "/run/kanidmd:/run/kanidmd"
+          ];
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
@@ -246,7 +252,7 @@ in
           PrivateUsers = lib.mkForce false;
           # Port needs to be exposed to the host network
           PrivateNetwork = lib.mkForce false;
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
           TemporaryFileSystem = "/:ro";
         }
       ];
@@ -273,6 +279,8 @@ in
             "-/etc/static/kanidm"
             "-/etc/ssl"
             "-/etc/static/ssl"
+            "-/etc/passwd"
+            "-/etc/group"
           ];
           BindPaths = [
             # To create the socket
@@ -320,12 +328,16 @@ in
         ProtectHome = false;
         RestrictAddressFamilies = [ "AF_UNIX" ];
         TemporaryFileSystem = "/:ro";
+        Restart = "on-failure";
       };
       environment.RUST_LOG = "info";
     };
 
     # These paths are hardcoded
     environment.etc = lib.mkMerge [
+      (lib.mkIf cfg.enableServer {
+        "kanidm/server.toml".source = serverConfigFile;
+      })
       (lib.mkIf options.services.kanidm.clientSettings.isDefined {
         "kanidm/config".source = clientConfigFile;
       })

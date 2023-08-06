@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , gperf
 , guile
 , guile-lib
@@ -46,6 +45,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.gnu;
+    platforms = guile.meta.platforms;
   };
 }

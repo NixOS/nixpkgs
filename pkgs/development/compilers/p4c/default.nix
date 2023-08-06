@@ -25,15 +25,15 @@
 let
   toCMakeBoolean = v: if v then "ON" else "OFF";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p4c";
-  version = "1.2.3.8";
+  version = "1.2.4.1";
 
   src = fetchFromGitHub {
     owner = "p4lang";
     repo = "p4c";
-    rev = "v${version}";
-    sha256 = "sha256-EvMoooB6kAV0fJ3XBFJKpams87ImybTXw0C5P9YAa9Q=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Whdryz1Gt0ymE7cj+mI95lW3Io9yBvLqcWa04gu5zEw=";
     fetchSubmodules = true;
   };
 
@@ -78,12 +78,12 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/p4lang/p4c";
+  meta = {
     changelog = "https://github.com/p4lang/p4c/releases";
     description = "Reference compiler for the P4 programming language";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ raitobezarius govanify ];
-    license = licenses.asl20;
+    homepage = "https://github.com/p4lang/p4c";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raitobezarius govanify ];
+    platforms = lib.platforms.linux;
   };
-}
+})

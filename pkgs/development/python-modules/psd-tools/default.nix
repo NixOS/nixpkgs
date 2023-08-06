@@ -4,7 +4,7 @@
 , pythonOlder
 , docopt
 , pillow
-, scikitimage
+, scikit-image
 , aggdraw
 , pytestCheckHook
 , ipython
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.9.24";
+  version = "1.9.28";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "psd-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RW8v3UeO2tCjKkCqraFw2IfVt2YL3EbixfGsK7pOQYI=";
+    hash = "sha256-+oxXuZaHkLPuMIsiFOkvW6VLuGxpV7YKs6Gxp/lexVQ=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     docopt
     ipython
     pillow
-    scikitimage
+    scikit-image
   ];
 
   nativeCheckInputs = [

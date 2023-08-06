@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , which
 , python3
 , gfortran
@@ -14,21 +13,15 @@
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-    hash = "sha256-Ii61M8ncVHNJSes6QWn1Su+hvCC+OF/Bz3mMghn+ZAA=";
+    hash = "sha256-hwY9TC6kHHNqoujLvHwvGgYuIjlVFX+EBFU87XZJE80=";
   };
 
   patches = [
     ./patches/1.8/0002-skip-failing-and-flaky-tests.patch
-    # https://github.com/JuliaLang/julia/issues/46530
-    (fetchpatch {
-      url = "https://github.com/JuliaLang/julia/commit/b9b60fcde61ff18d77cb548421b3f71a369b4e02.patch";
-      revert = true;
-      hash = "sha256-XXn4U8aWkWwZYwpvIx+Gk5E16prjeXooF9AafK0aEfg=";
-    })
   ];
 
   strictDeps = true;
@@ -56,8 +49,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=$(out)"
     "USE_BINARYBUILDER=0"
-    # workaround for https://github.com/JuliaLang/julia/issues/47989
-    "USE_INTEL_JITEVENTS=0"
   ] ++ lib.optionals stdenv.isx86_64 [
     # https://github.com/JuliaCI/julia-buildbot/blob/master/master/inventory.py
     "JULIA_CPU_TARGET=generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1)"

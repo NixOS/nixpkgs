@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , freezegun
 , gettext
-, importlib-metadata
 , pytestCheckHook
 , pythonOlder
 , hatch-vcs
@@ -12,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "humanize";
-  version = "4.6.0";
+  version = "4.7.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-humanize";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-sI773uzh+yMiyu1ebsk6zutfyt+tfx/zT/X2AdH5Fyg=";
+    hash = "sha256-ofRdrFVxIxAtv8WopJDX8Te8yaaJTnDbRM56V7pm/NM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -30,10 +29,6 @@ buildPythonPackage rec {
     hatch-vcs
     hatchling
     gettext
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   postBuild = ''

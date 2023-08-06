@@ -5,13 +5,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-tools";
-  version = "1.0.30";
+  version = "1.0.38";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-Sd4oYHywXejLPDbNmQ73bWGw48QNQ8M+2l3CjC6D6Iw=";
+    hash = "sha256-SGNIGOpkREGu/bmojOh+TPlg75rKoa04u+BDiida6dI=";
     fetchSubmodules = true;
   };
 

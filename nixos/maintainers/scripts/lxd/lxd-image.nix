@@ -1,7 +1,5 @@
 { lib, config, pkgs, ... }:
 
-with lib;
-
 {
   imports = [
     ../../../modules/virtualisation/lxc-container.nix

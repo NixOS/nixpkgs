@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Minimalistic scrobbler for libre.fm & last.fm";
+    description = "Minimalistic scrobbler for ListenBrainz, libre.fm, & last.fm";
     homepage = "https://github.com/mariusor/mpris-scrobbler";
     license = licenses.mit;
     maintainers = with maintainers; [ emantor ];

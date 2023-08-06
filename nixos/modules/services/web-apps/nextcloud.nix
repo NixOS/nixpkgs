@@ -8,6 +8,21 @@ let
 
   jsonFormat = pkgs.formats.json {};
 
+  defaultPHPSettings = {
+    short_open_tag = "Off";
+    expose_php = "Off";
+    error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
+    display_errors = "stderr";
+    "opcache.enable_cli" = "1";
+    "opcache.interned_strings_buffer" = "8";
+    "opcache.max_accelerated_files" = "10000";
+    "opcache.memory_consumption" = "128";
+    "opcache.revalidate_freq" = "1";
+    "opcache.fast_shutdown" = "1";
+    "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
+    catch_workers_output = "yes";
+  };
+
   inherit (cfg) datadir;
 
   phpPackage = cfg.phpPackage.buildEnv {
@@ -26,21 +41,12 @@ let
         ++ optional cfg.caching.memcached memcached
       )
       ++ cfg.phpExtraExtensions all; # Enabled by user
-    extraConfig = toKeyValue phpOptions;
+    extraConfig = toKeyValue cfg.phpOptions;
   };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
   };
-
-  phpOptions = {
-    upload_max_filesize = cfg.maxUploadSize;
-    post_max_size = cfg.maxUploadSize;
-    memory_limit = cfg.maxUploadSize;
-  } // cfg.phpOptions
-    // optionalAttrs cfg.caching.apcu {
-      "apc.enable_cli" = "1";
-    };
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
@@ -207,11 +213,11 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud25" "nextcloud26" ];
+      relatedPackages = [ "nextcloud25" "nextcloud26" "nextcloud27" ];
     };
     phpPackage = mkOption {
       type = types.package;
-      relatedPackages = [ "php80" "php81" ];
+      relatedPackages = [ "php81" "php82" ];
       defaultText = "pkgs.php";
       description = lib.mdDoc ''
         PHP package to use for Nextcloud.
@@ -263,22 +269,33 @@ in {
 
     phpOptions = mkOption {
       type = types.attrsOf types.str;
-      default = {
-        short_open_tag = "Off";
-        expose_php = "Off";
-        error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
-        display_errors = "stderr";
-        "opcache.enable_cli" = "1";
-        "opcache.interned_strings_buffer" = "8";
-        "opcache.max_accelerated_files" = "10000";
-        "opcache.memory_consumption" = "128";
-        "opcache.revalidate_freq" = "1";
-        "opcache.fast_shutdown" = "1";
-        "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
-        catch_workers_output = "yes";
-      };
+      defaultText = literalExpression (generators.toPretty { } defaultPHPSettings);
       description = lib.mdDoc ''
         Options for PHP's php.ini file for nextcloud.
+
+        Please note that this option is _additive_ on purpose while the
+        attribute values inside the default are option defaults: that means that
+
+        ```nix
+        {
+          services.nextcloud.phpOptions."opcache.interned_strings_buffer" = "23";
+        }
+        ```
+
+        will override the `php.ini` option `opcache.interned_strings_buffer` without
+        discarding the rest of the defaults.
+
+        Overriding all of `phpOptions` (including `upload_max_filesize`, `post_max_size`
+        and `memory_limit` which all point to [](#opt-services.nextcloud.maxUploadSize)
+        by default) can be done like this:
+
+        ```nix
+        {
+          services.nextcloud.phpOptions = lib.mkForce {
+            /* ... */
+          };
+        }
+        ```
       '';
     };
 
@@ -317,7 +334,7 @@ in {
 
       createLocally = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = lib.mdDoc ''
           Create the database and database user locally.
         '';
@@ -381,7 +398,8 @@ in {
         type = types.str;
         description = lib.mdDoc ''
           The full path to a file that contains the admin's password. Must be
-          readable by user `nextcloud`.
+          readable by user `nextcloud`. The password is set only in the initial
+          setup of nextcloud by the systemd `nextcloud-setup.service`.
         '';
       };
 
@@ -551,6 +569,19 @@ in {
       default = true;
     };
 
+    configureRedis = lib.mkOption {
+      type = lib.types.bool;
+      default = config.services.nextcloud.notify_push.enable;
+      defaultText = literalExpression "config.services.nextcloud.notify_push.enable";
+      description = lib.mdDoc ''
+        Whether to configure nextcloud to use the recommended redis settings for small instances.
+
+        ::: {.note}
+        The `notify_push` app requires redis to be configured. If this option is turned off, this must be configured manually.
+        :::
+      '';
+    };
+
     caching = {
       apcu = mkOption {
         type = types.bool;
@@ -675,7 +706,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 26;
+        latest = 27;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -694,10 +725,9 @@ in {
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
-        ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
+        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
         ++ (optional cfg.enableBrokenCiphersForSSE ''
           You're using PHP's openssl extension built against OpenSSL 1.1 for Nextcloud.
           This is only necessary if you're using Nextcloud's server-side encryption.
@@ -730,20 +760,32 @@ in {
             ''
           else if versionOlder stateVersion "22.11" then nextcloud24
           else if versionOlder stateVersion "23.05" then nextcloud25
-          else nextcloud26
+          else if versionOlder stateVersion "23.11" then nextcloud26
+          else nextcloud27
         );
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "26" then pkgs.php81
         else pkgs.php82;
+
+      services.nextcloud.phpOptions = mkMerge [
+        (mapAttrs (const mkOptionDefault) defaultPHPSettings)
+        {
+          upload_max_filesize = cfg.maxUploadSize;
+          post_max_size = cfg.maxUploadSize;
+          memory_limit = cfg.maxUploadSize;
+        }
+        (mkIf cfg.caching.apcu {
+          "apc.enable_cli" = "1";
+        })
+      ];
     }
 
     { assertions = [
       { assertion = cfg.database.createLocally -> cfg.config.dbpassFile == null;
         message = ''
-          Using `services.nextcloud.database.createLocally` (that now defaults
-          to true) with database password authentication is no longer
-          supported.
+          Using `services.nextcloud.database.createLocally` with database
+          password authentication is no longer supported.
 
           If you use an external database (or want to use password auth for any
           other reason), set `services.nextcloud.database.createLocally` to
@@ -1042,6 +1084,23 @@ in {
           name = cfg.config.dbuser;
           ensurePermissions = { "DATABASE ${cfg.config.dbname}" = "ALL PRIVILEGES"; };
         }];
+      };
+
+      services.redis.servers.nextcloud = lib.mkIf cfg.configureRedis {
+        enable = true;
+        user = "nextcloud";
+      };
+
+      services.nextcloud = lib.mkIf cfg.configureRedis {
+        caching.redis = true;
+        extraOptions = {
+          "memcache.distributed" = ''\OC\Memcache\Redis'';
+          "memcache.locking" = ''\OC\Memcache\Redis'';
+          redis = {
+            host = config.services.redis.servers.nextcloud.unixSocket;
+            port = 0;
+          };
+        };
       };
 
       services.nginx.enable = mkDefault true;

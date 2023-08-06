@@ -1,18 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , pytestCheckHook
 , gym
+, gymnasium
 , torch
 , tensorboard
 , tqdm
+, wandb
 , packaging
 }:
 
 buildPythonPackage rec {
   pname = "skrl";
-  version = "0.10.1";
+  version = "0.10.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -20,14 +24,25 @@ buildPythonPackage rec {
     owner = "Toni-SM";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/fFKotDibc+wcoGteloh5OEKbQdN/W1NdF+mWf8mSNw=";
+    hash = "sha256-OY5+bUPg+G1eKFMvHlXSHwc2WWHTpyoyCKjY3MvlLyM=";
   };
+
+  patches = [
+    # remove after next release:
+    (fetchpatch {
+       name = "fix-python_requires-specification";
+       url = "https://github.com/Toni-SM/skrl/pull/62/commits/9b554adfe2da6cd97cccbbcd418a349cc8f1de80.patch";
+       hash = "sha256-GeASMU1Pgy8U1zaIAVroBDjYaY+n93XP5uFyP4U9lok=";
+    })
+  ];
 
   propagatedBuildInputs = [
     gym
+    gymnasium
     torch
     tensorboard
     tqdm
+    wandb
     packaging
   ];
 

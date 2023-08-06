@@ -19,7 +19,6 @@ let param = {
   };
 }."${version}"; in
 
-let v = version; in
 buildDunePackage rec {
   pname = "odoc-parser";
   inherit version;

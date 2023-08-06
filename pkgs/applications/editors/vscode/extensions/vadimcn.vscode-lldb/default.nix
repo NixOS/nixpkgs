@@ -1,11 +1,11 @@
 { pkgs, lib, stdenv, fetchFromGitHub, runCommand, rustPlatform, makeWrapper, llvmPackages
-, nodePackages, cmake, nodejs, unzip, python3, pkg-config, libsecret
+, buildNpmPackage, cmake, nodejs, unzip, python3, pkg-config, libsecret, darwin
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.8.1";
+  version = "1.9.2";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -15,7 +15,7 @@ let
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-5wrw8LNH14WAyIKIRGFbvrISb5RUXeD5Uh/weja9p4Q=";
+    hash = "sha256-6QmYRlSv8jY3OE3RcYuZt+c3z6GhFc8ESETVfCfF5RI=";
   };
 
   # need to build a custom version of lldb and llvm for enhanced rust support
@@ -25,7 +25,7 @@ let
     pname = "${pname}-adapter";
     inherit version src;
 
-    cargoSha256 = "sha256-Lpo2jaDMaZGwSrpQBvBCscVbWi2Db1Cx1Tv84v1H4Es=";
+    cargoHash = "sha256-Qq2igtH1XIB+NAEES6hdNZcMbEmaFN69qIJ+gTYupvQ=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -38,19 +38,41 @@ let
       "--bin=codelldb"
     ];
 
+    patches = [ ./adapter-output-shared_object.patch ];
+
     # Tests are linked to liblldb but it is not available here.
     doCheck = false;
   };
 
-  nodeDeps = ((import ./build-deps/default.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  }).nodeDependencies.override (old: {
-    inherit src version;
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [libsecret];
-    dontNpmInstall = true;
-  }));
+  nodeDeps = buildNpmPackage {
+    pname = "${pname}-node-deps";
+    inherit version src;
+
+    npmDepsHash = "sha256-fMKGi+AJTMlWl7SQtZ21hUwOLgqlFYDhwLvEergQLfI=";
+
+    nativeBuildInputs = [
+      python3
+      pkg-config
+    ];
+
+    buildInputs = [
+      libsecret
+    ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      Security
+      AppKit
+    ]);
+
+    dontNpmBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/lib
+      cp -r node_modules $out/lib
+
+      runHook postInstall
+    '';
+  };
 
 in stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
@@ -63,7 +85,7 @@ in stdenv.mkDerivation {
   patches = [ ./cmake-build-extension-only.patch ];
 
   postConfigure = ''
-    cp -r ${nodeDeps}/lib/{node_modules,package-lock.json} .
+    cp -r ${nodeDeps}/lib/node_modules .
   '';
 
   cmakeFlags = [
@@ -71,6 +93,10 @@ in stdenv.mkDerivation {
     "-DVERSION_SUFFIX="
   ];
   makeFlags = [ "vsix_bootstrap" ];
+
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    export HOME=$TMPDIR
+  '';
 
   installPhase = ''
     ext=$out/$installPrefix
@@ -80,7 +106,8 @@ in stdenv.mkDerivation {
 
     mkdir -p $ext/{adapter,formatters}
     mv -t $ext vsix-extracted/extension/*
-    cp -t $ext/adapter ${adapter}/{bin,lib}/* ../adapter/*.py
+    cp -t $ext/adapter ${adapter}/{bin,lib}/*
+    cp -r ../adapter/scripts $ext/adapter
     wrapProgram $ext/adapter/codelldb \
       --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
     cp -t $ext/formatters ../formatters/*.py

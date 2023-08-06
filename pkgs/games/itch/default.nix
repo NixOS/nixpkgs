@@ -1,6 +1,5 @@
 { lib
 , stdenvNoCC
-, fetchpatch
 , fetchzip
 , fetchFromGitHub
 , butler
@@ -12,22 +11,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "itch";
-  version = "25.5.1";
+  version = "25.6.2";
 
   src = fetchzip {
     url = "https://broth.itch.ovh/${pname}/linux-amd64/${version}/itch.zip";
     stripRoot = false;
-    sha256 = "sha256-ejfS+sqhacW2h8u96W4fout3V8xrBs0SrW5w/7X83m4=";
+    sha256 = "sha256-F/vaYBHCygseiKNMJ+jBy31YDIFqYToAETGUl/pkHII=";
   };
-
-  patches = [
-    # Fixes crash while browsing the store.
-    (fetchpatch {
-      name = "itch.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/itch.patch?h=itch-bin&id=0b181454567029141749f870880b10093216e133";
-      sha256 = "sha256-gmLL/BMondSflERm0z+DuGDP56JhDXiyxEwLUavTD8Q=";
-    })
-  ];
 
   itch-setup = fetchzip {
     url = "https://broth.itch.ovh/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
@@ -39,8 +29,8 @@ stdenvNoCC.mkDerivation rec {
     fetchFromGitHub {
         owner = "itchio";
         repo = pname;
-        rev = "v${version}";
-        hash = "sha256-DZBmf8fe0zw5uiQjNKXw8g/vU2hjNDa87z/7XuhyXog=";
+        rev = "v25.6.1-canary"; # Use ${version} if possible
+        hash = "sha256-iBp7K7AW97SOlRa8N8TW2LcVtmUi9JU00fYUuPwKORc=";
         sparseCheckout = [ sparseCheckout ];
       } + sparseCheckout;
 

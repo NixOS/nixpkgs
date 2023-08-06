@@ -5,7 +5,7 @@
 }:
 
 mkDerivation rec {
-  version = "0.9.10";
+  version = "0.9.11";
   pname = "qjackctl";
 
   # some dependencies such as killall have to be installed additionally
@@ -14,7 +14,7 @@ mkDerivation rec {
     owner = "rncbc";
     repo = "qjackctl";
     rev = "${pname}_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-XF5v+VgSCqqV2ft9qw1NTNzeYOv1OuhljJGdgikPLEo=";
+    sha256 = "sha256-dZW9bZ17O/1DxBr5faYSE+YkSuz7NIJSc1vqxzOOxyg=";
   };
 
   buildInputs = [

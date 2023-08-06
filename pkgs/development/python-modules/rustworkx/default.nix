@@ -1,6 +1,8 @@
 { fetchFromGitHub
 , buildPythonPackage
+, cargo
 , rustPlatform
+, rustc
 , setuptools-rust
 , numpy
 , fixtures
@@ -26,11 +28,12 @@ buildPythonPackage rec {
     hash = "sha256-imhiPj763iumRQb+oeBOpICD1nCvzZx+3yQWu1QRRQQ=";
   };
 
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs = [
+    setuptools-rust
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [ numpy ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 

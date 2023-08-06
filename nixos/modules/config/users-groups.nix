@@ -539,14 +539,12 @@ in {
 
     # systemd initrd
     boot.initrd.systemd.users = mkOption {
-      visible = false;
       description = ''
         Users to include in initrd.
       '';
       default = {};
       type = types.attrsOf (types.submodule ({ name, ... }: {
         options.uid = mkOption {
-          visible = false;
           type = types.int;
           description = ''
             ID of the user in initrd.
@@ -555,7 +553,6 @@ in {
           default = cfg.users.${name}.uid;
         };
         options.group = mkOption {
-          visible = false;
           type = types.singleLineStr;
           description = ''
             Group the user belongs to in initrd.
@@ -567,14 +564,12 @@ in {
     };
 
     boot.initrd.systemd.groups = mkOption {
-      visible = false;
       description = ''
         Groups to include in initrd.
       '';
       default = {};
       type = types.attrsOf (types.submodule ({ name, ... }: {
         options.gid = mkOption {
-          visible = false;
           type = types.int;
           description = ''
             ID of the group in initrd.
@@ -652,7 +647,7 @@ in {
       deps = [ "users" ];
       text = ''
         users=()
-        while IFS=: read -r user hash tail; do
+        while IFS=: read -r user hash _; do
           if [[ "$hash" = "$"* && ! "$hash" =~ ^\''$${cryptSchemeIdPatternGroup}\$ ]]; then
             users+=("$user")
           fi

@@ -60,7 +60,7 @@ in
         default = [ ];
         example = [ "192.168.1.0/24" "192.168.2.0/24" ];
         description = lib.mdDoc ''
-          Acess control list for incoming SIP registrations.
+          Access control list for incoming SIP registrations.
         '';
       };
 
@@ -69,7 +69,7 @@ in
         default = [ ];
         example = [ "123.45.0.0/16" "123.46.0.0/16" ];
         description = lib.mdDoc ''
-          Acess control list for incoming SIP traffic.
+          Access control list for incoming SIP traffic.
         '';
       };
 
@@ -78,7 +78,7 @@ in
         default = [ ];
         example = [ "10.0.0.0/8" "11.0.0.0/8" ];
         description = lib.mdDoc ''
-          Acess control list for denying incoming
+          Access control list for denying incoming
           SIP registrations and traffic.
         '';
       };

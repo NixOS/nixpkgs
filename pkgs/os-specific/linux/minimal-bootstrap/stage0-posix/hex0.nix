@@ -9,7 +9,7 @@ derivationWithMeta {
   pname = "hex0";
   builder = hex0-seed;
   args = [
-    "${src}/bootstrap-seeds/POSIX/x86/hex0_x86.hex0"
+    "${src}/x86/hex0_x86.hex0"
     (placeholder "out")
   ];
 
@@ -17,7 +17,7 @@ derivationWithMeta {
     description = "Minimal assembler for bootstrapping";
     homepage = "https://github.com/oriansj/stage0-posix";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.minimal-bootstrap.members;
     platforms = [ "i686-linux" ];
   };
 

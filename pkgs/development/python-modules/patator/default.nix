@@ -1,16 +1,33 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
-, paramiko, pycurl, ajpy, impacket, pyopenssl, cx_oracle, mysqlclient
-, psycopg2, pycrypto, dnspython, ipy, pysnmp, pyasn1, pysqlcipher3 }:
-
+{ lib
+, ajpy
+, buildPythonPackage
+, cx_oracle
+, dnspython
+, fetchPypi
+, impacket
+, ipy
+, mysqlclient
+, paramiko
+, psycopg2
+, pyasn1
+, pycrypto
+, pycurl
+, pyopenssl
+, pysnmp
+, pysqlcipher3
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "patator";
   version = "0.9";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "68cb24bdc3042ee0d47a288b19a8b99a6c54bdbd4ddf0c5817d9b9ac0a0d8a15";
+    hash = "sha256-aMskvcMELuDUeiiLGai5mmxUvb1N3wxYF9m5rAoNihU=";
   };
 
   postPatch = ''
@@ -19,19 +36,19 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    paramiko
-    pycurl
     ajpy
-    impacket
-    pyopenssl
     cx_oracle
-    mysqlclient
-    psycopg2
-    pycrypto
     dnspython
+    impacket
     ipy
-    pysnmp
+    mysqlclient
+    paramiko
+    psycopg2
     pyasn1
+    pycrypto
+    pycurl
+    pyopenssl
+    pysnmp
     pysqlcipher3
   ];
 
@@ -39,9 +56,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "multi-purpose brute-forcer";
+    description = "Multi-purpose brute-forcer";
     homepage = "https://github.com/lanjelot/patator";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ y0no SuperSandro2000 ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ y0no ];
   };
 }

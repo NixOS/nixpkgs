@@ -1,26 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices, pkgsStatic }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, ApplicationServices
+, CoreServices
+, pkgsStatic
 
-stdenv.mkDerivation rec {
-  version = "1.44.2";
+# for passthru.tests
+, bind
+, cmake
+, knot-resolver
+, lispPackages
+, luajitPackages
+, mosquitto
+, neovim
+, nodejs
+, ocamlPackages
+, python3
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.46.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-K6v+00basjI32ON27ZjC5spQi/zWCcslDwQwyosq2iY=";
+    owner = "libuv";
+    repo = "libuv";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Lrsyh4qd3OkTw1cSPfahzfSGNt6+pRN1X21iiv1SsFo=";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # Fix tests for statically linked variant upstream PR is
-    # https://github.com/libuv/libuv/pull/3735
-    (fetchpatch {
-      url = "https://github.com/libuv/libuv/commit/9d898acc564351dde74e9ed9865144e5c41f5beb.patch";
-      sha256 = "sha256-6XsjrseD8a+ny887EKOX0NmHocLMXGf2YL13vkNHUZ0=";
-    })
-  ];
 
   postPatch = let
     toDisable = [
@@ -30,7 +43,7 @@ stdenv.mkDerivation rec {
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
-      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
+      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" "metrics_pool_events" # times out sometimes
       "fs_fstat" # https://github.com/libuv/libuv/issues/2235#issuecomment-1012086927
 
       # Assertion failed in test/test-tcp-bind6-error.c on line 60: r == UV_EADDRINUSE
@@ -49,7 +62,7 @@ stdenv.mkDerivation rec {
         "tcp_create_early" "tcp_close" "tcp_bind_error_inval"
         "tcp_bind_error_addrinuse" "tcp_shutdown_after_write"
         "tcp_open" "tcp_write_queue_order" "tcp_try_write" "tcp_writealot"
-        "multiple_listen" "delayed_accept"
+        "multiple_listen" "delayed_accept" "udp_recv_in_a_row"
         "shutdown_close_tcp" "shutdown_eof" "shutdown_twice" "callback_stack"
         "tty_pty" "condvar_5" "hrtime" "udp_multicast_join"
         # Tests that fail when sandboxing is enabled.
@@ -63,7 +76,7 @@ stdenv.mkDerivation rec {
       "shutdown_close_pipe"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
-    in lib.optionalString doCheck ''
+    in lib.optionalString (finalAttrs.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
@@ -85,15 +98,24 @@ stdenv.mkDerivation rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests.static = pkgsStatic.libuv;
+  passthru.tests = {
+    inherit bind cmake knot-resolver mosquitto neovim nodejs;
+    inherit (lispPackages) cl-libuv;
+    luajit-libluv = luajitPackages.libluv;
+    luajit-luv = luajitPackages.luv;
+    ocaml-luv = ocamlPackages.luv;
+    python-pyuv = python3.pkgs.pyuv;
+    python-uvloop = python3.pkgs.uvloop;
+    static = pkgsStatic.libuv;
+  };
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
-    changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
+    changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     maintainers = with maintainers; [ cstrahan ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 
-}
+})

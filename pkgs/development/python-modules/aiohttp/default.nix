@@ -25,7 +25,6 @@
 , freezegun
 , gunicorn
 , pytest-mock
-, pytest-xdist
 , pytestCheckHook
 , re-assert
 , trustme
@@ -48,6 +47,12 @@ buildPythonPackage rec {
       # https://github.com/aio-libs/aiohttp/pull/7178
       url = "https://github.com/aio-libs/aiohttp/commit/5718879cdb6a98bf48810a994b78bc02abaf3e07.patch";
       hash = "sha256-4UynkTZOzWzusQ2+MPZszhFA8I/PJNLeT/hHF/fASy8=";
+    })
+    (fetchpatch {
+      # https://github.com/aio-libs/aiohttp/pull/7260
+      # Merged upstream, should likely be dropped post-3.8.4
+      url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
+      hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
     })
   ];
 
@@ -81,12 +86,12 @@ buildPythonPackage rec {
     idna-ssl
   ];
 
+  # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
     async_generator
     freezegun
     gunicorn
     pytest-mock
-    pytest-xdist
     pytestCheckHook
     re-assert
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [

@@ -1,4 +1,4 @@
-{ lib
+{ lib, stdenv
 , buildPythonPackage
 , cffi
 , dos2unix
@@ -73,6 +73,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/coin-or/python-mip/releases";
     changelog = "https://github.com/coin-or/python-mip/releases/tag/${version}";
     license = licenses.epl20;
+    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ nessdoor ];
   };
 }

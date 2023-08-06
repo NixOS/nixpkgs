@@ -39,6 +39,6 @@ let incremental = buildPythonPackage rec {
     homepage = "https://github.com/twisted/incremental";
     description = "Incremental is a small library that versions your Python projects";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }; in incremental

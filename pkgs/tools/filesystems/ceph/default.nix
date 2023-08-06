@@ -3,6 +3,7 @@
 , runCommand
 , fetchurl
 , fetchFromGitHub
+, fetchPypi
 
 # Build time
 , cmake
@@ -106,7 +107,7 @@ let
   optZfs = shouldUsePkg zfs;
 
   # Downgrade rocksdb, 7.10 breaks ceph
-  rocksdb' = rocksdb.overrideAttrs (oldAttrs: {
+  rocksdb' = rocksdb.overrideAttrs {
     version = "7.9.2";
     src = fetchFromGitHub {
       owner = "facebook";
@@ -114,7 +115,7 @@ let
       rev = "refs/tags/v7.9.2";
       hash = "sha256-5P7IqJ14EZzDkbjaBvbix04ceGGdlWBuVFH/5dpD5VM=";
     };
-  });
+  };
 
   hasRadosgw = optExpat != null && optCurl != null && optLibedit != null;
 
@@ -164,21 +165,18 @@ let
   # Watch out for python <> boost compatibility
   python = python310.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs rec {
         version = "1.4.46";
-        src = super.fetchPypi {
+        src = fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
         };
-        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
-          pytest-xdist
-        ]);
-        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+        disabledTestPaths = [
           "test/aaa_profiling"
           "test/ext/mypy"
         ];
-      });
+      };
     };
   };
 
@@ -225,11 +223,11 @@ let
     cmd2
     colorama
   ]);
-  sitePackages = ceph-python-env.python.sitePackages;
+  inherit (ceph-python-env.python) sitePackages;
 
   version = "17.2.5";
   src = fetchurl {
-    url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
+    url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
     hash = "sha256-NiJpwUeROvh0siSaRoRrDm+C0s61CvRiIrbd7JmRspo=";
   };
 in rec {

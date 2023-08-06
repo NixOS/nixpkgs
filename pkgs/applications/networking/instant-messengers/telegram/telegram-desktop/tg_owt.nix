@@ -4,7 +4,7 @@
 , openh264, usrsctp, libevent, libvpx
 , libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
-, mesa, valgrind, libepoxy, libglvnd
+, mesa, libepoxy, libglvnd, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
@@ -53,6 +53,8 @@ stdenv.mkDerivation {
     # Required for linking downstream binaries.
     abseil-cpp openh264 usrsctp libevent libvpx openssl
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     license = licenses.bsd3;

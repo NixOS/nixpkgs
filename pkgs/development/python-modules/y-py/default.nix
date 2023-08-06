@@ -3,6 +3,8 @@
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
+, cargo
+, rustc
 , libiconv
 , pytestCheckHook
 }:
@@ -24,11 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-tpUDGBIHqXsKPsK+1h2sNuiV2I0pGVBokKh+hdFazRQ=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    cargo
+    rustc
   ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;

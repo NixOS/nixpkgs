@@ -23,6 +23,16 @@ in
         description = lib.mdDoc "The Klipper package.";
       };
 
+      logFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/var/lib/klipper/klipper.log";
+        description = lib.mdDoc ''
+          Path of the file Klipper should log to.
+          If `null`, it logs to stdout, which is not recommended by upstream.
+        '';
+      };
+
       inputTTY = mkOption {
         type = types.path;
         default = "/run/klipper/tty";
@@ -101,8 +111,11 @@ in
           (submodule {
             options = {
               enable = mkEnableOption (lib.mdDoc ''
-                building of firmware and addition of klipper-flash tools for manual flashing.
-                This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
+                building of firmware for manual flashing.
+              '');
+              enableKlipperFlash = mkEnableOption (lib.mdDoc ''
+                flashings scripts for firmware. This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
+                Please check the configs at [klipper](https://github.com/Klipper3d/klipper/tree/master/config) whether your board supports flashing via `make flash`.
               '');
               serial = mkOption {
                 type = types.nullOr path;
@@ -151,7 +164,9 @@ in
     systemd.services.klipper =
       let
         klippyArgs = "--input-tty=${cfg.inputTTY}"
-          + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
+          + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}"
+          + optionalString (cfg.logFile != null) " --logfile=${cfg.logFile}"
+        ;
         printerConfigPath =
           if cfg.mutableConfig
           then cfg.mutableConfigFolder + "/printer.cfg"
@@ -177,7 +192,7 @@ in
         '';
 
         serviceConfig = {
-          ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} ${printerConfigPath}";
+          ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${printerConfigPath}";
           RuntimeDirectory = "klipper";
           StateDirectory = "klipper";
           SupplementaryGroups = [ "dialout" ];
@@ -201,11 +216,14 @@ in
       with pkgs;
       let
         default = a: b: if a != null then a else b;
-        firmwares = filterAttrs (n: v: v!= null) (mapAttrs
-          (mcu: { enable, configFile, serial }: if enable then pkgs.klipper-firmware.override {
-            mcu = lib.strings.sanitizeDerivationName mcu;
-            firmwareConfig = configFile;
-          } else null)
+        firmwares = filterAttrs (n: v: v != null) (mapAttrs
+          (mcu: { enable, enableKlipperFlash, configFile, serial }:
+            if enable then
+              pkgs.klipper-firmware.override
+                {
+                  mcu = lib.strings.sanitizeDerivationName mcu;
+                  firmwareConfig = configFile;
+                } else null)
           cfg.firmwares);
         firmwareFlasher = mapAttrsToList
           (mcu: firmware: pkgs.klipper-flash.override {
@@ -214,7 +232,7 @@ in
             flashDevice = default cfg.firmwares."${mcu}".serial cfg.settings."${mcu}".serial;
             firmwareConfig = cfg.firmwares."${mcu}".configFile;
           })
-          firmwares;
+          (filterAttrs (mcu: firmware: cfg.firmwares."${mcu}".enableKlipperFlash) firmwares);
       in
       [ klipper-genconf ] ++ firmwareFlasher ++ attrValues firmwares;
   };

@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , makeWrapper
 , babashka
-, jdk
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D neil $out/bin/neil
     wrapProgram $out/bin/neil \
-      --prefix PATH : "${lib.makeBinPath [ babashka jdk ]}"
+      --prefix PATH : "${lib.makeBinPath [ babashka ]}"
   '';
 
   meta = with lib; {

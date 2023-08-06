@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "khal";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5wBKo24EKdEUoYhhv1EqMPOjdwUS31d3R24kLdbyvPA=";
+    hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     icalendar
     lxml
     pkginfo
-    pkgs.vdirsyncer
+    vdirsyncer
     python-dateutil
     pytz
     pyxdg
