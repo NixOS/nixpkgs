@@ -4,7 +4,16 @@
 , # Incompatible licenses, LGPLv3 - GPLv2
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
-, enablePerl         ? (!stdenv.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
+# Original enablePerl value was:
+# (!stdenv.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform)
+# Since perl 5.38.0, we experience this issue:
+# https://github.com/rkd77/elinks/issues/256
+#
+# Using perl536 doesn't make the build fail, but we prefer not depend on perl
+# when we are not aware of the features that this dependency enables -
+# upstream's manual mentions the word `perl` only once.
+, enablePerl         ? false
+, perl ? null
 # re-add javascript support when upstream supports modern spidermonkey
 }:
 
