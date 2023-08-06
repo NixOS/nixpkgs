@@ -163,6 +163,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://quictls.github.io";
     description = "TLS/SSL and crypto library with QUIC APIs";
+    changelog = "https://github.com/quictls/openssl/blob/${src.rev}/CHANGES.md";
     license = licenses.openssl;
     platforms = platforms.all;
     maintainers = with maintainers; [ izorkin ];
