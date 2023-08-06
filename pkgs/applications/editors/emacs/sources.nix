@@ -50,12 +50,12 @@ in
 
   emacs29 = import ./generic.nix {
     pname = "emacs";
-    version = "29.1-rc1";
+    version = "29.1";
     variant = "mainline";
     src = fetchFromSavannah {
       repo = "emacs";
-      rev = "29.1-rc1";
-      hash = "sha256-p0lBSKsHrFwYTqO5UVIF/PgiqwdhYQE4oUVcPtd+gsU=";
+      rev = "29.1";
+      hash = "sha256-3HDCwtOKvkXwSULf3W7YgTz4GV8zvYnh2RrL28qzGKg=";
     };
 
     meta = mainlineMeta;
@@ -78,7 +78,7 @@ in
       longDescription = mainlineMeta.longDescription + ''
 
         This release is built from Mitsuharu Yamamoto's patched source code
-        tailoired for MacOS X.
+        tailored for MacOS X.
       '';
       inherit (mainlineMeta) license maintainers;
       platforms = lib.platforms.darwin;
