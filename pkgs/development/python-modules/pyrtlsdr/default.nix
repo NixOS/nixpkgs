@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyrtlsdr";
-  version = "0.2.93";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LeKbtOQDcIinjokBK8LMhLc9xFxgYIsot9kD9ikjuiY=";
+    sha256 = "sha256-+z5YO6BzuGHo4LxeYvZvBzZekUf102SR3krWLyPkU2I=";
   };
 
   propagatedBuildInputs = [ setuptools ];
