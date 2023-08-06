@@ -59,7 +59,9 @@ in stdenv.mkDerivation {
     cp -r *.app $out/Applications
   '';
 
-  passthru.updateScript = updateScript;
+  passthru = {
+    inherit updateScript;
+  };
 
   meta = with lib; {
     changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";

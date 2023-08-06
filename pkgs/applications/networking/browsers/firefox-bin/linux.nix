@@ -95,52 +95,52 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (source) url sha256; };
 
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      alsa-lib
-      atk
-      cairo
-      curl
-      cups
-      dbus-glib
-      dbus
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      glibc
-      gtk3
-      libkrb5
-      mesa
-      libX11
-      libXScrnSaver
-      libXcomposite
-      libXcursor
-      libxcb
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXinerama
-      libXrender
-      libXrandr
-      libXt
-      libXtst
-      libcanberra
-      libnotify
-      libGLU libGL
-      nspr
-      nss
-      pango
-      pipewire
-      pciutils
-      heimdal
-      libpulseaudio
-      systemd
-      ffmpeg
-    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
-      stdenv.cc.cc
-    ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    alsa-lib
+    atk
+    cairo
+    curl
+    cups
+    dbus-glib
+    dbus
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    glibc
+    gtk3
+    libkrb5
+    mesa
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libxcb
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXinerama
+    libXrender
+    libXrandr
+    libXt
+    libXtst
+    libcanberra
+    libnotify
+    libGLU libGL
+    nspr
+    nss
+    pango
+    pipewire
+    pciutils
+    heimdal
+    libpulseaudio
+    systemd
+    ffmpeg
+  ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
+    stdenv.cc.cc
+  ];
 
   inherit gtk3;
 
@@ -157,53 +157,55 @@ stdenv.mkDerivation {
     echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
   '';
 
-  installPhase =
-    ''
-      mkdir -p "$prefix/usr/lib/firefox-bin-${version}"
-      cp -r * "$prefix/usr/lib/firefox-bin-${version}"
+  installPhase = ''
+    mkdir -p "$prefix/usr/lib/firefox-bin-${version}"
+    cp -r * "$prefix/usr/lib/firefox-bin-${version}"
 
-      mkdir -p "$out/bin"
-      ln -s "$prefix/usr/lib/firefox-bin-${version}/firefox" "$out/bin/"
+    mkdir -p "$out/bin"
+    ln -s "$prefix/usr/lib/firefox-bin-${version}/firefox" "$out/bin/"
 
-      for executable in \
-        firefox firefox-bin plugin-container \
-        updater crashreporter webapprt-stub \
-        glxtest vaapitest
-      do
-        if [ -e "$out/usr/lib/firefox-bin-${version}/$executable" ]; then
-          patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-            "$out/usr/lib/firefox-bin-${version}/$executable"
-        fi
-      done
+    for executable in \
+      firefox firefox-bin plugin-container \
+      updater crashreporter webapprt-stub \
+      glxtest vaapitest
+    do
+      if [ -e "$out/usr/lib/firefox-bin-${version}/$executable" ]; then
+        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+          "$out/usr/lib/firefox-bin-${version}/$executable"
+      fi
+    done
 
-      find . -executable -type f -exec \
-        patchelf --set-rpath "$libPath" \
-          "$out/usr/lib/firefox-bin-${version}/{}" \;
+    find . -executable -type f -exec \
+      patchelf --set-rpath "$libPath" \
+        "$out/usr/lib/firefox-bin-${version}/{}" \;
 
-      # wrapFirefox expects "$out/lib" instead of "$out/usr/lib"
-      ln -s "$out/usr/lib" "$out/lib"
+    # wrapFirefox expects "$out/lib" instead of "$out/usr/lib"
+    ln -s "$out/usr/lib" "$out/lib"
 
-      gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
+    gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
 
-      # See: https://github.com/mozilla/policy-templates/blob/master/README.md
-      mkdir -p "$out/lib/firefox-bin-${version}/distribution";
-      ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
-    '';
+    # See: https://github.com/mozilla/policy-templates/blob/master/README.md
+    mkdir -p "$out/lib/firefox-bin-${version}/distribution";
+    ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
+  '';
 
-  passthru.binaryName = "firefox";
-  passthru.libName = "firefox-bin-${version}";
-  passthru.execdir = "/bin";
-  passthru.ffmpegSupport = true;
-  passthru.gssSupport = true;
-  # update with:
-  # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
-  passthru.updateScript = import ./update.nix {
-    inherit pname channel lib writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
-    baseUrl =
-      if channel == "devedition"
-        then "https://archive.mozilla.org/pub/devedition/releases/"
-        else "https://archive.mozilla.org/pub/firefox/releases/";
+  passthru = {
+    binaryName = "firefox";
+    libName = "firefox-bin-${version}";
+    execdir = "/bin";
+    ffmpegSupport = true;
+    gssSupport = true;
+    # update with:
+    # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
+    updateScript = import ./update.nix {
+      inherit pname channel lib writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
+      baseUrl =
+        if channel == "devedition"
+          then "https://archive.mozilla.org/pub/devedition/releases/"
+          else "https://archive.mozilla.org/pub/firefox/releases/";
+    };
   };
+
   meta = with lib; {
     changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
