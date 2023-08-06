@@ -1,7 +1,7 @@
 { version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
-, gnulib
+, gnulib, gawk
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -55,9 +55,13 @@ stdenv.mkDerivation {
     ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
-    # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
-    # fallbacks.
-    ++ optional crossBuildTools "--enable-perl-xs=no"
+    ++ optionals crossBuildTools [
+      # Prevent texindex from using build platform awk from PATH
+      "TI_AWK=${gawk}/bin/awk"
+      # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
+      # fallbacks.
+      "--enable-perl-xs=no"
+    ]
     ++ lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
