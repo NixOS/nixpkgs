@@ -1,8 +1,10 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchCrate
-, fetchpatch
+, fetchFromGitHub
+, protobuf
+, dbus
+, openssl
 , pkg-config
 , alsa-lib
 , darwin
@@ -10,22 +12,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.7.10";
+  version = "0.7.11";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-m0hi5u4BcRcEDEpg1BoWXc25dfhD6+OJtqSZfSdV0HM=";
+  src = fetchFromGitHub {
+    owner = "tramhao";
+    repo = "termusic";
+    rev = "v${version}";
+    hash = "sha256-ykOBXM/WF+zasAt+6mgY2aSFCpGaYcqk+YI7YLM3MWs=";
   };
 
-  cargoHash = "sha256-A83gLsaPm6t4nm7DJfcp9z1huDU/Sfy9gunP8pzBiCA=";
+  cargoHash = "sha256-BrOpU0RFdlRXQIMjfHfs/XYIdBCYKFSA+5by/rGzC8Y=";
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     rustPlatform.bindgenHook
   ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
+    dbus
+    openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AudioUnit
   ];
