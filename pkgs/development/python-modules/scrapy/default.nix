@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.9.0";
+  version = "2.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-VkyXK1blS4MUHzlc4/aiW/4gk9YdE/m4HQU4ThnbmNo=";
+    hash = "sha256-ThajP8jAOli99OjUvcofhnNU6sacz1c2WMf/NPoMrjk=";
   };
 
   nativeBuildInputs = [
@@ -98,6 +98,7 @@ buildPythonPackage rec {
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
     "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+    "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
     # Depends on uvloop
