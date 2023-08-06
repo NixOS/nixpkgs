@@ -20,7 +20,7 @@
 , jack
 , jsoncpp
 , libarchive
-, libgit2
+, libgit2_1_5
 , libnatpmp
 , libpulseaudio
 , libupnp
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
       jack
       jsoncpp
       libarchive
-      libgit2
+      libgit2_1_5
       libnatpmp
       libpulseaudio
       libupnp
