@@ -8885,7 +8885,9 @@ with pkgs;
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
-  harmonia = callPackage ../tools/package-management/harmonia { };
+  harmonia = callPackage ../tools/package-management/harmonia {
+    nix = nixVersions.unstable;
+  };
 
   hayagriva = callPackage ../tools/typesetting/hayagriva { };
 
