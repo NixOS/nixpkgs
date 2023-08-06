@@ -12,6 +12,7 @@
 , joblib
 , wikipedia
 , stemming
+, setuptools
 }:
 let
   pname = "quantulum3";
@@ -40,6 +41,7 @@ buildPythonPackage {
     joblib
     wikipedia
     stemming
+    setuptools
   ];
 
   pythonImportsCheck = [ "quantulum3" ];
