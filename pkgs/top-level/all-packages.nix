@@ -11080,6 +11080,8 @@ with pkgs;
 
   netlify-cli = callPackage ../development/web/netlify-cli { };
 
+  netlistsvg = callPackage ../applications/science/logic/netlistsvg { };
+
   netpbm = callPackage ../tools/graphics/netpbm { };
 
   netproc = callPackage ../tools/networking/netproc { };
