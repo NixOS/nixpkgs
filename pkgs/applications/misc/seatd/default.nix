@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seatd";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "seatd";
     rev = version;
-    sha256 = "sha256-m8xoL90GI822FTgCXuVr3EejLAMUStkPKVoV7w8ayIE=";
+    sha256 = "sha256-YaR4VuY+wrzbnhER4bkwdm0rTY1OVMtixdDEhu7Lnws=";
   };
 
   outputs = [ "bin" "out" "dev" "man" ];
