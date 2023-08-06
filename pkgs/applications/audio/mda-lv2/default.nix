@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftwSinglePrec lv2 ];
 
   meta = with lib; {
-    homepage = "http://drobilla.net/software/mda-lv2/";
+    homepage = "http://drobilla.net/software/mda-lv2.html";
     description = "An LV2 port of the MDA plugins by Paul Kellett";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
