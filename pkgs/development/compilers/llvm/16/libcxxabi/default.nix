@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
 
   postUnpack = lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
-  '' + lib.optionalString stdenv.hostPlatform.isWasm ''
-    patch -p1 -d llvm -i ${./wasm.patch}
   '';
 
   prePatch = ''
-    cd ../${pname}
+    cd ../
     chmod -R u+w .
+    cd ${pname}
+    patch -p1 -d ../llvm -i ${./wasm.patch}
   '';
 
   patches = [
@@ -65,13 +65,30 @@ stdenv.mkDerivation rec {
     # CMake however checks for this anyways; this flag tells it not to. See:
     # https://github.com/llvm/llvm-project/blob/4bd3f3759259548e159aeba5c76efb9a0864e6fa/llvm/runtimes/CMakeLists.txt#L243
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
+    "-DCMAKE_C_COMPILER_WORKS=ON"
   ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
-    "-DLIBCXXABI_ENABLE_THREADS=OFF"
-    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
-  ] ++ lib.optionals (!enableShared) [
+  ] ++ lib.optionals stdenv.hostPlatform.isWasm (
+    [
+      "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
+      # CMake tests for -fno-exceptions together with -lc++ -lc++abi which fails
+      # here, without -fno-exceptions, libc++abi is unusable later.
+      # See also: https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=260005
+      # TODO(@sternenseemann): make this unconditional?
+      "-DCXX_SUPPORTS_FNO_EXCEPTIONS_FLAG=ON"
+    ]
+    ++ (if stdenv.cc.libc.hasThreads then [
+      "-DLIBCXXABI_ENABLE_THREADS=ON"
+      "-DLIBCXXABI_HAS_PTHREAD_API=ON"
+      "-DLIBCXXABI_HAS_EXTERNAL_THREAD_API=OFF"
+      "-DLIBCXXABI_BUILD_EXTERNAL_THREAD_LIBRARY=OFF"
+      "-DLIBCXXABI_HAS_WIN32_THREAD_API=OFF"
+    ] else [
+      "-DLIBCXXABI_ENABLE_THREADS=OFF"
+    ])
+  )
+  ++ lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 

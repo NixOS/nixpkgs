@@ -15954,8 +15954,8 @@ with pkgs;
   haskell = callPackage ./haskell-packages.nix { };
 
   haskellPackages = dontRecurseIntoAttrs
-    # JS backend is only available for GHC >= 9.6
-    (if stdenv.hostPlatform.isGhcjs
+    # JS and wasm backends are only available for GHC >= 9.6
+    (if stdenv.hostPlatform.isGhcjs || stdenv.hostPlatform.isWasm
      then haskell.packages.native-bignum.ghc96
      # Prefer native-bignum to avoid linking issues with gmp
      else if stdenv.hostPlatform.isStatic
@@ -16345,7 +16345,7 @@ with pkgs;
       else if platform.isFreeBSD then 12
       else if platform.isAndroid then 12
       else if platform.isLinux then 11
-      else if platform.isWasm then 12
+      else if platform.isWasm then 16
       else 14;
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
@@ -22601,6 +22601,8 @@ with pkgs;
   libffiBoot = libffi.override {
     doCheck = false;
   };
+
+  libffi-wasm-ghc = callPackage ../development/libraries/libffi-wasm-ghc { };
 
   libfreeaptx = callPackage ../development/libraries/libfreeaptx { };
 

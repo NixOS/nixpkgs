@@ -75,6 +75,8 @@ let
     boehmgc = nativePlatforms;
     hello = nativePlatforms;
     zlib = nativePlatforms;
+    haskellPackages.hello = nativePlatforms;
+    haskell.packages.ghcHEAD.hello = nativePlatforms;
   };
 
   darwinCommon = {

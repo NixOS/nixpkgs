@@ -123,7 +123,12 @@ stdenv.mkDerivation rec {
     # HACK: Make emscripten look more like a cc-wrapper to GHC
     # when building the javascript backend.
     targetPrefix = "em";
-    bintools = emscripten;
+    bintools = emscripten.overrideAttrs (old: {
+      passthru = old.passthru // {
+        # emscripten wraps LLVM bintools, GHC checks for this fact
+        isLLVM = true;
+      };
+    });
   };
 
   meta = with lib; {
