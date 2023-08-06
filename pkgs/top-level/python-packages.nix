@@ -9573,6 +9573,8 @@ self: super: with self; {
 
   pyrad = callPackage ../development/python-modules/pyrad { };
 
+  pyradiomics = callPackage ../development/python-modules/pyradiomics { };
+
   pyradios = callPackage ../development/python-modules/pyradios { };
 
   pyrainbird = callPackage ../development/python-modules/pyrainbird { };
