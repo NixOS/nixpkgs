@@ -6,8 +6,10 @@
 , jinja2
 , pandas
 , plotly
+, setuptools
 , setuptools-scm
 , typeguard
+, wheel
 , hypothesis
 , mercurial
 , pyfakefs
@@ -27,13 +29,18 @@ buildPythonPackage rec {
     hash = "sha256-1KLLjeUktXvIDOlTQzMmpbL/On8PTxZQ44Qi4BT3nPk=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
   propagatedBuildInputs = [
     botorch
     ipywidgets
     jinja2
     pandas
     plotly
-    setuptools-scm
     typeguard
   ];
 

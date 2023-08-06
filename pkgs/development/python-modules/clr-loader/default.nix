@@ -4,16 +4,19 @@
 , pytestCheckHook
 , dotnetCorePackages
 , setuptools
+, setuptools-scm
+, wheel
 , buildDotnetModule
 , cffi
 }:
 
 let
-  pname = "clr_loader";
+  pname = "clr-loader";
   version = "0.2.5";
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-gu1ftlRynRT9iCludLtrhOss+5dv9LfUnU5En9eKIms=";
+    pname = "clr_loader";
+    inherit version;
+    hash = "sha256-gu1ftlRynRT9iCludLtrhOss+5dv9LfUnU5En9eKIms=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual
@@ -29,13 +32,10 @@ buildPythonPackage {
 
   format = "pyproject";
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
-  '';
-
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
     dotnetCorePackages.sdk_6_0
   ];
 

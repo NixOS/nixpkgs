@@ -5,7 +5,7 @@
 , perl, perlPackages, python3Packages, pkg-config
 , libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
-, makeWrapper, shortenPerlShebang, useFixedHashes
+, makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
 }:
 
 # Useful resource covering build options:
@@ -387,38 +387,6 @@ dvipng = stdenv.mkDerivation {
   enableParallelBuilding = true;
 };
 
-
-latexindent = perlPackages.buildPerlPackage rec {
-  pname = "latexindent";
-  inherit (src) version;
-
-  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs));
-
-  outputs = [ "out" ];
-
-  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-  propagatedBuildInputs = with perlPackages; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ];
-
-  postPatch = ''
-    substituteInPlace scripts/latexindent/LatexIndent/GetYamlSettings.pm \
-      --replace '$FindBin::RealBin/defaultSettings.yaml' ${src}/scripts/latexindent/defaultSettings.yaml
-  '';
-
-  # Dirty hack to apply perlFlags, but do no build
-  preConfigure = ''
-    touch Makefile.PL
-  '';
-  dontBuild = true;
-  installPhase = ''
-    install -D ./scripts/latexindent/latexindent.pl "$out"/bin/latexindent
-    mkdir -p "$out"/${perl.libPrefix}
-    cp -r ./scripts/latexindent/LatexIndent "$out"/${perl.libPrefix}/
-  '' + lib.optionalString stdenv.isDarwin ''
-    shortenPerlShebang "$out"/bin/latexindent
-  '';
-};
-
-
 pygmentex = python3Packages.buildPythonApplication rec {
   pname = "pygmentex";
   inherit (src) version;
@@ -456,27 +424,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   };
 };
 
-
-texlinks = stdenv.mkDerivation rec {
-  name = "texlinks";
-
-  src = assertFixedHash name (lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs));
-
-  dontBuild = true;
-  doCheck = false;
-
-  installPhase = ''
-    runHook preInstall
-
-    # Patch texlinks.sh back to 2015 version;
-    # otherwise some bin/ links break, e.g. xe(la)tex.
-    patch --verbose -R scripts/texlive-extra/texlinks.sh < '${./texlinks.diff}'
-    install -Dm555 scripts/texlive-extra/texlinks.sh "$out"/bin/texlinks
-
-    runHook postInstall
-  '';
-};
-
+inherit asymptote;
 
 inherit biber;
 bibtexu = bibtex8;

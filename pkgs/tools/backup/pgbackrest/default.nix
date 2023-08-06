@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://pgbackrest.org/";
     changelog = "https://github.com/pgbackrest/pgbackrest/releases";
     license = licenses.mit;
+    mainProgram = "pgbackrest";
     maintainers = with maintainers; [ zaninime ];
   };
 }

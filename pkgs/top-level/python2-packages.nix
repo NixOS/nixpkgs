@@ -7,6 +7,8 @@ self: super:
 with self; with super; {
   attrs = callPackage ../development/python2-modules/attrs { };
 
+  backports-functools-lru-cache = callPackage ../development/python2-modules/backports-functools-lru-cache { };
+
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
   cffi = callPackage ../development/python2-modules/cffi { inherit cffi; };
@@ -80,6 +82,10 @@ with self; with super; {
   six = super.six.overridePythonAttrs (_: {
     doCheck = false;  # circular dependency with pytest
   });
+
+  wcwidth = callPackage ../development/python2-modules/wcwidth {
+    inherit wcwidth;
+  };
 
   wheel = callPackage ../development/python2-modules/wheel { };
 

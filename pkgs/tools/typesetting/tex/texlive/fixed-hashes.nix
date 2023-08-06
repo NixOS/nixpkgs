@@ -8629,6 +8629,7 @@
 "texlive-fr.doc.r63071"="120jahzjmak3shjhiy81gv6nk3c1hv4rrxyi1mmzi1xklxjlhl4b";
 "texlive-it.doc.r58653"="0vmwn6n8bxpzcfrzic5qg5k2vklbm6rhl9861zxsli0rd9396qn6";
 "texlive-ja.doc.r62817"="1h2rv13ip3bgmfz8q64abqx3ajla9mc02a50xz1nzmng0rmgz04r";
+"texlive-msg-translations.tlpkg.r65889"="03bshv5xacw01ssbpd5wmz4ryym3dc27l8mwyh652i8gd2lg0scm";
 "texlive-pl.doc.r62841"="19qab4nd9z87v9dpx7gh2a87rw8k4x6kqzg5yc7wqmf46pfjmpcw";
 "texlive-ru.doc.r58426"="0c77yyfj87fajran8jppj0x8krk6b5195iscpn8z2n94spz2fcc9";
 "texlive-scripts.r66570"="0hl1vjr4hr7q7s2pvizicmabb185df5rl84cjsz0ki7vai5mh7pq";
