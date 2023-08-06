@@ -4,8 +4,8 @@
 , pythonOlder
 , eventlet
 , gevent
+, packaging
 , pytestCheckHook
-, setuptools
 }:
 
 buildPythonPackage rec {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    setuptools
+    packaging
   ];
 
   nativeCheckInputs = [
