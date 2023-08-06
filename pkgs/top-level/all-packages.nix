@@ -2361,6 +2361,8 @@ with pkgs;
 
   glitter = callPackage ../applications/version-management/glitter { };
 
+  globalping-cli = callPackage ../tools/networking/globalping-cli { };
+
   gst = callPackage ../applications/version-management/gst { };
 
   gut = callPackage ../applications/version-management/gut { };
