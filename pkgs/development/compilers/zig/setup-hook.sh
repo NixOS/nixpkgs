@@ -20,7 +20,7 @@
 # https://github.com/NixOS/nixpkgs/pull/241741#issuecomment-1624227485
 # https://github.com/ziglang/zig/issues/14281#issuecomment-1624220653
 
-readonly zigDefaultFlagsArray=("-Drelease-safe=true" "-Dcpu=baseline")
+readonly zigDefaultFlagsArray=(@zig_default_flags@)
 
 function zigSetGlobalCacheDir {
     ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
