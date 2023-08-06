@@ -199,6 +199,142 @@ in
       machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
     '';
   };
+  mirroredBoots = makeTest {
+    name = "mirrored-boots";
+    nodes.machine = {
+      config,
+      ...
+    }: {
+      imports = [
+        ../modules/image/repart.nix
+
+      ];
+      virtualisation = {
+        useEFIBoot = true;
+        directBoot.enable = false;
+        useBootLoader = true;
+        useDefaultFilesystems = false;
+        fileSystems = {
+          "/" = {
+            device = "/dev/disk/by-partlabel/root";
+            fsType = "ext4";
+          };
+          "/boot0" = {
+            device = "/dev/disk/by-partlabel/esp";
+            fsType = "vfat";
+          };
+          "/boot1" = {
+            device = "/dev/disk/by-partlabel/esp";
+            fsType = "vfat";
+          };
+          "/boot2" = {
+            device = "/dev/disk/by-partlabel/esp";
+            fsType = "vfat";
+          };
+        };
+      };
+      image.repart = {
+        name = "mirrored-boots-image";
+        partitions = {
+          "boot0" = {
+            repartConfig = {
+              Type = "esp";
+              Format = "vfat";
+              SizeMinBytes =
+                if config.nixpkgs.hostPlatform.isx86_64
+                then "64M"
+                else "96M";
+              Label = "esp";
+            };
+          };
+          "boot1" = {
+            repartConfig = {
+              Type = "esp";
+              Format = "vfat";
+              SizeMinBytes =
+                if config.nixpkgs.hostPlatform.isx86_64
+                then "64M"
+                else "96M";
+              Label = "esp";
+            };
+          };
+          "boot2" = {
+            repartConfig = {
+              Type = "esp";
+              Format = "vfat";
+              SizeMinBytes =
+                if config.nixpkgs.hostPlatform.isx86_64
+                then "64M"
+                else "96M";
+              Label = "esp";
+            };
+          };
+          "root" = {
+            storePaths = [config.system.build.toplevel];
+            repartConfig = {
+              Type = "root";
+              Format = config.fileSystems."/".fsType;
+              Label = "root";
+              Minimize = "guess";
+            };
+          };
+        };
+      };
+      boot.loader = {
+        efi = {
+          efiSysMountPoint = "/boot0";
+          canTouchEfiVariables = true;
+        };
+        systemd-boot = {
+          enable = true;
+          mirroredBoots = [
+            "/boot1"
+            "/boot2"
+          ];
+        };
+      };
+    };
+
+    testScript = {nodes, ...}:
+     ''
+      import os
+      import subprocess
+      import tempfile
+
+      tmp_disk_image = tempfile.NamedTemporaryFile()
+
+      subprocess.run([
+        "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img",
+        "create",
+        "-f",
+        "qcow2",
+        "-b",
+        "${nodes.machine.system.build.image}/image.raw",
+        "-F",
+        "raw",
+        tmp_disk_image.name,
+      ])
+
+      # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
+      os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+      machine.fail("test -n \"$(find /boot0 -prune empty)\"")
+      machine.succeed("test -z \"$(find /boot1 -prune empty)\"")
+      machine.succeed("test -z \"$(find /boot2 -prune empty)\"")
+      machine.succeed("diff -r -q -x random-seed /boot1 /boot2")
+    '';
+    /*
+      tests are
+      /boot0 should be empty
+      /boot1 and /boot2 shoud not be empty
+
+      /boot1 should equal /boot2 (except random-seed)
+
+      efibootmgr should show two UEFI OS entries
+
+    */
+  };
 
   switch-test = makeTest {
     name = "systemd-boot-switch-test";
