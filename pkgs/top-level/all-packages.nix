@@ -12409,6 +12409,8 @@ with pkgs;
 
   re-isearch = callPackage ../applications/search/re-isearch { };
 
+  reason-shell = callPackage ../applications/science/misc/reason-shell { };
+
   reaverwps = callPackage ../tools/networking/reaver-wps { };
 
   reaverwps-t6x = callPackage ../tools/networking/reaver-wps-t6x { };
