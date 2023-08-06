@@ -46,6 +46,8 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  pythonImportsCheck = [ "syrupy" ];
+
   meta = with lib; {
     changelog = "https://github.com/tophat/syrupy/releases/tag/v${version}";
     description = "Pytest Snapshot Test Utility";
