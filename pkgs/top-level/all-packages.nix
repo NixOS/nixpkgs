@@ -25553,6 +25553,8 @@ with pkgs;
 
   fastjar = callPackage ../development/tools/java/fastjar { };
 
+  jextract = callPackage ../development/tools/java/jextract { };
+
   httpunit = callPackage ../development/libraries/java/httpunit { };
 
   javaCup = callPackage ../development/libraries/java/cup {

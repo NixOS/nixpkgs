@@ -9,7 +9,7 @@
 , zlib
 , libpng
 , boost
-, guile_3_0
+, guile
 , stdenv
 }:
 
@@ -25,12 +25,12 @@ mkDerivation {
   };
 
   nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config ];
-  buildInputs = [ eigen zlib libpng boost guile_3_0 ];
+  buildInputs = [ eigen zlib libpng boost guile ];
 
   preConfigure = ''
     substituteInPlace studio/src/guile/interpreter.cpp \
       --replace "qputenv(\"GUILE_LOAD_COMPILED_PATH\", \"libfive/bind/guile\");" \
-                "qputenv(\"GUILE_LOAD_COMPILED_PATH\", \"libfive/bind/guile:$out/lib/guile/3.0/ccache\");"
+                "qputenv(\"GUILE_LOAD_COMPILED_PATH\", \"libfive/bind/guile:$out/${guile.siteCcacheDir}\");"
 
     substituteInPlace libfive/bind/guile/CMakeLists.txt \
       --replace "LIBFIVE_FRAMEWORK_DIR=$<TARGET_FILE_DIR:libfive>" \
@@ -42,7 +42,7 @@ mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DGUILE_CCACHE_DIR=${placeholder "out"}/lib/guile/3.0/ccache"
+    "-DGUILE_CCACHE_DIR=${placeholder "out"}/${guile.siteCcacheDir}"
   ];
 
   postInstall = if stdenv.isDarwin then ''
