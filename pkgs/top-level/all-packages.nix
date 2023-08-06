@@ -14559,6 +14559,8 @@ with pkgs;
 
   xl2tpd = callPackage ../tools/networking/xl2tpd { };
 
+  xlights = callPackage ../applications/misc/xlights/default.nix { };
+
   xe = callPackage ../tools/system/xe { };
 
 
