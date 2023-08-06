@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libspatialite";
-  version = "5.0.1";
+  version = "5.1.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/libspatialite-${version}.tar.gz";
-    hash = "sha256-7svJQxHHgBLQWevA+uhupe9u7LEzA+boKzdTwbNAnpg=";
+    url = "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-${version}.tar.gz";
+    hash = "sha256-Q74t00na/+AW3RQAxdEShYKMIv6jXKUQnyHz7VBgUIA=";
   };
 
   nativeBuildInputs = [
