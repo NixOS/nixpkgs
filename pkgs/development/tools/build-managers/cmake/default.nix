@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHooks = [
     ./setup-hook.sh
-    ./check-pc-files-hook.sh
+    ./check-improper-prefix-hook.sh
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
