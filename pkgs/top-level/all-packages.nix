@@ -33286,6 +33286,8 @@ with pkgs;
 
   iamb = callPackage ../applications/networking/instant-messengers/iamb { };
 
+  icalingua-plus-plus = callPackage ../applications/networking/instant-messengers/icalingua-plus-plus { };
+
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
   mbrola = callPackage ../applications/audio/mbrola { };
