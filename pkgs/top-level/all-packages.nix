@@ -37235,6 +37235,8 @@ with pkgs;
 
   vintagestory = callPackage ../games/vintagestory { };
 
+  vintagestory-experimental = callPackage ../games/vintagestory { experimental = true; };
+
   ckan = callPackage ../games/ckan { };
 
   cockatrice = libsForQt5.callPackage ../games/cockatrice {  };
