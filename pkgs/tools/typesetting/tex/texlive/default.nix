@@ -405,6 +405,9 @@ let
         extraRevision = ".tlpdb${toString tlpdbVersion.revision}";
         extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
 
+        # add license of tlmgr and TeXLive::* perl packages and of bin.core
+        license = [ "gpl2Plus" ] ++ lib.toList bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
+
         scriptsFolder = "texlive";
         extraBuildInputs = [ coreutils gnused gnupg (lib.last tl.kpathsea.pkgs) (perl.withPackages (ps: with ps; [ Tk ])) ];
 
@@ -654,7 +657,7 @@ in
             lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
           scheme-gust = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2
             gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
-          scheme-infraonly = [ gpl2 lgpl21 ];
+          scheme-infraonly = [ gpl2 gpl2Plus lgpl21 ];
           scheme-medium = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only
             free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl
             publicDomain x11 ];
