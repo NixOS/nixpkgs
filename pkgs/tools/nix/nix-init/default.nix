@@ -6,7 +6,7 @@
 , installShellFiles
 , pkg-config
 , bzip2
-, libgit2
+, libgit2_1_6
 , openssl
 , zlib
 , zstd
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     bzip2
     curl
-    libgit2
+    libgit2_1_6
     openssl
     zlib
     zstd
