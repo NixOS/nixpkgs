@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.emptyflask ];
     platforms = platforms.all;
+    mainProgram = "google-java-format";
   };
 }
