@@ -1,13 +1,10 @@
 { lib
 , botocore
 , buildPythonPackage
-, docutils
 , fetchFromGitHub
-, mock
 , pytestCheckHook
 , pythonOlder
 , stdenv
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -26,16 +23,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ botocore ];
 
-  buildInputs = [ docutils mock pytestCheckHook wheel ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Requires network access
-    "tests/integration/test_copy.py"
-    "tests/integration/test_delete.py"
-    "tests/integration/test_download.py"
-    "tests/integration/test_processpool.py"
-    "tests/integration/test_s3transfer.py"
-    "tests/integration/test_upload.py"
+    "tests/integration"
   ] ++
   # There was a change in python 3.8 that defaults multiprocessing to spawn instead of fork on macOS
   # See https://bugs.python.org/issue33725 and https://github.com/python/cpython/pull/13603.
@@ -48,6 +40,6 @@ buildPythonPackage rec {
     description = "Library for managing Amazon S3 transfers";
     homepage = "https://github.com/boto/s3transfer";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
