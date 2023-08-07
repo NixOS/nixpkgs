@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype, fontconfig
-, withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
-, withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
-, writeScriptBin, makeWrapper, runtimeShell
-}:
+{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype
+, fontconfig, nlohmann_json, curl, pkg-config, harfbuzz, icu, withOpenGFX ? true
+, withOpenSFX ? true, withOpenMSX ? true, withFluidSynth ? true
+, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps, writeScriptBin
+, makeWrapper, runtimeShell }:
 
 let
   opengfx = fetchzip {
@@ -36,9 +36,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-Kh3roBv+WOIYiHn0UMP6TzgZJxq0m/NI3WZUXwQNFG8=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig ]
-    ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  buildInputs = [
+    SDL2 libpng xz zlib freetype fontconfig
+    nlohmann_json curl harfbuzz.dev icu.dev
+  ] ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";
 
