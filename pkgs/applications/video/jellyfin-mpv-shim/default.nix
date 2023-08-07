@@ -58,6 +58,8 @@ buildPythonApplication rec {
   '';
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"python-mpv"' '"mpv"'
     substituteInPlace jellyfin_mpv_shim/conf.py \
       --replace "check_updates: bool = True" "check_updates: bool = False" \
       --replace "notify_updates: bool = True" "notify_updates: bool = False"
