@@ -126,6 +126,7 @@ in
     virtualisation.diskSize = 4 * 1024;
     virtualisation.memorySize = 2 * 1024;
     networking.domain = domain;
+    networking.enableIPv6 = false;
     networking.extraHosts = ''
       ${config.networking.primaryIPAddress} builds.${domain}
       ${config.networking.primaryIPAddress} git.${domain}
