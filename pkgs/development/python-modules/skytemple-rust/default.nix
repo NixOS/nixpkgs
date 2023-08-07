@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "1.4.0.post0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-aw57B15sDbMcdNPD8MW+O7AdqSSqjlOcuXNSm10GdPM=";
+    hash = "sha256-Txx8kQNb3ODbaJXfuHERzPx4zGUqYXzy+jbLNaMyf+w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-SvHrMr5k4afVdU5nvg+bcoHVmzHYyoOYqv7nOSVxRCE=";
+    hash = "sha256-KQA8dfHnuysx9EUySJXZ/52Hfq6AbALwkBp3B1WJJuc=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
