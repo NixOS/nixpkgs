@@ -863,6 +863,7 @@
   ./services/networking/coturn.nix
   ./services/networking/create_ap.nix
   ./services/networking/croc.nix
+  ./services/networking/dae.nix
   ./services/networking/dante.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dnscache.nix
