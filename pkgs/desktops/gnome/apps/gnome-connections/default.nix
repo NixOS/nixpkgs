@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "44.1";
+  version = "45.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-E2otkksHfVzEEAyEWCbUcURCMKFsjawnMhE2gBcaYms=";
+    hash = "sha256-wzbxwzAHso+0Lw8z/8jkRW4utmB4b+8Ed0FTqm9cKpo=";
   };
 
   nativeBuildInputs = [
