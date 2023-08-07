@@ -127,6 +127,14 @@ let
           QEMU's swtpm options.
         '';
       };
+
+      hook = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          QEMU's hook script.
+        '';
+      };
     };
   };
 in
@@ -337,6 +345,17 @@ in
           ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
           ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
         '')}
+
+        ${if cfg.qemu.hook != null then ''
+          # copy qemu hook script
+          mkdir -p /var/lib/libvirt/hooks
+          chmod 755 /var/lib/libvirt/hooks
+          cp -f ${cfg.qemu.hook} /var/lib/libvirt/hooks/qemu
+          chmod +x /var/lib/libvirt/hooks/qemu
+        '' else ''
+          # remove qemu hook script if it is not configured
+          rm -f /var/lib/libvirt/hooks/qemu
+        ''}
       '';
 
       serviceConfig = {
