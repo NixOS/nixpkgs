@@ -3,7 +3,6 @@ let
   common = opts: callPackage (import ./common.nix opts) { };
 in
 {
-
   openssh = common rec {
     pname = "openssh";
     version = "9.3p2";
@@ -59,12 +58,12 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "9.0p1";
+    version = "9.3p2";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      sha256 = "12m2f9czvgmi7akp7xah6y7mrrpi280a3ksk47iwr7hy2q1475q3";
+      sha256 = "sha256-IA6+FH9ss/EB/QzfngJEKvfdyimN/9n0VoeOfMrGdug=";
     };
 
     extraPatches = [
@@ -73,11 +72,10 @@ in
       (fetchpatch {
         name = "openssh-gssapi.patch";
         url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-1/debian/patches/gssapi.patch";
-        sha256 = "sha256-VG7+2dfu09nvHWuSAB6sLGMmjRCDCysl/9FR1WSF21k=";
+        sha256 = "sha256-E36jxnPcu6RTyXXb9yVBCoFIVchiOSLX7L74ng1Dmao=";
       })
     ];
 
     extraNativeBuildInputs = [ autoreconfHook ];
-    extraMeta.knownVulnerabilities = [ "CVE-2023-28531" ];
   };
 }
