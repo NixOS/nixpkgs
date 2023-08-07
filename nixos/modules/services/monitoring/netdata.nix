@@ -216,6 +216,7 @@ in {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
         DO_NOT_TRACK = "1";
+        NETDATA_PIPENAME = "/run/netdata/ipc";
       };
       restartTriggers = [
         config.environment.etc."netdata/netdata.conf".source

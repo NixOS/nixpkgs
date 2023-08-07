@@ -5,12 +5,16 @@
 , ncurses
 , importlib-metadata
 , setuptools
+, wheel
 , patchelf
 }:
 
 buildPythonPackage rec {
   pname = "cx-freeze";
   version = "6.14.4";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "cx_Freeze";
@@ -18,7 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-ydox+o4B0t/dYD+nDiY5CmWupt1iMzyU2fA4tCqgVcg=";
   };
 
-  disabled = pythonOlder "3.5";
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     importlib-metadata # upstream has this for 3.8 as well

@@ -8,6 +8,14 @@ makeSetupHook {
 
   propagatedBuildInputs = [ zig ];
 
+  substitutions = {
+    zig_default_flags =
+      if lib.versionAtLeast zig.version "0.11" then
+        "-Doptimize=ReleaseSafe -Dcpu=baseline"
+      else
+        "-Drelease-safe=true -Dcpu=baseline";
+  };
+
   passthru = { inherit zig; };
 
   meta = {
