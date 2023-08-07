@@ -13,8 +13,7 @@ evalConfigArgs@
   #     however, removing or changing this default is too much
   #     of a breaking change. To set it modularly, pass `null`.
   system ? builtins.currentSystem
-, # !!! is this argument needed any more? The pkgs argument can
-  # be set modularly anyway.
+, # !!! Deprecated as of 23.11
   pkgs ? null
 , # !!! what do we gain by making this configurable?
   #     we can add modules that are included in specialisations, regardless
@@ -33,9 +32,6 @@ evalConfigArgs@
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
                  in lib.optional (e != "") (import e)
 }:
-
-let pkgs_ = pkgs;
-in
 
 let
   inherit (lib) optional;
@@ -58,13 +54,14 @@ let
         nixpkgs.system = lib.mkDefault system;
       })
       ++
-      (optional (pkgs_ != null) {
-        _module.args.pkgs = lib.mkForce pkgs_;
+      (optional (pkgs != null) {
+        _module.args.pkgs = lib.mkForce pkgs;
       })
     );
   };
 
   withWarnings = x:
+    lib.warnIf (evalConfigArgs?pkgs) "Passing pkgs to lib.nixosSystem is deprecated. Please set nixpkgs.pkgs instead."
     lib.warnIf (evalConfigArgs?extraArgs) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
     lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
     x;
