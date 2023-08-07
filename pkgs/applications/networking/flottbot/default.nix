@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
 buildGoModule rec {
   pname = "flottbot";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "target";
     repo = pname;
     rev = version;
-    sha256 = "ykT719DOgDH+uFyrIF8UNQQwWbf6SkDmEMsjwjjAouQ=";
+    sha256 = "538c2SkyOYmm84yM0svbPeJtSIMHRI6mot8MIP5wBfc=";
   };
 
-  vendorSha256 = "sha256-HbijD5P7ttfek9gFQwXq50cI2rQ1MN3CzRmIk8mLW1g=";
+  vendorSha256 = "sha256-6j1nQBlFqd78v/CNV7ivwYZ5CEzGh+An6xcQr4dAkAs=";
 
   subPackages = [ ];
 
@@ -27,6 +27,5 @@ buildGoModule rec {
     homepage = "https://github.com/target/flottbot";
     license = licenses.asl20;
     maintainers = with maintainers; [ bryanhonof ];
-    platforms = platforms.unix;
   };
 }
