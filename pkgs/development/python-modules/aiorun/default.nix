@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "2023.7.2";
   format = "flit";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cjrh";
