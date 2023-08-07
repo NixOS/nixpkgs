@@ -21873,6 +21873,8 @@ with pkgs;
 
   imtui = callPackage ../development/libraries/imtui { };
 
+  immer = callPackage ../development/libraries/immer { };
+
   imv = callPackage ../applications/graphics/imv { };
 
   iml = callPackage ../development/libraries/iml { };
