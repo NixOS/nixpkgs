@@ -1000,11 +1000,11 @@ and in this case the `python3` interpreter is automatically used.
 | Package    | Aliases         | Interpreter |
 |------------|-----------------|-------------|
 | python27   | python2, python | CPython 2.7 |
-| python38   | ` `             | CPython 3.8 |
-| python39   | ` `             | CPython 3.9 |
+| python38   |                 | CPython 3.8 |
+| python39   |                 | CPython 3.9 |
 | python310  | python3         | CPython 3.10 |
-| python311  | ` `             | CPython 3.11 |
-| python312  | ` `             | CPython 3.12 |
+| python311  |                 | CPython 3.11 |
+| python312  |                 | CPython 3.12 |
 | pypy27     | pypy2, pypy     | PyPy2.7 |
 | pypy39     | pypy3           | PyPy 3.9 |
 
