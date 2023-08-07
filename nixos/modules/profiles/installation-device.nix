@@ -120,5 +120,8 @@ with lib;
       [PStore]
       Unlink=no
     '';
+
+    # allow nix-copy to live system
+    nix.settings.trusted-users = [ "root" "nixos" ];
   };
 }
