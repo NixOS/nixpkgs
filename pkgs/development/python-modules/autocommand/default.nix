@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "autocommand";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "Lucretiel";
     repo = "autocommand";
     rev = version;
-    hash = "sha256-bjoVGfP57qhvPuHHcMP8JQddAaW4/fEyatElk1UEPZo=";
+    hash = "sha256-9bv9Agj4RpeyNJvTLUaMwygQld2iZZkoLb81rkXOd3E=";
   };
 
   # fails with: SyntaxError: invalid syntax
