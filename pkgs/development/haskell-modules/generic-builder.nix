@@ -98,6 +98,15 @@ in
   # build products from that prior build as a starting point for accelerating
   # this build
 , previousIntermediates ? null
+, # For GHC >= 9.4 we currently automatically propagate the dependencies of
+  # allPkgconfigDepends to be direct dependencies to allow Cabal >= 3.8
+  # to call `pkg-config --libs --static` (https://github.com/haskell/cabal/issues/8455).
+  # This can easily lead to the argv limit being exceeded in linker or C compiler
+  # invocations. To work around this we can only propagate derivations that are
+  # known to provide pkg-config modules, as indicated by the presence of
+  # `meta.pkgConfigModules`. This option defaults to false for now, since this
+  # metadata is far from complete in nixpkgs.
+  __onlyPropagateKnownPkgConfigModules ? false
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -265,6 +274,13 @@ let
   # pkg-config --static to work in most cases.
   allPkgconfigDepends =
     let
+      # If __onlyPropagateKnownPkgConfigModules is set, packages without
+      # meta.pkgConfigModules will be filtered out, otherwise all packages in
+      # buildInputs and propagatePlainBuildInputs are propagated.
+      propagateValue = drv:
+        lib.isDerivation drv
+        && (__onlyPropagateKnownPkgConfigModules -> drv ? meta.pkgConfigModules);
+
       # Take list of derivations and return list of the transitive dependency
       # closure, only taking into account buildInputs. Loosely based on
       # closePropagationFast.
@@ -273,12 +289,12 @@ let
           builtins.genericClosure {
             startSet = builtins.map (drv:
               { key = drv.outPath; val = drv; }
-            ) (builtins.filter lib.isDerivation drvs);
+            ) (builtins.filter propagateValue drvs);
             operator = { val, ... }:
               builtins.concatMap (drv:
-                if !lib.isDerivation drv
-                then [ ]
-                else [ { key = drv.outPath; val = drv; } ]
+                if propagateValue drv
+                then [ { key = drv.outPath; val = drv; } ]
+                else [ ]
               ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
           }
         );
