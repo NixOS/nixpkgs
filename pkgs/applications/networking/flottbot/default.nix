@@ -6,7 +6,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "target";
     repo = pname;
-    rev = "${pname}-${version}";
+    rev = version;
     sha256 = "ykT719DOgDH+uFyrIF8UNQQwWbf6SkDmEMsjwjjAouQ=";
   };
 
