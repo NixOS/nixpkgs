@@ -1011,5 +1011,510 @@
       arch = "linux-i686";
       sha256 = "0372977c63a6360945ad0581abdd10e10435e016e09e61c0c24f5ce0a7b82f0d";
     }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ach/Firefox%20117.0b3.dmg";
+      locale = "ach";
+      arch = "mac";
+      sha256 = "a1beb37d803cd1059502be99c90cfcc5d5898645306673a3e7808d09555b9104";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/af/Firefox%20117.0b3.dmg";
+      locale = "af";
+      arch = "mac";
+      sha256 = "87a823491d5d76a5e73b0fd176165ba4d1af1858e0daf3e609cdb7c30bc06059";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/an/Firefox%20117.0b3.dmg";
+      locale = "an";
+      arch = "mac";
+      sha256 = "904ef7b7c314d55243282b21d1c9ed67d73a2b01100feca3a49da36188d74ca6";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ar/Firefox%20117.0b3.dmg";
+      locale = "ar";
+      arch = "mac";
+      sha256 = "1eefd7f54e3a8c84d3c8f4c9c712139744ab4a6dbe524a39c703eb79476ff537";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ast/Firefox%20117.0b3.dmg";
+      locale = "ast";
+      arch = "mac";
+      sha256 = "a0a992da83553a145dccc8edff1fefa62d0d7fb6c6e5cf56ea2ada96702a4fc2";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/az/Firefox%20117.0b3.dmg";
+      locale = "az";
+      arch = "mac";
+      sha256 = "f9d37014707c2a2e6d639df0b74add0a3902889f98322c87f30599f53d001a8c";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/be/Firefox%20117.0b3.dmg";
+      locale = "be";
+      arch = "mac";
+      sha256 = "3a41d23c601e1a60b25c571fcbdf0edd2ba16305285b9d929a63c83b7160735e";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/bg/Firefox%20117.0b3.dmg";
+      locale = "bg";
+      arch = "mac";
+      sha256 = "6ecca7992d723dc493194e6788329daa78ec4155dbe2facf84c3dba09d58c6c1";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/bn/Firefox%20117.0b3.dmg";
+      locale = "bn";
+      arch = "mac";
+      sha256 = "f2bd5714cd57ac2179cbe770e9d6978691a1d3ba030b7d45fdf8a1e5ee4107fe";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/br/Firefox%20117.0b3.dmg";
+      locale = "br";
+      arch = "mac";
+      sha256 = "6e4d05b6202da8a496f59b6fe462f314a01f4d8666e0334a29b91e6314c0bbbe";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/bs/Firefox%20117.0b3.dmg";
+      locale = "bs";
+      arch = "mac";
+      sha256 = "85bbea09ff4a6b1947ea7c8861195832003ebc82c139d8c117a2df46e328aecd";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ca-valencia/Firefox%20117.0b3.dmg";
+      locale = "ca-valencia";
+      arch = "mac";
+      sha256 = "a5f57b3b74c2d3d4b61ca5f5f26d1b77c9f7591de377dba5145560b33cc18508";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ca/Firefox%20117.0b3.dmg";
+      locale = "ca";
+      arch = "mac";
+      sha256 = "a28b16f987f1a67d57198da575baffb00b5a58cb6f5a4cfb2c0c628ee8376210";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/cak/Firefox%20117.0b3.dmg";
+      locale = "cak";
+      arch = "mac";
+      sha256 = "fe6046d6569bc86a9089857adc6eaae52302cf8bb4535f92128c727225d2e9f2";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/cs/Firefox%20117.0b3.dmg";
+      locale = "cs";
+      arch = "mac";
+      sha256 = "13134fc73de273060f7c2b6ed3fb3e88403b7b6ad30b8441840887d9897a45f2";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/cy/Firefox%20117.0b3.dmg";
+      locale = "cy";
+      arch = "mac";
+      sha256 = "94497111575b3a7812592aa917617ef8f88838f165295fc2c74a76c612e3e999";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/da/Firefox%20117.0b3.dmg";
+      locale = "da";
+      arch = "mac";
+      sha256 = "64e278ccb9df504048e3ab5c4f8ae4dc16161a279dec97ed7d1785e5bb69c97d";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/de/Firefox%20117.0b3.dmg";
+      locale = "de";
+      arch = "mac";
+      sha256 = "7b7425ec60b05eb2b6f7256c8a20a1a844d0649c1ee4d0dcaf3da45a0d5c289d";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/dsb/Firefox%20117.0b3.dmg";
+      locale = "dsb";
+      arch = "mac";
+      sha256 = "da6b53fcaafdb4d1ce5f24947b2817107fa6f9fd5cb7a26c7e4bcd2ba11345bd";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/el/Firefox%20117.0b3.dmg";
+      locale = "el";
+      arch = "mac";
+      sha256 = "7911f04d97e8ffd75738dfa582253f8e88b281e80186a2c68efdfc39edd8eb8d";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/en-CA/Firefox%20117.0b3.dmg";
+      locale = "en-CA";
+      arch = "mac";
+      sha256 = "54be65db6a1f466c82f933a074c76a77a6f99eab50b4c28cfd472d47b99e9dbb";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/en-GB/Firefox%20117.0b3.dmg";
+      locale = "en-GB";
+      arch = "mac";
+      sha256 = "02f6f32b6bd23393d631b5576378851a7e512e21d76ad02903bd2a34c993087f";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/en-US/Firefox%20117.0b3.dmg";
+      locale = "en-US";
+      arch = "mac";
+      sha256 = "5e449d69dc43ecf1791c6f9360f98e857aed4fd5f50e0f601156c8bf73a53747";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/eo/Firefox%20117.0b3.dmg";
+      locale = "eo";
+      arch = "mac";
+      sha256 = "6fba602559138aaaaa3b506f36a5eba9989aa18ee5565aae13b9fca8ef69ad94";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/es-AR/Firefox%20117.0b3.dmg";
+      locale = "es-AR";
+      arch = "mac";
+      sha256 = "9f25a1f135f11906c515db61ade31af4af846bfde0f705a8c921166be9f12fca";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/es-CL/Firefox%20117.0b3.dmg";
+      locale = "es-CL";
+      arch = "mac";
+      sha256 = "8858a073e795271abf27ac2feff258a34240391bdcc86b8b36f67f5e7abce6f8";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/es-ES/Firefox%20117.0b3.dmg";
+      locale = "es-ES";
+      arch = "mac";
+      sha256 = "23abe0c0fe840066b5c46f5bfba4db8a73301582d3c589eac7309f6e1398c521";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/es-MX/Firefox%20117.0b3.dmg";
+      locale = "es-MX";
+      arch = "mac";
+      sha256 = "450e9a8dcaf0db85c849cbbb929cd4c13c34b7a33c2dc9264ab58636d03bd462";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/et/Firefox%20117.0b3.dmg";
+      locale = "et";
+      arch = "mac";
+      sha256 = "6f5dfb01c1c0c9f85546d0b1e9ee81e9300d96a3d5089c3d73eef5e87af3b574";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/eu/Firefox%20117.0b3.dmg";
+      locale = "eu";
+      arch = "mac";
+      sha256 = "e0047da0ac468c2564f12fb2bfac21f57cab50d73ee50ea1ed68b0bbe7573b6c";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/fa/Firefox%20117.0b3.dmg";
+      locale = "fa";
+      arch = "mac";
+      sha256 = "e1488cdbd9ac75513f3ba82859a5b119e493226a048fef0380680724d4aec5d4";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ff/Firefox%20117.0b3.dmg";
+      locale = "ff";
+      arch = "mac";
+      sha256 = "a75282e71f7e4b7b39f86f52c79c5bb6f3c2707aa992f27b81fd4e8338823ea6";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/fi/Firefox%20117.0b3.dmg";
+      locale = "fi";
+      arch = "mac";
+      sha256 = "d3e2b69d2b8ce783b313716c58001478607976067fd00aa41665913065635d1e";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/fr/Firefox%20117.0b3.dmg";
+      locale = "fr";
+      arch = "mac";
+      sha256 = "4a3d3a952be338845408ded27456e8bf6bd8bad23096137c1e93f7b74ff2fe0c";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/fur/Firefox%20117.0b3.dmg";
+      locale = "fur";
+      arch = "mac";
+      sha256 = "973361577f69a4e5571fcc54d73ed019f196318a4c35c585e58ad7d5aacdc3b0";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/fy-NL/Firefox%20117.0b3.dmg";
+      locale = "fy-NL";
+      arch = "mac";
+      sha256 = "0eb620cd5ca3ad6d6e758535e1662998ede0be1c8a7974ab6004a60f40c48627";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ga-IE/Firefox%20117.0b3.dmg";
+      locale = "ga-IE";
+      arch = "mac";
+      sha256 = "594cff7870b2ff9e536532b271af281c32c9e16293e3f484f02076c9dda51739";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/gd/Firefox%20117.0b3.dmg";
+      locale = "gd";
+      arch = "mac";
+      sha256 = "700c013003345a6d60bf7deb9a67bf78f11a615a70491b8c948326c79dea2d81";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/gl/Firefox%20117.0b3.dmg";
+      locale = "gl";
+      arch = "mac";
+      sha256 = "ce575c6e3572fdf42a0f3b4f655aecf2ee9398c89aee030e25505b28932fc833";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/gn/Firefox%20117.0b3.dmg";
+      locale = "gn";
+      arch = "mac";
+      sha256 = "1d5901f8acabc403cca98f4c39ae49acabf2b268971df9d2e37613638fa5d5d9";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/gu-IN/Firefox%20117.0b3.dmg";
+      locale = "gu-IN";
+      arch = "mac";
+      sha256 = "8060c3835d96967d25737fb5b2e48f69064bd3de71b3665aade33de2c41bc9c2";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/he/Firefox%20117.0b3.dmg";
+      locale = "he";
+      arch = "mac";
+      sha256 = "cd66254707c38c871c3cfbbff1973316ae6ad4fd0ddceee4c966fd308787af7e";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/hi-IN/Firefox%20117.0b3.dmg";
+      locale = "hi-IN";
+      arch = "mac";
+      sha256 = "6ce07782030f9fbb4e28425f5686afb9ec3c99b00718e034eefe6d4b407e8bc7";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/hr/Firefox%20117.0b3.dmg";
+      locale = "hr";
+      arch = "mac";
+      sha256 = "6d090549c0863bc3771d3f0ebed30a1351ba767a104ace6755c48b07d48b8aef";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/hsb/Firefox%20117.0b3.dmg";
+      locale = "hsb";
+      arch = "mac";
+      sha256 = "94b4a678c0fc91bc993dbef739d7ed9ee9b66704b472a9537622dbf6311be4ad";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/hu/Firefox%20117.0b3.dmg";
+      locale = "hu";
+      arch = "mac";
+      sha256 = "9b7f424f29f343cbe1e574543a67559592b7859f1d2c796d8b006cfcca9f17d6";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/hy-AM/Firefox%20117.0b3.dmg";
+      locale = "hy-AM";
+      arch = "mac";
+      sha256 = "a926c8269589451b1b70dd876c0b4f9ed7adf65f0c868785ee6b93efe652b057";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ia/Firefox%20117.0b3.dmg";
+      locale = "ia";
+      arch = "mac";
+      sha256 = "2b1a3ded2ee54502502b6fedffeca78baee911b002fb47ce520f3897febbcfc4";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/id/Firefox%20117.0b3.dmg";
+      locale = "id";
+      arch = "mac";
+      sha256 = "1d84db6822154bdb8f8cd8833ac30d5dc9e089d2464488a04a98b395103621a6";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/is/Firefox%20117.0b3.dmg";
+      locale = "is";
+      arch = "mac";
+      sha256 = "10125d01b0646057241fe6c4983174f719d1351efc7af2dfc0d3a10236119fe5";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/it/Firefox%20117.0b3.dmg";
+      locale = "it";
+      arch = "mac";
+      sha256 = "a4a3426a2e7c7c522a85f8b35eeb4c5adacc43bcbc049707c42fe6cdd9e2f458";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ja-JP-mac/Firefox%20117.0b3.dmg";
+      locale = "ja-JP-mac";
+      arch = "mac";
+      sha256 = "829ba0898a849d390fdf6827167eedfb2aa649e8dd1b34e2733a95e56b79ee7b";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ka/Firefox%20117.0b3.dmg";
+      locale = "ka";
+      arch = "mac";
+      sha256 = "6bc3817ce4f35b90ee6b79b4244100a99f5459b136c70f97f1f71edd378bb38e";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/kab/Firefox%20117.0b3.dmg";
+      locale = "kab";
+      arch = "mac";
+      sha256 = "86285c27b014962a82cb44a41450590593af8b19c62e24d899d8b4c8547b0f19";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/kk/Firefox%20117.0b3.dmg";
+      locale = "kk";
+      arch = "mac";
+      sha256 = "1ac9dd24c4caa7f8810082413d2f5bcceba9f4277539a022da237f5a84c9c2b2";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/km/Firefox%20117.0b3.dmg";
+      locale = "km";
+      arch = "mac";
+      sha256 = "33b4b7029cd4a2ae656552774986248de59e9d16f8723108f4f235aa564f8f55";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/kn/Firefox%20117.0b3.dmg";
+      locale = "kn";
+      arch = "mac";
+      sha256 = "852773658f4c677a63da638f502a8417d1281c13bb4a7e53363fd36bf9f17316";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ko/Firefox%20117.0b3.dmg";
+      locale = "ko";
+      arch = "mac";
+      sha256 = "70c9df99231274934d1a694b7bbb5b4ef79e3b8b4c7c599c09c930667bb9a368";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/lij/Firefox%20117.0b3.dmg";
+      locale = "lij";
+      arch = "mac";
+      sha256 = "9a267e0071888a635e01649f0dc00a5883531c4ad87c756820223551ce7060dd";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/lt/Firefox%20117.0b3.dmg";
+      locale = "lt";
+      arch = "mac";
+      sha256 = "4dc194ee7d334ecf40337540d6cef2f708d887cc8cf09e6f8f50c64becbb4675";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/lv/Firefox%20117.0b3.dmg";
+      locale = "lv";
+      arch = "mac";
+      sha256 = "7f3f5014bbd0d1623adf3028004ac1425b3af393fb7c1815761fbab8540c4b99";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/mk/Firefox%20117.0b3.dmg";
+      locale = "mk";
+      arch = "mac";
+      sha256 = "ea0509be4f20ba98756a9c50bc6ec739326ea35dfac2ecc629629df1afe74b4b";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/mr/Firefox%20117.0b3.dmg";
+      locale = "mr";
+      arch = "mac";
+      sha256 = "397589301fa9f14267d769553c4125f0192bc6e36ac3b5e851f9f5226fdd8f39";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ms/Firefox%20117.0b3.dmg";
+      locale = "ms";
+      arch = "mac";
+      sha256 = "7f90bcb6b44d77bcb88adecf4f7826cdcb864759306b7931e6cceb12a4f61ad6";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/my/Firefox%20117.0b3.dmg";
+      locale = "my";
+      arch = "mac";
+      sha256 = "7723299a4fcb0f7e8e8ba2ff7607ee562b543e88e6d012d8053d9516a9e9a462";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/nb-NO/Firefox%20117.0b3.dmg";
+      locale = "nb-NO";
+      arch = "mac";
+      sha256 = "f4d78b1e1bfad8f9f454d451f277c5d9a79c61255a9fe503adc3b97af699b606";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ne-NP/Firefox%20117.0b3.dmg";
+      locale = "ne-NP";
+      arch = "mac";
+      sha256 = "de3e9272e6b8c8204e40eb1564a6b3e79f157446d90e6dabda2579b899630598";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/nl/Firefox%20117.0b3.dmg";
+      locale = "nl";
+      arch = "mac";
+      sha256 = "efcbdf962a1b2f00f3a58abb2ad72b2bae18e9ef1e9f693793ae3eb48b15d6b1";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/nn-NO/Firefox%20117.0b3.dmg";
+      locale = "nn-NO";
+      arch = "mac";
+      sha256 = "b61b65943c1a7d401e2fec08849f8c594eec157e50e5427a85a1af438e4899d8";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/oc/Firefox%20117.0b3.dmg";
+      locale = "oc";
+      arch = "mac";
+      sha256 = "cb7b8c64148139c07d7f64638824f23e3d119f28782c01716b354051b4b61952";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/pa-IN/Firefox%20117.0b3.dmg";
+      locale = "pa-IN";
+      arch = "mac";
+      sha256 = "35f0a0fe71df6d352ef776ff98eb45ac6aaa003ecd9aecaad7438568b3ec061e";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/pl/Firefox%20117.0b3.dmg";
+      locale = "pl";
+      arch = "mac";
+      sha256 = "2c4a5c65a690925ef63b3aba876a87db0aceae20f0a362d38ebe0caf0aa90700";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/pt-BR/Firefox%20117.0b3.dmg";
+      locale = "pt-BR";
+      arch = "mac";
+      sha256 = "ca25017c0098e095b2ecc06e4129a28226815f13298852aa5fcc9ec509ceba23";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/pt-PT/Firefox%20117.0b3.dmg";
+      locale = "pt-PT";
+      arch = "mac";
+      sha256 = "42141bd5e24ef1db8d4e320be43c224860565b1997cf5a3a0a7e0fb7f7a65602";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/rm/Firefox%20117.0b3.dmg";
+      locale = "rm";
+      arch = "mac";
+      sha256 = "44f7d715d14dfac07881572d71c6bbe683a9c1fac03056fc39ba312be2dd7347";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ro/Firefox%20117.0b3.dmg";
+      locale = "ro";
+      arch = "mac";
+      sha256 = "e0754d8091aa5b810723565891b597307cebe58136de9a6e4cb629679a8cbd4e";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ru/Firefox%20117.0b3.dmg";
+      locale = "ru";
+      arch = "mac";
+      sha256 = "dc907fec452d7eab381b8e9bf08231e732e0d2f5170d505cce0b57c50e173813";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/sc/Firefox%20117.0b3.dmg";
+      locale = "sc";
+      arch = "mac";
+      sha256 = "8838f9166a19041571d6074cef7129819cfd408af015e11edb3d43b0e137ea0e";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/sco/Firefox%20117.0b3.dmg";
+      locale = "sco";
+      arch = "mac";
+      sha256 = "4b5936a4510e2a9242f02c63ec9ad2fdb93fdc07d965def8284ab8f6ce3d4a17";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/si/Firefox%20117.0b3.dmg";
+      locale = "si";
+      arch = "mac";
+      sha256 = "ef7163737e640441c0785cb353cb2cb0be99b145596e6c58b448028f4aed9152";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/sk/Firefox%20117.0b3.dmg";
+      locale = "sk";
+      arch = "mac";
+      sha256 = "3e2d965ef473f415fa484d60b4726793789f6b6638901226cc91eb71dea2a53b";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/sl/Firefox%20117.0b3.dmg";
+      locale = "sl";
+      arch = "mac";
+      sha256 = "d309a61e986a104b65ee7501d7af3ecd2a154059606b3ac950c208d72c868ee9";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/son/Firefox%20117.0b3.dmg";
+      locale = "son";
+      arch = "mac";
+      sha256 = "9d9d6fcedbe32b63efba7553007b38e4bd0a7ccce5aa28d1cc127ada8eaa28f4";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/sq/Firefox%20117.0b3.dmg";
+      locale = "sq";
+      arch = "mac";
+      sha256 = "cd1fc61cb3e01ee3e74294a3c206b87f6bf56a8182a8e79a544480baea04c4da";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/sr/Firefox%20117.0b3.dmg";
+      locale = "sr";
+      arch = "mac";
+      sha256 = "a30ba752d01d4036845868f0bf4bd7917f3694b44bc04994104664eb52696cce";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/sv-SE/Firefox%20117.0b3.dmg";
+      locale = "sv-SE";
+      arch = "mac";
+      sha256 = "19f05c36d9d79c7fd46642a3e1a3f0bb745517bd7d8e4eb8fae59bbf03636a77";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/szl/Firefox%20117.0b3.dmg";
+      locale = "szl";
+      arch = "mac";
+      sha256 = "4113a2fe9f7972d62828f357c6ad39d405ffbd62592257e2be5725105c314dcd";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ta/Firefox%20117.0b3.dmg";
+      locale = "ta";
+      arch = "mac";
+      sha256 = "a2302a0abb25f367bab4d2f20dc43cca081386a2e99f0e387526e2b70d9434de";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/te/Firefox%20117.0b3.dmg";
+      locale = "te";
+      arch = "mac";
+      sha256 = "15c1d751dd605284f660fe6908735d9d535932efd30cf1fdaf72a57938220259";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/tg/Firefox%20117.0b3.dmg";
+      locale = "tg";
+      arch = "mac";
+      sha256 = "d7852a441464cb281953a5a1714a2ec9d185a2a383b6bbcb3b467a4a5ba410a0";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/th/Firefox%20117.0b3.dmg";
+      locale = "th";
+      arch = "mac";
+      sha256 = "3e1211f497c1d236f02a76585c2e43787a403ed58dd53c9bfb78f3744c36116a";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/tl/Firefox%20117.0b3.dmg";
+      locale = "tl";
+      arch = "mac";
+      sha256 = "c0656f0ee4c05679a7f78ceecffa3aa4eca93f7e33364bb45eccb49ef862c50b";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/tr/Firefox%20117.0b3.dmg";
+      locale = "tr";
+      arch = "mac";
+      sha256 = "0f8f53be5567a6b51fc1807f592dd963c63face617ad42b44b595a355bc646f4";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/trs/Firefox%20117.0b3.dmg";
+      locale = "trs";
+      arch = "mac";
+      sha256 = "4b2a08426f88d2028243b4d7fe25404aaada8458a5ee38e6f97032e8851eb594";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/uk/Firefox%20117.0b3.dmg";
+      locale = "uk";
+      arch = "mac";
+      sha256 = "0f7df24ef333622612f27718dbc8e33a5a71b0a76869027895f72e1fc684721a";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/ur/Firefox%20117.0b3.dmg";
+      locale = "ur";
+      arch = "mac";
+      sha256 = "192dd20b343ad023614fe8ad19c0a168a2ace7a7993194dcf81ea1892f52164c";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/uz/Firefox%20117.0b3.dmg";
+      locale = "uz";
+      arch = "mac";
+      sha256 = "7b98fd3b2d7c08869b5ab86ea3376d5ffc0d68b2dc57da170e68ca711d4bc450";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/vi/Firefox%20117.0b3.dmg";
+      locale = "vi";
+      arch = "mac";
+      sha256 = "c989cb94d55f801b79902825e10914bd53b88f4136eb3edb0b59b17b394280e7";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/xh/Firefox%20117.0b3.dmg";
+      locale = "xh";
+      arch = "mac";
+      sha256 = "17c68ee6fa60d861acb4fbb316903ef5a700b2cde4e907999506cb7da7d38e80";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/zh-CN/Firefox%20117.0b3.dmg";
+      locale = "zh-CN";
+      arch = "mac";
+      sha256 = "53698de5f28aeb6cdcd1734fc2833e56d491a6104716f8279d3d26ec476d224d";
+    }
+    { url = "https://archive.mozilla.org/pub/devedition/releases/117.0b3/mac/zh-TW/Firefox%20117.0b3.dmg";
+      locale = "zh-TW";
+      arch = "mac";
+      sha256 = "cb3297651163e8bfd59c9640a093013141df7f4db0391696148b439f8a64aab5";
+    }
     ];
 }
