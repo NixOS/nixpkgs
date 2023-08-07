@@ -1,17 +1,17 @@
 diff --git a/panels/color/cc-color-panel.c b/panels/color/cc-color-panel.c
-index 603178efc..c363a6a5c 100644
+index f6c84e3d2..cd897f8f5 100644
 --- a/panels/color/cc-color-panel.c
 +++ b/panels/color/cc-color-panel.c
-@@ -591,7 +591,7 @@ gcm_prefs_calibrate_cb (CcColorPanel *prefs)
+@@ -614,7 +614,7 @@ gcm_prefs_calibrate_cb (CcColorPanel *self)
  
    /* run with modal set */
    argv = g_ptr_array_new_with_free_func (g_free);
 -  g_ptr_array_add (argv, g_strdup ("gcm-calibrate"));
 +  g_ptr_array_add (argv, g_build_filename ("@gcm@", "bin", "gcm-calibrate", NULL));
    g_ptr_array_add (argv, g_strdup ("--device"));
-   g_ptr_array_add (argv, g_strdup (cd_device_get_id (prefs->current_device)));
+   g_ptr_array_add (argv, g_strdup (cd_device_get_id (self->current_device)));
    g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1029,7 +1029,7 @@ gcm_prefs_profile_view (CcColorPanel *prefs, CdProfile *profile)
+@@ -989,7 +989,7 @@ gcm_prefs_profile_view (CcColorPanel *self, CdProfile *profile)
  
    /* open up gcm-viewer as a info pane */
    argv = g_ptr_array_new_with_free_func (g_free);
@@ -20,9 +20,9 @@ index 603178efc..c363a6a5c 100644
    g_ptr_array_add (argv, g_strdup ("--profile"));
    g_ptr_array_add (argv, g_strdup (cd_profile_get_id (profile)));
    g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1275,15 +1275,12 @@ gcm_prefs_device_clicked (CcColorPanel *prefs, CdDevice *device)
+@@ -1221,15 +1221,12 @@ gcm_prefs_device_clicked (CcColorPanel *self, CdDevice *device)
  static void
- gcm_prefs_profile_clicked (CcColorPanel *prefs, CdProfile *profile, CdDevice *device)
+ gcm_prefs_profile_clicked (CcColorPanel *self, CdProfile *profile, CdDevice *device)
  {
 -  g_autofree gchar *s = NULL;
 -
@@ -34,9 +34,9 @@ index 603178efc..c363a6a5c 100644
 -  if (cd_profile_get_filename (profile) != NULL &&
 -      (s = g_find_program_in_path ("gcm-viewer")) != NULL)
 +  if (cd_profile_get_filename (profile) != NULL)
-     gtk_widget_set_sensitive (prefs->toolbutton_profile_view, TRUE);
+     gtk_widget_set_sensitive (self->toolbutton_profile_view, TRUE);
    else
-     gtk_widget_set_sensitive (prefs->toolbutton_profile_view, FALSE);
+     gtk_widget_set_sensitive (self->toolbutton_profile_view, FALSE);
 diff --git a/panels/datetime/tz.h b/panels/datetime/tz.h
 index a2376f8a4..98769e08f 100644
 --- a/panels/datetime/tz.h
