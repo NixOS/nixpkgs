@@ -307,7 +307,9 @@ in /* No rec! Add dependencies on this file at the top. */ {
       splitRoot "/foo/bar"
       => <error>
   */
-  splitRoot = path:
+  splitRoot =
+    # The path to split the root off of
+    path:
     assert assertMsg
       (isPath path)
       "lib.path.splitRoot: Argument is of type ${typeOf path}, but a path was expected";
@@ -466,6 +468,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
       => <error>
   */
   subpath.components =
+    # The subpath string to split into components
     subpath:
     assert assertMsg (isValid subpath) ''
       lib.path.subpath.components: Argument is not a valid subpath string:
