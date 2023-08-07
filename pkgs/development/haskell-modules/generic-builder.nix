@@ -98,14 +98,21 @@ in
   # build products from that prior build as a starting point for accelerating
   # this build
 , previousIntermediates ? null
-, # For GHC >= 9.4 we currently automatically propagate the dependencies of
-  # allPkgconfigDepends to be direct dependencies to allow Cabal >= 3.8
-  # to call `pkg-config --libs --static` (https://github.com/haskell/cabal/issues/8455).
-  # This can easily lead to the argv limit being exceeded in linker or C compiler
-  # invocations. To work around this we can only propagate derivations that are
-  # known to provide pkg-config modules, as indicated by the presence of
-  # `meta.pkgConfigModules`. This option defaults to false for now, since this
-  # metadata is far from complete in nixpkgs.
+, # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
+  # `pkg-config --libs --static` as part of the configure step. This requires
+  # Requires.private dependencies of pkg-config dependencies to be present in
+  # PKG_CONFIG_PATH which is normally not the case in nixpkgs (except in pkgsStatic).
+  # Since there is no patch or upstream patch yet, we replicate the automatic
+  # propagation of dependencies in pkgsStatic for allPkgConfigDepends for
+  # GHC >= 9.3 by default. This option allows overriding this behavior manually
+  # if mismatching Cabal and GHC versions are used.
+  # See also <https://github.com/haskell/cabal/issues/8455>.
+  __propagatePkgConfigDepends ? lib.versionAtLeast ghc.version "9.3"
+, # Propagation can easily lead to the argv limit being exceeded in linker or C
+  # compiler invocations. To work around this we can only propagate derivations
+  # that are known to provide pkg-config modules, as indicated by the presence
+  # of `meta.pkgConfigModules`. This option defaults to false for now, since
+  # this metadata is far from complete in nixpkgs.
   __onlyPropagateKnownPkgConfigModules ? false
 } @ args:
 
@@ -300,7 +307,7 @@ let
         );
     in
 
-    if lib.versionAtLeast ghc.version "9.3"
+    if __propagatePkgConfigDepends
     then propagatePlainBuildInputs allPkgconfigDepends'
     else allPkgconfigDepends';
   allPkgconfigDepends' =
