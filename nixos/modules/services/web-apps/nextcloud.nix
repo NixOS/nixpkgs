@@ -405,7 +405,11 @@ in {
       adminuser = mkOption {
         type = types.str;
         default = "root";
-        description = lib.mdDoc "Username for the admin account.";
+        description = lib.mdDoc ''
+          Username for the admin account. The username is only set during the
+          initial setup of Nextcloud! Since the username also acts as unique
+          ID internally, it cannot be changed later!
+        '';
       };
       adminpassFile = mkOption {
         type = types.str;
