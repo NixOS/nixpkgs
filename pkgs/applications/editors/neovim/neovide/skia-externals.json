@@ -33,5 +33,10 @@
     "url": "https://skia.googlesource.com/libgifcodec",
     "rev": "fd59fa92a0c86788dcdd84d091e1ce81eda06a77",
     "sha256": "sha256-spyZU4QhV2xrHcBRoYqYgCR0wEM5lgfhGh8pqJE5yXM="
+  },
+  "wuffs": {
+    "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
+    "rev": "a0041ac0310b3156b963e2f2bea09245f25ec073",
+    "sha256": "sha256-obRMrrKY3rPdFwQNa5IplpuKqiodHvRC8jbIOjp7R2w="
   }
 }
