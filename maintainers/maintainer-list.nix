@@ -5853,6 +5853,11 @@
     githubId = 17859309;
     name = "Fuzen";
   };
+  fuzzdk = {
+    github = "fuzzdk";
+    githubId = 12715461;
+    name = "Anders Bo Rasmussen";
+  };
   fwc = {
     github = "fwc";
     githubId = 29337229;
