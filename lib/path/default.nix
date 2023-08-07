@@ -121,7 +121,8 @@ let
 
 in /* No rec! Add dependencies on this file at the top. */ {
 
-  /* Append a subpath string to a path.
+  /*
+    Append a subpath string to a path.
 
     Like `path + ("/" + string)` but safer, because it errors instead of returning potentially surprising results.
     More specifically, it checks that the first argument is a [path value type](https://nixos.org/manual/nix/stable/language/values.html#type-path"),
@@ -175,26 +176,26 @@ in /* No rec! Add dependencies on this file at the top. */ {
     path + ("/" + subpath);
 
   /*
-  Whether the first path is a component-wise prefix of the second path.
+    Whether the first path is a component-wise prefix of the second path.
 
-  Laws:
+    Laws:
 
-  - `hasPrefix p q` is only true if [`q == append p s`](#function-library-lib.path.append) for some [subpath](#function-library-lib.path.subpath.isValid) `s`.
+    - `hasPrefix p q` is only true if [`q == append p s`](#function-library-lib.path.append) for some [subpath](#function-library-lib.path.subpath.isValid) `s`.
 
-  - `hasPrefix` is a [non-strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Non-strict_partial_order) over the set of all path values.
+    - `hasPrefix` is a [non-strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Non-strict_partial_order) over the set of all path values.
 
-  Type:
-    hasPrefix :: Path -> Path -> Bool
+    Type:
+      hasPrefix :: Path -> Path -> Bool
 
-  Example:
-    hasPrefix /foo /foo/bar
-    => true
-    hasPrefix /foo /foo
-    => true
-    hasPrefix /foo/bar /foo
-    => false
-    hasPrefix /. /foo
-    => true
+    Example:
+      hasPrefix /foo /foo/bar
+      => true
+      hasPrefix /foo /foo
+      => true
+      hasPrefix /foo/bar /foo
+      => false
+      hasPrefix /. /foo
+      => true
   */
   hasPrefix =
     path1:
@@ -219,27 +220,27 @@ in /* No rec! Add dependencies on this file at the top. */ {
         take (length path1Deconstructed.components) path2Deconstructed.components == path1Deconstructed.components;
 
   /*
-  Remove the first path as a component-wise prefix from the second path.
-  The result is a [normalised subpath string](#function-library-lib.path.subpath.normalise).
+    Remove the first path as a component-wise prefix from the second path.
+    The result is a [normalised subpath string](#function-library-lib.path.subpath.normalise).
 
-  Laws:
+    Laws:
 
-  - Inverts [`append`](#function-library-lib.path.append) for [normalised subpath string](#function-library-lib.path.subpath.normalise):
+    - Inverts [`append`](#function-library-lib.path.append) for [normalised subpath string](#function-library-lib.path.subpath.normalise):
 
-        removePrefix p (append p s) == subpath.normalise s
+          removePrefix p (append p s) == subpath.normalise s
 
-  Type:
-    removePrefix :: Path -> Path -> String
+    Type:
+      removePrefix :: Path -> Path -> String
 
-  Example:
-    removePrefix /foo /foo/bar/baz
-    => "./bar/baz"
-    removePrefix /foo /foo
-    => "./."
-    removePrefix /foo/bar /foo
-    => <error>
-    removePrefix /. /foo
-    => "./foo"
+    Example:
+      removePrefix /foo /foo/bar/baz
+      => "./bar/baz"
+      removePrefix /foo /foo
+      => "./."
+      removePrefix /foo/bar /foo
+      => <error>
+      removePrefix /. /foo
+      => "./foo"
   */
   removePrefix =
     path1:
@@ -272,39 +273,39 @@ in /* No rec! Add dependencies on this file at the top. */ {
         joinRelPath components;
 
   /*
-  Split the filesystem root from a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path).
-  The result is an attribute set with these attributes:
-  - `root`: The filesystem root of the path, meaning that this directory has no parent directory.
-  - `subpath`: The [normalised subpath string](#function-library-lib.path.subpath.normalise) that when [appended](#function-library-lib.path.append) to `root` returns the original path.
+    Split the filesystem root from a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path).
+    The result is an attribute set with these attributes:
+    - `root`: The filesystem root of the path, meaning that this directory has no parent directory.
+    - `subpath`: The [normalised subpath string](#function-library-lib.path.subpath.normalise) that when [appended](#function-library-lib.path.append) to `root` returns the original path.
 
-  Laws:
-  - [Appending](#function-library-lib.path.append) the `root` and `subpath` gives the original path:
+    Laws:
+    - [Appending](#function-library-lib.path.append) the `root` and `subpath` gives the original path:
 
-        p ==
-          append
-            (splitRoot p).root
-            (splitRoot p).subpath
+          p ==
+            append
+              (splitRoot p).root
+              (splitRoot p).subpath
 
-  - Trying to get the parent directory of `root` using [`readDir`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readDir) returns `root` itself:
+    - Trying to get the parent directory of `root` using [`readDir`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readDir) returns `root` itself:
 
-        dirOf (splitRoot p).root == (splitRoot p).root
+          dirOf (splitRoot p).root == (splitRoot p).root
 
-  Type:
-    splitRoot :: Path -> { root :: Path, subpath :: String }
+    Type:
+      splitRoot :: Path -> { root :: Path, subpath :: String }
 
-  Example:
-    splitRoot /foo/bar
-    => { root = /.; subpath = "./foo/bar"; }
+    Example:
+      splitRoot /foo/bar
+      => { root = /.; subpath = "./foo/bar"; }
 
-    splitRoot /.
-    => { root = /.; subpath = "./."; }
+      splitRoot /.
+      => { root = /.; subpath = "./."; }
 
-    # Nix neutralises `..` path components for all path values automatically
-    splitRoot /foo/../bar
-    => { root = /.; subpath = "./bar"; }
+      # Nix neutralises `..` path components for all path values automatically
+      splitRoot /foo/../bar
+      => { root = /.; subpath = "./bar"; }
 
-    splitRoot "/foo/bar"
-    => <error>
+      splitRoot "/foo/bar"
+      => <error>
   */
   splitRoot = path:
     assert assertMsg
@@ -317,46 +318,47 @@ in /* No rec! Add dependencies on this file at the top. */ {
       subpath = joinRelPath deconstructed.components;
     };
 
-  /* Whether a value is a valid subpath string.
+  /*
+    Whether a value is a valid subpath string.
 
-  A subpath string points to a specific file or directory within an absolute base directory.
-  It is a stricter form of a relative path that excludes `..` components, since those could escape the base directory.
+    A subpath string points to a specific file or directory within an absolute base directory.
+    It is a stricter form of a relative path that excludes `..` components, since those could escape the base directory.
 
-  - The value is a string.
+    - The value is a string.
 
-  - The string is not empty.
+    - The string is not empty.
 
-  - The string doesn't start with a `/`.
+    - The string doesn't start with a `/`.
 
-  - The string doesn't contain any `..` path components.
+    - The string doesn't contain any `..` path components.
 
-  Type:
-    subpath.isValid :: String -> Bool
+    Type:
+      subpath.isValid :: String -> Bool
 
-  Example:
-    # Not a string
-    subpath.isValid null
-    => false
+    Example:
+      # Not a string
+      subpath.isValid null
+      => false
 
-    # Empty string
-    subpath.isValid ""
-    => false
+      # Empty string
+      subpath.isValid ""
+      => false
 
-    # Absolute path
-    subpath.isValid "/foo"
-    => false
+      # Absolute path
+      subpath.isValid "/foo"
+      => false
 
-    # Contains a `..` path component
-    subpath.isValid "../foo"
-    => false
+      # Contains a `..` path component
+      subpath.isValid "../foo"
+      => false
 
-    # Valid subpath
-    subpath.isValid "foo/bar"
-    => true
+      # Valid subpath
+      subpath.isValid "foo/bar"
+      => true
 
-    # Doesn't need to be normalised
-    subpath.isValid "./foo//bar/"
-    => true
+      # Doesn't need to be normalised
+      subpath.isValid "./foo//bar/"
+      => true
   */
   subpath.isValid =
     # The value to check
@@ -364,7 +366,8 @@ in /* No rec! Add dependencies on this file at the top. */ {
     subpathInvalidReason value == null;
 
 
-  /* Join subpath strings together using `/`, returning a normalised subpath string.
+  /*
+    Join subpath strings together using `/`, returning a normalised subpath string.
 
     Like `concatStringsSep "/"` but safer, specifically:
 
@@ -439,28 +442,28 @@ in /* No rec! Add dependencies on this file at the top. */ {
       ) 0 subpaths;
 
   /*
-  Split [a subpath](#function-library-lib.path.subpath.isValid) into its path component strings.
-  Throw an error if the subpath isn't valid.
-  Note that the returned path components are also [valid subpath strings](#function-library-lib.path.subpath.isValid), though they are intentionally not [normalised](#function-library-lib.path.subpath.normalise).
+    Split [a subpath](#function-library-lib.path.subpath.isValid) into its path component strings.
+    Throw an error if the subpath isn't valid.
+    Note that the returned path components are also [valid subpath strings](#function-library-lib.path.subpath.isValid), though they are intentionally not [normalised](#function-library-lib.path.subpath.normalise).
 
-  Laws:
+    Laws:
 
-  - Splitting a subpath into components and [joining](#function-library-lib.path.subpath.join) the components gives the same subpath but [normalised](#function-library-lib.path.subpath.normalise):
+    - Splitting a subpath into components and [joining](#function-library-lib.path.subpath.join) the components gives the same subpath but [normalised](#function-library-lib.path.subpath.normalise):
 
-        subpath.join (subpath.components s) == subpath.normalise s
+          subpath.join (subpath.components s) == subpath.normalise s
 
-  Type:
-    subpath.components :: String -> [ String ]
+    Type:
+      subpath.components :: String -> [ String ]
 
-  Example:
-    subpath.components "."
-    => [ ]
+    Example:
+      subpath.components "."
+      => [ ]
 
-    subpath.components "./foo//bar/./baz/"
-    => [ "foo" "bar" "baz" ]
+      subpath.components "./foo//bar/./baz/"
+      => [ "foo" "bar" "baz" ]
 
-    subpath.components "/foo"
-    => <error>
+      subpath.components "/foo"
+      => <error>
   */
   subpath.components =
     subpath:
@@ -469,77 +472,78 @@ in /* No rec! Add dependencies on this file at the top. */ {
           ${subpathInvalidReason subpath}'';
     splitRelPath subpath;
 
-  /* Normalise a subpath. Throw an error if the subpath isn't [valid](#function-library-lib.path.subpath.isValid).
+  /*
+    Normalise a subpath. Throw an error if the subpath isn't [valid](#function-library-lib.path.subpath.isValid).
 
-  - Limit repeating `/` to a single one.
+    - Limit repeating `/` to a single one.
 
-  - Remove redundant `.` components.
+    - Remove redundant `.` components.
 
-  - Remove trailing `/` and `/.`.
+    - Remove trailing `/` and `/.`.
 
-  - Add leading `./`.
+    - Add leading `./`.
 
-  Laws:
+    Laws:
 
-  - Idempotency - normalising multiple times gives the same result:
+    - Idempotency - normalising multiple times gives the same result:
 
-        subpath.normalise (subpath.normalise p) == subpath.normalise p
+          subpath.normalise (subpath.normalise p) == subpath.normalise p
 
-  - Uniqueness - there's only a single normalisation for the paths that lead to the same file system node:
+    - Uniqueness - there's only a single normalisation for the paths that lead to the same file system node:
 
-        subpath.normalise p != subpath.normalise q -> $(realpath ${p}) != $(realpath ${q})
+          subpath.normalise p != subpath.normalise q -> $(realpath ${p}) != $(realpath ${q})
 
-  - Don't change the result when [appended](#function-library-lib.path.append) to a Nix path value:
+    - Don't change the result when [appended](#function-library-lib.path.append) to a Nix path value:
 
-        append base p == append base (subpath.normalise p)
+          append base p == append base (subpath.normalise p)
 
-  - Don't change the path according to `realpath`:
+    - Don't change the path according to `realpath`:
 
-        $(realpath ${p}) == $(realpath ${subpath.normalise p})
+          $(realpath ${p}) == $(realpath ${subpath.normalise p})
 
-  - Only error on [invalid subpaths](#function-library-lib.path.subpath.isValid):
+    - Only error on [invalid subpaths](#function-library-lib.path.subpath.isValid):
 
-        builtins.tryEval (subpath.normalise p)).success == subpath.isValid p
+          builtins.tryEval (subpath.normalise p)).success == subpath.isValid p
 
-  Type:
-    subpath.normalise :: String -> String
+    Type:
+      subpath.normalise :: String -> String
 
-  Example:
-    # limit repeating `/` to a single one
-    subpath.normalise "foo//bar"
-    => "./foo/bar"
+    Example:
+      # limit repeating `/` to a single one
+      subpath.normalise "foo//bar"
+      => "./foo/bar"
 
-    # remove redundant `.` components
-    subpath.normalise "foo/./bar"
-    => "./foo/bar"
+      # remove redundant `.` components
+      subpath.normalise "foo/./bar"
+      => "./foo/bar"
 
-    # add leading `./`
-    subpath.normalise "foo/bar"
-    => "./foo/bar"
+      # add leading `./`
+      subpath.normalise "foo/bar"
+      => "./foo/bar"
 
-    # remove trailing `/`
-    subpath.normalise "foo/bar/"
-    => "./foo/bar"
+      # remove trailing `/`
+      subpath.normalise "foo/bar/"
+      => "./foo/bar"
 
-    # remove trailing `/.`
-    subpath.normalise "foo/bar/."
-    => "./foo/bar"
+      # remove trailing `/.`
+      subpath.normalise "foo/bar/."
+      => "./foo/bar"
 
-    # Return the current directory as `./.`
-    subpath.normalise "."
-    => "./."
+      # Return the current directory as `./.`
+      subpath.normalise "."
+      => "./."
 
-    # error on `..` path components
-    subpath.normalise "foo/../bar"
-    => <error>
+      # error on `..` path components
+      subpath.normalise "foo/../bar"
+      => <error>
 
-    # error on empty string
-    subpath.normalise ""
-    => <error>
+      # error on empty string
+      subpath.normalise ""
+      => <error>
 
-    # error on absolute path
-    subpath.normalise "/foo"
-    => <error>
+      # error on absolute path
+      subpath.normalise "/foo"
+      => <error>
   */
   subpath.normalise =
     # The subpath string to normalise
