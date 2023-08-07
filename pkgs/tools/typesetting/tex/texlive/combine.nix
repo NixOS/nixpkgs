@@ -30,11 +30,12 @@ let
     # remove fake derivations (without 'outPath') to avoid undesired build dependencies
     paths = lib.catAttrs "outPath" pkgList.nonbin;
 
-    nativeBuildInputs = [ (lib.last tl.texlive-scripts.pkgs) ];
+    # mktexlsr
+    nativeBuildInputs = [ (lib.last tl."texlive.infra".pkgs) ];
 
     postBuild = # generate ls-R database
     ''
-      mktexlsr --sort "$out"
+      mktexlsr "$out"
     '';
   }).overrideAttrs (_: { allowSubstitutes = true; });
 
@@ -88,7 +89,8 @@ in (buildEnv {
   nativeBuildInputs = [
     makeWrapper
     libfaketime
-    (lib.last tl.texlive-scripts.pkgs) # fmtutil, mktexlsr, updmap
+    (lib.last tl."texlive.infra".pkgs) # mktexlsr
+    (lib.last tl.texlive-scripts.pkgs) # fmtutil, updmap
     (lib.last tl.texlive-scripts-extra.pkgs) # texlinks
     perl
   ];
@@ -222,8 +224,8 @@ in (buildEnv {
       "$TEXMFDIST"/tex/generic/config/language.dat.lua > "$TEXMFSYSVAR"/tex/generic/config/language.dat.lua
     [[ -e "$TEXMFDIST"/web2c/fmtutil.cnf ]] && sed -E -f '${fmtutilSed}' "$TEXMFDIST"/web2c/fmtutil.cnf > "$TEXMFCNF"/fmtutil.cnf
 
-    # make new files visible to kpathsea
-    mktexlsr --sort "$TEXMFSYSVAR"
+    # create $TEXMFSYSCONFIG database, make new $TEXMFSYSVAR files visible to kpathsea
+    mktexlsr "$TEXMFSYSCONFIG" "$TEXMFSYSVAR"
   '') +
     # generate format links (reads fmtutil.cnf to know which ones) *after* the wrappers have been generated
   ''
@@ -260,7 +262,7 @@ in (buildEnv {
     # sort entries to improve reproducibility
     [[ -f "$TEXMFSYSCONFIG"/web2c/updmap.cfg ]] && sort -o "$TEXMFSYSCONFIG"/web2c/updmap.cfg "$TEXMFSYSCONFIG"/web2c/updmap.cfg
 
-    mktexlsr --sort "$TEXMFSYSCONFIG" "$TEXMFSYSVAR" # to make sure (of what?)
+    mktexlsr "$TEXMFSYSCONFIG" "$TEXMFSYSVAR" # to make sure (of what?)
   '' +
     # remove *-sys scripts since /nix/store is readonly
   ''

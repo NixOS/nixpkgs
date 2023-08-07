@@ -113,6 +113,7 @@ let
       ps2eps.extraBuildInputs = [ ghostscript_headless ];
       pst2pdf.extraBuildInputs = [ ghostscript_headless ];
       tex4ht.extraBuildInputs = [ ruby ];
+      "texlive.infra".extraBuildInputs = [ coreutils gnused (lib.last tl.kpathsea.pkgs) ];
       texlive-scripts.extraBuildInputs = [ gnused ];
       texlive-scripts-extra.extraBuildInputs = [ coreutils findutils ghostscript_headless gnused ];
       thumbpdf.extraBuildInputs = [ ghostscript_headless ];
@@ -132,12 +133,8 @@ let
       # so we add it back to binfiles to generate it from mkPkgBin
       mptopdf.binfiles = (orig.mptopdf.binfiles or []) ++ [ "mptopdf" ];
 
-      # mktexlsr distributed by texlive.infra has implicit dependencies (e.g. kpsestat)
-      # the perl one hidden in texlive-scripts is better behaved
-      "texlive.infra".binfiles = lib.remove "mktexlsr" orig."texlive.infra".binfiles;
-
-      # remove man, add mktexlsr
-      texlive-scripts.binfiles = (lib.remove "man" orig.texlive-scripts.binfiles) ++ [ "mktexlsr" ];
+      # remove man
+      texlive-scripts.binfiles = lib.remove "man" orig.texlive-scripts.binfiles;
 
       # upmendex is "TODO" in bin.nix
       uptex.binfiles = lib.remove "upmendex" orig.uptex.binfiles;
@@ -172,7 +169,7 @@ let
 
       texlive-scripts.binlinks = {
         mktexfmt = "fmtutil";
-        texhash = "mktexlsr";
+        texhash = (lib.last tl."texlive.infra".pkgs) + "/bin/mktexlsr";
       };
 
       texlive-scripts-extra.binlinks = {
@@ -342,9 +339,11 @@ let
       '';
 
       # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
+      # add runtime dependencies to PATH
       "texlive.infra".postFixup = ''
         substituteInPlace "$out"/bin/tlmgr \
           --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
+        sed -i '2iPATH="${lib.makeBinPath overridden."texlive.infra".extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
       '';
 
       # Patch texlinks.sh back to 2015 version;
