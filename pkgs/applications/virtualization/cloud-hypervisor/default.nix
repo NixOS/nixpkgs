@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
-  version = "32.0";
+  version = "32.1";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "aSBzbxL9TOYVQUZBgHI8GHELfx9avRDHh/MWmN+/nY0=";
+    sha256 = "JwsPZrCZZyp9gz/V1KEvLGbRHYMGaQS6zFH8GMLjceI=";
   };
 
   cargoLock = {
