@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     platforms = lua.meta.platforms;
     maintainers = with maintainers; [ chiroptical ];
+    mainProgram = "fnlfmt";
   };
 }

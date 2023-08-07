@@ -1,5 +1,11 @@
-{ lib, callPackage, buildDunePackage, re, ocamlformat-lib, menhir
-, version ? "0.26.0" }:
+{ lib
+, callPackage
+, buildDunePackage
+, re
+, ocamlformat-lib
+, menhir
+, version ? "0.26.0"
+}:
 
 let inherit (callPackage ./generic.nix { inherit version; }) src library_deps;
 
@@ -22,5 +28,6 @@ in buildDunePackage {
     description = "Auto-formatter for OCaml code";
     maintainers = with lib.maintainers; [ Zimmi48 marsam Julow ];
     license = lib.licenses.mit;
+    mainProgram = "ocamlformat";
   };
 }
