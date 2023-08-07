@@ -13476,6 +13476,12 @@
     githubId = 38314551;
     name = "Peter Okelmann";
   };
+  pokon548 = {
+    email = "nix@bukn.uk";
+    github = "pokon548";
+    githubId = 65808665;
+    name = "Bu Kun";
+  };
   polarmutex = {
     email = "brian@brianryall.xyz";
     github = "polarmutex";
