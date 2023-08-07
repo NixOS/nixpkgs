@@ -1312,4 +1312,9 @@ self: super: builtins.intersectAttrs super {
   # Sydtest has a brittle test suite that will only work with the exact
   # versions that it ships with.
   sydtest = dontCheck super.sydtest;
+
+  # Prevent argv limit being exceeded when invoking $CC.
+  gi-javascriptcore = overrideCabal {
+    __onlyPropagateKnownPkgConfigModules = true;
+  } super.gi-javascriptcore;
 }
