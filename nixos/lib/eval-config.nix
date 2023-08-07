@@ -20,13 +20,9 @@ evalConfigArgs@
   #     of inheritParentConfig.
   baseModules ? import ../modules/module-list.nix
 , # !!! See comment about args in lib/modules.nix
-  extraArgs ? {}
-, # !!! See comment about args in lib/modules.nix
   specialArgs ? {}
 , modules
 , modulesLocation ? (builtins.unsafeGetAttrPos "modules" evalConfigArgs).file or null
-, # !!! See comment about check in lib/modules.nix
-  check ? true
 , prefix ? []
 , lib ? import ../../lib
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
@@ -62,21 +58,7 @@ let
 
   withWarnings = x:
     lib.warnIf (evalConfigArgs?pkgs) "Passing pkgs to lib.nixosSystem is deprecated. Please set nixpkgs.pkgs instead."
-    lib.warnIf (evalConfigArgs?extraArgs) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
-    lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
     x;
-
-  legacyModules =
-    lib.optional (evalConfigArgs?extraArgs) {
-      config = {
-        _module.args = extraArgs;
-      };
-    }
-    ++ lib.optional (evalConfigArgs?check) {
-      config = {
-        _module.check = lib.mkDefault check;
-      };
-    };
 
   allUserModules =
     let
@@ -88,7 +70,7 @@ let
         else
           map (lib.setDefaultModuleLocation modulesLocation) modules;
     in
-      locatedModules ++ legacyModules;
+      locatedModules;
 
   noUserModules = evalModulesMinimal ({
     inherit prefix specialArgs;
@@ -107,7 +89,6 @@ let
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
   withExtraArgs = nixosSystem: nixosSystem // {
-    inherit extraArgs;
     inherit (nixosSystem._module.args) pkgs;
     extendModules = args: withExtraArgs (nixosSystem.extendModules args);
   };
