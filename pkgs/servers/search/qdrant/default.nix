@@ -29,12 +29,6 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  prePatch = lib.optionalString stdenv.isAarch64 ''
-    substituteInPlace .cargo/config.toml \
-      --replace "[target.aarch64-unknown-linux-gnu]" "" \
-      --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
-  '';
-
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
