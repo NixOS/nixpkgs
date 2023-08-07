@@ -6266,6 +6266,8 @@ with pkgs;
 
   tsduck = callPackage ../tools/video/tsduck { };
 
+  turso-cli = callPackage ../development/tools/turso-cli {};
+
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
@@ -19758,6 +19760,8 @@ with pkgs;
 
   inherit (callPackage ../development/tools/replay-io { })
     replay-io replay-node-cli;
+
+  requestly = callPackage ../tools/networking/requestly { };
 
   reshape = callPackage ../development/tools/reshape { } ;
 
