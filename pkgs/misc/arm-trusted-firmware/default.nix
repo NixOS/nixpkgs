@@ -52,6 +52,7 @@ let
     buildInputs = [ openssl ];
 
     makeFlags = [
+      "HOSTCC=$(CC_FOR_BUILD)"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
       # binutils 2.39 regression
       # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
