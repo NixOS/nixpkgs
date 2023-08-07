@@ -121,74 +121,66 @@ So e.g. the [`nixpkgs-unstable` branch](https://github.com/nixos/nixpkgs/tree/ni
 
 ### Releases
 
-The NixOS release process is documented in the [NixOS Release Wiki](https://nixos.github.io/release-wiki/)
+Nixpkgs in its entirety is tied to the NixOS release process, which is documented in the [NixOS Release Wiki](https://nixos.github.io/release-wiki/).
 
-Most changes added to the stable release branches are cherry-picked (“backported”) from the `master` and staging branches.
+Changes should generally always go to the `master` branch.
+Once in `master`, it can be backported to the `release-YY.MM` branches if [acceptable](#acceptable-backport-criteria).
+A change should only go to the `release-YY.MM` branch directly if `master` doesn't need that change.
+
+#### Acceptable backport criteria
+
+Backports are only accepted to supported releases.
+The oldest supported release (`YYMM`) can be found using
+```
+nix-instantiate --eval -A lib.trivial.oldestSupportedRelease
+```
+
+The release branches should generally not receive any breaking changes, both for the Nix expressions and derivations.
+So these changes are acceptable to backport:
+- New packages, modules and functions
+- Security fixes
+- Package version updates
+  - Patch versions with fixes
+  - Minor versions with new functionality, but no breaking changes
+
+In addition, major package version updates with breaking changes are also acceptable for:
+- Services that would fail without up-to-date client software, such as `spotify`, `steam`, and `discord`
+- Security critical applications, such as `firefox` and `chromium`
 
 #### Backporting changes
 
-Follow these steps to backport a change into a release branch in compliance with the [commit policy](https://nixos.org/nixpkgs/manual/#submitting-changes-stable-release-branches).
+Once a pull request has been merged into `master`, a backport pull request to the corresponding `release-YY.MM` branch can be created either automatically or manually.
 
-You can add a label such as `backport release-23.05` to a PR, so that merging it will
-automatically create a backport (via [a GitHub Action](.github/workflows/backport.yml)).
-This also works for pull requests that have already been merged, and might take a couple of minutes to trigger.
+##### Automatically backporting changes
 
-You can also create the backport manually:
+> **Note**
+> You have to be a [Nixpkgs maintainer](./maintainers) to automatically create a backport pull request.
 
-1. Take note of the commits in which the change was introduced into `master` branch.
-2. Check out the target _release branch_, e.g. `release-23.05`. Do not use a _channel branch_ like `nixos-23.05` or `nixpkgs-23.05-darwin`.
-3. Create a branch for your change, e.g. `git checkout -b backport`.
-4. When the reason to backport is not obvious from the original commit message, use `git cherry-pick -xe <original commit>` and add a reason. Otherwise use `git cherry-pick -x <original commit>`. That's fine for minor version updates that only include security and bug fixes, commits that fixes an otherwise broken package or similar. Please also ensure the commits exists on the master branch; in the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
-5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-23.05`) as the target branch of the pull request, and link to the pull request in which the original change was committed to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[23.05]`.
-6. When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request. This way maintainers can keep track of missing backports easier.
+Add the [`backport release-YY.MM` label](https://github.com/NixOS/nixpkgs/labels?q=backport) to the pull request on the `master` branch.
+This will cause [a GitHub Action](.github/workflows/backport.yml) to open a pull request to the `release-YY.MM` branch a few minutes later.
+This can be done on both open or already merged pull requests.
 
-#### Automatically backporting a Pull Request {#submitting-changes-stable-release-branches-automatic-backports}
+##### Manually backporting changes
 
-Assign label `backport <branch>` (e.g. `backport release-21.11`) to the PR and a backport PR is automatically created after the PR is merged.
+To manually create a backport pull request, follow [the standard pull request process](#how-to-propose-a-change), with these notable differences:
 
-#### Manually backporting changes {#submitting-changes-stable-release-branches-manual-backports}
+- Use `release-YY.MM` for the base branch, both for the local branch and the pull request.
+  > **Warning**
+  > Do not use the `nixos-YY.MM` branch, that is a branch pointing to the tested release channel commit
 
-Cherry-pick changes via `git cherry-pick -x <original commit>` so that the original commit id is included in the commit message.
+- Instead of making manually making and committing the changes, use [`git cherry-pick -x`](https://git-scm.com/docs/git-cherry-pick) for each commit from the pull request you'd like to backport.
+  Either `git cherry-pick -x <commit>` when the reason for the backport is obvious (such as minor versions, fixes, etc.), otherwise use `git cherry-pickx -xe <commit>` to add a reason for the backport to the commit message.
+  Here is [an example](5688c39af5a6c5f3d646343443683da880eaefb8) of this.
 
-Add a reason for the backport when it is not obvious from the original commit message. You can do this by cherry picking with `git cherry-pick -xe <original commit>`, which allows editing the commit message. This is not needed for minor version updates that include security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
+  > **Warning**
+  > Ensure the commits exists on the master branch.
+  > In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
 
-Here is an example of a cherry-picked commit message with good reason description:
+- In the pull request description, link to the original pull request to `master`.
+  The pull request title should include `[YY.MM]` matching the release you're backporting to.
 
-```
-zfs: Keep trying root import until it works
-
-Works around #11003.
-
-(cherry picked from commit 98b213a11041af39b39473906b595290e2a4e2f9)
-
-Reason: several people cannot boot with ZFS on NVMe
-```
-
-Other examples of reasons are:
-
-- Previously the build would fail due to, e.g., `getaddrinfo` not being defined
-- The previous download links were all broken
-- Crash when starting on some X11 systems
-
-#### Acceptable backport criteria {#acceptable-backport-criteria}
-
-The stable branch does have some changes which cannot be backported. Most notable are breaking changes. The desire is to have stable users be uninterrupted when updating packages.
-
-However, many changes are able to be backported, including:
-- New Packages / Modules
-- Security / Patch updates
-- Version updates which include new functionality (but no breaking changes)
-- Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
-- Security critical applications (E.g. `firefox`)
-
-#### Criteria for Backporting changes
-
-Anything that does not cause user or downstream dependency regressions can be backported. This includes:
-- New Packages / Modules
-- Security / Patch updates
-- Version updates which include new functionality (but no breaking changes)
-- Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
-- Security critical applications (E.g. `firefox`)
+- When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request.
+  This way maintainers can keep track of missing backports easier.
 
 ### Staging
 
