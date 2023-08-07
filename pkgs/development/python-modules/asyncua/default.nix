@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.0.2";
+  version = "1.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DnBxR4nD3dBBhiElDuRgljHaoBPiakdjY/VFn3VsKEQ=";
+    hash = "sha256-fSXhW/Ik96HVecwOFWM+VftSzWGX6O4PzPT7JuaYXy0=";
     fetchSubmodules = true;
   };
 

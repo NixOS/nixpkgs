@@ -65,6 +65,7 @@ let
           zowoq
           techknowlogick
         ];
+        mainProgram = "terraform";
       };
     } // attrs');
 

@@ -88,13 +88,15 @@ let
       "mdformat"
     ];
 
-    passthru = {inherit withPlugins;};
+    passthru = { inherit withPlugins; };
 
     meta = with lib; {
       description = "CommonMark compliant Markdown formatter";
       homepage = "https://mdformat.rtfd.io/";
       license = with licenses; [ mit ];
       maintainers = with maintainers; [ fab aldoborrero ];
+      mainProgram = "mdformat";
     };
   };
-in package
+in
+package

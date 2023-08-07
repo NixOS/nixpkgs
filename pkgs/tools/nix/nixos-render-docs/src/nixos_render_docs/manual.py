@@ -623,7 +623,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             elif bt.type == 'footnote_ref' and (id := cast(str, bt.attrs.get('id', ''))):
                 result.append(XrefTarget(id, "???", None, None, target_file))
             elif bt.type == 'inline':
-                assert bt.children
+                assert bt.children is not None
                 result += self._collect_ids(bt.children, target_file, typ, False)
             elif id := cast(str, bt.attrs.get('id', '')):
                 # anchors and examples have no titles we could use, but we'll have to put
