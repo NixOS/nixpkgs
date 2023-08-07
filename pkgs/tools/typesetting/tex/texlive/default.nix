@@ -352,6 +352,12 @@ let
         substituteInPlace "$out"/bin/* --replace java "$interpJava"
       '';
 
+      # hardcode revision numbers (since texlive.infra, tlshell are not in either system or user texlive.tlpdb)
+      tlshell.postFixup = ''
+        substituteInPlace "$out"/bin/tlshell \
+          --replace '[dict get $::pkgs texlive.infra localrev]' '${toString overridden."texlive.infra".revision}' \
+          --replace '[dict get $::pkgs tlshell localrev]' '${toString overridden.tlshell.revision}'
+      '';
       #### dependency changes
 
       # it seems to need it to transform fonts
