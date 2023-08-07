@@ -5851,10 +5851,9 @@ self: super: with self; {
     pythonSupport = true;
   });
 
-  libgpiod = toPythonModule (pkgs.libgpiod.override {
-    enablePython = true;
-    python3 = python;
-  });
+  libgpiod = callPackage ../development/python-modules/libgpiod {
+    inherit (pkgs) libgpiod;
+  };
 
   libgpuarray = callPackage ../development/python-modules/libgpuarray {
     clblas = pkgs.clblas.override { inherit (self) boost; };

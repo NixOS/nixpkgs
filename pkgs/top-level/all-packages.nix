@@ -8887,7 +8887,9 @@ with pkgs;
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
-  harmonia = callPackage ../tools/package-management/harmonia { };
+  harmonia = callPackage ../tools/package-management/harmonia {
+    nix = nixVersions.unstable;
+  };
 
   hayagriva = callPackage ../tools/typesetting/hayagriva { };
 
@@ -13564,6 +13566,8 @@ with pkgs;
 
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
 
+  timelens = callPackage ../applications/video/timelens { };
+
   timetrap = callPackage ../applications/office/timetrap { };
 
   timetagger = callPackage ../servers/timetagger { };
@@ -18225,6 +18229,8 @@ with pkgs;
 
   fortran-language-server = python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server { };
 
+  glslls = callPackage ../development/tools/language-servers/glslls { };
+
   gopls = callPackage ../development/tools/language-servers/gopls { };
 
   helm-ls = callPackage ../development/tools/language-servers/helm-ls { };
@@ -22588,7 +22594,7 @@ with pkgs;
 
   libfabric = callPackage ../development/libraries/libfabric { };
 
-  libfive = libsForQt5.callPackage ../development/libraries/libfive { };
+  libfive = qt6Packages.callPackage ../development/libraries/libfive { };
 
   libfixposix = callPackage ../development/libraries/libfixposix { };
 
@@ -27929,6 +27935,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  libraqm = callPackage ../development/libraries/libraqm { };
+
   libraw = callPackage ../development/libraries/libraw { };
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
@@ -32371,6 +32379,10 @@ with pkgs;
   rootbar = callPackage ../applications/misc/rootbar { };
 
   waybar = callPackage ../applications/misc/waybar { };
+
+  waybar-hyprland = callPackage ../applications/misc/waybar {
+    hyprlandSupport = true;
+  };
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
@@ -40297,7 +40309,7 @@ with pkgs;
   dnadd = callPackage ../tools/nix/dnadd { };
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_16;
+    nix = nixVersions.nix_2_17;
   };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };
