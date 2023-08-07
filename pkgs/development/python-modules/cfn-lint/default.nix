@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.77.10";
+  version = "0.79.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "aws-cloudformation";
     repo = "cfn-python-lint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lIL+lwrQqD4mamf0xDwxpL4jTgQWSLzRM1nUgkSZgQA=";
+    hash = "sha256-5Lb8dA8HqDdEO/Ehv5y/JlP+te46mzrTw/kNHBb9l38=";
   };
 
   propagatedBuildInputs = [
