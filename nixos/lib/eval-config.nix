@@ -57,6 +57,9 @@ let
   };
 
   withWarnings = x:
+    lib.throwIf (specialArgs?config) "Setting specialArgs.config is a very bad idea"
+    lib.throwIf (specialArgs?modulesPath) "Setting modulesPath is a very bad idea"
+    lib.warnIf (specialArgs?pkgs) "Setting specialArgs.pkgs is potentially dangerous. Please use nixpkgs.pkgs instead"
     lib.warnIf (evalConfigArgs?pkgs) "Passing pkgs to lib.nixosSystem is deprecated. Please set nixpkgs.pkgs instead."
     x;
 
