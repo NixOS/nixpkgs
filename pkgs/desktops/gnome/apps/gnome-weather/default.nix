@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, desktop-file-utils
 , pkg-config
 , gnome
 , gtk4
@@ -18,14 +19,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
-  version = "44.0";
+  version = "45.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "aw04rHhQQWmd9iiSbjXbe1/6CG7g1pNMIioZxrmSO68=";
+    sha256 = "rMHR8uN24vXbXdHZRaTaFlgITFB8YXJQWRNLa3r48es=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     pkg-config
     meson
     ninja
@@ -56,8 +58,6 @@ stdenv.mkDerivation rec {
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
-    substituteInPlace meson_post_install.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   passthru = {
