@@ -11802,6 +11802,8 @@ with pkgs;
 
   tautulli = python3Packages.callPackage ../servers/tautulli { };
 
+  passim = callPackage ../servers/passim { };
+
   pleroma = callPackage ../servers/pleroma { };
 
   plfit = callPackage ../tools/misc/plfit {
