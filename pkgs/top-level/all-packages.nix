@@ -17165,6 +17165,22 @@ with pkgs;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
+  # https://github.com/NixOS/nixpkgs/issues/89426
+  rustc-wasm32 = (rustc.override {
+    stdenv = stdenv.override {
+      targetPlatform = stdenv.targetPlatform // {
+        parsed = {
+          cpu.name = "wasm32";
+          vendor.name = "unknown";
+          kernel.name = "unknown";
+          abi.name = "unknown";
+        };
+      };
+    };
+  }).overrideAttrs (old: {
+    configureFlags = old.configureFlags ++ ["--set=build.docs=false"];
+  });
+
   makeRustPlatform = callPackage ../development/compilers/rust/make-rust-platform.nix { };
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
