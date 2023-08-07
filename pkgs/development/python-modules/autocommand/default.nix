@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Autocommand turns a python function into a CLI program";
     homepage = "https://github.com/Lucretiel/autocommand";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ ];
   };
 }
