@@ -37,13 +37,13 @@ let
   ];
 
   configureFlags = [
+    "--prefix=${placeholder "out"}"
+    "--build=${buildPlatform.config}"
+    "--host=${hostPlatform.config}"
     "--disable-nls"
     "--disable-shared"
     "--disable-werror"
-    "--prefix=${placeholder "out"}"
-
-    "--build=${buildPlatform.config}"
-    "--host=${hostPlatform.config}"
+    "--with-sysroot=/"
 
     # Turn on --enable-new-dtags by default to make the linker set
     # RUNPATH instead of RPATH on binaries.  This is important because
@@ -93,8 +93,6 @@ bash.runCommand "${pname}-${version}" {
 
   # Patch
   ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
-  # Clear the default library search path.
-  echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
 
   # Configure
   ${if mesBootstrap then ''

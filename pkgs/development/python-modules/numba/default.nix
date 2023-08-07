@@ -37,9 +37,20 @@ in buildPythonPackage rec {
     owner = "numba";
     repo = "numba";
     rev = "fcf94205335dcc6135d2e19c07bbef968d13610d";
-    hash = "sha256-9YmIX+ydDA7xcPqjDus1LSrAhsgv6eVpKLZVzX8Cv0w=";
+    # Upstream uses .gitattributes to inject information about the revision
+    # hash and the refname into `numba/_version.py`, see:
+    #
+    # - https://git-scm.com/docs/gitattributes#_export_subst and
+    # - https://github.com/numba/numba/blame/5ef7c86f76a6e8cc90e9486487294e0c34024797/numba/_version.py#L25-L31
+    #
+    # Hence this hash may change if GitHub / Git will change it's behavior.
+    # Hopefully this will not happen until the next release. We are fairly sure
+    # that upstream relies on those strings to be valid, that's why we don't
+    # use `forceFetchGit = true;`.` If in the future we'll observe the hash
+    # changes too often, we can always use forceFetchGit, and inject the
+    # relevant strings ourselves, using `sed` commands, in extraPostFetch.
+    hash = "sha256-Wm1sV4uS/Xkz1BkT2xNmwgBZS0X8YziC6jlbfolXGB8=";
   };
-
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   nativeBuildInputs = [

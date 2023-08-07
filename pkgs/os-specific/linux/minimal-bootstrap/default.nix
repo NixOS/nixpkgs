@@ -73,6 +73,11 @@ lib.makeScope
       mesBootstrap = true;
     };
 
+    gcc46 = callPackage ./gcc/4.6.nix {
+      gcc = gcc2;
+      glibc = glibc22;
+    };
+
     inherit (callPackage ./glibc {
       bash = bash_2_05;
       gnused = gnused-mes;
@@ -151,6 +156,7 @@ lib.makeScope
       echo ${gawk.tests.get-version}
       echo ${gcc2.tests.get-version}
       echo ${gcc2-mes.tests.get-version}
+      echo ${gcc46.tests.get-version}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}
