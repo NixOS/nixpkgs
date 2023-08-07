@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, callPackage
 , flit
 }:
 
@@ -9,28 +8,15 @@ buildPythonPackage rec {
   inherit (flit) version;
   format = "pyproject";
 
-  outputs = [
-    "out"
-    "testsout"
-  ];
-
   inherit (flit) src patches;
 
-  preConfigure = ''
-    cd flit_core
-  '';
+  sourceRoot = "source/flit_core";
 
-  postInstall = ''
-    mkdir $testsout
-    cp -R ../tests $testsout/tests
-  '';
-
-  # check in passthru.tests.pytest to escape infinite recursion with setuptools-scm
+  # Tests are run in the "flit" package.
   doCheck = false;
 
   passthru.tests = {
     inherit flit;
-    pytest = callPackage ./tests.nix { };
   };
 
   meta = with lib; {
