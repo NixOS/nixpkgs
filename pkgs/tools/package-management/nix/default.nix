@@ -208,7 +208,7 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = self.nix_2_15;
+  stable = self.nix_2_16;
 
   unstable = self.nix_2_17;
 } // lib.optionalAttrs config.allowAliases {
