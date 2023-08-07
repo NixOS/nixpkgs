@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonOlder
 
 # Build dependencies
@@ -28,13 +27,13 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.11.0";
+  version = "8.14.0";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "735cede4099dbc903ee540307b9171fbfef4aa75cfcacc5a273b2cda2f02be04";
+    hash = "sha256-HRl7kHtrpEG2ksSM8qOi3igNwKyRo0BbOTSaUCcsoKE=";
   };
 
   nativeBuildInputs = [
@@ -62,10 +61,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$TMPDIR
-
-    # doctests try to fetch an image from the internet
-    substituteInPlace pytest.ini \
-      --replace "--ipdoctest-modules" "--ipdoctest-modules --ignore=IPython/core/display.py"
   '';
 
   nativeCheckInputs = [
