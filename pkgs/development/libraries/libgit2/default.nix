@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libgit2/libgit2/commit/3e15292d8863da316a57be23fede04f443460686.patch";
       hash = "sha256-N314YK7osO9L3hCXb+FcMoDM8iBW9Bt8D5O2Szdz7YA=";
     })
+    (fetchpatch {
+      name = "missing-git_oidarray.patch";
+      url = "https://github.com/libgit2/libgit2/commit/085a169c1d73e02888708652d7772b3bc1f1b28b.diff";
+      hash = "sha256-l6q1TLuOloyk0Jqvo5Npv4grU/oxlg+RFLa43qENaLI=";
+    })
   ];
 
   cmakeFlags = [

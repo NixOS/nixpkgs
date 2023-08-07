@@ -21,7 +21,6 @@ buildPythonPackage rec {
     mailman
     requests
     zope_interface
-    packaging
   ];
 
   nativeCheckInputs = [

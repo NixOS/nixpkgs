@@ -1281,6 +1281,13 @@ let
       '';
     });
 
+    ROracle = old.ROracle.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-oci-lib=${pkgs.oracle-instantclient.lib}/lib"
+        "--with-oci-inc=${pkgs.oracle-instantclient.dev}/include"
+      ];
+    });
+
     sparklyr = old.sparklyr.overrideAttrs (attrs: {
       # Pyspark's spark is full featured and better maintained than pkgs.spark
       preConfigure = ''
