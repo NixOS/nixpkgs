@@ -5,7 +5,6 @@
 , libuuid
 , python3
 , bc
-, llvmPackages_9
 , lib
 , buildPackages
 }:
@@ -24,17 +23,12 @@ else if stdenv.isAarch64 then
 else
   throw "Unsupported architecture";
 
-buildStdenv = if stdenv.isDarwin then
-  llvmPackages_9.stdenv
-else
-  stdenv;
-
 buildType = if stdenv.isDarwin then
     "CLANGPDB"
   else
     "GCC5";
 
-edk2 = buildStdenv.mkDerivation {
+edk2 = stdenv.mkDerivation {
   pname = "edk2";
   version = "202305";
 
@@ -42,7 +36,7 @@ edk2 = buildStdenv.mkDerivation {
     # pass targetPrefix as an env var
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
-      sha256 = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
+      hash = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
     })
   ];
 
@@ -62,8 +56,7 @@ edk2 = buildStdenv.mkDerivation {
   # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
   ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
 
-  makeFlags = [ "-C BaseTools" ]
-    ++ lib.optionals (stdenv.cc.isClang) [ "CXX=llvm BUILD_AR=ar BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang BUILD_LD=ld" ];
+  makeFlags = [ "-C BaseTools" ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
 
@@ -89,7 +82,7 @@ edk2 = buildStdenv.mkDerivation {
   };
 
   passthru = {
-    mkDerivation = projectDscPath: attrsOrFun: buildStdenv.mkDerivation (finalAttrs:
+    mkDerivation = projectDscPath: attrsOrFun: stdenv.mkDerivation (finalAttrs:
     let
       attrs = lib.toFunction attrsOrFun finalAttrs;
     in

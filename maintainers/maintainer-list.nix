@@ -3952,6 +3952,12 @@
       fingerprint = "4E35 F2E5 2132 D654 E815  A672 DB2C BC24 2868 6000";
     }];
   };
+  declan = {
+    name = "Declan Rixon";
+    email = "declan.fraser.rixon@gmail.com";
+    github = "DeclanRixon";
+    githubId = 57464835;
+  };
   deejayem = {
     email = "nixpkgs.bu5hq@simplelogin.com";
     github = "deejayem";
@@ -13300,7 +13306,7 @@
   };
   piturnah = {
     email = "peterhebden6@gmail.com";
-    github = "piturnah";
+    github = "Piturnah";
     githubId = 20472367;
     name = "Peter Hebden";
   };

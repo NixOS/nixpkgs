@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nixd";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixd";
     rev = version;
-    hash = "sha256-3PI/Bzs5WPIKevbRPz6TQ5yo7QpY4HeALrqbUY/zUgY=";
+    hash = "sha256-NqRYFaxa6Y4j7IMAxxVKo7o15Xmx0CiyeG71Uf1SLCI=";
   };
 
   mesonBuildType = "release";
@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
 
   env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
-  doCheck = true;
+  # https://github.com/nix-community/nixd/issues/215
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck

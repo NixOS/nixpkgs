@@ -274,6 +274,7 @@ rec {
       '';
       license = licenses.asl20;
       maintainers = with maintainers; [ offline vdemeester periklis maxeaubrey ];
+      mainProgram = "docker";
     };
   });
 

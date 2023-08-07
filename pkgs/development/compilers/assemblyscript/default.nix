@@ -5,13 +5,13 @@
 
 buildNpmPackage rec {
   pname = "assemblyscript";
-  version = "0.27.6";
+  version = "0.27.8";
 
   src = fetchFromGitHub {
     owner = "AssemblyScript";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jN8P3EL3giDIZSExkjm5ZUwgkN3EIQhVpMqfx273yZU=";
+    sha256 = "sha256-EwpIUD9+IjJlWOnUEXgvx60i59ftQyHcPTQVWVoOGNQ=";
   };
 
   npmDepsHash = "sha256-9ILa1qY2GpP2RckcZYcCMmgCwdXIImOm+D8nldeoQL8=";
