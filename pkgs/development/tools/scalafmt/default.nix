@@ -12,7 +12,7 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHash     = "sha256-r4vv62H0AryjZb+34fVHvqvndipOYyf6XpQC9u8Dxso=";
+    outputHash = "sha256-r4vv62H0AryjZb+34fVHvqvndipOYyf6XpQC9u8Dxso=";
   };
 in
 stdenv.mkDerivation {
@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     homepage = "http://scalameta.org/scalafmt";
     license = licenses.asl20;
     maintainers = [ maintainers.markus1189 ];
+    mainProgram = "scalafmt";
   };
 }
