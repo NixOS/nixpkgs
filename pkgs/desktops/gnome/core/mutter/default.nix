@@ -66,13 +66,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "44.3";
+  version = "45.alpha";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "GFy+vyFQ0+RQVQ43G9sTqLTbCWl4sU+ZUh6WbqzHBVE=";
+    sha256 = "DgyXx8AE+O9asrKugf5/61r/DUR1eRflBZhjNpsizk0=";
   };
 
   mesonFlags = [
@@ -170,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-12/doc" "$devdoc"
+    moveToOutput "share/mutter-13/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -179,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-12";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-13";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
