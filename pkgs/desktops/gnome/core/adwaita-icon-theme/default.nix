@@ -1,8 +1,9 @@
 { lib
 , stdenv
 , fetchurl
+, meson
+, ninja
 , pkg-config
-, autoreconfHook
 , gnome
 , gtk3
 , gdk-pixbuf
@@ -12,16 +13,17 @@
 
 stdenv.mkDerivation rec {
   pname = "adwaita-icon-theme";
-  version = "44.0";
+  version = "45.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/adwaita-icon-theme/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "SInFYBu/7NJdgLo0IgnQqTbc9pHuVr1uykzeNh8aZkw=";
+    sha256 = "jrn75CbPd1kxVLt1nmkN3EBCktSYPycuz02e+b7boxI=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
-    autoreconfHook
     gtk3
   ];
 
