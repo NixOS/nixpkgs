@@ -49,6 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "authlib"
   ];
+
   disabledTestPaths = [
     # Django tests require a running instance
     "tests/django/"
@@ -60,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for building OAuth and OpenID Connect servers";
     homepage = "https://github.com/lepture/authlib";
-    changelog = "https://github.com/lepture/authlib/releases/tag/v${version}";
+    changelog = "https://github.com/lepture/authlib/blob/v${version}/docs/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ flokli ];
   };
