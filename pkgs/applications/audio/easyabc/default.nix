@@ -15,7 +15,7 @@ python39.pkgs.buildPythonApplication {
   nativeBuildInputs = [ wrapGAppsHook ];
 
   propagatedBuildInputs = with python39.pkgs; [
-    cx_Freeze
+    cx-freeze
     wxPython_4_2
     pygame
   ];
