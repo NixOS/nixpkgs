@@ -8,9 +8,10 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, boost179
+, boost
 , pkg-config
 , libusb1
+, glslang
 , zstd
 , libressl
 , enableSdl2 ? true, SDL2
@@ -31,11 +32,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    glslang
     pkg-config
   ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
 
   buildInputs = [
-    boost179
+    boost
     libusb1
   ] ++ lib.optionals enableQt [ qtbase qtmultimedia ]
     ++ lib.optional enableSdl2 SDL2
@@ -47,6 +49,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_SYSTEM_BOOST=ON"
+    "-DCITRA_WARNINGS_AS_ERRORS=OFF"
     "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
     "-DCITRA_USE_BUNDLED_QT=OFF"
     "-DUSE_SYSTEM_SDL2=ON"
@@ -66,7 +69,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional useDiscordRichPresence "-DUSE_DISCORD_PRESENCE=ON"
     ++ lib.optional enableFdk "-DENABLE_FDK=ON";
 
-  postPatch = ''
+  postPatch = with lib; let
+    branchCaptialized = (lib.toUpper (lib.substring 0 1 branch) + lib.substring 1 (-1) branch);
+  in ''
     # Fix file not found when looking in var/empty instead of opt
     mkdir externals/dynarmic/src/dynarmic/ir/var
     ln -s ../opt externals/dynarmic/src/dynarmic/ir/var/empty
@@ -77,6 +82,9 @@ stdenv.mkDerivation rec {
     # We already know the submodules are present
     substituteInPlace CMakeLists.txt \
       --replace "check_submodules_present()" ""
+
+    # Add versions
+    echo 'set(BUILD_FULLNAME "${branchCaptialized} ${version}")' >> CMakeModules/GenerateBuildInfo.cmake
 
     # Devendoring
     rm -rf externals/zstd externals/libressl
