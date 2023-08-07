@@ -25,7 +25,7 @@ let
       || head srvMatch == srv # Include sections for the service being configured
       then v
       # Enable Web links and integrations between services.
-      else if tail srvMatch == [ null ] && elem (head srvMatch) cfg.services
+      else if tail srvMatch == [ null ] && cfg.${head srvMatch}.enable
       then {
         inherit (v) origin;
         # mansrht crashes without it
@@ -119,15 +119,6 @@ in
       sourcehut - git hosting, continuous integration, mailing list, ticket tracking, wiki
       and account management services
     '');
-
-    services = mkOption {
-      type = with types; listOf (enum
-        [ "builds" "git" "hg" "hub" "lists" "man" "meta" "pages" "paste" "todo" ]);
-      defaultText = "locally enabled services";
-      description = lib.mdDoc ''
-        Services that may be displayed as links in the title bar of the Web interface.
-      '';
-    };
 
     listenAddress = mkOption {
       type = types.str;
@@ -1370,6 +1361,10 @@ in
     (mkRemovedOptionModule [ "services" "sourcehut" "dispatch" ] ''
         dispatch is deprecated. See https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/
         for more information.
+    '')
+
+    (mkRemovedOptionModule [ "services" "sourcehut" "services"] ''
+        This option was removed in favor of individual <service>.enable flags.
     '')
   ];
 

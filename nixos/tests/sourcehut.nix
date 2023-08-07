@@ -134,11 +134,6 @@ in
 
     services.sourcehut = {
       enable = true;
-      services = [
-        "builds"
-        "git"
-        "meta"
-      ];
       nginx.enable = true;
       nginx.virtualHost = {
         forceSSL = true;

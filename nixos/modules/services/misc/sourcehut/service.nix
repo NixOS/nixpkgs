@@ -255,9 +255,6 @@ in
         }) [srvCfg.user];
     };
 
-    services.sourcehut.services = mkDefault (filter (s: cfg.${s}.enable)
-      [ "builds" "dispatch" "git" "hg" "hub" "lists" "man" "meta" "pages" "paste" "todo" ]);
-
     services.sourcehut.settings = mkMerge [
       {
         "${srv}.sr.ht".origin = mkDefault "https://${srv}.${cfg.settings."sr.ht".global-domain}";
