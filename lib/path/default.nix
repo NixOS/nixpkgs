@@ -125,13 +125,13 @@ in /* No rec! Add dependencies on this file at the top. */ {
 
     Like `path + ("/" + string)` but safer, because it errors instead of returning potentially surprising results.
     More specifically, it checks that the first argument is a [path value type](https://nixos.org/manual/nix/stable/language/values.html#type-path"),
-    and that the second argument is a valid subpath string (see `lib.path.subpath.isValid`).
+    and that the second argument is a [valid subpath string](#function-library-lib.path.subpath.isValid).
 
     Laws:
 
-    - Not influenced by subpath normalisation
+    - Not influenced by subpath [normalisation](#function-library-lib.path.subpath.normalise):
 
-        append p s == append p (subpath.normalise s)
+          append p s == append p (subpath.normalise s)
 
     Type:
       append :: Path -> String -> Path
@@ -179,9 +179,9 @@ in /* No rec! Add dependencies on this file at the top. */ {
 
   Laws:
 
-  - `hasPrefix p q` is only true if `q == append p s` for some subpath `s`.
+  - `hasPrefix p q` is only true if [`q == append p s`](#function-library-lib.path.append) for some [subpath](#function-library-lib.path.subpath.isValid) `s`.
 
-  - `hasPrefix` is a [non-strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Non-strict_partial_order) over the set of all path values
+  - `hasPrefix` is a [non-strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Non-strict_partial_order) over the set of all path values.
 
   Type:
     hasPrefix :: Path -> Path -> Bool
@@ -220,11 +220,11 @@ in /* No rec! Add dependencies on this file at the top. */ {
 
   /*
   Remove the first path as a component-wise prefix from the second path.
-  The result is a normalised subpath string, see `lib.path.subpath.normalise`.
+  The result is a [normalised subpath string](#function-library-lib.path.subpath.normalise).
 
   Laws:
 
-  - Inverts `append` for normalised subpaths:
+  - Inverts [`append`](#function-library-lib.path.append) for [normalised subpath string](#function-library-lib.path.subpath.normalise):
 
         removePrefix p (append p s) == subpath.normalise s
 
@@ -322,13 +322,13 @@ in /* No rec! Add dependencies on this file at the top. */ {
   A subpath string points to a specific file or directory within an absolute base directory.
   It is a stricter form of a relative path that excludes `..` components, since those could escape the base directory.
 
-  - The value is a string
+  - The value is a string.
 
-  - The string is not empty
+  - The string is not empty.
 
-  - The string doesn't start with a `/`
+  - The string doesn't start with a `/`.
 
-  - The string doesn't contain any `..` path components
+  - The string doesn't contain any `..` path components.
 
   Type:
     subpath.isValid :: String -> Bool
@@ -368,11 +368,11 @@ in /* No rec! Add dependencies on this file at the top. */ {
 
     Like `concatStringsSep "/"` but safer, specifically:
 
-    - All elements must be valid subpath strings, see `lib.path.subpath.isValid`
+    - All elements must be [valid subpath strings](#function-library-lib.path.subpath.isValid).
 
-    - The result gets normalised, see `lib.path.subpath.normalise`
+    - The result gets [normalised](#function-library-lib.path.subpath.normalise).
 
-    - The edge case of an empty list gets properly handled by returning the neutral subpath `"./."`
+    - The edge case of an empty list gets properly handled by returning the neutral subpath `"./."`.
 
     Laws:
 
@@ -386,12 +386,12 @@ in /* No rec! Add dependencies on this file at the top. */ {
           subpath.join [ (subpath.normalise p) "./." ] == subpath.normalise p
           subpath.join [ "./." (subpath.normalise p) ] == subpath.normalise p
 
-    - Normalisation - the result is normalised according to `lib.path.subpath.normalise`:
+    - Normalisation - the result is [normalised](#function-library-lib.path.subpath.normalise):
 
           subpath.join ps == subpath.normalise (subpath.join ps)
 
-    - For non-empty lists, the implementation is equivalent to normalising the result of `concatStringsSep "/"`.
-      Note that the above laws can be derived from this one.
+    - For non-empty lists, the implementation is equivalent to [normalising](#function-library-lib.path.subpath.normalise) the result of `concatStringsSep "/"`.
+      Note that the above laws can be derived from this one:
 
           ps != [] -> subpath.join ps == subpath.normalise (concatStringsSep "/" ps)
 
@@ -441,7 +441,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
   /*
   Split [a subpath](#function-library-lib.path.subpath.isValid) into its path component strings.
   Throw an error if the subpath isn't valid.
-  Note that the returned path components are also valid subpath strings, though they are intentionally not [normalised](#function-library-lib.path.subpath.normalise).
+  Note that the returned path components are also [valid subpath strings](#function-library-lib.path.subpath.isValid), though they are intentionally not [normalised](#function-library-lib.path.subpath.normalise).
 
   Laws:
 
@@ -469,16 +469,15 @@ in /* No rec! Add dependencies on this file at the top. */ {
           ${subpathInvalidReason subpath}'';
     splitRelPath subpath;
 
-  /* Normalise a subpath. Throw an error if the subpath isn't valid, see
-  `lib.path.subpath.isValid`
+  /* Normalise a subpath. Throw an error if the subpath isn't [valid](#function-library-lib.path.subpath.isValid).
 
-  - Limit repeating `/` to a single one
+  - Limit repeating `/` to a single one.
 
-  - Remove redundant `.` components
+  - Remove redundant `.` components.
 
-  - Remove trailing `/` and `/.`
+  - Remove trailing `/` and `/.`.
 
-  - Add leading `./`
+  - Add leading `./`.
 
   Laws:
 
@@ -490,15 +489,15 @@ in /* No rec! Add dependencies on this file at the top. */ {
 
         subpath.normalise p != subpath.normalise q -> $(realpath ${p}) != $(realpath ${q})
 
-  - Don't change the result when appended to a Nix path value:
+  - Don't change the result when [appended](#function-library-lib.path.append) to a Nix path value:
 
-        base + ("/" + p) == base + ("/" + subpath.normalise p)
+        append base p == append base (subpath.normalise p)
 
   - Don't change the path according to `realpath`:
 
         $(realpath ${p}) == $(realpath ${subpath.normalise p})
 
-  - Only error on invalid subpaths:
+  - Only error on [invalid subpaths](#function-library-lib.path.subpath.isValid):
 
         builtins.tryEval (subpath.normalise p)).success == subpath.isValid p
 
