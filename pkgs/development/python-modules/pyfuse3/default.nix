@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , cython_3
 , pkg-config
+, setuptools
 , fuse3
 , trio
 , python
@@ -18,7 +19,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "libfuse";
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython_3
     pkg-config
+    setuptools
   ];
 
   buildInputs = [ fuse3 ];
