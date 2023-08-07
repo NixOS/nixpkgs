@@ -6,7 +6,7 @@
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper
 , python3, ruby, perl, tk, jdk, bash, snobol4
-, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnused, gzip, ncurses, zip
+, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, ncurses, zip
 , libfaketime, asymptote, biber-ms, makeFontsConf
 , useFixedHashes ? true
 , recurseIntoAttrs
@@ -54,7 +54,6 @@ let
       fontinst.scriptsFolder = "texlive-extra";
       mptopdf.scriptsFolder = "context/perl";
       pdftex.scriptsFolder = "simpdftex";
-      "texlive.infra".scriptsFolder = "texlive";
       texlive-scripts.scriptsFolder = "texlive";
       texlive-scripts-extra.scriptsFolder = "texlive-extra";
       xetex.scriptsFolder = "texlive-extra";
@@ -113,7 +112,6 @@ let
       ps2eps.extraBuildInputs = [ ghostscript_headless ];
       pst2pdf.extraBuildInputs = [ ghostscript_headless ];
       tex4ht.extraBuildInputs = [ ruby ];
-      "texlive.infra".extraBuildInputs = [ coreutils gnused (lib.last tl.kpathsea.pkgs) ];
       texlive-scripts.extraBuildInputs = [ gnused ];
       texlive-scripts-extra.extraBuildInputs = [ coreutils findutils ghostscript_headless gnused ];
       thumbpdf.extraBuildInputs = [ ghostscript_headless ];
@@ -337,14 +335,6 @@ let
         substituteInPlace "$out"/bin/latexindent --replace 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
       '';
 
-      # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
-      # add runtime dependencies to PATH
-      "texlive.infra".postFixup = ''
-        substituteInPlace "$out"/bin/tlmgr \
-          --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
-        sed -i '2iPATH="${lib.makeBinPath overridden."texlive.infra".extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
-      '';
-
       # Patch texlinks.sh back to 2015 version;
       # otherwise some bin/ links break, e.g. xe(la)tex.
       # add runtime dependencies to PATH
@@ -401,6 +391,29 @@ let
               -c texlive_tlpdb=texlive.tlpdb -lM texdoc
 
             cp texdoc/cache-tlpdb.lua "$out"/scripts/texdoc/Data.tlpdb.lua
+          fi
+        '';
+      };
+
+      "texlive.infra" = {
+        extraRevision = ".tlpdb${toString tlpdbVersion.revision}";
+        extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
+
+        scriptsFolder = "texlive";
+        extraBuildInputs = [ coreutils gnused gnupg (lib.last tl.kpathsea.pkgs) (perl.withPackages (ps: with ps; [ Tk ])) ];
+
+        # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
+        postFixup = ''
+          substituteInPlace "$out"/bin/tlmgr \
+            --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
+          sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath [ gnupg ]}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/tlmgr
+          sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused (lib.last tl.kpathsea.pkgs) ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
+        '';
+
+        # add minimal texlive.tlpdb
+        postUnpack = ''
+          if [[ "$tlType" == "tlpkg" ]] ; then
+            xzcat "${tlpdbxz}" | sed -n -e '/^name \(00texlive.config\|00texlive.installation\)$/,/^$/p' > "$out"/texlive.tlpdb
           fi
         '';
       };
@@ -571,7 +584,7 @@ let
           if [[ "$tlType"  == "tlpkg" ]]; then
             tar -xf "$src" \
               --strip-components=1 \
-              -C "$out" --anchored --exclude=tlpkg/tlpobj --exclude=tlpkg/installer --exclude=tlpkg/gpg --keep-old-files \
+              -C "$out" --anchored --exclude=tlpkg/tlpobj --keep-old-files \
               tlpkg
           else
             tar -xf "$src" \
