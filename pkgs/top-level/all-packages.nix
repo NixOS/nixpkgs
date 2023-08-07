@@ -771,6 +771,8 @@ with pkgs;
 
   vcpkg-tool = callPackage ../development/tools/vcpkg-tool { fmt = fmt_10; };
 
+  vcpkg = callPackage ../development/tools/vcpkg {  };
+
   r3ctl = qt5.callPackage ../tools/misc/r3ctl { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
