@@ -106,57 +106,38 @@ This section describes in some detail how changes can be made and proposed with 
    git push --force-with-lease
    ```
 
-## (Flow of changes) | Commit policy {#submitting-changes-commit-policy}
+## Flow of changes
 
-Most contributions are based on and merged into these branches:
+After a Nixpkgs pull requests is merged, it eventually makes it to the [official Hydra CI](https://hydra.nixos.org/).
+Hydra regularly evaluates and builds Nixpkgs, updating [the official channels](http://channels.nixos.org/) when specific Hydra jobs succeeded.
+See [Nix Channel Status](https://status.nixos.org/) for the current channels and their state.
+Here's a brief overview of the main Git branches and what channels they're used for:
 
-* `master` is the main branch where all small contributions go
-* `staging` is branched from master, changes that have a big impact on
-  Hydra builds go to this branch
-* `staging-next` is branched from staging and only fixes to stabilize
-  and security fixes with a big impact on Hydra builds should be
-  contributed to this branch. This branch is merged into master when
-  deemed of sufficiently high quality
+- `master`: The main branch, used for the unstable channels such as `nixpkgs-unstable`, `nixos-unstable` and `nixos-unstable-small`.
+- `release-YY.MM` (e.g. `release-23.05`): The NixOS release branches, used for the stable channels such as `nixos-23.05`, `nixos-23.05-small` and `nixpkgs-23.05-darwin`.
 
-- Commits must be sufficiently tested before being merged, both for the master and staging branches.
-- Hydra builds for master and staging should not be used as testing platform, it’s a build farm for changes that have been already tested.
-- When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
+When a channel is updated, a corresponding Git branch is also updated to point to the corresponding commit.
+So e.g. the [`nixpkgs-unstable` branch](https://github.com/nixos/nixpkgs/tree/nixpkgs-unstable) corresponds to the Git commit from the [`nixpkgs-unstable` channel](https://channels.nixos.org/nixpkgs-unstable).
 
-### Branches {#submitting-changes-branches}
+### Staging
 
-The `nixpkgs` repository has three major branches:
-- `master`
-- `staging`
-- `staging-next`
+The staging workflow exists to batch Hydra builds of many packages together.
 
-The most important distinction between them is that `staging`
-(colored red in the diagram below) can receive commits which cause
-a mass-rebuild (for example, anything that changes the `drvPath` of
-`stdenv`).  The other two branches `staging-next` and `master`
-(colored green in the diagram below) can *not* receive commits which
-cause a mass-rebuild.
+It works by directing commits that cause [mass rebuilds](#mass-rebuilds) to a separate `staging` branch that isn't directly built by Hydra.
+Regularly, the `staging` branch is _manually_ merged into a `staging-next` branch to be built by Hydra using the [`nixpkgs:staging-next` jobset](https://hydra.nixos.org/jobset/nixpkgs/staging-next).
+The `staging-next` branch should then only receive direct commits in order to fix Hydra builds.
+Once it is verified that there are no major regressions, it is merged into `master` using [a pull requests](https://github.com/NixOS/nixpkgs/pulls?q=head%3Astaging-next).
+This is done manually in order to ensure it's a good use of Hydra's computing resources.
+By keeping the `staging-next` branch separate from `staging`, this batching does not block developers from merging changes into `staging`.
 
-Arcs between the branches show possible merges into these branches,
-either from other branches or from independently submitted PRs.  The
-colors of these edges likewise show whether or not they could
-trigger a mass rebuild (red) or must not trigger a mass rebuild
-(green).
+In order for the `staging` and `staging-next` branches to be up-to-date with the latest commits on `master`, there are regular _automated_ merges from `master` into `staging-next` and `staging`.
+This is implemented using GitHub workflows [here](.github/workflows/periodic-merge-6h.yml) and [here](.github/workflows/periodic-merge-24h.yml).
 
-Hydra runs automatic builds for the green branches.
+> **Note**
+> Changes must be sufficiently tested before being merged into any branch.
+> Hydra builds should not be used as testing platform.
 
-Notice that the automatic merges are all green arrows.  This is by
-design.  Any merge which might cause a mass rebuild on a branch
-which has automatic builds (`staging-next`, `master`) will be a
-manual merge to make sure it is good use of compute power.
-
-Nixpkgs has two branches so that there is one branch (`staging`)
-which accepts mass-rebuilding commits, and one fast-rebuilding
-branch which accepts independent PRs (`master`).  The `staging-next`
-branch allows the Hydra operators to batch groups of commits to
-`staging` to be built.  By keeping the `staging-next` branch
-separate from `staging`, this batching does not block
-developers from merging changes into `staging`.
-
+Here is a Git history diagram showing the flow of commits between the three branches:
 ```mermaid
 %%{init: {
     'theme': 'base',
@@ -205,32 +186,33 @@ gitGraph
     merge staging-next type:HIGHLIGHT id:"manual (PR)"
 ```
 
-[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the green arrows in the diagram above.  The red arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
 
+Here's an overview of the different branches:
 
-#### Master branch {#submitting-changes-master-branch}
+| branch | `master` | `staging` | `staging-next` |
+| --- | --- | --- | --- |
+| Used for development | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| Built by Hydra | :heavy_check_mark: | :x: | :heavy_check_mark: |
+| [Mass rebuilds](#mass-rebuilds) | :x: | :heavy_check_mark: | :warning: Only to fix Hydra builds |
+| Critical security fixes | :heavy_check_mark: for non-mass-rebuilds | :x: | :heavy_check_mark: for mass-rebuilds |
+| Automatically merged into | `staging-next` | - | `staging` |
+| Manually merged into | - | `staging-next` | `master` |
 
-The `master` branch is the main development branch. It should only see non-breaking commits that do not cause mass rebuilds.
+The staging workflow is used for all main branches, `master` and `release-YY.MM`, with corresponding names:
+- `master`/`release-YY.MM`
+- `staging`/`staging-YY.MM`
+- `staging-next`/`staging-next-YY.MM`
 
-#### Staging branch {#submitting-changes-staging-branch}
+#### Mass rebuilds
 
-The `staging` branch is a development branch where mass-rebuilds go. Mass rebuilds are commits that cause rebuilds for many packages, like more than 500 (or perhaps, if it's 'light' packages, 1000). It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
+Which changes cause mass rebuilds is not formally defined.
+In order to help the decision, CI automatically assigns [`rebuild` labels](https://github.com/NixOS/nixpkgs/labels?q=rebuild) to pull requests based on the number of packages they cause rebuilds for.
+As a rule of thumb, if the number of rebuilds is **over 500**, it can be considered a mass rebuild.
+To get a sense for what changes are considered mass rebuilds, see [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged).
 
-During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
+### Releases
 
-#### Staging-next branch {#submitting-changes-staging-next-branch}
-
-The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds must go via the `staging` branch. It must only see non-breaking commits that are fixing issues blocking it from being merged into the `master` branch.
-
-If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days and then merge into master.
-
-During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
-
-#### Stable release branches {#submitting-changes-stable-release-branches}
-
-The same staging workflow applies to stable release branches, but the main branch is called `release-*` instead of `master`.
-
-Example branch names: `release-21.11`, `staging-21.11`, `staging-next-21.11`.
+The NixOS release process is documented in the [NixOS Release Wiki](https://nixos.github.io/release-wiki/)
 
 Most changes added to the stable release branches are cherry-picked (“backported”) from the `master` and staging branches.
 
@@ -639,6 +621,9 @@ Names of files and directories should be in lowercase, with dashes between words
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
 ## Commit conventions
+
+
+- When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
 
 - Create a commit for each logical unit.
 
