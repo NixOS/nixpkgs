@@ -28,7 +28,7 @@
 , libpulseaudio
 , libical
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook4
 , libxslt
 , gcr_4
 , accountsservice
@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "44.3";
+  version = "45.alpha";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "VWlLccLuTq72DZNCgAPy6qTPABhoSPXja0XP5Qb8Mb8=";
+    sha256 = "fBXgRyi3oykhH/SJODTbPJlX8PIGHkAoyFCYYR6x97I=";
   };
 
   patches = [
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     gtk-doc
     perl
-    wrapGAppsHook
+    wrapGAppsHook4
     sassc
     desktop-file-utils
     libxslt.bin
@@ -187,7 +187,7 @@ stdenv.mkDerivation rec {
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
-    rm data/theme/gnome-shell.css
+    rm data/theme/gnome-shell-{light,dark}.css
   '';
 
   postInstall = ''
@@ -212,6 +212,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # The services need typelibs.
     for svc in org.gnome.ScreenSaver org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
+      chmod +x $out/share/gnome-shell/$svc
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';
