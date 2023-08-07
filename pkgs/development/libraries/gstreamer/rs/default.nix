@@ -117,7 +117,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-rs";
-  version = "0.10.10";
+  version = "0.10.11";
 
   outputs = [ "out" "dev" ];
 
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = version;
-    hash = "sha256-ZsE1Pz2N0XSQFDyIeEUg9+eFN94mdSmge2Tvw57RLZ4=";
+    hash = "sha256-oOoUGzbg/ib1pA0T81hxgLlHnTRlNCWH5qZUNAutn8U=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
