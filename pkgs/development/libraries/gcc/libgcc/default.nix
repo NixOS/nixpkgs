@@ -24,30 +24,19 @@ stdenvNoLibs.mkDerivation rec {
 
   hardeningDisable = [ "pie" ];
 
-  preConfigure = ''
-    cd "$buildRoot"
+  preConfigure =
   ''
-
-  # Drop in libiberty, as external builds are not expected
-  + ''
+    # Drop in libiberty, as external builds are not expected
+    cd "$buildRoot"
     (
       mkdir -p build-${stdenvNoLibs.buildPlatform.config}/libiberty/
       cd build-${stdenvNoLibs.buildPlatform.config}/libiberty/
       ln -s ${buildPackages.libiberty}/lib/libiberty.a ./
     )
-  ''
-  # A few misc bits of gcc need to be built.
-  #
-  #  - We "shift" the tools over to fake platforms perspective from the previous
-  #    stage.
-  #
-  #  - We define GENERATOR_FILE so nothing bothers looking for GNU GMP.
-  #
-  #  - We remove the `libgcc.mvar` deps so that the bootstrap xgcc isn't built.
-  + ''
     mkdir -p "$buildRoot/gcc"
     cd "$buildRoot/gcc"
     (
+      # We "shift" the tools over to fake platforms perspective from the previous stage.
       export AS_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$AS_FOR_BUILD
       export CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CC_FOR_BUILD
       export CPP_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CPP_FOR_BUILD
@@ -65,10 +54,12 @@ stdenvNoLibs.mkDerivation rec {
       export CPP_FOR_TARGET=${stdenvNoLibs.cc}/bin/$CPP
       export LD_FOR_TARGET=${stdenvNoLibs.cc.bintools}/bin/$LD
 
+      # We define GENERATOR_FILE so nothing bothers looking for GNU GMP.
       export NIX_CFLAGS_COMPILE_FOR_BUILD+=' -DGENERATOR_FILE=1'
 
       "$sourceRoot/../gcc/configure" $gccConfigureFlags
 
+      # We remove the `libgcc.mvar` deps so that the bootstrap xgcc isn't built.
       sed -e 's,libgcc.mvars:.*$,libgcc.mvars:,' -i Makefile
 
       make \
@@ -81,9 +72,8 @@ stdenvNoLibs.mkDerivation rec {
         insn-modes.h
     )
     mkdir -p "$buildRoot/gcc/include"
-  ''
-  # Preparing to configure + build libgcc itself
-  + ''
+
+    # Preparing to configure + build libgcc itself
     mkdir -p "$buildRoot/gcc/${stdenvNoLibs.hostPlatform.config}/libgcc"
     cd "$buildRoot/gcc/${stdenvNoLibs.hostPlatform.config}/libgcc"
     configureScript=$sourceRoot/configure
