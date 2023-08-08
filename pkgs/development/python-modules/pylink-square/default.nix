@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pylink-square";
-  version = "1.1.0";
+  version = "1.2.0";
 
   format = "setuptools";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "square";
     repo = "pylink";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pICSU33n/oH+LRbWNYOdnTaa5qAGRRXWsO1NjO4ylzw=";
+    hash = "sha256-rcM7gvUUfXN5pL9uIihzmOCXA7NKjiMt2GaQaGJxD9M=";
   };
 
   propagatedBuildInputs = [ psutil six future ];
