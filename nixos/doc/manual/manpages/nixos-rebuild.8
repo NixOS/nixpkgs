@@ -52,7 +52,9 @@ must run
 .Nm
 to make the changes take effect. It builds the new system in
 .Pa /nix/store Ns
-, runs its activation script, and stop and (re)starts any system services if
+, runs its activation script (invoking
+.Ic sudo Ns
+\& if required), and stop and (re)starts any system services if
 needed. Please note that user services need to be started manually as they
 aren't detected by the activation script at the moment.
 .
@@ -350,6 +352,11 @@ or
 .Fl -build-host
 is also set. This is useful when the target-host connection to cache.nixos.org
 is faster than the connection between hosts.
+.
+.It Fl -no-auto-sudo
+When set, disables automatic use of
+.Ic sudo Ns
+\& when deploying to localhost as a non-root user.
 .
 .It Fl -use-remote-sudo
 When set, nixos-rebuild prefixes remote commands that run on the
