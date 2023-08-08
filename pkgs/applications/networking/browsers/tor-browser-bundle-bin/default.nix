@@ -47,7 +47,7 @@
 # Hardening
 , graphene-hardened-malloc
 # Whether to use graphene-hardened-malloc
-, useHardenedMalloc ? true
+, useHardenedMalloc ? null
 
 # Whether to disable multiprocess support
 , disableContentSandbox ? false
@@ -56,7 +56,10 @@
 , extraPrefs ? ""
 }:
 
-let
+lib.warnIf (useHardenedMalloc != null)
+  "tor-browser-bundle-bin: useHardenedMalloc is deprecated and enabling it can cause issues"
+
+(let
   libPath = lib.makeLibraryPath libPkgs;
 
   libPkgs = [
@@ -268,7 +271,7 @@ stdenv.mkDerivation rec {
     GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
     EOF
 
-    WRAPPER_LD_PRELOAD=${lib.optionalString useHardenedMalloc
+    WRAPPER_LD_PRELOAD=${lib.optionalString (useHardenedMalloc == true)
       "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}
 
     WRAPPER_XDG_DATA_DIRS=${lib.concatMapStringsSep ":" (x: "${x}/share") [
@@ -477,4 +480,4 @@ stdenv.mkDerivation rec {
     license = licenses.free;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})
