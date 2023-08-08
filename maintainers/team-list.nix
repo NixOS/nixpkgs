@@ -712,7 +712,6 @@ with lib.maintainers; {
       adisbladis
       saschagrunert
       vdemeester
-      zowoq
     ];
     githubTeams = [
       "podman"
