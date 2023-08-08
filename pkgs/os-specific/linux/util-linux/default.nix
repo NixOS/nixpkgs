@@ -138,6 +138,13 @@ stdenv.mkDerivation rec {
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
     license = with licenses; [ gpl2Only gpl2Plus gpl3Plus lgpl21Plus bsd3 bsdOriginalUC publicDomain ];
     platforms = platforms.unix;
+    pkgConfigModules = [
+      "blkid"
+      "fdisk"
+      "mount"
+      "smartcols"
+      "uuid"
+    ];
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };
 }

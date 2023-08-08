@@ -3184,6 +3184,8 @@ self: super: with self; {
 
   durus = callPackage ../development/python-modules/durus {  };
 
+  dvc = callPackage ../development/python-modules/dvc {  };
+
   dvc-azure = callPackage ../development/python-modules/dvc-azure {  };
 
   dvc-data = callPackage ../development/python-modules/dvc-data {  };
@@ -5321,7 +5323,6 @@ self: super: with self; {
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
     inherit (pkgs.config) cudaSupport;
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
-    protobuf = pkgs.protobuf3_20; # jaxlib-build 0.3.15 won't build with protobuf 3.21
   };
 
   jaxlib = self.jaxlib-build;
@@ -6557,6 +6558,7 @@ self: super: with self; {
   mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
   mkdocs-git-authors-plugin = callPackage ../development/python-modules/mkdocs-git-authors-plugin { };
+  mkdocs-git-revision-date-localized-plugin = callPackage ../development/python-modules/mkdocs-git-revision-date-localized-plugin { };
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
@@ -6575,6 +6577,8 @@ self: super: with self; {
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
   ml-collections = callPackage ../development/python-modules/ml-collections { };
+
+  ml-dtypes = callPackage ../development/python-modules/ml-dtypes { };
 
   mlflow = callPackage ../development/python-modules/mlflow { };
 

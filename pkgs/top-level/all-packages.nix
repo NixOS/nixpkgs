@@ -5025,9 +5025,9 @@ with pkgs;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
-  dvc = callPackage ../applications/version-management/dvc { };
+  dvc = with python3.pkgs; toPythonApplication dvc;
 
-  dvc-with-remotes = callPackage ../applications/version-management/dvc {
+  dvc-with-remotes = dvc.override {
     enableGoogle = true;
     enableAWS = true;
     enableAzure = true;
@@ -6778,6 +6778,8 @@ with pkgs;
   evscript = callPackage ../tools/inputmethods/evscript { };
 
   keyd = callPackage ../tools/inputmethods/keyd { };
+
+  keymapper = callPackage ../tools/inputmethods/keymapper { };
 
   twitch-tui = callPackage ../applications/networking/instant-messengers/twitch-tui {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -11007,6 +11009,13 @@ with pkgs;
 
   mtm = callPackage ../tools/misc/mtm { };
 
+  op-geth = callPackage ../applications/blockchains/optimism/geth.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
+
+  optimism = callPackage ../applications/blockchains/optimism { };
+
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
   pandoc-acro = python3Packages.callPackage ../tools/misc/pandoc-acro { };
@@ -15001,6 +15010,8 @@ with pkgs;
   zsh-powerlevel9k = callPackage ../shells/zsh/zsh-powerlevel9k { };
 
   zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
+
+  zsh-fzf-history-search = callPackage ../shells/zsh/zsh-fzf-history-search { };
 
   zsh-vi-mode = callPackage ../shells/zsh/zsh-vi-mode { };
 
@@ -24955,6 +24966,8 @@ with pkgs;
 
   sv-lang = callPackage ../applications/science/electronics/sv-lang { };
 
+  sqld = callPackage ../servers/sql/sqld { };
+
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
   unqlite = lowPrio (callPackage ../development/libraries/unqlite { });
@@ -33743,6 +33756,8 @@ with pkgs;
 
   mutt-ics = callPackage ../tools/networking/mutt-ics { };
 
+  mw = callPackage ../tools/text/mw { };
+
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
   };
@@ -40910,6 +40925,8 @@ with pkgs;
   ums = callPackage ../servers/ums { };
 
   unityhub = callPackage ../development/tools/unityhub { };
+
+  upspin = callPackage ../tools/filesystems/upspin { };
 
   urbit = callPackage ../misc/urbit { };
 
