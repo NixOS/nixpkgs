@@ -20,6 +20,7 @@ lib.recurseIntoAttrs
     thumbfast = callPackage ./thumbfast.nix { };
     thumbnail = callPackage ./thumbnail.nix { };
     uosc = callPackage ./uosc.nix { };
+    visualizer = callPackage ./visualizer.nix { };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
     cutter = callPackage ./cutter.nix { };
