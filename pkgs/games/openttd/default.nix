@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchzip, cmake, pkg-config
-, SDL2, libpng, zlib, xz, lzo, freetype, fontconfig
-, nlohmann_json, curl, icu, expat, glib, pcre2
+, SDL2, libpng, zlib, xz, freetype, fontconfig
+, nlohmann_json, curl, icu, harfbuzz, expat, glib, pcre2
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
 , withFluidSynth ? true, audioDriver ? "alsa"
 , fluidsynth, soundfont-fluid, libsndfile
@@ -41,14 +41,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   buildInputs = [
-    SDL2 libpng xz zlib lzo freetype fontconfig
-    nlohmann_json curl icu expat glib pcre2
+    SDL2 libpng xz zlib freetype fontconfig
+    nlohmann_json curl icu harfbuzz expat glib pcre2
   ] ++ lib.optionals withFluidSynth [
     fluidsynth soundfont-fluid libsndfile
     flac libogg libvorbis libopus libmpg123 pulseaudio alsa-lib libjack2
   ];
 
   prefixKey = "--prefix-dir=";
+
+  configureFlags = [
+    "--without-liblzo2"
+  ];
 
   postInstall = ''
     ${lib.optionalString withOpenGFX ''
