@@ -69,6 +69,7 @@ let
     ghc927
     ghc928
     ghc945
+    ghc946
     ghc962
   ];
 
@@ -533,6 +534,7 @@ let
         compilerNames.ghc927
         compilerNames.ghc928
         compilerNames.ghc945
+        compilerNames.ghc946
       ];
       hashable = released;
       primitive = released;
@@ -545,6 +547,7 @@ let
         compilerNames.ghc927
         compilerNames.ghc928
         compilerNames.ghc945
+        compilerNames.ghc946
         compilerNames.ghc962
       ];
     })
