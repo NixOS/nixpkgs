@@ -1,13 +1,14 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 53af96320f2fddfc0189ea66fd9db1f87d94eb06
-  ref: refs/tags/6.3.27
+  revision: fa40647fa24c91f387b6d4b84bf818c90feb8fd9
+  ref: refs/tags/6.3.28
   specs:
-    metasploit-framework (6.3.27)
+    metasploit-framework (6.3.28)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
       aws-sdk-ec2
+      aws-sdk-ec2instanceconnect
       aws-sdk-iam
       aws-sdk-s3
       aws-sdk-ssm
@@ -36,7 +37,7 @@ GIT
       metasploit-model
       metasploit-payloads (= 2.0.148)
       metasploit_data_models
-      metasploit_payloads-mettle (= 1.0.20)
+      metasploit_payloads-mettle (= 1.0.26)
       mqtt
       msgpack (~> 1.6.0)
       nessus_rest
@@ -125,19 +126,22 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.4)
+    addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     afm (0.2.2)
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.795.0)
-    aws-sdk-core (3.180.1)
+    aws-partitions (1.799.0)
+    aws-sdk-core (3.180.2)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.395.0)
+    aws-sdk-ec2 (1.396.0)
+      aws-sdk-core (~> 3, >= 3.177.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-ec2instanceconnect (1.32.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.86.0)
@@ -256,7 +260,7 @@ GEM
       railties (~> 7.0)
       recog
       webrick
-    metasploit_payloads-mettle (1.0.20)
+    metasploit_payloads-mettle (1.0.26)
     method_source (1.0.0)
     mini_portile2 (2.8.4)
     minitest (5.19.0)
@@ -301,11 +305,11 @@ GEM
       nio4r (~> 2.0)
     racc (1.7.1)
     rack (2.2.8)
-    rack-protection (3.0.6)
-      rack
+    rack-protection (3.1.0)
+      rack (~> 2.2, >= 2.2.4)
     rack-test (2.1.0)
       rack (>= 1.3)
-    rails-dom-testing (2.1.1)
+    rails-dom-testing (2.2.0)
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
@@ -394,10 +398,10 @@ GEM
       faraday (>= 0.17.3, < 3)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    sinatra (3.0.6)
+    sinatra (3.1.0)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.0.6)
+      rack-protection (= 3.1.0)
       tilt (~> 2.0)
     sqlite3 (1.6.3)
       mini_portile2 (~> 2.8.0)
@@ -440,9 +444,9 @@ GEM
     xdr (3.0.3)
       activemodel (>= 4.2, < 8.0)
       activesupport (>= 4.2, < 8.0)
-    xmlrpc (0.3.2)
+    xmlrpc (0.3.3)
       webrick
-    zeitwerk (2.6.10)
+    zeitwerk (2.6.11)
 
 PLATFORMS
   ruby
@@ -451,4 +455,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.14
+   2.4.17
