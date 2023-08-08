@@ -30833,6 +30833,8 @@ with pkgs;
 
   dia = callPackage ../applications/graphics/dia { };
 
+  diebahn = callPackage ../applications/misc/diebahn { };
+
   digital = callPackage ../applications/science/electronics/digital { };
 
   direwolf = callPackage ../applications/radio/direwolf {
