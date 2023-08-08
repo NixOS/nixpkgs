@@ -3,7 +3,7 @@
 , libiberty
 }:
 
-stdenvNoLibs.mkDerivation rec {
+stdenvNoLibs.mkDerivation (finalAttrs: {
   pname = "libgcc";
   inherit (gcc.cc) src version;
 
@@ -138,9 +138,9 @@ stdenvNoLibs.mkDerivation rec {
   makeFlags = [ "MULTIBUILDTOP:=../" ];
 
   postInstall = ''
-    moveToOutput "lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}/include" "$dev"
+    moveToOutput "lib/gcc/${stdenvNoLibs.hostPlatform.config}/${finalAttrs.version}/include" "$dev"
     mkdir -p "$out/lib" "$dev/include"
-    ln -s "$out/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}"/* "$out/lib"
-    ln -s "$dev/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}/include"/* "$dev/include/"
+    ln -s "$out/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${finalAttrs.version}"/* "$out/lib"
+    ln -s "$dev/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${finalAttrs.version}/include"/* "$dev/include/"
   '';
-}
+})
