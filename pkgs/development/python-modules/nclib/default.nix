@@ -7,7 +7,9 @@
 buildPythonPackage rec {
   pname = "nclib";
   version = "1.0.5";
-  disabled = pythonOlder "3.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +18,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "nclib" ];
+
+  pythonImportsCheck = [
+    "nclib"
+  ];
 
   meta = with lib; {
     description = "Python module that provides netcat features";
