@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "graphite" withGraphite2)
     (lib.mesonEnable "icu" withIcu)
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonOption "cmakepackagedir" "${placeholder "dev"}/lib/cmake")
   ];
 
   depsBuildBuild = [
