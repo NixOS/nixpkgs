@@ -934,7 +934,7 @@ in
       };
       authserver = mkOption {
         default = null;
-        type = with types; nullOr string;
+        type = with types; nullOr str;
         description = lib.mdDoc ''
           This controls the hostname for the 9front authentication server
           that users will be authenticated against.
