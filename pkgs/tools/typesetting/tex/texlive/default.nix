@@ -386,7 +386,7 @@ let
       npp-for-context.license = [  "gpl3Only" ];
 
       texdoc = {
-        extraRevision = ".tlpdb${toString tlpdbVersion.revision}";
+        extraRevision = "-tlpdb${toString tlpdbVersion.revision}";
         extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
 
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
@@ -426,6 +426,7 @@ let
             # the fake derivations are used for filtering of hyphenation patterns and formats
           else ({
             inherit pname version;
+            inherit (attrs) revision;
             tlType = "run";
             hasHyphens = attrs.hasHyphens or false;
             tlDeps = map (n: tl.${n}) (attrs.deps or []);
@@ -486,11 +487,11 @@ let
   # map: name -> fixed-output hash
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixed-hashes.nix);
 
-  # NOTE: the fixed naming scheme must match generated-fixed-hashes.nix
   # name for the URL
   mkURLName = { pname, tlType, ... }: pname + lib.optionalString (tlType != "run" && tlType != "tlpkg") ".${tlType}";
+  # NOTE: the fixed naming scheme must match generated-fixed-hashes.nix
   # name + revision for the fixed output hashes
-  mkFixedName = { tlType, revision, extraRevision ? "", ... }@attrs: mkURLName attrs + (lib.optionalString (tlType == "tlpkg") ".tlpkg") + ".r${toString revision}${extraRevision}";
+  mkFixedName = { pname, tlType, revision, extraRevision ? "", ... }: "${pname}-${toString revision}${extraRevision}";
   # name + version for the derivation
   mkTLName = { tlType, version, extraVersion ? "", ... }@attrs: mkURLName attrs + (lib.optionalString (tlType == "tlpkg") ".tlpkg") + "-${version}${extraVersion}";
 
@@ -538,7 +539,8 @@ let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = mkURLName args;
       tlName = mkTLName args;
-      fixedHash = fixedHashes.${mkFixedName args} or null; # be graceful about missing hashes
+      fixedName = mkFixedName args;
+      fixedHash = if fixedHashes ? ${fixedName} then fixedHashes.${fixedName}.${tlType} or null else null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
         map (up: "${up}/archive/${urlName}.r${toString revision}.tar.xz") (args.urlPrefixes or urlPrefixes));
