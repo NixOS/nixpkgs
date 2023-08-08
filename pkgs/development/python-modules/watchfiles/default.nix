@@ -53,6 +53,11 @@ buildPythonPackage rec {
     anyio
   ];
 
+  # Tests need these permissions in order to use the FSEvents API on macOS.
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.FSEvents"))
+  '';
+
   nativeCheckInputs = [
     dirty-equals
     pytest-mock
