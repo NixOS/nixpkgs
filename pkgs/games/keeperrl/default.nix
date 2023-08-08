@@ -13,18 +13,18 @@
 , libtheora
 , unfree_assets ? false }:
 
-stdenv.mkDerivation rec {
+let
   pname = "keeperrl";
   version = "alpha34";
 
   free-src = fetchFromGitHub {
     owner = "miki151";
-    repo = "keeperrl";
+    repo = pname;
     rev = version;
     sha256 = "sha256-0sww+ppctXvxMouclG3OdXpcNgrrOZJw9z8s2GhJ+IE=";
   };
 
-  assets = if unfree_assets then requireFile rec {
+  assets = requireFile rec {
     name = "keeperrl_data_${version}.tar.gz";
     message = ''
       This nix expression requires that the KeeperRL art assets are already
@@ -39,11 +39,18 @@ stdenv.mkDerivation rec {
       "nix-prefetch-url file://\$PWD/${name}".
     '';
     sha256 = "0115pxdzdyma2vicxgr0j21pp82gxdyrlj090s8ihp0b50f0nlll";
-  } else null;
+  };
+in
+
+stdenv.mkDerivation {
+  inherit pname version;
+
+  srcs = [ free-src ] ++ lib.optional unfree_assets assets;
 
   sourceRoot = free-src.name;
 
-  srcs = [ free-src ] ++ lib.optional unfree_assets assets;
+  inherit free-src;
+  assets = if unfree_assets then assets else null;
 
   postUnpack = lib.optionalString unfree_assets ''
     mv data $sourceRoot
