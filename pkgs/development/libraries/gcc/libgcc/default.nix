@@ -128,15 +128,9 @@ in stdenvNoLibs.mkDerivation (finalAttrs: {
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
-    "--disable-dependency-tracking"
-    # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
-    # Do not have dynamic linker without libc
-    "--enable-static"
-    "--disable-shared"
-
-    # Avoid dependency on gcc.
     "--disable-gcov"
+    "--with-glibc-version=${glibc.version}"
   ];
 
   makeFlags = [ "MULTIBUILDTOP:=../" ];
