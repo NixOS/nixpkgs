@@ -38190,6 +38190,8 @@ with pkgs;
 
   typespeed = callPackage ../games/typespeed { };
 
+  u2ps = callPackage ../tools/text/u2ps { };
+
   uchess = callPackage ../games/uchess { };
 
   ufoai = callPackage ../games/ufoai { };
