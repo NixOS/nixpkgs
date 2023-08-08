@@ -15009,6 +15009,8 @@ with pkgs;
 
   zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
 
+  zsh-fzf-history-search = callPackage ../shells/zsh/zsh-fzf-history-search { };
+
   zsh-vi-mode = callPackage ../shells/zsh/zsh-vi-mode { };
 
   zsh-you-should-use = callPackage ../shells/zsh/zsh-you-should-use { };
