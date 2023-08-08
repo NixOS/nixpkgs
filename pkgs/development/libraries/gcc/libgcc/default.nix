@@ -3,7 +3,33 @@
 , libiberty
 }:
 
-stdenvNoLibs.mkDerivation (finalAttrs: {
+let
+  gccConfigureFlags = gcc.cc.configureFlags ++ [
+    "--build=${stdenvNoLibs.buildPlatform.config}"
+    "--host=${stdenvNoLibs.buildPlatform.config}"
+    "--target=${stdenvNoLibs.hostPlatform.config}"
+
+    "--disable-bootstrap"
+    "--disable-multilib" "--with-multilib-list="
+    "--enable-languages=c"
+
+    "--disable-fixincludes"
+    "--disable-intl"
+    "--disable-lto"
+    "--disable-libatomic"
+    "--disable-libbacktrace"
+    "--disable-libcpp"
+    "--disable-libssp"
+    "--disable-libquadmath"
+    "--disable-libgomp"
+    "--disable-libvtv"
+    "--disable-vtable-verify"
+
+    "--with-system-zlib"
+  ] ++ lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
+       "--with-glibc-version=${glibc.version}";
+
+in stdenvNoLibs.mkDerivation (finalAttrs: {
   pname = "libgcc";
   inherit (gcc.cc) src version;
 
@@ -57,7 +83,7 @@ stdenvNoLibs.mkDerivation (finalAttrs: {
       # We define GENERATOR_FILE so nothing bothers looking for GNU GMP.
       export NIX_CFLAGS_COMPILE_FOR_BUILD+=' -DGENERATOR_FILE=1'
 
-      "$sourceRoot/../gcc/configure" $gccConfigureFlags
+      "$sourceRoot/../gcc/configure" ${lib.concatStringsSep " " gccConfigureFlags}
 
       # We remove the `libgcc.mvar` deps so that the bootstrap xgcc isn't built.
       sed -e 's,libgcc.mvars:.*$,libgcc.mvars:,' -i Makefile
@@ -96,31 +122,6 @@ stdenvNoLibs.mkDerivation (finalAttrs: {
     export CPP_FOR_TARGET=${stdenvNoLibs.cc}/bin/$CPP_FOR_TARGET
     export LD_FOR_TARGET=${stdenvNoLibs.cc.bintools}/bin/$LD_FOR_TARGET
   '';
-
-  gccConfigureFlags = [
-    "--build=${stdenvNoLibs.buildPlatform.config}"
-    "--host=${stdenvNoLibs.buildPlatform.config}"
-    "--target=${stdenvNoLibs.hostPlatform.config}"
-
-    "--disable-bootstrap"
-    "--disable-multilib" "--with-multilib-list="
-    "--enable-languages=c"
-
-    "--disable-fixincludes"
-    "--disable-intl"
-    "--disable-lto"
-    "--disable-libatomic"
-    "--disable-libbacktrace"
-    "--disable-libcpp"
-    "--disable-libssp"
-    "--disable-libquadmath"
-    "--disable-libgomp"
-    "--disable-libvtv"
-    "--disable-vtable-verify"
-
-    "--with-system-zlib"
-  ] ++ lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
-       "--with-glibc-version=${glibc.version}";
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
