@@ -13,6 +13,7 @@
 , protoc-gen-go-grpc
 , testers
 , opensnitch
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -69,9 +70,12 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = opensnitch;
-    command = "opensnitchd -version";
+  passthru.tests = {
+    inherit (nixosTests) opensnitch;
+    version = testers.testVersion {
+      package = opensnitch;
+      command = "opensnitchd -version";
+    };
   };
 
   meta = with lib; {
