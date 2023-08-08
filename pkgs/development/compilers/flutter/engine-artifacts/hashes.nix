@@ -1,5 +1,7 @@
 {
   "1a65d409c7a1438a34d21b60bf30a6fd5db59314" = {
+    skyNotice = "sha256-n9B26rLlfUqdR6s+2+PNK4H/fN95UE0T7/Vic19W6yo=";
+    flutterNotice = "sha256-pZjblLYpD/vhC17PkRBXtqlDNRxyf92p5fKJHWhwCiA=";
     android-arm = {
       "artifacts.zip" = "sha256-KDMiI6SQoZHfFV5LJJZ7VOGyEKC4UxzRc777j4BbXgM=";
     };
@@ -113,6 +115,8 @@
     };
   };
   "45f6e009110df4f34ec2cf99f63cf73b71b7a420" = {
+    skyNotice = "sha256-n9B26rLlfUqdR6s+2+PNK4H/fN95UE0T7/Vic19W6yo=";
+    flutterNotice = "sha256-pZjblLYpD/vhC17PkRBXtqlDNRxyf92p5fKJHWhwCiA=";
     android-arm = {
       "artifacts.zip" = "sha256-NOpUM+iFSPVzr99Dz0DBdDUQnMC0ad1eZnVhtqu9HnU=";
     };
