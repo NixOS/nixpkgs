@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       Arp-scan is a command-line tool that uses the ARP protocol to discover
       and fingerprint IP hosts on the local network.
     '';
-    homepage = "http://www.nta-monitor.com/wiki/index.php/Arp-scan_Documentation";
+    homepage = "https://github.com/royhills/arp-scan/wiki/arp-scan-User-Guide";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor mikoim r-burns ];
