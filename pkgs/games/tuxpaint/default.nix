@@ -1,20 +1,21 @@
-{ lib, stdenv, fetchurl, SDL, SDL_gfx, SDL_image, SDL_ttf, SDL_mixer, libpng
-, libimagequant, cairo, librsvg, gettext, libpaper, fribidi, pkg-config, gperf
-, imagemagick
+{ lib, stdenv, fetchurl, SDL2, SDL2_gfx, SDL2_image, SDL2_ttf, SDL2_mixer
+, SDL2_Pango, libpng, freetype, pango, libimagequant, cairo, librsvg, gettext
+, libpaper, fribidi, pkg-config, gperf, imagemagick
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.28";
+  version = "0.9.31";
   pname = "tuxpaint";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tuxpaint/${version}/${pname}-${version}-sdl1.tar.gz";
-    sha256 = "sha256-b4Ru9GqyGf2jMmM24szGXO2vbSxCwvPmA6tgEUWhhos=";
+    url = "mirror://sourceforge/tuxpaint/${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-GoXAT6XJrms//Syo+oaoTAyLRitQWfofwsRFtc+oV+4=";
   };
 
   nativeBuildInputs = [
-    SDL SDL_gfx SDL_image SDL_ttf SDL_mixer libpng cairo libimagequant librsvg
-    gettext libpaper fribidi pkg-config gperf imagemagick
+    SDL2 SDL2_gfx SDL2_image SDL2_ttf SDL2_mixer SDL2_Pango libpng cairo
+    libimagequant librsvg gettext libpaper fribidi pkg-config gperf
+    imagemagick pango freetype
   ];
   hardeningDisable = [ "format" ];
   makeFlags = [ "GPERF=${gperf}/bin/gperf"
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./tuxpaint-completion.diff ];
   postPatch = ''
-    grep -Zlr include.*SDL . | xargs -0 sed -i -e 's,"SDL,"SDL/SDL,'
+    grep -Zlr include.*SDL . | xargs -0 sed -i -E -e 's,"(SDL2?_?[a-zA-Z]*.h),"SDL2/\1,' -e 's,SDL2/SDL2_Pango.h,SDL2_Pango.h,'
   '';
 
   # stamps
