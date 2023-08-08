@@ -33926,6 +33926,8 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+  ragnarwm = callPackage ../applications/window-managers/ragnarwm {};
+
   rime-cli = callPackage ../applications/office/rime-cli { };
 
   roxctl = callPackage ../applications/networking/cluster/roxctl {
