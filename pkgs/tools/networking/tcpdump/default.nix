@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
+    mainProgram = "tcpdump";
   };
 }
