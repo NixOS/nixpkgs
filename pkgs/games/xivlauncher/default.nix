@@ -1,6 +1,8 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam, gst_all_1
+{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, gamemode, glib, gnutls, aria2, steam, gst_all_1
 , copyDesktopItems, makeDesktopItem, makeWrapper
-, useSteamRun ? true }:
+, useSteamRun ? true
+, withGameMode ? false
+}:
 
 let
   rev = "1.0.4";
@@ -42,6 +44,7 @@ in
     postFixup = lib.optionalString useSteamRun (let
       steam-run = (steam.override {
         extraPkgs = pkgs: [ pkgs.libunwind ];
+        extraLibraries = pkgs: (lib.optionals withGameMode [ gamemode ]);
       }).run;
     in ''
       substituteInPlace $out/bin/XIVLauncher.Core \
