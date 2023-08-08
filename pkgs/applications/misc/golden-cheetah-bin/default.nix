@@ -30,7 +30,7 @@ appimageTools.wrapType2 {
     description = "Performance software for cyclists, runners and triathletes. This version includes the API Tokens for e.g. Strava";
     platforms = lib.platforms.linux;
     broken = !stdenv.isx86_64;
-    maintainers = with lib.maintainers; [ gador ];
+    maintainers = with lib.maintainers; [ gador adamcstephens ];
     license = lib.licenses.gpl2Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
