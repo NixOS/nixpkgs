@@ -1314,7 +1314,10 @@ self: super: builtins.intersectAttrs super {
   sydtest = dontCheck super.sydtest;
 
   # Prevent argv limit being exceeded when invoking $CC.
-  gi-javascriptcore = overrideCabal {
+  inherit (lib.mapAttrs (_: overrideCabal {
     __onlyPropagateKnownPkgConfigModules = true;
-  } super.gi-javascriptcore;
+    }) super)
+      gi-javascriptcore
+      webkit2gtk3-javascriptcore
+      gi-webkit2;
 }
