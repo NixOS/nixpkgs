@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor mikoim r-burns ];
+    mainProgram = "arp-scan";
   };
 }
