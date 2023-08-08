@@ -26,6 +26,7 @@
 , qtmultimedia
 , qtspeech
 , wrapQtAppsHook
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZKbrO5L4KFmr2NsGDihRWBeW0OXHoPRwZGj6kt1Anc8=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook ];
   buildInputs = [
     qtbase
     qtsvg
@@ -63,6 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     xapian
     libzim
   ];
+
+  # to prevent double wrapping of wrapQtApps and wrapGApps
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   cmakeFlags = [
     "-DWITH_XAPIAN=ON"
