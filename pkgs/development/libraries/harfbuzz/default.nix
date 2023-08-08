@@ -1,11 +1,9 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , glib
 , freetype
-, fontconfig
 , libintl
 , meson
 , ninja
