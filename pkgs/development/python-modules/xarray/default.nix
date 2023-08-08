@@ -6,8 +6,9 @@
 , pandas
 , pytestCheckHook
 , pythonOlder
-, setuptoolsBuildHook
+, setuptools
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,11 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-qnYFAKLY+L6O/Y87J6lLKvOwqMLANzR9WV6vb/Cdinc=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    setuptoolsBuildHook
+    setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
