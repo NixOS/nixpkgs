@@ -5070,6 +5070,8 @@ with pkgs;
 
   egglog = callPackage ../applications/science/logic/egglog { };
 
+  ego = callPackage ../tools/misc/ego { };
+
   ekam = callPackage ../development/tools/build-managers/ekam { };
 
   eksctl = callPackage ../tools/admin/eksctl { };
