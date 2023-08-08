@@ -7,15 +7,19 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.5.2";
+  version = "2.5.4";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-5qxop/hJj1hIsEcK6vJnI2RnAcLf3tO43B0e0FcNZcA=";
+    sha256 = "sha256-V/q6qpQkdrtMLzihV/0d3B+QUWwG4cYy8c2jNd5npww=";
   };
+
+  patches = [
+    ./Revert-Config-Restrict-permissions-of-OTP-config.patch
+  ];
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
