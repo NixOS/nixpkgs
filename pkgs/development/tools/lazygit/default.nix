@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne equirosa paveloom ];
+    mainProgram = "lazygit";
   };
 }
