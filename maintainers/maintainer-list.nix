@@ -7845,6 +7845,11 @@
     githubId = 31008330;
     name = "Jann Marc Villablanca";
   };
+  jgarcia = {
+    github = "chewblacka";
+    githubId = 18430320;
+    name = "John Garcia";
+  };
   jgart = {
     email = "jgart@dismail.de";
     github = "jgarte";
