@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/array_record";
     license = licenses.asl20;
     maintainers = with maintainers; [ GaetanLepage ];
+    platforms = [ "x86_64-linux" ];
   };
 }
