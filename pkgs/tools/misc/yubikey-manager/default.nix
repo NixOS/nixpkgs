@@ -62,7 +62,7 @@ python3Packages.buildPythonPackage rec {
 
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley lassulus pinpox ];
+    maintainers = with maintainers; [ benley lassulus pinpox nickcao ];
     mainProgram = "ykman";
   };
 }
