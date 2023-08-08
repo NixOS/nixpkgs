@@ -26,6 +26,7 @@ let
     "ghc943"
     "ghc944"
     "ghc945"
+    "ghc946"
     "ghc94"
     "ghc96"
     "ghc961"
@@ -47,6 +48,7 @@ let
     "ghc943"
     "ghc944"
     "ghc945"
+    "ghc946"
     "ghc96"
     "ghc961"
     "ghc962"
@@ -349,6 +351,30 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
+    ghc946 = callPackage ../development/compilers/ghc/9.4.6.nix {
+      bootPkgs =
+        # Building with 9.2 is broken due to
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
+        # Use 8.10 as a workaround where possible to keep bootstrap path short.
+
+        # On ARM text won't build with GHC 8.10.*
+        if stdenv.hostPlatform.isAarch then
+          # TODO(@sternenseemann): package bindist
+          packages.ghc902
+        # No suitable bindists for powerpc64le
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc902
+        else
+          packages.ghc8107Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      # Support range >= 10 && < 14
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
+    };
     ghc94 = ghc945;
     ghc961 = callPackage ../development/compilers/ghc/9.6.1.nix {
       bootPkgs =
@@ -550,6 +576,11 @@ in {
     ghc945 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc945;
       ghc = bh.compiler.ghc945;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
+    };
+    ghc946 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc946;
+      ghc = bh.compiler.ghc946;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
     };
     ghc94 = ghc945;
