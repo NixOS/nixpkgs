@@ -24963,6 +24963,8 @@ with pkgs;
 
   sv-lang = callPackage ../applications/science/electronics/sv-lang { };
 
+  sqld = callPackage ../servers/sql/sqld { };
+
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
   unqlite = lowPrio (callPackage ../development/libraries/unqlite { });
