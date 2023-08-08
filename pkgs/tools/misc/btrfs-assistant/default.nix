@@ -13,16 +13,9 @@
 , snapper
 , util-linux
 , wrapQtAppsHook
+, enableSnapper ? true
 }:
 
-let
-  runtimeDeps = lib.makeBinPath [
-    coreutils
-    snapper
-    util-linux
-  ];
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "btrfs-assistant";
   version = "1.8";
@@ -51,10 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace src/util/System.cpp \
-      --replace '/bin/bash' "${bash}/bin/bash"
-
-     substituteInPlace src/main.cpp \
-      --replace '/usr/bin/snapper' "${snapper}/bin/snapper"
+      --replace '/bin/bash' "${lib.getExe bash}"
+  ''
+  + lib.optionalString enableSnapper ''
+    substituteInPlace src/main.cpp \
+      --replace '/usr/bin/snapper' "${lib.getExe snapper}"
   '';
 
   postPatch = ''
@@ -66,14 +60,23 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace src/btrfs-assistant-launcher \
       --replace 'btrfs-assistant' "$out/bin/btrfs-assistant"
-
+  ''
+  + lib.optionalString enableSnapper ''
     substituteInPlace src/btrfs-assistant.conf \
-      --replace '/usr/bin/snapper' "${snapper}/bin/snapper"
+      --replace '/usr/bin/snapper' "${lib.getExe snapper}"
   '';
 
-  qtWrapperArgs = [
-    "--prefix PATH : ${runtimeDeps}"
-  ];
+  qtWrapperArgs =
+    let
+      runtimeDeps = lib.makeBinPath ([
+        coreutils
+        util-linux
+      ]
+      ++ lib.optionals enableSnapper [ snapper ]);
+    in
+    [
+      "--prefix PATH : ${runtimeDeps}"
+    ];
 
   meta = {
     description = "A GUI management tool to make managing a Btrfs filesystem easier";
