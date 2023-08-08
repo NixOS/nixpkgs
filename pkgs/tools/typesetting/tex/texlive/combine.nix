@@ -30,7 +30,7 @@ let
     # remove fake derivations (without 'outPath') to avoid undesired build dependencies
     paths = lib.catAttrs "outPath" pkgList.nonbin;
 
-    nativeBuildInputs = [ (lib.last tl.texlive-scripts.pkgs) ];
+    nativeBuildInputs = [ (lib.last texlivePackages.texlive-scripts.pkgs) ];
 
     postBuild = # generate ls-R database
     ''
@@ -88,8 +88,8 @@ in (buildEnv {
   nativeBuildInputs = [
     makeWrapper
     libfaketime
-    (lib.last tl.texlive-scripts.pkgs) # fmtutil, mktexlsr, updmap
-    (lib.last tl.texlive-scripts-extra.pkgs) # texlinks
+    (lib.last texlivePackages.texlive-scripts.pkgs) # fmtutil, mktexlsr, updmap
+    (lib.last texlivePackages.texlive-scripts-extra.pkgs) # texlinks
     perl
   ];
 

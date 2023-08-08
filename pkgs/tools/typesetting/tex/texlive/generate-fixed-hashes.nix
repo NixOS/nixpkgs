@@ -19,9 +19,8 @@ with lib; let
   hashLine = { pkgs }@pkg:
     let
       first = lib.head pkgs;
-      extraRevision = first.extraRevision or "";
       # NOTE: the fixed naming scheme must match default.nix
-      fixedName = with first; "${pname}-${toString revision}${extraRevision}";
+      fixedName = with first; "${pname}-${toString revision}${first.extraRevision or ""}";
     in
     ''
       ${strings.escapeNixIdentifier fixedName}={${hashes pkg}};
