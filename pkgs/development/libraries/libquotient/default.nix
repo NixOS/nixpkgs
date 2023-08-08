@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "A Qt5/Qt6 library to write cross-platform clients for Matrix";
     homepage = "https://matrix.org/docs/projects/sdk/quotient";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ colemickens matthiasbeyer ];
   };
 }
