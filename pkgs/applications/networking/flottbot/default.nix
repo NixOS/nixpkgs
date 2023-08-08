@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+}:
 buildGoModule rec {
   pname = "flottbot";
   version = "0.12.0";
