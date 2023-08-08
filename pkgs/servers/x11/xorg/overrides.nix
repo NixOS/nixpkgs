@@ -83,6 +83,34 @@ self: super:
     configureFlags = [ "--enable-xkb" "--enable-xinput" ]
       ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
     outputs = [ "out" "dev" "man" "doc" ];
+    meta = attrs.meta // {
+      pkgConfigModules = [
+        "xcb-composite"
+        "xcb-damage"
+        "xcb-dpms"
+        "xcb-dri2"
+        "xcb-dri3"
+        "xcb-glx"
+        "xcb-present"
+        "xcb-randr"
+        "xcb-record"
+        "xcb-render"
+        "xcb-res"
+        "xcb-screensaver"
+        "xcb-shape"
+        "xcb-shm"
+        "xcb-sync"
+        "xcb-xf86dri"
+        "xcb-xfixes"
+        "xcb-xinerama"
+        "xcb-xinput"
+        "xcb-xkb"
+        "xcb-xtest"
+        "xcb-xv"
+        "xcb-xvmc"
+        "xcb"
+      ];
+    };
   });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
@@ -119,6 +147,15 @@ self: super:
 
   libXdmcp = super.libXdmcp.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
+    meta = attrs.meta // {
+      pkgConfigModules = [ "xdmcp" ];
+    };
+  });
+
+  libXtst = super.libXtst.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      pkgConfigModules = [ "xtst" ];
+    };
   });
 
   libXfont = super.libXfont.overrideAttrs (attrs: {

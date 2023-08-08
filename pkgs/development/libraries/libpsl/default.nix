@@ -92,5 +92,6 @@ in stdenv.mkDerivation rec {
     maintainers = [ maintainers.c0bw3b ];
     mainProgram = "psl";
     platforms = platforms.unix;
+    pkgConfigModules = [ "libpsl" ];
   };
 }
