@@ -3410,6 +3410,8 @@ self: super: with self; {
 
   epson-projector = callPackage ../development/python-modules/epson-projector { };
 
+  equinox = callPackage ../development/python-modules/equinox { };
+
   eradicate = callPackage ../development/python-modules/eradicate { };
 
   es-client = callPackage ../development/python-modules/es-client { };
@@ -5339,6 +5341,8 @@ self: super: with self; {
   };
 
   jaxopt = callPackage ../development/python-modules/jaxopt { };
+
+  jaxtyping = callPackage ../development/python-modules/jaxtyping { };
 
   jaydebeapi = callPackage ../development/python-modules/jaydebeapi { };
 
