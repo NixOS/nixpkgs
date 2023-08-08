@@ -55,8 +55,7 @@ stdenv.mkDerivation rec {
     doxygen
     # needed for the docs
     graphviz
-    systemd
-  ];
+  ] ++ lib.optional (!stdenv.isDarwin) systemd;
   propagatedBuildInputs = [ omniorb_4_2 cppzmq zeromq libjpeg_turbo ];
 
   cmakeFlags = [
@@ -69,11 +68,9 @@ stdenv.mkDerivation rec {
     "-DTSD_JAVA_PATH=${openjdk11}"
   ];
 
-  patches = [
-    # To build proper systemd services for Tango, we need a way to tell when the DB service is started.
-    # This patch adds systemd support for this.
-    ./sd_notify_cmake.patch
-  ];
+  # To build proper systemd services for Tango, we need a way to tell when the DB service is started.
+  # This patch adds systemd support for this.
+  patches = lib.optional (!stdenv.isDarwin) ./sd_notify_cmake.patch;
 
   postPatch = ''
     sed -i -e 's#Requires: libzmq#Requires: libzmq cppzmq#' -e 's#libdir=.*#libdir=@CMAKE_INSTALL_FULL_LIBDIR@#' lib/cpp/tango.pc.cmake
