@@ -3010,6 +3010,12 @@ with pkgs;
 
   pikchr = callPackage ../tools/graphics/pikchr { };
 
+  poop = callPackage ../tools/misc/poop {
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_11;
+    };
+  };
+
   popl = callPackage ../development/libraries/popl { };
 
   popsicle = callPackage ../tools/misc/popsicle { };
@@ -4353,6 +4359,8 @@ with pkgs;
 
   buildpack = callPackage ../development/tools/buildpack { };
 
+  bonk = callPackage ../tools/misc/bonk { };
+
   bottom-rs = callPackage ../tools/misc/bottom-rs { };
 
   bsp-layout = callPackage ../tools/misc/bsp-layout { };
@@ -5538,6 +5546,8 @@ with pkgs;
     udis86 = pkgs.callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
   };
 
+  hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
+
   hyprland-per-window-layout = callPackage ../tools/wayland/hyprland-per-window-layout { };
 
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
@@ -6263,6 +6273,8 @@ with pkgs;
   recyclarr = callPackage ../tools/video/recyclarr { };
 
   tsduck = callPackage ../tools/video/tsduck { };
+
+  turso-cli = callPackage ../development/tools/turso-cli {};
 
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
@@ -12351,6 +12363,8 @@ with pkgs;
   rich-cli = callPackage ../misc/rich-cli { };
 
   richgo = callPackage ../development/tools/richgo {  };
+
+  risor = callPackage ../development/interpreters/risor { };
 
   rlci = callPackage ../development/interpreters/rlci { };
 
@@ -19756,6 +19770,8 @@ with pkgs;
 
   inherit (callPackage ../development/tools/replay-io { })
     replay-io replay-node-cli;
+
+  requestly = callPackage ../tools/networking/requestly { };
 
   reshape = callPackage ../development/tools/reshape { } ;
 
@@ -32495,7 +32511,9 @@ with pkgs;
     texinfo = buildPackages.texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
   };
 
-  avalonia-ilspy = callPackage ../applications/misc/avalonia-ilspy { };
+  avalonia-ilspy = callPackage ../applications/misc/avalonia-ilspy {
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
 
   image-roll = callPackage ../applications/graphics/image-roll { };
 
@@ -32814,6 +32832,8 @@ with pkgs;
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
   krabby = callPackage ../applications/misc/krabby { };
+
+  kraft = callPackage ../applications/virtualization/kraft { };
 
   krane = callPackage ../applications/networking/cluster/krane { };
 

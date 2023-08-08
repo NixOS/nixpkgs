@@ -26520,16 +26520,21 @@ with self; {
       hash = "sha256-0QbPfCPBdNBbUiZ8Ppg2zao98+Ddl3l+yX6y1/J50rg=";
     };
 
+    patches = [
+      # https://github.com/openstreetmap/tirex/pull/54
+      (fetchpatch {
+        url = "https://github.com/openstreetmap/tirex/commit/da0c5db926bc0939c53dd902a969b689ccf9edde.patch";
+        hash = "sha256-bnL1ZGy8ZNSZuCRbZn59qRVLg3TL0GjFYnhRKroeVO0=";
+      })
+    ];
+
     buildInputs = [
       GD
       IPCShareLite
       JSON
       LWP
-      HTTPDaemon
-      pkgs.cairo
       pkgs.mapnik
-      pkgs.zlib
-    ];
+    ] ++ pkgs.mapnik.buildInputs;
 
     installPhase = ''
       install -m 755 -d $out/usr/libexec

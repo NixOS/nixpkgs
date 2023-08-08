@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "initool";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pszlP9gy1zjQjNNr0L1NY0XViejUUuvUZH6JHtUxdJI=";
+    hash = "sha256-+uyBweTmtMzwTsxL1xWnomtjcwra2hWcylqFHY2AexI=";
   };
 
   nativeBuildInputs = [ mlton ];

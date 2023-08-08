@@ -79,7 +79,19 @@ in mkDerivation rec {
     rustPlatform.cargoSetupHook
   ];
 
-  corrosionDeps = if rustSupport then corrosion.cargoDeps else null;
+  # their vendored version is too old and missing this patch: https://github.com/corrosion-rs/corrosion/pull/205
+  corrosionSrc = if rustSupport then fetchFromGitHub {
+    owner = "corrosion-rs";
+    repo = "corrosion";
+    rev = "v0.3.5";
+    hash = "sha256-r/jrck4RiQynH1+Hx4GyIHpw/Kkr8dHe1+vTHg+fdRs=";
+  } else null;
+  corrosionDeps = if rustSupport then rustPlatform.fetchCargoTarball {
+    src = corrosionSrc;
+    name = "corrosion-deps";
+    preBuild = "cd generator";
+    hash = "sha256-dhUgpwSjE9NZ2mCkhGiydI51LIOClA5wwk1O3mnnbM8=";
+  } else null;
   blake3Deps = if rustSupport then rustPlatform.fetchCargoTarball {
     inherit src;
     name = "blake3-deps";
@@ -97,9 +109,8 @@ in mkDerivation rec {
   postUnpack = lib.optionalString rustSupport ''
     pushd source
 
-    # their vendored version is too old and missing this patch: https://github.com/corrosion-rs/corrosion/pull/205
     rm -rf contrib/corrosion
-    cp -r --no-preserve=mode ${corrosion.src} contrib/corrosion
+    cp -r --no-preserve=mode $corrosionSrc contrib/corrosion
 
     pushd contrib/corrosion/generator
     cargoDeps="$corrosionDeps" cargoSetupPostUnpackHook

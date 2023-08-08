@@ -23,13 +23,13 @@
 
 let
   pname = "windmill";
-  version = "1.100.1";
+  version = "1.131.0";
 
   fullSrc = fetchFromGitHub {
     owner = "windmill-labs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-o9obIvtFRNGfyOWmAQVLfAmLhwtJVHZWNxGaG7lbbC8=";
+    sha256 = "sha256-w9WkXoBHdQZUTOveHMyK/iyPB0B1e6bYJ/8qMXH8gFw=";
   };
 
   pythonEnv = python3.withPackages (ps: [ ps.pip-tools ]);
@@ -42,7 +42,7 @@ let
 
     sourceRoot = "${fullSrc.name}/frontend";
 
-    npmDepsHash = "sha256-nRx/UQ7GU1iwhddTotCTG08RoOmdbP66zGKYsEp9XOE=";
+    npmDepsHash = "sha256-2bKrpvh7x8mlhNnHFKVrZJzrWy2yynXbQW3l63HGNTg=";
 
     preBuild = ''
       npm run generate-backend-client
@@ -61,33 +61,34 @@ rustPlatform.buildRustPackage {
   inherit pname version;
   src = "${fullSrc}/backend";
 
-  SQLX_OFFLINE = "true";
-  RUSTY_V8_ARCHIVE =
-    let
-      arch = rust.toRustTarget stdenv.hostPlatform;
-      fetch_librusty_v8 = args:
-        fetchurl {
-          name = "librusty_v8-${args.version}";
-          url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${arch}.a";
-          sha256 = args.shas.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-          meta = { inherit (args) version; };
+  env = {
+    SQLX_OFFLINE = "true";
+    RUSTY_V8_ARCHIVE =
+      let
+        arch = rust.toRustTarget stdenv.hostPlatform;
+        fetch_librusty_v8 = args:
+          fetchurl {
+            name = "librusty_v8-${args.version}";
+            url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${arch}.a";
+            sha256 = args.shas.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+            meta = { inherit (args) version; };
+          };
+      in
+      fetch_librusty_v8 {
+        version = "0.73.0";
+        shas = {
+          x86_64-linux = "sha256-rDthrqAs4yUl9BpFm8yJ2sKbUImydMMZegUBhcu6vdk=";
+          aarch64-linux = "sha256-fM7yteYrPxCLNIUKvUpH6XTdD2aYsK4SEyrkknZgzLk=";
+          x86_64-darwin = "sha256-3c3oNq6WJkFR7E/EeJ7CnN+JO7X5x+wSlqo39TbEDQk=";
+          aarch64-darwin = "sha256-fO1R99XWfgAGcZXJX8nHbfnPZOlz28kXO7fkkeEF43A=";
         };
-    in
-    fetch_librusty_v8 {
-      version = "0.71.0";
-      shas = {
-        x86_64-linux = "sha256-52usT7MsLme3o3tjxcRJ0U3iX0fKtnvEvyKJeuL1Bvc=";
-        aarch64-linux = "sha256-E7CjpBO1cV5wFtLTIPPltGAyX1OEPjfhnVUQ4u3Mzxs=";
-        x86_64-darwin = "sha256-+Vj0SgvenrCuHPSYKFoxXTyfWDFbnUgHtWibNnXwbVk=";
-        aarch64-darwin = "sha256-p7BaC2nkZ+BGRPSXogpHshBblDe3ZDMGV93gA4sqpUc=";
       };
-    };
+  };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "progenitor-0.3.0" = "sha256-EPiAeAKCYBHiISGdXyuqlX/+Xp1feQmniLzt/FIDiLw=";
-      "typify-0.0.12" = "sha256-LfFUhr40jKQNO6be2RWend3mbZ/b6i2eljGLx0UTunY=";
+      "progenitor-0.3.0" = "sha256-F6XRZFVIN6/HfcM8yI/PyNke45FL7jbcznIiqj22eIQ=";
     };
   };
 
@@ -101,6 +102,12 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     substituteInPlace windmill-worker/src/worker.rs \
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
+
+    substituteInPlace windmill-api/src/lib.rs \
+      --replace 'unknown-version' 'v${version}'
+
+    substituteInPlace src/main.rs \
+      --replace 'unknown-version' 'v${version}'
   '';
 
   buildInputs = [ openssl rustfmt lld ];

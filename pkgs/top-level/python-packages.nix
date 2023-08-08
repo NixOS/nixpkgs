@@ -2328,7 +2328,7 @@ self: super: with self; {
 
   cwlformat = callPackage ../development/python-modules/cwlformat { };
 
-  cx_Freeze = callPackage ../development/python-modules/cx_freeze { };
+  cx-freeze = callPackage ../development/python-modules/cx-freeze { };
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
 
@@ -5183,6 +5183,8 @@ self: super: with self; {
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
+  ipynbname = callPackage ../development/python-modules/ipynbname { };
+
   ipyniivue = callPackage ../development/python-modules/ipyniivue { };
 
   ipykernel = callPackage ../development/python-modules/ipykernel { };
@@ -5489,6 +5491,8 @@ self: super: with self; {
 
   jupyter-client = callPackage ../development/python-modules/jupyter-client { };
 
+  jupyter-collaboration = callPackage ../development/python-modules/jupyter-collaboration { };
+
   jupyter-contrib-core = callPackage ../development/python-modules/jupyter-contrib-core { };
 
   jupyter-contrib-nbextensions = callPackage ../development/python-modules/jupyter-contrib-nbextensions { };
@@ -5510,8 +5514,6 @@ self: super: with self; {
   jupyter-server-fileid = callPackage ../development/python-modules/jupyter-server-fileid { };
 
   jupyter-server-terminals = callPackage ../development/python-modules/jupyter-server-terminals { };
-
-  jupyter-server-ydoc = callPackage ../development/python-modules/jupyter-server-ydoc { };
 
   jupyter-ui-poll = callPackage ../development/python-modules/jupyter-ui-poll { };
 
@@ -7287,6 +7289,8 @@ self: super: with self; {
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
+
+  oldest-supported-numpy = callPackage ../development/python-modules/oldest-supported-numpy { };
 
   olefile = callPackage ../development/python-modules/olefile { };
 
@@ -10876,8 +10880,6 @@ self: super: with self; {
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
-
-  rednose = callPackage ../development/python-modules/rednose { };
 
   redshift-connector = callPackage ../development/python-modules/redshift-connector { };
 

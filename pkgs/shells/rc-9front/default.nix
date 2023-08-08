@@ -22,16 +22,17 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ byacc installShellFiles ];
   enableParallelBuilding = true;
   patches = [ ./path.patch ];
-
-  buildPhase = ''
-    make PREFIX=$out
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin/ rc
     installManPage rc.1
     mkdir -p $out/lib
     install -m644 rcmain.unix $out/lib/rcmain
+
+    runHook postInstall
   '';
 
   passthru = {

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "greeneye-monitor";
-  version = "4.0";
+  version = "4.0.1";
 
   disabled = pythonOlder "3.10";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jkeljo";
     repo = "greeneye-monitor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kMyFerb6T5316cr4T5hSo4HcpO5Hl5l+bMor5jon9yY=";
+    hash = "sha256-S/1MT9ZQ9G0F1WXqzNKhVo8vtfPLzr8WRlfYc7TU9iQ=";
   };
 
   postPatch = ''

@@ -13488,6 +13488,12 @@
     githubId = 38314551;
     name = "Peter Okelmann";
   };
+  pokon548 = {
+    email = "nix@bukn.uk";
+    github = "pokon548";
+    githubId = 65808665;
+    name = "Bu Kun";
+  };
   polarmutex = {
     email = "brian@brianryall.xyz";
     github = "polarmutex";
@@ -18731,6 +18737,12 @@
     matrix = "@zeri:matrix.org";
     github = "zeri42";
     githubId = 68825133;
+  };
+  zestsystem = {
+    email = "mk337337@gmail.com";
+    github = "zestsystem";
+    githubId = 39456023;
+    name = "Mike Yim";
   };
   zfnmxt = {
     name = "zfnmxt";
