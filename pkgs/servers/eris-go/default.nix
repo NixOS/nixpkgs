@@ -1,27 +1,26 @@
-{ lib, stdenv, buildGoModule, fetchFromGitea }:
+{ lib, stdenv, buildGoModule, fetchFromGitea, nixosTests }:
 
 buildGoModule rec {
   pname = "eris-go";
-  version = "20230202";
+  version = "20230729";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "eris";
-    repo = pname;
+    repo = "eris-go";
     rev = version;
-    hash = "sha256-o9FRlUtMk1h8sR+am2gNEQOMgAceRTdRusI4a6ikHUM=";
+    hash = "sha256-yFWmfWmlGL4fC36XsjO/ao/v8FVI20EpXSblZ0EcosI=";
   };
 
-  vendorHash = "sha256-ZDJm7ZlDBVWLnuC90pOwa608GnuEgy0N/I96vvesZPY=";
+  vendorHash = "sha256-Z6rirsiiBzH0herQAkxZp1Xr++489qNoiD4fqoLt9/A=";
 
-  postInstall = "ln -s $out/bin/eris-get $out/bin/eris-put";
-  # eris-get is a multicall binary
+  passthru.tests = { inherit (nixosTests) eris-server; };
 
   meta = src.meta // {
     description = "Implementation of ERIS for Go";
+    homepage = "https://codeberg.org/eris/eris-go";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ehmry ];
-    mainProgram = "eris-get";
     broken = stdenv.isDarwin;
   };
 }
