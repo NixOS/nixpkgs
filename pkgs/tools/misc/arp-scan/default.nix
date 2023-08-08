@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ perlPackages.perl libpcap ];
 
   postInstall = ''
-    for name in get-{oui,iab}; do
-      wrapProgram "$out/bin/$name" --set PERL5LIB "${perlPackages.makeFullPerlPath perlModules}"
+    for binary in get-{oui,iab}; do
+      wrapProgram "$out/bin/$binary" --set PERL5LIB "${perlPackages.makeFullPerlPath perlModules}"
     done;
   '';
 
