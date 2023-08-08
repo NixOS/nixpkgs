@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [ undmg ];
-  sourceRoot = "${appName}";
+  sourceRoot = appName;
 
   installPhase = ''
     runHook preInstall
