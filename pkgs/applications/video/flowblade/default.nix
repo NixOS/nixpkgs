@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ffmpeg frei0r sox gtk3 gobject-introspection ladspaPlugins
+    ffmpeg frei0r sox gtk3 ladspaPlugins
     (python3.withPackages (ps: with ps; [ mlt pygobject3 dbus-python numpy pillow ]))
   ];
 

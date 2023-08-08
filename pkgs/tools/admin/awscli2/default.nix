@@ -3,6 +3,7 @@
 , groff
 , less
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , testers
 , awscli2
@@ -10,8 +11,13 @@
 
 let
   py = python3 // {
-    pkgs = python3.pkgs.overrideScope (self: super: {
-      # nothing right now
+    pkgs = python3.pkgs.overrideScope (final: prev: {
+      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
+        src = prev.src.override {
+          version = "0.17.21";
+          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
+        };
+      });
     });
   };
 
@@ -28,9 +34,19 @@ with py.pkgs; buildPythonApplication rec {
     hash = "sha256-gtzRHNEReCKzGDdiwS5kngcJYp5oAHmhnOPl/uTyxvU=";
   };
 
+  patches = [
+    # https://github.com/aws/aws-cli/pull/7912
+    (fetchpatch {
+      name = "update-flit-core.patch";
+      url = "https://github.com/aws/aws-cli/commit/83412a4b2ec750bada640a34a87bfe07ce41fb50.patch";
+      hash = "sha256-uhO6aOSptsARYWuXXEFhx+6rCW5/uGn2KQ15BnhzH68=";
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace requirements/bootstrap.txt \
-      --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
+    substituteInPlace pyproject.toml \
+      --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
+      --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1'
   '';
 
   nativeBuildInputs = [
@@ -74,8 +90,6 @@ with py.pkgs; buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  doCheck = true;
-
   preCheck = ''
     export PATH=$PATH:$out/bin
     export HOME=$(mktemp -d)
@@ -107,7 +121,7 @@ with py.pkgs; buildPythonApplication rec {
     tests.version = testers.testVersion {
       package = awscli2;
       command = "aws --version";
-      version = version;
+      inherit version;
     };
   };
 

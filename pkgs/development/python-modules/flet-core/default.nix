@@ -1,7 +1,13 @@
 { lib
-, python3
 , buildPythonPackage
 , fetchPypi
+
+# build-system
+, poetry-core
+
+# propagates
+, typing-extensions
+, repath
 }:
 
 buildPythonPackage rec {
@@ -15,13 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-8WG7odYiGrew4GwD+MUuzQPmDn7V/GmocBproqsbCNw=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    typing-extensions
+  propagatedBuildInputs = [
     repath
+    typing-extensions
   ];
 
   doCheck = false;

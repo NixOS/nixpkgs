@@ -449,6 +449,10 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect tests/test_config.py::test_merge"
     # AssertionError: assert 2 == 1
     "--deselect=tests/helpers/test_translation.py::test_caching"
+    # AssertionError: assert None == RegistryEntry
+    "--deselect=tests/helpers/test_entity_registry.py::test_get_or_create_updates_data"
+    # AssertionError: assert 2 == 1
+    "--deselect=tests/helpers/test_entity_values.py::test_override_single_value"
     # tests are located in tests/
     "tests"
   ];

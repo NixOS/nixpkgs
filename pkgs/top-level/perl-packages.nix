@@ -1565,11 +1565,11 @@ with self; {
 
   BerkeleyDB = buildPerlPackage {
     pname = "BerkeleyDB";
-    version = "0.64";
+    version = "0.65";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.64.tar.gz";
-      hash = "sha256-U1yF6FScGsQ6IBYP3ALwpABhQVb9dhV//yiqM/2jdEs=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.65.tar.gz";
+      hash = "sha256-QQqonnIylB1JEGyeBI1jN0dVQ+wdIz6nzbcly1uWNQQ=i";
     };
 
     preConfigure = ''
@@ -1705,10 +1705,10 @@ with self; {
 
   BKeywords = buildPerlPackage rec {
     pname = "B-Keywords";
-    version = "1.24";
+    version = "1.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.24.tar.gz";
-      hash = "sha256-pc9rsoXQbRfO4id4O3I7snQhP9QVOl3uMR0kDhFpYG4=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.26.tar.gz";
+      hash = "sha256-LaoVXS8mf7De3Yf4pMT7VmOHn8EGUXse4lg1Pvh67TQ=";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
@@ -5515,10 +5515,10 @@ with self; {
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.076";
+    version = "0.078";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.076.tar.gz";
-      hash = "sha256-u4SsASQ4x87NtRpab/+08f7jsOrgAi6WzrwuFnUiYhw=";
+      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.078.tar.gz";
+      hash = "sha256-kxYLEkL31XQ8s8kxuO/HyzmCHQ4y+U+Wkz8eiOYYvL0=";
     };
     meta = {
       description = "Cryptographic toolkit";
@@ -5562,6 +5562,9 @@ with self; {
       hash = "sha256-L+XheYgqa5Jt/vChCLSiyHof+waJK88vuI5Mj0uEODw=";
     };
     buildInputs = [ TestRequires ];
+    patches = [
+      ../development/perl-modules/Data-Clone-fix-apostrophe-package-separator.patch
+    ];
     meta = {
       description = "Polymorphic data cloning";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -6604,10 +6607,10 @@ with self; {
 
   DevelCaller = buildPerlPackage {
     pname = "Devel-Caller";
-    version = "2.06";
+    version = "2.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RC/RCLAMP/Devel-Caller-2.06.tar.gz";
-      hash = "sha256-anOuaikoNCVbkNqUCSBUJTBfz+mUsUjcttLW72KNt98=";
+      url = "mirror://cpan/authors/id/R/RC/RCLAMP/Devel-Caller-2.07.tar.gz";
+      hash = "sha256-tnmisYA0sLcg3oLDcIckw2SxCmyhZMvGfNw68oPzUD8=";
     };
     propagatedBuildInputs = [ PadWalker ];
     meta = {
@@ -7349,10 +7352,10 @@ with self; {
 
   DevelFindPerl = buildPerlPackage {
     pname = "Devel-FindPerl";
-    version = "0.015";
+    version = "0.016";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.015.tar.gz";
-      hash = "sha256-UnW33CJv5/Fstp/G+Z9eKahSxqTTt4arGIajE4Z0Pfw=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.016.tar.gz";
+      hash = "sha256-Q6K/L3h6PxuIEXkGMWKyqj58sET25eduxkZq6QqGETg=";
     };
     meta = {
       description = "Find the path to your perl";
@@ -7403,10 +7406,10 @@ with self; {
 
   DevelNYTProf = buildPerlPackage {
     pname = "Devel-NYTProf";
-    version = "6.10";
+    version = "6.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JK/JKEENAN/Devel-NYTProf-6.10.tar.gz";
-      hash = "sha256-JKxBdPHwEyIGP6ThGbJH03HTJg3cpud4xsGg4/kF9Y4=";
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/Devel-NYTProf-6.12.tar.gz";
+      hash = "sha256-qDtZheTalr24X1McFqtvPUkHGnM80JSqMPqF+2pLAsQ=";
     };
     propagatedBuildInputs = [ FileWhich JSONMaybeXS ];
     buildInputs = [ CaptureTiny TestDifferences ];
@@ -8668,6 +8671,9 @@ with self; {
       hash = "sha256-VyPdePSsC00mKgXqRq9mPqANgJay6cCkNRXCEHYOHnU=";
     };
     buildInputs = [ TestUnitLite ];
+    patches = [
+      ../development/perl-modules/Exception-Base-remove-smartmatch-when-5.38.0.patch
+    ];
     meta = {
       description = "Lightweight exceptions";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -8823,6 +8829,9 @@ with self; {
       url = "mirror://cpan/authors/id/N/NW/NWCLARK/ExtUtils-Constant-0.25.tar.gz";
       hash = "sha256-aTPQ6WO2IoHvdWEGjmrsrIxKwrR2srugmrC5D7rJ11c=";
     };
+    patches = [
+      ../development/perl-modules/ExtUtils-Constant-fix-indirect-method-call-in-test.patch
+    ];
     meta = {
       description = "Generate XS code to import C header constants";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11276,10 +11285,10 @@ with self; {
 
   HTMLMason = buildPerlPackage {
     pname = "HTML-Mason";
-    version = "1.59";
+    version = "1.60";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTML-Mason-1.59.tar.gz";
-      hash = "sha256-lb7SpsSINwBGqjFL5LWSvWWmUi+IRdqLNqav+ai0OdA=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTML-Mason-1.60.tar.gz";
+      hash = "sha256-qgu9WmtjxiyJVfjFXsCF43DXktZSZrbDtcXweIu8d+Y=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ CGI CacheCache ClassContainer ExceptionClass LogAny ];
@@ -13865,10 +13874,10 @@ with self; {
 
   locallib = buildPerlPackage {
     pname = "local-lib";
-    version = "2.000024";
+    version = "2.000029";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/local-lib-2.000024.tar.gz";
-      hash = "sha256-LpuRe9SKBhXkJjOyoydJTgRhDY9xB2W5ST0wbOrZigU=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/local-lib-2.000029.tar.gz";
+      hash = "sha256-jfh6EMFMjpCcW0fFcB5LgYfVGeUlHofIBwmwK7M+/dc=";
     };
     propagatedBuildInputs = [ ModuleBuild ];
     meta = {
@@ -14069,10 +14078,10 @@ with self; {
 
   LogLog4perl = buildPerlPackage {
     pname = "Log-Log4perl";
-    version = "1.53";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/Log-Log4perl-1.53.tar.gz";
-      hash = "sha256-j7+0jQFu7HNEpTnzrXCHC0rEY45JZmv6cNEPb/1Kw44=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Log-Log4perl-1.57.tar.gz";
+      hash = "sha256-D4/Ldjio89tMeX35T9vFYBN0kULy+Uy8lbQ8n8oJahM=";
     };
     meta = {
       description = "Log4j implementation for Perl";
@@ -15220,10 +15229,10 @@ with self; {
 
   MIMECharset = buildPerlPackage {
     pname = "MIME-Charset";
-    version = "1.012.2";
+    version = "1.013.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEZUMI/MIME-Charset-1.012.2.tar.gz";
-      hash = "sha256-h4x3nAJWxZFma9BsDN5MDXgg7uuY/RGDCCrumh57HRM=";
+      url = "mirror://cpan/authors/id/N/NE/NEZUMI/MIME-Charset-1.013.1.tar.gz";
+      hash = "sha256-G7em4MDSUfI9bmC/hMmt78W3TuxYR1v+5NORB+YIcPA=";
     };
     meta = {
       description = "Charset Information for MIME";
@@ -15467,6 +15476,20 @@ with self; {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4231.tar.gz";
       hash = "sha256-fg9MaSwXQMGshOoU1+o9i8eYsvsmwJh3Ip4E9DCytxc=";
     };
+    postConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      # for unknown reason, the first run of Build fails
+      ./Build || true
+    '';
+    postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      # remove version check since miniperl uses a stub of File::Temp, which do not provide a version:
+      # https://github.com/arsv/perl-cross/blob/master/cnf/stub/File/Temp.pm
+      sed -i '/File::Temp/d' \
+        Build.PL
+
+      # fix discover perl function, it can not handle a wrapped perl
+      sed -i "s,\$self->_discover_perl_interpreter,'$(type -p perl)',g" \
+        lib/Module/Build/Base.pm
+    '';
     meta = {
       description = "Build and install Perl modules";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -18613,10 +18636,10 @@ with self; {
 
   NumberFormat = buildPerlPackage {
     pname = "Number-Format";
-    version = "1.75";
+    version = "1.76";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WR/WRW/Number-Format-1.75.tar.gz";
-      hash = "sha256-gtZZyxZGF2T9RNEanOnmpPXodn3BBp6wNGfG5V3iV/M=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Number-Format-1.76.tar.gz";
+      hash = "sha256-DgBg6zY2NaiFcGxqJvX8qv6udZ97Ksrkndpw4ZXdRNY=";
     };
     meta = {
       description = "Perl extension for formatting numbers";
@@ -18740,12 +18763,12 @@ with self; {
 
   ObjectPad = buildPerlModule {
     pname = "Object-Pad";
-    version = "0.68";
+    version = "0.79";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.68.tar.gz";
-      hash = "sha256-xN5jBIQxMJZNrskozF99HphTnu/X7azHvn4Yg0XhnXE=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.79.tar.gz";
+      hash = "sha256-+wsQ+J5i1UFlvWqyHbVfYLVT+gCPyOddNJhwwafiKtY=";
     };
-    buildInputs = [ TestFatal TestRefcount ];
+    buildInputs = [ Test2Suite TestFatal TestRefcount ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     propagatedBuildInputs = [ XSParseKeyword XSParseSublike ];
     meta = {
@@ -19195,10 +19218,10 @@ with self; {
 
   Parent = buildPerlPackage {
     pname = "parent";
-    version = "0.238";
+    version = "0.241";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CO/CORION/parent-0.238.tar.gz";
-      hash = "sha256-OPWP3vPiihlMnI0NxdAmcvr5PAafQMW8sfq+rbvE0tE=";
+      url = "mirror://cpan/authors/id/C/CO/CORION/parent-0.241.tar.gz";
+      hash = "sha256-sQs5YKs5l9q3Vx/+l1ukYtl50IZFB0Ch4Is5WedRKP4=";
     };
     meta = {
       description = "Establish an ISA relationship with base classes at compile time";
@@ -20236,10 +20259,10 @@ with self; {
 
   PPR = buildPerlPackage {
     pname = "PPR";
-    version = "0.000028";
+    version = "0.001008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.000028.tar.gz";
-      hash = "sha256-032ndHxDN+TH11jHuO1dEsuXN2Q2krCfC9TZnFBouak=";
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.001008.tar.gz";
+      hash = "sha256-EQ5xwF8uLJDrAfCgaU5VqdvpHIV+SBJeF0LRflzbHkk=";
     };
     meta = {
       description = "Pattern-based Perl Recognizer";
@@ -21426,10 +21449,10 @@ with self; {
 
   ScopeUpper = buildPerlPackage {
     pname = "Scope-Upper";
-    version = "0.33";
+    version = "0.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VP/VPIT/Scope-Upper-0.33.tar.gz";
-      hash = "sha256-XzO+Aa1o/L7G74HusDs1EaL18HUq1RPZk6TBOl+xpkg=";
+      url = "mirror://cpan/authors/id/V/VP/VPIT/Scope-Upper-0.34.tar.gz";
+      hash = "sha256-WB2LxRDevQxFal/HlSy3E4rmZ78486d+ltdz3DGWpB4=";
     };
     meta = {
       description = "Act on upper scopes";
@@ -23591,10 +23614,10 @@ with self; {
 
   Test2Harness = buildPerlPackage {
     pname = "Test2-Harness";
-    version = "1.000042";
+    version = "1.000152";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000042.tar.gz";
-      hash = "sha256-qvIxporxpv/WoRGIh1/PVy43PkPIKFlFInudaHtD2y0=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000152.tar.gz";
+      hash = "sha256-iIqWAdvTPuuaSTcdZmK7JE8Ad/QJlM4gvJClvlSRqls=";
     };
 
     checkPhase = ''
@@ -23602,7 +23625,7 @@ with self; {
       ./scripts/yath test -j $NIX_BUILD_CORES
     '';
 
-    propagatedBuildInputs = [ DataUUID Importer LongJump ScopeGuard TermTable Test2PluginMemUsage Test2PluginUUID Test2Suite gotofile ];
+    propagatedBuildInputs = [ DataUUID Importer LongJump ScopeGuard TermTable Test2PluginMemUsage Test2PluginUUID Test2Suite YAMLTiny gotofile ];
     meta = {
       description = "A new and improved test harness with better Test2 integration";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -23658,10 +23681,10 @@ with self; {
 
   Test2Suite = buildPerlPackage {
     pname = "Test2-Suite";
-    version = "0.000138";
+    version = "0.000155";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Suite-0.000138.tar.gz";
-      hash = "sha256-DPct8s7RFkhTW/2I6lSjxwBnhqfFlSkOOPMU41E7CHU=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Suite-0.000155.tar.gz";
+      hash = "sha256-x45rxNabwJeDaXaGM4K1K54MMe4YUGbOYMVL10uq1T0=";
     };
     propagatedBuildInputs = [ ModulePluggable ScopeGuard SubInfo TermTable TestSimple13 ];
     meta = {
@@ -25000,10 +25023,10 @@ with self; {
 
   TestSimple13 = buildPerlPackage {
     pname = "Test-Simple";
-    version = "1.302183";
+    version = "1.302195";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302183.tar.gz";
-      hash = "sha256-mgO9pexCCuqWkrZQQ39NW1dPpQX91/9gzbXz7ANBBv8=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302195.tar.gz";
+      hash = "sha256-s5C7I1kuC5Rsla27PDCxG8Y0ooayhHvmEa2SnFfjmmw=";
     };
     meta = {
       description = "Basic utilities for writing tests";
@@ -25227,10 +25250,10 @@ with self; {
 
   TestWithoutModule = buildPerlPackage {
     pname = "Test-Without-Module";
-    version = "0.20";
+    version = "0.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CO/CORION/Test-Without-Module-0.20.tar.gz";
-      hash = "sha256-jprrfDKmxtC4qTEU2yqMBychJzqdmi3U+cqGz9KKpSQ=";
+      url = "mirror://cpan/authors/id/C/CO/CORION/Test-Without-Module-0.21.tar.gz";
+      hash = "sha256-PN6vraxIU+vq/miTRtVV2l36PPqdTITj5ee/7lC+7EY=";
     };
     meta = {
       description = "Test fallback behaviour in absence of modules";
@@ -25987,10 +26010,10 @@ with self; {
 
   TestTrap = buildPerlModule {
     pname = "Test-Trap";
-    version = "0.3.4";
+    version = "0.3.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EB/EBHANSSEN/Test-Trap-v0.3.4.tar.gz";
-      hash = "sha256-CwRlbzO2yW2o7sTP/lKGFQtOS14pkdOINoaxCRAQWuI=";
+      url = "mirror://cpan/authors/id/E/EB/EBHANSSEN/Test-Trap-v0.3.5.tar.gz";
+      hash = "sha256-VPmQFlYrWx1yEQEA8fK+Q3F4zfhDdvSV/9A3bx1+y5o=";
     };
     propagatedBuildInputs = [ DataDump ];
     meta = {
@@ -27084,10 +27107,10 @@ with self; {
 
   VariableMagic = buildPerlPackage {
     pname = "Variable-Magic";
-    version = "0.62";
+    version = "0.63";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VP/VPIT/Variable-Magic-0.62.tar.gz";
-      hash = "sha256-P5oYUX4z8AapwvxPQ/AbVKv+b/Lq5zIkJPMQaSlrYVw=";
+      url = "mirror://cpan/authors/id/V/VP/VPIT/Variable-Magic-0.63.tar.gz";
+      hash = "sha256-ukCDssMf8mlPI3EzPVVMgmqvJLTZjQPki1tKQ6Kg5nk=";
     };
     meta = {
       description = "Associate user-defined magic to variables from Perl";
@@ -27995,12 +28018,12 @@ with self; {
 
   XSParseKeyword = buildPerlModule {
     pname = "XS-Parse-Keyword";
-    version = "0.25";
+    version = "0.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.25.tar.gz";
-      hash = "sha256-9e2zDPfH8iDQxsMdwetVQDKECpnHwpgxT1zD/vZscsc=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.34.tar.gz";
+      hash = "sha256-EDPdtAmSTZ1Cs4MEodeXRaBDSrxrBJHrErbIu5bx1sE=";
     };
-    buildInputs = [ ExtUtilsCChecker ];
+    buildInputs = [ ExtUtilsCChecker Test2Suite ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing keyword syntax";

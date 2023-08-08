@@ -15,6 +15,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-5TAw5H3soxe9vLhfj1qs8uMr4ybrHlCj4zdsMzvPo6s=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'Pillow = "^' 'Pillow = ">='
+  '';
+
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
   ];

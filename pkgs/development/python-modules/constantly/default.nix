@@ -23,7 +23,7 @@ let
 
     pythonImportsCheck = [ "constantly" ];
 
-    passthru.tests.constantly = self.overrideAttrs (_: { doInstallCheck = true; });
+    passthru.tests.constantly = self.overridePythonAttrs { doCheck = true; };
 
     meta = with lib; {
       homepage = "https://github.com/twisted/constantly";

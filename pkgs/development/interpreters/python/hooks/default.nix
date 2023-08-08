@@ -62,6 +62,16 @@ in {
       };
     } ./pip-build-hook.sh) {};
 
+  pypaBuildHook = callPackage ({ makePythonHook, build, wheel }:
+    makePythonHook {
+      name = "pypa-build-hook.sh";
+      propagatedBuildInputs = [ build wheel ];
+      substitutions = {
+        inherit pythonInterpreter;
+      };
+    } ./pypa-build-hook.sh) {};
+
+
   pipInstallHook = callPackage ({ makePythonHook, pip }:
     makePythonHook {
       name = "pip-install-hook";
@@ -159,6 +169,20 @@ in {
         inherit pythonCheckInterpreter setuppy;
       };
     } ./setuptools-check-hook.sh) {};
+
+    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust, rust }:
+      makePythonHook {
+        name = "setuptools-rust-setup-hook";
+        propagatedBuildInputs = [ setuptools-rust ];
+        substitutions = {
+          pyLibDir = "${python}/lib/${python.libPrefix}";
+          cargoBuildTarget = rust.toRustTargetSpec stdenv.hostPlatform;
+          cargoLinkerVar = lib.toUpper (
+              builtins.replaceStrings ["-"] ["_"] (
+                rust.toRustTarget stdenv.hostPlatform));
+          targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+        };
+      } ./setuptools-rust-hook.sh) {};
 
   unittestCheckHook = callPackage ({ makePythonHook }:
     makePythonHook {

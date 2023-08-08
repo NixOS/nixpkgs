@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , jsonschema
 , pytestCheckHook
 , python-dateutil
@@ -11,6 +12,9 @@ buildPythonPackage rec {
   pname = "hologram";
   version = "0.0.16";
   format = "pyproject";
+
+  # ValueError: mutable default <class 'tests.conftest.Point'> for field a is not allowed: use default_factory
+  disabled = pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";

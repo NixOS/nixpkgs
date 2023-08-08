@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     python3Packages.wrapPython
     intltool
     pkg-config
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -49,7 +50,6 @@ stdenv.mkDerivation rec {
     libpeas
     gsettings-desktop-schemas
     json-glib
-    gobject-introspection
     libsecret
     glib-networking
     libnotify

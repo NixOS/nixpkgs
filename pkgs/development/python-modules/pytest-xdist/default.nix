@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "3.2.1";
+  version = "3.3.1";
   disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GEm9mNiyQrlI5HLbdHjgkL8zYZEqj+2HmS7ZQIX1Ryc=";
+    hash = "sha256-1e4FIOsbe8ylCmClGKt6dweZKBLFeBmPi0T9+seOjJM=";
   };
 
   nativeBuildInputs = [

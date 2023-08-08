@@ -239,9 +239,9 @@ in
   };
 
   gio2 = attrs: {
-    nativeBuildInputs = [ pkg-config ]
+    nativeBuildInputs = [ pkg-config gobject-introspection ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre pcre2 gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
+    buildInputs = [ gtk2 pcre pcre2 ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };

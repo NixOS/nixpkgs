@@ -61,6 +61,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
   preCheck = ''
     export HOME=$TEMP
   '';

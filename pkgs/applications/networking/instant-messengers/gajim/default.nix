@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "pyproject";
 
   buildInputs = [
-    gobject-introspection gtk3 gnome.adwaita-icon-theme
+    gtk3 gnome.adwaita-icon-theme
     gtksourceview4
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook
+    gettext wrapGAppsHook gobject-introspection
   ];
 
   dontWrapGApps = true;

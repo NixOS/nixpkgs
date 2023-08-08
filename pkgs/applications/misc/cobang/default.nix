@@ -59,8 +59,6 @@ buildPythonApplication rec {
   buildInputs = [
     atk
     gdk-pixbuf
-    # Needed to detect namespaces
-    gobject-introspection
     gst-plugins-good
     libhandy
     networkmanager

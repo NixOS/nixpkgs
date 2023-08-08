@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     "jsonschema"
     "pathspec"
     "python-json-logger"
-    "pyyaml"
+    "PyYAML"
     "toolz"
     "unidiff"
     "yamllint"

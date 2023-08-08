@@ -24,13 +24,13 @@
   } ./setup-hook.sh;
 in buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.10.4";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-n7nLEG2+sSR9wnxM+C8FWc2B+Mx74Pan1+IQf+h2bGU=";
+    hash = "sha256-sO/Fa+QrAKyq2EYyYMcjPrYI+bdJIrDoj6L3JHoDo3E=";
   };
 
   postPatch = ''
@@ -87,7 +87,7 @@ in buildPythonPackage rec {
     "tests/extra_setuptools/test_setuphelper.py"
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin) [
+  disabledTests = lib.optionals stdenv.isDarwin [
     # expects KeyError, gets RuntimeError
     # https://github.com/pybind/pybind11/issues/4243
     "test_cross_module_exception_translator"

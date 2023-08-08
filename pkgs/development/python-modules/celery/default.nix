@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.3.0";
+  version = "5.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Hqul7hTYyMC+2PYGPl4Q2r288jUDqGHPDhC3Ih2Zyw0=";
+    hash = "sha256-+E0cIaFSDBFsK30mWTkmWBGRQ1oDqnS3fJQbk8ocYhA=";
   };
 
   propagatedBuildInputs = [

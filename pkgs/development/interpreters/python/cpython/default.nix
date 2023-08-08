@@ -439,6 +439,7 @@ in with passthru; stdenv.mkDerivation {
     ln -s "$out/bin/python3" "$out/bin/python"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
     ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
+    ln -sL "$out/share/man/man1/python3.1.gz" "$out/share/man/man1/python.1.gz"
 
     # Get rid of retained dependencies on -dev packages, and remove
     # some $TMPDIR references to improve binary reproducibility.
