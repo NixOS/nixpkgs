@@ -997,13 +997,18 @@ and in this case the `python3` interpreter is automatically used.
 
 ### Interpreters {#interpreters}
 
-Versions 2.7, 3.8, 3.9, 3.10 and 3.11 of the CPython interpreter are available
-as respectively `python27`, `python38`, `python39`, `python310` and `python311`.
-The aliases `python2` and `python3` correspond to respectively `python27` and
-`python310`. The attribute `python` maps to `python2`. The PyPy interpreters
-compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with
-aliases `pypy2` mapping to `pypy27` and `pypy` mapping to `pypy2`. The Nix
-expressions for the interpreters can be found in
+| Package    | Aliases         | Interpreter |
+|------------|-----------------|-------------|
+| python27   | python2, python | CPython 2.7 |
+| python38   |                 | CPython 3.8 |
+| python39   |                 | CPython 3.9 |
+| python310  | python3         | CPython 3.10 |
+| python311  |                 | CPython 3.11 |
+| python312  |                 | CPython 3.12 |
+| pypy27     | pypy2, pypy     | PyPy2.7 |
+| pypy39     | pypy3           | PyPy 3.9 |
+
+The Nix expressions for the interpreters can be found in
 `pkgs/development/interpreters/python`.
 
 All packages depending on any Python interpreter get appended
