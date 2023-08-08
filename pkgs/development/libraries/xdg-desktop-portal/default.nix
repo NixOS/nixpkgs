@@ -1,11 +1,13 @@
 { lib
 , acl
-, autoreconfHook
 , dbus
 , fetchFromGitHub
 , flatpak
 , fuse3
 , bubblewrap
+, docbook_xml_dtd_412
+, docbook_xml_dtd_43
+, docbook_xsl
 , systemdMinimal
 , geoclue2
 , glib
@@ -13,6 +15,8 @@
 , json-glib
 , libportal
 , libxml2
+, meson
+, ninja
 , nixosTests
 , pipewire
 , gdk-pixbuf
@@ -22,12 +26,13 @@
 , stdenv
 , runCommand
 , wrapGAppsHook
+, xmlto
 , enableGeoLocation ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.16.0";
+  version = "1.17.0";
 
   outputs = [ "out" "installedTests" ];
 
@@ -35,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = finalAttrs.version;
-    sha256 = "sha256-5VNauinTvZrSaQzyP/quL/3p2RPcTJUDLscEQMJpvYA=";
+    sha256 = "sha256-OGf2ohP/Qd+ff3KfJYoHu9wbCAUXCP3wm/utjqkgccE=";
   };
 
   patches = [
@@ -46,13 +51,21 @@ stdenv.mkDerivation (finalAttrs: {
       substitute "${flatpak.icon-validator-patch}" "$out" \
         --replace "/icon-validator/validate-icon.c" "/src/validate-icon.c"
     '')
+
+    # Allow installing installed tests to a separate output.
+    ./installed-tests-path.patch
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    docbook_xml_dtd_412
+    docbook_xml_dtd_43
+    docbook_xsl
     libxml2
+    meson
+    ninja
     pkg-config
     wrapGAppsHook
+    xmlto
   ];
 
   buildInputs = [
@@ -80,16 +93,26 @@ stdenv.mkDerivation (finalAttrs: {
     geoclue2
   ];
 
-  configureFlags = [
-    "--enable-installed-tests"
-  ] ++ lib.optionals (!enableGeoLocation) [
-    "--disable-geoclue"
+  nativeCheckInputs = [
+    python3.pkgs.pytest
+    python3.pkgs.python-dbusmock
+    python3.pkgs.pygobject3
+    python3.pkgs.dbus-python
   ];
 
-  makeFlags = [
-    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal"
-    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/xdg-desktop-portal"
+  mesonFlags = [
+    "-Dinstalled-tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ] ++ lib.optionals (!enableGeoLocation) [
+    "-Dgeoclue=false"
   ];
+
+  doCheck = true;
+
+  preCheck = ''
+    # For test_trash_file
+    export HOME=$(mktemp -d)
+  '';
 
   passthru = {
     tests = {
