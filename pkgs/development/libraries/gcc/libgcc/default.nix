@@ -5,29 +5,18 @@
 
 let
   gccConfigureFlags = gcc.cc.configureFlags ++ [
-    "--build=${stdenvNoLibs.buildPlatform.config}"
-    "--host=${stdenvNoLibs.buildPlatform.config}"
-    "--target=${stdenvNoLibs.hostPlatform.config}"
-
-    "--disable-bootstrap"
-    "--disable-multilib" "--with-multilib-list="
-    "--enable-languages=c"
-
     "--disable-fixincludes"
     "--disable-intl"
-    "--disable-lto"
-    "--disable-libatomic"
-    "--disable-libbacktrace"
-    "--disable-libcpp"
-    "--disable-libssp"
-    "--disable-libquadmath"
-    "--disable-libgomp"
-    "--disable-libvtv"
-    "--disable-vtable-verify"
+    "--enable-threads=posix"
+    "--with-glibc-version=${glibc.version}"
 
-    "--with-system-zlib"
-  ] ++ lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
-       "--with-glibc-version=${glibc.version}";
+    # these are required in order to prevent inhibit_libc=true,
+    # which will cripple libgcc's unwinder; see:
+    #  https://github.com/NixOS/nixpkgs/issues/213453#issuecomment-1616346163
+    "--with-headers=${lib.getDev glibc}/include"
+    "--with-native-system-header-dir=${lib.getDev glibc}${glibc.incdir or "/include"}"
+    "--with-build-sysroot=/"
+  ];
 
 in stdenvNoLibs.mkDerivation (finalAttrs: {
   pname = "libgcc";
