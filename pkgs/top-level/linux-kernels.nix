@@ -372,6 +372,8 @@ in {
 
     lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
 
+    linux-gpib = callPackage ../applications/science/electronics/linux-gpib/kernel.nix { };
+
     liquidtux = callPackage ../os-specific/linux/liquidtux {};
 
     lkrg = callPackage ../os-specific/linux/lkrg {};

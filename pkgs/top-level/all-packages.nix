@@ -10335,6 +10335,8 @@ with pkgs;
 
   linux-exploit-suggester = callPackage ../tools/security/linux-exploit-suggester { };
 
+  linux-gpib = callPackage ../applications/science/electronics/linux-gpib/user.nix { };
+
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
   lipl = callPackage ../tools/misc/lipl { };
