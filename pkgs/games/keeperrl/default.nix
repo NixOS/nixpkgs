@@ -17,7 +17,7 @@ let
   pname = "keeperrl";
   version = "alpha34";
 
-  free-src = fetchFromGitHub {
+  free_src = fetchFromGitHub {
     owner = "miki151";
     repo = pname;
     rev = version;
@@ -45,12 +45,9 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  srcs = [ free-src ] ++ lib.optional unfree_assets assets;
+  srcs = [ free_src ] ++ lib.optional unfree_assets assets;
 
-  sourceRoot = free-src.name;
-
-  inherit free-src;
-  assets = if unfree_assets then assets else null;
+  sourceRoot = free_src.name;
 
   postUnpack = lib.optionalString unfree_assets ''
     mv data $sourceRoot
