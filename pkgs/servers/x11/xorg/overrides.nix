@@ -152,6 +152,12 @@ self: super:
     };
   });
 
+  libXtst = super.libXtst.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      pkgConfigModules = [ "xtst" ];
+    };
+  });
+
   libXfont = super.libXfont.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ freetype ]; # propagate link reqs. like bzip2
