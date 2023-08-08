@@ -58,6 +58,14 @@ self: super: {
   # weeder == 2.5.* requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
 
+  ormolu = self.ormolu_0_5_2_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  };
+
+  fourmolu = self.fourmolu_0_10_1_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  };
+
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;

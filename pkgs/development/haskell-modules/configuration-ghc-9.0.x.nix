@@ -68,6 +68,14 @@ self: super: {
   tuple = addBuildDepend self.base-orphans super.tuple;
   vector-th-unbox = doJailbreak super.vector-th-unbox;
 
+  ormolu = self.ormolu_0_5_2_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  };
+
+  fourmolu = self.fourmolu_0_10_1_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  };
+
   doctest = dontCheck super.doctest;
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
@@ -87,6 +95,7 @@ self: super: {
     # Needed for modern ormolu and fourmolu.
     # Apply this here and not in common, because other ghc versions offer different Cabal versions.
     Cabal = lself.Cabal_3_6_3_0;
+    hls-overloaded-record-dot-plugin = null;
   }));
 
   # Needs to use ghc-lib due to incompatible GHC
