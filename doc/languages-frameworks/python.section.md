@@ -1254,32 +1254,6 @@ This is particularly useful for numpy and scipy users who want to gain speed wit
 Note that using simply `scipy = super.scipy.override { blas = super.pkgs.mkl; };` will likely result in
 compilation issues, because scipy dependencies need to use the same blas implementation as well.
 
-#### Optional extra dependencies {#python-optional-dependencies}
-
-Some packages define optional dependencies for additional features. With
-`setuptools` this is called `extras_require` and `flit` calls it
-`extras-require`, while PEP 621 calls these `optional-dependencies`. A
-method for supporting this is by declaring the extras of a package in its
-`passthru`, e.g. in case of the package `dask`
-
-```nix
-passthru.optional-dependencies = {
-  complete = [ distributed ];
-};
-```
-
-and letting the package requiring the extra add the list to its dependencies
-
-```nix
-propagatedBuildInputs = [
-  ...
-] ++ dask.optional-dependencies.complete;
-```
-
-Note this method is preferred over adding parameters to builders, as that can
-result in packages depending on different variants and thereby causing
-collisions.
-
 #### `buildPythonApplication` function {#buildpythonapplication-function}
 
 The `buildPythonApplication` function is practically the same as
@@ -1949,6 +1923,32 @@ let
   };
 in mypython
 ```
+
+### How to add optional dependencies? {#python-optional-dependencies}
+
+Some packages define optional dependencies for additional features. With
+`setuptools` this is called `extras_require` and `flit` calls it
+`extras-require`, while PEP 621 calls these `optional-dependencies`. A
+method for supporting this is by declaring the extras of a package in its
+`passthru`, e.g. in case of the package `dask`
+
+```nix
+passthru.optional-dependencies = {
+  complete = [ distributed ];
+};
+```
+
+and letting the package requiring the extra add the list to its dependencies
+
+```nix
+propagatedBuildInputs = [
+  ...
+] ++ dask.optional-dependencies.complete;
+```
+
+Note this method is preferred over adding parameters to builders, as that can
+result in packages depending on different variants and thereby causing
+collisions.
 
 ## Contributing {#contributing}
 
