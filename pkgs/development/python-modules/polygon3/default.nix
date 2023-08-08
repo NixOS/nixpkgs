@@ -3,19 +3,17 @@
 , fetchFromGitHub
 , pythonOlder
 }:
-let
-  pname = "Polygon3";
-  version = "3.0.9";
-in
+
 buildPythonPackage {
-  inherit pname version;
+  pname = "polygon3";
+  version = "3.0.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jraedler";
-    repo = pname;
+    repo = "Polygon3";
     rev = "7b2091f77741fa1d94251979bc4a4f2676b4d2d1";
     hash = "sha256-jXtjEzjWwMoVgrHWsK8brSN6TQRxIPRjUaRiLBXYLcI=";
   };
