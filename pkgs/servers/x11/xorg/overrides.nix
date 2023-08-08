@@ -147,6 +147,9 @@ self: super:
 
   libXdmcp = super.libXdmcp.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
+    meta = attrs.meta // {
+      pkgConfigModules = [ "xdmcp" ];
+    };
   });
 
   libXfont = super.libXfont.overrideAttrs (attrs: {
