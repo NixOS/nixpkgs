@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   # stamps
   stamps = fetchurl {
-    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2022-06-04/tuxpaint-stamps-2022.06.04.tar.gz";
-    sha256 = "sha256-hCBlV2+uVUNY4A5R1xpJJhamSQsStZIigGdHfCh6C/g=";
+    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2023-07-20/tuxpaint-stamps-2023.07.20.tar.gz";
+    sha256 = "sha256-D7QgYXRRdZpN3Ni/4lXoXCtsJORT+T2hHaLUFpgDeEI=";
   };
 
   postInstall = ''
