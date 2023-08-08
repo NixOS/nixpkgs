@@ -38,6 +38,7 @@ in stdenvNoLibs.mkDerivation (finalAttrs: {
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ libiberty ];
+  buildInputs = [ glibc ];
 
   postUnpack = ''
     mkdir -p ./build
