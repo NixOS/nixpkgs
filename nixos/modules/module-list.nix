@@ -807,6 +807,7 @@
   ./services/network-filesystems/davfs2.nix
   ./services/network-filesystems/diod.nix
   ./services/network-filesystems/drbd.nix
+  ./services/network-filesystems/eris-server.nix
   ./services/network-filesystems/glusterfs.nix
   ./services/network-filesystems/kbfs.nix
   ./services/network-filesystems/kubo.nix
