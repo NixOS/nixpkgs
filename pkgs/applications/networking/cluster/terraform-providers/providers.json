@@ -454,12 +454,12 @@
     "vendorHash": "sha256-AVTWTS16d8QsPLLAJeAfgcVDzUBMp+b2oAphaCBqhS0="
   },
   "google": {
-    "hash": "sha256-6VLZW6RlBW7D4GS/JTvlpIcF3AhIEKbNFOqsQI58HyE=",
+    "hash": "sha256-vhWtIJ5hKe/8a7N5Qxs8CQuSNlZEF3gdRzSqZiFqhVg=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google",
-    "rev": "v4.76.0",
+    "rev": "v4.77.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-rlNYh42Cw2wMF/9aI8QM0x8t2jdz+V9u4uJvS6A4zx8="
   },
