@@ -164,8 +164,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_13 = common {
-    version = "2.13.3";
-    hash = "sha256-jUc2ccTR8f6MGY2pUKgujm+lxSPNGm/ZAP+toX+nMNc=";
+    version = "2.13.5";
+    hash = "sha256-yHZMgMs/6/aQUwfMwmPUQov17JMGS7squLJsjmucnLc=";
     patches = [
       patch-fix-aarch64-darwin-static
     ];
