@@ -5,7 +5,9 @@
 , linear_operator
 , multipledispatch
 , pyro-ppl
+, setuptools
 , setuptools-scm
+, wheel
 , torch
 , scipy
 , pytestCheckHook
@@ -23,9 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-VcNHgfk8OfLJseQxHksycWuCPCudCtOdcRV0XnxHSfU=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
+    setuptools
     setuptools-scm
+    wheel
   ];
+
   propagatedBuildInputs = [
     gpytorch
     linear_operator

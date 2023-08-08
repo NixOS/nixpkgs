@@ -15,11 +15,7 @@
 , executableName, longName, shortName, pname, updateScript
 , dontFixup ? false
 , rev ? null, vscodeServer ? null
-
-# sourceExecutableName is the name of the binary in the source archive, over
-# which we have no control
 , sourceExecutableName ? executableName
-
 , useVSCodeRipgrep ? false
 , ripgrep
 }:

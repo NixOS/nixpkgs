@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "spacy-lookups-data";
-  version = "1.0.3";
+  version = "1.0.5";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "spacy_lookups_data";
     inherit version;
-    hash = "sha256-q2hlVI+4ZtR5CQ4xEIp+Je0ZKhH8sJiW5xFjKM3FK+E=";
+    hash = "sha256-b5NcgfFFvcyE/GEV9kh2QoXH/z6P8kYpUEaBTpba1jw=";
   };
 
   nativeCheckInputs = [

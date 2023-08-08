@@ -72,5 +72,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.unix;
+    pkgConfigModules = [ "epoxy" ];
   };
 }
