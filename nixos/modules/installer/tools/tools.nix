@@ -26,6 +26,7 @@ let
       pkgs.jq
       nixos-enter
       pkgs.util-linuxMinimal
+      pkgs.coreutils # we need rmdir
     ];
   };
 
