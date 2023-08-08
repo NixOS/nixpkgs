@@ -4375,6 +4375,8 @@ with pkgs;
 
   bwbasic = callPackage ../development/interpreters/bwbasic { };
 
+  bws = callPackage ../tools/security/bws { };
+
   byobu = callPackage ../tools/misc/byobu {
     # Choices: [ tmux screen ];
     textual-window-manager = tmux;
