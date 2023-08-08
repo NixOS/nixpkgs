@@ -40896,6 +40896,8 @@ with pkgs;
 
   unityhub = callPackage ../development/tools/unityhub { };
 
+  upspin = callPackage ../tools/filesystems/upspin { };
+
   urbit = callPackage ../misc/urbit { };
 
   usb-reset = callPackage ../applications/misc/usb-reset { };
