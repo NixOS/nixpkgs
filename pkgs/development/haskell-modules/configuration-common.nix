@@ -1438,7 +1438,6 @@ self: super: {
     });
   };
 
-  # 2023-06-24: too strict upper bound on bytestring
   jsaddle-webkit2gtk =
     appendPatches [
       (pkgs.fetchpatch {
@@ -1455,7 +1454,14 @@ self: super: {
         stripLen = 1;
         includes = [ "jsaddle-webkit2gtk.cabal" ];
       })
-    ] super.jsaddle-webkit2gtk;
+    ]
+    (overrideCabal (old: {
+      postPatch = old.postPatch or "" + ''
+        sed -i 's/aeson.*,/aeson,/' jsaddle-webkit2gtk.cabal
+        sed -i 's/text.*,/text,/' jsaddle-webkit2gtk.cabal
+      '';
+    })
+    super.jsaddle-webkit2gtk);
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
