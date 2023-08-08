@@ -1936,6 +1936,8 @@ with pkgs;
 
   tailwindcss = callPackage ../development/tools/tailwindcss { };
 
+  tango-controls = callPackage ../applications/system/tango-controls { };
+
   tauon = callPackage ../applications/audio/tauon { };
 
   tere = callPackage ../tools/misc/tere { };

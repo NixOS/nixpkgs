@@ -1,0 +1,36 @@
+diff --git a/cppserver/database/CMakeLists.txt b/cppserver/database/CMakeLists.txt
+index 00c89fd..89ed4e1 100644
+--- a/cppserver/database/CMakeLists.txt
++++ b/cppserver/database/CMakeLists.txt
+@@ -29,8 +29,9 @@ set(ADDITIONAL_SOURCES  DataBaseUtils.cpp
+                         update_starter.cpp)
+ 
+ add_executable(Databaseds ${SOURCES} ${ADDITIONAL_SOURCES})
+-target_include_directories(Databaseds PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+-target_link_libraries(Databaseds PUBLIC Tango::Tango MySQL::MySQL)
++pkg_check_modules(SYSTEMD libsystemd REQUIRED)
++target_include_directories(Databaseds PUBLIC ${CMAKE_CURRENT_BINARY_DIR} ${SYSTEMD_INCLUDE_DIRS})
++target_link_libraries(Databaseds PUBLIC Tango::Tango MySQL::MySQL ${SYSTEMD_LIBRARIES})
+ 
+ if (WIN32 AND (Tango_IS_STATIC OR Tango_FORCE_STATIC))
+     set_target_properties(Databaseds PROPERTIES
+diff --git a/cppserver/database/main.cpp b/cppserver/database/main.cpp
+index 2d7b369..2f4686b 100644
+--- a/cppserver/database/main.cpp
++++ b/cppserver/database/main.cpp
+@@ -37,6 +37,7 @@
+ // along with Tango.  If not, see <http://www.gnu.org/licenses/>.
+ //
+ 
++#include <systemd/sd-daemon.h>
+ #include <tango/tango.h>
+ #include "DataBase.h"
+ #include "Logging.h"
+@@ -336,6 +337,7 @@ int main(int argc,char *argv[])
+ //
+ 
+ 		TANGO_LOG << "Ready to accept request" << std::endl;
++		sd_notify(0, "READY=1");
+ 		(tango_util->get_orb())->run();
+ 	}
+ 	catch (std::bad_alloc&)
