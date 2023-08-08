@@ -120,6 +120,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     libxslt.bin
     asciidoc
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -153,7 +154,6 @@ stdenv.mkDerivation rec {
     ibus
     gnome-desktop
     gnome-settings-daemon
-    gobject-introspection
     mesa
 
     # recording

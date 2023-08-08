@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
-  version = "0.20.2";
+  version = "0.20.3";
 
   outputs = [ "out" "dev" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${version}";
-    sha256 = "sha256-6oRVAL4pn+1+/LqLijKiBV6fZy3k9fZySwMwYHB1aUY=";
+    sha256 = "sha256-70AchkuhuyumwpBYaj9mOVPJ8+6VSLTLtr3ghwqG3wM=";
   };
 
   patches = [

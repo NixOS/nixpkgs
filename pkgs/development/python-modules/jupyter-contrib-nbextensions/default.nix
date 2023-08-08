@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, ipython_genutils
 , jupyter-contrib-core
 , jupyter-highlight-selected-word
 , jupyter-nbextensions-configurator
@@ -19,6 +20,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    ipython_genutils
     jupyter-contrib-core
     jupyter-highlight-selected-word
     jupyter-nbextensions-configurator

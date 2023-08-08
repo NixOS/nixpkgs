@@ -4,43 +4,36 @@
 , azure-servicebus
 , backports-zoneinfo
 , buildPythonPackage
-, cached-property
 , case
 , fetchPypi
 , hypothesis
-, importlib-metadata
 , pyro4
 , pytestCheckHook
 , pythonOlder
 , pytz
 , vine
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.3.0";
+  version = "5.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0ITsH5b3p8N7qegWgjvbwI8Px92zpb5VWAXmkhAil9g=";
+    hash = "sha256-+9dXLZLAv3HBEqa0UWMVPepae2pwHsFrVown0P0jcPI=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements/test.txt \
-      --replace "pytz>dev" "pytz"
-  '';
 
   propagatedBuildInputs = [
     amqp
     vine
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
-    importlib-metadata
   ];
 
   nativeCheckInputs = [
@@ -58,6 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/celery/kombu/releases/tag/v${version}";
     description = "Messaging library for Python";
     homepage = "https://github.com/celery/kombu";
     license = licenses.bsd3;

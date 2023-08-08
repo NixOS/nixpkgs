@@ -11727,6 +11727,12 @@
     githubId = 38578268;
     name = "Morgan Wolfe";
   };
+  mxkrsv = {
+    email = "mxkrsv@disroot.org";
+    github = "mxkrsv";
+    githubId = 59313755;
+    name = "Maxim Karasev";
+  };
   myaats = {
     email = "mats@mats.sh";
     github = "Myaats";
@@ -12729,6 +12735,11 @@
     github = "Oro";
     githubId = 357005;
     name = "Marco Orovecchia";
+  };
+  orthros = {
+    github = "orthros";
+    githubId = 7820716;
+    name = "orthros";
   };
   osener = {
     email = "ozan@ozansener.com";

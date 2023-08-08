@@ -45,7 +45,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.22.4";
+  version = "1.22.5";
 
   outputs = [ "out" "dev" ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-KSQk6C3qFwUoxCtFb2KolTK8q8BQjxkuNGcvuG9o5bg=";
+    hash = "sha256-7dQzi0XCapryjA01qrlkoCTDiEum9SDYQo3wQhLIyTo=";
   };
 
   strictDeps = true;
@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gobject-introspection
     graphene
     orc
     libtheora

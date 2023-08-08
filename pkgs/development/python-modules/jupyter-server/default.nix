@@ -82,12 +82,17 @@ buildPythonPackage rec {
     flaky
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH=$out/bin:$PATH
   '';
 
   disabledTests = [
+    "test_server_extension_list"
     "test_cull_idle"
     "test_server_extension_list"
   ] ++ lib.optionals stdenv.isDarwin [

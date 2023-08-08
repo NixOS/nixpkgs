@@ -81,8 +81,18 @@ for flag in "${!hardeningEnableMap[@]}"; do
       hardeningCFlags+=('-fPIC')
       ;;
     strictoverflow)
-       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
-      hardeningCFlags+=('-fno-strict-overflow')
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
+      if (( @isClang@ )); then
+        # In Clang, -fno-strict-overflow only serves to set -fwrapv and is
+        # reported as an unused CLI argument if -fwrapv or -fno-wrapv is set
+        # explicitly, so we side step that by doing the conversion here.
+        #
+        # See: https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/clang/lib/Driver/ToolChains/Clang.cpp#L6315
+        #
+        hardeningCFlags+=('-fwrapv')
+      else
+        hardeningCFlags+=('-fno-strict-overflow')
+      fi
       ;;
     format)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi

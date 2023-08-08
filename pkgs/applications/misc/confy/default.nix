@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk4
     libadwaita
     libnotify

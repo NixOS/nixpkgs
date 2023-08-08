@@ -23,6 +23,14 @@ let
           self.lockfile
         ];
       });
+      keyring = super.keyring.overridePythonAttrs (old: rec {
+        version = "23.13.1";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-ui4VqbNeIZCNCq9OCkesxS1q4zRE3w2itJ1BpG721ng=";
+        };
+      });
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
         version = "1.6.1";
         src = fetchFromGitHub {
@@ -34,17 +42,6 @@ let
         patches = [ ];
         nativeCheckInputs = old.nativeCheckInputs ++ [
           self.tomli-w
-        ];
-      });
-      virtualenv = super.virtualenv.overridePythonAttrs (old: rec {
-        version = "20.23.1";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-j/GaOMECHHQhSO3E+By0PX+MaBbS7eKrcq9bhMdJreE=";
-        };
-        nativeCheckInputs = old.nativeCheckInputs ++ [
-          self.time-machine
         ];
       });
     } // (plugins self);

@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     python3
     vala
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     (python3.withPackages (ps: with ps; [
       pygobject3
       setproctitle # mate applet

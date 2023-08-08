@@ -45,10 +45,11 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gi-docgen
+    gobject-introspection
   ] ++ lib.optional enableViewer wrapGAppsHook;
 
   buildInputs =
-    [ glib libxml2 gobject-introspection ]
+    [ glib libxml2 ]
     ++ lib.optional enableUsb libusb1
     ++ lib.optionals (enableViewer || enableGstPlugin) (with gst_all_1; [ gstreamer gst-plugins-base (gst-plugins-good.override { gtkSupport = true; }) gst-plugins-bad ])
     ++ lib.optionals (enableViewer) [ gtk3 ];

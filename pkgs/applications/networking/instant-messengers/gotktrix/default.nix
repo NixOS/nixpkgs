@@ -23,10 +23,9 @@ buildGoModule rec {
   buildInputs = [
     gtk4
     glib
-    gobject-introspection
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config gobject-introspection ];
 
   # Checking requires a working display
   doCheck = false;

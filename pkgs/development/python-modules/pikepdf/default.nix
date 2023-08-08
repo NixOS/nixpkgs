@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , hypothesis
 , pythonOlder
-, importlib-metadata
 , jbig2dec
 , deprecation
 , lxml
@@ -19,14 +18,13 @@
 , python-xmp-toolkit
 , qpdf
 , setuptools
-, setuptools-scm
 , substituteAll
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "7.2.0";
+  version = "8.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -41,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-acGIhIWC1nUQiN0iwb1kLKxz+ytIqYIW4VXF45Tx50g=";
+    hash = "sha256-8uPPEoLxoMRq/tkpThatwjPHZIMYQ8lNL6fLcG+nsnw=";
   };
 
   patches = [
@@ -57,8 +55,6 @@ buildPythonPackage rec {
       --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   buildInputs = [
     qpdf
   ];
@@ -66,7 +62,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pybind11
     setuptools
-    setuptools-scm
     wheel
   ];
 
@@ -85,8 +80,6 @@ buildPythonPackage rec {
     lxml
     packaging
     pillow
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   pythonImportsCheck = [ "pikepdf" ];

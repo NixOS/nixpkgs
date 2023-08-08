@@ -3,8 +3,8 @@
 , withPython3 ? true, python3, ncurses
 , withPHP81 ? true, php81
 , withPHP82 ? false, php82
-, withPerl534 ? false, perl534
-, withPerl536 ? true, perl536
+, withPerl536 ? false, perl536
+, withPerl538 ? true, perl538
 , withPerldevel ? false, perldevel
 , withRuby_3_0 ? false, ruby_3_0
 , withRuby_3_1 ? true, ruby_3_1
@@ -46,8 +46,8 @@ in stdenv.mkDerivation rec {
     ++ optionals withPython3 [ python3 ncurses ]
     ++ optional withPHP81 php81-unit
     ++ optional withPHP82 php82-unit
-    ++ optional withPerl534 perl534
     ++ optional withPerl536 perl536
+    ++ optional withPerl538 perl538
     ++ optional withPerldevel perldevel
     ++ optional withRuby_3_0 ruby_3_0
     ++ optional withRuby_3_1 ruby_3_1
@@ -70,8 +70,8 @@ in stdenv.mkDerivation rec {
     ${optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
     ${optionalString withPHP81      "./configure php    --module=php81    --config=${php81-unit.unwrapped.dev}/bin/php-config --lib-path=${php81-unit}/lib"}
     ${optionalString withPHP82      "./configure php    --module=php81    --config=${php82-unit.unwrapped.dev}/bin/php-config --lib-path=${php82-unit}/lib"}
-    ${optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
     ${optionalString withPerl536    "./configure perl   --module=perl536  --perl=${perl536}/bin/perl"}
+    ${optionalString withPerl538    "./configure perl   --module=perl538  --perl=${perl538}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
     ${optionalString withRuby_3_0   "./configure ruby   --module=ruby30   --ruby=${ruby_3_0}/bin/ruby"}
     ${optionalString withRuby_3_1   "./configure ruby   --module=ruby31   --ruby=${ruby_3_1}/bin/ruby"}

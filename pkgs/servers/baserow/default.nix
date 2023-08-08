@@ -48,10 +48,15 @@ with python.pkgs; buildPythonApplication rec {
   sourceRoot = "${src.name}/backend";
 
   postPatch = ''
+    # use input files to not depend on outdated peer dependencies
+    mv requirements/base.{in,txt}
+    mv requirements/dev.{in,txt}
+
     # remove dependency constraints
-    sed 's/[~<>=].*//' -i requirements/base.in requirements/base.txt
-    sed 's/zope-interface/zope.interface/' -i requirements/base.in requirements/base.txt
-    sed 's/\[standard\]//' -i requirements/base.in requirements/base.txt
+    sed -i requirements/base.txt \
+      -e 's/[~<>=].*//' -i requirements/base.txt \
+      -e 's/zope-interface/zope.interface/' \
+      -e 's/\[standard\]//'
   '';
 
   nativeBuildInputs = [

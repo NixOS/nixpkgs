@@ -38,7 +38,6 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gexiv2
-    gobject-introspection
     gtk3
     hicolor-icon-theme
     libnotify
