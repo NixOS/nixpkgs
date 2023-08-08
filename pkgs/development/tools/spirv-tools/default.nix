@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-K7cv0mMNrXYOlJsxAPwz3rVX5FnsnBNvaU33k9hYnQc=";
   };
 
+  # The cmake options are sufficient for turning on static building, but not
+  # for disabling shared building, just trim the shared lib from the CMake
+  # description
+  patches = lib.optional stdenv.hostPlatform.isStatic ./no-shared-libs.patch;
+
   nativeBuildInputs = [ cmake python3 ];
 
   cmakeFlags = [
