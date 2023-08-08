@@ -745,6 +745,7 @@ supported-platforms:
   seqalign:                                     [ platforms.x86 ] # x86 intrinsics
   streamed:                                     [ platforms.linux] # alsa-core only supported on linux
   swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
+  systemd-api:                                  [ platforms.linux ]
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
   udev:                                         [ platforms.linux ]
   Win32-console:                                [ platforms.windows ]
