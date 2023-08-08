@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, SDL2, SDL2_gfx, SDL2_image, SDL2_ttf, SDL2_mixer
 , SDL2_Pango, libpng, freetype, pango, libimagequant, cairo, librsvg, gettext
-, libpaper, fribidi, pkg-config, gperf, imagemagick
+, libpaper, fribidi, pkg-config, gperf, imagemagick, netpbm, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     SDL2 SDL2_gfx SDL2_image SDL2_ttf SDL2_mixer SDL2_Pango libpng cairo
     libimagequant librsvg gettext libpaper fribidi pkg-config gperf
-    imagemagick pango freetype
+    imagemagick pango freetype makeWrapper
   ];
   hardeningDisable = [ "format" ];
   makeFlags = [ "GPERF=${gperf}/bin/gperf"
@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     cd tuxpaint-stamps-*
     make install-all PREFIX=$out
     rm -rf $out/share/tuxpaint/stamps/military
+
+    # Requirements for tuxpaint-import
+    wrapProgram $out/bin/tuxpaint-import \
+    --prefix PATH : ${lib.makeBinPath [ netpbm ]}
   '';
 
   enableParallelBuilding = true;
