@@ -7857,6 +7857,11 @@
     githubId = 1473909;
     name = "Jascha Geerds";
   };
+  jgarcia = {
+    github = "chewblacka";
+    githubId = 18430320;
+    name = "John Garcia";
+  };
   jgertm = {
     email = "jger.tm@gmail.com";
     github = "jgertm";
