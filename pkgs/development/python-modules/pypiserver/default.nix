@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-1tV3pVEC5sIjT0tjbujU7l41Jx7PQ1dCn4B1r94C9xE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jub+iVL/YeGaG9Vzqyyfc4qFi0cR+7xrzuXNHL5W4p4=";
   };
 
   nativeBuildInputs = [ setuptools-git ];
