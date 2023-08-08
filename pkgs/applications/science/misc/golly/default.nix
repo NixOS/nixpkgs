@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   ];
 
   setSourceRoot = ''
-    sourceRoot=$(echo */gui-wx/)
+    sourceRoot=$(echo */gui-wx)
   '';
 
   postPatch = ''
