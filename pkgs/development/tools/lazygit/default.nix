@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "lazygit";
-  version = "0.40.0";
+  version = "0.40.2";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-UGIqrdjIP7AyLck1DT38wS48hSn46uZXcMrSehXOui8=";
+    hash = "sha256-xj5WKAduaJWA3NhWuMsF5EXF91+NTGAXkbdhpeFqLxE=";
   };
 
   vendorHash = null;
@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne equirosa paveloom ];
+    mainProgram = "lazygit";
   };
 }
