@@ -1,14 +1,59 @@
 { lib
-, python3
+, buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, pythonOlder
+, pythonRelaxDepsHook
+, setuptools-scm
+, appdirs
+, colorama
+, configobj
+, distro
+, dpath
+, dvc-azure
+, dvc-data
+, dvc-gs
+, dvc-http
+, dvc-render
+, dvc-s3
+, dvc-ssh
+, dvc-studio-client
+, dvc-task
+, flatten-dict
+, flufl_lock
+, funcy
+, grandalf
+, hydra-core
+, importlib-metadata
+, importlib-resources
+, iterative-telemetry
+, networkx
+, packaging
+, pathspec
+, platformdirs
+, psutil
+, pydot
+, pygtrie
+, pyparsing
+, requests
+, rich
+, ruamel-yaml
+, scmrepo
+, shortuuid
+, shtab
+, tabulate
+, tomlkit
+, tqdm
+, typing-extensions
+, voluptuous
+, zc_lockfile
 , enableGoogle ? false
 , enableAWS ? false
 , enableAzure ? false
 , enableSSH ? false
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "dvc";
   version = "3.8.1";
   format = "pyproject";
@@ -31,12 +76,12 @@ python3.pkgs.buildPythonApplication rec {
       --subst-var-by dvc "$out/bin/dcv"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     pythonRelaxDepsHook
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     appdirs
     colorama
     configobj
@@ -73,19 +118,23 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
     voluptuous
     zc_lockfile
-  ] ++ lib.optionals enableGoogle [
-    dvc-gs
-  ] ++ lib.optionals enableAWS [
-    dvc-s3
-  ] ++ lib.optionals enableAzure [
-    dvc-azure
-  ] ++ lib.optionals enableSSH [
-    dvc-ssh
-  ] ++ lib.optionals (pythonOlder "3.8") [
+  ]
+  ++ lib.optionals enableGoogle passthru.optional-dependencies.gs
+  ++ lib.optionals enableAWS passthru.optional-dependencies.s3
+  ++ lib.optionals enableAzure passthru.optional-dependencies.azure
+  ++ lib.optionals enableSSH passthru.optional-dependencies.ssh
+  ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
+
+  passthru.optional-dependencies = {
+    azure = [ dvc-azure ];
+    gs = [ dvc-gs ];
+    s3 = [ dvc-s3 ];
+    ssh = [ dvc-ssh ];
+  };
 
   # Tests require access to real cloud services
   doCheck = false;
