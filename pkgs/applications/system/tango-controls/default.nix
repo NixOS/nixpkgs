@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ omniorb_4_2 cppzmq zeromq libjpeg_turbo ];
 
   cmakeFlags = [
-    "-DMySQL_LIBRARY_RELEASE=${mariadb-connector-c}/lib/mariadb/libmariadb.so"
+    "-DMySQL_LIBRARY_RELEASE=${mariadb-connector-c}/lib/mariadb/libmariadb${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMySQL_INCLUDE_DIR=${mariadb-connector-c.dev}/include/mariadb"
     "-DMySQL_EXECUTABLE=${mariadb-connector-c}/bin/mariadb"
     "-DCMAKE_VERBOSE_MAKEFILE=TRUE"
