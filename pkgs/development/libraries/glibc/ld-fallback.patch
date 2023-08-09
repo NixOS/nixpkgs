@@ -1,8 +1,55 @@
+From 5956982e611afe46f2aa6a1e241262379fdbcbb6 Mon Sep 17 00:00:00 2001
+From: Jan Malakhovski <oxij@oxij.org>
+Date: Wed, 9 Aug 2023 08:53:06 +0000
+Subject: [PATCH] Implement support for LD_FALLBACK_PATH env variable and
+ related command line options
+
+LD_FALLBACK_PATH has the same semantics as LD_LIBRARY_PATH but unlike
+LD_LIBRARY_PATH, instead of having the highest priority, it has the second-lowest
+(it gets used just before the default system directories).
+
+Thus, LD_FALLBACK_PATH provides a way to specify fallback library paths.
+
+Consider the following use cases:
+
+- Running a closed-source program (like Steam and its games) on an unsupported
+  distribution: closed-source programs commonly override LD_LIBRARY_PATH to
+  override system libraries with their own bundled versions, but they
+  frequently do it the wrong way by overriding it while ignoring the current
+  value of LD_LIBRARY_PATH, thus failing to pick up any non-system libraries
+  they don't bundle but require specific versions of.
+
+  LD_FALLBACK_PATH, being the low-priority option, can't be used to achieve
+  the same effect as LD_LIBRARY_PATH from the perspective of the closed-source
+  program's vendor, thus making it unlikely they would ever touch
+  LD_FALLBACK_PATH. But it can be used by other tools to supply needed default
+  libraries to the closed-source program in question.
+
+- Similarly, sometimes you just want to change the underlying library for a
+  set of programs without changing the system default. For instance, if you
+  have different GPUs requiring different libGL's (though, specifically for
+  libGL there are several less ad-hoc solutions than this).
+
+In general, before LD_FALLBACK_PATH there was no good way to solve these
+problems without generating a whole chroot. Now you can collect those
+libraries you want to override system defaults but not override those found
+via LD_LIBRARY_PATH in a directory somewhere and put its path into
+LD_FALLBACK_PATH.
+---
+ elf/dl-load.c               | 60 +++++++++++++++++++++++++++++++++++--
+ elf/dl-main.h               |  7 +++++
+ elf/dl-support.c            |  1 +
+ elf/dl-usage.c              |  2 ++
+ elf/rtld.c                  | 22 ++++++++++++++
+ sysdeps/generic/ldsodefs.h  |  1 +
+ sysdeps/generic/unsecvars.h |  1 +
+ 7 files changed, 92 insertions(+), 2 deletions(-)
+
 diff --git a/elf/dl-load.c b/elf/dl-load.c
-index 9e2089cfaa..e560b09932 100644
+index 9a87fda9c9..a8fd639238 100644
 --- a/elf/dl-load.c
 +++ b/elf/dl-load.c
-@@ -99,6 +99,8 @@ int __stack_prot attribute_hidden attribute_relro
+@@ -101,6 +101,8 @@ int __stack_prot attribute_hidden attribute_relro
  
  /* This is the decomposed LD_LIBRARY_PATH search path.  */
  struct r_search_path_struct __rtld_env_path_list attribute_relro;
@@ -11,7 +58,7 @@ index 9e2089cfaa..e560b09932 100644
  
  /* List of the hardware capabilities we might end up using.  */
  #ifdef SHARED
-@@ -683,6 +685,7 @@ cache_rpath (struct link_map *l,
+@@ -701,6 +703,7 @@ cache_rpath (struct link_map *l,
  
  void
  _dl_init_paths (const char *llp, const char *source,
@@ -19,7 +66,7 @@ index 9e2089cfaa..e560b09932 100644
  		const char *glibc_hwcaps_prepend,
  		const char *glibc_hwcaps_mask)
  {
-@@ -835,6 +838,45 @@ _dl_init_paths (const char *llp, const char *source,
+@@ -854,6 +857,45 @@ _dl_init_paths (const char *llp, const char *source,
      }
    else
      __rtld_env_path_list.dirs = (void *) -1;
@@ -65,7 +112,7 @@ index 9e2089cfaa..e560b09932 100644
  }
  
  
-@@ -1997,9 +2039,10 @@ open_path (const char *name, size_t namelen, int mode,
+@@ -1928,9 +1970,10 @@ open_path (const char *name, size_t namelen, int mode,
        if (sps->malloced)
  	free (sps->dirs);
  
@@ -78,7 +125,7 @@ index 9e2089cfaa..e560b09932 100644
  	sps->dirs = (void *) -1;
      }
  
-@@ -2233,6 +2276,17 @@ _dl_map_object (struct link_map *loader, const char *name,
+@@ -2160,6 +2203,17 @@ _dl_map_object (struct link_map *loader, const char *name,
  	}
  #endif
  
@@ -96,7 +143,7 @@ index 9e2089cfaa..e560b09932 100644
        /* Finally, try the default path.  */
        if (fd == -1
  	  && ((l = loader ?: GL(dl_ns)[nsid]._ns_loaded) == NULL
-@@ -2416,6 +2470,8 @@ _dl_rtld_di_serinfo (struct link_map *loader, Dl_serinfo *si, bool counting)
+@@ -2342,6 +2396,8 @@ _dl_rtld_di_serinfo (struct link_map *loader, Dl_serinfo *si, bool counting)
       Here is where ld.so.cache gets checked, but we don't have
       a way to indicate that in the results for Dl_serinfo.  */
  
@@ -106,7 +153,7 @@ index 9e2089cfaa..e560b09932 100644
    if (!(loader->l_flags_1 & DF_1_NODEFLIB))
      add_path (&p, &__rtld_search_dirs, XXX_default);
 diff --git a/elf/dl-main.h b/elf/dl-main.h
-index 3a5e13c739..24742b14cf 100644
+index 92766d06b4..c9d85f4dcc 100644
 --- a/elf/dl-main.h
 +++ b/elf/dl-main.h
 @@ -78,6 +78,12 @@ struct dl_main_state
@@ -122,7 +169,7 @@ index 3a5e13c739..24742b14cf 100644
    /* The list preloaded objects from LD_PRELOAD.  */
    const char *preloadlist;
  
-@@ -107,6 +113,7 @@ static inline void
+@@ -110,6 +116,7 @@ static inline void
  call_init_paths (const struct dl_main_state *state)
  {
    _dl_init_paths (state->library_path, state->library_path_source,
@@ -131,10 +178,10 @@ index 3a5e13c739..24742b14cf 100644
  }
  
 diff --git a/elf/dl-support.c b/elf/dl-support.c
-index 7abb65d8e3..b76975d663 100644
+index 44a54dea07..3b402d53a6 100644
 --- a/elf/dl-support.c
 +++ b/elf/dl-support.c
-@@ -337,6 +337,7 @@ _dl_non_dynamic_init (void)
+@@ -288,6 +288,7 @@ _dl_non_dynamic_init (void)
    /* Initialize the data structures for the search paths for shared
       objects.  */
    _dl_init_paths (getenv ("LD_LIBRARY_PATH"), "LD_LIBRARY_PATH",
@@ -143,10 +190,10 @@ index 7abb65d8e3..b76975d663 100644
  		     linked binaries.  */
  		  NULL, NULL);
 diff --git a/elf/dl-usage.c b/elf/dl-usage.c
-index 6e26818bd7..2cec74b4ad 100644
+index 98f0b0d027..98b9da57aa 100644
 --- a/elf/dl-usage.c
 +++ b/elf/dl-usage.c
-@@ -247,6 +247,8 @@ setting environment variables (which would be inherited by subprocesses).\n\
+@@ -187,6 +187,8 @@ setting environment variables (which would be inherited by subprocesses).\n\
    --inhibit-cache       Do not use " LD_SO_CACHE "\n\
    --library-path PATH   use given PATH instead of content of the environment\n\
                          variable LD_LIBRARY_PATH\n\
@@ -156,10 +203,10 @@ index 6e26818bd7..2cec74b4ad 100644
                          search glibc-hwcaps subdirectories in LIST\n\
    --glibc-hwcaps-mask LIST\n\
 diff --git a/elf/rtld.c b/elf/rtld.c
-index 596b6ac3d9..85a152195e 100644
+index a91e2a4471..d03ccbe077 100644
 --- a/elf/rtld.c
 +++ b/elf/rtld.c
-@@ -290,6 +290,8 @@ dl_main_state_init (struct dl_main_state *state)
+@@ -295,6 +295,8 @@ dl_main_state_init (struct dl_main_state *state)
    audit_list_init (&state->audit_list);
    state->library_path = NULL;
    state->library_path_source = NULL;
@@ -168,7 +215,7 @@ index 596b6ac3d9..85a152195e 100644
    state->preloadlist = NULL;
    state->preloadarg = NULL;
    state->glibc_hwcaps_prepend = NULL;
-@@ -1229,6 +1231,17 @@ dl_main (const ElfW(Phdr) *phdr,
+@@ -1438,6 +1440,16 @@ dl_main (const ElfW(Phdr) *phdr,
  	    _dl_argc -= 2;
  	    _dl_argv += 2;
  	  }
@@ -178,7 +225,6 @@ index 596b6ac3d9..85a152195e 100644
 +	    state.fallback_path = _dl_argv[2];
 +	    state.fallback_path_source = "--fallback-path";
 +
-+	    _dl_skip_args += 2;
 +	    _dl_argc -= 2;
 +	    _dl_argv += 2;
 +	    // this line is to force git produce the correct diff
@@ -186,11 +232,11 @@ index 596b6ac3d9..85a152195e 100644
  	else if (! strcmp (_dl_argv[1], "--inhibit-rpath")
  		 && _dl_argc > 2)
  	  {
-@@ -2781,6 +2794,16 @@ process_envvars (struct dl_main_state *state)
- #ifdef EXTRA_LD_ENVVARS_13
- 	  EXTRA_LD_ENVVARS_13
- #endif
-+
+@@ -2644,6 +2656,16 @@ process_envvars (struct dl_main_state *state)
+ 	    GLRO(dl_dynamic_weak) = 1;
+ 	  break;
+ 
++	case 13:
 +	  /* The library fallback search path.  */
 +	  if (!__libc_enable_secure
 +	      && memcmp (envline, "FALLBACK_PATH", 13) == 0)
@@ -200,14 +246,14 @@ index 596b6ac3d9..85a152195e 100644
 +	      break;
 +	    }
 +
+ 	case 14:
+ 	  /* Where to place the profiling data file.  */
  	  if (!__libc_enable_secure
- 	      && memcmp (envline, "USE_LOAD_BIAS", 13) == 0)
- 	    {
 diff --git a/sysdeps/generic/ldsodefs.h b/sysdeps/generic/ldsodefs.h
-index aab7245e93..aced9be1fd 100644
+index e8b7359b04..1ff1b2cec1 100644
 --- a/sysdeps/generic/ldsodefs.h
 +++ b/sysdeps/generic/ldsodefs.h
-@@ -1061,6 +1061,7 @@ extern struct r_debug *_dl_debug_initialize (ElfW(Addr) ldbase, Lmid_t ns)
+@@ -1075,6 +1075,7 @@ extern struct r_debug *_dl_debug_update (Lmid_t ns) attribute_hidden;
     search.  GLIBC_HWCAPS_MASK is used to filter the built-in
     subdirectories if not NULL.  */
  extern void _dl_init_paths (const char *library_path, const char *source,
@@ -216,10 +262,10 @@ index aab7245e93..aced9be1fd 100644
  			    const char *glibc_hwcaps_mask)
    attribute_hidden;
 diff --git a/sysdeps/generic/unsecvars.h b/sysdeps/generic/unsecvars.h
-index 5ea8a4a259..0d01562bee 100644
+index 81397fb90b..8a47ca9284 100644
 --- a/sysdeps/generic/unsecvars.h
 +++ b/sysdeps/generic/unsecvars.h
-@@ -18,6 +18,7 @@
+@@ -12,6 +12,7 @@
    "LD_DYNAMIC_WEAK\0"							      \
    "LD_HWCAP_MASK\0"							      \
    "LD_LIBRARY_PATH\0"							      \
