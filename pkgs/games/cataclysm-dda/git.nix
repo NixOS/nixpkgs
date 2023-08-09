@@ -2,9 +2,9 @@
 , tiles ? true, Cocoa
 , debug ? false
 , useXdgDir ? false
-, version ? "2022-08-20"
-, rev ? "f65b2bc4c6dea24bd9a993b8df146e5698e7e36f"
-, sha256 ? "sha256-00Tp9OmsM39PYwAJXKKRS9zmn7KsGQ9s1eVmEqghkpw="
+, version ? "2023-08-09-1243"
+, rev ? "cdda-experimental-2023-08-09-1243"
+, sha256 ? "sha256-pdnvtVE6qkigut2CFuSrPrtiP02EvkOWWnRgfKjn9fo="
 }:
 
 let
@@ -24,11 +24,11 @@ let
 
     patches = [
       # Unconditionally look for translation files in $out/share/locale
-      ./locale-path.patch
+      ./locale-path-git.patch
     ];
 
     makeFlags = common.makeFlags ++ [
-      "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
+      "VERSION=${version}"
     ];
 
     meta = common.meta // {
