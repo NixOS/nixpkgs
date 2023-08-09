@@ -754,7 +754,7 @@ self: super: with self; {
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
-  asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
+  asyncio-mqtt = callPackage ../development/python-modules/asyncio-mqtt { };
 
   asyncio-rlock = callPackage ../development/python-modules/asyncio-rlock { };
 
@@ -772,11 +772,11 @@ self: super: with self; {
 
   asyncstdlib = callPackage ../development/python-modules/asyncstdlib { };
 
-  async_stagger = callPackage ../development/python-modules/async_stagger { };
+  async-stagger = callPackage ../development/python-modules/async-stagger { };
 
   asynctest = callPackage ../development/python-modules/asynctest { };
 
-  async-timeout = callPackage ../development/python-modules/async_timeout { };
+  async-timeout = callPackage ../development/python-modules/async-timeout { };
 
   async-tkinter-loop = callPackage ../development/python-modules/async-tkinter-loop { };
 

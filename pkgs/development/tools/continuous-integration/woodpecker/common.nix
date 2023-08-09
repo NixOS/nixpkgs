@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub }:
 let
-  version = "1.0.0";
-  srcHash = "sha256-1HSSHR3myn1x75kO/70w1p21a7dHwFiC7iAH/KRoYsE=";
-  vendorHash = "sha256-UFTK3EK8eYB3/iKxycCIkSHdLsKGnDkYCpoFJSajm5M=";
+  version = "1.0.1";
+  srcHash = "sha256-uwKLD3fW/em6UMkkyrWxAo7T//Hkzj6WjIp5qJVtBuc=";
+  vendorHash = "sha256-NYWJorVeRxbQTiirHK8gqpDddn2RsKsNWwDNdcONVQA=";
   yarnHash = "sha256-QNeQwWU36A05zaARWmqEOhfyZRW68OgF4wTonQLYQfs=";
 in
 {
@@ -32,6 +32,6 @@ in
   meta = with lib; {
     homepage = "https://woodpecker-ci.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie techknowlogick ];
+    maintainers = with maintainers; [ ambroisie techknowlogick adamcstephens ];
   };
 }
