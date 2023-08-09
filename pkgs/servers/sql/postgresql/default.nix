@@ -20,7 +20,7 @@ let
 
       # for tests
       nixosTests, thisAttr
-    }:
+    }@args:
   let
     atLeast = lib.versionAtLeast version;
     icuEnabled = atLeast "10";
@@ -151,14 +151,14 @@ let
       inherit readline psqlSchema;
 
       pkgs = let
-        scope = { postgresql = this; };
+        scope = { postgresql = this.override args; };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };
       in import ./packages.nix newSelf newSuper;
 
       withPackages = postgresqlWithPackages {
                        inherit makeWrapper buildEnv;
-                       postgresql = this;
+                       postgresql = this.override args;
                      }
                      this.pkgs;
 
