@@ -1,69 +1,50 @@
-{ mkXfceDerivation
-, lib
-, docbook_xsl
-, exo
-, gdk-pixbuf
-, gtk3
-, libgudev
-, libnotify
-, libX11
-, libxfce4ui
-, libxfce4util
-, libxslt
-, pcre
-, xfconf
-, gobject-introspection
+{ lib
 , makeWrapper
+, callPackage
 , symlinkJoin
+, base ? callPackage ./base.nix {}
 , thunarPlugins ? []
 }:
 
-let unwrapped = mkXfceDerivation {
-  category = "xfce";
-  pname = "thunar";
-  version = "4.18.6";
 
-  sha256 = "sha256-7SWpIBGm/YhnQSWYi5BgYjx8WCiEqxZRTagz/cY0p3E=";
+if thunarPlugins == [] then base
+else symlinkJoin {
 
-  nativeBuildInputs = [
-    docbook_xsl
-    gobject-introspection
-    libxslt
-  ];
+  name = "thunar-with-plugins-${base.version}";
 
-  buildInputs = [
-    exo
-    gdk-pixbuf
-    gtk3
-    libX11
-    libgudev
-    libnotify
-    libxfce4ui
-    libxfce4util
-    pcre
-    xfconf
-  ];
+  paths = [ base ] ++ thunarPlugins;
 
-  configureFlags = [ "--with-custom-thunarx-dirs-enabled" ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  # the desktop file … is in an insecure location»
-  # which pops up when invoking desktop files that are
-  # symlinks to the /nix/store
-  #
-  # this error was added by this commit:
-  # https://github.com/xfce-mirror/thunar/commit/1ec8ff89ec5a3314fcd6a57f1475654ddecc9875
-  postPatch = ''
-    sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
+  postBuild = ''
+    wrapProgram "$out/bin/thunar" \
+      --set "THUNARX_DIRS" "$out/lib/thunarx-3"
+
+    wrapProgram "$out/bin/thunar-settings" \
+      --set "THUNARX_DIRS" "$out/lib/thunarx-3"
+
+    # NOTE: we need to remove the folder symlink itself and create
+    # a new folder before trying to substitute any file below.
+    rm -f "$out/lib/systemd/user"
+    mkdir -p "$out/lib/systemd/user"
+
+    # point to wrapped binary in all service files
+    for file in "lib/systemd/user/thunar.service" \
+      "share/dbus-1/services/org.xfce.FileManager.service" \
+      "share/dbus-1/services/org.xfce.Thunar.FileManager1.service" \
+      "share/dbus-1/services/org.xfce.Thunar.service"
+    do
+      rm -f "$out/$file"
+      substitute "${base}/$file" "$out/$file" \
+        --replace "${base}" "$out"
+    done
   '';
 
   meta = with lib; {
-    description = "Xfce file manager";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
-  };
-};
+    inherit (base.meta) homepage license platforms maintainers;
 
-in if thunarPlugins == [] then unwrapped
-  else import ./wrapper.nix {
-    inherit makeWrapper symlinkJoin thunarPlugins lib;
-    thunar = unwrapped;
-  }
+    description = base.meta.description + optionalString
+      (0 != length thunarPlugins)
+      " (with plugins: ${concatStringsSep  ", " (map (x: x.name) thunarPlugins)})";
+  };
+}
