@@ -13,6 +13,7 @@
   fetchFromGitLab,
   git,
   glibcLocales,
+  libxcrypt,
   icu,
   ncurses,
   openssl,
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     coreutils-full
     elfutils.dev
     glibcLocales
+    libxcrypt
     icu
     openssl
     util-linux
