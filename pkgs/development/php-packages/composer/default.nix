@@ -1,7 +1,7 @@
-{ lib, fetchFromGitHub, php, composer, unzip, _7zz, xz, git, curl, cacert, makeBinaryWrapper }:
+{ lib, callPackage, fetchFromGitHub, php, unzip, _7zz, xz, git, curl, cacert, makeBinaryWrapper }:
 
 php.buildComposerProject (finalAttrs: {
-  inherit composer;
+  composer = callPackage ../../tools/misc/composer { };
 
   pname = "composer";
   version = "2.6.2";
