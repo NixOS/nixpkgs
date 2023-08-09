@@ -25,6 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface for rizin";
     homepage = "https://rizin.re";
+    changelog = "https://github.com/rizinorg/rizin/releases/tag/v0.6.0";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
