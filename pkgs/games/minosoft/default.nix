@@ -24,7 +24,7 @@ let
 
   # build jar into fixed-output derivation (it is fetching JARs to include from the internet anyways, so it doesnt matter if its not that conform to our ideals)
   deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
+    pname = "minosoft-deps";
     inherit version src;
     nativeBuildInputs = [ gradle perl ];
     buildPhase = ''
