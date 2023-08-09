@@ -1,7 +1,9 @@
-{ stdenvNoCC, lib, fetchFromGitHub, composer, makeBinaryWrapper }:
+{ callPackage, stdenvNoCC, lib, fetchFromGitHub, makeBinaryWrapper }:
 
 stdenvNoCC.mkDerivation (finalAttrs:
 let
+  composer = callPackage ../../development/tools/misc/composer { };
+
   composerKeys = stdenvNoCC.mkDerivation (finalComposerKeysAttrs: {
     pname = "composer-keys";
     version = "fa5a62092f33e094073fbda23bbfc7188df3cbc5";

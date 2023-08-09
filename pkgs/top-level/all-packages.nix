@@ -17725,8 +17725,6 @@ with pkgs;
 
 
   # PHP interpreters, packages and extensions.
-  composer = callPackage ../development/tools/misc/composer { };
-
   #
   # Set default PHP interpreter, extensions and packages
   php = php82;
