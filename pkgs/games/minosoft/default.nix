@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.bixilon.de/bixilon/minosoft";
     description = "An open source Minecraft re-implementation written from scratch";
     sourceProvenance = with sourceTypes; [
