@@ -21,11 +21,15 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pyintesishome" ];
+
+  pythonImportsCheck = [
+    "pyintesishome"
+  ];
 
   meta = with lib; {
     description = "Python interface for IntesisHome devices";
     homepage = "https://github.com/jnimmo/pyIntesisHome";
+    changelog = "https://github.com/jnimmo/pyIntesisHome/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
