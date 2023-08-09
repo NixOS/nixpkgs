@@ -1261,11 +1261,11 @@
     "vendorHash": null
   },
   "wavefront": {
-    "hash": "sha256-ag4mu9CyG78X47QGMTQTK7+VsdCv0TBOCovVnM4OMsw=",
+    "hash": "sha256-bBJZT5h/2ZFTKhFXMWj/xf+DAMGdUZw8E07PuIsMVpU=",
     "homepage": "https://registry.terraform.io/providers/vmware/wavefront",
     "owner": "vmware",
     "repo": "terraform-provider-wavefront",
-    "rev": "v5.0.0",
+    "rev": "v5.0.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-77pijBYzCQoaZgMRNRwZEAJVM51EMGezXXcrfn9ae1Q="
   },
