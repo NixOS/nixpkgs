@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "11.0.2";
+  version = "11.0.3";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    hash = "sha256-ckB1LO8LfeYiuvi9U0jmP8axnwLvgklhsq3Rd9llKVI=";
+    hash = "sha256-1VNLxwPy96aVuRSPvaqevFm1VAXVsD0ya4063frK5wc=";
   };
 
   depsBuildBuild = [ pkg-config ];
