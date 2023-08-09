@@ -2041,6 +2041,8 @@ self: super: with self; {
 
   cmdline = callPackage ../development/python-modules/cmdline { };
 
+  cmdstanpy = callPackage ../development/python-modules/cmdstanpy { };
+
   cmigemo = callPackage ../development/python-modules/cmigemo {
     inherit (pkgs) cmigemo;
   };
@@ -6167,6 +6169,8 @@ self: super: with self; {
 
   luhn = callPackage ../development/python-modules/luhn { };
 
+  lunarcalendar = callPackage ../development/python-modules/lunarcalendar { };
+
   luqum = callPackage ../development/python-modules/luqum { };
 
   luxor = callPackage ../development/python-modules/luxor { };
@@ -8025,6 +8029,8 @@ self: super: with self; {
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   prodict = callPackage ../development/python-modules/prodict { };
+
+  prophet = callPackage ../development/python-modules/prophet { };
 
   propka = callPackage ../development/python-modules/propka { };
 
