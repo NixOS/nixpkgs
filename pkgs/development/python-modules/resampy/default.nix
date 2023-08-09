@@ -6,6 +6,7 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , scipy
 }:
 
@@ -23,10 +24,20 @@ buildPythonPackage rec {
     hash = "sha256-t5I7NJmIeV0uucPyvR+UJ24NK7fIzYlNJ8bECkbvdjI=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   propagatedBuildInputs = [
     numpy
     cython
     numba
+  ];
+
+  pythonRelaxDeps = [
+    # the version of numba may not be set correctly until the next release, 0.58
+    # see the comment of https://github.com/NixOS/nixpkgs/pull/247678
+    "numba"
   ];
 
   nativeCheckInputs = [
