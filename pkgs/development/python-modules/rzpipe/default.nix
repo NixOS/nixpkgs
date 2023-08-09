@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "rzpipe";
   version = "0.6.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
