@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype, fontconfig
+{ lib, stdenv, fetchurl, fetchzip, cmake, pkg-config
+, SDL2, libpng, zlib, xz, freetype, fontconfig
+, nlohmann_json, curl, icu, harfbuzz, expat, glib, pcre2
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
-, withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
-, writeScriptBin, makeWrapper, runtimeShell
-}:
+, withFluidSynth ? true, audioDriver ? "alsa"
+, fluidsynth, soundfont-fluid, libsndfile
+, flac, libogg, libvorbis, libopus, libmpg123, pulseaudio, alsa-lib, libjack2
+, procps, writeScriptBin, makeWrapper, runtimeShell }:
 
 let
   opengfx = fetchzip {
@@ -36,9 +39,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-Kh3roBv+WOIYiHn0UMP6TzgZJxq0m/NI3WZUXwQNFG8=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig ]
-    ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  buildInputs = [
+    SDL2 libpng xz zlib freetype fontconfig
+    nlohmann_json curl icu harfbuzz expat glib pcre2
+  ] ++ lib.optionals withFluidSynth [
+    fluidsynth soundfont-fluid libsndfile
+    flac libogg libvorbis libopus libmpg123 pulseaudio alsa-lib libjack2
+  ];
 
   prefixKey = "--prefix-dir=";
 

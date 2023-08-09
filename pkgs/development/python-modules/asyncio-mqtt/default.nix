@@ -8,6 +8,7 @@
 , setuptools
 , setuptools-scm
 , typing-extensions
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
