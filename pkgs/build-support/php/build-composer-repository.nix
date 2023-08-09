@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, writeTextDir, fetchFromGitHub, php, composer-local-repo-plugin }:
+{ callPackage, stdenvNoCC, lib, writeTextDir, fetchFromGitHub, php }:
 
 let
   mkComposerRepositoryOverride =
@@ -19,6 +19,7 @@ let
     let
       phpDrv = finalAttrs.php or php;
       composer = finalAttrs.composer or phpDrv.packages.composer;
+      composer-local-repo-plugin = callPackage ./composer-local-repo-plugin.nix { };
     in
     assert (lib.assertMsg (previousAttrs ? src) "mkComposerRepository expects src argument.");
     assert (lib.assertMsg (previousAttrs ? vendorHash) "mkComposerRepository expects vendorHash argument.");
