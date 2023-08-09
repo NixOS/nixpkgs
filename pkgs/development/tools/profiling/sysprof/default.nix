@@ -8,11 +8,12 @@
 , json-glib
 , itstool
 , libadwaita
+, libdex
+, libpanel
 , libunwind
 , libxml2
 , meson
 , ninja
-, pango
 , pkg-config
 , polkit
 , shared-mime-info
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.48.0";
+  version = "45.beta";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "B9kIGmbPL7UnU/SP8rha2nXGD/G8GvG9FNiutieXIWg=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "hdxiGFO8X/6YMq2V0jm4Qz2DDF2tMIzQN7qw9AP4Dxs=";
   };
 
   nativeBuildInputs = [
@@ -48,10 +49,11 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     json-glib
-    pango
     polkit
     systemd
     libadwaita
+    libdex
+    libpanel
     libunwind
   ];
 
@@ -64,7 +66,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "odd-unstable";
     };
   };
 
