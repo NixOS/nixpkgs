@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication {
     aiofiles
     aiohttp
     aiohttp-cors
-    async_generator
+    async-generator
     distro
     importlib-resources
     jinja2
