@@ -43,11 +43,6 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  disabledTests = [
-    "test_circular_macro_require"
-    "test_macro_require"
-  ];
-
   pythonImportsCheck = [ "hy" ];
 
   passthru = {
