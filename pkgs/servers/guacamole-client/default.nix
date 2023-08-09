@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "guacamole-client";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/guacamole/${finalAttrs.version}/binary/guacamole-${finalAttrs.version}.war";
-    hash = "sha256-hu/DABbkA4lI2MGlw3oLBeONrdMQTbbsA3VbxuMRHEA=";
+    hash = "sha256-FaNObtbPbwP+IPkPZ9LWCXE6ic08syT4nt8edpbm7WE=";
   };
 
   dontUnpack = true;
