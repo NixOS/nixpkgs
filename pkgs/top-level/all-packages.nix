@@ -14646,6 +14646,8 @@ with pkgs;
 
   webalizer = callPackage ../tools/networking/webalizer { };
 
+  webmesh = callPackage ../servers/webmesh { };
+
   wget = callPackage ../tools/networking/wget { };
 
   wget2 = callPackage ../tools/networking/wget2 {
