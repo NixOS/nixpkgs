@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     grep -Fl '#!/usr/bin/env' `find . -type f -executable` | while read f ; do
       substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env' ;
     done ;
-'';
+  '';
 
 ## TODO: make static compilation work.
 ## For that, get all the packages below to somehow expose static libraries,
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Gerbil Scheme";
     homepage    = "https://github.com/vyzo/gerbil";
-    license     = lib.licenses.lgpl21; # also asl20, like Gambit
-    # NB regarding platforms: regularly tested on Linux, only occasionally on macOS.
+    license     = lib.licenses.lgpl21Only; # dual, also asl20, like Gambit
+    # NB regarding platforms: regularly tested on Linux and on macOS.
     # Please report success and/or failure to fare.
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
