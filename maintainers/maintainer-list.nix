@@ -18858,6 +18858,15 @@
       fingerprint = "7AFB C595 0D3A 77BD B00F  947B 229E 63AE 5644 A96D";
     }];
   };
+  ztmr = {
+    name = "Tomas Morstein";
+    github = "ztmr";
+    githubId = 1504424;
+    matrix = "@ztmr:matrix.org";
+    keys = [{
+      fingerprint = "A8C4 D329 0201 B564 7F55  7BC8 1352 80C2 690F CF0F";
+    }];
+  };
   ztzg = {
     email = "dd@crosstwine.com";
     github = "ztzg";
@@ -18911,16 +18920,6 @@
     github = "zzzsyyy";
     githubId = 	59917878;
     name = "Mathias Zhang";
-  };
-  ztmr = {
-    name = "Tomas Morstein";
-    email = "ztmr@users.noreply.github.com";
-    github = "ztmr";
-    githubId = 1504424;
-    keys = [{
-      longkeyid = "rsa4096/0x135280C2690FCF0F";
-      fingerprint = "A8C4 D329 0201 B564 7F55  7BC8 1352 80C2 690F CF0F";
-    }];
   };
 }
 /* Keep the list alphabetically sorted. */
