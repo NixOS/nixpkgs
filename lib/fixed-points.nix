@@ -108,6 +108,26 @@ rec {
     fix g
     => { a = 11; b = 13; c = 24; }
     ```
+
+    Type:
+      extends :: (Attrs -> Attrs -> Attrs) # The overlay to apply to the fixed-point function
+              -> (Attrs -> Attrs) # A fixed-point function
+              -> (Attrs -> Attrs) # The resulting fixed-point function
+
+    Example:
+      f = final: { a = 1; b = final.a + 2; }
+
+      fix f
+      => { a = 1; b = 3; }
+
+      fix (extends (final: prev: { a = prev.a + 10; }) f)
+      => { a = 11; b = 13; }
+
+      fix (extends (final: prev: { b = final.a + 5; }) f)
+      => { a = 1; b = 6; }
+
+      fix (extends (final: prev: { c = final.a + final.b; }) f)
+      => { a = 1; b = 3; c = 4; }
   */
   extends = f: rattrs: self: let super = rattrs self; in super // f self super;
 
