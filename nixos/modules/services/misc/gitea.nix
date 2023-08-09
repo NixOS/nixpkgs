@@ -666,6 +666,7 @@ in
          USER = cfg.user;
          HOME = cfg.stateDir;
          GITEA_WORK_DIR = cfg.stateDir;
+         GITEA_CUSTOM = cfg.customDir;
        };
 
        serviceConfig = {
