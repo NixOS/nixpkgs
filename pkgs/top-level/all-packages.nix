@@ -17725,10 +17725,7 @@ with pkgs;
 
 
   # PHP interpreters, packages and extensions.
-
   composer = callPackage ../development/tools/misc/composer { };
-
-  composer-local-repo-plugin = callPackage ../build-support/php/composer-local-repo-plugin.nix {};
 
   #
   # Set default PHP interpreter, extensions and packages

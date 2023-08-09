@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, writeTextDir, php, makeBinaryWrapper, fetchFromGitHub, fetchurl, composer-local-repo-plugin }:
+{ callPackage, stdenvNoCC, lib, writeTextDir, php, makeBinaryWrapper, fetchFromGitHub, fetchurl }:
 
 let
   buildComposerProjectOverride = finalAttrs: previousAttrs:
@@ -6,6 +6,7 @@ let
     let
       phpDrv = finalAttrs.php or php;
       composer = finalAttrs.composer or phpDrv.packages.composer;
+      composer-local-repo-plugin = callPackage ./composer-local-repo-plugin.nix { };
       composerLock = finalAttrs.composerLock or null;
     in
     {
