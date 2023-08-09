@@ -16,7 +16,7 @@ composerInstallConfigureHook() {
     fi
 
     if [[ -e "$composerLock" ]]; then
-        cp $composerLock composer.lock
+        cp "$composerLock" composer.lock
     fi
 
     if [[ ! -f "composer.lock" ]]; then
@@ -39,7 +39,7 @@ composerInstallBuildHook() {
 
     # Since this file cannot be generated in the composer-repository-hook.sh
     # because the file contains hardcoded nix store paths, we generate it here.
-    composer-local-repo-plugin --no-ansi build-local-repo -p ${composerRepository} > packages.json
+    composer-local-repo-plugin --no-ansi build-local-repo -p "${composerRepository}" > packages.json
 
     # Remove all the repositories of type "composer"
     # from the composer.json file.
@@ -48,7 +48,7 @@ composerInstallBuildHook() {
     # Configure composer to disable packagist and avoid using the network.
     composer config repo.packagist false
     # Configure composer to use the local repository.
-    composer config repo.composer composer file://$PWD/packages.json
+    composer config repo.composer composer file://"$PWD"/packages.json
 
     # Since the composer.json file has been modified in the previous step, the
     # composer.lock file needs to be updated.
@@ -96,13 +96,13 @@ composerInstallInstallHook() {
     rm packages.json
 
     # Copy the relevant files only in the store.
-    mkdir -p $out/share/php/${pname}
-    cp -r . $out/share/php/${pname}/
+    mkdir -p "$out"/share/php/"${pname}"
+    cp -r . "$out"/share/php/"${pname}"/
 
     # Create symlinks for the binaries.
-    jq -r -c 'try .bin[]' composer.json | while read bin; do
-        mkdir -p $out/share/php/${pname} $out/bin
-        ln -s $out/share/php/${pname}/$bin $out/bin/$(basename $bin)
+    jq -r -c 'try .bin[]' composer.json | while read -r bin; do
+        mkdir -p "$out"/share/php/"${pname}" "$out"/bin
+        ln -s "$out"/share/php/"${pname}"/"$bin" "$out"/bin/"$(basename "$bin")"
     done
 
     echo "Finished composerInstallInstallHook"
