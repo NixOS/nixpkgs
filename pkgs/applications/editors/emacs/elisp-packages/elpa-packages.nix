@@ -106,6 +106,17 @@ self: let
         };
       });
 
+      eglot = super.eglot.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          local info_file=eglot.info
+          pushd $out/share/emacs/site-lisp/elpa/eglot-*
+          # specify output info file to override the one defined in eglot.texi
+          makeinfo --output=$info_file eglot.texi
+          install-info $info_file dir
+          popd
+        '';
+      });
+
       jinx = super.jinx.overrideAttrs (old: let
         libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
       in {

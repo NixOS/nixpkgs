@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , pythonOlder
 , h5py
@@ -8,7 +9,6 @@
 , scipy
 , pandas
 , pytestCheckHook
-, lib
 }:
 
 buildPythonPackage rec {
@@ -24,33 +24,43 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace tox.ini --replace "--cov=./hickle" ""
+    substituteInPlace tox.ini \
+      --replace "--cov=./hickle" ""
   '';
 
-  propagatedBuildInputs = [ h5py numpy dill ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    scipy
-    pandas
-    astropy
+  propagatedBuildInputs = [
+    dill
+    h5py
+    numpy
   ];
 
-  pythonImportsCheck = [ "hickle" ];
+  nativeCheckInputs = [
+    astropy
+    pandas
+    pytestCheckHook
+    scipy
+  ];
+
+  pythonImportsCheck = [
+    "hickle"
+  ];
 
   disabledTests = [
     # broken in 5.0.2 with recent NumPy
     # see https://github.com/telegraphic/hickle/issues/174
     "test_scalar_compression"
-    # broken in 5.0.2 with python 3.11
+    # broken in 5.0.2 with Python 3.11
     # see https://github.com/telegraphic/hickle/issues/169
     "test_H5NodeFilterProxy"
+    # broken in 5.0.2
+    "test_slash_dict_keys"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

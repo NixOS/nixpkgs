@@ -4,6 +4,7 @@
 , pythonOlder
 , setuptools
 , versioningit
+, wheel
 
   # mandatory
 , broadbean
@@ -37,6 +38,7 @@
 , slack-sdk
 
   # test
+, pip
 , pytestCheckHook
 , deepdiff
 , hypothesis
@@ -61,9 +63,15 @@ buildPythonPackage rec {
     sha256 = "sha256-zKn9LN7FBxKUfYSxUV1O6fB2s/B5bQpGDZTrK4DcxmU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'versioningit ~=' 'versioningit >='
+  '';
+
   nativeBuildInputs = [
     setuptools
     versioningit
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -110,6 +118,7 @@ buildPythonPackage rec {
     deepdiff
     hypothesis
     lxml
+    pip
     pytest-asyncio
     pytest-mock
     pytest-rerunfailures
