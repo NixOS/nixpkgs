@@ -23,6 +23,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Command-line tool to manipulate Android App Bundles";
     homepage = "https://developer.android.com/studio/command-line/bundletool";
     changelog = "https://github.com/google/bundletool/releases/tag/${version}";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ marsam ];
     platforms = jre_headless.meta.platforms;
     license = licenses.asl20;
