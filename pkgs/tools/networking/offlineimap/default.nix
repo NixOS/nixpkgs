@@ -63,5 +63,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://offlineimap.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ endocrimes ];
+    mainProgram = "offlineimap";
   };
 }
