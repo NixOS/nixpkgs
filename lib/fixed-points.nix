@@ -53,39 +53,60 @@ rec {
       else converge f x';
 
   /*
-    Modify the contents of an explicitly recursive attribute set in a way that
-    honors `self`-references. This is accomplished with a function
+    `extends overlay f` applies the overlay `overlay` to the fixed-point function `f` to get a new fixed-point function.
+    Overlays allow modifying and extending fixed-point functions, specifically ones returning attribute sets.
 
-    ```nix
-    g = self: super: { foo = super.foo + " + "; }
+    A fixed-point function is a function which is intended to be evaluated by passing the result of itself as the argument, only possible due to Nix's lazy evaluation.
+    Here's an example of one:
+    ```
+    f = final: {
+      # Constant value a
+      a = 1;
+
+      # b depends on the final value of a, available as final.a
+      b = final.a + 2;
+    }
+    ```
+    We can evaluated this using [`lib.fix`](#function-library-lib.fixedPoints.fix) to get the final result:
+    ```
+    fix f
+    => { a = 1; b = 3; }
     ```
 
-    that has access to the unmodified input (`super`) as well as the final
-    non-recursive representation of the attribute set (`self`). `extends`
-    differs from the native `//` operator insofar as that it's applied *before*
-    references to `self` are resolved:
-
+    An overlay represents a modification or extension of such a fixed-point function.
+    Here's an example of an overlay:
     ```
-    nix-repl> fix (extends g f)
-    { bar = "bar"; foo = "foo + "; foobar = "foo + bar"; }
+    overlay = final: prev: {
+      # Modify the previous value of a, available as prev.a
+      a = prev.a + 10;
+
+      # Extend the attribute set with c, letting it depend on the final values of a and b
+      c = final.a + final.b;
+    }
     ```
 
-    The name of the function is inspired by object-oriented inheritance, i.e.
-    think of it as an infix operator `g extends f` that mimics the syntax from
-    Java. It may seem counter-intuitive to have the "base class" as the second
-    argument, but it's nice this way if several uses of `extends` are cascaded.
-
-    To get a better understanding how `extends` turns a function with a fix
-    point (the package set we start with) into a new function with a different fix
-    point (the desired packages set) lets just see, how `extends g f`
-    unfolds with `g` and `f` defined above:
-
+    We can now use `extends overlay f` to apply the overlay to the fixed-point function `f`, giving us a new fixed-point function `g` with the combined behavior of `f` and `overlay`.
     ```
-    extends g f = self: let super = f self; in super // g self super;
-                = self: let super = { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; }; in super // g self super
-                = self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; } // g self { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; }
-                = self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; } // { foo = "foo" + " + "; }
-                = self: { foo = "foo + "; bar = "bar"; foobar = self.foo + self.bar; }
+    g = extends overlay f
+    ```
+    The result is a function, so we can't print it directly, but it's the same as:
+    ```
+    g = final: {
+      # The constant from f, but changed with the overlay
+      a = 1 + 10;
+
+      # Unchanged from f
+      b = final.a + 2;
+
+      # Extended in the overlay
+      c = final.a + final.b;
+    }
+    ```
+
+    We can evaluate this using [`lib.fix`](#function-library-lib.fixedPoints.fix) again to get the final result:
+    ```
+    fix g
+    => { a = 11; b = 13; c = 24; }
     ```
   */
   extends = f: rattrs: self: let super = rattrs self; in super // f self super;
