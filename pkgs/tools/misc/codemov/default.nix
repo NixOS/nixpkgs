@@ -10,22 +10,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "codemov";
-  version = "unstable-2023-05-28";
+  version = "unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "sloganking";
     repo = "codemov";
-    rev = "ab4b287c5cdb64f8a1f378c54070fde5a1f3be5b";
-    hash = "sha256-miW/s3Ox2Z5qyFZqAp/FqHhc5jC6s+4DzxlHQhzCc2w=";
+    rev = "8a4d6e50c21010866ca06f845f30c2aa54c09854";
+    hash = "sha256-nOqh8kXS5mx0AM4NvIcwvC0lAZRHsQwrxI0c+9PeroU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-cyzoMD97ofrbm3BDAtl8pSezcM4B2TVbW9V5J6xRVLc=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
