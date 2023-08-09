@@ -214,9 +214,9 @@ in {
         ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
+        NETDATA_PIPENAME = "/run/netdata/ipc";
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
         DO_NOT_TRACK = "1";
-        NETDATA_PIPENAME = "/run/netdata/ipc";
       };
       restartTriggers = [
         config.environment.etc."netdata/netdata.conf".source
