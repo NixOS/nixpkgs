@@ -370,6 +370,10 @@ self: super: {
   hzk = dontCheck super.hzk;
   resolv_0_1_2_0 = doJailbreak super.resolv_0_1_2_0;
 
+  # Too strict bounds on base{,-orphans}, template-haskell
+  # https://github.com/sebastiaanvisser/fclabels/issues/44
+  fclabels = doJailbreak super.fclabels;
+
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
 
