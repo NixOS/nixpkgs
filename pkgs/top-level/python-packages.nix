@@ -776,7 +776,7 @@ self: super: with self; {
 
   asynctest = callPackage ../development/python-modules/asynctest { };
 
-  async-timeout = callPackage ../development/python-modules/async_timeout { };
+  async-timeout = callPackage ../development/python-modules/async-timeout { };
 
   async-tkinter-loop = callPackage ../development/python-modules/async-tkinter-loop { };
 
