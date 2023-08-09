@@ -89,6 +89,11 @@ in {
   inherit buildArmTrustedFirmware;
 
   armTrustedFirmwareTools = buildArmTrustedFirmware rec {
+    # Normally, arm-trusted-firmware builds the build tools for buildPlatform
+    # using CC_FOR_BUILD (or as it calls it HOSTCC). Since want to build them
+    # for the hostPlatform here, we trick it by overriding the HOSTCC setting
+    # and, to be safe, remove CC_FOR_BUILD from the environment.
+    depsBuildBuild = [ ];
     extraMakeFlags = [
       "HOSTCC=${stdenv.cc.targetPrefix}gcc"
       "fiptool" "certtool"
