@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "yottadb";
-  version = "1.36";
+  version = "1.38";
 
   src = fetchFromGitLab {
     owner = "YottaDB";
     repo = "DB/YDB";
     rev = "r${version}";
     leaveDotGit = true;
-    hash = "sha256-8KAvCkMvUyDU1xU+g94/YwHEQpM8249c8qF1GrPqFBA=";
+    hash = "sha256-k6kAIdPW75cqdT+dXqjlS8TpT2NjQYBTceDzMvWD/oE=";
   };
 
   enableParallelBuilding = true;
