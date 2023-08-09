@@ -220,7 +220,7 @@ let
             + toString (lib.attrNames (if lib.isAttrs args then args else args {}))
           ) overridableKernel;
       };
-    in [ (nixosTests.kernel-generic.testsForKernel overridableKernel) ] ++ kernelTests;
+    in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
   };
 
   finalKernel = lib.extendDerivation true passthru kernel;

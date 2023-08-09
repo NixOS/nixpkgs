@@ -8,11 +8,12 @@
 , perl
 , zlib
 , openssl
-, libuv
 , file
+, libmspack
 , libzip
 , lz4
 , xxHash
+, xz
 , meson
 , python3
 , cmake
@@ -23,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    hash = "sha256-cauA/DyKycgKEAANg4EoryigXTGg7hg5AMLFxuNQ7KM=";
+    hash = "sha256-apJJBu/fVHrFBGJ2f1rdU5AkNuekhi0sDiTKkbd2FQg=";
   };
 
   mesonFlags = [
@@ -35,9 +36,11 @@ stdenv.mkDerivation rec {
     "-Duse_sys_magic=enabled"
     "-Duse_sys_libzip=enabled"
     "-Duse_sys_zlib=enabled"
-    "-Duse_sys_xxhash=enabled"
     "-Duse_sys_lz4=enabled"
+    "-Duse_sys_lzma=enabled"
+    "-Duse_sys_xxhash=enabled"
     "-Duse_sys_openssl=enabled"
+    "-Duse_sys_libmspack=enabled"
     "-Duse_sys_tree_sitter=enabled"
   ];
 
@@ -77,9 +80,10 @@ stdenv.mkDerivation rec {
     zlib
     lz4
     openssl
-    libuv
+    libmspack
     tree-sitter
     xxHash
+    xz
   ];
 
   postPatch = ''
