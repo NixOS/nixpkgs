@@ -129,7 +129,20 @@ rec {
       fix (extends (final: prev: { c = final.a + final.b; }) f)
       => { a = 1; b = 3; c = 4; }
   */
-  extends = f: rattrs: self: let super = rattrs self; in super // f self super;
+  extends =
+    # The overlay to apply to the fixed-point function
+    overlay:
+    # The fixed-point function
+    f:
+    # Wrap with parenthesis to prevent nixdoc from rendering the `final` argument in the documentation
+    # The result should be thought of as a function, the argument of that function is not an argument to `extends` itself
+    (
+      final:
+      let
+        prev = f final;
+      in
+      prev // overlay final prev
+    );
 
   /*
     Compose two extending functions of the type expected by 'extends'
