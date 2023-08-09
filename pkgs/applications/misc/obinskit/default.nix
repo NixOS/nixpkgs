@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "1.2.11";
 
   src = fetchurl {
-    url = "https://s3.hexcore.xyz/occ/linux/tar/ObinsKit_${version}_x64.tar.gz";
+    url = "https://releases.obins.net/occ/linux/tar/ObinsKit_${version}_x64.tar.gz";
     sha256 = "1kcn41wmwcx6q70spa9a1qh7wfrj1sk4v4i58lbnf9kc6vasw41a";
   };
 
