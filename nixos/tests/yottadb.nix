@@ -53,8 +53,9 @@ in {
     machine.succeed("yottadb -r checkProcName^ydbTest")
     machine.succeed("yottadb -r writeDb^ydbTest")
 
-    #machine.succeed("test $(stat -L -c %a $ydb_dist/gtmsecshrdir) -eq 500")
-    #machine.succeed("test $(stat -L -c %a $ydb_dist/utf8/gtmsecshrdir) -eq 500")
+    machine.succeed("test $(stat -L -c %a ${pkgs.yottadb.ydbSecRunDir}/gtmsecshr) -eq 4555")
+    machine.succeed("test $(stat -L -c %a ${pkgs.yottadb.ydbSecRunDir}/gtmsecshrdir) -eq 0500")
+    machine.succeed("test $(stat -L -c %a ${pkgs.yottadb.ydbSecRunDir}/gtmsecshrdir/gtmsecshr) -eq 4500")
 
     def getSyslogTs():
       _ts = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S.%f")
@@ -63,7 +64,7 @@ in {
       return _ts
 
     ts = getSyslogTs()
-    machine.succeed("$ydb_dist/gtmsecshr STOP")
+    machine.succeed("${pkgs.yottadb.ydbSecRunDir}/gtmsecshr")
     machine.fail("journalctl --no-pager -S '%s' -g 'E-SECSHR'" % ts)
     machine.succeed("journalctl --no-pager -S '%s' -g 'I-GTMSECSHRDMNSTARTED'" % ts)
 
@@ -82,6 +83,7 @@ in {
 
     # NOTE: gtmsecshr blocks shutdown for some reason, and killing it
     # makes the test vm shutdown faster...
+    machine.succeed("${pkgs.yottadb.ydbSecRunDir}/gtmsecshr STOP")
     machine.succeed("pkill gtmsecshr")
 
     machine.shutdown()

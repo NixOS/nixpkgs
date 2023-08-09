@@ -18,19 +18,23 @@ in {
     in
     mkIf cfg.enable {
       environment.systemPackages = [ package ];
-      security.wrappers."${package.gtmsecshrSuidName}" = {
-        setuid = true;
-        owner = "root";
-        group = "${package.ydbGroup}";
-        permissions = "u+rx";
-        source = "${package}/${package.gtmsecshrSuidTargetRelative}";
-      };
-      security.wrappers."${package.gtmsecshrWrapperSuidName}" = {
-        setuid = true;
-        owner = "root";
-        group = "${package.ydbGroup}";
-        permissions = "a+rx";
-        source = "${package}/${package.gtmsecshrWrapperSuidTargetRelative}";
-      };
+
+      # boot.specialFileSystems.${package.ydbSecRunDir} = {
+      #   fsType = "tmpfs";
+      #   options = [ "nodev" "mode=755" "size=32M" ];
+      # };
+
+      systemd.tmpfiles.rules = [
+        # Create `gtmsrcshrdir` with the right permissions and ownership
+        "d  ${package.ydbSecRunDir}/gtmsecshrdir 0500 root root"
+
+        # Copy `gtmsecshr` binary and set the right permissions and ownership
+        "C+ ${package.ydbSecRunDir}/gtmsecshrdir/gtmsecshr - - - - ${package}/dist/gtmsecshr-real"
+        "z  ${package.ydbSecRunDir}/gtmsecshrdir/gtmsecshr 4500 root root"
+
+        # Copy `gtmsecshr` *wrapper* binary and set the right permissions and ownership
+        "C+ ${package.ydbSecRunDir}/gtmsecshr - - - - ${package}/dist/gtmsecshr-wrap"
+        "z  ${package.ydbSecRunDir}/gtmsecshr 4555 root root"
+      ];
     };
 }
