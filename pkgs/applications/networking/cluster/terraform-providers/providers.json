@@ -1188,13 +1188,13 @@
     "vendorHash": null
   },
   "utils": {
-    "hash": "sha256-3eEC0UN/VVockLstHhSNY9EH0bRv/LK3SkpSfMrMwSI=",
+    "hash": "sha256-UqAWByIArvTz2ArR/dgIDw98grqj9BEyRJzNODteKao=",
     "homepage": "https://registry.terraform.io/providers/cloudposse/utils",
     "owner": "cloudposse",
     "repo": "terraform-provider-utils",
-    "rev": "1.9.0",
+    "rev": "1.10.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-ZOJ4J+t8YIWAFZe9dnVHezdXdjz5y2ho53wmyS4dJEo="
+    "vendorHash": "sha256-n70qtdz4x8bdzCmVYyVTvvndx0w0AV/Yv8thGvitT6U="
   },
   "vault": {
     "hash": "sha256-lnM52d7J36wu9MYh13IFSR15rMfJpXP4tw47LzRy4o4=",
