@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , callPackage
-, ...
-} @args:
+}:
 
 let
   pname = "plexamp";
@@ -15,8 +14,6 @@ let
     maintainers = with maintainers; [ killercup synthetica ];
     platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
   };
-  extraArgs = removeAttrs args [ "callPackage" ];
-
 in
-if stdenv.isDarwin then callPackage ./darwin.nix (extraArgs // { inherit pname version meta; })
-else callPackage ./linux.nix (extraArgs // { inherit pname version meta; })
+if stdenv.isDarwin then callPackage ./darwin.nix { inherit pname version meta; }
+else callPackage ./linux.nix { inherit pname version meta; }
