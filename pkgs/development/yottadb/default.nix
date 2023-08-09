@@ -3,7 +3,6 @@
   config,
   makeWrapper,
   stdenv,
-  wrapperDir ? "/run/wrappers/bin",
   writeText,
   writeScript,
 
@@ -39,6 +38,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-k6kAIdPW75cqdT+dXqjlS8TpT2NjQYBTceDzMvWD/oE=";
   };
 
+  patches = [
+    ./01-gtmsecshr-relocate.patch
+  ];
+
+  NIX_CFLAGS_COMPILE = "-DYDB_EXTERNAL_SECSHR_PARENT_DIR=\"${ydbSecRunDir}\"";
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = buildInputs ++ [
@@ -73,66 +78,15 @@ stdenv.mkDerivation rec {
     cmakeFlags="$cmakeFlags -DYDB_INSTALL_DIR:STRING=$out/dist"
   '';
 
+  prePatch = ''
+    # Revert any potential repo modifications to keep the release clean
+    git reset --hard
+  '';
+
   preBuild = ''
     # Make sure that we can find all the runtime libs in order to
     # use the freshly built M compiler to build the M code...
     export LD_LIBRARY_PATH="${lib.makeLibraryPath buildInputs}:$LD_LIBRARY_PATH"
-
-    # Revert any potential repo modifications to keep the release clean
-    git reset --hard
-
-    # =========
-    # The following changes are not done as a conventional
-    # patchset because we need to hardcode a fixed Nix store path
-    # that is only known at package build time ($out).
-    #
-    # Background and motivation:
-    #
-    # gtmsecshr and gtmsecshr wrapper are two binaries that are
-    # assumed to be SUID and owned by root user, they are also
-    # assumed to be in $ydb_dist ($out/dist/gtmsecshr or
-    # $out/dist/utf8/gtmsecshr) in case of gtmsecshr wrapper
-    # and in $ydb_dist/gtmsecshrdir/gtmsecshr (or
-    # $ydb_dist/utf8/gtmsecshrdir/gtmsecshr) in case of the
-    # gtmsecshr daemon itself. The gtmsecshrdir is assumed to
-    # be 0500 (but Nix store has all directories as 0555).
-    #
-    # The problem is that NixOS does not allow SUID binaries
-    # in the Nix store itself, and all SUID has to be done
-    # using security wrappers. These are stored outside of
-    # the Nix store, which causes issues when the binary
-    # assumes to be in a directory relative to the package
-    # directory. Hardlinks are not possible because security
-    # wrapper does not exist before package is installed
-    # (chicken and egg problem), and softlinks are causing
-    # realpath syscall to return path to the wrapper that
-    # is outside of the package directory, breaking all the
-    # runtime assertions.
-    # Using makeBinWrapper that calls the security wrapper
-    # does not fix this, because it only manipulates argv[0],
-    # but YottaDB is using /proc/self/comm instead.
-    #
-    # Note that the changes below are developer enablers only,
-    # and are NOT meant for production use until this is solved
-    # properly. We don't know how is the YDB security model
-    # affected by these changes...
-    #
-    # Changes required:
-    #
-    # (1) Nix Store does not support 500 on directories, only 555
-    sed -ie s,0277,0222,g ../sr_unix/gtmsecshr_wrapper.c
-    #
-    # (2) gtmsecshr is SUID-wrapped and symlinked, so the realpath
-    # and ydb_dist checks are not working correctly, so we need
-    # to hack this a bit...
-    fullSecshrPath="$out/${gtmsecshrSuidTargetRelative}"
-    suffix="${gtmsecshrNosuidSuffix}"
-    rndirLen=$((''${#fullSecshrPath}-''${#suffix}))
-    sed -i \
-        -e 's@rndir = realpath(PROCSELF, gtmsecshr_realpath);@rndir = realpath("'"$out/${gtmsecshrSuidTargetRelative}"'", gtmsecshr_realpath); rndir['$rndirLen'] = NULL;@g' \
-        -e 's,path = ydb_dist,path = "'$out/dist'",g' \
-        ../sr_unix/gtmsecshr.c
-    # =========
   '';
 
   # NOTE: Setting exec_prefix=@@YDB_EXEDIR@@, includedir=@@YDB_INCDIR@@
@@ -152,13 +106,8 @@ stdenv.mkDerivation rec {
     Libs: -L''${libdir} -lyottadb -Wl,-rpath,''${libdir}
   '';
 
-  gtmsecshrNosuidSuffix = ".nosuid";
-  gtmsecshrSuidName = "gtmsecshr";
-  gtmsecshrSuidTargetRelative = "dist/gtmsecshrdir/gtmsecshr${gtmsecshrNosuidSuffix}";
-  gtmsecshrWrapperSuidName = "gtmsecshr-wrapper";
-  gtmsecshrWrapperSuidTargetRelative = "dist/gtmsecshr${gtmsecshrNosuidSuffix}";
-
-  ydbGroup = "root";
+  # Managed by `systemd-tmpfiles` via `program.yottadb` module
+  ydbSecRunDir = "/var/lib/yottadb/${version}";
 
   yottadbGde = writeScript "gde" ''
     #!/usr/bin/env bash
@@ -175,21 +124,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/lib $out/dist/utf8
     mkdir -p $out/lib/pkgconfig $out/include
 
-    # We cannot set SUID for gtmsecshr wrapper, it has to be done
-    # using Nix Security Wrapper (wrapping the wrapper)
     cd $out/dist
-    # This is the gtmsecshr wrapper:
-    mv gtmsecshr "$out/${gtmsecshrWrapperSuidTargetRelative}"
-    # Can be symlink? We can't do hard-link before the wrapper is created!
-    ln -rs "${wrapperDir}/${gtmsecshrWrapperSuidName}" gtmsecshr
 
-    chmod 700 gtmsecshrdir
-    cd $out/dist/gtmsecshrdir
-    mv gtmsecshr "$out/${gtmsecshrSuidTargetRelative}"
-    # Can be symlink? We can't do hard-link before the wrapper is created!
-    ln -rs "${wrapperDir}/${gtmsecshrSuidName}" gtmsecshr
-    chmod 500 $out/dist/gtmsecshrdir  # is this needed?
-    cd $out/dist
+    mv gtmsecshr gtmsecshr-wrap
+    mv gtmsecshrdir/gtmsecshr gtmsecshr-real
+    rmdir gtmsecshrdir
+    ln -s ${ydbSecRunDir}/gtmsecshrdir .
+    ln -s ${ydbSecRunDir}/gtmsecshr .
 
     # Make sure we have ICU in library path (why is this needed only for ICU?)
     # NOTE: make{Binary}Wrapper can manipulate argv0, but not /proc/self/comm
@@ -221,7 +162,9 @@ stdenv.mkDerivation rec {
       ln -rs $inc ../include/
       ln -rs $inc ./utf8/
     done
+
     ln -rs $out/dist/gtmsecshrdir $out/dist/utf8/gtmsecshrdir
+    ln -rs $out/dist/gtmsecshr $out/dist/utf8/gtmsecshr
 
     sed -e s,@@YDB_DIST@@,$out/dist,g \
         -e s,@@YDB_EXEDIR@@,$out/bin,g \
