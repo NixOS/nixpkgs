@@ -6,7 +6,7 @@
 , asyncio-rlock
 , asyncio-throttle
 , ircstates
-, async_stagger
+, async-stagger
 , async-timeout
 , python
 }:
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     asyncio-rlock
     asyncio-throttle
     ircstates
-    async_stagger
+    async-stagger
     async-timeout
   ];
 
