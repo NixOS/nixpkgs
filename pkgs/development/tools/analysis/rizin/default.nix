@@ -106,6 +106,9 @@ let rizin = stdenv.mkDerivation rec {
 
   passthru = rec {
     plugins = {
+      jsdec = pkgs.callPackage ./jsdec.nix {
+        inherit rizin openssl;
+      };
       # sigdb isn't a real plugin, but it's separated from the main rizin
       # derivation so that only those who need it will download it
       sigdb = pkgs.callPackage ./sigdb.nix { };
