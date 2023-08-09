@@ -8,7 +8,6 @@
 , certifi
 , cryptography
 , fetchFromGitLab
-, fetchpatch
 , poetry-core
 , pyotp
 , pythonOlder
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "alexapy";
-  version = "1.26.8";
+  version = "1.26.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -29,17 +28,8 @@ buildPythonPackage rec {
     owner = "keatontaylor";
     repo = "alexapy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AjtSEqUbJ5e/TZIYMX+pwBSH35tEVrfCA6H/55yrZsk=";
+    hash = "sha256-mDh4kYwRXpvVCh+nBmQblmlmgG98P6+UmgG4ZioQ68M=";
   };
-
-  patches = [
-    # Switch to poetry-core, https://gitlab.com/keatontaylor/alexapy/-/merge_requests/342
-    (fetchpatch {
-      name = "switch-poetry-core.patch";
-      url = "https://gitlab.com/keatontaylor/alexapy/-/commit/843daec4ba1fb219f1c4f4a6ca01c9af73014e53.patch";
-      hash = "sha256-wlCq0/NJx4Adh/o61FSMWMQU99PZkJ0U2yqxqOfvAa8=";
-    })
-  ];
 
   pythonRelaxDeps = [
     "aiofiles"

@@ -1,19 +1,32 @@
 # cd nixpkgs
 # nix-build -A tests.testers.hasPkgConfigModule
-{ lib, testers, zlib, runCommand }:
+{ lib, testers, zlib, openssl, runCommand }:
 
 lib.recurseIntoAttrs {
 
-  zlib-has-zlib = testers.hasPkgConfigModule {
+  zlib-has-zlib = testers.hasPkgConfigModules {
     package = zlib;
-    moduleName = "zlib";
+    moduleNames = [ "zlib" ];
+  };
+
+  zlib-has-meta-pkgConfigModules = testers.hasPkgConfigModules {
+    package = zlib;
+  };
+
+  openssl-has-openssl = testers.hasPkgConfigModules {
+    package = openssl;
+    moduleNames = [ "openssl" ];
+  };
+
+  openssl-has-all-meta-pkgConfigModules = testers.hasPkgConfigModules {
+    package = openssl;
   };
 
   zlib-does-not-have-ylib = runCommand "zlib-does-not-have-ylib" {
     failed = testers.testBuildFailure (
-      testers.hasPkgConfigModule {
+      testers.hasPkgConfigModules {
       package = zlib;
-      moduleName = "ylib";
+      moduleNames = [ "ylib" ];
       }
     );
   } ''

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mepo";
-  version = "1.1";
+  version = "1.1.2";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "mepo";
     rev = finalAttrs.version;
-    hash = "sha256-OIZ617QLjiTiDwcsn0DnRussYtjDkVyifr2mdSqA98A=";
+    hash = "sha256-rKIyhr0sxG1moFsapylJWoAoHi9FSRdugIHr/TqY71s=";
   };
 
   nativeBuildInputs = [

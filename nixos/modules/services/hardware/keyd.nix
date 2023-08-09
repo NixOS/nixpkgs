@@ -7,7 +7,7 @@ let
   keyboardOptions = { ... }: {
     options = {
       ids = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [ "*" ];
         example = [ "*" "-0123:0456" ];
         description = lib.mdDoc ''

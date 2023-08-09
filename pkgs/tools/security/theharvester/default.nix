@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.3.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9W4xN+ZSNdR5NOnwohNrQVW8JSEKFyKxWTz012uiUm8=";
+    hash = "sha256-jPwyciS4aIXJSCOolgzHbiadPzHO2MsQPGfavHqC2sg=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

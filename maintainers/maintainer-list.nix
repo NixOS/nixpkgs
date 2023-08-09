@@ -11658,6 +11658,12 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
+  multisn8 = {
+    email = "all-things-nix@multisamplednight.com";
+    github = "MultisampledNight";
+    githubId = 80128916;
+    name = "MultisampledNight";
+  };
   multun = {
     email = "victor.collod@epita.fr";
     github = "multun";

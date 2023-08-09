@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-opensky";
-  version = "0.0.10";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-opensky";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QhcnbFp37gj1/37OlRxnQnIhgyNi/D19PXRh5hagHvE=";
+    hash = "sha256-62ncinv6XUGB1dYle/yqSCyJNbGD9BLaOqrF/zjL2fA=";
   };
 
   postPatch = ''

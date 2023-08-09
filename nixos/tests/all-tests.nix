@@ -21,7 +21,7 @@ let
     if isAttrs val
     then
       if hasAttr "test" val then callTest val
-      else mapAttrs (n: s: discoverTests s) val
+      else mapAttrs (n: s: if n == "passthru" then s else discoverTests s) val
     else if isFunction val
       then
         # Tests based on make-test-python.nix will return the second lambda

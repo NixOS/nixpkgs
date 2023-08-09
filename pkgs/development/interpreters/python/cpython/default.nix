@@ -184,6 +184,8 @@ let
         if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
       else if isx86_32 then "i386"
       else parsed.cpu.name;
+    # Python doesn't distinguish musl and glibc and always prefixes with "gnu"
+    gnuAbiName = replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name;
     pythonAbiName =
       # python's build doesn't support every gnu<extension>, and doesn't
       # differentiate between musl and glibc, so we list those supported in
@@ -191,7 +193,7 @@ let
       # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
       # Note: this is an approximation, as it doesn't take into account the CPU
       # family, or the nixpkgs abi naming conventions.
-      if elem parsed.abi.name [
+      if elem gnuAbiName [
         "gnux32"
         "gnueabihf"
         "gnueabi"
@@ -199,7 +201,7 @@ let
         "gnuabi64"
         "gnuspe"
       ]
-      then parsed.abi.name
+      then gnuAbiName
       else "gnu";
     multiarch =
       if isDarwin then "darwin"
@@ -573,6 +575,6 @@ in with passthru; stdenv.mkDerivation {
     license = licenses.psfl;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ fridh ];
-    mainProgram = "python3";
+    mainProgram = executable;
   };
 }

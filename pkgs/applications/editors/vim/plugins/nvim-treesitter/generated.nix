@@ -1796,12 +1796,12 @@
   };
   sql = buildGrammar {
     language = "sql";
-    version = "0.0.0+rev=012fe71";
+    version = "0.0.0+rev=a000dd8";
     src = fetchFromGitHub {
       owner = "derekstride";
       repo = "tree-sitter-sql";
-      rev = "012fe71ce44399e870f75615b54bd40d91b87a63";
-      hash = "sha256-K977zxbsxRkSlA+pYW5oVV3kECDHgUhDrnY3kHdBMP0=";
+      rev = "a000dd8930464c71fa6fec9be4fdd6198068393c";
+      hash = "sha256-37nN/Zh84iTmmpZ804rnb/7oXzQqOk7ub1FbkCMlT28=";
     };
     meta.homepage = "https://github.com/derekstride/tree-sitter-sql";
   };
@@ -2176,12 +2176,12 @@
   };
   wing = buildGrammar {
     language = "wing";
-    version = "0.0.0+rev=fea885a";
+    version = "0.0.0+rev=df94899";
     src = fetchFromGitHub {
       owner = "winglang";
       repo = "wing";
-      rev = "fea885a0358e5d6146dbd12feaa3f270ddfd78a3";
-      hash = "sha256-4sLupliDl7j281sMcVeF4EROI9TvAqhh077ZhJI6Ctw=";
+      rev = "df94899fcee25e2da32744760aa4394d2e728a33";
+      hash = "sha256-4mp3m029/3Kvke8NXbLQmE3qZa+c9I6x6nht1AckSgA=";
     };
     location = "libs/tree-sitter-wing";
     generate = true;

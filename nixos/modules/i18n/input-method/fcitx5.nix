@@ -19,7 +19,7 @@ in
         '';
       };
       quickPhrase = mkOption {
-        type = with types; attrsOf string;
+        type = with types; attrsOf str;
         default = { };
         example = literalExpression ''
           {

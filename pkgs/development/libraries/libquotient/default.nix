@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-Lq404O2VjZ8vlXOW+rhsvWDvZsNd3APNbv6AadQCjhk=";
+    hash = "sha256-ecTHiWbsNDIUz+Sadh2pVbDRZFzdMkZXBYSjy1JqZrk=";
   };
 
   buildInputs = [ olm openssl qtbase qtmultimedia qtkeychain ];
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "A Qt5/Qt6 library to write cross-platform clients for Matrix";
     homepage = "https://matrix.org/docs/projects/sdk/quotient";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ colemickens matthiasbeyer ];
   };
 }

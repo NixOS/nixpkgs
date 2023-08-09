@@ -1,9 +1,11 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , cargo
 , rustPlatform
 , rustc
+, libiconv
 , typing-extensions
 , pytestCheckHook
 , hypothesis
@@ -38,6 +40,10 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     rustc
     typing-extensions
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
   ];
 
   propagatedBuildInputs = [

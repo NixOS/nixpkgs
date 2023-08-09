@@ -1,20 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonAtLeast
+, fetchpatch
 , jsonschema
 , pytestCheckHook
 , python-dateutil
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "hologram";
   version = "0.0.16";
   format = "pyproject";
-
-  # ValueError: mutable default <class 'tests.conftest.Point'> for field a is not allowed: use default_factory
-  disabled = pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
@@ -23,8 +21,18 @@ buildPythonPackage rec {
     hash = "sha256-DboVCvByI8bTThamGBwSiQADGxIaEnTMmwmVI+4ARgc=";
   };
 
+  patches = [
+    # https://github.com/dbt-labs/hologram/pull/58
+    (fetchpatch {
+      name = "python3.11-test-compatibility.patch";
+      url = "https://github.com/dbt-labs/hologram/commit/84bbe862ef6a2fcc8b8ce85b5c9a006cc7dc1f66.patch";
+      hash = "sha256-t096jJDoKUPED4QHSfVjUMLtUJjWcqjblCtGR8moEJc=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

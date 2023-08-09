@@ -1739,6 +1739,8 @@ self: super: with self; {
 
   celery-singleton = callPackage ../development/python-modules/celery-singleton { };
 
+  celery-types = callPackage ../development/python-modules/celery-types { };
+
   cement = callPackage ../development/python-modules/cement { };
 
   cemm = callPackage ../development/python-modules/cemm { };
@@ -3407,6 +3409,8 @@ self: super: with self; {
   ephemeral-port-reserve = callPackage ../development/python-modules/ephemeral-port-reserve { };
 
   epson-projector = callPackage ../development/python-modules/epson-projector { };
+
+  equinox = callPackage ../development/python-modules/equinox { };
 
   eradicate = callPackage ../development/python-modules/eradicate { };
 
@@ -5189,6 +5193,8 @@ self: super: with self; {
 
   ipy = callPackage ../development/python-modules/IPy { };
 
+  ipycanvas = callPackage ../development/python-modules/ipycanvas { };
+
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
   ipynbname = callPackage ../development/python-modules/ipynbname { };
@@ -5337,6 +5343,8 @@ self: super: with self; {
   };
 
   jaxopt = callPackage ../development/python-modules/jaxopt { };
+
+  jaxtyping = callPackage ../development/python-modules/jaxtyping { };
 
   jaydebeapi = callPackage ../development/python-modules/jaydebeapi { };
 
@@ -8304,7 +8312,7 @@ self: super: with self; {
 
   polyline = callPackage ../development/python-modules/polyline { };
 
-  Polygon3 = callPackage ../development/python-modules/Polygon3 { };
+  polygon3 = callPackage ../development/python-modules/polygon3 { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 

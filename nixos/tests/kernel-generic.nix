@@ -42,7 +42,9 @@ let
   };
 
 in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
-  inherit testsForLinuxPackages;
+  passthru = {
+    inherit testsForLinuxPackages;
 
-  testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
+    testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
+  };
 }

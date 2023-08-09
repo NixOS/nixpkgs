@@ -53,6 +53,16 @@ self: let
     super = removeAttrs imported [ "dash" ];
 
     overrides = {
+      eglot = super.eglot.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          local info_file=eglot.info
+          pushd $out/share/emacs/site-lisp/elpa/eglot-*
+          # specify output info file to override the one defined in eglot.texi
+          makeinfo --output=$info_file eglot.texi
+          install-info $info_file dir
+          popd
+        '';
+      });
     };
 
     elpaDevelPackages = super // overrides;

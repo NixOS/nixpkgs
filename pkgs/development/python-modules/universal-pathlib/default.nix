@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "universal-pathlib";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "universal_pathlib";
     inherit version;
-    hash = "sha256-LqzljIZUZh8zHvcyBqFHBbunpJVYFpk6mfuesVGyojg=";
+    hash = "sha256-UhTIbyEP6rm+W8wALwQtZeruw8CTP9ZlpDNstw6GxZ0=";
   };
 
   nativeBuildInputs = [

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildNpmPackage
 , nixosTests
@@ -14,6 +15,7 @@
 , unpaper
 , poppler_utils
 , liberation_ttf
+, xcbuild
 }:
 
 let
@@ -53,6 +55,8 @@ let
 
     nativeBuildInputs = [
       python3
+    ] ++ lib.optionals stdenv.isDarwin [
+      xcbuild
     ];
 
     postPatch = ''
@@ -279,6 +283,8 @@ python.pkgs.buildPythonApplication rec {
     "testNormalOperation"
   ];
 
+  doCheck = !stdenv.isDarwin;
+
   passthru = {
     inherit python path frontend;
     tests = { inherit (nixosTests) paperless; };
@@ -289,7 +295,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://docs.paperless-ngx.com/";
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
   };
 }
