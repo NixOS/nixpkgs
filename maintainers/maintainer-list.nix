@@ -25765,6 +25765,15 @@
     githubId = 332534;
     name = "Zach Shipko";
   };
+  ztmr = {
+    name = "Tomas Morstein";
+    github = "ztmr";
+    githubId = 1504424;
+    matrix = "@ztmr:matrix.org";
+    keys = [{
+      fingerprint = "A8C4 D329 0201 B564 7F55  7BC8 1352 80C2 690F CF0F";
+    }];
+  };
   ztzg = {
     email = "dd@crosstwine.com";
     github = "ztzg";
@@ -25806,16 +25815,6 @@
     github = "zzzsyyy";
     githubId = 59917878;
     name = "Mathias Zhang";
-  };
-  ztmr = {
-    name = "Tomas Morstein";
-    email = "ztmr@users.noreply.github.com";
-    github = "ztmr";
-    githubId = 1504424;
-    keys = [{
-      longkeyid = "rsa4096/0x135280C2690FCF0F";
-      fingerprint = "A8C4 D329 0201 B564 7F55  7BC8 1352 80C2 690F CF0F";
-    }];
   };
 }
 # Keep the list alphabetically sorted.
