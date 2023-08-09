@@ -109,6 +109,10 @@ let rizin = stdenv.mkDerivation rec {
       jsdec = pkgs.callPackage ./jsdec.nix {
         inherit rizin openssl;
       };
+      rz-ghidra = pkgs.libsForQt5.callPackage ./rz-ghidra.nix {
+        inherit rizin openssl;
+        enableCutterPlugin = false;
+      };
       # sigdb isn't a real plugin, but it's separated from the main rizin
       # derivation so that only those who need it will download it
       sigdb = pkgs.callPackage ./sigdb.nix { };

@@ -40,7 +40,12 @@ let cutter = mkDerivation rec {
   '';
 
   passthru = rec {
-    inherit (rizin) plugins;
+    plugins = rizin.plugins // {
+      rz-ghidra = rizin.plugins.rz-ghidra.override {
+        inherit cutter qtbase qtsvg;
+        enableCutterPlugin = true;
+      };
+    };
     withPlugins = filter: pkgs.callPackage ./wrapper.nix {
       unwrapped = cutter;
       inherit rizin;
