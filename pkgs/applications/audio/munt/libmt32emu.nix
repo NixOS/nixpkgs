@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
-    rev = "${pname}_${lib.replaceChars [ "." ] [ "_" ] version}";
+    rev = "${pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-XGds9lDfSiY0D8RhYG4TGyjYEVvVYuAfNSv9+VxiJEs=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://munt.sourceforge.net/";
+    homepage = "https://munt.sourceforge.net/";
     description = "A library to emulate Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ OPNA2608 ];

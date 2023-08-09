@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bubblewrap";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "bubblewrap";
     rev = "v${version}";
-    hash = "sha256-ddxEtBw6JcSsZCN5uKyuBMVkWwSoThfxrcvHZGZzFr4=";
+    hash = "sha256-UiZfp1bX/Eul5x31oBln5P9KMT2oFwawQqDs9udZUxY=";
   };
 
   postPatch = ''
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/containers/bubblewrap/releases/tag/${src.rev}";
     description = "Unprivileged sandboxing tool";
     homepage = "https://github.com/containers/bubblewrap";
     license = licenses.lgpl2Plus;

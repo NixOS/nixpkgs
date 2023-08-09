@@ -5,7 +5,7 @@
 , appdirs
 , cffi
 , decorator
-, Mako
+, mako
 , mesa_drivers
 , numpy
 , ocl-icd
@@ -13,7 +13,9 @@
 , platformdirs
 , pybind11
 , pytest
+, pytestCheckHook
 , pytools
+, setuptools
 , six
 }:
 
@@ -22,31 +24,31 @@ let
     if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
 in buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2022.2.4";
+  version = "2023.1.1";
 
-  checkInputs = [ pytest ];
+  format = "pyproject";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-CtkleKlKC+De3Vyk/Lbie1p13k5frHV/BMkES9nUJEQ=";
+  };
+
+  nativeBuildInputs = [ setuptools ];
+
   buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 
   propagatedBuildInputs = [
     appdirs
     cffi
     decorator
-    Mako
+    mako
     numpy
     platformdirs
     pytools
     six
   ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-tXye+L2ObbB+iRBvMJG6I2sk+Vo4/UDfsX0u1/9r5K0=";
-  };
-
-  # py.test is not needed during runtime, so remove it from `install_requires`
-  postPatch = ''
-    substituteInPlace setup.py --replace "pytest>=2" ""
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -54,6 +56,8 @@ in buildPythonPackage rec {
 
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory
   doCheck = false;
+
+  pythonImportsCheck = [ "pyopencl" ];
 
   meta = with lib; {
     description = "Python wrapper for OpenCL";

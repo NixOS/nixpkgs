@@ -204,13 +204,13 @@ The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _s
 
 In Nixpkgs, there are generally three different names associated with a package:
 
-- The `name` attribute of the derivation (excluding the version part). This is what most users see, in particular when using `nix-env`.
+- The `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
 - The variable name used for the instantiated package in `all-packages.nix`, and when passing it as a dependency to other functions. Typically this is called the _package attribute name_. This is what Nix expression authors see. It can also be used when installing using `nix-env -iA`.
 
 - The filename for (the directory containing) the Nix expression.
 
-Most of the time, these are the same. For instance, the package `e2fsprogs` has a `name` attribute `"e2fsprogs-version"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
+Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
 
 There are a few naming guidelines:
 
@@ -220,7 +220,9 @@ There are a few naming guidelines:
 
 - The `version` attribute _must_ start with a digit e.g`"0.3.1rc2".
 
-- If a package is not a release but a commit from a repository, then the `version` attribute _must_ be the date of that (fetched) commit. The date _must_ be in `"unstable-YYYY-MM-DD"` format.
+- If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
+
+Example: Given a project had its latest releases `2.2` in November 2021, and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
 
 - Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
@@ -259,6 +261,10 @@ When in doubt, consider refactoring the `pkgs/` tree, e.g. creating new categori
   - **If it’s a _build manager_:**
 
     - `development/tools/build-managers` (e.g. `gnumake`)
+
+  - **If it’s a _language server_:**
+
+    - `development/tools/language-servers` (e.g. `ccls` or `rnix-lsp`)
 
   - **Else:**
 
@@ -426,9 +432,10 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
 
   ```nix
   src = fetchgit {
+    url = "git@github.com:NixOS/nix.git"
     url = "git://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 
@@ -438,7 +445,7 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
   src = fetchgit {
     url = "https://github.com/NixOS/nix.git";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 
@@ -449,14 +456,14 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
     owner = "NixOS";
     repo = "nix";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    sha256 = "1i2yxndxb6yc9l6c99pypbd92lfq5aac4klq7y2v93c9qvx2cgpc";
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 
 When fetching from GitHub, commits must always be referenced by their full commit hash. This is because GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous. It already happens for some short, 6-character commit hashes in `nixpkgs`.
 It is a practical vector for a denial-of-service attack by pushing large amounts of auto generated commits into forks and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
 
-Find the value to put as `sha256` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`. 
+Find the value to put as `hash` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`.
 
 ## Obtaining source hash {#sec-source-hashes}
 
@@ -486,12 +493,12 @@ Preferred source hash type is sha256. There are several ways to get it.
    - `lib.fakeHash`
    - `lib.fakeSha256`
    - `lib.fakeSha512`
-   
+
    in the package expression, attempt build and extract correct hash from error messages.
 
    ::: {.warning}
    You must use one of these four fake hashes and not some arbitrarily-chosen hash.
-   
+
    See [](#sec-source-hashes-security).
    :::
 
@@ -519,7 +526,7 @@ patches = [
   (fetchpatch {
     name = "fix-check-for-using-shared-freetype-lib.patch";
     url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
-    sha256 = "1f0k043rng7f0rfl9hhb89qzvvksqmkrikmm38p61yfx51l325xr";
+    hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
   })
 ];
 ```
@@ -669,3 +676,18 @@ stdenv.mkDerivation {
   ...
 }
 ```
+
+### Import From Derivation {#ssec-import-from-derivation}
+
+Import From Derivation (IFD) is disallowed in Nixpkgs for performance reasons:
+[Hydra] evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
+
+[Hydra]: https://github.com/NixOS/hydra
+
+Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.
+
+<!-- TODO: remove the following and link to Nix manual once https://github.com/NixOS/nix/pull/7332 is merged -->
+
+See also [NixOS Wiki: Import From Derivation].
+
+[NixOS Wiki: Import From Derivation]: https://nixos.wiki/wiki/Import_From_Derivation

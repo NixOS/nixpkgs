@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "bob";
-  version = "0.6.3";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "benchkram";
     repo = pname;
     rev = version;
-    hash = "sha256-jZDyZVjo4Purt2tabJew5N4MZmLXli6gqBTejv5FGJM=";
+    hash = "sha256-zmWfOLBb+GWw9v6LdCC7/WaP1Wz7UipPwqkmI1+rG8Q=";
   };
 
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
-  vendorHash = "sha256-dmMoFyl9IX0QS6sNC6qzC4DQQQfvxmxuUeUfx0DBd/I=";
+  vendorHash = "sha256-S1XUgjdSVTWXehOLCxXcvj0SH12cxqvYadVlCw/saF4=";
 
   excludedPackages = [ "example/server-db" "test/e2e" "tui-example" ];
 
@@ -24,7 +24,6 @@ buildGoModule rec {
     description = "A build system for microservices";
     homepage = "https://bob.build";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ zuzuleinen ];
   };
 }

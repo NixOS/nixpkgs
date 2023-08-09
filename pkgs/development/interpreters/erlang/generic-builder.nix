@@ -21,7 +21,7 @@
 , parallelBuild ? false
 , systemd
 , wxSupport ? true
-, systemdSupport ? stdenv.isLinux # systemd support in epmd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd # systemd support in epmd
   # updateScript deps
 , writeScript
 , common-updater-scripts
@@ -128,6 +128,8 @@ stdenv.mkDerivation ({
     ++ optional wxSupport "--enable-wx"
     ++ optional systemdSupport "--enable-systemd"
     ++ optional stdenv.isDarwin "--enable-darwin-64bit"
+    # make[3]: *** [yecc.beam] Segmentation fault: 11
+    ++ optional (stdenv.isDarwin && stdenv.isx86_64) "--disable-jit"
     ++ configureFlags;
 
   # install-docs will generate and install manpages and html docs
@@ -156,7 +158,7 @@ stdenv.mkDerivation ({
         latest=$(list-git-tags --url=https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
         if [ "$latest" != "${version}" ]; then
           nixpkgs="$(git rev-parse --show-toplevel)"
-          nix_file="$nixpkgs/pkgs/development/interpreters/erlang/R${major}.nix"
+          nix_file="$nixpkgs/pkgs/development/interpreters/erlang/${major}.nix"
           update-source-version ${baseName}R${major} "$latest" --version-key=version --print-changes --file="$nix_file"
         else
           echo "${baseName}R${major} is already up-to-date"

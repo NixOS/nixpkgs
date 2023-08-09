@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 {
   name = "fluidd";
-  meta.maintainers = with maintainers; [ vtuan10 ];
+  meta.maintainers = with lib.maintainers; [ vtuan10 ];
 
   nodes.machine = { pkgs, ... }: {
     services.fluidd = {

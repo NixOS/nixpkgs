@@ -1,7 +1,5 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
-, nix-gitignore
 , makeWrapper
 , stdenv
 , darwin
@@ -15,7 +13,7 @@
 
 let
   runtimePath = lib.makeBinPath [ nix nix-prefetch-git git ];
-  sources = (builtins.fromJSON (builtins.readFile ./sources.json)).pins;
+  sources = (lib.importJSON ./sources.json).pins;
 in rustPlatform.buildRustPackage rec {
   pname = "npins";
   version = src.version;

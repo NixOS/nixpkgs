@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "babl";
-  version = "0.1.96";
+  version = "0.1.106";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-M2c/5Fmpg/QRJFpJ+B/X8ZZq8eqOypsJWpQMVCuFRfY=";
+    url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/babl-${version}.tar.xz";
+    hash = "sha256-0yUTXTME8IjBNMxiABOs8DXeLl0SWlCi2RBU5zd8QV8=";
   };
 
   nativeBuildInputs = [

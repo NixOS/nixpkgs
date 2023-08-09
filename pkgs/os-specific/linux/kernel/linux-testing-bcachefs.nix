@@ -1,9 +1,13 @@
 { lib
+, stdenv
 , fetchpatch
 , kernel
-, commitDate ? "2022-10-31"
-, currentCommit ? "77c27f28aa58e9d9037eb68c87d3283f68c371f7"
-, diffHash ? "sha256-TUpI9z0ac3rjn2oT5Z7oQXevDKbGwTVjyigS5/aGwgQ="
+, commitDate ? "2023-06-28"
+# bcachefs-tools stores the expected-revision in:
+#   https://evilpiepirate.org/git/bcachefs-tools.git/tree/.bcachefs_revision
+# but this does not means that it'll be the latest-compatible revision
+, currentCommit ? "84f132d5696138bb038d2dc8f1162d2fab5ac832"
+, diffHash ? "sha256-RaBWBU7rXjJFb1euFAFBHWCBQAG7npaCodjp/vMYpyw="
 , kernelPatches # must always be defined in bcachefs' all-packages.nix entry because it's also a top-level attribute supplied by callPackage
 , argsOverride ? {}
 , ...
@@ -11,14 +15,19 @@
 
 # NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
 (kernel.override ( args // {
-  argsOverride = {
-    version = "${kernel.version}-bcachefs-unstable-${commitDate}";
+  version = "${kernel.version}-bcachefs-unstable-${commitDate}";
 
-    extraMeta = {
-      branch = "master";
-      maintainers = with lib.maintainers; [ davidak Madouura ];
-    };
-  } // argsOverride;
+  extraMeta = {
+    branch = "master";
+    broken = stdenv.isAarch64;
+    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc raitobezarius ];
+  };
+
+  structuredExtraConfig = with lib.kernel; {
+    BCACHEFS_FS = module;
+    BCACHEFS_QUOTA = option yes;
+    BCACHEFS_POSIX_ACL = option yes;
+  };
 
   kernelPatches = [ {
       name = "bcachefs-${currentCommit}";
@@ -28,7 +37,5 @@
         url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${currentCommit}&id2=v${lib.versions.majorMinor kernel.version}";
         sha256 = diffHash;
       };
-
-      extraConfig = "BCACHEFS_FS m";
     } ] ++ kernelPatches;
 }))

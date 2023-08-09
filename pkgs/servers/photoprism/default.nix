@@ -1,14 +1,14 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg, libheif, exiftool, nixosTests, makeWrapper }:
+{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg, libheif, exiftool, imagemagick, makeWrapper, testers }:
 
 let
-  version = "221102-905925b4d";
+  version = "230615-90a18f6e7";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-xyyV16yYlKIMINmVDtiQJmnbEQ12wjzn6p90f4+GpWk=";
+    sha256 = "sha256-DRrztxaSktt0R/5uMhn/BS2/d2MGbC2Knc2+/DwRycM=";
   };
 
   libtensorflow = pkgs.callPackage ./libtensorflow.nix { };
@@ -42,7 +42,7 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
   ];
 
@@ -62,7 +62,8 @@ stdenv.mkDerivation {
       --set PHOTOPRISM_RAWTHERAPEE_BIN ${rawtherapee}/bin/rawtherapee-cli \
       --set PHOTOPRISM_HEIFCONVERT_BIN ${libheif}/bin/heif-convert \
       --set PHOTOPRISM_FFMPEG_BIN ${ffmpeg}/bin/ffmpeg \
-      --set PHOTOPRISM_EXIFTOOL_BIN ${exiftool}/bin/exiftool
+      --set PHOTOPRISM_EXIFTOOL_BIN ${exiftool}/bin/exiftool \
+      --set PHOTOPRISM_IMAGEMAGICK_BIN ${imagemagick}/bin/convert
 
     # install frontend
     ln -s ${frontend}/assets/* ${assets_path}
@@ -74,7 +75,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.tests.photoprism = nixosTests.photoprism;
+  passthru.tests.version = testers.testVersion { package = pkgs.photoprism; };
 
   meta = with lib; {
     homepage = "https://photoprism.app";

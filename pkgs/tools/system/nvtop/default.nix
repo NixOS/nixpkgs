@@ -6,16 +6,18 @@
 , cudatoolkit
 , libdrm
 , ncurses
+, nvtop
+, testers
+, udev
 , addOpenGLRunpath
 , amd ? true
 , nvidia ? true
-, udev
 }:
 
 let
   pname-suffix = if amd && nvidia then "" else if amd then "-amd" else "-nvidia";
   nvidia-postFixup = "addOpenGLRunpath $out/bin/nvtop";
-  libPath = lib.makeLibraryPath [ libdrm ncurses ];
+  libPath = lib.makeLibraryPath [ libdrm ncurses udev ];
   amd-postFixup = ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -37,6 +39,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = with lib; [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_TESTING=ON"
+    "-DUSE_LIBUDEV_OVER_LIBSYSTEMD=ON"
   ] ++ optional nvidia "-DNVML_INCLUDE_DIRS=${cudatoolkit}/include"
   ++ optional nvidia "-DNVML_LIBRARIES=${cudatoolkit}/targets/x86_64-linux/lib/stubs/libnvidia-ml.so"
   ++ optional (!amd) "-DAMDGPU_SUPPORT=OFF"
@@ -53,6 +56,14 @@ stdenv.mkDerivation rec {
   postFixup = (lib.optionalString amd amd-postFixup) + (lib.optionalString nvidia nvidia-postFixup);
 
   doCheck = true;
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+      package = nvtop;
+      command = "nvtop --version";
+    };
+  };
 
   meta = with lib; {
     description = "A (h)top like task monitor for AMD, Intel and NVIDIA GPUs";

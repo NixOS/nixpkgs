@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "3.4.0";
+  version = "3.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,8 +31,14 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yr8IyAwZ6y2MPTe6bHRW+CIp19R3ZJWHuqdN5qultnQ=";
+    hash = "sha256-/uPaRju2AJCjMCfA29IKQ4Hu71RBu/Yz8jHwk9EE1Eg=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace \
+      "websockets>=10,<11;python_version>'3.6'" \
+      "websockets>=10,<12;python_version>'3.6'"
+  '';
 
   propagatedBuildInputs = [
     backoff
@@ -40,7 +46,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiofiles
     mock
     parse
@@ -80,7 +86,7 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
   ];
 
   disabledTests = [
@@ -93,6 +99,22 @@ buildPythonPackage rec {
     # Exclude linter tests
     "gql-checker/tests/test_flake8_linter.py"
     "gql-checker/tests/test_pylama_linter.py"
+    # Tests require network access
+    "tests/custom_scalars/test_money.py"
+    "tests/test_aiohttp.py"
+    "tests/test_appsync_http.py"
+    "tests/test_appsync_websockets.py"
+    "tests/test_async_client_validation.py"
+    "tests/test_graphqlws_exceptions.py"
+    "tests/test_graphqlws_subscription.py"
+    "tests/test_phoenix_channel_exceptions.py"
+    "tests/test_phoenix_channel_exceptions.py"
+    "tests/test_phoenix_channel_query.py"
+    "tests/test_phoenix_channel_subscription.py"
+    "tests/test_requests.py"
+    "tests/test_websocket_exceptions.py"
+    "tests/test_websocket_query.py"
+    "tests/test_websocket_subscription.py"
   ];
 
   pythonImportsCheck = [
@@ -102,6 +124,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "GraphQL client in Python";
     homepage = "https://github.com/graphql-python/gql";
+    changelog = "https://github.com/graphql-python/gql/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

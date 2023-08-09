@@ -23,12 +23,12 @@ let
     optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
         optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "packageOverrides" ] { } rhs) pkgs;
     } //
     optionalAttrs (lhs ? perlPackageOverrides) {
       perlPackageOverrides = pkgs:
         optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
     };
 
   configType = mkOptionType {
@@ -49,16 +49,11 @@ let
     merge = lib.mergeOneOption;
   };
 
-  pkgsType = mkOptionType {
-    name = "nixpkgs";
+  pkgsType = types.pkgs // {
+    # This type is only used by itself, so let's elaborate the description a bit
+    # for the purpose of documentation.
     description = "An evaluation of Nixpkgs; the top level attribute set of packages";
-    check = builtins.isAttrs;
   };
-
-  # Whether `pkgs` was constructed by this module - not if nixpkgs.pkgs or
-  # _module.args.pkgs is set. However, determining whether _module.args.pkgs
-  # is defined elsewhere does not seem feasible.
-  constructedByMe = !opt.pkgs.isDefined;
 
   hasBuildPlatform = opt.buildPlatform.highestPrio < (mkOptionDefault {}).priority;
   hasHostPlatform = opt.hostPlatform.isDefined;
@@ -67,11 +62,6 @@ let
   # Context for messages
   hostPlatformLine = optionalString hasHostPlatform "${showOptionWithDefLocs opt.hostPlatform}";
   buildPlatformLine = optionalString hasBuildPlatform "${showOptionWithDefLocs opt.buildPlatform}";
-  platformLines = optionalString hasPlatform ''
-    Your system configuration configures nixpkgs with platform parameters:
-    ${hostPlatformLine
-    }${buildPlatformLine
-    }'';
 
   legacyOptionsDefined =
     optional (opt.localSystem.highestPrio < (mkDefault {}).priority) opt.system
@@ -342,10 +332,28 @@ in
 
   config = {
     _module.args = {
-      pkgs = finalPkgs.__splicedPackages;
+      pkgs =
+        # We explicitly set the default override priority, so that we do not need
+        # to evaluate finalPkgs in case an override is placed on `_module.args.pkgs`.
+        # After all, to determine a definition priority, we need to evaluate `._type`,
+        # which is somewhat costly for Nixpkgs. With an explicit priority, we only
+        # evaluate the wrapper to find out that the priority is lower, and then we
+        # don't need to evaluate `finalPkgs`.
+        lib.mkOverride lib.modules.defaultOverridePriority
+          finalPkgs.__splicedPackages;
     };
 
-    assertions = [
+    assertions = let
+      # Whether `pkgs` was constructed by this module. This is false when any of
+      # nixpkgs.pkgs or _module.args.pkgs is set.
+      constructedByMe =
+        # We set it with default priority and it can not be merged, so if the
+        # pkgs module argument has that priority, it's from us.
+        (lib.modules.mergeAttrDefinitionsWithPrio options._module.args).pkgs.highestPrio
+          == lib.modules.defaultOverridePriority
+        # Although, if nixpkgs.pkgs is set, we did forward it, but we did not construct it.
+          && !opt.pkgs.isDefined;
+    in [
       (
         let
           nixosExpectedSystem =

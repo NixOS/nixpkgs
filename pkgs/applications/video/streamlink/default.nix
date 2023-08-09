@@ -1,24 +1,26 @@
 { lib
 , python3Packages
+, fetchPypi
 , ffmpeg
-, fetchpatch
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "5.0.1";
+  version = "6.0.1";
   format = "pyproject";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PKRioPBhTV6i3ckQgcKuhQFmpBvUQE4o3FLej8qx4mM=";
+    hash = "sha256-0Qpil/bh2F+WaG0zv4yxEzx6e1fv3t9xed+nhT+NC7U=";
   };
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     mock
     requests-mock
     freezegun
+    pytest-asyncio
+    pytest-trio
   ];
 
   nativeBuildInputs = with python3Packages; [
@@ -26,12 +28,17 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = (with python3Packages; [
+    certifi
     isodate
     lxml
     pycountry
     pycryptodome
     pysocks
     requests
+    trio
+    trio-websocket
+    typing-extensions
+    urllib3
     websocket-client
   ]) ++ [
     ffmpeg

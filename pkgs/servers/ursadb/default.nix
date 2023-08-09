@@ -1,38 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zeromq, cppzmq }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ursadb";
-  version = "1.2.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "ursadb";
-    rev = "v${version}";
-    hash = "sha256-/EK1CKJ0IR7fkKSpQkONbWcz6uhUoAwK430ljNYsV5U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5kVci9o1jUDpbTgMuach8AjXCKhTglcgsywHt3yoo2Y=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace \
-        "add_executable(ursadb_test Tests.cpp)" "" \
-      --replace \
-        "target_link_libraries(ursadb_test ursa)" ""
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ursadb $out/bin/
-    cp ursadb_new $out/bin/
-    cp ursadb_trim $out/bin/
+      --replace "add_executable(ursadb_test src/Tests.cpp)" "" \
+      --replace "target_link_libraries(ursadb_test ursa)" "" \
+      --replace "target_enable_ipo(ursadb_test)" "" \
+      --replace "target_clangformat_setup(ursadb_test)" "" \
+      --replace 'target_include_directories(ursadb_test PUBLIC ${"$"}{CMAKE_SOURCE_DIR})' "" \
+      --replace "ursadb_test" ""
   '';
 
   nativeBuildInputs = [
     cmake
-  ];
-
-  buildInputs = [
-    zeromq
-    cppzmq
   ];
 
   meta = with lib; {
@@ -43,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
   };
-}
+})

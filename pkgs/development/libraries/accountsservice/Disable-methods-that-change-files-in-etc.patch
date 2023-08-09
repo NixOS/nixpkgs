@@ -10,10 +10,10 @@ Only if environment variable NIXOS_USERS_PURE is set.
  2 files changed, 45 insertions(+)
 
 diff --git a/src/daemon.c b/src/daemon.c
-index e62e124..87459b2 100644
+index 861430f..aefaf2d 100644
 --- a/src/daemon.c
 +++ b/src/daemon.c
-@@ -931,6 +931,11 @@ daemon_create_user (AccountsAccounts      *accounts,
+@@ -1378,6 +1378,11 @@ daemon_create_user (AccountsAccounts      *accounts,
                      const gchar           *real_name,
                      gint                   account_type)
  {
@@ -22,10 +22,10 @@ index e62e124..87459b2 100644
 +                return;
 +        }
 +
-         Daemon *daemon = (Daemon*)accounts;
+         Daemon *daemon = (Daemon *) accounts;
          CreateUserData *data;
  
-@@ -1138,6 +1143,11 @@ daemon_delete_user (AccountsAccounts      *accounts,
+@@ -1581,6 +1586,11 @@ daemon_delete_user (AccountsAccounts      *accounts,
                      gint64                 uid,
                      gboolean               remove_files)
  {
@@ -34,14 +34,14 @@ index e62e124..87459b2 100644
 +                return;
 +        }
 +
-         Daemon *daemon = (Daemon*)accounts;
+         Daemon *daemon = (Daemon *) accounts;
          DeleteUserData *data;
  
 diff --git a/src/user.c b/src/user.c
-index 0fb1a17..dbdebaf 100644
+index 28170db..df947a1 100644
 --- a/src/user.c
 +++ b/src/user.c
-@@ -904,6 +904,11 @@ user_set_real_name (AccountsUser          *auser,
+@@ -1216,6 +1216,11 @@ user_set_real_name (AccountsUser          *auser,
                      GDBusMethodInvocation *context,
                      const gchar           *real_name)
  {
@@ -50,10 +50,10 @@ index 0fb1a17..dbdebaf 100644
 +                return;
 +        }
 +
-         User *user = (User*)auser;
+         User *user = (User *) auser;
          int uid;
          const gchar *action_id;
-@@ -981,6 +986,11 @@ user_set_user_name (AccountsUser          *auser,
+@@ -1293,6 +1298,11 @@ user_set_user_name (AccountsUser          *auser,
                      GDBusMethodInvocation *context,
                      const gchar           *user_name)
  {
@@ -62,10 +62,10 @@ index 0fb1a17..dbdebaf 100644
 +                return;
 +        }
 +
-         User *user = (User*)auser;
+         User *user = (User *) auser;
+ 
          daemon_local_check_auth (user->daemon,
-                                  user,
-@@ -1263,6 +1273,11 @@ user_set_home_directory (AccountsUser          *auser,
+@@ -1945,6 +1955,11 @@ user_set_home_directory (AccountsUser          *auser,
                           GDBusMethodInvocation *context,
                           const gchar           *home_dir)
  {
@@ -74,10 +74,10 @@ index 0fb1a17..dbdebaf 100644
 +                return;
 +        }
 +
-         User *user = (User*)auser;
+         User *user = (User *) auser;
+ 
          daemon_local_check_auth (user->daemon,
-                                  user,
-@@ -1322,6 +1337,11 @@ user_set_shell (AccountsUser          *auser,
+@@ -2000,6 +2015,11 @@ user_set_shell (AccountsUser          *auser,
                  GDBusMethodInvocation *context,
                  const gchar           *shell)
  {
@@ -86,10 +86,10 @@ index 0fb1a17..dbdebaf 100644
 +                return;
 +        }
 +
-         User *user = (User*)auser;
+         User *user = (User *) auser;
+ 
          daemon_local_check_auth (user->daemon,
-                                  user,
-@@ -1602,6 +1622,11 @@ user_set_locked (AccountsUser          *auser,
+@@ -2249,6 +2269,11 @@ user_set_locked (AccountsUser          *auser,
                   GDBusMethodInvocation *context,
                   gboolean               locked)
  {
@@ -98,10 +98,10 @@ index 0fb1a17..dbdebaf 100644
 +                return;
 +        }
 +
-         User *user = (User*)auser;
+         User *user = (User *) auser;
+ 
          daemon_local_check_auth (user->daemon,
-                                  user,
-@@ -1814,6 +1839,11 @@ user_set_password_mode (AccountsUser          *auser,
+@@ -2457,6 +2482,11 @@ user_set_password_mode (AccountsUser          *auser,
                          GDBusMethodInvocation *context,
                          gint                   mode)
  {
@@ -110,10 +110,10 @@ index 0fb1a17..dbdebaf 100644
 +                return;
 +        }
 +
-         User *user = (User*)auser;
+         User *user = (User *) auser;
          const gchar *action_id;
- 
-@@ -1905,6 +1935,11 @@ user_set_password (AccountsUser          *auser,
+         gint uid;
+@@ -2550,6 +2580,11 @@ user_set_password (AccountsUser          *auser,
                     const gchar           *password,
                     const gchar           *hint)
  {
@@ -122,9 +122,6 @@ index 0fb1a17..dbdebaf 100644
 +                return;
 +        }
 +
-         User *user = (User*)auser;
+         User *user = (User *) auser;
          gchar **data;
- 
--- 
-2.9.3
-
+         const gchar *action_id;

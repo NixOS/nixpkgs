@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "ocaml-lsp-server";
   inherit (lsp) version src preBuild;
-  duneVersion = if lib.versionAtLeast version "1.10.0" then "3" else "2";
+  duneVersion = "3";
 
   buildInputs = lsp.buildInputs ++ [ lsp re ]
   ++ lib.optional (lib.versionAtLeast version "1.9") spawn

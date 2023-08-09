@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/134445
   doCheck = !stdenv.isDarwin && stdenv.isx86_64;
 
-  checkInputs = [
+  nativeCheckInputs = [
     expect
     which
     coreutils

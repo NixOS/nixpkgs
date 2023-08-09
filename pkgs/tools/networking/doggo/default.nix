@@ -2,20 +2,30 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, fetchpatch
 }:
 
 buildGoModule rec {
   pname = "doggo";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "mr-karan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6jNs8vigrwKk47Voe42J9QYMTP7KnNAtJ5vFZTUW680=";
+    sha256 = "sha256-qc6RYz2bVaY/IBGIXUYO6wyh7iUDAJ1ASCK0dFwZo6s=";
   };
 
-  vendorSha256 = "sha256-pyzu89HDFrMQqYJZC2vdqzOc6PiAbqhaTgYakmN0qj8=";
+  patches = [
+    # go 1.20 support
+    # https://github.com/mr-karan/doggo/pull/66
+    (fetchpatch {
+      url = "https://github.com/mr-karan/doggo/commit/7db5c2144fa4a3f18afe1c724b9367b03f84aed7.patch";
+      hash = "sha256-cx8s23e02zIvJOtuqTz8XC9ApYODh96Ubl1KhsFUZ9g=";
+    })
+  ];
+
+  vendorHash = "sha256-GVLfPK1DFVSfNSdIxYSaspHFphd8ft2HUK0SMeWiVUg=";
   nativeBuildInputs = [ installShellFiles ];
   subPackages = [ "cmd/doggo" ];
 
@@ -38,7 +48,6 @@ buildGoModule rec {
       It outputs information in a neat concise manner and supports protocols like DoH, DoT, DoQ, and DNSCrypt as well
     '';
     license = licenses.gpl3Only;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ georgesalkhouri ];
   };
 }

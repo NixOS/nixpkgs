@@ -1,10 +1,10 @@
-{ lib, python }:
+{ lib, python, fetchPypi }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "alibuild";
   version = "1.11.2";
 
-  src = python.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-wq2H2inUf2CjPD45krCNdjw2s4FXsEDlfOHqW8VaVKg=";
   };

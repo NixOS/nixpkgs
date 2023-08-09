@@ -1,6 +1,6 @@
 { ballerina, lib, writeText, runCommand, makeWrapper, fetchzip, stdenv, openjdk }:
 let
-  version = "2201.2.2";
+  version = "2201.6.0";
   codeName = "swan-lake";
 in stdenv.mkDerivation {
   pname = "ballerina";
@@ -8,7 +8,7 @@ in stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://dist.ballerina.io/downloads/${version}/ballerina-${version}-${codeName}.zip";
-    sha256 = "sha256-xBr7lsZJKk4VXuUDt7IRQN/ZDH4WrxYjd1mBIoyb9qs=";
+    sha256 = "sha256-yttRswqNq8Tam1OwnC9klwrryDDqdHMzzRs9T9pYlnU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
   preFixup = ''
-    wrapProgram $out/bin/bal --set JAVA_HOME ${openjdk}/lib/openjdk
+    wrapProgram $out/bin/bal --set JAVA_HOME ${openjdk}
   '';
 
   passthru.tests.smokeTest = let

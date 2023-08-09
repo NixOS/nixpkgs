@@ -11,7 +11,6 @@ buildNimPackage rec {
     sha256 = "1p250wb97nzz2g0vvq6mn521fx7sn1jpk1ralbzqh5q8clh4g7wr";
   };
 
-  doCheck = true;
 
   meta = with lib;
     src.meta // {

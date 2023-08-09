@@ -2,17 +2,19 @@
 
 let
   pname = "youtube-music";
-  version = "1.17.0";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "https://github.com/th-ch/youtube-music/releases/download/v${version}/YouTube-Music-${version}.AppImage";
-    sha256 = "sha256-3QNmCek6UD0WNaqalIksYWLHGfMgetLRLi8mEM1J39I=";
+    hash = "sha256-eTPWLD9KUs2ZsLbYRkknnx5uDyrNSbFHPyv6gU+wL/c=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 rec {
   inherit pname version src;
+  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
+    ++ [ pkgs.libappindicator ];
 
   extraInstallCommands = ''
     mv $out/bin/{${pname}-${version},${pname}}
@@ -29,8 +31,9 @@ appimageTools.wrapType2 rec {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
     license = licenses.mit;
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     maintainers = [ maintainers.aacebedo ];
+    mainProgram = "youtube-music";
   };
 }

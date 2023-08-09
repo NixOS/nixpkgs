@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, testtools
 }:
 
 buildPythonApplication rec {
@@ -26,10 +27,11 @@ buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fixtures
     mock
     pytestCheckHook
+    testtools
   ];
 
   pythonImportsCheck = [ "bashate" ];

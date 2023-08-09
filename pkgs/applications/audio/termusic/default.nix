@@ -1,23 +1,34 @@
 { lib
 , stdenv
-, fetchCrate
 , rustPlatform
+, fetchCrate
+, fetchpatch
 , pkg-config
-, alsa-lib }:
+, alsa-lib
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.7.5";
+  version = "0.7.10";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-/wpaxXY0hT7XX44cW1f3JuowE5u46/aLMC2VXgty/jE=";
+    hash = "sha256-m0hi5u4BcRcEDEpg1BoWXc25dfhD6+OJtqSZfSdV0HM=";
   };
 
-  cargoHash = "sha256-TznzZ1dcun57IQ8e2T2FOxSdyqxS6etnuvxOY8n1y14=";
+  cargoHash = "sha256-A83gLsaPm6t4nm7DJfcp9z1huDU/Sfy9gunP8pzBiCA=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AudioUnit
+  ];
 
   meta = with lib; {
     description = "Terminal Music Player TUI written in Rust";

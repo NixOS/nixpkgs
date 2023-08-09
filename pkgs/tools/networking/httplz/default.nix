@@ -7,21 +7,20 @@
 , ronn
 , openssl
 , stdenv
-, libiconv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.12.5";
+  version = "1.13.0";
 
   src = fetchCrate {
     inherit version;
     pname = "https";
-    sha256 = "sha256-+nCqMTLrBYNQvoKo1PzkyzRCkKdlE88+NYoJcIlAJts=";
+    hash = "sha256-sTkj2UkUENpezPFAzyDUz6rC4F0G864uLLYOU9fyXjo=";
   };
 
-  cargoSha256 = "sha256-odiVIfNJPpagoASnYvdOosHXa37gbQM8Zmvtnao0pAs=";
+  cargoHash = "sha256-omjm+NSny1NLUj9MCeGU6XgrVRAxMJzTbvIyfmWgoCU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,8 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
+    darwin.apple_sdk.frameworks.Security
   ];
 
   cargoBuildFlags = [ "--bin" "httplz" ];
@@ -48,6 +46,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A basic http server for hosting a folder fast and simply";
     homepage = "https://github.com/thecoshman/http";
+    changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

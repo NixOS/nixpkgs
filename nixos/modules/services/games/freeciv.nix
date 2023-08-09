@@ -16,7 +16,7 @@ let
     generate = name: value:
       let mkParam = k: v:
             if v == null then []
-            else if isBool v then if v then [("--"+k)] else []
+            else if isBool v then optional v ("--"+k)
             else [("--"+k) v];
           mkParams = k: v: map (mkParam k) (if isList v then v else [v]);
       in escapeShellArgs (concatLists (concatLists (mapAttrsToList mkParams value)));
@@ -54,7 +54,7 @@ in
             default = 0;
             description = lib.mdDoc "Set debug log level.";
           };
-          options.exit-on-end = mkEnableOption (lib.mdDoc "exit instead of restarting when a game ends.");
+          options.exit-on-end = mkEnableOption (lib.mdDoc "exit instead of restarting when a game ends");
           options.Guests = mkEnableOption (lib.mdDoc "guests to login if auth is enabled");
           options.Newusers = mkEnableOption (lib.mdDoc "new users to login if auth is enabled");
           options.port = mkOption {

@@ -1,6 +1,9 @@
 { lib, stdenv, fetchurl, pkg-config, perl
 , openssl, db, cyrus_sasl, zlib
 , Security
+# Disabled by default as XOAUTH2 is an "OBSOLETE" SASL mechanism and this relies
+# on a package that isn't really maintained anymore:
+, withCyrusSaslXoauth2 ? false, cyrus-sasl-xoauth2, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +18,20 @@ stdenv.mkDerivation rec {
   patches = [
     # Fixes "Fatal: buffer too small" error
     ./0001-Increase-imap_vprintf-buffer-size.patch
+    # Fix #202595: SSL error "Socket error: ... unexpected eof while reading"
+    # Source: https://sourceforge.net/p/isync/isync/ci/b6c36624f04cd388873785c0631df3f2f9ac4bf0/
+    ./work-around-unexpected-EOF-error-messages-at-end-of-SSL-connections.patch
   ];
 
-  nativeBuildInputs = [ pkg-config perl ];
+  nativeBuildInputs = [ pkg-config perl ]
+    ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
   buildInputs = [ openssl db cyrus_sasl zlib ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  postInstall = lib.optionalString withCyrusSaslXoauth2 ''
+    wrapProgram "$out/bin/mbsync" \
+        --prefix SASL_PATH : "${lib.makeSearchPath "lib/sasl2" [ cyrus-sasl-xoauth2 ]}"
+  '';
 
   meta = with lib; {
     homepage = "http://isync.sourceforge.net/";

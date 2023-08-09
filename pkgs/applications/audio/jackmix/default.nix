@@ -1,4 +1,6 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, sconsPackages, qtbase, lash, libjack2, jack ? libjack2, alsa-lib }:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, scons, qtbase, lash, libjack2, jack ? libjack2, alsa-lib
+, fetchpatch
+}:
 
 mkDerivation rec {
   pname = "jackmix";
@@ -11,9 +13,16 @@ mkDerivation rec {
     sha256 = "0p59411vk38lccn24r7nih10jpgg9i46yc26zpc3x13amxwwpd4h";
   };
 
-  patches = [ ./no_error.patch ];
+  patches = [
+    ./no_error.patch
+    (fetchpatch {
+      name = "sconstruct-python3.patch";
+      url = "https://github.com/kampfschlaefer/jackmix/commit/3a0c868b267728fdbc69cc3dc1941edac27d97f6.patch";
+      hash = "sha256-MLgxIiZ0+C1IVEci9Q347DR+SJUlPG2N3iPvuhRptJU=";
+    })
+  ];
 
-  nativeBuildInputs = [ sconsPackages.scons_3_1_2 pkg-config ];
+  nativeBuildInputs = [ scons pkg-config ];
   buildInputs = [
     qtbase
     lash

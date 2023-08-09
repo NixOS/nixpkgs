@@ -1,5 +1,4 @@
 { lib
-, python3
 , pkgconfig
 , wrapGAppsHook
 , gettext
@@ -45,11 +44,6 @@ in
     hash = "sha256-KPQLgXSonuOgphagYN2JN+CMIpmjTIPUTCqOPDk0UYU=";
   };
 
-  # Fixes error
-  # Couldn’t recognize the image file format for file "*.svg"
-  # at startup, see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   postPatch = ''
     # fix FHS paths
     substituteInPlace inputremapper/configs/data.py \
@@ -60,7 +54,7 @@ in
   '';
 
   doCheck = withDoCheck;
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
   ];
   pythonImportsCheck = [

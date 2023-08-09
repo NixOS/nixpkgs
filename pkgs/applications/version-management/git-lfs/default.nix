@@ -1,19 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, ronn, installShellFiles, git, testers, git-lfs }:
+{ lib, buildGoModule, fetchFromGitHub, asciidoctor, installShellFiles, git, testers, git-lfs }:
 
 buildGoModule rec {
   pname = "git-lfs";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
     rev = "v${version}";
-    sha256 = "sha256-3gVUPfZs5GViEA3D7Zm5NdxhuEz9DhwPLoQqHFdGCrI=";
+    hash = "sha256-lZx+sJQttclZPET0jkv3dmpQysCpsYani+La7yfSUlI=";
   };
 
-  vendorSha256 = null;
+  vendorHash = "sha256-VmPeQYWOHFqFLHKcKH3WHz50yx7GMHVIDPzqiVwwjSg=";
 
-  nativeBuildInputs = [ ronn installShellFiles ];
+  nativeBuildInputs = [ asciidoctor installShellFiles ];
 
   ldflags = [
     "-s"
@@ -31,7 +31,7 @@ buildGoModule rec {
     make man
   '';
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     unset subPackages
@@ -39,6 +39,10 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage man/man*/*
+    installShellCompletion --cmd git-lfs \
+      --bash <($out/bin/git-lfs completion bash) \
+      --fish <($out/bin/git-lfs completion fish) \
+      --zsh <($out/bin/git-lfs completion zsh)
   '';
 
   passthru.tests.version = testers.testVersion {

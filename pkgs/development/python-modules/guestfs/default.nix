@@ -20,5 +20,6 @@ buildPythonPackage rec {
     description = "Use libguestfs from Python";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ grahamc ];
+    inherit (libguestfs.meta) platforms;
   };
 }

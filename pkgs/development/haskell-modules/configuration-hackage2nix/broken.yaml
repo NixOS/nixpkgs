@@ -47,6 +47,7 @@ broken-packages:
   - acme-zalgo
   - acme-zero
   - AC-MiniTest
+  - acousticbrainz-client
   - AC-Terminal
   - ActionKid
   - activehs-base
@@ -60,23 +61,22 @@ broken-packages:
   - adaptive-tuple
   - adb
   - addy
+  - adjunction
   - adobe-swatch-exchange
-  - ADPfusion
   - adp-multi
   - adtrees
-  - advent-of-code-ocr
   - AERN-Basics
   - aeson-applicative
   - aeson-bson
   - aeson-decode
   - aeson-default
-  - aeson-dependent-sum
   - aeson-deriving
   - aeson-diff-generic
   - aeson-filthy
   - aeson-flat
   - aeson-flatten
   - aeson-flowtyped
+  - aeson-gadt-th
   - aeson-injector
   - aeson-json-ast
   - aeson-lens
@@ -84,10 +84,8 @@ broken-packages:
   - aeson-modern-tojson
   - aeson-options
   - aeson-parsec-picky
-  - aeson-picker
   - aeson-prefix
   - aeson-schema
-  - aeson-schemas
   - aeson-smart
   - aeson-streams
   - aeson-t
@@ -102,13 +100,15 @@ broken-packages:
   - agda-snippets
   - agda-unused
   - AGI
-  - ag-pictgen
+  - ag-pictgen # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/225557198 at 2023-06-28
   - AhoCorasick
   - aig
   - airbrake
+  - air-extra
   - airship
   - airtable-api
   - air-th
+  - aivika-gpss
   - ajhc
   - AlanDeniseEricLauren
   - alerta
@@ -119,10 +119,13 @@ broken-packages:
   - algebra-dag
   - algebraic-classes
   - algebraic-prelude
+  - algorithmic-composition-additional
+  - algorithmic-composition-complex
   - AlgorithmW
   - algo-s
   - align-text
   - ally-invest
+  - alpaca-netcode
   - alphachar
   - alpino-tools
   - alsa
@@ -139,12 +142,14 @@ broken-packages:
   - AMI
   - amqp-conduit
   - analyze
+  - analyze-client
   - anansi-pandoc
   - android
   - android-activity
   - android-lint-summary
   - angel
   - angle
+  - animalcase
   - Animas
   - animascii
   - animate
@@ -161,7 +166,9 @@ broken-packages:
   - antlr-haskell
   - anydbm
   - Aoide
+  - aop-prelude
   - aosd
+  - apache-md5
   - apart
   - api-builder
   - api-rpc-factom
@@ -184,6 +191,7 @@ broken-packages:
   - arbor-monad-logger
   - arbor-monad-metric
   - arbor-postgres
+  - arch-hs
   - archiver
   - archlinux
   - archnews
@@ -210,10 +218,13 @@ broken-packages:
   - artifact
   - asap
   - ascii85-conduit
+  - ascii-caseless
   - ascii-flatten
   - ascii-string
   - ascii-vector-avc
-  - asil
+  - asif
+  - asil # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/225556674 at 2023-06-28
+  - asn1-ber-syntax
   - asn1-codec
   - asn1-data
   - AspectAG
@@ -225,17 +236,20 @@ broken-packages:
   - assumpta
   - ast-monad
   - astrds
+  - astro #  failure  in job https://hydra.nixos.org/build/225575437 at 2023-06-28
   - async-combinators
   - async-dejafu
   - asynchronous-exceptions
   - async-manager
   - async-timer
   - aterm
+  - atlassian-connect-descriptor
   - atndapi
+  - atom
   - atomic-primops-vector
-  - atom-msp430
   - atomo
   - atp-haskell
+  - ats-pkg
   - ats-setup
   - ats-storable
   - attempt
@@ -257,14 +271,12 @@ broken-packages:
   - authenticate-ldap
   - authinfo-hs
   - auto
-  - autodocodec-yaml
   - autom
   - autonix-deps
   - autopack
   - avatar-generator
   - aviation-units
   - avl-static
-  - avro
   - avro-piper
   - avr-shake
   - avwx
@@ -286,6 +298,7 @@ broken-packages:
   - azure-email
   - azurify
   - b9
+  - babl # wants pkg-config dependency `babl`, but pkgs.babl's pkg-config file is called babl-0.1.pc
   - backprop
   - backstop
   - backtracking-exceptions
@@ -301,9 +314,12 @@ broken-packages:
   - barrie
   - barrier
   - barrier-monad
+  - base16-lens
+  - base32-lens
   - base58address
   - base62
   - base64-conduit
+  - base64-lens
   - base-compat-migrate
   - base-encoding
   - base-feature-macros
@@ -332,18 +348,17 @@ broken-packages:
   - bencoding-lens
   - berkeleydb
   - BerkeleyDBXML
+  - berp
   - bert
   - besout
   - bet
   - betacode
   - bgmax
   - bgzf
-  - bhoogle
   - bibdb
   - bidi-icu
   - bidirectional
   - bidirectional-instances
-  - bidirectionalization-combined
   - bidispec
   - bidispec-extras
   - BiGUL
@@ -353,8 +368,9 @@ broken-packages:
   - binary-derive
   - binary-ext
   - binary-indexed-tree
-  - binary-io
+  - binary-parsers
   - binary-protocol
+  - binary-strict
   - binary-tree
   - binary-typed
   - BinderAnn
@@ -387,17 +403,17 @@ broken-packages:
   - bindings-wlc
   - bind-marshal
   - binembed
-  - bins
+  - binsm
   - bio
-  - BiobaseBlast
   - BiobaseNewick
-  - BiobaseTurner
   - biocore
   - biohazard
   - bio-sequence
+  - birds-of-paradise
   - biscuit-haskell
   - bisect-binary
   - bishbosh
+  - bitcoind-rpc # dependency missing in job https://hydra.nixos.org/build/217579845 at 2023-04-29
   - bitcoin-hs
   - bitcoin-keys
   - bitcoin-rpc
@@ -408,15 +424,15 @@ broken-packages:
   - bits-extras
   - bitspeak
   - bit-stream
+  - bitstream
   - BitStringRandomMonad
   - BitSyntax
   - bitx-bitcoin
   - bizzlelude-js
   - bkr
+  - blagda
   - blakesum
-  - Blammo
   - blas
-  - blaze-html-contrib
   - blaze-html-hexpat
   - blaze-html-truncate
   - blaze-json
@@ -428,6 +444,7 @@ broken-packages:
   - blockchain
   - blockhash
   - Blogdown
+  - BlogLiterately
   - bloomfilter-redis
   - blosum
   - blubber-server
@@ -439,17 +456,15 @@ broken-packages:
   - bolt
   - boltzmann-brain
   - bookhound
-  - bookkeeper
+  - boolean-like
   - boolean-normal-forms
   - boolexpr
   - boombox
-  - boots-app
   - boring-window-switcher
+  - borsh
   - bot
   - botpp
   - bottom
-  - boundingboxes
-  - bowntz
   - box
   - bpath
   - BPS
@@ -459,9 +474,14 @@ broken-packages:
   - Bravo
   - brians-brain
   - brick-dropdownmenu
-  - brick-panes
+  - brick-filetree
+  - brick-list-search #  failure  in job https://hydra.nixos.org/build/211236614 at 2023-03-13
+  - brick-list-skip #  failure  in job https://hydra.nixos.org/build/215850872 at 2023-04-17
   - bricks-internal
+  - brick-tabular-list
   - brillig
+  - brittany
+  - broadcast-chan-tests
   - broccoli
   - brok
   - broker-haskell
@@ -473,7 +493,7 @@ broken-packages:
   - bson-generics
   - bson-mapping
   - bsparse
-  - btree-concurrent
+  - btree-concurrent # dependency missing in job https://hydra.nixos.org/build/211250233 at 2023-03-13
   - btrfs
   - buffer
   - buffer-builder-aeson
@@ -490,6 +510,7 @@ broken-packages:
   - bumper
   - bunz
   - burst-detection
+  - bus-pirate
   - buster
   - Buster
   - butter
@@ -513,6 +534,7 @@ broken-packages:
   - bytestring-substring
   - bytestring-time
   - bytestring-typenats
+  - bzlib
   - bzlib-conduit-jappie
   - c10k
   - c2ats
@@ -520,13 +542,13 @@ broken-packages:
   - cabal2doap
   - cabal2ebuild
   - cabal2ghci
+  - cabal2json # dependency missing in job https://hydra.nixos.org/build/225572535 at 2023-06-28
   - cabal-audit
   - cabal-auto-expose
   - cabal-bundle-clib
   - cabal-constraints
   - cabal-db
   - cabal-dependency-licenses
-  - cabal-detailed-quickcheck
   - cabal-dev
   - cabal-dir
   - cabal-edit
@@ -546,6 +568,7 @@ broken-packages:
   - cabal-meta
   - cabal-mon
   - cabal-nirvana
+  - cabal-plan-bounds
   - cabal-progdeps
   - cabalQuery
   - CabalSearch
@@ -563,51 +586,50 @@ broken-packages:
   - caching
   - cacophony
   - cafeteria-prelude
-  - caffegraph
   - cairo-core
   - cake3
   - cal3d
-  - calamity
   - caledon
   - calenderweek
   - call-alloy
   - cal-layout
   - call-haskell-from-anything
   - call-plantuml
-  - camfort
   - canon
   - canonical-filepath
-  - canonical-json
   - canteven-listen-http
   - canteven-log
   - canteven-parsedate
   - cantor
+  - capataz
   - capped-list
   - capri
   - caps
-  - captcha-core
   - caramia
   - carbonara
   - carettah
   - CarneadesDSL
   - carte
   - Cartesian
+  - casa-abbreviations-and-acronyms
   - casadi-bindings-internal
   - Cascade
   - cascading
   - caseof
-  - cases
   - cas-hashable
   - casr-logbook
   - casr-logbook-types
+  - cassandra-cql
   - Cassava
   - cassava-conduit
   - cassava-records
   - cassette
+  - castagnoli #  failure  in job https://hydra.nixos.org/build/219826672 at 2023-05-19
   - castle
   - catamorphism
   - Catana
   - catch-fd
+  - category-printf
   - category-traced
   - catnplus
   - cautious-file
@@ -623,6 +645,7 @@ broken-packages:
   - CC-delcont-ref-tf
   - cci
   - ccnx
+  - cdp
   - c-dsl
   - cedict
   - cef
@@ -636,44 +659,46 @@ broken-packages:
   - cfn-flip
   - cg
   - cgen
-  - cgi-utils
+  - cgi
   - cgroup-rts-threads
+  - chakra
   - chalkboard
   - chalmers-lava2000
+  - ChannelT
   - character-cases
   - charter
   - chart-histogram
   - Chart-simple
-  - chart-svg
   - chaselev-deque
   - chatty-text
   - chatwork
+  - check-cfg-ambiguity #  failure  in job https://hydra.nixos.org/build/225575902 at 2023-06-28
   - checked
   - Checked
   - checkmate
   - chez-grater
-  - chiasma
+  - chiphunk
   - Chitra
   - choose
   - chorale
   - chp
-  - chp-spec
-  - chr-data
   - ChristmasTree
+  - chronograph
   - chr-parse
   - chunky
   - church
   - church-maybe
-  - church-pair
-  - churros
-  - cicero-api
   - cielo
   - cil
   - cinvoke
   - c-io
   - cio
+  - cipher-aes128
   - cipher-blowfish
+  - cipher-des
+  - circle
   - circlehs
+  - circular-enum # dependency missing in job https://hydra.nixos.org/build/225566485 at 2023-06-28
   - citeproc-hs
   - cjk
   - cj-token
@@ -684,26 +709,24 @@ broken-packages:
   - clanki
   - clarifai
   - CLASE
-  - clashilator
-  - clash-multisignal
-  - clash-prelude-quickcheck
   - Clash-Royale-Hack-Cheats
-  - clash-systemverilog
-  - clash-verilog
-  - clash-vhdl
   - ClassLaws
   - classy-influxdb-simple
   - classy-parallel
   - classyplate
   - ClassyPrelude
+  - clckwrks-plugin-bugs
+  - clckwrks-plugin-mailinglist
+  - clckwrks-theme-clckwrks
+  - clckwrks-theme-geo-bootstrap
   - cld2
   - Clean
   - clean-unions
+  - clerk # failure building library in job https://hydra.nixos.org/build/214864491 at 2023-04-07
   - clevercss
   - clexer
   - CLI
   - cli-builder
-  - clickhouse-haskell
   - clif
   - clifm
   - cli-git
@@ -713,13 +736,17 @@ broken-packages:
   - clipper
   - clisparkline
   - clit
+  - clocked
   - clock-extras
   - clogparse
   - clone-all
   - closure
   - cloudfront-signer
+  - clplug #  failure  in job https://hydra.nixos.org/build/211239834 at 2023-03-13
   - clr-inline
+  - clr-typed
   - cluss
+  - clustering
   - cmark-highlight
   - cmark-patterns
   - cmark-sections
@@ -737,27 +764,25 @@ broken-packages:
   - cobot-tools
   - code-builder
   - codec-beam
-  - codec-libevent
   - codecov-haskell
   - codeforces-cli
   - codepad
-  - codeworld-api
   - codex
   - codo-notation
+  - coercible-utils
   - coin
   - coinbase-pro
-  - cointracking-imports
+  - colchis
   - collada-output
   - collapse-util
+  - collate
   - collections
   - collections-api
   - co-log-concurrent
   - co-log-json
-  - co-log-polysemy-formatting
   - co-log-sys
   - colonnade
   - colorless
-  - colors
   - coltrane
   - com
   - comark-syntax
@@ -766,21 +791,22 @@ broken-packages:
   - combinatorial-problems
   - combinator-interactive
   - combobuffer
+  - comic
   - Command
   - commander
+  - commander-cli
   - Commando
-  - commsec
+  - commodities
+  - compact
   - Compactable
+  - compactable # dependency missing in job https://hydra.nixos.org/build/225560369 at 2023-06-28
   - compact-list
   - compact-map
-  - compact-mutable-vector
   - compact-sequences
-  - compact-socket
   - compact-string
   - compact-string-fix
   - comparse
   - compdata
-  - compdoc
   - compendium-client
   - competition
   - compilation
@@ -788,9 +814,8 @@ broken-packages:
   - composable-associations-aeson
   - compose-trans
   - composite-aeson-path
+  - composite-aeson-refined
   - composite-cassava
-  - composite-dhall
-  - composite-lens-extra
   - composition-tree
   - compressed
   - compression
@@ -798,17 +823,20 @@ broken-packages:
   - computations
   - concrete-relaxng-parser
   - concrete-typerep
-  - concur-core
+  - concurrency-benchmarks
   - concurrent-buffer
   - Concurrent-Cache
   - Concurrential
   - concurrent-st
   - concurrent-state
+  - concurrent-supply
   - concurrent-utilities
+  - conditional-restriction-parser
   - condorcet
   - conductive-base
   - conduit-audio-lame
   - conduit-audio-samplerate
+  - conduit-connection
   - conduit-find
   - conduit-iconv
   - conduit-network-stream
@@ -816,6 +844,7 @@ broken-packages:
   - conduit-tokenize-attoparsec
   - conduit-vfs
   - conf
+  - conferer-dhall
   - conferer-hspec
   - conferer-provider-json
   - conferer-snap
@@ -836,17 +865,21 @@ broken-packages:
   - Conscript
   - consistent
   - console-program
+  - constable
   - const-math-ghc-plugin
+  - constrained
   - constrained-categories
   - constrained-dynamic
   - constrained-monads
   - ConstraintKinds
+  - constraints-deriving
   - constraints-emerge
   - constr-eq
   - constructive-algebra
   - consul-haskell
   - Consumer
   - containers-benchmark
+  - containers-unicode-symbols
   - containers-verified
   - ContArrow
   - ContextAlgebra
@@ -854,6 +887,8 @@ broken-packages:
   - contiguous-checked
   - contiguous-fft
   - continue
+  - continued-fractions #  failure  in job https://hydra.nixos.org/build/225575101 at 2023-06-28
+  - contracheck-applicative
   - Contract
   - contra-tracers
   - control-dsl
@@ -861,25 +896,26 @@ broken-packages:
   - control-monad-failure
   - control-monad-failure-mtl
   - Control-Monad-ST2
-  - contstuff
-  - copilot-sbv
+  - contstuff-monads-tf
+  - contstuff-transformers
+  - convert-annotation
   - copr
   - coquina
   - COrdering
   - core
   - corebot-bliki
+  - core-compiler
   - CoreDump
   - CoreErlang
   - core-haskell
   - corenlp-parser
-  - core-telemetry
+  - core-warn
   - Coroutine
   - coroutine-object
   - CouchDB
   - couchdb-conduit
   - couch-hs
   - counter
-  - country
   - courier
   - court
   - coverage
@@ -897,9 +933,11 @@ broken-packages:
   - craftwerk
   - crawlchain
   - crc16
+  - crc32c
   - crdt
   - crdt-event-fold
   - credential-store
+  - crem # test failure in job https://hydra.nixos.org/build/214604824 at 2023-04-07
   - critbit
   - criterion-cmp
   - criterion-compare
@@ -918,6 +956,7 @@ broken-packages:
   - crypto-keys-ssh
   - crypto-multihash
   - crypto-numbers
+  - crypton-x509 # failure building test suite 'test-x509' in job https://hydra.nixos.org/build/225569131 at 2023-06-28
   - crypto-pubkey-openssh
   - crypto-random-effect
   - crypto-simple
@@ -925,7 +964,7 @@ broken-packages:
   - csa
   - cse-ghc-plugin
   - csg
-  - CSPM-FiringRules
+  - csound-expression-dynamic
   - CSPM-Frontend
   - cspretty
   - css
@@ -934,16 +973,19 @@ broken-packages:
   - css-syntax
   - C-structs
   - csv-nptools
+  - csv-sip
   - ctemplate
   - ctkl
   - cuboid
   - cuckoo-filter
+  - cuckoo # test failure in job https://hydra.nixos.org/build/225558690 at 2023-06-28
   - curl-aeson
   - curl-runnings
+  - curly-expander
   - currency-convert
   - curry-base
   - CurryDB
-  - curryer-rpc
+  - curryer-rpc # dependency missing in job https://hydra.nixos.org/build/214772339 at 2023-04-07
   - curry-frontend
   - curryrs
   - curves
@@ -953,6 +995,7 @@ broken-packages:
   - d3js
   - dag
   - DAG-Tournament
+  - dahdit
   - damnpacket
   - danibot
   - dao
@@ -965,11 +1008,12 @@ broken-packages:
   - darkplaces-rcon
   - darkplaces-text
   - data-accessor-monadLib
+  - data-accessor-monads-fd
   - data-accessor-monads-tf
   - data-accessor-template
+  - data-ascii
   - data-aviary
   - data-base
-  - database-id-groundhog
   - database-migrate
   - database-study
   - data-check
@@ -977,11 +1021,11 @@ broken-packages:
   - data-concurrent-queue
   - data-construction
   - data-constructors
+  - data-default-instances-new-base
   - data-dispersal
   - data-diverse
   - datadog
   - data-easy
-  - data-elevator
   - data-embed
   - data-emoticons
   - data-filepath
@@ -992,7 +1036,9 @@ broken-packages:
   - DataIndex
   - data-ivar
   - data-kiln
-  - data-lens
+  - data-lens-fd
+  - data-lens-ixset
+  - data-lens-template
   - datalog
   - data-map-multikey
   - data-named
@@ -1013,18 +1059,17 @@ broken-packages:
   - data-standards
   - data-store
   - data-stringmap
-  - data-sword
   - DataTreeView
   - data-type
   - data-util
   - data-validation
   - data-variant
-  - DataVersion
   - dates
   - datetime
   - datetime-sb
   - dawdle
   - dawg
+  - daytripper #  failure  in job https://hydra.nixos.org/build/225578117 at 2023-06-28
   - dbcleaner
   - dbf
   - DBlimited
@@ -1040,17 +1085,18 @@ broken-packages:
   - dcpu16
   - ddc-base
   - ddc-code
-  - ddc-core
   - dead-code-detection
   - Deadpan-DDP
   - dead-simple-json
+  - debug-me
   - debug-tracy
   - decepticons
-  - decimal-literals
+  - decision-diagrams
   - DecisionTree
   - decoder-conduit
   - deepcontrol
   - DeepDarkFantasy
+  - deepl
   - deepseq-bounded
   - deepseq-instances
   - deepseq-magic
@@ -1064,23 +1110,29 @@ broken-packages:
   - dense
   - dense-int-set
   - dependent-hashmap
-  - dependent-monoidal-map
-  - dep-t
+  - dep-t-dynamic
   - deptrack-core
+  - dep-t-value
   - derangement
   - derivation-trees
   - derive
   - derive-enumerable
   - derive-gadt
   - deriveJsonNoPrefix
+  - derive-lifted-instances
   - derive-monoid
   - derive-trie
+  - deriving-openapi3
+  - deriving-trans
   - derp-lib
   - describe
+  - descriptive
+  - desktop-portal # test failure in job https://hydra.nixos.org/build/217585702 at 2023-04-29
   - deterministic-game-engine
   - detrospector
   - deunicode
   - devil
+  - df1-html
   - Dflow
   - dfsbuild
   - dgim
@@ -1100,6 +1152,7 @@ broken-packages:
   - diagrams-rubiks-cube
   - diagrams-tikz
   - dialogflow-fulfillment
+  - dialogue
   - dib
   - dice2tex
   - dicom
@@ -1107,6 +1160,7 @@ broken-packages:
   - dictparser
   - diet
   - diffcabal
+  - differential
   - DifferentialEvolution
   - diff-gestalt
   - diffmap
@@ -1115,24 +1169,26 @@ broken-packages:
   - digestive-foundation-lucid
   - digestive-functors-aeson
   - digestive-functors-happstack
+  - digestive-functors-snap
   - digest-pure
   - DigitalOcean
   - digitalocean-kzs
   - digits
+  - digraph
   - dijkstra-simple
   - DimensionalHash
-  - dimensional-tf
   - diophantine
   - diplomacy
   - direct-binary-files
   - directed-cubical
   - direct-fastcgi
   - direct-http
+  - directory-ospath-streaming # dependency missing in job https://hydra.nixos.org/build/219209527 at 2023-05-10
   - direct-plugins
   - direm
-  - dirtree
-  - discord-haskell
+  - disco # failure building library in job https://hydra.nixos.org/build/219207076 at 2023-05-10
   - discordian-calendar
+  - discord-register
   - discord-types
   - discrete
   - DiscussionSupportSystem
@@ -1140,7 +1196,7 @@ broken-packages:
   - disjoint-containers
   - disjoint-set
   - disjoint-set-stateful
-  - disk-bytes
+  - diskhash
   - Dist
   - distance
   - distributed-closure
@@ -1151,18 +1207,17 @@ broken-packages:
   - djinn-th
   - dmcc
   - dmenu
-  - dnf-repo
-  - dns-patterns
+  - dnscache
   - dnsrbl
   - dnssd
   - dobutok
   - dobutokO
-  - dobutokO-frequency
   - doccheck
   - docidx
   - docker-build-cacher
   - dockercook
   - dockerfile-creator
+  - docopt
   - docrecords
   - doctest-discover-configurator
   - doctest-prop
@@ -1170,18 +1225,18 @@ broken-packages:
   - docvim
   - DOH
   - doi
+  - domain-optics
   - dom-parser
   - domplate
   - dom-selector
-  - do-notation
   - do-notation-dsl
   - dormouse-uri
   - do-spaces
   - dotfs
   - dot-linker
+  - dotparse
   - doublezip
   - doublify-toolkit
-  - downhill
   - downloader
   - dozenal
   - dozens
@@ -1197,11 +1252,9 @@ broken-packages:
   - DrIFT
   - DrIFT-cabalized
   - drifter-postgresql
-  - drinkery
   - drmaa
   - drone
   - dropbox
-  - DSA
   - dsc
   - ds-kanren
   - dsmc
@@ -1210,20 +1263,24 @@ broken-packages:
   - dstring
   - DTC
   - dtd-text
+  - dtw
   - dualizer
   - duckling
   - duet
+  - dumb-cas
   - dump-core
   - dunai-core
   - Dung
   - duplo
   - dura
+  - duration
   - dvault
   - dvdread
   - dvi-processing
   - dwarf
   - dwarfadt
   - dyckword
+  - dyna-brick
   - dynamic-graphs
   - dynamic-mvector
   - dynamic-object
@@ -1248,7 +1305,7 @@ broken-packages:
   - easytest
   - ebeats
   - ebnf-bff
-  - eccrypto-ed25519-bindings
+  - eccrypto
   - ecma262
   - ecta-plugin
   - ecu
@@ -1256,24 +1313,23 @@ broken-packages:
   - ede
   - edenmodules
   - edis
-  - EdisonAPI
   - edit
   - edit-lenses
   - editline
   - effectful-st
   - effect-handlers
   - effective-aspects
-  - effect-monad
   - effect-stack
   - effet
   - effin
+  - eflint
   - egison-pattern-src
   - ehaskell
-  - ehlo
   - ehs
   - eibd-client-simple
   - eigen
   - Eight-Ball-Pool-Hack-Cheats
+  - eio
   - EitherT
   - either-unwrap
   - ejdb2-binding
@@ -1286,9 +1342,9 @@ broken-packages:
   - ekg-rrd
   - ekg-statsd
   - elevator
+  - eliminators
   - elision
   - elm-export-persistent
-  - elminator
   - elm-street
   - elm-websocket
   - elocrypt
@@ -1302,9 +1358,11 @@ broken-packages:
   - Empty
   - empty-monad
   - enchant
+  - encode-string
   - encoding
   - encoding-io
   - encryptable
+  - endo
   - engine-io
   - entwine
   - EnumContainers
@@ -1324,7 +1382,6 @@ broken-packages:
   - epic
   - epi-sim
   - epoll
-  - eprocess
   - epubname
   - Eq
   - EqualitySolver
@@ -1346,30 +1403,29 @@ broken-packages:
   - escoger
   - esqueleto-pgcrypto
   - ess
-  - essence-of-live-coding-gloss-example
-  - essence-of-live-coding-pulse-example
+  - essence-of-live-coding
   - EstProgress
   - Etage
   - etc
   - etcd
   - ethereum-rlp
   - eurofxref
-  - eve
+  - evdev-streamly
+  - eve-cli
   - eved
   - event
   - event-driven
-  - eventful-sql-common
   - eventsource-api
+  - eventsourced
   - eventstore
-  - eventuo11y
-  - eventuo11y-dsl
-  - evoke
-  - ewe
+  - ewe # failure building executable 'ewe' in job https://hydra.nixos.org/build/225555839 at 2023-06-28
   - exact-cover
   - exact-real-positional
   - except-exceptions
   - exceptional
   - exceptionfree-readfile
+  - exception-monads-fd
+  - exception-via
   - exchangerates
   - execs
   - executor
@@ -1381,13 +1437,13 @@ broken-packages:
   - exinst
   - exists
   - exitcode
-  - exon
+  - exon # dependency missing in job https://hydra.nixos.org/build/210848638 at 2023-02-28
   - exp-cache
+  - exp-extended
   - explain
   - explicit-constraint-lens
   - explicit-determinant
   - explicit-iomodes
-  - exploring-interpreters
   - exposed-containers
   - expression-parser
   - expressions
@@ -1395,14 +1451,17 @@ broken-packages:
   - extcore
   - extended-categories
   - extended-containers
+  - extensible-data
   - extensible-effects-concurrent
   - extensible-skeleton
-  - Extra
+  - external-sort
+  - extism
   - extractelf
   - ez3
   - ez-couch
   - Facebook-Password-Hacker-Online-Latest-Version
   - faceted
+  - factory # test failure in job https://hydra.nixos.org/build/214600338 at 2023-04-07
   - facts
   - fadno-braids
   - fadno-xml
@@ -1415,31 +1474,39 @@ broken-packages:
   - falling-turnip
   - fastbayes
   - fast-combinatorics
+  - fast-downward
   - fastedit
+  - fastly
   - fast-nats
+  - fastparser # failure building library in job https://hydra.nixos.org/build/211240748 at 2023-03-13
   - fastpbkdf2
   - FastPush
+  - fast-tagsoup-utf8-only
   - FastxPipe
   - fathead-util
+  - fay
   - fbmessenger-api
   - fb-persistent
   - fca
   - fcache
   - fcf-composite
+  - fcf-graphs
   - fcg
-  - fckeditor
   - fclabels-monadlib
   - fcm-client
   - fdo-trash
+  - feather
   - feature-flipper
   - fedora-packages
   - feed-cli
   - feed-collect
   - feed-crawl
   - fei-cocoapi
+  - feldspar-language
   - fenfire
   - fernet
   - FerryCore
+  - festival
   - Feval
   - fez-conf
   - ffeed
@@ -1447,6 +1514,7 @@ broken-packages:
   - fgl-extras-decompositions
   - fib
   - fibon
+  - fields
   - fieldwise
   - fig
   - file-collection
@@ -1470,7 +1538,6 @@ broken-packages:
   - find-source-files
   - fingertree-psqueue
   - fingertree-tf
-  - finitary
   - finite
   - FiniteCategories
   - finite-fields
@@ -1482,12 +1549,14 @@ broken-packages:
   - fits-parse
   - fixed-point
   - fixedprec
+  - fixed-precision
   - fixed-storable-array
   - fixed-timestep
   - fixed-width
   - fixer
   - fixfile
   - fixie
+  - fix-imports # dependency missing in job https://hydra.nixos.org/build/215306368 at 2023-04-11
   - fix-symbols-gitit
   - fizzbuzz
   - fizzbuzz-as-a-service
@@ -1499,10 +1568,11 @@ broken-packages:
   - flexible-time
   - flickr
   - flink-statefulfun
-  - float128
   - float-binstring
   - floating-bits
+  - flock
   - flowdock
+  - flowdock-api
   - flowdock-rest
   - flow-er
   - flowlocks-framework
@@ -1531,11 +1601,15 @@ broken-packages:
   - for-free
   - forger
   - ForkableT
+  - formal
   - formattable
+  - forml
   - formura
   - Fortnite-Hack-Cheats-Free-V-Bucks-Generator
   - fortran-src-extras
   - foscam-filename
+  - fpe
+  - fp-ieee # test failure in job https://hydra.nixos.org/build/225561952 at 2023-06-28
   - FPretty
   - fptest
   - fquery
@@ -1560,12 +1634,15 @@ broken-packages:
   - freesound
   - free-theorems
   - FreeTypeGL
+  - freetype-simple
   - free-v-bucks-generator-no-survey
   - free-v-bucks-generator-ps4-no-survey
   - freq
   - fresh
+  - fresnel
   - friday-devil
   - friday-scale-dct
+  - friday # test failure in job https://hydra.nixos.org/build/225561573 at 2023-06-28
   - frown
   - frp-arduino
   - frpnow
@@ -1583,6 +1660,7 @@ broken-packages:
   - ftphs
   - full-sessions
   - funbot-client
+  - funcons-lambda-cbv-mp # failure building executable 'lambda-cbv' in job https://hydra.nixos.org/build/217559083 at 2023-04-29
   - functional-arrow
   - function-instances-algebra
   - functor-combinators
@@ -1597,7 +1675,6 @@ broken-packages:
   - fused-effects-exceptions
   - fused-effects-mwc-random
   - fused-effects-resumable
-  - fused-effects-squeal
   - fusion
   - futhask
   - futun
@@ -1605,11 +1682,13 @@ broken-packages:
   - fuzzyfind
   - fuzzy-timings
   - fwgl
+  - fxpak
   - g4ip
   - galois-field
   - gameclock
   - game-probability
   - gamgee
+  - Gamgine
   - gamma
   - Ganymede
   - garepinoh
@@ -1622,16 +1701,16 @@ broken-packages:
   - gegl
   - gelatin
   - gemcap
-  - gemini-exports
+  - gemini-server
   - gemstone
   - gencheck
   - gender
   - genders
+  - general-allocate
   - general-prelude
   - GeneralTicTacToe
   - generator
   - generators
-  - generic-accessors
   - generic-binary
   - generic-church
   - generic-enum
@@ -1639,21 +1718,25 @@ broken-packages:
   - generic-labels
   - generic-lens-labels
   - generic-lucid-scaffold
+  - generic-match
   - generic-maybe
   - generic-override
+  - generic-persistence #  failure  in job https://hydra.nixos.org/build/215303659 at 2023-04-11
   - generic-pretty
+  - generic-pretty-instances
+  - generic-records
   - genericserialize
   - generic-server
   - generics-mrsop
   - generic-storable
   - generic-tree
-  - generic-trie
   - generic-xml
   - generic-xmlpickler
   - genetics
   - genifunctors
   - gen-imports
   - geniplate
+  - geniplate-mirror
   - gen-passwd
   - genprog
   - gentlemark
@@ -1668,13 +1751,12 @@ broken-packages:
   - geos
   - Get
   - getflag
-  - gf
   - GGg
   - ggtsTC
+  - ghc-api-compat
   - ghc-clippy-plugin
   - ghc-core-smallstep
   - ghc-datasize
-  - ghc-debug-convention
   - ghc-dump-tree
   - ghc-dup
   - ghc-events-analyze
@@ -1705,10 +1787,8 @@ broken-packages:
   - ghc-srcspan-plugin
   - ghc-syb
   - ghc-syb-utils
-  - ghc-tags
   - ghc-tags-core
   - ghc-time-alloc-prof
-  - ghcup
   - ghc-usage
   - gh-labeler
   - gi-adwaita
@@ -1718,13 +1798,13 @@ broken-packages:
   - gi-gio-hs-list-model
   - gi-graphene
   - gi-gsttag
+  - gi-gtk-declarative
   - gi-gtk-layer-shell
   - gi-gtksheet
   - gi-handy
-  - ginger
   - gingersnap
   - ginsu
-  - gi-pangocairo
+  - gipeda
   - giphy-api
   - gist
   - GiST
@@ -1745,12 +1825,11 @@ broken-packages:
   - gitlab-api
   - gitlab-haskell
   - gitlib-cmdline
-  - gitlib-libgit2
   - gitlib-utils
   - git-repair
-  - gitson
   - gitter
   - git-vogue
+  - gi-webkitwebprocessextension # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/215220491 at 2023-04-07
   - glade
   - glapp
   - glaze
@@ -1767,17 +1846,14 @@ broken-packages:
   - gloss-banana
   - gloss-export
   - gloss-game
-  - glpk-headers
   - gltf-codec
   - glue
-  - gluturtle
   - g-npm
   - goa
   - goal-core
   - goatee
   - gochan
   - godot-haskell
-  - godot-megaparsec
   - gofer-prelude
   - gogol-core
   - gooey
@@ -1790,14 +1866,17 @@ broken-packages:
   - googlepolyline
   - google-search
   - google-server-api
+  - google-static-maps
   - google-translate
   - gopherbot
   - gopro-plus
   - gore-and-ash
+  - gothic
   - GotoT-transformers
+  - gotta-go-fast
   - gpah
   - GPipe
-  - GPipe-GLFW4
+  - GPipe-Core
   - gpmf
   - gpx-conduit
   - graceful
@@ -1805,7 +1884,6 @@ broken-packages:
   - Grafos
   - grakn
   - grammatical-parsers
-  - grapefruit-frp
   - Graph500
   - Graphalyze
   - graphbuilder
@@ -1831,22 +1909,22 @@ broken-packages:
   - greg-client
   - gremlin-haskell
   - Grempa
-  - grenade
   - greplicate
   - gridfs
+  - grid-proto # failure building library in job https://hydra.nixos.org/build/219248049 at 2023-05-10
   - grids
   - grm
   - GroteTrap
-  - groundhog-mysql
-  - groundhog-th
+  - groundhog
+  - groups-generic
   - group-theory
   - group-with
   - growler
+  - grow-vector
   - grpc-api-etcd
   - gsl-random
   - gstreamer
   - GTALib
-  - gtfs-realtime
   - gtk2hs-cast-th
   - gtk2hs-hello
   - gtk2hs-rpn
@@ -1856,6 +1934,7 @@ broken-packages:
   - gtksourceview2
   - gtksourceview3
   - gtk-toy
+  - guardian   # transitive dependency uses doctest, but doctest doesn't build with newer Cabal version
   - guess-combinator
   - gulcii
   - gw
@@ -1865,33 +1944,33 @@ broken-packages:
   - h2c
   - haar
   - HABQT
+  - hack2-contrib
   - hack2-handler-warp
   - hackage2hwn
   - hackage-api
   - hackage-diff
+  - hackage-mirror
   - hackage-processing
   - hackage-proxy
   - hackager
-  - hackage-repo-tool
   - hackage-server
   - hackage-whatsnew
   - hackernews
   - hack-frontend-happstack
   - hack-handler-cgi
-  - hack-handler-happstack
-  - hack-handler-kibro
   - HackMail
   - hackport
   - hactor
   - hactors
   - haddock-api
-  - haddock-cheatsheet
   - haddock-leksah
   - haddock-test
   - hadoop-formats
   - hadoop-rpc
+  - hadoop-streaming
   - hafar
   - Haggressive
+  - HaGL # test failure in job https://hydra.nixos.org/build/225563740 at 2023-06-28
   - hahp
   - haiji
   - hail
@@ -1920,6 +1999,9 @@ broken-packages:
   - halipeto
   - halive
   - halma
+  - halves
+  - ham
+  - HaMinitel
   - hampp
   - hamsql
   - hamtmap
@@ -1929,6 +2011,7 @@ broken-packages:
   - HandlerSocketClient
   - handsy
   - Hangman
+  - HangmanAscii
   - hannahci
   - hans
   - hanspell
@@ -1945,27 +2028,32 @@ broken-packages:
   - happstack-monad-peel
   - happstack-server-tls-cryptonite
   - happstack-util
+  - happstack-yui
   - HAppS-Util
   - happybara
   - happybara-webkit-server
+  - happy-hour
   - HappyTree
   - hapstone
   - HaPy
   - haquery
   - harchive
+  - hardware-edsl
+  - harfbuzz-pure
   - HARM
   - HarmTrace-Base
   - haroonga
   - harpy
   - harvest-api
   - has
+  - hasbolt
   - HasCacBDD
   - hascar
+  - hascard
   - hascas
   - hash
   - hashable-extras
   - hashable-generics
-  - hashable-orphans
   - hashabler
   - hashed-storage
   - hashring
@@ -1983,12 +2071,13 @@ broken-packages:
   - haskell98
   - haskell98libraries
   - haskell-abci
+  - haskell-admin-core
   - HaskellAnalysisProgram
   - haskell-awk
+  - haskell-bcrypt
   - haskell-bitmex-rest
   - haskell-brainfuck
   - haskell-cnc
-  - haskell-coffee
   - haskell-compression
   - haskell-conll
   - haskell-course-preludes
@@ -2005,7 +2094,7 @@ broken-packages:
   - haskell-in-space
   - haskell-kubernetes
   - HaskellLM
-  - haskell-lsp
+  - haskell-lsp-types
   - haskell-ml
   - haskell-mpfr
   - haskell-names
@@ -2044,8 +2133,8 @@ broken-packages:
   - haskhol-core
   - haskmon
   - haskoin
-  - haskoin-core
   - haskoin-util
+  - haskoin-wallet
   - haskore
   - haskore-vintage
   - HaskRel
@@ -2053,19 +2142,21 @@ broken-packages:
   - hasktorch-ffi-th
   - hasktorch-signatures-partial
   - hasktorch-signatures-support
-  - haskus-binary
+  - haskus-utils-variant
   - haskyapi
   - hasmin
   - haspara
+  - hasparql-client
   - hasql-backend
   - hasql-class
   - hasql-cursor-transaction
   - hasql-explain-tests
   - hasql-generic
+  - hasql-interpolate
   - hasql-resource-pool
   - hasql-simple
-  - hasql-streams-example
-  - hasql-transaction-io
+  - hasql-streams-core
+  - hasql-url
   - hastache
   - haste
   - haste-prim
@@ -2077,11 +2168,12 @@ broken-packages:
   - haven
   - haverer
   - hax
-  - haxl-facebook
+  - haxl
   - haxparse
   - haxr-th
   - hayland
   - hayoo-cli
+  - hb3sum
   - hBDD-CMUBDD
   - hBDD-CUDD
   - hbeanstalk
@@ -2097,6 +2189,7 @@ broken-packages:
   - hchesslib
   - hcltest
   - hcoap
+  - hcobs
   - hcom
   - hcron
   - hCsound
@@ -2106,10 +2199,8 @@ broken-packages:
   - hdbc-postgresql-hstore
   - HDBC-postgresql-hstore
   - hdevtools
-  - hdf
   - hdf5
   - hDFA
-  - hdigest
   - hdis86
   - hdiscount
   - hdm
@@ -2118,6 +2209,7 @@ broken-packages:
   - hdr-histogram
   - HDRUtils
   - headergen
+  - headroom
   - heap-console
   - heapsort
   - heart-core
@@ -2125,9 +2217,9 @@ broken-packages:
   - heckle
   - heddit
   - hedgehog-checkers
+  - hedgehog-gen
   - hedgehog-generic
   - hedgehog-golden
-  - hedgehog-lens
   - hedgehog-servant
   - hedis-config
   - hedis-namespace
@@ -2136,10 +2228,11 @@ broken-packages:
   - hedra
   - heidi
   - hein
+  - heist-aeson
   - heist-async
+  - heist-emanote
   - helisp
   - helix
-  - hell
   - helm
   - help-esb
   - hemkay
@@ -2169,12 +2262,12 @@ broken-packages:
   - hext
   - hextra
   - heyefi
-  - heystone
+  - heyting-algebras
   - hF2
   - hfann
   - HFitUI
   - hfmt
-  - hfoil
+  - hfoil # failure building library in job https://hydra.nixos.org/build/213500290 at 2023-03-26
   - hfov
   - HFrequencyQueue
   - hfusion
@@ -2187,7 +2280,6 @@ broken-packages:
   - hGelf
   - hgeometric
   - hgeometry-ipe
-  - hgettext
   - hgis
   - hgom
   - hgopher
@@ -2203,6 +2295,7 @@ broken-packages:
   - hi
   - hi3status
   - hichi
+  - hid
   - hidden-char
   - hid-examples
   - hieraclus
@@ -2210,18 +2303,20 @@ broken-packages:
   - hierarchy
   - hiernotify
   - higgledy
+  - higher-leveldb
   - higherorder
   - highjson
   - highlight-versions
   - highWaterMark
+  - hills
   - himg
   - hindley-milner
   - hindley-milner-type-check
-  - hinotify-conduit
   - hinquire
   - hinstaller
   - hinter
   - hinterface
+  - hint-server
   - hipchat-hs
   - hipe
   - Hipmunk
@@ -2245,9 +2340,9 @@ broken-packages:
   - hkt
   - hlbfgsb
   - hleap
-  - hledger-api
   - hledger-chart
   - hledger-diff
+  - hledger-iadd
   - hledger-irr
   - hledger-vty
   - hlibBladeRF
@@ -2257,18 +2352,19 @@ broken-packages:
   - hlogger
   - HLogger
   - hlongurl
-  - hlrdb-core
-  - hls-exactprint-utils
+  - hls-brittany-plugin
+  - hls-haddock-comments-plugin
   - hls-selection-range-plugin
   - hls-stan-plugin
+  - hls-tactics-plugin
   - hlwm
+  - hly
   - hmarkup
   - hmatrix-banded
   - hmatrix-mmap
   - hmatrix-nipals
   - hmatrix-sparse
   - hmatrix-static
-  - hmatrix-sundials
   - hmatrix-svdlibc
   - hmatrix-syntax
   - hmatrix-tests
@@ -2280,7 +2376,6 @@ broken-packages:
   - hMollom
   - hmp3
   - Hmpf
-  - hmpfr
   - hmumps
   - hnetcdf
   - hnn
@@ -2301,14 +2396,12 @@ broken-packages:
   - hogg
   - hoggl
   - hois
-  - hol
   - hold-em
   - hole
   - holmes
   - homeomorphic
   - homoiconic
   - homplexity
-  - honeycomb
   - honi
   - hoobuddy
   - hood2
@@ -2321,11 +2414,13 @@ broken-packages:
   - hopencc
   - hopencl
   - HOpenCV
+  - hopenpgp-tools
   - hopfield
-  - hoppy-runtime
+  - hoppy-generator
   - hops
   - hoq
   - horizon
+  - horizon-spec # dependency missing in job https://hydra.nixos.org/build/213500294 at 2023-03-26
   - horname
   - hosc-json
   - hosts-server
@@ -2334,9 +2429,11 @@ broken-packages:
   - houseman
   - hp2any-core
   - hpack-convert
+  - hpack-dhall
   - hpapi
   - hpasteit
   - HPath
+  - hpath-directory # failure building library in job https://hydra.nixos.org/build/214497909 at 2023-04-07
   - hpc-coveralls
   - hpg
   - HPi
@@ -2344,19 +2441,17 @@ broken-packages:
   - hplaylist
   - hpodder
   - hpqtypes
-  - hprotoc
+  - hprox # dependency missing in job https://hydra.nixos.org/build/221844808 at 2023-05-30
   - hps-kmeans
   - hPushover
   - hpygments
   - hpylos
   - hpyrg
-  - hq
-  - HQu
-  - hquantlib
+  - hquantlib-time
   - hquery
   - hR
-  - h-raylib
   - hreq-core
+  - hRESP
   - h-reversi
   - hricket
   - Hricket
@@ -2364,27 +2459,19 @@ broken-packages:
   - hruby
   - hs2bf
   - hs2ps
-  - hsaml2
   - hsay
   - hsbc
   - hsbencher
   - hs-brotli
-  - hsc3-cairo
-  - hsc3-db
-  - hsc3-dot
-  - hsc3-lang
-  - hsc3-process
-  - hsc3-rec
+  - hsc3
   - hsc3-rw
   - hsc3-sf
-  - hsc3-unsafe
   - hscaffold
   - hscamwire
   - hs-carbon-examples
   - hscd
-  - hs-cdb
   - hscdio
-  - hschema
+  - hschema-aeson
   - hscim
   - hsclock
   - hScraper
@@ -2404,7 +2491,6 @@ broken-packages:
   - hsfilt
   - hs-fltk
   - hsforce
-  - hs-functors
   - hs-gizapp
   - hsgnutls
   - hsgnutls-yj
@@ -2426,19 +2512,20 @@ broken-packages:
   - hslogger-reader
   - hslogger-template
   - hs-logo
-  - hslua-list
+  - hslua-examples
+  - hslua-repl # dependency missing in job https://hydra.nixos.org/build/214605872 at 2023-04-07
+  - hslua-typing # dependency missing in job https://hydra.nixos.org/build/214600262 at 2023-04-07
   - hsluv-haskell
   - hsmagick
-  - HSmarty
   - hsmodetweaks
   - Hsmtlib
   - hsmtpclient
   - hsnock
   - hs-nombre-generator
   - hsns
+  - hsnsq
   - hsntp
   - hs-openmoji-data
-  - hs-opentelemetry-instrumentation-hspec
   - hsoptions
   - hsoz
   - hsparql
@@ -2455,6 +2542,7 @@ broken-packages:
   - hspec-snap
   - hspec-structured-formatter
   - hspec-tables
+  - hspec-webdriver
   - HsPerl5
   - hs-pgms
   - hspkcs11
@@ -2489,26 +2577,25 @@ broken-packages:
   - hsx
   - hsXenCtrl
   - hsyscall
-  - hsyslog-tcp
+  - hsyslog-udp
   - hszephyr
   - hTalos
-  - htar
   - htdp-image
   - hTensor
   - htestu
   - HTicTacToe
   - htiled
   - htlset
-  - html-charset
-  - html-parse
   - html-rules
   - html-tokenizer
   - htoml
   - htoml-megaparsec
+  - hts
   - htsn
   - htssets
-  - http2-client
-  - http2-grpc-proto-lens
+  - http2-client-exe
+  - http2-grpc-types
+  - http3 # dependency missing in job https://hydra.nixos.org/build/214603147 at 2023-04-07
   - http-attoparsec
   - http-client-lens
   - http-client-request-modifiers
@@ -2518,10 +2605,13 @@ broken-packages:
   - http-conduit-downloader
   - http-directory
   - http-dispatch
+  - http-encodings
   - http-grammar
   - http-kinder
+  - http-kit
   - http-listen
   - http-monad
+  - http-pony
   - http-pony-serve-wai
   - http-proxy
   - http-querystring
@@ -2529,6 +2619,7 @@ broken-packages:
   - http-rfc7807
   - http-server
   - http-shed
+  - httpstan # dependency missing in job https://hydra.nixos.org/build/221916023 at 2023-05-31
   - http-wget
   - htune
   - htvm
@@ -2547,7 +2638,6 @@ broken-packages:
   - HUnit-Diff
   - HUnit-Plus
   - hunit-rematch
-  - hunspell-hs
   - hup
   - hurl
   - hurriyet
@@ -2557,17 +2647,21 @@ broken-packages:
   - hVOIDP
   - hwall-auth-iitk
   - hw-ci-assist
+  - hw-dump
   - hweblib
   - hwhile
   - hw-json-demo
-  - hw-lazy
+  - hw-json-lens
+  - hw-json-simd
   - hworker
   - hw-playground-linear
+  - hw-prim-bits
+  - hw-simd-cli
   - hwsl2
+  - hw-tar
   - hx
   - hxmppc
   - HXQ
-  - hxt-cache
   - hxt-pickle-utils
   - hyakko
   - hydra-hs
@@ -2575,13 +2669,13 @@ broken-packages:
   - hydrogen-multimap
   - hylide
   - hylolib
+  - hyper
   - hyperdrive
   - hyperfunctions
-  - hypergeomatrix
-  - hyper-haskell-server
   - hyperion
   - hyperloglogplus
   - hyperscript
+  - hypertypes
   - hypher
   - hyraxAbif
   - hzulip
@@ -2619,10 +2713,10 @@ broken-packages:
   - ihaskell-parsec
   - ihaskell-plot
   - ihaskell-widgets
-  - ihp-hsx
   - illuminate
   - imagemagick
   - imagepaste
+  - image-type
   - imapget
   - imgur
   - imj-prelude
@@ -2637,7 +2731,8 @@ broken-packages:
   - imports
   - impossible
   - imprint
-  - incipit
+  - impure-containers
+  - inchworm
   - indentation-core
   - index-core
   - indexed-containers
@@ -2645,6 +2740,7 @@ broken-packages:
   - indextype
   - indices
   - infernal
+  - inferno-types
   - infer-upstream
   - inf-interval
   - infix
@@ -2653,9 +2749,10 @@ broken-packages:
   - inilist
   - ini-qq
   - initialize
+  - inj-base
   - inject-function
-  - inline-asm
-  - inline-r
+  - injections
+  - inline-c-objc # failure building test suite 'tests' in job https://hydra.nixos.org/build/221844966 at 2023-05-30
   - in-other-words-plugin
   - inserts
   - instana-haskell-trace-sdk
@@ -2663,11 +2760,12 @@ broken-packages:
   - instant-generics
   - instapaper-sender
   - instinct
-  - intcode
+  - integer-conversion # dependency missing in job https://hydra.nixos.org/build/225563519 at 2023-06-28
   - integer-pure
-  - intel-aes
+  - integer-simple
   - intensional-datatys
   - interact
+  - interactive-plot
   - interleavableGen
   - interleavableIO
   - interlude-l
@@ -2679,14 +2777,17 @@ broken-packages:
   - interpolator
   - interruptible
   - interval
+  - interval-algebra
+  - interval-patterns
   - interval-tree-clock
   - IntFormats
+  - int-interval-map
   - int-multimap
   - intrinsic-superclasses
+  - intro
   - introduction
-  - intro-prelude
+  - inventory
   - invertible
-  - invertible-hlist
   - invertible-syntax
   - involutive-semigroups
   - io-capture
@@ -2706,6 +2807,7 @@ broken-packages:
   - iptables-helpers
   - IPv6DB
   - Irc
+  - ircbot
   - irc-dcc
   - irc-fun-types
   - ireal
@@ -2718,13 +2820,13 @@ broken-packages:
   - IsNull
   - iso8601-duration
   - isobmff
-  - isomorphism-class
   - isotope
   - itcli
   - itemfield
   - iteratee
   - iterative-forward-search
   - iterIO
+  - iterm-show
   - it-has
   - ivory
   - ixdopp
@@ -2736,11 +2838,13 @@ broken-packages:
   - JackMiniMix
   - jacobi-roots
   - jaeger-flamegraph
+  - jail
   - jalla
+  - jammittools
   - jarfind
   - jarify
   - jason
-  - java-bridge
+  - java-adt
   - javascript-bridge
   - javav
   - Javav
@@ -2753,15 +2857,18 @@ broken-packages:
   - jet-stream
   - Jikka
   - jinquantities
+  - jmacro-rpc
   - jml-web-service
   - jni
   - jobqueue
   - join-api
   - joinlist
-  - joint
   - jonathanscard
   - jort
+  - joy-rewrite
   - jpeg
+  - jsaddle-clib
+  - jsaddle-warp
   - jsaddle-wkwebview
   - js-good-parts
   - json2
@@ -2772,12 +2879,13 @@ broken-packages:
   - json-ast-quickcheck
   - JSONb
   - json-builder
+  - json-bytes-builder
   - json-encoder
   - jsonextfilter
   - json-extra
   - json-fu
   - json-litobj
-  - jsonlogic
+  - jsonlogic-aeson
   - jsonnet
   - json-pointer
   - json-pointy
@@ -2786,6 +2894,7 @@ broken-packages:
   - jsonresume
   - json-rpc-generic
   - json-rpc-server
+  - json-rpc # test failure in job https://hydra.nixos.org/build/214602304 at 2023-04-07
   - jsonrpc-tinyclient
   - json-schema
   - jsonschema-gen
@@ -2800,6 +2909,7 @@ broken-packages:
   - judy
   - juicy-gcode
   - JuicyPixels-blp
+  - JuicyPixels-blurhash
   - JuicyPixels-canvas
   - JuicyPixels-util
   - JunkDB
@@ -2809,8 +2919,9 @@ broken-packages:
   - jvm-binary
   - jvm-parser
   - JYU-Utils
+  - k8s-wrapper # test failure in job https://hydra.nixos.org/build/211254982 at 2023-03-13
   - kademlia
-  - kafka-client
+  - kafka-client # dependency missing in job https://hydra.nixos.org/build/211238496 at 2023-03-13
   - kafka-client-sync
   - kalman
   - Kalman
@@ -2832,22 +2943,25 @@ broken-packages:
   - kdesrc-build-extra
   - kd-tree
   - keccak
+  - keenser
   - keera-hails-reactivevalues
+  - keid-render-basic #  failure  in job https://hydra.nixos.org/build/225578420 at 2023-06-28
   - keid-ui-dearimgui
   - keiretsu
   - kempe
-  - kerry
   - kesha
   - Ketchup
   - kewar
   - keycloak-hs
   - keyed
-  - keystore
+  - keyed-vals
   - khph
   - kickass-torrents-dump-parser
   - kickchan
-  - ki-unlifted
+  - kind-generics-deriving
+  - kind-integer # failure building library in job https://hydra.nixos.org/build/214501345 at 2023-04-07
   - kleene-list
+  - kmn-programming
   - kmonad
   - kmp-dfa
   - knots
@@ -2859,9 +2973,9 @@ broken-packages:
   - koofr-client
   - korea-holidays
   - kraken
-  - krank
   - krapsh
   - Kriens
+  - kriti-lang
   - krpc
   - KSP
   - ktx
@@ -2874,7 +2988,6 @@ broken-packages:
   - lagrangian
   - lambda2js
   - lambdaBase
-  - lambdabot-telegram-plugins
   - lambdabot-utils
   - lambdabot-xmpp
   - lambda-bridge
@@ -2891,9 +3004,10 @@ broken-packages:
   - lambda-sampler
   - lambdatex
   - lambda-toolbox
+  - lambdatwit
+  - Lambdaya
   - lame
   - lame-tester
-  - landlock
   - language-asn
   - language-c-comments
   - language-c-inline
@@ -2901,14 +3015,15 @@ broken-packages:
   - language-csharp
   - language-dart
   - language-dockerfile
-  - language-ecmascript
   - language-elm
+  - language-fortran
   - language-gcl
   - language-gemini
   - language-go
   - language-guess
   - language-hcl
   - language-java-classfile
+  - language-js
   - language-lua2
   - language-lua-qq
   - language-mixal
@@ -2920,16 +3035,18 @@ broken-packages:
   - language-sh
   - language-sqlite
   - language-sygus
-  - language-tl
   - language-typescript
   - language-webidl
+  - laop
   - LargeCardinalHierarchy
   - Lastik
   - latest-npm-version
   - latex-formulae-image
   - latex-svg-image
   - LATS
+  - launchdarkly-server-sdk
   - launchpad-control
+  - lawful-classes-hedgehog
   - lawless-concurrent-machines
   - layers
   - layout
@@ -2938,22 +3055,19 @@ broken-packages:
   - lazify
   - lazyarray
   - lazyboy
-  - lazy-bracket
   - lazy-priority-queue
   - lazyset
   - LazyVault
   - l-bfgs-b
   - LC3
   - lcs
-  - lda
   - ldif
   - ld-intervals
   - leaf
   - leapseconds
   - learn
   - Learning
-  - learning-hmm
-  - learn-physics-examples
+  - learn-physics-examples # dependency missing in job https://hydra.nixos.org/build/213500293 at 2023-03-26
   - leetify
   - lendingclub
   - lens-datetime
@@ -2964,12 +3078,14 @@ broken-packages:
   - lens-process
   - lensref
   - lens-simple
+  - lens-tell
   - lens-text-encoding
   - lens-th-rewrite
   - lens-time
   - lens-tutorial
   - lens-typelevel
   - lens-xml
+  - lenz-template
   - less-arbitrary
   - Level0
   - level-monad
@@ -2980,7 +3096,6 @@ broken-packages:
   - lhslatex
   - LibClang
   - libexpect
-  - libfuse3
   - libGenI
   - libhbb
   - libinfluxdb
@@ -2989,12 +3104,12 @@ broken-packages:
   - liboath-hs
   - liboleg
   - libpafe
+  - libphonenumber # dependency missing in job https://hydra.nixos.org/build/214497968 at 2023-04-07
   - libpq
   - librandomorg
-  - librarian
   - libsecp256k1
+  - libssh2 # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/223222399 at 2023-06-07
   - libsystemd-daemon
-  - libsystemd-journal
   - libtagc
   - libxls
   - libxlsxwriter-hs
@@ -3006,7 +3121,6 @@ broken-packages:
   - lifetimes
   - lifted-protolude
   - lifter
-  - lifx-lan
   - ligature
   - light
   - lilypond
@@ -3027,14 +3141,16 @@ broken-packages:
   - linkedhashmap
   - linked-list-with-iterator
   - linklater
+  - linnet
   - linode
   - linode-v4
   - linux-blkid
   - linux-cgroup
+  - linux-evdev
   - linux-kmod
   - linux-perf
+  - linux-xattr
   - linx-gateway
-  - lion
   - lipsum-gen
   - liquid
   - liquidhaskell-cabal
@@ -3043,8 +3159,8 @@ broken-packages:
   - listlike-instances
   - list-mux
   - list-prompt
-  - list-remote-forwards
   - list-t-http-client
+  - list-t-libcurl
   - list-tries
   - list-t-text
   - list-zip-def
@@ -3056,39 +3172,40 @@ broken-packages:
   - ll-picosat
   - llsd
   - llvm-base
-  - llvm-ffi
+  - llvm-extra # dependency missing in job https://hydra.nixos.org/build/217586045 at 2023-04-29
   - llvm-general-pure
   - llvm-hs
   - llvm-ht
   - llvm-pretty
-  - lmdb-high-level
+  - lmdb-simple
   - lmonad
+  - lnurl
   - load-balancing
   - load-font
   - local-address
   - located
   - located-monad-logger
   - loch
-  - loc-test
   - log2json
+  - log-base
+  - log-effect
   - logentries
   - logger
   - logging-effect-extra-file
   - logging-effect-extra-handler
   - Logic
   - logicst
-  - logict-state
+  - logict-sequence
   - logplex-parse
   - log-warper
   - lojbanParser
   - lojbanXiragan
-  - lol
   - lol-calculus
   - longboi
-  - longshot
   - lookup-tables
   - loopbreaker
   - loop-dsl
+  - looper # failure building test suite 'looper-test' in job https://hydra.nixos.org/build/225553593 at 2023-06-28
   - loops
   - loop-while
   - loopy
@@ -3096,20 +3213,21 @@ broken-packages:
   - lorem
   - loris
   - loshadka
+  - louis
   - lowgl
-  - lp-diagrams
+  - lp-diagrams-svg
   - LRU
   - lrucaching
   - lscabal
   - L-seed
   - lsfrom
-  - lti13
   - ltiv1p1
   - ltk
   - LTS
   - lua-bc
   - luautils
-  - lucid2
+  - lucid2-htmx
+  - lucid-aria
   - lucid-hyperscript
   - luis-client
   - luka
@@ -3140,10 +3258,9 @@ broken-packages:
   - macos-corelibs
   - macrm
   - madlang
-  - mad-props
   - mage
-  - MagicHaskeller
   - magic-tyfams
+  - magma
   - mailchimp
   - mailchimp-subscribe
   - makedo
@@ -3154,10 +3271,10 @@ broken-packages:
   - mandulia
   - mangopay
   - mapalgebra
-  - map-classes
   - map-exts
   - Mapping
   - mappy
+  - map-reduce-folds
   - MapWith
   - markdown-kate
   - marked-pretty
@@ -3173,7 +3290,6 @@ broken-packages:
   - math-grads
   - math-interpolate
   - math-metric
-  - math-programming
   - matrix-as-xyz
   - matrix-lens
   - matrix-market
@@ -3184,6 +3300,7 @@ broken-packages:
   - maybench
   - MaybeT
   - MaybeT-monads-tf
+  - MaybeT-transformers
   - MazesOfMonad
   - MBot
   - mbox-tools
@@ -3204,12 +3321,13 @@ broken-packages:
   - Mecha
   - mechs
   - Mechs
-  - medea
   - mediabus
   - mediawiki
   - medium-sdk-haskell
   - meep
   - megalisp
+  - megastore #  failure  in job https://hydra.nixos.org/build/211239200 at 2023-03-13
+  - melf
   - mellon-core
   - melody
   - membrain
@@ -3219,10 +3337,12 @@ broken-packages:
   - meminfo
   - memoization-utils
   - memo-ptr
+  - memorable-bits
   - memorypool
   - memo-sqlite
   - menoh
   - menshen
+  - mercury-api
   - mergeful-persistent
   - mergeless-persistent
   - messagepack-rpc
@@ -3241,6 +3361,8 @@ broken-packages:
   - MHask
   - mi
   - miconix-test
+  - microbase
+  - microformats2-parser
   - microgroove
   - microlens-each
   - micrologger
@@ -3248,9 +3370,11 @@ broken-packages:
   - microsoft-translator
   - mida
   - midi-simple
-  - midisurface
+  - midisurface # dependency missing in job https://hydra.nixos.org/build/217805409 at 2023-04-29
   - midi-utils
-  - migrant-core
+  - mighttpd2 #  failure  in job https://hydra.nixos.org/build/225576224 at 2023-06-28
+  - mighty-metropolis # test failure in job https://hydra.nixos.org/build/214599789 at 2023-04-07
+  - migrant-postgresql-simple
   - mikmod
   - mikrokosmos
   - miku
@@ -3267,6 +3391,7 @@ broken-packages:
   - minst-idx
   - mios
   - MIP
+  - mirror-tweet
   - mismi-s3-core
   - miso-action-logger
   - miso-examples
@@ -3278,12 +3403,17 @@ broken-packages:
   - ml-w
   - mm2
   - mmsyn2
-  - mmsyn3
+  - mmsyn4
+  - mmsyn7l
+  - mmsyn7ukr-array
+  - mmsyn7ukr-common
   - mmtf
   - mmtl
   - Mobile-Legends-Hack-Cheats
   - mockazo
   - mock-httpd
+  - modbus-tcp
+  - model
   - modelicaparser
   - modular-prelude
   - module-management
@@ -3298,13 +3428,16 @@ broken-packages:
   - monad-atom
   - monad-atom-simple
   - monad-branch
-  - MonadCatchIO-transformers
+  - MonadCatchIO-mtl
+  - MonadCatchIO-transformers-foreign
   - monad-choice
   - MonadCompose
+  - monad-control-aligned
+  - monadcryptorandom
   - monad-fork
-  - monad-http
+  - monadic-bang
   - monadiccp
-  - monad-interleave
+  - monadic-recursion-schemes
   - monad-introspect
   - Monadius
   - monad-levels
@@ -3313,6 +3446,7 @@ broken-packages:
   - monadloc-pp
   - monad-log
   - monadlog
+  - monad-logger-syslog
   - monad-lrs
   - monad-mersenne-random
   - monad-mock
@@ -3322,60 +3456,61 @@ broken-packages:
   - monad-persist
   - monadplus
   - monad-ran
+  - MonadRandomLazy
   - monad-recorder
-  - monads-fd
   - MonadStack
   - monad-statevar
   - monad-ste
   - monad-stlike-io
   - monad-task
   - monad-throw-exit
+  - monad-time-effectful # failure building library in job https://hydra.nixos.org/build/225552858 at 2023-06-28
   - monad-timing
+  - monad-tree
   - monad-tx
   - monad-unify
-  - monad-unlift
   - monad-wrap
   - Monatron
   - mondo
   - money
   - mongodb-queue
   - monitor
+  - monocypher # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/212811942 at 2023-03-22
   - mono-foldable
   - monoid
   - monoid-absorbing
   - monoid-owns
   - monoidplus
   - monoids
-  - monomer-hagrid
+  - monoid-statistics
+  - monomer-flatpak-example #  failure  in job https://hydra.nixos.org/build/215851035 at 2023-04-17
   - monopati
   - monus
   - monzo
+  - moo-nad
   - morfette
   - morfeusz
-  - morloc
-  - morpheus-graphql-core
+  - morpheus-graphql-cli
   - morphisms-functors
   - morphisms-objects
   - morte
-  - mosaico-lib
-  - motor
+  - mortred
+  - mosaico-lib # dependency missing in job https://hydra.nixos.org/build/212818174 at 2023-03-22
+  - motor-reflection
   - mount
   - movie-monad
-  - mpeff
   - mpppc
   - mpris
   - mpvguihs
   - mqtt
   - mqtt-hs
-  - mr-env
   - mrifk
   - mrm
   - ms
   - msgpack
-  - msgpack-binary
-  - msgpack-persist
+  - msgpack-types
   - msh
-  - msi-kb-backlit
+  - mssql-simple
   - MTGBuilder
   - mtgoxapi
   - mtl-c
@@ -3388,7 +3523,6 @@ broken-packages:
   - MuCheck
   - mud
   - mudbath
-  - muesli
   - mulang
   - multext-east-msd
   - multiaddr
@@ -3398,18 +3532,18 @@ broken-packages:
   - multipass
   - multipath
   - multiplate-simplified
-  - multipool-persistent-postgresql
+  - multipool
   - multirec
-  - multivariant
   - Munkres-simple
   - muon
+  - murmur
   - mu-schema
   - musicScroll
   - music-util
   - musicxml
   - mustache2hs
   - mustache-haskell
-  - mutable-lens
+  - mutable
   - mvc
   - mxnet
   - mxnet-nnvm
@@ -3422,10 +3556,11 @@ broken-packages:
   - mysql-simple-quasi
   - mystem
   - my-test-docs
-  - mywatch
+  - mywork
   - myxine-client
   - mzv
   - n2o-protocols
+  - NaCl
   - nagios-plugin-ekg
   - named-binary-tag
   - named-lock
@@ -3433,6 +3568,7 @@ broken-packages:
   - named-sop
   - namelist
   - nanoAgda
+  - nano-cryptr
   - nanocurses
   - nano-hmac
   - nano-md5
@@ -3451,7 +3587,6 @@ broken-packages:
   - nats-client
   - nat-sized-numbers
   - natural
-  - NaturalLanguageAlphabets
   - NaturalSort
   - naver-translate
   - nbt
@@ -3464,6 +3599,7 @@ broken-packages:
   - neither
   - neither-data
   - neko-lib
+  - neko-obfs
   - Neks
   - neptune-backend
   - nero
@@ -3472,13 +3608,11 @@ broken-packages:
   - nestedmap
   - nested-sequence
   - netclock
-  - netcore
   - netease-fm
   - netrium
   - NetSNMP
   - netspec
   - net-spider
-  - nettle-openflow
   - netwire-input-javascript
   - netwire-vinylglfw-examples
   - network-address
@@ -3490,9 +3624,10 @@ broken-packages:
   - network-bytestring
   - network-carbon
   - network-dbus
-  - network-dns
   - networked-game
   - network-house
+  - network-manager-tui
+  - network-messagepack-rpc-websocket
   - network-metrics
   - network-msg
   - network-msgpack-rpc
@@ -3510,6 +3645,7 @@ broken-packages:
   - neural-network-hmatrix
   - newbase60
   - newhope
+  - newline # dependency missing in job https://hydra.nixos.org/build/211250825 at 2023-03-13
   - newports
   - newsletter
   - newt
@@ -3518,13 +3654,16 @@ broken-packages:
   - next-ref
   - nextstep-plist
   - NGrams
+  - ngrams-loader
   - ngx-export-log
   - niagra
   - nibblestring
   - nice-html
   - nicovideo-translator
+  - nist-beacon
   - nitro
   - nix-delegate
+  - nixdu
   - nix-eval
   - nix-freeze-tree
   - nixfromnpm
@@ -3540,7 +3679,7 @@ broken-packages:
   - nofib-analyse
   - nofib-analyze
   - noise
-  - nom
+  - noli
   - NonEmpty
   - non-empty-containers
   - nonempty-lift
@@ -3548,7 +3687,7 @@ broken-packages:
   - noodle
   - no-role-annots
   - notcpp
-  - not-gloss-examples
+  - notmuch-haskell
   - NoTrace
   - notzero
   - np-linear
@@ -3560,25 +3699,26 @@ broken-packages:
   - nullary
   - null-canvas
   - nullpipe
-  - numbered-semigroups
   - NumberSieves
   - NumberTheory
-  - numerals-base
-  - numeric-ode
   - numeric-qq
   - numeric-ranges
   - numhask-free
   - numhask-histogram
   - numhask-prelude
+  - numtype
+  - numtype-tf
   - Nutri
   - nvim-hs-ghcid
+  - NXT
   - NXTDSL
   - nyan-interpolation-core
   - nylas
   - nyx-game
+  - oanda-rest-api
   - oasis-xrd
-  - oauth2-jwt-bearer
   - oauthenticated
+  - obd
   - Object
   - ObjectIO
   - ocaml-export
@@ -3586,9 +3726,15 @@ broken-packages:
   - OddWord
   - oden-go-packages
   - oeis2
+  - OGDF
   - OGL
+  - ogma-language-c
+  - ogma-language-cocospec
+  - ogma-language-smv
   - ogmarkup
+  - ohloh-hs
   - oi
+  - okapi
   - old-version
   - om-actor
   - omaketex
@@ -3598,13 +3744,13 @@ broken-packages:
   - Omega
   - om-elm
   - om-fail
-  - om-fork
-  - om-http
   - om-http-logging
   - omnifmt
+  - om-plugin-imports
+  - om-show
+  - om-time
   - on-a-horse
   - onama
-  - ONC-RPC
   - on-demand-ssh-tunnel
   - oneormore
   - onpartitions
@@ -3615,9 +3761,12 @@ broken-packages:
   - opaleye-trans
   - open-adt
   - OpenAFP
-  - openai-servant
+  - openai-hs # failure building library in job https://hydra.nixos.org/build/215850908 at 2023-04-17
+  - openapi3
+  - openapi3-code-generator
   - openapi-petstore
   - openapi-typed
+  - opencc
   - opench-meteo
   - OpenCL
   - OpenCLRaw
@@ -3633,13 +3782,12 @@ broken-packages:
   - open-haddock
   - openid-connect
   - open-pandoc
-  - openpgp
   - open-signals
   - opensoundcontrol-ht
   - openssh-protocol
+  - opentelemetry-extra
   - opentelemetry-http-client
   - opentheory-char
-  - opentok
   - opentype
   - open-typerep
   - OpenVGRaw
@@ -3654,18 +3802,18 @@ broken-packages:
   - options-time
   - optparse-applicative-simple
   - optparse-helper
-  - orbits
+  - optstream
   - orc
   - orchestrate
   - OrchestrateDB
   - ordered
   - order-statistics
-  - ordinal
   - Ordinary
   - ordrea
   - oref
   - organize-imports
   - orgmode
+  - orgmode-parse
   - origami
   - orion-hs
   - orizentic
@@ -3674,12 +3822,15 @@ broken-packages:
   - oscpacking
   - oset
   - Oslo-Vectize
+  - OSM
   - osm-conduit
   - oso2pdf
   - osx-ar
   - ot
   - OTP
   - ottparse-pretty
+  - overeasy
+  - overload
   - overloaded
   - overloaded-records
   - overture
@@ -3694,6 +3845,7 @@ broken-packages:
   - packedstring
   - packer-messagepack
   - packman
+  - packstream
   - packunused
   - pacman-memcache
   - padic
@@ -3709,10 +3861,12 @@ broken-packages:
   - pandoc-filter-indent
   - pandoc-include
   - pandoc-lens
+  - pandoc-lua-engine
   - pandoc-markdown-ghci-filter
   - pandoc-placetable
   - pandoc-plantuml-diagrams
   - pandoc-pyplot
+  - pandoc-server
   - pandoc-unlit
   - pandoc-utils
   - pandora
@@ -3737,8 +3891,10 @@ broken-packages:
   - papillon
   - pappy
   - paragon
+  - Parallel-Arrows-Definition
   - parallel-tasks
   - parameterized-data
+  - parameterized-utils
   - paranoia
   - parco
   - parcom-lib
@@ -3749,13 +3905,13 @@ broken-packages:
   - PArrows
   - Parry
   - parse
-  - parseargs
   - parsec2
   - parsec3
   - parsec-free
   - parsec-parsers
   - parsec-pratt
   - parseerror-eq
+  - parse-gcstats
   - parsely
   - parser241
   - parser-combinators-tests
@@ -3764,10 +3920,10 @@ broken-packages:
   - parsers-megaparsec
   - parser-unbiased-choice-monad-embedding
   - parsimony
-  - parsley-core
+  - parsnip
   - partage
+  - partial-lens
   - partial-records
-  - partial-semigroup-hedgehog
   - partly
   - passage
   - passman
@@ -3775,6 +3931,7 @@ broken-packages:
   - PasswordGenerator
   - passwords
   - pasta
+  - pasta-curves
   - pastis
   - pasty
   - patches-vector
@@ -3783,6 +3940,8 @@ broken-packages:
   - PathTree
   - patrol
   - patronscraper
+  - pattern-trie
+  - paynow-zw
   - paypal-adaptive-hoops
   - paypal-api
   - paypal-rest-client
@@ -3796,9 +3955,8 @@ broken-packages:
   - PCLT
   - pcre2
   - pcre-light-extra
-  - pdfname
+  - pdfinfo
   - pdf-slave-template
-  - pdfsplit
   - pdf-toolbox-viewer
   - pdftotext
   - pdynload
@@ -3809,10 +3967,10 @@ broken-packages:
   - peggy
   - pencil
   - penntreebank-megaparsec
-  - penrose
   - percent-encoder
   - perceptron
   - peregrin
+  - perf
   - PerfectHash
   - perfect-vector-shuffle
   - perhaps
@@ -3829,11 +3987,11 @@ broken-packages:
   - persistent-generic
   - persistent-mongoDB
   - persistent-odbc
-  - persistent-protobuf
   - persistent-ratelimit
   - persistent-stm
   - persistent-template-classy
   - persistent-zookeeper
+  - persist-state
   - persona
   - pesca
   - pez
@@ -3843,9 +4001,11 @@ broken-packages:
   - pg-harness
   - pg-harness-server
   - pg-recorder
+  - pgsql-simple
   - pg-store
   - pgstream
   - pg-transact
+  - pgvector #  failure  in job https://hydra.nixos.org/build/215851675 at 2023-04-17
   - phasechange
   - phaser
   - phoityne
@@ -3853,7 +4013,13 @@ broken-packages:
   - phone-numbers
   - phone-push
   - phonetic-languages-constaints
+  - phonetic-languages-constraints-array
+  - phonetic-languages-filters-array
+  - phonetic-languages-permutations-array
+  - phonetic-languages-phonetics-basics
+  - phonetic-languages-plus
   - phonetic-languages-simplified-properties-array-old
+  - phonetic-languages-ukrainian-array
   - phonetic-languages-vector
   - phraskell
   - Phsu
@@ -3870,23 +4036,22 @@ broken-packages:
   - pi-forall
   - pig
   - pi-hoole
+  - pi-lcd
+  - pinboard
   - pinch-gen
   - pinchot
   - pine
   - Pipe
   - pipes-async
   - pipes-bgzf
-  - pipes-break
   - pipes-brotli
-  - pipes-bzip
   - pipes-category
-  - pipes-cborg
   - pipes-cereal
   - pipes-core
   - pipes-errors
   - pipes-interleave
   - pipes-io
-  - pipes-network
+  - pipes-network-ws # failure building library in job https://hydra.nixos.org/build/214504366 at 2023-04-07
   - pipes-protolude
   - pipes-rt
   - pipes-s3
@@ -3895,13 +4060,13 @@ broken-packages:
   - pipes-transduce
   - pipes-vector
   - pipes-zeromq4
-  - pipes-zlib
   - Piso
   - pit
   - pivotal-tracker
   - pixela
   - pixelated-avatar-generator
   - pixel-printer
+  - pixiv
   - pkcs10
   - pkcs7
   - pkggraph
@@ -3916,7 +4081,6 @@ broken-packages:
   - platinum-parsing
   - PlayingCards
   - playlists
-  - plex
   - plist
   - plist-buddy
   - plivo
@@ -3925,6 +4089,8 @@ broken-packages:
   - plot-gtk3
   - plot-gtk-ui
   - plot-lab
+  - plots
+  - plow-log
   - plugins
   - plugins-multistage
   - plumbers
@@ -3938,8 +4104,9 @@ broken-packages:
   - pointfree-fancy
   - pointful
   - pointless-haskell
+  - poke
   - pokemon-go-protobuf-types
-  - poker
+  - poker-base
   - poker-eval
   - pokitdok
   - polar-configfile
@@ -3951,14 +4118,20 @@ broken-packages:
   - poly-control
   - polydata-core
   - polynom
+  - polynomial
   - polysemy-check
   - polysemy-keyed-state
   - polysemy-kvstore-jsonfile
-  - polysemy-log-co
-  - polysemy-managed
+  - polysemy-methodology-co-log
   - polysemy-mocks
+  - polysemy-path
   - polysemy-readline
-  - polysemy-scoped-fs
+  - polysemy-req
+  - polysemy-resume
+  - polysemy-socket
+  - polysemy-video
+  - polysemy-vinyl
+  - poly # test failure in job https://hydra.nixos.org/build/225574715 at 2023-06-28
   - polytypeable
   - pomaps
   - pomohoro
@@ -3966,38 +4139,38 @@ broken-packages:
   - pong-server
   - pontarius-xpmn
   - pool
+  - poolboy # test failure in job https://hydra.nixos.org/build/212819440 at 2023-03-26
   - pool-conduit
   - pop3-client
-  - popkey
   - poppler
+  - porpoise
   - portager
   - porte
   - PortFusion
-  - portray-pretty
-  - portray-prettyprinter
   - posit
   - positron
   - posix-acl
-  - posix-api
   - posix-realtime
   - posix-waitpid
-  - posplyu
   - postcodes
   - postgres-embedded
   - PostgreSQL
+  - postgresql-common
+  - postgresql-cube
   - postgresql-lo-stream
   - postgresql-ltree
   - postgresql-named
+  - postgresql-orm
   - postgresql-query
+  - postgresql-replicant
   - postgresql-resilient
   - postgresql-simple-bind
+  - postgresql-simple-migration
   - postgresql-simple-named
   - postgresql-simple-sop
-  - postgresql-transactional
+  - postgresql-tx-monad-logger
   - postgresql-tx-simple
-  - postgresql-tx-squeal
   - postgresql-typed-lifted
-  - postgrest
   - postgres-tmp
   - postgrest-ws
   - postgres-websockets
@@ -4006,6 +4179,7 @@ broken-packages:
   - postmaster
   - potato-tool
   - potoki-core
+  - powerdns
   - powermate
   - powerpc
   - powerqueue-levelmem
@@ -4031,6 +4205,7 @@ broken-packages:
   - presburger
   - present
   - press
+  - pretty-compact
   - pretty-ghci
   - pretty-ncols
   - prettyprinter-vty
@@ -4040,17 +4215,17 @@ broken-packages:
   - prime
   - primes-type
   - prim-instances
+  - PrimitiveArray
   - PrimitiveArray-Pretty
   - primitive-atomic
-  - primitive-containers
   - primitive-convenience
   - primitive-foreign
   - primitive-indexed
   - primitive-maybe
   - primitive-simd
+  - primitive-sort
   - primitive-stablename
   - prim-ref
-  - prim-spoon
   - pringletons
   - printcess
   - print-debugger
@@ -4066,6 +4241,7 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
+  - process-sequential
   - procrastinating-variable
   - procstat
   - product-isomorphic
@@ -4077,9 +4253,13 @@ broken-packages:
   - progress-meter
   - progress-reporting
   - proj4-hs-bindings
+  - project-forge
   - projectile
+  - project-m36
   - prolens
   - prolog
+  - prometheus-effect
+  - prometheus-proc
   - promise
   - pronounce
   - proof-combinators
@@ -4087,9 +4267,13 @@ broken-packages:
   - Proper
   - properties
   - property-list
+  - proquint #  failure  in job https://hydra.nixos.org/build/215308028 at 2023-04-11
   - prosidy
   - prosper
+  - proteaaudio
+  - proteaaudio-sdl
   - protocol
+  - protocol-buffers
   - protocol-buffers-fork
   - proto-lens-combinators
   - protolude-lifted
@@ -4099,15 +4283,17 @@ broken-packages:
   - provenience
   - proxy-kindness
   - proxy-mapping
+  - prune-juice
   - psc-ide
   - pseudo-trie
+  - psi
   - psx
   - PTQ
+  - pub
   - publicsuffix
   - publicsuffixlistcreate
   - publish
   - pubnub
-  - pubsub
   - pugixml
   - pugs-DrIFT
   - pugs-HsSyck
@@ -4115,7 +4301,8 @@ broken-packages:
   - Pup-Events-Server
   - pure-io
   - pure-priority-queue
-  - purescript
+  - purescript-ast
+  - purescript-cst
   - purescript-tsd-gen
   - pure-zlib
   - pushbullet
@@ -4126,12 +4313,10 @@ broken-packages:
   - push-notifications
   - putlenses
   - puzzle-draw
-  - pvector
   - pyffi
   - pyfi
   - python-pickle
   - q4c12-twofinger
-  - qbe
   - qc-oi-testgenerator
   - qd
   - qed
@@ -4140,29 +4325,34 @@ broken-packages:
   - QIO
   - QLearn
   - qlinear
-  - qnap-decrypt
+  - qrcode
   - qr-imager
   - qsem
   - qt
   - QuadEdge
   - QuadTree
+  - qualified-imports-plugin
   - quandl-api
-  - quantfin
   - quantification
   - quantum-arrow
   - quarantimer
-  - qudb
+  - qudb # failure building executable 'qudb' in job https://hydra.nixos.org/build/211250260 at 2023-03-13
   - quenya-verb
   - querystring-pickle
   - questioner
   - quibble-core
   - QuickAnnotate
+  - quickbooks
   - quickcheck-arbitrary-template
-  - quickcheck-lockstep
+  - quickcheck-groups
+  - quickcheck-lockstep # dependency missing in job https://hydra.nixos.org/build/210845914 at 2023-02-28
+  - quickcheck-monoid-subclasses
   - quickcheck-property-comb
   - quickcheck-property-monad
   - quickcheck-rematch
   - quickcheck-report
+  - QuickCheckVariant
+  - quickcheck-webdriver
   - quickjs-hs
   - QuickPlot
   - quickpull
@@ -4182,21 +4372,22 @@ broken-packages:
   - radium
   - radium-formula-parser
   - radix
+  - radix-tree
   - rados-haskell
   - raft
   - rakhana
   - rakuten
   - ralist
   - raml
-  - randfile
   - rando
   - random-access-list
   - random-derive
   - RandomDotOrg
   - random-eff
   - Randometer
-  - random-extras
+  - random-source
   - random-stream
+  - random-string
   - rand-vars
   - Range
   - rangemin
@@ -4205,14 +4396,15 @@ broken-packages:
   - rank-product
   - rapid-term
   - Rasenschach
+  - rating-chgk-info
   - rational-list
   - rattle
   - rattletrap
   - raven-haskell-scotty
+  - raylib-imgui
   - raz
   - rbst
   - rclient
-  - rdf
   - react-flux
   - react-haskell
   - reaction-logic
@@ -4227,6 +4419,7 @@ broken-packages:
   - readability
   - read-bounded
   - read-ctags
+  - reader-soup
   - read-io
   - readline-statevar
   - readme-lhs
@@ -4237,13 +4430,13 @@ broken-packages:
   - reason-export
   - record
   - record-encode
-  - record-impl
   - records
+  - records-sop
   - record-wrangler
-  - recursion-schemes-ext
-  - recursion-schemes-ix
+  - recover-rtti
   - recursors
   - red-black-record
+  - redis-glob
   - redis-hs
   - redis-simple
   - Redmine
@@ -4254,9 +4447,11 @@ broken-packages:
   - refcount
   - Referees
   - references
+  - ref-extras
   - refined-http-api-data
   - refined-with
   - reflection-extras
+  - reflex-backend-socket
   - reflex-basic-host
   - reflex-dom-ace
   - reflex-dom-contrib
@@ -4266,10 +4461,10 @@ broken-packages:
   - reflex-dom-svg
   - reflex-external-ref
   - reflex-fsnotify
-  - reflex-gadt-api
   - reflex-gi-gtk
   - reflex-gloss
   - reflex-jsx
+  - reflex-libtelnet
   - reflex-orphans
   - reflex-sdl2
   - reflex-test-host
@@ -4279,6 +4474,7 @@ broken-packages:
   - reformat
   - refresht
   - refty
+  - refurb
   - reg-alloc
   - regex-dfa
   - regexdot
@@ -4287,7 +4483,6 @@ broken-packages:
   - regex-posix-unittest
   - regexpr-symbolic
   - regexqq
-  - regex-rure
   - regex-tdfa-pipes
   - regex-tdfa-quasiquoter
   - regex-tdfa-rc
@@ -4306,7 +4501,7 @@ broken-packages:
   - reified-records
   - reify
   - relacion
-  - relapse
+  - relation
   - relevant-time
   - reload
   - remark
@@ -4333,8 +4528,9 @@ broken-packages:
   - req-conduit
   - request
   - request-monad
+  - require
   - req-url-extra
-  - reserve
+  - rescue
   - reservoir
   - resolve
   - resolve-trivial-conflicts
@@ -4347,9 +4543,9 @@ broken-packages:
   - resumable-exceptions
   - rethinkdb
   - rethinkdb-client-driver
-  - rethinkdb-wereHamster
   - retryer
   - reverse-geocoding
+  - reverse-list
   - reversi
   - ReviewBoard
   - rewrite-inspector
@@ -4357,10 +4553,11 @@ broken-packages:
   - rfc-prelude
   - r-glpk-phonetic-languages-ukrainian-durations
   - rhbzquery
+  - rhine
   - riak
   - riak-protobuf-lens
-  - rib
   - ribbit
+  - rib-core
   - RichConditional
   - ridley
   - riemann
@@ -4376,18 +4573,19 @@ broken-packages:
   - rivet-simple-deploy
   - RJson
   - Rlang-QQ
-  - rle
   - rlglue
   - RLP
   - rl-satton
-  - RNAdraw
   - robin
   - robots-txt
   - roc-cluster
+  - roc-id
+  - roguestar
   - roku-api
   - rollbar-client
   - rollbar-hs
   - roller
+  - roman-numerals
   - ron
   - rope
   - rosebud
@@ -4395,6 +4593,7 @@ broken-packages:
   - rosmsg
   - rosso
   - rotating-log
+  - rounded
   - rounding
   - roundtrip-aeson
   - rowrecord
@@ -4409,6 +4608,7 @@ broken-packages:
   - RtMidi
   - rtnetlink
   - rtorrent-rpc
+  - rtorrent-state
   - rts-loader
   - ruby-marshal
   - ruby-qq
@@ -4416,32 +4616,40 @@ broken-packages:
   - ruin
   - runhs
   - runmany
+  - runtime-instances
   - rustls
   - rws
   - RxHaskell
+  - rzk # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/217574605 at 2023-04-29
   - rz-pipe
   - SableCC2Hs
   - safe-buffer-monad
   - safe-coerce
+  - safe-coloured-text-gen # test failure in job https://hydra.nixos.org/build/225565471 at 2023-06-28
+  - safe-coloured-text-layout # test failure in job https://hydra.nixos.org/build/225562935 at 2023-06-28
   - safecopy-migrate
   - safecopy-store
   - safe-freeze
   - safe-globals
   - safeint
+  - safeio
   - safe-lazy-io
   - safe-length
+  - safe-money-xmlbf
   - safepath
   - safe-printf
   - saferoute
   - safe-tensor
+  - safe-wild-cards
   - sajson
   - sakuraio-platform
-  - salak-toml
+  - salak
   - Salsa
   - salvia-protocol
   - sandlib
   - sandman
   - sarasvati
+  - sasha # dependency missing in job https://hydra.nixos.org/build/211237944 at 2023-03-13
   - sat
   - satchmo-backends
   - satchmo-minisat
@@ -4449,14 +4657,14 @@ broken-packages:
   - satyros
   - savage
   - sax
-  - sbvPlugin
+  - sbv
   - sc2-proto
   - scale
   - scaleimage
   - scalendar
+  - s-cargot-letbind
   - scc
-  - scgi
-  - schedule
+  - schedevr
   - schedule-planner
   - schedyield
   - schemas
@@ -4479,6 +4687,7 @@ broken-packages:
   - ScratchFs
   - script-monad
   - scrobble
+  - scroll-list
   - scrz
   - scythe
   - scyther-proof
@@ -4486,11 +4695,10 @@ broken-packages:
   - sdl2-cairo-image
   - sdl2-compositor
   - sdl2-fps
-  - SDL-mpeg
+  - sdp
   - sdr
   - seacat
   - seakale
-  - search
   - sec
   - secdh
   - seclib
@@ -4498,29 +4706,34 @@ broken-packages:
   - secp256k1
   - secp256k1-legacy
   - secret-santa
+  - SecureHash-SHA3
+  - secure-memory
   - secure-sockets
   - secureUDP
   - SegmentTree
-  - selda-json
+  - selda-postgresql
   - selectors
   - selenium
   - selinux
   - Semantique
+  - semaphore-compat # dependency missing in job https://hydra.nixos.org/build/214509429 at 2023-04-07
   - semdoc
   - semialign-extras
   - semibounded-lattices
   - Semigroup
   - semigroupoids-syntax
   - semigroups-actions
+  - semilattices
   - sendgrid-haskell
   - sendgrid-v3
   - sensu-run
   - sentry
+  - seonbi
   - separated
   - SeqAlign
   - sequent-core
+  - sequential-index
   - serialize-instances
-  - serialport
   - serokell-util
   - servant-aeson-specs
   - servant-auth-cookie
@@ -4533,20 +4746,22 @@ broken-packages:
   - servant-docs-simple
   - servant-elm
   - servant-errors
+  - servant-event-stream
   - servant-gdp
   - servant-generate
   - servant-generic
   - servant-github
   - servant-github-webhook
-  - servant-haxl-client
   - servant-hmac-auth
   - servant-htmx
+  - servant-http2-client
+  - servant-iCalendar
+  - servant-jquery
   - servant-kotlin
   - servant-mock
   - servant-namedargs
   - servant-nix
   - servant-pandoc
-  - servant-polysemy
   - servant-pool
   - servant-proto-lens
   - servant-purescript
@@ -4556,18 +4771,23 @@ broken-packages:
   - servant-router
   - servant-scotty
   - servant-seo
+  - servant-serf
   - servant-smsc-ru
   - servant-stache
   - servant-static-th
   - servant-streaming
   - servant-streamly
-  - servant-util
+  - servant-tracing
+  - servant-typed-error
   - servant-wasm
+  - servant-xml
   - servant-yaml
   - servant-zeppelin
   - server-generic
+  - serversession-backend-acid-state
   - serversession-backend-persistent
   - services
+  - serviette
   - ses-html-snaplet
   - SessionLogger
   - sessions
@@ -4580,26 +4800,22 @@ broken-packages:
   - sexp
   - sext
   - SFML
+  - sfml-audio
   - sfmt
-  - sfnt2woff
   - SG
   - sgd
   - SGplus
   - sh2md
   - shade
   - shadower
-  - shady-gen
-  - shake-cabal
   - shake-cabal-build
   - shake-dhall
   - shake-extras
   - shake-minify
-  - shake-pack
   - shake-path
   - shake-persist
   - shakespeare-babel
   - shakespeare-sass
-  - shapes
   - shared-buffer
   - shared-fields
   - sha-streams
@@ -4613,12 +4829,13 @@ broken-packages:
   - shivers-cfg
   - shoap
   - shopify
+  - shortbytestring
   - shortcut-links
   - shorten-strings
   - short-vec
   - show-prettyprint
-  - Shpadoinkle-backend-snabbdom
   - Shpadoinkle-console
+  - Shpadoinkle-debug
   - Shpadoinkle-isreal
   - shwifty
   - sifflet
@@ -4626,7 +4843,7 @@ broken-packages:
   - signable
   - signable-haskell-protoc
   - signed-multiset
-  - significant-figures
+  - significant-figures # test failure in job https://hydra.nixos.org/build/225555677 at 2023-06-28
   - simd
   - simfin
   - simple-actors
@@ -4638,7 +4855,6 @@ broken-packages:
   - simpleconfig
   - simple-css
   - simple-download
-  - simple-effects
   - simple-eval
   - simple-form
   - simple-genetic-algorithm
@@ -4646,6 +4862,7 @@ broken-packages:
   - simple-index
   - simpleirc
   - simple-log
+  - simple-logging
   - simple-money
   - simple-neural-networks
   - simplenote
@@ -4665,12 +4882,14 @@ broken-packages:
   - simplexmq
   - simple-zipper
   - simplistic-generics
+  - singlethongs
   - singleton-dict
   - singleton-typelits
   - single-tuple
   - singnal
   - singular-factory
   - sink
+  - siphash
   - sitepipe
   - sixfiguregroup
   - sized-grid
@@ -4682,24 +4901,25 @@ broken-packages:
   - skeletal-set
   - skell
   - skemmtun
+  - skews
   - skulk
   - skylighting-extensions
-  - skylighting-format-ansi
+  - skylighting-lucid
   - skype4hs
   - slack
   - slack-api
   - slack-notify-haskell
   - slack-verify
-  - slack-web
-  - slave-thread
   - sliceofpy
-  - slick
+  - slidemews
   - Slides
   - slim
   - sloane
   - sloth
   - slot-lambda
   - slug
+  - slugger
+  - slugify
   - smallarray
   - small-bytearray-builder
   - smallcaps
@@ -4710,6 +4930,7 @@ broken-packages:
   - smartcheck
   - smartconstructor
   - smartGroup
+  - smash
   - sme
   - smerdyakov
   - smiles
@@ -4718,6 +4939,7 @@ broken-packages:
   - smt-lib
   - SmtLib
   - smtlib2
+  - smtlib-backends
   - SMTPClient
   - smtp-mail-ng
   - smtps-gmail
@@ -4727,30 +4949,38 @@ broken-packages:
   - snake
   - snake-game
   - snap-accept
+  - snap-auth-cli
   - snap-blaze-clay
   - snap-configuration-utilities
   - snap-error-collector
   - snap-language
   - snaplet-acid-state
   - snaplet-amqp
+  - snaplet-auth-acid
+  - snaplet-coffee
   - snaplet-css-min
   - snaplet-environments
   - snaplet-hslogger
   - snaplet-influxdb
   - snaplet-mandrill
   - snaplet-mongodb-minimalistic
+  - snaplet-mysql-simple
   - snaplet-postgresql-simple
+  - snaplet-recaptcha
   - snaplet-redis
   - snaplet-sass
   - snaplet-scoped-session
   - snaplet-ses-html
-  - snaplet-sqlite-simple
+  - snaplet-sqlite-simple-jwt-auth
   - snaplet-typed-sessions
+  - snap-loader-dynamic
   - snap-predicates
   - snappy-conduit
+  - snappy-iteratee
   - snap-routes
   - snap-stream
   - snap-testing
+  - snap-utils
   - snap-web-routes
   - SNet
   - snipcheck
@@ -4760,17 +4990,17 @@ broken-packages:
   - socket-activation
   - socketed
   - socketio
+  - sockets
   - sockets-and-pipes
   - socket-sctp
-  - socketson
   - socket-unix
   - sodium
   - soegtk
   - softfloat-hs
+  - solar
   - solga
-  - sonic-visualiser
+  - som # test failure in job https://hydra.nixos.org/build/216744749 at 2023-04-20
   - Sonnex
-  - SoOSiM
   - sorted
   - sorting
   - sorty
@@ -4779,6 +5009,7 @@ broken-packages:
   - sousit
   - soyuz
   - spacepart
+  - spade # dependency missing in job https://hydra.nixos.org/build/225563353 at 2023-06-28
   - spake2
   - spanout
   - spars
@@ -4786,7 +5017,6 @@ broken-packages:
   - sparsecheck
   - sparse-lin-alg
   - sparse-tensor
-  - spartacon
   - special-functors
   - special-keys
   - spectacle
@@ -4797,7 +5027,7 @@ broken-packages:
   - spir-v
   - splay
   - splaytree
-  - splines
+  - splint
   - split-morphism
   - splitter
   - Spock-api-ghcjs
@@ -4806,17 +5036,16 @@ broken-packages:
   - spoty
   - Sprig
   - spritz
-  - sproxy
-  - sproxy-web
   - spsa
   - spy
   - sqlcipher
   - sqlite
+  - sqlite-easy
   - sqlite-simple-errors
   - sql-simple
   - sqlvalue-list
   - srcinst
-  - sr-extra
+  - srt-dhall
   - sscan
   - ssh
   - ssh-tunnel
@@ -4832,13 +5061,14 @@ broken-packages:
   - stackage-to-hackage
   - stackage-types
   - stack-bump
+  - stackcollapse-ghc
   - stack-fix
-  - stack-hpc-coveralls
   - stack-lib
   - stack-prism
   - stack-run
   - stack-type
   - stack-wrapper
+  - staged-gg
   - standalone-derive-topdown
   - standalone-haddock
   - starling
@@ -4850,10 +5080,12 @@ broken-packages:
   - state-record
   - static
   - static-canvas
+  - static-ls #  failure  in job https://hydra.nixos.org/build/221848657 at 2023-05-30
   - static-tensor
   - statistics-dirichlet
   - statistics-fusion
   - statistics-hypergeometric-genvar
+  - statistics-skinny #  failure  in job https://hydra.nixos.org/build/225576019 at 2023-06-28
   - stats
   - statsd
   - statvfs
@@ -4864,7 +5096,6 @@ broken-packages:
   - stdf
   - stdio
   - steambrowser
-  - steeloverseer
   - stego-uuid
   - stemmer
   - stemmer-german
@@ -4873,10 +5104,13 @@ broken-packages:
   - STL
   - stm-chunked-queues
   - stm-firehose
+  - stm-incremental
   - stm-promise
+  - stm-queue
   - stm-stats
   - stochastic
   - Stomp
+  - stooq-api
   - storable
   - storable-static-array
   - stp
@@ -4888,7 +5122,7 @@ broken-packages:
   - stratux-types
   - stream
   - streamdeck
-  - streamed
+  - streamed # dependency missing in job https://hydra.nixos.org/build/217576821 at 2023-04-29
   - stream-fusion
   - streaming-benchmarks
   - streaming-brotli
@@ -4902,7 +5136,6 @@ broken-packages:
   - streaming-png
   - streaming-postgresql-simple
   - streaming-sort
-  - streaming-utils
   - streamly-binary
   - streamly-cassava
   - streamly-examples
@@ -4910,8 +5143,10 @@ broken-packages:
   - streamly-process
   - stream-monad
   - streamproc
+  - strelka-core
   - StrictBench
   - StrictCheck
+  - strict-containers
   - strict-ghc-plugin
   - strictly
   - strict-tuple-lens
@@ -4920,12 +5155,14 @@ broken-packages:
   - string-isos
   - stringlike
   - string-quote
+  - strings
   - stringtable-atom
   - stripe
   - stripe-core
-  - stripe-servant
-  - strongweak
+  - stripe-hs
+  - strong-path
   - structural-traversal
+  - structured-haskell-mode
   - structures
   - stt
   - stunclient
@@ -4933,7 +5170,7 @@ broken-packages:
   - stylized
   - subG-instances
   - subleq-toolchain
-  - sublists
+  - submark
   - subsample
   - sub-state
   - subwordgraph
@@ -4943,7 +5180,10 @@ broken-packages:
   - sugar
   - sugarhaskell
   - suitable
+  - summer
   - summoner
+  - sump
+  - sum-type-boilerplate
   - sunlight
   - sunroof-compiler
   - superbubbles
@@ -4956,12 +5196,14 @@ broken-packages:
   - supervisors
   - supplemented
   - surjective
+  - sv2v
   - sv-core
   - SVD2HS
   - svfactor
   - svg-builder-fork
   - svg-icons
   - SvgIcons
+  - svgsym
   - svgutils
   - svm-light-utils
   - svm-simple
@@ -4969,23 +5211,25 @@ broken-packages:
   - swagger
   - swagger-petstore
   - swagger-test
-  - swarm
   - swearjure
   - swf
   - swift-lda
   - swiss
   - swiss-ephemeris
-  - SWMMoutGetMB
   - sws
   - syb-extras
-  - SybWidget
   - syb-with-class-instances-text
+  - sydtest-hedis # test failure in job https://hydra.nixos.org/build/225562212 at 2023-06-28
+  - sydtest-mongo #  failure  in job https://hydra.nixos.org/build/225574398 at 2023-06-28
+  - sydtest-persistent-postgresql # test failure in job https://hydra.nixos.org/build/225560820 at 2023-06-28
+  - sydtest-persistent-sqlite # test failure in job https://hydra.nixos.org/build/225566898 at 2023-06-28
+  - sydtest-rabbitmq # test failure in job https://hydra.nixos.org/build/225569272 at 2023-06-28
+  - sydtest-webdriver # test failure in job https://hydra.nixos.org/build/225552802 at 2023-06-28
   - syfco
   - sym
   - symantic
   - symantic-cli
   - symantic-http-client
-  - symantic-http-pipes
   - symantic-parser
   - symantic-xml
   - symbolic-link
@@ -4995,7 +5239,7 @@ broken-packages:
   - sync-mht
   - syntax-trees
   - syntax-trees-fork-bairyn
-  - synthesizer
+  - synthesizer # dependency missing in job https://hydra.nixos.org/build/217577245 at 2023-04-29
   - Sysmon
   - system-canonicalpath
   - system-command
@@ -5008,7 +5252,6 @@ broken-packages:
   - system-test
   - t3-server
   - table
-  - tableaux
   - tables
   - Tables
   - tablestorage
@@ -5040,16 +5283,19 @@ broken-packages:
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage
+  - tasty-json
   - tasty-mgolden
+  - tasty-papi # test failure in job https://hydra.nixos.org/build/216756583 at 2023-04-20
   - tasty-stats
   - tasty-test-vector
   - TastyTLT
   - TBC
   - TBit
-  - tcache-AWS
+  - TCache
   - tcod-haskell
   - tcp
   - tcp-streams-openssl
+  - tdd-util
   - tdigest-Chart
   - tdoc
   - tds
@@ -5057,6 +5303,7 @@ broken-packages:
   - technique
   - teeth
   - tehepero
+  - telega
   - telegram
   - telegram-api
   - telegram-types
@@ -5072,19 +5319,13 @@ broken-packages:
   - template-toolkit
   - template-yj
   - tempodb
-  - temporal-csound
   - tempus
   - ten
   - tensor
-  - tensorflow
-  - tensorflow-opgen
   - tensor-safe
-  - termbox-banana
   - termbox-bindings
-  - termbox-tea
   - termination-combinators
   - termplot
-  - term-rewriting
   - terntup
   - tersmu
   - tesla
@@ -5116,18 +5357,17 @@ broken-packages:
   - text-format-heavy
   - text-generic-pretty
   - text-icu-normalized
+  - text-icu-translit
   - text-lens
-  - text-lips
   - text-markup
   - text-normal
   - textocat-api
   - text-offset
   - text-position
-  - text-region
   - text-register-machine
-  - text-time
   - text-trie
   - textual
+  - text-utf7
   - text-utf8
   - text-xml-qq
   - text-zipper-monad
@@ -5153,7 +5393,7 @@ broken-packages:
   - thorn
   - th-pprint
   - threadmanager
-  - thread-supervisor
+  - thread-supervisor # test failure in job https://hydra.nixos.org/build/214156434 at 2023-03-29
   - threepenny-editors
   - threepenny-gui-contextmenu
   - threepenny-gui-flexbox
@@ -5166,17 +5406,21 @@ broken-packages:
   - th-tc
   - th-to-exp
   - th-traced
+  - thumbnail
   - thumbnail-plus
-  - thyme
   - tianbar
+  - ticket-management
   - TicTacToe
   - tictactoe3d
   - tidal-midi
+  - tidal-serial
   - tidal-vis
   - tie-knot
   - tiempo
-  - tiger
+  - tiger # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/225568410 at 2023-06-28
+  - TigerHash
   - tightrope
+  - tikzsd
   - timecalc
   - time-extras
   - time-machine
@@ -5185,17 +5429,20 @@ broken-packages:
   - timeout-with-results
   - timeparsers
   - TimePiece
+  - timeplot
   - time-qq
   - time-quote
   - time-recurrence
   - time-series
+  - timeseries # dependency missing in job https://hydra.nixos.org/build/217565262 at 2023-04-29
   - time-series-lib
   - timeutils
   - time-w3c
   - timezone-detect
-  - tintin
   - tinyid
   - TinyLaunchbury
+  - tinylog
+  - tinyMesh
   - tiny-scheduler
   - tinytemplate
   - TinyURL
@@ -5207,11 +5454,6 @@ broken-packages:
   - tkhs
   - tkyprof
   - tmp-proc-example
-  - tmp-proc-postgres
-  - tmp-proc-rabbitmq
-  - tmp-proc-redis
-  - tmp-proc-zipkin
-  - todo
   - tofromxml
   - to-haskell
   - token-bucket
@@ -5223,18 +5465,18 @@ broken-packages:
   - tokstyle
   - tokyocabinet-haskell
   - tokyotyrant-haskell
-  - tomato-rubato-openal
   - toml
   - toml-parser
-  - toml-reader-parse
   - tonalude
   - tonaparser
   - toodles
   - Top
+  - topkata
   - torch
   - TORCS
   - to-string-class
   - TotalMap
+  - total-maps
   - touched
   - Tournament
   - toxiproxy-haskell
@@ -5252,6 +5494,7 @@ broken-packages:
   - traildb
   - transactional-events
   - TransformeR
+  - transformers-bifunctors
   - transformers-compose
   - transformers-lift
   - transformers-runnable
@@ -5267,6 +5510,7 @@ broken-packages:
   - treap
   - treemap
   - treemap-html
+  - tree-monad
   - tree-render-text
   - TreeStructures
   - tree-traversals
@@ -5275,14 +5519,13 @@ broken-packages:
   - TrendGraph
   - trhsx
   - trial-tomland
+  - tries
   - trigger
   - trim
   - tripLL
   - trivia
   - tropical
   - tropical-geometry
-  - true-name
-  - trust-chain
   - tsession
   - tslib
   - tsparse
@@ -5290,62 +5533,65 @@ broken-packages:
   - tsuntsun
   - tsvsql
   - ttask
+  - ttl-hashtables
   - ttn-client
   - tttool
   - tubes
   - tuntap
+  - tuple-append
   - tuple-gen
   - tuple-hlist
   - tupleinstances
   - tuple-lenses
   - tuple-morph
-  - turingMachine
   - turing-machines
   - turing-music
   - turtle-options
   - tweak
   - twentefp-websockets
   - twfy-api-client
+  - twhs
   - twilio
   - twiml
   - twine
+  - twirl # dependency missing in job https://hydra.nixos.org/build/217564808 at 2023-04-29
   - twirp
   - twisty
   - twitchapi
   - twitter
   - twitter-feed
-  - twitter-types
   - tx
   - txtblk
   - TYB
   - tyfam-witnesses
   - typalyze
-  - typeable-mock
   - typeable-th
-  - typecheck-plugin-nat-simple
   - type-combinators
+  - TypeCompose
   - typed-digits
   - typed-encoding
-  - typedflow
   - typedquery
   - typed-time
   - typed-wire
   - type-eq
+  - type-errors-pretty
   - typehash
   - type-indexed-queues
   - type-int
   - type-interpreter
+  - typelet
   - type-level-bst
-  - type-level-kv-list-esqueleto
   - type-level-natural-number-induction
   - type-level-natural-number-operations
+  - typelevel-rewrite-rules
+  - type-level-sets
   - typelevel-tensor
   - type-list
+  - typelits-witnesses
   - type-of-html-static
   - typeparams
   - type-prelude
-  - type-reflection
-  - type-rig
+  - type-safe-avl
   - types-compat
   - type-settheory
   - type-spine
@@ -5366,22 +5612,26 @@ broken-packages:
   - uhexdump
   - uhttpc
   - ui-command
+  - ukrainian-phonetics-basic-array
+  - ukrainian-phonetics-basic-array-bytestring
   - unamb-custom
+  - unbeliever
   - unbounded-delays-units
+  - unbound-kind-generics # failure building library in job https://hydra.nixos.org/build/219201570 at 2023-05-10
+  - unboxed
   - unboxed-containers
   - unboxed-references
   - unbreak
-  - uncertain
   - unescaping-print
   - unfix-binders
-  - unfoldable
   - unicode-data-names
   - unicode-data-scripts
   - unicode-data-security
+  - unicode-general-category
   - unicode-prelude
   - unicode-symbols
   - unicode-tricks
-  - union
+  - uniform-json # failure building test suite 'json-test' in job https://hydra.nixos.org/build/214602707 at 2023-04-07
   - union-map
   - uniprot-kb
   - uniqueid
@@ -5400,6 +5650,7 @@ broken-packages:
   - unix-handle
   - unix-process-conduit
   - unix-recursive
+  - unlift
   - unlifted-list
   - unliftio-messagebox
   - unlift-stm
@@ -5412,6 +5663,7 @@ broken-packages:
   - unpack-funcs
   - unroll-ghc-plugin
   - unsafely
+  - unsatisfiable
   - unsequential
   - unused
   - uom-plugin
@@ -5440,7 +5692,6 @@ broken-packages:
   - utf8-conversions
   - utf8-prelude
   - utf8-validator
-  - UTFTConverter
   - util
   - util-logict
   - util-plus
@@ -5449,6 +5700,7 @@ broken-packages:
   - uuagc-diagrams
   - uu-cco
   - uuid-aeson
+  - uusi
   - uvector
   - uxadt
   - vabal-lib
@@ -5465,7 +5717,6 @@ broken-packages:
   - variables
   - variadic
   - variation
-  - vaultaire-common
   - vault-tool
   - vcache
   - vcatt
@@ -5483,28 +5734,29 @@ broken-packages:
   - vector-fftw
   - vector-functorlazy
   - vector-heterogenous
+  - vector-quicksort # dependency missing in job https://hydra.nixos.org/build/216753081 at 2023-04-20
   - vector-random
   - vector-read-instances
   - vector-space-map
   - vector-space-opengl
   - vector-space-points
   - vector-static
-  - Vec-Transform
-  - velma
+  - vega-view
   - Verba
   - verbalexpressions
   - verdict
   - verify
   - verilog
-  - verismith
-  - versioning-servant
-  - vformat-aeson
+  - verset
+  - versioning
+  - vformat
+  - vgrep
   - vhd
   - vhdl
   - vicinity
-  - ViennaRNA-extras
   - viewprof
   - views
+  - Villefort
   - vimus
   - vintage-basic
   - vinyl-json
@@ -5514,6 +5766,7 @@ broken-packages:
   - vinyl-vectors
   - virthualenv
   - visibility
+  - visualize-cbn
   - visual-prof
   - vitrea
   - vk-aws-route53
@@ -5533,7 +5786,6 @@ broken-packages:
   - wai-graceful
   - wai-handler-devel
   - wai-handler-fastcgi
-  - wai-handler-hal
   - wai-handler-scgi
   - wai-handler-webkit
   - wai-hmac-auth
@@ -5554,6 +5806,7 @@ broken-packages:
   - wai-middleware-travisci
   - wai-middleware-validation
   - wai-predicates
+  - wai-problem-details # dependency missing in job https://hydra.nixos.org/build/219206235 at 2023-05-10
   - wai-rate-limit-postgres
   - wai-rate-limit-redis
   - wai-request-spec
@@ -5561,7 +5814,6 @@ broken-packages:
   - wai-router
   - wai-routes
   - wai-secure-cookies
-  - wai-session-alt
   - wai-session-mysql
   - wai-session-postgresql
   - wai-session-redis
@@ -5570,8 +5822,8 @@ broken-packages:
   - wai-throttler
   - waitra
   - wallpaper
+  - warc
   - warp-dynamic
-  - warp-grpc
   - warp-static
   - warp-systemd
   - wasm
@@ -5580,33 +5832,31 @@ broken-packages:
   - wavefront
   - wavefront-obj
   - weak-bag
+  - WeakSets
   - Weather
   - weather-api
   - web3-ipfs
   - webapi
   - webapp
   - WebBits
-  - webcloud
   - webcrank
   - webcrank-dispatch
   - web-css
-  - webdriver
+  - webdriver-angular
   - webdriver-snoy
   - web-encodings
   - WeberLogic
-  - webex-teams-pipes
   - webfinger-client
   - webkitgtk3
   - webkit-javascriptcore
   - webmention
   - web-output
+  - web-page
   - web-push
-  - web-rep
   - Webrexp
   - web-routes-quasi
   - web-routes-transformers
   - webshow
-  - websockets-rpc
   - webwire
   - wedged
   - WEditor
@@ -5620,8 +5870,8 @@ broken-packages:
   - whim
   - whiskers
   - whois
-  - wholepixels
   - why3
+  - wide-word-instances # failure building library in job https://hydra.nixos.org/build/211245524 at 2023-03-13
   - WikimediaParser
   - willow
   - windns
@@ -5630,11 +5880,11 @@ broken-packages:
   - wireguard-hs
   - wires
   - wiring
-  - witness
   - witty
   - wkt
   - wkt-geom
   - WL500gPLib
+  - wl-pprint-console
   - wl-pprint-extras
   - WMSigner
   - woe
@@ -5642,18 +5892,21 @@ broken-packages:
   - wol
   - word24
   - word2vec-model
+  - word8set #  failure  in job https://hydra.nixos.org/build/221843616 at 2023-05-30
+  - wordchoice
   - wordify
   - Wordlint
+  - wordlist # dependency missing in job https://hydra.nixos.org/build/214500004 at 2023-04-07
   - wordn
   - WordNet
   - WordNet-ghc74
   - wordpass
   - wordsearch
   - workdays
-  - Workflow
   - workflow-osx
   - workflow-windows
   - work-time
+  - worldturtle
   - wp-archivebot
   - wreq-helper
   - wreq-patchable
@@ -5663,7 +5916,7 @@ broken-packages:
   - writer-cps-morph
   - wsdl
   - wsedit
-  - wsjtx-udp
+  - wss-client
   - wtk
   - wumpus-core
   - wxdirect
@@ -5699,7 +5952,9 @@ broken-packages:
   - XmlHtmlWriter
   - xml-parsec
   - xml-prettify
+  - xml-prettify-text
   - xml-query-xml-types
+  - xml-syntax
   - xml-to-json
   - xml-tydom-core
   - xml-verify
@@ -5714,16 +5969,15 @@ broken-packages:
   - xmonad-windownames
   - Xorshift128Plus
   - xorshift-plus
-  - xournal-types
-  - xrefcheck
   - xsact
   - xsd
+  - xsha1
   - xslt
-  - xstatic-th
-  - xturtle
+  - xxhash
   - y0l0bot
   - yabi-muno
   - yackage
+  - YACPong
   - yahoo-finance-api
   - yahoo-finance-conduit
   - yahoo-prices
@@ -5741,19 +5995,19 @@ broken-packages:
   - YamlReference
   - yaml-rpc
   - yaml-union
-  - yaml-unscrambler
+  - yaml-unscrambler # dependency missing in job https://hydra.nixos.org/build/212821989 at 2023-03-22
   - yampa2048
   - yampa-glfw
   - yampa-gloss
   - yampa-glut
   - yampa-sdl2
   - YampaSynth
+  - yampa-test # dependency missing in job https://hydra.nixos.org/build/214864510 at 2023-04-07
   - yandex-translate
   - yaop
   - yapb
-  - yarl
+  - yarn2nix
   - yarr
-  - yasi
   - yate
   - yaya-test
   - yaya-unsafe-test
@@ -5773,7 +6027,6 @@ broken-packages:
   - yesod-auth-ldap-mediocre
   - yesod-auth-ldap-native
   - yesod-auth-nopassword
-  - yesod-auth-oauth
   - yesod-auth-pam
   - yesod-auth-smbclient
   - yesod-auth-zendesk
@@ -5796,6 +6049,7 @@ broken-packages:
   - yesod-katip
   - yesod-links
   - yesod-lucid
+  - yesod-middleware-csp
   - yesod-paginate
   - yesod-pagination
   - yesod-pnotify
@@ -5818,9 +6072,13 @@ broken-packages:
   - yhccore
   - yhseq
   - yices
-  - yi-core
+  - yi-language
+  - yoctoparsec
   - yoda
   - Yogurt
+  - youtube
+  - yst
+  - yu-auth
   - yu-core
   - yuiGrid
   - yu-tool
@@ -5835,6 +6093,8 @@ broken-packages:
   - zeno
   - zeolite-lang
   - zephyr
+  - zero
+  - zeromq3-haskell
   - zeromq4-clone-pattern
   - zeromq4-conduit
   - zeromq4-patterns
@@ -5847,7 +6107,7 @@ broken-packages:
   - zipedit
   - zipkin
   - ziptastic-core
-  - zm
+  - zlib-lens
   - ZMachine
   - zmidi-score
   - zmqat
@@ -5858,6 +6118,7 @@ broken-packages:
   - zsh-battery
   - zsyntax
   - ztar
+  - zuul
   - Zwaluw
   - zxcvbn-dvorak
   - zydiskell

@@ -14,14 +14,14 @@ buildPythonPackage rec {
     owner = "joysoftware";
     repo = "pypi_smhi";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-jcIXzAZO9SxC/0apdjAVv1GmBTbdlasfXr1/Tj9adNc=";
+    hash = "sha256-jcIXzAZO9SxC/0apdjAVv1GmBTbdlasfXr1/Tj9adNc=";
   };
 
   propagatedBuildInputs = [
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

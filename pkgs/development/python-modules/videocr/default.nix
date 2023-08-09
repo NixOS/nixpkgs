@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python-Levenshtein
+, levenshtein
 , pytesseract
 , opencv4
 , fuzzywuzzy
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    python-Levenshtein
+    levenshtein
     pytesseract
     opencv4
     fuzzywuzzy
@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "python-Levenshtein" "Levenshtein" \
       --replace "opencv-python" "opencv"
     substituteInPlace videocr/constants.py \
       --replace "master" "main"

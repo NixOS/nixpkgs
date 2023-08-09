@@ -2,10 +2,10 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, flit-core
 , filelock
-, importlib-metadata
 , packaging
-, pep517
+, pyproject-hooks
 , pytest-mock
 , pytest-rerunfailures
 , pytest-xdist
@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "build";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -27,34 +27,36 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = pname;
     rev = version;
-    hash = "sha256-iQvfZC/h9SbagExoG8dJ2A8G8gVRdMaRvEy9QcQIN5I=";
+    hash = "sha256-kXFrfTb7+68EV+gSENL81IFSR+ue7Fl6R2gsuFFBJhI=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
   propagatedBuildInputs = [
     packaging
-    pep517
+    pyproject-hooks
+  ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     filelock
-    toml
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
+    setuptools
+    toml
   ];
 
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # Tests often fail with StopIteration
@@ -75,12 +77,14 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    mainProgram = "pyproject-build";
     description = "Simple, correct PEP517 package builder";
     longDescription = ''
       build will invoke the PEP 517 hooks to build a distribution package. It
       is a simple build tool and does not perform any dependency management.
     '';
     homepage = "https://github.com/pypa/build";
+    changelog = "https://github.com/pypa/build/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

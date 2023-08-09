@@ -124,8 +124,8 @@ in
         type = types.lines;
         default = "";
         description = lib.mdDoc ''
-          Additional options that will be copied verbatim in `gnunet.conf'.
-          See `gnunet.conf(5)' for details.
+          Additional options that will be copied verbatim in `gnunet.conf`.
+          See {manpage}`gnunet.conf(5)` for details.
         '';
       };
     };
@@ -155,7 +155,7 @@ in
       description = "GNUnet";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ configFile ];
+      restartTriggers = [ config.environment.etc."gnunet.conf".source ];
       path = [ cfg.package pkgs.miniupnpc ];
       serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c /etc/gnunet.conf";
       serviceConfig.User = "gnunet";

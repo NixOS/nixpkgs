@@ -2,11 +2,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "bwidget";
-  version = "1.9.14";
+  version = "1.9.16";
 
   src = fetchurl {
     url = "mirror://sourceforge/tcllib/bwidget-${version}.tar.gz";
-    sha256 = "0wm6hk3rnqhnn2cyw24drqwbfnysp6jyfi8lc1vih5k704a955lf";
+    sha256 = "sha256-v+ADY3S4QpPSNiCn9t2oZXGBPQx63+2YPB8zflzoGuA=";
   };
 
   dontBuild = true;

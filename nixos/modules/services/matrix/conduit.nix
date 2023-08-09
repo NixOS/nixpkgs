@@ -23,8 +23,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.matrix-conduit;
-        defaultText = "pkgs.matrix-conduit";
-        example = "pkgs.matrix-conduit";
+        defaultText = lib.literalExpression "pkgs.matrix-conduit";
         description = lib.mdDoc ''
           Package of the conduit matrix server to use.
         '';
@@ -139,10 +138,12 @@ in
             "~@privileged"
           ];
           StateDirectory = "matrix-conduit";
+          StateDirectoryMode = "0700";
           ExecStart = "${cfg.package}/bin/conduit";
           Restart = "on-failure";
           RestartSec = 10;
           StartLimitBurst = 5;
+          UMask = "077";
         };
       };
     };

@@ -1,0 +1,48 @@
+diff -ur a/getty.tproj/main.c b/getty.tproj/main.c
+--- a/getty.tproj/main.c	2008-06-10 14:50:19.000000000 -0400
++++ b/getty.tproj/main.c	2023-05-31 18:06:40.121028558 -0400
+@@ -67,6 +67,7 @@
+ #include <syslog.h>
+ #include <termios.h>
+ #include <time.h>
++#include <util.h>
+ #include <unistd.h>
+ 
+ #ifdef __APPLE__
+@@ -152,7 +153,7 @@
+ static void	putpad(const char *);
+ static void	puts(const char *);
+ static void	timeoverrun(int);
+-static char	*getline(int);
++static char	*get_line(int);
+ static void	setttymode(int);
+ static int	opentty(const char *, int);
+ 
+@@ -352,7 +353,7 @@
+ 			if ((fd = open(IF, O_RDONLY)) != -1) {
+ 				char * cp;
+ 
+-				while ((cp = getline(fd)) != NULL) {
++				while ((cp = get_line(fd)) != NULL) {
+ 					  putf(cp);
+ 				}
+ 				close(fd);
+@@ -744,7 +745,7 @@
+ 
+ 
+ static char *
+-getline(int fd)
++get_line(int fd)
+ {
+ 	int i = 0;
+ 	static char linebuf[512];
+--- a/newgrp.tproj/newgrp.c	2021-10-06 01:38:52.000000000 -0400
++++ b/newgrp.tproj/newgrp.c	2023-05-31 22:26:50.656157841 -0400
+@@ -47,6 +47,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #ifdef __APPLE__
++#include <membership.h>
+ #include <paths.h>
+ #endif /* __APPLE__ */
+ static void	 addgroup(const char *grpname);

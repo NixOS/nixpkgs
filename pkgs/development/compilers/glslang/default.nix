@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , bison
 , cmake
 , jq
@@ -9,14 +10,23 @@
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "1.3.231.0";
+  version = "12.2.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "sdk-${version}";
-    hash = "sha256-huPrQr+lPi7QCF8CufAavHEKGDDimGrcskiojhH9QYk=";
+    rev = version;
+    hash = "sha256-2i6DZA42b0s1ul6VDhjPi9lpSYvsRD8r9yiRoRfVoW0=";
   };
+
+  patches = [
+    # Fix build on Darwin
+    # FIXME: remove for next release
+    (fetchpatch {
+      url = "https://github.com/KhronosGroup/glslang/commit/6a7ec4be7b8a22ab16cea0f294b5973dbcdd637a.diff";
+      hash = "sha256-O1N62X6LZNRNHHz90TLJDbt6pDr28EI6IKMbMXcKBj8=";
+    })
+  ];
 
   # These get set at all-packages, keep onto them for child drvs
   passthru = {

@@ -38,7 +38,7 @@ in {
     };
 
     dns.port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 53;
       description = lib.mdDoc ''
         Port number Recursor DNS server will bind to.
@@ -67,7 +67,7 @@ in {
     };
 
     api.port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 8082;
       description = lib.mdDoc ''
         Port number Recursor REST API server will bind to.
@@ -158,6 +158,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+
+    environment.etc."pdns-recursor".source = configDir;
 
     services.pdns-recursor.settings = mkDefaultAttrs {
       local-address = cfg.dns.address;

@@ -20,21 +20,24 @@
 , pugixml
 , rapidjson
 , vulkan-headers
+, wayland
 , wxGTK32
 , zarchive
-
+, gamemode
 , vulkan-loader
+
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-13";
+  version = "2.0-45";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-0yomEJoXMKZV2PAjINegSvtDB6gbYxQ6XcXA60/ZkEM=";
+    hash = "sha256-Bi2ws08e+6rNv83ypLrgB/KZWt95i7UkFrqhCr/0Zko=";
   };
 
   patches = [
@@ -68,6 +71,7 @@ stdenv.mkDerivation rec {
     pugixml
     rapidjson
     vulkan-headers
+    wayland
     wxGTK32
     zarchive
   ];
@@ -76,15 +80,20 @@ stdenv.mkDerivation rec {
     "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG"
     "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG"
     "-DENABLE_VCPKG=OFF"
+    "-DENABLE_FERAL_GAMEMODE=ON"
 
     # PORTABLE:
     # "All data created and maintained by Cemu will be in the directory where the executable file is located"
     "-DPORTABLE=OFF"
   ];
 
-  preConfigure = ''
+  preConfigure = with lib; let
+    tag = last (splitString "-" version);
+  in ''
     rm -rf dependencies/imgui
     ln -s ${imgui}/include/imgui dependencies/imgui
+    substituteInPlace src/Common/version.h --replace " (experimental)" "-${tag} (experimental)"
+    substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
   '';
 
   installPhase = ''
@@ -106,8 +115,12 @@ stdenv.mkDerivation rec {
   preFixup = let
     libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
   in ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}")
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
+    )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Cemu is a Wii U emulator";
@@ -115,5 +128,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ zhaofengli baduhai ];
+    mainProgram = "cemu";
   };
 }

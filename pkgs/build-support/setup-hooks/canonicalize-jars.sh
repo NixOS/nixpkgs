@@ -6,12 +6,11 @@ fixupOutputHooks+=('if [ -z "$dontCanonicalizeJars" -a -e "$prefix" ]; then cano
 
 canonicalizeJarsIn() {
   local dir="$1"
-  header "canonicalizing jars in $dir"
+  echo "canonicalizing jars in $dir"
   dir="$(realpath -sm -- "$dir")"
   while IFS= read -rd '' f; do
     canonicalizeJar "$f"
   done < <(find -- "$dir" -type f -name '*.jar' -print0)
-  stopNest
 }
 
 source @canonicalize_jar@

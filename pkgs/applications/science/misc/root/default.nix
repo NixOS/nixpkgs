@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , callPackage
-, fetchFromGitHub
+, fetchurl
 , fetchpatch
 , makeWrapper
 , cmake
@@ -48,6 +48,7 @@
 , patchRcPathFish
 , patchRcPathPosix
 , tbb
+, xrootd
 , Cocoa
 , CoreSymbolication
 , OpenGL
@@ -70,20 +71,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.26.08";
+  version = "6.26.10";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
   };
 
-  src = fetchFromGitHub {
-    owner = "root-project";
-    repo = "root";
-    rev = "v${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-cNd1GvEbO/a+WdDe8EHYGmdlw3TrOT2fWaSk+s7fw7U=";
+  src = fetchurl {
+    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
+    hash = "sha256-jla+w5cQQBeqVPnrVU3noaE0R0/gs7sPQ6cPxPq9Yl8=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
+  propagatedBuildInputs = [
+    nlohmann_json
+  ];
   buildInputs = [
     davix
     ftgl
@@ -107,12 +109,12 @@ stdenv.mkDerivation rec {
     libjpeg
     libtiff
     libpng
-    nlohmann_json
     patchRcPathCsh
     patchRcPathFish
     patchRcPathPosix
     python.pkgs.numpy
     tbb
+    xrootd
   ]
   ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
   ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
@@ -120,6 +122,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
+  ] ++ lib.optionals (python.pkgs.pythonAtLeast "3.11") [
+    # Fix build against Python 3.11
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc.patch";
+      hash = "sha256-4qur2e3SxMIPgOg4IjlvuULR2BObuP7xdvs+LmNT2/s=";
+    })
   ];
 
   # Fix build against vanilla LLVM 9
@@ -172,6 +180,7 @@ stdenv.mkDerivation rec {
     "-Dfftw3=OFF"
     "-Dfitsio=OFF"
     "-Dfortran=OFF"
+    "-Dgnuinstall=ON"
     "-Dimt=ON"
     "-Dgfal=OFF"
     "-Dgviz=OFF"
@@ -195,7 +204,7 @@ stdenv.mkDerivation rec {
     "-Dvdt=OFF"
     "-Dwebgui=OFF"
     "-Dxml=ON"
-    "-Dxrootd=OFF"
+    "-Dxrootd=ON"
   ]
   ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
   ++ lib.optionals stdenv.isDarwin [
@@ -207,19 +216,23 @@ stdenv.mkDerivation rec {
     "-Druntime_cxxmodules=OFF"
   ];
 
+  # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.
+  # TODO: Remove the [DY]LDLIBRARY_PATH prefix for xrootd when #200830 get merged.
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
         --set PYTHONPATH "$out/lib" \
-        --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib"
+        --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib:${lib.makeLibraryPath [ xrootd ]}"
     done
 
-    # Make ldd and sed available to the ROOT executable
-    wrapProgram "$out/bin/root" --prefix PATH : "${lib.makeBinPath [
-      gnused # sed
-      stdenv.cc # c++ ld etc.
-      stdenv.cc.libc # ldd
-    ]}"
+    # Make ldd and sed available to the ROOT executable by prefixing PATH.
+    wrapProgram "$out/bin/root" \
+      --prefix PATH : "${lib.makeBinPath [
+        gnused # sed
+        stdenv.cc # c++ ld etc.
+        stdenv.cc.libc # ldd
+      ]}" \
+      --prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xrootd ]}"
 
     # Patch thisroot.{sh,csh,fish}
 
@@ -254,6 +267,15 @@ stdenv.mkDerivation rec {
     ]}"
   '';
 
+  # To use the debug information on the fly (without installation)
+  # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)
+  # and make sure that gdb from Nixpkgs can be found in PATH.
+  #
+  # Darwin currently fails to support it (#203380)
+  # we set it to true hoping to benefit from the future fix.
+  # Before that, please make sure if root.debug exists before using it.
+  separateDebugInfo = true;
+
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
@@ -262,9 +284,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.veprbl ];
     license = licenses.lgpl21;
-
-    # See https://github.com/NixOS/nixpkgs/pull/192581#issuecomment-1256860426
-    # for some context on issues on aarch64.
-    broken = stdenv.isAarch64 && stdenv.isLinux;
   };
 }

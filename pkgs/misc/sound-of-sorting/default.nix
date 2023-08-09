@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, wxGTK32, Cocoa }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, SDL2
+, wxGTK32
+, darwin
+}:
 
 stdenv.mkDerivation {
   pname = "sound-of-sorting";
@@ -8,17 +15,24 @@ stdenv.mkDerivation {
     owner = "bingmann";
     repo = "sound-of-sorting";
     rev = "5cfcaf752593c8cbcf52555dd22745599a7d8b1b";
-    sha256 = "sha256-cBrTvFoz6WZIsh5qPPiWxQ338Z0OfcIefiI8CZF6nn8=";
+    hash = "sha256-cBrTvFoz6WZIsh5qPPiWxQ338Z0OfcIefiI8CZF6nn8=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ wxGTK32 SDL2 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [
+    wxGTK32
+    SDL2
+  ]
+  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa ;
 
-  meta = with lib; {
+  meta = {
     description = "Audibilization and Visualization of Sorting Algorithms";
     homepage = "https://panthema.net/2013/sound-of-sorting/";
-    license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 }

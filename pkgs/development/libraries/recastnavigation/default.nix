@@ -4,13 +4,13 @@ stdenv.mkDerivation rec {
   pname = "recastai";
   # use latest revision for the CMake build process and OpenMW
   # OpenMW use e75adf86f91eb3082220085e42dda62679f9a3ea
-  version = "unstable-2021-03-05";
+  version = "unstable-2023-01-02";
 
   src = fetchFromGitHub {
     owner = "recastnavigation";
     repo = "recastnavigation";
-    rev = "c5cbd53024c8a9d8d097a4371215e3342d2fdc87";
-    sha256 = "sha256-QP3lMMFR6fiKQTksAkRL6X9yaoVz2xt4QSIP9g6piww=";
+    rev = "405cc095ab3a2df976a298421974a2af83843baf";
+    sha256 = "sha256-WVzDI7+UuAl10Tm1Zjkea/FMk0cIe7pWg0iyFLbwAdI=";
   };
 
   postPatch = ''
@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Expects SDL2.framework in specific location, which we don't have
+    # Change where SDL2 headers are searched for to match what we do have
+    substituteInPlace RecastDemo/CMakeLists.txt \
+      --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2.dev}/include/SDL2)'
   '';
 
   doCheck = true;
@@ -29,7 +34,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGL SDL2 libGLU ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/recastnavigation/recastnavigation";
     description = "Navigation-mesh Toolset for Games";
     license = licenses.zlib;

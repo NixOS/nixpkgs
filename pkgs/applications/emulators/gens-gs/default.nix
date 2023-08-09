@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # Work around build failures on recent GTK.
   # See http://ubuntuforums.org/showthread.php?p=10535837
-  NIX_CFLAGS_COMPILE = "-UGTK_DISABLE_DEPRECATED -UGSEAL_ENABLE";
+  env.NIX_CFLAGS_COMPILE = "-UGTK_DISABLE_DEPRECATED -UGSEAL_ENABLE";
 
   meta = with lib; {
     homepage = "https://segaretro.org/Gens/GS";

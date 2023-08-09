@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
     stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   buildInputs = [ ncurses perl ];

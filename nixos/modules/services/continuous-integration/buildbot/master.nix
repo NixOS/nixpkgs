@@ -1,4 +1,4 @@
-# NixOS module for Buildbot continous integration server.
+# NixOS module for Buildbot continuous integration server.
 
 { config, lib, options, pkgs, ... }:
 
@@ -8,9 +8,10 @@ let
   cfg = config.services.buildbot-master;
   opt = options.services.buildbot-master;
 
-  python = cfg.package.pythonModule;
+  package = pkgs.python3.pkgs.toPythonModule cfg.package;
+  python = package.pythonModule;
 
-  escapeStr = s: escape ["'"] s;
+  escapeStr = escape [ "'" ];
 
   defaultMasterCfg = pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
@@ -206,16 +207,16 @@ in {
 
       port = mkOption {
         default = 8010;
-        type = types.int;
+        type = types.port;
         description = lib.mdDoc "Specifies port number on which the buildbot HTTP interface listens.";
       };
 
       package = mkOption {
         type = types.package;
-        default = pkgs.python3Packages.buildbot-full;
-        defaultText = literalExpression "pkgs.python3Packages.buildbot-full";
+        default = pkgs.buildbot-full;
+        defaultText = literalExpression "pkgs.buildbot-full";
         description = lib.mdDoc "Package to use for buildbot.";
-        example = literalExpression "pkgs.python3Packages.buildbot";
+        example = literalExpression "pkgs.buildbot";
       };
 
       packages = mkOption {
@@ -245,9 +246,7 @@ in {
         description = "Buildbot User.";
         isNormalUser = true;
         createHome = true;
-        home = cfg.home;
-        group = cfg.group;
-        extraGroups = cfg.extraGroups;
+        inherit (cfg) home group extraGroups;
         useDefaultShell = true;
       };
     };
@@ -257,7 +256,7 @@ in {
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages ++ cfg.pythonPackages python.pkgs;
-      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ cfg.package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ package ])}/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}"

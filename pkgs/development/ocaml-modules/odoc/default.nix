@@ -6,19 +6,20 @@
 
 buildDunePackage rec {
   pname = "odoc";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";
-    sha256 = "sha256-9XTb0ozQ/DorlVJcS7ld320fZAi7T+EhV/pTeIT5h/0=";
+    sha256 = "sha256-aBjJcfwMPu2dPRQzifgHObFhivcLn9tEOzW9fwEhdAw=";
   };
 
-  # dune 3 is required for tests to pass
-  duneVersion = if doCheck then "3" else "2";
+  duneVersion = "3";
 
-  buildInputs = [ astring cmdliner cppo fpath result tyxml odoc-parser fmt ];
+  nativeBuildInputs = [ cppo ];
+  buildInputs = [ astring cmdliner fpath result tyxml odoc-parser fmt ];
 
-  checkInputs = [ markup yojson sexplib0 jq ppx_expect bash ];
+  nativeCheckInputs = [ bash jq ];
+  checkInputs = [ markup yojson sexplib0 jq ppx_expect ];
   doCheck = lib.versionAtLeast ocaml.version "4.08"
     && lib.versionOlder yojson.version "2.0";
 

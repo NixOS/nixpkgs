@@ -1,10 +1,11 @@
 { buildPythonPackage, fetchFromGitHub, lib, pythonOlder
-, clang_12, python2, python
+, clang_12, python
 , graphviz, matplotlib, numpy, pandas, plotly, scipy, six
 , withCuda ? false, cudatoolkit }:
 
 buildPythonPackage rec {
   pname = "catboost";
+  # nixpkgs-update: no auto update
   version = "1.0.5";
 
   disabled = pythonOlder "3.4";
@@ -12,11 +13,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
-    rev = "v${version}";
-    sha256 = "ILemeZUBI9jPb9G6F7QX/T1HaVhQ+g6y7YmsT6DFCJk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ILemeZUBI9jPb9G6F7QX/T1HaVhQ+g6y7YmsT6DFCJk";
   };
 
-  nativeBuildInputs = [ clang_12 python2 ];
+  nativeBuildInputs = [ clang_12 ];
 
   propagatedBuildInputs = [ graphviz matplotlib numpy pandas scipy plotly six ]
     ++ lib.optionals withCuda [ cudatoolkit ];
@@ -40,6 +41,11 @@ buildPythonPackage rec {
   # Tests use custom "ya" tool, not yet supported.
   dontUseSetuptoolsCheck = true;
   pythonImportsCheck = [ "catboost" ];
+
+  passthru = {
+    # Do not update to catboost 1.1.x because the patch doesn't apply cleanly
+    skipBulkUpdate = true;
+  };
 
   meta = with lib; {
     description = "High-performance library for gradient boosting on decision trees.";

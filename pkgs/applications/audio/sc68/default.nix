@@ -13,21 +13,32 @@
 
 stdenv.mkDerivation rec {
   pname = "sc68";
-  version = "unstable-2021-08-23";
+  version = "unstable-2022-11-24";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/sc68/code/";
-    rev = "694";
-    sha256 = "1yycnr4ndzfhbmki41c30zskwyizpb9wb8sf0gxcprllmbq6a421";
+    rev = "695";
+    sha256 = "sha256-RO3Yhjalu49BUM0fYOZtI2l6KbuUuw03whRxlKneabo=";
   };
 
   preConfigure = "tools/svn-bootstrap.sh";
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config which autoconf automake libtool hexdump ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    hexdump
+    libtool
+    pkg-config
+    which
+  ];
 
-  buildInputs = [ libao zlib curl ];
+  buildInputs = [
+    curl
+    libao
+    zlib
+  ];
 
   meta = with lib; {
     description = "Atari ST and Amiga music player";

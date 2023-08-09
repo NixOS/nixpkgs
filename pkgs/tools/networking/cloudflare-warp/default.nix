@@ -4,30 +4,45 @@
 , dpkg
 , autoPatchelfHook
 , makeWrapper
+, copyDesktopItems
+, makeDesktopItem
 , dbus
 , nftables
 }:
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
-  version = "2022.8.936";
+  version = "2023.3.470";
 
   src = fetchurl {
-    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2022_8_936_1_amd64_1923bb9dba.deb";
-    sha256 = "sha256-ZuJyMl6g8KDwxc9UipH63naJ4dl/84Vhk7ini/VNPno=";
+    url = "https://pkg.cloudflareclient.com/pool/jammy/main/c/cloudflare-warp/cloudflare-warp_2023.3.470-1_amd64.deb";
+    hash = "sha256-AYnmisEQKFiEB2iRJifEqRbdzAyBcfrU0ITeUokKLag=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
     makeWrapper
+    copyDesktopItems
   ];
 
-  buildInputs = [ dbus ];
+  buildInputs = [
+    dbus
+    stdenv.cc.cc.lib
+  ];
 
-  unpackPhase = ''
-    dpkg-deb -x ${src} ./
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.cloudflare.WarpCli";
+      desktopName = "Cloudflare Zero Trust Team Enrollment";
+      categories = [ "Utility" "Security" "ConsoleOnly" ];
+      noDisplay = true;
+      mimeTypes = [ "x-scheme-handler/com.cloudflare.warp" ];
+      exec = "warp-cli teams-enroll-token %u";
+      startupNotify = false;
+      terminal = true;
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -53,7 +68,10 @@ stdenv.mkDerivation rec {
     homepage = "https://pkg.cloudflareclient.com/packages/cloudflare-warp";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [
+      wolfangaukang
+      devpikachu
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

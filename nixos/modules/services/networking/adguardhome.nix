@@ -41,6 +41,20 @@ in
       '';
     };
 
+    allowDHCP = mkOption {
+      default = cfg.settings.dhcp.enabled or false;
+      defaultText = literalExpression ''config.services.adguardhome.settings.dhcp.enabled or false'';
+      type = bool;
+      description = lib.mdDoc ''
+        Allows AdGuard Home to open raw sockets (`CAP_NET_RAW`), which is
+        required for the integrated DHCP server.
+
+        The default enables this conditionally if the declarative configuration
+        enables the integrated DHCP server. Manually setting this option is only
+        required for non-declarative setups.
+      '';
+    };
+
     mutableSettings = mkOption {
       default = true;
       type = bool;
@@ -147,7 +161,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${pkgs.adguardhome}/bin/adguardhome ${args}";
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ] ++ optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         Restart = "always";
         RestartSec = 10;
         RuntimeDirectory = "AdGuardHome";

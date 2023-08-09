@@ -1,4 +1,5 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
+, buildPackages
 , jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
@@ -6,7 +7,7 @@
 , gnome/*.gnome-shell*/
 , browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
-, fx_cast_bridge
+, fx-cast-bridge
 , udev
 , libkrb5
 , libva
@@ -15,6 +16,7 @@
 , pciutils
 , sndio
 , libjack2
+, speechd
 }:
 
 ## configurability of the wrapper itself
@@ -30,10 +32,9 @@ let
       (lib.toUpper (lib.substring 0 1 applicationName) + lib.substring 1 (-1) applicationName)
     , nameSuffix ? ""
     , icon ? applicationName
-    , wmClass ? null
+    , wmClass ? applicationName
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
-    , forceWayland ? false
     , useGlvnd ? true
     , cfg ? config.${applicationName} or {}
 
@@ -61,16 +62,16 @@ let
       smartcardSupport = cfg.smartcardSupport or false;
 
       nativeMessagingHosts =
-        ([ ]
+        [ ]
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
           ++ lib.optional (cfg.enableBukubrow or false) bukubrow
           ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome-browser-connector
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5Packages.plasma-browser-integration
-          ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
+          ++ lib.optional (cfg.enableFXCastBridge or false) fx-cast-bridge
           ++ extraNativeMessagingHosts
-        );
+        ;
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg_5
@@ -83,6 +84,7 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
+            ++ lib.optional (cfg.speechSynthesisSupport or false) speechd
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
@@ -97,7 +99,7 @@ let
 
       usesNixExtensions = nixExtensions != null;
 
-      nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
+      nameArray = builtins.map(a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
       requiresSigning = browser ? MOZ_REQUIRE_SIGNING
                      -> toString browser.MOZ_REQUIRE_SIGNING != "";
@@ -113,7 +115,7 @@ let
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
         else
         a
-      ) (if usesNixExtensions then nixExtensions else []);
+      ) (lib.optionals usesNixExtensions nixExtensions);
 
       enterprisePolicies =
       {
@@ -167,10 +169,10 @@ let
       inherit pname version;
 
       desktopItem = makeDesktopItem ({
-        name = applicationName;
-        exec = "${launcherName} %U";
+        name = launcherName;
+        exec = "${launcherName} --name ${wmClass} %U";
         inherit icon;
-        desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
+        inherit desktopName;
         startupNotify = true;
         startupWMClass = wmClass;
         terminal = false;
@@ -274,7 +276,7 @@ let
           # Symbolic link: wrap the link's target.
           oldExe="$(readlink -v --canonicalize-existing "$executablePath")"
           rm "$executablePath"
-        elif wrapperCmd=$(${makeBinaryWrapper.extractCmd} "$executablePath"); [[ $wrapperCmd ]]; then
+        elif wrapperCmd=$(${buildPackages.makeBinaryWrapper.extractCmd} "$executablePath"); [[ $wrapperCmd ]]; then
           # If the executable is a binary wrapper, we need to update its target to
           # point to $out, but we can't just edit the binary in-place because of length
           # issues. So we extract the command used to create the wrapper and add the
@@ -301,7 +303,7 @@ let
           "''${executablePath}${nameSuffix}" \
             --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --suffix PATH ':' "${xdg-utils}/bin" \
+            ${lib.optionalString (!xdg-utils.meta.broken) "--suffix PATH ':' \"${xdg-utils}/bin\""} \
             --suffix PATH ':' "$out/bin" \
             --set MOZ_APP_LAUNCHER "${launcherName}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
@@ -309,7 +311,7 @@ let
             --set MOZ_ALLOW_DOWNGRADE 1 \
             --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
             --suffix XDG_DATA_DIRS : '${gnome.adwaita-icon-theme}/share' \
-            ${lib.optionalString forceWayland "--set MOZ_ENABLE_WAYLAND 1"} \
+            --set-default MOZ_ENABLE_WAYLAND 1 \
             "''${oldWrapperArgs[@]}"
         #############################
         #                           #
@@ -402,7 +404,7 @@ let
       disallowedRequisites = [ stdenv.cc ];
 
       meta = browser.meta // {
-        description = browser.meta.description;
+        inherit (browser.meta) description;
         hydraPlatforms = [];
         priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
       };

@@ -4,27 +4,29 @@
 , gettext
 , makeDesktopItem
 , copyDesktopItems
+, wrapGAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
   version = "2.6.0";
+  format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";
     sha256 = "sha256-qwH2mt3Va62QJKJGOpt5WV3QksqQaRGEif4CcPC5F2E=";
   };
 
-  nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems wrapGAppsHook ];
 
   pythonPath = with python3.pkgs; [
-    wxPython_4_0
+    wxPython_4_2
     humblewx
     icalendar
     markdown
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gettext
     python3.pkgs.mock
   ];
@@ -75,9 +77,15 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
-    homepage = "http://thetimelineproj.sourceforge.net/";
-    changelog = "http://thetimelineproj.sourceforge.net/changelog.html";
+    homepage = "https://thetimelineproj.sourceforge.net/";
+    changelog = "https://thetimelineproj.sourceforge.net/changelog.html";
     description = "Display and navigate information on a timeline";
     license = with licenses; [ gpl3Only cc-by-sa-30 ];
     platforms = with platforms; unix;

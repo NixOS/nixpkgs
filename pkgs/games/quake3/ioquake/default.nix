@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation {
   pname = "ioquake3";
-  version = "unstable-2021-07-20";
+  version = "unstable-2022-11-24";
 
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "bc8737d707595aebd7cc11d6d5a5d65ede750f59";
-    sha256 = "1icrkaw6c5c5ndy886bn65lycwnxzxwvz0ndz4p9i6r716k11add";
+    rev = "70d07d91d62dcdd2f2268d1ac401bfb697b4c991";
+    sha256 = "sha256-WDjR0ik+xAs6OA1DNbUGIF1MXSuEoy8nNkPiHaegfF0=";
   };
 
   nativeBuildInputs = [ which pkg-config ];
@@ -50,10 +50,10 @@ stdenv.mkDerivation {
 
   installTargets = [ "copyfiles" ];
 
-  installFlags = [ "COPYDIR=$(out)" ];
+  installFlags = [ "COPYDIR=$(out)" "COPYBINDIR=$(out)/bin" ];
 
   preInstall = ''
-    mkdir -p $out/baseq3
+    mkdir -p $out/baseq3 $out/bin
   '';
 
   meta = with lib; {

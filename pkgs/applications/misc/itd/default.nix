@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "itd";
-  version = "0.0.9";
+  version = "1.1.0";
 
   # https://gitea.arsenm.dev/Arsen6331/itd/tags
   src = fetchFromGitea {
@@ -14,10 +14,10 @@ buildGoModule rec {
     owner = "Arsen6331";
     repo = "itd";
     rev = "v${version}";
-    hash = "sha256-FefffF8YIEcB+eglifNWuuK7H5A1YXyxxZOXz1a8HfY=";
+    hash = "sha256-95/9Qy0HhrX+ORuv6g1T4/Eq1hf539lYG5fTkLeY6B0=";
   };
 
-  vendorHash = "sha256-LFzrpKQQ4nFoK4vVTzJDQ5OGDe1y5BSfXPX+FRVunjQ=";
+  vendorHash = "sha256-ZkAxNs4yDUFBhhmIRtzxQlEQtsa/BTuHy0g3taFcrMM=";
 
   preBuild = ''
     echo r${version} > version.txt

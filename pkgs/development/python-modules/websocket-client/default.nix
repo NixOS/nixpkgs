@@ -4,29 +4,31 @@
 , pythonOlder
 , pytestCheckHook
 , python-socks
-, six
 }:
 
 buildPythonPackage rec {
   pname = "websocket-client";
-  version = "1.4.1";
-  disabled = pythonOlder "3.6";
+  version = "1.5.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+WEetlyCQaZ/s3O+8ECzz4rTd6n2VGoStiC2UR6Oqe8=";
+    hash = "sha256-Pwnm2CMIklRxMhd/V1pOPnPP3wZSbiDMAqocO0cYTUA=";
   };
 
   propagatedBuildInputs = [
     python-socks
-    six
    ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "websocket" ];
+  pythonImportsCheck = [
+    "websocket"
+  ];
 
   meta = with lib; {
     description = "Websocket client for Python";

@@ -1,18 +1,27 @@
-{ pkgs, nodejs, stdenv, lib, ... }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+}:
 
-let
+buildNpmPackage rec {
+  pname = "newman";
+  version = "5.3.2";
 
-  packageName = with lib; concatStrings (map (entry: (concatStrings (mapAttrsToList (key: value: "${key}-${value}") entry))) (importJSON ./package.json));
-
-  nodePackages = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
+  src = fetchFromGitHub {
+    owner = "postmanlabs";
+    repo = "newman";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-j5YS9Zbk9b3K4+0sGzqtCgEsR+S5nGPf/rebeGzsscA=";
   };
-in
-nodePackages.newman.override {
+
+  npmDepsHash = "sha256-FwVmesHtzTZKsTCIfZiRPb1zf7q5LqABAZOh8gXB9qw=";
+
+  dontNpmBuild = true;
+
   meta = with lib; {
     homepage = "https://www.getpostman.com";
     description = "A command-line collection runner for Postman";
+    changelog = "https://github.com/postmanlabs/newman/releases/tag/v${version}";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.asl20;
   };

@@ -323,7 +323,7 @@ let
             }
           fi
         '');
-      } // optionalAttrs (data.listenHTTP != null && toInt (elemAt (splitString ":" data.listenHTTP) 1) < 1024) {
+      } // optionalAttrs (data.listenHTTP != null && toInt (last (splitString ":" data.listenHTTP)) < 1024) {
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       };
@@ -487,7 +487,7 @@ let
       };
 
       email = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         inherit (defaultAndText "email" null) default defaultText;
         description = lib.mdDoc ''
           Email address for account creation and correspondence from the CA.
@@ -555,7 +555,7 @@ let
       };
 
       credentialsFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
         inherit (defaultAndText "credentialsFile" null) default defaultText;
         description = lib.mdDoc ''
           Path to an EnvironmentFile for the cert's service containing any required and
@@ -714,7 +714,7 @@ in {
         default = false;
         description = lib.mdDoc ''
           Whether to use the root user when generating certs. This is not recommended
-          for security + compatiblity reasons. If a service requires root owned certificates
+          for security + compatibility reasons. If a service requires root owned certificates
           consider following the guide on "Using ACME with services demanding root
           owned certificates" in the NixOS manual, and only using this as a fallback
           or for testing.
@@ -727,7 +727,7 @@ in {
           Default values inheritable by all configured certs. You can
           use this to define options shared by all your certs. These defaults
           can also be ignored on a per-cert basis using the
-          `security.acme.certs.''${cert}.inheritDefaults' option.
+          {option}`security.acme.certs.''${cert}.inheritDefaults` option.
         '';
       };
 
@@ -765,7 +765,7 @@ in {
       To use the let's encrypt staging server, use security.acme.server =
       "https://acme-staging-v02.api.letsencrypt.org/directory".
     '')
-    (mkRemovedOptionModule [ "security" "acme" "directory" ] "ACME Directory is now hardcoded to /var/lib/acme and its permisisons are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
+    (mkRemovedOptionModule [ "security" "acme" "directory" ] "ACME Directory is now hardcoded to /var/lib/acme and its permissions are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
     (mkRemovedOptionModule [ "security" "acme" "preDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
     (mkRemovedOptionModule [ "security" "acme" "activationDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
     (mkChangedOptionModule [ "security" "acme" "validMin" ] [ "security" "acme" "defaults" "validMinDays" ] (config: config.security.acme.validMin / (24 * 3600)))
@@ -781,11 +781,11 @@ in {
 
       # FIXME Most of these custom warnings and filters for security.acme.certs.* are required
       # because using mkRemovedOptionModule/mkChangedOptionModule with attrsets isn't possible.
-      warnings = filter (w: w != "") (mapAttrsToList (cert: data: if data.extraDomains != "_mkMergedOptionModule" then ''
+      warnings = filter (w: w != "") (mapAttrsToList (cert: data: optionalString (data.extraDomains != "_mkMergedOptionModule") ''
         The option definition `security.acme.certs.${cert}.extraDomains` has changed
         to `security.acme.certs.${cert}.extraDomainNames` and is now a list of strings.
         Setting a custom webroot for extra domains is not possible, instead use separate certs.
-      '' else "") cfg.certs);
+      '') cfg.certs);
 
       assertions = let
         certs = attrValues cfg.certs;
@@ -916,6 +916,6 @@ in {
 
   meta = {
     maintainers = lib.teams.acme.members;
-    doc = ./doc.xml;
+    doc = ./default.md;
   };
 }

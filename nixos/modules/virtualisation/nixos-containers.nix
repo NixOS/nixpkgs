@@ -9,6 +9,10 @@ let
   configurationDirectory = "/etc/${configurationDirectoryName}";
   stateDirectory = "/var/lib/${configurationPrefix}containers";
 
+  nixos-container = pkgs.nixos-container.override {
+    inherit stateDirectory configurationDirectory;
+  };
+
   # The container's init script, a small wrapper around the regular
   # NixOS stage-2 init script.
   containerInit = (cfg:
@@ -166,11 +170,11 @@ let
         --setenv HOST_PORT="$HOST_PORT" \
         --setenv PATH="$PATH" \
         ${optionalString cfg.ephemeral "--ephemeral"} \
-        ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
-          ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"'' else ""
+        ${optionalString (cfg.additionalCapabilities != null && cfg.additionalCapabilities != [])
+          ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"''
         } \
-        ${if cfg.tmpfs != null && cfg.tmpfs != [] then
-          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}'' else ""
+        ${optionalString (cfg.tmpfs != null && cfg.tmpfs != [])
+          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}''
         } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
@@ -250,7 +254,7 @@ let
     ExecReload = pkgs.writeScript "reload-container"
       ''
         #! ${pkgs.runtimeShell} -e
-        ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
+        ${nixos-container}/bin/nixos-container run "$INSTANCE" -- \
           bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
       '';
 
@@ -510,6 +514,11 @@ in
                       };
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
+                  inherit (config) specialArgs;
+
+                  # The system is inherited from the host above.
+                  # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+                  system = null;
                 }).config;
               };
             };
@@ -548,6 +557,16 @@ in
                 Setting `config.nixpkgs.pkgs = pkgs` speeds up the container evaluation
                 by reusing the system pkgs, but the `nixpkgs.config` option in the
                 container config is ignored in this case.
+              '';
+            };
+
+            specialArgs = mkOption {
+              type = types.attrsOf types.unspecified;
+              default = {};
+              description = lib.mdDoc ''
+                A set of special arguments to be passed to NixOS modules.
+                This will be merged into the `specialArgs` used to evaluate
+                the NixOS configurations.
               '';
             };
 
@@ -781,14 +800,14 @@ in
       # declarative containers
       ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (let
           containerConfig = cfg // (
-          if cfg.enableTun then
+          optionalAttrs cfg.enableTun
             {
               allowedDevices = cfg.allowedDevices
                 ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               additionalCapabilities = cfg.additionalCapabilities
                 ++ [ "CAP_NET_ADMIN" ];
             }
-          else {});
+          );
         in
           recursiveUpdate unit {
             preStart = preStartScript containerConfig;
@@ -798,7 +817,7 @@ in
             unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i";
             environment.root = if containerConfig.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
           } // (
-          if containerConfig.autoStart then
+          optionalAttrs containerConfig.autoStart
             {
               wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
@@ -809,7 +828,7 @@ in
               ];
               restartIfChanged = true;
             }
-          else {})
+          )
       )) config.containers)
     ));
 
@@ -868,9 +887,7 @@ in
     '';
 
     environment.systemPackages = [
-      (pkgs.nixos-container.override {
-        inherit stateDirectory configurationDirectory;
-      })
+      nixos-container
     ];
 
     boot.kernelModules = [

@@ -1,5 +1,5 @@
 { stdenv
-, buildFHSUserEnv
+, buildFHSEnv
 , fetchurl
 , lib
 , zlib
@@ -16,6 +16,7 @@
 , vulkan-loader
 , alsa-lib
 , libpulseaudio
+, libxcrypt-legacy
 , libGL
 , numactl
 , libX11
@@ -26,13 +27,29 @@
 , makeWrapper
 , sqlite
 , enableInstaller ? false
+, enableMacOSGuests ? false, fetchFromGitHub, gnutar, unzip
 }:
 
 let
-  vmware-unpack-env = buildFHSUserEnv rec {
-    name = "vmware-unpack-env";
-    targetPkgs = pkgs: [ zlib ];
+  # macOS - versions
+  fusionVersion = "13.0.0";
+  fusionBuild = "20802013";
+  unlockerVersion = "3.0.4";
+
+  # macOS - ISOs
+  darwinIsoSrc = fetchurl {
+    url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/x86/core/com.vmware.fusion.zip.tar";
+    sha256 = "sha256-cSboek+nhkVj8rjdic6yzWQfjXiiLlch6gBWn73BzRU=";
   };
+
+  # macOS - Unlocker
+  unlockerSrc = fetchFromGitHub {
+    owner = "paolo-projects";
+    repo = "unlocker";
+    rev = "${unlockerVersion}";
+    sha256 = "sha256-kpvrRiiygfjQni8z+ju9mPBVqy2gs08Wj4cHxE9eorQ=";
+  };
+
   gdbm3 = gdbm.overrideAttrs (old: rec {
     version = "1.8.3";
 
@@ -46,11 +63,16 @@ let
       cp .libs/libgdbm*.so* $out/lib/
     '';
   });
+
+  vmware-unpack-env = buildFHSEnv rec {
+    name = "vmware-unpack-env";
+    targetPkgs = pkgs: [ zlib ];
+  };
 in
 stdenv.mkDerivation rec {
   pname = "vmware-workstation";
-  version = "16.2.3";
-  build = "19376536";
+  version = "17.0.0";
+  build = "20800274";
 
   buildInputs = [
     libxslt
@@ -65,6 +87,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
     alsa-lib
     libpulseaudio
+    libxcrypt-legacy
     libGL
     numactl
     libX11
@@ -73,15 +96,35 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
-    ++ lib.optionals enableInstaller [ sqlite bzip2 ];
+    ++ lib.optionals enableInstaller [ sqlite bzip2 ]
+    ++ lib.optionals enableMacOSGuests [ gnutar unzip ];
 
   src = fetchurl {
-    url = "https://download3.vmware.com/software/WKST-1623-LX-New/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
-    sha256 = "sha256-+JE1KnRfawcaBannIyEr1TNZTF7YXRYYaFMVq0/erbM=";
+    url = "https://download3.vmware.com/software/WKST-1700-LX/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
+    sha256 = "sha256-kBTocGb1tg5i+dvWmOaPfPUHxrWcX8/obeKqRGR+mRA=";
   };
 
   unpackPhase = ''
     ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
+
+    ${lib.optionalString enableMacOSGuests ''
+      mkdir -p fusion/
+      tar -xvpf "${darwinIsoSrc}" -C fusion/
+      unzip "fusion/com.vmware.fusion.zip" \
+        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
+        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
+        -d fusion/
+    ''}
+  '';
+
+  patchPhase = lib.optionalString enableMacOSGuests ''
+    cp -R "${unlockerSrc}" unlocker/
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so" "$out/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so"
   '';
 
   installPhase = ''
@@ -226,6 +269,14 @@ stdenv.mkDerivation rec {
        unpacked/vmware-tools-solaris/solaris.iso \
        $out/lib/vmware/isoimages/
 
+    ${lib.optionalString enableMacOSGuests ''
+      echo "Installing VMWare Tools for MacOS"
+      cp -v \
+       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
+       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
+       $out/lib/vmware/isoimages/
+    ''}
+
     ## VMware Player Application
     echo "Installing VMware Player Application"
     unpacked="unpacked/vmware-player-app"
@@ -290,9 +341,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include/
     cp -r $unpacked/include/* $out/include/
 
-    ## VMware VIX Workstation-16.0.0 Library
-    echo "Installing VMware VIX Workstation-16.0.0 Library"
-    unpacked="unpacked/vmware-vix-lib-Workstation1600"
+    ## VMware VIX Workstation-17.0.0 Library
+    echo "Installing VMware VIX Workstation-17.0.0 Library"
+    unpacked="unpacked/vmware-vix-lib-Workstation1700"
     cp -r $unpacked/lib/* $out/lib/vmware-vix/
 
     ## VMware VProbes component for Linux
@@ -327,6 +378,11 @@ stdenv.mkDerivation rec {
       sed -i -e "s,/usr/local/sbin,/run/vmware/bin," "$out/$lib"
     done
 
+    ${lib.optionalString enableMacOSGuests ''
+      echo "Running VMWare Unlocker to enable macOS Guests"
+      python3 unlocker/unlocker.py
+    ''}
+
     # SUID hack
     wrapProgram $out/lib/vmware/bin/vmware-vmx
     rm $out/lib/vmware/bin/vmware-vmx
@@ -339,6 +395,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ deinferno ];
+    maintainers = with maintainers; [ cawilliamson deinferno ];
   };
 }

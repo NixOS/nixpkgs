@@ -100,7 +100,7 @@ let
     };
   };
 
-  optionalKV = k: v: if v == null then "" else "${k} = ${builtins.toString v}";
+  optionalKV = k: v: optionalString (v != null) "${k} = ${builtins.toString v}";
 
   renderPhocOutput = name: output: let
     modelines = if builtins.isList output.modeline
@@ -173,7 +173,7 @@ in
     systemd.services.phosh = {
       wantedBy = [ "graphical.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/phosh";
+        ExecStart = "${cfg.package}/bin/phosh-session";
         User = cfg.user;
         Group = cfg.group;
         PAMName = "login";

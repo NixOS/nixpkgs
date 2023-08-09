@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "titlecase";
-  version = "2.3";
+  version = "2.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ppannuto";
     repo = "python-titlecase";
-    rev = "v${version}";
-    sha256 = "169ywzn5wfzwyknqavspkdpwbx31nycxsxkl7iywwk71gs1lskkw";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aJbbfNnQvmmYPXVOO+xx7ADetsxE+jnVQOVDzV5jUp8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     regex
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

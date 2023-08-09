@@ -27,7 +27,7 @@
 , networkmanager
 , pango
 , polkit
-, webkitgtk_5_0
+, webkitgtk_6_0
 , systemd
 , libadwaita
 , libnma-gtk4
@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "43.1";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "gQTnBD75uY4rULKrOP2gX9BDf4xVVp+haDC3vle+DfY=";
+    sha256 = "WTz8bcj4KphnG5TANbl9vojvVucIeAsq0dIyTk0Eu/8=";
   };
 
   patches = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     networkmanager
     pango
     polkit
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   mesonFlags = [

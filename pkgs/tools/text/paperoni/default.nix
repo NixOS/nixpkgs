@@ -1,10 +1,11 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
+, curl
+, stdenv
 , pkg-config
+, zlib
 , openssl
-, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,17 +19,33 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-vTylnDtoPpiRtk/vew1hLq3g8pepWRVqBEBnvSif4Zw=";
   };
 
-  cargoSha256 = "sha256-iLEIGuVB9ykNcwbXk/donDdBuMvitM54Ax6bszVGaO0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [
+    curl
+  ] ++ lib.optionals stdenv.isLinux [
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    curl
+    zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    openssl
+  ];
+
+  # update Cargo.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = with lib; {
     description = "An article extractor in Rust";
     homepage = "https://github.com/hipstermojo/paperoni";
+    changelog = "https://github.com/hipstermojo/paperoni/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

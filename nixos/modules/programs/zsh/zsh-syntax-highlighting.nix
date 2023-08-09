@@ -26,6 +26,7 @@ in
           "brackets"
           "pattern"
           "cursor"
+          "regexp"
           "root"
           "line"
         ]));

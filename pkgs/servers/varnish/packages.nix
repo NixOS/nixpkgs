@@ -1,4 +1,4 @@
-{ callPackages, callPackage, varnish60, varnish72, fetchFromGitHub }: {
+{ callPackages, callPackage, varnish60, varnish72, varnish73, fetchFromGitHub }: {
   varnish60Packages = rec {
     varnish = varnish60;
     modules = (callPackages ./modules.nix { inherit varnish; }).modules15;
@@ -16,5 +16,9 @@
   varnish72Packages = rec {
     varnish = varnish72;
     modules = (callPackages ./modules.nix { inherit varnish; }).modules20;
+  };
+  varnish73Packages = rec {
+    varnish = varnish73;
+    modules = (callPackages ./modules.nix { inherit varnish; }).modules22;
   };
 }

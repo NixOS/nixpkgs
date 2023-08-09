@@ -1,31 +1,81 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, packaging
-, pytestCheckHook
-, nose
+, pythonOlder
+, hatchling
+, hatch-vcs
 , numpy
-, h5py
+, packaging
+, importlib-resources
 , pydicom
+, pillow
+, h5py
 , scipy
+, git
+, pytest-doctestplus
+, pytest-httpserver
+, pytest-xdist
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "4.0.2";
-  disabled = isPy27;
+  version = "5.1.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RcSbU0k1G0X2wEWpGqArTw02dob/MoRjLvlaxluTB4Y=";
+    hash = "sha256-znPKXpVyCechmiI8tx93I1yd8qz00/J/hhujjpSBrFM=";
   };
 
-  propagatedBuildInputs = [ numpy scipy h5py packaging pydicom ];
-
-  checkInputs = [
-    pytestCheckHook
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
   ];
+
+  propagatedBuildInputs = [
+    numpy
+    packaging
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
+
+  passthru.optional-dependencies = rec {
+    all = dicom
+      ++ dicomfs
+      ++ minc2
+      ++ spm
+      ++ zstd;
+    dicom = [
+      pydicom
+    ];
+    dicomfs = [
+      pillow
+    ] ++ dicom;
+    minc2 = [
+      h5py
+    ];
+    spm = [
+      scipy
+    ];
+    zstd = [
+      # TODO: pyzstd
+    ];
+  };
+
+  nativeCheckInputs = [
+    git
+    pytest-doctestplus
+    pytest-httpserver
+    pytest-xdist
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.all;
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
 
   disabledTests = [
     # https://github.com/nipy/nibabel/issues/951

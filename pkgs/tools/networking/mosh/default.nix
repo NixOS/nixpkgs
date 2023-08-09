@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./ssh_path.patch
     ./mosh-client_path.patch
-    ./utempter_path.patch
     # Fix build with bash-completion 2.10
     ./bash_completion_datadir.patch
   ];
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
       especially over Wi-Fi, cellular, and long-distance links.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric SuperSandro2000 ];
+    maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
   };
 }

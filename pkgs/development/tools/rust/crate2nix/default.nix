@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-JaF9/H3m4Wrc5MtXcONkOAgKVkswLVw0yZe0dBr2e4Y=";
   };
 
-  sourceRoot = "source/crate2nix";
+  sourceRoot = "${src.name}/crate2nix";
 
   cargoSha256 = "sha256-PD7R1vcb3FKd4hfpViKyvfCExJ5H1Xo2HPYden5zpxQ=";
 

@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodulemd";
-  version = "2.14.0";
+  version = "2.15.0";
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "py" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "fedora-modularity";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-ccLk8O0UJwy7WZYr5Bq2XqaSFNe4i7HQehmVoB5C2Yg=";
+    sha256 = "sha256-mIyrdksyEk1AKV+vw4g8LUwlQRzwwMkPDuCbw2IiNcA=";
   };
 
   patches = [

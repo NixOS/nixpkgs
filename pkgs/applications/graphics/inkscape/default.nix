@@ -4,8 +4,8 @@
 , boost
 , cairo
 , cmake
+, desktopToDarwinBundle
 , fetchurl
-, fetchpatch
 , gettext
 , ghostscript
 , glib
@@ -59,11 +59,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/inkscape-${version}.tar.xz";
-    sha256 = "Rs59oOunykutwdtw6cu2fgrfm7NCaH3G4ItcohuNTBs=";
+    sha256 = "oMf9DQPAohU15kjvMB3PgN18/B81ReUQZfvxuj7opcQ=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -79,22 +79,15 @@ stdenv.mkDerivation rec {
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
     })
-
-    # Fix build with Poppler 22.09
-    (fetchpatch {
-      url = "https://github.com/archlinux/svntogit-packages/raw/b2f65dfb60ae0c8cd6cd9affd3d71064082a6201/trunk/inkscape-1.2.1-poppler-22.09.0.patch";
-      sha256 = "pArvsS/qoCTMAisF8yj3agZKrb90zRFZkck1TX0KeGc=";
+    (substituteAll {
+      # Fix path to ps2pdf binary
+      src = ./fix-ps2pdf-path.patch;
+      inherit ghostscript;
     })
   ];
 
   postPatch = ''
     patchShebangs share/extensions
-    substituteInPlace share/extensions/eps_input.inx \
-      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
-    substituteInPlace share/extensions/ps_input.inx \
-      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
-    substituteInPlace share/extensions/ps_input.py \
-      --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
     patchShebangs share/templates
     patchShebangs man/fix-roff-punct
 
@@ -114,7 +107,9 @@ stdenv.mkDerivation rec {
   ] ++ (with perlPackages; [
     perl
     XMLParser
-  ]);
+  ]) ++ lib.optionals stdenv.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   buildInputs = [
     boehmgc
@@ -164,6 +159,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.all;
+    mainProgram = "inkscape";
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits
       files in the W3C SVG (Scalable Vector Graphics) file format.

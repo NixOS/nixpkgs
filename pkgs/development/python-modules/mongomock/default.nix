@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sentinels
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

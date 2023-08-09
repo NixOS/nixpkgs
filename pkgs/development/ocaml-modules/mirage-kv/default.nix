@@ -1,20 +1,22 @@
 { lib, fetchurl, buildDunePackage
-, fmt, mirage-device
+, fmt
+, lwt
 , alcotest
 }:
 
 buildDunePackage rec {
   pname = "mirage-kv";
-  version = "3.0.1";
+  version = "4.0.1";
 
-  useDune2 = true;
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-kv/releases/download/v${version}/mirage-kv-v${version}.tbz";
-    sha256 = "1n736sjvdd8rkbc2b5jm9sn0w6hvhjycma5328r0l03v24vk5cki";
+    url = "https://github.com/mirage/mirage-kv/releases/download/v${version}/mirage-kv-${version}.tbz";
+    hash = "sha256-p6i4zUVgxtTnUiBIjb8W6u9xRTczVl4WwfFcl5tVqnE=";
   };
 
-  propagatedBuildInputs = [ fmt mirage-device ];
+  propagatedBuildInputs = [ fmt lwt ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

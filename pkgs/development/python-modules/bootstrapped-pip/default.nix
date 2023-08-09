@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     mkdir -p $out/bin
-  '';
+  '' + (pip.postPatch or ""); # `pip` does not necessarily have a `postPatch` field.
 
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ python ];
@@ -38,9 +38,10 @@ stdenv.mkDerivation rec {
     mv pip* pip
     mv setuptools* setuptools
     mv wheel* wheel
-    # Set up PYTHONPATH. The above folders need to be on PYTHONPATH
-    # $out is where we are installing to and takes precedence
-    export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$(pwd)/wheel:$PYTHONPATH"
+    # Set up PYTHONPATH:
+    # - pip and setuptools need to be in PYTHONPATH to install setuptools, wheel, and pip.
+    # - $out is where we are installing to and takes precedence, and is where wheel will end so we can install pip.
+    export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$PYTHONPATH"
 
     echo "Building setuptools wheel..."
     pushd setuptools
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
     echo "Building pip wheel..."
     pushd pip
+    rm pyproject.toml
     ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
   '';

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "otpauth";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "dim13";
     repo = "otpauth";
     rev = "v${version}";
-    sha256 = "sha256-toFBkUssU10ejoZzWnrm5o2P0p5Oq8kKP4vb2ASDC0s=";
+    sha256 = "sha256-jeKxCuE3cA/oTEKwdrCGPchsrtaMyirTzv8oLl9gxtA=";
   };
 
-  vendorSha256 = "sha256-jnIq7Zc2MauJReJ9a8TeqXXsvHixsBB+znmXAxcpqUQ=";
+  vendorHash = "sha256-jnIq7Zc2MauJReJ9a8TeqXXsvHixsBB+znmXAxcpqUQ=";
   doCheck = true;
 
   meta = with lib; {

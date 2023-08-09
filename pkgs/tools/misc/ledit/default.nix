@@ -14,7 +14,9 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace /bin/rm rm --replace BINDIR=/usr/local/bin BINDIR=$out/bin
   '';
 
-  buildInputs = [
+  strictDeps = true;
+
+  nativeBuildInputs = [
     ocaml
     camlp5
   ];

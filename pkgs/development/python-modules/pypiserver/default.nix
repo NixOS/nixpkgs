@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1tV3pVEC5sIjT0tjbujU7l41Jx7PQ1dCn4B1r94C9xE=";
+    hash = "sha256-1tV3pVEC5sIjT0tjbujU7l41Jx7PQ1dCn4B1r94C9xE=";
   };
 
   nativeBuildInputs = [ setuptools-git ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     passlib
     pytestCheckHook
     twine
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypiserver/pypiserver";
     description = "Minimal PyPI server for use with pip/easy_install";
     license = with licenses; [ mit zlib ];
-    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
+    maintainers = with maintainers; [ austinbutler ];
   };
 }

@@ -63,6 +63,7 @@ in
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "cadvisorPort" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "allowPrivileged" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "networkPlugin" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "containerRuntime" ] "")
   ];
 
   ###### interface
@@ -134,19 +135,13 @@ in
       };
     };
 
-    containerRuntime = mkOption {
-      description = lib.mdDoc "Which container runtime type to use";
-      type = enum ["docker" "remote"];
-      default = "remote";
-    };
-
     containerRuntimeEndpoint = mkOption {
       description = lib.mdDoc "Endpoint at which to find the container runtime api interface/socket";
       type = str;
       default = "unix:///run/containerd/containerd.sock";
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes kubelet.");
+    enable = mkEnableOption (lib.mdDoc "Kubernetes kubelet");
 
     extraOpts = mkOption {
       description = lib.mdDoc "Kubernetes kubelet extra command line options.";
@@ -171,7 +166,7 @@ in
       port = mkOption {
         description = lib.mdDoc "Kubernetes kubelet healthz port.";
         default = 10248;
-        type = int;
+        type = port;
       };
     };
 
@@ -204,7 +199,7 @@ in
     port = mkOption {
       description = lib.mdDoc "Kubernetes kubelet info server listening port.";
       default = 10250;
-      type = int;
+      type = port;
     };
 
     seedDockerImages = mkOption {
@@ -331,7 +326,6 @@ in
             ${optionalString (cfg.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.tlsKeyFile}"} \
             ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-            --container-runtime=${cfg.containerRuntime} \
             --container-runtime-endpoint=${cfg.containerRuntimeEndpoint} \
             --cgroup-driver=systemd \
             ${cfg.extraOpts}
@@ -343,7 +337,7 @@ in
         };
       };
 
-      # Allways include cni plugins
+      # Always include cni plugins
       services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins pkgs.cni-plugin-flannel];
 
       boot.kernelModules = ["br_netfilter" "overlay"];

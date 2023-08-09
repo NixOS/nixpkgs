@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   # Pillow needed for unit tests
-  checkInputs = [ pillow ];
+  nativeCheckInputs = [ pillow ];
 
   meta = with lib; {
     description = "Simplify Exif manipulations with Python";

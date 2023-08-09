@@ -173,9 +173,9 @@ stdenv.mkDerivation rec {
     "-make" "libs" "-make" "tools" "-make" "translations"
     "-no-phonon" "-no-webkit" "-no-multimedia" "-audio-backend"
   ]) ++ [
-    "-${if demos then "" else "no"}make" "demos"
-    "-${if examples then "" else "no"}make" "examples"
-    "-${if docs then "" else "no"}make" "docs"
+    "-${lib.optionalString (!demos) "no"}make" "demos"
+    "-${lib.optionalString (!examples) "no"}make" "examples"
+    "-${lib.optionalString (!docs) "no"}make" "docs"
   ] ++ lib.optional developerBuild "-developer-build"
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ platformFlag "unsupported/macx-clang-libc++" ]
     ++ lib.optionals stdenv.hostPlatform.isWindows [ platformFlag "win32-g++-4.6" ];
@@ -198,7 +198,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = toString (
+  env.NIX_CFLAGS_COMPILE = toString (
     # with gcc7 the warnings blow the log over Hydra's limit
     [ "-Wno-expansion-to-defined" "-Wno-unused-local-typedefs" ]
     ++ lib.optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin

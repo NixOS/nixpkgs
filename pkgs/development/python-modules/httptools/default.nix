@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KVh0hhwXP5EBlgu6MyQpu3ftTc2M31zumSLrAOT2vAk=";
+    hash = "sha256-KVh0hhwXP5EBlgu6MyQpu3ftTc2M31zumSLrAOT2vAk=";
   };
 
   # tests are not included in pypi tarball
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "A collection of framework independent HTTP protocol utils";
     homepage = "https://github.com/MagicStack/httptools";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.6.0";
+  version = "4.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     repo = "selenium";
     # check if there is a newer tag with or without -python suffix
     rev = "refs/tags/selenium-${version}";
-    hash = "sha256-xgGGtJo+DZIwPa0H6dsT0VClRTMM8iFbNzSDZjH7ImI=";
+    hash = "sha256-YTi6SNtTWuEPlQ3PTeis9osvtnWmZ7SRQbne9fefdco=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     urllib3
   ] ++ urllib3.optional-dependencies.socks;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Bindings for Selenium WebDriver";
     homepage = "https://selenium.dev/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jraygauthier SuperSandro2000 ];
+    maintainers = with maintainers; [ jraygauthier ];
   };
 }

@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "gRPC extensions for Google Cloud Platform";
     homepage = "https://grpc.io";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

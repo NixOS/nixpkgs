@@ -2,22 +2,27 @@
 
 buildGoModule rec {
   pname = "moar";
-  version = "1.10.0";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cFXUspVSCUy0q5CW8K+YL/LBpK87qlPys8hg6AYvg5M=";
+    hash = "sha256-ppaBO+qgjHPCQysTiB3nCXa8zUuEyLOK5iR2VwSyXRM=";
   };
 
-  vendorSha256 = "sha256-RfkY66879Us0UudplMzW8xEC1zs+2OXwyB+nBim3I0I=";
+  vendorHash = "sha256-aFCv6VxHD1bOLhCHXhy4ubik8Z9uvU6AeqcMqIZI2Oo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installManPage ./moar.1
   '';
+
+  ldflags = [
+    "-s" "-w"
+    "-X" "main.versionString=v${version}"
+  ];
 
   meta = with lib; {
     description = "Nice-to-use pager for humans";

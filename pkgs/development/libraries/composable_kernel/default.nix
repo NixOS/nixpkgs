@@ -1,26 +1,21 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , cmake
 , rocm-cmake
 , hip
 , openmp
-, gtest ? null
+, clang-tools-extra
+, gtest
 , buildTests ? false
 , buildExamples ? false
-, gpuTargets ? null # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
+, gpuTargets ? [ ] # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
 }:
 
-assert buildTests -> gtest != null;
-
-# Several tests seem to either not compile or have a race condition
-# Undefined reference to symbol '_ZTIN7testing4TestE'
-# Try removing this next update
-assert buildTests == false;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel";
-  version = "unstable-2022-11-02";
+  version = "unstable-2023-01-16";
 
   outputs = [
     "out"
@@ -30,40 +25,37 @@ stdenv.mkDerivation rec {
     "example"
   ];
 
+  # ROCm 5.6 should release composable_kernel as stable with a tag in the future
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "composable_kernel";
-    rev = "79aa3fb1793c265c59d392e916baa851a55521c8";
-    hash = "sha256-vIfMdvRYCTqrjMGSb7gQfodzLw2wf3tGoCAa5jtfbvw=";
+    rev = "80e05267417f948e4f7e63c0fe807106d9a0c0ef";
+    hash = "sha256-+c0E2UtlG/abweLwCWWjNHDO5ZvSIVKwwwettT9mqR4=";
   };
 
   nativeBuildInputs = [
     cmake
     rocm-cmake
     hip
+    clang-tools-extra
   ];
 
   buildInputs = [
     openmp
-  ] ++ lib.optionals buildTests [
-    gtest
   ];
 
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
-  ] ++ lib.optionals (gpuTargets != null) [
-    "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ] ++ lib.optionals buildTests [
+    "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
   ];
 
   # No flags to build selectively it seems...
-  postPatch = ''
-    substituteInPlace test/CMakeLists.txt \
-      --replace "include(googletest)" ""
-
-    substituteInPlace CMakeLists.txt \
-      --replace "enable_testing()" ""
-  '' + lib.optionalString (!buildTests) ''
+  postPatch = lib.optionalString (!buildTests) ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(test)" ""
   '' + lib.optionalString (!buildExamples) ''
@@ -71,21 +63,24 @@ stdenv.mkDerivation rec {
       --replace "add_subdirectory(example)" ""
   '';
 
-  postInstall = ''
-    mkdir -p $out/bin
-    mv bin/ckProfiler $out/bin
-  '' + lib.optionalString buildTests ''
+  postInstall = lib.optionalString buildTests ''
     mkdir -p $test/bin
-    mv bin/test_* $test/bin
+    mv $out/bin/test_* $test/bin
   '' + lib.optionalString buildExamples ''
     mkdir -p $example/bin
-    mv bin/example_* $example/bin
+    mv $out/bin/example_* $example/bin
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
+
+  # Times out otherwise
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "Performance portable programming model for machine learning tensor operators";
     homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
+    platforms = platforms.linux;
   };
-}
+})

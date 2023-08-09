@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "homebank";
-  version = "5.5.6";
+  version = "5.6.6";
   src = fetchurl {
-    url = "http://homebank.free.fr/public/homebank-${version}.tar.gz";
-    sha256 = "sha256-Rg6OjHLkwVIDnXqzqPXA8DxqSdrh2T6V/gLBND8vx9o=";
+    url = "http://homebank.free.fr/public/sources/homebank-${version}.tar.gz";
+    hash = "sha256-ZW/N8YUU8r7SYY/+hqVYrqYW/KQqtuChfQJxXftl3A4=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook intltool ];
-  buildInputs = [ gtk libofx libsoup gnome.adwaita-icon-theme ];
+  buildInputs = [ gtk libofx libsoup gnome.adwaita-icon-theme];
 
   meta = with lib; {
     description = "Free, easy, personal accounting for everyone";

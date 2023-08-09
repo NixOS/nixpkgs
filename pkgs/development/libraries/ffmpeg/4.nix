@@ -1,15 +1,11 @@
-{ callPackage, fetchpatch, ... }@args:
-
-callPackage ./generic.nix (rec {
-  version = "4.4.2";
-  branch = version;
-  sha256 = "sha256-+YpIJSDEdQdSGpB5FNqp77wThOBZG1r8PaGKqJfeKUg=";
-
-  patches = [
-    # SDL2 recently changed their versioning
-    (fetchpatch {
-      url = "https://git.videolan.org/?p=ffmpeg.git;a=patch;h=e5163b1d34381a3319214a902ef1df923dd2eeba";
-      hash = "sha256-nLhP2+34cj5EgpnUrePZp60nYAxmbhZAEDfay4pBVk0=";
-    })
+import ./generic.nix rec {
+  version = "4.4.4";
+  sha256 = "sha256-Q8bkuF/1uJfqttJJoObnnLX3BEduv+qxsvOrVhMvRjA=";
+  extraPatches = [
+    {
+      name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
+      url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/031f1561cd286596cdb374da32f8aa816ce3b135";
+      hash = "sha256-mSnmAkoNikDpxcN+A/hpB7mUbbtcMvm4tG6gZFuroe8=";
+    }
   ];
-} // args)
+}

@@ -2,9 +2,9 @@
 , arrow
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , pytestCheckHook
-, unittest2
 }:
 
 buildPythonPackage rec {
@@ -18,16 +18,23 @@ buildPythonPackage rec {
     owner = "nickmaccarthy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WVWGhyBguE1+KEMQu0N5QxO7IC4rPEJ/2L3VWUCQNi4=";
+    hash = "sha256-WVWGhyBguE1+KEMQu0N5QxO7IC4rPEJ/2L3VWUCQNi4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "remove-unittest2.patch";
+      url = "https://github.com/nickmaccarthy/python-datemath/commit/781daa0241ed327d5f211f3b62f553f3ee3d86e0.patch";
+      hash = "sha256-WD6fuDaSSNXgYWoaUexiWnofCzEZzercEUlqTvOUT5I=";
+    })
+  ];
 
   propagatedBuildInputs = [
     arrow
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    unittest2
   ];
 
   pytestFlagsArray = [

@@ -35,10 +35,12 @@ let
     "dovecot"
     "fastly"
     "fritzbox"
+    "graphite"
     "influxdb"
     "ipmi"
     "json"
     "jitsi"
+    "junos-czerwonk"
     "kea"
     "keylight"
     "knot"
@@ -51,8 +53,10 @@ let
     "nginx"
     "nginxlog"
     "node"
+    "nut"
     "openldap"
     "openvpn"
+    "php-fpm"
     "pihole"
     "postfix"
     "postgres"
@@ -62,17 +66,20 @@ let
     "redis"
     "rspamd"
     "rtl_433"
+    "scaphandre"
     "script"
+    "shelly"
     "snmp"
     "smartctl"
     "smokeping"
     "sql"
+    "statsd"
     "surfboard"
     "systemd"
     "tor"
     "unbound"
     "unifi"
-    "unifi-poller"
+    "unpoller"
     "v2ray"
     "varnish"
     "wireguard"
@@ -229,6 +236,10 @@ in
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
       options = (mkSubModules);
+      imports = [
+        ../../../misc/assertions.nix
+        (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])
+      ];
     };
     description = lib.mdDoc "Prometheus exporter configuration";
     default = {};
@@ -292,13 +303,29 @@ in
         Please specify either 'services.prometheus.exporters.sql.configuration' or
           'services.prometheus.exporters.sql.configFile'
       '';
-    } ] ++ (flip map (attrNames cfg) (exporter: {
+    } {
+      assertion = cfg.scaphandre.enable -> (pkgs.stdenv.targetPlatform.isx86_64 == true);
+      message = ''
+        Scaphandre only support x86_64 architectures.
+      '';
+    } {
+      assertion = cfg.scaphandre.enable -> ((lib.kernel.whenHelpers pkgs.linux.version).whenOlder "5.11" true).condition == false;
+      message = ''
+        Scaphandre requires a kernel version newer than '5.11', '${pkgs.linux.version}' given.
+      '';
+    } {
+      assertion = cfg.scaphandre.enable -> (builtins.elem "intel_rapl_common" config.boot.kernelModules);
+      message = ''
+        Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
+      '';
+    } ] ++ (flip map (attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
       message = ''
         The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
         `openFirewall' is set to `true'!
       '';
-    }));
+    })) ++ config.services.prometheus.exporters.assertions;
+    warnings = config.services.prometheus.exporters.warnings;
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
@@ -316,7 +343,7 @@ in
   );
 
   meta = {
-    doc = ./exporters.xml;
+    doc = ./exporters.md;
     maintainers = [ maintainers.willibutz ];
   };
 }

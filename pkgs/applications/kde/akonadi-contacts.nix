@@ -16,10 +16,14 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     qtwebengine
-    grantlee grantleetheme
+    grantlee
     kcmutils kdbusaddons ki18n kiconthemes kio kitemmodels ktextwidgets prison
     akonadi-mime kcontacts kmime libkleo
   ];
-  propagatedBuildInputs = [ akonadi ];
+  propagatedBuildInputs = [ akonadi grantleetheme ];
   outputs = [ "out" "dev" ];
+  postInstall = ''
+    # added as an include directory by cmake files and fails to compile if it's missing
+    mkdir -p "$dev/include/KF5"
+  '';
 }

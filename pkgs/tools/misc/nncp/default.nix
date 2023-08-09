@@ -1,14 +1,14 @@
 { lib, stdenv, go, fetchurl, redo-apenwarr, curl, perl, genericUpdater
-, writeShellScript, nixosTests, cfgPath ? "/etc/nncp.hjson" }:
+, writeShellScript, cfgPath ? "/etc/nncp.hjson" }:
 
 stdenv.mkDerivation rec {
   pname = "nncp";
-  version = "8.8.1";
+  version = "8.8.3";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
-    sha256 = "426463C97211AD88DF74DDDF61BDBB830BAE275668B2F23158D43146517469A6";
+    hash = "sha256-IldQCEdH6XDYK+DW5lB/5HFFFGuq1nDkCwEaVo7vIvE=";
   };
 
   nativeBuildInputs = [ go redo-apenwarr ];

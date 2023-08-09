@@ -1,14 +1,32 @@
-{ lib, mkXfceDerivation, exo, gtk3, libwnck, libXmu }:
+{ lib
+, mkXfceDerivation
+, exo
+, gtk3
+, libxfce4ui
+, xfconf
+, libwnck
+, libXmu
+}:
 
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-taskmanager";
-  version = "1.4.2";
+  version = "1.5.5";
+  odd-unstable = false;
 
-  sha256 = "sha256-jcICXPtG/7t0U0xqgvU52mjiA8wsyw7JQ0OmNjwA89A=";
+  sha256 = "sha256-worHYB9qibRxMaCYQ0+nHA9CSTColewgahyrXiPOnQA=";
 
-  nativeBuildInputs = [ exo ];
-  buildInputs = [ gtk3 libwnck libXmu ];
+  nativeBuildInputs = [
+    exo
+  ];
+
+  buildInputs = [
+    gtk3
+    libxfce4ui
+    xfconf
+    libwnck
+    libXmu
+  ];
 
   meta = with lib; {
     description = "Easy to use task manager for Xfce";

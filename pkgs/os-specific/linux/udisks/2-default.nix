@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "udisks";
-  version = "2.9.4";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
     rev = "${pname}-${version}";
-    sha256 = "sha256-MYQztzIyp5kh9t1bCIlj08/gaOmZfuu/ZOwo3F+rZiw=";
+    sha256 = "sha256-M0L2MjVKv7VmtML/JZx0I8vNj+m6KDWGezvcwFqoTNI=";
   };
 
   outputs = [ "out" "man" "dev" ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       bash = "${bash}/bin/bash";
-      blkid = "${util-linux}/bin/blkid";
       false = "${coreutils}/bin/false";
       mdadm = "${mdadm}/bin/mdadm";
       mkswap = "${util-linux}/bin/mkswap";
@@ -84,7 +83,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.tests.vm = nixosTests.udisks2;
+  passthru = {
+    inherit libblockdev;
+    tests.vm = nixosTests.udisks2;
+  };
 
   meta = with lib; {
     description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";

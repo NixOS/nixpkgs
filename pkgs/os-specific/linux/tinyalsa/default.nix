@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "-DTINYALSA_USES_PLUGINS=ON"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=sign-compare"
   ];
 

@@ -1,4 +1,6 @@
 { lib
+, aiohttp
+, asgiref
 , buildPythonPackage
 , django
 , djangorestframework
@@ -7,36 +9,35 @@
 , flask
 , httpx
 , isodate
+, jsonschema
 , jsonschema-spec
-, mock
 , more-itertools
 , openapi-schema-validator
 , openapi-spec-validator
 , parse
-, pathable
 , poetry-core
+, pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 , responses
 , requests
 , starlette
-, typing-extensions
 , webob
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.16.1";
+  version = "0.18.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
-    rev = version;
-    hash = "sha256-J3n34HR5lfMM0ik5HAZ2JCr75fX5FTqBWrZ7E3/6XSE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2OcGaZQwzgxcwrXinmJjFc91620Ri0O79c8WZWfDdlQ=";
   };
 
   postPatch = ''
@@ -50,17 +51,19 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     isodate
     more-itertools
-    pathable
-    more-itertools
-    openapi-schema-validator
-    jsonschema-spec
-    openapi-spec-validator
-    typing-extensions
     parse
+    openapi-schema-validator
+    openapi-spec-validator
     werkzeug
+    jsonschema-spec
+    asgiref
+    jsonschema
   ];
 
   passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+    ];
     django = [
       django
     ];
@@ -79,23 +82,15 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
-    mock
+  nativeCheckInputs = [
+    pytest-aiohttp
     pytestCheckHook
     responses
     webob
-  ] ++ passthru.optional-dependencies.flask
-  ++ passthru.optional-dependencies.falcon
-  ++ passthru.optional-dependencies.django
-  ++ passthru.optional-dependencies.starlette
-  ++ passthru.optional-dependencies.requests;
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   disabledTestPaths = [
-    # AttributeError: 'str' object has no attribute '__name__'
-    #"tests/integration/validation"
     # Requires secrets and additional configuration
-    "tests/integration/contrib/django/"
-    # Unable to detect SECRET_KEY and ROOT_URLCONF
     "tests/integration/contrib/django/"
   ];
 

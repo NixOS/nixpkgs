@@ -9,12 +9,12 @@ buildPythonPackage rec {
   inherit (antlr4.runtime.cpp) version src;
   disabled = python.pythonOlder "3.6";
 
-  sourceRoot = "source/runtime/Python3";
+  sourceRoot = "${src.name}/runtime/Python3";
 
   # in 4.9, test was renamed to tests
   checkPhase = ''
     cd test*
-    ${python.interpreter} ctest.py
+    ${python.interpreter} run.py
   '';
 
   meta = with lib; {

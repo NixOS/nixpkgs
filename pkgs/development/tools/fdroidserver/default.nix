@@ -1,39 +1,53 @@
-{ fetchFromGitLab
+{ lib
+, fetchFromGitLab
 , python
-, lib
 , apksigner
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "2.1.1";
   pname = "fdroidserver";
+  version = "2.2.1";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = version;
-    sha256 = "0qg4vxjcgm05dqk3kyj8lry9wh5bxy0qwz70fiyxb5bi1kwai9ss";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-+Y1YTgELsX834WIrhx/NX34yLMHdkKM+YUNvnHPiC/s=";
   };
 
+  pythonRelaxDeps = [
+    "pyasn1"
+    "pyasn1-modules"
+  ];
+
   postPatch = ''
-    substituteInPlace fdroidserver/common.py --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
+    substituteInPlace fdroidserver/common.py \
+      --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
   '';
 
   preConfigure = ''
-    ${python.interpreter} setup.py compile_catalog
+    ${python.pythonForBuild.interpreter} setup.py compile_catalog
   '';
+
   postInstall = ''
     patchShebangs gradlew-fdroid
     install -m 0755 gradlew-fdroid $out/bin
   '';
 
-  buildInputs = [ python.pkgs.babel ];
+  nativeBuildInputs = with python.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  buildInputs = with python.pkgs; [
+    babel
+  ];
 
   propagatedBuildInputs = with python.pkgs; [
     androguard
     clint
     defusedxml
-    GitPython
+    gitpython
     libcloud
     mwclient
     paramiko
@@ -48,18 +62,26 @@ python.pkgs.buildPythonApplication rec {
     yamllint
   ];
 
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ apksigner ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ apksigner ]}"
+  ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "fdroidserver" ];
+  pythonImportsCheck = [
+    "fdroidserver"
+  ];
 
   meta = with lib; {
-    homepage = "https://f-droid.org";
+    homepage = "https://github.com/f-droid/fdroidserver";
+    changelog = "https://github.com/f-droid/fdroidserver/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
-    license = licenses.agpl3;
-    maintainers = [ lib.maintainers.obfusk ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ obfusk ];
   };
 
 }

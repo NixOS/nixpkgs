@@ -10,16 +10,15 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "ipykernel-tests";
-  inherit (ipykernel) version;
-
-  src = ipykernel.src;
+  inherit (ipykernel) version src;
+  format = "other";
 
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     ipykernel
     ipyparallel

@@ -9,19 +9,17 @@
 {
   # language name
   language
-  # version of tree-sitter
 , version
-  # source for the language grammar
-, source
+, src
 , location ? null
-, generate ? false,
-}:
+, generate ? false
+, ...
+}@args:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation ({
   pname = "${language}-grammar";
-  inherit version;
 
-  src = source;
+  inherit src version;
 
   nativeBuildInputs = lib.optionals generate [ nodejs tree-sitter ];
 
@@ -30,10 +28,10 @@ stdenv.mkDerivation rec {
 
   stripDebugList = [ "parser" ];
 
-  configurePhase = lib.optionalString generate ''
-    tree-sitter generate
-  '' + lib.optionalString (location != null) ''
+  configurePhase = lib.optionalString (location != null) ''
     cd ${location}
+  '' + lib.optionalString generate ''
+    tree-sitter generate
   '';
 
   # When both scanner.{c,cc} exist, we should not link both since they may be the same but in
@@ -46,6 +44,7 @@ stdenv.mkDerivation rec {
       $CC -fPIC -c src/scanner.c -o scanner.o $CFLAGS
     fi
     $CC -fPIC -c src/parser.c -o parser.o $CFLAGS
+    rm -rf parser
     $CXX -shared -o parser *.o
     runHook postBuild
   '';
@@ -59,4 +58,4 @@ stdenv.mkDerivation rec {
     fi
     runHook postInstall
   '';
-}
+} // removeAttrs args [ "language" "location" "generate" ])

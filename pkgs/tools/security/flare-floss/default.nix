@@ -10,7 +10,7 @@ let
         version = "4.4.2";
         src = o.src.override {
           inherit version;
-          sha256 = "sha256-46YvBSAXJEDKDcyCN0kxk4Ljd/N/FAoLme9F/suEv+c=";
+          hash = "sha256-46YvBSAXJEDKDcyCN0kxk4Ljd/N/FAoLme9F/suEv+c=";
         };
       });
 
@@ -19,7 +19,7 @@ let
         version = "2.5.1";
         src = o.src.override {
           inherit version;
-          sha256 = "sha256-EJzVhcrEEpf3EQPDxCrG73N58peI61TLdRvlpmO7I1o=";
+          hash = "sha256-EJzVhcrEEpf3EQPDxCrG73N58peI61TLdRvlpmO7I1o=";
         };
       });
     };
@@ -27,14 +27,15 @@ let
 in
 py.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "2.0.0";
+  version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "flare-floss";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true; # for tests
-    sha256 = "sha256-V4OWYcISyRdjf8x93B6h2hJwRgmRmk32hr8TrgRDu8Q=";
+    hash = "sha256-Oa0DMl7RKNfA00shcc4y1sNd2OiKCf0sA0EUC5gByBI=";
   };
 
   postPatch = ''
@@ -55,7 +56,7 @@ py.pkgs.buildPythonPackage rec {
     vivisect
   ] ++ viv-utils.optional-dependencies.flirt;
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     pytest-sugar
     pytestCheckHook
     pyyaml
@@ -63,13 +64,15 @@ py.pkgs.buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/share/flare-floss/
-    cp -r sigs $out/share/flare-floss/
+    cp -r floss/sigs $out/share/flare-floss/
   '';
 
   meta = with lib; {
     description = "Automatically extract obfuscated strings from malware";
     homepage = "https://github.com/mandiant/flare-floss";
+    changelog = "https://github.com/mandiant/flare-floss/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    mainProgram = "floss";
+    maintainers = with maintainers; [ fab ];
   };
 }

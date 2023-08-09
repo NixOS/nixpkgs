@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "~cnx";
     repo = "ipwhl-utils";
     rev = version;
-    sha256 = "sha256-YaIYcoUnbiv9wUOFIzGj2sWGbh7NsqRQcqOR2X6+QZA=";
+    hash = "sha256-YaIYcoUnbiv9wUOFIzGj2sWGbh7NsqRQcqOR2X6+QZA=";
   };
 
   buildInputs = [ kubo ];

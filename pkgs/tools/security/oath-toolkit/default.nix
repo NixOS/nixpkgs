@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = lib.optionals stdenv.isDarwin [ "--disable-pam" ];
 
-  passthru.updateScript = nix-update-script { attrPath = pname; };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Components for building one-time password authentication systems";

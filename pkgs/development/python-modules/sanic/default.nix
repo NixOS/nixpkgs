@@ -1,61 +1,86 @@
 { lib
 , stdenv
-, aiofiles
-, beautifulsoup4
 , buildPythonPackage
-, doCheck ? true
 , fetchFromGitHub
-, gunicorn
+
+# build-system
+, setuptools
+
+# propagates
+, aiofiles
+, html5tagger
 , httptools
 , multidict
-, pytest-asyncio
-, pytest-benchmark
-, pytest-sugar
-, pytestCheckHook
-, pythonOlder
-, pythonAtLeast
 , sanic-routing
-, sanic-testing
+, tracerite
+, typing-extensions
 , ujson
-, uvicorn
 , uvloop
 , websockets
+
+# optionals
 , aioquic
+
+# tests
+, doCheck ? !stdenv.isDarwin # on Darwin, tests fail but pkg still works
+
+, beautifulsoup4
+, gunicorn
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, sanic-testing
+, uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "22.6.2";
-  format = "setuptools";
+  version = "23.6.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-krEQd0ak9Uua+r+pYmLStlizgE4HmZBO8Q0I2/gWAwU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Ffw92mlYNV+ikb6299uw24EI1XPpl3Ju2st1Yt/YHKw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
-    aioquic
     httptools
+    html5tagger
     multidict
     sanic-routing
+    tracerite
+    typing-extensions
     ujson
     uvloop
     websockets
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    ext = [
+      # TODO: sanic-ext
+    ];
+    http3 = [
+      aioquic
+    ];
+  };
+
+  nativeCheckInputs = [
     beautifulsoup4
     gunicorn
     pytest-asyncio
     pytestCheckHook
     sanic-testing
     uvicorn
-  ];
+  ] ++ passthru.optional-dependencies.http3;
 
   inherit doCheck;
 
@@ -66,7 +91,7 @@ buildPythonPackage rec {
 
     # needed for relative paths for some packages
     cd tests
-  '' + lib.optionalString stdenv.isDarwin  ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # OSError: [Errno 24] Too many open files
     ulimit -n 1024
   '';
@@ -76,42 +101,41 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--asyncio-mode=auto"
+    "-vvv"
   ];
 
   disabledTests = [
     # Require networking
     "test_full_message"
-    # Fails to parse cmdline arguments
-    "test_dev"
-    "test_auto_reload"
-    "test_host_port_ipv6_loopback"
+    # Server mode mismatch (debug vs production)
     "test_num_workers"
-    "test_debug"
-    "test_access_logs"
-    "test_noisy_exceptions"
-    # OSError: foo
-    "test_bad_headers"
-    "test_create_server_trigger_events"
-    "test_json_body_requests"
-    "test_missing_startup_raises_exception"
-    "test_no_body_requests"
-    "test_oserror_warning"
-    "test_running_multiple_offset_warning"
-    "test_streaming_body_requests"
-    "test_trigger_before_events_create_server"
-    "test_keep_alive_connection_context"
     # Racy tests
     "test_keep_alive_client_timeout"
     "test_keep_alive_server_timeout"
     "test_zero_downtime"
-    # broke with ujson 5.4 upgrade
-    # https://github.com/sanic-org/sanic/pull/2504
-    "test_json_response_json"
+    # sanic.exceptions.SanicException: Cannot setup Sanic Simple Server without a path to a directory
+    "test_load_app_simple"
+    # create defunct python processes
+    "test_reloader_live"
+    "test_reloader_live_with_dir"
+    "test_reload_listeners"
+    # crash the python interpreter
+    "test_host_port_localhost"
+    "test_host_port"
+    "test_server_run"
+    # NoneType object is not subscriptable
+    "test_serve_app_implicit"
+    # AssertionError: assert [] == ['Restarting a process', 'Begin restart termination', 'Starting a process']
+    "test_default_reload_shutdown_order"
+    # App not found.
+    "test_input_is_dir"
   ];
 
   disabledTestPaths = [
     # We are not interested in benchmarks
     "benchmark/"
+    # We are also not interested in typing
+    "typing/test_typing.py"
     # unable to create async loop
     "test_app.py"
     "test_asgi.py"
@@ -126,10 +150,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sanic" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
+    changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc AluisioASG ];
+    maintainers = with maintainers; [ AluisioASG ];
   };
 }

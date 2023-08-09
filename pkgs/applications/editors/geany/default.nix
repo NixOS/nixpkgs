@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ frlan ];
     platforms = platforms.all;
+    mainProgram = "geany";
   };
 }

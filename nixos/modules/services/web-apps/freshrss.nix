@@ -7,7 +7,7 @@ let
   poolName = "freshrss";
 in
 {
-  meta.maintainers = with maintainers; [ etu stunkymonkey ];
+  meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
     enable = mkEnableOption (mdDoc "FreshRSS feed reader");
@@ -27,7 +27,8 @@ in
     };
 
     passwordFile = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
+      default = null;
       description = mdDoc "Password for the defaultUser for FreshRSS.";
       example = "/run/secrets/freshrss";
     };
@@ -60,7 +61,7 @@ in
       };
 
       port = mkOption {
-        type = with types; nullOr port;
+        type = types.nullOr types.port;
         default = null;
         description = mdDoc "Database port for FreshRSS.";
         example = 3306;
@@ -73,7 +74,7 @@ in
       };
 
       passFile = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         description = mdDoc "Database password file for FreshRSS.";
         example = "/run/secrets/freshrss";
@@ -116,12 +117,24 @@ in
         with default values.
       '';
     };
-  };
 
+    user = mkOption {
+      type = types.str;
+      default = "freshrss";
+      description = lib.mdDoc "User under which FreshRSS runs.";
+    };
+
+    authType = mkOption {
+      type = types.enum [ "form" "http_auth" "none" ];
+      default = "form";
+      description = mdDoc "Authentication type for FreshRSS.";
+    };
+  };
 
   config =
     let
-      systemd-hardening = {
+      defaultServiceConfig = {
+        ReadWritePaths = "${cfg.dataDir}";
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DeviceAllow = "";
         LockPersonality = true;
@@ -146,9 +159,22 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
         UMask = "0007";
+        Type = "oneshot";
+        User = cfg.user;
+        Group = config.users.users.${cfg.user}.group;
+        StateDirectory = "freshrss";
+        WorkingDirectory = cfg.package;
       };
     in
     mkIf cfg.enable {
+      assertions = mkIf (cfg.authType == "form") [
+        {
+          assertion = cfg.passwordFile != null;
+          message = ''
+            `passwordFile` must be supplied when using "form" authentication!
+          '';
+        }
+      ];
       # Set up a Nginx virtual host.
       services.nginx = mkIf (cfg.virtualHost != null) {
         enable = true;
@@ -199,19 +225,24 @@ in
         };
       };
 
-      users.users.freshrss = {
+      users.users."${cfg.user}" = {
         description = "FreshRSS service user";
         isSystemUser = true;
-        group = "freshrss";
+        group = "${cfg.user}";
+        home = cfg.dataDir;
       };
-      users.groups.freshrss = { };
+      users.groups."${cfg.user}" = { };
+
+      systemd.tmpfiles.rules = [
+        "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+      ];
 
       systemd.services.freshrss-config =
         let
           settingsFlags = concatStringsSep " \\\n    "
             (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--default_user" = ''"${cfg.defaultUser}"'';
-              "--auth_type" = ''"form"'';
+              "--auth_type" = ''"${cfg.authType}"'';
               "--base_url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
@@ -228,37 +259,41 @@ in
         {
           description = "Set up the state directory for FreshRSS before use";
           wantedBy = [ "multi-user.target" ];
-          serviceConfig = {
+          serviceConfig = defaultServiceConfig //{
             Type = "oneshot";
             User = "freshrss";
             Group = "freshrss";
             StateDirectory = "freshrss";
             WorkingDirectory = cfg.package;
-          } // systemd-hardening;
+          };
           environment = {
             FRESHRSS_DATA_PATH = cfg.dataDir;
           };
 
-          script = ''
-            # create files with correct permissions
-            mkdir -m 755 -p ${cfg.dataDir}
-
-            # do installation or reconfigure
-            if test -f ${cfg.dataDir}/config.php; then
-              # reconfigure with settings
-              ./cli/reconfigure.php ${settingsFlags}
-              ./cli/update-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
-            else
-              # Copy the user data template directory
-              cp -r ./data ${cfg.dataDir}
-
-              # check correct folders in data folder
-              ./cli/prepare.php
-              # install with settings
-              ./cli/do-install.php ${settingsFlags}
-              ./cli/create-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
-            fi
-          '';
+          script =
+            let
+              userScriptArgs = ''--user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"'';
+              updateUserScript = optionalString (cfg.authType == "form") ''
+                ./cli/update-user.php ${userScriptArgs}
+              '';
+              createUserScript = optionalString (cfg.authType == "form") ''
+                ./cli/create-user.php ${userScriptArgs}
+              '';
+            in
+            ''
+              # do installation or reconfigure
+              if test -f ${cfg.dataDir}/config.php; then
+                # reconfigure with settings
+                ./cli/reconfigure.php ${settingsFlags}
+                ${updateUserScript}
+              else
+                # check correct folders in data folder
+                ./cli/prepare.php
+                # install with settings
+                ./cli/do-install.php ${settingsFlags}
+                ${createUserScript}
+              fi
+            '';
         };
 
       systemd.services.freshrss-updater = {
@@ -269,14 +304,9 @@ in
         environment = {
           FRESHRSS_DATA_PATH = cfg.dataDir;
         };
-        serviceConfig = {
-          Type = "oneshot";
-          User = "freshrss";
-          Group = "freshrss";
-          StateDirectory = "freshrss";
-          WorkingDirectory = cfg.package;
+        serviceConfig = defaultServiceConfig //{
           ExecStart = "${cfg.package}/app/actualize_script.php";
-        } // systemd-hardening;
+        };
       };
     };
 }

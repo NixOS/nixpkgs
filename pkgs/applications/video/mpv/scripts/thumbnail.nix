@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mpv-thumbnail-script";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "marzzzello";
     repo = "mpv_thumbnail_script";
     rev = version;
-    sha256 = "sha256-0nqV8vY3cBOJkLRoQ33Cc+4+vSK45i9yWbhKiQIuVSw=";
+    sha256 = "sha256-6J1eeuSYyUJmWLIl9WsQ4NzQOBJNO3Cnl5jcPEal4vM=";
   };
 
   nativeBuildInputs = [ python3 ];
@@ -29,6 +29,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "A lua script to show preview thumbnails in mpv's OSC seekbar";
     homepage = "https://github.com/marzzzello/mpv_thumbnail_script";
+    changelog = "https://github.com/marzzzello/mpv_thumbnail_script/releases/tag/${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ figsoda ];

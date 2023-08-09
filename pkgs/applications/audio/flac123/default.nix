@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ flac libao libogg popt ];
 
   meta = with lib; {
-    homepage = "http://flac-tools.sourceforge.net/";
+    homepage = "https://flac-tools.sourceforge.net/";
     description = "A command-line program for playing FLAC audio files";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

@@ -67,7 +67,7 @@ else
   # because the reported $oldHash to be changed
   # may not actually be in $default_nix
   # but in the file of one of its dependencies.
-  services=( "srht" "scmsrht" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
+  services=( "srht" "scmsrht" "buildsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
              "metasrht" "pagessrht" "pastesrht" "todosrht" )
 fi
 

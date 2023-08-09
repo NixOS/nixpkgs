@@ -1,38 +1,29 @@
 { lib, stdenv, fetchurl, fetchpatch, perl
-, enableGhostscript ? false, ghostscript # for postscript and html output
+, enableGhostscript ? false
+, ghostscript, gawk, libX11, libXaw, libXt, libXmu # for postscript and html output
 , enableHtml ? false, psutils, netpbm # for html output
+, enableIconv ? false, iconv
+, enableLibuchardet ? false, libuchardet # for detecting input file encoding in preconv(1)
 , buildPackages
 , autoreconfHook
 , pkg-config
 , texinfo
+, bison
 , bash
 }:
 
 stdenv.mkDerivation rec {
   pname = "groff";
-  version = "1.22.4";
+  version = "1.23.0";
 
   src = fetchurl {
     url = "mirror://gnu/groff/${pname}-${version}.tar.gz";
-    sha256 = "14q2mldnr1vx0l9lqp9v2f6iww24gj28iyh4j2211hyynx67p3p7";
+    hash = "sha256-a5dX9ZK3UYtJAutq9+VFcL3Mujeocf3bLTCuOGNRHBM=";
   };
 
   outputs = [ "out" "man" "doc" "info" "perl" ];
 
-  # Parallel build is failing for missing depends. Known upstream as:
-  #   https://savannah.gnu.org/bugs/?62084
-  enableParallelBuilding = false;
-
-  patches = [
-    ./0001-Fix-cross-compilation-by-looking-for-ar.patch
-  ]
-  ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") [
-    # https://trac.macports.org/ticket/59783
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/openembedded/openembedded-core/ce265cf467f1c3e5ba2edbfbef2170df1a727a52/meta/recipes-extended/groff/files/0001-Include-config.h.patch";
-      sha256 = "1b0mg31xkpxkzlx696nr08rcc7ndpaxdplvysy0hw5099c4n1wyf";
-    })
-  ];
+  enableParallelBuilding = true;
 
   postPatch = ''
     # BASH_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
@@ -44,28 +35,37 @@ stdenv.mkDerivation rec {
       --replace "pnmcut" "${lib.getBin netpbm}/bin/pnmcut" \
       --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
       --replace "pnmtopng" "${lib.getBin netpbm}/bin/pnmtopng"
-    substituteInPlace tmac/www.tmac \
+    substituteInPlace tmac/www.tmac.in \
       --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
       --replace "pngtopnm" "${lib.getBin netpbm}/bin/pngtopnm" \
       --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
+  '' + lib.optionalString (enableGhostscript || enableHtml) ''
+    substituteInPlace contrib/pdfmark/pdfroff.sh \
+      --replace '$GROFF_GHOSTSCRIPT_INTERPRETER' "${lib.getBin ghostscript}/bin/gs" \
+      --replace '$GROFF_AWK_INTERPRETER' "${lib.getBin gawk}/bin/gawk"
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ]
+    # Required due to the patch that changes .ypp files.
+    ++ lib.optional (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") bison;
   buildInputs = [ perl bash ]
-    ++ lib.optionals enableGhostscript [ ghostscript ]
-    ++ lib.optionals enableHtml [ psutils netpbm ];
+    ++ lib.optionals enableGhostscript [ ghostscript gawk libX11 libXaw libXt libXmu ]
+    ++ lib.optionals enableHtml [ psutils netpbm ]
+    ++ lib.optionals enableIconv [ iconv ]
+    ++ lib.optionals enableLibuchardet [ libuchardet ];
 
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
   # package. To avoid this issue, X11 support is explicitly disabled.
-  # Note: If we ever want to *enable* X11 support, then we'll probably
-  # have to pass "--with-appresdir", too.
-  configureFlags = [
+  configureFlags = lib.optionals (!enableGhostscript) [
     "--without-x"
+  ] ++ [
     "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
   ] ++ lib.optionals enableGhostscript [
-    "--with-gs=${ghostscript}/bin/gs"
+    "--with-gs=${lib.getBin ghostscript}/bin/gs"
+    "--with-awk=${lib.getBin gawk}/bin/gawk"
+    "--with-appresdir=${placeholder "out"}/lib/X11/app-defaults"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "gl_cv_func_signbit=yes"
   ];
@@ -103,11 +103,6 @@ stdenv.mkDerivation rec {
     moveToOutput lib/groff/gpinyin $perl
     substituteInPlace $perl/bin/gpinyin \
       --replace $out/lib/groff/gpinyin $perl/lib/groff/gpinyin
-
-    moveToOutput bin/groffer $perl
-    moveToOutput lib/groff/groffer $perl
-    substituteInPlace $perl/bin/groffer \
-      --replace $out/lib/groff/groffer $perl/lib/groff/groffer
 
     moveToOutput bin/grog $perl
     moveToOutput lib/groff/grog $perl

@@ -21,9 +21,11 @@ let
 
       configureFlags = [ "--with-colm=${colm}" ];
 
-      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu++98";
+      env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu++98";
 
       doCheck = true;
+
+      enableParallelBuilding = true;
 
       meta = with lib; {
         homepage = "https://www.colm.net/open-source/ragel/";

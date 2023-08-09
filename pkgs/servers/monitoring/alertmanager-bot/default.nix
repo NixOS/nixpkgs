@@ -30,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/metalmatze/alertmanager-bot";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
-    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }

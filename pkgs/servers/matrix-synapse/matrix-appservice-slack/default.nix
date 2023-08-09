@@ -19,7 +19,7 @@ mkYarnPackage rec {
     owner = "matrix-org";
     repo = "matrix-appservice-slack";
     rev = data.version;
-    sha256 = data.srcHash;
+    hash = data.srcHash;
   };
 
   offlineCache = fetchYarnDeps {
@@ -47,7 +47,7 @@ mkYarnPackage rec {
 
   meta = with lib; {
     description = "A Matrix <--> Slack bridge";
-    maintainers = with maintainers; [ beardhatcode ];
+    maintainers = with maintainers; [ beardhatcode chvp ];
     license = licenses.asl20;
   };
 }

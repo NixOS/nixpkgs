@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.14.0";
+  version = "0.14.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "5YJ5pv8gtvZPpJlhXaXptXz2W6eFC3L6/fFyIanW1p4=";
+    sha256 = "Kgyc9I++izQ1AIhm/9QLjt2wZn0iErQjlv32iOk84L4=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-    "-Dpython3_girdir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
+    "-Dtests=true"
   ];
 
   doCheck = true;

@@ -15,6 +15,8 @@ let
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
 
+  inherit (snipe-it.passthru) phpPackage;
+
   # shell script for local administration
   artisan = pkgs.writeScriptBin "snipe-it" ''
     #! ${pkgs.runtimeShell}
@@ -23,7 +25,7 @@ let
     if [[ "$USER" != ${user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${user}'
     fi
-    $sudo ${pkgs.php}/bin/php artisan $*
+    $sudo ${phpPackage}/bin/php artisan $*
   '';
 in {
   options.services.snipe-it = {
@@ -340,8 +342,7 @@ in {
     };
 
     services.phpfpm.pools.snipe-it = {
-      inherit user group;
-      phpPackage = pkgs.php81;
+      inherit user group phpPackage;
       phpOptions = ''
         post_max_size = ${cfg.maxUploadSize}
         upload_max_filesize = ${cfg.maxUploadSize}
@@ -381,7 +382,7 @@ in {
     };
 
     systemd.services.snipe-it-setup = {
-      description = "Preperation tasks for snipe-it";
+      description = "Preparation tasks for snipe-it";
       before = [ "phpfpm-snipe-it.service" ];
       after = optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];
@@ -450,12 +451,13 @@ in {
           rm "${cfg.dataDir}"/bootstrap/cache/*.php || true
 
           # migrate db
-          ${pkgs.php}/bin/php artisan migrate --force
+          ${phpPackage}/bin/php artisan migrate --force
 
           # A placeholder file for invalid barcodes
           invalid_barcode_location="${cfg.dataDir}/public/uploads/barcodes/invalid_barcode.gif"
-          [ ! -e "$invalid_barcode_location" ] \
-              && cp ${snipe-it}/share/snipe-it/invalid_barcode.gif "$invalid_barcode_location"
+          if [ ! -e "$invalid_barcode_location" ]; then
+              cp ${snipe-it}/share/snipe-it/invalid_barcode.gif "$invalid_barcode_location"
+          fi
         '';
     };
 

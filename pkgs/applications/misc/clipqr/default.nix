@@ -17,16 +17,16 @@
 
 buildGoModule rec {
   pname = "clipqr";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     owner = "imatt-foss";
     repo = "clipqr";
     rev = "v${version}";
-    sha256 = "sha256-E90nTJtx4GOacu8M7oQBznnSQVDIZatibgKMZEpTUaQ=";
+    hash = "sha256-RIzOkJx1eSik+3N6rSh+3LY2VZmbzNYyV5wpLQHFU2A=";
   };
 
-  vendorSha256 = "5kAOSyVbvot4TX/XfRNe1/zZk6fa7pS1Dvn9nz11u3U=";
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 

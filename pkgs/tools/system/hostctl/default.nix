@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "hostctl";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "guumaster";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3CfUU74e79eilu7WP+EeoGlXUYnxmRpjb8RaH/XXjxo=";
+    hash = "sha256-9BbPHqAZKw8Rpjpdd/e9ip3V0Eh06tEFt/skQ97ij4g=";
   };
 
-  vendorSha256 = "sha256-3UM9w3o3qSlUvgg0k87aODJXqx1ryFvxHs6hlovBILY=";
+  vendorHash = "sha256-+p1gIqklTyd/AU1q0zbQN4BwxOM910fBFmkqvbFAbZA=";
 
   nativeBuildInputs = [
     installShellFiles

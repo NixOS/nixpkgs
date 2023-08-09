@@ -22,9 +22,7 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   src = fetchzip {
-    # this site does not like curl -> override useragent
-    curlOpts = "-A ''";
-    url = "https://cdn.kyostatics.net/dlc/ru/driver/all/linuxdrv_1_1203_fs-1x2xmfp.-downloadcenteritem-Single-File.downloadcenteritem.tmp/LinuxDrv_1.1203_FS-1x2xMFP.zip";
+    url = "https://web.archive.org/web/20220709011705/https://cdn.kyostatics.net/dlc/ru/driver/all/linuxdrv_1_1203_fs-1x2xmfp.-downloadcenteritem-Single-File.downloadcenteritem.tmp/LinuxDrv_1.1203_FS-1x2xMFP.zip";
     sha256 = "0z1pbgidkibv4j21z0ys8cq1lafc6687syqa07qij2qd8zp15wiz";
   };
 

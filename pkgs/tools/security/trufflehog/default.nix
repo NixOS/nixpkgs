@@ -1,38 +1,47 @@
-{ lib, python3Packages }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, testers
+, trufflehog
+}:
 
-let
-  truffleHogRegexes = python3Packages.buildPythonPackage rec {
-    pname = "truffleHogRegexes";
-    version = "0.0.7";
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "b81dfc60c86c1e353f436a0e201fd88edb72d5a574615a7858485c59edf32405";
+buildGoModule rec {
+  pname = "trufflehog";
+  version = "3.46.3";
+
+  src = fetchFromGitHub {
+    owner = "trufflesecurity";
+    repo = "trufflehog";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IdLNDJYg86dTj+E2w7+sXmNf/MY7eqW9NMAmuhrzm10=";
+  };
+
+  vendorHash = "sha256-ecEms2Zf4EckP2OLoL41S1ZTTnGJhpdMDhknq/mO7qI=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/trufflesecurity/trufflehog/v3/pkg/version.BuildVersion=${version}"
+  ];
+
+  # Test cases run git clone and require network access
+  doCheck = false;
+
+  postInstall = ''
+    rm $out/bin/{generate,snifftest}
+  '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = trufflehog;
     };
   };
-in
-  python3Packages.buildPythonApplication rec {
-    pname = "truffleHog";
-    version = "2.2.1";
 
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "sha256-fw0JyM2iqQrkL4FAXllEozJdkKWELS3eAURx5NZcceQ=";
-    };
-
-    # Relax overly restricted version constraint
-    postPatch = ''
-      substituteInPlace setup.py --replace "GitPython ==" "GitPython >= "
-    '';
-
-    propagatedBuildInputs = [ python3Packages.GitPython truffleHogRegexes ];
-
-    # Test cases run git clone and require network access
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/dxa4481/truffleHog";
-      description = "Searches through git repositories for high entropy strings and secrets, digging deep into commit history";
-      license = with lib.licenses; [ gpl2 ];
-      maintainers = with lib.maintainers; [ bhipple ];
-    };
-  }
+  meta = with lib; {
+    description = "Find credentials all over the place";
+    homepage = "https://github.com/trufflesecurity/trufflehog";
+    changelog = "https://github.com/trufflesecurity/trufflehog/releases/tag/v${version}";
+    license = with licenses; [ agpl3Only ];
+    maintainers = with maintainers; [ fab ];
+  };
+}

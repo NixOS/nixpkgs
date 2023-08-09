@@ -36,14 +36,14 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.7.1";
+      version = "4.0.3";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
-        url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        hash = "sha256-ZtJi1NhE1agZWnAv6FCUeO1GDtuQnLTraA5nkwWiCqs=";
+        url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
+        hash = "sha256-iA29zo5zs/SAKggsShp8YZQ9vFhn16lWleTkY8ZTWpI=";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -51,6 +51,7 @@ let
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
+        "-DENABLE_DOC_INCOMPLETE=ON"
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
@@ -65,7 +66,7 @@ let
         ++ concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
-      NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
+      env.NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
         # Fix '_res_9_init: undefined symbol' error
         + (lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
@@ -84,7 +85,8 @@ let
       '';
 
       meta = {
-        homepage = "http://www.weechat.org/";
+        homepage = "https://weechat.org/";
+        changelog = "https://weechat.org/files/doc/weechat/ChangeLog-${version}.html";
         description = "A fast, light and extensible chat client";
         longDescription = ''
           You can find more documentation as to how to customize this package
@@ -93,6 +95,7 @@ let
         '';
         license = lib.licenses.gpl3;
         maintainers = with lib.maintainers; [ ncfavier ];
+        mainProgram = "weechat";
         platforms = lib.platforms.unix;
       };
     }

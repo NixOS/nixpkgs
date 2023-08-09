@@ -37,7 +37,7 @@ even if networkd is disabled.
 Alternatively, we can use a plain old udev rule:
 
 ```nix
-services.udev.initrdRules = ''
+boot.initrd.services.udev.rules = ''
   SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", \
   ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="wan"
 '';
@@ -45,7 +45,7 @@ services.udev.initrdRules = ''
 
 ::: {.warning}
 The rule must be installed in the initrd using
-`services.udev.initrdRules`, not the usual `services.udev.extraRules`
+`boot.initrd.services.udev.rules`, not the usual `services.udev.extraRules`
 option. This is to avoid race conditions with other programs controlling
 the interface.
 :::

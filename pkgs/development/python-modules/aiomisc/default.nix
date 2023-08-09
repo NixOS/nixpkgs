@@ -8,36 +8,41 @@
 , colorlog
 , croniter
 , fastapi
-, fetchFromGitHub
+, fetchPypi
 , logging-journald
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , raven
   #, raven-aiohttp
 , setproctitle
+, setuptools
 , uvloop
 }:
 
 buildPythonPackage rec {
   pname = "aiomisc";
-  version = "16.2";
-  format = "setuptools";
+  version = "17.3.21";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "aiokitchen";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wxm7MrFHZ7TrUGw5w7iLWs1olU8ZmJmJ7M/BZ6Nf0fU=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-NaSwjU4SfUYeUe/3nWQxfgMYrN4Ez1Dc/PE4ffJmlSs=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     colorlog
     logging-journald
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiocontextvars
     async-timeout
     fastapi
@@ -73,15 +78,19 @@ buildPythonPackage rec {
     "aiomisc"
   ];
 
-  disabledTestPaths = [
-    # Dependencies are not available at the moment
-    "tests/test_entrypoint.py"
-    "tests/test_raven_service.py"
-  ];
+  # Upstream stopped tagging with 16.2
+  doCheck = false;
+
+  # disabledTestPaths = [
+  #   # Dependencies are not available at the moment
+  #   "tests/test_entrypoint.py"
+  #   "tests/test_raven_service.py"
+  # ];
 
   meta = with lib; {
     description = "Miscellaneous utils for asyncio";
     homepage = "https://github.com/aiokitchen/aiomisc";
+    changelog = "https://github.com/aiokitchen/aiomisc/blob/master/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

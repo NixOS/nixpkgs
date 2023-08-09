@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , fetchPypi
 , importlib-resources
-, mock
+, poetry-core
 , pyasn1
 , pymongo
 , pyopenssl
@@ -16,7 +16,6 @@
 , requests
 , responses
 , setuptools
-, six
 , substituteAll
 , xmlschema
 , xmlsec
@@ -28,22 +27,26 @@ let
     src = fetchPypi {
       pname = "pymongo";
       inherit version;
-      sha256 = "sha256-ConK3ABipeU2ZN3gQ/bAlxcrjBxfAJRJAJUoL/mZWl8=";
+      hash = "sha256-ConK3ABipeU2ZN3gQ/bAlxcrjBxfAJRJAJUoL/mZWl8=";
     };
   });
 in buildPythonPackage rec {
   pname = "pysaml2";
-  version = "7.2.1";
-  format = "setuptools";
+  version = "7.4.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lnaizwbtBYdKx1puizah+UWsw54NVW6UhEw/eStl1WI=";
+    hash = "sha256-QHAbm6u5oH3O7MEVFE+sW98raquv89KJ8gonk3Yyu/0=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     cryptography
@@ -53,14 +56,12 @@ in buildPythonPackage rec {
     pytz
     requests
     setuptools
-    six
     xmlschema
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
 
-  checkInputs = [
-    mock
+  nativeCheckInputs = [
     pyasn1
     pymongo3
     pytestCheckHook

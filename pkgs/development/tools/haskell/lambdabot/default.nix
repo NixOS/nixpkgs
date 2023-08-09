@@ -20,8 +20,8 @@ let allPkgs = pkgs: mueval.defaultPkgs pkgs ++ [ pkgs.lambdabot-trusted ] ++ pac
                             ++ lib.optional withDjinn haskellPackages.djinn
                             ++ lib.optional (aspell != null) aspell
                            );
-    modulesStr = lib.replaceChars ["\n"] [" "] modules;
-    configStr = lib.replaceChars ["\n"] [" "] configuration;
+    modulesStr = lib.replaceStrings ["\n"] [" "] modules;
+    configStr = lib.replaceStrings ["\n"] [" "] configuration;
 
 in haskellLib.overrideCabal (self: {
   patches = (self.patches or []) ++ [ ./custom-config.patch ];

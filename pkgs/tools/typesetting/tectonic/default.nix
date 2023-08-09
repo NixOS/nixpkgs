@@ -8,35 +8,29 @@
 , openssl
 , pkg-config
 , makeBinaryWrapper
-, biber
 , icu
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.11.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
     fetchSubmodules = true;
-    sha256 = "tBX737Yv4TvDo64cDYuALX61vzKjhz6PTMXQhWc5S/I=";
+    sha256 = "sha256-Cd8YzjU5mCA5DmgLBjg8eVRc87chVVIXinJuf8cNw3o=";
   };
 
-  cargoSha256 = "awDVjJLwgpSMbwptmLhczaxB5HqvsdvEOUsLYb/zTUc=";
+  cargoHash = "sha256-1WjZbmZFPB1+QYpjqq5Y+fDkMZNmWJYIxmMFWg7Tiac=";
 
   nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
 
   buildInputs = [ icu fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
-  # Tectonic runs biber when it detects it needs to run it, see:
-  # https://github.com/tectonic-typesetting/tectonic/releases/tag/tectonic%400.7.0
-  postInstall = ''
-    wrapProgram $out/bin/tectonic \
-      --prefix PATH : "${lib.getBin biber}/bin"
-  '' + lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     substituteInPlace dist/appimage/tectonic.desktop \
       --replace Exec=tectonic Exec=$out/bin/tectonic
     install -D dist/appimage/tectonic.desktop -t $out/share/applications/

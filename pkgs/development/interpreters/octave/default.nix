@@ -15,7 +15,7 @@
 , portaudio
 , libX11
 , graphicsmagick
-, pcre
+, pcre2
 , pkg-config
 , libGL
 , libGLU
@@ -29,7 +29,7 @@
 , blas, lapack
 # These two should use the same lapack and blas as the above
 , qrupdate, arpack, suitesparse ? null
-# If set to true, the above 5 deps are overriden to use the blas and lapack
+# If set to true, the above 5 deps are overridden to use the blas and lapack
 # with 64 bit indexes support. If all are not compatible, the build will fail.
 , use64BitIdx ? false
 , libwebp
@@ -82,7 +82,7 @@ let
   ;
   qrupdate' = qrupdate.override {
     # If use64BitIdx is false, this override doesn't evaluate to a new
-    # derivation, as blas and lapack are not overriden.
+    # derivation, as blas and lapack are not overridden.
     blas = blas';
     lapack = lapack';
   };
@@ -112,12 +112,12 @@ let
   };
 
   self = mkDerivation rec {
-    version = "7.3.0";
+    version = "8.2.0";
     pname = "octave";
 
     src = fetchurl {
       url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
-      sha256 = "sha256-bhSkZJ1wr0WrZg+Mu/ZFqvHsM/JfiL/aRpfLF+RAxPU=";
+      sha256 = "sha256-V9F/kYqUDTjKM0ghHhELNNc1oyKofbccF3xGkqSanIQ=";
     };
 
     buildInputs = [
@@ -127,7 +127,7 @@ let
       flex
       qhull
       graphicsmagick
-      pcre
+      pcre2
       fltk
       zlib
       curl
@@ -186,7 +186,7 @@ let
     NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";
 
     # See https://savannah.gnu.org/bugs/?50339
-    F77_INTEGER_8_FLAG = if use64BitIdx then "-fdefault-integer-8" else "";
+    F77_INTEGER_8_FLAG = lib.optionalString use64BitIdx "-fdefault-integer-8";
 
     configureFlags = [
       "--with-blas=blas"

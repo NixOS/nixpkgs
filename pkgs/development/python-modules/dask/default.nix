@@ -1,50 +1,58 @@
 { lib
 , stdenv
-, bokeh
 , buildPythonPackage
+, fetchFromGitHub
+
+# build-syste
+, setuptools
+, versioneer
+
+# dependencies
 , click
 , cloudpickle
-, distributed
-, fastparquet
-, fetchFromGitHub
-, fetchpatch
 , fsspec
-, jinja2
-, numpy
+, importlib-metadata
 , packaging
-, pandas
 , partd
+, pyyaml
+, toolz
+
+# optional-dependencies
+, numpy
 , pyarrow
+, lz4
+, pandas
+, distributed
+, bokeh
+, jinja2
+
+# tests
+, arrow-cpp
+, hypothesis
+, pytest-asyncio
 , pytest-rerunfailures
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
-, pyyaml
-, scipy
-, toolz
-, zarr
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.10.2";
-  format = "setuptools";
+  version = "2023.7.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
-    rev = version;
-    hash = "sha256-zHJR2WjHigUMWtRJW25+gk1fKGKedU53BBjwx5zaodA=";
+    repo = "dask";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1KnvIMEWT1MwlvkdgH10xk+lGSsGWJMLBonTtWwKjog=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Fix test_repartition_npartitions on platforms other than x86-64
-      url = "https://github.com/dask/dask/commit/65f40ad461c57065f981e6213e33b1d13cc9bc8f.patch";
-      hash = "sha256-KyTSms4ik1kYtL+I/huAxD+zK2AAuPkwmHA9FYk601Y=";
-    })
+  nativeBuildInputs = [
+    setuptools
+    versioneer
   ];
 
   propagatedBuildInputs = [
@@ -54,16 +62,22 @@ buildPythonPackage rec {
     packaging
     partd
     pyyaml
+    importlib-metadata
     toolz
   ];
 
-  passthru.optional-dependencies = {
+  passthru.optional-dependencies = lib.fix (self: {
     array = [
       numpy
     ];
     complete = [
-      distributed
-    ];
+      pyarrow
+      lz4
+    ]
+    ++ self.array
+    ++ self.dataframe
+    ++ self.distributed
+    ++ self.diagnostics;
     dataframe = [
       numpy
       pandas
@@ -75,16 +89,17 @@ buildPythonPackage rec {
       bokeh
       jinja2
     ];
-  };
+  });
 
-  checkInputs = [
-    fastparquet
-    pyarrow
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
-    scipy
-    zarr
+    # from panda[test]
+    hypothesis
+    pytest-asyncio
+  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+    pyarrow
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -97,9 +112,10 @@ buildPythonPackage rec {
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
 
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace " --durations=10" "" \
-      --replace " -v" ""
+      --replace " --cov-config=pyproject.toml" "" \
+      --replace "\"-v" "\" "
   '';
 
   pytestFlagsArray = [
@@ -107,8 +123,6 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # DeprecationWarning: The 'sym_pos' keyword is deprecated and should be replaced by using 'assume_a = "pos"'. 'sym_pos' will be removed in SciPy 1.11.0.
-    "-W" "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -118,9 +132,10 @@ buildPythonPackage rec {
     # AttributeError: 'str' object has no attribute 'decode'
     "test_read_dir_nometa"
   ] ++ [
-    "test_chunksize_files"
-    # TypeError: 'ArrowStringArray' with dtype string does not support reduction 'min'
-    "test_set_index_string"
+    # AttributeError: 'ArrowStringArray' object has no attribute 'tobytes'. Did you mean: 'nbytes'?
+    "test_dot"
+    "test_dot_nan"
+    "test_merge_column_with_nulls"
   ];
 
   __darwinAllowLocalNetworking = true;

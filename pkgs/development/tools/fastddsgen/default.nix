@@ -1,21 +1,23 @@
-{ lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle, openjdk11, git, perl, cmake }:
+{ lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle_7, openjdk17, git, perl, cmake }:
 let
   pname = "fastddsgen";
-  version = "2.2.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS-Gen";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-P0Fj8znhky8mTebnoNyojKDdnDowQaGXpX5L0CHcEeU=";
+    hash = "sha256-3x99FfdxSfqa2+BNZ3lZQzRgjwGhbm5PKezoS6fs5Ts=";
   };
+
+  gradle = gradle_7;
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-    nativeBuildInputs = [ gradle openjdk11 perl ];
+    nativeBuildInputs = [ gradle openjdk17 perl ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
@@ -33,13 +35,13 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-wnnoyaO1QndAYrqmYu1fO6OJrP1NQs8IX4uh37dVntY=";
+    outputHash = "sha256-ZGWTK665wIX/Biz4JDrbaU4EZNqT7Q8o6DSpziUd/SM=";
   };
 in
 stdenv.mkDerivation {
   inherit pname src version;
 
-  nativeBuildInputs = [ gradle openjdk11 ];
+  nativeBuildInputs = [ gradle openjdk17 ];
 
   # use our offline deps
   postPatch = ''
@@ -72,7 +74,7 @@ stdenv.mkDerivation {
     # Override the default start script to use absolute java path
     cat  <<EOF >$out/bin/fastddsgen
     #!${runtimeShell}
-    exec ${openjdk11}/bin/java -jar "$out/share/fastddsgen/java/fastddsgen.jar" "\$@"
+    exec ${openjdk17}/bin/java -jar "$out/share/fastddsgen/java/fastddsgen.jar" "\$@"
     EOF
     chmod a+x "$out/bin/fastddsgen"
 
@@ -92,6 +94,6 @@ stdenv.mkDerivation {
       used to publish or subscribe.
     '';
     maintainers = with maintainers; [ wentasah ];
-    platforms = openjdk11.meta.platforms;
+    platforms = openjdk17.meta.platforms;
   };
 }

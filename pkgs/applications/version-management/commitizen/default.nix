@@ -1,66 +1,60 @@
-{ buildPythonApplication
-, colorama
-, decli
+{ lib
+, commitizen
 , fetchFromGitHub
 , git
-, jinja2
-, lib
-, packaging
-, poetry
-, pytest-freezegun
-, pytest-mock
-, pytest-regressions
-, pytestCheckHook
-, pyyaml
-, questionary
-, termcolor
-, tomlkit
-, typing-extensions
-, argcomplete
-, nix-update-script
+, python3
+, testers
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.37.0";
+  version = "3.5.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-wo1I6QDWLxByHISmkPdass+BcKh0oxR5hD31UN/5+WQ=";
-    deepClone = true;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4m3NCnGUX9lHCk6czwzxXLqf8GLi2u2A/crBZYTyplA=";
   };
 
-  format = "pyproject";
+  pythonRelaxDeps = [
+    "decli"
+  ];
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
 
-  propagatedBuildInputs = [
-    termcolor
-    questionary
+  propagatedBuildInputs = with python3.pkgs; [
+    argcomplete
+    charset-normalizer
     colorama
     decli
-    tomlkit
+    importlib-metadata
     jinja2
-    pyyaml
-    argcomplete
-    typing-extensions
     packaging
+    pyyaml
+    questionary
+    termcolor
+    tomlkit
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    argcomplete
+    deprecated
+    git
+    py
+    pytest-freezer
+    pytest-mock
+    pytest-regressions
+    pytestCheckHook
   ];
 
   doCheck = true;
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-freezegun
-    pytest-mock
-    pytest-regressions
-    argcomplete
-    git
-  ];
-
-  # the tests require a functional git installation
+  # The tests require a functional git installation
   # which requires a valid HOME directory.
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -79,10 +73,15 @@ buildPythonApplication rec {
     "test_bump_pre_commit_changelog"
     "test_bump_pre_commit_changelog_fails_always"
     "test_get_commits_with_signature"
+    # fatal: not a git repository (or any of the parent directories): .git
+    "test_commitizen_debug_excepthook"
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = commitizen;
+      command = "cz version";
+    };
   };
 
   meta = with lib; {

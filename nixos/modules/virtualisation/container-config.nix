@@ -8,7 +8,9 @@ with lib;
 
     # Disable some features that are not useful in a container.
 
+    # containers don't have a kernel
     boot.kernel.enable = false;
+    boot.modprobeConfig.enable = false;
 
     console.enable = mkDefault false;
 
@@ -23,6 +25,9 @@ with lib;
 
     # containers do not need to setup devices
     services.udev.enable = false;
+
+    # containers normally do not need to manage logical volumes
+    services.lvm.enable = lib.mkDefault false;
 
     # Shut up warnings about not having a boot loader.
     system.build.installBootLoader = lib.mkDefault "${pkgs.coreutils}/bin/true";

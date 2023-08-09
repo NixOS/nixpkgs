@@ -1,7 +1,7 @@
 { stdenv, fetchurl, dpkg, xorg
 , glib, libGLU, libGL, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk3, pango
-, makeWrapper , python3Packages, lib
+, makeWrapper , python3Packages, lib, libcap
 , lsof, curl, libuuid, cups, mesa, xz, libxkbcommon
 }:
 
@@ -14,7 +14,7 @@ let
 
   data = all_data.${system_map.${stdenv.hostPlatform.system} or (throw "Unsupported platform")};
 
-  baseUrl = "http://repo.sinew.in";
+  baseUrl = "https://apt.enpass.io";
 
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
@@ -32,12 +32,17 @@ let
     libXrender
     libXScrnSaver
     libxcb
+    libcap
     glib
     gtk3
     pango
     curl
     libuuid
     cups
+    xcbutilwm         # libxcb-icccm.so.4
+    xcbutilimage      # libxcb-image.so.0
+    xcbutilkeysyms    # libxcb-keysyms.so.1
+    xcbutilrenderutil # libxcb-render-util.so.0
     xz
     libxkbcommon
   ]);
@@ -57,7 +62,7 @@ let
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       platforms = [ "x86_64-linux" "i686-linux"];
-      maintainers = with maintainers; [ ewok ];
+      maintainers = with maintainers; [ ewok dritter ];
     };
 
     nativeBuildInputs = [ makeWrapper ];

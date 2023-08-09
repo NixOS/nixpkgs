@@ -5,7 +5,6 @@
 , gnatcoll-core
 , gprbuild
 , python3
-, why3
 , ocaml
 , ocamlPackages
 , makeWrapper
@@ -45,19 +44,17 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # gnat2why/gnat_src points to the GNAT sources
-    tar xf ${gnat12.cc.src} gcc-12.2.0/gcc/ada
-    mv gcc-12.2.0/gcc/ada gnat2why/gnat_src
+    tar xf ${gnat12.cc.src} gcc-${gnat12.cc.version}/gcc/ada
+    mv gcc-${gnat12.cc.version}/gcc/ada gnat2why/gnat_src
   '';
 
   configurePhase = ''
     make setup
   '';
 
-  postInstall = ''
+  installPhase = ''
+    make install-all
     cp -a ./install/. $out
-    # help gnatprove to locate why3server
-    wrapProgram "$out/bin/gnatprove" \
-        --prefix PATH : "${why3}/lib/why3"
   '';
 
   meta = with lib; {

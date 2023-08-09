@@ -1,17 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, systemd, nixosTests, bcc }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, grafana-agent
+, nixosTests
+, stdenv
+, systemd
+, testers
+}:
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.29.0";
+  version = "0.35.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-6CnYoUECT6vcQw2v7GLRzOtlL4tKKpz4VADuz9MxseM=";
+    rev = "v${version}";
+    hash = "sha256-jotJe7DIPYNekAxiMdghdykEXVD7Pk/MPWSH2XjhkL8=";
   };
 
-  vendorSha256 = "sha256-FSxkldMYMmyjVv6UYeZlceygkfKFzZK2udeUNBbpYnc=";
+  vendorHash = "sha256-MqUkGKOzx8Qo9xbD9GdUryVwKjpVUOXFo2x0/2uz8Uk=";
+  proxyVendor = true; # darwin/linux hash mismatch
 
   ldflags = let
     prefix = "github.com/grafana/agent/pkg/build";
@@ -28,40 +37,42 @@ buildGoModule rec {
   tags = [
     "nonetwork"
     "nodocker"
+    "promtail_journal_enabled"
   ];
 
   subPackages = [
-    "cmd/agent"
-    "cmd/agentctl"
+    "cmd/grafana-agent"
+    "cmd/grafana-agentctl"
   ];
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = [ "-I${lib.getDev systemd}/include" ];
-
-  buildInputs = [ bcc ];
-
-  # tries to access /sys: https://github.com/grafana/agent/issues/333
-  preBuild = ''
-    rm pkg/integrations/node_exporter/node_exporter_test.go
-  '';
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isLinux [ "-I${lib.getDev systemd}/include" ]);
 
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
   # runtime.
   # Add to RUNPATH so it can be found.
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     patchelf \
-      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/agent)" \
-      $out/bin/agent
+      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/grafana-agent)" \
+      $out/bin/grafana-agent
   '';
 
-  passthru.tests.grafana-agent = nixosTests.grafana-agent;
+  passthru.tests = {
+    inherit (nixosTests) grafana-agent;
+    version = testers.testVersion {
+      inherit version;
+      command = "${lib.getExe grafana-agent} --version";
+      package = grafana-agent;
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
-    maintainers = with maintainers; [ flokli ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/grafana/agent/blob/${src.rev}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ flokli emilylange ];
+    mainProgram = "grafana-agent";
   };
 }

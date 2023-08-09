@@ -6,6 +6,7 @@
 , ninja
 , pkg-config
 , wayland-protocols
+, wayland-scanner
 , grim
 , inih
 , libdrm
@@ -19,17 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UztkfvMIbslPd/d262NZFb6WfESc9nBsSSH96BA4Aqw=";
+    sha256 = "sha256-EwBHkXFEPAEgVUGC/0e2Bae/rV5lec1ttfbJ5ce9cKw=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-protocols makeWrapper ];
-  buildInputs = [ inih libdrm mesa pipewire scdoc systemd wayland ];
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner makeWrapper ];
+  buildInputs = [ inih libdrm mesa pipewire systemd wayland wayland-protocols ];
 
   mesonFlags = [
     "-Dsd-bus-provider=libsystemd"

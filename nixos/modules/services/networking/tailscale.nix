@@ -4,10 +4,7 @@ with lib;
 
 let
   cfg = config.services.tailscale;
-  firewallOn = config.networking.firewall.enable;
-  rpfMode = config.networking.firewall.checkReversePath;
   isNetworkd = config.networking.useNetworkd;
-  rpfIsStrict = rpfMode == true || rpfMode == "strict";
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
 
@@ -32,16 +29,40 @@ in {
       description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.tailscale;
-      defaultText = literalExpression "pkgs.tailscale";
-      description = lib.mdDoc "The package to use for tailscale";
+    package = lib.mkPackageOptionMD pkgs "tailscale" {};
+
+    useRoutingFeatures = mkOption {
+      type = types.enum [ "none" "client" "server" "both" ];
+      default = "none";
+      example = "server";
+      description = lib.mdDoc ''
+        Enables settings required for Tailscale's routing features like subnet routers and exit nodes.
+
+        To use these these features, you will still need to call `sudo tailscale up` with the relevant flags like `--advertise-exit-node` and `--exit-node`.
+
+        When set to `client` or `both`, reverse path filtering will be set to loose instead of strict.
+        When set to `server` or `both`, IP forwarding will be enabled.
+      '';
+    };
+
+    authKeyFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/run/secrets/tailscale_key";
+      description = lib.mdDoc ''
+        A file containing the auth key.
+      '';
+    };
+
+    extraUpFlags = mkOption {
+      description = lib.mdDoc "Extra flags to pass to {command}`tailscale up`.";
+      type = types.listOf types.str;
+      default = [];
+      example = ["--ssh"];
     };
   };
 
   config = mkIf cfg.enable {
-    warnings = optional (firewallOn && rpfIsStrict) "Strict reverse path filtering breaks Tailscale exit node use and some subnet routing setups. Consider setting `networking.firewall.checkReversePath` = 'loose'";
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
@@ -49,7 +70,8 @@ in {
       path = [
         config.networking.resolvconf.package # for configuring DNS in some configs
         pkgs.procps     # for collecting running services (opt-in feature)
-        pkgs.glibc      # for `getent` to look up user shells
+        pkgs.getent     # for `getent` to look up user shells
+        pkgs.kmod       # required to pass tailscale's v6nat check
       ];
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
@@ -70,6 +92,28 @@ in {
       # linux distros.
       stopIfChanged = false;
     };
+
+    systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
+      after = ["tailscale.service"];
+      wants = ["tailscale.service"];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+      };
+      script = ''
+        status=$(${config.systemd.package}/bin/systemctl show -P StatusText tailscaled.service)
+        if [[ $status != Connected* ]]; then
+          ${cfg.package}/bin/tailscale up --auth-key 'file:${cfg.authKeyFile}' ${escapeShellArgs cfg.extraUpFlags}
+        fi
+      '';
+    };
+
+    boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
+      "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
+      "net.ipv6.conf.all.forwarding" = mkOverride 97 true;
+    };
+
+    networking.firewall.checkReversePath = mkIf (cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both") "loose";
 
     networking.dhcpcd.denyInterfaces = [ cfg.interfaceName ];
 

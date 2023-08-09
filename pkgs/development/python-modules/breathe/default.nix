@@ -2,6 +2,7 @@
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , sphinx
@@ -21,12 +22,19 @@ buildPythonPackage rec {
     hash = "sha256-OOc3XQjqQa0cVpA+/HHco+koL+0whUm5qC7x3xiEdwQ=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/breathe-doc/breathe/commit/de3504c81c7cefc87c8229743f93232ca00a685d.patch";
+      hash = "sha256-UGld5j0F/hnTuS7KUFvgQL52xCUdaJ3/NeuEuHhpCxI=";
+    })
+  ];
+
   propagatedBuildInputs = [
     docutils
     sphinx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

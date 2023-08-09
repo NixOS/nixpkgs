@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   preCheck = "export HOME=$TEMPDIR";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-cov
   ];

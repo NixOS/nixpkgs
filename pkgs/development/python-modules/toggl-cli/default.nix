@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "sha256-ncMwiMwYivaFu5jrAsm1oCuXP/PZ2ALT+M+CmV6dtFo=";
+    hash = "sha256-ncMwiMwYivaFu5jrAsm1oCuXP/PZ2ALT+M+CmV6dtFo=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     validate-email
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     faker
@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "notify-py==0.3.1" "notify-py>=0.3.1" \
+      --replace "notify-py==0.3.3" "notify-py>=0.3.3" \
       --replace "click==8.0.3" "click>=8.0.3" \
       --replace "pbr==5.8.0" "pbr>=5.8.0" \
       --replace "inquirer==2.9.1" "inquirer>=2.9.1"

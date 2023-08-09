@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: ../util/libutil.a(estream-printf.o):/build/gnupg-1.4.23/util/../include/memory.h:100: multiple definition of
   #     `memory_debug_mode'; gpgsplit.o:/build/gnupg-1.4.23/tools/../include/memory.h:100: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   doCheck = true;
 

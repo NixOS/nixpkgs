@@ -1,33 +1,34 @@
 { lib
 , rustPlatform
 , fetchCrate
-, pkg-config
-, openssl
 , stdenv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "0.1.89";
+  version = "1.0.9";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-xPF8HW4QFXLLjg2HO5Pl+uQ44XCdAHc6koVpVXxN6dE=";
+    hash = "sha256-dO0GzbMopX84AKOtJYYW6vojcs4kYcZ8LQ4tXEgUN7I=";
   };
 
-  cargoSha256 = "sha256-dDSmiMwDbVDfStXamQvOMBBO5MiuDFhgzWPx0oYwzcM=";
+  cargoHash = "sha256-RQnyVRHWrqnKcI3Jy593jDTydG1nGyrScsqSNyJTDJk=";
 
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.IOKit
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
-
-  # memory allocation of 34359738368 bytes failed
+  # tests are broken
   doCheck = false;
+
+  # enable nightly features
+  RUSTC_BOOTSTRAP = true;
 
   meta = with lib; {
     description = "A pure functional compile target that is lazy, non-garbage-collected, and parallel";
-    homepage = "https://github.com/kindelia/hvm";
+    homepage = "https://github.com/higherorderco/hvm";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

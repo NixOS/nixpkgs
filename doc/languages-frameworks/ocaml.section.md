@@ -38,12 +38,12 @@ Here is a simple package example.
 
 - It uses the `fetchFromGitHub` fetcher to get its source.
 
-- `duneVersion = "2"` ensures that Dune version 2 is used for the
-  build (this is the default; valid values are `"1"`, `"2"`, and `"3"`);
-  note that there is also a legacy `useDune2` boolean attribute:
-  set to `false` it corresponds to `duneVersion = "1"`; set to `true` it
-  corresponds to `duneVersion = "2"`. If both arguments (`duneVersion` and
-  `useDune2`) are given, the second one (`useDune2`) is silently ignored.
+- It also accept `duneVersion` parameter (valid value are `"1"`, `"2"`, and
+  `"3"`). The recommended practice it to set only if you don't want the default
+  value and/or it depends on something else like package version. You might see
+  a not-supported argument `useDune2`. The behavior was `useDune2 = true;` =>
+  `duneVersion = "2";` and `useDune2 = false;` => `duneVersion = "1";`. It was
+  used at the time when dune3 didn't existed.
 
 - It sets the optional `doCheck` attribute such that tests will be run with
   `dune runtest -p angstrom` after the build (`dune build -p angstrom`) is
@@ -71,7 +71,6 @@ Here is a simple package example.
 buildDunePackage rec {
   pname = "angstrom";
   version = "0.15.0";
-  duneVersion = "2";
 
   minimalOCamlVersion = "4.04";
 
@@ -79,7 +78,7 @@ buildDunePackage rec {
     owner  = "inhabitedtype";
     repo   = pname;
     rev    = version;
-    sha256 = "1hmrkdcdlkwy7rxhngf3cv3sa61cznnd9p5lmqhx20664gx2ibrh";
+    hash   = "sha256-MK8o+iPGANEhrrTc1Kz9LBilx2bDPQt7Pp5P2libucI=";
   };
 
   checkInputs = [ alcotest ppx_let ];
@@ -104,13 +103,11 @@ buildDunePackage rec {
   pname = "wtf8";
   version = "1.0.2";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "09ygcxxd5warkdzz17rgpidrd0pg14cy2svvnvy1hna080lzg7vp";
+    hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 
   meta = with lib; {
@@ -129,3 +126,8 @@ packaged libraries may still use the old spelling: maintainers are invited to
 fix this when updating packages. Massive renaming is strongly discouraged as it
 would be challenging to review, difficult to test, and will cause unnecessary
 rebuild.
+
+The build will automatically fail if two distinct versions of the same library
+are added to `buildInputs` (which usually happens transitively because of
+`propagatedBuildInputs`). Set `dontDetectOcamlConflicts` to true to disable this
+behavior.

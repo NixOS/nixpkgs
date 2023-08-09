@@ -11,7 +11,7 @@ mkDerivation rec {
     sha256 = "1238d1m0mjkwkdpgq165a4ql9aql0aji5f41rzdzny6m7ws9nm2y";
   };
 
-  sourceRoot = "source/src-qt5";
+  sourceRoot = "${src.name}/src-qt5";
 
   nativeBuildInputs = [ qmake qttools ];
 

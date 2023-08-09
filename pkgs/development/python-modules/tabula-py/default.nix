@@ -2,27 +2,36 @@
 , buildPythonPackage
 , distro
 , fetchFromGitHub
-, jdk
+, jre
 , numpy
 , pandas
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.5.1";
-  format = "setuptools";
+  version = "2.7.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "chezou";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Dfi6LzrLDz9VVDmbeK1dEaWuQosD4tvAH13Q4Mp3smA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SV4QLvk7dXtU0/husS5A5mBYvbTejLyO9PpiO2oBtjs=";
   };
+
+  patches = [
+    ./java-interpreter-path.patch
+  ];
+
+  postPatch = ''
+    sed -i 's|@JAVA@|${jre}/bin/java|g' $(find -name '*.py')
+  '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -34,10 +43,10 @@ buildPythonPackage rec {
     distro
     numpy
     pandas
+    setuptools
   ];
 
-  checkInputs = [
-    jdk
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -56,6 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to extract table from PDF into pandas DataFrame";
     homepage = "https://github.com/chezou/tabula-py";
+    changelog = "https://github.com/chezou/tabula-py/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

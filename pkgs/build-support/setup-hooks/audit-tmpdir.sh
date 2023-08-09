@@ -13,10 +13,10 @@ auditTmpdir() {
     local dir="$1"
     [ -e "$dir" ] || return 0
 
-    header "checking for references to $TMPDIR/ in $dir..."
+    echo "checking for references to $TMPDIR/ in $dir..."
 
     local i
-    while IFS= read -r -d $'\0' i; do
+    find "$dir" -type f -print0 | while IFS= read -r -d $'\0' i; do
         if [[ "$i" =~ .build-id ]]; then continue; fi
 
         if isELF "$i"; then
@@ -35,7 +35,5 @@ auditTmpdir() {
             fi
         fi
 
-    done < <(find "$dir" -type f -print0)
-
-    stopNest
+    done
 }

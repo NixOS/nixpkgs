@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
-  checkInputs = [
+  nativeCheckInputs = [
     perl
     lhapdf.pdf_sets.CT10nlo
   ];

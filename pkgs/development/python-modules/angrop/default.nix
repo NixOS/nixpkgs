@@ -4,13 +4,13 @@
 , fetchFromGitHub
 , progressbar
 , pythonOlder
-, pythonRelaxDepsHook
+, setuptools
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "angrop";
-  version = "9.2.7";
+  version = "9.2.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,22 +18,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-wIPk7Cz7FSPviPFBSLrBjLr9M0o3pyoJM7wiAhHrg9Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zmWdGbFzwLDP7MUqEprZcIgA7lAdCrafWYohAehJyh0=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
+    setuptools
   ];
 
   propagatedBuildInputs = [
     angr
     progressbar
     tqdm
-  ];
-
-  pythonRelaxDeps = [
-    "angr"
   ];
 
   # Tests have additional requirements, e.g., angr binaries

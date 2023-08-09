@@ -1,5 +1,5 @@
 # This module defines the software packages included in the "minimal"
-# installation CD.  It might be useful elsewhere.
+# installation CD. It might be useful elsewhere.
 
 { config, lib, pkgs, ... }:
 
@@ -17,18 +17,23 @@
     pkgs.ddrescue
     pkgs.ccrypt
     pkgs.cryptsetup # needed for dm-crypt volumes
-    pkgs.mkpasswd # for generating password files
 
     # Some text editors.
-    pkgs.vim
+    (pkgs.vim.customize {
+      name = "vim";
+      vimrcConfig.packages.default = {
+        start = [ pkgs.vimPlugins.vim-nix ];
+      };
+      vimrcConfig.customRC = "syntax on";
+    })
 
     # Some networking tools.
     pkgs.fuse
     pkgs.fuse3
     pkgs.sshfs-fuse
-    pkgs.rsync
     pkgs.socat
     pkgs.screen
+    pkgs.tcpdump
 
     # Hardware-related tools.
     pkgs.sdparm
@@ -36,23 +41,16 @@
     pkgs.smartmontools # for diagnosing hard disks
     pkgs.pciutils
     pkgs.usbutils
-
-    # Tools to create / manipulate filesystems.
-    pkgs.ntfsprogs # for resizing NTFS partitions
-    pkgs.dosfstools
-    pkgs.mtools
-    pkgs.xfsprogs.bin
-    pkgs.jfsutils
-    pkgs.f2fs-tools
+    pkgs.nvme-cli
 
     # Some compression/archiver tools.
     pkgs.unzip
     pkgs.zip
   ];
 
-  # Include support for various filesystems.
+  # Include support for various filesystems and tools to create / manipulate them.
   boot.supportedFilesystems =
-    [ "btrfs" "reiserfs" "vfat" "f2fs" "xfs" "ntfs" "cifs" ] ++
+    [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" ] ++
     lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform config.boot.zfs.package) "zfs";
 
   # Configure host id for ZFS to work

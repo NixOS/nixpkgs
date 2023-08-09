@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "out-of-tree";
-  version = "1.4.0";
+  version = "2.0.4";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
     url = "https://code.dumpstack.io/tools/${pname}.git";
-    sha256 = "1rn824l3dzh3xjxsbzzj053qg1abhzjimc8l73r0n5qrl44k2qk2";
+    sha256 = "sha256-D2LiSDnF7g1h0XTulctCnZ+I6FZSLA0XRd9LQLOMP9c=";
   };
 
-  vendorSha256 = "0kg5c4h7xnwfcfshrh5n76xv98wzr73kxzr8q65iphsjimbxcpy3";
+  vendorSha256 = "sha256-p1dqzng3ak9lrnzrEABhE1TP1lM2Ikc8bmvp5L3nUp0=";
 
   doCheck = false;
 
   postFixup = ''
     wrapProgram $out/bin/out-of-tree \
-      --prefix PATH : "${lib.makeBinPath [ qemu docker which ]}"
+      --prefix PATH : "${lib.makeBinPath [ qemu ]}"
   '';
 
   meta = with lib; {

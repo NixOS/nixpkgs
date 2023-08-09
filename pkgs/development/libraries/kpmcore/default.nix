@@ -1,16 +1,22 @@
-{ stdenv, lib, fetchurl, extra-cmake-modules
-, qca-qt5, kauth, kio, polkit-qt, qtbase
+{ stdenv
+, lib
+, fetchurl
+, extra-cmake-modules
+, qca-qt5
+, kauth
+, kio
+, polkit-qt
 , util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "kpmcore";
   # NOTE: When changing this version, also change the version of `partition-manager`.
-  version = "22.08.0";
+  version = "23.04.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-Ws20hKX2iDdke5yBBKXukVUD4OnLf1OmwlhW+jUXL24=";
+    hash = "sha256-NFIq8CZwYvpqDOOYLlBqoGdgfNPsyf15FkB3dToDCB8=";
   };
 
   patches = [
@@ -42,7 +48,5 @@ stdenv.mkDerivation rec {
     homepage = "https://invent.kde.org/system/kpmcore";
     license = with licenses; [ cc-by-40 cc0 gpl3Plus mit ];
     maintainers = with maintainers; [ peterhoeg oxalica ];
-    # The build requires at least Qt 5.14:
-    broken = versionOlder qtbase.version "5.14";
   };
 }

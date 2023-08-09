@@ -13,12 +13,14 @@
 
 buildPythonPackage rec {
   pname = "locationsharinglib";
-  version = "4.1.8";
+  version = "5.0.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-69NzKSWpuU0Riwlj6cFC4h/shc/83e1mpq++zxDqftY=";
+    hash = "sha256-KT/q1UIJ/DzGqz8T08MXG9UCstAcpDydM4Tkn33pruI=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +30,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     emoji
     nose
@@ -38,8 +40,9 @@ buildPythonPackage rec {
     # Tests requirements want to pull in multiple modules which we don't need
     substituteInPlace setup.py \
       --replace "tests_require=test_requirements" "tests_require=[]"
-     substituteInPlace requirements.txt \
-       --replace "coloredlogs>=15.0.1" "coloredlogs"
+    substituteInPlace requirements.txt \
+      --replace "coloredlogs>=15.0.1" "coloredlogs" \
+      --replace "pytz>=2023.3" "pytz"
   '';
 
   checkPhase = ''
@@ -49,11 +52,14 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "locationsharinglib" ];
+  pythonImportsCheck = [
+    "locationsharinglib"
+  ];
 
   meta = with lib; {
     description = "Python package to retrieve coordinates from a Google account";
     homepage = "https://locationsharinglib.readthedocs.io/";
+    changelog = "https://github.com/costastf/locationsharinglib/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

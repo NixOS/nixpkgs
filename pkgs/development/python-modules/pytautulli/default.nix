@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytautulli";
-  version = "21.11.0";
+  version = "23.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-zODU3aN+8Fdw/GQ/EfZhn6kOuLDARKgLULzRw2+b2BM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5wE8FjLFu1oQkVqnWsbp253dsQ1/QGWC6hHSIFwLajY=";
   };
 
   postPatch = ''
@@ -33,14 +33,17 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
-    aresponses
-    pytest-asyncio
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
+  checkInputs = [
+    aresponses
+    pytest-asyncio
+  ];
+
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
   ];
 
   pythonImportsCheck = [
@@ -50,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to get information from Tautulli";
     homepage = "https://github.com/ludeeus/pytautulli";
+    changelog = "https://github.com/ludeeus/pytautulli/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -41,6 +41,12 @@ let
         RestrictNamespaces = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+
+        # Because of various issues Invidious must be restarted often, at least once a day, ideally
+        # every hour.
+        # This option enables the automatic restarting of the Invidious instance.
+        Restart = lib.mkDefault "always";
+        RuntimeMaxSec = lib.mkDefault "1h";
       };
     };
 
@@ -56,7 +62,7 @@ let
         port = cfg.database.port;
         # Blank for unix sockets, see
         # https://github.com/will/crystal-pg/blob/1548bb255210/src/pq/conninfo.cr#L100-L108
-        host = if cfg.database.host == null then "" else cfg.database.host;
+        host = lib.optionalString (cfg.database.host != null) cfg.database.host;
         # Not needed because peer authentication is enabled
         password = lib.mkIf (cfg.database.host == null) "";
       };
@@ -151,7 +157,7 @@ in
     package = lib.mkOption {
       type = types.package;
       default = pkgs.invidious;
-      defaultText = "pkgs.invidious";
+      defaultText = lib.literalExpression "pkgs.invidious";
       description = lib.mdDoc "The Invidious package to use.";
     };
 
@@ -171,7 +177,7 @@ in
       description = lib.mdDoc ''
         A file including Invidious settings.
 
-        It gets merged with the setttings specified in {option}`services.invidious.settings`
+        It gets merged with the settings specified in {option}`services.invidious.settings`
         and can be used to store secrets like `hmac_key` outside of the nix store.
       '';
     };

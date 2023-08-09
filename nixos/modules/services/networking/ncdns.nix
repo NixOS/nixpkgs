@@ -85,7 +85,7 @@ in
           ```
           bit. IN NS ns1.example.com.
           ```
-          If unset ncdns will generate an internal psuedo-hostname under the
+          If unset ncdns will generate an internal pseudo-hostname under the
           zone, which will resolve to the value of
           {option}`services.ncdns.identity.address`.
           If you are only using ncdns locally you can ignore this.

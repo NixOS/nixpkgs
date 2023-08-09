@@ -15,7 +15,7 @@
 , pytz
 , requests
 , six
-, zope_component
+, zope-component
 , zope_interface
 , dialog
 , gnureadline
@@ -26,16 +26,16 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "1.31.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-JDhesUU6SQBEf0CG3vo1AhlRfGpltTEUmSqrpGIpptg=";
+    hash = "sha256-BQsdhlYABZtz5+SORiCVnWMZdMmiWGM9W1YLqObyFo8=";
   };
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   propagatedBuildInputs = [
     configargparse
@@ -50,13 +50,13 @@ buildPythonPackage rec {
     pytz
     requests
     six
-    zope_component
+    zope-component
     zope_interface
   ];
 
   buildInputs = [ dialog gnureadline ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python-dateutil
     pytestCheckHook
     pytest-xdist

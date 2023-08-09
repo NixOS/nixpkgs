@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://empty.sourceforge.net";
+    homepage = "https://empty.sourceforge.net";
     description = "A simple tool to automate interactive terminal applications";
     license = licenses.bsd3;
     platforms = platforms.all;

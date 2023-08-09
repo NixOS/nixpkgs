@@ -13,21 +13,21 @@
 , libXrandr
 , libXi
 , gnome
-, kdialog
+, libsForQt5
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ludusavi";
-  version = "0.15.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3nh1EhjiH+dUBw3CNeFSg/+Wkxr5AYgVdM1HzVKbqJI=";
+    hash = "sha256-6wwBXgR0jutkM3L7Ihi4qryuOeBRItQTyKn2lNcvfdQ=";
   };
 
-  cargoSha256 = "sha256-l9jYqmKC0GJL9MSRbrNng4rO6/dx4q8EVCxfuin4v6E=";
+  cargoSha256 = "sha256-9ksstWNqc2Rq5fdb4/LLHGMUXQgri9BAo2LlkFl3Irg=";
 
   nativeBuildInputs = [
     cmake
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/$pname"
-      wrapProgram $out/bin/$pname --prefix PATH : ${lib.makeBinPath [ gnome.zenity kdialog ]}
+      wrapProgram $out/bin/$pname --prefix PATH : ${lib.makeBinPath [ gnome.zenity libsForQt5.kdialog ]}
     '';
 
 

@@ -106,6 +106,14 @@ in
       description = lib.mdDoc "Only run the server. This option only makes sense for a server.";
     };
 
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      description = lib.mdDoc ''
+        File path containing environment variables for configuring the k3s service in the format of an EnvironmentFile. See systemd.exec(5).
+      '';
+      default = null;
+    };
+
     configPath = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -139,8 +147,8 @@ in
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = [ "network.service" "firewall.service" ];
-      wants = [ "network.service" "firewall.service" ];
+      after = [ "firewall.service" "network-online.target" ];
+      wants = [ "firewall.service" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {
@@ -154,6 +162,7 @@ in
         LimitNPROC = "infinity";
         LimitCORE = "infinity";
         TasksMax = "infinity";
+        EnvironmentFile = cfg.environmentFile;
         ExecStart = concatStringsSep " \\\n " (
           [
             "${cfg.package}/bin/k3s ${cfg.role}"

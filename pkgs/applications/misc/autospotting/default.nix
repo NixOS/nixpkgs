@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "autospotting";
-  version = "unstable-2022-02-17";
+  version = "unstable-2023-07-03";
 
   src = fetchFromGitHub {
-    owner = "cloudutil";
+    owner = "LeanerCloud";
     repo = "AutoSpotting";
-    rev = "f295a1f86c4a21144fc7fe28a69da5668fb7ad0c";
-    sha256 = "sha256-n5R5RM2fv3JWqtbSsyb7GWS4032dkgcihAKbpjB/5PM=";
+    rev = "6b08f61d72eafddf01bb68ccb789505f1c7be3eb";
+    hash = "sha256-gW8AIPqwNXfjsPxPv/5+gF374wTw8iavhjmlG4Onkxg=";
   };
 
-  vendorSha256 = "sha256-w7OHGZ7zntu8ZlI5gA19Iq7TKR23BQk9KpkUO+njL9Q=";
+  vendorHash = "sha256-RuBchKainwE6RM3AphKWjndGZc1nh7A/Xxcacq1r7Nk=";
 
   excludedPackages = [ "scripts" ];
 
@@ -23,6 +23,5 @@ buildGoModule rec {
     license = licenses.osl3;
     maintainers = with maintainers; [ costrouc ];
     mainProgram = "AutoSpotting";
-    platforms = platforms.unix;
   };
 }

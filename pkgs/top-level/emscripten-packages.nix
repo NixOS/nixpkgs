@@ -8,7 +8,7 @@ with pkgs;
 rec {
   json_c = (pkgs.json_c.override {
     stdenv = pkgs.emscriptenStdenv;
-  }).overrideDerivation
+  }).overrideAttrs
     (old: {
       nativeBuildInputs = [ pkg-config cmake ];
       propagatedBuildInputs = [ zlib ];
@@ -47,7 +47,7 @@ rec {
   libxml2 = (pkgs.libxml2.override {
     stdenv = emscriptenStdenv;
     pythonSupport = false;
-  }).overrideDerivation
+  }).overrideAttrs
     (old: {
       propagatedBuildInputs = [ zlib ];
       nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkg-config ];
@@ -66,7 +66,10 @@ rec {
         echo "Compiling a custom test"
         set -x
         emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 xmllint.o \
-        ./.libs/libxml2.a `pkg-config zlib --cflags` `pkg-config zlib --libs` -o ./xmllint.test.js \
+        ./.libs/''
+      + pkgs.lib.optionalString pkgs.stdenv.isDarwin "libxml2.dylib "
+      + pkgs.lib.optionalString (!pkgs.stdenv.isDarwin) "libxml2.a "
+      + '' `pkg-config zlib --cflags` `pkg-config zlib --libs` -o ./xmllint.test.js \
         --embed-file ./test/xmlid/id_err1.xml
 
         echo "Using node to execute the test which basically outputs an error on stderr which we grep for"
@@ -138,11 +141,11 @@ rec {
 
   zlib = (pkgs.zlib.override {
     stdenv = pkgs.emscriptenStdenv;
-  }).overrideDerivation
+  }).overrideAttrs
     (old: {
       nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkg-config ];
       # we need to reset this setting!
-      NIX_CFLAGS_COMPILE="";
+      env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
       dontStrip = true;
       outputs = [ "out" ];
       buildPhase = ''

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libnl, iptables }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libnl, iptables }:
 
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };

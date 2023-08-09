@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://digidev.digi.e-technik.uni-kassel.de/git/scalp.git";
-    # mirrored at https://github.com/wegank/scalp.git
+    # mirrored at https://git.sr.ht/~weijia/scalp
     rev = "185b84e4ff967f42cf2de5db4db4e6fa0cc18fb8";
     sha256 = "sha256-NyMZdJwdD3FR6uweYCclJjfcf3Y24Bns1ViwsmJ5izg=";
   };

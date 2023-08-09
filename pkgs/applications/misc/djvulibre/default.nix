@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
-    homepage = "http://djvu.sourceforge.net";
+    homepage = "https://djvu.sourceforge.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Anton-Latukha ];
     platforms = platforms.all;

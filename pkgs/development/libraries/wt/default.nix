@@ -40,7 +40,7 @@ let
         description = "C++ library for developing web applications";
         platforms = platforms.linux;
         license = licenses.gpl2;
-        maintainers = with maintainers; [ juliendehos willibutz ];
+        maintainers = with maintainers; [ juliendehos ];
       };
     };
 in {
@@ -50,7 +50,7 @@ in {
   };
 
   wt4 = generic {
-    version = "4.6.1";
-    sha256 = "04pv4kb8d576bfnd9kjc3cfjls9cm3cgpaiabwb3iyq9z0w585gh";
+    version = "4.9.1";
+    sha256 = "sha256-Qm0qqYB/CLVHUgKE9N83MgAWQ2YFdumrB0i84qYNto8=";
   };
 }

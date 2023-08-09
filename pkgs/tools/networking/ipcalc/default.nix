@@ -15,14 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ipcalc";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitLab {
     owner = "ipcalc";
     repo = "ipcalc";
     rev = version;
-    hash = "sha256-UQq5TqK83I44ANU0yXD8YUTQWvBFLiAxmLSRtKUJ5WE=";
+    hash = "sha256-9eaR1zG8tjSGlkpyY1zTHAVgN5ypuyRfeRq6ct6zsLU=";
   };
+
+  patches = [
+    # disable tests which fail in NixOS sandbox (trying to access the network)
+    ./sandbox_tests.patch
+  ];
 
   # technically not needed as we do not support the paid maxmind databases, but
   # keep it around if someone wants to add support and /usr/share/GeoIP is
@@ -50,5 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/ipcalc/ipcalc";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
   };
 }

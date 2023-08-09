@@ -1,24 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch
 , nixosTests, postgresql, postgresqlTestHook }:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.10.5";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-AU8Tb50HVODB2P9vObiIx4l+PxIFR+eQEgLi3wHWT64=";
+    hash = "sha256-2DqEfTXD3W6MxfBb6aHaKH+zpxLc2tHaGuWGQuncySo=";
   };
 
-  vendorSha256 = "sha256-QqyLgxUB7MXR3SxUV0kYXH7fqQpwIc+G/2Y2ry1r4e4=";
+  patches = [
+    # Fix SQLite db lockup
+    (fetchpatch {
+      url = "https://github.com/matrix-org/dendrite/commit/c08c7405dbe9d88c1364f6f1f2466db5045506cc.patch";
+      hash = "sha256-gTF9jK5Ihfe1v49gPCK68BLeiUZa2Syo+7D9r62iEXQ=";
+    })
+  ];
+
+  vendorHash = "sha256-dc0zpKh7J+fi2b5GD/0BQ120UXbBvJLUF74RmYMSOMw=";
 
   subPackages = [
-    # The server as a monolith: https://matrix-org.github.io/dendrite/installation/install/monolith
-    "cmd/dendrite-monolith-server"
-    # The server as a polylith: https://matrix-org.github.io/dendrite/installation/install/polylith
-    "cmd/dendrite-polylith-multi"
+    # The server
+    "cmd/dendrite"
     # admin tools
     "cmd/create-account"
     "cmd/generate-config"
@@ -31,10 +37,9 @@ buildGoModule rec {
     ## tech demos
     # "cmd/dendrite-demo-pinecone"
     # "cmd/dendrite-demo-yggdrasil"
-    # "cmd/dendritejs-pinecone"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     postgresqlTestHook
     postgresql
   ];

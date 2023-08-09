@@ -1,18 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sqlite, cppcheck, gtest }:
+{ lib, stdenv, fetchFromGitHub, cmake, sqlite, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "sqlitecpp";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "SRombauts";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Z1c2lQZ0UltcIf9dTnumZPhke4uEmsjg/Ygppvx3kxY=";
+    sha256 = "sha256-3Xo/FgifbrSn0AvinriJZerUM2kbcMaoyF5ST8+1Qqw=";
   };
 
   nativeBuildInputs = [ cmake ];
-  checkInputs = [ cppcheck ];
   buildInputs = [ sqlite gtest ];
   doCheck = true;
 

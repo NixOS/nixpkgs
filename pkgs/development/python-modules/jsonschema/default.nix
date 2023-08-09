@@ -5,24 +5,36 @@
 , hatch-fancy-pypi-readme
 , hatch-vcs
 , hatchling
-, importlib-metadata
 , importlib-resources
-, pyrsistent
+, jsonschema-specifications
+, pkgutil-resolve-name
+, pytestCheckHook
 , pythonOlder
-, twisted
-, typing-extensions
+, referencing
+, rpds-py
+
+# optionals
+, fqdn
+, idna
+, isoduration
+, jsonpointer
+, rfc3339-validator
+, rfc3986-validator
+, rfc3987
+, uri-template
+, webcolors
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.16.0";
+  version = "4.18.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FlBZ8Hbv9pcbrlt0L8App7TvP5vPBMFOR3anYF3hSyM=";
+    hash = "sha256-+zZCc1OZ+pWMDSqtcFeQFVRZbGM0n09rKDxJPPaSol0=";
   };
 
   postPatch = ''
@@ -37,29 +49,47 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
-    pyrsistent
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    typing-extensions
+    jsonschema-specifications
+    referencing
+    rpds-py
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
+    pkgutil-resolve-name
   ];
 
-  checkInputs = [
-    twisted
-  ];
+  passthru.optional-dependencies = {
+    format = [
+      fqdn
+      idna
+      isoduration
+      jsonpointer
+      rfc3339-validator
+      rfc3987
+      uri-template
+      webcolors
+    ];
+    format-nongpl = [
+      fqdn
+      idna
+      isoduration
+      jsonpointer
+      rfc3339-validator
+      rfc3986-validator
+      uri-template
+      webcolors
+    ];
+  };
 
-  checkPhase = ''
-    export JSON_SCHEMA_TEST_SUITE=json
-    trial jsonschema
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "jsonschema"
   ];
 
   meta = with lib; {
-    description = "An implementation of JSON Schema validation for Python";
+    description = "An implementation of JSON Schema validation";
     homepage = "https://github.com/python-jsonschema/jsonschema";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];

@@ -14,7 +14,7 @@
 , pango
 , libsecret
 , openssh
-, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , gobject-introspection
 , wrapGAppsHook
 , gi-docgen
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     pango
     libsecret
     openssh
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (systemdSupport) [
     systemd
   ];
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
   ];
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     # We are still using ssh-agent from gnome-keyring.
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!systemdSupport) [
     "-Dsystemd=disabled"
   ];
 

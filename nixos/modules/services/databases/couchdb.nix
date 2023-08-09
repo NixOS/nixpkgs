@@ -122,7 +122,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5984;
         description = lib.mdDoc ''
           Defined the port number to listen.
@@ -141,7 +141,7 @@ in {
         type = types.lines;
         default = "";
         description = lib.mdDoc ''
-          Extra configuration. Overrides any other cofiguration.
+          Extra configuration. Overrides any other configuration.
         '';
       };
 

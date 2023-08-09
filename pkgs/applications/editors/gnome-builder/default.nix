@@ -5,7 +5,6 @@
 , desktop-file-utils
 , editorconfig-core-c
 , fetchurl
-, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -18,6 +17,7 @@
 , json-glib
 , jsonrpc-glib
 , libadwaita
+, libdex
 , libpanel
 , libpeas
 , libportal-gtk4
@@ -33,7 +33,7 @@
 , template-glib
 , vala
 , vte-gtk4
-, webkitgtk_5_0
+, webkitgtk_6_0
 , wrapGAppsHook4
 , dbus
 , xvfb-run
@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "43.2";
+  version = "44.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "dzIhF6ERsnR7zOitYFeKZ5wgIeSGkRz29OY0FjKKuzM=";
+    sha256 = "z6aJx40/AiMcp0cVV99MZIKASio08nHDXRqWLX8XKbA=";
   };
 
   patches = [
@@ -66,14 +66,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    (gi-docgen.overrideAttrs (attrs: {
-      patches = attrs.patches ++ [
-        (fetchpatch {
-          url = "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/f4ff4787cce962b705fb2588b31f2988c5063c13.patch";
-          sha256 = "11VGFFb2PLVxnX/qUQdLPLfhGQWx4sf4apBP7R2JWjA=";
-        })
-      ];
-    }))
+    gi-docgen
     gobject-introspection
     meson
     ninja
@@ -99,6 +92,7 @@ stdenv.mkDerivation rec {
     json-glib
     jsonrpc-glib
     libadwaita
+    libdex
     libpanel
     libxml2
     ostree
@@ -108,10 +102,10 @@ stdenv.mkDerivation rec {
     sysprof
     template-glib
     vala
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -136,9 +130,9 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
-    export NO_AT_BRIDGE=1
+    GTK_A11Y=none \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
 

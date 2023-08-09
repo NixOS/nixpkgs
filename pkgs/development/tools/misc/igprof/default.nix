@@ -1,14 +1,14 @@
 {lib, stdenv, fetchFromGitHub, libunwind, cmake, pcre, gdb}:
 
 stdenv.mkDerivation rec {
-  version = "5.9.16";
+  version = "5.9.18";
   pname = "igprof";
 
   src = fetchFromGitHub {
     owner = "igprof";
     repo = "igprof";
     rev = "v${version}";
-    sha256 = "0rx3mv8zdh9bmcpfbzkib3d52skzfr8600gh5gv21wcsh50jnifx";
+    sha256 = "sha256-UTrAaH8C79km78Z/7NxvQ6dnl4u4Ki80nORf4bsoSNw=";
   };
 
   postPatch = ''

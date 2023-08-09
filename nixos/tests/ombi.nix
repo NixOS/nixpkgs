@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 {
   name = "ombi";
-  meta.maintainers = with maintainers; [ woky ];
+  meta.maintainers = with lib.maintainers; [ woky ];
 
   nodes.machine =
     { pkgs, ... }:

@@ -22,6 +22,8 @@ in {
       '';
     };
 
+    package = lib.mkPackageOptionMD pkgs "grafana-loki" { };
+
     group = mkOption {
       type = types.str;
       default = "loki";
@@ -78,7 +80,7 @@ in {
       '';
     }];
 
-    environment.systemPackages = [ pkgs.grafana-loki ]; # logcli
+    environment.systemPackages = [ cfg.package ]; # logcli
 
     users.groups.${cfg.group} = { };
     users.users.${cfg.user} = {
@@ -99,7 +101,7 @@ in {
                else cfg.configFile;
       in
       {
-        ExecStart = "${pkgs.grafana-loki}/bin/loki --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${cfg.package}/bin/loki --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
         User = cfg.user;
         Restart = "always";
         PrivateTmp = true;

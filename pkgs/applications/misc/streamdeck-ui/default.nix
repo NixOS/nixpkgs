@@ -1,12 +1,13 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, poetry
+, fetchpatch
 , copyDesktopItems
 , wrapQtAppsHook
 , writeText
 , makeDesktopItem
 , xvfb-run
+, qt5
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -19,6 +20,19 @@ python3Packages.buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "sha256-5dk+5oefg5R68kv038gsZ2p5ixmpj/vBLBp/V7Sdos8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "use-poetry-core.patch";
+      url = "https://github.com/timothycrosley/streamdeck-ui/commit/e271656c1f47b1619d1b942e2ebb01ab2d6a68a9.patch";
+      hash = "sha256-wqYwX6eSqMnW6OG7wSprD62Dz818ayFduVrqW9E/ays=";
+    })
+    (fetchpatch {
+      name = "update-python-xlib-0.33.patch";
+      url = "https://github.com/timothycrosley/streamdeck-ui/commit/07d7fdd33085b413dd26b02d8a02820edad2d568.patch";
+      hash = "sha256-PylTrbfB8RJ0+kbgJlRdcvfdahGoob8LabwhuFNsUpY=";
+    })
+  ];
 
   desktopItems = [ (makeDesktopItem {
     name = "streamdeck-ui";
@@ -50,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   format = "pyproject";
 
   nativeBuildInputs = [
-    poetry
+    python3Packages.poetry-core
     copyDesktopItems
     wrapQtAppsHook
   ];
@@ -64,9 +78,11 @@ python3Packages.buildPythonApplication rec {
     pyside2
     streamdeck
     xlib
+  ] ++ lib.optionals stdenv.isLinux [
+    qt5.qtwayland
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     python3Packages.pytest
     python3Packages.hypothesis-auto

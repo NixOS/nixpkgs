@@ -1,5 +1,6 @@
 { fetchzip, lib }:
 
+lib.makeOverridable (
 { url, rev, name ? "source", ... } @ args:
 
 fetchzip ({
@@ -8,3 +9,4 @@ fetchzip ({
   stripRoot = false;
   meta.homepage = url;
 } // removeAttrs args [ "url" "rev" ]) // { inherit rev; }
+)

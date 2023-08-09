@@ -6,7 +6,7 @@ let
   cfg = config.services.dex;
   fixClient = client: if client ? secretFile then ((builtins.removeAttrs client [ "secretFile" ]) // { secret = client.secretFile; }) else client;
   filteredSettings = mapAttrs (n: v: if n == "staticClients" then (builtins.map fixClient v) else v) cfg.settings;
-  secretFiles = flatten (builtins.map (c: if c ? secretFile then [ c.secretFile ] else []) (cfg.settings.staticClients or []));
+  secretFiles = flatten (builtins.map (c: optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or []));
 
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "config.yaml" filteredSettings;
@@ -83,11 +83,12 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         BindReadOnlyPaths = [
           "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
+          "-/etc/dex"
           "-/etc/hosts"
           "-/etc/localtime"
-          "-/etc/dex"
+          "-/etc/nsswitch.conf"
+          "-/etc/resolv.conf"
+          "-/etc/ssl/certs/ca-certificates.crt"
         ];
         BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";

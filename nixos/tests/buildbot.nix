@@ -23,7 +23,7 @@ import ./make-test-python.nix {
         ];
       };
       networking.firewall.allowedTCPPorts = [ 8010 8011 9989 ];
-      environment.systemPackages = with pkgs; [ git python3Packages.buildbot-full ];
+      environment.systemPackages = with pkgs; [ git buildbot-full ];
     };
 
     bbworker = { pkgs, ... }: {
@@ -31,7 +31,7 @@ import ./make-test-python.nix {
         enable = true;
         masterUrl = "bbmaster:9989";
       };
-      environment.systemPackages = with pkgs; [ git python3Packages.buildbot-worker ];
+      environment.systemPackages = with pkgs; [ git buildbot-worker ];
     };
 
     gitrepo = { pkgs, ... }: {

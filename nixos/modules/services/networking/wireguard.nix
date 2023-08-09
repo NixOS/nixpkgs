@@ -170,13 +170,25 @@ let
 
   # peer options
 
-  peerOpts = {
+  peerOpts = self: {
 
     options = {
 
+      name = mkOption {
+        default =
+          replaceStrings
+            [ "/" "-"     " "     "+"     "="     ]
+            [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ]
+            self.config.publicKey;
+        defaultText = literalExpression "publicKey";
+        example = "bernd";
+        type = types.str;
+        description = lib.mdDoc "Name used to derive peer unit name.";
+      };
+
       publicKey = mkOption {
         example = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
-        type = types.str;
+        type = types.singleLineStr;
         description = lib.mdDoc "The base64 public key of the peer.";
       };
 
@@ -251,6 +263,21 @@ let
         '';
       };
 
+      dynamicEndpointRefreshRestartSeconds = mkOption {
+        default = null;
+        example = 5;
+        type = with types; nullOr ints.unsigned;
+        description = lib.mdDoc ''
+          When the dynamic endpoint refresh that is configured via
+          dynamicEndpointRefreshSeconds exits (likely due to a failure),
+          restart that service after this many seconds.
+
+          If set to `null` the value of
+          {option}`networking.wireguard.dynamicEndpointRefreshSeconds`
+          will be used as the default.
+        '';
+      };
+
       persistentKeepalive = mkOption {
         default = null;
         type = with types; nullOr int;
@@ -288,7 +315,7 @@ let
           set -e
 
           # If the parent dir does not already exist, create it.
-          # Otherwise, does nothing, keeping existing permisions intact.
+          # Otherwise, does nothing, keeping existing permissions intact.
           mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
 
           if [ ! -f "${values.privateKeyFile}" ]; then
@@ -298,15 +325,11 @@ let
         '';
       };
 
-  peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
+  peerUnitServiceName = interfaceName: peerName: dynamicRefreshEnabled:
     let
-      keyToUnitName = replaceChars
-        [ "/" "-"    " "     "+"     "="      ]
-        [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
-      unitName = keyToUnitName publicKey;
       refreshSuffix = optionalString dynamicRefreshEnabled "-refresh";
     in
-      "wireguard-${interfaceName}-peer-${unitName}${refreshSuffix}";
+      "wireguard-${interfaceName}-peer-${peerName}${refreshSuffix}";
 
   generatePeerUnit = { interfaceName, interfaceCfg, peer }:
     let
@@ -322,10 +345,11 @@ let
       # We generate a different name (a `-refresh` suffix) when `dynamicEndpointRefreshSeconds`
       # to avoid that the same service switches `Type` (`oneshot` vs `simple`),
       # with the intent to make scripting more obvious.
-      serviceName = peerUnitServiceName interfaceName peer.publicKey dynamicRefreshEnabled;
+      serviceName = peerUnitServiceName interfaceName peer.name dynamicRefreshEnabled;
     in nameValuePair serviceName
       {
-        description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
+        description = "WireGuard Peer - ${interfaceName} - ${peer.name}"
+          + optionalString (peer.name != peer.publicKey) " (${peer.publicKey})";
         requires = [ "wireguard-${interfaceName}.service" ];
         wants = [ "network-online.target" ];
         after = [ "wireguard-${interfaceName}.service" "network-online.target" ];
@@ -348,7 +372,16 @@ let
                 # cannot be used with systemd timers (see `man systemd.timer`),
                 # which is why `simple` with a loop is the best choice here.
                 # It also makes starting and stopping easiest.
+                #
+                # Restart if the service exits (e.g. when wireguard gives up after "Name or service not known" dns failures):
+                Restart = "always";
+                RestartSec = if null != peer.dynamicEndpointRefreshRestartSeconds
+                             then peer.dynamicEndpointRefreshRestartSeconds
+                             else peer.dynamicEndpointRefreshSeconds;
               };
+        unitConfig = lib.optionalAttrs dynamicRefreshEnabled {
+          StartLimitIntervalSec = 0;
+        };
 
         script = let
           wg_setup = concatStringsSep " " (
@@ -394,7 +427,7 @@ let
   # the target is required to start new peer units when they are added
   generateInterfaceTarget = name: values:
     let
-      mkPeerUnit = peer: (peerUnitServiceName name peer.publicKey (peer.dynamicEndpointRefreshSeconds != 0)) + ".service";
+      mkPeerUnit = peer: (peerUnitServiceName name peer.name (peer.dynamicEndpointRefreshSeconds != 0)) + ".service";
     in
     nameValuePair "wireguard-${name}"
       rec {
@@ -437,7 +470,7 @@ let
 
           ${ipPreMove} link add dev "${name}" type wireguard
           ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
-          ${optionalString (values.mtu != null) ''${ipPreMove} link set "${name}" mtu ${toString values.mtu}''}
+          ${optionalString (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''}
 
           ${concatMapStringsSep "\n" (ip:
             ''${ipPostMove} address add "${ip}" dev "${name}"''

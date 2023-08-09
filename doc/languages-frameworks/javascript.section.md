@@ -6,16 +6,16 @@ This contains instructions on how to package javascript applications.
 
 The various tools available will be listed in the [tools-overview](#javascript-tools-overview). Some general principles for packaging will follow. Finally some tool specific instructions will be given.
 
-## Getting unstuck / finding code examples
+## Getting unstuck / finding code examples {#javascript-finding-examples}
 
 If you find you are lacking inspiration for packing javascript applications, the links below might prove useful. Searching online for prior art can be helpful if you are running into solved problems.
 
-### Github
+### Github {#javascript-finding-examples-github}
 
 - Searching Nix files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+language%3ANix&type=code>
 - Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+filename%3Aflake.nix&type=code>
 
-### Gitlab
+### Gitlab {#javascript-finding-examples-gitlab}
 
 - Searching Nix files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+extension%3Anix>
 - Searching just `flake.nix` files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+filename%3Aflake.nix>
@@ -105,7 +105,7 @@ After you have identified the correct system, you need to override your package 
     });
 ```
 
-### Adding and Updating Javascript packages in nixpkgs
+### Adding and Updating Javascript packages in nixpkgs {#javascript-adding-or-updating-packages}
 
 To add a package from NPM to nixpkgs:
 
@@ -140,10 +140,10 @@ To update NPM packages in nixpkgs, run the same `generate.sh` script:
 ./pkgs/development/node-packages/generate.sh
 ```
 
-#### Git protocol error
+#### Git protocol error {#javascript-git-error}
 
 Some packages may have Git dependencies from GitHub specified with `git://`.
-GitHub has [disabled unecrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
+GitHub has [disabled unencrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
 
 ```
 The unauthenticated git protocol on port 9418 is no longer supported
@@ -175,9 +175,10 @@ buildNpmPackage rec {
     hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
   };
 
-  patches = [ ./remove-prepack-script.patch ];
+  npmDepsHash = "sha256-tuEfyePwlOy2/mOPdXbqJskO6IowvAP4DWg8xSZwbJw=";
 
-  npmDepsHash = "sha256-s8SpZY/1tKZVd3vt7sA9vsqHvEaNORQBMrSyhWpj048=";
+  # The prepack script runs the build script, which we'd rather do in the build phase.
+  npmPackFlags = [ "--ignore-scripts" ];
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 
@@ -195,10 +196,14 @@ buildNpmPackage rec {
 * `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
 * `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 * `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
+* `npmWorkspace`: The workspace directory within the project to build and install.
+* `dontNpmBuild`: Option to disable running the build script. Set to `true` if the package does not have a build script. Defaults to `false`. Alternatively, setting `buildPhase` explicitly also disables this.
+* `dontNpmInstall`: Option to disable running `npm install`. Defaults to `false`. Alternatively, setting `installPhase` explicitly also disables this.
 * `npmFlags`: Flags to pass to all npm commands.
 * `npmInstallFlags`: Flags to pass to `npm ci`.
 * `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
 * `npmPackFlags`: Flags to pass to `npm pack`.
+* `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 
@@ -228,7 +233,7 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 #### Pitfalls {#javascript-node2nix-pitfalls}
 
 - If upstream package.json does not have a "version" attribute, `node2nix` will crash. You will need to add it like shown in [the package.json section](#javascript-upstream-package-json).
-- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs-16_x`.
+- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs_16`.
 - `node2nix` does not like missing packages from NPM. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of NPM.
 
 ### yarn2nix {#javascript-yarn2nix}
@@ -242,7 +247,7 @@ If the downloaded files contain the `package.json` and `yarn.lock` files they ca
 ```nix
 offlineCache = fetchYarnDeps {
   yarnLock = src + "/yarn.lock";
-  sha256 = "....";
+  hash = "....";
 };
 ```
 
@@ -287,7 +292,7 @@ configurePhase = ''
 This will generate a derivation including the `node_modules` directory.
 If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way.
 
-#### Overriding dependency behavior
+#### Overriding dependency behavior {#javascript-mkYarnPackage-overriding-dependencies}
 
 In the `mkYarnPackage` record the property `pkgConfig` can be used to override packages when you encounter problems building.
 
@@ -330,13 +335,16 @@ mkYarnPackage rec {
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
 
-## Outside of nixpkgs {#javascript-outside-nixpkgs}
+## Outside Nixpkgs {#javascript-outside-nixpkgs}
 
-There are some other options available that can't be used inside nixpkgs. Those other options are written in Nix. Importing them in nixpkgs will require moving the source code into nixpkgs. Using [Import From Derivation](https://nixos.wiki/wiki/Import_From_Derivation) is not allowed in Hydra at present. If you are packaging something outside nixpkgs, those can be considered
+There are some other tools available, which are written in the Nix language.
+These that can't be used inside Nixpkgs because they require [Import From Derivation](#ssec-import-from-derivation), which is not allowed in Nixpkgs.
+
+If you are packaging something outside Nixpkgs, consider the following:
 
 ### npmlock2nix {#javascript-npmlock2nix}
 
-[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building node_modules without code generation. It hasn't reached v1 yet, the API might be subject to change.
+[npmlock2nix](https://github.com/nix-community/npmlock2nix) aims at building `node_modules` without code generation. It hasn't reached v1 yet, the API might be subject to change.
 
 #### Pitfalls {#javascript-npmlock2nix-pitfalls}
 
@@ -344,7 +352,7 @@ There are some [problems with npm v7](https://github.com/tweag/npmlock2nix/issue
 
 ### nix-npm-buildpackage {#javascript-nix-npm-buildpackage}
 
-[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building node_modules without code generation. It hasn't reached v1 yet, the API might change. It supports both package-lock.json and yarn.lock.
+[nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage) aims at building `node_modules` without code generation. It hasn't reached v1 yet, the API might change. It supports both `package-lock.json` and yarn.lock.
 
 #### Pitfalls {#javascript-nix-npm-buildpackage-pitfalls}
 

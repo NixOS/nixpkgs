@@ -2,44 +2,59 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
-, cmake
 , llvmPackages
-, pkg-config
+, libffi
+, libxml2
+, CoreFoundation
+, SystemConfiguration
+, Security
+, withLLVM ? !stdenv.isDarwin
+, withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "2.3.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-25wWgMNybbsEf/1xmm+8BPcjx8CSW9ZBzxGKT/DbBXw=";
-    fetchSubmodules = true;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vpIvoKvIqXgJ6MtuqM3dryR8nxLB/diLyQYcuGkZDLU=";
   };
 
-  cargoSha256 = "sha256-tswsbijNN5UcSZovVmy66yehcEOpQDGMdRgR/1mkuE8=";
+  cargoHash = "sha256-1Gx8MLPAA/LV9jdK8gkztcsjltju0ousETLEiTEAaEo=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-
-  # cranelift+jit works everywhere, see:
-  # https://github.com/wasmerio/wasmer/blob/master/Makefile#L22
-  buildFeatures = [ "cranelift" "jit" ];
-  cargoBuildFlags = [
-    # must target manifest and desired output bin, otherwise output is empty
-    "--manifest-path" "lib/cli/Cargo.toml"
-    "--bin" "wasmer"
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
   ];
 
-  # Can't use test-jit:
-  # error: Package `wasmer-workspace v2.3.0 (/build/source)` does not have the feature `test-jit`
-  checkFeatures = [ "test-cranelift" ];
+  buildInputs = lib.optionals withLLVM [
+    llvmPackages.llvm
+    libffi
+    libxml2
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    SystemConfiguration
+    Security
+  ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  # check references to `compiler_features` in Makefile on update
+  buildFeatures = [
+    "cranelift"
+    "wasmer-artifact-create"
+    "static-artifact-create"
+    "wasmer-artifact-load"
+    "static-artifact-load"
+  ]
+  ++ lib.optional withLLVM "llvm"
+  ++ lib.optional withSinglepass "singlepass";
+
+  cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
+
+  env.LLVM_SYS_140_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "The Universal WebAssembly Runtime";
     longDescription = ''
       Wasmer is a standalone WebAssembly runtime for running WebAssembly outside

@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
+    mainProgram = "mpc";
   };
 }

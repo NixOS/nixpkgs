@@ -9,22 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-backgroundremoval";
-  version = "unstable-2022-05-02";
+  version = "0.5.16";
 
   src = fetchFromGitHub {
     owner = "royshil";
     repo = "obs-backgroundremoval";
-    rev = "cc9d4a5711f9388ed110230f9f793bb071577a23";
-    hash = "sha256-xkVZ4cB642p4DvZAPwI2EVhkfVl5lJhgOQobjNMqpec=";
+    rev = "v${version}";
+    hash = "sha256-E+pm/Ma6dZTYlX3DpB49ynTETsRS2TBqgHSCijl/Txc=";
   };
-
-  patches = [
-    # Fix c++ include directives
-    ./includes.patch
-
-    # Use CPU backend instead of CUDA/DirectML
-    ./use-cpu-backend.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio onnxruntime opencv ];
@@ -32,19 +24,21 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs"
-    "-DOnnxruntime_INCLUDE_DIRS=${onnxruntime.dev}/include/onnxruntime/core/session"
+    "-DUSE_SYSTEM_ONNXRUNTIME=ON"
+    "-DUSE_SYSTEM_OPENCV=ON"
   ];
 
-
-  prePatch = ''
-    sed -i 's/version_from_git()/set(VERSION "0.4.0")/' CMakeLists.txt
+  postInstall = ''
+    mkdir $out/lib $out/share
+    mv $out/obs-plugins/64bit $out/lib/obs-plugins
+    rm -rf $out/obs-plugins
+    mv $out/data $out/share/obs
   '';
 
   meta = with lib; {
     description = "OBS plugin to replace the background in portrait images and video";
     homepage = "https://github.com/royshil/obs-backgroundremoval";
-    maintainers = with maintainers; [ puffnfresh ];
+    maintainers = with maintainers; [ zahrun ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

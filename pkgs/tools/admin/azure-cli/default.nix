@@ -1,7 +1,7 @@
-{ stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, python3, fetchPypi, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.37.0";
+  version = "2.50.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,12 +9,12 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-Y1P+cTOK7NbV7k9rg38vE7EPuZQo88IQW3IYYou8ZOI=";
+    hash = "sha256-eKE/jdS5/PshCxn/4NXuW5rHh7jBsv2VQSWM3cjLHRw=";
   };
 
-  # put packages that needs to be overriden in the py package scope
+  # put packages that needs to be overridden in the py package scope
   py = import ./python-packages.nix {
-    inherit stdenv lib src version python3;
+    inherit stdenv src version python3 fetchPypi;
   };
 in
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
@@ -27,7 +27,9 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     substituteInPlace setup.py \
       --replace "chardet~=3.0.4" "chardet" \
       --replace "javaproperties~=0.5.1" "javaproperties" \
-      --replace "scp~=0.13.2" "scp"
+      --replace "scp~=0.13.2" "scp" \
+      --replace "packaging>=20.9,<22.0" "packaging" \
+      --replace "fabric~=2.4" "fabric"
 
     # remove namespace hacks
     # remove urllib3 because it was added as 'urllib3[secure]', which doesn't get handled well
@@ -53,11 +55,14 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-keyvault
     azure-keyvault-administration
     azure-keyvault-keys
+    azure-keyvault-certificates
+    azure-keyvault-secrets
     azure-loganalytics
     azure-mgmt-advisor
     azure-mgmt-apimanagement
     azure-mgmt-applicationinsights
     azure-mgmt-appconfiguration
+    azure-mgmt-appcontainers
     azure-mgmt-authorization
     azure-mgmt-batch
     azure-mgmt-batchai
@@ -131,13 +136,13 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     colorama
     cryptography
     distro
-    Fabric
+    fabric
     jsmin
     knack
     mock
     paramiko
     pydocumentdb
-    PyGithub
+    pygithub
     pygments
     pynacl
     pyopenssl
@@ -199,6 +204,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.mgmt.apimanagement"
     "azure.mgmt.applicationinsights"
     "azure.mgmt.appconfiguration"
+    "azure.mgmt.appcontainers"
     "azure.mgmt.authorization"
     "azure.mgmt.batch"
     "azure.mgmt.batchai"
@@ -264,7 +270,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     homepage = "https://github.com/Azure/azure-cli";
     description = "Next generation multi-platform command line experience for Azure";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ akechishiro jonringer ];
   };
 })
 

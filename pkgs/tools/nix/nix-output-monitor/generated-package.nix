@@ -22,12 +22,13 @@
   mtl,
   nix-derivation,
   optics,
-  process,
   random,
   relude,
   safe,
   stm,
-  streamly,
+  streamly-core,
+  strict,
+  strict-types,
   terminal-size,
   text,
   time,
@@ -37,10 +38,10 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.0.0.3";
+  version = "2.0.0.6";
   src = fetchzip {
-    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.3.tar.gz";
-    sha256 = "0mgg309vncjvx80mhqcyb7kk1918nfl02d38jczm9lsrlrmdafd9";
+    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.6.tar.gz";
+    sha256 = "1adxg2bws7fqbmzfna5hr28fh8j10gvf57j6b0xbkhh4hgj4h9xd";
   };
   isLibrary = true;
   isExecutable = true;
@@ -65,7 +66,9 @@ mkDerivation {
     relude
     safe
     stm
-    streamly
+    streamly-core
+    strict
+    strict-types
     terminal-size
     text
     time
@@ -93,7 +96,9 @@ mkDerivation {
     relude
     safe
     stm
-    streamly
+    streamly-core
+    strict
+    strict-types
     terminal-size
     text
     time
@@ -120,20 +125,23 @@ mkDerivation {
     mtl
     nix-derivation
     optics
-    process
     random
     relude
     safe
     stm
-    streamly
+    streamly-core
+    strict
+    strict-types
     terminal-size
     text
     time
+    typed-process
     wcwidth
     word8
   ];
   homepage = "https://github.com/maralorn/nix-output-monitor";
   description = "Parses output of nix-build to show additional information";
   license = lib.licenses.agpl3Plus;
-  maintainers = with lib.maintainers; [maralorn];
+  mainProgram = "nom";
+  maintainers = [lib.maintainers.maralorn];
 }

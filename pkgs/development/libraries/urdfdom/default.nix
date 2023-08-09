@@ -1,15 +1,15 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, validatePkgConfig
-, tinyxml, boost, urdfdom-headers, console-bridge }:
+, urdfdom-headers, console-bridge, tinyxml }:
 
 stdenv.mkDerivation rec {
   pname = "urdfdom";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = pname;
     rev = version;
-    hash = "sha256-9MJnify4zcDBSZVJZCN/XupN5xax+U4PLee54gVVw3Q=";
+    hash = "sha256-UdkGJAXK3Q8QJaqMZBA5/FKUgWq9EVeqkqwVewTlTD8=";
   };
 
   patches = [
@@ -21,8 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config validatePkgConfig ];
-  buildInputs = [ tinyxml boost ];
-  propagatedBuildInputs = [ urdfdom-headers console-bridge ];
+  propagatedBuildInputs = [ urdfdom-headers console-bridge tinyxml ];
 
   meta = with lib; {
     description = "Provides core data structures and a simple XML parser for populating the class data structures from an URDF file";

@@ -1,20 +1,22 @@
 { lib
-, stdenv
 , python3Packages
 , fetchFromGitHub
-, makeWrapper
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nvitop";
-  version = "0.10.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "XuehaiPan";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-nGdEMLxpw2Ts0dypkoZg3r2NF4IeT1ykbRmrmf9qxrA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Za2NJ4gx+aE/cfl2wzbwLxIFNL1UzgKVbb6VqopkNxs=";
   };
+
+  pythonRelaxDeps = [ "nvidia-ml-py" ];
+
+  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     cachetools

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "invisibleroads";
     repo = "socketio-client";
     rev = version;
-    sha256 = "sha256-71sjiGJDDYElPGUNCH1HaVdvgMt8KeD/kXVDpF615ho=";
+    hash = "sha256-71sjiGJDDYElPGUNCH1HaVdvgMt8KeD/kXVDpF615ho=";
   };
 
   propagatedBuildInputs = [

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, desktop-file-utils
 , gtk3, libX11, cmake, imagemagick
-, pkg-config, perl, wrapGAppsHook
+, pkg-config, perl, wrapGAppsHook, nixosTests
 , isMobile ? false
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  NIX_CFLAGS_COMPILE = if isMobile then "-DSTYLUS_BASED" else "";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString isMobile "-DSTYLUS_BASED";
 
   buildInputs = [ gtk3 libX11 ];
 
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
 
     install -Dm644 ${sgt-puzzles-menu} -t $out/etc/xdg/menus/applications-merged/
   '';
+
+  passthru.tests.sgtpuzzles = nixosTests.sgtpuzzles;
 
   meta = with lib; {
     description = "Simon Tatham's portable puzzle collection";

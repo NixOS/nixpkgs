@@ -1,19 +1,18 @@
 { lib
-, stdenv
-, fetchCrate
 , rustPlatform
+, fetchCrate
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "svg2pdf";
-  version = "0.4.0";
+  version = "0.5.0";
   # This cargo package is usually a library, hence it does not track a
   # Cargo.lock by default so we use fetchCrate
   src = fetchCrate {
     inherit version pname;
-    sha256 = "2Aw8VYFVw0rKeaDUTsYTHcHBDP1jLm4tVGfi6+RNK9E=";
+    sha256 = "sha256-4n7aBVjXiVU7O7sOKN5eBrKZNYsKk8eDPdna9o7piJo=";
   };
-  cargoSha256 = "KADfBOnkY1T1xy4Oj7s85SXcDhjRhQQ2hWGWinMXux8=";
+  cargoHash = "sha256-5EEZoYvobbNOknwZWn71EDQSNPmYoegHoZW1Or8Xv2c=";
   buildFeatures = [ "cli" ];
 
   doCheck = true;

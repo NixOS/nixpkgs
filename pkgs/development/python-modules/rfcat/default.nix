@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , future
@@ -6,14 +7,13 @@
 , numpy
 , pyserial
 , pyusb
-, hostPlatform
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "rfcat";
-  version = "1.9.6";
+  version = "1.9.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "atlas0fd00m";
     repo = "rfcat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7iYz7YY9zpnJmLfCmp/sF21eZ21HMGq2sLQIENxbr34=";
+    hash = "sha256-VOLA/ZZLazW7u0VYkAHzDh4aaHGr3u09bKVOkhYk6Fk=";
   };
 
   propagatedBuildInputs = [
@@ -33,12 +33,12 @@ buildPythonPackage rec {
     pyusb
   ];
 
-  postInstall = lib.optionalString hostPlatform.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/etc/udev/rules.d
     cp etc/udev/rules.d/20-rfcat.rules $out/etc/udev/rules.d
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

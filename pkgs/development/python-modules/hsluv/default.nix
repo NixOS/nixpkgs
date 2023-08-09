@@ -14,10 +14,10 @@ buildPythonPackage rec {
     owner = "hsluv";
     repo = "hsluv-python";
     rev = "v${version}";
-    sha256 = "sha256-p3KD+zhHCOs/rLUVf1IkW/isfpUPQstB2VHGmZ/aEPU=";
+    hash = "sha256-p3KD+zhHCOs/rLUVf1IkW/isfpUPQstB2VHGmZ/aEPU=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

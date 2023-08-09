@@ -19,7 +19,7 @@ mkDerivation {
 
   meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
-    homepage = "http://www.kde.org";
+    homepage = "https://invent.kde.org/frameworks/extra-cmake-modules";
     license = licenses.bsd2;
   };
 }

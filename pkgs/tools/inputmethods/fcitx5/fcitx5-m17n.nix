@@ -9,17 +9,18 @@
 , m17n_db
 , gettext
 , fmt
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-m17n";
-  version = "5.0.10";
+  version = "5.0.11";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u4rW89ofuKYCn+NcvdIy0eU+lZ7Lp9kp/d0NdHW2V1s=";
+    sha256 = "sha256-MCSJGZGpnOcZ9ZHlUDOPrbfo61HRM4s2xuj8zblyW/8=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,10 @@ stdenv.mkDerivation rec {
     m17n_lib
     fmt
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) fcitx5;
+  };
 
   meta = with lib; {
     description = "m17n support for Fcitx5";

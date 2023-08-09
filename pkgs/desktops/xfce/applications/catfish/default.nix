@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
-  version = "4.16.4";
+  version = "4.18.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-hdrEFdBa/4i/PF7VyEI7ObiJXLIRW+RFSe8yGnUpqRc=";
+    sha256 = "sha256-hfbIgSFn48++eGrJXzhXRxhWkrjgTYsr7BX/n0EXhGo=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pyxdg
     python3Packages.ptyprocess
     python3Packages.pycairo
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ];
 
   propagatedBuildInputs = [

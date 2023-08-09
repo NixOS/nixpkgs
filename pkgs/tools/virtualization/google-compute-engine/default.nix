@@ -3,7 +3,6 @@
 , buildPythonPackage
 , bash
 , bashInteractive
-, systemd
 , util-linux
 , boto
 , setuptools

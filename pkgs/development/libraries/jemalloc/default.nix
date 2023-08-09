@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # see the comment on stripPrefix
-  configureFlags = []
-    ++ lib.optional stripPrefix "--with-jemalloc-prefix="
+  configureFlags =
+    # see the comment on stripPrefix
+    lib.optional stripPrefix "--with-jemalloc-prefix="
     ++ lib.optional disableInitExecTls "--disable-initial-exec-tls"
     # jemalloc is unable to correctly detect transparent hugepage support on
     # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
@@ -47,14 +47,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) "--with-lg-vaddr=48"
   ;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://jemalloc.net";
+    homepage = "https://jemalloc.net/";
     description = "General purpose malloc(3) implementation";
     longDescription = ''
       malloc(3)-compatible memory allocator that emphasizes fragmentation

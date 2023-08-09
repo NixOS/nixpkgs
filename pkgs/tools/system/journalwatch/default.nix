@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
 
   doCheck = true;
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     pytest
   '';

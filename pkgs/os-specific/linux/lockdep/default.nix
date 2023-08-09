@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: lockdep.o:/build/linux-5.0.21/tools/lib/lockdep/../../include/linux/rcu.h:5: multiple definition of
   #     `rcu_scheduler_active'; common.o:/build/linux-5.0.21/tools/lib/lockdep/../../include/linux/rcu.h:5: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''
     make defconfig
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkInputs = [ valgrind ];
+  nativeCheckInputs = [ valgrind ];
   checkPhase = ''
     # there are more /bin/bash references than just shebangs
     for f in lockdep run_tests.sh tests/*.sh; do

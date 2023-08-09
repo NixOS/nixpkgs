@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , protobuf
 , git
 , testers
@@ -11,42 +10,27 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.9.0";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KnG1FUdC8xpW/wI4E8+RzO0StKF+N7Wx1jTWNm4302M=";
+    hash = "sha256-koYRJCO9G8McoFNe2P61y+q7T4gZ1MBNAy9jFC63kds=";
   };
 
-  vendorSha256 = "sha256-e/hkJoQ1GkSl4mhhgYVB4POult87DzWOXRLGyDVP+M0=";
+  vendorHash = "sha256-2UA8rp2ZHTUnYialFXrIlH+RzfZHtdKn0dc+Dfps8ow=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
     ./skip_test_requiring_network.patch
-    # Skip TestWorkspaceGit which requires .git and commits.
-    ./skip_test_requiring_dotgit.patch
-    # Remove reliance of tests on file protocol which is disabled in git by default now
-    # Rebased upstream change https://github.com/bufbuild/buf/commit/bcaa77f8bbb8f6c198154c7c8d53596da4506dab
-    ./buf-tests-dont-use-file-transport.patch
-    # Make TestCyclicImport tests deterministic (see https://github.com/bufbuild/buf/pull/1551)
-    (fetchpatch {
-      url = "https://github.com/bufbuild/buf/commit/75b5ef4c84f5953002dff95a1c66cb82b0e3b06f.patch";
-      sha256 = "sha256-pKF3VXkzttsTTT2r/Z37ug9nnu8gRdkfmv/aTOhAJpw=";
-    })
-    # Make TestDuplicateSyntheticOneofs check deterministic (see https://github.com/bufbuild/buf/pull/1579)
-    (fetchpatch {
-      url = "https://github.com/bufbuild/buf/commit/9e72aa314e6f02b36793caa5f6068394cbdcb98c.patch";
-      sha256 = "sha256-6NEF3sP1EQ6cQxkH2xRyHxAD0OrXBlQQa05rLK998wo=";
-    })
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git # Required for TestGitCloner
     protobuf # Required for buftesting.GetProtocFilePaths
   ];
@@ -54,9 +38,10 @@ buildGoModule rec {
   preCheck = ''
     # The tests need access to some of the built utilities
     export PATH="$PATH:$GOPATH/bin"
-    # To skip TestCloneBranchAndRefToBucket
-    export CI=true
   '';
+
+  # Allow tests that bind or connect to localhost on macOS.
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall

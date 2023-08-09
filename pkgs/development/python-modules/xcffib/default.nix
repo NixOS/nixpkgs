@@ -1,31 +1,48 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , xorg
 , cffi
-, nose
-, six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "0.11.1";
+  version = "1.2.0";
   pname = "xcffib";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12949cfe2e68c806efd57596bb9bf3c151f399d4b53e15d1101b2e9baaa66f5a";
+    hash = "sha256-8yMCFEf55zB40hu5KMSPTavq6z87N+gDxta5hzXoFIM=";
   };
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch {
+      name = "remove-leftover-six-import.patch";
+      url = "https://github.com/tych0/xcffib/commit/8a488867d30464913706376ca3a9f4c98ca6c5cf.patch";
+      hash = "sha256-wEms0gC7tVqtmKMjjpH/34kdQ6HUV0h67bUGbgijlqw=";
+    })
+  ];
+
+  postPatch = ''
     # Hardcode cairo library path
     sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
   '';
 
-  propagatedBuildInputs = [ cffi six ];
+  propagatedBuildInputs = [ cffi ];
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    xorg.xeyes
+    xorg.xorgserver
+  ];
+
+  preCheck = ''
+    # import from $out
+    rm -r xcffib
+  '';
 
   pythonImportsCheck = [ "xcffib" ];
 

@@ -1,6 +1,6 @@
 { lib
-, stdenv
 , python3
+, fetchPypi
 }:
 
 let

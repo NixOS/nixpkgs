@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "rst2pdf";
-  version = "0.99";
+  version = "0.101";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fa23fa93bddd1f52d058ceaeab6582c145546d80f2f8a95974f3703bd6c8152";
+    sha256 = "sha256-AF8FssEIFHmeY2oVrAPNe85pbmgKWO52yD6ycNNzTSg=";
   };
 
   outputs = [ "out" "man" ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     "rst2pdf"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pymupdf
     sphinx
@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Convert reStructured Text to PDF via ReportLab";
     homepage = "https://rst2pdf.org/";
+    changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };

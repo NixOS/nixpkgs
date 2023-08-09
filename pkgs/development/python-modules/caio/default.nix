@@ -2,13 +2,14 @@
 , aiomisc
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "caio";
-  version = "0.9.8";
+  version = "0.9.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,11 +18,12 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-hUG5EaraoKj3D3K+Qm2Nm1AFe19qwRy/FnEb1SXWKDM=";
+    hash = "sha256-uMq/3yWP9OwaVxixGAFCLMsDPoJhmIuG0I7hO7AnIOk=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiomisc
+    pytest-aiohttp
     pytestCheckHook
   ];
 
@@ -32,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "File operations with asyncio support";
     homepage = "https://github.com/mosquito/caio";
+    changelog = "https://github.com/mosquito/caio/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

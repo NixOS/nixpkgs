@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yuview";
-  version = "2.12.1";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "IENT";
     repo = "YUView";
-    rev = "v${version}";
-    sha256 = "sha256-BQnlq6TBxGbwqn6lAZGBo4+2HeXdFYL33LKqKSXMvdY=";
+    rev = "v.${version}";
+    sha256 = "sha256-2mNIuyY/ni+zkUc8V/iXUEa7JeBJyOnNod7friMYAm8=";
   };
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];

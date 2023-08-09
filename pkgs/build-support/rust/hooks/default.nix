@@ -1,8 +1,8 @@
 { buildPackages
 , callPackage
 , cargo
+, cargo-nextest
 , clang
-, diffutils
 , lib
 , makeSetupHook
 , maturin
@@ -31,7 +31,7 @@ in {
   cargoBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-build-hook.sh";
-      deps = [ cargo ];
+      propagatedBuildInputs = [ cargo ];
       substitutions = {
         inherit ccForBuild ccForHost cxxForBuild cxxForHost
           rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;
@@ -41,7 +41,7 @@ in {
   cargoCheckHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-check-hook.sh";
-      deps = [ cargo ];
+      propagatedBuildInputs = [ cargo ];
       substitutions = {
         inherit rustTargetPlatformSpec;
       };
@@ -50,55 +50,40 @@ in {
   cargoInstallHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-install-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
       substitutions = {
         inherit shortTarget;
       };
     } ./cargo-install-hook.sh) {};
 
+  cargoNextestHook = callPackage ({ }:
+    makeSetupHook {
+      name = "cargo-nextest-hook.sh";
+      propagatedBuildInputs = [ cargo cargo-nextest ];
+      substitutions = {
+        inherit rustTargetPlatformSpec;
+      };
+    } ./cargo-nextest-hook.sh) {};
+
   cargoSetupHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-setup-hook.sh";
-      deps = [ ];
+      propagatedBuildInputs = [ ];
       substitutions = {
         defaultConfig = ../fetchcargo-default-config.toml;
 
         # Specify the stdenv's `diff` by abspath to ensure that the user's build
         # inputs do not cause us to find the wrong `diff`.
-        # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
-        diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
+        diff = "${lib.getBin buildPackages.diffutils}/bin/diff";
 
-        # We want to specify the correct crt-static flag for both
-        # the build and host platforms. This is important when the wanted
-        # value for crt-static does not match the defaults in the rustc target,
-        # like for pkgsMusl or pkgsCross.musl64; Upstream rustc still assumes
-        # that musl = static[1].
-        #
-        # By default, Cargo doesn't apply RUSTFLAGS when building build.rs
-        # if --target is passed, so the only good way to set crt-static for
-        # build.rs files is to use the unstable -Zhost-config Cargo feature.
-        # This allows us to specify flags that should be passed to rustc
-        # when building for the build platform. We also need to use
-        # -Ztarget-applies-to-host, because using -Zhost-config requires it.
-        #
-        # When doing this, we also have to specify the linker, or cargo
-        # won't pass a -C linker= argument to rustc.  This will make rustc
-        # try to use its default value of "cc", which won't be available
-        # when cross-compiling.
-        #
-        # [1]: https://github.com/rust-lang/compiler-team/issues/422
         cargoConfig = ''
-          [host]
+          [target."${rust.toRustTarget stdenv.buildPlatform}"]
           "linker" = "${ccForBuild}"
-          "rustflags" = [ "-C", "target-feature=${if stdenv.buildPlatform.isStatic then "+" else "-"}crt-static" ]
-
-          [target."${shortTarget}"]
-          "linker" = "${ccForHost}"
+          ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
+            [target."${shortTarget}"]
+            "linker" = "${ccForHost}"
+          ''}
           "rustflags" = [ "-C", "target-feature=${if stdenv.hostPlatform.isStatic then "+" else "-"}crt-static" ]
-
-          [unstable]
-          host-config = true
-          target-applies-to-host = true
         '';
       };
     } ./cargo-setup-hook.sh) {};
@@ -106,7 +91,7 @@ in {
   maturinBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "maturin-build-hook.sh";
-      deps = [ cargo maturin rustc ];
+      propagatedBuildInputs = [ cargo maturin rustc ];
       substitutions = {
         inherit ccForBuild ccForHost cxxForBuild cxxForHost
           rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;

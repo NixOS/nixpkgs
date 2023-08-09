@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.9.1";
+  version = "0.11.0";
   disabled = isPy27; # scikit-learn>=0.21 doesn't work on python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ThT3rmB4tauEO3PDebKsULIHRGQV2cJDjIhdbLWv2WI=";
+    hash = "sha256-dYKuiFjm2wuS/vl90IZgoYKX7hKNeMKr3ABri9hrj9w=";
   };
 
   propagatedBuildInputs = [ scikit-learn ];
-  checkInputs = [ pytestCheckHook pandas ];
+  nativeCheckInputs = [ pytestCheckHook pandas ];
   preCheck = ''
     export HOME=$TMPDIR
   '';

@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "mawk";
-  version = "1.3.4-20200120";
+  version = "1.3.4-20230525";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/mawk/mawk-${version}.tgz"
       "https://invisible-mirror.net/archives/mawk/mawk-${version}.tgz"
     ];
-    sha256 = "0dw2icf8bnqd9y0clfd9pkcxz4b2phdihwci13z914mf3wgcvm3z";
+    sha256 = "sha256-VjnRS7kSQ3Oz1/lX0rklrYrZZW1GISw/I9vKgQzJJp8=";
   };
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   meta = with lib; {
     description = "Interpreter for the AWK Programming Language";

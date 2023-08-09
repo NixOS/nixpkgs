@@ -1,47 +1,50 @@
 { lib
 , stdenv
+, fetchurl
 , buildPackages
 , bzip2
 , curlMinimal
 , expat
-, fetchurl
 , libarchive
 , libuv
 , ncurses
 , openssl
 , pkg-config
-, qtbase
+, ps
 , rhash
 , sphinx
 , texinfo
-, wrapQtAppsHook
 , xz
 , zlib
-, SystemConfiguration
-, ps
 , isBootstrap ? false
 , useOpenSSL ? !isBootstrap
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
 , uiToolkits ? [] # can contain "ncurses" and/or "qt5"
 , buildDocs ? !(isBootstrap || (uiToolkits == []))
+, darwin
+, libsForQt5
 }:
 
 let
+  inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  inherit (libsForQt5) qtbase wrapQtAppsHook;
   cursesUI = lib.elem "ncurses" uiToolkits;
   qt5UI = lib.elem "qt5" uiToolkits;
 in
 # Accepts only "ncurses" and "qt5" as possible uiToolkits
 assert lib.subtractLists [ "ncurses" "qt5" ] uiToolkits == [];
-stdenv.mkDerivation rec {
+# Minimal, bootstrap cmake does not have toolkits
+assert isBootstrap -> (uiToolkits == []);
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmake"
     + lib.optionalString isBootstrap "-boot"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.24.2";
+  version = "3.26.4";
 
   src = fetchurl {
-    url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
-    sha256 = "sha256-DZAg8G893xf7U33CKOGlbJJ+5Qa0hvVf4twZ9pvwyNs=";
+    url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
+    hash = "sha256-MTtogMKRvU/jHAqlHW5iZZKCpSHmlfMNXMDSWrvVwgg=";
   };
 
   patches = [
@@ -68,7 +71,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = setupHooks ++ [
+  nativeBuildInputs = finalAttrs.setupHooks ++ [
     pkg-config
   ]
   ++ lib.optionals buildDocs [ texinfo ]
@@ -103,7 +106,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "CXXFLAGS=-Wno-elaborated-enum-base"
-    "--docdir=share/doc/${pname}${version}"
+    "--docdir=share/doc/${finalAttrs.pname}-${finalAttrs.version}"
   ] ++ (if useSharedLibraries
         then [ "--no-system-jsoncpp" "--system-libs" ]
         else [ "--no-system-libs" ]) # FIXME: cleanup
@@ -151,7 +154,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cmake.org/";
     description = "Cross-platform, open-source build system generator";
     longDescription = ''
@@ -161,10 +164,10 @@ stdenv.mkDerivation rec {
       configuration files, and generate native makefiles and workspaces that can
       be used in the compiler environment of your choice.
     '';
-    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/release/${lib.versions.majorMinor version}.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ttuegel lnl7 AndersonTorres ];
-    platforms = platforms.all;
+    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor finalAttrs.version}/release/${lib.versions.majorMinor finalAttrs.version}.html";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ttuegel lnl7 AndersonTorres ];
+    platforms = lib.platforms.all;
     broken = (qt5UI && stdenv.isDarwin);
   };
-}
+})

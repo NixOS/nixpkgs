@@ -30,6 +30,5 @@ buildGoModule rec {
     description = "Your Swiss Army Knife for Protocol Buffers";
     maintainers = [ maintainers.marsam ];
     license = licenses.mit;
-    platforms = platforms.unix;
   };
 }

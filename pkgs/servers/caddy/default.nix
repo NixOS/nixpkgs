@@ -7,12 +7,12 @@
 , installShellFiles
 }:
 let
-  version = "2.6.2";
+  version = "2.7.3";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     rev = "v${version}";
-    sha256 = "sha256-EXs+LNb87RWkmSWvs8nZIVqRJMutn+ntR241gqI7CUg=";
+    hash = "sha256-fQhujBYyl2p3cdqyf+LVebPBGxXn2lKMB/dsvTo5+NM=";
   };
 in
 buildGoModule {
@@ -23,10 +23,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    sha256 = "sha256-Tbf6RB3106OEZGc/Wx7vk+I82Z8/Q3WqnID4f8uZ6z0=";
+    hash = "sha256-KezKMpx3M7rdKXEWf5XUSXqY5SEimACkv3OB/4XccCE=";
   };
 
-  vendorSha256 = "sha256-YxGXk3Q1qw6uZxrGc8l2lKExP2GP+nm3eYbHDoEbgdY=";
+  vendorHash = "sha256-mTHEM+0yakKiy4ZFi+2qakjSlKFyRkbjeXOXdvx+9lA=";
 
   subPackages = [ "cmd/caddy" ];
 
@@ -43,8 +43,12 @@ buildGoModule {
     substituteInPlace $out/lib/systemd/system/caddy.service --replace "/usr/bin/caddy" "$out/bin/caddy"
     substituteInPlace $out/lib/systemd/system/caddy-api.service --replace "/usr/bin/caddy" "$out/bin/caddy"
 
-    installShellCompletion --cmd metal \
+    $out/bin/caddy manpage --directory manpages
+    installManPage manpages/*
+
+    installShellCompletion --cmd caddy \
       --bash <($out/bin/caddy completion bash) \
+      --fish <($out/bin/caddy completion fish) \
       --zsh <($out/bin/caddy completion zsh)
   '';
 
@@ -58,8 +62,8 @@ buildGoModule {
 
   meta = with lib; {
     homepage = "https://caddyserver.com";
-    description = "Fast, cross-platform HTTP/2 web server with automatic HTTPS";
+    description = "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne techknowlogick ];
+    maintainers = with maintainers; [ Br1ght0ne emilylange techknowlogick ];
   };
 }

@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "terraria-server";
-  version = "1.4.4.8.1";
-  urlVersion = lib.replaceChars [ "." ] [ "" ] version;
+  version = "1.4.4.9";
+  urlVersion = lib.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchurl {
     url = "https://terraria.org/api/download/pc-dedicated-server/terraria-server-${urlVersion}.zip";
-    sha256 = "sha256-4mM9+iE2HJnzoW4mvet3sy0mngQ62dxhxa1eDJxBGBo=";
+    sha256 = "sha256-Mk+5s9OlkyTLXZYVT0+8Qcjy2Sb5uy2hcC8CML0biNY=";
   };
 
-  buildInputs = [ file ];
+  buildInputs = [ file stdenv.cc.cc.libgcc ];
   nativeBuildInputs = [ autoPatchelfHook unzip ];
 
   installPhase = ''

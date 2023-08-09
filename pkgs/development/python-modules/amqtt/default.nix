@@ -32,7 +32,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'transitions = "^0.8.0"' 'transitions = "*"'
+      --replace 'transitions = "^0.8.0"' 'transitions = "*"' \
+      --replace 'websockets = ">=9.0,<11.0"' 'websockets = "*"'
   '';
 
   nativeBuildInputs = [
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest-logdog
     pytest-asyncio
@@ -56,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
   ];
 
   disabledTestPaths = [

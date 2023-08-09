@@ -1,39 +1,51 @@
 { lib
-, fetchPypi
 , buildPythonPackage
+, certifi
 , chardet
-, configparser
 , datadog
+, decorator
+, fetchPypi
+, idna
 , requests
-, python
+, urllib3
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "gradient_statsd";
+  pname = "gradient-statsd";
   version = "1.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "iWlNX43ZtvU73wz4+8DgDulQNOnssJGxTBkvAaLj530=";
+    pname = "gradient_statsd";
+    inherit version;
+    hash = "sha256-iWlNX43ZtvU73wz4+8DgDulQNOnssJGxTBkvAaLj530=";
   };
 
   propagatedBuildInputs = [
+    certifi
     chardet
     datadog
+    decorator
+    idna
     requests
-  ]
-  ++ lib.optional python.isPy2 configparser;
+    urllib3
+  ];
 
-  pythonImportsCheck = [ "gradient_statsd" ];
+  pythonImportsCheck = [
+    "gradient_statsd"
+  ];
 
   # Pypi does not contain tests
   doCheck = false;
 
   meta = with lib; {
     description = "Wrapper around the DogStatsd client";
-    homepage    = "https://paperspace.com";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://paperspace.com";
+    license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];
+    platforms = platforms.unix;
   };
 }

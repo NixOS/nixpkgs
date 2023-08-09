@@ -23,7 +23,7 @@ file.
 
   meta = {
     maintainers = with lib.maintainers; [ ericsagnes ];
-    doc = ./default.xml;
+    doc = ./default.md;
     buildDocsInSandbox = true;
   };
 }
@@ -31,7 +31,9 @@ file.
 
 -   `maintainers` contains a list of the module maintainers.
 
--   `doc` points to a valid DocBook file containing the module
+-   `doc` points to a valid [Nixpkgs-flavored CommonMark](
+      https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-markup
+    ) file containing the module
     documentation. Its contents is automatically added to
     [](#ch-configuration). Changes to a module documentation have to
     be checked to not break building the NixOS manual:

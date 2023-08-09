@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , cython
 , pytestCheckHook
 , hypothesis
@@ -9,24 +10,25 @@
 buildPythonPackage rec {
   pname = "datrie";
   version = "0.8.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UlsI9jjVz2EV32zNgY5aASmM0jCy2skcj/LmSZ0Ydl0=";
+    hash = "sha256-UlsI9jjVz2EV32zNgY5aASmM0jCy2skcj/LmSZ0Ydl0=";
   };
 
   nativeBuildInputs = [
+    setuptools
     cython
   ];
 
-  buildInputs = [
-    hypothesis
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner", ' ""
-  '';
+  checkInputs = [
+    hypothesis
+  ];
 
   pythonImportsCheck = [ "datrie" ];
 

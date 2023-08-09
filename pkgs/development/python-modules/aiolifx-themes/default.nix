@@ -1,18 +1,18 @@
 { lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
 , aiolifx
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
-, async-timeout
+, pythonOlder
 , typer
 }:
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
-  version = "0.2.0";
+  version = "0.4.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
-    rev = "v${version}";
-    hash = "sha256:17498vdg8i20hk4i8hzc67qaj206ik3s1zn1k70plsjr9zlgs6vz";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-df3FQdOa3C8eQfgFi+sh7+/GBpE+4B5gOI+3XDQLHEs=";
   };
 
   prePatch = ''
@@ -29,6 +29,11 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace " --cov=aiolifx_themes --cov-report=term-missing:skip-covered" "" \
       --replace "typer = " "# unused: typer = "
+  '';
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiolifx = "^0.8.6"' 'aiolifx = "*"'
   '';
 
   nativeBuildInputs = [
@@ -39,7 +44,7 @@ buildPythonPackage rec {
     aiolifx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     async-timeout
     pytestCheckHook
     pytest-asyncio
@@ -52,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Color themes for LIFX lights running on aiolifx";
     homepage = "https://github.com/Djelibeybi/aiolifx-themes";
+    changelog = "https://github.com/Djelibeybi/aiolifx-themes/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ lukegb ];
   };

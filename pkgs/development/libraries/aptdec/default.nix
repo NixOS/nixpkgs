@@ -1,22 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, libpng, libsndfile
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libpng
+, libsndfile
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "aptdec";
-  version = "unstable-2022-05-18";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "Xerbo";
     repo = "aptdec";
-    rev = "b1cc7480732349a7c772124f984b58f4c734c91b";
-    sha256 = "sha256-Fi9IkZcvqxpmHzqucpCr++37bmTtMy18P4LPznoaYIY=";
+    rev = "v${version}";
+    hash = "sha256-5Pr2PlCPSEIWnThJXKcQEudmxhLJC2sVa9BfAOEKHB4=";
+    fetchSubmodules = true;
   };
-
-  # fixes https://github.com/Xerbo/aptdec/issues/15
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "-Werror" ""
-  '';
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libpng libsndfile ];
@@ -26,6 +27,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Xerbo/aptdec";
     license = licenses.gpl2;
     maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

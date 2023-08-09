@@ -20,7 +20,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.sabnzbd;
-        defaultText = "pkgs.sabnzbd";
+        defaultText = lib.literalExpression "pkgs.sabnzbd";
         description = lib.mdDoc "The sabnzbd executable package run by the service.";
       };
 

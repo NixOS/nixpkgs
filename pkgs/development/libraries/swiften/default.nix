@@ -9,16 +9,16 @@
 , fetchpatch
 , openssl
 , boost
-, sconsPackages
+, scons
 }:
 
 stdenv.mkDerivation rec {
   pname = "swiften";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchurl {
-    url = "https://swift.im/downloads/releases/swift-${version}/swift-${version}.tar.gz";
-    sha256 = "0w0aiszjd58ynxpacwcgf052zpmbpcym4dhci64vbfgch6wryz0w";
+    url = "http://swift.im/git/swift/snapshot/swift-${version}.tar.bz2";
+    hash = "sha256-aj+T6AevtR8birbsj+83nfzFC6cf72q+7nwSM0jaZrA=";
   };
 
   patches = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    sconsPackages.scons_3_1_2
+    scons
   ];
 
   buildInputs = [
@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Ensure bundled dependencies cannot be used.
     rm -rf 3rdParty
+
+    find . \( \
+      -name '*.py' -o -name SConscript -o -name SConstruct \
+      \) -exec 2to3 -w {} +
   '';
 
   installTargets = "${placeholder "out"}";

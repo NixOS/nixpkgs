@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.8.1";
+  version = "1.10.6";
 
   disabled = !stdenv.isLinux;
 
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
-    hash = "sha256-bK8wlwhP0pi8rOs8ysbSZ+0aZOaX4mckfH/p4OLGnes=";
+    hash = "sha256-+pbFG1SmSO/cnt1e+kel7ereC0I1OCJKKsS0KaJDWdc=";
   };
 
   patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
@@ -28,9 +28,9 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     libelf
     nasm
-  ];
+  ] ++ lib.optionals withDriver kernel.moduleBuildDependencies;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     distro
     pytestCheckHook
   ];
@@ -39,6 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     export CHIPSEC_BUILD_LIB=$(mktemp -d)
     mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=dangling-pointer"
+  ];
 
   preInstall = lib.optionalString withDriver ''
     mkdir -p $out/${python3.pkgs.python.sitePackages}/drivers/linux
@@ -67,7 +72,9 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
-    maintainers = with maintainers; [ johnazoidberg ];
+    maintainers = with maintainers; [ johnazoidberg erdnaxe ];
     platforms = [ "x86_64-linux" ] ++ lib.optional (!withDriver) "x86_64-darwin";
+    # https://github.com/chipsec/chipsec/issues/1793
+    broken = withDriver && kernel.kernelOlder "5.4" && kernel.isHardened;
   };
 }

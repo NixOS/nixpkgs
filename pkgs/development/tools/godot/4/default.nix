@@ -1,54 +1,56 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, installShellFiles
-, autoPatchelfHook
 , pkg-config
+, autoPatchelfHook
+, installShellFiles
 , scons
 , vulkan-loader
+, libGL
 , libX11
 , libXcursor
 , libXinerama
-, libXi
-, libXrandr
 , libXext
+, libXrandr
+, libXrender
+, libXi
 , libXfixes
-, libGLU
-, freetype
+, libxkbcommon
 , alsa-lib
 , libpulseaudio
 , dbus
 , speechd
 , fontconfig
 , udev
-, withPulseaudio ? false
+, withPlatform ? "linuxbsd"
+, withTarget ? "editor"
+, withPrecision ? "single"
+, withPulseaudio ? true
 , withDbus ? true
-, withSpeechd ? false
+, withSpeechd ? true
 , withFontconfig ? true
 , withUdev ? true
 , withTouch ? true
 }:
 
+assert lib.asserts.assertOneOf "withPrecision" withPrecision [ "single" "double" ];
+
 let
-  # Options from godot/platform/linuxbsd/detect.py
-  options = {
-    pulseaudio = withPulseaudio;
-    dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
-    speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
-    fontconfig = withFontconfig; # Use fontconfig for system fonts support
-    udev = withUdev; # Use udev for gamepad connection callbacks
-    touch = withTouch; # Enable touch events
-  };
+  mkSconsFlagsFromAttrSet = lib.mapAttrsToList (k: v:
+    if builtins.isString v
+    then "${k}=${v}"
+    else "${k}=${builtins.toJSON v}");
 in
 stdenv.mkDerivation rec {
   pname = "godot";
-  version = "4.0-beta3";
+  version = "4.1-stable";
+  commitHash = "970459615f6b2b4151742ec6d7ef8559f87fd5c5";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
-    rev = "01ae26d31befb6679ecd92cd3c73aa5a76162e95";
-    sha256 = "sha256-Q+zMviGevezjcQKJPOm7zAu4liJ5z8Rl73TYmjRR3MY=";
+    rev = commitHash;
+    hash = "sha256-v9qKrPYQz4c+xkSu/2ru7ZE5EzKVyXhmrxyHZQkng2U=";
   };
 
   nativeBuildInputs = [
@@ -59,58 +61,83 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     scons
-    libGLU
-    libX11
-    libXcursor
-    libXinerama
-    libXi
-    libXrandr
-    libXext
-    libXfixes
-  ]
-  ++ runtimeDependencies
-  # Necessary to make godot see fontconfig.lib and dbus.lib
-  ++ lib.optional withFontconfig fontconfig
-  ++ lib.optional withDbus dbus;
+  ];
 
   runtimeDependencies = [
     vulkan-loader
+    libGL
+    libX11
+    libXcursor
+    libXinerama
+    libXext
+    libXrandr
+    libXrender
+    libXi
+    libXfixes
+    libxkbcommon
     alsa-lib
   ]
   ++ lib.optional withPulseaudio libpulseaudio
+  ++ lib.optional withDbus dbus
   ++ lib.optional withDbus dbus.lib
   ++ lib.optional withSpeechd speechd
+  ++ lib.optional withFontconfig fontconfig
   ++ lib.optional withFontconfig fontconfig.lib
   ++ lib.optional withUdev udev;
 
-  patches = [
-    # Godot expects to find xfixes inside xi, but nix's pkg-config only
-    # gives the libs for the requested package (ignoring the propagated-build-inputs)
-    ./xfixes.patch
-  ];
-
   enableParallelBuilding = true;
 
-  sconsFlags = "platform=linuxbsd target=editor production=true";
+  # Set the build name which is part of the version. In official downloads, this
+  # is set to 'official'. When not specified explicitly, it is set to
+  # 'custom_build'. Other platforms packaging Godot (Gentoo, Arch, Flatpack
+  # etc.) usually set this to their name as well.
+  #
+  # See also 'methods.py' in the Godot repo and 'build' in
+  # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
+  BUILD_NAME = "nixpkgs";
+
+  # Required for the commit hash to be included in the version number.
+  #
+  # `methods.py` reads the commit hash from `.git/HEAD` and manually follows
+  # refs. Since we just write the hash directly, there is no need to emulate any
+  # other parts of the .git directory.
+  #
+  # See also 'hash' in
+  # https://docs.godotengine.org/en/stable/classes/class_engine.html#class-engine-method-get-version-info
   preConfigure = ''
-    sconsFlags+=" ${
-      lib.concatStringsSep " "
-      (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)
-    }"
+    mkdir -p .git
+    echo ${commitHash} > .git/HEAD
   '';
+
+  sconsFlags = mkSconsFlagsFromAttrSet {
+    # Options from 'SConstruct'
+    production = true; # Set defaults to build Godot for use in production
+    platform = withPlatform;
+    target = withTarget;
+    precision = withPrecision; # Floating-point precision level
+
+    # Options from 'platform/linuxbsd/detect.py'
+    pulseaudio = withPulseaudio; # Use PulseAudio
+    dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
+    speechd = withSpeechd; # Use Speech Dispatcher for Text-to-Speech support
+    fontconfig = withFontconfig; # Use fontconfig for system fonts support
+    udev = withUdev; # Use udev for gamepad connection callbacks
+    touch = withTouch; # Enable touch events
+  };
 
   outputs = [ "out" "man" ];
 
   installPhase = ''
     mkdir -p "$out/bin"
-    cp bin/godot.* $out/bin/godot
+    cp bin/godot.* $out/bin/godot4
 
     installManPage misc/dist/linux/godot.6
 
     mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
-    cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/"
-    substituteInPlace "$out/share/applications/org.godotengine.Godot.desktop" \
-      --replace "Exec=godot" "Exec=$out/bin/godot"
+    cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/org.godotengine.Godot4.desktop"
+    substituteInPlace "$out/share/applications/org.godotengine.Godot4.desktop" \
+      --replace "Exec=godot" "Exec=$out/bin/godot4" \
+      --replace "Godot Engine" "Godot Engine 4"
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
     cp icon.png "$out/share/icons/godot.png"
   '';
@@ -119,7 +146,7 @@ stdenv.mkDerivation rec {
     homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ twey shiryel ];
   };
 }

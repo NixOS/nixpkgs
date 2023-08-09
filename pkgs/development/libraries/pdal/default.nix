@@ -11,6 +11,7 @@
 , enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
 , libe57format
 , libgeotiff
+, libtiff
 , libxml2
 , postgresql
 , tiledb
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pdal";
-  version = "2.4.0";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = version;
-    sha256 = "sha256-w9Fu4Op6OdaxdvOUM+glpJUEZq//EwRD2lqzYrMXk8w=";
+    sha256 = "sha256-AhekpvWAdbDAYAr38VXPBDGE40xvP0BnEAI2ZKF3ctY=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     hdf5-cpp
     LASzip
     libgeotiff
+    libtiff
     libxml2
     postgresql
     tiledb
@@ -77,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = teams.geospatial.members;
     platforms = platforms.all;
   };
 }

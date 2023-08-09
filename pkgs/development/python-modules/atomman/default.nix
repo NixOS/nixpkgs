@@ -11,19 +11,19 @@
 , phonopy
 , potentials
 , pymatgen
-, pytest
 , pytestCheckHook
 , pythonOlder
-, pythonAtLeast
 , requests
 , scipy
 , setuptools
 , toolz
+, wheel
 , xmltodict
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
-  version = "1.4.6";
+  version = "unstable-2023-07-28";
   pname = "atomman";
   format = "pyproject";
 
@@ -32,12 +32,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "atomman";
-    rev = "v${version}";
-    hash = "sha256-tcsxtFbBdMC6+ixzqhnR+5UNwcQmnPQSvuyNA2IYelI=";
+    rev = "b8af21a9285959d38ee26173081db1b4488401bc";
+    hash = "sha256-WfB+OY61IPprT6OCVHl8VA60p7lLVkRGuyYX+nm7bbA=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -54,6 +56,8 @@ buildPythonPackage rec {
     xmltodict
   ];
 
+  pythonRelaxDeps = [ "potentials" ];
+
   preCheck = ''
     # By default, pytestCheckHook imports atomman from the current directory
     # instead of from where `pip` installs it and fails due to missing Cython
@@ -62,11 +66,10 @@ buildPythonPackage rec {
     rm -r atomman
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ase
     phonopy
     pymatgen
-    pytest
     pytestCheckHook
   ];
 
@@ -82,6 +85,6 @@ buildPythonPackage rec {
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

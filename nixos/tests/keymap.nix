@@ -29,10 +29,10 @@ let
   mkKeyboardTest = layout: { extraConfig ? {}, tests }: with pkgs.lib; makeTest {
     name = "keymap-${layout}";
 
-    machine.console.keyMap = mkOverride 900 layout;
-    machine.services.xserver.desktopManager.xterm.enable = false;
-    machine.services.xserver.layout = mkOverride 900 layout;
-    machine.imports = [ ./common/x11.nix extraConfig ];
+    nodes.machine.console.keyMap = mkOverride 900 layout;
+    nodes.machine.services.xserver.desktopManager.xterm.enable = false;
+    nodes.machine.services.xserver.layout = mkOverride 900 layout;
+    nodes.machine.imports = [ ./common/x11.nix extraConfig ];
 
     testScript = ''
       import json
@@ -64,7 +64,6 @@ let
 
               # wait for reader to be ready
               machine.wait_for_file("${readyFile}")
-              machine.sleep(1)
 
               # send all keys
               for key in inputs:
@@ -78,9 +77,18 @@ let
       with open("${pkgs.writeText "tests.json" (builtins.toJSON tests)}") as json_file:
           tests = json.load(json_file)
 
+      # These environments used to run in the opposite order, causing the
+      # following error at openvt startup.
+      #
+      # openvt: Couldn't deallocate console 1
+      #
+      # This error did not appear in successful runs.
+      # I don't know the exact cause, but I it seems that openvt and X are
+      # fighting over the virtual terminal. This does not appear to be a problem
+      # when the X test runs first.
       keymap_environments = {
-          "VT Keymap": "openvt -sw --",
           "Xorg Keymap": "DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e",
+          "VT Keymap": "openvt -sw --",
       }
 
       machine.wait_for_x()
@@ -192,5 +200,34 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
 
     extraConfig.console.keyMap = "de";
     extraConfig.services.xserver.layout = "de";
+  };
+
+  custom = {
+    tests = {
+      us.qwerty = [ "a" "b" "g" "d" "z" "shift-2" "shift-3" ];
+      us.expect = [ "a" "b" "g" "d" "z" "@" "#" ];
+      greek.qwerty = map (x: "alt_r-${x}")
+                     [ "a" "b" "g" "d" "z" ];
+      greek.expect = [ "α" "β" "γ" "δ" "ζ" ];
+    };
+
+    extraConfig.console.useXkbConfig = true;
+    extraConfig.services.xserver.layout = "us-greek";
+    extraConfig.services.xserver.extraLayouts.us-greek =
+      { description = "US layout with alt-gr greek";
+        languages   = [ "eng" ];
+        symbolsFile = pkgs.writeText "us-greek" ''
+          xkb_symbols "us-greek"
+          {
+            include "us(basic)"
+            include "level3(ralt_switch)"
+            key <LatA> { [ a, A, Greek_alpha ] };
+            key <LatB> { [ b, B, Greek_beta  ] };
+            key <LatG> { [ g, G, Greek_gamma ] };
+            key <LatD> { [ d, D, Greek_delta ] };
+            key <LatZ> { [ z, Z, Greek_zeta  ] };
+          };
+        '';
+      };
   };
 }

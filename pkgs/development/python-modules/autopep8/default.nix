@@ -1,38 +1,44 @@
 { lib
-, fetchPypi
 , buildPythonPackage
-, pycodestyle
+, fetchFromGitHub
 , glibcLocales
-, toml
+, pycodestyle
 , pytestCheckHook
+, pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "1.7.1";
+  version = "2.0.2";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-8AWCIOTMDvYSGZb8jsHDLwc15Ea+I8Th9pLeC/IxdN0=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "hhatto";
+    repo = "autopep8";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+EZgo7xtYKMgpcntU5FtPrfikDDpnvGHhorhtoqDsvE=";
   };
 
-  propagatedBuildInputs = [ pycodestyle toml ];
+  propagatedBuildInputs = [
+    pycodestyle
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # missing tox.ini file from pypi package
-    "test_e101_skip_innocuous"
-  ];
-
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
+    changelog = "https://github.com/hhatto/autopep8/releases/tag/v${version}";
     description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
-    homepage = "https://pypi.org/project/autopep8/";
+    homepage = "https://github.com/hhatto/autopep8";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
   };

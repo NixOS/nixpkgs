@@ -2,7 +2,7 @@
   ghcSrc ? null, ghcVersion ? null
 , mkDerivation, base, bytestring, Cabal, containers, directory
 , extra, filepath, lib, mtl, parsec, shake, text, transformers
-, unordered-containers
+, unordered-containers, cryptohash-sha256, base16-bytestring
 , userSettings ? null
 , writeText
 }:
@@ -35,6 +35,8 @@ mkDerivation {
   executableHaskellDepends = [
     base bytestring Cabal containers directory extra filepath mtl
     parsec shake text transformers unordered-containers
+  ] ++ lib.optionals (lib.versionAtLeast ghcVersion "9.7") [
+    cryptohash-sha256 base16-bytestring
   ];
   description = "GHC build system";
   license = lib.licenses.bsd3;

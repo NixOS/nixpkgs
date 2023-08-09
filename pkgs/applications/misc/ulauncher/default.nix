@@ -50,19 +50,17 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     mock
-    mypy
-    mypy-extensions
     dbus-python
     pygobject3
     pyinotify
-    python-Levenshtein
+    levenshtein
     pyxdg
     pycairo
     requests
     websocket-client
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytest
     pytest-mock
@@ -113,9 +111,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
 

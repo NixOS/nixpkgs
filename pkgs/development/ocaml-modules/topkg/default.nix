@@ -9,7 +9,10 @@ build system is required, the attribute `run` can be used.
 
 let
   param =
-  if lib.versionAtLeast ocaml.version "4.03" then {
+  if lib.versionAtLeast ocaml.version "4.05" then {
+    version = "1.0.5";
+    sha256 = "sha256-RSCCYm5lGsSxYzwrSuTK16vrH7ahMEbmmfle7Fi10cc=";
+  } else if lib.versionAtLeast ocaml.version "4.03" then {
     version = "1.0.3";
     sha256 = "0b77gsz9bqby8v77kfi4lans47x9p2lmzanzwins5r29maphb8y6";
   } else {

@@ -1,7 +1,5 @@
 { lib
 , rustPlatform
-, llvmPackages
-, clang
 , fetchFromGitHub
 }:
 
@@ -21,12 +19,8 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   nativeBuildInputs = [
-    llvmPackages.libclang
-    llvmPackages.libcxxClang
-    clang
+    rustPlatform.bindgenHook
   ];
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-  BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion clang}/include";
 
   postPatch = ''
     substituteInPlace src/main.rs --replace "./config.cfg" "$out/etc/sonic/config.cfg"

@@ -1,29 +1,76 @@
-{ mkDerivation, lib, stdenv, fetchurl
-, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwebsockets
-, qtx11extras, qtwayland
+{ lib
+, stdenv
+, fetchurl
+, qmake
+, qttools
+, qtbase
+, qtdeclarative
+, qtsvg
+, qtwayland
+, qtwebsockets
+, qt5compat
+, makeWrapper
+, wrapQtAppsHook
+, botan2
+, pkg-config
+, nixosTests
 }:
 
-mkDerivation rec {
+let
   pname = "qownnotes";
-  version = "22.11.5";
+  appname = "QOwnNotes";
+  version = "23.7.3";
+in
+stdenv.mkDerivation {
+  inherit pname appname version;
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
-    # Fetch the checksum of current version with curl:
-    # curl https://download.tuxfamily.org/qownnotes/src/qownnotes-<version>.tar.xz.sha256
-    sha256 = "451c7bed728710d1ff7ddc5bcc5a32b829dfac3ed2bbfdb6f7c2c328e6676a8c";
+    url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
+    hash = "sha256-Jk0KPYYB+CW60ggVn58JKJ1UX5VXWbSUC+osHG4wjR0=";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+    pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
 
-  buildInputs = [ qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets qtx11extras ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland ];
+  buildInputs = [
+    qtbase
+    qtdeclarative
+    qtsvg
+    qtwebsockets
+    qt5compat
+    botan2
+  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
+
+  qmakeFlags = [
+    "USE_SYSTEM_BOTAN=1"
+  ];
+
+  postInstall =
+  # Create a lowercase symlink for Linux
+  lib.optionalString stdenv.isLinux ''
+    ln -s $out/bin/${appname} $out/bin/${pname}
+  ''
+  # Wrap application for macOS as lowercase binary
+  + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/${appname}.app $out/Applications
+    makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}
+  '';
+
+  # Tests QOwnNotes using the NixOS module by launching xterm:
+  passthru.tests.basic-nixos-module-functionality = nixosTests.qownnotes;
 
   meta = with lib; {
     description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
     homepage = "https://www.qownnotes.org/";
+    changelog = "https://www.qownnotes.org/changelog.html";
+    downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ totoroot ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ pbek totoroot ];
+    platforms = platforms.unix;
   };
 }

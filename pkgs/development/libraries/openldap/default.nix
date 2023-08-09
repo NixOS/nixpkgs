@@ -1,26 +1,27 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 
 # dependencies
 , cyrus_sasl
-, db
 , groff
 , libsodium
 , libtool
 , openssl
 , systemdMinimal
 , libxcrypt
+
+# passthru
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.6.3";
+  version = "2.6.5";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-0qKh1x3z13OWscFq11AuZ030RuBgcrDlpOlBw9BsDUY=";
+    hash = "sha256-Lieo1PTCr4/oQLVzJxwgqhY+JJh/l2UhRkQpD1vrONk=";
   };
 
   # TODO: separate "out" and "bin"
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
     "devdoc"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
@@ -38,8 +41,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cyrus_sasl
-    db
+    (cyrus_sasl.override {
+      inherit openssl;
+    })
     libsodium
     libtool
     openssl
@@ -62,7 +66,7 @@ stdenv.mkDerivation rec {
     "ac_cv_func_memcmp_working=yes"
   ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
-  NIX_CFLAGS_COMPILE = [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
 
   makeFlags= [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -92,6 +96,9 @@ stdenv.mkDerivation rec {
   preCheck = ''
     substituteInPlace tests/scripts/all \
       --replace "/bin/rm" "rm"
+
+    # skip flaky tests
+    rm -f tests/scripts/test063-delta-multiprovider
   '';
 
   doCheck = true;
@@ -114,6 +121,10 @@ stdenv.mkDerivation rec {
     done
     chmod +x "$out"/lib/*.{so,dylib}
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) openldap;
+  };
 
   meta = with lib; {
     homepage = "https://www.openldap.org/";

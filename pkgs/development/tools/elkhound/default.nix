@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     patchShebangs scripts
   '';
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ bison cmake flex perl ];
 

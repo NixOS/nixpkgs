@@ -22,41 +22,41 @@
 , qtbase
 , qtwayland
 , removeReferencesTo
+, speechd
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
+, wrapGAppsHook
 , unrarSupport ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "6.8.0";
+  version = "6.24.0";
 
   src = fetchurl {
-    url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-d9JaWjAjJzKldjyrdrl6OyX1JSatp9U8agRog7K5n2s=";
+    url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
+    hash = "sha256-SG6st8RRN2hGFQa1XB93fbklTNta5uJXGSeY+F7CSPY=";
   };
 
-  # https://sources.debian.org/patches/calibre/${version}+dfsg-1
+  # https://sources.debian.org/patches/calibre/${finalAttrs.version}+dfsg-1
   patches = [
     #  allow for plugin update check, but no calibre version check
     (fetchpatch {
       name = "0001-only-plugin-update.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}-1/debian/patches/0001-only-plugin-update.patch";
       hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
     })
     (fetchpatch {
-      name = "0006-Hardening-Qt-code.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0006-Hardening-Qt-code.patch";
-      hash = "sha256-CutVTb7K4tjewq1xAjHEGUHFcuuP/Z4FFtj4xQb4zKQ=";
+      name = "0007-Hardening-Qt-code.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+      hash = "sha256-WBm0dWDXoPT6alEdK5dVMrVTOxG7Z8bq1s0iO2HTy/Q=";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
-      setup/build.py
-    sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${python3Packages.sip.platform_tag}\"]/g" \
       setup/build.py
 
     # Remove unneeded files and libs
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qmake
     removeReferencesTo
+    wrapGAppsHook
     wrapQtAppsHook
   ];
 
@@ -94,15 +95,15 @@ stdenv.mkDerivation rec {
     xdg-utils
   ] ++ (
     with python3Packages; [
-      (apsw.overrideAttrs (oldAttrs: rec {
+      (apsw.overrideAttrs (oldAttrs: {
         setupPyBuildFlags = [ "--enable=load_extension" ];
       }))
       beautifulsoup4
-      cchardet
       css-parser
       cssselect
       python-dateutil
       dnspython
+      faust-cchardet
       feedparser
       html2text
       html5-parser
@@ -119,6 +120,7 @@ stdenv.mkDerivation rec {
       regex
       sip
       setuptools
+      speechd
       zeroconf
       jeepney
       pycryptodome
@@ -147,7 +149,7 @@ stdenv.mkDerivation rec {
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
-    ${python3Packages.python.interpreter} setup.py install --root=$out \
+    ${python3Packages.python.pythonForBuild.interpreter} setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
       --staging-root=$out \
@@ -169,6 +171,7 @@ stdenv.mkDerivation rec {
 
   # Wrap manually
   dontWrapQtApps = true;
+  dontWrapGApps = true;
 
   # Remove some references to shrink the closure size. This reference (as of
   # 2018-11-06) was a single string like the following:
@@ -178,7 +181,9 @@ stdenv.mkDerivation rec {
       $out/lib/calibre/calibre/plugins/podofo.so
 
     for program in $out/bin/*; do
-      wrapQtApp $program \
+      wrapProgram $program \
+        ''${qtWrapperArgs[@]} \
+        ''${gappsWrapperArgs[@]} \
         --prefix PYTHONPATH : $PYTHONPATH \
         --prefix PATH : ${poppler_utils.out}/bin
     done
@@ -186,7 +191,7 @@ stdenv.mkDerivation rec {
 
   disallowedReferences = [ podofo.dev ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://calibre-ebook.com";
     description = "Comprehensive e-book software";
     longDescription = ''
@@ -195,8 +200,12 @@ stdenv.mkDerivation rec {
       it takes things a step beyond normal e-book software. It’s also completely
       free and open source and great for both casual users and computer experts.
     '';
-    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3Plus;
-    maintainers = with maintainers; [ pSub AndersonTorres ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
+    license = if unrarSupport
+              then lib.licenses.unfreeRedistributable
+              else lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub AndersonTorres ];
+    platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
-}
+})

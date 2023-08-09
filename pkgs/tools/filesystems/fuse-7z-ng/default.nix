@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     # Drop unused pthread library. pthread_yield()
     # fails the configure.
     ./no-pthread.patch
+    # Zero-initialize unset fields of `struct fuse_operations` so that
+    # garbage values don't cause segfault.
+    # <https://github.com/kedazo/fuse-7z-ng/pull/8>
+    ./zero-init-fuse-operations.patch
   ];
 
   nativeBuildInputs = [ pkg-config makeWrapper autoconf automake ];
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit (src.homepage);
+    inherit (src.meta) homepage;
     description = "A FUSE-based filesystem that uses the p7zip library";
     longDescription = ''
       fuse-7z-ng is a FUSE file system that uses the p7zip

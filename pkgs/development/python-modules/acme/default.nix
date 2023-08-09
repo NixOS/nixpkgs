@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "acme" ];
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   meta = certbot.meta // {
     description = "ACME protocol implementation in Python";

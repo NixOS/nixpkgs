@@ -1,13 +1,16 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper
-, perl, pandoc, python3Packages, git
+, perl, pandoc, python3, git
 , par2cmdline ? null, par2Support ? true
 }:
 
 assert par2Support -> par2cmdline != null;
 
-let version = "0.32"; in
+let
+  version = "0.33.2";
 
-with lib;
+  pythonDeps = with python3.pkgs; [ setuptools tornado ]
+    ++ lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ];
+in
 
 stdenv.mkDerivation {
   pname = "bup";
@@ -17,23 +20,13 @@ stdenv.mkDerivation {
     repo = "bup";
     owner = "bup";
     rev = version;
-    sha256 = "sha256-SWnEJ5jwu/Jr2NLsTS8ajWay0WX/gYbOc3J6w00DndI=";
+    hash = "sha256-DDVCrY4SFqzKukXm8rIq90xAW2U+yYyhyPmUhslMMWI=";
   };
 
-  buildInputs = [
-    git
-    (python3Packages.python.withPackages
-      (p: with p; [ setuptools tornado ]
-        ++ lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))
-  ];
+  buildInputs = [ git python3 ];
   nativeBuildInputs = [ pandoc perl makeWrapper ];
 
-  postPatch = ''
-    patchShebangs .
-    substituteInPlace Makefile --replace "-Werror" ""
-  '' + optionalString par2Support ''
-    substituteInPlace cmd/fsck-cmd.py --replace "'par2'" "'${par2cmdline}/bin/par2'"
-  '';
+  postPatch = "patchShebangs .";
 
   dontAddPrefix = true;
 
@@ -44,12 +37,15 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=implicit-function-declaration";
+
   postInstall = ''
     wrapProgram $out/bin/bup \
-      --prefix PATH : ${git}/bin
+      --prefix PATH : ${lib.makeBinPath [ git par2cmdline ]} \
+      --prefix NIX_PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages pythonDeps}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bup/bup";
     description = "Efficient file backup system based on the git packfile format";
     license = licenses.gpl2Plus;
@@ -60,6 +56,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }

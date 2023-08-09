@@ -15,17 +15,19 @@
 , zlib
 , icu
 , freetype
+, pugixml
+, nix-update-script
 }:
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2022.11.02-2";
+  version = "2023.06.04-13";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    sha256 = "sha256-E/lJDw1QMPT0QcaTOxEyJL4hmEFkq21vQkgZbssszJg=";
+    hash = "sha256-HoEOKN99ClR1sa8YFZcS9XomtXnTRdAXS0iQEdDrhvc=";
     fetchSubmodules = true;
   };
 
@@ -35,6 +37,9 @@ mkDerivation rec {
 
     # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
     echo "echo ${lib.replaceStrings ["." "-"] ["" ""] version}" > tools/unix/version.sh
+
+    # TODO use system boost instead, see https://github.com/organicmaps/organicmaps/issues/5345
+    patchShebangs 3party/boost/tools/build/src/engine/build.sh
   '';
 
   nativeBuildInputs = [
@@ -55,12 +60,19 @@ mkDerivation rec {
     zlib
     icu
     freetype
+    pugixml
   ];
 
   # Yes, this is PRE configure. The configure phase uses cmake
   preConfigure = ''
     bash ./configure.sh
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "-vr" "(.*)-android" ];
+    };
+  };
 
   meta = with lib; {
     # darwin: "invalid application of 'sizeof' to a function type"

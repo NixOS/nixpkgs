@@ -24,12 +24,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ghidra";
-  version = "10.2.1";
-  versiondate = "20221110";
+  version = "10.3.1";
+  versiondate = "20230614";
 
   src = fetchzip {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    sha256 = "sha256-04EZQnSuYtcseamlNBjpm8+9wD5r1WsBseix6yr057k=";
+    hash = "sha256-I4FUEbBF/iwMP/iiA9Hjf36J4sAInhO80hLTbxWmUFc=";
   };
 
   nativeBuildInputs = [

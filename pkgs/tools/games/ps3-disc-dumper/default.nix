@@ -1,6 +1,5 @@
 { lib
 , buildDotnetModule
-, dotnetCorePackages
 , fetchFromGitHub
 , zlib
 , openssl
@@ -25,10 +24,6 @@ buildDotnetModule rec {
   runtimeDeps = [
     zlib
     openssl
-  ];
-
-  dotnetFlags = [
-    "--runtime linux-x64"
   ];
 
   meta = with lib; {

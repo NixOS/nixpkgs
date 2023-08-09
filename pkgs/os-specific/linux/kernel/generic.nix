@@ -29,7 +29,8 @@
  structuredExtraConfig ? {}
 
 , # The version number used for the module directory
-  modDirVersion ? version
+  # If unspecified, this is determined automatically from the version.
+  modDirVersion ? null
 
 , # An attribute set whose attributes express the availability of
   # certain features in this kernel.  E.g. `{iwlwifi = true;}'
@@ -46,8 +47,7 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc" ||
-                       stdenv.hostPlatform != stdenv.buildPlatform
+, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name or "" != "pc"
 , extraMeta ? {}
 
 , isZen      ? false
@@ -55,7 +55,7 @@
 , isHardened ? false
 
 # easy overrides to stdenv.hostPlatform.linux-kernel members
-, autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
+, autoModules ? stdenv.hostPlatform.linux-kernel.autoModules or true
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
 , kernelTests ? []
@@ -128,11 +128,8 @@ let
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ lib.optional (lib.versionAtLeast version "5.2") pahole;
 
-    platformName = stdenv.hostPlatform.linux-kernel.name;
     # e.g. "defconfig"
-    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
-    # e.g. "bzImage"
-    kernelTarget = stdenv.hostPlatform.linux-kernel.target;
+    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig or "defconfig";
 
     makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags) stdenv.hostPlatform.linux-kernel.makeFlags
       ++ extraMakeFlags;
@@ -194,17 +191,26 @@ let
     };
   }; # end of configfile derivation
 
-  kernel = (callPackage ./manual-config.nix { inherit buildPackages;  }) (basicArgs // {
-    inherit modDirVersion kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
+  kernel = (callPackage ./manual-config.nix { inherit lib stdenv buildPackages; }) (basicArgs // {
+    inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile;
     pos = builtins.unsafeGetAttrPos "version" args;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
-  });
+  } // lib.optionalAttrs (modDirVersion != null) { inherit modDirVersion; });
 
   passthru = basicArgs // {
     features = kernelFeatures;
-    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre modDirVersion;
+    inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
+
+    # Adds dependencies needed to edit the config:
+    # nix-shell '<nixpkgs>' -A linux.configEnv --command 'make nconfig'
+    configEnv = kernel.overrideAttrs (old: {
+      nativeBuildInputs = old.nativeBuildInputs or [] ++ (with buildPackages; [
+        pkg-config ncurses
+      ]);
+    });
+
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
     tests = let
       overridableKernel = finalKernel // {
@@ -214,7 +220,7 @@ let
             + toString (lib.attrNames (if lib.isAttrs args then args else args {}))
           ) overridableKernel;
       };
-    in [ (nixosTests.kernel-generic.testsForKernel overridableKernel) ] ++ kernelTests;
+    in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
   };
 
   finalKernel = lib.extendDerivation true passthru kernel;

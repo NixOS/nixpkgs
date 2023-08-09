@@ -6,6 +6,8 @@ let
     sha512 = "sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==";
   };
 
+  tests = callPackage ./tests {};
+
 in {
   prefetch-yarn-deps = stdenv.mkDerivation {
     name = "prefetch-yarn-deps";
@@ -21,8 +23,8 @@ in {
       mkdir libexec
       tar --strip-components=1 -xf ${yarnpkg-lockfile-tar} package/index.js
       mv index.js libexec/yarnpkg-lockfile.js
-      cp ${./index.js} libexec/index.js
-      patchShebangs libexec/index.js
+      cp ${./.}/*.js libexec/
+      patchShebangs libexec
 
       runHook postBuild
     '';
@@ -34,9 +36,12 @@ in {
       cp -r libexec $out
       makeWrapper $out/libexec/index.js $out/bin/prefetch-yarn-deps \
         --prefix PATH : ${lib.makeBinPath [ coreutils nix-prefetch-git nix ]}
+      makeWrapper $out/libexec/fixup.js $out/bin/fixup-yarn-lock
 
       runHook postInstall
     '';
+
+    passthru = { inherit tests; };
   };
 
   fetchYarnDeps = let
@@ -74,6 +79,6 @@ in {
     } // hash_ // (removeAttrs args ["src" "name" "hash" "sha256"]));
 
   in lib.setFunctionArgs f (lib.functionArgs f) // {
-    tests = callPackage ./tests {};
+    inherit tests;
   };
 }

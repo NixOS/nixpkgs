@@ -38,7 +38,7 @@ buildPythonPackage rec {
     sparse
   ] ++ dask.optional-dependencies.array;
 
-  checkInputs = [
+  nativeCheckInputs = [
     sparse
     pytestCheckHook
   ];
@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "Generalized Linear Models with Dask";
     homepage = "https://github.com/dask/dask-glm/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

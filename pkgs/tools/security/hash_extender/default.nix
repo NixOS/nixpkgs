@@ -16,6 +16,11 @@ stdenv.mkDerivation {
   doCheck = true;
   checkPhase = "./hash_extender --test";
 
+  # https://github.com/iagox86/hash_extender/issues/26
+  hardeningDisable = [ "fortify3" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   installPhase = ''
     mkdir -p $out/bin
     cp hash_extender $out/bin

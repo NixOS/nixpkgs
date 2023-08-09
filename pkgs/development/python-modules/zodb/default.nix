@@ -10,17 +10,17 @@
 , zconfig
 , persistent
 , zc_lockfile
-, BTrees
+, btrees
 , manuel
 }:
 
 buildPythonPackage rec {
   pname = "ZODB";
-  version = "5.7.0";
+  version = "5.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+kC7wF7NoewkNc0MbdAqE7dphGBVikYENm9qCmhAHNM=";
+    hash = "sha256-KNugDvYm3hBYnt7auFrQ8O33KSXnXTahXJnGOsBf52Q=";
   };
 
   # remove broken test
@@ -36,10 +36,10 @@ buildPythonPackage rec {
     zconfig
     persistent
     zc_lockfile
-    BTrees
+    btrees
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     manuel
     zope_testrunner
   ];
@@ -50,7 +50,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Zope Object Database: object database and persistence";
-    homepage = "https://pypi.python.org/pypi/ZODB";
+    homepage = "https://zodb-docs.readthedocs.io/";
+    changelog = "https://github.com/zopefoundation/ZODB/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
     maintainers = with maintainers; [ goibhniu ];
   };

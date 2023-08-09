@@ -11,7 +11,7 @@
 , cppheaderparser
 , dpkt
 , fetchFromGitHub
-, GitPython
+, gitpython
 , itanium-demangler
 , mulpyplexer
 , nampa
@@ -22,31 +22,17 @@
 , pycparser
 , pythonOlder
 , pyvex
-, sympy
-, sqlalchemy
+, rich
 , rpyc
 , sortedcontainers
+, sqlalchemy
+, sympy
 , unicorn
 }:
 
-let
-  # Only the pinned release in setup.py works properly
-  unicorn' = unicorn.overridePythonAttrs (old: rec {
-    pname = "unicorn";
-    version = "1.0.2-rc4";
-    src =  fetchFromGitHub {
-      owner = "unicorn-engine";
-      repo = pname;
-      rev = version;
-      sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
-    };
-    doCheck = false;
-  });
-in
-
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.25";
+  version = "9.2.63";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -54,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-BxhCQZl/hsqaKzjieAreiOePUcmWGNn63jD0mZ9vFNE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vrcziVoH+P0cqnzalwZOyu7awidQ0Lv6vT6Uq9Pu4I0=";
   };
 
   propagatedBuildInputs = [
@@ -68,7 +54,7 @@ buildPythonPackage rec {
     cle
     cppheaderparser
     dpkt
-    GitPython
+    gitpython
     itanium-demangler
     mulpyplexer
     nampa
@@ -78,11 +64,12 @@ buildPythonPackage rec {
     psutil
     pycparser
     pyvex
+    rich
     rpyc
     sortedcontainers
     sqlalchemy
     sympy
-    unicorn'
+    unicorn
   ];
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [

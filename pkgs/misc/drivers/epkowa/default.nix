@@ -255,6 +255,38 @@ let plugins = {
     };
     meta = common_meta // { description = "iscan GT-S650 for " + passthru.hw; };
   };
+  x750 = stdenv.mkDerivation rec {
+    name = "iscan-gt-x750-bundle";
+    version = "2.30.4";
+
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-x750/rpm/x64/iscan-gt-x750-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "sha256-9EeBHmh1nwSxnTnevPP8RZ4WBdyY+itR3VXo2I7f5N0=";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-gt-x750-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x0119 "$plugin/lib/esci/libesint54 $plugin/share/esci/esfw54.bin"
+      '';
+      hw = "GT-X750, Perfection 4490";
+    };
+    meta = common_meta // { description = "iscan GT-X750 for " + passthru.hw; };
+  };
   network = stdenv.mkDerivation rec {
     pname = "iscan-nt-bundle";
     # for the version, look for the driver of XP-750 in the search page

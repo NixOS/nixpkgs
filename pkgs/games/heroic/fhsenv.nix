@@ -1,17 +1,20 @@
-{ lib
-, buildFHSUserEnv
+{ buildFHSEnv
 , heroic-unwrapped
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 }:
 
-buildFHSUserEnv {
+buildFHSEnv {
   name = "heroic";
 
   runScript = "heroic";
 
+  # Many Wine and native games need 32-bit libraries.
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
     heroic-unwrapped
+    gamemode
     curl
     gawk
     gnome.zenity
@@ -49,21 +52,28 @@ buildFHSUserEnv {
     ];
   in pkgs: with pkgs; [
     alsa-lib
+    alsa-plugins
     bash
+    cabextract
     cairo
     coreutils
     cups
     dbus
+    freealut
     freetype
     fribidi
     giflib
     glib
     gnutls
+    gst_all_1.gst-plugins-base
     gtk3
     lcms2
     libevdev
+    libgcrypt
     libGLU
     libglvnd
+    libgpg-error
+    libgudev
     libjpeg
     libkrb5
     libmpeg2
@@ -73,26 +83,35 @@ buildFHSUserEnv {
     libpulseaudio
     libselinux
     libsndfile
-    libsndfile
+    libsoup
     libtheora
     libtiff
     libusb1
     libv4l
     libva
+    libvdpau
     libvorbis
+    libvpx
+    libwebp
     libxkbcommon
     libxml2
     mpg123
+    ncurses
     ocl-icd
+    openal
     openldap
+    openssl
+    pango
     pipewire
     samba4
     sane-backends
     SDL2
-    udev
+    speex
+    sqlite
     udev
     unixODBC
     util-linux
+    v4l-utils
     vulkan-loader
     wayland
     zlib

@@ -28,7 +28,7 @@ let
     pname = "tsc";
     commit = version;
 
-    sourceRoot = "source/core";
+    sourceRoot = "${src.name}/core";
 
     recipe = writeText "recipe" ''
       (tsc
@@ -43,12 +43,8 @@ let
 
     pname = "tsc-dyn";
 
-    nativeBuildInputs = [ clang ];
-    sourceRoot = "source/core";
-
-    configurePhase = ''
-      export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
-    '';
+    nativeBuildInputs = [ rustPlatform.bindgenHook ];
+    sourceRoot = "${src.name}/core";
 
     postInstall = ''
       LIB=($out/lib/libtsc_dyn.*)
@@ -59,7 +55,7 @@ let
       rm -r $out/lib
     '';
 
-    inherit (srcMeta) cargoSha256;
+    inherit (srcMeta) cargoHash;
   };
 
 in symlinkJoin {

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "datree";
-  version = "1.7.3";
+  version = "1.9.17";
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
-    rev = version;
-    hash = "sha256-FeGV/GXzt/AHprvKyt/gPAxxJ7d46GXrh0QRLb7qp0E=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vGlvujN9/1e9X/c2WgVSuc+yuqECUF55NLPmBecwvT0=";
   };
 
-  vendorHash = "sha256-m3O5AoAHSM6rSnmL5N7V37XU38FADb0Edt/EZvvb2u4=";
+  vendorHash = "sha256-ECVKofvmLuFAFvncq63hYUaYW8/2+F4gZr8wIGQyrdU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -51,6 +51,7 @@ buildGoModule rec {
       objects.
     '';
     homepage = "https://datree.io/";
+    changelog = "https://github.com/datreeio/datree/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ azahi jceb ];
   };

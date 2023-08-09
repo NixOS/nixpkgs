@@ -3,9 +3,11 @@
 , desktop-file-utils
 , fetchFromGitHub
 , calf
+, fftw
 , fftwFloat
-, fmt_8
+, fmt_9
 , glib
+, gsl
 , gtk4
 , itstool
 , libadwaita
@@ -30,17 +32,18 @@
 , wrapGAppsHook4
 , zam-plugins
 , zita-convolver
+, soundtouch
 }:
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "6.3.0";
+  version = "7.0.5";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-OLxuE1jiALuKlC9U9esVlhaMBEaoZyNae8OO8upE4ZM=";
+    hash = "sha256-Z/0O8dVZ3J901OdOc1wF1XibNE/33b8oSqY6RKPDfzg=";
   };
 
   nativeBuildInputs = [
@@ -53,9 +56,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    fftw
     fftwFloat
-    fmt_8
+    fmt_9
     glib
+    gsl
     gtk4
     libadwaita
     libbs2b
@@ -69,6 +74,7 @@ stdenv.mkDerivation rec {
     pipewire
     rnnoise
     rubberband
+    soundtouch
     speexdsp
     tbb
     zita-convolver
@@ -99,8 +105,8 @@ stdenv.mkDerivation rec {
     description = "Audio effects for PipeWire applications.";
     homepage = "https://github.com/wwmm/easyeffects";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
+    mainProgram = "easyeffects";
   };
 }

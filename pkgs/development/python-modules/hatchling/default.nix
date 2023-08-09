@@ -5,11 +5,11 @@
 
 # runtime
 , editables
-, importlib-metadata # < 3.8
 , packaging
 , pathspec
 , pluggy
 , tomli
+, trove-classifiers
 
 # tests
 , build
@@ -18,27 +18,24 @@
 , virtualenv
 }:
 
-let
+buildPythonPackage rec {
   pname = "hatchling";
-  version = "1.9.0";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "1.18.0";
   format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tXxzYvQ3uUJuS5QiiiHSrFgE+7KrywGt3iVEo1uzA80=";
+    hash = "sha256-UOmcMRDOCvw/e9ut/xxxwXdY5HZzHCdgeUDPpmhkico=";
   };
 
-  # listed in backend/src/hatchling/ouroboros.py
+  # listed in backend/pyproject.toml
   propagatedBuildInputs = [
     editables
     packaging
     pathspec
     pluggy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+    trove-classifiers
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
@@ -52,9 +49,8 @@ buildPythonPackage {
   doCheck = false;
 
   # listed in /backend/tests/downstream/requirements.txt
-  checkInputs = [
+  nativeCheckInputs = [
     build
-    packaging
     requests
     virtualenv
   ];
@@ -72,6 +68,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Modern, extensible Python build backend";
     homepage = "https://hatch.pypa.io/latest/";
+    changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ofek ];
   };

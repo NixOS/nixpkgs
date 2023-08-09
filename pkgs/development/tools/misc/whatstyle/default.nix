@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace ${pname}.py --replace 0.1.6 ${version}
   '';
 
-  checkInputs = [ clang-unwrapped /* clang-format */ ];
+  nativeCheckInputs = [ clang-unwrapped /* clang-format */ ];
 
   doCheck = false; # 3 or 4 failures depending on version, haven't investigated.
 

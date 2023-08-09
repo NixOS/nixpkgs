@@ -4,31 +4,39 @@
 , pkg-config
 , libgit2
 , openssl
+, zlib
 , stdenv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fw";
-  version = "2.16.1";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "brocode";
-    repo = pname;
+    repo = "fw";
     rev = "v${version}";
-    sha256 = "1nhkirjq2q9sxg4k2scy8vxlqa9ikvr5lid0f22vws07vif4kkfs";
+    hash = "sha256-8Jq7VjTKwq8n9lrwTzazkkrq8/mNacFTwz/M+eAwBWM=";
   };
 
-  cargoSha256 = "sha256-iD3SBSny0mYpmVEInYaylHn0AbtIqTOwJHdFeq3UBaM=";
+  cargoHash = "sha256-tIrACx4KRjfxLyxTiP32PpdN8NegaHBIkINsPGgygVQ=";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
-    Security
+  nativeBuildInputs = [
+    pkg-config
   ];
 
-  OPENSSL_NO_VENDOR = 1;
-  USER = "nixbld";
+  buildInputs = [
+    libgit2
+    openssl
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   meta = with lib; {
     description = "A workspace productivity booster";

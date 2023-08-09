@@ -70,7 +70,7 @@ patchPpdFileCommands () {
     # * outputs of current build before buildInputs
     # * `/lib/cups/filter' before `/bin`
     # * add HOST_PATH at end, so we don't miss anything
-    for path in $outputs; do
+    for path in $(getAllOutputNames); do
         addToSearchPath cupspath "${!path}/lib/cups/filter"
         addToSearchPath cupspath "${!path}/bin"
     done

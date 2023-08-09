@@ -2,8 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , ipykernel
-, jupyter_core
+, jupyter-core
 , jupyter-client
+, ipython_genutils
 , pygments
 , pyqt5
 , pytestCheckHook
@@ -27,7 +28,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ipykernel
-    jupyter_core
+    ipython_genutils
+    jupyter-core
     jupyter-client
     pygments
     pyqt5
@@ -36,7 +38,7 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

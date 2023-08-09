@@ -80,8 +80,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   drumstick = callPackage ../development/libraries/drumstick { };
 
-  fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
-
   fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
   qgpgme = callPackage ../development/libraries/gpgme { };
@@ -116,6 +114,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
+  kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
+
   kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
 
   ldutils = callPackage ../development/libraries/ldutils { };
@@ -131,7 +131,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
   libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
-    inherit (pkgs.darwin.apple_sdk.frameworks) AGL Cocoa Foundation;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
   };
 
   libqglviewer = callPackage ../development/libraries/libqglviewer {
@@ -152,7 +152,11 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
 
-  mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
+  maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
+
+  mlt = pkgs.mlt.override {
+    enableQt = true;
+  };
 
   phonon = callPackage ../development/libraries/phonon { };
 
@@ -172,7 +176,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
-  qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
+  qca-qt5 = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca-qt5 {
+    inherit (libsForQt5) qtbase;
+  };
 
   qcoro = callPackage ../development/libraries/qcoro { };
 
@@ -187,8 +193,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
 
   qoauth = callPackage ../development/libraries/qoauth { };
-
-  qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qt5ct = callPackage ../tools/misc/qt5ct { };
 

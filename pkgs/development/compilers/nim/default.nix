@@ -3,7 +3,7 @@
 
 { lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
 , makeWrapper, openssl, pcre, readline, boehmgc, sqlite, nim-unwrapped
-, nimble-unwrapped }:
+, nimble-unwrapped, Security }:
 
 let
   parseCpu = platform:
@@ -71,19 +71,31 @@ let
 
   nimHost = parsePlatform stdenv.hostPlatform;
   nimTarget = parsePlatform stdenv.targetPlatform;
+
+  bootstrapCompiler = stdenv.mkDerivation {
+    pname = "nim-bootstrap";
+    inherit (nim-unwrapped) version src preBuild;
+    enableParallelBuilding = true;
+    installPhase = ''
+      runHook preInstall
+      install -Dt $out/bin bin/nim
+      runHook postInstall
+    '';
+  };
 in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.6.8";
+    version = "1.6.14";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-D1tlzbYPeK9BywdcI4mDaJoeH34lyBnxeYYsGKSEz1c=";
+      hash = "sha256-0HDS8oriQA33/kpJ7OufRc1TmQaxB0gYVqCveo+oLck=";
     };
 
-    buildInputs = [ boehmgc openssl pcre readline sqlite ];
+    buildInputs = [ boehmgc openssl pcre readline sqlite ]
+      ++ lib.optional stdenv.isDarwin Security;
 
     patches = [
       ./NIM_CONFIG_DIR.patch
@@ -91,10 +103,14 @@ in {
 
       ./nixbuild.patch
       # Load libraries at runtime by absolute path
+
+      ./extra-mangling.patch
+      # Mangle store paths of modules to prevent runtime dependence.
     ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
 
     configurePhase = ''
       runHook preConfigure
+      cp ${bootstrapCompiler}/bin/nim bin/
       echo 'define:nixbuild' >> config/nim.cfg
       runHook postConfigure
     '';
@@ -106,13 +122,14 @@ in {
       "-d:useGnuReadline"
     ] ++ lib.optional (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace";
 
+    preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+      substituteInPlace makefile \
+        --replace "aarch64" "arm64"
+    '';
+
     buildPhase = ''
       runHook preBuild
       local HOME=$TMPDIR
-    '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
-      sed -i "s/aarch64/arm64/g" makefile
-    '' + ''
-      make -j$NIX_BUILD_CORES
       ./bin/nim c --parallelBuild:$NIX_BUILD_CORES koch
       ./koch boot $kochArgs --parallelBuild:$NIX_BUILD_CORES
       ./koch toolsNoExternal $kochArgs --parallelBuild:$NIX_BUILD_CORES
@@ -134,24 +151,26 @@ in {
       description = "Statically typed, imperative programming language";
       homepage = "https://nim-lang.org/";
       license = licenses.mit;
+      mainProgram = "nim";
       maintainers = with maintainers; [ ehmry ];
     };
   };
 
   nimble-unwrapped = stdenv.mkDerivation rec {
     pname = "nimble-unwrapped";
-    version = "0.13.1";
+    version = "0.14.2";
     strictDeps = true;
 
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "nimble";
       rev = "v${version}";
-      sha256 = "1idb4r0kjbqv16r6bgmxlr13w2vgq5332hmnc8pjbxiyfwm075x8";
+      hash = "sha256-8b5yKvEl7c7wA/8cpdaN2CSvawQJzuRce6mULj3z/mI=";
     };
 
     depsBuildBuild = [ nim-unwrapped ];
-    buildInputs = [ openssl ];
+    buildInputs = [ openssl ]
+      ++ lib.optional stdenv.isDarwin Security;
 
     nimFlags = [ "--cpu:${nimHost.cpu}" "--os:${nimHost.os}" "-d:release" ];
 
@@ -187,6 +206,10 @@ in {
       strictDeps = true;
 
       nativeBuildInputs = [ makeWrapper ];
+
+      # Needed for any nim package that uses the standard library's
+      # 'std/sysrand' module.
+      depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
 
       patches = [
         ./nim.cfg.patch
@@ -249,7 +272,7 @@ in {
           runHook postBuild
         '';
 
-      wrapperArgs = [
+      wrapperArgs = lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
         "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${
           placeholder "out"
         }/bin"
@@ -262,9 +285,6 @@ in {
 
         "--set NIM_CONFIG_PATH ${placeholder "out"}/etc/nim"
         # Use the custom configuration
-
-        ''--set NIX_HARDENING_ENABLE "''${NIX_HARDENING_ENABLE/fortify}"''
-        # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
       ];
 
       installPhase = ''

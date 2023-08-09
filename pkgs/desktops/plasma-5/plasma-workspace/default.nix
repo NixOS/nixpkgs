@@ -2,9 +2,6 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, coreutils
-, gnugrep
-, gnused
 , isocodes
 , libdbusmenu
 , libSM
@@ -56,6 +53,7 @@
 , plasma-wayland-protocols
 , kpipewire
 , libkexiv2
+, kuserfeedback
 , qtgraphicaleffects
 , qtquickcontrols
 , qtquickcontrols2
@@ -126,6 +124,7 @@ mkDerivation {
     kpipewire
     libkexiv2
 
+    kuserfeedback
     qtgraphicaleffects
     qtquickcontrols
     qtquickcontrols2
@@ -162,7 +161,7 @@ mkDerivation {
     ln -sf $out/bin/kcminit $out/bin/kcminit_startup
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
     ''-DNIXPKGS_XSETROOT="${getBin xsetroot}/bin/xsetroot"''
     ''-DNIXPKGS_START_KDEINIT_WRAPPER="${getLib kinit}/libexec/kf5/start_kdeinit_wrapper"''

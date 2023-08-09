@@ -1,5 +1,5 @@
 { lib
-, gcc12Stdenv
+, stdenv
 , cmake
 , llvm
 , fetchFromGitHub
@@ -17,23 +17,22 @@
 , curl
 , fmt_8
 , nlohmann_json
-, xlibsWrapper
 , yara
+, rsync
 }:
 
 let
-  # when bumping the version, check if imhex has gotten support for the capstone version in nixpkgs
-  version = "1.19.3";
+  version = "1.29.0";
 
   patterns_src = fetchFromGitHub {
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${version}";
-    hash = "sha256-mukGPN2TugJZLLuZ5FTvZ4DxUsMGfVNhBFAPnBRC0qs=";
+    hash = "sha256-lTTXu9RxoD582lXWI789gNcWvJmxmBIlBRIiyY3DseM=";
   };
 
 in
-gcc12Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "imhex";
   inherit version;
 
@@ -42,10 +41,10 @@ gcc12Stdenv.mkDerivation rec {
     owner = "WerWolv";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SFv5ulyjm5Yf+3Gpx+A74so2YClCJx1sx0LE5fh5eG4=";
+    hash = "sha256-dghyv7rpqGs5dt51ziAaeb/Ba7rGEcJ54AYKRJ2xXuk=";
   };
 
-  nativeBuildInputs = [ cmake llvm python3 perl pkg-config xlibsWrapper ];
+  nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
 
   buildInputs = [
     capstone
@@ -64,8 +63,7 @@ gcc12Stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DIMHEX_OFFLINE_BUILD=ON"
-    # see comment at the top about our version of capstone
-    "-DUSE_SYSTEM_CAPSTONE=OFF"
+    "-DUSE_SYSTEM_CAPSTONE=ON"
     "-DUSE_SYSTEM_CURL=ON"
     "-DUSE_SYSTEM_FMT=ON"
     "-DUSE_SYSTEM_LLVM=ON"
@@ -73,13 +71,10 @@ gcc12Stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_YARA=ON"
   ];
 
-  # for reasons unknown, the built-in plugin isn't found unless made available under $out/bin
+  # rsync is used here so we can not copy the _schema.json files
   postInstall = ''
-    ln -s $out/share/imhex/plugins $out/bin/
-
-    for d in ${patterns_src}/{constants,encodings,includes,magic,patterns}; do
-      cp -r $d $out/share/imhex/
-    done
+    mkdir -p $out/share/imhex
+    rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,patterns} $out/share/imhex
   '';
 
   meta = with lib; {

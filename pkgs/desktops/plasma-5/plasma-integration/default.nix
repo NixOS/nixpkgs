@@ -33,4 +33,9 @@ mkDerivation {
     wayland-protocols
     plasma-wayland-protocols
   ];
+
+  meta = {
+    description = "A set of plugins responsible for better integration of Qt applications when running on a KDE Plasma workspace";
+    homepage = "https://invent.kde.org/plasma/plasma-integration";
+  };
 }

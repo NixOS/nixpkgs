@@ -46,7 +46,7 @@ in {
 
       port = mkOption {
         default = 8153;
-        type = types.int;
+        type = types.port;
         description = lib.mdDoc ''
           Specifies port number on which the Go.CD server HTTP interface listens.
         '';

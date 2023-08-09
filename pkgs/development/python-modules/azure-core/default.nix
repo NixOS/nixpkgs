@@ -14,17 +14,22 @@
 , requests
 , six
 , trio
-, typing-extensions }:
+, typing-extensions
+}:
 
 buildPythonPackage rec {
-  version = "1.25.1";
+  version = "1.28.0";
   pname = "azure-core";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-PBzzaGUOduwAnAfNEXSpXNy0cbJHu3LRgkX31WwYCbI=";
+    hash = "sha256-6e78Zvwf3lbatvBNTl0SxgdU1an6Sb3P2FNPyW7ZNr0=";
   };
 
   propagatedBuildInputs = [
@@ -33,9 +38,14 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    aio = [
+      aiohttp
+    ];
+  };
+
+  nativeCheckInputs = [
     aiodns
-    aiohttp
     flask
     mock
     pytest
@@ -43,14 +53,17 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # test server needs to be available
   preCheck = ''
     export PYTHONPATH=tests/testserver_tests/coretestserver:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  pytestFlagsArray = [
+    "tests/"
+  ];
+
   # disable tests which touch network
   disabledTests = [
     "aiohttp"
@@ -66,6 +79,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "location_polling_fail"
   ];
+
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
     "tests/test_connection_string_parsing.py"
@@ -76,7 +90,7 @@ buildPythonPackage rec {
     "tests/testserver_tests/"
     # requires missing pytest plugin
     "tests/async_tests/test_rest_asyncio_transport.py"
-    # needs msrest, which cannot be included in checkInputs due to circular dependency new in msrest 0.7.1
+    # needs msrest, which cannot be included in nativeCheckInputs due to circular dependency new in msrest 0.7.1
     # azure-core needs msrest which needs azure-core
     "tests/test_polling.py"
     "tests/async_tests/test_base_polling_async.py"
@@ -86,6 +100,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Microsoft Azure Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/core/azure-core/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

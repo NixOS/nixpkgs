@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, backendStdenv
 , requireFile
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
@@ -9,16 +9,16 @@
 }:
 
 { fullVersion
-, fileVersionCudnn
+, fileVersionCudnn ? null
 , tarball
 , sha256
 , supportedCudaVersions ? [ ]
 }:
 
-assert lib.assertMsg (lib.strings.versionAtLeast cudnn.version fileVersionCudnn)
+assert fileVersionCudnn == null || lib.assertMsg (lib.strings.versionAtLeast cudnn.version fileVersionCudnn)
   "This version of TensorRT requires at least cuDNN ${fileVersionCudnn} (current version is ${cudnn.version})";
 
-stdenv.mkDerivation rec {
+backendStdenv.mkDerivation rec {
   pname = "cudatoolkit-${cudatoolkit.majorVersion}-tensorrt";
   version = fullVersion;
   src = requireFile rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   # Used by autoPatchelfHook
   buildInputs = [
-    cudatoolkit.cc.cc.lib # libstdc++
+    backendStdenv.cc.cc.lib # libstdc++
     cudatoolkit
     cudnn
   ];
@@ -73,6 +73,8 @@ stdenv.mkDerivation rec {
         "$out/lib/libnvinfer_plugin.so.${mostOfVersion}" \
         "$out/lib/libnvinfer_builder_resource.so.${mostOfVersion}"
     '';
+
+  passthru.stdenv = backendStdenv;
 
   meta = with lib; {
     # Check that the cudatoolkit version satisfies our min/max constraints (both

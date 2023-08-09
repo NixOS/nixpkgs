@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lisgd";
-  version = "0.3.5";
+  version = "0.3.7";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "lisgd";
     rev = version;
-    hash = "sha256-NnZhOQ/I7wbGlWkSXFXEV96UfG+GPMz1VSiEc9TwI6Y=";
+    hash = "sha256-3kmGpgZpCH7CkN+d1+5ygXOi8E0Ojcgw6Fbd0T9z7z0=";
   };
 
   inherit patches;

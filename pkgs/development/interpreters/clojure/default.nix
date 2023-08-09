@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper, writeScript }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.11.1.1189";
+  version = "1.11.1.1347";
 
   src = fetchurl {
     # https://clojure.org/releases/tools
-    url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "sha256-wg5iN5/UT6jb68vF98mgSl21fLG9BdEcXH0EEmvnEOs=";
+    url = "https://download.clojure.org/install/clojure-tools-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1ebAPk64tJt/Cpt3pKfMTN50YABKPflqG055f4Quv+M=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       install -Dm644 example-deps.edn "$clojure_lib_dir/example-deps.edn"
       install -Dm644 tools.edn "$clojure_lib_dir/tools.edn"
       install -Dm644 exec.jar "$clojure_lib_dir/libexec/exec.jar"
-      install -Dm644 clojure-tools-${version}.jar "$clojure_lib_dir/libexec/clojure-tools-${version}.jar"
+      install -Dm644 clojure-tools-${finalAttrs.version}.jar "$clojure_lib_dir/libexec/clojure-tools-${finalAttrs.version}.jar"
 
       echo "Installing clojure and clj into $bin_dir"
       substituteInPlace clojure --replace PREFIX $out
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
-      -Scp $out/libexec/clojure-tools-${version}.jar
+      -Scp $out/libexec/clojure-tools-${finalAttrs.version}.jar
   '';
 
   passthru.updateScript = writeScript "update-clojure" ''
@@ -64,12 +64,14 @@ stdenv.mkDerivation rec {
 
     # `jq -r '.[0].name'` results in `v0.0`
     readonly latest_version="$(curl \
-      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
       -s "https://api.github.com/repos/clojure/brew-install/tags" \
       | jq -r '.[1].name')"
 
     update-source-version clojure "$latest_version"
   '';
+
+  passthru.jdk = jdk;
 
   meta = with lib; {
     description = "A Lisp dialect for the JVM";
@@ -98,4 +100,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jlesquembre thiagokokada ];
     platforms = platforms.unix;
   };
-}
+})

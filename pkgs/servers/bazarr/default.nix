@@ -1,26 +1,26 @@
-{ stdenv, lib, fetchurl, makeWrapper, unzip, python3, unrar, ffmpeg, nixosTests }:
+{ stdenv, lib, fetchurl, makeWrapper, unzip, python3, unar, ffmpeg, nixosTests }:
 
 let
   runtimeProgDeps = [
     ffmpeg
-    unrar
+    unar
   ];
 in
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "1.1.2";
+  version = "1.2.4";
 
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    sha256 = "sha256-cTSRfnMYAyoOoTy0wx8sxqyS92zP6GZu8aH5hRRTxU4=";
+    sha256 = "sha256-TdBazeY/w9vSEbs/OgRtdoi/riAUai1zrmM/A8ecaWA=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
   buildInputs = [
-    (python3.withPackages (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ]))
+    (python3.withPackages (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ps.pillow ]))
   ] ++ runtimeProgDeps;
 
   installPhase = ''

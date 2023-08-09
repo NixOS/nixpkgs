@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ markupsafe setuptools ];
 
   # Multiple tests run out of stack space on 32bit systems with python2.

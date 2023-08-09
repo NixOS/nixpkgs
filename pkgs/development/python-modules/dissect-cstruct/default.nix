@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-cstruct";
-  version = "3.2";
+  version = "3.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cstruct";
-    rev = version;
-    hash = "sha256-iP00EcEkUWoYi+SCo/gY9LSVtCSQZ3g2wMs4Z8m+X2M=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ART7m0OR0KjkZYHXDoNGJDX0v7h+FgctAaWXNFohGV8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for C-like structures";
     homepage = "https://github.com/fox-it/dissect.cstruct";
+    changelog = "https://github.com/fox-it/dissect.cstruct/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

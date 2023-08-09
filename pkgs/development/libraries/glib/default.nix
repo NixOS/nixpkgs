@@ -1,4 +1,14 @@
-{ config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
+{ config
+, lib
+, stdenv
+, fetchurl
+, fetchpatch2
+, gettext
+, meson
+, ninja
+, pkg-config
+, perl
+, python3
 , libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
@@ -8,8 +18,8 @@
 , coreutils, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
-# update script
-, runCommand, git, coccinelle
+, makeHardcodeGsettingsPatch
+, testers
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
@@ -22,7 +32,7 @@ assert stdenv.isLinux -> util-linuxMinimal != null;
 #       $out/bin/gtester-report' to postInstall if this is solved
 /*
   * Use --enable-installed-tests for GNOME-related packages,
-      and use them as a separately installed tests runned by Hydra
+      and use them as a separately installed tests run by Hydra
       (they should test an already installed package)
       https://wiki.gnome.org/GnomeGoals/InstalledTests
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
@@ -46,11 +56,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.74.1";
+  version = "2.76.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "CrmBYY0dtHhF5WQXsNfBI/gaNCeyuck/Wkb/W7uWSWQ=";
+    sha256 = "WloZHJaDbhZqd3H36myisAacYDx9o8uhzTjRaUo5Xdo=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -62,10 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
 
-    # Add support for the GNOME’s default terminal emulator.
-    # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
-    ./gnome-console-support.patch
-    # Do the same for Pantheon’s terminal emulator.
+    # Add support for Pantheon’s terminal emulator.
     ./elementary-terminal-support.patch
 
     # GLib contains many binaries used for different purposes;
@@ -134,12 +141,12 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     python3
     gettext
+    libxslt
+    docbook_xsl
   ] ++ lib.optionals buildDocs [
     gtk-doc
-    docbook_xsl
     docbook_xml_dtd_45
     libxml2
-    libxslt
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -152,9 +159,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddevbindir=${placeholder "dev"}/bin"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    "-Db_lundef=false"
+    "-Dxattr=false"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=nonnull"
     # Default for release buildtype but passed manually because
     # we're using plain
@@ -169,6 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs glib/gen-unicode-tables.pl
     patchShebangs glib/tests/gen-casefold-txt.py
     patchShebangs glib/tests/gen-casemap-txt.py
+    patchShebangs tools/gen-visibility-macros.py
 
     # Needs machine-id, comment the test
     sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
@@ -217,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
+  nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
   preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -226,7 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_RUNTIME_HOME="$TMP"
     export HOME="$TMP"
     export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
-    export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
+    export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
     export PATH="$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
   '';
@@ -241,69 +252,40 @@ stdenv.mkDerivation (finalAttrs: {
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
 
-    tests.withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+    tests = {
+      withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
 
     inherit flattenInclude;
     updateScript = gnome.updateScript {
       packageName = "glib";
       versionPolicy = "odd-unstable";
     };
-    /*
-      can be used as part of an update script to automatically create a patch
-      hardcoding the path of all gsettings schemas in C code.
-      For example:
-      passthru = {
-        hardcodeGsettingsPatch = glib.mkHardcodeGsettingsPatch {
-          inherit src;
-          glib-schema-to-var = {
-             ...
-          };
-        };
 
-        updateScript =
-          let
-            updateSource = ...;
-            patch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
-          in
-          _experimental-update-script-combinators.sequence [
-            updateSource
-            patch
-          ];
-        };
-      }
-      takes as input a mapping from schema path to variable name.
-      For example `{ "org.gnome.evolution" = "EVOLUTION_SCHEMA_PATH"; }`
-      hardcodes looking for `org.gnome.evolution` into `@EVOLUTION_SCHEMA_PATH@`.
-      All schemas must be listed.
-    */
-    mkHardcodeGsettingsPatch = { src, glib-schema-to-var }:
-      runCommand
-        "hardcode-gsettings.patch"
-        {
+    mkHardcodeGsettingsPatch =
+      {
+        src,
+        glib-schema-to-var,
+      }:
+      builtins.trace
+        "glib.mkHardcodeGsettingsPatch is deprecated, please use makeHardcodeGsettingsPatch instead"
+        (makeHardcodeGsettingsPatch {
           inherit src;
-          nativeBuildInputs = [
-            git
-            coccinelle
-            python3 # For patch script
-          ];
-        }
-        ''
-          unpackPhase
-          cd "''${sourceRoot:-.}"
-          set -x
-          cp ${builtins.toFile "glib-schema-to-var.json" (builtins.toJSON glib-schema-to-var)} ./glib-schema-to-var.json
-          git init
-          git add -A
-          spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
-          git diff > "$out"
-        '';
+          schemaIdToVariableMapping = glib-schema-to-var;
+        });
   };
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
-    homepage    = "https://www.gtk.org/";
+    homepage    = "https://wiki.gnome.org/Projects/GLib";
     license     = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
+    pkgConfigModules = [
+      "gio-2.0"
+      "gobject-2.0"
+      "gthread-2.0"
+    ];
     platforms   = platforms.unix;
 
     longDescription = ''

@@ -13,7 +13,9 @@
 , gtk-layer-shell
 , gtk3
 , json-glib
+, libgee
 , libhandy
+, libpulseaudio
 , librsvg
 , meson
 , ninja
@@ -26,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
-  version = "0.7.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
-    repo = "SwayNotificationCenter";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-Z8CFSaH4RsZ/Qgj+l+36p7smbiGV5RRQhZBBcA3iyK8=";
+    hash = "sha256-mwwSTs4d9jUXUy33nSYJCRFlpH6naCmbRUSpfVacMBE=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +60,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     gtk-layer-shell
     gtk3
     json-glib
+    libgee
     libhandy
+    libpulseaudio
     librsvg
     # systemd # ends with broken permission
   ];
@@ -76,8 +80,10 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = with lib; {
     description = "Simple notification daemon with a GUI built for Sway";
     homepage = "https://github.com/ErikReider/SwayNotificationCenter";
+    changelog = "https://github.com/ErikReider/SwayNotificationCenter/releases/tag/v${version}";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    mainProgram = "swaync";
     maintainers = with maintainers; [ berbiche pedrohlc ];
   };
 })

@@ -10,6 +10,7 @@
 , fftw
 , fmt_8
 , libsndfile
+, libX11
 , rtmidi
 , SDL2
 , zlib
@@ -21,15 +22,22 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6pre1.5";
+  version = "0.6pre7";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-2Bl6CFZJkhdNxMZiJ392zjcVMu8BgyK58R8aE4ToskY=";
+    sha256 = "sha256-Gr4XDfYaRUFdtnCJ6i0oRDszwAZYVW6Mbj4Sp7El5+8=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    # To offer scaling detection on X11, furnace checks if libX11.so is available via dlopen and uses some of its functions
+    # But it's being linked against a versioned libX11.so.VERSION via SDL, so the unversioned one is not on the rpath
+    substituteInPlace src/gui/scaling.cpp \
+      --replace 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -63,6 +71,12 @@ stdenv.mkDerivation rec {
     "-DWARNINGS_ARE_ERRORS=ON"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but breaks on darwin (with clang) or aarch64 (old gcc)
+    "-Wno-error=mismatched-new-delete"
+    "-Wno-error=use-after-free"
+  ]);
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
     # bundle. That adds alot of overhead for not much benefit (CPack is currently abit broken, and needs impure access
@@ -91,6 +105,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multi-system chiptune tracker compatible with DefleMask modules";
     homepage = "https://github.com/tildearrow/furnace";
+    changelog = "https://github.com/tildearrow/furnace/releases/tag/v${version}";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;

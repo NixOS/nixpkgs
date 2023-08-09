@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ lzip ];
+  nativeCheckInputs = [ lzip ];
 
   enableParallelBuilding = true;
 

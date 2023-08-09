@@ -1,24 +1,25 @@
-{ fetchFromGitHub
-, lib
+{ lib
+, fetchFromGitHub
 , stdenv
 , python3Packages
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.1.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = pname;
     rev = "refs/tags/release/${version}";
-    sha256 = "sha256-xRyKCpO2eBe5lI0pQW8wUee/5ZMDEo7/FLORrp3Sduk=";
+    hash = "sha256-5mecCg5c+fu6WUgmNEL4BR+JCild02YAuYgLwO1MGnI=";
   };
 
   patches = [
     ./unwrap-subprocess.patch
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     python-snappy
     google-cloud-storage
@@ -45,6 +46,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://www.pgbarman.org/";
     description = "Backup and Recovery Manager for PostgreSQL";
+    changelog = "https://github.com/EnterpriseDB/barman/blob/release/${version}/NEWS";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

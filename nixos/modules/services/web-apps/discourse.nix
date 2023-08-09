@@ -19,9 +19,9 @@ let
   # We only want to create a database if we're actually going to connect to it.
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == null;
 
-  tlsEnabled = (cfg.enableACME
+  tlsEnabled = cfg.enableACME
                 || cfg.sslCertificate != null
-                || cfg.sslCertificateKey != null);
+                || cfg.sslCertificateKey != null;
 in
 {
   options = {
@@ -615,6 +615,7 @@ in
       s3_endpoint = null;
       s3_http_continue_timeout = null;
       s3_install_cors_rule = null;
+      s3_asset_cdn_url = null;
 
       max_user_api_reqs_per_minute = 20;
       max_user_api_reqs_per_day = 2880;
@@ -647,6 +648,12 @@ in
       multisite_config_path = "config/multisite.yml";
       enable_long_polling = null;
       long_polling_interval = null;
+      preload_link_header = false;
+      redirect_avatar_requests = false;
+      pg_force_readonly_mode = false;
+      dns_query_timeout_secs = null;
+      regex_timeout_seconds = 2;
+      allow_impersonation = true;
     };
 
     services.redis.servers.discourse =
@@ -820,10 +827,10 @@ in
 
     services.nginx = lib.mkIf cfg.nginx.enable {
       enable = true;
-      additionalModules = [ pkgs.nginxModules.brotli ];
 
       recommendedTlsSettings = true;
       recommendedOptimisation = true;
+      recommendedBrotliSettings = true;
       recommendedGzipSettings = true;
       recommendedProxySettings = true;
 
@@ -1011,6 +1018,7 @@ in
         notification_email = cfg.mail.notificationEmailAddress;
         contact_email = cfg.mail.contactEmailAddress;
       };
+      security.force_https = tlsEnabled;
       email = {
         manual_polling_enabled = cfg.mail.incoming.enable;
         reply_by_email_enabled = cfg.mail.incoming.enable;
@@ -1020,8 +1028,8 @@ in
 
     services.postfix = lib.mkIf cfg.mail.incoming.enable {
       enable = true;
-      sslCert = if cfg.sslCertificate != null then cfg.sslCertificate else "";
-      sslKey = if cfg.sslCertificateKey != null then cfg.sslCertificateKey else "";
+      sslCert = lib.optionalString (cfg.sslCertificate != null) cfg.sslCertificate;
+      sslKey = lib.optionalString (cfg.sslCertificateKey != null) cfg.sslCertificateKey;
 
       origin = cfg.hostname;
       relayDomains = [ cfg.hostname ];
@@ -1080,6 +1088,6 @@ in
     ];
   };
 
-  meta.doc = ./discourse.xml;
+  meta.doc = ./discourse.md;
   meta.maintainers = [ lib.maintainers.talyz ];
 }

@@ -9,6 +9,7 @@
 , libgtop
 , libXdamage
 , libXpresent
+, libXres
 , libstartup_notification
 , gnome
 , glib
@@ -20,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "marco";
-  version = "1.26.0";
+  version = "1.26.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "01avxrg2fc6grfrp6hl8b0im4scy9xf6011swfrhli87ig6hhg7n";
+    sha256 = "EvGiVP4QcvAwSIRxHgiaVoJ4CgEVk0Au043muUgOB6M=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +41,14 @@ stdenv.mkDerivation rec {
     libgtop
     libXdamage
     libXpresent
+    libXres
     libstartup_notification
     gtk3
     gnome.zenity
     mate-settings-daemon
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 

@@ -10,23 +10,26 @@
 }:
 
 let
-  openShiftVersion = "4.10.22";
-  podmanVersion = "4.1.0";
+  openShiftVersion = "4.12.5";
+  okdVersion = "4.12.0-0.okd-2023-02-18-033438";
+  podmanVersion = "4.3.1";
   writeKey = "cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
+  gitHash = "sha256-zk/26cG2Rt3jpbhKgprtq2vx7pIQVi7cPUA90uoQa80=";
 in
 buildGoModule rec {
-  version = "2.6.0";
+  version = "2.15.0";
   pname = "crc";
-  gitCommit = "6b954d40ec3280ca63e825805503d4414a3ff55b";
+  gitCommit = "72256c3cb00ac01519b26658dd5cfb0dd09b37a1";
+  modRoot = "cmd/crc";
 
   src = fetchFromGitHub {
-    owner = "code-ready";
+    owner = "crc-org";
     repo = "crc";
     rev = "v${version}";
-    sha256 = "sha256-4EaonL+7/zPEbuM12jQFx8wLR62iLYZ3LkHAibdGQZc=";
+    hash = gitHash;
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ git ];
 
@@ -41,21 +44,17 @@ buildGoModule rec {
   tags = [ "containers_image_openpgp" ];
 
   ldflags = [
-    "-X github.com/code-ready/crc/pkg/crc/version.crcVersion=${version}"
-    "-X github.com/code-ready/crc/pkg/crc/version.bundleVersion=${openShiftVersion}"
-    "-X github.com/code-ready/crc/pkg/crc/version.podmanVersion=${podmanVersion}"
-    "-X github.com/code-ready/crc/pkg/crc/version.commitSha=${gitCommit}"
-    "-X github.com/code-ready/crc/pkg/crc/segment.WriteKey=${writeKey}"
+    "-X github.com/crc-org/crc/pkg/crc/version.crcVersion=${version}"
+    "-X github.com/crc-org/crc/pkg/crc/version.ocpVersion=${openShiftVersion}"
+    "-X github.com/crc-org/crc/pkg/crc/version.okdVersion=${okdVersion}"
+    "-X github.com/crc-org/crc/pkg/crc/version.podmanVersion=${podmanVersion}"
+    "-X github.com/crc-org/crc/pkg/crc/version.commitSha=${builtins.substring 0 8 gitCommit}"
+    "-X github.com/crc-org/crc/pkg/crc/segment.WriteKey=${writeKey}"
   ];
 
   preBuild = ''
     export HOME=$(mktemp -d)
   '';
-
-  # tests are currently broken on aarch64-darwin
-  # https://github.com/code-ready/crc/issues/3237
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
-  checkFlags = [ "-args --crc-binary=$out/bin/crc" ];
 
   passthru.tests.version = testers.testVersion {
     package = crc;
@@ -64,11 +63,12 @@ buildGoModule rec {
       crc version
     '';
   };
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Manages a local OpenShift 4.x cluster or a Podman VM optimized for testing and development purposes";
     homepage = "https://crc.dev";
     license = licenses.asl20;
-    maintainers = with maintainers; [ shikanime tricktron ];
+    maintainers = with maintainers; [ matthewpi shikanime tricktron ];
   };
 }

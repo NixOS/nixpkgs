@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     description = "Set of Thai language support routines";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
+    pkgConfigModules = [ "libthai" ];
   };
 }

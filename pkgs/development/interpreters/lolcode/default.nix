@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, doxygen, cmake, readline }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   pname = "lolcode";
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
   # Maybe it clashes with lci scientific logic software package...
   postInstall = "mv $out/bin/lci $out/bin/lolcode-lci";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://lolcode.org";
     description = "An esoteric programming language";
     longDescription = ''

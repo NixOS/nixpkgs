@@ -13,10 +13,10 @@ buildPythonPackage rec {
     owner = "patrys";
     repo = "httmock";
     rev = version;
-    sha256 = "sha256-yid4vh1do0zqVzd1VV7gc+Du4VPrkeGFsDHqNbHL28I=";
+    hash = "sha256-yid4vh1do0zqVzd1VV7gc+Du4VPrkeGFsDHqNbHL28I=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests
     pytestCheckHook
   ];

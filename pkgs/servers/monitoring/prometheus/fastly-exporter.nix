@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fastly-exporter";
-  version = "7.2.5";
+  version = "7.6.1";
 
   src = fetchFromGitHub {
     owner = "peterbourgon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-W/P4jUBNDR3t7FESNyUUnNWfGR0PI/dG03EVKYt8S2Y=";
+    sha256 = "sha256-JUbjWAJ70iq0RCr6U2thbtZ3nmCic9wGtSf2ArRy4uA=";
   };
 
-  vendorSha256 = "sha256-exoDUxcOXVn7wUqfLLtJpklPYFHjLodEYa3lF+qFD+A=";
+  vendorHash = "sha256-lEaMhJL/sKNOXx0W+QHMG4QUUE6Pc4AqulhgyCMQQNY=";
 
   meta = with lib; {
     description = "Prometheus exporter for the Fastly Real-time Analytics API";

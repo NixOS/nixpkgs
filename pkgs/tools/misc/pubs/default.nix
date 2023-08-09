@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     argcomplete
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pyfakefs
     mock
     ddt

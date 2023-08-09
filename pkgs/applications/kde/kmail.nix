@@ -33,6 +33,7 @@
 , kservice
 , ktextwidgets
 , ktnef
+, kuserfeedback
 , kwallet
 , kwidgetsaddons
 , kwindowsystem
@@ -85,6 +86,7 @@ mkDerivation {
     kservice
     ktextwidgets
     ktnef
+    kuserfeedback
     kwidgetsaddons
     kwindowsystem
     kxmlgui

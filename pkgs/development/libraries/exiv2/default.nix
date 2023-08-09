@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.27.5";
+  version = "0.27.7";
 
   outputs = [ "out" "lib" "dev" "doc" "man" "static" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "exiv2";
     repo  = "exiv2";
     rev = "v${version}";
-    sha256 = "sha256-5kdzw/YzpYldfHjUSPOzu3gW2TPgxt8Oxs0LZDFphgA=";
+    sha256 = "sha256-xytVGrLDS22n2/yydFTT6CsDESmhO9mFbPGX4yk+b6g=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     libxml2.bin
     python3
     which
@@ -61,9 +61,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  # Test setup found by inspecting ${src}/.travis/run.sh; problems without cmake.
-  checkTarget = "tests";
 
   preCheck = ''
     patchShebangs ../test/
