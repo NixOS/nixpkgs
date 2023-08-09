@@ -595,11 +595,7 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
-  dt = callPackage ../tools/text/dt {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_11;
-    };
-  };
+  dt = callPackage ../tools/text/dt { };
 
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
@@ -3016,11 +3012,7 @@ with pkgs;
 
   pikchr = callPackage ../tools/graphics/pikchr { };
 
-  poop = callPackage ../tools/misc/poop {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_11;
-    };
-  };
+  poop = callPackage ../tools/misc/poop { };
 
   popl = callPackage ../development/libraries/popl { };
 
@@ -6149,7 +6141,11 @@ with pkgs;
 
   rex = callPackage ../tools/system/rex { };
 
-  river = callPackage ../applications/window-managers/river { };
+  river = callPackage ../applications/window-managers/river {
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
+  };
 
   rivercarro = callPackage ../applications/misc/rivercarro {
     zigHook = zigHook.override {
@@ -8003,7 +7999,11 @@ with pkgs;
 
   findutils = callPackage ../tools/misc/findutils { };
 
-  findup = callPackage ../tools/misc/findup { };
+  findup = callPackage ../tools/misc/findup {
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
+  };
 
   fingerprintx = callPackage ../tools/security/fingerprintx { };
 
@@ -9726,7 +9726,11 @@ with pkgs;
     ffmpeg = ffmpeg-full;
   };
 
-  linuxwave = callPackage ../tools/audio/linuxwave { };
+  linuxwave = callPackage ../tools/audio/linuxwave {
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
+  };
 
   littlefs-fuse = callPackage ../tools/filesystems/littlefs-fuse { };
 
@@ -14747,7 +14751,11 @@ with pkgs;
     stdenv = if stdenv.isDarwin then llvmPackages_16.stdenv else stdenv;
   };
 
-  clipbuzz = callPackage ../tools/misc/clipbuzz { };
+  clipbuzz = callPackage ../tools/misc/clipbuzz {
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
+  };
 
   xclip = callPackage ../tools/misc/xclip { };
 
@@ -25551,7 +25559,7 @@ with pkgs;
   zig_0_11 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.11.nix {
     llvmPackages = llvmPackages_16;
   };
-  zig = zig_0_10;
+  zig = zig_0_11;
 
   zigHook = callPackage ../development/compilers/zig/hook.nix { };
 
@@ -41735,7 +41743,11 @@ with pkgs;
 
   duden = callPackage ../applications/misc/duden { };
 
-  zf = callPackage ../tools/misc/zf { };
+  zf = callPackage ../tools/misc/zf {
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
+  };
 
   isolate = callPackage ../tools/security/isolate { };
 
