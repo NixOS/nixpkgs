@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build --base=/BASE_PATH",
     "serve": "vite preview",
     "lint": "eslint --max-warnings 0 --ext .js,.ts,.vue,.json .",
     "formatcheck": "prettier -c .",
