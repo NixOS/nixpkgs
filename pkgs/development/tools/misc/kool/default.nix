@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, testers
+, kool
 }:
 
 buildGoModule rec {
@@ -21,6 +23,12 @@ buildGoModule rec {
     "-w"
     "-X=kool-dev/kool/commands.version=${version}"
   ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = kool;
+    };
+  };
 
   meta = with lib; {
     description = "From local development to the cloud: development workflow made easy";
