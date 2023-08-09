@@ -16,6 +16,9 @@
 , libopus
 , nasm
 , xorg
+, lame
+, pixman
+, libjpeg_turbo
 }:
 
 let
@@ -74,10 +77,13 @@ let
 
     buildInputs = [
       fuse
+      lame
       libjpeg
+      libjpeg_turbo
       libopus
       openssl
       pam
+      pixman
       systemd
       xorg.libX11
       xorg.libXfixes
@@ -86,6 +92,8 @@ let
 
     postPatch = ''
       substituteInPlace sesman/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
+
+      substituteInPlace configure.ac --replace /usr/include/ ""
     '';
 
     preConfigure = ''
@@ -98,9 +106,14 @@ let
       "--enable-fuse"
       "--enable-ipv6"
       "--enable-jpeg"
+      "--enable-mp3lame"
       "--enable-opus"
       "--enable-pam-config=unix"
+      "--enable-pixman"
+      "--enable-rdpsndaudin"
       "--enable-rfxcodec"
+      "--enable-tjpeg"
+      "--enable-vsock"
     ];
 
     installFlags = [ "DESTDIR=$(out)" "prefix=" ];
