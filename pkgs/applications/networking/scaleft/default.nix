@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
     patchShebangs $out
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = scaleft;
+    command = "sft -v";
+    version = "sft version ${version}";
+  };
+
   meta = with lib; {
     description = "ScaleFT provides Zero Trust software which you can use to secure your internal servers and services";
     homepage = "https://www.scaleft.com";
