@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "4.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jazzband";
@@ -59,5 +59,5 @@ buildPythonPackage rec {
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yuu ];
-};
+  };
 }
