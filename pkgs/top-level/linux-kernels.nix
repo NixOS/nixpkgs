@@ -368,6 +368,8 @@ in {
 
     ena = callPackage ../os-specific/linux/ena {};
 
+    keymash = callPackage ../os-specific/linux/keymash {};
+
     kvdo = callPackage ../os-specific/linux/kvdo {};
 
     lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
