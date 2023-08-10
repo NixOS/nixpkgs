@@ -1693,6 +1693,8 @@ with pkgs;
 
   nominatim = callPackage ../servers/nominatim { };
 
+  odmpy = python3Packages.callPackage ../tools/misc/odmpy { };
+
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
