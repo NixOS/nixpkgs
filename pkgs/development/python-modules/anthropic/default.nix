@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , anyio
 , distro
@@ -27,6 +28,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-dfMlM7IRP1PG7Ynr+MR4OPeKnHBbhhWKSug7UQ4/4rI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "support-pytest-asyncio-0.21.0.patch";
+      url = "https://github.com/anthropics/anthropic-sdk-python/commit/1e199aa9b38970c5b5b4492907494ac653a7f756.patch";
+      hash = "sha256-f9KldnvXuRKVgT7Xb/xdhInKOeXvi4g5OxVRD0PMhgQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
