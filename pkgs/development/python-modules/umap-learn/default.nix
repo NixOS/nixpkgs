@@ -8,6 +8,7 @@
 , pynndescent
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , scikit-learn
 , scipy
 , tensorflow
@@ -59,6 +60,16 @@ buildPythonPackage rec {
     })
   ];
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    # the version of numba may not be set correctly until the next release, 0.58
+    # see the comment of https://github.com/NixOS/nixpkgs/pull/247678
+    "numba"
+  ];
+
   propagatedBuildInputs = [
     numba
     numpy
@@ -90,6 +101,17 @@ buildPythonPackage rec {
 
     # tensorflow maybe incompatible? https://github.com/lmcinnes/umap/issues/821
     "test_save_load"
+
+    # incompatible with numpy 1.25
+    "test_tsw_spectral_init"
+    # incompatible with scipy 1.11
+    "test_kulsinski"
+    "test_sparse_kulsinski"
+    # incompatible with sklearn 1.3
+    "test_composite_trustworthiness"
+    "test_multi_component_layout"
+    "test_multi_component_layout_precomputed"
+    "test_precomputed_knn_on_iris"
   ];
 
   meta = with lib; {
