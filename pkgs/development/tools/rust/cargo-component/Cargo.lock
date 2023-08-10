@@ -3729,6 +3729,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "wit"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assert_cmd",
+ "bytes",
+ "cargo-component-core",
+ "clap",
+ "futures",
+ "indexmap 2.0.0",
+ "log",
+ "p256",
+ "predicates",
+ "pretty_env_logger",
+ "rand_core",
+ "rpassword",
+ "semver",
+ "serde",
+ "tokio",
+ "tokio-util",
+ "toml_edit",
+ "url",
+ "warg-client",
+ "warg-crypto",
+ "warg-protocol",
+ "warg-server",
+ "wasm-metadata 0.10.1",
+ "wasmparser 0.110.0",
+ "wit-component 0.13.1",
+ "wit-parser",
+]
+
+[[package]]
 name = "wit-bindgen"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

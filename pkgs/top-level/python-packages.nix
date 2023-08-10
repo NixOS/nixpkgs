@@ -12468,6 +12468,8 @@ self: super: with self; {
 
   tensorrt = callPackage ../development/python-modules/tensorrt { };
 
+  tensorstore = callPackage ../development/python-modules/tensorstore { };
+
   tellduslive = callPackage ../development/python-modules/tellduslive { };
 
   termcolor = callPackage ../development/python-modules/termcolor { };

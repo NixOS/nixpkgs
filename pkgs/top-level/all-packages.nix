@@ -17139,6 +17139,8 @@ with pkgs;
 
   devspace = callPackage ../development/tools/misc/devspace { };
 
+  leptosfmt = callPackage ../development/tools/rust/leptosfmt { };
+
   maturin = callPackage ../development/tools/rust/maturin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -25445,6 +25447,8 @@ with pkgs;
 
   xdo = callPackage ../tools/misc/xdo { };
 
+  xdiskusage = callPackage ../tools/misc/xdiskusage { };
+
   xed = callPackage ../development/libraries/xed { };
 
   xedit = callPackage ../applications/editors/xedit { };
@@ -26931,6 +26935,7 @@ with pkgs;
   prometheus-gitlab-ci-pipelines-exporter = callPackage ../servers/monitoring/prometheus/gitlab-ci-pipelines-exporter.nix { };
   prometheus-graphite-exporter = callPackage ../servers/monitoring/prometheus/graphite-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
+  prometheus-idrac-exporter = callPackage ../servers/monitoring/prometheus/idrac-exporter.nix { };
   prometheus-influxdb-exporter = callPackage ../servers/monitoring/prometheus/influxdb-exporter.nix { };
   prometheus-ipmi-exporter = callPackage ../servers/monitoring/prometheus/ipmi-exporter.nix { };
   prometheus-jitsi-exporter = callPackage ../servers/monitoring/prometheus/jitsi-exporter.nix { };
