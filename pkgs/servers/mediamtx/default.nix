@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -22,6 +23,8 @@ buildGoModule rec {
   ldflags = [
     "-X github.com/bluenviron/mediamtx/internal/core.version=v${version}"
   ];
+
+  passthru.tests = { inherit (nixosTests) mediamtx; };
 
   meta = with lib; {
     description =
