@@ -13410,6 +13410,12 @@
     githubId = 7839004;
     name = "Dmitriy Pleshevskiy";
   };
+  pluiedev = {
+    email = "hi@pluie.me";
+    github = "pluiedev";
+    githubId = 22406910;
+    name = "Leah Amelia Chen";
+  };
   plumps = {
     email = "maks.bronsky@web.de";
     github = "plumps";
