@@ -40,6 +40,10 @@ buildPythonPackage rec {
     scrapy
   ];
 
+  pythonImportsCheck = [
+    "scrapy_fake_useragent"
+  ];
+
   disabledTests = [
     # AttributeError: 'RetryUserAgentMiddleware' object has no attribute 'EXCEPTIONS_TO_RETRY'
     "test_random_ua_set_on_exception"
