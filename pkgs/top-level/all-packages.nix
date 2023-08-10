@@ -18346,7 +18346,7 @@ with pkgs;
 
   zls = callPackage ../development/tools/language-servers/zls {
     zigHook = zigHook.override {
-      zig = buildPackages.zig_0_10;
+      zig = buildPackages.zig_0_11;
     };
   };
 
