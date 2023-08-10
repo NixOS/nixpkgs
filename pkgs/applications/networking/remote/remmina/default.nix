@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
+      --set-default SSL_CERT_DIR "/etc/ssl/certs/"
       --prefix LD_LIBRARY_PATH : "${libX11.out}/lib"
       ${lib.optionalString stdenv.isDarwin ''
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
