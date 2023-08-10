@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
+{ lib, stdenv, fetchurl, xorg, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
 let
   pname = "geogebra";
   version = "5-0-785-0";
@@ -55,7 +55,11 @@ let
     installPhase = ''
       install -D geogebra/* -t "$out/libexec/geogebra/"
 
+      # The bundled jogl (required for 3D graphics) links to libXxf86vm
+      # OpenGL versions newer than 3.0 cause "javax.media.opengl.GLException: Not a GL2 implementation"
       makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm ]}" \
+        --set MESA_GL_VERSION_OVERRIDE 3.0 \
         --set JAVACMD "${jre}/bin/java" \
         --set GG_PATH "$out/libexec/geogebra" \
         --add-flags "--language=${language}"
