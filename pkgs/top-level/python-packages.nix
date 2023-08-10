@@ -4445,6 +4445,8 @@ self: super: with self; {
 
   gpaw = callPackage ../development/python-modules/gpaw { };
 
+  gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
+
   gpiozero = callPackage ../development/python-modules/gpiozero { };
 
   gplaycli = callPackage ../development/python-modules/gplaycli { };
