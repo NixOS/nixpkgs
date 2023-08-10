@@ -9970,6 +9970,8 @@ with pkgs;
 
   multitail = callPackage ../tools/misc/multitail { };
 
+  mvebu64boot = callPackage ../tools/misc/mvebu64boot { };
+
   mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
 
   mx-takeover = callPackage ../tools/security/mx-takeover { };
