@@ -20,13 +20,13 @@
 , gnome-desktop
 , gnome-online-accounts
 , gnome-settings-daemon
+, gnome-tecla
 , gnome
 , gsettings-desktop-schemas
 , gsound
 , gst_all_1
 , gtk4
 , ibus
-, libgnomekbd
 , libgtop
 , libgudev
 , libadwaita
@@ -66,18 +66,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "45.alpha";
+  version = "45.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-0Exsn2yo+ywyOS24p+qt30OiP6XZhlgB+0Z1DK0TwpA=";
+    sha256 = "sha256-DGwHNKAbNK+RSMzx28xalZ88+bsEpTvTB6nykORe8p4=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      inherit glibc libgnomekbd tzdata shadow;
+      tecla = gnome-tecla;
+      inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
     })
   ];
