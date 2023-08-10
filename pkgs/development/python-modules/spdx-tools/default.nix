@@ -1,10 +1,13 @@
 { lib
 , buildPythonPackage
+, beartype
 , click
 , fetchPypi
+, license-expression
 , pyyaml
 , rdflib
 , ply
+, semantic-version
 , xmltodict
 , pytestCheckHook
 , pythonOlder
@@ -13,21 +16,24 @@
 
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.7.1";
+  version = "0.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l15tu6iPEFqKyyKr9T/pDw6dVjWiubH+SHeB6WliOxc=";
+    hash = "sha256-ZoCb94eDtHFH3K9ppju51WHrReay7BXC6P4VUOJK4c0=";
   };
 
   propagatedBuildInputs = [
+    beartype
     click
+    license-expression
     ply
     pyyaml
     rdflib
+    semantic-version
     uritools
     xmltodict
   ];
@@ -37,7 +43,12 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "spdx"
+    "spdx_tools.spdx"
+  ];
+
+  disabledTestPaths = [
+    # Depends on the currently not packaged pyshacl module.
+    "tests/spdx3/validation/json_ld/test_shacl_validation.py"
   ];
 
   meta = with lib; {
