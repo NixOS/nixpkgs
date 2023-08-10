@@ -440,10 +440,8 @@ in {
   loki = handleTest ./loki.nix {};
   luks = handleTest ./luks.nix {};
   lvm2 = handleTest ./lvm2 {};
-  lxd = handleTest ./lxd.nix {};
-  lxd-nftables = handleTest ./lxd-nftables.nix {};
+  lxd = handleTest ./lxd {};
   lxd-image-server = handleTest ./lxd-image-server.nix {};
-  lxd-ui = handleTest ./lxd-ui.nix {};
   #logstash = handleTest ./logstash.nix {};
   lorri = handleTest ./lorri/default.nix {};
   maddy = discoverTests (import ./maddy { inherit handleTest; });

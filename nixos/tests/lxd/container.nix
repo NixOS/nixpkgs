@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, lib, ... } :
+import ../make-test-python.nix ({ pkgs, lib, ... } :
 
 let
-  lxd-image = import ../release.nix {
+  lxd-image = import ../../release.nix {
     configuration = {
       # Building documentation makes the test unnecessarily take a longer time:
       documentation.enable = lib.mkForce false;
@@ -38,19 +38,18 @@ in {
   };
 
   testScript = ''
+    def instance_is_up(_) -> bool:
+      status, _ = machine.execute("lxc exec container --disable-stdin --force-interactive /run/current-system/sw/bin/true")
+      return status == 0
+
     machine.wait_for_unit("sockets.target")
     machine.wait_for_unit("lxd.service")
     machine.wait_for_file("/var/lib/lxd/unix.socket")
 
-    # It takes additional second for lxd to settle
-    machine.sleep(1)
+    # Wait for lxd to settle
+    machine.succeed("lxd waitready")
 
-    # lxd expects the pool's directory to already exist
-    machine.succeed("mkdir /var/lxd-pool")
-
-    machine.succeed(
-        "cat ${./common/lxd/config.yaml} | lxd init --preseed"
-    )
+    machine.succeed("lxd init --minimal")
 
     machine.succeed(
         "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs}/*/*.tar.xz --alias nixos"
@@ -58,21 +57,23 @@ in {
 
     with subtest("Container can be managed"):
         machine.succeed("lxc launch nixos container")
-        machine.sleep(5)
+        with machine.nested("Waiting for instance to start and be usable"):
+          retry(instance_is_up)
         machine.succeed("echo true | lxc exec container /run/current-system/sw/bin/bash -")
-        machine.succeed("lxc exec container true")
         machine.succeed("lxc delete -f container")
 
     with subtest("Container is mounted with lxcfs inside"):
         machine.succeed("lxc launch nixos container")
-        machine.sleep(5)
+        with machine.nested("Waiting for instance to start and be usable"):
+            retry(instance_is_up)
 
         ## ---------- ##
         ## limits.cpu ##
 
         machine.succeed("lxc config set container limits.cpu 1")
         machine.succeed("lxc restart container")
-        machine.sleep(5)
+        with machine.nested("Waiting for instance to start and be usable"):
+            retry(instance_is_up)
 
         assert (
             "1"
@@ -81,7 +82,8 @@ in {
 
         machine.succeed("lxc config set container limits.cpu 2")
         machine.succeed("lxc restart container")
-        machine.sleep(5)
+        with machine.nested("Waiting for instance to start and be usable"):
+            retry(instance_is_up)
 
         assert (
             "2"
@@ -93,7 +95,8 @@ in {
 
         machine.succeed("lxc config set container limits.memory 64MB")
         machine.succeed("lxc restart container")
-        machine.sleep(5)
+        with machine.nested("Waiting for instance to start and be usable"):
+            retry(instance_is_up)
 
         assert (
             "MemTotal:          62500 kB"
@@ -102,7 +105,8 @@ in {
 
         machine.succeed("lxc config set container limits.memory 128MB")
         machine.succeed("lxc restart container")
-        machine.sleep(5)
+        with machine.nested("Waiting for instance to start and be usable"):
+            retry(instance_is_up)
 
         assert (
             "MemTotal:         125000 kB"
