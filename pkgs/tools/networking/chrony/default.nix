@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config
 , gnutls, libedit, nspr, nss, readline, texinfo
 , libcap, libseccomp, pps-tools
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   hardeningEnable = [ "pie" ];
+
+  passthru.tests = { inherit (nixosTests) chrony chrony-ptp; };
 
   meta = with lib; {
     description = "Sets your computer's clock from time servers on the Net";
