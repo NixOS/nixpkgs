@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
   ];
 
-  setSourceRoot = "sourceRoot=`pwd`";
+  sourceRoot = ".";
 
   dontUnpack = true;
 
