@@ -1,7 +1,7 @@
 { lib, callPackage, fetchFromGitHub, php, unzip, _7zz, xz, git, curl, cacert, makeBinaryWrapper }:
 
 php.buildComposerProject (finalAttrs: {
-  composer = callPackage ../../tools/misc/composer { };
+  composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix { };
 
   pname = "composer";
   version = "2.6.2";

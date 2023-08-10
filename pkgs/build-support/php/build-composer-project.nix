@@ -6,7 +6,7 @@ let
     let
       phpDrv = finalAttrs.php or php;
       composer = finalAttrs.composer or phpDrv.packages.composer;
-      composer-local-repo-plugin = callPackage ./composer-local-repo-plugin.nix { };
+      composer-local-repo-plugin = callPackage ./pkgs/composer-local-repo-plugin.nix { };
       composerLock = finalAttrs.composerLock or null;
     in
     {
