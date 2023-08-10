@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
+, pythonRelaxDepsHook
 
 # build-system
 , setuptools
@@ -43,14 +45,29 @@ buildPythonPackage rec {
     hash = "sha256-MXzPIcbG8b1JwhEyAZG4DRObGaHq+ipVHMrZCzaxLdE=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "support-scipy-1.11.patch";
+      url = "https://github.com/librosa/librosa/commit/12dee8eabed7df14c5622b52c05393ddfeb11f4b.patch";
+      hash = "sha256-JxTXU0Mc+QYpsafjoGLaIccD7EdCYJvIVianeosYpw4=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "--cov-report term-missing --cov librosa --cov-report=xml " ""
   '';
+
+  pythonRelaxDeps = [
+    # the version of numba may not be set correctly until the next release, 0.58
+    # see the comment of https://github.com/NixOS/nixpkgs/pull/247678
+    "numba"
+  ];
 
   propagatedBuildInputs = [
     audioread
