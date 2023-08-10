@@ -293,6 +293,7 @@ in
 
   options = {
 
+    virtualisation.overrideFilesystems = lib.mkEnableOption "overriding fileSystems with virtualisation.fileSystems" // { default = true; };
     virtualisation.fileSystems = options.fileSystems;
 
     virtualisation.memorySize =
@@ -1125,7 +1126,7 @@ in
     # build-vm`) of a system configuration, where the regular value for the
     # `fileSystems' attribute should be disregarded (since those filesystems
     # don't necessarily exist in the VM).
-    fileSystems = mkVMOverride cfg.fileSystems;
+    fileSystems = lib.mkIf cfg.overrideFilesystems (mkVMOverride cfg.fileSystems);
 
     virtualisation.fileSystems = let
       mkSharedDir = tag: share:
