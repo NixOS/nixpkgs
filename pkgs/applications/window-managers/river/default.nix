@@ -14,7 +14,7 @@
 , wayland-protocols
 , wlroots_0_16
 , xwayland
-, zigHook
+, zig_0_10
 , withManpages ? true
 , xwaylandSupport ? true
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland
     xwayland
-    zigHook
+    zig_0_10.hook
   ]
   ++ lib.optional withManpages scdoc;
 

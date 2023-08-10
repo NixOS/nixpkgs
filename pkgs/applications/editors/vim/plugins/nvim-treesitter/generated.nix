@@ -854,11 +854,11 @@
   };
   htmldjango = buildGrammar {
     language = "htmldjango";
-    version = "0.0.0+rev=11e73eb";
+    version = "0.0.0+rev=717e83a";
     src = fetchFromGitHub {
       owner = "interdependence";
       repo = "tree-sitter-htmldjango";
-      rev = "11e73ebd8e73356badaad826a0534437b208b6e7";
+      rev = "717e83aefd328735beeeb671f3f95b2624e70c57";
       hash = "sha256-xOWR5Lp9Ggkqmm5rutKrnMNXFASdyn6vPtxcY2mu2zs=";
     };
     meta.homepage = "https://github.com/interdependence/tree-sitter-htmldjango";
@@ -1696,12 +1696,12 @@
   };
   scala = buildGrammar {
     language = "scala";
-    version = "0.0.0+rev=a2f36c2";
+    version = "0.0.0+rev=f14629b";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-scala";
-      rev = "a2f36c2477859110d5b7b675f395e50241fbc004";
-      hash = "sha256-/GT4SwYit6IwWgEadPMEyXVtmXdwomWUrDMdlTHS6Qs=";
+      rev = "f14629b4d53f72356ce8f6d4ac8c54d21b4e74dd";
+      hash = "sha256-SRj4iF1qS2jEFaIkRfXzAmzG7jKeSzKv5/GdXKbKRjU=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-scala";
   };
@@ -1796,12 +1796,12 @@
   };
   sql = buildGrammar {
     language = "sql";
-    version = "0.0.0+rev=a000dd8";
+    version = "0.0.0+rev=3dfa1b1";
     src = fetchFromGitHub {
       owner = "derekstride";
       repo = "tree-sitter-sql";
-      rev = "a000dd8930464c71fa6fec9be4fdd6198068393c";
-      hash = "sha256-37nN/Zh84iTmmpZ804rnb/7oXzQqOk7ub1FbkCMlT28=";
+      rev = "3dfa1b1fafac51e3ffc39064eafb26b5111861a2";
+      hash = "sha256-sDXYfILv+7/fGIaWp4SOfsjZ67Mi3UPnpt9NEapKZ+M=";
     };
     meta.homepage = "https://github.com/derekstride/tree-sitter-sql";
   };
@@ -2176,12 +2176,12 @@
   };
   wing = buildGrammar {
     language = "wing";
-    version = "0.0.0+rev=df94899";
+    version = "0.0.0+rev=6ae93e3";
     src = fetchFromGitHub {
       owner = "winglang";
       repo = "wing";
-      rev = "df94899fcee25e2da32744760aa4394d2e728a33";
-      hash = "sha256-4mp3m029/3Kvke8NXbLQmE3qZa+c9I6x6nht1AckSgA=";
+      rev = "6ae93e3950b12b6c1b3881e4d347263574222c4e";
+      hash = "sha256-Ik5RaizsMVF+ObB1HzmwzMdmYzwH1TJ342TXDrKqFFs=";
     };
     location = "libs/tree-sitter-wing";
     generate = true;
