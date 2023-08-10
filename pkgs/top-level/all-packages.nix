@@ -24406,6 +24406,8 @@ with pkgs;
 
   qimageblitz = callPackage ../development/libraries/qimageblitz { };
 
+  qoi = callPackage ../development/libraries/qoi { };
+
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
   quarto = callPackage ../development/libraries/quarto { };
