@@ -3,11 +3,14 @@
 , darwin
 , dbus
 , fetchFromGitHub
+, glib
+, gst_all_1
 , lib
 , openssl
 , pkg-config
 , protobuf
 , rustPlatform
+, sqlite
 , stdenv
 }:
 
@@ -30,12 +33,21 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
+  buildInputs = [
     dbus
+    glib
+    gst_all_1.gstreamer
     openssl
+    sqlite
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AudioUnit
+    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.CoreAudio
+    darwin.apple_sdk.frameworks.CoreGraphics
+    darwin.apple_sdk.frameworks.Foundation
+    darwin.apple_sdk.frameworks.IOKit
+    darwin.apple_sdk.frameworks.Security
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
   ];
 
   meta = {
