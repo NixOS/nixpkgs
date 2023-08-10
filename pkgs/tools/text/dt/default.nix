@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ zig_0_11.hook ];
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.dt; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     homepage = "https://dt.plumbing";
