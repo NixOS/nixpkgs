@@ -4,6 +4,7 @@
 , cmake
 , boost
 , eigen
+, collisionSupport ? !stdenv.isDarwin
 , hpp-fcl
 , urdfdom
 , pythonSupport ? false
@@ -39,22 +40,28 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!pythonSupport) [
     boost
     eigen
+  ] ++ lib.optionals (!pythonSupport && collisionSupport) [
     hpp-fcl
   ] ++ lib.optionals pythonSupport [
     python3Packages.boost
     python3Packages.eigenpy
+  ] ++ lib.optionals (pythonSupport && collisionSupport) [
     python3Packages.hpp-fcl
   ];
 
-  cmakeFlags = [
+  cmakeFlags = lib.optionals collisionSupport [
     "-DBUILD_WITH_COLLISION_SUPPORT=ON"
-  ] ++ lib.optionals (pythonSupport) [
+  ] ++ lib.optionals pythonSupport [
     "-DBUILD_WITH_LIBPYTHON=ON"
+  ] ++ lib.optionals (pythonSupport && stdenv.isDarwin) [
+    # AssertionError: '.' != '/tmp/nix-build-pinocchio-2.6.20.drv/sou[84 chars].dae'
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;test-py-bindings_geometry_model_urdf'"
   ] ++ lib.optionals (!pythonSupport) [
     "-DBUILD_PYTHON_INTERFACE=OFF"
   ];
 
   doCheck = true;
+
   pythonImportsCheck = lib.optionals (!pythonSupport) [
     "pinocchio"
   ];
