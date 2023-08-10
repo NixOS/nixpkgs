@@ -1,4 +1,4 @@
-# Contributing to this documentation {#chap-contributing}
+# Contributing to Nixpkgs documentation {#chap-contributing}
 
 The sources of the Nixpkgs manual are in the [doc](https://github.com/NixOS/nixpkgs/tree/master/doc) subdirectory of the Nixpkgs repository.
 
@@ -24,6 +24,9 @@ It is a daemon, that:
 As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
 
 Additional syntax extensions are available, all of which can be used in NixOS option documentation. The following extensions are currently used:
+
+- []{#ssec-contributing-markup-tables}
+  Tables, using the [GitHub-flavored Markdown syntax](https://github.github.com/gfm/#tables-extension-).
 
 - []{#ssec-contributing-markup-anchors}
   Explicitly defined **anchors** on headings, to allow linking to sections. These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
