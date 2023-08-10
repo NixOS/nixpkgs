@@ -22358,6 +22358,8 @@ with pkgs;
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
 
+  libcanlock = callPackage ../development/libraries/libcanlock { };
+
   libcollectdclient = callPackage ../development/libraries/libcollectdclient { };
 
   libcpr = callPackage ../development/libraries/libcpr { };
@@ -26315,6 +26317,8 @@ with pkgs;
     theme-snow = callPackage ../servers/icingaweb2/theme-snow { };
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
+
+  inn = callPackage ../servers/news/inn { };
 
   inspircd = callPackage ../servers/irc/inspircd { };
 
