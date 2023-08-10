@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       comment = meta.description;
-      name = "JabRef %U";
+      name = "JabRef";
       desktopName = "JabRef";
       genericName = "Bibliography manager";
       categories = [ "Office" ];
       icon = "jabref";
-      exec = "JabRef";
+      exec = "JabRef %U";
       startupWMClass = "org.jabref.gui.JabRefMain";
       mimeTypes = [ "text/x-bibtex" ];
     })
@@ -144,8 +144,14 @@ stdenv.mkDerivation rec {
     unzip $out/lib/javafx-web-*.jar libjfxwebkit.so -d $out/lib/
 
     DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
     rm $out/bin/*
 
+    # put this in postFixup because some gappsWrapperArgs are generated in gappsWrapperArgsHook in preFixup
     makeWrapper ${jdk}/bin/java $out/bin/JabRef \
       "''${gappsWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
@@ -154,8 +160,6 @@ stdenv.mkDerivation rec {
 
     # lowercase alias (for convenience and required for browser extensions)
     ln -sf $out/bin/JabRef $out/bin/jabref
-
-    runHook postInstall
   '';
 
   meta = with lib; {
