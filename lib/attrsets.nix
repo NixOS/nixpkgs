@@ -28,6 +28,7 @@ let
     groupBy
     take
     foldl
+    imap0
     ;
 in
 
@@ -1053,6 +1054,85 @@ rec {
     :::
   */
   mapAttrs' = f: set: listToAttrs (mapAttrsToList f set);
+
+  /*
+    Map the values of an attribute set to the result of
+    calling a function on each attribute.
+
+    The function takes three positional arguments:
+    1. (Int): The attribute's alphabetical index (starting at 0).
+    2. (String): The attribute's name
+    3. (Any): The attribute's value.
+
+    This function is similar to [`builtins.mapAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-mapAttrs)
+    but additionally passes the index to the function.
+
+    # Inputs
+
+    `f`
+
+    : A function to use when mapping over the attributes
+
+    `set`
+
+    : The set to map over
+
+    # Type
+      imap0Attrs :: (Int -> String -> a -> b) -> { ... :: a } -> { ... :: b }
+
+    # Examples
+    :::{.example}
+    ## Simple example
+    ```nix
+      imap0Attrs (i: name: value: value + i)
+         { a = 1; b = 1; c = 1; }
+      => { a = 1; b = 2; c = 3; }
+    ```
+
+    :::
+  */
+  imap0Attrs =
+    f: set: listToAttrs (imap0 (i: attr: nameValuePair attr (f i attr set.${attr})) (attrNames set));
+
+  /*
+    Map the names and values of an attribute set to a new set using a function.
+
+    The function takes three positional arguments
+
+    1. (Int): The attribute's alphabetical index
+    2. (String): The attribute's name
+    3. (Any): The attribute's value
+
+    and should output a name value pair like `{ name = "a-new-name", value = "any value"}`.
+    You can use a function like `NameValuePair`.
+
+    This function is similar to `lib.mapAttrs'` but addtionally passes the index to the function.
+
+    # Inputs
+
+    `f`
+
+    : A function taking three arguments and returning a name value pair `{name :: String; value:: Any}`
+
+    `set`
+
+    : The set to map over
+
+    # Type
+       imap0Attrs' :: (Int -> String -> { ... :: a } -> {name :: String; value:: b}) -> { ... :: a } -> { ... :: b}
+
+    # Example
+    :::{.example}
+    ## Simple example
+
+    ```
+      imap0Attrs' (i: name: value: nameValuePair "${name}${toString i}" (value + i))
+         { a = 2; b = 3; }
+      => { a0 = 2; b1 = 4 }
+    ```
+    :::
+  */
+  imap0Attrs' = f: set: listToAttrs (imap0 (i: attr: f i attr set.${attr}) (attrNames set));
 
   /**
     Call a function for each attribute in the given set and return
