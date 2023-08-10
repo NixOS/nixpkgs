@@ -1938,7 +1938,7 @@ with pkgs;
 
   tere = callPackage ../tools/misc/tere { };
 
-  termusic = callPackage ../applications/audio/termusic { };
+  termusic = darwin.apple_sdk_11_0.callPackage ../applications/audio/termusic { };
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
