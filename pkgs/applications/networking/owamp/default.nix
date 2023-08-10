@@ -3,9 +3,8 @@
 
 stdenv.mkDerivation rec {
   pname = "owamp";
-  version = "3.5.6";
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [ mandoc ];
+  version = "5.0.4";
+
   src = fetchFromGitHub {
     owner = "perfsonar";
     repo = "owamp";
@@ -13,6 +12,9 @@ stdenv.mkDerivation rec {
     sha256="019rcshmrqk8pfp510j5jvazdcnz0igfkwv44mfxb5wirzj9p6s7";
     fetchSubmodules = true;
   };
+
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ mandoc ];
 
   preConfigure = ''
     I2util/bootstrap.sh
