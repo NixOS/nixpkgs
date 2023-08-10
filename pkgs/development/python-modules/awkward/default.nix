@@ -24,6 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-v06mYdoP/WfIfz6x6+MJvS4YOsTsyWqhCyAykZ1d5v4=";
   };
 
+  patches = [
+    # the version of numba may not be set correctly until the next release, 0.58
+    # see the comment of https://github.com/NixOS/nixpkgs/pull/247678
+    ./relax-numba-version.patch
+  ];
+
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatchling

@@ -1,0 +1,16 @@
+diff --git a/src/awkward/numba.py b/src/awkward/numba.py
+index 12664116..948dbf60 100644
+--- a/src/awkward/numba.py
++++ b/src/awkward/numba.py
+@@ -28,11 +28,6 @@ conda install numba"""
+         ) from err
+ 
+     if not _has_checked_version:
+-        if parse_version(numba.__version__) < parse_version("0.50"):
+-            raise ImportError(
+-                "Awkward Array can only work with numba 0.50 or later "
+-                "(you have version {})".format(numba.__version__)
+-            )
+         _has_checked_version = True
+ 
+     _register()
