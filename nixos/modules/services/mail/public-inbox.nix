@@ -303,6 +303,22 @@ in
             };
           };
         };
+        options.publicinboxmda.spamcheck = mkOption {
+          type = with types; enum [ "spamc" "none" ];
+          default = "none";
+          description = lib.mdDoc ''
+            If set to spamc, {manpage}`public-inbox-watch(1)` will filter spam
+            using SpamAssassin. This is currently not working in NixOS.
+          '';
+        };
+        options.publicinboxwatch.spamcheck = mkOption {
+          type = with types; enum [ "spamc" "none" ];
+          default = "none";
+          description = lib.mdDoc ''
+            If set to spamc, {manpage}`public-inbox-watch(1)` will filter spam
+            using SpamAssassin. This is currently not working in NixOS.
+          '';
+        };
         options.publicinboxwatch.watchspam = mkOption {
           type = with types; nullOr str;
           default = null;
