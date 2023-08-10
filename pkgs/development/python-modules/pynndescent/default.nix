@@ -10,6 +10,7 @@
 , scipy
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,22 @@ buildPythonPackage rec {
       url = "https://github.com/lmcinnes/pynndescent/commit/e56b92776a4a05f2dabb80d25479bd37e7ebd88e.patch";
       hash = "sha256-zVTaW4syGEHh2HAGPyBN3YXqUGe55v/LxKLX/zjXT5Y=";
     })
+  ];
+
+  postPatch = ''
+    # fix scipy 1.11 compat
+    substituteInPlace pynndescent/tests/test_distances.py \
+      --replace '"kulsinski",' ""
+  '';
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    # the version of numba may not be set correctly until the next release, 0.58
+    # see the comment of https://github.com/NixOS/nixpkgs/pull/247678
+    "numba"
   ];
 
   propagatedBuildInputs = [
