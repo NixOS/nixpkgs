@@ -1,4 +1,4 @@
-# Contributing to this documentation {#chap-contributing}
+# Contributing to Nixpkgs documentation {#chap-contributing}
 
 The sources of the Nixpkgs manual are in the [doc](https://github.com/NixOS/nixpkgs/tree/master/doc) subdirectory of the Nixpkgs repository.
 
