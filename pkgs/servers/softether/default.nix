@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , openssl, readline, ncurses, zlib
-, dataDir ? "/var/lib/softether" }:
+, dataDir ? "/var/lib/softether"
+, removeRegionLock ? false }:
 
 stdenv.mkDerivation rec {
   pname = "softether";
@@ -13,6 +14,11 @@ stdenv.mkDerivation rec {
     rev = "v${version}-${build}-rtm";
     sha256 = "uSI5IV/Xhu+jnjVUWbYizTcSiOkG7N8IjQPPUSJby+I=";
   };
+
+  patches = lib.optionals removeRegionLock [
+    # https://github.com/SoftEtherVPN/SoftEtherVPN/blob/5f12684b42f747c2d15f3b89a03133c15dd902ea/src/Cedar/Server.c#L10586-L10637
+    ./remove-region-lock.patch
+  ];
 
   buildInputs = [ openssl readline ncurses zlib ];
 

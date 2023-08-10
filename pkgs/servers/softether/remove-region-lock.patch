@@ -1,0 +1,10 @@
+--- v4.42-9798/src/Cedar/Server.c	2023-08-08 14:50:00.240140548 +0900
++++ v4.42-9798/src/Cedar/Server.c	2023-08-08 14:50:33.271800128 +0900
+@@ -10905,6 +10905,7 @@
+ // 
+ bool SiIsEnterpriseFunctionsRestrictedOnOpenSource(CEDAR *c)
+ {
++	return false;
+ 	char region[128];
+ 	bool ret = false;
+ 	// Validate arguments
