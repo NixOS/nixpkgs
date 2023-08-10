@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "k3sup";
-  version = "0.12.13";
+  version = "0.12.14";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
     rev = version;
-    sha256 = "sha256-lnr2zMp6gpOM1DtUFIniDd38zR1qnXCmcftlt7dL6P4=";
+    sha256 = "sha256-8zXcW1jVNVpFWpVYONjc0cwRQr8YTVbLYIH1IYCe9Nw=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  vendorHash = "sha256-97m8xz46lvTtZoxO2+pjWmZyZnB2atPuVzYgS9DV+gI=";
+  vendorHash = "sha256-cCodzX7/JBEEFAwlspaITju4Ev1Gno+DsrEkUpAFwxM=";
 
   postConfigure = ''
     substituteInPlace vendor/github.com/alexellis/go-execute/pkg/v1/exec.go \
@@ -49,6 +49,6 @@ buildGoModule rec {
     homepage = "https://github.com/alexellis/k3sup";
     description = "Bootstrap Kubernetes with k3s over SSH";
     license = licenses.mit;
-    maintainers = with maintainers; [ welteki ];
+    maintainers = with maintainers; [ welteki qjoly ];
   };
 }
