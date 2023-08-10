@@ -1,15 +1,21 @@
 {
   alsa-lib
-, darwin
+, AppKit
+, CoreAudio
+, CoreGraphics
 , dbus
+, Foundation
 , fetchFromGitHub
 , glib
 , gst_all_1
+, IOKit
 , lib
+, MediaPlayer
 , openssl
 , pkg-config
 , protobuf
 , rustPlatform
+, Security
 , sqlite
 , stdenv
 }:
@@ -40,13 +46,13 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.CoreAudio
-    darwin.apple_sdk.frameworks.CoreGraphics
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.apple_sdk.frameworks.IOKit
-    darwin.apple_sdk.frameworks.MediaPlayer
-    darwin.apple_sdk.frameworks.Security
+    AppKit
+    CoreAudio
+    CoreGraphics
+    Foundation
+    IOKit
+    MediaPlayer
+    Security
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
   ];

@@ -1938,7 +1938,9 @@ with pkgs;
 
   tere = callPackage ../tools/misc/tere { };
 
-  termusic = darwin.apple_sdk_11_0.callPackage ../applications/audio/termusic { };
+  termusic = darwin.apple_sdk_11_0.callPackage ../applications/audio/termusic {
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreGraphics Foundation IOKit MediaPlayer Security;
+  };
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
