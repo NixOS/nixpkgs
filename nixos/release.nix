@@ -310,7 +310,7 @@ in rec {
   );
 
   # An image that can be imported into lxd and used for container creation
-  lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -319,14 +319,14 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
         ];
     }).config.system.build.tarball)
 
   );
 
   # Metadata for the lxd image
-  lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerImageMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -335,7 +335,7 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
         ];
     }).config.system.build.metadata)
 

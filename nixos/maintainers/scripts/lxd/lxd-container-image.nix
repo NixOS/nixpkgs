@@ -2,10 +2,10 @@
 
 {
   imports = [
-    ../../../modules/virtualisation/lxc-container.nix
+    ../../../modules/virtualisation/lxd-container.nix
   ];
 
-  virtualisation.lxc.templates.nix = {
+  virtualisation.lxd.image.templates.nix = {
     enable = true;
     target = "/etc/nixos/lxd.nix";
     template = ./nix.tpl;
@@ -16,8 +16,8 @@
   system.activationScripts.config = ''
     if [ ! -e /etc/nixos/configuration.nix ]; then
       mkdir -p /etc/nixos
-      cat ${./lxd-image-inner.nix} > /etc/nixos/configuration.nix
-      sed 's|../../../modules/virtualisation/lxc-container.nix|<nixpkgs/nixos/modules/virtualisation/lxc-container.nix>|g' -i /etc/nixos/configuration.nix
+      cat ${./lxd-container-image-inner.nix} > /etc/nixos/configuration.nix
+      ${lib.getExe pkgs.gnused} 's|../../../modules/virtualisation/lxc-container.nix|<nixpkgs/nixos/modules/virtualisation/lxc-container.nix>|g' -i /etc/nixos/configuration.nix
     fi
   '';
 
