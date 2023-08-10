@@ -21,7 +21,7 @@
 , typing-extensions
 , idna-ssl
 # tests_require
-, async_generator
+, async-generator
 , freezegun
 , gunicorn
 , pytest-mock
@@ -80,7 +80,7 @@ buildPythonPackage rec {
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
-    async_generator
+    async-generator
     freezegun
     gunicorn
     pytest-mock
