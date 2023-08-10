@@ -20295,6 +20295,8 @@ with pkgs;
 
   tockloader = callPackage ../development/tools/misc/tockloader { };
 
+  zon2nix = callPackage ../tools/nix/zon2nix { };
+
   ### DEVELOPMENT / LIBRARIES
 
   a52dec = callPackage ../development/libraries/a52dec { };
