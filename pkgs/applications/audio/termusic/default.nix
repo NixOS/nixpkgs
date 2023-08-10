@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.CoreGraphics
     darwin.apple_sdk.frameworks.Foundation
     darwin.apple_sdk.frameworks.IOKit
+    darwin.apple_sdk.frameworks.MediaPlayer
     darwin.apple_sdk.frameworks.Security
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
