@@ -41744,4 +41744,6 @@ with pkgs;
   gitrs = callPackage ../tools/misc/gitrs { };
 
   wttrbar = callPackage ../applications/misc/wttrbar { };
+
+  sdns = callPackage ../tools/networking/sdns { };
 }
