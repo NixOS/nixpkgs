@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "owamp";
-  version = "5.0.4";
+  version = "4.4.6";
 
   src = fetchFromGitHub {
     owner = "perfsonar";
     repo = "owamp";
-    rev = version;
-    sha256="019rcshmrqk8pfp510j5jvazdcnz0igfkwv44mfxb5wirzj9p6s7";
+    rev = "v${version}";
+    sha256= "5o85XSn84nOvNjIzlaZ2R6/TSHpKbWLXTO0FmqWsNMU=";
     fetchSubmodules = true;
   };
 
