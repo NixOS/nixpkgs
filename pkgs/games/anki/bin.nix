@@ -58,7 +58,7 @@ let
     targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 ]);
 
     runScript = writeShellScript "anki-wrapper.sh" ''
-      exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs }
+      exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs } "$@"
     '';
 
     extraInstallCommands = ''

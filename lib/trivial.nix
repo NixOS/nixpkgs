@@ -307,14 +307,14 @@ rec {
 
   /* Reads a JSON file.
 
-     Type :: path -> any
+     Type: importJSON :: path -> any
   */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
   /* Reads a TOML file.
 
-     Type :: path -> any
+     Type: importTOML :: path -> any
   */
   importTOML = path:
     builtins.fromTOML (builtins.readFile path);

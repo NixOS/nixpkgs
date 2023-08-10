@@ -16,12 +16,11 @@ import ./generic.nix args {
 
   patches = [
     # Fix index out of bounds reading RPATH (cherry-picked from 0.10-dev)
-    ./rpath.patch
+    ./000-0.9-read-dynstr-at-rpath-offset.patch
     # Fix build on macOS 13 (cherry-picked from 0.10-dev)
-    ./ventura.patch
+    ./001-0.9-bump-macos-supported-version.patch
   ];
 
-  # TODO: remove on next upgrade
   prePatch =
     let
       zig_0_10_0 = fetchFromGitHub {
