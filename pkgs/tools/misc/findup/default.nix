@@ -1,9 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, findup
 , testers
-, zigHook
+, zig_0_10
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Tpyiy5oJQ04lqVEOFshFC0+90VoNILQ+N6Dd7lbuH/Q=";
   };
 
-  nativeBuildInputs = [ zigHook ];
+  nativeBuildInputs = [ zig_0_10.hook ];
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.findup; };
 

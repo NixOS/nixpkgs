@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, zigHook
+, zig
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    zigHook
+    zig.hook
   ];
 
   meta = with lib; {
