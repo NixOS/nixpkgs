@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
       trade-offs.
     '';
     homepage    = "http://mercurylang.org";
+    changelog   = "https://dl.mercurylang.org/release/release-notes-${version}.html";
     license     = lib.licenses.gpl2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
