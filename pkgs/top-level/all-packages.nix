@@ -1770,6 +1770,8 @@ with pkgs;
 
   gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
 
+  grizzly = callPackage ../tools/misc/grizzly { };
+
   guestfs-tools = callPackage ../tools/virtualization/guestfs-tools { };
 
   fabs = callPackage ../tools/backup/fabs { };
