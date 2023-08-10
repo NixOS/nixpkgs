@@ -65,7 +65,7 @@ stripDirs() {
     if [ -n "${paths}" ]; then
         echo "stripping (with command $cmd and flags $stripFlags) in $paths"
         local striperr
-        striperr="$(mktemp 'striperr.XXXXXX')"
+        striperr="$(mktemp --tmpdir="$TMPDIR" 'striperr.XXXXXX')"
         # Do not strip lib/debug. This is a directory used by setup-hooks/separate-debug-info.sh.
         find $paths -type f -a '!' -path "$prefix/lib/debug/*" -print0 |
             # Make sure we process files under symlinks only once. Otherwise
