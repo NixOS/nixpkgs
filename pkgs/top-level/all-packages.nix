@@ -6167,6 +6167,8 @@ with pkgs;
 
   scour = with python3Packages; toPythonApplication scour;
 
+  see = callPackage ../tools/misc/see { };
+
   s2png = callPackage ../tools/graphics/s2png { };
 
   sfz = callPackage ../tools/misc/sfz { };
