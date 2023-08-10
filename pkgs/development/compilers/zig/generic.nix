@@ -6,6 +6,7 @@
 , libxml2
 , zlib
 , coreutils
+, callPackage
 , ...
 }:
 
@@ -52,6 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru = {
+    hook = callPackage ./hook.nix {
+      zig = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";

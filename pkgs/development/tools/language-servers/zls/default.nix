@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, zigHook
+, zig
 , callPackage
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zigHook
+    zig.hook
   ];
 
   postPatch = ''

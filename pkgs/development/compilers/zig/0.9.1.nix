@@ -6,6 +6,7 @@
 , libxml2
 , zlib
 , coreutils
+, callPackage
 }@args:
 
 import ./generic.nix args {
