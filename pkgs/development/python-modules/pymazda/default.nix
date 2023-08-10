@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pymazda";
-  version = "0.3.10";
+  version = "0.3.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b7YRg5g9ltYJhjMVcq9uZaSqzizJZM4pE4WYW2u9AwY=";
+    hash = "sha256-DiXLY4mfgRbE0Y1tOJnkMSQQj1vcySLVDBthOWe7/dM=";
   };
 
   nativeBuildInputs = [

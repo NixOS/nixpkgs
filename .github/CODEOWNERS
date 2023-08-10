@@ -58,9 +58,11 @@
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
 
-/doc/build-aux/pandoc-filters @jtojnar
-/doc/contributing/ @fricklerhandwerk
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk
+# Contributor documentation
+/CONTRIBUTING.md @infinisil
+/.github/PULL_REQUEST_TEMPLATE.md @infinisil
+/doc/contributing/ @fricklerhandwerk @infinisil
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk @infinisil
 
 # NixOS Internals
 /nixos/default.nix                                    @infinisil

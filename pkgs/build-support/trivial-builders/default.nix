@@ -357,12 +357,20 @@ rec {
       '';
 
       checkPhase =
+        # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
+        # but we still want to use writeShellApplication on those platforms
+        let
+          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck.compiler;
+          shellcheckCommand = lib.optionalString shellcheckSupported ''
+            # use shellcheck which does not include docs
+            # pandoc takes long to build and documentation isn't needed for just running the cli
+            ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
+          '';
+        in
         if checkPhase == null then ''
           runHook preCheck
           ${stdenv.shellDryRun} "$target"
-          # use shellcheck which does not include docs
-          # pandoc takes long to build and documentation isn't needed for in nixpkgs usage
-          ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
+          ${shellcheckCommand}
           runHook postCheck
         ''
         else checkPhase;
