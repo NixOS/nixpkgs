@@ -30,8 +30,15 @@
 , nettools
 , nixosTests
 
-# general options
-, snmpSupport ? true
+# FRR's configure.ac gets SNMP options by executing net-snmp-config on the build host
+# This leads to compilation errors when cross compiling.
+# E.g. net-snmp-config for x86_64 does not return the ARM64 paths.
+#
+#   SNMP_LIBS="`${NETSNMP_CONFIG} --agent-libs`"
+#   SNMP_CFLAGS="`${NETSNMP_CONFIG} --base-cflags`"
+, snmpSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+
+# other general options besides snmp support
 , rpkiSupport ? true
 , numMultipath ? 64
 , watchfrrSupport ? true
@@ -71,7 +78,8 @@
 , ospfApi ? true
 }:
 
-assert snmpSupport -> stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+  "cannot enable SNMP support due to cross-compilation issues with net-snmp-config"
 
 stdenv.mkDerivation rec {
   pname = "frr";
@@ -119,7 +127,7 @@ stdenv.mkDerivation rec {
 
   # cross-compiling: clippy is compiled with the build host toolchain, split it out to ease
   # navigation in dependency hell
-  clippy-helper = buildPackages.callPackage ./clippy-helper.nix { frr_version = version; frr_source=src; };
+  clippy-helper = buildPackages.callPackage ./clippy-helper.nix { frrVersion = version; frrSource = src; };
 
   configureFlags = [
     "--disable-silent-rules"

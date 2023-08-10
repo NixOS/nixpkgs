@@ -1,9 +1,9 @@
 { lib
 , stdenv
-, frr_source
-, frr_version
+, frrSource
+, frrVersion
 
-# build time
+  # build time
 , autoreconfHook
 , flex
 , bison
@@ -16,9 +16,9 @@
 
 stdenv.mkDerivation rec {
   pname = "frr-clippy-helper";
-  version = frr_version;
+  version = frrVersion;
 
-  src = frr_source;
+  src = frrSource;
 
   nativeBuildInputs = [
     autoreconfHook
