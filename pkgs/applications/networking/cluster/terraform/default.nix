@@ -54,6 +54,7 @@ let
         homepage = "https://www.terraform.io/";
         changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
         license = licenses.mpl20;
+        mainProgram = "terraform";
         maintainers = with maintainers; [
           Chili-Man
           babariviere
