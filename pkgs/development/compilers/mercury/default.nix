@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
       allowing modularity, separate compilation, and numerous optimization/time
       trade-offs.
     '';
-    homepage    = "http://mercurylang.org";
+    homepage    = "https://mercurylang.org/";
     changelog   = "https://dl.mercurylang.org/release/release-notes-${version}.html";
-    license     = lib.licenses.gpl2;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license     = lib.licenses.gpl2Only;
+    platforms   = lib.platforms.all;
     maintainers = [ ];
   };
 }
