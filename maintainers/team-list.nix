@@ -891,4 +891,14 @@ with lib.maintainers; {
     shortName = "Xfce";
     enableFeatureFreezePing = true;
   };
+
+  zig = {
+    members = [
+      AndersonTorres
+      figsoda
+    ];
+    scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
+    shortName = "Zig";
+    enableFeatureFreezePing = true;
+  };
 }
