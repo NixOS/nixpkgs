@@ -1,5 +1,5 @@
 import ../make-test-python.nix ({ lib, ... }:
-rec {
+{
   name = "fcitx5";
   meta.maintainers = with lib.maintainers; [ nevivurn ];
 
@@ -30,11 +30,12 @@ rec {
 
     i18n.inputMethod = {
       enabled = "fcitx5";
-      fcitx5.addons = [
-        pkgs.fcitx5-chinese-addons
-        pkgs.fcitx5-hangul
-        pkgs.fcitx5-m17n
-        pkgs.fcitx5-mozc
+      fcitx5.addons = with pkgs; [
+        fcitx5-chinese-addons
+        fcitx5-hangul
+        fcitx5-m17n
+        fcitx5-mozc
+        fcitx5-sayura
       ];
     };
   };
@@ -121,6 +122,14 @@ rec {
             machine.send_chars("ka\n")
             machine.sleep(1)
 
+            ### Switch to Sayura
+            machine.send_key("alt-shift")
+            machine.sleep(1)
+
+            ### Enter ග
+            machine.send_chars("g\n")
+            machine.sleep(1)
+
             ### Turn off Fcitx
             machine.send_key("ctrl-spc")
             machine.sleep(1)
@@ -132,7 +141,7 @@ rec {
 
             ### Verify that file contents are as expected
             file_content = machine.succeed("cat ${user.home}/fcitx_test.out")
-            assert file_content == "☺一下한कか\n"
+            assert file_content == "☺一下한कかග\n"
       ''
   ;
 })
