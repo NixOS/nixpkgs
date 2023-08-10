@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , installShellFiles
-, zigHook
+, zig_0_10
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    zigHook
+    zig_0_10.hook
   ];
 
   postInstall = ''
@@ -32,6 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/orhun/linuxwave/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda ];
-    inherit (zigHook.meta) platforms;
+    inherit (zig_0_10.meta) platforms;
   };
 })

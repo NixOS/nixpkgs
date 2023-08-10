@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , ncurses
-, zigHook
+, zig_0_10
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zigHook
+    zig_0_10.hook
   ];
 
   buildInputs = [
@@ -28,6 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://dev.yorhel.nl/ncdu/changes2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pSub rodrgz ];
-    inherit (zigHook.meta) platforms;
+    inherit (zig_0_10.meta) platforms;
   };
 })

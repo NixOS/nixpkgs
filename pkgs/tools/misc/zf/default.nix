@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , installShellFiles
 , testers
-, zf
-, zigHook
+, zig_0_10
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    zigHook
+    zig_0_10.hook
   ];
 
   doCheck = false; # it's failing somehow

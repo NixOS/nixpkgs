@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
     license = licenses.agpl3;
     maintainers = with maintainers; [ Br1ght0ne gaelreyrol ];
-    platforms = [ "x86_64-linux" ];
+    # error[E0432]: unresolved import `std::arch::x86_64`
+    broken = !stdenv.isx86_64;
   };
 }

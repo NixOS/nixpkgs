@@ -2,10 +2,12 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , pyzipper
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -22,8 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-ZLBvhuLXEOgqS7tRwP/e1Dv1/EMqxqXgpAZtLQGIt/o=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "unpin-setuptools.patch";
+      url = "https://github.com/XKNX/xknxproject/commit/53fecaf757d682fda00b04c3a2a1f3da86d9705f.patch";
+      hash = "sha256-EpfgEq4pIx7ahqJZalzo30ruj8NlZYHcKHxFXCGL98w=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

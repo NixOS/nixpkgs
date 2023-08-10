@@ -509,11 +509,7 @@ with pkgs;
 
   colorpicker = callPackage ../tools/misc/colorpicker { };
 
-  colorstorm = callPackage ../applications/misc/colorstorm {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_9;
-    };
-  };
+  colorstorm = callPackage ../applications/misc/colorstorm { };
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
@@ -595,11 +591,7 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
-  dt = callPackage ../tools/text/dt {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_11;
-    };
-  };
+  dt = callPackage ../tools/text/dt { };
 
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
@@ -1778,6 +1770,8 @@ with pkgs;
 
   gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
 
+  grizzly = callPackage ../tools/misc/grizzly { };
+
   guestfs-tools = callPackage ../tools/virtualization/guestfs-tools { };
 
   fabs = callPackage ../tools/backup/fabs { };
@@ -1991,6 +1985,8 @@ with pkgs;
   vrc-get = callPackage ../tools/misc/vrc-get {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  vrrtest = callPackage ../tools/video/vrrtest { };
 
   winbox = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.staging;
@@ -3016,11 +3012,7 @@ with pkgs;
 
   pikchr = callPackage ../tools/graphics/pikchr { };
 
-  poop = callPackage ../tools/misc/poop {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_11;
-    };
-  };
+  poop = callPackage ../tools/misc/poop { };
 
   popl = callPackage ../development/libraries/popl { };
 
@@ -6151,11 +6143,7 @@ with pkgs;
 
   river = callPackage ../applications/window-managers/river { };
 
-  rivercarro = callPackage ../applications/misc/rivercarro {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_9;
-    };
-  };
+  rivercarro = callPackage ../applications/misc/rivercarro { };
 
   river-luatile = callPackage ../applications/misc/river-luatile{ };
 
@@ -18336,11 +18324,7 @@ with pkgs;
 
   vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
 
-  zls = callPackage ../development/tools/language-servers/zls {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_10;
-    };
-  };
+  zls = callPackage ../development/tools/language-servers/zls { };
 
   ansible-later = callPackage ../tools/admin/ansible/later.nix { };
 
@@ -25560,9 +25544,7 @@ with pkgs;
   zig_0_11 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.11.nix {
     llvmPackages = llvmPackages_16;
   };
-  zig = zig_0_10;
-
-  zigHook = callPackage ../development/compilers/zig/hook.nix { };
+  zig = zig_0_11;
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
@@ -25571,6 +25553,8 @@ with pkgs;
   zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
 
   zita-resampler = callPackage ../development/libraries/audio/zita-resampler { };
+
+  zitadel-tools = callPackage ../tools/misc/zitadel-tools { };
 
   zix = callPackage ../development/libraries/audio/zix { };
 
@@ -30199,6 +30183,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  anytone-emu = callPackage ../applications/radio/anytone-emu { };
+
   anytype = callPackage ../applications/misc/anytype { };
 
   ao = libfive;
@@ -32462,11 +32448,7 @@ with pkgs;
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
-  waylock = callPackage ../applications/misc/waylock {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_10;
-    };
-  };
+  waylock = callPackage ../applications/misc/waylock { };
 
   wayshot = callPackage ../tools/misc/wayshot { };
 
@@ -33446,9 +33428,6 @@ with pkgs;
 
   mepo = callPackage ../applications/misc/mepo {
     inherit (gnome) zenity;
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_10;
-    };
   };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
@@ -34117,11 +34096,7 @@ with pkgs;
 
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
-  ncdu = callPackage ../tools/misc/ncdu {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_10;
-    };
-  };
+  ncdu = callPackage ../tools/misc/ncdu { };
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
 
@@ -37283,11 +37258,7 @@ with pkgs;
     inherit (perlPackages) PathTiny;
   };
 
-  blackshades = callPackage ../games/blackshades {
-    zigHook = zigHook.override {
-      zig = buildPackages.zig_0_9;
-    };
-  };
+  blackshades = callPackage ../games/blackshades { };
 
   blobby = callPackage ../games/blobby { };
 

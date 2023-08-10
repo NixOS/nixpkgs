@@ -5,7 +5,7 @@
 , fetchPypi
 , fetchzip
 , alembic
-, async_generator
+, async-generator
 , certipy
 , python-dateutil
 , entrypoints
@@ -113,7 +113,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     # https://github.com/jupyterhub/jupyterhub/blob/master/requirements.txt
     alembic
-    async_generator
+    async-generator
     certipy
     python-dateutil
     entrypoints
