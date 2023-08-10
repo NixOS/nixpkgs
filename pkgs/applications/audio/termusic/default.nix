@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, protobuf
+{
+  alsa-lib
+, darwin
 , dbus
+, fetchFromGitHub
+, lib
 , openssl
 , pkg-config
-, alsa-lib
-, darwin
+, protobuf
+, rustPlatform
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,10 +38,10 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.AudioUnit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal Music Player TUI written in Rust";
     homepage = "https://github.com/tramhao/termusic";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ devhell ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ devhell ];
   };
 }
