@@ -7,6 +7,7 @@
 , numba
 , numpy
 , pytestCheckHook
+, pythonRelaxDepsHook
 , scipy
 , sparse
 }:
@@ -21,6 +22,16 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-eVE8FrD0YHoRreY9CrNb8v4v4KrG83ZU0oFz+V+p+Q0=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    # the version of numba may not be set correctly until the next release, 0.58
+    # see the comment of https://github.com/NixOS/nixpkgs/pull/247678
+    "numba"
+  ];
 
   propagatedBuildInputs = [
     h5py
