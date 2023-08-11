@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-zA7R9UIB0hOWev10Y4oySIKeIxTOo0V6Q3Fxe+FeHSU=";
   };
 
@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A 21 century R console";
     homepage = "https://github.com/randy3k/radian";
+    changelog = "https://github.com/randy3k/radian/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ savyajha ];
   };
