@@ -24,7 +24,7 @@
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
-, bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
+, bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk, yasm
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
 , autoSignDarwinBinariesHook, fetchpatch
@@ -639,6 +639,15 @@ in
   rmagick = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ imagemagick which ];
+  };
+
+  ronin-code-asm = attrs: {
+    dontBuild = false;
+    postPatch = ''
+        substituteInPlace lib/ronin/code/asm/program.rb \
+          --replace "YASM::Command.run(" "YASM::Command.run(
+          command_path: '${yasm}/bin/yasm',"
+      '';
   };
 
   rouge = attrs: {
