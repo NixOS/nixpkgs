@@ -1,4 +1,5 @@
 { lib
+, pkgs # for passthru.plugins
 , stdenv
 , fetchurl
 , pkg-config
@@ -22,7 +23,7 @@
 , tree-sitter
 }:
 
-stdenv.mkDerivation rec {
+let rizin = stdenv.mkDerivation rec {
   pname = "rizin";
   version = "0.6.0";
 
@@ -42,7 +43,16 @@ stdenv.mkDerivation rec {
     "-Duse_sys_openssl=enabled"
     "-Duse_sys_libmspack=enabled"
     "-Duse_sys_tree_sitter=enabled"
+    # this is needed for wrapping (adding plugins) to work
+    "-Dportable=true"
   ];
+
+  # Normally, Rizin only looks for files in the install prefix. With
+  # portable=true, it instead looks for files in relation to the parent
+  # of the directory of the binary file specified in /proc/self/exe,
+  # caching it. This patch replaces the entire logic to only look at
+  # the env var NIX_RZ_PREFIX
+  patches = [ ./librz-wrapper-support.patch ];
 
   nativeBuildInputs = [
     pkg-config
@@ -94,6 +104,25 @@ stdenv.mkDerivation rec {
       --replace "import('python').find_installation()" "find_program('python3')"
   '';
 
+  passthru = rec {
+    plugins = {
+      jsdec = pkgs.callPackage ./jsdec.nix {
+        inherit rizin openssl;
+      };
+      rz-ghidra = pkgs.libsForQt5.callPackage ./rz-ghidra.nix {
+        inherit rizin openssl;
+        enableCutterPlugin = false;
+      };
+      # sigdb isn't a real plugin, but it's separated from the main rizin
+      # derivation so that only those who need it will download it
+      sigdb = pkgs.callPackage ./sigdb.nix { };
+    };
+    withPlugins = filter: pkgs.callPackage ./wrapper.nix {
+      unwrapped = rizin;
+      plugins = filter plugins;
+    };
+  };
+
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset.";
     homepage = "https://rizin.re/";
@@ -101,4 +130,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
     platforms = with lib.platforms; unix;
   };
-}
+}; in rizin

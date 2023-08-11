@@ -34,9 +34,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Data Validation for Humans";
-    homepage = "https://github.com/kvesteri/validators";
+    homepage = "https://github.com/python-validators/validators";
     changelog = "https://github.com/python-validators/validators/blob/${version}/CHANGES.md";
-    license = licenses.bsd3;
+    license = licenses.mit;
     maintainers = [ ];
   };
 }
