@@ -4,9 +4,13 @@
 }:
 
 let
-  mainlineMeta = {
-    homepage = "https://www.gnu.org/software/emacs/";
-    description = "The extensible, customizable GNU text editor";
+  metaFor = variant: version: rev: {
+    homepage = {
+      "mainline" = "https://www.gnu.org/software/emacs/";
+      "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
+    }.${variant};
+    description = "The extensible, customizable GNU text editor"
+                  + lib.optionalString (variant == "macport") " - macport variant";
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more. At its core
       is an interpreter for Emacs Lisp, a dialect of the Lisp programming
@@ -21,7 +25,15 @@ let
       functionality, including a project planner, mail and news reader, debugger
       interface, calendar, and more. Many of these extensions are distributed
       with GNU Emacs; others are available separately.
+    '' + lib.optionalString (variant == "macport") ''
+
+      This release is built from Mitsuharu Yamamoto's patched source code
+      tailored for macOS.
     '';
+    changelog = {
+      "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
+      "macport" = "https://bitbucket.org/mituharu/emacs-mac/raw/${rev}/NEWS-mac";
+    }.${variant};
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       AndersonTorres
@@ -31,7 +43,10 @@ let
       lovek323
       matthewbauer
     ];
-    platforms = lib.platforms.all;
+    platforms = {
+      "mainline" = lib.platforms.all;
+      "macport" = lib.platforms.darwin;
+    }.${variant};
     mainProgram = "emacs";
   };
 in
@@ -46,7 +61,7 @@ in
       hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
     };
 
-    meta = mainlineMeta;
+    meta = metaFor "mainline" "28.2" "28.2";
   };
 
   emacs29 = import ./generic.nix {
@@ -59,7 +74,7 @@ in
       hash = "sha256-p0lBSKsHrFwYTqO5UVIF/PgiqwdhYQE4oUVcPtd+gsU=";
     };
 
-    meta = mainlineMeta;
+    meta = metaFor "mainline" "29.1-rc1" "29.1-rc1";
   };
 
   emacs28-macport = import ./generic.nix {
@@ -73,16 +88,6 @@ in
       hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
     };
 
-    meta = {
-      homepage = "https://bitbucket.org/mituharu/emacs-mac/";
-      description = mainlineMeta.description + " - with macport patches";
-      longDescription = mainlineMeta.longDescription + ''
-
-        This release is built from Mitsuharu Yamamoto's patched source code
-        tailoired for MacOS X.
-      '';
-      inherit (mainlineMeta) license maintainers;
-      platforms = lib.platforms.darwin;
-    };
+    meta = metaFor "macport" "28.2" "emacs-28.2-mac-9.1";
   };
 }
