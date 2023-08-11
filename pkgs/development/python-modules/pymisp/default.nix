@@ -35,6 +35,8 @@ buildPythonPackage {
     requests python-dateutil jsonschema deprecated
   ];
 
+  pythonImportsCheck = [ "pymisp" ];
+
   # testing optional email feature
   pytestFlagsArray = [ "--ignore tests/test_emailobject.py" ];
 
