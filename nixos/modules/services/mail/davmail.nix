@@ -6,10 +6,11 @@ let
 
   cfg = config.services.davmail;
 
-  configType = with types;
-    oneOf [ (attrsOf configType) str int bool ] // {
+  configType = with types; (fix (final: {
+    valueType = oneOf [ (attrsOf final.valueType) str int bool ] // {
       description = "davmail config type (str, int, bool or attribute set thereof)";
     };
+  })).valueType;
 
   toStr = val: if isBool val then boolToString val else toString val;
 

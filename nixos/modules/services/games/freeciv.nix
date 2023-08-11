@@ -5,14 +5,14 @@ let
   inherit (config.users) groups;
   rootDir = "/run/freeciv";
   argsFormat = {
-    type = with lib.types; let
+    type = with lib.types; (fix (final: {
       valueType = nullOr (oneOf [
         bool int float str
-        (listOf valueType)
+        (listOf final.valueType)
       ]) // {
         description = "freeciv-server params";
       };
-    in valueType;
+    })).valueType;
     generate = name: value:
       let mkParam = k: v:
             if v == null then []

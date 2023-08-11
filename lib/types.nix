@@ -848,6 +848,11 @@ rec {
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
       };
 
+    fix = f:
+      let
+        result = lib.mapAttrs (name: value: value // { recursiveId = name; }) (f result);
+      in result;
+
     # Either value of type `t1` or `t2`.
     either = t1: t2: mkOptionType rec {
       name = "either";
