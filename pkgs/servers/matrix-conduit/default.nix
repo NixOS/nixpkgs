@@ -1,4 +1,13 @@
-{ lib, rustPlatform, fetchFromGitLab, pkg-config, sqlite, stdenv, darwin, nixosTests, rocksdb_6_23 }:
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, pkg-config
+, sqlite
+, stdenv
+, darwin
+, nixosTests
+, rocksdb_6_23
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
@@ -8,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
-    sha256 = "sha256-GSCpmn6XRbmnfH31R9c6QW3/pez9KHPjI99dR+ln0P4=";
+    hash = "sha256-GSCpmn6XRbmnfH31R9c6QW3/pez9KHPjI99dR+ln0P4=";
   };
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
@@ -37,8 +46,10 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  ROCKSDB_INCLUDE_DIR = "${rocksdb_6_23}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb_6_23}/lib";
+  env = {
+    ROCKSDB_INCLUDE_DIR = "${rocksdb_6_23}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb_6_23}/lib";
+  };
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
