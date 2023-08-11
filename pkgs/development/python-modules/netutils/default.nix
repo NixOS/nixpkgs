@@ -1,8 +1,9 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , jinja2
+, napalm
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -12,20 +13,24 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.4.1";
+  version = "1.5.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hSSHCWi0L/ZfFz0JQ6Al5mjhb2g0DpykLF66uMKMIN8=";
+    hash = "sha256-uUw48EBUpEUw+A8wxw3qXrnqmFWQzg/zb+8qAGRSlUw=";
   };
 
   nativeBuildInputs = [
     poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    napalm
   ];
 
   nativeCheckInputs = [
@@ -49,6 +54,9 @@ buildPythonPackage rec {
     # OSError: [Errno 22] Invalid argument
     "test_compare_type5"
     "test_encrypt_type5"
+    "test_compare_cisco_type5"
+    "test_get_napalm_getters_napalm_installed_default"
+    "test_encrypt_cisco_type5"
   ];
 
   meta = with lib; {
