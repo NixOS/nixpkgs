@@ -8,10 +8,6 @@ let
   cfg = top.controllerManager;
 in
 {
-  imports = [
-    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "address" ] ["services" "kubernetes" "controllerManager" "bindAddress"])
-    (mkRemovedOptionModule [ "services" "kubernetes" "controllerManager" "insecurePort" ] "")
-  ];
 
   ###### interface
   options.services.kubernetes.controllerManager = with lib.types; {

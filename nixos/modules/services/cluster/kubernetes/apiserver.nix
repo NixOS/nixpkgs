@@ -15,18 +15,6 @@ let
 in
 {
 
-  imports = [
-    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
-    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
-    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "insecureBindAddress" ] "")
-    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "insecurePort" ] "")
-    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "publicAddress" ] "")
-    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "servers" ] [ "services" "kubernetes" "apiserver" "etcd" "servers" ])
-    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "keyFile" ] [ "services" "kubernetes" "apiserver" "etcd" "keyFile" ])
-    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "certFile" ] [ "services" "kubernetes" "apiserver" "etcd" "certFile" ])
-    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "caFile" ] [ "services" "kubernetes" "apiserver" "etcd" "caFile" ])
-  ];
-
   ###### interface
   options.services.kubernetes.apiserver = with lib.types; {
 
