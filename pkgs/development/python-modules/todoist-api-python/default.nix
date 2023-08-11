@@ -1,5 +1,4 @@
 { lib
-, attrs
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    attrs
     requests
   ];
 
