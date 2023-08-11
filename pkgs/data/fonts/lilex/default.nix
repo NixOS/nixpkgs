@@ -1,12 +1,12 @@
 { lib, stdenvNoCC, fetchzip }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lilex";
   version = "2.200";
 
   src = fetchzip {
-    url = "https://github.com/mishamyrt/Lilex/releases/download/${version}/Lilex.zip";
-    sha256 = "sha256-MPQfqCMFMjcAlMos1o4bC+I+cvQYwr2TjI4Q03QeuaQ=";
+    url = "https://github.com/mishamyrt/Lilex/releases/download/${finalAttrs.version}/Lilex.zip";
+    hash = "sha256-MPQfqCMFMjcAlMos1o4bC+I+cvQYwr2TjI4Q03QeuaQ=";
     stripRoot = false;
   };
 
@@ -21,14 +21,13 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Open source programming font";
+    homepage = "https://github.com/mishamyrt/Lilex";
+    license = lib.licenses.ofl;
     longDescription = ''
       Lilex is the modern programming font containing a set of ligatures for
       common programming multi-character combinations.
     '';
-    homepage = "https://github.com/mishamyrt/Lilex";
-
-    license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ chriscoffee ];
-    platforms = lib.platforms; all;
+    platforms = lib.platforms.all;
   };
-}
+})
