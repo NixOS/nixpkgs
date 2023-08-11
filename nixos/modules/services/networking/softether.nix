@@ -85,6 +85,16 @@ in
           Type = "forking";
           ExecStart = "${package}/bin/vpnserver start";
           ExecStop = "${package}/bin/vpnserver stop";
+          KillMode = "process";
+          Restart = "on-failure";
+
+          # Hardening
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectSystem = "full";
+          ReadOnlyPaths = [ "/" ];
+          ReadWritePaths = [ "-${cfg.dataDir}/vpnserver" ];
+          CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_BROADCAST" "CAP_NET_RAW" "CAP_SYS_NICE" "CAP_SYSLOG" "CAP_SETUID" ];
         };
       };
     })
@@ -97,6 +107,16 @@ in
           Type = "forking";
           ExecStart = "${package}/bin/vpnbridge start";
           ExecStop = "${package}/bin/vpnbridge stop";
+          KillMode = "process";
+          Restart = "on-failure";
+
+          # Hardening
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectSystem = "full";
+          ReadOnlyPaths = [ "/" ];
+          ReadWritePaths = [ "-${cfg.dataDir}/vpnbridge" ];
+          CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_BROADCAST" "CAP_NET_RAW" "CAP_SYS_NICE" "CAP_SYSLOG" "CAP_SETUID" ];
         };
       };
     })
@@ -109,6 +129,16 @@ in
           Type = "forking";
           ExecStart = "${package}/bin/vpnclient start";
           ExecStop = "${package}/bin/vpnclient stop";
+          KillMode = "process";
+          Restart = "on-failure";
+
+          # Hardening
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectSystem = "full";
+          ReadOnlyPaths = [ "/" ];
+          ReadWritePaths = [ "-${cfg.dataDir}/vpnclient" ];
+          CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_BROADCAST" "CAP_NET_RAW" "CAP_SYS_NICE" "CAP_SYSLOG" "CAP_SETUID" ];
         };
         postStart = ''
             sleep 1
