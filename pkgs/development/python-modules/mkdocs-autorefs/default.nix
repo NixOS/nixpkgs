@@ -4,7 +4,7 @@
 , markdown
 , mkdocs
 , pytestCheckHook
-, pdm-pep517
+, pdm-backend
 , pythonOlder
 }:
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.5.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
@@ -22,8 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-GZKQlOXhQIQhS/z4cbmS6fhAKYgnVhSXh5a8Od7+TWc=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
@@ -34,11 +39,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
-  '';
 
   pythonImportsCheck = [
     "mkdocs_autorefs"
