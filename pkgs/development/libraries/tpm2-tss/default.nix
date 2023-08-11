@@ -70,10 +70,11 @@ stdenv.mkDerivation rec {
       --replace 'git describe --tags --always --dirty' 'echo "${version}"'
   '';
 
-  configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    "--enable-unit"
-    "--enable-integration"
-  ];
+  preConfigure = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    if [ ! -z $doCheck ]; then
+      configureFlagsArray+=('--enable-unit' '--enable-integration')
+    fi
+  '';
 
   doCheck = true;
   preCheck = ''
