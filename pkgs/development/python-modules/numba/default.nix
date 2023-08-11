@@ -82,6 +82,8 @@ in buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py --replace "version=versioneer.get_version()" "version='0.57.1'"
+    substituteInPlace numba/_version.py \
+      --replace 'git_refnames = ""' 'git_refnames = "0.57.1"'
   '';
 
   postFixup = lib.optionalString cudaSupport ''
