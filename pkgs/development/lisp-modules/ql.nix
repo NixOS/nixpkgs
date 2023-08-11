@@ -223,7 +223,43 @@ let
       lispLibs = o.lispLibs ++ [
         self.mcclim
       ];
-});
+    });
+    cl-charms = super.cl-charms.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.ncurses ];
+    });
+    libusb-ffi = super.libusb-ffi.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libusb-compat-0_1 ];
+    });
+    cl-fam = super.cl-fam.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.fam ];
+    });
+    jpeg-turbo = super.jpeg-turbo.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libjpeg_turbo ];
+    });
+    vorbisfile-ffi = super.vorbisfile-ffi.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libvorbis ];
+    });
+    png = super.png.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libpng ];
+    });
+    zmq = super.zmq.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.czmq ];
+    });
+    consfigurator = super.consfigurator.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.acl pkgs.libcap ];
+    });
+    cl-gss = super.cl-gss.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libkrb5 ];
+    });
+    magicffi = super.magicffi.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.file ];
+    });
+    keystone = super.keystone.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.keystone ];
+    });
+    capstone = super.capstone.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.capstone ];
+    });
   });
 
   qlpkgs =
