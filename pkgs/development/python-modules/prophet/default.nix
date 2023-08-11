@@ -44,7 +44,7 @@ buildPythonPackage rec {
     })
   ];
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   env.PROPHET_REPACKAGE_CMDSTAN = "false";
 
