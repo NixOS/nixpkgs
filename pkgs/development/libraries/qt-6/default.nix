@@ -9,6 +9,7 @@
 , libglvnd
 , darwin
 , buildPackages
+, python3
 
   # options
 , developerBuild ? false
@@ -24,7 +25,7 @@ let
   addPackages = self: with self;
     let
       callPackage = self.newScope ({
-        inherit qtModule srcs;
+        inherit qtModule srcs python3;
         stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       });
     in

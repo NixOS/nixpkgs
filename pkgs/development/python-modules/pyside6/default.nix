@@ -2,7 +2,6 @@
 , stdenv
 , cmake
 , ninja
-, qt6
 , python
 , moveBuildTree
 , shiboken6
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
     moveBuildTree
   ];
 
-  buildInputs = with qt6; [
+  buildInputs = with python.pkgs.qt6; [
     # required
     qtbase
   ] ++ lib.optionals stdenv.isLinux [

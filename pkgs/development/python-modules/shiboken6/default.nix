@@ -2,7 +2,6 @@
 , fetchurl
 , llvmPackages
 , python
-, qt6
 , cmake
 , autoPatchelfHook
 , stdenv
@@ -35,7 +34,7 @@ llvmPackages.stdenv.mkDerivation rec {
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.libclang
-    qt6.qtbase
+    python.pkgs.qt6.qtbase
   ];
 
   cmakeFlags = [

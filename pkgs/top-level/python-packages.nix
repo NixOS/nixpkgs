@@ -9894,7 +9894,7 @@ self: super: with self; {
   });
 
   pyside6 = toPythonModule (callPackage ../development/python-modules/pyside6 {
-    inherit (pkgs) cmake ninja qt6;
+    inherit (pkgs) cmake ninja;
   });
 
   pyside = callPackage ../development/python-modules/pyside {
@@ -10912,6 +10912,10 @@ self: super: with self; {
 
   qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
+  qt6 = pkgs.qt6.override {
+    python3 = self.python;
+  };
+
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
@@ -11735,7 +11739,7 @@ self: super: with self; {
   });
 
   shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
-    inherit (pkgs) cmake llvmPackages qt6;
+    inherit (pkgs) cmake llvmPackages;
   });
 
   shippai = callPackage ../development/python-modules/shippai { };
