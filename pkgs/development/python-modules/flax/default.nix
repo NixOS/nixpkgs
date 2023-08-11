@@ -1,20 +1,20 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , jaxlib
+, pythonRelaxDepsHook
 , jax
-, keras
-, lib
 , matplotlib
 , msgpack
 , numpy
 , optax
+, rich
+, tensorstore
+, einops
+, keras
 , pytest-xdist
 , pytestCheckHook
-, pythonRelaxDepsHook
 , tensorflow
-, tensorstore
-, fetchpatch
-, rich
 }:
 
 buildPythonPackage rec {
@@ -23,12 +23,15 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "flax";
     rev = "refs/tags/v${version}";
     hash = "sha256-i48omag/1Si3mCCGfsUD9qeejyeCLWzvvwKJqH8vm8k=";
   };
 
-  nativeBuildInputs = [ jaxlib pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    jaxlib
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     jax
@@ -48,6 +51,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    einops
     keras
     pytest-xdist
     pytestCheckHook
