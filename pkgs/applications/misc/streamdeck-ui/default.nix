@@ -15,8 +15,8 @@ python3Packages.buildPythonApplication rec {
   version = "2.0.6";
 
   src = fetchFromGitHub {
-    repo = pname;
-    owner = "timothycrosley";
+    repo = "streamdeck-linux-gui";
+    owner = "streamdeck-linux-gui";
     rev = "v${version}";
     sha256 = "sha256-5dk+5oefg5R68kv038gsZ2p5ixmpj/vBLBp/V7Sdos8=";
   };
@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Linux compatible UI for the Elgato Stream Deck";
-    homepage = "https://timothycrosley.github.io/streamdeck-ui/";
+    homepage = "https://streamdeck-linux-gui.github.io/streamdeck-linux-gui/";
     license = licenses.mit;
     maintainers = with maintainers; [ majiir ];
   };
