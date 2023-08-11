@@ -23,6 +23,8 @@ in buildGoModule rec {
 
   vendorHash = "sha256-jhLZvusYpX5fW1NCmJtwE/p9/wTwzA2hbwt657VsZts=";
 
+  passthru.updateScript = ./update.sh;
+
   postInstall = ''
     installShellCompletion --cmd deck \
       --bash <($out/bin/deck completion bash) \
