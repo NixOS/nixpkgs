@@ -1,6 +1,6 @@
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -2387,7 +2387,7 @@ dependencies = [
+@@ -2468,7 +2468,7 @@ dependencies = [
  [[package]]
  name = "svg2pdf"
  version = "0.5.0"
@@ -11,10 +11,11 @@
   "miniz_oxide",
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -61,12 +61,5 @@ typst = { git = "https://github.com/typst/typst.git", tag = "v0.6.0" }
- typst-library = { git = "https://github.com/typst/typst.git", tag = "v0.6.0" }
- walkdir = "2.3"
+@@ -84,13 +84,5 @@ reqwest = { version = "0.11.18", default-features = false, features = [
+     "rustls-tls",
+ ] }
  
+-
 -# Typst 0.6.0 does not specify a tag or ref for svg2pdf, so provide one...
 -# ...but Cargo doesn't want to make our lives too easy, and we can't replace the
 -# dependency with another at the same URL. Use a workaroud inspired by
