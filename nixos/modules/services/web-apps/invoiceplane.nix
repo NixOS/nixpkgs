@@ -80,7 +80,7 @@ let
           '';
         };
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 80;
           example = 8080;
           description = lib.mdDoc "Port for Caddy to listen on";
