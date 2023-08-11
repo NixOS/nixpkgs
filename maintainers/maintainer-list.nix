@@ -18569,6 +18569,13 @@
     githubId = 647076;
     name = "Yorick van Pelt";
   };
+  YorikSar = {
+    name = "Yuriy Taraday";
+    email = "yorik.sar@gmail.com";
+    matrix = "@yorik.sar:matrix.org";
+    github = "YorikSar";
+    githubId = 428074;
+  };
   yrashk = {
     email = "yrashk@gmail.com";
     github = "yrashk";
