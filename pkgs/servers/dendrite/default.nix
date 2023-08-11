@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, nix-update-script
 , nixosTests, postgresql, postgresqlTestHook }:
 
 buildGoModule rec {
@@ -54,6 +54,9 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) dendrite;
+  };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(.+)" ];
   };
 
   meta = with lib; {
