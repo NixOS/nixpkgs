@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, fetchpatch
 # propagated build inputs
 , filelock
 , huggingface-hub
@@ -74,6 +75,17 @@ buildPythonPackage rec {
     tokenizers
     safetensors
     tqdm
+  ];
+
+  patches = [
+    # Remove jnp.DeviceArray since it is deprecated
+    # https://github.com/huggingface/transformers/pull/24875
+    # TODO remove in next release
+    (fetchpatch {
+      name = "remove-jnp-device-array.patch";
+      url = "https://github.com/huggingface/transformers/commit/a6e6b1c622d8d08e2510a82cb6266d7b654f1cbf.patch";
+      hash = "sha256-OVT6rGylnXljvaN40cu0StqO22PxBbExkgqi6nG3IrA=";
+    })
   ];
 
   passthru.optional-dependencies =

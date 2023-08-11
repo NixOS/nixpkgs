@@ -1,0 +1,15 @@
+diff --git a/src/dalle_mini/model/modeling.py b/src/dalle_mini/model/modeling.py
+index 25af7a1..9282524 100644
+--- a/src/dalle_mini/model/modeling.py
++++ b/src/dalle_mini/model/modeling.py
+@@ -1602,8 +1602,8 @@ class DalleBart(PretrainedFromWandbMixin, FlaxBartForConditionalGeneration):
+         self,
+         decoder_input_ids,
+         max_length,
+-        attention_mask: Optional[jnp.DeviceArray] = None,
+-        decoder_attention_mask: Optional[jnp.DeviceArray] = None,
++        attention_mask: Optional[jax.Array] = None,
++        decoder_attention_mask: Optional[jax.Array] = None,
+         encoder_outputs=None,
+         **kwargs,
+     ):
