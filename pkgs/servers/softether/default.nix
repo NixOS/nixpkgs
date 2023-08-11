@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, openssl, readline, ncurses, zlib
+, openssl, readline, ncurses, zlib, libpcap, libiconv
 , dataDir ? "/var/lib/softether"
 , removeRegionLock ? false }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./remove-region-lock.patch
   ];
 
-  buildInputs = [ openssl readline ncurses zlib ];
+  buildInputs = [ openssl readline ncurses zlib ] ++ lib.optionals stdenv.isDarwin [ libpcap libiconv ];
 
   preConfigure = ''
     ./configure
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.softether.org/";
     license = licenses.asl20;
     maintainers = [ maintainers.rick68 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = intersectLists (platforms.linux ++ platforms.freebsd ++ platforms.darwin ++ platforms.openbsd) (platforms.x86 ++ platforms.arm ++ platforms.aarch64 ++ platforms.mips ++ platforms.power);
+    broken = stdenv.isDarwin;
   };
 }
