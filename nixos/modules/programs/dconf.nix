@@ -7,6 +7,7 @@ let
   cfgDir = pkgs.symlinkJoin {
     name = "dconf-system-config";
     paths = map (x: "${x}/etc/dconf") cfg.packages;
+    nativeBuildInputs = [ pkgs.dconf ];
     postBuild = ''
       mkdir -p $out/profile
       mkdir -p $out/db
@@ -19,7 +20,7 @@ let
         ) cfg.profiles
       )
     ) + ''
-      ${pkgs.dconf}/bin/dconf update $out/db
+      dconf update $out/db
     '';
   };
 in
