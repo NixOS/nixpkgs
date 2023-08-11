@@ -26,6 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-1Pl+l28J7crfO2UY/9/D019IzOHWOwjR+UvVEHICTqU=";
   };
 
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
   propagatedBuildInputs = [
     pyparsing
   ];
@@ -40,12 +44,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   # Don't run tests for older Pythons
   doCheck = pythonAtLeast "3.9";
-
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
 
   disabledTests = [
     # ValueError: Unable to load PEM file.

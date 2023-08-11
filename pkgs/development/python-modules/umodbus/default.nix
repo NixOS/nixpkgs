@@ -25,6 +25,8 @@ buildPythonPackage rec {
     pyserial
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
   ];

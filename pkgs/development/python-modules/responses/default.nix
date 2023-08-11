@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.23.1";
+  version = "0.23.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-BU90nUZVqowFMn78KfbBEf59X7Q/1itvkGFdOzy4D2c=";
+    hash = "sha256-VJmcRMn0O+3mDwzkCwxIX7RU3/I9T9p9N8t6USWDZJQ=";
   };
 
   propagatedBuildInputs = [

@@ -21168,6 +21168,8 @@ with pkgs;
 
   folks = callPackage ../development/libraries/folks { };
 
+  fortify-headers = callPackage ../development/libraries/fortify-headers { };
+
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     callPackage ../development/libraries/fontconfig/make-fonts-conf.nix {
       inherit fontconfig fontDirectories;
@@ -24365,8 +24367,9 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf3_21;
+  protobuf = protobuf3_23;
 
+  protobuf3_23 = callPackage ../development/libraries/protobuf/3.23.nix { };
   protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix {
     abseil-cpp = abseil-cpp_202103;
   };
@@ -25722,6 +25725,17 @@ with pkgs;
   };
   buildGo120Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_20;
+  };
+
+  # requires a newer Apple SDK
+  go_1_21 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.21.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
+  };
+  buildGo121Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
+    go = buildPackages.go_1_21;
+  };
+  buildGo121Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
+    go = buildPackages.go_1_21;
   };
 
   go2nix = callPackage ../development/tools/go2nix { };
@@ -31082,7 +31096,8 @@ with pkgs;
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
-  ed = callPackage ../applications/editors/ed { };
+  inherit (recurseIntoAttrs (callPackage ../applications/editors/ed { }))
+    ed edUnstable;
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
 

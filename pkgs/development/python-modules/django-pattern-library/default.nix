@@ -51,5 +51,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/torchbox/django-pattern-library/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sephi ];
+    # https://github.com/torchbox/django-pattern-library/issues/212
+    broken = lib.versionAtLeast django.version "4.2";
   };
 }

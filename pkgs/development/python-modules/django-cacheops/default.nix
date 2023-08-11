@@ -42,6 +42,8 @@ buildPythonPackage rec {
     six
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django

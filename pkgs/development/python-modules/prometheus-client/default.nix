@@ -19,6 +19,8 @@ buildPythonPackage rec {
     hash = "sha256-ag9gun47Ar0Sw3ZGIXAHjtv4GdhX8x51UVkgwdQ8A+s=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
   ];

@@ -46,6 +46,8 @@ buildPythonPackage rec {
     curl
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     bottle
     pytestCheckHook

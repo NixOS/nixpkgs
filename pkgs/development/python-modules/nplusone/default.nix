@@ -1,6 +1,7 @@
 { lib
 , blinker
 , buildPythonPackage
+, django
 , fetchFromGitHub
 , flake8
 , flask-sqlalchemy
@@ -79,5 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jmcarp/nplusone";
     maintainers = with maintainers; [ cript0nauta ];
     license = licenses.mit;
+    broken = lib.versionAtLeast django.version "4";
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-Gym2iHq5ws9kuG4HWSQndD8hVugV4USZt6dUFnEkLwY=";
   };
-  patches = lib.optionals (with stdenv; isAarch64 && isLinux) [ # conditional, temporarily
+  patches = [
     # backport for compilation issue on aarch64
     # https://github.com/google/highway/issues/1613
     (fetchpatch {

@@ -6,18 +6,19 @@
 , psycopg2
 , beautifulsoup4
 , python
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "django-cachalot";
-  version = "2.5.3";
+  version = "2.6.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "noripyt";
     repo = "django-cachalot";
     rev = "v${version}";
-    hash = "sha256-ayAN+PgK3aIpt4R8aeC6c6mRGTnfObycmkoXPTjx4WI=";
+    hash = "sha256-bCiIZkh02+7xL6aSWE9by+4dFDsanr0iXuO9QKpLOjw=";
   };
 
   patches = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     beautifulsoup4
     django-debug-toolbar
     psycopg2
+    pytz
   ];
 
   pythonImportsCheck = [ "cachalot" ];

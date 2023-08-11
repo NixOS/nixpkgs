@@ -2735,12 +2735,11 @@ self: super: with self; {
 
   distutils_extra = callPackage ../development/python-modules/distutils_extra { };
 
-  django = self.django_3;
-
-  # Current LTS
+  # LTS in extended support phase
   django_3 = callPackage ../development/python-modules/django/3.nix { };
 
-  # Current latest
+  # LTS with mainsteam support
+  django = self.django_4;
   django_4 = callPackage ../development/python-modules/django/4.nix { };
 
   django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
@@ -2784,8 +2783,6 @@ self: super: with self; {
   django-cleanup = callPackage ../development/python-modules/django-cleanup { };
 
   django-colorful = callPackage ../development/python-modules/django-colorful { };
-
-  django-compat = callPackage ../development/python-modules/django-compat { };
 
   django-compressor = callPackage ../development/python-modules/django-compressor { };
 
@@ -3686,6 +3683,8 @@ self: super: with self; {
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
 
+  ffmpy = callPackage ../development/python-modules/ffmpy { };
+
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
@@ -4489,6 +4488,8 @@ self: super: with self; {
   gradient-utils = callPackage ../development/python-modules/gradient-utils { };
 
   gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
+
+  gradio = callPackage ../development/python-modules/gradio { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -6467,7 +6468,9 @@ self: super: with self; {
 
   mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
 
-  meson-python = callPackage ../development/python-modules/meson-python { };
+  meson-python = callPackage ../development/python-modules/meson-python {
+    inherit (pkgs) ninja;
+  };
 
   messagebird = callPackage ../development/python-modules/messagebird { };
 
@@ -7062,7 +7065,7 @@ self: super: with self; {
 
   nine = callPackage ../development/python-modules/nine { };
 
-  ninja-python = callPackage ../development/python-modules/ninja { };
+  ninja = callPackage ../development/python-modules/ninja { inherit (pkgs) ninja; };
 
   nipy = callPackage ../development/python-modules/nipy { };
 

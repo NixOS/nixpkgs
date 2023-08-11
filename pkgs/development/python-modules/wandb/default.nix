@@ -97,6 +97,8 @@ buildPythonPackage rec {
     shortuuid
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     azure-containerregistry
     azure-core
