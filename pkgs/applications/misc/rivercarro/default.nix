@@ -4,7 +4,7 @@
 , pkg-config
 , river
 , wayland
-, zigHook
+, zig_0_9
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     river
     wayland
-    zigHook
+    zig_0_9.hook
   ];
 
   meta = with lib; {
@@ -42,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~novakane/rivercarro/refs/v${finalAttrs.version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kraem ];
-    inherit (zigHook.meta) platforms;
+    inherit (zig_0_9.meta) platforms;
   };
 })

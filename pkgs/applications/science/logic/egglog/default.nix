@@ -5,13 +5,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "egglog";
-  version = "unstable-2023-07-19";
+  version = "unstable-2023-08-09";
 
   src = fetchFromGitHub {
     owner = "egraphs-good";
     repo = "egglog";
-    rev = "9fe03ad35a2a975a2c9140a641ba91266b7a72ce";
-    hash = "sha256-9JeJJdZW8ecogReJzQrp3hFkK/pp/+pLxJMNREWuiyI=";
+    rev = "de31786679e3fa879e37c324e7eb54d76466f61f";
+    hash = "sha256-mskFjDTkmHwaGWMpwW2DTD64vLvWGZJYgy9smEbhFwI=";
   };
 
   cargoLock = {

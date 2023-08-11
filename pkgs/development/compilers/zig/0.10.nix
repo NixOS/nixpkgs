@@ -6,6 +6,7 @@
 , libxml2
 , zlib
 , coreutils
+, callPackage
 }@args:
 
 import ./generic.nix args {
@@ -18,7 +19,7 @@ import ./generic.nix args {
   patches = [
     # Backport alignment related panics from zig-master to 0.10.
     # Upstream issue: https://github.com/ziglang/zig/issues/14559
-    ./zig_14559.patch
+    ./002-0.10-macho-fixes.patch
   ];
 
   cmakeFlags = [

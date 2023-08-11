@@ -218,13 +218,13 @@
     "vendorHash": "sha256-qIgr+ynaNSfNx1iW5RJrNHvEnlr46dBzIi+5IXYn+3Q="
   },
   "cloudflare": {
-    "hash": "sha256-vC3uvv04an6KhXT1FECiB2LQMxJbiYhULNuiXoCRhnY=",
+    "hash": "sha256-ayxekJkQt/7K/qwMKvjqkyVkux5+Jw3uyepmaiy3Ptc=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v4.11.0",
+    "rev": "v4.12.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-m+tQeOUbJ+bnVYl4FcBSTHKYuSGtznCqRQ/CR204WkE="
+    "vendorHash": "sha256-VTSbi2pDllzyKDhWs5EpWSXO5oKl+khVqLg/Ro3x8ys="
   },
   "cloudfoundry": {
     "hash": "sha256-hoX2KNUzC7G+bFxReTN/6IG8/P4rczHAYn2QQ2iOioc=",
@@ -372,11 +372,11 @@
     "vendorHash": "sha256-7a90fzAU76QRXkSa+G/N3kMPP8jy68i72i2JSlUrvfc="
   },
   "exoscale": {
-    "hash": "sha256-dLA9BWW4ghD1OSZaZtFfv8ipS+2lTeNRr1YD3E8ewpI=",
+    "hash": "sha256-93pCsHrsYLJYgg8MXHz2Gg+vaPC9gcHdLastb89/BMg=",
     "homepage": "https://registry.terraform.io/providers/exoscale/exoscale",
     "owner": "exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.50.0",
+    "rev": "v0.51.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -390,11 +390,11 @@
     "vendorHash": "sha256-E1gzdES/YVxQq2J47E2zosvud2C/ViBeQ8+RfNHMBAg="
   },
   "fastly": {
-    "hash": "sha256-90mVwC90lkvNRvyt5aKBE3h0XZTVXvWVVG6qIP+4pOk=",
+    "hash": "sha256-Pd79xIFu+vwynwVqDFqkuhg8NczkbCF2eWOXrLOPCGI=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v5.3.0",
+    "rev": "v5.3.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -827,11 +827,11 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-PLlgHUIQWxBCBmTRuQ6RSLuqkilqUb4svmklbSoYEtA=",
+    "hash": "sha256-dB8yoUPv6uYKveZxCblwif2FKW0qNdY5CJMpbZivB78=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v5.7.0",
+    "rev": "v5.8.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

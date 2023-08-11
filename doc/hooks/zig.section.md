@@ -1,22 +1,22 @@
-# zigHook {#zighook}
+# zig.hook {#zig-hook}
 
 [Zig](https://ziglang.org/) is a general-purpose programming language and toolchain for maintaining robust, optimal and reusable software.
 
-In Nixpkgs, `zigHook` overrides the default build, check and install phases.
+In Nixpkgs, `zig.hook` overrides the default build, check and install phases.
 
 ## Example code snippet {#example-code-snippet}
 
 ```nix
 { lib
 , stdenv
-, zigHook
+, zig_0_11
 }:
 
 stdenv.mkDerivation {
   # . . .
 
   nativeBuildInputs = [
-    zigHook
+    zig_0_11.hook
   ];
 
   zigBuildFlags = [ "-Dman-pages=true" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 }
 ```
 
-## Variables controlling zigHook {#variables-controlling-zighook}
+## Variables controlling zig.hook {#variables-controlling-zig-hook}
 
 ### `dontUseZigBuild` {#dontUseZigBuild}
 
@@ -53,7 +53,7 @@ Disables using `zigInstallPhase`.
 
 Controls the flags passed to the install phase.
 
-### Variables honored by zigHook {#variablesHonoredByZigHook}
+### Variables honored by zig.hook {#variables-honored-by-zig-hook}
 
 - `prefixKey`
 - `dontAddPrefix`

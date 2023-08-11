@@ -3,7 +3,7 @@
 , fetchFromSourcehut
 , libX11
 , libXfixes
-, zigHook
+, zig_0_10
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-V5bAZHoScTzFZBPUhPd7xc/c32SXPLAJp+vsc/lCyeI=";
   };
 
-  nativeBuildInputs = [ zigHook ];
+  nativeBuildInputs = [ zig_0_10.hook ];
 
   buildInputs = [
     libX11
