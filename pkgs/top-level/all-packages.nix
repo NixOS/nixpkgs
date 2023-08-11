@@ -30167,6 +30167,7 @@ with pkgs;
     emacs29-nox
     emacs29-pgtk
     emacs28-macport
+    emacs29-macport
   ;
 
   emacs-macport = emacs28-macport;

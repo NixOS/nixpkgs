@@ -62,4 +62,13 @@ lib.makeScope pkgs.newScope (self:
         AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
         QuartzCore WebKit;
     };
+
+    emacs29-macport = callPackage (self.sources.emacs29-macport) {
+      inherit gconf;
+
+      inherit (pkgs.darwin) sigtool;
+      inherit (pkgs.darwin.apple_sdk.frameworks)
+        AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
+        QuartzCore WebKit;
+    };
   })
