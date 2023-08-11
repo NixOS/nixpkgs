@@ -58,12 +58,12 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "9.3p2";
+    version = "9.4p1";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      sha256 = "sha256-IA6+FH9ss/EB/QzfngJEKvfdyimN/9n0VoeOfMrGdug=";
+      sha256 = "sha256-Ngj9kIjbIWPOs+YAyFq3nQ3j0iHlkZLqGSPiMmOGaoU=";
     };
 
     extraPatches = [
