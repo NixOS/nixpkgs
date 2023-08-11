@@ -9,20 +9,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "nvarner";
     repo = "typst-lsp";
     rev = "v${version}";
-    hash = "sha256-Aq9KP9L9s42NmX45YVnGUMpP0MXKB1Pjd4W0f0U8T7o=";
+    hash = "sha256-XV/LlibO+2ORle0lVcqqHrDdH75kodk9yOU3OsHFA+A=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "svg2pdf-0.5.0" = "sha256-yBQpvDAnJ7C0PWIM/o0PzOg9JlDZCEiVdCTDDPSwrmE=";
-      "typst-0.6.0" = "sha256-8e6BNffKgAUNwic4uEfDh77y2nIyYt9BwZr+ypv+d5A=";
+      "typst-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
     };
   };
 
@@ -34,11 +33,6 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
-  ];
-
-  patches = [
-    # `rustPlatform.importCargoLock` has trouble parsing the `??` in the url
-    ./remove-svg2pdf-patch.patch
   ];
 
   checkFlags = [
