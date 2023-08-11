@@ -1,5 +1,6 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
 , perl, gmp, autoconf, automake, libidn2, libiconv
+, fetchpatch, texinfo
 , unbound, dns-root-data, gettext, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
 , tpmSupport ? false, trousers, which, nettools, libunistring
@@ -45,7 +46,15 @@ stdenv.mkDerivation rec {
   outputInfo = "devdoc";
   outputDoc  = "devdoc";
 
-  patches = [ ./nix-ssl-cert-file.patch ];
+  patches = [
+    (fetchpatch { #TODO: when updating drop this patch and texinfo
+      name = "GNUTLS_NO_EXTENSIONS.patch";
+      url = "https://gitlab.com/gnutls/gnutls/-/commit/abfa8634db940115a11a07596ce53c8f9c4f87d2.diff";
+      hash = "sha256-3M5WdNoVx9gUwTUPgu/sXmsaNg+j5d6liXs0UZz8fGU=";
+    })
+
+    ./nix-ssl-cert-file.patch
+  ];
 
   # Skip some tests:
   #  - pkg-config: building against the result won't work before installing (3.5.11)
@@ -80,7 +89,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withP11-kit) p11-kit
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers;
 
-  nativeBuildInputs = [ perl pkg-config ]
+  nativeBuildInputs = [ perl pkg-config texinfo ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ]
