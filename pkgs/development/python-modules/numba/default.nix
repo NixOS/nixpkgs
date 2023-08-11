@@ -27,7 +27,8 @@
 let
   inherit (cudaPackages) cudatoolkit;
 in buildPythonPackage rec {
-  # Using an untagged version, with numpy 1.25 support
+  # Using an untagged version, with numpy 1.25 support, when it's released
+  # also drop the versioneer patch in postPatch
   version = "unstable-2023-08-02";
   pname = "numba";
   format = "setuptools";
@@ -77,6 +78,13 @@ in buildPythonPackage rec {
       cuda_toolkit_lib_path = cudatoolkit.lib;
     })
   ];
+  # with untagged version we need to specify the correct version ourselves
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "version=versioneer.get_version()" "version='0.57.1'"
+    substituteInPlace numba/_version.py \
+      --replace 'git_refnames = ""' 'git_refnames = "0.57.1"'
+  '';
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
