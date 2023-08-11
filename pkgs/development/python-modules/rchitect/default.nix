@@ -2,16 +2,20 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cffi
-, six
 , pytestCheckHook
 , pytest-mock
+, pythonOlder
 , R
 , rPackages
+, six
 }:
 
 buildPythonPackage rec {
   pname = "rchitect";
   version = "0.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "randy3k";
@@ -21,7 +25,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner"' ""
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
   '';
 
   propagatedBuildInputs = [
