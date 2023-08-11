@@ -195,5 +195,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ danbst tadfisher ];
+    mainProgram = "zoom";
   };
 }

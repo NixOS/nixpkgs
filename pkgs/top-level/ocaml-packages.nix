@@ -343,6 +343,8 @@ let
 
     domain-local-await = callPackage ../development/ocaml-modules/domain-local-await { };
 
+    domain-local-timeout = callPackage ../development/ocaml-modules/domain-local-timeout { };
+
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
     domainslib = callPackage ../development/ocaml-modules/domainslib { };
@@ -796,6 +798,8 @@ let
     kafka = callPackage ../development/ocaml-modules/kafka { };
 
     kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix { };
+
+    kcas = callPackage ../development/ocaml-modules/kcas { };
 
     ke = callPackage ../development/ocaml-modules/ke { };
 

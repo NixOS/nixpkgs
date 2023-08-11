@@ -1790,6 +1790,8 @@ with pkgs;
 
   hexdiff = callPackage ../tools/misc/hexdiff { };
 
+  hostmux = callPackage ../tools/misc/hostmux { };
+
   httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
 
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
@@ -2396,6 +2398,10 @@ with pkgs;
   lucky-commit = callPackage ../applications/version-management/lucky-commit {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
+
+  merge-fmt = callPackage ../applications/version-management/merge-fmt {
+    inherit (ocamlPackages) buildDunePackage cmdliner base stdio;
+   };
 
   pass-git-helper = python3Packages.callPackage ../applications/version-management/pass-git-helper { };
 
@@ -3457,6 +3463,8 @@ with pkgs;
   botamusique = callPackage ../tools/audio/botamusique { };
 
   boulder = callPackage ../tools/admin/boulder { };
+
+  btrfs-assistant = libsForQt5.callPackage ../tools/misc/btrfs-assistant { };
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
@@ -9961,6 +9969,8 @@ with pkgs;
   };
 
   multitail = callPackage ../tools/misc/multitail { };
+
+  mvebu64boot = callPackage ../tools/misc/mvebu64boot { };
 
   mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
 
@@ -24403,6 +24413,8 @@ with pkgs;
   qdjango = libsForQt5.callPackage ../development/libraries/qdjango { };
 
   qimageblitz = callPackage ../development/libraries/qimageblitz { };
+
+  qoi = callPackage ../development/libraries/qoi { };
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
