@@ -1,5 +1,14 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, numpy, cython, zlib, six
-, python-lzo, nose }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, numpy
+, cython
+, zlib
+, six
+, python-lzo
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "bx-python";
@@ -13,10 +22,23 @@ buildPythonPackage rec {
     hash = "sha256-j2GKj2IGDBk4LBnISRx6ZW/lh5VSdQBasC0gCRj0Fiw=";
   };
 
-  nativeBuildInputs = [ cython ];
-  buildInputs = [ zlib ];
-  propagatedBuildInputs = [ numpy six python-lzo ];
-  nativeCheckInputs = [ nose ];
+  nativeBuildInputs = [
+    cython
+  ];
+
+  buildInputs = [
+    zlib
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    six
+    python-lzo
+  ];
+
+  nativeCheckInputs = [
+    nose
+  ];
 
   postInstall = ''
     cp -r scripts/* $out/bin
@@ -33,7 +55,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/bxlab/bx-python";
     changelog = "https://github.com/bxlab/bx-python/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.jbedo ];
+    maintainers = with maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];
   };
 }
