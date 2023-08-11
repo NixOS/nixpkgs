@@ -1,6 +1,6 @@
 { buildGoModule, lib, installShellFiles, fetchFromGitHub }:
 let
-  short_hash = "86497a5";
+  short_hash = "63b9742";
 in buildGoModule rec {
   pname = "deck";
   version = "1.26.0";
