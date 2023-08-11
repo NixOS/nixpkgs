@@ -20,8 +20,8 @@ in
       unitConfig = {
         Description = "dae Service";
         Documentation = "https://github.com/daeuniverse/dae";
-        After = [ "network.target" "systemd-sysctl.service" ];
-        Wants = [ "network.target" ];
+        After = [ "network-online.target" "systemd-sysctl.service" ];
+        Wants = [ "network-online.target" ];
       };
 
       serviceConfig = {

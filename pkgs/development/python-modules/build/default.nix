@@ -86,6 +86,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/build";
     changelog = "https://github.com/pypa/build/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = teams.python.members ++ [ maintainers.fab ];
   };
 }
