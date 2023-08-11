@@ -304,6 +304,7 @@ rec {
       checkPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
+      meta.mainProgram = name;
     };
 
   /*
