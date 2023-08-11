@@ -25,10 +25,6 @@ buildGoModule rec {
 
   subPackages = [ "cmd/ipfs" ];
 
-  buildInputs = [ openssl ];
-  nativeBuildInputs = [ pkg-config ];
-  tags = [ "openssl" ];
-
   passthru.tests.kubo = nixosTests.kubo;
 
   vendorSha256 = null;
