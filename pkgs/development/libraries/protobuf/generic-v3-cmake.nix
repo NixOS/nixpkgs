@@ -68,8 +68,11 @@ let
     ];
 
     buildInputs = [
-      abseil-cpp
       zlib
+    ];
+
+    propagatedBuildInputs = [
+      abseil-cpp
     ];
 
     cmakeDir = if lib.versionOlder version "3.22" then "../cmake" else null;
