@@ -3022,6 +3022,12 @@
     githubId = 538538;
     name = "Bryan Richter";
   };
+  chriscoffee = {
+    email = "millscj01@gmail.com";
+    github = "chriscoffee";
+    githubId = 7100370;
+    name = "Chris Mills";
+  };
   chrisjefferson = {
     email = "chris@bubblescope.net";
     github = "ChrisJefferson";
