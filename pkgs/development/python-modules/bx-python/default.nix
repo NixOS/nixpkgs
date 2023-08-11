@@ -5,7 +5,6 @@
 , numpy
 , cython
 , zlib
-, six
 , python-lzo
 , nose
 }:
@@ -13,7 +12,9 @@
 buildPythonPackage rec {
   pname = "bx-python";
   version = "0.10.0";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bxlab";
@@ -32,7 +33,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    six
     python-lzo
   ];
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   postInstall = ''
     cp -r scripts/* $out/bin
 
-    # This is a small hack; the test suit uses the scripts which need to
+    # This is a small hack; the test suite uses the scripts which need to
     # be patched. Linking the patched scripts in $out back to the
     # working directory allows the tests to run
     rm -rf scripts
