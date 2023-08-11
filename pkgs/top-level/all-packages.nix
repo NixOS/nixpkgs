@@ -33682,7 +33682,18 @@ with pkgs;
 
   rofi-pulse-select = callPackage ../applications/audio/rofi-pulse-select { };
 
-  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw { };
+  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw {
+    waylandSupport = false;
+    x11Support = false;
+  };
+
+  rofi-rbw-wayland = python3Packages.callPackage ../applications/misc/rofi-rbw {
+    waylandSupport = true;
+  };
+
+  rofi-rbw-x11 = python3Packages.callPackage ../applications/misc/rofi-rbw {
+    x11Support = true;
+  };
 
   rofi-screenshot = callPackage ../applications/misc/rofi-screenshot { };
 
