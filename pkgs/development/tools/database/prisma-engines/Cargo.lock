@@ -553,10 +553,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "context"
-version = "0.1.0"
-
-[[package]]
 name = "convert_case"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1660,14 +1656,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6c8af84674fe1f223a982c933a0ee1086ac4d4052aa0fb8060c12c6ad838e754"
 
 [[package]]
-name = "js-drivers"
+name = "js-connectors"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "bigdecimal",
+ "chrono",
  "expect-test",
  "napi",
  "napi-derive",
+ "num-bigint",
  "once_cell",
+ "psl",
  "quaint",
  "serde",
  "serde_json",
@@ -2495,9 +2495,9 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "openssl"
-version = "0.10.48"
+version = "0.10.55"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "518915b97df115dd36109bfa429a48b8f737bd05508cf9588977b599648926d2"
+checksum = "345df152bc43501c5eb9e4654ff05f794effb78d4efe3d53abc158baddc0703d"
 dependencies = [
  "bitflags 1.3.2",
  "cfg-if",
@@ -2536,11 +2536,10 @@ dependencies = [
 
 [[package]]
 name = "openssl-sys"
-version = "0.9.83"
+version = "0.9.90"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "666416d899cf077260dac8698d60a60b435a46d57e82acb1be3d0dad87284e5b"
+checksum = "374533b0e45f3a7ced10fcaeccca020e66656bc03dac384f852e4e5a7a8104a6"
 dependencies = [
- "autocfg",
  "cc",
  "libc",
  "openssl-src",
@@ -3338,7 +3337,7 @@ dependencies = [
  "async-trait",
  "connection-string",
  "futures",
- "js-drivers",
+ "js-connectors",
  "napi",
  "napi-build",
  "napi-derive",
