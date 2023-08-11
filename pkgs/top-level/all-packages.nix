@@ -17438,6 +17438,8 @@ with pkgs;
 
   angelscript = callPackage ../development/interpreters/angelscript { };
 
+  anko = callPackage ../development/interpreters/anko { };
+
   babashka-unwrapped = callPackage ../development/interpreters/babashka { };
   babashka = callPackage ../development/interpreters/babashka/wrapped.nix { };
 
