@@ -24,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-MPBOdurEQhA9BPRgVftejjtkvN/zRQEJDjQcS2QW3xc=";
   };
 
-  sourceRoot = "source/opentelemetry-instrumentation";
+  sourceRoot = "${src.name}/opentelemetry-instrumentation";
 
   format = "pyproject";
 

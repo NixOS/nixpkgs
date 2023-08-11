@@ -17,7 +17,7 @@ buildPythonPackage {
   pname = "opentelemetry-instrumentation-aiohttp-client";
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "source/instrumentation/opentelemetry-instrumentation-aiohttp-client";
+  sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-aiohttp-client";
 
   format = "pyproject";
 

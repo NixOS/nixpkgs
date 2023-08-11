@@ -97,7 +97,7 @@ buildPythonPackage rec {
     hash = "sha256-YQFIF1tA/CjvmD6xGgVre2lbcHR+UYx/sy1dOfpvkPY=";
   };
 
-  sourceRoot = "source/libs/langchain";
+  sourceRoot = "${src.name}/libs/langchain";
 
   postPatch = ''
     substituteInPlace langchain/utilities/bash.py \

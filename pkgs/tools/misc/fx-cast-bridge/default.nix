@@ -10,7 +10,7 @@ buildNpmPackage rec {
     rev = "v${version}";
     hash = "sha256-hB4NVJW2exHoKsMp0CKzHerYgj8aR77rV+ZsCoWA1Dg=";
   };
-  sourceRoot = "source/app";
+  sourceRoot = "${src.name}/app";
   npmDepsHash = "sha256-GLrDRZqKcX1PDGREx+MLZ1TEjr88r9nz4TvZ9nvo40g=";
 
   nativeBuildInputs = [ python3 ];
