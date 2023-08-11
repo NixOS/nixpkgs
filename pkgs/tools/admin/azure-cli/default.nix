@@ -2,10 +2,9 @@
 
 let
   version = "2.50.0";
-  srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
-    name = srcName;
+    name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
@@ -17,11 +16,12 @@ let
     inherit stdenv src version python3 fetchPypi;
   };
 in
+
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   pname = "azure-cli";
   inherit version src;
 
-  sourceRoot = "${srcName}/src/azure-cli";
+  sourceRoot = "${src.name}/src/azure-cli";
 
   prePatch = ''
     substituteInPlace setup.py \
