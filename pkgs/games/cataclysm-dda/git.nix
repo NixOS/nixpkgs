@@ -30,11 +30,6 @@ let
     makeFlags = common.makeFlags ++ [
       "VERSION=${version}"
     ];
-
-    meta = common.meta // {
-      maintainers = with lib.maintainers;
-      common.meta.maintainers ++ [ rardiol ];
-    };
   });
 in
 
