@@ -211,6 +211,11 @@ in
             User = "gitea-runner";
             StateDirectory = "gitea-runner";
             WorkingDirectory = "-/var/lib/gitea-runner/${name}";
+
+            # gitea-runner might fail when gitea is restarted during upgrade.
+            Restart = "on-failure";
+            RestartSec = 2;
+
             ExecStartPre = [(pkgs.writeShellScript "gitea-register-runner-${name}" ''
               export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
               mkdir -vp "$INSTANCE_DIR"
