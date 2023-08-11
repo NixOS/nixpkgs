@@ -54,7 +54,7 @@ lib.makeScope pkgs.newScope (self:
       withPgtk = true;
     };
 
-    emacs-macport = callPackage (self.sources.emacs-macport) {
+    emacs28-macport = callPackage (self.sources.emacs28-macport) {
       inherit gconf;
 
       inherit (pkgs.darwin) sigtool;

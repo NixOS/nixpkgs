@@ -62,7 +62,7 @@ in
     meta = mainlineMeta;
   };
 
-  emacs-macport = import ./generic.nix {
+  emacs28-macport = import ./generic.nix {
     pname = "emacs-mac";
     version = "28.2";
     variant = "macport";
