@@ -18,12 +18,12 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "9.3p2";
+    version = "9.4p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-IA6+FH9ss/EB/QzfngJEKvfdyimN/9n0VoeOfMrGdug=";
+      hash = "sha256-Ngj9kIjbIWPOs+YAyFq3nQ3j0iHlkZLqGSPiMmOGaoU=";
     };
 
     extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/700625bcd86b74cf3fb9536aeea250d7f8cd1fd5/security/openssh-portable/files/extra-patch-hpn"; in
