@@ -55,7 +55,7 @@ with lib;
 with builtins;
 
 let majorVersion = "13";
-    version = "${majorVersion}.1.0";
+    version = "${majorVersion}.2.0";
     disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -63,7 +63,7 @@ let majorVersion = "13";
     patches =
          optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../gcc-12-no-sys-dirs.patch
-      ++ optional noSysDirs ../no-sys-dirs-riscv.patch
+      ++ optional noSysDirs ./no-sys-dirs-riscv.patch
       ++ [
         ../gnat-cflags-11.patch
         ../gcc-12-gfortran-driving.patch
@@ -201,7 +201,7 @@ lib.pipe ((callFile ../common/builder.nix {}) ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "sha256-YdaE8Kpedqxlha2ImKJCeq3ol57V5/hUkihsTfwT7oY=";
+    hash = "sha256-4nXnZEKmBnNBon8Exca4PYYTFEAEwEE1KIY9xrXHQ9o=";
   };
 
   inherit patches;
