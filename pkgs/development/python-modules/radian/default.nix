@@ -18,17 +18,18 @@
 
 buildPythonPackage rec {
   pname = "radian";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
     rev = "v${version}";
-    sha256 = "iuD4EkGZ1GwNxR8Gpg9ANe3lMHJYZ/Q/RyuN6vZZWME=";
+    hash = "sha256-zA7R9UIB0hOWev10Y4oySIKeIxTOo0V6Q3Fxe+FeHSU=";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace '"pytest-runner"' ""
+    substituteInPlace setup.py --replace '0.3.39,<0.4.0' '0.3.39'
   '';
 
   nativeBuildInputs = [
