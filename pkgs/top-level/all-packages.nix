@@ -4519,6 +4519,8 @@ with pkgs;
                           { inherit (haskellPackages) alex happy Agda ghcWithPackages;
                           };
 
+  cel-go = callPackage ../development/interpreters/cel-go { };
+
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   cf-terraforming = callPackage ../tools/misc/cf-terraforming { };
