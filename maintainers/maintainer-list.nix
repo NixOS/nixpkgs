@@ -17181,6 +17181,12 @@
     githubId = 27586264;
     name = "Tobias Schmidt";
   };
+  totalchaos = {
+    email = "basil.keeler@outlook.com";
+    github = "totalchaos05";
+    githubId = 70387628;
+    name = "Basil Keeler";
+  };
   totoroot = {
     name = "Matthias Thym";
     email = "git@thym.at";
@@ -18568,6 +18574,13 @@
     github = "yorickvP";
     githubId = 647076;
     name = "Yorick van Pelt";
+  };
+  YorikSar = {
+    name = "Yuriy Taraday";
+    email = "yorik.sar@gmail.com";
+    matrix = "@yorik.sar:matrix.org";
+    github = "YorikSar";
+    githubId = 428074;
   };
   yrashk = {
     email = "yrashk@gmail.com";

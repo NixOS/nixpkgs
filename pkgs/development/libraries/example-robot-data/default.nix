@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  # The package expect to find an `example-robot-data/robots` folder somewhere
+  # either in install prefix or in the sources
+  # where it can find the meshes for unit tests
+  preCheck = "ln -s source ../../${finalAttrs.pname}";
   pythonImportsCheck = [
     "example_robot_data"
   ];

@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
       src = ./hardcode-gsettings.patch;
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
     })
+
+    # Backport cursor fix for Qt6 apps
+    # Ajusted from https://github.com/FedoraQt/QGnomePlatform/pull/138
+    ./qt6-cursor-fix.patch
   ];
 
   nativeBuildInputs = [
