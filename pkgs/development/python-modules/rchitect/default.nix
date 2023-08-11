@@ -6,7 +6,8 @@
 , pytestCheckHook
 , pytest-mock
 , R
-, rPackages }:
+, rPackages
+}:
 
 buildPythonPackage rec {
   pname = "rchitect";
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-fXL2UX0n9kKAVwMUP0z8V3UtJAy4xbAjnPIggUHllN0=";
   };
 
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Interoperate R with Python";
     homepage = "https://github.com/randy3k/rchitect";
+    changelog = "https://github.com/randy3k/rchitect/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ savyajha ];
   };
