@@ -90,4 +90,19 @@ in
 
     meta = metaFor "macport" "28.2" "emacs-28.2-mac-9.1";
   };
+
+  emacs29-macport = import ./generic.nix {
+    pname = "emacs-mac";
+    version = "29.1";
+    variant = "macport";
+
+    src = fetchFromBitbucket {
+      owner = "mituharu";
+      repo = "emacs-mac";
+      rev = "emacs-29.1-mac-10.0";
+      hash = "sha256-TE829qJdPjeOQ+kD0SfyO8d5YpJjBge/g+nScwj+XVU=";
+    };
+
+    meta = metaFor "macport" "29.1" "emacs-29.1-mac-10.0";
+  };
 }
