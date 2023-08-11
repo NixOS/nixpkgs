@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, setJavaClassPath }:
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, setJavaClassPath
+, enableJavaFX ? false
+}:
 let
   # Details from https://www.azul.com/downloads/?version=java-19-sts&os=macos&package=jdk
   # Note that the latest build may differ by platform
@@ -7,14 +13,18 @@ let
       arch = "x64";
       zuluVersion = "20.32.11";
       jdkVersion = "20.0.2";
-      hash = "sha256-Ev9KG6DvuBnsZrOguLsO1KQzudHCBcJNwKh45Inpnfo=";
+      hash =
+        if enableJavaFX then "sha256-hyxQAivZAXtqMebe30L+EYa7p+TdSdKNYj7Rl/ZwRNQ="
+        else "sha256-Ev9KG6DvuBnsZrOguLsO1KQzudHCBcJNwKh45Inpnfo=";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
       zuluVersion = "20.32.11";
       jdkVersion = "20.0.2";
-      hash = "sha256-15uNZ6uMfSASV3QU2q2oA/jBk2PCHOfSjn1GY7/7qIY=";
+      hash =
+        if enableJavaFX then "sha256-iPQzZS4CwaoqT8cSzg4kWCT1OyGBSJLq+NETcbucLo4="
+        else "sha256-15uNZ6uMfSASV3QU2q2oA/jBk2PCHOfSjn1GY7/7qIY=";
     };
   }."${stdenv.hostPlatform.system}";
 
@@ -23,12 +33,14 @@ let
     hash = "sha256-gCGii4ysQbRPFCH9IQoKCCL8r4jWLS5wo1sv9iioZ1o=";
   };
 
+  javaPackage = if enableJavaFX then "ca-fx-jdk" else "ca-jdk";
+
   jdk = stdenv.mkDerivation rec {
-    pname = "zulu${dist.zuluVersion}-ca-jdk";
+    pname = "zulu${dist.zuluVersion}-${javaPackage}";
     version = dist.jdkVersion;
 
     src = fetchurl {
-      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-ca-jdk${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
+      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
       inherit (dist) hash;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
