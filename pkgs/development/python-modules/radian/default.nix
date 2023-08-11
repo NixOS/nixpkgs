@@ -11,14 +11,17 @@
 , prompt-toolkit
 , pygments
 , rchitect
-, six
 , R
 , rPackages
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "radian";
   version = "0.6.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "randy3k";
@@ -28,8 +31,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner"' ""
-    substituteInPlace setup.py --replace '0.3.39,<0.4.0' '0.3.39'
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' "" \
+      --replace '0.3.39,<0.4.0' '0.3.39'
   '';
 
   nativeBuildInputs = [
@@ -41,7 +45,6 @@ buildPythonPackage rec {
     prompt-toolkit
     pygments
     rchitect
-    six
   ] ++ (with rPackages; [
     reticulate
     askpass
