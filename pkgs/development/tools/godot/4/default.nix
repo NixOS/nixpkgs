@@ -148,5 +148,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ twey shiryel ];
+    mainProgram = "godot4";
   };
 }
