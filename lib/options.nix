@@ -11,7 +11,6 @@ let
     filter
     foldl'
     head
-    tail
     isAttrs
     isBool
     isDerivation
@@ -23,10 +22,13 @@ let
     mapAttrs
     optional
     optionals
+    tail
     take
     ;
   inherit (lib.attrsets)
     attrByPath
+    attrNames
+    attrValues
     optionalAttrs
     ;
   inherit (lib.strings)
@@ -186,6 +188,218 @@ rec {
      documentation, which is no longer required.
   */
   mkPackageOptionMD = mkPackageOption;
+
+  /* Creates a suggestion based resource namespace allocator.
+
+    It allows someone to define a value space, like a port interval, so other
+    modules can "ask" for a value and the module will check for missing values,
+    conflicts and invalid candidates and suggest values for these cases that
+    must be explicitly set.
+
+    See RFC 0159 for more specification details.
+
+    Example:
+     with lib; mkAllocatorModule {
+      # dontThrow = true;
+      keyPath = "networking.ports";
+
+      valueKey = "port";
+      valueType = types.port;
+      cfg = config.networking.ports;
+      description = "Build time port allocations for services that are only used internally";
+      enableDescription = name: "Enable automatic port allocation for service ${name}";
+      valueDescription = name: "Allocated port for service ${name}";
+
+      firstValue = 49151;
+      succFunc = x: x - 1;
+      valueLiteral = toString;
+      validateFunc = x: (types.port.check x) && (x > 1024);
+      example = literalExpression ''{
+        app = {
+          enable = true;
+          port = 42069; # guided
+        };
+      }'';
+    }
+    => { _type = "option"; apply = «lambda @ /nix/store/8dq1grzr2g9ghh8nrwh15mn65pnp9qb1-source/lib/options.nix:309:13»; default = { ... }; description = "Build time port allocations for services that are only used internally"; example = { ... }; internal = null; relatedPackages = null; type = { ... }; visible = null; }
+  */
+  mkAllocatorModule = {
+    # <!-- begin of passthru parameters to the outer mkOption -->
+    # `example` parameter passed to the outer mkOption
+    example ? null,
+    # `internal` parameter passed to the outer mkOption
+    internal ? null,
+    # `relatedPackages` parameter passed to the outer mkOption
+    relatedPackages ? null,
+    # `visible` parameter passed to the outer mkOption
+    visible ? null,
+    # `description` parameter passed to the outer mkOption
+    description ? null,
+    # <!-- end of passthru parameters to the outer mkOption -->
+
+    # <!-- begin of passthru parameters to the inner mkOption -->
+    # Description of one of the items. Can also be a function that gets the
+    # item <name> and returs a string
+    enableDescription ? "Enable allocation of * undefined item *",
+
+    # `description` parameter passed to the item mkOption
+    valueDescription ? "Allocated value for * undefined item *",
+
+    # `type` parameter passed to the item mkOption
+    valueType ? null,
+
+    # `apply` parameter passed to the item mkOption
+    valueApply ? null,
+    # <!-- end of passthru parameters to the inner mkOption -->
+
+    # <!-- begin of user friendliness parameters -->
+    # how to convert one item value to a user friendly string
+    # representation
+    valueLiteral ? value: ''"${keyFunc value}"'',
+
+    # the config parameter but based on the options being defined
+    # same idea as that cfg in a let expression in other modules
+    cfg,
+
+    # module key path to the generated module
+    # example: "networking.ports"
+    keyPath ? "", # like "networking.ports"
+
+    # Name of the value of an item. Useful when modules
+    # use values in a informal standard way like
+    # valueKey = "port" to be able to inherit to
+    # `service.<name>.port`
+    valueKey ? "value",
+
+    # Returns the processed config with what did go out of
+    # the happy path instead of raising hard errors and warnings.
+    # This is a workaround for the limitation that tryEval
+    # can't recover from errors.
+    # Useful for testing.
+    dontThrow ? false,
+    # <!-- end of user friendliness parameters -->
+
+    # <!-- begin of allocator specific parameters -->
+    # first value in the space being allocated
+    firstValue ? 0,
+
+    # how to convert one value to a string key that uniquely identifies
+    # it to check for conflicts?
+    # TODO: better conflict key abstraction
+    #   this is actually a really naive and leaky abstraction
+    keyFunc ? toString,
+
+    # from one value how to get the next value?
+    # the first usage of this function will always be `succFunc firstValue`
+    succFunc,
+
+    # validation logic for one value
+    validateFunc ? valueType.check or (value: true),
+    # <!-- end of allocator specific parameters -->
+
+  }: mkOption {
+    inherit
+      description
+      example
+      internal
+      relatedPackages
+      visible
+    ;
+    default = {};
+    apply = _items: let
+      # all items but the disabled ones
+      items = removeAttrs _items (filter (item: !_items.${item}.enable) (attrNames _items));
+
+      # keys of enabled items
+      itemKeys = attrNames items;
+
+      # check if one item name has a value
+      isItemDefined = itemKey: items.${itemKey}.${valueKey} != null;
+
+      # keys of all items that has a value
+      definedItems = lib.filter isItemDefined itemKeys;
+
+      # keys of all items that has no value
+      undefinedItems = lib.filter (x: !isItemDefined x) itemKeys;
+
+      conflictDict = foldl' (x: y: x // (let
+        thisItemValue = items.${y}.${valueKey};
+        thisConflictKey = keyFunc thisItemValue;
+        conflictKey = x.${thisConflictKey} or null;
+        isConflict = conflictKey != null;
+        isValid = validateFunc thisItemValue;
+        hasProblem = isConflict || !isValid;
+      in {
+        "${thisConflictKey}" = y; # the item key itself
+
+        #   Utility keys to accumulate all conflicts and invalid
+        # values to report later.
+        #   Bailing out in this phase is really tricky and can easily
+        # cause infinite recursions.
+        _conflict = if (x._conflict or null) != null then x._conflict else (if isConflict then {from = conflictKey; to = y; } else null);
+        _invalid = (x._invalid or []) ++ (optional (!isValid) y);
+      })) {} definedItems;
+
+      getFullKey = key: concatStringsSep "." ((optional (keyPath != "") keyPath) ++ [ key ]);
+
+      isValueConflicts = value: (conflictDict.${keyFunc value} or null) != null;
+
+      # How the suggestion works
+      suggestValue = prevValue: if (isValueConflicts prevValue) || (!(validateFunc prevValue)) then suggestValue (succFunc prevValue) else prevValue;
+
+      # It always only look for one value suggestion on demand.
+      suggestedValue = suggestValue firstValue;
+
+      # And the suggestion representation can be required in any of
+      # these checks
+      suggestedValueLiteral = valueLiteral suggestedValue;
+
+      handleCondition = isThrow: condition: message: _passthru:
+        let
+          handler = if isThrow then lib.throwIfNot else lib.warnIfNot;
+          handledValue = handler condition message _passthru;
+
+          dontThrowValue = _passthru // {
+            _message = (_passthru._message or []) ++ (optional (!condition) message);
+            _conflictDict = conflictDict;
+            _steps = mapAttrs (k: v: v items) { inherit handleMissingKeyPath handleMissingValues handleConflicts handleInvalidValues; };
+          };
+          handledValueDontThrow = if condition then _passthru else dontThrowValue;
+        in if dontThrow then handledValueDontThrow else handledValue;
+
+      handleConditionThrow = handleCondition true;
+      handleConditionWarn = handleCondition false;
+
+      handleMissingKeyPath = handleConditionWarn (keyPath != "")
+        "mkAllocatorModule: keyPath missing. Error messages will be less useful";
+      handleMissingValues = handleConditionThrow (length undefinedItems == 0)
+        "Key ${getFullKey (head undefinedItems)} is missing a value. Suggestion: set the value to: `${suggestedValueLiteral}`";
+      handleConflicts = handleConditionThrow (conflictDict._conflict == null)
+        "Key ${getFullKey conflictDict._conflict.from} and ${getFullKey conflictDict._conflict.to} have the same values. Suggestion: change the value of one of them to: `${suggestedValueLiteral}`";
+      handleInvalidValues = handleConditionThrow (length conflictDict._invalid == 0)
+        "The following keys have invalid values: ${concatStringsSep ", " (map (getFullKey) conflictDict._invalid)}. Suggestion: change the value of the first key to: `${suggestedValueLiteral}`";
+
+    in lib.pipe items [
+      handleMissingKeyPath
+      handleMissingValues
+      handleConflicts
+      handleInvalidValues
+    ];
+
+    type = lib.types.attrsOf (lib.types.submodule ({ name, config, options, ... }: {
+      options = {
+        enable = mkEnableOption (if isString enableDescription then enableDescription else enableDescription name);
+
+        "${valueKey}" = mkOption {
+          default = null;
+
+          description = mkEnableOption (if isString valueDescription then valueDescription else valueDescription name);
+          type = lib.types.nullOr valueType;
+        };
+      };
+    }));
+  };
+
 
   /* This option accepts anything, but it does not produce any result.
 

@@ -227,6 +227,12 @@ checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
 checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
 
+# Check mkAllocatorModule
+checkConfigOutput '42069' config.expected.example.port ./declare-mkAllocatorModule.nix
+checkConfigError 'Key missing_value.example is missing a value[^$]*' config.missing_value.example ./declare-mkAllocatorModule.nix
+checkConfigError 'Key conflict.a and conflict.b have the same values[^$]*' config.conflict.a ./declare-mkAllocatorModule.nix
+checkConfigError 'The following keys have invalid values: invalid.example[^$]*' config.invalid ./declare-mkAllocatorModule.nix
+
 # submoduleWith
 
 ## specialArgs should work

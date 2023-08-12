@@ -140,7 +140,7 @@ let
       optionAttrSetToDocList optionAttrSetToDocList'
       scrubOptionValue literalExpression literalExample
       showOption showOptionWithDefLocs showFiles
-      unknownModule mkOption mkPackageOption mkPackageOptionMD
+      unknownModule mkOption mkPackageOption mkPackageOptionMD mkAllocatorModule
       mdDoc literalMD;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
