@@ -96,6 +96,8 @@ let
           protobuf = self;
         });
       };
+
+      inherit abseil-cpp;
     };
 
     meta = {
