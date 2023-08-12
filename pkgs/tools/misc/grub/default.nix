@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
                else lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
   doCheck = false;
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # unreliable due to msgfilter races
 
   postInstall = ''
     # Avoid a runtime reference to gcc
