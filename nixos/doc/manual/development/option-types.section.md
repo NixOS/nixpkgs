@@ -35,10 +35,16 @@ merging is handled.
 :   One element of the list *`l`*, e.g. `types.enum [ "left" "right" ]`.
     Multiple definitions cannot be merged.
 
-`types.enumMap` *`a`*
+`types.enumAttrs` *`attrs`*
 
-:   A type that takes one attribute name of the set *`a`* and maps it
-    to it's value, e.g. `types.enumMap { "name" = "value"; ... }`.
+:   A type that takes one attribute name of the attrset *`attrs`* and maps it
+    to it's value, e.g. `types.enumAttrs { "name" = "value"; ... }`.
+    Multiple definitions cannot be merged.
+
+`types.enumWith` *`mapping`*
+:   A type that takes one value of attribute `name` from any attribute set
+    in the list *`mapping`* and maps it to value of attribute *`value`*,
+    e.g. `types.enumWith [ { name = "name"; value = "value"; } ... ]`.
     Multiple definitions cannot be merged.
 
 `types.anything`

@@ -439,11 +439,24 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
 checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
 
-# types.enumMap
-checkConfigOutput "bar" config.map ./enumMap.nix
-checkConfigError "The option \`multiple\' has conflicting definition values" config.multiple ./enumMap.nix
-checkConfigOutput "foo" config.merge ./enumMap.nix
-checkConfigOutput "foo" config.priorities ./enumMap.nix
+# types.enum
+checkConfigOutput '^"foo"$' config.enum_string ./enum.nix
+checkConfigOutput '^42$' config.enum_int ./enum.nix
+checkConfigError 'The option .multiple. has conflicting definition values' config.multiple ./enum.nix
+checkConfigOutput '^42$' config.merge ./enum.nix
+checkConfigOutput '^42$' config.priorities ./enum.nix
+checkConfigError 'enum: `values` must be a list' config.string ./enum.nix
+
+# types.enumWith
+checkConfigOutput '^"f"$' config.enum_string ./enumWith.nix
+checkConfigOutput '^24$' config.enum_int ./enumWith.nix
+checkConfigError 'The option .multiple. has conflicting definition values' config.multiple ./enumWith.nix
+checkConfigOutput '^24$' config.merge ./enumWith.nix
+checkConfigOutput '^24$' config.priorities ./enumWith.nix
+checkConfigError 'enumAttrs: `attrs` must be an attribute set' config.string_attrs ./enumWith.nix
+checkConfigError 'enumWith: Mapping must be a list' config.string ./enumWith.nix
+checkConfigError 'enumWith: Some of the mappings missing `name` or `value` attribute' config.missing ./enumWith.nix
+checkConfigError 'enumWith: Some of the mappings are duplicated' config.duplicate ./enumWith.nix
 
 cat <<EOF
 ====== module tests ======

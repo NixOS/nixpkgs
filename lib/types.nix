@@ -24,18 +24,23 @@ let
     count
     elemAt
     filter
+    findFirst
     foldl'
     head
     imap1
     last
     length
+    subtractLists
     tail
     ;
   inherit (lib.attrsets)
     attrNames
+    catAttrs
     filterAttrs
     hasAttr
     mapAttrs
+    mapAttrsToList
+    nameValuePair
     optionalAttrs
     zipAttrsWith
     ;
@@ -64,6 +69,9 @@ let
     mergeDefinitions
     fixupOptionType
     mergeOptionDecls
+    ;
+  inherit (lib.generators)
+    toPretty
     ;
   outer_types =
 rec {
@@ -818,42 +826,64 @@ rec {
 
     # A value from a set of allowed ones.
     enum = values:
+      assert lib.assertMsg (isList values)
+        "enum: `values` must be a list: ${toPretty {} values}";
+      enumWith (map (v: nameValuePair v v) (lib.unique values));
+
+    # A type that takes one attribute name of the attrset `attrs` and maps it to it's value
+    enumAttrs = attrs:
+      assert lib.assertMsg (isAttrs attrs)
+        "enumAttrs: `attrs` must be an attribute set: ${toPretty {} attrs}";
+      enumWith (mapAttrsToList nameValuePair attrs);
+
+    # A type that takes one value of attribute `name` from any attribute set
+    # in the list `mapping` and maps it to value of attribute `value`
+    enumWith = mapping:
       let
-        inherit (lib.lists) unique;
+        names = catAttrs "name" mapping;
+
         show = v:
-               if builtins.isString v then ''"${v}"''
-          else if builtins.isInt v then builtins.toString v
-          else if builtins.isBool v then boolToString v
-          else ''<${builtins.typeOf v}>'';
+          if isString v then ''"${v}"''
+          else if isInt v then toString v
+          else if isBool v then boolToString v
+          else "<${builtins.typeOf v}>";
+        showMapping = v:
+          if v.name == v.value
+          then show v.name
+          else "${show v.name}(${show v.value})";
       in
+      assert lib.assertMsg (isList mapping)
+        "enumWith: Mapping must be a list: ${toPretty {} mapping}";
+      assert lib.assertMsg (all (v: v ? name && v ? value) mapping)
+        "enumWith: Some of the mappings missing `name` or `value` attribute: ${toPretty {} mapping}";
+      assert lib.assertMsg (names == lib.unique names)
+        "enumWith: Some of the mappings are duplicated: ${toPretty {} mapping}";
       mkOptionType rec {
-        name = "enum";
+        name = "enumWith";
         description =
           # Length 0 or 1 enums may occur in a design pattern with type merging
           # where an "interface" module declares an empty enum and other modules
           # provide implementations, each extending the enum with their own
           # identifier.
-          if values == [] then
+          if mapping == [] then
             "impossible (empty enum)"
-          else if builtins.length values == 1 then
-            "value ${show (builtins.head values)} (singular enum)"
+          else if length mapping == 1 then
+            "value ${showMapping (head mapping)} (singular enum)"
           else
-            "one of ${concatMapStringsSep ", " show values}";
+            "one of ${concatMapStringsSep ", " showMapping mapping}";
         descriptionClass =
-          if builtins.length values < 2
+          if length mapping < 2
           then "noun"
           else "conjunction";
-        check = flip elem values;
-        merge = mergeEqualOption;
-        functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
-      };
-
-    # Similar to `enum (attrNames mapping)` but merges to `mapping.${name}`
-    enumMap = mapping:
-      enum (attrNames mapping) // rec {
-        name = "enumMap";
-        merge = loc: defs: mapping.${mergeEqualOption loc defs};
-        functor = (defaultFunctor name) // { type = enumMap; payload = mapping; binOp = a: b: a // b; };
+        check = flip elem names;
+        merge = loc: defs:
+          (findFirst (v: v.name == (mergeEqualOption loc defs)) {} mapping).value;
+        functor = { inherit name mapping; };
+        typeMerge = other:
+          if name == other.name
+            && names == subtractLists (catAttrs "name" other.mapping) names
+          then enumWith (mapping ++ other.mapping)
+          else null;
       };
 
     # Either value of type `t1` or `t2`.
