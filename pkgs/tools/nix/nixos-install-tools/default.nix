@@ -20,7 +20,7 @@ in
     inherit (config.system.build)
       nixos-install nixos-generate-config nixos-enter;
 
-    inherit (config.system.build.manual) configuration-manual;
+    inherit (config.system.build.manual) nixos-configuration-reference-manpage;
   };
 
   extraOutputsToInstall = ["man"];
