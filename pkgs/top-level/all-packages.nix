@@ -21206,6 +21206,8 @@ with pkgs;
 
   fribidi = callPackage ../development/libraries/fribidi { };
 
+  frozen = callPackage ../development/libraries/frozen { };
+
   funambol = callPackage ../development/libraries/funambol { };
 
   function-runner = callPackage ../development/web/function-runner { };

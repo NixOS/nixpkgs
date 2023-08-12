@@ -12,7 +12,7 @@ buildPythonPackage {
   pname = "opentelemetry-proto";
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "source/opentelemetry-proto";
+  sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-proto";
 
   format = "pyproject";
 

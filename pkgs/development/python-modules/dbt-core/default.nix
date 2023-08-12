@@ -40,7 +40,7 @@ buildPythonPackage rec {
     hash = "sha256-ZgP11fVMtXpzo9QaTkejvKl0LzCAkIyGBMcOquBirxQ=";
   };
 
-  sourceRoot = "source/core";
+  sourceRoot = "${src.name}/core";
 
   nativeBuildInputs = [
     pythonRelaxDepsHook

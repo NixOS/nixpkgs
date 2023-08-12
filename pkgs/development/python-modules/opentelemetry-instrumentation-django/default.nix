@@ -18,7 +18,7 @@ buildPythonPackage {
   pname = "opentelemetry-instrumentation-django";
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "source/instrumentation/opentelemetry-instrumentation-django";
+  sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-django";
 
   format = "pyproject";
 
