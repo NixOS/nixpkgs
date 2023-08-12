@@ -8797,9 +8797,9 @@ with pkgs;
 
   gup = callPackage ../development/tools/build-managers/gup { };
 
-  gupnp = callPackage ../development/libraries/gupnp { };
-
+  gupnp_1_4 = callPackage ../development/libraries/gupnp/1.4.nix { };
   gupnp_1_6 = callPackage ../development/libraries/gupnp/1.6.nix { };
+  gupnp = gupnp_1_6;
 
   gupnp-av = callPackage ../development/libraries/gupnp-av { };
 
