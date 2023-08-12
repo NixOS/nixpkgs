@@ -1282,6 +1282,12 @@
     githubId = 56009;
     name = "Arcadio Rubio García";
   };
+  arcayr = {
+    email = "nix@arcayr.online";
+    github = "arcayr";
+    githubId = 11192354;
+    name = "Elliot Speck";
+  };
   archer-65 = {
     email = "mario.liguori.056@gmail.com";
     github = "archer-65";
