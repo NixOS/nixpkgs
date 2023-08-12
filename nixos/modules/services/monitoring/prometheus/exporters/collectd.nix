@@ -18,7 +18,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 25826;
         description = lib.mdDoc "Network address on which to accept collectd binary network packets.";
       };
@@ -58,10 +58,10 @@ in
     };
   };
   serviceOpts = let
-    collectSettingsArgs = if (cfg.collectdBinary.enable) then ''
+    collectSettingsArgs = optionalString (cfg.collectdBinary.enable) ''
       --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
       --collectd.security-level ${cfg.collectdBinary.securityLevel} \
-    '' else "";
+    '';
   in {
     serviceConfig = {
       ExecStart = ''

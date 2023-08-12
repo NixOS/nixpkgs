@@ -2,40 +2,27 @@
 
 buildGoModule rec {
   pname = "govulncheck";
-  version = "unstable-2022-09-02";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    rev = "27dd78d2ca392c1738e54efe513a2ecb7bf46000";
-    sha256 = "sha256-G35y1V4W1nLZ+QGvIQwER9whBIBDFUVptrHx78orcI0=";
+    rev = "v${version}";
+    sha256 = "sha256-cewQ03dK/k3mXevE09M01Yox/3ZWP6IrG0H4QsZMzy8=";
   };
 
-  vendorSha256 = "sha256-9FH9nq5cEyhMxrrvfQAOWZ4aThMsU0HwlI+0W0uVHZ4=";
+  vendorSha256 = "sha256-r9XshbgVA5rppJF46SFYPad344ZHMLWTHTnL6vbIFH8=";
 
   subPackages = [ "cmd/govulncheck" ];
 
-  preCheck = ''
-    # test all paths
-    unset subPackages
-
-    # remove test that calls checks.bash
-    # the header check and misspell gets upset at the vendor dir
-    rm all_test.go
-
-    # remove tests that generally have "inconsistent vendoring" issues
-    # - tries to builds govulncheck again
-    rm cmd/govulncheck/main_command_118_test.go
-    # - does go builds of example go files
-    rm vulncheck/binary_test.go
-    # - just have resolution issues
-    rm vulncheck/{source,vulncheck}_test.go
-  '';
+  # Vendoring breaks tests
+  doCheck = false;
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";
+    downloadPage = "https://github.com/golang/vuln";
     description = "The database client and tools for the Go vulnerability database, also known as vuln";
     longDescription = ''
       Govulncheck reports known vulnerabilities that affect Go code. It uses
@@ -59,6 +46,6 @@ buildGoModule rec {
       reported for a Linux build.
     '';
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk SuperSandro2000 ];
   };
 }

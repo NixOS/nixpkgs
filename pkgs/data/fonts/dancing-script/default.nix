@@ -1,19 +1,22 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation {
   pname = "dancing-script";
   version = "2.0";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "impallari";
-  repo = "DancingScript";
-  rev = "f7f54bc1b8836601dae8696666bfacd306f77e34";
-  sha256 = "dfFvh8h+oMhAQL9XKMrNr07VUkdQdxAsA8+q27KWWCA=";
+  src = fetchFromGitHub {
+    owner = "impallari";
+    repo = "DancingScript";
+    rev = "f7f54bc1b8836601dae8696666bfacd306f77e34";
+    hash = "sha256-B9oAZFPH3dG/Nt5FfKfFVJYtfUKGK0AXNkQHRC7IgdU=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/truetype fonts/ttf/*.ttf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

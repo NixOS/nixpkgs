@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
+, importlib-metadata
 , joblib
 , llvmlite
 , numba
@@ -12,15 +14,27 @@
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.7";
+  version = "0.5.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7LOVJV+janSLWHC0ugMA6g99qLGWSGS47dYld6hN/X0=";
+    hash = "sha256-p8VSVpv2BKEB/VS7odJ8EjieBllF3uOmd3pRjGOkbys=";
   };
+
+  patches = [
+    # Fix sklearn 1.2.0 compat; https://github.com/lmcinnes/pynndescent/issues/207
+    (fetchpatch {
+      url = "https://github.com/lmcinnes/pynndescent/commit/00444be2107b71169b853847e7b334623c58a4e3.patch";
+      hash = "sha256-mbe01BwroS5q6hENsj3NejmGGhmk2IeX4LD6Iq6PR0c=";
+    })
+    (fetchpatch {
+      url = "https://github.com/lmcinnes/pynndescent/commit/e56b92776a4a05f2dabb80d25479bd37e7ebd88e.patch";
+      hash = "sha256-zVTaW4syGEHh2HAGPyBN3YXqUGe55v/LxKLX/zjXT5Y=";
+    })
+  ];
 
   propagatedBuildInputs = [
     joblib
@@ -28,9 +42,11 @@ buildPythonPackage rec {
     numba
     scikit-learn
     scipy
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

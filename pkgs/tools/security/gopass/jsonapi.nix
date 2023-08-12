@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gopass-jsonapi";
-  version = "1.14.6";
+  version = "1.15.7";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
-    repo = pname;
+    repo = "gopass-jsonapi";
     rev = "v${version}";
-    sha256 = "sha256-4jpW1XGT3LWucrDYsz30fKTO7v7AxDKhjx4UYE7NnMQ=";
+    hash = "sha256-lwY5uc6eKqXO8FbvzlrpQY0y5AEcV0RQFvvnE+At6z0=";
   };
 
-  vendorSha256 = "sha256-bTZ7fjRCKvp7AJcuNDHnsgB8hQUURPBCISgWtBAO1fI=";
+  vendorHash = "sha256-BKwgP22l4t4jaAHHh+ZD/2nroCtAp/A6DqHt+9HZzKw=";
 
   subPackages = [ "." ];
 
@@ -28,12 +28,14 @@ buildGoModule rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/gopass-jsonapi --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+    wrapProgram $out/bin/gopass-jsonapi \
+      --prefix PATH : "${gopass.wrapperPath}"
   '';
 
   meta = with lib; {
     description = "Enables communication with gopass via JSON messages";
-    homepage = "https://www.gopass.pw/";
+    homepage = "https://github.com/gopasspw/gopass-jsonapi";
+    changelog = "https://github.com/gopasspw/gopass-jsonapi/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ maxhbr ];
   };

@@ -1,22 +1,20 @@
 { lib
-, fetchFromGitLab
+, fetchurl
 , meson
 , ninja
 , python3
+, gnome
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
-  version = "2022.1";
+  version = "2023.1";
 
   format = "other";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = pname;
-    rev = version;
-    sha256 = "35pL/2TQRVgPfAcfOGCLlSP1LIh4r95mFC+UoXQEEHo=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";
+    sha256 = "qaaHwbfEpBOaIUvUUeAcqGExoxYfaKo+BzJbBgArv7Y=";
   };
 
   depsBuildBuild = [
@@ -33,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     markdown
     markupsafe
     pygments
-    toml
+    toml # remove once python311 is the default
     typogrify
   ];
 
@@ -44,6 +42,12 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace $out/nix-support/propagated-build-inputs \
       --replace "${python3}" ""
   '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "gi-docgen";
+    };
+  };
 
   meta = with lib; {
     description = "Documentation generator for GObject-based libraries";

@@ -1,21 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
 
 buildGoModule rec {
   pname = "exercism";
-  version = "3.0.13";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
-    owner  = "exercism";
-    repo   = "cli";
-    rev    = "v${version}";
-    sha256 = "17gvz9a0sn4p36hf4l77bxhhfipf4x998iay31layqwbnzmb4xy7";
+    owner = "exercism";
+    repo  = "cli";
+    rev   = "refs/tags/v${version}";
+    hash  = "sha256-+DXmbbs9oo667o5P0OVcfBMMIvyBzEAdbrq9i+U7p0k=";
   };
 
-  vendorSha256 = "0b2m9xkac60k5rbxmb03cxf530m23av14pnsjk8067l998sm4vqi";
+  vendorHash = "sha256-wQGnGshsRJLe3niHDoyr3BTxbwrV3L66EjJ8x633uHY=";
 
   doCheck = false;
 
   subPackages = [ "./exercism" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
    inherit (src.meta) homepage;

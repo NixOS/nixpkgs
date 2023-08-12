@@ -1,29 +1,85 @@
-{ lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK31, wxmac, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, libLAS, proj-datumgrid
-, zstd, pdal, wrapGAppsHook
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, makeWrapper
+, wrapGAppsHook
+
+, bison
+, blas
+, cairo
+, ffmpeg
+, fftw
+, flex
+, gdal
+, geos
+, libiconv
+, libmysqlclient
+, libpng
+, libtiff
+, libxml2
+, netcdf
+, pdal
+, pkg-config
+, postgresql
+, proj
+, proj-datumgrid
+, python3Packages
+, readline
+, sqlite
+, wxGTK32
+, zlib
+, zstd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "grass";
-  version = "8.2.0";
+  version = "8.3.0";
 
   src = with lib; fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = version;
-    sha256 = "sha256-VK9FCqIwHGmeJe5lk12lpAGcsC1aPRBiI+XjACXjDd4=";
+    hash = "sha256-YHQtvp/AYMWme46yIc4lE/izjqVePnPxn3GY5RRfPq4=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite
-  readline ffmpeg netcdf geos postgresql libmysqlclient blas
-  libLAS proj-datumgrid zstd wrapGAppsHook ]
-    ++ lib.optionals stdenv.isLinux [ cairo pdal wxGTK31 ]
-    ++ lib.optional stdenv.isDarwin wxmac
-    ++ (with python3Packages; [ python python-dateutil numpy ]
-      ++ lib.optional stdenv.isDarwin wxPython_4_0
-      ++ lib.optional stdenv.isLinux wxPython_4_1);
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook
+
+    bison
+    flex
+    gdal # for `gdal-config`
+    geos # for `geos-config`
+    libmysqlclient # for `mysql_config`
+    netcdf # for `nc-config`
+    pkg-config
+  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
+
+  buildInputs = [
+    blas
+    cairo
+    ffmpeg
+    fftw
+    gdal
+    geos
+    libmysqlclient
+    libpng
+    libtiff
+    libxml2
+    netcdf
+    pdal
+    postgresql
+    proj
+    proj-datumgrid
+    readline
+    sqlite
+    wxGTK32
+    zlib
+    zstd
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+
+  strictDeps = true;
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory
@@ -35,25 +91,24 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-proj-share=${proj}/share/proj"
-    "--with-proj-includes=${proj.dev}/include"
-    "--with-proj-libs=${proj}/lib"
-    "--without-opengl"
-    "--with-readline"
-    "--with-wxwidgets"
-    "--with-netcdf"
+    "--with-blas"
+    "--with-fftw"
     "--with-geos"
-    "--with-postgres"
-    "--with-postgres-libs=${postgresql.lib}/lib/"
-    # it complains about missing libmysqld but doesn't really seem to need it
+    # It complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
     "--with-mysql-includes=${lib.getDev libmysqlclient}/include/mysql"
     "--with-mysql-libs=${libmysqlclient}/lib/mysql"
-    "--with-blas"
-    "--with-liblas=${libLAS}/bin/liblas-config"
-    "--with-zstd"
-    "--with-fftw"
+    "--with-netcdf"
+    "--with-postgres"
+    "--with-postgres-libs=${postgresql.lib}/lib/"
+    "--with-proj-includes=${proj.dev}/include"
+    "--with-proj-libs=${proj}/lib"
+    "--with-proj-share=${proj}/share/proj"
     "--with-pthread"
+    "--with-readline"
+    "--with-wxwidgets"
+    "--with-zstd"
+    "--without-opengl"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-pdal"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -86,11 +141,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
-    homepage = "https://grass.osgeo.org/";
-    description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mpickering willcohen ];
+  passthru.tests = {
+    grass = callPackage ./tests.nix { grass = finalAttrs.finalPackage; };
   };
-}
+
+  meta = with lib; {
+    description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
+    homepage = "https://grass.osgeo.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
+    platforms = platforms.all;
+  };
+})

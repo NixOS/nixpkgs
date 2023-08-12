@@ -9,15 +9,18 @@
 , python-jose
 , requests
 , tabulate
+
+# Sensitive downstream dependencies
+, localstack
 }:
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "1.0.4";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YNj4V/mv8gn+TEPBejgyMIuSXYmIXNjk5xruyVbf1qA=";
+    hash = "sha256-/uesHiB/54wEfcWf4e9BW1ZvcVfAgAD7yGAlfYxv+6g=";
   };
 
   postPatch = ''
@@ -49,6 +52,10 @@ buildPythonPackage rec {
 
   # No tests in repo
   doCheck = false;
+
+  passthru.tests = {
+    inherit localstack;
+  };
 
   meta = with lib; {
     description = "Extensions for LocalStack";

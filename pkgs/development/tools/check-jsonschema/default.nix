@@ -4,38 +4,41 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "check-jsonschema";
-  version = "0.16.2";
+  version = "0.23.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
     rev = version;
-    sha256 = "sha256-rPjXua5kITr+I+jqeAO2iGUFVhjkLnQkXlUzRvkXduA=";
+    hash = "sha256-gPFG1AgInakF8leMM0c1zZt2OdZdIKcUmItwICV8p1I=";
   };
 
   propagatedBuildInputs = [
     ruamel-yaml
     jsonschema
-    identify
     requests
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
     responses
   ];
 
-  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
-    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
-    export no_proxy='*';
-  '';
+  pythonImportsCheck = [
+    "check_jsonschema"
+    "check_jsonschema.cli"
+  ];
 
   meta = with lib; {
     description = "A jsonschema CLI and pre-commit hook";
     homepage = "https://github.com/python-jsonschema/check-jsonschema";
-    license = licenses.apsl20;
+    changelog = "https://github.com/python-jsonschema/check-jsonschema/blob/${version}/CHANGELOG.rst";
+    license = licenses.asl20;
     maintainers = with maintainers; [ sudosubin ];
   };
 }

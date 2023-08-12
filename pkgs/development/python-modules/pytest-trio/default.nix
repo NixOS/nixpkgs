@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, trio, async_generator, hypothesis, outcome, pytest }:
+, trio, async-generator, hypothesis, outcome, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-trio";
@@ -17,11 +17,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     trio
-    async_generator
+    async-generator
     outcome
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     hypothesis
   ];

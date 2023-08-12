@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , rustPlatform
+, rustc
 , callPackage
 , fetchFromGitHub
 , buildPythonPackage
@@ -41,6 +42,12 @@ let
       nativeBuildInputs = (with rustPlatform; [ cargoSetupHook maturinBuildHook ])
         ++ extraNativeBuildInputs;
 
+      postPatch = ''
+        # Workaround for metadata, that maturin 0.14 does not accept in Cargo.toml anymore
+        substituteInPlace ${buildAndTestSubdir}/Cargo.toml \
+          --replace "package.metadata.maturin" "broken"
+      '';
+
       buildInputs = lib.optionals stdenv.isDarwin [ libiconv ]
         ++ extraBuildInputs;
 
@@ -66,7 +73,7 @@ let
         homepage = "https://github.com/wasmerio/wasmer-python";
         license = licenses.mit;
         platforms = platforms.unix;
-        maintainers = with maintainers; [ SuperSandro2000 ];
+        maintainers = with maintainers; [ ];
       };
     };
 in
@@ -87,7 +94,7 @@ rec {
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
     cargoHash = "sha256-xawbf5gXXV+7I2F2fDSaMvjtFvGDBtqX7wL3c28TSbA=";
-    extraNativeBuildInputs = [ rustPlatform.rust.rustc.llvm ];
+    extraNativeBuildInputs = [ rustc.llvm ];
     extraBuildInputs = [ libffi libxml2.out ncurses zlib ];
   };
 

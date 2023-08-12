@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  # https://github.com/FedeDP/libmodule/issues/7
+  postPatch = ''
+    substituteInPlace Extra/libmodule.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     description = "C simple and elegant implementation of an actor library";
     homepage = "https://github.com/FedeDP/libmodule";

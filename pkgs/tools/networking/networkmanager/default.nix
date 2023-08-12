@@ -4,7 +4,6 @@
 , substituteAll
 , gettext
 , pkg-config
-, fetchpatch
 , dbus
 , gnome
 , systemd
@@ -58,11 +57,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.40.0";
+  version = "1.42.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-rufgV7wsyl2rhOQfFfHai3lespB0ewTL7ugiutnp/AM=";
+    sha256 = "sha256-AzfnWD0uxa3iui6MYl0vCe7M2h0ig27imqcpJdOZw1M=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -113,6 +112,7 @@ stdenv.mkDerivation rec {
     "-Dfirewalld_zone=false"
     "-Dtests=no"
     "-Dcrypto=gnutls"
+    "-Dmobile_broadband_provider_info_database=${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml"
   ];
 
   patches = [
@@ -128,7 +128,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     systemd
     libselinux
     audit

@@ -1,49 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, python3, imagemagick, libwnck, libxfce4ui, xfce4-panel, xfconf, xfce4-dev-tools, xfce, gitUpdater }:
+{ stdenv
+, lib
+, fetchurl
+, intltool
+, pkg-config
+, libwnck
+, libxfce4ui
+, xfce4-panel
+, xfconf
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
-  pname  = "xfce4-windowck-plugin";
-  version = "0.4.10";
+  pname = "xfce4-windowck-plugin";
+  version = "0.5.1";
 
-  src = fetchFromGitHub {
-    owner = "invidian";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-luCQzqWX3Jl2MlBa3vi1q7z1XOhpFxE8PUxscoIyBlA=";
+  src = fetchurl {
+    # Use dist tarballs to avoid pulling extra deps and generating images ourselves.
+    url = "mirror://xfce/src/panel-plugins/xfce4-windowck-plugin/${lib.versions.majorMinor version}/xfce4-windowck-plugin-${version}.tar.bz2";
+    sha256 = "sha256-p4FEi3gemE072lmw2qsNGE1M7CJSMW9zcKxKmO/kgfQ=";
   };
 
   nativeBuildInputs = [
-    pkg-config
     intltool
+    pkg-config
   ];
 
   buildInputs = [
-    python3
-    imagemagick
     libwnck
     libxfce4ui
     xfce4-panel
     xfconf
-    xfce4-dev-tools
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-    patchShebangs .
-  '';
-
-  enableParallelBuilding = true;
-
   passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    rev-prefix = "v";
+    url = "https://gitlab.xfce.org/panel-plugins/xfce4-windowck-plugin";
+    rev-prefix = "xfce4-windowck-plugin-";
   };
 
   meta = with lib; {
-    homepage = "https://goodies.xfce.org/projects/panel-plugins/xfce4-windowck-plugin";
-    description = "Xfce plugins which allows to put the maximized window title and buttons on the panel";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    description = "Xfce panel plugin for displaying window title and buttons";
+    homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-windowck-plugin";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

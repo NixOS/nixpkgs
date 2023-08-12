@@ -21,16 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gambit ]
     ++ buildInputs_libraries; # ++ buildInputs_staticLibraries;
 
-  # disable stackprotector on aarch64-darwin for now
-  # build error:
-  # ```
-  # /private/tmp/nix-build-gerbil-unstable-2020-11-05.drv-0/ccjyhWKi.s:326:15: error: index must be an integer in range [-256, 255].
-  #         ldr     x2, [x2, ___stack_chk_guard];momd
-  #                          ^
-  # ```
-  hardeningDisable = lib.optionals (gccStdenv.isAarch64 && gccStdenv.isDarwin) [ "stackprotector" ];
-
-  NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
+  env.NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 
   postPatch = ''
     echo '(define (gerbil-version-string) "v${git-version}")' > src/gerbil/runtime/gx-version.scm ;
@@ -38,7 +29,7 @@ stdenv.mkDerivation rec {
     grep -Fl '#!/usr/bin/env' `find . -type f -executable` | while read f ; do
       substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env' ;
     done ;
-'';
+  '';
 
 ## TODO: make static compilation work.
 ## For that, get all the packages below to somehow expose static libraries,
@@ -101,8 +92,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Gerbil Scheme";
     homepage    = "https://github.com/vyzo/gerbil";
-    license     = lib.licenses.lgpl21; # also asl20, like Gambit
-    # NB regarding platforms: regularly tested on Linux, only occasionally on macOS.
+    license     = lib.licenses.lgpl21Only; # dual, also asl20, like Gambit
+    # NB regarding platforms: regularly tested on Linux and on macOS.
     # Please report success and/or failure to fare.
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];

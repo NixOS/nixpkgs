@@ -1,26 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, gettext, intltool
+{ lib, stdenv, fetchFromGitHub, pkg-config, meson, ninja, xxd, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
+, libarchive, djvulibre, libheif, openjpeg, libjxl, libraw, lua5_3, poppler
+, gspell, libtiff, libwebp
 , wrapGAppsHook, fetchpatch, doxygen
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "2.0.1";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     rev = "v${version}";
-    sha256 = "sha256-O+yz/uNxueR+naEJG8EZ+k/JutRjJ5wwbB9DYb8YNLw=";
+    hash = "sha256-qkM/7auZ9TMF2r8KLnitxmvlyPmIjh7q9Ugh+QKh8hw=";
   };
 
   patches = [
-    # Do not build the changelog as this requires markdown.
     (fetchpatch {
-      name = "geeqie-1.4-goodbye-changelog.patch";
-      url = "https://src.fedoraproject.org/rpms/geeqie/raw/132fb04a1a5e74ddb333d2474f7edb9a39dc8d27/f/geeqie-1.4-goodbye-changelog.patch";
-      sha256 = "00a35dds44kjjdqsbbfk0x9y82jspvsbpm2makcm1ivzlhjjgszn";
+      name = "exiv2-0.28.0-support-1.patch";
+      url = "https://github.com/BestImageViewer/geeqie/commit/c45cca777aa3477eaf297db99f337e18d9683c61.patch";
+      hash = "sha256-YiFzAj3G3Z2w7p+8zZlDBjWqUqnfSqvaxMkESfPFdzc=";
+    })
+    (fetchpatch {
+      name = "exiv2-0.28.0-support-2.patch";
+      url = "https://github.com/BestImageViewer/geeqie/commit/b04f7cd0546976dc4f7ea440648ac0eedd8df3ce.patch";
+      hash = "sha256-V0ZOHbAZOrhLcNN+Al1/kvxvbw0vc/R7r99CegjuBQg=";
+    })
+    (fetchpatch {
+      name = "fix-compilation-with-lua.patch";
+      url = "https://github.com/BestImageViewer/geeqie/commit/a132645ee87e612217ac955b227cad04f21a5722.patch";
+      hash = "sha256-BozarBPoIKxZS3qpjuzHHAWZGIWZAwvJyqsNC8v+TMk=";
     })
   ];
 
@@ -28,15 +39,16 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  preConfigure = "./autogen.sh";
-
   nativeBuildInputs =
-    [ pkg-config autoconf automake gettext intltool
+    [ pkg-config gettext intltool
       wrapGAppsHook doxygen
+      meson ninja xxd
     ];
 
   buildInputs = [
     gtk3 lcms2 exiv2 libchamplain clutter-gtk ffmpegthumbnailer fbida
+    libarchive djvulibre libheif openjpeg libjxl libraw lua5_3 poppler
+    gspell libtiff libwebp
   ];
 
   postInstall = ''
@@ -49,9 +61,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

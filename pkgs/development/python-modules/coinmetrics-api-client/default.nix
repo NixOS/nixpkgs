@@ -1,41 +1,73 @@
-{ buildPythonPackage, fetchPypi, lib, orjson, pandas, poetry-core
-, pytestCheckHook, pytest-mock, pythonOlder, python-dateutil, requests, typer
-, websocket-client }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nix-update-script
+, orjson
+, pandas
+, poetry-core
+, pytest-mock
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pythonRelaxDepsHook
+, requests
+, typer
+, websocket-client
+}:
 
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
-  version = "2022.8.29.6";
+  version = "2023.8.2.13";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.9";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EPPRKOdFbLLYw0K5C4nojR8GueekoFW7xIlwKeSV1EY=";
+    inherit version;
+    pname = "coinmetrics_api_client";
+    hash = "sha256-R7EbzH8ftHqoCbe8plXPOmTL01mow7t+zgVfL4+bZXQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [
+    "typer"
+  ];
+
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
-    orjson python-dateutil requests typer websocket-client
+    orjson
+    python-dateutil
+    requests
+    typer
+    websocket-client
   ];
 
-  checkInputs = [
-    pandas
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
-  ];
+  ] ++ passthru.optional-dependencies.pandas;
 
-  pythonImportsCheck = [ "coinmetrics.api_client" ];
+  pythonImportsCheck = [
+    "coinmetrics.api_client"
+  ];
 
   passthru = {
     optional-dependencies = {
-      pandas = [ pandas ];
+      pandas = [
+        pandas
+      ];
     };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
+    description = "Coin Metrics API v4 client library";
     homepage = "https://coinmetrics.github.io/api-client-python/site/index.html";
-    description = "Coin Metrics API v4 client library (Python)";
     license = licenses.mit;
     maintainers = with maintainers; [ centromere ];
   };

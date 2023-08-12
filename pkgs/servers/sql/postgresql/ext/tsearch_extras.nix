@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation {
   pname = "tsearch-extras";
@@ -11,7 +11,6 @@ stdenv.mkDerivation {
     sha256 = "18j0saqblg3jhrz38splk173xjwdf32c67ymm18m8n5y94h8d2ba";
   };
 
-  nativenativeBuildInputs = [ pkg-config ];
   buildInputs = [ postgresql ];
 
   installPhase = ''

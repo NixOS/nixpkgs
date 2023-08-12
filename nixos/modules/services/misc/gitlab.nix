@@ -6,28 +6,13 @@ let
   cfg = config.services.gitlab;
   opt = options.services.gitlab;
 
-  ruby = cfg.packages.gitlab.ruby;
+  toml = pkgs.formats.toml {};
+  yaml = pkgs.formats.yaml {};
 
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
-                        pkgs.postgresql_12;
-
-  # Git 2.36.1 seemingly contains a commit-graph related bug which is
-  # easily triggered through GitLab, so we downgrade it to 2.35.x
-  # until this issue is solved. See
-  # https://gitlab.com/gitlab-org/gitlab/-/issues/360783#note_992870101.
-  gitPackage =
-    let
-      version = "2.35.4";
-    in
-      pkgs.git.overrideAttrs (oldAttrs: rec {
-        inherit version;
-        src = pkgs.fetchurl {
-          url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-          sha256 = "sha256-mv13OdNkXggeKQkJ+47QcJ6lYmcw6Qjri1ZJ2ETCTOk=";
-        };
-      });
+                        pkgs.postgresql_13;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
@@ -53,14 +38,12 @@ let
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
+    runtime_dir = "/run/gitaly"
     bin_dir = "${cfg.packages.gitaly}/bin"
     prometheus_listen_addr = "localhost:9236"
 
     [git]
-    bin_path = "${gitPackage}/bin/git"
-
-    [gitaly-ruby]
-    dir = "${cfg.packages.gitaly.ruby}"
+    bin_path = "${pkgs.git}/bin/git"
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
@@ -89,21 +72,20 @@ let
     repos_path = "${cfg.statePath}/repositories";
     secret_file = "${cfg.statePath}/gitlab_shell_secret";
     log_file = "${cfg.statePath}/log/gitlab-shell.log";
-    redis = {
-      bin = "${pkgs.redis}/bin/redis-cli";
-      host = "127.0.0.1";
-      port = config.services.redis.servers.gitlab.port;
-      database = 0;
-      namespace = "resque:gitlab";
-    };
   };
 
   redisConfig.production.url = cfg.redisUrl;
 
-  pagesArgs = [
-    "-pages-domain" gitlabConfig.production.pages.host
-    "-pages-root" "${gitlabConfig.production.shared.path}/pages"
-  ] ++ cfg.pagesExtraArgs;
+  cableYml = yaml.generate "cable.yml" {
+    production = {
+      adapter = "redis";
+      url = cfg.redisUrl;
+      channel_prefix = "gitlab_production";
+    };
+  };
+
+  # Redis configuration file
+  resqueYml = pkgs.writeText "resque.yml" (builtins.toJSON redisConfig);
 
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
@@ -153,7 +135,7 @@ let
       };
       workhorse.secret_file = "${cfg.statePath}/.gitlab_workhorse_secret";
       gitlab_kas.secret_file = "${cfg.statePath}/.gitlab_kas_secret";
-      git.bin_path = "${gitPackage}/bin/git";
+      git.bin_path = "git";
       monitoring = {
         ip_whitelist = [ "127.0.0.0/8" "::1/128" ];
         sidekiq_exporter = {
@@ -170,8 +152,15 @@ let
         api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
         issuer = cfg.registry.issuer;
       };
+      elasticsearch.indexer_path = "${pkgs.gitlab-elasticsearch-indexer}/bin/gitlab-elasticsearch-indexer";
       extra = {};
       uploads.storage_path = cfg.statePath;
+      pages = optionalAttrs cfg.pages.enable {
+        enabled = cfg.pages.enable;
+        port = 8090;
+        host = cfg.pages.settings.pages-domain;
+        secret_file = cfg.pages.settings.api-secret-key;
+      };
     };
   };
 
@@ -182,22 +171,32 @@ let
     SCHEMA = "${cfg.statePath}/db/structure.sql";
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
-    GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
     MALLOC_ARENA_MAX = "2";
   } // cfg.extraEnv;
 
+  runtimeDeps = with pkgs; [
+    nodejs
+    gzip
+    git
+    gnutar
+    postgresqlPackage
+    coreutils
+    procps
+    findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
+  ];
+
   gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
     dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath runtimeDeps}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
@@ -205,14 +204,14 @@ let
 
   gitlab-rails = pkgs.stdenv.mkDerivation {
     name = "gitlab-rails";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
     dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath runtimeDeps}:$PATH' \
           --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
   };
@@ -245,6 +244,8 @@ in {
     (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
     (mkRenamedOptionModule [ "services" "gitlab" "backupPath" ] [ "services" "gitlab" "backup" "path" ])
     (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ] "")
+    (mkRemovedOptionModule [ "services" "gitlab" "logrotate" "extraConfig" ] "Modify services.logrotate.settings.gitlab directly instead")
+    (mkRemovedOptionModule [ "services" "gitlab" "pagesExtraArgs" ] "Use services.gitlab.pages.settings instead")
   ];
 
   options = {
@@ -468,9 +469,9 @@ in {
 
       redisUrl = mkOption {
         type = types.str;
-        default = "redis://localhost:${toString config.services.redis.servers.gitlab.port}/";
-        defaultText = literalExpression ''redis://localhost:''${toString config.services.redis.servers.gitlab.port}/'';
-        description = lib.mdDoc "Redis URL for all GitLab services except gitlab-shell";
+        default = "unix:/run/gitlab/redis.sock";
+        example = "redis://localhost:6379/";
+        description = lib.mdDoc "Redis URL for all GitLab services.";
       };
 
       extraGitlabRb = mkOption {
@@ -553,6 +554,20 @@ in {
           default = false;
           description = lib.mdDoc "Enable GitLab container registry.";
         };
+        package = mkOption {
+          type = types.package;
+          default =
+            if versionAtLeast config.system.stateVersion "23.11"
+            then pkgs.gitlab-container-registry
+            else pkgs.docker-distribution;
+          defaultText = literalExpression "pkgs.docker-distribution";
+          description = lib.mdDoc ''
+            Container registry package to use.
+
+            External container registries such as `pkgs.docker-distribution` are not supported
+            anymore since GitLab 16.0.0.
+          '';
+        };
         host = mkOption {
           type = types.str;
           default = config.services.gitlab.host;
@@ -560,7 +575,7 @@ in {
           description = lib.mdDoc "GitLab container registry host name.";
         };
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 4567;
           description = lib.mdDoc "GitLab container registry port.";
         };
@@ -613,7 +628,7 @@ in {
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 25;
           description = lib.mdDoc "Port of the SMTP server for GitLab.";
         };
@@ -666,10 +681,127 @@ in {
         };
       };
 
-      pagesExtraArgs = mkOption {
-        type = types.listOf types.str;
-        default = [ "-listen-proxy" "127.0.0.1:8090" ];
-        description = lib.mdDoc "Arguments to pass to the gitlab-pages daemon";
+      pages.enable = mkEnableOption (lib.mdDoc "the GitLab Pages service");
+
+      pages.settings = mkOption {
+        example = literalExpression ''
+          {
+            pages-domain = "example.com";
+            auth-client-id = "generated-id-xxxxxxx";
+            auth-client-secret = { _secret = "/var/keys/auth-client-secret"; };
+            auth-redirect-uri = "https://projects.example.com/auth";
+            auth-secret = { _secret = "/var/keys/auth-secret"; };
+            auth-server = "https://gitlab.example.com";
+          }
+        '';
+
+        description = lib.mdDoc ''
+          Configuration options to set in the GitLab Pages config
+          file.
+
+          Options containing secret data should be set to an attribute
+          set containing the attribute `_secret` - a string pointing
+          to a file containing the value the option should be set
+          to. See the example to get a better picture of this: in the
+          resulting configuration file, the `auth-client-secret` and
+          `auth-secret` keys will be set to the contents of the
+          {file}`/var/keys/auth-client-secret` and
+          {file}`/var/keys/auth-secret` files respectively.
+        '';
+
+        type = types.submodule {
+          freeformType = with types; attrsOf (nullOr (oneOf [ str int bool attrs ]));
+
+          options = {
+            listen-http = mkOption {
+              type = with types; listOf str;
+              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              default = [];
+              description = lib.mdDoc ''
+                The address(es) to listen on for HTTP requests.
+              '';
+            };
+
+            listen-https = mkOption {
+              type = with types; listOf str;
+              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              default = [];
+              description = lib.mdDoc ''
+                The address(es) to listen on for HTTPS requests.
+              '';
+            };
+
+            listen-proxy = mkOption {
+              type = with types; listOf str;
+              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              default = [ "127.0.0.1:8090" ];
+              description = lib.mdDoc ''
+                The address(es) to listen on for proxy requests.
+              '';
+            };
+
+            artifacts-server = mkOption {
+              type = with types; nullOr str;
+              default = "http${optionalString cfg.https "s"}://${cfg.host}/api/v4";
+              defaultText = "http(s)://<services.gitlab.host>/api/v4";
+              example = "https://gitlab.example.com/api/v4";
+              description = lib.mdDoc ''
+                API URL to proxy artifact requests to.
+              '';
+            };
+
+            gitlab-server = mkOption {
+              type = with types; nullOr str;
+              default = "http${optionalString cfg.https "s"}://${cfg.host}";
+              defaultText = "http(s)://<services.gitlab.host>";
+              example = "https://gitlab.example.com";
+              description = lib.mdDoc ''
+                Public GitLab server URL.
+              '';
+            };
+
+            internal-gitlab-server = mkOption {
+              type = with types; nullOr str;
+              default = null;
+              defaultText = "http(s)://<services.gitlab.host>";
+              example = "https://gitlab.example.internal";
+              description = lib.mdDoc ''
+                Internal GitLab server used for API requests, useful
+                if you want to send that traffic over an internal load
+                balancer. By default, the value of
+                `services.gitlab.pages.settings.gitlab-server` is
+                used.
+              '';
+            };
+
+            api-secret-key = mkOption {
+              type = with types; nullOr str;
+              default = "${cfg.statePath}/gitlab_pages_secret";
+              internal = true;
+              description = lib.mdDoc ''
+                File with secret key used to authenticate with the
+                GitLab API.
+              '';
+            };
+
+            pages-domain = mkOption {
+              type = with types; nullOr str;
+              example = "example.com";
+              description = lib.mdDoc ''
+                The domain to serve static pages on.
+              '';
+            };
+
+            pages-root = mkOption {
+              type = types.str;
+              default = "${gitlabConfig.production.shared.path}/pages";
+              defaultText = literalExpression ''config.${opt.extraConfig}.production.shared.path + "/pages"'';
+              description = lib.mdDoc ''
+                The directory where pages are stored.
+              '';
+            };
+          };
+        };
       };
 
       secrets.secretFile = mkOption {
@@ -856,19 +988,43 @@ in {
           default = 30;
           description = lib.mdDoc "How many rotations to keep.";
         };
+      };
 
-        extraConfig = mkOption {
-          type = types.lines;
-          default = "";
-          description = lib.mdDoc ''
-            Extra logrotate config options for this path. Refer to
-            <https://linux.die.net/man/8/logrotate> for details.
-          '';
-        };
+      workhorse.config = mkOption {
+        type = toml.type;
+        default = {};
+        example = literalExpression ''
+          {
+            object_storage.provider = "AWS";
+            object_storage.s3 = {
+              aws_access_key_id = "AKIAXXXXXXXXXXXXXXXX";
+              aws_secret_access_key = { _secret = "/var/keys/aws_secret_access_key"; };
+            };
+          };
+        '';
+        description = lib.mdDoc ''
+          Configuration options to add to Workhorse's configuration
+          file.
+
+          See
+          <https://gitlab.com/gitlab-org/gitlab/-/blob/master/workhorse/config.toml.example>
+          and
+          <https://docs.gitlab.com/ee/development/workhorse/configuration.html>
+          for examples and option documentation.
+
+          Options containing secret data should be set to an attribute
+          set containing the attribute `_secret` - a string pointing
+          to a file containing the value the option should be set
+          to. See the example to get a better picture of this: in the
+          resulting configuration file, the
+          `object_storage.s3.aws_secret_access_key` key will be set to
+          the contents of the {file}`/var/keys/aws_secret_access_key`
+          file.
+        '';
       };
 
       extraConfig = mkOption {
-        type = types.attrs;
+        type = yaml.type;
         default = {};
         example = literalExpression ''
           {
@@ -926,6 +1082,13 @@ in {
   };
 
   config = mkIf cfg.enable {
+    warnings = [
+      (mkIf
+        (cfg.registry.enable && versionAtLeast (getVersion cfg.packages.gitlab) "16.0.0" && cfg.registry.package == pkgs.docker-distribution)
+        ''Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
+          Please back up your data and migrate to the gitlab-container-registry package.''
+      )
+    ];
 
     assertions = [
       {
@@ -957,8 +1120,8 @@ in {
         message = "services.gitlab.secrets.jwsFile must be set!";
       }
       {
-        assertion = versionAtLeast postgresqlPackage.version "12.0.0";
-        message = "PostgreSQL >=12 is required to run GitLab 14. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+        assertion = versionAtLeast postgresqlPackage.version "13.6.0";
+        message = "PostgreSQL >=13.6 is required to run GitLab 16. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
       }
     ];
 
@@ -972,8 +1135,9 @@ in {
     # Redis is required for the sidekiq queue runner.
     services.redis.servers.gitlab = {
       enable = mkDefault true;
-      port = mkDefault 31636;
-      bind = mkDefault "127.0.0.1";
+      user = mkDefault cfg.user;
+      unixSocket = mkDefault "/run/gitlab/redis.sock";
+      unixSocketPerm = mkDefault 770;
     };
 
     # We use postgres as the main data store.
@@ -993,7 +1157,6 @@ in {
           rotate = cfg.logrotate.keep;
           copytruncate = true;
           compress = true;
-          extraConfig = cfg.logrotate.extraConfig;
         };
       };
     };
@@ -1062,15 +1225,17 @@ in {
     # Ensure Docker Registry launches after the certificate generation job
     systemd.services.docker-registry = optionalAttrs cfg.registry.enable {
       wants = [ "gitlab-registry-cert.service" ];
+      after = [ "gitlab-registry-cert.service" ];
     };
 
     # Enable Docker Registry, if GitLab-Container Registry is enabled
     services.dockerRegistry = optionalAttrs cfg.registry.enable {
       enable = true;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
+      package = cfg.registry.package;
       extraConfig = {
         auth.token = {
-          realm = "http${if cfg.https == true then "s" else ""}://${cfg.host}/jwt/auth";
+          realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
           service = cfg.registry.serviceName;
           issuer = cfg.registry.issuer;
           rootcertbundle = cfg.registry.certFile;
@@ -1115,7 +1280,9 @@ in {
       "d ${gitlabConfig.production.shared.path}/lfs-objects 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/packages 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/pages 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/registry 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/terraform_state 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/ci_secure_files 0750 ${cfg.user} ${cfg.group} -"
       "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
       "L+ /run/gitlab/log - - - - ${cfg.statePath}/log"
       "L+ /run/gitlab/tmp - - - - ${cfg.statePath}/tmp"
@@ -1168,6 +1335,8 @@ in {
           cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
           cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
           ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
+          ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
+          ln -sf ${resqueYml} ${cfg.statePath}/config/resque.yml
 
           ${cfg.packages.gitlab-shell}/bin/install
 
@@ -1182,6 +1351,9 @@ in {
             umask u=rwx,g=,o=
 
             openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
+            ${optionalString cfg.pages.enable ''
+                openssl rand -base64 32 > ${cfg.pages.settings.api-secret-key}
+            ''}
 
             rm -f '${cfg.statePath}/config/database.yml'
 
@@ -1282,7 +1454,7 @@ in {
       });
       path = with pkgs; [
         postgresqlPackage
-        gitPackage
+        git
         ruby
         openssh
         nodejs
@@ -1312,10 +1484,7 @@ in {
       partOf = [ "gitlab.target" ];
       path = with pkgs; [
         openssh
-        procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
-        gitPackage
-        cfg.packages.gitaly.rubyEnv
-        cfg.packages.gitaly.rubyEnv.wrappedRuby
+        git
         gzip
         bzip2
       ];
@@ -1326,39 +1495,79 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
+        RuntimeDirectory = "gitaly";
         ExecStart = "${cfg.packages.gitaly}/bin/gitaly ${gitalyToml}";
       };
     };
 
-    systemd.services.gitlab-pages = mkIf (gitlabConfig.production.pages.enabled or false) {
-      description = "GitLab static pages daemon";
-      after = [ "network.target" "gitlab-config.service" ];
-      bindsTo = [ "gitlab-config.service" ];
-      wantedBy = [ "gitlab.target" ];
-      partOf = [ "gitlab.target" ];
-
-      path = [ pkgs.unzip ];
-
-      serviceConfig = {
-        Type = "simple";
-        TimeoutSec = "infinity";
-        Restart = "on-failure";
-
-        User = cfg.user;
-        Group = cfg.group;
-
-        ExecStart = "${cfg.packages.pages}/bin/gitlab-pages ${escapeShellArgs pagesArgs}";
-        WorkingDirectory = gitlabEnv.HOME;
-      };
+    services.gitlab.pages.settings = {
+      api-secret-key = "${cfg.statePath}/gitlab_pages_secret";
     };
+
+    systemd.services.gitlab-pages =
+      let
+        filteredConfig = filterAttrs (_: v: v != null) cfg.pages.settings;
+        isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+        mkPagesKeyValue = lib.generators.toKeyValue {
+          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
+            mkValueString = v:
+              if isInt           v then toString v
+              else if isString   v then v
+              else if true  ==   v then "true"
+              else if false ==   v then "false"
+              else if isSecret   v then builtins.hashString "sha256" v._secret
+              else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
+          };
+        };
+        secretPaths = lib.catAttrs "_secret" (lib.collect isSecret filteredConfig);
+        mkSecretReplacement = file: ''
+          replace-secret ${lib.escapeShellArgs [ (builtins.hashString "sha256" file) file "/run/gitlab-pages/gitlab-pages.conf" ]}
+        '';
+        secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+        configFile = pkgs.writeText "gitlab-pages.conf" (mkPagesKeyValue filteredConfig);
+      in
+        mkIf cfg.pages.enable {
+          description = "GitLab static pages daemon";
+          after = [ "network.target" "gitlab-config.service" "gitlab.service" ];
+          bindsTo = [ "gitlab-config.service" "gitlab.service" ];
+          wantedBy = [ "gitlab.target" ];
+          partOf = [ "gitlab.target" ];
+
+          path = with pkgs; [
+            unzip
+            replace-secret
+          ];
+
+          serviceConfig = {
+            Type = "simple";
+            TimeoutSec = "infinity";
+            Restart = "on-failure";
+
+            User = cfg.user;
+            Group = cfg.group;
+
+            ExecStartPre = pkgs.writeShellScript "gitlab-pages-pre-start" ''
+              set -o errexit -o pipefail -o nounset
+              shopt -s dotglob nullglob inherit_errexit
+
+              install -m u=rw ${configFile} /run/gitlab-pages/gitlab-pages.conf
+              ${secretReplacements}
+            '';
+            ExecStart = "${cfg.packages.pages}/bin/gitlab-pages -config=/run/gitlab-pages/gitlab-pages.conf";
+            WorkingDirectory = gitlabEnv.HOME;
+            RuntimeDirectory = "gitlab-pages";
+            RuntimeDirectoryMode = "0700";
+          };
+        };
 
     systemd.services.gitlab-workhorse = {
       after = [ "network.target" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       path = with pkgs; [
+        remarshal
         exiftool
-        gitPackage
+        git
         gnutar
         gzip
         openssh
@@ -1371,6 +1580,17 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
+        ExecStartPre = pkgs.writeShellScript "gitlab-workhorse-pre-start" ''
+          set -o errexit -o pipefail -o nounset
+          shopt -s dotglob nullglob inherit_errexit
+
+          ${utils.genJqSecretsReplacementSnippet
+              cfg.workhorse.config
+              "${cfg.statePath}/config/gitlab-workhorse.json"}
+
+          json2toml "${cfg.statePath}/config/gitlab-workhorse.json" "${cfg.statePath}/config/gitlab-workhorse.toml"
+          rm "${cfg.statePath}/config/gitlab-workhorse.json"
+        '';
         ExecStart =
           "${cfg.packages.gitlab-workhorse}/bin/workhorse "
           + "-listenUmask 0 "
@@ -1378,6 +1598,7 @@ in {
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "
           + "-authSocket ${gitlabSocket} "
           + "-documentRoot ${cfg.packages.gitlab}/share/gitlab/public "
+          + "-config ${cfg.statePath}/config/gitlab-workhorse.toml "
           + "-secretPath ${cfg.statePath}/.gitlab_workhorse_secret";
       };
     };
@@ -1414,16 +1635,17 @@ in {
         "gitlab-config.service"
         "gitlab-db-config.service"
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";
-      wantedBy = [ "gitlab.target" ];
+      requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        gitPackage
+        git
         openssh
         nodejs
         procps
         gnupg
+        gzip
       ];
       serviceConfig = {
         Type = "notify";
@@ -1462,6 +1684,6 @@ in {
 
   };
 
-  meta.doc = ./gitlab.xml;
-
+  meta.doc = ./gitlab.md;
+  meta.maintainers = teams.gitlab.members;
 }

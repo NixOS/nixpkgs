@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "social-auth-core";
-  version = "4.3.0";
+  version = "4.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "python-social-auth";
     repo = "social-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-P9IWnu1/PWVNl/tZZ4bqz0WnruKu/jXASZBoaWXWeYI=";
+    hash = "sha256-o/qx3bwaj2fiNKM3fafFxOW27JrJ9jG4M4uSnnJDpes=";
   };
 
   propagatedBuildInputs = [
@@ -53,12 +53,10 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     httpretty
-  ] ++ passthru.optional-dependencies.openidconnect
-  ++ passthru.optional-dependencies.saml
-  ++ passthru.optional-dependencies.azuread;
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   # Disable checking the code coverage
   prePatch = ''

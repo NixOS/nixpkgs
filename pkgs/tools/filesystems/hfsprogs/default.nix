@@ -1,24 +1,34 @@
-{ lib, stdenv, fetchurl, openssl, libbsd }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, openssl, libbsd }:
+
+let
+  version = "332.25";
+
+  apple_src = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "diskdev_cmds";
+    rev = "diskdev_cmds-${version}";
+    hash = "sha256-cycPGPx2Gbjn4FKGKuQKJkh+dWGbJfy6C+LTz8rrs0A=";
+    name = "diskdev_cmds-${version}";
+  };
+in
 
 stdenv.mkDerivation rec {
-  version = "332.25";
   pname = "hfsprogs";
+  inherit version;
+
   srcs = [
     (fetchurl {
       url = "http://ftp.de.debian.org/debian/pool/main/h/hfsprogs/hfsprogs_${version}-11.debian.tar.gz";
       sha256 = "62d9b8599c66ebffbc57ce5d776e20b41341130d9b27341d63bda08460ebde7c";
     })
-    (fetchurl {
-      url = "https://opensource.apple.com/tarballs/diskdev_cmds/diskdev_cmds-${version}.tar.gz";
-      sha256 = "74c9aeca899ed7f4bf155c65fc45bf0f250c0f6d57360ea953b1d536d9aa45e6";
-    })
+    apple_src
   ];
 
   postPatch = ''
     sed -ie '/sys\/sysctl.h/d' newfs_hfs.tproj/makehfs.c
   '';
 
-  sourceRoot = "diskdev_cmds-" + version;
+  sourceRoot = apple_src.name;
   patches = [ "../debian/patches/*.patch" ];
 
   buildInputs = [ openssl libbsd ];

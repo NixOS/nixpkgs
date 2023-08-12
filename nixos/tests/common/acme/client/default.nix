@@ -1,7 +1,7 @@
 { lib, nodes, pkgs, ... }:
 let
-  caCert = nodes.acme.config.test-support.acme.caCert;
-  caDomain = nodes.acme.config.test-support.acme.caDomain;
+  caCert = nodes.acme.test-support.acme.caCert;
+  caDomain = nodes.acme.test-support.acme.caDomain;
 
 in {
   security.acme = {

@@ -10,18 +10,18 @@
 , kwindowsystem
 , liblxqt
 , libqtxdg
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-openssh-askpass";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "s1ywmlcHsbeaRi5zrhFMPS0SJ1s8IYnDXWkFvB1kaI4=";
+    sha256 = "6S+x8Az9e7rZ8i5p6+F3PZjx7k8fJcM1b/55dJdkuOM=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ mkDerivation rec {
     libqtxdg
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-openssh-askpass";

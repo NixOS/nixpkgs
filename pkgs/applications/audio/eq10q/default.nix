@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       64 bits floating point internal audio processing.
       Nice GUI with powerful metering for every plugin.
     '';
-    homepage = "http://eq10q.sourceforge.net/";
+    homepage = "https://eq10q.sourceforge.net/";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;

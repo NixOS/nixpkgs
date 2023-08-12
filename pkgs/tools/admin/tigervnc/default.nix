@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , xorg
 , xkeyboard_config
 , zlib
@@ -23,27 +22,16 @@
 , nixosTests
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
-  version = "1.12.0";
+  version = "1.13.1";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
     rev = "v${version}";
-    sha256 = "sha256-77X+AvHFWfYYIio3c+EYf11jg/1IbYhNUweRIDHMOZw=";
+    sha256 = "sha256-YSkgkk87bbHg7lJGoPBs7bfjvd1hvUeOZulFHYpXvvo=";
   };
-
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/TigerVNC/tigervnc/pull/1383.patch";
-      sha256 = "sha256-r3QLtxVD0wIv2NWVN9r0LVxSlLurDHgkAZfkpIjmZyU=";
-      name = "Xvnc-support-Xorg-1.21-PR1383.patch";
-    })
-  ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
@@ -65,6 +53,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
     "-DCMAKE_INSTALL_SBINDIR=${placeholder "out"}/bin"
     "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "out"}/bin"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=array-bounds"
   ];
 
   postBuild = lib.optionalString stdenv.isLinux ''
@@ -92,7 +84,7 @@ stdenv.mkDerivation rec {
         --with-xkb-path=${xkeyboard_config}/share/X11/xkb \
         --with-xkb-bin-directory=${xorg.xkbcomp}/bin \
         --with-xkb-output=$out/share/X11/xkb/compiled
-    make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
+    make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES
     popd
   '' + lib.optionalString stdenv.isDarwin ''
     make dmg

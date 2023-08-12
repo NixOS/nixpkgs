@@ -2,15 +2,18 @@
 
 stdenv.mkDerivation {
   pname = "mmc-utils";
-  version = "unstable-2022-07-13";
+  version = "unstable-2023-08-07";
 
   src = fetchzip rec {
     url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/snapshot/mmc-utils-${passthru.rev}.tar.gz";
-    passthru.rev = "d7b343fd262880994f041ce2335442e7bd1071f5";
-    sha256 = "cTF3xSNvZ1wifItPmflNFd+fpYArPRvinM7Cyg3JoeE=";
+    passthru.rev = "613495ecaca97a19fa7f8f3ea23306472b36453c";
+    sha256 = "zOjm/YDxqU6bu6GMyQTuzuZbrCfaU4FBodRWLb8GTdE=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "prefix=$(out)" ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   postInstall = ''
     mkdir -p $out/share/man/man1

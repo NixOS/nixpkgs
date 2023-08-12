@@ -2,7 +2,7 @@
 , stdenv
 , gettext
 , fetchurl
-, evolution-data-server
+, evolution-data-server-gtk4
 , pkg-config
 , libxslt
 , docbook-xsl-nons
@@ -10,12 +10,12 @@
 , desktop-file-utils
 , gtk4
 , glib
-, libportal
+, libportal-gtk4
 , gnome-desktop
 , gnome-online-accounts
-, wrapGAppsHook
+, qrencode
+, wrapGAppsHook4
 , folks
-, libgdata
 , libxml2
 , gnome
 , vala
@@ -27,16 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "42.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "iALDj9wj9SjawSj1O9zx9sow4OHGhIxCzWyEpeIsUhY=";
+    sha256 = "fdEWO8HwavY4La5AFcQ0Q+4sEpKBKPyZ/USSktDee+0=";
   };
-
-  propagatedUserEnvPkgs = [
-    evolution-data-server
-  ];
 
   nativeBuildInputs = [
     meson
@@ -48,20 +44,21 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_42
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     gtk4
     glib
-    libportal
-    evolution-data-server
+    libportal-gtk4
+    evolution-data-server-gtk4
     gsettings-desktop-schemas
     folks
     gnome-desktop
     libadwaita
     libxml2
     gnome-online-accounts
+    qrencode
   ];
 
   doCheck = true;

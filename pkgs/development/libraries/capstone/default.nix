@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config }:
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation rec {
   pname = "capstone";
@@ -11,29 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XMwQ7UaPC8YYu4yxsE4bbR3leYPfBHu5iixSLz05r3g=";
   };
 
-  # replace faulty macos detection
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i 's/^IS_APPLE := .*$/IS_APPLE := 1/' Makefile
-  '';
-
-  configurePhase = "patchShebangs make.sh ";
-  buildPhase = "PREFIX=$out ./make.sh";
-
-  doCheck = true;
-  checkPhase = ''
-    # first remove fuzzing steps from check target
-    substituteInPlace Makefile --replace "fuzztest fuzzallcorp" ""
-    make check
-  '';
-
-  installPhase = (lib.optionalString stdenv.isDarwin "HOMEBREW_CAPSTONE=1 ")
-    + "PREFIX=$out ./make.sh install";
-
   nativeBuildInputs = [
-    pkg-config
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
-  enableParallelBuilding = true;
+  doCheck = true;
 
   meta = {
     description = "Advanced disassembly library";

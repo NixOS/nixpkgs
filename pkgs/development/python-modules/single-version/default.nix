@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, poetry-core, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, poetry-core
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "single-version";
@@ -9,16 +15,21 @@ buildPythonPackage rec {
     owner = "hongquan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I8ATQzPRH9FVjqPoqrNjYMBU5azpmkLjRmHcz943C10=";
+    hash = "sha256-I8ATQzPRH9FVjqPoqrNjYMBU5azpmkLjRmHcz943C10=";
   };
 
   patches = [
-    ./0001-set-poetry-core.patch
+    # https://github.com/hongquan/single-version/pull/4
+    (fetchpatch {
+      name = "use-poetry-core.patch";
+      url = "https://github.com/hongquan/single-version/commit/0cdf9795cb0522e90a8dc00306f1ff7bb85621ad.patch";
+      hash = "sha256-eT9G1XvkNF0+NKgx+yN7ei53xIEMvnc7V/KtPLqlWik=";
+    })
   ];
 
   nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "single_version" ];
 

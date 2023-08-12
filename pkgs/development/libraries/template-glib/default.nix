@@ -1,24 +1,56 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, flex, bison, vala, gettext, gnome, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
-let
-  version = "3.34.1";
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, glib
+, gobject-introspection
+, flex
+, bison
+, vala
+, gettext
+, gnome
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+}:
+
+stdenv.mkDerivation rec {
   pname = "template-glib";
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "3.36.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "nsm3HgTU9csU91XveQYxzQtFwGA+Ecg2/Hz9niaM0Ho=";
+    sha256 = "OxZ6Fzha10WvviD634EGxm0wxb10bVqh2b236AP2pQM=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext flex bison vala glib gtk-doc docbook_xsl docbook_xml_dtd_43 gobject-introspection ];
-  buildInputs = [ glib ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    flex
+    bison
+    vala
+    glib
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    glib
+  ];
 
   mesonFlags = [
-    "-Denable_gtk_doc=true"
+    "-Dgtk_doc=true"
   ];
+
+  doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {

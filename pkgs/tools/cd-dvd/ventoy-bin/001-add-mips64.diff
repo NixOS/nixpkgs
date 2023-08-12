@@ -1,5 +1,0 @@
---- VentoyPlugson.sh
-+++ VentoyPlugson.sh
-@@ -27,0 +28,2 @@ elif echo $machine | egrep -q 'x86_64|am
-+elif echo $machine | egrep -q 'mips64'; then
-+    TOOLDIR=mips64el

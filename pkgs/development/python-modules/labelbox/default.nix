@@ -1,67 +1,112 @@
 { lib
 , backoff
-, backports-datetime-fromisoformat
 , buildPythonPackage
-, dataclasses
 , fetchFromGitHub
+, geojson
 , google-api-core
-, jinja2
+, imagesize
+, nbconvert
+, nbformat
 , ndjson
+, numpy
+, opencv
+  # , opencv-python
+, packaging
 , pillow
 , pydantic
+  # , pygeotile
+, pyproj
 , pytest-cases
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , rasterio
 , requests
 , shapely
+, tqdm
+, typeguard
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.24.1";
-  disabled = pythonOlder "3.6";
+  version = "3.38.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    sha256 = "sha256-pcIbCtVOr6pwodgNv8aGZ+k2Z9cQPCQm1UBJWJAlj/o=";
+    hash = "sha256-AyQPI19As49GML3kVXtHtRNOKthrpkQ7MCmww+F6owc=";
   };
+
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "--reruns 5 --reruns-delay 10" ""
+  '';
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "backoff"
+  ];
 
   propagatedBuildInputs = [
     backoff
-    backports-datetime-fromisoformat
-    dataclasses
     google-api-core
-    jinja2
     ndjson
-    pillow
     pydantic
-    rasterio
     requests
-    shapely
+    tqdm
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "pydantic==1.8" "pydantic>=1.8"
-  '';
+  passthru.optional-dependencies = {
+    data = [
+      shapely
+      geojson
+      numpy
+      pillow
+      # opencv-python
+      typeguard
+      imagesize
+      pyproj
+      # pygeotile
+      typing-extensions
+      packaging
+    ];
+  };
 
-  checkInputs = [
+  nativeCheckInputs = [
+    nbconvert
+    nbformat
     pytest-cases
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access
     "tests/integration"
+    # Missing requirements
+    "tests/data"
   ];
 
-  pythonImportsCheck = [ "labelbox" ];
+  pytestFlagsArray = [
+    # see tox.ini
+    "-k 'not notebooks'"
+  ];
+
+  pythonImportsCheck = [
+    "labelbox"
+  ];
 
   meta = with lib; {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
+    changelog = "https://github.com/Labelbox/labelbox-python/blob/v.${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
   };

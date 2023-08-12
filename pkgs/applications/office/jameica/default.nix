@@ -5,10 +5,12 @@ let
   _build = "484";
   version = "${_version}-${_build}";
 
-  swtSystem = if stdenv.hostPlatform.system == "i686-linux" then "linux"
-  else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
-  else if stdenv.hostPlatform.system == "x86_64-darwin" then "macos64"
-  else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  swtSystem =
+    if stdenv.hostPlatform.system == "i686-linux" then "linux"
+    else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then "linux-arm64"
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then "macos64"
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
     name = "jameica";
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ ant jdk wrapGAppsHook makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
-                ++ lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.isDarwin Cocoa;
 
   src = fetchFromGitHub {
     owner = "willuhn";
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = with maintainers; [ flokli r3dl3g ];
   };
 }

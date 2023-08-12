@@ -2,30 +2,32 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-
-# pythonPackages
 , azure-core
 , cryptography
+, isodate
 , msrest
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
-  version = "12.9.0";
+  version = "12.13.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-faowRP4H1/dQTLmhX5mhessoyAjtgzQWeL8t+TFfXCI=";
+    hash = "sha256-ozqVIWPvAl0doaqK77P+VBhx9q+6Ljk/q7WrAP2ZPm8=";
   };
 
   propagatedBuildInputs = [
     azure-core
     cryptography
+    isodate
     msrest
+    typing-extensions
   ];
 
   # requires checkout from monorepo

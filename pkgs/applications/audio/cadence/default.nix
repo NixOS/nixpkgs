@@ -1,6 +1,4 @@
 { lib
-, a2jmidid
-, coreutils
 , libjack2
 , fetchpatch
 , fetchFromGitHub
@@ -8,7 +6,6 @@
 , pkg-config
 , pulseaudioFull
 , qtbase
-, makeWrapper
 , mkDerivation
 , python3
 }:
@@ -110,5 +107,6 @@ mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "cadence";
   };
 }

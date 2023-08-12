@@ -1,14 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, xlibsWrapper, libXmu, libXi
+{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, libXmu, libXi, libXext
 , OpenGL
 , enableEGL ? false
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glew";
   version = "2.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/glew/${finalAttrs.pname}-${finalAttrs.version}.tgz";
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ xlibsWrapper libXmu libXi ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ libXmu libXi libXext ];
   propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   cmakeDir = "cmake";
@@ -41,17 +42,25 @@ stdenv.mkDerivation rec {
     set(GLEW_VERSION "$version")
     set(GLEW_LIBRARIES GLEW::glew\''${_glew_target_postfix})
     get_target_property(GLEW_INCLUDE_DIRS GLEW::glew\''${_glew_target_postfix} INTERFACE_INCLUDE_DIRECTORIES)
+    set_target_properties(GLEW::GLEW\''${_glew_target_postfix} PROPERTIES
+        IMPORTED_LINK_INTERFACE_LIBRARIES_RELEASE ""
+        IMPORTED_IMPLIB_RELEASE "GLEW"
+        IMPORTED_IMPLIB_DEBUG "GLEW"
+    )
     EOF
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "An OpenGL extension loading library for C/C++";
-    homepage = "http://glew.sourceforge.net/";
+    homepage = "https://glew.sourceforge.net/";
     license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
+    pkgConfigModules = [ "glew" ];
     platforms = with platforms;
       if enableEGL then
         subtractLists darwin mesaPlatforms
       else
         mesaPlatforms;
   };
-}
+})

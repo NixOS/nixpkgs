@@ -1,39 +1,49 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{ aria2
 , cmake
-, qt5
-, ffmpeg-full
-, aria2
-, yt-dlp
+, fetchFromGitHub
+, ffmpeg
+, lib
 , python3
+, qtbase
+, stdenv
+, wrapQtAppsHook
+, yt-dlp
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "media-downloader";
-  version = "2.5.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
-    repo = pname;
-    rev = "${version}";
-    sha256 = "sha256-xoRbNbzFa1CEB4x9JLkVMrkEqaCgweFzvI0Qr9Fl4zs=";
+    repo = "media-downloader";
+    rev = finalAttrs.version;
+    hash = "sha256-UmNaosunkNUTm4rsf4q29H+0cJAccUDx+ulcS2octIo=";
   };
 
-  nativeBuildInputs = [ cmake qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
-  preFixup = ''
-    qtWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg-full aria2 yt-dlp python3 ]}"
-    )
-  '';
+  buildInputs = [
+    qtbase
+  ];
 
-  meta = with lib; {
+  qtWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [
+        aria2
+        ffmpeg
+        python3
+        yt-dlp
+      ]}"
+  ];
+
+  meta = {
     description = "A Qt/C++ GUI front end to youtube-dl";
     homepage = "https://github.com/mhogomchungu/media-downloader";
-    license = licenses.gpl2Plus;
-    broken = stdenv.isDarwin;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ zendo ];
+    platforms = lib.platforms.linux;
   };
-}
+})

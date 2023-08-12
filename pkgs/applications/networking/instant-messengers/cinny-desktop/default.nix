@@ -10,12 +10,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cinny-desktop";
-  version = "2.1.3";
+  pname = "cinny-desktop";
+  version = "2.2.6";
 
   src = fetchurl {
     url = "https://github.com/cinnyapp/cinny-desktop/releases/download/v${version}/Cinny_desktop-x86_64.deb";
-    sha256 = "sha256-fUnWGnulj/515aEdd+rCy/LGLLAs2yAOOBUn9K1LhNs=";
+    sha256 = "sha256-Bh7qBlHh2bQ6y2HnI4TtxMU6N3t04tr1Juoul2KMrqs=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Yet another matrix client for desktop";
     homepage = "https://github.com/cinnyapp/cinny-desktop";
     maintainers = [ maintainers.aveltras ];
-    license = licenses.mit;
+    license = licenses.agpl3Only;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     mainProgram = "cinny";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pganssle";
     repo = "zoneinfo";
     rev = version;
-    sha256 = "sha256-00xdDOVdDanfsjQTd3yjMN2RFGel4cWRrAA3CvSnl24=";
+    hash = "sha256-00xdDOVdDanfsjQTd3yjMN2RFGel4cWRrAA3CvSnl24=";
   };
 
   # Make sure test data update patch applies
@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "backports.zoneinfo" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

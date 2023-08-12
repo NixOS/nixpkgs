@@ -204,6 +204,27 @@ in
         `/usr/bin/env`.
       '';
     };
+
+    system.build.installBootLoader = mkOption {
+      internal = true;
+      # "; true" => make the `$out` argument from switch-to-configuration.pl
+      #             go to `true` instead of `echo`, hiding the useless path
+      #             from the log.
+      default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+      description = lib.mdDoc ''
+        A program that writes a bootloader installation script to the path passed in the first command line argument.
+
+        See `nixos/modules/system/activation/switch-to-configuration.pl`.
+      '';
+      type = types.unique {
+        message = ''
+          Only one bootloader can be enabled at a time. This requirement has not
+          been checked until NixOS 22.05. Earlier versions defaulted to the last
+          definition. Change your configuration to enable only one bootloader.
+        '';
+      } (types.either types.str types.package);
+    };
+
   };
 
 
@@ -217,7 +238,8 @@ in
       ''
         # Various log/runtime directories.
 
-        mkdir -m 1777 -p /var/tmp
+        mkdir -p /var/tmp
+        chmod 1777 /var/tmp
 
         # Empty, immutable home directory of many system accounts.
         mkdir -p /var/empty
@@ -231,7 +253,8 @@ in
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
       then ''
-        mkdir -m 0755 -p /usr/bin
+        mkdir -p /usr/bin
+        chmod 0755 /usr/bin
         ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
         mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
       ''
@@ -251,7 +274,8 @@ in
           if mountpoint -q "$mountPoint"; then
             local options="remount,$options"
           else
-            mkdir -m 0755 -p "$mountPoint"
+            mkdir -p "$mountPoint"
+            chmod 0755 "$mountPoint"
           fi
           mount -t "$fsType" -o "$options" "$device" "$mountPoint"
         }

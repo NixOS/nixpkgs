@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e16";
-  version = "1.0.25";
+  version = "1.0.28";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/e16-${version}.tar.xz";
-    hash = "sha256-rUtDaBa4vvC3gO7QSkFrphWuVOmbtkH+pRujQDaUOek=";
+    hash = "sha256-k3W2IoBc75DNQ2QSjChsC/yVRO/aZT3E31Tl/njgH30=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://git.enlightenment.org/e16/e16";
     rev-prefix = "v";
   };

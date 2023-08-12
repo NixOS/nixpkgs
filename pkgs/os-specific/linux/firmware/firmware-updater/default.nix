@@ -3,17 +3,19 @@
 , fetchFromGitHub
 }:
 
-flutter.mkFlutterApp {
+flutter.buildFlutterApplication {
   pname = "firmware-updater";
-  version = "unstable";
+  version = "unstable-2023-06-20";
 
-  vendorHash = "sha256-3wVA9BLCnMijC0gOmskz+Hv7NQIGu/jhBDbWjmoq1Tc=";
+  pubspecLockFile = ./pubspec.lock;
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-+4Lu6yHH/Yhl58bxhsLanP5hyhXSg9LpCuG1ohAlM5g=";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "firmware-updater";
-    rev = "a51817a2551e29895352618a91df9cf93d944af1";
-    sha256 = "6uhks6a9JcyIC5o0VssqfBlE4pqKiQ7d3KOb6feNTvU=";
+    rev = "49ebcad241ed4964f1547c8da408bef13a8b4c69";
+    sha256 = "sha256-1BGcpcIJV0jqrj3nA7FJg36lMqpl281NGOgWppDUFCI=";
     fetchSubmodules = true;
   };
 

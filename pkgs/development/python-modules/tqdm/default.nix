@@ -14,18 +14,18 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.64.0";
+  version = "4.64.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13a0spki37rdbx54nspcni3bpsp4d7p5ln570yipf1r01v9mbgj0";
+    hash = "sha256-X09oKgBJUcG0ULx1PHEOkoDFdGzm/+3uJT3by/VM8eQ=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-timeout

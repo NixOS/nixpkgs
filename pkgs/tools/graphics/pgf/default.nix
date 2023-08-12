@@ -1,27 +1,37 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, dos2unix, libpgf, freeimage, doxygen }:
+{ lib
+, stdenv
+, fetchzip
+, autoreconfHook
+, dos2unix
+, doxygen
+, freeimage
+, libpgf
+}:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "pgf";
-  version = "6.14.12";
+  version = "7.21.7";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libpgf/pgf-console-src-${version}.tar.gz";
-    sha256 = "1vfm12cfq3an3xg0679bcwdmjq2x1bbij1iwsmm60hwmrm3zvab0";
+  src = fetchzip {
+    url = "mirror://sourceforge/libpgf/libpgf/${version}/pgf-console.zip";
+    hash = "sha256-W9eXYhbynLtvZQsn724Uw0SZ5TuyK2MwREwYKGFhJj0=";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [ libtool dos2unix libpgf freeimage doxygen ];
-
-  patchPhase = ''
-      sed 1i'#include <inttypes.h>' -i src/PGF.cpp
-      sed s/__int64/int64_t/g -i src/PGF.cpp
-      rm include/FreeImage.h include/FreeImagePlus.h
+  postPatch = ''
+    find . -type f | xargs dos2unix
+    mv README.txt README
   '';
 
-  preConfigure = "dos2unix configure.ac; sh autogen.sh";
+  nativeBuildInputs = [
+    autoreconfHook
+    dos2unix
+    doxygen
+  ];
 
-# configureFlags = optional static "--enable-static --disable-shared";
+  buildInputs = [
+    freeimage
+    libpgf
+  ];
 
   meta = {
     homepage = "https://www.libpgf.org/";

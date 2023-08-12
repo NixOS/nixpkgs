@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
+  env.NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
 
   patches = [
     (fetchpatch {

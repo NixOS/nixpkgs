@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.13.9";
+  version = "1.15.0";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "IP3TSmnRekFebxeBh5JRegeSedx+y24e4X9muMAyhFk=";
+    sha256 = "1a7dlwuUOHeCsB+ofAOPlbyuh/QAB8kf50MsocMNz70=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     python3Packages.wrapPython
     intltool
     pkg-config
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -49,7 +50,6 @@ stdenv.mkDerivation rec {
     libpeas
     gsettings-desktop-schemas
     json-glib
-    gobject-introspection
     libsecret
     glib-networking
     libnotify
@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://github.com/lwindolf/${pname}";
     rev-prefix = "v";
   };

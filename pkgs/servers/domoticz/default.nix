@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "domoticz";
-  version = "2022.1";
+  version = "2023.2";
 
   src = fetchFromGitHub {
     owner = "domoticz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wPSmpk3YeA+dNjx2mBdRkP2Mx/1cfrQOMLV5H5Ti7qU=";
+    sha256 = "sha256-DxY9rBeRc20wmt4pDdBS16vyoOjCzczuxhOdUX/Lxao=";
     fetchSubmodules = true;
   };
 
@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ edcragg ];
     homepage = "https://www.domoticz.com/";
+    changelog = "https://github.com/domoticz/domoticz/blob/${version}/History.txt";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/domoticz.x86_64-darwin

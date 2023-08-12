@@ -12,23 +12,24 @@
 
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "4.2.2";
+  version = "5.9.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
-    repo = pname;
+    repo = "texlab";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-vGKDngFYh24wwR5nAYEz1GXm+K4sqEBvOp9jsioE0wU=";
+    hash = "sha256-mF0vbKdTACGeL1NZ57kzZANxjcHX92WtRJoU2Z4iJiM=";
   };
 
-  cargoSha256 = "sha256-s2gQuLkPxKQceGl3II9D6vWisYgL+YCI/YhX+mSyPoo=";
+  cargoHash = "sha256-io0dkKDNoF+1n7D1q1JShd/Gj5Ce1Uh3dnM6uiTw0Vs=";
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
   nativeBuildInputs = [ installShellFiles ]
-  ++ lib.optional (!isCross) help2man;
+    ++ lib.optional (!isCross) help2man;
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
@@ -36,30 +37,20 @@ in rustPlatform.buildRustPackage rec {
     CoreServices
   ];
 
-  postInstall = ''
-    # Remove generated dylib of human_name dependency. TexLab statically
-    # links to the generated rlib and doesn't reference the dylib. I
-    # couldn't find any way to prevent building this by passing cargo flags.
-    # See https://github.com/djudd/human-name/blob/master/Cargo.toml#L43
-    rm "$out/lib/libhuman_name${stdenv.hostPlatform.extensions.sharedLibrary}"
-    rmdir "$out/lib"
-  ''
   # When we cross compile we cannot run the output executable to
   # generate the man page
-  + lib.optionalString (!isCross) ''
+  postInstall = lib.optionalString (!isCross) ''
     # TexLab builds man page separately in CI:
-    # https://github.com/latex-lsp/texlab/blob/v4.2.2/.github/workflows/publish.yml#L131-L135
+    # https://github.com/latex-lsp/texlab/blob/v5.6.0/.github/workflows/publish.yml#L127-L131
     help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";
-    homepage = "https://texlab.netlify.app";
+    homepage = "https://github.com/latex-lsp/texlab";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar kira-bruneau ];
     platforms = platforms.all;

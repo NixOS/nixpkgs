@@ -6,6 +6,7 @@
 , pythonOlder
 , requests
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -22,11 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-873XAf0jOX5pjrNRELEcTWCauk80FUYxTu7G7jc3MHE=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     requests-mock

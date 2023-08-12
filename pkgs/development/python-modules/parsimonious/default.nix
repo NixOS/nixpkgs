@@ -8,22 +8,30 @@
 
 buildPythonPackage rec {
   pname = "parsimonious";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sq0a5jovZb149eCorFEKmPNgekPx2yqNRmNqXZ5KMME=";
+    hash = "sha256-goFgDaGA7IrjVCekq097gr/sHj0eUvgMtg6oK5USUBw=";
   };
 
   propagatedBuildInputs = [
     regex
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # test_benchmarks.py tests are actually benchmarks and may fail due to
+    # something being unexpectedly slow on a heavily loaded build machine
+    "test_lists_vs_dicts"
+    "test_call_vs_inline"
+    "test_startswith_vs_regex"
   ];
 
   postPatch = ''

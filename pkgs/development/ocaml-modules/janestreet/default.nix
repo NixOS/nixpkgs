@@ -413,18 +413,6 @@ with self;
     meta.description = "Shell helpers for Async";
   };
 
-  async_ssl = janePackage {
-    pname = "async_ssl";
-    hash = "1p83fzfla4rb820irdrz3f2hp8kq5zrhw47rqmfv6qydlca1bq64";
-    propagatedBuildInputs = [ async ctypes openssl ];
-    meta = {
-      description = "Async wrappers for SSL";
-      # ctypes no longer works with dune 1
-      # dune 2 no longer supports jbuild
-      broken = true;
-    };
-  };
-
   sexp_pretty = janePackage {
     pname = "sexp_pretty";
     hash = "0xskahjggbwvvb82fn0jp1didxbgpmgks76xhwp9s3vqkhgz6918";

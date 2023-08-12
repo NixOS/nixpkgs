@@ -4,6 +4,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, poetry-dynamic-versioning
 , pyjwt
 , pytest-aiohttp
 , pytest-freezegun
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2022.9.2";
+  version = "2023.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,12 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-iGif349AhrqcJnaZZdGc7x4KD7u4oStmKWxIY/knMww=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pUtOLQ4ftG0tYPued12CqKGt3LKyfmLPxIYKvkYg1nI=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    poetry-dynamic-versioning
   ];
 
   propagatedBuildInputs = [
@@ -36,15 +38,11 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytest-freezegun
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
   ];
 
   pythonImportsCheck = [
@@ -54,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Modulefor controlling a Litter-Robot";
     homepage = "https://github.com/natekspencer/pylitterbot";
+    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

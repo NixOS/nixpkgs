@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "murex";
-  version = "2.10.2400";
+  version = "4.4.9100";
 
   src = fetchFromGitHub {
     owner = "lmorg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bqd91m7m4i4lfvz4p1lbrfs01kyh73p0g236q13bv4x1n1lkqr3";
+    sha256 = "sha256-3YXRjwDEJC4rZdvrgj8Hp8oD+4NN5LOUJmM/9bjwfQw=";
   };
 
-  vendorSha256 = "sha256-hLz36ESf6To6sT/ha/yXyhG0U1gGw8HDfnrPJnws25g=";
+  vendorHash = "sha256-eQfffqNxt6es/3/H59FC5mLn1IU3oMpY/quzgNOgOaU=";
 
   subPackages = [ "." ];
 

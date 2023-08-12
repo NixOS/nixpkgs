@@ -1,19 +1,21 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cryptography
 , ifaddr
-, voluptuous
-, pyyaml
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "1.0.2";
-  format = "setuptools";
+  version = "2.11.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -21,15 +23,29 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-linVQqU45vmJ8zWyJl0W4o5Ci8N0M0jP/fiYekdaamc=";
+    hash = "sha256-rKvHb0wkWVuZO8M8uIQdOiY1N6DmGSpqUgz4YYbUfSM=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "unpin-setuptools.patch";
+      url = "https://github.com/XKNX/xknx/commit/c0826aec52ab69b8bd81f600bea154fae16f334e.patch";
+      hash = "sha256-EpfgEq4pIx7ahqJZalzo30ruj8NlZYHcKHxFXCGL98w=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
   propagatedBuildInputs = [
+    async-timeout
     cryptography
     ifaddr
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -41,6 +57,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires network access
     "test_scan_timeout"
+    "test_start_secure_routing_knx_keys"
+    "test_start_secure_routing_manual"
   ];
 
   meta = with lib; {
@@ -50,6 +68,7 @@ buildPythonPackage rec {
       packets. It provides support for KNX/IP routing and tunneling devices.
     '';
     homepage = "https://github.com/XKNX/xknx";
+    changelog = "https://github.com/XKNX/xknx/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;

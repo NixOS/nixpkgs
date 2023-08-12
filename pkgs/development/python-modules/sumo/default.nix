@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "sumo";
-  version = "2.3.4";
+  version = "2.3.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "SMTG-UCL";
     repo = "sumo";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-kgTTYCTq8jTNOmc92TRskbsOcnk6wTZgf0UfoctJ4M4=";
+    hash = "sha256-HQIs2G2hdKQkQOBs2lijmx/0cI4o/FFJU866PjtrBAE=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     spglib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

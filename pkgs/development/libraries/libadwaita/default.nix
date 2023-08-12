@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.1.4";
+  version = "1.3.4";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -30,8 +30,12 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    hash = "sha256-xxnLgPKPOND/ITvDC6SOD2GlkzlIX3BzBbt6p2AEjgY=";
+    hash = "sha256-NBYIDW0sphmBT2cIB2CPsCJrjRsINxWpumJbQK5RjU8=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gi-docgen
@@ -40,6 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     sassc
     vala
+    gobject-introspection
   ];
 
   mesonFlags = [
@@ -50,7 +55,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fribidi
-    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Foundation
@@ -60,16 +64,16 @@ stdenv.mkDerivation rec {
     gtk4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gnome.adwaita-icon-theme
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run
   ];
 
-  # Tests had to be disabled on Darwin because they fail with the same error as https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=264947 on Hydra:
+  # Tests had to be disabled on Darwin because test-button-content fails
   #
-  # In file included from ../tests/test-style-manager.c:10:
-  # ../src/adw-settings-private.h:16:10: fatal error: 'adw-enums-private.h' file not found
+  # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
+  # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
@@ -105,6 +109,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${src.rev}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;

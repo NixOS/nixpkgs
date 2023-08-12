@@ -9,20 +9,22 @@ stdenv.mkDerivation rec {
     sha256 = "3ef25907ec5d1dfb0df94c9388c020b593fbe162d7aaa9bd08f35d2a125af056";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
-      --replace "gcc" "cc"
+      --replace "gcc" "$CC"
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/man/man1
     cp dog.1 $out/man/man1
     cp dog $out/bin
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://lwn.net/Articles/421072/";
+    homepage = "https://lwn.net/Articles/421072/";
     description = "cat replacement";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qknight ];

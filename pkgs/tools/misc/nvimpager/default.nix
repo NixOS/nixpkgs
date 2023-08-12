@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvimpager";
-  version = "0.10.4";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0guSL4RvYQFwok7zGuevhQY6DHjnETRLpEIEQfGslcg=";
+    sha256 = "sha256-RmpPWS9gnBnR+Atw6uzBmeDSgoTOFSdKzHoJ84O+gyA=";
   };
 
   buildInputs = [
@@ -29,10 +29,11 @@ stdenv.mkDerivation rec {
     '';
 
   doCheck = true;
-  checkInputs = [ lua51Packages.busted util-linux neovim ];
+  nativeCheckInputs = [ lua51Packages.busted util-linux neovim ];
+  # filter out one test that fails in the sandbox of nix
   checkPhase = ''
     runHook preCheck
-    script -c "busted --lpath './?.lua' test"
+    make test BUSTED='busted --output TAP --exclude-tags=nix'
     runHook postCheck
   '';
 

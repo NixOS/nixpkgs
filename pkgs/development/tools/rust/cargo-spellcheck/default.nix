@@ -1,27 +1,26 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, libclang
 , stdenv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "drahnr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PyNO+kBxTYeqXgZh1XhE18G9ZK7suo/acKSE57zCbcY=";
+    sha256 = "sha256-XqT2l839fRDNj6zJB0vlVMmoRB2Lz61cN297PNIvFX8=";
   };
 
-  cargoSha256 = "sha256-i6AvKF34Gh3QhwvYVd+QTYCPMW9D0/vhz7WoY5d4kHU=";
+  cargoSha256 = "sha256-PzPQnexT1oeZ0FkTLyZiQJlMx+WDoSHD+J1JzoME6sA=";
+
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   buildInputs = lib.optional stdenv.isDarwin Security;
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   preCheck = "HOME=$(mktemp -d)";
 
@@ -34,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/drahnr/cargo-spellcheck";
     changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ newam ];
+    maintainers = with maintainers; [ newam matthiasbeyer ];
   };
 }

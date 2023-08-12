@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-user-guide";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1h620ngryqc4m8ybvc92ba8404djnm0l65f34mlw38g9ad8d9085";
+    sha256 = "XQTJdLd/L/OQQkQ4mY6F7ErdjiJnJA51WnqODvd/wi8=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "MATE User Guide";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus fdl12 ];
+    license = with licenses; [ gpl2Plus fdl11Plus ];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

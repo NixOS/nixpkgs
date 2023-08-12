@@ -1,7 +1,7 @@
-{ lib, buildGoModule, fetchFromGitLab, fetchurl }:
+{ lib, buildGoModule, fetchFromGitLab, fetchurl, bash }:
 
 let
-  version = "15.2.1";
+  version = "16.2.0";
 in
 buildGoModule rec {
   inherit version;
@@ -14,13 +14,16 @@ buildGoModule rec {
     "-X ${commonPackagePath}.REVISION=v${version}"
   ];
 
-  vendorSha256 = "sha256-weT4Ed/VNTLovxUu2xCdHDqxY7v/5Wi3WsWlNDWYLLc=";
+  # For patchShebangs
+  buildInputs = [ bash ];
+
+  vendorHash = "sha256-sP9lboy1M4+AB1Z0VsX5eNxZ9ckuJBgEPxavAbOSk8g=";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-HaFxMNREHTtnbIuQUXCinhd4lhcnkLkacLczeySsfWQ=";
+    sha256 = "sha256-gTjGf/WuMoGNvsiWWj3Y7l2MvSzBM12RY/Odolm4fNw=";
   };
 
   patches = [
@@ -43,6 +46,17 @@ buildGoModule rec {
     rm executors/docker/terminal_test.go
     rm executors/docker/docker_test.go
     rm helpers/docker/auth/auth_test.go
+    rm executors/docker/services_test.go
+  '';
+
+  excludedPackages = [
+    # CI helper script for pushing images to Docker and ECR registries
+    # https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/4139
+    "./scripts/sync-docker-images"
+  ];
+
+  postInstall = ''
+    install packaging/root/usr/share/gitlab-runner/clear-docker-cache $out/bin
   '';
 
   preCheck = ''
@@ -55,6 +69,6 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://about.gitlab.com/gitlab-ci/";
     platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ bachp zimbatm globin yayayayaka ];
+    maintainers = with maintainers; [ bachp zimbatm globin ] ++ teams.gitlab.members;
   };
 }

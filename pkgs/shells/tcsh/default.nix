@@ -1,33 +1,34 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
+, libxcrypt
 , ncurses
+, buildPackages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcsh";
-  version = "6.24.00";
+  version = "6.24.10";
 
   src = fetchurl {
-    url = "mirror://tcsh/${pname}-${version}.tar.gz";
-    hash = "sha256-YL4sUEvY8fpuQksZVkldfnztUqKslNtf0n9La/yPdPA=";
+    url = "mirror://tcsh/tcsh-${finalAttrs.version}.tar.gz";
+    hash = "sha256-E0dcD763QTnTPteTvwD/u7KsLcn7HURGekEHYKujZmQ=";
   };
 
   strictDeps = true;
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
   buildInputs = [
+    libxcrypt
     ncurses
   ];
 
-  patches = lib.optional stdenv.hostPlatform.isMusl
-    # Use system malloc
-    (fetchpatch {
-      name = "sysmalloc.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/tcsh/001-sysmalloc.patch?id=184585c046cdd56512f1a76e426dd799b368f8cf";
-      sha256 = "1qc6ydxhdfizsbkaxhpn3wib8sfphrw10xnnsxx2prvzg9g2zp67";
-    });
+  passthru.shellPath = "/bin/tcsh";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.tcsh.org/";
     description = "An enhanced version of the Berkeley UNIX C shell (csh)";
     longDescription = ''
@@ -42,10 +43,8 @@ stdenv.mkDerivation rec {
       - history mechanism
       - job control
     '';
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-
-  passthru.shellPath = "/bin/tcsh";
-}
+})

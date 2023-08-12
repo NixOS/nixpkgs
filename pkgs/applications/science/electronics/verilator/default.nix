@@ -1,42 +1,47 @@
-{ lib, stdenv, fetchFromGitHub
-, perl, flex, bison, python3, autoconf
-}:
+{ lib, stdenv, fetchFromGitHub, perl, flex, bison, python3, autoconf,
+  which, cmake, ccache, help2man, makeWrapper, glibcLocales,
+  systemc, git, numactl }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "4.224";
+  version = "5.012";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Kn44yWkNcOLkc79HLDTxx5zQn/vqft+hhbvsoUAKR7I=";
+    hash = "sha256-Y6GkIgkauayJmGhOQg2kWjbcxYVIob6InMopv555Lb8=";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ perl ];
-  nativeBuildInputs = [ flex bison python3 autoconf ];
+  buildInputs = [ perl python3 systemc ];  # ccache
+  nativeBuildInputs = [ makeWrapper flex bison autoconf help2man git ];
+  nativeCheckInputs = [ which numactl ];  # cmake
 
-  # these tests need some interpreter paths patched early on...
-  # see https://github.com/NixOS/nix/issues/1205
-  doCheck = false;
+  doCheck = stdenv.isLinux; # darwin tests are broken for now...
   checkTarget = "test";
 
-  preConfigure = ''
-    autoconf
-  '';
+  preConfigure = "autoconf";
 
   postPatch = ''
-    patchShebangs \
-      src/flexfix \
-      src/vlcovgen
+    patchShebangs bin/* src/* nodist/* docs/bin/* examples/xml_py/* \
+    test_regress/{driver.pl,t/*.{pl,pf}} \
+    ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
+  '';
+  # grep '^#!/' -R . | grep -v /nix/store | less
+  # (in nix-shell after patchPhase)
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    for x in $(ls $out/bin/verilator*); do
+      wrapProgram "$x" --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+    done
   '';
 
   meta = with lib; {
-    description = "Fast and robust (System)Verilog simulator/compiler";
-    homepage    = "https://www.veripool.org/wiki/verilator";
+    description = "Fast and robust (System)Verilog simulator/compiler and linter";
+    homepage    = "https://www.veripool.org/verilator";
     license     = with licenses; [ lgpl3Only artistic2 ];
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice amiloradovsky ];
   };
 }

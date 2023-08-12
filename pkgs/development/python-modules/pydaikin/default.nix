@@ -12,14 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pydaikin";
-  version = "2.7.0";
+  version = "2.10.5";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromBitbucket {
     owner = "mustang51";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-k6NAQvt79Qo7sAXQwOjq4Coz2iTZAUImasc/oMSpmmg=";
+    hash = "sha256-G4mNBHk8xskQyt1gbMqz5XhoTfWWxp+qTruOSqmTvOc=";
   };
 
   propagatedBuildInputs = [
@@ -28,17 +30,17 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  # while they have tests, they do not run them in their CI and they fail as of 2.7.0
-  # AttributeError: 'DaikinBRP069' object has no attribute 'last_hour_cool_energy_consumption'
-  doCheck = false;
+  doCheck = false; # tests fail and upstream does not seem to run them either
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-aiohttp
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pydaikin" ];
+  pythonImportsCheck = [
+    "pydaikin"
+  ];
 
   meta = with lib; {
     description = "Python Daikin HVAC appliances interface";

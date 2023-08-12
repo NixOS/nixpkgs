@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
 , coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
-, which, openssh, procps, qrencode, makeWrapper, pass, symlinkJoin
+, which, openssh, procps, qrencode, makeWrapper, pass
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
@@ -10,8 +10,6 @@
 # For backwards-compatibility
 , tombPluginSupport ? false
 }:
-
-with lib;
 
 assert x11Support -> xclip != null;
 assert waylandSupport -> wl-clipboard != null;
@@ -31,11 +29,10 @@ let
       selected = [ pass ] ++ extensions passExtensions
         ++ lib.optional tombPluginSupport passExtensions.tomb;
     in buildEnv {
-      # lib.getExe looks for name, so we keep it the same as mainProgram
-      name = "pass";
+      name = "pass-env";
       paths = selected;
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = concatMap (x: x.buildInputs) selected;
+      buildInputs = lib.concatMap (x: x.buildInputs) selected;
 
       postBuild = ''
         files=$(find $out/bin/ -type f -exec readlink -f {} \;)
@@ -53,6 +50,7 @@ let
         wrapProgram $out/bin/pass \
           --set SYSTEM_EXTENSION_DIR "$out/lib/password-store/extensions"
       '';
+      meta.mainProgram = "pass";
     };
 in
 
@@ -79,7 +77,7 @@ stdenv.mkDerivation rec {
     # dependencies (s.el) here. The user has to do this themselves.
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
-  '' + optionalString dmenuSupport ''
+  '' + lib.optionalString dmenuSupport ''
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
@@ -145,7 +143,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   doInstallCheck = true;
-  installCheckInputs = [ git ];
+  nativeInstallCheckInputs = [ git ];
   installCheckTarget = "test";
 
   passthru = {

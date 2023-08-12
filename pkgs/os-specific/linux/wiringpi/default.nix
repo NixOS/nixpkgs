@@ -2,6 +2,7 @@
 , stdenv
 , symlinkJoin
 , fetchFromGitHub
+, libxcrypt
 }:
 
 let
@@ -17,7 +18,7 @@ let
   }: stdenv.mkDerivation rec {
     pname = "wiringpi-${subprj}";
     inherit version src;
-    sourceRoot = "source/${subprj}";
+    sourceRoot = "${src.name}/${subprj}";
     inherit buildInputs;
     # Remove (meant for other OSs) lines from Makefiles
     preInstall = ''
@@ -35,6 +36,9 @@ let
     inherit mkSubProject;
     wiringPi = mkSubProject {
       subprj = "wiringPi";
+      buildInputs = [
+        libxcrypt
+      ];
     };
     devLib = mkSubProject {
       subprj = "devLib";
@@ -45,6 +49,7 @@ let
     wiringPiD = mkSubProject {
       subprj = "wiringPiD";
       buildInputs = [
+        libxcrypt
         passthru.wiringPi
         passthru.devLib
       ];
@@ -52,6 +57,7 @@ let
     gpio = mkSubProject {
       subprj = "gpio";
       buildInputs = [
+        libxcrypt
         passthru.wiringPi
         passthru.devLib
       ];

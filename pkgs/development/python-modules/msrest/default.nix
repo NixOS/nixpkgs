@@ -1,6 +1,7 @@
 { lib
 , aiodns
 , aiohttp
+, azure-core
 , buildPythonPackage
 , certifi
 , fetchFromGitHub
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "msrest";
-  version = "0.6.21";
+  version = "0.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,11 +25,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "msrest-for-python";
-    rev = "v${version}";
-    hash = "sha256-IlBwlVQ/v+vJmCWNbFZKGL6a9K09z4AYrPm3kwaA/nI=";
+    # no tag for 0.7.1
+    rev = "2d8fd04f68a124d0f3df7b81584accc3270b1afc";
+    hash = "sha256-1EXXXflhDeU+erdI+NsWxSX76ooDTl3+MyQwRzm2xV0=";
   };
 
   propagatedBuildInputs = [
+    azure-core
     aiodns
     aiohttp
     certifi
@@ -37,7 +40,7 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     httpretty
     pytest-aiohttp
     pytestCheckHook

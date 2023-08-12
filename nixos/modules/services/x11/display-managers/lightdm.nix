@@ -32,7 +32,7 @@ let
   usersConf = writeText "users.conf"
     ''
       [UserList]
-      minimum-uid=500
+      minimum-uid=1000
       hidden-users=${concatStringsSep " " dmcfg.hiddenUsers}
       hidden-shells=/run/current-system/sw/bin/nologin
     '';
@@ -83,6 +83,7 @@ in
     ./lightdm-greeters/pantheon.nix
     ./lightdm-greeters/tiny.nix
     ./lightdm-greeters/slick.nix
+    ./lightdm-greeters/mobile.nix
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "enable" ] [
       "services"
       "xserver"
@@ -301,7 +302,7 @@ in
 
         account   sufficient    pam_unix.so
 
-        password  requisite     pam_unix.so nullok sha512
+        password  requisite     pam_unix.so nullok yescrypt
 
         session   optional      pam_keyinit.so revoke
         session   include       login

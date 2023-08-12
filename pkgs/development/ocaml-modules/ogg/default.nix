@@ -2,16 +2,16 @@
 
 buildDunePackage rec {
   pname = "ogg";
-  version = "0.7.2";
-
-  useDune2 = true;
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ogg";
     rev = "v${version}";
-    sha256 = "sha256-EY1iVtB5M8//KJPT9FMDYVeBrE/lT30fCqTjjKKnWZU=";
+    sha256 = "sha256-S6rJw90c//a9d63weCLuOBoQwNqbpTb+lRytvHUOZuc=";
   };
+
+  minimalOCamlVersion = "4.08";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libogg ];

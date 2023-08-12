@@ -23,20 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "2.7.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ge87rctbd7iR9x9Xq4sMIC09DiPHbpbWBgMZUuJNWbw=";
+    sha256 = "sha256-X5EGDS8/EazIHiDBHCisd+XPE9dMx/0lQ8hrz9imUno=";
   };
 
   patches = [
     ./0001-Remove-Install-Unlisted-Engines-function.patch
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit ibus onboard;
+      inherit ibus onboard libgnomekbd;
     })
   ];
 
@@ -55,16 +55,13 @@ stdenv.mkDerivation rec {
     gtk3
     ibus
     libgee
-    libgnomekbd
     libhandy
     libxklavier
     switchboard
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

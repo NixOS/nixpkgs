@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl
 , cmake, docbook_xml_dtd_45, docbook_xsl, doxygen, graphviz-nox, pkg-config, qttools, wrapQtAppsHook
-, alsa-lib, fluidsynth, qtbase, qtsvg, libpulseaudio
+, alsa-lib, fluidsynth, libpulseaudio, qtbase, qtsvg, sonivox
 }:
 
 stdenv.mkDerivation rec {
   pname = "drumstick";
-  version = "2.6.1";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-5O9yD3MexorJUm5tv6oghDb4J/b3SO10mDQR9dT2jlA=";
+    hash = "sha256-5XxG5ur584fgW4oCONgMiWzV48Q02HEdmpb9+YhBFe0=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsa-lib fluidsynth libpulseaudio qtbase qtsvg
+    alsa-lib fluidsynth libpulseaudio qtbase qtsvg sonivox
   ];
 
   cmakeFlags = [

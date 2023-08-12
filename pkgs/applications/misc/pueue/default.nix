@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, Libsystem
 , SystemConfiguration
 , installShellFiles
 , libiconv
@@ -9,20 +10,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "2.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
     rev = "v${version}";
-    hash = "sha256-xUTkjj/PdlgDEp2VMwBuRtF/9iGGiN4FZizdOdcbTag=";
+    hash = "sha256-Fk31k0JIe1KJW7UviA8yikjfwlcdRD92wehNbuEoH2w=";
   };
 
-  cargoSha256 = "sha256-7VdPu+9RYoj4Xfb3J6GLOji7Fqxkk+Fswi4C4q33+jk=";
+  cargoHash = "sha256-eVJuebau0Y9oelniCzvOk9riMMZ9cS7E/G6KinbQa6k=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optionals stdenv.isDarwin [
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
+    Libsystem
     SystemConfiguration
     libiconv
   ];

@@ -10,13 +10,15 @@
 
 buildDunePackage rec {
   pname = "ssl";
-  version = "0.5.12";
+  version = "0.5.13";
+
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ssl";
     rev = version;
-    sha256 = "sha256-cQUJ7t7C9R74lDy1/lt+up4E5CogiPbeZpaDveDzJ7c=";
+    sha256 = "sha256-Ws7QZOvZVy0QixMiBFJZEOnYzYlCWrZ1d95gOp/a5a0=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -8,9 +8,9 @@ let
   systemd = cfg.package;
 in rec {
 
-  shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);
+  shellEscape = s: (replaceStrings [ "\\" ] [ "\\\\" ] s);
 
-  mkPathSafeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
+  mkPathSafeName = lib.replaceStrings ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
 
   # a type for options that take a unit name
   unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
@@ -24,7 +24,7 @@ in rec {
         }
         ''
           name=${shellEscape name}
-          mkdir -p "$out/$(dirname "$name")"
+          mkdir -p "$out/$(dirname -- "$name")"
           echo -n "$text" > "$out/$name"
         ''
     else
@@ -63,7 +63,12 @@ in rec {
 
   assertMacAddress = name: group: attr:
     optional (attr ? ${name} && ! isMacAddress attr.${name})
-      "Systemd ${group} field `${name}' must be a valid mac address.";
+      "Systemd ${group} field `${name}' must be a valid MAC address.";
+
+  assertNetdevMacAddress = name: group: attr:
+    optional (attr ? ${name} && (! isMacAddress attr.${name} && attr.${name} != "none"))
+      "Systemd ${group} field `${name}` must be a valid MAC address or the special value `none`.";
+
 
   isPort = i: i >= 0 && i <= 65535;
 
@@ -187,11 +192,14 @@ in rec {
         done
       done
 
-      # Symlink all units defined by systemd.units. If these are also
-      # provided by systemd or systemd.packages, then add them as
+      # Symlink units defined by systemd.units where override strategy
+      # shall be automatically detected. If these are also provided by
+      # systemd or systemd.packages, then add them as
       # <unit-name>.d/overrides.conf, which makes them extend the
       # upstream unit.
-      for i in ${toString (mapAttrsToList (n: v: v.unit) units)}; do
+      for i in ${toString (mapAttrsToList
+          (n: v: v.unit)
+          (lib.filterAttrs (n: v: (attrByPath [ "overrideStrategy" ] "asDropinIfExists" v) == "asDropinIfExists") units))}; do
         fn=$(basename $i/*)
         if [ -e $out/$fn ]; then
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
@@ -210,11 +218,21 @@ in rec {
         fi
       done
 
+      # Symlink units defined by systemd.units which shall be
+      # treated as drop-in file.
+      for i in ${toString (mapAttrsToList
+          (n: v: v.unit)
+          (lib.filterAttrs (n: v: v ? overrideStrategy && v.overrideStrategy == "asDropin") units))}; do
+        fn=$(basename $i/*)
+        mkdir -p $out/$fn.d
+        ln -s $i/$fn $out/$fn.d/overrides.conf
+      done
+
       # Create service aliases from aliases option.
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             ln -sfn '${name}' $out/'${name2}'
-          '') unit.aliases) units)}
+          '') (unit.aliases or [])) units)}
 
       # Create .wants and .requires symlinks from the wantedBy and
       # requiredBy options.
@@ -222,13 +240,13 @@ in rec {
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.wants'
             ln -sfn '../${name}' $out/'${name2}.wants'/
-          '') unit.wantedBy) units)}
+          '') (unit.wantedBy or [])) units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.requires'
             ln -sfn '../${name}' $out/'${name2}.requires'/
-          '') unit.requiredBy) units)}
+          '') (unit.requiredBy or [])) units)}
 
       ${optionalString (type == "system") ''
         # Stupid misc. symlinks.
@@ -245,7 +263,7 @@ in rec {
 
   makeJobScript = name: text:
     let
-      scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
+      scriptName = replaceStrings [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
       out = (pkgs.writeShellScriptBin scriptName ''
         set -e
         ${text}
@@ -276,9 +294,9 @@ in rec {
         // optionalAttrs (config.requisite != [])
           { Requisite = toString config.requisite; }
         // optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
-          { X-Restart-Triggers = toString config.restartTriggers; }
+          { X-Restart-Triggers = "${pkgs.writeText "X-Restart-Triggers" (toString config.restartTriggers)}"; }
         // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
-          { X-Reload-Triggers = toString config.reloadTriggers; }
+          { X-Reload-Triggers = "${pkgs.writeText "X-Reload-Triggers" (toString config.reloadTriggers)}"; }
         // optionalAttrs (config.description != "") {
           Description = config.description; }
         // optionalAttrs (config.documentation != []) {
@@ -340,7 +358,7 @@ in rec {
     '';
 
   targetToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text =
         ''
           [Unit]
@@ -349,7 +367,7 @@ in rec {
     };
 
   serviceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Service]
@@ -371,7 +389,7 @@ in rec {
     };
 
   socketToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Socket]
@@ -382,7 +400,7 @@ in rec {
     };
 
   timerToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Timer]
@@ -391,7 +409,7 @@ in rec {
     };
 
   pathToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Path]
@@ -400,7 +418,7 @@ in rec {
     };
 
   mountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Mount]
@@ -409,7 +427,7 @@ in rec {
     };
 
   automountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Automount]
@@ -418,11 +436,28 @@ in rec {
     };
 
   sliceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Slice]
           ${attrsToSection def.sliceConfig}
         '';
     };
+
+  # Create a directory that contains systemd definition files from an attrset
+  # that contains the file names as keys and the content as values. The values
+  # in that attrset are determined by the supplied format.
+  definitions = directoryName: format: definitionAttrs:
+    let
+      listOfDefinitions = lib.mapAttrsToList
+        (name: format.generate "${name}.conf")
+        definitionAttrs;
+    in
+    pkgs.runCommand directoryName { } ''
+      mkdir -p $out
+      ${(lib.concatStringsSep "\n"
+        (map (pkg: "cp ${pkg} $out/${pkg.name}") listOfDefinitions)
+      )}
+    '';
+
 }

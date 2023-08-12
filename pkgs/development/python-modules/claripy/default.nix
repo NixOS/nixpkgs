@@ -1,20 +1,19 @@
 { lib
 , buildPythonPackage
+, setuptools
 , cachetools
 , decorator
 , fetchFromGitHub
 , future
-, nose
 , pysmt
 , pythonOlder
 , pytestCheckHook
-, six
 , z3
 }:
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.15";
+  version = "9.2.63";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,9 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-3v5te+j3I4yzxoBO8kY8VGLCrWfb1iOz9GHzun1DT0I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-p5fJ5+YFQIs397eVFxtMMJj/FwfH97CY1HjFJqPVVc0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cachetools
@@ -34,16 +37,14 @@ buildPythonPackage rec {
     z3
   ];
 
-  checkInputs = [
-    nose
+  nativeCheckInputs = [
     pytestCheckHook
-    six
   ];
 
   postPatch = ''
     # Use upstream z3 implementation
     substituteInPlace setup.cfg \
-      --replace "z3-solver == 4.10.2.0" ""
+      --replace "z3-solver==4.10.2.0" ""
   '';
 
   pythonImportsCheck = [

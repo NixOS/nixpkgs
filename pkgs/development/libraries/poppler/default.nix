@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
+, fetchFromGitLab
 , cairo
 , cmake
 , pcre
@@ -32,25 +32,29 @@
 
 let
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
+
+  # unclear relationship between test data repo versions and poppler
+  # versions, though files don't appear to be updated after they're
+  # added, so it's probably safe to just always use the latest available
+  # version.
+  testData = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "poppler";
+    repo = "test";
+    rev = "e3cdc82782941a8d7b8112f83b4a81b3d334601a";
+    hash = "sha256-i/NjVWC/PXAXnv88qNaHFBQQNEjRgjdV224NgENaESo=";
+  };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "poppler-${suffix}";
-  version = "22.08.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
+  version = "23.07.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    sha256 = "sha256-tJMyhyFALyXLdSP5zcL318WfRa2Zm951xjyQYE2w8gs=";
+    hash = "sha256-8ptLS/R1cmERdkVMjyFQbXHSfspQEaOapEA4swuVfbA=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-38784.patch";
-      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/27354e9d9696ee2bc063910a6c9a6b27c5184a52.patch";
-      sha256 = "sha256-M12zaHxcgQB/37tHffllqzd+Juq9BH5gpKVGaRY00vI=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -64,7 +68,7 @@ stdenv.mkDerivation rec {
     pcre
     libiconv
     libintl
-  ] ++ lib.optional withData [
+  ] ++ lib.optionals withData [
     poppler_data
   ];
 
@@ -94,7 +98,10 @@ stdenv.mkDerivation rec {
     (mkFlag utils "UTILS")
     (mkFlag qt5Support "QT5")
     (mkFlag qt6Support "QT6")
+  ] ++ lib.optionals finalAttrs.doCheck [
+    "-DTESTDATADIR=${testData}"
   ];
+  disallowedReferences = lib.optional finalAttrs.doCheck testData;
 
   dontWrapQtApps = true;
 
@@ -103,7 +110,10 @@ stdenv.mkDerivation rec {
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
 
+  doCheck = true;
+
   passthru = {
+    inherit testData;
     tests = {
       # These depend on internal poppler code that frequently changes.
       inherit inkscape cups-filters texlive scribus;
@@ -121,4 +131,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
   };
-}
+})

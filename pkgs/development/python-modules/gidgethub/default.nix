@@ -14,22 +14,23 @@
 
 buildPythonPackage rec {
   pname = "gidgethub";
-  version = "5.2.0";
+  version = "5.3.0";
   format = "flit";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-w1m3aRlOcvmE0uMo3g7o64G3AjQrCkTcXOuskhBOz0s=";
+    hash = "sha256-ns59N/vOuBm4BWDn7Vj5NuSKZdN+xfVtt5FFFWtCaiU=";
   };
 
   propagatedBuildInputs = [
     uritemplate
     pyjwt
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     aiohttp
     httpx
@@ -48,6 +49,6 @@ buildPythonPackage rec {
     description = "An async GitHub API library";
     homepage = "https://github.com/brettcannon/gidgethub";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "stlehmann";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eNouFJQDgp56fgkA7wZKfosKWOKU6OvXRjFwjCMvZqI=";
+    hash = "sha256-eNouFJQDgp56fgkA7wZKfosKWOKU6OvXRjFwjCMvZqI=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
       --replace "ctypes.CDLL(adslib)" "ctypes.CDLL(\"${adslib}/lib/adslib.so\")"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -2,12 +2,13 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch, isPy311
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "2.5.0";
+  version = "3.0.1";
 
   disabled = pythonOlder "3.6";
 
@@ -15,10 +16,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "491feb020dca48ccc562a8c0cbe8df07ee13078df59813b83959cbdada312ea3";
+    hash = "sha256-7IsnamtgvYDe/tJa3X5DmIHBnmSFCv2bNGKD1BZf0P0=";
   };
 
-  checkInputs = [
+  patches = lib.optional isPy311 # could be made unconditional on rebuild
+    (fetchpatch {
+      name = "tests-py311.patch";
+      url = "https://github.com/PyCQA/pyflakes/commit/836631f2f73d45baa4021453d89fc9fd6f52be58.diff";
+      hash = "sha256-xlgql+bN0HsGnTMkwax3ZG/5wrbkUl/kQkjlr3lsgRw=";
+    })
+  ;
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

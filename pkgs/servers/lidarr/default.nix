@@ -1,35 +1,52 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper, icu, dotnet-runtime, openssl, nixosTests }:
 
-stdenv.mkDerivation rec {
+let
+  os = if stdenv.isDarwin then "osx" else "linux";
+  arch = {
+    x86_64-linux = "x64";
+    aarch64-linux = "arm64";
+    x86_64-darwin = "x64";
+  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  hash = {
+    x64-linux_hash = "sha256-fYfqkv3o9aly2bgY5iiZETs4LZfrbJGWd7XeRP4nTu0=";
+    arm64-linux_hash = "sha256-ENdQQnjxNFyVYnTdxZuaSO4oJ7sd4Oa9TLs8xu93p5g=";
+    x64-osx_hash = "sha256-LwzwMsqq8RDBiQbKtBVKJPhh4woQTpVr+T0K8ii6kG8=";
+  }."${arch}-${os}_hash";
+in stdenv.mkDerivation rec {
   pname = "lidarr";
-  version = "0.8.1.2135";
+  version = "1.2.6.3313";
 
   src = fetchurl {
-    url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.linux.tar.gz";
-    sha256 = "sha256-eJX6t19D2slX68fXSMd/Vix3XSgCVylK+Wd8VH9jsuI=";
+    url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.${os}-core-${arch}.tar.gz";
+    sha256 = hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r * $out/bin/
+    runHook preInstall
 
-    # Mark main executable as executable
-    chmod +x $out/bin/Lidarr.exe
-
-    makeWrapper "${mono}/bin/mono" $out/bin/Lidarr \
-      --add-flags "$out/bin/Lidarr.exe" \
-      --prefix PATH : ${lib.makeBinPath [ chromaprint ]} \
+    mkdir -p $out/{bin,share/${pname}-${version}}
+    cp -r * $out/share/${pname}-${version}/.
+    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Lidarr \
+      --add-flags "$out/share/${pname}-${version}/Lidarr.dll" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-          curl sqlite libmediainfo ]}
+        curl sqlite libmediainfo icu  openssl ]}
+
+    runHook postInstall
   '';
+
+
+  passthru = {
+    updateScript = ./update.sh;
+    tests.smoke-test = nixosTests.lidarr;
+  };
 
   meta = with lib; {
     description = "A Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio/";
     license = licenses.gpl3;
     maintainers = [ maintainers.etu ];
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }

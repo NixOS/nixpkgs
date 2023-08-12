@@ -20,6 +20,5 @@ buildGoModule rec {
     description = "Discord terminal client";
     license = licenses.bsd3;
     maintainers = with maintainers; [ colemickens ];
-    platforms = platforms.unix;
   };
 }

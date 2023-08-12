@@ -6,9 +6,7 @@
 , hatchling
 , ipykernel
 , ipython
-, ipython_genutils
 , jupyter-client
-, packaging
 , psutil
 , python-dateutil
 , pythonOlder
@@ -20,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "8.4.1";
+  version = "8.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zwu+BXVTgXQuHqARd9xCj/jz6Urx8NVkLJ0Z83yoKJs=";
+    hash = "sha256-o5ql75VgFwvw6a/typ/wReG5wYMsSTAzd+3Mkc6p+3c=";
   };
 
   nativeBuildInputs = [
@@ -39,9 +37,7 @@ buildPythonPackage rec {
     entrypoints
     ipykernel
     ipython
-    ipython_genutils
     jupyter-client
-    packaging
     psutil
     python-dateutil
     pyzmq

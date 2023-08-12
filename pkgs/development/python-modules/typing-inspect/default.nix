@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "typing-inspect";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit version;
     pname = "typing_inspect";
-    sha256 = "1al2lyi3r189r5xgw90shbxvd88ic4si9w7n3d9lczxiv6bl0z84";
+    hash = "sha256-sj/EL/b272lU5IUsH7USzdGNvqAxNPkfhWqVzMlGH3g=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     mypy-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

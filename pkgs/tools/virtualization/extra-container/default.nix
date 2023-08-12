@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "extra-container";
-  version = "0.10";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "erikarvstedt";
     repo = pname;
     rev = version;
-    hash = "sha256-vtCZ0w1Kaiw9bIrzwEb4Jnv7QoQLp8JDjaGmAP91hpE=";
+    hash = "sha256-/5wPv962ZHvZoZMOr4nMz7qcvbzlExRYS2nrnay/PU8=";
   };
 
   buildCommand = ''
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Run declarative containers without full system rebuilds";
     homepage = "https://github.com/erikarvstedt/extra-container";
+    changelog = "https://github.com/erikarvstedt/extra-container/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.erikarvstedt ];

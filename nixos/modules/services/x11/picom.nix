@@ -41,11 +41,14 @@ let
 in {
 
   imports = [
-    (mkAliasOptionModule [ "services" "compton" ] [ "services" "picom" ])
+    (mkAliasOptionModuleMD [ "services" "compton" ] [ "services" "picom" ])
     (mkRemovedOptionModule [ "services" "picom" "refreshRate" ] ''
       This option corresponds to `refresh-rate`, which has been unused
       since picom v6 and was subsequently removed by upstream.
       See https://github.com/yshui/picom/commit/bcbc410
+    '')
+    (mkRemovedOptionModule [ "services" "picom" "experimentalBackends" ] ''
+      This option was removed by upstream since picom v10.
     '')
   ];
 
@@ -55,14 +58,6 @@ in {
       default = false;
       description = lib.mdDoc ''
         Whether or not to enable Picom as the X.org composite manager.
-      '';
-    };
-
-    experimentalBackends = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Whether to use the unstable new reimplementation of the backends.
       '';
     };
 
@@ -204,10 +199,10 @@ in {
     };
 
     backend = mkOption {
-      type = types.enum [ "glx" "xrender" "xr_glx_hybrid" ];
+      type = types.enum [ "egl" "glx" "xrender" "xr_glx_hybrid" ];
       default = "xrender";
       description = lib.mdDoc ''
-        Backend to use: `glx`, `xrender` or `xr_glx_hybrid`.
+        Backend to use: `egl`, `glx`, `xrender` or `xr_glx_hybrid`.
       '';
     };
 
@@ -306,8 +301,7 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}"
-          + (optionalString cfg.experimentalBackends " --experimental-backends");
+        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };

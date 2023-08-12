@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
-  version = "6.0.6";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wAoLU59hEYubWn9o7cVlZ/mJoxJJjEkJA9xu9gwxQ7o=";
+    sha256 = "sha256-HEkuNJgG0WEOKO6upwQgXg4huA7dNyz73U1nyOjQiTs=";
   };
 
   nativeBuildInputs = [
@@ -42,9 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

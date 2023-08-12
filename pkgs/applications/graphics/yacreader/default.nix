@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "yacreader";
-  version = "9.9.1";
+  version = "9.12.0";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = pname;
     rev = version;
-    sha256 = "sha256-D+ZmFMg9ZixZNUAMjPHwz7gcwKjG49lm5hTEqftbIrY=";
+    sha256 = "sha256-sIQxUiTGQCcHmxBp0Mf49e/XVaJe7onlLHiorMlNLZ8=";
   };
 
   nativeBuildInputs = [ qmake pkg-config ];
@@ -22,5 +22,6 @@ mkDerivation rec {
     description = "A comic reader for cross-platform reading and managing your digital comic collection";
     homepage = "http://www.yacreader.com";
     license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ srapenne ];
   };
 }

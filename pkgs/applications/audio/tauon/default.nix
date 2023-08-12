@@ -9,9 +9,12 @@
 , librsvg
 , gobject-introspection
 , gtk3
+, kissfft
+, libappindicator
 , libnotify
 , libsamplerate
 , libvorbis
+, miniaudio
 , mpg123
 , libopenmpt
 , opusfile
@@ -21,16 +24,24 @@
 , withDiscordRPC ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
-  version = "7.3.1";
+  version = "7.6.6";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
-    rev = "v${version}";
-    sha256 = "sha256-g3mRVPOXU3N+MApLaHAAIIsVuVv2GeB1Nj//8tuS0oI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yt5sMvYau43WwVerQlaOrvzJ4HnBOEVQqbql9UH8jnM=";
   };
+
+  postUnpack = ''
+    rmdir source/src/phazor/kissfft
+    ln -s ${kissfft.src} source/src/phazor/kissfft
+
+    rmdir source/src/phazor/miniaudio
+    ln -s ${miniaudio.src} source/src/phazor/miniaudio
+  '';
 
   postPatch = ''
     substituteInPlace tauon.py \
@@ -47,6 +58,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs compile-phazor.sh
 
+    substituteInPlace compile-phazor.sh --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
+
     substituteInPlace extra/tauonmb.desktop --replace 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
   '';
 
@@ -57,12 +70,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     python3Packages.wrapPython
+    gobject-introspection
   ];
 
   buildInputs = [
     flac
-    gobject-introspection
     gtk3
+    libappindicator
     libnotify
     libopenmpt
     librsvg
@@ -85,9 +99,8 @@ stdenv.mkDerivation rec {
     natsort
     pillow
     plexapi
-    pulsectl
     pycairo
-    PyChromecast
+    pychromecast
     pylast
     pygobject3
     pylyrics
@@ -95,7 +108,8 @@ stdenv.mkDerivation rec {
     requests
     send2trash
     setproctitle
-  ] ++ lib.optional withDiscordRPC pypresence;
+  ] ++ lib.optional withDiscordRPC pypresence
+    ++ lib.optional stdenv.isLinux pulsectl;
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ffmpeg]}"
@@ -121,8 +135,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Linux desktop music player from the future";
     homepage = "https://tauonmusicbox.rocks/";
+    changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ jansol ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

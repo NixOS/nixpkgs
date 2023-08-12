@@ -12,14 +12,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sticky";
-  version = "1.12";
+  version = "1.17";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-kAO8Qz4bTn3+YeIXAvPZ1SpKgn+g+rBgi9+TaqL1vOY=";
+    hash = "sha256-Am62Azm27irIUQEpZVY8ZP2pslH1eaiyRBdq4eSakQA=";
   };
 
   postPatch = ''
@@ -33,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
-    gobject-introspection
     cinnamon.xapp
     gspell
   ];
@@ -76,7 +75,6 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     updateScript = gitUpdater {
-      inherit pname version;
       ignoredVersions = ''master.*'';
     };
   };
@@ -86,6 +84,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with maintainers; [ linsui bobby285271 ];
   };
 }

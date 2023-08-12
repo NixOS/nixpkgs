@@ -1,19 +1,37 @@
-{ fetchurl, pypy2Packages }:
+{ lib
+, python3
+, fetchurl
+}:
 
-pypy2Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "tailor";
-  version = "0.9.35";
+  version = "0.9.37";
 
   src = fetchurl {
-    urls = [
-      "http://darcs.arstecnica.it/tailor/tailor-${version}.tar.gz"
-      "https://src.fedoraproject.org/repo/pkgs/tailor/tailor-${version}.tar.gz/58a6bc1c1d922b0b1e4579c6440448d1/tailor-${version}.tar.gz"
-    ];
-    sha256 = "061acapxxn5ab3ipb5nd3nm8pk2xj67bi83jrfd6lqq3273fmdjh";
+    url = "https://gitlab.com/ports1/tailor/-/archive/0.937/tailor-0.937.tar.gz";
+    hash = "sha256-Bdf8ZCRsbCsFz1GRxyQxxndXSsm8oOL2738m9UxOTVc=";
   };
 
-  meta = {
-    description = "Version control tools integration tool";
+  propagatedBuildInputs = with python3.pkgs; [
+    future
+  ];
+
+  # AssertionError: Tailor Darcs repository not found!
+  doCheck = false;
+
+  meta = with lib; {
+    description = "A tool to migrate changesets between various kinds of version control system.";
+    longDescription = ''
+      With its ability to "translate the history" from one VCS kind to another,
+      this tool makes it easier to keep the upstream changes merged in
+      a own branch of a product.
+
+      Tailor is able to fetch the history from Arch, Bazaar, CVS, Darcs, Monotone,
+      Perforce or Subversion and rewrite it over Aegis, Bazaar, CVS, Darcs, Git,
+      Mercurial, Monotone and Subversion.
+    '';
+    homepage = "https://gitlab.com/ports1/tailor";
+    license = licenses.gpl1Plus;
+    platforms = platforms.unix;
   };
 }
-

@@ -1,19 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "1.3.2";
+stdenvNoCC.mkDerivation rec {
   pname = "d2codingfont";
+  version = "1.3.2";
 
-in fetchzip {
-  name = "${pname}-${version}";
-  url = "https://github.com/naver/${pname}/releases/download/VER${version}/D2Coding-Ver${version}-20180524.zip";
+  src = fetchzip {
+    url = "https://github.com/naver/${pname}/releases/download/VER${version}/D2Coding-Ver${version}-20180524.zip";
+    stripRoot = false;
+    hash = "sha256-iC6iaUSVg4zt3wVFJUU4HEeswuKDOTFsAxq/0gRiOCA=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*-all.ttc -d $out/share/fonts/truetype/
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 */*-all.ttc -t $out/share/fonts/truetype/
+
+    runHook postInstall
   '';
-
-  sha256 = "1812r82530wzfki7k9cm35fy6k2lvis7j6w0w8svc784949m1wwj";
 
   meta = with lib; {
     description = "Monospace font with support for Korean and latin characters";
@@ -21,7 +24,7 @@ in fetchzip {
       D2Coding is a monospace font developed by a Korean IT Company called Naver.
       Font is good for displaying both Korean characters and latin characters,
       as sometimes these two languages could share some similar strokes.
-      Since verion 1.3, D2Coding font is officially supported by the font
+      Since version 1.3, D2Coding font is officially supported by the font
       creator, with symbols for Powerline.
     '';
     homepage = "https://github.com/naver/d2codingfont";

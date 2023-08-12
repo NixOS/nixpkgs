@@ -1,22 +1,19 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, qtwebsockets, qtwebengine, wrapQtAppsHook, openconnect
+{ stdenv, lib, fetchurl
+, cmake, qtwebsockets, qtwebengine, qtkeychain, wrapQtAppsHook, openconnect
 }:
 
 stdenv.mkDerivation rec {
   pname = "globalprotect-openconnect";
-  version = "1.4.8";
+  version = "1.4.9";
 
-  src = fetchFromGitHub {
-    owner = "yuezk";
-    repo = "GlobalProtect-openconnect";
-    fetchSubmodules = true;
-    rev = "v${version}";
-    sha256 = "sha256-PQAlGeHVayImKalCNv2SwPcxD0ts4BVSqeo1hKYmnMA=";
+  src = fetchurl {
+    url = "https://github.com/yuezk/GlobalProtect-openconnect/releases/download/v${version}/globalprotect-openconnect-${version}.tar.gz";
+    hash = "sha256-vhvVKESLbqHx3XumxbIWOXIreDkW3yONDMXMHxhjsvk=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
 
-  buildInputs = [ openconnect qtwebsockets qtwebengine ];
+  buildInputs = [ openconnect qtwebsockets qtwebengine qtkeychain ];
 
   patchPhase = ''
     substituteInPlace GPService/gpservice.h \

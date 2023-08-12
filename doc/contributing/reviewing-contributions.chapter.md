@@ -12,7 +12,7 @@ When reviewing a pull request, please always be nice and polite. Controversial c
 
 GitHub provides reactions as a simple and quick way to provide feedback to pull requests or any comments. The thumb-down reaction should be used with care and if possible accompanied with some explanation so the submitter has directions to improve their contribution.
 
-pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
+Pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
 
 All the review template samples provided in this section are generic and meant as examples. Their usage is optional and the reviewer is free to adapt them to their liking.
 
@@ -62,6 +62,8 @@ Sample template for a package update review is provided below.
 - [ ] package build on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] all depending packages build
+- [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
+- [ ] patches that are remotely available are fetched rather than vendored
 
 ##### Possible improvements
 
@@ -105,7 +107,8 @@ Sample template for a new package review is provided below.
 - [ ] source is fetched using the appropriate function
 - [ ] the list of `phases` is not overridden
 - [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
-- [ ] patches that are remotely available are fetched with `fetchpatch`
+- [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
+- [ ] patches that are remotely available are fetched rather than vendored
 
 ##### Possible improvements
 
@@ -185,7 +188,7 @@ Sample template for a new module review is provided below.
 ##### Comments
 ```
 
-## Individual maintainer list {#reviewing-contributions-indvidual-maintainer-list}
+## Individual maintainer list {#reviewing-contributions-individual-maintainer-list}
 
 When adding users to `maintainers/maintainer-list.nix`, the following
 checks should be performed:
@@ -201,7 +204,7 @@ checks should be performed:
     them to either recommit using that key or to remove their key
     information.
 
-    Given a maintainter entry like this:
+    Given a maintainer entry like this:
 
     ``` nix
     {
@@ -301,6 +304,12 @@ Container system, boot system and library changes are some examples of the pull 
 ## Merging pull requests {#reviewing-contributions--merging-pull-requests}
 
 It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.
+
+In case the PR is stuck waiting for the original author to apply a trivial
+change (a typo, capitalisation change, etc.) and the author allowed the members
+to modify the PR, consider applying it yourself. (or commit the existing review
+suggestion) You should pay extra attention to make sure the addition doesn't go
+against the idea of the original PR and would not be opposed by the author.
 
 <!--
 The following paragraphs about how to deal with unactive contributors is just a proposition and should be modified to what the community agrees to be the right policy.

@@ -1,7 +1,8 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "1.1.1";
+  version = "1.4.0";
+  # nixpkgs-update: no auto update
 
   suffix = {
     x86_64-linux = "x86_64";
@@ -22,8 +23,8 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-KRlOE4iDWMYzKZUZnuKIwIGooj5o8ARpROS7f2VIr1c=";
-    aarch64-linux = "sha256-AqVFqUbMtjPmOsSgAaJ2AFNc0McC708fAD36qLz0VAc=";
+    x86_64-linux = "sha256-WSa8fd0OSPo1HFkH6i8cGMNH1df88xI6PCx39ONb73c=";
+    aarch64-linux = "sha256-eOsO/nbwKT50tC5g6INPELh2yVb5C3EGqNLQLT7IGBs=";
   };
 
   dontConfigure = true;

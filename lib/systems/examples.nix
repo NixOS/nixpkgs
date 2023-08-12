@@ -37,6 +37,10 @@ rec {
     config = "armv6l-unknown-linux-gnueabihf";
   } // platforms.raspberrypi;
 
+  bluefield2 = {
+    config = "aarch64-unknown-linux-gnu";
+  } // platforms.bluefield2;
+
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
   } // platforms.zero-gravitas;
@@ -91,22 +95,16 @@ rec {
   } // platforms.fuloong2f_n32;
 
   # can execute on 32bit chip
-  mips-linux-gnu                = { config = "mips-unknown-linux-gnu";                } // platforms.gcc_mips32r2_o32;
-  mipsel-linux-gnu              = { config = "mipsel-unknown-linux-gnu";              } // platforms.gcc_mips32r2_o32;
-  mipsisa32r6-linux-gnu         = { config = "mipsisa32r6-unknown-linux-gnu";         } // platforms.gcc_mips32r6_o32;
-  mipsisa32r6el-linux-gnu       = { config = "mipsisa32r6el-unknown-linux-gnu";       } // platforms.gcc_mips32r6_o32;
+  mips-linux-gnu           = { config = "mips-unknown-linux-gnu";           } // platforms.gcc_mips32r2_o32;
+  mipsel-linux-gnu         = { config = "mipsel-unknown-linux-gnu";         } // platforms.gcc_mips32r2_o32;
 
   # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
-  mips64-linux-gnuabin32        = { config = "mips64-unknown-linux-gnuabin32";        } // platforms.gcc_mips64r2_n32;
-  mips64el-linux-gnuabin32      = { config = "mips64el-unknown-linux-gnuabin32";      } // platforms.gcc_mips64r2_n32;
-  mipsisa64r6-linux-gnuabin32   = { config = "mipsisa64r6-unknown-linux-gnuabin32";   } // platforms.gcc_mips64r6_n32;
-  mipsisa64r6el-linux-gnuabin32 = { config = "mipsisa64r6el-unknown-linux-gnuabin32"; } // platforms.gcc_mips64r6_n32;
+  mips64-linux-gnuabin32   = { config = "mips64-unknown-linux-gnuabin32";   } // platforms.gcc_mips64r2_n32;
+  mips64el-linux-gnuabin32 = { config = "mips64el-unknown-linux-gnuabin32"; } // platforms.gcc_mips64r2_n32;
 
   # 64bit pointers
-  mips64-linux-gnuabi64         = { config = "mips64-unknown-linux-gnuabi64";         } // platforms.gcc_mips64r2_64;
-  mips64el-linux-gnuabi64       = { config = "mips64el-unknown-linux-gnuabi64";       } // platforms.gcc_mips64r2_64;
-  mipsisa64r6-linux-gnuabi64    = { config = "mipsisa64r6-unknown-linux-gnuabi64";    } // platforms.gcc_mips64r6_64;
-  mipsisa64r6el-linux-gnuabi64  = { config = "mipsisa64r6el-unknown-linux-gnuabi64";  } // platforms.gcc_mips64r6_64;
+  mips64-linux-gnuabi64    = { config = "mips64-unknown-linux-gnuabi64";    } // platforms.gcc_mips64r2_64;
+  mips64el-linux-gnuabi64  = { config = "mips64el-unknown-linux-gnuabi64";  } // platforms.gcc_mips64r2_64;
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
@@ -133,6 +131,20 @@ rec {
   riscv32-embedded = {
     config = "riscv32-none-elf";
     libc = "newlib";
+  };
+
+  mips64-embedded = {
+    config = "mips64-none-elf";
+    libc = "newlib";
+  };
+
+  mips-embedded = {
+    config = "mips-none-elf";
+    libc = "newlib";
+  };
+
+  loongarch64-linux = {
+    config = "loongarch64-unknown-linux-gnu";
   };
 
   mmix = {
@@ -303,15 +315,18 @@ rec {
 
   # BSDs
 
+  x86_64-freebsd = {
+    config = "x86_64-unknown-freebsd13";
+    useLLVM = true;
+  };
+
   x86_64-netbsd = {
     config = "x86_64-unknown-netbsd";
-    libc = "nblibc";
   };
 
   # this is broken and never worked fully
   x86_64-netbsd-llvm = {
     config = "x86_64-unknown-netbsd";
-    libc = "nblibc";
     useLLVM = true;
   };
 
@@ -326,6 +341,9 @@ rec {
 
   # Ghcjs
   ghcjs = {
-    config = "js-unknown-ghcjs";
+    # This triple is special to GHC/Cabal/GHCJS and not recognized by autotools
+    # See: https://gitlab.haskell.org/ghc/ghc/-/commit/6636b670233522f01d002c9b97827d00289dbf5c
+    # https://github.com/ghcjs/ghcjs/issues/53
+    config = "javascript-unknown-ghcjs";
   };
 }

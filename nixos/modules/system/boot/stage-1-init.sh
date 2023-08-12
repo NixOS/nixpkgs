@@ -73,7 +73,7 @@ trap 'fail' 0
 
 # Print a greeting.
 info
-info "[1;32m<<< NixOS Stage 1 >>>[0m"
+info "[1;32m<<< @distroName@ Stage 1 >>>[0m"
 info
 
 # Make several required directories.
@@ -112,6 +112,28 @@ waitDevice() {
             [ $try -ne 0 ]
         fi
     done
+}
+
+# Create the mount point if required.
+makeMountPoint() {
+    local device="$1"
+    local mountPoint="$2"
+    local options="$3"
+
+    local IFS=,
+
+    # If we're bind mounting a file, the mount point should also be a file.
+    if ! [ -d "$device" ]; then
+        for opt in $options; do
+            if [ "$opt" = bind ] || [ "$opt" = rbind ]; then
+                mkdir -p "$(dirname "/mnt-root$mountPoint")"
+                touch "/mnt-root$mountPoint"
+                return
+            fi
+        done
+    fi
+
+    mkdir -m 0755 -p "/mnt-root$mountPoint"
 }
 
 # Mount special file systems.
@@ -234,8 +256,7 @@ done
 mkdir -p /lib
 ln -s @modulesClosure@/lib/modules /lib/modules
 ln -s @modulesClosure@/lib/firmware /lib/firmware
-# see comment in stage-1.nix for explanation
-echo @extraUtils@/bin/modprobe-kernel > /proc/sys/kernel/modprobe
+echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
     modprobe $i
@@ -294,6 +315,9 @@ checkFS() {
     # Skip fsck for inherently readonly filesystems.
     if [ "$fsType" = squashfs ]; then return 0; fi
 
+    # Skip fsck.erofs because it is still experimental.
+    if [ "$fsType" = erofs ]; then return 0; fi
+
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
         echo 'cannot check filesystem with type "auto"!'
@@ -342,6 +366,14 @@ checkFS() {
     return 0
 }
 
+escapeFstab() {
+    local original="$1"
+
+    # Replace space
+    local escaped="${original// /\\040}"
+    # Replace tab
+    echo "${escaped//$'\t'/\\011}"
+}
 
 # Function for mounting a file system.
 mountFS() {
@@ -364,22 +396,6 @@ mountFS() {
 
     checkFS "$device" "$fsType"
 
-    # Optionally resize the filesystem.
-    case $options in
-        *x-nixos.autoresize*)
-            if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
-                modprobe "$fsType"
-                echo "resizing $device..."
-                e2fsck -fp "$device"
-                resize2fs "$device"
-            elif [ "$fsType" = f2fs ]; then
-                echo "resizing $device..."
-                fsck.f2fs -fp "$device"
-                resize.f2fs "$device"
-            fi
-            ;;
-    esac
-
     # Create backing directories for overlayfs
     if [ "$fsType" = overlay ]; then
         for i in upper work; do
@@ -390,7 +406,7 @@ mountFS() {
 
     info "mounting $device on $mountPoint..."
 
-    mkdir -p "/mnt-root$mountPoint"
+    makeMountPoint "$device" "$mountPoint" "$optionsPrefixed"
 
     # For ZFS and CIFS mounts, retry a few times before giving up.
     # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.
@@ -403,6 +419,11 @@ mountFS() {
         n=$((n + 1))
     done
 
+    # For bind mounts, busybox has a tendency to ignore options, which can be a
+    # security issue (e.g. "nosuid"). Remounting the partition seems to fix the
+    # issue.
+    mount "/mnt-root$mountPoint" -o "remount,$optionsPrefixed"
+
     [ "$mountPoint" == "/" ] &&
         [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&
         lustrateRoot "/mnt-root"
@@ -414,7 +435,7 @@ lustrateRoot () {
     local root="$1"
 
     echo
-    echo -e "\e[1;33m<<< NixOS is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
+    echo -e "\e[1;33m<<< @distroName@ is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
     echo
 
     mkdir -m 0755 -p "$root/old-root.tmp"
@@ -430,7 +451,7 @@ lustrateRoot () {
         mv -v "$d" "$root/old-root.tmp"
     done
 
-    # Use .tmp to make sure subsequent invokations don't clash
+    # Use .tmp to make sure subsequent invocations don't clash
     mv -v "$root/old-root.tmp" "$root/old-root"
 
     mkdir -m 0755 -p "$root/etc"
@@ -555,6 +576,9 @@ while read -u 3 mountPoint; do
 
       umount /tmp-iso
       rmdir /tmp-iso
+      if [ -n "$isoPath" ] && [ $fsType = "iso9660" ] && mountpoint -q /findiso; then
+       umount /findiso
+      fi
       continue
     fi
 
@@ -566,7 +590,7 @@ while read -u 3 mountPoint; do
         continue
     fi
 
-    mountFS "$device" "$mountPoint" "$options" "$fsType"
+    mountFS "$device" "$(escapeFstab "$mountPoint")" "$(escapeFstab "$options")" "$fsType"
 done
 
 exec 3>&-

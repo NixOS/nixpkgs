@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "072s765jyzpdq8qqysdy0dld17m6sr9zfcs0ip2zk8c4imxaysnb";
   };
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   nativeBuildInputs = [
     cython
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  setupPyBuildFlags = "-I${openems}/include -L${openems}/lib -R${openems}/lib";
+  setupPyBuildFlags = [ "-I${openems}/include" "-L${openems}/lib" "-R${openems}/lib" ];
 
   meta = with lib; {
     description = "Python interface to CSXCAD";

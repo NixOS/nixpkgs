@@ -1,20 +1,22 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , cmake
 , rustPlatform
+, rustc
 , libiconv
 }:
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "0.2.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
     rev = "v${version}";
-    hash = "sha256-nJ4ercNykECDBqecuL8cdCl4DHgbgIUmbiFBG/jiOaA=";
+    hash = "sha256-/PSOAEtJtn9OykPiN3RhRv59wgQNJ0HoMyYS5RCdSCI=";
   };
 
   cargoRoot = "generator";
@@ -23,24 +25,16 @@ stdenv.mkDerivation rec {
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-4JVbHYlMOKztWPYW7tXQdvdNh/ygfpi0CY6Ly93VxsI=";
+    hash = "sha256-lJaK+0NmlnTsV3h5Pqpqd8uA3g8PGERWfq2aR7FtYrc=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   nativeBuildInputs = [
     cmake
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
-
-  cmakeFlags = [
-    "-DRust_CARGO=${rustPlatform.rust.cargo}/bin/cargo"
-
-    # tests cannot find cargo because Rust_CARGO is unset before tests
-    "-DCORROSION_BUILD_TESTS=OFF"
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ];
 
   meta = with lib; {

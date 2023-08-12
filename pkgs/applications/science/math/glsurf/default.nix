@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
   ] ++ (with ocamlPackages; [
     camlp4
     lablgl
-    camlimages_4_2_4
+    camlimages
+    num
   ]);
 
   postPatch = ''
@@ -48,6 +49,9 @@ stdenv.mkDerivation rec {
       substituteInPlace "$f" --replace "+camlp4" \
         "${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4"
     done
+
+    # Fatal error: exception Sys_error("Mutex.unlock: Operation not permitted")
+    sed -i "/gl_started/d" src/draw.ml* src/main.ml
   '';
 
   installPhase = ''
@@ -63,5 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://raffalli.eu/~christophe/glsurf/";
     description = "A program to draw implicit surfaces and curves";
     license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

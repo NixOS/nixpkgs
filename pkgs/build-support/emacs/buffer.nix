@@ -73,7 +73,5 @@ rec {
         haskell-package-env =
           builtins.head haskell-package.env.nativeBuildInputs;
     in
-      if is-haskell-package
-        then withPackages [ haskell-package-env ]
-        else {};
+      lib.optionalAttrs is-haskell-package (withPackages [ haskell-package-env ]);
 }

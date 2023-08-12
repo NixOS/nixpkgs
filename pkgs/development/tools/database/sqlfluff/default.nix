@@ -5,13 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "1.3.1";
+  version = "2.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IUHV08X6U5GHuKsFh6yYetKX+nRf7C6PIXb+b7AD9po=";
+    hash = "sha256-TRu9pDvVQIyT9aZR9MSYOtTbsUV596OcAZlGY4VrrKY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -31,23 +32,22 @@ python3.pkgs.buildPythonApplication rec {
     toml
     tqdm
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ] ++ lib.optionals (pythonOlder "3.8") [
     backports.cached-property
     importlib_metadata
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     hypothesis
     pytestCheckHook
   ];
 
   disabledTestPaths = [
     # Don't run the plugin related tests
-    "test/core/plugin_test.py"
-    "plugins/sqlfluff-templater-dbt"
     "plugins/sqlfluff-plugin-example/test/rules/rule_test_cases_test.py"
+    "plugins/sqlfluff-templater-dbt"
+    "test/core/plugin_test.py"
+    "test/diff_quality_plugin_test.py"
   ];
 
   disabledTests = [
@@ -64,6 +64,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "SQL linter and auto-formatter";
     homepage = "https://www.sqlfluff.com/";
+    changelog = "https://github.com/sqlfluff/sqlfluff/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

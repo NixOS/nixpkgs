@@ -17,7 +17,7 @@ showSyntax() {
 
 # Parse the command line.
 origArgs=("$@")
-copyClosureFlags=()
+copyFlags=()
 extraBuildFlags=()
 lockFlags=()
 flakeFlags=(--extra-experimental-features 'nix-command flakes')
@@ -28,7 +28,8 @@ rollback=
 upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
-buildHost=localhost
+specialisation=
+buildHost=
 targetHost=
 remoteSudo=
 verboseScript=
@@ -73,10 +74,10 @@ while [ "$#" -gt 0 ]; do
         upgrade=1
         upgrade_all=1
         ;;
-      --use-substitutes|-s)
-        copyClosureFlags+=("$i")
+      --use-substitutes|--substitute-on-destination|-s)
+        copyFlags+=("-s")
         ;;
-      -I|--max-jobs|-j|--cores|--builders)
+      -I|--max-jobs|-j|--cores|--builders|--log-format)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
@@ -105,6 +106,14 @@ while [ "$#" -gt 0 ]; do
             profile="/nix/var/nix/profiles/system-profiles/$1"
             mkdir -p -m 0755 "$(dirname "$profile")"
         fi
+        shift 1
+        ;;
+      --specialisation|-c)
+        if [ -z "$1" ]; then
+            log "$0: ‘--specialisation’ requires an argument"
+            exit 1
+        fi
+        specialisation="$1"
         shift 1
         ;;
       --build-host|h)
@@ -148,16 +157,6 @@ if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
     maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
 fi
 
-if [[ -z "$buildHost" && -n "$targetHost" ]]; then
-    buildHost="$targetHost"
-fi
-if [ "$targetHost" = localhost ]; then
-    targetHost=
-fi
-if [ "$buildHost" = localhost ]; then
-    buildHost=
-fi
-
 # log the given argument to stderr if verbose mode is on
 logVerbose() {
     if [ -n "$verboseScript" ]; then
@@ -193,12 +192,12 @@ copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --from "$buildHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --from "$buildHost" "$1"
         elif [ -z "$buildHost" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
         else
-            buildHostCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
+            buildHostCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
         fi
     fi
 }
@@ -293,7 +292,7 @@ nixFlakeBuild() {
         drv="$(runCmd nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             logVerbose "Running nix with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy "${copyFlags[@]}" --derivation --to "ssh://$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             log "nix eval failed"
@@ -371,6 +370,10 @@ if [[ -n $flake ]]; then
     fi
 fi
 
+if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; then
+    log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
+    exit 1
+fi
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 
@@ -477,7 +480,7 @@ if [[ -n $buildNix && -z $flake ]]; then
     if [ -a "$nixDrv" ]; then
         nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
         if [ -n "$buildHost" ]; then
-            nix-copy-closure "${copyClosureFlags[@]}" --to "$buildHost" "$nixDrv"
+            nix-copy-closure "${copyFlags[@]}" --to "$buildHost" "$nixDrv"
             # The nix build produces multiple outputs, we add them all to the remote path
             for p in $(buildHostCmd nix-store -r "$(readlink "$nixDrv")" "${buildArgs[@]}"); do
                 remoteNix="$remoteNix${remoteNix:+:}$p/bin"
@@ -565,7 +568,18 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
-    if ! targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action"; then
+    if [[ -z "$specialisation" ]]; then
+        cmd="$pathToConfig/bin/switch-to-configuration"
+    else
+        cmd="$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration"
+
+        if [[ ! -f "$cmd" ]]; then
+            log "error: specialisation not found: $specialisation"
+            exit 1
+        fi
+    fi
+
+    if ! targetHostCmd "$cmd" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi

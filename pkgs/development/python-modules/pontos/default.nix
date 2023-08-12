@@ -4,26 +4,30 @@
 , fetchFromGitHub
 , git
 , httpx
+, lxml
 , packaging
 , poetry-core
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
+, semver
 , rich
 , tomlkit
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "22.8.1";
+  version = "23.7.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-oWk6t7PocF7go7EE7nQjHA78G0Q1tAOXBff2zKXDvgU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qaeVQQmgEfuQ46us2l74W2yWZnUzePyT8+f5JQR0RdM=";
   };
 
   nativeBuildInputs = [
@@ -33,20 +37,21 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     colorful
     httpx
+    lxml
     packaging
+    python-dateutil
+    semver
     rich
+    typing-extensions
     tomlkit
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ httpx.optional-dependencies.http2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'packaging = "^20.3"' 'packaging = "*"'
-  '';
 
   disabledTests = [
     "PrepareTestCase"
@@ -60,6 +65,8 @@ buildPythonPackage rec {
     # Network access
     "test_fail_sign_on_upload_fail"
     "test_successfully_sign"
+    # calls git log, but our fetcher removes .git
+    "test_git_error"
   ];
 
   pythonImportsCheck = [
@@ -69,6 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
+    changelog = "https://github.com/greenbone/pontos/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

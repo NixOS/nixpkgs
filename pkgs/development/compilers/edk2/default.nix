@@ -5,7 +5,6 @@
 , libuuid
 , python3
 , bc
-, llvmPackages_9
 , lib
 , buildPackages
 }:
@@ -17,30 +16,27 @@ targetArch = if stdenv.isi686 then
   "IA32"
 else if stdenv.isx86_64 then
   "X64"
+else if stdenv.isAarch32 then
+  "ARM"
 else if stdenv.isAarch64 then
   "AARCH64"
 else
   throw "Unsupported architecture";
-
-buildStdenv = if stdenv.isDarwin then
-  llvmPackages_9.stdenv
-else
-  stdenv;
 
 buildType = if stdenv.isDarwin then
     "CLANGPDB"
   else
     "GCC5";
 
-edk2 = buildStdenv.mkDerivation {
+edk2 = stdenv.mkDerivation {
   pname = "edk2";
-  version = "202202";
+  version = "202305";
 
   patches = [
     # pass targetPrefix as an env var
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
-      sha256 = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
+      hash = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
     })
   ];
 
@@ -50,7 +46,7 @@ edk2 = buildStdenv.mkDerivation {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    sha256 = "0srmhi6c27n5vyl01nhh0fq8k4vngbwn79siyjvcacjbj2ivhh8d";
+    hash = "sha256-htOvV43Hw5K05g0SF3po69HncLyma3BtgpqYSdzRG4s=";
   };
 
   nativeBuildInputs = [ pythonEnv ];
@@ -60,10 +56,9 @@ edk2 = buildStdenv.mkDerivation {
   # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
   ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
 
-  makeFlags = [ "-C BaseTools" ]
-    ++ lib.optional (stdenv.cc.isClang) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
+  makeFlags = [ "-C BaseTools" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
+  env.NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
 
   hardeningDisable = [ "format" "fortify" ];
 
@@ -83,11 +78,11 @@ edk2 = buildStdenv.mkDerivation {
     description = "Intel EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64;
   };
 
   passthru = {
-    mkDerivation = projectDscPath: attrsOrFun: buildStdenv.mkDerivation (finalAttrs:
+    mkDerivation = projectDscPath: attrsOrFun: stdenv.mkDerivation (finalAttrs:
     let
       attrs = lib.toFunction attrsOrFun finalAttrs;
     in
@@ -114,7 +109,7 @@ edk2 = buildStdenv.mkDerivation {
 
       buildPhase = ''
         runHook preBuild
-        build -a ${targetArch} -b RELEASE -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
+        build -a ${targetArch} -b ${attrs.buildConfig or "RELEASE"} -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
         runHook postBuild
       '';
 

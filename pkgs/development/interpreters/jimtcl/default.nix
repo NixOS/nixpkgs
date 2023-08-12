@@ -10,17 +10,18 @@
 , readline
 , SDL
 , SDL_gfx
+, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "jimtcl";
-  version = "0.81";
+  version = "0.82";
 
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
     rev = version;
-    sha256 = "sha256-OpM9y7fQ+18qxl3/5wUCrNA9qiCdA0vTHqLYSw2lvJs=";
+    sha256 = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +30,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    sqlite readline SDL SDL_gfx
+    sqlite
+    readline
+    SDL
+    SDL_gfx
+    openssl
   ];
 
   configureFlags = [
@@ -51,14 +56,12 @@ stdenv.mkDerivation rec {
   preCheck = ''
     # test exec2-3.2 fails depending on platform or sandboxing (?)
     rm tests/exec2.test
+    # requires internet access
+    rm tests/ssl.test
   '';
 
   # test posix-1.6 needs the "hostname" command
-  checkInputs = [ inetutils ];
-
-  postInstall = ''
-    ln -sr $out/lib/libjim.so.${version} $out/lib/libjim.so
-  '';
+  nativeCheckInputs = [ inetutils ];
 
   meta = {
     description = "An open source small-footprint implementation of the Tcl programming language";

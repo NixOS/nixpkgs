@@ -24,19 +24,19 @@ let
 
 in buildPythonPackage rec {
   pname = "cython";
-  version = "0.29.30";
+  version = "0.29.36";
 
   src = fetchPypi {
     pname = "Cython";
     inherit version;
-    sha256 = "sha256-IjW2Laj+b6i5lCLI5YPy+5XhQ4Z9M3tcdeS5oahl+eM=";
+    hash = "sha256-QcDP0tdU44PJ7rle/8mqSrhH0Ml0cHfd18Dctow7wB8=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gdb numpy ncurses
   ];
 
@@ -46,10 +46,18 @@ in buildPythonPackage rec {
     # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.
     # it does not affect Python code unless the code explicitly uses the feature.
     # trashcan support is needed to avoid stack overflows during object deallocation in sage (https://trac.sagemath.org/ticket/27267)
+    ./trashcan.patch
+    # The above commit introduces custom trashcan macros, as well as
+    # compiler changes to use them in Cython-emitted code. The latter
+    # change is still useful, but the former has been upstreamed as of
+    # Python 3.8, and the patch below makes Cython use the upstream
+    # trashcan macros whenever available. This is needed for Python
+    # 3.11 support, because the API used in Cython's implementation
+    # changed: https://github.com/cython/cython/pull/4475
     (fetchpatch {
-      name = "trashcan.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/cython/patches/trashcan.patch?id=4569a839f070a1a38d5dbce2a4d19233d25aeed2";
-      sha256 = "sha256-+pOF1XNTEtNseLpqPzrc1Jfwt5hGx7doUoccIhNneYY=";
+      name = "disable-trashcan.patch";
+      url = "https://github.com/cython/cython/commit/e337825cdcf5e94d38ba06a0cb0188e99ce0cc92.patch";
+      hash = "sha256-q0f63eetKrDpmP5Z4v8EuGxg26heSyp/62OYqhRoSso=";
     })
   ];
 
@@ -66,7 +74,12 @@ in buildPythonPackage rec {
   doCheck = false;
   # doCheck = !stdenv.isDarwin;
 
+  # force regeneration of generated code in source distributions
+  # https://github.com/cython/cython/issues/5089
+  setupHook = ./setup-hook.sh;
+
   meta = {
+    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = "https://cython.org";
     license = lib.licenses.asl20;

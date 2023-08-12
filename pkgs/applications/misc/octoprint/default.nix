@@ -1,10 +1,12 @@
 { pkgs
 , stdenv
+, callPackage
 , lib
 , fetchFromGitHub
 , python3
 , substituteAll
 , nix-update-script
+, nixosTests
   # To include additional plugins, pass them here as an overlay.
 , packageOverrides ? self: super: { }
 }:
@@ -43,7 +45,7 @@ let
                 owner = "OctoPrint";
                 repo = "OctoPrint-FirmwareCheck";
                 rev = version;
-                sha256 = "0hl0612x0h4pcwsrga5il5x3m04j37cmyzh2dg1kl971cvrw79n2";
+                hash = "sha256-wqbD82bhJDrDawJ+X9kZkoA6eqGxqJc1Z5dA0EUwgEI=";
               };
               doCheck = false;
             };
@@ -54,18 +56,22 @@ let
           self: super: {
             octoprint-pisupport = self.buildPythonPackage rec {
               pname = "OctoPrint-PiSupport";
-              version = "2022.6.13";
+              version = "2023.5.24";
               format = "setuptools";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-PiSupport";
                 rev = version;
-                sha256 = "sha256-3z5Btl287W3j+L+MQG8FOWt21smML0vpmu9BP48B9A0=";
+                hash = "sha256-KfkZXJ2f02G2ee+J1w+YQRKz+LSWwxVIIwmdevDGhew=";
               };
 
               # requires octoprint itself during tests
               doCheck = false;
+              postPatch = ''
+                substituteInPlace octoprint_pi_support/__init__.py \
+                  --replace /usr/bin/vcgencmd ${self.pkgs.libraspberrypi}/bin/vcgencmd
+              '';
             };
           }
         )
@@ -74,16 +80,17 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.8.2";
+              version = "1.9.2";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                sha256 = "sha256-uJuGeDS4TnGH1r+6oHtcJDZVGM7hDmkJpB35B1JtqQ0=";
+                hash = "sha256-DSngV8nWHNqfPEBIfGq3HQeC1p9s6Q+GX+LcJiAiS4E=";
               };
 
-              propagatedBuildInputs = with super; [
+              propagatedBuildInputs = with self; [
+                argon2-cffi
                 blinker
                 cachelib
                 click
@@ -94,7 +101,8 @@ let
                 flask
                 flask-babel
                 flask_assets
-                flask_login
+                flask-login
+                flask-limiter
                 frozendict
                 future
                 itsdangerous
@@ -107,6 +115,7 @@ let
                 octoprint-filecheck
                 octoprint-firmwarecheck
                 octoprint-pisupport
+                passlib
                 pathvalidate
                 pkginfo
                 pip
@@ -129,11 +138,13 @@ let
                 wrapt
                 zeroconf
                 zipstream-ng
+                class-doc
+                pydantic
               ] ++ lib.optionals stdenv.isDarwin [
                 py.pkgs.appdirs
               ];
 
-              checkInputs = with super; [
+              nativeCheckInputs = with self; [
                 ddt
                 mock
                 pytestCheckHook
@@ -143,7 +154,7 @@ let
                 # substitute pip and let it find out, that it can't write anywhere
                 (substituteAll {
                   src = ./pip-path.patch;
-                  pip = "${super.pip}/bin/pip";
+                  pip = "${self.pip}/bin/pip";
                 })
 
                 # hardcore path to ffmpeg and hide related settings
@@ -169,6 +180,8 @@ let
                     "Flask-Login"
                     "werkzeug"
                     "flask"
+                    "Flask-Limiter"
+                    "blinker"
                   ];
                 in
                 ''
@@ -196,8 +209,12 @@ let
               ];
 
               passthru = {
-                python = self.python;
-                updateScript = nix-update-script { attrPath = "octoprint"; };
+                inherit (self) python;
+                updateScript = nix-update-script { };
+                tests = {
+                  plugins = (callPackage ./plugins.nix { }) super self;
+                  inherit (nixosTests) octoprint;
+                };
               };
 
               meta = with lib; {
@@ -209,7 +226,7 @@ let
             };
           }
         )
-        (import ./plugins.nix { inherit pkgs; })
+        (callPackage ./plugins.nix { })
         packageOverrides
       ]
     );

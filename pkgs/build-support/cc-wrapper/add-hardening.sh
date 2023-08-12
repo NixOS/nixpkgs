@@ -12,7 +12,16 @@ done
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
   unset -v "hardeningEnableMap[$flag]"
+  # fortify being unsupported implies fortify3 is unsupported
+  if [[ "$flag" = 'fortify' ]] ; then
+    unset -v "hardeningEnableMap['fortify3']"
+  fi
 done
+
+# make fortify and fortify3 mutually exclusive
+if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
+  unset -v "hardeningEnableMap['fortify']"
+fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
   declare -a allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
@@ -36,9 +45,23 @@ fi
 
 for flag in "${!hardeningEnableMap[@]}"; do
   case $flag in
-    fortify)
-      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
-      hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
+    fortify | fortify3)
+      # Use -U_FORTIFY_SOURCE to avoid warnings on toolchains that explicitly
+      # set -D_FORTIFY_SOURCE=0 (like 'clang -fsanitize=address').
+      hardeningCFlags+=('-O2' '-U_FORTIFY_SOURCE')
+      case $flag in
+        fortify)
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
+          hardeningCFlags+=('-D_FORTIFY_SOURCE=2')
+        ;;
+        fortify3)
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify3 >&2; fi
+          hardeningCFlags+=('-D_FORTIFY_SOURCE=3')
+        ;;
+        *)
+          # Ignore unsupported.
+          ;;
+      esac
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
@@ -48,7 +71,7 @@ for flag in "${!hardeningEnableMap[@]}"; do
       # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
       hardeningCFlags=('-fPIE' "${hardeningCFlags[@]}")
-      if [[ ! (" $* " =~ " -shared " || " $* " =~ " -static ") ]]; then
+      if [[ ! (" ${params[*]} " =~ " -shared " || " ${params[*]} " =~ " -static ") ]]; then
         if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
         hardeningCFlags=('-pie' "${hardeningCFlags[@]}")
       fi
@@ -58,8 +81,18 @@ for flag in "${!hardeningEnableMap[@]}"; do
       hardeningCFlags+=('-fPIC')
       ;;
     strictoverflow)
-       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
-      hardeningCFlags+=('-fno-strict-overflow')
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
+      if (( @isClang@ )); then
+        # In Clang, -fno-strict-overflow only serves to set -fwrapv and is
+        # reported as an unused CLI argument if -fwrapv or -fno-wrapv is set
+        # explicitly, so we side step that by doing the conversion here.
+        #
+        # See: https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/clang/lib/Driver/ToolChains/Clang.cpp#L6315
+        #
+        hardeningCFlags+=('-fwrapv')
+      else
+        hardeningCFlags+=('-fno-strict-overflow')
+      fi
       ;;
     format)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi

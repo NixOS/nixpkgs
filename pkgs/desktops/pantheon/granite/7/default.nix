@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , python3
 , meson
 , ninja
+, sassc
 , vala
 , pkg-config
 , libgee
@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "7.0.0";
+  version = "7.3.0";
 
   outputs = [ "out" "dev" ];
 
@@ -27,18 +27,8 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fuyjQDH3C8qRYuAfQDDeW3aSWVTLtGzMAjcuAHCB1Zw=";
+    sha256 = "sha256-siFS8BiHVlDtM5odL0Lf1aRMoG6qqQOnbsXGKVyc218=";
   };
-
-  patches = [
-    # MessageDialog: Fix large height bug
-    # https://github.com/elementary/granite/pull/616
-    (fetchpatch {
-      url = "https://github.com/elementary/granite/commit/28e9b60fc8257b2d8e76412518e96a7e03efc6e4.patch";
-      sha256 = "sha256-3VH5bhX8tuNR3Iabz3JjkLfVVyO5eSnYacFgdqurU0A=";
-      excludes = [ "data/granite.appdata.xml.in" ];
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -47,6 +37,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    sassc
     vala
     wrapGAppsHook4
   ];
@@ -64,9 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.granite7";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

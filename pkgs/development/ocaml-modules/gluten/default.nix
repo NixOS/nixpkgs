@@ -3,24 +3,25 @@
 , faraday
 , fetchurl
 , lib
+, ke
 }:
 
 buildDunePackage rec {
   pname = "gluten";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchurl {
     url = "https://github.com/anmonteiro/gluten/releases/download/${version}/gluten-${version}.tbz";
-    sha256 = "1pl0mpcprz8hmaiv28p7w51qfcx7s76zdkak0vm5cazbjl38nc46";
+    hash = "sha256-9jctX3G/nQJTGJ7ClSBEiXwxeu0GcT9N+EmPfLuSFOU=";
   };
 
-  minimalOCamlVersion = "4.06";
-
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     bigstringaf
     faraday
+    ke
   ];
 
   doCheck = false; # No tests

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bdftopcf, mkfontdir, mkfontscale }:
+{ lib, stdenv, fetchurl, bdftopcf, mkfontdir, mkfontscale }:
 
 stdenv.mkDerivation rec {
   pname = "dosemu-fonts";
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Various fonts from the DOSEmu project";
+    license = lib.licenses.gpl2Only;
   };
 }

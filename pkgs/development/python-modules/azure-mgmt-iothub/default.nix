@@ -6,17 +6,20 @@
 , azure-common
 , azure-mgmt-core
 , azure-mgmt-nspkg
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-iothub";
-  version = "2.2.0";
+  version = "2.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-nsAeVhs5N8bpwYenmRwJmqF/IAqz/ulSoYIeOU5l0eM=";
+    hash = "sha256-enpNE5kVyGK+ctrGt1gt6633rNvT9FM76kSQ7prb1Wo=";
   };
 
   propagatedBuildInputs = [
@@ -24,8 +27,6 @@ buildPythonPackage rec {
     azure-mgmt-core
     msrest
     msrestazure
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
   ];
 
   # has no tests

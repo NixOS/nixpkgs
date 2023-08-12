@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool m4 pkg-config makeWrapper ];
 
-  buildInputs = [ SDL gtk2 libGLU libGL ];
+  buildInputs = [ SDL ] ++ lib.optionals (!stdenv.isDarwin) [ gtk2 libGLU libGL ];
+
+  outputs = [ "out" "dev" ];
 
   preConfigure = ''
     touch NEWS AUTHORS ChangeLog
@@ -35,9 +37,11 @@ stdenv.mkDerivation rec {
     -e 's,"SDL_audio.h",<SDL/SDL_audio.h>,' \
     -e 's,"SDL_thread.h",<SDL/SDL_thread.h>,' \
     -e 's,"SDL_types.h",<SDL/SDL_types.h>,' \
-      $out/include/smpeg/*.h
+      $dev/include/smpeg/*.h
 
-    wrapProgram $out/bin/smpeg-config \
+    moveToOutput bin/smpeg-config "$dev"
+
+    wrapProgram $dev/bin/smpeg-config \
       --prefix PATH ":" "${pkg-config}/bin" \
       --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';

@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ protobuf ];
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/codecserver.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace '=''${exec_prefix}//' '=/'
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/jketterl/codecserver";
     description = "Modular audio codec server";

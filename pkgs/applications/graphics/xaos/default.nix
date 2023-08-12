@@ -1,31 +1,50 @@
-{ lib, stdenv, fetchurl, aalib, gsl, libpng, libX11, xorgproto, libXext
-, libXt, zlib, gettext, intltool, perl }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, wrapQtAppsHook, copyDesktopItems }:
 
-stdenv.mkDerivation rec {
+let datapath = "$out/share/XaoS";
+in stdenv.mkDerivation rec {
   pname = "xaos";
-  version = "3.6";
+  version = "4.2.1";
+  outputs = [ "out" "man" ];
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xaos/${pname}-${version}.tar.gz";
-    sha256 = "15cd1cx1dyygw6g2nhjqq3bsfdj8sj8m4va9n75i0f3ryww3x7wq";
+  src = fetchFromGitHub {
+    owner = "xaos-project";
+    repo = pname;
+    rev = "release-${version}";
+    hash = "sha256-JLF8Mz/OHZEEJG/aryKQuJ6B5R8hPJdvln7mbKoqXFU=";
   };
 
-  hardeningDisable = [ "format" ];
+  nativeBuildInputs = [ qmake qttools wrapQtAppsHook copyDesktopItems ];
+  buildInputs = [ qtbase ];
 
-  buildInputs = [
-    aalib gsl libpng libX11 xorgproto libXext
-    libXt zlib gettext intltool perl
-  ];
+  QMAKE_LRELEASE = "lrelease";
+  DEFINES = [ "USE_OPENGL" "USE_FLOAT128" ];
 
-  preConfigure = ''
-    sed -e s@/usr/@"$out/"@g -i configure $(find . -name 'Makefile*')
-    mkdir -p $out/share/locale
+  postPatch = ''
+    substituteInPlace src/include/config.h \
+      --replace "/usr/share/XaoS" "${datapath}"
   '';
 
-  meta = {
-    homepage = "http://xaos.sourceforge.net/";
-    description = "Fractal viewer";
+  desktopItems = [ "xdg/xaos.desktop" ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D bin/xaos "$out/bin/xaos"
+
+    mkdir -p "${datapath}"
+    cp -r tutorial examples catalogs "${datapath}"
+
+    install -D "xdg/${pname}.png" "$out/share/icons/${pname}.png"
+
+    install -D doc/xaos.6 "$man/man6/xaos.6"
+    runHook postInstall
+  '';
+
+  meta = src.meta // {
+    description = "Real-time interactive fractal zoomer";
+    homepage = "https://xaos-project.github.io/";
     license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

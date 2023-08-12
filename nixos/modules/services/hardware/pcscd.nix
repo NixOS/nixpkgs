@@ -5,6 +5,10 @@ with lib;
 let
   cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
 
+  package = if config.security.polkit.enable
+              then pkgs.pcscliteWithPolkit
+              else pkgs.pcsclite;
+
   pluginEnv = pkgs.buildEnv {
     name = "pcscd-plugins";
     paths = map (p: "${p}/pcsc/drivers") config.services.pcscd.plugins;
@@ -20,7 +24,6 @@ in
 
     plugins = mkOption {
       type = types.listOf types.package;
-      default = [ pkgs.ccid ];
       defaultText = literalExpression "[ pkgs.ccid ]";
       example = literalExpression "[ pkgs.pcsc-cyberjack ]";
       description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
@@ -49,8 +52,10 @@ in
 
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ pkgs.pcsclite ];
-    systemd.packages = [ (getBin pkgs.pcsclite) ];
+    environment.systemPackages = [ package ];
+    systemd.packages = [ (getBin package) ];
+
+    services.pcscd.plugins = [ pkgs.ccid ];
 
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
 
@@ -66,7 +71,7 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${getBin pkgs.pcsclite}/bin/pcscd -f -x -c ${cfgFile}" ];
+      serviceConfig.ExecStart = [ "" "${getBin package}/bin/pcscd -f -x -c ${cfgFile}" ];
     };
   };
 }

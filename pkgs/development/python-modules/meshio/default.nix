@@ -7,6 +7,7 @@
 , exdown
 , pytestCheckHook
 , rich
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -16,8 +17,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4kBpLX/yecErE8bl17QDYpqGrStE6SMJWLPwDB7DafA=";
+    hash = "sha256-4kBpLX/yecErE8bl17QDYpqGrStE6SMJWLPwDB7DafA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -26,7 +31,7 @@ buildPythonPackage rec {
     rich
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     exdown
     pytestCheckHook
   ];

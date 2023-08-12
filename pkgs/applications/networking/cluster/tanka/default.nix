@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "tanka";
-  version = "0.22.1";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MMQv3/Ft6/FUueGEXGqYWAYy4zc2R6LASbh2x7eJNdQ=";
+    sha256 = "sha256-xKB/SKiw3cKqdpl869Bs/NO1Jbrla8Un0hH4kIGqAPs=";
   };
 
-  vendorSha256 = "sha256-QwtcWzJbusa8BxtG5xmGUgqG0qCMSpkzbmes/x3lnWc=";
+  vendorHash = "sha256-+BCUQ+czqWkxbDoSvCaAxewTN0SuI+hCHEQpLOvNGj4=";
 
   doCheck = false;
 
   subPackages = [ "cmd/tk" ];
 
-  ldflags = [ "-s" "-w" "-extldflags '-static'" "-X github.com/grafana/tanka/pkg/tanka.CURRENT_VERSION=v${version}" ];
+  ldflags = [ "-s" "-w" "-extldflags '-static'" "-X github.com/grafana/tanka/pkg/tanka.CurrentVersion=v${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,6 +32,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ mikefaille ];
     mainProgram = "tk";
-    platforms = platforms.unix;
   };
 }

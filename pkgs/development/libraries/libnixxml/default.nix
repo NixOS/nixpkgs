@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     glib
     nix
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     nix
   ];
 

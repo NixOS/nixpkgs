@@ -2,15 +2,15 @@
 
 buildDunePackage rec {
   pname = "ff-sig";
-  version = "0.6.1";
+  version = "0.6.2";
   src = fetchFromGitLab {
-    owner = "dannywillems";
-    repo = "ocaml-ff";
+    owner = "nomadic-labs";
+    repo = "cryptography/ocaml-ff";
     rev = version;
-    sha256 = "0p42ivyfbn1pwm18773y4ga9cm64ysha0rplzvrnhszg01anarc0";
+    sha256 = "sha256-IoUH4awMOa1pm/t8E5io87R0TZsAxJjGWaXhXjn/w+Y=";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     zarith
@@ -19,7 +19,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    homepage = "https://gitlab.com/dannywillems/ocaml-ff";
+    inherit (src.meta) homepage;
     description = "Minimal finite field signatures";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];

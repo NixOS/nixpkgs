@@ -10,21 +10,21 @@
 
 buildPythonPackage rec {
   pname = "siosocks";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-k2+qTtxkF0rT5LLPW8icePbf9jNopdo9uDp3NPA9SRo=";
+    hash = "sha256-uja79vWhPYOhhTUBIh+XpS4GnrYJy0/XpDXXQjnyHWM=";
   };
 
   propagatedBuildInputs = [
     trio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     pytest-trio

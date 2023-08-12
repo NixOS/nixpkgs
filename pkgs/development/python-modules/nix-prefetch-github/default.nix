@@ -9,18 +9,18 @@
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "5.2.1";
+  version = "7.0.0";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "seppeljordan";
     repo = "nix-prefetch-github";
     rev = "v${version}";
-    sha256 = "etmlRavPzJKLmyw3PYMgeMveFj4aVi38crHjdtDuaLg=";
+    hash = "sha256-oIR2iEiOBQ1VKouJTLqEiWWNzrMSJcnxK+m/j9Ia/m8=";
   };
 
-  checkInputs = [ unittestCheckHook git which ];
+  nativeCheckInputs = [ unittestCheckHook git which ];
 
   # ignore tests which are impure
   DISABLED_TESTS = "network requires_nix_build";

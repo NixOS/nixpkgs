@@ -11,7 +11,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           memorySize = 2048;
 
           libvirtd.enable = true;
+          libvirtd.hooks.qemu.is_working = "${pkgs.writeShellScript "testHook.sh" ''
+            touch /tmp/qemu_hook_is_working
+          ''}";
         };
+        boot.supportedFilesystems = [ "zfs" ];
+        networking.hostId = "deadbeef"; # needed for zfs
         networking.nameservers = [ "192.168.122.1" ];
         security.polkit.enable = true;
         environment.systemPackages = with pkgs; [ virt-manager ];
@@ -19,12 +24,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   };
 
   testScript = let
-    nixosInstallISO = (import ../release.nix {}).iso_minimal.${pkgs.hostPlatform.system};
+    nixosInstallISO = (import ../release.nix {}).iso_minimal.${pkgs.stdenv.hostPlatform.system};
     virshShutdownCmd = if pkgs.stdenv.isx86_64 then "shutdown" else "destroy";
   in ''
     start_all()
 
-    virthost.wait_for_unit("sockets.target")
+    virthost.wait_for_unit("multi-user.target")
 
     with subtest("enable default network"):
       virthost.succeed("virsh net-start default")
@@ -37,13 +42,27 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       virthost.succeed("virsh vol-create-as foo loop0p1 25MB")
       virthost.succeed("virsh vol-create-as foo loop0p2 50MB")
 
-    with subtest("check if nixos install iso boots and network works"):
+    with subtest("check if virsh zfs pools work"):
+      virthost.succeed("fallocate -l100m /tmp/zfs; losetup /dev/loop1 /tmp/zfs;")
+      virthost.succeed("zpool create zfs_loop /dev/loop1")
+      virthost.succeed("virsh pool-define-as --name zfs_storagepool --source-name zfs_loop --type zfs")
+      virthost.succeed("virsh pool-start zfs_storagepool")
+      virthost.succeed("virsh vol-create-as zfs_storagepool disk1 25MB")
+
+    with subtest("check if nixos install iso boots, network and autostart works"):
       virthost.succeed(
-        "virt-install -n nixos --osinfo=nixos-unstable --ram=1024 --graphics=none --disk=`find ${nixosInstallISO}/iso -type f | head -n1`,readonly=on --import --noautoconsole"
+        "virt-install -n nixos --osinfo nixos-unstable --memory 1024 --graphics none --disk `find ${nixosInstallISO}/iso -type f | head -n1`,readonly=on --import --noautoconsole --autostart"
       )
       virthost.succeed("virsh domstate nixos | grep running")
       virthost.wait_until_succeeds("ping -c 1 nixos")
       virthost.succeed("virsh ${virshShutdownCmd} nixos")
       virthost.wait_until_succeeds("virsh domstate nixos | grep 'shut off'")
+      virthost.shutdown()
+      virthost.wait_for_unit("multi-user.target")
+      virthost.wait_until_succeeds("ping -c 1 nixos")
+
+    with subtest("test if hooks are linked and run"):
+      virthost.succeed("ls /var/lib/libvirt/hooks/qemu.d/is_working")
+      virthost.succeed("ls /tmp/qemu_hook_is_working")
   '';
 })

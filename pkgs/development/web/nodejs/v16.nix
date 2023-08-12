@@ -5,20 +5,19 @@ let
     inherit openssl;
     python = python3;
   };
+
+  npmPatches = callPackage ./npm-patches.nix { };
 in
   buildNodejs {
     inherit enableNpm;
-    version = "16.17.0";
-    sha256 = "sha256-HSjChWheRGmFkhvJY1ZcqcDF9P2pdV5InAaAjql5VkU=";
+    # If you do upgrade here, please update in pkgs/top-level/release.nix
+    # the permitted insecure version to ensure it gets cached for our users
+    # and backport this to stable release (23.05).
+    version = "16.20.2";
+    sha256 = "sha256-V28aA8RV5JGo0TK1h+trO4RlH8iXS7NjhDPdRNIsj0k=";
     patches = [
       ./disable-darwin-v8-system-instrumentation.patch
-      # Fix npm silently fail without a HOME directory https://github.com/npm/cli/issues/4996
-      (fetchpatch {
-        url = "https://github.com/npm/cli/commit/9905d0e24c162c3f6cc006fa86b4c9d0205a4c6f.patch";
-        sha256 = "sha256-RlabXWtjzTZ5OgrGf4pFkolonvTDIPlzPY1QcYDd28E=";
-        includes = [ "deps/npm/lib/npm.js" "deps/npm/lib/utils/log-file.js" ];
-        stripLen = 1;
-        extraPrefix = "deps/npm/";
-      })
-    ];
+      ./bypass-darwin-xcrun-node16.patch
+      ./node-npm-build-npm-package-logic-node16.patch
+    ] ++ npmPatches;
   }

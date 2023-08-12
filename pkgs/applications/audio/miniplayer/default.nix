@@ -1,17 +1,18 @@
 { lib
 , python3Packages
+, fetchPypi
 }:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "miniplayer";
-  version = "1.7.0";
+  version = "1.8.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JUlUFj/5DOTLa1XCZX/9Nj3Z9W+k4gnpJONiS4qNBIU=";
+    hash = "sha256-iUUsVIDLQAiaMomfA2LvvJZ2ePhgADtC6GCwIpRC1MA=";
   };
 
   propagatedBuildInputs = [

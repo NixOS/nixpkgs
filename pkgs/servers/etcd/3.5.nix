@@ -1,13 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub, symlinkJoin }:
+{ lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests }:
 
 let
-  version = "3.5.4";
+  version = "3.5.9";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "sha256-mTQHxLLfNiihvHg5zaTeVNWKuzvE0KBiJdY3qMJHMCM=";
+    hash = "sha256-Vp8U49fp0FowIuSSvbrMWjAKG2oDO1o0qO4izSnTR3U=";
   };
 
   CGO_ENABLED = 0;
@@ -16,7 +16,7 @@ let
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline zowoq endocrimes ];
+    maintainers = with maintainers; [ offline endocrimes ];
     platforms = platforms.darwin ++ platforms.linux;
   };
 
@@ -25,11 +25,11 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorSha256 = "sha256-4djUQvWp9hScua9l1ZTq298zWSeDYRDojEt2AWmarzw=";
+    vendorHash = "sha256-vu5VKHnDbvxSd8qpIFy0bA88IIXLaQ5S8dVUJEwnKJA=";
 
     modRoot = "./server";
 
-    postBuild = ''
+    preInstall = ''
       mv $GOPATH/bin/{server,etcd}
     '';
 
@@ -45,7 +45,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorSha256 = "sha256-nk56XGpNsDwcGrTKithKGnPCX0NhpQmzNSXHk3vmdtg=";
+    vendorHash = "sha256-i60rKCmbEXkdFOZk2dTbG5EtYKb5eCBSyMcsTtnvATs=";
 
     modRoot = "./etcdutl";
   };
@@ -55,7 +55,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorSha256 = "sha256-WIMYrXfay6DMz+S/tIc/X4ffMizxub8GS1DDgIR40D4=";
+    vendorHash = "sha256-awl/4kuOjspMVEwfANWK0oi3RId6ERsFkdluiRaaXlA=";
 
     modRoot = "./etcdctl";
   };
@@ -65,7 +65,10 @@ symlinkJoin {
 
   inherit meta version;
 
-  passthru = { inherit etcdserver etcdutl etcdctl; };
+  passthru = {
+    inherit etcdserver etcdutl etcdctl;
+    tests = { inherit (nixosTests) etcd etcd-cluster; };
+  };
 
   paths = [
     etcdserver

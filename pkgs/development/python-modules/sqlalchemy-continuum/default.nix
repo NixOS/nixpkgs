@@ -1,23 +1,29 @@
 { lib
-, fetchPypi
 , buildPythonPackage
+, fetchPypi
 , flask
-, flask_login
+, flask-login
 , flask-sqlalchemy
-, flexmock
+, psycopg2
+, pymysql
 , pytestCheckHook
+, pythonOlder
 , sqlalchemy
-, sqlalchemy-utils
 , sqlalchemy-i18n
+, sqlalchemy-utils
 }:
 
 buildPythonPackage rec {
-  pname = "SQLAlchemy-Continuum";
-  version = "1.3.12";
+  pname = "sqlalchemy-continuum";
+  version = "1.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "rlHl59MAQhsicMtZQT9rv1iQrDyVYJlawtyhvFaAM7o=";
+    pname = "SQLAlchemy-Continuum";
+    inherit version;
+    hash = "sha256-Rk+aWxBjUrXuRPE5MSyzWMWS0l7qrjU3wOrHLC+vteU=";
   };
 
   propagatedBuildInputs = [
@@ -25,21 +31,39 @@ buildPythonPackage rec {
     sqlalchemy-utils
   ];
 
-  # indicate tests that we don't have a database server at hand
-  DB = "sqlite";
+  passthru.optional-dependencies = {
+    flask = [
+      flask
+    ];
+    flask-login = [
+      flask-login
+    ];
+    flask-sqlalchemy = [
+      flask-sqlalchemy
+    ];
+    i18n = [
+      sqlalchemy-i18n
+    ];
+  };
 
-  checkInputs = [
+  nativeCheckInputs = [
+    psycopg2
+    pymysql
     pytestCheckHook
-    sqlalchemy-i18n
-    flask
-    flask_login
-    flask-sqlalchemy
-    flexmock
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  # Indicate tests that we don't have a database server at hand
+  env.DB = "sqlite";
+
+  pythonImportsCheck = [
+    "sqlalchemy_continuum"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/kvesteri/sqlalchemy-continuum/";
     description = "Versioning and auditing extension for SQLAlchemy";
+    homepage = "https://github.com/kvesteri/sqlalchemy-continuum/";
+    changelog = "https://github.com/kvesteri/sqlalchemy-continuum/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

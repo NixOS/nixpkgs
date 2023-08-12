@@ -7,10 +7,12 @@
 , intltool
 , autoreconfHook
 , wrapGAppsHook
+, cinnamon
 , lightdm
 , gtk3
 , pixman
 , libcanberra
+, libgnomekbd
 , libX11
 , libXext
 , linkFarm
@@ -20,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "1.5.9";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    sha256 = "sha256-UEzidH4ZWggcOWHHuAclHbbgATDBdogL99Ze0PlwRoc=";
+    sha256 = "sha256-OSL4Ls3bCua5ut8zWodeIH1SfevCbsS7BgBJYdcJaVE=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +42,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cinnamon.xapp
     lightdm
     gtk3
     pixman
     libcanberra
+    libgnomekbd # needed by XApp.KbdLayoutController
     libX11
     libXext
   ];
@@ -56,10 +60,15 @@ stdenv.mkDerivation rec {
     substituteInPlace src/slick-greeter.vala \
       --replace "/usr/bin/numlockx" "${numlockx}/bin/numlockx" \
       --replace "/usr/share/xsessions/" "/run/current-system/sw/share/xsessions/" \
+      --replace "/usr/share/wayland-sessions/" "/run/current-system/sw/share/wayland-sessions/" \
       --replace "/usr/bin/slick-greeter" "${placeholder "out"}/bin/slick-greeter"
 
     substituteInPlace src/session-list.vala \
       --replace "/usr/share" "${placeholder "out"}/share"
+
+    # We prefer stable path here.
+    substituteInPlace data/x.dm.slick-greeter.gschema.xml \
+      --replace "/usr/share/onboard" "/run/current-system/sw/share/onboard"
 
     patchShebangs files/usr/bin/*
   '';
@@ -104,7 +113,7 @@ stdenv.mkDerivation rec {
     description = "A slick-looking LightDM greeter";
     homepage = "https://github.com/linuxmint/slick-greeter";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ water-sucks ];
+    maintainers = with maintainers; [ water-sucks bobby285271 ];
     platforms = platforms.linux;
   };
 }

@@ -1,14 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle
+, jdk
+, makeWrapper
+, perl
+, imagemagick
+, makeDesktopItem
+, copyDesktopItems
+, desktopToDarwinBundle
+}:
 
 let
   pname = "jadx";
-  version = "1.4.4";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ku82SHCJhrruJEiojH6Rp7FUWvM8KtvDivL8CE5C8gc=";
+    hash = "sha256-3t2e3WfH/ohkdGWlfV3t9oHJ1Q6YM6nSLOgmzgJEkls=";
   };
 
   deps = stdenv.mkDerivation {
@@ -37,15 +48,23 @@ let
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
+
+      # Work around okio-2.10.0 bug, fixed in 3.0. Remove "-jvm" from filename.
+      # https://github.com/square/okio/issues/954
+      mv $out/com/squareup/okio/okio/2.10.0/okio{-jvm,}-2.10.0.jar
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-nGejkCScX45VMT2nNArqG+fqOGvDwzeH9Xob4XMtdow=";
+    outputHash = "sha256-QebPRmfLtXy4ZlyKeGC5XNzhMTsYI0X36My+nTFvQpM=";
   };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
-  nativeBuildInputs = [ gradle jdk makeWrapper ];
+  nativeBuildInputs = [ gradle jdk imagemagick makeWrapper copyDesktopItems ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+
+  # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
+  __darwinAllowLocalNetworking = true;
 
   buildPhase = ''
     # The installDist Gradle build phase tries to copy some dependency .jar
@@ -89,13 +108,38 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out $out/bin
     cp -R build/jadx/lib $out
     for prog in jadx jadx-gui; do
       cp build/jadx/bin/$prog $out/bin
       wrapProgram $out/bin/$prog --set JAVA_HOME ${jdk.home}
     done
+
+    for size in 16 32 48; do
+      install -Dm444 \
+        jadx-gui/src/main/resources/logos/jadx-logo-"$size"px.png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+    done
+    for size in 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+    done
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jadx";
+      desktopName = "JADX";
+      exec = "jadx-gui";
+      icon = "jadx";
+      comment = finalAttrs.meta.description;
+      categories = [ "Development" "Utility" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Dex to Java decompiler";
@@ -111,4 +155,4 @@ in stdenv.mkDerivation {
     platforms = platforms.unix;
     maintainers = with maintainers; [ delroth ];
   };
-}
+})

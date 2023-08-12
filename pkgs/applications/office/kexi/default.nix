@@ -49,7 +49,7 @@ mkDerivation rec {
       All database objects - tables, queries and forms - are stored in the database,
       making it easy to share data and design.
     '';
-    homepage = "http://kexi-project.org/";
+    homepage = "https://kexi-project.org/";
     maintainers = with maintainers; [ zraexy ];
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2 ];

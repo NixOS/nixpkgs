@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.1.1";
+  version = "1.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Pne3Ho5kT4bItb5/HChe9ZfeTDhJYTie4+nKNsRFslY=";
+    hash = "sha256-i+VJiG9e2kZDa25VWw5Ic7TxCqIcB99FxLwXNa+8zXo=";
   };
 
   buildInputs = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  checkInputs = [ pytestCheckHook pytest-xdist ];
+  nativeCheckInputs = [ pytestCheckHook pytest-xdist ];
 
   LC_ALL="en_US.UTF-8";
 
@@ -65,6 +65,8 @@ buildPythonPackage rec {
     "check_regressors_train"
     "check_classifiers_train"
     "xfail_ignored_in_check_estimator"
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    "test_graphical_lasso"
   ];
 
   pytestFlagsArray = [
@@ -93,7 +95,7 @@ buildPythonPackage rec {
     changelog = let
       major = versions.major version;
       minor = versions.minor version;
-      dashVer = replaceChars ["."] ["-"] version;
+      dashVer = replaceStrings ["."] ["-"] version;
     in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";

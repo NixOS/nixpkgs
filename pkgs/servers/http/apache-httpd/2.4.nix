@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which
+{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
+, fetchpatch
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
+, modTlsSupport ? false, rustls-ffi, Foundation
 , http2Support ? true, nghttp2
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
@@ -11,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.54";
+  version = "2.4.57";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "sha256-6zl/7u/MryVPjUXeN2jZ1o6Oc4UcSa/VtxdtHs+Aw0A=";
+    sha256 = "sha256-28y4Su6V4JXt+7geXrkmzNJOatpV3Ng8rssmLlz5TSo=";
   };
 
   # FIXME: -dev depends on -doc
@@ -24,13 +26,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [ perl ] ++
+  buildInputs = [ perl libxcrypt ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
+    lib.optional modTlsSupport rustls-ffi ++
+    lib.optional (modTlsSupport && stdenv.isDarwin) Foundation ++
     lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
     lib.optional libxml2Support libxml2 ++
     lib.optional http2Support nghttp2 ++
     lib.optional stdenv.isDarwin libiconv;
+
+  patches = lib.optionals modTlsSupport [
+    (fetchpatch {
+      name = "compat-with-rustls-ffi-0.10.0.patch";
+      url = "https://github.com/apache/httpd/commit/918620a183d843fb393ed939423a25d42c1044ec.patch";
+      hash = "sha256-YZi3t++hjM0skisax2xuh9DifZVZjCjVn6XQr6QKGEs=";
+    })
+  ];
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
@@ -55,6 +67,7 @@ stdenv.mkDerivation rec {
     "--includedir=${placeholder "dev"}/include"
     (lib.enableFeature proxySupport "proxy")
     (lib.enableFeature sslSupport "ssl")
+    (lib.enableFeature modTlsSupport "tls")
     (lib.withFeatureAs libxml2Support "libxml2" "${libxml2.dev}/include/libxml2")
     "--docdir=$(doc)/share/doc"
 

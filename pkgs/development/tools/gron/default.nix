@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-K/QAG9mCIHe7PQhex3TntlGYAK9l0bESWk616N97dBs=";
 
+  ldflags = [ "-s" "-w" "-X main.gronVersion=${version}" ];
+
   meta = with lib; {
     description = "Make JSON greppable!";
     longDescription = ''
@@ -24,6 +26,5 @@ buildGoModule rec {
     homepage = "https://github.com/tomnomnom/gron";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz SuperSandro2000 ];
-    platforms = platforms.unix;
   };
 }

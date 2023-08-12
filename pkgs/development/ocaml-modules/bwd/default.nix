@@ -2,15 +2,16 @@
 
 buildDunePackage rec {
   pname = "bwd";
-  version = "2.0.0";
+  version = "2.1.0";
 
   minimalOCamlVersion = "4.12";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = "ocaml-bwd";
     rev = version;
-    sha256 = "sha256:0zgi8an53z6wr6nzz0zlmhx19zhqy1w2vfy1sq3sikjwh74jjq60";
+    hash = "sha256-ucXOBjD1behL2h8CZv64xtRjCPkajZic7G1oxxDmEXY=";
   };
 
   doCheck = true;

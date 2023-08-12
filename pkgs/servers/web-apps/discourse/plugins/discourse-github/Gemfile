@@ -3,5 +3,5 @@
 source "https://rubygems.org"
 
 # gem "rails"
-gem 'sawyer', '0.8.2'
-gem 'octokit', '4.22.0'
+gem "sawyer", "0.9.2"
+gem "octokit", "5.6.1"

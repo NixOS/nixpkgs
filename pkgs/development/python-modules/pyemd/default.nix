@@ -1,16 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, cython }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, cython
+, packaging
+, setuptools
+, numpy
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyemd";
-  version = "0.5.1";
+  version = "1.0.0";
+
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc81c2116f8573e559dfbb8d73e03d9f73c22d0770559f406516984302e07e70";
+    hash = "sha256-tCta57LRWx1N7mOBDqeYo5IX6Kdre0nA62OoTg/ZAP4=";
   };
 
-  propagatedBuildInputs = [ numpy ];
-  buildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+    packaging
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "A Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance";

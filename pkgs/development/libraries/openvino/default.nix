@@ -1,115 +1,149 @@
 { lib
-, addOpenGLRunpath
-, autoPatchelfHook
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, fetchurl
+, substituteAll
+
+# build
+, addOpenGLRunpath
+, autoPatchelfHook
 , cmake
 , git
-, protobuf
-, tbb
-, opencv
-, unzip
-, shellcheck
-, srcOnly
+, libarchive
+, pkg-config
 , python
-, enablePython ? false
+, shellcheck
+
+# runtime
+, libusb1
+, libxml2
+, opencv
+, protobuf
+, pugixml
+, tbb
 }:
 
 let
-
-  onnx_src = srcOnly {
-    name = "onnx-patched";
-    src = fetchFromGitHub {
-      owner = "onnx";
-      repo = "onnx";
-      rev = "v1.8.1";
-      sha256 = "+1zNnZ4lAyVYRptfk0PV7koIX9FqcfD1Ah33qj/G2rA=";
-    };
-    patches = [
-      # Fix build with protobuf 3.18+
-      # Remove with onnx 1.9 release
-      (fetchpatch {
-        url = "https://github.com/onnx/onnx/commit/d3bc82770474761571f950347560d62a35d519d7.patch";
-        sha256 = "0vdsrklkzhdjaj8wdsl4icn93q3961g8dx35zvff0nhpr08wjb7y";
-      })
-    ];
+  # See GNA_VERSION in cmake/dependencies.cmake
+  gna_version = "03.05.00.1906";
+  gna = fetchurl {
+    url = "https://storage.openvinotoolkit.org/dependencies/gna/gna_${gna_version}.zip";
+    hash = "sha256-SlvobZwCaw4Qr6wqV/x8mddisw49UGq7OjOA+8/icm4=";
   };
 
+  tbbbind_version = "2_5";
+  tbbbind = fetchurl {
+    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v3.tgz";
+    hash = "sha256-053rJiwGmBteLS48WT6fyb5izk/rkd1OZI6SdTZZprM=";
+  };
 in
+
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2021.2";
+  version = "2023.0.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
-    rev = version;
-    sha256 = "pv4WTfY1U5GbA9Yj07UOLQifvVH3oDfWptxxYW5IwVQ=";
+    rev = "refs/tags/${version}";
     fetchSubmodules = true;
+    hash = "sha256-z88SgAZ0UX9X7BhBA7/NU/UhVLltb6ANKolruU8YiZQ=";
   };
+
+  outputs = [
+    "out"
+    "python"
+  ];
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+    autoPatchelfHook
+    cmake
+    git
+    libarchive
+    pkg-config
+    (python.withPackages (ps: with ps; [
+      cython
+      pybind11
+      setuptools
+    ]))
+    shellcheck
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./cmake.patch;
+      inherit (lib) version;
+    })
+  ];
+
+  postPatch = ''
+    mkdir -p temp/gna_${gna_version}
+    pushd temp/
+    bsdtar -xf ${gna}
+    autoPatchelf gna_${gna_version}
+    echo "${gna.url}" > gna_${gna_version}/ie_dependency.info
+    popd
+
+    mkdir -p temp/tbbbind_${tbbbind_version}
+    pushd temp/tbbbind_${tbbbind_version}
+    bsdtar -xf ${tbbbind}
+    echo "${tbbbind.url}" > ie_dependency.info
+    popd
+  '';
 
   dontUseCmakeBuildDir = true;
 
   cmakeFlags = [
-    "-DNGRAPH_USE_SYSTEM_PROTOBUF:BOOL=ON"
-    "-DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON"
-    "-DFETCHCONTENT_SOURCE_DIR_EXT_ONNX:STRING=${onnx_src}"
-    "-DENABLE_VPU:BOOL=OFF"
-    "-DTBB_DIR:STRING=${tbb}"
+    "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
+    "-DCMAKE_MODULE_PATH:PATH=${placeholder "out"}/lib/cmake"
+    "-DENABLE_LTO:BOOL=ON"
+    # protobuf
+    "-DENABLE_SYSTEM_PROTOBUF:BOOL=OFF"
+    "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
+    # tbb
+    "-DENABLE_SYSTEM_TBB:BOOL=ON"
+    # opencv
     "-DENABLE_OPENCV:BOOL=ON"
-    "-DOPENCV:STRING=${opencv}"
-    "-DENABLE_GNA:BOOL=OFF"
-    "-DENABLE_SPEECH_DEMO:BOOL=OFF"
-    "-DBUILD_TESTING:BOOL=OFF"
-    "-DENABLE_CLDNN_TESTS:BOOL=OFF"
-    "-DNGRAPH_INTERPRETER_ENABLE:BOOL=ON"
-    "-DNGRAPH_TEST_UTIL_ENABLE:BOOL=OFF"
-    "-DNGRAPH_UNIT_TEST_ENABLE:BOOL=OFF"
-    "-DENABLE_SAMPLES:BOOL=OFF"
-    "-DENABLE_CPPLINT:BOOL=OFF"
-  ] ++ lib.optional enablePython [
+    "-DOpenCV_DIR=${opencv}/lib/cmake/opencv4/"
+    # pugixml
+    "-DENABLE_SYSTEM_PUGIXML:BOOL=ON"
+    # onednn
+    "-DENABLE_ONEDNN_FOR_GPU:BOOL=OFF"
+    # intel gna
+    "-DENABLE_INTEL_GNA:BOOL=ON"
+    # python
     "-DENABLE_PYTHON:BOOL=ON"
+    # tests
+    "-DENABLE_CPPLINT:BOOL=OFF"
+    "-DBUILD_TESTING:BOOL=OFF"
+    "-DENABLE_SAMPLES:BOOL=OFF"
   ];
 
-  preConfigure = ''
-    # To make install openvino inside /lib instead of /python
-    substituteInPlace inference-engine/ie_bridges/python/CMakeLists.txt \
-      --replace 'DESTINATION python/''${PYTHON_VERSION}/openvino' 'DESTINATION lib/''${PYTHON_VERSION}/site-packages/openvino' \
-      --replace 'DESTINATION python/''${PYTHON_VERSION}' 'DESTINATION lib/''${PYTHON_VERSION}/site-packages/openvino'
-    substituteInPlace inference-engine/ie_bridges/python/src/openvino/inference_engine/CMakeLists.txt \
-      --replace 'python/''${PYTHON_VERSION}/openvino/inference_engine' 'lib/''${PYTHON_VERSION}/site-packages/openvino/inference_engine'
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
 
-    # Used to download OpenCV based on Linux Distro and make it use system OpenCV
-    substituteInPlace inference-engine/cmake/dependencies.cmake \
-        --replace 'include(linux_name)' ' ' \
-        --replace 'if (ENABLE_OPENCV)' 'if (ENABLE_OPENCV AND NOT DEFINED OPENCV)'
-
-    cmakeDir=$PWD
-    mkdir ../build
-    cd ../build
-  '';
-
-  autoPatchelfIgnoreMissingDeps = [ "libngraph_backend.so" ];
-
-  nativeBuildInputs = [
-    cmake
-    autoPatchelfHook
-    addOpenGLRunpath
-    unzip
+  autoPatchelfIgnoreMissingDeps = [
+    "libngraph_backend.so"
   ];
 
   buildInputs = [
-    git
-    protobuf
+    libusb1
+    libxml2
     opencv
-    python
+    protobuf
+    pugixml
     tbb
-    shellcheck
-  ] ++ lib.optional enablePython (with python.pkgs; [
-    cython
-    pybind11
-  ]);
+  ];
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    pushd $out/python/python${lib.versions.majorMinor python.version}
+    mkdir -p $python
+    mv ./* $python/
+    popd
+    rm -r $out/python
+  '';
 
   postFixup = ''
     # Link to OpenCL
@@ -130,7 +164,8 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Cannot find macos sdk
+    broken = (stdenv.isLinux && stdenv.isAarch64) # requires scons, then fails with *** Source directory cannot be under variant directory.
+      || stdenv.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

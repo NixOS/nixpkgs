@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "rolfberkenbosch";
     repo = "meteoalert-api";
     rev = "v${version}";
-    sha256 = "sha256-uB2nza9fj7vOWixL4WEQX1N3i2Y80zQPM3x1+gRtg+w=";
+    hash = "sha256-uB2nza9fj7vOWixL4WEQX1N3i2Y80zQPM3x1+gRtg+w=";
   };
 
   propagatedBuildInputs = [

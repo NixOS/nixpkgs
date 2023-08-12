@@ -1,30 +1,37 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, flit-core
+, fetchFromGitHub
+, flit-scm
 , pytestCheckHook
 , pythonOlder
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.0.0rc8";
-  format = "flit";
+  version = "1.1.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-aZDCTwa40zyAZc/kPl6KS/o4TgNYvgNq+cxgtjIb0Ro=";
+  src = fetchFromGitHub {
+    owner = "agronholm";
+    repo = "exceptiongroup";
+    rev = version;
+    hash = "sha256-19taP6adzmO4zH2As1OTXeYNFj6KwjhxBr09X+SrZRk=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    flit-scm
   ];
 
-  # Tests are only in the source available but tagged releases
-  # are incomplete as files are generated during the release process
-  doCheck = false;
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "exceptiongroup"
@@ -33,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Backport of PEP 654 (exception groups)";
     homepage = "https://github.com/agronholm/exceptiongroup";
+    changelog = "https://github.com/agronholm/exceptiongroup/blob/${version}/CHANGES.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

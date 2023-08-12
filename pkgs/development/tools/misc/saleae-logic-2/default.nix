@@ -1,10 +1,10 @@
 { lib, fetchurl, makeDesktopItem, appimageTools }:
 let
   name = "saleae-logic-2";
-  version = "2.3.59";
+  version = "2.4.9";
   src = fetchurl {
-    url = "https://downloads.saleae.com/logic2/Logic-${version}-master.AppImage";
-    sha256 = "sha256-jIu/ODVD/x+TjcVSGlOw6/JWESJYDKZQrJGMAix9wTY=";
+    url = "https://downloads.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
+    hash = "sha256-zM5XztFv+A7cNMqNPGAO5i0B45w6AMyRL4OR+tG03JY=";
   };
   desktopItem = makeDesktopItem {
     inherit name;
@@ -25,7 +25,7 @@ appimageTools.wrapType2 {
     in
       ''
         mkdir -p $out/etc/udev/rules.d
-        cp ${appimageContents}/resources/linux/99-SaleaeLogic.rules $out/etc/udev/rules.d/
+        cp ${appimageContents}/resources/linux-x64/99-SaleaeLogic.rules $out/etc/udev/rules.d/
         mkdir -p $out/share/pixmaps
         ln -s ${desktopItem}/share/applications $out/share/
         cp ${appimageContents}/usr/share/icons/hicolor/256x256/apps/Logic.png $out/share/pixmaps/Logic.png
@@ -59,6 +59,7 @@ appimageTools.wrapType2 {
     alsa-lib
     at-spi2-core
     cups
+    libxcrypt-legacy
   ];
 
   meta = with lib; {

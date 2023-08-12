@@ -1,4 +1,5 @@
 from typing import Callable, Optional
+from math import isfinite
 import time
 
 from .logger import rootlog
@@ -14,7 +15,7 @@ class PollingCondition:
     description: Optional[str]
 
     last_called: float
-    entered: bool
+    entry_count: int
 
     def __init__(
         self,
@@ -34,14 +35,21 @@ class PollingCondition:
             self.description = str(description)
 
         self.last_called = float("-inf")
-        self.entered = False
+        self.entry_count = 0
 
-    def check(self) -> bool:
-        if self.entered or not self.overdue:
+    def check(self, force: bool = False) -> bool:
+        if (self.entered or not self.overdue) and not force:
             return True
 
         with self, rootlog.nested(self.nested_message):
-            rootlog.info(f"Time since last: {time.monotonic() - self.last_called:.2f}s")
+            time_since_last = time.monotonic() - self.last_called
+            last_message = (
+                f"Time since last: {time_since_last:.2f}s"
+                if isfinite(time_since_last)
+                else "(not called yet)"
+            )
+
+            rootlog.info(last_message)
             try:
                 res = self.condition()  # type: ignore
             except Exception:
@@ -69,9 +77,16 @@ class PollingCondition:
     def overdue(self) -> bool:
         return self.last_called + self.seconds_interval < time.monotonic()
 
+    @property
+    def entered(self) -> bool:
+        # entry_count should never dip *below* zero
+        assert self.entry_count >= 0
+        return self.entry_count > 0
+
     def __enter__(self) -> None:
-        self.entered = True
+        self.entry_count += 1
 
     def __exit__(self, exc_type, exc_value, traceback) -> None:  # type: ignore
-        self.entered = False
+        assert self.entered
+        self.entry_count -= 1
         self.last_called = time.monotonic()

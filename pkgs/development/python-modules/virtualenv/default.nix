@@ -1,72 +1,66 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , pythonOlder
 , isPy27
-, backports-entry-points-selectable
+, isPyPy
 , cython
 , distlib
 , fetchPypi
 , filelock
 , flaky
+, hatch-vcs
+, hatchling
 , importlib-metadata
-, importlib-resources
-, pathlib2
 , platformdirs
 , pytest-freezegun
 , pytest-mock
 , pytest-timeout
 , pytestCheckHook
-, setuptools-scm
-, six
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.15.1";
+  version = "20.24.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KIFxE0ov87+xovVPEZ53zRuBwp/BJlojVvPo0Ux9WMQ=";
+    hash = "sha256-4qfO+dqIDWk7kz23ZUNndU8U4gZQ3GDo7nOFVx+Fk6M=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
-    backports-entry-points-selectable
     distlib
     filelock
     platformdirs
-    six
-  ] ++ lib.optionals (pythonOlder "3.4" && !stdenv.hostPlatform.isWindows) [
-    pathlib2
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  patches = lib.optionals (isPy27) [
-    ./0001-Check-base_prefix-and-base_exec_prefix-for-Python-2.patch
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     cython
     flaky
     pytest-freezegun
     pytest-mock
     pytest-timeout
     pytestCheckHook
+  ] ++ lib.optionals (!isPyPy) [
+    time-machine
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  # Ignore tests which require network access
   disabledTestPaths = [
+    # Ignore tests which require network access
     "tests/unit/create/test_creator.py"
     "tests/unit/seed/embed/test_bootstrap_link_via_app_data.py"
   ];
@@ -77,16 +71,23 @@ buildPythonPackage rec {
     "test_seed_link_via_app_data"
     # Permission Error
     "test_bad_exe_py_info_no_raise"
-  ] ++ lib.optionals isPy27 [
-    "test_python_via_env_var"
-    "test_python_multi_value_prefer_newline_via_env_var"
+  ] ++ lib.optionals (isPyPy) [
+    # encoding problems
+    "test_bash"
+    # permission error
+    "test_can_build_c_extensions"
+    # fails to detect pypy version
+    "test_discover_ok"
   ];
 
-  pythonImportsCheck = [ "virtualenv" ];
+  pythonImportsCheck = [
+    "virtualenv"
+  ];
 
   meta = with lib; {
     description = "A tool to create isolated Python environments";
     homepage = "http://www.virtualenv.org";
+    changelog = "https://github.com/pypa/virtualenv/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
   };

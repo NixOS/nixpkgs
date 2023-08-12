@@ -1,18 +1,21 @@
-{
-  lib, stdenv, fetchFromGitHub, docbook_xsl,
-  docbook_xml_dtd_45, python, pygments,
-  libxslt
+{ lib
+, stdenv
+, fetchFromGitHub
+, docbook_xsl
+, docbook_xml_dtd_45
+, python3
+, libxslt
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "csound-manual";
-  version = "unstable-2019-02-22";
+  version = "6.18.0";
 
   src = fetchFromGitHub {
     owner = "csound";
     repo = "manual";
-    rev = "3b0bdc83f9245261b4b85a57c3ed636d5d924a4f";
-    sha256 = "074byjhaxraapyg54dxgg7hi1d4978aa9c1rmyi50p970nsxnacn";
+    rev = version;
+    sha256 = "sha256-W8MghqUBr3V7LPgNwU6Ugw16wdK3G37zAPuasMlZ2+I=";
   };
 
   prePatch = ''
@@ -21,9 +24,7 @@ stdenv.mkDerivation {
                 "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
   '';
 
-  nativeBuildInputs = [ libxslt.bin ];
-
-  buildInputs = [ docbook_xsl python pygments ];
+  nativeBuildInputs = [ libxslt.bin docbook_xsl python3 python3.pkgs.pygments ];
 
   buildPhase = ''
     make XSL_BASE_PATH=${docbook_xsl}/share/xml/docbook-xsl html-dist
@@ -34,11 +35,11 @@ stdenv.mkDerivation {
     cp -r ./html $out/share/doc/csound
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The Csound Canonical Reference Manual";
     homepage = "https://github.com/csound/manual";
-    license = lib.licenses.fdl12Plus;
-    maintainers = [ lib.maintainers.hlolli ];
+    license = licenses.fdl12Plus;
+    maintainers = with maintainers; [ hlolli ];
     platforms = lib.platforms.all;
   };
 }

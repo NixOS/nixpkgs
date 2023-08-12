@@ -2,6 +2,7 @@
 , stdenv
 , gccStdenv
 , autoreconfHook
+, autoconf-archive
 , pkg-config
 , fetchurl
 , fetchFromGitHub
@@ -16,15 +17,16 @@
 
 let
   pname = "7kaa";
-  version = "2.15.4p1";
+  version = "2.15.5";
 
+  musicVersion = lib.versions.majorMinor version;
   music = stdenv.mkDerivation {
     pname = "7kaa-music";
-    version = lib.versions.majorMinor version;
+    version = musicVersion;
 
     src = fetchurl {
-      url = "https://www.7kfans.com/downloads/7kaa-music-${lib.versions.majorMinor version}.tar.bz2";
-      sha256 = "sha256-sNdntuJXGaFPXzSpN0SoAi17wkr2YnW+5U38eIaVwcM=";
+      url = "https://www.7kfans.com/downloads/7kaa-music-${musicVersion}.tar.bz2";
+      hash = "sha256-sNdntuJXGaFPXzSpN0SoAi17wkr2YnW+5U38eIaVwcM=";
     };
 
     installPhase = ''
@@ -33,22 +35,20 @@ let
     '';
 
     meta.license = lib.licenses.unfree;
-
   };
-
 in
-
 gccStdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "the3dfxdude";
     repo = pname;
-    rev = "9db2a43e1baee25a44b7aa7e9cedde9a107ed34b";
-    sha256 = "sha256-OAKaRuPP0/n8pO3wIUvGKs6n+U+EmZXUTywXYDAan1o=";
+    rev = "v${version}";
+    hash = "sha256-Z6TsR6L6vwpzoKTj6xJ6HKy4DxcUBWmYBFi/a9pQBD8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config ];
+
   buildInputs = [ openal enet SDL2 curl gettext libiconv ];
 
   preAutoreconf = ''

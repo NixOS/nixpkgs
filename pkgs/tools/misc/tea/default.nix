@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "tea";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "tea";
     rev = "v${version}";
-    sha256 = "sha256-Bvee8m/BXvPtaaD8xjVg9qzorO0ln6xHP1upPgWoD+A=";
+    sha256 = "sha256-sZfg8+LIu1Ejvmr/o4X3EOz3fv+RvLhrGRf2yy+6t8c=";
   };
 
   vendorSha256 = "sha256-nb0lQEAaIYlGpodFQLhMk/24DmTgg5K3zQ4s/XY+Z1w=";

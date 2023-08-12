@@ -4,9 +4,10 @@
 , cmake
 , clang
 , libclang
+, libxml2
 , zlib
 , openexr
-, openimageio2
+, openimageio
 , llvm
 , boost
 , flex
@@ -23,16 +24,17 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openshadinglanguage";
-  version = "1.11.17.0";
+  version = "1.12.13.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
     rev = "v${version}";
-    sha256 = "sha256-2OOkLnHLz+vmSeEDQl12SrJBTuWwbnvoTatnvm8lpbA=";
+    hash = "sha256-EVV7YHovWwbRju+uv8IK2wpcpoK1ndZ8yNRHzU8LUuE=";
   };
 
   cmakeFlags = [
+    "-DBoost_ROOT=${boost}"
     "-DUSE_BOOST_WAVE=ON"
     "-DENABLE_RTTI=ON"
 
@@ -40,6 +42,7 @@ in stdenv.mkDerivation rec {
     # Override defaults.
     "-DLLVM_DIRECTORY=${llvm}"
     "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
+    "-DLLVM_BC_GENERATOR=${clang}/bin/clang++"
 
     # Set C++11 to C++14 required for LLVM10+
     "-DCMAKE_CXX_STANDARD=14"
@@ -59,20 +62,26 @@ in stdenv.mkDerivation rec {
     libclang
     llvm
     openexr
-    openimageio2
+    openimageio
     partio
     pugixml
     python3.pkgs.pybind11
     util-linux # needed just for hexdump
     zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    libxml2
   ];
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/*.pc \
+      --replace '=''${exec_prefix}//' '=/'
+  '';
+
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Advanced shading language for production GI renderers";
     homepage = "https://opensource.imageworks.com/osl.html";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

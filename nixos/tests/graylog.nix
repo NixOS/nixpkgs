@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     services.mongodb.enable = true;
     services.elasticsearch.enable = true;
-    services.elasticsearch.package = pkgs.elasticsearch-oss;
     services.elasticsearch.extraConf = ''
       network.publish_host: 127.0.0.1
       network.bind_host: 127.0.0.1

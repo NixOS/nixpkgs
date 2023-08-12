@@ -13,16 +13,15 @@
 , testscenarios
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "openstacksdk-tests";
-  inherit (openstacksdk) version;
-
-  src = openstacksdk.src;
+  inherit (openstacksdk) version src;
+  format = "other";
 
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     hacking
     jsonschema

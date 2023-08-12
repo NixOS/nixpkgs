@@ -5,10 +5,10 @@
 # imlib2 can load images from ID3 tags.
 , libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
-, x11Support ? true, xlibsWrapper ? null
+, x11Support ? true
+, webpSupport ? true
 , svgSupport ? false
 , heifSupport ? false
-, webpSupport ? false
 , jxlSupport ? false
 , psSupport ? false
 
@@ -20,24 +20,26 @@
 , openbox
 , fluxbox
 , enlightenment
+, xorg
+, testers
 }:
 
 let
-  inherit (lib) optional;
+  inherit (lib) optional optionals;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
-  version = "1.9.1";
+  version = "1.11.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.xz";
-    hash = "sha256-SiJAOL//vl1NJQxE4F9O5a4k3P74OVsWd8cVxY92TUM=";
+    url = "mirror://sourceforge/enlightenment/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    hash = "sha256-9xK2u53K1G2Lj0rVJhDcu667TMgLX9EvkxJNOjgPpr8=";
   };
 
   buildInputs = [
     libjpeg libtiff giflib libpng
     bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper
+  ] ++ optionals x11Support [ xorg.libXft xorg.libXext ]
     ++ optional heifSupport libheif
     ++ optional svgSupport librsvg
     ++ optional webpSupport libwebp
@@ -68,6 +70,8 @@ stdenv.mkDerivation rec {
       enlightenment;
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Image manipulation library";
 
@@ -82,7 +86,8 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
     changelog = "https://git.enlightenment.org/legacy/imlib2.git/plain/ChangeLog?h=v${version}";
     license = licenses.imlib2;
+    pkgConfigModules = [ "imlib2" ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ spwhitt ];
+    maintainers = with maintainers; [ ];
   };
-}
+})

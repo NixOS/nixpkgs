@@ -5,44 +5,63 @@
 , git
 , go
 , gnumake
+, installShellFiles
+, testers
+, kubebuilder
 }:
 
 buildGoModule rec {
   pname = "kubebuilder";
-  version = "3.6.0";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
     rev = "v${version}";
-    sha256 = "sha256-WbFY1tBwq0DjJqM5ld7W9GkhPQDsGUQCwEe42XkJlfQ=";
+    hash = "sha256-VT9S8Ijf684rowfoU1kvgPSTzR8ZGr3GwxWiYHWLANc=";
   };
-  vendorSha256 = "sha256-tz0SHAl9SwppjA8s0m4gJOh6rf8F+kRc2HnNMjO+blQ=";
+
+  vendorHash = "sha256-5XUYmAfFH6UlLF09PqcSLUxkgZ5iHZGj0Vurab+Jl1g=";
 
   subPackages = ["cmd"];
+
+  allowGoReference = true;
 
   ldflags = [
     "-X main.kubeBuilderVersion=v${version}"
     "-X main.goos=${go.GOOS}"
     "-X main.goarch=${go.GOARCH}"
-    "-X main.gitCommit=v${version}"
-    "-X main.buildDate=v${version}"
+    "-X main.gitCommit=unknown"
+    "-X main.buildDate=unknown"
   ];
 
-  doCheck = true;
+  nativeBuildInputs = [
+    makeWrapper
+    git
+    installShellFiles
+  ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/kubebuilder
     wrapProgram $out/bin/kubebuilder \
       --prefix PATH : ${lib.makeBinPath [ go gnumake ]}
+
+    installShellCompletion --cmd kubebuilder \
+      --bash <($out/bin/kubebuilder completion bash) \
+      --fish <($out/bin/kubebuilder completion fish) \
+      --zsh <($out/bin/kubebuilder completion zsh)
   '';
 
-  allowGoReference = true;
-  nativeBuildInputs = [ makeWrapper git ];
+  passthru.tests.version = testers.testVersion {
+    command = "${kubebuilder}/bin/kubebuilder version";
+    package = kubebuilder;
+    version = "v${version}";
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/kubernetes-sigs/kubebuilder";
     description = "SDK for building Kubernetes APIs using CRDs";
+    homepage = "https://github.com/kubernetes-sigs/kubebuilder";
+    changelog = "https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmars ];
   };

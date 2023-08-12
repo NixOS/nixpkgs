@@ -5,21 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apkid";
-  version = "2.1.3";
+  version = "2.1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rednaga";
     repo = "APKiD";
-    rev = "v${version}";
-    hash = "sha256-U4CsPTA0fXCzj5iLTbLFGudAvewVCzxe4xl0osoBy5A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yO3k2kT043/KkiCjDnNUlqxX86kQqMZ+CghD+yon3r4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     yara-python
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

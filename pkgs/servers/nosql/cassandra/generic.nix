@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, python2
+, python
 , makeWrapper
 , gawk
 , bash
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       fi
     done
 
-    wrapProgram $out/bin/cqlsh --prefix PATH : ${python2}/bin
+    wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
 
     runHook postInstall
   '';

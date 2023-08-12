@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2022.8.7";
+  version = "2023.5.27";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TRTqhWQSVhjJkd9FLJk1lDwdzyzkeih9zHPSOvTf2oQ=";
+    hash = "sha256-HqNBXDmPU0vh1cA0swWK708MnCcAEeiRxf/yaW2Oh/U=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

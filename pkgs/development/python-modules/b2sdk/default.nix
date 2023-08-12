@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.17.3";
+  version = "1.19.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pyPjjdQ8wzvQitlchGlfNTPwqs0PH6xgplSPUWpjtwM=";
+    hash = "sha256-aJpSt+dXjw4S33dBiMkaR6wxzwLru+jseuPKFj2R36Y=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-lazy-fixture
     pytest-mock
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # requires aws s3 auth
     "test/integration/test_download.py"
+    "test/integration/test_upload.py"
   ];
 
   disabledTests = [

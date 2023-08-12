@@ -18,6 +18,7 @@ in symlinkJoin rec {
   pythonInputs = qgis-ltr-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-ltr-unwrapped.py.pkgs);
 
   postBuild = ''
+    # unpackPhase
 
     buildPythonPath "$pythonInputs"
 

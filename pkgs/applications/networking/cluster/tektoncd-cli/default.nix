@@ -2,28 +2,29 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.24.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-mrTtg60LZpRONrEhX53EhSYpfdfGMvPK4WhTHeAKsoQ=";
+    sha256 = "sha256-SneGlXEthl/x6n+IlMN6y/ZubgHlfseoV0PS9sGcrTM=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # third_party/VENDOR-LICENSE breaks build/check as go files are still included
-  # docs is a tool for generating docs
-  excludedPackages = [ "third_party" "cmd/docs" ];
+  subPackages = [ "cmd/tkn" ];
 
   preCheck = ''
     # some tests try to write to the home dir
     export HOME="$TMPDIR"
+
+    # run all tests
+    unset subPackages
 
     # the tests expect the clientVersion ldflag not to be set
     unset ldflags

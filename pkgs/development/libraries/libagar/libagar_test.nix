@@ -1,17 +1,16 @@
 { lib, stdenv, fetchurl, bsdbuild, libagar, perl, libjpeg, libpng, openssl }:
 
-let srcs = import ./srcs.nix { inherit fetchurl; }; in
 stdenv.mkDerivation {
   pname = "libagar-test";
-  inherit (srcs) version src;
+  inherit (libagar) version src;
 
-  sourceRoot = "agar-1.5.0/tests";
+  sourceRoot = "agar-${libagar.version}/tests";
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: textdlg.o:(.bss+0x0): multiple definition of `someString';
   #     configsettings.o:(.bss+0x0): first defined here
   # TODO: the workaround can be removed once nixpkgs updates to 1.6.0.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure = ''
     substituteInPlace configure.in \

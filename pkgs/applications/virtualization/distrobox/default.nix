@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "distrobox";
-  version = "1.4.0";
+  version = "1.5.0.2";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XYqPwBiMbwG0bTiFRywZRWjp1OabTHcwhmbcx11SgPo=";
+    sha256 = "sha256-ss8049D6n1V/gDzEMjywDnoke5s2we9j3mO8yta72UA=";
   };
 
   dontConfigure = true;
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://distrobox.privatedns.org/";
     license = licenses.gpl3Only;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ atila ];
   };
 }

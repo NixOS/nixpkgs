@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sed -i '/chown $(OWNER)/d' Makefile.in
   '';
 
+  makeFlags = [ "AR:=$(AR)" ];
+
   meta = {
     description = "Unix-unix cp over serial line, also includes cu program";
 

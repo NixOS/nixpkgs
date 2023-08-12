@@ -7,6 +7,8 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , nixosTests
+, vips
+, nodePackages
 }:
 
 let
@@ -14,24 +16,31 @@ let
 
   pkgConfig = {
     node-sass = {
-      nativeBuildInputs = [ ];
-      buildInputs = [ libsass pkg-config python3 ];
+      nativeBuildInputs = [ pkg-config ];
+      buildInputs = [ libsass python3 ];
       postInstall = ''
         LIBSASS_EXT=auto yarn --offline run build
         rm build/config.gypi
       '';
     };
+    sharp = {
+      nativeBuildInputs = [ pkg-config nodePackages.semver ];
+      buildInputs = [ vips ];
+      postInstall = ''
+        yarn --offline run install
+      '';
+    };
   };
 
   name = "lemmy-ui";
-  version = pinData.version;
+  version = pinData.uiVersion;
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = name;
     rev = version;
     fetchSubmodules = true;
-    sha256 = pinData.uiSha256;
+    hash = pinData.uiHash;
   };
 in
 mkYarnPackage {
@@ -43,7 +52,7 @@ mkYarnPackage {
   packageJSON = ./package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    sha256 = pinData.uiYarnDepsSha256;
+    hash = pinData.uiYarnDepsHash;
   };
 
   yarnPreBuild = ''
@@ -55,6 +64,7 @@ mkYarnPackage {
     export HOME=$PWD/yarn_home
 
     ln -sf $PWD/node_modules $PWD/deps/lemmy-ui/
+    echo 'export const VERSION = "${version}";' > $PWD/deps/lemmy-ui/src/shared/version.ts
 
     yarn --offline build:prod
   '';
@@ -67,14 +77,14 @@ mkYarnPackage {
 
   distPhase = "true";
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.py;
   passthru.tests.lemmy-ui = nixosTests.lemmy;
 
   meta = with lib; {
     description = "Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ happysalada billewanick adisbladis ];
+    inherit (nodejs.meta) platforms;
   };
 }

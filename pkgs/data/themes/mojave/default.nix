@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , fetchurl
 , glib
@@ -21,35 +21,39 @@
 }:
 
 let
+
   pname = "mojave-gtk-theme";
+  version = "2023-06-13";
+
+  main_src = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = pname;
+    rev = version;
+    hash = "sha256-0jb/VQ6Z0BGaEka57BWM0pBweP08cr4jfPRdEN/BJ1M=";
+  };
+
+  wallpapers_src = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = pname;
+    rev = "0c4ae6ddff7e3fab4959469461c4d4042deb1b2f";
+    hash = "sha256-7LSZSsRt6zTVPLWzuBgwRC1q1MHp5pN/pMl3x2wR8Ow=";
+    name = "wallpapers";
+  };
+
 in
+
 lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] buttonSizeVariants
 lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVariants
 lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityVariants
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
 
-stdenv.mkDerivation rec {
-  inherit pname;
-  version = "2022-06-07";
+stdenvNoCC.mkDerivation rec {
+  inherit pname version;
 
-  srcs = [
-    (fetchFromGitHub {
-      owner = "vinceliuice";
-      repo = pname;
-      rev = version;
-      sha256 = "sha256-OEqB2PSZ5KoxXAUhlyT1PRUzckVz+jTCIoAqP8gVqTk=";
-    })
-  ]
-  ++
-  lib.optional wallpapers
-    (fetchurl {
-      url = "https://github.com/vinceliuice/Mojave-gtk-theme/raw/11741a99d96953daf9c27e44c94ae50a7247c0ed/macOS_Mojave_Wallpapers.tar.xz";
-      sha256 = "18zzkwm1kqzsdaj8swf0xby1n65gxnyslpw4lnxcx1rphip0rwf7";
-    })
-  ;
+  srcs = [ main_src ] ++ lib.optional wallpapers wallpapers_src;
 
-  sourceRoot = "source";
+  sourceRoot = main_src.name;
 
   nativeBuildInputs = [
     glib
@@ -97,6 +101,12 @@ stdenv.mkDerivation rec {
         --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
         --replace /usr/bin/optipng ${optipng}/bin/optipng
     done
+
+    ${lib.optionalString wallpapers ''
+      for f in ../${wallpapers_src.name}/Mojave{,-timed}.xml; do
+        substituteInPlace $f --replace /usr $out
+      done
+    ''}
   '';
 
   installPhase = ''
@@ -111,17 +121,21 @@ stdenv.mkDerivation rec {
       --dest $out/share/themes
 
     ${lib.optionalString wallpapers ''
-      install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
+      mkdir -p $out/share/backgrounds/Mojave
+      mkdir -p $out/share/gnome-background-properties
+      cp -a ../${wallpapers_src.name}/Mojave*.jpeg $out/share/backgrounds/Mojave/
+      cp -a ../${wallpapers_src.name}/Mojave-timed.xml $out/share/backgrounds/Mojave/
+      cp -a ../${wallpapers_src.name}/Mojave.xml $out/share/gnome-background-properties/
     ''}
 
-    # Replace duplicate files with hardlinks to the first file in each
+    # Replace duplicate files with soft links to the first file in each
     # set of duplicates, reducing the installed size in about 53%
-    jdupes -L -r $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";

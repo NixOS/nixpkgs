@@ -6,6 +6,7 @@
 , libdaemon
 , dbus
 , perlPackages
+, libpcap
 , expat
 , gettext
 , glib
@@ -13,8 +14,8 @@
 , libevent
 , nixosTests
 , gtk3Support ? false
-, gtk3 ? null
-, qt5 ? null
+, gtk3
+, qt5
 , qt5Support ? false
 , withLibdnssdCompat ? false
 , python ? null
@@ -30,10 +31,18 @@ stdenv.mkDerivation rec {
     sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   patches = [
+    # CVE-2021-36217 / CVE-2021-3502
     (fetchpatch {
       url = "https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch";
       sha256 = "sha256-BXWmrLWUvDxKPoIPRFBpMS3T4gijRw0J+rndp6iDybU=";
+    })
+    # CVE-2021-3468
+    (fetchpatch {
+      url = "https://github.com/lathiat/avahi/commit/447affe29991ee99c6b9732fc5f2c1048a611d3b.patch";
+      sha256 = "sha256-qWaCU1ZkCg2PmijNto7t8E3pYRN/36/9FrG8okd6Gu8=";
     })
   ];
 
@@ -57,7 +66,9 @@ stdenv.mkDerivation rec {
   ] ++ (with perlPackages; [
     perl
     XMLParser
-  ]) ++ lib.optionals gtk3Support [
+  ]) ++ lib.optionals stdenv.isFreeBSD [
+    libpcap
+  ] ++ lib.optionals gtk3Support [
     gtk3
   ] ++ lib.optionals qt5Support [
     qt5
@@ -80,7 +91,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--runstatedir=/run"
     "--sysconfdir=/etc"
-    "--with-distro=none"
+    "--with-distro=${with stdenv.hostPlatform; if isBSD then parsed.kernel.name else "none"}"
     # A systemd unit is provided by the avahi-daemon NixOS module
     "--with-systemdsystemunitdir=no"
   ] ++ lib.optionals withLibdnssdCompat [
@@ -106,7 +117,7 @@ stdenv.mkDerivation rec {
   postInstall =
     # Maintain compat for mdnsresponder
     lib.optionalString withLibdnssdCompat ''
-      ln -s avahi-compat-libdns_sd/dns_sd.h "$out/include/dns_sd.h"
+      ln -s avahi-compat-libdns_sd/dns_sd.h "$dev/include/dns_sd.h"
     '';
 
   passthru.tests = {

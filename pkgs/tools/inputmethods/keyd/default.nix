@@ -1,11 +1,10 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cmake
-, pkg-config
 , systemd
 , runtimeShell
 , python3
+, nixosTests
 }:
 
 let
@@ -42,7 +41,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "keyd";
   inherit version src;
 
@@ -59,10 +58,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # post-2.4.2 may need this to unbreak the test
+  # makeFlags = [ "SOCKET_PATH/run/keyd/keyd.socket" ];
+
   postInstall = ''
     ln -sf ${lib.getExe appMap} $out/bin/${appMap.pname}
     rm -rf $out/etc
   '';
+
+  passthru.tests.keyd = nixosTests.keyd;
 
   meta = with lib; {
     description = "A key remapping daemon for linux.";

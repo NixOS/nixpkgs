@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "lame";
   version = "0.3.6";
 
-  minimalOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "savonet";

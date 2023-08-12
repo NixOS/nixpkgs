@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "bontchev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SYOFGMvrzxDPMACaCvqwU28Mh9LEuvFBGvAph4X+geo=";
+    hash = "sha256-SYOFGMvrzxDPMACaCvqwU28Mh9LEuvFBGvAph4X+geo=";
   };
 
   postPatch = ''

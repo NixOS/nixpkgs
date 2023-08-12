@@ -27,7 +27,7 @@ buildPythonPackage rec {
     ''}
 
     chmod +x configure.py
-    sed -i '1i#!${python.interpreter}' configure.py
+    sed -i '1i#!${python.pythonForBuild.interpreter}' configure.py
   '';
 
   configureScript = "./configure.py";

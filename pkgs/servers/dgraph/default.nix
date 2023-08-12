@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dgraph";
-  version = "21.12.0";
+  version = "23.0.1";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "sha256-OYDWr+wJEIP7raIHsXSjvuFr2ENJOllufO5ff6lxoR4=";
+    sha256 = "sha256-FB+bgrv6KojbuXDB4FKKe7eW4d9lcm9x4gA6Ceop734=";
   };
 
-  vendorSha256 = "sha256-YtU3Yeq/lNeq7cOB+KvHbvlH9g40WuJk1ovHxCQMG60=";
+  vendorHash = "sha256-HoZpxY+xT1gRHgEpkscPXogVq2eDKGlKE6KTMIQ+mMI=";
 
   doCheck = false;
 
@@ -44,6 +44,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ sigma ];
     # Apache 2.0 because we use only build "oss"
     license = licenses.asl20;
-    platforms = platforms.unix;
   };
 }

@@ -1,22 +1,21 @@
-{ clang
-, fetchFromGitHub
+{ fetchFromGitHub
 , lib
-, llvmPackages
 , protobuf
+, rocksdb
 , rustPlatform
 , stdenv
-, writeShellScriptBin
 , Security
+, SystemConfiguration
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.9.28";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "sha256-PYPNbysk9jHGtAUGr8O/Ah0ArTNKQYYToR5djG+XujI=";
+    hash = "sha256-izm0rpLzwlhpp3dciQ1zj1boWxhgGnNMG5ceZoZQGEE=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -32,19 +31,38 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "sha256-Dqcjt3yvZdaHp6sIQFo9wYH/icIInyXqKHE1Q/JjrwY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "binary-merkle-tree-4.0.0-dev" = "sha256-J09SHQVOLGStMGONdreI5QZlk+uNNKzWRZpGiNJ+lrk=";
+      "sub-tokens-0.1.0" = "sha256-GvhgZhOIX39zF+TbQWtTCgahDec4lQjH+NqamLFLUxM=";
+    };
+  };
 
-  buildInputs = lib.optional stdenv.isDarwin [ Security ];
+  # NOTE: the build process currently tries to read some files to generate
+  # documentation from hardcoded paths that aren't compatible with the cargo
+  # vendoring strategy, so we need to manually put them in their expected place.
+  # this should be fixed with the next polkadot release that includes
+  # https://github.com/paritytech/substrate/pull/14570.
+  postPatch = ''
+    FAST_UNSTAKE_DIR=$PWD/../cargo-vendor-dir/pallet-fast-unstake-4.0.0-dev
+    FAST_UNSTAKE_DOCIFY_DIR=$FAST_UNSTAKE_DIR/frame/fast-unstake
 
-  nativeBuildInputs = [ clang ];
+    mkdir -p $FAST_UNSTAKE_DOCIFY_DIR
+    cp -r $FAST_UNSTAKE_DIR/src $FAST_UNSTAKE_DOCIFY_DIR
+  '';
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   preBuild = ''
     export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)
     rm .git_commit
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
+  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   # NOTE: We don't build the WASM runtimes since this would require a more
   # complicated rust environment setup and this is only needed for developer

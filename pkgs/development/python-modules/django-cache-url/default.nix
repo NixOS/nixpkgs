@@ -20,12 +20,12 @@ buildPythonPackage rec {
     sed -i '/--cov/d' setup.cfg
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/epicserve/django-cache-url";
     description = "Use Cache URLs in your Django application";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

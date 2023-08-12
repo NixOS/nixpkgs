@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libpsm2";
-  version = "11.2.229";
+  version = "11.2.230";
 
   preConfigure= ''
     export UDEVDIR=$out/etc/udev
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ numactl pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ numactl ];
 
   makeFlags = [
     # Disable blanket -Werror to avoid build failures
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "opa-psm2";
     rev = "PSM2_${version}";
-    sha256 = "sha256-t3tZCxGmGMscDmeyCATLbHxU7jEJqAzxwPV0Z8pl2ko=";
+    sha256 = "sha256-dMfGq067TqstGAWNSZZaZCwvChTyPUsvaPVjFGGzp64=";
   };
 
   postInstall = ''

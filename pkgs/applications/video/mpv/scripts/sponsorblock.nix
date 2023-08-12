@@ -1,15 +1,15 @@
-{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, stdenvNoCC, fetchFromGitHub, fetchpatch, python3, nix-update-script }:
 
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
 stdenvNoCC.mkDerivation {
   pname = "mpv_sponsorblock";
-  version = "unstable-2021-12-23";
+  version = "unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "mpv_sponsorblock";
-    rev = "6743bd47d4cfce3ae3d5dd4f587f3193bd4fb9b2";
-    sha256 = "06c37f33cdpz1w1jacjf1wnbh4f9b1xpipxzkg5ixf46cbwssmsj";
+    rev = "7785c1477103f2fafabfd65fdcf28ef26e6d7f0d";
+    sha256 = "sha256-iUXaTWWFEdxhxClu2NYbQcThlvYty3A2dEYGooeAVAQ=";
   };
 
   dontBuild = true;
@@ -41,7 +41,9 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     scriptName = "sponsorblock.lua";
-    updateScript = ./update-sponsorblock.sh;
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
   };
 
   meta = with lib; {

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , babashka
 , cacert
 , clojure
@@ -79,5 +78,8 @@ stdenv.mkDerivation rec {
       willcohen
     ];
     platforms = platforms.darwin;
+
+    # https://hydra.nixos.org/job/nixpkgs/trunk/obb.aarch64-darwin/all
+    broken = true;
   };
 }

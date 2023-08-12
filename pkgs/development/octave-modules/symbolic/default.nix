@@ -1,27 +1,26 @@
 { buildOctavePackage
 , lib
 , fetchFromGitHub
-# Octave's Python (Python 3)
+  # Octave's Python (Python 3)
 , python
 }:
 
 let
   pythonEnv = python.withPackages (ps: [
-      ps.sympy
-      ps.mpmath
-    ]);
+    ps.sympy
+    ps.mpmath
+  ]);
 
-in buildOctavePackage rec {
+in
+buildOctavePackage rec {
   pname = "symbolic";
-  version = "unstable-2021-10-16";
+  version = "3.1.1";
 
-  # https://github.com/cbm755/octsympy/issues/1023 has been resolved, however
-  # a new release has not been made
   src = fetchFromGitHub {
     owner = "cbm755";
     repo = "octsympy";
-    rev = "5b58530f4ada78c759829ae703a0e5d9832c32d4";
-    sha256 = "sha256-n6P1Swjl4RfgxfLY0ZuN3pcL8PcoknA6yxbnw96OZ2k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6LmLzTwcBhvMDBE7u/lIkSUP97qFMPRHkxfbAyvas6M=";
   };
 
   propagatedBuildInputs = [ pythonEnv ];

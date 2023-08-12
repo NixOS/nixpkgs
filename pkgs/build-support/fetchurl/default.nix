@@ -57,13 +57,16 @@ in
   # first element of `urls').
   name ? ""
 
+  # for versioned downloads optionally take pname + version.
+, pname ? ""
+, version ? ""
+
 , # SRI hash.
   hash ? ""
 
 , # Legacy ways of specifying the hash.
   outputHash ? ""
 , outputHashAlgo ? ""
-, md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
 , sha512 ? ""
@@ -121,7 +124,6 @@ let
     if hash != "" && sha256 != "" then throw "multiple hashes passed to fetchurl" else
 
     if hash != "" then { outputHashAlgo = null; outputHash = hash; }
-    else if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
     else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
@@ -130,12 +132,16 @@ let
     else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
 in
 
-stdenvNoCC.mkDerivation {
-  name =
-    if showURLs then "urls"
-    else if name != "" then name
-    else baseNameOf (toString (builtins.head urls_));
-
+stdenvNoCC.mkDerivation ((
+  if (pname != "" && version != "") then
+    { inherit pname version; }
+  else
+    { name =
+      if showURLs then "urls"
+      else if name != "" then name
+      else baseNameOf (toString (builtins.head urls_));
+    }
+) // {
   builder = ./builder.sh;
 
   nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
@@ -177,4 +183,4 @@ stdenvNoCC.mkDerivation {
 
   inherit meta;
   passthru = { inherit url; } // passthru;
-}
+})

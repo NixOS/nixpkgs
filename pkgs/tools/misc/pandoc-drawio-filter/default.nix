@@ -5,10 +5,7 @@
 , pandoc
 , pandocfilters
 , runCommand
-, runtimeShell
 , texlive
-, writeScriptBin
-, xvfb-run
 }:
 
 let

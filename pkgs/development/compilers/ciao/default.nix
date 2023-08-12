@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ciao";
-  version = "1.21.0-m1";
+  version = "1.22.0-m7";
   src = fetchFromGitHub {
     owner = "ciao-lang";
     repo = "ciao";
     rev = "v${version}";
-    sha256 = "sha256-o9EQS7KsoTg458Uw+1shgKE6NlZO495XE/rLq6/1S4g=";
+    sha256 = "sha256-5LX+NVDAtdffQeLTD4Camp5aNm0K3Cwmavh7OF5XcZU=";
   };
 
   configurePhase = ''

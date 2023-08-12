@@ -1,21 +1,22 @@
 { lib, fetchFromGitHub }:
 let
-  version = "0.15.3";
-  srcSha256 = "sha256-HOOH3H2SXLcT2oW/xL80TO+ZSI+Haulnznpb4hlCQow=";
-  yarnSha256 = "sha256-x9g0vSoexfknqLejgcNIigmkFnqYsmhcQNTOStcj68o=";
+  version = "1.0.1";
+  srcHash = "sha256-uwKLD3fW/em6UMkkyrWxAo7T//Hkzj6WjIp5qJVtBuc=";
+  vendorHash = "sha256-NYWJorVeRxbQTiirHK8gqpDddn2RsKsNWwDNdcONVQA=";
+  yarnHash = "sha256-QNeQwWU36A05zaARWmqEOhfyZRW68OgF4wTonQLYQfs=";
 in
 {
-  inherit version yarnSha256;
+  inherit version yarnHash vendorHash;
 
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "woodpecker";
     rev = "v${version}";
-    sha256 = srcSha256;
+    hash = srcHash;
   };
 
-  postBuild = ''
-    cd $GOPATH/bin
+  postInstall = ''
+    cd $out/bin
     for f in *; do
       mv -- "$f" "woodpecker-$f"
     done
@@ -31,6 +32,6 @@ in
   meta = with lib; {
     homepage = "https://woodpecker-ci.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie ];
+    maintainers = with maintainers; [ ambroisie techknowlogick adamcstephens ];
   };
 }

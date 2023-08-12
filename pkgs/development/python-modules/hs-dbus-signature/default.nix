@@ -14,10 +14,12 @@ buildPythonPackage rec {
     hash = "sha256-NNnTcSX+K8zU+sj1QBd13h7aEXN9VqltJMNWCuhgZ6I=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];
+
+  pythonImportsCheck = [ "hs_dbus_signature" ];
 
   meta = with lib; {
     description = "A Hypothesis Strategy for Generating Arbitrary DBus Signatures";

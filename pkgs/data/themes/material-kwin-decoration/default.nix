@@ -17,14 +17,20 @@
 
 mkDerivation rec {
   pname = "material-kwin-decoration";
-  version = "unstable-2022-01-19";
+  version = "unstable-2023-01-15";
 
   src = fetchFromGitHub {
     owner = "Zren";
     repo = "material-decoration";
-    rev = "973949761f609f9c676c5b2b7c6d9560661d34c3";
-    sha256 = "sha256-n+yUmBUrkS+06qLnzl2P6CTQZZbDtJLy+2mDPCcQz9M=";
+    rev = "0e989e5b815b64ee5bca989f983da68fa5556644";
+    sha256 = "sha256-Ncn5jxkuN4ZBWihfycdQwpJ0j4sRpBGMCl6RNiH4mXg=";
   };
+
+  # Remove -Werror since it uses deprecated methods
+  postPatch = ''
+    substituteInPlace ./CMakeLists.txt \
+      --replace "add_definitions (-Wall -Werror)" "add_definitions (-Wall)"
+  '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
 

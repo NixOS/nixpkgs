@@ -1,23 +1,45 @@
-{ lib, buildGoModule, fetchFromGitHub
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, nix-update-script
 , nixosTests, postgresql, postgresqlTestHook }:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.9.8";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-BA+jI5S8pDXIWzCelUh8pWiXy98E94DJgLvqiy0r23g=";
+    hash = "sha256-2DqEfTXD3W6MxfBb6aHaKH+zpxLc2tHaGuWGQuncySo=";
   };
 
-  vendorSha256 = "sha256-xcgnpaq0owlCD4nA4I1oD8FpsTGziUghRFy/7ZPVpKY=";
+  patches = [
+    # Fix SQLite db lockup
+    (fetchpatch {
+      url = "https://github.com/matrix-org/dendrite/commit/c08c7405dbe9d88c1364f6f1f2466db5045506cc.patch";
+      hash = "sha256-gTF9jK5Ihfe1v49gPCK68BLeiUZa2Syo+7D9r62iEXQ=";
+    })
+  ];
 
-  # some tests are racy, re-enable once upstream has fixed them
-  doCheck = false;
+  vendorHash = "sha256-dc0zpKh7J+fi2b5GD/0BQ120UXbBvJLUF74RmYMSOMw=";
 
-  checkInputs = [
+  subPackages = [
+    # The server
+    "cmd/dendrite"
+    # admin tools
+    "cmd/create-account"
+    "cmd/generate-config"
+    "cmd/generate-keys"
+    "cmd/resolve-state"
+    ## curl, but for federation requests, only useful for developers
+    # "cmd/furl"
+    ## an internal tool for upgrading ci tests, only relevant for developers
+    # "cmd/dendrite-upgrade-tests"
+    ## tech demos
+    # "cmd/dendrite-demo-pinecone"
+    # "cmd/dendrite-demo-yggdrasil"
+  ];
+
+  nativeCheckInputs = [
     postgresqlTestHook
     postgresql
   ];
@@ -33,10 +55,14 @@ buildGoModule rec {
   passthru.tests = {
     inherit (nixosTests) dendrite;
   };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(.+)" ];
+  };
 
   meta = with lib; {
     homepage = "https://matrix-org.github.io/dendrite";
     description = "A second-generation Matrix homeserver written in Go";
+    changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     platforms = platforms.unix;

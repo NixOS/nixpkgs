@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "superqt";
-  version = "0.3.5";
+  version = "0.3.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-nKNFV/mzdugQ+UJ/qB0SkCSm5vEpvI/tgHYKJr6NEyg=";
+    hash = "sha256-zEMG2zscGDlRxtLn/lUTEjZBPabcwzMcj/kMcy3yOs8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = false; # Segfaults...
 

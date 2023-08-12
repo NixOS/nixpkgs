@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , crystal
+, pcre2
 , shards
 , git
 , pkg-config
@@ -48,7 +49,8 @@ let
     })
     (import shardsFile));
 
-  defaultOptions = [ "--release" "--progress" "--verbose" "--no-debug" ];
+  # We no longer use --no-debug in accordance with upstream's recommendation
+  defaultOptions = [ "--release" "--progress" "--verbose" ];
 
   buildDirectly = shardsFile == null || crystalBinaries != { };
 
@@ -89,7 +91,8 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   inherit enableParallelBuilding;
   strictDeps = true;
-  buildInputs = args.buildInputs or [ ] ++ [ crystal ];
+  buildInputs = args.buildInputs or [ ] ++ [ crystal ]
+    ++ lib.optional (lib.versionAtLeast crystal.version "1.8") pcre2;
 
   nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
     crystal
@@ -149,6 +152,9 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   installCheckPhase = args.installCheckPhase or ''
     for f in $out/bin/*; do
+      if [ $f == $out/bin/*.dwarf ]; then
+        continue
+      fi
       $f --help > /dev/null
     done
   '';

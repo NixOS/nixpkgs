@@ -8,20 +8,23 @@
 , python-dateutil
 , sqlite-fts4
 , tabulate
+, pluggy
 , pytestCheckHook
 , hypothesis
+, testers
+, sqlite-utils
 }:
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.29";
+  version = "3.34";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2eoQJqnAB6iVzdBKvcvjzSrANRXCouu62SM5OaoRH1s=";
+    hash = "sha256-RgdoPLsyz9TzxjkpBF6qAgqwIhxQNvm7QbeyW8dVzSM=";
   };
 
   postPatch = ''
@@ -35,9 +38,10 @@ buildPythonPackage rec {
     python-dateutil
     sqlite-fts4
     tabulate
+    pluggy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];
@@ -46,9 +50,14 @@ buildPythonPackage rec {
     "sqlite_utils"
   ];
 
+  passthru.tests.version = testers.testVersion {
+    package = sqlite-utils;
+  };
+
   meta = with lib; {
     description = "Python CLI utility and library for manipulating SQLite databases";
     homepage = "https://github.com/simonw/sqlite-utils";
+    changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ meatcar techknowlogick ];
   };

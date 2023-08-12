@@ -3,11 +3,12 @@
 , fetchFromGitHub
 , pythonOlder
 , pytz
+, tomlkit
 }:
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.0.0";
+  version = "5.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,11 +17,12 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-I3RAsCpfaDcW0L89lOff2zCQc+6B6eNvuWKgV7G2Bws=";
+    hash = "sha256-xPMO1Db1+TwOT+JsBGJcTc7BL2B8Eb1K3kqKMGnsUmE=";
   };
 
   propagatedBuildInputs = [
     pytz
+    tomlkit
   ];
 
   # Missing dependencies
@@ -33,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Neo4j Bolt Driver for Python";
     homepage = "https://github.com/neo4j/neo4j-python-driver";
+    changelog = "https://github.com/neo4j/neo4j-python-driver/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

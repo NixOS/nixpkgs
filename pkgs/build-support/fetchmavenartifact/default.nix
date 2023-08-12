@@ -37,19 +37,16 @@ assert (url == "") || (urls == []);
 assert (repos != []) || (url != "") || (urls != []);
 
 let
-  name_ =
-    lib.concatStrings [
-      (lib.replaceChars ["."] ["_"] groupId) "_"
-      (lib.replaceChars ["."] ["_"] artifactId) "-"
-      version
-    ];
+  pname = (lib.replaceStrings [ "." ] [ "_" ] groupId) + "_" + (lib.replaceStrings [ "." ] [ "_" ] artifactId);
+  suffix = lib.optionalString (classifier != null) "-${classifier}";
+  filename = "${artifactId}-${version}${suffix}.jar";
   mkJarUrl = repoUrl:
     lib.concatStringsSep "/" [
       (lib.removeSuffix "/" repoUrl)
-      (lib.replaceChars ["."] ["/"] groupId)
+      (lib.replaceStrings ["."] ["/"] groupId)
       artifactId
       version
-      "${artifactId}-${version}${lib.optionalString (!isNull classifier) "-${classifier}"}.jar"
+      filename
     ];
   urls_ =
     if url != "" then [url]
@@ -57,18 +54,18 @@ let
     else map mkJarUrl repos;
   jar =
     fetchurl (
-      builtins.removeAttrs args ["groupId" "artifactId" "version" "classifier" "repos" "url" ]
-        // { urls = urls_; name = "${name_}.jar"; }
+      builtins.removeAttrs args [ "groupId" "artifactId" "version" "classifier" "repos" "url" ]
+      // { urls = urls_; name = "${pname}-${version}.jar"; }
     );
 in
   stdenv.mkDerivation {
-    name = name_;
-    phases = "installPhase fixupPhase";
+    inherit pname version;
+    dontUnpack = true;
     # By moving the jar to $out/share/java we make it discoverable by java
     # packages packages that mention this derivation in their buildInputs.
     installPhase = ''
       mkdir -p $out/share/java
-      ln -s ${jar} $out/share/java/${artifactId}-${version}.jar
+      ln -s ${jar} $out/share/java/${filename}
     '';
     # We also add a `jar` attribute that can be used to easily obtain the path
     # to the downloaded jar file.

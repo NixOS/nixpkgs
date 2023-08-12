@@ -7,32 +7,35 @@
 , pkg-config
 , gettext
 , python3
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+, docutils
 , gi-docgen
 , glib
 , libtiff
 , libjpeg
 , libpng
 , gnome
-, gobject-introspection
-, buildPackages
 , doCheck ? false
 , makeWrapper
 , lib
+, testers
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.42.8";
+  version = "2.42.10";
 
-  outputs = [ "out" "dev" "man" "devdoc" ]
+  outputs = [ "out" "dev" "man" ]
+    ++ lib.optional withIntrospection "devdoc"
     ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "hKzqOsskEbKRNLMgFaWxqqYoRLGcSx74uJccawdZ9MY=";
+    sha256 = "7ptsddE7oJaQei48aye2G80X9cfr6rWltDnS8uOf5Es=";
   };
 
   patches = [
@@ -55,18 +58,15 @@ stdenv.mkDerivation rec {
     python3
     makeWrapper
     glib
-    gi-docgen
-    gobject-introspection
 
     # for man pages
-    libxslt
-    docbook-xsl-nons
-    docbook_xml_dtd_43
+    docutils
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
   ];
-
-  buildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
     glib
@@ -77,7 +77,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgio_sniffing=false"
-    "-Dgtk_doc=true"
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
   ];
 
   postPatch = ''
@@ -103,11 +104,11 @@ stdenv.mkDerivation rec {
     '' + lib.optionalString stdenv.isDarwin ''
       # meson erroneously installs loaders with .dylib extension on Darwin.
       # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
-      for f in $out/${passthru.moduleDir}/*.dylib; do
+      for f in $out/${finalAttrs.passthru.moduleDir}/*.dylib; do
           install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
           mv $f ''${f%.dylib}.so
       done
-    '' + ''
+    '' + lib.optionalString withIntrospection ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       ${stdenv.hostPlatform.emulator buildPackages} $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
@@ -119,7 +120,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString withIntrospection ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
@@ -133,12 +134,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
 
     tests = {
       installedTests = nixosTests.installed-tests.gdk-pixbuf;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
@@ -151,6 +153,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
     mainProgram = "gdk-pixbuf-thumbnailer";
+    pkgConfigModules = [ "gdk-pixbuf-2.0" ];
     platforms = platforms.unix;
   };
-}
+})

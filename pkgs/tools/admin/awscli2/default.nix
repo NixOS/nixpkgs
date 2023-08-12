@@ -3,32 +3,55 @@
 , groff
 , less
 , fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, testers
+, awscli2
 }:
+
 let
-  py = python3.override {
-    packageOverrides = self: super: {
-      awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
-        version = "0.13.11";
-        src = self.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "sha256-Yx3I3RD57Nx6Cvm4moc5zmMbdsHeYiMghDfbQUor38E=";
+  py = python3 // {
+    pkgs = python3.pkgs.overrideScope (final: prev: {
+      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
+        src = prev.src.override {
+          version = "0.17.21";
+          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
-    };
+    });
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.7.20"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.13.5"; # N.B: if you change this, check if overrides are still up-to-date
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-o6rs9OMP3154WApboSqUfVn3TRxap0htHczyjAMQe2I=";
+    hash = "sha256-gtzRHNEReCKzGDdiwS5kngcJYp5oAHmhnOPl/uTyxvU=";
   };
+
+  patches = [
+    # https://github.com/aws/aws-cli/pull/7912
+    (fetchpatch {
+      name = "update-flit-core.patch";
+      url = "https://github.com/aws/aws-cli/commit/83412a4b2ec750bada640a34a87bfe07ce41fb50.patch";
+      hash = "sha256-uhO6aOSptsARYWuXXEFhx+6rCW5/uGn2KQ15BnhzH68=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
+      --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1'
+  '';
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     awscrt
@@ -43,36 +66,16 @@ with py.pkgs; buildPythonApplication rec {
     pyyaml
     rsa
     ruamel-yaml
-    wcwidth
     python-dateutil
     jmespath
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonschema
     mock
     pytestCheckHook
-    pytest-xdist
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-      --replace "cryptography>=3.3.2,<37.0.0" "cryptography" \
-      --replace "docutils>=0.10,<0.16" "docutils" \
-      --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
-      --replace "wcwidth<0.2.0" "wcwidth" \
-      --replace "prompt-toolkit>=3.0.24,<3.0.29" "prompt-toolkit~=3.0" \
-      --replace "distro>=1.5.0,<1.6.0" "distro"
-  '';
-
-  checkPhase = ''
-    export PATH=$PATH:$out/bin
-
-    # https://github.com/NixOS/nixpkgs/issues/16144#issuecomment-225422439
-    export HOME=$TMP
-  '';
 
   postInstall = ''
     mkdir -p $out/${python3.sitePackages}/awscli/data
@@ -87,13 +90,47 @@ with py.pkgs; buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  passthru.python = py; # for aws_shell
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+  '';
+
+  pytestFlagsArray = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTestPaths = [
+    # Integration tests require networking
+    "tests/integration"
+
+    # Disable slow tests (only run unit tests)
+    "tests/backends"
+    "tests/functional"
+  ];
+
+  pythonImportsCheck = [
+    "awscli"
+  ];
+
+  passthru = {
+    python = py; # for aws_shell
+    updateScript = nix-update-script {
+      # Excludes 1.x versions from the Github tags list
+      extraArgs = [ "--version-regex" "^(2\.(.*))" ];
+    };
+    tests.version = testers.testVersion {
+      package = awscli2;
+      command = "aws --version";
+      inherit version;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb ];
+    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
+    mainProgram = "aws";
   };
 }

@@ -1,15 +1,15 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation (finalPackages: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "prio";
   version = "unstable-2018-09-13";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = finalPackages.pname;
+    repo = "prio";
     rev = "c3f97491339d15f063d6937d5f89bcfaea774dd1";
     hash = "sha256-Idv/duEYmDk/rO+TI8n+FY3VFDtUEh8C292jh12BJuM=";
   };

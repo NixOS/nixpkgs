@@ -1,38 +1,38 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , rustPlatform
+, fetchCrate
 , pkg-config
 , openssl
-, CoreServices
-, Security
+, stdenv
+, darwin
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "zine";
-  version = "0.6.0";
+  version = "0.16.0";
 
-  src = fetchFromGitHub {
-    owner = "zineland";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Pd/UAg6O9bOvrdvbY46Vf8cxFzjonEwcwPaaW59vH6E=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-pUoMMgZQ+oDs9Yhc1rQuy9cUWiR800DlIe8wxQjnIis=";
   };
 
-  cargoPatches = [ ./Cargo.lock.patch ]; # Repo does not provide Cargo.lock
-
-  cargoSha256 = "sha256-qpzBDyNSZblmdimnnL4T/wS+6EXpduJ1U2+bfxM7piM=";
+  cargoHash = "sha256-dXq8O0jVpr0xxvLTrsLJbiyyOMXXtEz7OMINqDEfG4U=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   meta = with lib; {
     description = "A simple and opinionated tool to build your own magazine";
     homepage = "https://github.com/zineland/zine";
+    changelog = "https://github.com/zineland/zine/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya figsoda ];
   };
 }

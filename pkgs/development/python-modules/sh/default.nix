@@ -1,31 +1,57 @@
-{ lib, buildPythonPackage, fetchPypi, python, coverage, lsof, glibcLocales, coreutils }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+ }:
 
 buildPythonPackage rec {
   pname = "sh";
-  version = "1.14.2";
+  version = "2.0.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9d7bd0334d494b2a4609fe521b2107438cdb21c0e469ffeeb191489883d6fe0d";
+  src = fetchFromGitHub {
+    owner = "amoffat";
+    repo = "sh";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qMYaGNEvv2z47IHFGqb64TRpN3JHycpEmhYhDjrUi6s=";
   };
 
-  patches = [
-    # Disable tests that fail on Darwin sandbox
-    ./disable-broken-tests-darwin.patch
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  postPatch = ''
-    sed -i 's#/usr/bin/env python#${python.interpreter}#' test.py
-    sed -i 's#/bin/sleep#${coreutils.outPath}/bin/sleep#' test.py
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  checkInputs = [ coverage lsof glibcLocales ];
+  pytestFlagsArray = [
+    "tests/test.py"
+  ];
 
   # A test needs the HOME directory to be different from $TMPDIR.
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
-    HOME=$(mktemp -d)
+    export HOME=$(mktemp -d)
   '';
+
+  disabledTests = [
+    # Disable tests that fail on Hydra
+    "test_no_fd_leak"
+    "test_piped_exception1"
+    "test_piped_exception2"
+    "test_unicode_path"
+    # fails to import itself after modifying the environment
+    "test_environment"
+    # timing sensitive through usage of sleep(1) and signal handling
+    # https://github.com/amoffat/sh/issues/684
+    "test_general_signal"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Disable tests that fail on Darwin sandbox
+    "test_background_exception"
+    "test_cwd"
+    "test_ok_code"
+  ];
 
   meta = with lib; {
     description = "Python subprocess interface";

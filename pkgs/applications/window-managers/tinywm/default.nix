@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   buildPhase = ''
-    ${stdenv.cc}/bin/cc -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
+    $CC -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
   '';
 
   installPhase = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib;{
-    description = "A tiny window manger for X11";
+    description = "A tiny window manager for X11";
     longDescription = ''
 
       TinyWM is a tiny window manager that I created as an exercise in

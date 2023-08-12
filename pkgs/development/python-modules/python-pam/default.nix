@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pam
 , six
 , toml
@@ -15,7 +16,7 @@ buildPythonPackage rec {
     owner = "FirefighterBlu3";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-MR9LYXtkbltAmn7yoyyKZn4yMHyh3rj/i/pA8nJy2xU=";
+    hash = "sha256-MR9LYXtkbltAmn7yoyyKZn4yMHyh3rj/i/pA8nJy2xU=";
   };
 
   postPatch = ''
@@ -23,6 +24,10 @@ buildPythonPackage rec {
       --replace 'find_library("pam")' '"${pam}/lib/libpam.so"' \
       --replace 'find_library("pam_misc")' '"${pam}/lib/libpam_misc.so"'
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     pam

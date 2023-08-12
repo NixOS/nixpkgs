@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "libnats";
-  version = "3.3.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner  = "nats-io";
     repo   = "nats.c";
     rev    = "v${version}";
-    sha256 = "sha256-2z+r0OIVYE7NPQQAd5vOK8KkFo4Zzi2pPcwPByJTyPc=";
+    sha256 = "sha256-zqtPBxjTJ+/XxVpfVpyFIwvlj5xCcnTrUv2RGzP8UQc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
   outputs = [ "out" "dev" ];
+
+  # https://github.com/nats-io/nats.c/issues/542
+  postPatch = ''
+    substituteInPlace src/libnats.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
 
   meta = with lib; {
     description = "C API for the NATS messaging system";

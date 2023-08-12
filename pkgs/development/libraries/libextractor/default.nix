@@ -1,7 +1,7 @@
-{ fetchurl, lib, stdenv, substituteAll
+{ lib, stdenv, fetchurl, fetchpatch, substituteAll
 , libtool, gettext, zlib, bzip2, flac, libvorbis
 , exiv2, libgsf, rpm, pkg-config
-, gstreamerSupport ? true, gst_all_1 ? null
+, gstreamerSupport ? true, gst_all_1
 # ^ Needed e.g. for proper id3 and FLAC support.
 #   Set to `false` to decrease package closure size by about 87 MB (53%).
 , gstPlugins ? (gst: [ gst.gst-plugins-base gst.gst-plugins-good ])
@@ -12,12 +12,9 @@
 #   wrapProgram $out/bin/extract --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
 # '';
 # See also <https://nixos.org/nixpkgs/manual/#sec-language-gnome>.
-, gtkSupport ? true, glib ? null, gtk3 ? null
-, videoSupport ? true, ffmpeg ? null, libmpeg2 ? null}:
-
-assert gstreamerSupport -> gst_all_1 != null && builtins.isList (gstPlugins gst_all_1);
-assert gtkSupport -> glib != null && gtk3 != null;
-assert videoSupport -> ffmpeg != null && libmpeg2 != null;
+, gtkSupport ? true, glib, gtk3
+, videoSupport ? true, ffmpeg_4, libmpeg2
+}:
 
 stdenv.mkDerivation rec {
   pname = "libextractor";
@@ -28,7 +25,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FvYzq4dGo4VHxKHaP0WRGSsIJa2DxDNvBXW4WEPYvY8=";
   };
 
-  patches = lib.optionals gstreamerSupport [
+  patches = [
+    (fetchpatch {
+      name = "libextractor-exiv2-0.28.patch";
+      url = "https://git.pld-linux.org/?p=packages/libextractor.git;a=blob_plain;f=libextractor-exiv2-0.28.patch;h=d763b65f2578f1127713de8dc82f432d34f95a85;hb=0e7de1c6794e8c331a1a1a6a829993c7cd217d3a";
+      hash = "sha256-szAv2A+NmiQyj2+R7BO6fHX588vlTgljPtrnMR6mgGY=";
+    })
+  ] ++ lib.optionals gstreamerSupport [
 
     # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
     (substituteAll {
@@ -45,14 +48,15 @@ stdenv.mkDerivation rec {
            -e "s|pexe[[:blank:]]*=.*$|pexe = strdup(\"$out/lib/\");|g"
     '';
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs =
    [ libtool gettext zlib bzip2 flac libvorbis exiv2
      libgsf rpm
-     pkg-config
    ] ++ lib.optionals gstreamerSupport
           ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
      ++ lib.optionals gtkSupport [ glib gtk3 ]
-     ++ lib.optionals videoSupport [ ffmpeg libmpeg2 ];
+     ++ lib.optionals videoSupport [ ffmpeg_4 libmpeg2 ];
 
   configureFlags = [
     "--disable-ltdl-install"

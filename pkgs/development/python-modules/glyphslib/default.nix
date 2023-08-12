@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "glyphslib";
-  version = "6.0.7";
+  version = "6.3.0";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "glyphsLib";
-    rev = "v${version}";
-    sha256 = "sha256-PrHK9uEgs0DcNYW6EQ5Qw29CN4R2OcxOHrMeIswsxdA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wBtotr7nH7KL5ISaJFs4i8CCv4OCZnVOREUon8jhQdY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     skia-pathops
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "glyphsLib" ];
 

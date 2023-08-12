@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   # https://bugs.launchpad.net/audio-recorder/+bug/1784622
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 

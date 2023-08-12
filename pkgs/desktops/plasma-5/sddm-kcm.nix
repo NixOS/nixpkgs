@@ -1,11 +1,9 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , shared-mime-info
 , libpthreadstubs
 , libXcursor
 , libXdmcp
-, qtbase
 , qtquickcontrols2
 , qtx11extras
 , karchive

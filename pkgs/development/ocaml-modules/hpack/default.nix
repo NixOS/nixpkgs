@@ -7,15 +7,15 @@
 
 buildDunePackage rec {
   pname = "hpack";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://github.com/anmonteiro/ocaml-h2/releases/download/${version}/h2-${version}.tbz";
-    sha256 = "0qcn3yvyz0h419fjg9nb20csfmwmh3ihz0zb0jfzdycf5w4mlry6";
+    hash = "sha256-n9avpVL6HD2KBON2FpnUeuH3HOUDOA29iSmjdcxMRvE=";
   };
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.04";
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     angstrom

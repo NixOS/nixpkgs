@@ -4,17 +4,27 @@
 , csrmesh
 , fetchPypi
 , pycryptodome
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "avion";
   version = "0.10";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zgv45086b97ngyqxdp41wxb7hpn9g7alygc21j9y3dib700vzdz";
+    hash = "sha256-v/0NwFmxDZ9kEOx5qs5L9sKzOg/kto79syctg0Ah+30=";
   };
+
+  postPatch = ''
+    # https://github.com/mjg59/python-avion/pull/16
+    substituteInPlace setup.py \
+      --replace "bluepy>==1.1.4" "bluepy>=1.1.4"
+  '';
 
   propagatedBuildInputs = [
     bluepy
@@ -23,8 +33,9 @@ buildPythonPackage rec {
     requests
   ];
 
-  # Project has no test
+  # Module has no test
   doCheck = false;
+
   # bluepy/uuids.json is not found
   # pythonImportsCheck = [ "avion" ];
 

@@ -3,13 +3,13 @@
 let
   librewolf-src = callPackage ./librewolf.nix { };
 in
-(buildMozillaMach rec {
+((buildMozillaMach rec {
   pname = "librewolf";
   applicationName = "LibreWolf";
   binaryName = "librewolf";
   version = librewolf-src.packageVersion;
   src = librewolf-src.firefox;
-  inherit (librewolf-src) extraConfigureFlags extraPostPatch extraPassthru;
+  inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {
     description = "A fork of Firefox, focused on privacy, security and freedom";
@@ -29,5 +29,6 @@ in
 }).override {
   crashreporterSupport = false;
   enableOfficialBranding = false;
-  pgoSupport = false; # Profiling gets stuck and doesn't terminate.
-}
+}).overrideAttrs (prev: {
+  MOZ_REQUIRE_SIGNING = "";
+})

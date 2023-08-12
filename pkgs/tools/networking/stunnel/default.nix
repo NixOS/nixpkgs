@@ -1,30 +1,39 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, nixosTests }:
+{
+  fetchurl
+, lib
+, nixosTests
+, openssl
+, stdenv
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stunnel";
-  version = "5.65";
+  version = "5.70";
+
+  outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
-    url    = "https://www.stunnel.org/downloads/${pname}-${version}.tar.gz";
-    sha256 = "60c500063bd1feff2877f5726e38278c086f96c178f03f09d264a2012d6bf7fc";
+    url = "https://www.stunnel.org/archive/${lib.versions.major finalAttrs.version}.x/stunnel-${finalAttrs.version}.tar.gz";
+    hash = "sha256-e7x7npqYjXYwEyXbTBEOw2Cpj/uKIhx6zL/5wKi64vM=";
     # please use the contents of "https://www.stunnel.org/downloads/stunnel-${version}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };
-  patches = [
-    # Fixes compilation on darwin, patch is from
-    # https://github.com/mtrojnar/stunnel/pull/15.
-    (fetchpatch {
-        name = "stunnel_darwin_environ.patch";
-        url = "https://github.com/mtrojnar/stunnel/commit/d41932f6d55f639cc921007c2e180a55ef88bf00.patch";
-        sha256 = "sha256-d2K/BHE6GxvDCBIbttCHEVwH9SCu0jggNvhVHkC/qto=";
-      })
+
+  enableParallelBuilding = true;
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals systemdSupport [
+    systemd
   ];
 
-  buildInputs = [ openssl ];
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.enableFeature systemdSupport "systemd")
   ];
 
   postInstall = ''
@@ -43,9 +52,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Universal tls/ssl wrapper";
-    homepage    = "https://www.stunnel.org/";
-    license     = lib.licenses.gpl2Plus;
-    platforms   = lib.platforms.unix;
+    homepage = "https://www.stunnel.org/";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.thoughtpolice ];
+    platforms = lib.platforms.unix;
   };
-}
+})

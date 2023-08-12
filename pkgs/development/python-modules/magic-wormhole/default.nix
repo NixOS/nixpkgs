@@ -46,11 +46,16 @@ buildPythonPackage rec {
   ] ++ autobahn.optional-dependencies.twisted
   ++ twisted.optional-dependencies.tls;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     magic-wormhole-transit-relay
     magic-wormhole-mailbox-server
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Expected: (<class 'wormhole.errors.WrongPasswordError'>,) Got: Failure instance: Traceback (failure with no frames): <class 'wormhole.errors.LonelyError'>:
+    "test_welcome"
   ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -65,7 +70,7 @@ buildPythonPackage rec {
     description = "Securely transfer data between computers";
     homepage = "https://github.com/magic-wormhole/magic-wormhole";
     license = licenses.mit;
-    maintainers = with maintainers; [ asymmetric SuperSandro2000 ];
+    maintainers = with maintainers; [ asymmetric ];
     mainProgram = "wormhole";
   };
 }

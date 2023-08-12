@@ -8,41 +8,41 @@
 , stdenv
 , mono
 }:
+let
+  mainProgram = "EventStore.ClusterNode";
+in
 
 buildDotnetModule rec {
   pname = "EventStore";
-  version = "21.10.5";
+  version = "22.10.2";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
     rev = "oss-v${version}";
-    sha256 = "sha256-uUDjTGCiQgXmvOUsujIA0JkGQGuw9U4zLKDP1WIFq1o=";
+    sha256 = "sha256-CYI1VE+6bR3UFx98IquS8rgucKmQqcHh74Jf/9CGE0k=";
     leaveDotGit = true;
   };
 
   # Fixes application reporting 0.0.0.0 as its version.
   MINVERVERSIONOVERRIDE = version;
 
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_5_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
   nativeBuildInputs = [ git glibcLocales bintools ];
 
   runtimeDeps = [ mono ];
 
-  nugetBinariesToPatch = lib.optionals stdenv.isLinux [
-    "grpc.tools/2.39.1/tools/linux_x64/protoc"
-    "grpc.tools/2.39.1/tools/linux_x64/grpc_csharp_plugin"
+  executables = [ mainProgram ];
+
+  # This test has a problem running on macOS
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "EventStore.Projections.Core.Tests.Services.grpc_service.ServerFeaturesTests<LogFormat+V2,String>.should_receive_expected_endpoints"
+    "EventStore.Projections.Core.Tests.Services.grpc_service.ServerFeaturesTests<LogFormat+V3,UInt32>.should_receive_expected_endpoints"
   ];
 
   postConfigure = ''
-    # Fixes execution of native protoc binaries during build
-    for binary in $nugetBinariesToPatch; do
-      path="$HOME/.nuget/packages/$binary"
-      patchelf --set-interpreter "$(cat $NIX_BINTOOLS/nix-support/dynamic-linker)" $path
-    done
-
     # Fixes git execution by GitInfo on mac os
     substituteInPlace "$HOME/.nuget/packages/gitinfo/2.0.26/build/GitInfo.targets" \
       --replace "<GitExe Condition=\"Exists('/usr/bin/git')\">/usr/bin/git</GitExe>" " " \
@@ -71,11 +71,14 @@ buildDotnetModule rec {
     kill "$PID";
   '';
 
+  passthru.updateScript = ./updater.sh;
+
   meta = with lib; {
     homepage = "https://geteventstore.com/";
     description = "Event sourcing database with processing logic in JavaScript";
     license = licenses.bsd3;
     maintainers = with maintainers; [ puffnfresh mdarocha ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    inherit mainProgram;
   };
 }

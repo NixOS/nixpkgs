@@ -12,33 +12,24 @@ index 2a170c6..5ee3ba1 100644
              check=True,
          )
 diff --git a/src/pikepdf/jbig2.py b/src/pikepdf/jbig2.py
-index be390a1..3818ec3 100644
+index 28c596b..aff3565 100644
 --- a/src/pikepdf/jbig2.py
 +++ b/src/pikepdf/jbig2.py
-@@ -31,7 +31,7 @@ def extract_jbig2(
+@@ -28,7 +28,7 @@ def _extract_jbig2_bytes(jbig2: bytes, jbig2_globals: bytes) -> bytes:
          output_path = Path(tmpdir) / "outfile"
- 
+
          args = [
 -            "jbig2dec",
 +            "@jbig2dec@",
              "--embedded",
              "--format",
              "png",
-@@ -64,7 +64,7 @@ def _extract_jbig2_bytes(jbig2: bytes, jbig2_globals: bytes) -> bytes:
-         output_path = Path(tmpdir) / "outfile"
- 
-         args = [
--            "jbig2dec",
-+            "@jbig2dec@",
-             "--embedded",
-             "--format",
-             "png",
-@@ -100,7 +100,7 @@ def extract_jbig2_bytes(
- 
- def _check_jbig2dec_available() -> None:  # pragma: no cover
-     try:
--        proc = run(['jbig2dec', '--version'], stdout=PIPE, check=True, encoding='ascii')
-+        proc = run(['@jbig2dec@', '--version'], stdout=PIPE, check=True, encoding='ascii')
-     except (CalledProcessError, FileNotFoundError) as e:
-         raise DependencyError("jbig2dec - not installed or not found") from e
-     else:
+@@ -88,7 +88,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+     def _version(self) -> Version:
+         try:
+             proc = run(
+-                ['jbig2dec', '--version'], stdout=PIPE, check=True, encoding='ascii'
++                ['@jbig2dec@', '--version'], stdout=PIPE, check=True, encoding='ascii'
+             )
+         except (CalledProcessError, FileNotFoundError) as e:
+             raise DependencyError("jbig2dec - not installed or not found") from e

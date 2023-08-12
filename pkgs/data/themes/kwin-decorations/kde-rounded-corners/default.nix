@@ -6,19 +6,19 @@
 , kwin
 , kdelibs4support
 , libepoxy
-, libXdmcp
+, libxcb
 , lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "kde-rounded-corners";
-  version = "unstable-2022-06-17";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "matinlotfali";
     repo = "KDE-Rounded-Corners";
-    rev = "015ef5cd65e9ec89e4a1ae057f2251eda03715e2";
-    hash = "sha256-NJ7icavofSUPPww1Ro7p0yY2EQ78S4KVCuj9yPuYwd8=";
+    rev = "v${version}";
+    hash = "sha256-mjZWfh00A0J6ijuLqW6frPH4AYbRI/BlVHblGCCmNEo=";
   };
 
   postConfigure = ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
-  buildInputs = [ kwin kdelibs4support libepoxy libXdmcp ];
+  buildInputs = [ kwin kdelibs4support libepoxy libxcb ];
 
   meta = with lib; {
     description = "Rounds the corners of your windows";

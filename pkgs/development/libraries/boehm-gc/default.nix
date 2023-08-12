@@ -1,41 +1,53 @@
 { lib
 , stdenv
 , fetchurl
-, autoreconfHook
-# doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros (LARGE_CONFIG)
+# doc: https://github.com/ivmai/bdwgc/blob/v8.2.2/doc/README.macros (LARGE_CONFIG)
 , enableLargeConfig ? false
 , enableMmap ? true
+, enableStatic ? false
 , nixVersions
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
-  version = "8.0.6";
+  version = "8.2.2";
 
   src = fetchurl {
     urls = [
-      "https://www.hboehm.info/gc/gc_source/gc-${finalAttrs.version}.tar.gz"
+      # "https://www.hboehm.info/gc/gc_source/gc-${finalAttrs.version}.tar.gz"
       "https://github.com/ivmai/bdwgc/releases/download/v${finalAttrs.version}/gc-${finalAttrs.version}.tar.gz"
     ];
-    sha256 = "sha256-O0kUq8n6dlk1lnc+TaZx1+1NU5Dj1G+/Ll8VXhIb6hE=";
+    sha256 = "sha256-8wEHvLBi4JIKeQ//+lbZUSNIVGhZNkwjoUviZLOINqA=";
   };
 
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
-  # boehm-gc whitelists GCC threading models
-  patches = lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
-
   configureFlags = [
     "--enable-cplusplus"
     "--with-libatomic-ops=none"
   ]
+  ++ lib.optional enableStatic "--enable-static"
   ++ lib.optional enableMmap "--enable-mmap"
   ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isMinGW autoreconfHook;
+  # This stanza can be dropped when a release fixes this issue:
+  #   https://github.com/ivmai/bdwgc/issues/376
+  # The version is checked with == instead of versionAtLeast so we
+  # don't forget to disable the fix (and if the next release does
+  # not fix the problem the test failure will be a reminder to
+  # extend the set of versions requiring the workaround).
+  makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 &&
+                  finalAttrs.version == "8.2.2")
+    [
+      # do not use /proc primitives to track dirty bits; see:
+      # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
+      # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
+      "CFLAGS_EXTRA=-DNO_SOFT_VDB"
+    ];
 
-  doCheck = true;
+  # `gctest` fails under emulation on aarch64-darwin
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
 
   enableParallelBuilding = true;
 

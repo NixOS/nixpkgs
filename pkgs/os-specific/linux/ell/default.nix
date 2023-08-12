@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.52";
+  version = "0.57";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    sha256 = "sha256-JnkNWWdr0CSlwME619BBWkvelFZoZpzmAR53nm2bSqM=";
+    sha256 = "sha256-9d9WMCByQ1TKWpzWe5msts1LG+BKKqwCgaMBbD74/+4=";
   };
 
   nativeBuildInputs = [
@@ -22,13 +22,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # tests sporadically fail on musl
+  doCheck = !stdenv.hostPlatform.isMusl;
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/libs/ell/ell.git";

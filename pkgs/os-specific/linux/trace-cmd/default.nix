@@ -1,25 +1,26 @@
 { lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "3.1.2";
+  version = "3.2";
 
   src = fetchgit {
-    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
+    url    = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
     rev    = "trace-cmd-v${version}";
-    sha256 = "sha256-wxrMEE7ZgMHM59Rv6Gk3f0zdpULuXLnY0UY797YF1a0=";
+    sha256 = "sha256-KlykIYF4uy1phgWRG5j76FJqgO7XhNnyrTDVTs8YOXY=";
   };
 
   # Don't build and install html documentation
   postPatch = ''
     sed -i -e '/^all:/ s/html//' -e '/^install:/ s/install-html//' \
        Documentation{,/trace-cmd,/libtracecmd}/Makefile
+    patchShebangs check-manpages.sh
   '';
 
   nativeBuildInputs = [ asciidoc libxslt pkg-config xmlto docbook_xsl docbook_xml_dtd_45 sourceHighlight ];
 
   buildInputs = [ libtraceevent libtracefs zstd ];
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [ "out" "lib" "dev" "man" "devman" ];
 
   MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
   # because the Makefile would not print warnings about too old
   # libraries (see "warning:" in the Makefile)
   postBuild = ''
-    make libs doc -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
+    make libs doc -j$NIX_BUILD_CORES
   '';
 
   installTargets = [
@@ -58,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.trace-cmd.org/";
     license     = with licenses; [ lgpl21Only gpl2Only ];
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice basvandijk ];
+    maintainers = with maintainers; [ thoughtpolice basvandijk wentasah ];
   };
 }

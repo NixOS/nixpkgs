@@ -5,12 +5,13 @@
 , mpi4py
 , numpy
 , precice
+, pkgconfig
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "2.4.0.0";
+  version = "2.5.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,11 +20,12 @@ buildPythonPackage rec {
     owner = "precice";
     repo = "python-bindings";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Endy5oiC1OWdtZlVPUkIdkzoDTc1b5TaQ6VEUWq5iSg=";
+    hash = "sha256-SIuv3VUpEit1ed+4AEPx59bGTDfoQYcAgO1PnVb+9VM=";
   };
 
   nativeBuildInputs = [
     cython
+    pkgconfig
   ];
 
   propagatedBuildInputs = [

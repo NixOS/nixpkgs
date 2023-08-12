@@ -1,18 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, graphicsmagick, libjpeg
-, ffmpeg, zlib, libexif, openslide }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ffmpeg
+, graphicsmagick
+, libdeflate
+, libexif
+, libjpeg
+, libsixel
+, openslide
+}:
 
 stdenv.mkDerivation rec {
   pname = "timg";
-  version = "1.4.4";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "timg";
     rev = "v${version}";
-    sha256 = "1gdwg15fywya6k6pajkx86kv2d8k85pmisnq53b02br5i01y4k41";
+    hash = "sha256-hGQL6MAsaSVV/w5fDKAcd4KIBuh2pvl3D2QUzi/aeG0=";
   };
 
-  buildInputs = [ graphicsmagick ffmpeg libexif libjpeg openslide zlib ];
+  buildInputs = [
+    ffmpeg
+    graphicsmagick
+    libdeflate
+    libexif
+    libjpeg
+    libsixel
+    openslide
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -21,6 +40,7 @@ stdenv.mkDerivation rec {
     "-DWITH_VIDEO_DECODING=On"
     "-DWITH_VIDEO_DEVICE=On"
     "-DWITH_OPENSLIDE_SUPPORT=On"
+    "-DWITH_LIBSIXEL=On"
   ];
 
   meta = with lib; {

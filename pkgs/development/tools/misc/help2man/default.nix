@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "help2man";
-  version = "1.49.2";
+  version = "1.49.3";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ni4OITp+CjYkTu1iBNkCtlBGAqV4tuzRUmixRU3q3TY=";
+    url = "mirror://gnu/help2man/help2man-${version}.tar.xz";
+    sha256 = "sha256-TX5P3vLspq/geiaCFRzqeHgeCk6PliIULZ9wwIOi/U8=";
   };
 
   strictDeps = true;
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     "--enable-nls"
   ];
 
-  doCheck = false;                                # target `check' is missing
+  doCheck = false; # target `check' is missing
 
-  patches = if stdenv.hostPlatform.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
+  patches = lib.optional stdenv.hostPlatform.isCygwin ./1.40.4-cygwin-nls.patch;
 
   # We don't use makeWrapper here because it uses substitutions our
   # bootstrap shell can't handle.
@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
     cat > $out/bin/help2man <<EOF
     #! $SHELL -e
     export PERL5LIB=\''${PERL5LIB:+:}${perlPackages.LocaleGettext}/${perlPackages.perl.libPrefix}
-    ${lib.optionalString stdenv.hostPlatform.isCygwin
-        ''export PATH=\''${PATH:+:}${gettext}/bin''}
+    ${lib.optionalString stdenv.hostPlatform.isCygwin ''export PATH=\''${PATH:+:}${gettext}/bin''}
     exec -a \$0 $out/bin/.help2man-wrapped "\$@"
     EOF
     chmod +x $out/bin/help2man
@@ -45,14 +44,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generate man pages from `--help' output";
-
-    longDescription =
-      '' help2man produces simple manual pages from the ‘--help’ and
-         ‘--version’ output of other commands.
-      '';
-
+    longDescription = ''
+      help2man produces simple manual pages from the ‘--help’ and ‘--version’ output of other commands.
+    '';
     homepage = "https://www.gnu.org/software/help2man/";
-
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];

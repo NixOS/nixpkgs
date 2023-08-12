@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "btrees";
-  version = "4.10.1";
+  version = "5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "BTrees";
     inherit version;
-    hash = "sha256-QOPUFrOwMajIYzRQfRIbadnJ3pB+ESNE3lJrVFHZA8U=";
+    hash = "sha256-/d+KTcwCU+OQJ7qzgKLiDUeuNwoySFQW8qZq2a4aQ/o=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     transaction
     zope_testrunner
   ];

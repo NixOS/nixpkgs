@@ -1,39 +1,103 @@
-{ lib, fetchurl, appimageTools }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, yarn
+, fixup_yarn_lock
+, nodejs
+, python3
+, makeWrapper
+, electron
+, gogdl
+, legendary-gl
+}:
 
-let
-  pname = "heroic";
-  version = "2.2.6";
-  name = "${pname}-${version}";
-  src = fetchurl {
-    url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}.AppImage";
-    sha256 = "sha256-kL30/G4DpDPwGN7PvbWest7TcgL4Rd1c2OM4nRCT3bg=";
+let appName = "heroic";
+in stdenv.mkDerivation rec {
+  pname = "heroic-unwrapped";
+  version = "2.8.0";
+
+  src = fetchFromGitHub {
+    owner = "Heroic-Games-Launcher";
+    repo = "HeroicGamesLauncher";
+    rev = "v${version}";
+    hash = "sha256-AZwJRBkWuzBPT+ADVHabiK2KRXe6clZFa0IO99BO2Wk=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
 
-in
-appimageTools.wrapType2 {
-  inherit name src;
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-xiLK0D9+oL2UMD7b/9htOQJEpYCNayKW+KJ/vNVCgsw=";
+  };
 
-  extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+  nativeBuildInputs = [
+    yarn
+    fixup_yarn_lock
+    nodejs
+    python3
+    makeWrapper
+  ];
 
-    mkdir -p $out/share/${pname}
-    cp -a ${appimageContents}/locales $out/share/${pname}
-    cp -a ${appimageContents}/resources $out/share/${pname}
+  configurePhase = ''
+    runHook preConfigure
 
-    install -m 444 -D ${appimageContents}/heroic.desktop -t $out/share/applications
+    export HOME=$(mktemp -d)
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    fixup_yarn_lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
 
-    cp -a ${appimageContents}/usr/share/icons $out/share/
+    runHook postConfigure
+  '';
 
-    substituteInPlace $out/share/applications/heroic.desktop \
-      --replace 'Exec=AppRun' 'Exec=heroic'
+  buildPhase = ''
+    runHook preBuild
+
+    yarn --offline vite build
+
+    # Remove dev dependencies.
+    yarn install --production --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+
+    runHook postBuild
+  '';
+
+  # --disable-gpu-compositing is to work around upstream bug
+  # https://github.com/electron/electron/issues/32317
+  installPhase = let
+    binPlatform = if stdenv.isDarwin then "darwin" else "linux";
+  in ''
+    runHook preInstall
+
+    mkdir -p $out/share/{applications,${appName}}
+    cp -r . $out/share/${appName}
+    rm -rf $out/share/${appName}/{.devcontainer,.vscode,.husky,.idea,.github}
+
+    chmod -R u+w "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
+    rm -rf "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
+    mkdir -p "$out/share/${appName}/build/bin/${binPlatform}"
+    ln -s "${gogdl}/bin/gogdl" "${legendary-gl}/bin/legendary" "$out/share/${appName}/build/bin/${binPlatform}"
+
+    makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
+      --inherit-argv0 \
+      --add-flags --disable-gpu-compositing \
+      --add-flags $out/share/${appName} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+
+    substituteInPlace "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.desktop" \
+      --replace "Exec=heroic-run" "Exec=heroic"
+    mkdir -p "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
+    ln -s "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications"
+    ln -s "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.png" "$out/share/icons/hicolor/512x512/apps"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A Native GUI Epic Games Launcher for Linux, Windows and Mac";
+    description = "A Native GOG and Epic Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
+    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ aidalgol ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    mainProgram = appName;
   };
 }

@@ -4,16 +4,16 @@
 , click
 , dnspython
 , fetchFromGitHub
-, mock
 , poetry-core
 , pytest-asyncio
+, pytest-rerunfailures
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "9.3.0";
+  version = "11.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,9 +21,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-mine";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-kNThVElEDqhbCitktBv5tQkjMaU4IsX0dJk63hvLhb0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+r6WL59T9rNAKl3r4Hef75uJoD7DRYA23uS/OlzRyRk=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -35,19 +41,11 @@ buildPythonPackage rec {
     dnspython
   ];
 
-  checkInputs = [
-    mock
+  nativeCheckInputs = [
     pytest-asyncio
+    pytest-rerunfailures
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" "" \
-      --replace 'asyncio-dgram = "2.1.2"' 'asyncio-dgram = ">=2.1.2"' \
-      --replace 'dnspython = "2.2.1"' 'dnspython = ">=2.2.0"'
-  '';
 
   pythonImportsCheck = [
     "mcstatus"
@@ -62,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for checking the status of Minecraft servers";
     homepage = "https://github.com/py-mine/mcstatus";
+    changelog = "https://github.com/py-mine/mcstatus/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

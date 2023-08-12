@@ -16,7 +16,7 @@
     createTrivialProject = pkgs.stdenv.mkDerivation {
       name = "create-trivial-project";
       dontUnpack = true;
-      buildInputs = [ pkgs.makeWrapper ];
+      nativeBuildInputs = [ pkgs.makeWrapper ];
       installPhase = "install -m755 -D ${./create-trivial-project.sh} $out/bin/create-trivial-project.sh";
       postFixup = ''
         wrapProgram "$out/bin/create-trivial-project.sh" --prefix PATH ":" ${pkgs.lib.makeBinPath [ pkgs.curl ]} --set EXPR_PATH ${trivialJob}

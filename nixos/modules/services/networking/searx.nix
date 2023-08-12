@@ -10,6 +10,8 @@ let
   settingsFile = pkgs.writeText "settings.yml"
     (builtins.toJSON cfg.settings);
 
+  limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
+
   generateConfig = ''
     cd ${runDir}
 
@@ -65,6 +67,15 @@ in
         '';
       };
 
+      redisCreateLocally = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Configure a local Redis server for SearXNG. This is required if you
+          want to enable the rate limiter and bot protection of SearXNG.
+        '';
+      };
+
       settings = mkOption {
         type = types.attrsOf settingType;
         default = { };
@@ -111,6 +122,31 @@ in
         '';
       };
 
+      limiterSettings = mkOption {
+        type = types.attrsOf settingType;
+        default = { };
+        example = literalExpression ''
+          {
+            real_ip = {
+              x_for = 1;
+              ipv4_prefix = 32;
+              ipv6_prefix = 56;
+            }
+            botdetection.ip_lists.block_ip = [
+              # "93.184.216.34" # example.org
+            ];
+          }
+        '';
+        description = lib.mdDoc ''
+          Limiter settings for SearXNG.
+
+          ::: {.note}
+          For available settings, see the SearXNG
+          [schema file](https://github.com/searxng/searxng/blob/master/searx/botdetection/limiter.toml).
+          :::
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.searx;
@@ -124,7 +160,7 @@ in
         description = lib.mdDoc ''
           Whether to run searx in uWSGI as a "vassal", instead of using its
           built-in HTTP server. This is the recommended mode for public or
-          large instances, but is unecessary for LAN or local-only use.
+          large instances, but is unnecessary for LAN or local-only use.
 
           ::: {.warning}
           The built-in HTTP server logs all queries by default.
@@ -158,6 +194,17 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = (cfg.limiterSettings != { }) -> cfg.package.pname == "searxng";
+        message = "services.searx.limiterSettings requires services.searx.package to be searxng.";
+      }
+      {
+        assertion = cfg.redisCreateLocally -> cfg.package.pname == "searxng";
+        message = "services.searx.redisCreateLocally requires services.searx.package to be searxng.";
+      }
+    ];
+
     environment.systemPackages = [ cfg.package ];
 
     users.users.searx =
@@ -206,6 +253,7 @@ in
     services.searx.settings = {
       # merge NixOS settings with defaults settings.yml
       use_default_settings = mkDefault true;
+      redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
     };
 
     services.uwsgi = mkIf (cfg.runInUwsgi) {
@@ -223,7 +271,7 @@ in
         module = "searx.webapp";
         env = [
           "SEARX_SETTINGS_PATH=${cfg.settingsFile}"
-          # searxng compatiblity https://github.com/searxng/searxng/issues/1519
+          # searxng compatibility https://github.com/searxng/searxng/issues/1519
           "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
         ];
         buffer-size = 32768;
@@ -231,7 +279,16 @@ in
       } // cfg.uwsgiConfig;
     };
 
+    services.redis.servers.searx = lib.mkIf cfg.redisCreateLocally {
+      enable = true;
+      user = "searx";
+      port = 0;
+    };
+
+    environment.etc."searxng/limiter.toml" = lib.mkIf (cfg.limiterSettings != { }) {
+      source = limiterSettingsFile;
+    };
   };
 
-  meta.maintainers = with maintainers; [ rnhmjoj ];
+  meta.maintainers = with maintainers; [ rnhmjoj _999eagle ];
 }

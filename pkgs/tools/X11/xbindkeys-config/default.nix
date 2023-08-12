@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ gtk ];

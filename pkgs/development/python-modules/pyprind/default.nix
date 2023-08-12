@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   buildInputs = [ psutil ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     py.test tests

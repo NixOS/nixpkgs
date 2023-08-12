@@ -2,14 +2,14 @@
 
 mkDerivation rec {
   pname = "grantlee";
-  version = "5.2.0";
+  version = "5.3.1";
   grantleePluginPrefix = "lib/grantlee/${lib.versions.majorMinor version}";
 
   src = fetchFromGitHub {
     owner = "steveire";
     repo = "grantlee";
     rev = "v${version}";
-    sha256 = "sha256-mAbgzdBdIW1wOTQNBePQuyTgkKdpn1c+zR3H7mXHvgk=";
+    sha256 = "sha256-enP7b6A7Ndew2LJH569fN3IgPu2/KL5rCmU/jmKb9sY=";
   };
 
   buildInputs = [ qtbase qtscript ];

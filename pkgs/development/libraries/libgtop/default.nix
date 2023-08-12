@@ -7,20 +7,23 @@
 , gobject-introspection
 , gnome
 , gtk-doc
+, deterministic-uname
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgtop";
-  version = "2.40.0";
+  version = "2.41.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1m6jbqk8maa52gxrf223442fr5bvvxgb7ham6v039i3r1i62gwvq";
+    sha256 = "Q+qa0T98r5gwPmQXKxkb6blrqzQLAZ3u7HIlHuFA/js=";
   };
 
   nativeBuildInputs = [
+    # uname output embedded in https://gitlab.gnome.org/GNOME/libgtop/-/blob/master/src/daemon/Makefile.am
+    deterministic-uname
     pkg-config
     gtk-doc
     perl

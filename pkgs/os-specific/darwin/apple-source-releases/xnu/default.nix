@@ -12,7 +12,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
   nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python3 ];
 
-  patches = lib.optional stdenv.isx86_64 [ ./python3.patch ];
+  patches = lib.optionals stdenv.isx86_64 [ ./python3.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -34,7 +34,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
       --replace "-Werror " ""
 
     substituteInPlace SETUP/kextsymboltool/Makefile \
-      --replace "-lstdc++" "-lc++"
+      --replace "-lstdc++" "-lc++ -lc++abi"
 
     substituteInPlace libsyscall/xcodescripts/mach_install_mig.sh \
       --replace "/usr/include" "/include" \
@@ -63,6 +63,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   MIG = "mig";
   MIGCOM = "migcom";
   STRIP = "${stdenv.cc.bintools.targetPrefix or ""}strip";
+  RANLIB = "${stdenv.cc.bintools.targetPrefix or ""}ranlib";
   NM = "${stdenv.cc.bintools.targetPrefix or ""}nm";
   UNIFDEF = "unifdef";
   DSYMUTIL = "dsymutil";
@@ -75,7 +76,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   ARCHS = arch;
   ARCH_CONFIGS = arch;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preBuild = let macosVersion =
     "10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11" +
@@ -115,6 +116,9 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
     cp EXTERNAL_HEADERS/AssertMacros.h $out/include
     cp EXTERNAL_HEADERS/Availability*.h $out/System/Library/Frameworks/Kernel.framework/Versions/A/Headers/
     cp -r EXTERNAL_HEADERS/corecrypto $out/include
+
+    # These headers are needed by Libsystem.
+    cp libsyscall/wrappers/{spawn/spawn.h,libproc/libproc.h} $out/include
 
     # Build the mach headers we crave
     export SRCROOT=$PWD/libsyscall

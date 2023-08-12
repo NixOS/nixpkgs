@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, GitPython
+, gitpython
 , isort
 , jupyter-client
 , jupyter-packaging
@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.14.1";
+  version = "1.15.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "mwouts";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DDF4aTLkhEl4xViYh/E0/y6swcwZ9KbeS0qKm+HdFz8=";
+    hash = "sha256-M4BoST18sf1C1lwhFkp4a0B3fc0VKerwuVEIfwkD7i0=";
   };
 
   buildInputs = [
@@ -44,8 +44,8 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
-    GitPython
+  nativeCheckInputs = [
+    gitpython
     isort
     jupyter-client
     notebook
@@ -77,7 +77,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
     homepage = "https://github.com/mwouts/jupytext";
+    changelog = "https://github.com/mwouts/jupytext/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.jupyter.members;
   };
 }

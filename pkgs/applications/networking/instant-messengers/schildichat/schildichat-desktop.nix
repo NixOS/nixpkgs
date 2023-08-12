@@ -14,6 +14,7 @@
 , Security
 , AppKit
 , CoreServices
+, sqlcipher
 }:
 
 let
@@ -57,13 +58,18 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+  # Only affects unused scripts in $out/share/element/electron/scripts. Also
+  # breaks because there are some `node`-scripts with a `npx`-shebang and
+  # this shouldn't be in the closure just for unused scripts.
+  dontPatchShebangs = true;
+
   buildPhase = ''
     runHook preBuild
 
     pushd element-desktop
-    npx tsc
-    yarn run i18n
-    node ./scripts/copy-res.js
+    yarn --offline run build:ts
+    yarn --offline run i18n
+    yarn --offline run build:res
     popd
 
     runHook postBuild
@@ -87,16 +93,14 @@ stdenv.mkDerivation rec {
     done
 
     # executable wrapper
+    # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
+      --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';
-
-  # Do not attempt generating a tarball for element-web again.
-  # note: `doDist = false;` does not work.
-  distPhase = ";";
 
   # The desktop item properties should be kept in sync with data from upstream:
   # https://github.com/schildichat/element-desktop/blob/sc/package.json

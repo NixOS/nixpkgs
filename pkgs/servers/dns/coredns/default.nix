@@ -2,20 +2,25 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "coredns";
-  version = "1.9.4";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "sha256-9+DwOSfhX+sNnvLMgHKUQSozXzT9k8u7Q1p8FvbvsTE=";
+    sha256 = "sha256-/+D/jATZhHSxLPB8RkPLUYAZ3O+/9l8XIhgokXz2SUQ=";
   };
 
-  vendorSha256 = "sha256-L4GzOY7oZlC3Et/kEBXrrQGt5/c3jHZimY7NnjXYSro=";
+  vendorHash = "sha256-aWmwzIHScIMb3DPzr4eto2yETMgKd/hUy18X8KxQGos=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  outputs = [ "out" "man" ];
 
   postPatch = ''
     substituteInPlace test/file_cname_proxy_test.go \
@@ -29,10 +34,14 @@ buildGoModule rec {
     sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
   '';
 
+  postInstall = ''
+    installManPage man/*
+  '';
+
   meta = with lib; {
     homepage = "https://coredns.io";
     description = "A DNS server that runs middleware";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem rtreffer deltaevo superherointj ];
+    maintainers = with maintainers; [ rushmorem rtreffer deltaevo ];
   };
 }

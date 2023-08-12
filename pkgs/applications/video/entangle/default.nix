@@ -33,6 +33,7 @@
 , libxkbcommon
 , orc
 , pcre
+, pcre2
 , udev
 , util-linux
 , xorg
@@ -69,6 +70,7 @@ stdenv.mkDerivation rec {
     python3 # for build scripts
     pkgconf
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -78,7 +80,6 @@ stdenv.mkDerivation rec {
     elfutils
     gexiv2
     glib
-    gobject-introspection
     gst-plugins-base
     gstreamer
     gtk3
@@ -94,7 +95,8 @@ stdenv.mkDerivation rec {
     libunwind
     libxkbcommon
     orc
-    pcre
+    pcre # required by libselinux before we USE_PCRE2
+    pcre2 # required by glib-2.0
     udev
     util-linux
     zstd

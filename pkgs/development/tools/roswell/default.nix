@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, curl, autoconf, automake, makeWrapper, sbcl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, autoconf
+, automake
+, makeWrapper
+, sbcl
+}:
 
 stdenv.mkDerivation rec {
   pname = "roswell";
-  version = "21.10.14.111";
+  version = "22.12.14.113";
 
   src = fetchFromGitHub {
     owner = "roswell";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K4RDNTY8g6MNjjiwXMmYaZm0fChJ1C1eTpc0h7ja1ds=";
+    hash = "sha256-tNOkZcdjwvrsleWMtcQ76KMBnssnuYQU3gqXnBVPN6w=";
   };
 
   patches = [
@@ -31,16 +39,24 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ sbcl ]} --argv0 ros
   '';
 
-  nativeBuildInputs = [ autoconf automake makeWrapper ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    makeWrapper
+  ];
 
-  buildInputs = [ sbcl curl ];
+  buildInputs = [
+    sbcl
+    curl
+  ];
 
   meta = with lib; {
-    description = "Roswell is a Lisp implementation installer/manager, launcher, and much more";
+    description = "Lisp implementation installer/manager and launcher";
     license = licenses.mit;
     maintainers = with maintainers; [ hiro98 ];
     platforms = platforms.unix;
     homepage = "https://github.com/roswell/roswell";
+    changelog = "https://github.com/roswell/roswell/blob/v${version}/ChangeLog";
     mainProgram = "ros";
   };
 }

@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation {
   pname = "kgt";
-  version = "2021-04-07";
+  version = "2023-06-03";
 
   src = fetchFromGitHub {
     owner = "katef";
     repo = "kgt";
-    # 2021-04-07, no version tags (yet)
-    rev = "a7cbc52d368e413a3f1212c0fafccc05b2a42606";
-    sha256 = "1x6q30xb8ihxi26rzk3s2hqd827fim4l4wn3qq252ibrwcq6lqyj";
+    # 2023-06-03, no version tags (yet)
+    rev = "dc881796aa691f1fddb1d01ec77216b34fe8134d";
+    hash = "sha256-Az5995/eGUHFL1C1WAdgh1td3goHUYgzWFeVFz2zb8g=";
     fetchSubmodules = true;
   };
 

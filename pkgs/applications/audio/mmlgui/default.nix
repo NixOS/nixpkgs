@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mmlgui";
-  version = "unstable-2022-05-24";
+  version = "unstable-2023-06-12";
 
   src = fetchFromGitHub {
     owner = "superctr";
     repo = "mmlgui";
-    rev = "fe2b298c1eddae4cc38096f6c1ba1ccaed562cf1";
+    rev = "d680f576aba769b0d63300fbed57a0e9e54dfa4b";
     fetchSubmodules = true;
-    sha256 = "Q34zzZthdThMbduXcc/qMome89mAMrn1Vinr073u4zo=";
+    hash = "sha256-BqwayGQBIa0ru22Xci8vHNYPFr9scZSdrUOlDtGBnno=";
   };
 
   postPatch = ''
@@ -31,9 +31,17 @@ stdenv.mkDerivation rec {
     # Removing a pkgconf-specific option makes it work with pkg-config
     substituteInPlace libvgm.mak \
       --replace '--with-path=/usr/local/lib/pkgconfig' ""
+
+    # Use correct pkg-config
+    substituteInPlace {imgui,libvgm}.mak \
+      --replace 'pkg-config' "\''$(PKG_CONFIG)"
+
+    # Don't force building tests
     substituteInPlace Makefile \
       --replace 'all: $(MMLGUI_BIN) test' 'all: $(MMLGUI_BIN)'
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -61,7 +69,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   installPhase = ''
     runHook preInstall

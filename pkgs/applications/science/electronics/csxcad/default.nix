@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "csxcad";
-  version = "unstable-2020-02-08";
+  version = "unstable-2022-05-18";
 
   src = fetchFromGitHub {
     owner = "thliebig";
     repo = "CSXCAD";
-    rev = "ef6e40931dbd80e0959f37c8e9614c437bf7e518";
-    sha256 = "072s765jyzpdq8qqysdy0dld17m6sr9zfcs0ip2zk8c4imxaysnb";
+    rev = "cd9decb4d9cebe3c8bf115e2c0ee73f730f22da1";
+    sha256 = "1604amhvp7dm8ych7gwzxwawqvb9hpjglk5ffd4qm0y3k6r89arn";
   };
 
   patches = [./searchPath.patch ];

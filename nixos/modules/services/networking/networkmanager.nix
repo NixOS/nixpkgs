@@ -365,7 +365,7 @@ in {
           If you enable this option the
           `networkmanager_strongswan` plugin will be added to
           the {option}`networking.networkmanager.plugins` option
-          so you don't need to to that yourself.
+          so you don't need to do that yourself.
         '';
       };
 
@@ -461,6 +461,8 @@ in {
       "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
 
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+      # ppp isn't able to mkdir that directory at runtime
+      "d /run/pppd/lock 0700 root root -"
     ];
 
     systemd.services.NetworkManager = {

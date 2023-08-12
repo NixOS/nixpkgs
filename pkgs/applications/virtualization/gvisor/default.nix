@@ -9,25 +9,31 @@
 
 buildGoModule rec {
   pname = "gvisor";
-  version = "20220905.0";
+  version = "20221102.1";
+
+  # gvisor provides a synthetic go branch (https://github.com/google/gvisor/tree/go)
+  # that can be used to build gvisor without bazel.
+  # For updates, you should stick to the commits labeled "Merge release-** (automated)"
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gvisor";
-    rev = "442a3cd44a0858ac2a8e773b6fbba67cf3bd3767";
-    sha256 = "sha256-LKY7AKAHX29eGuXRrkCVCFl/bdHAVOC0QNZfzlpXqwc=";
+    rev = "bf8eeee3a9eb966bc72c773da060a3c8bb73b8ff";
+    sha256 = "sha256-rADQsJ+AnBVlfQURGJl1xR6Ad5NyRWSrBSpOFMRld+o=";
   };
 
-  vendorSha256 = "sha256-Fn8A8iwTv0lNI9ZBJkq3SlRelnAGIQY0GInTxaCzSAU=";
+  vendorSha256 = "sha256-iGLWxx/Kn1QaJTNOZcc+mwoF3ecEDOkaqmA0DH4pdgU=";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  CGO_ENABLED = 0;
 
   ldflags = [ "-s" "-w" ];
 
   subPackages = [ "runsc" "shim" ];
 
   postInstall = ''
-    # Needed for the 'runsc do' subcomand
+    # Needed for the 'runsc do' subcommand
     wrapProgram $out/bin/runsc \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
     mv $out/bin/shim $out/bin/containerd-shim-runsc-v1

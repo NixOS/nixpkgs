@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 , yt-dlp
 , ffmpeg
 }:
@@ -8,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   pname = "ytmdl";
   version = "2022.03.16";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname;
     version = builtins.replaceStrings [ ".0" ] [ "." ] version;
     sha256 = "sha256-2lEOgwSi4fAVK+gJXvjWQDBWIb1cODFmUiq0FUfpyXA=";
@@ -19,6 +20,7 @@ python3Packages.buildPythonApplication rec {
       --replace "bs4" "beautifulsoup4" \
       --replace "/etc/bash_completion.d" "share/bash-completion/completions" \
       --replace "/usr/share/zsh/functions/Completion/Unix" "share/zsh/site-functions"
+    sed -i '/python_requires=/d' setup.py
   '';
 
   propagatedBuildInputs = with python3Packages; [

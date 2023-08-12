@@ -3,31 +3,44 @@
 , fetchFromGitHub
 , pkg-config
 , meson
+, cmake
 , ninja
 , libxkbcommon
 , wayland
+, wayland-scanner
 , wayland-protocols
 , wlroots
 , pixman
 , udev
 , libGL
+, libxml2
 , mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "waybox";
-  version = "unstable-2021-04-07";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "wizbright";
     repo = pname;
-    rev = "309ccd2faf08079e698104b19eff32b3a255b947";
-    hash = "sha256-G32cGmOwmnuVlj1hCq9NRti6plJbkAktfzM4aYzQ+k8=";
+    rev = version;
+    hash = "sha256-G8dRa4hgev3x58uqp5To5OzF3zcPSuT3NL9MPnWf2M8=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    cmake
+    ninja
+    wayland-scanner
+  ];
+
+  dontUseCmakeConfigure = true;
+
   buildInputs = [
     libxkbcommon
+    libxml2
     wayland
     wayland-protocols
     wlroots
@@ -36,6 +49,8 @@ stdenv.mkDerivation rec {
     libGL
     mesa # for libEGL
   ];
+
+  passthru.providedSessions = [ "waybox" ];
 
   meta = with lib; {
     homepage = "https://github.com/wizbright/waybox";

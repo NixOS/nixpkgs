@@ -1,31 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, systemd, openssl, libyaml }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, flex
+, bison
+, systemd
+, postgresql
+, openssl
+, libyaml
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "1.9.8";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
-    rev = "v${version}";
-    sha256 = "sha256-qHfEcLqCajGFXlEP6as7kvqFUcEAr74UZ9zSAL+OC/I=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iWbWkKd0Rpg0EU3H//sAxth1v1S52yPwGn1AzeC9xkA=";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
 
-  buildInputs = [ openssl libyaml ]
+  buildInputs = [ openssl libyaml postgresql ]
     ++ lib.optionals stdenv.isLinux [ systemd ];
 
-  cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" ];
+  cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" "-DFLB_OUT_PGSQL=ON"  ];
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-O" ]
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [ "-O" ]
     # Workaround build failure on -fno-common toolchains:
     #   ld: /monkey/mk_tls.h:81: multiple definition of `mk_tls_server_timeout';
     #     flb_config.c.o:include/monkey/mk_tls.h:81: first defined here
     # TODO: drop when upstream gets a fix for it:
     #   https://github.com/fluent/fluent-bit/issues/5537
-    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
+    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ]);
 
   outputs = [ "out" "dev" ];
 
@@ -34,11 +44,12 @@ stdenv.mkDerivation rec {
       --replace /lib/systemd $out/lib/systemd
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/fluent/fluent-bit/releases/tag/v${finalAttrs.version}";
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
-    maintainers = with maintainers; [ samrose fpletz ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.samrose lib.maintainers.fpletz ];
+    platforms = lib.platforms.linux;
   };
-}
+})

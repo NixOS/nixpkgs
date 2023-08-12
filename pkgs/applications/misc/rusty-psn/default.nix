@@ -5,6 +5,11 @@
 , makeDesktopItem
 , copyDesktopItems
 , pkg-config
+, cmake
+, fontconfig
+, glib
+, gtk3
+, freetype
 , openssl
 , xorg
 , libGL
@@ -13,23 +18,31 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rusty-psn";
-  version = "0.1.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "RainbowCookie32";
     repo = "rusty-psn";
     rev = "v${version}";
-    sha256 = "14li5fsaj4l5al6lcxy07g3gzmi0l3cyiczq44q7clq4myhykhhb";
+    sha256 = "sha256-BsbuEsW6cQbWg8BLtEBnjoCfcUCy1xWz9u0wBa8BKtA=";
   };
 
-  cargoSha256 = "0kjaq3ik3lwaz7rjb5jaxavpahzp33j7vln3zyifql7j7sbr300f";
+  cargoSha256 = "sha256-TD5du7I6Hw1PC8s9NI19jYCXlaZMnsdVj/a0q+M8Raw=";
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals withGui [
     copyDesktopItems
+    cmake
   ];
 
-  buildInputs = if withGui then [
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals withGui [
+    fontconfig
+    glib
+    gtk3
+    freetype
     openssl
     xorg.libxcb
     xorg.libX11
@@ -39,8 +52,6 @@ rustPlatform.buildRustPackage rec {
     xorg.libxcb
     libGL
     libGL.dev
-  ] else [
-    openssl
   ];
 
   buildNoDefaultFeatures = true;

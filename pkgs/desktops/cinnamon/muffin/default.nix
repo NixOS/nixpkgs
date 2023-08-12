@@ -35,9 +35,16 @@
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "5.4.7";
+  version = "5.8.1";
 
   outputs = [ "out" "dev" "man" ];
+
+  src = fetchFromGitHub {
+    owner = "linuxmint";
+    repo = pname;
+    rev = version;
+    hash = "sha256-9YE+pHXJb21CcAflL9swNyhQY3ZCkLlZbnmUwTNdyfA=";
+  };
 
   patches = [
     (substituteAll {
@@ -45,13 +52,6 @@ stdenv.mkDerivation rec {
       zenity = gnome.zenity;
     })
   ];
-
-  src = fetchFromGitHub {
-    owner = "linuxmint";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Zx6au1FXLgK8PRmkh8jaGJ3Zh0YYFj2zmbxhgXAFgDg=";
-  };
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook
     xorgserver # for cvt command
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -69,7 +70,6 @@ stdenv.mkDerivation rec {
     cinnamon-desktop
     dbus
     glib
-    gobject-introspection
     gtk3
     libcanberra
     libdrm

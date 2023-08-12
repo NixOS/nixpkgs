@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   buildInputs = [ lzo ];
   propagatedBuildInputs = [ ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   meta = with lib; {
     homepage = "https://github.com/jd-boyd/python-lzo";

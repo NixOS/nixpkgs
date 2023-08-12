@@ -10,18 +10,18 @@
 , polkit-qt
 , kwindowsystem
 , xorg
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "liblxqt";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "vfqEB9Vh/BL47dlEvnyWwDBO0pRIUS1IuixW8A0PRds=";
+    sha256 = "Ug6LmDxynSDLWykZhnih2F9lT34aOlU0ewM88PX+5Ms=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ mkDerivation rec {
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Core utility library for all LXQt components";

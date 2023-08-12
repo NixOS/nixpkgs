@@ -1,31 +1,70 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, asciidoc
-, jansson, jose, http-parser, systemd
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, asciidoc
+, jansson
+, jose
+, http-parser
+, systemd
+, meson
+, ninja
+, makeWrapper
+, testers
+, tang
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "tang";
-  version = "7";
+  version = "14";
 
   src = fetchFromGitHub {
     owner = "latchset";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0y5w1jrq5djh9gpy2r98ja7676nfxss17s1dk7jvgblsijx9qsd7";
+    repo = "tang";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QKURKb2g71pZvuZlJk3Rc26H3oU0WSkjgQtJQLrYGbw=";
   };
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  nativeBuildInputs = [
+    asciidoc
+    meson
+    ninja
+    pkg-config
+    makeWrapper
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config asciidoc ];
-  buildInputs = [ jansson jose http-parser systemd ];
+  buildInputs = [
+    jansson
+    jose
+    http-parser
+    systemd
+  ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  postFixup = ''
+    wrapProgram $out/bin/tang-show-keys --prefix PATH ":" ${lib.makeBinPath [ jose ]}
+    wrapProgram $out/libexec/tangd-keygen --prefix PATH ":" ${lib.makeBinPath [ jose ]}
+    wrapProgram $out/libexec/tangd-rotate-keys --prefix PATH ":" ${lib.makeBinPath [ jose ]}
+  '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = tang;
+      command = "${tang}/libexec/tangd --version";
+      version = "tangd ${version}";
+    };
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Server for binding data to network presence";
     homepage = "https://github.com/latchset/tang";
+    changelog = "https://github.com/latchset/tang/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.gpl3Plus;
   };

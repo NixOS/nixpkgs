@@ -14,7 +14,7 @@ in
 
   meta.maintainers = with pkgs.lib.maintainers; [ julm ];
 
-  machine = { config, pkgs, nodes, ... }: let
+  nodes.machine = { config, pkgs, nodes, ... }: let
     inherit (config.services) gitolite public-inbox;
     # Git repositories paths in Gitolite.
     # Only their baseNameOf is used for configuring public-inbox.
@@ -201,7 +201,7 @@ in
 
       This is a testing mail.
     ''}")
-    machine.sleep(5)
+    machine.sleep(10)
     machine.succeed("curl -L 'https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u' | grep 'This is a testing mail.'")
 
     # Read a mail through public-inbox-imapd
@@ -221,7 +221,10 @@ in
     # Delete a mail.
     # Note that the use of an extension not listed in the addresses
     # require to use --all
-    machine.succeed("curl -L https://machine.example.localdomain/inbox/repo1/repo1@root-1/raw | sudo -u public-inbox public-inbox-learn rm --all")
-    machine.fail("curl -L https://machine.example.localdomain/inbox/repo1/repo1@root-1/T/#u | grep 'This is a testing mail.'")
+    machine.succeed("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1/raw | sudo -u public-inbox public-inbox-learn rm --all")
+    machine.fail("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u | grep 'This is a testing mail.'")
+
+    # Compact the database
+    machine.succeed("sudo -u public-inbox public-inbox-compact --all")
   '';
 })

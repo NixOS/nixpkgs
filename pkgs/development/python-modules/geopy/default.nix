@@ -1,5 +1,5 @@
 { lib
-, async_generator
+, async-generator
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
@@ -11,27 +11,23 @@
 
 buildPythonPackage rec {
   pname = "geopy";
-  version = "2.2.0";
-  disabled = pythonOlder "3.5";
+  version = "2.3.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-zFz0T/M/CABKkChuiKsFkWj2pphZuFeE5gz0HxZYaz8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bHfjUfuiEH3AxRDTLmbm67bKOw6fBuMQDUQA2NLg800=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "geographiclib<2,>=1.49" "geographiclib"
-  '';
 
   propagatedBuildInputs = [
     geographiclib
   ];
 
-  checkInputs = [
-    async_generator
+  nativeCheckInputs = [
+    async-generator
     docutils
     pytestCheckHook
     pytz

@@ -2,13 +2,13 @@
 
 let
   pname = "beekeeper-studio";
-  version = "3.3.8";
+  version = "3.6.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${version}/Beekeeper-Studio-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha512 = "sha512-riBKlvOzBovJhXUf7YX6SJKshxwGiQR0jyWHfJRkq9+WMspPkpXg4sJMXziARHaa6durXZtqCfzQ08HrfqA4Qg==";
+    sha512 = "sha512-an4Gqx2mx/rnkLe/LUAz3qRdrqWBcrWcdCiNi8Hz1OKBp1SWN3acU8RppIM0uwlrcBkjnigbbM5DZ2o+svA23A==";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -18,7 +18,7 @@ in
 appimageTools.wrapType2 {
   inherit name src;
 
-  multiPkgs = null; # no 32bit needed
+  multiArch = false; # no 32bit needed
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
 
   extraInstallCommands = ''

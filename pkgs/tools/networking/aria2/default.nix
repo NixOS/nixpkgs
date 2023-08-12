@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, openssl, c-ares, libxml2, sqlite, zlib, libssh2
+, gnutls, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit, sphinx
 , Security
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
 
-  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
+  buildInputs = [ gnutls c-ares libxml2 sqlite zlib libssh2 ] ++
     lib.optional stdenv.isDarwin Security;
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     patchShebangs --build doc/manual-src/en/mkapiref.py
   '';
 
-  checkInputs = [ cppunit ];
+  nativeCheckInputs = [ cppunit ];
   doCheck = false; # needs the net
 
   enableParallelBuilding = true;
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://aria2.github.io";
     description = "A lightweight, multi-protocol, multi-source, command-line download utility";
+    mainProgram = "aria2c";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Br1ght0ne koral ];

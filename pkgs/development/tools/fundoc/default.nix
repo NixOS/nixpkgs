@@ -1,21 +1,30 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fundoc";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner = "csssr";
+    owner = "daynin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qmsr4bhErpMzS71NhLep0EWimZb/S3aEhMbeBNa5y8E=";
+    hash = "sha256-8WWaYgfqGWrTV2EEeSPz1BN2ur7gsxFiHeDNMJdVDcw=";
   };
 
-  cargoSha256 = "sha256-G2KRjkccS/rfrb7BtotbG6L4WaVnfwY1UEXLnVBLSzM=";
+  cargoPatches = [
+    # updates outdated lock file and fixes a test
+    (fetchpatch {
+      name = "fix-tests.patch";
+      url = "https://github.com/daynin/fundoc/commit/7dd3cf53a1d1ed72b00bf38ea3a45ba4590da7ef.patch";
+      hash = "sha256-9Xsw2P4t9gzwc/qDU6U5+HZevPiQOOQo88gybC8QpyM=";
+    })
+  ];
+
+  cargoHash = "sha256-yapFUkG2JfGb3N3iVEDpQunOyRnbNTs+q3zQ23B23/s=";
 
   meta = with lib; {
     description = "Language agnostic documentation generator";
-    homepage = "https://github.com/csssr/fundoc";
+    homepage = "https://github.com/daynin/fundoc";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

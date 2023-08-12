@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./hardcode-gsettings.patch;
-      CAJA_GSETTINGS_PATH = glib.getSchemaPath mate.caja;
-      TERM_GSETTINGS_PATH = glib.getSchemaPath mate.mate-terminal;
+      caja_gsetttings_path = glib.getSchemaPath mate.caja;
+      desktop_gsetttings_path = glib.getSchemaPath mate.mate-desktop;
     })
   ];
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Set of extensions for Caja file manager";

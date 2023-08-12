@@ -1,12 +1,17 @@
-{ stdenv, lib, fetchurl, withReadline ? true, readline }:
+{ stdenv, lib, fetchurl, symlinkJoin, withReadline ? true, readline }:
 
+let
+  readline-all = symlinkJoin {
+    name = "readline-all"; paths = [ readline readline.dev ];
+  };
+in
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.12.4";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    hash = "sha256-g/j8WePzE23pixhq7w6E6PfoGLGLB9Rp9atThMlxkW8=";
+    hash = "sha256-cRHIqFcdGm0dYgExvGfzd92P5iJO2+/ySeHV1o8d1WY=";
   };
 
   postPatch = ''
@@ -19,7 +24,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   buildInputs = lib.optional withReadline readline;
-  configureFlags = lib.optional withReadline "--with-readline";
+  configureFlags = [
+    "--datarootdir=${placeholder "out"}"
+  ] ++ lib.optionals withReadline [
+    "--with-readline"
+    "--readline=${readline-all}"
+  ];
 
   # Stripping breaks the bundles by removing the zip file from the end.
   dontStrip = true;

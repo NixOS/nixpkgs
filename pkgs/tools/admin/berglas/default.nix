@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, berglas }:
 
 let
   skipTests = {
@@ -27,23 +27,34 @@ in
 
 buildGoModule rec {
   pname = "berglas";
-  version = "0.6.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aLsrrK+z080qn7L2zggA8yD+QqLaSRJLTjWQnFKFogQ=";
+    sha256 = "sha256-4hbRX0kKMWixcu5SWjrM5lVvhLMOaeBdG4GH5NVAh70=";
   };
 
-  vendorSha256 = "sha256-HjZT0jezJzoEvXuzrjoTv/zSex+xDuGoP1h82CIlX14=";
+  vendorHash = "sha256-qcFS07gma7GVxhdrYca0E6rcczNcZmU8JcjjcpEaxp0=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/GoogleCloudPlatform/berglas/internal/version.Version=${version}"
+  ];
 
   postPatch = skipTestsCommand;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = berglas;
+    };
+  };
 
   meta = with lib; {
     description = "A tool for managing secrets on Google Cloud";
     homepage = "https://github.com/GoogleCloudPlatform/berglas";
     license = licenses.asl20;
-    platforms = platforms.unix;
   };
 }

@@ -16,31 +16,29 @@
 , wmctrl
 , xvfb-run
 , librsvg
+, libX11
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.12.1";
-
-  disabled = python3Packages.isPy27;
+  version = "5.15.3";
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-Fd3IOCEeXGV8zGd/8SzrWRsSsZRVePnsDaX8WrBrCOQ=";
+    sha256 = "sha256-unAic6GTgvZFFJwPERh164vfDiFE0zLEUjgADR94w5w=";
   };
 
   nativeBuildInputs = with python3Packages; [
     distutils_extra
+    gobject-introspection
     intltool
     wrapGAppsHook
     gdk-pixbuf
   ];
 
   buildInputs = [
-    gdk-pixbuf
     glib
     gnome.adwaita-icon-theme
-    gobject-introspection
     gtk3
     keybinder3
     libappindicator
@@ -52,19 +50,17 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     mock
-    mypy
-    mypy-extensions
     dbus-python
     pygobject3
     pyinotify
-    python-Levenshtein
+    levenshtein
     pyxdg
     pycairo
     requests
     websocket-client
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytest
     pytest-mock
@@ -73,7 +69,6 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     ./fix-path.patch
-    ./0001-Adjust-get_data_path-for-NixOS.patch
     ./fix-extensions.patch
   ];
 
@@ -110,13 +105,13 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(
      "''${gappsWrapperArgs[@]}"
      --prefix PATH : "${lib.makeBinPath [ wmctrl ]}"
+     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libX11 ]}"
+     --prefix WEBKIT_DISABLE_COMPOSITING_MODE : "1"
     )
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
 
@@ -125,6 +120,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse ];
+    maintainers = with maintainers; [ aaronjanse sebtm ];
   };
 }

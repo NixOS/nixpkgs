@@ -1,22 +1,22 @@
 { stdenv, lib
-, pkg-config, autoreconfHook
+, pkg-config, autoreconfHook, pandoc
 , fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
-, sqlite, zstd, fetchpatch, libcap
+, sqlite, zstd, libcap
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.17.1";
+  version = "4.18.1";
 
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/rpm/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    hash = "sha256-DBG3k0ZucliFH/gr1lyP/Ywtu8cKzIaaXTQVBUmSbl0=";
+    hash = "sha256-N/O0LAlmlB4q0/EP3jY5gkplkdBxl7qP0IacoHeeH1Y=";
   };
 
   outputs = [ "out" "dev" "man" ];
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
                 ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
                 ++ lib.optional stdenv.isLinux libcap;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
     ++ lib.optional stdenv.isLinux elfutils;
 
-  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
+  env.NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
   configureFlags = [
     "--with-external-db"
@@ -37,13 +37,6 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sharedstatedir=/com"
   ] ++ lib.optional stdenv.isLinux "--with-cap";
-
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ # Fix build for macOS aarch64
-    (fetchpatch {
-      url = "https://github.com/rpm-software-management/rpm/commit/ad87ced3990c7e14b6b593fa411505e99412e248.patch";
-      hash = "sha256-WYlxPGcPB5lGQmkyJ/IpGoqVfAKtMxKzlr5flTqn638=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
@@ -78,6 +71,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     description = "The RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 }

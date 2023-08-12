@@ -7,7 +7,6 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , gtk4
 , libadwaita
 , glib
@@ -19,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "baobab";
-  version = "42.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Sxqr5rqxWCs/6nmigpvOfyQVu25QYvJTV67t1TF6UNw=";
+    sha256 = "hFtju5Ej10VoyBJsVxu8dCc0g/+SAXmizx7du++hv8A=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook4
     # Prevents “error: Package `libadwaita-1' not found in specified Vala API
@@ -52,12 +50,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postPatch = ''
-    # https://gitlab.gnome.org/GNOME/baobab/-/merge_requests/40
-    substituteInPlace build-aux/post-install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -69,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/DiskUsageAnalyzer";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

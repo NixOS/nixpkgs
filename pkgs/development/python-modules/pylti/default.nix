@@ -21,7 +21,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyLTI";
+  pname = "pylti";
   version = "0.7.0";
 
   disabled = !isPy27;
@@ -32,13 +32,14 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ httplib2 oauth oauth2 semantic-version ];
-  checkInputs = [
+  nativeCheckInputs = [
     flask httpretty oauthlib pyflakes pytest pytestcache pytest-cov covCore
     pytest-flakes sphinx mock chalice
   ];
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyLTI";
+    inherit version;
     sha256 = "80938a235b1ab390f6889a95237d087ea7adde5cc50fcae9c80c49898e8ee78e";
   };
 

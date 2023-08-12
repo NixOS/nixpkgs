@@ -19,6 +19,7 @@ gsmakeDerivation rec {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
     sha256 = "05vjz19v1w7yb7hm8qrc41bqh6xd8in7sgg2p0h1vldyyaa5sh90";
   };
+  outputs = [ "out" "dev" "lib" ];
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
     aspell audiofile
@@ -39,6 +40,11 @@ gsmakeDerivation rec {
       url = "https://github.com/gnustep/libs-base/commit/bd5f2909e6edc8012a0a6e44ea1402dfbe1353a4.patch";
       revert = true;
       sha256 = "02awigkbhqa60hfhqfh2wjsa960y3q6557qck1k2l231piz2xasa";
+    })
+    # https://github.com/gnustep/libs-base/issues/294
+    (fetchpatch {
+      url = "https://github.com/gnustep/libs-base/commit/37913d006d96a6bdcb963f4ca4889888dcce6094.patch";
+      sha256 = "PyOmzRIirSKG5SQY+UwD6moCidPb8PXCx3aFgfwxsXE=";
     })
   ];
 

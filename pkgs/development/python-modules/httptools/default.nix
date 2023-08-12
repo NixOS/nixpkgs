@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "httptools";
-  version = "0.4.0";
+  version = "0.5.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LJqTDDeLPRXWtpX7levP+BpzlbT5d1xPEKB2vrCywf8=";
+    hash = "sha256-KVh0hhwXP5EBlgu6MyQpu3ftTc2M31zumSLrAOT2vAk=";
   };
 
   # tests are not included in pypi tarball
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "A collection of framework independent HTTP protocol utils";
     homepage = "https://github.com/MagicStack/httptools";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

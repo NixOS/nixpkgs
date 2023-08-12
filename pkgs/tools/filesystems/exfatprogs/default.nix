@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "exfatprogs";
-  version = "1.1.3";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-idP3wEGGJcSH4DDFLj1XPRKcLkFEsvtv0ytK89bmj5I=";
+    sha256 = "sha256-xNspLbm7v4nj82Y4gYqWEBU7cVlFBh3rnqhQ8CXEqrw=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook file ];

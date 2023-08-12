@@ -22,9 +22,9 @@ let
   # we can only check for values consistently after converting them to their corresponding environment variable name.
   configEnv =
     let
-      configEnv = listToAttrs (concatLists (mapAttrsToList (name: value:
-        if value != null then [ (nameValuePair (nameToEnvVar name) (if isBool value then boolToString value else toString value)) ] else []
-      ) cfg.config));
+      configEnv = concatMapAttrs (name: value: optionalAttrs (value != null) {
+        ${nameToEnvVar name} = if isBool value then boolToString value else toString value;
+      }) cfg.config;
     in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
@@ -59,7 +59,12 @@ in {
 
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
-      default = {};
+      default = {
+        config = {
+          ROCKET_ADDRESS = "::1"; # default to localhost
+          ROCKET_PORT = 8222;
+        };
+      };
       example = literalExpression ''
         {
           DOMAIN = "https://bitwarden.example.com";
@@ -116,7 +121,7 @@ in {
         The available configuration options can be found in
         [the environment template file](https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template).
 
-        See ()[#opt-services.vaultwarden.environmentFile) for how
+        See [](#opt-services.vaultwarden.environmentFile) for how
         to set up access to the Admin UI to invite initial users.
       '';
     };
@@ -162,8 +167,8 @@ in {
 
     webVaultPackage = mkOption {
       type = package;
-      default = pkgs.vaultwarden-vault;
-      defaultText = literalExpression "pkgs.vaultwarden-vault";
+      default = pkgs.vaultwarden.webvault;
+      defaultText = literalExpression "pkgs.vaultwarden.webvault";
       description = lib.mdDoc "Web vault package to use.";
     };
   };

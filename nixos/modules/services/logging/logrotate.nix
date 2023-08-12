@@ -5,93 +5,9 @@ with lib;
 let
   cfg = config.services.logrotate;
 
-  # deprecated legacy compat settings
-  # these options will be removed before 22.11 in the following PR:
-  # https://github.com/NixOS/nixpkgs/pull/164169
-  pathOpts = { name, ... }: {
-    options = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          Whether to enable log rotation for this path. This can be used to explicitly disable
-          logging that has been configured by NixOS.
-        '';
-      };
-
-      name = mkOption {
-        type = types.str;
-        internal = true;
-      };
-
-      path = mkOption {
-        type = with types; either str (listOf str);
-        default = name;
-        defaultText = "attribute name";
-        description = lib.mdDoc ''
-          The path to log files to be rotated.
-          Spaces are allowed and normal shell quoting rules apply,
-          with ', ", and \ characters supported.
-        '';
-      };
-
-      user = mkOption {
-        type = with types; nullOr str;
-        default = null;
-        description = lib.mdDoc ''
-          The user account to use for rotation.
-        '';
-      };
-
-      group = mkOption {
-        type = with types; nullOr str;
-        default = null;
-        description = lib.mdDoc ''
-          The group to use for rotation.
-        '';
-      };
-
-      frequency = mkOption {
-        type = types.enum [ "hourly" "daily" "weekly" "monthly" "yearly" ];
-        default = "daily";
-        description = lib.mdDoc ''
-          How often to rotate the logs.
-        '';
-      };
-
-      keep = mkOption {
-        type = types.int;
-        default = 20;
-        description = lib.mdDoc ''
-          How many rotations to keep.
-        '';
-      };
-
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = lib.mdDoc ''
-          Extra logrotate config options for this path. Refer to
-          <https://linux.die.net/man/8/logrotate> for details.
-        '';
-      };
-
-      priority = mkOption {
-        type = types.int;
-        default = 1000;
-        description = lib.mdDoc ''
-          Order of this logrotate block in relation to the others. The semantics are
-          the same as with `lib.mkOrder`. Smaller values have a greater priority.
-        '';
-      };
-    };
-
-    config.name = name;
-  };
-
   generateLine = n: v:
     if builtins.elem n [ "files" "priority" "enable" "global" ] || v == null then null
-    else if builtins.elem n [ "extraConfig" "frequency" ] then "${v}\n"
+    else if builtins.elem n [ "frequency" ] then "${v}\n"
     else if builtins.elem n [ "firstaction" "lastaction" "prerotate" "postrotate" "preremove" ]
          then "${n}\n    ${v}\n  endscript\n"
     else if isInt v then "${n} ${toString v}\n"
@@ -110,25 +26,6 @@ let
         ${generateSection 2 settings}}
     '';
 
-  # below two mapPaths are compat functions
-  mapPathOptToSetting = n: v:
-    if n == "keep" then nameValuePair "rotate" v
-    else if n == "path" then nameValuePair "files" v
-    else nameValuePair n v;
-
-  mapPathsToSettings = path: pathOpts:
-    nameValuePair path (
-      filterAttrs (n: v: ! builtins.elem n [ "user" "group" "name" ] && v != "") (
-        (mapAttrs' mapPathOptToSetting pathOpts) //
-        {
-          su =
-            if pathOpts.user != null
-            then "${pathOpts.user} ${pathOpts.group}"
-            else null;
-        }
-      )
-    );
-
   settings = sortProperties (attrValues (filterAttrs (_: settings: settings.enable) (
     foldAttrs recursiveUpdate { } [
       {
@@ -139,15 +36,7 @@ let
           frequency = "weekly";
           rotate = 4;
         };
-        # compat section
-        extraConfig = {
-          enable = (cfg.extraConfig != "");
-          global = true;
-          extraConfig = cfg.extraConfig;
-          priority = 101;
-        };
       }
-      (mapAttrs' mapPathsToSettings cfg.paths)
       cfg.settings
       { header = { global = true; priority = 100; }; }
     ]
@@ -194,13 +83,14 @@ let
   };
 
   mailOption =
-    if foldr (n: a: a || (n.mail or false) != false) false (attrValues cfg.settings)
-    then "--mail=${pkgs.mailutils}/bin/mail"
-    else "";
+    optionalString (foldr (n: a: a || (n.mail or false) != false) false (attrValues cfg.settings))
+    "--mail=${pkgs.mailutils}/bin/mail";
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "logrotate" "config" ] [ "services" "logrotate" "extraConfig" ])
+    (mkRemovedOptionModule [ "services" "logrotate" "config" ] "Modify services.logrotate.settings.header instead")
+    (mkRemovedOptionModule [ "services" "logrotate" "extraConfig" ] "Modify services.logrotate.settings.header instead")
+    (mkRemovedOptionModule [ "services" "logrotate" "paths" ] "Add attributes to services.logrotate.settings instead")
   ];
 
   options = {
@@ -218,6 +108,25 @@ in
           or settings common to all further files settings.
           Refer to <https://linux.die.net/man/8/logrotate> for details.
         '';
+        example = literalExpression ''
+          {
+            # global options
+            header = {
+              dateext = true;
+            };
+            # example custom files
+            "/var/log/mylog.log" = {
+              frequency = "daily";
+              rotate = 3;
+            };
+            "multiple paths" = {
+               files = [
+                "/var/log/first*.log"
+                "/var/log/second.log"
+              ];
+            };
+          };
+          '';
         type = types.attrsOf (types.submodule ({ name, ... }: {
           freeformType = with types; attrsOf (nullOr (oneOf [ int bool str ]));
 
@@ -253,7 +162,7 @@ in
               default = null;
               description = lib.mdDoc ''
                 How often to rotate the logs. Defaults to previously set global setting,
-                which itself defauts to weekly.
+                which itself defaults to weekly.
               '';
             };
 
@@ -277,7 +186,7 @@ in
           A configuration file automatically generated by NixOS.
         '';
         description = lib.mdDoc ''
-          Override the configuration file used by MySQL. By default,
+          Override the configuration file used by logrotate. By default,
           NixOS generates one automatically from [](#opt-services.logrotate.settings).
         '';
         example = literalExpression ''
@@ -311,76 +220,10 @@ in
           in this case you can disable the failing check with this option.
         '';
       };
-
-      # deprecated legacy compat settings
-      paths = mkOption {
-        type = with types; attrsOf (submodule pathOpts);
-        default = { };
-        description = lib.mdDoc ''
-          Attribute set of paths to rotate. The order each block appears in the generated configuration file
-          can be controlled by the [priority](#opt-services.logrotate.paths._name_.priority) option
-          using the same semantics as `lib.mkOrder`. Smaller values have a greater priority.
-          This setting has been deprecated in favor of [logrotate settings](#opt-services.logrotate.settings).
-        '';
-        example = literalExpression ''
-          {
-            httpd = {
-              path = "/var/log/httpd/*.log";
-              user = config.services.httpd.user;
-              group = config.services.httpd.group;
-              keep = 7;
-            };
-
-            myapp = {
-              path = "/var/log/myapp/*.log";
-              user = "myuser";
-              group = "mygroup";
-              frequency = "weekly";
-              keep = 5;
-              priority = 1;
-            };
-          }
-        '';
-      };
-
-      extraConfig = mkOption {
-        default = "";
-        type = types.lines;
-        description = lib.mdDoc ''
-          Extra contents to append to the logrotate configuration file. Refer to
-          <https://linux.die.net/man/8/logrotate> for details.
-          This setting has been deprecated in favor of
-          [logrotate settings](#opt-services.logrotate.settings).
-        '';
-      };
     };
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      mapAttrsToList
-        (name: pathOpts:
-          {
-            assertion = (pathOpts.user != null) == (pathOpts.group != null);
-            message = ''
-              If either of `services.logrotate.paths.${name}.user` or `services.logrotate.paths.${name}.group` are specified then *both* must be specified.
-            '';
-          })
-        cfg.paths;
-
-    warnings =
-      (mapAttrsToList
-        (name: pathOpts: ''
-          Using config.services.logrotate.paths.${name} is deprecated and will become unsupported in a future release.
-          Please use services.logrotate.settings instead.
-        '')
-        cfg.paths
-      ) ++
-      (optional (cfg.extraConfig != "") ''
-        Using config.services.logrotate.extraConfig is deprecated and will become unsupported in a future release.
-        Please use services.logrotate.settings with globals=true instead.
-      '');
-
     systemd.services.logrotate = {
       description = "Logrotate Service";
       startAt = "hourly";

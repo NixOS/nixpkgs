@@ -18,13 +18,13 @@
 
 toPythonModule (stdenv.mkDerivation rec {
   pname = "pygmo";
-  version = "2.18.0";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "esa";
     repo = "pygmo2";
-    rev = "v${version}";
-    sha256 = "sha256-he7gxRRJd6bBrD0Z0i+CQTr5JH4P3Im/beNGO+HfmNM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gjmZf66AcNaAMqyLerBgRu5RUzV6qrT7DigTNE39AwI=";
   };
 
   cmakeFlags = [
@@ -58,6 +58,6 @@ toPythonModule (stdenv.mkDerivation rec {
     description = "Parallel optimisation for Python";
     homepage = "https://github.com/esa/pygmo2";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 })

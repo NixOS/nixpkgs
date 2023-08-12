@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ViennaRNA";
-  version = "2.4.18";
+  version = "2.5.1";
 
   src = fetchurl {
-    url = "https://www.tbi.univie.ac.at/RNA/download/sourcecode/2_4_x/${pname}-${version}.tar.gz";
-    sha256 = "17b0mcfkms0gn1a3faa4cakig65k9nk282x6mdh1mmjwbqzp5akw";
+    url = "https://www.tbi.univie.ac.at/RNA/download/sourcecode/2_5_x/${pname}-${version}.tar.gz";
+    sha256 = "sha256-BUAEN88VWV4QsaJd9snEiFbzVhMPnR44D6iGa20n9Fc=";
   };
 
   buildInputs = [
@@ -34,7 +34,5 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
     platforms = platforms.unix;
-    # Perl bindings fail on aarch64-darwin with "Undefined symbols for architecture arm64"
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

@@ -1,11 +1,11 @@
-{ lib, stdenv, config, vim_configurable, macvim, vimPlugins
+{ lib, stdenv, config, vim-full, macvim, vimPlugins
 , useMacvim ? stdenv.isDarwin && (config.vimacs.macvim or true)
 , vimacsExtraArgs ? "" }:
 
 stdenv.mkDerivation rec {
   pname = "vimacs";
   version = lib.getVersion vimPackage;
-  vimPackage = if useMacvim then macvim else vim_configurable;
+  vimPackage = if useMacvim then macvim else vim-full;
 
   buildInputs = [ vimPackage vimPlugins.vimacs ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace '-gvim}' '-@bin@/bin/vim -g}' \
       --replace '--cmd "let g:VM_Enabled = 1"' \
                 '--cmd "let g:VM_Enabled = 1" --cmd "set rtp^=@rtp@" ${vimacsExtraArgs}' \
-      --replace @rtp@ ${vimPlugins.vimacs.rtp} \
+      --replace @rtp@ ${vimPlugins.vimacs} \
       --replace @bin@ ${vimPackage}
     for prog in vm gvm gvimacs vmdiff vimacsdiff
     do

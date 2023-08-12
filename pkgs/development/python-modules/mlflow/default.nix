@@ -9,10 +9,12 @@
 , fetchpatch
 , fetchPypi
 , flask
-, GitPython
+, gitpython
 , gorilla
 , gunicorn
 , importlib-metadata
+, markdown
+, matplotlib
 , numpy
 , packaging
 , pandas
@@ -20,27 +22,43 @@
 , protobuf
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
+, pyarrow
+, pytz
 , pyyaml
 , querystring_parser
 , requests
+, scikit-learn
 , scipy
+, shap
 , simplejson
-, six
 , sqlalchemy
 , sqlparse
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "1.28.0";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aXZp4eQuiHwzBQKuTw7WROgUvgas2pDOpEU57M4zSmQ=";
+    hash = "sha256-+ZKujqnHNQI0S69IxOxEeqnvv6iWW8CQho5hYyNPTrA=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements/core-requirements.txt \
+      --replace "gunicorn<21" "gunicorn"
+  '';
+
+  # Remove currently broken dependency `shap`, a model explainability package.
+  # This seems quite unprincipled especially with tests not being enabled,
+  # but not mlflow has a 'skinny' install option which does not require `shap`.
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRemoveDeps = [ "shap" ];
+  pythonRelaxDeps = [ "pytz" "pyarrow" ];
 
   propagatedBuildInputs = [
     alembic
@@ -50,22 +68,27 @@ buildPythonPackage rec {
     docker
     entrypoints
     flask
-    GitPython
+    gitpython
     gorilla
     gunicorn
     importlib-metadata
+    markdown
+    matplotlib
     numpy
     packaging
     pandas
     prometheus-flask-exporter
     protobuf
     python-dateutil
+    pyarrow
+    pytz
     pyyaml
     querystring_parser
     requests
+    scikit-learn
     scipy
+    #shap
     simplejson
-    six
     sqlalchemy
     sqlparse
   ];
@@ -74,13 +97,15 @@ buildPythonPackage rec {
     "mlflow"
   ];
 
+  # no tests in PyPI dist
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
-  # also, tests use conda so can't run on NixOS without buildFHSUserEnv
+  # also, tests use conda so can't run on NixOS without buildFHSEnv
   doCheck = false;
 
   meta = with lib; {
     description = "Open source platform for the machine learning lifecycle";
     homepage = "https://github.com/mlflow/mlflow";
+    changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
   };

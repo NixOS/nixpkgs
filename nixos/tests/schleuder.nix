@@ -82,9 +82,7 @@ import ./make-test-python.nix {
     # Since we don't have internet here, use dnsmasq to provide MX records from /etc/hosts
     services.dnsmasq = {
       enable = true;
-      extraConfig = ''
-        selfmx
-      '';
+      settings.selfmx = true;
     };
 
     networking.extraHosts = ''

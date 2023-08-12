@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
 , ocaml, findlib, ocamlbuild, ocaml_oasis
-, bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
+, bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, mmap, lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
 , utop, libxml2, ncurses
 , linenoise
 , ppx_bap
@@ -38,13 +38,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which makeWrapper ocaml findlib ocamlbuild ocaml_oasis ];
 
-  buildInputs = [ linenoise
+  buildInputs = [ ocamlbuild
+                  linenoise
                   ounit
                   ppx_bitstring
                   z3
                   utop libxml2 ncurses ];
 
-  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_bap core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
+  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_bap core_kernel ezjsonm fileutils mmap lwt ocamlgraph ocurl re uri zarith piqi parsexp
                             piqi-ocaml uuidm frontc yojson ];
 
   installPhase = ''

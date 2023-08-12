@@ -1,25 +1,25 @@
 { lib
 , stdenv
 , cmake
-, buildGoModule
+, buildGo118Module
 , makeWrapper
 , fetchFromGitHub
 , pythonPackages
 , pkg-config
 , systemd
 , hostname
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , extraTags ? [ ]
 }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "4.78.0";
+  payloadVersion = "5.0.89";
   python = pythonPackages.python;
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.38.1";
+  version = "7.45.1";
 
   src = fetchFromGitHub {
     inherit owner repo;
@@ -35,7 +35,7 @@ let
     cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
   };
 
-in buildGoModule rec {
+in buildGo118Module rec {
   pname = "datadog-agent";
   inherit src version;
 
@@ -93,15 +93,15 @@ in buildGoModule rec {
   # into standard paths.
   postInstall = ''
     mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
-    cp -R $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+    cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+    rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d}
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
     cp -R $src/pkg/status/templates $out/share/datadog-agent
 
     wrapProgram "$out/bin/agent" \
       --set PYTHONPATH "$out/${python.sitePackages}"'' + lib.optionalString withSystemd '' \
-      --prefix LD_LIBRARY_PATH : ${lib.getLib systemd}/lib
-  '';
+      --prefix LD_LIBRARY_PATH : '' + lib.makeLibraryPath [ (lib.getLib systemd) rtloader ];
 
   meta = with lib; {
     description = ''
@@ -111,5 +111,7 @@ in buildGoModule rec {
     homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl viraptor ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

@@ -1,58 +1,53 @@
 { lib
-, fetchzip
-, buildPythonPackage
-, setuptools
-, ecdsa
-, fastecdsa
-, sympy
-, frozendict
-, marshmallow
-, marshmallow-enum
-, marshmallow-dataclass
-, marshmallow-oneofschema
-, pipdeptree
-, eth-hash
-, web3
 , aiohttp
+, buildPythonPackage
 , cachetools
+, ecdsa
+, eth-hash
+, fastecdsa
+, fetchzip
+, frozendict
+, gmp
+, lark
+, marshmallow
+, marshmallow-dataclass
+, marshmallow-enum
+, marshmallow-oneofschema
 , mpmath
 , numpy
+, pipdeptree
 , prometheus-client
-, typeguard
-, lark
-, pyyaml
-, pytest-asyncio
 , pytest
+, pytest-asyncio
 , pytestCheckHook
-, gmp
+, pythonOlder
+, pythonRelaxDepsHook
+, pyyaml
+, setuptools
+, sympy
+, typeguard
+, web3
 }:
 
 buildPythonPackage rec {
   pname = "cairo-lang";
-  version = "0.10.0";
+  version = "0.10.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchzip {
     url = "https://github.com/starkware-libs/cairo-lang/releases/download/v${version}/cairo-lang-${version}.zip";
-    sha256 = "sha256-+PE7RSKEGADbue63FoT6UBOwURJs7lBNkL7aNlpSxP8=";
+    hash = "sha256-MNbzDqqNhij9JizozLp9hhQjbRGzWxECOErS3TOPlAA=";
   };
 
-  # TODO: remove a substantial part when https://github.com/starkware-libs/cairo-lang/pull/88/files is merged.
-  # TODO: pytest and pytest-asyncio must be removed as they are check inputs in fact.
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'frozendict==1.2' 'frozendict>=1.2' \
-      --replace 'lark-parser' 'lark' \
-      --replace 'pytest-asyncio' ''' \
-      --replace "pytest" '''
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
-    substituteInPlace starkware/cairo/lang/compiler/parser_transformer.py \
-      --replace 'value, meta' 'meta, value' \
-      --replace 'value: Tuple[CommaSeparatedWithNotes], meta' 'meta, value: Tuple[CommaSeparatedWithNotes]'
-    substituteInPlace starkware/cairo/lang/compiler/parser.py \
-      --replace 'standard' 'basic'
-  '';
-
-  buildInputs = [ gmp ];
+  buildInputs = [
+    gmp
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -74,23 +69,37 @@ buildPythonPackage rec {
     lark
     web3
     eth-hash
-    eth-hash.optional-dependencies.pycryptodome
     pyyaml
-  ];
+  ] ++ eth-hash.optional-dependencies.pycryptodome;
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
+
+  pythonRelaxDeps = [
+    "frozendict"
+  ];
+
+  pythonRemoveDeps = [
+    # TODO: pytest and pytest-asyncio must be removed as they are check inputs
+    "pytest"
+    "pytest-asyncio"
+  ];
+
+  postFixup = ''
+    chmod +x $out/bin/*
+  '';
 
   # There seems to be no test included in the ZIP release…
   # Cloning from GitHub is harder because they use a custom CMake setup
   # TODO(raitobezarius): upstream was pinged out of band about it.
   doCheck = false;
 
-  meta = {
-    homepage = "https://github.com/starkware/cairo-lang";
+  meta = with lib; {
     description = "Tooling for Cairo language";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    homepage = "https://github.com/starkware/cairo-lang";
+    license = licenses.mit;
+    maintainers = with maintainers; [ raitobezarius ];
   };
 }

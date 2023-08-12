@@ -2,7 +2,7 @@
 , lib
 , blender
 , makeWrapper
-, python39Packages
+, python3Packages
 }:
 { name ? "wrapped"
 , packages ? []
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   inherit (blender) version;
   src = blender;
 
-  nativeBuildInputs = [ python39Packages.wrapPython makeWrapper ];
+  nativeBuildInputs = [ python3Packages.wrapPython makeWrapper ];
   installPhase = ''
     mkdir $out/{share/applications,bin} -p
     sed 's/Exec=blender/Exec=blender-${name}/g' $src/share/applications/blender.desktop > $out/share/applications/blender-${name}.desktop
@@ -22,15 +22,9 @@ stdenv.mkDerivation {
 
     buildPythonPath "$pythonPath"
 
-    echo '#!/usr/bin/env bash ' >> $out/bin/blender-${name}
-    for p in $program_PATH; do
-      echo "export PATH=\$PATH:$p " >> $out/bin/blender-${name}
-    done
-    for p in $program_PYTHONPATH; do
-      echo "export PYTHONPATH=\$PYTHONPATH:$p " >> $out/bin/blender-${name}
-    done
-    echo 'exec ${blender}/bin/blender "$@"' >> $out/bin/blender-${name}
-    chmod +x $out/bin/blender-${name}
+    makeWrapper ${blender}/bin/blender $out/bin/blender-${name} \
+      --prefix PATH : $program_PATH \
+      --prefix PYTHONPATH : $program_PYTHONPATH
   '';
 
   pythonPath = packages;

@@ -18,7 +18,7 @@
 , libpngSupport ? true, libpng
 , liblqr1Support ? true, liblqr1
 , librawSupport ? true, libraw
-, librsvgSupport ? !stdenv.hostPlatform.isMinGW, librsvg
+, librsvgSupport ? !stdenv.hostPlatform.isMinGW, librsvg, pango
 , libtiffSupport ? true, libtiff
 , libxml2Support ? true, libxml2
 , openjpegSupport ? !stdenv.hostPlatform.isMinGW, openjpeg
@@ -30,6 +30,7 @@
 , Foundation
 , testers
 , imagemagick
+, python3
 }:
 
 assert libXtSupport -> libX11Support;
@@ -44,15 +45,15 @@ let
     else null;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.0-48";
+  version = "7.1.1-15";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
-    rev = version;
-    hash = "sha256-ExGeZVqRajuYcck0JrIFGDEam4PfUCXF/jI2dudHh+E=";
+    rev = finalAttrs.version;
+    hash = "sha256-/fI/RrwcgvKX5loIrDAur60VF5O4FgyPYN7BbcPP/bU=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     "--with-frozenpaths"
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
     (lib.withFeature librsvgSupport "rsvg")
+    (lib.withFeature librsvgSupport "pango")
     (lib.withFeature liblqr1Support "lqr")
     (lib.withFeature libjxlSupport "jxl")
     (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript}/share/ghostscript/fonts")
@@ -88,7 +90,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional djvulibreSupport djvulibre
     ++ lib.optional libjxlSupport libjxl
     ++ lib.optional openexrSupport openexr
-    ++ lib.optional librsvgSupport librsvg
+    ++ lib.optionals librsvgSupport [
+      librsvg
+      pango
+    ]
     ++ lib.optional openjpegSupport openjpeg
     ++ lib.optionals stdenv.isDarwin [
       ApplicationServices
@@ -110,7 +115,7 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '$(command -v $PKG_CONFIG)'"
     done
   '' + lib.optionalString ghostscriptSupport ''
     for la in $out/lib/*.la; do
@@ -118,15 +123,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests.version =
-    testers.testVersion { package = imagemagick; };
+  passthru.tests = {
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
+    inherit (python3.pkgs) img2pdf;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
+    pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen dotlambda ];
+    maintainers = with maintainers; [ erictapen dotlambda rhendric ];
     license = licenses.asl20;
     mainProgram = "magick";
   };
-}
+})

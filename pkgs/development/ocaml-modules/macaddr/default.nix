@@ -1,20 +1,20 @@
-{ lib, fetchurl, buildDunePackage
-, ppx_sexp_conv, ounit
+{ lib, fetchurl, buildDunePackage, ocaml
+, ppx_sexp_conv, ounit2
 }:
 
 buildDunePackage rec {
   pname = "macaddr";
-  version = "5.3.0";
+  version = "5.4.0";
 
   minimalOCamlVersion = "4.04";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-ipaddr/releases/download/v${version}/ipaddr-${version}.tbz";
-    sha256 = "0mdp38mkvk2f5h2q7nb9fc70a8hyssblnl7kam0d8r5lckgrx5rn";
+    hash = "sha256-WmYpG/cQtF9+lVDs1WIievUZ1f7+iZ2hufsdD1HHNeo=";
   };
 
-  checkInputs = [ ppx_sexp_conv ounit ];
-  doCheck = true;
+  checkInputs = [ ppx_sexp_conv ounit2 ];
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-ipaddr";

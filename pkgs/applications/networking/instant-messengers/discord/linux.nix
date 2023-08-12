@@ -1,11 +1,31 @@
-{ pname, version, src, openasar, meta, binaryName, desktopName, autoPatchelfHook
+{ pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
 , makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
-, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11
+, glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
-, pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript
-, common-updater-scripts, withOpenASAR ? false }:
+, pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
+, libunity
+, speechd
+, wayland
+, branch
+, withOpenASAR ? false, openasar
+, withVencord ? false, vencord
+, withTTS ? false }:
+
+let
+  disableBreakingUpdates = runCommand "disable-breaking-updates.py"
+    {
+      pythonInterpreter = "${python3.interpreter}";
+      configDirName = lib.toLower binaryName;
+      meta.mainProgram = "disable-breaking-updates.py";
+    } ''
+    mkdir -p $out/bin
+    cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
+    substituteAllInPlace $out/bin/disable-breaking-updates.py
+    chmod +x $out/bin/disable-breaking-updates.py
+  '';
+in
 
 stdenv.mkDerivation rec {
   inherit pname version src meta;
@@ -30,7 +50,7 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  libPath = lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath ([
     libcxx
     systemd
     libpulseaudio
@@ -50,9 +70,11 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk3
+    libglvnd
     libnotify
     libX11
     libXcomposite
+    libunity
     libuuid
     libXcursor
     libXdamage
@@ -63,13 +85,13 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     nspr
-    nss
     libxcb
     pango
     libXScrnSaver
     libappindicator-gtk3
     libdbusmenu
-  ];
+    wayland
+  ] ++ lib.optional withTTS speechd);
 
   installPhase = ''
     runHook preInstall
@@ -83,9 +105,11 @@ stdenv.mkDerivation rec {
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
+        ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName}
+        --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
+        --run "${lib.getExe disableBreakingUpdates}"
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
@@ -96,13 +120,18 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
-    ln -s "${desktopItem}/share/applications" $out/share/
+    ln -s "$desktopItem/share/applications" $out/share/
 
     runHook postInstall
   '';
 
   postInstall = lib.strings.optionalString withOpenASAR ''
     cp -f ${openasar} $out/opt/${binaryName}/resources/app.asar
+  '' + lib.strings.optionalString withVencord ''
+    mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
+    mkdir $out/opt/${binaryName}/resources/app.asar
+    echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
+    echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
   '';
 
   desktopItem = makeDesktopItem {
@@ -115,15 +144,19 @@ stdenv.mkDerivation rec {
     mimeTypes = [ "x-scheme-handler/discord" ];
   };
 
-  passthru.updateScript = writeScript "discord-update-script" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl gnugrep common-updater-scripts
-    set -eou pipefail;
-    url=$(curl -sI "https://discordapp.com/api/download/${
-      builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
-    }?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
-    version=''${url##https://dl*.discordapp.net/apps/linux/}
-    version=''${version%%/*.tar.gz}
-    update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix
-  '';
+  passthru = {
+    # make it possible to run disableBreakingUpdates standalone
+    inherit disableBreakingUpdates;
+    updateScript = writeScript "discord-update-script" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl gnugrep common-updater-scripts
+      set -eou pipefail;
+      url=$(curl -sI "https://discordapp.com/api/download/${
+        builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
+      }?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
+      version=''${url##https://dl*.discordapp.net/apps/linux/}
+      version=''${version%%/*.tar.gz}
+      update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
+    '';
+  };
 }

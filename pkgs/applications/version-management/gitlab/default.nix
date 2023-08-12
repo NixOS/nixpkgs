@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
+, ruby_3_0, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 }:
 
 let
@@ -17,11 +17,14 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    inherit ruby;
+    ruby = ruby_3_0;
     gemdir = ./rubyEnv;
     gemset =
-      let x = import (gemdir + "/gemset.nix");
+      let x = import (gemdir + "/gemset.nix") src;
       in x // {
+        gpgme = x.gpgme // {
+          nativeBuildInputs = [ pkg-config ];
+        };
         # the openssl needs the openssl include files
         openssl = x.openssl // {
           buildInputs = [ openssl ];
@@ -37,7 +40,7 @@ let
         railties = x.railties // {
           dontBuild = false;
           patches = [ ./railties-remove-yarn-install-enhancement.patch ];
-          patchFlags = "-p2";
+          patchFlags = [ "-p2" ];
         };
       };
     groups = [
@@ -47,17 +50,17 @@ let
     # `console` executable.
     ignoreCollisions = true;
 
-    extraConfigPaths = lib.forEach data.vendored_gems (gem: "${src}/vendor/gems/${gem}");
-  };
-
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = data.yarn_hash;
+    extraConfigPaths = [ "${src}/vendor" ];
   };
 
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
     inherit version src;
+
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      sha256 = data.yarn_hash;
+    };
 
     nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
@@ -67,10 +70,10 @@ let
       ./remove-hardcoded-locations.patch
 
       # Gitlab edited the default database config since [1] and the
-      # installer complains about valid keywords only being "main" and "ci".
+      # installer now complains about valid keywords only being "main", "ci" and "embedded".
       #
       # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
-      ./Remove-geo-from-database.yml.patch
+      ./Remove-unsupported-database-names.patch
     ];
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
@@ -91,7 +94,7 @@ let
       export HOME=$NIX_BUILD_TOP/fake_home
 
       # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
@@ -99,6 +102,7 @@ let
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
       patchShebangs node_modules/
+      patchShebangs scripts/frontend/
 
       runHook postConfigure
     '';
@@ -108,7 +112,7 @@ let
 
       bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile_webpack_if_needed RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
 
@@ -137,9 +141,6 @@ stdenv.mkDerivation {
   patches = [
     # Change hardcoded paths to the NixOS equivalent
     ./remove-hardcoded-locations.patch
-
-    # Bump pg to 1.4.3 (see https://github.com/NixOS/nixpkgs/pull/187946)
-    ./update-pg.patch
   ];
 
   postPatch = ''
@@ -165,6 +166,7 @@ stdenv.mkDerivation {
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the
     # state directory.
+    ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
   '';
@@ -209,7 +211,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin krav talyz yayayayaka yuka ];
+    maintainers = teams.gitlab.members;
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

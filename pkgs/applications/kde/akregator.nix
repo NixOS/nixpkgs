@@ -4,6 +4,7 @@
   qtwebengine,
   grantlee,
   kcmutils, kcrash, kiconthemes, knotifyconfig, kparts, ktexteditor,
+  kuserfeedback,
   kwindowsystem,
   akonadi, akonadi-mime, grantleetheme, kontactinterface, libkdepim, libkleo,
   messagelib, syndication
@@ -14,7 +15,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/akregator/";
     description = "KDE feed reader";
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -23,7 +24,9 @@ mkDerivation {
 
     grantlee
 
-    kcmutils kcrash kiconthemes knotifyconfig kparts ktexteditor kwindowsystem
+    kcmutils kcrash kiconthemes knotifyconfig kparts ktexteditor
+    kuserfeedback
+    kwindowsystem
 
     akonadi akonadi-mime grantleetheme kontactinterface libkdepim libkleo
     messagelib syndication

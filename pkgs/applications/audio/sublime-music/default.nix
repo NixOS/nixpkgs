@@ -1,6 +1,6 @@
-{ fetchFromGitLab
-, lib
-, python3Packages
+{ lib
+, fetchFromGitHub
+, python3
 , gobject-introspection
 , gtk3
 , pango
@@ -9,64 +9,79 @@
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
-, notifySupport ? true, libnotify
-, networkSupport ? true, networkmanager
+, notifySupport ? true
+, libnotify
+, networkSupport ? true
+, networkmanager
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      semver = super.semver.overridePythonAttrs (oldAttrs: rec {
+        version = "2.13.0";
+        src = fetchFromGitHub {
+          owner = "python-semver";
+          repo = "python-semver";
+          rev = "refs/tags/${version}";
+          hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.16";
-  format = "pyproject";
+  version = "0.12.0";
+  format = "flit";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "sublime-music";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-n77mTgElwwFaX3WQL8tZzbkPwnsyQ08OW9imSOjpBlg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FPzeFqDOcaiariz7qJwz6P3Wd+ZDxNP57uj+ptMtEyM=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    python3Packages.poetry-core
     wrapGAppsHook
   ];
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+    sed -i "/--no-cov-on-fail/d" setup.cfg
+
+    # https://github.com/sublime-music/sublime-music/commit/f477659d24e372ed6654501deebad91ae4b0b51c
+    sed -i "s/python-mpv/mpv/g" pyproject.toml
+  '';
 
   buildInputs = [
     gtk3
     pango
   ]
-   ++ lib.optional notifySupport libnotify
-   ++ lib.optional networkSupport networkmanager
+  ++ lib.optional notifySupport libnotify
+  ++ lib.optional networkSupport networkmanager
   ;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     bleach
+    bottle
     dataclasses-json
     deepdiff
-    fuzzywuzzy
+    levenshtein
     mpv
     peewee
+    pychromecast
     pygobject3
-    python-Levenshtein
     python-dateutil
     requests
     semver
+    thefuzz
   ]
-   ++ lib.optional chromecastSupport PyChromecast
-   ++ lib.optional keyringSupport keyring
-   ++ lib.optional serverSupport bottle
+  ++ lib.optional keyringSupport keyring
   ;
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-    sed -i "/--no-cov-on-fail/d" setup.cfg
-  '';
-
-  # hook for gobject-introspection doesn't like strictDeps
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python.pkgs; [
     pytest
   ];
 
@@ -91,6 +106,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
     homepage = "https://sublimemusic.app/";
+    changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ albakham sumnerevans ];
   };

@@ -1,21 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
 , django
 , python
 }:
 
 buildPythonPackage rec {
   pname = "django-js-asset";
-  version = "2.0";
-  format = "setuptools";
+  version = "2.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-YDOmbqB0xDBAlOSO1UBYJ8VfRjJ8Z6Hw1i24DNSrnjw=";
+    hash = "sha256-rxJ9TgVBiJByiFSLTg/dtAR31Fs14D4sh2axyBcKGTU=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     django

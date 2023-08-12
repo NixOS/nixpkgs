@@ -203,7 +203,7 @@ with lib;
     users = {
       users.${cfg.user} = {
         description = "Nullmailer relay-only mta user";
-        group = cfg.group;
+        inherit (cfg) group;
         isSystemUser = true;
       };
 
@@ -211,7 +211,10 @@ with lib;
     };
 
     systemd.tmpfiles.rules = [
-      "d /var/spool/nullmailer - ${cfg.user} - - -"
+      "d /var/spool/nullmailer - ${cfg.user} ${cfg.group} - -"
+      "d /var/spool/nullmailer/failed 770 ${cfg.user} ${cfg.group} - -"
+      "d /var/spool/nullmailer/queue 770 ${cfg.user} ${cfg.group} - -"
+      "d /var/spool/nullmailer/tmp 770 ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.nullmailer = {
@@ -220,7 +223,6 @@ with lib;
       after = [ "network.target" ];
 
       preStart = ''
-        mkdir -p /var/spool/nullmailer/{queue,tmp,failed}
         rm -f /var/spool/nullmailer/trigger && mkfifo -m 660 /var/spool/nullmailer/trigger
       '';
 
@@ -236,7 +238,7 @@ with lib;
       program = "sendmail";
       source = "${pkgs.nullmailer}/bin/sendmail";
       owner = cfg.user;
-      group = cfg.group;
+      inherit (cfg) group;
       setuid = true;
       setgid = true;
     };

@@ -6,11 +6,13 @@
 , importlib-metadata
 , packaging
 , pytestCheckHook
+, setuptools
+, git
 }:
 
 buildPythonPackage rec {
   pname = "dunamai";
-  version = "1.13.0";
+  version = "1.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = "dunamai";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-0x1bwu5X1P8f51NeupEQc0eghaqQIp3jb2uwZ0JDbgQ=";
+    hash = "sha256-pPUn+1rv76N/7WVDyWJLPVMweJ1Qbx6/P4zIKU06hSs=";
   };
 
   nativeBuildInputs = [
@@ -35,17 +37,26 @@ buildPythonPackage rec {
   # needs to be able to run dunami from PATH
   preCheck = ''
     export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+
+    git config --global user.email "nobody@example.com"
+    git config --global user.name "Nobody"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
+    git
     pytestCheckHook
+    setuptools
   ];
 
-  pythonImportsCheck = [ "dunamai" ];
+  pythonImportsCheck = [
+    "dunamai"
+  ];
 
   meta = with lib; {
     description = "Dynamic version generation";
     homepage = "https://github.com/mtkennerly/dunamai";
+    changelog = "https://github.com/mtkennerly/dunamai/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jmgilman ];
   };

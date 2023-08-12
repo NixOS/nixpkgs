@@ -1,64 +1,90 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub, fetchurl, autoPatchelfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, prefetch-yarn-deps
+, nodejs
+, nodejs-slim
+, matrix-sdk-crypto-nodejs
+, nixosTests
+, nix-update-script
+}:
 
 let
-  ourNodePackages = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
-  version = (lib.importJSON ./package.json).version;
-  srcInfo = lib.importJSON ./src.json;
-
-  # TODO: package matrix-rust-sdk and use that instead of fetching & patching binaries
-  platform = {
-    "x86_64-linux" = "linux-x64-gnu";
-    "aarch64-linux" = "linux-arm64-gnu";
-  }.${stdenv.hostPlatform.system} or
-    (throw "matrix-appservice-irc: Unsupported platform ${stdenv.hostPlatform.system}");
-
-  matrix-sdk-crypto = let
-    version = "0.1.0-beta.1";
-    base = "https://github.com/matrix-org/matrix-rust-sdk/releases/download/matrix-sdk-crypto-nodejs-v${version}";
-  in
-    fetchurl {
-      url = "${base}/matrix-sdk-crypto.${platform}.node";
-      hash = {
-        "x86_64-linux" = "sha256-a6FX+KhHooipIMsJ7Fl7gmUBt8WbTUgT6sXN4N3NXRk=";
-        "aarch64-linux" = "sha256-jvr6gMTQ4aAk5x0iXpA28ADdaCgDpvOjmogd52Z6bIY=";
-      }.${stdenv.hostPlatform.system} or
-        (throw "matrix-appservice-irc: Unsupported platform ${stdenv.hostPlatform.system}");
-    };
-in
-ourNodePackages.package.override {
   pname = "matrix-appservice-irc";
-  inherit version;
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
-    repo = "matrix-appservice-irc";
-    rev = version;
-    inherit (srcInfo) sha256;
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-wUbWvCa9xvot73nXZjF3/RawM98ffBCW5YR2+ZKzmEo=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper nodePackages.node-gyp-build ];
+  yarnOfflineCache = fetchYarnDeps {
+    name = "${pname}-${version}-offline-cache";
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-P9u5sK9rIHWRE8kFMj05fVjv26jwsawvHBZgSn7j5BE=";
+  };
 
-  dontAutoPatchelf = true;
+in
+stdenv.mkDerivation {
+  inherit pname version src yarnOfflineCache;
 
-  postInstall = ''
-    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-irc" \
-      --add-flags "$out/lib/node_modules/matrix-appservice-irc/app.js"
+  strictDeps = true;
 
-    # install the native bindings for matrix-sdk-crypto
-    export CRYPTO_SDK_PATH="$out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/matrix-sdk-crypto-nodejs/matrix-sdk-crypto.${platform}.node"
-    cp -v ${matrix-sdk-crypto} "$CRYPTO_SDK_PATH"
-    autoPatchelf "$CRYPTO_SDK_PATH"
+  nativeBuildInputs = [
+    prefetch-yarn-deps
+    nodejs-slim
+    nodejs.pkgs.yarn
+    nodejs.pkgs.node-gyp-build
+  ];
+
+  configurePhase = ''
+    runHook preConfigure
+
+    export HOME=$(mktemp -d)
+    yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
+    fixup-yarn-lock yarn.lock
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-scripts
+    patchShebangs node_modules/ bin/
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn --offline build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir $out
+    cp package.json $out
+    cp app.js config.schema.yml $out
+    cp -r bin lib public $out
+
+    # prune dependencies to production only
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-scripts --production
+    cp -r node_modules $out
+
+    # replace matrix-sdk-crypto-nodejs with nixos package
+    rm -rv $out/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    ln -sv ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/node_modules/@matrix-org/
+
+    runHook postInstall
   '';
 
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rhysmdnz ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;
     platforms = platforms.linux;

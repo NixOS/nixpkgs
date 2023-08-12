@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "exoscale-cli";
-  version = "1.59.1";
+  version = "1.72.0";
 
   src = fetchFromGitHub {
     owner = "exoscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-dkiUO68NtWU/GOOuJvihlOfnEjF+5sNSkOAttCrQEHI=";
+    sha256 = "sha256-+M7+/iexcqQD1RVJziNll0XaPAsUiFlC3+1EwXxA5P0=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 

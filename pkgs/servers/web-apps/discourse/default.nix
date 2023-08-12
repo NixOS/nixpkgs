@@ -1,24 +1,61 @@
-{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
-, fetchFromGitHub, bundlerEnv, callPackage
+{ stdenv
+, pkgs
+, makeWrapper
+, runCommand
+, lib
+, writeShellScript
+, fetchFromGitHub
+, bundlerEnv
+, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk, nettools
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, oxipng, libpsl, redis, postgresql, which, brotli, procps, rsync, icu
-, fetchYarnDeps, yarn, fixup_yarn_lock, nodePackages, nodejs-14_x
-, nodejs-16_x
+, ruby_3_2
+, replace
+, gzip
+, gnutar
+, git
+, cacert
+, util-linux
+, gawk
+, nettools
+, imagemagick
+, optipng
+, pngquant
+, libjpeg
+, jpegoptim
+, gifsicle
+, jhead
+, oxipng
+, libpsl
+, redis
+, postgresql
+, which
+, brotli
+, procps
+, rsync
+, icu
+, fetchYarnDeps
+, yarn
+, fixup_yarn_lock
+, nodePackages
+, nodejs_16
+, dart-sass-embedded
+, jq
+, moreutils
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.9.0.beta9";
+  version = "3.1.0.beta4";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-pavNdAbk9yuWRg++p1MCmpBMuYKDs63QbJpHrPS9oAY=";
+    sha256 = "sha256-22GXFYPjPYL20amR4xFB4L/dCp32H4Z3uf0GLGEghUE=";
   };
+
+  ruby = ruby_3_2;
 
   runtimeDeps = [
     # For backups, themes and assets
@@ -125,9 +162,9 @@ let
                 cd ../..
 
                 mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-                ln -s "${nodejs-16_x.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+                ln -s "${nodejs_16.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-                ln -s ${nodejs-16_x.libv8}/include vendor/v8/include
+                ln -s ${nodejs_16.libv8}/include vendor/v8/include
 
                 mkdir -p ext/libv8-node
                 echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -152,6 +189,20 @@ let
               cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
             '';
           };
+          sass-embedded = gems.sass-embedded // {
+            dontBuild = false;
+            # `sass-embedded` depends on `dart-sass-embedded` and tries to
+            # fetch that as `.tar.gz` from GitHub releases. That `.tar.gz`
+            # can also be specified via `SASS_EMBEDDED`. But instead of
+            # compressing our `dart-sass-embedded` just to decompress it
+            # again, we simply patch the Rakefile to symlink that path.
+            patches = [
+              ./rubyEnv/sass-embedded-static.patch
+            ];
+            postPatch = ''
+              export SASS_EMBEDDED=${dart-sass-embedded}/bin
+            '';
+          };
         };
 
     groups = [
@@ -159,22 +210,25 @@ let
     ];
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/app/assets/javascripts/yarn.lock";
-    sha256 = "14d7y29460ggqcjnc9vk1q2lnxfl6ycyp8rc103g3gs2bl5sb6r0";
-  };
-
   assets = stdenv.mkDerivation {
     pname = "discourse-assets";
     inherit version src;
+
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/app/assets/javascripts/yarn.lock";
+      sha256 = "0a20kns4irdpzzx2dvdjbi0m3s754gp737q08z5nlcnffxqvykrk";
+    };
 
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
       nodePackages.uglify-js
       nodePackages.terser
+      nodePackages.patch-package
       yarn
-      nodejs-14_x
+      nodejs_16
+      jq
+      moreutils
     ];
 
     outputs = [ "out" "javascripts" ];
@@ -192,6 +246,12 @@ let
       # Fix the rake command used to recursively execute itself in the
       # assets precompilation task.
       ./assets_rake_command.patch
+
+      # `app/assets/javascripts/discourse/package.json`'s postinstall
+      # hook tries to call `../node_modules/.bin/patch-package`, which
+      # hasn't been `patchShebangs`-ed yet. So instead we just use
+      # `patch-package` from `nativeBuildInputs`.
+      ./asserts_patch-package_from_path.patch
     ];
 
     # We have to set up an environment that is close enough to
@@ -203,16 +263,25 @@ let
       export HOME=$NIX_BUILD_TOP/fake_home
 
       # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
 
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
+      find app/assets/javascripts -name package.json -print0 \
+        | xargs -0 -I {} bash -c "jq 'del(.scripts.postinstall)' -r <{} | sponge {}"
       yarn install --offline --cwd app/assets/javascripts/discourse
 
       patchShebangs app/assets/javascripts/node_modules/
+
+      # Run `patch-package` AFTER the corresponding shebang inside `.bin/patch-package`
+      # got patched. Otherwise this will fail with
+      #     /bin/sh: line 1: /build/source/app/assets/javascripts/node_modules/.bin/patch-package: cannot execute: required file not found
+      pushd app/assets/javascripts &>/dev/null
+        yarn run patch-package
+      popd &>/dev/null
 
       redis-server >/dev/null &
 
@@ -261,10 +330,6 @@ let
 
       runHook postInstall
     '';
-
-    passthru = {
-      inherit yarnOfflineCache;
-    };
   };
 
   discourse = stdenv.mkDerivation {

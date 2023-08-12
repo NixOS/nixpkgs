@@ -5,13 +5,14 @@
 
 buildDunePackage rec {
   pname = "mimic";
-  version = "0.0.4";
+  version = "0.0.6";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/mimic/releases/download/${version}/mimic-${version}.tbz";
-    sha256 = "sha256-1Wb2xufgGKp3FJ+FYjK45i9B5+HohdPX+w9Sw0ph5JY=";
+    sha256 = "sha256-gVvBj4NqqKR2mn944g9F0bFZ8Me+WC87skti0dBW3Cg=";
   };
 
   propagatedBuildInputs = [

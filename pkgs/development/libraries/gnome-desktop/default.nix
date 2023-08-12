@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
-  version = "42.3";
+  version = "44.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2lBBC48Z/X53WwDR/g26Z/xeEVHe0pkVjcJd2tw/qKk=";
+    sha256 = "sha256-QsdzdF2EuhS8HPHExvRgYUiAOlzTN5QcY5ZHlfPFnUI=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -78,8 +78,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Ddesktop_docs=false"
-    "-Ddate_in_gnome_version=false"
-    "-Dgnome_distributor=NixOS"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-Dsystemd=disabled"
     "-Dudev=disabled"

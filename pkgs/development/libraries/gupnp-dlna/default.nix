@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/GUPnP/";
     description = "Library to ease DLNA-related bits for applications using GUPnP";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

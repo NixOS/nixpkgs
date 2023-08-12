@@ -1,31 +1,33 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , setuptools
 , setuptools-scm
 , cocotb-bus
+, find-libpython
 , pytestCheckHook
 , swig
 , verilog
+, ghdl
 }:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.6.2";
+  version = "1.8.0";
 
-  # - we need to use the tarball from PyPi
-  #   or the full git checkout (with .git)
-  # - using fetchFromGitHub will cause a build failure,
-  #   because it does not include required metadata
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-SY+1727DbWMg6CnmHw8k/VP0dwBRYszn+YyyvZXgvUs=";
+  # pypi source doesn't include tests
+  src = fetchFromGitHub {
+    owner = "cocotb";
+    repo = "cocotb";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-k3VizQ9iyDawfDCeE3Zup/KkyD54tFBLdQvRKsbKDLY=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ setuptools ];
+  propagatedBuildInputs = [ find-libpython ];
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -51,16 +53,19 @@ buildPythonPackage rec {
     ./0001-Patch-LDCXXSHARED-for-macOS-along-with-LDSHARED.patch
   ];
 
-  checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
-
-  checkPhase = ''
+  nativeCheckInputs = [ cocotb-bus pytestCheckHook swig verilog ghdl ];
+  preCheck = ''
     export PATH=$out/bin:$PATH
+    mv cocotb cocotb.hidden
   '';
 
+  pythonImportsCheck = [ "cocotb" ];
+
   meta = with lib; {
+    changelog = "https://github.com/cocotb/cocotb/releases/tag/v${version}";
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ matthuszagh ];
+    maintainers = with maintainers; [ matthuszagh jleightcap ];
   };
 }

@@ -19,6 +19,7 @@ let
   });
 
   testLegacyNetwork = { nixopsPkg }: pkgs.nixosTest ({
+    name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {
         imports = [ ../../modules/installer/cd-dvd/channel.nix ];
@@ -29,12 +30,10 @@ let
         virtualisation.additionalPaths = [
           pkgs.hello
           pkgs.figlet
-
-          # This includes build dependencies all the way down. Not efficient,
-          # but we do need build deps to an *arbitrary* depth, which is hard to
-          # determine.
-          (allDrvOutputs nodes.server.config.system.build.toplevel)
         ];
+
+        # TODO: make this efficient, https://github.com/NixOS/nixpkgs/issues/180529
+        system.includeBuildDependencies = true;
       };
       server = { lib, ... }: {
         imports = [ ./legacy/base-configuration.nix ];

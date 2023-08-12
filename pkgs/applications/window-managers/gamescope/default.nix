@@ -6,9 +6,13 @@
 , xorg
 , libdrm
 , vulkan-loader
+, vulkan-headers
 , wayland
+, wayland-scanner
 , wayland-protocols
 , libxkbcommon
+, glm
+, gbenchmark
 , libcap
 , SDL2
 , pipewire
@@ -18,32 +22,52 @@
 , seatd
 , xwayland
 , glslang
+, hwdata
+, openvr
 , stb
 , wlroots
 , libliftoff
+, libdisplay-info
 , lib
 , makeBinaryWrapper
 }:
 let
   pname = "gamescope";
-  version = "3.11.45-2";
+  version = "3.12.0-beta10";
+
+  vkroots = fetchFromGitHub {
+    owner = "Joshua-Ashton";
+    repo = "vkroots";
+    rev = "26757103dde8133bab432d172b8841df6bb48155";
+    hash = "sha256-eet+FMRO2aBQJcCPOKNKGuQv5oDIrgdVPRO00c5gkL0=";
+  };
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "Plagman";
+    owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
-    hash = "sha256-OLPwUELahqzmOBPvJg8pm556RH+H6TzRD9PHLnM2Ruc=";
+    hash = "sha256-31zGo22Z0+zQ81LmzI+Xif9eREzRpS0S9+nK1i/cBCY=";
   };
 
-  patches = [ ./use-pkgconfig.patch ];
+  patches = [
+    ./use-pkgconfig.patch
+  ];
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
     pkg-config
     ninja
+    wayland-scanner
+    glslang
     makeBinaryWrapper
   ];
 
@@ -56,10 +80,11 @@ stdenv.mkDerivation {
     xorg.libXtst
     xorg.libXres
     xorg.libXi
+    xorg.libXmu
     libdrm
     libliftoff
     vulkan-loader
-    glslang
+    vulkan-headers
     SDL2
     wayland
     wayland-protocols
@@ -68,12 +93,23 @@ stdenv.mkDerivation {
     seatd
     libinput
     libxkbcommon
+    glm
+    gbenchmark
     udev
     pixman
     pipewire
     libcap
     stb
+    hwdata
+    openvr
+    vkroots
+    libdisplay-info
   ];
+
+  postUnpack = ''
+    rm -rf source/subprojects/vkroots
+    ln -s ${vkroots} source/subprojects/vkroots
+  '';
 
   # --debug-layers flag expects these in the path
   postInstall = ''
@@ -83,9 +119,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "SteamOS session compositing window manager";
-    homepage = "https://github.com/Plagman/gamescope";
+    homepage = "https://github.com/ValveSoftware/gamescope";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ nrdxp ];
+    maintainers = with maintainers; [ nrdxp pedrohlc Scrumplex zhaofengli ];
     platforms = platforms.linux;
   };
 }

@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitLab
+, nix-update-script
 
 , autoreconfHook
 , pkg-config
+, sphinx
 
 , libdeflate
 , libjpeg
 , xz
 , zlib
 
-# for passthru.tests
+  # for passthru.tests
 , libgeotiff
 , python3Packages
 , imagemagick
@@ -18,16 +20,17 @@
 , gdal
 , openimageio
 , freeimage
-, imlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "libtiff";
-  version = "4.4.0";
+  version = "4.5.1";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1vdbk3sc497c58kxmp02irl6nqkfm9rjs3br7g59m59qfnrj6wli";
+  src = fetchFromGitLab {
+    owner = "libtiff";
+    repo = "libtiff";
+    rev = "v${version}";
+    hash = "sha256-qQEthy6YhNAQmdDMyoCIvK8f3Tx25MgqhJZW74CB93E=";
   };
 
   patches = [
@@ -36,11 +39,6 @@ stdenv.mkDerivation rec {
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
-    (fetchpatch {
-      name = "CVE-2022-34526.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/275735d0354e39c0ac1dc3c0db2120d6f31d1990.patch";
-      sha256 = "sha256-faKsdJjvQwNdkAKjYm4vubvZvnULt9zz4l53zBFr67s=";
-    })
   ];
 
   postPatch = ''
@@ -50,26 +48,34 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
   postFixup = ''
-    moveToOutput include/tif_dir.h $dev_private
     moveToOutput include/tif_config.h $dev_private
+    moveToOutput include/tif_dir.h $dev_private
+    moveToOutput include/tif_hash_set.h $dev_private
     moveToOutput include/tiffiop.h $dev_private
   '';
 
   # If you want to change to a different build system, please make
   # sure cross-compilation works first!
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
 
-  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
-
-  buildInputs = [ libdeflate ];
+  # TODO: opengl support (bogus configure detection)
+  propagatedBuildInputs = [
+    libdeflate
+    libjpeg
+    xz
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  passthru.tests = {
-    inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage imlib;
-    inherit (python3Packages) pillow imread;
+  passthru = {
+    tests = {
+      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
+      inherit (python3Packages) pillow imread;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -2,20 +2,28 @@
 
 let
   pname = "ookla-speedtest";
-  version = "1.1.1";
+  version = "1.2.0";
 
   srcs = rec {
     x86_64-linux = fetchurl {
       url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-x86_64.tgz";
-      sha256 = "sha256-lwR3/f7k10HnXwiPr2SPm1HHvgQxP7iP+13gfrGjBAw=";
+      sha256 = "sha256-VpBZbFT/m+1j+jcy+BigXbwtsZrTbtaPIcpfZNXP7rc=";
+    };
+    i686-linux = fetchurl {
+      url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-i386.tgz";
+      sha256 = "sha256-n/fhjbrn7g4DxmEIRFovts7qbIb2ZILhOS9ViBt3L+g=";
     };
     aarch64-linux = fetchurl {
       url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-aarch64.tgz";
-      sha256 = "sha256-J2pAhz/hw8okohWAwvxkqpLtNY/8bbYHGhPQOo1DH9k=";
+      sha256 = "sha256-OVPSMdo3g+K/iQS23XJ2fFxuUz4WPTdC/QQ3r/pDG9M=";
+    };
+    armv7l-linux = fetchurl {
+      url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-armhf.tgz";
+      sha256 = "sha256-5F/N672KGFVTU1Uz3QMtaxC8jGTu5BObEUe5wJg10I0=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://install.speedtest.net/app/cli/${pname}-${version}.84-macosx-x86_64.tgz";
-      sha256 = "sha256-FT925OUCortHDH98O0uK+qUOuYuxHoYhb8sai5JnbpQ=";
+      url = "https://install.speedtest.net/app/cli/${pname}-${version}-macosx-universal.tgz";
+      sha256 = "sha256-yfgZIUnryI+GmZmM7Ksc4UQUQEWQfs5vU89Qh39N5m8=";
     };
     aarch64-darwin = x86_64-darwin;
   };

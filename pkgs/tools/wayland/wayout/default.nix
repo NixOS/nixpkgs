@@ -1,7 +1,6 @@
 { lib
-, stdenv
-, fetchFromSourcehut
 , rustPlatform
+, fetchFromSourcehut
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~shinyzenith/wayout";
     license = licenses.bsd2;
     maintainers = with maintainers; [ onny ];
-    broken = stdenv.isDarwin; # Build failed on Darwin
+    platforms = platforms.linux;
   };
 
 }

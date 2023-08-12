@@ -3,25 +3,27 @@
 , fetchPypi
 , azure-mgmt-common
 , azure-mgmt-core
+, isodate
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-compute";
-  version = "27.2.0";
+  version = "30.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-5caVUxZvt+7L/1LDfcD/SiUwvFVF1KXdS6mDIVrSKJ0=";
+    hash = "sha256-pWN525DU4kwHi8h0XQ5fdzIp+e8GfNcSwQ+qmIYVp1s=";
   };
 
   propagatedBuildInputs = [
     azure-mgmt-common
     azure-mgmt-core
+    isodate
   ];
 
   pythonNamespaces = [

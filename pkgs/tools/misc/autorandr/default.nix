@@ -1,17 +1,26 @@
 { lib
 , python3
-, python3Packages
 , fetchFromGitHub
 , systemd
 , xrandr
-, installShellFiles }:
+, installShellFiles
+, desktop-file-utils
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autorandr";
-  version = "1.12.1";
+  version = "1.14";
+  format = "other";
 
-  nativeBuildInputs = [ installShellFiles ];
-  propagatedBuildInputs = [ python3Packages.packaging ];
+  src = fetchFromGitHub {
+    owner = "phillipberndt";
+    repo = "autorandr";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ru3nQF0DB98rKSew6QtxAZQEB/9nVlIelNX3M7bNYHk=";
+  };
+
+  nativeBuildInputs = [ installShellFiles desktop-file-utils ];
+  propagatedBuildInputs = with python3.pkgs; [ packaging ];
 
   buildPhase = ''
     substituteInPlace autorandr.py \
@@ -32,7 +41,10 @@ python3.pkgs.buildPythonApplication rec {
     # see https://github.com/phillipberndt/autorandr/issues/197
     installShellCompletion --cmd autorandr \
         --bash contrib/bash_completion/autorandr \
-        --zsh contrib/zsh_completion/_autorandr
+        --zsh contrib/zsh_completion/_autorandr \
+        --fish contrib/fish_copletion/autorandr.fish
+    # In the line above there's a typo that needs to be fixed in the next
+    # release
 
     make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
 
@@ -53,13 +65,6 @@ python3.pkgs.buildPythonApplication rec {
 
     runHook postInstall
   '';
-
-  src = fetchFromGitHub {
-    owner = "phillipberndt";
-    repo = "autorandr";
-    rev = version;
-    sha256 = "sha256-7SNnbgV6PeseBD6wdilEIOfOL2KVDpnlkSn9SBgRhhM=";
-  };
 
   meta = with lib; {
     homepage = "https://github.com/phillipberndt/autorandr/";

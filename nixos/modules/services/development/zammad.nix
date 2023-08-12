@@ -28,7 +28,7 @@ in
 
   options = {
     services.zammad = {
-      enable = mkEnableOption (lib.mdDoc "Zammad, a web-based, open source user support/ticketing solution.");
+      enable = mkEnableOption (lib.mdDoc "Zammad, a web-based, open source user support/ticketing solution");
 
       package = mkOption {
         type = types.package;
@@ -254,7 +254,7 @@ in
       preStart = ''
         # Blindly copy the whole project here.
         chmod -R +w .
-        rm -rf ./public/assets/*
+        rm -rf ./public/assets/
         rm -rf ./tmp/*
         rm -rf ./log/*
         cp -r --no-preserve=owner ${cfg.package}/* .

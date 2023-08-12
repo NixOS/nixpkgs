@@ -2,20 +2,18 @@
 
 buildGoModule rec {
   pname = "dcrd";
-  version = "1.5.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrd";
     rev = "refs/tags/release-v${version}";
-    sha256 = "14pxajc8si90hnddilfm09kmljwxq6i6p53fk0g09jp000cbklkl";
+    hash = "sha256-ZNBSIzx07zJrBxas7bHpZ8ZPDWJ4d7jumpKYj5Qmzlo=";
   };
 
-  vendorSha256 = "03aw6mcvp1vr01ppxy673jf5hdryd5032cxndlkaiwg005mxp1dy";
+  vendorHash = "sha256-++IPB2IadXd1LC5r6f1a0UqsTG/McAf7KQAw8WKKoaE=";
 
-  doCheck = false;
-
-  subPackages = [ "." "cmd/dcrctl" "cmd/promptsecret" ];
+  subPackages = [ "." "cmd/promptsecret" ];
 
   meta = {
     homepage = "https://decred.org";

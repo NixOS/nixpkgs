@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "atari800";
     repo = "atari800";
-    rev = "ATARI800_${replaceChars ["."] ["_"] version}";
+    rev = "ATARI800_${replaceStrings ["."] ["_"] version}";
     sha256 = "sha256-+eJXhqPyU0GhmzF7DbteTXzEnn5klCor9Io/UgXQfQg=";
   };
 

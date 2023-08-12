@@ -130,7 +130,7 @@ let
     ''}
 
     # Disable all input echo for the whole stage. We could use read -s
-    # instead but that would ocasionally leak characters between read
+    # instead but that would occasionally leak characters between read
     # invocations.
     stty -echo
   '';
@@ -157,6 +157,20 @@ let
     ${optionalString (dev.header != null) ''
       wait_target "header" ${dev.header} || die "${dev.header} is unavailable"
     ''}
+
+    try_empty_passphrase() {
+        ${if dev.tryEmptyPassphrase then ''
+             echo "Trying empty passphrase!"
+             echo "" | ${csopen}
+             cs_status=$?
+             if [ $cs_status -eq 0 ]; then
+                 return 0
+             else
+                 return 1
+             fi
+        '' else "return 1"}
+    }
+
 
     do_open_passphrase() {
         local passphrase
@@ -212,13 +226,27 @@ let
             ${csopen} --key-file=${dev.keyFile} \
               ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
               ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
+            cs_status=$?
+            if [ $cs_status -ne 0 ]; then
+              echo "Key File ${dev.keyFile} failed!"
+              if ! try_empty_passphrase; then
+                ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
+                echo " - failing back to interactive password prompt"
+                do_open_passphrase
+              fi
+            fi
         else
-            ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
-            echo " - failing back to interactive password prompt"
-            do_open_passphrase
+            # If the key file never shows up we should also try the empty passphrase
+            if ! try_empty_passphrase; then
+               ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
+               echo " - failing back to interactive password prompt"
+               do_open_passphrase
+            fi
         fi
         '' else ''
-        do_open_passphrase
+           if ! try_empty_passphrase; then
+              do_open_passphrase
+           fi
         ''}
     }
 
@@ -476,13 +504,16 @@ let
   preLVM = filterAttrs (n: v: v.preLVM) luks.devices;
   postLVM = filterAttrs (n: v: !v.preLVM) luks.devices;
 
+
   stage1Crypttab = pkgs.writeText "initrd-crypttab" (lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: let
     opts = v.crypttabExtraOpts
       ++ optional v.allowDiscards "discard"
       ++ optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]
       ++ optional (v.header != null) "header=${v.header}"
-      ++ optional (v.keyFileOffset != null) "keyfile-offset=${v.keyFileOffset}"
-      ++ optional (v.keyFileSize != null) "keyfile-size=${v.keyFileSize}"
+      ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
+      ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
+      ++ optional (v.keyFileTimeout != null) "keyfile-timeout=${builtins.toString v.keyFileTimeout}s"
+      ++ optional (v.tryEmptyPassphrase) "try-empty-password=true"
     ;
   in "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}") luks.devices));
 
@@ -591,6 +622,25 @@ in
               The name of the file (can be a raw device or a partition) that
               should be used as the decryption key for the encrypted device. If
               not specified, you will be prompted for a passphrase instead.
+            '';
+          };
+
+          tryEmptyPassphrase = mkOption {
+            default = false;
+            type = types.bool;
+            description = lib.mdDoc ''
+              If keyFile fails then try an empty passphrase first before
+              prompting for password.
+            '';
+          };
+
+          keyFileTimeout = mkOption {
+            default = null;
+            example = 5;
+            type = types.nullOr types.int;
+            description = lib.mdDoc ''
+              The amount of time in seconds for a keyFile to appear before
+              timing out and trying passwords.
             '';
           };
 
@@ -811,7 +861,7 @@ in
             '';
             description = lib.mdDoc ''
               Commands that should be run right before we try to mount our LUKS device.
-              This can be useful, if the keys needed to open the drive is on another partion.
+              This can be useful, if the keys needed to open the drive is on another partition.
             '';
           };
 
@@ -889,6 +939,10 @@ in
           message = "boot.initrd.luks.devices.<name>.bypassWorkqueues is not supported for kernels older than 5.9";
         }
 
+        { assertion = !config.boot.initrd.systemd.enable -> all (x: x.keyFileTimeout == null) (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.keyFileTimeout is only supported for systemd initrd";
+        }
+
         { assertion = config.boot.initrd.systemd.enable -> all (dev: !dev.fallbackToPassword) (attrValues luks.devices);
           message = "boot.initrd.luks.devices.<name>.fallbackToPassword is implied by systemd stage 1.";
         }
@@ -905,9 +959,11 @@ in
         { assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
           message = "systemd stage 1 does not support GPG smartcards yet.";
         }
-        # TODO
         { assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
-          message = "systemd stage 1 does not support FIDO2 yet.";
+          message = ''
+            systemd stage 1 does not support configuring FIDO2 unlocking through `boot.initrd.luks.devices.<name>.fido2`.
+            Use systemd-cryptenroll(1) to configure FIDO2 support.
+          '';
         }
         # TODO
         { assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;
@@ -924,10 +980,17 @@ in
       ++ luks.cryptoModules
       # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
       # remove once 'modprobe --show-depends xts' shows ecb as a dependency
-      ++ (if builtins.elem "xts" luks.cryptoModules then ["ecb"] else []);
+      ++ (optional (builtins.elem "xts" luks.cryptoModules) "ecb");
 
     # copy the cryptsetup binary and it's dependencies
-    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.extraUtilsCommands = let
+      pbkdf2-sha512 = pkgs.runCommandCC "pbkdf2-sha512" { buildInputs = [ pkgs.openssl ]; } ''
+        mkdir -p "$out/bin"
+        cc -O3 -lcrypto ${./pbkdf2-sha512.c} -o "$out/bin/pbkdf2-sha512"
+        strip -s "$out/bin/pbkdf2-sha512"
+      '';
+    in
+    mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
       copy_bin_and_libs ${askPass}/bin/cryptsetup-askpass
       sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
@@ -937,9 +1000,7 @@ in
         copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykinfo
         copy_bin_and_libs ${pkgs.openssl.bin}/bin/openssl
 
-        cc -O3 -I${pkgs.openssl.dev}/include -L${lib.getLib pkgs.openssl}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto
-        strip -s pbkdf2-sha512
-        copy_bin_and_libs pbkdf2-sha512
+        copy_bin_and_libs ${pbkdf2-sha512}/bin/pbkdf2-sha512
 
         mkdir -p $out/etc/ssl
         cp -pdv ${pkgs.openssl.out}/etc/ssl/openssl.cnf $out/etc/ssl
@@ -963,13 +1024,12 @@ in
         copy_bin_and_libs ${pkgs.gnupg}/libexec/scdaemon
 
         ${concatMapStringsSep "\n" (x:
-          if x.gpgCard != null then
+          optionalString (x.gpgCard != null)
             ''
               mkdir -p $out/secrets/gpg-keys/${x.device}
               cp -a ${x.gpgCard.encryptedPass} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
               cp -a ${x.gpgCard.publicKey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
             ''
-          else ""
           ) (attrValues luks.devices)
         }
       ''}

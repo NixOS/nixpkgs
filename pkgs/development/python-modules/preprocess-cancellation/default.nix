@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , poetry-core
+, setuptools
 , shapely
 , pytestCheckHook
 }:
@@ -40,13 +41,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
     shapely
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

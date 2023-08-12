@@ -21,7 +21,7 @@ buildPythonPackage rec {
      "priority"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

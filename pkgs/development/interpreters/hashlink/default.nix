@@ -7,25 +7,24 @@
 , libjpeg_turbo
 , libuv
 , libvorbis
-, mbedtls
+, mbedtls_2
 , openal
 , pcre
 , SDL2
 , sqlite
+, getconf
 }:
 
 stdenv.mkDerivation rec {
   pname = "hashlink";
-  version = "1.12";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
     repo = "hashlink";
     rev = version;
-    sha256 = "AiUGhTxz4Pkrks4oE+SAuAQPMuC5T2B6jo3Jd3sNrkQ=";
+    sha256 = "lpHW0JWxbLtOBns3By56ZBn47CZsDzwOFBuW9MlERrE=";
   };
-
-  patches = [ ./hashlink.patch ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -36,18 +35,24 @@ stdenv.mkDerivation rec {
     libpng
     libuv
     libvorbis
-    mbedtls
+    mbedtls_2
     openal
     pcre
     SDL2
     sqlite
   ];
 
+  nativeBuildInputs = [ getconf ];
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libhl.dylib $out/lib/libhl.dylib $out/bin/hl
+  '';
+
   meta = with lib; {
     description = "A virtual machine for Haxe";
     homepage = "https://hashlink.haxe.org/";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ iblech locallycompact ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ iblech locallycompact logo ];
   };
 }

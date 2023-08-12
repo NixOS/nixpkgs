@@ -1,27 +1,35 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitLab
 , requests
+, pytestCheckHook
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "2.1.0";
+  version = "2.2.2";
+  format = "setuptools";
 
-  src = fetchPypi {
-    pname = "DoorBirdPy";
-    inherit version;
-    sha256 = "ed0e94953cdf96111c7f73c5fcf358f65dc0ff5e47f63fc057bf18ca7512e606";
+  src = fetchFromGitLab {
+    owner = "klikini";
+    repo = "doorbirdpy";
+    rev = version;
+    hash = "sha256-pgL4JegD1gANefp7jLYb74N9wgpkDgQc/Fe+NyLBrkA=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
 
-  # no tests on PyPI, no tags on GitLab
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests-mock
+  ];
 
-  pythonImportsCheck = [ "doorbirdpy" ];
+  pythonImportsCheck = [
+    "doorbirdpy"
+  ];
 
   meta = with lib; {
     description = "Python wrapper for the DoorBird LAN API";

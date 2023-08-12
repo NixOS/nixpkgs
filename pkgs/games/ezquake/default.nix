@@ -1,21 +1,23 @@
 { lib, stdenv, fetchFromGitHub, curl, expat
-, jansson, libpng, libjpeg, libGLU, libGL, libXxf86vm, pcre
-, pkg-config, SDL2, vim, speex }:
+, jansson, libpng, libjpeg, libGLU, libGL
+, libsndfile, libXxf86vm, pcre, pkg-config, SDL2
+, vim, speex }:
 
 stdenv.mkDerivation rec {
   pname = "ezquake";
-  version = "3.2.3";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
-    owner = "ezQuake";
+    owner = "QW-Group";
     repo = pname + "-source";
     rev = version;
-    sha256 = "sha256-EBhKmoX11JavTG6tPfg15FY2lqOFfzSDg3058OWfcYQ=";
+    fetchSubmodules = true;
+    hash = "sha256-mi/VDSZ+ybEAaZOhBGh/cSnrRUAB/h+WQZ4Aml0UfW4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    expat curl jansson libpng libjpeg libGLU libGL libXxf86vm pcre SDL2 vim speex
+    expat curl jansson libpng libjpeg libGLU libGL libsndfile libXxf86vm pcre SDL2 vim speex
   ];
 
   installPhase = with lib; let
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://ezquake.github.io/";
+    homepage = "https://ezquake.com/";
     description = "A modern QuakeWorld client focused on competitive online play";
     license = licenses.gpl2;
     platforms = platforms.linux;

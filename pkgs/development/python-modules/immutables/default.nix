@@ -3,13 +3,12 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
-, mypy
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "immutables";
-  version = "0.18";
+  version = "0.19";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,22 +16,30 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MagicStack";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-lXCoPTcpTOv9K0xCVjbrP3qlzP9tfk/e3Rk3oOmbS/Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yW+pmAryBp6bvjolN91ACDkk5zxvKfu4nRLQSy71kqs=";
   };
+
+  postPatch = ''
+    rm tests/conftest.py
+  '';
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 
-  checkInputs = [
-    mypy
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   disabledTests = [
     # Version mismatch
     "testMypyImmu"
+  ];
+
+  disabledTestPaths = [
+    # avoid dependency on mypy
+    "tests/test_mypy.py"
   ];
 
   pythonImportsCheck = [

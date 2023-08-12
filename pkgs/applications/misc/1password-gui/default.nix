@@ -1,138 +1,58 @@
-{ lib
-, stdenv
+{ stdenv
+, callPackage
+, channel ? "stable"
 , fetchurl
-, makeWrapper
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, gdk-pixbuf
-, glib
-, gtk3
-, libX11
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXrandr
-, libdrm
-, libxcb
-, libxkbcommon
-, libxshmfence
-, libGL
-, libappindicator-gtk3
-, mesa
-, nspr
-, nss
-, pango
-, systemd
-, udev
-, xdg-utils
+, lib
+# This is only relevant for Linux, so we need to pass it through
+, polkitPolicyOwners ? [ ] }:
 
-  # The 1Password polkit file requires a list of users for whom polkit
-  # integrations should be enabled. This should be a list of strings that
-  # correspond to usernames.
-, polkitPolicyOwners ? []
-}:
 let
-  # Convert the polkitPolicyOwners variable to a polkit-compatible string for the polkit file.
-  policyOwners = lib.concatStringsSep " " (map (user: "unix-user:${user}") polkitPolicyOwners);
 
-in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.8.0";
+  version = if channel == "stable" then "8.10.9" else "8.10.12-10.BETA";
 
-  src =
-    if stdenv.hostPlatform.isAarch64 then
-      fetchurl {
-        url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
-        sha256 = "01swx12nqqh9i3191ibc8gv92k4dzsk1qpikg053qhn1zh2ag1dd";
-      }
-    else
-      fetchurl {
+  sources = {
+    stable = {
+      x86_64-linux = {
         url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-        sha256 = "1rcvxxcz2q7kgf6qbcjnjhysnx9z81hvl0jfv0nkp0p1w8bf1h66";
+        hash = "sha256-Ef0ee41WVN46IOYbdyF1w8Ud2s7ncR71/5TFnQwOnVU=";
       };
+      aarch64-linux = {
+        url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
+        hash = "sha256-IuRPCphagpx0jynJmhL9ETSzS0JaWCpDaodt0TDm7xs=";
+      };
+      x86_64-darwin = {
+        url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
+        hash = "sha256-KwMYxe6WpLFXaJ3jyEOc18IYO/pwZ7RiPF/7RN2c5xg=";
+      };
+      aarch64-darwin = {
+        url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
+        hash = "sha256-MDc2Okc8nZbAPPn0ihoraDe9kNI5xx654DdTe7AlD3E=";
+      };
+    };
+    beta = {
+      x86_64-linux = {
+        url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
+        hash = "sha256-SnfFd+ksJc69r7GGFUYCLH0NAwwiSxEDyaIRTrj/VWo=";
+      };
+      aarch64-linux = {
+        url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
+        hash = "sha256-5PDlMe/EZNBkfIrf6se4B5TKVYycSSoqiv0iMEPiIrA=";
+      };
+      x86_64-darwin = {
+        url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
+        hash = "sha256-nn8lnn52MkKcFRluH9k8IoAu4vZ1C9Uk/+k6TQ6CKFs=";
+      };
+      aarch64-darwin = {
+        url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
+        hash = "sha256-ACeFyaDzo1I4w/9CrkQ5iO/JBHYRbxxzMDhTX4oI548=";
+      };
+    };
+  };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  dontConfigure = true;
-  dontBuild = true;
-  dontPatchELF = true;
-
-  installPhase =
-    let rpath = lib.makeLibraryPath [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      cairo
-      cups
-      dbus
-      expat
-      gdk-pixbuf
-      glib
-      gtk3
-      libX11
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libXrandr
-      libdrm
-      libxcb
-      libxkbcommon
-      libxshmfence
-      libGL
-      libappindicator-gtk3
-      mesa
-      nspr
-      nss
-      pango
-      systemd
-    ] + ":${stdenv.cc.cc.lib}/lib64";
-    in ''
-      runHook preInstall
-
-      mkdir -p $out/bin $out/share/1password
-      cp -a * $out/share/1password
-
-      # Desktop file
-      install -Dt $out/share/applications resources/${pname}.desktop
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
-
-      '' + (lib.optionalString (polkitPolicyOwners != [ ])
-      ''
-      # Polkit file
-        mkdir -p $out/share/polkit-1/actions
-        substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace "\''${POLICY_OWNERS}" "${policyOwners}"
-        '') + ''
-
-      # Icons
-      cp -a resources/icons $out/share
-
-      interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper}
-      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper}
-      for file in $(find $out -type f -name \*.so\* ); do
-        patchelf --set-rpath ${rpath}:$out/share/1password $file
-      done
-
-      # Electron is trying to open udev via dlopen()
-      # and for some reason that doesn't seem to be impacted from the rpath.
-      # Adding udev to LD_LIBRARY_PATH fixes that.
-      # Make xdg-open overrideable at runtime.
-      makeWrapper $out/share/1password/1password $out/bin/1password \
-        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
-
-      runHook postInstall
-    '';
+  src = fetchurl {
+    inherit (sources.${channel}.${stdenv.system}) url hash;
+  };
 
   meta = with lib; {
     description = "Multi-platform password manager";
@@ -140,6 +60,10 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = builtins.attrNames sources.${channel};
+    mainProgram = "1password";
   };
-}
+
+in if stdenv.isDarwin
+then callPackage ./darwin.nix { inherit pname version src meta; }
+else callPackage ./linux.nix { inherit pname version src meta polkitPolicyOwners; }

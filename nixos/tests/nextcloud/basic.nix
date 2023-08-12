@@ -14,12 +14,12 @@ in {
     client = { ... }: {
       services.davfs2.enable = true;
       system.activationScripts.davfs2-secrets = ''
-        echo "http://nextcloud/remote.php/webdav/ ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
+        echo "http://nextcloud/remote.php/dav/files/${adminuser} ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
         chmod 600 /tmp/davfs2-secrets
       '';
       virtualisation.fileSystems = {
         "/mnt/dav" = {
-          device = "http://nextcloud/remote.php/webdav/";
+          device = "http://nextcloud/remote.php/dav/files/${adminuser}";
           fsType = "davfs";
           options = let
             davfs2Conf = (pkgs.writeText "davfs2.conf" "secrets /tmp/davfs2-secrets");
@@ -37,10 +37,13 @@ in {
         "d /var/lib/nextcloud-data 0750 nextcloud nginx - -"
       ];
 
+      system.stateVersion = "22.11"; # stateVersion >=21.11 to make sure that we use OpenSSL3
+
       services.nextcloud = {
         enable = true;
         datadir = "/var/lib/nextcloud-data";
         hostName = "nextcloud";
+        database.createLocally = true;
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
           adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
@@ -67,7 +70,7 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -87,8 +90,8 @@ in {
       test -e graph
       grep "$what" graph >$out || true
     '';
-    nextcloudUsesImagick = findInClosure "imagick" nodes.nextcloud.config.system.build.vm;
-    nextcloudWithoutDoesntUseIt = findInClosure "imagick" nodes.nextcloudWithoutMagick.config.system.build.vm;
+    nextcloudUsesImagick = findInClosure "imagick" nodes.nextcloud.system.build.vm;
+    nextcloudWithoutDoesntUseIt = findInClosure "imagick" nodes.nextcloudWithoutMagick.system.build.vm;
   in ''
     assert open("${nextcloudUsesImagick}").read() != ""
     assert open("${nextcloudWithoutDoesntUseIt}").read() == ""
@@ -99,6 +102,10 @@ in {
     # This is just to ensure the nextcloud-occ program is working
     nextcloud.succeed("nextcloud-occ status")
     nextcloud.succeed("curl -sSf http://nextcloud/login")
+    # Ensure that no OpenSSL 1.1 is used.
+    nextcloud.succeed(
+        "${nodes.nextcloud.services.phpfpm.pools.nextcloud.phpPackage}/bin/php -i | grep 'OpenSSL Library Version' | awk -F'=>' '{ print $2 }' | awk '{ print $2 }' | grep -v 1.1"
+    )
     nextcloud.succeed(
         "${withRcloneEnv} ${copySharedFile}"
     )
@@ -108,5 +115,6 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
     assert "hi" in client.succeed("cat /mnt/dav/test-shared-file")
+    nextcloud.succeed("grep -vE '^HBEGIN:oc_encryption_module' /var/lib/nextcloud-data/data/root/files/test-shared-file")
   '';
 })) args

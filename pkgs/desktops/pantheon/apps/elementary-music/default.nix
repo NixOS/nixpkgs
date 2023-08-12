@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -9,6 +8,8 @@
 , python3
 , vala
 , wrapGAppsHook4
+, elementary-gtk-theme
+, elementary-icon-theme
 , glib
 , granite7
 , gst_all_1
@@ -17,23 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "music";
     rev = version;
-    sha256 = "sha256-fZbOjZd6udJWM+jWXCmGwt6cyl/lXPsgM9XeTScbqts=";
+    sha256 = "sha256-L+E5gDtIgVkfmOIhzS7x8vtyMJYqx/UQpYMChrt2Tgo=";
   };
-
-  patches = [
-    # Use file basename for fallback audio object title
-    # https://github.com/elementary/music/pull/710
-    (fetchpatch {
-      url = "https://github.com/elementary/music/commit/97a437edc7652e0b85b7d3c6fd87089c14ec02e2.patch";
-      sha256 = "sha256-VmK5dKfSKWAIxfaKXsC8tjg6Pqq1XSGxJDQOZWJX92w=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -45,6 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-icon-theme
     glib
     granite7
     gtk4
@@ -61,10 +54,17 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The GTK theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
+  '';
+
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

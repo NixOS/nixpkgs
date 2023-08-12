@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ntninja";
     repo = pname;
     rev = "1ff9ec43ac9eaf76352ea7e7a060cd081cb8b68a"; # Version has no git tag
-    sha256 = "sha256-H2RtMGYWukowTTfqZSx+hikxzkqw1v5bA4AfZfiVl8U=";
+    hash = "sha256-H2RtMGYWukowTTfqZSx+hikxzkqw1v5bA4AfZfiVl8U=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     py-cid
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
   ];

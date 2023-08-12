@@ -2,20 +2,23 @@
 
 buildGoModule rec {
   pname = "toxiproxy";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "toxiproxy";
     rev = "v${version}";
-    sha256 = "sha256-vFf1yLpAa+yO1PCE+pLTnvvtROtpVxlEgACDNNUWBEM=";
+    sha256 = "sha256-SL3YHsNeFw8K8lPrzJXAoTkHxS+1sTREfzjawBxdnf0=";
   };
 
-  vendorSha256 = "sha256-mrRMyIU6zeyAT/fXbBmtMlZzpyeB45FQmYJ4FDwTRTo=";
+  vendorSha256 = "sha256-CmENxPAdjz0BAyvhLKIaJjSbK/mvRzHGCQOfGIiA3yI=";
 
   excludedPackages = [ "test/e2e" ];
 
   ldflags = [ "-s" "-w" "-X github.com/Shopify/toxiproxy/v2.Version=${version}" ];
+
+  # Fixes tests on Darwin
+  __darwinAllowLocalNetworking = true;
 
   checkFlags = [ "-short" ];
 

@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config gobject-introspection ];
   propagatedBuildInputs = [ glib zlib libgpg-error ];
-  configureFlags = [ "--enable-introspection=yes" ];
+  configureFlags = [
+    "--enable-introspection=yes"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "ac_cv_have_iconv_detect_h=yes" ];
 
   postPatch = ''
     substituteInPlace tests/testsuite.c \
@@ -24,7 +26,11 @@ stdenv.mkDerivation rec {
       --replace /bin/mkdir mkdir
   '';
 
-  checkInputs = [ gnupg ];
+  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    cp ${if stdenv.hostPlatform.isMusl then ./musl-iconv-detect.h else ./iconv-detect.h} ./iconv-detect.h
+  '';
+
+  nativeCheckInputs = [ gnupg ];
 
   enableParallelBuilding = true;
 

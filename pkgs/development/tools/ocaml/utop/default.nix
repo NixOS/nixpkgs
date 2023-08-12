@@ -1,21 +1,22 @@
 { lib, stdenv, fetchurl, ocaml, findlib
 , lambda-term, cppo, makeWrapper, buildDunePackage
+, xdg, zed, logs, lwt, react, lwt_react
 }:
 
 buildDunePackage rec {
   pname = "utop";
-  version = "2.9.2";
 
-  minimalOCamlVersion = "4.03";
+  version = "2.13.1";
+  propagatedBuildInputs = [ findlib lambda-term xdg zed logs ];
+
+  minimalOCamlVersion = "4.11";
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
-    sha256 = "sha256-kvFBCe69TRQIWvZV47SH7ISus9k8afGRw5WLKzKqw08=";
+    sha256 = "sha256-sE7Co5TRpqKKeURMWPZuq3e390QB9HFKpubxwhJab/0=";
   };
 
   nativeBuildInputs = [ makeWrapper cppo ];
-
-  propagatedBuildInputs = [ lambda-term ];
 
   postFixup =
    let
@@ -64,7 +65,8 @@ buildDunePackage rec {
 
     It integrates with the tuareg mode in Emacs.
     '';
-    homepage = "https://github.com/diml/utop";
+    homepage = "https://github.com/ocaml-community/utop";
+    changelog = "https://github.com/ocaml-community/utop/blob/${version}/CHANGES.md";
     license = lib.licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = [

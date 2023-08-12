@@ -1,5 +1,13 @@
-{ lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
-, tiles ? true, Cocoa
+{ lib
+, callPackage
+, CoreFoundation
+, fetchFromGitHub
+, fetchpatch
+, pkgs
+, wrapCDDA
+, attachPkgs
+, tiles ? true
+, Cocoa
 , debug ? false
 , useXdgDir ? false
 }:
@@ -10,18 +18,18 @@ let
   };
 
   self = common.overrideAttrs (common: rec {
-    version = "0.F-3";
+    version = "0.G";
 
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
       rev = version;
-      sha256 = "sha256-2su1uQaWl9WG41207dRvOTdVKcQsEz/y0uTi9JX52uI=";
+      sha256 = "sha256-Hda0dVVHNeZ8MV5CaCbSpdOCG2iqQEEmXdh16vwIBXk=";
     };
 
     patches = [
       # Unconditionally look for translation files in $out/share/locale
-      ./locale-path-stable.patch
+      ./locale-path.patch
     ];
 
     makeFlags = common.makeFlags ++ [
@@ -29,9 +37,15 @@ let
       "VERSION=${version}"
     ];
 
+    env.NIX_CFLAGS_COMPILE = toString [
+      # Needed with GCC 12
+      "-Wno-error=array-bounds"
+    ];
+
     meta = common.meta // {
       maintainers = with lib.maintainers;
-      common.meta.maintainers ++ [ skeidel ];
+        common.meta.maintainers ++ [ skeidel ];
+      changelog = "https://github.com/CleverRaven/Cataclysm-DDA/blob/${version}/data/changelog.txt";
     };
   });
 in

@@ -13,7 +13,6 @@
 , itstool
 , libhandy
 , libnotify
-, libsoup
 , libxml2
 , pkg-config
 , python3Packages
@@ -23,7 +22,6 @@ python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
   version = "42.beta";
   format = "other";
-  strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -54,7 +52,6 @@ python3Packages.buildPythonApplication rec {
     gtk3
     libhandy
     libnotify
-    libsoup
   ];
 
   pythonPath = with python3Packages; [

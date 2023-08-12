@@ -28,5 +28,7 @@ buildOctavePackage rec {
       The Octave-forge Image Aquisition package provides functions to
       capture images from connected devices. Currently only v4l2 is supported.
     '';
+    # Got broke with octave 8.x update, and wasn't updated since 2015
+    broken = true;
   };
 }

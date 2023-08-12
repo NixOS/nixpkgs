@@ -1,0 +1,26 @@
+diff --git a/auxil/spicy/spicy/hilti/runtime/CMakeLists.txt b/auxil/spicy/spicy/hilti/runtime/CMakeLists.txt
+index f154901c..76563717 100644
+--- a/auxil/spicy/spicy/hilti/runtime/CMakeLists.txt
++++ b/auxil/spicy/spicy/hilti/runtime/CMakeLists.txt
+@@ -69,7 +69,7 @@ target_compile_definitions(hilti-rt-objects PRIVATE "HILTI_RT_BUILD_TYPE_RELEASE
+ # Build hilti-rt-debug with debug flags.
+ string(REPLACE " " ";" cxx_flags_debug ${CMAKE_CXX_FLAGS_DEBUG})
+ target_compile_options(hilti-rt-debug-objects PRIVATE ${cxx_flags_debug})
+-target_compile_options(hilti-rt-debug-objects PRIVATE "-UNDEBUG;-O0;-Wall")
++target_compile_options(hilti-rt-debug-objects PRIVATE "-UNDEBUG;-O0;-Wall;-U_FORTIFY_SOURCE")
+ target_compile_definitions(hilti-rt-debug-objects PRIVATE "HILTI_RT_BUILD_TYPE_DEBUG")
+ 
+ add_library(hilti-rt-tests-library-dummy1 SHARED src/tests/library-dummy.cc)
+diff --git a/auxil/spicy/spicy/spicy/runtime/CMakeLists.txt b/auxil/spicy/spicy/spicy/runtime/CMakeLists.txt
+index 20e7d291..9712341f 100644
+--- a/auxil/spicy/spicy/spicy/runtime/CMakeLists.txt
++++ b/auxil/spicy/spicy/spicy/runtime/CMakeLists.txt
+@@ -48,7 +48,7 @@ target_link_libraries(spicy-rt-objects PUBLIC hilti-rt-objects)
+ # Build spicy-rt-debug with debug flags.
+ string(REPLACE " " ";" cxx_flags_debug ${CMAKE_CXX_FLAGS_DEBUG})
+ target_compile_options(spicy-rt-debug-objects PRIVATE ${cxx_flags_debug})
+-target_compile_options(spicy-rt-debug-objects PRIVATE "-UNDEBUG;-O0;-Wall")
++target_compile_options(spicy-rt-debug-objects PRIVATE "-UNDEBUG;-O0;-Wall;-U_FORTIFY_SOURCE")
+ target_compile_definitions(spicy-rt-debug-objects PRIVATE "HILTI_RT_BUILD_TYPE_DEBUG")
+ target_link_libraries(spicy-rt-debug-objects PUBLIC hilti-rt-debug-objects)
+ 

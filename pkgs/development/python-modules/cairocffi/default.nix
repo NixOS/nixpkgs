@@ -7,55 +7,30 @@
 , substituteAll
 , makeFontsConf
 , freefont_ttf
-, pytest
-, glibcLocales
+, pikepdf
+, pytestCheckHook
 , cairo
 , cffi
 , numpy
 , withXcffib ? false
 , xcffib
-, python
 , glib
 , gdk-pixbuf
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "cairocffi";
-  version = "1.3.0";
+  version = "1.5.1";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EIo6fLCeIDvdhQHZuq2R14bSBFYb1x6TZOizSJfEe5E=";
+    hash = "sha256-Bxq3ty41MzALC/1VpSBWtP/cHtbmVneeKs7Ztwm4opU=";
   };
-
-  LC_ALL = "en_US.UTF-8";
-
-  # checkPhase require at least one 'normal' font and one 'monospace',
-  # otherwise glyph tests fails
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
-
-  propagatedBuildInputs = [ cairo cffi ] ++ lib.optional withXcffib xcffib;
-  propagatedNativeBuildInputs = [ cffi ];
-
-  # pytestCheckHook does not work
-  checkInputs = [ numpy pytest glibcLocales ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "pytest-cov" "" \
-      --replace "pytest-flake8" "" \
-      --replace "pytest-isort" "" \
-      --replace "--flake8 --isort" ""
-  '';
-
-  checkPhase = ''
-    py.test $out/${python.sitePackages}
-  '';
 
   patches = [
     # OSError: dlopen() failed to load a library: gdk-pixbuf-2.0 / gdk-pixbuf-2.0-0
@@ -69,10 +44,26 @@ buildPythonPackage rec {
     ./fix_test_scaled_font.patch
   ];
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedNativeBuildInputs = [ cffi ];
+
+  propagatedBuildInputs = [ cairo cffi ]
+    ++ lib.optional withXcffib xcffib;
+
+  nativeCheckInputs = [
+    numpy
+    pikepdf
+    pytestCheckHook
+  ];
+
   meta = with lib; {
+    changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";
     homepage = "https://github.com/SimonSapin/cairocffi";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
     description = "cffi-based cairo bindings for Python";
   };
 }

@@ -14,13 +14,13 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.1.4";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
-    rev = version;
-    hash = "sha256-nDfVF7g0M54DRpkH1rnZB8o+nCV4A6b1uKMOMRQ3GbI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MdPZ9uLQYwgZ6xXWinzFg5A2gJ3ihTS9CbEmXnaNEkI=";
   };
 
   outputs = [ "out" "udev" ];
@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     pyudev
     pyyaml
     xlib
+    hid-parser
   ];
 
   # the -cli symlink is just to maintain compabilility with older versions where

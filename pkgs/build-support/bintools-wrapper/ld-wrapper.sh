@@ -55,10 +55,12 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
             # produces '-syslibroot //' linker flag. It's a no-op,
             # which does not introduce impurities.
             n+=1; skip "$p2"
-        elif [ "${p:0:1}" = / ] && badPath "$p"; then
-            # We cannot skip this; barf.
-            echo "impure path \`$p' used in link" >&2
-            exit 1
+        elif [ "${p:0:10}" = /LIBPATH:/ ] && badPath "${p:9}"; then
+            reject "${p:9}"
+        # We need to not match LINK.EXE-style flags like
+        # /NOLOGO or /LIBPATH:/nix/store/foo
+        elif [[ $p =~ ^/[^:]*/ ]] && badPath "$p"; then
+            reject "$p"
         elif [ "${p:0:9}" = --sysroot ]; then
             # Our ld is not built with sysroot support (Can we fix that?)
             :
@@ -232,8 +234,11 @@ fi
 
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
+#
+# Note: `lld` interprets `--build-id` to mean `--build-id=fast`; GNU ld defaults
+# to SHA1.
 if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
-    extraAfter+=(--build-id)
+    extraAfter+=(--build-id="${NIX_BUILD_ID_STYLE:-sha1}")
 fi
 
 
@@ -250,10 +255,18 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-@prog@ \
-    ${extraBefore+"${extraBefore[@]}"} \
-    ${params+"${params[@]}"} \
-    ${extraAfter+"${extraAfter[@]}"}
+
+if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+    @prog@ @<(printf "%q\n" \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"})
+else
+    @prog@ \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"}
+fi
 
 if [ -e "@out@/nix-support/post-link-hook" ]; then
     source @out@/nix-support/post-link-hook

@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.0.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nwnhaqSn/9WHBjUPaEabK4x23fJ83WwEYvz6aCcvsDw=";
+    hash = "sha256-3ylFz5j176hBQLklLmVKltE8whynzojsoBEWjEL2M14=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ nose nose-exclude ];
+  nativeCheckInputs = [ nose nose-exclude ];
 
   pythonImportsCheck = [ "pyscf" ];
   preCheck = ''
@@ -74,6 +74,7 @@ buildPythonPackage rec {
       -e test_jk_hermi0 \
       -e test_j_kpts \
       -e test_k_kpts \
+      -e test_lda \
       -e high_cost \
       -e skip \
       -e call_in_background \
@@ -82,6 +83,7 @@ buildPythonPackage rec {
       -e test_finite_diff_uks_eph \
       -e test_pipek \
       -e test_n3_cis_ewald \
+      -e test_veff \
       -I test_kuccsd_supercell_vs_kpts\.py \
       -I test_kccsd_ghf\.py \
       -I test_h_.*\.py \

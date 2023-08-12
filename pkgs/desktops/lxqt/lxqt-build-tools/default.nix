@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -8,18 +7,18 @@
 , qtbase
 , glib
 , perl
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "vzppKTDwADBG5pOaluT858cWCKFFRaSbHz2Qhe6799E=";
+    sha256 = "4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
   };
 
   postPatch = ''
@@ -59,7 +58,7 @@ mkDerivation rec {
     cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-build-tools";

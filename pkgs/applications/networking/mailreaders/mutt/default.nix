@@ -12,22 +12,29 @@
 , gpgSupport   ? false
 , gpgmeSupport ? true
 , imapSupport  ? true
+, pop3Support  ? true
+, smtpSupport  ? true
 , withSidebar  ? true
 , gssSupport   ? true
 , writeScript
 }:
+assert smimeSupport -> sslSupport;
+assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.2.7";
+  version = "2.2.10";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "6xOFj1i7Np9He/ZS2Q6baq3dDWEKy+o0VQSeXvrTbfE=";
+    sha256 = "sha256-TXc/IkIveQlve5S1e+5FZUrZolFl27NkY8WClbTNPYg=";
   };
 
-  patches = lib.optional smimeSupport (fetchpatch {
+  patches = [
+    # Avoid build-only references embedding into 'mutt -v' output.
+    ./no-build-only-refs.patch
+  ] ++ lib.optional smimeSupport (fetchpatch {
     url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
@@ -44,9 +51,9 @@ stdenv.mkDerivation rec {
     (lib.enableFeature headerCache  "hcache")
     (lib.enableFeature gpgmeSupport "gpgme")
     (lib.enableFeature imapSupport  "imap")
+    (lib.enableFeature smtpSupport  "smtp")
+    (lib.enableFeature pop3Support  "pop")
     (lib.enableFeature withSidebar  "sidebar")
-    "--enable-smtp"
-    "--enable-pop"
     "--with-mailpath="
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail

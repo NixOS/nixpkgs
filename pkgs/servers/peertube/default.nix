@@ -1,47 +1,75 @@
-{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, buildGoModule, fetchYarnDeps, nixosTests
-, fixup_yarn_lock, jq, nodejs, yarn
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, fetchFromGitHub
+, fetchYarnDeps
+, nixosTests
+, brotli
+, fixup_yarn_lock
+, jq
+, nodejs
+, which
+, yarn
 }:
 let
-  arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
-    else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
+  bcryptHostPlatformAttrs = {
+    x86_64-linux = {
+      arch = "linux-x64";
+      libc = "glibc";
+      hash = "sha256-I1ceMi7h6flvKBmMIU1qjAU1S6z5MzguHDul3g1zMKw=";
+    };
+    aarch64-linux = {
+      arch = "linux-arm64";
+      libc = "glibc";
+      hash = "sha256-q8BR7kILYV8i8ozDkpcuKarf4s1TgRqOrUeLqjdWEQ0=";
+    };
+    x86_64-darwin = {
+      arch = "darwin-x64";
+      libc = "unknown";
+      hash = "sha256-ONnXtRxcYFuFz+rmVTg+yEKe6J/vfKahX2i6k8dQStg=";
+    };
+    aarch64-darwin = {
+      arch = "darwin-arm64";
+      libc = "unknown";
+      hash = "sha256-VesAcT/IF2cvJVncJoqZcAvFxw32SN70C60GLU2kmVI=";
+    };
+  };
+  bcryptAttrs = bcryptHostPlatformAttrs."${stdenv.hostPlatform.system}" or
+    (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
+  bcryptVersion = "5.1.0";
+  bcryptLib = fetchurl {
+    url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcryptVersion}/bcrypt_lib-v${bcryptVersion}-napi-v3-${bcryptAttrs.arch}-${bcryptAttrs.libc}.tar.gz";
+    inherit (bcryptAttrs) hash;
+  };
+in
+stdenv.mkDerivation rec {
+  pname = "peertube";
+  version = "5.1.0";
 
-  version = "4.2.2";
-
-  source = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    sha256 = "sha256-q6wSk5AO91Z6dw5MgpO7QTAlA8Q5Xx1CboBr7SElVUA=";
+    hash = "sha256-C9mBF+QymGXyBB3IFX6MNgsZpHk739qv1/DLuvzrTaU=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
-    yarnLock = "${source}/yarn.lock";
-    sha256 = "sha256-MMsxh20jcbW4YYsJyoupKbT9+Xa1BWZAmYHoj2/t+LM=";
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-W+pX2XO27j6qAVxvo+Xf1h7g3V0LUMtwNf+meZmkgwE=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
-    yarnLock = "${source}/server/tools/yarn.lock";
-    sha256 = "sha256-maPR8OCiuNlle0JQIkZSgAqW+BrSxPwVm6CkxIrIg5k=";
+    yarnLock = "${src}/server/tools/yarn.lock";
+    hash = "sha256-maPR8OCiuNlle0JQIkZSgAqW+BrSxPwVm6CkxIrIg5k=";
   };
 
   yarnOfflineCacheClient = fetchYarnDeps {
-    yarnLock = "${source}/client/yarn.lock";
-    sha256 = "sha256-6Snx1OwEndGrkMZbAEsoNRUQnZcwH+pwSDZW8igCzXA=";
+    yarnLock = "${src}/client/yarn.lock";
+    hash = "sha256-TAv8QAAfT3q28jUo26h0uCGsoqBzAn8lybIaqNAApU8=";
   };
 
-  bcrypt_version = "5.0.1";
-  bcrypt_lib = fetchurl {
-    url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcrypt_version}/bcrypt_lib-v${bcrypt_version}-napi-v3-${arch}-glibc.tar.gz";
-    sha256 = "3R3dBZyPansTuM77Nmm3f7BbTDkDdiT2HQIrti2Ottc=";
-  };
-
-in stdenv.mkDerivation rec {
-  inherit version;
-  pname = "peertube";
-  src = source;
-
-  nativeBuildInputs = [ fixup_yarn_lock jq nodejs yarn ];
+  nativeBuildInputs = [ brotli fixup_yarn_lock jq nodejs which yarn ];
 
   buildPhase = ''
     # Build node modules
@@ -49,13 +77,13 @@ in stdenv.mkDerivation rec {
     fixup_yarn_lock ~/yarn.lock
     fixup_yarn_lock ~/server/tools/yarn.lock
     fixup_yarn_lock ~/client/yarn.lock
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCacheServer}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheServer
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/server/tools
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCacheTools}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheTools
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
     cd ~/client
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCacheClient}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCacheClient
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
 
     patchShebangs ~/node_modules
@@ -65,11 +93,11 @@ in stdenv.mkDerivation rec {
 
     # Fix bcrypt node module
     cd ~/node_modules/bcrypt
-    if [ "${bcrypt_version}" != "$(cat package.json | jq -r .version)" ]; then
+    if [ "${bcryptVersion}" != "$(cat package.json | jq -r .version)" ]; then
       echo "Mismatching version please update bcrypt in derivation"
       exit
     fi
-    mkdir -p ./lib/binding && tar -C ./lib/binding -xf ${bcrypt_lib}
+    mkdir -p ./lib/binding && tar -C ./lib/binding -xf ${bcryptLib}
 
     # Return to home directory
     cd ~
@@ -83,7 +111,7 @@ in stdenv.mkDerivation rec {
     # Build PeerTube tools
     cp -r "./server/tools/node_modules" "./dist/server/tools"
     npm run tsc -- --build ./server/tools/tsconfig.json
-    npm run resolve-tspaths:cli
+    npm run resolve-tspaths:server
 
     # Build PeerTube client
     npm run build:client
@@ -97,6 +125,12 @@ in stdenv.mkDerivation rec {
     mkdir $out/client
     mv ~/client/{dist,node_modules,package.json,yarn.lock} $out/client
     mv ~/{config,scripts,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,tsconfig.json,yarn.lock} $out
+
+    # Create static gzip and brotli files
+    find $out/client/dist -type f -regextype posix-extended -iregex '.*\.(css|eot|html|js|json|svg|webmanifest|xlf)' | while read file; do
+      gzip -9 -n -c $file > $file.gz
+      brotli --best -f $file -o $file.br
+    done
   '';
 
   passthru.tests.peertube = nixosTests.peertube;
@@ -119,7 +153,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ immae izorkin matthiasbeyer mohe2015 stevenroose ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [ immae izorkin mohe2015 stevenroose ];
   };
 }

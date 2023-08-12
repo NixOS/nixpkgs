@@ -14,7 +14,7 @@
 }:
 
 let
-  char2underscore = char: str: lib.replaceChars [ char ] [ "_" ] str;
+  char2underscore = char: str: lib.replaceStrings [ char ] [ "_" ] str;
 in
 mkDerivation rec {
   pname = "mt32emu-qt";
@@ -63,7 +63,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://munt.sourceforge.net/";
+    homepage = "https://munt.sourceforge.net/";
     description = "A synthesizer application built on Qt and libmt32emu";
     longDescription = ''
       mt32emu-qt is a synthesiser application that facilitates both realtime

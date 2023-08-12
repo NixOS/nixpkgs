@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, removeReferencesTo
 , alsaSupport ? !stdenv.isDarwin, alsa-lib
 , dbusSupport ? !stdenv.isDarwin, dbus
 , pipewireSupport ? !stdenv.isDarwin, pipewire
@@ -8,18 +8,20 @@
 
 stdenv.mkDerivation rec {
   pname = "openal-soft";
-  version = "1.22.2";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
     rev = version;
-    sha256 = "sha256-MVM0qCZDWcO7/Hnco+0dBqzBLcWD279xjx0slxxlc4w=";
+    sha256 = "sha256-jwY1NzNJdWIvVv7TvJyg4cIGFLWGZhL3BkMI1NbOEG0=";
   };
 
-  # this will make it find its own data files (e.g. HRTF profiles)
-  # without any other configuration
-  patches = [ ./search-out.patch ];
+  patches = [
+    # this will make it find its own data files (e.g. HRTF profiles)
+    # without any other configuration
+    ./search-out.patch
+  ];
   postPatch = ''
     substituteInPlace core/helpers.cpp \
       --replace "@OUT@" $out
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config removeReferencesTo ];
 
   buildInputs = lib.optional alsaSupport alsa-lib
     ++ lib.optional dbusSupport dbus
@@ -44,9 +46,13 @@ stdenv.mkDerivation rec {
     "-DOSS_INCLUDE_DIR=${stdenv.cc.libc}/include"
   ];
 
+  postInstall = lib.optional pipewireSupport ''
+    remove-references-to -t ${pipewire.dev} $(readlink -f $out/lib/*.so)
+  '';
+
   meta = with lib; {
     description = "OpenAL alternative";
-    homepage = "https://kcat.strangesoft.net/openal.html";
+    homepage = "https://openal-soft.org/";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ftrvxmtrx];
     platforms = platforms.unix;

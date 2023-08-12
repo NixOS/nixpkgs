@@ -1,40 +1,20 @@
-{ stdenvNoCC, callPackage, fetchurl, autoPatchelfHook, unzip, openssl, lib }:
-let
-  dists = {
-    aarch64-darwin = {
-      arch = "aarch64";
-      shortName = "darwin";
-      sha256 = "sha256-R17Ga4C6PSxfL1bz6IBjx0dYFmX93i0y8uqxG1eZKd4=";
-    };
+{ lib
+, stdenvNoCC
+, fetchurl
+, autoPatchelfHook
+, unzip
+, openssl
+, writeShellScript
+, curl
+, jq
+, common-updater-scripts
+}:
 
-    aarch64-linux = {
-      arch = "aarch64";
-      shortName = "linux";
-      sha256 = "sha256-KSC4gdsJZJoPjMEs+VigVuqlUDhg4sL054WRlAbB+eA=";
-    };
-
-    x86_64-darwin = {
-      arch = "x64";
-      shortName = "darwin";
-      sha256 = "sha256-CVqFPvZScNTudE2wgUctwGDgTyaMeN8dUNmLatcKo5M=";
-    };
-
-    x86_64-linux = {
-      arch = "x64";
-      shortName = "linux";
-      sha256 = "sha256-N3hGPyp9wvb7jjpaFLJcdNIRyLvegjAe+MiV2aMS1nE=";
-    };
-  };
-  dist = dists.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-in
 stdenvNoCC.mkDerivation rec {
-  version = "0.1.11";
+  version = "0.7.3";
   pname = "bun";
 
-  src = fetchurl {
-    url = "https://github.com/Jarred-Sumner/bun-releases-for-updater/releases/download/bun-v${version}/bun-${dist.shortName}-${dist.arch}.zip";
-    sha256 = dist.sha256;
-  };
+  src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   strictDeps = true;
   nativeBuildInputs = [ unzip ] ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
@@ -45,13 +25,48 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     install -Dm 755 ./bun $out/bin/bun
+    ln -s $out/bin/bun $out/bin/bunx
+
     runHook postInstall
   '';
-
+  passthru = {
+    sources = {
+      "aarch64-darwin" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
+        hash = "sha256-9gs5PIbYxhhUC+lw/iEIhjdMIUYVnhP7oYrRqmE3HcU=";
+      };
+      "aarch64-linux" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
+        hash = "sha256-CFio1bgsgND54BrklkCVjfDvMDFxpYe1h77nGMOJdsc=";
+      };
+      "x86_64-darwin" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
+        hash = "sha256-j6NpHAqSBRe2Wa4ztA1Ao4JYTKTEIwlYMCMMICKqZv0=";
+      };
+      "x86_64-linux" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
+        hash = "sha256-05Duhv2WrYXWS6mKI3zB5QiIlitsysXwmuy+9XHBB9M=";
+      };
+    };
+    updateScript = writeShellScript "update-bun" ''
+      set -o errexit
+      export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
+      NEW_VERSION=$(curl --silent https://api.github.com/repos/oven-sh/bun/releases/latest | jq '.tag_name | ltrimstr("bun-v")' --raw-output)
+      if [[ "${version}" = "$NEW_VERSION" ]]; then
+          echo "The new version same as the old version."
+          exit 0
+      fi
+      for platform in ${lib.escapeShellArgs meta.platforms}; do
+        update-source-version "bun" "0" "${lib.fakeSha256}" --source-key="sources.$platform"
+        update-source-version "bun" "$NEW_VERSION" --source-key="sources.$platform"
+      done
+    '';
+  };
   meta = with lib; {
     homepage = "https://bun.sh";
-    changelog = "https://github.com/Jarred-Sumner/bun/releases/tag/bun-v${version}";
+    changelog = "https://bun.sh/blog/bun-v${version}";
     description = "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     longDescription = ''
@@ -61,7 +76,7 @@ stdenvNoCC.mkDerivation rec {
       mit # bun core
       lgpl21Only # javascriptcore and webkit
     ];
-    maintainers = with maintainers; [ DAlperin jk ];
-    platforms = builtins.attrNames dists;
+    maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman ];
+    platforms = builtins.attrNames passthru.sources;
   };
 }

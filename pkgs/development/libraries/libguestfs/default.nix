@@ -4,6 +4,7 @@
 , pkg-config
 , autoreconfHook
 , makeWrapper
+, libxcrypt
 , ncurses
 , cpio
 , gperf
@@ -37,17 +38,18 @@
 , appliance ? null
 , javaSupport ? false
 , jdk
+, zstd
 }:
 
 assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation rec {
   pname = "libguestfs";
-  version = "1.48.4";
+  version = "1.50.1";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ncIrbFpF8ZwsupEaN7Oo2G9idEUhsQ61PD05B+UIAxI=";
+    sha256 = "sha256-Xmhx6I+C5SHjHUQt5qELZJcCN8t5VumdEXsSO1hWWm8=";
   };
 
   strictDeps = true;
@@ -62,9 +64,11 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     qemu
+    zstd
   ] ++ (with perlPackages; [ perl libintl-perl GetoptLong ModuleBuild ])
   ++ (with ocamlPackages; [ ocaml findlib ]);
   buildInputs = [
+    libxcrypt
     ncurses
     jansson
     pcre2

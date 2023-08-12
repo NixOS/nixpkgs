@@ -11,6 +11,10 @@ buildFishPlugin {
     sha256 = "sha256-NQa12L0zlEz2EJjMDhWUhw5cz/zcFokjuCK5ZofTn+Q=";
   };
 
+  postInstall = ''
+    cp conf.d/executables $out/share/fish/vendor_conf.d/
+  '';
+
   meta = with lib; {
     description = "grc Colourizer for some commands on Fish shell";
     license = licenses.mit;

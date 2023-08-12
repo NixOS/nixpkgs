@@ -1,14 +1,14 @@
-From 4ee942ccc7cdb06ee51490e9cb44ecb36b25378a Mon Sep 17 00:00:00 2001
+From 301b2d82cdbfaffe4dfba1d2cfed068a4115f730 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Mustafa=20=C3=87al=C4=B1=C5=9Fkan?= <muscaln@protonmail.com>
 Date: Sat, 30 Apr 2022 16:18:31 +0300
 Subject: [PATCH 2/3] Add clang header path
 
 
 diff --git a/builder/builtins.go b/builder/builtins.go
-index 479b541d..b35283c6 100644
+index 121398fa..a589988b 100644
 --- a/builder/builtins.go
 +++ b/builder/builtins.go
-@@ -164,7 +164,7 @@ var aeabiBuiltins = []string{
+@@ -170,7 +170,7 @@ var aeabiBuiltins = []string{
  var CompilerRT = Library{
  	name: "compiler-rt",
  	cflags: func(target, headerPath string) []string {
@@ -18,23 +18,23 @@ index 479b541d..b35283c6 100644
  	sourceDir: func() string {
  		llvmDir := filepath.Join(goenv.Get("TINYGOROOT"), "llvm-project/compiler-rt/lib/builtins")
 diff --git a/builder/picolibc.go b/builder/picolibc.go
-index f1b061ae..159f90cf 100644
+index d0786ee3..9a5cf9b0 100644
 --- a/builder/picolibc.go
 +++ b/builder/picolibc.go
-@@ -27,7 +27,7 @@ var Picolibc = Library{
- 			"-D_COMPILING_NEWLIB",
- 			"-DHAVE_ALIAS_ATTRIBUTE",
- 			"-DTINY_STDIO",
+@@ -30,7 +30,7 @@ var Picolibc = Library{
+ 			"-D_IEEE_LIBM",
+ 			"-D__OBSOLETE_MATH_FLOAT=1", // use old math code that doesn't expect a FPU
+ 			"-D__OBSOLETE_MATH_DOUBLE=0",
 -			"-nostdlibinc",
 +			"-isystem", "@clang_include@",
- 			"-isystem", picolibcDir + "/include",
- 			"-I" + picolibcDir + "/tinystdio",
- 			"-I" + headerPath,
+ 			"-isystem", newlibDir + "/libc/include",
+ 			"-I" + newlibDir + "/libc/tinystdio",
+ 			"-I" + newlibDir + "/libm/common",
 diff --git a/compileopts/config.go b/compileopts/config.go
-index b30e653e..7561b3f2 100644
+index a006b673..3a105b49 100644
 --- a/compileopts/config.go
 +++ b/compileopts/config.go
-@@ -288,6 +288,7 @@ func (c *Config) CFlags() []string {
+@@ -279,6 +279,7 @@ func (c *Config) CFlags() []string {
  		path, _ := c.LibcPath("picolibc")
  		cflags = append(cflags,
  			"--sysroot="+path,
@@ -42,7 +42,7 @@ index b30e653e..7561b3f2 100644
  			"-isystem", filepath.Join(path, "include"), // necessary for Xtensa
  			"-isystem", filepath.Join(picolibcDir, "include"),
  			"-isystem", filepath.Join(picolibcDir, "tinystdio"),
-@@ -297,7 +298,6 @@ func (c *Config) CFlags() []string {
+@@ -288,7 +289,6 @@ func (c *Config) CFlags() []string {
  		path, _ := c.LibcPath("musl")
  		arch := MuslArchitecture(c.Triple())
  		cflags = append(cflags,
@@ -51,5 +51,5 @@ index b30e653e..7561b3f2 100644
  			"-isystem", filepath.Join(root, "lib", "musl", "arch", arch),
  			"-isystem", filepath.Join(root, "lib", "musl", "include"),
 -- 
-2.36.0
+2.37.2
 

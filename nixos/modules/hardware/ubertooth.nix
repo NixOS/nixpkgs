@@ -10,7 +10,7 @@ let
   };
 in {
   options.hardware.ubertooth = {
-    enable = mkEnableOption (lib.mdDoc "Enable the Ubertooth software and its udev rules.");
+    enable = mkEnableOption (lib.mdDoc "Ubertooth software and its udev rules");
 
     group = mkOption {
       type = types.str;

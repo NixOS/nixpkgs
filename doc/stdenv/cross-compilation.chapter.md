@@ -150,7 +150,7 @@ depsBuildBuild = [ buildPackages.stdenv.cc ];
 Add the following to your `mkDerivation` invocation.
 
 ```nix
-doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 ```
 
 #### Package using Meson needs to run binaries for the host platform during build. {#cross-meson-runs-host-code}
@@ -250,5 +250,5 @@ Thirdly, it is because everything target-mentioning only exists to accommodate c
 :::
 
 ::: {.note}
-If one explores Nixpkgs, they will see derivations with names like `gccCross`. Such `*Cross` derivations is a holdover from before we properly distinguished between the host and target platforms—the derivation with “Cross” in the name covered the `build = host != target` case, while the other covered the `host = target`, with build platform the same or not based on whether one was using its `.nativeDrv` or `.crossDrv`. This ugliness will disappear soon.
+If one explores Nixpkgs, they will see derivations with names like `gccCross`. Such `*Cross` derivations is a holdover from before we properly distinguished between the host and target platforms—the derivation with “Cross” in the name covered the `build = host != target` case, while the other covered the `host = target`, with build platform the same or not based on whether one was using its `.__spliced.buildHost` or `.__spliced.hostTarget`.
 :::

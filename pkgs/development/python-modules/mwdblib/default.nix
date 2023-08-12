@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mwdblib";
-  version = "4.2.1";
+  version = "4.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Wkqvi/buYKDoGi+4C9zkxWEiGynk9Ds8gLsdoaZCdKg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+hh7SJFITpLumIuzNgBbXtFh+26tUG66UFv6DLDk5ag=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "mwdblib"
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for the mwdb service";
     homepage = "https://github.com/CERT-Polska/mwdblib";
+    changelog = "https://github.com/CERT-Polska/mwdblib/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

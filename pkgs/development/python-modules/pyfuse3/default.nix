@@ -2,8 +2,9 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, cython
+, cython_3
 , pkg-config
+, setuptools
 , fuse3
 , trio
 , python
@@ -14,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.2.1";
+  version = "3.3.0";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "pyfuse3";
-    rev = "release-${version}";
-    hash = "sha256-JGbp2bSI/Rvyys1xMd2o34KlqqBsV6B9LhuuNopayYA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GLGuTFdTA16XnXKSBD7ET963a8xH9EG/JfPNu6/3DOg=";
   };
 
   postPatch = ''
@@ -33,8 +34,9 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
+    cython_3
     pkg-config
+    setuptools
   ];
 
   buildInputs = [ fuse3 ];
@@ -45,7 +47,7 @@ buildPythonPackage rec {
     ${python.pythonForBuild.interpreter} setup.py build_cython
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-trio
     which
@@ -65,5 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/libfuse/pyfuse3";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ nyanloutre dotlambda ];
+    changelog = "https://github.com/libfuse/pyfuse3/blob/${version}/Changes.rst";
   };
 }

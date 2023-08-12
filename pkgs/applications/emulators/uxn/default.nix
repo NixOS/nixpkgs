@@ -2,33 +2,32 @@
 , stdenv
 , fetchFromSourcehut
 , SDL2
+, unstableGitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uxn";
-  version = "0.pre+unstable=2021-08-30";
+  version = "unstable-2023-07-30";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
-    repo = pname;
-    rev = "a2e40d9d10c11ef48f4f93d0dc86f5085b4263ce";
-    hash = "sha256-/hxDYi814nQydm2iQk4NID4vpJ3BcBcM6NdL0iuZk5M=";
+    repo = "uxn";
+    rev = "9ca8e9623d0ab1c299f08d3dd9d54098557f5749";
+    hash = "sha256-K51YiLnBwFWgD3h3l2BhsvzhnHHolZPsjjUWJSe4sPQ=";
   };
 
   buildInputs = [
     SDL2
   ];
 
-  dontConfigure = true;
+  postPatch = ''
+     sed -i -e 's|UXNEMU_LDFLAGS="$(brew.*$|UXNEMU_LDFLAGS="$(sdl2-config --cflags --libs)"|' build.sh
+  '';
 
-  # It is easier to emulate build.sh script
   buildPhase = ''
     runHook preBuild
 
-    cc -std=c89 -Wall -Wno-unknown-pragmas src/uxnasm.c -o uxnasm
-    cc -std=c89 -Wall -Wno-unknown-pragmas src/uxn.c src/uxncli.c -o uxncli
-    cc -std=c89 -Wall -Wno-unknown-pragmas src/uxn.c src/devices/ppu.c \
-       src/devices/apu.c src/uxnemu.c $(sdl2-config --cflags --libs) -o uxnemu
+    ./build.sh --no-run
 
     runHook postBuild
   '';
@@ -36,19 +35,21 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/bin/ $out/share/${pname}/
+    install -d $out/bin/ $out/share/uxn/
 
-    cp uxnasm uxncli uxnemu $out/bin/
-    cp -r projects $out/share/${pname}/
+    cp bin/uxnasm bin/uxncli bin/uxnemu $out/bin/
+    cp -r projects $out/share/uxn/
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     description = "An assembler and emulator for the Uxn stack machine";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres kototama ];
+    inherit (SDL2.meta) platforms;
   };
 }

@@ -1,47 +1,48 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchurl
-, cmake
-, ninja
-, pkg-config
-, opencv
-, openexr
-, graphicsmagick
 , cimg
-, fftw
-, zlib
-, libjpeg
-, libtiff
-, libpng
-, writeShellScript
+, cmake
 , common-updater-scripts
+, coreutils
 , curl
+, fftw
+, gmic-qt
 , gnugrep
 , gnused
-, coreutils
+, graphicsmagick
 , jq
+, libjpeg
+, libpng
+, libtiff
+, ninja
+, opencv
+, openexr
+, pkg-config
+, writeShellScript
+, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.1.5";
+  version = "3.2.6";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchFromGitHub {
-    owner = "dtschump";
+    owner = "GreycLab";
     repo = "gmic";
-    rev = "326ea9b7dc320b3624fe660d7b7d81669ca12e6d";
-    sha256 = "RRCzYMN/IXViiUNnacJV3DNpku3hIHQkHbIrtixExT0=";
+    rev = "v.${finalAttrs.version}";
+    hash = "sha256-kaI5rcAz3Cw/xzWgJhMRu/cQwVrvLRAPiB5BhzPMOHY=";
   };
 
   # TODO: build this from source
-  # https://github.com/dtschump/gmic/blob/b36b2428db5926af5eea5454f822f369c2d9907e/src/Makefile#L675-L729
+  # Reference: src/Makefile, directive gmic_stdlib.h
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
-    url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] version}.h";
-    sha256 = "FM8RscCrt6jYlwVB2DtpqYrh9B3pO0I6Y69tkf9W1/o=";
+    url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
+    hash = "sha256-7JzFU4HvAtC5Nz5vusKCnJ8VMuKfSi1yFmjj0Hh+vA4=";
   };
 
   nativeBuildInputs = [
@@ -53,13 +54,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cimg
     fftw
-    zlib
+    graphicsmagick
     libjpeg
-    libtiff
     libpng
+    libtiff
     opencv
     openexr
-    graphicsmagick
+    zlib
   ];
 
   cmakeFlags = [
@@ -70,38 +71,51 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # TODO: build from source
-    cp -r ${gmic_stdlib} src/gmic_stdlib.h
+    cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib.h
 
     # CMake build files were moved to subdirectory.
     mv resources/CMakeLists.txt resources/cmake .
+  ''
+  + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
   '';
 
   passthru = {
-    updateScript = writeShellScript "${pname}-update-script" ''
+    tests = {
+      # Needs to update them all in lockstep.
+      inherit cimg gmic-qt;
+    };
+
+    updateScript = writeShellScript "gmic-update-script" ''
       set -o errexit
-      PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep gnused coreutils jq ]}
+      PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused jq ]}
 
-      latestVersion=$(curl 'https://gmic.eu/files/source/' | grep -E 'gmic_[^"]+\.tar\.gz' | sed -E 's/.+<a href="gmic_([^"]+)\.tar\.gz".+/\1/g' | sort --numeric-sort --reverse | head -n1)
+      latestVersion=$(curl 'https://gmic.eu/files/source/' \
+                       | grep -E 'gmic_[^"]+\.tar\.gz' \
+                       | sed -E 's/.+<a href="gmic_([^"]+)\.tar\.gz".+/\1/g' \
+                       | sort --numeric-sort --reverse | head -n1)
 
-      if [[ "${version}" = "$latestVersion" ]]; then
+      if [[ "${finalAttrs.version}" = "$latestVersion" ]]; then
           echo "The new version same as the old version."
           exit 0
       fi
 
       for component in src gmic_stdlib; do
-          # The script will not perform an update when the version attribute is up to date from previous platform run
-          # We need to clear it before each run
-          update-source-version "--source-key=$component" "gmic" 0 "$(printf '0%.0s' {1..64})"
+          # The script will not perform an update when the version attribute is
+          # up to date from previous platform run; we need to clear it before
+          # each run
+          update-source-version "--source-key=$component" "gmic" 0 "${lib.fakeHash}"
           update-source-version "--source-key=$component" "gmic" $latestVersion
       done
     '';
   };
 
-  meta = with lib; {
-    description = "Open and full-featured framework for image processing";
+  meta = {
     homepage = "https://gmic.eu/";
-    license = licenses.cecill20;
-    platforms = platforms.unix;
+    description = "Open and full-featured framework for image processing";
+    license = lib.licenses.cecill21;
+    maintainers = [ lib.maintainers.lilyinstarlight ];
+    platforms = lib.platforms.unix;
   };
-}
+})

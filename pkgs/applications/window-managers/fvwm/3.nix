@@ -7,7 +7,6 @@
 , fontconfig
 , freetype
 , fribidi
-, imlib
 , libSM
 , libX11
 , libXcursor
@@ -32,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fvwm3";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "fvwmorg";
     repo = "fvwm3";
     rev = finalAttrs.version;
-    hash = "sha256-ByMSX4nwXkp+ly39C2+cYy3e9B0vnGcJlyIiS7V6zoI=";
+    hash = "sha256-CPEGwZuYDh0zDXVKLn806c4DfZZJVaMlmIsVAZl20S4=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     fribidi
-    imlib
     libSM
     libX11
     libXcursor

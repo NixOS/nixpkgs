@@ -11,38 +11,44 @@
 , iptables
 , makeWrapper
 , protoc-gen-go-grpc
+, testers
+, opensnitch
 }:
 
 buildGoModule rec {
   pname = "opensnitch";
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "v${version}";
-    sha256 = "sha256-MF7K3WasG1xLdw1kWz6xVYrdfuZW5GUq6dlS0pPOkHI=";
+    sha256 = "sha256-yEo5nga0WTbgZm8W2qbJcTOO4cCzFWrjRmTBCFH7GLg=";
   };
-
-  patches = [
-    # https://github.com/evilsocket/opensnitch/pull/384 don't require
-    # a configuration file in /etc
-    (fetchpatch {
-      name = "dont-require-config-in-etc.patch";
-      url = "https://github.com/evilsocket/opensnitch/commit/8a3f63f36aa92658217bbbf46d39e6d20b2c0791.patch";
-      sha256 = "sha256-WkwjKTQZppR0nqvRO4xiQoKZ307NvuUwoRx+boIpuTg=";
-    })
-  ];
 
   modRoot = "daemon";
 
-  buildInputs = [ libnetfilter_queue libnfnetlink ];
+  buildInputs = [
+    libnetfilter_queue
+    libnfnetlink
+  ];
 
-  nativeBuildInputs = [ pkg-config protobuf go-protobuf makeWrapper protoc-gen-go-grpc ];
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+    go-protobuf
+    makeWrapper
+    protoc-gen-go-grpc
+  ];
 
-  vendorSha256 = "sha256-81BKMLuEXA/NeIjO7icBm48ROq6KxAxHtvP0nV5yM5A=";
+  vendorSha256 = "sha256-bUzGWpQxeXzvkzQ7G53ljQJq6wwqiXqbi6bgeFlNvvM=";
 
   preBuild = ''
+    # Fix inconsistent vendoring build error
+    # https://github.com/evilsocket/opensnitch/issues/770
+    cp ${./go.mod} go.mod
+    cp ${./go.sum} go.sum
+
     make -C ../proto ../daemon/ui/protocol/ui.pb.go
   '';
 
@@ -65,11 +71,16 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = opensnitch;
+    command = "opensnitchd -version";
+  };
+
   meta = with lib; {
     description = "An application firewall";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.raboof ];
+    maintainers = with maintainers; [ onny ];
     platforms = platforms.linux;
   };
 }

@@ -1,72 +1,148 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , pytestCheckHook
-, numpy
-, scipy
-, scikit-learn
-, pandas
-, tqdm
-, slicer
-, numba
+, pythonOlder
+, writeText
+, catboost
+, cloudpickle
+, ipython
+, lightgbm
+, lime
 , matplotlib
 , nose
-, ipython
+, numba
+, numpy
+, opencv4
+, pandas
+, pyspark
+, pytest-mpl
+, scikit-learn
+, scipy
+, sentencepiece
+, setuptools
+, slicer
+, tqdm
+, transformers
+, xgboost
 }:
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.41.0";
-  disabled = isPy27;
+  version = "0.42.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "slundberg";
-    repo = pname;
+    repo = "shap";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-rYVWQ3VRvIObSQPwDRsxhTOGOKNkYkLtiHzVwoB3iJ0=";
+    hash = "sha256-Ezq6WS6QnoM5uEfo2DgDAEo1HkQ1KjmfgIyVWh3RM94=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    scipy
-    scikit-learn
-    pandas
-    tqdm
-    slicer
-    numba
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  preCheck = ''
+  propagatedBuildInputs = [
+    cloudpickle
+    numba
+    numpy
+    pandas
+    scikit-learn
+    scipy
+    slicer
+    tqdm
+  ];
+
+  passthru.optional-dependencies = {
+    plots = [ matplotlib ipython ];
+    others = [ lime ];
+  };
+
+  preCheck = let
+    # This pytest hook mocks and catches attempts at accessing the network
+    # tests that try to access the network will raise, get caught, be marked as skipped and tagged as xfailed.
+    conftestSkipNetworkErrors = writeText "conftest.py" ''
+      from _pytest.runner import pytest_runtest_makereport as orig_pytest_runtest_makereport
+      import urllib, requests, transformers
+
+      class NetworkAccessDeniedError(RuntimeError): pass
+      def deny_network_access(*a, **kw):
+        raise NetworkAccessDeniedError
+
+      requests.head = deny_network_access
+      requests.get  = deny_network_access
+      urllib.request.urlopen = deny_network_access
+      urllib.request.Request = deny_network_access
+      transformers.AutoTokenizer.from_pretrained = deny_network_access
+
+      def pytest_runtest_makereport(item, call):
+        tr = orig_pytest_runtest_makereport(item, call)
+        if call.excinfo is not None and call.excinfo.type is NetworkAccessDeniedError:
+            tr.outcome = 'skipped'
+            tr.wasxfail = "reason: Requires network access."
+        return tr
+    '';
+  in ''
     export HOME=$TMPDIR
     # when importing the local copy the extension is not found
     rm -r shap
+
+    # Add pytest hook skipping tests that access network.
+    # These tests are marked as "Expected fail" (xfail)
+    cat ${conftestSkipNetworkErrors} >> tests/conftest.py
   '';
-  checkInputs = [ pytestCheckHook matplotlib nose ipython ];
-  # Those tests access the network
+
+  nativeCheckInputs = [
+    ipython
+    matplotlib
+    nose
+    pytest-mpl
+    pytestCheckHook
+    # optional dependencies, which only serve to enable more tests:
+    catboost
+    lightgbm
+    opencv4
+    pyspark
+    sentencepiece
+    #torch # we already skip all its tests due to slowness, adding it does nothing
+    transformers
+    xgboost
+  ];
+
+  disabledTestPaths = [
+    # The resulting plots look sane, but does not match pixel-perfectly with the baseline.
+    # Likely due to a matplotlib version mismatch, different backend, or due to missing fonts.
+    "tests/plots/test_summary.py" # FIXME: enable
+  ];
+
   disabledTests = [
-    "test_kernel_shap_with_a1a_sparse_zero_background"
-    "test_kernel_shap_with_a1a_sparse_nonzero_background"
-    "test_kernel_shap_with_high_dim_sparse"
-    "test_sklearn_random_forest_newsgroups"
-    "test_sum_match_random_forest"
-    "test_sum_match_extra_trees"
-    "test_single_row_random_forest"
-    "test_sum_match_gradient_boosting_classifier"
-    "test_single_row_gradient_boosting_classifier"
-    "test_HistGradientBoostingClassifier_proba"
-    "test_HistGradientBoostingClassifier_multidim"
-    "test_sum_match_gradient_boosting_regressor"
-    "test_single_row_gradient_boosting_regressor"
+    # The same reason as above test_summary.py
+    "test_simple_bar_with_cohorts_dict"
+    "test_random_summary_violin_with_data2"
+    "test_random_summary_layered_violin_with_data2"
+  ];
+
+  pythonImportsCheck = [
+    "shap"
+    "shap.explainers"
+    "shap.explainers.other"
+    "shap.plots"
+    "shap.plots.colors"
+    "shap.benchmark"
+    "shap.maskers"
+    "shap.utils"
+    "shap.actions"
+    "shap.models"
   ];
 
   meta = with lib; {
     description = "A unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
+    changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ evax ];
-    platforms = platforms.unix;
-    # ModuleNotFoundError: No module named 'sklearn.ensemble.iforest'
-    broken = true;
+    maintainers = with maintainers; [ evax natsukium ];
   };
 }

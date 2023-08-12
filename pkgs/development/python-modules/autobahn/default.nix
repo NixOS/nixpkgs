@@ -20,7 +20,7 @@
 , msgpack
 , passlib
 , py-ecc
-, py-eth-sig-utils
+# , py-eth-sig-utils
 , py-multihash
 , py-ubjson
 , pynacl
@@ -48,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "22.6.1";
+  version = "23.6.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+2PpRtXC3Q32gIUehOZWJKSUzofJmfKklE5PLYG/RJg=";
+    hash = "sha256-7JQhxSohAzZNHvBGgDbmAZ7oT3FyHoazb+Ga1pZsEYE=";
   };
 
   postPatch = ''
@@ -70,12 +70,10 @@ buildPythonPackage rec {
     txaio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
-    # FIXME: remove the following dependencies when web3 gets added
-    eth-account
   ] ++ passthru.optional-dependencies.scram
   ++ passthru.optional-dependencies.serialization
   ++ passthru.optional-dependencies.xbr;
@@ -103,13 +101,13 @@ buildPythonPackage rec {
     serialization = [ cbor2 flatbuffers msgpack ujson py-ubjson ];
     twisted = [ attrs args.twisted zope_interface ];
     ui = [ pygobject3 ];
-    xbr = [ base58 cbor2 click ecdsa eth-abi jinja2 hkdf mnemonic py-ecc py-eth-sig-utils py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
+    xbr = [ base58 cbor2 click ecdsa eth-abi jinja2 hkdf mnemonic py-ecc /* py-eth-sig-utils */ py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
   };
 
   meta = with lib; {
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage = "https://crossbar.io/autobahn";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

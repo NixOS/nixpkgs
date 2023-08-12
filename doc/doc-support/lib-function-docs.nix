@@ -1,27 +1,41 @@
-# Generates the documentation for library functons via nixdoc. To add
-# another library function file to this list, the include list in the
-# file `doc/functions/library.xml` must also be updated.
+# Generates the documentation for library functions via nixdoc.
 
-{ pkgs ? import ./.. {}, locationsXml }:
+{ pkgs, nixpkgs, libsets }:
 
-with pkgs; stdenv.mkDerivation {
+with pkgs;
+
+let
+  locationsJSON = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
+in
+stdenv.mkDerivation {
   name = "nixpkgs-lib-docs";
-  src = ./../../lib;
+  src = ../../lib;
 
   buildInputs = [ nixdoc ];
   installPhase = ''
     function docgen {
-      nixdoc -c "$1" -d "$2" -f "../lib/$1.nix"  > "$out/$1.xml"
+      name=$1
+      baseName=$2
+      description=$3
+      # TODO: wrap lib.$name in <literal>, make nixdoc not escape it
+      if [[ -e "../lib/$baseName.nix" ]]; then
+        nixdoc -c "$name" -d "lib.$name: $description" -l ${locationsJSON} -f "$baseName.nix" > "$out/$name.md"
+      else
+        nixdoc -c "$name" -d "lib.$name: $description" -l ${locationsJSON} -f "$baseName/default.nix" > "$out/$name.md"
+      fi
+      echo "$out/$name.md" >> "$out/index.md"
     }
 
-    mkdir -p $out
-    ln -s ${locationsXml} $out/locations.xml
+    mkdir -p "$out"
 
-    docgen strings 'String manipulation functions'
-    docgen trivial 'Miscellaneous functions'
-    docgen lists 'List manipulation functions'
-    docgen debug 'Debugging functions'
-    docgen options 'NixOS / nixpkgs option handling'
-    docgen sources 'Source filtering functions'
+    cat > "$out/index.md" << 'EOF'
+    ```{=include=} sections
+    EOF
+
+    ${lib.concatMapStrings ({ name, baseName ? name, description }: ''
+      docgen ${name} ${baseName} ${lib.escapeShellArg description}
+    '') libsets}
+
+    echo '```' >> "$out/index.md"
   '';
 }

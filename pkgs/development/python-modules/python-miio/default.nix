@@ -9,10 +9,12 @@
 , cryptography
 , defusedxml
 , fetchPypi
+, fetchpatch
 , importlib-metadata
 , micloud
 , netifaces
 , poetry-core
+, pytest-asyncio
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -39,6 +41,14 @@ buildPythonPackage rec {
     poetry-core
   ];
 
+  patches = [
+    (fetchpatch {
+      # Fix pytest 7.2 compat
+      url = "https://github.com/rytilahti/python-miio/commit/67d9d771d04d51f5bd97f361ca1c15ae4a18c274.patch";
+      hash = "sha256-Os9vCSKyieCqHs63oX6gcLrtv1N7hbX5WvEurelEp8w=";
+    })
+  ];
+
   propagatedBuildInputs = [
     android-backup
     appdirs
@@ -54,22 +64,15 @@ buildPythonPackage rec {
     pyyaml
     tqdm
     zeroconf
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'defusedxml = "^0"' 'defusedxml = "*"'
-    # Will be fixed with the next release, https://github.com/rytilahti/python-miio/pull/1378
-    substituteInPlace miio/integrations/vacuum/roborock/vacuum_cli.py \
-      --replace "resultcallback" "result_callback"
-  '';
 
   pythonImportsCheck = [
     "miio"

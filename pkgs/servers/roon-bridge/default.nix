@@ -9,25 +9,23 @@
 , stdenv
 , zlib
 }:
-stdenv.mkDerivation rec {
+let
+  version = "1.8-1125";
+  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+  host = stdenv.hostPlatform.system;
+  system = if host == "x86_64-linux" then "linuxx64"
+           else if host == "aarch64-linux" then "linuxarmv8"
+           else throw "Unsupported platform ${host}";
+  src = fetchurl {
+    url = "https://download.roonlabs.com/updates/stable/RoonBridge_${system}_${urlVersion}.tar.bz2";
+    hash = if system == "linuxx64" then "sha256-DbtKPFEz2WIoKTxP+zoehzz+BjfsLZ2ZQk/FMh+zFBM="
+           else if system == "linuxarmv8" then "sha256-+przEj96R+f1z4ewETFarF4oY6tT2VW/ukSTgUBLiYk="
+           else throw "Unsupported platform ${host}";
+  };
+in
+stdenv.mkDerivation {
   pname = "roon-bridge";
-  version = "1.8-943";
-
-  src =
-    let
-      urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "00" ] version;
-      inherit (stdenv.targetPlatform) system;
-    in
-      {
-        x86_64-linux = fetchurl {
-          url = "http://download.roonlabs.com/builds/RoonBridge_linuxx64_${urlVersion}.tar.bz2";
-          hash = "sha256-knmy2zlRh+ehvYKHC7UN60pMCt8bYPuo9kTz2m0pOW0";
-        };
-        aarch64-linux = fetchurl {
-          url = "http://download.roonlabs.com/builds/RoonBridge_linuxarmv8_${urlVersion}.tar.bz2";
-          hash = "sha256-urMhtBUjP4HpV9EDZOLLnfnMqhmsWPx0M2+Xdvc8YnU=";
-        };
-      }.${system} or (throw "Unsupposed system: ${system}");
+  inherit src version;
 
   dontConfigure = true;
   dontBuild = true;

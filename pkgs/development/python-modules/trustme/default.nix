@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -17,13 +16,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XgeyPXDO7WTzuzauS5q8UjVMFsmNRasDe+4rX7/+WGw=";
+    hash = "sha256-XgeyPXDO7WTzuzauS5q8UjVMFsmNRasDe+4rX7/+WGw=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyopenssl
-    service-identity
     pytestCheckHook
+    service-identity
   ];
 
   propagatedBuildInputs = [
@@ -31,12 +30,6 @@ buildPythonPackage rec {
     idna
   ] ++ lib.optionals (!isPy3k) [
     futures
-  ];
-
-  # aarch64-darwin forbids W+X memory, but this tests depends on it:
-  # * https://github.com/pyca/pyopenssl/issues/873
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    "test_pyopenssl_end_to_end"
   ];
 
   # Some of the tests use localhost networking.

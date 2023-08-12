@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, async-timeout
+, chacha20poly1305-reuseable
 , mock
 , noiseprotocol
 , protobuf
@@ -12,25 +14,27 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "10.13.0";
+  version = "16.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ZaNrSkRH9pFhzZncCs37k1M0w5svPfrY0WxePUnUlms=";
+    hash = "sha256-ATfAI8srh5G1ejkp/2wl2Soowatjprq9e8h8tSAAXGs=";
   };
 
   propagatedBuildInputs = [
+    async-timeout
+    chacha20poly1305-reuseable
     noiseprotocol
     protobuf
     zeroconf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
@@ -43,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab hexa ];
   };

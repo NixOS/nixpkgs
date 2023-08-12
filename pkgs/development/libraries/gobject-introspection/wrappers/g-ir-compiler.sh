@@ -1,4 +1,4 @@
 #! @bash@/bin/bash
 # shellcheck shell=bash
 
-exec @emulator@ @targetgir@/bin/g-ir-compiler "$@"
+exec @emulatorwrapper@ @targetgir@/bin/g-ir-compiler "$@"

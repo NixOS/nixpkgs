@@ -14,17 +14,18 @@
 , winetricks
 , wine
 , glxinfo
+, xrandr
 }:
 
 python3Packages.buildPythonApplication rec  {
   pname = "grapejuice";
-  version = "5.5.4";
+  version = "7.8.3";
 
   src = fetchFromGitLab {
     owner = "BrinkerVII";
     repo = "grapejuice";
     rev = "v${version}";
-    sha256 = "sha256-y4J0589FgNahRmoPkVtHYtc6/OIfUi9bhz6BZrSeWVI=";
+    sha256 = "sha256-jNh3L6JDuJryFpHQaP8UesBmepmJopoHxb/XUfOwZz4=";
   };
 
   nativeBuildInputs = [
@@ -50,13 +51,14 @@ python3Packages.buildPythonApplication rec  {
     requests
     unidecode
     click
+    pydantic
   ];
 
   dontWrapGApps = true;
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs wine winetricks pciutils glxinfo ]}"
+    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs wine winetricks pciutils glxinfo xrandr ]}"
     # make xdg-open overrideable at runtime
     "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
@@ -82,8 +84,8 @@ python3Packages.buildPythonApplication rec  {
     substituteInPlace src/grapejuice_common/paths.py \
       --replace 'return local_share() / "locale"' 'return Path("${placeholder "out"}/share/locale")'
 
-    substituteInPlace src/grapejuice_common/features/settings.py \
-      --replace 'k_default_wine_home: "",' 'k_default_wine_home: "${wine}",'
+    substituteInPlace src/grapejuice_common/models/settings_model.py \
+      --replace 'default_wine_home: Optional[str] = ""' 'default_wine_home: Optional[str] = "${wine}"'
   '';
 
   postInstall = ''

@@ -85,6 +85,14 @@ in {
           considered failed and systemd will attempt to restart it.
         '';
       };
+
+      ui = {
+        enable = lib.mkEnableOption (lib.mdDoc ''
+          Enables the (experimental) LXD UI.
+        '');
+
+        package = mkPackageOption pkgs.lxd-unwrapped "ui" { };
+      };
     };
   };
 
@@ -129,11 +137,23 @@ in {
       description = "LXD Container Management Daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "lxcfs.service" ];
-      requires = [ "network-online.target" "lxd.socket"  "lxcfs.service" ];
+      after = [
+        "network-online.target"
+        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+      ];
+      requires = [
+        "network-online.target"
+        "lxd.socket"
+        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+      ];
       documentation = [ "man:lxd(1)" ];
 
-      path = optional cfg.zfsSupport config.boot.zfs.package;
+      path = [ pkgs.util-linux ]
+        ++ optional cfg.zfsSupport config.boot.zfs.package;
+
+      environment = mkIf (cfg.ui.enable) {
+        "LXD_UI" = cfg.ui.package;
+      };
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
@@ -169,7 +189,7 @@ in {
       "fs.inotify.max_queued_events" = 1048576;
       "fs.inotify.max_user_instances" = 1048576;
       "fs.inotify.max_user_watches" = 1048576;
-      "vm.max_map_count" = 262144;
+      "vm.max_map_count" = 262144; # TODO: Default vm.max_map_count has been increased system-wide
       "kernel.dmesg_restrict" = 1;
       "net.ipv4.neigh.default.gc_thresh3" = 8192;
       "net.ipv6.neigh.default.gc_thresh3" = 8192;

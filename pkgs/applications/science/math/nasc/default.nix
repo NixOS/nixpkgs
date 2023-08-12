@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , pkg-config
-, fetchpatch
 , python3
 , meson
 , ninja
@@ -61,12 +60,12 @@ stdenv.mkDerivation rec {
     substituteInPlace subprojects/libqalculate/libqalculate/Calculator-plot.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
+    substituteInPlace subprojects/libqalculate/libqalculate/meson.build \
+      --replace "link_with: 'libqalculate_lib_static'" "link_with: libqalculate_lib_static"
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -14,7 +14,7 @@ let
           inherit sha256;
         };
 
-        vendorSha256 = null;
+        vendorHash = null;
 
         nativeBuildInputs = [ installShellFiles ];
 
@@ -42,29 +42,27 @@ let
           changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
           maintainers = with maintainers; [ offline zimbatm diegolelis yurrriq ];
-          platforms = platforms.unix;
         };
       } // attrs';
 in
 rec {
   mkKops = generic;
 
-  kops_1_22 = mkKops rec {
-    version = "1.22.4";
-    sha256 = "sha256-osU7yI77ZALGrAGuP8qAgv+ogDRn+BSVmcjPbi/WEKE=";
+  kops_1_25 = mkKops rec {
+    version = "1.25.4";
+    sha256 = "sha256-Q40d62D+H7CpLmrjweCy75U3LgnHEV2pFZs2Ze+koqo=";
     rev = "v${version}";
   };
 
-  kops_1_23 = mkKops rec {
-    version = "1.23.2";
-    sha256 = "sha256-9GANjGRS9QaJw+CEeMv/f+rEu37QV2YxMvSRSH6+3PM=";
+  kops_1_26 = mkKops rec {
+    version = "1.26.5";
+    sha256 = "sha256-DbKzqfcQCHP3ZWJQcRhPDkKVzHB/MkcfukguUDG4UQg=";
     rev = "v${version}";
   };
 
-  kops_1_24 = mkKops rec {
-    version = "1.24.2";
-    sha256 = "sha256-QEoaSkJ3fzUr2Fr3M2EOd/3iwq1ZX2YHEez2i0kjRmY=";
+  kops_1_27 = mkKops rec {
+    version = "1.27.0";
+    sha256 = "sha256-XJOdqOT/vMVXZmVasXRb+pdmWcSd6lsyQDCnZKyqrto=";
     rev = "v${version}";
   };
-
 }

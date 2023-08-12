@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EkVE6BgoA1lo4oqlNETTxLILIVvGXspFyXykxpmYk8M=";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with lib; {
     description = "It's like cat, but for images";

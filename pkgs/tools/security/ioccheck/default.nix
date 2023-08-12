@@ -6,7 +6,7 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
-      emoji = super.emoji.overridePythonAttrs (oldAttrs: rec {
+      emoji = super.emoji.overridePythonAttrs rec {
         version = "1.7.0";
 
         src = fetchFromGitHub {
@@ -15,11 +15,11 @@ let
           rev = "v${version}";
           sha256 = "sha256-vKQ51RP7uy57vP3dOnHZRSp/Wz+YDzeLUR8JnIELE/I=";
         };
-      });
+      };
 
       # Support for later tweepy releases is missing
       # https://github.com/ranguli/ioccheck/issues/70
-      tweepy = super.tweepy.overridePythonAttrs (oldAttrs: rec {
+      tweepy = super.tweepy.overridePythonAttrs rec {
         version = "3.10.0";
 
         src = fetchFromGitHub {
@@ -29,7 +29,7 @@ let
           sha256 = "0k4bdlwjna6f1k19jki4xqgckrinkkw8b9wihzymr1l04rwd05nw";
         };
         doCheck = false;
-      });
+      };
     };
   };
 in
@@ -44,7 +44,7 @@ buildPythonApplication rec {
     owner = "ranguli";
     repo = pname;
     rev = "db02d921e2519b77523a200ca2d78417802463db";
-    sha256 = "0lgqypcd5lzb2yqd5lr02pba24m26ghly4immxgz13svi8f6vzm9";
+    hash = "sha256-qf5tHIpbj/BfrzUST+EzohKh1hUg09KwF+vT0tj1+FE=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -66,7 +66,7 @@ buildPythonApplication rec {
     vt-py
   ];
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     pytestCheckHook
   ];
 
@@ -75,7 +75,9 @@ buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace '"hurry.filesize" = "^0.9"' "" \
       --replace 'vt-py = ">=0.6.1,<0.8.0"' 'vt-py = ">=0.6.1"' \
-      --replace 'backoff = "^1.10.0"' 'backoff = ">=1.10.0"'
+      --replace 'backoff = "^1.10.0"' 'backoff = ">=1.10.0"' \
+      --replace 'termcolor = "^1.1.0"' 'termcolor = "*"' \
+      --replace 'tabulate = "^0.8.9"' 'tabulate = "*"'
   '';
 
   pythonImportsCheck = [

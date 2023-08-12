@@ -4,12 +4,14 @@
 , rust
 , stdenv
 , callPackage
-, cacert
-, git
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
+, cargoNextestHook
 , cargoSetupHook
+, cargo
+, cargo-auditable
+, buildPackages
 , rustc
 , libiconv
 , windows
@@ -22,7 +24,9 @@
 
 , src ? null
 , srcs ? null
+, preUnpack ? null
 , unpackPhase ? null
+, postUnpack ? null
 , cargoPatches ? []
 , patches ? []
 , sourceRoot ? null
@@ -40,6 +44,9 @@
 , checkNoDefaultFeatures ? buildNoDefaultFeatures
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
+, useNextest ? false
+, auditable ? !cargo-auditable.meta.broken
+
 , depsExtraArgs ? {}
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
@@ -52,8 +59,9 @@
 , buildAndTestSubdir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null && cargoLock == null -> !(args ? cargoSha256) && !(args ? cargoHash)
-  -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
+assert cargoVendorDir == null && cargoLock == null
+    -> !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
+    -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
 assert buildType == "release" || buildType == "debug";
 
 let
@@ -62,7 +70,7 @@ let
     if cargoVendorDir != null then null
     else if cargoLock != null then importCargoLock cargoLock
     else fetchCargoTarball ({
-      inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
+      inherit src srcs sourceRoot preUnpack unpackPhase postUnpack cargoUpdateHook;
       name = cargoDepsName;
       patches = cargoPatches;
     } // lib.optionalAttrs (args ? cargoHash) {
@@ -70,10 +78,6 @@ let
     } // lib.optionalAttrs (args ? cargoSha256) {
       sha256 = args.cargoSha256;
     } // depsExtraArgs);
-
-  # If we have a cargoSha256 fixed-output derivation, validate it at build time
-  # against the src fixed-output derivation to check consistency.
-  validateCargoDeps = args ? cargoHash || args ? cargoSha256;
 
   target = rust.toRustTargetSpec stdenv.hostPlatform;
   targetIsJSON = lib.hasSuffix ".json" target;
@@ -116,11 +120,13 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++ [
-    cacert
-    git
+  nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
+    (buildPackages.cargo-auditable-cargo-wrapper.override {
+      inherit cargo cargo-auditable;
+    })
+  ] ++ [
     cargoBuildHook
-    cargoCheckHook
+    (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
     cargoSetupHook
     rustc
@@ -150,10 +156,16 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   strictDeps = true;
 
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
-
   meta = {
     # default to Rust's platforms
-    platforms = rustc.meta.platforms;
+    platforms = rustc.meta.platforms ++ [
+      # Platforms without host tools from
+      # https://doc.rust-lang.org/nightly/rustc/platform-support.html
+      "armv7a-darwin"
+      "armv5tel-linux" "armv7a-linux" "m68k-linux" "riscv32-linux"
+      "armv6l-netbsd"
+      "x86_64-redox"
+      "wasm32-wasi"
+    ];
   } // meta;
 })

@@ -63,8 +63,6 @@ buildPythonPackage rec {
       --replace "all: api gitsrht-dispatch gitsrht-keys gitsrht-shell gitsrht-update-hook" ""
   '';
 
-  nativeBuildInputs = srht.nativeBuildInputs;
-
   propagatedBuildInputs = [
     srht
     pygit2

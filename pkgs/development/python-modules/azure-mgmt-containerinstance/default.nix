@@ -6,17 +6,20 @@
 , azure-common
 , azure-mgmt-core
 , azure-mgmt-nspkg
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerinstance";
-  version = "9.2.0";
+  version = "10.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-3rElVUvbGqF99ppZanUUrwFGtCAXak2zhMVOd6n9bkY=";
+    hash = "sha256-eNQ3rbKFdPRIyDjtXwH5ztN4GWCYBh3rWdn3AxcEwX4=";
   };
 
   propagatedBuildInputs = [
@@ -24,14 +27,14 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
   ];
 
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.mgmt.containerinstance" ];
+  pythonImportsCheck = [
+    "azure.mgmt.containerinstance"
+  ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Container Instance Client Library";

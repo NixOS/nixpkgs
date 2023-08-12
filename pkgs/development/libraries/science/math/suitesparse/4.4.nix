@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, gfortran, blas, lapack
-, enableCuda ? false, cudatoolkit
+, config
+, enableCuda ? config.cudaSupport, cudatoolkit
 }:
 
 let
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     "LAPACK=-llapack"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -DNTIMER";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -DNTIMER";
 
   postInstall = ''
     # Build and install shared library

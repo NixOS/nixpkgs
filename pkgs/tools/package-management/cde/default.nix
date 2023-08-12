@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "cde";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   # useful.
   preferLocalBuild = true;
 
+  buildInputs = [ libxcrypt ];
+
   patchBuild = ''
     sed -i -e '/install/d' $src/Makefile
   '';
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: ../readelf-mini/libreadelf-mini.a(dwarf.o):/build/source/readelf-mini/dwarf.c:64:
   #     multiple definition of `do_wide'; ../readelf-mini/libreadelf-mini.a(readelf-mini.o):/build/source/readelf-mini/readelf-mini.c:170: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
     install -d $out/bin

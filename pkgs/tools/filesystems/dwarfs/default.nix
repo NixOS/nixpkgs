@@ -7,9 +7,8 @@
 , boost
 , cmake
 , double-conversion
-, fmt_8
+, fmt
 , fuse3
-, gflags
 , glog
 , gtest
 , jemalloc
@@ -21,30 +20,27 @@
 , pkg-config
 , ronn
 , xxHash
+, utf8cpp
 , zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "dwarfs";
-  version = "0.6.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-bGJkgcq8JxueRTX08QpJv1A0O5wXbiIgUY7BrY0Ln/M=";
+    hash = "sha256-DcPRrATI2cpLZWAL+sSCoXvJ1R0O3yHqhlJW1aEpDpA=";
   };
 
-  patches = with lib.versions; [
-    (substituteAll {
+  patches = [
+    (with lib.versions; substituteAll {
       src = ./version_info.patch;
 
-      gitRev = "v${version}";
-      gitDesc = "v${version}";
-      gitBranch = "v${version}";
-      gitId = "v${version}"; # displayed as version number
-
+      versionFull = version; # displayed as version number (with v prepended)
       versionMajor = major version;
       versionMinor = minor version;
       versionPatch = patch version;
@@ -55,6 +51,7 @@ stdenv.mkDerivation rec {
     "-DPREFER_SYSTEM_ZSTD=ON"
     "-DPREFER_SYSTEM_XXHASH=ON"
     "-DPREFER_SYSTEM_GTEST=ON"
+    "-DPREFER_SYSTEM_LIBFMT=ON"
 
     # may be added under an option in the future
     # "-DWITH_LEGACY_FUSE=ON"
@@ -71,12 +68,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     # dwarfs
     boost
-    fmt_8
+    fmt
     fuse3
     jemalloc
     libarchive
     lz4
     xxHash
+    utf8cpp
     zstd
 
     # folly
@@ -88,10 +86,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ gtest ];
-  # this fails inside of the sandbox due to missing access
+  nativeCheckInputs = [ gtest ];
+  # these fail inside of the sandbox due to missing access
   # to the FUSE device
-  GTEST_FILTER = "-tools.everything";
+  GTEST_FILTER = "-dwarfs/tools_test.end_to_end/*:dwarfs/tools_test.mutating_ops/*";
 
   meta = with lib; {
     description = "A fast high compression read-only file system";

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kubie";
-  version = "0.19.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "sbstp";
     repo = "kubie";
-    sha256 = "sha256-K7zoohyVBnRMqwpizBs+wlN/gkgGjBHNk1cwxY7P3Hs=";
+    sha256 = "sha256-Qe//QBAQzxgNdQ0YrKFhgqNfVMFT9cb9eSQWgbPv0Gk=";
   };
 
-  cargoSha256 = "sha256-feNmtUkpN+RdMrvF2ZY2BcZ0p8qEqw6Hr+p4be3YavA=";
+  cargoHash = "sha256-hKM1lyVAXaRCIqrrQpVO03FSThzgQw3tFJIjWyUNfXo=";
 
   nativeBuildInputs = [ installShellFiles ];
 

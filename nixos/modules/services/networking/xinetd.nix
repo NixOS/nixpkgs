@@ -27,7 +27,7 @@ let
         ${optionalString srv.unlisted "type        = UNLISTED"}
         ${optionalString (srv.flags != "") "flags = ${srv.flags}"}
         socket_type = ${if srv.protocol == "udp" then "dgram" else "stream"}
-        ${if srv.port != 0 then "port        = ${toString srv.port}" else ""}
+        ${optionalString (srv.port != 0) "port        = ${toString srv.port}"}
         wait        = ${if srv.protocol == "udp" then "yes" else "no"}
         user        = ${srv.user}
         server      = ${srv.server}
@@ -78,7 +78,7 @@ in
           };
 
           port = mkOption {
-            type = types.int;
+            type = types.port;
             default = 0;
             example = 123;
             description = lib.mdDoc "Port number of the service.";

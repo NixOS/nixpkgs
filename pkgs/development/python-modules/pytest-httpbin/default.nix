@@ -38,10 +38,12 @@ buildPythonPackage rec {
       --replace "assert response.headers['Location'].startswith('https://')" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "pytest_httpbin"

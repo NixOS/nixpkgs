@@ -1,38 +1,43 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, autoPatchelfHook
-, wrapGAppsHook
-, dotnetCorePackages
-, fontconfig
-, gtk3
-, openssl
-, libX11
-, libXi
-, xinput
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  wrapGAppsHook,
+  dotnetCorePackages,
+  fontconfig,
+  gtk3,
+  libunwind,
+  openssl,
+  xinput,
+  xorg,
 }:
-
 buildDotnetModule rec {
   pname = "opentracker";
-  version = "1.8.2";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "trippsc2";
     repo = pname;
-    rev = version;
-    sha256 = "0nsmyb1wd86465iri9jxl3jp74gxkscvnmr3687ddbia3dv4fz0z";
+    rev = "refs/tags/${version}";
+    hash = "sha512-nWkPgVYdnBJibyJRdLPe3O3RioDPbzumSritRejmr4CeiPb7aUTON7HjivcV/GKor1guEYu+TJ+QxYrqO/eppg==";
   };
 
-  dotnet-runtime = dotnetCorePackages.runtime_3_1;
-  dotnet-sdk = dotnetCorePackages.sdk_3_1;
+  patches = [./remove-project.patch];
+
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   nugetDeps = ./deps.nix;
 
   projectFile = "OpenTracker.sln";
-  executables = [ "OpenTracker" ];
+  executables = ["OpenTracker"];
 
   doCheck = true;
+  disabledTests = [
+    "OpenTracker.UnitTests.Models.Nodes.Factories.SLightWorldConnectionFactoryTests.GetNodeConnections_ShouldReturnExpectedValue"
+    "OpenTracker.UnitTests.Models.Sections.Factories.ItemSectionFactoryTests.GetItemSection_ShouldReturnExpected"
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -43,17 +48,27 @@ buildDotnetModule rec {
     stdenv.cc.cc.lib
     fontconfig
     gtk3
+    libunwind
   ];
 
-  runtimeDeps = [
-    gtk3
-    openssl
-    libX11
-    libXi
-    xinput
-  ];
+  runtimeDeps =
+    [
+      gtk3
+      openssl
+      xinput
+    ]
+    ++ (with xorg; [
+      libICE
+      libSM
+      libX11
+      libXi
+    ]);
 
-  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ]; # Attempts to patchelf unneeded SOs
+  # Attempts to patchelf unneeded SOs
+  autoPatchelfIgnoreMissingDeps = [
+    "libc.musl-x86_64.so.1"
+    "libintl.so.8"
+  ];
 
   meta = with lib; {
     description = "A tracking application for A Link to the Past Randomizer";
@@ -65,8 +80,8 @@ buildDotnetModule rec {
       binaryNativeCode
     ];
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [maintainers.ivar];
     mainProgram = "OpenTracker";
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
   };
 }

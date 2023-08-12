@@ -32,7 +32,7 @@ buildPythonPackage rec {
     libpcap
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

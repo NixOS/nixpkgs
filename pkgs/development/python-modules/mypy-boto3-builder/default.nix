@@ -2,6 +2,7 @@
 , black
 , boto3
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , isort
 , jinja2
@@ -12,20 +13,21 @@
 , pyparsing
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.5.5";
+  version = "7.17.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
-    owner = "vemel";
+    owner = "youtype";
     repo = "mypy_boto3_builder";
-    rev = version;
-    hash = "sha256-rv0c0QoXOd7aSOLhGDGfq4v0bnGBOJhGhZVNhS5hgOs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YuHq3pfx3dNgi9M4dGSmIOC3iZaLe9lqrRL0q3ggCTs=";
   };
 
   nativeBuildInputs = [
@@ -35,15 +37,17 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     black
     boto3
+    cryptography
     isort
     jinja2
     md-toc
     mdformat
     newversion
     pyparsing
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -59,6 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Type annotations builder for boto3";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

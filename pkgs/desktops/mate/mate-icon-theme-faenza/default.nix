@@ -5,7 +5,7 @@
 , gtk3
 , mate
 , hicolor-icon-theme
-, mateUpdateScript
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript {
-    inherit pname version;
-    url = "https://github.com/mate-desktop-legacy-archive/mate-icon-theme-faenza";
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    url = "https://github.com/mate-desktop-legacy-archive/${pname}";
   };
 
   meta = with lib; {

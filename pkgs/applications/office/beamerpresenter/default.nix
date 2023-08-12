@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.2.3";
+  version = "0.2.3-1";
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
-    rev = "v${version}";
-    sha256 = "1n9d0i0j67ymnghn8zkqf52c88zby6rqin8aicbw8cpn35fqf5a6";
+    rev = "dd41a00b3c6c8b881fa62945165c965634df66f0";
+    sha256 = "11yj1zl8hdnqbynkbyzg8kwyx1jl8c87x8f8qyllpk0s6cg304d0";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtmultimedia
     qttools
+  ] ++ lib.optionals stdenv.isLinux [
     qtwayland
   ] ++ lib.optionals useMupdf [
     freetype

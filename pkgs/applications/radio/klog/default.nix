@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, hamlib, pkg-config, qt5, qtbase, qttools, qtserialport, qtcharts, qmake, wrapQtAppsHook }:
+{ lib, stdenv, fetchurl, hamlib, pkg-config, qtbase, qttools, qtserialport, qtcharts, qmake, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "klog";

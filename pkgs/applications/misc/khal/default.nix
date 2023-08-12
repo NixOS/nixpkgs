@@ -1,32 +1,58 @@
-{ lib, stdenv, pkgs, python3, fetchpatch, glibcLocales, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, glibcLocales
+, installShellFiles
+, python3
+}:
 
-with python3.pkgs; buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "khal";
-  version = "0.10.5";
+  version = "0.11.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Tu+3rDAqJthgbbOSgXWHpO2UwnoVvy6iEWFKRk/PDHY=";
+  src = fetchFromGitHub {
+    owner = "pimutils";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
   };
 
-  propagatedBuildInputs = [
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    glibcLocales
+    installShellFiles
+  ] ++ (with python3.pkgs; [
+    setuptools-scm
+    sphinx
+    sphinxcontrib_newsfeed
+  ]);
+
+  propagatedBuildInputs = with python3.pkgs;[
     atomicwrites
     click
     click-log
     configobj
-    python-dateutil
+    freezegun
     icalendar
     lxml
-    pkgs.vdirsyncer
+    pkginfo
+    vdirsyncer
+    python-dateutil
     pytz
     pyxdg
     requests-toolbelt
     tzlocal
     urwid
-    pkginfo
-    freezegun
   ];
-  nativeBuildInputs = [ setuptools-scm sphinx sphinxcontrib_newsfeed installShellFiles ];
+
+  nativeCheckInputs = with python3.pkgs;[
+    freezegun
+    hypothesis
+    packaging
+    pytestCheckHook
+    vdirsyncer
+  ];
 
   postInstall = ''
     # shell completions
@@ -38,31 +64,28 @@ with python3.pkgs; buildPythonApplication rec {
     # man page
     PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib_newsfeed ])}/bin:$PATH" \
     make -C doc man
-    install -Dm755 doc/build/man/khal.1 -t $out/share/man/man1
+    installManPage doc/build/man/khal.1
 
-    # desktop
+    # .desktop file
     install -Dm755 misc/khal.desktop -t $out/share/applications
   '';
 
   doCheck = !stdenv.isAarch64;
-
-  checkInputs = [
-    glibcLocales
-    pytestCheckHook
-  ];
 
   LC_ALL = "en_US.UTF-8";
 
   disabledTests = [
     # timing based
     "test_etag"
+    "test_bogota"
+    "test_event_no_dst"
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    homepage = "http://lostpackets.de/khal/";
     description = "CLI calendar application";
+    homepage = "http://lostpackets.de/khal/";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
+    broken = stdenv.isDarwin;
   };
 }

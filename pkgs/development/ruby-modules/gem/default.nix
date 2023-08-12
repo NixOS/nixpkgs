@@ -75,6 +75,14 @@ let
     else
       throw "buildRubyGem: don't know how to build a gem of type \"${type}\""
   );
+
+  # See: https://github.com/rubygems/rubygems/blob/7a7b234721c375874b7e22b1c5b14925b943f04e/bundler/lib/bundler/source/git.rb#L103
+  suffix =
+    if type == "git" then
+      builtins.substring 0 12 attrs.source.rev
+    else
+      version;
+
   documentFlag =
     if document == []
     then "-N"
@@ -86,7 +94,8 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   inherit ruby;
   inherit dontBuild;
   inherit dontStrip;
-  inherit type;
+  inherit suffix;
+  gemType = type;
 
   nativeBuildInputs = [
     ruby makeWrapper
@@ -100,7 +109,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     ++ buildInputs;
 
   #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
-  name = attrs.name or "${namePrefix}${gemName}-${version}";
+  name = attrs.name or "${namePrefix}${gemName}-${suffix}";
 
   inherit src;
 
@@ -136,14 +145,14 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   # As of ruby 3.0, ruby headers require -fdeclspec when building with clang
   # Introduced in https://github.com/ruby/ruby/commit/0958e19ffb047781fe1506760c7cbd8d7fe74e57
-  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (ruby.rubyEngine == "ruby" && stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3") [
     "-fdeclspec"
-  ];
+  ]);
 
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
 
-    if [[ "$type" == "gem" ]]; then
+    if [[ "$gemType" == "gem" ]]; then
       if [[ -z "$gemspec" ]]; then
         gemspec="$(find . -name '*.gemspec')"
         echo "found the following gemspecs:"
@@ -158,7 +167,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       gempkg=$(echo "$output" | grep -oP 'File: \K(.*)')
 
       echo "gem package built: $gempkg"
-    elif [[ "$type" == "git" ]]; then
+    elif [[ "$gemType" == "git" ]]; then
       git init
       # remove variations to improve the likelihood of a bit-reproducible output
       rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD .git/refs/remotes/origin/HEAD .git/config
@@ -224,7 +233,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     pushd $out/${ruby.gemPath}
     find doc/ -iname created.rid -delete -print
     find gems/*/ext/ extensions/ \( -iname Makefile -o -iname mkmf.log -o -iname gem_make.out \) -delete -print
-    ${if keepGemCache then "" else "rm -fvr cache"}
+    ${lib.optionalString (!keepGemCache) "rm -fvr cache"}
     popd
 
     # write out metadata and binstubs
@@ -250,6 +259,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   meta = {
     # default to Ruby's platforms
     platforms = ruby.meta.platforms;
+    mainProgram = gemName;
   } // meta;
 })
 

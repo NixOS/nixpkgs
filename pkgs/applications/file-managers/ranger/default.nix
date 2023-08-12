@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
   propagatedBuildInputs = [
     less
     file
@@ -55,5 +55,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ toonn magnetophon ];
+    mainProgram = "ranger";
   };
 }

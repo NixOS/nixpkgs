@@ -30,6 +30,7 @@
 , wayland
 , wayland-protocols
 , qtwayland
+, cairo
 }:
 
 mkDerivation rec {
@@ -61,7 +62,7 @@ mkDerivation rec {
   buildInputs = [
     eigen boost glew opencsg cgal mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
-    qtbase qtmultimedia qscintilla
+    qtbase qtmultimedia qscintilla cairo
   ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
     ++ lib.optional stdenv.isDarwin qtmacextras
     ++ lib.optional spacenavSupport libspnav
@@ -108,5 +109,6 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
+    mainProgram = "openscad";
   };
 }

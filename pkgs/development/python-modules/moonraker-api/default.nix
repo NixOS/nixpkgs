@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "cmroche";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PgFsXmdAmHXK0wZ6xLTu94RdME1L2H1Mb6V+qFlGXSk=";
+    hash = "sha256-PgFsXmdAmHXK0wZ6xLTu94RdME1L2H1Mb6V+qFlGXSk=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];

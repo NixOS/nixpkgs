@@ -14,10 +14,10 @@ buildPythonPackage rec {
     owner = "altdesktop";
     repo = "python-dbus-next";
     rev = "v${version}";
-    sha256 = "sha256-EKEQZFRUe+E65Z6DNCJFL5uCI5kbXrN7Tzd4O0X5Cqo=";
+    hash = "sha256-EKEQZFRUe+E65Z6DNCJFL5uCI5kbXrN7Tzd4O0X5Cqo=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     pytest
     pytest-cov
@@ -26,17 +26,20 @@ buildPythonPackage rec {
   ];
 
   # test_peer_interface hits a timeout
+  # test_tcp_connection_with_forwarding fails due to dbus
+  # creating unix socket anyway on v1.14.4
   checkPhase = ''
-    dbus-run-session --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+    dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf \
       ${python.interpreter} -m pytest -sv --cov=dbus_next \
-      -k "not test_peer_interface"
+      -k "not test_peer_interface and not test_tcp_connection_with_forwarding"
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    homepage = "https://github.com/altdesktop/python-dbus-next";
     description = "A zero-dependency DBus library for Python with asyncio support";
+    homepage = "https://github.com/altdesktop/python-dbus-next";
+    changelog = "https://github.com/altdesktop/python-dbus-next/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sfrijters ];
+    broken = stdenv.isDarwin;
   };
 }

@@ -11,19 +11,19 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-ssh";
-  version = "0.15.1";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "artyom-poptsov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+BhyaBieqMwTgsSLci3HJdCrNQmfPN/jK2Od5DQs9n8=";
+    sha256 = "sha256-P29U88QrCjoyl/wdTPZbiMoykd/v6ul6CW/IJn9UAyw=";
   };
 
-  configureFlags = [ "--with-guilesitedir=\${out}/share/guile/site" ];
+  configureFlags = [ "--with-guilesitedir=\${out}/${guile.siteDir}" ];
 
   postFixup = ''
-    for f in $out/share/guile/site/ssh/**.scm; do \
+    for f in $out/${guile.siteDir}/ssh/**.scm; do \
       substituteInPlace $f \
         --replace "libguile-ssh" "$out/lib/libguile-ssh"; \
     done
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/artyom-poptsov/guile-ssh";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }

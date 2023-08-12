@@ -5,26 +5,22 @@
 , nodejs
 , yarn
 , yarn2nix-moretea
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.65.2";
+  version = "0.70.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    sha256 = "sha256-a9K6nMgg1j93BPiy03M86dDecXv/J47vUaqHH3S6DOs=";
+    hash = "sha256-y2VGWuwJX91Aa8Bs7YcT4MKOURrFKXUz9CcQkUI/U2s=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
   buildInputs = [ yarn nodejs ];
-
-  # Replace the inline call to yarn with our sequalize wrapper. This should be
-  # the only occurrence:
-  # https://github.com/outline/outline/search?l=TypeScript&q=yarn
-  patches = [ ./sequelize-command.patch ];
 
   yarnOfflineCache = yarn2nix-moretea.importOfflineCache ./yarn.nix;
 
@@ -34,6 +30,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
+    export NODE_OPTIONS=--openssl-legacy-provider
 
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
     fixup_yarn_lock yarn.lock
@@ -42,11 +39,9 @@ stdenv.mkDerivation rec {
       --frozen-lockfile \
       --ignore-engines --ignore-scripts
     patchShebangs node_modules/
+    # apply upstream patches with `patch-package`
+    yarn run postinstall
     yarn build
-
-    pushd server
-    cp -r config migrations onboarding ../build/server/
-    popd
 
     runHook postBuild
   '';
@@ -55,33 +50,30 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/outline
-    mv node_modules build $out/share/outline/
+    mv build server public node_modules $out/share/outline/
 
     node_modules=$out/share/outline/node_modules
     build=$out/share/outline/build
+    server=$out/share/outline/server
 
     makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
       --add-flags $build/server/index.js \
       --set NODE_ENV production \
       --set NODE_PATH $node_modules
 
-    makeWrapper ${nodejs}/bin/node $out/bin/outline-sequelize \
-      --add-flags $node_modules/.bin/sequelize \
-      --add-flags "--migrations-path $build/server/migrations" \
-      --add-flags "--models-path $build/server/models" \
-      --add-flags "--seeders-path $build/server/models/fixtures" \
-      --set NODE_ENV production \
-      --set NODE_PATH $node_modules
-
     runHook postInstall
   '';
+
+  passthru.tests = {
+    basic-functionality = nixosTests.outline;
+  };
 
   meta = with lib; {
     description = "The fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ cab404 yrd ];
+    maintainers = with maintainers; [ cab404 yrd xanderio ];
     platforms = platforms.linux;
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , cairo
@@ -10,7 +9,6 @@
 , fontconfig
 , gd
 , gts
-, libdevil
 , libjpeg
 , libpng
 , libtool
@@ -30,22 +28,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "5.0.1";
+  version = "8.0.5";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     rev = version;
-    sha256 = "sha256-lcU6Pb45kg7AxXQ9lmqwAazT2JpGjBz4PzK+S5lpYa0=";
+    hash = "sha256-s3AUOLZhehxs2GcDCsq87RVvsDli1NvvQtwI0AyUs4k=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/graphviz/graphviz/-/commit/8d662734b6a34709d9475b120e7ce3de872339e2.diff";
-      includes = [ "lib/*" ];
-      sha256 = "sha256-cqzUpK//2TnzWb7oSa/g8LJ61yr3O+Wiq5LsZzw34NE=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -62,7 +52,6 @@ stdenv.mkDerivation rec {
     fontconfig
     gd
     gts
-    libdevil
     pango
     bash
   ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
@@ -73,25 +62,14 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ lib.optional (xorg == null) "--without-x";
+  ] ++ optional (xorg == null) "--without-x";
 
   enableParallelBuilding = true;
 
-  CPPFLAGS = lib.optionalString (withXorg && stdenv.isDarwin)
+  CPPFLAGS = optionalString (withXorg && stdenv.isDarwin)
     "-I${cairo.dev}/include/cairo";
 
-  # ''
-  #   substituteInPlace rtest/rtest.sh \
-  #     --replace "/bin/ksh" "${mksh}/bin/mksh"
-  # '';
-
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
-
-  postPatch = ''
-    for f in $(find . -name Makefile.in); do
-      substituteInPlace $f --replace "-lstdc++" "-lc++"
-    done
-  '';
 
   preAutoreconf = "./autogen.sh";
 

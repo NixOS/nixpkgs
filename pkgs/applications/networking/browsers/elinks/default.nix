@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, xlibsWrapper, bzip2, zlib
+{ lib, stdenv, fetchFromGitHub, ncurses, libX11, bzip2, zlib
 , brotli, zstd, xz, openssl, autoreconfHook, gettext, pkg-config, libev
 , gpm, libidn, tre, expat
 , # Incompatible licenses, LGPLv3 - GPLv2
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
 , enablePerl         ? (!stdenv.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
+, fetchpatch
 # re-add javascript support when upstream supports modern spidermonkey
 }:
 
@@ -13,17 +14,26 @@ assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "elinks";
-  version = "0.15.1";
+  version = "0.16.1.1";
 
   src = fetchFromGitHub {
     owner = "rkd77";
     repo = "felinks";
     rev = "v${version}";
-    sha256 = "sha256-9OEi4UF/4/IRtccJou3QuevQzWjA6PuU5IVlT7qqGZ0=";
+    sha256 = "sha256-u6QGhfi+uWeIzSUFuYHAH3Xu0Fky0yw2h4NOKgYFLsM=";
   };
 
+  patches = [
+    # Fix build bug with perl 5.38.0. Backport of https://github.com/rkd77/elinks/pull/243 by gentoo:
+    # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=dfefaa456bd69bc14e3a1c2c6c1b0cc19c6b0869
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/elinks/files/elinks-0.16.1.1-perl-5.38.patch?id=dfefaa456bd69bc14e3a1c2c6c1b0cc19c6b0869";
+      hash = "sha256-bHP9bc/l7VEw7oXlkSUQhhuq8rT2QTahh9SM7ZJgK5w=";
+    })
+  ];
+
   buildInputs = [
-    ncurses xlibsWrapper bzip2 zlib brotli zstd xz
+    ncurses libX11 bzip2 zlib brotli zstd xz
     openssl libidn tre expat libev
   ]
     ++ lib.optional stdenv.isLinux gpm
@@ -38,11 +48,13 @@ stdenv.mkDerivation rec {
     "--enable-finger"
     "--enable-html-highlight"
     "--enable-gopher"
+    "--enable-gemini"
     "--enable-cgi"
     "--enable-bittorrent"
     "--enable-nntp"
     "--enable-256-colors"
     "--enable-true-color"
+    "--with-brotli"
     "--with-lzma"
     "--with-libev"
     "--with-terminfo"

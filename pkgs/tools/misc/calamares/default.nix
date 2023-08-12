@@ -1,5 +1,5 @@
 { lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore, kirigami2
-, kservice, libatasmart, libxcb, libyamlcpp, libpwquality, parted, polkit-qt, python
+, kservice, libatasmart, libxcb, yaml-cpp, libpwquality, parted, polkit-qt, python
 , qtbase, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
 , ckbcomp, xkeyboard_config, mkDerivation
 , nixos-extensions ? false
@@ -7,12 +7,12 @@
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.61";
+  version = "3.2.62";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/calamares/calamares/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dZG5tgc4vbp7neK42lRiqyEAbbBqAG8N0hrFuDJxHdI=";
+    sha256 = "sha256-oPvOwqQ4aTdT/BdCIDVhGa1624orGcMXUYqhywJdbdA=";
   };
 
   patches = lib.optionals nixos-extensions [
@@ -36,12 +36,14 @@ mkDerivation rec {
     # Fix setting the kayboard layout on GNOME wayland
     # By default the module uses the setxkbmap, which will not change the keyboard
     ./waylandkbd.patch
+    # Change default location where calamares searches for locales
+    ./supportedlocale.patch
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
     boost kparts.dev kpmcore.out kservice.dev kirigami2
-    libatasmart libxcb libyamlcpp libpwquality parted polkit-qt python
+    libatasmart libxcb yaml-cpp libpwquality parted polkit-qt python
     qtbase qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
   ];
 

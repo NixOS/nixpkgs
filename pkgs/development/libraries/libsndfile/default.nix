@@ -1,20 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, flac, libogg, libopus, libvorbis, pkg-config, python3
-, Carbon, AudioToolbox
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, pkg-config, python3
+, flac, lame, libmpg123, libogg, libopus, libvorbis
+, alsa-lib, Carbon, AudioToolbox
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsndfile";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-bhIXVSKuUnUzs5aaLDHt21RcnqekEpLU414sFtl2Lro=";
+    hash = "sha256-zd0HDUzVYLyFjhIudBJQaKJUtYMjZeQRLALSkyD9tXU=";
   };
 
   nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
-  buildInputs = [ flac libogg libopus libvorbis ]
+  buildInputs = [ flac lame libmpg123 libogg libopus libvorbis ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
     ++ lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
 
   enableParallelBuilding = true;
@@ -34,6 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A C library for reading and writing files containing sampled sound";
     homepage    = "https://libsndfile.github.io/libsndfile/";
+    changelog   = "https://github.com/libsndfile/libsndfile/releases/tag/${version}";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

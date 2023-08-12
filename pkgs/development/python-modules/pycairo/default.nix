@@ -7,12 +7,13 @@
 , pytestCheckHook
 , pkg-config
 , cairo
+, libxcrypt
 , python
 }:
 
 buildPythonPackage rec {
   pname = "pycairo";
-  version = "1.21.0";
+  version = "1.23.0";
 
   disabled = pythonOlder "3.6";
 
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "pygobject";
     repo = "pycairo";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cwkGN5O15DduCLkFWeh8DPO4lY64iIlCQaUsCBKB8Mw=";
+    hash = "sha256-tkyVTJUdL2pBpBUpWsiDPKnd5OV88w3TdEOMxMc+hPM=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +34,11 @@ buildPythonPackage rec {
 
   buildInputs = [
     cairo
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    libxcrypt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -26,12 +26,12 @@
 }:
 
 let
-  version = "2.5";
+  version = "2.6";
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "xCAM+tjjyDg/gqAXr4YNPhM8R3n9r895jktisAGlpZo=";
+    sha256 = "sha256-LA7XlzoCXUiG/9subTddAd22336wO9sOHCIBlQK4Ga4=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
@@ -94,7 +94,7 @@ rec {
       obfs4
     ];
 
-    checkInputs = [
+    nativeCheckInputs = [
       pytestCheckHook
     ];
 
@@ -124,6 +124,7 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+      ./fix-qrcode-gui.patch
     ];
 
     disable = !isPy3k;
@@ -137,6 +138,13 @@ rec {
     ];
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
+    postInstall = ''
+      mkdir -p $out/share/{appdata,applications,icons}
+      cp $src/org.onionshare.OnionShare.desktop $out/share/applications
+      cp $src/org.onionshare.OnionShare.svg $out/share/icons
+      cp $src/org.onionshare.OnionShare.appdata.xml $out/share/appdata
+    '';
 
     preFixup = ''
       wrapQtApp $out/bin/onionshare

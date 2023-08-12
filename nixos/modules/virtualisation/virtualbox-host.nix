@@ -104,16 +104,18 @@ in
         group = "vboxusers";
         setuid = true;
       };
+      executables = [
+        "VBoxHeadless"
+        "VBoxNetAdpCtl"
+        "VBoxNetDHCP"
+        "VBoxNetNAT"
+        "VBoxVolInfo"
+      ] ++ (lib.optionals (!cfg.headless) [
+        "VBoxSDL"
+        "VirtualBoxVM"
+      ]);
     in mkIf cfg.enableHardening
-      (builtins.listToAttrs (map (x: { name = x; value = mkSuid x; }) [
-      "VBoxHeadless"
-      "VBoxNetAdpCtl"
-      "VBoxNetDHCP"
-      "VBoxNetNAT"
-      "VBoxSDL"
-      "VBoxVolInfo"
-      "VirtualBoxVM"
-    ]));
+      (builtins.listToAttrs (map (x: { name = x; value = mkSuid x; }) executables));
 
     users.groups.vboxusers.gid = config.ids.gids.vboxusers;
 

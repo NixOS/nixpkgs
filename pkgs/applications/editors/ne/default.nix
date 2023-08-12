@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, texinfo, texlive, perl, ghostscript }:
+{ lib, stdenv, fetchFromGitHub, ncurses, texinfo6, texlive, perl, ghostscript }:
 
 stdenv.mkDerivation rec {
   pname = "ne";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "vigna";
     repo = pname;
     rev = version;
-    sha256 = "sha256-75xsZ9X6nmRj0VVZmY1AeEOBtO2d7jbanZIZ3Klx4mk=";
+    sha256 = "sha256-mRMACfWcUW6/R43riRGNce4Ac5IRo4YEML8H0oGSH5o=";
   };
 
   postPatch = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/makefile --replace "-lcurses" "-lncurses"
   '';
 
-  nativeBuildInputs = [ texlive.combined.scheme-medium texinfo perl ghostscript ];
+  nativeBuildInputs = [ texlive.combined.scheme-medium texinfo6 perl ghostscript ];
   buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ geri1701 ];
   };
 }

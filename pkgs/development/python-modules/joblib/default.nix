@@ -1,31 +1,53 @@
 { lib
-, pythonAtLeast
-, pythonOlder
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , stdenv
-, numpydoc
-, pytestCheckHook
-, lz4
+
+# build-system
 , setuptools
-, sphinx
+
+# propagates (optional, but unspecified)
+# https://github.com/joblib/joblib#dependencies
+, lz4
+, psutil
+
+# tests
+, pytestCheckHook
+, threadpoolctl
 }:
 
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.1.0";
+  version = "1.3.1";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4158fcecd13733f8be669be0683b96ebdbbd38d23559f54dca7205aea1bf1e35";
+    hash = "sha256-H5N5Bt9lMpupgBPclpL+IqTF5KZIES3lAFCLGKIbQeM=";
   };
 
-  checkInputs = [ sphinx numpydoc pytestCheckHook ];
-  propagatedBuildInputs = [ lz4 setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  pytestFlagsArray = [ "joblib/test" ];
+  propagatedBuildInputs = [
+    lz4
+    psutil
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    threadpoolctl
+  ];
+
+  pytestFlagsArray = [
+    "joblib/test"
+  ];
+
   disabledTests = [
     "test_disk_used" # test_disk_used is broken: https://github.com/joblib/joblib/issues/57
     "test_parallel_call_cached_function_defined_in_jupyter" # jupyter not available during tests
@@ -35,9 +57,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/joblib/joblib/releases/tag/${version}";
     description = "Lightweight pipelining: using Python functions as pipeline jobs";
     homepage = "https://joblib.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

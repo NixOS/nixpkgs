@@ -1,22 +1,22 @@
-{ lib, autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, glibc, pango, gtk2, kcoreaddons, ki18n, kio, kservice
+{ lib, autoPatchelfHook, bzip2, cairo, fetchurl, gdk-pixbuf, glibc, pango, gtk2, kcoreaddons, ki18n, kio, kservice
 , stdenv, runtimeShell, unzip
 }:
 
 let
   pname = "bcompare";
-  version = "4.4.2.26348";
+  version = "4.4.6.27483";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
-      sha256 = "sha256-GotORErgPs7IPXATbBfIisDCNwp8csl7pDSwV77FylA=";
+      sha256 = "sha256-1+f/AfyJ8Z80WR4cs1JDjTquTR1mGAUOd27vniSeA0k=";
     };
 
     x86_64-darwin = fetchurl {
       url = "https://www.scootersoftware.com/BCompareOSX-${version}.zip";
-      sha256 = "sha256-XqmtW2EGyFmOzCooXczP3mtMN5UVQCCx7DJnVDlzAko=";
+      sha256 = "sha256-hUzJfUgfCuvB6ADHbsgmEXXgntm01hPnfSjwl7jI70c=";
     };
 
     aarch64-darwin = srcs.x86_64-darwin;
@@ -41,7 +41,7 @@ let
 
       substituteInPlace $out/bin/${pname} \
         --replace "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
-        --replace "ldd" "${glibc.out}/bin/ldd" \
+        --replace "ldd" "${glibc.bin}/bin/ldd" \
         --replace "/bin/bash" "${runtimeShell}"
 
       # Create symlink bzip2 library

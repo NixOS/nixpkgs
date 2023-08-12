@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, attrs
 , hypothesis
 , pytest
 , pytest-arraydiff
 , pytest-astropy-header
+, pytest-cov
 , pytest-doctestplus
 , pytest-filter-subpackage
 , pytest-mock
@@ -21,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hePGbO7eTOZo9HOzzzd/yyqjxI4k8oqqN3roYATM4hE=";
+    hash = "sha256-hePGbO7eTOZo9HOzzzd/yyqjxI4k8oqqN3roYATM4hE=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +35,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    attrs
     hypothesis
     pytest-arraydiff
     pytest-astropy-header
+    pytest-cov
     pytest-doctestplus
     pytest-filter-subpackage
     pytest-mock
@@ -50,6 +54,6 @@ buildPythonPackage rec {
     description = "Meta-package containing dependencies for testing";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

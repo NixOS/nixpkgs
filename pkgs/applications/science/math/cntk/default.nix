@@ -2,7 +2,8 @@
 , fetchpatch
 , openblas, blas, lapack, opencv3, libzip, boost, protobuf, mpi
 , onebitSGDSupport ? false
-, cudaSupport ? false, cudaPackages ? {}, addOpenGLRunpath, cudatoolkit, nvidia_x11
+, config
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }, addOpenGLRunpath, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport
 }:
 
@@ -60,7 +61,7 @@ in stdenv.mkDerivation rec {
   OMPI_CXX = "g++";
 
   # Uses some deprecated tensorflow functions
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   buildInputs = [ openblas opencv3 libzip boost protobuf mpi ]
              ++ lib.optional cudaSupport cudatoolkit
@@ -120,13 +121,14 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    # Newer cub is included with cudatoolkit now and it breaks the build.
-    # https://github.com/Microsoft/CNTK/issues/3191
-    broken = cudaSupport;
     homepage = "https://github.com/Microsoft/CNTK";
     description = "An open source deep-learning toolkit";
     license = if onebitSGDSupport then licenses.unfreeRedistributable else licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ abbradar ];
+    # Newer cub is included with cudatoolkit now and it breaks the build.
+    # https://github.com/Microsoft/CNTK/issues/3191
+    # broken = cudaSupport;
+    broken = true; # at 2022-11-23
   };
 }

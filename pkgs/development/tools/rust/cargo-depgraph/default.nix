@@ -2,22 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-depgraph";
-  version = "1.2.5";
+  version = "1.5.0";
 
   src = fetchFromSourcehut {
     owner = "~jplatte";
-    repo = pname;
+    repo = "cargo-depgraph";
     rev = "v${version}";
-    sha256 = "sha256-ewlrxxHnsXBWSMPAlxTfrHj23jMiThkDSJhEsChO/sM=";
+    hash = "sha256-q9a7O6lSsQz9nJ82uG1oNyNyNebzXEanVWh3xkypqqM=";
   };
 
-  cargoSha256 = "sha256-Ce13vJ5zE63hHVkg/WFdz3LrASj7Xw6nqOO64uALOeQ=";
+  cargoHash = "sha256-gmSNYxyizaVvz38R0nTdUp9nP/f4hxgHO9hVV3RFP6U=";
 
   meta = with lib; {
     description = "Create dependency graphs for cargo projects using `cargo metadata` and graphviz";
     homepage = "https://sr.ht/~jplatte/cargo-depgraph";
-    changelog = "https://git.sr.ht/~jplatte/cargo-depgraph/tree/v${version}/item/CHANGELOG.md";
+    changelog = "https://git.sr.ht/~jplatte/cargo-depgraph/tree/${src.rev}/item/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

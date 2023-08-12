@@ -56,6 +56,8 @@ let
     "libgobject-2.0.so.0" = glib;
     "libgthread-2.0.so.0" = glib;
     "libglib-2.0.so.0" = glib;
+    "libz.so.1" = zlib;
+    "libexpat.so.1" = expat;
     });
 
   # https://www.python.org/dev/peps/pep-0571/
@@ -65,7 +67,7 @@ let
   manylinux1Libs = getLibOutputs(manylinux2010Libs // (with pkgs; {
     "libpanelw.so.5" = ncurses5;
     "libncursesw.so.5" = ncurses5;
-    "libcrypt.so.1" = glibc;
+    "libcrypt.so.1" = libxcrypt;
     }));
 
 in {

@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -71,8 +71,13 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # No need to test the version number
+    "cirq_rigetti/_version_test.py"
   ];
 
   # cirq's importlib hook doesn't work here

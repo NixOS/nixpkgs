@@ -1,8 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ lib, pkgs, ... }: {
   name = "3proxy";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ misuzu ];
-  };
+  meta.maintainers = with lib.maintainers; [ misuzu ];
 
   nodes = {
     peer0 = { lib, ... }: {
@@ -92,7 +90,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       networking.firewall.allowedTCPPorts = [ 3128 9999 ];
     };
 
-    peer3 = { lib, ... }: {
+    peer3 = { lib, pkgs, ... }: {
       networking.useDHCP = false;
       networking.interfaces.eth1 = {
         ipv4.addresses = [
@@ -186,4 +184,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.4:3128 -S -O /dev/null http://127.0.0.1:9999"
     )
   '';
-})
+}

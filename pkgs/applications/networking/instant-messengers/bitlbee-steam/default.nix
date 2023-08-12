@@ -1,6 +1,5 @@
-{ lib, fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkg-config, glib, libgcrypt }:
+{ lib, fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkg-config, libgcrypt }:
 
-with lib;
 stdenv.mkDerivation rec {
   version = "1.4.2";
   pname = "bitlbee-steam";
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Steam protocol plugin for BitlBee";
 
     homepage = "https://github.com/jgeboski/bitlbee-steam";

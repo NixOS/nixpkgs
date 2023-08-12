@@ -5,16 +5,16 @@ let
 
 in rustPlatform.buildRustPackage rec {
   pname = "seshat-node";
-  inherit (pinData) version;
+  inherit (pinData) version cargoHash;
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "seshat";
     rev = version;
-    sha256 = pinData.srcHash;
+    hash = pinData.srcHash;
   };
 
-  sourceRoot = "source/seshat-node/native";
+  sourceRoot = "${src.name}/seshat-node/native";
 
   nativeBuildInputs = [ nodejs python3 yarn ];
   buildInputs = [ sqlcipher ] ++ lib.optional stdenv.isDarwin CoreServices;
@@ -32,7 +32,7 @@ in rustPlatform.buildRustPackage rec {
     chmod u+w . ./yarn.lock
     export HOME=$PWD/tmp
     mkdir -p $HOME
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCache
     ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
@@ -53,6 +53,4 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   disallowedReferences = [ stdenv.cc.cc ];
-
-  cargoSha256 = pinData.cargoHash;
 }

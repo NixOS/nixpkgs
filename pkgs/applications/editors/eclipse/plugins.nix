@@ -254,13 +254,13 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    # find current version at https://www.eclipse.org/cdt/downloads.php
-    version = "10.7.0";
+    # find current version at https://github.com/eclipse-cdt/cdt/releases
+    version = "11.1.1";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
-      hash = "sha256-/lQ3TLFQ1IgwYM540gxAFiEGOfHQIQQMf/pqCZ29ztQ=";
+      hash = "sha256-k78QKPIb3Lr0Wcg2tTlX1abdpcvxspjaxJiP2Hrgb4A=";
     };
 
     meta = with lib; {
@@ -433,25 +433,26 @@ rec {
     };
   };
 
-  gnuarmeclipse = buildEclipseUpdateSite rec {
-    name = "gnuarmeclipse-${version}";
-    version = "3.1.1-201606210758";
+  embed-cdt = buildEclipseUpdateSite rec {
+    name = "embed-cdt-${version}";
+    version = "6.3.1";
 
     src = fetchzip {
-      stripRoot = false;
-      url = "https://github.com/gnuarmeclipse/plug-ins/releases/download/v${version}/ilg.gnuarmeclipse.repository-${version}.zip";
-      sha256 = "1g77jlhfa3csaxxps1z5lasrd9l2p5ajnddnq9ra5syw8ggkdc2h";
+      stripRoot = true;
+      url = "https://github.com/eclipse-embed-cdt/eclipse-plugins/archive/v${version}.zip";
+      sha256 = "sha256-0wHRIls48NGDQzD+wuX79Thgiax+VVYVPJw2Z6NEzsg=";
     };
 
     meta = with lib; {
-      homepage = "http://gnuarmeclipse.livius.net/";
-      description = "GNU ARM Eclipse Plug-ins";
+      homepage = "https://github.com/eclipse-embed-cdt/eclipse-plugins";
+      description = "Embedded C/C++ Development Tools (formerly GNU MCU/ARM Eclipse)";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.epl10;
+      license = licenses.epl20;
       platforms = platforms.all;
       maintainers = [ maintainers.bjornfor ];
     };
   };
+  gnuarmeclipse = embed-cdt; # backward compat alias, added 2022-11-04
 
   jsonedit = buildEclipsePlugin rec {
     name = "jsonedit-${version}";

@@ -1,94 +1,73 @@
 { lib
-, gcc11Stdenv
+, stdenv
 , fetchFromGitHub
 , cmake
 , ninja
 , unzip
 , wrapQtAppsHook
-, makeWrapper
+, libxcrypt
 , qtbase
-, qttools
+, nixosTests
 }:
 
-let serenity = fetchFromGitHub {
-  owner = "SerenityOS";
-  repo = "serenity";
-  rev = "094ba6525f0217f3b8d5e467cef326caeb659e8a";
-  hash = "sha256-IHXe2Td9iRSL1oQVwL2gZHxEM2ID4SghZwK6ewjFV1Y=";
-};
-
-in gcc11Stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "unstable-2022-07-20";
+  version = "unstable-2023-01-17";
 
-  # Remember to update `serenity` too!
   src = fetchFromGitHub {
-    owner = "awesomekling";
-    repo = "ladybird";
-    rev = "9e3a1f47d484cee6f23c4dae6c51750af155a8fc";
-    hash = "sha256-1cPWpPvjM/VcVUEf2k+MvGvTgZ3Fc4LFHZCLh1wU78Y=";
+    owner = "SerenityOS";
+    repo = "serenity";
+    rev = "45e85d20b64862df119f643f24e2d500c76c58f3";
+    hash = "sha256-n2mLg9wNfdMGsJuGj+ukjto9qYjGOIz4cZjgvMGQUrY=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/Ladybird";
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "MACOSX_BUNDLE TRUE" "MACOSX_BUNDLE FALSE"
+    # https://github.com/SerenityOS/serenity/issues/17062
+    substituteInPlace main.cpp \
+      --replace "./SQLServer/SQLServer" "$out/bin/SQLServer"
+    # https://github.com/SerenityOS/serenity/issues/10055
+    substituteInPlace ../Meta/Lagom/CMakeLists.txt \
+      --replace "@rpath" "$out/lib"
+  '';
 
   nativeBuildInputs = [
     cmake
     ninja
     unzip
     wrapQtAppsHook
-    makeWrapper
   ];
 
   buildInputs = [
+    libxcrypt
     qtbase
   ];
 
   cmakeFlags = [
-    "-DSERENITY_SOURCE_DIR=${serenity}"
     # Disable network operations
     "-DENABLE_TIME_ZONE_DATABASE_DOWNLOAD=false"
     "-DENABLE_UNICODE_DATABASE_DOWNLOAD=false"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  # Upstream install rules are missing
-  # https://github.com/awesomekling/ladybird/issues/36
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 ladybird $out/bin/ladybird
-    mkdir -p $out/lib/ladybird
-    cp -d _deps/lagom-build/*.so* $out/lib/ladybird/
-    runHook postInstall
+  # https://github.com/SerenityOS/serenity/issues/10055
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath $out/lib $out/bin/ladybird
   '';
 
-  # Patch rpaths
-  # https://github.com/awesomekling/ladybird/issues/36
-  preFixup = ''
-    for f in $out/bin/ladybird $out/lib/ladybird/*.so; do
-      old_rpath=$(patchelf --print-rpath "$f")
-      # Remove reference to libraries from build directory
-      rpath_without_build=$(sed -e 's@[^:]*/_deps/lagom-build:@@g' <<< $old_rpath)
-      # Add directory where we install those libraries
-      new_rpath=$out/lib/ladybird:$rpath_without_build
-      patchelf --set-rpath "$new_rpath" "$f"
-    done
-  '';
-
-  # According to the readme, the program needs access to the serenity sources
-  # at runtime
-  postFixup = ''
-    wrapProgram $out/bin/ladybird --set SERENITY_SOURCE_DIR "${serenity}"
-  '';
-
-  # Stripping results in a symbol lookup error
-  dontStrip = true;
+  passthru.tests = {
+    nixosTest = nixosTests.ladybird;
+  };
 
   meta = with lib; {
     description = "A browser using the SerenityOS LibWeb engine with a Qt GUI";
     homepage = "https://github.com/awesomekling/ladybird";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
-    # SerenityOS only works on x86, and can only be built on unix systems.
-    # We also use patchelf in preFixup, so we restrict that to linux only.
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.unix;
   };
-}
+})

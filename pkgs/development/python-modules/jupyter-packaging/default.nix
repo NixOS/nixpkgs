@@ -1,34 +1,49 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , deprecation
 , hatchling
 , pythonOlder
 , packaging
 , pytestCheckHook
 , pytest-timeout
+, setuptools
 , tomlkit
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-packaging";
-  version = "0.12.2";
+  version = "0.12.3";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "jupyter_packaging";
     inherit version;
-    sha256 = "sha256-C5nq7PVrnR2Z57y2Yy2RSo6laY2kCyOLqJIno0FX3jI=";
+    hash = "sha256-nZsrY7l//WeovFORwypCG8QVsmSjLJnk2NjdMdqunPQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "setuptools-68-test-compatibility.patch";
+      url = "https://github.com/jupyter/jupyter-packaging/commit/e963fb27aa3b58cd70c5ca61ebe68c222d803b7e.patch";
+      hash = "sha256-NlO07wBCutAJ1DgoT+rQFkuC9Y+DyF1YFlTwWpwsJzo=";
+    })
+  ];
 
   nativeBuildInputs = [
     hatchling
   ];
 
-  propagatedBuildInputs = [ deprecation packaging tomlkit ];
+  propagatedBuildInputs = [
+    deprecation
+    packaging
+    setuptools
+    tomlkit
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
   ];

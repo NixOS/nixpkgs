@@ -1,24 +1,42 @@
-{ lib, fetchzip, buildPythonApplication, python3Packages
-  , desktop-file-utils, freecell-solver }:
+{ lib
+, fetchzip
+, buildPythonApplication
+, python3Packages
+, desktop-file-utils
+, freecell-solver
+}:
 
 buildPythonApplication rec {
   pname = "PySolFC";
-  version = "2.6.4";
+  version = "2.20.1";
 
   src = fetchzip {
     url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC/PySolFC-${version}/PySolFC-${version}.tar.xz";
-    sha256 = "1bd84law5b1yga3pryggdvlfvm0l62gci2q8y3q79cysdk3z4w3z";
+    hash = "sha256-mEnsq8Su0ses+nqoSFC+Wr0MHY7aTDMbtDV8toYVNPY=";
   };
 
   cardsets = fetchzip {
-    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC-Cardsets/PySolFC-Cardsets-2.0/PySolFC-Cardsets-2.0.tar.bz2";
-    sha256 = "0h0fibjv47j8lkc1bwnlbbvrx2nr3l2hzv717kcgagwhc7v2mrqh";
+    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC-Cardsets/PySolFC-Cardsets-2.2/PySolFC-Cardsets-2.2.tar.bz2";
+    hash = "sha256-mWJ0l9rvn9KeZ9rCWy7VjngJzJtSQSmG8zGcYFE4yM0=";
+  };
+
+  music = fetchzip {
+    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySol-Music/PySol-Music-4.50/pysol-music-4.50.tar.xz";
+    hash = "sha256-sOl5U98aIorrQHJRy34s0HHaSW8hMUE7q84FMQAj5Yg=";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    tkinter six random2
+    tkinter
+    six
+    random2
+    configobj
+    pysol-cards
+    attrs
+    pycotap
     # optional :
-    pygame freecell-solver pillow
+    pygame
+    freecell-solver
+    pillow
   ];
 
   patches = [
@@ -34,6 +52,7 @@ buildPythonApplication rec {
   postInstall = ''
     mkdir $out/share/PySolFC/cardsets
     cp -r $cardsets/* $out/share/PySolFC/cardsets
+    cp -r $music/data/music $out/share/PySolFC
   '';
 
   # No tests in archive

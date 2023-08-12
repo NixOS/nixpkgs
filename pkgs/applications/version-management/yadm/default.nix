@@ -29,7 +29,7 @@ to support their use in yadm.
 
 resholve.mkDerivation rec {
   pname = "yadm";
-  version = "3.1.1";
+  version = "3.2.2";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,7 +37,7 @@ resholve.mkDerivation rec {
     owner  = "TheLocehiliosan";
     repo   = "yadm";
     rev    = version;
-    hash   = "sha256-bgiRBlqEjDq0gQ0+aUWpFDeE2piFX3Gy2gEAXgChAOk=";
+    hash   = "sha256-GcuqMlE8oef9+LIqKoCotktU7GcgPBE9CTVrZ8bKhv4=";
   };
 
   dontConfigure = true;

@@ -1,11 +1,10 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , john
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "adenum";
   version = "unstable-2022-04-01";
   format = "other";
@@ -20,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     impacket
     pwntools
-    ldap
+    python-ldap
   ] ++ [
     john
   ];

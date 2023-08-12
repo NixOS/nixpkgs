@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.3.1";
+  version = "3.5.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
     rev = "refs/tags/${version}";
-    hash = "sha256-QmpwnOnMjV29Tq+M6FCotDytq6zlhsp0Zgzw3V7nhNQ=";
+    hash = "sha256-Vsje8gEJWNt2P1WOFm/IZSpJo04N0CXWxcmfADmP/M4=";
   };
 
   # force pyproj to use ${proj}
@@ -43,7 +43,7 @@ buildPythonPackage rec {
      certifi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     numpy
@@ -53,14 +53,13 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    # We need to build extensions locally to run tests
-    ${python.interpreter} setup.py build_ext --inplace
-    cd test
+    # import from $out
+    rm -r pyproj
   '';
 
   disabledTestPaths = [
-    "test_doctest_wrapper.py"
-    "test_datadir.py"
+    "test/test_doctest_wrapper.py"
+    "test/test_datadir.py"
   ];
 
   disabledTests = [
@@ -85,10 +84,27 @@ buildPythonPackage rec {
     "test_transformer_group__download_grids"
   ];
 
+  pythonImportsCheck = [
+    "pyproj"
+    "pyproj.crs"
+    "pyproj.transformer"
+    "pyproj.geod"
+    "pyproj.proj"
+    "pyproj.database"
+    "pyproj.list"
+    "pyproj.datadir"
+    "pyproj.network"
+    "pyproj.sync"
+    "pyproj.enums"
+    "pyproj.aoi"
+    "pyproj.exceptions"
+  ];
+
   meta = {
-    description = "Python interface to PROJ.4 library";
+    description = "Python interface to PROJ library";
     homepage = "https://github.com/pyproj4/pyproj";
-    license = with lib.licenses; [ isc ];
-    maintainers = with lib.maintainers; [ lsix ];
+    changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lsix dotlambda ];
   };
 }

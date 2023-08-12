@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     libxml2 # xmllint
     docbook_xml_dtd_45
     docbook_xsl
+    dbus-glib # gdbus-codegen
+    protobuf # protoc
   ];
 
   buildInputs = [

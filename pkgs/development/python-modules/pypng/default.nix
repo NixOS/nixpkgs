@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -12,13 +13,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "drj11";
     repo = "pypng";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-JU1GCSTm2s6Kczn6aRcF5DizPJVpizNtnAMJxTBi9vo=";
+    rev = "refs/tags/${pname}-${version}";
+    hash = "sha256-JU1GCSTm2s6Kczn6aRcF5DizPJVpizNtnAMJxTBi9vo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [ "png" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Pure Python library for PNG image encoding/decoding";

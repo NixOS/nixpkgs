@@ -1,44 +1,58 @@
-{ lib, buildGoModule, fetchFromGitHub, coreutils }:
+{ lib, buildGoModule, fetchFromGitHub, coreutils, runtimeShell, testers, skeema }:
 
 buildGoModule rec {
   pname = "skeema";
-  version = "1.8.1";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     rev = "v${version}";
-    sha256 = "sha256-1XK4eXRVUkCPx5MULmHx5mwQ5P1aqZNtHNEqCBMK8NE=";
+    hash = "sha256-t0UACavJaDorAgxm2gA6FEsMfQ8UQEY/CZbFIFHwfIQ=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   CGO_ENABLED = 0;
 
   ldflags = [ "-s" "-w" ];
 
-  preCheck = ''
-    # Disable tests requiring network access to gitlab.com
-    buildFlagsArray+=("-run" "[^(Test(ParseDir(Symlinks|))|DirRelPath)]")
+  preCheck =
+    let
+      skippedTests = [
+        # Tests requiring network access to gitlab.com
+        "TestDirRelPath"
+        "TestParseDirSymlinks"
 
-    # Fix tests expecting /usr/bin/printf and /bin/echo
-    substituteInPlace skeema_cmd_test.go \
-      --replace /usr/bin/printf "${coreutils}/bin/printf"
+        # Flaky tests
+        "TestShellOutTimeout"
+      ];
+    in
+    ''
+      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
 
-    substituteInPlace internal/fs/dir_test.go \
-      --replace /bin/echo "${coreutils}/bin/echo" \
-      --replace /usr/bin/printf "${coreutils}/bin/printf"
+      # Fix tests expecting /usr/bin/printf and /bin/echo
+      substituteInPlace skeema_cmd_test.go \
+        --replace /usr/bin/printf "${coreutils}/bin/printf"
 
-    substituteInPlace internal/applier/ddlstatement_test.go \
-      --replace /bin/echo "${coreutils}/bin/echo"
+      substituteInPlace internal/fs/dir_test.go \
+        --replace /bin/echo "${coreutils}/bin/echo" \
+        --replace /usr/bin/printf "${coreutils}/bin/printf"
 
-    substituteInPlace internal/util/shellout_unix_test.go \
-      --replace /bin/echo "${coreutils}/bin/echo" \
-      --replace /usr/bin/printf "${coreutils}/bin/printf"
+      substituteInPlace internal/applier/ddlstatement_test.go \
+        --replace /bin/echo "${coreutils}/bin/echo"
 
-    substituteInPlace internal/util/shellout_unix_test.go \
-      --replace /bin/echo "${coreutils}/bin/echo"
-  '';
+      substituteInPlace internal/util/shellout_unix_test.go \
+        --replace /bin/echo "${coreutils}/bin/echo" \
+        --replace /usr/bin/printf "${coreutils}/bin/printf"
+
+      substituteInPlace internal/util/shellout_unix.go \
+        --replace /bin/sh "${runtimeShell}"
+    '';
+
+  passthru.tests.version = testers.testVersion {
+    package = skeema;
+  };
 
   meta = with lib; {
     description = "Declarative pure-SQL schema management for MySQL and MariaDB";

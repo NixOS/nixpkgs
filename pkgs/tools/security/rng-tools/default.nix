@@ -5,62 +5,68 @@
 , libtool
 , pkg-config
 , psmisc
-, argp-standalone ? null
+, argp-standalone
 , openssl
-, jitterentropy ? null, withJitterEntropy ? true
+, libcap
+, jitterentropy, withJitterEntropy ? true
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
-, curl ? null, jansson ? null, libxml2 ? null, withNistBeacon ? false
-, libp11 ? null, opensc ? null, withPkcs11 ? true
-, librtlsdr ? null, withRtlsdr ? true
+, curl, jansson, libxml2, withNistBeacon ? false
+, libp11, opensc, withPkcs11 ? true
+, rtl-sdr, withRtlsdr ? true
+, withQrypt ? false
 }:
-
-assert (stdenv.hostPlatform.isMusl) -> argp-standalone != null;
-assert (withJitterEntropy) -> jitterentropy != null;
-assert (withNistBeacon) -> curl != null && jansson != null && libxml2 != null;
-assert (withPkcs11) -> libp11 != null && opensc != null;
-assert (withRtlsdr) -> librtlsdr != null;
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
-  version = "6.15";
+  version = "6.16";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-km+MEng3VWZF07sdvGLbAG/vf8/A1DxhA/Xa2Y+LAEQ=";
+    hash = "sha256-9pXQhG2nbu6bq4BnBgEOyyUBNkQTI5RhWmJIoLtFU+c=";
   };
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
 
   configureFlags = [
-    (enableFeature (withJitterEntropy) "jitterentropy")
-    (withFeature   (withNistBeacon)    "nistbeacon")
-    (withFeature   (withPkcs11)        "pkcs11")
-    (withFeature   (withRtlsdr)        "rtlsdr")
+    (lib.enableFeature (withJitterEntropy) "jitterentropy")
+    (lib.withFeature   (withNistBeacon)    "nistbeacon")
+    (lib.withFeature   (withPkcs11)        "pkcs11")
+    (lib.withFeature   (withRtlsdr)        "rtlsdr")
+    (lib.withFeature   (withQrypt)         "qrypt")
   ];
 
-  buildInputs = [ openssl ]
-    ++ optionals (stdenv.hostPlatform.isMusl) [ argp-standalone ]
-    ++ optionals (withJitterEntropy) [ jitterentropy ]
-    ++ optionals (withNistBeacon)    [ curl jansson libxml2 ]
-    ++ optionals (withPkcs11)        [ libp11 openssl ]
-    ++ optionals (withRtlsdr)        [ librtlsdr ];
+  buildInputs = [ openssl libcap ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
+    ++ lib.optionals withJitterEntropy [ jitterentropy ]
+    ++ lib.optionals withNistBeacon    [ curl jansson libxml2 ]
+    ++ lib.optionals withPkcs11        [ libp11 libp11.passthru.openssl ]
+    ++ lib.optionals withRtlsdr        [ rtl-sdr ]
+    ++ lib.optionals withQrypt         [ curl jansson ];
 
   enableParallelBuilding = true;
 
   makeFlags = [
     "AR:=$(AR)" # For cross-compilation
-  ] ++ optionals (withPkcs11) [
+  ] ++ lib.optionals withPkcs11 [
     "PKCS11_ENGINE=${opensc}/lib/opensc-pkcs11.so" # Overrides configure script paths
   ];
 
   doCheck = true;
-  preCheck = "patchShebangs tests/*.sh";
-  checkInputs = [ psmisc ]; # rngtestjitter.sh needs killall
+  preCheck = ''
+    patchShebangs tests/*.sh
+    export RNGD_JITTER_TIMEOUT=10
+  '';
+  # After updating to jitterentropy 3.4.1 jitterentropy initialization seams
+  # to have increased. On some system rng-tools fail therefore to initialize the
+  # jitterentropy entropy source. You can increase the init timeout with a command-line
+  # option (-O jitter:timeout:SECONDS). The environment variable above only has effect
+  # for the test cases.
+  # Patching the timeout to a larger value was declined upstream,
+  # see (https://github.com/nhorman/rng-tools/pull/178).
+  nativeCheckInputs = [ psmisc ]; # rngtestjitter.sh needs killall
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -70,7 +76,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A random number generator daemon";
     homepage = "https://github.com/nhorman/rng-tools";
     changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${version}";

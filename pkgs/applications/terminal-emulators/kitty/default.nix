@@ -4,15 +4,14 @@
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland
 , lcms2
 , librsync
+, openssl
 , installShellFiles
 , dbus
-, darwin
+, Libsystem
 , Cocoa
-, CoreGraphics
-, Foundation
-, IOKit
 , Kernel
-, OpenGL
+, UniformTypeIdentifiers
+, UserNotifications
 , libcanberra
 , libicns
 , libpng
@@ -22,38 +21,46 @@
 , zsh
 , fish
 , nixosTests
+, go
+, buildGoModule
+, nix-update-script
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.25.2";
+  version = "0.29.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
-    rev = "v${version}";
-    sha256 = "sha256-o/vVz1lPfsgkzbYjYhIrScCAROmVdiPsNwjW/m5n7Us=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ureJHG6Jh4bsXqQZnGwY5Hlq7sXxYX3iTajb8ZkpZw8=";
   };
+
+  goModules = (buildGoModule {
+    pname = "kitty-go-modules";
+    inherit src version;
+    vendorHash = "sha256-jk2EcYVuhV/UQfHAIfpnn8ZIZnwjA/o8YRXmpoC85Vc=";
+  }).goModules;
 
   buildInputs = [
     harfbuzz
     ncurses
     lcms2
     librsync
+    openssl.dev
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
-    CoreGraphics
-    Foundation
-    IOKit
     Kernel
-    OpenGL
+    UniformTypeIdentifiers
+    UserNotifications
     libpng
     python3
     zlib
-  ] ++ lib.optionals (stdenv.isDarwin && (builtins.hasAttr "UserNotifications" darwin.apple_sdk.frameworks)) [
-    darwin.apple_sdk.frameworks.UserNotifications
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    Libsystem
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
@@ -69,14 +76,18 @@ buildPythonApplication rec {
     sphinx-copybutton
     sphinxext-opengraph
     sphinx-inline-tabs
+    go
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
   ];
 
-  outputs = [ "out" "terminfo" "shell_integration" ];
+  outputs = [ "out" "terminfo" "shell_integration" "kitten" ];
 
   patches = [
+    # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
+    ./fix-test_ssh_env_vars.patch
+
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
@@ -88,35 +99,53 @@ buildPythonApplication rec {
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
   ];
 
-  # Causes build failure due to warning
-  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+  hardeningDisable = [
+    # causes redefinition of _FORTIFY_SOURCE
+    "fortify3"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    # Causes build failure due to warning
+    "strictoverflow"
+  ];
 
-  dontConfigure = true;
+  CGO_ENABLED = 0;
+  GOFLAGS = "-trimpath";
+
+  configurePhase = ''
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH="$TMPDIR/go"
+    export GOPROXY=off
+    cp -r --reflink=auto $goModules vendor
+  '';
 
   buildPhase = let
     commonOptions = ''
       --update-check-interval=0 \
       --shell-integration=enabled\ no-rc
     '';
-  in ''
-    runHook preBuild
-    ${if stdenv.isDarwin then ''
-      ${python.interpreter} setup.py kitty.app \
+    darwinOptions = ''
       --disable-link-time-optimization \
       ${commonOptions}
-      make man
+    '';
+  in ''
+    runHook preBuild
+    ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
+    ${if stdenv.isDarwin then ''
+      ${python.pythonForBuild.interpreter} setup.py build ${darwinOptions}
+      make docs
+      ${python.pythonForBuild.interpreter} setup.py kitty.app ${darwinOptions}
     '' else ''
-      ${python.interpreter} setup.py linux-package \
+      ${python.pythonForBuild.interpreter} setup.py linux-package \
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
       --canberra-library='${libcanberra}/lib/libcanberra.so' \
       --fontconfig-library='${fontconfig.lib}/lib/libfontconfig.so' \
       ${commonOptions}
+      ${python.pythonForBuild.interpreter} setup.py build-launcher
     ''}
     runHook postBuild
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
 
     # Shells needed for shell integration tests
@@ -126,27 +155,27 @@ buildPythonApplication rec {
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = if stdenv.isDarwin then ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_file_get dont_test_file_get \
       --replace test_path_mapping_receive dont_test_path_mapping_receive
     substituteInPlace kitty_tests/shell_integration.py \
       --replace test_fish_integration dont_test_fish_integration
+    substituteInPlace kitty_tests/shell_integration.py \
+      --replace test_bash_integration dont_test_bash_integration
     substituteInPlace kitty_tests/open_actions.py \
       --replace test_parsing_of_open_actions dont_test_parsing_of_open_actions
     substituteInPlace kitty_tests/ssh.py \
       --replace test_ssh_connection_data dont_test_ssh_connection_data
     substituteInPlace kitty_tests/fonts.py \
       --replace 'class Rendering(BaseTest)' 'class Rendering'
-  '' else "";
+    # theme collection test starts an http server
+    rm tools/themes/collection_test.go
+    # passwd_test tries to exec /usr/bin/dscl
+    rm tools/utils/passwd_test.go
+  '';
 
-  checkPhase =
-    let buildBinPath =
-      if stdenv.isDarwin
-        then "kitty.app/Contents/MacOS"
-        else "linux-package/bin";
-    in
-    ''
+  checkPhase = ''
       runHook preCheck
 
       # Fontconfig error: Cannot load default config file: No such file: (null)
@@ -155,21 +184,26 @@ buildPythonApplication rec {
       # Required for `test_ssh_shell_integration` to pass.
       export TERM=kitty
 
-      env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
+      make test
+      runHook postCheck
     '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
+    mkdir -p "$out"
+    mkdir -p "$kitten/bin"
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
     ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
+    ln -s ../Applications/kitty.app/Contents/MacOS/kitten "$out/bin/kitten"
+    cp ./kitty.app/Contents/MacOS/kitten "$kitten/bin/kitten"
     mkdir "$out/Applications"
     cp -r kitty.app "$out/Applications/kitty.app"
 
     installManPage 'docs/_build/man/kitty.1'
     '' else ''
-    cp -r linux-package/{bin,share,lib} $out
+    cp -r linux-package/{bin,share,lib} "$out"
+    cp linux-package/bin/kitten "$kitten/bin/kitten"
     ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
@@ -186,7 +220,7 @@ buildPythonApplication rec {
     mkdir -p $terminfo/share
     mv "$terminfo_src" $terminfo/share/terminfo
 
-    mkdir -p $out/nix-support
+    mkdir -p "$out/nix-support"
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
     cp -r 'shell-integration' "$shell_integration"
@@ -194,19 +228,10 @@ buildPythonApplication rec {
     runHook postInstall
   '';
 
-  # Patch shebangs that Nix can't automatically patch
-  preFixup =
-    let
-      pathComponent = if stdenv.isDarwin then "Applications/kitty.app/Contents/Resources" else "lib";
-    in
-    ''
-      substituteInPlace $out/${pathComponent}/kitty/shell-integration/ssh/askpass.py \
-        --replace '/usr/bin/env -S ' $out/bin/
-      substituteInPlace $shell_integration/ssh/askpass.py \
-        --replace '/usr/bin/env -S ' $out/bin/
-    '';
-
-  passthru.tests.test = nixosTests.terminal-emulators.kitty;
+  passthru = {
+    tests.test = nixosTests.terminal-emulators.kitty;
+    updateScript = nix-update-script {};
+  };
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
@@ -214,6 +239,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Only;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens ];
   };
 }

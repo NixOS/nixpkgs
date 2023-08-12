@@ -10,7 +10,7 @@
 
 let
   pname = "setuptools";
-  version = "63.2.0";
+  version = "67.4.0";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -19,8 +19,8 @@ let
     src = fetchFromGitHub {
       owner = "pypa";
       repo = pname;
-      rev = "v${version}";
-      hash = "sha256-GyQjc0XulUxl3Btpj7Q6KHTpd1FDZnXCYviYjjgK7tY=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-QDHycUFA2VRUE9alan8rF0efZTNV3Jt0CskjkCc+in0=";
       name = "${pname}-${version}-source";
     };
 
@@ -44,7 +44,7 @@ let
       mv dist/${name} $out
     '';
   };
-in buildPythonPackage rec {
+in buildPythonPackage {
   inherit pname version;
   # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
   # Instead, we override it to remove setuptools to avoid a circular dependency.
@@ -73,9 +73,11 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utilities to facilitate the installation of Python packages";
-    homepage = "https://pypi.python.org/pypi/setuptools";
-    license = with licenses; [ psfl zpl20 ];
+    homepage = "https://github.com/pypa/setuptools";
+    changelog = "https://setuptools.pypa.io/en/stable/history.html#v${replaceStrings [ "." ] [ "-" ] version}";
+    license = with licenses; [ mit ];
     platforms = python.meta.platforms;
     priority = 10;
+    maintainers = teams.python.members;
   };
 }

@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "colmena";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "colmena";
     rev = "v${version}";
-    sha256 = "sha256-kXc5YD3u+4lLWnih6s5ZjOYT+p0TvC2I7GT9eBAK2Jk=";
+    sha256 = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
   };
 
-  cargoSha256 = "sha256-B8gO2m+i3BOsMyB/KHlA4MO+a5UT+ZAN1XJ92X1suec=";
+  cargoSha256 = "sha256-rk2atWWJIR95duUXxAiARegjeCyfAsqTDwEr5P0eIr8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A simple, stateless NixOS deployment tool";
-    homepage = "https://zhaofengli.github.io/colmena/${passthru.apiVersion}";
+    homepage = "https://colmena.cli.rs/${passthru.apiVersion}";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];
     platforms = platforms.linux ++ platforms.darwin;

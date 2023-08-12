@@ -3,6 +3,10 @@
 buildGoModule rec {
   pname = "shadowsocks-v2ray-plugin";
   version = "1.3.1";
+  # Version 1.3.2 has runtime failures with Go 1.19
+  # https://github.com/NixOS/nixpkgs/issues/219343
+  # https://github.com/shadowsocks/v2ray-plugin/issues/292
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "shadowsocks";

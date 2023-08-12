@@ -1,9 +1,11 @@
 { lib
-, attrs
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -20,11 +22,20 @@ buildPythonPackage rec {
     hash = "sha256-M3XGHG733X5qKuMS6mvFSFHYOwWPaBMXw+w0eYo6ByE=";
   };
 
-  buildInputs = [
-    attrs
+  patches = [
+    (fetchpatch {
+      name = "remove-wheel-dependency-constraint.patch";
+      url = "https://github.com/jwodder/wheel-filename/commit/11cfa57c8a32fa2a52fb5fe537859997bb642e75.patch";
+      hash = "sha256-ssePCVlJuHPJpPyFET3FnnWRlslLnZbnfn42g52yVN4=";
+    })
   ];
 
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

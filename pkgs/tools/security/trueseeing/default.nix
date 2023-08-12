@@ -31,7 +31,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "attrs~=21.4" "attrs>=21.4"
+      --replace "attrs~=21.4" "attrs>=21.4" \
+      --replace "docker~=5.0.3" "docker"
   '';
 
   # Project has no tests

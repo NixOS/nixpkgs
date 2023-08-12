@@ -12,6 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
+  notExcluded = pkg: (!(lib.elem pkg config.environment.cinnamon.excludePackages));
 in
 
 {
@@ -65,10 +66,18 @@ in
         enable = mkDefault true;
 
         # Taken from mint-artwork.gschema.override
-        theme.name = mkDefault "Mint-X";
-        theme.package = mkDefault pkgs.cinnamon.mint-themes;
-        iconTheme.name = mkDefault "Mint-X-Dark";
-        iconTheme.package = mkDefault pkgs.cinnamon.mint-x-icons;
+        theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
+          name = mkDefault "Mint-Y-Aqua";
+          package = mkDefault pkgs.cinnamon.mint-themes;
+        };
+        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
+          name = mkDefault "Mint-Y-Sand";
+          package = mkDefault pkgs.cinnamon.mint-y-icons;
+        };
+        cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
+          name = mkDefault "Bibata-Modern-Classic";
+          package = mkDefault pkgs.cinnamon.mint-cursor-themes;
+        };
       };
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
@@ -96,13 +105,16 @@ in
       services.dbus.packages = with pkgs.cinnamon; [
         cinnamon-common
         cinnamon-screensaver
-        nemo
+        nemo-with-extensions
         xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
+      services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
+      services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true;
@@ -123,11 +135,8 @@ in
         cinnamon-screensaver = {};
       };
 
-      environment.systemPackages = with pkgs.cinnamon // pkgs; [
+      environment.systemPackages = with pkgs.cinnamon // pkgs; ([
         desktop-file-utils
-        nixos-artwork.wallpapers.simple-dark-gray
-        onboard
-        sound-theme-freedesktop
 
         # common-files
         cinnamon-common
@@ -148,27 +157,47 @@ in
         polkit_gnome
 
         # packages
-        nemo
+        nemo-with-extensions
         cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd
-        orca
 
         # theme
         gnome.adwaita-icon-theme
-        hicolor-icon-theme
         gnome.gnome-themes-extra
         gtk3.out
-        mint-artwork
-        mint-themes
-        mint-x-icons
-        mint-y-icons
-        vanilla-dmz
 
         # other
         glib # for gsettings
-        shared-mime-info # for update-mime-database
         xdg-user-dirs
+      ] ++ utils.removePackagesByName [
+        # accessibility
+        onboard
+        orca
+
+        # theme
+        sound-theme-freedesktop
+        nixos-artwork.wallpapers.simple-dark-gray
+        mint-artwork
+        mint-cursor-themes
+        mint-l-icons
+        mint-l-theme
+        mint-themes
+        mint-x-icons
+        mint-y-icons
+        xapp # provides some xapp-* icons
+      ] config.environment.cinnamon.excludePackages);
+
+      xdg.mime.enable = true;
+      xdg.icons.enable = true;
+
+      xdg.portal.enable = true;
+      xdg.portal.extraPortals = [
+        pkgs.xdg-desktop-portal-xapp
+        (pkgs.xdg-desktop-portal-gtk.override {
+          # Do not build portals that we already have.
+          buildPortalsInGnome = false;
+        })
       ];
 
       # Override GSettings schemas
@@ -183,13 +212,13 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt5 applications under Pantheon
-      qt5.enable = true;
-      qt5.platformTheme = "gnome";
-      qt5.style = "adwaita";
+      # Harmonize Qt applications under Cinnamon
+      qt.enable = true;
+      qt.platformTheme = "gnome";
+      qt.style = "adwaita";
 
       # Default Fonts
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         source-code-pro # Default monospace font in 3.32
         ubuntu_font_family # required for default theme
       ];
@@ -199,7 +228,6 @@ in
       programs.geary.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
       programs.gnome-terminal.enable = mkDefault true;
-      programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
       environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
@@ -217,6 +245,7 @@ in
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator
+        gnome-calendar
         gnome-screenshot
       ] config.environment.cinnamon.excludePackages;
     })

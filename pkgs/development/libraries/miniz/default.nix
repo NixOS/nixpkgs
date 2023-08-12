@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  postFixup = ''
+    substituteInPlace "$out"/share/pkgconfig/miniz.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace '=''${exec_prefix}//' '=/'
+  '';
+
   meta = with lib; {
     description = "Single C source file zlib-replacement library";
     homepage = "https://github.com/richgel999/miniz";

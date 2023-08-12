@@ -1,6 +1,6 @@
 { lib
 , buildGoModule
-, buildFHSUserEnv
+, buildFHSEnv
 , binutils
 , dejavu_fonts
 , pkg-config
@@ -41,7 +41,7 @@ let
       homepage = "https://github.com/go-flutter-desktop/hover";
       license = licenses.bsd3;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ ericdallo flexagoon ];
+      maintainers = with maintainers; [ ericdallo ];
     };
 
     subPackages = [ "." ];
@@ -84,7 +84,7 @@ let
   };
 
 in
-buildFHSUserEnv rec {
+buildFHSEnv rec {
   name = pname;
   targetPkgs = pkgs: [
     binutils

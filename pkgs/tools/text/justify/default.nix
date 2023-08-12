@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-406OhJt2Ila/LIhfqJXhbFqFxJJiRyMVI4/VK8Y43kc=";
   };
 
+  postPatch = ''
+    sed '1i#include <algorithm>' -i src/stringHelper.h # gcc12
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''

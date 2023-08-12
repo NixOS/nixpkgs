@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, qt5, cmake
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, qt5, cmake
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsa-lib, python3
 , rnnoise
@@ -19,6 +19,17 @@ let
   generic = overrides: source: stdenv.mkDerivation (source // overrides // {
     pname = overrides.type;
     version = source.version;
+
+    patches = [
+      ./0001-BUILD-crypto-Migrate-to-OpenSSL-3.0-compatible-API.patch
+      # fix crash caused by openssl3 thread unsafe evp implementation
+      # see https://github.com/mumble-voip/mumble/issues/5361#issuecomment-1173001440
+      (fetchpatch {
+        url = "https://github.com/mumble-voip/mumble/commit/f8d47db318f302f5a7d343f15c9936c7030c49c4.patch";
+        hash = "sha256-xk8vBrPwvQxHCY8I6WQJAyaBGHmlH9NCixweP6FyakU=";
+      })
+      ./0002-FIX-positional-audio-Force-8-bytes-alignment-for-CCa.patch
+    ];
 
     nativeBuildInputs = [ cmake pkg-config python3 qt5.wrapQtAppsHook qt5.qttools ]
       ++ (overrides.nativeBuildInputs or [ ]);
@@ -71,7 +82,7 @@ let
       ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
       ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
 
-    NIX_CFLAGS_COMPILE = lib.optional speechdSupport "-I${speechd}/include/speech-dispatcher";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd}/include/speech-dispatcher";
 
     postFixup = ''
       wrapProgram $out/bin/mumble \
@@ -98,16 +109,27 @@ let
   } source;
 
   source = rec {
-    version = "1.4.274";
+    version = "1.4.287";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
-      rev = "cc73c7679b08158f91b02272efbb0e3e5dd9c9e4";
-      sha256 = "sha256-QXczSLDhWLE4CDvBJ7NtqfL52bZJDisFo04AMHnMuN8=";
+      rev = "5d808e287e99b402b724e411a7a0848e00956a24";
+      sha256 = "sha256-SYsGCuj3HeyAQRUecGLaRdJR9Rm7lbaM54spY/zx0jU=";
       fetchSubmodules = true;
     };
+
+    patches = [
+      # fixes 'static assertion failed: static_assert(sizeof(CCameraAngles) == 0x408, "");'
+      # when compiling pkgsi686Linux.mumble, which is a dependency of x64 mumble_overlay
+      # https://github.com/mumble-voip/mumble/pull/5850
+      # Remove with next version update
+      (fetchpatch {
+        url = "https://github.com/mumble-voip/mumble/commit/13c051b36b387356815cff5d685bc628b74ba136.patch";
+        hash = "sha256-Rq8fb6NFd4DCNWm6OOMYIP7tBllufmQcB5CSxPU4qqg=";
+      })
+    ];
   };
 in {
   mumble  = client source;

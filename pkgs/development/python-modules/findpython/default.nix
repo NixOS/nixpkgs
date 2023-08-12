@@ -4,7 +4,7 @@
 , pythonOlder
 
 # build time
-, pdm-pep517
+, pdm-backend
 
 # runtime
 , packaging
@@ -15,7 +15,7 @@
 
 let
   pname = "findpython";
-  version = "0.2.1";
+  version = "0.3.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,18 +25,18 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q5Shy828+NEOo0OeLYCGsuwHRQcJe25tvuGAKMblKwg=";
+    hash = "sha256-diH4qcGZpw0hmDHN2uuEyn6D4guDWBcr/0eHGhil7aQ=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -47,6 +47,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "A utility to find python versions on your system";
     homepage = "https://github.com/frostming/findpython";
+    changelog = "https://github.com/frostming/findpython/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

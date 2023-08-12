@@ -1,10 +1,9 @@
 { lib
 , mkXfceDerivation
 , automakeAddFlags
-, dbus-glib
-, dbus
 , exo
 , gtk3
+, libcanberra
 , libpulseaudio
 , libnotify
 , libxfce4ui
@@ -18,14 +17,12 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-pulseaudio-plugin";
-  version = "0.4.4";
-  sha256 = "sha256-arnHB9ziQm/vQk6hYHS+MKL5dJeEVxUX+SwjZ3/LcEQ=";
+  version = "0.4.7";
+  sha256 = "sha256-9fumaX4M6NTXHM1gGa4wB/Uq+CZIUnvm9kC+pJNbWXU=";
 
   nativeBuildInputs = [
     automakeAddFlags
   ];
-
-  NIX_CFLAGS_COMPILE = "-I${dbus-glib.dev}/include/dbus-1.0 -I${dbus.dev}/include/dbus-1.0";
 
   postPatch = ''
     substituteInPlace configure.ac.in --replace gio-2.0 gio-unix-2.0
@@ -36,6 +33,7 @@ mkXfceDerivation {
     glib
     gtk3
     keybinder3
+    libcanberra
     libnotify
     libpulseaudio
     libxfce4ui

@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lief";
-  version = "0.12.1";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
     rev = version;
-    sha256 = "sha256-IQqPwTNFHLOr8iwg8IhXpuiyg2rIdFuVDzwT39eA6/c=";
+    sha256 = "sha256-wZgv4AFc7DrMCyxMLKQxO1mUTDAU4klK8aZAySqGJoY=";
   };
 
   outputs = [ "out" "py" ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     description = "Library to Instrument Executable Formats";
     homepage = "https://lief.quarkslab.com/";
     license = [ licenses.asl20 ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.lassulus ];
   };
 }

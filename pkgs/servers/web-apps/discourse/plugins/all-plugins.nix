@@ -18,6 +18,7 @@ in
   discourse-oauth2-basic = callPackage ./discourse-oauth2-basic {};
   discourse-openid-connect = callPackage ./discourse-openid-connect {};
   discourse-prometheus = callPackage ./discourse-prometheus {};
+  discourse-reactions = callPackage ./discourse-reactions {};
   discourse-saved-searches = callPackage ./discourse-saved-searches {};
   discourse-solved = callPackage ./discourse-solved {};
   discourse-spoiler-alert = callPackage ./discourse-spoiler-alert {};

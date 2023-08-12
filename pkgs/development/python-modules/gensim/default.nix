@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.2.0";
+  version = "4.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mV69KXCjHUfBAKqsECEvR+K/EuKwZTbTiIPJUf807vE=";
+    hash = "sha256-i18RwOalMICGtI6PaEEiOk+ho31RNoRhK37oVLUzAV8=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pyemd
     pytestCheckHook
@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Topic-modelling library";
     homepage = "https://radimrehurek.com/gensim/";
+    changelog = "https://github.com/RaRe-Technologies/gensim/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ jyp ];
   };

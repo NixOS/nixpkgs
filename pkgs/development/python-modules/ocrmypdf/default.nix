@@ -1,12 +1,14 @@
 { lib
 , buildPythonPackage
 , coloredlogs
+, deprecation
 , fetchFromGitHub
 , ghostscript
+, hypothesis
 , img2pdf
-, importlib-metadata
 , importlib-resources
 , jbig2enc
+, packaging
 , pdfminer-six
 , pikepdf
 , pillow
@@ -16,18 +18,23 @@
 , pytestCheckHook
 , pythonOlder
 , reportlab
+, setuptools
 , setuptools-scm
-, setuptools-scm-git-archive
 , substituteAll
-, tesseract4
+, tesseract
 , tqdm
+, typing-extensions
 , unpaper
 , installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.7.0";
+  version = "14.3.0";
+
+  disabled = pythonOlder "3.8";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
@@ -39,7 +46,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-cw2wZMPhWzxRpeM90g9NmuYBYpU13R2iDzs7a8SS/CY=";
+    hash = "sha256-OUz19N2YIl7iwayjulx0v1K00jB5SdWo8m5XiJ9BDSs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -50,33 +57,36 @@ buildPythonPackage rec {
       gs = "${lib.getBin ghostscript}/bin/gs";
       jbig2 = "${lib.getBin jbig2enc}/bin/jbig2";
       pngquant = "${lib.getBin pngquant}/bin/pngquant";
-      tesseract = "${lib.getBin tesseract4}/bin/tesseract";
+      tesseract = "${lib.getBin tesseract}/bin/tesseract";
       unpaper = "${lib.getBin unpaper}/bin/unpaper";
     })
   ];
 
   nativeBuildInputs = [
-    setuptools-scm-git-archive
+    setuptools
     setuptools-scm
     installShellFiles
   ];
 
   propagatedBuildInputs = [
     coloredlogs
+    deprecation
     img2pdf
+    packaging
     pdfminer-six
     pikepdf
     pillow
     pluggy
     reportlab
     tqdm
-  ] ++ (lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ]) ++ (lib.optionals (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
-  ]);
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    hypothesis
     pytest-xdist
     pytestCheckHook
   ];
