@@ -5,10 +5,15 @@ args@{
                     || pkg.hasManpages or false)
 , extraName ? "combined"
 , extraVersion ? ""
+
+, paperSize ? null # "a4", "letter", or attribute set { context = letter"; dvipdfmx = "legal"; }
 , ...
 }:
+
+assert lib.assertMsg (with builtins; isNull paperSize || isString paperSize || isAttrs paperSize) "paperSize must be null, a string, or an attribute set";
+
 let
-  pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ];
+  pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" "paperSize" ];
   pkgList = rec {
     combined = combinePkgs (lib.attrValues pkgSet);
     all = lib.filter pkgFilter combined;
@@ -67,6 +72,8 @@ let
       "/man"
     ];
   };
+
+  defaultPaperSize = if builtins.isString paperSize then paperSize else paperSize.default or null;
 
 in (buildEnv {
 
@@ -240,6 +247,19 @@ in (buildEnv {
     echo "postaction install script for ${pkg.pname}: ''${postInterp:+$postInterp }$postaction install $TEXMFROOT"
     $postInterp "$TEXMFROOT/$postaction" install "$TEXMFROOT"
   '') (lib.filter (pkg: pkg ? postactionScript) pkgList.tlpkg)) +
+    # configure the paper size (must be run before creating the formats)
+  lib.optionalString (! builtins.isNull defaultPaperSize) ''
+    perl -I"$TEXMFROOT"/tlpkg -e "BEGIN { \$0 = 'TeXLive::TLPaper'; } use TeXLive::TLPaper; exit 1 if TeXLive::TLPaper::paper_all('$TEXMFSYSCONFIG','${defaultPaperSize}') != \$F_OK;"
+  '' +
+  lib.optionalString (builtins.isAttrs paperSize) (lib.concatMapStrings (
+    prg: ''
+      perl -I"$TEXMFROOT"/tlpkg -e "BEGIN { \$0 = 'TeXLive::TLPaper'; } use TeXLive::TLPaper; exit 1 if TeXLive::TLPaper::do_paper('${prg}','$TEXMFSYSCONFIG','${paperSize.${prg}}') != \$F_OK;"
+    ''
+  ) (builtins.attrNames (builtins.removeAttrs paperSize [ "default" ]))) +
+    # TeXLive::TLPaper does not run mktexlsr but delegates it to tlmgr
+  lib.optionalString (! builtins.isNull paperSize) ''
+    mktexlsr "$TEXMFSYSCONFIG"
+  '' +
     # generate formats
   ''
     # many formats still ignore SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1

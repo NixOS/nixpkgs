@@ -28,6 +28,29 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
   }
   ```
 
+- To configure the default page size, pass `paperSize`:
+
+  ```nix
+  texlive.combine {
+    # inherit (texlive) whatever-you-want;
+    paperSize = "letter"; # a4 or letter
+  }
+  ```
+
+  The argument `paperSize` can also be an attribute set, specifying different page sizes for different programs:
+
+  ```nix
+  texlive.combine {
+    # inherit (texlive) whatever-you-want;
+    paperSize = {
+      "dvipdfmx" = "legal";
+      "psutils" = "letter";
+    };
+  }
+  ```
+
+  The full list of supported programs and paper sizes can be found in `$TEXMFROOT/tlpkg/TeXLive/TLPaper.pm`.
+
 - You can list packages e.g. by `nix repl`.
 
   ```ShellSession
