@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, installShellFiles
 , mock
 , scripttest
 , setuptools
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    installShellFiles
     setuptools
     wheel
   ];
@@ -40,6 +42,13 @@ buildPythonPackage rec {
 
   # Pip wants pytest, but tests are not distributed
   doCheck = false;
+
+  postInstall = ''
+    installShellCompletion --cmd pip \
+      --bash <($out/bin/pip completion --bash) \
+      --fish <($out/bin/pip completion --fish) \
+      --zsh <($out/bin/pip completion --zsh)
+  '';
 
   passthru.tests = { inherit pip-tools; };
 
