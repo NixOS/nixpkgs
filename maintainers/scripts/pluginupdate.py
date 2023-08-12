@@ -315,9 +315,10 @@ def load_plugins_from_csv(config: FetchConfig, input_file: Path,) -> List[Plugin
     return plugins
 
 def run_nix_expr(expr):
-    with CleanEnvironment():
+    with CleanEnvironment() as nix_path:
         cmd = ["nix", "eval", "--extra-experimental-features",
-                "nix-command", "--impure", "--json", "--expr", expr]
+                "nix-command", "--impure", "--json", "--expr", expr,
+                "--nix-path", nix_path]
         log.debug("Running command %s", " ".join(cmd))
         out = subprocess.check_output(cmd)
         data = json.loads(out)
@@ -521,14 +522,14 @@ class Editor:
 
 
 class CleanEnvironment(object):
-    def __enter__(self) -> None:
+    def __enter__(self) -> str:
         self.old_environ = os.environ.copy()
         local_pkgs = str(Path(__file__).parent.parent.parent)
-        os.environ["NIX_PATH"] = f"localpkgs={local_pkgs}"
         self.empty_config = NamedTemporaryFile()
         self.empty_config.write(b"{}")
         self.empty_config.flush()
         os.environ["NIXPKGS_CONFIG"] = self.empty_config.name
+        return f"localpkgs={local_pkgs}"
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         os.environ.update(self.old_environ)
