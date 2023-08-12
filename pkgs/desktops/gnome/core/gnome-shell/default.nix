@@ -37,7 +37,6 @@
 , upower
 , ibus
 , libnma-gtk4
-, libgnomekbd
 , gnome-desktop
 , gsettings-desktop-schemas
 , gnome-keyring
@@ -57,6 +56,7 @@
 , gnome-clocks
 , gnome-settings-daemon
 , gnome-autoar
+, gnome-tecla
 , asciidoc
 , bash-completion
 , mesa
@@ -67,22 +67,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "45.alpha";
+  version = "45.beta.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "fBXgRyi3oykhH/SJODTbPJlX8PIGHkAoyFCYYR6x97I=";
+    sha256 = "sf/3O3k4UJIpL7jpsH5xdDRuW7XTqV9cgFn/y1UGJpU=";
   };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
     (substituteAll {
       src = ./fix-paths.patch;
-      gkbd_keyboard_display = "${lib.getBin libgnomekbd}/bin/gkbd-keyboard-display";
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
+      tecla = "${lib.getBin gnome-tecla}/bin/tecla";
       unzip = "${lib.getBin unzip}/bin/unzip";
     })
 
@@ -95,11 +95,8 @@ stdenv.mkDerivation rec {
 
     # Fix greeter logo being too big.
     # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2591
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/ffb8bd5fa7704ce70ce7d053e03549dd15dce5ae.patch";
-      revert = true;
-      sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
-    })
+    # Reverts https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/1101
+    ./greeter-logo-size.patch
 
     # Work around failing fingerprint auth
     (fetchpatch {
