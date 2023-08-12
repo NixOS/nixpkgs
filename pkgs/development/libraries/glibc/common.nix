@@ -95,6 +95,9 @@ stdenv.mkDerivation ({
         See https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991 for context.
       */
       ./reenable_DT_HASH.patch
+
+      /* Add a NIX_LD_SO_CACHE environment variable */
+      ./nix-ld-so-cache.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
