@@ -12,18 +12,18 @@
 }:
 
 let
-  version = "7.4.0";
+  version = "7.4.1";
   tag = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
   dist = {
     x86_64-linux = rec {
       archSuffix = "amd64";
       url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${tag}/onlyoffice-documentserver_${archSuffix}.deb";
-      hash = "sha256-FL09EXxQlUZuJMMHYu9tSOH8ARPgzoqAKmQYV6225PU=";
+      hash = "sha256-60S8M1Y9BxuMxXGxEaxW82Va5lSnZZPfQnPq2ivTXdU=";
     };
     aarch64-linux = rec {
       archSuffix = "arm64";
       url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${tag}/onlyoffice-documentserver_${archSuffix}.deb";
-      hash = "sha256-JHDdwLAfrH+hKF0c1UqcjwxTdeYFjWVEjzjG8HTcqaA=";
+      hash = "sha256-z2Mp9q+KLpQLG3tVUZaD3jMYoRAXoq7s5wUhNnckTDg=";
     };
   };
   # var/www/onlyoffice/documentserver/server/DocService/docservice
