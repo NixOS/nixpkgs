@@ -37,6 +37,7 @@
 , nixosTestRunner ? false
 , doCheck ? false
 , qemu  # for passthru.tests
+, gitUpdater
 }:
 
 let
@@ -48,11 +49,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "8.0.3";
+  version = "8.0.4";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    hash = "sha256-7PTTLL7505e/yMxQ5NHpKhswJTvzLo7nPHqNz5ojKwk=";
+    hash = "sha256-gcgX3aOK+Vi+W+8abPVbZYuy0/uHwealcd5reyxEUWw=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -248,6 +249,12 @@ stdenv.mkDerivation rec {
     qemu-system-i386 = "bin/qemu-system-i386";
     tests = {
       qemu-tests = qemu.override { doCheck = true; };
+    };
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://gitlab.com/qemu-project/qemu.git";
+      rev-prefix = "v";
+      ignoredVersions = "(alpha|beta|rc).*";
     };
   };
 
