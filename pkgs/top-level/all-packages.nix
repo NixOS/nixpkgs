@@ -27055,6 +27055,8 @@ with pkgs;
 
   radicale = radicale3;
 
+  qcal = callPackage ../tools/networking/qcal/default.nix { };
+
   rake = callPackage ../development/tools/build-managers/rake { };
 
   rakkess = callPackage ../development/tools/rakkess { };
