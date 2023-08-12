@@ -947,7 +947,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-cDlqJBx9p/rA+OAHZW2GcOiQmroU66urZ+qv2lXhg/4=";
+        cargoHash = "sha256-cMMNur6QKp87Q28JyCH2IMLE3xDVd7Irg9HvJ2AsnZc=";
 
         nativeBuildInputs = [ pkg-config ];
 
