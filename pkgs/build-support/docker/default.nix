@@ -777,7 +777,7 @@ rec {
       fi
     done
     # Copy all layers from input images to output image directory
-    cp -R --no-clobber inputs/*/* image/
+    cp -R --update=none inputs/*/* image/
     # Merge repositories objects and manifests
     jq -s add "''${repos[@]}" > repositories
     jq -s add "''${manifests[@]}" > manifest.json
