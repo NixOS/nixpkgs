@@ -828,16 +828,28 @@ rec {
 
     # A value from a set of allowed ones.
     enum = values:
-      if (! isList values) # Keep laziness
-      then throw "enum: `values` is not a list: ${builtins.typeOf values}: ${toPretty {} values}"
-      else enumWith (map (v: keyValuePair v v) values);
+      let
+        type = enumWith (map (v: keyValuePair v v) values);
+      in
+      type // {
+        check =
+          assert lib.assertMsg (isList values)
+            "enum: `values` is not a list: ${builtins.typeOf values}: ${toPretty {} values}";
+          type.check;
+      };
 
     # A type that accepts the attribute names of `attrs`,
     # and returns an option value that corresponds to the attribute value
     enumAttrs = attrs:
-      if (! isAttrs attrs) # Keep laziness
-      then throw "enumAttrs: `attrs` must be an attribute set: ${toPretty {} attrs}"
-      else enumWith (mapAttrsToList keyValuePair attrs);
+      let
+        type = enumWith (mapAttrsToList keyValuePair attrs);
+      in
+      type // {
+        check =
+          assert lib.assertMsg (isAttrs attrs)
+            "enumAttrs: `attrs` must be an attribute set: ${toPretty {} attrs}";
+          type.check;
+      };
 
     # A type that accepts the attribute `key` of attribute sets in list `keyValues`,
     # and returns an option value that corresponds to the attribute `value`,
