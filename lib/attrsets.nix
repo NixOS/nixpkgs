@@ -487,6 +487,21 @@ rec {
     value:
     { inherit name value; };
 
+  /* Utility function that creates a `{key, value}` pair.
+
+     Example:
+       keyValuePair 6 "some"
+       => { key = 6; value = "some"; }
+
+     Type:
+       keyValuePair :: Any -> Any -> { key :: Any; value :: Any; }
+  */
+  keyValuePair =
+    # Attribute `key`
+    key:
+    # Attribute `value`
+    value:
+    { inherit key value; };
 
   /* Apply a function to each element in an attribute set, creating a new attribute set.
 

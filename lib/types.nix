@@ -38,6 +38,7 @@ let
     catAttrs
     filterAttrs
     hasAttr
+    keyValuePair
     mapAttrs
     mapAttrsToList
     nameValuePair
@@ -63,6 +64,7 @@ let
     ;
   inherit (lib.trivial)
     boolToString
+    concat
     ;
 
   inherit (lib.modules)
@@ -826,64 +828,57 @@ rec {
 
     # A value from a set of allowed ones.
     enum = values:
-      #assert lib.assertMsg (isList values)
-      #  "enum: `values` must be a list: ${toPretty {} values}";
-      enumWith (map (v: nameValuePair v v) (lib.unique values));
+      if (! isList values) # Keep laziness
+      then throw "enum: `values` is not a list: ${builtins.typeOf values}: ${toPretty {} values}"
+      else enumWith (map (v: keyValuePair v v) values);
 
-    # A type that takes one attribute name of the attrset `attrs` and maps it to it's value
+    # A type that accepts the attribute names of `attrs`,
+    # and returns an option value that corresponds to the attribute value
     enumAttrs = attrs:
-      #assert lib.assertMsg (isAttrs attrs)
-      #  "enumAttrs: `attrs` must be an attribute set: ${toPretty {} attrs}";
-      enumWith (mapAttrsToList nameValuePair attrs);
+      if (! isAttrs attrs) # Keep laziness
+      then throw "enumAttrs: `attrs` must be an attribute set: ${toPretty {} attrs}"
+      else enumWith (mapAttrsToList keyValuePair attrs);
 
-    # A type that takes one value of attribute `name` from any attribute set
-    # in the list `mapping` and maps it to value of attribute `value`
-    enumWith = mapping:
-      let
-        names = catAttrs "name" mapping;
-
-        show = v:
-          if isString v then ''"${v}"''
-          else if isInt v then toString v
-          else if isBool v then boolToString v
-          else "<${builtins.typeOf v}>";
-        showMapping = v:
-          if v.name == v.value
-          then show v.name
-          else "${show v.name}(${show v.value})";
-      in
-      #assert lib.assertMsg (isList mapping)
-      #  "enumWith: Mapping must be a list: ${toPretty {} mapping}";
-      #assert lib.assertMsg (all (v: v ? name && v ? value) mapping)
-      #  "enumWith: Some of the mappings missing `name` or `value` attribute: ${toPretty {} mapping}";
-      #assert lib.assertMsg (names == lib.unique names)
-      #  "enumWith: Some of the mappings are duplicated: ${toPretty {} mapping}";
+    # A type that accepts the attribute `key` of attribute sets in list `keyValues`,
+    # and returns an option value that corresponds to the attribute `value`,
+    enumWith = keyValues:
       mkOptionType rec {
         name = "enumWith";
         description =
+          let
+            show = v:
+              if isString v then ''"${v}"''
+              else if isInt v then toString v
+              else if isBool v then boolToString v
+              else "<${builtins.typeOf v}>";
+            showkeyValues = v:
+              if v.key == v.value
+              then show v.key
+              else "${show v.key}(${show v.value})";
+          in
           # Length 0 or 1 enums may occur in a design pattern with type merging
           # where an "interface" module declares an empty enum and other modules
           # provide implementations, each extending the enum with their own
           # identifier.
-          if mapping == [] then
+          if keyValues == [] then
             "impossible (empty enum)"
-          else if length mapping == 1 then
-            "value ${showMapping (head mapping)} (singular enum)"
+          else if length keyValues == 1 then
+            "value ${showkeyValues (head keyValues)} (singular enum)"
           else
-            "one of ${concatMapStringsSep ", " showMapping mapping}";
+            "one of ${concatMapStringsSep ", " showkeyValues keyValues}";
         descriptionClass =
-          if length mapping < 2
+          if length keyValues < 2
           then "noun"
           else "conjunction";
-        check = flip elem names;
+        check =
+          assert lib.assertMsg (isList keyValues)
+            "enumWith: `keyValues` is not a list: ${builtins.typeOf keyValues}: ${toPretty {} keyValues}";
+          assert lib.assertMsg (all (v: v ? key && v ? value) keyValues)
+            "enumWith: Some attrset in list `keyValues` is missing `key` or `value` attribute: ${toPretty {} keyValues}";
+          flip elem (catAttrs "key" keyValues);
         merge = loc: defs:
-          (findFirst (v: v.name == (mergeEqualOption loc defs)) {} mapping).value;
-        functor = { inherit name mapping; };
-        typeMerge = other:
-          if name == other.name
-            && names == subtractLists (catAttrs "name" other.mapping) names
-          then enumWith (mapping ++ other.mapping)
-          else null;
+          (findFirst (v: v.key == (mergeEqualOption loc defs)) {} keyValues).value;
+        functor = (defaultFunctor name) // { type = enumWith; payload = keyValues; binOp = concat; };
       };
 
     # Either value of type `t1` or `t2`.

@@ -37,15 +37,16 @@ merging is handled.
 
 `types.enumAttrs` *`attrs`*
 
-:   A type that takes one attribute name of the attrset *`attrs`* and maps it
-    to it's value, e.g. `types.enumAttrs { "name" = "value"; ... }`.
-    Multiple definitions cannot be merged.
+:   A type that accepts the attribute names of *`attrs`*, and returns an option value
+    that corresponds to the attribute value, e.g. `types.enumAttrs { "key" = "value"; ... }`,
+    `"key"` is a valid definition, and the option value would be `"value"`.
 
-`types.enumWith` *`mapping`*
-:   A type that takes one value of attribute `name` from any attribute set
-    in the list *`mapping`* and maps it to value of attribute *`value`*,
-    e.g. `types.enumWith [ { name = "name"; value = "value"; } ... ]`.
-    Multiple definitions cannot be merged.
+`types.enumWith` *`keyValues`*
+
+:   A type that accepts the attribute `key` of attribute sets in list *`keyValues`*,
+    and returns an option value that corresponds to the attribute `value`,
+    e.g. `types.enumWith [ { key = "foo"; value = "bar"; } ... ]`,
+    `"foo"` is a valid definition, and the option value would be `"bar"`.
 
 `types.anything`
 

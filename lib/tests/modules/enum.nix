@@ -3,17 +3,17 @@ with lib;
 with types;
 {
   options = mapAttrs (_: type: mkOption { inherit type; }) rec {
-    enum_string = enum [ "foo" ];
-    enum_int = enum [ 42 ];
-    merge = enum_string.typeMerge enum_int.functor;
+    enumString = enum [ "foo" ];
+    enumInt = enum [ 42 ];
+    merge = enumString.typeMerge enumInt.functor;
     multiple = merge;
     priorities = merge;
     string = enum "Not a list";
   };
 
   config = {
-    enum_string = "foo";
-    enum_int = 42;
+    enumString = "foo";
+    enumInt = 42;
     multiple = mkMerge [
       "foo"
       42
