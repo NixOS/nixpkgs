@@ -16266,6 +16266,12 @@
     github = "sweenu";
     githubId = 7051978;
   };
+  swesterfeld = {
+    email = "stefan@space.twc.de";
+    github = "swesterfeld";
+    githubId = 14840066;
+    name = "Stefan Westerfeld";
+  };
   swflint = {
     email = "swflint@flintfam.org";
     github = "swflint";
