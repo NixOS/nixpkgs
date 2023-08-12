@@ -513,4 +513,25 @@
           echo "$errorText"
           false
         '');
+
+  # verify that all fixed hashes are present
+  # this is effectively an eval-time assertion, converted into a derivation for
+  # ease of testing
+  fixedHashes = with lib; let
+    combine = findFirst (p: (head p.pkgs).pname == "combine") { pkgs = []; } (head texlive.collection-latexextra.pkgs).tlDeps;
+    all = concatLists (map (p: p.pkgs or []) (attrValues (removeAttrs texlive [ "bin" "combine" "combined" "tlpdb" ]))) ++ combine.pkgs;
+    fods = filter (p: isDerivation p && p.tlType != "bin") all;
+    errorText = concatMapStrings (p: optionalString (! p ? outputHash) "${p.pname + optionalString (p.tlType != "run") ("." + p.tlType)} does not have a fixed output hash\n") fods;
+  in runCommand "texlive-test-fixed-hashes" {
+    inherit errorText;
+    passAsFile = [ "errorText" ];
+  } ''
+    if [[ -s "$errorTextPath" ]] ; then
+      cat "$errorTextPath"
+      echo Failed: some TeX Live packages do not have fixed output hashes. Please read UPGRADING.md for how to generate a new fixed-hashes.nix.
+      exit 1
+    else
+      touch "$out"
+    fi
+  '';
 }
