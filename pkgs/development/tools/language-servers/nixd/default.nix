@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nix-community/nixd";
     changelog = "https://github.com/nix-community/nixd/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth ];
+    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth marsam ];
     platforms = lib.platforms.unix;
   };
 }
