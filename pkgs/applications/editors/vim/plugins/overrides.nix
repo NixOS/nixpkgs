@@ -1440,6 +1440,10 @@ self: super: {
     preInstall = "cd vim";
   };
 
+  vim-pluto = super.vim-pluto.overrideAttrs {
+    dependencies = with self; [ denops-vim ];
+  };
+
   vim-snipmate = super.vim-snipmate.overrideAttrs {
     dependencies = with self; [ vim-addon-mw-utils tlib_vim ];
   };
