@@ -28,6 +28,7 @@
 , pytestCheckHook
 , resampy
 , samplerate
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -45,6 +46,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/librosa/librosa/commit/12dee8eabed7df14c5622b52c05393ddfeb11f4b.patch";
+      sha256 = "sha256-JxTXU0Mc+QYpsafjoGLaIccD7EdCYJvIVianeosYpw4=";
+    })
   ];
 
   postPatch = ''
