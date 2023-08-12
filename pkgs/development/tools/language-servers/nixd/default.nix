@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nixd";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixd";
     rev = version;
-    hash = "sha256-NqRYFaxa6Y4j7IMAxxVKo7o15Xmx0CiyeG71Uf1SLCI=";
+    hash = "sha256-W44orkPZQ9gDUTogb8YVIaw4WHzUA+ExOXhTnZlJ6yY=";
   };
 
   mesonBuildType = "release";
@@ -81,8 +81,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Nix language server";
     homepage = "https://github.com/nix-community/nixd";
+    changelog = "https://github.com/nix-community/nixd/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth ];
+    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth marsam ];
     platforms = lib.platforms.unix;
   };
 }

@@ -10,7 +10,7 @@ let
   compat-list = fetchurl {
     name = "citra-compat-list";
     url = "https://web.archive.org/web/20230807103651/https://api.citra-emu.org/gamedb/";
-    hash = "sha256-Ma1SXgzhyMHa/MeoYuf8b+QYPjhoQEeKklLbGbkHwEk=";
+    hash = "sha256-J+zqtWde5NgK2QROvGewtXGRAWUTNSKHNMG6iu9m1fU=";
   };
 in {
   nightly = qt6Packages.callPackage ./generic.nix rec {

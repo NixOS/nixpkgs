@@ -2613,6 +2613,8 @@ with pkgs;
 
   np2kai = callPackage ../applications/emulators/np2kai { };
 
+  nuked-md = callPackage ../applications/emulators/nuked-md { };
+
   oberon-risc-emu = callPackage ../applications/emulators/oberon-risc-emu { };
 
   openmsx = callPackage ../applications/emulators/openmsx { };
@@ -3547,6 +3549,8 @@ with pkgs;
   codespell = callPackage ../development/tools/codespell { };
 
   codux = callPackage ../applications/editors/codux { };
+
+  conjure = callPackage ../applications/graphics/conjure { };
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader { };
 
@@ -39560,7 +39564,7 @@ with pkgs;
 
   caffeWithCuda = caffe.override { cudaSupport = true; };
 
-  caffeine-ng = python3Packages.callPackage ../tools/X11/caffeine-ng { };
+  caffeine-ng = callPackage ../tools/X11/caffeine-ng { };
 
   cntk = callPackage ../applications/science/math/cntk {
     stdenv = gcc7Stdenv;

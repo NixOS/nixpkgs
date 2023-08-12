@@ -2,8 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, makeWrapper
 , meson
 , ninja
+, binutils
 , cairo
 , git
 , hyprland-protocols
@@ -24,34 +26,35 @@
 , xcbutilwm
 , xwayland
 , debug ? false
+, enableNvidiaPatches ? false
 , enableXWayland ? true
-, hidpiXWayland ? false
 , legacyRenderer ? false
-, nvidiaPatches ? false
 , withSystemd ? true
+, wrapRuntimeDeps ? true
+  # deprecated flags
+, nvidiaPatches ? false
+, hidpiXWayland ? false
 }:
-let
-  assertXWayland = lib.assertMsg (hidpiXWayland -> enableXWayland) ''
-    Hyprland: cannot have hidpiXWayland when enableXWayland is false.
-  '';
-in
-assert assertXWayland;
+assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been renamed `enableNvidiaPatches`";
+assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.27.0";
+  version = "unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mEKF6Wcx+wSF/eos/91A7LxhFLDYhSnQnLpwZF13ntg=";
+    rev = "8e04a80e60983f5def26bdcaea701040fea9a7ae";
+    hash = "sha256-5/vEdU3SzAdeIyPykjks/Zxkvh9luPTIei6oa77OY2Q=";
   };
 
   patches = [
     # make meson use the provided dependencies instead of the git submodules
-    "${finalAttrs.src}/nix/meson-build.patch"
+    "${finalAttrs.src}/nix/patches/meson-build.patch"
     # look into $XDG_DESKTOP_PORTAL_DIR instead of /usr; runtime checks for conflicting portals
-    "${finalAttrs.src}/nix/portals.patch"
+    # NOTE: revert back to the patch inside SRC on the next version bump
+    # "${finalAttrs.src}/nix/patches/portals.patch"
+    ./portals.patch
   ];
 
   postPatch = ''
@@ -64,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     jq
+    makeWrapper
     meson
     ninja
     pkg-config
@@ -90,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols
       pango
       pciutils
-      (wlroots.override { inherit enableXWayland hidpiXWayland nvidiaPatches; })
+      (wlroots.override { inherit enableNvidiaPatches; })
     ]
     ++ lib.optionals enableXWayland [ libxcb xcbutilwm xwayland ]
     ++ lib.optionals withSystemd [ systemd ];
@@ -105,6 +109,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optional legacyRenderer "-DLEGACY_RENDERER:STRING=true")
     (lib.optional withSystemd "-Dsystemd=enabled")
   ];
+
+  postInstall = ''
+    ln -s ${wlroots}/include/wlr $dev/include/hyprland/wlroots
+    ${lib.optionalString wrapRuntimeDeps ''
+      wrapProgram $out/bin/Hyprland \
+        --suffix PATH : ${lib.makeBinPath [binutils pciutils]}
+    ''}
+  '';
 
   passthru.providedSessions = [ "hyprland" ];
 
