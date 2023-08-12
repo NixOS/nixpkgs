@@ -387,43 +387,6 @@ dvipng = stdenv.mkDerivation {
   enableParallelBuilding = true;
 };
 
-pygmentex = python3Packages.buildPythonApplication rec {
-  pname = "pygmentex";
-  inherit (src) version;
-  format = "other";
-
-  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs));
-
-  propagatedBuildInputs = with python3Packages; [ pygments chardet ];
-
-  dontBuild = true;
-
-  doCheck = false;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D ./scripts/pygmentex/pygmentex.py "$out"/bin/pygmentex
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    homepage = "https://www.ctan.org/pkg/pygmentex";
-    description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
-    longDescription = ''
-      PygmenTeX is a Python-based LaTeX package that can be used for
-      typesetting code listings in a LaTeX document using Pygments.
-
-      Pygments is a generic syntax highlighter for general use in all kinds of
-      software such as forum systems, wikis or other applications that need to
-      prettify source code.
-    '';
-    license = licenses.lppl13c;
-    maintainers = with maintainers; [ romildo ];
-  };
-};
-
 inherit asymptote;
 
 inherit biber;

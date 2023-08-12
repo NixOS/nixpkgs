@@ -83,6 +83,7 @@ let
       ulqda.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ DigestSHA1 ])) ];
 
       #### python packages
+      pygmentex.extraBuildInputs = [ (python3.withPackages (ps: with ps; [ pygments chardet ])) ];
       pythontex.extraBuildInputs = [ (python3.withPackages (ps: with ps; [ pygments ])) ];
 
       #### other runtime PATH dependencies
@@ -618,13 +619,14 @@ in
 
     bin = assert assertions; bin // {
       # for backward compatibility
-      latexindent = lib.findFirst (p: p.tlType == "bin") tl.latexindent.pkgs;
+      latexindent = lib.findFirst (p: p.tlType == "bin") null tl.latexindent.pkgs;
+      pygmentex = lib.findFirst (p: p.tlType == "bin") null tl.pygmentex.pkgs;
     };
     combine = assert assertions; combine;
 
     # Pre-defined combined packages for TeX Live schemes,
     # to make nix-env usage more comfortable and build selected on Hydra.
-    combined = with lib;
+    combined = assert assertions; with lib;
       let
         # these license lists should be the sorted union of the licenses of the packages the schemes contain.
         # The correctness of this collation is tested by tests.texlive.licenses
