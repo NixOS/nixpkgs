@@ -6,8 +6,10 @@
 
 # build-system
 , cython
+, oldest-supported-numpy
 , setuptools
 , versioneer
+, wheel
 
 # propagates
 , numpy
@@ -75,7 +77,9 @@ buildPythonPackage rec {
     setuptools
     cython
     numpy
+    oldest-supported-numpy
     versioneer
+    wheel
   ] ++ versioneer.optional-dependencies.toml;
 
   enableParallelBuilding = true;
@@ -167,10 +171,6 @@ buildPythonPackage rec {
   in extras // {
     all = lib.concatLists (lib.attrValues extras);
   };
-
-  # Doesn't work with -Werror,-Wunused-command-line-argument
-  # https://github.com/NixOS/nixpkgs/issues/39687
-  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
   nativeCheckInputs = [
     glibcLocales
