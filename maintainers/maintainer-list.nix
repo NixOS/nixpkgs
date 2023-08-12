@@ -1203,6 +1203,12 @@
     githubId = 20933385;
     name = "Anton Latukha";
   };
+  antonmosich = {
+    email = "anton@mosich.at";
+    github = "antonmosich";
+    githubId = 27223336;
+    name = "Anton Mosich";
+  };
   antono = {
     email = "self@antono.info";
     github = "antono";
