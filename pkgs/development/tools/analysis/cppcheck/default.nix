@@ -11,14 +11,14 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
   version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "danmar";
     repo = "cppcheck";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZQ1EgnC2JBc0AvSW8PtgMzJoWSPt04Xfh8dqOU+KMfw=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ joachifm ];
   };
-}
+})
