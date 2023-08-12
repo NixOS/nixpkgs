@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , gfortran
 , cmake
 , shared ? true
@@ -19,6 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-AYD78u70y8cY19hmM/aDjQEzxO8u9lPWhCFxRe5cqXI=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Reference-LAPACK/lapack/pull/893/commits/d5ba059159758313d793e3e61d4142b1f79f61c9.patch";
+      hash = "sha256-YWZhdj1GBcvOKXGAwAvEiRZ4qgfDvluPtW7gH0k/EY0=";
+    })
+  ];
 
   nativeBuildInputs = [ gfortran cmake ];
 
