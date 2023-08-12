@@ -6,6 +6,7 @@
 , mdformat-gfm
 , mdit-py-plugins
 , poetry-core
+, pytestCheckHook
 , pythonOlder
 , wheel
 }:
@@ -37,6 +38,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     beautysh
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "mdformat_beautysh"
   ];
 
   meta = with lib; {
