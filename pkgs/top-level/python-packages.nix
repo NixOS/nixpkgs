@@ -456,7 +456,7 @@ self: super: with self; {
 
   amazon-ion = callPackage ../development/python-modules/amazon-ion { };
 
-  amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
+  amazon-kclpy = callPackage ../development/python-modules/amazon-kclpy { };
 
   ambee = callPackage ../development/python-modules/ambee { };
 
