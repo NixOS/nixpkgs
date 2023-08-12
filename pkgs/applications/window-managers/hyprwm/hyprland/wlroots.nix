@@ -54,7 +54,7 @@ wlroots.overrideAttrs
     patches =
       (old.patches or [ ])
       ++ (lib.optionals enableNvidiaPatches [
-        "${hyprland.src}/nix/patches/nvidia.patch"
+        "${hyprland.src}/nix/patches/wlroots-nvidia.patch"
       ]);
 
     postPatch =
