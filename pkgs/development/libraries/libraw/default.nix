@@ -5,6 +5,13 @@
 , autoreconfHook
 , lcms2
 , pkg-config
+
+# for passthru.tests
+, deepin
+, freeimage
+, hdrmerge
+, imagemagick
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +40,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit imagemagick hdrmerge freeimage;
+    inherit (deepin) deepin-image-viewer;
+    inherit (python3.pkgs) rawkit;
+  };
 
   meta = with lib; {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";
