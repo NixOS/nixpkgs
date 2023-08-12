@@ -122,8 +122,7 @@ for name in toVersions.keys():
 
 # Commit the result
 logging.info("#### Committing changes... ####")
-subprocess.run(['git', 'add', versions_file_path], check=True)
-subprocess.run(['git', 'commit', '--file=-'], input=commitMessage.encode(), check=True)
+subprocess.run(['git', 'commit', f'-m{commitMessage}', '--', f'{versions_file_path}'], check=True)
 
 logging.info("#### Updating plugins ####")
 plugin_script = current_path.joinpath("plugins/update_plugins.py").resolve()
