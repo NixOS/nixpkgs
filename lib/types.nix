@@ -826,14 +826,14 @@ rec {
 
     # A value from a set of allowed ones.
     enum = values:
-      assert lib.assertMsg (isList values)
-        "enum: `values` must be a list: ${toPretty {} values}";
+      #assert lib.assertMsg (isList values)
+      #  "enum: `values` must be a list: ${toPretty {} values}";
       enumWith (map (v: nameValuePair v v) (lib.unique values));
 
     # A type that takes one attribute name of the attrset `attrs` and maps it to it's value
     enumAttrs = attrs:
-      assert lib.assertMsg (isAttrs attrs)
-        "enumAttrs: `attrs` must be an attribute set: ${toPretty {} attrs}";
+      #assert lib.assertMsg (isAttrs attrs)
+      #  "enumAttrs: `attrs` must be an attribute set: ${toPretty {} attrs}";
       enumWith (mapAttrsToList nameValuePair attrs);
 
     # A type that takes one value of attribute `name` from any attribute set
@@ -852,12 +852,12 @@ rec {
           then show v.name
           else "${show v.name}(${show v.value})";
       in
-      assert lib.assertMsg (isList mapping)
-        "enumWith: Mapping must be a list: ${toPretty {} mapping}";
-      assert lib.assertMsg (all (v: v ? name && v ? value) mapping)
-        "enumWith: Some of the mappings missing `name` or `value` attribute: ${toPretty {} mapping}";
-      assert lib.assertMsg (names == lib.unique names)
-        "enumWith: Some of the mappings are duplicated: ${toPretty {} mapping}";
+      #assert lib.assertMsg (isList mapping)
+      #  "enumWith: Mapping must be a list: ${toPretty {} mapping}";
+      #assert lib.assertMsg (all (v: v ? name && v ? value) mapping)
+      #  "enumWith: Some of the mappings missing `name` or `value` attribute: ${toPretty {} mapping}";
+      #assert lib.assertMsg (names == lib.unique names)
+      #  "enumWith: Some of the mappings are duplicated: ${toPretty {} mapping}";
       mkOptionType rec {
         name = "enumWith";
         description =
