@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cyclone";
-  version = "0.3beta-2";
+  version = "0.7-0";
 
   src = fetchFromGitHub {
     owner = "porres";
     repo = "pd-cyclone";
-    rev = "cyclone${version}";
-    sha256 = "192jrq3bdsv626js1ymq10gwp9wwcszjs63ys6ap9ig8xdkbhr3q";
+    rev = "cyclone_${version}";
+    sha256 = "C+zs+xNyv6bV1LIZT2E7Yg0fyHADcHze3VpmmW/YJWg=";
   };
 
   buildInputs = [ puredata ];
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A library of PureData classes, bringing some level of compatibility between Max/MSP and Pd environments";
     homepage = "http://puredata.info/downloads/cyclone";
-    license = lib.licenses.tcltk;
-    maintainers = [ lib.maintainers.magnetophon ];
-    platforms = lib.platforms.linux;
+    license = licenses.tcltk;
+    maintainers = [ maintainers.magnetophon maintainers.carlthome ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
