@@ -24,15 +24,23 @@ python3Packages.buildPythonApplication rec {
     ./update-pillow.patch
   ];
 
-  desktopItems = [ (makeDesktopItem {
-    name = "streamdeck-ui";
-    desktopName = "Stream Deck UI";
-    icon = "streamdeck-ui";
-    exec = "streamdeck --no-ui";
-    comment = "UI for the Elgato Stream Deck";
-    categories = [ "Utility" ];
-    noDisplay = true;
-  }) ];
+  desktopItems = let
+    common = {
+      name = "streamdeck-ui";
+      desktopName = "Stream Deck UI";
+      icon = "streamdeck-ui";
+      exec = "streamdeck";
+      comment = "UI for the Elgato Stream Deck";
+      categories = [ "Utility" ];
+    };
+  in builtins.map makeDesktopItem [
+    common
+    (common // {
+      name = "${common.name}-noui";
+      exec = "${common.exec} --no-ui";
+      noDisplay = true;
+    })
+  ];
 
   postInstall =
     let
