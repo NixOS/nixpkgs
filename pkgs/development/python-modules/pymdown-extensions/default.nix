@@ -7,6 +7,12 @@
 , markdown
 , pyyaml
 , pygments
+
+# for passthru.tests
+, mkdocstrings
+, mkdocs-material
+, mkdocs-mermaid2-plugin
+, hydrus
 }:
 
 let
@@ -81,6 +87,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = map (ext: "pymdownx.${ext}") extensions;
+
+  passthru.tests = {
+    inherit mkdocstrings mkdocs-material mkdocs-mermaid2-plugin hydrus;
+  };
 
   meta = with lib; {
     description = "Extensions for Python Markdown";
