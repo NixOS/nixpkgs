@@ -21,7 +21,7 @@ let
   ui = buildNpmPackage {
     inherit version src;
     pname = "${pname}-ui";
-    sourceRoot = "source/ui";
+    sourceRoot = "${src.name}/ui";
     npmDepsHash = "sha256-IpZWgMo6Y3vRn9h495ifMB3tQxobLeTLC0xXS1vrKLA=";
     installPhase = ''
       runHook preInstall
@@ -34,7 +34,7 @@ let
 in rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  sourceRoot = "source/server";
+  sourceRoot = "${src.name}/server";
 
   cargoLock = {
     lockFile = ./Cargo.lock;

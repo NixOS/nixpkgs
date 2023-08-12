@@ -53,6 +53,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda turbomack ];
+    maintainers = with maintainers; [ figsoda turbomack matthiasbeyer ];
   };
 }

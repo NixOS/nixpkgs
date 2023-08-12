@@ -34,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     description = "A Cargo subcommand for watching over Cargo project's source";
     homepage = "https://github.com/watchexec/cargo-watch";
     license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd ivan ];
+    maintainers = with maintainers; [ xrelkd ivan matthiasbeyer ];
   };
 }

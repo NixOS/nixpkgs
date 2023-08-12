@@ -8,7 +8,7 @@
 , pytest-asyncio
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "langsmith";
   version = "0.0.14";
   format = "pyproject";
@@ -22,7 +22,7 @@ buildPythonPackage {
     hash = "sha256-U8fs16Uq80EB7Ey5YuQhUKKI9DOXJWlabM5JdoDnWP0=";
   };
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   nativeBuildInputs = [
     poetry-core

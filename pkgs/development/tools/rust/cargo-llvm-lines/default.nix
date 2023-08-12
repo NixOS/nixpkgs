@@ -18,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dtolnay/cargo-llvm-lines";
     changelog = "https://github.com/dtolnay/cargo-llvm-lines/releases/tag/${src.rev}";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }
