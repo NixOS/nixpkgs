@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kbt";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "bloznelis";
     repo = "kbt";
     rev = version;
-    hash = "sha256-v0xbW1xlOhaLf19a6gFpd16RjYfXIK6FDBSWVWPlK3c=";
+    hash = "sha256-AhMl8UuSVKLiIj+EnnmJX8iURjytLByDRLqDkgHGBr0=";
   };
 
-  cargoHash = "sha256-rBThJqaemtPAHqiWDILJZ7j+NL5+6+4tsXrFPcEiFL0=";
+  cargoHash = "sha256-pgdI+BoYrdSdQpVN0pH4QMcNAKbjbnrUbAmMpmtfd2s=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config

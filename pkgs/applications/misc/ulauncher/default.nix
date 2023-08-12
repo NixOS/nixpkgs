@@ -21,11 +21,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.15.0";
+  version = "5.15.3";
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-1Qo6ffMtVRtZDPCHvHEl7T0dPdDUxP4TP2hkSVSdQpo";
+    sha256 = "sha256-unAic6GTgvZFFJwPERh164vfDiFE0zLEUjgADR94w5w=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -120,6 +120,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse ];
+    maintainers = with maintainers; [ aaronjanse sebtm ];
   };
 }
