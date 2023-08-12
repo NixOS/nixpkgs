@@ -4393,6 +4393,11 @@
     githubId = 7875;
     name = "Rommel Martinez";
   };
+  eclairevoyant = {
+    github = "eclairevoyant";
+    githubId = 848000;
+    name = "éclairevoyant";
+  };
   edanaher = {
     email = "nixos@edanaher.net";
     github = "edanaher";
