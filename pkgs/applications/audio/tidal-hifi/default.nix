@@ -34,13 +34,13 @@
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.3.0";
+  version = "5.5.0";
 
   src = fetchurl {
-    url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${version}/tidal-hifi_${version}_amd64.deb";
-    sha256 = "sha256-YGSHEvanWek6qiWvKs6g+HneGbuuqJn/DBfhawjQi5M=";
+    url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
+    sha256 = "sha256-pUQgTz7KZt4icD4lDAs4Wg095HxYEAifTM8a4cDejQM=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
@@ -104,18 +104,18 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper $out/opt/tidal-hifi/tidal-hifi $out/bin/tidal-hifi \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
       "''${gappsWrapperArgs[@]}"
     substituteInPlace $out/share/applications/tidal-hifi.desktop \
       --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${finalAttrs.version}";
     description = "The web version of Tidal running in electron with hifi support thanks to widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
-    changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qbit ];
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qbit ];
+    platforms = lib.platforms.linux;
   };
-}
+})
