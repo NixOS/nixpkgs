@@ -2365,8 +2365,6 @@ self: super: with self; {
 
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
-  d2to1 = callPackage ../development/python-modules/d2to1 { };
-
   dacite = callPackage ../development/python-modules/dacite { };
 
   daemonize = callPackage ../development/python-modules/daemonize { };
@@ -4238,6 +4236,8 @@ self: super: with self; {
   git-revise = callPackage ../development/python-modules/git-revise { };
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
+
+  git-url-parse = callPackage ../development/python-modules/git-url-parse { };
 
   gitdb = callPackage ../development/python-modules/gitdb { };
 

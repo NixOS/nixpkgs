@@ -11,24 +11,29 @@
 , prompt-toolkit
 , pygments
 , rchitect
-, six
 , R
 , rPackages
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "radian";
-  version = "0.6.5";
+  version = "0.6.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "iuD4EkGZ1GwNxR8Gpg9ANe3lMHJYZ/Q/RyuN6vZZWME=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zA7R9UIB0hOWev10Y4oySIKeIxTOo0V6Q3Fxe+FeHSU=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner"' ""
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' "" \
+      --replace '0.3.39,<0.4.0' '0.3.39'
   '';
 
   nativeBuildInputs = [
@@ -40,7 +45,6 @@ buildPythonPackage rec {
     prompt-toolkit
     pygments
     rchitect
-    six
   ] ++ (with rPackages; [
     reticulate
     askpass
@@ -65,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A 21 century R console";
     homepage = "https://github.com/randy3k/radian";
+    changelog = "https://github.com/randy3k/radian/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ savyajha ];
   };

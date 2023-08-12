@@ -63,8 +63,8 @@ mkDerivation rec {
 
   postUnpack = ''
     for dep in AuxiliarCustomWidgets QPinnableTabWidget QLogger git; do
-      rmdir "source/src/$dep"
-      ln -sf "../../$dep" "source/src/$dep"
+      rmdir "${main_src.name}/src/$dep"
+      ln -sf "../../$dep" "${main_src.name}/src/$dep"
     done
   '';
 

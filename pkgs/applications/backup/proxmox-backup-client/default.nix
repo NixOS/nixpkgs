@@ -16,38 +16,45 @@
   proxmox-backup-client,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
   pname = "proxmox-backup-client";
   version = "3.0.1";
 
-  srcs = [
-    (fetchgit {
-      url = "git://git.proxmox.com/git/proxmox-backup.git";
-      rev = "v${version}";
-      name = "proxmox-backup";
-      hash = "sha256-a6dPBZBBh//iANXoPmOdgxYO0qNszOYI3QtrjQr4Cxc=";
-    })
-    (fetchgit {
-      url = "git://git.proxmox.com/git/proxmox.git";
-      rev = "2a070da0651677411a245f1714895235b1caf584";
-      name = "proxmox";
-      hash = "sha256-WH6oW2MB2yN1Y2zqOuXewI9jHqev/xLcJtb7D1J4aUE=";
-    })
-    (fetchgit {
-      url = "git://git.proxmox.com/git/proxmox-fuse.git";
-      rev = "93099f76b6bbbc8a0bbaca9b459a1ce4dc5e0a79";
-      name = "proxmox-fuse";
-      hash = "sha256-3l0lAZVFQC0MYaqZvB+S+ihb1fTkEgs5i9q463+cbvQ=";
-    })
-    (fetchgit {
-      url = "git://git.proxmox.com/git/pxar.git";
-      rev = "6ad046f9f92b40413f59cc5f4c23d2bafdf141f2";
-      name = "pxar";
-      hash = "sha256-I9kk27oN9BDQpnLDWltjZMrh2yJitCpcD/XAhkmtJUg=";
-    })
-  ];
+  proxmox-backup_src = fetchgit {
+    url = "git://git.proxmox.com/git/proxmox-backup.git";
+    rev = "v${version}";
+    name = "proxmox-backup";
+    hash = "sha256-a6dPBZBBh//iANXoPmOdgxYO0qNszOYI3QtrjQr4Cxc=";
+  };
 
-  sourceRoot = "proxmox-backup";
+  proxmox_src = fetchgit {
+    url = "git://git.proxmox.com/git/proxmox.git";
+    rev = "2a070da0651677411a245f1714895235b1caf584";
+    name = "proxmox";
+    hash = "sha256-WH6oW2MB2yN1Y2zqOuXewI9jHqev/xLcJtb7D1J4aUE=";
+  };
+
+  proxmox-fuse_src = fetchgit {
+    url = "git://git.proxmox.com/git/proxmox-fuse.git";
+    rev = "93099f76b6bbbc8a0bbaca9b459a1ce4dc5e0a79";
+    name = "proxmox-fuse";
+    hash = "sha256-3l0lAZVFQC0MYaqZvB+S+ihb1fTkEgs5i9q463+cbvQ=";
+  };
+
+  proxmox-pxar_src = fetchgit {
+    url = "git://git.proxmox.com/git/pxar.git";
+    rev = "6ad046f9f92b40413f59cc5f4c23d2bafdf141f2";
+    name = "pxar";
+    hash = "sha256-I9kk27oN9BDQpnLDWltjZMrh2yJitCpcD/XAhkmtJUg=";
+  };
+in
+
+rustPlatform.buildRustPackage {
+  inherit pname version;
+
+  srcs = [ proxmox-backup_src proxmox_src proxmox-fuse_src proxmox-pxar_src ];
+
+  sourceRoot = proxmox-backup_src.name;
 
   # These patches are essentially un-upstreamable, due to being "workarounds" related to the
   # project structure.

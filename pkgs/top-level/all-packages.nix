@@ -1944,7 +1944,9 @@ with pkgs;
 
   tere = callPackage ../tools/misc/tere { };
 
-  termusic = callPackage ../applications/audio/termusic { };
+  termusic = darwin.apple_sdk_11_0.callPackage ../applications/audio/termusic {
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreGraphics Foundation IOKit MediaPlayer Security;
+  };
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
@@ -3593,6 +3595,8 @@ with pkgs;
   cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
 
   dcap = callPackage ../tools/networking/dcap { };
+
+  dark-mode-notify = callPackage ../os-specific/darwin/dark-mode-notify { };
 
   deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
 
@@ -6174,6 +6178,8 @@ with pkgs;
   ropgadget = with python3Packages; toPythonApplication ropgadget;
 
   scour = with python3Packages; toPythonApplication scour;
+
+  see = callPackage ../tools/misc/see { };
 
   s2png = callPackage ../tools/graphics/s2png { };
 
@@ -10142,7 +10148,7 @@ with pkgs;
   lact = callPackage ../tools/system/lact { };
 
   ledit = callPackage ../tools/misc/ledit {
-    inherit (ocaml-ng.ocamlPackages_4_12) ocaml camlp5;
+    inherit (ocaml-ng.ocamlPackages_4_11) ocaml camlp5;
   };
 
   ledmon = callPackage ../tools/system/ledmon { };
@@ -19770,7 +19776,11 @@ with pkgs;
 
   rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
 
+  rizinPlugins = recurseIntoAttrs rizin.plugins;
+
   cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix { };
+
+  cutterPlugins = recurseIntoAttrs rizin.plugins;
 
   ragel = ragelStable;
 
@@ -20624,6 +20634,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  ceedling = callPackage ../development/tools/ceedling { };
+
   celt = callPackage ../development/libraries/celt { };
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix { };
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix { };
@@ -21191,6 +21203,8 @@ with pkgs;
   frei0r = callPackage ../development/libraries/frei0r { };
 
   fribidi = callPackage ../development/libraries/fribidi { };
+
+  frozen = callPackage ../development/libraries/frozen { };
 
   funambol = callPackage ../development/libraries/funambol { };
 
@@ -27541,7 +27555,7 @@ with pkgs;
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptomator = callPackage ../tools/security/cryptomator {
-    jdk = jdk.override { enableJavaFX = true; };
+    jdk = jdk20.override { enableJavaFX = true; };
   };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
@@ -36100,6 +36114,8 @@ with pkgs;
 
   watershot = callPackage ../applications/misc/watershot { };
 
+  waypaper = callPackage ../applications/misc/waypaper { };
+
   w3m = callPackage ../applications/networking/browsers/w3m { };
 
   # Should always be the version with the most features
@@ -39251,7 +39267,7 @@ with pkgs;
 
   hol = callPackage ../applications/science/logic/hol { };
 
-  inherit (ocaml-ng.ocamlPackages_4_12) hol_light;
+  inherit (ocamlPackages) hol_light;
 
   hologram = callPackage ../tools/security/hologram { };
 

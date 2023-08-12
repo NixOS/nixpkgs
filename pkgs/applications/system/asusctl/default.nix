@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "4.6.2";
+  version = "4.7.0";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-qfl8MUSHjqlSnsaudoRD9fY5TM9zgy7L7DA+pctn/nc=";
+    hash = "sha256-SZijR9PotN0O72laj+FBSCVMXLXadmLRhCSD4XqobD0=";
   };
 
   cargoHash = "";
@@ -28,22 +28,23 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "ecolor-0.21.0" = "sha256-m7eHX6flwO21umtx3dnIuVUnNsEs3ZCyOk5Vvp/lVfI=";
       "notify-rust-4.6.0" = "sha256-jhCgisA9f6AI9e9JQUYRtEt47gQnDv5WsdRKFoKvHJs=";
-      "supergfxctl-5.1.1" = "sha256-AThaZ9dp5T/DtLPE6gZ9qgkw0xksiq+VCL9Y4G41voE=";
+      "supergfxctl-5.1.1" = "sha256-H00QHNILEjOtavXdj4Jd+rdLprJpVSlSVV3qkTeknzQ=";
     };
   };
 
   postPatch = ''
     files="
-      daemon-user/src/daemon.rs
-      daemon-user/src/config.rs
-      rog-control-center/src/main.rs
+      asusd-user/src/config.rs
+      asusd-user/src/daemon.rs
+      asusd/src/ctrl_anime/config.rs
       rog-aura/src/aura_detection.rs
+      rog-control-center/src/main.rs
     "
     for file in $files; do
       substituteInPlace $file --replace /usr/share $out/share
     done
 
-    substituteInPlace daemon/src/ctrl_platform.rs --replace /usr/bin/chattr ${e2fsprogs}/bin/chattr
+    substituteInPlace asusd/src/ctrl_platform.rs --replace /usr/bin/chattr ${e2fsprogs}/bin/chattr
 
     substituteInPlace data/asusd.rules --replace systemctl ${systemd}/bin/systemctl
     substituteInPlace data/asusd.service \

@@ -2,9 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, libtool
+, perl
 , libtermkey
 , unibilium
-, libtool
 }:
 stdenv.mkDerivation rec {
   pname = "libtickit";
@@ -22,8 +23,21 @@ stdenv.mkDerivation rec {
     "LIBTOOL=${lib.getExe libtool}"
   ];
 
-  nativeBuildInputs = [ pkg-config libtool ];
-  buildInputs = [ libtermkey unibilium ];
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+  ];
+  buildInputs = [
+    libtermkey
+    unibilium
+  ];
+  nativeCheckInputs = [ perl ];
+
+  patches = [
+    ./skipTestMacOS.patch
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A terminal interface construction kit";

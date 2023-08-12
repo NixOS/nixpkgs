@@ -39,6 +39,6 @@ rustPlatform.buildRustPackage rec {
       library (e.g. fenix or rust-overlay)
     '';
     license = with lib.licenses; [ asl20 /* or */ mit ];
-    maintainers = with lib.maintainers; [ wucke13 ];
+    maintainers = with lib.maintainers; [ wucke13 matthiasbeyer ];
   };
 }

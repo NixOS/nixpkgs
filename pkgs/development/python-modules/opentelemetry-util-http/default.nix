@@ -14,7 +14,7 @@ buildPythonPackage {
   pname = "opentelemetry-util-http";
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "source/util/opentelemetry-util-http";
+  sourceRoot = "${opentelemetry-instrumentation.src.name}/util/opentelemetry-util-http";
 
   format = "pyproject";
 

@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     description = "Command line helpers for fuzzing";
     homepage = "https://github.com/rust-fuzz/cargo-fuzz";
     license = with licenses; [ mit asl20 ];
-    maintainers = [ maintainers.ekleog ];
+    maintainers = with maintainers; [ ekleog matthiasbeyer ];
   };
 }
