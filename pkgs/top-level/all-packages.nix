@@ -2613,6 +2613,8 @@ with pkgs;
 
   np2kai = callPackage ../applications/emulators/np2kai { };
 
+  nuked-md = callPackage ../applications/emulators/nuked-md { };
+
   oberon-risc-emu = callPackage ../applications/emulators/oberon-risc-emu { };
 
   openmsx = callPackage ../applications/emulators/openmsx { };
