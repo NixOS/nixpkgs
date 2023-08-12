@@ -1,4 +1,5 @@
-{ config, lib, stdenv, fetchFromGitHub, cmake, pkg-config, xorg, libGLU
+{ config, lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, pkg-config, xorg, libGLU
 , libGL, glew, ocl-icd, python3
 , cudaSupport ? config.cudaSupport, cudatoolkit
   # For visibility mostly. The whole approach to cuda architectures and capabilities
@@ -18,6 +19,13 @@ stdenv.mkDerivation rec {
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
     sha256 = "sha256-pYD2HxAszE9Ux1xsSJ7s2R13U8ct5tDo3ZP7H0+F9Rc=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/PixarAnimationStudios/OpenSubdiv/pull/1315/commits/19b2bac39aa075fe231259e519d13aed6ee373bf.patch";
+      hash = "sha256-euNPhYi8JA0OxEveTb0fou5VO/Guz9WeIMO3AZ6pNvE=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
