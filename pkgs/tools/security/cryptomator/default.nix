@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoPatchelfHook
 , fuse3
 , maven, jdk, makeShellWrapper, glib, wrapGAppsHook
@@ -10,6 +10,7 @@ let
     jdk = jdk;
   };
 in
+assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
 mavenJdk.buildMavenPackage rec {
   pname = "cryptomator";
   version = "1.9.1";
