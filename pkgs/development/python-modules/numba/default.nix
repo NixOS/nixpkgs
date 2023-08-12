@@ -131,6 +131,7 @@ in buildPythonPackage rec {
     description = "Compiling Python code using LLVM";
     homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;
+    mainProgram = "numba";
     maintainers = with maintainers; [ fridh ];
   };
 }
