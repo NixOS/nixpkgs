@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/libnice/libnice/commit/d470c4bf4f2449f7842df26ca1ce1efb63452bc6.patch";
       sha256 = "0z74vizf92flfw1m83p7yz824vfykmnm0xbnk748bnnyq186i6mg";
     })
+
+    # GuPNP-IGD 1.6 support
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/libnice/libnice/-/commit/7255d6376fad2c88eaadf1278ee8947181230866.patch";
+      hash = "sha256-1EJED3vcdyEigbWnqkJpLUoQHg9Aes3yDEz6MzVwKRk=";
+    })
   ];
 
   nativeBuildInputs = [
