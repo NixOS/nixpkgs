@@ -40177,6 +40177,8 @@ with pkgs;
 
   mysides = callPackage ../os-specific/darwin/mysides { };
 
+  narrowlink = callPackage ../tools/networking/narrowlink { };
+
   nar-serve = callPackage ../tools/nix/nar-serve { };
 
   neo = callPackage ../applications/misc/neo { };
