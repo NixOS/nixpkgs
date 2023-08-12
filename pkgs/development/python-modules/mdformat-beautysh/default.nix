@@ -7,6 +7,7 @@
 , mdit-py-plugins
 , poetry-core
 , pythonOlder
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    wheel
   ];
 
   buildInputs = [
