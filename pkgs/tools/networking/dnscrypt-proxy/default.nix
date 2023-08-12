@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  pname = "dnscrypt-proxy2";
+  pname = "dnscrypt-proxy";
   version = "2.1.5";
 
   vendorSha256 = null;
