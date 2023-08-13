@@ -1,11 +1,11 @@
 { lib
-, fetchPypi
 , buildPythonPackage
-, pkg-config
-, gtk3
+, fetchPypi
 , gobject-introspection
-, pygobject3
 , goocanvas2
+, gtk3
+, pkg-config
+, pygobject3
 , pythonOlder
  }:
 
@@ -38,6 +38,10 @@ buildPythonPackage rec {
 
   # No upstream tests available
   doCheck = false;
+
+  pythonImportsCheck = [
+    "goocalendar"
+  ];
 
   meta = with lib; {
     description = "A calendar widget for GTK using PyGoocanvas";
