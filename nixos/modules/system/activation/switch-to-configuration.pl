@@ -871,7 +871,7 @@ if (scalar(keys(%units_to_reload)) > 0) {
     for my $unit (keys(%units_to_reload)) {
         if (!unit_is_active($unit)) {
             # Figure out if we need to start the unit
-            my %unit_info = parse_unit("$toplevel/etc/systemd/system/$unit", "$out/etc/systemd/system/$unit");
+            my %unit_info = parse_unit("$toplevel/etc/systemd/system/$unit", "$toplevel/etc/systemd/system/$unit");
             if (!(parse_systemd_bool(\%unit_info, "Unit", "RefuseManualStart", 0) || parse_systemd_bool(\%unit_info, "Unit", "X-OnlyManualStart", 0))) {
                 $units_to_start{$unit} = 1;
                 record_unit($start_list_file, $unit);
