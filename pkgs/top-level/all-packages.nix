@@ -37113,6 +37113,10 @@ with pkgs;
 
   shipwright = callPackage ../games/shipwright { };
 
+  wipeout-rewrite = callPackage ../games/wipeout-rewrite {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   ### GAMES/DOOM-PORTS
 
   dhewm3 = callPackage ../games/doom-ports/dhewm3 { };
