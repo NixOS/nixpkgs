@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   meta = with lib; {
-    homepage = "http://spacenav.sourceforge.net/";
+    homepage = "https://spacenav.sourceforge.net/";
     description = "Interactive configuration GUI for space navigator input devices";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

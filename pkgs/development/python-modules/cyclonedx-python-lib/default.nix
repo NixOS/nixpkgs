@@ -6,9 +6,10 @@
 , jsonschema
 , lxml
 , packageurl-python
+, py-serializable
+, pythonRelaxDepsHook
 , poetry-core
 , pytestCheckHook
-, python
 , pythonOlder
 , requirements-parser
 , sortedcontainers
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "3.1.1";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -30,11 +31,12 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DajXu8aZAZyr7o0fGH9do9i/z+UqMMkcMXjbETtWa1g=";
+    hash = "sha256-GCY7M0XnVsGyuADSq/EzOy9fged5frj+hRDLhs2Uq8I=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -44,11 +46,12 @@ buildPythonPackage rec {
     setuptools
     sortedcontainers
     toml
+    py-serializable
     types-setuptools
     types-toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     jsonschema
     lxml
@@ -58,6 +61,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "cyclonedx"
+  ];
+
+  pythonRelaxDeps = [
+    "py-serializable"
   ];
 
   preCheck = ''

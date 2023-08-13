@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , gitUpdater
 , pkg-config
-, ffmpeg
+, ffmpeg_4
 }:
 
 buildGoModule rec {
@@ -21,7 +21,7 @@ buildGoModule rec {
   proxyVendor = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg ];
+  buildInputs = [ ffmpeg_4 ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

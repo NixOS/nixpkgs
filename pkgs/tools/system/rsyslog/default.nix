@@ -10,7 +10,7 @@
 , fastJson
 , withKrb5 ? true
 , libkrb5
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , withJemalloc ? true
 , jemalloc
@@ -49,7 +49,6 @@
 , withRdkafka ? true
 , rdkafka
 , withMongo ? true
-, libmongo-client
 , mongoc
 , withCzmq ? true
 , czmq
@@ -62,11 +61,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2210.0";
+  version = "8.2306.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    hash = "sha256-ZD7ieROdaUoHyf8/8Q3FITvfh0mD0n03NSXpXgX6CU0=";
+    hash = "sha256-9ig++q3GCVQKVua+yIo2LJZud/Kf5I5rc0vWwRI+C+U=";
   };
 
   nativeBuildInputs = [
@@ -97,7 +96,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withNet libnet
   ++ lib.optional withHadoop hadoop
   ++ lib.optional withRdkafka rdkafka
-  ++ lib.optionals withMongo [ libmongo-client mongoc ]
+  ++ lib.optionals withMongo [ mongoc ]
   ++ lib.optional withCzmq czmq
   ++ lib.optional withRabbitmq rabbitmq-c
   ++ lib.optional withHiredis hiredis
@@ -187,7 +186,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
     changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${version}/ChangeLog";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
   };

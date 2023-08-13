@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/qrhD7AqVGMBi6PyvYww5PxukUU//KrttKqnPS0OYPc=";
+    hash = "sha256-hFuuwmwe0ti4Y8mSJyNqUIhZjFC6qtv6W5cwtNjPUFQ=";
   };
 
-  cargoSha256 = "sha256-hVjtjeaIyySAHm3v0kFQ387THqYU1s+nGdBUwzIzBjg=";
+  cargoHash = "sha256-1gtLWU6uiWzUfYy9y3pb2vcnUC3H+Mf9rglmqNd989M=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/str4d/rage/raw/v${version}/rage/CHANGELOG.md";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ marsam ryantm ];
+    mainProgram = "rage";
   };
 }

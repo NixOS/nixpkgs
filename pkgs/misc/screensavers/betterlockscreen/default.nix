@@ -7,6 +7,7 @@
 , bc
 , coreutils
 , dbus
+, withDunst ? true
 , dunst
 , i3lock-color
 , gawk
@@ -16,6 +17,12 @@
 , procps
 , xorg
 }:
+
+let
+  runtimeDeps =
+    [ bc coreutils dbus i3lock-color gawk gnugrep gnused imagemagick procps xorg.xdpyinfo xorg.xrandr xorg.xset ]
+    ++ lib.optionals withDunst [ dunst ];
+in
 
 stdenv.mkDerivation rec {
   pname = "betterlockscreen";
@@ -36,7 +43,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp betterlockscreen $out/bin/betterlockscreen
     wrapProgram "$out/bin/betterlockscreen" \
-      --prefix PATH : "$out/bin:${lib.makeBinPath [ bc coreutils dbus dunst i3lock-color gawk gnugrep gnused imagemagick procps xorg.xdpyinfo xorg.xrandr xorg.xset ]}"
+      --prefix PATH : "$out/bin:${lib.makeBinPath runtimeDeps}"
 
     runHook postInstall
   '';
@@ -44,6 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast and sweet looking lockscreen for linux systems with effects!";
     homepage = "https://github.com/pavanjadhaw/betterlockscreen";
+    mainProgram = "betterlockscreen";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ eyjhb sebtm ];

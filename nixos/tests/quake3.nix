@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ...} :
 
 let
 
@@ -11,11 +11,11 @@ let
     };
 
   # Only allow the demo data to be used (only if it's unfreeRedistributable).
-  unfreePredicate = pkg: with pkgs.lib; let
+  unfreePredicate = pkg: let
     allowPackageNames = [ "quake3-demodata" "quake3-pointrelease" ];
-    allowLicenses = [ pkgs.lib.licenses.unfreeRedistributable ];
-  in elem pkg.pname allowPackageNames &&
-     elem (pkg.meta.license or null) allowLicenses;
+    allowLicenses = [ lib.licenses.unfreeRedistributable ];
+  in lib.elem pkg.pname allowPackageNames &&
+     lib.elem (pkg.meta.license or null) allowLicenses;
 
   client =
     { pkgs, ... }:
@@ -31,7 +31,7 @@ in
 
 rec {
   name = "quake3";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ domenkozar eelco ];
   };
 

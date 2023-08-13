@@ -1,40 +1,51 @@
 { lib
+, asgiref
 , buildPythonPackage
 , fetchFromGitHub
-
 , flask
-, limits
-, rich
-, typing-extensions
-
-, asgiref
 , hiro
+, limits
+, ordered-set
 , pymemcache
+, pymongo
 , pytest-mock
 , pytestCheckHook
+, pythonOlder
 , redis
-, pymongo
+, rich
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Limiter";
-  version = "2.6.2";
+  pname = "flask-limiter";
+  version = "3.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "flask-limiter";
-    rev = version;
-    sha256 = "sha256-JjksKwSMWzcslXCs977/Wlq1wDMaACxm8e6Ub+r3wPg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YDVZ/dD+TRJEnJRTRmGEB6EIkK5eQ5MdXh8FideoVDQ=";
   };
+
+  postPatch = ''
+    sed -i "/--cov/d" pytest.ini
+
+    # flask-restful is unmaintained and breaks regularly, don't depend on it
+    sed -i "/import flask_restful/d" tests/test_views.py
+  '';
 
   propagatedBuildInputs = [
     flask
     limits
+    ordered-set
     rich
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asgiref
     pytest-mock
     pytestCheckHook
@@ -43,13 +54,6 @@ buildPythonPackage rec {
     pymemcache
     pymongo
   ];
-
-  postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-
-    # flask-restful is unmaintained and breaks regularly, don't depend on it
-    sed -i "/import flask_restful/d" tests/test_views.py
-  '';
 
   disabledTests = [
     # flask-restful is unmaintained and breaks regularly
@@ -76,11 +80,15 @@ buildPythonPackage rec {
     "tests/test_storage.py"
   ];
 
-  pythonImportsCheck = [ "flask_limiter" ];
+  pythonImportsCheck = [
+    "flask_limiter"
+  ];
 
   meta = with lib; {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
+    changelog = "https://github.com/alisaifee/flask-limiter/blob/${version}/HISTORY.rst";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

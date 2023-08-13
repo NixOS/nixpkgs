@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec  {
   pname = "kora-icon-theme";
-  version = "1.5.4";
+  version = "1.5.7";
 
   src = fetchFromGitHub  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "sha256-LYlrLkMArF3rRVrvQNNfMdOgW6bJOjK9fE9obXEJK4w=";
+    sha256 = "sha256-VAlfrUWgxcG17ZTlA357gengXTilwuZOBscIzadAsaU=";
   };
 
   nativeBuildInputs = [

@@ -25,7 +25,7 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flake8
     mock
     nose

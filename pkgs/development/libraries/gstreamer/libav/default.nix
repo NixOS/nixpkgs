@@ -9,6 +9,8 @@
 , gst-plugins-base
 , gettext
 , libav
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 # Note that since gst-libav-1.6, libav is actually ffmpeg. See
@@ -16,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-libav";
-  version = "1.20.3";
+  version = "1.22.5";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-P+3RBWD836obZGLL95o4xOe1fX85A1k5P8DO9tvyff4=";
+    hash = "sha256-hYPwwfT8sB7tEfoePCESZUOovXOe1Pwdsx91alqwHZo=";
   };
 
   outputs = [ "out" "dev" ];
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
@@ -40,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''
@@ -53,5 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }

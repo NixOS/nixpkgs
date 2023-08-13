@@ -54,7 +54,7 @@ buildPythonPackage rec {
     "test_load_input_from_file"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytest-freezegun

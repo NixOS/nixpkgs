@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ boost ];
+  nativeCheckInputs = [ boost ];
 
   cmakeFlags = [ "-DELFIO_BUILD_TESTS=ON" ];
 

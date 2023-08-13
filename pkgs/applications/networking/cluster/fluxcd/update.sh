@@ -38,7 +38,9 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     if [ $# -eq 1 ] && [ "$1" = "git" ]; then
         git switch -c "package-fluxcd-${LATEST_VERSION}"
         git add "$FLUXCD_PATH"/default.nix
-        git commit -m "fluxcd: ${OLD_VERSION} -> ${LATEST_VERSION}"
+        git commit -m "fluxcd: ${OLD_VERSION} -> ${LATEST_VERSION}
+
+Release: https://github.com/fluxcd/flux2/releases/tag/v${LATEST_VERSION}"
     fi
 else
     echo "fluxcd is already up-to-date at $OLD_VERSION"

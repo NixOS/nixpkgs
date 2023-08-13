@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pynetbox";
-  version = "7.0.0";
+  version = "7.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PFSnINbXSnEo1gvntjfH6KCVa/LeaNrsiuWM4H+fOvQ=";
+    hash = "sha256-RAUM79lDz7oNV7Li987Sz7JoNz/feO6BsEcWO0u/Ub8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];

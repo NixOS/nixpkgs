@@ -1,20 +1,36 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, testers
+, kube-score
 }:
 
 buildGoModule rec {
   pname = "kube-score";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "zegl";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dKvPLAT9e8gNJkKDF7dQPGLSkv9QUjQklUX8Dm8i33E=";
+    hash = "sha256-/4xnUb60ARGO6hM5PQ3ZkuwjEQUT4Xnj/InIsfw2bzI=";
   };
 
-  vendorHash = "sha256-pcNdszOfsYKiASOUNKflbr89j/wb9ILQvjMJYsiGPWo=";
+  vendorHash = "sha256-UpuwkQHcNg3rohr+AdALakIdHroIySlTnXHgoUdY+EQ=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+    "-X=main.commit=${src.rev}"
+  ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = kube-score;
+      command = "kube-score version";
+    };
+  };
 
   meta = with lib; {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";

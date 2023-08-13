@@ -1,15 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pygments }:
+{ lib, buildPythonPackage, fetchPypi, pygments, jupyter-packaging }:
 
 buildPythonPackage rec {
   pname = "jupyterlab_pygments";
-  version = "0.1.2";
+  version = "0.2.2";
 
-  src = fetchFromGitHub {
-    owner = "jupyterlab";
-    repo = pname;
-    rev = version;
-    sha256 = "02lv63qalw4x6xs70n2w2p3c2cnhk91sr961wlbi77xs0g8fcman";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-dAXX/eYIGdkFqfqM6J5M2DDjGM2tIqADD3qQHacFWF0=";
   };
+
+  nativeBuildInputs = [
+    jupyter-packaging
+  ];
 
   # no tests exist on upstream repo
   doCheck = false;

@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , isPyPy
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
@@ -12,15 +13,15 @@
 
 import ./generic.nix (rec {
   pname = "pillow";
-  version = "9.3.0";
-  format = "setuptools";
+  version = "10.0.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Pillow";
     inherit version;
-    hash = "sha256-yTWiKlV6VgEI14D5oPxCbddFmUDcVPqknYMknI0+dg8=";
+    hash = "sha256-nIK1s+BDx68NlXktDSDM9o9hof7Gs1MOcYtohCJyc5Y=";
   };
 
   passthru.tests = {
@@ -37,6 +38,6 @@ import ./generic.nix (rec {
       processing and graphics capabilities.
     '';
     license = licenses.hpnd;
-    maintainers = with maintainers; [ goibhniu prikhi SuperSandro2000 ];
+    maintainers = with maintainers; [ goibhniu prikhi ];
   };
 } // args )

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.7.3";
+  version = "1.8.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-${pname}";
-    rev = "v${version}";
-    sha256 = "sha256-/1YOnG6sCP8G8J3K2/RycTC95rXW9M+U3Mjz4GCt13s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qz4EWAO++yq72/AGwyNOtH/fTRSFbiCo/K98htROUxI=";
   };
 
   # It's used to locate headers
@@ -32,6 +32,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5}"'
   '';
+
+  env = lib.optionalAttrs (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+    GSSAPI_SUPPORT_DETECT = "false";
+  };
 
   nativeBuildInputs = [
     cython
@@ -47,7 +51,7 @@ buildPythonPackage rec {
     GSS
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     k5test
     nose
     parameterized

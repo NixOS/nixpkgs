@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, FormEncode
+, formencode
 , pastedeploy
 , paste
 , pydispatcher
@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sqlobject";
-  version = "3.10.0";
+  version = "3.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,17 +19,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "SQLObject";
     inherit version;
-    hash = "sha256-i/wBFu8z/DS5Gtj00ZKrbuPsvqDH3O5GmbrknGbvJ7A=";
+    hash = "sha256-dW9IsIdOSnCG3thWhYwIsz0Oa5runnXD84S5ITPH3ww=";
   };
 
   propagatedBuildInputs = [
-    FormEncode
+    formencode
     paste
     pastedeploy
     pydispatcher
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Object Relational Manager for providing an object interface to your database";
     homepage = "http://www.sqlobject.org/";
+    changelog = "https://github.com/sqlobject/sqlobject/blob/${version}/docs/News.rst";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ ];
   };

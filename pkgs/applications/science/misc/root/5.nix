@@ -5,7 +5,7 @@
 , cmake
 , pcre
 , pkg-config
-, python2
+, python3
 , libX11
 , libXpm
 , libXft
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ pcre python2 zlib libxml2 lz4 xz gsl xxHash libxcrypt ]
+  buildInputs = [ pcre python3 zlib libxml2 lz4 xz gsl xxHash libxcrypt ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
   ;
@@ -59,7 +59,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/root-project/root/commit/3c243b18768d3c3501faf3ca4e4acfc071021350.diff";
       sha256 = "1hjmgnp4zx6im8ps78673x0rrhmfyy1nffhgxjlfl1r2z8cq210z";
     })
+    (fetchpatch {
+      name = "root5-python37-fix.patch";
+      url = "https://github.com/root-project/root/commit/c75458024082de0cc35b45505c652b8460a9e71b.patch";
+      sha256 = "sha256-A5zEjQE9OGPFp/L1HUs4NIdxQMRiwbwCRNWOLN2ENrM=";
+    })
   ];
+
+  # https://github.com/root-project/root/issues/13216
+  hardeningDisable = [ "fortify3" ];
 
   preConfigure = ''
     # binutils 2.37 fixes

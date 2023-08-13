@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-sysmon";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-sysmon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aRgnjqSrzmzDCICRiozTGkFmWuCzBpo8k9/YLcylg3w=";
+    hash = "sha256-W3Osv0RApm6sCVdsLXUB79H3g62yUID4dtBi5Ywk5NY=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pysigma
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

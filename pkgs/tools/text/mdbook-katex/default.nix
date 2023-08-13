@@ -1,18 +1,15 @@
-{ lib, stdenv, fetchCrate, rustPlatform, openssl, CoreServices }:
+{ lib, rustPlatform, fetchCrate, stdenv, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-katex";
-  version = "0.2.21";
+  version = "0.5.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-cJRO/HHxujSL5YTM4e+HMRsItlEe1OYn8rSqnwcqbgU=";
+    hash = "sha256-aG7mXMDogGfAHwz+itJthl7sJ4o+Oz5RnrTHNstrh28=";
   };
 
-  cargoHash = "sha256-FPoSye+wD/MPR5fCrQ212W4iYoJLWOFXgeStcg0GEHw=";
-
-  OPENSSL_DIR = "${lib.getDev openssl}";
-  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+  cargoHash = "sha256-LE9NalzCTYvcj7WwQKVc7HkbyUj9zQIA2RfK8uxNfOk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

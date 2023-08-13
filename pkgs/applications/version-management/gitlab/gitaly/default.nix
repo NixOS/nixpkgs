@@ -1,17 +1,19 @@
-{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
-, bundlerEnv, pkg-config
+{ lib
+, fetchFromGitLab
+, fetchFromGitHub
+, buildGoModule
+, pkg-config
+
 # libgit2 + dependencies
-, libgit2, openssl, zlib, pcre, http-parser }:
+, libgit2
+, http-parser
+, openssl
+, pcre
+, zlib
+}:
 
 let
-  rubyEnv = bundlerEnv rec {
-    name = "gitaly-env";
-    inherit ruby;
-    copyGemFiles = true;
-    gemdir = ./.;
-  };
-
-  version = "15.6.2";
+  version = "16.1.3";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -22,17 +24,17 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      sha256 = "sha256-or5Z96BCLFUC4r9bAZf9ytUOt4WozqwwuWGFuX2ix9k=";
+      sha256 = "sha256-g9K1dFcrUkWJInPrwg9fz/TEK35GrjqFpUS2bnemwLQ=";
     };
 
-    vendorSha256 = "sha256-SEPfso27PHHpvnQwdeMQYECw/CZIa/NdpMBSTRJEwIo=";
+    vendorSha256 = "sha256-6oOFQGPwiMRQrESXsQsGzvWz9bCb0VTYIyyG/C2b3nA=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
     tags = [ "static,system_libgit2" ];
 
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ rubyEnv.wrappedRuby libgit2 openssl zlib pcre http-parser ];
+    buildInputs = [ libgit2 openssl zlib pcre http-parser ];
 
     doCheck = false;
   };
@@ -46,10 +48,6 @@ in
 buildGoModule ({
   pname = "gitaly";
 
-  passthru = {
-    inherit rubyEnv;
-  };
-
   subPackages = [ "cmd/gitaly" "cmd/gitaly-backup" ];
 
   preConfigure = ''
@@ -57,18 +55,13 @@ buildGoModule ({
     cp -r ${auxBins}/bin/* _build/bin
   '';
 
-  postInstall = ''
-    mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib} $ruby
-  '';
-
-  outputs = [ "out" "ruby" ];
+  outputs = [ "out" ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
     description = "A Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux ++ [ "x86_64-darwin" ];
-    maintainers = with maintainers; [ roblabla globin talyz yayayayaka ];
+    maintainers = teams.gitlab.members;
     license = licenses.mit;
   };
 } // commonOpts)

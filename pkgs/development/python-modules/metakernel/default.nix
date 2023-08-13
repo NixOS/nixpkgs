@@ -4,21 +4,21 @@
 , hatchling
 , ipykernel
 , jedi
-, jupyter_core
+, jupyter-core
 , pexpect
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "metakernel";
-  version = "0.29.4";
+  version = "0.29.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kxrF/Msxjht7zGs0aEcL/Sf0qwcLiSoDPDUlE7Lrcmg=";
+    hash = "sha256-tGp8CHQ1Ekn/2KiGZGd/8V6NdWMseDSETZ/Z3T3P91U=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ipykernel
     jedi
-    jupyter_core
+    jupyter-core
     pexpect
   ];
 

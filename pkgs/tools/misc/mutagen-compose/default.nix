@@ -1,24 +1,25 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, fetchzip }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "mutagen-compose";
-  version = "0.16.3";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "mutagen-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jvQCXSdEw8xQ8m2xBLDu7pw9K51lAH3nzCr2N0/+Kuw=";
+    hash = "sha256-FEUVRDGVYYpgNSOSSR9hyUyz9mP8B8qWy3MnTtuE3fQ=";
   };
 
-  vendorSha256 = "sha256-rosoPXNb3NYI5mM0gt3Fpg2XZtSLt90jxcBqALx7Lno=";
+  vendorHash = "sha256-u4vRQjqBSsugEcBzteV7yOTizbXGpCH+M/zAvdWusK0=";
 
   doCheck = false;
 
   subPackages = [ "cmd/mutagen-compose" ];
 
+  tags = [ "mutagencompose" ];
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Compose with Mutagen integration";
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen-compose/releases/tag/v${version}";

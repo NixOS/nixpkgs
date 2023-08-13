@@ -1,22 +1,24 @@
 { fetchFromGitHub, lib, stdenv, kernel ? false }:
 
 stdenv.mkDerivation rec {
-  pname = "cryptodev-linux-1.12";
+  pname = "cryptodev-linux-1.13";
   name = "${pname}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "cryptodev-linux";
     repo = "cryptodev-linux";
     rev = pname;
-    sha256 = "sha256-vJQ10rG5FGbeEOqCUmH/pZ0P77kAW/MtUarywbtIyHw=";
+    hash = "sha256-EzTPoKYa+XWOAa/Dk7ru02JmlymHeXVX7RMmEoJ1OT0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   hardeningDisable = [ "pic" ];
 
-  KERNEL_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  INSTALL_MOD_PATH = "\${out}";
-  prefix = "\${out}";
+  makeFlags = kernel.makeFlags ++ [
+    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=$(out)"
+    "prefix=$(out)"
+  ];
 
   meta = {
     description = "Device that allows access to Linux kernel cryptographic drivers";

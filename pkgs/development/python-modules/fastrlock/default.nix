@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # Todo: Check why the tests have an import error
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

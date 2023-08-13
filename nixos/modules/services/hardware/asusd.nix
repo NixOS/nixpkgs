@@ -2,8 +2,6 @@
 
 let
   cfg = config.services.asusd;
-  json = pkgs.formats.json { };
-  toml = pkgs.formats.toml { };
 in
 {
   options = {
@@ -19,55 +17,55 @@ in
       };
 
       animeConfig = lib.mkOption {
-        type = json.type;
-        default = { };
+        type = lib.types.nullOr lib.types.str;
+        default = null;
         description = lib.mdDoc ''
-          The content of /etc/asusd/anime.conf.
+          The content of /etc/asusd/anime.ron.
           See https://asus-linux.org/asusctl/#anime-control.
         '';
       };
 
       asusdConfig = lib.mkOption {
-        type = json.type;
-        default = { };
+        type = lib.types.nullOr lib.types.str;
+        default = null;
         description = lib.mdDoc ''
-          The content of /etc/asusd/asusd.conf.
+          The content of /etc/asusd/asusd.ron.
           See https://asus-linux.org/asusctl/.
         '';
       };
 
       auraConfig = lib.mkOption {
-        type = json.type;
-        default = { };
+        type = lib.types.nullOr lib.types.str;
+        default = null;
         description = lib.mdDoc ''
-          The content of /etc/asusd/aura.conf.
+          The content of /etc/asusd/aura.ron.
           See https://asus-linux.org/asusctl/#led-keyboard-control.
         '';
       };
 
       profileConfig = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = "";
+        default = null;
         description = lib.mdDoc ''
-          The content of /etc/asusd/profile.conf.
+          The content of /etc/asusd/profile.ron.
           See https://asus-linux.org/asusctl/#profiles.
         '';
       };
 
-      ledModesConfig = lib.mkOption {
-        type = lib.types.nullOr toml.type;
-        default = null;
-        description = lib.mdDoc ''
-          The content of /etc/asusd/asusd-ledmodes.toml. Leave `null` to use default settings.
-          See https://asus-linux.org/asusctl/#led-keyboard-control.
+      fanCurvesConfig = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = lib.mdDoc ''
+          The content of /etc/asusd/fan_curves.ron.
+          See https://asus-linux.org/asusctl/#fan-curves.
         '';
       };
 
       userLedModesConfig = lib.mkOption {
-        type = lib.types.nullOr toml.type;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = lib.mdDoc ''
-          The content of /etc/asusd/asusd-user-ledmodes.toml.
+          The content of /etc/asusd/asusd-user-ledmodes.ron.
           See https://asus-linux.org/asusctl/#led-keyboard-control.
         '';
       };
@@ -79,26 +77,18 @@ in
 
     environment.etc =
       let
-        maybeConfig = name: cfg: lib.mkIf (cfg != { }) {
-          source = json.generate name cfg;
+        maybeConfig = name: cfg: lib.mkIf (cfg != null) {
+          source = pkgs.writeText name cfg;
           mode = "0644";
         };
       in
       {
-        "asusd/anime.conf" = maybeConfig "anime.conf" cfg.animeConfig;
-        "asusd/asusd.conf" = maybeConfig "asusd.conf" cfg.asusdConfig;
-        "asusd/aura.conf" = maybeConfig "aura.conf" cfg.auraConfig;
-        "asusd/profile.conf" = lib.mkIf (cfg.profileConfig != null) {
-          source = pkgs.writeText "profile.conf" cfg.profileConfig;
-          mode = "0644";
-        };
-        "asusd/asusd-ledmodes.toml" = {
-          source =
-            if cfg.ledModesConfig == null
-            then "${pkgs.asusctl}/share/asusd/data/asusd-ledmodes.toml"
-            else toml.generate "asusd-ledmodes.toml" cfg.ledModesConfig;
-          mode = "0644";
-        };
+        "asusd/anime.ron" = maybeConfig "anime.ron" cfg.animeConfig;
+        "asusd/asusd.ron" = maybeConfig "asusd.ron" cfg.asusdConfig;
+        "asusd/aura.ron" = maybeConfig "aura.ron" cfg.auraConfig;
+        "asusd/profile.conf" = maybeConfig "profile.ron" cfg.profileConfig;
+        "asusd/fan_curves.ron" = maybeConfig "fan_curves.ron" cfg.fanCurvesConfig;
+        "asusd/asusd_user_ledmodes.ron" = maybeConfig "asusd_user_ledmodes.ron" cfg.userLedModesConfig;
       };
 
     services.dbus.enable = true;

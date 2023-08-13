@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "sptlrx";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "raitonoberu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UDxmUc902A6+DC254wyvjSzNs95K7QIuDW+24o8VCCc=";
+    hash = "sha256-6GbefTWrhH6RdASmSrugd4xESkwqFVF5qwFmf0JUDTY=";
   };
 
-  vendorSha256 = "sha256-t9Mkszzuw7YtBnADsZDjwN2AA6MuQH4+zzDiHe302A4=";
+  vendorHash = "sha256-Ll5jUjpx4165BAE86/z95i4xa8fdKlfxqrUc/gDLqJ0=";
 
   ldflags = [ "-s" "-w" ];
 

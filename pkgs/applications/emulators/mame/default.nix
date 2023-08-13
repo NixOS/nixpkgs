@@ -15,7 +15,6 @@
 , libjpeg
 , libpcap
 , libpulseaudio
-, lua5_3
 , makeDesktopItem
 , makeWrapper
 , papirus-icon-theme
@@ -39,14 +38,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.250";
+  version = "0.257";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    sha256 = "sha256-jexs/1ovRk9Is5orD7hT9fN+dYm+WA+57aZ6JH7zjL4=";
+    hash = "sha256-iBLHvdqIgF6XkJQX5hFLrP9KkTGWfVvTCs+DRJhsSp4=";
   };
 
   outputs = [ "out" "tools" ];
@@ -61,7 +60,8 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIB_FLAC=1"
     "USE_SYSTEM_LIB_GLM=1"
     "USE_SYSTEM_LIB_JPEG=1"
-    "USE_SYSTEM_LIB_LUA=1"
+    # https://www.mamedev.org/?p=523
+    # "USE_SYSTEM_LIB_LUA=1"
     "USE_SYSTEM_LIB_PORTAUDIO=1"
     "USE_SYSTEM_LIB_PORTMIDI=1"
     "USE_SYSTEM_LIB_PUGIXML=1"
@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
     expat
     zlib
     flac
-    lua5_3
     portmidi
     portaudio
     utf8proc
@@ -197,5 +196,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
+    mainProgram = "mame";
   };
 }

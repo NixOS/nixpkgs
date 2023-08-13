@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "memray";
-  version = "1.5.0";
+  version = "1.9.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BnsboMjlMDfDsqR3UU/bxQpyUaqCDuglaqwTPOF79Fc=";
+    hash = "sha256-DaJ1Hhg7q4ckA5feUx0twOsmy28v5aBBCTUAkn43xAo=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     ipython
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.11") [

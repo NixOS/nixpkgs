@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
-  version = "4.3.3";
+  version = "4.4.3";
 
   src = fetchurl {
     url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${version}.tar.gz";
     name = "pgpool-II-${version}.tar.gz";
-    sha256 = "sha256-bHNDS67lgThqlVX+WWKL9GeCD31b2+M0F2g5mgOCyXk=";
+    sha256 = "sha256-RnRaqY9FTgl87LTaz1NvicN+0+xB8y8KhGk0Ip0OtzM=";
   };
 
   buildInputs = [
@@ -32,6 +32,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [
     "sysconfdir=\${out}/etc"
+  ];
+
+  patches = lib.optionals (stdenv.isDarwin) [
+    # Build checks for strlcpy being available in the system, but doesn't
+    # actually exclude its own copy from being built
+    ./darwin-strlcpy.patch
   ];
 
   enableParallelBuilding = true;

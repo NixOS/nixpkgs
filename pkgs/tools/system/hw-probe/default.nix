@@ -1,6 +1,5 @@
-{ config
+{ lib
 , stdenv
-, lib
 , fetchFromGitHub
 , makeWrapper
 , makePerlPath
@@ -30,7 +29,7 @@
 , xz
 
 # Conditionally recommended
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 
 # Recommended

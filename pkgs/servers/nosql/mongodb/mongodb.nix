@@ -7,7 +7,7 @@
 , pcre-cpp
 , snappy
 , zlib
-, libyamlcpp
+, yaml-cpp
 , sasl
 , openssl
 , libpcap
@@ -41,13 +41,12 @@ let
         pymongo
       ]);
 
-      # 4.2 < mongodb <= 6.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
+      scons = sconsPackages.scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
 
-    } else if versionAtLeast version "4.2" then rec {
+    } else rec {
       python = scons.python.withPackages (ps: with ps; [
         pyyaml
         cheetah3
@@ -55,23 +54,12 @@ let
         setuptools
       ]);
 
-      # 4.2 < mongodb <= 5.0.x needs scons 3.x built with python3
-      scons = sconsPackages.scons_3_1_2.override { python = python3; };
+      scons = sconsPackages.scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
 
-    } else rec {
-      python = scons.python.withPackages (ps: with ps; [
-        setuptools
-        typing
-        cheetah3
-      ]);
-
-      scons = sconsPackages.scons_3_1_2;
-      mozjsVersion = "45";
-      mozjsReplace = "defined(HAVE_SINCOS)";
-   };
+    };
 
   system-libraries = [
     "boost"
@@ -103,7 +91,7 @@ in stdenv.mkDerivation rec {
     curl
     gperftools
     libpcap
-    libyamlcpp
+    yaml-cpp
     openssl
     pcre-cpp
     variants.python
@@ -128,6 +116,9 @@ in stdenv.mkDerivation rec {
     #include <string>'
     substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
+  '' + lib.optionalString (versionOlder version "5.0") ''
+    # remove -march overriding, we know better.
+    sed -i 's/env.Append.*-march=.*$/pass/' SConstruct
   '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
     substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
   '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
@@ -143,7 +134,7 @@ in stdenv.mkDerivation rec {
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument";
 
   sconsFlags = [
@@ -157,6 +148,9 @@ in stdenv.mkDerivation rec {
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
   ] ++ lib.optionals (versionAtLeast version "4.4") [ "--link-model=static" ]
     ++ map (lib: "--use-system-${lib}") system-libraries;
+
+  # This seems to fix mongodb not able to find OpenSSL's crypto.h during build
+  hardeningDisable = [ "fortify3" ];
 
   preBuild = ''
     sconsFlags+=" CC=$CC"
@@ -198,5 +192,6 @@ in stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
+    broken = (versionOlder version "6.0" && stdenv.system == "aarch64-darwin");
   };
 }

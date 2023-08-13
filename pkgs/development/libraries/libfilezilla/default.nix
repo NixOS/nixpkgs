@@ -12,17 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libfilezilla";
-  version = "0.39.1";
+  version = "0.41.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-89bA3yjzP1LPJTywP8UVeXUq5NrvKqxzRaa9feYjpsU=";
+    hash = "sha256-rCodDYKOpgB4fOoefuUNIfDTvZFSzs5hh7ivyQBiKqA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ gettext gnutls nettle libxcrypt ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
+
+  preBuild = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
+    export MACOSX_DEPLOYMENT_TARGET=10.13  # for futimens()
+  '';
 
   enableParallelBuilding = true;
 

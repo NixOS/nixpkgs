@@ -5,13 +5,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-cursor-themes";
-  version = "unstable-2022-11-29";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    rev = "aa6bb767831ac43d1768c2e639de713a4a1eba8d";
-    hash = "sha256-UQnRrylUo9zuDiAwQ1COtXMtq4XTbxtMle41p+pzxJc=";
+    # They don't really do tags, this is just a named commit.
+    rev = "d2c1428b499a347c291dafb13c89699fdbdd4be7";
+    hash = "sha256-i2Wf+OKwal9G5hkcAdmGSgX6txu1AHajqqPJdhpJoA0=";
   };
 
   installPhase = ''

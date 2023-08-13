@@ -35,7 +35,7 @@ buildPythonPackage rec {
     wheel-filename
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonschema
     pytestCheckHook
   ];

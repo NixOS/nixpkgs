@@ -8,7 +8,8 @@ let
   cfg = config.services.buildbot-master;
   opt = options.services.buildbot-master;
 
-  python = cfg.package.pythonModule;
+  package = pkgs.python3.pkgs.toPythonModule cfg.package;
+  python = package.pythonModule;
 
   escapeStr = escape [ "'" ];
 
@@ -212,10 +213,10 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.python3Packages.buildbot-full;
-        defaultText = literalExpression "pkgs.python3Packages.buildbot-full";
+        default = pkgs.buildbot-full;
+        defaultText = literalExpression "pkgs.buildbot-full";
         description = lib.mdDoc "Package to use for buildbot.";
-        example = literalExpression "pkgs.python3Packages.buildbot";
+        example = literalExpression "pkgs.buildbot";
       };
 
       packages = mkOption {
@@ -255,7 +256,7 @@ in {
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages ++ cfg.pythonPackages python.pkgs;
-      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ cfg.package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ package ])}/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}"

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgbinder";
-  version = "1.1.26";
+  version = "1.1.34";
 
   src = fetchFromGitHub {
     owner = "mer-hybris";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bXptf1ALanzDyhajQtKMs/0M9TWlrjhWQdC1NZiUgd8=";
+    sha256 = "sha256-e4J7K1AZyw3AvBNMj69VGKo7gtJ6Nr2ELjqgoqPlObU=";
   };
 
   outputs = [ "out" "dev" ];
@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     glib
     libglibutil
   ];
+
+  postPatch = ''
+    # Fix pkg-config and ranlib names for cross-compilation
+    substituteInPlace Makefile \
+      --replace "pkg-config" "$PKG_CONFIG" \
+      --replace "ranlib" "$RANLIB"
+  '';
 
   makeFlags = [
     "LIBDIR=$(out)/lib"

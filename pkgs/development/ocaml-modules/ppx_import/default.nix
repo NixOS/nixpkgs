@@ -25,9 +25,8 @@ buildDunePackage rec {
   pname = "ppx_import";
   inherit version;
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.05";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ppx_import/releases/download/${version}/ppx_import-${version}.tbz";

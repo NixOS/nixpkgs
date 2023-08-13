@@ -2,13 +2,14 @@
 , lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , addOpenGLRunpath
 , docutils
 , meson
 , ninja
 , pkg-config
 , python3
-, ffmpeg
+, ffmpeg_5
 , freefont_ttf
 , freetype
 , libass
@@ -66,9 +67,9 @@
 , sdl2Support        ? true,           SDL2
 , sixelSupport       ? false,          libsixel
 , speexSupport       ? true,           speex
-, swiftSupport       ? false,          swift
+, swiftSupport       ? stdenv.isDarwin, swift
 , theoraSupport      ? true,           libtheora
-, vaapiSupport       ? stdenv.isLinux, libva
+, vaapiSupport       ? x11Support || waylandSupport, libva
 , vapoursynthSupport ? false,          vapoursynth
 , vdpauSupport       ? true,           libvdpau
 , xineramaSupport    ? stdenv.isLinux, libXinerama
@@ -78,20 +79,44 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
+  inherit (darwin.apple_sdk_11_0.frameworks)
+    AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer Accelerate;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
-in stdenv.mkDerivation rec {
+
+  overrideSDK = platform: version:
+    platform // lib.optionalAttrs (platform ? darwinMinVersion) {
+      darwinMinVersion = version;
+    };
+
+  stdenv' = if swiftSupport && stdenv.isDarwin && stdenv.isx86_64
+    then stdenv.override (old: {
+      buildPlatform = overrideSDK old.buildPlatform "10.15";
+      hostPlatform = overrideSDK old.hostPlatform "10.15";
+      targetPlatform = overrideSDK old.targetPlatform "10.15";
+    })
+    else stdenv;
+in stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.35.0";
+  version = "0.36.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo = "mpv";
-    rev = "v${version}";
-    sha256 = "sha256-U3NDSxlX4/WkoHFkOvpcwPMwfwTnSpCw0QI5yLMK08o=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-82moFbWvfc1awXih0d0D+dHqYbIoGNZ77RmafQ80IOY=";
   };
+
+  patches = [
+    # Revert "meson: use the new build_options method" to avoid a
+    # cycle between the out and dev outputs.
+    (fetchpatch {
+      url = "https://github.com/mpv-player/mpv/commit/3c1686488b48bd2760e9b19f42e7d3be1363d00a.patch";
+      hash = "sha256-eYXfX8Y08q4Bl41VHBpwbxYRMZgm/iziXeK6AOp8O6I=";
+      revert = true;
+    })
+  ];
 
   postPatch = ''
     patchShebangs version.* ./TOOLS/
@@ -99,21 +124,24 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
 
-  mesonFlags = let
-    inherit (lib) mesonOption mesonBool mesonEnable;
-  in [
-    (mesonOption "default_library" "shared")
-    (mesonBool "libmpv" true)
-    (mesonEnable "libarchive" archiveSupport)
-    (mesonEnable "manpage-build" true)
-    (mesonEnable "cdda" cddaSupport)
-    (mesonEnable "dvbin" dvbinSupport)
-    (mesonEnable "dvdnav" dvdnavSupport)
-    (mesonEnable "openal" openalSupport)
-    (mesonEnable "sdl2" sdl2Support)
+  preConfigure = lib.optionalString swiftSupport ''
+    # Ensure we reference 'lib' (not 'out') of Swift.
+    export SWIFT_LIB_DYNAMIC=${lib.getLib swift.swift}/lib/swift/macosx
+  '';
+
+  mesonFlags = [
+    (lib.mesonOption "default_library" "shared")
+    (lib.mesonBool "libmpv" true)
+    (lib.mesonEnable "libarchive" archiveSupport)
+    (lib.mesonEnable "manpage-build" true)
+    (lib.mesonEnable "cdda" cddaSupport)
+    (lib.mesonEnable "dvbin" dvbinSupport)
+    (lib.mesonEnable "dvdnav" dvdnavSupport)
+    (lib.mesonEnable "openal" openalSupport)
+    (lib.mesonEnable "sdl2" sdl2Support)
     # Disable whilst Swift isn't supported
-    (mesonEnable "swift-build" swiftSupport)
-    (mesonEnable "macos-cocoa-cb" swiftSupport)
+    (lib.mesonEnable "swift-build" swiftSupport)
+    (lib.mesonEnable "macos-cocoa-cb" swiftSupport)
   ];
 
   mesonAutoFeatures = "auto";
@@ -131,7 +159,7 @@ in stdenv.mkDerivation rec {
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_5
     freetype
     libass
     libpthreadstubs
@@ -169,7 +197,8 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals zimgSupport        [ zimg ]
     ++ lib.optionals stdenv.isLinux     [ nv-codec-headers ]
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
-    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
+    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer Accelerate ]
+    ++ lib.optionals (stdenv.isDarwin && swiftSupport) [ AVFoundation CoreMedia ];
 
   postBuild = lib.optionalString stdenv.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
@@ -185,7 +214,8 @@ in stdenv.mkDerivation rec {
     cp ../TOOLS/mpv_identify.sh $out/bin
     cp ../TOOLS/umpv $out/bin
     cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
-    sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
+    sed -i '/Icon=/ ! s/mpv/umpv/g; s/^Exec=.*/Exec=umpv %U/' $out/share/applications/umpv.desktop
+    printf "NoDisplay=true\n" >> $out/share/applications/umpv.desktop
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r mpv.app $out/Applications
@@ -218,8 +248,9 @@ in stdenv.mkDerivation rec {
       mpv is a free and open-source general-purpose video player, based on the
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
+    changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
     platforms = platforms.unix;
   };
-}
+})

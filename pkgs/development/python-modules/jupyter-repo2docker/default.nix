@@ -59,6 +59,6 @@ buildPythonPackage rec {
     description = "Turn code repositories into Jupyter enabled Docker Images";
     homepage = "https://repo2docker.readthedocs.io/";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,20 +1,20 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
   pname = "proxify";
-  version = "0.0.8";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "proxify";
-    rev = "v${version}";
-    sha256 = "sha256-0zXWW6U+x9W+fMsvYTfWRdoftsQCp2JXXkfbqS63Svk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aoge1K1T4jgh8TFN8nFIjFehmz/o1UefbzEbV85dHTk=";
   };
 
-  vendorSha256 = "sha256-OldZyaPROtnPZPczFjn+kl61TI5zco/gM2MuPn2gYjo=";
+  vendorHash = "sha256-ingumSn4EDdw1Vgwm/ghQTsErqFVFZtjNfwfDwdJ/2s=";
 
   meta = with lib; {
     description = "Proxy tool for HTTP/HTTPS traffic capture";
@@ -25,6 +25,7 @@ buildGoModule rec {
       domain name) into other tools by simply setting the upstream proxy to proxify.
     '';
     homepage = "https://github.com/projectdiscovery/proxify";
+    changelog = "https://github.com/projectdiscovery/proxify/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

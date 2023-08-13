@@ -10,32 +10,39 @@
 , fastapi
 , fetchPypi
 , logging-journald
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , raven
   #, raven-aiohttp
 , setproctitle
+, setuptools
 , uvloop
 }:
 
 buildPythonPackage rec {
   pname = "aiomisc";
-  version = "16.2.10";
-  format = "setuptools";
+  version = "17.3.21";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iQlbd1DoPgxq+Am0BTDYXIBZoC21/54+bywDtcCXlls=";
+    hash = "sha256-NaSwjU4SfUYeUe/3nWQxfgMYrN4Ez1Dc/PE4ffJmlSs=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     colorlog
     logging-journald
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiocontextvars
     async-timeout
     fastapi
@@ -83,6 +90,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Miscellaneous utils for asyncio";
     homepage = "https://github.com/aiokitchen/aiomisc";
+    changelog = "https://github.com/aiokitchen/aiomisc/blob/master/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

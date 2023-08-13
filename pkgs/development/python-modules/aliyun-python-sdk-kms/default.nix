@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-kms";
-  version = "2.16.0";
+  version = "2.16.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p/GFdyyI86DdqFa2Zt2kNtguAPnxHqW78S3KsmEO41g=";
+    hash = "sha256-o3JzdxVoIBS6zmi9QP6DMy9P2SUAmj6xENQbxm8nDno=";
   };
 
   propagatedBuildInputs = [

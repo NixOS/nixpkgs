@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, python3, openssl }:
+{ lib, fetchFromGitHub, fetchpatch, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     done
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pyelftools
   ];
 
@@ -68,6 +68,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hexa ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonPackage rec {
   pname = "rst2html5";
   version = "2.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-Ejjja/fm6wXTf9YtjCYZsNDB8X5oAtyPoUIsYFDuZfc=";
   };

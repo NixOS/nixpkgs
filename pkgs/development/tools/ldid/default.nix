@@ -4,7 +4,7 @@
 , fetchgit
 , libplist
 , libxml2
-, openssl_1_1
+, openssl
 , CoreFoundation
 , Security
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libplist
     libxml2
-    openssl_1_1
+    openssl
   ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
     Security

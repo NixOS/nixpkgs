@@ -129,6 +129,60 @@ let
       };
     };
   };
+
+  hooksModule = types.submodule {
+    options = {
+      daemon = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/daemon.d/
+          and called for daemon start/shutdown/SIGHUP events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+
+      qemu = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/qemu.d/
+          and called for qemu domains begin/end/migrate events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+
+      lxc = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
+          and called for lxc domains begin/end events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+
+      libxl = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/libxl.d/
+          and called for libxl-handled xen domains begin/end events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+
+      network = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
+          and called for networks begin/end events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+    };
+  };
 in
 {
 
@@ -246,6 +300,14 @@ in
         QEMU related options.
       '';
     };
+
+    hooks = mkOption {
+      type = hooksModule;
+      default = { };
+      description = lib.mdDoc ''
+        Hooks related options.
+      '';
+    };
   };
 
 
@@ -308,7 +370,9 @@ in
             libvirt/nwfilter/*.xml );
         do
             mkdir -p /var/lib/$(dirname $i) -m 755
-            cp -npd ${cfg.package}/var/lib/$i /var/lib/$i
+            if [ ! -e /var/lib/$i ]; then
+              cp -pd ${cfg.package}/var/lib/$i /var/lib/$i
+            fi
         done
 
         # Copy generated qemu config to libvirt directory
@@ -335,6 +399,15 @@ in
           ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
           ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
         '')}
+
+        # Symlink hooks to /var/lib/libvirt
+        ${concatStringsSep "\n" (map (driver:
+          ''
+          mkdir -p /var/lib/${dirName}/hooks/${driver}.d
+          rm -rf /var/lib/${dirName}/hooks/${driver}.d/*
+          ${concatStringsSep "\n" (mapAttrsToList (name: value:
+            "ln -s --force ${value} /var/lib/${dirName}/hooks/${driver}.d/${name}") cfg.hooks.${driver})}
+        '') (attrNames cfg.hooks))}
       '';
 
       serviceConfig = {
@@ -414,13 +487,16 @@ in
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
     systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
 
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-        if (action.id == "org.libvirt.unix.manage" &&
-          subject.isInGroup("libvirtd")) {
-          return polkit.Result.YES;
-        }
-      });
-    '';
+    security.polkit = {
+      enable = true;
+      extraConfig = ''
+        polkit.addRule(function(action, subject) {
+          if (action.id == "org.libvirt.unix.manage" &&
+            subject.isInGroup("libvirtd")) {
+            return polkit.Result.YES;
+          }
+        });
+      '';
+    };
   };
 }

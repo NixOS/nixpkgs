@@ -1,7 +1,5 @@
 {lib, stdenv, fetchurl, aspell, which, writeScript}:
 
-with lib;
-
 /* HOWTO:
 
    * Add some of these to your profile or systemPackages.
@@ -105,7 +103,7 @@ let
         homepage = "http://ftp.gnu.org/gnu/aspell/dict/0index.html";
       } // (args.meta or {});
 
-    } // lib.optionalAttrs (stdenv.isDarwin && elem language [ "is" "nb" ]) {
+    } // lib.optionalAttrs (stdenv.isDarwin && lib.elem language [ "is" "nb" ]) {
       # tar: Cannot open: Illegal byte sequence
       unpackPhase = ''
         runHook preUnpack
@@ -115,7 +113,7 @@ let
         runHook postUnpack
       '';
 
-      postPatch = getAttr language {
+      postPatch = lib.getAttr language {
         is = ''
           cp icelandic.alias íslenska.alias
           sed -i 's/ .slenska\.alias/ íslenska.alias/g' Makefile.pre
@@ -137,7 +135,7 @@ let
       preBuild = ''
         # Aspell can't handle multiple data-dirs
         # Copy everything we might possibly need
-        ${concatMapStringsSep "\n" (p: ''
+        ${lib.concatMapStringsSep "\n" (p: ''
           cp -a ${p}/lib/aspell/* .
         '') ([ aspell ] ++ langInputs)}
         export ASPELL_CONF="data-dir $(pwd)"

@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , fetchpatch
 , nixosTests
+, lib
 
 , plugins ? ps: []
 }:
@@ -32,18 +33,14 @@ let
 
 in py.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vrRMdqEpsps4ZKgunMhznJr/TQ9+WVMNYFu76ZU7iMI=";
+    sha256 = "sha256-mXva4c5Rtjq/jFJl3yGGlVrggzGJ3awN0+xoDnDWBSA=";
   };
-
-  patches = [
-    ./redis-unix-sock.patch
-  ];
 
   format = "other";
 
@@ -96,5 +93,13 @@ in py.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) peering-manager;
     };
+  };
+
+  meta = with lib; {
+    homepage = "https://peering-manager.net/";
+    license = licenses.asl20;
+    description = "BGP sessions management tool";
+    maintainers = with maintainers; [ yuka ];
+    platforms = platforms.linux;
   };
 }

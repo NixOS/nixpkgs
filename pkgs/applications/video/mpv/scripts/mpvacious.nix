@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mpvacious";
-  version = "0.18";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "sha256-FiYEpZVaeJQVSXa9obFYSKNVASJolOBm5D3faOlCzNY=";
+    sha256 = "sha256-b0JUT5Y0u/H9p5whuFTU8EgQnKzFCUR2HA9NO+mxe04=";
   };
 
   postPatch = ''

@@ -1,4 +1,4 @@
-{ stdenv, lib, git, openssl, makeWrapper, buildPythonApplication, pytestCheckHook, ps
+{ stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
 , fetchPypi, fetchFromGitLab, sudo }:
 
 buildPythonApplication rec {
@@ -23,7 +23,7 @@ buildPythonApplication rec {
   # Tests depend on sudo
   doCheck = stdenv.isLinux;
 
-  checkInputs = [ pytestCheckHook git openssl ps sudo ];
+  nativeCheckInputs = [ pytestCheckHook git openssl ps sudo ];
 
   # Add test dependency in PATH
   preCheck = "export PYTHONPATH=$PYTHONPATH:${pmb_test}";

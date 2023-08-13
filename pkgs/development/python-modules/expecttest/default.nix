@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [ hypothesis pytestCheckHook ];
+  nativeCheckInputs = [ hypothesis pytestCheckHook ];
 
   pythonImportsCheck = [ "expecttest" ];
 

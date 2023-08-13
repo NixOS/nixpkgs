@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "thebino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-e0MJjE4zgBPL+vt9EkgsdGrgqUyKK/1S9ZFxy56PUjc=";
+    hash = "sha256-e0MJjE4zgBPL+vt9EkgsdGrgqUyKK/1S9ZFxy56PUjc=";
   };
 
   propagatedBuildInputs = [
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytestCheckHook

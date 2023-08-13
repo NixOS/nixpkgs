@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "iTaybb";
     repo = pname;
     rev = "b93df794e1e60017c42d9520ac097b6fd38c2e8b";
-    sha256 = "sha256-Etyv3xCB1cGozWDsskygwcTHJfC+V5hvqBNQAF8SIMM=";
+    hash = "sha256-Etyv3xCB1cGozWDsskygwcTHJfC+V5hvqBNQAF8SIMM=";
   });
 
   doCheck = false;
@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "A Smart Download Manager for Python";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ WeebSorceress ];
+    maintainers = with maintainers; [ ];
   };
 }

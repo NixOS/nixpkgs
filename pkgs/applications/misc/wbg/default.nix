@@ -11,27 +11,23 @@
 , wayland-protocols
 , enablePNG ? true
 , enableJPEG ? true
+, enableWebp ? true
 # Optional dependencies
 , libpng
 , libjpeg
+, libwebp
 }:
-
-let
-  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
-  mesonFeatureFlag = feature: flag:
-    "-D${feature}=${if flag then "enabled" else "disabled"}";
-in
 
 stdenv.mkDerivation rec {
   pname = "wbg";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "wbg";
     rev = version;
-    sha256 = "sha256-PKEOWRcSAB4Uv5TfameQIEZh6s6xCGdyoZ13etL1TKA=";
+    sha256 = "sha256-JJIIqSc0qHgjtpGKai8p6vihXg16unsO7vW91pioAmc=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +43,15 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ] ++ lib.optional enablePNG libpng
-    ++ lib.optional enableJPEG libjpeg;
+    ++ lib.optional enableJPEG libjpeg
+    ++ lib.optional enableWebp libwebp;
 
   mesonBuildType = "release";
 
   mesonFlags = [
-    (mesonFeatureFlag "png" enablePNG)
-    (mesonFeatureFlag "jpeg" enableJPEG)
+    (lib.mesonEnable "png" enablePNG)
+    (lib.mesonEnable "jpeg" enableJPEG)
+    (lib.mesonEnable "webp" enableWebp)
   ];
 
   meta = with lib; {

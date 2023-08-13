@@ -6,13 +6,13 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "1.7.3";
+  version = "1.9.3";
 
   src = fetchurl {
-    url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
-    sha256 = "sha256-J4bDI5bLiH9Gz8OlU5eHJRPsdahJ6uqfTwFGkoycsGA=";
+    url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
+    hash = "sha256-nM+UTsyzPGaDDvn/nUbDQCdBzcbYgyUQRSYdsz50joI=";
   };
 
   postPatch = ''
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nequissimus ];
     platforms = platforms.unix;
   };
-}
+})

@@ -47,7 +47,7 @@ buildPythonPackage rec {
     u-msgpack-python
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

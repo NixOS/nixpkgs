@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+/Du5dk7ls728ZqfAHA/IsCmTxlyjZG5VCgAmlISlwk=";
+    hash = "sha256-+/Du5dk7ls728ZqfAHA/IsCmTxlyjZG5VCgAmlISlwk=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Single API for reading, manipulating and writing data in csv, ods, xls, xlsx and xlsm files";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

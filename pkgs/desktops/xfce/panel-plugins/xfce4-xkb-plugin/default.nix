@@ -1,6 +1,7 @@
 { lib
 , mkXfceDerivation
 , gtk3
+, libnotify
 , librsvg
 , libwnck
 , libxklavier
@@ -14,13 +15,13 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-xkb-plugin";
-  version = "0.8.2";
-  rev-prefix = "";
-  sha256 = "sha256-xmCoNMxykeaThYEJo6BcbraFo9CruFZL6YPjovzb6hg=";
+  version = "0.8.3";
+  sha256 = "sha256-qWxjULrBpueQS3gxwRg49cQ3ovlQ8iWvYZ6Z/THm+/s=";
 
   buildInputs = [
     garcon
     gtk3
+    libnotify # optional notification support
     librsvg
     libxfce4ui
     libxfce4util

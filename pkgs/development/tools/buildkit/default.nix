@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "buildkit";
-  version = "0.10.6";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "moby";
     repo = "buildkit";
     rev = "v${version}";
-    sha256 = "sha256-bTzpiTqdAfo31sFRBCp0EzYMVjc6jt4aPK0VLsB9j0g=";
+    hash = "sha256-Fee/XuxtNP9+T8kRd3yeEhFvpfaIgMkqfSaZCpaYEdM=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/buildctl" ] ++ lib.optionals stdenv.isLinux [ "cmd/buildkitd" ];
 
@@ -23,7 +23,7 @@ buildGoModule rec {
     description = "Concurrent, cache-efficient, and Dockerfile-agnostic builder toolkit";
     homepage = "https://github.com/moby/buildkit";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester marsam ];
+    maintainers = with maintainers; [ vdemeester marsam developer-guy ];
     mainProgram = "buildctl";
   };
 }

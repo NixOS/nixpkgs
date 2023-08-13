@@ -13,7 +13,6 @@ buildNimPackage rec {
   propagatedNativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ getdns ];
 
-  doCheck = true;
   checkPhase = "nim c tests/test_example_synchronous";
     # The test requires network but check if it builds.
 

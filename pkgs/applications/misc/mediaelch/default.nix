@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 , cmake
 , qttools
@@ -23,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediaelch";
-  version = "2.8.18";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "sha256-9kwU9j8YNF/OmzrQaRAlBpW+t/tIpZJw5+pfEoTmCBA=";
+    hash = "sha256-gNpnmyUKDXf40+1JmJzNyEPIv/DO8b3CdJAphheEvTU=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwayland
     quazip
-  ] ++ lib.optional (qtVersion == "6") [
+  ] ++ lib.optionals (qtVersion == "6") [
     qt5compat
   ];
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "flink";
-  version = "1.14.4";
+  version = "1.17.1";
 
   src = fetchurl {
-    url = "mirror://apache/flink/${pname}-${version}/${pname}-${version}-bin-scala_2.11.tgz";
-    sha256 = "sha256-qvWUh+EQT/MljN5LCX2JLMEapIEGAbAljrCMTYsFqtw=";
+    url = "mirror://apache/flink/${pname}-${version}/${pname}-${version}-bin-scala_2.12.tgz";
+    sha256 = "sha256-HpVDS3ydi2Z1SINAUed9lni9i8FCr0SI8yBCYP4wxyM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://flink.apache.org/downloads.html";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ mbode ];
+    maintainers = with maintainers; [ mbode autophagy ];
   };
 }

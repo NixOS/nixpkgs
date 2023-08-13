@@ -1,16 +1,16 @@
 { lib, mkCoqDerivation, coq, callPackage }:
 
-with lib; let mkContrib = pname: coqs: param:
+  let mkContrib = pname: coqs: param:
   let contribVersion = {version ? null}: mkCoqDerivation ({
       inherit pname version;
       owner = "coq-contribs";
       mlPlugin = true;
-    } // optionalAttrs (builtins.elem coq.coq-version coqs) ({
+    } // lib.optionalAttrs (builtins.elem coq.coq-version coqs) ({
       defaultVersion = param.version;
       release = { "${param.version}" = { inherit (param) rev sha256; }; };
     } // (removeAttrs param [ "version" "rev" "sha256" ]))
   ); in
-  makeOverridable contribVersion {} ; in
+  lib.makeOverridable contribVersion {} ; in
 {
   aac-tactics = mkContrib "aac-tactics" [ "8.7" "8.8" ] {
     "8.7" = {

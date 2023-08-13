@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Filesystem for accessing FTP hosts based on FUSE and libcurl";
-    homepage = "http://curlftpfs.sourceforge.net";
+    homepage = "https://curlftpfs.sourceforge.net";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
   };

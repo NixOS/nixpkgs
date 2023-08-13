@@ -5,6 +5,11 @@
 , makeDesktopItem
 , copyDesktopItems
 , pkg-config
+, cmake
+, fontconfig
+, glib
+, gtk3
+, freetype
 , openssl
 , xorg
 , libGL
@@ -26,10 +31,18 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals withGui [
     copyDesktopItems
+    cmake
   ];
 
-  buildInputs = if withGui then [
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals withGui [
+    fontconfig
+    glib
+    gtk3
+    freetype
     openssl
     xorg.libxcb
     xorg.libX11
@@ -39,8 +52,6 @@ rustPlatform.buildRustPackage rec {
     xorg.libxcb
     libGL
     libGL.dev
-  ] else [
-    openssl
   ];
 
   buildNoDefaultFeatures = true;

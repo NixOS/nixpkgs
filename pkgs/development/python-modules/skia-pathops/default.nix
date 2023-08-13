@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , cython
+, isPyPy
 , ninja
 , setuptools-scm
 , setuptools
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     pname = "skia-pathops";
     inherit version;
     extension = "zip";
-    sha256 = "sha256-Ci/e6Ht62wGMv6bpXvnkKZ7WOwCAvidnejD/77ypE1A=";
+    hash = "sha256-Ci/e6Ht62wGMv6bpXvnkKZ7WOwCAvidnejD/77ypE1A=";
   };
 
   postPatch = ''
@@ -44,14 +45,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pathops" ];
 
   meta = {
     description = "Python access to operations on paths using the Skia library";
-    homepage = "https://skia.org/dev/present/pathops";
+    homepage = "https://github.com/fonttools/skia-pathops";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.BarinovMaxim ];
+    # ERROR at //gn/BUILDCONFIG.gn:87:14: Script returned non-zero exit code.
+    broken = isPyPy;
   };
 }

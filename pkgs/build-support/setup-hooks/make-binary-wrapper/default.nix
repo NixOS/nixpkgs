@@ -10,7 +10,8 @@
 }:
 
 makeSetupHook {
-  deps = [ dieHook ]
+  name = "make-binary-wrapper-hook";
+  propagatedBuildInputs = [ dieHook ]
     # https://github.com/NixOS/nixpkgs/issues/148189
     ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) cc;
 

@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.19.2";
+  version = "0.20.1";
 
   disabled = pythonOlder "3.6";
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-jfOyQ0wjYsJOAlix/P9dzBPmkv901eETmBYQzIHZqfg=";
+    hash = "sha256-BFiGMPiO9Xcl8EiTZYiwHCpo7z+tRaBkIb8GTo01rBA=";
   };
 
   propagatedBuildInputs = [
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   '';
 
   # Most tests require credentials to run on IBMQ
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     nbconvert
     nbformat

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "karlender";
-  version = "0.8.0";
+  version = "0.9.2";
 
   src = fetchFromGitLab {
     owner = "floers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WuTxsnYXudciTBH1RFHsIYNIHeoeZ+rI2JhYBYPUziw=";
+    hash = "sha256-txPMOWwxgs9PH1Scnwr/X4cuMIUa+eoLW3K2aqmqRMQ=";
   };
 
-  cargoHash = "sha256-eHEISCHh1jWCy3LwVuCx4LXfNLe1A4drHusyayoS+Ho=";
+  cargoHash = "sha256-OyyzzkoYBed2XFCesj3QBodT9e/BaapGl/z0f6+cDZA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/domain/time.rs --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace build.rs --replace "// gra::build" "gra::build"
   '';
 
   postInstall = ''

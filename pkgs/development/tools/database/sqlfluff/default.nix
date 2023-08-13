@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "1.4.5";
+  version = "2.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Kc0doBR2iOy54arxOYXH5eHlcM7pXFVUqedopsZH8rE=";
+    hash = "sha256-TRu9pDvVQIyT9aZR9MSYOtTbsUV596OcAZlGY4VrrKY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     importlib_metadata
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     hypothesis
     pytestCheckHook
   ];

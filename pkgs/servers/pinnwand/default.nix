@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 }:
 
@@ -21,6 +20,11 @@ with python3.pkgs; buildPythonApplication rec {
     poetry-core
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'sqlalchemy = "^1.4"' 'sqlalchemy = "*"'
+  '';
+
   propagatedBuildInputs = [
     click
     docutils
@@ -32,7 +36,7 @@ with python3.pkgs; buildPythonApplication rec {
     tornado
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

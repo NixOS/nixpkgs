@@ -1,8 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, runCommand
 , rustPlatform
 , openssl
 , zlib
@@ -10,80 +8,56 @@
 , pkg-config
 , python3
 , xorg
-, libiconv
+, Libsystem
 , AppKit
-, Foundation
 , Security
-# darwin.apple_sdk.sdk
-, sdk
 , nghttp2
 , libgit2
-, withExtraFeatures ? true
+, doCheck ? true
+, withDefaultFeatures ? true
+, additionalFeatures ? (p: p)
 , testers
 , nushell
 , nix-update-script
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  version = "0.83.1";
+in
+
+rustPlatform.buildRustPackage {
   pname = "nushell";
-  version = "0.73.0";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "nushell";
+    repo = "nushell";
     rev = version;
-    sha256 = "sha256-hxcB5nzhVjsC5XYR4Pt3GN4ZEgWpetQQZr0mj3bAnRc=";
+    hash = "sha256-WMMGsJFgUkascCja7v0VA3spaOb5QmMFXQ2JOT9beO4=";
   };
 
-  cargoSha256 = "sha256-pw+pBZeXuKSaP/qC3aiauXAH/BRR1rQZ2jVVmR1JQhU=";
-
-  # enable pkg-config feature of zstd
-  cargoPatches = [ ./zstd-pkg-config.patch ];
+  cargoHash = "sha256-/0+k3qOM9/rY6XmeVjqQWkjv19yZTkmfMK51z4+ppJU=";
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
     ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    Foundation
-    (
-      # Pull a header that contains a definition of proc_pid_rusage().
-      # (We pick just that one because using the other headers from `sdk` is not
-      # compatible with our C++ standard library. This header is already in
-      # the standard library on aarch64)
-      # See also:
-      # https://github.com/shanesveller/nixpkgs/tree/90ed23b1b23c8ee67928937bdec7ddcd1a0050f5/pkgs/development/libraries/webkitgtk/default.nix
-      # https://github.com/shanesveller/nixpkgs/blob/90ed23b1b23c8ee67928937bdec7ddcd1a0050f5/pkgs/tools/system/btop/default.nix#L32-L38
-      runCommand "${pname}_headers" { } ''
-        install -Dm444 "${lib.getDev sdk}"/include/libproc.h "$out"/include/libproc.h
-      ''
-    )
-  ] ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+    ++ lib.optionals stdenv.isDarwin [ zlib Libsystem Security ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
-  buildFeatures = lib.optional withExtraFeatures "extra";
+  buildNoDefaultFeatures = !withDefaultFeatures;
+  buildFeatures = additionalFeatures [ ];
 
-  # TODO investigate why tests are broken on darwin
-  # failures show that tests try to write to paths
-  # outside of TMPDIR
-  doCheck = ! stdenv.isDarwin;
+  inherit doCheck;
 
   checkPhase = ''
     runHook preCheck
     echo "Running cargo test"
-    HOME=$TMPDIR cargo test
+    HOME=$(mktemp -d) cargo test
     runHook postCheck
   '';
-
-  meta = with lib; {
-    description = "A modern shell written in Rust";
-    homepage = "https://www.nushell.sh/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
-    mainProgram = "nu";
-  };
 
   passthru = {
     shellPath = "/bin/nu";
@@ -91,5 +65,13 @@ rustPlatform.buildRustPackage rec {
       package = nushell;
     };
     updateScript = nix-update-script { };
+  };
+
+  meta = with lib; {
+    description = "A modern shell written in Rust";
+    homepage = "https://www.nushell.sh/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
+    mainProgram = "nu";
   };
 }

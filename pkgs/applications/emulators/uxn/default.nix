@@ -2,24 +2,23 @@
 , stdenv
 , fetchFromSourcehut
 , SDL2
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
   pname = "uxn";
-  version = "unstable-2022-10-22";
+  version = "unstable-2023-07-30";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "1b2049e238df96f32335edf1c6db35bd09f8b42d";
-    hash = "sha256-lwms+qUelfpTC+i2m5b3dW7ww9298YMPFdPVsFrwcDQ=";
+    rev = "9ca8e9623d0ab1c299f08d3dd9d54098557f5749";
+    hash = "sha256-K51YiLnBwFWgD3h3l2BhsvzhnHHolZPsjjUWJSe4sPQ=";
   };
 
   buildInputs = [
     SDL2
   ];
-
-  dontConfigure = true;
 
   postPatch = ''
      sed -i -e 's|UXNEMU_LDFLAGS="$(brew.*$|UXNEMU_LDFLAGS="$(sdl2-config --cflags --libs)"|' build.sh
@@ -44,11 +43,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     description = "An assembler and emulator for the Uxn stack machine";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ AndersonTorres kototama ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres kototama ];
+    inherit (SDL2.meta) platforms;
   };
 }

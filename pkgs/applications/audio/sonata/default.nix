@@ -39,10 +39,6 @@ in buildPythonApplication rec {
     setuptools
   ];
 
-  # Otherwise the setup hook for gobject-introspection is not run:
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   postPatch = ''
     # Remove "Local MPD" tab which is not suitable for NixOS.
     sed -i '/localmpd/d' sonata/consts.py

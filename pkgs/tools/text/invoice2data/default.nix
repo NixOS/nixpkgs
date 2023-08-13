@@ -1,26 +1,25 @@
 { lib
 , fetchFromGitHub
+, ghostscript
 , imagemagick
+, poppler_utils
 , python3
-, tesseract
-, xpdf
+, tesseract5
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "invoice2data";
-  version = "0.3.6";
+  version = "0.4.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "invoice-x";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-t1jgLyKtQsLINlnkCdSbVfTM6B/EiD1yGtx9UHjyZVE=";
+    sha256 = "sha256-ss2h8cg0sga+lzJyQHckrZB/Eb63Oj3FkqmGqWCzCQ8=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools-git
-  ];
+  buildInputs = with python3.pkgs; [ setuptools-git ];
 
   propagatedBuildInputs = with python3.pkgs; [
     chardet
@@ -28,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     pdfminer-six
     pillow
     pyyaml
+    setuptools
     unidecode
   ];
 
@@ -37,9 +37,10 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [
+    ghostscript
     imagemagick
-    tesseract
-    xpdf
+    tesseract5
+    poppler_utils
   ])];
 
   # Tests fails even when ran manually on my ubuntu machine !!

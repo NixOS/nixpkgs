@@ -1,19 +1,17 @@
-{ mkDerivation, fetchurl, makeWrapper, unzip, lib, php }:
-let
+{ mkDerivation, fetchurl, makeBinaryWrapper, unzip, lib, php }:
+
+mkDerivation (finalAttrs: {
   pname = "composer";
-  version = "2.5.0";
-in
-mkDerivation {
-  inherit pname version;
+  version = "2.5.8";
 
   src = fetchurl {
-    url = "https://getcomposer.org/download/${version}/composer.phar";
-    sha256 = "tXFhDlRReF92OJoI6VddkcPW44/uHfepcI/jBwE8hCQ=";
+    url = "https://github.com/composer/composer/releases/download/${finalAttrs.version}/composer.phar";
+    hash = "sha256-8Hk0+tRPkEjA3IdaUGzKMcwnlNauv8GGfzsfv0jc4sU=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -25,11 +23,11 @@ mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";
     description = "Dependency Manager for PHP";
-    license = licenses.mit;
     homepage = "https://getcomposer.org/";
-    changelog = "https://github.com/composer/composer/releases/tag/${version}";
-    maintainers = with maintainers; [ offline ] ++ teams.php.members;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ offline ] ++ lib.teams.php.members;
   };
-}
+})

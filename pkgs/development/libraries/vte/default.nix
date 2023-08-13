@@ -24,19 +24,19 @@
 , zlib
 , icu
 , systemd
-, systemdSupport ? stdenv.hostPlatform.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.70.2";
+  version = "0.72.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-TRW0OA3j9WTVfqvQBjicQHxwXfWwxwAw/cwklxozTYA=";
+    sha256 = "sha256-95Zv0YWmmB9TlkFitxz+9+YGSVFV1vWCe3KqDdZ0HJ4=";
   };
 
   patches = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   ];
 
   # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
 
   postPatch = ''
     patchShebangs perf/*

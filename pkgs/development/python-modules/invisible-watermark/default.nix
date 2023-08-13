@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ShieldMnt";
     repo = "invisible-watermark";
     rev = version;
-    sha256 = "sha256-NGDPEETuM7rYbo8kXYoRWLJWpa/lWLKEvaaiDzSWYZ4=";
+    hash = "sha256-NGDPEETuM7rYbo8kXYoRWLJWpa/lWLKEvaaiDzSWYZ4=";
   };
 
   propagatedBuildInputs = [

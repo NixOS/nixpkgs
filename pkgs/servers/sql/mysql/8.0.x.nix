@@ -6,11 +6,11 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "8.0.31";
+  version = "8.0.34";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Z7uMunWyjpXH95SFY/AfuEUo/LsaNduoOdTORP4Bm6o=";
+    hash = "sha256-5l0Do8QmGLX7+ZBCrtMyCUAumyeqYsfIdD/9R4jY2x0=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]

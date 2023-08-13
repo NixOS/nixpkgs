@@ -16,21 +16,27 @@ in
 
 stdenv.mkDerivation rec {
   pname = "hepmc3";
-  version = "3.2.5";
+  version = "3.2.6";
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "sha256-zQ91yA91VJxZzCqCns52Acd96Xyypat1eQysjh1YUDI=";
+    sha256 = "sha256-JI87WzbddzhEy+c9UfYIkUWDNLmGsll1TFnb9Lvx1SU=";
   };
 
   nativeBuildInputs = [
     cmake
-  ];
+  ]
+  ++ lib.optional withPython python.pkgs.pythonImportsCheckHook;
 
   buildInputs = [
     root_py
   ]
   ++ lib.optional withPython python;
+
+  # error: invalid version number in 'MACOSX_DEPLOYMENT_TARGET=11.0'
+  preConfigure = lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '';
 
   cmakeFlags = [
     "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}"
@@ -45,11 +51,7 @@ stdenv.mkDerivation rec {
       --replace 'readlink' '${coreutils}/bin/readlink'
   '';
 
-  doInstallCheck = withPython;
-  # prevent nix from trying to dereference a null python
-  installCheckPhase = lib.optionalString withPython ''
-    PYTHONPATH=${placeholder "out"}/${python.sitePackages} python -c 'import pyHepMC3'
-  '';
+  pythonImportsCheck = [ "pyHepMC3" ];
 
   meta = with lib; {
     description = "The HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation";
@@ -57,7 +59,5 @@ stdenv.mkDerivation rec {
     homepage = "http://hepmc.web.cern.ch/hepmc/";
     platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.11";
+  version = "1.4.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "tenable";
     repo = "pyTenable";
     rev = "refs/tags/${version}";
-    hash = "sha256-GSEMjgG8Q+gzHQWRbXr/qiGP6U6ydPxu0JsD56mRNWU=";
+    hash = "sha256-UY3AFnPplmU0jrV4LIKH4+2tcJEFkKMqO2GWVkgaHYE=";
   };
 
   propagatedBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     responses
     pytest-datafiles
     pytest-vcr

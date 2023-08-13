@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, evdev-proto }:
 
 stdenv.mkDerivation rec {
   pname = "mtdev";
@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1q700h9dqcm3zl6c3gj0qxxjcx6ibw2c51wjijydhwdcm26v5mqm";
   };
 
+  buildInputs = lib.optional stdenv.hostPlatform.isFreeBSD evdev-proto;
+
   meta = with lib; {
-    homepage = "http://bitmath.org/code/mtdev/";
+    homepage = "https://bitmath.org/code/mtdev/";
     description = "Multitouch Protocol Translation Library";
     longDescription = ''
       The mtdev is a stand-alone library which transforms all variants of
@@ -20,6 +22,6 @@ stdenv.mkDerivation rec {
       See the kernel documentation for further details.
     '';
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = with platforms; freebsd ++ linux;
   };
 }

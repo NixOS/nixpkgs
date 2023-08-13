@@ -7,19 +7,21 @@
 , openssh
 , openssl
 , python3
+, xxHash
 , zstd
 , installShellFiles
 , nixosTests
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.2";
+  version = "1.2.4";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1zBodEPxvrYCsdcrrjYxj2+WVIGPzcUEWFQOxXnlcmA=";
+    hash = "sha256-pL1U6UaegbejCmcRQjEVq8gY2c2ETsscoOYQS8U3Tag=";
   };
 
   postPatch = ''
@@ -31,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     cython
     setuptools-scm
+    pkgconfig
 
     # docs
     sphinxHook
@@ -45,6 +48,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     libb2
     lz4
+    xxHash
     zstd
     openssl
   ] ++ lib.optionals stdenv.isLinux [
@@ -57,13 +61,6 @@ python3.pkgs.buildPythonApplication rec {
     (if stdenv.isLinux then pyfuse3 else llfuse)
   ];
 
-  preConfigure = ''
-    export BORG_OPENSSL_PREFIX="${openssl.dev}"
-    export BORG_LZ4_PREFIX="${lz4.dev}"
-    export BORG_LIBB2_PREFIX="${libb2}"
-    export BORG_LIBZSTD_PREFIX="${zstd.dev}"
-  '';
-
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''
   ];
@@ -75,8 +72,9 @@ python3.pkgs.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     e2fsprogs
+    py
     python-dateutil
     pytest-benchmark
     pytest-xdist
@@ -117,6 +115,7 @@ python3.pkgs.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
+    changelog = "https://github.com/borgbackup/borg/blob/${version}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;

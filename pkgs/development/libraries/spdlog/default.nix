@@ -1,68 +1,71 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt_8, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+# Although we include upstream patches that fix compilation with fmt_10, we
+# still use fmt_9 because this dependency is propagated, and many of spdlog's
+# reverse dependencies don't support fmt_10 yet.
+, fmt_9
 , staticBuild ? stdenv.hostPlatform.isStatic
+
+# tests
+, bear, tiledb
 }:
 
-let
-  generic = { version, sha256 }:
-    stdenv.mkDerivation {
-      pname = "spdlog";
-      inherit version;
+stdenv.mkDerivation rec {
+  pname = "spdlog";
+  version = "1.11.0";
 
-      src = fetchFromGitHub {
-        owner  = "gabime";
-        repo   = "spdlog";
-        rev    = "v${version}";
-        inherit sha256;
-      };
-
-      # in master post 1.10.0, see https://github.com/gabime/spdlog/issues/2380
-      patches = lib.optional (lib.versionAtLeast version "1.4.1") (fetchpatch {
-        name = "fix-pkg-config.patch";
-        url = "https://github.com/gabime/spdlog/commit/afb69071d5346b84e38fbcb0c8c32eddfef02a55.patch";
-        sha256 = "0cab2bbv8zyfhrhfvcyfwf5p2fddlq5hs2maampn5w18f6jhvk6q";
-      });
-
-      nativeBuildInputs = [ cmake ];
-      # spdlog <1.3 uses a bundled version of fmt
-      propagatedBuildInputs = lib.optional (lib.versionAtLeast version "1.3") fmt_8;
-
-      cmakeFlags = [
-        "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
-        "-DSPDLOG_BUILD_STATIC=${if staticBuild then "ON" else "OFF"}"
-        "-DSPDLOG_BUILD_EXAMPLE=OFF"
-        "-DSPDLOG_BUILD_BENCH=OFF"
-        "-DSPDLOG_BUILD_TESTS=ON"
-        "-DSPDLOG_FMT_EXTERNAL=ON"
-      ];
-
-      outputs = [ "out" "doc" ]
-        # spdlog <1.4 is header only, no need to split libraries and headers
-        ++ lib.optional (lib.versionAtLeast version "1.4") "dev";
-
-      postInstall = ''
-        mkdir -p $out/share/doc/spdlog
-        cp -rv ../example $out/share/doc/spdlog
-      '';
-
-      doCheck = true;
-
-      meta = with lib; {
-        description    = "Very fast, header only, C++ logging library";
-        homepage       = "https://github.com/gabime/spdlog";
-        license        = licenses.mit;
-        maintainers    = with maintainers; [ obadz ];
-        platforms      = platforms.all;
-      };
-    };
-in
-{
-  spdlog_1 = generic {
-    version = "1.10.0";
-    sha256 = "sha256-c6s27lQCXKx6S1FhZ/LiKh14GnXMhZtD1doltU4Avws=";
+  src = fetchFromGitHub {
+    owner = "gabime";
+    repo  = "spdlog";
+    rev   = "v${version}";
+    hash  = "sha256-kA2MAb4/EygjwiLEjF9EA7k8Tk//nwcKB1+HlzELakQ=";
   };
 
-  spdlog_0 = generic {
-    version = "0.17.0";
-    sha256 = "112kfh4fbpm5cvrmgbgz4d8s802db91mhyjpg7cwhlywffnzkwr9";
+  patches = [
+    # Fix compatiblity with fmt 10.0. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/gabime/spdlog/commit/0ca574ae168820da0268b3ec7607ca7b33024d05.patch";
+      hash = "sha256-cRsQilkyUQW47PFpDwKgU/pm+tOeLvwPx32gNOPAO1U=";
+    })
+    (fetchpatch {
+      url = "https://github.com/gabime/spdlog/commit/af1785b897c9d1098d4aa7213fad232be63c19b4.patch";
+      hash = "sha256-zpfLiBeDAOsvk4vrIyXC0kvFe2WkhAhersd+fhA8DFY=";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [ fmt_9 ];
+
+  cmakeFlags = [
+    "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
+    "-DSPDLOG_BUILD_STATIC=${if staticBuild then "ON" else "OFF"}"
+    "-DSPDLOG_BUILD_EXAMPLE=OFF"
+    "-DSPDLOG_BUILD_BENCH=OFF"
+    "-DSPDLOG_BUILD_TESTS=ON"
+    "-DSPDLOG_FMT_EXTERNAL=ON"
+  ];
+
+  outputs = [ "out" "doc" "dev" ] ;
+
+  postInstall = ''
+    mkdir -p $out/share/doc/spdlog
+    cp -rv ../example $out/share/doc/spdlog
+  '';
+
+  doCheck = true;
+
+  passthru.tests = {
+    inherit bear tiledb;
+  };
+
+  meta = with lib; {
+    description    = "Very fast, header only, C++ logging library";
+    homepage       = "https://github.com/gabime/spdlog";
+    license        = licenses.mit;
+    maintainers    = with maintainers; [ obadz ];
+    platforms      = platforms.all;
   };
 }

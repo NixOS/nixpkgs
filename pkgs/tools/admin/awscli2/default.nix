@@ -3,37 +3,51 @@
 , groff
 , less
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , testers
 , awscli2
 }:
 
 let
-  py = python3.override {
-    packageOverrides = self: super: {
-      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.28";
-        src = self.fetchPypi {
-          pname = "prompt_toolkit";
-          inherit version;
-          hash = "sha256-nxzRax6GwpaPJRnX+zHdnWaZFvUVYSwmnRTp7VK1FlA=";
+  py = python3 // {
+    pkgs = python3.pkgs.overrideScope (final: prev: {
+      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
+        src = prev.src.override {
+          version = "0.17.21";
+          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
-    };
+    });
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.9.8"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.13.5"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-Q1iHGwkFg0rkunwEgWQIqLEPAGfOLfqA1UpjmCe2x8M=";
+    hash = "sha256-gtzRHNEReCKzGDdiwS5kngcJYp5oAHmhnOPl/uTyxvU=";
   };
+
+  patches = [
+    # https://github.com/aws/aws-cli/pull/7912
+    (fetchpatch {
+      name = "update-flit-core.patch";
+      url = "https://github.com/aws/aws-cli/commit/83412a4b2ec750bada640a34a87bfe07ce41fb50.patch";
+      hash = "sha256-uhO6aOSptsARYWuXXEFhx+6rCW5/uGn2KQ15BnhzH68=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
+      --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1'
+  '';
 
   nativeBuildInputs = [
     flit-core
@@ -57,18 +71,11 @@ with py.pkgs; buildPythonApplication rec {
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonschema
     mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    sed -i pyproject.toml \
-      -e 's/colorama.*/colorama",/' \
-      -e 's/cryptography.*/cryptography",/' \
-      -e 's/distro.*/distro",/'
-  '';
 
   postInstall = ''
     mkdir -p $out/${python3.sitePackages}/awscli/data
@@ -82,8 +89,6 @@ with py.pkgs; buildPythonApplication rec {
 
     rm $out/bin/aws.cmd
   '';
-
-  doCheck = true;
 
   preCheck = ''
     export PATH=$PATH:$out/bin
@@ -116,7 +121,7 @@ with py.pkgs; buildPythonApplication rec {
     tests.version = testers.testVersion {
       package = awscli2;
       command = "aws --version";
-      version = version;
+      inherit version;
     };
   };
 

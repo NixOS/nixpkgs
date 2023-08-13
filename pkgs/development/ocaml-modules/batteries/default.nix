@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  checkInputs = [ qtest qcheck ];
+  nativeCheckInputs = [ qtest ];
+  checkInputs = [ qcheck ];
   propagatedBuildInputs = [ camlp-streams num ];
 
-  strictDeps = !doCheck;
+  strictDeps = true;
 
   inherit doCheck;
   checkTarget = "test";

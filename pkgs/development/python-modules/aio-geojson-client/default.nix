@@ -1,11 +1,11 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , geojson
 , haversine
+, mock
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-client";
-  version = "0.17";
+  version = "0.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-client";
-    rev = "v${version}";
-    hash = "sha256-5GiQgtbvYeleovFbXO2vlr2XPsDIWZiElM64O+urMcY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nvfy1XLiMjyCiQo/YuzRbDtxGmAUAiq8UJwS/SkN3oM=";
   };
 
   propagatedBuildInputs = [
@@ -31,9 +31,9 @@ buildPythonPackage rec {
     haversine
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
-    asynctest
+    mock
     pytest-asyncio
     pytestCheckHook
   ];
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for accessing GeoJSON feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-client";
+    changelog = "https://github.com/exxamalte/python-aio-geojson-client/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

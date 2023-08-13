@@ -5,8 +5,9 @@
 , qmake
 , qtbase
 , qtsvg
-, qtx11extras
-, kwindowsystem
+, qtx11extras ? null
+, kwindowsystem ? null
+, qtwayland
 , libX11
 , libXext
 , qttools
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
-  version = "1.0.7";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${version}";
-    sha256 = "Ys77z5BoeQEOYe1h5ITEuVtVn6Uug9zQjrCBxLQOrSs=";
+    sha256 = "48Blio8qHLmXSKG0c1tphXSfiwQXs0Xqwxe187nM3Ro=";
   };
 
   nativeBuildInputs = [
@@ -34,13 +35,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
-    qtx11extras
-    kwindowsystem
     libX11
     libXext
-  ];
+  ] ++ lib.optionals (lib.versionOlder qtbase.version "6") [ qtx11extras kwindowsystem ]
+    ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland;
 
-  sourceRoot = "source/Kvantum";
+  sourceRoot = "${src.name}/Kvantum";
 
   patches = [
     (fetchpatch {
@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    broken = lib.versionOlder qtbase.version "5.14";
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ romildo Scrumplex ];
   };
 }

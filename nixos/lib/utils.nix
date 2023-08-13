@@ -226,5 +226,8 @@ rec {
     lib = import ./systemd-lib.nix { inherit lib config pkgs; };
     unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
     types = import ./systemd-types.nix { inherit lib systemdUtils pkgs; };
+    network = {
+      units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
+    };
   };
 }

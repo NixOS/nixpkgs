@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnum4 ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-deprecated";
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated";
 
   # Makefile is missing intra-library depends, fails build as:
   # ld: cannot find -lsp

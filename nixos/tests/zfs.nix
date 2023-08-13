@@ -12,108 +12,180 @@ let
                       then pkgs.zfsUnstable.latestCompatibleLinuxPackages
                       else pkgs.linuxPackages
     , enableUnstable ? false
+    , enableSystemdStage1 ? false
     , extraTest ? ""
     }:
     makeTest {
       name = "zfs-" + name;
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ adisbladis ];
+        maintainers = [ adisbladis elvishjerricco ];
       };
 
       nodes.machine = { pkgs, lib, ... }:
         let
           usersharePath = "/var/lib/samba/usershares";
         in {
-        virtualisation.emptyDiskImages = [ 4096 ];
+        virtualisation = {
+          emptyDiskImages = [ 4096 4096 ];
+          useBootLoader = true;
+          useEFIBoot = true;
+        };
+        boot.loader.systemd-boot.enable = true;
+        boot.loader.timeout = 0;
+        boot.loader.efi.canTouchEfiVariables = true;
         networking.hostId = "deadbeef";
         boot.kernelPackages = kernelPackage;
         boot.supportedFilesystems = [ "zfs" ];
         boot.zfs.enableUnstable = enableUnstable;
-
-        services.samba = {
-          enable = true;
-          extraConfig = ''
-            registry shares = yes
-            usershare path = ${usersharePath}
-            usershare allow guests = yes
-            usershare max shares = 100
-            usershare owner only = no
-          '';
-        };
-        systemd.services.samba-smbd.serviceConfig.ExecStartPre =
-          "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
+        boot.initrd.systemd.enable = enableSystemdStage1;
 
         environment.systemPackages = [ pkgs.parted ];
 
-        # Setup regular fileSystems machinery to ensure forceImportAll can be
-        # tested via the regular service units.
-        virtualisation.fileSystems = {
-          "/forcepool" = {
+        # /dev/disk/by-id doesn't get populated in the NixOS test framework
+        boot.zfs.devNodes = "/dev/disk/by-uuid";
+
+        specialisation.samba.configuration = {
+          services.samba = {
+            enable = true;
+            extraConfig = ''
+              registry shares = yes
+              usershare path = ${usersharePath}
+              usershare allow guests = yes
+              usershare max shares = 100
+              usershare owner only = no
+            '';
+          };
+          systemd.services.samba-smbd.serviceConfig.ExecStartPre =
+            "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
+          virtualisation.fileSystems = {
+            "/tmp/mnt" = {
+              device = "rpool/root";
+              fsType = "zfs";
+            };
+          };
+        };
+
+        specialisation.encryption.configuration = {
+          boot.zfs.requestEncryptionCredentials = [ "automatic" ];
+          virtualisation.fileSystems."/automatic" = {
+            device = "automatic";
+            fsType = "zfs";
+          };
+          virtualisation.fileSystems."/manual" = {
+            device = "manual";
+            fsType = "zfs";
+          };
+          virtualisation.fileSystems."/manual/encrypted" = {
+            device = "manual/encrypted";
+            fsType = "zfs";
+            options = [ "noauto" ];
+          };
+          virtualisation.fileSystems."/manual/httpkey" = {
+            device = "manual/httpkey";
+            fsType = "zfs";
+            options = [ "noauto" ];
+          };
+        };
+
+        specialisation.forcepool.configuration = {
+          systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [ "forcepool.mount" ];
+          systemd.targets.zfs.wantedBy = lib.mkVMOverride [];
+          boot.zfs.forceImportAll = true;
+          virtualisation.fileSystems."/forcepool" = {
             device = "forcepool";
             fsType = "zfs";
             options = [ "noauto" ];
           };
         };
 
-        # forcepool doesn't exist at first boot, and we need to manually test
-        # the import after tweaking the hostId.
-        systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [];
-        systemd.targets.zfs.wantedBy = lib.mkVMOverride [];
-        boot.zfs.forceImportAll = true;
-        # /dev/disk/by-id doesn't get populated in the NixOS test framework
-        boot.zfs.devNodes = "/dev/disk/by-uuid";
+        services.nginx = {
+          enable = true;
+          virtualHosts = {
+            localhost = {
+              locations = {
+                "/zfskey" = {
+                  return = ''200 "httpkeyabc"'';
+                };
+              };
+            };
+          };
+        };
       };
 
       testScript = ''
+        machine.wait_for_unit("multi-user.target")
         machine.succeed(
-            "modprobe zfs",
             "zpool status",
-            "ls /dev",
-            "mkdir /tmp/mnt",
-            "udevadm settle",
             "parted --script /dev/vdb mklabel msdos",
             "parted --script /dev/vdb -- mkpart primary 1024M -1s",
-            "udevadm settle",
-            "zpool create rpool /dev/vdb1",
-            "zfs create -o mountpoint=legacy rpool/root",
-            # shared datasets cannot have legacy mountpoint
-            "zfs create rpool/shared_smb",
-            "mount -t zfs rpool/root /tmp/mnt",
-            "udevadm settle",
-            # wait for samba services
-            "systemctl is-system-running --wait",
-            "zfs set sharesmb=on rpool/shared_smb",
-            "zfs share rpool/shared_smb",
-            "smbclient -gNL localhost | grep rpool_shared_smb",
-            "umount /tmp/mnt",
-            "zpool destroy rpool",
-            "udevadm settle",
+            "parted --script /dev/vdc mklabel msdos",
+            "parted --script /dev/vdc -- mkpart primary 1024M -1s",
         )
 
-        machine.succeed(
-            'echo password | zpool create -o altroot="/tmp/mnt" '
-            + "-O encryption=aes-256-gcm -O keyformat=passphrase rpool /dev/vdb1",
-            "zfs create -o mountpoint=legacy rpool/root",
-            "mount -t zfs rpool/root /tmp/mnt",
-            "udevadm settle",
-            "umount /tmp/mnt",
-            "zpool destroy rpool",
-            "udevadm settle",
-        )
+        with subtest("sharesmb works"):
+            machine.succeed(
+                "zpool create rpool /dev/vdb1",
+                "zfs create -o mountpoint=legacy rpool/root",
+                # shared datasets cannot have legacy mountpoint
+                "zfs create rpool/shared_smb",
+                "bootctl set-default nixos-generation-1-specialisation-samba.conf",
+                "sync",
+            )
+            machine.crash()
+            machine.wait_for_unit("multi-user.target")
+            machine.succeed(
+                "zfs set sharesmb=on rpool/shared_smb",
+                "zfs share rpool/shared_smb",
+                "smbclient -gNL localhost | grep rpool_shared_smb",
+                "umount /tmp/mnt",
+                "zpool destroy rpool",
+            )
+
+        with subtest("encryption works"):
+            machine.succeed(
+                'echo password | zpool create -O mountpoint=legacy '
+                + "-O encryption=aes-256-gcm -O keyformat=passphrase automatic /dev/vdb1",
+                "zpool create -O mountpoint=legacy manual /dev/vdc1",
+                "echo otherpass | zfs create "
+                + "-o encryption=aes-256-gcm -o keyformat=passphrase manual/encrypted",
+                "zfs create -o encryption=aes-256-gcm -o keyformat=passphrase "
+                + "-o keylocation=http://localhost/zfskey manual/httpkey",
+                "bootctl set-default nixos-generation-1-specialisation-encryption.conf",
+                "sync",
+                "zpool export automatic",
+                "zpool export manual",
+            )
+            machine.crash()
+            machine.start()
+            machine.wait_for_console_text("Starting password query on")
+            machine.send_console("password\n")
+            machine.wait_for_unit("multi-user.target")
+            machine.succeed(
+                "zfs get -Ho value keystatus manual/encrypted | grep -Fx unavailable",
+                "echo otherpass | zfs load-key manual/encrypted",
+                "systemctl start manual-encrypted.mount",
+                "zfs load-key manual/httpkey",
+                "systemctl start manual-httpkey.mount",
+                "umount /automatic /manual/encrypted /manual/httpkey /manual",
+                "zpool destroy automatic",
+                "zpool destroy manual",
+            )
 
         with subtest("boot.zfs.forceImportAll works"):
             machine.succeed(
                 "rm /etc/hostid",
                 "zgenhostid deadcafe",
                 "zpool create forcepool /dev/vdb1 -O mountpoint=legacy",
+                "bootctl set-default nixos-generation-1-specialisation-forcepool.conf",
+                "rm /etc/hostid",
+                "sync",
             )
-            machine.shutdown()
-            machine.start()
-            machine.succeed("udevadm settle")
+            machine.crash()
+            machine.wait_for_unit("multi-user.target")
             machine.fail("zpool import forcepool")
             machine.succeed(
-                "systemctl start zfs-import-forcepool.service",
-                "mount -t zfs forcepool /tmp/mnt",
+                "systemctl start forcepool.mount",
+                "mount | grep forcepool",
             )
       '' + extraTest;
 
@@ -126,6 +198,11 @@ in {
 
   unstable = makeZfsTest "unstable" {
     enableUnstable = true;
+  };
+
+  unstableWithSystemdStage1 = makeZfsTest "unstable" {
+    enableUnstable = true;
+    enableSystemdStage1 = true;
   };
 
   installer = (import ./installer.nix { }).zfsroot;

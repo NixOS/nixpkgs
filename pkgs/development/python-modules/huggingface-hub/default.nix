@@ -3,18 +3,18 @@
 , buildPythonPackage
 , pythonOlder
 , filelock
+, fsspec
 , importlib-metadata
 , packaging
 , pyyaml
 , requests
-, ruamel-yaml
 , tqdm
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.11.0";
+  version = "0.15.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,15 +23,15 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d+X4hGt4K6xmRFw8mevKpZ6RDv+U1PJ8WbmdKGDbVNs=";
+    hash = "sha256-q30/oNP1NjyxiJuSfxyjFgciydImMUgPdGJ/tqVtwZk=";
   };
 
   propagatedBuildInputs = [
     filelock
+    fsspec
     packaging
     pyyaml
     requests
-    ruamel-yaml
     tqdm
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.8") [
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/huggingface/huggingface_hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }

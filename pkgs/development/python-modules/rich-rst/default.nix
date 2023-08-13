@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "wasi-master";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-s48hdJo1LIRXTf+PeSBa6y/AH1NLmnyAafFydJ+exDk=";
+    hash = "sha256-s48hdJo1LIRXTf+PeSBa6y/AH1NLmnyAafFydJ+exDk=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "A beautiful reStructuredText renderer for rich";
     homepage = "https://github.com/wasi-master/rich-rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ jyooru ];
+    maintainers = with maintainers; [ joelkoen ];
   };
 }

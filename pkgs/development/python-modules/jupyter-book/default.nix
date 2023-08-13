@@ -3,6 +3,7 @@
 , fetchPypi
 , pythonOlder
 , flit-core
+, pythonRelaxDepsHook
 , click
 , docutils
 , jinja2
@@ -25,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "0.13.1";
+  version = "0.15.1";
 
   format = "flit";
 
@@ -33,20 +34,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RgpC/H4J3kbdZsKuwYu7EOKCqcgM2v4uUsm6PVFknQE=";
+    hash = "sha256-ihY07Bb37t7g0Rbx5ft8SCAyia2S2kLglRnccdlWwBA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "jsonschema<4" "jsonschema" \
-      --replace "sphinx-external-toc~=0.2.3" "sphinx-external-toc" \
-      --replace "myst-nb~=0.13.1" "myst-nb" \
-      --replace "docutils>=0.15,<0.18" "docutils" \
-      --replace "sphinx-design~=0.1.0" "sphinx-design" \
-      --replace "linkify-it-py~=1.0.1" "linkify-it-py"
-  '';
-
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [
+    flit-core
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     click
@@ -69,11 +63,19 @@ buildPythonPackage rec {
     sphinx-multitoc-numbering
   ];
 
-  pythonImportsCheck = [ "jupyter_book" ];
+  pythonRelaxDeps = [
+    "docutils"
+    "sphinx-design"
+  ];
+
+  pythonImportsCheck = [
+    "jupyter_book"
+  ];
 
   meta = with lib; {
     description = "Build a book with Jupyter Notebooks and Sphinx";
-    homepage = "https://executablebooks.org/";
+    homepage = "https://jupyterbook.org/";
+    changelog = "https://github.com/executablebooks/jupyter-book/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
   };

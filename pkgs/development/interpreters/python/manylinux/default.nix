@@ -56,6 +56,8 @@ let
     "libgobject-2.0.so.0" = glib;
     "libgthread-2.0.so.0" = glib;
     "libglib-2.0.so.0" = glib;
+    "libz.so.1" = zlib;
+    "libexpat.so.1" = expat;
     });
 
   # https://www.python.org/dev/peps/pep-0571/

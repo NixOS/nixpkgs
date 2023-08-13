@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "reuse";
-  version = "1.1.0";
+  version = "2.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
-    rev = "v${version}";
-    hash = "sha256-bjUDImMFwMhRjCa7XzGlqR8h+KfTsyxonrQlRGgApwo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MEQiuBxe/ctHlAnmLhQY4QH62uAcHb7CGfZz+iZCRSk=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -22,11 +22,14 @@ python3Packages.buildPythonApplication rec {
     debian
     jinja2
     license-expression
-    setuptools
-    setuptools-scm
   ];
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # pytest wants to execute the actual source files for some reason, which fails with ImportPathMismatchError()
+    "src/reuse"
+  ];
 
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";

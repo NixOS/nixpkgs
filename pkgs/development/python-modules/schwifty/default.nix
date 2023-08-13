@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2022.9.0";
+  version = "2023.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/zxK0pUfg5G5w9E+QBt1H12Ld5gWc+WakQdNVRMSFiA=";
+    hash = "sha256-hDNAoITt2Ak5aVWmMgqg2oA9rDFsiuum5JXc7v7sspU=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-cov
     pytestCheckHook
   ];

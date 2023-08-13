@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkOption mkIf types;
+  inherit (lib) mkOption mkIf types optionalString;
 
   cfg = config.programs.tmux;
 
@@ -17,17 +17,17 @@ let
     set  -g base-index      ${toString cfg.baseIndex}
     setw -g pane-base-index ${toString cfg.baseIndex}
 
-    ${if cfg.newSession then "new-session" else ""}
+    ${optionalString cfg.newSession "new-session"}
 
-    ${if cfg.reverseSplit then ''
+    ${optionalString cfg.reverseSplit ''
     bind v split-window -h
     bind s split-window -v
-    '' else ""}
+    ''}
 
     set -g status-keys ${cfg.keyMode}
     set -g mode-keys   ${cfg.keyMode}
 
-    ${if cfg.keyMode == "vi" && cfg.customPaneNavigationAndResize then ''
+    ${optionalString (cfg.keyMode == "vi" && cfg.customPaneNavigationAndResize) ''
     bind h select-pane -L
     bind j select-pane -D
     bind k select-pane -U
@@ -37,15 +37,15 @@ let
     bind -r J resize-pane -D ${toString cfg.resizeAmount}
     bind -r K resize-pane -U ${toString cfg.resizeAmount}
     bind -r L resize-pane -R ${toString cfg.resizeAmount}
-    '' else ""}
+    ''}
 
-    ${if (cfg.shortcut != defaultShortcut) then ''
+    ${optionalString (cfg.shortcut != defaultShortcut) ''
     # rebind main key: C-${cfg.shortcut}
     unbind C-${defaultShortcut}
     set -g prefix C-${cfg.shortcut}
     bind ${cfg.shortcut} send-prefix
     bind C-${cfg.shortcut} last-window
-    '' else ""}
+    ''}
 
     setw -g aggressive-resize ${boolToStr cfg.aggressiveResize}
     setw -g clock-mode-style  ${if cfg.clock24 then "24" else "12"}
@@ -160,7 +160,10 @@ in {
         default = defaultTerminal;
         example = "screen-256color";
         type = types.str;
-        description = lib.mdDoc "Set the $TERM variable.";
+        description = lib.mdDoc ''
+          Set the $TERM variable. Use tmux-direct if italics or 24bit true color
+          support is needed.
+        '';
       };
 
       secureSocket = mkOption {

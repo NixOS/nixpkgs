@@ -10,24 +10,22 @@
 , makeWrapper
 , mplayer
 , mpv
-, ncurses
 , procps
 , scdoc
 , stdenv
 , streamlink
-, sudo
 , vlc
 }:
 
 stdenv.mkDerivation rec {
   pname = "wtwitch";
-  version = "2.6.0";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "krathalan";
     repo = pname;
     rev = version;
-    hash = "sha256-KkuXZOquihY3IRVp4FM+AdN3kYi0MqmrXFuNmydTpio=";
+    hash = "sha256-2YLBuxGwGkav3zB2qMqM6yRXf7ZLqgULoJV4s5p+hSw=";
   };
 
   # hardcode SCRIPT_NAME because #150841

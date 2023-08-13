@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "2.13.0";
+  version = "3.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-p61U2WF+Bq2xJif3W74ghS51UggjLjIsFMGdhEu3pq8=";
+    hash = "sha256-fw1Eo4f9MdCjICkZiCUX3wa947s1kv9qqYmYjd0zqF4=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     dbus-fast
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

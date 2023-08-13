@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "4.12.0";
+  version = "6.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-Y3JFuLqytlAvy8dSzEt6b2JDuwKzHFwmFWrRA9PUVnA=";
+    hash = "sha256-26zniS2MDErBrQlmYiMvgx1OZPTEVFvVMBaj6dRlR0M=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Read metadata from Python packages";
     homepage = "https://importlib-metadata.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab AndersonTorres ];
   };
 }

@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "megapixels";
     rev = version;
-    hash = "sha256-xrO9Xr9DPjlDs4yaKy32yb4X8wFqLKfy8rsjtBuN+Rg=";
+    hash = "sha256-ZkTDHDL5nhpR8PKqia12pbrEZLnRXEm8DwBYdYrP5Qo=";
   };
 
   nativeBuildInputs = [

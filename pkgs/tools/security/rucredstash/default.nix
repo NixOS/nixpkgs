@@ -11,6 +11,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1jwsj2y890nxpgmlfbr9hms2raspp5h89ykzsh014mf7lb3yxzwg";
   };
 
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
     ++ lib.optional stdenv.isDarwin Security;
@@ -19,7 +23,10 @@ rustPlatform.buildRustPackage rec {
   # presence of certain AWS infrastructure
   doCheck = false;
 
-  cargoSha256 = "0qnfrwpdvjksc97iiwn1r6fyqaqn0q3ckbdzswf9flvwshqzb6ih";
+  # update Cargo.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = with lib; {
     description = "Rust port for credstash. Manages credentials securely in AWS cloud";

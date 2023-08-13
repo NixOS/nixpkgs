@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.5.7";
+  version = "2.5.8";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-D5NQaxkGhwyBoScI7fZxnSHC0ABmsUeRf8pZCKooV3w=";
+    sha256 = "sha256-VuuqR5fj0YvqIfVPH7N3rpAfIbcTwOx9W3H60saCToQ=";
   };
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cp contrib/vim.tigrc $out/etc/
 
     # Note: Until https://github.com/jonas/tig/issues/940 is resolved it is best
-    # not to install the ZSH completion so that the fallback implemenation from
+    # not to install the ZSH completion so that the fallback implementation from
     # ZSH can be used (Completion/Unix/Command/_git: "_tig () { _git-log }"):
     #install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
 

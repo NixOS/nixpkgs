@@ -1,4 +1,4 @@
-{ pkgs, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, }:
+{ pkgs, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
 # Documentation is in doc/builders/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
@@ -95,6 +95,22 @@
     in checked;
 
   # See doc/builders/testers.chapter.md or
+  # https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
+  runNixOSTest =
+    let nixos = import ../../../nixos/lib {
+      inherit lib;
+    };
+    in testModule:
+        nixos.runTest {
+          _file = "pkgs.runNixOSTest implementation";
+          imports = [
+            (lib.setDefaultModuleLocation "the argument that was passed to pkgs.runNixOSTest" testModule)
+          ];
+          hostPkgs = pkgs;
+          node.pkgs = pkgs;
+        };
+
+  # See doc/builders/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
   nixosTest =
     let
@@ -121,4 +137,14 @@
         in
           nixosTesting.simpleTest calledTest;
 
+  hasPkgConfigModule =
+    { moduleName, ... }@args:
+    lib.warn "testers.hasPkgConfigModule has been deprecated in favor of testers.hasPkgConfigModules. It accepts a list of strings via the moduleNames argument instead of a single moduleName." (
+      testers.hasPkgConfigModules (builtins.removeAttrs args [ "moduleName" ] // {
+        moduleNames = [ moduleName ];
+      })
+    );
+  hasPkgConfigModules = callPackage ./hasPkgConfigModules/tester.nix { };
+
+  testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 }

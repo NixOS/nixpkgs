@@ -22,6 +22,7 @@
 , pycparser
 , pythonOlder
 , pyvex
+, rich
 , rpyc
 , sortedcontainers
 , sqlalchemy
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.30";
+  version = "9.2.63";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -39,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-UCXxKCvxzGr/c4WuAAFLfEp2QOlKD3n8tqSGI4fjEDo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vrcziVoH+P0cqnzalwZOyu7awidQ0Lv6vT6Uq9Pu4I0=";
   };
 
   propagatedBuildInputs = [
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     psutil
     pycparser
     pyvex
+    rich
     rpyc
     sortedcontainers
     sqlalchemy

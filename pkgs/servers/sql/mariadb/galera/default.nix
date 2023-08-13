@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub, buildEnv
 , asio, boost, check, openssl, cmake
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "mariadb-galera";
-  version = "26.4.13";
+  version = "26.4.15";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
     rev = "release_${version}";
-    sha256 = "sha256-Jg7RMAwxAYjMcAweBig6Eb0rGcFhjiZbq+xNuQA3bho=";
+    hash = "sha256-9CjxtNvsj2qM65u+R0pJZVwEaTdqtqURrfOGbT+/5ks=";
     fetchSubmodules = true;
   };
 
@@ -29,11 +30,16 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libgalera_smm.so $out/lib/galera/libgalera_smm.so
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) mariadb-galera;
+  };
+
   meta = with lib; {
     description = "Galera 3 wsrep provider library";
     homepage = "https://galeracluster.com/";
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ ajs124 izorkin ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wl-clipboard";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "bugaevc";
     repo = "wl-clipboard";
     rev = "v${version}";
-    sha256 = "sha256-lqtLHLsSChWcYWsfFigj0Xveo9doAr7G31fRSaxm0Lw=";
+    hash = "sha256-L4k2jOZ2YtkFpDs2+LAUElYl5aNSC42QxkbMNJ2ZhWQ=";
   };
 
   strictDeps = true;
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Command-line copy/paste utilities for Wayland";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

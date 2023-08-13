@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromSourcehut, nixos, wayland }:
+{ lib, stdenv, fetchFromSourcehut, wayland-scanner, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "lswt";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Orwa7sV56AeznEcq/Xj5qj4PALMxq0CI+ZnXuY4JYE0=";
   };
 
+  nativeBuildInputs = [ wayland-scanner ];
   buildInputs = [ wayland ];
 
   makeFlags = [

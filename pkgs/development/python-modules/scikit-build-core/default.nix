@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.1.3";
+  version = "0.2.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "scikit_build_core";
     inherit version;
-    hash = "sha256-qkVj7fS2+JB8mpJ788vTw4jhD/TGtZAMtCiBlmjbFM8=";
+    hash = "sha256-0qdtlEekEgONxeJd0lmwPCUnhmGgx8Padmu5ccGprNI=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     cattrs
     cmake
     pytest-subprocess

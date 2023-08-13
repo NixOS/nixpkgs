@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-DhGY8bdFGVtrPdGkzWYBH7+C8wpNnauu4fnlyG8CAnQ=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -25,8 +26,10 @@ buildPythonPackage rec {
     "w3lib"
   ];
 
-  disabledTests = [
-    "test_add_or_replace_parameter"
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # regressed on Python 3.11.4
+    # https://github.com/scrapy/w3lib/issues/212
+    "test_safe_url_string_url"
   ];
 
   meta = with lib; {

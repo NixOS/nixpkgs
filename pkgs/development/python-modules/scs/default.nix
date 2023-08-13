@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "bodono";
     repo = "scs-python";
     rev = version;
-    sha256 = "sha256-7OgqCo21S0FDev8xv6/8iGFXg8naVi93zd8v1f9iaWw=";
+    hash = "sha256-7OgqCo21S0FDev8xv6/8iGFXg8naVi93zd8v1f9iaWw=";
     fetchSubmodules = true;
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];
 
   meta = with lib; {

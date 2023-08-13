@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fftw ];
 
-  checkInputs = [ catch2 ];
+  nativeCheckInputs = [ catch2 ];
 
   doCheck = true;
 

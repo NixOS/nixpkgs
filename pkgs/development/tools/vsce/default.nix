@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pkg-config
 , libsecret
+, darwin
 , python3
 , testers
 , vsce
@@ -11,16 +12,16 @@
 
 buildNpmPackage rec {
   pname = "vsce";
-  version = "2.15.0";
+  version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     rev = "v${version}";
-    hash = "sha256-WDKOHQV6J22l0ELmXwl5BC5x7MsI6TAMeU3oBFpwqx4=";
+    hash = "sha256-wwSrECqCNBTfr+Hk0sO6eI64uXCiJuRdCk7HUf5oO4g=";
   };
 
-  npmDepsHash = "sha256-i2LpQ/4MwkUGTUhih0ybLv5np45j7m4kCx9IOBIgtXo=";
+  npmDepsHash = "sha256-eTyeNvI34+x2ymyQc3qD5WTGIwL+7OjUCK3u2QZhJDQ=";
 
   postPatch = ''
     substituteInPlace package.json --replace '"version": "0.0.0"' '"version": "${version}"'
@@ -28,7 +29,8 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ pkg-config python3 ];
 
-  buildInputs = [ libsecret ];
+  buildInputs = [ libsecret ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Security ]);
 
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
@@ -44,4 +46,3 @@ buildNpmPackage rec {
     license = licenses.mit;
   };
 }
-

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , asn1crypto
 , buildPythonPackage
 , defusedxml
@@ -16,6 +17,7 @@
 , dissect-ntfs
 , dissect-regf
 , dissect-sql
+, dissect-shellitem
 , dissect-thumbcache
 , dissect-util
 , dissect-volume
@@ -24,6 +26,7 @@
 , flow-record
 , fusepy
 , ipython
+, pycryptodome
 , pytestCheckHook
 , pythonOlder
 , pyyaml
@@ -36,16 +39,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.4";
+  version = "3.11";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
-    rev = version;
-    hash = "sha256-QwEznweETwDTuTctOnq0n27JYXC9BO5l6BYpXsMRVq4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WnF0Z/1jIUKSDAToQzKpiYQgn58KvQJfxk6r8oXANvU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -56,6 +59,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    defusedxml
     dissect-cstruct
     dissect-eventlog
     dissect-evidence
@@ -71,7 +75,6 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     full = [
       asn1crypto
-      defusedxml
       dissect-cim
       dissect-clfs
       dissect-esedb
@@ -79,18 +82,20 @@ buildPythonPackage rec {
       dissect-extfs
       dissect-fat
       dissect-ffs
+      dissect-shellitem
       dissect-sql
       dissect-thumbcache
       dissect-xfs
       fusepy
       ipython
+      pycryptodome
       pyyaml
       yara-python
       zstandard
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.full;
 
@@ -101,11 +106,25 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires rdump
     "test_exec_target_command"
+    # Issue with tar file
+    "test_tar_sensitive_drive_letter"
+    # Tests compare dates and times
+    "yum"
+    # Filesystem access, windows defender tests
+    "test_defender_quarantine_recovery"
+  ] ++
+  # test is broken on Darwin
+  lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
+
+  disabledTestPaths = [
+    # Tests are using Windows paths
+    "tests/test_plugins_browsers.py"
   ];
 
   meta = with lib; {
     description = "Dissect module that provides a programming API and command line tools";
     homepage = "https://github.com/fox-it/dissect.target";
+    changelog = "https://github.com/fox-it/dissect.target/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

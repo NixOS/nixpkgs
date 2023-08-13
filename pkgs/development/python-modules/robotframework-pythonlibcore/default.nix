@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , pytest-mockito
 , pytestCheckHook
 , robotframework
@@ -10,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "robotframework-pythonlibcore";
-  version = "4.0.0";
+  version = "4.2.0";
 
   disabled = pythonOlder "3.7";
 
@@ -19,19 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "PythonLibCore";
-    rev = "v${version}";
-    hash = "sha256-86o5Lh9zWo4vUF2186dN7e8tTUu5PIxM/ZukPwNl0S8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RJTn1zSVJYgbh93Idr77uHl02u0wpj6p6llSJfQVTQk=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-finding-version.patch";
-      url = "https://github.com/robotframework/PythonLibCore/commit/84c73979e309f59de057ae6a77725ab0f468b71f.patch";
-      hash = "sha256-zrjsNvXpJDLpXql200NV+QGWFLtnRVZTeAjT52dRn2s=";
-    })
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mockito
     pytestCheckHook
     robotframework

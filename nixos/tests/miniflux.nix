@@ -17,15 +17,15 @@ let
           '';
 
 in
-with lib;
 {
   name = "miniflux";
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   nodes = {
     default =
       { ... }:
       {
+        security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
           inherit adminCredentialsFile;
@@ -35,6 +35,7 @@ with lib;
     withoutSudo =
       { ... }:
       {
+        security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
           inherit adminCredentialsFile;
@@ -45,6 +46,7 @@ with lib;
     customized =
       { ... }:
       {
+        security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
           config = {
@@ -64,6 +66,7 @@ with lib;
     default.succeed(
         "curl 'http://localhost:${toString defaultPort}/v1/me' -u '${defaultUsername}:${defaultPassword}' -H Content-Type:application/json | grep '\"is_admin\":true'"
     )
+    default.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
 
     withoutSudo.wait_for_unit("miniflux.service")
     withoutSudo.wait_for_open_port(${toString defaultPort})
@@ -71,6 +74,7 @@ with lib;
     withoutSudo.succeed(
         "curl 'http://localhost:${toString defaultPort}/v1/me' -u '${defaultUsername}:${defaultPassword}' -H Content-Type:application/json | grep '\"is_admin\":true'"
     )
+    withoutSudo.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
 
     customized.wait_for_unit("miniflux.service")
     customized.wait_for_open_port(${toString port})
@@ -78,5 +82,6 @@ with lib;
     customized.succeed(
         "curl 'http://localhost:${toString port}/v1/me' -u '${username}:${password}' -H Content-Type:application/json | grep '\"is_admin\":true'"
     )
+    customized.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
   '';
 })

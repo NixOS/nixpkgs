@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmilter";
-  version = "8.15.2";
+  version = "8.17.2";
 
   src = fetchurl {
     url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.${version}.tar.gz";
-    sha256 = "0fdl9ndmspqspdlmghzxlaqk56j3yajk52d7jxcg21b7sxglpy94";
+    sha256 = "sha256-kPWudMNahICIYZM7oJQgG5AbcMaykDaE3POb2uiloaI=";
   };
 
   buildPhase = ''
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     sh Build -f ./a.m4
   '';
 
-  patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ./darwin.patch ];
+  patches = [ ./install.patch ./sharedlib.patch ./darwin.patch ];
 
   nativeBuildInputs = [ m4 ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   postInstall = lib.optionalString stdenv.isDarwin ''
-    fixDarwinDylibNames $out/lib/libmilter.dylib.1
+    fixDarwinDylibNames $out/lib/libmilter.*.1
   '';
 
   meta = with lib; {

@@ -9,7 +9,7 @@
 , fetchpatch
 , openssl
 , boost
-, sconsPackages
+, scons
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    sconsPackages.scons_latest
+    scons
   ];
 
   buildInputs = [

@@ -22,7 +22,7 @@ if !(pythonOlder "3.3") then null else buildPythonPackage {
     sha256 = "17sgv8vg0xxfdnca45l1mmwwvj29gich5c8kqznnj51kfccch7sg";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "Tblue";
     repo = "python-jproperties";
     rev = "v${version}";
-    sha256 = "sha256-O+ALeGHMNjW1dc9IRyLzO81k8DW2vbGjuZqXxgrhYjo=";
+    hash = "sha256-O+ALeGHMNjW1dc9IRyLzO81k8DW2vbGjuZqXxgrhYjo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-datadir
     pytestCheckHook
   ];

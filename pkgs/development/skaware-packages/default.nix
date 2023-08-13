@@ -30,4 +30,5 @@ lib.makeScope pkgs.newScope (self:
   s6-man-pages = callPackage ./s6-man-pages { };
   s6-networking-man-pages = callPackage ./s6-networking-man-pages { };
   s6-portable-utils-man-pages = callPackage ./s6-portable-utils-man-pages { };
+  s6-rc-man-pages = callPackage ./s6-rc-man-pages { };
 })

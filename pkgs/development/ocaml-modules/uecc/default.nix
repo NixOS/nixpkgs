@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "uecc";
   version = "0.4";
 
+  duneVersion = "3";
+
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "ocaml-uecc";

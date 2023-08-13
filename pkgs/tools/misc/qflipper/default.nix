@@ -6,6 +6,7 @@
 , libusb1
 , libGL
 , qmake
+, wrapGAppsHook
 , wrapQtAppsHook
 , mkDerivation
 
@@ -23,8 +24,8 @@
 }:
 let
   pname = "qFlipper";
-  version = "1.2.2";
-  sha256 = "sha256-zlw1WUKmx93EwgR2FSEovo9570MsDRWtI6IAuAOvBJ0=";
+  version = "1.3.2";
+  sha256 = "sha256-n/vvLR4p7ZmQC+FuYOvarmgydfYwxRBRktzs7CfiNQg=";
   timestamp = "99999999999";
   commit = "nix-${version}";
 
@@ -44,6 +45,7 @@ mkDerivation {
     pkg-config
     qmake
     qttools
+    wrapGAppsHook
     wrapQtAppsHook
   ];
 
@@ -68,6 +70,8 @@ mkDerivation {
     "DEFINES+=DISABLE_APPLICATION_UPDATES"
     "CONFIG+=qtquickcompiler"
   ];
+
+  dontWrapGApps = true;
 
   postPatch = ''
     substituteInPlace qflipper_common.pri \
@@ -98,5 +102,4 @@ mkDerivation {
     maintainers = with maintainers; [ cab404 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]; # qtbase doesn't build yet on aarch64-darwin
   };
-
 }

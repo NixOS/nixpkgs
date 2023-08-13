@@ -170,8 +170,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
   '';
 
   hosts = nodes: ''
-    ${nodes.pleroma.config.networking.primaryIPAddress} pleroma.nixos.test
-    ${nodes.client.config.networking.primaryIPAddress} client.nixos.test
+    ${nodes.pleroma.networking.primaryIPAddress} pleroma.nixos.test
+    ${nodes.client.networking.primaryIPAddress} client.nixos.test
   '';
   in {
   name = "pleroma";

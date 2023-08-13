@@ -1,21 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, makeBinaryWrapper }:
 
 buildGoModule rec {
   pname = "docker-slim";
-  version = "1.39.0";
+  version = "1.40.3";
 
   src = fetchFromGitHub {
-    owner = "docker-slim";
-    repo = "docker-slim";
+    owner = "slimtoolkit";
+    repo = "slim";
     rev = version;
-    sha256 = "sha256-CN3mvXjI6c10yvXM2owWASngsU2PjgLhd1N55vxubw0=";
+    hash = "sha256-fXB2rMW73F12ZO1sqUIiaky6LDiMasg3QcIgeWwtkOs=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
-  subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
+  subPackages = [ "cmd/slim" "cmd/slim-sensor" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  preBuild = ''
+    go generate github.com/docker-slim/docker-slim/pkg/appbom
+  '';
 
   ldflags = [
     "-s"
@@ -27,13 +31,13 @@ buildGoModule rec {
   # docker-slim tries to create its state dir next to the binary (inside the nix
   # store), so we set it to use the working directory at the time of invocation
   postInstall = ''
-    wrapProgram "$out/bin/docker-slim" --add-flags '--state-path "$(pwd)"'
+    wrapProgram "$out/bin/slim" --add-flags '--state-path "$(pwd)"'
   '';
 
   meta = with lib; {
     description = "Minify and secure Docker containers";
-    homepage = "https://dockersl.im/";
-    changelog = "https://github.com/docker-slim/docker-slim/raw/${version}/CHANGELOG.md";
+    homepage = "https://slimtoolkit.org/";
+    changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ Br1ght0ne marsam mbrgm ];
   };

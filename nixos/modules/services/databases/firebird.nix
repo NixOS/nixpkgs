@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-# TODO: This may file may need additional review, eg which configuartions to
+# TODO: This may file may need additional review, eg which configurations to
 # expose to the user.
 #
 # I only used it to access some simple databases.

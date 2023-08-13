@@ -14,14 +14,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v8IBn4T82FFBkVIyCmN1YEoPFFnCgbWxmbLNDS5yf48=";
+    hash = "sha256-v8IBn4T82FFBkVIyCmN1YEoPFFnCgbWxmbLNDS5yf48=";
   };
 
   propagatedBuildInputs = [
     wcwidth
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

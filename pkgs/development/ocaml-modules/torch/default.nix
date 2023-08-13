@@ -2,6 +2,7 @@
 , stdenv
 , buildDunePackage
 , fetchFromGitHub
+, fetchpatch
 , cmdliner
 , ctypes
 , dune-configurator
@@ -17,16 +18,25 @@
 
 buildDunePackage rec {
   pname = "torch";
-  version = "0.15";
+  version = "0.17";
 
+  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
-    repo   = "ocaml-${pname}";
-    rev    = version;
-    sha256 = "sha256-EXJqlAGa0LwQKY8IlmcoJs0l2eRTiUhuzMHfakrslXU=";
+    repo = "ocaml-${pname}";
+    rev = version;
+    hash = "sha256-z/9NUBjeFWE63Z/e8OyzDiy8hrn6qzjaiBH8G9MPeos=";
   };
+
+  patches = [
+    # Pytorch 2.0 support. Drop when it reaches a release
+    (fetchpatch {
+      url = "https://github.com/LaurentMazare/ocaml-torch/commit/ef7ef30cafecb09e45ec1ed8ce4bedae5947cfa5.patch";
+      hash = "sha256-smdwKy40iIISp/25L2J4az6KmqFS1soeChBElUyhl5A=";
+    })
+  ];
 
   buildInputs = [ dune-configurator ];
 

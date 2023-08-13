@@ -3,7 +3,7 @@
 , buildPythonPackage
 , debugger
 , fetchPypi
-, Mako
+, mako
 , packaging
 , pysocks
 , pygments
@@ -28,20 +28,15 @@ let
   debuggerName = lib.strings.getName debugger;
 in
 buildPythonPackage rec {
-  version = "4.8.0";
   pname = "pwntools";
+  version = "4.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QgUuLYg3EOTh2gQekWdabXGftOXvLdJFyyhT2hEmkpA=";
+    hash = "sha256-WI6J6meFJ8C1tsru7n524xNS544vHPPdp7yaz1JuRG0=";
   };
 
   postPatch = ''
-    # Upstream has set an upper bound on unicorn because of https://github.com/Gallopsled/pwntools/issues/1538,
-    # but since that is a niche use case and it requires extra work to get unicorn 1.0.2rc3 to work we relax
-    # the bound here. Check if this is still necessary when updating!
-    sed -i 's/unicorn>=1.0.2rc1,<1.0.2rc4/unicorn>=1.0.2rc1/' setup.py
-
     # Upstream hardcoded the check for the command `gdb-multiarch`;
     # Forcefully use the provided debugger, as `gdb` (hence `pwndbg`) is built with multiarch in `nixpkgs`.
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
@@ -52,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Mako
+    mako
     packaging
     pysocks
     pygments
@@ -84,8 +79,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "https://pwntools.com";
     description = "CTF framework and exploit development library";
+    homepage = "https://pwntools.com";
+    changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bennofs kristoff3r pamplemousse ];
   };

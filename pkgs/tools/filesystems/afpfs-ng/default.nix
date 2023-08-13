@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   # avoid build failures like:
   #   ld: afpcmd-cmdline_main.o:/build/source/cmdline/cmdline_afp.h:4: multiple definition of
   #    `full_url'; afpcmd-cmdline_afp.o:/build/source/cmdline/cmdline_afp.c:27: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildInputs = [ fuse readline libgcrypt gmp ];
 

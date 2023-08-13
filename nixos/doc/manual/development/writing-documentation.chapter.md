@@ -83,7 +83,7 @@ Keep the following guidelines in mind when you create and add a topic:
 
 ## Adding a Topic to the Book {#sec-writing-docs-adding-a-topic}
 
-Open the parent XML file and add an `xi:include` element to the list of
+Open the parent CommonMark file and add a line to the list of
 chapters with the file name of the topic that you created. If you
 created a `section`, you add the file to the `chapter` file. If you created
 a `chapter`, you add the file to the `part` file.

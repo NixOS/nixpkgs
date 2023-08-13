@@ -4,15 +4,15 @@
 , gnome-themes-extra
 , gtk-engine-murrine
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "gruvbox-gtk-theme";
-  version = "unstable-2022-12-09";
+  version = "unstable-2023-05-26";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Gruvbox-GTK-Theme";
-    rev = "c3172d8dcba66f4125a014d280d41e23f0b95cad";
-    sha256 = "1411mjlcj1d6kw3d3h1w9zsr0a08bzl5nddkkbv7w7lf67jy9b22";
+    rev = "c0b7fb501938241a3b6b5734f8cb1f0982edc6b4";
+    hash = "sha256-Y+6HuWaVkNqlYc+w5wLkS2LpKcDtpeOpdHnqBmShm5Q=";
   };
 
   propagatedUserEnvPkgs = [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
     rev = version;
-    sha256 = "063agzcrcihasqqk2yqxqxg9xknjs99y6vx3n1v7md7dqnfv4iva";
+    sha256 = "sha256-Ju22lCpwbNxiFeQoaUh3LmtI6RlTO3hOw2Z4/O8PQ6E=";
   };
 
   nativeBuildInputs = [ qmake ];
@@ -26,12 +26,6 @@ stdenv.mkDerivation rec {
       --replace '$$PROTOBUF/include' '${protobuf}/include' \
       --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
   '';
-
-  # error: 'path' is unavailable: introduced in macOS 10.15
-  qmakeFlags = lib.optionals stdenv.isDarwin [
-    "CONFIG+=c++17"
-    "QMAKE_MACOSX_DEPLOYMENT_TARGET=10.15"
-  ];
 
   meta = with lib; {
     description = "Qt image plugin for displaying Mapbox vector tiles";

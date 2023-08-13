@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tikD8efc3Q3xIQnaC3SSBaCRQxMI1HzXxeupvYeNnE4=";
+    hash = "sha256-tikD8efc3Q3xIQnaC3SSBaCRQxMI1HzXxeupvYeNnE4=";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     flask
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

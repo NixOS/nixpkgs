@@ -29,7 +29,6 @@
 
     # GNU GRUB, where available.
     boot.loader.grub.enable = !pkgs.stdenv.isAarch32;
-    boot.loader.grub.version = 2;
 
     # GNU lsh.
     services.openssh.enable = false;

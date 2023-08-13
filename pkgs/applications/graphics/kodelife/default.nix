@@ -45,24 +45,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "kodelife";
-  version = "1.0.6.163";
+  version = "1.1.0.173";
 
   suffix = {
     aarch64-linux = "linux-arm64";
     armv7l-linux  = "linux-armhf";
-    x86_64-linux  = "linux-x86_64";
+    x86_64-linux  = "linux-x64";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-BbNk/YfTx/J8ApgdiY/thnD2MFUUCSQt/CMjkewLcL0=";
-      armv7l-linux  = "sha256-fp4YM2BgyTr4vvxw5FaqKyGm608q8fOpB3gAgPA9UQ4=";
-      x86_64-linux  = "sha256-sLRdU/UW2JORAUOPzmr+VUkcLoesrshjdLvDCizX0iM=";
+      aarch64-linux = "sha256-WPUWvgVZR+2Dg4zpk+iUemMBGlGBDtaGkUGrWuF5LBs=";
+      armv7l-linux  = "sha256-tOPqP40e0JrXg92OluMZrurWHXZavGwTkJiNN1IFVEE=";
+      x86_64-linux  = "sha256-ZA8BlUtKaiSnXGncYwb2BbhBlULuGz7SWuXL0RAgQLI=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
-
-  unpackCmd = "mkdir root; dpkg-deb -x $curSrc root";
 
   strictDeps = true;
 
@@ -94,6 +92,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://hexler.net/kodelife";

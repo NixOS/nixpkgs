@@ -10,6 +10,7 @@
 , qttools
 , qtsvg
 , zlib
+, zstd
 , libGL
 }:
 
@@ -19,17 +20,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tiled";
-  version = "1.9.2";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
-    owner = "bjorn";
+    owner = "mapeditor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-026OO7r8n1BUapUtKRHvqKdSZiClTQIiYfajiC2TAcQ=";
+    sha256 = "sha256-4Ykr60u2t5cyIZdpFHiRirXg2FqSLCzJzsdvw6r/LK8=";
   };
 
   nativeBuildInputs = [ pkg-config qbs wrapQtAppsHook ];
-  buildInputs = [ qtEnv zlib libGL ];
+  buildInputs = [ qtEnv zlib zstd libGL ];
 
   outputs = [ "out" "dev" ];
 

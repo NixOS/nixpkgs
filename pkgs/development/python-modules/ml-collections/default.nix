@@ -19,13 +19,13 @@ let
 in
 buildPythonPackage rec {
   pname = "ml-collections";
-  version = "0.1.0";
+  version = "0.1.1";
 
   # ml-collections does not have any git release tags. See https://github.com/google/ml_collections/issues/8.
   src = fetchPypi {
     inherit version;
     pname = "ml_collections";
-    sha256 = "0g6gxfz8g6fh1sghys869ylxgpda9hq7ylc8jw05608l3k6pz8ar";
+    hash = "sha256-P+/McuxDOqHl0yMHo+R0u7Z/QFvoFOpSohZr/J2+aMw=";
   };
 
   # The pypi source archive does not include requirements.txt or

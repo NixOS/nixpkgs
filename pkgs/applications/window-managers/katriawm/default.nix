@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "katriawm";
-  version = "21.09";
+  version = "23.04";
 
   src = fetchzip {
     name = finalAttrs.pname + "-" + finalAttrs.version;
     url = "https://www.uninformativ.de/git/katriawm/archives/katriawm-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-xt0sWEwTcCs5cwoB3wVbYcyAKL0jx7KyeCefEBVFhH8=";
+    hash = "sha256-Wi9Fv/Ms6t7tr8nxznXrn/6V04lnO1HMz4XFbuCr9+Y=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.uninformativ.de/git/katriawm/file/README.html";
     description = "A non-reparenting, dynamic window manager with decorations";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (libX11.meta) platforms;
   };
 })

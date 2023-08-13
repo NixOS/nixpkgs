@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jW+cKMm+xef8C+fl0CGe+6SEkYBHDjFX2/kLCZ62j6c=";
+    hash = "sha256-jW+cKMm+xef8C+fl0CGe+6SEkYBHDjFX2/kLCZ62j6c=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     # change of API in keyrings.testing
     (fetchpatch {
       url = "https://github.com/frispete/keyrings.cryptfile/commit/6fb9e45f559b8b69f7a0a519c0bece6324471d79.patch";
-      sha256 = "sha256-1878pMO9Ed1zs1pl+7gMjwx77HbDHdE1CryN8TPfPdU=";
+      hash = "sha256-1878pMO9Ed1zs1pl+7gMjwx77HbDHdE1CryN8TPfPdU=";
     })
   ];
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     "keyrings.cryptfile"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

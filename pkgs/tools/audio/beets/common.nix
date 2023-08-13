@@ -1,4 +1,5 @@
 { stdenv
+, fetchpatch
 , bashInteractive
 , diffPlugins
 , glibcLocales
@@ -22,6 +23,7 @@
 
 , src
 , version
+, extraPatches ? [ ]
 , pluginOverrides ? { }
 , disableAllPlugins ? false
 
@@ -44,18 +46,20 @@ let
 
   pluginWrapperBins = concatMap (p: p.wrapperBins) (attrValues enabledPlugins);
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "beets";
   inherit src version;
 
-  patches = [
-    # Bash completion fix for Nix
-    ./patches/bash-completion-always-print.patch
-  ];
+  patches = extraPatches;
+
+  postPatch = ''
+    # https://github.com/beetbox/beets/pull/4868
+    substituteInPlace beets/util/artresizer.py \
+      --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     confuse
-    gobject-introspection
     gst-python
     jellyfish
     mediafile
@@ -66,9 +70,9 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     reflink
     unidecode
+    typing-extensions
   ] ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
-  # see: https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
   nativeBuildInputs = [
     gobject-introspection
     sphinxHook
@@ -113,7 +117,7 @@ python3Packages.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath pluginWrapperBins}"
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest
     mock
     rarfile

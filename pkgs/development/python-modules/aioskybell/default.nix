@@ -23,12 +23,17 @@ buildPythonPackage rec {
     hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'version="master",' 'version="${version}",'
+  '';
+
   propagatedBuildInputs = [
     aiohttp
     aiofiles
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

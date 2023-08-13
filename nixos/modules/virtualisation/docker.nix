@@ -100,7 +100,7 @@ in
 
     logDriver =
       mkOption {
-        type = types.enum ["none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs"];
+        type = types.enum ["none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs" "local"];
         default = "journald";
         description =
           lib.mdDoc ''
@@ -158,12 +158,21 @@ in
         Docker package to be used in the module.
       '';
     };
+
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      example = literalExpression "with pkgs; [ criu ]";
+      description = lib.mdDoc ''
+        Extra packages to add to PATH for the docker daemon process.
+      '';
+    };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable (mkMerge [{
-      boot.kernelModules = [ "bridge" "veth" ];
+      boot.kernelModules = [ "bridge" "veth" "br_netfilter" "xt_nat" ];
       boot.kernel.sysctl = {
         "net.ipv4.conf.all.forwarding" = mkOverride 98 true;
         "net.ipv4.conf.default.forwarding" = mkOverride 98 true;
@@ -194,7 +203,8 @@ in
         };
 
         path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
-          ++ optional cfg.enableNvidia pkgs.nvidia-docker;
+          ++ optional cfg.enableNvidia pkgs.nvidia-docker
+          ++ cfg.extraPackages;
       };
 
       systemd.sockets.docker = {

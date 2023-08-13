@@ -6,7 +6,7 @@
 , cppunit
 , swig
 , boost
-, log4cpp
+, logLib
 , python
 , libsodium
 }:
@@ -31,7 +31,7 @@ mkDerivation {
 
   buildInputs = [
     cppunit
-    log4cpp
+    logLib
     boost
     libsodium
   ];

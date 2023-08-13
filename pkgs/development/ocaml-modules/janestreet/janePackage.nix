@@ -5,7 +5,7 @@
 buildDunePackage (args // {
   inherit version buildInputs;
 
-  useDune2 = false;
+  duneVersion = "1";
 
   minimalOCamlVersion = "4.04";
 
@@ -15,8 +15,6 @@ buildDunePackage (args // {
     rev = "v${version}";
     sha256 = hash;
   };
-
-  strictDeps = true;
 
   meta = {
     license = lib.licenses.asl20;

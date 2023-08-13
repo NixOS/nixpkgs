@@ -4,10 +4,8 @@
 , perlPackages
 , buildEnv
 , makeWrapper
-, libtool
 , unzip
 , pkg-config
-, sqlite
 , libpqxx
 , top-git
 , mercurial
@@ -22,7 +20,6 @@
 , prometheus-cpp
 , nukeReferences
 , git
-, boehmgc
 , nlohmann_json
 , docbook_xsl
 , openssh
@@ -126,13 +123,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "unstable-2022-12-05";
+  version = "2023-07-17";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "d1fac69c213002721971cd983e2576b784677d40";
-    sha256 = "sha256-HVsp+BPjEDS1lR7sjplWNrNljHvYcaUiaAn8gGNAMxU=";
+    rev = "d135b123cde78576e99e919a5db0428cb70fcd1e";
+    sha256 = "sha256-wjHHcJr1liYKESUtCjIdvC+USjd9EWjEFssvIKiEuVU=";
   };
 
   buildInputs = [
@@ -186,7 +183,7 @@ stdenv.mkDerivation rec {
     nukeReferences
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cacert
     foreman
     glibcLocales
@@ -197,7 +194,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  NIX_CFLAGS_COMPILE = "-pthread";
+  env.NIX_CFLAGS_COMPILE = "-pthread";
 
   OPENLDAP_ROOT = openldap;
 

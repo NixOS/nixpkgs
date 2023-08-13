@@ -11,20 +11,21 @@
 , enableOpencl ? true
 , opencl-headers
 , ocl-icd
-, enableCuda ? false
+, config
+, enableCuda ? config.cudaSupport
 , cudaPackages
 , addOpenGLRunpath
 }:
 
 stdenv.mkDerivation rec {
   pname = "openmm";
-  version = "7.7.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = pname;
     rev = version;
-    hash = "sha256-2PYUGTMVQ5qVDeeABrwR45U3JIgo2xMXKlD6da7y3Dw=";
+    hash = "sha256-89ngeZHdjyL/OoGuQ+F5eaXE1/od0EEfIgw9eKdLtL8=";
   };
 
   # "This test is stochastic and may occassionally fail". It does.
@@ -82,8 +83,8 @@ stdenv.mkDerivation rec {
       export OPENMM_LIB_PATH=$out/lib
       export OPENMM_INCLUDE_PATH=$out/include
       cd python
-      ${python3Packages.python.interpreter} setup.py build
-      ${python3Packages.python.interpreter} setup.py install --prefix=$out
+      ${python3Packages.python.pythonForBuild.interpreter} setup.py build
+      ${python3Packages.python.pythonForBuild.interpreter} setup.py install --prefix=$out
     '';
 
   postFixup = ''

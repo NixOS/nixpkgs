@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   inherit src;
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "dev" ];
 
@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$dev/include"
     install -m 644 ../include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
   '';
+
+  passthru = {
+    libName = "c++abi";
+  };
 
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";

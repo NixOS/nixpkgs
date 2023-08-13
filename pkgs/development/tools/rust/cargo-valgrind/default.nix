@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-valgrind";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
     rev = "v${version}";
-    sha256 = "sha256-FCz15kMSKckifYWSTMGqJbRpZ8X/AM5dSw46dg8ERcY=";
+    sha256 = "sha256-l/1paghG/ARD0JfzNh0xj2UD5kW6FddM8Xrd/FCygYc=";
   };
 
-  cargoSha256 = "sha256-csSUe2qUIN2xKOMHWyM56FZyCwKPdfAI0NrFiDOtRiE=";
+  cargoSha256 = "sha256-9/kIIZDIsOhUvRT3TyXN5PGFUB+a8m2yXmzBbsPUK28=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -38,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     description = ''Cargo subcommand "valgrind": runs valgrind and collects its output in a helpful manner'';
     homepage = "https://github.com/jfrimmel/cargo-valgrind";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ otavio ];
+    maintainers = with maintainers; [ otavio matthiasbeyer ];
   };
 }

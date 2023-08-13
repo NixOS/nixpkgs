@@ -28,6 +28,7 @@ in stdenv.mkDerivation {
     tzdata
   ] ++ lib.optionals hostPlatform.isLinux [
     glibc
+    stdenv.cc.cc.libgcc
   ];
 
   installPhase = ''

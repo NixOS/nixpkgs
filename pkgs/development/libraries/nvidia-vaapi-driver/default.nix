@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkg-config
+, libdrm
 , libGL
 , gst_all_1
 , nv-codec-headers-11
@@ -13,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvidia-vaapi-driver";
-  version = "unstable-2022-12-01";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "elFarto";
     repo = pname;
-    rev = "6e8b0d067c52c3a7e0c3de745337e6e733c59207";
-    sha256 = "sha256-HL/sjNPsLhzl8NZ/9l8in27vUrMkyUIcNr/+HhiaTT0=";
+    rev = "v${version}";
+    sha256 = "sha256-j6AIleVZCgV7CD7nP/dKz5we3sUW9pldy0QKi8xwXB0=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libdrm
     libGL
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-bad
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib;{
     homepage = "https://github.com/elFarto/nvidia-vaapi-driver";
     description = "A VA-API implemention using NVIDIA's NVDEC";
+    changelog = "https://github.com/elFarto/nvidia-vaapi-driver/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers;[ nickcao ];
   };

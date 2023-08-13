@@ -1,16 +1,10 @@
 { lib
 , bubblewrap
 , cacert
-, callPackage
 , fetchFromGitLab
-, fetchurl
-, fetchzip
 , git
 , imagemagick
-, jre
-, makeWrapper
 , openmw
-, perlPackages
 , python3Packages
 , rustPlatform
 , tes3cmd
@@ -82,7 +76,7 @@ python3Packages.buildPythonApplication rec {
     fasteners
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ] ++ bin-programs;
 

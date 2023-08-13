@@ -43,5 +43,6 @@ python3Packages.buildPythonPackage rec {
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.Technical27 ];
+    mainProgram = "auto-cpufreq";
   };
 }

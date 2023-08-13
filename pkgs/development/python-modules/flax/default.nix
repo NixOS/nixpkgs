@@ -10,23 +10,25 @@
 , optax
 , pytest-xdist
 , pytestCheckHook
+, pythonRelaxDepsHook
 , tensorflow
+, tensorstore
 , fetchpatch
 , rich
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.6.1";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-fZiODo+izOwGjCCTvi11GvUG/VQL1DV9bNXKjvIIw4A=";
+    hash = "sha256-Vv68BK83gTIKj0r9x+twdhqmRYziD0vxQCdHkYSeTak=";
   };
 
-  buildInputs = [ jaxlib ];
+  nativeBuildInputs = [ jaxlib pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     jax
@@ -35,13 +37,17 @@ buildPythonPackage rec {
     numpy
     optax
     rich
+    tensorstore
   ];
+
+  # See https://github.com/google/flax/pull/2882.
+  pythonRemoveDeps = [ "orbax" ];
 
   pythonImportsCheck = [
     "flax"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     keras
     pytest-xdist
     pytestCheckHook
@@ -64,6 +70,12 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
+
+    # See https://github.com/google/flax/issues/3232.
+    "tests/jax_utils_test.py"
+
+    # Requires orbax which is not packaged as of 2023-07-27.
+    "tests/checkpoints_test.py"
   ];
 
   disabledTests = [
@@ -85,6 +97,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
+    changelog = "https://github.com/google/flax/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
   };

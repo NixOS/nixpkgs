@@ -51,13 +51,13 @@ let
       package = mkOption {
         type = types.package;
         description = mdDoc "Akkoma frontend package.";
-        example = literalExpression "pkgs.akkoma-frontends.pleroma-fe";
+        example = literalExpression "pkgs.akkoma-frontends.akkoma-fe";
       };
 
       name = mkOption {
         type = types.nonEmptyStr;
         description = mdDoc "Akkoma frontend name.";
-        example = "pleroma-fe";
+        example = "akkoma-fe";
       };
 
       ref = mkOption {
@@ -476,8 +476,8 @@ in {
         type = with types; attrsOf (submodule frontend);
         default = {
           primary = {
-            package = pkgs.akkoma-frontends.pleroma-fe;
-            name = "pleroma-fe";
+            package = pkgs.akkoma-frontends.akkoma-fe;
+            name = "akkoma-fe";
             ref = "stable";
           };
           admin = {
@@ -489,8 +489,8 @@ in {
         defaultText = literalExpression ''
           {
             primary = {
-              package = pkgs.akkoma-frontends.pleroma-fe;
-              name = "pleroma-fe";
+              package = pkgs.akkoma-frontends.akkoma-fe;
+              name = "akkoma-fe";
               ref = "stable";
             };
             admin = {
@@ -1082,5 +1082,5 @@ in {
   };
 
   meta.maintainers = with maintainers; [ mvs ];
-  meta.doc = ./akkoma.xml;
+  meta.doc = ./akkoma.md;
 }

@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "12.26.2";
+  version = "18.3.3";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-WznHvGNpb2iGz+jZFtphkxsGeT0Y25CO5MMjmAl7GV0=";
+    hash = "sha256-AJw+NNTbksYSW2VqUzxLwxwd3OjM9uK/ou2CVS2zNvw=";
   };
 
-  vendorHash = "sha256-OrtKFkWXqVoXKmN6BT8YbCNjR1gRTT4gPNwmirn7fjU=";
+  vendorHash = "sha256-xkguBWk2Nh8w7C7tKbvaP0tRgZO4z08AEsdjNlJYC6Q=";
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,7 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X github.com/jandedobbeleer/oh-my-posh/src/build.Version=${version}"
+    "-X github.com/jandedobbeleer/oh-my-posh/src/build.Date=1970-01-01T00:00:00Z"
   ];
 
   tags = [
@@ -35,7 +36,13 @@ buildGoModule rec {
     "static_build"
   ];
 
+  postPatch = ''
+    # these tests requires internet access
+    rm engine/image_test.go engine/migrate_glyphs_test.go
+  '';
+
   postInstall = ''
+    mv $out/bin/{src,oh-my-posh}
     mkdir -p $out/share/oh-my-posh
     cp -r ${src}/themes $out/share/oh-my-posh/
     installShellCompletion --cmd oh-my-posh \

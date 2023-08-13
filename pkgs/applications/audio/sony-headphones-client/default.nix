@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "SonyHeadphonesClient";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Plutoberth";
     repo = "SonyHeadphonesClient";
     rev = "v${version}";
-    hash = "sha256-0DQanrglJiGsN8qQ5KxkL8I+Fpt1abeeuKiM8v9GclM=";
+    hash = "sha256-vhI97KheKzr87exCh4xNN7NDefcagdMu1tWSt67vLiU=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config copyDesktopItems ];
   buildInputs = [ bluez dbus glew glfw imgui ];
 
-  sourceRoot = "./source/Client";
+  sourceRoot = "./${src.name}/Client";
 
   cmakeFlags = [ "-Wno-dev" ];
 

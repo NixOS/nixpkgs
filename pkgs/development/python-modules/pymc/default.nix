@@ -1,6 +1,4 @@
 { lib
-, aeppl
-, aesara
 , arviz
 , buildPythonPackage
 , cachetools
@@ -8,38 +6,33 @@
 , fastprogress
 , fetchFromGitHub
 , numpy
+, pytensor
 , pythonOlder
-, pythonRelaxDepsHook
 , scipy
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "4.4.0";
+  version = "5.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
-    repo = "pymc";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZBltvvKXfqHYLeYOEYFK8kQc0wHM9+UHLRJFMSYX4Ow=";
+    hash = "sha256-TtRIYgsPlire4li4/9Ls7Rh1SIkDGi5uCSN7huSrelA=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
   propagatedBuildInputs = [
-    aeppl
-    aesara
     arviz
     cachetools
     cloudpickle
     fastprogress
     numpy
+    pytensor
     scipy
     typing-extensions
   ];
@@ -48,11 +41,6 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace ', "pytest-cov"' ""
   '';
-
-  pythonRelaxDeps = [
-    "aesara"
-    "aeppl"
-  ];
 
   # The test suite is computationally intensive and test failures are not
   # indicative for package usability hence tests are disabled by default.

@@ -4,22 +4,32 @@
 , fetchFromGitHub
 , DiskArbitration
 , Foundation
+, withNotification ? false
+, withYubikey ? false
+, withStrictCaller ? false
+, withAll ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-credential-keepassxc";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Frederick888";
     repo = "git-credential-keepassxc";
     rev = "v${version}";
-    hash = "sha256-ZpysJ+xs3IenqAdoswG0OkzxzuNPSKkqlutGxn4VRw8=";
+    hash = "sha256-eu4Ff+7670gCO+j3WSRnvQ1aFXIx0nw1jAZXNuni2bU=";
   };
 
-  cargoHash = "sha256-IPsMlVfgwoFEQlXmW4gnt16WNF5W6akobUVct/iF42E=";
+  cargoHash = "sha256-DVMQLsiiaxMZtDqzqnMJQl91NCuMRSPEb8B6AttB4lE=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation ];
+
+  buildFeatures = []
+    ++ lib.optional withNotification "notification"
+    ++ lib.optional withYubikey "yubikey"
+    ++ lib.optional withStrictCaller "strict-caller"
+    ++ lib.optional withAll "all";
 
   meta = with lib; {
     description = "Helper that allows Git (and shell scripts) to use KeePassXC as credential store";

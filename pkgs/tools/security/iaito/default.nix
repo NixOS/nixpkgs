@@ -11,30 +11,35 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "iaito";
-  version = "5.8.0";
+  version = "5.8.6";
 
-  srcs = [
-    (fetchFromGitHub rec {
-      owner = "radareorg";
-      repo = "iaito";
-      rev = version;
-      hash = "sha256-LqJu30Bp+JgB+y3MDyPVuFmEoXTpfA7K2pxv1ZCABx0=";
-      name = repo;
-    })
-    (fetchFromGitHub rec {
-      owner = "radareorg";
-      repo = "iaito-translations";
-      rev = "e66b3a962a7fc7dfd730764180011ecffbb206bf";
-      hash = "sha256-6NRTZ/ydypsB5TwbivvwOH9TEMAff/LH69hCXTvMPp8=";
-      name = repo;
-    })
-  ];
-  sourceRoot = "iaito/src";
+  main_src = fetchFromGitHub rec {
+    owner = "radareorg";
+    repo = pname;
+    rev = version;
+    hash = "sha256-rl8bOIR0oS6YvZA5pr8oSj7HcKK4YeCjAEi7saVdvk8=";
+    name = repo;
+  };
+
+  translations_src = fetchFromGitHub rec {
+    owner = "radareorg";
+    repo = "iaito-translations";
+    rev = "e66b3a962a7fc7dfd730764180011ecffbb206bf";
+    hash = "sha256-6NRTZ/ydypsB5TwbivvwOH9TEMAff/LH69hCXTvMPp8=";
+    name = repo;
+  };
+in
+
+stdenv.mkDerivation rec {
+  inherit pname version;
+
+  srcs = [ main_src translations_src ];
+  sourceRoot = "${main_src.name}/src";
 
   postUnpack = ''
-    chmod -R u+w iaito-translations
+    chmod -R u+w ${translations_src.name}
   '';
 
   postPatch = ''
@@ -57,11 +62,11 @@ stdenv.mkDerivation rec {
   ];
 
   # the radare2 binary package seems to not install all necessary headers.
-  NIX_CFLAGS_COMPILE = [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
 
   postBuild = ''
-    pushd ../../../iaito-translations
-    make build PREFIX=$out
+    pushd ../../../${translations_src.name}
+    make build -j$NIX_BUILD_CORES PREFIX=$out
     popd
   '';
 
@@ -73,8 +78,8 @@ stdenv.mkDerivation rec {
     install -m644 -Dt $out/share/applications ../org.radare.iaito.desktop
     install -m644 -Dt $out/share/pixmaps ../img/iaito-o.svg
 
-    pushd ../../../iaito-translations
-    make install PREFIX=$out -j$NIX_BUILD_CORES
+    pushd ../../../${translations_src.name}
+    make install -j$NIX_BUILD_CORES PREFIX=$out
     popd
 
     runHook postInstall

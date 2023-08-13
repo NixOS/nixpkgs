@@ -23,24 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.6.1";
+  version = "5.8.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ztx3Y+n9Bpzuz06mbkis3kdlM/0JrOaMDbRF5glzkDE=";
+    sha256 = "sha256-WjgQXQe8iCzkc4pmeTIx6mSlsg88xy3FTPMokJWo3fg=";
   };
 
   patches = [
     # Load extensions from NEMO_EXTENSION_DIR environment variable
     # https://github.com/NixOS/nixpkgs/issues/78327
     ./load-extensions-from-env.patch
-
-    # Don't populate nemo actions from /run/current-system/sw/share
-    # They should only be loaded exactly once from $out/share
-    # https://github.com/NixOS/nixpkgs/issues/190781
-    ./fix-nemo-actions-duplicate-menu-items.patch
   ];
 
   outputs = [ "out" "dev" ];
@@ -54,7 +49,6 @@ stdenv.mkDerivation rec {
     libexif
     exempi
     gvfs
-    gobject-introspection
     libgsf
   ];
 
@@ -65,12 +59,20 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     shared-mime-info
+    gobject-introspection
   ];
 
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
+
+  preFixup = ''
+    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${xapp}/share"
+    )
+  '';
 
   # Taken from libnemo-extension.pc.
   passthru.extensiondir = "lib/nemo/extensions-3.0";

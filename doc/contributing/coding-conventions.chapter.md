@@ -204,13 +204,13 @@ The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _s
 
 In Nixpkgs, there are generally three different names associated with a package:
 
-- The `name` attribute of the derivation (excluding the version part). This is what most users see, in particular when using `nix-env`.
+- The `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
 - The variable name used for the instantiated package in `all-packages.nix`, and when passing it as a dependency to other functions. Typically this is called the _package attribute name_. This is what Nix expression authors see. It can also be used when installing using `nix-env -iA`.
 
 - The filename for (the directory containing) the Nix expression.
 
-Most of the time, these are the same. For instance, the package `e2fsprogs` has a `name` attribute `"e2fsprogs-version"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
+Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
 
 There are a few naming guidelines:
 
@@ -220,7 +220,9 @@ There are a few naming guidelines:
 
 - The `version` attribute _must_ start with a digit e.g`"0.3.1rc2".
 
-- If a package is not a release but a commit from a repository, then the `version` attribute _must_ be the date of that (fetched) commit. The date _must_ be in `"unstable-YYYY-MM-DD"` format.
+- If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
+
+Example: Given a project had its latest releases `2.2` in November 2021, and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
 
 - Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
@@ -454,7 +456,7 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
     owner = "NixOS";
     repo = "nix";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "ha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=;
+    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 

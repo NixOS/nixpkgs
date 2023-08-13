@@ -23,7 +23,6 @@
 , withWallet ? true
 }:
 
-with lib;
 let
   desktop = fetchurl {
     # c2e5f3e is the last commit when the debian/bitcoin-qt.desktop file was changed
@@ -33,28 +32,28 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "24.0.1";
+  version = "25.0";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "12d4ad6dfab4767d460d73307e56d13c72997e114fad4f274650f95560f5f2ff";
+    sha256 = "5df67cf42ca3b9a0c38cdafec5bbb517da5b58d251f32c8d2a47511f9be1ebc2";
   };
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config ]
-    ++ optionals stdenv.isLinux [ util-linux ]
-    ++ optionals stdenv.isDarwin [ hexdump ]
-    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
-    ++ optionals withGui [ wrapQtAppsHook ];
+    ++ lib.optionals stdenv.isLinux [ util-linux ]
+    ++ lib.optionals stdenv.isDarwin [ hexdump ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
+    ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ optionals withWallet [ db48 sqlite ]
-    ++ optionals withGui [ qrencode qtbase qttools ];
+    ++ lib.optionals withWallet [ db48 sqlite ]
+    ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
-  postInstall = optionalString withGui ''
+  postInstall = lib.optionalString withGui ''
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
     substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
     install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
@@ -63,17 +62,17 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
     "--disable-bench"
-  ] ++ optionals (!doCheck) [
+  ] ++ lib.optionals (!doCheck) [
     "--disable-tests"
     "--disable-gui-tests"
-  ] ++ optionals (!withWallet) [
+  ] ++ lib.optionals (!withWallet) [
     "--disable-wallet"
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
     "--with-gui=qt5"
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   doCheck = true;
 
@@ -81,7 +80,7 @@ stdenv.mkDerivation rec {
     [ "LC_ALL=en_US.UTF-8" ]
     # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
     # See also https://github.com/NixOS/nixpkgs/issues/24256
-    ++ optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+    ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 
@@ -89,7 +88,7 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests.bitcoind;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Peer-to-peer electronic cash system";
     longDescription = ''
       Bitcoin is a free open source peer-to-peer electronic cash system that is

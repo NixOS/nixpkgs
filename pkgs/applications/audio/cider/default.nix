@@ -2,11 +2,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "cider";
-  version = "1.5.7";
+  version = "1.6.1";
 
   src = fetchurl {
-    url = "https://github.com/ciderapp/cider-releases/releases/download/v${version}/Cider-${version}.AppImage";
-    sha256 = "sha256-fWpt7YxqEDa1U4CwyVZwgbiwe0lrh64v0cJG9pbNMUU=";
+    url = "https://github.com/ciderapp/Cider/releases/download/v${version}/Cider-${version}.AppImage";
+    sha256 = "sha256-t3kslhb6STPemdBN6fXc8jcPgNrlnGzcAUQ3HAUB7Yw=";
   };
 
   extraInstallCommands =

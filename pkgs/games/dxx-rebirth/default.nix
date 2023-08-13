@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dxx-rebirth";
-  version = "unstable-2022-09-17";
+  version = "unstable-2023-03-23";
 
   src = fetchFromGitHub {
     owner = "dxx-rebirth";
     repo = "dxx-rebirth";
-    rev = "ad46235b67a24a38dec4734f94a59eba149ad94a";
-    hash = "sha256-vIAY1O4VnOsV617J5yjg09JIL/vK4Fb/lopnX17g+uY=";
+    rev = "841ebcc11d249febe48911bc239606ade3bd78b3";
+    hash = "sha256-cr5QdkKO/HNvtc2w4ynJixuLauhPCwtsSC3UEV7+C1A=";
   };
 
   nativeBuildInputs = [ pkg-config scons ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   sconsFlags = [ "sdl2=1" ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-format-nonliteral"
     "-Wno-format-truncation"
   ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = rev;
 
   src = fetchFromGitHub {
-    owner = "Eloston";
+    owner = "ungoogled-software";
     repo = "ungoogled-chromium";
     inherit rev sha256;
   };

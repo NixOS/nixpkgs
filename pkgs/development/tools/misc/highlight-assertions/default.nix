@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "highlight-assertions";
-  version = "unstable-2022-11-24";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "thehamsta";
     repo = pname;
-    rev = "c738a51513285ded4fc16d68afcdb77761543f92";
-    sha256 = "sha256-vYXr0xFwRUwSEP++834A/4M1QB14Wx+qWwB9PUtn3uA=";
+    rev = "v${version}";
+    sha256 = "sha256-7r8tBJ6JFGUGUsTivzlO23hHiXISajjn2WF12mmbmMg=";
   };
 
-  cargoSha256 = "sha256-sezjd7tmVVDoRsrsTK2zKjHmrBcAQDHyHd/dR1q1za0=";
+  cargoSha256 = "sha256-E2TNwCry7JOWy50+iLM9d+Tx4lIO6hkBtaHVLV8bDuo=";
 
   # requires nightly features
   RUSTC_BOOTSTRAP = 1;

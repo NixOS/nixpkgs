@@ -23,7 +23,7 @@ let
         # - imports lua-packages.nix
         # - adds spliced package sets to the package set
         # - applies overrides from `packageOverrides`
-        ({ lua, overrides, callPackage, splicePackages, newScope }: let
+        ({ lua, overrides, callPackage, makeScopeWithSplicing }: let
           luaPackagesFun = callPackage ../../../top-level/lua-packages.nix {
             lua = self;
           };
@@ -46,9 +46,7 @@ let
             overriddenPackages
             overrides
           ];
-        in lib.makeScopeWithSplicing
-          splicePackages
-          newScope
+        in makeScopeWithSplicing
           otherSplices
           keep
           extra
@@ -79,29 +77,12 @@ in
 rec {
   lua5_4 = callPackage ./interpreter.nix {
     self = lua5_4;
-    version = "5.4.4";
-    hash = "sha256-Fkx4SWU7gK5nvsS3RzuIS/XMjS3KBWU0dewu0nuev2E=";
+    version = "5.4.6";
+    hash = "sha256-fV6huctqoLWco93hxq3LV++DobqOVDLA7NBr9DmzrYg=";
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
 
-    patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch
-      ++ [
-        (fetchpatch {
-          name = "CVE-2022-28805.patch";
-          url = "https://github.com/lua/lua/commit/1f3c6f4534c6411313361697d98d1145a1f030fa.patch";
-          sha256 = "sha256-YTwoolSnRNJIHFPVijSO6ZDw35BG5oWYralZ8qOb9y8=";
-          stripLen = 1;
-          extraPrefix = "src/";
-          excludes = [ "src/testes/*" ];
-        })
-        (fetchpatch {
-          name = "CVE-2022-33099.patch";
-          url = "https://github.com/lua/lua/commit/42d40581dd919fb134c07027ca1ce0844c670daf.patch";
-          sha256 = "sha256-qj1Dq1ojVoknALSa67jhgH3G3Kk4GtJP6ROFElVF+D0=";
-          stripLen = 1;
-          extraPrefix = "src/";
-        })
-      ];
+    patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch;
   };
 
   lua5_4_compat = lua5_4.override({
@@ -163,4 +144,8 @@ rec {
     inherit callPackage fetchFromGitHub passthruFun;
   };
 
+  luajit_openresty = import ../luajit/openresty.nix {
+    self = luajit_openresty;
+    inherit callPackage fetchFromGitHub passthruFun;
+  };
 }

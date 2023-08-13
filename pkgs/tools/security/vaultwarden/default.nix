@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
+{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, nixosTests
 , pkg-config, openssl
 , libiconv, Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
@@ -9,32 +9,27 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.26.0";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LPIc1odUBvjVJty3GYYFNhile4XBWMisLUeVtWH6xgE=";
+    hash = "sha256-uASoPZRBQ9IKJHtMGeeZzmr0fCYDWl56EzaJVj6LwMk=";
   };
 
-  cargoSha256 = "sha256-IfseODaoqlPNBlVjS+9+rKXAOq29TgULMA/ogmqg0NA=";
-
-  postPatch = ''
-    # Upstream specifies 1.57; nixpkgs has 1.56 which also produces a working
-    # vaultwarden when using RUSTC_BOOTSTRAP=1
-    sed -ri 's/^rust-version = .*//g' Cargo.toml
-  '';
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rocket-0.5.0-rc.3" = "sha256-E71cktkHCbmQyjkjWWJ20KfCm3B/h3jQ2TMluYhvCQw=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
     ++ optionals stdenv.isDarwin [ libiconv Security CoreServices ]
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
-
-  # vaultwarden depends on rocket v0.5.0-dev, which requires nightly features.
-  # This may be removed if https://github.com/dani-garcia/vaultwarden/issues/712 is fixed.
-  RUSTC_BOOTSTRAP = 1;
 
   buildFeatures = dbBackend;
 
@@ -47,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
-    license = licenses.gpl3Only;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ msteen ivan ];
   };
 }

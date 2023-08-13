@@ -1,4 +1,6 @@
 { python
+, pythonAtLeast
+, disabledIf
 , fetchurl
 , lib
 , stdenv
@@ -9,13 +11,17 @@
 , shiboken2
 }:
 
+# Only build when Python<=3.10
+# See https://bugreports.qt.io/browse/PYSIDE-1864
+# "There are no plans to support Python versions > 3.10 in the 5.15 branch."
+disabledIf (pythonAtLeast "3.11") (
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.15.5";
+  version = "5.15.10";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
-    sha256 = "0cwvw6695215498rsbm2xzkwaxdr3w7zfvy4kc62c01k6pxs881r";
+    sha256 = "sha256-KvaR02E6Qfg6YEObRlaPwsaW2/rkL3zXsHFS0RXq0zo=";
   };
 
   patches = [
@@ -31,7 +37,7 @@ stdenv.mkDerivation rec {
     "-DPYTHON_EXECUTABLE=${python.interpreter}"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${qt5.qtdeclarative.dev}/include/QtQuick/${qt5.qtdeclarative.version}/QtQuick";
+  env.NIX_CFLAGS_COMPILE = "-I${qt5.qtdeclarative.dev}/include/QtQuick/${qt5.qtdeclarative.version}/QtQuick";
 
   nativeBuildInputs = [ cmake ninja qt5.qmake python ];
 
@@ -49,6 +55,7 @@ stdenv.mkDerivation rec {
     qtcharts
     qtsensors
     qtsvg
+    qt3d
   ]) ++ (with python.pkgs; [
     setuptools
   ]) ++ (lib.optionals (python.pythonOlder "3.9") [
@@ -63,7 +70,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd ../../..
-    ${python.interpreter} setup.py egg_info --build-type=pyside2
+    ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=pyside2
     cp -r PySide2.egg-info $out/${python.sitePackages}/
   '';
 
@@ -73,4 +80,4 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
   };
-}
+})

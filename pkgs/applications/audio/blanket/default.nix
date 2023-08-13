@@ -31,13 +31,13 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     wrapGAppsHook4
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
     glib
     gtk4
     libadwaita
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -48,9 +48,6 @@ python3Packages.buildPythonApplication rec {
     pygobject3
   ];
 
-  # Broken with gobject-introspection setup hook
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
   format = "other";
 
   postPatch = ''

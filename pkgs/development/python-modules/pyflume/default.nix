@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ChrisMandich";
     repo = "PyFlume";
     rev = "v${version}";
-    sha256 = "sha256-Ka90n9Esv6tm310DjYeosBUhudeVoEJzt45L40+0GwQ=";
+    hash = "sha256-Ka90n9Esv6tm310DjYeosBUhudeVoEJzt45L40+0GwQ=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     pytestCheckHook
   ];

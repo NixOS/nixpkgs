@@ -10,17 +10,17 @@
 
 buildPythonPackage rec {
   pname = "chart-studio";
-  version = "5.10.0";
+  version = "5.15.0";
 
   # chart-studio was split from plotly
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-j1MiLUSIun0xnUFCcyZ5p8eGF5Q34jCwoVuQG5xSlkU=";
+    hash = "sha256-H+p2fPBXn+VqrW63KkdmPn2xqxC9uAOzQUV1ruKEUSs=";
   };
 
-  sourceRoot = "source/packages/python/chart-studio";
+  sourceRoot = "${src.name}/packages/python/chart-studio";
 
   propagatedBuildInputs = [
     plotly
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [ mock nose pytest ];
+  nativeCheckInputs = [ mock nose pytest ];
   # most tests talk to a service
   checkPhase = ''
     HOME=$TMPDIR pytest chart_studio/tests/test_core chart_studio/tests/test_plot_ly/test_api

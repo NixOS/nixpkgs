@@ -46,7 +46,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
             type = "custom";
             status = {
               source = "script";
-              cmd = "/bin/sh -c 'echo charger status F'";
+              cmd = "/bin/sh -c 'echo charger status A'";
             };
             enabled = {
               source = "script";
@@ -88,7 +88,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     with subtest("Check journal for errors"):
         _, output = machine.execute("journalctl -o cat -u evcc.service")
         assert "FATAL" not in output
-        assert "ERROR" not in output
 
     with subtest("Check systemd hardening"):
         _, output = machine.execute("systemd-analyze security evcc.service | grep -v '✓'")

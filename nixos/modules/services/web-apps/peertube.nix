@@ -52,9 +52,7 @@ let
 
   envFile = pkgs.writeText "peertube.env" (lib.concatMapStrings (s: s + "\n") (
     (lib.concatLists (lib.mapAttrsToList (name: value:
-      if value != null then [
-        "${name}=\"${toString value}\""
-      ] else []
+      lib.optional (value != null) ''${name}="${toString value}"''
     ) env))));
 
   peertubeEnv = pkgs.writeShellScriptBin "peertube-env" ''
@@ -350,7 +348,7 @@ in {
         };
         redis = {
           hostname = "${toString cfg.redis.host}";
-          port = (if cfg.redis.port == null then "" else cfg.redis.port);
+          port = (lib.optionalString (cfg.redis.port != null) cfg.redis.port);
         };
         storage = {
           tmp = lib.mkDefault "/var/lib/peertube/storage/tmp/";
@@ -429,7 +427,7 @@ in {
 
       environment = env;
 
-      path = with pkgs; [ bashInteractive ffmpeg nodejs-16_x openssl yarn python3 ];
+      path = with pkgs; [ bashInteractive ffmpeg nodejs_18 openssl yarn python3 ];
 
       script = ''
         #!/bin/sh
@@ -490,7 +488,7 @@ in {
     services.nginx = lib.mkIf cfg.configureNginx {
       enable = true;
       virtualHosts."${cfg.localDomain}" = {
-        root = "/var/lib/peertube";
+        root = "/var/lib/peertube/www";
 
         # Application
         locations."/" = {
@@ -593,7 +591,7 @@ in {
 
         # Bypass PeerTube for performance reasons.
         locations."~ ^/client/(assets/images/(icons/icon-36x36\.png|icons/icon-48x48\.png|icons/icon-72x72\.png|icons/icon-96x96\.png|icons/icon-144x144\.png|icons/icon-192x192\.png|icons/icon-512x512\.png|logo\.svg|favicon\.png|default-playlist\.jpg|default-avatar-account\.png|default-avatar-account-48x48\.png|default-avatar-video-channel\.png|default-avatar-video-channel-48x48\.png))$" = {
-          tryFiles = "/www/client-overrides/$1 /www/client/$1 $1";
+          tryFiles = "/client-overrides/$1 /client/$1 $1";
           priority = 1310;
         };
 
@@ -859,7 +857,7 @@ in {
           home = cfg.package;
         };
       })
-      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package peertubeEnv peertubeCli pkgs.ffmpeg pkgs.nodejs-16_x pkgs.yarn ])
+      (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package peertubeEnv peertubeCli pkgs.ffmpeg pkgs.nodejs_18 pkgs.yarn ])
       (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];})
     ];
 

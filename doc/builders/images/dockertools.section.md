@@ -145,7 +145,7 @@ Create a Docker image with many of the store paths being on their own layer to i
 
 `architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
 
-: Run-time configuration of the container. A full list of the options are available at in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+: Run-time configuration of the container. A full list of the options available is in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
     *Default:* `{}`
 
@@ -410,7 +410,7 @@ If the derivation is fully buildable (i.e. `nix-build` can be used on it), runni
 The behavior doesn't match `nix-shell` or `nix-build` exactly and this function is known not to work correctly for e.g. fixed-output derivations, content-addressed derivations, impure derivations and other special types of derivations.
 :::
 
-### Arguments
+### Arguments {#ssec-pkgs-dockerTools-buildNixShellImage-arguments}
 
 `drv`
 
@@ -473,7 +473,7 @@ The behavior doesn't match `nix-shell` or `nix-build` exactly and this function 
 
     *Default:* (none)
 
-### Example
+### Example {#ssec-pkgs-dockerTools-buildNixShellImage-example}
 
 The following shows how to build the `pkgs.hello` package inside a Docker container built with `buildNixShellImage`.
 

@@ -144,7 +144,6 @@ in rec {
   manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
   manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
-  manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);
   options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
@@ -404,6 +403,12 @@ in rec {
     pantheon = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.pantheon.enable = true;
+      });
+
+    deepin = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.lightdm.enable = true;
+        services.xserver.desktopManager.deepin.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.

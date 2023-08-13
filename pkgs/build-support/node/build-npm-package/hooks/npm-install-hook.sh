@@ -13,8 +13,8 @@ npmInstallHook() {
     while IFS= read -r file; do
         local dest="$packageOut/$(dirname "$file")"
         mkdir -p "$dest"
-        cp "$file" "$dest"
-    done < <(@jq@ --raw-output '.[0].files | map(.path) | join("\n")' <<< "$(npm pack --json --dry-run $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
+        cp "${npmWorkspace-.}/$file" "$dest"
+    done < <(@jq@ --raw-output '.[0].files | map(.path) | join("\n")' <<< "$(npm pack --json --dry-run ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
 
     while IFS=" " read -ra bin; do
         mkdir -p "$out/bin"
@@ -22,12 +22,15 @@ npmInstallHook() {
     done < <(@jq@ --raw-output '(.bin | type) as $typ | if $typ == "string" then
         .name + " " + .bin
         elif $typ == "object" then .bin | to_entries | map(.key + " " + .value) | join("\n")
-        else "invalid type " + $typ | halt_error end' package.json)
+        else "invalid type " + $typ | halt_error end' "${npmWorkspace-.}/package.json")
 
     local -r nodeModulesPath="$packageOut/node_modules"
 
     if [ ! -d "$nodeModulesPath" ]; then
-        npm prune --omit dev --no-save $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+        if [ -z "${dontNpmPrune-}" ]; then
+            npm prune --omit=dev --no-save ${npmWorkspace+--workspace=$npmWorkspace} $npmPruneFlags "${npmPruneFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+        fi
+
         find node_modules -maxdepth 1 -type d -empty -delete
 
         cp -r node_modules "$nodeModulesPath"

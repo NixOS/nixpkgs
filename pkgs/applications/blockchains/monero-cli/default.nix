@@ -6,16 +6,32 @@
 , trezorSupport ? true, libusb1, protobuf, python3
 }:
 
+let
+  # submodules
+  supercop = fetchFromGitHub {
+    owner = "monero-project";
+    repo = "supercop";
+    rev = "633500ad8c8759995049ccd022107d1fa8a1bbc9";
+    sha256 = "26UmESotSWnQ21VbAYEappLpkEMyl0jiuCaezRYd/sE=";
+  };
+  trezor-common = fetchFromGitHub {
+    owner = "trezor";
+    repo = "trezor-common";
+    rev = "bff7fdfe436c727982cc553bdfb29a9021b423b0";
+    sha256 = "VNypeEz9AV0ts8X3vINwYMOgO8VpNmyUPC4iY3OOuZI=";
+  };
+
+in
+
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.1.2";
+  version = "0.18.2.2";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "sha256-yV1ysoesEcjL+JX6hkmcrBDmazOWBvYK6EjshxJzcAw=";
-    fetchSubmodules = true;
+    sha256 = "6VI5D3vP6NKdrEE5qOpKnv1wr6AWriixdOxkAa8HaCQ=";
   };
 
   patches = [
@@ -23,8 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # remove vendored libraries
-    rm -r external/{miniupnp,randomx,rapidjson}
+    # manually install submodules
+    rmdir external/{supercop,trezor-common}
+    ln -sf ${supercop} external/supercop
+    ln -sf ${trezor-common} external/trezor-common
     # export patched source for monero-gui
     cp -r . $source
   '';

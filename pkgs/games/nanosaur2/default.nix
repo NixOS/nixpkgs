@@ -20,22 +20,17 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    cmake --build build
-    runHook postBuild
-  '';
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   installPhase = ''
     runHook preInstall
-    mv build $out
-    makeWrapper $out/Nanosaur2 $out/bin/Nanosaur2 --chdir "$out"
+    mkdir -p "$out/bin"
+    mkdir -p "$out/share/Nanosaur2"
+    mv Data ReadMe.txt "$out/share/Nanosaur2/"
+    install -Dm755 {.,$out/bin}/Nanosaur2
+    wrapProgram $out/bin/Nanosaur2 --chdir "$out/share/Nanosaur2"
+    install -Dm644 $src/packaging/nanosaur2.desktop $out/share/applications/nanosaur2.desktop
+    install -Dm644 $src/packaging/nanosaur2-desktopicon.png $out/share/pixmaps/nanosaur2-desktopicon.png
     runHook postInstall
   '';
 

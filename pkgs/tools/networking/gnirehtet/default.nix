@@ -1,12 +1,19 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchzip, androidenv, makeWrapper }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchzip
+, androidenv
+, makeWrapper
+}:
 let
-version = "2.5";
+version = "2.5.1";
 apk = stdenv.mkDerivation {
   pname = "gnirehtet.apk";
   inherit version;
   src = fetchzip {
     url = "https://github.com/Genymobile/gnirehtet/releases/download/v${version}/gnirehtet-rust-linux64-v${version}.zip";
-    sha256 = "1db0gkg5z8lighhkyqfsr9jiacrck89zmfnmp74vj865hhxgjzgq";
+    hash = "sha256-e1wwMhcco9VNoBUzbEq1ESbkX2bqTOkCbPmnV9CpvGo=";
   };
   installPhase = ''
     mkdir $out
@@ -14,18 +21,23 @@ apk = stdenv.mkDerivation {
   '';
 };
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "gnirehtet";
   inherit version;
 
   src = fetchFromGitHub {
-      owner = "Genymobile";
-      repo = "gnirehtet";
-      rev = "v${version}";
-      sha256 = "0wk6n082gnj9xk46n542h1012h8gyhldca23bs7vl73g0534g878";
+    owner = "Genymobile";
+    repo = "gnirehtet";
+    rev = "v${version}";
+    hash = "sha256-ewLYCZgkjbh6lR9e4iTddCIrB+5dxyviIXhOqlZsLqc=";
   };
-  sourceRoot = "source/relay-rust";
-  cargoSha256 = "03r8ivsvmhi5f32gj4yacbyzanziymszya18dani53bq9zis9z31";
+  passthru = {
+    inherit apk;
+  };
+
+  sourceRoot = "${src.name}/relay-rust";
+
+  cargoHash = "sha256-3oVWFMFzYsuCec1wxZiHXW6O45qbdL1npqYrg/m4SPc=";
 
   nativeBuildInputs = [ makeWrapper ];
 

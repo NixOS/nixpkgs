@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sigi";
-  version = "3.5.0";
+  version = "3.6.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-VUf5fCVOZCn0iY51eBS/fIvlxQF+BY+k75I+NY7yqzM=";
+    sha256 = "sha256-UL4V/5XvqaqO4R2ievw379D/rzHf/ITgvG3BcSbMeTQ=";
   };
 
-  cargoSha256 = "sha256-ivSVcpUDGK0dJDy+jY7BYQIFCXu/npV0MiNe3nlsUho=";
+  cargoSha256 = "sha256-wzTUK4AvJmBK7LX7CLCAeAXLDxMJA/3qs/KT1+pMaoI=";
   nativeBuildInputs = [ installShellFiles ];
 
   # In case anything goes wrong.
@@ -25,6 +25,6 @@ rustPlatform.buildRustPackage rec {
     description = "Organizing CLI for people who don't love organizing.";
     homepage = "https://github.com/sigi-cli/sigi";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ hiljusti ];
+    maintainers = with maintainers; [ booniepepper ];
   };
 }

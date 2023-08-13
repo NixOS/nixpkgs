@@ -1,60 +1,103 @@
 { lib
-, buildGoModule
 , fetchFromGitHub
+, fetchpatch
+, applyPatches
+, buildGoModule
+, buildNpmPackage
 , makeWrapper
-, pkgs
-, stdenv
-, fetchzip
-, jdk
-, nodejs
-, pathDeps ? [ ]
+, go-swag
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "pufferpanel";
-  version = "2.2.0";
+  version = "2.6.7";
 
-  src = fetchFromGitHub {
-    owner = "pufferpanel";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1ifig8ckjlg47wj0lfk4q941dan7llb1i5l76akcpjq726b2j8lh";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "PufferPanel";
+      repo = "PufferPanel";
+      rev = "v${version}";
+      hash = "sha256-ay9NNcK+6QFobe/rwtZF8USl0vMbDZBg5z57fjA5VLw=";
+    };
+    patches = [
+      # Bump sha1cd package, otherwise i686-linux fails to build.
+      ./bump-sha1cd.patch
+
+      # Seems to be an anti-feature. Startup is the only place where user/group is
+      # hardcoded and checked.
+      #
+      # There is no technical reason PufferPanel cannot run as a different user,
+      # especially for simple commands like `pufferpanel version`.
+      ./disable-group-checks.patch
+
+      # Some tests do not have network requests stubbed :(
+      ./skip-network-tests.patch
+    ];
   };
 
-  # PufferPanel is split into two parts: the backend daemon and the
-  # frontend.
-  # Getting the frontend to build in the Nix environment fails even
-  # with all the proper node_modules populated. To work around this,
-  # we just download the built frontend and package that.
-  frontend = fetchzip {
-    url = "https://github.com/PufferPanel/PufferPanel/releases/download/v${version}/pufferpanel_${version}_linux_arm64.zip";
-    sha256 = "0phbf4asr0dns7if84crx05kfgr44yaxrbsbihdywbhh2mb16052";
-    stripRoot = false;
-  } + "/www";
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/pufferpanel/pufferpanel/v2.Hash=none"
+    "-X=github.com/pufferpanel/pufferpanel/v2.Version=${version}-nixpkgs"
+  ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  frontend = buildNpmPackage {
+    pname = "pufferpanel-frontend";
+    inherit version;
 
-  vendorSha256 = "061l1sy0z3kd7rc2blqh333gy66nbadfxy9hyxgq07dszds4byys";
+    src = "${src}/client";
 
-  postFixup = ''
-    mkdir -p $out/share/pufferpanel
-    cp -r ${src}/assets/email $out/share/pufferpanel/templates
-    cp -r ${frontend} $out/share/pufferpanel/www
+    npmDepsHash = "sha256-oWFXtV/dxzHv3sfIi01l1lHE5tcJgpVq87XgS6Iy62g=";
 
-    # Wrap the binary with the path to the external files.
-    mv $out/bin/cmd $out/bin/pufferpanel
-    wrapProgram "$out/bin/pufferpanel" \
-      --set PUFFER_PANEL_EMAIL_TEMPLATES $out/share/pufferpanel/templates/emails.json \
-      --set GIN_MODE release \
-      --set PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www \
-      --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath pathDeps)}
+    NODE_OPTIONS = "--openssl-legacy-provider";
+    npmBuildFlags = [ "--" "--dest=${placeholder "out"}" ];
+    dontNpmInstall = true;
+  };
+
+  nativeBuildInputs = [ makeWrapper go-swag ];
+
+  vendorHash = "sha256-Esfk7SvqiWeiobXSI+4wYVEH9yVkB+rO7bxUQ5TzvG4=";
+  proxyVendor = true;
+
+  # Generate code for Swagger documentation endpoints (see web/swagger/docs.go).
+  # Note that GOROOT embedded in go-swag is empty by default since it is built
+  # with -trimpath (see https://go.dev/cl/399214). It looks like go-swag skips
+  # file paths that start with $GOROOT, thus all files when it is empty.
+  preBuild = ''
+    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --output web/swagger --generalInfo web/loader.go
   '';
+
+  installPhase = ''
+    runHook preInstall
+
+    # Set up directory structure similar to the official PufferPanel releases.
+    mkdir -p $out/share/pufferpanel
+    cp "$GOPATH"/bin/cmd $out/share/pufferpanel/pufferpanel
+    cp -r $frontend $out/share/pufferpanel/www
+    cp -r $src/assets/email $out/share/pufferpanel/email
+    cp web/swagger/swagger.{json,yaml} $out/share/pufferpanel
+
+    # Wrap the binary with the path to the external files, but allow setting
+    # custom paths if needed.
+    makeWrapper $out/share/pufferpanel/pufferpanel $out/bin/pufferpanel \
+      --set-default GIN_MODE release \
+      --set-default PUFFER_PANEL_EMAIL_TEMPLATES $out/share/pufferpanel/email/emails.json \
+      --set-default PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www
+
+    runHook postInstall
+  '';
+
+  passthru.tests = {
+    inherit (nixosTests) pufferpanel;
+  };
 
   meta = with lib; {
     description = "A free, open source game management panel";
     homepage = "https://www.pufferpanel.com/";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ ckie ];
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/pufferpanel.x86_64-darwin
+    maintainers = with maintainers; [ ckie tie ];
+    mainProgram = "pufferpanel";
   };
 }

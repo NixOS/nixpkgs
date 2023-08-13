@@ -6,17 +6,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
-  version = "1.5.2";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-MF7K3WasG1xLdw1kWz6xVYrdfuZW5GUq6dlS0pPOkHI=";
+    sha256 = "sha256-yEo5nga0WTbgZm8W2qbJcTOO4cCzFWrjRmTBCFH7GLg=";
   };
 
   postPatch = ''
-    substituteInPlace ui/opensnitch/utils.py \
+    substituteInPlace ui/opensnitch/utils/__init__.py \
       --replace /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
   '';
 

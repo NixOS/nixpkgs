@@ -1,21 +1,23 @@
-{ lib, stdenv, ruby, bison, rake, fetchFromGitHub }:
+{ lib, stdenv, ruby, rake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "mruby";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner   = "mruby";
     repo    = "mruby";
     rev     = version;
-    sha256  = "0gnzip7qfadnl0r1k8bpc9a6796sy503h77ggds02wrz7mpq32nf";
+    sha256  = "sha256-MmrbWeg/G29YBvVrOtceTOZChrQ2kx9+apl7u7BiGjA=";
   };
 
-  nativeBuildInputs = [ ruby bison rake ];
+  nativeBuildInputs = [ rake ];
+
+  nativeCheckInputs = [ ruby ];
 
   # Necessary so it uses `gcc` instead of `ld` for linking.
-  # https://github.com/mruby/mruby/blob/35be8b252495d92ca811d76996f03c470ee33380/tasks/toolchains/gcc.rake#L25
-  preBuild = if stdenv.isLinux then "unset LD" else null;
+  # https://github.com/mruby/mruby/blob/e502fd88b988b0a8d9f31b928eb322eae269c45a/tasks/toolchains/gcc.rake#L30
+  preBuild = "unset LD";
 
   installPhase = ''
     mkdir $out
@@ -24,11 +26,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  checkTarget = "test";
+
   meta = with lib; {
     description = "An embeddable implementation of the Ruby language";
     homepage = "https://mruby.org";
-    maintainers = [ maintainers.nicknovitski ];
+    maintainers = with maintainers; [ nicknovitski marsam ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }

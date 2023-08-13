@@ -1,5 +1,6 @@
 [
   "add-widget-after-content"
+, "akismet"
 , "antispam-bee"
 , "async-javascript"
 , "breeze"
@@ -8,9 +9,12 @@
 , "co-authors-plus"
 , "disable-xml-rpc"
 , "gutenberg"
+, "hello-dolly"
+, "hkdev-maintenance-mode"
 , "jetpack"
 , "jetpack-lite"
 , "lightbox-photoswipe"
+, "login-lockdown"
 , "mailpoet"
 , "merge-minify-refresh"
 , "opengraph"
@@ -25,5 +29,7 @@
 , "wp-gdpr-compliance"
 , "wp-mail-smtp"
 , "wp-statistics"
+, "wp-swiper"
 , "wp-user-avatars"
+, "wpforms-lite"
 ]

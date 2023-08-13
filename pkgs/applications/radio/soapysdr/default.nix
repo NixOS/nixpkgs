@@ -5,7 +5,9 @@
 , python ? null
 , ncurses, swig2
 , extraPackages ? []
-} :
+, testers
+, buildPackages
+}:
 
 let
 
@@ -14,7 +16,7 @@ let
   modulesPath = "lib/SoapySDR/modules" + modulesVersion;
   extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
   inherit version;
 
@@ -50,7 +52,7 @@ in stdenv.mkDerivation {
   postFixup = lib.optionalString (lib.length extraPackages != 0) ''
     # Join all plugins via symlinking
     for i in ${toString extraPackages}; do
-      ${lndir}/bin/lndir -silent $i $out
+      ${buildPackages.xorg.lndir}/bin/lndir -silent $i $out
     done
     # Needed for at least the remote plugin server
     for file in $out/bin/*; do
@@ -58,12 +60,15 @@ in stdenv.mkDerivation {
     done
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
     mainProgram = "SoapySDRUtil";
+    pkgConfigModules = [ "SoapySDR" ];
     platforms = platforms.unix;
   };
-}
+})

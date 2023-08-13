@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "add-trailing-comma";
-  version = "2.4.0";
+  version = "3.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/dA3OwBBMjykSYaIbvhJZj9Z8/0+mfL5pW4GqgMgops=";
+    hash = "sha256-wCqCKomnkYgvxDWtjBwyqKb09sTPqPgWbYohgosUaHA=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "add_trailing_comma"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

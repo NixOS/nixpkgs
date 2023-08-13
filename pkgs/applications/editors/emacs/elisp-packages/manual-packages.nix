@@ -1,12 +1,19 @@
 { lib, pkgs }:
 
-self: with self; {
+self:
+let
+  inherit (self) callPackage;
+in
+{
+  acm = callPackage ./manual-packages/acm { };
+
+  acm-terminal = callPackage ./manual-packages/acm-terminal { };
 
   agda-input = callPackage ./manual-packages/agda-input { };
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  bqn-mode = callPackage ./manual-packages/bqn-mode { };
+  beancount = callPackage ./manual-packages/beancount { };
 
   cask = callPackage ./manual-packages/cask { };
 
@@ -17,8 +24,6 @@ self: with self; {
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
   emacspeak = callPackage ./manual-packages/emacspeak { };
-
-  ement = callPackage ./manual-packages/ement { };
 
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
@@ -32,8 +37,6 @@ self: with self; {
 
   haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
 
-  header-file-mode = callPackage ./manual-packages/header-file-mode { };
-
   helm-words = callPackage ./manual-packages/helm-words { };
 
   idris2-mode = callPackage ./manual-packages/idris2-mode { };
@@ -44,7 +47,13 @@ self: with self; {
 
   jam-mode = callPackage ./manual-packages/jam-mode { };
 
+  ligo-mode = callPackage ./manual-packages/ligo-mode { };
+
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
+
+  lsp-bridge = callPackage ./manual-packages/lsp-bridge {
+    inherit (pkgs) python3 git go gopls pyright;
+  };
 
   matrix-client = callPackage ./manual-packages/matrix-client {
     _map = self.map;
@@ -66,11 +75,15 @@ self: with self; {
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
+  treesit-grammars = callPackage ./manual-packages/treesit-grammars { };
+
   tsc = callPackage ./manual-packages/tsc { };
 
   urweb-mode = callPackage ./manual-packages/urweb-mode { };
 
   voicemacs = callPackage ./manual-packages/voicemacs { };
+
+  wat-mode = callPackage ./manual-packages/wat-mode { };
 
   yes-no = callPackage ./manual-packages/yes-no { };
 
@@ -86,8 +99,8 @@ self: with self; {
   sunrise-commander = callPackage ./manual-packages/sunrise-commander { };
 
   # camelCase aliases for some of the kebab-case expressions above
-  colorThemeSolarized = color-theme-solarized;
-  emacsSessionManagement = session-management-for-emacs;
-  rectMark = rect-mark;
-  sunriseCommander = sunrise-commander;
+  colorThemeSolarized = self.color-theme-solarized;
+  emacsSessionManagement = self.session-management-for-emacs;
+  rectMark = self.rect-mark;
+  sunriseCommander = self.sunrise-commander;
 }

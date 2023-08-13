@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mjdrushton";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-G7lNqwEUwAT0f7M2nUTCxpXOAl6FWKlh7tcsvbur1eM=";
+    hash = "sha256-G7lNqwEUwAT0f7M2nUTCxpXOAl6FWKlh7tcsvbur1eM=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     deepdiff
     pytestCheckHook
   ];
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mjdrushton/atsim-potentials";
     description = "Provides tools for working with pair and embedded atom method potential models including tabulation routines for DL_POLY and LAMMPS";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

@@ -15,14 +15,16 @@
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.7.0";
+  version = "1.8.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-vzaaX3wj1UkFGCohxYlPw6NA0b+oV/2JtpYXC4zncjk=";
+    hash = "sha256-UPnWVYiZJdP6r7Bm1H9DMXpLi26c9tpXeEkLXVJxWdM=";
   };
 
   preBuild = ''
@@ -31,15 +33,29 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  checkInputs = [
-    lz4
+  passthru.optional-dependencies = {
+    codecs = [
+      lz4
+      python-snappy
+      zstandard
+    ];
+    snappy = [
+      python-snappy
+    ];
+    zstandard = [
+      zstandard
+    ];
+    lz4 = [
+      lz4
+    ];
+  };
+
+  nativeCheckInputs = [
     numpy
     pandas
     pytestCheckHook
     python-dateutil
-    python-snappy
-    zstandard
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
   # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.
@@ -53,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast read/write of AVRO files";
     homepage = "https://github.com/fastavro/fastavro";
+    changelog = "https://github.com/fastavro/fastavro/blob/${version}/ChangeLog";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };

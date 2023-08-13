@@ -8,7 +8,10 @@ let
   configFile = toml.generate "garage.toml" cfg.settings;
 in
 {
-  meta.maintainers = [ maintainers.raitobezarius ];
+  meta = {
+    doc = ./garage.md;
+    maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+  };
 
   options.services.garage = {
     enable = mkEnableOption (lib.mdDoc "Garage Object Storage (S3 compatible)");
@@ -46,20 +49,22 @@ in
 
           replication_mode = mkOption {
             default = "none";
-            type = types.enum ([ "none" "1" "2" "3" 1 2 3 ]);
+            type = types.enum ([ "none" "1" "2" "3" "2-dangerous" "3-dangerous" "3-degraded" 1 2 3 ]);
             apply = v: toString v;
-            description = lib.mdDoc "Garage replication mode, defaults to none, see: <https://garagehq.deuxfleurs.fr/reference_manual/configuration.html#replication_mode> for reference.";
+            description = lib.mdDoc "Garage replication mode, defaults to none, see: <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode> for reference.";
           };
         };
       };
-      description = lib.mdDoc "Garage configuration, see <https://garagehq.deuxfleurs.fr/reference_manual/configuration.html> for reference.";
+      description = lib.mdDoc "Garage configuration, see <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/> for reference.";
     };
 
     package = mkOption {
-      default = pkgs.garage;
-      defaultText = literalExpression "pkgs.garage";
+      # TODO: when 23.05 is released and if Garage 0.9 is the default, put a stateVersion check.
+      default = if versionAtLeast config.system.stateVersion "23.05" then pkgs.garage_0_8
+                else pkgs.garage_0_7;
+      defaultText = literalExpression "pkgs.garage_0_7";
       type = types.package;
-      description = lib.mdDoc "Garage package to use.";
+      description = lib.mdDoc "Garage package to use, if you are upgrading from a major version, please read NixOS and Garage release notes for upgrade instructions.";
     };
   };
 
@@ -75,6 +80,7 @@ in
       after = [ "network.target" "network-online.target" ];
       wants = [ "network.target" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ configFile ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/garage server";
 

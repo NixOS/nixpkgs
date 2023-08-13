@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "routinator";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-anc2nFZXYO0Ab5xwDasXGw8/SluNt15C6pRmQfUJVDs=";
+    sha256 = "sha256-QH4M6Kr6UiDJAaDtEn2GXQT9oSSz3lqkf+VE0GfOqeg=";
   };
 
-  cargoSha256 = "sha256-EyrQR9gevInCI4kBZvUW5U9FrE0ZHbRUFyLKVZefKEE=";
+  cargoSha256 = "sha256-lzw26aat+Zk0E70H7/xwZ6azRMkknfQmTrE4wOJRwfo=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 

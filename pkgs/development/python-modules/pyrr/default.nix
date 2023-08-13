@@ -1,21 +1,22 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , setuptools
 , multipledispatch
 , numpy
 }:
 
 buildPythonPackage rec {
-  version = "0.10.3";
   pname = "pyrr";
+  version = "unstable-2022-07-22";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3c0f7b20326e71f706a610d58f2190fff73af01eef60c19cb188b186f0ec7e1d";
+  src = fetchFromGitHub {
+    owner = "adamlwgriffiths";
+    repo = "Pyrr";
+    rev = "f6c8698c48a75f3fb7ad0d47d0ce80a04f87ba2f";
+    hash = "sha256-u9O52MQskZRzw0rBH6uPdXdikWLJe7wyBZGNKIFA4BA=";
   };
 
-  buildInputs = [ setuptools ];
   propagatedBuildInputs = [ multipledispatch numpy ];
 
   meta = with lib; {

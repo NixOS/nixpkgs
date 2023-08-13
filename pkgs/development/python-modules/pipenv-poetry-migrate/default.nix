@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , poetry-core
@@ -11,25 +10,18 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.2.1";
   pname = "pipenv-poetry-migrate";
+  version = "0.3.2";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aP8bzWFUzAZrEsz8pYL2y5c7GaUjWG5GA+cc4/tGPZk=";
+    hash = "sha256-aPG0MgChnJbivJRjYx9aQE5OPhL4WlPyt5uKCHZUpeE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "use-poetry-core.patch";
-      url = "https://github.com/yhino/pipenv-poetry-migrate/commit/726ebd823bf6ef982992085bd04e41d178775b98.patch";
-      hash = "sha256-TBVH1MZA0O1/2zLpVgNckLaP4JO3wIJJi0Nst726erk=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -42,16 +34,18 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace 'typer = "^0.4.0"' 'typer = ">=0.4"'
+    substituteInPlace pyproject.toml \
+      --replace 'typer = "^0.4.0"' 'typer = ">=0.4"'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   meta = with lib; {
     description = "This is simple migration script, migrate pipenv to poetry";
     homepage = "https://github.com/yhino/pipenv-poetry-migrate";
+    changelog = "https://github.com/yhino/pipenv-poetry-migrate/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ gador ];
   };

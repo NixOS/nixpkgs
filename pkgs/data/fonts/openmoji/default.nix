@@ -63,6 +63,12 @@ in stdenv.mkDerivation rec {
     nodePackages.lodash
   ];
 
+  postPatch = ''
+    # this is API change in glob >9
+    substituteInPlace helpers/generate-font-glyphs.js \
+      --replace "require('glob').sync" "require('glob').globSync"
+  '';
+
   buildPhase = ''
     runHook preBuild
 

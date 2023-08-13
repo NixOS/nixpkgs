@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, six, jaraco_logging, jaraco_text, jaraco_stream, pytz, jaraco_itertools
-, setuptools-scm, jaraco_collections, importlib-metadata
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, six
+, jaraco-logging
+, jaraco-text
+, jaraco-stream
+, pytz
+, jaraco-itertools
+, setuptools-scm
+, jaraco-collections
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
@@ -12,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tvc3ky3UeR87GOMZ3nt9rwLSKFpr6iY9EB9NjlU4B+w=";
+    hash = "sha256-tvc3ky3UeR87GOMZ3nt9rwLSKFpr6iY9EB9NjlU4B+w=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -20,12 +30,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     six
     importlib-metadata
-    jaraco_logging
-    jaraco_text
-    jaraco_stream
+    jaraco-logging
+    jaraco-text
+    jaraco-stream
     pytz
-    jaraco_itertools
-    jaraco_collections
+    jaraco-itertools
+    jaraco-collections
   ];
 
   doCheck = false;

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.3.4";
+  version = "4.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,11 +24,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
-    rev = "v${version}";
-    hash = "sha256-fymO9WqkYaRsHKCJHQJpySHqZor2t8BfVrfYUfYoJno=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sE6AlT01Rou427i9w+xwUTMflKxUr0Heqt2l+Y2AMmU=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     eventlet
     mock

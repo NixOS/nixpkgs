@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, autoreconfHook, libmd }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, libmd
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "libbsd";
-  version = "0.11.6";
+  version = "0.11.7";
 
   src = fetchurl {
     url = "https://libbsd.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GbOPMXLq9pPm4caHFGNhkMfkiFHkUiTXILO1vASZtd8=";
+    hash = "sha256-m6oYYFnrvyXAYwjp+ZH9ox9xg8DySTGCbYOqar2KAmE=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -17,6 +23,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libmd ];
 
   patches = [ ./darwin.patch ];
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://gitlab.freedesktop.org/libbsd/libbsd.git";
+  };
 
   meta = with lib; {
     description = "Common functions found on BSD systems";

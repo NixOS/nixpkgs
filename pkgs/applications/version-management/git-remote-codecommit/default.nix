@@ -23,7 +23,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ botocore ];
 
-  checkInputs = [ pytest mock flake8 tox awscli ];
+  nativeCheckInputs = [ pytest mock flake8 tox awscli ];
 
   checkPhase = ''
     pytest

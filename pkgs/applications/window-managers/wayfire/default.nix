@@ -1,33 +1,88 @@
-{ lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config
-, cairo, doctest, libdrm, libexecinfo, libinput, libjpeg, libxkbcommon, wayland
-, wayland-protocols, wf-config, wlroots, mesa
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, meson
+, ninja
+, pkg-config
+, wf-config
+, cairo
+, doctest
+, libdrm
+, libexecinfo
+, libinput
+, libjpeg
+, libxkbcommon
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wlroots
+, pango
+, xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.7.2";
+  version = "0.7.5";
 
-  src = fetchurl {
-    url = "https://github.com/WayfireWM/wayfire/releases/download/v${version}/wayfire-${version}.tar.xz";
-    sha256 = "1gasijjyfl00zpy6j9hh6qpwv0sw42h9irycbnm693j3vw9mcy66";
+  src = fetchFromGitHub {
+    owner = "WayfireWM";
+    repo = "wayfire";
+    rev = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-Z+rR9pY244I3i/++XZ4ROIkq3vtzMgcxxHvJNxFD9is=";
   };
 
-  nativeBuildInputs = [ cmake meson ninja pkg-config wayland ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
+
   buildInputs = [
-    cairo doctest libdrm libexecinfo libinput libjpeg libxkbcommon wayland
-    wayland-protocols wf-config wlroots mesa
+    wf-config
+    libdrm
+    libexecinfo
+    libinput
+    libjpeg
+    libxkbcommon
+    wayland-protocols
+    xorg.xcbutilwm
+    wayland
+    cairo
+    pango
+  ];
+
+  propagatedBuildInputs = [
+    wlroots
+  ];
+
+  nativeCheckInputs = [
+    cmake
+    doctest
   ];
 
   # CMake is just used for finding doctest.
   dontUseCmakeConfigure = true;
 
-  mesonFlags = [ "--sysconfdir" "/etc" ];
+  doCheck = true;
 
-  meta = with lib; {
+  mesonFlags = [
+    "--sysconfdir /etc"
+    "-Duse_system_wlroots=enabled"
+    "-Duse_system_wfconfig=enabled"
+    (lib.mesonEnable "wf-touch:tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+  ];
+
+  passthru.providedSessions = [ "wayfire" ];
+
+  meta = {
     homepage = "https://wayfire.org/";
     description = "3D Wayland compositor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qyliss wucke13 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qyliss wucke13 rewine ];
+    platforms = lib.platforms.unix;
+    mainProgram = "wayfire";
   };
-}
+})

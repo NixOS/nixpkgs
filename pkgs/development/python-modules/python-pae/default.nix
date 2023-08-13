@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "MatthiasValvekens";
     repo = "python-pae";
     rev = version;
-    sha256 = "sha256-D0X2T0ze79KR6Gno4UWpA/XvlkK6Y/jXUtLbzlOKr3E=";
+    hash = "sha256-D0X2T0ze79KR6Gno4UWpA/XvlkK6Y/jXUtLbzlOKr3E=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

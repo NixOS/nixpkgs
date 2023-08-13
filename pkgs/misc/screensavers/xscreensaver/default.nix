@@ -1,32 +1,71 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, pkg-config, intltool
-, perl, perlPackages, gettext, libX11, libXext, libXi, libXt
-, libXft, libXinerama, libXrandr, libXxf86vm, libGL, libGLU, gle
-, gtk2, gdk-pixbuf, gdk-pixbuf-xlib, libxml2, pam
-, systemd, coreutils
+{ lib
+, stdenv
+, fetchurl
+, coreutils
+, gdk-pixbuf
+, gdk-pixbuf-xlib
+, gettext
+, gle
+, gtk3
+, intltool
+, libGL
+, libGLU
+, libX11
+, libXext
+, libXft
+, libXi
+, libXinerama
+, libXrandr
+, libXt
+, libXxf86vm
+, libxml2
+, makeWrapper
+, pam
+, perlPackages
+, pkg-config
+, systemd
 , forceInstallAllHacks ? false
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
-stdenv.mkDerivation rec {
-  version = "6.04";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
+  version = "6.06";
 
   src = fetchurl {
-    url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-eHAUsp8MV5Pswtk+EQmgSf9IqwwpuFHas09oPO72sVI=";
+    url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
+    hash = "sha256-9TT6uFqDbeW4vo6R/CG4DKfWpO2ThuviB9S+ek50mac=";
   };
 
   nativeBuildInputs = [
-    pkg-config intltool makeWrapper
+    intltool
+    makeWrapper
+    pkg-config
   ];
 
   buildInputs = [
-    perl gettext libX11 libXext libXi libXt
-    libXft libXinerama libXrandr libXxf86vm libGL libGLU gle
-    gtk2 gdk-pixbuf gdk-pixbuf-xlib libxml2 pam
-    perlPackages.LWPProtocolHttps perlPackages.MozillaCA
-  ] ++ lib.optional withSystemd systemd;
+    gdk-pixbuf
+    gdk-pixbuf-xlib
+    gettext
+    gle
+    gtk3
+    libGL
+    libGLU
+    libX11
+    libXext
+    libXft
+    libXi
+    libXinerama
+    libXrandr
+    libXt
+    libXxf86vm
+    libxml2
+    pam
+    perlPackages.LWPProtocolHttps
+    perlPackages.MozillaCA
+    perlPackages.perl
+  ]
+  ++ lib.optional withSystemd systemd;
 
   preConfigure = ''
     # Fix installation paths for GTK resources.
@@ -39,16 +78,17 @@ stdenv.mkDerivation rec {
   ];
 
   # "marbling" has NEON code that mixes signed and unsigned vector types
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.hostPlatform.isAarch "-flax-vector-conversions";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch "-flax-vector-conversions";
 
   postInstall = ''
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH : "$out/libexec/xscreensaver" \
-        --prefix PATH : "${lib.makeBinPath [ coreutils perl ]}" \
+        --prefix PATH : "${lib.makeBinPath [ coreutils perlPackages.perl ]}" \
         --prefix PERL5LIB ':' $PERL5LIB
     done
-  '' + lib.optionalString forceInstallAllHacks ''
+  ''
+  + lib.optionalString forceInstallAllHacks ''
     make -j$NIX_BUILD_CORES -C hacks/glx dnalogo
     cat hacks/Makefile.in \
       | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1 | xargs make -j$NIX_BUILD_CORES -C hacks
@@ -60,9 +100,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.jwz.org/xscreensaver/";
     description = "A set of screensavers";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.unix; # Once had cygwin problems
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raskin AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})

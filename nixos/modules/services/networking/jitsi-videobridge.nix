@@ -43,6 +43,7 @@ let
         muc_nickname = xmppConfig.mucNickname;
         disable_certificate_verification = xmppConfig.disableCertificateVerification;
       });
+      apis.rest.enabled = cfg.colibriRestApi;
     };
   };
 
@@ -50,6 +51,11 @@ let
   jvbConfig = recursiveUpdate defaultJvbConfig cfg.config;
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "jitsi-videobridge" "apis" ]
+      "services.jitsi-videobridge.apis was broken and has been migrated into the boolean option services.jitsi-videobridge.colibriRestApi. It is set to false by default, setting it to true will correctly enable the private /colibri rest API."
+    )
+  ];
   options.services.jitsi-videobridge = with types; {
     enable = mkEnableOption (lib.mdDoc "Jitsi Videobridge, a WebRTC compatible video router");
 
@@ -192,14 +198,13 @@ in
       '';
     };
 
-    apis = mkOption {
-      type = with types; listOf str;
+    colibriRestApi = mkOption {
+      type = bool;
       description = lib.mdDoc ''
-        What is passed as --apis= parameter. If this is empty, "none" is passed.
-        Needed for monitoring jitsi.
+        Whether to enable the private rest API for the COLIBRI control interface.
+        Needed for monitoring jitsi, enabling scraping of the /colibri/stats endpoint.
       '';
-      default = [];
-      example = literalExpression "[ \"colibri\" \"rest\" ]";
+      default = false;
     };
   };
 
@@ -233,7 +238,7 @@ in
         "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
       ) cfg.xmppConfigs))
       + ''
-        ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge --apis=${if (cfg.apis == []) then "none" else concatStringsSep "," cfg.apis}
+        ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge
       '';
 
       serviceConfig = {

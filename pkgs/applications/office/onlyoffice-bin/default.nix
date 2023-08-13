@@ -12,6 +12,7 @@
 , dconf
 , dpkg
 , fontconfig
+, gcc-unwrapped
 , gdk-pixbuf
 , glib
 , glibc
@@ -66,6 +67,7 @@ let
   runtimeLibs = lib.makeLibraryPath [
     curl
     glibc
+    gcc-unwrapped.lib
     libudev0-shim
     pulseaudio
   ];
@@ -142,6 +144,13 @@ stdenv.mkDerivation rec {
     mv usr/bin/* $out/bin
     mv usr/share/* $out/share/
     mv opt/onlyoffice/desktopeditors $out/share
+
+    for f in $out/share/desktopeditors/asc-de-*.png; do
+      size=$(basename "$f" ".png" | cut -d"-" -f3)
+      res="''${size}x''${size}"
+      mkdir -pv "$out/share/icons/hicolor/$res/apps"
+      ln -s "$f" "$out/share/icons/hicolor/$res/apps/onlyoffice-desktopeditors.png"
+    done;
 
     substituteInPlace $out/bin/onlyoffice-desktopeditors \
       --replace "/opt/onlyoffice/" "$out/share/"

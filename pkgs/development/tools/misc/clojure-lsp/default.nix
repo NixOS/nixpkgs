@@ -2,18 +2,18 @@
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
-  version = "2022.11.03-00.14.57";
+  version = "2023.07.01-22.35.41";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-NtvW0KT6d0k2oN//7xaTnBIoLKkc7zQFj3VdoFdgBWI=";
+    sha256 = "sha256-/gpynrmu9O6nRH5TzfXwxbPbpk7c6ZzwR6cp8F2puUM=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
-    sha256 = "49e0a848dc32216a60f48eca68ff476cb69b999f6a79fb7310bf9fb2ffcaf4b6";
+    sha256 = "90457834b079eea57d07b62a1281ebe91b7449d61da0f6e20d5b9f8f8163e525";
   };
 
   extraNativeImageBuildArgs = [

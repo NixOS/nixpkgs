@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "infra";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "infrahq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4sExRKq4J94cQYqjxaXCKa2aEeptCG+TTvrDOrJfBUg=";
+    sha256 = "sha256-uz4wimhOfeHSL949m+biIhjfDwwEGnTiJWaz/r3Rsko=";
   };
 
-  vendorSha256 = "sha256-afbQQsluZjgliNxSOGcTS1DJwj7en5NpxtuzCDAyv98=";
+  vendorHash = "sha256-qbmaebQcD3cN+tbmzzJbry0AXz2LZFMoqbcBwGGrRo4=";
 
   subPackages = [ "." ];
 
@@ -21,7 +21,7 @@ buildGoModule rec {
     description = "Infra manages access to infrastructure such as Kubernetes";
     homepage = "https://github.com/infrahq/infra";
     changelog = "https://github.com/infrahq/infra/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = licenses.elastic;
     maintainers = with maintainers; [ peterromfeldhk ];
   };
 }

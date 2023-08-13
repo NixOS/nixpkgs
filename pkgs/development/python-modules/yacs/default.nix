@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "rbgirshick";
     repo = "yacs";
     rev = "v${version}";
-    sha256 = "sha256-nO8FL4tTkfTthXYXxXORLieFwvn780DDxfrxC9EUUJ0=";
+    hash = "sha256-nO8FL4tTkfTthXYXxXORLieFwvn780DDxfrxC9EUUJ0=";
   };
 
   propagatedBuildInputs = [ pyyaml ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Yet Another Configuration System";
     homepage = "https://github.com/rbgirshick/yacs";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ lucasew ];
   };
 }

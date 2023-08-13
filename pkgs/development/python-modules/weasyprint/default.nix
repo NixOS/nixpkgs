@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "57.0";
+  version = "59.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-e29cwTgZ6afYdIwdvw6NJET3pIGKmDOfgtzKqCK/kRs=";
+    hash = "sha256-Ijp2Y2s3ROqkq4oohfUM9Gz467GsuZtSdtAv7M9QdJI=";
   };
 
   patches = [
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     tinycss2
   ] ++ fonttools.optional-dependencies.woff;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ghostscript
   ];

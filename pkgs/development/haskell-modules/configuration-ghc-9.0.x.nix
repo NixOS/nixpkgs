@@ -40,7 +40,7 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -48,18 +48,6 @@ self: super: {
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
-
-  # cabal-install needs the latest/matching versions of Cabal-syntax and Cabal
-  cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
-  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_16_0;
-  });
 
   # Jailbreaks & Version Updates
 
@@ -93,7 +81,6 @@ self: super: {
   tar = doJailbreak super.tar;
   time-compat = doJailbreak super.time-compat;
   tuple = addBuildDepend self.base-orphans super.tuple;
-  vector = doJailbreak (dontCheck super.vector);
   vector-binary-instances = doJailbreak super.vector-binary-instances;
   vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
@@ -113,7 +100,7 @@ self: super: {
     additionalDeps = with self.haskell-language-server.scope; [
       hls-haddock-comments-plugin
       (unmarkBroken hls-splice-plugin)
-      (unmarkBroken hls-tactics-plugin)
+      hls-tactics-plugin
     ];
   in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
     # Needed for modern ormolu and fourmolu.
@@ -121,11 +108,20 @@ self: super: {
     Cabal = lself.Cabal_3_6_3_0;
   }));
 
+  # Needs to use ghc-lib due to incompatible GHC
+  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
+
   # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
   # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
   hls-haddock-comments-plugin = unmarkBroken (addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
     ghc-exactprint ghcide hls-plugin-api hls-refactor-plugin lsp-types unordered-containers
   ]) super.hls-haddock-comments-plugin);
+
+  hls-tactics-plugin = unmarkBroken (addBuildDepends (with self.hls-tactics-plugin.scope; [
+    aeson extra fingertree generic-lens ghc-exactprint ghc-source-gen ghcide
+    hls-graph hls-plugin-api hls-refactor-plugin hyphenation lens lsp megaparsec
+    parser-combinators prettyprinter refinery retrie syb unagi-chan unordered-containers
+  ]) super.hls-tactics-plugin);
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
@@ -157,9 +153,6 @@ self: super: {
   # Restrictive upper bound on ormolu
   hls-ormolu-plugin = doJailbreak super.hls-ormolu-plugin;
 
-  # Too strict bounds on base
-  # https://github.com/lspitzner/multistate/issues/9
-  multistate = doJailbreak super.multistate;
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
 
@@ -177,5 +170,15 @@ self: super: {
 
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;
+
+  retrie = dontCheck self.retrie_1_1_0_0;
+
   apply-refact = self.apply-refact_0_9_3_0;
+
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
+    inherit (self) apply-refact;
+  };
+
+  # Needs OneTuple for ghc < 9.2
+  binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
 }

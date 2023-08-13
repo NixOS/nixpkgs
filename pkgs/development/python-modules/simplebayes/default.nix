@@ -19,7 +19,7 @@ buildPythonPackage {
     sha256 = "0mp7rvfdmpfxnka4czw3lv5kkh6gdxh6dm4r6hcln1zzfg9lxp4h";
   };
 
-  checkInputs = [ nose mock ];
+  nativeCheckInputs = [ nose mock ];
 
   postPatch = lib.optionalString isPy3k ''
     sed -i -e 's/open *(\([^)]*\))/open(\1, encoding="utf-8")/' setup.py

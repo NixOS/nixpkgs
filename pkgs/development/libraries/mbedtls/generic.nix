@@ -42,6 +42,12 @@ stdenv.mkDerivation rec {
     "-DGEN_FILES=off"
   ];
 
+  doCheck = true;
+
+  # Parallel checking causes test failures
+  # https://github.com/Mbed-TLS/mbedtls/issues/4980
+  enableParallelChecking = false;
+
   meta = with lib; {
     homepage = "https://www.trustedfirmware.org/projects/mbed-tls/";
     changelog = "https://github.com/Mbed-TLS/mbedtls/blob/${pname}-${version}/ChangeLog";

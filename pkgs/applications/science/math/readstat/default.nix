@@ -1,19 +1,21 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "readstat";
-  version = "1.1.8";
+  pname = "readstat";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "WizardMac";
     repo = "ReadStat";
     rev = "v${version}";
-    sha256 = "1r04lq45h1yn34v1mgfiqjfzyaqv4axqlby0nkandamcsqyhc7y4";
+    sha256 = "sha256-4lRJgZPB2gfaQ9fQKvDDpGhy1eDNT/nT1QmeZlCmCis=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64)  [ libiconv ];
+  buildInputs = [ libiconv ];
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://github.com/WizardMac/ReadStat";

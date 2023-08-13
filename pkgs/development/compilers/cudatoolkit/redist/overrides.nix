@@ -1,6 +1,8 @@
-final: prev: let
+final: prev:
+let
   inherit (prev) lib pkgs;
-in (lib.filterAttrs (attr: _: (prev ? "${attr}")) {
+in
+(lib.filterAttrs (attr: _: (prev ? "${attr}")) {
   ### Overrides to fix the components of cudatoolkit-redist
 
   # Attributes that don't exist in the previous set are removed.
@@ -19,6 +21,34 @@ in (lib.filterAttrs (attr: _: (prev ? "${attr}")) {
   libcusolver = final.addBuildInputs prev.libcusolver [
     prev.libcublas
   ];
+
+  cuda_nvcc = prev.cuda_nvcc.overrideAttrs (oldAttrs:
+    let
+      inherit (prev.backendStdenv) cc;
+    in
+    {
+      # Required by cmake's enable_language(CUDA) to build a test program
+      # When implementing cross-compilation support: this is
+      # final.pkgs.targetPackages.cudaPackages.cuda_cudart
+      env.cudartRoot = "${prev.lib.getDev final.cuda_cudart}";
+
+      # Point NVCC at a compatible compiler
+
+      # Desiredata: whenever a package (e.g. magma) adds cuda_nvcc to
+      # nativeBuildInputs (offsets `(-1, 0)`), magma should also source the
+      # setupCudaHook, i.e. we want it the hook to be propagated into the
+      # same nativeBuildInputs.
+      #
+      # Logically, cuda_nvcc should include the hook in depsHostHostPropagated,
+      # so that the final offsets for the propagated hook would be `(-1, 0) +
+      # (0, 0) = (-1, 0)`.
+      #
+      # In practice, TargetTarget appears to work:
+      # https://gist.github.com/fd80ff142cd25e64603618a3700e7f82
+      depsTargetTargetPropagated = [
+        final.setupCudaHook
+      ];
+    });
 
   cuda_nvprof = prev.cuda_nvprof.overrideAttrs (oldAttrs: {
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.addOpenGLRunpath ];

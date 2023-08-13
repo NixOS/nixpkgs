@@ -26,6 +26,11 @@ buildPythonPackage rec {
     pkg-config
   ];
 
+  postPatch = ''
+    # Fix pkg-config name for cross-compilation
+    substituteInPlace setup.py --replace "pkg-config" "$PKG_CONFIG"
+  '';
+
   setupPyGlobalFlags = [ "--cython" ];
 
   meta = with lib; {

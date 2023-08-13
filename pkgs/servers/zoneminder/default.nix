@@ -57,13 +57,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.28";
+  version = "1.36.33";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "sha256-x00u7AWMNS+wAO/tdWi7GYbMZZM7XnszCO57ZDlm0J0=";
+    sha256 = "sha256-KUhFZrF7BuLB2Z3LnTcHEEZVA6iosam6YsOd8KWvx7E=";
     fetchSubmodules = true;
   };
 
@@ -114,6 +114,12 @@ in stdenv.mkDerivation rec {
     for f in includes/Event.php views/image.php ; do
       substituteInPlace web/$f \
         --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
+    done
+
+    for f in scripts/ZoneMinder/lib/ZoneMinder/Event.pm \
+             scripts/ZoneMinder/lib/ZoneMinder/Storage.pm ; do
+      substituteInPlace $f \
+        --replace '/bin/rm' "${coreutils}/bin/rm"
     done
 
     substituteInPlace web/includes/functions.php \

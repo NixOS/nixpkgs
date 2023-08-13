@@ -5,15 +5,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "refurb";
-  version = "1.8.0";
+  version = "1.13.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dosisod";
     repo = "refurb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dpPPhA5bVLiG9DsJ3RnO9RpCd0j4u5f//x/OTdlC+GQ=";
+    hash = "sha256-e/gKBgbtjO2XYnAIdHDoVJWyP6cyvsuIFLrV/eqjces=";
   };
+
+  postPatch = ''
+    # remove --cov* options provided to pytest
+    sed -i '/^addopts = "--cov/d' pyproject.toml
+  '';
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
@@ -26,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     typing-extensions
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     attrs
     click
     colorama
@@ -41,9 +46,9 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    sed -i "/^addopts/d" pyproject.toml
-  '';
+  disabledTests = [
+    "test_checks" # broken because new mypy release added new checks
+  ];
 
   pythonImportsCheck = [
     "refurb"

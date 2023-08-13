@@ -11,11 +11,18 @@ rustPlatform.buildRustPackage rec {
     sha256 = "19xkjym0i7y52cfhvis49c59nzvgw4906cd8bkz8ka38mbgfqgiy";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
-
-  cargoSha256 = "1hqv530x8k4rf9zzyl5p5z58bymk1p4qwrcxs21gr0zm2hqjlxy4";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "itm-0.4.0" = "sha256-T61f1WvxEMhI5bzp8FuMYWiG1YOPJvWuBJfK/gjuNKI=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   doCheck = false;
 

@@ -11,7 +11,7 @@ let incremental = buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kS/uteD34BiOb0IkHS9FAALhG7wJN8ZYZQRYVMJMC9A=";
+    hash = "sha256-kS/uteD34BiOb0IkHS9FAALhG7wJN8ZYZQRYVMJMC9A=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +21,7 @@ let incremental = buildPythonPackage rec {
   # escape infinite recursion with twisted
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     twisted
   ];
 
@@ -39,6 +39,6 @@ let incremental = buildPythonPackage rec {
     homepage = "https://github.com/twisted/incremental";
     description = "Incremental is a small library that versions your Python projects";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }; in incremental

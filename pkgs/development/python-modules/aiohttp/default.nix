@@ -2,7 +2,10 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
+# build_requires
+, setuptools
 # install_requires
 , attrs
 , charset-normalizer
@@ -13,12 +16,12 @@
 , aiosignal
 , aiodns
 , brotli
-, cchardet
+, faust-cchardet
 , asynctest
 , typing-extensions
 , idna-ssl
 # tests_require
-, async_generator
+, async-generator
 , freezegun
 , gunicorn
 , pytest-mock
@@ -29,17 +32,32 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.8.3";
+  version = "3.8.5";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3828fb41b7203176b82fe5d699e0d845435f2374750a44b480ea6b930f6be269";
+    hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/aio-libs/aiohttp/pull/7260
+      # Merged upstream, should likely be dropped post-3.8.5
+      url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
+      hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -52,7 +70,7 @@ buildPythonPackage rec {
     aiosignal
     aiodns
     brotli
-    cchardet
+    faust-cchardet
   ] ++ lib.optionals (pythonOlder "3.8") [
     asynctest
     typing-extensions
@@ -60,8 +78,9 @@ buildPythonPackage rec {
     idna-ssl
   ];
 
-  checkInputs = [
-    async_generator
+  # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
+  nativeCheckInputs = [
+    async-generator
     freezegun
     gunicorn
     pytest-mock
@@ -82,6 +101,10 @@ buildPythonPackage rec {
     "test_async_with_session"
     "test_session_close_awaitable"
     "test_close_run_until_complete_not_deprecated"
+    # https://github.com/aio-libs/aiohttp/issues/7130
+    "test_static_file_if_none_match"
+    "test_static_file_if_match"
+    "test_static_file_if_modified_since_past_date"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -102,9 +125,10 @@ buildPythonPackage rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
-   '';
+  '';
 
   meta = with lib; {
+    changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";

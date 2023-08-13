@@ -7,6 +7,7 @@
 , writeText
 , makeDesktopItem
 , xvfb-run
+, qt5
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,6 +26,11 @@ python3Packages.buildPythonApplication rec {
       name = "use-poetry-core.patch";
       url = "https://github.com/timothycrosley/streamdeck-ui/commit/e271656c1f47b1619d1b942e2ebb01ab2d6a68a9.patch";
       hash = "sha256-wqYwX6eSqMnW6OG7wSprD62Dz818ayFduVrqW9E/ays=";
+    })
+    (fetchpatch {
+      name = "update-python-xlib-0.33.patch";
+      url = "https://github.com/timothycrosley/streamdeck-ui/commit/07d7fdd33085b413dd26b02d8a02820edad2d568.patch";
+      hash = "sha256-PylTrbfB8RJ0+kbgJlRdcvfdahGoob8LabwhuFNsUpY=";
     })
   ];
 
@@ -72,9 +78,11 @@ python3Packages.buildPythonApplication rec {
     pyside2
     streamdeck
     xlib
+  ] ++ lib.optionals stdenv.isLinux [
+    qt5.qtwayland
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     python3Packages.pytest
     python3Packages.hypothesis-auto

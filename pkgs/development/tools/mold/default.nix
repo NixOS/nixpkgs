@@ -8,33 +8,52 @@
 , zlib
 , testers
 , mold
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "1.7.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-sC8rJOyQB8mDCCmfpk2lVDPTWxBj7tZxVXQw8agl7t0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dEmwVgo9XiU3WtObVL5VbFW7rEzdFfnRepcbyGxX1JM=";
   };
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  buildInputs = [ openssl zlib ]
-    ++ lib.optionals (!stdenv.isDarwin) [ mimalloc ];
+  buildInputs = [
+    openssl
+    zlib
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    mimalloc
+  ];
+
+  patches = [
+    ./fix-debug-strip.patch # fix --debug-strip; https://github.com/rui314/mold/pull/1038
+  ];
 
   postPatch = ''
     sed -i CMakeLists.txt -e '/.*set(DEST\ .*/d'
   '';
 
-  cmakeFlags = [ "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON" ];
+  cmakeFlags = [
+    "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
+  ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-faligned-allocation" ];
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-faligned-allocation"
+  ]);
 
-  passthru.tests.version = testers.testVersion { package = mold; };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = mold; };
+  };
 
   meta = with lib; {
     description = "A faster drop-in replacement for existing Unix linkers";
@@ -45,7 +64,8 @@ stdenv.mkDerivation rec {
       rapid debug-edit-rebuild cycles.
     '';
     homepage = "https://github.com/rui314/mold";
-    license = licenses.agpl3Plus;
+    changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ azahi nitsky ];
     platforms = platforms.unix;
   };

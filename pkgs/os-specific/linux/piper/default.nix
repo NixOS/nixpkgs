@@ -19,9 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk3 glib gnome.adwaita-icon-theme python3 librsvg
   ];
-  propagatedBuildInputs = with python3.pkgs; [ lxml evdev pygobject3 ] ++ [
-    gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
-  ];
+  propagatedBuildInputs = with python3.pkgs; [ lxml evdev pygobject3 ];
 
   mesonFlags = [
     "-Druntime-dependency-checks=false"

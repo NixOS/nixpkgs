@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out"/{share/java,bin}
-    cp ./build/*.jar "$out/share/java/"
+    cp ./build/*.jar ./lib/resolver.jar "$out/share/java/"
 
     for tool in jing trang; do
     cat > "$out/bin/$tool" <<EOF

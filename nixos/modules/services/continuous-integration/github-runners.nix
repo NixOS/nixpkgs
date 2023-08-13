@@ -53,4 +53,6 @@ in
         }))
     );
   };
+
+  meta.maintainers = with maintainers; [ veehaitch newam ];
 }

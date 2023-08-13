@@ -123,8 +123,8 @@ in
             architecture = builtins.elemAt (builtins.match "^([a-z0-9_]+).+" (toString pkgs.system)) 0;
             creation_date = 1;
             properties = {
-              description = "NixOS ${config.system.nixos.codeName} ${config.system.nixos.label} ${pkgs.system}";
-              os = "nixos";
+              description = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} ${pkgs.system}";
+              os = "${config.system.nixos.distroId}";
               release = "${config.system.nixos.codeName}";
             };
             templates = templates.properties;
@@ -150,10 +150,21 @@ in
           source = config.system.build.toplevel + "/init";
           target = "/sbin/init";
         }
+        # Technically this is not required for lxc, but having also make this configuration work with systemd-nspawn.
+        # Nixos will setup the same symlink after start.
+        {
+          source = config.system.build.toplevel + "/etc/os-release";
+          target = "/etc/os-release";
+        }
       ];
 
       extraCommands = "mkdir -p proc sys dev";
     };
+
+    system.build.installBootLoader = pkgs.writeScript "install-lxd-sbin-init.sh" ''
+      #!${pkgs.runtimeShell}
+      ln -fs "$1/init" /sbin/init
+    '';
 
     # Add the overrides from lxd distrobuilder
     # https://github.com/lxc/distrobuilder/blob/05978d0d5a72718154f1525c7d043e090ba7c3e0/distrobuilder/main.go#L630

@@ -11,6 +11,8 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "Navidrome music server");
 
+      package = mkPackageOptionMD pkgs "navidrome" { };
+
       settings = mkOption rec {
         type = settingsFormat.type;
         apply = recursiveUpdate default;
@@ -36,7 +38,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.navidrome}/bin/navidrome --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
+          ${cfg.package}/bin/navidrome --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
         '';
         DynamicUser = true;
         StateDirectory = "navidrome";

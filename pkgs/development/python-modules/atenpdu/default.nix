@@ -2,25 +2,25 @@
 , buildPythonPackage
 , fetchPypi
 , async-timeout
-, pysnmp
+, pysnmplib
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "atenpdu";
-  version = "0.4.0";
+  version = "0.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mn44nChWy6z/B+gLc3MDndkRb2+geoojT/4AqwKpLXM=";
+    hash = "sha256-Of7tQJNqaLDgO8nie6rSd1saMbauXJBp8vWfXYAziEE=";
   };
 
   propagatedBuildInputs = [
     async-timeout
-    pysnmp
+    pysnmplib
   ];
 
   # Project has no test

@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ ncurses libX11 ];
 
   # Makefile(s) and config are not top-level
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     # allow usage of ANGBAND_PATH

@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "hypothesmith";
-  version = "0.2.0";
+  version = "0.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fb7b3fd03d76eddd4474b0561e1c2662457593a74cc300fd27e5409cd4d7922";
+    hash = "sha256-vc6EXsmE5uP+0h5l0ugrjrxt5cpeuTZJ39dgNMWQakY=";
   };
 
   patches = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ hypothesis lark libcst ];
 
-  checkInputs = [ parso pytestCheckHook pytest-xdist ];
+  nativeCheckInputs = [ parso pytestCheckHook pytest-xdist ];
 
   pytestFlagsArray = [
     "-v"
@@ -46,12 +46,17 @@ buildPythonPackage rec {
     "test_source_code_from_libcst_node_type"
   ];
 
+  disabledTestPaths = [
+    # missing blib2to3
+    "tests/test_syntactic.py"
+  ];
+
   pythonImportsCheck = [ "hypothesmith" ];
 
   meta = with lib; {
     description = "Hypothesis strategies for generating Python programs, something like CSmith";
     homepage = "https://github.com/Zac-HD/hypothesmith";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

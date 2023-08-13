@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-katex";
-  version = "0.9.3";
+  version = "0.9.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6IUTUc4HOK2e++3qMfT2MVm+cBnfVyohSiyROtiRGzI=";
+    hash = "sha256-OmdUsc/JDhQeP3Pgg16vyCYtpfr+ekxnT6cI+rec69c=";
   };
 
   propagatedBuildInputs = [

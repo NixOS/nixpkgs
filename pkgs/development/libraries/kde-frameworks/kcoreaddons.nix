@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, stdenv,
   extra-cmake-modules,
   qtbase, qttools, shared-mime-info
 }:
@@ -18,4 +18,7 @@ mkDerivation ({
   postInstall = ''
     moveToOutput "mkspecs" "$dev"
   '';
+} // lib.optionalAttrs stdenv.isDarwin {
+  # https://invent.kde.org/frameworks/kcoreaddons/-/merge_requests/327
+  env.NIX_CFLAGS_COMPILE = "-DSOCK_CLOEXEC=0";
 })

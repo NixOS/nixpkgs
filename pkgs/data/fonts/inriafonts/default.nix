@@ -1,20 +1,24 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "inriafonts";
   version = "1.200";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
-  owner = "BlackFoundry";
-  repo = "InriaFonts";
-  rev = "v${version}";
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  src = fetchFromGitHub {
+    owner = "BlackFoundry";
+    repo = "InriaFonts";
+    rev = "v${version}";
+    hash = "sha256-CMKkwGuUEVYavnFi15FCk7Xloyk97w+LhAZ6mpIv5xg=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     install -m444 -Dt $out/share/fonts/truetype fonts/*/TTF/*.ttf
     install -m444 -Dt $out/share/fonts/opentype fonts/*/OTF/*.otf
+
+    runHook postInstall
   '';
-  sha256 = "0wrwcyycyzvgvgnlmwi1ncdvwb8f6bbclynd1105rsyxgrz5dd70";
 
   meta = with lib; {
     homepage = "https://black-foundry.com/work/inria";

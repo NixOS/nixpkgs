@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.6.3";
+  version = "1.8.0";
   disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Fvr5WhrhxPBeAMsrVj/frg01qgt2SeWgrRJYgBxRFHc=";
+    hash = "sha256-Ys7XrvV4qzq4Q9llua2WgU013Ui0+x+uMwLNIv6xxCw=";
   };
 
   format = "pyproject";

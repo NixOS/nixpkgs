@@ -283,7 +283,7 @@ in
         '';
 
     ###### wrappers consistency checks
-    system.extraDependencies = lib.singleton (pkgs.runCommandLocal
+    system.checks = lib.singleton (pkgs.runCommandLocal
       "ensure-all-wrappers-paths-exist" { }
       ''
         # make sure we produce output

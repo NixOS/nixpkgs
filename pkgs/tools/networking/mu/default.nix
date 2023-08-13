@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.8.13";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-uXrJOBF3X8UF1ktTfAoYgzc0QBLvyzzGQVJVfs8tjng=";
+    hash = "sha256-AGHPczGh4z0bla034FGSTmaRgMIfBNYFBUPevJ9LHqI=";
   };
 
   postPatch = ''
@@ -29,6 +29,19 @@ stdenv.mkDerivation rec {
       --replace "@abs_top_builddir@" "$out"
     substituteInPlace lib/utils/mu-test-utils.cc \
       --replace "/bin/rm" "${coreutils}/bin/rm"
+  '';
+
+  # AOT native-comp, mostly copied from pkgs/build-support/emacs/generic.nix
+  postInstall = lib.optionalString (emacs.withNativeCompilation or false) ''
+    mkdir -p $out/share/emacs/native-lisp
+    export EMACSLOADPATH=$out/share/emacs/site-lisp/mu4e:
+    export EMACSNATIVELOADPATH=$out/share/emacs/native-lisp:
+
+    find $out/share/emacs -type f -name '*.el' -print0 \
+      | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
+          "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
+  '' + ''
+    emacs --batch -l package --eval "(package-generate-autoloads \"mu4e\" \"$out/share/emacs/site-lisp/mu4e\")"
   '';
 
   buildInputs = [ emacs glib gmime3 texinfo xapian ];
@@ -43,11 +56,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A collection of utilties for indexing and searching Maildirs";
+    description = "A collection of utilities for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
     maintainers = with maintainers; [ antono chvp peterhoeg ];
+    mainProgram = "mu";
     platforms = platforms.unix;
   };
 }

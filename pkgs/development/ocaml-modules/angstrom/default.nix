@@ -3,9 +3,9 @@
 buildDunePackage rec {
   pname = "angstrom";
   version = "0.15.0";
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
     owner  = "inhabitedtype";

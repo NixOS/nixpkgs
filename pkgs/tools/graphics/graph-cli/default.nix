@@ -1,12 +1,13 @@
 { lib
 , python3Packages
+, fetchPypi
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "graph-cli";
   version = "0.1.18";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "graph_cli";
     sha256 = "sha256-0mxOc8RJ3GNgSbppLylIViqfYf6zwJ49pltnsyQUpSA=";

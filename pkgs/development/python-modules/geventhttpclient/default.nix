@@ -30,7 +30,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dpkt
     pytestCheckHook
     urllib3

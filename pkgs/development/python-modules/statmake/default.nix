@@ -44,7 +44,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ufo2ft
     ufoLib2
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/daltonmaag/statmake";
     changelog = "https://github.com/daltonmaag/statmake/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

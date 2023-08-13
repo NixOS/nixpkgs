@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "5.6.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-ajtKvy9CMr+Vsmdn49ZWYtbniZV1dqWJGTou3QY4oPc=";
+    hash = "sha256-rYTWtdYfMow3cIPhJdcmhyaIIU7fgVecWigbsCW0Piw=";
   };
 
   outputs = [ "out" "dev" ];
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     xorg.libxkbfile
     xorg.libXext
     xorg.libXrandr
-    gobject-introspection
   ];
 
   nativeBuildInputs = [
@@ -51,6 +50,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     pkg-config
+    gobject-introspection
   ];
 
   postPatch = ''

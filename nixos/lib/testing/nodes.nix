@@ -1,13 +1,23 @@
 testModuleArgs@{ config, lib, hostPkgs, nodes, ... }:
 
 let
-  inherit (lib) mkOption mkForce optional types mapAttrs mkDefault mdDoc;
-
-  system = hostPkgs.stdenv.hostPlatform.system;
+  inherit (lib)
+    literalExpression
+    literalMD
+    mapAttrs
+    mdDoc
+    mkDefault
+    mkIf
+    mkOption mkForce
+    optional
+    optionalAttrs
+    types
+    ;
 
   baseOS =
     import ../eval-config.nix {
-      inherit system;
+      inherit lib;
+      system = null; # use modularly defined system
       inherit (config.node) specialArgs;
       modules = [ config.defaults ];
       baseModules = (import ../../modules/module-list.nix) ++
@@ -17,11 +27,17 @@ let
           ({ config, ... }:
             {
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
-
+            })
+          (optionalAttrs (!config.node.pkgsReadOnly) {
+            key = "nodes.nix-pkgs";
+            config = {
               # Ensure we do not use aliases. Ideally this is only set
               # when the test framework is used by Nixpkgs NixOS tests.
               nixpkgs.config.allowAliases = false;
-            })
+              # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
+              nixpkgs.system = hostPkgs.stdenv.hostPlatform.system;
+            };
+          })
           testModuleArgs.config.extraBaseModules
         ];
     };
@@ -68,6 +84,30 @@ in
       default = { };
     };
 
+    node.pkgs = mkOption {
+      description = mdDoc ''
+        The Nixpkgs to use for the nodes.
+
+        Setting this will make the `nixpkgs.*` options read-only, to avoid mistakenly testing with a Nixpkgs configuration that diverges from regular use.
+      '';
+      type = types.nullOr types.pkgs;
+      default = null;
+      defaultText = literalMD ''
+        `null`, so construct `pkgs` according to the `nixpkgs.*` options as usual.
+      '';
+    };
+
+    node.pkgsReadOnly = mkOption {
+      description = mdDoc ''
+        Whether to make the `nixpkgs.*` options read-only. This is only relevant when [`node.pkgs`](#test-opt-node.pkgs) is set.
+
+        Set this to `false` when any of the [`nodes`](#test-opt-nodes) needs to configure any of the `nixpkgs.*` options. This will slow down evaluation of your test a bit.
+      '';
+      type = types.bool;
+      default = config.node.pkgs != null;
+      defaultText = literalExpression ''node.pkgs != null'';
+    };
+
     node.specialArgs = mkOption {
       type = types.lazyAttrsOf types.raw;
       default = { };
@@ -100,5 +140,11 @@ in
         config.nodes;
 
     passthru.nodes = config.nodesCompat;
+
+    defaults = mkIf config.node.pkgsReadOnly {
+      nixpkgs.pkgs = config.node.pkgs;
+      imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
+    };
+
   };
 }

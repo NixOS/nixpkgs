@@ -5,6 +5,7 @@
 , poetry-core
 , pytest-mock
 , pytestCheckHook
+, pythonRelaxDepsHook
 , rapidfuzz
 }:
 
@@ -22,6 +23,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "rapidfuzz"
   ];
 
   propagatedBuildInputs = [
@@ -36,7 +42,7 @@ buildPythonPackage rec {
     "cleo.helpers"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

@@ -17,7 +17,7 @@ import ../pillow/generic.nix (rec {
     owner = "uploadcare";
     repo = "pillow-simd";
     rev = "v${version}";
-    sha256 = "sha256-qTZYhgHjVMXqoYl3mG1xVrFaWrPidSY8HlyFQizV27Y=";
+    hash = "sha256-qTZYhgHjVMXqoYl3mG1xVrFaWrPidSY8HlyFQizV27Y=";
   };
 
   meta = with lib; {
@@ -32,6 +32,6 @@ import ../pillow/generic.nix (rec {
       Currently, Pillow-SIMD can be compiled with SSE4 (default) or AVX2 support.
     '';
     license = "http://www.pythonware.com/products/pil/license.htm";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 } // args )

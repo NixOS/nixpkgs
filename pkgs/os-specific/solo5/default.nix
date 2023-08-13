@@ -2,7 +2,7 @@
 , pkg-config, qemu, syslinux, util-linux }:
 
 let
-  version = "0.7.5";
+  version = "0.8.0";
   # list of all theoretically available targets
   targets = [
     "genode"
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    sha256 = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
+    sha256 = "sha256-t80VOZ8Tr1Dq+mJfRPVLGqYprCaqegcQtDqdoHaSXW0=";
   };
 
   hardeningEnable = [ "pie" ];
@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
   '';
 
   doCheck = stdenv.hostPlatform.isLinux;
-  checkInputs = [ util-linux qemu ];
+  nativeCheckInputs = [ util-linux qemu ];
   checkPhase = ''
     runHook preCheck
     patchShebangs tests

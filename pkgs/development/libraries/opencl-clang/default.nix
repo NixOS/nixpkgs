@@ -100,7 +100,7 @@ let
         description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
         license     = licenses.ncsa;
         platforms   = platforms.all;
-        maintainers = with maintainers; [ SuperSandro2000 ];
+        maintainers = with maintainers; [ ];
       };
     };
 in

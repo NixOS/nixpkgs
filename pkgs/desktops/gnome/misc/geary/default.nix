@@ -47,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "43.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "SJFm+H3Z0pAR9eW3lpTyWItHP34ZHFnOkBPIyODjY+c=";
+    sha256 = "gBSsWorTxURMpWl32a0QBr1vTvXJLkNzXFEw3o7ckJ0=";
   };
 
   nativeBuildInputs = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     webkitgtk_4_1
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     gnutls # for certtool
     cacert # trust store for glib-networking

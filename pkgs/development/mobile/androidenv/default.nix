@@ -1,5 +1,5 @@
 { config, pkgs ? import <nixpkgs> {}
-, licenseAccepted ? config.android_sdk.accept_license or false
+, licenseAccepted ? config.android_sdk.accept_license or (builtins.getEnv "NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE" == "1")
 }:
 
 rec {
@@ -19,4 +19,6 @@ rec {
     platformVersions = [ "28" ];
     abiVersions = [ "x86" "x86_64"];
   };
+
+  test-suite = pkgs.callPackage ./test-suite.nix {};
 }

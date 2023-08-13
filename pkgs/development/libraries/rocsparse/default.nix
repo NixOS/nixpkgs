@@ -5,9 +5,6 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-runtime
-, rocm-device-libs
-, rocm-comgr
 , rocprim
 , hip
 , gfortran
@@ -21,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
-  version = "5.4.0";
+  version = "5.4.3";
 
   outputs = [
     "out"
@@ -35,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "rocSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-paibzXYvRnd+4yYvteLf7EYmqeqWDc7BoDByfSMrhYo=";
+    hash = "sha256-jzHD55c4rlPab5IAj2UzHTJI9MKhTfevsLthSZKOEzQ=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocm-runtime
-    rocm-device-libs
-    rocm-comgr
     rocprim
     git
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
@@ -146,6 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocSPARSE";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.version != hip.version;
+    platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor hip.version;
   };
 })

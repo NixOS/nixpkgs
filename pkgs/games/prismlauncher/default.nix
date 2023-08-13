@@ -1,28 +1,23 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
-, jdk8
+, cmark
+, Cocoa
+, ninja
 , jdk17
 , zlib
-, file
-, wrapQtAppsHook
-, xorg
-, libpulseaudio
 , qtbase
-, qtsvg
-, qtwayland
-, libGL
 , quazip
-, glfw
-, openal
 , extra-cmake-modules
 , tomlplusplus
 , ghc_filesystem
-, msaClientID ? ""
-, jdks ? [ jdk17 jdk8 ]
+, gamemode
+, msaClientID ? null
+, gamemodeSupport ? stdenv.isLinux
+,
 }:
-
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
@@ -32,62 +27,74 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
-  pname = "prismlauncher";
-  version = "6.1";
+assert lib.assertMsg (stdenv.isLinux || !gamemodeSupport) "gamemodeSupport is only available on Linux";
+
+stdenv.mkDerivation
+rec {
+  pname = "prismlauncher-unwrapped";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = version;
-    sha256 = "sha256-aIBaenSnssv0/r2+UT5R4nBwo2QBGZ1Zp0CWOeiaeDE=";
+    sha256 = "sha256-RArg60S91YKp1Mt97a5JNfBEOf2cmuX4pK3VAx2WfqM=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules cmake file jdk17 wrapQtAppsHook ];
-  buildInputs = [
-    qtbase
-    qtsvg
-    zlib
-    quazip
-    ghc_filesystem
-    tomlplusplus
-  ] ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland;
+  patches = lib.optionals stdenv.isDarwin [
+    # https://github.com/PrismLauncher/PrismLauncher/pull/1452
+    # These patches allow us to disable the Sparkle updater and cmake bundling
+    # TODO: remove these when updating to 8.0
+    (fetchpatch {
+      name = "disable-sparkle-when-url-is-empty.patch";
+      url = "https://github.com/PrismLauncher/PrismLauncher/commit/48e50401968a72846350c6fbd76cc957b64a6b5a.patch";
+      hash = "sha256-IFxp6Sj87ogQcMooV4Ql5/4B+C7oTzEk+4tlMud2OLo=";
+    })
+    (fetchpatch {
+      name = "make-install_bundle-cached.patch";
+      url = "https://github.com/PrismLauncher/PrismLauncher/commit/a8498b0dab94d0ab6c9e5cf395e5003db541b749.patch";
+      hash = "sha256-ji5GGUnzVut9xFXkynqf9aVR9FO/zsqIbt3P9dexJ2I=";
+    })
+    (fetchpatch {
+      name = "dont-include-sparkle-when-not-enabled.patch";
+      url = "https://github.com/PrismLauncher/PrismLauncher/commit/51bfda937d47837ed426150ed6f43a60b4ca0ce1.patch";
+      hash = "sha256-7hMgANOg4zRIf3F2AfLXGR3dAEBqVmKm/J5SH0G5oCk=";
+    })
+    (fetchpatch {
+      name = "introduce-internal-updater-variable.patch";
+      url = "https://github.com/PrismLauncher/PrismLauncher/commit/b1aa9e584624a0732dd55fc6c459524a8abfe6ba.patch";
+      hash = "sha256-mm++EfnBxz7NVtKLMb889mMq8F/OdQmzob8OmlvNlRA=";
+    })
+  ];
 
-  cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
-    ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];
-  dontWrapQtApps = true;
+  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja ];
+  buildInputs =
+    [
+      qtbase
+      zlib
+      quazip
+      ghc_filesystem
+      tomlplusplus
+      cmark
+    ]
+    ++ lib.optional gamemodeSupport gamemode
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  hardeningEnable = lib.optionals stdenv.isLinux [ "pie" ];
+
+  cmakeFlags = [
+    # downstream branding
+    "-DLauncher_BUILD_PLATFORM=nixpkgs"
+  ] ++ lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
+  ++ lib.optionals (lib.versionOlder qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ]
+  ++ lib.optionals stdenv.isDarwin [ "-DINSTALL_BUNDLE=nodeps" "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''" ];
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
-    mkdir source/libraries/libnbtplusplus
-    ln -s ${libnbtplusplus}/* source/libraries/libnbtplusplus
-    chmod -R +r+w source/libraries/libnbtplusplus
-    chown -R $USER: source/libraries/libnbtplusplus
+    ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
   '';
 
-  postInstall =
-    let
-      libpath = with xorg;
-        lib.makeLibraryPath [
-          libX11
-          libXext
-          libXcursor
-          libXrandr
-          libXxf86vm
-          libpulseaudio
-          libGL
-          glfw
-          openal
-          stdenv.cc.cc.lib
-        ];
-    in
-    ''
-      # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-      wrapQtApp $out/bin/prismlauncher \
-        --set LD_LIBRARY_PATH /run/opengl-driver/lib:${libpath} \
-        --prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks} \
-        --prefix PATH : ${lib.makeBinPath [xorg.xrandr]}
-    '';
+  dontWrapQtApps = true;
 
   meta = with lib; {
     homepage = "https://prismlauncher.org/";
@@ -97,9 +104,9 @@ stdenv.mkDerivation rec {
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ minion3665 Scrumplex ];
+    maintainers = with maintainers; [ minion3665 Scrumplex getchoo ];
   };
 }

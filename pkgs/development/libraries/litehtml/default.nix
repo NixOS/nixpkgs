@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-9571d3k8RkzEpMWPuIejZ7njLmYstSwFUaSqT3sk6uQ=";
   };
 
+  # Don't search for non-existant gumbo cmake config
+  # This will mislead cmake that litehtml is not found
+  # Affects build of pkgs that depend on litehtml
+  postPatch = ''
+    substituteInPlace cmake/litehtmlConfig.cmake \
+      --replace "find_dependency(gumbo)" ""
+  '';
+
   nativeBuildInputs = [
     cmake
   ];

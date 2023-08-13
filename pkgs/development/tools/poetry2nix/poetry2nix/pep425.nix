@@ -19,10 +19,19 @@ let
   toWheelAttrs = str:
     let
       entries' = splitString "-" str;
+      el = builtins.length entries';
+      entryAt = builtins.elemAt entries';
+
       # Hack: Remove version "suffixes" like 2.11.4-1
-      # Some wheels have build tag with more than one digit
-      # like openvino-2022.1.0-7019-cp36-cp36m-manylinux_2_27_x86_64.whl
-      entries = builtins.filter (x: builtins.match "[0-9]*" x == null) entries';
+      entries =
+        if el == 6 then [
+          (entryAt 0) # name
+          (entryAt 1) # version
+          # build tag is skipped
+          (entryAt (el - 3)) # python version
+          (entryAt (el - 2)) # abi
+          (entryAt (el - 1)) # platform
+        ] else entries';
       p = removeSuffix ".whl" (builtins.elemAt entries 4);
     in
     {
@@ -106,7 +115,7 @@ let
       filtered = builtins.filter filterWheel filesWithoutSources;
       choose = files:
         let
-          osxMatches = [ "12_0" "11_0" "10_15" "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
+          osxMatches = [ "12_0" "11_0" "10_15" "10_14" "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
           linuxMatches = [ "manylinux1_" "manylinux2010_" "manylinux2014_" "manylinux_" "any" ];
           chooseLinux = x: lib.take 1 (findBestMatches linuxMatches x);
           chooseOSX = x: lib.take 1 (findBestMatches osxMatches x);

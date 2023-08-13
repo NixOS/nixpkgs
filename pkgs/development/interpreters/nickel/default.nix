@@ -1,20 +1,34 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, python3
+, nix-update-script
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "0.3.1";
+  version = "1.1.1";
 
-  src  = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
-    rev = "refs/tags/${version}"; # because pure ${version} doesn't work
-    hash = "sha256-bUUQP7ze0j8d+VEckexDOferAgAHdKZbdKR3q0TNOeE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bG0vNfKQpFQHDBfokvTpfXgVmKg6u/BcIz139pLwwsE=";
   };
 
-  cargoSha256 = "sha256-E8eIUASjCIVsZhptbU41VfK8bFmA4FTT3LVagLrgUso=";
+  cargoHash = "sha256-qPKAozFXv94wgY99ugjsSuaN92SXZGgZwI2+7UlerHQ=";
+
+  cargoBuildFlags = [ "-p nickel-lang-cli" ];
+
+  nativeBuildInputs = [
+    python3
+  ];
+
+  # Disable checks on Darwin because of issue described in https://github.com/tweag/nickel/pull/1454
+  doCheck = !stdenv.isDarwin;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://nickel-lang.org/";
@@ -29,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     '';
     changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres felschr matthiasbeyer ];
   };
 }

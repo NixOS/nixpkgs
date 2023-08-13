@@ -25,11 +25,11 @@ let
   pname = "teams";
   versions = {
     linux = "1.5.00.23861";
-    darwin = "1.5.00.22362";
+    darwin = "1.6.00.4464";
   };
   hashes = {
     linux = "sha256-h0YnCeJX//l4TegJVZtavV3HrxjYUF2Fa5KmaYmZW8E=";
-    darwin = "sha256-fbw6T+k6R5FyQ7XOKzyNYBvXlxH2xpJsBnsR1L+3Jmw=";
+    darwin = "sha256-DvXMrXotKWUqFCb7rZj8wU7mmZJKuTLGyx8qOB/aQtg=";
   };
   meta = with lib; {
     description = "Microsoft Teams";
@@ -39,6 +39,7 @@ let
     license = licenses.unfree;
     maintainers = with maintainers; [ liff tricktron ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "teams";
   };
 
   linux = stdenv.mkDerivation rec {
@@ -46,7 +47,11 @@ let
     version = versions.linux;
 
     src = fetchurl {
-      url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${versions.linux}_amd64.deb";
+      urls = [
+        "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${versions.linux}_amd64.deb"
+        # NOTE: the archive.org timestamp must also be updated if the version changes.
+        "https://web.archive.org/web/20221130115842if_/https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${versions.linux}_amd64.deb"
+      ];
       hash = hashes.linux;
     };
 
@@ -97,6 +102,10 @@ let
 
       mv share/teams $out/opt/
       mv share $out/share
+
+      mkdir -p $out/share/icons/hicolor/512x512/apps
+      mv $out/share/pixmaps/teams.png $out/share/icons/hicolor/512x512/apps
+      rmdir $out/share/pixmaps
 
       substituteInPlace $out/share/applications/teams.desktop \
         --replace /usr/bin/ ""

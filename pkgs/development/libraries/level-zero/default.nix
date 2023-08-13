@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, addOpenGLRunpath, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, addOpenGLRunpath
+, cmake
+}:
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.8.12";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
-    rev = "v${version}";
-    sha256 = "sha256-87fnucPg8JygYo3QSuA6ll0acbHQvmWzNLEp4dqkAH8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qV2OM41+DkuT3lDCTHOyNkHixD/HITfCiItBQX6Ewio=";
   };
 
   nativeBuildInputs = [ cmake addOpenGLRunpath ];
@@ -18,8 +23,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.oneapi.io/";
     description = "oneAPI Level Zero Specification Headers and Loader";
+    homepage = "https://github.com/oneapi-src/level-zero";
+    changelog = "https://github.com/oneapi-src/level-zero/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.ziguana ];
   };

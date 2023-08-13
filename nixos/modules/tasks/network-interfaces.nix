@@ -434,7 +434,8 @@ in
   options = {
 
     networking.hostName = mkOption {
-      default = "nixos";
+      default = config.system.nixos.distroId;
+      defaultText = literalExpression "config.system.nixos.distroId";
       # Only allow hostnames without the domain name part (i.e. no FQDNs, see
       # e.g. "man 5 hostname") and require valid DNS labels (recommended
       # syntax). Note: We also allow underscores for compatibility/legacy
@@ -1495,7 +1496,7 @@ in
           in
           ''
             # override to ${msg} for ${i.name}
-            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
+            ACTION=="add", SUBSYSTEM=="net", NAME=="${i.name}", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
           '') (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})

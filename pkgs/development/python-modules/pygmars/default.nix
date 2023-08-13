@@ -17,8 +17,16 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-PiH1lV1Vt9VTSOB+jep8FHIdk8qnauxj4nP3CIi/m7o=";
+    hash = "sha256-PiH1lV1Vt9VTSOB+jep8FHIdk8qnauxj4nP3CIi/m7o=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  postPatch = ''
+    # https://github.com/nexB/pygmars/pull/9
+    substituteInPlace setup.cfg \
+      --replace ">=3.6.*" ">=3.6"
+  '';
 
   dontConfigure = true;
 
@@ -26,7 +34,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

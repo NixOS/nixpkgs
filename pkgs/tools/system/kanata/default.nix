@@ -1,23 +1,27 @@
-{ fetchFromGitHub
-, lib
+{ lib
 , rustPlatform
+, fetchFromGitHub
 , withCmd ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.1.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/v3P5C0F/FVPJqJ38dzSnAc7ua2fOs3BeX9BDoQ8bDw=";
+    sha256 = "sha256-Tenh2LARajYAFHJ5gddeozY7rfySSvqFhudc/7b9cGg=";
   };
 
-  cargoHash = "sha256-KXsW0fgbBy0tf/He0vH9Xq8yGuz77H/jeIabgw3ppy8=";
+  cargoHash = "sha256-oJVGZhKJVK8q5lgK+G+KhVupOF05u37B7Nmv4rrI28I=";
 
   buildFeatures = lib.optional withCmd "cmd";
+
+  postInstall = ''
+    install -Dm 444 assets/kanata-icon.svg $out/share/icons/hicolor/scalable/apps/kanata.svg
+  '';
 
   meta = with lib; {
     description = "A tool to improve keyboard comfort and usability with advanced customization";
@@ -25,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ linj ];
     platforms = platforms.linux;
+    mainProgram = "kanata";
   };
 }

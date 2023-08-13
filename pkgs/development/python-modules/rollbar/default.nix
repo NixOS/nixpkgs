@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AjE9/GBxDsc2qwM9D4yWnYV6i5kc1n4MGpFiDooE7eI=";
+    hash = "sha256-AjE9/GBxDsc2qwM9D4yWnYV6i5kc1n4MGpFiDooE7eI=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     webob
     blinker
     mock

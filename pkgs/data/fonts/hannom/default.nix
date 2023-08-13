@@ -1,27 +1,26 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "hannom";
   version = "2005";
-in fetchzip {
-  name = "hannom-${version}";
 
-  url = "mirror://sourceforge/vietunicode/hannom/hannom%20v${version}/hannomH.zip";
+  src = fetchzip {
+    url = "mirror://sourceforge/vietunicode/hannom/hannom%20v${version}/hannomH.zip";
+    stripRoot = false;
+    hash = "sha256-Oh8V72tYvVA6Sk0f9UTIkRQYjdUbEB/fmCSaRYfyoP8=";
+  };
 
-  stripRoot = false;
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
     mkdir -p $out/share/fonts/truetype
-    mv $out/*.ttf -t $out/share/fonts/truetype
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
-  '';
+    mv *.ttf -t $out/share/fonts/truetype
 
-  sha256 = "sha256-zOYJxEHl4KM0ncVQDBs9+e3z8DxzF2ef3pRj0OVSuUo=";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "UNICODE Han Nom Font Set";
-    homepage = "http://vietunicode.sourceforge.net/fonts/fonts_hannom.html";
     longDescription = ''
       The true type fonts HAN NOM A and HAN NOM B have been developed by Chan
       Nguyen Do Quoc Bao (Germany), To Minh Tam (USA) and Ni sinh Thien Vien Vien
@@ -31,6 +30,7 @@ in fetchzip {
       code points by the Unicode Standard. Two sets of true type fonts are
       available with high and low resolutions.
     '';
+    homepage = "https://vietunicode.sourceforge.net/fonts/fonts_hannom.html";
     license = licenses.unfree;
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.all;

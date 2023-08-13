@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.2.0";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Roche";
     repo = "pyreadstat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rw+v1+KpjSSZoqhlENKcJiaFhAvcNRbZ3+MA2dOsj4Q=";
+    hash = "sha256-CvovylOTTyXm0ucTwNSFZzkcA0H8H76BSg4vjB2Pe4M=";
   };
 
   nativeBuildInputs = [

@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     types-setuptools
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -45,5 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/lovesegfault/beautysh";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "beautysh";
   };
 }

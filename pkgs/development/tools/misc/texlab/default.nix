@@ -15,16 +15,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "4.3.2";
+  version = "5.9.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = "texlab";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-og/kDSoMaTNi+EpTHEwOlEkT8Y/UL8nLiqwjDFAUACg=";
+    hash = "sha256-mF0vbKdTACGeL1NZ57kzZANxjcHX92WtRJoU2Z4iJiM=";
   };
 
-  cargoSha256 = "sha256-g3Uzohcy2AS7ybdyZqKQR7ybmSQmit8I9klZ0UIhiv8=";
+  cargoHash = "sha256-io0dkKDNoF+1n7D1q1JShd/Gj5Ce1Uh3dnM6uiTw0Vs=";
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   # generate the man page
   postInstall = lib.optionalString (!isCross) ''
     # TexLab builds man page separately in CI:
-    # https://github.com/latex-lsp/texlab/blob/v4.3.2/.github/workflows/publish.yml#L126-L130
+    # https://github.com/latex-lsp/texlab/blob/v5.6.0/.github/workflows/publish.yml#L127-L131
     help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
   '';
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";
-    homepage = "https://texlab.netlify.app";
+    homepage = "https://github.com/latex-lsp/texlab";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar kira-bruneau ];
     platforms = platforms.all;

@@ -1,6 +1,7 @@
 { lib
 , mkXfceDerivation
 , exo
+, glib
 , gtk3
 , libXtst
 , libxfce4ui
@@ -13,13 +14,14 @@
 mkXfceDerivation rec {
   category = "panel-plugins";
   pname  = "xfce4-cpugraph-plugin";
-  version = "1.2.7";
+  version = "1.2.8";
   rev-prefix = "xfce4-cpugraph-plugin-";
   odd-unstable = false;
-  sha256 = "sha256-IgxljHJAg9Bp/OFFZiQ6QwE5vtAtQ0WmYHs78NVsmCw=";
+  sha256 = "sha256-GNoODnw9Z9MTlvxCOTeZt61A/0AGhMwjrRGdM35XU+M=";
 
   buildInputs = [
     exo
+    glib
     gtk3
     libXtst
     libxfce4ui

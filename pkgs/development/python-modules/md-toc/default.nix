@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.1.6";
+  version = "8.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    hash = "sha256-Wtb2xHBj6RYVfUkPmRMxUti7UBj1PVh9ZCDienYX4Bw=";
+    hash = "sha256-7Udmon/5E741+v2vBHHL7h31r91RR33hN1WhL3FiDQc=";
   };
 
   propagatedBuildInputs = [
     fpyutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyfakefs
     pytestCheckHook
   ];

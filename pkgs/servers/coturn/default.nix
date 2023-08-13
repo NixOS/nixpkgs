@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "coturn";
-  version = "4.6.1";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     rev = "refs/tags/${version}";
-    hash = "sha256-ckqPxG3ieqA0H9g1GfE8hYs6tUsZfzt6/yYR1qlgoxE=";
+    hash = "sha256-BKIto762W7UkKjzIm3eVU18oiHpYUMQYJihebYxBOZs=";
   };
 
   nativeBuildInputs = [
@@ -38,12 +38,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./pure-configure.patch
-
-    # fix build against openssl 3.x
-    (fetchpatch {
-      url = "https://github.com/coturn/coturn/commit/4ce784a8781ab086c150e2b9f5641b1a37fd9b31.patch";
-      hash = "sha256-Jx8XNXrgq0ockm1zjwRzfvSS3fVrVyVvQY1l0CpcR3Q=";
-    })
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream
@@ -51,7 +45,7 @@ stdenv.mkDerivation rec {
   #   ld: ...-libprom-0.1.1/include/prom_collector_registry.h:37: multiple definition of
   #     `PROM_COLLECTOR_REGISTRY_DEFAULT'; ...-libprom-0.1.1/include/prom_collector_registry.h:37: first defined here
   # Should be fixed in libprom-1.2.0 and later: https://github.com/digitalocean/prometheus-client-c/pull/25
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   passthru.tests.coturn = nixosTests.coturn;
 

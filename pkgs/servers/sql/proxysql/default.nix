@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, applyPatches
 , fetchFromGitHub
 , autoconf
 , automake
@@ -23,20 +24,22 @@
 , openssl
 , pcre
 , perl
-, python2
+, python3
+, prometheus-cpp
 , re2
 , zlib
+, texinfo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
-  version = "2.4.4";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "sysown";
-    repo = pname;
-    rev = version;
-    hash = "sha256-S0Oy0uQPbAn52KM0r7yxLvVl1DKQwRW3QYVHtJ20CnM=";
+    repo = "proxysql";
+    rev = finalAttrs.version;
+    hash = "sha256-HFhfAWyDB20t+c4s9NlVwdANrFobVyr+vnmZqx+X20Q=";
   };
 
   patches = [
@@ -50,7 +53,8 @@ stdenv.mkDerivation rec {
     cmake
     libtool
     perl
-    python2
+    python3
+    texinfo  # for makeinfo
   ];
 
   buildInputs = [
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  GIT_VERSION = version;
+  GIT_VERSION = finalAttrs.version;
 
   dontConfigure = true;
 
@@ -94,21 +98,31 @@ stdenv.mkDerivation rec {
     }
 
     ${lib.concatMapStringsSep "\n"
-      (x: ''replace_dep "${x.f}" "${x.p.src}" "${x.p.pname or (builtins.parseDrvName x.p.name).name}" "${x.p.name}"'') [
-        { f = "curl"; p = curl; }
-        { f = "libconfig"; p = libconfig; }
-        { f = "libdaemon"; p = libdaemon; }
-        { f = "libev"; p = libev; }
-        { f = "libinjection"; p = libinjection; }
-        { f = "libmicrohttpd"; p = libmicrohttpd_0_9_69; }
-        { f = "libssl"; p = openssl; }
-        { f = "lz4"; p = lz4; }
-        { f = "pcre"; p = pcre; }
-        { f = "re2"; p = re2; }
-    ]}
+      (x: ''replace_dep "${x.f}" "${x.p.src}" "${x.p.pname or (builtins.parseDrvName x.p.name).name}" "${x.p.name}"'') (
+        map (x: {
+          inherit (x) f;
+          p = x.p // {
+            src = applyPatches {
+              inherit (x.p) src patches;
+            };
+          };
+        }) [
+          { f = "curl"; p = curl; }
+          { f = "libconfig"; p = libconfig; }
+          { f = "libdaemon"; p = libdaemon; }
+          { f = "libev"; p = libev; }
+          { f = "libinjection"; p = libinjection; }
+          { f = "libmicrohttpd"; p = libmicrohttpd_0_9_69; }
+          { f = "libssl"; p = openssl; }
+          { f = "lz4"; p = lz4; }
+          { f = "pcre"; p = pcre; }
+          { f = "prometheus-cpp"; p = prometheus-cpp; }
+          { f = "re2"; p = re2; }
+        ]
+      )}
 
     pushd libhttpserver
-    tar xf libhttpserver-0.18.1.tar.gz
+    tar xf libhttpserver-*.tar.gz
     sed -i s_/bin/pwd_${coreutils}/bin/pwd_g libhttpserver/configure.ac
     popd
 
@@ -117,12 +131,27 @@ stdenv.mkDerivation rec {
     ln -s ${nlohmann_json.src}/single_include/nlohmann/json.hpp .
     popd
 
-    pushd prometheus-cpp
-    tar xf v0.9.0.tar.gz
-    replace_dep prometheus-cpp/3rdparty "${civetweb.src}" civetweb
+    pushd prometheus-cpp/prometheus-cpp/3rdparty
+    replace_dep . "${civetweb.src}" civetweb
     popd
 
     sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config
+
+    pushd libmicrohttpd/libmicrohttpd
+    autoreconf
+    popd
+
+    pushd libconfig/libconfig
+    autoreconf
+    popd
+
+    pushd libdaemon/libdaemon
+    autoreconf
+    popd
+
+    pushd pcre/pcre
+    autoreconf
+    popd
 
     popd
     patchShebangs .
@@ -136,11 +165,12 @@ stdenv.mkDerivation rec {
     sed -i s_/usr/bin/proxysql_$out/bin/proxysql_ $out/lib/systemd/system/*.service
   '';
 
-  meta = with lib; {
-    homepage = "https://proxysql.com/";
+  meta = {
     broken = stdenv.isDarwin;
     description = "High-performance MySQL proxy";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ ajs124 ];
+    homepage = "https://proxysql.com/";
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ ajs124 ];
+    platforms = lib.platforms.unix;
   };
-}
+})

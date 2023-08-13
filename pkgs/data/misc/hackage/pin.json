@@ -1,6 +1,6 @@
 {
-  "commit": "d2f407d64c568ff572505378248cd834f808f6e0",
-  "url": "https://github.com/commercialhaskell/all-cabal-hashes/archive/d2f407d64c568ff572505378248cd834f808f6e0.tar.gz",
-  "sha256": "0agbmi2gjrg5gnp8dy76770lyh3ny42clm55wlr529320wnc14wm",
-  "msg": "Update from Hackage at 2022-12-18T22:10:13Z"
+  "commit": "2951c03cb95b8892bd6d4eb89d135764c35a8d7f",
+  "url": "https://github.com/commercialhaskell/all-cabal-hashes/archive/2951c03cb95b8892bd6d4eb89d135764c35a8d7f.tar.gz",
+  "sha256": "08sh9l9df2p51q4xhrl14jga48i0ad78fp7w3cccgcw1bqq4yxml",
+  "msg": "Update from Hackage at 2023-06-19T20:13:38Z"
 }

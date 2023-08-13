@@ -21,7 +21,7 @@ buildDotnetModule rec {
 
   projectFile = [ "src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj" ];
 
-  nugetDeps = ./extended-deps.nix;
+  nugetDeps = ./deps.nix;
 
   dontDotnetFixup = true;
 
@@ -62,7 +62,6 @@ buildDotnetModule rec {
     description = ".NET C# and Visual Basic compiler";
     homepage = "https://github.com/dotnet/roslyn";
     mainProgram = "csc";
-    platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ corngood ];
   };

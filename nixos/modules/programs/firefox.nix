@@ -53,7 +53,7 @@ in
     };
 
     preferences = mkOption {
-      type = with types; attrsOf (oneOf [ bool int string ]);
+      type = with types; attrsOf (oneOf [ bool int str ]);
       default = { };
       description = mdDoc ''
         Preferences to set from `about:config`.
@@ -201,6 +201,7 @@ in
     nativeMessagingHosts = mapAttrs (_: v: mkEnableOption (mdDoc v)) {
       browserpass = "Browserpass support";
       bukubrow = "Bukubrow support";
+      euwebid = "Web eID support";
       ff2mpv = "ff2mpv support";
       fxCast = "fx_cast support";
       gsconnect = "GSConnect support";
@@ -217,6 +218,8 @@ in
         extraPrefs = cfg.autoConfig;
         extraNativeMessagingHosts = with pkgs; optionals nmh.ff2mpv [
           ff2mpv
+        ] ++ optionals nmh.euwebid [
+          web-eid-app
         ] ++ optionals nmh.gsconnect [
           gnomeExtensions.gsconnect
         ] ++ optionals nmh.jabref [

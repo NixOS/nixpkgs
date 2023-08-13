@@ -1,21 +1,30 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "simple-http-server";
-  version = "0.6.5";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9wssSegekRBUXxpru5WGGu6BLX6BFEgV0QliNJToRFg=";
+    sha256 = "sha256-Xi5tJIfK4zjckKERhxHuDqeyOB9Dxul/eFLKOtpgR/w=";
   };
 
-  cargoSha256 = "sha256-P8Zr5KTjXD0qHkf6QfyfN39PjokpZUfywhzVjIO5rE8=";
+  cargoSha256 = "sha256-wv1hlBTQe1Mm67J2FqrrXSSlZkFPB0TzKc5VUMMfUIQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-keys";
     rev = "v${version}";
-    sha256 = "sha256-jG/jJPM4t3z6UQIdc8L6y0DxZiGx5pVuGL8XwbIt60o=";
+    hash = "sha256-jG/jJPM4t3z6UQIdc8L6y0DxZiGx5pVuGL8XwbIt60o=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     eth-utils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asn1tools
     factory_boy
     hypothesis
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     description = "Common API for Ethereum key operations";
     homepage = "https://github.com/ethereum/eth-keys";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-raises

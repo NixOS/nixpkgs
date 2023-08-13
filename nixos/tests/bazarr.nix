@@ -1,13 +1,11 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 let
   port = 42069;
 in
 {
   name = "bazarr";
-  meta.maintainers = with maintainers; [ d-xo ];
+  meta.maintainers = with lib.maintainers; [ d-xo ];
 
   nodes.machine =
     { pkgs, ... }:

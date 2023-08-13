@@ -5,6 +5,7 @@
 , cryptography
 , ed25519
 , ecdsa
+, gnupg
 , semver
 , mnemonic
 , unidecode
@@ -27,8 +28,15 @@ buildPythonPackage rec {
     owner = "romanz";
     repo = "trezor-agent";
     rev = "v${version}";
-    sha256 = "sha256-RISAy0efdatr9u4CWNRGnlffkC8ksw1NyRpJWKwqz+s=";
+    hash = "sha256-RISAy0efdatr9u4CWNRGnlffkC8ksw1NyRpJWKwqz+s=";
   };
+
+  # hardcode the path to gpgconf in the libagent library
+  postPatch = ''
+    substituteInPlace libagent/gpg/keyring.py \
+      --replace "util.which('gpgconf')" "'${gnupg}/bin/gpgconf'" \
+      --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'"
+  '';
 
   propagatedBuildInputs = [
     unidecode
@@ -45,7 +53,7 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  checkInputs = [ mock pytest ];
+  nativeCheckInputs = [ mock pytest ];
 
   checkPhase = ''
     py.test libagent/tests

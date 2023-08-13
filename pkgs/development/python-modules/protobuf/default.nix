@@ -1,8 +1,12 @@
 { buildPackages
-, lib
 , buildPythonPackage
-, protobuf
+, fetchpatch
 , isPyPy
+, lib
+, protobuf
+, pytestCheckHook
+, pythonAtLeast
+, tzdata
 }:
 
 let
@@ -13,15 +17,22 @@ in
 buildPythonPackage {
   inherit (protobuf) pname src;
 
-  # protobuf 3.21 coresponds with its python library 4.21
+  # protobuf 3.21 corresponds with its python library 4.21
   version =
     if lib.versionAtLeast protobuf.version "3.21"
     then "${toString (lib.toInt versionMajor + 1)}.${versionMinor}.${versionPatch}"
     else protobuf.version;
 
-  disabled = isPyPy;
+  sourceRoot = "${protobuf.src.name}/python";
 
-  sourceRoot = "source/python";
+  patches = lib.optionals (pythonAtLeast "3.11") [
+    (fetchpatch {
+      url = "https://github.com/protocolbuffers/protobuf/commit/da973aff2adab60a9e516d3202c111dbdde1a50f.patch";
+      stripLen = 2;
+      extraPrefix = "";
+      hash = "sha256-a/12C6yIe1tEKjsMxcfDAQ4JHolA8CzkN7sNG8ZspPs=";
+    })
+  ];
 
   prePatch = ''
     if [[ "$(<../version.json)" != *'"python": "'"$version"'"'* ]]; then
@@ -29,6 +40,8 @@ buildPythonPackage {
       exit 1
     fi
   '';
+
+  nativeBuildInputs = lib.optional isPyPy tzdata;
 
   buildInputs = [ protobuf ];
 
@@ -38,6 +51,20 @@ buildPythonPackage {
   ];
 
   setupPyGlobalFlags = [ "--cpp_implementation" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals isPyPy [
+    # error message differs
+    "testInvalidTimestamp"
+    # requires tracemalloc which pypy does not implement
+    # https://foss.heptapod.net/pypy/pypy/-/issues/3048
+    "testUnknownFieldsNoMemoryLeak"
+    # assertion is not raised for some reason
+    "testStrictUtf8Check"
+  ];
 
   pythonImportsCheck = [
     "google.protobuf"

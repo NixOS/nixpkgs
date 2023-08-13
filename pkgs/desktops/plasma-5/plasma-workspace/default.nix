@@ -2,9 +2,6 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, coreutils
-, gnugrep
-, gnused
 , isocodes
 , libdbusmenu
 , libSM
@@ -56,6 +53,7 @@
 , plasma-wayland-protocols
 , kpipewire
 , libkexiv2
+, kuserfeedback
 , qtgraphicaleffects
 , qtquickcontrols
 , qtquickcontrols2
@@ -67,6 +65,7 @@
 , polkit-qt
 , pipewire
 , libdrm
+, fetchpatch
 }:
 
 let inherit (lib) getBin getLib; in
@@ -126,6 +125,7 @@ mkDerivation {
     kpipewire
     libkexiv2
 
+    kuserfeedback
     qtgraphicaleffects
     qtquickcontrols
     qtquickcontrols2
@@ -148,6 +148,13 @@ mkDerivation {
   patches = [
     ./0001-startkde.patch
     ./0002-absolute-wallpaper-install-dir.patch
+
+    # backport patch fixing a Wayland crash
+    # FIXME: remove in next release
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/fc01a7f837d06ee9e92d02f13acb79c2b06e9e3c.diff";
+      hash = "sha256-cHupiD6fKZ7ICFb4AcuUErrA4646sNGxeGiACPs8IHQ=";
+    })
   ];
 
   # QT_INSTALL_BINS refers to qtbase, and qdbus is in qttools
@@ -162,7 +169,7 @@ mkDerivation {
     ln -sf $out/bin/kcminit $out/bin/kcminit_startup
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
     ''-DNIXPKGS_XSETROOT="${getBin xsetroot}/bin/xsetroot"''
     ''-DNIXPKGS_START_KDEINIT_WRAPPER="${getLib kinit}/libexec/kf5/start_kdeinit_wrapper"''

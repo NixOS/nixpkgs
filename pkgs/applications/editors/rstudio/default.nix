@@ -25,7 +25,7 @@
 , makeWrapper
 , pandoc
 , llvmPackages
-, libyamlcpp
+, yaml-cpp
 , soci
 , postgresql
 , nodejs
@@ -95,7 +95,7 @@ in
       openssl
       R
       libuuid
-      libyamlcpp
+      yaml-cpp
       soci
       postgresql
     ] ++ (if server then [
@@ -148,6 +148,8 @@ in
 
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
         --replace '@pandoc@' ${pandoc}/bin/pandoc
+
+      sed '1i#include <set>' -i src/cpp/core/include/core/Thread.hpp
     '';
 
     hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
@@ -206,7 +208,7 @@ in
       homepage = "https://www.rstudio.com/";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ ciil cfhammill ];
-      mainProgram = "rstudio" + optionalString server "-server";
+      mainProgram = "rstudio" + lib.optionalString server "-server";
       platforms = platforms.linux;
     };
 

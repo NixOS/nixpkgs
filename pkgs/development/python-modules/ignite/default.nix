@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.4.10";
+  version = "0.4.12";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mMiEVenDBNmeXMrDSZamUpnSm+4BQEgfK89zxIaFMio=";
+    hash = "sha256-cLlPUPzYyOpqk4qHsn22s3Xr/VkGjnHL4JVw2qy2iTc=";
   };
 
-  checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
+  nativeCheckInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
   propagatedBuildInputs = [ packaging torch scikit-learn tqdm ];
 
   # runs successfully in 3.9, however, async isn't correctly closed so it will fail after test suite.

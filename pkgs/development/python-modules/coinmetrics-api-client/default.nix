@@ -1,13 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, nix-update-script
 , orjson
 , pandas
 , poetry-core
-, pytestCheckHook
 , pytest-mock
-, pythonOlder
+, pytestCheckHook
 , python-dateutil
+, pythonOlder
+, pythonRelaxDepsHook
 , requests
 , typer
 , websocket-client
@@ -15,18 +17,26 @@
 
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
-  version = "2022.11.14.16";
+  version = "2023.8.2.13";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2x8S9Jj/1bBnhXS/x0lQ8YUQkCvfpgGcDSQU2dGbAn0=";
+    inherit version;
+    pname = "coinmetrics_api_client";
+    hash = "sha256-R7EbzH8ftHqoCbe8plXPOmTL01mow7t+zgVfL4+bZXQ=";
   };
+
+  pythonRelaxDeps = [
+    "typer"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -37,7 +47,7 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ] ++ passthru.optional-dependencies.pandas;
@@ -48,8 +58,11 @@ buildPythonPackage rec {
 
   passthru = {
     optional-dependencies = {
-      pandas = [ pandas ];
+      pandas = [
+        pandas
+      ];
     };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

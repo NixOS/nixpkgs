@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     prompt-toolkit
   ];
 
-  checkInputs = [ git ]
+  nativeCheckInputs = [ git ]
     ++ (with python3Packages; [ parameterized ]);
 
   meta = with lib; {

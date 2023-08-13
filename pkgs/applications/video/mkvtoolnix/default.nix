@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , pkg-config
 , autoreconfHook
 , rake
@@ -47,13 +46,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "71.1.0";
+  version = "77.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "sha256-JHbnjcXOctB6HQeHXykWbykdn35S2fCYegMkc3GLmAI=";
+    sha256 = "t+kfFS5c8w+c9wxNh59nceFesfdMy8qvHlUqDbZAxkk=";
   };
 
   nativeBuildInputs = [

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     untangle
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-vcr
     pytestCheckHook
   ];

@@ -215,10 +215,12 @@ in
     };
 
     security.pam.services = {
-      sddm = {
-        allowNullPassword = true;
-        startSession = true;
-      };
+      sddm.text = ''
+        auth      substack      login
+        account   include       login
+        password  substack      login
+        session   include       login
+      '';
 
       sddm-greeter.text = ''
         auth     required       pam_succeed_if.so audit quiet_success user = sddm
@@ -265,6 +267,17 @@ in
 
     environment.systemPackages = [ sddm ];
     services.dbus.packages = [ sddm ];
+
+    # We're not using the upstream unit, so copy these: https://github.com/sddm/sddm/blob/develop/services/sddm.service.in
+    systemd.services.display-manager.after = [
+      "systemd-user-sessions.service"
+      "getty@tty7.service"
+      "plymouth-quit.service"
+      "systemd-logind.service"
+    ];
+    systemd.services.display-manager.conflicts = [
+      "getty@tty7.service"
+    ];
 
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;

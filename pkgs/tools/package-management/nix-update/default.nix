@@ -1,25 +1,26 @@
 { lib
-, buildPythonApplication
+, python3
 , fetchFromGitHub
 , nix
+, nix-prefetch-git
 , nixpkgs-fmt
 , nixpkgs-review
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nix-update";
-  version = "0.12.0";
+  version = "0.19.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7Co8mKG3eyM5WmGoAskyYleeutH4/kygSkvFpSg7Y04=";
+    hash = "sha256-+WD+SV/L3TvksWBIg6jk+T0dUTNdp4VKONzdzVT+pac=";
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nix nixpkgs-fmt nixpkgs-review ])
+    "--prefix" "PATH" ":" (lib.makeBinPath [ nix nix-prefetch-git nixpkgs-fmt nixpkgs-review ])
   ];
 
   checkPhase = ''

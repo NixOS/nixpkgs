@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.26.6";
+  version = "0.28.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     rev = "refs/tags/${version}";
-    hash = "sha256-A/P59fhXlMu1QF1Nc7zeE9q4KgS6ABe7FraZWZPYDys=";
+    hash = "sha256-S/arFxM+9VZECqUzPijTxclBQ6oeiOxdRXQLb+uhkfM=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     python-dateutil
   ] ++ gql.optional-dependencies.websockets;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

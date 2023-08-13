@@ -16,14 +16,14 @@
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.30";
+  version = "9.2.63";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
-    rev = "v${version}";
-    hash = "sha256-LpYi5Ty6OBcW0zokCliMDhujJ7tPPl1XdPs5ad1tv5s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-03DyvPht4E4uysKqgyfu8hxu1qh+YzWsTI09E4ftiSs=";
   };
 
 in
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ZLMbV4H1JWfnMlSsN1nZhQVmsEyJF2sIii0sSOxe+2E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rCopCv7CPx04MYW1HkP0RP4NRZZlKtD4D8854FqIu10=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
   ];

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "databricks-cli";
-  version = "0.17.4";
+  version = "0.17.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "databricks";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-srrNxiOGrU1u5shssRssr8Hwdy20U4coOAjYsT7eTSA=";
+    hash = "sha256-Eg6qpoEvWlbOJbMIkbJiHfHVrglVfVNq/TCOhQxukl0=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     decorator
     mock
     pytestCheckHook

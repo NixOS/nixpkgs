@@ -1,8 +1,10 @@
 { lib
 , stdenv
+, backendStdenv
 , fetchurl
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
+, markForCudatoolkitRootHook
 }:
 
 pname:
@@ -10,7 +12,8 @@ attrs:
 
 let
   arch = "linux-x86_64";
-in stdenv.mkDerivation {
+in
+backendStdenv.mkDerivation {
   inherit pname;
   inherit (attrs) version;
 
@@ -26,10 +29,21 @@ in stdenv.mkDerivation {
     # directory to the rpath of all ELF binaries.
     # Check e.g. with `patchelf --print-rpath path/to/my/binary
     autoAddOpenGLRunpathHook
+    markForCudatoolkitRootHook
   ];
 
   buildInputs = [
+    # autoPatchelfHook will search for a libstdc++ and we're giving it
+    # one that is compatible with the rest of nixpkgs, even when
+    # nvcc forces us to use an older gcc
+    # NB: We don't actually know if this is the right thing to do
     stdenv.cc.cc.lib
+  ];
+
+  # Picked up by autoPatchelf
+  # Needed e.g. for libnvrtc to locate (dlopen) libnvrtc-builtins
+  appendRunpaths = [
+    "$ORIGIN"
   ];
 
   dontBuild = true;
@@ -43,9 +57,12 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.stdenv = backendStdenv;
+
   meta = {
     description = attrs.name;
     license = lib.licenses.unfree;
+    maintainers = lib.teams.cuda.members;
     platforms = lib.optionals (lib.hasAttr arch attrs) [ "x86_64-linux" ];
   };
 }

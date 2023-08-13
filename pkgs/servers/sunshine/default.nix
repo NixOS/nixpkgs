@@ -1,7 +1,10 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
+, fetchurl
 , autoPatchelfHook
+, makeWrapper
 , buildNpmPackage
 , cmake
 , avahi
@@ -11,7 +14,7 @@
 , libxcb
 , openssl
 , libopus
-, ffmpeg-full
+, ffmpeg_5-full
 , boost
 , pkg-config
 , libdrm
@@ -23,35 +26,48 @@
 , libva
 , libvdpau
 , numactl
-, cudaSupport ? false
+, amf-headers
+, svt-av1
+, vulkan-loader
+, libappindicator
+, config
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
-
+let
+  libcbs = callPackage ./libcbs.nix { };
+  # get cmake file used to find external ffmpeg from previous sunshine version
+  findFfmpeg = fetchurl {
+    url = "https://raw.githubusercontent.com/LizardByte/Sunshine/6702802829869547708dfec98db5b8cbef39be89/cmake/FindFFMPEG.cmake";
+    sha256 = "sha256:1hl3sffv1z8ghdql5y9flk41v74asvh23y6jmaypll84f1s6k1xa";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "sunshine";
-  version = "0.16.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-o489IPza1iLoe74Onn2grP5oeNy0ZYdrvBoMEWlbwCE=";
+    sha256 = "sha256-/ceN44PAEtXzrAUi4AEldW1FBhJqIXah1Zd0S6fiV3s=";
     fetchSubmodules = true;
   };
 
   # remove pre-built ffmpeg; use ffmpeg from nixpkgs
-  patches = [ ./ffmpeg.diff ];
+  patches = [
+    ./ffmpeg.diff
+  ];
 
   # fetch node_modules needed for webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    sourceRoot = "source/src_assets/common/assets/web";
-    npmDepsHash = "sha256-fg/turcpPMHUs6GBwSoJl4Pxua/lGfCA1RzT1R5q53M=";
+    npmDepsHash = "sha256-pwmkpZjDwluKJjcY0ehetQbAlFnj1tsW100gRjolboc=";
 
     dontNpmBuild = true;
 
-    # use generated package-lock.json upstream does not provide one
+    # use generated package-lock.json as upstream does not provide one
     postPatch = ''
       cp ${./package-lock.json} ./package-lock.json
     '';
@@ -66,13 +82,15 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     autoPatchelfHook
+    makeWrapper
   ] ++ lib.optionals cudaSupport [
     cudaPackages.autoAddOpenGLRunpathHook
   ];
 
   buildInputs = [
+    libcbs
     avahi
-    ffmpeg-full
+    ffmpeg_5-full
     libevdev
     libpulseaudio
     xorg.libX11
@@ -80,6 +98,7 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXrandr
     xorg.libXtst
+    xorg.libXi
     openssl
     libopus
     boost
@@ -94,6 +113,9 @@ stdenv.mkDerivation rec {
     libvdpau
     numactl
     mesa
+    amf-headers
+    svt-av1
+    libappindicator
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
   ];
@@ -105,29 +127,40 @@ stdenv.mkDerivation rec {
     libxcb
   ];
 
-  CXXFLAGS = [
-    "-Wno-format-security"
-  ];
-  CFLAGS = [
-    "-Wno-format-security"
-  ];
-
   cmakeFlags = [
     "-Wno-dev"
   ];
 
   postPatch = ''
-    # Don't force the need for a static boost, fix hardcoded libevdev path
+    # fix hardcoded libevdev and icon path
     substituteInPlace CMakeLists.txt \
-      --replace 'set(Boost_USE_STATIC_LIBS ON)' '# set(Boost_USE_STATIC_LIBS ON)' \
-      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0'
+      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0' \
+      --replace '/usr/share' "$out/share"
+
+    substituteInPlace packaging/linux/sunshine.desktop \
+      --replace '@PROJECT_NAME@' 'Sunshine'
+
+    # add FindFFMPEG to source tree
+    cp ${findFfmpeg} cmake/FindFFMPEG.cmake
   '';
 
   preBuild = ''
     # copy node_modules where they can be picked up by build
-    mkdir -p ../src_assets/common/assets/web/node_modules
-    cp -r ${ui}/node_modules/* ../src_assets/common/assets/web/node_modules
+    mkdir -p ../node_modules
+    cp -r ${ui}/node_modules/* ../node_modules
   '';
+
+  # allow Sunshine to find libvulkan
+  postFixup = lib.optionalString cudaSupport ''
+    wrapProgram $out/bin/sunshine \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
+
+  postInstall = ''
+    install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
+  '';
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     description = "Sunshine is a Game stream host for Moonlight.";

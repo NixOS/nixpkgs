@@ -1,38 +1,67 @@
-{ lib, stdenv, fetchurl, jdk11, runtimeShell, unzip, chromium }:
-
-stdenv.mkDerivation rec {
-  pname = "burpsuite";
-  version = "2021.12";
+{ lib, fetchurl, jdk, buildFHSEnv, unzip, makeDesktopItem }:
+let
+  version = "2023.5.3";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
+      "https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
     ];
-    sha256 = "sha256-BLX/SgHctXciOZoA6Eh4zuDJoxNSZgvoj2Teg1fV80g=";
+    sha256 = "e2e9a9b307b5b54daf724ae7f5fda22b9cbd8382a4c72e18b85ac39b3e8a16ab";
   };
 
-  dontUnpack = true;
-  dontBuild = true;
-  installPhase = ''
-    runHook preInstall
+  name = "burpsuite-${version}";
+  description = "An integrated platform for performing security testing of web applications";
+  desktopItem = makeDesktopItem rec {
+    name = "burpsuite";
+    exec = name;
+    icon = name;
+    desktopName = "Burp Suite Community Edition";
+    comment = description;
+    categories = [ "Development" "Security" "System" ];
+  };
 
-    mkdir -p $out/bin
-    echo '#!${runtimeShell}
-    eval "$(${unzip}/bin/unzip -p ${src} chromium.properties)"
-    mkdir -p "$HOME/.BurpSuite/burpbrowser/$linux64"
-    ln -sf "${chromium}/bin/chromium" "$HOME/.BurpSuite/burpbrowser/$linux64/chrome"
-    exec ${jdk11}/bin/java -jar ${src} "$@"' > $out/bin/burpsuite
-    chmod +x $out/bin/burpsuite
+in
+buildFHSEnv {
+  inherit name;
 
-    runHook postInstall
+  runScript = "${jdk}/bin/java -jar ${src}";
+
+  targetPkgs = pkgs: with pkgs; [
+    alsa-lib
+    at-spi2-core
+    cairo
+    cups
+    dbus
+    expat
+    glib
+    gtk3
+    libdrm
+    libudev0-shim
+    libxkbcommon
+    mesa.drivers
+    nspr
+    nss
+    pango
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrandr
+  ];
+
+  extraInstallCommands = ''
+    mv "$out/bin/${name}" "$out/bin/burpsuite" # name includes the version number
+    mkdir -p "$out/share/pixmaps"
+    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64community.png > "$out/share/pixmaps/burpsuite.png"
+    cp -r ${desktopItem}/share/applications $out/share
   '';
 
-  preferLocalBuild = true;
-
   meta = with lib; {
-    description = "An integrated platform for performing security testing of web applications";
+    inherit description;
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
       Its various tools work seamlessly together to support the entire testing process, from
@@ -43,8 +72,8 @@ stdenv.mkDerivation rec {
     downloadPage = "https://portswigger.net/burp/freedownload";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    platforms = jdk11.meta.platforms;
-    hydraPlatforms = [];
-    maintainers = with maintainers; [ bennofs ];
+    platforms = jdk.meta.platforms;
+    hydraPlatforms = [ ];
+    maintainers = with maintainers; [ bennofs stepech ];
   };
 }

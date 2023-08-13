@@ -20,9 +20,9 @@ mkDerivation rec {
   dontUseQmakeConfigure = true;
 
   # c++11 and above is needed for building with Qt 5.9+
-  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     substituteInPlace xxdiff.pro --replace ../bin ./bin

@@ -8,7 +8,7 @@
 
 # runtime
 , pytz
-, jaraco_functools
+, jaraco-functools
 
 # tests
 , freezegun
@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.0.2";
+  version = "5.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MfpbszsmQQJiEfI+gI64vTUZAZiLFn1F8yPI9FDs8hE=";
+    hash = "sha256-txdkhsWUinUgHo0LIe8sI8qAhHQGDfRyGMkilb3OUnY=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +33,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jaraco_functools
+    jaraco-functools
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-freezegun
     pytestCheckHook

@@ -1,34 +1,45 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiosqlite
+, stdenv
 , aiofiles
-, pytz
-, python-dateutil
-, sortedcontainers
+, aiosqlite
+, buildPythonPackage
 , cryptography
-, typing-extensions
-, importlib-metadata
-, pytestCheckHook
+, fetchFromGitHub
 , pytest-asyncio
 , pytest-mock
-, asynctest
+, pytestCheckHook
+, python-dateutil
 , pythonOlder
+, pytz
+, sortedcontainers
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.0.0";
+  version = "1.0.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
-    rev = "v${version}";
-    hash = "sha256-wBtI3ZlsvOkNvl/q0X9cm2hNRUBW1oB/kZOo8lqo4dQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fSXhW/Ik96HVecwOFWM+VftSzWGX6O4PzPT7JuaYXy0=";
+    fetchSubmodules = true;
   };
+
+  postPatch = ''
+    # https://github.com/FreeOpcUa/opcua-asyncio/issues/1263
+    substituteInPlace setup.py \
+      --replace ", 'asynctest'" ""
+
+    # Workaround hardcoded paths in test
+    # "test_cli_tools_which_require_sigint"
+    substituteInPlace tests/test_tools.py \
+      --replace "tools/" "$out/bin/"
+  '';
 
   propagatedBuildInputs = [
     aiosqlite
@@ -38,28 +49,33 @@ buildPythonPackage rec {
     sortedcontainers
     cryptography
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-mock
   ];
 
   pythonImportsCheck = [
     "asyncua"
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pytest-mock
-    asynctest
-  ];
-
-  disabledTests = [
-    "test_cli_tools_which_require_sigint" # Hard coded path only works from root of src
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>
+    "test_publish"
+    # OSError: [Errno 48] error while attempting to bind on address ('127.0.0.1',...
+    "test_anonymous_rejection"
+    "test_certificate_handling_success"
+    "test_encrypted_private_key_handling_success"
+    "test_encrypted_private_key_handling_success_with_cert_props"
+    "test_encrypted_private_key_handling_failure"
   ];
 
   meta = with lib; {
     description = "OPC UA / IEC 62541 Client and Server for Python";
     homepage = "https://github.com/FreeOpcUa/opcua-asyncio";
+    changelog = "https://github.com/FreeOpcUa/opcua-asyncio/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ harvidsen ];
   };

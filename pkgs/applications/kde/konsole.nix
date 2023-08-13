@@ -4,7 +4,7 @@
   kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons, kguiaddons,
   ki18n, kiconthemes, kinit, kio, knotifications,
   knotifyconfig, kparts, kpty, kservice, ktextwidgets, kwidgetsaddons,
-  kwindowsystem, kxmlgui, qtscript, knewstuff
+  kwindowsystem, kxmlgui, qtscript, knewstuff, qtmultimedia
 }:
 
 mkDerivation {
@@ -19,7 +19,7 @@ mkDerivation {
   buildInputs = [
     kbookmarks kcompletion kconfig kconfigwidgets kcoreaddons
     kguiaddons ki18n kiconthemes kinit kio knotifications knotifyconfig kparts kpty
-    kservice ktextwidgets kwidgetsaddons kwindowsystem kxmlgui qtscript knewstuff
+    kservice ktextwidgets kwidgetsaddons kwindowsystem kxmlgui qtscript knewstuff qtmultimedia
   ];
 
   passthru.tests.test = nixosTests.terminal-emulators.konsole;

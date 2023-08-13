@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pytap2";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "johnthagen";
     repo = "pytap2";
     rev = "v${version}";
-    hash = "sha256-/t0Seg+8ZrOWOHBu9ftE1xkrnDeoYdHopXBvJTMGYRI=";
+    hash = "sha256-GN8yFnS7HVgIP73/nVtYnwwhCBI9doGHLGSOaFiWIdw=";
   };
 
   propagatedBuildInputs = [
     nettools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

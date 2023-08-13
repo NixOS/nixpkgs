@@ -17,6 +17,7 @@ with pkgs.lib;
           ln -s ${pkgs.writeText "sshPublicKey" sshPublicKey} $out/1.0/meta-data/public-keys/0/openssh-key
         '';
       };
+      indentLines = str: concatLines (map (s: "  " + s) (splitString "\n" str));
     in makeTest {
       name = "ec2-" + name;
       nodes = {};
@@ -35,6 +36,8 @@ with pkgs.lib;
                 "qemu-img",
                 "create",
                 "-f",
+                "qcow2",
+                "-F",
                 "qcow2",
                 "-o",
                 "backing_file=${image}",
@@ -59,7 +62,11 @@ with pkgs.lib;
         )
 
         machine = create_machine({"startCommand": start_command})
-      '' + script;
+        try:
+      '' + indentLines script + ''
+        finally:
+          machine.shutdown()
+      '';
 
       inherit meta;
     };

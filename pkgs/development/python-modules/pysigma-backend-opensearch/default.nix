@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
-  version = "0.1.3";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,13 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-opensearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lRw9zNyAIdwCT0uhZ9NxJXWs+sB/cyGFtZIIBImTNcM=";
+    hash = "sha256-erqKAtTNMQQy/zUkpOd0LoQT2MY2mgz5yGuSQJ0QTjI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -32,7 +37,7 @@ buildPythonPackage rec {
     pysigma-backend-elasticsearch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
   ];
@@ -49,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to support OpenSearch for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-opensearch";
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-opensearch/releases/tag/v${version}";
     license = with licenses; [ lgpl21Only ];
     maintainers = with maintainers; [ fab ];
   };

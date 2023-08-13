@@ -5,29 +5,33 @@
 , libgit2
 , openssl
 , stdenv
-, Security
+, darwin
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.17.4";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-3dJ16G1PCLAV1sxtDt+eru+Chg7SWt+K/crJgXMO++k=";
+    sha256 = "sha256-Prue55oe3+NeiOiOYdr41sRqc6WvAVKC9nHD0a6mvrc=";
   };
 
-  # patch Cargo.toml to not vendor libgit2 and openssl
-  cargoPatches = [ ./no-vendor.patch ];
-
-  cargoSha256 = "sha256-eLPLBBytzjKfJk0pbPBC0kJrxkelfDrAj5kaM6g9z9w=";
+  cargoSha256 = "sha256-TcJ8DeplbBOx3utdc67xkUg5Z4PYe/lnG+k/X5Zg0FQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  nativeCheckInputs = [ git ];
+
+  # disable vendored libgit2 and openssl
+  buildNoDefaultFeatures = true;
 
   preCheck = ''
     export HOME=$(mktemp -d) USER=nixbld
@@ -49,6 +53,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda turbomack ];
+    maintainers = with maintainers; [ figsoda turbomack matthiasbeyer ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "morsel";

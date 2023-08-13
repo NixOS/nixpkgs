@@ -5,41 +5,37 @@
 , scipy
 , torch
 , autograd
-, nose2
 , matplotlib
-, tensorflow
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "2.0.1";
+  version = "2.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-VwCUqKI1PkR8nUVaa73bkTw67URKPaza3VU9g+rB+Mg=";
+    hash = "sha256-nbSxqMmYWi71s74bbB9LAlPKEslTqG/j266cLfNHrwg=";
   };
 
   propagatedBuildInputs = [ numpy scipy torch ];
-  checkInputs = [ nose2 autograd matplotlib tensorflow ];
+  nativeCheckInputs = [ autograd matplotlib pytestCheckHook ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    # upstream themselves seem unsure about the robustness of these
-    # tests - see https://github.com/pymanopt/pymanopt/issues/219
-    grep -lr 'test_second_order_function_approximation' tests/ | while read -r fn ; do
-      substituteInPlace "$fn" \
-        --replace \
-          'test_second_order_function_approximation' \
-          'dont_test_second_order_function_approximation'
-    done
-
-    nose2 tests -v
-
-    runHook postCheck
+  preCheck = ''
+    substituteInPlace "tests/conftest.py" \
+      --replace "import tensorflow as tf" ""
+    substituteInPlace "tests/conftest.py" \
+      --replace "tf.random.set_seed(seed)" ""
   '';
+
+  disabledTestPaths = [
+    "tests/test_examples.py"
+    "tests/backends/test_tensorflow.py"
+    "tests/test_problem.py"
+  ];
 
   pythonImportsCheck = [ "pymanopt" ];
 
@@ -48,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://www.pymanopt.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yl3dy ];
+    broken = lib.versionAtLeast scipy.version "1.10.0";
   };
 }

@@ -1,6 +1,6 @@
 # Bower {#sec-bower}
 
-[Bower](https://bower.io) is a package manager for web site front-end components. Bower packages (comprising of build artefacts and sometimes sources) are stored in `git` repositories, typically on Github. The package registry is run by the Bower team with package metadata coming from the `bower.json` file within each package.
+[Bower](https://bower.io) is a package manager for web site front-end components. Bower packages (comprising of build artifacts and sometimes sources) are stored in `git` repositories, typically on Github. The package registry is run by the Bower team with package metadata coming from the `bower.json` file within each package.
 
 The end result of running Bower is a `bower_components` directory which can be included in the web app's build process.
 
@@ -41,32 +41,18 @@ The function is implemented in [pkgs/development/bower-modules/generic/default.n
 
 ### Example buildBowerComponents {#ex-buildBowerComponents}
 
-```{=docbook}
-<programlisting language="nix">
+```nix
 bowerComponents = buildBowerComponents {
   name = "my-web-app";
-  generated = ./bower-packages.nix; <co xml:id="ex-buildBowerComponents-1" />
-  src = myWebApp; <co xml:id="ex-buildBowerComponents-2" />
+  generated = ./bower-packages.nix; # note 1
+  src = myWebApp; # note 2
 };
-</programlisting>
 ```
 
 In ["buildBowerComponents" example](#ex-buildBowerComponents) the following arguments are of special significance to the function:
 
-```{=docbook}
-<calloutlist>
-  <callout arearefs="ex-buildBowerComponents-1">
-    <para>
-      <varname>generated</varname> specifies the file which was created by <command>bower2nix</command>.
-    </para>
-    </callout>
-      <callout arearefs="ex-buildBowerComponents-2">
-    <para>
-      <varname>src</varname> is your project's sources. It needs to contain a <filename>bower.json</filename> file.
-    </para>
-  </callout>
-</calloutlist>
-```
+1. `generated` specifies the file which was created by {command}`bower2nix`.
+2. `src` is your project's sources. It needs to contain a {file}`bower.json` file.
 
 `buildBowerComponents` will run Bower to link together the output of `bower2nix`, resulting in a `bower_components` directory which can be used.
 
@@ -91,10 +77,9 @@ gulp.task('build', [], function () {
 
 ### Example Full example — default.nix {#ex-buildBowerComponentsDefaultNix}
 
-```{=docbook}
-<programlisting language="nix">
+```nix
 { myWebApp ? { outPath = ./.; name = "myWebApp"; }
-, pkgs ? import &lt;nixpkgs&gt; {}
+, pkgs ? import <nixpkgs> {}
 }:
 
 pkgs.stdenv.mkDerivation {
@@ -103,49 +88,29 @@ pkgs.stdenv.mkDerivation {
 
   buildInputs = [ pkgs.nodePackages.gulp ];
 
-  bowerComponents = pkgs.buildBowerComponents { <co xml:id="ex-buildBowerComponentsDefault-1" />
+  bowerComponents = pkgs.buildBowerComponents { # note 1
     name = "my-web-app";
     generated = ./bower-packages.nix;
     src = myWebApp;
   };
 
   buildPhase = ''
-    cp --reflink=auto --no-preserve=mode -R $bowerComponents/bower_components . <co xml:id="ex-buildBowerComponentsDefault-2" />
-    export HOME=$PWD <co xml:id="ex-buildBowerComponentsDefault-3" />
-    ${pkgs.nodePackages.gulp}/bin/gulp build <co xml:id="ex-buildBowerComponentsDefault-4" />
+    cp --reflink=auto --no-preserve=mode -R $bowerComponents/bower_components . # note 2
+    export HOME=$PWD # note 3
+    ${pkgs.nodePackages.gulp}/bin/gulp build # note 4
   '';
 
   installPhase = "mv gulpdist $out";
 }
-</programlisting>
 ```
 
 A few notes about [Full example — `default.nix`](#ex-buildBowerComponentsDefaultNix):
 
-```{=docbook}
-<calloutlist>
-  <callout arearefs="ex-buildBowerComponentsDefault-1">
-    <para>
-      The result of <varname>buildBowerComponents</varname> is an input to the frontend build.
-    </para>
-  </callout>
-  <callout arearefs="ex-buildBowerComponentsDefault-2">
-    <para>
-      Whether to symlink or copy the <filename>bower_components</filename> directory depends on the build tool in use. In this case a copy is used to avoid <command>gulp</command> silliness with permissions.
-    </para>
-  </callout>
-  <callout arearefs="ex-buildBowerComponentsDefault-3">
-    <para>
-      <command>gulp</command> requires <varname>HOME</varname> to refer to a writeable directory.
-    </para>
-  </callout>
-  <callout arearefs="ex-buildBowerComponentsDefault-4">
-    <para>
-      The actual build command. Other tools could be used.
-    </para>
-  </callout>
-</calloutlist>
-```
+1. The result of `buildBowerComponents` is an input to the frontend build.
+2. Whether to symlink or copy the {file}`bower_components` directory depends on the build tool in use.
+   In this case a copy is used to avoid {command}`gulp` silliness with permissions.
+3. {command}`gulp` requires `HOME` to refer to a writeable directory.
+4. The actual build command in this example is {command}`gulp`. Other tools could be used instead.
 
 ## Troubleshooting {#ssec-bower2nix-troubleshooting}
 

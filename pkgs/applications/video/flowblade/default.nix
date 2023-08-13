@@ -5,17 +5,17 @@
 
 stdenv.mkDerivation rec {
   pname = "flowblade";
-  version = "2.8.0.3";
+  version = "2.10.0.4";
 
   src = fetchFromGitHub {
     owner = "jliljebl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/EkI3qiceB5eKTVQnpG+z4e6yaE9hDtn6I+iN/J+h/g=";
+    sha256 = "sha256-IjutDCp+wrvXSQzvELuPMdW/16Twi0ee8VjdAFyi+OE=";
   };
 
   buildInputs = [
-    ffmpeg frei0r sox gtk3 gobject-introspection ladspaPlugins
+    ffmpeg frei0r sox gtk3 ladspaPlugins
     (python3.withPackages (ps: with ps; [ mlt pygobject3 dbus-python numpy pillow ]))
   ];
 
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/flowblade/flowblade $out/bin/flowblade \
       --set FREI0R_PATH ${frei0r}/lib/frei0r-1 \
       --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa \
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
       ''${gappsWrapperArgs[@]}
 
     runHook postInstall

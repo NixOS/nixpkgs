@@ -35,10 +35,18 @@ self: super: ({
   double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
   streamly = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly;
+  streamly_0_9_0 = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly_0_9_0;
 
   apecs-physics = addPkgconfigDepends [
     darwin.apple_sdk.frameworks.ApplicationServices
   ] super.apecs-physics;
+
+  # Framework deps are hidden behind a flag
+  hmidi = addExtraLibraries [
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.CoreAudio
+    darwin.apple_sdk.frameworks.CoreMIDI
+  ] super.hmidi;
 
   # "erf table" test fails on Darwin
   # https://github.com/bos/math-functions/issues/63
@@ -109,6 +117,12 @@ self: super: ({
   }) super.llvm-hs;
 
   yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
+
+  yesod-core = super.yesod-core.overrideAttrs (drv: {
+    # Allow access to local networking when the Darwin sandbox is enabled, so yesod-core can
+    # run tests that access localhost.
+    __darwinAllowLocalNetworking = true;
+  });
 
   hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
 
@@ -269,6 +283,12 @@ self: super: ({
     '' + drv.postPatch or "";
   }) super.http-client-tls;
 
+  http2 = super.http2.overrideAttrs (drv: {
+    # Allow access to local networking when the Darwin sandbox is enabled, so http2 can run tests
+    # that access localhost.
+    __darwinAllowLocalNetworking = true;
+  });
+
   foldl = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing
@@ -307,6 +327,9 @@ self: super: ({
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu);
+
+  # https://github.com/NixOS/nixpkgs/issues/149692
+  Agda = removeConfigureFlag "-foptimise-heavily" super.Agda;
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 

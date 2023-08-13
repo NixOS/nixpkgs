@@ -7,6 +7,7 @@
 , curl
 , fetchFromGitHub
 , ffmpeg
+, ffmpeg_4
 , fluidsynth
 , gettext
 , hexdump
@@ -41,7 +42,7 @@
 }:
 
 let
-  hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
+  hashesFile = lib.importJSON ./hashes.json;
 
   getCoreSrc = core:
     fetchFromGitHub (builtins.getAttr core hashesFile);
@@ -49,7 +50,7 @@ let
   mkLibretroCore =
     { core
     , src ? (getCoreSrc core)
-    , version ? "unstable-2022-12-20"
+    , version ? "unstable-2023-03-13"
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
@@ -359,6 +360,17 @@ in
     };
   };
 
+  dosbox-pure = mkLibretroCore {
+    core = "dosbox-pure";
+    CXXFLAGS = "-std=gnu++11";
+    hardeningDisable = [ "format" ];
+    makefile = "Makefile";
+    meta = {
+      description = "Port of DOSBox to libretro aiming for simplicity and ease of use.";
+      license = lib.licenses.gpl2Only;
+    };
+  };
+
   eightyone = mkLibretroCore {
     core = "81";
     src = getCoreSrc "eightyone";
@@ -400,8 +412,6 @@ in
     core = "flycast";
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
-    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
-    patches = [ ./fix-flycast-makefile.patch ];
     meta = {
       description = "Flycast libretro port";
       license = lib.licenses.gpl2Only;
@@ -423,6 +433,14 @@ in
     makefile = "Makefile";
     meta = {
       description = "FreeIntv libretro port";
+      license = lib.licenses.gpl3Only;
+    };
+  };
+
+  fuse = mkLibretroCore {
+    core = "fuse";
+    meta = {
+      description = "A port of the Fuse Unix Spectrum Emulator to libretro";
       license = lib.licenses.gpl3Only;
     };
   };
@@ -715,6 +733,10 @@ in
       # remove ccache
       substituteInPlace CMakeLists.txt --replace "ccache" ""
     '';
+
+    # causes redefinition of _FORTIFY_SOURCE
+    hardeningDisable = [ "fortify3" ];
+
     postBuild = "cd /build/source/build/pcsx2";
     meta = {
       description = "Port of PCSX2 to libretro";
@@ -735,7 +757,6 @@ in
   picodrive = mkLibretroCore {
     core = "picodrive";
     dontConfigure = true;
-    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
     meta = {
       description = "Fast MegaDrive/MegaCD/32X emulator";
       license = "MAME";
@@ -758,7 +779,7 @@ in
   ppsspp = mkLibretroCore {
     core = "ppsspp";
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg_4 snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
@@ -821,8 +842,19 @@ in
     };
   };
 
-  scummvm = mkLibretroCore {
+  scummvm = mkLibretroCore rec {
     core = "scummvm";
+    version = "unstable-2022-04-06";
+    # Commit below introduces libretro platform, that uses libretro-{deps,common} as
+    # submodules. We will probably need to introduce this as separate derivations,
+    # but for now let's just use the last known version that does not use it.
+    # https://github.com/libretro/scummvm/commit/36446fa6eb33e67cc798f56ce1a31070260e2ada
+    src = fetchFromGitHub {
+      owner = "libretro";
+      repo = core;
+      rev = "2fb2e4c551c9c1510c56f6e890ee0300b7b3fca3";
+      hash = "sha256-wrlFqu+ONbYH4xMFDByOgySobGrkhVc7kYWI4JzA4ew=";
+    };
     extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL ];
     makefile = "Makefile";
     preConfigure = "cd backends/platform/libretro/build";
@@ -958,6 +990,14 @@ in
     meta = {
       description = "Port of TIC-80 to libretro";
       license = lib.licenses.mit;
+    };
+  };
+
+  twenty-fortyeight = mkLibretroCore {
+    core = "2048";
+    meta = {
+      description = "Port of 2048 puzzle game to the libretro API";
+      license = lib.licenses.unlicense;
     };
   };
 

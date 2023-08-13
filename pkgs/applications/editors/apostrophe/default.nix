@@ -7,7 +7,7 @@
 
 let
   pythonEnv = pythonPackages.python.withPackages(p: with p; [
-    regex setuptools python-Levenshtein pyenchant
+    regex setuptools levenshtein pyenchant
     pygobject3 pycairo pypandoc chardet
   ]);
 
@@ -24,9 +24,9 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkg-config desktop-file-utils
-    appstream-glib wrapGAppsHook sassc ];
+    appstream-glib wrapGAppsHook sassc gobject-introspection ];
 
-  buildInputs = [ glib pythonEnv gobject-introspection gtk3
+  buildInputs = [ glib pythonEnv gtk3
     gnome.adwaita-icon-theme webkitgtk gspell texlive
     glib-networking libhandy ];
 

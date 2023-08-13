@@ -5,14 +5,15 @@
 , colorama
 , fetchFromGitHub
 , git
-, pdm-pep517
+, jsonschema
+, pdm-backend
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.25.1";
+  version = "0.32.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,18 +22,16 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-DBjwqQ7tmvpHa0FZYS6Jsb/wQ7cnoynhybBWl9PNejs=";
+    hash = "sha256-rPh4FtcigZzscm3y/BJ/0Q0wURlumowlHY15MiQw2B8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
       --replace 'license = "ISC"' 'license = {file = "LICENSE"}' \
-      --replace 'version = {source = "scm"}' 'license-expression = "ISC"'
   '';
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
@@ -41,8 +40,9 @@ buildPythonPackage rec {
     cached-property
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
+    jsonschema
     pytestCheckHook
   ];
 

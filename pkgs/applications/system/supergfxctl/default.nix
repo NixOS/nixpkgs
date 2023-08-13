@@ -1,22 +1,33 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
+, fetchpatch
 , pkg-config
 , systemd
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "supergfxctl";
-  version = "5.0.1";
+  version = "5.1.1";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "supergfxctl";
     rev = version;
-    hash = "sha256-4q+7F8s6y+oDkBUKIBBsXZ2EtADcChdnjmABjBUnH9k=";
+    hash = "sha256-AThaZ9dp5T/DtLPE6gZ9qgkw0xksiq+VCL9Y4G41voE=";
   };
 
-  cargoSha256 = "sha256-nfs9sUq9569qXsC7JYMzrRPdQQm/l4HZANlG7827K8o=";
+  # fix reported version in Cargo.lock
+  # submitted upstream: https://gitlab.com/asus-linux/supergfxctl/-/merge_requests/31
+  # FIXME: remove for next update
+  cargoPatches = [
+    (fetchpatch {
+      url = "https://gitlab.com/asus-linux/supergfxctl/-/commit/8812dd208791d162881d72f785650a3344ec5151.diff";
+      hash = "sha256-eFFj2nIwGXHV1vMIpZvdvFPtfNLDfgqyGRt+VvB03LE=";
+    })
+  ];
+
+  cargoSha256 = "sha256-gbRGUWfpCQjCxuTdQ+qwOeCDU17G3nNFkIPAgzmeL+E=";
 
   postPatch = ''
     substituteInPlace data/supergfxd.service --replace /usr/bin/supergfxd $out/bin/supergfxd

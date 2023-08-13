@@ -1,56 +1,85 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pcre
-, python3
-, libxslt
-, docbook_xsl
+{ docbook_xsl
 , docbook_xml_dtd_45
-, withZ3 ? true
-, z3
+, fetchFromGitHub
+, installShellFiles
+, lib
+, libxslt
+, pcre
+, pkg-config
+, python3
+, stdenv
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.9.3";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "danmar";
     repo = "cppcheck";
-    rev = version;
-    hash = "sha256-AaZzr5r+tpG5M40HSx45KCUBPhN/nSpXxS5H3FuSx2c=";
+    rev = finalAttrs.version;
+    hash = "sha256-ZQ1EgnC2JBc0AvSW8PtgMzJoWSPt04Xfh8dqOU+KMfw=";
   };
 
-  buildInputs = [ pcre
-    (python3.withPackages (ps: [ps.pygments]))
-  ] ++ lib.optionals withZ3 [ z3 ];
-  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 which ];
+  strictDeps = true;
 
-  makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ]
-   ++ lib.optionals withZ3 [ "USE_Z3=yes" "CPPFLAGS=-DNEW_Z3=1" ];
+  nativeBuildInputs = [
+    docbook_xsl
+    docbook_xml_dtd_45
+    installShellFiles
+    libxslt
+    pkg-config
+    python3
+    which
+  ];
+
+  buildInputs = [
+    pcre
+    (python3.withPackages (ps: [ ps.pygments ]))
+  ];
+
+  makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ];
 
   outputs = [ "out" "man" ];
 
   enableParallelBuilding = true;
 
-  doCheck = true;
-
-  postInstall = ''
-    make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
-    mkdir -p $man/share/man/man1
-    cp cppcheck.1 $man/share/man/man1/cppcheck.1
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace 'PCRE_CONFIG = $(shell which pcre-config)' 'PCRE_CONFIG = $(PKG_CONFIG) libpcre'
   '';
 
-  meta = with lib; {
+  postBuild = ''
+    make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
+  '';
+
+  postInstall = ''
+    installManPage cppcheck.1
+  '';
+
+  # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo 'int main() {}' > ./installcheck.cpp
+    $out/bin/cppcheck ./installcheck.cpp > /dev/null
+
+    runHook postInstallCheck
+  '';
+
+  meta = {
     description = "A static analysis tool for C/C++ code";
+    homepage = "http://cppcheck.sourceforge.net/";
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       Check C/C++ code for memory leaks, mismatching allocation-deallocation,
       buffer overruns and more.
     '';
-    homepage = "http://cppcheck.sourceforge.net/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = lib.platforms.unix;
   };
-}
+})

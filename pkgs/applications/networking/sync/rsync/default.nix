@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     # disable the included zlib explicitly as it otherwise still compiles and
     # links them even.
     "--with-included-zlib=no"
+  ] ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
+    # fix `multiversioning needs 'ifunc' which is not supported on this target` error
+    "--disable-roll-simd"
   ];
 
   enableParallelBuilding = true;
@@ -53,7 +56,8 @@ stdenv.mkDerivation rec {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    mainProgram = "rsync";
     maintainers = with lib.maintainers; [ ehmry kampfschlaefer ivan ];
+    platforms = platforms.unix;
   };
 }

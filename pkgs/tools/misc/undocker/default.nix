@@ -4,21 +4,21 @@
 }:
 buildGoModule rec {
   pname = "undocker";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromSourcehut {
     owner = "~motiejus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SmtM25sijcm5NF0ZrSqrRQDXiLMNp8WGAZX9yKvj1rQ=";
+    hash = "sha256-I+pTbr1lKELyYlyHrx2gB+aeZ3/PmcePQfXu1ckhKAk=";
   };
 
-  vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = null;
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~motiejus/undocker";
     description = "A CLI tool to convert a Docker image to a flattened rootfs tarball";
-    license = licenses.mit;
+    license = licenses.asl20;
     maintainers = with maintainers; [ jordanisaacs ];
   };
 }

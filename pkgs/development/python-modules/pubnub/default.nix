@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "7.0.2";
+  version = "7.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python";
     rev = "refs/tags/${version}";
-    hash = "sha256-LVkP9og9Xru1Xuw4boI2pLwZ0RE2RvtUx0AHoJa6o9c=";
+    hash = "sha256-AUB6pk3Gkrjc0RRFP0mql+up1baPjyPwuiRz8O6r/GM=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-vcr
     pytestCheckHook

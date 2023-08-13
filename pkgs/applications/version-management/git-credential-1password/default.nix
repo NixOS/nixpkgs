@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "git-credential-1password";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "develerik";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Bz/EW+K4XtDap3cu3/+9nJePcdxMXakj8HDPsbCx1FU=";
+    sha256 = "sha256-8qdUOJ0MOk/xVvp3kDuxNRo3lMEJhLeI3Fle0tuZez0=";
   };
 
-  vendorSha256 = "sha256-cPHA6rVUQg41sS79UBFf85OfLn53C8/OZVGT5xVdBdw=";
+  vendorHash = "sha256-B6BlVnUX4XLT+9EpL63Ht4S8Wo84RsmY99CL+srQfpw=";
 
   meta = with lib; {
     description = "A git credential helper for 1Password";

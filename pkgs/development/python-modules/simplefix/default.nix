@@ -8,7 +8,7 @@ buildPythonPackage rec {
     repo = "simplefix";
     owner = "da4089";
     rev = "v${version}";
-    sha256 = "sha256-GQHMotxNRuRv6zXhrD02T+aFgfYe3RnvUGADsBeSPbA=";
+    hash = "sha256-GQHMotxNRuRv6zXhrD02T+aFgfYe3RnvUGADsBeSPbA=";
   };
 
   checkPhase = ''

@@ -12,14 +12,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sticky";
-  version = "1.13";
+  version = "1.17";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-oirTDIbvG9/iAkYrquX+ciujAnLUmubkBVvTyaiz2g8=";
+    hash = "sha256-Am62Azm27irIUQEpZVY8ZP2pslH1eaiyRBdq4eSakQA=";
   };
 
   postPatch = ''
@@ -33,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
-    gobject-introspection
     cinnamon.xapp
     gspell
   ];

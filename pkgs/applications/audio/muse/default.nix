@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rasp2v1ds2aw296lbf27rzw0l9fjl0cvbvw85d5ycvh6wkm301p";
   };
 
-  sourceRoot = "source/muse3";
+  sourceRoot = "${src.name}/muse3";
 
   patches = [ ./fix-parallel-building.patch ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libsamplerate libsndfile lilv lrdf lv2 qtsvg rtaudio rubberband sord
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${lib.getDev serd}/include/serd-0" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev serd}/include/serd-0" ];
 
   meta = with lib; {
     homepage = "https://muse-sequencer.github.io/";

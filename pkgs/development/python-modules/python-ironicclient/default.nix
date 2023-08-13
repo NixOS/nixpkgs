@@ -20,11 +20,11 @@
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.0.1";
+  version = "5.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7RawbJ5O5KCruD499fOkuFcouBzp3f7aEUnE37wJqmM=";
+    hash = "sha256-veDhwpSXPtoi27tKI6xebH4haAeq+sUsEEk9TxQSbg4=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     requests-mock
     oslotest

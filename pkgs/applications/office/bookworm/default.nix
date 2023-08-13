@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
     appstream
     desktop-file-utils
     glib
-    gobject-introspection
     gtk3
     html2text
     libgee

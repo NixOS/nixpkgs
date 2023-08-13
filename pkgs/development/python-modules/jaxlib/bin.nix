@@ -18,16 +18,17 @@
 , autoPatchelfHook
 , buildPythonPackage
 , config
-, cudnn ? cudaPackages.cudnn
+, fetchPypi
 , fetchurl
 , flatbuffers
-, isPy39
+, jaxlib-build
 , lib
+, ml-dtypes
 , python
 , scipy
 , stdenv
   # Options:
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
 
@@ -35,55 +36,73 @@ let
   inherit (cudaPackages) cudatoolkit cudnn;
 in
 
-assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1";
-assert cudaSupport -> lib.versionAtLeast cudnn.version "8.2";
+assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1" && lib.versionAtLeast cudnn.version "8.2" && stdenv.isLinux;
 
 let
-  version = "0.3.22";
+  version = "0.4.14";
 
-  pythonVersion = python.pythonVersion;
+  inherit (python) pythonVersion;
+
+  # As of 2023-06-06, google/jax upstream is no longer publishing CPU-only wheels to their GCS bucket. Instead the
+  # official instructions recommend installing CPU-only versions via PyPI.
+  cpuSrcs =
+    let
+      getSrcFromPypi = { platform, hash }: fetchPypi {
+        inherit version platform hash;
+        pname = "jaxlib";
+        format = "wheel";
+        # See the `disabled` attr comment below.
+        dist = "cp310";
+        python = "cp310";
+        abi = "cp310";
+      };
+    in
+    {
+      "x86_64-linux" = getSrcFromPypi {
+        platform = "manylinux2014_x86_64";
+        hash = "sha256-nyylSZfqHeftlvVgJZFCN1ldjluZVJIYu4ZSsVxvXf8=";
+      };
+      "aarch64-darwin" = getSrcFromPypi {
+        platform = "macosx_11_0_arm64";
+        hash = "sha256-La3wYbGCjWTl7krBD6BaBRqyBD8R530Lckbz0AWv0FM=";
+      };
+      "x86_64-darwin" = getSrcFromPypi {
+        platform = "macosx_10_14_x86_64";
+        hash = "sha256-hDg5+qisgtgOrdvbjxsUgI73cW6Aah8NLjhPe4kMAsM=";
+      };
+    };
+
 
   # Find new releases at https://storage.googleapis.com/jax-releases/jax_releases.html.
   # When upgrading, you can get these hashes from prefetch.sh. See
-  # https://github.com/google/jax/issues/12879 as to why this specific URL is
-  # the correct index.
-  cpuSrcs = {
-    "x86_64-linux" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/nocuda/jaxlib-${version}-cp310-cp310-manylinux2014_x86_64.whl";
-      hash = "sha256-w2wo0jk+1BdEkNwfSZRQbebdI4Ac8Kgn0MB0cIMcWU4=";
-    };
-    "aarch64-darwin" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_11_0_arm64.whl";
-      hash = "sha256-7Ir55ZhBkccqfoa56WVBF8QwFAC2ws4KFHDkfVw6zm0=";
-    };
-    "x86_64-darwin" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_10_14_x86_64.whl";
-      hash = "sha256-bOoQI+T+YsTUNA+cDu6wwYTcq9fyyzCpK9qrdCrNVoA=";
-    };
+  # https://github.com/google/jax/issues/12879 as to why this specific URL is the correct index.
+  gpuSrc = fetchurl {
+    url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp310-cp310-manylinux2014_x86_64.whl";
+    hash = "sha256-CcQ5kjp4XfUX4/RwFY3T5G3kVKAeyoCTXu1Lo4O16Qo=";
   };
 
-  gpuSrc = fetchurl {
-    url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn82-cp310-cp310-manylinux2014_x86_64.whl";
-    hash = "sha256-rabU62p4fF7Tu/6t8LNYZdf6YO06jGry/JtyFZeamCs=";
-  };
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "jaxlib";
   inherit version;
   format = "wheel";
 
-  # At the time of writing (2022-10-19), there are releases for <=3.10.
-  # Supporting all of them is a pain, so we focus on 3.10, the current nixpkgs
-  # python version.
   disabled = !(pythonVersion == "3.10");
 
-  src = if !cudaSupport then cpuSrcs."${stdenv.hostPlatform.system}" else gpuSrc;
+  # See https://discourse.nixos.org/t/ofborg-does-not-respect-meta-platforms/27019/6.
+  src =
+    if !cudaSupport then
+      (
+        cpuSrcs."${stdenv.hostPlatform.system}"
+          or (throw "jaxlib-bin is not supported on ${stdenv.hostPlatform.system}")
+      ) else gpuSrc;
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
-  nativeBuildInputs = lib.optionals cudaSupport [ autoPatchelfHook addOpenGLRunpath ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ]
+    ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
   # Dynamic link dependencies
-  buildInputs = [ stdenv.cc.cc ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   # jaxlib contains shared libraries that open other shared libraries via dlopen
   # and these implicit dependencies are not recognized by ldd or
@@ -107,7 +126,12 @@ buildPythonPackage rec {
     done
   '';
 
-  propagatedBuildInputs = [ absl-py flatbuffers scipy ];
+  propagatedBuildInputs = [
+    absl-py
+    flatbuffers
+    ml-dtypes
+    scipy
+  ];
 
   # Note that cudatoolkit is snecessary since jaxlib looks for "ptxas" in $PATH.
   # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 for
@@ -117,7 +141,7 @@ buildPythonPackage rec {
     ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
   '';
 
-  pythonImportsCheck = [ "jaxlib" ];
+  inherit (jaxlib-build) pythonImportsCheck;
 
   meta = with lib; {
     description = "XLA library for JAX";

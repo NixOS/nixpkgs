@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, fetchzip, ocaml, findlib, tcl, tk }:
+{ stdenv, lib, makeWrapper, fetchzip, Cocoa, ocaml, findlib, tcl, tk }:
 
 let
  params =
@@ -59,8 +59,10 @@ stdenv.mkDerivation rec {
   inherit (param) version src;
   pname = "ocaml${ocaml.version}-labltk";
 
+  strictDeps = true;
+
   nativeBuildInputs = [ ocaml findlib makeWrapper ];
-  buildInputs = [ tcl tk ];
+  buildInputs = [ tcl tk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   configureFlags = [ "--use-findlib" "--installbindir" "$(out)/bin" ];
   dontAddPrefix = true;

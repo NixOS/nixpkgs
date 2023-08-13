@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "berarma";
     repo = "new-lg4ff";
-    rev = "${version}";
+    rev = version;
     sha256 = "ZFwNdeJcSxzWtqjOF86SZpqhuz8jXZ2drvlQeIqsaNY=";
   };
 

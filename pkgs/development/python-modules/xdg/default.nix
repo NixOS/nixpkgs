@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "srstevenson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-z/Zvo2WGw9qA+M3Pt9r35DuxtuhL7/I75LlFEdDOJcc=";
+    hash = "sha256-z/Zvo2WGw9qA+M3Pt9r35DuxtuhL7/I75LlFEdDOJcc=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     clikit
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "XDG Base Directory Specification for Python";

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , cairo
@@ -10,7 +9,6 @@
 , fontconfig
 , gd
 , gts
-, libdevil
 , libjpeg
 , libpng
 , libtool
@@ -30,13 +28,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "7.0.2";
+  version = "8.0.5";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     rev = version;
-    hash = "sha256-iCpIKTGXZ1R3mbpbwv5ztdtjY7p9/NsJlA6u5lfpgdY=";
+    hash = "sha256-s3AUOLZhehxs2GcDCsq87RVvsDli1NvvQtwI0AyUs4k=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +52,6 @@ stdenv.mkDerivation rec {
     fontconfig
     gd
     gts
-    libdevil
     pango
     bash
   ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])

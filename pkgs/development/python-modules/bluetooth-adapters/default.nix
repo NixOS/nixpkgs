@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.15.2";
+  version = "0.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-vwcOMg10XRT6wNkQQF6qkbWSG2rsUXaDSEiIevii1eA=";
+    hash = "sha256-gbnsTRiT/4YumyaJ1h4VRzDAf8/oSkD3yL9mdACvWWk=";
   };
 
   postPatch = ''
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     "bluetooth_adapters"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

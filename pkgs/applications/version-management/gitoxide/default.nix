@@ -7,29 +7,31 @@
 , libiconv
 , Security
 , SystemConfiguration
+, curl
 , openssl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.19.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
-    sha256 = "sha256-GGXujTn5Xb63vKIycj5o9+PCsMN1Kp3RCSg1wiM31qA=";
+    hash = "sha256-7iJx7kE606jeaokROmOSoh0egCQUgYwvg8BAA3y1BGs=";
   };
 
-  cargoSha256 = "sha256-MAZhrd9CtFOIAaUUbXplBo+eo6Zaws2LIRkPoX4HztE=";
+  cargoHash = "sha256-zChqIA/KuS1aBs/g1tlymGvvJeljKMMCODijPhQYy40=";
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = if stdenv.isDarwin
+
+  buildInputs = [ curl ] ++ (if stdenv.isDarwin
     then [ libiconv Security SystemConfiguration ]
-    else [ openssl ];
+    else [ openssl ]);
 
   # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
     description = "A command-line application for interacting with git repositories";

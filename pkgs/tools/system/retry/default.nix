@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "retry";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "minfrin";
     repo = "retry";
     rev = "${pname}-${version}";
-    hash = "sha256-C6PYt5NjDT4w1yuWnw1+Z/L3j1S5zwTGsI44yrMnPUs=";
+    hash = "sha256-5H2MnnThi4rT/o3oTkGDKXStQwob4G9mMsZewItPub4=";
   };
 
   nativeBuildInputs = [ autoreconfHook txt2man which ];

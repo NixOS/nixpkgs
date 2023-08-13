@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
+, autoreconfHook
 , guile
 , guile-commonmark
 , guile-reader
@@ -10,14 +12,31 @@
 
 stdenv.mkDerivation rec {
   pname = "haunt";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchurl {
     url = "https://files.dthompson.us/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-zOkICg7KmJJhPWPtJRT3C9sYB1Oig1xLtgPNGe0n3xQ=";
+    hash = "sha256-vPKLQ9hDJdimEAXwIBGgRRlefM8/77xFQoI+0J/lkNs=";
   };
 
+  # Symbol not found: inotify_init
+  patches = [
+    (fetchpatch {
+      url = "https://git.dthompson.us/haunt.git/patch/?id=ab0b722b0719e3370a21359e4d511af9c4f14e60";
+      hash = "sha256-TPNJKGlbDkV9RpdN274qMLoN3HlwfH/yHpxlpqOPw58=";
+    })
+    (fetchpatch {
+      url = "https://git.dthompson.us/haunt.git/patch/?id=7d0b71f6a3f0e714da5a5c43e52408e27f44c383";
+      hash = "sha256-CW/h8CqsALKDuKRoN1bd/WEtFTvFj0VxtgmpatyrLm8=";
+    })
+    (fetchpatch {
+      url = "https://git.dthompson.us/haunt.git/patch/?id=1a91f3d0568fc095d8b0875c6553ef15b76efa4c";
+      hash = "sha256-+3wUlTuzbyGibAsCiYWKvzPqUrFs7VwdhnADjnPuWIY=";
+    })
+  ];
+
   nativeBuildInputs = [
+    autoreconfHook
     makeWrapper
     pkg-config
   ];
@@ -27,17 +46,14 @@ stdenv.mkDerivation rec {
     guile-reader
   ];
 
-  doCheck = true;
+  # Test suite is non-determinisitic in later versions
+  doCheck = false;
 
-  postInstall =
-    let
-      guileVersion = lib.versions.majorMinor guile.version;
-    in
-    ''
-      wrapProgram $out/bin/haunt \
-        --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
-        --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/haunt \
+      --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
+      --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

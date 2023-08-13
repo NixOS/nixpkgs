@@ -51,12 +51,12 @@ def get_src(tag_name: str) -> Dict[str, str]:
     )
     src = json.loads(p.stdout)
 
-    fields = ["owner", "repo", "rev", "sha256"]
+    fields = ["owner", "repo", "rev", "hash"]
 
     return {f: src[f] for f in fields}
 
 
-def get_cargo_sha256(drv_path: str):
+def get_cargo_hash(drv_path: str):
     # Note: No check=True since we expect this command to fail
     p = subprocess.run(["nix-store", "-r", drv_path], stderr=subprocess.PIPE)
 
@@ -74,7 +74,7 @@ def get_cargo_sha256(drv_path: str):
         if m:
             return m.group(1)
 
-    raise ValueError("Could not extract actual sha256 hash: ", stderr)
+    raise ValueError("Could not extract actual hash: ", stderr)
 
 
 if __name__ == "__main__":
@@ -96,26 +96,26 @@ if __name__ == "__main__":
         drv_path = eval_drv(
             nixpkgs,
             """
-        rustPlatform.buildRustPackage {
+        rustPlatform.buildRustPackage rec {
           pname = "tsc-dyn";
           version = "%s";
           nativeBuildInputs = [ clang ];
           src = fetchFromGitHub (lib.importJSON %s);
-          sourceRoot = "source/core";
-          cargoSha256 = lib.fakeSha256;
+          sourceRoot = "${src.name}/core";
+          cargoHash = lib.fakeHash;
         }
         """
             % (tag_name, f.name),
         )
 
-    cargo_sha256 = get_cargo_sha256(drv_path)
+    cargo_hash = get_cargo_hash(drv_path)
 
     with open(join(cwd, "src.json"), mode="w") as f:
         json.dump(
             {
                 "src": src,
                 "version": tag_name,
-                "cargoSha256": cargo_sha256,
+                "cargoHash": cargo_hash,
             },
             f,
             indent=2,

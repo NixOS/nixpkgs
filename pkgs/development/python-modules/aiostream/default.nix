@@ -16,10 +16,10 @@ buildPythonPackage rec {
     owner = "vxgmichel";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-WOtscg02Dq5YNSAfq4pIyH3oUP/5G+cjBwKB6c+SUVA=";
+    hash = "sha256-WOtscg02Dq5YNSAfq4pIyH3oUP/5G+cjBwKB6c+SUVA=";
   };
 
-  checkInputs = [ pytestCheckHook pytest-cov pytest-asyncio ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov pytest-asyncio ];
 
   meta = with lib; {
     description = "Generator-based operators for asynchronous iteration";

@@ -2,33 +2,37 @@
 
 stdenv.mkDerivation rec {
   pname = "OttoMatic";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eHy5yED5qrgHqKuqq1dXhmuR2PQBE5aMhSLPoydlpPk=";
+    sha256 = "sha256-0mqOAdAmJGxKa6yXktrbmdXkoQIliimq37iy9bCBZYg=";
     fetchSubmodules = true;
   };
-
-  buildInputs = [
-    SDL2
-  ];
 
   nativeBuildInputs = [
     cmake
     makeWrapper
   ];
 
+  buildInputs = [
+    SDL2
+  ];
+
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/OttoMatic
-    mv Data $out/share/OttoMatic
+    mkdir -p "$out/bin"
+    mkdir -p "$out/share/OttoMatic"
+    mv Data ReadMe.txt "$out/share/OttoMatic/"
     install -Dm755 {.,$out/bin}/OttoMatic
     wrapProgram $out/bin/OttoMatic --chdir "$out/share/OttoMatic"
-
+    install -Dm644 $src/packaging/io.jor.ottomatic.desktop $out/share/applications/io.jor.ottomatic.desktop
+    install -Dm644 $src/packaging/io.jor.ottomatic.png $out/share/pixmaps/io.jor.ottomatic.png
     runHook postInstall
   '';
 

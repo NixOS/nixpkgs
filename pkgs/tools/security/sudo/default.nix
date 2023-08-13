@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , buildPackages
 , coreutils
 , pam
@@ -14,12 +15,27 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.12p1";
+  version = "1.9.14p3";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    hash = "sha256-R1oYqOs9qLKRfOqwY6a69R6gkSjDxH4+DjOrdJe6t9g=";
+    hash = "sha256-oIMYscS8hYLABNTNmuKQOrxUnn5GuoFeQf6B0cB4K2I=";
   };
+
+  patches = [
+    # Extra bugfix not included in 1.9.14p3 to address a bug that impacts the
+    # NixOS test suite for sudo.
+    (fetchpatch {
+      url = "https://github.com/sudo-project/sudo/commit/760c9c11074cb921ecc0da9fbb5f0a12afd46233.patch";
+      hash = "sha256-smwyoYEkaqfQYz9C4VVz59YMtKabOPpwhS+RBwXbWuE=";
+    })
+    # Fix for the patch above:
+    #   https://bugzilla.sudo.ws/show_bug.cgi?id=1057
+    (fetchpatch {
+      url = "https://github.com/sudo-project/sudo/commit/d148e7d8f9a98726dd4fde6f187c7d614e1258c7.patch";
+      hash = "sha256-3I3PnuAHlBs3JOn0Ul900aFxuUkDGV4sM3S5DNtW7bE=";
+    })
+  ];
 
   prePatch = ''
     # do not set sticky bit in nix store

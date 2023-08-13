@@ -14,13 +14,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "diffuse";
-  version = "0.7.7";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "MightyCreak";
     repo = "diffuse";
     rev = "v${version}";
-    sha256 = "7tidv01znXYYSOKe3cH2+gSBF00aneL9nealcE5avcE=";
+    sha256 = "aGg5uh9KitVP2bBUizgGIZWvzTxfJGid0WUGVNyHdlk=";
   };
 
   format = "other";
@@ -45,6 +45,11 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
+  preConfigure = ''
+    # app bundle for macos
+    substituteInPlace src/diffuse/meson.build data/icons/meson.build --replace "/Applications" "$out/Applications";
+  '';
+
   mesonFlags = [
     "-Db_ndebug=true"
   ];
@@ -63,6 +68,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Graphical tool for merging and comparing text files";
     license = licenses.gpl2;
     maintainers = with maintainers; [ k3a ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

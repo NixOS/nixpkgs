@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, autoreconfHook, gmpxx }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, automake
+, autoconf
+, libtool
+, autoreconfHook
+, gmpxx
+}:
 stdenv.mkDerivation rec {
   pname = "givaro";
   version = "4.2.0";
@@ -8,6 +17,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-KR0WJc0CSvaBnPRott4hQJhWNBb/Wi6MIhcTExtVobQ=";
   };
+  patches = [
+    # Pull upstream fix for gcc-13:
+    #   https://github.com/linbox-team/givaro/pull/218
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/linbox-team/givaro/commit/c7744bb133496cd7ac04688f345646d505e1bf52.patch";
+      hash = "sha256-aAA5o8Va10v0Pqgcpx7qM0TAZiNQgXoR6N9xecj7tDA=";
+    })
+  ];
 
   enableParallelBuilding = true;
 

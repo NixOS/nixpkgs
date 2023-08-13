@@ -31,7 +31,7 @@ in
 
         (lazyDerivation { inherit derivation; meta.foo = true; }).meta
 
-    In these expressions, it `derivation` _will_ be evaluated:
+    In these expressions, `derivation` _will_ be evaluated:
 
         "${lazyDerivation { inherit derivation }}"
 

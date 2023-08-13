@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://gitlab.com/shackra/goimapnotify";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wohanley ];
+    mainProgram = "goimapnotify";
   };
 }

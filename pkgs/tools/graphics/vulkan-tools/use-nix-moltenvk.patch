@@ -1,8 +1,8 @@
 diff --git a/cube/CMakeLists.txt b/cube/CMakeLists.txt
-index 616fbc96..d2811c8d 100644
+index a2f026e7..327f5dba 100644
 --- a/cube/CMakeLists.txt
 +++ b/cube/CMakeLists.txt
-@@ -262,14 +262,7 @@ else()
+@@ -257,14 +257,7 @@ else()
  endif()
  
  if(APPLE)
@@ -18,7 +18,7 @@ index 616fbc96..d2811c8d 100644
  else()
      install(TARGETS vkcube RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
  endif()
-@@ -309,14 +302,7 @@ else()
+@@ -302,14 +295,7 @@ else()
  endif()
  
  if(APPLE)
@@ -35,10 +35,10 @@ index 616fbc96..d2811c8d 100644
      install(TARGETS vkcubepp RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
  endif()
 diff --git a/cube/macOS/cube/cube.cmake b/cube/macOS/cube/cube.cmake
-index 9b823f95..238c3e67 100644
+index 9b823f95..0c43a2c9 100644
 --- a/cube/macOS/cube/cube.cmake
 +++ b/cube/macOS/cube/cube.cmake
-@@ -72,12 +69,14 @@ set_source_files_properties("${CMAKE_BINARY_DIR}/staging-json/MoltenVK_icd.json"
+@@ -72,12 +72,14 @@ set_source_files_properties("${CMAKE_BINARY_DIR}/staging-json/MoltenVK_icd.json"
  # Copy the MoltenVK lib into the bundle.
  if(${CMAKE_GENERATOR} MATCHES "^Xcode.*")
      add_custom_command(TARGET vkcube POST_BUILD
@@ -56,10 +56,10 @@ index 9b823f95..238c3e67 100644
                         DEPENDS vulkan)
  endif()
 diff --git a/cube/macOS/cubepp/cubepp.cmake b/cube/macOS/cubepp/cubepp.cmake
-index eae4de3c..0acd18f9 100644
+index eae4de3c..e528ae26 100644
 --- a/cube/macOS/cubepp/cubepp.cmake
 +++ b/cube/macOS/cubepp/cubepp.cmake
-@@ -74,12 +71,14 @@ set_source_files_properties("${CMAKE_BINARY_DIR}/staging-json/MoltenVK_icd.json"
+@@ -74,12 +74,14 @@ set_source_files_properties("${CMAKE_BINARY_DIR}/staging-json/MoltenVK_icd.json"
  # Copy the MoltenVK lib into the bundle.
  if(${CMAKE_GENERATOR} MATCHES "^Xcode.*")
      add_custom_command(TARGET vkcubepp POST_BUILD
@@ -107,10 +107,10 @@ index bad3c414..b498906d 100644
  
  find_library(COCOA NAMES Cocoa)
 diff --git a/vulkaninfo/CMakeLists.txt b/vulkaninfo/CMakeLists.txt
-index fb236a5b..3c8270d4 100644
+index d23dcf89..32aa0ebb 100644
 --- a/vulkaninfo/CMakeLists.txt
 +++ b/vulkaninfo/CMakeLists.txt
-@@ -139,9 +139,4 @@ elseif(APPLE)
+@@ -136,9 +136,5 @@ elseif(APPLE)
      add_definitions(-DVK_USE_PLATFORM_MACOS_MVK -DVK_USE_PLATFORM_METAL_EXT)
  endif()
  
@@ -119,37 +119,5 @@ index fb236a5b..3c8270d4 100644
 -else()
 -    install(TARGETS vulkaninfo RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 -endif()
--
 +install(TARGETS vulkaninfo RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-diff --git a/vulkaninfo/macOS/vulkaninfo.cmake b/vulkaninfo/macOS/vulkaninfo.cmake
-index 9614530e..56af3b89 100644
---- a/vulkaninfo/macOS/vulkaninfo.cmake
-+++ b/vulkaninfo/macOS/vulkaninfo.cmake
-@@ -48,26 +48,4 @@ set_source_files_properties(${CMAKE_BINARY_DIR}/staging-json/MoltenVK_icd.json
-                             MACOSX_PACKAGE_LOCATION
-                             "Resources/vulkan/icd.d")
  
--# Xcode projects need some extra help with what would be install steps.
--if(${CMAKE_GENERATOR} MATCHES "^Xcode.*")
--    add_custom_command(TARGET vulkaninfo-bundle POST_BUILD
--                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/MoltenVK/dylib/macOS/libMoltenVK.dylib"
--                               ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/vulkaninfo.app/Contents/Frameworks/libMoltenVK.dylib
--                       DEPENDS vulkan)
--else()
--    add_custom_command(TARGET vulkaninfo-bundle POST_BUILD
--                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/MoltenVK/dylib/macOS/libMoltenVK.dylib"
--                               ${CMAKE_CURRENT_BINARY_DIR}/vulkaninfo.app/Contents/Frameworks/libMoltenVK.dylib
--                       DEPENDS vulkan)
--endif()
--
--# Keep RPATH so fixup_bundle can use it to find libraries
--set_target_properties(vulkaninfo-bundle PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
--install(TARGETS vulkaninfo-bundle BUNDLE DESTINATION "vulkaninfo")
--# Fix up the library search path in the executable to find (loader) libraries in the bundle. When fixup_bundle() is passed a bundle
--# in the first argument, it looks at the Info.plist file to determine the BundleExecutable. In this case, the executable is a
--# script, which can't be fixed up. Instead pass it the explicit name of the executable.
--install(CODE "
--    include(BundleUtilities)
--    fixup_bundle(\${CMAKE_INSTALL_PREFIX}/vulkaninfo/vulkaninfo.app/Contents/MacOS/vulkaninfo \"\" \"${Vulkan_LIBRARY_DIR}\")
--    ")
-+install(TARGETS vulkaninfo-bundle BUNDLE DESTINATION "Applications")

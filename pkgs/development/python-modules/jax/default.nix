@@ -1,53 +1,61 @@
 { lib
-, absl-py
 , blas
 , buildPythonPackage
-, etils
+, setuptools
+, importlib-metadata
 , fetchFromGitHub
 , jaxlib
+, jaxlib-bin
 , lapack
 , matplotlib
+, ml-dtypes
 , numpy
 , opt-einsum
 , pytestCheckHook
 , pytest-xdist
 , pythonOlder
 , scipy
-, typing-extensions
+, stdenv
 }:
 
 let
   usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
+  # jaxlib is broken on aarch64-* as of 2023-03-05, but the binary wheels work
+  # fine. jaxlib is only used in the checkPhase, so switching backends does not
+  # impact package behavior. Get rid of this once jaxlib is fixed on aarch64-*.
+  jaxlib' = if jaxlib.meta.broken then jaxlib-bin else jaxlib;
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.3.23";
-  format = "setuptools";
+  version = "0.4.14";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "jax-v${version}";
-    hash = "sha256-ruXOwpBwpi1G8jgH9nhbWbs14JupwWkjh+Wzrj8HVU4=";
+    # google/jax contains tags for jax and jaxlib. Only use jax tags!
+    rev = "refs/tags/${pname}-v${version}";
+    hash = "sha256-0KnILQkahSiA1uuyT+kgy1XaCcZ3cpx1q114e2pecvg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
   # different versions of jaxlib depending on the desired target hardware. The
-  # JAX project ships separate wheels for CPU, GPU, and TPU. Currently only the
-  # CPU wheel is packaged.
+  # JAX project ships separate wheels for CPU, GPU, and TPU.
   propagatedBuildInputs = [
-    absl-py
-    etils
+    ml-dtypes
     numpy
     opt-einsum
     scipy
-    typing-extensions
-  ] ++ etils.optional-dependencies.epath;
+  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
-  checkInputs = [
-    jaxlib
+  nativeCheckInputs = [
+    jaxlib'
     matplotlib
     pytestCheckHook
     pytest-xdist
@@ -69,6 +77,12 @@ buildPythonPackage rec {
   disabledTests = [
     # Exceeds tolerance when the machine is busy
     "test_custom_linear_solve_aux"
+    # UserWarning: Explicitly requested dtype <class 'numpy.float64'>
+    #  requested in astype is not available, and will be truncated to
+    # dtype float32. (With numpy 1.24)
+    "testKde3"
+    "testKde5"
+    "testKde6"
   ] ++ lib.optionals usingMKL [
     # See
     #  * https://github.com/google/jax/issues/9705
@@ -77,23 +91,19 @@ buildPythonPackage rec {
     "test_custom_linear_solve_cholesky"
     "test_custom_root_with_aux"
     "testEigvalsGrad_shape"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # See https://github.com/google/jax/issues/14793.
+    "test_for_loop_fixpoint_correctly_identifies_loop_varying_residuals_unrolled_for_loop"
+    "testQdwhWithRandomMatrix3"
+    "testScanGrad_jit_scan"
   ];
 
-  # See https://github.com/google/jax/issues/11722. This is a temporary fix in
-  # order to unblock etils, and upgrading jax/jaxlib to the latest version. See
-  # https://github.com/NixOS/nixpkgs/issues/183173#issuecomment-1204074993.
-  disabledTestPaths = [
-    "tests/api_test.py"
-    "tests/core_test.py"
-    "tests/lax_numpy_indexing_test.py"
-    "tests/lax_numpy_test.py"
-    "tests/nn_test.py"
-    "tests/random_test.py"
-    "tests/sparse_test.py"
+  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # RuntimeWarning: invalid value encountered in cast
+    "tests/lax_test.py"
   ];
 
-  # As of 0.3.22, `import jax` does not work without jaxlib being installed.
-  pythonImportsCheck = [ ];
+  pythonImportsCheck = [ "jax" ];
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";

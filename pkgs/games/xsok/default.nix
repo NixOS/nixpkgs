@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [libX11 libXt libXaw libXpm libXext];
   nativeBuildInputs = [imake];
 
-  NIX_CFLAGS_COMPILE=" -isystem ${libXpm.dev}/include/X11 ";
+  env.NIX_CFLAGS_COMPILE = " -isystem ${libXpm.dev}/include/X11 ";
 
   preConfigure = ''
     sed -e "s@/usr/@$out/share/@g" -i src/Imakefile
@@ -42,7 +42,5 @@ stdenv.mkDerivation rec {
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;
     homepage = "https://tracker.debian.org/pkg/xsok";
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

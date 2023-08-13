@@ -32,17 +32,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "diffsitter";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "afnanenayet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oHG2vw981r9FZSwbJ+xcLemfQSMDrk6PAr/qtyImM04=";
+    sha256 = "sha256-8nKZ8zcZSSF7Qd36kA9IQjio+TIhlQWRgMqKrsdInj4=";
     fetchSubmodules = false;
   };
 
-  cargoSha256 = "sha256-Cj9jdeeJNR/7mquEfaQCsFgiCjyJbZaaSkOzbU64T3U=";
+  cargoHash = "sha256-LEBAMb9tROpjrWEfucw+2ZaytnoyJE477IH3MyeUGEA=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -54,6 +54,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    # completions are not yet implemented
+    # so we can safely remove this without installing the completions
+    rm $out/bin/diffsitter_completions
+
     wrapProgram "$out/bin/diffsitter" \
       --prefix LD_LIBRARY_PATH : "${libPath}"
   '';

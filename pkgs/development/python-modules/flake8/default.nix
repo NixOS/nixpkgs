@@ -36,7 +36,7 @@ buildPythonPackage rec {
   # Tests fail on Python 3.7 due to importlib using a deprecated interface
   doCheck = pythonAtLeast "3.7";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pycqa/flake8";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "flake8";
   };
 }

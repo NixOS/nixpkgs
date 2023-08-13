@@ -1,23 +1,22 @@
 { lib
 , aiofiles
 , aiohttp
-, async_generator
+, async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , pypubsub
 , pyserial
 , pyserial-asyncio
-, pytest-asyncio
-, pytest-timeout
 , pytestCheckHook
 , pythonOlder
-, pyyaml
+, setuptools
+, voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.4.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -25,8 +24,12 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PMjvic+K/m7beavlZvGhJcizSNCzLPZYLm3P2V9EPLs=";
+    hash = "sha256-KKF+XYQgdmLbbicyMFyZBG4ol69xAWCF2W/r15gH2Mo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -34,18 +37,12 @@ buildPythonPackage rec {
     pypubsub
     pyserial
     pyserial-asyncio
-    pyyaml
+    voluptuous
   ];
 
-  checkInputs = [
-    async_generator
-    pytest-asyncio
-    pytest-timeout
+  nativeCheckInputs = [
+    async-generator
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    "test_results"
   ];
 
   pythonImportsCheck = [

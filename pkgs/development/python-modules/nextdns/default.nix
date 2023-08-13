@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "nextdns";
-  version = "1.2.2";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-F6vTOwE8WdcELH+W7VuRbGDLD+7+a09iai/TDMBfv4s=";
+    hash = "sha256-fW/fLbL4IMLN6LmFijH4+ew+cDdJY9tOha+010YEfNs=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     orjson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-error-for-skips

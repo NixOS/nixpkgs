@@ -80,6 +80,9 @@ in {
               "example.com" = "full";
               "@admin:example.com" = "admin";
             };
+            telegram = {
+              connection.use_ipv6 = true;
+            };
           }
         '';
         description = lib.mdDoc ''
@@ -137,7 +140,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
-      path = [ pkgs.lottieconverter ];
+      path = [ pkgs.lottieconverter pkgs.ffmpeg-full ];
 
       # mautrix-telegram tries to generate a dotfile in the home directory of
       # the running user if using a postgresql database:

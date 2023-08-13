@@ -20,12 +20,12 @@ buildPythonPackage rec {
     owner = "uber";
     repo = "h3-py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-QNiuiHJ4IMxpi39iobPSSlYUUj5oxpxO4B2+HXVQ/Zk=";
+    hash = "sha256-QNiuiHJ4IMxpi39iobPSSlYUUj5oxpxO4B2+HXVQ/Zk=";
   };
 
   dontConfigure = true;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   nativeBuildInputs = [
     scikit-build cmake cython

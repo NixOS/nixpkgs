@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchFromGitLab
 , cmake
 , extra-cmake-modules
 , makeWrapper
@@ -13,6 +12,7 @@
 , qqc2-desktop-style
 
 , kirigami2
+, kirigami-addons
 , kdbusaddons
 , ki18n
 , kcalendarcore
@@ -59,6 +59,7 @@ mkDerivation rec {
     qqc2-desktop-style
 
     kirigami2
+    kirigami-addons
     kdbusaddons
     ki18n
     kcalendarcore
@@ -97,7 +98,7 @@ mkDerivation rec {
     description = "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
     homepage = "https://apps.kde.org/kalendar/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [ Thra11 ];
     platforms = platforms.linux;
   };
 }

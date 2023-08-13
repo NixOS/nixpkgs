@@ -50,6 +50,13 @@ in
       mutableConfig = false;
       extraConfig.SupportSettings.HelpLink = "https://search.nixos.org";
     };
+    environmentFile = makeMattermost {
+      mutableConfig = false;
+      extraConfig.SupportSettings.AboutLink = "https://example.org";
+      environmentFile = pkgs.writeText "mattermost-env" ''
+        MM_SUPPORTSETTINGS_ABOUTLINK=https://nixos.org
+      '';
+    };
   };
 
   testScript = let
@@ -69,6 +76,7 @@ in
       rm -f $mattermostConfig
       echo "$newConfig" > "$mattermostConfig"
     '';
+
   in
   ''
     start_all()
@@ -120,5 +128,13 @@ in
 
     # Our edits should be ignored on restart
     immutable.succeed("${expectConfig ''.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"''}")
+
+
+    ## Environment File node tests ##
+    environmentFile.wait_for_unit("mattermost.service")
+    environmentFile.wait_for_open_port(8065)
+
+    # Settings in the environment file should override settings set otherwise
+    environmentFile.succeed("${expectConfig ''.AboutLink == "https://nixos.org"''}")
   '';
 })

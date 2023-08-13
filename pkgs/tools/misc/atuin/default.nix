@@ -11,16 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "12.0.0";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
-    owner = "ellie";
-    repo = pname;
+    owner = "atuinsh";
+    repo = "atuin";
     rev = "v${version}";
-    sha256 = "sha256-kt0Xu95E3MayUybSh1mU5frJoU7BF41Hnjqqrz/cVHE=";
+    hash = "sha256-Kh6aaWYV+ZG7Asvw5JdGsV+nxD+xvvQab5wLIedcQcQ=";
   };
 
-  cargoSha256 = "sha256-WAAelEFtHlFGDk0AI381OS5bxN58Z46kyMAuL+XX/Ac=";
+  # TODO: unify this to one hash because updater do not support this
+  cargoHash =
+    if stdenv.isLinux
+    then "sha256-Ami88ScGj58jCCat4MMDvjZtV5WglmrlggpQfo+LPjs="
+    else "sha256-HQMZ9w1C6go16XGrPNniQZliIQ/5yAp2w/uUwAOQTM0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,10 +41,15 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) atuin;
   };
 
+  checkFlags = [
+    # tries to make a network access
+    "--skip=registration"
+  ];
+
   meta = with lib; {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
-    homepage = "https://github.com/ellie/atuin";
+    homepage = "https://github.com/atuinsh/atuin";
     license = licenses.mit;
-    maintainers = with maintainers; [ onsails SuperSandro2000 sciencentistguy ];
+    maintainers = with maintainers; [ SuperSandro2000 sciencentistguy _0x4A6F ];
   };
 }

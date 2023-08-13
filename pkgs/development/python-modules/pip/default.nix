@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "22.2.2";
+  version = "23.0.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-SLjmxFUFmvgy8E8kxfc6lxxCRo+GN4L77pqkWkRR8aE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BSonlwKmegrlrQTTIL0avPi61/TY2M0f7kOZpSzPRQk=";
     name = "${pname}-${version}-source";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   # to force it a little.
   pipInstallFlags = [ "--ignore-installed" ];
 
-  checkInputs = [ mock scripttest virtualenv pretend pytest ];
+  nativeCheckInputs = [ mock scripttest virtualenv pretend pytest ];
   # Pip wants pytest, but tests are not distributed
   doCheck = false;
 
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     description = "The PyPA recommended tool for installing Python packages";
     license = with lib.licenses; [ mit ];
     homepage = "https://pip.pypa.io/";
+    changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
     priority = 10;
   };
 }

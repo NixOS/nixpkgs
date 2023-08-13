@@ -16,20 +16,20 @@
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.109.2";
+  version = "0.118.11";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = pname;
     rev = version;
-    hash = "sha256-/Mklf+F9OHq56Qj/kn8JpRAgWwCZqwsH9EwrBFdi/mQ=";
+    hash = "sha256-gwFArZJX3DBUNaSpWD5n76VImWeDImR8b1s2czBrBaA=";
   };
 
-  vendorHash = "sha256-H3ACmang+DPOCnccHLG6YzKvi7Rf5k8RkJDD1CgGBrw=";
+  vendorHash = "sha256-0NTOit1nhX/zxQjHwU7ZOY1GsoIu959/KICCEWyfIQ4=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-oxoENlZNThW1PrwcGwiNP5Q7BZyhhtuCwXFey0t3Kz8=";
+    hash = "sha256-/zpyU7x3cdmKrS7YiMe2BVJm0AC0P+yspiG9C3dMVAk=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ buildGoModule rec {
 
   tags = [
     "release"
+    "test"
   ];
 
   ldflags = [
@@ -60,10 +61,6 @@ buildGoModule rec {
     "-X github.com/evcc-io/evcc/server.Commit=${src.rev}"
     "-s"
     "-w"
-  ];
-
-  npmInstallFlags = [
-    "--legacy-peer-deps"
   ];
 
   preBuild = ''
@@ -75,6 +72,7 @@ buildGoModule rec {
   preCheck = ''
     # requires network access
     rm meter/template_test.go
+    rm charger/template_test.go
   '';
 
   passthru = {

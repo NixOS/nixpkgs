@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   # Stripping kills the binary
   dontStrip = true;
 
-  # Just make sure the binary executes sucessfully
+  # Just make sure the binary executes successfully
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck

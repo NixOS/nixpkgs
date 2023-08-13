@@ -1,22 +1,13 @@
-{lib, stdenv, fetchurl, fetchpatch}:
+{lib, stdenv, fetchurl}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "par";
-  version = "1.52";
+  version = "1.53.0";
 
   src = fetchurl {
-    url = "http://www.nicemice.net/par/Par152.tar.gz";
-    sha256 = "33dcdae905f4b4267b4dc1f3efb032d79705ca8d2122e17efdecfd8162067082";
+    url = "http://www.nicemice.net/par/Par-${version}.tar.gz";
+    sha256 = "sha256-yAnGIOuCtYlVOsVLmJjI2lUZbSYjOdE8BG8r5ErEeAQ=";
   };
-
-  patches = [
-    # A patch by Jérôme Pouiller that adds support for multibyte
-    # charsets (like UTF-8), plus Debian packaging.
-    (fetchpatch {
-      url = "http://sysmic.org/dl/par/par-1.52-i18n.4.patch";
-      sha256 = "0alw44lf511jmr38jnh4j0mpp7vclgy0grkxzqf7q158vzdb6g23";
-    })
-  ];
 
   makefile = "protoMakefile";
   preBuild = ''

@@ -2,14 +2,14 @@
 
 nimPackages.buildNimPackage rec {
   pname = "mosdepth";
-  version = "0.3.3";
+  version = "0.3.4";
   nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner = "brentp";
     repo = "mosdepth";
     rev = "v${version}";
-    sha256 = "sha256-de3h3SXnXlqjuLT1L66jj/1AoiTuFc3PVJYjm7s8Fj8=";
+    sha256 = "sha256-7uteYTCbAaXedPqk0WtHpqTfUWH/+rRW8aSlFixkEko=";
   };
 
   buildInputs = with nimPackages; [ docopt hts-nim pcre ];

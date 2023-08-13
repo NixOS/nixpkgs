@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl, fetchpatch, cdrtools, m4 }:
+{ lib, stdenv, fetchurl, fetchpatch, cdrtools, m4, darwin }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) IOKit;
+in
 stdenv.mkDerivation rec {
   pname = "dvd+rw-tools";
   version = "7.1";
@@ -9,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jkjvvnjcyxpql97xjjx0kwvy70kxpiznr2zpjy2hhci5s10zmpq";
   };
 
+  patches = [ ./darwin.patch ]
   # Patches from Gentoo
-  patches = [ ]
   ++ builtins.map ({pfile, sha256}: fetchpatch {
        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-cdr/dvd+rw-tools/files/${pfile}?id=b510df361241e8f16314b1f14642305f0111dac6";
        inherit sha256;
@@ -28,14 +31,26 @@ stdenv.mkDerivation rec {
      ];
 
   nativeBuildInputs = [ m4 ];
-  buildInputs = [ cdrtools ];
+  buildInputs = [ cdrtools ]
+    ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    # error: invalid suffix on literal; C++11 requires a space between literal and identifier
+    "-Wno-reserved-user-defined-literal"
+    # error: non-constant-expression cannot be narrowed from type 'size_t' (aka 'unsigned long') to 'IOByteCount' (aka 'unsigned int') in initializer list
+    "-Wno-c++11-narrowing"
+  ]);
 
   meta = with lib; {
     homepage = "http://fy.chalmers.se/~appro/linux/DVD+RW/tools";
     description = "Tools for mastering Blu-ray and DVD+-RW/+-R media";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = with licenses; [ gpl2 publicDomain ];
   };
 }

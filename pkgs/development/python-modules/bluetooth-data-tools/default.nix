@@ -4,11 +4,12 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
-  version = "0.3.1";
+  version = "1.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -17,14 +18,15 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MMsg1laEk9cKU4oMhjKI47ulLNaGPH6QjAdx/wuAvMM=";
+    hash = "sha256-A3zdM2kVmz8cUix9JT8cnIABZK64r6yiZisvb8A1RSQ=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

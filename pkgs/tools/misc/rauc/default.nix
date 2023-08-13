@@ -1,5 +1,4 @@
-{ autoreconfHook
-, curl
+{ curl
 , dbus
 , fetchFromGitHub
 , glib
@@ -9,17 +8,22 @@
 , openssl
 , pkg-config
 , stdenv
+, meson
+, ninja
+, util-linux
+, libnl
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "rauc";
-  version = "1.8";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lSTC/WDwa6WVPd+Tj6XdKpwwENfAweUnE6lCyXQvAXU=";
+    sha256 = "sha256-KxU8/ExRsyqhV3np1EqAzpFm0Uy4fY/oi9lS2GBYHZE=";
   };
 
   passthru = {
@@ -28,15 +32,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [ pkg-config meson ninja glib ];
 
-  buildInputs = [ curl dbus glib json-glib openssl ];
+  buildInputs = [ curl dbus glib json-glib openssl util-linux libnl systemd ];
 
-  configureFlags = [
-    "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-dbusinterfacesdir=${placeholder "out"}/share/dbus-1/interfaces"
-    "--with-dbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
-    "--with-dbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+  mesonFlags = [
+    "--buildtype=release"
+    (lib.mesonOption "systemdunitdir" "${placeholder "out"}/lib/systemd/system")
+    (lib.mesonOption "dbusinterfacesdir" "${placeholder "out"}/share/dbus-1/interfaces")
+    (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
+    (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
   ];
 
   meta = with lib; {

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   inherit src;
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [

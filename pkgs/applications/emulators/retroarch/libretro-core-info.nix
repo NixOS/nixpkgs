@@ -5,12 +5,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "libretro-core-info";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    hash = "sha256-3nw8jUxBQJxiKlWS6OjTjwUYWKx3r2E7eHmbj4naWrk=";
+    hash = "sha256-WIgcHuZgAOrlg+WyOS4TyzWziNzjyQB2sPDM9fR6kwA=";
     rev = "v${version}";
   };
 

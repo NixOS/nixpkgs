@@ -20,8 +20,6 @@
 , libsoup_3
 , libosinfo
 , systemd
-, tracker
-, tracker-miners
 , vala
 , libcap
 , yajl
@@ -38,7 +36,6 @@
 , libarchive
 , acl
 , libgudev
-, libsecret
 , libcap_ng
 , numactl
 , libapparmor
@@ -51,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "43.1";
+  version = "44.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "NB5qXO1RrVAPwd00ZZ1YhsP3YEViS1POZBv/Y8WwimE=";
+    sha256 = "ndOJwUnQwPpXRW7DY9UaiCVflFVY+530KJTOeO+F34k=";
   };
 
   patches = [
@@ -105,7 +102,6 @@ stdenv.mkDerivation rec {
     libhandy
     libosinfo
     librsvg
-    libsecret
     libsoup_3
     libusb1
     libvirt
@@ -115,8 +111,6 @@ stdenv.mkDerivation rec {
     spice-gtk
     spice-protocol
     systemd
-    tracker
-    tracker-miners
     vte
     webkitgtk_4_1
     yajl

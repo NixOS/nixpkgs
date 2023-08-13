@@ -3,29 +3,24 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkg-config
-, dbus
 , libiconv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "0.13.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-uKpYI+Oc49xgoIZCh72baBMZLcpMXk7g2Jb1DQxW9lk=";
+    hash = "sha256-UH+qOKKQdWXQZZMtrihbWmKaUoSy1NciGh9UTtS/W5E=";
   };
 
-  cargoHash = "sha256-levBWghFIXOXe+NGXvwBqQpPmWeUK53ruSyLik1urSU=";
+  cargoHash = "sha256-EGgVPRaofia+AwXSr6X4Aa8jbk5qDkXg1XvMoEp0qMQ=";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = lib.optionals stdenv.isLinux [ dbus ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   # Requires network access, fails in sandbox.
   doCheck = false;
@@ -43,7 +38,8 @@ rustPlatform.buildRustPackage rec {
       Python and can upload them to PyPI.
     '';
     homepage = "https://github.com/PyO3/maturin";
-    license = licenses.asl20;
+    changelog = "https://github.com/PyO3/maturin/blob/v${version}/Changelog.md";
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ ];
   };
 }

@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uefi-run";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Richard-W";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fwzWdOinW/ECVI/65pPB1shxPdl2nZThAqlg8wlWg/g=";
+    hash = "sha256-tR547osqw18dCMHJLqJ8AQBelbv8yCl7rAqslu+vnDQ=";
   };
 
-  cargoSha256 = "sha256-c+wzMzTkG0FpfQ1rZ8e9dn0ez12vmoecrtNeFk90sdQ=";
+  cargoHash = "sha256-s1Kbc3JHoYy0UJwNfSunIdQ3xHjlQaut/Cb0JSYyB9g=";
 
   meta = with lib; {
     description = "Directly run UEFI applications in qemu";

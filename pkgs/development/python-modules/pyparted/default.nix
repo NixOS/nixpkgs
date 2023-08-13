@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , buildPythonPackage
 , isPyPy
 , pkgs
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     repo = pname;
     owner = "dcantrell";
     rev = "v${version}";
-    sha256 = "sha256-LfBLR0A/wnfBtXISAAY6Nl4vnk1rtY03F+PT8UIMrEs=";
+    hash = "sha256-LfBLR0A/wnfBtXISAAY6Nl4vnk1rtY03F+PT8UIMrEs=";
   };
 
   postPatch = ''
@@ -32,6 +33,14 @@ buildPythonPackage rec {
 
   patches = [
     ./fix-test-pythonpath.patch
+    (fetchpatch {
+      url = "https://github.com/dcantrell/pyparted/commit/07ba882d04fa2099b53d41370416b97957d2abcb.patch";
+      hash = "sha256-yYfLdy+TOKfN3gtTMgOWPebPTRYyaOYh/yFTowCbdjg=";
+    })
+    (fetchpatch {
+      url = "https://github.com/dcantrell/pyparted/commit/a01b4eeecf63b0580c192c7c2db7a5c406a7ad6d.patch";
+      hash = "sha256-M/8hYiKUBzaTOxPYDFK5BAvCm6WJGx+693qwj3HzdRA=";
+    })
   ];
 
   preConfigure = ''
@@ -39,7 +48,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ pkgs.pkg-config ];
-  checkInputs = [ six ];
+  nativeCheckInputs = [ six ];
   propagatedBuildInputs = [ pkgs.parted ];
 
   checkPhase = ''

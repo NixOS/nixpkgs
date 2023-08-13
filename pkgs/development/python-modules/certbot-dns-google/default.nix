@@ -20,13 +20,13 @@ buildPythonPackage rec {
     oauth2client
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
 
-  sourceRoot = "source/certbot-dns-google";
+  sourceRoot = "${src.name}/certbot-dns-google";
 
   meta = certbot.meta // {
     description = "Google Cloud DNS Authenticator plugin for Certbot";

@@ -1,4 +1,5 @@
 { lib
+, bleak-retry-connector
 , bluetooth-data-tools
 , bluetooth-sensor-state-data
 , buildPythonPackage
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "oralb-ble";
-  version = "0.14.3";
+  version = "0.17.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-L6i/XnsPsxO1qltfWOoGV/NpPpZj73w95ScdcBTkdlo=";
+    hash = "sha256-6LnZ+Y68sl0uA5i764n4fFJnPeo+bAi/xgEvTK6LkXY=";
   };
 
   nativeBuildInputs = [
@@ -28,12 +29,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    bleak-retry-connector
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,6 +1,7 @@
 { lib
 , mkDerivationWith
 , python3Packages
+, fetchPypi
 , p7zip
 , archiveSupport ? true
 }:
@@ -9,7 +10,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "kcc";
   version = "5.5.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "KindleComicConverter";
     sha256 = "5dbee5dc5ee06a07316ae5ebaf21ffa1970094dbae5985ad735e2807ef112644";
@@ -25,7 +26,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   qtWrapperArgs = lib.optionals archiveSupport [ "--prefix" "PATH" ":" "${ lib.makeBinPath [ p7zip ] }" ];
 
-  postFixup =  ''
+  postFixup = ''
     wrapProgram $out/bin/kcc "''${qtWrapperArgs[@]}"
   '';
 

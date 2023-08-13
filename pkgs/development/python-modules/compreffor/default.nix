@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "compreffor";
-  version = "0.5.3";
+  version = "0.5.4";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fUEpbU+wqh72lt/ZJdKvMifUAwYivpmzx9QQfcb4cTo=";
+    hash = "sha256-MGulQEUGPrQ30T3VYzwRRlvzvWkFqNzqsNzAjtjX9xU=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     fonttools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "CFF table subroutinizer for FontTools";
     homepage = "https://github.com/googlefonts/compreffor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

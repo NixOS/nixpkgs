@@ -6,13 +6,14 @@
 , lxml
 , paramiko
 , poetry-core
+, pontos
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "22.9.1";
+  version = "23.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-V9xfPYwDDoCGJPstzYsC/ikUp45uiaZE0Bg4i9tRNhU=";
+    hash = "sha256-jdfrmFpWOuQgYwV2NrRyRDwAZThWdBFgfLByVIZ5HhQ=";
   };
 
   nativeBuildInputs = [
@@ -32,9 +33,10 @@ buildPythonPackage rec {
     defusedxml
     lxml
     paramiko
+    pontos
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -52,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
     homepage = "https://github.com/greenbone/python-gvm";
+    changelog = "https://github.com/greenbone/python-gvm/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

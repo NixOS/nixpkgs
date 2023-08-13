@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-N96Nb7G6hqfh8DyMtHbttl/fRZUkS8f2KfPSqeMAhHY=";
   };
 
+  postPatch = ''
+    sed '1i#include <utility>' -i \
+      libs/JUCELV2/modules/juce_gui_basics/windows/juce_ComponentPeer.h # gcc12
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

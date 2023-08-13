@@ -9,7 +9,7 @@
 
 , x11Support ? false
 
-, useSystemd ? stdenv.isLinux
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 
 , # Whether to support the JACK sound system as a backend.
   jackaudioSupport ? false
@@ -36,7 +36,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "${if libOnly then "lib" else ""}pulseaudio";
+  pname = "${lib.optionalString libOnly "lib"}pulseaudio";
   version = "16.1";
 
   src = fetchurl {

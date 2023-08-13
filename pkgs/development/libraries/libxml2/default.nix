@@ -11,7 +11,10 @@
 , ncurses
 , findXMLCatalogs
 , libiconv
-, pythonSupport ? enableShared
+# Python limits cross-compilation to an allowlist of host OSes.
+# https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
+, pythonSupport ? enableShared &&
+    (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
 , icuSupport ? false
 , icu
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
@@ -31,7 +34,7 @@ in
 let
 libxml = stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.10.3";
+  version = "2.11.4";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -40,23 +43,8 @@ libxml = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    sha256 = "XSzD14vsPb4hKp1/pimtolp9qSivQyyTBg/1wX7iipw=";
+    sha256 = "c34df4qz8TlynKE6JJT9F78w3bS3pCfPM2JSyrV/V/c=";
   };
-
-  patches = [
-    # Upstream bugs:
-    #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
-    #   https://gitlab.gnome.org/GNOME/libxml2/issues/64
-    # Patch from https://bugzilla.opensuse.org/show_bug.cgi?id=1065270 ,
-    # but only the UTF-8 part.
-    # Can also be mitigated by fixing malformed XML inputs, such as in
-    # https://gitlab.gnome.org/GNOME/gnumeric/merge_requests/3 .
-    # Other discussion:
-    #   https://github.com/itstool/itstool/issues/22
-    #   https://github.com/NixOS/nixpkgs/pull/63174
-    #   https://github.com/NixOS/nixpkgs/pull/72342
-    ./utf8-xmlErrorFuncHandler.patch
-  ];
 
   strictDeps = true;
 

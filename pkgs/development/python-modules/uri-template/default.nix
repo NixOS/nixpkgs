@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "plinss";
     repo = "uri_template";
     rev = "v${version}";
-    sha256 = "sha256-IAq6GpEwimq45FU0QugLZLSOhwAmC1KbpZKD0zyxsUs=";
+    hash = "sha256-IAq6GpEwimq45FU0QugLZLSOhwAmC1KbpZKD0zyxsUs=";
   };
 
   postPatch = ''

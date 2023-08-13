@@ -1,25 +1,27 @@
-{ lib, mkYarnPackage, fetchFromGitHub, nodejs, runtimeShell
-, nodePackages, python3, vips, glib, pkg-config
-}:
+{ lib, mkYarnPackage, fetchFromGitHub, fetchYarnDeps, nodejs, runtimeShell }:
 
 # Notes for the upgrade:
 # * Download the tarball of the new version to use.
-# * Remove the `resolutions`-section from upstream `package.json`
-#   as this breaks with `yarn2nix`.
-# * Regenerate `yarn.lock` and `yarn2nix --no-patch`.
-# * Replace new `package.json`, `yarn.nix`, `yarn.lock` here.
+# * Replace new `package.json` here.
 # * Update `version`+`hash` and rebuild.
 
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
-  version = "3.6.1";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    sha256 = "sha256-x+kGouF/7ltKdYfNO2EI8F4FKWYClcyigcUVfZlud00=";
+    hash = "sha256-I5UHNt4vOsXqgeQ96CxJwxuD/MiGK1NEAFJItN1CkwA=";
   };
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    hash = "sha256-YT2tHvLtn4Z2CxH9utmsT8r/UM4/OdPFXByp9pBHDqU=";
+  };
+
+  packageJSON = ./package.json;
 
   buildPhase = ''
     runHook preBuild
@@ -32,18 +34,6 @@ mkYarnPackage rec {
   '';
 
   dontInstall = true;
-
-  packageJSON = ./package.json;
-  yarnNix = ./yarn.nix;
-  yarnLock = ./yarn.lock;
-
-  pkgConfig.sharp = {
-    nativeBuildInputs = [ nodePackages.node-gyp python3 pkg-config ];
-    buildInputs = [ glib vips ];
-    postInstall = ''
-      node-gyp rebuild
-    '';
-  };
 
   distPhase = ''
     runHook preDist
@@ -72,6 +62,6 @@ mkYarnPackage rec {
     description = "A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
     license = licenses.asl20;
     maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -36,7 +36,7 @@
 , gdm
 , upower
 , ibus
-, libnma
+, libnma-gtk4
 , libgnomekbd
 , gnome-desktop
 , gsettings-desktop-schemas
@@ -62,27 +62,28 @@
 , mesa
 }:
 
-# http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "43.2";
+  version = "44.3";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "52/UvpNCQQ7p+9zday2Bxv8GDnyMxaDxyuanq6JdGGA=";
+    sha256 = "VWlLccLuTq72DZNCgAPy6qTPABhoSPXja0XP5Qb8Mb8=";
   };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit libgnomekbd unzip;
+      gkbd_keyboard_display = "${lib.getBin libgnomekbd}/bin/gkbd-keyboard-display";
+      glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
+      unzip = "${lib.getBin unzip}/bin/unzip";
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
@@ -121,6 +122,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     libxslt.bin
     asciidoc
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -154,7 +156,6 @@ stdenv.mkDerivation rec {
     ibus
     gnome-desktop
     gnome-settings-daemon
-    gobject-introspection
     mesa
 
     # recording
@@ -165,7 +166,7 @@ stdenv.mkDerivation rec {
 
     # not declared at build time, but typelib is needed at runtime
     libgweather
-    libnma
+    libnma-gtk4
 
     # for gnome-extension tool
     bash-completion
@@ -178,6 +179,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dtests=false"
   ];
 
   postPatch = ''

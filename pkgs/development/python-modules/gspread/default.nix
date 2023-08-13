@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "gspread";
-  version = "5.7.2";
+  version = "5.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-znb5wWuIzLeSNQFCIkpZr6jmn3Rj89NBcUjL6JLvx8s=";
+    hash = "sha256-NLl4NLvvrM9ySXcCuuJtEvltBoXkmkGK/mqSqbvLnJw=";
   };
 
   propagatedBuildInputs = [

@@ -5,7 +5,7 @@
 , testpath
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "flit-core";
   inherit (flit-core) version;
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     flit
     pytestCheckHook
     testpath

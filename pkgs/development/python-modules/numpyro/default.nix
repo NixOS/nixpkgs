@@ -7,19 +7,20 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+, tensorflow-probability
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.10.1";
+  version = "0.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-36iW8ByN9D3dQWY68rPi/Erqc0ieZpR06DMpsYOykVA=";
+    hash = "sha256-01fdGgFZ+G1FwjNwitM6PT1TQx0FtLvs4dBorkFoqo4=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +31,8 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    tensorflow-probability
     pytestCheckHook
   ];
 
@@ -46,16 +48,22 @@ buildPythonPackage rec {
     "test_gamma_poisson"
     "test_gof"
     "test_hpdi"
+    "test_kl_dirichlet_dirichlet"
     "test_kl_univariate"
     "test_mean_var"
     # Tests want to download data
     "data_load"
     "test_jsb_chorales"
+    # RuntimeWarning: overflow encountered in cast
+    "test_zero_inflated_logits_probs_agree"
+    # NameError: unbound axis name: _provenance
+    "test_model_transformation"
   ];
 
   meta = with lib; {
     description = "Library for probabilistic programming with NumPy";
     homepage = "https://num.pyro.ai/";
+    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

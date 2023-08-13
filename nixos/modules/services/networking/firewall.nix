@@ -269,6 +269,10 @@ in
         assertion = cfg.filterForward -> config.networking.nftables.enable;
         message = "filterForward only works with the nftables based firewall";
       }
+      {
+        assertion = cfg.autoLoadConntrackHelpers -> lib.versionOlder config.boot.kernelPackages.kernel.version "6";
+        message = "conntrack helper autoloading has been removed from kernel 6.0 and newer";
+      }
     ];
 
     networking.firewall.trustedInterfaces = [ "lo" ];

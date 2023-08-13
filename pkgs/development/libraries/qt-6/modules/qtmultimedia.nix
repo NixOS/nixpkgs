@@ -26,11 +26,11 @@ qtModule {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libunwind orc ]
     ++ lib.optionals stdenv.isLinux [ libpulseaudio elfutils alsa-lib wayland ];
-  propagatedBuildInputs = [ gstreamer gst-plugins-base gst-plugins-good gst-libav ]
-    ++ lib.optionals stdenv.isLinux [ gst-vaapi ]
+  propagatedBuildInputs =
+    lib.optionals stdenv.isLinux [ gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi ]
     ++ lib.optionals stdenv.isDarwin [ VideoToolbox ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
     "-include AudioToolbox/AudioToolbox.h";
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
     "-framework AudioToolbox";

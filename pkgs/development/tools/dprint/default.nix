@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.33.0";
+  version = "0.40.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-7UgE8/FPEG3VUtQLdlvfaFx9N6iIci5eu+Z2HBo+7c0=";
+    sha256 = "sha256-leneOdV65aAUGRdVFpPuVnCmu3VmVzZXxOLJ5vspVB8=";
   };
 
-  cargoSha256 = "sha256-/7YUbbuoN/qUIHk95ndaKjHZdJOPNTqZqOBvM2dHvoc=";
+  cargoHash = "sha256-C0cgN7G+zQZr+V/iPHh6HXV8DnPaE0bWkbJmbfIMwgk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://dprint.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ khushraj ];
+    mainProgram = "dprint";
   };
 }

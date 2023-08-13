@@ -40,11 +40,12 @@ in
     };
 
     specialisation = {
-      withUnscd.configuration = { ... }: {
-        services.nscd.package = pkgs.unscd;
+      withGlibcNscd.configuration = { ... }: {
+        services.nscd.enableNsncd = false;
       };
-      withNsncd.configuration = { ... }: {
-        services.nscd.enableNsncd = true;
+      withUnscd.configuration = { ... }: {
+        services.nscd.enableNsncd = false;
+        services.nscd.package = pkgs.unscd;
       };
     };
   };
@@ -118,6 +119,14 @@ in
       test_host_lookups()
       test_nss_myhostname()
 
+      with subtest("glibc-nscd"):
+          machine.succeed('${specialisations}/withGlibcNscd/bin/switch-to-configuration test')
+          machine.wait_for_unit("default.target")
+
+          test_dynamic_user()
+          test_host_lookups()
+          test_nss_myhostname()
+
       with subtest("unscd"):
           machine.succeed('${specialisations}/withUnscd/bin/switch-to-configuration test')
           machine.wait_for_unit("default.target")
@@ -129,13 +138,5 @@ in
 
           # known to fail, unscd doesn't load external NSS modules
           # test_nss_myhostname()
-
-      with subtest("nsncd"):
-          machine.succeed('${specialisations}/withNsncd/bin/switch-to-configuration test')
-          machine.wait_for_unit("default.target")
-
-          test_dynamic_user()
-          test_host_lookups()
-          test_nss_myhostname()
     '';
 })

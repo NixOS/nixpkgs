@@ -5,17 +5,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
-  version = "0.8.0";
+  version = "0.9.1";
 
-  disabled = python3.pythonOlder "3.7";
+  disabled = python3.pythonOlder "3.8";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
-    rev = "v${version}";
-    hash = "sha256-uZCPEUoWNrcSz5qV24eFdZOOxKkoz+Qn6HpELBwOK2I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-o22Jn2x2mFczjQTttKEfrzGBAKpXSe9JT8kIA5WGjmA=";
   };
 
   pythonRelaxDeps = true;
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   ]
   ++ uvicorn.optional-dependencies.standard;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     aiohttp
     pytest-asyncio
     pytestCheckHook

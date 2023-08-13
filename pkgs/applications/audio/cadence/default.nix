@@ -107,5 +107,6 @@ mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "cadence";
   };
 }

@@ -1,6 +1,6 @@
 { lib
 , rustPlatform
-, fetchFromGitLab
+, fetchFromGitHub
 , pkg-config
 , gtk4
 , libadwaita
@@ -13,16 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "watchmate";
-  version = "0.3.0";
+  version = "0.4.4";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "azymohliad";
     repo = "watchmate";
     rev = "v${version}";
-    sha256 = "sha256-HyH+9KMbdiJSmjo2NsAvz8rN3JhYKz1nNqfuZufKjQA=";
+    hash = "sha256-+E1tyDfFSu3J89fXd75bdYxh+Z1zTwKL6AmMTNQBEYY=";
   };
 
-  cargoSha256 = "sha256-HvuxKPIVwVrcsTKgPwNosF/ar8QL9Jlldq7SBe2nh6o=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "mpris2-zbus-0.1.0" = "sha256-f2hth7TnA14I4UPyp0u4IfMi9WY4G3M1sEc4xNtnbr0=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -46,7 +51,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "PineTime smart watch companion app for Linux phone and desktop";
-    homepage = "https://gitlab.com/azymohliad/watchmate";
+    homepage = "https://github.com/azymohliad/watchmate";
+    changelog = "https://github.com/azymohliad/watchmate/raw/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chuangzhu ];
     platforms = platforms.linux;

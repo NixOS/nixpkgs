@@ -1,9 +1,8 @@
-{ base58
+{ lib
+, base58
 , buildPythonPackage
 , fetchFromGitHub
-, lib
 , morphys
-, pytest-runner
 , pytestCheckHook
 , pythonOlder
 , six
@@ -13,18 +12,21 @@
 buildPythonPackage rec {
   pname = "py-multihash";
   version = "2.0.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
   };
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner', " ""
+  '';
 
   propagatedBuildInputs = [
     base58
@@ -33,11 +35,13 @@ buildPythonPackage rec {
     varint
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "multihash" ];
+  pythonImportsCheck = [
+    "multihash"
+  ];
 
   meta = with lib; {
     description = "Self describing hashes - for future proofing";

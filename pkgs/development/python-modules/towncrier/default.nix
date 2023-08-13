@@ -39,7 +39,7 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     mock
     twisted

@@ -22,6 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/eth0izzle/shhgit";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }

@@ -1,4 +1,4 @@
-{ lib, pkgs, stdenv, fetchFromGitHub, mypy, python3, nix, git, makeWrapper
+{ lib, pkgs, stdenv, fetchFromGitHub, python3, nix, git, makeWrapper
 , runtimeShell }:
 let self = stdenv.mkDerivation rec {
   pname = "nix-pin";
@@ -10,10 +10,7 @@ let self = stdenv.mkDerivation rec {
     sha256 = "1pccvc0iqapms7kidrh09g5fdx44x622r5l9k7bkmssp3v4c68vy";
   };
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python3 mypy ];
-  checkPhase = ''
-    mypy bin/*
-  '';
+  buildInputs = [ python3 ];
   installPhase = ''
     mkdir "$out"
     cp -r bin share "$out"

@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 , buildPythonPackage
 
@@ -30,7 +31,7 @@ buildPythonPackage {
     owner = "jazzband";
     repo = "django-redis";
     rev = version;
-    sha256 = "sha256-e8wCgfxBT+WKFY4H83CTMirTpQym3QAoeWnXbRCDO90=";
+    hash = "sha256-e8wCgfxBT+WKFY4H83CTMirTpQym3QAoeWnXbRCDO90=";
   };
 
   postPatch = ''
@@ -60,10 +61,15 @@ buildPythonPackage {
     kill $REDIS_PID
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytest-mock
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = lib.optionals (pythonAtLeast "3.11") [
+    # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
+    "-W" "ignore::DeprecationWarning"
   ];
 
   disabledTests = [

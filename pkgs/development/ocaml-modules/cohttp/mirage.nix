@@ -10,6 +10,8 @@ buildDunePackage {
 
   inherit (cohttp) version src;
 
+  duneVersion = "3";
+
   nativeBuildInputs = [ ppx_sexp_conv ];
 
   propagatedBuildInputs = [

@@ -6,23 +6,28 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.7.15";
-  format = "setuptools";
+  version = "0.7.17";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = pname;
-    rev = version;
-    hash = "sha256-OuM/r9rxIl4niY87cEcbZ73x2ZIQbaPZqbMrQ7hZE/g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Vlt4+fRULb9mB0ceRmc7MJ50DnF9DAJPHA8iCbNVvcE=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
@@ -45,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
+    changelog = "https://github.com/alengwenus/pypck/releases/tag/${version}";
     license = with licenses; [ epl20 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -22,8 +22,8 @@ let
       (option: ''
         menuentry '${defaults.name} ${
         # Name appended to menuentry defaults to params if no specific name given.
-        option.name or (if option ? params then "(${option.params})" else "")
-        }' ${if option ? class then " --class ${option.class}" else ""} {
+        option.name or (optionalString (option ? params) "(${option.params})")
+        }' ${optionalString (option ? class) " --class ${option.class}"} {
           linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
@@ -52,7 +52,7 @@ let
   buildMenuAdditionalParamsGrub2 = additional:
   let
     finalCfg = {
-      name = "NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
+      name = "${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
       params = "init=${config.system.build.toplevel}/init ${additional} ${toString config.boot.kernelParams}";
       image = "/boot/${config.system.boot.loader.kernelFile}";
       initrd = "/boot/initrd";
@@ -76,6 +76,14 @@ let
       35996
     else
       config.boot.loader.timeout * 10;
+
+  # Timeout in grub is in seconds.
+  # null means max timeout (infinity)
+  # 0 means disable timeout
+  grubEfiTimeout = if config.boot.loader.timeout == null then
+      -1
+    else
+      config.boot.loader.timeout;
 
   # The configuration file for syslinux.
 
@@ -101,35 +109,35 @@ let
     DEFAULT boot
 
     LABEL boot
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'nomodeset'
     LABEL boot-nomodeset
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
+    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'copytoram'
     LABEL boot-copytoram
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
+    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with verbose logging to the console
     LABEL boot-debug
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
+    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with a serial console enabled
     LABEL boot-serial
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
+    MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0,115200n8
     INITRD /boot/${config.system.boot.loader.initrdFile}
@@ -275,7 +283,7 @@ let
     cat <<EOF > $out/EFI/boot/grub.cfg
 
     set with_fonts=false
-    set textmode=false
+    set textmode=${boolToString (!config.isoImage.graphicalGrub)}
     # If you want to use serial for "terminal_*" commands, you need to set one up:
     #   Example manual configuration:
     #    → serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
@@ -284,7 +292,7 @@ let
     if serial; then set with_serial=yes ;fi
     export with_serial
     clear
-    set timeout=10
+    set timeout=${toString grubEfiTimeout}
 
     # This message will only be viewable when "gfxterm" is not used.
     echo ""
@@ -434,9 +442,6 @@ let
       fsck.vfat -vn "$out"
     ''; # */
 
-  # Syslinux (and isolinux) only supports x86-based architectures.
-  canx86BiosBoot = pkgs.stdenv.hostPlatform.isx86;
-
 in
 
 {
@@ -444,13 +449,15 @@ in
 
     isoImage.isoName = mkOption {
       default = "${config.isoImage.isoBaseName}.iso";
+      type = lib.types.str;
       description = lib.mdDoc ''
         Name of the generated ISO image file.
       '';
     };
 
     isoImage.isoBaseName = mkOption {
-      default = "nixos";
+      default = config.system.nixos.distroId;
+      type = lib.types.str;
       description = lib.mdDoc ''
         Prefix of the name of the generated ISO image file.
       '';
@@ -458,6 +465,7 @@ in
 
     isoImage.compressImage = mkOption {
       default = false;
+      type = lib.types.bool;
       description = lib.mdDoc ''
         Whether the ISO image should be compressed using
         {command}`zstd`.
@@ -465,12 +473,13 @@ in
     };
 
     isoImage.squashfsCompression = mkOption {
-      default = with pkgs.stdenv.targetPlatform; "xz -Xdict-size 100% "
+      default = with pkgs.stdenv.hostPlatform; "xz -Xdict-size 100% "
                 + lib.optionalString isx86 "-Xbcj x86"
                 # Untested but should also reduce size for these platforms
                 + lib.optionalString isAarch "-Xbcj arm"
                 + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
                 + lib.optionalString (isSparc) "-Xbcj sparc";
+      type = lib.types.str;
       description = lib.mdDoc ''
         Compression settings to use for the squashfs nix store.
       '';
@@ -479,6 +488,7 @@ in
 
     isoImage.edition = mkOption {
       default = "";
+      type = lib.types.str;
       description = lib.mdDoc ''
         Specifies which edition string to use in the volume ID of the generated
         ISO image.
@@ -488,6 +498,7 @@ in
     isoImage.volumeID = mkOption {
       # nixos-$EDITION-$RELEASE-$ARCH
       default = "nixos${optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}"}-${config.system.nixos.release}-${pkgs.stdenv.hostPlatform.uname.processor}";
+      type = lib.types.str;
       description = lib.mdDoc ''
         Specifies the label or volume ID of the generated ISO image.
         Note that the label is used by stage 1 of the boot process to
@@ -518,6 +529,7 @@ in
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
+      type = lib.types.bool;
       description = lib.mdDoc ''
         Set this option to include all the needed sources etc in the
         image. It significantly increases image size. Use that when
@@ -527,15 +539,35 @@ in
       '';
     };
 
+    isoImage.makeBiosBootable = mkOption {
+      # Before this option was introduced, images were BIOS-bootable if the
+      # hostPlatform was x86-based. This option is enabled by default for
+      # backwards compatibility.
+      #
+      # Also note that syslinux package currently cannot be cross-compiled from
+      # non-x86 platforms, so the default is false on non-x86 build platforms.
+      default = pkgs.stdenv.buildPlatform.isx86 && pkgs.stdenv.hostPlatform.isx86;
+      defaultText = lib.literalMD ''
+        `true` if both build and host platforms are x86-based architectures,
+        e.g. i686 and x86_64.
+      '';
+      type = lib.types.bool;
+      description = lib.mdDoc ''
+        Whether the ISO image should be a BIOS-bootable disk.
+      '';
+    };
+
     isoImage.makeEfiBootable = mkOption {
       default = false;
+      type = lib.types.bool;
       description = lib.mdDoc ''
-        Whether the ISO image should be an efi-bootable volume.
+        Whether the ISO image should be an EFI-bootable volume.
       '';
     };
 
     isoImage.makeUsbBootable = mkOption {
       default = false;
+      type = lib.types.bool;
       description = lib.mdDoc ''
         Whether the ISO image should be bootable from CD as well as USB.
       '';
@@ -571,7 +603,7 @@ in
 
     isoImage.syslinuxTheme = mkOption {
       default = ''
-        MENU TITLE NixOS
+        MENU TITLE ${config.system.nixos.distroName}
         MENU RESOLUTION 800 600
         MENU CLEAR
         MENU ROWS 6
@@ -600,8 +632,22 @@ in
       '';
     };
 
+    isoImage.prependToMenuLabel = mkOption {
+      default = "";
+      type = types.str;
+      example = "Install ";
+      description = lib.mdDoc ''
+        The string to prepend before the menu label for the NixOS system.
+        This will be directly prepended (without whitespace) to the NixOS version
+        string, like for example if it is set to `XXX`:
+
+        `XXXNixOS 99.99-pre666`
+      '';
+    };
+
     isoImage.appendToMenuLabel = mkOption {
       default = " Installer";
+      type = types.str;
       example = " Live System";
       description = lib.mdDoc ''
         The string to append after the menu label for the NixOS system.
@@ -609,6 +655,16 @@ in
         string, like for example if it is set to `XXX`:
 
         `NixOS 99.99-pre666XXX`
+      '';
+    };
+
+    isoImage.graphicalGrub = mkOption {
+      default = false;
+      type = types.bool;
+      example = true;
+      description = lib.mdDoc ''
+        Whether to use textmode or graphical grub.
+        false means we use textmode grub.
       '';
     };
 
@@ -666,6 +722,11 @@ in
   config = {
     assertions = [
       {
+        # Syslinux (and isolinux) only supports x86-based architectures.
+        assertion = config.isoImage.makeBiosBootable -> pkgs.stdenv.hostPlatform.isx86;
+        message = "BIOS boot is only supported on x86-based architectures.";
+      }
+      {
         assertion = !(stringLength config.isoImage.volumeID > 32);
         # https://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor
         # Volume Identifier can only be 32 bytes
@@ -678,14 +739,12 @@ in
       }
     ];
 
-    boot.loader.grub.version = 2;
-
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
     environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
-      ++ optional canx86BiosBoot pkgs.syslinux
+      ++ optional (config.isoImage.makeBiosBootable) pkgs.syslinux
     ;
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
@@ -736,7 +795,7 @@ in
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
-      ] ++ optionals canx86BiosBoot [
+      ] ++ optionals (config.isoImage.makeBiosBootable) [
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -763,7 +822,7 @@ in
         { source = config.isoImage.efiSplashImage;
           target = "/EFI/boot/efi-background.png";
         }
-      ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
+      ] ++ optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
         }
@@ -778,10 +837,10 @@ in
     # Create the ISO image.
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
       inherit (config.isoImage) isoName compressImage volumeID contents;
-      bootable = canx86BiosBoot;
+      bootable = config.isoImage.makeBiosBootable;
       bootImage = "/isolinux/isolinux.bin";
-      syslinux = if canx86BiosBoot then pkgs.syslinux else null;
-    } // optionalAttrs (config.isoImage.makeUsbBootable && canx86BiosBoot) {
+      syslinux = if config.isoImage.makeBiosBootable then pkgs.syslinux else null;
+    } // optionalAttrs (config.isoImage.makeUsbBootable && config.isoImage.makeBiosBootable) {
       usbBootable = true;
       isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
     } // optionalAttrs config.isoImage.makeEfiBootable {

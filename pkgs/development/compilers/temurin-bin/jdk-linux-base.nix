@@ -20,7 +20,9 @@
 # runtime dependencies
 , cups
 # runtime dependencies for GTK+ Look and Feel
-, gtkSupport ? true
+# TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
+# which should be fixable, this is a no-rebuild workaround for GHC.
+, gtkSupport ? !stdenv.targetPlatform.isGhcjs
 , cairo
 , glib
 , gtk3
@@ -38,7 +40,7 @@ let
   providedCpuTypes = builtins.filter
     (arch: builtins.elem arch validCpuTypes)
     (builtins.attrNames sourcePerArch);
-  result = stdenv.mkDerivation rec {
+  result = stdenv.mkDerivation {
     pname = if sourcePerArch.packageType == "jdk"
       then "${name-prefix}-bin"
       else "${name-prefix}-${sourcePerArch.packageType}-bin";

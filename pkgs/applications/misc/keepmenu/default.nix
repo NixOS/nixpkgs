@@ -1,12 +1,12 @@
-{ lib, python3Packages, python3, xvfb-run }:
+{ lib, python3Packages, fetchPypi, xvfb-run }:
 
 python3Packages.buildPythonApplication rec {
   pname = "keepmenu";
-  version = "1.2.2";
+  version = "1.3.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "SeVNtONH1bn2hb2pBOVM3Oafrb+jARgfvRe7vUu6Gto=";
+    hash = "sha256-AGuJY7IirzIjcu/nY9CzeOqU1liwcRijYLi8hGN/pRg=";
   };
 
   preConfigure = ''
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     pynput
   ];
 
-  checkInputs = [ xvfb-run ];
+  nativeCheckInputs = [ xvfb-run ];
   checkPhase = ''
     xvfb-run python setup.py test
   '';

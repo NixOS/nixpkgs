@@ -1,16 +1,18 @@
 { lib
 , aiohttp
+, aiomqtt
 , buildPythonPackage
 , fetchFromGitHub
-, paho-mqtt
 , pydantic
 , pythonOlder
+, setuptools
+, tenacity
 }:
 
 buildPythonPackage rec {
   pname = "yolink-api";
-  version = "0.1.5";
-  format = "setuptools";
+  version = "0.3.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -18,13 +20,18 @@ buildPythonPackage rec {
     owner = "YoSmart-Inc";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-6Ch17aKUT8jVUo+pYD5EvydEzP/TTjLtgkUQJnHYkKg=";
+    hash = "sha256-t/e3DSpmrH48I6ZAmDljL5YblsY2/UWgPCcodi2A7Ro=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
-    paho-mqtt
+    aiomqtt
     pydantic
+    tenacity
   ];
 
   # Module has no tests

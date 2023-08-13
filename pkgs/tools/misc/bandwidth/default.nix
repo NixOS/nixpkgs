@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bandwidth";
-  version = "1.11.2";
+  version = "1.11.2d";
 
   src = fetchurl {
     url = "https://zsmith.co/archives/${pname}-${version}.tar.gz";
-    sha256 = "sha256-mjtvQAOH9rv12XszGdD5hIX197er7Uc74WfVaP32TpM=";
+    hash = "sha256-7IrNiCXKf1vyRGl73Ccu3aYMqPVc4PpEr6lnSqIa4Q8=";
   };
 
   postPatch = ''
@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     # Fix missing symbol exports for macOS clang
     echo global _VectorToVector128 >> routines-x86-64bit.asm
     echo global _VectorToVector256 >> routines-x86-64bit.asm
+    # Fix unexpected token on macOS
+    sed -i '/.section .note.GNU-stack/d' *-64bit.asm
+    sed -i '/.section code/d' *-arm-64bit.asm
+    sed -i 's#-Wl,-z,noexecstack##g' Makefile-arm64
   '';
 
   nativeBuildInputs = [ nasm ];

@@ -2,27 +2,25 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, libqalculate
 , muparser
-, python3
+, python3Packages
 , qtbase
-, qtcharts
-, qtdeclarative
-, qtgraphicaleffects
+, qtscxml
 , qtsvg
-, qtx11extras
 , wrapQtAppsHook
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "albert";
-  version = "0.17.6";
+  version = "0.20.14";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${version}";
-    sha256 = "sha256-nbnywrsKvFG8AkayjnylOKSnn7rRWgNv5zE9DDeOmLw=";
+    sha256 = "sha256-c1Bp7rIloXuWv/kUzWGJJ+bh9656vpuqADy77zYZjqk=";
     fetchSubmodules = true;
   };
 
@@ -32,20 +30,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libqalculate
     muparser
-    python3
     qtbase
-    qtcharts
-    qtdeclarative
-    qtgraphicaleffects
+    qtscxml
     qtsvg
-    qtx11extras
-  ];
+  ] ++ (with python3Packages; [ python pybind11 ]);
 
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
 
-    sed -i src/app/main.cpp \
+    sed -i src/nativepluginprovider.cpp \
       -e "/QStringList dirs = {/a    QFileInfo(\"$out/lib\").canonicalFilePath(),"
   '';
 

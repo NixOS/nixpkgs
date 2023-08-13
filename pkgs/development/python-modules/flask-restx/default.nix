@@ -10,6 +10,7 @@
 , faker
 , mock
 , blinker
+, py
 , pytest-flask
 , pytest-mock
 , pytest-benchmark
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "1.0.3";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-fodoGeVSNw4XZrVt907H20OJQIR8FlfINvEPWOkZQqI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-alXuo6TGDX2ko6VIKpAtyrg0EBkxEnC3DabH8GYqEs0=";
   };
 
   propagatedBuildInputs = [
@@ -39,10 +40,11 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     blinker
     faker
     mock
+    py
     pytest-benchmark
     pytest-flask
     pytest-mock

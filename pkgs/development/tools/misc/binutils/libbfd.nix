@@ -1,45 +1,22 @@
 { lib, stdenv
-, buildPackages
-, gnu-config, autoreconfHook, bison, binutils-unwrapped, texinfo
-, libiberty, libintl, zlib
+, binutils-unwrapped-all-targets
 }:
 
 stdenv.mkDerivation {
   pname = "libbfd";
-  inherit (binutils-unwrapped) version src;
+  inherit (binutils-unwrapped-all-targets) version;
 
-  outputs = [ "out" "dev" ];
-
-  patches = binutils-unwrapped.patches ++ [
-    ./build-components-separately.patch
+  dontUnpack = true;
+  dontBuild = true;
+  dontInstall = true;
+  propagatedBuildInputs = [
+    binutils-unwrapped-all-targets.dev
+    binutils-unwrapped-all-targets.lib
   ];
 
-  # We just want to build libbfd
-  postPatch = ''
-    cd bfd
-  '';
-
-  postAutoreconf = ''
-    echo "Updating config.guess and config.sub from ${gnu-config}"
-    cp -f ${gnu-config}/config.{guess,sub} ../
-  '';
-
-  # We update these ourselves
-  dontUpdateAutotoolsGnuConfigScripts = true;
-
-  strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook bison texinfo ];
-  buildInputs = [ libiberty zlib ] ++ lib.optionals stdenv.isDarwin [ libintl ];
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-  configurePlatforms = [ "build" "host" ];
-  configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
-    "--enable-install-libbfd"
-    "--with-system-zlib"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
-
-  enableParallelBuilding = true;
+  passthru = {
+    inherit (binutils-unwrapped-all-targets) dev hasPluginAPI;
+  };
 
   meta = with lib; {
     description = "A library for manipulating containers of machine code";

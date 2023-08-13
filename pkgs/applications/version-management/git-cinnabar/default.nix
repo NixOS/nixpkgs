@@ -1,54 +1,69 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, makeWrapper
-, curl, libiconv, mercurial, zlib
+{ stdenv
+, lib
+, fetchFromGitHub
+, cargo
+, pkg-config
+, rustPlatform
+, bzip2
+, curl
+, zlib
+, zstd
+, libiconv
 , CoreServices
 }:
 
-let
-  python3 = mercurial.python;
-in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-cinnabar";
-  version = "0.5.11";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "glandium";
     repo = "git-cinnabar";
-    rev = version;
-    sha256 = "sha256-64ofKGeHwCqiZHOA6MrYrN2eV/qqClcjerDuSqsjKDg=";
+    rev = finalAttrs.version;
+    hash = "sha256-1Y4zd4rYNRatemDXRMkQQwBJdkfOGfDWk9QBvJOgi7s=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoconf makeWrapper ];
-  buildInputs = [ curl zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
+  nativeBuildInputs = [
+    cargo
+    pkg-config
+    rustPlatform.cargoSetupHook
+  ];
 
-  # Ignore submodule status failing due to no git in environment.
-  makeFlags = [ "SUBMODULE_STATUS=yes" ];
+  buildInputs = [
+    bzip2
+    curl
+    zlib
+    zstd
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    CoreServices
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) src;
+    hash = "sha256-p85AS2DukUzEbW9UGYmiF3hpnZvPrZ2sRaeA9dU8j/8=";
+  };
+
+  ZSTD_SYS_USE_PKG_CONFIG = true;
 
   enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/libexec
-    install git-cinnabar-helper $out/bin
-    install git-cinnabar git-remote-hg $out/libexec
-    cp -r cinnabar mercurial $out/libexec
-
-    for pythonBin in git-cinnabar git-remote-hg; do
-        makeWrapper $out/libexec/$pythonBin $out/bin/$pythonBin \
-            --prefix PATH : ${lib.getBin python3}/bin \
-            --set PYTHONPATH ${mercurial}/${python3.sitePackages}
-    done
+    mkdir -p $out/bin
+    install -v target/release/git-cinnabar $out/bin
+    ln -sv git-cinnabar $out/bin/git-remote-hg
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/glandium/git-cinnabar";
+  meta = {
     description = "git remote helper to interact with mercurial repositories";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.all;
+    homepage = "https://github.com/glandium/git-cinnabar";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.all;
   };
-}
+})

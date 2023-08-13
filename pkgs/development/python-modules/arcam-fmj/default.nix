@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "arcam-fmj";
-  version = "1.0.1";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "elupus";
     repo = "arcam_fmj";
     rev = "refs/tags/${version}";
-    hash = "sha256-Lmz701qdqFlXro279AdNx+P1o3Q/Om63jKvy854ogto=";
+    hash = "sha256-/A3Fs0JyzW05L80CtI07Y/kTTrIC6yqubJfYO0kAEf0=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytest-mock
     pytestCheckHook

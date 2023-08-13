@@ -18,10 +18,10 @@ buildPythonPackage rec {
     owner = "Lykos153";
     repo = "AnnexRemote";
     rev = "v${version}";
-    sha256 = "08myswj1vqkl4s1glykq6xn76a070nv5mxj0z8ibl6axz89bvypi";
+    sha256 = "sha256-h03gkRAMmOq35zzAq/OuctJwPAbP0Idu4Lmeu0RycDc=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

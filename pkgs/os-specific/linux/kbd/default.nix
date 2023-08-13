@@ -16,12 +16,16 @@
 
 stdenv.mkDerivation rec {
   pname = "kbd";
-  version = "2.5.1";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zN9FI4emOAlz0pJzY+nLuTn6IGiRWm+Tf/nSRSICRoM=";
+    sha256 = "sha256-LrbGyXK+lYm6tzMnW/AgvrX2RNX5Q5c3kg5wGvbPNIU=";
   };
+
+  # vlock is moved into its own output, since it depends on pam. This
+  # reduces closure size for most use cases.
+  outputs = [ "out" "vlock" "dev" ];
 
   configureFlags = [
     "--enable-optional-progs"
@@ -53,6 +57,12 @@ stdenv.mkDerivation rec {
         --replace 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
         --replace 'xz '    '${xz.bin}/bin/xz ' \
         --replace 'zstd '  '${zstd.bin}/bin/zstd '
+
+      sed -i '
+        1i prefix:=$(vlock)
+        1i bindir := $(vlock)/bin' \
+        src/vlock/Makefile.in \
+        src/vlock/Makefile.am
     '';
 
   postInstall = ''

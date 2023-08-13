@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchFromGitLab
 , gitUpdater
 , python3Packages
 , blueprint-compiler
@@ -26,18 +25,21 @@
 , vkbasalt-cli
 , vmtouch
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "2022.12.14.1";
+  version = "51.6";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     rev = version;
-    sha256 = "sha256-hoWyXCP7/0m8akUGBJyuF2yQcRKR8C7MDBLUdPdtBgE=";
+    sha256 = "sha256-9oEC+ksgHz2HP4jVwTbLzjqc8WG1+S8hmVgl2dcuPB0=";
   };
 
-  patches = [ ./vulkan_icd.patch ];
+  patches = [
+    ./vulkan_icd.patch
+  ];
 
   # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
@@ -59,6 +61,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    pathvalidate
     pycurl
     pyyaml
     requests
@@ -71,7 +74,6 @@ python3Packages.buildPythonApplication rec {
     chardet
     certifi
     idna
-    pillow
     orjson
     icoextract
   ] ++ [
@@ -107,5 +109,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ psydvl shamilton ];
     platforms = platforms.linux;
+    mainProgram = "bottles";
   };
 }

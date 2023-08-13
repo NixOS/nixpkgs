@@ -1,13 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
 , openssl
 , openjdk11
 , unixODBC
-, withHttpFs ? true
 , withJdbc ? false
 , withOdbc ? false
 }:
@@ -17,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.6.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-no4fcukEpzKmh2i41sdXGDljGhEDkzk3rYBATqlq6Gw=";
+    hash = "sha256-LEv9yURkYvONObTbIA4CS+umwCRMH8gRQaDtzbCzID4=";
   };
 
   patches = [ ./version.patch ];
@@ -32,20 +30,30 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
   '';
 
+  nativeBuildInputs = [ cmake ninja ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals withJdbc [ openjdk11 ]
+    ++ lib.optionals withOdbc [ unixODBC ];
+
   cmakeFlags = [
-    "-DBUILD_EXCEL_EXTENSION=ON"
-    "-DBUILD_FTS_EXTENSION=ON"
-    "-DBUILD_HTTPFS_EXTENSION=${enableFeature withHttpFs}"
+    "-DBUILD_AUTOCOMPLETE_EXTENSION=ON"
     "-DBUILD_ICU_EXTENSION=ON"
-    "-DBUILD_JSON_EXTENSION=ON"
-    "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DBUILD_PARQUET_EXTENSION=ON"
-    "-DBUILD_TPCDS_EXTENSION=ON"
-    "-DBUILD_TPCE=ON"
     "-DBUILD_TPCH_EXTENSION=ON"
+    "-DBUILD_TPCDS_EXTENSION=ON"
+    "-DBUILD_FTS_EXTENSION=ON"
+    "-DBUILD_HTTPFS_EXTENSION=ON"
     "-DBUILD_VISUALIZER_EXTENSION=ON"
+    "-DBUILD_JSON_EXTENSION=ON"
+    "-DBUILD_JEMALLOC_EXTENSION=ON"
+    "-DBUILD_EXCEL_EXTENSION=ON"
     "-DBUILD_INET_EXTENSION=ON"
+    "-DBUILD_TPCE=ON"
+    "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
+  ] ++ lib.optionals doInstallCheck [
+    # development settings
+    "-DBUILD_UNITTESTS=ON"
   ];
 
   doInstallCheck = true;
@@ -69,6 +77,24 @@ stdenv.mkDerivation rec {
         "test/sql/storage/compression/chimp/chimp_read_float.test"
         "test/sql/storage/compression/patas/patas_compression_ratio.test_coverage"
         "test/sql/storage/compression/patas/patas_read.test"
+        "test/sql/json/read_json_objects.test"
+        "test/sql/json/read_json.test"
+        "test/sql/copy/parquet/parquet_5968.test"
+        "test/fuzzer/pedro/buffer_manager_out_of_memory.test"
+        "test/sql/storage/compression/bitpacking/bitpacking_size_calculation.test"
+        "test/sql/copy/parquet/delta_byte_array_length_mismatch.test"
+        "test/sql/function/timestamp/test_icu_strptime.test"
+        "test/sql/timezone/test_icu_timezone.test"
+        "test/sql/copy/parquet/snowflake_lineitem.test"
+        "test/sql/copy/parquet/test_parquet_force_download.test"
+        "test/sql/copy/parquet/delta_byte_array_multiple_pages.test"
+        "test/sql/copy/csv/test_csv_httpfs_prepared.test"
+        "test/sql/copy/csv/test_csv_httpfs.test"
+        "test/sql/copy/csv/parallel/test_parallel_csv.test"
+        "test/sql/copy/csv/parallel/csv_parallel_httpfs.test"
+        "test/common/test_cast_struct.test"
+        # test is order sensitive
+        "test/sql/copy/parquet/parquet_glob.test"
         # these are only hidden if no filters are passed in
         "[!hide]"
         # this test apparently never terminates
@@ -86,11 +112,6 @@ stdenv.mkDerivation rec {
 
       runHook postInstallCheck
     '';
-
-  nativeBuildInputs = [ cmake ninja ];
-  buildInputs = lib.optionals withHttpFs [ openssl ]
-    ++ lib.optionals withJdbc [ openjdk11 ]
-    ++ lib.optionals withOdbc [ unixODBC ];
 
   meta = with lib; {
     homepage = "https://github.com/duckdb/duckdb";

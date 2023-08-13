@@ -8,18 +8,18 @@
 , pkg-config
 , systemd
 , hostname
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , extraTags ? [ ]
 }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "4.78.0";
+  payloadVersion = "5.0.89";
   python = pythonPackages.python;
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.38.1";
+  version = "7.45.1";
 
   src = fetchFromGitHub {
     inherit owner repo;
@@ -93,7 +93,8 @@ in buildGo118Module rec {
   # into standard paths.
   postInstall = ''
     mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
-    cp -R $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+    cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+    rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d}
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
     cp -R $src/pkg/status/templates $out/share/datadog-agent

@@ -1,7 +1,5 @@
 { config, lib, pkgs, buildEnv, ... }:
 
-with lib;
-
 let
   cfg = config.services.peering-manager;
   configFile = pkgs.writeTextFile {
@@ -41,24 +39,24 @@ let
   pkg = (pkgs.peering-manager.overrideAttrs (old: {
     postInstall = ''
       ln -s ${configFile} $out/opt/peering-manager/peering_manager/configuration.py
-    '' + optionalString cfg.enableLdap ''
+    '' + lib.optionalString cfg.enableLdap ''
       ln -s ${cfg.ldapConfigPath} $out/opt/peering-manager/peering_manager/ldap_config.py
     '';
   })).override {
     inherit (cfg) plugins;
   };
-  peeringManagerManageScript = with pkgs; (writeScriptBin "peering-manager-manage" ''
-    #!${stdenv.shell}
+  peeringManagerManageScript = pkgs.writeScriptBin "peering-manager-manage" ''
+    #!${pkgs.stdenv.shell}
     export PYTHONPATH=${pkg.pythonPath}
     sudo -u peering-manager ${pkg}/bin/peering-manager "$@"
-  '');
+  '';
 
 in {
-  options.services.peering-manager = {
+  options.services.peering-manager = with lib; {
     enable = mkOption {
-      type = lib.types.bool;
+      type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Enable Peering Manager.
 
         This module requires a reverse proxy that serves `/static` separately.
@@ -69,7 +67,7 @@ in {
     listenAddress = mkOption {
       type = types.str;
       default = "[::1]";
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Address the server will listen on.
       '';
     };
@@ -77,7 +75,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 8001;
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Port the server will listen on.
       '';
     };
@@ -88,14 +86,14 @@ in {
       defaultText = literalExpression ''
         python3Packages: with python3Packages; [];
       '';
-      description = lib.mdDoc ''
+      description = mdDoc ''
         List of plugin packages to install.
       '';
     };
 
     secretKeyFile = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Path to a file containing the secret key.
       '';
     };
@@ -103,7 +101,7 @@ in {
     peeringdbApiKeyFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Path to a file containing the PeeringDB API key.
       '';
     };
@@ -111,7 +109,7 @@ in {
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Additional lines of configuration appended to the `configuration.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/configuration/optional-settings/) for more possible options.
       '';
@@ -120,7 +118,7 @@ in {
     enableLdap = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Enable LDAP-Authentication for Peering Manager.
 
         This requires a configuration file being pass through `ldapConfigPath`.
@@ -129,15 +127,15 @@ in {
 
     ldapConfigPath = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6-ldap/#configuration) for possible options.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
-    services.peering-manager.plugins = mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+  config = lib.mkIf cfg.enable {
+    services.peering-manager.plugins = lib.mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
 
     system.build.peeringManagerPkg = pkg;
 
@@ -262,4 +260,6 @@ in {
     users.groups.peering-manager = {};
     users.groups."${config.services.redis.servers.peering-manager.user}".members = [ "peering-manager" ];
   };
+
+  meta.maintainers = with lib.maintainers; [ yuka ];
 }

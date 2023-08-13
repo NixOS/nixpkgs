@@ -13,18 +13,18 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.15.2";
+  version = "1.15.7";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "gopasspw";
-    repo = pname;
+    repo = "gopass";
     rev = "v${version}";
-    hash = "sha256-UvHLbbV75mrWDmlsM382gBhgOpgf5k9NmAQtVbePD04=";
+    hash = "sha256-Q3EX5giteIsH5+fXb7n2qpd9kBjaZZ/A5VuCljc72C8=";
   };
 
-  vendorHash = "sha256-2YycEsEsvBKb30LkQx38Rm3nxq5q6KN0Pb1FBXco0PU=";
+  vendorHash = "sha256-crnr5qXlYrhNT3nLlA7U13CaYAmAqcV+MBs/hee9ixU=";
 
   subPackages = [ "." ];
 
@@ -53,6 +53,9 @@ buildGoModule rec {
       --prefix PATH : "${wrapperPath}" \
       --set GOPASS_NO_REMINDER true
   '';
+  passthru = {
+    inherit wrapperPath;
+  };
 
   meta = with lib; {
     description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";

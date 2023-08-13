@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dicom2nifti";
-  version = "2.4.3";
+  version = "2.4.8";
   disabled = pythonOlder "3.6";
 
   # no tests in PyPI dist
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "icometrix";
     repo = pname;
     rev = version;
-    hash = "sha256-za2+HdnUhPu3+p29JsF4iL1lyPQVmEv3fam0Yf1oeMQ=";
+    hash = "sha256-2Pspxdeu3pHwXpbjS6bQQnvdeMuITRwYarPuLlmNcv8";
   };
 
   propagatedBuildInputs = [ gdcm nibabel numpy pydicom scipy setuptools ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     substituteInPlace tests/test_generic.py --replace "from common" "from dicom2nifti.common"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dicom2nifti" ];
 

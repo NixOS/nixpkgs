@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) "--with-lg-vaddr=48"
   ;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";
 
   doCheck = true;
 

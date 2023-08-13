@@ -10,12 +10,11 @@ let
   format = pkgs.formats.ini {
     mkKeyValue = key: value:
       let
-        value' = if builtins.isNull value then
-          ""
-        else if builtins.isBool value then
-          if value == true then "true" else "false"
-        else
-          toString value;
+        value' = lib.optionalString (value != null)
+          (if builtins.isBool value then
+            if value == true then "true" else "false"
+          else
+            toString value);
       in "${key} = ${value'}";
   };
 

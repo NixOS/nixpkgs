@@ -93,8 +93,11 @@ in stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  preCheck = ''
+    patchShebangs tests/
+  '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     iproute2
   ] ++ (with python3.pkgs; [
     netaddr

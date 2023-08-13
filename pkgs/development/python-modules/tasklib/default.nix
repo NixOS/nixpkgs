@@ -1,5 +1,6 @@
 { lib
 , pythonPackages
+, fetchPypi
 , taskwarrior
 , writeShellScriptBin
 }:
@@ -25,7 +26,7 @@ in buildPythonPackage rec {
     tzlocal
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     taskwarrior
     wsl_stub
   ];

@@ -26,11 +26,11 @@ mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
   outputs = [ "out" "dev" ];
-  version = "15.35.7";
+  version = "15.38.3";
 
   src = fetchurl {
-    url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
-    sha256 = "sha256-KNUhe0c6Th2pW7+Lmo62FYdOv+8t7Z5/eQkYPN8eusc=";
+    url = "https://dl.tvcdn.de/download/linux/version_${lib.versions.major version}x/teamviewer_${version}_amd64.deb";
+    sha256 = "sha256-+GGpGV8rl15VQvPRA2PWngQI4VoxCrZ0ArEm9FgdOVE=";
   };
 
   unpackPhase = ''

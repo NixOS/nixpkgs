@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "3.1.0";
+  version = "3.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/SW8hRj588N++4Cuz7elbU0qO++4Jhm1va069JnNmZo=";
+    hash = "sha256-opBb9Zf60kgMtBNis2c+22VGS7psFEDPYvlz7WyKIHs=";
   };
 
   propagatedBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     testscenarios
     requests-mock

@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
+, cargo
 , fetchFromGitHub
 , libiconv
 , pytestCheckHook
 , pythonOlder
 , rustPlatform
+, rustc
 , setuptools-rust
 }:
 
@@ -18,20 +20,20 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tvX4KcQGw0khBjEXVFmkhsVyAkdr2Bgm6IfD1yGZ37c=";
+    hash = "sha256-tvX4KcQGw0khBjEXVFmkhsVyAkdr2Bgm6IfD1yGZ37c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-KcF3Z71S7ZNZicViqwpClfT736nYYbKcKWylOP+S3HI=";
+    hash = "sha256-KcF3Z71S7ZNZicViqwpClfT736nYYbKcKWylOP+S3HI=";
   };
 
   nativeBuildInputs = with rustPlatform; [
     setuptools-rust
-    rust.rustc
-    rust.cargo
-    cargoSetupHook
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
   ];
 
   buildInputs = [
@@ -42,7 +44,7 @@ buildPythonPackage rec {
     "rtoml"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

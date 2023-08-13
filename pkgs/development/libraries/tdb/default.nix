@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.6";
+  version = "1.4.8";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1okr2L7+BKd2QqHdVuSoeTSb8c9bLAv1+4QQYZON7ws=";
+    hash = "sha256-hDTJyFfRPOP6hGb3VgHyXDaTZ2s2kZ8VngrWEhuvXOg=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +34,23 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
+
   wafPath = "buildtools/bin/waf";
 
   wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
   ];
+
+  postFixup = if stdenv.isDarwin
+    then ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
+    else null;
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig

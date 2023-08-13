@@ -6,6 +6,8 @@ buildDunePackage rec {
 
   inherit (metrics) version src;
 
+  duneVersion = "3";
+
   # Fixes https://github.com/mirage/metrics/issues/57
   postPatch = ''
     substituteInPlace src/unix/dune --replace "mtime mtime.clock" "mtime"
@@ -13,6 +15,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ gnuplot lwt metrics mtime uuidm ];
 
+  nativeCheckInputs = [ gnuplot ];
   checkInputs = [ metrics-lwt ];
 
   doCheck = true;

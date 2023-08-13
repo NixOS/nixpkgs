@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plv8";
-  version = "3.1.4";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "plv8";
     repo = "plv8";
     rev = "v${finalAttrs.version}";
-    sha256 = "GoPP2nAeDItBt3Lug49s+brD0gIy3iDlJpbyHRuMcZ4=";
+    hash = "sha256-LodC2eQJSm5fLckrjm2RuejZhmOyQMJTv9b0iPCnzKQ=";
   };
 
   patches = [
@@ -136,7 +136,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
     maintainers = with maintainers; [ marsam ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.postgresql;
+    broken = postgresql.jitSupport;
   };
 })

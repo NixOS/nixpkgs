@@ -29,7 +29,6 @@
 , bettercap
 , bully
 , crunch
-, dhcp
 , dnsmasq
 , ettercap
 , hashcat
@@ -94,7 +93,6 @@ let
     wireshark-cli
   ] ++ lib.optionals supportEvilTwin [
     bettercap
-    dhcp
     dnsmasq
     ettercap
     hostapd
@@ -111,13 +109,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "airgeddon";
-  version = "11.10";
+  version = "11.11";
 
   src = fetchFromGitHub {
     owner = "v1s1t0r1sh3r3";
     repo = "airgeddon";
-    rev = "v${version}";
-    hash = "sha256-0x13QmT61lcPc7b3OYs13g6AISWRipvxbSFb7XyQA5U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3Rx1tMRIpSk+IEJGOs+t+kDlvGHYOx1IOSi+663uzrw=";
   };
 
   strictDeps = true;
@@ -159,8 +157,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Multi-use TUI to audit wireless networks. ";
+    description = "Multi-use TUI to audit wireless networks";
     homepage = "https://github.com/v1s1t0r1sh3r3/airgeddon";
+    changelog = "https://github.com/v1s1t0r1sh3r3/airgeddon/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pedrohlc ];
     platforms = platforms.linux;

@@ -1,0 +1,11 @@
+[Hotkey]
+EnumerateSkipFirst=False
+
+[Hotkey/TriggerKeys]
+0=Control+space
+
+[Hotkey/EnumerateForwardKeys]
+0=Alt+Shift_L
+
+[Hotkey/EnumerateBackwardKeys]
+0=Alt+Shift_R

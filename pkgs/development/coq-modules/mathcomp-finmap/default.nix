@@ -1,13 +1,13 @@
 { coq, mkCoqDerivation, mathcomp, lib, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "finmap";
   owner = "math-comp";
   inherit version;
-  defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
-      { cases = [ (range "8.13" "8.16")  (isGe "1.12") ];         out = "1.5.2"; }
+  defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ]  [
+      { cases = [ (range "8.13" "8.17")  (isGe "1.12") ];         out = "1.5.2"; }
       { cases = [ (isGe "8.10")          (isGe "1.11") ];         out = "1.5.1"; }
       { cases = [ (range "8.7" "8.11")   "1.11.0" ];              out = "1.5.0"; }
       { cases = [ (isEq "8.11")          (range "1.8" "1.10") ];  out = "1.4.0+coq-8.11"; }
@@ -33,6 +33,6 @@ with lib; mkCoqDerivation {
 
   meta = {
     description = "A finset and finmap library";
-    license = licenses.cecill-b;
+    license = lib.licenses.cecill-b;
   };
 }

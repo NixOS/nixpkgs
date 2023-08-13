@@ -6,7 +6,6 @@ import ./make-test-python.nix ({ pkgs, ... } : {
 
   nodes.machine =
     { lib, pkgs, config, ... }:
-    with lib;
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];

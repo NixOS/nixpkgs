@@ -4,11 +4,11 @@ let
   license_dir = "~/.config/houdini";
 in
 stdenv.mkDerivation rec {
-  version = "18.5.596";
+  version = "19.5.569";
   pname = "houdini-runtime";
   src = requireFile rec {
-    name = "houdini-py3-${version}-linux_x86_64_gcc6.3.tar.gz";
-    sha256 = "1b1k7rkn7svmciijqdwvi9p00srsf81vkb55grjg6xa7fgyidjx1";
+    name = "houdini-${version}-linux_x86_64_gcc9.3.tar.gz";
+    sha256 = "0c2d6a31c24f5e7229498af6c3a7cdf81242501d7a0792e4c33b53a898d4999e";
     url = meta.homepage;
   };
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
                       --no-install-bin-symlink \
                       --auto-install \
                       --no-root-check \
-                      --accept-EULA 2020-05-05 \
+                      --accept-EULA 2021-10-13 \
                       $out
-    echo "licensingMode = localValidator" >> $out/houdini/Licensing.opt
+    echo "licensingMode = localValidator" >> $out/houdini/Licensing.opt  # does not seem to do anything any more. not sure, official docs do not say anything about it
   '';
 
   dontFixup = true;

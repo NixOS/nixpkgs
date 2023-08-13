@@ -4,8 +4,10 @@
 , makeWrapper
 
 , alsa-lib
+, curl
 , gtk3
 , lame
+, libxml2
 , ffmpeg
 , vlc
 , xdg-utils
@@ -23,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.71";
+  version = "6.81";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash = {
-      x86_64-linux = "sha256-AHi0US3U4PU/IrlCahJbm+tkmsz+nh0AFOk0lB2lI3M=";
-      aarch64-linux = "sha256-/yCV7wllQ024rux4u4Tp9TZK8JMN9Tk0DFJY3W2BGAk=";
+      x86_64-linux = "sha256-Zzt/g96yAztE0NjVa4uaWXBckSvnGxP0K87Hmq82Mi0=";
+      aarch64-linux = "sha256-PNUUm7xNpPRyQaZm9YDXysJ1yo/IzxUz+kqI6/Z6fpo=";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -69,8 +71,9 @@ stdenv.mkDerivation rec {
     # Setting the rpath of the plugin shared object files does not
     # seem to have an effect for some plugins.
     # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
+    # Note that libcurl and libxml2 are needed for ReaPack to run.
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ lame ffmpeg vlc xdotool ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ curl lame libxml2 ffmpeg vlc xdotool stdenv.cc.cc.lib ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/

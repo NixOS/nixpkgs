@@ -12,13 +12,13 @@ buildPythonPackage rec {
     owner = "Lucretiel";
     repo = "autocommand";
     rev = version;
-    sha256 = "sha256-bjoVGfP57qhvPuHHcMP8JQddAaW4/fEyatElk1UEPZo=";
+    hash = "sha256-bjoVGfP57qhvPuHHcMP8JQddAaW4/fEyatElk1UEPZo=";
   };
 
   # fails with: SyntaxError: invalid syntax
   doCheck = false;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "autocommand" ];
 
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = " Autocommand turns a python function into a CLI program ";
     homepage = "https://github.com/Lucretiel/autocommand";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

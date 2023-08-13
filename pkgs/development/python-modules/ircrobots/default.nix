@@ -6,7 +6,7 @@
 , asyncio-rlock
 , asyncio-throttle
 , ircstates
-, async_stagger
+, async-stagger
 , async-timeout
 , python
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "jesopo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+BrS1+ZkgwT/qvqD0PwRZi2LF+31biS738SzKH1dy7w=";
+    hash = "sha256-+BrS1+ZkgwT/qvqD0PwRZi2LF+31biS738SzKH1dy7w=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     asyncio-rlock
     asyncio-throttle
     ircstates
-    async_stagger
+    async-stagger
     async-timeout
   ];
 

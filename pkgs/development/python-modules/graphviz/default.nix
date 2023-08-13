@@ -45,7 +45,7 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest
     pytest-mock
