@@ -9956,6 +9956,8 @@ with pkgs;
 
   ministat = callPackage ../tools/misc/ministat { };
 
+  minizign = callPackage ../tools/security/minizign { };
+
   mitm6 = callPackage ../tools/security/mitm6 { };
 
   mjolnir = callPackage ../servers/mjolnir {
