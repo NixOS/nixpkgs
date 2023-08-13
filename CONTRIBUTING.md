@@ -347,13 +347,6 @@ for review, which allows you to sidestep this issue.
 This is not a bulletproof method though, as OfBorg still does review requests even on draft PRs.
 ```
 
-### Hotfixing pull requests
-
-- Make the appropriate changes in you branch.
-- Don’t create additional commits, do
-  - `git rebase -i`
-  - `git push --force` to your branch.
-
 ## Reviewing contributions
 
 > **Warning**
