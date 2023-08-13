@@ -47,8 +47,8 @@ let cutter = mkDerivation rec {
       };
     };
     withPlugins = filter: pkgs.callPackage ./wrapper.nix {
-      unwrapped = cutter;
-      inherit rizin;
+      inherit rizin cutter;
+      isCutter = true;
       plugins = filter plugins;
     };
   };

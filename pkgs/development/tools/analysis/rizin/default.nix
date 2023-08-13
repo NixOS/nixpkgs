@@ -118,7 +118,7 @@ let rizin = stdenv.mkDerivation rec {
       sigdb = pkgs.callPackage ./sigdb.nix { };
     };
     withPlugins = filter: pkgs.callPackage ./wrapper.nix {
-      unwrapped = rizin;
+      inherit rizin;
       plugins = filter plugins;
     };
   };
