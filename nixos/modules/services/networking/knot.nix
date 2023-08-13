@@ -102,7 +102,10 @@ let
 
   in result;
 
-  configFile = pkgs.writeTextFile {
+  configFile = if cfg.settingsFile != null then
+    assert cfg.settings == {} && cfg.keyFiles == [];
+    cfg.settingsFile
+  else pkgs.writeTextFile {
     name = "knot.conf";
     text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" + yamlConfig;
     # TODO: maybe we could do some checks even when private keys complicate this?
@@ -162,6 +165,16 @@ in {
         default = {};
         description = lib.mdDoc ''
           Extra configuration as nix values.
+        '';
+      };
+
+      settingsFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          As alternative to ``settings``, you can provide whole configuration
+          directly in the almost-YAML format of Knot DNS.
+          You might want to utilize ``writeTextFile`` for this.
         '';
       };
 
