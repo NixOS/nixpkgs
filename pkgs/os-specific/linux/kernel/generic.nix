@@ -1,3 +1,12 @@
+let
+  # Map of images representations to legacy Makefile targets.
+  defaultMapImageToTargets = {
+    "uImage" = "uinstall";
+    "zImage" = "zinstall";
+    "Image.gz" = "zinstall";
+    "vmlinux" = "install";
+  };
+in
 { buildPackages
 , callPackage
 , perl
@@ -57,6 +66,11 @@
 # easy overrides to stdenv.hostPlatform.linux-kernel members
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules or true
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
+, kernelTarget ? null
+# FIXME: this should go whenever we can rely on KBUILD_IMAGE to install
+# our kernel targets, MIPS is probably the only recent kernel in-tree
+# which does not support that yet.
+, installTargets ? [ ]
 , kernelArch ? stdenv.hostPlatform.linuxArch
 , kernelTests ? []
 , nixosTests
@@ -91,6 +105,41 @@ let
     netfilterRPFilter = true;
     ia32Emulation = true;
   } // features) kernelPatches;
+
+
+  # Legacy compatibility layer for
+  # systems relying on `installTarget`
+  # being a property of the platform.
+  defaultKernelInstallTargets = [
+    stdenv.hostPlatform.linux-kernel.installTarget or
+    (defaultMapImageToTargets.${stdenv.hostPlatform.linux-kernel.target or "vmlinux"})
+  ];
+
+  # Default kernel target in the case no install target or kernelTarget is mentioned
+  # We aim to derive the "best" kernel given the current constraints.
+  defaultKernelTarget =
+  if stdenv.hostPlatform.isx86
+    then "bzImage"
+  else if stdenv.hostPlatform.isAarch64
+    then "Image.gz"
+  else if (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isArmv7)
+    then "vmlinuz"
+  else if stdenv.hostPlatform.isMips
+    then "vmlinux"
+  else if stdenv.hostPlatform.isRiscV
+    then "Image.xz"
+  else if stdenv.hostPlatform.isSparc64
+    then "Image.gz"
+  else if stdenv.hostPlatform.isSparc
+    then "vmlinux"
+  else if stdenv.hostPlatform.isS390
+    then "bzImage"
+  else if stdenv.hostplatform.isLoongArch64
+    then "Image.gz"
+  else "vmlinux";
+
+  finalKernelTarget = if kernelTarget == null then defaultKernelTarget else kernelTarget;
+  finalInstallTargets = if installTargets != [] then defaultKernelInstallTargets else installTargets;
 
   commonStructuredConfig = import ./common-config.nix {
     inherit lib stdenv version;
@@ -193,6 +242,9 @@ let
 
   kernel = (callPackage ./manual-config.nix { inherit lib stdenv buildPackages; }) (basicArgs // {
     inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile;
+    kernelTarget = finalKernelTarget;
+    # kernelTarget has precedence
+    installTargets = if installTargets != [ ] then finalInstallTargets else [ ];
     pos = builtins.unsafeGetAttrPos "version" args;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
@@ -201,6 +253,10 @@ let
   passthru = basicArgs // {
     features = kernelFeatures;
     inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre;
+
+    kernelTarget = if kernelTarget == null then defaultKernelTarget else kernelTarget;
+    installTargets = if installTargets != [] then defaultKernelInstallTargets else installTargets;
+
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
 
     # Adds dependencies needed to edit the config:

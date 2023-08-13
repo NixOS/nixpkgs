@@ -906,7 +906,8 @@ let
 
       EFI_STUB            = yes; # EFI bootloader in the bzImage itself
       EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER =
-          whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
+        whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
+      EFI_ZBOOT = whenAtLeast "6.1" yes; # Generic compression support for EFI payloads
       CGROUPS             = yes; # used by systemd
       FHANDLE             = yes; # used by systemd
       SECCOMP             = yes; # used by systemd >= 231

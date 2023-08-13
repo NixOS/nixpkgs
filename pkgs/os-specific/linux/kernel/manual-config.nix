@@ -30,6 +30,16 @@ in lib.makeOverridable ({
   src,
   # a list of { name=..., patch=..., extraConfig=...} patches
   kernelPatches ? [],
+  # KBUILD_IMAGE
+  kernelTarget ? null,
+  # a list of install targets, e.g. :
+  # - uinstall for uImage, U-Boot wrapped image
+  # - zinstall for zImage, self-extracting images
+  # - install, the generic binary image
+  # those targets are legacy and are present
+  # only for compatibility with old kernels or MIPS for now.
+  # prefer KBUILD_IMAGE instead.
+  installTargets ? [],
   # The kernel .config file
   configfile,
   # Manually specified nixexpr representing the config
@@ -88,13 +98,15 @@ let
   isModular = config.isYes "MODULES";
 
   kernelConf = stdenv.hostPlatform.linux-kernel;
-  target = kernelConf.target or "vmlinux";
-
   buildDTBs = kernelConf.DTB or false;
 in
 
 assert lib.versionOlder version "5.8" -> libelf != null;
 assert lib.versionAtLeast version "5.8" -> elfutils != null;
+
+# An kernel image target must be explicit as we cannot learn it
+# from the defaults in the different Makefile.
+assert kernelTarget != null || installTargets != [];
 
 stdenv.mkDerivation ({
   pname = "linux";
@@ -220,6 +232,7 @@ stdenv.mkDerivation ({
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ] ++ (kernelConf.makeFlags or [])
+    ++ lib.optional (kernelTarget != null) "KBUILD_IMAGE=${kernelTarget}"
     ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
@@ -299,12 +312,7 @@ stdenv.mkDerivation ({
   '';
 
   # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-  installTargets = [
-    (kernelConf.installTarget or (
-      /**/ if target == "uImage" then "uinstall"
-      else if target == "zImage" || target == "Image.gz" then "zinstall"
-      else "install"))
-  ];
+  installTargets = if installTargets == [ ] then [ "install" ] else installTargets;
 
   postInstall = optionalString isModular ''
     if [ -z "''${dontStrip-}" ]; then
@@ -335,7 +343,8 @@ stdenv.mkDerivation ({
         cp -HR $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
       fi
     done
-    ln -s $dev/lib/modules/${modDirVersion}/build/vmlinux $dev
+    mkdir $debug/
+    ln -s $dev/lib/modules/${modDirVersion}/build/vmlinux $debug
 
     # !!! No documentation on how much of the source tree must be kept
     # If/when kernel builds fail due to missing files, you can add
@@ -428,5 +437,5 @@ stdenv.mkDerivation ({
 } // optionalAttrs (pos != null) {
   inherit pos;
 } // optionalAttrs isModular {
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "debug" ];
 }))

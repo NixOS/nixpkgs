@@ -14,7 +14,6 @@ rec {
       baseConfig = "defconfig";
       # Build whatever possible as a module, if not stated in the extra config.
       autoModules = true;
-      target = "bzImage";
     };
   };
 
@@ -27,7 +26,6 @@ rec {
       name = "PowerNV";
 
       baseConfig = "powernv_defconfig";
-      target = "vmlinux";
       autoModules = true;
       # avoid driver/FS trouble arising from unusual page size
       extraConfig = ''
@@ -383,7 +381,6 @@ rec {
         # which our initrd builder can't currently do easily.
         USB_XHCI_TEGRA m
       '';
-      target = "Image";
     };
     gcc = {
       arch = "armv8-a";
@@ -533,7 +530,6 @@ rec {
   riscv-multiplatform = {
     linux-kernel = {
       name = "riscv-multiplatform";
-      target = "Image";
       autoModules = true;
       baseConfig = "defconfig";
       DTB = true;
