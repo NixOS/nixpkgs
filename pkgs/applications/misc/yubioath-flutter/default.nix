@@ -3,6 +3,9 @@
 , python3
 , fetchFromGitHub
 , pcre2
+, libnotify
+, libappindicator
+, pkg-config
 , gnome
 , makeWrapper
 , removeReferencesTo
@@ -10,19 +13,19 @@
 
 flutter37.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    sha256 = "sha256-N9/qwC79mG9r+zMPLHSPjNSQ+srGtnXuKsf0ijtH7CI=";
+    hash = "sha256-NgzijuvyWNl9sFQzq1Jzk1povF8c/rKuVyVKeve+Vic=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
   depsListFile = ./deps.json;
-  vendorHash = "sha256-WfZiB7MO4wHUg81xm67BMu4zQdC9CfhN5BQol+AI2S8=";
+  vendorHash = "sha256-q/dNj9Pu7zg0HkV2QkXBbXiTsljsSJOqXhvAQlnoLlA=";
 
   postPatch = ''
     substituteInPlace linux/CMakeLists.txt \
@@ -68,10 +71,13 @@ flutter37.buildFlutterApplication rec {
   nativeBuildInputs = [
     makeWrapper
     removeReferencesTo
+    pkg-config
   ];
 
   buildInputs = [
     pcre2
+    libnotify
+    libappindicator
   ];
 
   disallowedReferences = [
