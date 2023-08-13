@@ -210,13 +210,21 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.callPackage ({ runCommand, json2toml }: runCommand name {
-      nativeBuildInputs = [ json2toml ];
-      value = builtins.toJSON value;
-      passAsFile = [ "value" ];
-    } ''
-      json2toml "$valuePath" --print-output > "$out"
-    '') {};
+    generate = name: value: pkgs.callPackage ({ stdenv, buildPackages }:
+      derivation {
+        inherit name;
+        system = stdenv.system;
+        builder = "${lib.getBin buildPackages.execline}/bin/exec";
+        args = [
+          # Redirect stdout to $out
+          "${lib.getBin buildPackages.execline}/bin/redirfd" "-w" "1" (placeholder "out")
+          # Substitute ${valuePath} with the $valuePath environment variable
+          "${lib.getBin buildPackages.execline}/bin/importas" "valuePath" "valuePath"
+          "${lib.getBin buildPackages.json2toml}/bin/json2toml" "\${valuePath}" "--print-output"
+        ];
+        value = builtins.toJSON value;
+        passAsFile = [ "value" ];
+      }) {};
 
   };
 
