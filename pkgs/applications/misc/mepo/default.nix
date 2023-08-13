@@ -17,23 +17,23 @@
 , util-linux
 , xwininfo
 , zenity
-, zig_0_10
+, zig_0_11
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mepo";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "mepo";
     rev = finalAttrs.version;
-    hash = "sha256-rKIyhr0sxG1moFsapylJWoAoHi9FSRdugIHr/TqY71s=";
+    hash = "sha256-sxN7yTnk3KDAkP/d3miKa2bEgB3AUaf9/M9ajJyRt3g=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    zig_0_10.hook
+    zig_0_11.hook
     makeWrapper
   ];
 
