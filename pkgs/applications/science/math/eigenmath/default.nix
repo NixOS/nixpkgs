@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://georgeweigt.github.io";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nickcao ];
+    platforms = platforms.unix;
   };
 }
