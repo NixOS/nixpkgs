@@ -45,7 +45,7 @@ in rec {
 
     meta = {
       description = "Brother ${lib.strings.toUpper model} driver";
-      homepage = "http://www.brother.com/";
+      homepage = "https://www.brother.com/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;
       platforms = [ "x86_64-linux" ];
@@ -78,7 +78,7 @@ in rec {
 
     meta = {
       description = "Brother ${lib.strings.toUpper model} CUPS wrapper driver";
-      homepage = "http://www.brother.com/";
+      homepage = "https://www.brother.com/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.gpl2;
       platforms = [ "x86_64-linux" ];
