@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LwL5TLRkD6ALucabLUeB0k4rIX+O/aW2ebS2rZPjIUs=";
+    hash = "sha256-LwL5TLRkD6ALucabLUeB0k4rIX+O/aW2ebS2rZPjIUs=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A calendar widget for GTK using PyGoocanvas.";
     homepage = "https://goocalendar.tryton.org/";
+    changelog = "https://foss.heptapod.net/tryton/goocalendar/-/blob/${version}/CHANGELOG";
     license = licenses.gpl2;
     maintainers = [ maintainers.udono ];
   };
