@@ -9,6 +9,7 @@
 , dnsmasq
 , docutils
 , fetchFromGitLab
+, fetchpatch
 , gettext
 , glib
 , gnutls
@@ -126,6 +127,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
+    (fetchpatch {
+      name = "CVE-2023-2700.patch";
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/6425a311b8ad19d6f9c0b315bf1d722551ea3585.patch";
+      sha256 = "sha256-CXO7Xer+mR2ZxSy8aI6Nt1qNSGsjbXu3BxWE20k2TaI=";
+    })
   ] ++ lib.optionals enableZfs [
     (substituteAll {
       src = ./0002-substitute-zfs-and-zpool-commands.patch;
