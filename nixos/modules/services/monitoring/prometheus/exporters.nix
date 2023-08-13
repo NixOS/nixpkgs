@@ -67,6 +67,7 @@ let
     "redis"
     "rspamd"
     "rtl_433"
+    "sabnzbd"
     "scaphandre"
     "script"
     "shelly"
