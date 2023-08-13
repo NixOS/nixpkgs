@@ -1,7 +1,14 @@
-{ lib, runCommand, makeBinaryWrapper, cargo, cargo-auditable }:
+{ lib, runCommand, makeBinaryWrapper, rust-audit-info, cargo, cargo-auditable }:
 
 runCommand "auditable-${cargo.name}" {
   nativeBuildInputs = [ makeBinaryWrapper ];
+
+  passthru.tests = runCommand "rust-audit-info-test" {
+    nativeBuildInputs = [ rust-audit-info ];
+  } ''
+    rust-audit-info ${lib.getBin rust-audit-info}/bin/rust-audit-info > $out
+  '';
+
   meta = cargo-auditable.meta // {
     mainProgram = "cargo";
   };
