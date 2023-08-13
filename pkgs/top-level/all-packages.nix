@@ -22096,6 +22096,8 @@ with pkgs;
 
   json2hcl = callPackage ../development/tools/json2hcl { };
 
+  json2toml = callPackage ../tools/misc/json2toml { };
+
   json2tsv = callPackage ../development/tools/json2tsv { };
 
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;

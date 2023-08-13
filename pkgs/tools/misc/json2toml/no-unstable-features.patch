@@ -1,0 +1,18 @@
+diff --git a/src/main.rs b/src/main.rs
+index 050f5c43ae68..afeaac27d63b 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,4 +1,3 @@
+-#![feature(file_create_new)]
+ use std::{
+     fs::{self, File},
+     io::{prelude::*, BufRead, BufReader},
+@@ -48,7 +47,7 @@ fn main() -> Result<()> {
+         std::process::exit(0);
+     }
+ 
+-    let mut file = match File::create_new(&output_file) {
++    let mut file = match File::options().write(true).create_new(true).open(&output_file) {
+         Ok(file) => file,
+         Err(e) => {
+             println!("Error creating {output_file:?}! Exiting program!");
