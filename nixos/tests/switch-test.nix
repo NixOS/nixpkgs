@@ -279,6 +279,28 @@ in {
           systemd.services.test-service.unitConfig.RefuseManualStart = true;
         };
 
+        unitWithTemplate.configuration = {
+          systemd.services."instantiated@".serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${pkgs.coreutils}/bin/true";
+            ExecReload = "${pkgs.coreutils}/bin/true";
+          };
+          systemd.services."instantiated@one" = {
+            wantedBy = [ "multi-user.target" ];
+            overrideStrategy = "asDropin";
+          };
+          systemd.services."instantiated@two" = {
+            wantedBy = [ "multi-user.target" ];
+            overrideStrategy = "asDropin";
+          };
+        };
+
+        unitWithTemplateModified.configuration = {
+          imports = [ unitWithTemplate.configuration ];
+          systemd.services."instantiated@".serviceConfig.X-Test = "test";
+        };
+
         restart-and-reload-by-activation-script.configuration = {
           systemd.services = rec {
             simple-service = {
@@ -768,6 +790,16 @@ in {
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_contains(out, "\nstarting the following units: required-service.service\n")
+        assert_lacks(out, "the following new units were started:")
+
+        # Ensure templated units are restarted when the base unit changes
+        switch_to_specialisation("${machine}", "unitWithTemplate")
+        out = switch_to_specialisation("${machine}", "unitWithTemplateModified")
+        assert_contains(out, "stopping the following units: instantiated@one.service, instantiated@two.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_contains(out, "\nstarting the following units: instantiated@one.service, instantiated@two.service\n")
         assert_lacks(out, "the following new units were started:")
 
     with subtest("failing units"):
