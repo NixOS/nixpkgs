@@ -11271,6 +11271,8 @@ self: super: with self; {
 
   s3-credentials = callPackage ../development/python-modules/s3-credentials { };
 
+  sabctools = callPackage ../development/python-modules/sabctools { };
+
   sabyenc3 = callPackage ../development/python-modules/sabyenc3 { };
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };

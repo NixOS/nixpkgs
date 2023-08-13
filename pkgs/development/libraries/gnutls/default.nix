@@ -19,6 +19,7 @@
 , python3Packages
 , qemu
 , rsyslog
+, openconnect
 , samba
 }:
 
@@ -115,7 +116,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver;
+    inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver samba openconnect;
     inherit (ocamlPackages) ocamlnet;
     haskell-gnutls = haskellPackages.gnutls;
     python3-gnutls = python3Packages.python3-gnutls;
