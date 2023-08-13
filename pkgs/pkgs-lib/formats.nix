@@ -210,12 +210,12 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
-      nativeBuildInputs = [ remarshal ];
+    generate = name: value: pkgs.callPackage ({ runCommand, json2toml }: runCommand name {
+      nativeBuildInputs = [ json2toml ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
     } ''
-      json2toml "$valuePath" "$out"
+      json2toml "$valuePath" --print-output > "$out"
     '') {};
 
   };
