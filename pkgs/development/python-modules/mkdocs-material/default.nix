@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , buildPythonPackage
 , fetchFromGitHub
 , colorama
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.1.13";
+  version = "9.1.20";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     owner = "squidfunk";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-S+cCNcQR8Y1UGj+4Nfy9Z10N/9PRq13fSeR2YFntxWI=";
+    hash = "sha256-g1GULyKdIwKALIzfrNw9Lt1mewBU5onAtCxo3TkXaxw=";
   };
 
   nativeBuildInputs = [
