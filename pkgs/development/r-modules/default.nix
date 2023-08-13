@@ -412,6 +412,7 @@ let
     Rssa = [ pkgs.fftw.dev ];
     rsvg = [ pkgs.pkg-config ];
     runjags = [ pkgs.jags ];
+    xslt = [ pkgs.pkg-config ];
     RVowpalWabbit = with pkgs; [ zlib.dev boost ];
     rzmq = with pkgs; [ zeromq pkg-config ];
     httpuv = [ pkgs.zlib.dev ];
@@ -552,6 +553,7 @@ let
     ArrayExpressHTS = with pkgs; [ zlib.dev curl.dev which ];
     bbl = with pkgs; [ gsl ];
     writexl = with pkgs; [ zlib.dev ];
+    xslt = with pkgs; [ libxslt libxml2 ];
     qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
