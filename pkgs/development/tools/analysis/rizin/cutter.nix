@@ -57,6 +57,7 @@ let cutter = mkDerivation rec {
     description = "Free and Open Source Reverse Engineering Platform powered by rizin";
     homepage = src.meta.homepage;
     license = licenses.gpl3;
+    mainProgram = "cutter";
     maintainers = with maintainers; [ mic92 dtzWill ];
   };
 }; in cutter
