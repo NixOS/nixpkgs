@@ -1345,6 +1345,11 @@ let
       patches = [ ./patches/rhdf5.patch ];
     });
 
+    redland = old.redland.overrideAttrs (_: {
+      PKGCONFIG_CFLAGS="-I${pkgs.redland}/include -I${pkgs.librdf_raptor2}/include/raptor2 -I${pkgs.librdf_rasqal}/include/rasqal";
+      PKGCONFIG_LIBS="-L${pkgs.redland}/lib -L${pkgs.librdf_raptor2}/lib -L${pkgs.librdf_rasqal}/lib -lrdf -lraptor2 -lrasqal";
+    });
+
     textshaping = old.textshaping.overrideAttrs (attrs: {
       env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
     });
