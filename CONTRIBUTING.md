@@ -10,11 +10,11 @@ If that's not the case, we recommend learning about it first [here](https://docs
 ## Overview
 
 This file contains general contributing information, but individual parts also have more specific information to them in their respective `README.md` files, linked here:
-- [`lib`](./lib): Sources and documentation of the [library functions](https://nixos.org/manual/nixpkgs/stable/#chap-functions)
-- [`maintainers`](./maintainers): Nixpkgs maintainer and team listings, maintainer scripts
-- [`pkgs`](./pkgs): Package and [builder](https://nixos.org/manual/nixpkgs/stable/#part-builders) definitions
-- [`doc`](./doc): Sources and infrastructure for the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/)
-- [`nixos`](./nixos): Implementation of [NixOS](https://nixos.org/manual/nixos/stable/)
+- [`lib`](./lib/README.md): Sources and documentation of the [library functions](https://nixos.org/manual/nixpkgs/stable/#chap-functions)
+- [`maintainers`](./maintainers/README.md): Nixpkgs maintainer and team listings, maintainer scripts
+- [`pkgs`](./pkgs/README.md): Package and [builder](https://nixos.org/manual/nixpkgs/stable/#part-builders) definitions
+- [`doc`](./doc/README.md): Sources and infrastructure for the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/)
+- [`nixos`](./nixos/README.md): Implementation of [NixOS](https://nixos.org/manual/nixos/stable/)
 
 ## How to propose a change
 
@@ -98,7 +98,7 @@ This section describes in some detail how changes can be made and proposed with 
    git push --force-with-lease
    ```
 
-   In case of merge conflicts you will also have to [rebasing the branch](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) on top of current `master`.
+   In case of merge conflicts you will also have to [rebase the branch](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) on top of current `master`.
    Sometimes this can be done [on GitHub directly](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch), but if not you will have to rebase locally using
    ```
    git fetch upstream
@@ -347,18 +347,17 @@ for review, which allows you to sidestep this issue.
 This is not a bulletproof method though, as OfBorg still does review requests even on draft PRs.
 ```
 
-### Hotfixing pull requests {#submitting-changes-hotfixing-pull-requests}
+### Hotfixing pull requests
 
 - Make the appropriate changes in you branch.
 - Don’t create additional commits, do
   - `git rebase -i`
   - `git push --force` to your branch.
 
-## Reviewing contributions {#chap-reviewing-contributions}
+## Reviewing contributions
 
-::: {.warning}
-The following section is a draft, and the policy for reviewing is still being discussed in issues such as [#11166](https://github.com/NixOS/nixpkgs/issues/11166) and [#20836](https://github.com/NixOS/nixpkgs/issues/20836).
-:::
+> **Warning**
+> The following section is a draft, and the policy for reviewing is still being discussed in issues such as [#11166](https://github.com/NixOS/nixpkgs/issues/11166) and [#20836](https://github.com/NixOS/nixpkgs/issues/20836).
 
 The Nixpkgs project receives a fairly high number of contributions via GitHub pull requests. Reviewing and approving these is an important task and a way to contribute to the project.
 
@@ -372,15 +371,13 @@ Pull request reviews should include a list of what has been reviewed in a commen
 
 All the review template samples provided in this section are generic and meant as examples. Their usage is optional and the reviewer is free to adapt them to their liking.
 
-### Other submissions {#reviewing-contributions-other-submissions}
-
-Other type of submissions requires different reviewing steps.
+To get more information about how to review specific parts of Nixpkgs, refer to the documents linked to in the [overview section](#overview).
 
 If you consider having enough knowledge and experience in a topic and would like to be a long-term reviewer for related submissions, please contact the current reviewers for that topic. They will give you information about the reviewing process. The main reviewers for a topic can be hard to find as there is no list, but checking past pull requests to see who reviewed or git-blaming the code to see who committed to that topic can give some hints.
 
 Container system, boot system and library changes are some examples of the pull requests fitting this category.
 
-## (Merging a pull request) | Merging pull requests {#reviewing-contributions--merging-pull-requests}
+## Merging pull requests
 
 The *Nixpkgs committers* are people who have been given
 permission to merge.
@@ -408,13 +405,13 @@ In a case a contributor definitively leaves the Nix community, they should creat
 
 ### Release notes
 
-If you removed pkgs or made some major NixOS changes, write about it in the release notes for the next stable release. For example `nixos/doc/manual/release-notes/rl-2003.xml`.
+If you removed pkgs or made some major NixOS changes, write about it in the release notes for the next stable release in [`nixos/doc/manual/release-notes`](./nixos/doc/manual/release-notes).
 
-### File naming and organisation {#sec-organisation}
+### File naming and organisation
 
 Names of files and directories should be in lowercase, with dashes between words — not in camel case. For instance, it should be `all-packages.nix`, not `allPackages.nix` or `AllPackages.nix`.
 
-### Syntax {#sec-syntax}
+### Syntax
 
 - Use 2 spaces of indentation per indentation level in Nix expressions, 4 spaces in shell scripts.
 
@@ -654,17 +651,17 @@ Package version upgrades usually allow for simpler commit messages, including at
 
 Pull requests should not be squash merged in order to keep complete commit messages and GPG signatures intact and must not be when the change doesn't make sense as a single commit.
 
-## Pull Request Template {#submitting-changes-pull-request-template}
+## Pull Request Template
 
 The pull request template helps determine what steps have been made for a contribution so far, and will help guide maintainers on the status of a change. The motivation section of the PR should include any extra details the title does not address and link any existing issues related to the pull request.
 
 When a PR is created, it will be pre-populated with some checkboxes detailed below:
 
-### Tested using sandboxing {#submitting-changes-tested-with-sandbox}
+### Tested using sandboxing
 
 When sandbox builds are enabled, Nix will setup an isolated environment for each build process. It is used to remove further hidden dependencies set by the build environment to improve reproducibility. This includes access to the network during the build outside of `fetch*` functions and files outside the Nix store. Depending on the operating system access to other resources are blocked as well (ex. inter process communication is isolated on Linux); see [sandbox](https://nixos.org/nix/manual/#conf-sandbox) in Nix manual for details.
 
-Sandboxing is not enabled by default in Nix due to a small performance hit on each build. In pull requests for [nixpkgs](https://github.com/NixOS/nixpkgs/) people are asked to test builds with sandboxing enabled (see `Tested using sandboxing` in the pull request template) because in<https://nixos.org/hydra/> sandboxing is also used.
+Sandboxing is not enabled by default in Nix due to a small performance hit on each build. In pull requests for [nixpkgs](https://github.com/NixOS/nixpkgs/) people are asked to test builds with sandboxing enabled (see `Tested using sandboxing` in the pull request template) because in [Hydra](https://nixos.org/hydra/) sandboxing is also used.
 
 Depending if you use NixOS or other platforms you can use one of the following methods to enable sandboxing **before** building the package:
 
@@ -680,15 +677,15 @@ Depending if you use NixOS or other platforms you can use one of the following m
   sandbox = true
   ```
 
-### Built on platform(s) {#submitting-changes-platform-diversity}
+### Built on platform(s)
 
 Many Nix packages are designed to run on multiple platforms. As such, it’s important to let the maintainer know which platforms your changes have been tested on. It’s not always practical to test a change on all platforms, and is not required for a pull request to be merged. Only check the systems you tested the build on in this section.
 
-### Tested via one or more NixOS test(s) if existing and applicable for the change (look inside nixos/tests) {#submitting-changes-nixos-tests}
+### Tested via one or more NixOS test(s) if existing and applicable for the change (look inside nixos/tests)
 
 Packages with automated tests are much more likely to be merged in a timely fashion because it doesn’t require as much manual testing by the maintainer to verify the functionality of the package. If there are existing tests for the package, they should be run to verify your changes do not break the tests. Tests can only be run on Linux. For more details on writing and running tests, see the [section in the NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests).
 
-### Tested compilation of all pkgs that depend on this change using `nixpkgs-review` {#submitting-changes-tested-compilation}
+### Tested compilation of all pkgs that depend on this change using `nixpkgs-review`
 
 If you are updating a package’s version, you can use `nixpkgs-review` to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommitted changes with the `wip` option or specifying a GitHub pull request number.
 
@@ -716,10 +713,10 @@ Review changes from last commit:
 nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"
 ```
 
-### Tested execution of all binary files (usually in `./result/bin/`) {#submitting-changes-tested-execution}
+### Tested execution of all binary files (usually in `./result/bin/`)
 
 It’s important to test any executables generated by a build when you change or create a package in nixpkgs. This can be done by looking in `./result/bin` and running any files in there, or at a minimum, the main executable for the package. For example, if you make a change to texlive, you probably would only check the binaries associated with the change you made rather than testing all of them.
 
-### Meets Nixpkgs contribution standards {#submitting-changes-contribution-standards}
+### Meets Nixpkgs contribution standards
 
-The last checkbox is fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md). The contributing document has detailed information on standards the Nix community has for commit messages, reviews, licensing of contributions you make to the project, etc... Everyone should read and understand the standards the community has for contributing before submitting a pull request.
+The last checkbox is fits the guidelines in this `CONTRIBUTING.md` file. The contributing document has detailed information on standards the Nix community has for commit messages, reviews, licensing of contributions you make to the project, etc... Everyone should read and understand the standards the community has for contributing before submitting a pull request.
