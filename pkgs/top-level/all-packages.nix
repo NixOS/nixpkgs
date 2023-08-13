@@ -25428,10 +25428,7 @@ with pkgs;
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
   wt = wt4;
-  inherit (callPackages ../development/libraries/wt {
-    boost = boost175;
-  })
-    wt3
+  inherit (libsForQt5.callPackage ../development/libraries/wt { })
     wt4;
 
   wxformbuilder = callPackage ../development/tools/wxformbuilder { };
