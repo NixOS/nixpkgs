@@ -5,7 +5,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.0.0.alpha20140727b";
 
   src = fetchurl {
-    url = "http://krusty.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta/leafnode-${version}.tar.bz2";
+    url = "http://krusty.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta/leafnode-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-NOuiy7uHG3JMjV3UAtHDWK6yG6QmvrVljhVe0NdGEHU=";
   };
 
