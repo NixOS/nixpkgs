@@ -22,7 +22,14 @@ stdenv.mkDerivation rec {
   makeFlags = [ "SYSCONFIG_DIR=$(out)/etc" "IGNORE_FILE_ATTRIBUTES=y" "CHOWN=true" ];
   installTargets = [ "install_base" "install_nls" "install_man" ];
 
-  patches = [ ./install.patch ];
+  patches = [
+    # 12.6.2 already addresses CVE-2022-39377 (see
+    # c1e631eddc50c04e4dcea169ba396bee2bd6b0ab and
+    # following commits), though helpfully this is
+    # not mentioned anywhere
+    ./CVE-2023-33204.patch
+    ./install.patch
+  ];
 
   meta = {
     homepage = "http://sebastien.godard.pagesperso-orange.fr/";
