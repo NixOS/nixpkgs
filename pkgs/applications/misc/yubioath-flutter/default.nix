@@ -3,6 +3,9 @@
 , python3
 , fetchFromGitHub
 , pcre2
+, libnotify
+, libappindicator
+, pkg-config
 , gnome
 , makeWrapper
 , removeReferencesTo
@@ -68,10 +71,13 @@ flutter37.buildFlutterApplication rec {
   nativeBuildInputs = [
     makeWrapper
     removeReferencesTo
+    pkg-config
   ];
 
   buildInputs = [
     pcre2
+    libnotify
+    libappindicator
   ];
 
   disallowedReferences = [
