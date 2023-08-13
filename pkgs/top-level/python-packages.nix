@@ -9823,6 +9823,8 @@ self: super: with self; {
 
   pysigset = callPackage ../development/python-modules/pysigset { };
 
+  pysim = callPackage ../development/python-modules/pysim { };
+
   pysimplegui = callPackage ../development/python-modules/pysimplegui { };
 
   pysingleton = callPackage ../development/python-modules/pysingleton { };
