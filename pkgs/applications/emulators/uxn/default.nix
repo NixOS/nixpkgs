@@ -65,5 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "uxnemu";
     inherit (SDL2.meta) platforms;
+    # ofborg complains about an error trying to link inexistent SDL2 library
+    # For full logs, run:
+    # 'nix log /nix/store/bmyhh0lpifl9swvkpflqldv43vcrgci1-uxn-unstable-2023-08-10.drv'.
+    broken = stdenv.isDarwin;
   };
 })
