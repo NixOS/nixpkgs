@@ -22,7 +22,7 @@ flutter37.buildFlutterApplication rec {
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
   depsListFile = ./deps.json;
-  vendorHash = "sha256-WfZiB7MO4wHUg81xm67BMu4zQdC9CfhN5BQol+AI2S8=";
+  vendorHash = "sha256-q/dNj9Pu7zg0HkV2QkXBbXiTsljsSJOqXhvAQlnoLlA=";
 
   postPatch = ''
     substituteInPlace linux/CMakeLists.txt \
