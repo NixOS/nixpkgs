@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "A calendar widget for GTK using PyGoocanvas.";
     homepage = "https://goocalendar.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/goocalendar/-/blob/${version}/CHANGELOG";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.udono ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ udono ];
   };
 }
