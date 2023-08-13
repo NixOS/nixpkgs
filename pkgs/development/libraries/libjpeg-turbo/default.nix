@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , nasm
 , openjdk
@@ -31,18 +32,24 @@ assert !(enableJpeg7 && enableJpeg8);  # pick only one or none, not both
 stdenv.mkDerivation rec {
 
   pname = "libjpeg-turbo";
-  version = "2.1.5.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
     rev = version;
-    sha256 = "sha256-96SBBZp+/4WkXLvHKSPItNi5WuzdVccI/ZcbJOFjYYk=";
+    hash = "sha256-B4NCpL4whM5+fuW/U1bdRVnpnELA63Cx5dtbmGGM/YU=";
   };
 
-  # This is needed by freeimage
-  patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ]
-    ++ lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
+  patches = [
+    (fetchpatch {
+      name = "fix-test-concurrency-issue.patch";
+      url = "https://github.com/libjpeg-turbo/libjpeg-turbo/commit/035ea386d1b6a99a8a1e2ab57cc1fc903569136c.patch";
+      hash = "sha256-xPo6hshbj+diRpL3CPY1lntYXjEVSsN2Vd3bSS8rV3c=";
+    })
+    # This is needed by freeimage
+    ./0001-Compile-transupp.c-as-part-of-the-library.patch
+  ] ++ lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
     ./mingw-boolean.patch;
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];

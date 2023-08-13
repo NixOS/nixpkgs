@@ -15,11 +15,11 @@ index 0ca6f98..a9a0fae 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -533,7 +533,7 @@ set(JPEG_SOURCES jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c
-   jdatasrc.c jdcoefct.c jdcolor.c jddctmgr.c jdhuff.c jdicc.c jdinput.c
-   jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c jdpostct.c jdsample.c
-   jdtrans.c jerror.c jfdctflt.c jfdctfst.c jfdctint.c jidctflt.c jidctfst.c
--  jidctint.c jidctred.c jquant1.c jquant2.c jutils.c jmemmgr.c jmemnobs.c)
-+  jidctint.c jidctred.c jquant1.c jquant2.c jutils.c jmemmgr.c jmemnobs.c transupp.c)
+   jclhuff.c jcmarker.c jcmaster.c jcomapi.c jcparam.c jcphuff.c jctrans.c
+   jdapimin.c jdatadst.c jdatasrc.c jdhuff.c jdicc.c jdinput.c jdlhuff.c
+   jdmarker.c jdmaster.c jdphuff.c jdtrans.c jerror.c jfdctflt.c jmemmgr.c
+-  jmemnobs.c)
++  jmemnobs.c transupp.c)
  
  if(WITH_ARITH_ENC OR WITH_ARITH_DEC)
    set(JPEG_SOURCES ${JPEG_SOURCES} jaricom.c)
