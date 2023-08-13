@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-browser/deb/pool/main/y/${pname}-beta/${pname}-beta_${version}_amd64.deb";
     sha256 = "sha256-0bnfgpqk9pq9pwkh0nnvv2i87iwj50jw8f1974m7gc97cd7yx5j8";
-  
   };
 
   nativeBuildInputs = [
