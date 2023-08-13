@@ -1,7 +1,7 @@
 [
   {
     "name": "file_manager",
-    "version": "0.1.2+1",
+    "version": "0.2.0+65656565656565",
     "kind": "root",
     "source": "root",
     "dependencies": [
@@ -29,6 +29,9 @@
       "intl",
       "provider",
       "flutter_markdown",
+      "flutter_adaptive_scaffold",
+      "package_info_plus",
+      "pub_semver",
       "flutter_test",
       "flutter_lints"
     ]
@@ -263,141 +266,19 @@
     "dependencies": []
   },
   {
-    "name": "flutter_markdown",
-    "version": "0.6.15",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "flutter",
-      "markdown",
-      "meta",
-      "path"
-    ]
-  },
-  {
-    "name": "markdown",
-    "version": "7.1.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "args",
-      "meta"
-    ]
-  },
-  {
-    "name": "args",
-    "version": "2.4.1",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": []
-  },
-  {
-    "name": "provider",
-    "version": "6.0.5",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "collection",
-      "flutter",
-      "nested"
-    ]
-  },
-  {
-    "name": "nested",
-    "version": "1.0.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "flutter"
-    ]
-  },
-  {
-    "name": "intl",
-    "version": "0.18.0",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "clock",
-      "meta",
-      "path"
-    ]
-  },
-  {
-    "name": "filesize",
-    "version": "2.0.1",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": []
-  },
-  {
-    "name": "pubspec",
-    "version": "2.3.0",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "path",
-      "pub_semver",
-      "yaml",
-      "uri"
-    ]
-  },
-  {
-    "name": "uri",
-    "version": "1.0.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "matcher",
-      "quiver"
-    ]
-  },
-  {
-    "name": "quiver",
-    "version": "3.2.1",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "matcher"
-    ]
-  },
-  {
-    "name": "yaml",
-    "version": "3.1.2",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "collection",
-      "source_span",
-      "string_scanner"
-    ]
-  },
-  {
     "name": "pub_semver",
     "version": "2.1.4",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "collection",
-      "meta"
-    ]
-  },
-  {
-    "name": "sentry_flutter",
-    "version": "7.7.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
-      "flutter",
-      "flutter_web_plugins",
-      "sentry",
-      "package_info_plus",
+      "collection",
       "meta"
     ]
   },
   {
     "name": "package_info_plus",
     "version": "3.1.2",
-    "kind": "transitive",
+    "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "ffi",
@@ -494,6 +375,137 @@
     ]
   },
   {
+    "name": "flutter_adaptive_scaffold",
+    "version": "0.1.5",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "flutter_markdown",
+    "version": "0.6.15",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "markdown",
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "markdown",
+    "version": "7.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "meta"
+    ]
+  },
+  {
+    "name": "args",
+    "version": "2.4.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "provider",
+    "version": "6.0.5",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "flutter",
+      "nested"
+    ]
+  },
+  {
+    "name": "nested",
+    "version": "1.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "intl",
+    "version": "0.18.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "filesize",
+    "version": "2.0.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "pubspec",
+    "version": "2.3.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "path",
+      "pub_semver",
+      "yaml",
+      "uri"
+    ]
+  },
+  {
+    "name": "uri",
+    "version": "1.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "matcher",
+      "quiver"
+    ]
+  },
+  {
+    "name": "quiver",
+    "version": "3.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "matcher"
+    ]
+  },
+  {
+    "name": "yaml",
+    "version": "3.1.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "source_span",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "sentry_flutter",
+    "version": "7.7.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_web_plugins",
+      "sentry",
+      "package_info_plus",
+      "meta"
+    ]
+  },
+  {
     "name": "sentry",
     "version": "7.7.0",
     "kind": "transitive",
@@ -543,7 +555,7 @@
   },
   {
     "name": "path_provider_windows",
-    "version": "2.1.6",
+    "version": "2.1.7",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -556,7 +568,7 @@
   },
   {
     "name": "permission_handler",
-    "version": "10.2.0",
+    "version": "10.3.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -570,7 +582,7 @@
   },
   {
     "name": "permission_handler_platform_interface",
-    "version": "3.9.0",
+    "version": "3.10.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -591,7 +603,7 @@
   },
   {
     "name": "permission_handler_apple",
-    "version": "9.0.8",
+    "version": "9.1.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -601,7 +613,7 @@
   },
   {
     "name": "permission_handler_android",
-    "version": "10.2.2",
+    "version": "10.2.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -621,7 +633,7 @@
   },
   {
     "name": "shared_preferences",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -977,29 +989,14 @@
       "flutter",
       "material_theme_builder",
       "libtokyo",
+      "flutter_localizations",
       "path",
       "intl",
-      "filesize"
-    ]
-  },
-  {
-    "name": "libtokyo",
-    "version": "0.1.0",
-    "kind": "direct",
-    "source": "git",
-    "dependencies": [
-      "meta",
-      "path"
-    ]
-  },
-  {
-    "name": "material_theme_builder",
-    "version": "1.0.4",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "flutter",
-      "material_color_utilities"
+      "filesize",
+      "bitsdojo_window",
+      "shared_preferences",
+      "pubspec",
+      "url_launcher"
     ]
   },
   {
@@ -1018,6 +1015,27 @@
       "meta",
       "path",
       "vector_math"
+    ]
+  },
+  {
+    "name": "libtokyo",
+    "version": "0.1.0",
+    "kind": "direct",
+    "source": "git",
+    "dependencies": [
+      "meta",
+      "path",
+      "pubspec"
+    ]
+  },
+  {
+    "name": "material_theme_builder",
+    "version": "1.0.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "material_color_utilities"
     ]
   }
 ]
