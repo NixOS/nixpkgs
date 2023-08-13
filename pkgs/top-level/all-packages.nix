@@ -1776,6 +1776,8 @@ with pkgs;
 
   fabs = callPackage ../tools/backup/fabs { };
 
+  fm = callPackage ../applications/file-managers/fm { };
+
   fm-tune = callPackage ../applications/radio/fm-tune { };
 
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
