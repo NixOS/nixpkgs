@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, python, mock, boto, pytest }:
 
 buildPythonPackage rec {
-  pname = "amazon_kclpy";
+  pname = "amazon-kclpy";
   version = "2.1.1";
 
   src = fetchFromGitHub {

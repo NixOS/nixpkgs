@@ -3,6 +3,7 @@
 , arrow
 , buildPythonPackage
 , fetchFromGitHub
+, pyotp
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "opower";
-  version = "0.0.20";
+  version = "0.0.26";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "tronikos";
     repo = "opower";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hb+TVnCAAnsoKPk9N1bDXj463CErp7nn2cteOumKhLs=";
+    hash = "sha256-W2lzMyu9N1ZLLaxoI8JLthtF7Zj3si1/mEVn5NrAlfU=";
   };
 
   pythonRemoveDeps = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     arrow
+    pyotp
   ];
 
   nativeCheckInputs = [

@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "http://goldendict.org/";
     description = "A feature-rich dictionary lookup program";
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "goldendict";
     maintainers = with maintainers; [ gebner astsmtl sikmir ];
     license = licenses.gpl3Plus;
   };

@@ -2613,6 +2613,8 @@ with pkgs;
 
   np2kai = callPackage ../applications/emulators/np2kai { };
 
+  nuked-md = callPackage ../applications/emulators/nuked-md { };
+
   oberon-risc-emu = callPackage ../applications/emulators/oberon-risc-emu { };
 
   openmsx = callPackage ../applications/emulators/openmsx { };
@@ -3547,6 +3549,8 @@ with pkgs;
   codespell = callPackage ../development/tools/codespell { };
 
   codux = callPackage ../applications/editors/codux { };
+
+  conjure = callPackage ../applications/graphics/conjure { };
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader { };
 
@@ -4855,6 +4859,8 @@ with pkgs;
   dasel = callPackage ../applications/misc/dasel { };
 
   dasher = callPackage ../applications/accessibility/dasher { };
+
+  dataclass-wizard = with python3Packages; toPythonApplication dataclass-wizard;
 
   datafusion-cli = callPackage ../development/misc/datafusion { };
 
@@ -9949,6 +9955,8 @@ with pkgs;
   minisign = callPackage ../tools/security/minisign { };
 
   ministat = callPackage ../tools/misc/ministat { };
+
+  mitm6 = callPackage ../tools/security/mitm6 { };
 
   mjolnir = callPackage ../servers/mjolnir {
     matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
@@ -17595,6 +17603,8 @@ with pkgs;
     mpi = mpich;
   };
 
+  gpython = callPackage ../development/interpreters/gpython { };
+
   graphql-client = callPackage ../development/tools/graphql-client {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -24044,6 +24054,8 @@ with pkgs;
 
   nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
 
+  nvidia-system-monitor-qt = libsForQt5.callPackage ../tools/system/nvidia-system-monitor-qt { };
+
   nvitop = callPackage ../tools/system/nvitop { };
 
   nvtop = callPackage ../tools/system/nvtop { };
@@ -27044,6 +27056,8 @@ with pkgs;
   radicale3 = callPackage ../servers/radicale/3.x.nix { };
 
   radicale = radicale3;
+
+  qcal = callPackage ../tools/networking/qcal/default.nix { };
 
   rake = callPackage ../development/tools/build-managers/rake { };
 
@@ -32365,6 +32379,8 @@ with pkgs;
   protonup-qt = python3Packages.callPackage ../applications/misc/protonup-qt { };
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
+
+  pokeget-rs = callPackage ../tools/misc/pokeget-rs { };
 
   popura = callPackage ../tools/networking/popura { };
 
@@ -39539,7 +39555,7 @@ with pkgs;
 
   caffeWithCuda = caffe.override { cudaSupport = true; };
 
-  caffeine-ng = python3Packages.callPackage ../tools/X11/caffeine-ng { };
+  caffeine-ng = callPackage ../tools/X11/caffeine-ng { };
 
   cntk = callPackage ../applications/science/math/cntk {
     stdenv = gcc7Stdenv;

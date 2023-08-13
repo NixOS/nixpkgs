@@ -456,7 +456,7 @@ self: super: with self; {
 
   amazon-ion = callPackage ../development/python-modules/amazon-ion { };
 
-  amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
+  amazon-kclpy = callPackage ../development/python-modules/amazon-kclpy { };
 
   ambee = callPackage ../development/python-modules/ambee { };
 
@@ -2420,6 +2420,8 @@ self: super: with self; {
   databricks-connect = callPackage ../development/python-modules/databricks-connect { };
 
   databricks-sql-connector = callPackage ../development/python-modules/databricks-sql-connector { };
+
+  dataclass-wizard = callPackage ../development/python-modules/dataclass-wizard { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
 
