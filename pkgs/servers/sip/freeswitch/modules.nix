@@ -12,6 +12,7 @@
 , spandsp3
 , sofia_sip
 , libks
+, erlang
 }:
 
 let
@@ -149,7 +150,7 @@ in
     cdr_mongodb = mk "event_handlers/mod_cdr_mongodb" [] [];
     cdr_pg_csv = mk "event_handlers/mod_cdr_pg_csv" [] [];
     cdr_sqlite = mk "event_handlers/mod_cdr_sqlite" [] [];
-    erlang_event = mk "event_handlers/mod_erlang_event" [] [];
+    erlang_event = mk "event_handlers/mod_erlang_event" [] [ erlang ];
     event_multicast = mk "event_handlers/mod_event_multicast" [] [];
     event_socket = mk "event_handlers/mod_event_socket" [] [];
     fail2ban = mk "event_handlers/mod_fail2ban" [] [];
@@ -157,7 +158,7 @@ in
     json_cdr = mk "event_handlers/mod_json_cdr" [] [];
     radius_cdr = mk "event_handlers/mod_radius_cdr" [] [];
     odbc_cdr = mk "event_handlers/mod_odbc_cdr" [] [];
-    kazoo = mk "event_handlers/mod_kazoo" [] [];
+    kazoo = mk "event_handlers/mod_kazoo" [] [ erlang ];
     rayo = mk "event_handlers/mod_rayo" [] [];
     smpp = mk "event_handlers/mod_smpp" [] [];
     snmp = mk "event_handlers/mod_snmp" [] [];
