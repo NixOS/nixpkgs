@@ -2,6 +2,7 @@
 , ncurses, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
 , ldns, libedit, yasm, which, libsndfile, libtiff, libxcrypt
+, spandsp3, curl
 
 , callPackage
 
@@ -119,6 +120,7 @@ stdenv.mkDerivation rec {
     sqlite pcre speex ldns libedit
     libsndfile libtiff
     libuuid libxcrypt
+    spandsp3 curl
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
