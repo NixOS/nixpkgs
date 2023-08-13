@@ -33,15 +33,12 @@
 , withZlib ? true
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "inn";
   version = "2.7.1";
 
-in stdenv.mkDerivation {
-  inherit pname version;
-
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/inn/inn-${version}.tar.gz";
+    url = "https://downloads.isc.org/isc/inn/inn-${finalAttrs.version}.tar.gz";
     hash = "sha256-6ODKd/YPlQ8XR8gvcml918Jpe8aRtG91YgViVXldk/Q=";
   };
 
@@ -63,7 +60,7 @@ in stdenv.mkDerivation {
     inherit (perlPackages) MIMETools GD Encode DBDSQLite;
   };
 
-  nativeBuildInputs = [
+  buildInputs = [
     bison
     flex
     perl
@@ -88,8 +85,6 @@ in stdenv.mkDerivation {
     export CHOWNPROG=set CHGRPPROG=set
   '';
 
-  buildInputs = [ ];
-
   meta = {
     homepage = "https://www.eyrie.org/~eagle/software/inn/";
     description = "INN (InterNetNews) is a full-featured and flexible news server package";
@@ -97,4 +92,4 @@ in stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.ne9z ];
   };
-}
+})
