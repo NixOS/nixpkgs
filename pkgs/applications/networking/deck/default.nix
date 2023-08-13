@@ -21,7 +21,7 @@ in buildGoModule rec {
     "-X github.com/kong/deck/cmd.COMMIT=${short_hash}"
   ];
 
-  vendorSha256 = "sha256-jhLZvusYpX5fW1NCmJtwE/p9/wTwzA2hbwt657VsZts=";
+  vendorHash = "sha256-jhLZvusYpX5fW1NCmJtwE/p9/wTwzA2hbwt657VsZts=";
 
   passthru.updateScript = ./update.sh;
 
