@@ -4590,6 +4590,8 @@ self: super: with self; {
 
   gsd = callPackage ../development/python-modules/gsd { };
 
+  gsm0338 = callPackage ../development/python-modules/gsm0338 { };
+
   gspread = callPackage ../development/python-modules/gspread { };
 
   gssapi = callPackage ../development/python-modules/gssapi {
