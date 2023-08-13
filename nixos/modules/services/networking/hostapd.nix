@@ -987,7 +987,7 @@ in {
                   } // optionalAttrs (bssCfg.authentication.wpaPassword != null) {
                     wpa_passphrase = bssCfg.authentication.wpaPassword;
                   } // optionalAttrs (bssCfg.authentication.wpaPskFile != null) {
-                    wpa_psk_file = bssCfg.authentication.wpaPskFile;
+                    wpa_psk_file = toString bssCfg.authentication.wpaPskFile;
                   };
 
                   dynamicConfigScripts = let

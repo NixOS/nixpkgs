@@ -1,5 +1,4 @@
 { lib
-, attrs
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -13,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "todoist-api-python";
-  version = "2.0.2";
+  version = "2.1.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Doist";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CKOsUb35+7WjSNf4Xo0SK5loIqWJbEnHdmhw9QXWFAI=";
+    hash = "sha256-mBQCC1beBAB+vDV/TrQHQB7cTjjoCDZlqpiYP8IphUA=";
   };
 
   patches = [
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    attrs
     requests
   ];
 

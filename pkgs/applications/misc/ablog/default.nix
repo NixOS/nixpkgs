@@ -3,30 +3,39 @@
 , fetchPypi
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ablog";
-  version = "0.10.33.post1";
+  version = "0.11.4.post1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+vrVQ4sItCXrSCzNXyKk6/6oDBOyfyD7iNWzmcbE/BQ=";
+    hash = "sha256-Zyvx7lVUQtjoGsSpFmH8pFrgTGgsFd4GMsL3fXKtUpU=";
   };
 
-  propagatedBuildInputs = [
-    feedgen
-    sphinx
-    invoke
-    watchdog
-    python-dateutil
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
-  nativeCheckInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
+    docutils
+    feedgen
+    invoke
+    packaging
+    python-dateutil
+    sphinx
+    watchdog
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  pytestFlagsArray = [
+    "--rootdir" "src/ablog"
+  ];
 
   meta = with lib; {
     description = "ABlog for blogging with Sphinx";

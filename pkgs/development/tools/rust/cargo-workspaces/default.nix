@@ -44,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/pksunkara/cargo-workspaces";
     license = licenses.mit;
-    maintainers = with maintainers; [ macalinao ];
+    maintainers = with maintainers; [ macalinao matthiasbeyer ];
   };
 }

@@ -456,7 +456,7 @@ self: super: with self; {
 
   amazon-ion = callPackage ../development/python-modules/amazon-ion { };
 
-  amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
+  amazon-kclpy = callPackage ../development/python-modules/amazon-kclpy { };
 
   ambee = callPackage ../development/python-modules/ambee { };
 
@@ -2365,8 +2365,6 @@ self: super: with self; {
 
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
-  d2to1 = callPackage ../development/python-modules/d2to1 { };
-
   dacite = callPackage ../development/python-modules/dacite { };
 
   daemonize = callPackage ../development/python-modules/daemonize { };
@@ -2422,6 +2420,8 @@ self: super: with self; {
   databricks-connect = callPackage ../development/python-modules/databricks-connect { };
 
   databricks-sql-connector = callPackage ../development/python-modules/databricks-sql-connector { };
+
+  dataclass-wizard = callPackage ../development/python-modules/dataclass-wizard { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
 
@@ -11267,6 +11267,8 @@ self: super: with self; {
   s3transfer = callPackage ../development/python-modules/s3transfer { };
 
   s3-credentials = callPackage ../development/python-modules/s3-credentials { };
+
+  sabctools = callPackage ../development/python-modules/sabctools { };
 
   sabyenc3 = callPackage ../development/python-modules/sabyenc3 { };
 
