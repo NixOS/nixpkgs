@@ -9122,6 +9122,8 @@ with pkgs;
 
   ibniz = callPackage ../tools/graphics/ibniz { };
 
+  icebreaker = callPackage ../servers/icebreaker { };
+
   icecast = callPackage ../servers/icecast { };
 
   icemon = libsForQt5.callPackage ../applications/networking/icemon { };
