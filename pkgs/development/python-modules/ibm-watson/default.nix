@@ -1,15 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, responses
-, pytestCheckHook
-, python-dotenv
-, pytest-rerunfailures
-, requests
-, python-dateutil
-, websocket-client
 , ibm-cloud-sdk-core
+, pytest-rerunfailures
+, pytestCheckHook
+, python-dateutil
+, python-dotenv
 , pythonOlder
+, requests
+, responses
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -27,23 +27,18 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    requests
-    python-dateutil
-    websocket-client
     ibm-cloud-sdk-core
+    python-dateutil
+    requests
+    websocket-client
   ];
 
   nativeCheckInputs = [
-    responses
+    pytest-rerunfailures
     pytestCheckHook
     python-dotenv
-    pytest-rerunfailures
+    responses
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace websocket-client==1.1.0 websocket-client>=1.1.0
-  '';
 
   pythonImportsCheck = [
     "ibm_watson"
