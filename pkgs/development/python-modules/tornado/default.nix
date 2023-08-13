@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.2.0";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
     rev = "v${version}";
-    hash = "sha256-IV0QN3GqoclFo9kWJVc21arypmBkvUClo86Zmt/Gv6E=";
+    hash = "sha256-l9Ce/c2wDSmsySr9yXu5Fl/+63QkQay46aDSUTJmetA=";
   };
 
   nativeCheckInputs = [
