@@ -11806,6 +11806,8 @@ self: super: with self; {
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
+  smpp_pdu = callPackage ../development/python-modules/smpp.pdu { };
+
   snack = toPythonModule (pkgs.newt.override {
     inherit (self) python;
   });
