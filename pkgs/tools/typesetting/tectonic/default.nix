@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://tectonic-typesetting.github.io/";
     changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
+    mainProgram = "tectonic";
     maintainers = with maintainers; [ lluchs doronbehar ];
   };
 }

@@ -37,7 +37,7 @@ Below is a short excerpt of some points in there:
 
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
-* `meta.description` should:
+* `meta.description` must:
   * Be short, just one sentence.
   * Be capitalized.
   * Not start with the package name.
@@ -47,7 +47,8 @@ Below is a short excerpt of some points in there:
 * `meta.license` must be set and fit the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
-* `meta.maintainers` must be set.
+* `meta.mainProgram` must be set when appropriate.
+* `meta.maintainers` should be set.
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 

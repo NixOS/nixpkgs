@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sudo-project/sudo/commit/760c9c11074cb921ecc0da9fbb5f0a12afd46233.patch";
       hash = "sha256-smwyoYEkaqfQYz9C4VVz59YMtKabOPpwhS+RBwXbWuE=";
     })
+    # Fix for the patch above:
+    #   https://bugzilla.sudo.ws/show_bug.cgi?id=1057
+    (fetchpatch {
+      url = "https://github.com/sudo-project/sudo/commit/d148e7d8f9a98726dd4fde6f187c7d614e1258c7.patch";
+      hash = "sha256-3I3PnuAHlBs3JOn0Ul900aFxuUkDGV4sM3S5DNtW7bE=";
+    })
   ];
 
   prePatch = ''

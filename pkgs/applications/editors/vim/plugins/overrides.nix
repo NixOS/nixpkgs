@@ -125,6 +125,7 @@
 
   # must be lua51Packages
 , luaPackages
+, luajitPackages
 }:
 
 self: super: {
@@ -598,6 +599,24 @@ self: super: {
 
     src = "${hurl.src}/contrib/vim";
 
+  };
+
+  image-nvim = super.image-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      nvim-treesitter-parsers.markdown_inline
+      nvim-treesitter-parsers.norg
+    ];
+
+    # Add magick to package.path
+    patches = [ ./patches/image-nvim/magick.patch ];
+
+    postPatch = ''
+      substituteInPlace lua/image/magick.lua \
+        --replace @nix_magick@ ${luajitPackages.magick}
+    '';
+
+    nvimRequireCheck = "image";
   };
 
   jedi-vim = super.jedi-vim.overrideAttrs {
