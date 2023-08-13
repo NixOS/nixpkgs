@@ -75,6 +75,7 @@ my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
+my $timeoutStyle = get("timeoutStyle");
 my $defaultEntry = get("default");
 my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
@@ -319,6 +320,7 @@ $conf .= "
       set default=$defaultEntryText
       set timeout=$timeout
     fi
+    set timeout_style=$timeoutStyle
 
     function savedefault {
         if [ -z \"\${boot_once}\"]; then
@@ -383,6 +385,31 @@ rmtree("$bootPath/theme") or die "cannot clean up theme folder in $bootPath\n" i
 if ($theme) {
     # Copy theme
     rcopy($theme, "$bootPath/theme") or die "cannot copy $theme to $bootPath\n";
+
+    # Detect which modules will need to be loaded
+    my $with_png = 0;
+    my $with_jpeg = 0;
+
+    find({ wanted => sub {
+            if ($_ =~ /\.png$/i) {
+                $with_png = 1;
+            }
+            elsif ($_ =~ /\.jpe?g$/i) {
+                $with_jpeg = 1;
+            }
+    }, no_chdir => 1 }, $theme);
+
+    if ($with_png) {
+        $conf .= "
+            insmod png
+        "
+    }
+    if ($with_jpeg) {
+        $conf .= "
+            insmod jpeg
+        "
+    }
+
     $conf .= "
         # Sets theme.
         set theme=" . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/theme.txt
@@ -725,9 +752,8 @@ if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both"))
     if ($forceInstall eq "true") {
         push @command, "--force";
     }
-    if ($canTouchEfiVariables eq "true") {
-        push @command, "--bootloader-id=$bootloaderId";
-    } else {
+    push @command, "--bootloader-id=$bootloaderId";
+    if ($canTouchEfiVariables ne "true") {
         push @command, "--no-nvram";
         push @command, "--removable" if $efiInstallAsRemovable eq "true";
     }

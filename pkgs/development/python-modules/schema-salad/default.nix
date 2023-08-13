@@ -38,7 +38,7 @@ buildPythonPackage rec {
     rdflib
     ruamel-yaml
     setuptools # needs pkg_resources at runtime
-  ];
+  ] ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = [
     pytestCheckHook

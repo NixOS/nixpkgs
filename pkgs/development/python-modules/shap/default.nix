@@ -13,6 +13,7 @@
 , nose
 , numba
 , numpy
+, oldest-supported-numpy
 , opencv4
 , pandas
 , pyspark
@@ -25,6 +26,7 @@
 , tqdm
 , transformers
 , xgboost
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -42,7 +44,9 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    oldest-supported-numpy
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
