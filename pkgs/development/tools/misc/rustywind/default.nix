@@ -1,20 +1,26 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustywind";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "avencera";
     repo = "rustywind";
     rev = "v${version}";
-    hash = "sha256-cRQdPOiERvxBZzaS26op1bDba9sCn3TyBIhlwI5XCro=";
+    hash = "sha256-rItLlyYUQODFazdVhCdAQgrrF8K2Cjuhyt5pvRyhSro=";
   };
 
-  cargoHash = "sha256-hw9DUe4iJ0DLX4P48ZpvZr6Xmq5rQ5rGmT13fO5uRoY=";
+  cargoHash = "sha256-sY4gXzMn7LTpJ/22BNKbmlHUbEx/CqS2+wa8DfLr/Fw=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "CLI for organizing Tailwind CSS classes";
