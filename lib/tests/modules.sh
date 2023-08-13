@@ -445,7 +445,7 @@ checkConfigOutput '^42$' config.enumInt ./enum.nix
 checkConfigError 'The option .multiple. has conflicting definition values' config.multiple ./enum.nix
 checkConfigOutput '^42$' config.merge ./enum.nix
 checkConfigOutput '^42$' config.priorities ./enum.nix
-checkConfigError 'enum: `values` is not a list' config.string ./enum.nix
+checkConfigError 'enum: `values'\''` is not a list' config.string ./enum.nix
 
 # types.enumWith
 checkConfigOutput '^"f"$' config.enumString ./enumWith.nix
@@ -453,9 +453,9 @@ checkConfigOutput '^24$' config.enumInt ./enumWith.nix
 checkConfigError 'The option .multiple. has conflicting definition values' config.multiple ./enumWith.nix
 checkConfigOutput '^24$' config.merge ./enumWith.nix
 checkConfigOutput '^24$' config.priorities ./enumWith.nix
-checkConfigError 'enumAttrs: `attrs` must be an attribute set' config.stringAttrs ./enumWith.nix
-checkConfigError 'enumWith: `keyValues` is not a list' config.string ./enumWith.nix
-checkConfigError 'enumWith: Some attrset in list `keyValues` is missing `key` or `value` attribute' config.missing ./enumWith.nix
+checkConfigError 'enumAttrs: `attrs'\''` is not an attribute set' config.stringAttrs ./enumWith.nix
+checkConfigError 'enumWith: `keyValues'\''` is not a list' config.string ./enumWith.nix
+checkConfigError 'enumWith: Some attrset in list `keyValues'\''` is missing `key` or `value` attribute' config.missing ./enumWith.nix
 
 cat <<EOF
 ====== module tests ======

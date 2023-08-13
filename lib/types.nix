@@ -827,33 +827,37 @@ rec {
       };
 
     # A value from a set of allowed ones.
-    enum = values:
+    enum = values':
       let
-        type = enumWith (map (v: keyValuePair v v) values);
+        values =
+          assert lib.assertMsg (isList values')
+            "enum: `values'` is not a list: ${builtins.typeOf values'}: ${toPretty {} values'}";
+          values';
       in
-      type // {
-        check =
-          assert lib.assertMsg (isList values)
-            "enum: `values` is not a list: ${builtins.typeOf values}: ${toPretty {} values}";
-          type.check;
-      };
+      enumWith (map (v: keyValuePair v v) values);
 
     # A type that accepts the attribute names of `attrs`,
     # and returns an option value that corresponds to the attribute value
-    enumAttrs = attrs:
+    enumAttrs = attrs':
       let
-        type = enumWith (mapAttrsToList keyValuePair attrs);
+        attrs =
+          assert lib.assertMsg (isAttrs attrs')
+            "enumAttrs: `attrs'` is not an attribute set: ${builtins.typeOf attrs'}: ${toPretty {} attrs'}";
+          attrs';
       in
-      type // {
-        check =
-          assert lib.assertMsg (isAttrs attrs)
-            "enumAttrs: `attrs` must be an attribute set: ${toPretty {} attrs}";
-          type.check;
-      };
+      enumWith (mapAttrsToList keyValuePair attrs);
 
     # A type that accepts the attribute `key` of attribute sets in list `keyValues`,
     # and returns an option value that corresponds to the attribute `value`,
-    enumWith = keyValues:
+    enumWith = keyValues':
+      let
+        keyValues =
+          assert lib.assertMsg (isList keyValues')
+            "enumWith: `keyValues'` is not a list: ${builtins.typeOf keyValues'}: ${toPretty {} keyValues'}";
+          assert lib.assertMsg (all (v: v ? key && v ? value) keyValues')
+            "enumWith: Some attrset in list `keyValues'` is missing `key` or `value` attribute: ${toPretty {} keyValues'}";
+          keyValues';
+      in
       mkOptionType rec {
         name = "enumWith";
         description =
@@ -882,12 +886,7 @@ rec {
           if length keyValues < 2
           then "noun"
           else "conjunction";
-        check =
-          assert lib.assertMsg (isList keyValues)
-            "enumWith: `keyValues` is not a list: ${builtins.typeOf keyValues}: ${toPretty {} keyValues}";
-          assert lib.assertMsg (all (v: v ? key && v ? value) keyValues)
-            "enumWith: Some attrset in list `keyValues` is missing `key` or `value` attribute: ${toPretty {} keyValues}";
-          flip elem (catAttrs "key" keyValues);
+        check = flip elem (catAttrs "key" keyValues);
         merge = loc: defs:
           (findFirst (v: v.key == (mergeEqualOption loc defs)) {} keyValues).value;
         functor = (defaultFunctor name) // { type = enumWith; payload = keyValues; binOp = concat; };

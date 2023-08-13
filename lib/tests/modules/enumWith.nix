@@ -1,10 +1,11 @@
 { lib, ... }:
 with lib;
+with attrsets;
 with types;
 {
   options = mapAttrs (_: type: mkOption { inherit type; }) rec {
     enumString = enumAttrs { "foo" = "f"; };
-    enumInt = enumWith [ (attrsets.keyValuePair 42 24) ];
+    enumInt = enumWith [ (keyValuePair 42 24) ];
     merge = enumString.typeMerge enumInt.functor;
     multiple = merge;
     priorities = merge;
