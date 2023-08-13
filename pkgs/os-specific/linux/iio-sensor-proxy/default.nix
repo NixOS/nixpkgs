@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, glib
 , cmake
 , libxml2
 , meson
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     cmake
+    glib
     libxml2
     ninja
     pkg-config

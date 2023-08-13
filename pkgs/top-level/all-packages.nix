@@ -6962,7 +6962,7 @@ with pkgs;
   code-browser-gtk2 = callPackage ../applications/editors/code-browser { withGtk2 = true; };
   code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk3 = true; };
 
-  CertDump = callPackage ../tools/security/CertDump { };
+  certdump = callPackage ../tools/security/certdump { };
 
   certstrap = callPackage ../tools/security/certstrap { };
 
@@ -20685,6 +20685,8 @@ with pkgs;
 
   clanlib = callPackage ../development/libraries/clanlib { };
 
+  clap = callPackage ../development/libraries/clap { };
+
   classads = callPackage ../development/libraries/classads { };
 
   clfft = callPackage ../development/libraries/clfft { };
@@ -21644,7 +21646,7 @@ with pkgs;
 
   granted = callPackage ../tools/admin/granted { };
 
-  grantlee = callPackage ../development/libraries/grantlee { };
+  grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
   gsasl = callPackage ../development/libraries/gsasl { };
 
@@ -21812,6 +21814,8 @@ with pkgs;
   gtkspellmm = callPackage ../development/libraries/gtkspellmm { };
 
   gtk-layer-shell = callPackage ../development/libraries/gtk-layer-shell { };
+
+  gtk4-layer-shell = callPackage ../development/libraries/gtk4-layer-shell { };
 
   gts = callPackage ../development/libraries/gts { };
 
@@ -25431,10 +25435,7 @@ with pkgs;
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
   wt = wt4;
-  inherit (callPackages ../development/libraries/wt {
-    boost = boost175;
-  })
-    wt3
+  inherit (libsForQt5.callPackage ../development/libraries/wt { })
     wt4;
 
   wxformbuilder = callPackage ../development/tools/wxformbuilder { };
@@ -40661,6 +40662,8 @@ with pkgs;
   qdl = callPackage ../tools/misc/qdl { };
 
   qperf = callPackage ../os-specific/linux/qperf { };
+
+  qzdl = libsForQt5.callPackage ../games/qzdl { };
 
   rates = callPackage ../tools/misc/rates {
     inherit (darwin.apple_sdk.frameworks) Security;
