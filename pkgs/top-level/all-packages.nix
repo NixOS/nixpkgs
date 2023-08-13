@@ -26635,6 +26635,8 @@ with pkgs;
 
   quark = callPackage ../servers/http/quark { };
 
+  sn = callPackage ../servers/news/sn { };
+
   soft-serve = callPackage ../servers/soft-serve { };
 
   sympa = callPackage ../servers/mail/sympa { };
