@@ -4,6 +4,18 @@
 , fetchFromGitHub
 , fetchpatch
 , pytestCheckHook
+
+# for passthru.tests
+, distributed
+, jupyter-server
+, jupyterlab
+, matplotlib
+, mitmproxy
+, pytest-tornado
+, pytest-tornasync
+, pyzmq
+, sockjs-tornado
+, urllib3
 }:
 
 buildPythonPackage rec {
@@ -46,6 +58,20 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tornado" ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit
+      distributed
+      jupyter-server
+      jupyterlab
+      matplotlib
+      mitmproxy
+      pytest-tornado
+      pytest-tornasync
+      pyzmq
+      sockjs-tornado
+      urllib3;
+  };
 
   meta = with lib; {
     description = "A web framework and asynchronous networking library";
