@@ -4,6 +4,8 @@
 , pythonOlder
 , installShellFiles
 , setuptools
+, setuptools-scm
+, wheel
 , docopt
 , hidapi
 , pyusb
@@ -29,9 +31,13 @@ buildPythonPackage rec {
     hash = "sha256-0QjgnTxqB50JNjSUAgBrGyhN2XC/TDYiC1tvhw1Bl1M=";
   };
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
     installShellFiles
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
