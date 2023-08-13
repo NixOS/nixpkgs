@@ -16,7 +16,10 @@ rec {
     sha256 = "sha256-EW35T7KUc/L1Zy4+oaJOC6mlVpbvhTfnU3NNFGoZAJg=";
   };
 
-  propagatedBuildInputs = [ yojson logs lsp ppx_yojson_conv_lib ];
+  lsp_v = lsp.override {
+    version = "1.14.2";
+  };
+  propagatedBuildInputs = [ yojson logs lsp_v ppx_yojson_conv_lib ];
 
   meta = with lib; {
     description = "LSP server library";
