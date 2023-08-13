@@ -106,6 +106,80 @@ This section describes in some detail how changes can be made and proposed with 
    git push --force-with-lease
    ```
 
+### Rebasing between branches (i.e. from master to staging)
+
+From time to time, changes between branches must be rebased, for example, if the
+number of new rebuilds they would cause is too large for the target branch. When
+rebasing, care must be taken to include only the intended changes, otherwise
+many CODEOWNERS will be inadvertently requested for review. To achieve this,
+rebasing should not be performed directly on the target branch, but on the merge
+base between the current and target branch. As an additional precautionary measure,
+you should temporarily mark the PR as draft for the duration of the operation.
+This reduces the probability of mass-pinging people. (OfBorg might still
+request a couple of persons for reviews though.)
+
+In the following example, we assume that the current branch, called `feature`,
+is based on `master`, and we rebase it onto the merge base between
+`master` and `staging` so that the PR can eventually be retargeted to
+`staging` without causing a mess. The example uses `upstream` as the remote for `NixOS/nixpkgs.git`
+while `origin` is the remote you are pushing to.
+
+
+```console
+# Rebase your commits onto the common merge base
+git rebase --onto upstream/staging... upstream/master
+# Force push your changes
+git push origin feature --force-with-lease
+```
+
+The syntax `upstream/staging...` is equivalent to `upstream/staging...HEAD` and
+stands for the merge base between `upstream/staging` and `HEAD` (hence between
+`upstream/staging` and `upstream/master`).
+
+Then change the base branch in the GitHub PR using the *Edit* button in the upper
+right corner, and switch from `master` to `staging`. *After* the PR has been
+retargeted it might be necessary to do a final rebase onto the target branch, to
+resolve any outstanding merge conflicts.
+
+```console
+# Rebase onto target branch
+git rebase upstream/staging
+# Review and fixup possible conflicts
+git status
+# Force push your changes
+git push origin feature --force-with-lease
+```
+
+#### Something went wrong and a lot of people were pinged
+
+It happens. Remember to be kind, especially to new contributors.
+There is no way back, so the pull request should be closed and locked
+(if possible). The changes should be re-submitted in a new PR, in which the people
+originally involved in the conversation need to manually be pinged again.
+No further discussion should happen on the original PR, as a lot of people
+are now subscribed to it.
+
+The following message (or a version thereof) might be left when closing to
+describe the situation, since closing and locking without any explanation
+is kind of rude:
+
+```markdown
+It looks like you accidentally mass-pinged a bunch of people, which are now subscribed
+and getting notifications for everything in this pull request. Unfortunately, they
+cannot be automatically unsubscribed from the issue (removing review request does not
+unsubscribe), therefore development cannot continue in this pull request anymore.
+
+Please open a new pull request with your changes, link back to this one and ping the
+people actually involved in here over there.
+
+In order to avoid this in the future, there are instructions for how to properly
+rebase between branches in our [contribution guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
+Setting your pull request to draft prior to rebasing is strongly recommended.
+In draft status, you can preview the list of people that are about to be requested
+for review, which allows you to sidestep this issue.
+This is not a bulletproof method though, as OfBorg still does review requests even on draft PRs.
+```
+
 ## Flow of changes
 
 After a Nixpkgs pull requests is merged, it eventually makes it to the [official Hydra CI](https://hydra.nixos.org/).
@@ -272,80 +346,6 @@ Which changes cause mass rebuilds is not formally defined.
 In order to help the decision, CI automatically assigns [`rebuild` labels](https://github.com/NixOS/nixpkgs/labels?q=rebuild) to pull requests based on the number of packages they cause rebuilds for.
 As a rule of thumb, if the number of rebuilds is **over 500**, it can be considered a mass rebuild.
 To get a sense for what changes are considered mass rebuilds, see [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged).
-
-#### Rebasing between branches (i.e. from master to staging)
-
-From time to time, changes between branches must be rebased, for example, if the
-number of new rebuilds they would cause is too large for the target branch. When
-rebasing, care must be taken to include only the intended changes, otherwise
-many CODEOWNERS will be inadvertently requested for review. To achieve this,
-rebasing should not be performed directly on the target branch, but on the merge
-base between the current and target branch. As an additional precautionary measure,
-you should temporarily mark the PR as draft for the duration of the operation.
-This reduces the probability of mass-pinging people. (OfBorg might still
-request a couple of persons for reviews though.)
-
-In the following example, we assume that the current branch, called `feature`,
-is based on `master`, and we rebase it onto the merge base between
-`master` and `staging` so that the PR can eventually be retargeted to
-`staging` without causing a mess. The example uses `upstream` as the remote for `NixOS/nixpkgs.git`
-while `origin` is the remote you are pushing to.
-
-
-```console
-# Rebase your commits onto the common merge base
-git rebase --onto upstream/staging... upstream/master
-# Force push your changes
-git push origin feature --force-with-lease
-```
-
-The syntax `upstream/staging...` is equivalent to `upstream/staging...HEAD` and
-stands for the merge base between `upstream/staging` and `HEAD` (hence between
-`upstream/staging` and `upstream/master`).
-
-Then change the base branch in the GitHub PR using the *Edit* button in the upper
-right corner, and switch from `master` to `staging`. *After* the PR has been
-retargeted it might be necessary to do a final rebase onto the target branch, to
-resolve any outstanding merge conflicts.
-
-```console
-# Rebase onto target branch
-git rebase upstream/staging
-# Review and fixup possible conflicts
-git status
-# Force push your changes
-git push origin feature --force-with-lease
-```
-
-##### Something went wrong and a lot of people were pinged
-
-It happens. Remember to be kind, especially to new contributors.
-There is no way back, so the pull request should be closed and locked
-(if possible). The changes should be re-submitted in a new PR, in which the people
-originally involved in the conversation need to manually be pinged again.
-No further discussion should happen on the original PR, as a lot of people
-are now subscribed to it.
-
-The following message (or a version thereof) might be left when closing to
-describe the situation, since closing and locking without any explanation
-is kind of rude:
-
-```markdown
-It looks like you accidentally mass-pinged a bunch of people, which are now subscribed
-and getting notifications for everything in this pull request. Unfortunately, they
-cannot be automatically unsubscribed from the issue (removing review request does not
-unsubscribe), therefore development cannot continue in this pull request anymore.
-
-Please open a new pull request with your changes, link back to this one and ping the
-people actually involved in here over there.
-
-In order to avoid this in the future, there are instructions for how to properly
-rebase between branches in our [contribution guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
-Setting your pull request to draft prior to rebasing is strongly recommended.
-In draft status, you can preview the list of people that are about to be requested
-for review, which allows you to sidestep this issue.
-This is not a bulletproof method though, as OfBorg still does review requests even on draft PRs.
-```
 
 ## Reviewing contributions
 
