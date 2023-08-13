@@ -21642,7 +21642,7 @@ with pkgs;
 
   granted = callPackage ../tools/admin/granted { };
 
-  grantlee = callPackage ../development/libraries/grantlee { };
+  grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
   gsasl = callPackage ../development/libraries/gsasl { };
 
