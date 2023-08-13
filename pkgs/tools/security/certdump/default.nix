@@ -6,8 +6,7 @@
 }:
 
 buildDotnetModule rec {
-  pname = "CertDump";
-
+  pname = "certdump";
   version = "unstable-2023-07-12";
 
   src = fetchFromGitHub {
@@ -40,6 +39,5 @@ buildDotnetModule rec {
     '';
     license = licenses.asl20;
     maintainers = [ maintainers.baloo ];
-    platforms = with platforms; (linux ++ darwin);
   };
 }
