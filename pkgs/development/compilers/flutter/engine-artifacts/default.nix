@@ -19,10 +19,14 @@ let
     version = engineVersion;
     dontUnpack = true;
     src = fetchurl {
+      pname = "flutter-sky_engine-LICENSE";
+      version = engineVersion;
       url = "https://raw.githubusercontent.com/flutter/engine/${engineVersion}/sky/packages/sky_engine/LICENSE";
       sha256 = hashes.skyNotice;
     };
     flutterNotice = fetchurl {
+      pname = "flutter-LICENSE";
+      version = engineVersion;
       url = "https://raw.githubusercontent.com/flutter/flutter/${flutterVersion}/LICENSE";
       sha256 = hashes.flutterNotice;
     };
