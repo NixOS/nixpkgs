@@ -1,5 +1,4 @@
-{ pkgsi686Linux
-, stdenv
+{ stdenv
 , fetchurl
 , dpkg
 , makeWrapper
@@ -22,7 +21,7 @@ let
   reldir = "opt/brother/Printers/${model}/";
 
 in rec {
-  driver = pkgsi686Linux.stdenv.mkDerivation rec {
+  driver = stdenv.mkDerivation rec {
     inherit src version;
     name = "${model}drv-${version}";
 
@@ -40,9 +39,8 @@ in rec {
         --prefix PATH : ${lib.makeBinPath [
           coreutils ghostscript gnugrep gnused which
         ]}
-    # need to use i686 glibc here, these are 32bit proprietary binaries
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $dir/lpd/i686/brmfcj1205wfilter
+      $dir/lpd/x86_64/brmfcj1205wfilter
     '';
 
     meta = {
@@ -50,8 +48,8 @@ in rec {
       homepage = "http://www.brother.com/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;
-      platforms = [ "x86_64-linux" "i686-linux" ];
-      maintainers = [ lib.maintainers.steveej ];
+      platforms = [ "x86_64-linux" ];
+      maintainers = [ lib.maintainers.saori-yuko ];
     };
   };
 
@@ -83,8 +81,8 @@ in rec {
       homepage = "http://www.brother.com/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.gpl2;
-      platforms = [ "x86_64-linux" "i686-linux" ];
-      maintainers = [ lib.maintainers.steveej ];
+      platforms = [ "x86_64-linux" ];
+      maintainers = [ lib.maintainers.saori-yuko ];
     };
   };
 }
