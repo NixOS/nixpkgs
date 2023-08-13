@@ -629,6 +629,7 @@ let
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
+    ijtiff = [ pkgs.libtiff ];
     ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ];
     qqconf = [ pkgs.fftw.dev ];
   };
@@ -1365,6 +1366,12 @@ let
 
     textshaping = old.textshaping.overrideAttrs (attrs: {
       env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
+    });
+
+    ijtiff = old.ijtiff.overrideAttrs (_: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
     });
 
     torch = old.torch.overrideAttrs (attrs: {
