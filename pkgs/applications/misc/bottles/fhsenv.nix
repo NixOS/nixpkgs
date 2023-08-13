@@ -1,7 +1,6 @@
 { buildFHSEnv
 , symlinkJoin
 , bottles-unwrapped
-, gst_all_1
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 }:
@@ -92,10 +91,6 @@ let fhsEnv = {
       zlib # Freetype
     ] ++ xorgDeps pkgs
     ++ extraLibraries pkgs;
-
-  profile = ''
-    export GST_PLUGIN_PATH=/usr/lib32/gstreamer-1.0:/usr/lib64/gstreamer-1.0
-  '';
 };
 in
 symlinkJoin {
