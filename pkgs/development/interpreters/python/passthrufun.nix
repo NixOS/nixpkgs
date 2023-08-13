@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, pythonPackagesExtensions, config, makeScopeWithSplicing, ... }:
+{ lib, stdenv, callPackage, pythonPackagesExtensions, config, makeScopeWithSplicing', ... }:
 
 { implementation
 , libPrefix
@@ -48,7 +48,6 @@
       };
       hooks = import ./hooks/default.nix;
       keep = lib.extends hooks pythonPackagesFun;
-      extra = _: {};
       optionalExtensions = cond: as: lib.optionals cond as;
       pythonExtension = import ../../../top-level/python-packages.nix;
       python2Extension = import ../../../top-level/python2-packages.nix;
@@ -60,12 +59,10 @@
         overrides
       ]);
       aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
-    in makeScopeWithSplicing
-      otherSplices
-      keep
-      extra
-      (lib.extends (lib.composeExtensions aliases extensions) keep))
-    {
+    in makeScopeWithSplicing' {
+      inherit otherSplices keep;
+      f = lib.extends (lib.composeExtensions aliases extensions) keep;
+    }) {
       overrides = packageOverrides;
       python = self;
     });

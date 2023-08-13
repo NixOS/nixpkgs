@@ -24479,7 +24479,7 @@ with pkgs;
   qt5 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.15) {
       inherit (__splicedPackages)
-        makeScopeWithSplicing generateSplicesForMkScope lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper
+        makeScopeWithSplicing' generateSplicesForMkScope lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper
         bison cups dconf harfbuzz libGL perl gtk3 python3
         darwin buildPackages;
       inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
@@ -27317,9 +27317,6 @@ with pkgs;
   };
 
   xorg = let
-    keep = _self: { };
-    extra = _spliced0: { };
-
     # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
     # so as not to have the newly bound xorg items already in scope,  which would
     # have created a cycle.
@@ -27334,11 +27331,10 @@ with pkgs;
 
     generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix { };
 
-    xorgPackages = makeScopeWithSplicing
-      (generateSplicesForMkScope "xorg")
-      keep
-      extra
-      (lib.extends overrides generatedPackages);
+    xorgPackages = makeScopeWithSplicing' {
+      otherSplices = generateSplicesForMkScope "xorg";
+      f = lib.extends overrides generatedPackages;
+    };
 
   in recurseIntoAttrs xorgPackages;
 
