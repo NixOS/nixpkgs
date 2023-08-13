@@ -144,9 +144,24 @@ rec {
        => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
   */
   getExe = x:
-    "${lib.getBin x}/bin/${x.meta.mainProgram or (
-      # This could be turned into an error when 23.05 is at end of life
-      lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, specify the full path to the program, such as \"\${lib.getBin foo}/bin/bar\"."
-      lib.getName x
-    )}";
+    let
+      y = x.meta.mainProgram or (
+        # This could be turned into an error when 23.05 is at end of life
+        lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, specify the full path to the program, such as \"\${lib.getBin foo}/bin/bar\"."
+          lib.getName
+          x
+      );
+    in
+    getExe' x y;
+
+  /* Get the path of a program of a derivation.
+
+     Type: getExe' :: derivation -> string -> string
+     Example:
+       getExe' pkgs.hello "hello"
+       => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
+       getExe' pkgs.imagemagick "convert"
+       => "/nix/store/5rs48jamq7k6sal98ymj9l4k2bnwq515-imagemagick-7.1.1-15/bin/convert"
+  */
+  getExe' = x: y: "${lib.getBin x}/bin/${y}";
 }
