@@ -6,14 +6,15 @@
 , gobject-introspection
 , pygobject3
 , goocanvas2
-, isPy3k
+, pythonOlder
  }:
 
 buildPythonPackage rec {
   pname = "GooCalendar";
   version = "0.8.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
