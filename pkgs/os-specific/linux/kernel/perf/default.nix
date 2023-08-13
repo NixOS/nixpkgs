@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   postPatch = ''
     # Linux scripts
     patchShebangs scripts
-
+    patchShebangs tools/perf/check-headers.sh
   '' + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
     # perf-specific scripts
     patchShebangs tools/perf/pmu-events
