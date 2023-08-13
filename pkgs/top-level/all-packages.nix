@@ -19792,7 +19792,7 @@ with pkgs;
 
   cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix { };
 
-  cutterPlugins = recurseIntoAttrs rizin.plugins;
+  cutterPlugins = recurseIntoAttrs cutter.plugins;
 
   ragel = ragelStable;
 
