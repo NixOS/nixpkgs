@@ -585,6 +585,7 @@ let
     qrqc = [ pkgs.zlib.dev ];
     rJPSGCS = [ pkgs.zlib.dev ];
     rhdf5filters = with pkgs; [ zlib.dev bzip2.dev ];
+    symengine = with pkgs; [ mpfr symengine flint ];
     rtk = [ pkgs.zlib.dev ];
     scPipe = [ pkgs.zlib.dev ];
     seqTools = [ pkgs.zlib.dev ];
@@ -1319,6 +1320,16 @@ let
     });
 
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
+
+    symengine = old.symengine.overrideAttrs (_: {
+      preConfigure = ''
+        rm configure
+        cat > src/Makevars << EOF
+        PKG_LIBS=-lsymengine
+        all: $(SHLIB)
+        EOF
+      '';
+    });
 
     RandomFieldsUtils = old.RandomFieldsUtils.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
