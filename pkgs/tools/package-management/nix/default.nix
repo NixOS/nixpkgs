@@ -208,9 +208,9 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = self.nix_2_15;
+  stable = self.nix_2_17;
 
-  unstable = self.nix_2_17;
+  unstable = self.stable;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
