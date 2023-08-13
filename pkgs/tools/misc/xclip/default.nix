@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     mainProgram = "xclip";
     platforms = lib.platforms.all;
+    mainProgram = "xclip";
   };
 }
