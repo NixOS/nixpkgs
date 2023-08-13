@@ -112,8 +112,8 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ 
-    pkg-config autoreconfHook perl which yasm 
+  nativeBuildInputs = [
+    pkg-config autoreconfHook perl which yasm
   ] ++ lib.unique (lib.concatMap (mod: mod.nativeInputs) enabledModules);
   buildInputs = [
     openssl ncurses gnutls readline libjpeg
