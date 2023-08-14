@@ -57,6 +57,7 @@ buildPythonPackage rec {
     "pylink-square"
     "pyocd"
     "typing-extensions"
+    "cryptography"
   ];
 
   pythonRemoveDeps = [

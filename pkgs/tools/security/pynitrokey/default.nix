@@ -51,6 +51,7 @@ buildPythonApplication rec {
     "python-dateutil"
     "spsdk"
     "typing_extensions"
+    "click"
   ];
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
