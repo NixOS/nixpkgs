@@ -118,5 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ qbit spikespaz ];
     platforms = lib.platforms.linux;
+    mainProgram = "tidal-hifi";
   };
 })
