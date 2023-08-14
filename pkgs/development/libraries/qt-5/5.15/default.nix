@@ -46,6 +46,7 @@ let
       ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
+      ./qtbase.patch.d/9999-backport-dbus-crash.patch
     ];
     qtdeclarative = [
       ./qtdeclarative.patch
