@@ -1,12 +1,18 @@
 { lib
-, fetchPypi
 , buildPythonPackage
+, fetchPypi
+, absl-py
+, chex
+, jax
+, jaxlib
 , numpy
 , tensorflow-probability
-, chex
 , dm-haiku
+, mock
+, optax
 , pytestCheckHook
-, jaxlib
+, tensorflow
+, tensorflow-datasets
 }:
 
 buildPythonPackage rec {
@@ -19,7 +25,9 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
+    absl-py
     chex
+    jax
     jaxlib
     numpy
     tensorflow-probability
@@ -27,7 +35,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-haiku
+    mock
+    optax
     pytestCheckHook
+    tensorflow
+    tensorflow-datasets
   ];
 
   pythonImportsCheck = [
