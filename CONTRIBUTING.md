@@ -3,7 +3,9 @@
 This document is for people wanting to contribute to the implementation of Nixpkgs.
 This involves interacting with implementation changes that are proposed using [GitHub](https://github.com/) [pull requests](https://docs.github.com/pull-requests) to the [Nixpkgs](https://github.com/nixos/nixpkgs/) repository (which you're in right now).
 
-As such, a GitHub account is required, which you can sign up for [here](https://github.com/signup).
+As such, a GitHub account is recommended, which you can sign up for [here](https://github.com/signup).
+See [here](https://discourse.nixos.org/t/about-the-patches-category/477) for how to contribute without a GitHub account.
+
 Additionally this document assumes that you already know how to use GitHub and Git.
 If that's not the case, we recommend learning about it first [here](https://docs.github.com/en/get-started/quickstart/hello-world).
 
@@ -91,6 +93,9 @@ This section describes in some detail how changes can be made and proposed with 
 7. Respond to review comments, potential CI failures and potential merge conflicts by updating the pull request.
    Always keep the pull request in a mergeable state.
 
+   The custom [OfBorg](https://github.com/NixOS/ofborg) CI system will perform various checks to help ensure code quality, whose results you can see at the bottom of the pull request.
+   See [the OfBorg Readme](https://github.com/NixOS/ofborg#readme) for more details.
+
    - To add new commits, repeat steps 3-4 and push the result using
      ```
      git push
@@ -133,7 +138,7 @@ Depending if you use NixOS or other platforms you can use one of the following m
 - **Globally enable sandboxing on NixOS**: add the following to `configuration.nix`
 
   ```nix
-  nix.useSandbox = true;
+  nix.settings.sandbox = true;
   ```
 
 - **Globally enable sandboxing on non-NixOS platforms**: add the following to: `/etc/nix/nix.conf`
@@ -152,7 +157,7 @@ Packages with automated tests are much more likely to be merged in a timely fash
 
 #### Tested compilation of all pkgs that depend on this change using `nixpkgs-review`
 
-If you are updating a package’s version, you can use `nixpkgs-review` to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommitted changes with the `wip` option or specifying a GitHub pull request number.
+If you are modifying a package, you can use `nixpkgs-review` to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommitted changes with the `wip` option or specifying a GitHub pull request number.
 
 Review changes from pull request number 12345:
 
