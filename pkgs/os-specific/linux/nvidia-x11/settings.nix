@@ -52,6 +52,12 @@ stdenv.mkDerivation {
       # fixes "multiple definition of `VDPAUDeviceFunctions'" linking errors
       url = "https://github.com/NVIDIA/nvidia-settings/commit/a7c1f5fce6303a643fadff7d85d59934bd0cf6b6.patch";
       hash = "sha256-ZwF3dRTYt/hO8ELg9weoz1U/XcU93qiJL2d1aq1Jlak=";
+    })
+    ++ lib.optional (lib.versionAtLeast nvidia_x11.settingsVersion "515.43.04")
+    (fetchpatch {
+      # fix wayland support for compositors that use wl_output version 4
+      url = "https://github.com/NVIDIA/nvidia-settings/pull/99/commits/2e0575197e2b3247deafd2a48f45afc038939a06.patch";
+      hash = "sha256-wKuO5CUTUuwYvsP46Pz+6fI0yxLNpZv8qlbL0TFkEFE=";
     });
 
   postPatch = lib.optionalString nvidia_x11.useProfiles ''
