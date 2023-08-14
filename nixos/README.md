@@ -10,6 +10,8 @@ You can add new module to your NixOS configuration file (usually it’s `/etc/ni
 
 ## Reviewing contributions
 
+When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
+
 ### Module updates
 
 Module updates are submissions changing modules in some ways. These often contains changes to the options or introduce new options.

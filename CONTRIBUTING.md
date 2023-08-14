@@ -506,8 +506,6 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
 ## Commit conventions
 [commit-conventions]: #commit-conventions
 
-- When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
-
 - Create a commit for each logical unit.
 
 - Check for unnecessary whitespace with `git diff --check` before committing.
