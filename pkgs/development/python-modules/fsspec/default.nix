@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2023.4.0";
+  version = "2023.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "filesystem_spec";
     rev = version;
-    hash = "sha256-qkvhmXJNxA8v+kbZ6ulxJAQr7ReQpb+JkbhOUnL59KM=";
+    hash = "sha256-YIAKEyhZqnqHkWAP2skrPXRw4fJzm1flO95LL7CwpBU=";
   };
 
   propagatedBuildInputs = [
