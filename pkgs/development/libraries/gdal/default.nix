@@ -9,6 +9,9 @@
 , useLibJXL ? (!useMinimalFeatures)
 , useMysql ? (!useMinimalFeatures)
 , usePostgres ? (!useMinimalFeatures)
+, usePoppler ? (!useMinimalFeatures)
+, useArrow ? (!useMinimalFeatures)
+, useHDF ? (!useMinimalFeatures)
 
 , bison
 , cmake
@@ -124,14 +127,19 @@ stdenv.mkDerivation (finalAttrs: {
       ];
       mysqlDeps = lib.optionals useMysql [ libmysqlclient ];
       postgresDeps = lib.optionals usePostgres [ postgresql ];
+      popplerDeps = lib.optionals usePoppler [ poppler ];
+      arrowDeps = lib.optionals useArrow [ arrow-cpp ];
+      hdfDeps = lib.optionals useHDF [
+        hdf4
+        hdf5-cpp
+      ];
 
       darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
-      nonDarwinDeps = lib.optionals (!stdenv.isDarwin) [
+      nonDarwinDeps = lib.optionals (!stdenv.isDarwin) ([
         # tests for formats enabled by these packages fail on macos
-        arrow-cpp
         openexr
         xercesc
-      ];
+      ] ++ arrowDeps);
     in [
       armadillo
       c-blosc
@@ -145,8 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
       libgeotiff
       geos
       giflib
-      hdf4
-      hdf5-cpp
       libjpeg
       json_c
       lerc
@@ -158,7 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       pcre2
       libpng
-      poppler
       proj
       qhull
       libspatialite
@@ -175,6 +180,9 @@ stdenv.mkDerivation (finalAttrs: {
       ++ libJxlDeps
       ++ mysqlDeps
       ++ postgresDeps
+      ++ popplerDeps
+      ++ arrowDeps
+      ++ hdfDeps
       ++ darwinDeps
       ++ nonDarwinDeps;
 
@@ -229,6 +237,8 @@ stdenv.mkDerivation (finalAttrs: {
     "test_rda_download_queue"
   ] ++ lib.optionals (lib.versionOlder proj.version "8") [
     "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
+  ] ++ lib.optionals (!usePoppler) [
+    "test_pdf_jpx_compression"
   ];
   postCheck = ''
     popd # autotest
