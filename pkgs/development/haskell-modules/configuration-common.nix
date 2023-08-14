@@ -195,7 +195,11 @@ self: super: {
       ];
     in
     {
-      aeson = aesonQuickCheckPatch super.aeson;
+      aeson = overrideCabal {
+        # aeson's test suite includes some tests with big numbers that fail on 32bit
+        # https://github.com/haskell/aeson/issues/1060
+        doCheck = !pkgs.stdenv.hostPlatform.is32bit;
+      } (aesonQuickCheckPatch super.aeson);
     }
   ) aeson
     ;
