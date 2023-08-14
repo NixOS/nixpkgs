@@ -185,10 +185,14 @@ let
       # So instead we'll list a lot of possibly valid modes :/
       #"3840x2160"
       #"2560x1440"
+      "1920x1200"
       "1920x1080"
       "1366x768"
+      "1280x800"
       "1280x720"
+      "1200x1920"
       "1024x768"
+      "800x1280"
       "800x600"
       "auto"
     ]}
