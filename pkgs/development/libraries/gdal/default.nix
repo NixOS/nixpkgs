@@ -5,6 +5,7 @@
 
 , useMinimalFeatures ? false
 , useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
+, useLibHEIF ? (!useMinimalFeatures)
 
 , bison
 , cmake
@@ -106,6 +107,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     let
       tileDbDeps = lib.optionals useTiledb [ tiledb ];
+      libHeifDeps = lib.optionals useLibHEIF [
+        libheif
+        dav1d
+        libaom
+        libde265
+        rav1e
+        x265
+      ];
 
       darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
       nonDarwinDeps = lib.optionals (!stdenv.isDarwin) [
@@ -127,12 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
       libgeotiff
       geos
       giflib
-      libheif
-      dav1d  # required by libheif
-      libaom  # required by libheif
-      libde265  # required by libheif
-      rav1e  # required by libheif
-      x265  # required by libheif
       hdf4
       hdf5-cpp
       libjpeg
@@ -163,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3
       python3.pkgs.numpy
     ] ++ tileDbDeps
+      ++ libHeifDeps
       ++ darwinDeps
       ++ nonDarwinDeps;
 
