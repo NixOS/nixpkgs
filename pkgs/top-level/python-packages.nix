@@ -548,6 +548,8 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
+  anywidget = callPackage ../development/python-modules/anywidget { };
+
   aocd = callPackage ../development/python-modules/aocd { };
 
   apache-beam = callPackage ../development/python-modules/apache-beam { };
