@@ -303,7 +303,7 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/picom --config ${configFile}";
+        ExecStart = "${getExe cfg.package} --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };
