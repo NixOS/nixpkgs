@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "The web version of Tidal running in electron with hifi support thanks to widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ qbit ];
+    maintainers = with lib.maintainers; [ qbit spikespaz ];
     platforms = lib.platforms.linux;
   };
 })
