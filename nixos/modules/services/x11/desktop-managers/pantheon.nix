@@ -200,7 +200,6 @@ in
         gtk3.out # for gtk-launch program
         onboard
         orca # elementary/greeter#668
-        qgnomeplatform
         sound-theme-freedesktop
         xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
       ]) ++ (with pkgs.pantheon; [
@@ -260,10 +259,10 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt applications under Pantheon
-      qt.enable = true;
-      qt.platformTheme = "gnome";
-      qt.style = "adwaita";
+      # Use native GTK file chooser on Qt apps. This is because Qt does not know Pantheon.
+      # https://invent.kde.org/qt/qt/qtbase/-/blob/6.6/src/gui/platform/unix/qgenericunixthemes.cpp#L1312
+      # https://github.com/elementary/default-settings/blob/7.0.2/profile.d/qt-qpa-platformtheme.sh
+      environment.variables.QT_QPA_PLATFORMTHEME = mkDefault "gtk3";
 
       # Default Fonts
       fonts.packages = with pkgs; [
