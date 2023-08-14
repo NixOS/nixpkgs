@@ -17175,6 +17175,8 @@ with pkgs;
   opensycl = darwin.apple_sdk_11_0.callPackage ../development/compilers/opensycl { };
   opensyclWithRocm = opensycl.override { rocmSupport = true; };
 
+  pest-ide-tools = callPackage ../development/tools/misc/pest-ide-tools { };
+
   ravedude = callPackage ../development/tools/rust/ravedude { };
 
   ra-multiplex = callPackage ../development/tools/rust/ra-multiplex {};
