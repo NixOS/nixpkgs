@@ -1,30 +1,41 @@
 { lib
-, buildPythonPackage
 , beartype
+, buildPythonPackage
 , click
-, fetchPypi
+, fetchFromGitHub
 , license-expression
-, pyyaml
-, rdflib
 , ply
-, semantic-version
-, xmltodict
 , pytestCheckHook
 , pythonOlder
+, pyyaml
+, rdflib
+, semantic-version
+, setuptools
+, setuptools-scm
 , uritools
+, xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "spdx-tools";
   version = "0.8.0";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZoCb94eDtHFH3K9ppju51WHrReay7BXC6P4VUOJK4c0=";
+  src = fetchFromGitHub {
+    owner = "spdx";
+    repo = "tools-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TMiaxapJuiLqm+x9K49MIzeWOE/CRAI+M1+9OeU0YvM=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     beartype
@@ -47,8 +58,14 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Depends on the currently not packaged pyshacl module.
+    # Test depends on the currently not packaged pyshacl module
     "tests/spdx3/validation/json_ld/test_shacl_validation.py"
+  ];
+
+  disabledTests = [
+    # Missing files
+    "test_spdx2_convert_to_spdx3"
+    "test_json_writer"
   ];
 
   meta = with lib; {
@@ -56,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/spdx/tools-python";
     changelog = "https://github.com/spdx/tools-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }
