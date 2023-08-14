@@ -33,12 +33,12 @@ let
   buck2-version = "2023-08-01";
   src =
     let
-      hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
-      sha256 = hashes."${stdenv.hostPlatform.system}";
+      allHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+      hash = allHashes."${stdenv.hostPlatform.system}";
       url = "https://github.com/facebook/buck2/releases/download/${buck2-version}/buck2-${suffix}.zst";
-    in fetchurl { inherit url sha256; };
+    in fetchurl { inherit url hash; };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "buck2";
   version = "unstable-${buck2-version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
   inherit src;
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
     homepage = "https://buck2.build";
     changelog = "https://github.com/facebook/buck2/releases/tag/${buck2-version}";
     license = with licenses; [ asl20 /* or */ mit ];
-    mainProgram = "buck2";
+    mainProgram = pname;
     maintainers = with maintainers; [ thoughtpolice ];
     platforms = [
       "x86_64-linux" "aarch64-linux"
