@@ -6,13 +6,9 @@ You can find the [rendered documentation for Nixpkgs `unstable` on nixos.org](ht
 
 [Docs for Nixpkgs stable](https://nixos.org/manual/nixpkgs/stable/) are also available.
 
-If you want to contribute to the documentation, [here's how to do it](https://nixos.org/manual/nixpkgs/unstable/#chap-contributing).
-
 If you're only getting started with Nix, go to [nixos.org/learn](https://nixos.org/learn).
 
-## Contributing to this documentation {#chap-contributing}
-
-The sources of the Nixpkgs manual are in the [doc](https://github.com/NixOS/nixpkgs/tree/master/doc) subdirectory of the Nixpkgs repository.
+## Contributing to this documentation
 
 You can quickly check your edits with `nix-build`:
 
@@ -23,7 +19,7 @@ $ nix-build doc
 
 If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
 
-### devmode {#sec-contributing-devmode}
+### devmode
 
 The shell in the manual source directory makes available a command, `devmode`.
 It is a daemon, that:
@@ -31,97 +27,89 @@ It is a daemon, that:
 2. HTTP serves the manual, injecting a script that triggers reload on changes
 3. opens the manual in the default browser
 
-### Syntax {#sec-contributing-markup}
+## Syntax
 
 As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
 
 Additional syntax extensions are available, all of which can be used in NixOS option documentation. The following extensions are currently used:
 
-- []{#ssec-contributing-markup-tables}
-  Tables, using the [GitHub-flavored Markdown syntax](https://github.github.com/gfm/#tables-extension-).
+#### Tables
 
-- []{#ssec-contributing-markup-anchors}
-  Explicitly defined **anchors** on headings, to allow linking to sections. These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
+Tables, using the [GitHub-flavored Markdown syntax](https://github.github.com/gfm/#tables-extension-).
 
-  It uses the widely compatible [header attributes](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md) syntax:
+#### Anchors
 
-  ```markdown
-  ## Syntax {#sec-contributing-markup}
-  ```
+Explicitly defined **anchors** on headings, to allow linking to sections. These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
 
-  ::: {.note}
-  NixOS option documentation does not support headings in general.
-  :::
+It uses the widely compatible [header attributes](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md) syntax:
 
-- []{#ssec-contributing-markup-anchors-inline}
-  **Inline anchors**, which allow linking arbitrary place in the text (e.g. individual list items, sentences…).
+```markdown
+## Syntax {#sec-contributing-markup}
+```
 
-  They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
+> **Note**
+> NixOS option documentation does not support headings in general.
 
-  ```markdown
-  - []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGAppsHook` will prepend it to `XDG_DATA_DIRS`.
-  ```
+#### Inline Anchors
 
-- []{#ssec-contributing-markup-automatic-links}
-  If you **omit a link text** for a link pointing to a section, the text will be substituted automatically. For example, `[](#chap-contributing)` will result in [](#chap-contributing).
+Allow linking arbitrary place in the text (e.g. individual list items, sentences…).
 
-  This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
+They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
 
-- []{#ssec-contributing-markup-inline-roles}
-  If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``, which will turn into {manpage}`nix.conf(5)`. The references will turn into links when a mapping exists in {file}`doc/manpage-urls.json`.
+```markdown
+- []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGAppsHook` will prepend it to `XDG_DATA_DIRS`.
+```
 
-  A few markups for other kinds of literals are also available:
+#### Automatic links
 
-  - `` {command}`rm -rfi` `` turns into {command}`rm -rfi`
-  - `` {env}`XDG_DATA_DIRS` `` turns into {env}`XDG_DATA_DIRS`
-  - `` {file}`/etc/passwd` `` turns into {file}`/etc/passwd`
-  - `` {option}`networking.useDHCP` `` turns into {option}`networking.useDHCP`
-  - `` {var}`/etc/passwd` `` turns into {var}`/etc/passwd`
+If you **omit a link text** for a link pointing to a section, the text will be substituted automatically. For example `[](#chap-contributing)`.
 
-  These literal kinds are used mostly in NixOS option documentation.
+This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
 
-  This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+#### Roles
 
-- []{#ssec-contributing-markup-admonitions}
-  **Admonitions**, set off from the text to bring attention to something.
+If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``. The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
 
-  It uses pandoc’s [fenced `div`s syntax](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/fenced_divs.md):
+A few markups for other kinds of literals are also available:
 
-  ```markdown
-  ::: {.warning}
-  This is a warning
-  :::
-  ```
+- `` {command}`rm -rfi` ``
+- `` {env}`XDG_DATA_DIRS` ``
+- `` {file}`/etc/passwd` ``
+- `` {option}`networking.useDHCP` ``
+- `` {var}`/etc/passwd` ``
 
-  which renders as
+These literal kinds are used mostly in NixOS option documentation.
 
-  > ::: {.warning}
-  > This is a warning.
-  > :::
+This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
 
-  The following are supported:
+#### Admonitions
 
-    - [`caution`](https://tdg.docbook.org/tdg/5.0/caution.html)
-    - [`important`](https://tdg.docbook.org/tdg/5.0/important.html)
-    - [`note`](https://tdg.docbook.org/tdg/5.0/note.html)
-    - [`tip`](https://tdg.docbook.org/tdg/5.0/tip.html)
-    - [`warning`](https://tdg.docbook.org/tdg/5.0/warning.html)
+Set off from the text to bring attention to something.
 
-- []{#ssec-contributing-markup-definition-lists}
-  [**Definition lists**](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/definition_lists.md), for defining a group of terms:
+It uses pandoc’s [fenced `div`s syntax](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/fenced_divs.md):
 
-  ```markdown
-  pear
-  :   green or yellow bulbous fruit
+```markdown
+::: {.warning}
+This is a warning
+:::
+```
 
-  watermelon
-  :   green fruit with red flesh
-  ```
+The following are supported:
 
-  which renders as
+- [`caution`](https://tdg.docbook.org/tdg/5.0/caution.html)
+- [`important`](https://tdg.docbook.org/tdg/5.0/important.html)
+- [`note`](https://tdg.docbook.org/tdg/5.0/note.html)
+- [`tip`](https://tdg.docbook.org/tdg/5.0/tip.html)
+- [`warning`](https://tdg.docbook.org/tdg/5.0/warning.html)
 
-  > pear
-  > :   green or yellow bulbous fruit
-  >
-  > watermelon
-  > :   green fruit with red flesh
+#### [Definition lists](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/definition_lists.md)
+
+For defining a group of terms:
+
+```markdown
+pear
+:   green or yellow bulbous fruit
+
+watermelon
+:   green fruit with red flesh
+```
