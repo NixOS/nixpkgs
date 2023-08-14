@@ -178,6 +178,12 @@ rec {
         else if final.isLoongArch64 then "loongarch"
         else final.parsed.cpu.name;
 
+      # https://source.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L81-106
+      ubootArch =
+        if      final.isx86_32 then "x86"    # not i386
+        else if final.isMips64 then "mips64" # uboot *does* distinguish between mips32/mips64
+        else final.linuxArch;                # other cases appear to agree with linuxArch
+
       qemuArch =
         if final.isAarch32 then "arm"
         else if final.isS390 && !final.isS390x then null
