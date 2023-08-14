@@ -1,17 +1,17 @@
-{ lib, stdenv, go, fetchurl, redo-apenwarr, curl, perl, genericUpdater
-, writeShellScript, cfgPath ? "/etc/nncp.hjson" }:
+{ lib, stdenv, fetchurl, go, curl, perl, genericUpdater, writeShellScript
+, cfgPath ? "/etc/nncp.hjson" }:
 
 stdenv.mkDerivation rec {
   pname = "nncp";
-  version = "8.8.3";
+  version = "8.9.0";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
-    hash = "sha256-IldQCEdH6XDYK+DW5lB/5HFFFGuq1nDkCwEaVo7vIvE=";
+    sha256 = "259facbc3354edcc16e7c64e278aaccdb47ffa3ec2afea0b36283f46aa824b5d";
   };
 
-  nativeBuildInputs = [ go redo-apenwarr ];
+  nativeBuildInputs = [ go ];
 
   # Build parameters
   CFGPATH = cfgPath;
@@ -19,11 +19,15 @@ stdenv.mkDerivation rec {
 
   preConfigure = "export GOCACHE=$NIX_BUILD_TOP/gocache";
 
+  buildPhase = ''
+    runHook preBuild
+    ./bin/build
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
-    export PREFIX=$out
-    rm -f INSTALL # work around case insensitivity
-    redo install
+    PREFIX=$out ./install
     runHook postInstall
   '';
 
