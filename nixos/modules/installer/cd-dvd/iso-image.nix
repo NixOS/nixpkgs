@@ -250,18 +250,61 @@ let
     touch $out/EFI/nixos-installer-image
 
     # ALWAYS required modules.
-    MODULES="fat iso9660 part_gpt part_msdos \
-             normal boot linux configfile loopback chain halt \
-             efifwsetup efi_gop \
-             ls search search_label search_fs_uuid search_fs_file \
-             gfxmenu gfxterm gfxterm_background gfxterm_menu test all_video loadenv \
-             exfat ext2 ntfs btrfs hfsplus udf \
-             videoinfo png \
-             echo serial \
-            "
+    MODULES=(
+      # Basic modules for filesystems and partition schemes
+      "fat"
+      "iso9660"
+      "part_gpt"
+      "part_msdos"
+      "exfat"
+      "ext2"
+      "ntfs"
+      "btrfs"
+      "hfsplus"
+      "udf"
+
+      # Basic stuff
+      "normal"
+      "boot"
+      "linux"
+      "configfile"
+      "loopback"
+      "chain"
+      "halt"
+
+      # Allows rebooting into firmware setup interface
+      "efifwsetup"
+
+      # EFI Graphics Output Protocol
+      "efi_gop"
+
+      # User commands
+      "ls"
+
+      # System commands
+      "search"
+      "search_label"
+      "search_fs_uuid"
+      "search_fs_file"
+      "echo"
+      "serial"
+
+      # Graphical mode stuff
+      "gfxmenu"
+      "gfxterm"
+      "gfxterm_background"
+      "gfxterm_menu"
+      "test"
+      "loadenv"
+      "all_video"
+      "videoinfo"
+
+      # File types for graphical mode
+      "png"
+    )
 
     echo "Building GRUB with modules:"
-    for mod in $MODULES; do
+    for mod in ''${MODULES[@]}; do
       echo " - $mod"
     done
 
@@ -270,14 +313,18 @@ let
     for mod in efi_uga; do
       if [ -f ${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget}/$mod.mod ]; then
         echo " - $mod"
-        MODULES+=" $mod"
+        MODULES+=("$mod")
       fi
     done
 
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
-    grub-mkimage --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} -o $out/EFI/boot/boot${targetArch}.efi -p /EFI/boot -O ${grubPkgs.grub2_efi.grubTarget} \
-      $MODULES
+    grub-mkimage \
+      --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
+      -o $out/EFI/boot/boot${targetArch}.efi \
+      -p /EFI/boot \
+      -O ${grubPkgs.grub2_efi.grubTarget} \
+      ''${MODULES[@]}
     cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
     cat <<EOF > $out/EFI/boot/grub.cfg
