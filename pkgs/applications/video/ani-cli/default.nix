@@ -4,24 +4,42 @@
 , lib
 , gnugrep
 , gnused
-, wget
+, curl
+, catt
+, syncplay
+, ffmpeg
 , fzf
-, mpv
 , aria2
+, withMpv ? true, mpv
+, withVlc ? false, vlc
+, withIina ? false, iina
+, chromecastSupport ? false
+, syncSupport ? false
 }:
+
+assert withMpv || withVlc || withIina;
 
 stdenvNoCC.mkDerivation rec {
   pname = "ani-cli";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
     rev = "v${version}";
-    hash = "sha256-HDpspU9OZxDET7/1rnKdGgaVEBt0gpzGtd3DuNIj7FY=";
+    hash = "sha256-ahyCD4QsYyb3xtNK03HITeF0+hJFIHZ+PAjisuS/Kdo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  runtimeDependencies =
+    let player = []
+        ++ lib.optional withMpv mpv
+        ++ lib.optional withVlc vlc
+        ++ lib.optional withIina iina;
+    in [ gnugrep gnused curl fzf ffmpeg aria2 ]
+      ++ player
+      ++ lib.optional chromecastSupport catt
+      ++ lib.optional syncSupport syncplay;
 
   installPhase = ''
     runHook preInstall
@@ -29,7 +47,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm755 ani-cli $out/bin/ani-cli
 
     wrapProgram $out/bin/ani-cli \
-      --prefix PATH : ${lib.makeBinPath [ gnugrep gnused wget fzf mpv aria2 ]}
+      --prefix PATH : ${lib.makeBinPath runtimeDependencies}
 
     runHook postInstall
   '';

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "kics";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "Checkmarx";
     repo = "kics";
     rev = "v${version}";
-    sha256 = "sha256-h6ZnaknqMcW+Zp2t5RHPK/e/Ilw5yWY2fcSTJe2mVR4=";
+    hash = "sha256-+/wqwWRJQKfmh4JuWppcE2444lD1PQ9rDGOsFh57AKs=";
   };
 
   vendorHash = "sha256-ipXfxqHdushJ2P//oyGGjZsq5EypDEpHKlW32VHaMXw=";

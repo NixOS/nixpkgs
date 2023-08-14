@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lalrpop/lalrpop";
     changelog = "https://github.com/lalrpop/lalrpop/blob/${src.rev}/RELEASES.md";
     license = with licenses; [ asl20 /* or */ mit ];
+    mainProgram = "lalrpop";
     maintainers = with maintainers; [ chayleaf ];
   };
 }
