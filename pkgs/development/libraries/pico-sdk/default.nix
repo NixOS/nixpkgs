@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/raspberrypi/picotool";
+    homepage = "https://github.com/raspberrypi/pico-sdk";
     description = "SDK provides the headers, libraries and build system necessary to write programs for the RP2040-based devices";
     license = licenses.bsd3;
     maintainers = with maintainers; [ muscaln ];

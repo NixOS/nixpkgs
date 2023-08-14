@@ -4708,6 +4708,11 @@
     githubId = 7875;
     name = "Rommel Martinez";
   };
+  eclairevoyant = {
+    github = "eclairevoyant";
+    githubId = 848000;
+    name = "éclairevoyant";
+  };
   edanaher = {
     email = "nixos@edanaher.net";
     github = "edanaher";
@@ -7904,6 +7909,11 @@
     github = "jfvillablanca";
     githubId = 31008330;
     name = "Jann Marc Villablanca";
+  };
+  jgarcia = {
+    github = "chewblacka";
+    githubId = 18430320;
+    name = "John Garcia";
   };
   jgart = {
     email = "jgart@dismail.de";

@@ -450,6 +450,8 @@ in {
     # Current stable release; don't backport release updates!
     openafs = openafs_1_8;
 
+    opensnitch-ebpf = if lib.versionAtLeast kernel.version "5.10" then callPackage ../os-specific/linux/opensnitch-ebpf { } else null;
+
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
     tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
