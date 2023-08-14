@@ -25,6 +25,7 @@ let
     patches = [
       # Unconditionally look for translation files in $out/share/locale
       ./locale-path-git.patch
+      ./macosx-ghc-fix-git.patch
     ];
 
     makeFlags = common.makeFlags ++ [

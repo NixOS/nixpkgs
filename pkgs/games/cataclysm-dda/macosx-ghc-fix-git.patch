@@ -1,0 +1,11 @@
+--- a/src/third-party/ghc/filesystem.hpp
++++ b/src/third-party/ghc/filesystem.hpp
+@@ -4489,7 +4489,7 @@
+     }
+ #elif defined(GHC_OS_MACOS)
+ #ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+-#if __MAC_OS_X_VERSION_MIN_REQUIRED < 101300
++#if __MAC_OS_X_VERSION_MIN_REQUIRED < 101400
+     struct ::stat fs;
+     if (::stat(p.c_str(), &fs) == 0) {
+         struct ::timeval tv[2];
