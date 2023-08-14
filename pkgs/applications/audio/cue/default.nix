@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cue";
-  version = "0.9.18";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "cue";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-coW9tATbUX6Pi+fFFQ+7J0QuNyQo55ajSrGkKsqZGjg=";
+    hash = "sha256-4881jLC1AOxcmaZxhMrgnJ4dz/QCUbpWaKmac7TxDgo=";
   };
 
   strictDeps = true;
