@@ -452,6 +452,8 @@ let
     }
     EOF
 
+    grub-script-check $out/EFI/boot/grub.cfg
+
     ${refind}
   '';
 
