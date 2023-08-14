@@ -331,7 +331,7 @@ let
     cat <<EOF > $out/EFI/boot/grub.cfg
 
     set with_fonts=false
-    set textmode=${boolToString (!config.isoImage.graphicalGrub)}
+    set textmode=${boolToString (config.isoImage.forceTextMode)}
     # If you want to use serial for "terminal_*" commands, you need to set one up:
     #   Example manual configuration:
     #    → serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
@@ -709,13 +709,17 @@ in
       '';
     };
 
-    isoImage.graphicalGrub = mkOption {
-      default = true;
+    isoImage.forceTextMode = mkOption {
+      default = false;
       type = types.bool;
       example = true;
       description = lib.mdDoc ''
-        Whether to use textmode or graphical grub.
-        false means we use textmode grub.
+        Whether to use text mode instead of graphical grub.
+        A value of `true` means graphical mode is not tried to be used.
+
+        This is useful for validating that graphics mode usage is not at the root cause of a problem with the iso image.
+
+        If text mode is required off-handedly (e.g. for serial use) you can use the `T` key, after being prompted, to use text mode for the current boot.
       '';
     };
 
