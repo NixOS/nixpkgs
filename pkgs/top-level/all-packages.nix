@@ -14036,6 +14036,8 @@ with pkgs;
 
   uivonim = callPackage ../applications/editors/uivonim { };
 
+  ulid = callPackage ../tools/misc/ulid { };
+
   umlet = callPackage ../tools/misc/umlet { };
 
   unetbootin = libsForQt5.callPackage ../tools/cd-dvd/unetbootin { };
