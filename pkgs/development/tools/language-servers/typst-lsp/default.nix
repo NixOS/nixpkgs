@@ -1,21 +1,19 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
-, openssl
 , stdenv
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "nvarner";
     repo = "typst-lsp";
     rev = "v${version}";
-    hash = "sha256-XV/LlibO+2ORle0lVcqqHrDdH75kodk9yOU3OsHFA+A=";
+    hash = "sha256-vzywUbfLyogJhjybiUEGJ2XESjDWE2fMfHM0uJxZC38=";
   };
 
   cargoLock = {
@@ -25,19 +23,13 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   checkFlags = [
     # requires internet access
-    "--skip=workspace::package::external::repo::test::full_download"
+    "--skip=workspace::package::external::remote_repo::test::full_download"
   ];
 
   meta = with lib; {
