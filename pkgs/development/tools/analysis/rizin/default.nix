@@ -118,7 +118,7 @@ let rizin = stdenv.mkDerivation rec {
       sigdb = pkgs.callPackage ./sigdb.nix { };
     };
     withPlugins = filter: pkgs.callPackage ./wrapper.nix {
-      unwrapped = rizin;
+      inherit rizin;
       plugins = filter plugins;
     };
   };
@@ -127,6 +127,7 @@ let rizin = stdenv.mkDerivation rec {
     description = "UNIX-like reverse engineering framework and command-line toolset.";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "rizin";
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
     platforms = with lib.platforms; unix;
   };

@@ -21,7 +21,7 @@ set which contains `emacs.pkgs.withPackages`. For example, to override
 `emacs.pkgs.emacs.pkgs.withPackages`,
 ```
 let customEmacsPackages =
-      emacs.pkgs.overrideScope' (self: super: {
+      emacs.pkgs.overrideScope (self: super: {
         # use a custom version of emacs
         emacs = ...;
         # use the unstable MELPA version of magit
