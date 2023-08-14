@@ -104,8 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
       its internal RPC protocols and file formats.
     '';
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    homepage = "https://developers.google.com/protocol-buffers/";
+    platforms = lib.platforms.all;
+    homepage = "https://protobuf.dev/";
     maintainers = with lib.maintainers; [ jonringer ];
     mainProgram = "protoc";
   };
