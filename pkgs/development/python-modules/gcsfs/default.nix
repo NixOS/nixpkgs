@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2023.4.0";
+  version = "2023.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FHS+g0SuYH9OPiE/+p2SHrsWfzBQ82GM6hTph8koh+o=";
+    hash = "sha256-RwJaOkvO1nfXi/poqN+9pSEaf9xGcQ8nnekoAG0BCeE=";
   };
 
   propagatedBuildInputs = [
@@ -55,6 +55,11 @@ buildPythonPackage rec {
     "gcsfs/tests/test_core.py"
     "gcsfs/tests/test_mapping.py"
     "gcsfs/tests/test_retry.py"
+  ];
+
+  disabledTests = [
+    # Test requires network access
+    "test_credentials_from_raw_token"
   ];
 
   pytestFlagsArray = [
