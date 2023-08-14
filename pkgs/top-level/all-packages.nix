@@ -4525,6 +4525,8 @@ with pkgs;
                           { inherit (haskellPackages) alex happy Agda ghcWithPackages;
                           };
 
+  cel-go = callPackage ../development/interpreters/cel-go { };
+
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   cf-terraforming = callPackage ../tools/misc/cf-terraforming { };
@@ -7440,7 +7442,7 @@ with pkgs;
 
   dropbear = callPackage ../tools/networking/dropbear { };
 
-  dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
+  dsview = qt6Packages.callPackage ../applications/science/electronics/dsview { };
 
   dtach = callPackage ../tools/misc/dtach { };
 
@@ -9119,6 +9121,8 @@ with pkgs;
   ibm-sw-tpm2 = callPackage ../tools/security/ibm-sw-tpm2 { };
 
   ibniz = callPackage ../tools/graphics/ibniz { };
+
+  icebreaker = callPackage ../servers/icebreaker { };
 
   icecast = callPackage ../servers/icecast { };
 
