@@ -6,6 +6,7 @@
 , libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
+, biber-ms
 }:
 
 # Useful resource covering build options:
@@ -427,6 +428,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
 inherit asymptote;
 
 inherit biber;
+inherit biber-ms;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {
   pname = "texlive-bibtex-x.bin";
