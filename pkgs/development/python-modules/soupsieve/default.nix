@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "soupsieve";
-  version = "2.4";
+  version = "2.4.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4o26nKbHwAFz405LpXRI8GiLtoG3xei/SXHar8CT1po=";
+    hash = "sha256-idErLV380snowiMm2p2aqcs9+rCoOgJPBXBAdu6NNeo=";
   };
 
   nativeBuildInputs = [
