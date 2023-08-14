@@ -271,6 +271,20 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # Fixes compilation for basement on i686 for GHC >= 9.4
+  # https://github.com/haskell-foundation/foundation/pull/573
+  # Patch would not work for GHC >= 9.2 where it breaks compilation on x86_64
+  # https://github.com/haskell-foundation/foundation/pull/573#issuecomment-1669468867
+  # TODO(@sternenseemann): make unconditional
+  basement = appendPatches (lib.optionals pkgs.stdenv.hostPlatform.is32bit [
+    (fetchpatch {
+      name = "basement-i686-ghc-9.4.patch";
+      url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
+      sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
+      stripLen = 1;
+    })
+  ]) super.basement;
+
   # Waiting for the commit being fetched as a patch to get a release.
   espial = appendPatch (fetchpatch {
     url = "https://github.com/jonschoning/espial/commit/70375db7e245207b3572779288eade3252c4d9e3.patch";
