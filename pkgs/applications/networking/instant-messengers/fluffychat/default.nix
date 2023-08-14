@@ -1,24 +1,30 @@
 { lib
-, fetchFromGitLab
+, fetchFromGitHub
 , imagemagick
+, mesa
+, libdrm
 , flutter
+, pulseaudio
 , makeDesktopItem
 , gnome
 }:
 
+let
+  libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
+in
 flutter.buildFlutterApplication rec {
   pname = "fluffychat";
-  version = "1.12.1";
+  version = "1.13.0";
 
-  src = fetchFromGitLab {
-    owner = "famedly";
+  src = fetchFromGitHub {
+    owner = "krille-chan";
     repo = "fluffychat";
-    rev = "v${version}";
-    hash = "sha256-F4oVscw5L8iQZtz5K+yo4tlPYYv1wfs88oyq5Uds20I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-w29Nxs/d0b18jMvWnrRUjEGqY4jGtuEGodg+ncCAaVc=";
   };
 
   depsListFile = ./deps.json;
-  vendorHash = "sha256-u0cQ5ejyxhw4du3jXRB8oWsAlMtbw5nX+SMUUCuwklE=";
+  vendorHash = "sha256-Ot96+EF8PgYQmXn0hvIWzN8StuzTgQzakRO3yf7PJAU=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
@@ -30,6 +36,7 @@ flutter.buildFlutterApplication rec {
   };
 
   nativeBuildInputs = [ imagemagick ];
+  runtimeDependencies = [ pulseaudio ];
   extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
   postInstall = ''
     FAV=$out/app/data/flutter_assets/assets/favicon.png
@@ -45,7 +52,11 @@ flutter.buildFlutterApplication rec {
     done
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
+
+    patchelf --add-rpath ${libwebrtcRpath} $out/app/lib/libwebrtc.so
   '';
+
+  env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
 
   meta = with lib; {
     description = "Chat with your friends (matrix client)";
