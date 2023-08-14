@@ -30,7 +30,7 @@ package set to make it the default. This guarantees you get a consistent package
 set.
 ```nix
 mypkg = let
-  cudaPackages = cudaPackages_11_5.overrideScope' (final: prev: {
+  cudaPackages = cudaPackages_11_5.overrideScope (final: prev: {
     cudnn = prev.cudnn_8_3;
   }});
 in callPackage { inherit cudaPackages; };

@@ -266,4 +266,4 @@ let
     lib.optionalAttrs (builtins.pathExists ./imported.nix)
       (pkgs.callPackage ./imported.nix { inherit build-asdf-system; });
 
-in qlpkgs.overrideScope' overrides
+in qlpkgs.overrideScope overrides
