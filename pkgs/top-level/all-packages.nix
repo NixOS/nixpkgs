@@ -41741,6 +41741,10 @@ with pkgs;
 
   yandex-browser = callPackage ../applications/networking/browsers/yandex-browser { };
 
+  yandex-browser-beta = yandex-browser.override { edition = "beta"; };
+
+  yandex-browser-corporate = yandex-browser.override { edition = "corporate"; };
+
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   yara = callPackage ../tools/security/yara { };
