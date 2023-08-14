@@ -15,6 +15,7 @@
 
   # downstream dependencies
 , python3
+, grpc
 
 , ...
 }:
@@ -89,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       pythonProtobuf = python3.pkgs.protobuf.override (_: {
         protobuf = finalAttrs.finalPackage;
       });
+      inherit grpc;
     };
 
     inherit abseil-cpp;
