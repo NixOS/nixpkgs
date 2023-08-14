@@ -442,7 +442,6 @@ in {
     rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
 
     rtw88 = callPackage ../os-specific/linux/rtw88 { };
-    rtlwifi_new = rtw88;
 
     rtw89 = if lib.versionOlder kernel.version "5.16" then callPackage ../os-specific/linux/rtw89 { } else null;
 
