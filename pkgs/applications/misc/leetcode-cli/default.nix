@@ -32,6 +32,12 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
+  passthru.tests = testers.testVersion {
+    package = leetcode-cli;
+    command = "leetcode -V";
+    version = "leetcode ${version}";
+  };
+
   meta = with lib; {
     description = "May the code be with you 👻";
     longDescription = "Use leetcode.com in command line";
