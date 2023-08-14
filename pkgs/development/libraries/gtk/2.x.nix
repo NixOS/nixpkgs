@@ -37,7 +37,7 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gtk2";
+  pname = "gtk+";
   version = "2.24.33";
 
   src = fetchurl {
