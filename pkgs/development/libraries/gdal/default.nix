@@ -6,6 +6,9 @@
 , useMinimalFeatures ? false
 , useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
 , useLibHEIF ? (!useMinimalFeatures)
+, useLibJXL ? (!useMinimalFeatures)
+, useMysql ? (!useMinimalFeatures)
+, usePostgres ? (!useMinimalFeatures)
 
 , bison
 , cmake
@@ -115,6 +118,12 @@ stdenv.mkDerivation (finalAttrs: {
         rav1e
         x265
       ];
+      libJxlDeps = lib.optionals useLibJXL [
+        libjxl
+        libhwy
+      ];
+      mysqlDeps = lib.optionals useMysql [ libmysqlclient ];
+      postgresDeps = lib.optionals usePostgres [ postgresql ];
 
       darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
       nonDarwinDeps = lib.optionals (!stdenv.isDarwin) [
@@ -140,20 +149,16 @@ stdenv.mkDerivation (finalAttrs: {
       hdf5-cpp
       libjpeg
       json_c
-      libjxl
-      libhwy  # required by libjxl
       lerc
       xz
       libxml2
       lz4
-      libmysqlclient
       netcdf
       openjpeg
       openssl
       pcre2
       libpng
       poppler
-      postgresql
       proj
       qhull
       libspatialite
@@ -167,6 +172,9 @@ stdenv.mkDerivation (finalAttrs: {
       python3.pkgs.numpy
     ] ++ tileDbDeps
       ++ libHeifDeps
+      ++ libJxlDeps
+      ++ mysqlDeps
+      ++ postgresDeps
       ++ darwinDeps
       ++ nonDarwinDeps;
 
