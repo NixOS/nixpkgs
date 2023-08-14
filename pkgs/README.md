@@ -13,15 +13,15 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
   - `release*.nix`, [`make-tarball.nix`](./top-level/make-tarball.nix), [`packages-config.nix`](./top-level/packages-config.nix), [`metrics.nix`](./top-level/metrics.nix), [`nixpkgs-basic-release-checks.nix`](./top-level/nixpkgs-basic-release-checks.nix): Entry-points and utilities used by Hydra for continuous integration
 - [`development`](./development)
   - `*-modules`, `*-packages`, `*-pkgs`: Package definitions for nested package sets
-  - All other directories loosely categorise top-level package definitions, see [category hierarchy](#category-hierarchy)
+  - All other directories loosely categorise top-level package definitions, see [category hierarchy][categories]
 - [`build-support`](./build-support): [Builders](https://nixos.org/manual/nixpkgs/stable/#part-builders)
   - `fetch*`: [Fetchers](https://nixos.org/manual/nixpkgs/stable/#chap-pkgs-fetchers)
 - [`stdenv`](./stdenv): [Standard environment](https://nixos.org/manual/nixpkgs/stable/#part-stdenv)
 - [`pkgs-lib`](./pkgs-lib): Definitions for utilities that need packages but are not needed for packages
 - [`test`](./test): Tests not directly associated with any specific packages
-- All other directories loosely categorise top-level packages definitions, see [category hierarchy](#category-hierarchy)
+- All other directories loosely categorise top-level packages definitions, see [category hierarchy][categories]
 
-## Quick Start to Adding a Package {#chap-quick-start}
+## Quick Start to Adding a Package
 
 To add a package to Nixpkgs:
 
@@ -32,7 +32,7 @@ To add a package to Nixpkgs:
    $ cd nixpkgs
    ```
 
-2. Find a good place in the Nixpkgs tree to add the Nix expression for your package. For instance, a library package typically goes into `pkgs/development/libraries/pkgname`, while a web browser goes into `pkgs/applications/networking/browsers/pkgname`. See [](#sec-organisation) for some hints on the tree organisation. Create a directory for your package, e.g.
+2. Find a good place in the Nixpkgs tree to add the Nix expression for your package. For instance, a library package typically goes into `pkgs/development/libraries/pkgname`, while a web browser goes into `pkgs/applications/networking/browsers/pkgname`. See the [category hierarchy section][categories] for some hints on the tree organisation. Create a directory for your package, e.g.
 
    ```ShellSession
    $ mkdir pkgs/development/libraries/libfoo
@@ -47,35 +47,35 @@ To add a package to Nixpkgs:
 
    You can have a look at the existing Nix expressions under `pkgs/` to see how it’s done. Here are some good ones:
 
-   - GNU Hello: [`pkgs/applications/misc/hello/default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hello/default.nix). Trivial package, which specifies some `meta` attributes which is good practice.
+   - GNU Hello: [`pkgs/applications/misc/hello/default.nix`](applications/misc/hello/default.nix). Trivial package, which specifies some `meta` attributes which is good practice.
 
-   - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
+   - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
 
-   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp/5.1.x.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/gmp/5.1.x.nix). Also done by the generic builder, but has a dependency on `m4`.
+   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp/5.1.x.nix`](development/libraries/gmp/5.1.x.nix). Also done by the generic builder, but has a dependency on `m4`.
 
-   - Pan, a GTK-based newsreader: [`pkgs/applications/networking/newsreaders/pan/default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/newsreaders/pan/default.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
+   - Pan, a GTK-based newsreader: [`pkgs/applications/networking/newsreaders/pan/default.nix`](applications/networking/newsreaders/pan/default.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
 
-   - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/http/apache-httpd/2.4.nix). A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
+   - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix). A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
-   - buildMozillaMach: [`pkgs/applications/networking/browser/firefox/common.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/browsers/firefox/common.nix). A reusable build function for Firefox, Thunderbird and Librewolf.
+   - buildMozillaMach: [`pkgs/applications/networking/browser/firefox/common.nix`](applications/networking/browsers/firefox/common.nix). A reusable build function for Firefox, Thunderbird and Librewolf.
 
-   - JDiskReport, a Java utility: [`pkgs/tools/misc/jdiskreport/default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/jdiskreport/default.nix). Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
+   - JDiskReport, a Java utility: [`pkgs/tools/misc/jdiskreport/default.nix`](tools/misc/jdiskreport/default.nix). Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
 
-   - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/perl-packages.nix) (search for the `XMLSimple` attribute). Most Perl modules are so simple to build that they are defined directly in `perl-packages.nix`; no need to make a separate file for them.
+   - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](top-level/perl-packages.nix) (search for the `XMLSimple` attribute). Most Perl modules are so simple to build that they are defined directly in `perl-packages.nix`; no need to make a separate file for them.
 
-   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the [builder](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/adobe-reader/builder.sh) uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
+   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the [builder](applications/misc/adobe-reader/builder.sh) uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
 
    Some notes:
 
-   - All [`meta`](#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](#sec-meta-license).
+   - All [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
    - You can use `nix-prefetch-url url` to get the SHA-256 hash of source distributions. There are similar commands as `nix-prefetch-git` and `nix-prefetch-hg` available in `nix-prefetch-scripts` package.
 
-   - A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/fetchurl/mirrors.nix).
+   - A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](build-support/fetchurl/mirrors.nix).
 
-   The exact syntax and semantics of the Nix expression language, including the built-in function, are described in the Nix manual in the [chapter on writing Nix expressions](https://hydra.nixos.org/job/nix/trunk/tarball/latest/download-by-type/doc/manual/#chap-writing-nix-expressions).
+   The exact syntax and semantics of the Nix expression language, including the built-in function, are [described in the Nix manual](https://nixos.org/manual/nix/stable/language/).
 
-4. Add a call to the function defined in the previous step to [`pkgs/top-level/all-packages.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/all-packages.nix) with some descriptive name for the variable, e.g. `libfoo`.
+4. Add a call to the function defined in the previous step to [`pkgs/top-level/all-packages.nix`](top-level/all-packages.nix) with some descriptive name for the variable, e.g. `libfoo`.
 
    ```ShellSession
    $ emacs pkgs/top-level/all-packages.nix
@@ -100,6 +100,7 @@ To add a package to Nixpkgs:
 7. Optionally commit the new package and open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
 
 ## Category Hierarchy
+[categories]: #category-hierarchy
 
 Each package should be stored in its own directory somewhere in the `pkgs/` tree, i.e. in `pkgs/category/subcategory/.../pkgname`. Below are some rules for picking the right category for a package. Many packages fall under several categories; what matters is the _primary_ purpose of a package. For example, the `libxml2` package builds both a library and some tools; but it’s a library foremost, so it goes under `pkgs/development/libraries`.
 
@@ -279,9 +280,9 @@ A (typically large) program with a distinct user interface, primarily used inter
 
 - `misc`
 
-## (Conventions)
+# Conventions
 
-### Package naming {#sec-package-naming}
+## Package naming
 
 The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _should not_, _recommended_, _may_, and _optional_ in this section are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119). Only _emphasized_ words are to be interpreted in this way.
 
@@ -309,9 +310,10 @@ Example: Given a project had its latest releases `2.2` in November 2021, and `3.
 
 - Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [](#sec-versioning)
+- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [versioning][versioning].
 
-### Versioning {#sec-versioning}
+## Versioning
+[versioning]: #versioning
 
 Because every version of a package in Nixpkgs creates a potential maintenance burden, old versions of a package should not be kept unless there is a good reason to do so. For instance, Nixpkgs contains several versions of GCC because other packages don’t build with the latest version of GCC. Other examples are having both the latest stable and latest pre-release version of a package, or to keep several major releases of an application that differ significantly in functionality.
 
@@ -319,7 +321,7 @@ If there is only one version of a package, its Nix expression should be named `e
 
 All versions of a package _must_ be included in `all-packages.nix` to make sure that they evaluate correctly.
 
-### (Meta attributes)
+## Meta attributes
 
 * `meta.description` must:
   * Be short, just one sentence.
@@ -336,7 +338,7 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
-### Import From Derivation {#ssec-import-from-derivation}
+### Import From Derivation
 
 Import From Derivation (IFD) is disallowed in Nixpkgs for performance reasons:
 [Hydra] evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
@@ -351,9 +353,9 @@ See also [NixOS Wiki: Import From Derivation].
 
 [NixOS Wiki: Import From Derivation]: https://nixos.wiki/wiki/Import_From_Derivation
 
-## (Sources)
+## Sources
 
-### Fetching Sources {#sec-sources}
+### Fetching Sources
 
 There are multiple ways to fetch a package source in nixpkgs. The general guideline is that you should package reproducible sources with a high degree of availability. Right now there is only one fetcher which has mirroring support and that is `fetchurl`. Note that you should also prefer protocols which have a corresponding proxy environment variable.
 
@@ -398,7 +400,7 @@ It is a practical vector for a denial-of-service attack by pushing large amounts
 
 Find the value to put as `hash` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`.
 
-#### Obtaining source hash {#sec-source-hashes}
+#### Obtaining source hash
 
 Preferred source hash type is sha256. There are several ways to get it.
 
@@ -429,16 +431,15 @@ Preferred source hash type is sha256. There are several ways to get it.
 
    in the package expression, attempt build and extract correct hash from error messages.
 
-   ::: {.warning}
-   You must use one of these four fake hashes and not some arbitrarily-chosen hash.
+   > **Warning**
+   > You must use one of these four fake hashes and not some arbitrarily-chosen hash.
+   > See [here][secure-hashes]
 
-   See [](#sec-source-hashes-security).
-   :::
-
-    This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
+   This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
 
 
-#### Obtaining hashes securely {#sec-source-hashes-security}
+#### Obtaining hashes securely
+[secure-hashes]: #obtaining-hashes-securely
 
 Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of fetching source you can fetch malware, and instead of source hash you get hash of malware. Here are security considerations for this scenario:
 
@@ -450,7 +451,7 @@ Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of f
 
 - `https://` URLs are secure in method 5 *only if* you use one of the listed fake hashes. If you use any other hash, `fetchurl` will pass `--insecure` to `curl` and may then degrade to HTTP in case of TLS certificate expiration.
 
-### Patches {#sec-patches}
+### Patches
 
 Patches available online should be retrieved using `fetchpatch`.
 
@@ -466,7 +467,7 @@ patches = [
 
 Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
 
-If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [](#fetchpatch) for details.
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 
 ```nix
 patches = [ ./0001-changes.patch ];
@@ -495,13 +496,13 @@ If you do need to do create this sort of patch file, one way to do so is with gi
     $ git diff -a > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
 
-## Deprecating/removing packages {#submitting-changes-deprecating-packages}
+## Deprecating/removing packages
 
 There is currently no policy when to remove a package.
 
 Before removing a package, one should try to find a new maintainer or fix smaller issues first.
 
-### Steps to remove a package from Nixpkgs {#steps-to-remove-a-package-from-nixpkgs}
+### Steps to remove a package from Nixpkgs
 
 We use jbidwatcher as an example for a discontinued project here.
 
@@ -542,7 +543,7 @@ We use jbidwatcher as an example for a discontinued project here.
 
 This is how the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
 
-## Testing changes | Package tests {#sec-package-tests}
+## Package tests
 
 - update pkg
   - `nix-env -iA pkg-attribute-name -f <path to your local nixpkgs folder>`
@@ -570,7 +571,7 @@ The following types of tests exists:
 
 Here in the nixpkgs manual we describe mostly _package tests_; for _module tests_ head over to the corresponding [section in the NixOS manual](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
-### Writing inline package tests {#ssec-inline-package-tests-writing}
+### Writing inline package tests
 
 For very simple tests, they can be written inline:
 
@@ -589,7 +590,8 @@ buildGoModule rec {
 }
 ```
 
-### Writing larger package tests {#ssec-package-tests-writing}
+### Writing larger package tests
+[larger-package-tests]: #writing-larger-package-tests
 
 This is an example using the `phoronix-test-suite` package with the current best practices.
 
@@ -634,7 +636,7 @@ runCommand "${pname}-tests" { meta.timeout = 60; }
   ''
 ```
 
-### Running package tests {#ssec-package-tests-running}
+### Running package tests
 
 You can run these tests with:
 
@@ -643,19 +645,19 @@ $ cd path/to/nixpkgs
 $ nix-build -A phoronix-test-suite.tests
 ```
 
-### Examples of package tests {#ssec-package-tests-examples}
+### Examples of package tests
 
 Here are examples of package tests:
 
-- [Jasmin compile test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/jasmin/test-assemble-hello-world/default.nix)
-- [Lobster compile test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/compilers/lobster/test-can-run-hello-world.nix)
-- [Spacy annotation test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/spacy/annotation-test/default.nix)
-- [Libtorch test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/science/math/libtorch/test/default.nix)
-- [Multiple tests for nanopb](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/nanopb/default.nix)
+- [Jasmin compile test](development/compilers/jasmin/test-assemble-hello-world/default.nix)
+- [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
+- [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
+- [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
+- [Multiple tests for nanopb](development/libraries/nanopb/default.nix)
 
-### Linking NixOS module tests to a package {#ssec-nixos-tests-linking}
+### Linking NixOS module tests to a package
 
-Like [package tests](#ssec-package-tests-writing) as shown above, [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests) can also be linked to a package, so that the tests can be easily run when changing the related package.
+Like [package tests][larger-package-tests] as shown above, [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests) can also be linked to a package, so that the tests can be easily run when changing the related package.
 
 For example, assuming we're packaging `nginx`, we can link its module test via `passthru.tests`:
 
@@ -673,9 +675,9 @@ stdenv.mkDerivation {
 }
 ```
 
-## (Reviewing contributions)
+## Reviewing contributions
 
-### Package updates {#reviewing-contributions-package-updates}
+### Package updates
 
 A package update is the most trivial and common type of pull request. These pull requests mainly consist of updating the version part of the package name and the source hash.
 
@@ -729,7 +731,7 @@ Sample template for a package update review is provided below.
 ##### Comments
 ```
 
-### New packages {#reviewing-contributions-new-packages}
+### New packages
 
 New packages are a common type of pull requests. These pull requests consists in adding a new nix-expression for a package.
 
@@ -774,9 +776,10 @@ Sample template for a new package review is provided below.
 ##### Comments
 ```
 
-## (Security)
+## Security
 
-### Submitting security fixes {#submitting-changes-submitting-security-fixes}
+### Submitting security fixes
+[security-fixes]: #submitting-security-fixes
 
 Security fixes are submitted in the same way as other changes and thus the same guidelines apply.
 
@@ -796,9 +799,9 @@ If a security fix applies to both master and a stable release then, similar to r
 
 Critical security fixes may by-pass the staging branches and be delivered directly to release branches such as `master` and `release-*`.
 
-### Vulnerability Roundup {#chap-vulnerability-roundup}
+### Vulnerability Roundup
 
-#### Issues {#vulnerability-roundup-issues}
+#### Issues
 
 Vulnerable packages in Nixpkgs are managed using issues.
 Currently opened ones can be found using the following:
@@ -827,7 +830,7 @@ A "Vulnerability roundup" issue usually respects the following format:
 Note that there can be an extra comment containing links to previously reported (and still open) issues for the same package.
 
 
-#### Triaging and Fixing {#vulnerability-roundup-triaging-and-fixing}
+#### Triaging and Fixing
 
 **Note**: An issue can be a "false positive" (i.e. automatically opened, but without the package it refers to being actually vulnerable).
 If you find such a "false positive", comment on the issue an explanation of why it falls into this category, linking as much information as the necessary to help maintainers double check.
@@ -837,7 +840,7 @@ If you are investigating a "true positive":
 - Find the earliest patched version or a code patch in the CVE details;
 - Is the issue already patched (version up-to-date or patch applied manually) in Nixpkgs's `master` branch?
   - **No**:
-    - [Submit a security fix](#submitting-changes-submitting-security-fixes);
-    - Once the fix is merged into `master`, [submit the change to the vulnerable release branch(es)](https://nixos.org/manual/nixpkgs/stable/#submitting-changes-stable-release-branches);
-  - **Yes**: [Backport the change to the vulnerable release branch(es)](https://nixos.org/manual/nixpkgs/stable/#submitting-changes-stable-release-branches).
+    - [Submit a security fix][security-fixes];
+    - Once the fix is merged into `master`, [submit the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests);
+  - **Yes**: [Backport the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests).
 - When the patch has made it into all the relevant branches (`master`, and the vulnerable releases), close the relevant issue(s).
