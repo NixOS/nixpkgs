@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.1";
+  version = "3.2.3";
 
   src =
     let
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          sha256 = "1cfbypn9kh566s09c1bvxswpc0r11pmsvxlh4dixd5s622ia3h7r";
+          hash = "sha256-d8Xv9ecXxkUAIqCS82VKlLNne56hESYvYtSDvNvGul0=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          sha256 = "0mb6az0mzjz2zal7igigjcigg3phn2ijfw04igpl7q2rg6ha3z00";
+          hash = "sha256-yqZ4hl+E4IEEEuKhfyDYY1Lyz5/Nekrf8uxoJr1B8w8=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -131,7 +131,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight, alternative desktop client for Discord";
-    homepage = "https://github.com/ArmCord/ArmCord";
+    homepage = "https://armcord.app";
+    downloadPage = "https://github.com/ArmCord/ArmCord";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.osl3;
     maintainers = with maintainers; [ wrmilling ];
