@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pygithub";
-  version = "1.59.0";
+  version = "1.59.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bfXf1lwTpoyf6Pn4J0KR99xUh28VPszlbcYSbqKfyFQ=";
+    hash = "sha256-tzM2+nLBHTbKlQ7HLmNRq4Kn62vmz1MaGyZsnaJSrgQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
