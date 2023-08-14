@@ -31,17 +31,7 @@ let
       inherit sha256;
     };
 
-    # re-create submodule logic
-    postPatch = ''
-      rm -rf gmock
-      cp -r ${gtest.src}/googlemock third_party/gmock
-      cp -r ${gtest.src}/googletest third_party/
-      chmod -R a+w third_party/
-
-      ln -s ../googletest third_party/gmock/gtest
-      ln -s ../gmock third_party/googletest/googlemock
-      ln -s $(pwd)/third_party/googletest third_party/googletest/googletest
-    '' + lib.optionalString stdenv.isDarwin ''
+    postPatch = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/google/protobuf/testing/googletest.cc \
         --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
     '';
@@ -68,6 +58,7 @@ let
     ];
 
     buildInputs = [
+      gtest
       zlib
     ];
 
@@ -75,8 +66,11 @@ let
       abseil-cpp
     ];
 
+    strictDeps = true;
+
     cmakeDir = if lib.versionOlder version "3.22" then "../cmake" else null;
     cmakeFlags = [
+      "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
       "-Dprotobuf_ABSL_PROVIDER=package"
     ] ++ lib.optionals (!stdenv.targetPlatform.isStatic) [
       "-Dprotobuf_BUILD_SHARED_LIBS=ON"
@@ -87,8 +81,7 @@ let
       (stdenv.targetPlatform.is32bit && lib.versionOlder version "3.22")
       "-Dprotobuf_BUILD_TESTS=OFF";
 
-    # unfortunately the shared libraries have yet to been patched by nix, thus tests will fail
-    doCheck = false;
+    doCheck = true;
 
     passthru = {
       tests = {
