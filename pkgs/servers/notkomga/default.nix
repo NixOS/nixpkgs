@@ -1,13 +1,13 @@
 { lib
-, stdenvnoCC
+, stdenvNoCC
 , fetchurl
 , makeWrapper
 , jdk17_headless
 , nixosTests
 }:
 
-stdenvnoCC.mkDerivation rec {
-  pname = "komga";
+stdenvNoCC.mkDerivation rec {
+  pname = "notkomga";
   version = "1.3.0";
 
   src = fetchurl {

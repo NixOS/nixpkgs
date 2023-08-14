@@ -5695,6 +5695,7 @@ with pkgs;
   klog = qt5.callPackage ../applications/radio/klog { };
 
   komga = callPackage ../servers/komga { };
+  notkomga = callPackage ../servers/notkomga { };
 
   komorebi = callPackage ../applications/graphics/komorebi { };
 
