@@ -3,6 +3,9 @@
 , callPackage
 , fetchFromGitHub
 
+, useMinimalFeatures ? false
+, useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
+
 , bison
 , cmake
 , gtest
@@ -55,7 +58,6 @@
 , libspatialite
 , sqlite
 , libtiff
-, useTiledb ? !(stdenv.isDarwin && stdenv.isx86_64)
 , tiledb
 , libwebp
 , xercesc
@@ -101,63 +103,68 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGDAL_USE_TILEDB=OFF"
   ];
 
-  buildInputs = [
-    armadillo
-    c-blosc
-    brunsli
-    cfitsio
-    crunch
-    curl
-    cryptopp
-    libdeflate
-    expat
-    libgeotiff
-    geos
-    giflib
-    libheif
-    dav1d  # required by libheif
-    libaom  # required by libheif
-    libde265  # required by libheif
-    rav1e  # required by libheif
-    x265  # required by libheif
-    hdf4
-    hdf5-cpp
-    libjpeg
-    json_c
-    libjxl
-    libhwy  # required by libjxl
-    lerc
-    xz
-    libxml2
-    lz4
-    libmysqlclient
-    netcdf
-    openjpeg
-    openssl
-    pcre2
-    libpng
-    poppler
-    postgresql
-    proj
-    qhull
-    libspatialite
-    sqlite
-    libtiff
-    gtest
-  ] ++ lib.optionals useTiledb [
-    tiledb
-  ] ++ [
-    libwebp
-    zlib
-    zstd
-    python3
-    python3.pkgs.numpy
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # tests for formats enabled by these packages fail on macos
-    arrow-cpp
-    openexr
-    xercesc
-  ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs =
+    let
+      tileDbDeps = lib.optionals useTiledb [ tiledb ];
+
+      darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
+      nonDarwinDeps = lib.optionals (!stdenv.isDarwin) [
+        # tests for formats enabled by these packages fail on macos
+        arrow-cpp
+        openexr
+        xercesc
+      ];
+    in [
+      armadillo
+      c-blosc
+      brunsli
+      cfitsio
+      crunch
+      curl
+      cryptopp
+      libdeflate
+      expat
+      libgeotiff
+      geos
+      giflib
+      libheif
+      dav1d  # required by libheif
+      libaom  # required by libheif
+      libde265  # required by libheif
+      rav1e  # required by libheif
+      x265  # required by libheif
+      hdf4
+      hdf5-cpp
+      libjpeg
+      json_c
+      libjxl
+      libhwy  # required by libjxl
+      lerc
+      xz
+      libxml2
+      lz4
+      libmysqlclient
+      netcdf
+      openjpeg
+      openssl
+      pcre2
+      libpng
+      poppler
+      postgresql
+      proj
+      qhull
+      libspatialite
+      sqlite
+      libtiff
+      gtest
+      libwebp
+      zlib
+      zstd
+      python3
+      python3.pkgs.numpy
+    ] ++ tileDbDeps
+      ++ darwinDeps
+      ++ nonDarwinDeps;
 
   postInstall = ''
     wrapPythonPrograms
