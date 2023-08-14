@@ -62,7 +62,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gtk3";
+  pname = "gtk+3";
   version = "3.24.38";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
