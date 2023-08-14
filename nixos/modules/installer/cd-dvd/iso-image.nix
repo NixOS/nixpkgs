@@ -24,6 +24,9 @@ let
         # Name appended to menuentry defaults to params if no specific name given.
         option.name or (optionalString (option ? params) "(${option.params})")
         }' ${optionalString (option ? class) " --class ${option.class}"} {
+          # Fallback to UEFI console for boot, efifb sometimes has difficulties.
+          terminal_output console
+
           linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
