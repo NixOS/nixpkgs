@@ -5217,6 +5217,8 @@ self: super: with self; {
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
+  ipytablewidgets = callPackage ../development/python-modules/ipytablewidgets { };
+
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
   ipython = callPackage ../development/python-modules/ipython { };
