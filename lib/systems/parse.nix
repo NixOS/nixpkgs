@@ -353,7 +353,7 @@ rec {
 
     gnueabi      = { float = "soft"; inherit (gnu) kernels; };
     gnueabihf    = { float = "hard"; inherit (gnu) kernels; };
-    gnu          = { kernels = [ "freebsd12" "freebsd13" "linux" ];
+    gnu          = { kernels = [ "freebsd12" "freebsd13" "linux" "windows" ];
       assertions = [
         { assertion = platform: !platform.isAarch32;
           message = ''
@@ -388,7 +388,7 @@ rec {
     uclibc       = { kernels = [ "linux" ]; };
 
     # in gnu-config triples, this abi is actually the empty string "" rather than "-unknown"
-    unknown = { kernels = [ "darwin" "freebsd12" "freebsd13" "freebsd" "genode" "solaris2" "solaris" "ghcjs" "mmixware" "netbsd" "none" "" "openbsd" "redox" "wasi" ]; };
+    unknown = { kernels = [ "darwin" "freebsd12" "freebsd13" "freebsd" "genode" "solaris2" "solaris" "ghcjs" "mmixware" "netbsd" "none" "" "openbsd" "redox" "wasi" "windows" ]; };
   };
 
   ################################################################################
@@ -445,14 +445,8 @@ rec {
       then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
       else throw "Target specification with 1 components is ambiguous";
     "2" = # We only do 2-part hacks for things Nix already supports
-      if elemAt l 1 == "cygwin"
-        then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
-      # MSVC ought to be the default ABI so this case isn't needed. But then it
-      # becomes difficult to handle the gnu* variants for Aarch32 correctly for
-      # minGW. So it's easier to make gnu* the default for the MinGW, but
-      # hack-in MSVC for the non-MinGW case right here.
-      else if elemAt l 1 == "windows"
-        then { cpu = elemAt l 0;                      kernel = "windows";  abi = "msvc";     }
+      if (elemAt l 1) == "cygwin"
+        then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus"; }
       else if (elemAt l 1) == "elf"
         then { cpu = elemAt l 0;                      kernel = "";         abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
@@ -522,7 +516,7 @@ rec {
       vendor =
           if vendor_ == vendors.unknown then clobberedVendor
           else if vendor_ != vendors."" then vendor_
-          else if (isx86_64 parsed || isi686 parsed) &&
+          else if ((isx86_64 parsed || isi686 parsed) && !isWindows parsed) &&
                   parsed.abi == abis.gnu then
                     vendors.unknown  # nixpkgs-specific behavior
           else if (isx86_64 parsed || isAarch64 parsed) &&
@@ -530,7 +524,8 @@ rec {
                   parsed.kernel == kernels.darwin &&
                   parsed.abi == abis.unknown then
                     vendors.apple    # nixpkgs-specific behavior
-          else if isx86 parsed && isLinux parsed then vendors.pc
+          else if isx86 parsed && (isLinux parsed || isWindows parsed) then vendors.pc
+          else if isWindows parsed && vendor_ == vendors."" then clobberedVendor
           else if (args?abi && (args.abi=="eabi" || args.abi=="eabihf")) && !(isLinux parsed || isNetBSD parsed) then vendor_
           else if isx86 parsed then vendors.pc
           else clobberedVendor;
@@ -540,13 +535,8 @@ rec {
                else                                   getKernel args.kernel;
       abi =
         /**/ if args ? abi       then getAbi args.abi
-        else if isLinux parsed || isWindows parsed then
-          if isAarch32 parsed then
-            if parsed.vendor == vendors.apple then abis.gnu
-            else if isLinux parsed then abis.gnu
-            else if lib.versionAtLeast (parsed.cpu.version or "0") "6"
-            then abis.gnueabihf
-            else abis.gnueabi
+        else if isLinux parsed then
+          if isAarch32 parsed && parsed.vendor == vendors.apple then abis.gnu
           else abis.gnu
         else                     abis.unknown;
     };
@@ -599,7 +589,6 @@ rec {
     # reasons (see lib/tests/triples.nix) we need to replicate this
     # quirk when unparsing in order to round-trip correctly.
     if      abi == "cygnus"     then "${cpu}${optVendor}-cygwin"
-    else if kernel == "windows" then "${cpu}${optVendor}-mingw32"
     else "${cpu}${optVendor}${optKernel}${optExecFormat}${optAbi}";
 
   # To "canonicalize" a triple is to parse it and then unparse (turn
