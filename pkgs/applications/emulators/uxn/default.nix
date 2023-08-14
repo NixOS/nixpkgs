@@ -5,23 +5,34 @@
 , unstableGitUpdater
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "unstable-2023-07-30";
+  version = "unstable-2023-08-10";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "9ca8e9623d0ab1c299f08d3dd9d54098557f5749";
-    hash = "sha256-K51YiLnBwFWgD3h3l2BhsvzhnHHolZPsjjUWJSe4sPQ=";
+    rev = "a394dcb999525ac56ea37d0563d35849964b6d6a";
+    hash = "sha256-3Q8460pkoATKCEqfa+OfpQ4Lp18Ro5i84s88pkz+uzU=";
   };
+
+  outputs = [ "out" "projects" ];
+
+  nativeBuildInputs = [
+    SDL2
+  ];
 
   buildInputs = [
     SDL2
   ];
 
+  strictDeps = true;
+
   postPatch = ''
-     sed -i -e 's|UXNEMU_LDFLAGS="$(brew.*$|UXNEMU_LDFLAGS="$(sdl2-config --cflags --libs)"|' build.sh
+    patchShebangs build.sh
+    substituteInPlace build.sh \
+      --replace "-L/usr/local/lib " "" \
+      --replace "\$(brew --prefix)/lib/libSDL2.a " ""
   '';
 
   buildPhase = ''
@@ -32,13 +43,15 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
+  # ./build.sh --install is meant to install in $HOME, therefore not useful for
+  # package maintainers
   installPhase = ''
     runHook preInstall
 
-    install -d $out/bin/ $out/share/uxn/
-
+    install -d $out/bin/
     cp bin/uxnasm bin/uxncli bin/uxnemu $out/bin/
-    cp -r projects $out/share/uxn/
+    install -d $projects/share/uxn/
+    cp -r projects $projects/share/uxn/
 
     runHook postInstall
   '';
@@ -49,7 +62,12 @@ stdenv.mkDerivation {
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     description = "An assembler and emulator for the Uxn stack machine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres kototama ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    mainProgram = "uxnemu";
     inherit (SDL2.meta) platforms;
+    # ofborg complains about an error trying to link inexistent SDL2 library
+    # For full logs, run:
+    # 'nix log /nix/store/bmyhh0lpifl9swvkpflqldv43vcrgci1-uxn-unstable-2023-08-10.drv'.
+    broken = stdenv.isDarwin;
   };
-}
+})

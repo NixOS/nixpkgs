@@ -181,5 +181,6 @@ EOF
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
     platforms = platforms.linux;
+    mainProgram = "beet";
   };
 }
