@@ -15898,6 +15898,12 @@
     githubId = 2600039;
     name = "Spencer Janssen";
   };
+  spikespaz = {
+    name = "Jacob Birkett";
+    email = "support@birkett.dev";
+    github = "spikespaz";
+    githubId = 12502988;
+  };
   spinus = {
     email = "tomasz.czyz@gmail.com";
     github = "spinus";
