@@ -28,11 +28,13 @@ This section describes in some detail how changes can be made and proposed with 
    1. [Clone the forked repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) into a local `nixpkgs` directory.
    1. [Configure the upstream Nixpkgs repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo#configuring-git-to-sync-your-fork-with-the-upstream-repository).
 
-1. Create and switch to a new Git branch, ideally such that:
+1. Figure out the branch that should be used for this change by going through [this section][branch].
+   If in doubt use `master`, that's where most changes should go.
+   This can be changed later by [rebasing][rebasing].
+
+2. Create and switch to a new Git branch, ideally such that:
    - The name of the branch hints at the change you'd like to implement, e.g. `update-hello`.
-   - The base of the branch includes the most recent changes on the `master` branch.
-     > **Note**
-     > Depending on the change you may want to use a different branch, see [][branch].
+   - The base of the branch includes the most recent changes on the base branch from step 1, we'll assume `master` here.
 
    ```bash
    # Make sure you have the latest changes from upstream Nixpkgs
@@ -52,7 +54,7 @@ This section describes in some detail how changes can be made and proposed with 
    git switch --create update-hello <the desired base commit>
    ```
 
-2. Make the desired changes in the local Nixpkgs repository using an editor of your choice.
+3. Make the desired changes in the local Nixpkgs repository using an editor of your choice.
    Make sure to:
    - Adhere to both the [general code conventions](#code-conventions), and the code conventions specific to the part you're making changes to.
      See the [overview section](#overview) for more specific information.
@@ -61,13 +63,13 @@ This section describes in some detail how changes can be made and proposed with 
    - If necessary, document the change.
      See the [overview section](#overview) for more specific information.
 
-3. Commit your changes using `git commit`.
+4. Commit your changes using `git commit`.
    Make sure to adhere to the [commit conventions](#commit-conventions).
 
-   Repeat the steps 2 and 3 as many times as necessary.
+   Repeat the steps 3-4 as many times as necessary.
    Advance to the next step if all the commits (viewable with `git log`) make sense together.
 
-4. Push your commits to your fork of Nixpkgs.
+5. Push your commits to your fork of Nixpkgs.
    ```
    git push --set-upstream origin HEAD
    ```
@@ -78,33 +80,32 @@ This section describes in some detail how changes can be made and proposed with 
    remote:      https://github.com/myUser/nixpkgs/pull/new/update-hello
    ```
 
-5. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
-   Generally you should use `master` as the pull requests base branch.
-   See <!-- TODO branch section link --> for when a different branch should be used instead.
-   Make sure to go through the [pull request template](#pull-request-template) in the pre-filled default description.
+6. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
+   Use the branch from step 2 as the pull requests base branch, you can change this later by [rebasing][rebasing] if necessary.
+   Go through the [pull request template](#pull-request-template) in the pre-filled default description.
 
-6. Respond to review comments, potential CI failures and potential merge conflicts by updating the pull request.
+7. Respond to review comments, potential CI failures and potential merge conflicts by updating the pull request.
    Always keep the pull request in a mergeable state.
 
-   To add new commits, repeat steps 2-3 and push the result using
-   ```
-   git push
-   ```
+   - To add new commits, repeat steps 3-4 and push the result using
+     ```
+     git push
+     ```
 
-   To change existing commits you will have to [rewrite Git history](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
-   Useful Git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`.
-   With a rewritten history you need to force-push the commits using
-   ```
-   git push --force-with-lease
-   ```
+   - To change existing commits you will have to [rewrite Git history](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
+     Useful Git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`.
+     With a rewritten history you need to force-push the commits using
+     ```
+     git push --force-with-lease
+     ```
 
-   In case of merge conflicts you will also have to [rebase the branch](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) on top of current `master`.
-   Sometimes this can be done [on GitHub directly](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch), but if not you will have to rebase locally using
-   ```
-   git fetch upstream
-   git rebase upstream/master
-   git push --force-with-lease
-   ```
+   - In case of merge conflicts you will also have to [rebase the branch](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) on top of current `master`.
+     Sometimes this can be done [on GitHub directly](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch), but if not you will have to rebase locally using
+     ```
+     git fetch upstream
+     git rebase upstream/master
+     git push --force-with-lease
+     ```
 
 ### Which branch to use
 [branch]: #which-branch-to-use
@@ -155,6 +156,7 @@ As a rule of thumb, if the number of rebuilds is **over 500**, it can be conside
 To get a sense for what changes are considered mass rebuilds, see [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged).
 
 ### Rebasing between branches (i.e. from master to staging)
+[rebasing]: #rebasing-between-branches-ie-from-master-to-staging
 
 From time to time, changes between branches must be rebased, for example, if the
 number of new rebuilds they would cause is too large for the target branch. When
@@ -270,7 +272,7 @@ To manually create a backport pull request, follow [the standard pull request pr
 
 - Instead of making manually making and committing the changes, use [`git cherry-pick -x`](https://git-scm.com/docs/git-cherry-pick) for each commit from the pull request you'd like to backport.
   Either `git cherry-pick -x <commit>` when the reason for the backport is obvious (such as minor versions, fixes, etc.), otherwise use `git cherry-pickx -xe <commit>` to add a reason for the backport to the commit message.
-  Here is [an example](5688c39af5a6c5f3d646343443683da880eaefb8) of this.
+  Here is [an example](https://github.com/nixos/nixpkgs/commit/5688c39af5a6c5f3d646343443683da880eaefb8) of this.
 
   > **Warning**
   > Ensure the commits exists on the master branch.
