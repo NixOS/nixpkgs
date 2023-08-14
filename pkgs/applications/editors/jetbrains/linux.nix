@@ -11,6 +11,7 @@
 , unzip
 , libsecret
 , libnotify
+, udev
 , e2fsprogs
 , python3
 , vmopts ? null
@@ -109,6 +110,9 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret e2fsprogs
         libnotify
+        # Required for Help -> Collect Logs
+        # in at least rider and goland
+        udev
       ] ++ extraLdPath)}" \
       ${lib.concatStringsSep " " extraWrapperArgs} \
       --set-default JDK_HOME "$jdk" \
