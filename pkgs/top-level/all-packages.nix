@@ -30013,6 +30013,8 @@ with pkgs;
 
   weather-icons = callPackage ../data/fonts/weather-icons { };
 
+  whitesur-cursors = callPackage ../data/icons/whitesur-cursors { };
+
   whitesur-gtk-theme = callPackage ../data/themes/whitesur {
     inherit (gnome) gnome-shell;
   };
