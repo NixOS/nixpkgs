@@ -201,11 +201,11 @@ let
     if [ "\$textmode" != "true" -a "\$with_fonts" == "true" ]; then
       # Use graphical term, it can be either with background image or a theme.
       # input is "console", while output is "gfxterm".
-      # This enables "serial" input and output only when possible.
       # Otherwise the failure mode is to not even enable gfxterm.
+      # Note that "with_serial" relies on the EFI console.
       if test "\$with_serial" == "yes"; then
-        terminal_output gfxterm serial
-        terminal_input  console serial
+        terminal_output console
+        terminal_input  console
       else
         terminal_output gfxterm
         terminal_input  console
@@ -336,12 +336,11 @@ let
     #    → serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
     # This uses the defaults, and makes the serial terminal available.
     set with_serial=no
-    if serial; then set with_serial=yes ;fi
     export with_serial
     clear
     set timeout=${toString grubEfiTimeout}
 
-    # This message will only be viewable when "gfxterm" is not used.
+    # This message will only be viewable on the default (UEFI) console.
     echo ""
     echo "Loading graphical boot menu..."
     echo ""
@@ -352,12 +351,14 @@ let
 
     hiddenentry 'Text mode' --hotkey 't' {
       loadfont (\$root)/EFI/boot/unicode.pf2
+      set with_serial=yes
       set textmode=true
-      terminal_output gfxterm console
+      terminal_output console
     }
     hiddenentry 'GUI mode' --hotkey 'g' {
       $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
       set textmode=false
+      set with_serial=no
       terminal_output gfxterm
     }
 
