@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.65.0";
-  format = "setuptools";
+  version = "4.66.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GHH7aKhrj7O1nKTN09zMvH5tYT7u0x9MMyUxl3uJvrU=";
+    hash = "sha256-2I5lH5242FUaYlVtPP+eMDQnTKXWbpMZfPJJDi3Lacc=";
   };
 
   nativeBuildInputs = [
