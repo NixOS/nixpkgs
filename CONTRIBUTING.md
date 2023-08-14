@@ -32,7 +32,7 @@ This section describes in some detail how changes can be made and proposed with 
    - The name of the branch hints at the change you'd like to implement, e.g. `update-hello`.
    - The base of the branch includes the most recent changes on the `master` branch.
      > **Note**
-     > Depending on the change you may want to use a different branch, see <!-- TODO link to branch section -->
+     > Depending on the change you may want to use a different branch, see [][branch].
 
    ```bash
    # Make sure you have the latest changes from upstream Nixpkgs
@@ -105,6 +105,54 @@ This section describes in some detail how changes can be made and proposed with 
    git rebase upstream/master
    git push --force-with-lease
    ```
+
+### Which branch to use
+[branch]: #which-branch-to-use
+
+Most changes should go to the `master` branch, but sometimes other branches should be used instead.
+Use the following decision process to figure out which one it should be:
+
+Is the change [acceptable for releases][release-acceptable] and do you wish to have the change in the release?
+- No: Use the `master` branch, do not backport the pull request.
+- Yes: Can the change be implemented the same way on the `master` and release branches?
+  For example, a packages major version might differ between the `master` and release branches, such that separate security patches are required.
+  - Yes: Use the `master` branch and [backport the pull request](#backporting-changes).
+  - No: Create separate pull requests to the `master` and `release-XX.YY` branches.
+
+Furthermore, if the change causes a [mass rebuild][mass-rebuilds], use the appropriate staging branch instead:
+- Mass rebuilds to `master` should go to `staging` instead.
+- Mass rebuilds to `release-XX.YY` should go to `staging-XX.YY` instead.
+
+See [staging](#staging) for more details about such changes propagate between the branches.
+
+#### Changes acceptable for releases
+[release-acceptable]: #changes-acceptable-for-releases
+
+Only changes to supported releases may be accepted.
+The oldest supported release (`YYMM`) can be found using
+```
+nix-instantiate --eval -A lib.trivial.oldestSupportedRelease
+```
+
+The release branches should generally not receive any breaking changes, both for the Nix expressions and derivations.
+So these changes are acceptable to backport:
+- New packages, modules and functions
+- Security fixes
+- Package version updates
+  - Patch versions with fixes
+  - Minor versions with new functionality, but no breaking changes
+
+In addition, major package version updates with breaking changes are also acceptable for:
+- Services that would fail without up-to-date client software, such as `spotify`, `steam`, and `discord`
+- Security critical applications, such as `firefox` and `chromium`
+
+#### Changes causing mass rebuilds
+[mass-rebuilds]: #changes-causing-mass-rebuilds
+
+Which changes cause mass rebuilds is not formally defined.
+In order to help the decision, CI automatically assigns [`rebuild` labels](https://github.com/NixOS/nixpkgs/labels?q=rebuild) to pull requests based on the number of packages they cause rebuilds for.
+As a rule of thumb, if the number of rebuilds is **over 500**, it can be considered a mass rebuild.
+To get a sense for what changes are considered mass rebuilds, see [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged).
 
 ### Rebasing between branches (i.e. from master to staging)
 
@@ -197,29 +245,7 @@ So e.g. the [`nixpkgs-unstable` branch](https://github.com/nixos/nixpkgs/tree/ni
 
 Nixpkgs in its entirety is tied to the NixOS release process, which is documented in the [NixOS Release Wiki](https://nixos.github.io/release-wiki/).
 
-Changes should generally always go to the `master` branch.
-Once in `master`, it can be backported to the `release-YY.MM` branches if [acceptable](#acceptable-backport-criteria).
-A change should only go to the `release-YY.MM` branch directly if `master` doesn't need that change.
-
-#### Acceptable backport criteria
-
-Backports are only accepted to supported releases.
-The oldest supported release (`YYMM`) can be found using
-```
-nix-instantiate --eval -A lib.trivial.oldestSupportedRelease
-```
-
-The release branches should generally not receive any breaking changes, both for the Nix expressions and derivations.
-So these changes are acceptable to backport:
-- New packages, modules and functions
-- Security fixes
-- Package version updates
-  - Patch versions with fixes
-  - Minor versions with new functionality, but no breaking changes
-
-In addition, major package version updates with breaking changes are also acceptable for:
-- Services that would fail without up-to-date client software, such as `spotify`, `steam`, and `discord`
-- Security critical applications, such as `firefox` and `chromium`
+See [this section][branch] to know when to use the release branches.
 
 #### Backporting changes
 
@@ -339,13 +365,6 @@ The staging workflow is used for all main branches, `master` and `release-YY.MM`
 - `master`/`release-YY.MM`
 - `staging`/`staging-YY.MM`
 - `staging-next`/`staging-next-YY.MM`
-
-#### Mass rebuilds
-
-Which changes cause mass rebuilds is not formally defined.
-In order to help the decision, CI automatically assigns [`rebuild` labels](https://github.com/NixOS/nixpkgs/labels?q=rebuild) to pull requests based on the number of packages they cause rebuilds for.
-As a rule of thumb, if the number of rebuilds is **over 500**, it can be considered a mass rebuild.
-To get a sense for what changes are considered mass rebuilds, see [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged).
 
 ## Reviewing contributions
 
