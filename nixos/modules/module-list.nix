@@ -981,6 +981,7 @@
   ./services/networking/nix-serve.nix
   ./services/networking/nix-store-gcs-proxy.nix
   ./services/networking/nixops-dns.nix
+  ./services/networking/nncp.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nomad.nix
   ./services/networking/nsd.nix
