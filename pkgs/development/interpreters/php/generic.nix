@@ -85,7 +85,7 @@ let
 
           php-packages = (callPackage ../../../top-level/php-packages.nix {
             phpPackage = phpWithExtensions;
-          }).overrideScope' packageOverrides;
+          }).overrideScope packageOverrides;
 
           allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
           enabledExtensions =

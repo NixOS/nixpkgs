@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "pam_rssh";
-  version = "unstable-2023-03-18";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "z4yx";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-/AQqjmAGgvnpVWyoK3ymZ1gNAhTSN30KQEiqv4G+zx8=";
+  cargoHash = "sha256-QMyMqsjZ91WimIaaSCXtbRScS3BoB+yFtHjx3xViq7U=";
 
   nativeBuildInputs = [
     pkg-config
