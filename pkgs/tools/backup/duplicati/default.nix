@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/duplicati/duplicati/releases/download/v${version}-${version}_${channel}_${build_date}/duplicati-${version}_${channel}_${build_date}.zip";
-    sha256 = "sha256-isPmRC6N+gEZgvJ0bgeFf5kOQJsicZOsGnT+CAGgg+U=";
+    hash = "sha256-isPmRC6N+gEZgvJ0bgeFf5kOQJsicZOsGnT+CAGgg+U=";
     stripRoot = false;
   };
 
