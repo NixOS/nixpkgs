@@ -14,10 +14,9 @@ let
   okdVersion = "4.12.0-0.okd-2023-02-18-033438";
   podmanVersion = "4.3.1";
   writeKey = "cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
-  gitHash = "sha256-zk/26cG2Rt3jpbhKgprtq2vx7pIQVi7cPUA90uoQa80=";
 in
 buildGoModule rec {
-  version = "2.15.0";
+  version = "2.25.0";
   pname = "crc";
   gitCommit = "72256c3cb00ac01519b26658dd5cfb0dd09b37a1";
   modRoot = "cmd/crc";
@@ -26,7 +25,7 @@ buildGoModule rec {
     owner = "crc-org";
     repo = "crc";
     rev = "v${version}";
-    hash = gitHash;
+    hash = "sha256-p0pMWdiAaYGDBGFWaKctWlMdKHmkMEz642lhufyGrE8=";
   };
 
   vendorHash = null;
