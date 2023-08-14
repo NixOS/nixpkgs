@@ -9,7 +9,14 @@ let
 in
 
 originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
-  passthru = (originalAttrs.passthru or {}) // { inherit forceLibgccToBuildCrtStuff; };
+  passthru = let
+    target_libc = if stdenv.targetPlatform != stdenv.buildPlatform
+                  then finalAttrs.finalPackage.libcCross
+                  else finalAttrs.finalPackage.stdenv.cc.libc;
+    target_libgcc = target_libc.passthru.libgcc or null;
+  in (originalAttrs.passthru or {}) // {
+    inherit forceLibgccToBuildCrtStuff target_libc target_libgcc;
+  };
   preUnpack = ''
     oldOpts="$(shopt -po nounset)" || true
     set -euo pipefail
