@@ -1275,6 +1275,8 @@ self: super: with self; {
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
 
+  bce-python-sdk = callPackage ../development/python-modules/bce-python-sdk { };
+
   bcf = callPackage ../development/python-modules/bcf { };
 
   bcg = callPackage ../development/python-modules/bcg { };
