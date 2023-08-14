@@ -32142,6 +32142,8 @@ with pkgs;
 
   gspell = callPackage ../development/libraries/gspell { };
 
+  gst123 = callPackage ../applications/audio/gst123 { };
+
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
   gtklock = callPackage ../tools/wayland/gtklock { };
