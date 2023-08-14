@@ -14656,7 +14656,7 @@
     name = "Rahul Butani";
   };
   rs0vere = {
-    email = "rs0vere@outlook.com";
+    email = "rs0vere@proton.me";
     github = "rs0vere";
     githubId = 140035635;
     keys = [{
