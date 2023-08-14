@@ -8083,6 +8083,8 @@ with pkgs;
 
   fdk-aac-encoder = callPackage ../applications/audio/fdkaac { };
 
+  cue-music = callPackage ../applications/audio/cue { };
+
   fead = callPackage ../applications/misc/fead { };
 
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
