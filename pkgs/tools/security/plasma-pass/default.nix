@@ -15,12 +15,7 @@ mkDerivation rec {
     owner = "plasma";
     repo = "plasma-pass";
     sha256 = "sha256-lCNskOXkSIcMPcMnTWE37sDCXfmtP0FhyMzxeF6L0iU=";
-
-    # So the tag is actually "v0.2.1" but the released version is later than
-    # 1.2.0 and the "release" on the gitlab page also says "1.2.1".
-    # I guess they just messed up the tag subject and description.
-    # Maintainer of plasma-pass was notified about this 2023-08-13
-    rev = "v0.2.1";
+    rev = "v${version}";
   };
 
   buildInputs  = [
