@@ -30,13 +30,24 @@ let
     aarch64-linux  = "aarch64-unknown-linux-musl";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
+  allHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+
+  # our version of buck2; this should be a git tag
   buck2-version = "2023-08-01";
   src =
     let
-      allHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
       hash = allHashes."${stdenv.hostPlatform.system}";
       url = "https://github.com/facebook/buck2/releases/download/${buck2-version}/buck2-${suffix}.zst";
     in fetchurl { inherit url hash; };
+
+  # compatible version of buck2 prelude; a git revision in the buck2-prelude repository
+  buck2-prelude = "acf49faaa61fd6ad9facd9e1418eed514bbb2ec8";
+  prelude-src =
+    let
+      hash = allHashes."_prelude";
+      url = "https://github.com/facebook/buck2-prelude/archive/${buck2-prelude}.tar.gz";
+    in fetchurl { inherit url hash; };
+
 in
 stdenv.mkDerivation rec {
   pname = "buck2";
@@ -58,6 +69,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    prelude = prelude-src;
+
     updateScript = ./update.sh;
     tests = testers.testVersion {
       package = buck2;
