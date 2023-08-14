@@ -200,25 +200,13 @@ let
       "auto"
     ]}
 
-    # Fonts can be loaded?
-    # (This font is assumed to always be provided as a fallback by NixOS)
-    if loadfont (\$root)/EFI/boot/unicode.pf2; then
-      set with_fonts=true
-    fi
-    if [ "\$textmode" != "true" -a "\$with_fonts" == "true" ]; then
-      # Use graphical term, it can be either with background image or a theme.
-      # input is "console", while output is "gfxterm".
-      # Otherwise the failure mode is to not even enable gfxterm.
-      # Note that "with_serial" relies on the EFI console.
-      if test "\$with_serial" == "yes"; then
-        terminal_output console
-        terminal_input  console
-      else
-        terminal_output gfxterm
-        terminal_input  console
-      fi
+    if [ "\$textmode" == "false" ]; then
+      terminal_output gfxterm
+      terminal_input  console
     else
-      # Sets colors for the non-graphical term.
+      terminal_output console
+      terminal_input  console
+      # Sets colors for console term.
       set menu_color_normal=cyan/blue
       set menu_color_highlight=white/blue
     fi
@@ -288,6 +276,9 @@ let
       "search_fs_uuid"
       "search_fs_file"
       "echo"
+
+      # We're not using it anymore, but we'll leave it in so it can be used
+      # by user, with the console using "C"
       "serial"
 
       # Graphical mode stuff
@@ -330,17 +321,10 @@ let
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
-    set with_fonts=false
     set textmode=${boolToString (config.isoImage.forceTextMode)}
-    # If you want to use serial for "terminal_*" commands, you need to set one up:
-    #   Example manual configuration:
-    #    → serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
-    # This uses the defaults, and makes the serial terminal available.
-    set with_serial=no
-    export with_serial
-    clear
     set timeout=${toString grubEfiTimeout}
 
+    clear
     # This message will only be viewable on the default (UEFI) console.
     echo ""
     echo "Loading graphical boot menu..."
@@ -352,14 +336,12 @@ let
 
     hiddenentry 'Text mode' --hotkey 't' {
       loadfont (\$root)/EFI/boot/unicode.pf2
-      set with_serial=yes
       set textmode=true
       terminal_output console
     }
     hiddenentry 'GUI mode' --hotkey 'g' {
       $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
       set textmode=false
-      set with_serial=no
       terminal_output gfxterm
     }
 
