@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://ioquake3.org/";
     description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rvolosatovs eelco abbradar ];
   };
