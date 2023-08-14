@@ -713,7 +713,7 @@ in
     };
 
     isoImage.graphicalGrub = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       example = true;
       description = lib.mdDoc ''
