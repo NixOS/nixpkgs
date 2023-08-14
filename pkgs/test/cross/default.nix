@@ -134,6 +134,7 @@ let
     pkgs.pkgsLLVM.stdenv
     pkgs.pkgsStatic.bash
     pkgs.pkgsCross.arm-embedded.stdenv
+    pkgs.pkgsCross.armv7l-hf-multiplatform.stdenv
     pkgs.pkgsCross.m68k.stdenv
     pkgs.pkgsCross.aarch64-multiplatform.pkgsBuildTarget.gcc
     pkgs.pkgsCross.powernv.pkgsBuildTarget.gcc
