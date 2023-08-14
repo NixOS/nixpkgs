@@ -18094,6 +18094,8 @@ with pkgs;
 
   wasm3 = callPackage ../development/interpreters/wasm3 { };
 
+  yaegi = callPackage ../development/interpreters/yaegi { };
+
   yex-lang = callPackage ../development/interpreters/yex-lang { };
 
   ### DEVELOPMENT / MISC
