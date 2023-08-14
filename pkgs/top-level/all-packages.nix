@@ -37359,6 +37359,8 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
+  serioussam = callPackage ../games/serioussam { };
+
   shipwright = callPackage ../games/shipwright { };
 
   wipeout-rewrite = callPackage ../games/wipeout-rewrite {
