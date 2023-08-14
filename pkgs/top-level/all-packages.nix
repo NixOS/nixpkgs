@@ -589,6 +589,8 @@ with pkgs;
 
   dnf5 = callPackage ../tools/package-management/dnf5 { };
 
+  documenso = callPackage ../applications/office/documenso { };
+
   dsq = callPackage ../tools/misc/dsq { };
 
   dt = callPackage ../tools/text/dt { };
