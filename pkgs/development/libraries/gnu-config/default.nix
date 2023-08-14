@@ -23,9 +23,21 @@ in stdenv.mkDerivation {
   pname = "gnu-config";
   version = "2023-07-31";
 
-  buildCommand = ''
-    install -Dm755 ${configGuess} $out/config.guess
-    install -Dm755 ${configSub} $out/config.sub
+  unpackPhase = ''
+    runHook preUnpack
+    cp ${configGuess} ./config.guess
+    cp ${configSub} ./config.sub
+    runHook postUnpack
+  '';
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 ./config.guess $out/config.guess
+    install -Dm755 ./config.sub $out/config.sub
+    runHook postInstall
   '';
 
   meta = with lib; {
