@@ -142,8 +142,14 @@ self: super: {
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
     super.inline-c-cpp;
 
-  # 2022-05-31: weeder 2.3.0 requires GHC 9.2
+  # 2022-05-31: weeder 2.4.* requires GHC 9.2
   weeder = doDistribute self.weeder_2_3_1;
+  # Unnecessarily strict upper bound on lens
+  weeder_2_3_1 = doJailbreak (super.weeder_2_3_1.override {
+    # weeder < 2.6 only supports algebraic-graphs < 0.7
+    # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
+    algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
+  });
 
   # Restrictive upper bound on base and containers
   sv2v = doJailbreak super.sv2v;

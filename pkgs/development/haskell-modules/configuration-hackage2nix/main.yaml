@@ -141,6 +141,7 @@ extra-packages:
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
   - unix-compat < 0.7                   # 2023-07-04: Need System.PosixCompat.User for git-annex
+  - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
 
 package-maintainers:
   abbradar:

@@ -150,8 +150,14 @@ self: super: {
 
   mime-string = disableOptimization super.mime-string;
 
-  # weeder 2.3.0 no longer supports GHC 8.10
+  # weeder 2.3.* no longer supports GHC 8.10
   weeder = doDistribute (doJailbreak self.weeder_2_2_0);
+  # Unnecessarily strict upper bound on lens
+  weeder_2_2_0 = doJailbreak (super.weeder_2_2_0.override {
+    # weeder < 2.6 only supports algebraic-graphs < 0.7
+    # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
+    algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
+  });
 
   # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
   OneTuple = addBuildDepends [
