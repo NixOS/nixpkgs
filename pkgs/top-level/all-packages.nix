@@ -32254,6 +32254,8 @@ with pkgs;
 
   rlaunch = callPackage ../applications/misc/rlaunch { };
 
+  remontoire = callPackage ../applications/misc/remontoire { };
+
   rootbar = callPackage ../applications/misc/rootbar { };
 
   waybar = callPackage ../applications/misc/waybar { };
