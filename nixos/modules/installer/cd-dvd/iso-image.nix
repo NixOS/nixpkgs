@@ -260,12 +260,6 @@ let
       "iso9660"
       "part_gpt"
       "part_msdos"
-      "exfat"
-      "ext2"
-      "ntfs"
-      "btrfs"
-      "hfsplus"
-      "udf"
 
       # Basic stuff
       "normal"
