@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GStreamer based command line media player";
     homepage = "https://space.twc.de/~stefan/gst123.php";
     license = licenses.lgpl2Plus;
+    mainProgram = "gst123";
     maintainers = with maintainers; [ swesterfeld ];
     inherit (ncurses.meta) platforms;
     broken = stdenv.isDarwin;
