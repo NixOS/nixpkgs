@@ -8,9 +8,9 @@ https://nixos.org/nixos and in the manual in doc/manual.
 
 You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
 
-## (Reviewing contributions)
+## Reviewing contributions
 
-### Module updates {#reviewing-contributions-module-updates}
+### Module updates
 
 Module updates are submissions changing modules in some ways. These often contains changes to the options or introduce new options.
 
@@ -47,7 +47,7 @@ Sample template for a module update review is provided below.
 ##### Comments
 ```
 
-### New modules {#reviewing-contributions-new-modules}
+### New modules
 
 New modules submissions introduce a new module to NixOS.
 
