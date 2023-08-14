@@ -285,6 +285,16 @@ self: super: {
     })
   ]) super.basement;
 
+  # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
+  # https://github.com/vincenthz/hs-memory/pull/99
+  memory = appendPatches (lib.optionals pkgs.stdenv.hostPlatform.is32bit [
+    (fetchpatch {
+      name = "memory-i686-ghc-9.4.patch";
+      url = "https://github.com/vincenthz/hs-memory/pull/99/commits/2738929ce15b4c8704bbbac24a08539b5d4bf30e.patch";
+      sha256 = "196rj83iq2k249132xsyhbbl81qi1j23h9pa6mmk6zvxpcf63yfw";
+    })
+  ]) super.memory;
+
   # Waiting for the commit being fetched as a patch to get a release.
   espial = appendPatch (fetchpatch {
     url = "https://github.com/jonschoning/espial/commit/70375db7e245207b3572779288eade3252c4d9e3.patch";
