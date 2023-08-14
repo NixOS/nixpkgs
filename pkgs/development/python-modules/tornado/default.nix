@@ -2,6 +2,7 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 }:
 
@@ -15,6 +16,14 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-IV0QN3GqoclFo9kWJVc21arypmBkvUClo86Zmt/Gv6E=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-28370.patch";
+      url = "https://github.com/tornadoweb/tornado/commit/32ad07c54e607839273b4e1819c347f5c8976b2f.patch";
+      hash = "sha256-2dpPHkNThOaZD8T2g1vb/I5WYZ/vy/t690539uprJyc=";
+    })
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
