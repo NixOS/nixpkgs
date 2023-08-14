@@ -88,6 +88,9 @@ in stdenv.mkDerivation (finalAttrs: {
         tm.h \
         options.h \
         insn-constants.h \
+  '' + lib.optionalString stdenv.targetPlatform.isM68k ''
+        sysroot-suffix.h \
+  '' + ''
         insn-modes.h
     )
     mkdir -p "$buildRoot/gcc/include"
