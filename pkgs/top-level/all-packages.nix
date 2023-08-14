@@ -595,9 +595,7 @@ with pkgs;
 
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
-  dufs = callPackage ../servers/http/dufs {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  dufs = callPackage ../servers/http/dufs { };
 
   dynein = callPackage ../development/tools/database/dynein {
     inherit (darwin.apple_sdk.frameworks) Security;
