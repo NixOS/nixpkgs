@@ -49,7 +49,7 @@ in rec {
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;
       platforms = [ "x86_64-linux" ];
-      maintainers = [ lib.maintainers.saori-yuko ];
+      maintainers = [ lib.maintainers.saoriyuko ];
     };
   };
 
@@ -82,7 +82,7 @@ in rec {
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.gpl2;
       platforms = [ "x86_64-linux" ];
-      maintainers = [ lib.maintainers.saori-yuko ];
+      maintainers = [ lib.maintainers.saoriyuko ];
     };
   };
 }
