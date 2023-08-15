@@ -8724,6 +8724,11 @@
     githubId = 1927188;
     name = "karolchmist";
   };
+  katexochen = {
+    github = "katexochen";
+    githubId = 49727155;
+    name = "Paul Meyer";
+  };
   kayhide = {
     email = "kayhide@gmail.com";
     github = "kayhide";
