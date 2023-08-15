@@ -1326,5 +1326,7 @@ self: super: builtins.intersectAttrs super {
     }) super)
       gi-javascriptcore
       webkit2gtk3-javascriptcore
-      gi-webkit2;
+      gi-webkit2
+      gi-webkit2webextension
+      ;
 }
