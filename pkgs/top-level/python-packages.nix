@@ -1187,7 +1187,13 @@ self: super: with self; {
 
   paddleocr = callPackage ../development/python-modules/paddleocr { };
 
-  paddlepaddle = callPackage ../development/python-modules/paddlepaddle { };
+  paddlepaddle = callPackage ../development/python-modules/paddlepaddle {
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
+
+  paddlepaddle-gpu = callPackage ../development/python-modules/paddlepaddle {
+    cudaSupport = true;
+  };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
 

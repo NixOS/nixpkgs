@@ -9,6 +9,8 @@
 , openssl_1_1
 , zlib
 , setuptools
+, cudaSupport ? false
+, cudaPackages_11 ? {}
 # runtime dependencies
 , httpx
 , numpy
@@ -21,11 +23,15 @@
 }:
 
 let
-  pname = "paddlepaddle";
+  pname = "paddlepaddle${if cudaSupport then "_gpu" else ""}";
   version = "2.5.0";
   format = "wheel";
   pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
-  hashAndPlatform = import ./binary-hashes.nix { pythonVersion = pyShortVersion; system = stdenv.system; };
+  hashAndPlatform = import ./binary-hashes.nix {
+    inherit cudaSupport;
+    pythonVersion = pyShortVersion;
+    system = stdenv.system;
+  };
   src = fetchPypi ({
     inherit pname version format;
     dist = pyShortVersion;
@@ -38,16 +44,27 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.9" || pythonAtLeast "3.11";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
-    autoPatchelfHook
-  ];
-
-  buildInputs = [
+  libraryPath = lib.makeLibraryPath (
     # TODO: remove openssl_1_1 and zlib, maybe by building paddlepaddle from
     # source as suggested in the following comment:
     # https://github.com/NixOS/nixpkgs/pull/243583#issuecomment-1641450848
-    openssl_1_1
-    zlib
+    [ openssl_1_1 zlib ] ++ lib.optionals cudaSupport (with cudaPackages_11; [
+      cudatoolkit.lib
+      cudatoolkit.out
+      cudnn
+    ])
+  );
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    function fixRunPath {
+      p=$(patchelf --print-rpath $1)
+      patchelf --set-rpath "$p:$libraryPath" $1
+    }
+
+    fixRunPath $out/lib/python${python.pythonVersion}/site-packages/paddle/fluid/libpaddle.so
+  '';
+
+  buildInputs = [
     setuptools
   ];
 
@@ -69,6 +86,6 @@ buildPythonPackage {
     homepage = "https://github.com/PaddlePaddle/Paddle";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" ] ++ optionals (!cudaSupport) [ "x86_64-darwin" "aarch64-darwin" ];
   };
 }
