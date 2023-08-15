@@ -1,27 +1,30 @@
-{ lib
+{ coreutils
+, fetchurl
+, gnugrep
+, jre_headless
+, lib
+, makeBinaryWrapper
+, nixosTests
 , stdenv
 , stdenvNoCC
-, fetchurl
-, makeWrapper
-, jre_headless
-, gnugrep
-, coreutils
-, autoPatchelfHook
-, zlib
-, nixosTests
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opensearch";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchurl {
-    url = "https://artifacts.opensearch.org/releases/bundle/opensearch/${version}/opensearch-${version}-linux-x64.tar.gz";
-    hash = "sha256-64vWis+YQfjOw8eaYi1nggq/Q2ErqqcEuISXPGROypc=";
+    url = "https://artifacts.opensearch.org/releases/bundle/opensearch/${finalAttrs.version}/opensearch-${finalAttrs.version}-linux-x64.tar.gz";
+    hash = "sha256-A9YjwtmacQDC8PrdyP/ai6J+roqmP/bz99rSM3votow=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre_headless ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
+  buildInputs = [
+    jre_headless
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -48,12 +51,12 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
     homepage = "https://github.com/opensearch-project/OpenSearch";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ shyim ];
+    platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ shyim ];
   };
-}
+})
