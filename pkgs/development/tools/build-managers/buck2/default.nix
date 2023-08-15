@@ -36,17 +36,19 @@ let
   buck2-version = "2023-08-15";
   src =
     let
+      name = "buck2-${buck2-version}-${suffix}.zst";
       hash = allHashes."${stdenv.hostPlatform.system}";
       url = "https://github.com/facebook/buck2/releases/download/${buck2-version}/buck2-${suffix}.zst";
-    in fetchurl { inherit url hash; };
+    in fetchurl { inherit name url hash; };
 
   # compatible version of buck2 prelude; a git revision in the buck2-prelude repository
   buck2-prelude = "40d6fffd01f224d25a62d982f4a3f00b275a5677";
   prelude-src =
     let
+      name = "buck2-prelude-${buck2-version}.tar.gz";
       hash = allHashes."_prelude";
       url = "https://github.com/facebook/buck2-prelude/archive/${buck2-prelude}.tar.gz";
-    in fetchurl { inherit url hash; };
+    in fetchurl { inherit name url hash; };
 
 in
 stdenv.mkDerivation rec {
