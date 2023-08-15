@@ -16,6 +16,26 @@ drv: lib.pipe drv
 
 ([
 
+  # Check that the version of GCC exactly matches the version of
+  # libgcc (if any) used to build its target-glibc.  For an example
+  # of the problems that occur if this happens, see
+  # https://github.com/NixOS/nixpkgs/issues/244871
+  (pkg: pkg.overrideAttrs (finalAttrs: previousAttrs: {
+
+    # We put the assertion on the `meta` attribute to ensure that
+    # we can examine `finalAttrs` without creating any infinite
+    # recursions.  The meta checks (even the non-recursive ones)
+    # will force this assertion.
+    meta = let
+      inherit (finalAttrs) finalPackage;
+      inherit (finalPackage.passthru) target_libc target_libgcc;
+    in
+      assert (finalPackage.version != target_libgcc.version or finalPackage.version)
+             -> throw
+               "${finalPackage.name} version does not match target libgcc version ${target_libgcc.name} (from target libc ${target_libc.name})";
+      previousAttrs.meta;
+  }))
+
   (pkg: pkg.overrideAttrs (previousAttrs:
     lib.optionalAttrs (
       targetPlatform != hostPlatform &&

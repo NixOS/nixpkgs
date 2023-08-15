@@ -10,7 +10,8 @@ in
 
 originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
   passthru = let
-    target_libc = if stdenv.targetPlatform != stdenv.buildPlatform
+    target_libc = if finalAttrs.withoutTargetLibc then null
+                  else if finalAttrs.finalPackage.libcCross != null
                   then finalAttrs.finalPackage.libcCross
                   else finalAttrs.finalPackage.stdenv.cc.libc;
     target_libgcc = target_libc.passthru.libgcc or null;
