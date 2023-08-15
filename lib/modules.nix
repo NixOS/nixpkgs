@@ -48,11 +48,6 @@ let
   inherit (lib.strings)
     isConvertibleWithToString
     ;
-  mapAttrsLoc = f: set: mapAttrs
-    (name: val: f (builtins.unsafeGetAttrPos name set) name val)
-    set;
-
-  dontMapAttrsLoc = f: builtins.mapAttrs (f null);
 
   showDeclPrefix = loc: decl: prefix:
     " - option(s) with prefix `${showOption (loc ++ [prefix])}' in module `${decl._file}'";
@@ -100,8 +95,6 @@ let
         lib.warnIf (evalModulesArgs?args) "The args argument to evalModules is deprecated. Please set config._module.args instead."
         lib.warnIf (evalModulesArgs?check) "The check argument to evalModules is deprecated. Please set config._module.check instead."
         x;
-
-      maybeMapAttrsLoc = if declarationLocations then mapAttrsLoc else dontMapAttrsLoc;
 
       legacyModules =
         optional (evalModulesArgs?args) {
@@ -241,7 +234,7 @@ let
           (specialArgs.modulesPath or "")
           (regularModules ++ [ internalModule ])
           ({ inherit lib options config specialArgs; } // specialArgs);
-        in mergeModules maybeMapAttrsLoc prefix (reverseList collected);
+        in mergeModules prefix (reverseList collected);
 
       options = merged.matchedOptions;
 
@@ -469,7 +462,7 @@ let
         else config;
     in
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["_class" "_file" "key" "disabledModules" "imports" "options" "config" "meta" "freeformType"]; in
+      let badAttrs = removeAttrs m ["_class" "_file" "_loc" "key" "disabledModules" "imports" "options" "config" "meta" "freeformType"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
@@ -490,7 +483,7 @@ let
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = addFreeformType (removeAttrs m ["_class" "_file" "key" "disabledModules" "require" "imports" "freeformType"]);
+        config = addFreeformType (removeAttrs m ["_class" "_file" "_loc" "key" "disabledModules" "require" "imports" "freeformType"]);
       };
 
   applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }:
@@ -543,11 +536,11 @@ let
          ];
        }
   */
-  mergeModules = maybeMapAttrsLoc: prefix: modules:
-    mergeModules' maybeMapAttrsLoc prefix modules
+  mergeModules = prefix: modules:
+    mergeModules' prefix modules
       (concatMap (m: map (config: { file = m._file; inherit config; }) (pushDownProperties m.config)) modules);
 
-  mergeModules' = maybeMapAttrsLoc: prefix: options: configs:
+  mergeModules' = prefix: modules: configs:
     let
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName =
@@ -564,11 +557,11 @@ let
               else
                 mapAttrs
                   (n: option:
-                    [{ inherit (module) _file; options = option; }]
+                    [{ inherit (module) _file; _loc = builtins.unsafeGetAttrPos n subtree; options = option; }]
                   )
                   subtree
               )
-            options);
+            modules);
 
       # The root of any module definition must be an attrset.
       checkedConfigs =
@@ -673,7 +666,7 @@ let
                   showRawDecls loc nonOptions
                 }"
           else
-            mergeModules' maybeMapAttrsLoc loc decls defns) declsByName;
+            mergeModules' loc decls defns) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
 
@@ -740,7 +733,7 @@ let
             else res.options;
         in opt.options // res //
           { declarations = res.declarations ++ [opt._file];
-            declarationsWithLocations = res.declarationsWithLocations ++ [opt._loc];
+            declarationsWithLocations = res.declarationsWithLocations ++ optional (opt._loc != null) opt._loc;
             options = submodules;
           } // typeSet
     ) { inherit loc; declarations = []; declarationsWithLocations = []; options = []; } opts;
