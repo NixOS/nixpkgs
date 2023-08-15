@@ -15736,7 +15736,7 @@ with pkgs;
     (lib.listToAttrs (map (version:
       let atLeast = lib.versionAtLeast version;
           attrName = "gcc${lib.replaceStrings ["."] [""] version}";
-          pkg = lowPrio (wrapCC (callPackage (../development/compilers/gcc + "/${version}") ({
+          pkg = callPackage (../development/compilers/gcc + "/${version}") ({
             inherit noSysDirs;
             reproducibleBuild = true;
             profiledCompiler = false;
@@ -15761,8 +15761,8 @@ with pkgs;
           } // lib.optionalAttrs (atLeast "6" && !(atLeast "9")) {
             # gcc 10 is too strict to cross compile gcc <= 8
             stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
-          })));
-      in lib.nameValuePair attrName pkg
+          });
+      in lib.nameValuePair attrName (lowPrio (wrapCC pkg))
     ) [ "4.8" "4.9" "6" "7" "8" "9" "10" "11" "12" "13" ]))
     gcc48 gcc49 gcc6 gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13;
 
