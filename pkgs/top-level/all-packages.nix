@@ -15602,7 +15602,10 @@ with pkgs;
     else 12;
   inherit ({
       gcc = pkgs.${"gcc${toString default-gcc-version}"};
-      gccFun = callPackage (../development/compilers/gcc + "/${toString default-gcc-version}");
+      gccFun =
+        callPackage
+          ({ gcc_major_version }: callPackage (../development/compilers/gcc + "/${gcc_major_version}"))
+          { gcc_major_version = toString default-gcc-version; };
     }) gcc gccFun;
   gcc-unwrapped = gcc.cc;
 
