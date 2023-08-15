@@ -137,4 +137,10 @@ in stdenv.mkDerivation (finalAttrs: {
     ln -s "$out/lib/gcc/${stdenv.hostPlatform.config}/${finalAttrs.version}"/* "$out/lib"
     ln -s "$dev/lib/gcc/${stdenv.hostPlatform.config}/${finalAttrs.version}/include"/* "$dev/include/"
   '';
+
+  meta =
+    assert !stdenv.cc.cc.isGNU -> throw "you must use GCC to compile libgcc";
+    assert (stdenv.cc.cc.version != finalAttrs.finalPackage.version)
+           -> throw "you tried to use ${stdenv.cc.cc.name} (${stdenv.cc.cc}) to compile ${finalAttrs.finalPackage.name}";
+    { };
 })
