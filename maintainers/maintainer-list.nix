@@ -17799,6 +17799,12 @@
       fingerprint = "5814 50EB 6E17 E715 7C63  E7F1 9879 8C3C 4D68 8D6D";
     }];
   };
+  viluon = {
+    email = "nix@viluon.me";
+    github = "viluon";
+    githubId = 7235381;
+    name = "Ondřej Kvapil";
+  };
   vincentbernat = {
     email = "vincent@bernat.ch";
     github = "vincentbernat";
