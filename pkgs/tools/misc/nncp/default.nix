@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, go, curl, perl, genericUpdater, writeShellScript
 , cfgPath ? "/etc/nncp.hjson" }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nncp";
   version = "8.9.0";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
-    url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
+    url = "http://www.nncpgo.org/download/nncp-${finalAttrs.version}.tar.xz";
     sha256 = "259facbc3354edcc16e7c64e278aaccdb47ffa3ec2afea0b36283f46aa824b5d";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = genericUpdater {
     versionLister = writeShellScript "nncp-versionLister" ''
-      ${curl}/bin/curl -s ${meta.downloadPage} | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
+      ${curl}/bin/curl -s ${finalAttrs.meta.downloadPage} | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
     '';
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ehmry woffs ];
   };
-}
+})
