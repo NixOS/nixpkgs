@@ -2,58 +2,76 @@
 , testers, buck2 # for passthru.tests
 }:
 
+# NOTE (aseipp): buck2 uses a precompiled binary build for good reason — the
+# upstream codebase extensively uses unstable `rustc` nightly features, and as a
+# result can't be built upstream in any sane manner. it is only ever tested and
+# integrated against a single version of the compiler, which produces all usable
+# binaries. you shouldn't try to workaround this or get clever and think you can
+# patch it to work; just accept it for now. it is extremely unlikely buck2 will
+# build with a stable compiler anytime soon; see related upstream issues:
+#
+#   - NixOS/nixpkgs#226677
+#   - NixOS/nixpkgs#232471
+#   - facebook/buck2#265
+#   - facebook/buck2#322
+#
+# worth noting: it *is* possible to build buck2 from source using
+# buildRustPackage, and it works fine, but only if you are using flakes and can
+# import `rust-overlay` from somewhere else to vendor your compiler. See
+# nixos/nixpkgs#226677 for more information about that.
+
+# NOTE (aseipp): this expression is mostly automated, and you are STRONGLY
+# RECOMMENDED to use to nix-update for updating this expression when new
+# releases come out, which runs the sibling `update.sh` script.
+#
+# from the root of the nixpkgs git repository, run:
+#
+#    nix-shell maintainers/scripts/update.nix \
+#      --argstr commit true \
+#      --argstr package buck2
+
 let
-  # NOTE (aseipp): buck2 uses a precompiled binary build for good reason — the
-  # upstream codebase extensively uses unstable `rustc` nightly features, and as
-  # a result can't be built upstream in any sane manner. it is only ever tested
-  # and integrated against a single version of the compiler, which produces all
-  # usable binaries. you shouldn't try to workaround this or get clever and
-  # think you can patch it to work; just accept it for now. it is extremely
-  # unlikely buck2 will build with a stable compiler anytime soon; see related
-  # upstream issues:
-  #
-  #   - NixOS/nixpkgs#226677
-  #   - NixOS/nixpkgs#232471
-  #   - facebook/buck2#265
-  #   - facebook/buck2#322
-  #
-  # worth noting: it *is* possible to build buck2 from source using
-  # buildRustPackage, and it works fine, but only if you are using flakes and
-  # can import `rust-overlay` from somewhere else to vendor your compiler. See
-  # nixos/nixpkgs#226677 for more information about that.
 
-  # map our platform name to the rust toolchain suffix
-  suffix = {
-    x86_64-darwin  = "x86_64-apple-darwin";
-    aarch64-darwin = "aarch64-apple-darwin";
-    x86_64-linux   = "x86_64-unknown-linux-musl";
-    aarch64-linux  = "aarch64-unknown-linux-musl";
-  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  allHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+  # build hashes, which correspond to the hashes of the precompiled binaries
+  # procued by GitHub Actions. this also includes the hash for a download of a
+  # compatible buck2-prelude
+  buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # our version of buck2; this should be a git tag
-  buck2-version = "2023-08-15";
+  version = "2023-08-15";
+
+  # the platform-specific, statically linked binary — which is also
+  # zstd-compressed
   src =
     let
-      name = "buck2-${buck2-version}-${suffix}.zst";
-      hash = allHashes."${stdenv.hostPlatform.system}";
-      url = "https://github.com/facebook/buck2/releases/download/${buck2-version}/buck2-${suffix}.zst";
+      suffix = {
+        # map our platform name to the rust toolchain suffix
+        # NOTE (aseipp): must be synchronized with update.sh!
+        x86_64-darwin  = "x86_64-apple-darwin";
+        aarch64-darwin = "aarch64-apple-darwin";
+        x86_64-linux   = "x86_64-unknown-linux-musl";
+        aarch64-linux  = "aarch64-unknown-linux-musl";
+      }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+      name = "buck2-${version}-${suffix}.zst";
+      hash = buildHashes."${stdenv.hostPlatform.system}";
+      url = "https://github.com/facebook/buck2/releases/download/${version}/buck2-${suffix}.zst";
     in fetchurl { inherit name url hash; };
 
-  # compatible version of buck2 prelude; a git revision in the buck2-prelude repository
-  buck2-prelude = "40d6fffd01f224d25a62d982f4a3f00b275a5677";
+  # compatible version of buck2 prelude; this is exported via passthru.prelude
+  # for downstream consumers to use when they need to automate any kind of
+  # tooling
   prelude-src =
     let
-      name = "buck2-prelude-${buck2-version}.tar.gz";
-      hash = allHashes."_prelude";
-      url = "https://github.com/facebook/buck2-prelude/archive/${buck2-prelude}.tar.gz";
+      prelude-hash = "40d6fffd01f224d25a62d982f4a3f00b275a5677";
+      name = "buck2-prelude-${version}.tar.gz";
+      hash = buildHashes."_prelude";
+      url = "https://github.com/facebook/buck2-prelude/archive/${prelude-hash}.tar.gz";
     in fetchurl { inherit name url hash; };
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "buck2";
-  version = "unstable-${buck2-version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
+  version = "unstable-${version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
   inherit src;
 
   nativeBuildInputs = [ zstd ];
@@ -90,9 +108,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast, hermetic, multi-language build system";
     homepage = "https://buck2.build";
-    changelog = "https://github.com/facebook/buck2/releases/tag/${buck2-version}";
+    changelog = "https://github.com/facebook/buck2/releases/tag/${version}";
     license = with licenses; [ asl20 /* or */ mit ];
-    mainProgram = pname;
+    mainProgram = "buck2";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms = [
       "x86_64-linux" "aarch64-linux"
