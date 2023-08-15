@@ -15086,6 +15086,13 @@
       fingerprint = "30BB FF3F AB0B BB3E 0435  F83C 8E8F F66E 2AE8 D970";
     }];
   };
+  scm2342 = {
+    name = "Sven Mattsen";
+    email = "nix@sven.cc";
+    matrix = "@scm:matrix.sven.cc";
+    github = "scm2342";
+    githubId = 154108;
+  };
   scode = {
     email = "peter.schuller@infidyne.com";
     github = "scode";
