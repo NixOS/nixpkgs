@@ -65,8 +65,6 @@ in
 
   pod-mode = callPackage ./manual-packages/pod-mode { };
 
-  power-mode = callPackage ./manual-packages/power-mode { };
-
   prisma-mode = callPackage ./manual-packages/prisma-mode { };
 
   structured-haskell-mode = self.shm;
