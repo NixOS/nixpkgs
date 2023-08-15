@@ -13924,6 +13924,12 @@
     githubId = 115877;
     name = "Kenny Shen";
   };
+  quadradical = {
+    email = "nixos@henryhiles.com";
+    github = "Henry-Hiles";
+    githubId = 71790868;
+    name = "Henry Hiles";
+  };
   quag = {
     email = "quaggy@gmail.com";
     github = "quag";
