@@ -45,16 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-sendmail=${sendmailPath}"
     "--enable-largefiles"
-  ] ++ (if withKrb5 then
-    [ "--with-krb5" ]
-  else if withPerl then
-    [ "--with-perl" ]
-  else if withPython3 then
-    [ "--with-python" ]
-  else if withSASL then
-    [ "--with-sasl" ]
-  else
-    [ ]);
+  ]
+  ++ (lib.optional withKrb5 "--with-krb5")
+  ++ (lib.optional withPerl "--with-perl")
+  ++ (lib.optional withPython3 "--with-python")
+  ++ (lib.optional withSASL "--with-sasl");
 
   propagatedBuildInputs = builtins.attrValues {
     inherit (perlPackages) MIMETools GD Encode DBDSQLite;
@@ -73,13 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
     wget
     ncftp
   ]
-  ++ (lib.optional withBdb [ db62 ])
-  ++ (lib.optional withPam [ pam ])
-  ++ (lib.optional withSQLite3 [ sqlite ])
-  ++ (lib.optional withZlib [ zlib ])
-  ++ (lib.optional withCanlock [ libcanlock ])
-  ++ (lib.optional withOpenSSL [ openssl ])
-  ++ (lib.optional withSystemd [ systemd ]);
+  ++ (lib.optional withBdb db62)
+  ++ (lib.optional withPam pam)
+  ++ (lib.optional withSQLite3 sqlite)
+  ++ (lib.optional withZlib zlib)
+  ++ (lib.optional withCanlock libcanlock)
+  ++ (lib.optional withOpenSSL openssl)
+  ++ (lib.optional withSystemd systemd);
 
   preInstall = ''
     export CHOWNPROG=set CHGRPPROG=set
