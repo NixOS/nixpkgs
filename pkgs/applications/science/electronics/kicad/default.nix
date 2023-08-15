@@ -230,17 +230,8 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ evils ];
-    # kicad is cross platform
     platforms = lib.platforms.all;
     broken = stdenv.isDarwin;
-
-    hydraPlatforms = if (with3d) then [ ] else platforms;
-    # We can't download the 3d models on Hydra,
-    # they are a ~1 GiB download and they occupy ~5 GiB in store.
-    # as long as the base and libraries (minus 3d) are build,
-    # this wrapper does not need to get built
-    # the kicad-*small "packages" cause this to happen
-
     mainProgram = "kicad";
   };
 }
