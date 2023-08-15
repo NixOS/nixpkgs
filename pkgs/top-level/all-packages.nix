@@ -15736,7 +15736,7 @@ with pkgs;
     (lib.listToAttrs (map (version:
       let atLeast = lib.versionAtLeast version;
           attrName = "gcc${lib.replaceStrings ["."] [""] version}";
-          pkg = callPackage (../development/compilers/gcc + "/${version}") ({
+          pkg = (callPackage (../development/compilers/gcc + "/${version}") ({
             inherit noSysDirs;
             reproducibleBuild = true;
             profiledCompiler = false;
@@ -15761,7 +15761,43 @@ with pkgs;
           } // lib.optionalAttrs (atLeast "6" && !(atLeast "9")) {
             # gcc 10 is too strict to cross compile gcc <= 8
             stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
-          });
+
+          })).override (previousArgs:
+            let
+              inherit (previousArgs) stdenv libcCross;
+            in lib.optionalAttrs (!stdenv.buildPlatform.canExecute stdenv.targetPlatform &&
+                                  libcCross != null &&
+                                  (lib.versionOlder libcCross.passthru.libgcc.version version ||
+                                   lib.versionOlder stdenv.cc.cc.version version))
+            # The conditional above checks for the following situation: we are cross-building a
+            # native compiler (build!=(host==target)) using a cross-compiler ((build==host)!=target)
+            # which is *older than* the compiler being built.  We check both the cross-compiler
+            # itself as well as the cross-compiler which was used to build the copy of libgcc
+            # against which the target libc is linked.
+            #
+            # This configuration often fails (see https://github.com/NixOS/nixpkgs/issues/244871 for
+            # one example).  If you need to cross-build a newer-than-default-gcc-version native
+            # compiler, you must first build a newer-than-default-gcc-version cross-compiler.  The
+            # code below does that automatically.
+            (let
+              gcc = wrapCCWith {
+                cc = (pkgsHostTarget.gccWithoutTargetLibc.override {
+                  gcc_major_version = version;
+                }).cc;
+                bintools = binutilsNoLibc;
+                libc = binutilsNoLibc.libc;
+                extraPackages = [];
+              };
+              libcCross' = libcCross.override (previousArgs: {
+                libgcc = previousArgs.libgcc.override (previousArgs: {
+                  glibc = libcCross'.override { libgcc = null; };
+                  stdenvNoLibs = overrideCC previousArgs.stdenvNoLibs gcc;
+                  inherit gcc;
+                });
+              });
+            in {
+              libcCross = libcCross';
+            }));
       in lib.nameValuePair attrName (lowPrio (wrapCC pkg))
     ) [ "4.8" "4.9" "6" "7" "8" "9" "10" "11" "12" "13" ]))
     gcc48 gcc49 gcc6 gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13;
