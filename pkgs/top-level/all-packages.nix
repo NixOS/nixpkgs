@@ -15700,9 +15700,10 @@ with pkgs;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
-  gccWithoutTargetLibc = assert stdenv.targetPlatform != stdenv.hostPlatform;
-    wrapCCWith {
-      cc = gccFun {
+  gccWithoutTargetLibc =
+    assert stdenv.targetPlatform != stdenv.hostPlatform;
+    callPackage ({ gcc_major_version }: wrapCCWith {
+      cc = (gccFun.override { inherit gcc_major_version; }) {
         # copy-pasted
         inherit noSysDirs;
 
@@ -15727,7 +15728,7 @@ with pkgs;
       bintools = binutilsNoLibc;
       libc = binutilsNoLibc.libc;
       extraPackages = [];
-  };
+  }) { gcc_major_version = toString default-gcc-version; };
 
   # This expression will be pushed into pkgs/development/compilers/gcc/common
   # once the top-level gcc/${version}/default.nix files are deduplicated.
