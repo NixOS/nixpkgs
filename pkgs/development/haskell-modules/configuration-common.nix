@@ -358,6 +358,9 @@ self: super: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
   }) super.shell-conduit;
 
+  # https://github.com/serokell/nixfmt/issues/130
+  nixfmt = doJailbreak super.nixfmt;
+
   cachix = self.generateOptparseApplicativeCompletions [ "cachix" ]
     # Adds a workaround to the API changes in the versions library
     # Should be dropped by the next release
