@@ -393,6 +393,11 @@ checkConfigError \
   config.set \
   ./declare-set.nix ./declare-enable-nested.nix
 
+# Options: accidental use of an option-type instead of option (or other tagged type; unlikely)
+checkConfigError 'Expected an option declaration at option path .result. but got an attribute set with type option-type' config.result ./options-type-error-typical.nix
+checkConfigError 'Expected an option declaration at option path .result.here. but got an attribute set with type option-type' config.result.here ./options-type-error-typical-nested.nix
+checkConfigError 'Expected an option declaration at option path .result. but got an attribute set with type configuration' config.result ./options-type-error-configuration.nix
+
 # Check that that merging of option collisions doesn't depend on type being set
 checkConfigError 'The option .group..*would be a parent of the following options, but its type .<no description>. does not support nested options.\n\s*- option.s. with prefix .group.enable..*' config.group.enable ./merge-typeless-option.nix
 
