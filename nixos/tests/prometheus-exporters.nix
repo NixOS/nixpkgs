@@ -1103,7 +1103,7 @@ let
       };
       exporterTest = ''
         wait_until_succeeds(
-            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Device unavailable"'
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Unable to detect device type"'
         )
       '';
     };
