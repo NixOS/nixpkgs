@@ -68,16 +68,15 @@ let
       pythonImportsCheck = [ "${lib.replaceStrings ["-"] ["_"] pname}" ];
 
       meta = with lib; {
-        broken = stdenv.isDarwin;
         description = "Python extension to run WebAssembly binaries";
         homepage = "https://github.com/wasmerio/wasmer-python";
         license = licenses.mit;
         platforms = platforms.unix;
-        maintainers = with maintainers; [ ];
+        maintainers = [ ];
       };
     };
 in
-rec {
+{
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";
