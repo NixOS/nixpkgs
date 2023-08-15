@@ -44,14 +44,14 @@ lib.optional (lib.versionAtLeast version "11.0")
     !langJit &&
     !stdenv.hostPlatform.isDarwin &&
     enableShared
-    ;
+  ;
 
-    # For some reason libgcc_s.so has major-version "2" on m68k but
-    # "1" everywhere else.  Might be worth changing this to "*".
-    libgcc_s-version-major =
-      if targetPlatform.isM68k
-      then "2"
-      else "1";
+  # For some reason libgcc_s.so has major-version "2" on m68k but
+  # "1" everywhere else.  Might be worth changing this to "*".
+  libgcc_s-version-major =
+    if targetPlatform.isM68k
+    then "2"
+    else "1";
 
 in
 (pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
