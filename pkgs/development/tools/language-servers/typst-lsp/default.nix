@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "nvarner";
     repo = "typst-lsp";
     rev = "v${version}";
-    hash = "sha256-vzywUbfLyogJhjybiUEGJ2XESjDWE2fMfHM0uJxZC38=";
+    hash = "sha256-l69/8XhIvGYcvtoCE7+hfp810F3uBVvxqZnA12o8HCg=";
   };
 
   cargoLock = {
@@ -31,6 +31,11 @@ rustPlatform.buildRustPackage rec {
     # requires internet access
     "--skip=workspace::package::external::remote_repo::test::full_download"
   ];
+
+  # workspace::package::external::manager::test::local_package tries to access the data directory
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "A brand-new language server for Typst";
