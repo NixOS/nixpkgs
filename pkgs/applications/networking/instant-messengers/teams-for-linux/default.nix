@@ -31,11 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-j5N6d270myUylDVDFQTScbsGp1wlpt5sISDJBRCV/GU=";
   };
 
-  patches = [
-    # Can be removed once Electron upstream resolves https://github.com/electron/electron/issues/36660
-    ./screensharing-wayland-hack-fix.patch
-  ];
-
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
