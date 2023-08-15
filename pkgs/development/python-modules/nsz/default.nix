@@ -24,6 +24,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/nicoboss/nsz";
     description = "NSZ - Homebrew compatible NSP/XCI compressor/decompressor";
+    changelog = "https://github.com/nicoboss/nsz/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };
