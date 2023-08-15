@@ -1734,6 +1734,8 @@ with pkgs;
 
   github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
 
+  gickup = callPackage ../tools/backup/gickup { };
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gh-actions-cache = callPackage ../tools/misc/gh-actions-cache { };
