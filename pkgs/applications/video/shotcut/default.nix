@@ -23,13 +23,16 @@ assert lib.versionAtLeast mlt.version "6.24.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "21.09.20";
+  version = "23.07.29";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
+    ### Version 21.09.20
+    # sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
+    ### Version 23.07.29 after 'nix-hash shotcut-linux-x86_64-230729.txz --flat --base32 --type sha256'
+    sha256 = "01ary9y8bkf2wwmj4cgjrisp85inrmqbm37g46raq4kalzhxglk4";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];
