@@ -107,14 +107,14 @@ in
         };
       in
       lib.attrsets.mergeAttrsList [
-        (optionalFile "config" (lib.generators.toINI { }) sts.globalOptions)
-        (optionalFile "profile" (lib.generators.toINI { }) sts.inputMethod)
+        (optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
+        (optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
         (lib.concatMapAttrs
           (name: value: optionalFile
             "conf/${name}.conf"
             (lib.generators.toINIWithGlobalSection { })
             value)
-          sts.addons)
+          cfg.settings.addons)
       ];
 
     environment.variables = {
