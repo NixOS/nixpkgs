@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to make pylint respect virtual environments";
     homepage = "https://github.com/jgosmann/pylint-venv/";
+    changelog = "https://github.com/jgosmann/pylint-venv/blob/v${version}/CHANGES.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
