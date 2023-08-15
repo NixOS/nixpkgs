@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -30,6 +30,7 @@
 
 # check phase
 , cython
+, filelock
 , html5lib
 , pytestCheckHook
 , typed-ast
@@ -37,22 +38,21 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "5.3.0";
+  version = "7.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
-    repo = pname;
+    repo = "sphinx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-80bVg1rfBebgSOKbWkzP84vpm39iLgM8lWlVD64nSsQ=";
     postFetch = ''
       cd $out
-      mv tests/roots/test-images/testimäge.png \
-        tests/roots/test-images/testimæge.png
+      mv tests/roots/test-images/testimäge.png tests/roots/test-images/testimæge.png
       patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
     '';
+    hash = "sha256-bjQQLCUPMU3qZPQ3OMA+CxHh70XywVMMQUK7fIXptgQ=";
   };
 
   nativeBuildInputs = [
@@ -86,6 +86,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cython
+    filelock
     html5lib
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.8") [
@@ -159,14 +160,39 @@ buildPythonPackage rec {
     "test_partialfunction"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python documentation generator";
     longDescription = ''
-      A tool that makes it easy to create intelligent and beautiful
-      documentation for Python projects
+      Sphinx makes it easy to create intelligent and beautiful documentation.
+
+      Here are some of Sphinx’s major features:
+      - Output formats: HTML (including Windows HTML Help), LaTeX (for printable
+        PDF versions), ePub, Texinfo, manual pages, plain text
+      - Extensive cross-references: semantic markup and automatic links for
+        functions, classes, citations, glossary terms and similar pieces of
+        information
+      - Hierarchical structure: easy definition of a document tree, with
+        automatic links to siblings, parents and children
+      - Automatic indices: general index as well as a language-specific module
+        indices
+      - Code handling: automatic highlighting using the Pygments highlighter
+      - Extensions: automatic testing of code snippets, inclusion of docstrings
+        from Python modules (API docs) via built-in extensions, and much more
+        functionality via third-party extensions.
+      - Themes: modify the look and feel of outputs via creating themes, and
+        re-use many third-party themes.
+      - Contributed extensions: dozens of extensions contributed by users; most
+        of them installable from PyPI.
+
+      Sphinx uses the reStructuredText markup language by default, and can read
+      MyST markdown via third-party extensions. Both of these are powerful and
+      straightforward to use, and have functionality for complex documentation
+      and publishing workflows. They both build upon Docutils to parse and write
+      documents.
     '';
     homepage = "https://www.sphinx-doc.org";
-    license = licenses.bsd3;
-    maintainers = teams.sphinx.members;
+    changelog = "https://www.sphinx-doc.org/en/master/changes.html";
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.sphinx.members;
   };
 }
