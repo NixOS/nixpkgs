@@ -20130,6 +20130,7 @@ with pkgs;
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
   terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
+  terraform-plugin-docs = callPackage ../development/tools/misc/terraform-plugin-docs { };
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
