@@ -20342,6 +20342,8 @@ with pkgs;
 
   zon2nix = callPackage ../tools/nix/zon2nix { };
 
+  ztags = callPackage ../development/tools/misc/ztags { };
+
   ### DEVELOPMENT / LIBRARIES
 
   a52dec = callPackage ../development/libraries/a52dec { };
