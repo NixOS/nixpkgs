@@ -17,10 +17,12 @@
 , deepmerge
 , fastjsonschema
 , hexdump
+, importlib-metadata
 , jinja2
 , libusbsio
 , oscrypto
 , pycryptodome
+, pyftdi
 , pylink-square
 , pyocd
 , pypemicro
@@ -34,13 +36,13 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
-    owner = "NXPmicro";
+    owner = "nxp-mcuxpresso";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2UTgVHqFJqizJ6mDT7+PFec3bQexcBG6v8X0E5Ai4Hc=";
+    hash = "sha256-B3qedAXSG3A8rcWu1O2GnZ1ZqHN+7fQK43qXzGnDEY0=";
   };
 
   nativeBuildInputs = [
@@ -92,6 +94,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    importlib-metadata
+    pyftdi
     pytestCheckHook
     voluptuous
   ];
@@ -99,8 +103,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spsdk" ];
 
   meta = with lib; {
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
-    homepage = "https://github.com/NXPmicro/spsdk";
+    homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = licenses.bsd3;
     maintainers = with maintainers; [ frogamic sbruder ];
   };
