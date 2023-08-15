@@ -33,7 +33,7 @@ let
   allHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # our version of buck2; this should be a git tag
-  buck2-version = "2023-08-01";
+  buck2-version = "2023-08-15";
   src =
     let
       hash = allHashes."${stdenv.hostPlatform.system}";
@@ -41,7 +41,7 @@ let
     in fetchurl { inherit url hash; };
 
   # compatible version of buck2 prelude; a git revision in the buck2-prelude repository
-  buck2-prelude = "acf49faaa61fd6ad9facd9e1418eed514bbb2ec8";
+  buck2-prelude = "40d6fffd01f224d25a62d982f4a3f00b275a5677";
   prelude-src =
     let
       hash = allHashes."_prelude";
