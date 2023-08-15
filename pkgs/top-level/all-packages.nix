@@ -15701,7 +15701,7 @@ with pkgs;
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
   gccWithoutTargetLibc =
-    assert stdenv.targetPlatform != stdenv.hostPlatform;
+    assert stdenv.targetPlatform != stdenv.buildPlatform;
     callPackage ({ gcc_major_version }: wrapCCWith {
       cc = (gccFun.override { inherit gcc_major_version; }) {
         # copy-pasted
