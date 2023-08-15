@@ -15700,9 +15700,8 @@ with pkgs;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
-  gccWithoutTargetLibc = assert stdenv.targetPlatform != stdenv.hostPlatform; let
-    libcCross1 = binutilsNoLibc.libc;
-    in wrapCCWith {
+  gccWithoutTargetLibc = assert stdenv.targetPlatform != stdenv.hostPlatform;
+    wrapCCWith {
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
@@ -15714,7 +15713,7 @@ with pkgs;
 
         withoutTargetLibc = true;
         langCC = false;
-        libcCross = libcCross1;
+        libcCross = binutilsNoLibc.libc;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared =
           stdenv.targetPlatform.hasSharedLibraries
@@ -15726,7 +15725,7 @@ with pkgs;
         ;
       };
       bintools = binutilsNoLibc;
-      libc = libcCross1;
+      libc = binutilsNoLibc.libc;
       extraPackages = [];
   };
 
