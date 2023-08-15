@@ -56,10 +56,22 @@ stdenv.mkDerivation rec {
     "-DgRPC_PROTOBUF_PROVIDER=package"
     "-DgRPC_ABSL_PROVIDER=package"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_CXX_STANDARD=${passthru.cxxStandard}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-  ];
+  ]
+  # The build scaffold defaults to c++14 on darwin, even when the compiler uses
+  # a more recent c++ version by default [1]. However, downgrades are
+  # problematic, because the compatibility types in abseil will have different
+  # interface definitions than the ones used for building abseil itself.
+  # [1] https://github.com/grpc/grpc/blob/v1.57.0/CMakeLists.txt#L239-L243
+  ++ (let
+    defaultCxxIsOlderThan17 =
+      (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.cc.version "16.0")
+       || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
+    in lib.optionals (stdenv.hostPlatform.isDarwin && defaultCxxIsOlderThan17)
+  [
+    "-DCMAKE_CXX_STANDARD=17"
+  ]);
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.
@@ -80,17 +92,6 @@ stdenv.mkDerivation rec {
     + lib.optionalString stdenv.isAarch64 "-Wno-error=format-security";
 
   enableParallelBuilds = true;
-
-  passthru.cxxStandard =
-    let
-      # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
-      # only an issue with the useLLVM stdenv, not the darwin stdenv…
-      # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
-      useLLVMAndOldCC = (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0";
-      # With GCC 9 (current aarch64-linux) it fails with c++17 but OK with c++14.
-      useOldGCC = !(stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "10";
-    in
-    (if useLLVMAndOldCC then "11" else if useOldGCC then "14" else "17");
 
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools;
