@@ -23,5 +23,9 @@ Layout=us
 Name=mozc
 Layout=us
 
+[Groups/0/Items/5]
+Name=sayura
+Layout=us
+
 [GroupOrder]
 0=NixOS_test
