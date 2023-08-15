@@ -39973,9 +39973,11 @@ with pkgs;
 
   # this is a wrapper for kicad.base and kicad.libraries
   kicad = callPackage ../applications/science/electronics/kicad { };
+  # this is the same but without the (sizable) 3D models library
   kicad-small = kicad.override { pname = "kicad-small"; with3d = false; };
+  # this is the master branch at whatever point update.sh last updated versions.nix
   kicad-unstable = kicad.override { pname = "kicad-unstable"; stable = false; };
-  # mostly here so the kicad-unstable components (except packages3d) get built
+  # and a small version of that
   kicad-unstable-small = kicad.override {
     pname = "kicad-unstable-small";
     stable = false;
