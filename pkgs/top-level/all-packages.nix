@@ -7464,6 +7464,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  dumpasn1 = callPackage ../tools/security/dumpasn1 { };
+
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
 
   duo-unix = callPackage ../tools/security/duo-unix { };
@@ -20342,6 +20344,8 @@ with pkgs;
 
   zon2nix = callPackage ../tools/nix/zon2nix { };
 
+  ztags = callPackage ../development/tools/misc/ztags { };
+
   ### DEVELOPMENT / LIBRARIES
 
   a52dec = callPackage ../development/libraries/a52dec { };
@@ -32025,6 +32029,8 @@ with pkgs;
 
   svox = callPackage ../applications/audio/svox { };
 
+  g4music = callPackage ../applications/audio/g4music { };
+
   genesys = callPackage ../applications/misc/genesys { };
 
   giada = callPackage ../applications/audio/giada { };
@@ -33033,6 +33039,8 @@ with pkgs;
   kubectl-gadget = callPackage ../applications/networking/cluster/kubectl-gadget { };
 
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
+
+  kubectl-klock = callPackage ../applications/networking/cluster/kubectl-klock { };
 
   kubectl-ktop = callPackage ../applications/networking/cluster/kubectl-ktop { };
 

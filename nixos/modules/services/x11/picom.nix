@@ -61,6 +61,8 @@ in {
       '';
     };
 
+    package = mkPackageOptionMD pkgs "picom" { };
+
     fade = mkOption {
       type = types.bool;
       default = false;
@@ -301,13 +303,13 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}";
+        ExecStart = "${getExe cfg.package} --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };
     };
 
-    environment.systemPackages = [ pkgs.picom ];
+    environment.systemPackages = [ cfg.package ];
   };
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];

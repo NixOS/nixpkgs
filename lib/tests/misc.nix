@@ -349,6 +349,27 @@ runTests {
     expected = true;
   };
 
+  testRemovePrefixExample1 = {
+    expr = removePrefix "foo." "foo.bar.baz";
+    expected = "bar.baz";
+  };
+  testRemovePrefixExample2 = {
+    expr = removePrefix "xxx" "foo.bar.baz";
+    expected = "foo.bar.baz";
+  };
+  testRemovePrefixEmptyPrefix = {
+    expr = removePrefix "" "foo";
+    expected = "foo";
+  };
+  testRemovePrefixEmptyString = {
+    expr = removePrefix "foo" "";
+    expected = "";
+  };
+  testRemovePrefixEmptyBoth = {
+    expr = removePrefix "" "";
+    expected = "";
+  };
+
   testNormalizePath = {
     expr = strings.normalizePath "//a/b//c////d/";
     expected = "/a/b/c/d/";

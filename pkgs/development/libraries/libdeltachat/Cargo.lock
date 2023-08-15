@@ -1123,7 +1123,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.118.0"
+version = "1.119.1"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1199,7 +1199,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.118.0"
+version = "1.119.1"
 dependencies = [
  "anyhow",
  "async-channel",
@@ -1223,7 +1223,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-repl"
-version = "1.118.0"
+version = "1.119.1"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1238,7 +1238,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-rpc-server"
-version = "1.118.0"
+version = "1.119.1"
 dependencies = [
  "anyhow",
  "deltachat",
@@ -1263,7 +1263,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat_ffi"
-version = "1.118.0"
+version = "1.119.1"
 dependencies = [
  "anyhow",
  "deltachat",
@@ -4958,14 +4958,14 @@ dependencies = [
 
 [[package]]
 name = "tokio-tar"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a50188549787c32c1c3d9c8c71ad7e003ccf2f102489c5a96e385c84760477f4"
+checksum = "9d5714c010ca3e5c27114c1cdeb9d14641ace49874aa5626d7149e47aedace75"
 dependencies = [
  "filetime",
  "futures-core",
  "libc",
- "redox_syscall 0.2.16",
+ "redox_syscall 0.3.5",
  "tokio",
  "tokio-stream",
  "xattr",
@@ -5778,9 +5778,9 @@ dependencies = [
 
 [[package]]
 name = "xattr"
-version = "0.2.3"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d1526bbe5aaeb5eb06885f4d987bcdfa5e23187055de9b83fe00156a821fabc"
+checksum = "f4686009f71ff3e5c4dbcf1a282d0a44db3f021ba69350cd42086b3e5f1c6985"
 dependencies = [
  "libc",
 ]
