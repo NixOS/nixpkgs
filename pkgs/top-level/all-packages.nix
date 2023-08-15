@@ -25419,6 +25419,8 @@ with pkgs;
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
+  wfa2-lib = callPackage ../development/libraries/wfa2-lib { };
+
   webrtc-audio-processing_1 = callPackage ../development/libraries/webrtc-audio-processing {
     stdenv = gcc10StdenvCompat;
     abseil-cpp = abseil-cpp.override {
