@@ -1239,6 +1239,8 @@ self: super: with self; {
 
   base58check = callPackage ../development/python-modules/base58check { };
 
+  base64io = callPackage ../development/python-modules/base64io { };
+
   baseline = callPackage ../development/python-modules/baseline { };
 
   baselines = callPackage ../development/python-modules/baselines { };
