@@ -5,7 +5,7 @@
 , gtest
 , pcsclite
 , pkg-config
-, qttranslations
+, qttools
 }:
 
 mkDerivation rec {
@@ -23,12 +23,12 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    qttools
   ];
 
   buildInputs = [
     gtest # required during build of lib/libelectronic-id/lib/libpcsc-cpp
     pcsclite
-    qttranslations
   ];
 
   meta = with lib; {

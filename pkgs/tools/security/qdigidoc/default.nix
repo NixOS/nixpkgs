@@ -10,8 +10,8 @@
 , openssl
 , pcsclite
 , qtbase
-, qttranslations
 , qtsvg
+, qttools
 }:
 
 mkDerivation rec {
@@ -29,7 +29,7 @@ mkDerivation rec {
     sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
 
-  nativeBuildInputs = [ cmake gettext pkg-config ];
+  nativeBuildInputs = [ cmake gettext pkg-config qttools ];
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
@@ -44,7 +44,6 @@ mkDerivation rec {
     pcsclite
     qtbase
     qtsvg
-    qttranslations
   ];
 
   # qdigidoc4's `QPKCS11::reload()` dlopen()s "opensc-pkcs11.so" in QLibrary,

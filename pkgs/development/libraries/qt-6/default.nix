@@ -48,6 +48,7 @@ let
           ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
           ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
           ./patches/0007-qtbase-find-qt-tools-in-QTTOOLSPATH.patch
+          ./patches/0008-qtbase-allow-translations-outside-prefix.patch
         ];
       };
       env = callPackage ./qt-env.nix { };
@@ -168,6 +169,14 @@ let
 
   # TODO(@Artturin): convert to makeScopeWithSplicing
   # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
-  self = lib.makeScope newScope addPackages;
-in
-self
+  baseScope = lib.makeScope newScope addPackages;
+
+  bootstrapScope = baseScope.overrideScope'(final: prev: {
+    qtbase = prev.qtbase.override { qttranslations = null; };
+    qtdeclarative = null;
+  });
+
+  finalScope = baseScope.overrideScope'(final: prev: {
+    qttranslations = bootstrapScope.qttranslations;
+  });
+in finalScope

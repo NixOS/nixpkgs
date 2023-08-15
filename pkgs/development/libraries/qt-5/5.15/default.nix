@@ -331,4 +331,14 @@ let
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages
+  baseScope = makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages;
+
+  bootstrapScope = baseScope.overrideScope(final: prev: {
+    qtbase = prev.qtbase.override { qttranslations = null; };
+    qtdeclarative = null;
+  });
+
+  finalScope = baseScope.overrideScope(final: prev: {
+    qttranslations = bootstrapScope.qttranslations;
+  });
+in finalScope
