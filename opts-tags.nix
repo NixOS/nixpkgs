@@ -20,6 +20,9 @@ let
             type = lib.types.int;
           };
         };
+        config = {
+          nya.nya = 2;
+        };
       })
     ];
   };
@@ -30,7 +33,7 @@ let
     let line = if loc ? line then loc.line else 1;
     in
     if loc != null then
-    "${name}\t${loc.file}\t${toString line}\n"
+      "${name}\t${loc.file}\t${toString line}\n"
     else "";
 
   toTags = acc0: struct: (builtins.foldl'
@@ -39,11 +42,12 @@ let
       if item ? _type && item._type == "option" then
         acc ++ builtins.map (locationToTagLine (builtins.toString item)) item.declarationsWithLocations
       else toTags acc item
-    ) acc0
+    )
+    acc0
     (builtins.attrNames struct));
 in
 {
   inherit nixos lib testEm;
-  tags = builtins.concatStringsSep "" (builtins.sort builtins.lessThan (toTags [] nixos.options));
+  tags = set: builtins.concatStringsSep "" (builtins.sort builtins.lessThan (toTags [ ] set.options));
   dl = lib.optionAttrSetToDocList nixos.options;
 }
