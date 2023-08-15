@@ -3,7 +3,13 @@
 , enableMultilib
 }:
 
+let
+  forceLibgccToBuildCrtStuff =
+    import ./libgcc-buildstuff.nix { inherit lib stdenv; };
+in
+
 originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
+  passthru = (originalAttrs.passthru or {}) // { inherit forceLibgccToBuildCrtStuff; };
   preUnpack = ''
     oldOpts="$(shopt -po nounset)" || true
     set -euo pipefail

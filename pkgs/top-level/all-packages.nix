@@ -18918,6 +18918,8 @@ with pkgs;
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
+  libgcc = stdenv.cc.cc.libgcc or null;
+
   # This is for e.g. LLVM libraries on linux.
   gccForLibs =
     if stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
@@ -21444,6 +21446,11 @@ with pkgs;
   # Being redundant to avoid cycles on boot. TODO: find a better way
   glibcCross = callPackage ../development/libraries/glibc {
     stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
+    libgcc = callPackage ../development/libraries/gcc/libgcc {
+      gcc = gccCrossLibcStdenv.cc;
+      glibc = glibcCross.override { libgcc = null; };
+      stdenvNoLibs = gccCrossLibcStdenv;
+    };
   };
 
   muslCross = musl.override {
