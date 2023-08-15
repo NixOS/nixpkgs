@@ -3246,6 +3246,8 @@ with pkgs;
 
   aliyun-cli = callPackage ../tools/admin/aliyun-cli { };
 
+  aws-encryption-sdk-cli = callPackage ../tools/admin/aws-encryption-sdk-cli { };
+
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator { };
 
   awscli = callPackage ../tools/admin/awscli { };
