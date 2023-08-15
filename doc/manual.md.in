@@ -10,5 +10,6 @@ using-nixpkgs.md
 lib.md
 stdenv.md
 builders.md
+development.md
 contributing.md
 ```

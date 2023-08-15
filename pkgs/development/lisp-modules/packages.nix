@@ -50,7 +50,7 @@ let
   # lispLibs ofpackages in this file.
   ql = quicklispPackagesFor spec;
 
-  packages = ql.overrideScope' (self: super: {
+  packages = ql.overrideScope (self: super: {
 
   cffi = let
     jna = pkgs.fetchMavenArtifact {
