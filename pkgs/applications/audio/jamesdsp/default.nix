@@ -19,7 +19,7 @@
 
 assert lib.asserts.assertMsg (usePipewire != usePulseaudio) "You need to enable one and only one of pulseaudio or pipewire support";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jamesdsp";
   version = "2.6.1";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "Audio4Linux";
     repo = "JDSP4Linux";
     fetchSubmodules = true;
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-XYJl94/PstWG5qaBQ2rXc/nG9bDeP3Q62zDYHmZvPaw=";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pasqui23 rewine ];
     platforms = platforms.linux;
   };
-}
+})
