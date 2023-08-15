@@ -903,6 +903,8 @@ self: super: with self; {
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
+  aws-encryption-sdk = callPackage ../development/python-modules/aws-encryption-sdk { };
+
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
 
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
