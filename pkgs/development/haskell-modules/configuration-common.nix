@@ -281,24 +281,9 @@ self: super: {
   # 2023-06-10: Too strict version bound on https://github.com/haskell/ThreadScope/issues/118
   threadscope = doJailbreak super.threadscope;
 
-  patat = appendPatches [
-    # patat main branch has an unreleased commit that fixes the build by
-    # relaxing restrictive upper boundaries. This can be removed once there's a
-    # new release following version 0.8.8.0.
-    (fetchpatch {
-    url = "https://github.com/jaspervdj/patat/commit/be9e0fe5642ba6aa7b25705ba17950923e9951fa.patch";
-    sha256 = "sha256-Vxxi46qrkIyzYQZ+fe1vNTPldcQEI2rX2H40GvFJR2M=";
-    excludes = ["stack.yaml" "stack.yaml.lock"];
-    })
-    # Patching with a commit bumping dependencies that's not released to hackage yet.
-    (fetchpatch {
-    url = "https://github.com/jaspervdj/patat/commit/b4c5a7e641b813ef1c34821984a9e897f4ecf84e.patch";
-    sha256 = "sha256-01xdlN3r3p/r8TwAzbcWoTMIBesGvL8HZcXJRDZyWQM=";
-    excludes = ["stack.yaml" "stack.yaml.lock"];
-    })
-    # Overriding the version pandoc dependency uses as the latest release has version bounds
-    # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  ] (super.patat.override { pandoc = self.pandoc_3_1_6; });
+  # Overriding the version pandoc dependency uses as the latest release has version bounds
+  # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
+  patat = super.patat.override { pandoc = self.pandoc_3_1_6; };
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
