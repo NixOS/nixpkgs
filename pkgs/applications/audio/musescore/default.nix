@@ -153,6 +153,9 @@ in stdenv'.mkDerivation rec {
     ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore.
   '';
 
+  # Don't run bundled upstreams tests, as they require a running X window system.
+  doCheck = false;
+
   passthru.tests = nixosTests.musescore;
 
   meta = with lib; {
