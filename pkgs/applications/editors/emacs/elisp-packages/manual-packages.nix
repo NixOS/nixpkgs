@@ -17,6 +17,8 @@ in
 
   cask = callPackage ./manual-packages/cask { };
 
+  consult-gh = callPackage ./manual-packages/consult-gh { };
+
   control-lock = callPackage ./manual-packages/control-lock { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
