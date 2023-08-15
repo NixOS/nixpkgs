@@ -3234,6 +3234,8 @@ with pkgs;
 
   authenticator = callPackage ../applications/misc/authenticator { };
 
+  autobrr = callPackage ../servers/autobrr { };
+
   authelia = callPackage ../servers/authelia { };
 
   autoflake = with python3.pkgs; toPythonApplication autoflake;
@@ -3412,7 +3414,7 @@ with pkgs;
 
   base16-universal-manager = callPackage ../applications/misc/base16-universal-manager { };
 
-  base16384 = callPackage ../tools/text/base16384 { };
+  pbase16384 = callPackage ../tools/text/base16384 { };
 
   bashate = python3Packages.callPackage ../development/tools/bashate { };
 
