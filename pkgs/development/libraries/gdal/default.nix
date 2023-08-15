@@ -12,6 +12,8 @@
 , usePoppler ? (!useMinimalFeatures)
 , useArrow ? (!useMinimalFeatures)
 , useHDF ? (!useMinimalFeatures)
+, useNetCDF ? (!useMinimalFeatures)
+, useArmadillo ? (!useMinimalFeatures)
 
 , bison
 , cmake
@@ -133,6 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
         hdf4
         hdf5-cpp
       ];
+      netCdfDeps = lib.optionals useNetCDF [ netcdf ];
+      armadilloDeps = lib.optionals useArmadillo [ armadillo ];
 
       darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
       nonDarwinDeps = lib.optionals (!stdenv.isDarwin) ([
@@ -141,7 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
         xercesc
       ] ++ arrowDeps);
     in [
-      armadillo
       c-blosc
       brunsli
       cfitsio
@@ -159,7 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
       xz
       libxml2
       lz4
-      netcdf
       openjpeg
       openssl
       pcre2
@@ -183,6 +185,8 @@ stdenv.mkDerivation (finalAttrs: {
       ++ popplerDeps
       ++ arrowDeps
       ++ hdfDeps
+      ++ netCdfDeps
+      ++ armadilloDeps
       ++ darwinDeps
       ++ nonDarwinDeps;
 
