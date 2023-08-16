@@ -1058,7 +1058,6 @@ broken-packages:
   - custom-prelude
   - cut-the-crap
   - CV
-  - czipwith # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964553 at 2023-08-16
   - d3js
   - dag
   - DAG-Tournament
