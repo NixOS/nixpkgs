@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.22.0";
+  version = "0.22.2";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zmjxxUAKR7E3xaTecsfJAb1OeiT73r/ptB3oxsBOqs8=";
+    hash = "sha256-OIfPGMi8yJRDNCAwVGg4jax2ky6WaK+hxJqjgGtqzLM=";
   };
 
   propagatedBuildInputs = [
@@ -51,8 +51,10 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    substituteInPlace trio/tests/test_subprocess.py \
+    substituteInPlace trio/_tests/test_subprocess.py \
       --replace "/bin/sleep" "${coreutils}/bin/sleep"
+
+    export HOME=$(mktemp -d)
   '';
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
@@ -68,6 +70,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-W" "ignore::DeprecationWarning"
+    "-p" "trio._tests.pytest_plugin"
   ];
 
   meta = {
