@@ -133,11 +133,6 @@ buildPythonPackage rec {
     "--durations=20"
   ];
 
-  disabledTests = [
-    # timing sensitive
-    "test_access_channels_by_slice"
-  ];
-
   disabledTestPaths = [
     # Test depends on qcodes-loop, causing a cyclic dependency
     "qcodes/tests/dataset/measurement/test_load_legacy_data.py"
