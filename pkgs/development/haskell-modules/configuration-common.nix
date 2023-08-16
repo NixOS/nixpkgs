@@ -1641,7 +1641,6 @@ self: super: {
   # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
   # So let's not go there and just disable the tests altogether.
   hspec-core = dontCheck super.hspec-core;
-  hspec-core_2_7_10 = doDistribute (dontCheck super.hspec-core_2_7_10);
 
   # tests seem to require a different version of hspec-core
   hspec-contrib = dontCheck super.hspec-contrib;
@@ -1735,6 +1734,10 @@ self: super: {
     hspec-discover = self.hspec-discover_2_7_10;
     hspec-core = self.hspec-core_2_7_10;
   };
+  hspec-discover_2_7_10 = super.hspec-discover_2_7_10.override {
+    hspec-meta = self.hspec-meta_2_7_8;
+  };
+  hspec-core_2_7_10 = doJailbreak (dontCheck super.hspec-core_2_7_10);
 
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
