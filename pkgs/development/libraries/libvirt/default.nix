@@ -132,6 +132,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/libvirt/libvirt/-/commit/6425a311b8ad19d6f9c0b315bf1d722551ea3585.patch";
       sha256 = "sha256-CXO7Xer+mR2ZxSy8aI6Nt1qNSGsjbXu3BxWE20k2TaI=";
     })
+    (fetchpatch {
+      name = "CVE-2023-3750.patch";
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/9a47442366fcf8a7b6d7422016d7bbb6764a1098.patch";
+      sha256 = "sha256-FuFXa4z76Wl1tdMqPgIep1/f4d3lp7JkutCdQmmPiZs=";
+    })
   ] ++ lib.optionals enableZfs [
     (substituteAll {
       src = ./0002-substitute-zfs-and-zpool-commands.patch;
