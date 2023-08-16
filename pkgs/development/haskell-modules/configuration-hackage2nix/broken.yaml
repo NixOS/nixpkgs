@@ -545,7 +545,6 @@ broken-packages:
   - bus-pirate
   - buster
   - Buster
-  - butcher # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948627 at 2023-08-16
   - butter
   - buttplug-hs-core
   - bv-little
