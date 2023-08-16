@@ -899,7 +899,9 @@ self: super: with self; {
 
   awkward = callPackage ../development/python-modules/awkward { };
 
-  awkward-cpp = callPackage ../development/python-modules/awkward-cpp { };
+  awkward-cpp = callPackage ../development/python-modules/awkward-cpp {
+    inherit (pkgs) cmake;
+  };
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
@@ -2032,6 +2034,8 @@ self: super: with self; {
   cma = callPackage ../development/python-modules/cma { };
 
   cmaes = callPackage ../development/python-modules/cmaes { };
+
+  cmake = callPackage ../development/python-modules/cmake { inherit (pkgs) cmake; };
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
@@ -11359,7 +11363,9 @@ self: super: with self; {
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
-  scikit-build-core = callPackage ../development/python-modules/scikit-build-core { };
+  scikit-build-core = callPackage ../development/python-modules/scikit-build-core {
+    inherit (pkgs) cmake;
+  };
 
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
