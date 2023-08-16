@@ -4474,6 +4474,8 @@ self: super: with self; {
 
   gpustat = callPackage ../development/python-modules/gpustat { };
 
+  gpt4all = callPackage ../development/python-modules/gpt4all { };
+
   gpxpy = callPackage ../development/python-modules/gpxpy { };
 
   gpy = callPackage ../development/python-modules/gpy { };
