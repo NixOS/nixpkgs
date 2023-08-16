@@ -12208,6 +12208,8 @@ self: super: with self; {
 
   stopit = callPackage ../development/python-modules/stopit { };
 
+  stransi = callPackage ../development/python-modules/stransi { };
+
   strategies = callPackage ../development/python-modules/strategies { };
 
   stravalib = callPackage ../development/python-modules/stravalib { };
