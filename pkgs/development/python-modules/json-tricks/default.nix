@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "json-tricks";
-  version = "3.15.5";
+  version = "3.17.2";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "mverleg";
     repo = "pyjson_tricks";
     rev = "v${version}";
-    sha256 = "wdpqCqMO0EzKyqE4ishL3CTsSw3sZPGvJ0HEktKFgZU=";
+    sha256 = "sha256-7AT4h+f3FDTITfVZyLTimZlDGuAxKwe0kFYBEFGv51s=";
   };
 
   nativeCheckInputs = [ numpy pandas pytz pytestCheckHook ];
