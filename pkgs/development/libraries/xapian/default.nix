@@ -46,7 +46,7 @@ let
       homepage = "https://xapian.org/";
       changelog = "https://xapian.org/docs/xapian-core-${version}/NEWS";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ matthiasbeyer ];
       platforms = platforms.unix;
     };
   };
