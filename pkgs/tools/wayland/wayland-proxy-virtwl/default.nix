@@ -3,6 +3,7 @@
 , ocamlPackages
 , pkg-config
 , libdrm
+, unstableGitUpdater
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -34,6 +35,8 @@ ocamlPackages.buildDunePackage rec {
   ]);
 
   doCheck = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/talex5/wayland-virtwl-proxy";
