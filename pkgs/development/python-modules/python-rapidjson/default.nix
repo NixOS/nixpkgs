@@ -12,12 +12,12 @@
 
 let
   rapidjson' = rapidjson.overrideAttrs (old: {
-    version = "unstable-2022-05-24";
+    version = "unstable-2023-03-06";
     src = fetchFromGitHub {
       owner = "Tencent";
       repo = "rapidjson";
-      rev = "232389d4f1012dddec4ef84861face2d2ba85709";
-      hash = "sha256-RLvDcInUa8E8DRA4U/oXEE8+TZ0SDXXDU/oWvpfDWjw=";
+      rev = "083f359f5c36198accc2b9360ce1e32a333231d9";
+      hash = "sha256-8O5KwZcvoEkpE+O0Twn2CKHjV2AYh8qnSaBofoWEBs8=";
     };
     patches = [
       (fetchpatch {
@@ -30,13 +30,15 @@ let
     cmakeFlags = old.cmakeFlags ++ [ "-DCMAKE_CTEST_ARGUMENTS=-E;valgrind_unittest" ];
   });
 in buildPythonPackage rec {
-  version = "1.9";
+  version = "1.10";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.7";
 
+  format = "setuptools";
+
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vn01HHES2sYIEzoj9g6VOVZo0JgaB/QDf2Pg6Ir88Bo=";
+    hash = "sha256-rP7L9e25HscqIKEl3n9WuML2Fh7/TGU4LI7mokhNNUA=";
   };
 
   setupPyBuildFlags = [
@@ -53,6 +55,7 @@ in buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-rapidjson/python-rapidjson/blob/v${version}/CHANGES.rst";
     homepage = "https://github.com/python-rapidjson/python-rapidjson";
     description = "Python wrapper around rapidjson";
     license = licenses.mit;
