@@ -210,3 +210,5 @@ buildDotnetGlobalTool {
   };
 }
 ```
+
+When packaging a new .NET application in nixpkgs, you can tag the [`@NixOS/dotnet`](https://github.com/orgs/nixos/teams/dotnet) team for help and code review.
