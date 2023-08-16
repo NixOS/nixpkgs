@@ -77,7 +77,7 @@ stdenv.mkDerivation {
     mkdir "$out/bin"
     cp build/vm/*.so* "$out/lib/"
     cp build/vm/pharo "$out/bin/pharo"
-    patchelf --allowed-rpath-prefixes /nix/store --shrink-rpath "$out/bin/pharo"
+    patchelf --allowed-rpath-prefixes "$NIX_STORE" --shrink-rpath "$out/bin/pharo"
     wrapProgram "$out/bin/pharo" --set LD_LIBRARY_PATH "${library_path}"
 
     runHook postInstall

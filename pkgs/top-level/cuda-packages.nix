@@ -70,4 +70,4 @@ let
     cutensorExtension
   ]);
 
-in (scope.overrideScope' composedExtension)
+in (scope.overrideScope composedExtension)

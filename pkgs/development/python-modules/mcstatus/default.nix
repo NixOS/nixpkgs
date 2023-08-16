@@ -1,10 +1,10 @@
 { lib
 , asyncio-dgram
 , buildPythonPackage
-, click
 , dnspython
 , fetchFromGitHub
 , poetry-core
+, poetry-dynamic-versioning
 , pytest-asyncio
 , pytest-rerunfailures
 , pytestCheckHook
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "11.0.0";
+  version = "11.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,24 +22,25 @@ buildPythonPackage rec {
     owner = "py-mine";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+r6WL59T9rNAKl3r4Hef75uJoD7DRYA23uS/OlzRyRk=";
+    hash = "sha256-1jPIsFEJ17kjtCBiX4IvSf2FxYw9DkH3MrrJ85N71tc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
       --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" ""
   '';
 
   nativeBuildInputs = [
     poetry-core
+    poetry-dynamic-versioning
   ];
 
   propagatedBuildInputs = [
     asyncio-dgram
-    click
     dnspython
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytest-asyncio

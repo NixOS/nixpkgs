@@ -1,16 +1,22 @@
 { lib, stdenv, fetchFromGitHub, libgcrypt
-, pkg-config, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite }:
+, pkg-config, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite
+, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
-  version = "0.11.3";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    sha256 = "sha256-WjUM52IqMDvBzeGHo7p4JcvMO5iPWPVOr8GJ3RSsnUs=";
+    hash = "sha256-VPwcWAENCRnU51F78FhMPjQZaCTewQRUdeFwK1blJbs=";
   };
+
+  postPatch = ''
+    substituteInPlace util.c --replace \
+      "lscpu" "${lib.getBin util-linux}/bin/lscpu"
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libgcrypt glib linuxHeaders sqlite ];

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-forgit";
-  version = "23.07.0";
+  version = "23.08.1";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     rev = version;
-    sha256 = "sha256-PNeS/YpL56Ir3xoiUzOU5Tkhq0B5eyudzEuOt2yCqh4=";
+    sha256 = "sha256-YyPB7Kd6ScV0VVXR9wdxqd3oIyxdxRRgmK2c8E3uzWk=";
   };
 
   strictDeps = true;

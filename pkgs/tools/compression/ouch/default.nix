@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
-    repo = pname;
+    repo = "ouch";
     rev = version;
-    sha256 = "sha256-WzdKr0i31qNRm1EpMZ/W4fOfKKItmvz6BYFbJWcfoHo=";
+    hash = "sha256-XJOv7JFUJulEkGCMLxGi9nldHaPM/CUzyENIC2TdtoE=";
   };
 
-  cargoSha256 = "sha256-UhKcWpNuRNyA+uUw5kx84Y2F1Swr05m7JUM1+9lXYPM=";
+  cargoHash = "sha256-TfAAU46rH6Jq0MuLRjbaVMRjzoSLYNAWBnUcT8DyIVg=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion artifacts/ouch.{bash,fish} --zsh artifacts/_ouch
   '';
 
-  OUCH_ARTIFACTS_FOLDER = "artifacts";
+  env.OUCH_ARTIFACTS_FOLDER = "artifacts";
 
   meta = with lib; {
     description = "A command-line utility for easily compressing and decompressing files and directories";

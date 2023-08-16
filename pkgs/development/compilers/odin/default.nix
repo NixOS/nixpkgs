@@ -12,13 +12,13 @@ let
   inherit (llvmPackages) stdenv;
 in stdenv.mkDerivation rec {
   pname = "odin";
-  version = "dev-2023-07";
+  version = "dev-2023-08";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     rev = version;
-    hash = "sha256-ksCK1Qmjbg5ZgFoq0I4cjrWaCxd+UW7f1NLcSjCPMwE=";
+    hash = "sha256-pmgrauhB5/JWBkwrAm7tCml9IYQhXyGXsNVDKTntA0M=";
   };
 
   nativeBuildInputs = [

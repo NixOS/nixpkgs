@@ -1,9 +1,9 @@
 { lib }:
 
 rec {
-  version = "1.34.1";
+  version = "1.35.0";
 
-  srcHash = "sha256-jbwG3Xyb/rEyz7aR51/pfc+bU/KY9k6BsByZg6KDY5s=";
+  srcHash = "sha256-SUKswvY49Hxis5CwguXC5QSshG0sGKb23mz2IT1vNJI=";
 
   # submodule dependencies
   # these are fetched so we:
@@ -25,15 +25,15 @@ rec {
   core = {
     x86_64-linux = {
       platform = "any";
-      hash = "sha256-XogITZZtuNmWBrCfL5qpHJNm6jFxzraZMXWhUotXA4c=";
+      hash = "sha256-ZqSbiuVKGjH+2fB0ReSw07CzTDSK35a8Adstzrvh8zA=";
     };
     x86_64-darwin = {
       platform = "macosx_10_14_x86_64";
-      hash = "sha256-YjV915SZ2L8t6huToErTHRd82m4I+evPyeuwpVzi26o=";
+      hash = "sha256-MusoteFarPJm8eQO7T/LrXDWUV0Wx4nw80ZvjG7HHhM=";
     };
     aarch64-darwin = {
       platform = "macosx_11_0_arm64";
-      hash = "sha256-BAnYYeUWosAorcHpqUMpRXJFl4NQDPbWTsykDN3w5UQ=";
+      hash = "sha256-xN87fp5jqes/smMrtLbZowMIuTevpDJNFNeWdo0Seu4=";
     };
   };
 

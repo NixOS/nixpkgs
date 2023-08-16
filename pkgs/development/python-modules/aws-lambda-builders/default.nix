@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , mock
 , parameterized
+, pip
 , pyelftools
 , pytestCheckHook
 , pythonOlder
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     parameterized
+    pip
     pyelftools
     pytestCheckHook
   ];

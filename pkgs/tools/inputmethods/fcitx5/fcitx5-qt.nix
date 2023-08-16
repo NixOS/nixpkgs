@@ -48,8 +48,6 @@ mkDerivation rec {
     libXdmcp
   ];
 
-  qtWrapperArgs = [ "--prefix" "FCITX_ADDON_DIRS" ":" "${placeholder "out"}/lib/fcitx5" ];
-
   meta = with lib; {
     description = "Fcitx5 Qt Library";
     homepage = "https://github.com/fcitx/fcitx5-qt";

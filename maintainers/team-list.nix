@@ -413,6 +413,7 @@ with lib.maintainers; {
 
   jupyter = {
     members = [
+      GaetanLepage
       natsukium
     ];
     scope = "Maintain Jupyter and related packages.";
@@ -890,6 +891,16 @@ with lib.maintainers; {
     ];
     scope = "Maintain Xfce desktop environment and related packages.";
     shortName = "Xfce";
+    enableFeatureFreezePing = true;
+  };
+
+  zig = {
+    members = [
+      AndersonTorres
+      figsoda
+    ];
+    scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
+    shortName = "Zig";
     enableFeatureFreezePing = true;
   };
 }

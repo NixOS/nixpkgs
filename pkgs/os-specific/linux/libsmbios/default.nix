@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   # remove forbidden reference to $TMPDIR
   preFixup = ''
-    patchelf --shrink-rpath --allowed-rpath-prefixes "/nix/store" "$out/sbin/smbios-sys-info-lite"
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out/sbin/smbios-sys-info-lite"
   '';
 
   meta = with lib; {

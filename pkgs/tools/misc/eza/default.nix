@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eza";
-  version = "0.10.6";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
-    owner = "cafkafk";
+    owner = "eza-community";
     repo = "eza";
     rev = "v${version}";
-    hash = "sha256-+MA9p15RGPaQ7Drhiljeb7KqThQnXMymjXFFS5sLxdM=";
+    hash = "sha256-f8js+zToP61lgmxucz2gyh3uRZeZSnoxS4vuqLNVO7c=";
   };
 
-  cargoHash = "sha256-aplwr9X9MLhKrF5125gMtmuI/72RGf+1GZqkBYyxUSQ=";
+  cargoHash = "sha256-G3zNv8pG9uS12PsBug51RaS9Hx0sGHHnVEF4bHb+v18=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
@@ -37,7 +37,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     pandoc --standalone -f markdown -t man man/eza.1.md > man/eza.1
     pandoc --standalone -f markdown -t man man/eza_colors.5.md > man/eza_colors.5
-    installManPage man/eza.1 man/eza_colors.5
+    pandoc --standalone -f markdown -t man man/eza_colors-explanation.5.md > man/eza_colors-explanation.5
+    installManPage man/eza.1 man/eza_colors.5 man/eza_colors-explanation.5
     installShellCompletion \
       --bash completions/bash/eza \
       --fish completions/fish/eza.fish \
@@ -54,7 +55,7 @@ rustPlatform.buildRustPackage rec {
       for a directory, or recursing into directories with a tree view. eza is
       written in Rust, so it’s small, fast, and portable.
     '';
-    homepage = "https://github.com/cafkafk/eza";
+    homepage = "https://github.com/eza-community/eza";
     license = licenses.mit;
     maintainers = with maintainers; [ cafkafk ];
   };

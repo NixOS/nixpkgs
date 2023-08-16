@@ -63,6 +63,15 @@
 /.github/PULL_REQUEST_TEMPLATE.md @infinisil
 /doc/contributing/ @fricklerhandwerk @infinisil
 /doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk @infinisil
+/lib/README.md @infinisil
+/doc/README.md @infinisil
+/nixos/README.md @infinisil
+/pkgs/README.md @infinisil
+/maintainers/README.md @infinisil
+
+# User-facing development documentation
+/doc/development.md @infinisil
+/doc/development @infinisil
 
 # NixOS Internals
 /nixos/default.nix                                    @infinisil
@@ -304,6 +313,10 @@ nixos/lib/make-single-disk-zfs-image.nix  @raitobezarius
 nixos/lib/make-multi-disk-zfs-image.nix   @raitobezarius
 nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
 nixos/tests/zfs.nix                       @raitobezarius
+
+# Zig
+/pkgs/development/compilers/zig @AndersonTorres @figsoda
+/doc/hooks/zig.section.md @AndersonTorres @figsoda
 
 # Linux Kernel
 pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs
