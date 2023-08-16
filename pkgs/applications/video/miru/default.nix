@@ -20,7 +20,7 @@ appimageTools.wrapType2 rec {
 
   extraInstallCommands =
     let
-      contents = appimageTools.extractType2 { name = filename; inherit src; };
+      contents = appimageTools.extractType2 { name = "linux-Miru-${version}.AppImage"; inherit src; };
     in
     ''
       mkdir -p "$out/share/applications"
