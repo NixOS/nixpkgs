@@ -3,9 +3,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# build-syste
+# build-system
 , setuptools
-, versioneer
+, wheel
 
 # dependencies
 , click
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    versioneer
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -109,10 +109,12 @@ buildPythonPackage rec {
     echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
 
     substituteInPlace setup.py \
+      --replace "import versioneer" "" \
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
 
     substituteInPlace pyproject.toml \
+      --replace ', "versioneer[toml]==0.28"' "" \
       --replace " --durations=10" "" \
       --replace " --cov-config=pyproject.toml" "" \
       --replace "\"-v" "\" "
