@@ -1,38 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
+{ config
 , cudaPackages
+, fetchFromGitHub
+, lib
 , mpiSupport ? false
 , mpi
+, stdenv
+, which
 }:
 
-assert mpiSupport -> mpi != null;
-
-with cudaPackages;
-
-cudaPackages.backendStdenv.mkDerivation rec {
+cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
 
   pname = "nccl-tests";
   version = "2.13.6";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3gSBQ0g6mnQ/MFXGflE+BqqrIUoiBgp8+fWRQOvLVkw=";
   };
 
-  nativeBuildInputs = [ which cuda_nvcc ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    cudaPackages.cuda_nvcc
+    which
+  ];
 
   buildInputs = [
-    cuda_cudart
-    nccl
+    cudaPackages.cuda_cudart
+    cudaPackages.nccl
   ] ++ lib.optional mpiSupport mpi;
 
   makeFlags = [
-    "CUDA_HOME=${cudatoolkit}"
-    "NCCL_HOME=${nccl}"
+    "CUDA_HOME=${cudaPackages.cuda_nvcc}"
+    "NCCL_HOME=${cudaPackages.nccl}"
   ] ++ lib.optionals mpiSupport [
     "MPI=1"
   ];
@@ -45,10 +47,11 @@ cudaPackages.backendStdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Tests to check both the performance and the correctness of NVIDIA NCCL operations.";
+    description = "Tests to check both the performance and the correctness of NVIDIA NCCL operations";
     homepage = "https://github.com/NVIDIA/nccl-tests";
     platforms = [ "x86_64-linux" ];
     license = licenses.bsd3;
+    broken = !config.cudaSupport || (mpiSupport && mpi == null);
     maintainers = with maintainers; [ jmillerpdt ];
   };
-}
+})
