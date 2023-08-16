@@ -6,7 +6,7 @@
 
   # Native build inputs
   cmake, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
-  pythonRelaxDepsHook,
+  pythonRelaxDepsHook, rsync,
 
   # Build inputs
   numactl,
@@ -285,6 +285,7 @@ in buildPythonPackage rec {
     pybind11
     pythonRelaxDepsHook
     removeReferencesTo
+    rsync
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
@@ -358,7 +359,7 @@ in buildPythonPackage rec {
     find "$out/${python.sitePackages}/torch/include" "$out/${python.sitePackages}/torch/lib" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
 
     mkdir $dev
-    cp -r $out/${python.sitePackages}/torch/include $dev/include
+    rsync -av --exclude="pybind11" $out/${python.sitePackages}/torch/include/ $dev/include
     cp -r $out/${python.sitePackages}/torch/share $dev/share
 
     # Fix up library paths for split outputs
