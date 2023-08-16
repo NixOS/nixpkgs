@@ -23,11 +23,11 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.66";
+  version = "5.68";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Of6mS1kMlJKYSgwnqJ/CA+HNx0hmCG77j0aYZ3qytXQ=";
+    hash = "sha256-/FBeZEXLV5pVys7mgh/nDWM5IVIgQ9MitpbeChdf+TM=";
   };
 
   patches = [
