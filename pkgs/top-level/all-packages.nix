@@ -5971,6 +5971,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  nltk-data = callPackage ../tools/text/nltk_data { };
+
   nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
 
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
@@ -7461,6 +7463,8 @@ with pkgs;
   dump_syms = callPackage ../development/tools/dump_syms {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  dumpasn1 = callPackage ../tools/security/dumpasn1 { };
 
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
 
@@ -9960,6 +9964,8 @@ with pkgs;
   minisign = callPackage ../tools/security/minisign { };
 
   ministat = callPackage ../tools/misc/ministat { };
+
+  minizign = callPackage ../tools/security/minizign { };
 
   mitm6 = callPackage ../tools/security/mitm6 { };
 
@@ -18916,6 +18922,8 @@ with pkgs;
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
+  libgcc = stdenv.cc.cc.libgcc or null;
+
   # This is for e.g. LLVM libraries on linux.
   gccForLibs =
     if stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
@@ -20338,6 +20346,8 @@ with pkgs;
 
   zon2nix = callPackage ../tools/nix/zon2nix { };
 
+  ztags = callPackage ../development/tools/misc/ztags { };
+
   ### DEVELOPMENT / LIBRARIES
 
   a52dec = callPackage ../development/libraries/a52dec { };
@@ -21322,6 +21332,10 @@ with pkgs;
 
   gdal = callPackage ../development/libraries/gdal { };
 
+  gdalMinimal = callPackage ../development/libraries/gdal {
+    useMinimalFeatures = true;
+  };
+
   gdcm = callPackage ../development/libraries/gdcm {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
   };
@@ -21442,6 +21456,11 @@ with pkgs;
   # Being redundant to avoid cycles on boot. TODO: find a better way
   glibcCross = callPackage ../development/libraries/glibc {
     stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
+    libgcc = callPackage ../development/libraries/gcc/libgcc {
+      gcc = gccCrossLibcStdenv.cc;
+      glibc = glibcCross.override { libgcc = null; };
+      stdenvNoLibs = gccCrossLibcStdenv;
+    };
   };
 
   muslCross = musl.override {
@@ -23988,7 +24007,7 @@ with pkgs;
   ngtcp2-gnutls = callPackage ../development/libraries/ngtcp2/gnutls.nix { };
 
   nix-plugins = callPackage ../development/libraries/nix-plugins {
-    nix = nixVersions.nix_2_16;
+    nix = nixVersions.nix_2_17;
   };
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
@@ -32006,6 +32025,8 @@ with pkgs;
 
   svox = callPackage ../applications/audio/svox { };
 
+  g4music = callPackage ../applications/audio/g4music { };
+
   genesys = callPackage ../applications/misc/genesys { };
 
   giada = callPackage ../applications/audio/giada { };
@@ -33014,6 +33035,8 @@ with pkgs;
   kubectl-gadget = callPackage ../applications/networking/cluster/kubectl-gadget { };
 
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
+
+  kubectl-klock = callPackage ../applications/networking/cluster/kubectl-klock { };
 
   kubectl-ktop = callPackage ../applications/networking/cluster/kubectl-ktop { };
 
@@ -38254,6 +38277,8 @@ with pkgs;
   trigger = callPackage ../games/trigger { };
 
   typespeed = callPackage ../games/typespeed { };
+
+  u2ps = callPackage ../tools/text/u2ps { };
 
   uchess = callPackage ../games/uchess { };
 

@@ -413,6 +413,7 @@ with lib.maintainers; {
 
   jupyter = {
     members = [
+      GaetanLepage
       natsukium
     ];
     scope = "Maintain Jupyter and related packages.";

@@ -41,11 +41,11 @@ done
 echo "}" >> "$HFILE"
 
 sed -i \
-  's/buck2-version\s*=\s*".*";/buck2-version = "'"$VERSION"'";/' \
+  '0,/version\s*=\s*".*";/s//version = "'"$VERSION"'";/' \
   "$NFILE"
 
 sed -i \
-  's/buck2-prelude\s*=\s*".*";/buck2-prelude = "'"$PRELUDE_HASH"'";/' \
+  '0,/prelude-hash\s*=\s*".*";/s//prelude-hash = "'"$PRELUDE_HASH"'";/' \
   "$NFILE"
 
 echo "Done; wrote $HFILE and updated version in $NFILE."
