@@ -1,3 +1,20 @@
+# If the tests are broken, it's probably for one of two reasons:
+#
+# 1. The version of llvm used doesn't match the expectations of rustc and/or
+#    cargo-llvm-cov. This is relatively unlikely because we pull llvm out of
+#    rustc's attrset, so it *should* be the right version as long as this is the
+#    case.
+# 2. Nixpkgs has changed its rust infrastructure in a way that causes
+#    cargo-llvm-cov to misbehave under test. It's likely that even though the
+#    tests are failing, cargo-llvm-cov will still function properly in actual
+#    use. This has happened before, and is described [here][0] (along with a
+#    feature request that would fix this instance of the problem).
+#
+# For previous test-troubleshooting discussion, see [here][1].
+#
+# [0]: https://github.com/taiki-e/cargo-llvm-cov/issues/242
+# [1]: https://github.com/NixOS/nixpkgs/pull/197478
+
 { stdenv
 , lib
 , fetchurl
