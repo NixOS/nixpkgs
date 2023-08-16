@@ -40830,6 +40830,8 @@ with pkgs;
 
   brlaser = callPackage ../misc/cups/drivers/brlaser { };
 
+  fflinuxprint = callPackage ../misc/cups/drivers/fflinuxprint { };
+
   fxlinuxprint = callPackage ../misc/cups/drivers/fxlinuxprint { };
 
   brscan4 = callPackage ../applications/graphics/sane/backends/brscan4 { };
