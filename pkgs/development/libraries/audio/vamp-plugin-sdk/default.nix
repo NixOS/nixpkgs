@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
-  enableParallelBuilding = true;
+  # build is susceptible to race conditions: https://github.com/vamp-plugins/vamp-plugin-sdk/issues/12
+  enableParallelBuilding = false;
   makeFlags = [
     "AR:=$(AR)"
     "RANLIB:=$(RANLIB)"
