@@ -15,6 +15,16 @@ let
         cp310 = "sha256-2c1hjwNCOOOx9tVfBk+Pyk/pF0m/2tAmRsBH91834eM=";
       };
     };
+    aarch64-darwin = {
+      platform = "macosx_11_0_arm64";
+      hashes = {
+        cp39 = "sha256-JhYNTOx1UkuNf/63lHXBDry6FQjPnbIB8jU5jKcyX2k=";
+        cp310 = "sha256-4ltYEYm2OzPBc6D2bQt2dEh6Sz+5m1mMKGGYgQGLSAY=";
+      };
+    };
+
+    # Satisfy ofborg:
+    aarch64-linux = {platform = ""; hashes = {cp39 = ""; cp310 = "";};};
   };
   selected = all."${system}";
 in
