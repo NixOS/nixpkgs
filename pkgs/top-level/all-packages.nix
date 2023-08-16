@@ -25559,6 +25559,8 @@ with pkgs;
 
   yubioath-flutter = callPackage ../applications/misc/yubioath-flutter { };
 
+  yyjson = callPackage ../development/libraries/yyjson { };
+
   zchunk = callPackage ../development/libraries/zchunk { };
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
