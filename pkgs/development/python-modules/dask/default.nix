@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.7.1";
+  version = "2023.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-1KnvIMEWT1MwlvkdgH10xk+lGSsGWJMLBonTtWwKjog=";
+    hash = "sha256-ZKjfxTJCu3EUOKz16+VP8+cPqQliFNc7AU1FPC1gOXw=";
   };
 
   nativeBuildInputs = [

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, jaxtyping
 , scipy
 , torch
 , pytestCheckHook
@@ -8,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "linear_operator";
-  version = "0.4.0";
+  version = "0.5.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0f3F3k3xJACbx42jtwsAmjZwPAOfLywZs8VOrwWicc4=";
+    hash = "sha256-7NkcvVDwFaLHBZZhq7aKY3cWxe90qeKmodP6cVsdrPM=";
   };
 
   postPatch = ''
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    jaxtyping
     scipy
     torch
   ];

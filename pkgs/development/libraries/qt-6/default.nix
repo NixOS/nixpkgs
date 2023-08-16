@@ -49,6 +49,9 @@ let
           ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
           ./patches/0007-qtbase-find-qt-tools-in-QTTOOLSPATH.patch
           ./patches/0008-qtbase-allow-translations-outside-prefix.patch
+          ./patches/0008-qtbase-find-qmlimportscanner-in-macdeployqt-via-environment.patch
+          ./patches/0009-qtbase-check-in-the-QML-folder-of-this-library-does-actuall.patch
+          ./patches/0010-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
         ];
       };
       env = callPackage ./qt-env.nix { };

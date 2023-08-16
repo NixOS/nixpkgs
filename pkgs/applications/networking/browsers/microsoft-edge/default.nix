@@ -1,9 +1,9 @@
 {
   stable = import ./browser.nix {
     channel = "stable";
-    version = "114.0.1823.79";
+    version = "115.0.1901.188";
     revision = "1";
-    sha256 = "sha256-FyEsIGwGDzX22scKd8L67uw5ipqN1e9CrC+qACRBZRg=";
+    sha256 = "sha256-mRM3zakYwCptfKWYbiaDnPqv9Vt5WnDA7xIK1rlownU=";
   };
   beta = import ./browser.nix {
     channel = "beta";
