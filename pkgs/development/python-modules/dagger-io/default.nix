@@ -55,7 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dagger/dagger";
     changelog = "https://github.com/dagger/dagger/releases/tag/v${version}";
     license = licenses.asl20 ;
-    # Just commented until I got into maintainers-list.
-    # maintainers = with maintainers; [ rayanpiro ];
+    maintainers = with maintainers; [ rayanpiro ];
   };
 }
