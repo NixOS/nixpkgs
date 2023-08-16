@@ -21411,6 +21411,8 @@ with pkgs;
 
   libhsts = callPackage ../development/libraries/libhsts { };
 
+  libanet = callPackage ../development/libraries/libanet { };
+
   glbinding = callPackage ../development/libraries/glbinding { };
 
   gle = callPackage ../development/libraries/gle { };
