@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.calcurse.org/calcurse.git/plain/CHANGES.md?h=v${version}";
     license = licenses.bsd2;
     platforms = platforms.unix;
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }
