@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "nvarner";
     repo = "typst-lsp";
     rev = "v${version}";
-    hash = "sha256-l69/8XhIvGYcvtoCE7+hfp810F3uBVvxqZnA12o8HCg=";
+    hash = "sha256-maLiwM3ruCAf5qTv5Kky60eCdlpAp6JVKK6/E6vLVEw=";
   };
 
   cargoLock = {
