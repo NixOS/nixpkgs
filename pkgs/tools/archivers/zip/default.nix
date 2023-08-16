@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     platforms = platforms.all;
     maintainers = [ ];
+    mainProgram = "zip";
   };
 }
