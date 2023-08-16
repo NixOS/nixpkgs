@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "uivonim";
-  version = "unstable-2021-05-24";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "smolck";
     repo = pname;
-    rev = "ac027b4575b7e1adbedde1e27e44240289eebe39";
-    sha256 = "1b6k834qan8vhcdqmrs68pbvh4b59g9bx5126k5hjha6v3asd8pj";
+    rev = "v${version}";
+    hash = "sha256-TcsKjRwiCTRQLxolRuJ7nRTGxFC0V2Q8LQC5p9iXaaY=";
   };
 
-  npmDepsHash = "sha256-9oyw09DdjyAjv1IW30715kp0urf/1v754teEtDY1TaI=";
+  npmDepsHash = "sha256-jWLvsN6BCxTWn/Lc0fSz0VJIUiFNN8ptSYMeWlWsHXc=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
