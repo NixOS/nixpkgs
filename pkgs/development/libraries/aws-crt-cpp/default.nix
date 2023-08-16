@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-crt-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with maintainers; teams.aws.members ++ [ r-burns ];
   };
 }

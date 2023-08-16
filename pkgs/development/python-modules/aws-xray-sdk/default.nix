@@ -25,10 +25,11 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  meta = {
+  meta = with lib; {
     description = "AWS X-Ray SDK for the Python programming language";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     homepage = "https://github.com/aws/aws-xray-sdk-python";
+    maintainers = with maintainers; teams.aws.members ++ [ davegallant ];
   };
 
   doCheck = false;

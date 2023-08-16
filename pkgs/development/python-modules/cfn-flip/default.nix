@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Tool for converting AWS CloudFormation templates between JSON and YAML formats";
     homepage = "https://github.com/awslabs/aws-cfn-template-flip";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kamadorueda psyanticy ];
+    maintainers = with maintainers; teams.aws.members ++ [ kamadorueda psyanticy ];
   };
 }

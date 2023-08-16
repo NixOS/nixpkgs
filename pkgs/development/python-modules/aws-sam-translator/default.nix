@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/awslabs/serverless-application-model";
     changelog = "https://github.com/aws/serverless-application-model/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; teams.aws.members;
   };
 }

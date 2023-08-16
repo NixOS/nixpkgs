@@ -16,6 +16,8 @@ let
     esac
   '';
 in {
+  meta.maintainers = teams.aws.members;
+
   options.services.ssm-agent = {
     enable = mkEnableOption (lib.mdDoc "AWS SSM agent");
 

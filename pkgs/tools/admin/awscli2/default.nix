@@ -130,7 +130,7 @@ with py.pkgs; buildPythonApplication rec {
     homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
+    maintainers = with maintainers; teams.aws.members ++ [ bhipple davegallant bryanasdev000 devusb ];
     mainProgram = "aws";
   };
 }

@@ -43,6 +43,14 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  aws = {
+    members = [
+      anthonyroussel
+    ];
+    scope = "Maintain AWS packages and modules.";
+    shortName = "AWS";
+  };
+
   bazel = {
     members = [
       mboes

@@ -21,6 +21,6 @@ buildGoModule rec {
     description = "Amazon EC2 Metadata Mock";
     homepage = "https://github.com/aws/amazon-ec2-metadata-mock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ymatsiuk ];
+    maintainers = with maintainers; teams.aws.members ++ [ ymatsiuk ];
   };
 }

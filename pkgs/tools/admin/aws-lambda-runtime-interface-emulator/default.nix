@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "To locally test their Lambda function packaged as a container image.";
     homepage = "https://github.com/aws/aws-lambda-runtime-interface-emulator";
     license = licenses.asl20;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; teams.aws.members ++ [ teto ];
   };
 }

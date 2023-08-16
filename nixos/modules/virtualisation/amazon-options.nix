@@ -2,6 +2,8 @@
 let
   inherit (lib) literalExpression types;
 in {
+  meta.maintainers = with lib.maintainers; teams.aws.members;
+
   options = {
     ec2 = {
       zfs = {

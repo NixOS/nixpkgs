@@ -75,6 +75,6 @@ buildPythonPackage rec {
       AWS Lambda functions for several runtimes & frameworks.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ dhkl ];
+    maintainers = with maintainers; teams.aws.members ++ [ dhkl ];
   };
 }

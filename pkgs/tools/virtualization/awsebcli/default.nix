@@ -99,7 +99,8 @@ with localPython.pkgs; buildPythonApplication rec {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "A command line interface for Elastic Beanstalk";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
-    maintainers = with maintainers; [ eqyiel kirillrdy ];
+    maintainers = with maintainers; teams.aws.members ++ [ eqyiel kirillrdy ];
+
     license = licenses.asl20;
   };
 }

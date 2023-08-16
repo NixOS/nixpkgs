@@ -15,9 +15,11 @@ with pkgs.lib;
 
 makeTest {
   name = "amazon-init";
+
   meta = with maintainers; {
-    maintainers = [ urbas ];
+    maintainers = teams.aws.members ++ [ urbas ];
   };
+
   nodes.machine = { ... }:
   {
     imports = [ ../modules/profiles/headless.nix ../modules/virtualisation/amazon-init.nix ];

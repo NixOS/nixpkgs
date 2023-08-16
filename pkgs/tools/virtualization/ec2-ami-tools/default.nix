@@ -35,10 +35,11 @@ stdenv.mkDerivation rec {
       sed -i 's|/bin/bash|${stdenv.shell}|' $out/lib/ec2/platform/base/pipeline.rb
     '';  # */
 
-  meta = {
+  meta = with lib; {
     homepage = "https://aws.amazon.com/developertools/Amazon-EC2/368";
     description = "Command-line tools to create and manage Amazon EC2 virtual machine images";
-    license = lib.licenses.amazonsl;
+    license = licenses.amazonsl;
+    maintainers = with maintainers; teams.aws.members;
   };
 
 }

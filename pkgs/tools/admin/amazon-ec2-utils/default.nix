@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     description = "Contains a set of utilities and settings for Linux deployments in EC2";
     homepage = "https://github.com/amazonlinux/amazon-ec2-utils";
     license = licenses.mit;
-    maintainers = with maintainers; [ ketzacoatl thefloweringash anthonyroussel ];
+    maintainers = with maintainers; teams.aws.members ++ [ ketzacoatl thefloweringash ];
   };
 }

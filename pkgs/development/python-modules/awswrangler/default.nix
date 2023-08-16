@@ -83,6 +83,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aws/aws-sdk-pandas";
     changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mcwitt ];
+    maintainers = with maintainers; teams.aws.members ++ [ mcwitt ];
   };
 }

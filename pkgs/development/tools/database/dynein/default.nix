@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/awslabs/dynein";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pimeys ];
+    maintainers = with maintainers; teams.aws.members ++ [ pimeys ];
   };
 }

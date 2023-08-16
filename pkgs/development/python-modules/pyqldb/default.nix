@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Python driver for Amazon QLDB";
     homepage = "https://github.com/awslabs/amazon-qldb-driver-python";
     license = licenses.asl20;
-    maintainers = [ maintainers.terlar ];
+    maintainers = with maintainers; teams.aws.members ++ [ terlar ];
   };
 }

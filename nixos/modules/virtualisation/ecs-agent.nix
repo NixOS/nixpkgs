@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.services.ecs-agent;
 in {
+  meta.maintainers = teams.aws.members;
+
   options.services.ecs-agent = {
     enable = mkEnableOption (lib.mdDoc "Amazon ECS agent");
 

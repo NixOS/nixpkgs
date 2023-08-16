@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true; # required for tests
 
-  meta = {
+  meta = with lib; {
     description = "Redshift interface library";
     homepage = "https://github.com/aws/amazon-redshift-python-driver";
     changelog = "https://github.com/aws/amazon-redshift-python-driver/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mcwitt ];
+    license = licenses.asl20;
+    maintainers = with maintainers; teams.aws.members ++ [ mcwitt ];
   };
 }

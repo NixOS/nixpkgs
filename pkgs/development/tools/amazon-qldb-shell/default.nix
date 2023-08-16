@@ -36,7 +36,7 @@ let
       description = "An interface to send PartiQL statements to Amazon Quantum Ledger Database (QLDB)";
       homepage = "https://github.com/awslabs/amazon-qldb-shell";
       license = licenses.asl20;
-      maintainers = [ maintainers.terlar ];
+      maintainers = with maintainers; teams.aws.members ++ [ terlar ];
       mainProgram = "qldb";
     };
   };

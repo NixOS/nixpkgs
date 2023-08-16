@@ -55,6 +55,7 @@ let
     nixos-rebuild switch
   '';
 in {
+  meta.maintainers = teams.aws.members;
 
   options.virtualisation.amazon-init = {
     enable = mkOption {

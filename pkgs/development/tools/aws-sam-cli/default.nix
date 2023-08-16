@@ -62,6 +62,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/awslabs/aws-sam-cli";
     changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lo1tuma ];
+    maintainers = with maintainers; teams.aws.members ++ [ lo1tuma ];
   };
 }

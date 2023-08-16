@@ -7,6 +7,7 @@ let
   amiBootMode = if config.ec2.efi then "uefi" else "legacy-bios";
 
 in {
+  meta.maintainers = teams.aws.members;
 
   imports = [ ../../../modules/virtualisation/amazon-image.nix ];
 

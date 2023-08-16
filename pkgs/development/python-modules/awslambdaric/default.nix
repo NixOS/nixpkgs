@@ -61,7 +61,7 @@ buildPythonPackage rec {
     description = "AWS Lambda Runtime Interface Client for Python";
     homepage = "https://github.com/aws/aws-lambda-python-runtime-interface-client";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; teams.aws.members ++ [ austinbutler ];
     platforms = platforms.linux;
   };
 }

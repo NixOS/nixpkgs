@@ -7,6 +7,8 @@
 with lib;
 
 {
+  meta.maintainers = teams.aws.members;
+
   imports = [
     (mkRemovedOptionModule [ "ec2" "metadata" ] "")
   ];

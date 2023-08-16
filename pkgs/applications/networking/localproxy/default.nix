@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       description = "AWS IoT Secure Tunneling Local Proxy Reference Implementation C++";
       homepage = "https://github.com/aws-samples/aws-iot-securetunneling-localproxy";
       license = licenses.asl20;
-      maintainers = with maintainers; [spalf];
+      maintainers = with maintainers; teams.aws.members ++ [ spalf ];
       platforms = platforms.unix;
     };
   })

@@ -13,6 +13,8 @@ let
 in
 
 {
+  meta.maintainers = teams.aws.members;
+
   imports = [
     ../profiles/headless.nix
     # Note: While we do use the headless profile, we also explicitly

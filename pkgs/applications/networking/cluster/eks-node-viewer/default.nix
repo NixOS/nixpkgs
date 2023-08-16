@@ -32,6 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/awslabs/eks-node-viewer";
     changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = [ maintainers.ivankovnatsky ];
+    maintainers = with maintainers; teams.aws.members ++ [ ivankovnatsky ];
   };
 }

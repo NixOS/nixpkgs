@@ -42,6 +42,6 @@ buildGoModule rec {
     homepage = "https://github.com/aws/copilot-cli";
     changelog = "https://github.com/aws/copilot-cli/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jiegec ];
+    maintainers = with maintainers; teams.aws.members ++ [ jiegec ];
   };
 }

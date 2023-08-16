@@ -25,8 +25,7 @@ buildGoModule rec {
     changelog = "https://github.com/aws/amazon-ecs-agent/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; teams.aws.members ++ [ copumpkin ];
     mainProgram = "agent";
   };
 }
-
