@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "3.17.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mverleg";
