@@ -131,6 +131,7 @@ mapAliases ({
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
   flaskbabel = flask-babel; # added 2023-01-19
   flask_login = flask-login; # added 2022-10-17
+  flask_marshmallow = flask-marshmallow; # added 2023-08-16
   flask-restplus = throw "flask-restplus is no longer maintained, use flask-restx instead"; # added 2023-02-21
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
