@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils, libtool }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nco";
   version = "5.1.7";
 
   src = fetchFromGitHub {
     owner = "nco";
     repo = "nco";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-CdIZ0ql8QBM7UcEyTmt4P9gZyO8jrkLipAOsJUkpG8g=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bzizou ];
     platforms = platforms.unix;
   };
-}
+})
