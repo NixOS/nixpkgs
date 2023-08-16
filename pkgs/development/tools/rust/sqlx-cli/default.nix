@@ -58,5 +58,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/launchbadge/sqlx";
     license = licenses.asl20;
     maintainers = with maintainers; [ greizgh xrelkd fd ];
+    mainProgram = "sqlx";
   };
 }
