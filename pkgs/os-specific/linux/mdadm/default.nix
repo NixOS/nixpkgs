@@ -1,4 +1,4 @@
-{ lib, stdenv, util-linux, coreutils, fetchurl, groff, system-sendmail, udev }:
+{ lib, stdenv, util-linux, coreutils, fetchurl, groff, system-sendmail, udev, makeWrapper, findutils, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "mdadm";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ udev ];
 
-  nativeBuildInputs = [ groff ];
+  nativeBuildInputs = [ groff makeWrapper ];
 
   postPatch = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \
@@ -36,6 +36,17 @@ stdenv.mkDerivation rec {
         -e 's@/usr/bin/basename@${coreutils}/bin/basename@g' \
         -e 's@BINDIR/blkid@${util-linux}/bin/blkid@g' \
         *.rules
+  '';
+
+  postInstall = ''
+    install -D -m 755 misc/mdcheck ''${out}/bin/mdcheck
+    wrapProgram $out/bin/mdcheck \
+      --prefix PATH : ''${out}/bin:${lib.makeBinPath [ coreutils util-linux findutils gnugrep ]}
+
+    sed -i \
+      -e "s@/usr/share/mdadm/mdcheck@''${out}/bin/mdcheck@" \
+      -e "s@ExecStartPre=-/usr/lib/mdadm/mdadm_env.sh@@" \
+      ''${out}/lib/systemd/system/mdcheck* ''${out}/lib/systemd/system/mdmonitor*
   '';
 
   # This is to avoid self-references, which causes the initrd to explode
