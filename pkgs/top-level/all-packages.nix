@@ -40725,6 +40725,8 @@ with pkgs;
 
   rivalcfg = callPackage ../misc/rivalcfg { };
 
+  roadrunner = callPackage ../servers/roadrunner { };
+
   rmfakecloud = callPackage ../servers/rmfakecloud { };
 
   rmfuse = callPackage ../tools/filesystems/rmfuse { };
