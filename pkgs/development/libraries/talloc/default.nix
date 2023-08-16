@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tdb.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.all;
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }
