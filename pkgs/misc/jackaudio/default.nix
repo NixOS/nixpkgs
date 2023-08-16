@@ -2,32 +2,26 @@
 , libsamplerate, eigen, celt
 , wafHook
 , gitUpdater
+, testers
+
 # Darwin Dependencies
 , aften, AudioUnit, CoreAudio, libobjc, Accelerate
 
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsa-lib ? null
-, libopus ? null
+, libopus ? null, systemd ? null, db ? null
 
 # Extra options
 , prefix ? ""
-
-, testers
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: let
   inherit (python3Packages) python dbus-python;
-  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
-
+  shouldUsePkg = pkg: pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg;
+  enabled = pkg: pkg != null && lib.elem pkg finalAttrs.buildInputs;
   libOnly = prefix == "lib";
-
-  optDbus = if stdenv.isDarwin then null else shouldUsePkg dbus;
-  optPythonDBus = if libOnly then null else shouldUsePkg dbus-python;
-  optLibffado = if libOnly then null else shouldUsePkg libffado;
-  optAlsaLib = if libOnly then null else shouldUsePkg alsa-lib;
-  optLibopus = shouldUsePkg libopus;
-in
-stdenv.mkDerivation (finalAttrs: {
+  withJackDbus = !libOnly && enabled dbus;
+in {
   pname = "${prefix}jack2";
   version = "1.9.22";
 
@@ -41,11 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
-  buildInputs = [ libsamplerate eigen celt
-    optDbus optPythonDBus optLibffado optAlsaLib optLibopus
-  ] ++ lib.optionals stdenv.isDarwin [
-    aften AudioUnit CoreAudio Accelerate libobjc
-  ];
+  buildInputs = lib.filter shouldUsePkg (lib.concatLists [
+    [ libsamplerate eigen celt libopus db ]
+    (lib.optionals (!libOnly) [
+      dbus-python libffado alsa-lib systemd
+    ])
+    (if stdenv.isDarwin then [
+      aften AudioUnit CoreAudio Accelerate libobjc
+    ] else [
+      dbus
+    ])
+  ]);
 
   patches = [
     (fetchpatch2 {
@@ -59,16 +59,27 @@ stdenv.mkDerivation (finalAttrs: {
   dontAddWafCrossFlags = true;
 
   wafConfigureFlags = [
+    "--pkgconfigdir=${placeholder "dev"}/lib/pkgconfig"
     "--classic"
-    "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
-  ] ++ lib.optional (optDbus != null) "--dbus"
-    ++ lib.optional (optLibffado != null) "--firewire"
-    ++ lib.optional (optAlsaLib != null) "--alsa";
+    "--autostart=${if withJackDbus then "dbus" else "classic"}"
+  ] ++ lib.optionals withJackDbus [
+    "--dbus"
+  ];
 
-  postInstall = (if libOnly then ''
-    rm -rf $out/{bin,share}
-    rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
-  '' else lib.optionalString (optDbus != null) ''
+  postInstall = ''
+    _multioutJack2Bin() {
+      local bin="$1"
+      moveToOutput bin "$bin"
+      moveToOutput lib/jack "$bin"
+      moveToOutput "lib/libjacknet*" "$bin"
+      moveToOutput "lib/libjackserver*" "$bin"
+      moveToOutput share/dbus-1 "$bin"
+      moveToOutput share/man "$bin"
+    }
+  '' + (if libOnly then ''
+    _multioutJack2Bin REMOVE
+    sed -i -e '/^server_libs/d' "$dev/lib/pkgconfig/jack.pc"
+  '' else lib.optionalString (withJackDbus != null) ''
     wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
   '');
 
