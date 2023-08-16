@@ -1,0 +1,31 @@
+diff --git a/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/file.c b/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/file.c
+index a81cb07..f807d18 100644
+--- a/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/file.c
++++ b/kmods/prl_fs/SharedFolders/Guest/Linux/prl_fs/file.c
+@@ -393,7 +393,9 @@ struct file_operations prlfs_file_fops = {
+ 
+ struct file_operations prlfs_dir_fops = {
+ 	.open		= prlfs_open,
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,5,0)
++	.iterate_shared	= prlfs_readdir,
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0)
+ 	.iterate	= prlfs_readdir,
+ #else
+ 	.readdir	= prlfs_readdir,
+diff --git a/kmods/prl_tg/Toolgate/Guest/Linux/prl_tg/prltg_compat.h b/kmods/prl_tg/Toolgate/Guest/Linux/prl_tg/prltg_compat.h
+index 8a9c0ee..380567e 100644
+--- a/kmods/prl_tg/Toolgate/Guest/Linux/prl_tg/prltg_compat.h
++++ b/kmods/prl_tg/Toolgate/Guest/Linux/prl_tg/prltg_compat.h
+@@ -58,7 +58,10 @@
+ #define OPENSUSE_4_4_76
+ #endif
+ 
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0) || defined(OPENSUSE_4_4_76)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0)
++#define prl_get_user_pages(_1, _2, _3, _4, _5) \
++		get_user_pages(_1, _2, (_3) ? FOLL_WRITE : 0, _4)
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0) || defined(OPENSUSE_4_4_76)
+ #define prl_get_user_pages(_1, _2, _3, _4, _5) \
+ 		get_user_pages(_1, _2, (_3) ? FOLL_WRITE : 0, _4, _5)
+ #elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0)

@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mPETZiCI/i6xJ3+ououDKaVwrAxK5cr6L6A16oEgIqk=";
   };
 
+  patches = [
+    ./linux-6.5.patch
+  ];
+
   hardeningDisable = [ "pic" "format" ];
 
   nativeBuildInputs = [
