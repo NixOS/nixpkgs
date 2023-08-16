@@ -367,6 +367,7 @@ in {
   iftop = handleTest ./iftop.nix {};
   incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
+  influxdb2 = handleTest ./influxdb2.nix {};
   initrd-network-openvpn = handleTest ./initrd-network-openvpn {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrd-luks-empty-passphrase = handleTest ./initrd-luks-empty-passphrase.nix {};
@@ -463,6 +464,7 @@ in {
   matrix-conduit = handleTest ./matrix/conduit.nix {};
   matrix-synapse = handleTest ./matrix/synapse.nix {};
   mattermost = handleTest ./mattermost.nix {};
+  mediamtx = handleTest ./mediamtx.nix {};
   mediatomb = handleTest ./mediatomb.nix {};
   mediawiki = handleTest ./mediawiki.nix {};
   meilisearch = handleTest ./meilisearch.nix {};

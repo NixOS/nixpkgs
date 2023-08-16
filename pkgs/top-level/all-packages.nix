@@ -589,6 +589,8 @@ with pkgs;
 
   dnf5 = callPackage ../tools/package-management/dnf5 { };
 
+  documenso = callPackage ../applications/office/documenso { };
+
   dsq = callPackage ../tools/misc/dsq { };
 
   dt = callPackage ../tools/text/dt { };
@@ -1673,6 +1675,8 @@ with pkgs;
   colorless = callPackage ../tools/misc/colorless { };
 
   cope = callPackage ../tools/misc/cope { };
+
+  crypto-tracker = callPackage ../tools/misc/crypto-tracker { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
@@ -11760,6 +11764,8 @@ with pkgs;
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
+
+  pdf-sign = callPackage ../tools/graphics/pdf-sign { };
 
   pdfarranger = callPackage ../applications/misc/pdfarranger { };
 
@@ -24818,8 +24824,6 @@ with pkgs;
 
   sfsexp = callPackage ../development/libraries/sfsexp { };
 
-  shhgit = callPackage ../tools/security/shhgit { };
-
   shhmsg = callPackage ../development/libraries/shhmsg { };
 
   shhopt = callPackage ../development/libraries/shhopt { };
@@ -27471,6 +27475,8 @@ with pkgs;
     alsa-topology-conf
     alsa-ucm-conf
     alsa-utils;
+
+  apparency = callPackage ../os-specific/darwin/apparency { };
 
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
@@ -40725,6 +40731,8 @@ with pkgs;
 
   rivalcfg = callPackage ../misc/rivalcfg { };
 
+  roadrunner = callPackage ../servers/roadrunner { };
+
   rmfakecloud = callPackage ../servers/rmfakecloud { };
 
   rmfuse = callPackage ../tools/filesystems/rmfuse { };
@@ -40825,6 +40833,8 @@ with pkgs;
   senv = callPackage ../applications/misc/senv { };
 
   brlaser = callPackage ../misc/cups/drivers/brlaser { };
+
+  fflinuxprint = callPackage ../misc/cups/drivers/fflinuxprint { };
 
   fxlinuxprint = callPackage ../misc/cups/drivers/fxlinuxprint { };
 

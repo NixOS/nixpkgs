@@ -1466,6 +1466,15 @@
     githubId = 1482768;
     name = "Benjamin Asbach";
   };
+  asciimoth = {
+    name = "Andrew";
+    email = "ascii@moth.contact";
+    github = "asciimoth";
+    githubId = 91414737;
+    keys = [{
+      fingerprint = "C5C8 4658 CCFD 7E8E 71DE  E933 AF3A E54F C3A3 5C9F";
+    }];
+  };
   ashalkhakov = {
     email = "artyom.shalkhakov@gmail.com";
     github = "ashalkhakov";
@@ -7527,6 +7536,12 @@
     github = "jackgerrits";
     githubId = 7558482;
     name = "Jack Gerrits";
+  };
+  jaduff = {
+    email = "jdduffpublic@proton.me";
+    github = "jaduff";
+    githubId = 10690970;
+    name = "James Duff";
   };
   jagajaga = {
     email = "ars.seroka@gmail.com";
@@ -17055,6 +17070,13 @@
     github = "tiramiseb";
     githubId = 1292007;
     name = "Sébastien Maccagnoni";
+  };
+  tiredofit = {
+    email = "dave@tiredofit.ca";
+    github = "tiredofit";
+    githubId = 23528985;
+    name = "Dave Conroy";
+    matrix = "@dave:tiredofit.ca";
   };
   tirex = {
     email = "szymon@kliniewski.pl";
