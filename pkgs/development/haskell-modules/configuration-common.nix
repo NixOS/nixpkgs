@@ -318,6 +318,10 @@ self: super: {
   mysql-simple = dontCheck super.mysql-simple;
   mysql-haskell = dontCheck super.mysql-haskell;
 
+  # Test data missing
+  # https://github.com/FPtje/GLuaFixer/issues/165
+  glualint = dontCheck super.glualint;
+
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   git-annex = overrideCabal (drv: {
