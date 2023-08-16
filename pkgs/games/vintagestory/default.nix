@@ -4,7 +4,6 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, mono
 , xorg
 , gtk2
 , sqlite
@@ -16,36 +15,22 @@
 , libglvnd
 , pipewire
 , libpulseaudio
-, experimental ? false
 , dotnet-runtime_7
 }:
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = if experimental then "1.18.8-rc.1" else "1.18.7";
+  version = "1.18.8";
 
-  src =
-    if experimental
-    then
-      (fetchurl {
-        url = "https://cdn.vintagestory.at/gamefiles/unstable/vs_client_linux-x64_${version}.tar.gz";
-        hash = "sha256-FxyAJTiLENTp5QxPKRgsiOhkMXz88CTn3QRvIHtOH+A=";
-      })
-    else
-      (fetchurl {
-        url = "https://cdn.vintagestory.at/gamefiles/stable/vs_archive_${version}.tar.gz";
-        hash = "sha256-geJoNxBxODXQeTExLdTOaH84asjo2yg2xFm8Pj0IMc0=";
-      });
+  src = fetchurl {
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
+    hash = "sha256-q7MxmsWCGODOt/hCkCPz964m7az27SddIRBJ1vYg02k=";
+  };
 
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
-  buildInputs =
-    if experimental then [
-      dotnet-runtime_7
-    ] else [
-      mono
-    ];
+  buildInputs = [ dotnet-runtime_7 ];
 
   runtimeLibs = lib.makeLibraryPath ([
     gtk2
@@ -65,7 +50,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = makeDesktopItem {
     name = "vintagestory";
-    desktopName = if experimental then "Vintage Story Experimental .net 7" else "Vintage Story";
+    desktopName = "Vintage Story";
     exec = "vintagestory";
     icon = "vintagestory";
     comment = "Innovate and explore in a sandbox world";
@@ -83,21 +68,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = (if experimental then ''
+  preFixup = ''
     makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --add-flags $out/share/vintagestory/Vintagestory.dll
     makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
-  '' else ''
-    makeWrapper ${mono}/bin/mono $out/bin/vintagestory \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --add-flags $out/share/vintagestory/Vintagestory.exe
-    makeWrapper ${mono}/bin/mono $out/bin/vintagestory-server \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --add-flags $out/share/vintagestory/VintagestoryServer.exe
-  '') + ''
+  '' + ''
     find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
       local filename="$(basename -- "$file")"
       ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
