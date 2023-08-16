@@ -3,13 +3,13 @@
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
 let
   pname = "nosql-workbench";
-  version = "3.2.1";
+  version = "3.7.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     name = pname;
-    url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-linux-x86_64-${version}.AppImage";
-    sha256 = "c8qX5TTpocHIhv8Co6PXDt65PJLO6IItsIBXnASt5pY=";
+    url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-linux-${version}.AppImage";
+    sha256 = "sha256-Ls77f6i0uHbA8irHEnpz1Sit2m0CvrofepP9nMsBWvI=";
   };
 
   appimageContents = appimageTools.extract {
@@ -22,7 +22,7 @@ let
     comment = "NoSQL Workbench for Amazon DynamoDB is a cross-platform client-side application for modern database development and operations and is available for Windows and macOS.";
     desktopName = "NoSQL Workbench";
     genericName = "DB UI";
-    categories = "Development";
+    categories = ["Development"];
   };
 
 in
