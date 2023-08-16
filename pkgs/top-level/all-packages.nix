@@ -10144,6 +10144,8 @@ with pkgs;
 
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
 
+  lcsync = callPackage ../applications/networking/sync/lcsync { };
+
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
   ldapmonitor = callPackage ../tools/security/ldapmonitor { };
