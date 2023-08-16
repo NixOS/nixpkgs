@@ -118,4 +118,4 @@ with lib;
   boot.loader.systemd-boot.editor = false;
   # Coredump gives infomation (sometimes sensitive) during crash, it also slows down the system.
   systemd.coredump.enable = false; 
-}
+}  
