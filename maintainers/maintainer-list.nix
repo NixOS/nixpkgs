@@ -8976,6 +8976,13 @@
     githubId = 691290;
     name = "Keshav Kini";
   };
+  kip93 = {
+    name = "Leandro Reina Kiperman";
+    email = "leandro@kip93.net";
+    matrix = "@kip93:matrix.org";
+    github = "kip93";
+    githubId = 26793632;
+  };
   kira-bruneau = {
     email = "kira.bruneau@pm.me";
     name = "Kira Bruneau";

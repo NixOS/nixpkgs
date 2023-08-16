@@ -673,7 +673,9 @@ with lib.maintainers; {
     shortName = "OroraTech GmbH. employees";
     scope = "Team for packages maintained by employees of OroraTech GmbH.";
     # Edits to this list should only be done by an already existing member.
-    members = [ ];
+    members = [
+      kip93
+    ];
   };
 
   pantheon = {
