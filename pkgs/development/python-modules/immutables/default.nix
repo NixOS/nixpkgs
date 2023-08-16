@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "An immutable mapping type";
     homepage = "https://github.com/MagicStack/immutables";
+    changelog = "https://github.com/MagicStack/immutables/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ catern ];
   };
