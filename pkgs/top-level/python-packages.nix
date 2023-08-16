@@ -912,7 +912,7 @@ self: super: with self; {
   awkward = callPackage ../development/python-modules/awkward { };
 
   awkward-cpp = callPackage ../development/python-modules/awkward-cpp {
-    inherit (pkgs) cmake;
+    inherit (pkgs) cmake ninja;
   };
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
