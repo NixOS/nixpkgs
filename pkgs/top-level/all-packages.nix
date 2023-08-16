@@ -24816,8 +24816,6 @@ with pkgs;
 
   sfsexp = callPackage ../development/libraries/sfsexp { };
 
-  shhgit = callPackage ../tools/security/shhgit { };
-
   shhmsg = callPackage ../development/libraries/shhmsg { };
 
   shhopt = callPackage ../development/libraries/shhopt { };
@@ -40736,6 +40734,8 @@ with pkgs;
   ricty = callPackage ../data/fonts/ricty { };
 
   rivalcfg = callPackage ../misc/rivalcfg { };
+
+  roadrunner = callPackage ../servers/roadrunner { };
 
   rmfakecloud = callPackage ../servers/rmfakecloud { };
 
