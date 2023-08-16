@@ -32620,8 +32620,6 @@ with pkgs;
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
-  ideamaker = libsForQt5.callPackage ../applications/misc/ideamaker { };
-
   identity = callPackage ../applications/graphics/identity { };
 
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
