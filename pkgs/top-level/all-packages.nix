@@ -9528,8 +9528,6 @@ with pkgs;
 
   jove = callPackage ../applications/editors/jove { };
 
-  jucipp = callPackage ../applications/editors/jucipp { };
-
   jugglinglab = callPackage ../tools/misc/jugglinglab { };
 
   jupp = callPackage ../applications/editors/jupp { };
