@@ -304,6 +304,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     uv = callPackage ../development/php-packages/uv { };
 
+    vld = callPackage ../development/php-packages/vld { };
+
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
