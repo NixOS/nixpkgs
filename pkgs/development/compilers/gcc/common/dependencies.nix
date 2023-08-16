@@ -85,6 +85,7 @@ in
   ++ optionals langJava [ boehmgc zip unzip ]
   ++ optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs)
   ++ optionals (langGo && stdenv.hostPlatform.isMusl) [ libucontext ]
+  ++ optionals (stdenv.hostPlatform.isFreeBSD) [ buildPackages.libiconvReal ]
   ;
 
   # threadsCross.package after gcc6 so i assume its okay for 4.8 and 4.9 too

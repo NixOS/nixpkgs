@@ -113,9 +113,12 @@ let
       "--with-mpc=${libmpc}"
     ]
     ++ lib.optionals (!withoutTargetLibc) [
-      (if libcCross == null
-       then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
-       else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
+      (if libcCross != null
+       then "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}"
+       else if stdenv.cc.nativeLibc
+       then "--with-native-system-header-dir=${stdenv.cc.nativePrefix}/include"
+       else "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
+      )
       # gcc builds for cross-compilers (build != host) or cross-built
       # gcc (host != target) always apply the offset prefix to disentangle
       # target headers from build or host headers:

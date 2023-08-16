@@ -114,5 +114,8 @@ ln /usr/bin/strip
 ln /usr/bin/cc
 ln /usr/bin/cpp
 ln /usr/bin/c++
+# cc-wrapper misbehaves when wrapping the results of this script
+ln /usr/bin/clang
+ln /usr/bin/clang++
 
 #pkg info -l llvm37 | grep usr/local/bin

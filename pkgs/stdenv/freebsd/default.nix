@@ -264,6 +264,7 @@ in
 
       cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         inherit lib;
+        name = "stdenv-freebsd-boot-3-cc-wrapper";
         nativeTools  = true;
         nativePrefix = "/usr";
         nativeLibc   = true;
@@ -277,6 +278,7 @@ in
         bintools = import ../../build-support/bintools-wrapper {
           inherit lib;
           stdenvNoCC = prevStage.stdenv;
+          name = "stdenv-freebsd-boot-3-bintools-wrapper";
           nativeTools  = true;
           nativeLibc   = true;
           propagateDoc = false;
@@ -287,7 +289,99 @@ in
       };
 
       preHook = "export NIX_NO_SELF_RPATH=1";
+
+      overrides = self: super: ({
+        bootstrapTools = prevStage.bootstrapTools;
+        bootstrapStdenv = prevStage.stdenv;
+      });
     };
   })
 
+  (prevStage: {
+    inherit config overlays;
+    stdenv  = import ../generic rec {
+      name = "stdenv-freebsd-boot-4";
+      inherit config;
+
+      inherit (prevStage.stdenv)
+        buildPlatform hostPlatform targetPlatform
+        initialPath shell fetchurlBoot;
+
+      cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
+        inherit lib;
+        name = "stdenv-freebsd-boot-4-cc-wrapper";
+        nativeTools  = false;
+        nativePrefix = "/usr";
+        nativeLibc   = true;
+        stdenvNoCC = prevStage.stdenv;
+        #buildPackages = {
+        #  inherit (prevStage) bootstrapStdenv;
+        #};
+        cc = prevStage.bootstrapTools;
+        zlib = prevStage.bootstrapTools;
+        isGNU      = false;
+        isClang    = true;
+        coreutils = prevStage.coreutils;
+        gnugrep = prevStage.gnugrep;
+        bintools = import ../../build-support/bintools-wrapper {
+          inherit lib;
+          name = "stdenv-freebsd-boot-4-bintools-wrapper";
+          stdenvNoCC = prevStage.stdenv;
+          nativeTools  = false;
+          nativeLibc   = true;
+          propagateDoc = false;
+          nativePrefix = "/usr";
+          bintools     = prevStage.binutils-unwrapped;
+          coreutils = prevStage.coreutils;
+          gnugrep = prevStage.gnugrep;
+        };
+      };
+
+      preHook = "export NIX_NO_SELF_RPATH=1";
+    };
+  })
+
+  (prevStage: {
+    inherit config overlays;
+    stdenv  = import ../generic {
+      name = "stdenv-freebsd-boot-5";
+      inherit config;
+
+      inherit (prevStage.stdenv)
+        buildPlatform hostPlatform targetPlatform
+        initialPath shell fetchurlBoot;
+
+      cc = prevStage.gcc;
+      #cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
+      #  inherit lib;
+      #  name = "stdenv-freebsd-boot-5-cc-wrapper";
+      #  nativeTools  = false;
+      #  nativePrefix = "/usr";
+      #  nativeLibc   = true;
+      #  stdenvNoCC = prevStage.stdenv;
+      #  #buildPackages = {
+      #  #  inherit (prevStage) bootstrapStdenv;
+      #  #};
+      #  cc = prevStage.gcc-unwrapped;
+      #  isGNU      = true;
+      #  isClang    = false;
+      #  coreutils = prevStage.coreutils;
+      #  gnugrep = prevStage.gnugrep;
+      #  bintools = import ../../build-support/bintools-wrapper {
+      #    inherit lib;
+      #    name = "stdenv-freebsd-boot-5-bintools-wrapper";
+      #    stdenvNoCC = prevStage.stdenv;
+      #    nativeTools  = false;
+      #    nativeLibc   = true;
+      #    propagateDoc = false;
+      #    nativePrefix = "/usr";
+      #    bintools     = prevStage.binutils-unwrapped;
+      #    coreutils = prevStage.coreutils;
+      #    gnugrep = prevStage.gnugrep;
+      #  };
+      #};
+
+      preHook = "export NIX_NO_SELF_RPATH=1";
+    };
+  })
 ]

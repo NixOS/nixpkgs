@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    ./b2 install --prefix="$out"
+    ./b2 ${if stdenv.cc.isClang then "toolset=clang" else ""} install --prefix="$out"
 
     # older versions of b2 created this symlink,
     # which we want to support building via useBoost.
