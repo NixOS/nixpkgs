@@ -5394,6 +5394,8 @@ with pkgs;
 
   go-thumbnailer = callPackage ../applications/misc/go-thumbnailer { };
 
+  google-cursor = callPackage ../data/icons/google-cursor { };
+
   geckodriver = callPackage ../development/tools/geckodriver {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
