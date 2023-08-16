@@ -11,14 +11,15 @@ buildGoModule rec {
     owner = "cooperspencer";
     repo = "gickup";
     rev = "v${version}";
-    sha256 = "sha256-tiQmb7bBWb99k23lS+d+YR14y4YeYPWqccl/2DLv7Dk=";
+    hash = "sha256-tiQmb7bBWb99k23lS+d+YR14y4YeYPWqccl/2DLv7Dk=";
   };
 
-  vendorSha256 = "sha256-DWGrs/ZKMKgVfwU7W+dktLELbW9Co7cmDy9pWVP5p2w=";
+  vendorHash = "sha256-DWGrs/ZKMKgVfwU7W+dktLELbW9Co7cmDy9pWVP5p2w=";
 
   meta = with lib; {
-    description = "Backup all your repositories with Ease.";
+    description = "Tool to backup repositories";
     homepage = "https://github.com/cooperspencer/gickup";
+    changelog = "https://github.com/cooperspencer/gickup/releases/tag/v${version}";
     maintainers = with maintainers; [ rhousand ];
     license = licenses.asl20;
   };
