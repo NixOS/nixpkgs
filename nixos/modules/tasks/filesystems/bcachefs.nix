@@ -70,6 +70,32 @@ in
         "mount.bcachefs" = "${mountCommand}/bin/mount.bcachefs";
       };
 
+      boot.initrd.systemd.services = lib.mapAttrs' (mountpoint: fileSystem: let
+        mountUnitName =
+          if mountpoint == "/"
+          then "sysroot.mount"
+          else "sysroot-" + (utils.escapeSystemdPath mountpoint) + ".mount";
+        deviceUnit = (utils.escapeSystemdPath fileSystem.device) + ".device";
+      in {
+        name = "unlock-bcachefs-${utils.escapeSystemdPath mountpoint}";
+        value = {
+          requiredBy = [mountUnitName];
+          before = [mountUnitName];
+          after = [deviceUnit];
+          requires = [deviceUnit];
+          serviceConfig.Type = "oneshot";
+          script = ''
+            if ! bcachefs unlock -c ${fileSystem.device}; then
+              exit 0
+            fi
+            passphrase=
+            until bcachefs unlock ${fileSystem.device} <<<"$passphrase"; do
+              passphrase=$(systemd-ask-password "bcachefs passphrase for ${fileSystem.device}")
+            done
+          '';
+        };
+      }) bootFs;
+
       boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
         copy_bin_and_libs ${mountCommand}/bin/mount.bcachefs
