@@ -160,6 +160,10 @@ in
               root * ${cfg.ui.package}/dist
               file_server
             }
+            handle_path /static/undefined/* {
+              root * ${cfg.ui.package}/dist
+              file_server
+            }
             @for_backend {
               path /api/* /pictrs/* /feeds/* /nodeinfo/*
             }
