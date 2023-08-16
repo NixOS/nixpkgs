@@ -3,33 +3,63 @@
 , installShellFiles
 , makeWrapper
 , buildGoModule
-, fetchYarnDeps
-, fixup_yarn_lock
+, esbuild
 , pkg-config
 , nodejs
 , yarn
+, jq
+, moreutils
 , nodePackages
 , python3
 , terraform
+, stdenvNoCC
 }:
 
 buildGoModule rec {
   pname = "coder";
-  version = "0.17.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FHBaefwSGZXwn1jdU7zK8WhwjarknvyeUJTlhmk/hPM=";
+    hash = "sha256-6XHgocfk82SU8AcCVSUFIYj1sD84V0P3koewXXrtBYw=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = src + "/site/yarn.lock";
-    hash = "sha256-nRmEXR9fjDxvpbnT+qpGeM0Cc/qW/kN53sKOXwZiBXY=";
+  pnpm-deps = stdenvNoCC.mkDerivation {
+    pname = "${pname}-pnpm-deps";
+    inherit src version;
+
+    nativeBuildInputs = [
+      jq
+      moreutils
+      nodePackages.pnpm
+    ];
+
+    installPhase = ''
+      export HOME=$(mktemp -d)
+      pnpm config set store-dir $out
+      pushd site
+      # use --ignore-script and --no-optional to avoid downloading binaries
+      # use --frozen-lockfile to avoid checking git deps
+      pnpm install --frozen-lockfile --no-optional --ignore-script --reporter append-only
+
+      # Remove timestamp and sort the json files
+      rm -rf $out/v3/tmp
+      for f in $(find $out -name "*.json"); do
+        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
+        jq --sort-keys . $f | sponge $f
+      done
+      popd
+    '';
+
+    dontBuild = true;
+    dontFixup = true;
+    outputHashMode = "recursive";
+    outputHash = "sha256-103tms3p23WUCi4xaZSgeDnHrMNuMylPAzCQyw6JF1M=";
   };
 
-  vendorHash = "sha256-+AvmJkZCFovE2+5Lg98tUvA7f2kBHUMzhl5IyrEGuy8=";
+  vendorHash = "sha256-ScP25MUVmsMhYRPTAsQwYkX2CA3G58qM2Ewk1zb2z4I=";
 
   tags = [ "embed" ];
 
@@ -42,29 +72,43 @@ buildGoModule rec {
   subPackages = [ "cmd/..." ];
 
   preBuild = ''
-    export HOME=$TEMPDIR
+    export HOME=$(mktemp -d)
+
+    # Hack: permission error when running directly off `pnpm-deps`
+    cp -r ${pnpm-deps} "$HOME/.pnmp-store"
 
     pushd site
-    yarn config --offline set yarn-offline-mirror ${offlineCache}
-    fixup_yarn_lock yarn.lock
+    pnpm config set store-dir "$HOME/.pnmp-store"
 
-    # node-gyp tries to download always the headers and fails: https://github.com/NixOS/nixpkgs/issues/195404
-    yarn remove --offline jest-canvas-mock canvas
+    pnpm install --offline --frozen-lockfile --no-optional --ignore-script --reporter append-only
 
-    NODE_ENV=production node node_modules/.bin/vite build
+    pnpm typegen
 
+    NODE_OPTIONS=--max-old-space-size=4096 pnpm build
     popd
   '';
 
+  ESBUILD_BINARY_PATH = "${lib.getExe (esbuild.override {
+    buildGoModule = args: buildGoModule (args // rec {
+      version = "0.18.17";
+      src = fetchFromGitHub {
+        owner = "evanw";
+        repo = "esbuild";
+        rev = "v${version}";
+        hash = "sha256-OnAOomKVUIBTEgHywDSSx+ggqUl/vn/R0JdjOb3lUho=";
+      };
+      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+    });
+  })}";
+
   nativeBuildInputs = [
-    fixup_yarn_lock
     installShellFiles
     makeWrapper
     nodePackages.node-pre-gyp
     nodejs
     pkg-config
     python3
-    yarn
+    nodePackages.pnpm
   ];
 
   postInstall = ''
@@ -84,7 +128,6 @@ buildGoModule rec {
     homepage = "https://coder.com";
     license = lib.licenses.agpl3;
     maintainers = [ lib.maintainers.ghuntley lib.maintainers.urandom ];
-    # Failed to download Chromium 109.0.5414.46
-    broken = true; # At 2023-03-30
+    broken = false;
   };
 }
