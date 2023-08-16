@@ -114,10 +114,8 @@ with lib;
   # Ignore outgoing ICMP redirects (this is ipv4 only)
   boot.kernel.sysctl."net.ipv4.conf.all.send_redirects" = mkDefault false;
   boot.kernel.sysctl."net.ipv4.conf.default.send_redirects" = mkDefault false;
-  
   # Disabling this so  an attacker cannot gain root access by passing init=/bin/sh as a kernel parameter.
   boot.loader.systemd-boot.editor = false;
- 
   # Coredump gives infomation (sometimes sensitive) during crash, it also slows down the system.
   systemd.coredump.enable = false; 
 }
