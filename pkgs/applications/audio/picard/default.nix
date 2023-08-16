@@ -19,13 +19,13 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.9";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-ultpLz4u2wBxoL4YbNeZ4Z4NEXBvqpxJ8mzFeGQTt4A=";
+    hash = "sha256-KCLva8pc+hyz+3MkPsghXrDYGVqP0aeffG9hOYJzI+Q=";
   };
 
   nativeBuildInputs = [
