@@ -5484,9 +5484,7 @@ with pkgs;
   };
 
   gpu-burn = callPackage ../applications/misc/gpu-burn {
-    # gpu-burn doesn't build on gcc11. CUDA 11.3 is the last version to use
-    # pre-gcc11, in particular gcc9.
-    stdenv = gcc9Stdenv;
+    cudaPackages = cudaPackages_11_8; # requires cuda 11.8
   };
 
   gpu-viewer = callPackage ../applications/misc/gpu-viewer { };

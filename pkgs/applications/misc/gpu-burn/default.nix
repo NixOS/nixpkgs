@@ -1,45 +1,62 @@
-{ lib, stdenv, fetchFromGitHub, addOpenGLRunpath, cudatoolkit }:
+{ lib
+, fetchFromGitHub
+, cudaPackages
+}:
+let
+  inherit (cudaPackages) cuda_nvcc cuda_cudart libcublas;
+in
 
-stdenv.mkDerivation rec {
+cudaPackages.backendStdenv.mkDerivation rec {
   pname = "gpu-burn";
-  version = "unstable-2021-04-29";
+  version = "unstable-2023-04-13";
 
   src = fetchFromGitHub {
     owner = "wilicc";
     repo = "gpu-burn";
-    rev = "1e9a84f4bec3b0835c00daace45d79ed6c488edb";
-    sha256 = "sha256-x+kta81Z08PsBgbf+fzRTXhNXUPBd5w8bST/T5nNiQA=";
+    rev = "564a9a6d4e953d668bf7584a9c575679d861b1a7";
+    hash = "sha256-hZ6XOgB4h840BhX1HYUiNwcv+8lI04SypMqkLjPNcH4=";
   };
 
   postPatch = ''
     substituteInPlace gpu_burn-drv.cpp \
-      --replace "const char *kernelFile = \"compare.ptx\";" \
-                "const char *kernelFile = \"$out/share/compare.ptx\";"
+      --replace '"compare.ptx"' "\"$out/share/compare.ptx\""
   '';
 
-  buildInputs = [ cudatoolkit ];
+  strictDeps = true;
 
-  nativeBuildInputs = [ addOpenGLRunpath ];
+  nativeBuildInputs = [
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
 
-  makeFlags = [ "CUDAPATH=${cudatoolkit}" ];
+  buildInputs = [
+    cuda_cudart
+    cuda_nvcc
+    libcublas
+  ];
 
-  LDFLAGS = "-L${cudatoolkit}/lib/stubs";
+  makeFlags = [
+    "CUDAPATH=/does-not-exist"
+    "NVCC=${cuda_nvcc}/bin/nvcc"
+  ];
+
+  LDFLAGS = [ "-L${cuda_cudart}/lib/stubs" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share}
     cp gpu_burn $out/bin/
     cp compare.ptx $out/share/
-  '';
 
-  postFixup = ''
-    addOpenGLRunpath $out/bin/gpu_burn
+    runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "http://wili.cc/blog/gpu-burn.html";
     description = "Multi-GPU CUDA stress test";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elohmeier ];
+    mainProgram = "gpu_burn";
+    maintainers = [ maintainers.elohmeier ] ++ teams.deshaw.members;
     license = licenses.bsd2;
   };
 }
