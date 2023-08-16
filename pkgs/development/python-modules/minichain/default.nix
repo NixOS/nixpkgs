@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "minichain";
   version = "0.3.3";
+  format = "setuptools";
 
   # See https://github.com/srush/MiniChain/issues/23 and https://github.com/NixOS/nixpkgs/issues/248185 as to why we
   # don't fetchFromGitHub.
