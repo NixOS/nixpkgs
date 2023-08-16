@@ -367,6 +367,7 @@ in {
   iftop = handleTest ./iftop.nix {};
   incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
+  influxdb2 = handleTest ./influxdb2.nix {};
   initrd-network-openvpn = handleTest ./initrd-network-openvpn {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrd-luks-empty-passphrase = handleTest ./initrd-luks-empty-passphrase.nix {};
