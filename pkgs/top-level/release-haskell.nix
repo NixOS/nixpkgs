@@ -535,6 +535,7 @@ let
         compilerNames.ghc928
         compilerNames.ghc945
         compilerNames.ghc946
+        compilerNames.ghc962
       ];
       hashable = released;
       primitive = released;

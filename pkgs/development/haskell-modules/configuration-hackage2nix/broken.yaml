@@ -1919,7 +1919,6 @@ broken-packages:
   - ghc-syb
   - ghc-syb-utils
   - ghc-tags-core
-  - ghc-tags # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957256 at 2023-08-16
   - ghc-time-alloc-prof
   - ghc-usage
   - gh-labeler

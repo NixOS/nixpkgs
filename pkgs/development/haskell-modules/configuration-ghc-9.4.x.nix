@@ -94,6 +94,8 @@ in {
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
 
+  ghc-tags = self.ghc-tags_1_6;
+
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/issues/18
   th-extras = doJailbreak super.th-extras;
