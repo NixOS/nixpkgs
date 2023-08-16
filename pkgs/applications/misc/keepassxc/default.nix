@@ -49,57 +49,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-xgrkMz7BCBxjfxHsAz/CFLv1d175LnrAJIOZMM3GmU0=";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
-    "-Wno-old-style-cast"
-    "-Wno-error"
-    "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
-  ]);
-
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
-
   patches = [
     ./darwin.patch
   ];
 
-  cmakeFlags = [
-    "-DKEEPASSXC_BUILD_TYPE=Release"
-    "-DWITH_GUI_TESTS=ON"
-    "-DWITH_XC_UPDATECHECK=OFF"
-  ]
-  ++ (lib.optional (!withKeePassX11) "-DWITH_XC_X11=OFF")
-  ++ (lib.optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
-  ++ (lib.optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
-  ++ (lib.optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
-  ++ (lib.optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
-  ++ (lib.optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
-  ++ (lib.optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
-
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-
-    export LC_ALL="en_US.UTF-8"
-    export QT_QPA_PLATFORM=offscreen
-    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
-    # testcli, testgui and testkdbx4 are flaky - skip them all
-    # testautotype on darwin throws "QWidget: Cannot create a QWidget without QApplication"
-    make test ARGS+="-E 'testcli|testgui${lib.optionalString stdenv.isDarwin "|testautotype|testkdbx4"}' --output-on-failure"
-
-    runHook postCheck
-  '';
-
-  nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
-
-  dontWrapGApps = true;
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '' + lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
-  '';
+  nativeBuildInputs = [
+    asciidoctor
+    cmake
+    pkg-config
+    qttools
+    wrapGAppsHook
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
-    curl
     botan2
+    curl
     libXi
     libXtst
     libargon2
@@ -116,6 +81,51 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isLinux libusb1
   ++ lib.optional withKeePassX11 qtx11extras;
 
+  cmakeFlags = [
+    "-DKEEPASSXC_BUILD_TYPE=Release"
+    "-DWITH_GUI_TESTS=ON"
+    "-DWITH_XC_UPDATECHECK=OFF"
+  ]
+  ++ (lib.optional (!withKeePassX11) "-DWITH_XC_X11=OFF")
+  ++ (lib.optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
+  ++ (lib.optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
+  ++ (lib.optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
+  ++ (lib.optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
+  ++ (lib.optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
+  ++ (lib.optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
+
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
+      "-Wno-old-style-cast"
+      "-Wno-error"
+      "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
+    ]);
+    NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
+  };
+
+  doCheck = true;
+
+  dontWrapGApps = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    export LC_ALL="en_US.UTF-8"
+    export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+    # testcli, testgui and testkdbx4 are flaky - skip them all
+    # testautotype on darwin throws "QWidget: Cannot create a QWidget without QApplication"
+    make test ARGS+="-E 'testcli|testgui${lib.optionalString stdenv.isDarwin "|testautotype|testkdbx4"}' --output-on-failure"
+
+    runHook postCheck
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '' + lib.optionalString stdenv.isDarwin ''
+    wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
+  '';
+
   passthru.tests = nixosTests.keepassxc;
 
   meta = with lib; {
@@ -127,7 +137,7 @@ stdenv.mkDerivation rec {
       Accessible via native cross-platform GUI, CLI, has browser integration
       using the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser)
     '';
-    homepage = "https://keepassxc.org/";
+    homepage = "https://keepassxc.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonafato paveloom srapenne turion ];
     platforms = platforms.linux ++ platforms.darwin;
