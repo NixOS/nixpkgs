@@ -6236,6 +6236,12 @@
     githubId = 471835;
     name = "Giorgio Gallo";
   };
+  GirardR1006 = {
+    email = "julien.girard2@cea.fr";
+    github = "GirardR1006";
+    githubId = 19275558;
+    name = "Julien Girard-Satabin";
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
