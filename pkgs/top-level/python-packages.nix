@@ -7289,6 +7289,8 @@ self: super: with self; {
 
   oca-port = callPackage ../development/python-modules/oca-port { };
 
+  ochre = callPackage ../development/python-modules/ochre { };
+
   oci = callPackage ../development/python-modules/oci { };
 
   ocifs = callPackage ../development/python-modules/ocifs { };
