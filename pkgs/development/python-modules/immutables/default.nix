@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
-, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -11,7 +10,7 @@ buildPythonPackage rec {
   version = "0.20";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "MagicStack";
@@ -23,10 +22,6 @@ buildPythonPackage rec {
   postPatch = ''
     rm tests/conftest.py
   '';
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
