@@ -35599,6 +35599,8 @@ with pkgs;
 
   tev = callPackage ../applications/graphics/tev { };
 
+  textual-paint = callPackage ../applications/graphics/textual-paint { };
+
   themechanger = callPackage ../applications/misc/themechanger { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
