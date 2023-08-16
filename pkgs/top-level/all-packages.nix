@@ -22923,6 +22923,8 @@ with pkgs;
 
   libre = callPackage ../development/libraries/libre { };
 
+  librecast = callPackage ../development/libraries/librecast { };
+
   libredwg = callPackage ../development/libraries/libredwg { };
 
   librem = callPackage ../development/libraries/librem { };
