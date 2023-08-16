@@ -17050,6 +17050,13 @@
     githubId = 1292007;
     name = "Sébastien Maccagnoni";
   };
+  tiredofit = {
+    email = "dave@tiredofit.ca";
+    github = "tiredofit";
+    githubId = 23528985;
+    name = "Dave Conroy";
+    matrix = "@dave:tiredofit.ca";
+  };
   tirex = {
     email = "szymon@kliniewski.pl";
     name = "Szymon Kliniewski";

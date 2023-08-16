@@ -1674,6 +1674,8 @@ with pkgs;
 
   cope = callPackage ../tools/misc/cope { };
 
+  crypto-tracker = callPackage ../tools/misc/crypto-tracker { };
+
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
