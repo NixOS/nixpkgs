@@ -9,7 +9,6 @@
 , dnsmasq
 , docutils
 , fetchFromGitLab
-, fetchpatch
 , gettext
 , glib
 , gnutls
@@ -115,23 +114,18 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "9.5.0";
+  version = "9.6.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-u+J1ejv7JH6Lcwk8zDVUS8Vk806WvG59rLAZr0UOqj0=";
+    sha256 = "sha256-dQr6bUaZOX1MN+MZxbsPqbv3bsyyWBM0SBYlSnV04K0=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
-    (fetchpatch {
-      name = "CVE-2023-2700.patch";
-      url = "https://gitlab.com/libvirt/libvirt/-/commit/6425a311b8ad19d6f9c0b315bf1d722551ea3585.patch";
-      sha256 = "sha256-CXO7Xer+mR2ZxSy8aI6Nt1qNSGsjbXu3BxWE20k2TaI=";
-    })
   ] ++ lib.optionals enableZfs [
     (substituteAll {
       src = ./0002-substitute-zfs-and-zpool-commands.patch;
