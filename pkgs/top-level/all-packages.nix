@@ -39887,12 +39887,6 @@ with pkgs;
 
   fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
 
-  areca = callPackage ../applications/backup/areca {
-    jdk = jdk8;
-    jre = jre8;
-    swt = swt_jdk8;
-  };
-
   argononed = callPackage ../misc/drivers/argononed { };
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
