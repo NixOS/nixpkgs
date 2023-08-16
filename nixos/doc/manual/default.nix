@@ -184,7 +184,7 @@ in rec {
     '';
 
 
-  # Generate the configuration.nix manual package
+  # Generate the `man configuration.nix` package
   nixos-configuration-reference-manpage = runCommand "nixos-configuration-reference-manpage"
     { nativeBuildInputs = [
         buildPackages.installShellFiles

@@ -45,30 +45,30 @@ If you're on a different architecture that's supported by NixOS (check file `nix
 
 ## Contributing to `nixos-*` tools' manpages {#sec-contributing-nixos-tools}
 
-The manual pages for the tools available in the installation image can be found in Nixpkgs' by running (e.g for `nixos-rebuild`):
+The manual pages for the tools available in the installation image can be found in Nixpkgs by running (e.g for `nixos-rebuild`):
 
 ```ShellSession
 $ git ls | grep nixos-rebuild.8
 ```
 
-Man pages are written in [`mdoc(7)` format](https://mandoc.bsd.lv/man/mdoc.7.html) and should be portable between mandoc and groff for rendering (though minor differences may occur, mandoc and groff seem to have slightly different spacing rules.)
+Man pages are written in [`mdoc(7)` format](https://mandoc.bsd.lv/man/mdoc.7.html) and should be portable between mandoc and groff for rendering (except for minor differences, notably different spacing rules.)
 
-For previewing edited files, you can just run `man --local-file path/to/file.8` and you will see it rendered.
+For a preview, run `man --local-file path/to/file.8`.
 
-Being written in `mdoc`, these manpages use semantic markup. This file provides a guideline on where to apply which of the semantic elements of `mdoc`.
+Being written in `mdoc`, these manpages use semantic markup. This following subsections provides a guideline on where to apply which semantic elements.
 
 ### Command lines and arguments {#ssec-contributing-nixos-tools-cli-and-args}
 
 In any manpage, commands, flags and arguments to the *current* executable should be marked according to their semantics. Commands, flags and arguments passed to *other* executables should not be marked like this and should instead be considered as code examples and marked with `Ql`.
 
 - Use `Fl` to mark flag arguments, `Ar` for their arguments.
-- Repeating arguments should be marked by adding ellipses (`...`).
+- Repeating arguments should be marked by adding an ellipsis (spelled with periods, `...`).
 - Use `Cm` to mark literal string arguments, e.g. the `boot` command argument passed to `nixos-rebuild`.
 - Optional flags or arguments should be marked with `Op`. This includes optional repeating arguments.
 - Required flags or arguments should not be marked.
 - Mutually exclusive groups of arguments should be enclosed in curly brackets, preferably created with `Bro`/`Brc` blocks.
 
-When an argument is used in an example it should be marked up with `Ar` again to differentiate it from a constant. For example, a command with a `--host name` flag that calls ssh to retrieve the host's local time would signify this thusly:
+When an argument is used in an example it should be marked up with `Ar` again to differentiate it from a constant. For example, a command with a `--host name` option that calls ssh to retrieve the host's local time would signify this thusly:
 ```
 This will run
 .Ic ssh Ar name Ic time
@@ -81,8 +81,8 @@ Constant paths should be marked with `Pa`, NixOS options with `Va`, and environm
 
 Generated paths, e.g. `result/bin/run-hostname-vm` (where `hostname` is a variable or arguments) should be marked as `Ql` inline literals with their variable components marked appropriately.
 
- - Taking `hostname` from an argument become `.Ql result/bin/run- Ns Ar hostname Ns -vm`
- - Taking `hostname` from a variable otherwise defined becomes `.Ql result/bin/run- Ns Va hostname Ns -vm`
+ - When `hostname` refers to an argument, it becomes `.Ql result/bin/run- Ns Ar hostname Ns -vm`
+ - When `hostname` refers to a variable, it becomes `.Ql result/bin/run- Ns Va hostname Ns -vm`
 
 ### Code examples and other commands {#ssec-contributing-nixos-tools-code-examples}
 
@@ -101,7 +101,7 @@ Contents of code blocks may be marked up further, e.g. if they refer to argument
 ```
 .Bd -literal -offset indent
 {
-  options.hostname = "\c
+  config.networking.hostname = "\c
 .Ar hostname Ns \c
 ";
 }
