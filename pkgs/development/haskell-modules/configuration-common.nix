@@ -1913,6 +1913,7 @@ self: super: {
 
       # pandoc depends on crypton-connection, which requires tls >= 1.7
       tls = self.tls_1_7_0;
+      crypton-connection = unmarkBroken super.crypton-connection;
 
       # pandoc depends on http-client-tls, which only starts depending
       # on crypton-connection in http-client-tls-0.3.6.2.
