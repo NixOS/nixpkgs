@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname   = "pykeepass";
-  version = "4.0.3";
+  version = "4.0.5";
 
   format = "setuptools";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "libkeepass";
     repo = "pykeepass";
     rev = "v${version}";
-    hash = "sha256-HyveBBsd1OFWoY3PgqqaKRLBhsxgFv8PRAxEF6r+bf4=";
+    hash = "sha256-IdILcIhrxcTDddoxiK257II0V7ctVb1CTLfTPmuwjTQ=";
   };
 
   postPatch = ''
