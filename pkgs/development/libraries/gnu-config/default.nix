@@ -31,6 +31,13 @@ in stdenv.mkDerivation {
     runHook postUnpack
   '';
 
+  # If this isn't set, `pkgs.gnu-config.overrideAttrs( _: { patches
+  # = ...; })` will behave very counterintuitively: the (unpatched)
+  # gnu-config from the updateAutotoolsGnuConfigScriptsHook stdenv's
+  # defaultNativeBuildInputs will "update" the patched gnu-config by
+  # reverting the patch!
+  dontUpdateAutotoolsGnuConfigScripts = true;
+
   dontConfigure = true;
   dontBuild = true;
 
