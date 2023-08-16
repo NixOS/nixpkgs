@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, mkDerivation
 , SDL2
 , frei0r
 , ladspaPlugins
@@ -10,18 +9,18 @@
 , pkg-config
 , qtbase
 , qtmultimedia
-, qtx11extras
 , qtwebsockets
-, qtquickcontrols2
-, qtgraphicaleffects
-, qmake
+, cmake
 , qttools
+, wrapQtAppsHook
 , gitUpdater
+, stdenv
+, fftw
 }:
 
 assert lib.versionAtLeast mlt.version "6.24.0";
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "shotcut";
   version = "23.07.29";
 
@@ -29,13 +28,10 @@ mkDerivation rec {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    ### Version 21.09.20
-    # sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
-    ### Version 23.07.29 after 'nix-hash shotcut-linux-x86_64-230729.txz --flat --base32 --type sha256'
-    sha256 = "01ary9y8bkf2wwmj4cgjrisp85inrmqbm37g46raq4kalzhxglk4";
+    sha256 = "hd8xUGvP/8eMO7KQfqLqIkIeG6Z5xENlMOOtNLRcvvU=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [ pkg-config qttools cmake wrapQtAppsHook ];
   buildInputs = [
     SDL2
     frei0r
@@ -44,16 +40,14 @@ mkDerivation rec {
     mlt
     qtbase
     qtmultimedia
-    qtx11extras
     qtwebsockets
-    qtquickcontrols2
-    qtgraphicaleffects
+    fftw
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
-  qmakeFlags = [
-    "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
-    "SHOTCUT_VERSION=${version}"
+  cmakeFlags = [
+    "CMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
+    "-DSHOTCUT_VERSION=${version}"
     "DEFINES+=SHOTCUT_NOUPGRADE"
   ];
 
@@ -74,7 +68,7 @@ mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/shotcut
-    cp -r src/qml $out/share/shotcut/
+    cp -r ../src/qml $out/share/shotcut/
   '';
 
   passthru.updateScript = gitUpdater {
