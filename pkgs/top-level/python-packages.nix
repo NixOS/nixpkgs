@@ -3822,7 +3822,7 @@ self: super: with self; {
 
   flask-mailman = callPackage ../development/python-modules/flask-mailman { };
 
-  flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
+  flask-marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
