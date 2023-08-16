@@ -369,6 +369,10 @@ self: super: {
   # https://github.com/awakesecurity/nix-deploy/issues/35
   nix-deploy = doJailbreak super.nix-deploy;
 
+  # Too strict upper bound on algebraic-graphs
+  # https://github.com/awakesecurity/nix-graph/issues/5
+  nix-graph = doJailbreak super.nix-graph;
+
   cachix = self.generateOptparseApplicativeCompletions [ "cachix" ]
     # Adds a workaround to the API changes in the versions library
     # Should be dropped by the next release
