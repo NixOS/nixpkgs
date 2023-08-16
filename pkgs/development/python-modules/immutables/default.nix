@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "immutables";
-  version = "0.19";
+  version = "0.20";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "MagicStack";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yW+pmAryBp6bvjolN91ACDkk5zxvKfu4nRLQSy71kqs=";
+    hash = "sha256-fEECtP6WQVzwSzBYX+CbhQtzkB/1WC3OYKXk2XY//xA=";
   };
 
   postPatch = ''
