@@ -94,6 +94,16 @@ in
                 instance will require manual migration of data.
               '';
             };
+            global.allow_check_for_updates = mkOption {
+              type = types.bool;
+              default = false;
+              description = lib.mdDoc ''
+                Whether to allow Conduit to automatically contact
+                <https://conduit.rs> hourly to check for important Conduit news.
+
+                Disabled by default because nixpkgs handles updates.
+              '';
+            };
           };
         };
         default = {};

@@ -8,6 +8,7 @@
 , rustPlatform
 , stdenv
 , libiconv
+, nixosTests
 }:
 
 let
@@ -106,6 +107,8 @@ in buildGoModule {
   tags = [ "assets" ];
 
   ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];
+
+  passthru.tests = { inherit (nixosTests) influxdb2; };
 
   meta = with lib; {
     description = "An open-source distributed time series database";

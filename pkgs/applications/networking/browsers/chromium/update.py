@@ -63,21 +63,26 @@ def get_file_revision(revision, file_path):
         return base64.b64decode(resp)
 
 
-def get_matching_chromedriver(version):
-    """Gets the matching chromedriver version for the given Chromium version."""
-    # See https://chromedriver.chromium.org/downloads/version-selection
-    build = re.sub('.[0-9]+$', '', version)
-    chromedriver_version_url = f'https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{build}'
-    with urlopen(chromedriver_version_url) as http_response:
-        chromedriver_version = http_response.read().decode()
-        def get_chromedriver_url(system):
-            return ('https://chromedriver.storage.googleapis.com/' +
-                    f'{chromedriver_version}/chromedriver_{system}.zip')
+def get_chromedriver(channel):
+    """Get the latest chromedriver builds given a channel"""
+    # See https://chromedriver.chromium.org/downloads/version-selection#h.4wiyvw42q63v
+    chromedriver_versions_url = f'https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json'
+    print(f'GET {chromedriver_versions_url}')
+    with urlopen(chromedriver_versions_url) as http_response:
+        chromedrivers = json.load(http_response)
+        channel = chromedrivers['channels'][channel]
+        downloads = channel['downloads']['chromedriver']
+
+        def get_chromedriver_url(platform):
+            for download in downloads:
+                if download['platform'] == platform:
+                    return download['url']
+
         return {
-            'version': chromedriver_version,
+            'version': channel['version'],
             'sha256_linux': nix_prefetch_url(get_chromedriver_url('linux64')),
-            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac64')),
-            'sha256_darwin_aarch64': nix_prefetch_url(get_chromedriver_url('mac_arm64'))
+            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac-x64')),
+            'sha256_darwin_aarch64': nix_prefetch_url(get_chromedriver_url('mac-arm64'))
         }
 
 
@@ -212,7 +217,7 @@ with urlopen(RELEASES_URL) as resp:
 
         channel['deps'] = get_channel_dependencies(channel['version'])
         if channel_name == 'stable':
-            channel['chromedriver'] = get_matching_chromedriver(channel['version'])
+            channel['chromedriver'] = get_chromedriver('Stable')
         elif channel_name == 'ungoogled-chromium':
             ungoogled_repo_url = 'https://github.com/ungoogled-software/ungoogled-chromium.git'
             channel['deps']['ungoogled-patches'] = {

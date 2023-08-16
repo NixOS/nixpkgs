@@ -2,8 +2,9 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, wrapGAppsHook
 , gtk3
-, gdk-pixbuf
+, librsvg
 , withWayland ? false
 , gtk-layer-shell
 , stdenv
@@ -22,9 +23,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-dC7yVJdR7mO0n+sxWwigM1Q4tbDv5ZuOINHHlUIPdA0=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gdk-pixbuf ] ++ lib.optional withWayland gtk-layer-shell;
+  buildInputs = [ gtk3 librsvg ] ++ lib.optional withWayland gtk-layer-shell;
 
   buildNoDefaultFeatures = true;
   buildFeatures = [

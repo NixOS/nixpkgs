@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     description = "Terminal viewer for 3a format";
     homepage = "https://github.com/DomesticMoth/aaa";
     license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ DomesticMoth ];
+    maintainers = with maintainers; [ asciimoth ];
   };
 }
