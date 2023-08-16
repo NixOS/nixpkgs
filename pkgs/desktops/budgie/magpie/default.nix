@@ -126,6 +126,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs src/backends/native/gen-default-modes.py
     # Magpie does not install any .desktop files
     substituteInPlace scripts/mesonPostInstall.sh --replace "update-desktop-database" "# update-desktop-database"
+
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3187
+    substituteInPlace meson.build \
+      --replace "dependency('sysprof-4')" "dependency('sysprof-6')"
   '';
 
   postFixup = ''
