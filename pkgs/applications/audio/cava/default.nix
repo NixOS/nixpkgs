@@ -1,9 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, alsa-lib, fftw,
-  libpulseaudio, ncurses, iniparser }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, alsa-lib
+, fftw
+, iniparser
+, libpulseaudio
+, ncurses
+, pkgconf
+}:
 
 stdenv.mkDerivation rec {
   pname = "cava";
-  version = "0.9.0";
+  version = "0.9.1";
+
+  src = fetchFromGitHub {
+    owner = "karlstav";
+    repo = "cava";
+    rev = version;
+    hash = "sha256-W/2B9iTcO2F2vHQzcbg/6pYBwe+rRNfADdOiw4NY9Jk=";
+  };
 
   buildInputs = [
     alsa-lib
@@ -13,14 +29,14 @@ stdenv.mkDerivation rec {
     iniparser
   ];
 
-  src = fetchFromGitHub {
-    owner = "karlstav";
-    repo = "cava";
-    rev = version;
-    sha256 = "sha256-mIgkvgVcbRdE29lSLojIzIsnwZgnQ+B2sgScDWrLyd8=";
-  };
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconf
+  ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  preAutoreconf = ''
+    echo ${version} > version
+  '';
 
   meta = with lib; {
     description = "Console-based Audio Visualizer for Alsa";
