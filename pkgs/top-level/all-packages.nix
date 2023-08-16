@@ -6882,7 +6882,7 @@ with pkgs;
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       stdenv = clangStdenv;
-      protobuf = pkgs.protobuf.overrideDerivation (_: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf3_21.overrideDerivation (_: { stdenv = clangStdenv; });
     };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
