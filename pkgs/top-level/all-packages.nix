@@ -19004,7 +19004,15 @@ with pkgs;
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
-  docutils = with python3Packages; toPythonApplication docutils;
+  docutils = with python3Packages; toPythonApplication (
+    docutils.overridePythonAttrs (attrs: rec {
+      version = "0.20.1";
+      src = attrs.src.override {
+        inherit version;
+        hash = "sha256-8IpOJ2w6FYOobc4+NKuj/gTQK7ot1R7RYQYkToqSPjs=";
+      };
+    })
+  );
 
   doctl = callPackage ../development/tools/doctl { };
 
