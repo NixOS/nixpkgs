@@ -365,6 +365,10 @@ self: super: {
   # https://github.com/serokell/nixfmt/issues/130
   nixfmt = doJailbreak super.nixfmt;
 
+  # Too strict upper bounds on turtle and text
+  # https://github.com/awakesecurity/nix-deploy/issues/35
+  nix-deploy = doJailbreak super.nix-deploy;
+
   cachix = self.generateOptparseApplicativeCompletions [ "cachix" ]
     # Adds a workaround to the API changes in the versions library
     # Should be dropped by the next release
