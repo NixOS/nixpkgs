@@ -27,10 +27,10 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
-      owner = "dagger";
-      repo = "dagger";
-      rev = "v${version}";
-      sha256 = "sha256-9QQ6aDCkTWNq5KOSGF6FH6UQrOYa51ctW3CMcGrCJAQ=";
+    owner = "dagger";
+    repo = "dagger";
+    rev = "v${version}";
+    hash = "sha256-9QQ6aDCkTWNq5KOSGF6FH6UQrOYa51ctW3CMcGrCJAQ=";
   } + "/sdk/python";
 
   propagatedBuildInputs = [
