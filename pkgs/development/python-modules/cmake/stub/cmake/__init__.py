@@ -2,6 +2,8 @@ import os
 import subprocess
 import sys
 
+__version__ = '@version@'
+
 CMAKE_BIN_DIR = '@CMAKE_BIN_DIR@'
 
 def _program(name, args):

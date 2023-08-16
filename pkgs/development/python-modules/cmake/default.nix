@@ -16,6 +16,7 @@ buildPythonPackage rec {
       --subst-var version
 
     substituteInPlace "$sourceRoot/cmake/__init__.py" \
+      --subst-var version \
       --subst-var-by CMAKE_BIN_DIR "${cmake}/bin"
   '';
 
