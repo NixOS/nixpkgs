@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "23.7";
+  version = "23.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jXnpB42P9PjEgw7NoSCGE6S14oOkHkzTBFYb9vypaqw=";
+    hash = "sha256-VfA9TIgjbwRyZq/+VQug3RlHat/OagHz4K76x8gHjlY=";
   };
 
   postPatch = ''
