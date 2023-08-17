@@ -61,13 +61,13 @@ let majorVersion = "13";
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-         optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
-      ++ optional noSysDirs ../gcc-12-no-sys-dirs.patch
-      ++ optional noSysDirs ../no-sys-dirs-riscv.patch
+         optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
+      ++ optional noSysDirs ./gcc-12-no-sys-dirs.patch
+      ++ optional noSysDirs ./no-sys-dirs-riscv.patch
       ++ [
-        ../gnat-cflags-11.patch
-        ../gcc-12-gfortran-driving.patch
-        ../ppc-musl.patch
+        ./gnat-cflags-11.patch
+        ./gcc-12-gfortran-driving.patch
+        ./ppc-musl.patch
       ]
       # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
       # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
@@ -76,7 +76,7 @@ let majorVersion = "13";
         url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
         sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
       })
-      ++ optional langD ../libphobos.patch
+      ++ optional langD ./libphobos.patch
 
       # backport fixes to build gccgo with musl libc
       ++ optionals (langGo && stdenv.hostPlatform.isMusl) [
@@ -117,10 +117,10 @@ let majorVersion = "13";
       ]
 
       # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
-      ++ optional (stdenv.isDarwin && langAda) ../ada-cctools-as-detection-configure.patch
+      ++ optional (stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
       # Use absolute path in GNAT dylib install names on Darwin
-      ++ optional (stdenv.isDarwin && langAda) ../gnat-darwin-dylib-install-name.patch
+      ++ optional (stdenv.isDarwin && langAda) ./gnat-darwin-dylib-install-name.patch
     ;
 
     /* Cross-gcc settings (build == host != target) */
@@ -195,7 +195,7 @@ let majorVersion = "13";
 
 in
 
-lib.pipe ((callFile ../common/builder.nix {}) ({
+lib.pipe ((callFile ./common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -266,12 +266,12 @@ lib.pipe ((callFile ../common/builder.nix {}) ({
   inherit noSysDirs staticCompiler withoutTargetLibc
     libcCross crossMingw;
 
-  inherit (callFile ../common/dependencies.nix { }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
+  inherit (callFile ./common/dependencies.nix { }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
 
-  preConfigure = (callFile ../common/pre-configure.nix { }) + ''
+  preConfigure = (callFile ./common/pre-configure.nix { }) + ''
     ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
   '';
 
@@ -279,7 +279,7 @@ lib.pipe ((callFile ../common/builder.nix {}) ({
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  configureFlags = callFile ../common/configure-flags.nix { };
+  configureFlags = callFile ./common/configure-flags.nix { };
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -291,7 +291,7 @@ lib.pipe ((callFile ../common/builder.nix {}) ({
           lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
     in lib.optional (target != "") target;
 
-  inherit (callFile ../common/strip-attributes.nix { })
+  inherit (callFile ./common/strip-attributes.nix { })
     stripDebugList
     stripDebugListTarget
     preFixup;
@@ -317,7 +317,7 @@ lib.pipe ((callFile ../common/builder.nix {}) ({
 
   LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
 
-  inherit (callFile ../common/extra-target-flags.nix { })
+  inherit (callFile ./common/extra-target-flags.nix { })
     EXTRA_FLAGS_FOR_TARGET
     EXTRA_LDFLAGS_FOR_TARGET
     ;
@@ -331,7 +331,7 @@ lib.pipe ((callFile ../common/builder.nix {}) ({
   inherit enableShared enableMultilib;
 
   meta = {
-    inherit (callFile ../common/meta.nix { })
+    inherit (callFile ./common/meta.nix { })
       homepage
       license
       description
@@ -345,7 +345,7 @@ lib.pipe ((callFile ../common/builder.nix {}) ({
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 ))
 [
-  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
-  (callPackage ../common/checksum.nix { inherit langC langCC; })
+  (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
+  (callPackage ./common/checksum.nix { inherit langC langCC; })
 ]
 
