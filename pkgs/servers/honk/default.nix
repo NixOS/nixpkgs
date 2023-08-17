@@ -2,11 +2,11 @@
 
 buildGoModule rec {
   pname = "honk";
-  version = "0.9.91";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://humungus.tedunangst.com/r/honk/d/honk-${version}.tgz";
-    hash = "sha256-+NFWTTMVdngWsC8/EIN2xJC/5C4naaAekk/YoA17wFk=";
+    hash = "sha256-+0W9HncN+51dRE9bWJU4cAfYOc5bxNAqPe4xY+4UFg0=";
   };
   vendorHash = null;
 
@@ -14,6 +14,9 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
   subPackages = [ "." ];
 
+  # This susbtitution is not mandatory. It is only existing to have something
+  # working out of the box. This value can be overriden by the user, by
+  # providing the `-viewdir` parameter in the command line.
   postPatch = ''
     substituteInPlace honk.go --replace \
       "var viewDir = \".\"" \
