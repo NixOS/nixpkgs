@@ -1,10 +1,9 @@
 { lib, stdenvNoCC, texlive }:
 
+let src = lib.head (builtins.filter (p: p.tlType == "run") texlive.iwona.pkgs); in
 stdenvNoCC.mkDerivation {
-  pname = "iwona";
-  version = "0.995b";
-
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.iwona.pkgs);
+  inherit (src) pname version;
+  inherit src;
 
   installPhase = ''
     runHook preInstall
@@ -17,10 +16,7 @@ stdenvNoCC.mkDerivation {
   meta = with lib; {
     description = "A two-element sans-serif typeface, created by Małgorzata Budyta";
     homepage = "https://jmn.pl/en/kurier-i-iwona/";
-    # "[...] GUST Font License (GFL), which is a free license, legally
-    # equivalent to the LaTeX Project Public # License (LPPL), version 1.3c or
-    # later." - GUST website
-    license = licenses.lppl13c;
+    inherit (src.meta) license;
     maintainers = with maintainers; [ siddharthist ];
     platforms = platforms.all;
   };
