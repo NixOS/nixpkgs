@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-    unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
-
   postPatch = ''
     while read file; do
       substituteInPlace "$file" \
