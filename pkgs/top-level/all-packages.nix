@@ -15669,7 +15669,7 @@ with pkgs;
     else 12;
   inherit ({
       gcc = pkgs.${"gcc${toString default-gcc-version}"};
-      gccFun = callPackage (../development/compilers/gcc + "/${toString default-gcc-version}");
+      gccFun = callPackage ../development/compilers/gcc;
     }) gcc gccFun;
   gcc-unwrapped = gcc.cc;
 
@@ -15770,6 +15770,7 @@ with pkgs;
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
+        majorMinorVersion = toString default-gcc-version;
 
         reproducibleBuild = true;
         profiledCompiler = false;
