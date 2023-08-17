@@ -117,5 +117,5 @@ with lib;
   # Disabling this so  an attacker cannot gain root access by passing init=/bin/sh as a kernel parameter.
   boot.loader.systemd-boot.editor = false;
   # Coredump gives infomation (sometimes sensitive) during crash, it also slows down the system.
-  systemd.coredump.enable = false; 
+  systemd.coredump.enable = false;
 }
