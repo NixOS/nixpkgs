@@ -186,6 +186,8 @@ self: super: {
   # Too strict bounds on base
   # https://github.com/lspitzner/butcher/issues/7#issuecomment-1681394943
   butcher = doJailbreak super.butcher;
+  # https://github.com/lspitzner/data-tree-print/issues/4
+  data-tree-print = doJailbreak super.data-tree-print;
   # … and template-haskell.
   # https://github.com/lspitzner/czipwith/issues/5
   czipwith = doJailbreak super.czipwith;

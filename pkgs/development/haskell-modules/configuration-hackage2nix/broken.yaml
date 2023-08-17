@@ -1129,7 +1129,6 @@ broken-packages:
   - data-standards
   - data-store
   - data-stringmap
-  - data-tree-print # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962176 at 2023-08-16
   - DataTreeView
   - data-type
   - data-util
