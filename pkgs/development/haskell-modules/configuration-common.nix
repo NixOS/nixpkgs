@@ -856,9 +856,6 @@ self: super: {
   elm-server = markBroken super.elm-server;
   elm-yesod = markBroken super.elm-yesod;
 
-  # Tests failure with GHC >= 9.0.1, fixed in 1.6.24.4
-  yesod-core = assert super.yesod-core.version == "1.6.24.3"; dontCheck super.yesod-core;
-
   # https://github.com/Euterpea/Euterpea2/issues/40
   Euterpea = doJailbreak super.Euterpea;
 
