@@ -464,13 +464,16 @@ in
 
     services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 
-    services.postgresql.authentication = mkAfter
+    services.postgresql.authentication = mkMerge [
+      (mkBefore "# Generated file; do not edit!")
+      (mkAfter
       ''
-        # Generated file; do not edit!
+        # default value of services.postgresql.authentication
         local all all              peer
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
-      '';
+      '')
+    ];
 
     users.users.postgres =
       { name = "postgres";
