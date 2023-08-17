@@ -32,6 +32,7 @@ buildPythonPackage rec {
       This program can be used for strict validation and parsing of vCards. It currently supports vCard 3.0 (RFC 2426).
     '';
     license = lib.licenses.agpl3Plus;
+    mainProgram = "vcard";
     maintainers = [ lib.maintainers.l0b0 ];
   };
 }
