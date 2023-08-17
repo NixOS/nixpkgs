@@ -3,6 +3,7 @@
 , fetchPypi
 , pythonOlder
 , cmake
+, ninja
 , numpy
 , pybind11
 , scikit-build-core
@@ -23,6 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
     pybind11
     scikit-build-core
   ] ++ scikit-build-core.optional-dependencies.pyproject;
