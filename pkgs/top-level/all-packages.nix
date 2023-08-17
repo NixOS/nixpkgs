@@ -37177,6 +37177,8 @@ with pkgs;
 
   brogue = callPackage ../games/brogue { };
 
+  brogue-ce = callPackage ../games/brogue-ce { };
+
   brutalmaze = callPackage ../games/brutalmaze { };
 
   bsdgames = callPackage ../games/bsdgames { };
