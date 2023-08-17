@@ -39,6 +39,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    changelog = "https://humungus.tedunangst.com/r/honk/v/v${version}/f/docs/changelog.txt";
     description = "An ActivityPub server with minimal setup and support costs.";
     homepage = "https://humungus.tedunangst.com/r/honk";
     license = licenses.isc;
