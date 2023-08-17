@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ChrisMandich";
     repo = "PyFlume";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-wmaOOM8y7LthEgf3Uyv1N4ODviPGSlIQejC01IlhaJw=";
   };
 
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to work with Flume sensors";
     homepage = "https://github.com/ChrisMandich/PyFlume";
+    changelog = "https://github.com/ChrisMandich/PyFlume/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
