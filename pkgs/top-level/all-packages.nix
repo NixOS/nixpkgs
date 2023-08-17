@@ -15800,7 +15800,14 @@ with pkgs;
     (lib.listToAttrs (map (version:
       let atLeast = lib.versionAtLeast version;
           attrName = "gcc${lib.replaceStrings ["."] [""] version}";
-          pkg = lowPrio (wrapCC (callPackage (../development/compilers/gcc + "/${version}") ({
+          deduplicatedVersions = { # map from majorVersion to exact version
+            "13" = "13.1.0";
+          };
+          deduplicated = deduplicatedVersions ? "${version}";
+          path = if deduplicated
+                 then ../development/compilers/gcc/default.nix
+                 else ../development/compilers/gcc + "/${version}";
+          pkg = lowPrio (wrapCC (callPackage path ({
             inherit noSysDirs;
             reproducibleBuild = true;
             profiledCompiler = false;
@@ -15825,6 +15832,8 @@ with pkgs;
           } // lib.optionalAttrs (atLeast "6" && !(atLeast "9")) {
             # gcc 10 is too strict to cross compile gcc <= 8
             stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
+          } // lib.optionalAttrs deduplicated {
+            version = deduplicatedVersions."${version}";
           })));
       in lib.nameValuePair attrName pkg
     ) [ "4.8" "4.9" "6" "7" "8" "9" "10" "11" "12" "13" ]))
