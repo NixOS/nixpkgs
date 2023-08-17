@@ -54,15 +54,13 @@ let
   atLeast8  = lib.versionAtLeast version  "8";
   atLeast7  = lib.versionAtLeast version  "7";
   atLeast6  = lib.versionAtLeast version  "6";
+  atLeast49 = lib.versionAtLeast version  "4.9";
 in
 
 # We enable the isl cloog backend.
 assert !atLeast6 -> (cloog != null -> isl != null);
 
 assert langJava -> !atLeast7 && zip != null && unzip != null && zlib != null && boehmgc != null && perl != null;  # for `--enable-java-home'
-
-# only gcc>=4.9 is currently supported
-assert lib.versionAtLeast version "4.9";
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
@@ -92,14 +90,15 @@ let majorVersion = lib.versions.major version;
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-      optionals (!atLeast7) [
+      optionals (atLeast49 && !atLeast7) [
         ./9/fix-struct-redefinition-on-glibc-2.36.patch
-      ] ++ optionals ((!atLeast7 && !stdenv.targetPlatform.isRedox) || !atLeast6) [
+      ] ++ optionals (atLeast49 && ((!atLeast7 && !stdenv.targetPlatform.isRedox) || !atLeast6)) [
         ./use-source-date-epoch.patch
       ] ++ optionals (atLeast6 && !atLeast7 && !stdenv.targetPlatform.isRedox) [
         ./6/0001-Fix-build-for-glibc-2.31.patch
       ] ++ optionals (!atLeast6) [
         ./parallel-bconfig.patch
+      ] ++ optionals (atLeast49 && !atLeast6) [
         (./. + "/${lib.versions.major version}.${lib.versions.minor version}/parallel-strsignal.patch")
         (./. + "/${lib.versions.major version}.${lib.versions.minor version}/libsanitizer.patch")
         (fetchpatch {
@@ -160,7 +159,8 @@ let majorVersion = lib.versions.major version;
         sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
       })
       ++ optional langFortran ../gfortran-driving.patch
-      ++ optionals (!atLeast6) [
+      ++ optional (!atLeast49 && hostPlatform.isDarwin) ../gfortran-darwin-NXConstStr.patch
+      ++ optionals (atLeast49 && !atLeast6) [
         # glibc-2.26
         ./struct-ucontext.patch
         ./struct-sigaltstack-4.9.patch
@@ -234,7 +234,7 @@ let majorVersion = lib.versions.major version;
         ./Added-mcf-thread-model-support-from-mcfgthread.patch
 
       # Retpoline patches pulled from the branch hjl/indirect/gcc-4_9-branch (by H.J. Lu, the author of GCC upstream retpoline commits)
-      ++ optionals (!atLeast6) (builtins.map ({commit, sha256}: fetchpatch {url = "https://github.com/hjl-tools/gcc/commit/${commit}.patch"; inherit sha256;})
+      ++ optionals (atLeast49 && !atLeast6) (builtins.map ({commit, sha256}: fetchpatch {url = "https://github.com/hjl-tools/gcc/commit/${commit}.patch"; inherit sha256;})
          [{ commit = "e623d21608e96ecd6b65f0d06312117d20488a38"; sha256 = "1ix8i4d2r3ygbv7npmsdj790rhxqrnfwcqzv48b090r9c3ij8ay3"; }
           { commit = "2015a09e332309f12de1dadfe179afa6a29368b8"; sha256 = "0xcfs0cbb63llj2gbcdrvxim79ax4k4aswn0a3yjavxsj71s1n91"; }
           { commit = "6b11591f4494f705e8746e7d58b7f423191f4e92"; sha256 = "0aydyhsm2ig0khgbp27am7vq7liyqrq6kfhfi2ki0ij0ab1hfbga"; }
@@ -249,8 +249,8 @@ let majorVersion = lib.versions.major version;
           { commit = "1e961ed49b18e176c7457f53df2433421387c23b"; sha256 = "04dnqqs4qsvz4g8cq6db5id41kzys7hzhcaycwmc9rpqygs2ajwz"; }
           { commit = "e137c72d099f9b3b47f4cc718aa11eab14df1a9c"; sha256 = "1ms0dmz74yf6kwgjfs4d2fhj8y6mcp2n184r3jk44wx2xc24vgb2"; }])
 
-      ++ optional (!atLeast9) ./libsanitizer-no-cyclades-9.patch
-      ++ optional (!atLeast6) [
+      ++ optional (atLeast49 && !atLeast9) ./libsanitizer-no-cyclades-9.patch
+      ++ optional (atLeast49 && !atLeast6) [
         # gcc-11 compatibility
         (fetchpatch {
           name = "gcc4-char-reload.patch";
@@ -266,7 +266,26 @@ let majorVersion = lib.versions.major version;
       ++ optional (majorVersion == "10" && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
         url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
         sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
-      });
+      })
+      ++ lib.optionals (!atLeast49) [
+        (fetchpatch {
+          name = "libc_name_p.diff"; # needed to build with gcc6
+          url = "https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=ec1cc0263f1";
+          sha256 = "01jd7pdarh54ki498g6sz64ijl9a1l5f9v8q2696aaxalvh2vwzl";
+          excludes = [ "gcc/cp/ChangeLog" ];
+        })
+        # glibc-2.26
+        ./struct-ucontext-4.8.patch
+        ./sigsegv-not-declared.patch
+        ./res_state-not-declared.patch
+        # gcc-11 compatibility
+        (fetchpatch {
+          name = "gcc4-char-reload.patch";
+          url = "https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=d57c99458933a21fdf94f508191f145ad8d5ec58";
+          includes = [ "gcc/reload.h" ];
+          sha256 = "sha256-66AMP7/ajunGKAN5WJz/yPn42URZ2KN51yPrFdsxEuM=";
+        })
+      ];
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -426,7 +445,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   outputs =
     if atLeast7
     then [ "out" "man" "info" ] ++ lib.optional (!langJit) "lib"
-    else if langJava || langGo || (if atLeast6 then langJit else targetPlatform.isDarwin) then ["out" "man" "info"]
+    else if atLeast49 && (langJava || langGo || (if atLeast6 then langJit else targetPlatform.isDarwin)) then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
 
   setOutputFlags = false;
@@ -568,7 +587,7 @@ ${""}          done
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
   } // lib.optionalAttrs (!atLeast12) {
-    hardeningUnsupportedFlags = [ "fortify3" ];
+    hardeningUnsupportedFlags = lib.optionals (!atLeast49) [ "stackprotector" ] ++ [ "fortify3" ];
   };
 
   enableParallelBuilding = true;
@@ -584,7 +603,7 @@ ${""}          done
       maintainers
     ;
   } // lib.optionalAttrs (!atLeast11) {
-    badPlatforms = [ "aarch64-darwin" ];
+    badPlatforms = if atLeast49 then [ "aarch64-darwin" ] else lib.platforms.darwin;
   };
 } // optionalAttrs (atLeast7 && !atLeast8) {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
@@ -596,7 +615,7 @@ ${""}          done
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 } // optionalAttrs (enableMultilib) {
   dontMoveLib64 = true;
-} // optionalAttrs (!atLeast7 && langJava && (!atLeast6 || !stdenv.hostPlatform.isDarwin)) {
+} // optionalAttrs (atLeast49 && !atLeast7 && langJava && (!atLeast6 || !stdenv.hostPlatform.isDarwin)) {
      postFixup = ''
        target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
        patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
