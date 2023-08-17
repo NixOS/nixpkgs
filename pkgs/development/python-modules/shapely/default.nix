@@ -5,7 +5,9 @@
 , fetchPypi
 , cython
 , geos
+, oldest-supported-numpy
 , setuptools
+, wheel
 , numpy
 , pytestCheckHook
 }:
@@ -25,7 +27,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     geos # for geos-config
+    oldest-supported-numpy
     setuptools
+    wheel
   ];
 
   buildInputs = [
