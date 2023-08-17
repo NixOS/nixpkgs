@@ -56,17 +56,20 @@ let
   atLeast6  = lib.versionAtLeast version  "6";
 in
 
+# We enable the isl cloog backend.
+assert !atLeast6 -> (cloog != null -> isl != null);
+
 assert langJava -> !atLeast7 && zip != null && unzip != null && zlib != null && boehmgc != null && perl != null;  # for `--enable-java-home'
 
-# only gcc>=6 is currently supported
-assert atLeast6;
+# only gcc>=4.9 is currently supported
+assert lib.versionAtLeast version "4.9";
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
-assert (!atLeast7 || atLeast9) -> (langAda -> gnat-bootstrap != null);
+assert (atLeast6 && (!atLeast7 || atLeast9)) -> (langAda -> gnat-bootstrap != null);
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
@@ -91,9 +94,19 @@ let majorVersion = lib.versions.major version;
     patches =
       optionals (!atLeast7) [
         ./9/fix-struct-redefinition-on-glibc-2.36.patch
-      ] ++ optionals (!atLeast7 && !stdenv.targetPlatform.isRedox) [
+      ] ++ optionals ((!atLeast7 && !stdenv.targetPlatform.isRedox) || !atLeast6) [
         ./use-source-date-epoch.patch
+      ] ++ optionals (atLeast6 && !atLeast7 && !stdenv.targetPlatform.isRedox) [
         ./6/0001-Fix-build-for-glibc-2.31.patch
+      ] ++ optionals (!atLeast6) [
+        ./parallel-bconfig.patch
+        (./. + "/${lib.versions.major version}.${lib.versions.minor version}/parallel-strsignal.patch")
+        (./. + "/${lib.versions.major version}.${lib.versions.minor version}/libsanitizer.patch")
+        (fetchpatch {
+          name = "avoid-ustat-glibc-2.28.patch";
+          url = "https://gitweb.gentoo.org/proj/gcc-patches.git/plain/4.9.4/gentoo/100_all_avoid-ustat-glibc-2.28.patch?id=55fcb515620a8f7d3bb77eba938aa0fcf0d67c96";
+          sha256 = "0b32sb4psv5lq0ij9fwhi1b4pjbwdjnv24nqprsk14dsc6xmi1g0";
+        })
       ] ++ optionals (atLeast7 && !atLeast8) [
         # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
         (./. + "/${majorVersion}/riscv-pthread-reentrant.patch")
@@ -105,15 +118,15 @@ let majorVersion = lib.versions.major version;
       ] ++ optionals (atLeast7 && !atLeast8) [
         (./. + "/${majorVersion}/0001-Fix-build-for-glibc-2.31.patch")
       ] ++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
-      ++ optional (!atLeast12) ./fix-bug-80431.patch
+      ++ optional (atLeast6 && !atLeast12) ./fix-bug-80431.patch
       ++ optional (atLeast7 && !atLeast9) ./9/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (atLeast10 && !atLeast11) ./11/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
       ++ optional (atLeast7 && !atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
       ++ optional (noSysDirs &&  atLeast12) ./gcc-12-no-sys-dirs.patch
       ++ optional (noSysDirs && !atLeast12) ./no-sys-dirs.patch
-      ++ optional (!atLeast7 && langAda) ./gnat-cflags.patch
-      ++ optional (!atLeast7 && langAda) ./6/gnat-glibc234.patch
+      ++ optional (atLeast6 && !atLeast7 && langAda) ./gnat-cflags.patch
+      ++ optional (atLeast6 && !atLeast7 && langAda) ./6/gnat-glibc234.patch
       ++ optional (noSysDirs && atLeast10 && (is10 || !atLeast12 -> hostPlatform.isRiscV)) ./no-sys-dirs-riscv.patch
       ++ optional (noSysDirs && atLeast9 && !atLeast10 && hostPlatform.isRiscV) ./no-sys-dirs-riscv-gcc9.patch
       ++ optionals (langAda || atLeast12) [
@@ -147,15 +160,19 @@ let majorVersion = lib.versions.major version;
         sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
       })
       ++ optional langFortran ../gfortran-driving.patch
-
+      ++ optionals (!atLeast6) [
+        # glibc-2.26
+        ./struct-ucontext.patch
+        ./struct-sigaltstack-4.9.patch
+      ]
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
       ++ optional (atLeast7 && !atLeast12 && targetPlatform.libc == "musl" && targetPlatform.isPower) ./ppc-musl.patch
-      ++ optional (!atLeast8 && targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
+      ++ optional (atLeast6 && !atLeast8 && targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
         url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
         sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
       })
-      ++ optional (atLeast7 && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
-      ++ optional (!atLeast7 && langGo) ./gogcc-workaround-glibc-2.36.patch
+      ++ optional (atLeast6 && atLeast7 && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
+      ++ optional (atLeast6 && !atLeast7 && langGo) ./gogcc-workaround-glibc-2.36.patch
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
       ++ optionals (atLeast11 && !atLeast12 && stdenv.isDarwin) [
         (fetchpatch {
@@ -213,10 +230,35 @@ let majorVersion = lib.versions.major version;
       ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./gnat-darwin-dylib-install-name.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
+      ++ optional (atLeast6 && !atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
         ./Added-mcf-thread-model-support-from-mcfgthread.patch
 
+      # Retpoline patches pulled from the branch hjl/indirect/gcc-4_9-branch (by H.J. Lu, the author of GCC upstream retpoline commits)
+      ++ optionals (!atLeast6) (builtins.map ({commit, sha256}: fetchpatch {url = "https://github.com/hjl-tools/gcc/commit/${commit}.patch"; inherit sha256;})
+         [{ commit = "e623d21608e96ecd6b65f0d06312117d20488a38"; sha256 = "1ix8i4d2r3ygbv7npmsdj790rhxqrnfwcqzv48b090r9c3ij8ay3"; }
+          { commit = "2015a09e332309f12de1dadfe179afa6a29368b8"; sha256 = "0xcfs0cbb63llj2gbcdrvxim79ax4k4aswn0a3yjavxsj71s1n91"; }
+          { commit = "6b11591f4494f705e8746e7d58b7f423191f4e92"; sha256 = "0aydyhsm2ig0khgbp27am7vq7liyqrq6kfhfi2ki0ij0ab1hfbga"; }
+          { commit = "203c7d9c3e9cb0f88816b481ef8e7e87b3ecc373"; sha256 = "0wqn16y7wy5kg8ngfcni5qdwfphl01axczibbk49bxclwnzvldqa"; }
+          { commit = "f039c6f284b2c9ce97c8353d6034978795c4872e"; sha256 = "13fkgdb17lpyxfksz1zanxhgpsm0jrss9w61nbl7an4im22hz7ci"; }
+          { commit = "ed42606bdab1c5d9e5ad828cd6fe1a0557f193b7"; sha256 = "0gdnn8v3p03imj3qga2mzdhpgbmjcklkxdl97jvz5xia2ikzknxm"; }
+          { commit = "5278e062ef292fd2fbf987d25389785f4c5c0f99"; sha256 = "0j81x758wf8v7j4rx5wc1cy7yhkvhlhv3wmnarwakxiwsspq0vrs"; }
+          { commit = "76f1ffbbb6cd9f6ecde6c82cd16e20a27242e890"; sha256 = "1py56y6gp7fjf4f8bbsfwh5bs1gnmlqda1ycsmnwlzfm0cshdp0c"; }
+          { commit = "4ca48b2b688b135c0390f54ea9077ef10aedd52c"; sha256 = "15r019pzr3k0lpgyvdc92c8fayw8b5lrzncna4bqmamcsdz7vsaw"; }
+          { commit = "98c7bf9ddc80db965d69d61521b1c7a1cec32d9a"; sha256 = "1d7pfdv1q23nf0wadw7jbp6d6r7pnzjpbyxgbdfv7j1vr9l1bp60"; }
+          { commit = "3dc76b53ad896494ca62550a7a752fecbca3f7a2"; sha256 = "0jvdzfpvfdmklfcjwqblwq1i22iqis7ljpvm7adra5d7zf2xk7xz"; }
+          { commit = "1e961ed49b18e176c7457f53df2433421387c23b"; sha256 = "04dnqqs4qsvz4g8cq6db5id41kzys7hzhcaycwmc9rpqygs2ajwz"; }
+          { commit = "e137c72d099f9b3b47f4cc718aa11eab14df1a9c"; sha256 = "1ms0dmz74yf6kwgjfs4d2fhj8y6mcp2n184r3jk44wx2xc24vgb2"; }])
+
       ++ optional (!atLeast9) ./libsanitizer-no-cyclades-9.patch
+      ++ optional (!atLeast6) [
+        # gcc-11 compatibility
+        (fetchpatch {
+          name = "gcc4-char-reload.patch";
+          url = "https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=d57c99458933a21fdf94f508191f145ad8d5ec58";
+          includes = [ "gcc/reload.h" ];
+          sha256 = "sha256-66AMP7/ajunGKAN5WJz/yPn42URZ2KN51yPrFdsxEuM=";
+        })
+      ]
 
       # openjdk build fails without this on -march=opteron; is upstream in gcc12
       ++ optionals (majorVersion == "11") [ ./11/gcc-issue-103910.patch ]
@@ -349,12 +391,12 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
-  src = if !atLeast7 && stdenv.targetPlatform.isVc4 then fetchFromGitHub {
+  src = if majorVersion == "6" && stdenv.targetPlatform.isVc4 then fetchFromGitHub {
     owner = "itszor";
     repo = "gcc-vc4";
     rev = "e90ff43f9671c760cf0d1dd62f569a0fb9bf8918";
     sha256 = "0gxf66hwqk26h8f853sybphqa5ca0cva2kmrw5jsiv6139g0qnp8";
-  } else if !atLeast7 && stdenv.targetPlatform.isRedox then fetchFromGitHub {
+  } else if majorVersion == "6" && stdenv.targetPlatform.isRedox then fetchFromGitHub {
     owner = "redox-os";
     repo = "gcc";
     rev = "f360ac095028d286fc6dde4d02daed48f59813fa"; # `redox` branch
@@ -362,7 +404,9 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   } else (fetchurl {
     url = if atLeast7
           then "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz"
-          else "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
+          else if atLeast6
+          then "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz"
+          else "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
     ${if majorVersion == "11" then "hash" else "sha256"} = {
       "13.1.0" = "sha256-YdaE8Kpedqxlha2ImKJCeq3ol57V5/hUkihsTfwT7oY=";
       "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
@@ -372,6 +416,8 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       "8.5.0"  = "0l7d4m9jx124xsk6xardchgy2k5j5l2b15q322k31f0va4d8826k";
       "7.5.0"  = "0qg6kqc5l72hpnj4vr6l0p69qav0rh4anlkk3y55540zy3klc6dq";
       "6.5.0"  = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
+      "4.9.4"  = "14l06m7nvcvb0igkbip58x59w3nq6315k6jcz3wr9ch1rn9d44bc";
+      "4.8.5"  = "08yggr18v373a1ihj0rg2vd6psnic42b518xcgp3r9k81xz1xyr2";
     }."${version}";
   });
 
@@ -380,7 +426,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   outputs =
     if atLeast7
     then [ "out" "man" "info" ] ++ lib.optional (!langJit) "lib"
-    else if langJava || langGo || langJit then ["out" "man" "info"]
+    else if langJava || langGo || (if atLeast6 then langJit else targetPlatform.isDarwin) then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
 
   setOutputFlags = false;
@@ -399,7 +445,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   '')
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
-  + lib.optionalString hostPlatform.isDarwin ''
+  + lib.optionalString (atLeast6 && hostPlatform.isDarwin) ''
     substituteInPlace gcc/config/darwin-c.c${lib.optionalString atLeast12 "c"} \
       --replace 'if (stdinc)' 'if (0)'
 
@@ -417,19 +463,19 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
         libc = if libcCross != null then libcCross else stdenv.cc.libc;
       in
         (
-        '' echo "fixing the \`GLIBC_DYNAMIC_LINKER', \`UCLIBC_DYNAMIC_LINKER', and \`MUSL_DYNAMIC_LINKER' macros..."
+        '' echo "fixing the \`GLIBC_DYNAMIC_LINKER'${lib.optionalString atLeast6 ", \\`UCLIBC_DYNAMIC_LINKER',"} and \`${if atLeast6 then "MUSL" else "UCLIBC"}_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
            do
-             grep -q _DYNAMIC_LINKER "$header" || continue
+             grep -q ${lib.optionalString (!atLeast6) "LIBC"}_DYNAMIC_LINKER "$header" || continue
              echo "  fixing \`$header'..."
              sed -i "$header" \
-                 -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g' \
-                 -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
-           done
-        ''
-        + lib.optionalString (targetPlatform.libc == "musl")
-        ''
-            sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
+                 -e 's|define[[:blank:]]*\([UCG]\+\)LIBC_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define \1LIBC_DYNAMIC_LINKER\2 "${libc.out}\3"|g'${lib.optionalString atLeast6 " \\"}
+        '' + lib.optionalString atLeast6 ''
+${""}                -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
+        '' + ''
+${""}          done
+        '' + lib.optionalString (atLeast6 && targetPlatform.libc == "musl") ''
+           sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
     ))
@@ -446,9 +492,6 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
     libcCross crossMingw;
 
   inherit (callFile ./common/dependencies.nix { }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
-
-  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
-
 
   preConfigure = (callFile ./common/pre-configure.nix { }) + lib.optionalString atLeast10 ''
     ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
@@ -547,11 +590,13 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
 } // optionalAttrs (!atLeast7) {
   env.langJava = langJava;
+} // optionalAttrs (atLeast6) {
+  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 } // optionalAttrs (!atLeast8) {
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 } // optionalAttrs (enableMultilib) {
   dontMoveLib64 = true;
-} // optionalAttrs (!atLeast7 && langJava && !stdenv.hostPlatform.isDarwin) {
+} // optionalAttrs (!atLeast7 && langJava && (!atLeast6 || !stdenv.hostPlatform.isDarwin)) {
      postFixup = ''
        target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
        patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
