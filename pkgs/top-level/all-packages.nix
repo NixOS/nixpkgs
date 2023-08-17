@@ -19532,6 +19532,8 @@ with pkgs;
 
   lurk = callPackage ../development/tools/lurk { };
 
+  maizzle = callPackage ../development/tools/maizzle { };
+
   malt = callPackage ../development/tools/profiling/malt { };
 
   marksman = callPackage ../development/tools/marksman { };
