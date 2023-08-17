@@ -15795,40 +15795,25 @@ with pkgs;
   # This expression will be pushed into pkgs/development/compilers/gcc/common
   # once the top-level gcc/${version}/default.nix files are deduplicated.
   inherit
-    (lib.listToAttrs (map (version:
-      let atLeast = lib.versionAtLeast version;
-          attrName = "gcc${lib.replaceStrings ["."] [""] version}";
-          deduplicatedVersions = { # map from majorVersion to exact version
-            "13" = "13.1.0";
-            "12" = "12.3.0";
-            "11" = "11.4.0";
-            "10" = "10.4.0";
-            "9"  =  "9.5.0";
-            "8"  =  "8.5.0";
-            "7"  =  "7.5.0";
-            "6"  =  "6.5.0";
-            "4.9"=  "4.9.4";
-            "4.8"=  "4.8.5";
-          };
-          deduplicated = deduplicatedVersions ? "${version}";
-          path = if deduplicated
-                 then ../development/compilers/gcc/default.nix
-                 else ../development/compilers/gcc + "/${version}";
-          pkg = lowPrio (wrapCC (callPackage path ({
+    (lib.listToAttrs (map (majorMinorVersion:
+      let atLeast = lib.versionAtLeast majorMinorVersion;
+          attrName = "gcc${lib.replaceStrings ["."] [""] majorMinorVersion}";
+          pkg = lowPrio (wrapCC (callPackage ../development/compilers/gcc/default.nix ({
             inherit noSysDirs;
+            inherit majorMinorVersion;
             reproducibleBuild = true;
             profiledCompiler = false;
             libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-            threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor version else { };
+            threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor majorMinorVersion else { };
             isl = if       stdenv.isDarwin then null
                   else if    atLeast "9"   then isl_0_20
                   else if    atLeast "7"   then isl_0_17
                   else if    atLeast "6"   then (if stdenv.targetPlatform.isRedox then isl_0_17 else isl_0_14)
                   else if    atLeast "4.9" then isl_0_11
                   else            /* "4.8" */   isl_0_14;
-          } // lib.optionalAttrs (version == "4.8") {
+          } // lib.optionalAttrs (majorMinorVersion == "4.8") {
             texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
-          } // lib.optionalAttrs (version == "4.9") {
+          } // lib.optionalAttrs (majorMinorVersion == "4.9") {
             # Build fails on Darwin with clang
             stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
           } // lib.optionalAttrs (!(atLeast "6")) {
@@ -15839,8 +15824,6 @@ with pkgs;
           } // lib.optionalAttrs (atLeast "6" && !(atLeast "9")) {
             # gcc 10 is too strict to cross compile gcc <= 8
             stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
-          } // lib.optionalAttrs deduplicated {
-            version = deduplicatedVersions."${version}";
           })));
       in lib.nameValuePair attrName pkg
     ) [ "4.8" "4.9" "6" "7" "8" "9" "10" "11" "12" "13" ]))
