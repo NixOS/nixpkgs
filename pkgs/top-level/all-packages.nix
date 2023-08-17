@@ -20599,6 +20599,8 @@ with pkgs;
 
   bulletml = callPackage ../development/libraries/bulletml { };
 
+  buzz = callPackage ../applications/networking/mailreaders/buzz { };
+
   bwidget = callPackage ../development/libraries/bwidget { };
 
   bzrtp = callPackage ../development/libraries/bzrtp { };
