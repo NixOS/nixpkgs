@@ -26,6 +26,8 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  # This package does not include any tests.
+  doCheck = false;
 
   meta = with lib; {
     description = "PEP 561 Typing Stubs for PyGObject";
