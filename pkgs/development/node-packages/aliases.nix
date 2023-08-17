@@ -42,6 +42,7 @@ mapAliases {
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
+  "@maizzle/cli" = pkgs.maizzle; # added 2023-08-17
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   antennas = pkgs.antennas; # added 2023-07-30
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
