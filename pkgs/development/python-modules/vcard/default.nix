@@ -28,6 +28,9 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://gitlab.com/engmark/vcard";
     description = "vCard validator, class and utility functions";
+    longDescription = ''
+      This program can be used for strict validation and parsing of vCards. It currently supports vCard 3.0 (RFC 2426).
+    '';
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.l0b0 ];
   };
