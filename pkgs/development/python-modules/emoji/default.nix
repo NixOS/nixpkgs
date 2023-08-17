@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "2.7.0";
+  version = "2.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "carpedm20";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HxEQqWG0a96PQ0bNQsIyTSEK0G21WojgoAyaWLMmjyE=";
+    hash = "sha256-fnVY4KwiqvSVYijlDckLq6qDrBJj/rJGMwaQ1mMygek=";
   };
 
   nativeCheckInputs = [
