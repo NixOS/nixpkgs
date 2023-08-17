@@ -13,7 +13,6 @@
 , "@microsoft/rush"
 , "@nerdwallet/shepherd"
 , "@shopify/cli"
-, "@squoosh/cli"
 , "@tailwindcss/aspect-ratio"
 , "@tailwindcss/forms"
 , "@tailwindcss/language-server"

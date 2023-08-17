@@ -13261,6 +13261,8 @@ with pkgs;
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
 
+  squoosh-cli = callPackage ../tools/graphics/squoosh-cli { };
+
   srt-live-server = callPackage ../applications/video/srt-live-server { };
 
   srt-to-vtt-cl = callPackage ../tools/cd-dvd/srt-to-vtt-cl { };

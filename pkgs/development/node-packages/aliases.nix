@@ -43,6 +43,7 @@ mapAliases {
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  "@squoosh/cli" = pkgs.squoosh-cli; # added 2023-08-17
   antennas = pkgs.antennas; # added 2023-07-30
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30

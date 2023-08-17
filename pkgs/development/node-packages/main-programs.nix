@@ -4,7 +4,6 @@
   "@antfu/ni" = "ni";
   "@electron-forge/cli" = "electron-forge";
   "@microsoft/rush" = "rush";
-  "@squoosh/cli" = "squoosh-cli";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
   coffee-script = "coffee";
   vue-cli = "vue";
