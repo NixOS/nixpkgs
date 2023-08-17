@@ -23,7 +23,7 @@
 , poppler
 , auto-multiple-choice
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation rec {
   pname = "auto-multiple-choice";
   version = "1.5.2";
   src = fetchurl {
@@ -143,11 +143,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     XMLWriter
   ]);
 
-  passthru = {
-    tlType = "run";
-    pkgs = [ finalAttrs.finalPackage.tex ];
-  };
-
   meta = with lib; {
     description = "Create and manage multiple choice questionnaires with automated marking.";
     longDescription = ''
@@ -167,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: rec {
         auto-multiple-choice
         (texlive.combine {
           inherit (pkgs.texlive) scheme-full;
-          inherit auto-multiple-choice;
+          auto-multiple-choice = auto-multiple-choice.tex;
         })
       ];
       </screen>
@@ -180,4 +175,4 @@ stdenv.mkDerivation (finalAttrs: rec {
     maintainers = [ maintainers.thblt ];
     platforms = platforms.all;
   };
-})
+}
