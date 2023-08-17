@@ -73,8 +73,8 @@ let majorVersion = "13";
       # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
       ++ optional (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) (fetchpatch {
         name = "gcc-13-darwin-aarch64-support.patch";
-        url = "https://github.com/Homebrew/formula-patches/raw/5c206c47e2a08d522ec9795bb314346fff5fc4c5/gcc/gcc-13.1.0.diff";
-        sha256 = "sha256-sMgA7nwE2ULa54t5g6VE6eJQYa69XvQrefi9U9f2t4g=";
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
+        sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
       })
       ++ optional langD ../libphobos.patch
 
