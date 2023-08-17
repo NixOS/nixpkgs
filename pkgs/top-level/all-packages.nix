@@ -15800,6 +15800,7 @@ with pkgs;
           attrName = "gcc${lib.replaceStrings ["."] [""] version}";
           deduplicatedVersions = { # map from majorVersion to exact version
             "13" = "13.1.0";
+            "12" = "12.3.0";
           };
           deduplicated = deduplicatedVersions ? "${version}";
           path = if deduplicated

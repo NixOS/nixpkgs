@@ -34,8 +34,8 @@
 , version
 }:
 
-# only gcc13 is currently supported
-assert lib.versions.major version == "13";
+# only gcc>=12 is currently supported
+assert lib.versionAtLeast version "12";
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
@@ -72,14 +72,24 @@ let majorVersion = lib.versions.major version;
         ./gnat-cflags-11.patch
         ./gcc-12-gfortran-driving.patch
         ./ppc-musl.patch
+      ] ++ optionals (majorVersion == "12") [
+        # backport ICE fix on ccache code
+        ./12/lambda-ICE-PR109241.patch
       ]
       # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
       # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
-      ++ optional (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) (fetchpatch {
-        name = "gcc-13-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
-        sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
-      })
+      ++ optional (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
+        "13" = fetchpatch {
+          name = "gcc-13-darwin-aarch64-support.patch";
+          url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
+          sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
+        };
+        "12" = fetchurl {
+          name = "gcc-12-darwin-aarch64-support.patch";
+          url = "https://raw.githubusercontent.com/Homebrew/formula-patches/f1188b90d610e2ed170b22512ff7435ba5c891e2/gcc/gcc-12.3.0.diff";
+          sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
+        };
+      }."${majorVersion}")
       ++ optional langD ./libphobos.patch
 
       # backport fixes to build gccgo with musl libc
@@ -125,6 +135,10 @@ let majorVersion = lib.versions.major version;
 
       # Use absolute path in GNAT dylib install names on Darwin
       ++ optional (stdenv.isDarwin && langAda) ./gnat-darwin-dylib-install-name.patch
+
+      # Obtain latest patch with ../update-mcfgthread-patches.sh
+      ++ optional (majorVersion == "12" && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
+        ./Added-mcf-thread-model-support-from-mcfgthread.patch
     ;
 
     /* Cross-gcc settings (build == host != target) */
@@ -205,7 +219,10 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "sha256-YdaE8Kpedqxlha2ImKJCeq3ol57V5/hUkihsTfwT7oY=";
+    sha256 = {
+      "13.1.0" = "sha256-YdaE8Kpedqxlha2ImKJCeq3ol57V5/hUkihsTfwT7oY=";
+      "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
+    }."${version}";
   };
 
   inherit patches;
