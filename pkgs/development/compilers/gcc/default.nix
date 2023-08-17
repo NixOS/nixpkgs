@@ -40,17 +40,18 @@ let
   atLeast11 = lib.versionAtLeast version "11";
   atLeast10 = lib.versionAtLeast version "10";
   atLeast9  = lib.versionAtLeast version  "9";
+  atLeast8  = lib.versionAtLeast version  "8";
 in
 
-# only gcc>=9 is currently supported
-assert atLeast9;
+# only gcc>=8 is currently supported
+assert atLeast8;
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
-assert langAda -> gnat-bootstrap != null;
+assert atLeast9 -> (langAda -> gnat-bootstrap != null);
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
@@ -73,18 +74,19 @@ let majorVersion = lib.versions.major version;
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-         optional (!atLeast10) ./9/fix-struct-redefinition-on-glibc-2.36.patch
+         optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (!atLeast12) ./fix-bug-80431.patch
+      ++ optional (!atLeast9) ./9/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (atLeast10 && !atLeast11) ./11/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
       ++ optional (!atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
       ++ optional (noSysDirs &&  atLeast12) ./gcc-12-no-sys-dirs.patch
       ++ optional (noSysDirs && !atLeast12) ./no-sys-dirs.patch
       ++ optional (noSysDirs && atLeast10 && (is10 || !atLeast12 -> hostPlatform.isRiscV)) ./no-sys-dirs-riscv.patch
-      ++ optional (noSysDirs && !atLeast10 && hostPlatform.isRiscV) ./no-sys-dirs-riscv-gcc9.patch
+      ++ optional (noSysDirs && atLeast9 && !atLeast10 && hostPlatform.isRiscV) ./no-sys-dirs-riscv-gcc9.patch
       ++ optionals (langAda || atLeast12) [
         ./gnat-cflags-11.patch
-      ] ++ optionals (langAda && !atLeast11) [
+      ] ++ optionals (langAda && atLeast9 && !atLeast11) [
         ./gnat-cflags.patch
       ] ++ optionals atLeast12 [
         ./gcc-12-gfortran-driving.patch
@@ -107,11 +109,12 @@ let majorVersion = lib.versions.major version;
           sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
         }) ];
       }."${majorVersion}" or [])
-      ++ optional langD ./libphobos.patch
+      ++ optional (atLeast9 && langD) ./libphobos.patch
       ++ optional langFortran ../gfortran-driving.patch
 
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
       ++ optional (!atLeast12 && targetPlatform.libc == "musl" && targetPlatform.isPower) ./ppc-musl.patch
+      ++ optional (!atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
       ++ optionals (atLeast11 && !atLeast12 && stdenv.isDarwin) [
         (fetchpatch {
@@ -171,6 +174,8 @@ let majorVersion = lib.versions.major version;
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
         ./Added-mcf-thread-model-support-from-mcfgthread.patch
+
+      ++ optional (!atLeast9) ./libsanitizer-no-cyclades-9.patch
 
       # openjdk build fails without this on -march=opteron; is upstream in gcc12
       ++ optionals (majorVersion == "11") [ ./11/gcc-issue-103910.patch ]
@@ -264,6 +269,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       "11.4.0" = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";
       "10.5.0" = "sha256-JRCVQ/30bzl8NHtdi3osflaUpaUczkucbh6opxyjB8E=";
       "9.5.0"  = "13ygjmd938m0wmy946pxdhz9i1wq7z4w10l6pvidak0xxxj9yxi7";
+      "8.5.0"  = "0l7d4m9jx124xsk6xardchgy2k5j5l2b15q322k31f0va4d8826k";
     }."${version}";
   };
 
