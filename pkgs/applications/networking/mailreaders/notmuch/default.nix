@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     mkdir ${placeholder "bindingconfig"}
-    cp bindings/python-cffi/_notmuch_config.py ${placeholder "bindingconfig"}/
+    cp version.txt ${placeholder "bindingconfig"}/
   '';
 
   outputs = [ "out" "man" "info" "bindingconfig" ]
