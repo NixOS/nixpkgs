@@ -1,31 +1,32 @@
 { lib
-, stdenv
-, fetchurl
-, runCommand
-, fetchCrate
 , rustPlatform
-, Security
-, openssl
+, fetchCrate
 , pkg-config
-, SystemConfiguration
-, libiconv
+, bzip2
+, openssl
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.36.12";
+  version = "0.36.13";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-dsHjSy3LV6L/P5cAKTqOjT4LM33qvjKTIHGcqrBzWqU=";
+    hash = "sha256-9EnVO2CJY5y01mxSWphbuTVnckgUr6L8GrFy1nQcqT8=";
   };
+
+  cargoHash = "sha256-K6D5e9inuB1y3VcEW73ikrkTcewnZyW7kdHSDkWxC3w=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration libiconv ];
-
-  cargoHash = "sha256-w1TmUMEKg1/VP/AQQWdW4olp0gwCm9zmiuPQ9fQh9ak=";
+  buildInputs = [
+    bzip2
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
   # Some tests fail because they need network access.
   # However, Travis ensures a proper build.
@@ -36,7 +37,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A Rust task runner and build tool";
     homepage = "https://github.com/sagiegurari/cargo-make";
+    changelog = "https://github.com/sagiegurari/cargo-make/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = with maintainers; [ figsoda xrelkd ];
   };
 }
