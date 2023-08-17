@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchurl, installShellFiles, sqlite }:
+{ lib
+, buildGoModule
+, fetchurl
+, sqlite
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "honk";
@@ -10,8 +15,14 @@ buildGoModule rec {
   };
   vendorHash = null;
 
-  buildInputs = [ sqlite ];
-  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [
+    sqlite
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   subPackages = [ "." ];
 
   # This susbtitution is not mandatory. It is only existing to have something
@@ -38,12 +49,12 @@ buildGoModule rec {
     mv views $out/share/${pname}
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://humungus.tedunangst.com/r/honk/v/v${version}/f/docs/changelog.txt";
     description = "An ActivityPub server with minimal setup and support costs.";
     homepage = "https://humungus.tedunangst.com/r/honk";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     mainProgram = "honk";
-    maintainers = with maintainers; [ huyngo ];
+    maintainers = with lib.maintainers; [ huyngo ];
   };
 }
