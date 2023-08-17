@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lopsided98/grpc/commit/164f55260262c816e19cd2c41b564486097d62fe.patch";
       hash = "sha256-d6kMyjL5ZnEnEz4XZfRgXJBH53gp1r7q1tlwh+HM6+Y=";
     })
+    # Fix generated CMake config file
+    # FIXME: remove when merged
+    (fetchpatch {
+      url = "https://github.com/grpc/grpc/pull/33361/commits/117dc80eb43021dd5619023ef6d02d0d6ec7ae7a.patch";
+      hash = "sha256-VBk3ZD5h9uOQVN0st+quUQK/wXqvfFNk8G8AN4f2MQo=";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkg-config ]
