@@ -31,8 +31,6 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
     description = "A statically typed language for the Erlang VM";
     homepage = "https://gleam.run/";
