@@ -1,16 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
-, six
-, jaraco-logging
-, jaraco-text
-, jaraco-stream
-, pytz
-, jaraco-itertools
-, setuptools-scm
 , jaraco-collections
-, importlib-metadata
+, jaraco-itertools
+, jaraco-logging
+, jaraco-stream
+, jaraco-text
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -18,7 +17,7 @@ buildPythonPackage rec {
   version = "20.3.0";
   format = "pyproject";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,17 +29,17 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    six
-    importlib-metadata
-    jaraco-logging
-    jaraco-text
-    jaraco-stream
-    pytz
-    jaraco-itertools
     jaraco-collections
+    jaraco-itertools
+    jaraco-logging
+    jaraco-stream
+    jaraco-text
+    pytz
   ];
 
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "irc"
@@ -51,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/irc";
     changelog = "https://github.com/jaraco/irc/blob/v${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }
