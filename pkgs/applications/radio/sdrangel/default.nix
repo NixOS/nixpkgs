@@ -48,18 +48,23 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
-  version = "7.15.1";
+  version = "7.15.2";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
-    rev = "v${version}";
-    hash = "sha256-xOnToYe7+0Jlm4bWvnFbYxVi1VqBlGfKYdzHf4igyl0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Yvf0LJu7YbXhW3i0fd5R2KVn2dkx484AZ0XaWhjozFE=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     airspy
@@ -113,14 +118,14 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Software defined radio (SDR) software";
+    homepage = "https://github.com/f4exb/sdrangel";
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       SDRangel is an Open Source Qt5 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
     '';
-    homepage = "https://github.com/f4exb/sdrangel";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ alkeryn Tungsten842 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ alkeryn Tungsten842 ];
+    platforms = lib.platforms.unix;
   };
-}
+})
