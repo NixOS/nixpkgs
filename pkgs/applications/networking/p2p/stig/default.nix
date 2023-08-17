@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib 
+, stdenv
 , fetchFromGitHub
 , python3Packages
 }:
@@ -7,13 +8,13 @@ python3Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
-  version = "0.12.2a0";
+  version = "0.12.5a0";
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
-    sha256 = "0sk4vgj3cn75nyrng2d6q0pj1h968kcmbpr9sv1lj1g8fc7g0n4f";
+    sha256 = "sha256-e27DBzing38llFxPIsMGkZJXp2q7jjFlQdtfsqLXNHw=";
   };
 
   propagatedBuildInputs = with python3Packages; [
