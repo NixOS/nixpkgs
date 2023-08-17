@@ -141,11 +141,6 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  preCheck = ''
-    substituteInPlace jupyterhub/tests/test_spawner.py --replace \
-      "'jupyterhub-singleuser'" "'$out/bin/jupyterhub-singleuser'"
-  '';
-
   nativeCheckInputs = [
     beautifulsoup4
     cryptography
@@ -161,12 +156,18 @@ buildPythonPackage rec {
     virtualenv
   ];
 
+  preCheck = ''
+    substituteInPlace jupyterhub/tests/test_spawner.py --replace \
+      "'jupyterhub-singleuser'" "'$out/bin/jupyterhub-singleuser'"
+    export PATH="$PATH:$out/bin";
+  '';
+
   disabledTests = [
     # Tries to install older versions through pip
     "test_upgrade"
     # Testcase fails to find requests import
     "test_external_service"
-    # attempts to do ssl connection
+    # Attempts to do TLS connection
     "test_connection_notebook_wrong_certs"
     # AttributeError: 'coroutine' object...
     "test_valid_events"

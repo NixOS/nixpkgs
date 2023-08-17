@@ -13,17 +13,18 @@
 , protoc-gen-go-grpc
 , testers
 , opensnitch
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "opensnitch";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "v${version}";
-    sha256 = "sha256-yEo5nga0WTbgZm8W2qbJcTOO4cCzFWrjRmTBCFH7GLg=";
+    hash = "sha256-1ArwbewgZuoDF2lxY720yFQSsTuLR0WkS8vsTCr2FL4=";
   };
 
   modRoot = "daemon";
@@ -41,7 +42,7 @@ buildGoModule rec {
     protoc-gen-go-grpc
   ];
 
-  vendorSha256 = "sha256-bUzGWpQxeXzvkzQ7G53ljQJq6wwqiXqbi6bgeFlNvvM=";
+  vendorHash = "sha256-bUzGWpQxeXzvkzQ7G53ljQJq6wwqiXqbi6bgeFlNvvM=";
 
   preBuild = ''
     # Fix inconsistent vendoring build error
@@ -69,9 +70,12 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = opensnitch;
-    command = "opensnitchd -version";
+  passthru.tests = {
+    inherit (nixosTests) opensnitch;
+    version = testers.testVersion {
+      package = opensnitch;
+      command = "opensnitchd -version";
+    };
   };
 
   meta = with lib; {

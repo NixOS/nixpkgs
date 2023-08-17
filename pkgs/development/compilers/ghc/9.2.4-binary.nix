@@ -429,7 +429,6 @@ stdenv.mkDerivation rec {
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
     maintainers = lib.teams.haskell.members;
   };
 }

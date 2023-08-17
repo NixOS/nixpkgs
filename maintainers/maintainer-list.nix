@@ -3777,6 +3777,12 @@
     githubId = 1298344;
     name = "Daniel Fullmer";
   };
+  danielrolls = {
+    email = "daniel.rolls.27@googlemail.com";
+    github = "danielrolls";
+    githubId = 50051176;
+    name = "Daniel Rolls";
+  };
   daniyalsuri6 = {
     email = "daniyal.suri@gmail.com";
     github = "daniyalsuri6";
@@ -6244,6 +6250,12 @@
     github = "giorgiga";
     githubId = 471835;
     name = "Giorgio Gallo";
+  };
+  GirardR1006 = {
+    email = "julien.girard2@cea.fr";
+    github = "GirardR1006";
+    githubId = 19275558;
+    name = "Julien Girard-Satabin";
   };
   GKasparov = {
     email = "mizozahr@gmail.com";
@@ -16555,6 +16567,12 @@
     github = "tbenst";
     githubId = 863327;
     name = "Tyler Benster";
+  };
+  tbidne = {
+    email = "tbidne@protonmail.com";
+    github = "tbidne";
+    githubId = 2856188;
+    name = "Thomas Bidne";
   };
   tboerger = {
     email = "thomas@webhippie.de";

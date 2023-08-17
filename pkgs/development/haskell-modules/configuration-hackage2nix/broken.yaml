@@ -18,6 +18,7 @@ broken-packages:
   - access-time
   - accuerr
   - AC-EasyRaster-GTK
+  - ace # test failure in job https://hydra.nixos.org/build/230967016 at 2023-08-16
   - AC-HalfInteger
   - achille
   - acid-state-dist
@@ -68,8 +69,11 @@ broken-packages:
   - AERN-Basics
   - aeson-applicative
   - aeson-bson
+  - aeson-commit # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970158 at 2023-08-16
+  - aeson-compat # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230955731 at 2023-08-16
   - aeson-decode
   - aeson-default
+  - aeson-dependent-sum # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951615 at 2023-08-16
   - aeson-deriving
   - aeson-diff-generic
   - aeson-filthy
@@ -86,11 +90,13 @@ broken-packages:
   - aeson-parsec-picky
   - aeson-prefix
   - aeson-schema
+  - aeson-single-field # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952090 at 2023-08-16
   - aeson-smart
   - aeson-streams
   - aeson-t
   - aeson-toolkit
   - aeson-utils
+  - aeson-via # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971255 at 2023-08-16
   - aeson-with
   - affection
   - affine-invariant-ensemble-mcmc
@@ -112,6 +118,7 @@ broken-packages:
   - ajhc
   - AlanDeniseEricLauren
   - alerta
+  - alerts # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970661 at 2023-08-16
   - alex-prelude
   - alfred
   - alfred-margaret
@@ -123,6 +130,7 @@ broken-packages:
   - algorithmic-composition-complex
   - AlgorithmW
   - algo-s
+  - align-affine # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969907 at 2023-08-16
   - align-text
   - ally-invest
   - alpaca-netcode
@@ -170,10 +178,12 @@ broken-packages:
   - aosd
   - apache-md5
   - apart
+  - apecs-physics # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/230961455 at 2023-08-16
   - api-builder
   - api-rpc-factom
   - apns-http2
   - appc
+  - appendful-persistent # failure building library in job https://hydra.nixos.org/build/230949704 at 2023-08-16
   - app-lens
   - AppleScript
   - applicative-fail
@@ -196,6 +206,7 @@ broken-packages:
   - archlinux
   - archnews
   - arena
+  - argo # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957050 at 2023-08-16
   - argon2
   - argparser
   - arguedit
@@ -219,6 +230,7 @@ broken-packages:
   - asap
   - ascii85-conduit
   - ascii-caseless
+  - asciidiagram # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230955130 at 2023-08-16
   - ascii-flatten
   - ascii-string
   - ascii-vector-avc
@@ -233,6 +245,8 @@ broken-packages:
   - assert4hs-core
   - assertions
   - asset-map
+  - assoc-list # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968246 at 2023-08-16
+  - assoc-listlike # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957051 at 2023-08-16
   - assumpta
   - ast-monad
   - astrds
@@ -246,9 +260,11 @@ broken-packages:
   - atlassian-connect-descriptor
   - atndapi
   - atom
+  - atomic-modify # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969549 at 2023-08-16
   - atomic-primops-vector
   - atomo
   - atp-haskell
+  - ats-format # failure building executable 'atsfmt' in job https://hydra.nixos.org/build/230948414 at 2023-08-16
   - ats-pkg
   - ats-setup
   - ats-storable
@@ -257,6 +273,7 @@ broken-packages:
   - AttoBencode
   - atto-lisp
   - attomail
+  - attoparsec-aeson # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964825 at 2023-08-16
   - attoparsec-csv
   - attoparsec-text
   - attoparsec-trans
@@ -308,6 +325,7 @@ broken-packages:
   - bake
   - Bang
   - banwords
+  - barbies-th # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949387 at 2023-08-16
   - barchart
   - barcodes-code128
   - barecheck
@@ -318,13 +336,16 @@ broken-packages:
   - base32-lens
   - base58address
   - base62
+  - base64-bytes # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952298 at 2023-08-16
   - base64-conduit
   - base64-lens
   - base-compat-migrate
+  - based # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967441 at 2023-08-16
   - base-encoding
   - base-feature-macros
   - base-generics
   - base-io-access
+  - basement-cd # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963879 at 2023-08-16
   - basen
   - basex-client
   - basic-sop
@@ -343,7 +364,9 @@ broken-packages:
   - bech32
   - bed-and-breakfast
   - Befunge93
+  - bench-graph # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958515 at 2023-08-16
   - BenchmarkHistory
+  - bench-show # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951256 at 2023-08-16
   - bencodex
   - bencoding-lens
   - berkeleydb
@@ -353,6 +376,7 @@ broken-packages:
   - besout
   - bet
   - betacode
+  - betris # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971705 at 2023-08-16
   - bgmax
   - bgzf
   - bibdb
@@ -403,6 +427,7 @@ broken-packages:
   - bindings-wlc
   - bind-marshal
   - binembed
+  - binrep # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/231689637 at 2023-08-16
   - binsm
   - bio
   - BiobaseNewick
@@ -418,6 +443,7 @@ broken-packages:
   - bitcoin-keys
   - bitcoin-rpc
   - bitcoin-script
+  - bitfield # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967290 at 2023-08-16
   - bits-atomic
   - bits-conduit
   - bitset
@@ -428,6 +454,7 @@ broken-packages:
   - BitStringRandomMonad
   - BitSyntax
   - bitx-bitcoin
+  - bizzlelude # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230953184 at 2023-08-16
   - bizzlelude-js
   - bkr
   - blagda
@@ -456,6 +483,7 @@ broken-packages:
   - bolt
   - boltzmann-brain
   - bookhound
+  - bookkeeping # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958716 at 2023-08-16
   - boolean-like
   - boolean-normal-forms
   - boolexpr
@@ -465,7 +493,10 @@ broken-packages:
   - bot
   - botpp
   - bottom
+  - bounded-array # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957201 at 2023-08-16
+  - bound-simple # failure building library in job https://hydra.nixos.org/build/230950474 at 2023-08-16
   - box
+  - box-tuples # failure building library in job https://hydra.nixos.org/build/230956723 at 2023-08-16
   - bpath
   - BPS
   - braid
@@ -477,6 +508,7 @@ broken-packages:
   - brick-filetree
   - brick-list-search #  failure  in job https://hydra.nixos.org/build/211236614 at 2023-03-13
   - brick-list-skip #  failure  in job https://hydra.nixos.org/build/215850872 at 2023-04-17
+  - brick-panes # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961711 at 2023-08-16
   - bricks-internal
   - brick-tabular-list
   - brillig
@@ -522,6 +554,7 @@ broken-packages:
   - bytestring-aeson-orphans
   - bytestring-arbitrary
   - bytestring-class
+  - bytestring-conversion # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970130 at 2023-08-16
   - bytestring-csv
   - bytestring-delta
   - bytestring-handle
@@ -548,6 +581,7 @@ broken-packages:
   - cabal-bundle-clib
   - cabal-constraints
   - cabal-db
+  - cabal-debian # failure building library in job https://hydra.nixos.org/build/230959173 at 2023-08-16
   - cabal-dependency-licenses
   - cabal-dev
   - cabal-dir
@@ -558,6 +592,7 @@ broken-packages:
   - cabalgraph
   - cabal-graphdeps
   - cabal-helper
+  - cabal-hoogle # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965454 at 2023-08-16
   - Cabal-ide-backend
   - cabal-info
   - cabal-install-bundle
@@ -569,6 +604,7 @@ broken-packages:
   - cabal-mon
   - cabal-nirvana
   - cabal-plan-bounds
+  - cabal-plan # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949515 at 2023-08-16
   - cabal-progdeps
   - cabalQuery
   - CabalSearch
@@ -602,6 +638,7 @@ broken-packages:
   - canteven-parsedate
   - cantor
   - capataz
+  - ca-patterns # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959692 at 2023-08-16
   - capped-list
   - capri
   - caps
@@ -615,6 +652,7 @@ broken-packages:
   - casadi-bindings-internal
   - Cascade
   - cascading
+  - case-insensitive-match # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230953665 at 2023-08-16
   - caseof
   - cas-hashable
   - casr-logbook
@@ -623,6 +661,7 @@ broken-packages:
   - Cassava
   - cassava-conduit
   - cassava-records
+  - cassava-streams # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968263 at 2023-08-16
   - cassette
   - castagnoli #  failure  in job https://hydra.nixos.org/build/219826672 at 2023-05-19
   - castle
@@ -637,6 +676,7 @@ broken-packages:
   - cayene-lpp
   - cayley-client
   - cblrepo
+  - cbor-tool # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947427 at 2023-08-16
   - CCA
   - ccast
   - CC-delcont-cxe
@@ -664,6 +704,7 @@ broken-packages:
   - chakra
   - chalkboard
   - chalmers-lava2000
+  - changelogged # failure building library in job https://hydra.nixos.org/build/230967974 at 2023-08-16
   - ChannelT
   - character-cases
   - charter
@@ -672,6 +713,7 @@ broken-packages:
   - chaselev-deque
   - chatty-text
   - chatwork
+  - cheapskate # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951147 at 2023-08-16
   - check-cfg-ambiguity #  failure  in job https://hydra.nixos.org/build/225575902 at 2023-06-28
   - checked
   - Checked
@@ -688,8 +730,11 @@ broken-packages:
   - chunky
   - church
   - church-maybe
+  - churros # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230954366 at 2023-08-16
+  - cicero-api # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967916 at 2023-08-16
   - cielo
   - cil
+  - cimple # failure building library in job https://hydra.nixos.org/build/230963662 at 2023-08-16
   - cinvoke
   - c-io
   - cio
@@ -709,6 +754,7 @@ broken-packages:
   - clanki
   - clarifai
   - CLASE
+  - clash-prelude # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967667 at 2023-08-16
   - Clash-Royale-Hack-Cheats
   - ClassLaws
   - classy-influxdb-simple
@@ -722,11 +768,13 @@ broken-packages:
   - cld2
   - Clean
   - clean-unions
+  - cleff # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963671 at 2023-08-16
   - clerk # failure building library in job https://hydra.nixos.org/build/214864491 at 2023-04-07
   - clevercss
   - clexer
   - CLI
   - cli-builder
+  - cli-extras # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949753 at 2023-08-16
   - clif
   - clifm
   - cli-git
@@ -736,13 +784,17 @@ broken-packages:
   - clipper
   - clisparkline
   - clit
+  - cloben # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230955543 at 2023-08-16
   - clocked
   - clock-extras
   - clogparse
   - clone-all
+  - closed-classes # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969665 at 2023-08-16
+  - closed-intervals # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959515 at 2023-08-16
   - closure
   - cloudfront-signer
   - clplug #  failure  in job https://hydra.nixos.org/build/211239834 at 2023-03-13
+  - clr-host # failure building library in job https://hydra.nixos.org/build/230958504 at 2023-08-16
   - clr-inline
   - clr-typed
   - cluss
@@ -788,6 +840,7 @@ broken-packages:
   - comark-syntax
   - combinat-compat
   - combinat-diagrams
+  - combinat # failure building library in job https://hydra.nixos.org/build/230947031 at 2023-08-16
   - combinatorial-problems
   - combinator-interactive
   - combobuffer
@@ -815,12 +868,14 @@ broken-packages:
   - compose-trans
   - composite-aeson-path
   - composite-aeson-refined
+  - composite-base # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966274 at 2023-08-16
   - composite-cassava
   - composition-tree
   - compressed
   - compression
   - computational-geometry
   - computations
+  - ConClusion # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952663 at 2023-08-16
   - concrete-relaxng-parser
   - concrete-typerep
   - concurrency-benchmarks
@@ -845,6 +900,7 @@ broken-packages:
   - conduit-vfs
   - conf
   - conferer-dhall
+  - conferer # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230960587 at 2023-08-16
   - conferer-hspec
   - conferer-provider-json
   - conferer-snap
@@ -854,18 +910,21 @@ broken-packages:
   - config-parser
   - Configurable
   - configuration
+  - configurator-pg # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962366 at 2023-08-16
   - config-value-getopt
   - confsolve
   - congruence-relation
   - conjure
   - conkin
   - conlogger
+  - connection-pool # failure building library in job https://hydra.nixos.org/build/230958887 at 2023-08-16
   - connections
   - connection-string
   - Conscript
   - consistent
   - console-program
   - constable
+  - const # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972319 at 2023-08-16
   - const-math-ghc-plugin
   - constrained
   - constrained-categories
@@ -875,6 +934,7 @@ broken-packages:
   - constraints-deriving
   - constraints-emerge
   - constr-eq
+  - construct # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959867 at 2023-08-16
   - constructive-algebra
   - consul-haskell
   - Consumer
@@ -899,6 +959,7 @@ broken-packages:
   - contstuff-monads-tf
   - contstuff-transformers
   - convert-annotation
+  - copilot-c99 # test failure in job https://hydra.nixos.org/build/230951365 at 2023-08-16
   - copr
   - coquina
   - COrdering
@@ -916,6 +977,7 @@ broken-packages:
   - couchdb-conduit
   - couch-hs
   - counter
+  - country-codes # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969077 at 2023-08-16
   - courier
   - court
   - coverage
@@ -936,6 +998,7 @@ broken-packages:
   - crc32c
   - crdt
   - crdt-event-fold
+  - creatur # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950704 at 2023-08-16
   - credential-store
   - crem # test failure in job https://hydra.nixos.org/build/214604824 at 2023-04-07
   - critbit
@@ -945,6 +1008,7 @@ broken-packages:
   - criterion-to-html
   - criu-rpc-types
   - crjdt-haskell
+  - crockford # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/230965833 at 2023-08-16
   - crocodile
   - cronus
   - cruncher-types
@@ -955,8 +1019,8 @@ broken-packages:
   - cryptoids-types
   - crypto-keys-ssh
   - crypto-multihash
+  - crypton-connection # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956968 at 2023-08-16
   - crypto-numbers
-  - crypton-x509 # failure building test suite 'test-x509' in job https://hydra.nixos.org/build/225569131 at 2023-06-28
   - crypto-pubkey-openssh
   - crypto-random-effect
   - crypto-simple
@@ -970,7 +1034,7 @@ broken-packages:
   - css
   - css-easings
   - css-selectors
-  - css-syntax
+  - css-simple # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951038 at 2023-08-16
   - C-structs
   - csv-nptools
   - csv-sip
@@ -982,12 +1046,14 @@ broken-packages:
   - curl-aeson
   - curl-runnings
   - curly-expander
+  - currencies # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230946919 at 2023-08-16
   - currency-convert
   - curry-base
   - CurryDB
   - curryer-rpc # dependency missing in job https://hydra.nixos.org/build/214772339 at 2023-04-07
   - curry-frontend
   - curryrs
+  - cursedcsv # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967021 at 2023-08-16
   - curves
   - custom-prelude
   - cut-the-crap
@@ -1022,6 +1088,7 @@ broken-packages:
   - data-construction
   - data-constructors
   - data-default-instances-new-base
+  - data-default-instances-text # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949390 at 2023-08-16
   - data-dispersal
   - data-diverse
   - datadog
@@ -1029,9 +1096,11 @@ broken-packages:
   - data-embed
   - data-emoticons
   - data-filepath
+  - data-filter # failure building library in job https://hydra.nixos.org/build/230970830 at 2023-08-16
   - data-fin
   - data-fin-simple
   - data-flagset
+  - data-forced # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230946495 at 2023-08-16
   - data-index
   - DataIndex
   - data-ivar
@@ -1046,6 +1115,7 @@ broken-packages:
   - data-object
   - datapacker
   - data-pdf-fieldreader
+  - data-pprint # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972007 at 2023-08-16
   - data-quotientref
   - data-reify-cse
   - data-repr
@@ -1064,11 +1134,13 @@ broken-packages:
   - data-util
   - data-validation
   - data-variant
+  - data-vector-growable # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964148 at 2023-08-16
   - dates
   - datetime
   - datetime-sb
   - dawdle
   - dawg
+  - dawg-ord # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969059 at 2023-08-16
   - daytripper #  failure  in job https://hydra.nixos.org/build/225578117 at 2023-06-28
   - dbcleaner
   - dbf
@@ -1088,7 +1160,10 @@ broken-packages:
   - dead-code-detection
   - Deadpan-DDP
   - dead-simple-json
+  - dear-imgui # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968725 at 2023-08-16
+  - debugger-hs # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968226 at 2023-08-16
   - debug-me
+  - debug-trace-file # test failure in job https://hydra.nixos.org/build/230951658 at 2023-08-16
   - debug-tracy
   - decepticons
   - decision-diagrams
@@ -1102,6 +1177,7 @@ broken-packages:
   - deepseq-magic
   - deepseq-th
   - definitive-base
+  - deiko-config # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964942 at 2023-08-16
   - deka
   - Delta-Lambda
   - delude
@@ -1110,7 +1186,9 @@ broken-packages:
   - dense
   - dense-int-set
   - dependent-hashmap
+  - dependent-monoidal-map # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972604 at 2023-08-16
   - dep-t-dynamic
+  - dep-t # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956455 at 2023-08-16
   - deptrack-core
   - dep-t-value
   - derangement
@@ -1140,11 +1218,13 @@ broken-packages:
   - dhall-check
   - dhall-csv
   - dhall-fly
+  - dhall-lsp-server # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971652 at 2023-08-16
   - dhall-text
   - dhall-to-cabal
   - dhcp-lease-parser
   - dhrun
   - dia-base
+  - diagnose # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962878 at 2023-08-16
   - diagrams-boolean
   - diagrams-builder
   - diagrams-pdf
@@ -1169,11 +1249,12 @@ broken-packages:
   - digestive-foundation-lucid
   - digestive-functors-aeson
   - digestive-functors-happstack
+  - digestive-functors-heist # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948900 at 2023-08-16
+  - digestive-functors-lucid # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969836 at 2023-08-16
   - digestive-functors-snap
   - digest-pure
   - DigitalOcean
   - digitalocean-kzs
-  - digits
   - digraph
   - dijkstra-simple
   - DimensionalHash
@@ -1187,6 +1268,7 @@ broken-packages:
   - direct-plugins
   - direm
   - disco # failure building library in job https://hydra.nixos.org/build/219207076 at 2023-05-10
+  - discord-haskell # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971973 at 2023-08-16
   - discordian-calendar
   - discord-register
   - discord-types
@@ -1202,12 +1284,14 @@ broken-packages:
   - distributed-closure
   - distribution
   - dist-upload
+  - ditto-lucid # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947345 at 2023-08-16
   - djembe
   - djinn-ghc
   - djinn-th
   - dmcc
   - dmenu
   - dnscache
+  - dns-patterns # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959482 at 2023-08-16
   - dnsrbl
   - dnssd
   - dobutok
@@ -1216,6 +1300,7 @@ broken-packages:
   - docidx
   - docker-build-cacher
   - dockercook
+  - docker # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961470 at 2023-08-16
   - dockerfile-creator
   - docopt
   - docrecords
@@ -1225,7 +1310,9 @@ broken-packages:
   - docvim
   - DOH
   - doi
+  - domaindriven-core # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948092 at 2023-08-16
   - domain-optics
+  - dom-events # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958378 at 2023-08-16
   - dom-parser
   - domplate
   - dom-selector
@@ -1261,9 +1348,11 @@ broken-packages:
   - dson
   - dson-parsec
   - dstring
+  - dsv # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230953340 at 2023-08-16
   - DTC
   - dtd-text
   - dtw
+  - dual-game # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959616 at 2023-08-16
   - dualizer
   - duckling
   - duet
@@ -1312,6 +1401,7 @@ broken-packages:
   - eddie
   - ede
   - edenmodules
+  - edf # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965074 at 2023-08-16
   - edis
   - edit
   - edit-lenses
@@ -1348,6 +1438,7 @@ broken-packages:
   - elm-street
   - elm-websocket
   - elocrypt
+  - ema-generics # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957258 at 2023-08-16
   - emailaddress
   - email-header
   - email-postmark
@@ -1375,8 +1466,10 @@ broken-packages:
   - enum-text
   - enum-utf8
   - envelope
+  - env-extra # test failure in job https://hydra.nixos.org/build/230961939 at 2023-08-16
   - env-parser
   - envstatus
+  - envy-extensible # failure building library in job https://hydra.nixos.org/build/230971634 at 2023-08-16
   - epanet-haskell
   - epass
   - epic
@@ -1418,6 +1511,7 @@ broken-packages:
   - eventsource-api
   - eventsourced
   - eventstore
+  - evoke # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230955694 at 2023-08-16
   - ewe # failure building executable 'ewe' in job https://hydra.nixos.org/build/225555839 at 2023-06-28
   - exact-cover
   - exact-real-positional
@@ -1444,6 +1538,7 @@ broken-packages:
   - explicit-constraint-lens
   - explicit-determinant
   - explicit-iomodes
+  - exploring-interpreters # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967612 at 2023-08-16
   - exposed-containers
   - expression-parser
   - expressions
@@ -1454,15 +1549,18 @@ broken-packages:
   - extensible-data
   - extensible-effects-concurrent
   - extensible-skeleton
+  - extensioneer # failure building executable 'extensioneer' in job https://hydra.nixos.org/build/230953750 at 2023-08-16
   - external-sort
   - extism
   - extractelf
+  - extralife # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950860 at 2023-08-16
   - ez3
   - ez-couch
   - Facebook-Password-Hacker-Online-Latest-Version
   - faceted
   - factory # test failure in job https://hydra.nixos.org/build/214600338 at 2023-04-07
   - facts
+  - Facts # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949709 at 2023-08-16
   - fadno-braids
   - fadno-xml
   - failable-list
@@ -1510,6 +1608,7 @@ broken-packages:
   - Feval
   - fez-conf
   - ffeed
+  - ffmpeg-light # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963762 at 2023-08-16
   - ffunctor
   - fgl-extras-decompositions
   - fib
@@ -1517,6 +1616,7 @@ broken-packages:
   - fields
   - fieldwise
   - fig
+  - filecache # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961614 at 2023-08-16
   - file-collection
   - file-command-qq
   - filediff
@@ -1544,6 +1644,7 @@ broken-packages:
   - firefly-example
   - first-and-last
   - first-class-instances
+  - FirstPrelude # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952406 at 2023-08-16
   - fit
   - fitsio
   - fits-parse
@@ -1552,6 +1653,7 @@ broken-packages:
   - fixed-precision
   - fixed-storable-array
   - fixed-timestep
+  - fixed-vector-hetero # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959989 at 2023-08-16
   - fixed-width
   - fixer
   - fixfile
@@ -1564,6 +1666,7 @@ broken-packages:
   - flamethrower
   - flamingra
   - flat-maybe
+  - flat-mcmc # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951840 at 2023-08-16
   - flay
   - flexible-time
   - flickr
@@ -1585,10 +1688,13 @@ broken-packages:
   - fmark
   - FModExRaw
   - fn-extra
+  - fold-debounce-conduit # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972387 at 2023-08-16
   - foldl-incremental
   - foldl-statistics
+  - foldl-transduce # test failure in job https://hydra.nixos.org/build/230962135 at 2023-08-16
   - folds-common
   - follow
+  - fontconfig-pure # test failure in job https://hydra.nixos.org/build/230970811 at 2023-08-16
   - font-opengl-basic4x6
   - forbidden-fruit
   - fordo
@@ -1601,12 +1707,14 @@ broken-packages:
   - for-free
   - forger
   - ForkableT
+  - forma # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967499 at 2023-08-16
   - formal
   - formattable
   - forml
   - formura
   - Fortnite-Hack-Cheats-Free-V-Bucks-Generator
   - fortran-src-extras
+  - fortytwo # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950284 at 2023-08-16
   - foscam-filename
   - fpe
   - fp-ieee # test failure in job https://hydra.nixos.org/build/225561952 at 2023-06-28
@@ -1623,9 +1731,11 @@ broken-packages:
   - free-concurrent
   - f-ree-hack-cheats-free-v-bucks-generator
   - free-http
+  - freenect # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969157 at 2023-08-16
   - free-operational
   - freer-effects
   - freer-simple-catching
+  - freer-simple # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959714 at 2023-08-16
   - freer-simple-http
   - freer-simple-profiling
   - freer-simple-random
@@ -1643,16 +1753,20 @@ broken-packages:
   - friday-devil
   - friday-scale-dct
   - friday # test failure in job https://hydra.nixos.org/build/225561573 at 2023-06-28
+  - friendly # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966475 at 2023-08-16
   - frown
   - frp-arduino
   - frpnow
   - fs-events
   - fsh-csv
   - fsmActions
+  - FSM # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963381 at 2023-08-16
+  - fsnotify-conduit # failure building library in job https://hydra.nixos.org/build/230972081 at 2023-08-16
   - fst
   - fsutils
   - fswait
   - fswatch
+  - fswatcher # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959599 at 2023-08-16
   - ft-generator
   - FTGL-bytestring
   - ftp-client
@@ -1661,6 +1775,7 @@ broken-packages:
   - full-sessions
   - funbot-client
   - funcons-lambda-cbv-mp # failure building executable 'lambda-cbv' in job https://hydra.nixos.org/build/217559083 at 2023-04-29
+  - funcons-values # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971643 at 2023-08-16
   - functional-arrow
   - function-instances-algebra
   - functor-combinators
@@ -1675,11 +1790,14 @@ broken-packages:
   - fused-effects-exceptions
   - fused-effects-mwc-random
   - fused-effects-resumable
+  - fused-effects-th # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961770 at 2023-08-16
   - fusion
   - futhask
   - futun
   - future
+  - futures # failure building library in job https://hydra.nixos.org/build/230952892 at 2023-08-16
   - fuzzyfind
+  - fuzzyset # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967540 at 2023-08-16
   - fuzzy-timings
   - fwgl
   - fxpak
@@ -1692,6 +1810,7 @@ broken-packages:
   - gamma
   - Ganymede
   - garepinoh
+  - gargoyle # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230955806 at 2023-08-16
   - gargoyle-postgresql-nix
   - gas
   - gather
@@ -1711,6 +1830,7 @@ broken-packages:
   - GeneralTicTacToe
   - generator
   - generators
+  - generic-aeson # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230955043 at 2023-08-16
   - generic-binary
   - generic-church
   - generic-enum
@@ -1749,19 +1869,26 @@ broken-packages:
   - GeomPredicates-SSE
   - geo-resolver
   - geos
+  - gerrit # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950005 at 2023-08-16
   - Get
   - getflag
+  - gev-lib # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230946300 at 2023-08-16
   - GGg
   - ggtsTC
   - ghc-api-compat
+  - ghc-bignum-orphans # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952175 at 2023-08-16
   - ghc-clippy-plugin
   - ghc-core-smallstep
+  - ghc-corroborate # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966063 at 2023-08-16
   - ghc-datasize
+  - ghc-definitions-th # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968119 at 2023-08-16
+  - ghc-dump-core # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962483 at 2023-08-16
   - ghc-dump-tree
   - ghc-dup
   - ghc-events-analyze
   - ghc-events-parallel
   - ghcflags
+  - ghc-gc-hook # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962629 at 2023-08-16
   - ghc-generic-instances
   - ghc-hotswap
   - ghci-diagrams
@@ -1784,6 +1911,7 @@ broken-packages:
   - ghc-plugs-out
   - ghc-proofs
   - ghc-simple
+  - ghc-source-gen
   - ghc-srcspan-plugin
   - ghc-syb
   - ghc-syb-utils
@@ -1801,7 +1929,9 @@ broken-packages:
   - gi-gtk-declarative
   - gi-gtk-layer-shell
   - gi-gtksheet
+  - gi-gtksource # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968384 at 2023-08-16
   - gi-handy
+  - gi-ibus # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971732 at 2023-08-16
   - gingersnap
   - ginsu
   - gipeda
@@ -1810,6 +1940,7 @@ broken-packages:
   - GiST
   - git
   - git-all
+  - git-brunch # failure building executable 'git-brunch' in job https://hydra.nixos.org/build/230966224 at 2023-08-16
   - git-checklist
   - git-cuk
   - git-date
@@ -1820,6 +1951,7 @@ broken-packages:
   - github-utils
   - github-webhook-handler
   - githud
+  - gitHUD # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965338 at 2023-08-16
   - gitignore
   - git-jump
   - gitlab-api
@@ -1846,6 +1978,7 @@ broken-packages:
   - gloss-banana
   - gloss-export
   - gloss-game
+  - glsl # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230960137 at 2023-08-16
   - gltf-codec
   - glue
   - g-npm
@@ -1854,6 +1987,7 @@ broken-packages:
   - goatee
   - gochan
   - godot-haskell
+  - godot-megaparsec # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948877 at 2023-08-16
   - gofer-prelude
   - gogol-core
   - gooey
@@ -1874,6 +2008,7 @@ broken-packages:
   - gothic
   - GotoT-transformers
   - gotta-go-fast
+  - gotyno-hs # failure building library in job https://hydra.nixos.org/build/230953887 at 2023-08-16
   - gpah
   - GPipe
   - GPipe-Core
@@ -1910,12 +2045,14 @@ broken-packages:
   - gremlin-haskell
   - Grempa
   - greplicate
+  - greskell-core # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230954493 at 2023-08-16
   - gridfs
   - grid-proto # failure building library in job https://hydra.nixos.org/build/219248049 at 2023-05-10
   - grids
   - grm
   - GroteTrap
   - groundhog
+  - grouped-list # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962501 at 2023-08-16
   - groups-generic
   - group-theory
   - group-with
@@ -1969,6 +2106,7 @@ broken-packages:
   - hadoop-rpc
   - hadoop-streaming
   - hafar
+  - haggle # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967144 at 2023-08-16
   - Haggressive
   - HaGL # test failure in job https://hydra.nixos.org/build/225563740 at 2023-06-28
   - hahp
@@ -1987,6 +2125,7 @@ broken-packages:
   - hakyll-contrib-elm
   - hakyll-contrib-i18n
   - hakyll-contrib-links
+  - hakyll-convert # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951676 at 2023-08-16
   - hakyll-dhall
   - hakyll-dir-list
   - hakyll-R
@@ -1994,8 +2133,10 @@ broken-packages:
   - hakyll-shortcode
   - hakyll-typescript
   - HaLeX
+  - hal # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966637 at 2023-08-16
   - halfs
   - half-space
+  - halide-haskell # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951821 at 2023-08-16
   - halipeto
   - halive
   - halma
@@ -2022,9 +2163,11 @@ broken-packages:
   - happlets
   - happraise
   - happstack
+  - happstack-clientsession # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230955472 at 2023-08-16
   - happstack-hamlet
   - happstack-heist
   - happstack-hstringtemplate
+  - happstack-lite # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969664 at 2023-08-16
   - happstack-monad-peel
   - happstack-server-tls-cryptonite
   - happstack-util
@@ -2129,8 +2272,10 @@ broken-packages:
   - haskelzinc
   - haskeme
   - haskey
+  - haskey-btree # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947127 at 2023-08-16
   - haskheap
   - haskhol-core
+  - haskintex # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947126 at 2023-08-16
   - haskmon
   - haskoin
   - haskoin-util
@@ -2156,10 +2301,12 @@ broken-packages:
   - hasql-resource-pool
   - hasql-simple
   - hasql-streams-core
+  - hasql-transaction-io # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949199 at 2023-08-16
   - hasql-url
   - hastache
   - haste
   - haste-prim
+  - hasura-ekg-core # failure building library in job https://hydra.nixos.org/build/230950264 at 2023-08-16
   - hat
   - hatex-guide
   - hats
@@ -2212,7 +2359,9 @@ broken-packages:
   - headroom
   - heap-console
   - heapsort
+  - heartbeat-streams # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948671 at 2023-08-16
   - heart-core
+  - heatitup-complete # failure building executable 'heatitup-complete' in job https://hydra.nixos.org/build/230969611 at 2023-08-16
   - hebrew-time
   - heckle
   - heddit
@@ -2220,6 +2369,7 @@ broken-packages:
   - hedgehog-gen
   - hedgehog-generic
   - hedgehog-golden
+  - hedgehog-lens # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947380 at 2023-08-16
   - hedgehog-servant
   - hedis-config
   - hedis-namespace
@@ -2231,6 +2381,7 @@ broken-packages:
   - heist-aeson
   - heist-async
   - heist-emanote
+  - heist-extra # failure building library in job https://hydra.nixos.org/build/230953957 at 2023-08-16
   - helisp
   - helix
   - helm
@@ -2243,6 +2394,7 @@ broken-packages:
   - her-lexer-parsec
   - Hermes
   - herms
+  - heroku-persistent # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959576 at 2023-08-16
   - hetero-dict
   - heterogeneous-list-literals
   - hetris
@@ -2285,6 +2437,7 @@ broken-packages:
   - hgopher
   - h-gpgme
   - HGraphStorage
+  - hgreet # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970023 at 2023-08-16
   - hgrep
   - hgrev
   - hgrib
@@ -2299,9 +2452,11 @@ broken-packages:
   - hidden-char
   - hid-examples
   - hieraclus
+  - hierarchical-clustering # failure building library in job https://hydra.nixos.org/build/230953344 at 2023-08-16
   - hierarchical-exceptions
   - hierarchy
   - hiernotify
+  - hifi # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961852 at 2023-08-16
   - higgledy
   - higher-leveldb
   - higherorder
@@ -2342,12 +2497,15 @@ broken-packages:
   - hleap
   - hledger-chart
   - hledger-diff
+  - hledger-flow # failure building library in job https://hydra.nixos.org/build/230963320 at 2023-08-16
   - hledger-iadd
   - hledger-irr
+  - hledger-makeitso # failure building library in job https://hydra.nixos.org/build/230946385 at 2023-08-16
   - hledger-vty
   - hlibBladeRF
   - hlibev
   - hlibfam
+  - HList # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950021 at 2023-08-16
   - hlivy
   - hlogger
   - HLogger
@@ -2373,12 +2531,14 @@ broken-packages:
   - hmm
   - HMM
   - hmm-hmatrix
+  - HMock # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971948 at 2023-08-16
   - hMollom
   - hmp3
   - Hmpf
   - hmumps
   - hnetcdf
   - hnn
+  - hnock # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230960174 at 2023-08-16
   - hnop
   - hoauth
   - hoauth2-providers
@@ -2513,8 +2673,6 @@ broken-packages:
   - hslogger-template
   - hs-logo
   - hslua-examples
-  - hslua-repl # dependency missing in job https://hydra.nixos.org/build/214605872 at 2023-04-07
-  - hslua-typing # dependency missing in job https://hydra.nixos.org/build/214600262 at 2023-04-07
   - hsluv-haskell
   - hsmagick
   - hsmodetweaks
@@ -2533,11 +2691,13 @@ broken-packages:
   - hsp-cgi
   - hspear
   - hspec2
+  - hspec-api # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957655 at 2023-08-16
   - hspec-expectations-match
   - hspec-experimental
   - hspec-jenkins
   - hspec-junit-formatter
   - hspec-monad-control
+  - hspec-need-env # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962402 at 2023-08-16
   - hspec-slow
   - hspec-snap
   - hspec-structured-formatter
@@ -2557,6 +2717,7 @@ broken-packages:
   - hs-rs-notify
   - hs-scrape
   - hsseccomp
+  - hsshellscript # failure building library in job https://hydra.nixos.org/build/230964557 at 2023-08-16
   - hs-snowtify
   - hsSqlite3
   - hssqlppp
@@ -2586,6 +2747,7 @@ broken-packages:
   - HTicTacToe
   - htiled
   - htlset
+  - html-parse # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962751 at 2023-08-16
   - html-rules
   - html-tokenizer
   - htoml
@@ -2594,6 +2756,7 @@ broken-packages:
   - htsn
   - htssets
   - http2-client-exe
+  - http2-client # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949635 at 2023-08-16
   - http2-grpc-types
   - http3 # dependency missing in job https://hydra.nixos.org/build/214603147 at 2023-04-07
   - http-attoparsec
@@ -2647,6 +2810,7 @@ broken-packages:
   - hVOIDP
   - hwall-auth-iitk
   - hw-ci-assist
+  - hw-dsv # failure building library in job https://hydra.nixos.org/build/230955653 at 2023-08-16
   - hw-dump
   - hweblib
   - hwhile
@@ -2658,12 +2822,15 @@ broken-packages:
   - hw-prim-bits
   - hw-simd-cli
   - hwsl2
+  - hw-streams # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230953855 at 2023-08-16
   - hw-tar
+  - hw-xml # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966951 at 2023-08-16
   - hx
   - hxmppc
   - HXQ
   - hxt-pickle-utils
   - hyakko
+  - hydra # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947287 at 2023-08-16
   - hydra-hs
   - hydrogen
   - hydrogen-multimap
@@ -2710,9 +2877,12 @@ broken-packages:
   - ihaskell-charts
   - ihaskell-diagrams
   - ihaskell-gnuplot
+  - ihaskell-graphviz # failure building library in job https://hydra.nixos.org/build/230959018 at 2023-08-16
   - ihaskell-parsec
   - ihaskell-plot
   - ihaskell-widgets
+  - ihp-hsx # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971837 at 2023-08-16
+  - ilist # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948898 at 2023-08-16
   - illuminate
   - imagemagick
   - imagepaste
@@ -2741,9 +2911,11 @@ broken-packages:
   - indices
   - infernal
   - inferno-types
+  - infernu # failure building library in job https://hydra.nixos.org/build/230972899 at 2023-08-16
   - infer-upstream
   - inf-interval
   - infix
+  - inflections # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230960295 at 2023-08-16
   - inflist
   - informative
   - inilist
@@ -2753,6 +2925,7 @@ broken-packages:
   - inject-function
   - injections
   - inline-c-objc # failure building test suite 'tests' in job https://hydra.nixos.org/build/221844966 at 2023-05-30
+  - inline-r # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/231676486 at 2023-08-16
   - in-other-words-plugin
   - inserts
   - instana-haskell-trace-sdk
@@ -2760,7 +2933,7 @@ broken-packages:
   - instant-generics
   - instapaper-sender
   - instinct
-  - integer-conversion # dependency missing in job https://hydra.nixos.org/build/225563519 at 2023-06-28
+  - intcode # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963480 at 2023-08-16
   - integer-pure
   - integer-simple
   - intensional-datatys
@@ -2782,6 +2955,7 @@ broken-packages:
   - interval-tree-clock
   - IntFormats
   - int-interval-map
+  - int-like # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957175 at 2023-08-16
   - int-multimap
   - intrinsic-superclasses
   - intro
@@ -2808,6 +2982,7 @@ broken-packages:
   - IPv6DB
   - Irc
   - ircbot
+  - irc-core # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962123 at 2023-08-16
   - irc-dcc
   - irc-fun-types
   - ireal
@@ -2831,6 +3006,7 @@ broken-packages:
   - ivory
   - ixdopp
   - ixmonad
+  - ixset-typed # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967299 at 2023-08-16
   - ixshader
   - j
   - jack-bindings
@@ -2843,6 +3019,7 @@ broken-packages:
   - jammittools
   - jarfind
   - jarify
+  - jaskell # test failure in job https://hydra.nixos.org/build/230959845 at 2023-08-16
   - jason
   - java-adt
   - javascript-bridge
@@ -2864,6 +3041,7 @@ broken-packages:
   - join-api
   - joinlist
   - jonathanscard
+  - jordan # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965587 at 2023-08-16
   - jort
   - joy-rewrite
   - jpeg
@@ -2912,6 +3090,7 @@ broken-packages:
   - JuicyPixels-blurhash
   - JuicyPixels-canvas
   - JuicyPixels-util
+  - jukebox # failure building library in job https://hydra.nixos.org/build/230961139 at 2023-08-16
   - JunkDB
   - jupyter
   - justified-containers
@@ -2926,6 +3105,7 @@ broken-packages:
   - kalman
   - Kalman
   - kangaroo
+  - kanji # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967903 at 2023-08-16
   - karabiner-config
   - karps
   - katip-datadog
@@ -2981,9 +3161,11 @@ broken-packages:
   - ktx
   - kubernetes-client-core
   - kubernetes-webhook-haskell
+  - kudzu # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947047 at 2023-08-16
   - kuifje
   - kure
   - KyotoCabinet
+  - l10n # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958884 at 2023-08-16
   - labeled-graph
   - lagrangian
   - lambda2js
@@ -3032,6 +3214,7 @@ broken-packages:
   - language-openscad
   - language-pig
   - language-rust
+  - language-sally # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230953286 at 2023-08-16
   - language-sh
   - language-sqlite
   - language-sygus
@@ -3039,6 +3222,7 @@ broken-packages:
   - language-webidl
   - laop
   - LargeCardinalHierarchy
+  - large-generics # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948096 at 2023-08-16
   - Lastik
   - latest-npm-version
   - latex-formulae-image
@@ -3082,6 +3266,7 @@ broken-packages:
   - lens-text-encoding
   - lens-th-rewrite
   - lens-time
+  - lens-toml-parser # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971016 at 2023-08-16
   - lens-tutorial
   - lens-typelevel
   - lens-xml
@@ -3094,13 +3279,16 @@ broken-packages:
   - lhc
   - lhs2TeX-hl
   - lhslatex
+  - libarchive # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230954627 at 2023-08-16
   - LibClang
   - libexpect
   - libGenI
   - libhbb
   - libinfluxdb
   - libjenkins
+  - libjwt-typed # failure building library in job https://hydra.nixos.org/build/230959244 at 2023-08-16
   - libltdl
+  - libmdbx #  failure  in job https://hydra.nixos.org/build/230971264 at 2023-08-16
   - liboath-hs
   - liboleg
   - libpafe
@@ -3111,9 +3299,11 @@ broken-packages:
   - libssh2 # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/223222399 at 2023-06-07
   - libsystemd-daemon
   - libtagc
+  - libtelnet # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948008 at 2023-08-16
   - libxls
   - libxlsxwriter-hs
   - libxslt
+  - libyaml-streamly # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965706 at 2023-08-16
   - libzfs
   - licensor
   - lie
@@ -3136,8 +3326,11 @@ broken-packages:
   - linear-vect
   - line-bot-sdk
   - line-drawing
+  - line-indexed-cursor # test failure in job https://hydra.nixos.org/build/230971466 at 2023-08-16
+  - linenoise # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230954880 at 2023-08-16
   - lines-of-action
   - lingo
+  - linguistic-ordinals # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962191 at 2023-08-16
   - linkedhashmap
   - linked-list-with-iterator
   - linklater
@@ -3153,6 +3346,7 @@ broken-packages:
   - linx-gateway
   - lipsum-gen
   - liquid
+  - liquid-fixpoint # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948295 at 2023-08-16
   - liquidhaskell-cabal
   - Liquorice
   - list-fusion-probe
@@ -3169,6 +3363,7 @@ broken-packages:
   - lit
   - literals
   - LiterateMarkdown
+  - little-earley # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949904 at 2023-08-16
   - ll-picosat
   - llsd
   - llvm-base
@@ -3176,7 +3371,10 @@ broken-packages:
   - llvm-general-pure
   - llvm-hs
   - llvm-ht
+  - llvm-party # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967625 at 2023-08-16
   - llvm-pretty
+  - llvm-tf # failure building library in job https://hydra.nixos.org/build/230970343 at 2023-08-16
+  - lmdb-high-level # failure building library in job https://hydra.nixos.org/build/230954528 at 2023-08-16
   - lmdb-simple
   - lmonad
   - lnurl
@@ -3186,6 +3384,7 @@ broken-packages:
   - located
   - located-monad-logger
   - loch
+  - loc-test # failure in haddockPhase in job https://hydra.nixos.org/build/230967699 at 2023-08-16
   - log2json
   - log-base
   - log-effect
@@ -3202,6 +3401,8 @@ broken-packages:
   - lojbanXiragan
   - lol-calculus
   - longboi
+  - long-double # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964106 at 2023-08-16
+  - looksee # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959202 at 2023-08-16
   - lookup-tables
   - loopbreaker
   - loop-dsl
@@ -3227,8 +3428,10 @@ broken-packages:
   - lua-bc
   - luautils
   - lucid2-htmx
+  - lucid-alpine # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948075 at 2023-08-16
   - lucid-aria
   - lucid-hyperscript
+  - luhn # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/230960533 at 2023-08-16
   - luis-client
   - luka
   - luminance
@@ -3237,7 +3440,9 @@ broken-packages:
   - lvmlib
   - lvmrun
   - lxd-client
+  - lxd-client-config # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967232 at 2023-08-16
   - lye
+  - lz4-bytes # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958626 at 2023-08-16
   - lz4-frame-conduit
   - lzip
   - lzlib
@@ -3280,16 +3485,19 @@ broken-packages:
   - marked-pretty
   - markov-realization
   - mars
+  - marshal-contt # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964051 at 2023-08-16
   - marvin-interpolate
   - MASMGen
   - massiv-persist
   - massiv-scheduler
   - massiv-serialise
   - master-plan
+  - matcher # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947893 at 2023-08-16
   - mathflow
   - math-grads
   - math-interpolate
   - math-metric
+  - math-programming # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964799 at 2023-08-16
   - matrix-as-xyz
   - matrix-lens
   - matrix-market
@@ -3304,16 +3512,19 @@ broken-packages:
   - MazesOfMonad
   - MBot
   - mbox-tools
+  - mbtiles # failure building library in job https://hydra.nixos.org/build/230947737 at 2023-08-16
   - mbug
   - mcl
   - mcm
   - mcmaster-gloss-examples
   - mcmc-synthesis
   - mcpi
+  - md5 # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966189 at 2023-08-16
   - mdapi
   - mdcat
   - mdp
   - mealstrom
+  - mealy # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952277 at 2023-08-16
   - MeanShift
   - Measure
   - mecab
@@ -3365,6 +3576,7 @@ broken-packages:
   - microformats2-parser
   - microgroove
   - microlens-each
+  - microlens-process # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957561 at 2023-08-16
   - micrologger
   - micro-recursion-schemes
   - microsoft-translator
@@ -3392,6 +3604,7 @@ broken-packages:
   - mios
   - MIP
   - mirror-tweet
+  - mismi-p # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949261 at 2023-08-16
   - mismi-s3-core
   - miso-action-logger
   - miso-examples
@@ -3409,6 +3622,7 @@ broken-packages:
   - mmsyn7ukr-common
   - mmtf
   - mmtl
+  - mmzk-typeid # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951832 at 2023-08-16
   - Mobile-Legends-Hack-Cheats
   - mockazo
   - mock-httpd
@@ -3446,9 +3660,11 @@ broken-packages:
   - monadloc-pp
   - monad-log
   - monadlog
+  - monad-logger-prefix # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230955752 at 2023-08-16
   - monad-logger-syslog
   - monad-lrs
   - monad-mersenne-random
+  - monad-metrics # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947569 at 2023-08-16
   - monad-mock
   - monad-open
   - monad-parallel-progressbar
@@ -3458,6 +3674,7 @@ broken-packages:
   - monad-ran
   - MonadRandomLazy
   - monad-recorder
+  - monad-skeleton # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956155 at 2023-08-16
   - MonadStack
   - monad-statevar
   - monad-ste
@@ -3479,6 +3696,7 @@ broken-packages:
   - mono-foldable
   - monoid
   - monoid-absorbing
+  - monoidal-functors # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956652 at 2023-08-16
   - monoid-owns
   - monoidplus
   - monoids
@@ -3507,8 +3725,11 @@ broken-packages:
   - mrifk
   - mrm
   - ms
+  - ms-auth # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947549 at 2023-08-16
+  - ms-azure-api # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969734 at 2023-08-16
   - msgpack
   - msgpack-types
+  - ms-graph-api # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230953084 at 2023-08-16
   - msh
   - mssql-simple
   - MTGBuilder
@@ -3528,12 +3749,14 @@ broken-packages:
   - multiaddr
   - multiarg
   - multihash
+  - multi-instance # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230954844 at 2023-08-16
   - multilinear
   - multipass
   - multipath
   - multiplate-simplified
   - multipool
   - multirec
+  - Munkres # failure building library in job https://hydra.nixos.org/build/230964280 at 2023-08-16
   - Munkres-simple
   - muon
   - murmur
@@ -3571,6 +3794,7 @@ broken-packages:
   - nano-cryptr
   - nanocurses
   - nano-hmac
+  - NanoID # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948998 at 2023-08-16
   - nano-md5
   - nanomsg
   - nanomsg-haskell
@@ -3668,6 +3892,7 @@ broken-packages:
   - nix-freeze-tree
   - nixfromnpm
   - nixpkgs-update
+  - nix-serve-ng # failure building executable 'nix-serve' in job https://hydra.nixos.org/build/231635876 at 2023-08-16
   - nix-tools
   - nlp-scores
   - nm
@@ -3684,10 +3909,13 @@ broken-packages:
   - non-empty-containers
   - nonempty-lift
   - non-empty-zipper
+  - nonlinear-optimization # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950369 at 2023-08-16
   - noodle
+  - normalization-insensitive # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969473 at 2023-08-16
   - no-role-annots
   - notcpp
   - notmuch-haskell
+  - not-prelude # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947663 at 2023-08-16
   - NoTrace
   - notzero
   - np-linear
@@ -3696,19 +3924,23 @@ broken-packages:
   - ntp-control
   - ntrip-client
   - n-tuple
+  - nuha # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959017 at 2023-08-16
   - nullary
   - null-canvas
   - nullpipe
   - NumberSieves
   - NumberTheory
+  - number-wall # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947084 at 2023-08-16
   - numeric-qq
   - numeric-ranges
   - numhask-free
   - numhask-histogram
   - numhask-prelude
+  - numhask-space # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958208 at 2023-08-16
   - numtype
   - numtype-tf
   - Nutri
+  - nvfetcher # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/231635785 at 2023-08-16
   - nvim-hs-ghcid
   - NXT
   - NXTDSL
@@ -3751,6 +3983,7 @@ broken-packages:
   - om-time
   - on-a-horse
   - onama
+  - ONC-RPC # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952342 at 2023-08-16
   - on-demand-ssh-tunnel
   - oneormore
   - onpartitions
@@ -3788,6 +4021,7 @@ broken-packages:
   - opentelemetry-extra
   - opentelemetry-http-client
   - opentheory-char
+  - opentracing # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951073 at 2023-08-16
   - opentype
   - open-typerep
   - OpenVGRaw
@@ -3814,10 +4048,13 @@ broken-packages:
   - organize-imports
   - orgmode
   - orgmode-parse
+  - org-parser # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971946 at 2023-08-16
   - origami
   - orion-hs
   - orizentic
   - OrPatterns
+  - ory-hydra-client # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971097 at 2023-08-16
+  - ory-kratos # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968815 at 2023-08-16
   - osc
   - oscpacking
   - oset
@@ -3837,6 +4074,7 @@ broken-packages:
   - owoify-hs
   - pack
   - package-description-remote
+  - package-version # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230960762 at 2023-08-16
   - package-vt
   - packdeps
   - packed
@@ -3856,17 +4094,21 @@ broken-packages:
   - pagure-hook-receiver
   - PandocAgda
   - pandoc-citeproc
-  - pandoc-emphasize-code
+  - pandoc-columns # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956006 at 2023-08-16
+  - pandoc-csv2table # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968874 at 2023-08-16
   - pandoc-filter-graphviz
   - pandoc-filter-indent
   - pandoc-include
+  - pandoc-include-plus # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962699 at 2023-08-16
   - pandoc-lens
-  - pandoc-lua-engine
+  - pandoc-linear-table # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968966 at 2023-08-16
+  - pandoc-link-context # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972013 at 2023-08-16
+  - pandoc-logic-proof # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961625 at 2023-08-16
   - pandoc-markdown-ghci-filter
   - pandoc-placetable
   - pandoc-plantuml-diagrams
   - pandoc-pyplot
-  - pandoc-server
+  - pandoc-select-code # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956087 at 2023-08-16
   - pandoc-unlit
   - pandoc-utils
   - pandora
@@ -3920,6 +4162,7 @@ broken-packages:
   - parsers-megaparsec
   - parser-unbiased-choice-monad-embedding
   - parsimony
+  - parsix # failure building library in job https://hydra.nixos.org/build/230966036 at 2023-08-16
   - parsnip
   - partage
   - partial-lens
@@ -3937,6 +4180,7 @@ broken-packages:
   - patches-vector
   - Pathfinder
   - pathfindingcore
+  - path-formatting # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969881 at 2023-08-16
   - PathTree
   - patrol
   - patronscraper
@@ -3987,10 +4231,12 @@ broken-packages:
   - persistent-generic
   - persistent-mongoDB
   - persistent-odbc
+  - persistent-postgresql-streaming # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967419 at 2023-08-16
   - persistent-ratelimit
   - persistent-stm
   - persistent-template-classy
   - persistent-zookeeper
+  - persist # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970536 at 2023-08-16
   - persist-state
   - persona
   - pesca
@@ -4009,6 +4255,7 @@ broken-packages:
   - phasechange
   - phaser
   - phoityne
+  - phoityne-vscode # failure building executable 'phoityne-vscode' in job https://hydra.nixos.org/build/230958609 at 2023-08-16
   - phone-metadata
   - phone-numbers
   - phone-push
@@ -4044,6 +4291,7 @@ broken-packages:
   - Pipe
   - pipes-async
   - pipes-bgzf
+  - pipes-break # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950050 at 2023-08-16
   - pipes-brotli
   - pipes-category
   - pipes-cereal
@@ -4051,6 +4299,8 @@ broken-packages:
   - pipes-errors
   - pipes-interleave
   - pipes-io
+  - pipes-lines # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965615 at 2023-08-16
+  - pipes-lzma # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230954108 at 2023-08-16
   - pipes-network-ws # failure building library in job https://hydra.nixos.org/build/214504366 at 2023-04-07
   - pipes-protolude
   - pipes-rt
@@ -4121,41 +4371,52 @@ broken-packages:
   - polynomial
   - polysemy-check
   - polysemy-keyed-state
+  - polysemy-kvstore # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971431 at 2023-08-16
   - polysemy-kvstore-jsonfile
+  - polysemy-managed # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972262 at 2023-08-16
   - polysemy-methodology-co-log
   - polysemy-mocks
   - polysemy-path
   - polysemy-readline
   - polysemy-req
   - polysemy-resume
+  - polysemy-several # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969795 at 2023-08-16
   - polysemy-socket
   - polysemy-video
   - polysemy-vinyl
+  - polysemy-zoo # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962140 at 2023-08-16
   - poly # test failure in job https://hydra.nixos.org/build/225574715 at 2023-06-28
   - polytypeable
+  - polyvariadic # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956502 at 2023-08-16
   - pomaps
   - pomohoro
   - ponder
   - pong-server
+  - pontarius-xmpp-extras # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/231689607 at 2023-08-16
   - pontarius-xpmn
   - pool
   - poolboy # test failure in job https://hydra.nixos.org/build/212819440 at 2023-03-26
   - pool-conduit
   - pop3-client
+  - popkey # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964862 at 2023-08-16
   - poppler
   - porpoise
   - portager
   - porte
   - PortFusion
+  - posable # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948222 at 2023-08-16
   - posit
   - positron
   - posix-acl
+  - posix-api # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230954850 at 2023-08-16
   - posix-realtime
   - posix-waitpid
+  - posplyu # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957556 at 2023-08-16
   - postcodes
   - postgres-embedded
   - PostgreSQL
   - postgresql-common
+  - postgresql-config # failure building library in job https://hydra.nixos.org/build/230957015 at 2023-08-16
   - postgresql-cube
   - postgresql-lo-stream
   - postgresql-ltree
@@ -4207,6 +4468,7 @@ broken-packages:
   - press
   - pretty-compact
   - pretty-ghci
+  - pretty-loc # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230953975 at 2023-08-16
   - pretty-ncols
   - prettyprinter-vty
   - prim
@@ -4218,11 +4480,14 @@ broken-packages:
   - PrimitiveArray
   - PrimitiveArray-Pretty
   - primitive-atomic
+  - primitive-checked # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957933 at 2023-08-16
   - primitive-convenience
   - primitive-foreign
   - primitive-indexed
   - primitive-maybe
+  - primitive-primvar # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951857 at 2023-08-16
   - primitive-simd
+  - primitive-slice # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949991 at 2023-08-16
   - primitive-sort
   - primitive-stablename
   - prim-ref
@@ -4233,6 +4498,7 @@ broken-packages:
   - prints
   - PriorityChansConverger
   - priority-queue
+  - pro-abstract # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968325 at 2023-08-16
   - probable
   - prob-fx
   - Probnet
@@ -4247,6 +4513,7 @@ broken-packages:
   - product-isomorphic
   - prof2pretty
   - prof-flamegraph
+  - profiteur # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962019 at 2023-08-16
   - profunctor-monad
   - progression
   - progressive
@@ -4259,6 +4526,7 @@ broken-packages:
   - prolens
   - prolog
   - prometheus-effect
+  - prometheus # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959996 at 2023-08-16
   - prometheus-proc
   - promise
   - pronounce
@@ -4267,14 +4535,16 @@ broken-packages:
   - Proper
   - properties
   - property-list
+  - prop-unit # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950936 at 2023-08-16
   - proquint #  failure  in job https://hydra.nixos.org/build/215308028 at 2023-04-11
   - prosidy
+  - pro-source # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963769 at 2023-08-16
   - prosper
-  - proteaaudio
-  - proteaaudio-sdl
+  - proteaaudio # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950003 at 2023-08-16
   - protocol
   - protocol-buffers
   - protocol-buffers-fork
+  - proto-lens-arbitrary # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230953387 at 2023-08-16
   - proto-lens-combinators
   - protolude-lifted
   - proton-haskell
@@ -4287,6 +4557,7 @@ broken-packages:
   - psc-ide
   - pseudo-trie
   - psi
+  - pstemmer # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230955354 at 2023-08-16
   - psx
   - PTQ
   - pub
@@ -4305,6 +4576,7 @@ broken-packages:
   - purescript-cst
   - purescript-tsd-gen
   - pure-zlib
+  - purview # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961366 at 2023-08-16
   - pushbullet
   - pushbullet-types
   - pusher-haskell
@@ -4313,6 +4585,7 @@ broken-packages:
   - push-notifications
   - putlenses
   - puzzle-draw
+  - pvector # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952685 at 2023-08-16
   - pyffi
   - pyfi
   - python-pickle
@@ -4341,9 +4614,12 @@ broken-packages:
   - querystring-pickle
   - questioner
   - quibble-core
+  - quic # failure building library in job https://hydra.nixos.org/build/230948542 at 2023-08-16
   - QuickAnnotate
   - quickbooks
   - quickcheck-arbitrary-template
+  - quickcheck-combinators # failure building library in job https://hydra.nixos.org/build/230952645 at 2023-08-16
+  - quickcheck-dynamic # failure building library in job https://hydra.nixos.org/build/230963873 at 2023-08-16
   - quickcheck-groups
   - quickcheck-lockstep # dependency missing in job https://hydra.nixos.org/build/210845914 at 2023-02-28
   - quickcheck-monoid-subclasses
@@ -4381,6 +4657,7 @@ broken-packages:
   - raml
   - rando
   - random-access-list
+  - random-cycle # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957192 at 2023-08-16
   - random-derive
   - RandomDotOrg
   - random-eff
@@ -4394,6 +4671,7 @@ broken-packages:
   - rangeset
   - rank1dynamic
   - rank-product
+  - rapid # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958426 at 2023-08-16
   - rapid-term
   - Rasenschach
   - rating-chgk-info
@@ -4405,6 +4683,7 @@ broken-packages:
   - raz
   - rbst
   - rclient
+  - rdf4h # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965619 at 2023-08-16
   - react-flux
   - react-haskell
   - reaction-logic
@@ -4434,6 +4713,7 @@ broken-packages:
   - records-sop
   - record-wrangler
   - recover-rtti
+  - rec-smallarray # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971840 at 2023-08-16
   - recursors
   - red-black-record
   - redis-glob
@@ -4457,6 +4737,7 @@ broken-packages:
   - reflex-dom-contrib
   - reflex-dom-fragment-shader-canvas
   - reflex-dom-helpers
+  - reflex-dom-pandoc # failure building library in job https://hydra.nixos.org/build/230953122 at 2023-08-16
   - reflex-dom-retractable
   - reflex-dom-svg
   - reflex-external-ref
@@ -4472,6 +4753,9 @@ broken-packages:
   - reflex-vty
   - ref-mtl
   - reformat
+  - reform-hamlet # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965992 at 2023-08-16
+  - reform-hsp # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957580 at 2023-08-16
+  - reform-lucid # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968858 at 2023-08-16
   - refresht
   - refty
   - refurb
@@ -4502,6 +4786,7 @@ broken-packages:
   - reify
   - relacion
   - relation
+  - releaser # failure building library in job https://hydra.nixos.org/build/230963399 at 2023-08-16
   - relevant-time
   - reload
   - remark
@@ -4510,10 +4795,12 @@ broken-packages:
   - remote-debugger
   - remote-monad
   - reorderable
+  - reorder-expression # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952702 at 2023-08-16
   - repa-bytestring
   - repa-devil
   - repa-eval
   - repa-examples
+  - repa # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959980 at 2023-08-16
   - repa-linear-algebra
   - repa-scalar
   - repa-series
@@ -4524,6 +4811,7 @@ broken-packages:
   - repl-toolkit
   - repo-based-blog
   - representable-functors
+  - reprinter # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970043 at 2023-08-16
   - reproject
   - req-conduit
   - request
@@ -4536,9 +4824,10 @@ broken-packages:
   - resolve-trivial-conflicts
   - resource-effect
   - resource-embed
+  - resource-pool-monad # failure building library in job https://hydra.nixos.org/build/230949096 at 2023-08-16
+  - resourcet-pool # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950524 at 2023-08-16
   - respond
   - restartable
-  - rest-rewrite
   - restyle
   - resumable-exceptions
   - rethinkdb
@@ -4573,6 +4862,7 @@ broken-packages:
   - rivet-simple-deploy
   - RJson
   - Rlang-QQ
+  - rle # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950686 at 2023-08-16
   - rlglue
   - RLP
   - rl-satton
@@ -4591,6 +4881,7 @@ broken-packages:
   - rosebud
   - rose-trees
   - rosmsg
+  - rospkg # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/231689673 at 2023-08-16
   - rosso
   - rotating-log
   - rounded
@@ -4601,6 +4892,7 @@ broken-packages:
   - rpc-framework
   - rpm
   - rpmbuild-order
+  - rpmostree-update # failure building executable 'rpmostree-update' in job https://hydra.nixos.org/build/230963857 at 2023-08-16
   - rrule
   - rspp
   - rss2irc
@@ -4610,6 +4902,7 @@ broken-packages:
   - rtorrent-rpc
   - rtorrent-state
   - rts-loader
+  - rubberband # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972230 at 2023-08-16
   - ruby-marshal
   - ruby-qq
   - ruff
@@ -4653,6 +4946,7 @@ broken-packages:
   - sat
   - satchmo-backends
   - satchmo-minisat
+  - saturn # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961398 at 2023-08-16
   - Saturnin
   - satyros
   - savage
@@ -4663,6 +4957,7 @@ broken-packages:
   - scaleimage
   - scalendar
   - s-cargot-letbind
+  - scat # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970581 at 2023-08-16
   - scc
   - schedevr
   - schedule-planner
@@ -4695,6 +4990,10 @@ broken-packages:
   - sdl2-cairo-image
   - sdl2-compositor
   - sdl2-fps
+  - sdl2-gfx # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947327 at 2023-08-16
+  - sdl2-image # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965350 at 2023-08-16
+  - sdl2-mixer # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969457 at 2023-08-16
+  - sdl2-ttf # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963820 at 2023-08-16
   - sdp
   - sdr
   - seacat
@@ -4711,6 +5010,7 @@ broken-packages:
   - secure-sockets
   - secureUDP
   - SegmentTree
+  - selda # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970840 at 2023-08-16
   - selda-postgresql
   - selectors
   - selenium
@@ -4719,6 +5019,8 @@ broken-packages:
   - semaphore-compat # dependency missing in job https://hydra.nixos.org/build/214509429 at 2023-04-07
   - semdoc
   - semialign-extras
+  - semialign-indexed # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950953 at 2023-08-16
+  - semialign-optics # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950916 at 2023-08-16
   - semibounded-lattices
   - Semigroup
   - semigroupoids-syntax
@@ -4733,20 +5035,25 @@ broken-packages:
   - SeqAlign
   - sequent-core
   - sequential-index
+  - serf # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970238 at 2023-08-16
   - serialize-instances
+  - serialport # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962754 at 2023-08-16
   - serokell-util
   - servant-aeson-specs
   - servant-auth-cookie
   - servant-auth-hmac
+  - servant-auth-server # failure building test suite 'spec' in job https://hydra.nixos.org/build/230968407 at 2023-08-16
   - servant-avro
   - servant-benchmark
   - servant-client-js
+  - servant-combinators # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950496 at 2023-08-16
   - servant-db
   - servant-dhall
   - servant-docs-simple
   - servant-elm
   - servant-errors
   - servant-event-stream
+  - servant-foreign # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967834 at 2023-08-16
   - servant-gdp
   - servant-generate
   - servant-generic
@@ -4755,8 +5062,10 @@ broken-packages:
   - servant-hmac-auth
   - servant-htmx
   - servant-http2-client
+  - servant-http-streams # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956465 at 2023-08-16
   - servant-iCalendar
   - servant-jquery
+  - servant-JuicyPixels # failure building library in job https://hydra.nixos.org/build/230963492 at 2023-08-16
   - servant-kotlin
   - servant-mock
   - servant-namedargs
@@ -4798,6 +5107,7 @@ broken-packages:
   - setters
   - set-with
   - sexp
+  - sexpr-parser # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967001 at 2023-08-16
   - sext
   - SFML
   - sfml-audio
@@ -4821,9 +5131,12 @@ broken-packages:
   - sha-streams
   - she
   - Shellac
+  - shellify # failure building test suite 'haskelltest-test' in job https://hydra.nixos.org/build/230963414 at 2023-08-16
   - shellish
   - shellmate
+  - shellmet # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972264 at 2023-08-16
   - shell-pipe
+  - shikensu # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951632 at 2023-08-16
   - shimmer
   - shine-examples
   - shivers-cfg
@@ -4834,12 +5147,14 @@ broken-packages:
   - shorten-strings
   - short-vec
   - show-prettyprint
+  - show-type # failure building library in job https://hydra.nixos.org/build/230946625 at 2023-08-16
   - Shpadoinkle-console
   - Shpadoinkle-debug
   - Shpadoinkle-isreal
   - shwifty
   - sifflet
   - sifflet-lib
+  - sigmacord # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948674 at 2023-08-16
   - signable
   - signable-haskell-protoc
   - signed-multiset
@@ -4855,6 +5170,7 @@ broken-packages:
   - simpleconfig
   - simple-css
   - simple-download
+  - simple-effects # failure building library in job https://hydra.nixos.org/build/230951952 at 2023-08-16
   - simple-eval
   - simple-form
   - simple-genetic-algorithm
@@ -4863,9 +5179,11 @@ broken-packages:
   - simpleirc
   - simple-log
   - simple-logging
+  - simple-media-timestamp-formatting # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230946985 at 2023-08-16
   - simple-money
   - simple-neural-networks
   - simplenote
+  - simple-parser # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951616 at 2023-08-16
   - simple-pipe
   - simpleprelude
   - simple-rope
@@ -4889,6 +5207,7 @@ broken-packages:
   - singnal
   - singular-factory
   - sink
+  - sint # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966755 at 2023-08-16
   - siphash
   - sitepipe
   - sixfiguregroup
@@ -4931,9 +5250,12 @@ broken-packages:
   - smartconstructor
   - smartGroup
   - smash
+  - smawk # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963766 at 2023-08-16
   - sme
   - smerdyakov
   - smiles
+  - smith # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230967626 at 2023-08-16
+  - SmithNormalForm # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970411 at 2023-08-16
   - smoothie
   - smsaero
   - smt-lib
@@ -4966,6 +5288,7 @@ broken-packages:
   - snaplet-mongodb-minimalistic
   - snaplet-mysql-simple
   - snaplet-postgresql-simple
+  - snaplet-purescript # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971794 at 2023-08-16
   - snaplet-recaptcha
   - snaplet-redis
   - snaplet-sass
@@ -5008,6 +5331,7 @@ broken-packages:
   - source-constraints
   - sousit
   - soyuz
+  - SpaceInvaders # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963310 at 2023-08-16
   - spacepart
   - spade # dependency missing in job https://hydra.nixos.org/build/225563353 at 2023-06-28
   - spake2
@@ -5016,13 +5340,17 @@ broken-packages:
   - sparse
   - sparsecheck
   - sparse-lin-alg
+  - sparse-linear-algebra # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966041 at 2023-08-16
+  - sparse-merkle-trees # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948641 at 2023-08-16
   - sparse-tensor
+  - spdx # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970358 at 2023-08-16
   - special-functors
   - special-keys
   - spectacle
   - speculation
   - sphinx
   - sphinxesc
+  - Spintax # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964258 at 2023-08-16
   - spiros
   - spir-v
   - splay
@@ -5033,11 +5361,13 @@ broken-packages:
   - Spock-api-ghcjs
   - Spock-auth
   - spoonutil
+  - spotify # test failure in job https://hydra.nixos.org/build/230953177 at 2023-08-16
   - spoty
   - Sprig
   - spritz
   - spsa
   - spy
+  - sqids # test failure in job https://hydra.nixos.org/build/230970531 at 2023-08-16
   - sqlcipher
   - sqlite
   - sqlite-easy
@@ -5045,11 +5375,13 @@ broken-packages:
   - sql-simple
   - sqlvalue-list
   - srcinst
+  - srt-attoparsec # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966533 at 2023-08-16
   - srt-dhall
   - sscan
   - ssh
   - ssh-tunnel
   - SSTG
+  - st2 # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965507 at 2023-08-16
   - stable-heap
   - stable-maps
   - stable-marriage
@@ -5072,6 +5404,7 @@ broken-packages:
   - standalone-derive-topdown
   - standalone-haddock
   - starling
+  - starter # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947332 at 2023-08-16
   - stash
   - Stasis
   - state
@@ -5112,6 +5445,7 @@ broken-packages:
   - Stomp
   - stooq-api
   - storable
+  - storable-offset # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956457 at 2023-08-16
   - storable-static-array
   - stp
   - str
@@ -5136,10 +5470,13 @@ broken-packages:
   - streaming-png
   - streaming-postgresql-simple
   - streaming-sort
+  - streaming-with # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956271 at 2023-08-16
   - streamly-binary
   - streamly-cassava
   - streamly-examples
+  - streamly-fsnotify # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230946720 at 2023-08-16
   - streamly-lz4
+  - streamly-posix # failure building library in job https://hydra.nixos.org/build/230968738 at 2023-08-16
   - streamly-process
   - stream-monad
   - streamproc
@@ -5150,6 +5487,7 @@ broken-packages:
   - strict-ghc-plugin
   - strictly
   - strict-tuple-lens
+  - string-class # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948470 at 2023-08-16
   - string-conv-tests
   - string-fromto
   - string-isos
@@ -5167,6 +5505,7 @@ broken-packages:
   - stt
   - stunclient
   - stylish-cabal
+  - stylist # failure building test suite 'test-stylist' in job https://hydra.nixos.org/build/230952543 at 2023-08-16
   - stylized
   - subG-instances
   - subleq-toolchain
@@ -5218,15 +5557,16 @@ broken-packages:
   - swiss-ephemeris
   - sws
   - syb-extras
+  - syb-with-class # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970380 at 2023-08-16
   - syb-with-class-instances-text
   - sydtest-hedis # test failure in job https://hydra.nixos.org/build/225562212 at 2023-06-28
+  - sydtest-hspec # failure building library in job https://hydra.nixos.org/build/230968205 at 2023-08-16
   - sydtest-mongo #  failure  in job https://hydra.nixos.org/build/225574398 at 2023-06-28
   - sydtest-persistent-postgresql # test failure in job https://hydra.nixos.org/build/225560820 at 2023-06-28
   - sydtest-persistent-sqlite # test failure in job https://hydra.nixos.org/build/225566898 at 2023-06-28
   - sydtest-rabbitmq # test failure in job https://hydra.nixos.org/build/225569272 at 2023-06-28
   - sydtest-webdriver # test failure in job https://hydra.nixos.org/build/225552802 at 2023-06-28
   - syfco
-  - sym
   - symantic
   - symantic-cli
   - symantic-http-client
@@ -5237,6 +5577,7 @@ broken-packages:
   - symengine-hs
   - sync
   - sync-mht
+  - syntactic # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958352 at 2023-08-16
   - syntax-trees
   - syntax-trees-fork-bairyn
   - synthesizer # dependency missing in job https://hydra.nixos.org/build/217577245 at 2023-04-29
@@ -5268,8 +5609,10 @@ broken-packages:
   - tagsoup-megaparsec
   - tagsoup-parsec
   - tagsoup-selection
+  - tagtree # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961266 at 2023-08-16
   - tai
   - tai64
+  - tailwind # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/231536572 at 2023-08-16
   - tak
   - takahashi
   - Takusen
@@ -5287,6 +5630,7 @@ broken-packages:
   - tasty-mgolden
   - tasty-papi # test failure in job https://hydra.nixos.org/build/216756583 at 2023-04-20
   - tasty-stats
+  - tasty-test-reporter # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958587 at 2023-08-16
   - tasty-test-vector
   - TastyTLT
   - TBC
@@ -5312,6 +5656,8 @@ broken-packages:
   - teleshell
   - tellbot
   - template-default
+  - template # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971653 at 2023-08-16
+  - template-haskell-optics # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230946806 at 2023-08-16
   - template-haskell-util
   - template-hsml
   - templateify
@@ -5331,6 +5677,7 @@ broken-packages:
   - tesla
   - testCom
   - testcontainers
+  - TestExplode # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964283 at 2023-08-16
   - test-fixture
   - test-framework-doctest
   - test-framework-quickcheck
@@ -5347,11 +5694,13 @@ broken-packages:
   - test-shouldbe
   - tex2txt
   - texbuilder
+  - tex-join-bib # failure building library in job https://hydra.nixos.org/build/230946498 at 2023-08-16
   - text1
   - text-all
   - text-and-plots
   - text-ascii
   - text-builder-linear
+  - text-compression # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952349 at 2023-08-16
   - text-containers
   - text-display
   - text-format-heavy
@@ -5365,6 +5714,7 @@ broken-packages:
   - text-offset
   - text-position
   - text-register-machine
+  - text-stream-decode # failure building library in job https://hydra.nixos.org/build/230960721 at 2023-08-16
   - text-trie
   - textual
   - text-utf7
@@ -5378,6 +5728,7 @@ broken-packages:
   - th-build
   - th-dict-discovery
   - THEff
+  - themoviedb # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961888 at 2023-08-16
   - thentos-cookie-session
   - Theora
   - theoremquest
@@ -5401,6 +5752,7 @@ broken-packages:
   - Thrift
   - throttled-io-loop
   - throttle-io-stream
+  - through-text # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972325 at 2023-08-16
   - throwable-exceptions
   - th-sccs
   - th-tc
@@ -5453,9 +5805,12 @@ broken-packages:
   - Titim
   - tkhs
   - tkyprof
+  - tls-debug # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964438 at 2023-08-16
+  - TLT # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947319 at 2023-08-16
   - tmp-proc-example
   - tofromxml
   - to-haskell
+  - toilet # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230965271 at 2023-08-16
   - token-bucket
   - tokenify
   - tokenizer
@@ -5466,7 +5821,6 @@ broken-packages:
   - tokyocabinet-haskell
   - tokyotyrant-haskell
   - toml
-  - toml-parser
   - tonalude
   - tonaparser
   - toodles
@@ -5503,6 +5857,7 @@ broken-packages:
   - transient
   - translatable-intset
   - translate
+  - traverse-code # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230968928 at 2023-08-16
   - travis
   - travis-meta-yaml
   - trawl
@@ -5526,6 +5881,7 @@ broken-packages:
   - trivia
   - tropical
   - tropical-geometry
+  - trust-chain # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230956012 at 2023-08-16
   - tsession
   - tslib
   - tsparse
@@ -5547,6 +5903,7 @@ broken-packages:
   - turing-machines
   - turing-music
   - turtle-options
+  - twain # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972118 at 2023-08-16
   - tweak
   - twentefp-websockets
   - twfy-api-client
@@ -5558,6 +5915,7 @@ broken-packages:
   - twirp
   - twisty
   - twitchapi
+  - twitch # failure building test suite 'unit-tests' in job https://hydra.nixos.org/build/230961695 at 2023-08-16
   - twitter
   - twitter-feed
   - tx
@@ -5567,10 +5925,12 @@ broken-packages:
   - typalyze
   - typeable-th
   - type-combinators
+  - type-compare # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964481 at 2023-08-16
   - TypeCompose
   - typed-digits
   - typed-encoding
   - typedquery
+  - typed-spreadsheet # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959517 at 2023-08-16
   - typed-time
   - typed-wire
   - type-eq
@@ -5589,8 +5949,10 @@ broken-packages:
   - type-list
   - typelits-witnesses
   - type-of-html-static
+  - type-operators # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949643 at 2023-08-16
   - typeparams
   - type-prelude
+  - typerep-map # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230969193 at 2023-08-16
   - type-safe-avl
   - types-compat
   - type-settheory
@@ -5604,6 +5966,7 @@ broken-packages:
   - uAgda
   - uberlast
   - ucam-webauth-types
+  - ucl # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952255 at 2023-08-16
   - uconv
   - udbus
   - udp-conduit
@@ -5632,7 +5995,9 @@ broken-packages:
   - unicode-symbols
   - unicode-tricks
   - uniform-json # failure building test suite 'json-test' in job https://hydra.nixos.org/build/214602707 at 2023-04-07
+  - union-find # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230950510 at 2023-08-16
   - union-map
+  - unionmount # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230961993 at 2023-08-16
   - uniprot-kb
   - uniqueid
   - uniquely-represented-sets
@@ -5641,6 +6006,7 @@ broken-packages:
   - uniqueness-periods-vector-common
   - units-attoparsec
   - unittyped
+  - unitym # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230958411 at 2023-08-16
   - unitym-yesod
   - uni-util
   - universal-binary
@@ -5660,6 +6026,7 @@ broken-packages:
   - unordered-intmap
   - unpacked-either
   - unpacked-maybe
+  - unpacked-maybe-numeric # failure building library in job https://hydra.nixos.org/build/230962818 at 2023-08-16
   - unpack-funcs
   - unroll-ghc-plugin
   - unsafely
@@ -5670,6 +6037,7 @@ broken-packages:
   - Updater
   - uploadcare
   - upskirt
+  - urbit-hob # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966459 at 2023-08-16
   - uri
   - uri-conduit
   - uri-encoder
@@ -5682,11 +6050,13 @@ broken-packages:
   - urldecode
   - url-decoders
   - urldisp-happstack
+  - urlencoded # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230946607 at 2023-08-16
   - url-generic
   - urn
   - urn-random
   - urxml
   - useragents
+  - userid # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230959568 at 2023-08-16
   - users-persistent
   - utc
   - utf8-conversions
@@ -5705,15 +6075,18 @@ broken-packages:
   - uxadt
   - vabal-lib
   - vacuum
+  - vado # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947987 at 2023-08-16
   - validated-types
   - Validation
   - validations
+  - validators # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966128 at 2023-08-16
   - validity-network-uri
   - valid-names
   - value-supply
   - vampire
   - var
   - varan
+  - variable-media-field # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230971903 at 2023-08-16
   - variables
   - variadic
   - variation
@@ -5727,6 +6100,7 @@ broken-packages:
   - vect-floating
   - vect-opengl
   - vector-bytestring
+  - vector-circular # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951925 at 2023-08-16
   - vector-clock
   - vector-conduit
   - vector-doublezip
@@ -5737,11 +6111,13 @@ broken-packages:
   - vector-quicksort # dependency missing in job https://hydra.nixos.org/build/216753081 at 2023-04-20
   - vector-random
   - vector-read-instances
+  - vector-shuffling # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963853 at 2023-08-16
   - vector-space-map
   - vector-space-opengl
   - vector-space-points
   - vector-static
   - vega-view
+  - velma # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230963085 at 2023-08-16
   - Verba
   - verbalexpressions
   - verdict
@@ -5813,6 +6189,7 @@ broken-packages:
   - wai-responsible
   - wai-router
   - wai-routes
+  - wai-saml2 # test failure in job https://hydra.nixos.org/build/230969677 at 2023-08-16
   - wai-secure-cookies
   - wai-session-mysql
   - wai-session-postgresql
@@ -5821,6 +6198,7 @@ broken-packages:
   - waitfree
   - wai-throttler
   - waitra
+  - wakame # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947444 at 2023-08-16
   - wallpaper
   - warc
   - warp-dynamic
@@ -5838,7 +6216,9 @@ broken-packages:
   - web3-ipfs
   - webapi
   - webapp
+  - webauthn # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230964346 at 2023-08-16
   - WebBits
+  - webby # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230952008 at 2023-08-16
   - webcrank
   - webcrank-dispatch
   - web-css
@@ -5852,6 +6232,7 @@ broken-packages:
   - webmention
   - web-output
   - web-page
+  - web-plugins # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962603 at 2023-08-16
   - web-push
   - Webrexp
   - web-routes-quasi
@@ -5872,10 +6253,13 @@ broken-packages:
   - whois
   - why3
   - wide-word-instances # failure building library in job https://hydra.nixos.org/build/211245524 at 2023-03-13
+  - wikicfp-scraper # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230946581 at 2023-08-16
   - WikimediaParser
+  - wild-bind # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230951433 at 2023-08-16
   - willow
   - windns
   - windowslive
+  - window-utils # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962777 at 2023-08-16
   - winerror
   - wireguard-hs
   - wires
@@ -5948,11 +6332,13 @@ broken-packages:
   - xml-conduit-decode
   - xml-conduit-parse
   - xml-conduit-selectors
+  - xml-conduit-stylist # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230949082 at 2023-08-16
   - xml-html-conduit-lens
   - XmlHtmlWriter
   - xml-parsec
   - xml-prettify
   - xml-prettify-text
+  - xml-query # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230947454 at 2023-08-16
   - xml-query-xml-types
   - xml-syntax
   - xml-to-json
@@ -6062,6 +6448,7 @@ broken-packages:
   - yesod-sass
   - yesod-static-angular
   - yesod-static-remote
+  - yesod-static-streamly # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966153 at 2023-08-16
   - yesod-test-json
   - yesod-text-markdown
   - yesod-tls
@@ -6087,6 +6474,7 @@ broken-packages:
   - z85
   - zabt
   - zampolit
+  - zbar # failure in setupCompilerEnvironmentPhase in job https://hydra.nixos.org/build/230967764 at 2023-08-16
   - Z-Data
   - ZEBEDDE
   - zendesk-api
@@ -6107,6 +6495,7 @@ broken-packages:
   - zipedit
   - zipkin
   - ziptastic-core
+  - zlib-bytes # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230946586 at 2023-08-16
   - zlib-lens
   - ZMachine
   - zmidi-score
@@ -6117,6 +6506,7 @@ broken-packages:
   - zsdd
   - zsh-battery
   - zsyntax
+  - ztail # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230962012 at 2023-08-16
   - ztar
   - zuul
   - Zwaluw
