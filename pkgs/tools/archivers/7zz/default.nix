@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "7zz";
-  version = "22.01";
+  version = "23.01";
 
   src = fetchurl {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.tar.xz";
     hash = {
-      free = "sha256-mp3cFXOEiVptkUdD1+X8XxwoJhBGs+Ns5qk3HBByfLg=";
-      unfree = "sha256-OTCYcwxwBCOSr4CJF+dllF3CQ33ueq48/MSWbrkg+8U=";
+      free = "sha256-F1ybQsyReF2NBR/3eMZySvxVEntpwq2VUlRCHp/5nZs=";
+      unfree = "sha256-NWBxAHNg5aGCTZkEmT6LJIC1G1cOjJ+vfA9Y6+S/n3Q=";
     }.${if enableUnfree then "unfree" else "free"};
     downloadToTemp = (!enableUnfree);
     # remove the unRAR related code from the src drv
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   patches = [
-    ./fix-build-on-darwin.patch
     ./fix-cross-mingw-build.patch
+    # remove unneeded semicolons related to -Wextra-semi-stmt, caused by upstream
+    ./fix-empty-expr-stmt.patch
   ];
-  patchFlags = [ "-p0" ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
       # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];
-    maintainers = with maintainers; [ anna328p peterhoeg jk ];
+    maintainers = with maintainers; [ anna328p eclairevoyant jk peterhoeg ];
     platforms = platforms.unix ++ platforms.windows;
     mainProgram = "7zz";
   };
