@@ -106,12 +106,14 @@ in
       identMap = mkOption {
         type = types.lines;
         default = "";
+        example = literalExample ''
+          map-name-0 system-username-0 database-username-0
+          map-name-1 system-username-1 database-username-1
+        '';
         description = lib.mdDoc ''
           Defines the mapping from system users to database users.
 
-          The general form is:
-
-          map-name system-username database-username
+          See the [auth doc](https://postgresql.org/docs/current/auth-username-maps.html).
         '';
       };
 
