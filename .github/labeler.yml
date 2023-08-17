@@ -188,6 +188,10 @@
   - nixos/tests/xfce.nix
   - pkgs/desktops/xfce/**/*
 
+"6.topic: zig":
+  - pkgs/development/compilers/zig/**/*
+  - doc/hooks/zig.section.md
+
 "8.has: changelog":
   - nixos/doc/manual/release-notes/**/*
 
