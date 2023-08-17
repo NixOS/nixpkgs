@@ -116,9 +116,9 @@ self: super: {
     hls-overloaded-record-dot-plugin = null;
   }));
 
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_7_20230228;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_8_20230729;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
-  ghc-lib = doDistribute self.ghc-lib_9_2_7_20230228;
+  ghc-lib = doDistribute self.ghc-lib_9_2_8_20230729;
 
   mod = super.mod_0_1_2_2;
   path-io = doJailbreak super.path-io;
