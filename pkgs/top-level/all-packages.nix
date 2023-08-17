@@ -38663,6 +38663,8 @@ with pkgs;
 
   archimedes = callPackage ../applications/science/electronics/archimedes { };
 
+  bamtools = callPackage ../applications/science/biology/bamtools { };
+
   bayescan = callPackage ../applications/science/biology/bayescan { };
 
   bedops = callPackage ../applications/science/biology/bedops { };
