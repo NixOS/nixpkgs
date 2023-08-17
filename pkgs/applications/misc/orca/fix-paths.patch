@@ -1,8 +1,8 @@
 diff --git a/src/orca/debug.py b/src/orca/debug.py
-index 458838b8a..c51d5c18c 100644
+index b7e11ea60..9ab996765 100644
 --- a/src/orca/debug.py
 +++ b/src/orca/debug.py
-@@ -440,7 +440,7 @@ def traceit(frame, event, arg):
+@@ -447,7 +447,7 @@ def traceit(frame, event, arg):
      return traceit
  
  def getOpenFDCount(pid):
@@ -11,20 +11,20 @@ index 458838b8a..c51d5c18c 100644
      procs = procs.decode('UTF-8').split('\n')
      files = list(filter(lambda s: s and s[0] == 'f' and s[1:].isdigit(), procs))
  
-@@ -458,7 +458,7 @@ def getCmdline(pid):
+@@ -465,7 +465,7 @@ def getCmdline(pid):
      return cmdline
  
  def pidOf(procName):
--    openFile = subprocess.Popen('pgrep %s' % procName,
-+    openFile = subprocess.Popen('@pgrep@ %s' % procName,
+-    openFile = subprocess.Popen(f'pgrep {procName}',
++    openFile = subprocess.Popen(f'@pgrep@ {procName}',
                                  shell=True,
                                  stdout=subprocess.PIPE).stdout
      pids = openFile.read()
 diff --git a/src/orca/orca.py b/src/orca/orca.py
-index 0ac486949..42387453c 100644
+index d4e89f918..bb3e6cc1d 100644
 --- a/src/orca/orca.py
 +++ b/src/orca/orca.py
-@@ -304,7 +304,7 @@ def updateKeyMap(keyboardEvent):
+@@ -312,7 +312,7 @@ def updateKeyMap(keyboardEvent):
  
  def _setXmodmap(xkbmap):
      """Set the keyboard map using xkbcomp."""
@@ -33,7 +33,7 @@ index 0ac486949..42387453c 100644
          stdin=subprocess.PIPE, stdout=None, stderr=None)
      p.communicate(xkbmap)
  
-@@ -381,7 +381,7 @@ def _storeXmodmap(keyList):
+@@ -389,7 +389,7 @@ def _storeXmodmap(keyList):
      """
  
      global _originalXmodmap
@@ -42,7 +42,7 @@ index 0ac486949..42387453c 100644
  
  def _restoreXmodmap(keyList=[]):
      """Restore the original xmodmap values for the keys in keyList.
-@@ -396,7 +396,7 @@ def _restoreXmodmap(keyList=[]):
+@@ -404,7 +404,7 @@ def _restoreXmodmap(keyList=[]):
  
      global _capsLockCleared
      _capsLockCleared = False
@@ -74,15 +74,15 @@ index 9d64af948..ca9c9e083 100644
                                  stdout=subprocess.PIPE).stdout
      pids = openFile.read()
 diff --git a/src/orca/script_utilities.py b/src/orca/script_utilities.py
-index 87ee7de52..8d5072df8 100644
+index ed8b155e4..0436cca42 100644
 --- a/src/orca/script_utilities.py
 +++ b/src/orca/script_utilities.py
 @@ -144,7 +144,7 @@ class Utilities:
              return ""
  
          try:
--            cmdline = subprocess.getoutput("cat /proc/%s/cmdline" % pid)
-+            cmdline = subprocess.getoutput("@cat@ /proc/%s/cmdline" % pid)
+-            cmdline = subprocess.getoutput(f"cat /proc/{pid}/cmdline")
++            cmdline = subprocess.getoutput(f"@cat@ /proc/{pid}/cmdline")
          except Exception:
              return ""
  
