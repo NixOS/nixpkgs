@@ -12526,6 +12526,12 @@
     githubId = 1631737;
     name = "Mikhail Medvedev";
   };
+  meebey = {
+    email = "meebey@meebey.net";
+    github = "meebey";
+    githubId = 318066;
+    name = "Mirco Bauer";
+  };
   megheaiulian = {
     email = "iulian.meghea@gmail.com";
     github = "megheaiulian";
