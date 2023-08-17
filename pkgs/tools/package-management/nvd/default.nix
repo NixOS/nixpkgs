@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Nix/NixOS package version diff tool";
     homepage = "https://gitlab.com/khumba/nvd";
     license = licenses.asl20;
+    mainProgram = "nvd";
     maintainers = with maintainers; [ khumba ];
     platforms = platforms.all;
   };
