@@ -12,6 +12,8 @@
 , pipewireSupport ? true, pipewire
 , pulseSupport ? true, libpulseaudio
 , speechdSupport ? false, speechd
+# overlay stuff
+, mumble_i686 ? null, libGL, which, file
 }:
 
 let
@@ -72,9 +74,17 @@ let
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd}/include/speech-dispatcher";
 
-    postFixup = ''
+    postFixup = (lib.optionalString (mumble_i686 != null) ''
+      substituteInPlace $out/bin/mumble-overlay \
+        --replace /usr/lib32 ${mumble_i686}/lib
+    '') + ''
+      patchelf --add-needed ${libGL}/lib/libGL.so $out/lib/mumble/libmumbleoverlay.so
+
       wrapProgram $out/bin/mumble \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath (lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire)}"
+
+      wrapProgram $out/bin/mumble-overlay \
+        --prefix PATH : "${lib.makeBinPath [ which file ]}"
     '';
   } source;
 

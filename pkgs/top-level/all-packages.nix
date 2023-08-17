@@ -33827,13 +33827,10 @@ with pkgs;
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
+      mumble_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
+        then pkgsi686Linux.mumble
+        else null;
     }).mumble;
-
-  mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
-    mumble_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
-      then pkgsi686Linux.mumble
-      else null;
-  };
 
   mup = callPackage ../applications/audio/mup {
     autoreconfHook = buildPackages.autoreconfHook269;
