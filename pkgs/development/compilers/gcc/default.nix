@@ -34,8 +34,14 @@
 , version
 }:
 
-# only gcc>=12 is currently supported
-assert lib.versionAtLeast version "12";
+let
+  atLeast13 = lib.versionAtLeast version "13";
+  atLeast12 = lib.versionAtLeast version "12";
+  atLeast11 = lib.versionAtLeast version "11";
+in
+
+# only gcc>=11 is currently supported
+assert atLeast11;
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
@@ -46,7 +52,7 @@ assert langAda -> gnat-bootstrap != null;
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
-assert !langD;
+assert atLeast12 -> !langD;
 
 # threadsCross is just for MinGW
 assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
@@ -60,16 +66,19 @@ with builtins;
 
 let majorVersion = lib.versions.major version;
     inherit version;
-    disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
+    disableBootstrap = !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-         optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
-      ++ optional noSysDirs ./gcc-12-no-sys-dirs.patch
-      ++ optional noSysDirs ./no-sys-dirs-riscv.patch
-      ++ [
+         optional (!atLeast12) ./fix-bug-80431.patch
+      ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
+      ++ optional (noSysDirs &&  atLeast12) ./gcc-12-no-sys-dirs.patch
+      ++ optional (noSysDirs && !atLeast12) ./no-sys-dirs.patch
+      ++ optional (noSysDirs && (!atLeast12 -> hostPlatform.isRiscV)) ./no-sys-dirs-riscv.patch
+      ++ optionals (langAda || atLeast12) [
         ./gnat-cflags-11.patch
+      ] ++ optionals atLeast12 [
         ./gcc-12-gfortran-driving.patch
         ./ppc-musl.patch
       ] ++ optionals (majorVersion == "12") [
@@ -78,22 +87,37 @@ let majorVersion = lib.versions.major version;
       ]
       # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
       # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
-      ++ optional (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
-        "13" = fetchpatch {
+      ++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
+        "13" = [ (fetchpatch {
           name = "gcc-13-darwin-aarch64-support.patch";
           url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
           sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
-        };
-        "12" = fetchurl {
+        }) ];
+        "12" = [ (fetchurl {
           name = "gcc-12-darwin-aarch64-support.patch";
           url = "https://raw.githubusercontent.com/Homebrew/formula-patches/f1188b90d610e2ed170b22512ff7435ba5c891e2/gcc/gcc-12.3.0.diff";
           sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
-        };
-      }."${majorVersion}")
+        }) ];
+      }."${majorVersion}" or [])
       ++ optional langD ./libphobos.patch
+      ++ optional langFortran ../gfortran-driving.patch
+
+      # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
+      ++ optional (!atLeast12 && targetPlatform.libc == "musl" && targetPlatform.isPower) ./ppc-musl.patch
+      # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
+      ++ optionals (!atLeast12 && stdenv.isDarwin) [
+        (fetchpatch {
+          # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
+          # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.4.0
+          url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
+          hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
+        })
+      ]
+      # https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
+      ++ optional (!atLeast12 && stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
 
       # backport fixes to build gccgo with musl libc
-      ++ optionals (langGo && stdenv.hostPlatform.isMusl) [
+      ++ optionals (atLeast12 && langGo && stdenv.hostPlatform.isMusl) [
         (fetchpatch {
           excludes = [ "gcc/go/gofrontend/MERGE" ];
           url = "https://github.com/gcc-mirror/gcc/commit/cf79b1117bd177d3d4c6ed24b6fa243c3628ac2d.diff";
@@ -131,14 +155,17 @@ let majorVersion = lib.versions.major version;
       ]
 
       # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
-      ++ optional (stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
+      ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
       # Use absolute path in GNAT dylib install names on Darwin
-      ++ optional (stdenv.isDarwin && langAda) ./gnat-darwin-dylib-install-name.patch
+      ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./gnat-darwin-dylib-install-name.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (majorVersion == "12" && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
+      ++ optional (!atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
         ./Added-mcf-thread-model-support-from-mcfgthread.patch
+
+      # openjdk build fails without this on -march=opteron; is upstream in gcc12
+      ++ optionals (majorVersion == "11") [ ./11/gcc-issue-103910.patch ]
     ;
 
     /* Cross-gcc settings (build == host != target) */
@@ -219,9 +246,10 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = {
+    ${if atLeast12 then "sha256" else "hash"} = {
       "13.1.0" = "sha256-YdaE8Kpedqxlha2ImKJCeq3ol57V5/hUkihsTfwT7oY=";
       "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
+      "11.4.0" = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";
     }."${version}";
   };
 
@@ -233,7 +261,8 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
 
   libc_dev = stdenv.cc.libc_dev;
 
-  hardeningDisable = [ "format" "pie" ];
+  hardeningDisable = [ "format" "pie" ]
+  ++ lib.optionals (!atLeast12 && langAda) [ "fortify3" ];
 
   postPatch = ''
     configureScripts=$(find . -name configure)
@@ -244,7 +273,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
   + lib.optionalString hostPlatform.isDarwin ''
-    substituteInPlace gcc/config/darwin-c.cc \
+    substituteInPlace gcc/config/darwin-c.c${lib.optionalString atLeast12 "c"} \
       --replace 'if (stdinc)' 'if (0)'
 
     substituteInPlace libgcc/config/t-slibgcc-darwin \
@@ -306,7 +335,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
 
   buildFlags =
     # we do not yet have Nix-driven profiling
-    assert profiledCompiler -> !disableBootstrap;
+    assert atLeast12 -> (profiledCompiler -> !disableBootstrap);
     let target =
           lib.optionalString (profiledCompiler) "profiled" +
           lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
@@ -346,6 +375,8 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
+  } // lib.optionalAttrs (!atLeast12) {
+    hardeningUnsupportedFlags = [ "fortify3" ];
   };
 
   enableParallelBuilding = true;

@@ -15801,6 +15801,7 @@ with pkgs;
           deduplicatedVersions = { # map from majorVersion to exact version
             "13" = "13.1.0";
             "12" = "12.3.0";
+            "11" = "11.4.0";
           };
           deduplicated = deduplicatedVersions ? "${version}";
           path = if deduplicated
