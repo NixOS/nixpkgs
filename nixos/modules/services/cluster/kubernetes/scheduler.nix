@@ -1,60 +1,62 @@
-{ config, lib, options, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
-  otop = options.services.kubernetes;
   cfg = top.scheduler;
+
+  # TODO: Remove in NixOS 24.05
+  removedOptions = {
+    "extraOpts" = "Use freeform settings";
+  };
+
+  # TODO: Remove in NixOS 24.05
+  optName = n: builtins.filter (f: f != []) (builtins.split "\\." n);
+
+  # TODO: Remove in NixOS 24.05
+  renamedOptions = {
+    "address" = "bind-address";
+    "featureGates" = "feature-gates";
+    "kubeconfig" = "kubeconfig";
+    "leaderElect" = "leader-elect";
+    "port" = "secure-port";
+    "verbosity" = "v";
+  };
 in
 {
+  # TODO: Remove in NixOS 24.05
+  imports =
+    let
+      base = ["services" "kubernetes" "scheduler"];
+    in
+      (mapAttrsToList (n: v: mkRemovedOptionModule (base ++ [n]) v) removedOptions) ++
+      (mapAttrsToList (n: v: mkRenamedOptionModule (base ++ (optName n)) (base ++ ["settings" v])) renamedOptions);
+
   ###### interface
   options.services.kubernetes.scheduler = with lib.types; {
 
-    address = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler listening address.";
-      default = "127.0.0.1";
-      type = str;
-    };
-
     enable = mkEnableOption (lib.mdDoc "Kubernetes scheduler");
 
-    extraOpts = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler extra command line options.";
-      default = "";
-      type = separatedString " ";
-    };
-
-    featureGates = mkOption {
-      description = lib.mdDoc "List set of feature gates";
-      default = top.featureGates;
-      defaultText = literalExpression "config.${otop.featureGates}";
-      type = listOf str;
-    };
-
-    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes scheduler";
-
-    leaderElect = mkOption {
-      description = lib.mdDoc "Whether to start leader election before executing main loop.";
-      type = bool;
-      default = true;
-    };
-
-    port = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler listening port.";
-      default = 10251;
-      type = port;
-    };
-
-    verbosity = mkOption {
-      description = lib.mdDoc ''
-        Optional glog verbosity level for logging statements. See
-        <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
+    settings = mkOption {
+      description = ''
+        Configuration for kube-scheduler, see:
+          <https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler>.
+        All attrs defined here translates directly to flags of syntax `--<name>="<value>"`
+        which is provided as command line argument to the kube-scheduler binary.
       '';
-      default = null;
-      type = nullOr int;
+      type = types.submodule {
+        freeformType = attrsOf (oneOf [
+          bool
+          float
+          int
+          (listOf str)
+          package
+          path
+          str
+        ]);
+      };
     };
-
   };
 
   ###### implementation
@@ -66,14 +68,7 @@ in
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''${top.package}/bin/kube-scheduler \
-          --bind-address=${cfg.address} \
-          ${optionalString (cfg.featureGates != [])
-            "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
-          --leader-elect=${boolToString cfg.leaderElect} \
-          --secure-port=${toString cfg.port} \
-          ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-          ${cfg.extraOpts}
+          ${concatStringsSep " \\\n" (mapAttrsToList (n: v: ''--${n}="${top.lib.renderArg v}"'') cfg.settings)}
         '';
         WorkingDirectory = top.dataDir;
         User = "kubernetes";
@@ -93,8 +88,6 @@ in
         action = "systemctl restart kube-scheduler.service";
       };
     };
-
-    services.kubernetes.scheduler.kubeconfig.server = mkDefault top.apiserverAddress;
   };
 
   meta.buildDocsInSandbox = false;

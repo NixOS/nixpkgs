@@ -41,6 +41,15 @@ in
   ###### interface
   options.services.kubernetes.pki = with lib.types; {
 
+    apiServerExtraSANs = mkOption {
+      description = lib.mdDoc ''
+        Extra x509 Subject Alternative Names to be added to the kubernetes apiserver tls cert.
+      '';
+      default = [];
+      example = [ "subdomain.example.com" ];
+      type = listOf str;
+    };
+
     enable = mkEnableOption (lib.mdDoc "easyCert issuer service");
 
     certs = mkOption {
@@ -352,52 +361,54 @@ in
 
       services.kubernetes = {
 
-        apiserver = mkIf top.apiserver.enable (with cfg.certs.apiServer; {
-          etcd = with cfg.certs.apiserverEtcdClient; {
-            servers = ["https://etcd.local:2379"];
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
-            caFile = mkDefault caCert;
-          };
-          clientCaFile = mkDefault caCert;
-          tlsCertFile = mkDefault cert;
-          tlsKeyFile = mkDefault key;
-          serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.cert;
-          serviceAccountSigningKeyFile = mkDefault cfg.certs.serviceAccount.key;
-          kubeletClientCaFile = mkDefault caCert;
-          kubeletClientCertFile = mkDefault cfg.certs.apiserverKubeletClient.cert;
-          kubeletClientKeyFile = mkDefault cfg.certs.apiserverKubeletClient.key;
-          proxyClientCertFile = mkDefault cfg.certs.apiserverProxyClient.cert;
-          proxyClientKeyFile = mkDefault cfg.certs.apiserverProxyClient.key;
+        apiserver.settings = mkIf top.apiserver.enable (with cfg.certs.apiServer; {
+          etcd-servers = ["https://etcd.local:2379"];
+          etcd-certfile = mkDefault cert;
+          etcd-keyfile = mkDefault key;
+          etcd-cafile = mkDefault caCert;
+          client-ca-file = mkDefault caCert;
+          tls-cert-file = mkDefault cert;
+          tls-private-key-file = mkDefault key;
+          service-account-key-file = mkDefault cfg.certs.serviceAccount.cert;
+          service-account-signing-key-file = mkDefault cfg.certs.serviceAccount.key;
+          kubelet-certificate-authority = mkDefault caCert;
+          kubelet-client-certificate = mkDefault cfg.certs.apiserverKubeletClient.cert;
+          kubelet-client-key = mkDefault cfg.certs.apiserverKubeletClient.key;
+          proxy-client-cert-file = mkDefault cfg.certs.apiserverProxyClient.cert;
+          proxy-client-key-file = mkDefault cfg.certs.apiserverProxyClient.key;
         });
-        controllerManager = mkIf top.controllerManager.enable {
-          serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.key;
-          rootCaFile = cfg.certs.controllerManagerClient.caCert;
-          kubeconfig = with cfg.certs.controllerManagerClient; {
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
-          };
+        controllerManager.settings = mkIf top.controllerManager.enable {
+          service-account-private-key-file = mkDefault cfg.certs.serviceAccount.key;
+          root-ca-file = cfg.certs.controllerManagerClient.caCert;
+          kubeconfig = top.lib.mkKubeConfig "controller-manager-client" (with cfg.certs.controllerManagerClient; {
+            server = top.apiserverAddress;
+            certFile = cert;
+            keyFile = key;
+          });
         };
-        scheduler = mkIf top.scheduler.enable {
-          kubeconfig = with cfg.certs.schedulerClient; {
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
-          };
+        scheduler.settings = mkIf top.scheduler.enable {
+          kubeconfig = top.lib.mkKubeConfig "scheduler-client" (with cfg.certs.schedulerClient; {
+            server = top.apiserverAddress;
+            certFile = cert;
+            keyFile = key;
+          });
         };
-        kubelet = mkIf top.kubelet.enable {
-          clientCaFile = mkDefault cfg.certs.kubelet.caCert;
-          tlsCertFile = mkDefault cfg.certs.kubelet.cert;
-          tlsKeyFile = mkDefault cfg.certs.kubelet.key;
-          kubeconfig = with cfg.certs.kubeletClient; {
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
-          };
+        kubelet.settings = mkIf top.kubelet.enable {
+          client-ca-file = mkDefault cfg.certs.kubelet.caCert;
+          tls-cert-file = mkDefault cfg.certs.kubelet.cert;
+          tls-private-key-file = mkDefault cfg.certs.kubelet.key;
+          kubeconfig = top.lib.mkKubeConfig "kubelet-client" (with cfg.certs.kubeletClient; {
+            server = top.apiserverAddress;
+            certFile = cert;
+            keyFile = key;
+          });
         };
-        proxy = mkIf top.proxy.enable {
-          kubeconfig = with cfg.certs.kubeProxyClient; {
-            certFile = mkDefault cert;
-            keyFile = mkDefault key;
-          };
+        proxy.settings = mkIf top.proxy.enable {
+          kubeconfig = top.lib.mkKubeConfig "kubeproxy-client" (with cfg.certs.kubeProxyClient; {
+            server = top.apiserverAddress;
+            certFile = cert;
+            keyFile = key;
+          });
         };
       };
     });
