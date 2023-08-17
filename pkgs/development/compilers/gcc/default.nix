@@ -39,10 +39,11 @@ let
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
   atLeast10 = lib.versionAtLeast version "10";
+  atLeast9  = lib.versionAtLeast version  "9";
 in
 
-# only gcc>=10 is currently supported
-assert atLeast10;
+# only gcc>=9 is currently supported
+assert atLeast9;
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
@@ -72,12 +73,15 @@ let majorVersion = lib.versions.major version;
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-         optional (!atLeast12) ./fix-bug-80431.patch
-      ++ optional (!atLeast11) ./11/fix-struct-redefinition-on-glibc-2.36.patch
+         optional (!atLeast10) ./9/fix-struct-redefinition-on-glibc-2.36.patch
+      ++ optional (!atLeast12) ./fix-bug-80431.patch
+      ++ optional (atLeast10 && !atLeast11) ./11/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
+      ++ optional (!atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
       ++ optional (noSysDirs &&  atLeast12) ./gcc-12-no-sys-dirs.patch
       ++ optional (noSysDirs && !atLeast12) ./no-sys-dirs.patch
-      ++ optional (noSysDirs && (is10 || (!atLeast12 -> hostPlatform.isRiscV))) ./no-sys-dirs-riscv.patch
+      ++ optional (noSysDirs && atLeast10 && (is10 || !atLeast12 -> hostPlatform.isRiscV)) ./no-sys-dirs-riscv.patch
+      ++ optional (noSysDirs && !atLeast10 && hostPlatform.isRiscV) ./no-sys-dirs-riscv-gcc9.patch
       ++ optionals (langAda || atLeast12) [
         ./gnat-cflags-11.patch
       ] ++ optionals (langAda && !atLeast11) [
@@ -171,7 +175,7 @@ let majorVersion = lib.versions.major version;
       # openjdk build fails without this on -march=opteron; is upstream in gcc12
       ++ optionals (majorVersion == "11") [ ./11/gcc-issue-103910.patch ]
 
-      ++ optional (!atLeast11 && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
+      ++ optional (majorVersion == "10" && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
         url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
         sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
       });
@@ -259,6 +263,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
       "11.4.0" = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";
       "10.5.0" = "sha256-JRCVQ/30bzl8NHtdi3osflaUpaUczkucbh6opxyjB8E=";
+      "9.5.0"  = "13ygjmd938m0wmy946pxdhz9i1wq7z4w10l6pvidak0xxxj9yxi7";
     }."${version}";
   };
 
@@ -315,12 +320,14 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
         ''
         )
     ))
-      + lib.optionalString targetPlatform.isAvr ''
+      + lib.optionalString targetPlatform.isAvr (''
             makeFlagsArray+=(
+          '' + (lib.optionalString atLeast10 ''
                '-s' # workaround for hitting hydra log limit
+          '') + ''
                'LIMITS_H_TEST=false'
             )
-          '';
+          '');
 
   inherit noSysDirs staticCompiler withoutTargetLibc
     libcCross crossMingw;
@@ -330,7 +337,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
 
-  preConfigure = (callFile ./common/pre-configure.nix { }) + ''
+  preConfigure = (callFile ./common/pre-configure.nix { }) + lib.optionalString atLeast10 ''
     ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
   '';
 
