@@ -35,15 +35,15 @@
     };
     deps = {
       gn = {
-        rev = "e9e83d9095d3234adf68f3e2866f25daf766d5c7";
-        sha256 = "0y07c18xskq4mclqiz3a63fz8jicz2kqridnvdhqdf75lhp61f8a";
+        rev = "4bd1a77e67958fb7f6739bd4542641646f264e5d";
+        sha256 = "14h9jqspb86sl5lhh6q0kk2rwa9zcak63f8drp7kb3r4dx08vzsw";
         url = "https://gn.googlesource.com/gn";
-        version = "2023-05-19";
+        version = "2023-06-09";
       };
     };
-    sha256 = "1h3j24ihn76qkvckzg703pm1jsh6nbkc48n2zx06kia8wz96567z";
-    sha256bin64 = "04jklk2zwkyy8i70v9nk7nw35w2g9pyxdw9w3sn9mddgbjjph5z9";
-    version = "115.0.5790.170";
+    sha256 = "108wrm64pig0v24n44zd52jfzsy2kda84r5k8abfvg4sjlm0bh8y";
+    sha256bin64 = "1sr7wfssayw94x8bfn7bk03040221npj7612ccxgzdgr4x5i4adl";
+    version = "116.0.5845.96";
   };
   ungoogled-chromium = {
     deps = {
