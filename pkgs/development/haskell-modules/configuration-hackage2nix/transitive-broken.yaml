@@ -2364,7 +2364,7 @@ dont-distribute-packages:
  - htsn-import
  - http-client-auth
  - http-client-rustls
- - http-client-tls_0_3_6_2
+ - http-client-tls_0_3_6_3
  - http-conduit_2_3_8_3
  - http-enumerator
  - http2-client-grpc

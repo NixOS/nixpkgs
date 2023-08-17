@@ -312,7 +312,7 @@ self: super: {
 
   # Overriding the version pandoc dependency uses as the latest release has version bounds
   # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  patat = super.patat.override { pandoc = self.pandoc_3_1_6; };
+  patat = super.patat.override { pandoc = self.pandoc_3_1_6_1; };
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
@@ -1918,27 +1918,23 @@ self: super: {
   inherit (let
     pandoc-cli-overlay = self: super: {
       # pandoc-cli requires pandoc >= 3.1
-      pandoc = self.pandoc_3_1_6;
+      pandoc = self.pandoc_3_1_6_1;
 
       # pandoc depends on crypton-connection, which requires tls >= 1.7
-      tls = self.tls_1_7_0;
+      tls = self.tls_1_7_1;
       crypton-connection = unmarkBroken super.crypton-connection;
 
       # pandoc depends on http-client-tls, which only starts depending
       # on crypton-connection in http-client-tls-0.3.6.2.
-      http-client-tls = self.http-client-tls_0_3_6_2;
-
-      # pandoc and skylighting are developed in tandem
-      skylighting-core = self.skylighting-core_0_13_4_1;
-      skylighting = self.skylighting_0_13_4_1;
+      http-client-tls = self.http-client-tls_0_3_6_3;
     };
   in {
     pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
-    pandoc_3_1_6 = doDistribute (super.pandoc_3_1_6.overrideScope pandoc-cli-overlay);
+    pandoc_3_1_6_1 = doDistribute (super.pandoc_3_1_6_1.overrideScope pandoc-cli-overlay);
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
     pandoc-cli
-    pandoc_3_1_6
+    pandoc_3_1_6_1
     pandoc-lua-engine
     ;
 
