@@ -26,16 +26,6 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
-    dev = [
-      black
-      codespell
-      isort
-      mypy
-      pre-commit
-      pygobject3
-    ];
-  };
 
   meta = with lib; {
     description = "PEP 561 Typing Stubs for PyGObject";
