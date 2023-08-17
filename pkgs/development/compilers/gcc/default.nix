@@ -31,7 +31,7 @@
 , disableGdbPlugin ? !enablePlugin
 , nukeReferences
 , callPackage
-, version
+, majorMinorVersion
 
 # only for gcc<=6.x
 , langJava ? false
@@ -46,6 +46,20 @@
 }:
 
 let
+  version = {
+    "13" = "13.2.0";
+    "12" = "12.3.0";
+    "11" = "11.4.0";
+    "10" = "10.5.0";
+    "9"  =  "9.5.0";
+    "8"  =  "8.5.0";
+    "7"  =  "7.5.0";
+    "6"  =  "6.5.0";
+    "4.9"=  "4.9.4";
+    "4.8"=  "4.8.5";
+  }."${majorMinorVersion}";
+
+  majorVersion = lib.versions.major version;
   atLeast13 = lib.versionAtLeast version "13";
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
@@ -231,7 +245,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
           then "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz"
           else "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
     ${if majorVersion == "11" then "hash" else "sha256"} = {
-      "13.1.0" = "sha256-YdaE8Kpedqxlha2ImKJCeq3ol57V5/hUkihsTfwT7oY=";
+      "13.2.0" = "sha256-4nXnZEKmBnNBon8Exca4PYYTFEAEwEE1KIY9xrXHQ9o=";
       "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
       "11.4.0" = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";
       "10.5.0" = "sha256-JRCVQ/30bzl8NHtdi3osflaUpaUczkucbh6opxyjB8E=";
