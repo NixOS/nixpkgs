@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     sha256 = "sha256-AjonJOooSe53Fww3QU6Dft95ojNqWrTuPul3nkIbctM=";
   };
 
+  outputs = [ "out" "man" "tex" ];
+
   # There's only the Makefile
   dontConfigure = true;
 
@@ -49,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     # runtime, AND the path where the actual modules will be stored at
     # build-time.  This has been reported upstream as
     # https://project.auto-multiple-choice.net/issues/872
-    "TEXDIR=/tex/latex/" # what texlive.combine expects
+    "TEXDIR=$(tex)/tex/latex/auto-multiple-choice/" # what texlive.combine expects
     "TEXDOCDIR=/share/doc/texmf/" # TODO where to put this?
     "MAN1DIR=/share/man/man1"
     "DESKTOPDIR=/share/applications"
@@ -66,6 +68,11 @@ stdenv.mkDerivation (finalAttrs: rec {
     "GCC=${stdenv.cc.targetPrefix}cc"
     "GCC_PP=${stdenv.cc.targetPrefix}c++"
   ];
+
+  # do not prepend TEXDIR with DESTDIR since it is outside of $out
+  preBuild = ''
+    substituteInPlace Makefile --replace '$(DESTDIR)/$(TEXDIR)' '$(TEXDIR)'
+  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -92,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       XMLWriter
     ]}:"$out/share/perl5 \
     --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-    --set TEXINPUTS ":.:$out/tex/latex"
+    --suffix TEXINPUTS : "$tex//:"
   '';
 
   nativeBuildInputs = [
@@ -138,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   passthru = {
     tlType = "run";
-    pkgs = [ finalAttrs.finalPackage ];
+    pkgs = [ finalAttrs.finalPackage.tex ];
   };
 
   meta = with lib; {
