@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-mermaid2-plugin";
-  version = "0.6.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "fralau";
     repo = "mkdocs-mermaid2-plugin";
-    rev = "v${version}";
-    hash = "sha256-Oe6wkVrsB0NWF+HHeifrEogjxdGPINRDJGkh9p+GoHs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8/5lltOT78VSMxunIfCeGSBQ7VIRVnk3cHIzd7S+c00=";
   };
 
   propagatedBuildInputs = [
