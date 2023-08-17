@@ -33821,7 +33821,6 @@ with pkgs;
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
-      grpcSupport = config.murmur.grpcSupport or true;
     }).murmur;
 
   mumble = (callPackages ../applications/networking/mumble {
