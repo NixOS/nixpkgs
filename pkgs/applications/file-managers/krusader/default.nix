@@ -42,7 +42,7 @@ mkDerivation rec {
     homepage = "http://www.krusader.org";
     description = "Norton/Total Commander clone for KDE";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ sander turion ];
+    maintainers = with maintainers; [ sander ];
     mainProgram = "krusader";
   };
 }
