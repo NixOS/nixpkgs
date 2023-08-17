@@ -9,9 +9,9 @@ let
   filename = "linux-Miru-${version}.AppImage";
 in
 appimageTools.wrapType2 rec {
+  pname = "miru";
   name = pname;
-  inherit pname;
-  inherit version;
+  version = "3.11.6";
 
   src = fetchurl {
     url = "${homepage}/releases/download/v${version}/${filename}";
