@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "exempi";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchurl {
     url = "https://libopenraw.freedesktop.org/download/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-sHSdsYqeeM93FzeVSoOM3NsdVBWIi6wbqcr4y6d8ZWw=";
+    sha256 = "sha256-p1FJyWth45zcsEb9XlbYjP7qtuCPiU4V6//ZlECSv9A=";
   };
 
   configureFlags = [
