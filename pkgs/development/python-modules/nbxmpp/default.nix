@@ -1,20 +1,22 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitLab
 , gobject-introspection
 , idna
 , libsoup_3
+, packaging
 , precis-i18n
 , pygobject3
 , pyopenssl
-, setuptools
 , pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "4.3.1";
+  version = "4.3.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.10";
 
@@ -22,15 +24,14 @@ buildPythonPackage rec {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "python-nbxmpp";
-    rev = version;
-    hash = "sha256-8Fh4sgQps6zUEN8o5ljrDIbRlbSZIMncbqh/qAnyOkw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vSLWaGYST1nut+0KAzURRKsr6XRtmYYTrkJiQEK3wa4=";
   };
-
-  format = "pyproject";
 
   nativeBuildInputs = [
     # required for pythonImportsCheck otherwise libsoup cannot be found
     gobject-introspection
+    setuptools
   ];
 
   buildInputs = [
@@ -41,16 +42,18 @@ buildPythonPackage rec {
     gobject-introspection
     idna
     libsoup_3
+    packaging
     pygobject3
     pyopenssl
-    setuptools
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "nbxmpp" ];
+  pythonImportsCheck = [
+    "nbxmpp"
+  ];
 
   meta = with lib; {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
