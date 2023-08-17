@@ -12169,7 +12169,7 @@ with pkgs;
   teapot = callPackage ../applications/office/teapot { };
 
   pyditz = callPackage ../applications/misc/pyditz {
-    pythonPackages = python27Packages;
+    pythonPackages = python3Packages;
   };
 
   py-spy = darwin.apple_sdk_11_0.callPackage ../development/tools/py-spy { };
