@@ -130,6 +130,11 @@ in
       initialScript = mkOption {
         type = types.nullOr types.path;
         default = null;
+        example = literalExpression ''
+          pkgs.writeText "init-sql-script" '''
+            alter user postgres with password 'myPassword';
+          ''';'';
+
         description = lib.mdDoc ''
           A file containing SQL statements to execute on first startup.
         '';
