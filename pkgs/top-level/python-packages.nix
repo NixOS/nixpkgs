@@ -8845,6 +8845,8 @@ self: super: with self; {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
 
+  pcbnew-transition = callPackage ../development/python-modules/pcbnew-transition { };
+
   pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
   pcpp = callPackage ../development/python-modules/pcpp { };
