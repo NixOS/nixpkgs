@@ -1,13 +1,13 @@
 { fetchFromGitLab, installShellFiles, lib, python3, stdenv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvd";
   version = "0.2.3";
 
   src = fetchFromGitLab {
     owner = "khumba";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = finalAttrs.pname;
+    rev = "refs/tags/v${finalAttrs.version}";
     sha256 = "sha256:005nh24j01s0hd5j0g0qp67wpivpjwryxyyh6y44jijb4arrfrjf";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ khumba ];
     platforms = platforms.all;
   };
-}
+})
