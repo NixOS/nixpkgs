@@ -5,7 +5,6 @@
 , "@babel/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
-, "@emacs-eask/cli"
 , "@forge/cli"
 , "@maizzle/cli"
 , "@medable/mdctl-cli"
