@@ -1,7 +1,9 @@
-{ lib 
+{ lib
 , stdenv
 , fetchFromGitHub
 , python3Packages
+, testers
+, stig
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -50,6 +52,12 @@ python3Packages.buildPythonApplication rec {
     "--deselect=tests/client_test/aiotransmission_test/api_torrent_test.py"
     "--deselect=tests/client_test/aiotransmission_test/rpc_test.py"
   ];
+
+  passthru.tests = testers.testVersion {
+    package = stig;
+    command = "stig -v";
+    version = "stig version ${version}";
+  };
 
   meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
