@@ -38,10 +38,11 @@ let
   atLeast13 = lib.versionAtLeast version "13";
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
+  atLeast10 = lib.versionAtLeast version "10";
 in
 
-# only gcc>=11 is currently supported
-assert atLeast11;
+# only gcc>=10 is currently supported
+assert atLeast10;
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
@@ -66,18 +67,21 @@ with builtins;
 
 let majorVersion = lib.versions.major version;
     inherit version;
-    disableBootstrap = !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
+    disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
          optional (!atLeast12) ./fix-bug-80431.patch
+      ++ optional (!atLeast11) ./11/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
       ++ optional (noSysDirs &&  atLeast12) ./gcc-12-no-sys-dirs.patch
       ++ optional (noSysDirs && !atLeast12) ./no-sys-dirs.patch
-      ++ optional (noSysDirs && (!atLeast12 -> hostPlatform.isRiscV)) ./no-sys-dirs-riscv.patch
+      ++ optional (noSysDirs && (is10 || (!atLeast12 -> hostPlatform.isRiscV))) ./no-sys-dirs-riscv.patch
       ++ optionals (langAda || atLeast12) [
         ./gnat-cflags-11.patch
+      ] ++ optionals (langAda && !atLeast11) [
+        ./gnat-cflags.patch
       ] ++ optionals atLeast12 [
         ./gcc-12-gfortran-driving.patch
         ./ppc-musl.patch
@@ -105,7 +109,7 @@ let majorVersion = lib.versions.major version;
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
       ++ optional (!atLeast12 && targetPlatform.libc == "musl" && targetPlatform.isPower) ./ppc-musl.patch
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
-      ++ optionals (!atLeast12 && stdenv.isDarwin) [
+      ++ optionals (atLeast11 && !atLeast12 && stdenv.isDarwin) [
         (fetchpatch {
           # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
           # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.4.0
@@ -114,7 +118,7 @@ let majorVersion = lib.versions.major version;
         })
       ]
       # https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
-      ++ optional (!atLeast12 && stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
+      ++ optional (atLeast11 && !atLeast12 && stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
 
       # backport fixes to build gccgo with musl libc
       ++ optionals (atLeast12 && langGo && stdenv.hostPlatform.isMusl) [
@@ -166,7 +170,11 @@ let majorVersion = lib.versions.major version;
 
       # openjdk build fails without this on -march=opteron; is upstream in gcc12
       ++ optionals (majorVersion == "11") [ ./11/gcc-issue-103910.patch ]
-    ;
+
+      ++ optional (!atLeast11 && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
+        url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
+        sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
+      });
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -246,10 +254,11 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    ${if atLeast12 then "sha256" else "hash"} = {
+    ${if majorVersion == "11" then "hash" else "sha256"} = {
       "13.1.0" = "sha256-YdaE8Kpedqxlha2ImKJCeq3ol57V5/hUkihsTfwT7oY=";
       "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
       "11.4.0" = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";
+      "10.5.0" = "sha256-JRCVQ/30bzl8NHtdi3osflaUpaUczkucbh6opxyjB8E=";
     }."${version}";
   };
 
@@ -262,7 +271,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   libc_dev = stdenv.cc.libc_dev;
 
   hardeningDisable = [ "format" "pie" ]
-  ++ lib.optionals (!atLeast12 && langAda) [ "fortify3" ];
+  ++ lib.optionals (atLeast11 && !atLeast12 && langAda) [ "fortify3" ];
 
   postPatch = ''
     configureScripts=$(find . -name configure)
@@ -336,10 +345,15 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   buildFlags =
     # we do not yet have Nix-driven profiling
     assert atLeast12 -> (profiledCompiler -> !disableBootstrap);
-    let target =
-          lib.optionalString (profiledCompiler) "profiled" +
-          lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
-    in lib.optional (target != "") target;
+    if atLeast11
+    then let target =
+               lib.optionalString (profiledCompiler) "profiled" +
+               lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
+         in lib.optional (target != "") target
+    else
+      optional
+        (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
+        (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   inherit (callFile ./common/strip-attributes.nix { })
     stripDebugList
@@ -391,13 +405,16 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       platforms
       maintainers
     ;
+  } // lib.optionalAttrs (!atLeast11) {
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 ))
-[
+([
   (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
+] ++ optionals atLeast11 [
   (callPackage ./common/checksum.nix { inherit langC langCC; })
-]
+])
 

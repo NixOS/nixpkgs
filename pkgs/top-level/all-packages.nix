@@ -15802,6 +15802,7 @@ with pkgs;
             "13" = "13.1.0";
             "12" = "12.3.0";
             "11" = "11.4.0";
+            "10" = "10.4.0";
           };
           deduplicated = deduplicatedVersions ? "${version}";
           path = if deduplicated
