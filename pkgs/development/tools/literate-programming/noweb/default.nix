@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, nawk, groff, icon-lang, useIcon ? true }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation rec {
   pname = "noweb";
   version = "2.12";
 
@@ -70,11 +70,6 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   outputs = [ "out" "tex" ];
 
-  passthru = {
-    tlType = "run";
-    pkgs = [ finalAttrs.finalPackage.tex ];
-  };
-
   meta = with lib; {
     description = "A simple, extensible literate-programming tool";
     homepage = "https://www.cs.tufts.edu/~nr/noweb";
@@ -82,4 +77,4 @@ stdenv.mkDerivation (finalAttrs: rec {
     maintainers = with maintainers; [ yurrriq ];
     platforms = with platforms; linux ++ darwin;
   };
-})
+}
