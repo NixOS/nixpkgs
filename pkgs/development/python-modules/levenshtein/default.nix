@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , pythonOlder
 , cmake
-, cython
+, cython_3
 , pytestCheckHook
 , rapidfuzz
 , rapidfuzz-cpp
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython
+    cython_3
     scikit-build
   ];
 
