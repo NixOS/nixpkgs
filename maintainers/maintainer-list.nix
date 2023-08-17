@@ -11218,6 +11218,12 @@
     githubId = 11810057;
     name = "Matt Snider";
   };
+  matusf = {
+    email = "matus.ferech@gmail.com";
+    github = "matusf";
+    githubId = 18228995;
+    name = "Matúš Ferech";
+  };
   maurer = {
     email = "matthew.r.maurer+nix@gmail.com";
     github = "maurer";
