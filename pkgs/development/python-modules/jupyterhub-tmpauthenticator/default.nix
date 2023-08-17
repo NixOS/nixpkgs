@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub-tmpauthenticator";
-  version = "0.6";
+  version = "1.0.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "064x1ypxwx1l270ic97p8czbzb7swl9758v40k3w2gaqf9762f0l";
+    sha256 = "sha256-7TuAYP6mRffsZL+O+AMgt5HBu6PhwLYj5A8X8DnMfl0=";
   };
 
   propagatedBuildInputs = [ jupyterhub ];
