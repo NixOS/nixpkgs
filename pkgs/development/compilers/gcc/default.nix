@@ -41,10 +41,11 @@ let
   atLeast10 = lib.versionAtLeast version "10";
   atLeast9  = lib.versionAtLeast version  "9";
   atLeast8  = lib.versionAtLeast version  "8";
+  atLeast7  = lib.versionAtLeast version  "7";
 in
 
-# only gcc>=8 is currently supported
-assert atLeast8;
+# only gcc>=7 is currently supported
+assert atLeast7;
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
@@ -74,7 +75,16 @@ let majorVersion = lib.versions.major version;
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-         optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
+      optionals (!atLeast8) [
+        # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
+        (./. + "/${majorVersion}/riscv-pthread-reentrant.patch")
+        # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
+        (./. + "/${majorVersion}/riscv-no-relax.patch")
+        # Fix for asan w/glibc-2.34. Although there's no upstream backport to v7,
+        # the patch from gcc 8 seems to work perfectly fine.
+        (./. + "/${majorVersion}/gcc8-asan-glibc-2.34.patch")
+        (./. + "/${majorVersion}/0001-Fix-build-for-glibc-2.31.patch")
+      ] ++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (!atLeast12) ./fix-bug-80431.patch
       ++ optional (!atLeast9) ./9/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (atLeast10 && !atLeast11) ./11/fix-struct-redefinition-on-glibc-2.36.patch
@@ -110,10 +120,18 @@ let majorVersion = lib.versions.major version;
         }) ];
       }."${majorVersion}" or [])
       ++ optional (atLeast9 && langD) ./libphobos.patch
+      ++ optional (!atLeast8 && hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
+        url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
+        sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
+      })
       ++ optional langFortran ../gfortran-driving.patch
 
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
       ++ optional (!atLeast12 && targetPlatform.libc == "musl" && targetPlatform.isPower) ./ppc-musl.patch
+      ++ optional (!atLeast8 && targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
+        url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
+        sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
+      })
       ++ optional (!atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
       ++ optionals (atLeast11 && !atLeast12 && stdenv.isDarwin) [
@@ -270,6 +288,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       "10.5.0" = "sha256-JRCVQ/30bzl8NHtdi3osflaUpaUczkucbh6opxyjB8E=";
       "9.5.0"  = "13ygjmd938m0wmy946pxdhz9i1wq7z4w10l6pvidak0xxxj9yxi7";
       "8.5.0"  = "0l7d4m9jx124xsk6xardchgy2k5j5l2b15q322k31f0va4d8826k";
+      "7.5.0"  = "0qg6kqc5l72hpnj4vr6l0p69qav0rh4anlkk3y55540zy3klc6dq";
     }."${version}";
   };
 
@@ -351,7 +370,9 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  configureFlags = callFile ./common/configure-flags.nix { };
+  configureFlags = (callFile ./common/configure-flags.nix { })
+    ++ optional (!atLeast8 && targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
+    ++ optional (!atLeast8 && targetPlatform.isNetBSD) "--disable-libcilkrts";
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -421,9 +442,12 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   } // lib.optionalAttrs (!atLeast11) {
     badPlatforms = [ "aarch64-darwin" ];
   };
+} // optionalAttrs (!atLeast8) {
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+  doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
+} // optionalAttrs (enableMultilib) {
+  dontMoveLib64 = true;
 }
-
-// optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 ))
 ([
   (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
