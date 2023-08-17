@@ -2565,7 +2565,7 @@ self: super: {
   # Needs lsp >= 2.1
   futhark = super.futhark.overrideScope (fself: _: {
     lsp = fself.lsp_2_1_0_0;
-    lsp-types = fself.lsp-types_2_0_1_0;
+    lsp-types = fself.lsp-types_2_0_1_1;
   });
 
   # Too strict bounds on hspec
