@@ -42,6 +42,7 @@ buildGoModule rec {
     description = "An ActivityPub server with minimal setup and support costs.";
     homepage = "https://humungus.tedunangst.com/r/honk";
     license = licenses.isc;
+    mainProgram = "honk";
     maintainers = with maintainers; [ huyngo ];
   };
 }
