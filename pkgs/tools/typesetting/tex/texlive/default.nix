@@ -2,7 +2,7 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
+{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv, linkFarm
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper
 , python3, ruby, perl, tk, jdk, bash, snobol4
@@ -23,7 +23,7 @@ let
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv lib makeWrapper writeText runCommand
+    inherit bin buildEnv lib makeWrapper writeText runCommand linkFarm
       stdenv perl libfaketime makeFontsConf bash texlivePackages coreutils gawk gnugrep gnused;
     ghostscript = ghostscript_headless;
   };
@@ -465,29 +465,16 @@ let
       // lib.optionalAttrs (args ? deps) { deps = map (n: texlivePackages.${n}) (args.deps or [ ]); })
   ) overriddenTlpdb;
 
-  # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgList: lib.catAttrs "pkg" (
-    let
-      # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
-      # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
-      tlPkgToSets = { pkgs, ... }: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
-          # outputName required to distinguish among bin.core-big outputs
-          key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
-          inherit pkg;
-        }) pkgs;
-      pkgListToSets = lib.concatMap tlPkgToSets; in
-    builtins.genericClosure {
-      startSet = pkgListToSets pkgList;
-      operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or []);
-    });
-
   assertions = with lib;
     assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
     assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate" &&
-    (!useFixedHashes ||
-      (let all = concatLists (catAttrs "pkgs" (attrValues texlivePackages));
-         fods = filter (p: isDerivation p && p.tlType != "bin") all;
-      in builtins.all (p: assertMsg (p ? outputHash) "The TeX Live package '${p.pname + lib.optionalString (p.tlType != "run") ("." + p.tlType)}' does not have a fixed output hash. Please read UPGRADING.md on how to build a new 'fixed-hashes.nix'.") fods));
+    (useFixedHashes ->
+      (let getFods = p: optional (isDerivation p) p ++
+                        optional (p ? texdoc) p.texdoc ++
+                        optional (p ? texsource) p.texsource ++
+                        optional (p ? tlpkg) p.tlpkg;
+           fods = lib.concatMap getFods (attrValues texlivePackages);
+      in builtins.all (p: assertMsg (p ? outputHash) "The TeX Live package '${p.pname}-${p.version}-${p.tlOutputName}' does not have a fixed output hash. Please read UPGRADING.md on how to build a new 'fixed-hashes.nix'.") fods));
 
 in
   texlivePackages // {
@@ -500,7 +487,7 @@ in
 
     bin = assert assertions; bin // {
       # for backward compatibility
-      latexindent = lib.findFirst (p: p.tlType == "bin") texlivePackages.latexindent.pkgs;
+      latexindent = texlivePackages.latexindent;
     };
 
     combine = assert assertions; combine;
@@ -531,7 +518,7 @@ in
             fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a
             lppl13c mit ofl publicDomain x11];
         };
-      in recurseIntoAttrs (
+      in assert assertions; recurseIntoAttrs (
       mapAttrs
         (pname: attrs:
           addMetaAttrs rec {

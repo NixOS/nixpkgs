@@ -1,6 +1,6 @@
 { lib, stdenvNoCC, texlive }:
 
-let src = lib.head (builtins.filter (p: p.tlType == "run") texlive.iwona.pkgs); in
+let src = texlive.iwona; in
 stdenvNoCC.mkDerivation {
   inherit (src) pname version;
   inherit src;
