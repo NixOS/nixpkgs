@@ -31,7 +31,11 @@
 , disableGdbPlugin ? !enablePlugin
 , nukeReferences
 , callPackage
+, version
 }:
+
+# only gcc13 is currently supported
+assert lib.versions.major version == "13";
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
@@ -54,8 +58,8 @@ assert reproducibleBuild -> profiledCompiler == false;
 with lib;
 with builtins;
 
-let majorVersion = "13";
-    version = "${majorVersion}.1.0";
+let majorVersion = lib.versions.major version;
+    inherit version;
     disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -141,7 +145,7 @@ let majorVersion = "13";
         stageNameAddon
         crossNameAddon
       ;
-      # inherit generated with 'nix eval --json --impure --expr "with import ./. {}; lib.attrNames (lib.functionArgs gcc13.cc.override)" | jq '.[]' --raw-output'
+      # inherit generated with 'nix eval --json --impure --expr "with import ./. {}; lib.attrNames (lib.functionArgs gcc${majorVersion}.cc.override)" | jq '.[]' --raw-output'
       inherit
         binutils
         buildPackages
