@@ -361,7 +361,6 @@ let
 
       # Optional features:
       use_gio = true;
-      use_gnome_keyring = false; # Superseded by libsecret
       use_cups = cupsSupport;
 
       # Feature overrides:
@@ -384,6 +383,8 @@ let
       # We do intentionally not set rustc_version as nixpkgs will never do incremental
       # rebuilds, thus leaving this empty is fine.
       rust_sysroot_absolute = "${rustc}";
+      # Building with rust is disabled for now - this matches the flags in other major distributions.
+      enable_rust = false;
     } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
       # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
       arm_control_flow_integrity = "none";
