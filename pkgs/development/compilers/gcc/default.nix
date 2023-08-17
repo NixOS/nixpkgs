@@ -32,6 +32,17 @@
 , nukeReferences
 , callPackage
 , version
+
+# only for gcc<=6.x
+, langJava ? false
+, flex
+, boehmgc ? null
+, zip ? null, unzip ? null, pkg-config ? null
+, gtk2 ? null, libart_lgpl ? null
+, libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
+, libXrender ? null, xorgproto ? null
+, libXrandr ? null, libXi ? null
+, x11Support ? langJava
 }:
 
 let
@@ -42,17 +53,20 @@ let
   atLeast9  = lib.versionAtLeast version  "9";
   atLeast8  = lib.versionAtLeast version  "8";
   atLeast7  = lib.versionAtLeast version  "7";
+  atLeast6  = lib.versionAtLeast version  "6";
 in
 
-# only gcc>=7 is currently supported
-assert atLeast7;
+assert langJava -> !atLeast7 && zip != null && unzip != null && zlib != null && boehmgc != null && perl != null;  # for `--enable-java-home'
+
+# only gcc>=6 is currently supported
+assert atLeast6;
 
 # Make sure we get GNU sed.
 assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
-assert atLeast9 -> (langAda -> gnat-bootstrap != null);
+assert (!atLeast7 || atLeast9) -> (langAda -> gnat-bootstrap != null);
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
@@ -75,7 +89,12 @@ let majorVersion = lib.versions.major version;
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-      optionals (!atLeast8) [
+      optionals (!atLeast7) [
+        ./9/fix-struct-redefinition-on-glibc-2.36.patch
+      ] ++ optionals (!atLeast7 && !stdenv.targetPlatform.isRedox) [
+        ./use-source-date-epoch.patch
+        ./6/0001-Fix-build-for-glibc-2.31.patch
+      ] ++ optionals (atLeast7 && !atLeast8) [
         # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
         (./. + "/${majorVersion}/riscv-pthread-reentrant.patch")
         # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
@@ -83,15 +102,18 @@ let majorVersion = lib.versions.major version;
         # Fix for asan w/glibc-2.34. Although there's no upstream backport to v7,
         # the patch from gcc 8 seems to work perfectly fine.
         (./. + "/${majorVersion}/gcc8-asan-glibc-2.34.patch")
+      ] ++ optionals (atLeast7 && !atLeast8) [
         (./. + "/${majorVersion}/0001-Fix-build-for-glibc-2.31.patch")
       ] ++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (!atLeast12) ./fix-bug-80431.patch
-      ++ optional (!atLeast9) ./9/fix-struct-redefinition-on-glibc-2.36.patch
+      ++ optional (atLeast7 && !atLeast9) ./9/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (atLeast10 && !atLeast11) ./11/fix-struct-redefinition-on-glibc-2.36.patch
       ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
-      ++ optional (!atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
+      ++ optional (atLeast7 && !atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
       ++ optional (noSysDirs &&  atLeast12) ./gcc-12-no-sys-dirs.patch
       ++ optional (noSysDirs && !atLeast12) ./no-sys-dirs.patch
+      ++ optional (!atLeast7 && langAda) ./gnat-cflags.patch
+      ++ optional (!atLeast7 && langAda) ./6/gnat-glibc234.patch
       ++ optional (noSysDirs && atLeast10 && (is10 || !atLeast12 -> hostPlatform.isRiscV)) ./no-sys-dirs-riscv.patch
       ++ optional (noSysDirs && atLeast9 && !atLeast10 && hostPlatform.isRiscV) ./no-sys-dirs-riscv-gcc9.patch
       ++ optionals (langAda || atLeast12) [
@@ -120,19 +142,20 @@ let majorVersion = lib.versions.major version;
         }) ];
       }."${majorVersion}" or [])
       ++ optional (atLeast9 && langD) ./libphobos.patch
-      ++ optional (!atLeast8 && hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
+      ++ optional (atLeast7 && !atLeast8 && hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
         url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
         sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
       })
       ++ optional langFortran ../gfortran-driving.patch
 
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
-      ++ optional (!atLeast12 && targetPlatform.libc == "musl" && targetPlatform.isPower) ./ppc-musl.patch
+      ++ optional (atLeast7 && !atLeast12 && targetPlatform.libc == "musl" && targetPlatform.isPower) ./ppc-musl.patch
       ++ optional (!atLeast8 && targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
         url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
         sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
       })
-      ++ optional (!atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
+      ++ optional (atLeast7 && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
+      ++ optional (!atLeast7 && langGo) ./gogcc-workaround-glibc-2.36.patch
       # TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
       ++ optionals (atLeast11 && !atLeast12 && stdenv.isDarwin) [
         (fetchpatch {
@@ -208,7 +231,12 @@ let majorVersion = lib.versions.major version;
     stageNameAddon = if withoutTargetLibc then "stage-static" else "stage-final";
     crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
 
-    callFile = lib.callPackageWith {
+    javaAwtGtk = langJava && x11Support;
+    xlibs = [
+      libX11 libXt libSM libICE libXtst libXrender libXrandr libXi
+      xorgproto
+    ];
+    callFile = lib.callPackageWith ({
       # lets
       inherit
         majorVersion
@@ -271,16 +299,70 @@ let majorVersion = lib.versions.major version;
         zip
         zlib
       ;
-    };
+    } // lib.optionalAttrs (!atLeast7) {
+      inherit
+        boehmgc
+        flex
+        gnat-bootstrap
+        gtk2
+        langAda
+        langJava
+        libICE
+        libSM
+        libX11
+        libXi
+        libXrandr
+        libXrender
+        libXt
+        libXtst
+        libart_lgpl
+        pkg-config
+        unzip
+        x11Support
+        xorgproto
+        javaAwtGtk
+        xlibs
+      ;
+      javaEcj = fetchurl {
+        # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
+        # `configure' time.
+
+        # XXX: Eventually we might want to take it from upstream.
+        url = "ftp://sourceware.org/pub/java/ecj-4.3.jar";
+        sha256 = "0jz7hvc0s6iydmhgh5h2m15yza7p2rlss2vkif30vm9y77m97qcx";
+      };
+
+      # Antlr (optional) allows the Java `gjdoc' tool to be built.  We want a
+      # binary distribution here to allow the whole chain to be bootstrapped.
+      javaAntlr = fetchurl {
+        url = "https://www.antlr.org/download/antlr-4.4-complete.jar";
+        sha256 = "02lda2imivsvsis8rnzmbrbp8rh1kb8vmq4i67pqhkwz7lf8y6dz";
+      };
+    });
 
 in
+
+# We need all these X libraries when building AWT with GTK.
+assert !atLeast7 -> (x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == []);
 
 lib.pipe ((callFile ./common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
-  src = fetchurl {
-    url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
+  src = if !atLeast7 && stdenv.targetPlatform.isVc4 then fetchFromGitHub {
+    owner = "itszor";
+    repo = "gcc-vc4";
+    rev = "e90ff43f9671c760cf0d1dd62f569a0fb9bf8918";
+    sha256 = "0gxf66hwqk26h8f853sybphqa5ca0cva2kmrw5jsiv6139g0qnp8";
+  } else if !atLeast7 && stdenv.targetPlatform.isRedox then fetchFromGitHub {
+    owner = "redox-os";
+    repo = "gcc";
+    rev = "f360ac095028d286fc6dde4d02daed48f59813fa"; # `redox` branch
+    sha256 = "1an96h8l58pppyh3qqv90g8hgcfd9hj7igvh2gigmkxbrx94khfl";
+  } else (fetchurl {
+    url = if atLeast7
+          then "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz"
+          else "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
     ${if majorVersion == "11" then "hash" else "sha256"} = {
       "13.1.0" = "sha256-YdaE8Kpedqxlha2ImKJCeq3ol57V5/hUkihsTfwT7oY=";
       "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
@@ -289,12 +371,18 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       "9.5.0"  = "13ygjmd938m0wmy946pxdhz9i1wq7z4w10l6pvidak0xxxj9yxi7";
       "8.5.0"  = "0l7d4m9jx124xsk6xardchgy2k5j5l2b15q322k31f0va4d8826k";
       "7.5.0"  = "0qg6kqc5l72hpnj4vr6l0p69qav0rh4anlkk3y55540zy3klc6dq";
+      "6.5.0"  = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
     }."${version}";
-  };
+  });
 
   inherit patches;
 
-  outputs = [ "out" "man" "info" ] ++ lib.optional (!langJit) "lib";
+  outputs =
+    if atLeast7
+    then [ "out" "man" "info" ] ++ lib.optional (!langJit) "lib"
+    else if langJava || langGo || langJit then ["out" "man" "info"]
+    else [ "out" "lib" "man" "info" ];
+
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -303,12 +391,12 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   hardeningDisable = [ "format" "pie" ]
   ++ lib.optionals (atLeast11 && !atLeast12 && langAda) [ "fortify3" ];
 
-  postPatch = ''
+  postPatch = (lib.optionalString atLeast7 ''
     configureScripts=$(find . -name configure)
     for configureScript in $configureScripts; do
       patchShebangs $configureScript
     done
-  ''
+  '')
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
   + lib.optionalString hostPlatform.isDarwin ''
@@ -345,7 +433,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
         ''
         )
     ))
-      + lib.optionalString targetPlatform.isAvr (''
+      + lib.optionalString (atLeast7 && targetPlatform.isAvr) (''
             makeFlagsArray+=(
           '' + (lib.optionalString atLeast10 ''
                '-s' # workaround for hitting hydra log limit
@@ -371,8 +459,8 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags = (callFile ./common/configure-flags.nix { })
-    ++ optional (!atLeast8 && targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
-    ++ optional (!atLeast8 && targetPlatform.isNetBSD) "--disable-libcilkrts";
+    ++ optional (atLeast7 && !atLeast8 && targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
+    ++ optional (atLeast7 && !atLeast8 && targetPlatform.isNetBSD) "--disable-libcilkrts";
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -403,6 +491,11 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
   # library headers and binaries, regarless of the language being compiled.
   #
+  # Note: When building the Java AWT GTK peer, the build system doesn't honor
+  # `--with-gmp' et al., e.g., when building
+  # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
+  # them to $CPATH and $LIBRARY_PATH in this case.
+  #
   # Likewise, the LTO code doesn't find zlib.
   #
   # Cross-compiling, we need gcc not to read ./specs in order to build the g++
@@ -411,9 +504,17 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
 
   CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
     ++ optional (zlib != null) zlib
+    ++ optional langJava boehmgc
+    ++ optionals javaAwtGtk xlibs
+    ++ optionals javaAwtGtk [ gmp mpfr ]
   ));
 
-  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (optional (zlib != null) zlib));
+  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (
+    optional (zlib != null) zlib
+    ++ optional langJava boehmgc
+    ++ optionals javaAwtGtk xlibs
+    ++ optionals javaAwtGtk [ gmp mpfr ]
+  ));
 
   inherit (callFile ./common/extra-target-flags.nix { })
     EXTRA_FLAGS_FOR_TARGET
@@ -442,11 +543,19 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   } // lib.optionalAttrs (!atLeast11) {
     badPlatforms = [ "aarch64-darwin" ];
   };
-} // optionalAttrs (!atLeast8) {
+} // optionalAttrs (atLeast7 && !atLeast8) {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+} // optionalAttrs (!atLeast7) {
+  env.langJava = langJava;
+} // optionalAttrs (!atLeast8) {
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 } // optionalAttrs (enableMultilib) {
   dontMoveLib64 = true;
+} // optionalAttrs (!atLeast7 && langJava && !stdenv.hostPlatform.isDarwin) {
+     postFixup = ''
+       target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
+       patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
+     '';
 }
 ))
 ([
