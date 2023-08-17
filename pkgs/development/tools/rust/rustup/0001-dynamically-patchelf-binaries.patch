@@ -10,13 +10,15 @@ index 73a533b5..408ab815 100644
                  }
                  "dir" => {
                      if self.copy {
-@@ -135,6 +136,29 @@ fn components(&self) -> Vec<String> {
+@@ -135,6 +136,31 @@ fn components(&self) -> Vec<String> {
      }
  }
  
 +fn nix_patchelf_if_needed(dest_path: &Path, src_path: &Path) {
 +    let (is_bin, is_lib) = if let Some(p) = src_path.parent() {
-+        (p.ends_with("bin") || p.ends_with("libexec"), p.ends_with("lib"))
++        let bin_dirs = ["bin", "libexec", "gcc-ld"];
++        let is_bin = bin_dirs.iter().any(|dir| p.ends_with(dir));
++        (is_bin, p.ends_with("lib"))
 +    } else {
 +        (false, false)
 +    };
