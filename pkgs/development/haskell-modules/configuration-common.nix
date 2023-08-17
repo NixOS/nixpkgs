@@ -2738,9 +2738,12 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/pull/220972#issuecomment-1484017192
   ffmpeg-light = super.ffmpeg-light.override { ffmpeg = pkgs.ffmpeg_4; };
 
-  # posix-api has had broken tests since 2020 (until at least 2023-01-11)
-  # raehik has a fix pending: https://github.com/andrewthad/posix-api/pull/14
-  posix-api = dontCheck super.posix-api;
+  posix-api = super.posix-api.overrideScope (lself: lsuper: {
+    primitive-unlifted = lself.primitive-unlifted_2_1_0_0;
+
+    # need new run-st because old requires primitive-unlifted <0.2
+    run-st = lself.run-st_0_1_3_2;
+  });
 
   # bytestring <0.11.0, optparse-applicative <0.13.0
   # https://github.com/kseo/sfnt2woff/issues/1

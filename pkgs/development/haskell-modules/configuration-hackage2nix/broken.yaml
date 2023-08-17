@@ -4408,7 +4408,6 @@ broken-packages:
   - posit
   - positron
   - posix-acl
-  - posix-api # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230954850 at 2023-08-16
   - posix-realtime
   - posix-waitpid
   - posplyu # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230957556 at 2023-08-16
