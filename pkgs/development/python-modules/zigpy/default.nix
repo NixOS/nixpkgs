@@ -14,6 +14,7 @@
 , pythonOlder
 , setuptools
 , voluptuous
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -32,11 +33,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace '"setuptools-git-versioning<2"' "" \
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
