@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "bearer";
-  version = "1.17.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "bearer";
     repo = "bearer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cN+YEdNtxt/DDn4ZbUnDg0rHgSJ3xL2LmmtZQ+eKNZs=";
+    hash = "sha256-4Gth76mQca+FHtGIUgZZ6aWzjcoQghTikbEYlJszeyc=";
   };
 
-  vendorHash = "sha256-d2QMNxTM7Cbr5X2Y1J9VBleVjMy9wZeEItYkChaYBR0=";
+  vendorHash = "sha256-gqks+q8HxQ54UjRANXBvnfTzE14M8FxbnTMG/JN4ntk=";
 
   subPackages = [
     "cmd/bearer"
