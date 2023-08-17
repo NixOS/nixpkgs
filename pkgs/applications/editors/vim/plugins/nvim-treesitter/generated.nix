@@ -1929,12 +1929,12 @@
   };
   teal = buildGrammar {
     language = "teal";
-    version = "0.0.0+rev=2158ecc";
+    version = "0.0.0+rev=33482c9";
     src = fetchFromGitHub {
       owner = "euclidianAce";
       repo = "tree-sitter-teal";
-      rev = "2158ecce11ea542f9b791baf2c7fb33798174ed2";
-      hash = "sha256-Vofqs1AW5/a7kdPjY8+fu/t/mfBpaXiFFeG1Y0hsP6E=";
+      rev = "33482c92a0dfa694491d34e167a1d2f52b0dccb1";
+      hash = "sha256-6T9hn+Tvz8AYMsAu2J8vt6WkRQRrdGwGJcw3c85W14I=";
     };
     generate = true;
     meta.homepage = "https://github.com/euclidianAce/tree-sitter-teal";
@@ -2187,12 +2187,12 @@
   };
   wing = buildGrammar {
     language = "wing";
-    version = "0.0.0+rev=f416d4b";
+    version = "0.0.0+rev=9399564";
     src = fetchFromGitHub {
       owner = "winglang";
       repo = "wing";
-      rev = "f416d4b76141d803ea2ebadf0629fca164133723";
-      hash = "sha256-xSt6C64PmNJOqZxon4TWbAIlMzSaRClPc47wi9Sxdpk=";
+      rev = "9399564d1e32864c6af2d49c0dcd1f76d54443f2";
+      hash = "sha256-Me+AhVl0a38w54vWa4yvxOPHMwVnJw1wewrn0bBC9AM=";
     };
     location = "libs/tree-sitter-wing";
     generate = true;

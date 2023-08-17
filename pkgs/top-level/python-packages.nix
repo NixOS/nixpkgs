@@ -10704,6 +10704,8 @@ self: super: with self; {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+  qbittorrent-api = callPackage ../development/python-modules/qbittorrent-api { };
+
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
