@@ -8,19 +8,25 @@
 buildPythonPackage rec {
   pname = "jupyterhub-tmpauthenticator";
   version = "1.0.0";
-  disabled = pythonOlder "3.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-7TuAYP6mRffsZL+O+AMgt5HBu6PhwLYj5A8X8DnMfl0=";
   };
 
-  propagatedBuildInputs = [ jupyterhub ];
+  propagatedBuildInputs = [
+    jupyterhub
+  ];
 
   # No tests available in the package
   doCheck = false;
 
-  pythonImportsCheck = [ "tmpauthenticator" ];
+  pythonImportsCheck = [
+    "tmpauthenticator"
+  ];
 
   meta = with lib; {
     description = "Simple Jupyterhub authenticator that allows anyone to log in";
