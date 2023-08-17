@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo4, getopt, readline, texlive }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation rec {
   pname = "eukleides";
   version = "1.5.4";
 
@@ -49,12 +49,8 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   outputs = [ "out" "doc" "tex" ];
 
-  passthru = {
-    tlType = "run";
-    # packages needed by euktoeps, euktopdf and eukleides.sty
-    tlDeps = with texlive; [ collection-pstricks epstopdf iftex moreverb ];
-    pkgs = [ finalAttrs.finalPackage.tex ];
-  };
+  # packages needed by euktoeps, euktopdf and eukleides.sty
+  passthru.tlDeps = with texlive; [ collection-pstricks epstopdf iftex moreverb ];
 
   meta = {
     description = "Geometry Drawing Language";
@@ -72,4 +68,4 @@ stdenv.mkDerivation (finalAttrs: rec {
 
     platforms = lib.platforms.unix;
   };
-})
+}
