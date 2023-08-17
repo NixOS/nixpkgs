@@ -1848,6 +1848,8 @@ with pkgs;
 
   monica = callPackage ../servers/web-apps/monica { };
 
+  mpremote = python3Packages.callPackage ../tools/misc/mpremote { };
+
   mprocs = callPackage ../tools/misc/mprocs { };
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
