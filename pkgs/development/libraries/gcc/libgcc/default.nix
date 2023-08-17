@@ -90,7 +90,7 @@ in stdenv.mkDerivation (finalAttrs: {
         insn-constants.h \
   '' + lib.optionalString stdenv.targetPlatform.isM68k ''
         sysroot-suffix.h \
-  '' + lib.optionalString stdenv.targetPlatform.isArmv7 ''
+  '' + lib.optionalString stdenv.targetPlatform.isAarch32 ''
         arm-isa.h \
         arm-cpu.h \
   '' + ''
