@@ -8865,6 +8865,10 @@ with pkgs;
 
   pigz = callPackage ../tools/compression/pigz { };
 
+  pixi = callPackage ../tools/package-management/pixi { };
+
+  pixi-shell = callPackage ../tools/package-management/pixi/shell.nix { };
+
   pixz = callPackage ../tools/compression/pixz { };
 
   plog = callPackage ../development/libraries/plog {};
