@@ -15808,6 +15808,7 @@ with pkgs;
             "9"  =  "9.5.0";
             "8"  =  "8.5.0";
             "7"  =  "7.5.0";
+            "6"  =  "6.5.0";
           };
           deduplicated = deduplicatedVersions ? "${version}";
           path = if deduplicated
