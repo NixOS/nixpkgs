@@ -4112,6 +4112,8 @@ with pkgs;
 
   supergfxctl = callPackage ../applications/system/supergfxctl { };
 
+  titanium-alloy = callPackage ../development/mobile/titanium-alloy { };
+
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
 
   abootimg = callPackage ../development/mobile/abootimg { };

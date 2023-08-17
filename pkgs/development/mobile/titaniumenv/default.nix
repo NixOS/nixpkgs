@@ -13,7 +13,8 @@ rec {
 
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv lib python which file jdk nodejs;
-    inherit (pkgs.nodePackages) alloy titanium;
+    alloy = pkgs.titanium-alloy;
+    inherit (pkgs.nodePackages) titanium;
     inherit (androidenv) composeAndroidPackages;
     inherit (xcodeenv) composeXcodeWrapper;
     inherit titaniumsdk;

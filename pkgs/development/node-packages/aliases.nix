@@ -46,6 +46,7 @@ mapAliases {
   "@maizzle/cli" = pkgs.maizzle; # added 2023-08-17
   "@medable/mdctl-cli" = throw "@medable/mdctl-cli was removed because it was broken"; # added 2023-08-21
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  alloy = pkgs.titanium-alloy; # added 2023-08-17
   antennas = pkgs.antennas; # added 2023-07-30
   inherit (pkgs) asar; # added 2023-08-26
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
