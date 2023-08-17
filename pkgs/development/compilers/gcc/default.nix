@@ -69,6 +69,16 @@ let
   atLeast7  = lib.versionAtLeast version  "7";
   atLeast6  = lib.versionAtLeast version  "6";
   atLeast49 = lib.versionAtLeast version  "4.9";
+  is13 = majorVersion == "13";
+  is12 = majorVersion == "12";
+  is11 = majorVersion == "11";
+  is10 = majorVersion == "10";
+  is9  = majorVersion == "9";
+  is8  = majorVersion == "8";
+  is7  = majorVersion == "7";
+  is6  = majorVersion == "6";
+  is49 = majorVersion == "4" && lib.versions.minor version == "9";
+  is48 = majorVersion == "4" && lib.versions.minor version == "8";
 in
 
 # We enable the isl cloog backend.
@@ -81,7 +91,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
-assert (atLeast6 && (!atLeast7 || atLeast9)) -> (langAda -> gnat-bootstrap != null);
+assert (atLeast6 && !is7 && !is8) -> (langAda -> gnat-bootstrap != null);
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
@@ -97,8 +107,7 @@ assert reproducibleBuild -> profiledCompiler == false;
 with lib;
 with builtins;
 
-let majorVersion = lib.versions.major version;
-    inherit version;
+let inherit version;
     disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -228,17 +237,17 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
-  src = if majorVersion == "6" && stdenv.targetPlatform.isVc4 then fetchFromGitHub {
+  src = if is6 && stdenv.targetPlatform.isVc4 then fetchFromGitHub {
     owner = "itszor";
     repo = "gcc-vc4";
     rev = "e90ff43f9671c760cf0d1dd62f569a0fb9bf8918";
     sha256 = "0gxf66hwqk26h8f853sybphqa5ca0cva2kmrw5jsiv6139g0qnp8";
-  } else if majorVersion == "6" && stdenv.targetPlatform.isRedox then fetchFromGitHub {
+  } else if is6 && stdenv.targetPlatform.isRedox then fetchFromGitHub {
     owner = "redox-os";
     repo = "gcc";
     rev = "f360ac095028d286fc6dde4d02daed48f59813fa"; # `redox` branch
     sha256 = "1an96h8l58pppyh3qqv90g8hgcfd9hj7igvh2gigmkxbrx94khfl";
-  } else (fetchurl {
+  } else fetchurl {
     url = if atLeast7
           then "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz"
           else if atLeast6
@@ -256,7 +265,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       "4.9.4"  = "14l06m7nvcvb0igkbip58x59w3nq6315k6jcz3wr9ch1rn9d44bc";
       "4.8.5"  = "08yggr18v373a1ihj0rg2vd6psnic42b518xcgp3r9k81xz1xyr2";
     }."${version}";
-  });
+  };
 
   inherit patches;
 
@@ -272,14 +281,14 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   libc_dev = stdenv.cc.libc_dev;
 
   hardeningDisable = [ "format" "pie" ]
-  ++ lib.optionals (atLeast11 && !atLeast12 && langAda) [ "fortify3" ];
+  ++ lib.optionals (is11 && langAda) [ "fortify3" ];
 
-  postPatch = (lib.optionalString atLeast7 ''
+  postPatch = lib.optionalString atLeast7 ''
     configureScripts=$(find . -name configure)
     for configureScript in $configureScripts; do
       patchShebangs $configureScript
     done
-  '')
+  ''
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
   + lib.optionalString (atLeast6 && hostPlatform.isDarwin) ''
@@ -339,8 +348,8 @@ ${""}          done
   configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags = (callFile ./common/configure-flags.nix { })
-    ++ optional (atLeast7 && !atLeast8 && targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
-    ++ optional (atLeast7 && !atLeast8 && targetPlatform.isNetBSD) "--disable-libcilkrts";
+    ++ optional (is7 && targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
+    ++ optional (is7 && targetPlatform.isNetBSD) "--disable-libcilkrts";
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -405,7 +414,7 @@ ${""}          done
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
   } // lib.optionalAttrs (!atLeast12) {
-    hardeningUnsupportedFlags = lib.optionals (!atLeast49) [ "stackprotector" ] ++ [ "fortify3" ];
+    hardeningUnsupportedFlags = lib.optionals is48 [ "stackprotector" ] ++ [ "fortify3" ];
   };
 
   enableParallelBuilding = true;
@@ -421,23 +430,23 @@ ${""}          done
       maintainers
     ;
   } // lib.optionalAttrs (!atLeast11) {
-    badPlatforms = if atLeast49 then [ "aarch64-darwin" ] else lib.platforms.darwin;
+    badPlatforms = if !is49 then [ "aarch64-darwin" ] else lib.platforms.darwin;
   };
-} // optionalAttrs (atLeast7 && !atLeast8) {
+} // optionalAttrs is7 {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
 } // optionalAttrs (!atLeast7) {
   env.langJava = langJava;
-} // optionalAttrs (atLeast6) {
+} // optionalAttrs atLeast6 {
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 } // optionalAttrs (!atLeast8) {
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
-} // optionalAttrs (enableMultilib) {
+} // optionalAttrs enableMultilib {
   dontMoveLib64 = true;
-} // optionalAttrs (atLeast49 && !atLeast7 && langJava && (!atLeast6 || !stdenv.hostPlatform.isDarwin)) {
-     postFixup = ''
-       target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
-       patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
-     '';
+} // optionalAttrs (((is49 && !stdenv.hostPlatform.isDarwin) || is6) && langJava) {
+  postFixup = ''
+    target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
+    patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
+  '';
 }
 ))
 ([
