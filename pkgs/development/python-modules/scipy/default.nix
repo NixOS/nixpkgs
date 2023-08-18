@@ -33,9 +33,7 @@ let
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
-  # Even if you do update these hashes manually, don't change their base
-  # (base16 or base64), because the update script uses sed regexes to replace
-  # them with the updated hashes.
+  # The update script uses sed regexes to replace them with the updated hashes.
   version = "1.11.1";
   srcHash = "sha256-bgnYXe3EhzL7+Gfriz1cXCl2eYQJ8zF+rcIwHyZR8bQ=";
   datasetsHashes = {
