@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -m755 -D ./swiftlint-${version}-macos/bin/swiftlint $out/bin/swiftlint
   '';
-  
+
   meta = with lib; {
     description = "A tool to enforce Swift style and conventions";
     homepage = "https://github.com/realm/SwiftLint";
