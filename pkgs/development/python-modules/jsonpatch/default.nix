@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stefankoegl";
     repo = "python-json-patch";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-JHBB64LExzHQVoFF2xcsqGlNWX/YeEBa1M/TmfeQLWI=";
   };
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to apply JSON Patches according to RFC 6902";
     homepage = "https://github.com/stefankoegl/python-json-patch";
-    license = licenses.bsd2; # "Modified BSD license, says pypi"
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
 }
