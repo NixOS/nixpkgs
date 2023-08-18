@@ -31,6 +31,8 @@ buildPythonPackage rec {
     pydantic
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     freezegun
     pytest-aiohttp

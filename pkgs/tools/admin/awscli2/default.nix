@@ -47,6 +47,11 @@ with py.pkgs; buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
       --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1'
+
+    # upstream needs pip to build and install dependencies and validates this
+    # with a configure script, but we don't as we provide all of the packages
+    # through PYTHONPATH
+    sed -i '/pip>=/d' requirements/bootstrap.txt
   '';
 
   nativeBuildInputs = [

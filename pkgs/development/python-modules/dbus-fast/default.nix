@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.91.2";
+  version = "1.91.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5f9mnNdUgPTk30V2mrYpSvYMqss40DiLEVGzYevlrag=";
+    hash = "sha256-VFmx6OIDjKW4clMxzyjmTC+iO2MT83eXMbl1dPhDWxI=";
   };
 
   nativeBuildInputs = [
