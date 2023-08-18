@@ -1,17 +1,20 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , fetchpatch
-, swig2
+, fetchPypi
 , openssl
-, typing
 , parameterized
+, pythonOlder
+, swig2
+, typing
 }:
-
 
 buildPythonPackage rec {
   pname = "m2crypto";
   version = "0.38.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "M2Crypto";
