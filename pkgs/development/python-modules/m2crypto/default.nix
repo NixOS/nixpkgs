@@ -4,9 +4,9 @@
 , fetchPypi
 , openssl
 , parameterized
+, pytestCheckHook
 , pythonOlder
 , swig2
-, typing
 }:
 
 buildPythonPackage rec {
@@ -45,8 +45,23 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ swig2 openssl ];
-  buildInputs = [ openssl parameterized ];
+  nativeBuildInputs = [
+    swig2
+    openssl
+  ];
+
+  buildInputs = [
+    openssl
+    parameterized
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "M2Crypto"
+  ];
 
   meta = with lib; {
     description = "A Python crypto and SSL toolkit";
