@@ -17621,6 +17621,8 @@ with pkgs;
     fetchHex beamPackages
     lfe lfe_2_1;
 
+  expr = callPackage ../development/interpreters/expr { };
+
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
