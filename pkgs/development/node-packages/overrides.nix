@@ -92,17 +92,6 @@ final: prev: {
     '';
   };
 
-  carbon-now-cli = prev.carbon-now-cli.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    prePatch = ''
-      export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-    '';
-    postInstall = ''
-      wrapProgram $out/bin/carbon-now \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-    '';
-  };
-
   coc-imselect = prev.coc-imselect.override (oldAttrs: {
     meta = oldAttrs.meta // { broken = since "10"; };
   });

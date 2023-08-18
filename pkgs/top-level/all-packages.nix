@@ -1664,6 +1664,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  carbon-now-cli = callPackage ../tools/typesetting/carbon-now-cli { };
+
   cf-vault = callPackage ../tools/admin/cf-vault { };
 
   cfonts = callPackage ../tools/misc/cfonts { };
