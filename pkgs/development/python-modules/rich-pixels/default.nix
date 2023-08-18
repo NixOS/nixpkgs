@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pillow
 , poetry-core
 , pytestCheckHook
-, syrupy
-, pillow
+, pythonOlder
+, pythonRelaxDepsHook
 , rich
+, syrupy
 }:
 
 buildPythonPackage rec {
@@ -13,23 +15,22 @@ buildPythonPackage rec {
   version = "2.1.1";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "rich-pixels";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-zI6jtEdmBAEGxyASo/6fiHdzwzoSwXN7A5x1CmYS5qc=";
   };
 
+  pythonRelaxDeps = [
+    "pillow"
+  ];
+
   nativeBuildInputs = [
     poetry-core
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
-    syrupy
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -37,7 +38,14 @@ buildPythonPackage rec {
     rich
   ];
 
-  pythonImportsCheck = [ "rich_pixels" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    syrupy
+  ];
+
+  pythonImportsCheck = [
+    "rich_pixels"
+  ];
 
   meta = with lib; {
     description = "A Rich-compatible library for writing pixel images and ASCII art to the terminal";
