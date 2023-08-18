@@ -11102,6 +11102,12 @@
     github = "michaelCTS";
     githubId = 132582212;
   };
+  michaeldonovan = {
+    email = "michael@mdonovan.dev";
+    name = "Michael Donovan";
+    github = "michaeldonovan";
+    githubId = 14077230;
+  };
   michaelgrahamevans = {
     email = "michaelgrahamevans@gmail.com";
     name = "Michael Evans";
