@@ -566,6 +566,8 @@ self: super: with self; {
 
   appdirs = callPackage ../development/python-modules/appdirs { };
 
+  appium-python-client = callPackage ../development/python-modules/appium-python-client { };
+
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
 
   appnope = callPackage ../development/python-modules/appnope { };
