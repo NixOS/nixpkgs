@@ -36,7 +36,9 @@ buildPythonPackage rec {
     hash = "sha256-Sb5yqbEqGmwhPoG21+uMnl8Jdn3Gc455guceQhAflWY=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     boto3
@@ -53,7 +55,10 @@ buildPythonPackage rec {
     requests-aws4auth
   ];
 
-  nativeCheckInputs = [ moto pytestCheckHook ];
+  nativeCheckInputs = [
+    moto
+    pytestCheckHook
+  ];
 
   pytestFlagsArray = [
     # Subset of tests that run in upstream CI (many others require credentials)
@@ -65,15 +70,19 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    sqlserver = [ pyodbc ];
-    sparql = [ sparqlwrapper ];
+    sqlserver = [
+      pyodbc
+    ];
+    sparql = [
+      sparqlwrapper
+    ];
   };
 
-  meta = {
+  meta = with lib; {
     description = "Pandas on AWS";
     homepage = "https://github.com/aws/aws-sdk-pandas";
     changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mcwitt ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mcwitt ];
   };
 }
