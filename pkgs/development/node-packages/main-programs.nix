@@ -68,7 +68,6 @@
   react-native-cli = "react-native";
   react-tools = "jsx";
   remod-cli = "remod";
-  s3http = "s3http.js";
   svelte-language-server = "svelteserver";
   teck-programmer = "teck-firmware-upgrade";
   typescript-language-server = "typescript-language-server";

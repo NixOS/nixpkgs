@@ -267,7 +267,6 @@
 , "rollup"
 , {"rust-analyzer-build-deps": "../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps"}
 , "rtlcss"
-, "s3http"
 , "sass"
 , "semver"
 , "serve"
