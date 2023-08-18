@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
@@ -32,11 +32,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "moderngl_window" ];
 
   meta = with lib; {
-    homepage = "https://github.com/moderngl/moderngl_window";
     description = "Cross platform helper library for ModernGL making window creation and resource loading simple";
+    homepage = "https://github.com/moderngl/moderngl-window";
+    changelog = "https://github.com/moderngl/moderngl-window/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    broken = stdenv.isDarwin; # darwin build breaks
-    platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ c0deaddict ];
+    platforms = platforms.mesaPlatforms;
+    broken = stdenv.isDarwin; # darwin build breaks
   };
 }
