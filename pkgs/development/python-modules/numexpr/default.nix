@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Fast numerical array expression evaluator for NumPy";
     homepage = "https://github.com/pydata/numexpr";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.deshaw.members;
   };
 }
