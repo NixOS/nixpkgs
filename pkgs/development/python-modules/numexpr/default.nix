@@ -34,10 +34,12 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     runtest="$(pwd)/numexpr/tests/test_numexpr.py"
-    pushd "$out"
-    ${python.interpreter} "$runtest"
-    popd
+    (cd "$out" && ${python.interpreter} "$runtest")
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [
