@@ -112,9 +112,6 @@ final: prev: {
     meta = oldAttrs.meta // { broken = since "12"; };
   });
 
-  eask = prev."@emacs-eask/cli".override {
-    name = "eask";
-  };
 
   expo-cli = prev."expo-cli".override (oldAttrs: {
     # The traveling-fastlane-darwin optional dependency aborts build on Linux.

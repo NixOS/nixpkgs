@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-JYhuyW95I7Q0edLIe7H//+ej5vh6MdAGxXjmNxDMuhQ=";
   };
 
+  # Timeout increase has already been included upstream in master.
+  # Check upon updates if this can be removed.
+  postPatch = ''
+    substituteInPlace testsuite/CMakeLists.txt \
+        --replace "PROPERTIES TIMEOUT 1" "PROPERTIES TIMEOUT 30"
+  '';
+
   nativeBuildInputs = [ perl cmake gfortran ];
 
   preConfigure = ''

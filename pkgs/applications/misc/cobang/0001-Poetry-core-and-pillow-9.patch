@@ -23,7 +23,8 @@ index 5dc25e0..b3ba397 100644
 @@ -33,4 +33,4 @@ skip-string-normalization = true
  
  [build-system]
- requires = ["poetry>=0.12"]
+-requires = ["poetry>=0.12"]
++requires = ["poetry-core"]
 -build-backend = "poetry.masonry.api"
 +build-backend = "poetry.core.masonry.api"
 -- 

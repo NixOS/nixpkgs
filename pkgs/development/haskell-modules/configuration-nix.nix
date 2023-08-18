@@ -93,6 +93,13 @@ self: super: builtins.intersectAttrs super {
     doCheck = false;
   }) super.ghcide;
 
+  # Test suite needs executable
+  agda2lagda = overrideCabal (drv: {
+    preCheck = ''
+      export PATH="$PWD/dist/build/agda2lagda:$PATH"
+    '' + drv.preCheck or "";
+  }) super.agda2lagda;
+
   hiedb = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/hiedb:$PATH
@@ -117,6 +124,7 @@ self: super: builtins.intersectAttrs super {
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-cabal-plugin
+    hls-overloaded-record-dot-plugin
   ;
 
   # PLUGINS WITH DISABLED TESTS
@@ -293,6 +301,7 @@ self: super: builtins.intersectAttrs super {
   niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
+  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] super.hnix;
 
   # Generate shell completion.
   cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
@@ -322,23 +331,25 @@ self: super: builtins.intersectAttrs super {
   gio = lib.pipe super.gio
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-      (addPkgconfigDepends (with pkgs; [ glib pcre2 pcre ]
-                                       ++ lib.optionals pkgs.stdenv.isLinux [ util-linux libselinux libsepol ]))
     ];
   glib = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib));
   gtk3 = disableHardening ["fortify"] (super.gtk3.override { inherit (pkgs) gtk3; });
   gtk = lib.pipe super.gtk (
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-      (addPkgconfigDepends (with pkgs; [ gtk2 pcre2 pcre fribidi
-                                         libthai libdatrie xorg.libXdmcp libdeflate
-                                        ]
-                                       ++ lib.optionals pkgs.stdenv.isLinux [ util-linux libselinux libsepol ]))
     ] ++
     ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
   );
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
+
+  shelly = overrideCabal (drv: {
+    # /usr/bin/env is unavailable in the sandbox
+    preCheck = drv.preCheck or "" + ''
+      chmod +x ./test/data/*.sh
+      patchShebangs --build test/data
+    '';
+  }) super.shelly;
 
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
@@ -656,6 +667,9 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
+
+  # Break infinite recursion cycle with OneTuple and quickcheck-instances.
+  foldable1-classes-compat = dontCheck super.foldable1-classes-compat;
 
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
@@ -1070,8 +1084,7 @@ self: super: builtins.intersectAttrs super {
     '';
   }) (lib.pipe
         (super.cachix.override {
-          fsnotify = dontCheck super.fsnotify_0_4_1_0;
-          hnix-store-core = super.hnix-store-core_0_6_1_0;
+          hnix-store-core = self.hnix-store-core_0_6_1_0;
           nix = self.hercules-ci-cnix-store.nixPackage;
         })
         [
@@ -1083,9 +1096,15 @@ self: super: builtins.intersectAttrs super {
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
-  hercules-ci-cnix-store = (super.hercules-ci-cnix-store.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; }).overrideAttrs (_: {
-    passthru.nixPackage = pkgs.nixVersions.nix_2_14;
-  });
+  hercules-ci-cnix-store = overrideCabal
+    (old: {
+      passthru = old.passthru or { } // {
+        nixPackage = pkgs.nixVersions.nix_2_16;
+      };
+    })
+    (super.hercules-ci-cnix-store.override {
+      nix = self.hercules-ci-cnix-store.passthru.nixPackage;
+    });
 
   # the testsuite fails because of not finding tsc without some help
   aeson-typescript = overrideCabal (drv: {
@@ -1296,8 +1315,18 @@ self: super: builtins.intersectAttrs super {
   scalendar = dontCheck super.scalendar;
 
   halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
-  # Sydtest has a brittle test suite that will only work with the exact
 
+  # Sydtest has a brittle test suite that will only work with the exact
   # versions that it ships with.
   sydtest = dontCheck super.sydtest;
+
+  # Prevent argv limit being exceeded when invoking $CC.
+  inherit (lib.mapAttrs (_: overrideCabal {
+    __onlyPropagateKnownPkgConfigModules = true;
+    }) super)
+      gi-javascriptcore
+      webkit2gtk3-javascriptcore
+      gi-webkit2
+      gi-webkit2webextension
+      ;
 }

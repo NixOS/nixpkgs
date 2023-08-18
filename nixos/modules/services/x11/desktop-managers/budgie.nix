@@ -237,6 +237,11 @@ in {
       budgie.budgie-control-center
     ];
 
+    # Register packages for udev.
+    services.udev.packages = with pkgs; [
+      budgie.magpie
+    ];
+
     # Shell integration for MATE Terminal.
     programs.bash.vteIntegration = true;
     programs.zsh.vteIntegration = true;

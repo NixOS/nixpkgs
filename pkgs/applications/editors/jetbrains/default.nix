@@ -9,7 +9,7 @@
 , python3
 , icu
 , lldb
-, dotnet-sdk_6
+, dotnet-sdk_7
 , maven
 , autoPatchelfHook
 , libdbusmenu
@@ -275,7 +275,7 @@ let
           plugins/dotCommon/DotFiles/linux-x64/JetBrains.Profiler.PdbServer
 
         rm -rf lib/ReSharperHost/linux-x64/dotnet
-        ln -s ${dotnet-sdk_6} lib/ReSharperHost/linux-x64/dotnet
+        ln -s ${dotnet-sdk_7} lib/ReSharperHost/linux-x64/dotnet
       '');
     });
 

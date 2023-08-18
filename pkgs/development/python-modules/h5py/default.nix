@@ -2,7 +2,9 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
+, oldest-supported-numpy
 , setuptools
+, wheel
 , numpy
 , hdf5
 , cython
@@ -33,7 +35,6 @@ in buildPythonPackage rec {
   # avoid strict pinning of numpy
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "numpy ==" "numpy >=" \
       --replace "mpi4py ==" "mpi4py >="
   '';
 
@@ -50,8 +51,10 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+    oldest-supported-numpy
     pkgconfig
     setuptools
+    wheel
   ];
 
   buildInputs = [ hdf5 ]

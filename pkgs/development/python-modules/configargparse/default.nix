@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "configargparse";
-  version = "1.5.5";
+  version = "1.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "bw2";
     repo = "ConfigArgParse";
     rev = "refs/tags/${version}";
-    hash = "sha256-nhsbgyoIsYyrW20j4X4RosMJU/B+j7Z5YbebmZCLW4I=";
+    hash = "sha256-m77MY0IZ1AJkd4/Y7ltApvdF9y17Lgn92WZPYTCU9tA=";
   };
 
   passthru.optional-dependencies = {

@@ -69,6 +69,7 @@ let
     ghc927
     ghc928
     ghc945
+    ghc946
     ghc962
   ];
 
@@ -480,20 +481,11 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = released;
-      Cabal_3_6_3_0 = released;
-      Cabal_3_8_1_0 = released;
-      Cabal-syntax_3_8_1_0 = released;
       Cabal_3_10_1_0 = released;
       Cabal-syntax_3_10_1_0 = released;
-      cabal2nix = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
-      cabal2nix-unstable = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
-      funcmp = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
+      cabal2nix = released;
+      cabal2nix-unstable = released;
+      funcmp = released;
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 1.9.0.0
         compilerNames.ghc884
@@ -504,14 +496,13 @@ let
       hlint = lib.subtractLists [
         compilerNames.ghc962
       ] released;
-      hpack = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
+      hpack = released;
       hsdns = released;
       jailbreak-cabal = released;
-      language-nix = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
+      language-nix = released;
+      large-hashable = [
+        compilerNames.ghc928
+      ];
       nix-paths = released;
       titlecase = released;
       ghc-api-compat = [
@@ -526,6 +517,14 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
+      ghc-source-gen = [
+        # Feel free to remove these as they break,
+        # ghc-source-gen currently doesn't support GHC 9.4
+        compilerNames.ghc884
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc928
+      ];
       ghc-tags = [
         compilerNames.ghc8107
         compilerNames.ghc902
@@ -535,7 +534,11 @@ let
         compilerNames.ghc927
         compilerNames.ghc928
         compilerNames.ghc945
+        compilerNames.ghc946
+        compilerNames.ghc962
       ];
+      hashable = released;
+      primitive = released;
       weeder = [
         compilerNames.ghc8107
         compilerNames.ghc902
@@ -545,6 +548,8 @@ let
         compilerNames.ghc927
         compilerNames.ghc928
         compilerNames.ghc945
+        compilerNames.ghc946
+        compilerNames.ghc962
       ];
     })
     {

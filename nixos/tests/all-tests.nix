@@ -367,6 +367,7 @@ in {
   iftop = handleTest ./iftop.nix {};
   incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
+  influxdb2 = handleTest ./influxdb2.nix {};
   initrd-network-openvpn = handleTest ./initrd-network-openvpn {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrd-luks-empty-passphrase = handleTest ./initrd-luks-empty-passphrase.nix {};
@@ -572,6 +573,7 @@ in {
   openresty-lua = handleTest ./openresty-lua.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
   opensmtpd-rspamd = handleTest ./opensmtpd-rspamd.nix {};
+  opensnitch = handleTest ./opensnitch.nix {};
   openssh = handleTest ./openssh.nix {};
   octoprint = handleTest ./octoprint.nix {};
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};

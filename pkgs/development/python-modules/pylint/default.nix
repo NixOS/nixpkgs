@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , astroid
 , dill
@@ -18,6 +19,7 @@
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -28,14 +30,29 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7.2";
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
+    owner = "pylint-dev";
     repo = pname;
     rev = "v${version}";
     hash = "sha256-cmH6Q6/XJXx8EXDIsik1Aheu9hYGvvlNvWBUCdmC3P8=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "update-setuptools.patch";
+      url = "https://github.com/pylint-dev/pylint/commit/1d029b594aa258fa01570632d001e801f9257d60.patch";
+      hash = "sha256-brQwelZVkSX9h0POH8OJeapZuWZ8p7BY/ZzhYzGbiHY=";
+    })
+    # https://github.com/pylint-dev/pylint/pull/8961
+    (fetchpatch {
+      name = "unpin-setuptools.patch";
+      url = "https://github.com/pylint-dev/pylint/commit/a0ac282d6f8df381cc04adc0a753bec66fc4db63.patch";
+      hash = "sha256-15O72LE2WQK590htNc3jghdbVoGLHUIngERDpqT8pK8=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -104,7 +121,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://pylint.pycqa.org/";
+    homepage = "https://pylint.readthedocs.io/en/stable/";
     description = "A bug and style checker for Python";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,

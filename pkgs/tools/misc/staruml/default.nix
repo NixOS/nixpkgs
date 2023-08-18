@@ -6,7 +6,8 @@
 , atk, at-spi2-atk, dbus
 , gdk-pixbuf, pango, cairo
 , expat, libdrm, mesa
-, alsa-lib, at-spi2-core, cups }:
+, alsa-lib, at-spi2-core, cups
+, libxkbcommon }:
 
 let
   LD_LIBRARY_PATH = lib.makeLibraryPath [
@@ -14,21 +15,22 @@ let
     xorg.libX11 xorg.libxcb xorg.libXcomposite
     xorg.libXcursor xorg.libXext xorg.libXfixes
     xorg.libXi xorg.libXrender xorg.libXtst
-    nss nspr atk at-spi2-atk dbus
-    gdk-pixbuf pango cairo
+    xorg.libxshmfence libxkbcommon nss
+    nspr atk at-spi2-atk
+    dbus gdk-pixbuf pango cairo
     xorg.libXrandr expat libdrm
     mesa alsa-lib at-spi2-core
     cups
   ];
 in
 stdenv.mkDerivation rec {
-  version = "4.1.6";
+  version = "5.1.0";
   pname = "staruml";
 
   src =
     fetchurl {
-      url = "https://staruml.io/download/releases-v4/StarUML_${version}_amd64.deb";
-      sha256 = "sha256-CUOdpR8RExMLeOX8469egENotMNuPU4z8S1IGqA21z0=";
+      url = "https://staruml-7a0.kxcdn.com/releases-v5/StarUML_${version}_amd64.deb";
+      sha256 = "sha256-da1mY3OW24g6Ix0L57CBPbaMeSLzhOOjoBsyZszmNOc=";
     };
 
   nativeBuildInputs = [ wrapGAppsHook dpkg ];

@@ -2467,6 +2467,8 @@ self: super: with self; {
 
   datauri = callPackage ../development/python-modules/datauri { };
 
+  datefinder = callPackage ../development/python-modules/datefinder { };
+
   dateparser = callPackage ../development/python-modules/dateparser { };
 
   datetime = callPackage ../development/python-modules/datetime { };
@@ -4032,6 +4034,8 @@ self: super: with self; {
 
   ftputil = callPackage ../development/python-modules/ftputil { };
 
+  fugashi = callPackage ../development/python-modules/fugashi { };
+
   func-timeout = callPackage ../development/python-modules/func-timeout { };
 
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
@@ -5044,6 +5048,8 @@ self: super: with self; {
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
+  imagededup = callPackage ../development/python-modules/imagededup { };
+
   imagehash = callPackage ../development/python-modules/imagehash { };
 
   imageio = callPackage ../development/python-modules/imageio { };
@@ -5189,6 +5195,8 @@ self: super: with self; {
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
   iowait = callPackage ../development/python-modules/iowait { };
+
+  ipadic = callPackage ../development/python-modules/ipadic { };
 
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
@@ -5893,7 +5901,10 @@ self: super: with self; {
     inherit (pkgs.config) cudaSupport;
   };
 
-  libiio = (toPythonModule (pkgs.libiio.override { inherit python; })).python;
+  libiio = (toPythonModule (pkgs.libiio.override {
+    pythonSupport = true;
+    inherit python;
+  })).python;
 
   libkeepass = callPackage ../development/python-modules/libkeepass { };
 
@@ -6656,6 +6667,8 @@ self: super: with self; {
   mockupdb = callPackage ../development/python-modules/mockupdb { };
 
   moddb = callPackage ../development/python-modules/moddb { };
+
+  model-bakery = callPackage ../development/python-modules/model-bakery { };
 
   modeled = callPackage ../development/python-modules/modeled { };
 
@@ -10705,6 +10718,8 @@ self: super: with self; {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+  qbittorrent-api = callPackage ../development/python-modules/qbittorrent-api { };
+
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
@@ -12917,6 +12932,8 @@ self: super: with self; {
 
   trustme = callPackage ../development/python-modules/trustme { };
 
+  truststore = callPackage ../development/python-modules/truststore { };
+
   trytond = callPackage ../development/python-modules/trytond { };
 
   tskit = callPackage ../development/python-modules/tskit { };
@@ -13176,6 +13193,8 @@ self: super: with self; {
   unicrypto = callPackage ../development/python-modules/unicrypto { };
 
   unidecode = callPackage ../development/python-modules/unidecode { };
+
+  unidic = callPackage ../development/python-modules/unidic { };
 
   unidic-lite = callPackage ../development/python-modules/unidic-lite { };
 

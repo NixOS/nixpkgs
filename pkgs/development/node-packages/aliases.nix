@@ -40,14 +40,17 @@ in
 mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
+  "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
+  "@maizzle/cli" = pkgs.maizzle; # added 2023-08-17
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   antennas = pkgs.antennas; # added 2023-07-30
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
   castnow = pkgs.castnow; # added 2023-07-30
+  eask = pkgs.eask; # added 2023-08-17
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   flood = pkgs.flood; # Added 2023-07-25
   gtop = pkgs.gtop; # added 2023-07-31
