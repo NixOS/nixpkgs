@@ -33621,6 +33621,8 @@ with pkgs;
 
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
+  loupe = callPackage ../applications/graphics/loupe { };
+
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   handbrake = callPackage ../applications/video/handbrake {
