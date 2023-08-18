@@ -6694,6 +6694,8 @@ self: super: with self; {
 
   mohawk = callPackage ../development/python-modules/mohawk { };
 
+  molecule-plugins = callPackage ../development/python-modules/molecule/plugins.nix { };
+
   monai = callPackage ../development/python-modules/monai { };
 
   monai-deploy = callPackage ../development/python-modules/monai-deploy { };
