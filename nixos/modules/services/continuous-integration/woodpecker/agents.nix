@@ -35,6 +35,16 @@ let
         '';
       };
 
+      path = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = [ "" ];
+        description = lib.mdDoc ''
+          Additional packages that should be added to the agent's `PATH`.
+          Mostly useful for the `local` backend.
+        '';
+      };
+
       environmentFile = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [ ];
@@ -94,7 +104,7 @@ let
           "-/etc/localtime"
         ];
       };
-      inherit (agentCfg) environment;
+      inherit (agentCfg) environment path;
     };
   };
 in
@@ -127,6 +137,17 @@ in
               };
 
               environmentFile = [ "/run/secrets/woodpecker/agent-secret.txt" ];
+
+              path = [
+                # Needed to clone repos
+                git
+                git-lfs
+                woodpecker-plugin-git
+                # Used by the runner as the default shell
+                bash
+                # Most likely to be used in pipeline definitions
+                coreutils
+              ];
             };
           }
         '';
