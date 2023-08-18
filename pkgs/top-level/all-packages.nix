@@ -32946,7 +32946,7 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
-  klee = callPackage ../applications/science/logic/klee (with llvmPackages_11; {
+  klee = callPackage ../applications/science/logic/klee (with llvmPackages_12; {
     clang = clang;
     llvm = llvm;
     stdenv = stdenv;
