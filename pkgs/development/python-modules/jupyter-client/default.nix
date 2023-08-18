@@ -10,6 +10,7 @@
 , tornado
 , traitlets
 , isPyPy
+, pythonOlder
 , py
 }:
 
@@ -17,6 +18,8 @@ buildPythonPackage rec {
   pname = "jupyter-client";
   version = "8.3.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "jupyter_client";
@@ -41,10 +44,11 @@ buildPythonPackage rec {
   # Circular dependency with ipykernel
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Jupyter protocol implementation and client libraries";
-    homepage = "https://jupyter.org/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    homepage = "https://jupyter-client.readthedocs.io";
+    changelog = "https://github.com/jupyter/jupyter_client/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }
