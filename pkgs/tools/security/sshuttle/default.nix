@@ -49,14 +49,15 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/sshuttle/sshuttle/";
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''
       Forward connections over SSH, without requiring administrator access to the
       target network (though it does require Python 2.7, Python 3.5 or later at both ends).
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
-    license = licenses.lgpl21;
+    homepage = "https://github.com/sshuttle/sshuttle";
+    changelog = "https://github.com/sshuttle/sshuttle/blob/v${version}/CHANGES.rst";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ domenkozar carlosdagos ];
   };
 }
