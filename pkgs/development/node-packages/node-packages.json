@@ -40,7 +40,6 @@
 , "cdk8s-cli"
 , "cdktf-cli"
 , "clipboard-cli"
-, "clubhouse-cli"
 , "coc-clangd"
 , "coc-cmake"
 , "coc-css"
