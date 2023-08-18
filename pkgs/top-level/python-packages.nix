@@ -12353,6 +12353,8 @@ self: super: with self; {
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
+  tableauserverclient = callPackage ../development/python-modules/tableauserverclient { };
+
   tabledata = callPackage ../development/python-modules/tabledata { };
 
   tables = callPackage ../development/python-modules/tables { };
