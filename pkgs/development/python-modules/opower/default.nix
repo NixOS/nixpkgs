@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "opower";
-  version = "0.0.26";
+  version = "0.0.29";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "opower";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W2lzMyu9N1ZLLaxoI8JLthtF7Zj3si1/mEVn5NrAlfU=";
+    hash = "sha256-UvpBTCccJgJmseIn3eZdq6M+wF+Nm/aRxGHmMiMZy6w=";
   };
 
   pythonRemoveDeps = [
