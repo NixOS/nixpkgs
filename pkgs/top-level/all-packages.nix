@@ -5367,6 +5367,8 @@ with pkgs;
 
   fzf-obc = callPackage ../shells/bash/fzf-obc { };
 
+  fzf-make = callPackage ../shells/fzf-make { };
+
   fzf-zsh = callPackage ../shells/zsh/fzf-zsh { };
 
   fzy = callPackage ../tools/misc/fzy { };
