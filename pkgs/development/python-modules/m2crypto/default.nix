@@ -10,8 +10,8 @@
 
 
 buildPythonPackage rec {
-  version = "0.38.0";
   pname = "M2Crypto";
+  version = "0.38.0";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python crypto and SSL toolkit";
     homepage = "https://gitlab.com/m2crypto/m2crypto";
+    changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
     license = licenses.mit;
     maintainers = with maintainers; [ andrew-d ];
   };
