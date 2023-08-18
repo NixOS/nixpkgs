@@ -1,43 +1,96 @@
-{ lib, fetchurl, makeWrapper, patchelf, pkgs, stdenv, SDL, libglvnd, libogg, libvorbis, curl, openal }:
+{ lib
+, stdenvNoCC
+, fetchzip
+, curl
+, libglvnd
+, libicns
+, libogg
+, libvorbis
+, makeBinaryWrapper
+, openal
+, SDL
+, copyDesktopItems
+, autoPatchelfHook
+, makeDesktopItem
+}:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openarena";
   version = "0.8.8";
 
-  src = fetchurl {
-    name = "openarena.zip";
-    url = "http://openarena.ws/request.php?4";
-    sha256 = "0jmc1cmdz1rcvqc9ilzib1kilpwap6v0d331l6q53wsibdzsz3ss";
+  src = fetchzip {
+    url = "https://download.tuxfamily.org/openarena/rel/${builtins.replaceStrings ["."] [""] finalAttrs.version}/openarena-${finalAttrs.version}.zip";
+    hash = "sha256-Rup1n14k9sKcyVFYzFqPYV+BEBCnUNwpnFsnyGrhl20=";
   };
 
-  nativeBuildInputs = [ pkgs.unzip patchelf makeWrapper];
+  nativeBuildInputs = [
+    curl
+    libglvnd
+    libicns
+    libogg
+    libvorbis
+    makeBinaryWrapper
+    openal
+    SDL
+  ] ++ lib.optionals stdenvNoCC.isLinux [
+    copyDesktopItems
+    autoPatchelfHook
+  ];
 
-  installPhase = let
-    gameDir = "$out/openarena-$version";
-    interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
-    libPath = lib.makeLibraryPath [ SDL libglvnd libogg libvorbis curl openal ];
-    arch = {
-      "x86_64-linux" = "x86_64";
-      "i386-linux" = "i386";
-    }.${stdenv.hostPlatform.system};
-  in ''
-    mkdir -pv $out/bin
-    cd $out
-    unzip $src
+  installPhase =
+    if stdenvNoCC.isDarwin then ''
+      runHook preInstall
 
-    patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.${arch}"
-    patchelf --set-interpreter "${interpreter}" "${gameDir}/oa_ded.${arch}"
+      mkdir -p $out/Applications
+      mv *.app $out/Applications
 
-    makeWrapper "${gameDir}/openarena.${arch}" "$out/bin/openarena" \
-      --prefix LD_LIBRARY_PATH : "${libPath}"
-    makeWrapper "${gameDir}/oa_ded.${arch}" "$out/bin/oa_ded"
-  '';
+      runHook postInstall
+    '' else
+      let
+        arch = {
+          "x86_64-linux" = "x86_64";
+          "i386-linux" = "i386";
+        }.${stdenvNoCC.hostPlatform.system};
+      in
+      ''
+        runHook preInstall
+
+        mkdir -p $out/share/openarena
+        cp -r {baseoa,missionpack} $out/share/openarena/
+        install openarena.${arch} $out/share/openarena/
+        install oa_ded.${arch} $out/share/openarena/
+
+        icns2png --extract OpenArena.app/Contents/Resources/ioquake3.icns
+
+        for size in 16 32 128 256 512; do
+          mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
+          install -Dm644 ioquake3_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/openarena.png
+        done;
+
+        makeWrapper "$out/share/openarena/openarena.${arch}" "$out/bin/openarena"
+        makeWrapper "$out/share/openarena/oa_ded.${arch}" "$out/bin/oa_ded"
+
+        runHook postInstall
+      '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "OpenArena";
+      exec = "openarena";
+      icon = "openarena";
+      comment = "A fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena";
+      desktopName = "openarena";
+      categories = [ "Game" "ActionGame" ];
+    })
+  ];
 
   meta = {
-    description = "Crossplatform openarena client";
+    broken = stdenvNoCC.isDarwin; # the upstream binary only supports 32-bit
+    description = "A fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena";
     homepage = "http://openarena.ws/";
-    maintainers = [ lib.maintainers.wyvie ];
-    platforms = [ "i386-linux" "x86_64-linux" ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "openarena";
+    maintainers = with lib.maintainers; [ wyvie ];
+    platforms = [ "i386-linux" "x86_64-darwin" "x86_64-linux" ];
   };
-}
+})
