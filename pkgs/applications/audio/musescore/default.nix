@@ -162,7 +162,7 @@ in stdenv'.mkDerivation rec {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ vandenoever turion doronbehar ];
+    maintainers = with maintainers; [ vandenoever doronbehar ];
     # on aarch64-linux:
     # error: cannot convert '<brace-enclosed initializer list>' to 'float32x4_t' in assignment
     broken = (stdenv.isLinux && stdenv.isAarch64);

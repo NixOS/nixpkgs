@@ -68,7 +68,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://world-engine.org";
+    homepage = "https://github.com/mindwerks/worldengine";
     description = "World generator using simulation of plates, rain shadow, erosion, etc";
     license = licenses.mit;
     maintainers = with maintainers; [ rardiol ];

@@ -597,9 +597,7 @@ with pkgs;
 
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
-  dufs = callPackage ../servers/http/dufs {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  dufs = callPackage ../servers/http/dufs { };
 
   dynein = callPackage ../development/tools/database/dynein {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5399,6 +5397,8 @@ with pkgs;
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
   go-thumbnailer = callPackage ../applications/misc/go-thumbnailer { };
+
+  google-cursor = callPackage ../data/icons/google-cursor { };
 
   geckodriver = callPackage ../development/tools/geckodriver {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -14047,6 +14047,8 @@ with pkgs;
 
   uivonim = callPackage ../applications/editors/uivonim { };
 
+  ulid = callPackage ../tools/misc/ulid { };
+
   umlet = callPackage ../tools/misc/umlet { };
 
   unetbootin = libsForQt5.callPackage ../tools/cd-dvd/unetbootin { };
@@ -19045,6 +19047,8 @@ with pkgs;
 
   dwz = callPackage ../development/tools/misc/dwz { };
 
+  eask = callPackage ../development/tools/eask { };
+
   easypdkprog = callPackage ../development/embedded/easypdkprog { };
 
   eclint = callPackage ../development/tools/eclint { };
@@ -19529,6 +19533,8 @@ with pkgs;
     });
 
   lurk = callPackage ../development/tools/lurk { };
+
+  maizzle = callPackage ../development/tools/maizzle { };
 
   malt = callPackage ../development/tools/profiling/malt { };
 
@@ -26443,6 +26449,8 @@ with pkgs;
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
   leafnode = callPackage ../servers/news/leafnode { };
+
+  leafnode1 = callPackage ../servers/news/leafnode/1.nix { };
 
   lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -36493,7 +36501,6 @@ with pkgs;
 
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
-  win-qemu = callPackage ../applications/virtualization/driver/win-qemu { };
   win-pvdrivers = callPackage ../applications/virtualization/driver/win-pvdrivers { };
   win-signed-gplpv-drivers = callPackage ../applications/virtualization/driver/win-signed-gplpv-drivers { };
 

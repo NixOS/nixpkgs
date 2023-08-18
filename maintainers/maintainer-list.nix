@@ -6251,6 +6251,12 @@
     githubId = 471835;
     name = "Giorgio Gallo";
   };
+  GirardR1006 = {
+    email = "julien.girard2@cea.fr";
+    github = "GirardR1006";
+    githubId = 19275558;
+    name = "Julien Girard-Satabin";
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
@@ -13943,6 +13949,12 @@
     github = "qoelet";
     githubId = 115877;
     name = "Kenny Shen";
+  };
+  quadradical = {
+    email = "nixos@henryhiles.com";
+    github = "Henry-Hiles";
+    githubId = 71790868;
+    name = "Henry Hiles";
   };
   quag = {
     email = "quaggy@gmail.com";
