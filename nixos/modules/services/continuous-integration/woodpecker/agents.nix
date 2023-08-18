@@ -116,16 +116,16 @@ in
 
             extraGroups = [ "podman" ];
 
-            environmentFile = "/run/secrets/woodpecker/agent-secret.txt";
+            environmentFile = [ "/run/secrets/woodpecker/agent-secret.txt" ];
           };
 
           exec = {
             environment = {
               WOODPECKER_SERVER = "localhost:9000";
-              WOODPECKER_BACKEND = "exec";
+              WOODPECKER_BACKEND = "local";
             };
 
-            environmentFile = "/run/secrets/woodpecker/agent-secret.txt";
+            environmentFile = [ "/run/secrets/woodpecker/agent-secret.txt" ];
           };
         };
         description = lib.mdDoc "woodpecker-agents configurations";
