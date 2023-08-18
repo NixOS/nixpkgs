@@ -2,7 +2,9 @@
 , stdenv
 , python3Packages
 , fetchPypi
+, installShellFiles
 , makeWrapper
+, sphinx
 , coreutils
 , iptables
 , nettools
@@ -26,11 +28,22 @@ python3Packages.buildPythonApplication rec {
       --replace '--cov=sshuttle --cov-branch --cov-report=term-missing' ""
   '';
 
-  nativeBuildInputs = [ makeWrapper python3Packages.setuptools-scm ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    python3Packages.setuptools-scm
+    sphinx
+  ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
+  postBuild = ''
+    make man -C docs
+  '';
+
   postInstall = ''
+    installManPage docs/_build/man/*
+
     wrapProgram $out/bin/sshuttle \
       --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ])}" \
   '';
