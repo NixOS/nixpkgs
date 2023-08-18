@@ -5556,6 +5556,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  glycin-loaders = callPackage ../tools/graphics/glycin-loaders { };
+
   gmic = callPackage ../tools/graphics/gmic { };
 
   gmic-qt = libsForQt5.callPackage ../tools/graphics/gmic-qt { };
