@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "jq.py";
     rev = version;
-    hash = "sha256-1EQm5ShjFHbO1IO5QD42fsGHFGDBrJulLrcl+WeU7wo=";
+    hash = "sha256-prH3yUFh3swXGsxnoax09aYAXaiu8o2M21ZbOp9HDJY=";
   };
 
   patches = [
