@@ -13,7 +13,6 @@
 , twisted
 
 # tests
-, mock
 , parameterized
 , psutil
 , setuptoolsTrial
@@ -28,7 +27,7 @@ buildPythonPackage (rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-et0R0pNxtL5QCgHRT1/q5t+hb6cLl6NU3AowzT/WC90=";
+    hash = "sha256-L7TKo+4RDqHVVB/0ujR3jDxD+emvcEHdHTLyHe9jdk4=";
   };
 
   postPatch = ''
@@ -48,7 +47,6 @@ buildPythonPackage (rec {
   ];
 
   nativeCheckInputs = [
-    mock
     parameterized
     psutil
   ];
