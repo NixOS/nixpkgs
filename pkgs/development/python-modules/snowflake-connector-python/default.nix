@@ -9,6 +9,7 @@
 , filelock
 , idna
 , oscrypto
+, packaging
 , pycryptodomex
 , pyjwt
 , pyopenssl
@@ -22,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.0.0";
+  version = "3.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F0EbgRSS/kYKUDPhf6euM0eLqIqVjQsHC6C9ZZSRCIE=";
+    hash = "sha256-wMLn7PMcnmaRzn/VbcLVw60dOzJAWTpkEw5HFrCncLY=";
   };
 
   # snowflake-connector-python requires arrow 10.0.1, which we don't have in
@@ -66,12 +67,12 @@ buildPythonPackage rec {
     filelock
     idna
     oscrypto
+    packaging
     pycryptodomex
     pyjwt
     pyopenssl
     pytz
     requests
-    setuptools
     typing-extensions
   ];
 
