@@ -13021,6 +13021,8 @@ self: super: with self; {
 
   typer = callPackage ../development/python-modules/typer { };
 
+  types-appdirs = callPackage ../development/python-modules/types-appdirs { };
+
   types-colorama = callPackage ../development/python-modules/types-colorama { };
 
   types-dateutil = callPackage ../development/python-modules/types-dateutil { };
