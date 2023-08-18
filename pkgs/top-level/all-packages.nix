@@ -20095,6 +20095,8 @@ with pkgs;
 
   swiftformat = callPackage ../development/tools/swiftformat { };
 
+  swiftlint = callPackage ../development/tools/swiftlint { };
+  
   symfony-cli = callPackage ../development/tools/symfony-cli { };
 
   swiftshader = callPackage ../development/libraries/swiftshader { stdenv = gcc10StdenvCompat; };
