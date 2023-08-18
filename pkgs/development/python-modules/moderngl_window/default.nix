@@ -14,6 +14,9 @@
 buildPythonPackage rec {
   pname = "moderngl-window";
   version = "2.4.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "moderngl";
@@ -24,12 +27,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy moderngl pyglet pillow pyrr glcontext ];
 
-  disabled = !isPy3k;
-
   # Tests need a display to run.
   doCheck = false;
 
-  pythonImportsCheck = [ "moderngl_window" ];
+  pythonImportsCheck = [
+    "moderngl_window"
+  ];
 
   meta = with lib; {
     description = "Cross platform helper library for ModernGL making window creation and resource loading simple";
