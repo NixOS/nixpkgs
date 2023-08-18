@@ -10,11 +10,12 @@
 
 
 buildPythonPackage rec {
-  pname = "M2Crypto";
+  pname = "m2crypto";
   version = "0.38.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "M2Crypto";
+    inherit version;
     hash = "sha256-mfImCjCQHJSajcbV+CzVMS/7iryS52YzuvIxu7yy3ss=";
   };
 
