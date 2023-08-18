@@ -1,77 +1,105 @@
 { lib
-, stdenvNoCC
+, stdenv
+, fetchFromGitHub
 , fetchzip
+, fetchpatch
 , curl
+, freetype
 , libglvnd
-, libicns
 , libogg
 , libvorbis
+, libxmp
 , makeBinaryWrapper
 , openal
-, SDL
+, pkg-config
+, SDL2
+, speex
+, which
 , copyDesktopItems
 , autoPatchelfHook
 , makeDesktopItem
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "openarena";
-  version = "0.8.8";
-
-  src = fetchzip {
-    url = "https://download.tuxfamily.org/openarena/rel/${builtins.replaceStrings ["."] [""] finalAttrs.version}/openarena-${finalAttrs.version}.zip";
+let
+  openarena-maps = fetchzip {
+    name = "openarena-maps";
+    url = "https://download.tuxfamily.org/openarena/rel/088/openarena-0.8.8.zip";
     hash = "sha256-Rup1n14k9sKcyVFYzFqPYV+BEBCnUNwpnFsnyGrhl20=";
   };
 
+  openarena-source = fetchFromGitHub {
+    name = "openarena-source";
+    owner = "OpenArena";
+    repo = "engine";
+    rev = "075cb860a4d2bc43e75e5f506eba7da877708aba";
+    hash = "sha256-ofQKQyS3ti5TSN+zqwPFYuJiB9kvdER6zTWn8yrOpQU=";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "openarena";
+  version = "unstable-2023-03-02";
+
+  srcs = [
+    openarena-source
+    openarena-maps
+  ];
+
+  sourceRoot = "openarena-source";
+
+  patches = [
+    # Fix Makefile `copyFiles` target
+    # Related upstream issue: https://github.com/OpenArena/engine/issues/83
+    (fetchpatch {
+      url = "https://github.com/OpenArena/engine/commit/f2b424bd332e90a1e2592edd21c62bdb8cd05214.patch";
+      hash = "sha256-legiXLtZAeG2t1esiBa37qkAgxPJVM7JLhjpxGUmWCo=";
+    })
+  ];
+
   nativeBuildInputs = [
     curl
+    freetype
     libglvnd
-    libicns
     libogg
     libvorbis
+    libxmp
     makeBinaryWrapper
     openal
-    SDL
-  ] ++ lib.optionals stdenvNoCC.isLinux [
+    pkg-config
+    SDL2
+    speex
+    which
+  ] ++ lib.optionals stdenv.isLinux [
     copyDesktopItems
     autoPatchelfHook
   ];
 
-  installPhase =
-    if stdenvNoCC.isDarwin then ''
-      runHook preInstall
+  enableParallelBuilding = true;
 
-      mkdir -p $out/Applications
-      mv *.app $out/Applications
+  makeFlags = [
+    "USE_INTERNAL_LIBS=0"
+    "USE_FREETYPE=1"
+    "USE_OPENAL_DLOPEN=0"
+    "USE_CURL_DLOPEN=0"
+  ];
 
-      runHook postInstall
-    '' else
-      let
-        arch = {
-          "x86_64-linux" = "x86_64";
-          "i386-linux" = "i386";
-        }.${stdenvNoCC.hostPlatform.system};
-      in
-      ''
-        runHook preInstall
+  installTargets = [ "copyfiles" ];
+  installFlags = [ "COPYDIR=$(out)/share/openarena" ];
 
-        mkdir -p $out/share/openarena
-        cp -r {baseoa,missionpack} $out/share/openarena/
-        install openarena.${arch} $out/share/openarena/
-        install oa_ded.${arch} $out/share/openarena/
+  preInstall = ''
+    mkdir -p $out/share/openarena
+  '';
 
-        icns2png --extract OpenArena.app/Contents/Resources/ioquake3.icns
+  postInstall = ''
+    install -Dm644 misc/quake3.svg $out/share/icons/hicolor/scalable/apps/openarena.svg
 
-        for size in 16 32 128 256 512; do
-          mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
-          install -Dm644 ioquake3_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/openarena.png
-        done;
+    for FILE in $out/share/openarena/*; do
+      FILENAME=$(basename $FILE)
+      makeWrapper $FILE $out/bin/''${FILENAME%%.*}
+    done;
 
-        makeWrapper "$out/share/openarena/openarena.${arch}" "$out/bin/openarena"
-        makeWrapper "$out/share/openarena/oa_ded.${arch}" "$out/bin/oa_ded"
-
-        runHook postInstall
-      '';
+    ln -s ${openarena-maps}/baseoa $out/share/openarena/baseoa
+    ln -s ${openarena-maps}/missionpack $out/share/openarena/missionpack
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -85,12 +113,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    broken = stdenvNoCC.isDarwin; # the upstream binary only supports 32-bit
     description = "A fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena";
     homepage = "http://openarena.ws/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "openarena";
     maintainers = with lib.maintainers; [ wyvie ];
-    platforms = [ "i386-linux" "x86_64-darwin" "x86_64-linux" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
