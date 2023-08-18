@@ -45,7 +45,7 @@ rec {
       (setenv "PATH" (concat "${lib.makeSearchPath "bin" pkgs}:" (getenv "PATH")))
       (inherit-local-permanent exec-path (append '(${builtins.concatStringsSep " " (map (p: "\"${p}/bin\"") pkgs)}) exec-path))
 
-      (inherit-local-permanent eshell-path-env (concat "${lib.makeSearchPath "bin" pkgs}:" eshell-path-env))
+      (inherit-local-permanent eshell-path-env (concat "${lib.makeSearchPath "bin" pkgs}:" (if (boundp 'eshell-path-env) eshell-path-env (getenv "PATH"))))
 
       (setq nixpkgs--is-nixpkgs-buffer t)
       (inherit-local 'nixpkgs--is-nixpkgs-buffer)
