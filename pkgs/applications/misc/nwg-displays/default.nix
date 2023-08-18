@@ -5,6 +5,7 @@
 , gobject-introspection
 , gtk-layer-shell
 , gtk3
+, wlr-randr
 , pango
 , python310Packages
 , wrapGAppsHook
@@ -31,6 +32,7 @@ python310Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
+    wlr-randr
     atk
     gdk-pixbuf
     gtk-layer-shell
