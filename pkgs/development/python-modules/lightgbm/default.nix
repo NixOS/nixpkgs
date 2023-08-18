@@ -3,12 +3,17 @@
 , buildPythonPackage
 , fetchPypi
 , cmake
+, ninja
+, dask
 , numpy
-, scipy
+, pandas
+, pathspec
+, pyproject-metadata
+, scikit-build-core
 , scikit-learn
+, scipy
 , llvmPackages ? null
 , pythonOlder
-, python
 , ocl-icd
 , opencl-headers
 , boost
@@ -17,18 +22,22 @@
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "3.3.5";
-  format = "setuptools";
+  version = "4.0.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ELj73PhR5PaKHwLzjZm9xEx8f7mxpi3PkkoNKf9zOVw=";
+    hash = "sha256-A9GzkDqlHNml45ZZQSNvKnv1pp16dgWdv2j9m0/JLY8=";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
+    pathspec
+    pyproject-metadata
+    scikit-build-core
   ];
 
   dontUseCmakeConfigure = true;
@@ -44,16 +53,26 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     scipy
-    scikit-learn
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  pipBuildFlags = lib.optionals gpuSupport [
+    "--config-settings=cmake.define.USE_GPU=ON"
+  ];
 
-    ${python.pythonForBuild.interpreter} setup.py bdist_wheel ${lib.optionalString gpuSupport "--gpu"}
-
-    runHook postBuild
-  '';
+  passthru.optional-dependencies = {
+    dask = [
+      dask
+      pandas
+    ] ++ dask.optional-dependencies.array
+      ++ dask.optional-dependencies.dataframe
+      ++ dask.optional-dependencies.distributed;
+    pandas = [
+      pandas
+    ];
+    scikit-learn = [
+      scikit-learn
+    ];
+  };
 
   postConfigure = ''
     export HOME=$(mktemp -d)

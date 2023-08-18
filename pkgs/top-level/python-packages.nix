@@ -6031,7 +6031,9 @@ self: super: with self; {
 
   lifelines = callPackage ../development/python-modules/lifelines { };
 
-  lightgbm = callPackage ../development/python-modules/lightgbm { };
+  lightgbm = callPackage ../development/python-modules/lightgbm {
+    inherit (pkgs) cmake ninja;
+  };
 
   lightning-utilities  = callPackage ../development/python-modules/lightning-utilities { };
 
