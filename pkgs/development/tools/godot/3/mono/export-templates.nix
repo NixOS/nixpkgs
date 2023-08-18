@@ -1,8 +1,8 @@
-{ godot3 }:
+{ godot3-mono }:
 
-godot3.overrideAttrs (self: base: {
-  pname = "godot3-export-templates";
-  godotBuildDescription = "nix export templates";
+godot3-mono.overrideAttrs (self: base: {
+  pname = "godot3-mono-export-templates";
+  godotBuildDescription = "nix mono export templates";
 
   # As described in default.nix, adding the link flags to pulseaudio in detect.py was necessary to
   # allow the dlopen calls to succeed in Nix builds of godot. However, it seems that this *breaks*
@@ -12,7 +12,7 @@ godot3.overrideAttrs (self: base: {
 
   shouldBuildTools = false;
   godotBuildTarget = "release";
-  godotBinInstallPath = "share/godot/templates/${self.version}.stable";
+  godotBinInstallPath = "share/godot/templates/${self.version}.stable.mono";
   installedGodotBinName = "linux_${self.godotBuildPlatform}_64_${self.godotBuildTarget}";
 
   # https://docs.godotengine.org/en/stable/development/compiling/optimizing_for_size.html
@@ -23,6 +23,6 @@ godot3.overrideAttrs (self: base: {
   stripAllList = (base.stripAllList or []) ++ [ "share/godot/templates" ];
 
   meta = base.meta // {
-    homepage = "https://docs.godotengine.org/en/stable/development/compiling/compiling_for_x11.html#building-export-templates";
+    homepage = "https://docs.godotengine.org/en/stable/development/compiling/compiling_with_mono.html#export-templates";
   };
 })

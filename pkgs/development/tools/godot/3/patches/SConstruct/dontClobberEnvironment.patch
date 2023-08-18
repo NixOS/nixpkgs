@@ -1,8 +1,5 @@
-scons does not use os environment by default:
-  https://scons.org/doc/2.1.0/HTML/scons-user/x1750.html
-
-nixpkgs' cc-wrapper on the other hand relies on various NIX_* variables
-to be passed through like NIX_CFLAGS_COMPILE_BEFORE.
+diff --git a/SConstruct b/SConstruct
+index 057ec7628c..760be89fff 100644
 --- a/SConstruct
 +++ b/SConstruct
 @@ -67,14 +67,7 @@ elif platform_arg == "javascript":
