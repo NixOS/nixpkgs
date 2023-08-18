@@ -5,18 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ip2unix";
-  version = "2.1.4";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
     rev = "v${version}";
-    sha256 = "1pl8ayadxb0zzh5s26yschkjhr1xffbzzv347m88f9y0jv34d24r";
+    hash = "sha256-7Q2s7wBkt5OTbQnx7Q5mGRWBOtr6yRsFBh+CUu8CmMQ";
   };
-
-  postPatch = ''
-    sed '1i#include <array>' -i src/dynports/dynports.cc # gcc12
-  '';
 
   nativeBuildInputs = [
     meson ninja pkg-config asciidoc libxslt.bin docbook_xml_dtd_45 docbook_xsl

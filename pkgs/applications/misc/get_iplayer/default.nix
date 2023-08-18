@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, perlPackages, rtmpdump}:
+{ lib, fetchFromGitHub, stdenv, shortenPerlShebang, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, perlPackages, rtmpdump}:
 
 perlPackages.buildPerlPackage rec {
   pname = "get_iplayer";
@@ -12,7 +12,7 @@ perlPackages.buildPerlPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ];
+  buildInputs = [ perl ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
   propagatedBuildInputs = with perlPackages; [
     HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple Mojolicious
   ];
@@ -27,13 +27,16 @@ perlPackages.buildPerlPackage rec {
     wrapProgram $out/bin/get_iplayer --suffix PATH : ${lib.makeBinPath [ atomicparsley ffmpeg flvstreamer rtmpdump ]} --prefix PERL5LIB : $PERL5LIB
     cp get_iplayer.1 $out/share/man/man1
   '';
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/.get_iplayer-wrapped
+  '';
 
   meta = with lib; {
     description = "Downloads TV and radio from BBC iPlayer";
     license = licenses.gpl3Plus;
     homepage = "https://squarepenguin.co.uk/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ rika ];
+    maintainers = with maintainers; [ rika jgarcia ];
   };
 
 }

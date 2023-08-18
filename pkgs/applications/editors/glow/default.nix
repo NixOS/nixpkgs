@@ -1,5 +1,7 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 buildGoModule rec {
   pname = "glow";
   version = "1.5.0";
@@ -23,5 +25,6 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne penguwin ];
+    mainProgram = "glow";
   };
 }

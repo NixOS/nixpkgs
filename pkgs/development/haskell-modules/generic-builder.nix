@@ -33,8 +33,7 @@ in
 , doHaddockQuickjump ? doHoogle && lib.versionAtLeast ghc.version "8.6"
 , doInstallIntermediates ? false
 , editedCabalFile ? null
-# aarch64 outputs otherwise exceed 2GB limit
-, enableLibraryProfiling ? !(ghc.isGhcjs or stdenv.hostPlatform.isAarch64 or false)
+, enableLibraryProfiling ? !(ghc.isGhcjs or false)
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
@@ -99,6 +98,22 @@ in
   # build products from that prior build as a starting point for accelerating
   # this build
 , previousIntermediates ? null
+, # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
+  # `pkg-config --libs --static` as part of the configure step. This requires
+  # Requires.private dependencies of pkg-config dependencies to be present in
+  # PKG_CONFIG_PATH which is normally not the case in nixpkgs (except in pkgsStatic).
+  # Since there is no patch or upstream patch yet, we replicate the automatic
+  # propagation of dependencies in pkgsStatic for allPkgConfigDepends for
+  # GHC >= 9.3 by default. This option allows overriding this behavior manually
+  # if mismatching Cabal and GHC versions are used.
+  # See also <https://github.com/haskell/cabal/issues/8455>.
+  __propagatePkgConfigDepends ? lib.versionAtLeast ghc.version "9.3"
+, # Propagation can easily lead to the argv limit being exceeded in linker or C
+  # compiler invocations. To work around this we can only propagate derivations
+  # that are known to provide pkg-config modules, as indicated by the presence
+  # of `meta.pkgConfigModules`. This option defaults to false for now, since
+  # this metadata is far from complete in nixpkgs.
+  __onlyPropagateKnownPkgConfigModules ? false
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -257,8 +272,47 @@ let
 
   isHaskellPkg = x: x ? isHaskellLibrary;
 
-  allPkgconfigDepends = pkg-configDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
-                        optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
+  # Work around a Cabal bug requiring pkg-config --static --libs to work even
+  # when linking dynamically, affecting Cabal 3.8 and 3.9.
+  # https://github.com/haskell/cabal/issues/8455
+  #
+  # For this, we treat the runtime system/pkg-config dependencies of a Haskell
+  # derivation as if they were propagated from their dependencies which allows
+  # pkg-config --static to work in most cases.
+  allPkgconfigDepends =
+    let
+      # If __onlyPropagateKnownPkgConfigModules is set, packages without
+      # meta.pkgConfigModules will be filtered out, otherwise all packages in
+      # buildInputs and propagatePlainBuildInputs are propagated.
+      propagateValue = drv:
+        lib.isDerivation drv
+        && (__onlyPropagateKnownPkgConfigModules -> drv ? meta.pkgConfigModules);
+
+      # Take list of derivations and return list of the transitive dependency
+      # closure, only taking into account buildInputs. Loosely based on
+      # closePropagationFast.
+      propagatePlainBuildInputs = drvs:
+        builtins.map (i: i.val) (
+          builtins.genericClosure {
+            startSet = builtins.map (drv:
+              { key = drv.outPath; val = drv; }
+            ) (builtins.filter propagateValue drvs);
+            operator = { val, ... }:
+              builtins.concatMap (drv:
+                if propagateValue drv
+                then [ { key = drv.outPath; val = drv; } ]
+                else [ ]
+              ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
+          }
+        );
+    in
+
+    if __propagatePkgConfigDepends
+    then propagatePlainBuildInputs allPkgconfigDepends'
+    else allPkgconfigDepends';
+  allPkgconfigDepends' =
+    pkg-configDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
+    optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
   depsBuildBuild = [ nativeGhc ]
     # CC_FOR_BUILD may be necessary if we have no C preprocessor for the host
@@ -269,7 +323,7 @@ let
     optionals doCheck testToolDepends ++
     optionals doBenchmark benchmarkToolDepends;
   nativeBuildInputs =
-    [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkg-config ++
+    [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) (assert pkg-config != null; pkg-config) ++
     setupHaskellDepends ++ collectedToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
@@ -317,8 +371,6 @@ let
 
   intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
 in lib.fix (drv:
-
-assert allPkgconfigDepends != [] -> pkg-config != null;
 
 stdenv.mkDerivation ({
   inherit pname version;

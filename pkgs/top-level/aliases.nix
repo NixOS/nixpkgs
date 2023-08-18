@@ -1571,6 +1571,7 @@ mapAliases ({
   shared_mime_info = throw "'shared_mime_info' has been renamed to/replaced by 'shared-mime-info'"; # Converted to throw 2022-02-22
   inherit (libsForQt5.mauiPackages) shelf; # added 2022-05-17
   shellinabox = throw "shellinabox has been removed from nixpkgs, as it was unmaintained upstream"; # Added 2021-12-15
+  shhgit = throw "shhgit is broken and is no longer maintained. See https://github.com/eth0izzle/shhgit#-shhgit-is-no-longer-maintained-" ; # Added 2023-08-08
   shipyard = jumppad; # Added 2023-06-06
   sickbeard = throw "sickbeard has been removed from nixpkgs, as it was unmaintained"; # Added 2022-01-01
   sickrage = throw "sickbeard has been removed from nixpkgs, as it was unmaintained"; # Added 2022-01-01
@@ -1834,6 +1835,8 @@ mapAliases ({
   wineStaging = throw "'wineStaging' has been renamed to/replaced by 'wine-staging'"; # Converted to throw 2022-02-22
   wineUnstable = throw "'wineUnstable' has been renamed to/replaced by 'winePackages.unstable'"; # Converted to throw 2022-02-22
   wineWayland = wine-wayland;
+  win-qemu = throw "'win-qemu' has been replaced by 'win-virtio'"; # Added 2023-08-16
+  win-signed-gplpv-drivers = throw "win-signed-gplpv-drivers has been removed from nixpkgs, as it's unmaintained: https://help.univention.com/t/installing-signed-gplpv-drivers/21828"; # Added 2023-08-17
   winpdb = throw "winpdb has been removed: abandoned by upstream"; # Added 2022-04-22
   winusb = throw "'winusb' has been renamed to/replaced by 'woeusb'"; # Converted to throw 2022-02-22
   wireguard = throw "'wireguard' has been renamed to/replaced by 'wireguard-tools'"; # Converted to throw 2022-02-22

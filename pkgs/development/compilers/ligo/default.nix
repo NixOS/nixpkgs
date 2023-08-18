@@ -15,12 +15,12 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.71.1";
+  version = "0.72.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-E28/bRtYS57vB3WguUDGmR2ZhXhh/taiZTLa07Hu88g=";
+    sha256 = "sha256-DQ3TxxLxi8/W1+uBX7NEBIsVXBKnJBa6YNRBFleNrEA=";
     fetchSubmodules = true;
   };
 
@@ -75,6 +75,7 @@ ocamlPackages.buildDunePackage rec {
     decompress
     ppx_deriving
     ppx_deriving_yojson
+    ppx_yojson_conv
     ppx_expect
     ppx_import
     terminal_size

@@ -184,8 +184,8 @@ in rec {
     '';
 
 
-  # Generate the NixOS manpages.
-  manpages = runCommand "nixos-manpages"
+  # Generate the `man configuration.nix` package
+  nixos-configuration-reference-manpage = runCommand "nixos-configuration-reference-manpage"
     { nativeBuildInputs = [
         buildPackages.installShellFiles
         buildPackages.nixos-render-docs
@@ -194,8 +194,6 @@ in rec {
     }
     ''
       # Generate manpages.
-      mkdir -p $out/share/man/man8
-      installManPage ${./manpages}/*
       mkdir -p $out/share/man/man5
       nixos-render-docs -j $NIX_BUILD_CORES options manpage \
         --revision ${lib.escapeShellArg revision} \

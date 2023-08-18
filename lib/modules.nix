@@ -633,7 +633,7 @@ let
           optionDecls = filter
             (m: m.options?_type
                 && (m.options._type == "option"
-                    || throwDeclarationTypeError loc m.options._type
+                    || throwDeclarationTypeError loc m.options._type m._file
                 )
             )
             decls;
@@ -698,14 +698,14 @@ let
           ) unmatchedDefnsByName);
     };
 
-  throwDeclarationTypeError = loc: actualTag:
+  throwDeclarationTypeError = loc: actualTag: file:
     let
       name = lib.strings.escapeNixIdentifier (lib.lists.last loc);
       path = showOption loc;
       depth = length loc;
 
       paragraphs = [
-        "Expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
+        "In module ${file}: expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
       ] ++ optional (actualTag == "option-type") ''
           When declaring an option, you must wrap the type in a `mkOption` call. It should look somewhat like:
               ${comment}

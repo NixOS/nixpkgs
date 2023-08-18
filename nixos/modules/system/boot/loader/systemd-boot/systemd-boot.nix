@@ -32,7 +32,7 @@ let
 
     inherit (config.system.nixos) distroName;
 
-    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86-efi;
+    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86plus;
 
     netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
 
@@ -147,10 +147,8 @@ in {
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Make MemTest86 available from the systemd-boot menu. MemTest86 is a
-          program for testing memory.  MemTest86 is an unfree program, so
-          this requires `allowUnfree` to be set to
-          `true`.
+          Make MemTest86+ available from the systemd-boot menu. MemTest86+ is a
+          program for testing memory.
         '';
       };
 
@@ -193,8 +191,8 @@ in {
       default = {};
       example = literalExpression ''
         { "memtest86.conf" = '''
-          title MemTest86
-          efi /efi/memtest86/memtest86.efi
+          title MemTest86+
+          efi /efi/memtest86/memtest.efi
         '''; }
       '';
       description = lib.mdDoc ''
@@ -213,7 +211,7 @@ in {
       type = types.attrsOf types.path;
       default = {};
       example = literalExpression ''
-        { "efi/memtest86/memtest86.efi" = "''${pkgs.memtest86-efi}/BOOTX64.efi"; }
+        { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
       '';
       description = lib.mdDoc ''
         A set of files to be copied to {file}`/boot`.
@@ -276,11 +274,8 @@ in {
     boot.loader.supportsInitrdSecrets = true;
 
     boot.loader.systemd-boot.extraFiles = mkMerge [
-      # TODO: This is hard-coded to use the 64-bit EFI app, but it could probably
-      # be updated to use the 32-bit EFI app on 32-bit systems.  The 32-bit EFI
-      # app filename is BOOTIA32.efi.
       (mkIf cfg.memtest86.enable {
-        "efi/memtest86/BOOTX64.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
+        "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
       })
       (mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";
@@ -291,7 +286,7 @@ in {
       (mkIf cfg.memtest86.enable {
         "${cfg.memtest86.entryFilename}" = ''
           title  MemTest86
-          efi    /efi/memtest86/BOOTX64.efi
+          efi    /efi/memtest86/memtest.efi
         '';
       })
       (mkIf cfg.netbootxyz.enable {

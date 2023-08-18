@@ -1153,6 +1153,8 @@ let
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
+    ocaml-protoc-plugin = callPackage ../development/ocaml-modules/ocaml-protoc-plugin { };
+
     ocaml-r = callPackage ../development/ocaml-modules/ocaml-r { };
 
     ocaml-recovery-parser = callPackage ../development/tools/ocaml/ocaml-recovery-parser { };
