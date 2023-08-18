@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kyu08/fzf-make";
     changelog = "https://github.com/kyu08/fzf-make/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda sigmanificient ];
     mainProgram = "fzf-make";
   };
 }
