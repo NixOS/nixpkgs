@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.8.4";
+  version = "2.8.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1UMlN0GNGGkbkRXWFdbaoX7oJ1uu8+3xr7v4vGmAYUc=";
+    hash = "sha256-Re1B5VoKvOzz1xFIHhKl+3qQT+mdQrwoKhfMX46lEL4=";
   };
 
   nativeBuildInputs = [
