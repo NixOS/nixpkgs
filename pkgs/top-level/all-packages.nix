@@ -19178,6 +19178,8 @@ with pkgs;
 
   funzzy = callPackage ../development/tools/misc/funzzy { };
 
+  fzf-make = callPackage ../development/tools/misc/fzf-make { };
+
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
   gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
