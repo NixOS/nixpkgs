@@ -13,23 +13,12 @@
 (lib.makeScope pkgs.newScope ( self:
 
 let
-  libsForQt6 = self;
   callPackage = self.callPackage;
-  kdeFrameworks = let
-    mkFrameworks = import ../development/libraries/kde-frameworks;
-    attrs = {
-      libsForQt5 = libsForQt6;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkFrameworks attrs);
 in
-
 (qt6 // {
   inherit stdenv;
 
   # LIBRARIES
-
-  inherit (kdeFrameworks) kcoreaddons;
 
   qt6ct = callPackage ../tools/misc/qt6ct { };
 
