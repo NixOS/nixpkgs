@@ -34609,6 +34609,8 @@ with pkgs;
 
   pokefinder = qt6Packages.callPackage ../tools/games/pokefinder { };
 
+  pokegold = callPackage ../games/pokegold { };
+
   pokemonsay = callPackage ../tools/misc/pokemonsay { };
 
   pokered = callPackage ../games/pokered { };
