@@ -15,6 +15,7 @@ mkDerivation rec {
   # Removes a reference to gcc that is only used in a debug message
   patches = [ ./remove-compiler-reference.patch ];
 
+  outputs = [ "out" "dev" ];
   separateDebugInfo = true;
 
   nativeBuildInputs = [ cmake ];
