@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.0.29";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tronikos";
