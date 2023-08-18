@@ -8095,6 +8095,8 @@ self: super: with self; {
 
   pyhumps = callPackage ../development/python-modules/pyhumps { };
 
+  pyinstaller-versionfile = callPackage ../development/python-modules/pyinstaller-versionfile { };
+
   pyisy = callPackage ../development/python-modules/pyisy { };
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
