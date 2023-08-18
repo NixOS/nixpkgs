@@ -6662,6 +6662,8 @@ self: super: with self; {
 
   moddb = callPackage ../development/python-modules/moddb { };
 
+  model-bakery = callPackage ../development/python-modules/model-bakery { };
+
   modeled = callPackage ../development/python-modules/modeled { };
 
   moderngl = callPackage ../development/python-modules/moderngl { };

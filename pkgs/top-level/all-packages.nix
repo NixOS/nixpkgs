@@ -1850,6 +1850,8 @@ with pkgs;
 
   monica = callPackage ../servers/web-apps/monica { };
 
+  mpremote = python3Packages.callPackage ../tools/misc/mpremote { };
+
   mprocs = callPackage ../tools/misc/mprocs { };
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
@@ -32956,7 +32958,7 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
-  klee = callPackage ../applications/science/logic/klee (with llvmPackages_11; {
+  klee = callPackage ../applications/science/logic/klee (with llvmPackages_12; {
     clang = clang;
     llvm = llvm;
     stdenv = stdenv;

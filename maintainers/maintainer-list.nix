@@ -7525,6 +7525,12 @@
     github = "j4m3s-s";
     githubId = 9413812;
   };
+  jacbart = {
+    name = "Jack Bartlett";
+    email = "jacbart@gmail.com";
+    github = "jacbart";
+    githubId = 7909687;
+  };
   jacfal = {
     name = "Jakub Pravda";
     email = "me@jakubpravda.net";
@@ -8750,6 +8756,12 @@
     github = "karolchmist";
     githubId = 1927188;
     name = "karolchmist";
+  };
+  kashw2 = {
+    email = "supra4keanu@hotmail.com";
+    github = "kashw2";
+    githubId = 15855440;
+    name = "Keanu Ashwell";
   };
   katexochen = {
     github = "katexochen";
