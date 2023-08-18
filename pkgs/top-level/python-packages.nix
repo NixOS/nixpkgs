@@ -12353,6 +12353,8 @@ self: super: with self; {
 
   syrupy = callPackage ../development/python-modules/syrupy { };
 
+  tabcmd = callPackage ../development/python-modules/tabcmd { };
+
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
   tableauserverclient = callPackage ../development/python-modules/tableauserverclient { };
