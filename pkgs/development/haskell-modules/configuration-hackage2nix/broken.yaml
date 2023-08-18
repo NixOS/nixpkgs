@@ -5131,7 +5131,6 @@ broken-packages:
   - sha-streams
   - she
   - Shellac
-  - shellify # failure building test suite 'haskelltest-test' in job https://hydra.nixos.org/build/230963414 at 2023-08-16
   - shellish
   - shellmate
   - shellmet # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230972264 at 2023-08-16
