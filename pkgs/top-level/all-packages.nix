@@ -33845,13 +33845,14 @@ with pkgs;
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
-      grpcSupport = config.murmur.grpcSupport or true;
+      protobuf = protobuf3_21;
     }).murmur;
 
   mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
+      protobuf = protobuf3_21;
     }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
