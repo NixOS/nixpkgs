@@ -19457,6 +19457,8 @@ with pkgs;
 
   mold = callPackage ../development/tools/mold { };
 
+  mommy = callPackage ../tools/misc/mommy { };
+
   moon = callPackage ../development/tools/build-managers/moon/default.nix { };
 
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
