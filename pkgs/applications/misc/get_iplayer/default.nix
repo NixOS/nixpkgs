@@ -11,8 +11,8 @@ perlPackages.buildPerlPackage rec {
     sha256 = "+ChCF27nmPKbqaZVxsZ6TlbzSdEz6RfMs87NE8xaSRw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper shortenPerlShebang ];
+  buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
     HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple Mojolicious
   ];
@@ -26,8 +26,7 @@ perlPackages.buildPerlPackage rec {
     cp get_iplayer $out/bin
     wrapProgram $out/bin/get_iplayer --suffix PATH : ${lib.makeBinPath [ atomicparsley ffmpeg flvstreamer rtmpdump ]} --prefix PERL5LIB : $PERL5LIB
     cp get_iplayer.1 $out/share/man/man1
-  '';
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/.get_iplayer-wrapped
   '';
 
@@ -40,3 +39,4 @@ perlPackages.buildPerlPackage rec {
   };
 
 }
+
