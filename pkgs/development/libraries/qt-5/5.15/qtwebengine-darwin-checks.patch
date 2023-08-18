@@ -1,5 +1,5 @@
 diff --git a/configure.pri b/configure.pri
-index e072961f0..ac0861c01 100644
+index 3a33bdc82..c1460b8b5 100644
 --- a/configure.pri
 +++ b/configure.pri
 @@ -442,24 +442,6 @@ defineTest(qtwebengine_isWindowsPlatformSupported) {
@@ -24,6 +24,6 @@ index e072961f0..ac0861c01 100644
 -        qtwebengine_platformError("requires a macOS SDK version of 10.13 or newer. Current version is $${WEBENGINE_OSX_SDK_PRODUCT_VERSION}.")
 -        return(false)
 -    }
-     return(true)
- }
- 
+     CONFIG(debug, debug|release):isUniversal(){
+         qtwebengine_platformError("Universal builds can not be done with debug configuration due to large binary size.")
+         return(false)
