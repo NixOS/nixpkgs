@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "k-diffusion";
-  version = "0.0.14";
+  version = "0.0.16";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "crowsonkb";
     repo = "k-diffusion";
     rev = "v${version}";
-    hash = "sha256-KKVgk+1hidDBVaRnXjoqwuSRydI10OPHK3YModAizZU=";
+    hash = "sha256-tOWDFt0/hGZF5HENiHPb9a2pBlXdSvDvCNTsCMZljC4=";
   };
 
   propagatedBuildInputs = [
