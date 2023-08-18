@@ -1,14 +1,20 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
-, numpy
+, glfw
 , moderngl
-, pyglet
+, numpy
 , pillow
+, pygame
+, pyglet
+, pyqt5
 , pyrr
-, glcontext
+, pysdl2
+, pyside2
+, pythonOlder
+, scipy
+, stdenv
+, trimesh
 }:
 
 buildPythonPackage rec {
@@ -25,7 +31,35 @@ buildPythonPackage rec {
     hash = "sha256-mg3j5ZoMwdk39L5xjcoEJo9buqssM1VLJtndSFsuCB0=";
   };
 
-  propagatedBuildInputs = [ numpy moderngl pyglet pillow pyrr glcontext ];
+  propagatedBuildInputs = [
+    numpy
+    moderngl
+    pyglet
+    pillow
+    pyrr
+  ];
+
+  passthru.optional-dependencies = {
+    trimesh = [
+      trimesh
+      scipy
+    ];
+    glfw = [
+      glfw
+    ];
+    pygame = [
+      pygame
+    ];
+    PySDL2 = [
+      pysdl2
+    ];
+    PySide2 = [
+      pyside2
+    ];
+    pyqt5 = [
+      pyqt5
+    ];
+  };
 
   # Tests need a display to run.
   doCheck = false;
