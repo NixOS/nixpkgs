@@ -8751,6 +8751,12 @@
     githubId = 1927188;
     name = "karolchmist";
   };
+  kashw2 = {
+    email = "supra4keanu@hotmail.com";
+    github = "kashw2";
+    githubId = 15855440;
+    name = "Keanu Ashwell";
+  };
   katexochen = {
     github = "katexochen";
     githubId = 49727155;
