@@ -6,6 +6,15 @@ let
 
 in
   (haskell.lib.compose.overrideCabal (drv: {
+    # pandoc-cli's pandoc executable report the libraries version via --version, match that,
+    inherit (static.scope.pandoc) version;
+    # but prevent haskellPackages.mkDerivation from recomputing the src tarball based on that.
+    inherit (static) src;
+    # Make it possible to recover the cli version if necessary.
+    passthru = drv.passthru or {} // {
+      cliVersion = static.version;
+    };
+
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
     buildTools = (drv.buildTools or []) ++ [ removeReferencesTo ];
