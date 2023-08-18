@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "waybar";
-  version = "0.9.21";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = version;
-    hash = "sha256-VvQTRo2MuJ475lKrExVhzi74fb1wAw0gHD1v4rcWIDk=";
+    hash = "sha256-9LJDA+zrHF9Mn8+W9iUw50LvO+xdT7/l80KdltPrnDo=";
   };
 
   postUnpack = lib.optional cavaSupport ''
