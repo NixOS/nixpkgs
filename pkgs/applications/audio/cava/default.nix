@@ -7,6 +7,7 @@
 , iniparser
 , libpulseaudio
 , ncurses
+, pipewire
 , pkgconf
 }:
 
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     ncurses
     iniparser
+    pipewire
   ];
 
   nativeBuildInputs = [
