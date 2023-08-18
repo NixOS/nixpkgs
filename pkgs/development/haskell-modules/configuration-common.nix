@@ -238,7 +238,7 @@ self: super: {
   # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
   # store. Testing is done upstream.
   # 2023-07-27: Allow base-4.17
-  arion-compose = dontCheck (assert super.arion-compose.version == "0.2.0.0"; doJailbreak super.arion-compose);
+  arion-compose = dontCheck (assert super.arion-compose.version == "0.2.1.0"; doJailbreak super.arion-compose);
 
   # 2023-07-17: Outdated base bound https://github.com/srid/lvar/issues/5
   lvar = doJailbreak super.lvar;
