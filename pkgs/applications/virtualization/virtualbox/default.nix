@@ -212,6 +212,9 @@ in stdenv.mkDerivation {
     ''}
 
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+
+    mkdir -p "$out/share/virtualbox"
+    cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
   '';
 
   preFixup = optionalString (!headless) ''
