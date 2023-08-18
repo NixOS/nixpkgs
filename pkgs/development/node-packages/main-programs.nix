@@ -6,7 +6,6 @@
   "@microsoft/rush" = "rush";
   "@squoosh/cli" = "squoosh-cli";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
-  coffee-script = "coffee";
   "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable.
