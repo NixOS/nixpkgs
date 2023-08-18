@@ -20523,6 +20523,8 @@ with pkgs;
 
   ayatana-webmail = callPackage ../applications/networking/mailreaders/ayatana-webmail { };
 
+  azmq = callPackage ../development/libraries/azmq { };
+
   babl = callPackage ../development/libraries/babl { };
 
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
