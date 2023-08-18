@@ -7489,6 +7489,12 @@
     githubId = 20320695;
     name = "Matan Bendix Shenhav";
   };
+  iynaix = {
+    email = "iynaix@gmail.com";
+    github = "iynaix";
+    githubId = 94313;
+    name = "Xianyi Lin";
+  };
   izorkin = {
     email = "Izorkin@gmail.com";
     github = "Izorkin";
@@ -15954,6 +15960,12 @@
     github = "spencerjanssen";
     githubId = 2600039;
     name = "Spencer Janssen";
+  };
+  spikespaz = {
+    name = "Jacob Birkett";
+    email = "support@birkett.dev";
+    github = "spikespaz";
+    githubId = 12502988;
   };
   spinus = {
     email = "tomasz.czyz@gmail.com";

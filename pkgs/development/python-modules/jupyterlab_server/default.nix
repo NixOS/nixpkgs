@@ -11,9 +11,10 @@
 , jupyter-server
 , tomli
 , openapi-core
-, pytest-timeout
-, pytest-tornasync
+, pytest-jupyter
+, requests-mock
 , ruamel-yaml
+, strict-rfc3339
 , importlib-metadata
 }:
 
@@ -47,18 +48,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     openapi-core
     pytestCheckHook
-    pytest-timeout
-    pytest-tornasync
+    pytest-jupyter
+    requests-mock
     ruamel-yaml
+    strict-rfc3339
   ];
 
   postPatch = ''
-    # translation tests try to install additional packages into read only paths
-    rm -r tests/translations/
+    sed -i "/timeout/d" pyproject.toml
   '';
-
-  # https://github.com/jupyterlab/jupyterlab_server/blob/v2.15.2/pyproject.toml#L61
-  doCheck = false;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -68,6 +66,17 @@ buildPythonPackage rec {
     # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12.
     # Use setuptools or check PEP 632 for potential alternatives.
     "-W ignore::DeprecationWarning"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_settings_api.py"
+    "tests/test_themes_api.py"
+    "tests/test_translation_api.py"
+    "tests/test_workspaces_api.py"
+  ];
+
+  disabledTests = [
+    "test_get_listing"
   ];
 
   __darwinAllowLocalNetworking = true;

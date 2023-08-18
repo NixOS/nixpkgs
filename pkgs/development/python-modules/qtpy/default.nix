@@ -8,7 +8,7 @@
 
 # tests
 , pyqt5
-, pyside
+, pyside2
 , pytestCheckHook
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   doCheck = false; # ModuleNotFoundError: No module named 'PyQt5.QtConnectivity'
   nativeCheckInputs = [
-    pyside
+    pyside2
     (pyqt5.override {
       withConnectivity = true;
       withMultimedia = true;

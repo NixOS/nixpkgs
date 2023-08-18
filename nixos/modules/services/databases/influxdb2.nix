@@ -107,7 +107,7 @@ in
         LimitNOFILE = 65536;
         KillMode = "control-group";
         Restart = "on-failure";
-        LoadCredential = [
+        LoadCredential = mkIf cfg.provision.enable [
           "admin-password:${cfg.provision.initialSetup.passwordFile}"
           "admin-token:${cfg.provision.initialSetup.tokenFile}"
         ];
