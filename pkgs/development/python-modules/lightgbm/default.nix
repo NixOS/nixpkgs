@@ -1,4 +1,5 @@
 { lib
+, config
 , stdenv
 , buildPythonPackage
 , fetchPypi
@@ -17,8 +18,29 @@
 , ocl-icd
 , opencl-headers
 , boost
-, gpuSupport ? stdenv.isLinux
+, gpuSupport ? stdenv.isLinux && !cudaSupport
+, cudaSupport ? config.cudaSupport or false
+, cudaPackages ? { }
+, symlinkJoin
 }:
+let
+  cuda-common-redist = with cudaPackages; [
+    cuda_cudart
+  ];
+  cuda-native-redist = symlinkJoin {
+    name = "cuda-native-redist-${cudaPackages.cudaVersion}";
+    paths = with cudaPackages; [
+      cuda_nvcc
+    ] ++ cuda-common-redist;
+  };
+  cuda-redist = symlinkJoin {
+    name = "cuda-redist-${cudaPackages.cudaVersion}";
+    paths = cuda-common-redist;
+  };
+in
+
+assert gpuSupport -> !cudaSupport;
+assert cudaSupport -> !gpuSupport;
 
 buildPythonPackage rec {
   pname = "lightgbm";
@@ -38,6 +60,8 @@ buildPythonPackage rec {
     pathspec
     pyproject-metadata
     scikit-build-core
+  ] ++ lib.optionals cudaSupport [
+    cuda-native-redist
   ];
 
   dontUseCmakeConfigure = true;
@@ -48,7 +72,9 @@ buildPythonPackage rec {
     boost
     ocl-icd
     opencl-headers
-  ]);
+  ]) ++ lib.optionals cudaSupport [
+    cuda-redist
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -57,6 +83,8 @@ buildPythonPackage rec {
 
   pipBuildFlags = lib.optionals gpuSupport [
     "--config-settings=cmake.define.USE_GPU=ON"
+  ] ++ lib.optionals cudaSupport [
+    "--config-settings=cmake.define.USE_CUDA=ON"
   ];
 
   passthru.optional-dependencies = {
