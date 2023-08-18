@@ -34615,6 +34615,8 @@ with pkgs;
 
   pokered = callPackage ../games/pokered { };
 
+  pokeyellow = callPackage ../games/pokeyellow { };
+
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
 
   polar-bookshelf1 = callPackage ../applications/misc/polar-bookshelf1 { };
