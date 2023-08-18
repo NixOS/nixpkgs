@@ -35,7 +35,6 @@
   conventional-changelog-cli = "conventional-changelog";
   cpy-cli = "cpy";
   diff2html-cli = "diff2html";
-  dockerfile-language-server-nodejs = "docker-langserver";
   fast-cli = "fast";
   fauna-shell = "fauna";
   fkill-cli = "fkill";
