@@ -6709,6 +6709,7 @@ with pkgs;
   clementine = libsForQt5.callPackage ../applications/audio/clementine {
     gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
+    protobuf = protobuf3_21;
   };
 
   mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
@@ -10039,6 +10040,7 @@ with pkgs;
 
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
+    protobuf = protobuf3_21;
   };
   # Exposed here so the bots can auto-upgrade it
   netdata-go-plugins = callPackage ../tools/system/netdata/go.d.plugin.nix { };
@@ -10739,7 +10741,9 @@ with pkgs;
     electron = electron_22;
   };
 
-  mosh = callPackage ../tools/networking/mosh { };
+  mosh = callPackage ../tools/networking/mosh {
+    protobuf = protobuf3_21;
+  };
 
   motrix = callPackage ../tools/networking/motrix { };
 
@@ -26862,6 +26866,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost177; # Configure checks for specific version.
     icu = icu69;
+    protobuf = protobuf3_21;
   };
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
