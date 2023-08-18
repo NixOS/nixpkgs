@@ -34605,6 +34605,8 @@ with pkgs;
 
   poke = callPackage ../applications/editors/poke { };
 
+  pokecrystal = callPackage ../games/pokecrystal { };
+
   pokefinder = qt6Packages.callPackage ../tools/games/pokefinder { };
 
   pokemonsay = callPackage ../tools/misc/pokemonsay { };
