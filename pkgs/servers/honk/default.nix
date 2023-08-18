@@ -18,7 +18,7 @@ buildGoModule rec {
   # working out of the box. This value can be overriden by the user, by
   # providing the `-viewdir` parameter in the command line.
   postPatch = ''
-    substituteInPlace honk.go --replace \
+    substituteInPlace main.go --replace \
       "var viewDir = \".\"" \
       "var viewDir = \"$out/share/honk\""
   '';
