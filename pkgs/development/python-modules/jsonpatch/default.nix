@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "jsonpatch";
-  version = "1.32";
+  version = "1.33";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "stefankoegl";
     repo = "python-json-patch";
     rev = "v${version}";
-    hash = "sha256-JMGBgYjnjHQ5JpzDwJcR2nVZfzmQ8ZZtcB0GsJ9Q4Jc=";
+    hash = "sha256-JHBB64LExzHQVoFF2xcsqGlNWX/YeEBa1M/TmfeQLWI=";
   };
 
   propagatedBuildInputs = [
