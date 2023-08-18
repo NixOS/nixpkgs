@@ -11,6 +11,7 @@
 , keyring
 , oscrypto
 , packaging
+, platformdirs
 , pycryptodomex
 , pyjwt
 , pyopenssl
@@ -18,20 +19,22 @@
 , pytz
 , requests
 , setuptools
+, sortedcontainers
+, tomlkit
 , typing-extensions
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.0.2";
+  version = "3.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wMLn7PMcnmaRzn/VbcLVw60dOzJAWTpkEw5HFrCncLY=";
+    hash = "sha256-+sUfxc72+dV5iqRg9ObePlPhoPx7kT0r2Yta6Aa8yDs=";
   };
 
   # snowflake-connector-python requires arrow 10.0.1, which we don't have in
@@ -58,6 +61,7 @@ buildPythonPackage rec {
     "pyOpenSSL"
     "charset-normalizer"
     "cryptography"
+    "platformdirs"
   ];
 
   propagatedBuildInputs = [
@@ -69,11 +73,14 @@ buildPythonPackage rec {
     idna
     oscrypto
     packaging
+    platformdirs
     pycryptodomex
     pyjwt
     pyopenssl
     pytz
     requests
+    sortedcontainers
+    tomlkit
     typing-extensions
   ];
 
