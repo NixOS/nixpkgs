@@ -17,7 +17,7 @@ buildGoModule rec {
   # For patchShebangs
   buildInputs = [ bash ];
 
-  vendorHash = "sha256-sP9lboy1M4+AB1Z0VsX5eNxZ9ckuJBgEPxavAbOSk8g=";
+  vendorHash = "sha256-Rzy4R4QR+rPqzhjZlqcuiP3DDLOu9Z2fb42WPaSPR/4=";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
@@ -27,6 +27,9 @@ buildGoModule rec {
   };
 
   patches = [
+    # https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/4249
+    # patch needed until a new version is released
+    ./fix-invalid-Host-header.patch
     ./fix-shell-path.patch
     ./remove-bash-test.patch
   ];
