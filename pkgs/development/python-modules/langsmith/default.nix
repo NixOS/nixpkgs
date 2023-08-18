@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.0.14";
+  version = "0.0.24";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,10 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchainplus-sdk";
-    # there are no correct tags
-    # https://github.com/langchain-ai/langchainplus-sdk/issues/105
-    rev = "092f67222e4beabca0f51ba03f1ee028f916da63";
-    hash = "sha256-U8fs16Uq80EB7Ey5YuQhUKKI9DOXJWlabM5JdoDnWP0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Uv6zzSWs+Fvb0ztwgkbkZcaNJOFpt8pWh88HZHsTris=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -42,11 +40,13 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # these tests require network access
+    # These tests require network access
     "integration_tests"
   ];
 
-  pythonImportsCheck = [ "langsmith" ];
+  pythonImportsCheck = [
+    "langsmith"
+  ];
 
   meta = with lib; {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
