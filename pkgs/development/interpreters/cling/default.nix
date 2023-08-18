@@ -8,7 +8,7 @@
 , makeWrapper
 , ncurses
 , python3
-, runCommandNoCC
+, runCommand
 , zlib
 
 # *NOT* from LLVM 9!
@@ -35,7 +35,7 @@ let
   stdenv = clangStdenv;
 
   # The LLVM 9 headers have a couple bugs we need to patch
-  fixedLlvmDev = runCommandNoCC "llvm-dev-${llvmPackages_9.llvm.version}" { buildInputs = [git]; } ''
+  fixedLlvmDev = runCommand "llvm-dev-${llvmPackages_9.llvm.version}" { buildInputs = [git]; } ''
     mkdir $out
     cp -r ${llvmPackages_9.llvm.dev}/include $out
     cd $out
@@ -161,7 +161,7 @@ let
 
 in
 
-runCommandNoCC "cling-${unwrapped.version}" {
+runCommand "cling-${unwrapped.version}" {
   nativeBuildInputs = [ makeWrapper ];
   inherit unwrapped flags;
   inherit (unwrapped) meta;
