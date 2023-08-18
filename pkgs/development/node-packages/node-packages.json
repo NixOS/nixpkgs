@@ -41,7 +41,6 @@
 , "browser-sync"
 , "btc-rpc-explorer"
 , "carbon-now-cli"
-, "carto"
 , "cdk8s-cli"
 , "cdktf-cli"
 , "clean-css-cli"

@@ -18742,6 +18742,8 @@ with pkgs;
 
   cadre = callPackage ../development/tools/cadre { };
 
+  carto = callPackage ../development/tools/carto { };
+
   catnip = callPackage ../tools/audio/catnip { };
 
   catnip-gtk4 = callPackage ../tools/audio/catnip-gtk4 { };
