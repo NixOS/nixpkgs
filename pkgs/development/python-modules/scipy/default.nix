@@ -80,6 +80,7 @@ in buildPythonPackage {
     })
   ];
 
+  # Relax deps a bit
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'numpy==' 'numpy>=' \
@@ -117,9 +118,6 @@ in buildPythonPackage {
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
-    # Relax deps a bit
-    substituteInPlace pyproject.toml \
-      --replace 'numpy==' 'numpy>='
     # Helps parallelization a bit
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
     # We download manually the datasets and this variable tells the pooch
