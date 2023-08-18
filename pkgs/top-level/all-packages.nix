@@ -25636,6 +25636,8 @@ with pkgs;
   };
   zig = zig_0_11;
 
+  zig-shell-completions = callPackage ../development/compilers/zig/shell-completions.nix { };
+
   zimlib = callPackage ../development/libraries/zimlib { };
 
   zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
