@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "8.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_client";
