@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "VCD/Waveform viewer for Unix and Win32";
     homepage = "https://gtkwave.sourceforge.net";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ thoughtpolice jiegec ];
+    maintainers = with lib.maintainers; [ thoughtpolice jiegec jleightcap ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
