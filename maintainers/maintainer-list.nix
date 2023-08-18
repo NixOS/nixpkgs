@@ -7489,6 +7489,12 @@
     githubId = 20320695;
     name = "Matan Bendix Shenhav";
   };
+  iynaix = {
+    email = "iynaix@gmail.com";
+    github = "iynaix";
+    githubId = 94313;
+    name = "Xianyi Lin";
+  };
   izorkin = {
     email = "Izorkin@gmail.com";
     github = "Izorkin";
