@@ -14,12 +14,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jupyter_client";
+  pname = "jupyter-client";
   version = "8.3.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jupyter_client";
+    inherit version;
     hash = "sha256-OvaZIf6ZYXvhZwOZoLhXrWcnXu/PopHiyBoWC3tlD18=";
   };
 
