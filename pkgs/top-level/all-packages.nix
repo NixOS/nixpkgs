@@ -12911,6 +12911,8 @@ with pkgs;
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
 
+  schemacrawler = callPackage ../development/tools/schemacrawler { };
+
   sharedown = callPackage ../tools/misc/sharedown { };
 
   shen-sbcl = callPackage ../development/interpreters/shen-sbcl { };
