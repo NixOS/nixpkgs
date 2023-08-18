@@ -1,29 +1,21 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# build
-, pybind11
-, setuptools
-
-# propagates
-, numpy
-
-# optionals
 , bokeh
+, buildPythonPackage
 , chromedriver
-, selenium
-
-# tests
+, fetchFromGitHub
 , matplotlib
+, meson-python
+, numpy
 , pillow
+, pybind11
 , pytestCheckHook
+, pythonOlder
+, selenium
 }:
 
 let countourpy = buildPythonPackage rec {
   pname = "contourpy";
-  version = "1.0.7";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -32,12 +24,12 @@ let countourpy = buildPythonPackage rec {
     owner = "contourpy";
     repo = "contourpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n04b9yUoUMH2H7t8um/8h5XaL3hzY/uNMYmOKTVKEPA=";
+    hash = "sha256-7M+5HMDqQI4UgVfW/MXsVyz/yM6wjTcJEdw7vPvzuNY=";
   };
 
   nativeBuildInputs = [
     pybind11
-    setuptools
+    meson-python
   ];
 
   propagatedBuildInputs = [
@@ -45,16 +37,20 @@ let countourpy = buildPythonPackage rec {
   ];
 
   passthru.optional-depdendencies = {
-    bokeh = [ bokeh chromedriver selenium ];
+    bokeh = [
+      bokeh
+      chromedriver
+      selenium
+    ];
   };
-
-  doCheck = false; # infinite recursion with matplotlib, tests in passthru
 
   nativeCheckInputs = [
     matplotlib
     pillow
     pytestCheckHook
   ];
+
+  doCheck = false; # infinite recursion with matplotlib, tests in passthru
 
   passthru.tests = {
     check = countourpy.overridePythonAttrs (_: { doCheck = true; });
@@ -65,11 +61,10 @@ let countourpy = buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/contourpy/contourpy/releases/tag/v${version}";
     description = "Python library for calculating contours in 2D quadrilateral grids";
     homepage = "https://github.com/contourpy/contourpy";
+    changelog = "https://github.com/contourpy/contourpy/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
-};
-in countourpy
+}; in countourpy
