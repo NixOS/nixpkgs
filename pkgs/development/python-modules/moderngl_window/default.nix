@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , glfw
@@ -13,7 +14,6 @@
 , pyside2
 , pythonOlder
 , scipy
-, stdenv
 , trimesh
 }:
 
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
     platforms = platforms.mesaPlatforms;
-    broken = stdenv.isDarwin; # darwin build breaks
+    broken = versionAtLeast pillow.version "2" || stdenv.isDarwin;
   };
 }
