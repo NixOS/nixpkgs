@@ -22,7 +22,7 @@
 
 let
   platforms = lib.platforms.linux ++ [ "x86_64-darwin" "aarch64-darwin" ];
-  ideaPlatforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" "aarch64-darwin" ];
+  ideaPlatforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" "aarch64-darwin" "aarch64-linux" ];
 
   inherit (stdenv.hostPlatform) system;
 
@@ -74,7 +74,8 @@ let
           ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
-            --replace-needed libcrypto.so.10 libcrypto.so
+            --replace-needed libcrypto.so.10 libcrypto.so \
+            --replace-needed libcrypt.so.1 libcrypt.so
 
           autoPatchelf $PWD/bin
         )
