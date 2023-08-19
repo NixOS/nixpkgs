@@ -29,6 +29,9 @@ let
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
     hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
   };
+  rpiOnlyPatches = [
+    ./0001-configs-rpi-allow-for-bigger-kernels.patch
+  ];
   buildUBoot = lib.makeOverridable ({
     version ? null
   , src ? null
@@ -46,9 +49,7 @@ let
 
     src = if src == null then defaultSrc else src;
 
-    patches = [
-      ./0001-configs-rpi-allow-for-bigger-kernels.patch
-    ] ++ extraPatches;
+    patches = extraPatches;
 
     postPatch = ''
       patchShebangs tools
@@ -436,42 +437,49 @@ in {
   ubootRaspberryPi = buildUBoot {
     defconfig = "rpi_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
+    extraPatches = rpiOnlyPatches;
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi2 = buildUBoot {
     defconfig = "rpi_2_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
+    extraPatches = rpiOnlyPatches;
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi3_32bit = buildUBoot {
     defconfig = "rpi_3_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
+    extraPatches = rpiOnlyPatches;
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi3_64bit = buildUBoot {
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
+    extraPatches = rpiOnlyPatches;
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi4_32bit = buildUBoot {
     defconfig = "rpi_4_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
+    extraPatches = rpiOnlyPatches;
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi4_64bit = buildUBoot {
     defconfig = "rpi_4_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
+    extraPatches = rpiOnlyPatches;
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPiZero = buildUBoot {
     defconfig = "rpi_0_w_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
+    extraPatches = rpiOnlyPatches;
     filesToInstall = ["u-boot.bin"];
   };
 
