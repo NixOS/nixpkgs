@@ -27,6 +27,7 @@
 , freeglut
 , libGLU
 , xcbuild
+, gitUpdater
 
 # for passthru.tests
 , cups-filters
@@ -151,9 +152,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    inherit cups-filters zathura;
-    inherit (python3.pkgs) pikepdf pymupdf;
+  passthru = {
+    tests = {
+      inherit cups-filters zathura;
+      inherit (python3.pkgs) pikepdf pymupdf;
+    };
+
+    updateScript = gitUpdater {
+      url = "https://git.ghostscript.com/mupdf.git";
+      ignoredVersions = ".rc.*";
+    };
   };
 
   meta = with lib; {
