@@ -171,6 +171,14 @@
       "url": "https://download.jetbrains.com/idea/ideaIU-2023.2-aarch64.tar.gz",
       "build_number": "232.8660.185"
     },
+    "mps": {
+      "update-channel": "MPS RELEASE",
+      "url-template": "https://download.jetbrains.com/mps/{versionMajorMinor}/MPS-{version}-aarch64.tar.gz",
+      "version": "2022.3",
+      "sha256": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "url": "https://download.jetbrains.com/mps/2022.3/MPS-2022.3-aarch64.tar.gz",
+      "build_number": "223.8836.1185"
+    },
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}-aarch64.tar.gz",
