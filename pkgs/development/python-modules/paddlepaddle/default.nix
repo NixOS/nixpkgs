@@ -22,7 +22,7 @@
 }:
 
 let
-  pname = "paddlepaddle${if cudaSupport then "_gpu" else ""}";
+  pname = "paddlepaddle" + lib.optionalString cudaSupport "-gpu";
   version = "2.5.0";
   format = "wheel";
   pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
