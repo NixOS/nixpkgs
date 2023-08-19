@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -11,36 +10,18 @@
 , dbus
 , polkit
 , accountsservice
-, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "7.0.2";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "default-settings";
     rev = version;
-    sha256 = "sha256-YFI1UM7CxjYkoIhSg9Fn81Ze6DX7D7p89xibk7ik8bI=";
+    sha256 = "sha256-j4K8qYwfu6/s4qnTSzwv6KRsk9f+Qr/l1bhLywKMHMU=";
   };
-
-  patches = [
-    # Don't set picture-uri-dark. elementary-gsettings-schemas won't
-    # aware of our custom remove-backgrounds.gschema.override so it
-    # will be a confusing invalid value otherwise (though gala actually
-    # can handle it well).
-    # https://github.com/elementary/default-settings/pull/282
-    (fetchpatch {
-      url = "https://github.com/elementary/default-settings/commit/881f84b8316e549ab627b7ac9acf352e0346a1a4.patch";
-      sha256 = "sha256-zf2Anr+ljLjHbn5ZmRj3nCRVJ52rwe4EkwdIfSOGeLQ=";
-    })
-    # https://github.com/elementary/default-settings/pull/283
-    (fetchpatch {
-      url = "https://github.com/elementary/default-settings/commit/37ef6062a8651875dd9d927c5730155c8b26e953.patch";
-      sha256 = "sha256-u7rrwuHgMPn1eIyIuwJcBgy8SshaXgrgFTSNm8IHbaY=";
-    })
-  ];
 
   nativeBuildInputs = [
     accountsservice
@@ -50,7 +31,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     polkit
-    python3
   ];
 
   mesonFlags = [
@@ -58,11 +38,6 @@ stdenv.mkDerivation rec {
     "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
     "-Dplank-dockitems=false"
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   preInstall = ''
     # Install our override for plank dockitems as the desktop file path is different.

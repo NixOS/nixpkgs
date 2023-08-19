@@ -364,7 +364,6 @@
 , "vscode-html-languageserver-bin"
 , "vscode-json-languageserver"
 , "vscode-json-languageserver-bin"
-, "vue-cli"
 , "vue-language-server"
 , "wavedrom-cli"
 , "web-ext"
