@@ -5043,6 +5043,8 @@ self: super: with self; {
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
+  imagededup = callPackage ../development/python-modules/imagededup { };
+
   imagehash = callPackage ../development/python-modules/imagehash { };
 
   imageio = callPackage ../development/python-modules/imageio { };
@@ -6658,6 +6660,8 @@ self: super: with self; {
   mockupdb = callPackage ../development/python-modules/mockupdb { };
 
   moddb = callPackage ../development/python-modules/moddb { };
+
+  model-bakery = callPackage ../development/python-modules/model-bakery { };
 
   modeled = callPackage ../development/python-modules/modeled { };
 

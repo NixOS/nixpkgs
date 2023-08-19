@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 1f8710308cee679b61629e0050952ea37d647ff4
-  ref: refs/tags/6.3.29
+  revision: e15c05b0bd8774e33c33c100965ec7e301e4f295
+  ref: refs/tags/6.3.30
   specs:
-    metasploit-framework (6.3.29)
+    metasploit-framework (6.3.30)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -80,6 +80,7 @@ GIT
       rex-text
       rex-zip
       ruby-macho
+      ruby-mysql
       ruby_smb (~> 3.2.0)
       rubyntlm
       rubyzip
@@ -132,13 +133,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.803.0)
+    aws-partitions (1.806.0)
     aws-sdk-core (3.180.3)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.397.0)
+    aws-sdk-ec2 (1.399.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-ec2instanceconnect (1.32.0)
@@ -276,7 +277,7 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     net-ssh (7.2.0)
-    network_interface (0.0.2)
+    network_interface (0.0.4)
     nexpose (7.3.0)
     nio4r (2.5.9)
     nokogiri (1.14.5)
@@ -301,7 +302,7 @@ GEM
       ttfunk
     pg (1.5.3)
     public_suffix (5.0.3)
-    puma (6.3.0)
+    puma (6.3.1)
       nio4r (~> 2.0)
     racc (1.7.1)
     rack (2.2.8)
@@ -327,7 +328,7 @@ GEM
     rasn1 (0.12.1)
       strptime (~> 0.2.5)
     rb-readline (0.5.5)
-    recog (3.1.1)
+    recog (3.1.2)
       nokogiri
     redcarpet (3.6.0)
     reline (0.3.7)
@@ -383,6 +384,7 @@ GEM
     rexml (3.2.6)
     rkelly-remix (0.0.7)
     ruby-macho (4.0.0)
+    ruby-mysql (4.0.0)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
     ruby_smb (3.2.5)

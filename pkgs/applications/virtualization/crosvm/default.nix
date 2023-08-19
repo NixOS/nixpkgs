@@ -5,27 +5,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "114.1";
+  version = "115.2";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "a8b48953a7d209b32d34fe64e2324cb1113b4336";
-    sha256 = "PdP+Jx2oIAy+gxHjJDU5YlAlSYFtoX7ey3r5ELD9QPM=";
+    rev = "d14053a211eb6753c53ced71fad2d3b402b997e6";
+    sha256 = "8p6M9Q9E07zqtHYdIIi6io9LLatd+9fH4Inod2Xjy5M=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # Backport fix for non-Glibc.
+    # Backport option to not vendor virglrenderer.
     (fetchpatch {
-      url = "https://chromium.googlesource.com/chromiumos/platform/crosvm/+/8afa6096aa0417ccc5de0213a241dd7ebd25ac0a%5E%21/?format=TEXT";
+      url = "https://chromium.googlesource.com/crosvm/crosvm/+/dde9aa0e6d89a090f5d5f000822f7911eba98445%5E%21/?format=TEXT";
       decode = "base64 -d";
-      hash = "sha256-oRwGprs/P2ZG8BM9CMzyEyM8fjuyFINQw4rjTq9rKXA=";
+      hash = "sha256-W/s1i2reBXsbr0AOEtL9go3TNNYMwDVEu6pz3Q9wBSU=";
     })
   ];
 
   separateDebugInfo = true;
 
-  cargoSha256 = "EhxrtCGrwCcODCjPUONjY1glPGEXbjvk6No/g2kJzI8=";
+  cargoSha256 = "ZXyMeu2forItGcsGrNBWhV1V9HzVQK6LM4TxBrxAZnU=";
 
   nativeBuildInputs = [
     pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
@@ -39,11 +39,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs third_party/minijail/tools/*.py
   '';
 
-  # crosvm mistakenly expects the stable protocols to be in the root
-  # of the pkgdatadir path, rather than under the "stable"
-  # subdirectory.
-  PKG_CONFIG_WAYLAND_PROTOCOLS_PKGDATADIR =
-    "${wayland-protocols}/share/wayland-protocols/stable";
+  CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
 
   buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
 

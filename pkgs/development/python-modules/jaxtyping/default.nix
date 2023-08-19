@@ -14,16 +14,16 @@
 }:
 
 let
-  jaxtyping = buildPythonPackage rec {
+  self = buildPythonPackage rec {
     pname = "jaxtyping";
-    version = "0.2.20";
+    version = "0.2.21";
     format = "pyproject";
 
     src = fetchFromGitHub {
       owner = "google";
-      repo = pname;
+      repo = "jaxtyping";
       rev = "refs/tags/v${version}";
-      hash = "sha256-q/KQGV7I7w5p7VP8C9BDUHfPsuCMf2v304qiH+XCzyU=";
+      hash = "sha256-BacfFcrzXeS6LemU7P6oCZJGB/Zzq09kEPuz2rTIyfI=";
     };
 
     nativeBuildInputs = [
@@ -49,7 +49,7 @@ let
 
     # Enable tests via passthru to avoid cyclic dependency with equinox.
     passthru.tests = {
-      check = jaxtyping.overridePythonAttrs { doCheck = true; };
+      check = self.overridePythonAttrs { doCheck = true; };
     };
 
     pythonImportsCheck = [ "jaxtyping" ];
@@ -61,4 +61,4 @@ let
       maintainers = with maintainers; [ GaetanLepage ];
     };
   };
- in jaxtyping
+ in self

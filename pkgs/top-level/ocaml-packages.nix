@@ -1541,6 +1541,8 @@ let
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
+    sel = callPackage ../development/ocaml-modules/sel {};
+
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
     semver = callPackage ../development/ocaml-modules/semver { };

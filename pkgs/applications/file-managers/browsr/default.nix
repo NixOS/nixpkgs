@@ -70,5 +70,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    broken = versionAtLeast python3.pkgs.pandas.version "2" || versionAtLeast python3.pkgs.pillow.version "10";
   };
 }
