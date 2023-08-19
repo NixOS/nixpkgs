@@ -30453,6 +30453,8 @@ with pkgs;
 
   join-desktop = callPackage ../applications/misc/join-desktop { };
 
+  joincap = callPackage ../tools/security/joincap { };
+
   json-plot = callPackage ../applications/graphics/json-plot { };
 
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
