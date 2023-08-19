@@ -60,7 +60,7 @@ buildPythonPackage {
     fixRunPath $out/${python.sitePackages}/paddle/fluid/libpaddle.so
   '';
 
-  buildInputs = [
+  nativeBuildInputs = [
     setuptools
   ];
 
