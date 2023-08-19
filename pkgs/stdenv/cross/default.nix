@@ -79,7 +79,7 @@ in lib.init bootStages ++ [
         ++ lib.optionals
              (hostPlatform.isLinux && !buildPlatform.isLinux)
              [ buildPackages.patchelf ]
-        ++ [ buildPackages.updateAutotoolsGnuConfigScriptsHook ];
+        ;
     }));
   })
 
