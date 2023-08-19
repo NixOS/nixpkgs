@@ -87,6 +87,7 @@ mapAliases {
   inherit (pkgs) hsd; # added 2023-08-19
   inherit (pkgs) html-minifier; # added 2023-08-19
   inherit (pkgs) htmlhint; # added 2023-08-19
+  inherit (pkgs) http-server; # added 2024-01-20
   hueadm = pkgs.hueadm; # added 2023-07-31
   inherit (pkgs) hyperpotamus; # added 2023-08-19
   immich = pkgs.immich-cli; # added 2023-08-19
