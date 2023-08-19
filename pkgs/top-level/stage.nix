@@ -178,9 +178,11 @@ let
     # that target system. For instance, pkgsCross.raspberryPi.hello,
     # will refer to the "hello" package built for the ARM6-based
     # Raspberry Pi.
-    pkgsCross = lib.mapAttrs (n: crossSystem:
-                              nixpkgsFun { inherit crossSystem; })
-                              lib.systems.examples;
+    pkgsCross =
+      lib.mapAttrs (n: crossSystem:
+        lib.warn "pkgsCross is deprecated; please use pkgsOn instead"
+          (nixpkgsFun { inherit crossSystem; }))
+        lib.systems.examples;
 
     pkgsOn =
       (lib.flip lib.mapAttrs) lib.systems.parse.cpuTypes (cpu: _:
