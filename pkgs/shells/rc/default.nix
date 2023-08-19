@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
     "MANPREFIX=${placeholder "man"}/share/man"
     "CPPFLAGS=\"-DSIGCLD=SIGCHLD\""
+    "EDIT=readline"
   ];
 
   buildFlags = [
