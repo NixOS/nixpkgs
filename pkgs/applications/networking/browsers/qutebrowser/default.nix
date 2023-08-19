@@ -19,11 +19,11 @@
 
   python3Packages = python3.pkgs;
   pdfjs = let
-    version = "2.14.305";
+    version = "3.9.179";
   in
   fetchzip {
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-    hash = "sha256-E7t+0AUndrgi4zfJth0w28RmWLqLyXMUCnueNf/gNi4=";
+    hash = "sha256-QoJFb7MlZN6lDe2Yalsd10sseukL6+tNRi6JzLPVBYw=";
     stripRoot = false;
   };
 
