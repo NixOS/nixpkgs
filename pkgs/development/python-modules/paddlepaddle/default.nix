@@ -11,6 +11,7 @@
 , setuptools
 , cudaSupport ? config.cudaSupport or false
 , cudaPackages_11 ? {}
+, addOpenGLRunpah
 # runtime dependencies
 , httpx
 , numpy
