@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2023.7.26";
+  version = "2023.8.19";
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-HHk2kp7FfF3ezHyF8H+oss5Ta1yJE3dkzKUIvpDhHv0=";
+    hash = "sha256-Evmfh6GHO2dGIoz94Y93JE5sH/uF1/7ZXmOKrnDYBZA=";
   };
 
   nativeBuildInputs = [
