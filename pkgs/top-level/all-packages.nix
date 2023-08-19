@@ -6731,6 +6731,8 @@ with pkgs;
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
+  cmospwd = callPackage ../tools/security/cmospwd { };
+
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
   cmt = callPackage ../applications/audio/cmt { };
