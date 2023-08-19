@@ -141,7 +141,6 @@
 , "grunt-cli"
 , "makam"
 , "meshcommander"
-, "gqlint"
 , "gulp"
 , "gulp-cli"
 , "he"
