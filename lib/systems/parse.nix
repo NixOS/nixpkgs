@@ -353,7 +353,7 @@ rec {
 
     gnueabi      = { float = "soft"; inherit (gnu) kernels; };
     gnueabihf    = { float = "hard"; inherit (gnu) kernels; };
-    gnu          = { kernels = [ "freebsd12" "freebsd13" "linux" ];
+    gnu          = { kernels = [ "freebsd12" "freebsd13" "linux" "windows" ];
       assertions = [
         { assertion = platform: !platform.isAarch32;
           message = ''
