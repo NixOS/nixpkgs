@@ -51,6 +51,7 @@ mapAliases {
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
   castnow = pkgs.castnow; # added 2023-07-30
   eask = pkgs.eask; # added 2023-08-17
+  inherit (pkgs.elmPackages) elm-test;
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   flood = pkgs.flood; # Added 2023-07-25
   gtop = pkgs.gtop; # added 2023-07-31
