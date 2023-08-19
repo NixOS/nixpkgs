@@ -19,13 +19,13 @@
 
 python3Packages.buildPythonApplication rec  {
   pname = "grapejuice";
-  version = "7.8.3";
+  version = "7.14.4";
 
   src = fetchFromGitLab {
     owner = "BrinkerVII";
     repo = "grapejuice";
     rev = "v${version}";
-    sha256 = "sha256-jNh3L6JDuJryFpHQaP8UesBmepmJopoHxb/XUfOwZz4=";
+    hash = "sha256-CWTnofJXx9T/hGXx3rdephXHjpiVRdFEJQ1u2v6n7yo=";
   };
 
   nativeBuildInputs = [
@@ -86,6 +86,16 @@ python3Packages.buildPythonApplication rec  {
 
     substituteInPlace src/grapejuice_common/models/settings_model.py \
       --replace 'default_wine_home: Optional[str] = ""' 'default_wine_home: Optional[str] = "${wine}"'
+
+    # Removed in 7.10.3. Required to set up the binary files.
+   substituteInPlace setup.py \
+      --replace 'install_requires=install_requires(),' 'install_requires=install_requires(),
+        entry_points={
+            "console_scripts": [
+                "grapejuice=grapejuice.cli.main:easy_install_main",
+                "grapejuice-gui=grapejuice.cli.gui:easy_install_main"
+            ]
+        },'
   '';
 
   postInstall = ''
