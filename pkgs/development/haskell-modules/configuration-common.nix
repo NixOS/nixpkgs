@@ -2529,9 +2529,13 @@ self: super: {
   lucid-htmx = doJailbreak super.lucid-htmx;
 
   # Needs lsp >= 2.1
-  futhark = super.futhark.overrideScope (fself: _: {
-    lsp = fself.lsp_2_1_0_0;
-    lsp-types = fself.lsp-types_2_0_1_1;
+  futhark = super.futhark.override {
+    lsp = self.lsp_2_1_0_0;
+  };
+
+  # Provide matching lsp-types version
+  lsp_2_1_0_0 = doDistribute (super.lsp_2_1_0_0.override {
+    lsp-types = self.lsp-types_2_0_1_1;
   });
 
   # Too strict bounds on hspec
