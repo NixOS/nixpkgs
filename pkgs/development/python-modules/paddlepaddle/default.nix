@@ -62,11 +62,8 @@ buildPythonPackage {
     fixRunPath $out/${python.sitePackages}/paddle/fluid/libpaddle.so
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   propagatedBuildInputs = [
+    setuptools
     httpx
     numpy
     protobuf
