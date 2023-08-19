@@ -20,8 +20,8 @@
         "new": "neodev-nvim"
     },
     "nvchad-extensions": {
-      "date": "2023-08-19",
-      "new": "nvchad-ui"
+        "date": "2023-08-19",
+        "new": "nvchad-ui"
     },
     "nvim-bufferline-lua": {
         "date": "2021-08-22",
