@@ -120,6 +120,7 @@ buildPythonPackage rec {
     "click"
     "grpcio"
     "protobuf"
+    "virtualenv"
   ];
 
   propagatedBuildInputs = [

@@ -2,7 +2,7 @@
 , stdenv
 , pythonOlder
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ruff
 , pygls
 , lsprotocol
@@ -15,14 +15,15 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.35";
+  version = "0.0.36";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "ruff_lsp";
-    hash = "sha256-qRNpswpQitvVczFBKsUFlew+W1uEjtkbWnmwBRUHq0w=";
+  src = fetchFromGitHub {
+    owner = "astral-sh";
+    repo = "ruff-lsp";
+    rev = "v${version}";
+    hash = "sha256-29LK/upjtgv9LIOn4bJMHkWXUJEkR0pR5fuyOYP9hAI=";
   };
 
   postPatch = ''
