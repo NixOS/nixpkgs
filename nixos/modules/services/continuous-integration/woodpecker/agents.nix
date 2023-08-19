@@ -106,28 +106,30 @@ in
       agents = lib.mkOption {
         default = { };
         type = lib.types.attrsOf agentModule;
-        example = {
-          podman = {
-            environment = {
-              WOODPECKER_SERVER = "localhost:9000";
-              WOODPECKER_BACKEND = "docker";
-              DOCKER_HOST = "unix:///run/podman/podman.sock";
+        example = lib.literalExpression ''
+          {
+            podman = {
+              environment = {
+                WOODPECKER_SERVER = "localhost:9000";
+                WOODPECKER_BACKEND = "docker";
+                DOCKER_HOST = "unix:///run/podman/podman.sock";
+              };
+
+              extraGroups = [ "podman" ];
+
+              environmentFile = [ "/run/secrets/woodpecker/agent-secret.txt" ];
             };
 
-            extraGroups = [ "podman" ];
+            exec = {
+              environment = {
+                WOODPECKER_SERVER = "localhost:9000";
+                WOODPECKER_BACKEND = "local";
+              };
 
-            environmentFile = [ "/run/secrets/woodpecker/agent-secret.txt" ];
-          };
-
-          exec = {
-            environment = {
-              WOODPECKER_SERVER = "localhost:9000";
-              WOODPECKER_BACKEND = "local";
+              environmentFile = [ "/run/secrets/woodpecker/agent-secret.txt" ];
             };
-
-            environmentFile = [ "/run/secrets/woodpecker/agent-secret.txt" ];
-          };
-        };
+          }
+        '';
         description = lib.mdDoc "woodpecker-agents configurations";
       };
     };
