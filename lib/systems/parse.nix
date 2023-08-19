@@ -498,7 +498,7 @@ rec {
                          , vendor ? ""
                          , kernel
                          , # Also inferred below
-                           abi    ? assert false; null
+                           abi    ? null
                          } @ args: let
     getCpu    = name: cpuTypes.${name} or (throw "Unknown CPU type: ${name}");
     getVendor = name:  vendors.${name} or (throw "Unknown vendor: ${name}");
@@ -531,7 +531,7 @@ rec {
                   parsed.abi == abis.unknown then
                     vendors.apple    # nixpkgs-specific behavior
           else if isx86 parsed && isLinux parsed then vendors.pc
-          else if (args?abi && (args.abi=="eabi" || args.abi=="eabihf")) && !(isLinux parsed || isNetBSD parsed) then vendor_
+          else if ((abi=="eabi" || abi=="eabihf")) && !(isLinux parsed || isNetBSD parsed) then vendor_
           else if isx86 parsed then vendors.pc
           else clobberedVendor;
 
@@ -539,7 +539,7 @@ rec {
                else if hasPrefix "netbsd" args.kernel then getKernel "netbsd"
                else                                   getKernel args.kernel;
       abi =
-        /**/ if args ? abi       then getAbi args.abi
+        /**/ if abi != null      then getAbi abi
         else if isLinux parsed || isWindows parsed then
           if isAarch32 parsed then
             if parsed.vendor == vendors.apple then abis.gnu
