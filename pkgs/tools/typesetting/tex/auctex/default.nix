@@ -1,11 +1,8 @@
 { lib, stdenv, fetchurl, emacs, texlive, ghostscript }:
 
-let auctex = stdenv.mkDerivation ( rec {
-  # Make this a valid tex(live-new) package;
-  # the pkgs attribute is provided with a hack below.
+stdenv.mkDerivation rec {
   pname = "auctex";
   version = "12.3";
-  tlType = "run";
 
   outputs = [ "out" "tex" ];
 
@@ -35,6 +32,4 @@ let auctex = stdenv.mkDerivation ( rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };
-});
-
-in auctex // { pkgs = [ auctex.tex ]; }
+}

@@ -44,9 +44,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   # experimental texlive.combine support
   # (note that only the bin/ folder will be combined into texlive)
   passthru = {
-    tlType = "bin";
     tlDeps = with texlive; [ kpathsea t1utils metafont ];
-    pkgs = [ finalAttrs.finalPackage ];
   };
 
   meta = with lib; {
