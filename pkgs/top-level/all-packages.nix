@@ -20233,6 +20233,8 @@ with pkgs;
 
   uefi-firmware-parser = callPackage ../development/tools/analysis/uefi-firmware-parser { };
 
+  ufbt = python3Packages.callPackage ../development/tools/build-managers/ufbt { };
+
   uhd3_5 = callPackage ../applications/radio/uhd/3.5.nix { };
   uhd = callPackage ../applications/radio/uhd { };
 
