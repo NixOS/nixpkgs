@@ -57,7 +57,7 @@ buildPythonPackage {
       p=$(patchelf --print-rpath $1)
       patchelf --set-rpath "$p:$libraryPath" $1
     }
-    fixRunPath $out/lib/python${python.pythonVersion}/site-packages/paddle/fluid/libpaddle.so
+    fixRunPath $out/${python.sitePackages}/paddle/fluid/libpaddle.so
   '';
 
   buildInputs = [
