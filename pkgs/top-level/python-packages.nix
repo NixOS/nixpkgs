@@ -5870,7 +5870,7 @@ self: super: with self; {
   };
 
   libarcus = callPackage ../development/python-modules/libarcus {
-    inherit (pkgs) protobuf;
+    protobuf = pkgs.protobuf3_21;
   };
 
   libasyncns = callPackage ../development/python-modules/libasyncns {
