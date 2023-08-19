@@ -10175,6 +10175,8 @@ self: super: with self; {
 
   pytest-virtualenv = callPackage ../development/python-modules/pytest-virtualenv { };
 
+  pytest-voluptuous = callPackage ../development/python-modules/pytest-voluptuous { };
+
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
