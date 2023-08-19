@@ -64,6 +64,10 @@ buildPythonPackage {
     }
     fixRunPath $out/${python.sitePackages}/paddle/fluid/libpaddle.so
   '';
+  
+  nativeBuildInputs = [
+    addOpenGLRunpath
+  ];
 
   propagatedBuildInputs = [
     setuptools
