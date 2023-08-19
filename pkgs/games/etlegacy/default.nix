@@ -118,6 +118,8 @@ in
       makeWrapper $out/bin/etlded.* $out/bin/etlded
     '';
 
+    hardeningDisable = [ "fortify" ];
+
     meta = with lib; {
       description = "ET: Legacy is an open source project based on the code of Wolfenstein: Enemy Territory which was released in 2010 under the terms of the GPLv3 license";
       homepage = "https://etlegacy.com";
