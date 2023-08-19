@@ -2,6 +2,9 @@
 , rustPlatform
 , fetchFromGitHub
 , makeBinaryWrapper
+, runtimeShell
+, bat
+, gnugrep
 , gnumake
 }:
 
@@ -24,7 +27,8 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/fzf-make \
-      --suffix PATH : ${lib.makeBinPath [ gnumake ]}
+      --set SHELL ${runtimeShell} \
+      --suffix PATH : ${lib.makeBinPath [ bat gnugrep gnumake ]}
   '';
 
   meta = with lib; {
