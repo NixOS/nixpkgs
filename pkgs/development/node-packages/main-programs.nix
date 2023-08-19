@@ -42,7 +42,6 @@
   dockerfile-language-server-nodejs = "docker-langserver";
   fast-cli = "fast";
   fauna-shell = "fauna";
-  firebase-tools = "firebase";
   fkill-cli = "fkill";
   fleek-cli = "fleek";
   git-run = "gr";

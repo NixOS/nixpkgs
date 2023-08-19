@@ -131,7 +131,6 @@
 , "expo-cli"
 , "fast-cli"
 , "fauna-shell"
-, "firebase-tools"
 , "fixjson"
 , "fkill-cli"
 , "fleek-cli"

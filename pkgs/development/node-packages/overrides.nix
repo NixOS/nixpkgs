@@ -136,9 +136,6 @@ final: prev: {
     '';
   };
 
-  firebase-tools = prev.firebase-tools.override {
-    nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
-  };
 
   git-ssb = prev.git-ssb.override (oldAttrs: {
     buildInputs = [ final.node-gyp-build ];
