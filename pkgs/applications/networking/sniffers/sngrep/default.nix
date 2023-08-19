@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     ./bootstrap.sh
   '';
 
+  doCheck = true;
+
   meta = with lib; {
     description = "A tool for displaying SIP calls message flows from terminal";
     homepage = "https://github.com/irontec/sngrep";
