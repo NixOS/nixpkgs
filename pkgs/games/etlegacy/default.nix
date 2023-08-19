@@ -25,33 +25,26 @@
 }: let
   version = "2.81.1";
 
-  fetchAsset = {
-    asset,
-    sha256,
-  }:
-    fetchurl
-    {
-      url = "https://mirror.etlegacy.com/etmain/${asset}";
-      inherit sha256;
-    };
-  pak0 =
-    fetchAsset
-    {
-      asset = "pak0.pk3";
-      sha256 = "712966b20e06523fe81419516500e499c86b2b4fec823856ddbd333fcb3d26e5";
-    };
-  pak1 =
-    fetchAsset
-    {
-      asset = "pak1.pk3";
-      sha256 = "5610fd749024405b4425a7ce6397e58187b941d22092ef11d4844b427df53e5d";
-    };
-  pak2 =
-    fetchAsset
-    {
-      asset = "pak2.pk3";
-      sha256 = "a48ab749a1a12ab4d9137286b1f23d642c29da59845b2bafc8f64e052cf06f3e";
-    };
+  fetchAsset = { asset, hash }: fetchurl {
+    url = "https://mirror.etlegacy.com/etmain/${asset}";
+    inherit hash;
+  };
+
+  pak0 = fetchAsset {
+    asset = "pak0.pk3";
+    hash = "sha256-cSlmsg4GUj/oFBlRZQDkmchrK0/sgjhW3b0zP8s9JuU=";
+  };
+
+  pak1 = fetchAsset {
+    asset = "pak1.pk3";
+    hash = "sha256-VhD9dJAkQFtEJafOY5flgYe5QdIgku8R1IRLQn31Pl0=";
+  };
+
+  pak2 = fetchAsset {
+    asset = "pak2.pk3";
+    hash = "sha256-pIq3SaGhKrTZE3KGsfI9ZCwp2lmEWyuvyPZOBSzwbz4=";
+  };
+
   fakeGit = writeScriptBin "git" ''
     #! ${stdenv.shell} -e
     if [ "$1" = "describe" ]; then
