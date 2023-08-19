@@ -21,13 +21,13 @@
 , gtk3 }:
 
 let
-  version = "20.32.11";
-  openjdk = "20.0.2";
+  version = "19.32.13";
+  openjdk = "19.0.2";
 
-  sha256_x64_linux = "sha256-sq9EKhN6w6YyJ4vPXRSlIf6UbDU/Lfsyh15yvBbmMjo=";
-  sha256_aarch64_linux = "sha256-NpPb64PwDl5VESDO1+tINjtW4+4D+D2PeyPeQ8aIirw=";
-  sha256_x64_darwin = "sha256-PdOHIwaFR1C3tMuFEfelSEXHGYI5WQW4YUe+NGLxA0c=";
-  sha256_aarch64_darwin = "sha256-lJ5FabM1uQnqZgwtFfcRt/mHMz+4UwnvlifcdOmlbJs=";
+  sha256_x64_linux = "sha256-SplK3tHZs1JY1UOlnUlj0mh6EJSoGLeaIfACc/u8W8o=";
+  sha256_aarch64_linux = "sha256-diFu+mnkSP5IfVcxA3KuoN8c8VuCl0yEqMsNl+uTQWU=";
+  sha256_x64_darwin = "sha256-KARXWumsY+OcqpEOV2EL9SsPni1nGSipjRji/Mn2KsE=";
+  sha256_aarch64_darwin = "sha256-F30FjZaLL756X/Xs6xjNwW9jds4pEATxoxOeeLL7Y5E=";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isAarch64 && stdenv.isDarwin then
@@ -39,10 +39,7 @@ let
   else
     sha256_x64_linux;
   extension = "tar.gz";
-  architecture = if stdenv.isAarch64 then
-    "aarch64"
-  else
-    "x64";
+  architecture = if stdenv.isAarch64 then "aarch64" else "x64";
 
   runtimeDependencies = [ cups ]
     ++ lib.optionals gtkSupport [ cairo glib gtk3 ];

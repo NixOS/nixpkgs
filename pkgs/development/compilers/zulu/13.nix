@@ -18,16 +18,18 @@
 , gtkSupport ? stdenv.isLinux
 , cairo
 , glib
-, gtk3 }:
+, gtk3
+}:
 
 let
-  version = "20.32.11";
-  openjdk = "20.0.2";
+  version = "13.54.17";
+  openjdk = "13.0.14";
 
-  sha256_x64_linux = "sha256-sq9EKhN6w6YyJ4vPXRSlIf6UbDU/Lfsyh15yvBbmMjo=";
-  sha256_aarch64_linux = "sha256-NpPb64PwDl5VESDO1+tINjtW4+4D+D2PeyPeQ8aIirw=";
-  sha256_x64_darwin = "sha256-PdOHIwaFR1C3tMuFEfelSEXHGYI5WQW4YUe+NGLxA0c=";
-  sha256_aarch64_darwin = "sha256-lJ5FabM1uQnqZgwtFfcRt/mHMz+4UwnvlifcdOmlbJs=";
+  sha256_x64_linux = "sha256-ZYictM9B2CM1GhbFfghwuKsPLPHUGHclQgF4DUhOXe0=";
+  sha256_i686_linux = "sha256-pMhR3XskxXfCSJtW+RsESKUErdUY5u3109qC+julZeM=";
+  sha256_aarch64_linux = "sha256-XxRV8NZUG+l+QGMwEUtGL1nCmTWBs7h+ORg48VaxHYo=";
+  sha256_x64_darwin = "sha256-AYewUjHVbWlu9zPcWsE5xFQw5G+pMKO6/YuitPl4MOE=";
+  sha256_aarch64_darwin = "sha256-MCVTuhjgMXNqid9hyiEuJl1W8hHik1MafNJ9NmMyWi8=";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isAarch64 && stdenv.isDarwin then
@@ -36,16 +38,23 @@ let
     sha256_x64_darwin
   else if stdenv.isAarch64 then
     sha256_aarch64_linux
+  else if stdenv.isi686 then
+    sha256_i686_linux
   else
     sha256_x64_linux;
   extension = "tar.gz";
   architecture = if stdenv.isAarch64 then
     "aarch64"
+  else if stdenv.isi686 then
+    "i686"
   else
     "x64";
 
-  runtimeDependencies = [ cups ]
-    ++ lib.optionals gtkSupport [ cairo glib gtk3 ];
+  runtimeDependencies = [
+    cups
+  ] ++ lib.optionals gtkSupport [
+    cairo glib gtk3
+  ];
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 
 in stdenv.mkDerivation {
@@ -54,8 +63,7 @@ in stdenv.mkDerivation {
   pname = "zulu";
 
   src = fetchurl {
-    url =
-      "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_${architecture}.${extension}";
+    url = "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_${architecture}.${extension}";
     sha256 = hash;
   };
 
@@ -72,9 +80,13 @@ in stdenv.mkDerivation {
     zlib
   ];
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals stdenv.isDarwin [ unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    unzip
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -109,7 +121,9 @@ in stdenv.mkDerivation {
       patchelf --add-needed libfontconfig.so {} \;
   '';
 
-  passthru = { home = zulu; };
+  passthru = {
+    home = zulu;
+  };
 
   meta = with lib; {
     homepage = "https://www.azul.com/products/zulu/";
@@ -121,8 +135,13 @@ in stdenv.mkDerivation {
       operating systems, containers, hypervisors and Cloud platforms.
     '';
     maintainers = with maintainers; [ ];
-    platforms =
-      [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "java";
   };
 }

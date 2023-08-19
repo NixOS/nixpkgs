@@ -21,13 +21,14 @@
 , gtk3 }:
 
 let
-  version = "20.32.11";
-  openjdk = "20.0.2";
+  version = "15.46.17";
+  openjdk = "15.0.10";
 
-  sha256_x64_linux = "sha256-sq9EKhN6w6YyJ4vPXRSlIf6UbDU/Lfsyh15yvBbmMjo=";
-  sha256_aarch64_linux = "sha256-NpPb64PwDl5VESDO1+tINjtW4+4D+D2PeyPeQ8aIirw=";
-  sha256_x64_darwin = "sha256-PdOHIwaFR1C3tMuFEfelSEXHGYI5WQW4YUe+NGLxA0c=";
-  sha256_aarch64_darwin = "sha256-lJ5FabM1uQnqZgwtFfcRt/mHMz+4UwnvlifcdOmlbJs=";
+  sha256_x64_linux = "sha256-J45vhSmgBH77x0dTiPoj3uJHrz4wGwDx3JxDB5W6b+E=";
+  sha256_i686_linux = "sha256-kubLcx7a9y+Ei29lwJlM7i0ClU1mRMJNyfZjg+EIdBU=";
+  sha256_aarch64_linux = "sha256-EJeG95fFsteEHzlKO8kZtQoe2dJKPytfuy8SYN/3KRg=";
+  sha256_x64_darwin = "sha256-uzdtXwzTCSh8e12YxVztd4CkQqJiU4I0sdmVD7DGNG0=";
+  sha256_aarch64_darwin = "sha256-LWddzIITCQds30sjZsPmz/k8ZZpvKYiHYpez8PLKTB8=";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isAarch64 && stdenv.isDarwin then
@@ -36,11 +37,15 @@ let
     sha256_x64_darwin
   else if stdenv.isAarch64 then
     sha256_aarch64_linux
+  else if stdenv.isi686 then
+    sha256_i686_linux
   else
     sha256_x64_linux;
   extension = "tar.gz";
   architecture = if stdenv.isAarch64 then
     "aarch64"
+  else if stdenv.isi686 then
+    "i686"
   else
     "x64";
 
@@ -121,8 +126,13 @@ in stdenv.mkDerivation {
       operating systems, containers, hypervisors and Cloud platforms.
     '';
     maintainers = with maintainers; [ ];
-    platforms =
-      [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "java";
   };
 }

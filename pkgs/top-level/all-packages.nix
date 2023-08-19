@@ -17469,6 +17469,11 @@ with pkgs;
 
   zulip-term = callPackage ../applications/networking/instant-messengers/zulip-term { };
 
+  zulu19 = callPackage ../development/compilers/zulu/19.nix { };
+  zulu17 = callPackage ../development/compilers/zulu/17.nix { };
+  zulu15 = callPackage ../development/compilers/zulu/15.nix { };
+  zulu13 = callPackage ../development/compilers/zulu/13.nix { };
+  zulu11 = callPackage ../development/compilers/zulu/11.nix { };
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
   zulu = callPackage ../development/compilers/zulu { };
 

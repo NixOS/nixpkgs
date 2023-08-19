@@ -21,26 +21,28 @@
 , gtk3 }:
 
 let
-  version = "20.32.11";
-  openjdk = "20.0.2";
+  version = "17.44.15";
+  openjdk = "17.0.8";
 
-  sha256_x64_linux = "sha256-sq9EKhN6w6YyJ4vPXRSlIf6UbDU/Lfsyh15yvBbmMjo=";
-  sha256_aarch64_linux = "sha256-NpPb64PwDl5VESDO1+tINjtW4+4D+D2PeyPeQ8aIirw=";
-  sha256_x64_darwin = "sha256-PdOHIwaFR1C3tMuFEfelSEXHGYI5WQW4YUe+NGLxA0c=";
-  sha256_aarch64_darwin = "sha256-lJ5FabM1uQnqZgwtFfcRt/mHMz+4UwnvlifcdOmlbJs=";
+  sha256_x64_linux = "sha256-Pm27+aXMGhgGUlUu4FtNRfxW9b5dcBWdLTvBidYSeTA=";
+  sha256_i686_linux = "sha256-94XMV5w41BCoCghhnMPzzUVFGTI6ocQc5lPveWNQSXg=";
+  sha256_x64_darwin = "sha256-dAdQNasAqo66pxxItCth7fNPsm+bjnJLzLwo5GHR9uQ=";
+  sha256_aarch64_darwin = "sha256-GR/BT9Xp7NwGMubPpUpJFxHu6zSPz6RL1l0kwdzWd3M=";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isAarch64 && stdenv.isDarwin then
     sha256_aarch64_darwin
   else if stdenv.isDarwin then
     sha256_x64_darwin
-  else if stdenv.isAarch64 then
-    sha256_aarch64_linux
+  else if stdenv.isi686 then
+    sha256_i686_linux
   else
     sha256_x64_linux;
-  extension = "tar.gz";
+  extension = if stdenv.isDarwin then "tar.gz" else "zip";
   architecture = if stdenv.isAarch64 then
     "aarch64"
+  else if stdenv.isi686 then
+    "i686"
   else
     "x64";
 
@@ -73,8 +75,8 @@ in stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals stdenv.isDarwin [ unzip ];
+    ++ lib.optionals stdenv.isLinux [ unzip ]
+    ++ lib.optionals stdenv.isDarwin [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
@@ -122,7 +124,7 @@ in stdenv.mkDerivation {
     '';
     maintainers = with maintainers; [ ];
     platforms =
-      [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+      [ "x86_64-linux" "x86_64-darwin" "i686-linux" "aarch64-darwin" ];
     mainProgram = "java";
   };
 }
