@@ -8697,6 +8697,8 @@ with pkgs;
 
   graylog-5_0 = callPackage ../tools/misc/graylog/5.0.nix { };
 
+  graylog-5_1 = callPackage ../tools/misc/graylog/5.1.nix { };
+
   graylogPlugins = recurseIntoAttrs (
     callPackage ../tools/misc/graylog/plugins.nix { }
   );
@@ -24705,7 +24707,9 @@ with pkgs;
 
   qm-dsp = callPackage ../development/libraries/audio/qm-dsp { };
 
-  qradiolink = callPackage ../applications/radio/qradiolink { };
+  qradiolink = callPackage ../applications/radio/qradiolink {
+    protobuf = protobuf3_21;
+  };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
@@ -25656,6 +25660,8 @@ with pkgs;
   yubihsm-shell = callPackage ../tools/security/yubihsm-shell { };
 
   yubioath-flutter = callPackage ../applications/misc/yubioath-flutter { };
+
+  yyjson = callPackage ../development/libraries/yyjson { };
 
   zchunk = callPackage ../development/libraries/zchunk { };
 
@@ -32611,6 +32617,8 @@ with pkgs;
 
   rlaunch = callPackage ../applications/misc/rlaunch { };
 
+  remontoire = callPackage ../applications/misc/remontoire { };
+
   rootbar = callPackage ../applications/misc/rootbar { };
 
   waybar = callPackage ../applications/misc/waybar { };
@@ -33842,7 +33850,18 @@ with pkgs;
 
   rofi-pulse-select = callPackage ../applications/audio/rofi-pulse-select { };
 
-  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw { };
+  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw {
+    waylandSupport = false;
+    x11Support = false;
+  };
+
+  rofi-rbw-wayland = python3Packages.callPackage ../applications/misc/rofi-rbw {
+    waylandSupport = true;
+  };
+
+  rofi-rbw-x11 = python3Packages.callPackage ../applications/misc/rofi-rbw {
+    x11Support = true;
+  };
 
   rofi-screenshot = callPackage ../applications/misc/rofi-screenshot { };
 
@@ -38770,6 +38789,8 @@ with pkgs;
 
   archimedes = callPackage ../applications/science/electronics/archimedes { };
 
+  bamtools = callPackage ../applications/science/biology/bamtools { };
+
   bayescan = callPackage ../applications/science/biology/bayescan { };
 
   bedops = callPackage ../applications/science/biology/bedops { };
@@ -41963,4 +41984,6 @@ with pkgs;
   gitrs = callPackage ../tools/misc/gitrs { };
 
   wttrbar = callPackage ../applications/misc/wttrbar { };
+
+  wpm = callPackage ../applications/misc/wpm { };
 }

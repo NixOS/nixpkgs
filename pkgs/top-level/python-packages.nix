@@ -7375,7 +7375,9 @@ self: super: with self; {
     protobuf = protobuf3;
   };
 
-  onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
+  onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
+    protobuf = protobuf3;
+  };
 
   onnxmltools = callPackage ../development/python-modules/onnxmltools { };
 
@@ -11712,7 +11714,9 @@ self: super: with self; {
 
   skidl = callPackage ../development/python-modules/skidl { };
 
-  skl2onnx = callPackage ../development/python-modules/skl2onnx { };
+  skl2onnx = callPackage ../development/python-modules/skl2onnx {
+    protobuf = protobuf3;
+  };
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
