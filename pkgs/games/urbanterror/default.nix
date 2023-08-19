@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.urbanterror.info";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [ astsmtl drupol ];
     platforms = platforms.linux;
     hydraPlatforms = [];
   };
