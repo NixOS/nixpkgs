@@ -134,7 +134,6 @@
 , "git-standup"
 , "@gitbeaker/cli"
 , "gitmoji-cli"
-, "glob"
 , "gramma"
 , "grammarly-languageserver"
 , "graphql"

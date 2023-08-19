@@ -1890,6 +1890,8 @@ with pkgs;
     systemd = pkgs.systemd;
   };
 
+  node-glob = callPackage ../tools/misc/node-glob { };
+
   nominatim = callPackage ../servers/nominatim { };
 
   ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
