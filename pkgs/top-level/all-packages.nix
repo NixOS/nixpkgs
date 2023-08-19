@@ -17363,6 +17363,8 @@ with pkgs;
 
   devspace = callPackage ../development/tools/misc/devspace { };
 
+  djlint = callPackage ../development/tools/djlint { };
+
   leptosfmt = callPackage ../development/tools/rust/leptosfmt { };
 
   maturin = callPackage ../development/tools/rust/maturin {
