@@ -27,7 +27,7 @@ let
   inherit (stdenv.hostPlatform) system;
 
   versions = builtins.fromJSON (lib.readFile (./versions.json));
-  versionKey = if stdenv.isLinux then "linux" else system;
+  versionKey = system;
   products = versions.${versionKey} or (throw "Unsupported system: ${system}");
 
   package = if stdenv.isDarwin then ./darwin.nix else ./linux.nix;
