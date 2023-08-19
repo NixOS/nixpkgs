@@ -58,6 +58,9 @@ buildPythonPackage {
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
       patchelf --set-rpath "$p:$libraryPath" $1
+      ${lib.optionalString cudaSupport ''
+        addOpenGLRunpath $1
+      ''}
     }
     fixRunPath $out/${python.sitePackages}/paddle/fluid/libpaddle.so
   '';
