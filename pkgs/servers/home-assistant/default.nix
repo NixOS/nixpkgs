@@ -49,6 +49,7 @@ let
         };
         postPatch = ''
           substituteInPlace pyproject.toml \
+            --replace "poetry>=1.0.0b1" "poetry-core" \
             --replace "poetry.masonry" "poetry.core.masonry"
         '';
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
@@ -324,6 +325,7 @@ in python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python.pkgs; [
     setuptools
+    wheel
   ];
 
   # copy tests early, so patches apply as they would to the git repo
@@ -368,6 +370,9 @@ in python.pkgs.buildPythonApplication rec {
       ) relaxedConstraints)}
       pyproject.toml
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
+
+    sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
+    sed -i 's/wheel[~=]/wheel>/' pyproject.toml
   '';
 
   propagatedBuildInputs = with python.pkgs; [
