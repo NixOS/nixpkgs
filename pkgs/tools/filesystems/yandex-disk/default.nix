@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     sed -i 's@have@${which}/bin/which >/dev/null 2>\&1@' \
       $out/share/bash-completion/completions/yandex-disk-completion.bash
 
-    ${patchelf}/bin/patchelf \
+    ${lib.getExe patchelf} \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${zlib.out}/lib:${p.gcclib}" \
       $out/bin/yandex-disk

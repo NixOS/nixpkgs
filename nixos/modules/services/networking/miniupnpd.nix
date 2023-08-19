@@ -58,11 +58,11 @@ in
 
   config = mkIf cfg.enable {
     networking.firewall.extraCommands = ''
-      ${pkgs.bash}/bin/bash -x ${pkgs.miniupnpd}/etc/miniupnpd/iptables_init.sh -i ${cfg.externalInterface}
+      ${lib.getExe pkgs.bash} -x ${pkgs.miniupnpd}/etc/miniupnpd/iptables_init.sh -i ${cfg.externalInterface}
     '';
 
     networking.firewall.extraStopCommands = ''
-      ${pkgs.bash}/bin/bash -x ${pkgs.miniupnpd}/etc/miniupnpd/iptables_removeall.sh -i ${cfg.externalInterface}
+      ${lib.getExe pkgs.bash} -x ${pkgs.miniupnpd}/etc/miniupnpd/iptables_removeall.sh -i ${cfg.externalInterface}
     '';
 
     systemd.services.miniupnpd = {

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     cp -r README COPYING CHANGES examples/  "$out/share/doc/abcl/"
     cp -r dist/*.jar contrib/ "$out/lib/abcl/"
 
-    makeWrapper ${jre}/bin/java $out/bin/abcl \
+    makeWrapper ${lib.getExe jre} $out/bin/abcl \
       --prefix CLASSPATH : $out/lib/abcl/abcl.jar \
       --prefix CLASSPATH : $out/lib/abcl/abcl-contrib.jar \
       ${lib.optionalString (lib.versionAtLeast jre.version "17")

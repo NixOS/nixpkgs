@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/java
     cp $src $out/share/java/lombok.jar
 
-    makeWrapper ${jdk}/bin/java $bin/bin/lombok \
+    makeWrapper ${lib.getExe jdk} $bin/bin/lombok \
       --add-flags "-cp ${jdk}/lib/openjdk/lib/tools.jar:$out/share/java/lombok.jar" \
       --add-flags lombok.launch.Main
   '';

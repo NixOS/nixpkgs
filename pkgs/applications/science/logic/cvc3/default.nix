@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e "s@ /bin/bash@bash@g" -i Makefile.std
-    find . -exec sed -e "s@/usr/bin/perl@${perl}/bin/perl@g" -i '{}' ';'
+    find . -exec sed -e "s@/usr/bin/perl@${lib.getExe perl}@g" -i '{}' ';'
 
     # bison 3.7 workaround
     for f in parsePL parseLisp parsesmtlib parsesmtlib2 ; do

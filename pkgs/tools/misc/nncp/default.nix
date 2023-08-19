@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = genericUpdater {
     versionLister = writeShellScript "nncp-versionLister" ''
-      ${curl}/bin/curl -s ${finalAttrs.meta.downloadPage} | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
+      ${curl}/bin/curl -s ${finalAttrs.meta.downloadPage} | ${lib.getExe perl} -lne 'print $1 if /Release.*>([0-9.]+)</'
     '';
   };
 

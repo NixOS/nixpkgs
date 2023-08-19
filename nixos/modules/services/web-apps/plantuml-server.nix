@@ -120,7 +120,7 @@ in
         ALLOW_PLANTUML_INCLUDE = if cfg.allowPlantumlInclude then "true" else "false";
       };
       script = ''
-      ${cfg.packages.jdk}/bin/java \
+      ${lib.getExe cfg.packages.jdk} \
         -jar ${cfg.packages.jetty}/start.jar \
           --module=deploy,http,jsp \
           jetty.home=${cfg.packages.jetty} \

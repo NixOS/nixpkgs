@@ -56,7 +56,7 @@ buildPerlPackage rec {
   installPhase = ''
     ./Build install
     for f in $out/bin/*; do
-      substituteInPlace $f --replace "#! /usr/bin/env perl" "#!${perl}/bin/perl"
+      substituteInPlace $f --replace "#! /usr/bin/env perl" "#!${lib.getExe perl}"
     done
   '';
   meta = {

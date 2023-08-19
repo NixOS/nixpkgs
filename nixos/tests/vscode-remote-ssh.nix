@@ -44,7 +44,7 @@ in {
   enableOCR = true;
 
   testScript = let
-    jq = "${pkgs.jq}/bin/jq";
+    jq = "${lib.getExe pkgs.jq}";
 
     sshConfig = builtins.toFile "ssh.conf" ''
       UserKnownHostsFile=/dev/null

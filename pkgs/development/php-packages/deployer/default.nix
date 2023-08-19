@@ -17,7 +17,7 @@ mkDerivation rec {
     runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/deployer/deployer.phar
-    makeWrapper ${php}/bin/php $out/bin/dep --add-flags "$out/libexec/deployer/deployer.phar"
+    makeWrapper ${lib.getExe php} $out/bin/dep --add-flags "$out/libexec/deployer/deployer.phar"
 
     # fish support currently broken: https://github.com/deployphp/deployer/issues/2527
     installShellCompletion --cmd dep \

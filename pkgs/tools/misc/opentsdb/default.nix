@@ -334,7 +334,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/tsdb \
       --set JAVA_HOME "${jre}" \
-      --set JAVA "${jre}/bin/java"
+      --set JAVA "${lib.getExe jre}"
   '';
 
   meta = with lib; {

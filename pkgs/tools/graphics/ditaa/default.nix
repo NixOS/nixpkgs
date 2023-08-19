@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
     cat > "$out/bin/ditaa" << EOF
     #!${stdenv.shell}
-    exec ${jre}/bin/java -jar "$out/lib/ditaa.jar" "\$@"
+    exec ${lib.getExe jre} -jar "$out/lib/ditaa.jar" "\$@"
     EOF
 
     chmod a+x "$out/bin/ditaa"

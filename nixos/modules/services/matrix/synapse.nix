@@ -1012,7 +1012,7 @@ in {
       group = "matrix-synapse";
       home = cfg.dataDir;
       createHome = true;
-      shell = "${pkgs.bash}/bin/bash";
+      shell = "${lib.getExe pkgs.bash}";
       uid = config.ids.uids.matrix-synapse;
     };
 

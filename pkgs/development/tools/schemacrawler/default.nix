@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp -r {config,lib} $out/
 
-    makeWrapper ${jre}/bin/java $out/bin/schemacrawler \
+    makeWrapper ${lib.getExe jre} $out/bin/schemacrawler \
       --add-flags "-cp $out/lib/*:$out/config" \
       --add-flags schemacrawler.Main
 

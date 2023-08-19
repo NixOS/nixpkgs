@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
 
     export JAR=$out/share/java/flix/flix.jar
     install -D $src $JAR
-    makeWrapper ${jre}/bin/java $out/bin/flix \
+    makeWrapper ${lib.getExe jre} $out/bin/flix \
       --add-flags "-jar $JAR"
 
     runHook postInstall

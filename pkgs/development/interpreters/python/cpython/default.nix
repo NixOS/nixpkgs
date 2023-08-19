@@ -322,7 +322,7 @@ in with passthru; stdenv.mkDerivation {
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
-      --replace "'/bin/sh'" "'${bash}/bin/sh'"
+      --replace "'/bin/sh'" "'${lib.getExe' bash "sh"}'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace "@mime-types@" "${mailcap}"

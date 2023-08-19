@@ -152,9 +152,9 @@ in stdenv.mkDerivation (rec {
 
     # Esy by default erases the entire environment, so the builder makes a wrapper over bash to automatically re-export it
     mkdir wrapped-bash
-    echo "#!${bash}/bin/bash" > wrapped-bash/bash
+    echo "#!${lib.getExe bash}" > wrapped-bash/bash
     export | sed 's/PATH="/PATH="$PATH:/' >> wrapped-bash/bash
-    echo "exec ${bash}/bin/bash \"\$@\"" >> wrapped-bash/bash
+    echo "exec ${lib.getExe bash} \"\$@\"" >> wrapped-bash/bash
     chmod +x wrapped-bash/bash
 
     # Use custom builder for Oni2 to provide necessary environment to it
@@ -228,7 +228,7 @@ in stdenv.mkDerivation (rec {
     makeWrapper $out/bin/Oni2_editor{_unwrapped,} --unset LANG --unset XMODIFIERS --unset SDL_VIDEODRIVER
 
     rm -f $out/bin/setup.json
-    jq -n "{node: \"${nodejs}/bin/node\", nodeScript: \"$out/node\", bundledExtensions: \"$out/extensions\", rg: \"${ripgrep}/bin/rg\"}" > $out/bin/setup.json
+    jq -n "{node: \"${lib.getExe nodejs}\", nodeScript: \"$out/node\", bundledExtensions: \"$out/extensions\", rg: \"${ripgrep}/bin/rg\"}" > $out/bin/setup.json
 
     mkdir -p $out/share/applications $out/share/pixmaps
     cp ${source}/scripts/linux/Onivim2.desktop $out/share/applications

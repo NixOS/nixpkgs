@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out
     cp -a * $out/
-    makeWrapper ${jre}/bin/java $out/bin/opengrok \
+    makeWrapper ${lib.getExe jre} $out/bin/opengrok \
       --add-flags "-jar $out/lib/opengrok.jar"
 
     runHook postInstall

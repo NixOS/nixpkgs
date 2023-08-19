@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs:  {
 
   postPatch = lib.optionalString isDxvk2 ''
     substituteInPlace "subprojects/libdisplay-info/tool/gen-search-table.py" \
-      --replace "/usr/bin/env python3" "${lib.getBin pkgsBuildHost.python3}/bin/python3"
+      --replace "/usr/bin/env python3" "${lib.getExe pkgsBuildHost.python3}"
   '';
 
   # Build with the Vulkan SDK in nixpkgs.

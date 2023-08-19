@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace ./install --replace " 2>/dev/null" ""
     substituteInPlace src/lib/Gitolite/Hooks/PostUpdate.pm \
-      --replace /usr/bin/perl "${perl}/bin/perl"
+      --replace /usr/bin/perl "${lib.getExe perl}"
     substituteInPlace src/lib/Gitolite/Hooks/Update.pm \
-      --replace /usr/bin/perl "${perl}/bin/perl"
+      --replace /usr/bin/perl "${lib.getExe perl}"
     substituteInPlace src/lib/Gitolite/Setup.pm \
       --replace hostname "${nettools}/bin/hostname"
     substituteInPlace src/commands/sskm \

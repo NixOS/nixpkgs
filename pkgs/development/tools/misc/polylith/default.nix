@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       ARGS="$ARGS $1"
       shift
     done
-    exec "${jdk}/bin/java" "-jar" "${src}" $ARGS
+    exec "${lib.getExe jdk}" "-jar" "${src}" $ARGS
   '';
 
   installPhase = ''

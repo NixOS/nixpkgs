@@ -33,11 +33,11 @@ mkDerivation {
     for i in src/Cleanup.cpp src/cleanup-config-page.ui
     do
       substituteInPlace $i \
-        --replace /bin/bash ${bash}/bin/bash \
-        --replace /bin/sh ${bash}/bin/sh
+        --replace /bin/bash ${lib.getExe bash} \
+        --replace /bin/sh ${lib.getExe' bash "sh"}
     done
     substituteInPlace src/StdCleanup.cpp \
-      --replace /bin/bash ${bash}/bin/bash
+      --replace /bin/bash ${lib.getExe bash}
   '';
 
   qmakeFlags = [ "INSTALL_PREFIX=${placeholder "out"}" ];

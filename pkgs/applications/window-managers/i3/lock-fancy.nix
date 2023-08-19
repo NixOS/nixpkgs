@@ -23,18 +23,18 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i i3lock-fancy \
-      -e "s|mktemp|${coreutils}/bin/mktemp|" \
-      -e "s|'rm -f |'${coreutils}/bin/rm -f |" \
-      -e "s|scrot -z |${scrot}/bin/scrot -z |" \
-      -e "s|convert |${imagemagick.out}/bin/convert |" \
-      -e "s|awk -F|${gawk}/bin/awk -F|" \
-      -e "s| awk | ${gawk}/bin/awk |" \
-      -e "s|i3lock -i |${i3lock-color}/bin/i3lock-color -i |" \
+      -e "s|mktemp|${lib.getExe' coreutils "mktemp"}|" \
+      -e "s|'rm -f |'${lib.getExe' coreutils "rm"} -f |" \
+      -e "s|scrot -z |${lib.getExe scrot} -z |" \
+      -e "s|convert |${lib.getExe' imagemagick "convert"} |" \
+      -e "s|awk -F|${lib.getExe' gawk "awk"} -F|" \
+      -e "s| awk | ${lib.getExe' gawk "awk"} |" \
+      -e "s|i3lock -i |${lib.getExe' i3lock-color "i3lock-color"} -i |" \
       -e 's|icon="/usr/share/i3lock-fancy/icons/lockdark.png"|icon="'$out'/share/i3lock-fancy/icons/lockdark.png"|' \
       -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|' \
-      -e "s|getopt |${getopt}/bin/getopt |" \
-      -e "s|fc-match |${fontconfig.bin}/bin/fc-match |" \
-      -e "s|shot=(import -window root)|shot=(${scrot}/bin/scrot -z -o)|"
+      -e "s|getopt |${lib.getExe getopt} |" \
+      -e "s|fc-match |${lib.getExe' fontconfig "fc-match"} |" \
+      -e "s|shot=(import -window root)|shot=(${lib.getExe scrot} -z -o)|"
     rm Makefile
   '';
 

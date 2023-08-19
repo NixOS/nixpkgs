@@ -38,7 +38,7 @@ resholve.mkDerivation rec {
 
   solutions.default = {
     scripts = [ "bin/wgnord" ];
-    interpreter = "${bash}/bin/sh";
+    interpreter = "${lib.getExe' bash "sh"}";
     inputs = [
       coreutils
       curl

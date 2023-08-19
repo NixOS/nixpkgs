@@ -132,7 +132,7 @@ stdenv.mkDerivation {
 
     # Create a wrapper
     mkdir -p "$out/bin"
-    makeWrapper "${jre}/bin/java" "$out/bin/cieid" \
+    makeWrapper "${lib.getExe jre}" "$out/bin/cieid" \
       --add-flags "-Djna.library.path='$out/lib:${libraries}'" \
       --add-flags '-Dawt.useSystemAAFontSettings=on' \
       --add-flags "-cp $out/share/cieid/cieid.jar" \

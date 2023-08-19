@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/java
     cp ${src} $out/share/java/zipkin-server-${version}-exec.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/zipkin-server \
+    makeWrapper ${lib.getExe jre} $out/bin/zipkin-server \
       --add-flags "-cp $out/share/java/zipkin-server-${version}-exec.jar org.springframework.boot.loader.JarLauncher"
   '';
   meta = with lib; {

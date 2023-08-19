@@ -43,7 +43,7 @@ let
     prometheus_listen_addr = "localhost:9236"
 
     [git]
-    bin_path = "${pkgs.git}/bin/git"
+    bin_path = "${lib.getExe pkgs.git}"
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
@@ -1254,7 +1254,7 @@ in {
     users.users.${cfg.user} =
       { group = cfg.group;
         home = "${cfg.statePath}/home";
-        shell = "${pkgs.bash}/bin/bash";
+        shell = "${lib.getExe pkgs.bash}";
         uid = config.ids.uids.gitlab;
       };
 

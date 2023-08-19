@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in bookman src2man txt2man; do
       substituteInPlace $f \
-        --replace "gawk" "${gawk}/bin/gawk" \
+        --replace "gawk" "${lib.getExe gawk}" \
         --replace "(date" "(${coreutils}/bin/date" \
         --replace "=cat" "=${coreutils}/bin/cat" \
         --replace "cat <<" "${coreutils}/bin/cat <<" \

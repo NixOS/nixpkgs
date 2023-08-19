@@ -25,7 +25,7 @@ buildGoModule rec {
   vendorHash = "sha256-bIOS9Ja+mue6LNXUGmkLobh+lLiJfBDtNrAX3fp0jMY=";
 
   postPatch = ''
-    substituteInPlace clicommand/agent_start.go --replace /bin/bash ${bash}/bin/bash
+    substituteInPlace clicommand/agent_start.go --replace /bin/bash ${lib.getExe bash}
   '';
 
   nativeBuildInputs = [ makeWrapper ];

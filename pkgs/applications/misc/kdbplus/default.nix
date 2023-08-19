@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     # Shell script wrappers to make things more convenient...
 
     cat > $out/bin/q-install <<- EOF
-    #!${bash}/bin/bash
+    #!${lib.getExe bash}
     if [ -f \$HOME/q/q.k ]; then
       echo "kdb has already been unpacked in \$HOME. Skipping..."
       exit 0
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     EOF
 
     cat > $out/bin/q <<- EOF
-    #!${bash}/bin/bash
+    #!${lib.getExe bash}
     if [ ! -f \$HOME/q/q.k ]; then
       echo "ERROR: You need to unzip the Q sources into \$HOME before running q."
       echo

@@ -62,7 +62,7 @@ let
 
       passthru.dbtoepub = writeScriptBin "dbtoepub"
         ''
-          #!${bash}/bin/bash
+          #!${lib.getExe bash}
           exec -a dbtoepub ${ruby}/bin/ruby ${self}/share/xml/${pname}/epub/bin/dbtoepub "$@"
         '';
 

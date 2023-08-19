@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # for automake
     touch README ChangeLog
     # for tests
-    substituteInPlace Makefile.am --replace /bin/bash ${bash}/bin/bash
+    substituteInPlace Makefile.am --replace /bin/bash ${lib.getExe bash}
   '';
 
   patches = [

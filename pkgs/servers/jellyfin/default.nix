@@ -46,7 +46,7 @@ buildDotnetModule rec {
 
   preInstall = ''
     makeWrapperArgs+=(
-      --add-flags "--ffmpeg ${ffmpeg}/bin/ffmpeg"
+      --add-flags "--ffmpeg ${lib.getExe ffmpeg}"
       --add-flags "--webdir ${jellyfin-web}/share/jellyfin-web"
     )
   '';

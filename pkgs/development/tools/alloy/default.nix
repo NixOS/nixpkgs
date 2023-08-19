@@ -27,7 +27,7 @@ let generic = { version, sha256 }:
       install -Dm644 ${src} $jar
 
       mkdir -p $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/${pname} --add-flags \
+      makeWrapper ${lib.getExe jre} $out/bin/${pname} --add-flags \
         "-jar $jar"
 
       install -Dm644 ${./icon.png} $out/share/pixmaps/${pname}.png

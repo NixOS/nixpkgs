@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation rec {
         --replace 'cut ' '${coreutils}/bin/cut ' \
         --replace date ${coreutils}/bin/date \
         --replace dirname ${coreutils}/bin/dirname \
-        --replace sed ${gnused}/bin/sed \
+        --replace sed ${lib.getExe gnused} \
         --replace notify-send ${libnotify}/bin/notify-send \
         --replace paplay ${pulseaudio}/bin/paplay \
         --replace /usr/share/sounds/freedesktop ${sound-theme-freedesktop}/share/sounds/freedesktop \

@@ -356,7 +356,7 @@ self: super: {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/agent.vim \
         --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
-                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+                  "  let node = get(g:, 'copilot_node_command', '${lib.getExe nodejs}')"
     '';
   };
 
@@ -745,7 +745,7 @@ self: super: {
     patches = [
       (substituteAll {
         src = ./markdown-preview-nvim/fix-node-paths.patch;
-        node = "${nodejs}/bin/node";
+        node = "${lib.getExe nodejs}";
       })
     ];
     postInstall = ''

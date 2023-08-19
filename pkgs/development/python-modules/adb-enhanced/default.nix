@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace adbe/adb_enhanced.py \
-      --replace "cmd = 'java" "cmd = '${jdk11}/bin/java"
+      --replace "cmd = 'java" "cmd = '${lib.getExe jdk11}"
   '';
 
   # Disable tests because they require a dedicated Android emulator

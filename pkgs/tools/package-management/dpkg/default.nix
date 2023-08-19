@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       for i in $out/bin/*; do
         if head -n 1 $i | grep -q perl; then
           substituteInPlace $i --replace \
-            "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+            "${lib.getExe perl}" "${lib.getExe perl} -I $out/${perl.libPrefix}"
         fi
       done
 

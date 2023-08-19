@@ -112,7 +112,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
-        ${pkgs.jre8}/bin/java -Xmx${toString cfg.maxMemory}m \
+        ${lib.getExe pkgs.jre8} -Xmx${toString cfg.maxMemory}m \
           -Dsubsonic.home=${cfg.home} \
           -Dsubsonic.host=${cfg.listenAddress} \
           -Dsubsonic.port=${toString cfg.port} \
@@ -142,7 +142,7 @@ in {
         # Install transcoders.
         ${pkgs.coreutils}/bin/rm -rf ${cfg.home}/transcode ; \
         ${pkgs.coreutils}/bin/mkdir -p ${cfg.home}/transcode ; \
-        ${pkgs.bash}/bin/bash -c ' \
+        ${lib.getExe pkgs.bash} -c ' \
           for exe in "$@"; do \
             ${pkgs.coreutils}/bin/ln -sf "$exe" ${cfg.home}/transcode; \
           done' IGNORED_FIRST_ARG ${toString cfg.transcoders}

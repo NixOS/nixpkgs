@@ -27,7 +27,7 @@ maven.buildMavenPackage rec {
     mkdir -p $out/{bin,lib}
     cp target/tabula-${version}-jar-with-dependencies.jar $out/lib/tabula.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/tabula-java \
+    makeWrapper ${lib.getExe jre} $out/bin/tabula-java \
       --add-flags "-cp $out/lib/tabula.jar" \
       --add-flags "technology.tabula.CommandLineApp"
 

@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
           --socket-dir=\$IB_USER_PROFILE/xpra/ \
           --start-child="echo -n :\$DISPLAYNUM > \$IB_USER_PROFILE/xpra/run \
                          && kill \$WAIT_DUMMY_PID &> /dev/null \
-                         && ${jdk}/bin/java -cp $classpath \$$javaOptions ibcontroller.IBController \$IB_USER_PROFILE/IBController.ini" \
+                         && ${lib.getExe jdk} -cp $classpath \$$javaOptions ibcontroller.IBController \$IB_USER_PROFILE/IBController.ini" \
           --exit-with-children \
           --no-pulseaudio \
           --no-mdns \
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
           --socket-dir=\$IB_USER_PROFILE/xpra/ \
           --start-child="echo -n :\$DISPLAYNUM > \$IB_USER_PROFILE/xpra/run \
                          && kill \$WAIT_DUMMY_PID &> /dev/null \
-                         && ${jdk}/bin/java -cp $classpath \$$javaOptions ibcontroller.IBGatewayController \$IB_USER_PROFILE/IBController.ini" \
+                         && ${lib.getExe jdk} -cp $classpath \$$javaOptions ibcontroller.IBGatewayController \$IB_USER_PROFILE/IBController.ini" \
           --exit-with-children \
           --no-pulseaudio \
           --no-mdns \

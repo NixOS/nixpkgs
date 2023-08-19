@@ -20,8 +20,8 @@ in stdenv.mkDerivation {
     substituteInPlace checkup.bash \
       --replace curl ${curl}/bin/curl \
       --replace find ${findutils}/bin/find \
-      --replace grep ${gnugrep}/bin/grep \
-      --replace sed ${gnused}/bin/sed
+      --replace grep ${lib.getExe gnugrep} \
+      --replace sed ${lib.getExe gnused}
   '';
 
   installPhase = ''

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ln -s ${desktop}/share/applications/RuneLite.desktop $out/share/applications/RuneLite.desktop
 
     # RuneLite looks for `.so` files in $PWD/natives, so ensure that we set the PWD to the right place
-    makeWrapper ${jre}/bin/java $out/bin/runelite \
+    makeWrapper ${lib.getExe jre} $out/bin/runelite \
       --chdir "$out" \
       --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib" \
       --add-flags "-jar $out/share/runelite/RuneLite.jar"

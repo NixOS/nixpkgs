@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
     installShellCompletion --cmd crowdin --bash ./crowdin_completion
 
-    makeWrapper ${jre}/bin/java $out/bin/crowdin \
+    makeWrapper ${lib.getExe jre} $out/bin/crowdin \
       --argv0 crowdin \
       --add-flags "-jar $out/lib/crowdin-cli.jar" \
       --prefix PATH : ${lib.makeBinPath [ gawk gnugrep git ]}

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     cat << EOF > $out/bin/procyon
     #!${runtimeShell}
-    exec ${jre_headless}/bin/java -jar $out/share/procyon/procyon-decompiler.jar "\$@"
+    exec ${lib.getExe jre_headless} -jar $out/share/procyon/procyon-decompiler.jar "\$@"
     EOF
     chmod +x $out/bin/procyon
   '';

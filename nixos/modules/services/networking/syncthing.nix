@@ -29,7 +29,7 @@ let
     folder.enable
   ) cfg.settings.folders);
 
-  jq = "${pkgs.jq}/bin/jq";
+  jq = "${lib.getExe pkgs.jq}";
   updateConfig = pkgs.writers.writeBash "merge-syncthing-config" (''
     set -efu
 

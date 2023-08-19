@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     export JAR=$out/share/java/stegsolve/stegsolve.jar
     install -D $src $JAR
-    makeWrapper ${jre}/bin/java $out/bin/stegsolve \
+    makeWrapper ${lib.getExe jre} $out/bin/stegsolve \
       --add-flags "-jar $JAR"
 
     runHook postInstall

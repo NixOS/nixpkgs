@@ -45,7 +45,7 @@ in {
     )
     client.succeed("machinectl pull-tar --verify=signature http://server/testimage2.tar.xz")
     client.succeed(
-        "cmp /var/lib/machines/testimage2/${pkgs.hello}/bin/hello ${pkgs.hello}/bin/hello"
+        "cmp /var/lib/machines/testimage2/${lib.getExe pkgs.hello} ${lib.getExe pkgs.hello}"
     )
   '';
 })

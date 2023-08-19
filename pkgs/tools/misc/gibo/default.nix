@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp gibo $out/bin
     cp gibo-completion.bash $out/share/bash-completion/completions
 
-    sed -e 's|\<git |${git}/bin/git |g' \
+    sed -e 's|\<git |${lib.getExe git} |g' \
         -e 's|\<basename |${coreutils}/bin/basename |g' \
         -i "$out/bin/gibo"
     sed -e 's|\<find |${findutils}/bin/find |g' \

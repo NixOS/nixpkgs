@@ -11,7 +11,7 @@ let
   # Duplicate code, also found in cron.nix. Needs deduplication.
   systemCronJobs =
     ''
-      SHELL=${pkgs.bash}/bin/bash
+      SHELL=${lib.getExe pkgs.bash}
       PATH=${config.system.path}/bin:${config.system.path}/sbin
       ${optionalString (config.services.cron.mailto != null) ''
         MAILTO="${config.services.cron.mailto}"

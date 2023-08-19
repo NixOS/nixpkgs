@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     substituteInPlace usr/share/jicofo/jicofo.sh \
-      --replace "exec java" "exec ${jre_headless}/bin/java"
+      --replace "exec java" "exec ${lib.getExe jre_headless}"
 
     mkdir -p $out/{share,bin}
     mv usr/share/jicofo $out/share/

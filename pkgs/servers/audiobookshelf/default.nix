@@ -61,7 +61,7 @@ in buildNpmPackage {
     mkdir $out/bin
 
     echo '${wrapper}' > $out/bin/${pname}
-    echo "  exec ${nodejs}/bin/node $out/opt/index.js" >> $out/bin/${pname}
+    echo "  exec ${lib.getExe nodejs} $out/opt/index.js" >> $out/bin/${pname}
 
     chmod +x $out/bin/${pname}
   '';

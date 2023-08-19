@@ -111,7 +111,7 @@ in stdenv.mkDerivation rec {
     cat > $out/bin/jd-gui <<EOF
     #!${runtimeShell}
     export JAVA_HOME=${jre}
-    exec ${jre}/bin/java -jar ${jar} "\$@"
+    exec ${lib.getExe jre} -jar ${jar} "\$@"
     EOF
     chmod +x $out/bin/jd-gui
 

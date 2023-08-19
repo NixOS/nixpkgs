@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    sed -i -e "4s:.*:command=${jre}/bin/java:" -e "10s:.*:jarpath=$out/share/jmol/Jmol.jar:" -e "11,21d" jmol
+    sed -i -e "4s:.*:command=${lib.getExe jre}:" -e "10s:.*:jarpath=$out/share/jmol/Jmol.jar:" -e "11,21d" jmol
   '';
 
   installPhase = ''

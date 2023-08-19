@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
         admin_bind_path = "/run/kanidmd/sock";
         cpu_flags = if stdenv.isx86_64 then "x86_64_legacy" else "none";
         default_config_path = "/etc/kanidm/server.toml";
-        default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+        default_unix_shell_path = lib.getExe bashInteractive;
         web_ui_pkg_path = "@web_ui_pkg_path@";
       };
     in

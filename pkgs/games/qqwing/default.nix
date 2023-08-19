@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for file in "src-first-comment.pl" "src_neaten.pl"; do
       substituteInPlace "build/$file" \
-        --replace "#!/usr/bin/perl" "#!${perl}/bin/perl"
+        --replace "#!/usr/bin/perl" "#!${lib.getExe perl}"
     done
 
     substituteInPlace "build/cpp_install.sh" \

@@ -285,7 +285,7 @@ in
       production = {
         scm_subversion_command = optionalString cfg.components.subversion "${pkgs.subversion}/bin/svn";
         scm_mercurial_command = optionalString cfg.components.mercurial "${pkgs.mercurial}/bin/hg";
-        scm_git_command = optionalString cfg.components.git "${pkgs.git}/bin/git";
+        scm_git_command = optionalString cfg.components.git "${lib.getExe pkgs.git}";
         scm_cvs_command = optionalString cfg.components.cvs "${pkgs.cvs}/bin/cvs";
         scm_bazaar_command = optionalString cfg.components.breezy "${pkgs.breezy}/bin/bzr";
         imagemagick_convert_command = optionalString cfg.components.imagemagick "${pkgs.imagemagick}/bin/convert";

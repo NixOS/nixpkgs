@@ -47,7 +47,7 @@ resholve.mkDerivation rec {
   solutions = {
     git-ftp = {
       scripts = [ "bin/git-ftp" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = "${lib.getExe bash}";
       inputs = [
         coreutils
         git
@@ -74,7 +74,7 @@ resholve.mkDerivation rec {
       execer = [
         # TODO: rm when binlore/resholve handle git; manually
         # checked and see no obvious subexec for now
-        "cannot:${git}/bin/git"
+        "cannot:${lib.getExe git}"
         /*
         Mild uncertainty here. There *are* commandlikes in
         the arguments (especially wait & cd), but I think they are

@@ -346,7 +346,7 @@ in
       '' + ''
         fi
         ipfs --offline config show |
-          ${pkgs.jq}/bin/jq -s '.[0].Pinning as $Pinning | .[0].Identity as $Identity | .[1] + {$Identity,$Pinning}' - '${configFile}' |
+          ${lib.getExe pkgs.jq} -s '.[0].Pinning as $Pinning | .[0].Identity as $Identity | .[1] + {$Identity,$Pinning}' - '${configFile}' |
 
           # This command automatically injects the private key and other secrets from
           # the old config file back into the new config file.

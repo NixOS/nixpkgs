@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/jflex.bat
 
     patchShebangs $out
-    sed -i -e '/^JAVA=java/ s#java#${jre}/bin/java#' $out/bin/jflex
+    sed -i -e '/^JAVA=java/ s#java#${lib.getExe jre}#' $out/bin/jflex
     runHook postInstall
   '';
 

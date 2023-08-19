@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/share/tabula
     cp -v * $out/share/tabula
 
-    makeWrapper ${jre}/bin/java $out/bin/tabula --add-flags "-jar $out/share/tabula/tabula.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/tabula --add-flags "-jar $out/share/tabula/tabula.jar"
   '';
 
 

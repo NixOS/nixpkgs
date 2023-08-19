@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   preCheck = ''
-    export TEST_GIT=${git}/bin/git
-    export TEST_GIT_EXEC_PATH=$(${git}/bin/git --exec-path)
+    export TEST_GIT=${lib.getExe git}
+    export TEST_GIT_EXEC_PATH=$(${lib.getExe git} --exec-path)
   '';
   # FIXME: these tests deadlock when run in the Nix sandbox
   checkFlags = [

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
   doCheck = false; # MoarVM does not come with its own test suite
 
-  configureScript = "${perl}/bin/perl ./Configure.pl";
+  configureScript = "${lib.getExe perl} ./Configure.pl";
 
   meta = with lib; {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";

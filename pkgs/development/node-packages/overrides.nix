@@ -156,7 +156,7 @@ final: prev: {
       mkdir -p $out/bin
       cat >$exe <<EOF
       #!${pkgs.runtimeShell}
-      exec -a jsonplaceholder ${nodejs}/bin/node $out/lib/node_modules/jsonplaceholder/index.js
+      exec -a jsonplaceholder ${lib.getExe nodejs} $out/lib/node_modules/jsonplaceholder/index.js
       EOF
       chmod a+x $exe
     '';

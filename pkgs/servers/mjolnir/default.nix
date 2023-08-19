@@ -43,7 +43,7 @@ mkYarnPackage rec {
   '';
 
   postInstall = ''
-    makeWrapper ${nodejs}/bin/node "$out/bin/mjolnir" \
+    makeWrapper ${lib.getExe nodejs} "$out/bin/mjolnir" \
       --add-flags "$out/libexec/mjolnir/deps/mjolnir/lib/index.js"
   '';
 

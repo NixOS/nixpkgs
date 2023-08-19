@@ -97,7 +97,7 @@ in
 
       script = ''
         cd /var/felix
-        ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c '${pkgs.jre}/bin/java -jar bin/felix.jar'
+        ${pkgs.su}/bin/su -s ${lib.getExe' pkgs.bash "sh"} ${cfg.user} -c '${lib.getExe pkgs.jre} -jar bin/felix.jar'
       '';
     };
   };

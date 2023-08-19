@@ -213,7 +213,7 @@ buildFHSEnv {
     zlib
   ];
 
-  runScript = "${bash}/bin/bash ${
+  runScript = "${lib.getExe bash} ${
     writeText "davinci-wrapper"
     ''
     export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"

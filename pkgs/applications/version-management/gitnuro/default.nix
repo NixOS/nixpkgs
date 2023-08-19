@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${jre}/bin/java $out/bin/gitnuro --add-flags "-jar $src"
+    makeWrapper ${lib.getExe jre} $out/bin/gitnuro --add-flags "-jar $src"
     install -Dm444 $icon $out/share/icons/hicolor/scalable/apps/com.jetpackduba.Gitnuro.svg
     runHook postInstall
   '';

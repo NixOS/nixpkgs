@@ -8,7 +8,7 @@ let
   # EOVERFLOW for completely legitimate requests. This seems like an
   # incompatibility of new Linux kernels to run this ancient binary.
   wrapLegacyBinary = writeScript "wrapLegacyBinary" ''
-    #!${bash}/bin/bash
+    #!${lib.getExe bash}
 
     set -eu
 
@@ -22,7 +22,7 @@ let
     ARGV0="$(basename $2)"
 
     cat > "$OUT" <<EOF
-    #!${bash}/bin/bash
+    #!${lib.getExe bash}
 
     TERMINFO=${ncurses}/share/terminfo TERM=vt100 exec ${qemu}/bin/qemu-i386 -0 $ARGV0 $IN "\$@"
     EOF
@@ -31,7 +31,7 @@ let
   '';
 
   wrapInPlace = writeScriptBin "wrapInPlace" ''
-    #!${bash}/bin/bash
+    #!${lib.getExe bash}
 
     set -eu
 

@@ -71,7 +71,7 @@ mkYarnPackage rec {
   '';
 
   postInstall = ''
-    makeWrapper '${nodejs}/bin/node' "$out/bin/jellyseerr" \
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/jellyseerr" \
       --add-flags "$out/libexec/jellyseerr/deps/jellyseerr/dist/index.js" \
       --set NODE_ENV production
   '';

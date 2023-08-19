@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/lein \
       --prefix PATH ":" "${lib.makeBinPath [ rlwrap coreutils ]}" \
       --set LEIN_GPG ${gnupg}/bin/gpg \
-      --set JAVA_CMD ${jdk}/bin/java
+      --set JAVA_CMD ${lib.getExe jdk}
 
     runHook postFixup
   '';

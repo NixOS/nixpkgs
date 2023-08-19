@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     "PERL=${perlPackages.perl.outPath}/bin/perl"
     "PYTHON=${python3.interpreter}"
     "RUBY=${ruby.outPath}/bin/ruby"
-    "JAVARUN=${jre.outPath}/bin/java"
+    "JAVARUN=${lib.getExe jre}"
     "PLUGINUSER=munin"
   ];
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/{share/wiremock,bin}
     cp ${src} "$out/share/wiremock/wiremock.jar"
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${lib.getExe jre} $out/bin/${pname} \
       --add-flags "-jar $out/share/wiremock/wiremock.jar"
   '';
 

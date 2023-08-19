@@ -29,8 +29,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace bash_kernel/kernel.py \
-      --replace "'bash'" "'${bash}/bin/bash'" \
-      --replace "\"bash\"" "'${bash}/bin/bash'"
+      --replace "'bash'" "'${lib.getExe bash}'" \
+      --replace "\"bash\"" "'${lib.getExe bash}'"
   '';
 
   propagatedBuildInputs = [ ipykernel pexpect ];

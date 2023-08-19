@@ -138,7 +138,7 @@ python3Packages.buildPythonApplication {
   '' + lib.optionalString (!enableMinimal) ''
     chmod +w $sitepackages/edenscm-isl/run-isl
     substituteInPlace $sitepackages/edenscm-isl/run-isl \
-      --replace 'NODE=node' 'NODE=${nodejs}/bin/node'
+      --replace 'NODE=node' 'NODE=${lib.getExe nodejs}'
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${jdk17}/bin/java $out/bin/youtrack \
+    makeWrapper ${lib.getExe jdk17} $out/bin/youtrack \
       --add-flags "\$YOUTRACK_JVM_OPTS -jar $jar" \
       --prefix PATH : "${lib.makeBinPath [ gawk ]}" \
       --set JRE_HOME ${jdk17}

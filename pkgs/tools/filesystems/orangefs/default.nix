@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/bin/$f --replace '#!/bin/csh' '#!${tcsh}/bin/tcsh'
     done
 
-    sed -i 's:openssl:${openssl}/bin/openssl:' $out/bin/pvfs2-gen-keys.sh
+    sed -i 's:openssl:${lib.getExe openssl}:' $out/bin/pvfs2-gen-keys.sh
   '';
 
   meta = with lib; {

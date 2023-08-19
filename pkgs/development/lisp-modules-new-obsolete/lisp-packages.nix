@@ -328,7 +328,7 @@ let
 
   oldMakeWrapper = pkgs.runCommand "make-wrapper.sh" {} ''
     substitute ${./old-make-wrapper.sh} $out \
-      --replace @shell@ ${pkgs.bash}/bin/bash
+      --replace @shell@ ${lib.getExe pkgs.bash}
   '';
 
   # Creates a lisp wrapper with `packages` installed

@@ -22,7 +22,7 @@ in
     {
       name = "patch-rc-path-csh";
       substitutions = {
-        sed = "${gnused}/bin/sed";
+        sed = "${lib.getExe gnused}";
       };
       meta = with lib; {
         description = "Setup-hook to inject source-time PATH prefix to a Csh script";
@@ -47,7 +47,7 @@ in
     {
       name = "patch-rc-path-posix";
       substitutions = {
-        sed = "${gnused}/bin/sed";
+        sed = "${lib.getExe gnused}";
       };
       meta = with lib; {
         description = "Setup-hook to inject source-time PATH prefix to a POSIX shell script";

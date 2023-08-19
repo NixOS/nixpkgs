@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    sed -i 's|@JAVA@|${jre}/bin/java|g' $(find -name '*.py')
+    sed -i 's|@JAVA@|${lib.getExe jre}|g' $(find -name '*.py')
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

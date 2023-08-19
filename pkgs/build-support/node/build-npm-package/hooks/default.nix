@@ -19,9 +19,9 @@
 
         # Specify `diff`, `jq`, and `prefetch-npm-deps` by abspath to ensure that the user's build
         # inputs do not cause us to find the wrong binaries.
-        diff = "${diffutils}/bin/diff";
-        jq = "${jq}/bin/jq";
-        prefetchNpmDeps = "${prefetch-npm-deps}/bin/prefetch-npm-deps";
+        diff = lib.getExe' diffutils "diff";
+        jq = lib.getExe jq;
+        prefetchNpmDeps = lib.getExe prefetch-npm-deps;
 
         nodeVersion = nodejs.version;
         nodeVersionMajor = lib.versions.major nodejs.version;
@@ -41,8 +41,8 @@
         makeWrapper
       ];
       substitutions = {
-        hostNode = "${nodejs}/bin/node";
-        jq = "${jq}/bin/jq";
+        hostNode = lib.getExe nodejs;
+        jq = lib.getExe jq;
       };
     } ./npm-install-hook.sh;
 }

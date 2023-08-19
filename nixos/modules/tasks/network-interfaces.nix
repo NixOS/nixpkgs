@@ -1480,7 +1480,7 @@ in
           sysctl-value = tempaddrValues.${cfg.tempAddresses}.sysctl;
         in ''
           # enable and prefer IPv6 privacy addresses by default
-          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/$name/use_tempaddr'"
+          ACTION=="add", SUBSYSTEM=="net", RUN+="${lib.getExe' pkgs.bash "sh"} -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/$name/use_tempaddr'"
         '';
       })
       (pkgs.writeTextFile rec {
@@ -1525,18 +1525,18 @@ in
             curInterfaceScript = device: current: new: pkgs.writeScript "udev-run-script-wlan-interfaces-${device}.sh" ''
               #!${pkgs.runtimeShell}
               # Change the wireless phy device to a predictable name.
-              ${pkgs.iw}/bin/iw phy `${pkgs.coreutils}/bin/cat /sys/class/net/$INTERFACE/phy80211/name` set name ${device}
+              ${lib.getExe pkgs.iw} phy `${pkgs.coreutils}/bin/cat /sys/class/net/$INTERFACE/phy80211/name` set name ${device}
 
               # Add new WLAN interfaces
               ${flip concatMapStrings new (i: ''
-              ${pkgs.iw}/bin/iw phy ${device} interface add ${i._iName} type managed
+              ${lib.getExe pkgs.iw} phy ${device} interface add ${i._iName} type managed
               '')}
 
               # Configure the current interface
-              ${pkgs.iw}/bin/iw dev ${device} set type ${current.type}
-              ${optionalString (current.type == "mesh" && current.meshID!=null) "${pkgs.iw}/bin/iw dev ${device} set meshid ${current.meshID}"}
-              ${optionalString (current.type == "monitor" && current.flags!=null) "${pkgs.iw}/bin/iw dev ${device} set monitor ${current.flags}"}
-              ${optionalString (current.type == "managed" && current.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${device} set 4addr ${if current.fourAddr then "on" else "off"}"}
+              ${lib.getExe pkgs.iw} dev ${device} set type ${current.type}
+              ${optionalString (current.type == "mesh" && current.meshID!=null) "${lib.getExe pkgs.iw} dev ${device} set meshid ${current.meshID}"}
+              ${optionalString (current.type == "monitor" && current.flags!=null) "${lib.getExe pkgs.iw} dev ${device} set monitor ${current.flags}"}
+              ${optionalString (current.type == "managed" && current.fourAddr!=null) "${lib.getExe pkgs.iw} dev ${device} set 4addr ${if current.fourAddr then "on" else "off"}"}
               ${optionalString (current.mac != null) "${pkgs.iproute2}/bin/ip link set dev ${device} address ${current.mac}"}
             '';
 
@@ -1544,10 +1544,10 @@ in
             newInterfaceScript = new: pkgs.writeScript "udev-run-script-wlan-interfaces-${new._iName}.sh" ''
               #!${pkgs.runtimeShell}
               # Configure the new interface
-              ${pkgs.iw}/bin/iw dev ${new._iName} set type ${new.type}
-              ${optionalString (new.type == "mesh" && new.meshID!=null) "${pkgs.iw}/bin/iw dev ${new._iName} set meshid ${new.meshID}"}
-              ${optionalString (new.type == "monitor" && new.flags!=null) "${pkgs.iw}/bin/iw dev ${new._iName} set monitor ${new.flags}"}
-              ${optionalString (new.type == "managed" && new.fourAddr!=null) "${pkgs.iw}/bin/iw dev ${new._iName} set 4addr ${if new.fourAddr then "on" else "off"}"}
+              ${lib.getExe pkgs.iw} dev ${new._iName} set type ${new.type}
+              ${optionalString (new.type == "mesh" && new.meshID!=null) "${lib.getExe pkgs.iw} dev ${new._iName} set meshid ${new.meshID}"}
+              ${optionalString (new.type == "monitor" && new.flags!=null) "${lib.getExe pkgs.iw} dev ${new._iName} set monitor ${new.flags}"}
+              ${optionalString (new.type == "managed" && new.fourAddr!=null) "${lib.getExe pkgs.iw} dev ${new._iName} set 4addr ${if new.fourAddr then "on" else "off"}"}
               ${optionalString (new.mac != null) "${pkgs.iproute2}/bin/ip link set dev ${new._iName} address ${new.mac}"}
             '';
 

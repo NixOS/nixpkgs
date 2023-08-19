@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/pixmaps}
     mv _ant/release $out/jpsxdec
 
-    makeWrapper ${jre}/bin/java $out/bin/jpsxdec \
+    makeWrapper ${lib.getExe jre} $out/bin/jpsxdec \
       --add-flags "-jar $out/jpsxdec/jpsxdec.jar"
 
     cp ${src}/jpsxdec/src/jpsxdec/gui/icon48.png $out/share/pixmaps/${pname}.png

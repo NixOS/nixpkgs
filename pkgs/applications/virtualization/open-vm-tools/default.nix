@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
       --prefix PATH ':' "${lib.makeBinPath [ iproute2 dbus systemd which ]}"
-    substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace "/bin/sh" "${bash}/bin/sh"
+    substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace "/bin/sh" "${lib.getExe' bash "sh"}"
   '';
 
   meta = with lib; {

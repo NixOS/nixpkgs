@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     # use Nix(OS) paths
     substituteInPlace opt/balenaEtcher/resources/app/generated/gui.js \
       --replace '/usr/bin/pkexec' '/usr/bin/pkexec", "/run/wrappers/bin/pkexec' \
-      --replace '/bin/bash' '${bash}/bin/bash' \
+      --replace '/bin/bash' '${lib.getExe bash}' \
       --replace '"lsblk"' '"${util-linux}/bin/lsblk"'
   '';
 

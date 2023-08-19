@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     patchShebangs xmlif/test/run-test
 
     substituteInPlace "xmlto.in" \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace "/bin/bash" "${lib.getExe bash}"
     substituteInPlace "xmlto.in" \
       --replace "/usr/bin/locale" "$(type -P locale)"
     substituteInPlace "xmlto.in" \

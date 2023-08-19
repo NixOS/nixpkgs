@@ -29,10 +29,10 @@ let
       plantumlIncludePath = lib.concatStringsSep ":" [ c4-lib sprites ];
       includeFlag = "-Dplantuml.include.path=${lib.escapeShellArg plantumlIncludePath}";
       postFixedJre =
-        runCommand "jre-postfixed" { nativeBuildInputs = [ makeWrapper ]; } ''
+        runCommand "jre-postfixed" { nativeBuildInputs = [ makeWrapper ]; meta.mainProgram = "java"; } ''
           mkdir -p $out/bin
 
-          makeWrapper ${jre}/bin/java $out/bin/java \
+          makeWrapper ${lib.getExe jre} $out/bin/java \
             --add-flags ${lib.escapeShellArg includeFlag}
         '';
     in

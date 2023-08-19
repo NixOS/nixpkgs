@@ -51,7 +51,7 @@ maven.buildMavenPackage rec {
   installPhase = ''
     install -D target/${pname}-${version}.jar $out/share/java/${pname}-${version}.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/schemaspy \
+    makeWrapper ${lib.getExe jre} $out/bin/schemaspy \
       --add-flags "-jar $out/share/java/${pname}-${version}.jar" \
       --prefix PATH : "$wrappedPath"
   '';

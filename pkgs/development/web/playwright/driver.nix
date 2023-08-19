@@ -48,7 +48,7 @@ let
 
     postPatch = ''
       # Use Nix's NodeJS instead of the bundled one.
-      substituteInPlace playwright.sh --replace '"$SCRIPT_PATH/node"' '"${nodejs}/bin/node"'
+      substituteInPlace playwright.sh --replace '"$SCRIPT_PATH/node"' '"${lib.getExe nodejs}"'
       rm node
 
       # Hard-code the script path to $out directory to avoid a dependency on coreutils

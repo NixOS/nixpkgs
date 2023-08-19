@@ -22,7 +22,7 @@ let
 in
 
 writeScript "update-tor" ''
-#! ${bash}/bin/bash
+#! ${lib.getExe bash}
 
 set -eu -o pipefail
 

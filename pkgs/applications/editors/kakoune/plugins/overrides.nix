@@ -127,7 +127,7 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
   powerline-kak = super.powerline-kak.overrideAttrs(oldAttrs: rec {
     preFixup = ''
       substituteInPlace $out/share/kak/autoload/plugins/powerline-kak/rc/modules/git.kak \
-        --replace ' git ' ' ${git}/bin/git '
+        --replace ' git ' ' ${lib.getExe git} '
     '';
   });
 

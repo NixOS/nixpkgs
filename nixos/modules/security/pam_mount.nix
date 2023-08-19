@@ -10,7 +10,7 @@ let
   fake_ofl = pkgs.writeShellScriptBin "fake_ofl" ''
     SIGNAL=$1
     MNTPT=$2
-    ${pkgs.lsof}/bin/lsof | ${pkgs.gnugrep}/bin/grep $MNTPT | ${pkgs.gawk}/bin/awk '{print $2}' | ${pkgs.findutils}/bin/xargs ${pkgs.util-linux}/bin/kill -$SIGNAL
+    ${pkgs.lsof}/bin/lsof | ${lib.getExe pkgs.gnugrep} $MNTPT | ${pkgs.gawk}/bin/awk '{print $2}' | ${pkgs.findutils}/bin/xargs ${pkgs.util-linux}/bin/kill -$SIGNAL
   '';
 
   anyPamMount = any (attrByPath ["pamMount"] false) (attrValues config.security.pam.services);

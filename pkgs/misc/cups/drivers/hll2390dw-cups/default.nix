@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/opt/brother/Printers/HLL2390DW/lpd/lpdfilter \
       --replace /opt "$out/opt" \
-      --replace /usr/bin/perl ${perl}/bin/perl \
+      --replace /usr/bin/perl ${lib.getExe perl} \
       --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out\"; #" \
       --replace "PRINTER =~" "PRINTER = \"HLL2390DW\"; #"
 

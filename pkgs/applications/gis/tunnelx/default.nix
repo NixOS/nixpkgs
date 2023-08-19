@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/java
     cp -r symbols Tunnel tutorials $out/java
     # `SURVEX_EXECUTABLE_DIR` must include trailing slash
-    makeWrapper ${jre}/bin/java $out/bin/tunnelx \
+    makeWrapper ${lib.getExe jre} $out/bin/tunnelx \
       --add-flags "-cp $out/java Tunnel.MainBox" \
       --set SURVEX_EXECUTABLE_DIR ${lib.getBin survex}/bin/ \
       --set TUNNEL_USER_DIR $out/java/

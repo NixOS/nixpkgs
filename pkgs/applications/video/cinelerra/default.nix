@@ -54,7 +54,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    find -type f -print0 | xargs --null sed -e "s@/usr/bin/perl@${perl}/bin/perl@" -i
+    find -type f -print0 | xargs --null sed -e "s@/usr/bin/perl@${lib.getExe perl}@" -i
     ./autogen.sh
     sed -i -e "s@/usr/bin/file@${file}/bin/file@" ./configure
   '';

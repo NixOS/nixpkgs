@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     rmdir $dir/${uname}-${version}
     cat <<_EOF > $out/bin/msgviewer
     #!${runtimeShell} -eu
-    exec ${lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar "\$@"
+    exec ${lib.getExe jre} -jar $dir/MSGViewer.jar "\$@"
     _EOF
     chmod 755 $out/bin/msgviewer
   '';

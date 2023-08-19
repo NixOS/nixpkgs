@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./build
     patchShebangs scripts/
     substituteInPlace INSTALL.im --replace /usr $out
-    substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${lib.getExe perl}
     substituteInPlace scripts/yodl2whatever.in --replace getopt ${util-linux}/bin/getopt
   '';
 

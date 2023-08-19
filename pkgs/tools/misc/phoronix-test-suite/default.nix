@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     ./install-sh $out
     wrapProgram $out/bin/phoronix-test-suite \
-    --set PHP_BIN ${php}/bin/php \
+    --set PHP_BIN ${lib.getExe php} \
     --prefix PATH : ${lib.makeBinPath [ gnumake gcc ]}
 
     runHook postInstall

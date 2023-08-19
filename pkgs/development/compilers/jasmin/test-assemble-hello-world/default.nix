@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   meta.timeout = 60;
   buildCommand = ''
     ${jasmin}/bin/jasmin ${./HelloWorld.j}
-    ${jre}/bin/java HelloWorld | grep "Hello World"
+    ${lib.getExe jre} HelloWorld | grep "Hello World"
     touch $out
   '';
 }

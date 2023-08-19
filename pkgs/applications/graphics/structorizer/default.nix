@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     install -d $out/bin $out/share/mime/packages
 
     install -D ${pname}.jar -t $out/share/java/
-      makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
+      makeWrapper ${lib.getExe jdk11} $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${pname}.jar"
 
     cat << EOF > $out/share/mime/packages/structorizer.xml

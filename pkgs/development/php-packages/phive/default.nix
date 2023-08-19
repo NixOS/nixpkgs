@@ -17,7 +17,7 @@ mkDerivation rec {
     runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phive/phive.phar
-    makeWrapper ${php}/bin/php $out/bin/phive \
+    makeWrapper ${lib.getExe php} $out/bin/phive \
       --add-flags "$out/libexec/phive/phive.phar"
     runHook postInstall
   '';

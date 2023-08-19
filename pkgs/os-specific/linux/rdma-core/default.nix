@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
       echo "wrapping $pls"
       substituteInPlace $pls --replace \
-        "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+        "${lib.getExe perl}" "${lib.getExe perl} -I $out/${perl.libPrefix}"
     done
   '';
 

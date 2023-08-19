@@ -17,7 +17,7 @@
 
 let
   bisq-launcher = args: writeScript "bisq-launcher" ''
-    #! ${bash}/bin/bash
+    #! ${lib.getExe bash}
 
     # This is just a comment to convince Nix that Tor is a
     # runtime dependency; The Tor binary is in a *.jar file,
@@ -28,7 +28,7 @@ let
   '';
 
   bisq-tor = writeScript "bisq-tor" ''
-    #! ${bash}/bin/bash
+    #! ${lib.getExe bash}
 
     exec ${tor}/bin/tor "$@"
   '';
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib $out/bin
     cp opt/bisq/lib/app/desktop-${version}-all.jar $out/lib
 
-    makeWrapper ${openjdk11}/bin/java $out/bin/bisq-desktop-wrapped \
+    makeWrapper ${lib.getExe openjdk11} $out/bin/bisq-desktop-wrapped \
       --add-flags "-jar $out/lib/desktop-${version}-all.jar bisq.desktop.app.BisqAppMain"
 
     makeWrapper ${bisq-launcher ""} $out/bin/bisq-desktop \

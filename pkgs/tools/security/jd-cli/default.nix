@@ -19,7 +19,7 @@ maven.buildMavenPackage rec {
     mkdir -p $out/bin $out/share/jd-cli
     install -Dm644 jd-cli/target/jd-cli.jar $out/share/jd-cli
 
-    makeWrapper ${jre}/bin/java $out/bin/jd-cli \
+    makeWrapper ${lib.getExe jre} $out/bin/jd-cli \
       --add-flags "-jar $out/share/jd-cli/jd-cli.jar"
   '';
 

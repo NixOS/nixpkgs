@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     mv -- * $out/share/
 
     for lt in languagetool{,-commandline,-server};do
-      makeWrapper ${jre}/bin/java $out/bin/$lt \
+      makeWrapper ${lib.getExe jre} $out/bin/$lt \
         --add-flags "-cp $out/share/ -jar $out/share/$lt.jar"
     done
 
-    makeWrapper ${jre}/bin/java $out/bin/languagetool-http-server \
+    makeWrapper ${lib.getExe jre} $out/bin/languagetool-http-server \
       --add-flags "-cp $out/share/languagetool-server.jar org.languagetool.server.HTTPServer"
 
     runHook postInstall

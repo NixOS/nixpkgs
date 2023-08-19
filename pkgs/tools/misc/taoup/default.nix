@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
      --subst-var-by pname ${pname}
     substituteInPlace taoup-fortune \
       --subst-var-by out $out \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace "/bin/bash" "${lib.getExe bash}"
   '';
 
   dontConfigure = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     cp taoup $out/lib/taoup
     cat > $out/bin/taoup <<EOF
-    #!${bash}/bin/bash
+    #!${lib.getExe bash}
     exec ${rubyEnv}/bin/ruby "$out/lib/taoup/taoup" "\$@"
     EOF
     chmod +x $out/bin/taoup

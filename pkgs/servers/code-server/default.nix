@@ -294,7 +294,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline --cwd "$out/libexec/code-server" --production
 
     # create wrapper
-    makeWrapper "${nodejs}/bin/node" "$out/bin/code-server" \
+    makeWrapper "${lib.getExe nodejs}" "$out/bin/code-server" \
       --add-flags "$out/libexec/code-server/out/node/entry.js"
 
     runHook postInstall

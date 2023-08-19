@@ -33,7 +33,7 @@ in {
         setuid = false;
         setgid = true;
         source = pkgs.writeScript "nix-ccache.pl" ''
-          #!${pkgs.perl}/bin/perl
+          #!${lib.getExe pkgs.perl}
 
           %ENV=( CCACHE_DIR => '${cfg.cacheDir}' );
           sub untaint {

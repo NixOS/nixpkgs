@@ -46,7 +46,7 @@ in
     services.lighttpd.extraConfig = ''
       $HTTP["url"] =~ "^/collectd" {
         cgi.assign = (
-          ".cgi" => "${pkgs.perl}/bin/perl"
+          ".cgi" => "${lib.getExe pkgs.perl}"
         )
         alias.url = (
           "/collectd" => "${cfg.collectionCgi}"

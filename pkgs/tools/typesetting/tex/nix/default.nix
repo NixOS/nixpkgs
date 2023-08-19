@@ -61,7 +61,7 @@ rec {
           # what extensions we use to look for it.
           deps = import (pkgs.runCommand "latex-includes"
             { rootFile = baseNameOf (toString rootFile); src = key; }
-            "${pkgs.perl}/bin/perl ${./find-includes.pl}");
+            "${pkgs.lib.getExe pkgs.perl} ${./find-includes.pl}");
 
           # Look for the dependencies of `key', trying various
           # extensions determined by the type of each dependency.
@@ -96,7 +96,7 @@ rec {
 
           deps = import (pkgs.runCommand "lhs2tex-includes"
             { src = key; }
-            "${pkgs.stdenv.bash}/bin/bash ${./find-lhs2tex-includes.sh}");
+            "${pkgs.lib.getExe pkgs.bash} ${./find-lhs2tex-includes.sh}");
 
         in pkgs.lib.concatMap (x: lib.optionals (builtins.pathExists x) [{key = x;}])
                               (map (x: dirOf key + ("/" + x)) deps);

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    makeWrapper ${jre}/bin/java $out/bin/ugs \
+    makeWrapper ${lib.getExe jre} $out/bin/ugs \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --add-flags "-jar ${src}/UniversalGcodeSender.jar"
 

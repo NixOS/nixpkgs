@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
     rm $out/bin/*
 
     # put this in postFixup because some gappsWrapperArgs are generated in gappsWrapperArgsHook in preFixup
-    makeWrapper ${jdk}/bin/java $out/bin/JabRef \
+    makeWrapper ${lib.getExe jdk} $out/bin/JabRef \
       "''${gappsWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --add-flags "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main" \

@@ -39,7 +39,7 @@ mkYarnPackage rec {
   '';
 
   postInstall = ''
-    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-slack" --add-flags \
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-appservice-slack" --add-flags \
         "$out/libexec/matrix-appservice-slack/deps/matrix-appservice-slack/lib/app.js"
   '';
 

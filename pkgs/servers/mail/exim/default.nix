@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       s:^# \(MV_COMMAND\)=.*:\1=${coreutils}/bin/mv:
       s:^# \(RM_COMMAND\)=.*:\1=${coreutils}/bin/rm:
       s:^# \(TOUCH_COMMAND\)=.*:\1=${coreutils}/bin/touch:
-      s:^# \(PERL_COMMAND\)=.*:\1=${perl}/bin/perl:
+      s:^# \(PERL_COMMAND\)=.*:\1=${lib.getExe perl}:
       s:^# \(LOOKUP_DSEARCH=yes\)$:\1:
       ${lib.optionalString enableLDAP ''
         s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:

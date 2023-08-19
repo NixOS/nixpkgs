@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    sed -e "s|/bin/sh|${bash}/bin/sh|" -i *.rules
+    sed -e "s|/bin/sh|${lib.getExe' bash "sh"}|" -i *.rules
   '';
 
   preInstall = ''

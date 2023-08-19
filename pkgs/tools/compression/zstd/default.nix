@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $bin/bin
     substituteInPlace ../programs/zstdgrep \
-      --replace ":-grep" ":-${gnugrep}/bin/grep" \
+      --replace ":-grep" ":-${lib.getExe gnugrep}" \
       --replace ":-zstdcat" ":-$bin/bin/zstdcat"
 
     substituteInPlace ../programs/zstdless \

@@ -167,7 +167,7 @@ let
           https://www.modartt.com/api/0/download
         )
 
-        url=$(echo $json | ${jq}/bin/jq -r .url)
+        url=$(echo $json | ${lib.getExe jq} -r .url)
         if [ "$url" == "null"  ]; then
           echo "Could not get download URL, open an issue on https://github.com/NixOS/nixpkgs"
           return 1
@@ -190,7 +190,7 @@ let
 
         "''${curl[@]}" -s -o /dev/null "https://www.modartt.com/user_area"
 
-        ${jq}/bin/jq -n "{connect: 1, login: \"''${NIX_MODARTT_USERNAME}\", password: \"''${NIX_MODARTT_PASSWORD}\"}" > login.json
+        ${lib.getExe jq} -n "{connect: 1, login: \"''${NIX_MODARTT_USERNAME}\", password: \"''${NIX_MODARTT_PASSWORD}\"}" > login.json
 
         "''${curl[@]}" --silent --request POST \
           --cookie cookies \
@@ -213,7 +213,7 @@ let
           https://www.modartt.com/api/0/download
         )
 
-        url=$(echo $json | ${jq}/bin/jq -r .url)
+        url=$(echo $json | ${lib.getExe jq} -r .url)
         "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
       '';
     };

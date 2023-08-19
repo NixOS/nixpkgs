@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
     cp ${mimisrc}/xdg-open $out/bin/xdg-open
   '' + ''
     sed  '2s#.#\
-    sed()   { ${gnused}/bin/sed     "$@"; }\
-    grep()  { ${gnugrep}/bin/grep   "$@"; }\
+    sed()   { ${lib.getExe gnused}     "$@"; }\
+    grep()  { ${lib.getExe gnugrep}   "$@"; }\
     egrep() { ${gnugrep}/bin/egrep  "$@"; }\
     file()  { ${file}/bin/file      "$@"; }\
     awk()   { ${gawk}/bin/awk       "$@"; }\

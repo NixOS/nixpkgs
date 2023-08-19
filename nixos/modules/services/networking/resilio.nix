@@ -54,7 +54,7 @@ let
 
   createConfig = pkgs.writeShellScriptBin "create-resilio-config" (
     if cfg.sharedFolders != [ ] then ''
-      ${pkgs.jq}/bin/jq \
+      ${lib.getExe pkgs.jq} \
         '.shared_folders |= map(.secret = $ARGS.named[.dir])' \
         ${
           lib.concatMapStringsSep " \\\n  "

@@ -23,7 +23,7 @@ let
   activationSnippet = name: { interpreter, wrapInterpreterInShell, ... }: if wrapInterpreterInShell then ''
     rm -f /run/binfmt/${name}
     cat > /run/binfmt/${name} << 'EOF'
-    #!${pkgs.bash}/bin/sh
+    #!${lib.getExe' pkgs.bash "sh"}
     exec -- ${interpreter} "$@"
     EOF
     chmod +x /run/binfmt/${name}

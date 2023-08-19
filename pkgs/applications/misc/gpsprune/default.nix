@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -Dm644 ${src} $out/share/java/gpsprune.jar
-    makeWrapper ${jre}/bin/java $out/bin/gpsprune \
+    makeWrapper ${lib.getExe jre} $out/bin/gpsprune \
       --add-flags "-jar $out/share/java/gpsprune.jar"
     mkdir -p $out/share/pixmaps
     ${unzip}/bin/unzip -p $src tim/prune/gui/images/window_icon_64.png > $out/share/pixmaps/gpsprune.png

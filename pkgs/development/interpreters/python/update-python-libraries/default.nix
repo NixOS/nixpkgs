@@ -1,4 +1,4 @@
-{ python3, runCommand, git, nix, nix-prefetch-git }:
+{lib, python3, runCommand, git, nix, nix-prefetch-git }:
 
 runCommand "update-python-libraries" {
   buildInputs = [
@@ -10,5 +10,5 @@ runCommand "update-python-libraries" {
 } ''
   cp ${./update-python-libraries.py} $out
   patchShebangs $out
-  substituteInPlace $out --replace 'GIT = "git"' 'GIT = "${git}/bin/git"'
+  substituteInPlace $out --replace 'GIT = "git"' 'GIT = "${lib.getExe git}"'
 ''

@@ -27,13 +27,13 @@ buildPythonPackage rec {
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
         --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl" \
-        --replace /bin/bash "${bashInteractive}/bin/bash" \
+        --replace /bin/bash "${lib.getExe bashInteractive}" \
         --replace /sbin/hwclock "${util-linux}/bin/hwclock"
       # SELinux tool ???  /sbin/restorecon
     done
 
     substituteInPlace google_config/udev/64-gce-disk-removal.rules \
-      --replace /bin/sh "${bash}/bin/sh" \
+      --replace /bin/sh "${lib.getExe' bash "sh"}" \
       --replace /bin/umount "${util-linux}/bin/umount" \
       --replace /usr/bin/logger "${util-linux}/bin/logger"
   '';

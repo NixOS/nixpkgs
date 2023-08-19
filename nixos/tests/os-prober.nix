@@ -12,7 +12,7 @@ let
       ${util-linux}/bin/mount -t ext4 /dev/vda1 /mnt
 
       if test -e /mnt/.debug; then
-        exec ${bash}/bin/sh
+        exec ${lib.getExe' bash "sh"}
       fi
       touch /mnt/.debug
 

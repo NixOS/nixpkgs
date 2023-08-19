@@ -68,7 +68,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./hardcode-nodejs-npmjs-paths.patch;
-      node_bin = "${nodejs}/bin/node";
+      node_bin = "${lib.getExe nodejs}";
       npm_bin = "${nodejs}/bin/npm";
     })
   ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      sed = "${gnused}/bin/sed";
+      sed = "${lib.getExe gnused}";
       xprop = "${xorg.xprop}/bin/xprop";
       rlwrap = "${rlwrap}/bin/rlwrap";
       tput = "${ncurses}/bin/tput";

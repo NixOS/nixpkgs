@@ -19,7 +19,7 @@ let
   classp  = cljdeps.makeClasspaths {};
 
   shellScript = writeShellScript "clojupyter" ''
-    ${jre}/bin/java -cp ${classp} clojupyter.kernel.core "$@"
+    ${lib.getExe jre} -cp ${classp} clojupyter.kernel.core "$@"
   '';
 
   pname = "clojupyter";

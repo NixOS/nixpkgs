@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e "s|menugenbase|$out/bin/rofi-menugenbase|" menugen
     sed -i -e "s|rofi |${rofi}/bin/rofi |" menugen
-    sed -i -e "s|sed |${gnused}/bin/sed |" menugenbase
+    sed -i -e "s|sed |${lib.getExe gnused} |" menugenbase
   '';
 
   installPhase = ''

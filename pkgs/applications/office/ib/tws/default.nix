@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     if [ ! -e \$IB_USER_PROFILE ]; then mkdir -p \$IB_USER_PROFILE; fi
     if [ ! -d \$IB_USER_PROFILE ]; then echo "ERROR: \$IB_USER_PROFILE must be a directory!" && echo 1; fi
     if [ ! -e \$IB_USER_PROFILE/jts.ini ]; then cp $out/etc/ib/tws/jts.ini \$IB_USER_PROFILE/. && chmod +w \$IB_USER_PROFILE/jts.ini; fi
-    ${jdk}/bin/java -cp $classpath \$$javaOptions jclient.LoginFrame \$IB_USER_PROFILE
+    ${lib.getExe jdk} -cp $classpath \$$javaOptions jclient.LoginFrame \$IB_USER_PROFILE
     EOF
     chmod u+x $out/bin/ib-tws
     cat<<EOF > $out/bin/ib-gw
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     if [ ! -e \$IB_USER_PROFILE ]; then mkdir -p \$IB_USER_PROFILE; fi
     if [ ! -d \$IB_USER_PROFILE ]; then echo "ERROR: \$IB_USER_PROFILE must be a directory!" && echo 1; fi
     if [ ! -e \$IB_USER_PROFILE/jts.ini ]; then cp $out/etc/ib/tws/jts.ini \$IB_USER_PROFILE/. && chmod +w \$IB_USER_PROFILE/jts.ini; fi
-    ${jdk}/bin/java -cp $classpath -Dsun.java2d.noddraw=true \$$javaOptions ibgateway.GWClient \$IB_USER_PROFILE
+    ${lib.getExe jdk} -cp $classpath -Dsun.java2d.noddraw=true \$$javaOptions ibgateway.GWClient \$IB_USER_PROFILE
     EOF
     chmod u+x $out/bin/ib-gw
     '';

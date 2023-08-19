@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/mcaselector}
     cp $src $out/lib/mcaselector/mcaselector.jar
-    makeWrapper ${jre}/bin/java $out/bin/mcaselector \
+    makeWrapper ${lib.getExe jre} $out/bin/mcaselector \
       --add-flags "-jar $out/lib/mcaselector/mcaselector.jar"
 
     runHook postInstall

@@ -101,8 +101,8 @@ in
           if [ ! -d "${keydir}" ]; then
             mkdir -p "${keydir}"
             chmod 0700 "${keydir}"
-            ${pkgs.openssl}/bin/openssl genrsa -out "${privkey}" ${toString cfg.keySize}
-            ${pkgs.openssl}/bin/openssl rsa -in "${privkey}" -pubout -out "${pubkey}"
+            ${lib.getExe pkgs.openssl} genrsa -out "${privkey}" ${toString cfg.keySize}
+            ${lib.getExe pkgs.openssl} rsa -in "${privkey}" -pubout -out "${pubkey}"
             chown -R dkimproxy-out:dkimproxy-out "${keydir}"
           fi
         '';

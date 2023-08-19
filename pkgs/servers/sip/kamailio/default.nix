@@ -61,9 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     echo 'MD5="${pkgs.coreutils}/bin/md5sum"' >> $out/etc/kamailio/kamctlrc
     echo 'AWK="${pkgs.gawk}/bin/awk"' >> $out/etc/kamailio/kamctlrc
     echo 'GDB="${pkgs.gdb}/bin/gdb"' >> $out/etc/kamailio/kamctlrc
-    echo 'GREP="${pkgs.gnugrep}/bin/grep "' >> $out/etc/kamailio/kamctlrc
-    echo 'EGREP="${pkgs.gnugrep}/bin/grep -E"' >> $out/etc/kamailio/kamctlrc
-    echo 'SED="${pkgs.gnused}/bin/sed"' >> $out/etc/kamailio/kamctlrc
+    echo 'GREP="${lib.getExe pkgs.gnugrep} "' >> $out/etc/kamailio/kamctlrc
+    echo 'EGREP="${lib.getExe pkgs.gnugrep} -E"' >> $out/etc/kamailio/kamctlrc
+    echo 'SED="${lib.getExe pkgs.gnused}"' >> $out/etc/kamailio/kamctlrc
     echo 'LAST_LINE="${pkgs.coreutils}/bin/tail -n 1"' >> $out/etc/kamailio/kamctlrc
     echo 'EXPR="${pkgs.gnugrep}/bin/expr"' >> $out/etc/kamailio/kamctlrc
 

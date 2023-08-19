@@ -14,7 +14,7 @@ buildPythonPackage rec {
   postPatch = ''
     patchShebangs scripts/cram
     substituteInPlace tests/test.t \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace "/bin/bash" "${lib.getExe bash}"
   '';
 
   checkPhase = ''

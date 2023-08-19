@@ -32,13 +32,13 @@ buildGoModule rec {
       transcode/transcode.go \
       --replace \
         '`ffmpeg' \
-        '`${lib.getBin ffmpeg}/bin/ffmpeg'
+        '`${lib.getExe ffmpeg}'
   '' + ''
     substituteInPlace \
       jukebox/jukebox.go \
       --replace \
         '"mpv"' \
-        '"${lib.getBin mpv}/bin/mpv"'
+        '"${lib.getExe mpv}"'
   '';
 
   passthru = {

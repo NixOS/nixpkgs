@@ -21,7 +21,7 @@ let
         cat > $out/bin/${prog'} <<EOF
         #! $shell
         export JAVA_HOME=${jre}
-        exec ${jre}/bin/java -jar $out/${jar'}.jar "\$@"
+        exec ${lib.getExe jre} -jar $out/${jar'}.jar "\$@"
         EOF
         chmod a+x $out/bin/${prog'}
       '';

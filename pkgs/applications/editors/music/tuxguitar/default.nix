@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/share $out/bin/share
 
     wrapProgram $out/bin/tuxguitar \
-      --set JAVA "${jre}/bin/java" \
+      --set JAVA "${lib.getExe jre}" \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt alsa-lib jack2 fluidsynth libpulseaudio ]}" \
       --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
   '';

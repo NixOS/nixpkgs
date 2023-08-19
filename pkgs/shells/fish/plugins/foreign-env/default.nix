@@ -14,8 +14,8 @@ buildFishPlugin {
   patches = [ ./suppress-harmless-warnings.patch ];
 
   preInstall = ''
-    sed -e "s|sed|${gnused}/bin/sed|" \
-        -e "s|bash|${bash}/bin/bash|" \
+    sed -e "s|sed|${lib.getExe gnused}|" \
+        -e "s|bash|${lib.getExe bash}|" \
         -e "s|\| tr|\| ${coreutils}/bin/tr|" \
         -i functions/*
   '';

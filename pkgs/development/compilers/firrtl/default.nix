@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${lib.getExe jre} $out/bin/${pname} \
       --add-flags "-cp $CLASSPATH firrtl.stage.FirrtlMain"
 
     runHook postInstall

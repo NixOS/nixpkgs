@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec/quantomatic
     cp $src $out/libexec/quantomatic/quantomatic.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/quantomatic --add-flags "-jar $out/libexec/quantomatic/quantomatic.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/quantomatic --add-flags "-jar $out/libexec/quantomatic/quantomatic.jar"
   '';
 
   meta = with lib; {

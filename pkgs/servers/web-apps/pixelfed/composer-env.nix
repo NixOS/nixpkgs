@@ -43,7 +43,7 @@ let
         name = "reconstructinstalled.php";
         executable = true;
         text = ''
-          #! ${php}/bin/php
+          #! ${lib.getExe php}
           <?php
           if(file_exists($argv[1]))
           {
@@ -82,7 +82,7 @@ let
         name = "constructbin.php";
         executable = true;
         text = ''
-          #! ${php}/bin/php
+          #! ${lib.getExe php}
           <?php
           $composerJSONStr = file_get_contents($argv[1]);
 
@@ -179,7 +179,7 @@ let
 
         # Reconstruct the installed.json file from the lock file
         mkdir -p vendor/composer
-        ${php}/bin/php ${reconstructInstalled} composer.lock > vendor/composer/installed.json
+        ${lib.getExe php} ${reconstructInstalled} composer.lock > vendor/composer/installed.json
 
         # Copy or symlink the provided dependencies
         cd vendor
@@ -197,7 +197,7 @@ let
 
         ${lib.optionalString executable ''
           # Reconstruct the bin/ folder if we deploy an executable project
-          ${php}/bin/php ${constructBin} composer.json
+          ${lib.getExe php} ${constructBin} composer.json
           ln -s $(pwd)/vendor/bin $out/bin
         ''}
 
@@ -216,8 +216,8 @@ let
                   chmod u+w "$realFile"
 
                   # Patch shebang
-                  sed -e "s|#!/usr/bin/php|#!${php}/bin/php|" \
-                      -e "s|#!/usr/bin/env php|#!${php}/bin/php|" \
+                  sed -e "s|#!/usr/bin/php|#!${lib.getExe php}|" \
+                      -e "s|#!/usr/bin/env php|#!${lib.getExe php}|" \
                       "$realFile" > tmp
                   mv tmp "$realFile"
                   chmod u+x "$realFile"

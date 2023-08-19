@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       --set NIX_REDIRECTS /opt=$out/opt
 
     substituteInPlace $out/bin/brprintconf_hll3230cdw \
-      --replace \"\$"@"\" \"\$"@\" | LD_PRELOAD= ${gnused}/bin/sed -E '/^(function list :|resource file :).*/{s#/opt#$out/opt#}'"
+      --replace \"\$"@"\" \"\$"@\" | LD_PRELOAD= ${lib.getExe gnused} -E '/^(function list :|resource file :).*/{s#/opt#$out/opt#}'"
   '';
 
   meta = with lib; {

@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin" "$out/share/java"
     mv build/dist/vnu.jar "$out/share/java/"
-    makeWrapper "${jre_headless}/bin/java" "$out/bin/vnu" \
+    makeWrapper "${lib.getExe jre_headless}" "$out/bin/vnu" \
       --add-flags "-jar '$out/share/java/vnu.jar'"
   '';
 

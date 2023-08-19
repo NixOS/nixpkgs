@@ -71,13 +71,13 @@ stdenv.mkDerivation rec {
     ++ lib.optional saslSupport "--with-sasl";
 
   postPatch = lib.optionalString (smimeSupport || gpgmeSupport) ''
-    sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl
+    sed -i 's#/usr/bin/openssl#${lib.getExe openssl}#' smime_keys.pl
   '';
 
   postInstall = lib.optionalString smimeSupport ''
     # S/MIME setup
     cp contrib/smime.rc $out/etc/smime.rc
-    sed -i 's#openssl#${openssl}/bin/openssl#' $out/etc/smime.rc
+    sed -i 's#openssl#${lib.getExe openssl}#' $out/etc/smime.rc
     echo "source $out/etc/smime.rc" >> $out/etc/Muttrc
   '' + lib.optionalString gpgSupport ''
     # GnuPG setup

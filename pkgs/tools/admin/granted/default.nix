@@ -44,7 +44,7 @@ buildGoModule rec {
     # Install shell script
     install -Dm755 $src/scripts/assume $out/bin/assume
     substituteInPlace $out/bin/assume \
-      --replace /bin/bash ${bash}/bin/bash
+      --replace /bin/bash ${lib.getExe bash}
 
     wrapProgram $out/bin/assume \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}

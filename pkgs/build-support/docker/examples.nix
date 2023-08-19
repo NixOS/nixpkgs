@@ -7,7 +7,7 @@
 #  $ nix-build '<nixpkgs>' -A dockerTools.examples.redis
 #  $ docker load < result
 
-{ pkgs, buildImage, buildLayeredImage, fakeNss, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross, streamNixShellImage }:
+{ lib, pkgs, buildImage, buildLayeredImage, fakeNss, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross, streamNixShellImage }:
 
 let
   nixosLib = import ../../../nixos/lib {
@@ -215,7 +215,7 @@ rec {
     name = "layered-image";
     tag = "latest";
     extraCommands = ''echo "(extraCommand)" > extraCommands'';
-    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    config.Cmd = [ "${lib.getExe pkgs.hello}" ];
     contents = [ pkgs.hello pkgs.bash pkgs.coreutils ];
   };
 
@@ -232,7 +232,7 @@ rec {
       Env = [ "PATH=${pkgs.coreutils}/bin/" ];
       WorkingDir = "/example-output";
       Cmd = [
-        "${pkgs.bash}/bin/bash" "-c" "echo hello > foo; cat foo"
+        "${lib.getExe pkgs.bash}" "-c" "echo hello > foo; cat foo"
       ];
     };
   };
@@ -250,7 +250,7 @@ rec {
       Env = [ "PATH=${pkgs.coreutils}/bin/" ];
       WorkingDir = "/example-output";
       Cmd = [
-        "${pkgs.bash}/bin/bash" "-c" "echo hello > foo; cat foo"
+        "${lib.getExe pkgs.bash}" "-c" "echo hello > foo; cat foo"
       ];
     };
   };
@@ -354,14 +354,14 @@ rec {
   another-layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "another-layered-image";
     tag = "latest";
-    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    config.Cmd = [ "${lib.getExe pkgs.hello}" ];
   };
 
   # 17. Create a layered image with only 2 layers
   two-layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "two-layered-image";
     tag = "latest";
-    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    config.Cmd = [ "${lib.getExe pkgs.hello}" ];
     contents = [ pkgs.bash pkgs.hello ];
     maxLayers = 2;
   };
@@ -400,7 +400,7 @@ rec {
       cp -r ${pkgs.pkgsStatic.busybox}/* .
 
       # This is a "build" dependency that will not appear in the image
-      ${pkgs.hello}/bin/hello
+      ${lib.getExe pkgs.hello}
     '';
   };
 
@@ -567,14 +567,14 @@ rec {
   prefixedImage = pkgs.dockerTools.buildImage {
     name = "registry-1.docker.io/image";
     tag = "latest";
-    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    config.Cmd = [ "${lib.getExe pkgs.hello}" ];
   };
 
   # layered image with registry/ prefix
   prefixedLayeredImage = pkgs.dockerTools.buildLayeredImage {
     name = "registry-1.docker.io/layered-image";
     tag = "latest";
-    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+    config.Cmd = [ "${lib.getExe pkgs.hello}" ];
   };
 
   # layered image with files owned by a user other than root
@@ -683,7 +683,7 @@ rec {
     # This functionality is not available on darwin as of 2021.
     fakeRootCommands = ''
       mkdir /bin
-      ln -s ${pkgs.hello}/bin/hello /bin/hello
+      ln -s ${lib.getExe pkgs.hello} /bin/hello
     '';
   };
 

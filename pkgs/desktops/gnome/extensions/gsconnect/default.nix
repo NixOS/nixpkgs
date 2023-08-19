@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     "-Dgnome_shell_libdir=${gnome.gnome-shell}/lib"
     "-Dchrome_nmhdir=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
     "-Dchromium_nmhdir=${placeholder "out"}/etc/chromium/native-messaging-hosts"
-    "-Dopenssl_path=${openssl}/bin/openssl"
+    "-Dopenssl_path=${lib.getExe openssl}"
     "-Dsshadd_path=${openssh}/bin/ssh-add"
     "-Dsshkeygen_path=${openssh}/bin/ssh-keygen"
     "-Dsession_bus_services_dir=${placeholder "out"}/share/dbus-1/services"

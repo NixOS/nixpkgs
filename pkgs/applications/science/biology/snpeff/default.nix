@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     cp *.jar *.config $out/libexec/snpeff
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/snpeff --add-flags "-jar $out/libexec/snpeff/snpEff.jar"
-    makeWrapper ${jre}/bin/java $out/bin/snpsift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/snpeff --add-flags "-jar $out/libexec/snpeff/snpEff.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/snpsift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
   '';
 
   meta = with lib; {

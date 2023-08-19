@@ -31,7 +31,7 @@ let
       --subst-var-by installBootLoader ${lib.escapeShellArg config.system.build.installBootLoader} \
       --subst-var-by localeArchive "${config.i18n.glibcLocales}/lib/locale/locale-archive" \
       --subst-var-by perl "${perlWrapped}" \
-      --subst-var-by shell "${pkgs.bash}/bin/sh" \
+      --subst-var-by shell "${lib.getExe' pkgs.bash "sh"}" \
       --subst-var-by su "${pkgs.shadow.su}/bin/su" \
       --subst-var-by systemd "${config.systemd.package}" \
       --subst-var-by utillinux "${pkgs.util-linux}" \

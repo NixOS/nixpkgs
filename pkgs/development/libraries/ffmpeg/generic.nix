@@ -697,5 +697,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "libavutil" ];
     platforms = platforms.all;
     maintainers = with maintainers; [ atemu ];
+    mainProgram = "ffmpeg";
   };
 })

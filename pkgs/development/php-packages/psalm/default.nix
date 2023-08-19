@@ -20,7 +20,7 @@ mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/psalm/psalm.phar
-    makeWrapper ${php}/bin/php $out/bin/psalm \
+    makeWrapper ${lib.getExe php} $out/bin/psalm \
       --add-flags "$out/libexec/psalm/psalm.phar"
     runHook postInstall
   '';

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     rm -r $out/share/greenfoot/jdk
     rm -r $out/share/greenfoot/javafx-*.jar
 
-    makeWrapper ${openjdk}/bin/java $out/bin/greenfoot \
+    makeWrapper ${lib.getExe openjdk} $out/bin/greenfoot \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
                    --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \

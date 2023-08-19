@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     dir=$out/opt/brother/Printers/mfcl8690cdw
 
     substituteInPlace $dir/cupswrapper/brother_lpdwrapper_mfcl8690cdw \
-      --replace /usr/bin/perl ${perl}/bin/perl \
+      --replace /usr/bin/perl ${lib.getExe perl} \
       --replace "basedir =~" "basedir = \"$basedir/\"; #" \
       --replace "PRINTER =~" "PRINTER = \"mfcl8690cdw\"; #"
 

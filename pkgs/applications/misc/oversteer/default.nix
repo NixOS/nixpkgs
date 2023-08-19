@@ -61,7 +61,7 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     substituteInPlace $out/lib/udev/rules.d/* \
-      --replace /bin/sh ${bash}/bin/sh
+      --replace /bin/sh ${lib.getExe' bash "sh"}
   '';
 
   patches = [ ./fix-install-dir.patch ];

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
     bash scripts/injectPolyfills.sh
     substituteInPlace src/index.js --replace 'nightly' '${version}'
-    ${nodejs}/bin/node scripts/strip.js
+    ${lib.getExe nodejs} scripts/strip.js
     ${asar}/bin/asar pack src app.asar
 
     runHook postBuild

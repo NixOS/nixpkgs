@@ -49,7 +49,7 @@ maven.buildMavenPackage rec {
     install -Dm644 target/ns-usbloader-${version}.jar $out/share/java/ns-usbloader.jar
 
     mkdir -p $out/bin
-    makeWrapper ${jreWithJavaFX}/bin/java $out/bin/ns-usbloader \
+    makeWrapper ${lib.getExe jreWithJavaFX} $out/bin/ns-usbloader \
       --append-flags "-jar $out/share/java/ns-usbloader.jar"
 
     mkdir -p $out/lib/udev/rules.d

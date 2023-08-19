@@ -31,7 +31,7 @@ in
     services.lighttpd.extraConfig = ''
       $HTTP["url"] =~ "^/gitweb" {
           cgi.assign = (
-              ".cgi" => "${pkgs.perl}/bin/perl"
+              ".cgi" => "${lib.getExe pkgs.perl}"
           )
           url.redirect = (
               "^/gitweb$" => "/gitweb/"

@@ -100,7 +100,7 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/${binName} \
+    makeWrapper ${lib.getExe jre} $out/bin/${binName} \
       "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ ffmpeg ]} \
       --add-flags '${lib.concatStringsSep " " jvmArgs} net.rptools.maptool.client.LaunchInstructions'

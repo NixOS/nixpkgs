@@ -121,8 +121,8 @@ let
 
       shell = lib.mkOption {
         type = lib.types.str;
-        default = "${pkgs.bash}/bin/bash -e -c";
-        defaultText = lib.literalExpression ''"''${pkgs.bash}/bin/bash -e -c"'';
+        default = "${lib.getExe pkgs.bash} -e -c";
+        defaultText = lib.literalExpression ''"''${lib.getExe pkgs.bash} -e -c"'';
         description = lib.mdDoc ''
           Command that buildkite-agent 3 will execute when it spawns a shell.
         '';

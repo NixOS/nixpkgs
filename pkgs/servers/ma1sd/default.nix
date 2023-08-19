@@ -80,7 +80,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     install -D build/libs/source.jar $out/lib/ma1sd.jar
-    makeWrapper ${jre}/bin/java $out/bin/ma1sd --add-flags "-jar $out/lib/ma1sd.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/ma1sd --add-flags "-jar $out/lib/ma1sd.jar"
     runHook postInstall
   '';
 

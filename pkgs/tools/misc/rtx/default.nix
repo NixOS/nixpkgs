@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs --build ./test/data/plugins/**/bin/* ./src/fake_asdf.rs ./src/cli/reshim.rs
 
     substituteInPlace ./src/env_diff.rs \
-      --replace '"bash"' '"${bash}/bin/bash"'
+      --replace '"bash"' '"${lib.getExe bash}"'
 
     substituteInPlace ./src/cli/direnv/exec.rs \
       --replace '"env"' '"${coreutils}/bin/env"' \

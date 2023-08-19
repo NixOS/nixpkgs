@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/share/flyway
     cp -r sql jars drivers conf $out/share/flyway
     install -Dt $out/share/flyway/lib lib/community/*.jar lib/*.jar lib/aad/*.jar lib/oracle_wallet/*.jar
-    makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
+    makeWrapper "${lib.getExe jre_headless}" $out/bin/flyway \
       --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
       --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
       --add-flags "org.flywaydb.commandline.Main" \

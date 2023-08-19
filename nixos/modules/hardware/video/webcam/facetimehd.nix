@@ -39,7 +39,7 @@ in
 
     # unload module during suspend/hibernate as it crashes the whole system
     powerManagement.powerDownCommands = ''
-      ${pkgs.kmod}/bin/lsmod | ${pkgs.gnugrep}/bin/grep -q "^facetimehd" && ${pkgs.kmod}/bin/rmmod -f -v facetimehd
+      ${pkgs.kmod}/bin/lsmod | ${lib.getExe pkgs.gnugrep} -q "^facetimehd" && ${pkgs.kmod}/bin/rmmod -f -v facetimehd
     '';
 
     # and load it back on resume

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     cp -v limit_syscalls $out/bin
     cp -v monitor.sh $out/bin/limit_syscalls_monitor.sh
     substituteInPlace $out/bin/limit_syscalls_monitor.sh \
-      --replace perl ${perl}/bin/perl \
+      --replace perl ${lib.getExe perl} \
       --replace which ${which}/bin/which
   '';
 

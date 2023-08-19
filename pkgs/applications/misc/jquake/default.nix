@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     # By default, an 'errors.log' file is created in the current directory.
     # cd into a temporary directory and let it be created there.
     substituteInPlace JQuake.sh \
-      --replace "java -jar " "exec ${jre8.outPath}/bin/java -jar $out/lib/" \
+      --replace "java -jar " "exec ${lib.getExe jre8} -jar $out/lib/" \
       --replace "[JAR FOLDER]" "\$(mktemp -p /tmp -d jquake-errlog-XXX)"
   '';
 

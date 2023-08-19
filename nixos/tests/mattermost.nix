@@ -65,14 +65,14 @@ in
       echo "Expecting config to match: "${lib.escapeShellArg jqExpression} >&2
       curl ${lib.escapeShellArg url} >/dev/null
       config="$(curl ${lib.escapeShellArg "${url}/api/v4/config/client?format=old"})"
-      echo "Config: $(echo "$config" | ${pkgs.jq}/bin/jq)" >&2
-      [[ "$(echo "$config" | ${pkgs.jq}/bin/jq -r ${lib.escapeShellArg ".SiteName == $siteName and .Version == ($mattermostName / $sep)[-1] and (${jqExpression})"} --arg siteName ${lib.escapeShellArg siteName} --arg mattermostName ${lib.escapeShellArg pkgs.mattermost.name} --arg sep '-')" = "true" ]]
+      echo "Config: $(echo "$config" | ${lib.getExe pkgs.jq})" >&2
+      [[ "$(echo "$config" | ${lib.getExe pkgs.jq} -r ${lib.escapeShellArg ".SiteName == $siteName and .Version == ($mattermostName / $sep)[-1] and (${jqExpression})"} --arg siteName ${lib.escapeShellArg siteName} --arg mattermostName ${lib.escapeShellArg pkgs.mattermost.name} --arg sep '-')" = "true" ]]
     '';
 
     setConfig = jqExpression: pkgs.writeShellScript "set-config" ''
       set -euo pipefail
       mattermostConfig=/var/lib/mattermost/config/config.json
-      newConfig="$(${pkgs.jq}/bin/jq -r ${lib.escapeShellArg jqExpression} $mattermostConfig)"
+      newConfig="$(${lib.getExe pkgs.jq} -r ${lib.escapeShellArg jqExpression} $mattermostConfig)"
       rm -f $mattermostConfig
       echo "$newConfig" > "$mattermostConfig"
     '';

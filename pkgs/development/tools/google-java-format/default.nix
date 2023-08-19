@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/${pname}}
     install -D ${src} $out/share/${pname}/google-java-format-${version}-all-deps.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${lib.getExe jre} $out/bin/${pname} \
       --argv0 ${pname} \
       --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED" \
       --add-flags "--add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED" \

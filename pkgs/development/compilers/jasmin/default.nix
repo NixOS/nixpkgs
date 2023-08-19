@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ''
     install -Dm644 jasmin.jar $out/share/java/jasmin.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/jasmin \
+    makeWrapper ${lib.getExe jre} $out/bin/jasmin \
       --add-flags "-jar $out/share/java/jasmin.jar"
   '';
 

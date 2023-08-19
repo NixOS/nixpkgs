@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = genericUpdater {
     versionLister = writeShellScript "btrbk-versionLister" ''
-      ${curl}/bin/curl -s https://digint.ch/download/btrbk/releases/ | ${perl}/bin/perl -lne 'print $1 if /btrbk-([0-9.]*)\.tar/'
+      ${curl}/bin/curl -s https://digint.ch/download/btrbk/releases/ | ${lib.getExe perl} -lne 'print $1 if /btrbk-([0-9.]*)\.tar/'
     '';
   };
 

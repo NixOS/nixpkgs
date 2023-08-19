@@ -177,11 +177,11 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/share/git-core/contrib
       cp -a contrib/hooks/ $out/share/git-core/contrib/
       substituteInPlace $out/share/git-core/contrib/hooks/pre-auto-gc-battery \
-        --replace ' grep' ' ${gnugrep}/bin/grep' \
+        --replace ' grep' ' ${lib.getExe gnugrep}' \
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
-          --replace ' grep' ' ${gnugrep}/bin/grep' \
+          --replace ' grep' ' ${lib.getExe gnugrep}' \
           --replace ' egrep' ' ${gnugrep}/bin/egrep'
 
       # Fix references to the perl, sed, awk and various coreutil binaries used by
@@ -189,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
       SCRIPT="$(cat <<'EOS'
         BEGIN{
           @a=(
-            '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
+            '${lib.getExe gnugrep}', '${lib.getExe gnused}', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
             '${coreutils}/bin/wc', '${coreutils}/bin/tr'
             ${lib.optionalString perlSupport ", '${perlPackages.perl}/bin/perl'"}

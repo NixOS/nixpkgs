@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     machine.succeed("journalctl --grep=systemd")
 
     machine.succeed(
-        "${pkgs.curl}/bin/curl -s localhost:19531/machine | ${pkgs.jq}/bin/jq -e '.hostname == \"machine\"'"
+        "${pkgs.curl}/bin/curl -s localhost:19531/machine | ${lib.getExe pkgs.jq} -e '.hostname == \"machine\"'"
     )
   '';
 })

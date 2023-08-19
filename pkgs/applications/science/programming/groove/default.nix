@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     for bin in Generator Imager ModelChecker PrologChecker Simulator Viewer; do
-      makeWrapper ${jre8}/bin/java $out/bin/groove-''${bin,,} \
+      makeWrapper ${lib.getExe jre8} $out/bin/groove-''${bin,,} \
         --add-flags "-jar $out/share/groove/bin/$bin.jar"
     done
 

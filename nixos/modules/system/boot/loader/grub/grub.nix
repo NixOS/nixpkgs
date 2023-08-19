@@ -734,7 +734,7 @@ in
         set -e
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
+        ${lib.getExe perl} ${install-grub-pl} ${grubConfig args} $@
       '') + cfg.extraInstallCommands);
 
       system.build.grub = grub;

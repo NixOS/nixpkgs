@@ -12,7 +12,7 @@ buildNpmPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace src/webtorrent.ts --replace "node_path: 'node'" "node_path: '${nodejs}/bin/node'"
+    substituteInPlace src/webtorrent.ts --replace "node_path: 'node'" "node_path: '${lib.getExe nodejs}'"
     # This executable is just for telling non-Nix users how to install
     substituteInPlace package.json --replace '"bin": "build/bin.js",' ""
     rm -rf src/bin.ts

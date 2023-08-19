@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   buildCommand = ''
-    makeWrapper ${jdk17_headless}/bin/java $out/bin/komga --add-flags "-jar $src"
+    makeWrapper ${lib.getExe jdk17_headless} $out/bin/komga --add-flags "-jar $src"
   '';
 
   passthru.tests = {

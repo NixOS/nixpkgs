@@ -26,7 +26,7 @@ let
       ;
   in pkgs.writeText "config.php" ''
     <?php
-      putenv('TTRSS_PHP_EXECUTABLE=${pkgs.php}/bin/php');
+      putenv('TTRSS_PHP_EXECUTABLE=${lib.getExe pkgs.php}');
 
       putenv('TTRSS_LOCK_DIRECTORY=${cfg.root}/lock');
       putenv('TTRSS_CACHE_DIR=${cfg.root}/cache');
@@ -602,7 +602,7 @@ let
         serviceConfig = {
           User = "${cfg.user}";
           Group = "tt_rss";
-          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/www/update.php --daemon --quiet";
+          ExecStart = "${lib.getExe pkgs.php} ${cfg.root}/www/update.php --daemon --quiet";
           Restart = "on-failure";
           RestartSec = "60";
           SyslogIdentifier = "tt-rss";

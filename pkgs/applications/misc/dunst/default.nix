@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     install -D contrib/_dunst.zshcomp $out/share/zsh/site-functions/_dunst
     install -D contrib/_dunstctl.zshcomp $out/share/zsh/site-functions/_dunstctl
     substituteInPlace $out/share/zsh/site-functions/_dunstctl \
-      --replace "jq -M" "${jq}/bin/jq -M"
+      --replace "jq -M" "${lib.getExe jq} -M"
   '';
 
   passthru.tests.version = testers.testVersion { package = dunst; };

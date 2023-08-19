@@ -28,7 +28,7 @@ let
   # Finds data files using the XDG Base Directory Specification
   # See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
   find-xdg-data-files = writeScriptBin "find-xdg-data-files" ''
-    #!${bash}/bin/sh
+    #!${lib.getExe' bash "sh"}
     IFS=:
     for xdg_data_dir in ''${XDG_DATA_HOME:-$HOME/.local/share}:''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}; do
       if [ -f "$xdg_data_dir/$1" ]; then

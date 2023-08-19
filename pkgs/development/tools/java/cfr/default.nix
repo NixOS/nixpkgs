@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     jar=$out/share/java/cfr_${version}.jar
     install -Dm444 $src $jar
-    makeWrapper ${jre}/bin/java $out/bin/cfr --add-flags "-jar $jar"
+    makeWrapper ${lib.getExe jre} $out/bin/cfr --add-flags "-jar $jar"
   '';
 
   meta = with lib; {

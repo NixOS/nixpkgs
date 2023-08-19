@@ -181,7 +181,7 @@ let
       revision="''${args[''${#args[@]}-1]}"
       echo "$revision"
     else
-      ${git}/bin/git "''${args[@]}"
+      ${lib.getExe git} "''${args[@]}"
     fi
   '';
 

@@ -83,7 +83,7 @@ in let
 
       # We can't just call /usr/bin/env bash because a relocation error occurs
       # when trying to run a build from within Sublime Text
-      ln -s ${bash}/bin/bash $out/sublime_bash
+      ln -s ${lib.getExe bash} $out/sublime_bash
 
       runHook postInstall
     '';

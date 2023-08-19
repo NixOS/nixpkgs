@@ -40,7 +40,7 @@ let
       nativeBuildInputs = [ makeWrapper ];
 
       installPhase = ''
-        makeWrapper ${jdk}/bin/java $out/bin/charles \
+        makeWrapper ${lib.getExe jdk} $out/bin/charles \
           --add-flags "-Xmx1024M -Dcharles.config='~/.charles.config' -jar $out/share/java/charles.jar"
 
         for fn in lib/*.jar; do

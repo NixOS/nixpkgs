@@ -25,8 +25,8 @@ buildGoModule rec {
 
   postPatch = ''
     grep -lr '/s\?bin/' | xargs sed -i \
-      -e 's|/bin/mount|${mount}/bin/mount|' \
-      -e 's|/bin/umount|${umount}/bin/umount|' \
+      -e 's|/bin/mount|${lib.getExe mount}|' \
+      -e 's|/bin/umount|${lib.getExe umount}|' \
       -e 's|/bin/cp|${coreutils}/bin/cp|' \
       -e 's|/bin/mv|${coreutils}/bin/mv|' \
       -e 's|/bin/chown|${coreutils}/bin/chown|' \

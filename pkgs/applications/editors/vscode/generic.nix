@@ -133,7 +133,7 @@ let
       asar extract "$packed" "$unpacked"
       substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
         --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
-        --replace "/bin/bash" "${bash}/bin/bash"
+        --replace "/bin/bash" "${lib.getExe bash}"
       rm -rf "$packed"
 
       # without this symlink loading JsChardet, the library that is used for auto encoding detection when files.autoGuessEncoding is true,

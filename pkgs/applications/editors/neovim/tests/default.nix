@@ -76,7 +76,7 @@ let
       vimrc="${writeText "init.vim" neovim-drv.initRc}"
       vimrcGeneric="$out/patched.vim"
       mkdir $out
-      ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$vimrc" > "$vimrcGeneric"
+      ${lib.getExe pkgs.perl} -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$vimrc" > "$vimrcGeneric"
     '' + buildCommand);
 
 in

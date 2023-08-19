@@ -34,7 +34,7 @@ mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     install -D parallel-lint.phar $out/libexec/php-parallel-lint/php-parallel-lint.phar
-    makeWrapper ${php}/bin/php $out/bin/php-parallel-lint \
+    makeWrapper ${lib.getExe php} $out/bin/php-parallel-lint \
       --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
     runHook postInstall
   '';

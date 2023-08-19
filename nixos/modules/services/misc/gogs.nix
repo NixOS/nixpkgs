@@ -227,8 +227,8 @@ in
         then
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gogs,${pkgs.gogs}/bin/gogs,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${lib.getExe pkgs.bash},g' $HOOKS
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${lib.getExe pkgs.perl},g' $HOOKS
         fi
       '';
 

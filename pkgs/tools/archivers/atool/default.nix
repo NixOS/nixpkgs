@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl ];
-  configureScript = "${bash}/bin/bash configure";
+  configureScript = "${lib.getExe bash} configure";
 
   meta = {
     homepage = "https://www.nongnu.org/atool";

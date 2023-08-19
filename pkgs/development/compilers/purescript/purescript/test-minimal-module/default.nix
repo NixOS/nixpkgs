@@ -5,7 +5,7 @@ runCommand "purescript-test-minimal-module" {} ''
 
   echo 'import {main} from "./output/Main/index.js"; main()' > node.mjs
 
-  ${nodejs}/bin/node node.mjs | grep "hello world" || (echo "did not output hello world"; exit 1)
+  ${lib.getExe nodejs} node.mjs | grep "hello world" || (echo "did not output hello world"; exit 1)
 
   touch $out
 ''

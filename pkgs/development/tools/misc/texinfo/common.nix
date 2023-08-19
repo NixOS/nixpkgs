@@ -79,7 +79,7 @@ stdenv.mkDerivation {
   postFixup = optionalString crossBuildTools ''
     for f in "$out"/bin/{pod2texi,texi2any}; do
       substituteInPlace "$f" \
-        --replace ${buildPackages.perl}/bin/perl ${perl}/bin/perl
+        --replace ${buildPackages.perl}/bin/perl ${lib.getExe perl}
     done
   '';
 

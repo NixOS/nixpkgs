@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/CoreDumpWriter.c \
       --replace '"gcore ' '"${gdb}/bin/gcore ' \
       --replace '"rm ' '"${coreutils}/bin/rm ' \
-      --replace '/bin/bash' '${bash}/bin/bash'
+      --replace '/bin/bash' '${lib.getExe bash}'
   '';
 
   makeFlags = [

@@ -1,5 +1,5 @@
 import ./make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
 
   let
     remoteRepository = "/root/restic-backup";
@@ -38,7 +38,7 @@ import ./make-test-python.nix (
   {
     name = "restic";
 
-    meta = with pkgs.lib.maintainers; {
+    meta = with lib.maintainers; {
       maintainers = [ bbigras i077 ];
     };
 
@@ -112,7 +112,7 @@ import ./make-test-python.nix (
           "timedatectl set-time '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /root/backupCleanupCommand",
-          'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+          'restic-remotebackup snapshots --json | ${lib.getExe pkgs.jq} "length | . == 1"',
 
           # test that restoring that snapshot produces the same directory
           "mkdir /tmp/restore-1",
@@ -121,11 +121,11 @@ import ./make-test-python.nix (
 
           # test that remote-from-file-backup produces a snapshot
           "systemctl start restic-backups-remote-from-file-backup.service",
-          'restic-remote-from-file-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+          'restic-remote-from-file-backup snapshots --json | ${lib.getExe pkgs.jq} "length | . == 1"',
 
           # test that rclonebackup produces a snapshot
           "systemctl start restic-backups-rclonebackup.service",
-          'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+          'restic-rclonebackup snapshots --json | ${lib.getExe pkgs.jq} "length | . == 1"',
 
           # test that custompackage runs both `restic backup` and `restic check` with reasonable commandlines
           "systemctl start restic-backups-custompackage.service",
@@ -158,13 +158,12 @@ import ./make-test-python.nix (
           "rm /root/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
-          'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
-          'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
+          'restic-remotebackup snapshots --json | ${lib.getExe pkgs.jq} "length | . == 4"',
+          'restic-rclonebackup snapshots --json | ${lib.getExe pkgs.jq} "length | . == 4"',
 
           # test that remoteprune brings us back to 1 snapshot in remotebackup
           "systemctl start restic-backups-remoteprune.service",
-          'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
-
+          'restic-remotebackup snapshots --json | ${lib.getExe pkgs.jq} "length | . == 1"',
       )
     '';
   }

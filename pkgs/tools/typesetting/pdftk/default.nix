@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
 
     cat  << EOF > $out/bin/pdftk
     #!${runtimeShell}
-    exec ${jre}/bin/java -jar "$out/share/pdftk/pdftk-all.jar" "\$@"
+    exec ${lib.getExe jre} -jar "$out/share/pdftk/pdftk-all.jar" "\$@"
     EOF
     chmod a+x "$out/bin/pdftk"
 

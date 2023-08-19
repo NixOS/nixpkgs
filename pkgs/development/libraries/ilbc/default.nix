@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     mkdir -v ${name}
     cd ${name}
-    ${gawk}/bin/gawk -f ${script} ${rfc3951}
+    ${lib.getExe gawk} -f ${script} ${rfc3951}
     cp -v ${./CMakeLists.txt} CMakeLists.txt
     '';
 

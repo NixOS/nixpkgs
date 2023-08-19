@@ -12,7 +12,7 @@
 let
 
   briar-tor = writeScript "briar-tor" ''
-    #! ${bash}/bin/bash
+    #! ${lib.getExe bash}
     exec ${tor}/bin/tor "$@"
   '';
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/{bin,lib}
     cp ${src} $out/lib/briar-desktop.jar
-    makeWrapper ${openjdk}/bin/java $out/bin/briar-desktop \
+    makeWrapper ${lib.getExe openjdk} $out/bin/briar-desktop \
       --add-flags "-jar $out/lib/briar-desktop.jar" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         libnotify

@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     patchShebangs rocm_agent_enumerator
-    sed 's,lsmod | grep ,${busybox}/bin/lsmod | ${gnugrep}/bin/grep ,' -i rocminfo.cc
+    sed 's,lsmod | grep ,${busybox}/bin/lsmod | ${lib.getExe gnugrep} ,' -i rocminfo.cc
   '';
 
   postInstall = lib.optionalString (defaultTargets != [ ]) ''

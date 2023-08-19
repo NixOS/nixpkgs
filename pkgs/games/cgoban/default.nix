@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -D $src $out/lib/cgoban.jar
-    makeWrapper ${adoptopenjdk-jre-bin}/bin/java $out/bin/cgoban --add-flags "-jar $out/lib/cgoban.jar"
+    makeWrapper ${lib.getExe adoptopenjdk-jre-bin} $out/bin/cgoban --add-flags "-jar $out/lib/cgoban.jar"
     runHook postInstall
   '';
 

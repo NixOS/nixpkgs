@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out"/bin
-    makeWrapper "${jre}/bin/java" "$out"/bin/seyren --add-flags "-jar $src"
+    makeWrapper "${lib.getExe jre}" "$out"/bin/seyren --add-flags "-jar $src"
   '';
 
   meta = with lib; {

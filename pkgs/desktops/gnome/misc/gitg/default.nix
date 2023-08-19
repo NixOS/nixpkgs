@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
 
-    substituteInPlace tests/libgitg/test-commit.vala --replace "/bin/bash" "${bash}/bin/bash"
+    substituteInPlace tests/libgitg/test-commit.vala --replace "/bin/bash" "${lib.getExe bash}"
   '';
 
   preFixup = ''

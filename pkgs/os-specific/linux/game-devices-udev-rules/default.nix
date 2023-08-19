@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     install -Dm444 -t "$out/lib/udev/rules.d" *.rules
     substituteInPlace $out/lib/udev/rules.d/71-powera-controllers.rules \
-    --replace "/bin/sh" "${bash}/bin/bash"
+    --replace "/bin/sh" "${lib.getExe bash}"
   '';
 
   meta = with lib; {

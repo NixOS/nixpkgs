@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Setting SHELL=$SHELL when dmd testsuite is run doesn't work on Linux somehow
-    substituteInPlace tests/dmd/Makefile --replace "SHELL=/bin/bash" "SHELL=${bash}/bin/bash"
+    substituteInPlace tests/dmd/Makefile --replace "SHELL=/bin/bash" "SHELL=${lib.getExe bash}"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace runtime/phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""

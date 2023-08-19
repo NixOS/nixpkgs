@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     dir=$out/opt/brother/Printers/MFCL2700DN
 
     substituteInPlace $dir/lpd/filter_MFCL2700DN \
-      --replace /usr/bin/perl ${perl}/bin/perl \
+      --replace /usr/bin/perl ${lib.getExe perl} \
       --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$dir\"; #" \
       --replace "PRINTER =~" "PRINTER = \"MFCL2700DN\"; #"
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
                     \! -name 'janusgraph*' \
                     \! -name 'slf4j-log4j12*.jar' | sort | tr '\n' ':')
 
-    makeWrapper ${jdk11}/bin/java $out/bin/janusgraph-server \
+    makeWrapper ${lib.getExe jdk11} $out/bin/janusgraph-server \
       --add-flags "-classpath $classpath org.janusgraph.graphdb.server.JanusGraphServer"
 
     # temporary workaround for

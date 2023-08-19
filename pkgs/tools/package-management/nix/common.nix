@@ -163,7 +163,7 @@ self = stdenv.mkDerivation {
     lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && !atLeast24) ''
       mkdir tmp/
       substitute corepkgs/config.nix.in tmp/config.nix.in \
-        --subst-var-by bash ${bash}/bin/bash \
+        --subst-var-by bash ${lib.getExe bash} \
         --subst-var-by coreutils ${coreutils}/bin \
         --subst-var-by bzip2 ${bzip2}/bin/bzip2 \
         --subst-var-by gzip ${gzip}/bin/gzip \

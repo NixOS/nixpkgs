@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/logisim-evolution --add-flags "-jar $src"
+    makeWrapper ${lib.getExe jre} $out/bin/logisim-evolution --add-flags "-jar $src"
 
     # Create icons
     unzip $src "resources/logisim/img/*"

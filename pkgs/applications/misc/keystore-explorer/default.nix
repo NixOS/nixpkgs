@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cat > $out/bin/keystore-explorer <<EOF
     #!${runtimeShell}
     export JAVA_HOME=${jdk.home}
-    exec ${jdk}/bin/java -jar $out/share/keystore-explorer/kse.jar "\$@"
+    exec ${lib.getExe jdk} -jar $out/share/keystore-explorer/kse.jar "\$@"
     EOF
     chmod +x $out/bin/keystore-explorer
 

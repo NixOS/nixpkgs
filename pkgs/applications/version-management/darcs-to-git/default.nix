@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   in ''
     sed -r -i \
       -e '1s|^#!.*|#!${ruby}/bin/ruby|' \
-      -e 's!${matchExecution}git\>!\1${git}/bin/git!' \
+      -e 's!${matchExecution}git\>!\1${lib.getExe git}!' \
       -e 's!${matchExecution}darcs\>!\1${darcs}/bin/darcs!' \
       -e 's!${matchExecution}diff\>!\1${diffutils}/bin/diff!' \
       -e 's!\<egrep\>!${gnugrep}/bin/egrep!g' \
@@ -62,10 +62,10 @@ stdenv.mkDerivation {
     }
     echo "Checking if converted repository matches original repository:" >&2
     assertFileContents only_one_file testfile2
-    ${git}/bin/git reset --hard HEAD^
+    ${lib.getExe git} reset --hard HEAD^
     assertFileContents new_file1 testfile1
     assertFileContents new_file2 testfile2
-    ${git}/bin/git reset --hard HEAD^
+    ${lib.getExe git} reset --hard HEAD^
     assertFileContents new_file1 "this is a test file"
     echo "All checks passed." >&2
     cd "$orig_dir"

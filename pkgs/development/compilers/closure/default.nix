@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/share/java $out/bin
     cp ${src} $out/share/java/closure-compiler-v${version}.jar
-    makeWrapper ${jre}/bin/java $out/bin/closure-compiler \
+    makeWrapper ${lib.getExe jre} $out/bin/closure-compiler \
       --add-flags "-jar $out/share/java/closure-compiler-v${version}.jar"
   '';
 

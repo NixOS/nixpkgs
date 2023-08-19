@@ -562,7 +562,7 @@ in
               if test -d "$GIT_DIR"; then
                 # Config is inherited by each epoch repository,
                 # so just needs to be set for all.git.
-                ${pkgs.git}/bin/git config core.sharedRepository 0640
+                ${lib.getExe pkgs.git} config core.sharedRepository 0640
               fi
             '') cfg.inboxes
             );

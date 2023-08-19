@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cp -r doc $doc/share/doc/jacoco
     install -Dm444 lib/* -t $out/share/java
 
-    makeWrapper ${jre}/bin/java $out/bin/jacoco \
+    makeWrapper ${lib.getExe jre} $out/bin/jacoco \
       --add-flags "-jar $out/share/java/jacococli.jar"
 
     runHook postInstall

@@ -26,7 +26,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      makeWrapper ${jre}/bin/java $out/bin/ng-server \
+      makeWrapper ${lib.getExe jre} $out/bin/ng-server \
         --add-flags '-classpath ${nailgun-server.jar}:$CLASSPATH com.facebook.nailgun.NGServer'
 
       runHook postInstall

@@ -67,7 +67,7 @@ let
           # config/ needs to be accessed by PIWIK_USER_PATH anyway
           ln -s $out/share/config $out/
 
-          makeWrapper ${php}/bin/php $out/bin/matomo-console \
+          makeWrapper ${lib.getExe php} $out/bin/matomo-console \
             --add-flags "$out/share/console"
 
           runHook postInstall

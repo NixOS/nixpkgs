@@ -391,7 +391,7 @@ in
       find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
     '';
 
-  makeFlags = [ "SHELL=${bash}/bin/bash" ];
+  makeFlags = [ "SHELL=${lib.getExe bash}" ];
 
   enableParallelBuilding = true;
 

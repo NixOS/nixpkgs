@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp -r target/* "$out/share/java/zvtm/"
 
     echo '#!${runtimeShell}' > "$out/bin/zgrviewer"
-    echo "${jre}/bin/java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
+    echo "${lib.getExe jre} -jar '$out/share/java/zvtm/zgrviewer-${version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
     chmod a+x "$out/bin/zgrviewer"
   '';
   meta = {

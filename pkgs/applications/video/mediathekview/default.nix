@@ -22,15 +22,15 @@ stdenv.mkDerivation rec {
 
     install -m644 MediathekView.jar $out/lib
 
-    makeWrapper ${jre}/bin/java $out/bin/mediathek \
+    makeWrapper ${lib.getExe jre} $out/bin/mediathek \
       --add-flags "-jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
-    makeWrapper ${jre}/bin/java $out/bin/MediathekView \
+    makeWrapper ${lib.getExe jre} $out/bin/MediathekView \
       --add-flags "-jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
-    makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
+    makeWrapper ${lib.getExe jre} $out/bin/MediathekView_ipv4 \
       --add-flags "-Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 

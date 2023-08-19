@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace systemdspawner/systemd.py \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace "/bin/bash" "${lib.getExe bash}"
 
     substituteInPlace systemdspawner/systemdspawner.py \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace "/bin/bash" "${lib.getExe bash}"
   '';
 
   buildInputs = [

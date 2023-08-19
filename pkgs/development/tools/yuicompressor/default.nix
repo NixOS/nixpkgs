@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     mkdir -p $out/{bin,lib}
     ln -s $src $out/lib/yuicompressor.jar
-    makeWrapper ${jre}/bin/java $out/bin/yuicompressor --add-flags \
+    makeWrapper ${lib.getExe jre} $out/bin/yuicompressor --add-flags \
      "-cp $out/lib/yuicompressor.jar com.yahoo.platform.yui.compressor.YUICompressor"
   '';
 

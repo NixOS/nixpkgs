@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   dontConfigure = true;
 
   makeFlags = [
-    "PERLPATH=${perl}/bin/perl"
+    "PERLPATH=${lib.getExe perl}"
     # We *need* to pass DESTDIR, as the Makefile ignores PREFIX.
     "DESTDIR=$(out)"
     # Relative paths.

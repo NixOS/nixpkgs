@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     install -Dm644 dist/mkgmap.jar -t $out/share/java/mkgmap
     install -Dm644 dist/doc/mkgmap.1 -t $out/share/man/man1
     cp -r dist/lib/ $out/share/java/mkgmap/
-    makeWrapper ${jre}/bin/java $out/bin/mkgmap \
+    makeWrapper ${lib.getExe jre} $out/bin/mkgmap \
       --add-flags "-jar $out/share/java/mkgmap/mkgmap.jar"
   '' + lib.optionalString withExamples ''
     mkdir -p $out/share/mkgmap

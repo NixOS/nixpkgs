@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
 
     install -Dm644 desktop/build/libs/desktop-${version}.jar $out/share/shattered-pixel-dungeon.jar
     mkdir $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/shattered-pixel-dungeon \
+    makeWrapper ${lib.getExe jre} $out/bin/shattered-pixel-dungeon \
       --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
 

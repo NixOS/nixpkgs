@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-test-paths.patch;
       python3 = testPython.interpreter;
-      openssl = "${openssl}/bin/openssl";
+      openssl = "${lib.getExe openssl}";
     })
   ];
 

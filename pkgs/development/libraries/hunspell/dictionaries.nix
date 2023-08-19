@@ -48,11 +48,11 @@ let
       nativeBuildInputs = [ bash coreutils which zip unzip ];
       postPatch = ''
         substituteInPlace ortograf/herramientas/make_dict.sh \
-           --replace /bin/bash ${bash}/bin/bash \
+           --replace /bin/bash ${lib.getExe bash} \
            --replace /dev/stderr stderr.log
 
         substituteInPlace ortograf/herramientas/remover_comentarios.sh \
-           --replace /bin/bash ${bash}/bin/bash \
+           --replace /bin/bash ${lib.getExe bash} \
       '';
       buildPhase = ''
         cd ortograf/herramientas

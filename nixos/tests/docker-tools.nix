@@ -86,7 +86,7 @@ in {
         )
         assert unix_time_second1 in docker.succeed(
             "docker inspect ${examples.bash.imageName} "
-            + "| ${pkgs.jq}/bin/jq -r .[].Created",
+            + "| ${lib.getExe pkgs.jq} -r .[].Created",
         )
 
     docker.succeed("docker run --rm ${examples.bash.imageName} bash --version")
@@ -145,21 +145,21 @@ in {
     ):
         docker.succeed(
             "docker load --input='${examples.bashLayeredWithUser}'",
-            "docker run -u somebody --rm ${examples.bashLayeredWithUser.imageName} ${pkgs.bash}/bin/bash -c 'test 555 == $(stat --format=%a /nix) && test 555 == $(stat --format=%a /nix/store)'",
+            "docker run -u somebody --rm ${examples.bashLayeredWithUser.imageName} ${lib.getExe pkgs.bash} -c 'test 555 == $(stat --format=%a /nix) && test 555 == $(stat --format=%a /nix/store)'",
             "docker rmi ${examples.bashLayeredWithUser.imageName}",
         )
 
     with subtest("The nix binary symlinks are intact"):
         docker.succeed(
             "docker load --input='${examples.nix}'",
-            "docker run --rm ${examples.nix.imageName} ${pkgs.bash}/bin/bash -c 'test nix == $(readlink ${pkgs.nix}/bin/nix-daemon)'",
+            "docker run --rm ${examples.nix.imageName} ${lib.getExe pkgs.bash} -c 'test nix == $(readlink ${pkgs.nix}/bin/nix-daemon)'",
             "docker rmi ${examples.nix.imageName}",
         )
 
     with subtest("The nix binary symlinks are intact when the image is layered"):
         docker.succeed(
             "docker load --input='${examples.nixLayered}'",
-            "docker run --rm ${examples.nixLayered.imageName} ${pkgs.bash}/bin/bash -c 'test nix == $(readlink ${pkgs.nix}/bin/nix-daemon)'",
+            "docker run --rm ${examples.nixLayered.imageName} ${lib.getExe pkgs.bash} -c 'test nix == $(readlink ${pkgs.nix}/bin/nix-daemon)'",
             "docker rmi ${examples.nixLayered.imageName}",
         )
 
@@ -202,7 +202,7 @@ in {
         )
         assert unix_time_second1 not in docker.succeed(
             "docker inspect ${examples.unstableDate.imageName} "
-            + "| ${pkgs.jq}/bin/jq -r .[].Created"
+            + "| ${lib.getExe pkgs.jq} -r .[].Created"
         )
 
     with subtest("Ensure Layered Docker images can use an unstable date"):
@@ -211,7 +211,7 @@ in {
         )
         assert unix_time_second1 not in docker.succeed(
             "docker inspect ${examples.unstableDateLayered.imageName} "
-            + "| ${pkgs.jq}/bin/jq -r .[].Created"
+            + "| ${lib.getExe pkgs.jq} -r .[].Created"
         )
 
     with subtest("Ensure Layered Docker images work"):
@@ -238,7 +238,7 @@ in {
         return set(
             docker.succeed(
                 f"docker inspect {image_name} "
-                + "| ${pkgs.jq}/bin/jq -r '.[] | .RootFS.Layers | .[]'"
+                + "| ${lib.getExe pkgs.jq} -r '.[] | .RootFS.Layers | .[]'"
             ).split()
         )
 
@@ -298,10 +298,10 @@ in {
     ):
         # Read environment variables as stored in image config
         config = docker.succeed(
-            "tar -xOf ${examples.environmentVariablesLayered} manifest.json | ${pkgs.jq}/bin/jq -r .[].Config"
+            "tar -xOf ${examples.environmentVariablesLayered} manifest.json | ${lib.getExe pkgs.jq} -r .[].Config"
         ).strip()
         out = docker.succeed(
-            f"tar -xOf ${examples.environmentVariablesLayered} {config} | ${pkgs.jq}/bin/jq -r '.config.Env | .[]'"
+            f"tar -xOf ${examples.environmentVariablesLayered} {config} | ${lib.getExe pkgs.jq} -r '.config.Env | .[]'"
         )
         env = out.splitlines()
         assert (
@@ -365,7 +365,7 @@ in {
         assert (
             docker.succeed(
                 "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
-                + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
+                + "| ${lib.getExe pkgs.jq} -r .[].Architecture"
             ).strip()
             == "${if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then "amd64" else "arm64"}"
         )
@@ -475,13 +475,13 @@ in {
         docker.succeed("""
             docker load --input='${examples.build-image-with-architecture}'
             docker inspect build-image-with-architecture \
-              | ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'
+              | ${lib.getExe pkgs.jq} -er '.[] | select(.Architecture=="arm64").Architecture'
             docker rmi build-image-with-architecture
         """)
         docker.succeed("""
             ${examples.layered-image-with-architecture} | docker load
             docker inspect layered-image-with-architecture \
-              | ${pkgs.jq}/bin/jq -er '.[] | select(.Architecture=="arm64").Architecture'
+              | ${lib.getExe pkgs.jq} -er '.[] | select(.Architecture=="arm64").Architecture'
             docker rmi layered-image-with-architecture
         """)
 

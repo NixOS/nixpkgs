@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ln -s "$out"/{fuseki-backup,fuseki-server,fuseki} "$out/bin"
     for i in "$out"/bin/*; do
       wrapProgram "$i" \
-        --prefix "PATH" : "${java}/bin/:${coreutils}/bin:${which}/bin" \
+        --prefix "PATH" : "${lib.makeBinPath [java coreutils which]}" \
         --set-default "FUSEKI_HOME" "$out" \
         ;
     done

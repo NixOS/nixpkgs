@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    makeWrapper ${jre}/bin/java $out/bin/imagej \
+    makeWrapper ${lib.getExe jre} $out/bin/imagej \
       ''${gappsWrapperArgs[@]} \
       --add-flags "-jar $out/share/java/ij.jar -ijpath $out/share"
 

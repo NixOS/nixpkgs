@@ -43,10 +43,10 @@ let
       echo "making binaries executable"
       chmod +x {veloren-voxygen,veloren-server-cli}
       echo "patching dynamic linkers"
-      ${patchelf}/bin/patchelf \
+      ${lib.getExe patchelf} \
         --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
         veloren-server-cli
-      ${patchelf}/bin/patchelf \
+      ${lib.getExe patchelf} \
         --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
         --set-rpath "${lib.makeLibraryPath runtimeLibs}" \
         veloren-voxygen

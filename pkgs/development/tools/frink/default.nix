@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     cat > "$out/bin/frink" << EOF
     #!${stdenv.shell}
-    exec ${rlwrap}/bin/rlwrap -f $out/lib/unitnames.txt -b '$' -f $out/lib/functionnames.txt ${jdk}/bin/java -classpath "$out/lib/frink.jar" frink.gui.FrinkStarter "\$@"
+    exec ${rlwrap}/bin/rlwrap -f $out/lib/unitnames.txt -b '$' -f $out/lib/functionnames.txt ${lib.getExe jdk} -classpath "$out/lib/frink.jar" frink.gui.FrinkStarter "\$@"
     EOF
 
     chmod a+x "$out/bin/frink"

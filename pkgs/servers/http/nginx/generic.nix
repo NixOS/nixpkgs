@@ -106,7 +106,7 @@ stdenv.mkDerivation {
     "--with-mail_ssl_module"
   ] ++ lib.optionals withPerl [
     "--with-http_perl_module"
-    "--with-perl=${perl}/bin/perl"
+    "--with-perl=${lib.getExe perl}"
     "--with-perl_modules_path=lib/perl5"
   ] ++ lib.optional withSlice "--with-http_slice_module"
     ++ lib.optional (gd != null) "--with-http_image_filter_module"

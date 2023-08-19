@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   makeFlags = [
     "prefix=${placeholder "out"}"
     "XMLTO_EXTRA=--skip-validation"
-    "PERL_PATH=${perl}/bin/perl"
+    "PERL_PATH=${lib.getExe perl}"
   ];
 
   dontCargoBuild = true;

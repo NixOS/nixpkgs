@@ -38,7 +38,7 @@ mavenJdk.buildMavenPackage rec {
     cp target/libs/* $out/share/cryptomator/libs/
     cp target/mods/* target/cryptomator-*.jar $out/share/cryptomator/mods/
 
-    makeShellWrapper ${jdk}/bin/java $out/bin/cryptomator \
+    makeShellWrapper ${lib.getExe jdk} $out/bin/cryptomator \
       --add-flags "--enable-preview" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator/mods'" \

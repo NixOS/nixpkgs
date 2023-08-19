@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
     cat > "$out/bin/smc" << EOF
     #!${runtimeShell}
-    ${jre}/bin/java -jar "$out/share/java/Smc.jar" "\$@"
+    ${lib.getExe jre} -jar "$out/share/java/Smc.jar" "\$@"
     EOF
     chmod a+x "$out/bin/smc"
   '';

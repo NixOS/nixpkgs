@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp build/lib/*.jar lib/*.jar $out/share/java
 
     # There is a script in the source archive, but ours is cleaner
-    makeWrapper ${jre}/bin/java $out/bin/PerfTest \
+    makeWrapper ${lib.getExe jre} $out/bin/PerfTest \
       --add-flags "-Djava.awt.headless=true -cp $out/share/java/\* com.rabbitmq.examples.PerfTest"
   '';
 

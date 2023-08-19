@@ -25,7 +25,7 @@ buildNpmPackage rec {
     mkdir -p $out/bin $out/lib
     cp -r * $out/lib
 
-    makeWrapper ${nodejs}/bin/node "$out/bin/pairdrop" --add-flags "index.js public --rate-limit --auto-restart"
+    makeWrapper ${lib.getExe nodejs} "$out/bin/pairdrop" --add-flags "index.js public --rate-limit --auto-restart"
     wrapProgram $out/bin/pairdrop --chdir "$out/lib"
 
     runHook postInstall

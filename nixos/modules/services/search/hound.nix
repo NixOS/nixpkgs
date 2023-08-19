@@ -114,7 +114,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
+        ExecStartPre = "${lib.getExe pkgs.git} config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
         ExecStart = "${cfg.package}/bin/houndd" +
                     " -addr ${cfg.listen}" +
                     " -conf ${pkgs.writeText "hound.json" cfg.config}";

@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
            $out/etc-example/shorewall6/shorewall6.conf \
         -e 's|^LOGFILE=.*|LOGFILE=/var/log/shorewall.log|' \
         -e 's|^PATH=.*|PATH=${PATH}|' \
-        -e 's|^PERL=.*|PERL=${perl}/bin/perl|' \
+        -e 's|^PERL=.*|PERL=${lib.getExe perl}|' \
         -e 's|^SHOREWALL_SHELL=.*|SHOREWALL_SHELL=${stdenv.shell}|'
     sed -i $out/etc-example/shorewall6/shorewall6.conf \
         -e 's|^CONFIG_PATH=.*|CONFIG_PATH=:''${CONFDIR}/shorewall6:''${SHAREDIR}/shorewall6:''${SHAREDIR}/shorewall|'

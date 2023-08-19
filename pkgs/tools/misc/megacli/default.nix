@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp -r opt $out
     cp ${version}_MegaCLI.txt $out/share/MegaRAID/MegaCli
 
-    ${patchelf}/bin/patchelf \
+    ${lib.getExe patchelf} \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib \
       $out/opt/MegaRAID/MegaCli/MegaCli64

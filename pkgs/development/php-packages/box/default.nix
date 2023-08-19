@@ -20,7 +20,7 @@ mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/box/box.phar
-    makeWrapper ${php}/bin/php $out/bin/box \
+    makeWrapper ${lib.getExe php} $out/bin/box \
       --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
     runHook postInstall
   '';

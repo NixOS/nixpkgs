@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       --replace '/var/run/x2goserver.pid' '/var/run/x2go/x2goserver.pid'
     substituteInPlace x2goserver/sbin/x2godbadmin --replace 'user="x2gouser"' 'user="x2go"'
     substituteInPlace x2goserver-xsession/etc/Xsession \
-      --replace "SSH_AGENT /bin/bash -c" "SSH_AGENT ${bash}/bin/bash -c" \
+      --replace "SSH_AGENT /bin/bash -c" "SSH_AGENT ${lib.getExe bash} -c" \
       --replace "[ -f /etc/redhat-release ]" "[ -d /etc/nix ] || [ -f /etc/redhat-release ]"
   '';
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     done
     # We're patching @INC of the setgid wrapper, because we can't mix
     # the perl wrapper (for PERL5LIB) with security.wrappers (for setgid)
-    sed -ie "s,.\+bin/perl,#!${perl}/bin/perl -I ${perlEnv}/lib/perl5/site_perl," \
+    sed -ie "s,.\+bin/perl,#!${lib.getExe perl} -I ${perlEnv}/lib/perl5/site_perl," \
       $out/lib/x2go/libx2go-server-db-sqlite3-wrapper.pl
   '';
 

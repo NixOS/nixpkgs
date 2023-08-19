@@ -18,7 +18,7 @@ buildNpmPackage rec {
   passthru.tests = {
     simple = runCommand "${pname}-test" {} ''
       set -e -o pipefail
-      echo '<i id="foo">bar</i>' | ${hred}/bin/hred 'i#foo { @id => id, @.textContent => text }' -c | ${jq}/bin/jq -c > $out
+      echo '<i id="foo">bar</i>' | ${hred}/bin/hred 'i#foo { @id => id, @.textContent => text }' -c | ${lib.getExe jq} -c > $out
       [ "$(cat $out)" = '{"id":"foo","text":"bar"}' ]
     '';
   };

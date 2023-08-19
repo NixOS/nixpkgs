@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       ${addJars "$out/lib"}
       ${addJars "$out"}
       ${lib.concatStringsSep "\n" (map (p: addJars "${p}/share/java") extraJars)}
-      ${lib.getBin jre}/bin/java -cp "\$CP" \$JAVA_OPTS \
+      ${lib.getExe jre} -cp "\$CP" \$JAVA_OPTS \
       liquibase.integration.commandline.LiquibaseCommandLine \''${1+"\$@"}
       EOF
       chmod +x $out/bin/liquibase

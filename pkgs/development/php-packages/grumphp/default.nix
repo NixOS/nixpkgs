@@ -17,7 +17,7 @@ mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/grumphp/grumphp.phar
-    makeWrapper ${php}/bin/php $out/bin/grumphp \
+    makeWrapper ${lib.getExe php} $out/bin/grumphp \
       --add-flags "$out/libexec/grumphp/grumphp.phar"
     runHook postInstall
   '';

@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.zlib;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.raskin ];
+    mainProgram = "love";
   };
 }

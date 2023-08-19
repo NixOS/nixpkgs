@@ -33,7 +33,7 @@ in rec {
     installPhase = ''
       dir="$out/${reldir}"
       substituteInPlace $dir/lpd/filter_${model} \
-        --replace /usr/bin/perl ${perl}/bin/perl \
+        --replace /usr/bin/perl ${lib.getExe perl} \
         --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$dir\"; #" \
         --replace "PRINTER =~" "PRINTER = \"${model}\"; #"
       wrapProgram $dir/lpd/filter_${model} \
@@ -67,7 +67,7 @@ in rec {
       basedir=${driver}/${reldir}
       dir=$out/${reldir}
       substituteInPlace $dir/cupswrapper/brother_lpdwrapper_${model} \
-        --replace /usr/bin/perl ${perl}/bin/perl \
+        --replace /usr/bin/perl ${lib.getExe perl} \
         --replace "basedir =~" "basedir = \"$basedir\"; #" \
         --replace "PRINTER =~" "PRINTER = \"${model}\"; #"
       wrapProgram $dir/cupswrapper/brother_lpdwrapper_${model} \

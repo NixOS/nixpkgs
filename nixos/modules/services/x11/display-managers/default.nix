@@ -54,7 +54,7 @@ let
   # file provided by services.xserver.displayManager.sessionData.wrapper
   xsessionWrapper = pkgs.writeScript "xsession-wrapper"
     ''
-      #! ${pkgs.bash}/bin/bash
+      #! ${lib.getExe pkgs.bash}
 
       # Shared environment setup for graphical sessions.
 
@@ -456,7 +456,7 @@ in
 
         # Script responsible for starting the window manager and the desktop manager.
         xsession = dm: wm: pkgs.writeScript "xsession" ''
-          #! ${pkgs.bash}/bin/bash
+          #! ${lib.getExe pkgs.bash}
 
           # Legacy session script used to construct .desktop files from
           # `services.xserver.displayManager.session` entries. Called from

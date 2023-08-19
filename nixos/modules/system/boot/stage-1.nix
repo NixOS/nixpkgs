@@ -271,7 +271,7 @@ let
             --replace ${pkgs.util-linux}/bin/blkid ${extraUtils}/bin/blkid \
             --replace ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
             --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
-            --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
+            --replace ${lib.getExe' pkgs.bash "sh"} ${extraUtils}/bin/sh \
             --replace ${udev} ${extraUtils}
       done
 
@@ -392,7 +392,7 @@ let
       compressorExe = initialRamdisk.compressorExecutableFunction pkgs;
     in pkgs.writeScriptBin "append-initrd-secrets"
       ''
-        #!${pkgs.bash}/bin/bash -e
+        #!${lib.getExe pkgs.bash} -e
         function usage {
           echo "USAGE: $0 INITRD_FILE" >&2
           echo "Appends this configuration's secrets to INITRD_FILE" >&2

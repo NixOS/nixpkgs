@@ -140,7 +140,7 @@ in
         then
           mkdir --mode=700 -p ${builtins.dirOf keysPath}
           ${binYggdrasil} -genconf -json \
-            | ${pkgs.jq}/bin/jq \
+            | ${lib.getExe pkgs.jq} \
                 'to_entries|map(select(.key|endswith("Key")))|from_entries' \
             > ${keysPath}
         fi
@@ -176,7 +176,7 @@ in
             + (lib.optionalString configFileProvided
               "$(${binHjson} -c \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\")")
             + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
-            + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
+            + " | ${lib.getExe pkgs.jq} -s add | ${binYggdrasil} -normaliseconf -useconf"
           else
             "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf"}
 

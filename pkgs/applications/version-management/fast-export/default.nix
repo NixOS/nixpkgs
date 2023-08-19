@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
 
     mkdir repo-git
     pushd repo-git
-    ${git}/bin/git init
-    ${git}/bin/git config core.ignoreCase false  # for darwin
+    ${lib.getExe git} init
+    ${lib.getExe git} config core.ignoreCase false  # for darwin
     $out/bin/hg-fast-export.sh -r ../repo-hg/ --hg-hash
     for s in "foo" "bar" "baz" ; do
-      (${git}/bin/git show | grep $s > /dev/null) && echo $s found
+      (${lib.getExe git} show | grep $s > /dev/null) && echo $s found
     done
     popd
   '';

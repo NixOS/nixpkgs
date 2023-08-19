@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
       --replace 'TEST_PROGRAM += test-pipe' "" # skip test-pipe because it hangs the build
 
     substituteInPlace test/pytest/*.py \
-      --replace "'bash" "'${bashInteractive}/bin/bash"
+      --replace "'bash" "'${lib.getExe bashInteractive}"
 
     echo "m4_define(VERSION_NUMBER, [${version}])" > version.m4
   '';

@@ -10,9 +10,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     programs.firejail = {
       enable = true;
       wrappedBinaries = {
-        bash-jailed  = "${pkgs.bash}/bin/bash";
+        bash-jailed  = "${lib.getExe pkgs.bash}";
         bash-jailed2  = {
-          executable = "${pkgs.bash}/bin/bash";
+          executable = "${lib.getExe pkgs.bash}";
           extraArgs = [ "--private=~/firejail-home" ];
         };
       };

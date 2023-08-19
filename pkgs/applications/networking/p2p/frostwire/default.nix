@@ -80,7 +80,7 @@ in stdenv.mkDerivation {
 
     cp -dpR ${desktopItem}/share $out
 
-    makeWrapper ${jre}/bin/java $out/bin/frostwire \
+    makeWrapper ${lib.getExe jre} $out/bin/frostwire \
       --add-flags "-Djava.library.path=$out/lib -jar $out/share/java/frostwire.jar"
   '';
 

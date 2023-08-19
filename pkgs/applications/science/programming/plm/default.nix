@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$prefix/bin"
 
-    makeWrapper ${jre}/bin/java $out/bin/plm \
+    makeWrapper ${lib.getExe jre} $out/bin/plm \
       --add-flags "-jar $src" \
       --prefix PATH : "$PATH"
 

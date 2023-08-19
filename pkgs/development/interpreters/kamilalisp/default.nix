@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -pv $out/share/java $out/bin
     cp ${src} $out/share/java/${name}-${version}.jar
-    makeWrapper ${jre}/bin/java $out/bin/kamilalisp \
+    makeWrapper ${lib.getExe jre} $out/bin/kamilalisp \
       --add-flags "-jar $out/share/java/${name}-${version}.jar" \
       --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=on' \
       --set _JAVA_AWT_WM_NONREPARENTING 1

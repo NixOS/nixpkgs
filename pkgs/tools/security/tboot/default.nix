@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preConfigure = ''
-    substituteInPlace tboot/Makefile --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace tboot/Makefile --replace /usr/bin/perl ${lib.getExe perl}
 
     for a in lcptools-v2 tb_polgen utils; do
       substituteInPlace "$a/Makefile" --replace /usr/sbin /sbin

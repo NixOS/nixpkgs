@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/java}
     cp AstrolabeGenerator-${version}.jar $out/share/java
 
-    makeWrapper ${jre}/bin/java $out/bin/AstrolabeGenerator \
+    makeWrapper ${lib.getExe jre} $out/bin/AstrolabeGenerator \
       --add-flags "-jar $out/share/java/AstrolabeGenerator-${version}.jar"
   '';
 

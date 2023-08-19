@@ -74,9 +74,9 @@ let
 
       dugite=$share/resources/app.asar.unpacked/node_modules/dugite
       rm -f $dugite/git/bin/git
-      ln -s ${pkgs.git}/bin/git $dugite/git/bin/git
+      ln -s ${lib.getExe pkgs.git} $dugite/git/bin/git
       rm -f $dugite/git/libexec/git-core/git
-      ln -s ${pkgs.git}/bin/git $dugite/git/libexec/git-core/git
+      ln -s ${lib.getExe pkgs.git} $dugite/git/libexec/git-core/git
 
       find $share -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$share" {} \;
 

@@ -24,8 +24,8 @@ python3.pkgs.buildPythonApplication rec {
 
   buildPhase = ''
     substituteInPlace autorandr.py \
-      --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
-      --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
+      --replace 'os.popen("xrandr' 'os.popen("${lib.getExe xrandr}' \
+      --replace '["xrandr"]' '["${lib.getExe xrandr}"]'
   '';
 
   patches = [ ./0001-don-t-use-sys.executable.patch ];

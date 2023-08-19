@@ -86,7 +86,7 @@ in stdenv.mkDerivation {
     mkdir -p $out
     cp -R {app.js,bin,lib,locales,node_modules,package.json,public} $out
 
-    makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
+    makeWrapper ${lib.getExe nodejs} $out/bin/hedgedoc \
       --add-flags $out/app.js \
       --set NODE_ENV production \
       --set NODE_PATH "$out/lib/node_modules"

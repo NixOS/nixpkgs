@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     install -Dm644 dist/splitter.jar -t $out/share/java/splitter
     install -Dm644 doc/splitter.1 -t $out/share/man/man1
     cp -r dist/lib/ $out/share/java/splitter/
-    makeWrapper ${jre}/bin/java $out/bin/splitter \
+    makeWrapper ${lib.getExe jre} $out/bin/splitter \
       --add-flags "-jar $out/share/java/splitter/splitter.jar"
   '';
 

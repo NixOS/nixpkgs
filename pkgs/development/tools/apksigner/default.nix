@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm444 build/libs/apksigner.jar -t $out/lib
-    makeWrapper "${openjdk17_headless}/bin/java" "$out/bin/apksigner" \
+    makeWrapper "${lib.getExe openjdk17_headless}" "$out/bin/apksigner" \
       --add-flags "-jar $out/lib/apksigner.jar"
   '';
 

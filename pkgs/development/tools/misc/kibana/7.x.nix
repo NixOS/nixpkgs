@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     rm -r $out/libexec/kibana/node
     makeWrapper $out/libexec/kibana/bin/kibana $out/bin/kibana \
       --prefix PATH : "${lib.makeBinPath [ nodejs coreutils which ]}"
-    sed -i 's@NODE=.*@NODE=${nodejs}/bin/node@' $out/libexec/kibana/bin/kibana
+    sed -i 's@NODE=.*@NODE=${lib.getExe nodejs}@' $out/libexec/kibana/bin/kibana
   '';
 
   meta = with lib; {

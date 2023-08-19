@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -e "s|gnuplot_cmd = .*|gnuplot_cmd = '${gnuplot}/bin/gnuplot'|" \
         -e "s|\<wc\>|${coreutils}/bin/wc|g" \
-        -e "s|\<grep\>|${gnugrep}/bin/grep|g" \
+        -e "s|\<grep\>|${lib.getExe gnugrep}|g" \
         -i gitstats
   '';
 

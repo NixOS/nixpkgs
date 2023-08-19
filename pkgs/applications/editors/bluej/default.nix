@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     rm -r $out/share/bluej/javafx
     rm -r $out/share/bluej/javafx-*.jar
 
-    makeWrapper ${openjdk}/bin/java $out/bin/bluej \
+    makeWrapper ${lib.getExe openjdk} $out/bin/bluej \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
                    --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \

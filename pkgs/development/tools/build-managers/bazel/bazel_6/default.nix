@@ -415,8 +415,8 @@ stdenv.mkDerivation rec {
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
-          --replace /bin/bash ${bash}/bin/bash \
-          --replace "/usr/bin/env bash" ${bash}/bin/bash \
+          --replace /bin/bash ${lib.getExe bash} \
+          --replace "/usr/bin/env bash" ${lib.getExe bash} \
           --replace "/usr/bin/env python" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
@@ -431,17 +431,17 @@ stdenv.mkDerivation rec {
 
       # bazel test runner include references to /bin/bash
       substituteInPlace tools/build_rules/test_rules.bzl \
-        --replace /bin/bash ${bash}/bin/bash
+        --replace /bin/bash ${lib.getExe bash}
 
       for i in $(find tools/cpp/ -type f)
       do
         substituteInPlace $i \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace /bin/bash ${lib.getExe bash}
       done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace /bin/bash ${lib.getExe bash}
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
@@ -557,7 +557,7 @@ stdenv.mkDerivation rec {
     # Note that .bazelversion is always correct and is based on bazel-*
     # executable name, version checks should work fine
     export EMBED_LABEL="${version}- (@non-git)"
-    ${bash}/bin/bash ./bazel_src/compile.sh
+    ${lib.getExe bash} ./bazel_src/compile.sh
     ./bazel_src/scripts/generate_bash_completion.sh \
         --bazel=./bazel_src/output/bazel \
         --output=./bazel_src/output/bazel-complete.bash \
@@ -594,7 +594,7 @@ stdenv.mkDerivation rec {
     cp ./bazel_src/bazel-bin/src/tools/execlog/parser_deploy.jar $out/share/parser_deploy.jar
     cat <<EOF > $out/bin/bazel-execlog
     #!${runtimeShell} -e
-    ${runJdk}/bin/java -jar $out/share/parser_deploy.jar \$@
+    ${lib.getExe runJdk} -jar $out/share/parser_deploy.jar \$@
     EOF
     chmod +x $out/bin/bazel-execlog
 

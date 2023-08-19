@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     cat > "$out/bin/jdepend" <<EOF
     #!${runtimeShell}
-    exec ${jdk.jre}/bin/java -classpath "$out/share/*" "\$@"
+    exec ${lib.getExe jdk.jre} -classpath "$out/share/*" "\$@"
     EOF
     chmod a+x $out/bin/jdepend
   '';

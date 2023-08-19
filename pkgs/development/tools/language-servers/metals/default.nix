@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
 
-    makeWrapper ${jre}/bin/java $out/bin/metals \
+    makeWrapper ${lib.getExe jre} $out/bin/metals \
       --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
   '';
 

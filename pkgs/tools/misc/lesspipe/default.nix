@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace '/etc/bash_completion.d' '/share/bash-completion/completions'
   '';
 
-  configureFlags = [ "--shell=${bash}/bin/bash" "--prefix=/" ];
+  configureFlags = [ "--shell=${lib.getExe bash}" "--prefix=/" ];
   configurePlatforms = [ ];
 
   dontBuild = true;

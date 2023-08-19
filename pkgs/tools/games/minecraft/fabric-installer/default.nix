@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,lib/fabric}
 
     cp $src $out/lib/fabric/fabric-installer.jar
-    makeWrapper ${jre}/bin/java $out/bin/fabric-installer \
+    makeWrapper ${lib.getExe jre} $out/bin/fabric-installer \
       --add-flags "-jar $out/lib/fabric/fabric-installer.jar"
   '';
 

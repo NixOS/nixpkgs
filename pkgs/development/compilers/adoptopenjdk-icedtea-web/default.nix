@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cargo rustc glib xulrunner zip npapi_sdk ];
 
   preConfigure = ''
-    configureFlagsArray+=("BIN_BASH=${bash}/bin/bash")
+    configureFlagsArray+=("BIN_BASH=${lib.getExe bash}")
   '';
 
   patches = [ ./patches/0001-make-cargo-work-with-nix-build-on-linux.patch ];

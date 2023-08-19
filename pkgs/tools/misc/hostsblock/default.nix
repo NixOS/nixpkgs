@@ -49,8 +49,8 @@ stdenv.mkDerivation {
       substituteInPlace $f --replace "/usr/lib/" "$out/lib/"
       substituteInPlace $f --replace "/etc/hostsblock/" "$out/etc/"
       sed --in-place --regexp-extended "s|([\` ])curl |\1${curl}/bin/curl |g" $f
-      substituteInPlace $f --replace grep ${gnugrep}/bin/grep
-      substituteInPlace $f --replace " sed " " ${gnused}/bin/sed "
+      substituteInPlace $f --replace grep ${lib.getExe gnugrep}
+      substituteInPlace $f --replace " sed " " ${lib.getExe gnused} "
       sed --in-place --regexp-extended "s|([^_])unzip |\1${unzip}/bin/unzip |" $f
       sed --in-place --regexp-extended "s|7za([^,])|${p7zip}/bin/7za\1|g" $f
     done

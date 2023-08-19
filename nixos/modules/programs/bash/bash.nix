@@ -208,7 +208,7 @@ in
     environment.shells =
       [ "/run/current-system/sw/bin/bash"
         "/run/current-system/sw/bin/sh"
-        "${pkgs.bashInteractive}/bin/bash"
+        "${lib.getExe pkgs.bashInteractive}"
         "${pkgs.bashInteractive}/bin/sh"
       ];
 

@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     substituteInPlace util/dmtcp_restart_wrapper.sh \
       --replace /bin/bash ${stdenv.shell}
     substituteInPlace test/autotest.py \
-      --replace /bin/bash ${bash}/bin/bash \
-      --replace /usr/bin/perl ${perl}/bin/perl \
+      --replace /bin/bash ${lib.getExe bash} \
+      --replace /usr/bin/perl ${lib.getExe perl} \
       --replace /usr/bin/python ${python3.interpreter} \
       --replace "os.environ['USER']" "\"nixbld1\"" \
       --replace "os.getenv('USER')" "\"nixbld1\""

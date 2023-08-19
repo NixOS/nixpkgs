@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --replace "ack_cmd=ack"       "ack_cmd=${silver-searcher}/bin/ag" \
       --replace "tree_cmd=tree"     "tree_cmd=${tree}/bin/tree" \
       --replace "man_cmd=man"       "man_cmd=${man}/bin/man" \
-      --replace "git_cmd=git"       "git_cmd=${git}/bin/git" \
+      --replace "git_cmd=git"       "git_cmd=${lib.getExe git}" \
       --replace "pandoc_cmd=pandoc" "${pandocReplacement}"
     mv memo $out/bin/
     mv doc/memo.1 $out/share/man/man1/memo.1

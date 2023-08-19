@@ -248,14 +248,14 @@ let
     '';
 
     postInstall = with lib; ''
-      sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
+      sed -r "s|command grep|command ${lib.getExe gnugrep}|" \
           -i "$out/share/fish/functions/grep.fish"
       sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
           -i "$out/share/fish/functions/fish_prompt.fish"
       sed -e "s|uname|${coreutils}/bin/uname|"             \
           -i "$out/share/fish/functions/__fish_pwd.fish"   \
              "$out/share/fish/functions/prompt_pwd.fish"
-      sed -e "s|sed |${gnused}/bin/sed |"                  \
+      sed -e "s|sed |${lib.getExe gnused} |"                  \
           -i "$out/share/fish/functions/alias.fish"        \
              "$out/share/fish/functions/prompt_pwd.fish"
       sed -i "s|nroff|${groff}/bin/nroff|"                 \

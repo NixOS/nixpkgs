@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    makeWrapper ${jre}/bin/java $out/bin/${baseName} \
+    makeWrapper ${lib.getExe jre} $out/bin/${baseName} \
       --add-flags "-cp $CLASSPATH org.scalafmt.cli.Cli"
 
     runHook postInstall

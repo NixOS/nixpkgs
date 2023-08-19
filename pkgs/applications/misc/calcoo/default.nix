@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/${pname}
     mv dist/lib/calcoo.jar $out/share/${pname}
 
-    makeWrapper ${jdk}/bin/java $out/bin/calcoo \
+    makeWrapper ${lib.getExe jdk} $out/bin/calcoo \
     --add-flags "-jar $out/share/${pname}/calcoo.jar"
 
     runHook postInstall

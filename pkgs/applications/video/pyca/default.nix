@@ -42,7 +42,7 @@ let
     nativeBuildInputs = [ jq python ];
 
     postPatch = ''
-      ${jq}/bin/jq '. += {"version": "${version}"}' < package.json > package.json.tmp
+      ${lib.getExe jq} '. += {"version": "${version}"}' < package.json > package.json.tmp
       mv package.json.tmp package.json
     '';
 

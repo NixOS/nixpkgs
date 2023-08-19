@@ -87,7 +87,7 @@ in {
           secretFile = pkgs.writeText "secret" "Aig5zaic";
           otpFile = pkgs.writeText "otpsecret" "Riew9mue";
           dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
-          jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
+          jwsFile = pkgs.runCommand "oidcKeyBase" {} "${lib.getExe pkgs.openssl} genrsa 2048 > $out";
         };
       };
     };
@@ -189,7 +189,7 @@ in {
             "${pkgs.sudo}/bin/sudo -u gitlab -H gitlab-rake gitlab:check 1>&2"
         )
         gitlab.succeed(
-            "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${auth} http://gitlab/oauth/token | ${pkgs.jq}/bin/jq -r '.access_token')\" >/tmp/headers"
+            "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${auth} http://gitlab/oauth/token | ${lib.getExe pkgs.jq} -r '.access_token')\" >/tmp/headers"
         )
       '' + lib.optionalString doSetup ''
         with subtest("Create user Alice"):
@@ -197,7 +197,7 @@ in {
                 """[ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${createUserAlice} http://gitlab/api/v4/users)" = "201" ]"""
             )
             gitlab.succeed(
-                "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${aliceAuth} http://gitlab/oauth/token | ${pkgs.jq}/bin/jq -r '.access_token')\" >/tmp/headers-alice"
+                "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${aliceAuth} http://gitlab/oauth/token | ${lib.getExe pkgs.jq} -r '.access_token')\" >/tmp/headers-alice"
             )
 
         with subtest("Create user Bob"):
@@ -205,7 +205,7 @@ in {
                 """ [ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${createUserBob} http://gitlab/api/v4/users)" = "201" ]"""
             )
             gitlab.succeed(
-                "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${bobAuth} http://gitlab/oauth/token | ${pkgs.jq}/bin/jq -r '.access_token')\" >/tmp/headers-bob"
+                "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${bobAuth} http://gitlab/oauth/token | ${lib.getExe pkgs.jq} -r '.access_token')\" >/tmp/headers-bob"
             )
 
         with subtest("Setup Git and SSH for Alice"):

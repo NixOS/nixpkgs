@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp -v readme.md $out/share/doc/
 
     # launcher with `cd` is required b/c otherwise the model library isn't usable
-    makeWrapper "${jre}/bin/java" "$out/bin/netlogo" \
+    makeWrapper "${lib.getExe jre}" "$out/bin/netlogo" \
       --chdir "$out/share/netlogo/app" \
       --add-flags "-jar netlogo-${version}.jar"
 

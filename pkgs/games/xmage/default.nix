@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp -rv ./* $out
 
     cat << EOS > $out/bin/xmage
-exec ${jdk8}/bin/java -Xms256m -Xmx512m -XX:MaxPermSize=384m -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -jar $out/mage-client/lib/mage-client-1.4.42.jar
+exec ${lib.getExe jdk8} -Xms256m -Xmx512m -XX:MaxPermSize=384m -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -jar $out/mage-client/lib/mage-client-1.4.42.jar
 EOS
 
     chmod +x $out/bin/xmage

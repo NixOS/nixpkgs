@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out
     cp -R * $out/
     mkdir $out/bin
-    echo "${pythonEnv}/bin/python $out/SABnzbd.py \$*" > $out/bin/sabnzbd
+    echo "${lib.getExe pythonEnv} $out/SABnzbd.py \$*" > $out/bin/sabnzbd
     chmod +x $out/bin/sabnzbd
     wrapProgram $out/bin/sabnzbd --set PATH ${path}
 

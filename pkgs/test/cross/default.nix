@@ -114,7 +114,7 @@ let
     emulator = with lib.systems; (elaborate examples.aarch64-multiplatform).emulator pkgs;
   in
     pkgs.runCommand "test-mbuffer" {} ''
-      echo hello | ${emulator} ${mbuffer}/bin/mbuffer
+      echo hello | ${emulator} ${lib.getExe mbuffer}
       touch $out
     '';
 

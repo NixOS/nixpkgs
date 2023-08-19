@@ -10,7 +10,7 @@
         copy_bin_and_libs ${pkgs.fuse}/sbin/mount.fuse
         copy_bin_and_libs ${pkgs.unionfs-fuse}/bin/unionfs
         substitute ${pkgs.unionfs-fuse}/sbin/mount.unionfs-fuse $out/bin/mount.unionfs-fuse \
-          --replace '${pkgs.bash}/bin/bash' /bin/sh \
+          --replace '${lib.getExe pkgs.bash}' /bin/sh \
           --replace '${pkgs.fuse}/sbin' /bin \
           --replace '${pkgs.unionfs-fuse}/bin' /bin
         chmod +x $out/bin/mount.unionfs-fuse
@@ -28,7 +28,7 @@
         "unionfs" = "${pkgs.unionfs-fuse}/bin/unionfs";
         "mount.unionfs-fuse" = pkgs.runCommand "mount.unionfs-fuse" {} ''
           substitute ${pkgs.unionfs-fuse}/sbin/mount.unionfs-fuse $out \
-            --replace '${pkgs.bash}/bin/bash' /bin/sh \
+            --replace '${lib.getExe pkgs.bash}' /bin/sh \
             --replace '${pkgs.fuse}/sbin' /bin \
             --replace '${pkgs.unionfs-fuse}/bin' /bin
         '';

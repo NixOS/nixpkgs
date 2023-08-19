@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec/avro-tools
     cp $src $out/libexec/avro-tools/${pname}.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/avro-tools \
+    makeWrapper ${lib.getExe jre} $out/bin/avro-tools \
     --add-flags "-jar $out/libexec/avro-tools/${pname}.jar"
   '';
 

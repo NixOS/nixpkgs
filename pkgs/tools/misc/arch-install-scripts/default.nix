@@ -57,8 +57,8 @@ resholve.mkDerivation rec {
       # fixup (to correctly resolve in-package sourcing).
       scripts = [ "bin/arch-chroot" "bin/genfstab" "bin/pacstrap" ];
 
-      # "none" for no shebang, "${bash}/bin/bash" for bash, etc.
-      interpreter = "${bash}/bin/bash";
+      # "none" for no shebang, "${lib.getExe bash}" for bash, etc.
+      interpreter = "${lib.getExe bash}";
 
       # packages resholve should resolve executables from
       inputs = [ coreutils gawk gnugrep pacman util-linux ];

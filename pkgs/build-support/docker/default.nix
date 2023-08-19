@@ -807,7 +807,7 @@ rec {
   # This provides /bin/sh, pointing to bashInteractive.
   binSh = runCommand "bin-sh" { } ''
     mkdir -p $out/bin
-    ln -s ${bashInteractive}/bin/bash $out/bin/sh
+    ln -s ${lib.getExe bashInteractive} $out/bin/sh
   '';
 
   # This provides the ca bundle in common locations

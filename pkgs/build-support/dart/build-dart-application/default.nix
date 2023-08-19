@@ -21,7 +21,7 @@
 , dartRuntimeCommand ?
     if dartOutputType == "aot-snapshot" then "${dart}/bin/dartaotruntime"
     else if (dartOutputType == "jit-snapshot" || dartOutputType == "kernel") then "${dart}/bin/dart"
-    else if dartOutputType == "js" then "${nodejs}/bin/node"
+    else if dartOutputType == "js" then "${lib.getExe nodejs}"
     else null
 
 , pubspecLockFile ? null

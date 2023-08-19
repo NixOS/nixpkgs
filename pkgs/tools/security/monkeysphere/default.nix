@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
       -e "s,/usr/sbin/sshd,${opensshUnsafe}/bin/sshd," \
       -e "s,/bin/true,${coreutils}/bin/true," \
       -e "s,/bin/false,${coreutils}/bin/false," \
-      -e "s,openssl\ req,${openssl}/bin/openssl req," \
+      -e "s,openssl\ req,${lib.getExe openssl} req," \
       tests/basic
     sed -i "s/<(hd/<(hexdump/" tests/keytrans
   '';

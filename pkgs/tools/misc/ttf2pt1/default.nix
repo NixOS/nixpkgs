@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    find -type f | xargs sed -i 's@/usr/bin/perl@${perl}/bin/perl@'
+    find -type f | xargs sed -i 's@/usr/bin/perl@${lib.getExe perl}@'
     mkdir -p $out
     sed -e 's/chown/true/' \
         -e 's/chgrp/true/' \

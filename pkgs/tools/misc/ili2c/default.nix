@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       cp $build/build/source/build/jar/ili2c.jar $out/share/${pname}
 
       mkdir -p $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/ili2c \
+      makeWrapper ${lib.getExe jre} $out/bin/ili2c \
         --add-flags "-jar $out/share/${pname}/ili2c.jar"
     '';
 

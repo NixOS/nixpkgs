@@ -28,7 +28,7 @@ buildNpmPackage rec {
   '';
 
   postFixup = ''
-    makeWrapper ${nodejs}/bin/node $out/bin/uptime-kuma-server \
+    makeWrapper ${lib.getExe nodejs} $out/bin/uptime-kuma-server \
       --add-flags $out/lib/node_modules/uptime-kuma/server/server.js \
       --chdir $out/lib/node_modules/uptime-kuma
   '';

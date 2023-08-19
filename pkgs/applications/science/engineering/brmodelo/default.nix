@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     # in WMs that are not in that list (e.g. XMonad).
     # Solution/Workaround: set the environment variable
     # _JAVA_AWT_WM_NONREPARENTING=1.
-    makeWrapper ${openjdk8}/bin/java $out/bin/brmodelo \
+    makeWrapper ${lib.getExe openjdk8} $out/bin/brmodelo \
        --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
        --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on" \
        --add-flags "-jar $out/share/java/brModelo.jar"

@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -D $src $out/checkstyle/checkstyle-all.jar
-    makeWrapper ${jre}/bin/java $out/bin/checkstyle \
+    makeWrapper ${lib.getExe jre} $out/bin/checkstyle \
       --add-flags "-jar $out/checkstyle/checkstyle-all.jar"
     runHook postInstall
   '';

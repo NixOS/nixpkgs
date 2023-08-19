@@ -104,7 +104,7 @@ buildPythonPackage rec {
     substituteInPlace langchain/utilities/bash.py \
       --replace '"env", ["-i", "bash", ' '"${lib.getExe bash}", ['
     substituteInPlace tests/unit_tests/test_bash.py \
-      --replace "/bin/sh" "${bash}/bin/sh"
+      --replace "/bin/sh" "${lib.getExe' bash "sh"}"
   '';
 
   nativeBuildInputs = [

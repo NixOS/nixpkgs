@@ -1,4 +1,4 @@
-{ elasticmq-server, python3Packages, runCommand, writeText}:
+{ lib, elasticmq-server, python3Packages, runCommand, writeText}:
 
 runCommand "${elasticmq-server.name}-tests" (let
   commonPy = ''
@@ -34,7 +34,7 @@ in {
     assert messages[0].body == "bazqux"
   '';
 }) ''
-  JAVA_TOOL_OPTIONS="-Dconfig.file=$emqConfig" ${elasticmq-server}/bin/elasticmq-server &
+  JAVA_TOOL_OPTIONS="-Dconfig.file=$emqConfig" ${lib.getExe elasticmq-server} &
   SERVER_PID=$!
   sleep 10
 

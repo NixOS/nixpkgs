@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
     install -Dm644 build/dayon.jar $out/share/dayon/dayon.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/dayon \
+    makeWrapper ${lib.getExe jre} $out/bin/dayon \
       --add-flags "-jar $out/share/dayon/dayon.jar"
-    makeWrapper ${jre}/bin/java $out/bin/dayon_assisted \
+    makeWrapper ${lib.getExe jre} $out/bin/dayon_assisted \
       --add-flags "-cp $out/share/dayon/dayon.jar mpo.dayon.assisted.AssistedRunner"
-    makeWrapper ${jre}/bin/java $out/bin/dayon_assistant \
+    makeWrapper ${lib.getExe jre} $out/bin/dayon_assistant \
       --add-flags "-cp $out/share/dayon/dayon.jar mpo.dayon.assistant.AssistantRunner"
     install -Dm644 resources/dayon.png $out/share/icons/hicolor/128x128/apps/dayon.png
     runHook postInstall

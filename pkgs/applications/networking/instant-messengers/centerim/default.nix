@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withGpg gpgme;
 
   preConfigure = ''
-    ${gnused}/bin/sed -i '1,1i#include <stdio.h>' libicq2000/libicq2000/sigslot.h
+    ${lib.getExe gnused} -i '1,1i#include <stdio.h>' libicq2000/libicq2000/sigslot.h
   '';
 
   configureFlags = [

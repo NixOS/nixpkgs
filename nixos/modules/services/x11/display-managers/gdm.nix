@@ -11,7 +11,7 @@ let
 
   xSessionWrapper = if (cfg.setupCommands == "") then null else
     pkgs.writeScript "gdm-x-session-wrapper" ''
-      #!${pkgs.bash}/bin/bash
+      #!${lib.getExe pkgs.bash}
       ${cfg.setupCommands}
       exec "$@"
     '';

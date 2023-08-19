@@ -43,7 +43,7 @@ resholve.mkDerivation rec {
   solutions = {
     mons = {
       scripts = [ "bin/mons" "lib/libshlist/liblist.sh" ];
-      interpreter = "${bash}/bin/sh";
+      interpreter = "${lib.getExe' bash "sh"}";
       inputs = [
         bash
         coreutils

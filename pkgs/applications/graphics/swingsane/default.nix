@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     execWrapper = ''
       #!${runtimeShell}
-      exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
+      exec ${lib.getExe jre} -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
     '';
 
     desktopItem = makeDesktopItem {

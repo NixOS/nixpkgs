@@ -29,7 +29,7 @@ in mkDerivation rec {
     mkdir -p $out/bin
     cp usr/bin/rescuetime $out/bin
 
-    ${patchelf}/bin/patchelf \
+    ${lib.getExe patchelf} \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${lib.makeLibraryPath [ qt5.qtbase libXtst libXext libX11 libXScrnSaver ]}" \
       $out/bin/rescuetime

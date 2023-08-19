@@ -37,7 +37,7 @@ buildNpmPackage rec {
 
     echo "#! /bin/sh
     NODE_PATH=\"$out/lib/node_modules\" \\
-      exec ${nodejs}/bin/node \\
+      exec ${lib.getExe nodejs} \\
       $out/lib/fx_cast_bridge/src/main.js \\
       --_name fx_cast_bridge \"\$@\"
     " >$out/bin/fx_cast_bridge

@@ -105,7 +105,7 @@ lib.concatMapAttrs
             client.wait_for_open_port(3022)
 
         with subtest("check applied configuration"):
-            server.wait_until_succeeds("tctl get nodes --format=json | ${pkgs.jq}/bin/jq -e '.[] | select(.spec.hostname==\"client\") | .metadata.labels.role==\"client\"'")
+            server.wait_until_succeeds("tctl get nodes --format=json | ${lib.getExe pkgs.jq} -e '.[] | select(.spec.hostname==\"client\") | .metadata.labels.role==\"client\"'")
             server.wait_for_open_port(3000)
             client.succeed("journalctl -u teleport.service --grep='DEBU'")
             server.succeed("journalctl -u teleport.service --grep='Starting teleport in insecure mode.'")

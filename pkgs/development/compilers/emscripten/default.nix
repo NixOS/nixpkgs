@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
 
     echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
     echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
-    echo "NODE_JS = '${nodejs}/bin/node'" >> .emscripten
+    echo "NODE_JS = '${lib.getExe nodejs}'" >> .emscripten
     echo "JS_ENGINES = [NODE_JS]" >> .emscripten
     echo "CLOSURE_COMPILER = ['${closurecompiler}/bin/closure-compiler']" >> .emscripten
-    echo "JAVA = '${jre}/bin/java'" >> .emscripten
+    echo "JAVA = '${lib.getExe jre}'" >> .emscripten
     # to make the test(s) below work
     # echo "SPIDERMONKEY_ENGINE = []" >> .emscripten
     echo "BINARYEN_ROOT = '${binaryen}'" >> .emscripten

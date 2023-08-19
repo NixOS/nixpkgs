@@ -59,7 +59,7 @@ resholve.mkDerivation rec {
   solutions = {
     yadm = {
       scripts = [ "bin/yadm" ];
-      interpreter = "${bash}/bin/sh";
+      interpreter = "${lib.getExe' bash "sh"}";
       inputs = [
         git
         gnupg
@@ -109,7 +109,7 @@ resholve.mkDerivation rec {
       execer = [
         "cannot:${j2cli}/bin/j2"
         "cannot:${esh}/bin/esh"
-        "cannot:${git}/bin/git"
+        "cannot:${lib.getExe git}"
         "cannot:${gnupg}/bin/gpg"
       ];
     };

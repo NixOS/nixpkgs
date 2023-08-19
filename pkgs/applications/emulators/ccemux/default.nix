@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     install -D ${src} $out/share/ccemux/ccemux.jar
     install -D ${desktopIcon} $out/share/pixmaps/ccemux.png
 
-    makeWrapper ${jre}/bin/java $out/bin/ccemux \
+    makeWrapper ${lib.getExe jre} $out/bin/ccemux \
       --add-flags "-jar $out/share/ccemux/ccemux.jar"
 
     runHook postInstall

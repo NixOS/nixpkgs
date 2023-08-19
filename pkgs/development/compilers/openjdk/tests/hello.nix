@@ -21,7 +21,7 @@ in
 
     buildPhase = ''
       runHook preBuildPhase
-      ${jdk}/bin/javac src/Hello.java
+      ${lib.getExe jdk}c src/Hello.java
       runHook postBuildPhase
     '';
     installPhase = ''
@@ -33,7 +33,7 @@ in
       mkdir -p $out/bin
       cat >$out/bin/hello <<EOF;
       #!/usr/bin/env sh
-      ${jre}/bin/java -cp $out/lib Hello
+      ${lib.getExe jre} -cp $out/lib Hello
       EOF
       chmod a+x $out/bin/hello
 

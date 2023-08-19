@@ -17,7 +17,7 @@ perlPackages.buildPerlPackage {
 
   postFixup = ''
     substituteInPlace $out/bin/rename \
-      --replace "#!${perl}/bin/perl" "#!${perl}/bin/perl -I $out/${perl.libPrefix}"
+      --replace "#!${lib.getExe perl}" "#!${lib.getExe perl} -I $out/${perl.libPrefix}"
   '';
 
   doCheck = !stdenv.isDarwin;

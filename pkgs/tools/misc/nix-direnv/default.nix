@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # getting sourced, not executed:
   postPatch = ''
     sed -i "1a NIX_BIN_PREFIX=${nix}/bin/" direnvrc
-    substituteInPlace direnvrc --replace "grep" "${gnugrep}/bin/grep"
+    substituteInPlace direnvrc --replace "grep" "${lib.getExe gnugrep}"
   '';
 
   installPhase = ''

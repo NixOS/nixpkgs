@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -e "s|\<cmp\>|${diffutils}/bin/cmp|g" \
         -e "s|\<cat\>|${coreutils}/bin/cat|g" \
-        -e "s|\<grep\>|${gnugrep}/bin/grep|g" \
-        -e "s|\<sed\>|${gnused}/bin/sed|g" \
+        -e "s|\<grep\>|${lib.getExe gnugrep}|g" \
+        -e "s|\<sed\>|${lib.getExe gnused}|g" \
         -e "s|\<tee\>|${coreutils}/bin/tee|g" \
         -i "$out/bin/autorevision"
   '';

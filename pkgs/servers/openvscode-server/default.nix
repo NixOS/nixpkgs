@@ -200,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out
     cp -R -T ../vscode-reh-web-${vsBuildTarget} $out
-    ln -s ${nodejs}/bin/node $out
+    ln -s ${lib.getExe nodejs} $out
 
     runHook postInstall
   '';

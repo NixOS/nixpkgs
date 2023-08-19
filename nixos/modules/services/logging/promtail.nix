@@ -3,7 +3,7 @@ let
   cfg = config.services.promtail;
 
   prettyJSON = conf: pkgs.runCommandLocal "promtail-config.json" {} ''
-    echo '${builtins.toJSON conf}' | ${pkgs.buildPackages.jq}/bin/jq 'del(._module)' > $out
+    echo '${builtins.toJSON conf}' | ${lib.getExe pkgs.buildPackages.jq} 'del(._module)' > $out
   '';
 
   allowSystemdJournal = cfg.configuration ? scrape_configs && lib.any (v: v ? journal) cfg.configuration.scrape_configs;

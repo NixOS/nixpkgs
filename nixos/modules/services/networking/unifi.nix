@@ -4,7 +4,7 @@ let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
   cmd = ''
-    @${cfg.jrePackage}/bin/java java \
+    @${lib.getExe cfg.jrePackage} java \
         ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
         -jar ${stateDir}/lib/ace.jar

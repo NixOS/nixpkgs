@@ -582,7 +582,7 @@ let
             --retry-connrefused \
             --cacert /var/lib/lnd/tls.cert \
             -X GET \
-            https://localhost:8080/v1/genseed | ${pkgs.jq}/bin/jq -c '.cipher_seed_mnemonic' > /tmp/seed
+            https://localhost:8080/v1/genseed | ${lib.getExe pkgs.jq} -c '.cipher_seed_mnemonic' > /tmp/seed
           ${pkgs.curl}/bin/curl \
             --retry 20 \
             --retry-delay 1 \

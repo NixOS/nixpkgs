@@ -27,8 +27,8 @@ stdenv.mkDerivation {
     programDir="$out/lib"
     cd "\$programDir"
     if [ \$# -eq 1 ]
-     then "${jre}/bin/java" -jar "\$programDir/umlet.jar" -filename="\$1"
-     else "${jre}/bin/java" -jar "\$programDir/umlet.jar" "\$@"
+     then "${lib.getExe jre}" -jar "\$programDir/umlet.jar" -filename="\$1"
+     else "${lib.getExe jre}" -jar "\$programDir/umlet.jar" "\$@"
     fi
 
     EOF

@@ -117,6 +117,7 @@
       description = "Prefetch dependencies from npm (for use with `fetchNpmDeps`)";
       maintainers = with maintainers; [ lilyinstarlight winter ];
       license = licenses.mit;
+      mainProgram = "prefetch-npm-deps";
     };
   };
 

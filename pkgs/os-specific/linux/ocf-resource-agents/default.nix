@@ -62,7 +62,7 @@ in
 # https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
 runCommand "ocf-resource-agents" {} ''
   mkdir -p $out/usr/lib/ocf
-  ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
-  ${lndir}/bin/lndir -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
-  ${lndir}/bin/lndir -silent "${pacemakerForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
+  ${lib.getExe lndir} -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
+  ${lib.getExe lndir} -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
+  ${lib.getExe lndir} -silent "${pacemakerForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
 ''

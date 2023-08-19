@@ -45,11 +45,11 @@ in {
       machine.start()
 
       assert "world" in machine.succeed(
-          "${helloArmv7l}/bin/hello"
+          "${lib.getExe helloArmv7l}
       )
 
       assert "world" in machine.succeed(
-          "${helloAarch64}/bin/hello"
+          "${lib.getExe helloAarch64}"
       )
     '';
   };
@@ -83,7 +83,7 @@ in {
       machine.start()
 
       assert "error" not in machine.succeed(
-          "LD_PRELOAD='${libredirectAarch64}/lib/libredirect.so' ${helloAarch64}/bin/hello 2>&1"
+          "LD_PRELOAD='${libredirectAarch64}/lib/libredirect.so' ${lib.getExe helloAarch64} 2>&1"
       ).lower()
     '';
   };

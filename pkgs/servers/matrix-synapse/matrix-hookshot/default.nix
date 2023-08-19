@@ -69,7 +69,7 @@ mkYarnPackage rec {
   '';
 
   postInstall = ''
-    makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-hookshot" --add-flags \
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" --add-flags \
         "$out/libexec/matrix-hookshot/deps/matrix-hookshot/lib/App/BridgeApp.js"
   '';
 

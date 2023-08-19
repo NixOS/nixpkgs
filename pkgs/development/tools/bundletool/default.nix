@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${jre_headless}/bin/java $out/bin/bundletool --add-flags "-jar $src"
+    makeWrapper ${lib.getExe jre_headless} $out/bin/bundletool --add-flags "-jar $src"
     runHook postInstall
   '';
 

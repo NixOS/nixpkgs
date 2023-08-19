@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -D $src $out/lib/android-backup-extractor/abe.jar
-    makeWrapper ${jre}/bin/java $out/bin/abe --add-flags "-cp $out/lib/android-backup-extractor/abe.jar org.nick.abe.Main"
+    makeWrapper ${lib.getExe jre} $out/bin/abe --add-flags "-cp $out/lib/android-backup-extractor/abe.jar org.nick.abe.Main"
     runHook postInstall
   '';
 

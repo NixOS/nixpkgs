@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec/varscan
     cp $src $out/libexec/varscan/varscan.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/varscan --add-flags "-jar $out/libexec/varscan/varscan.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/varscan --add-flags "-jar $out/libexec/varscan/varscan.jar"
   '';
 
   meta = with lib; {

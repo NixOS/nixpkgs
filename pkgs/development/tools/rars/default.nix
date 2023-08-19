@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     export JAR=$out/share/java/${pname}/${pname}.jar
     install -D $src $JAR
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${lib.getExe jre} $out/bin/${pname} \
       --add-flags "-jar $JAR"
     runHook postInstall
   '';

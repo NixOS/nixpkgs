@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     patch -p1 < ${./sys-by-default.patch}
     sed -i -e "s,/usr/lib/xbattbar/,$out/libexec/," xbattbar.c
-    sed -i -e "s,/usr/bin/perl,${perl}/bin/perl," xbattbar-check-acpi
-    sed -i -e "s,/usr/bin/perl,${perl}/bin/perl," xbattbar-check-sys
+    sed -i -e "s,/usr/bin/perl,${lib.getExe perl}," xbattbar-check-acpi
+    sed -i -e "s,/usr/bin/perl,${lib.getExe perl}," xbattbar-check-sys
   '';
 
   installPhase = ''

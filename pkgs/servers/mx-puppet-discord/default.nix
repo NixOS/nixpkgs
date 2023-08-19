@@ -35,7 +35,7 @@ in myNodePackages.package.override {
     mkdir -p $out/bin
     cat <<EOF > $out/bin/mx-puppet-discord
     #!/bin/sh
-    exec ${nodejs}/bin/node $out/lib/node_modules/@mx-puppet/discord/build/index.js "\$@"
+    exec ${lib.getExe nodejs} $out/lib/node_modules/@mx-puppet/discord/build/index.js "\$@"
     EOF
     chmod +x $out/bin/mx-puppet-discord
   '';

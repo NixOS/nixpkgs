@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
     rm dmd/compiler/test/dshell/test6952.d
   '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
-    substituteInPlace dmd/compiler/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
+    substituteInPlace dmd/compiler/test/dshell/test6952.d --replace "/usr/bin/env bash" "${lib.getExe bash}"
   ''
 
   + lib.optionalString stdenv.isLinux ''

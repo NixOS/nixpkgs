@@ -5,7 +5,7 @@
 # installing Zenstates, I need a before-sleep script like so:
 #
 # before-sleep = pkgs.writeScript "before-sleep" ''
-#   #!${pkgs.bash}/bin/bash
+#   #!${lib.getExe pkgs.bash}
 #   ${pkgs.zenstates}/bin/zenstates --c6-disable
 # '';
 #

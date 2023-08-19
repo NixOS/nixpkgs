@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/share/java
     ln -s $jar $out/share/java/clooj.jar
-    makeWrapper ${jre}/bin/java $out/bin/clooj --add-flags "-jar $out/share/java/clooj.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/clooj --add-flags "-jar $out/share/java/clooj.jar"
   '';
 
   meta = {

@@ -77,7 +77,7 @@ in {
         NODE_PATH = "${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/node_modules";
       };
       preStart = "mkdir -p /var/lib/uptime";
-      serviceConfig.ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/app.js";
+      serviceConfig.ExecStart = "${lib.getExe pkgs.nodejs} ${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/app.js";
     };
 
     services.mongodb.enable = mkIf (!cfg.usesRemoteMongo) true;
@@ -94,7 +94,7 @@ in {
       };
       # Ugh, need to wait for web service to be up
       preStart = if cfg.enableWebService then "sleep 1s" else "mkdir -p /var/lib/uptime";
-      serviceConfig.ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/monitor.js";
+      serviceConfig.ExecStart = "${lib.getExe pkgs.nodejs} ${pkgs.nodePackages.node-uptime}/lib/node_modules/node-uptime/monitor.js";
     };
   }) ];
 }

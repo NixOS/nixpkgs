@@ -197,7 +197,7 @@ in
       # ssh needs a home directory
       home = "/var/lib/btrbk";
       createHome = true;
-      shell = "${pkgs.bash}/bin/bash";
+      shell = "${lib.getExe pkgs.bash}";
       group = "btrbk";
       openssh.authorizedKeys.keys = map
         (

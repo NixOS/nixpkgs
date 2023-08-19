@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D $src $out/share/java/${jarfilename}
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${lib.getExe jre} $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${jarfilename}"
   '';
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib"
 
     cp "${src}" "$out/lib/jnetmap.jar"
-    makeWrapper "${jre}/bin/java" "$out/bin/jnetmap" \
+    makeWrapper "${lib.getExe jre}" "$out/bin/jnetmap" \
         --add-flags "-jar \"$out/lib/jnetmap.jar\""
 
     runHook postInstall

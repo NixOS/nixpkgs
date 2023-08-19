@@ -29,7 +29,7 @@ let
   };
 
   launcher = writeScript "sparrow" ''
-    #! ${bash}/bin/bash
+    #! ${lib.getExe bash}
     params=(
       --module-path @out@/lib:@jdkModules@/modules
       --add-opens javafx.graphics/com.sun.javafx.css=org.controlsfx.controls
@@ -63,11 +63,11 @@ let
       -m com.sparrowwallet.sparrow
     )
 
-    XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS ${openjdk}/bin/java ''${params[@]} $@
+    XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS ${lib.getExe openjdk} ''${params[@]} $@
   '';
 
   torWrapper = writeScript "tor-wrapper" ''
-    #! ${bash}/bin/bash
+    #! ${lib.getExe bash}
 
     exec ${tor}/bin/tor "$@"
   '';

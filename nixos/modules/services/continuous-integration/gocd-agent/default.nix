@@ -200,8 +200,8 @@ in {
         rm -f config/autoregister.properties
         ln -s "${pkgs.writeText "autoregister.properties" cfg.agentConfig}" config/autoregister.properties
 
-        ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
-        ${pkgs.jre}/bin/java ${concatStringsSep " " cfg.startupOptions} \
+        ${lib.getExe pkgs.git} config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
+        ${lib.getExe pkgs.jre} ${concatStringsSep " " cfg.startupOptions} \
                         ${concatStringsSep " " cfg.extraOptions} \
                               -jar ${pkgs.gocd-agent}/go-agent/agent-bootstrapper.jar \
                               -serverUrl ${cfg.goServer}

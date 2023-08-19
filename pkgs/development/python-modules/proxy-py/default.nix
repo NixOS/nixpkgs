@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-    --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
+    --replace "SHELL := /bin/bash" "SHELL := ${lib.getExe bash}"
     substituteInPlace pytest.ini \
       --replace "-p pytest_cov" "" \
       --replace "--no-cov-on-fail" ""

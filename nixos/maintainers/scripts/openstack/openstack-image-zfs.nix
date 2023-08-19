@@ -82,10 +82,10 @@ in
          mkdir -p $out/nix-support
          echo "file ${cfg.format} $rootDisk" >> $out/nix-support/hydra-build-products
 
-        ${pkgs.jq}/bin/jq -n \
+        ${lib.getExe pkgs.jq} -n \
           --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
           --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
-          --arg root_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+          --arg root_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$rootDisk" | ${lib.getExe pkgs.jq} '."virtual-size"')" \
           --arg boot_mode "${imageBootMode}" \
           --arg root "$rootDisk" \
          '{}

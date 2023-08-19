@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     cp -R lib/* $out/share/vassal
     cp -R doc/* $out/doc
 
-    makeWrapper ${jre}/bin/java $out/bin/vassal \
+    makeWrapper ${lib.getExe jre} $out/bin/vassal \
       --add-flags "-Duser.dir=$out -cp $out/share/vassal/Vengine.jar \
       VASSAL.launch.ModuleManager"
 

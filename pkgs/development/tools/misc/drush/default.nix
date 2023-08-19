@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     install -D $src $out/libexec/drush/drush.phar
-    makeWrapper ${php}/bin/php $out/bin/drush \
+    makeWrapper ${lib.getExe php} $out/bin/drush \
       --add-flags "$out/libexec/drush/drush.phar" \
       --prefix PATH : "${lib.makeBinPath [ which php bash coreutils ncurses ]}"
   '';

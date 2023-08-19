@@ -111,9 +111,9 @@ stdenv.mkDerivation rec {
     # Replace the bundled git with the one from nixpkgs
     dugite=$opt/resources/app.asar.unpacked/node_modules/dugite
     rm -f $dugite/git/bin/git
-    ln -s ${git}/bin/git $dugite/git/bin/git
+    ln -s ${lib.getExe git} $dugite/git/bin/git
     rm -f $dugite/git/libexec/git-core/git
-    ln -s ${git}/bin/git $dugite/git/libexec/git-core/git
+    ln -s ${lib.getExe git} $dugite/git/libexec/git-core/git
 
     # We have to patch a prebuilt binary in the asar archive
     # But asar complains because the node_gyp unpacked dependency uses a prebuilt Python3 itself

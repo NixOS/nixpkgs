@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
     cat << EOF > $out/bin/${pname}
     #!${stdenv.shell}
-    ${jdk17}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX
+    ${lib.getExe jdk17} -jar $out/opt/STM32CubeMX/STM32CubeMX
     EOF
     chmod +x $out/bin/${pname}
 

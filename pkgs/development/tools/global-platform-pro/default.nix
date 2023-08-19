@@ -45,7 +45,7 @@ mavenJdk8.buildMavenPackage rec {
   installPhase = ''
     mkdir -p "$out/lib/java" "$out/share/java"
     cp tool/target/gp.jar "$out/share/java"
-    makeWrapper "${jre8_headless}/bin/java" "$out/bin/gp" \
+    makeWrapper "${lib.getExe jre8_headless}" "$out/bin/gp" \
       --add-flags "-jar '$out/share/java/gp.jar'" \
       --prefix LD_LIBRARY_PATH : "${pcsclite.out}/lib"
   '';

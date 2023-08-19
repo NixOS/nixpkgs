@@ -50,11 +50,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
           };
 
           systemd.services.molly-brown.preStart = ''
-            ${pkgs.openssl}/bin/openssl genrsa -out "/tmp/key.pem"
-            ${pkgs.openssl}/bin/openssl req -new \
+            ${lib.getExe pkgs.openssl} genrsa -out "/tmp/key.pem"
+            ${lib.getExe pkgs.openssl} req -new \
               -subj "/CN=${config.networking.hostName}" \
               -key "/tmp/key.pem" -out /tmp/request.pem
-            ${pkgs.openssl}/bin/openssl x509 -req -days 3650 \
+            ${lib.getExe pkgs.openssl} x509 -req -days 3650 \
               -in /tmp/request.pem -signkey "/tmp/key.pem" -out "/tmp/cert.pem"
 
             mkdir -p "${cfg.settings.DocBase}"

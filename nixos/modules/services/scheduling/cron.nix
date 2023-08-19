@@ -7,7 +7,7 @@ let
   # Put all the system cronjobs together.
   systemCronJobsFile = pkgs.writeText "system-crontab"
     ''
-      SHELL=${pkgs.bash}/bin/bash
+      SHELL=${lib.getExe pkgs.bash}
       PATH=${config.system.path}/bin:${config.system.path}/sbin
       ${optionalString (config.services.cron.mailto != null) ''
         MAILTO="${config.services.cron.mailto}"

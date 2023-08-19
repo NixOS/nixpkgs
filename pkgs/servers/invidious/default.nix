@@ -59,7 +59,7 @@ crystal.buildCrystalPackage rec {
             --replace 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
 
       substituteInPlace src/invidious/user/captcha.cr \
-          --replace 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
+          --replace 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getExe' librsvg "rsvg-convert"}'
     '';
 
   nativeBuildInputs = [ pkg-config shards ];

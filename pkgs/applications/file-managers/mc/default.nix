@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     # used for vfs helpers at run time:
-    "PERL=${perl}/bin/perl"
+    "PERL=${lib.getExe perl}"
     # used for .hlp generation at build time:
     "PERL_FOR_BUILD=${buildPackages.perl}/bin/perl"
 

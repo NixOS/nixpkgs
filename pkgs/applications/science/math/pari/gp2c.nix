@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-paricfg=${pari}/lib/pari/pari.cfg"
-    "--with-perl=${perl}/bin/perl"
+    "--with-perl=${lib.getExe perl}"
   ];
 
   meta = with lib; {

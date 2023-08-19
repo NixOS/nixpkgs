@@ -30,7 +30,7 @@ mavenWithJdk.buildMavenPackage rec {
     # archive it comes from, but we can't do that since
     # we need the mods directory to be writable.
     # see: https://github.com/Vhati/Slipstream-Mod-Manager/blob/85cad4ffbef8583d908b189204d7d22a26be43f8/src/main/java/net/vhati/modmanager/cli/SlipstreamCLI.java#L105
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeWrapper ${lib.getExe jdk} $out/bin/${pname} \
       --run '_dir="''${XDG_DATA_HOME:-$HOME/.local/share}/slipstream"' \
       --run 'mkdir -p $_dir/{mods,backup}' \
       --run 'cd $_dir' \

@@ -20,7 +20,7 @@ mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phpcs/phpcs.phar
-    makeWrapper ${php}/bin/php $out/bin/phpcs \
+    makeWrapper ${lib.getExe php} $out/bin/phpcs \
       --add-flags "$out/libexec/phpcs/phpcs.phar"
     runHook postInstall
   '';

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/tessera --add-flags "-jar $src"
+    makeWrapper ${lib.getExe jre} $out/bin/tessera --add-flags "-jar $src"
   '';
 
   meta = with lib; {

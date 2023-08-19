@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     license = licenses.lgpl3Plus;
     changelog = "https://github.com/nuspell/nuspell/blob/v${version}/CHANGELOG.md";
+    mainProgram = "nuspell";
   };
 }

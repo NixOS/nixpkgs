@@ -305,15 +305,15 @@ in
           ln -sf ${mattermostPlugins}/data/plugins "${cfg.statePath}/data"
         '' + lib.optionalString (!cfg.mutableConfig) ''
           rm -f "${cfg.statePath}/config/config.json"
-          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.statePath}/config/config.json"
+          ${lib.getExe pkgs.jq} -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.statePath}/config/config.json"
         '' + lib.optionalString cfg.mutableConfig ''
           if ! test -e "${cfg.statePath}/config/.initial-created"; then
             rm -f ${cfg.statePath}/config/config.json
-            ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.statePath}/config/config.json"
+            ${lib.getExe pkgs.jq} -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.statePath}/config/config.json"
             touch "${cfg.statePath}/config/.initial-created"
           fi
         '' + lib.optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
-          new_config="$(${pkgs.jq}/bin/jq -s '.[0] * .[1]' "${cfg.statePath}/config/config.json" ${mattermostConfJSON})"
+          new_config="$(${lib.getExe pkgs.jq} -s '.[0] * .[1]' "${cfg.statePath}/config/config.json" ${mattermostConfJSON})"
 
           rm -f "${cfg.statePath}/config/config.json"
           echo "$new_config" > "${cfg.statePath}/config/config.json"

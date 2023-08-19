@@ -168,7 +168,7 @@ in stdenv.mkDerivation (finalAttrs: rec {
     mkdir -p "$TARGET_DIR/isabelle/setup"
     declare -a ARGS=("-Xlint:unchecked")
 
-    SOURCES="$(${perl}/bin/perl -e 'while (<>) { if (m/(\S+\.java)/)  { print "$1 "; } }' "src/Tools/Setup/etc/build.props")"
+    SOURCES="$(${lib.getExe perl} -e 'while (<>) { if (m/(\S+\.java)/)  { print "$1 "; } }' "src/Tools/Setup/etc/build.props")"
     for SRC in $SOURCES
     do
       ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
     install -D "$src" "$out/share/java/${jarfilename}"
 
-    makeWrapper ${jre_headless}/bin/java $out/bin/detekt \
+    makeWrapper ${lib.getExe jre_headless} $out/bin/detekt \
       --add-flags "-jar $out/share/java/${jarfilename}"
 
     runHook postInstall

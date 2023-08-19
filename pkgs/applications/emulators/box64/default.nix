@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     } ''
       # There is no actual "Hello, world!" with any of the logging enabled, and with all logging disabled it's hard to
       # tell what problems the emulator has run into.
-      BOX64_NOBANNER=0 BOX64_LOG=1 box64 ${hello-x86_64}/bin/hello --version | tee $out
+      BOX64_NOBANNER=0 BOX64_LOG=1 box64 ${lib.getExe hello-x86_64} --version | tee $out
     '';
   };
 

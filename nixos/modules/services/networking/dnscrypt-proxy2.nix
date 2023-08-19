@@ -49,12 +49,12 @@ in
         passAsFile = [ "json" ];
       } ''
         ${if cfg.upstreamDefaults then ''
-          ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
-          ${pkgs.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
+          ${lib.getExe' pkgs.remarshal "tmol2json"} ${pkgs.dnscrypt-proxy.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
+          ${lib.getExe pkgs.jq} --slurp add example.json $jsonPath > config.json # merges the two
         '' else ''
           cp $jsonPath config.json
         ''}
-        ${pkgs.remarshal}/bin/json2toml < config.json > $out
+        ${lib.getExe' pkgs.remarshal "tmol2json"} < config.json > $out
       '';
       defaultText = literalMD "TOML file generated from {option}`services.dnscrypt-proxy2.settings`";
     };

@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       install -D ${finalAttrs.src} ${jar}
       mkdir -p "$out/bin"
-      makeWrapper "${jre}/bin/java" "$out/bin/code-maat" \
+      makeWrapper "${lib.getExe jre}" "$out/bin/code-maat" \
           --add-flags "-jar ${jar}"
 
       runHook postInstall

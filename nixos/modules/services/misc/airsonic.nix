@@ -140,7 +140,7 @@ in {
       '';
       serviceConfig = {
         ExecStart = ''
-          ${cfg.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
+          ${lib.getExe cfg.jre} -Xmx${toString cfg.maxMemory}m \
           -Dairsonic.home=${cfg.home} \
           -Dserver.address=${cfg.listenAddress} \
           -Dserver.port=${toString cfg.port} \

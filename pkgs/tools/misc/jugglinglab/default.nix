@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # copied from the upstream shell wrapper
     classpath=$out/lib/JugglingLab.jar:$out/lib/commons-math3-3.6.1.jar:$out/lib/protobuf.jar:$out/lib/com.google.ortools.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/jugglinglab \
+    makeWrapper ${lib.getExe jre} $out/bin/jugglinglab \
       --add-flags "-cp $classpath" \
       --add-flags "-Xss2048k -Djava.library.path=ortools-lib" \
       --add-flags jugglinglab.JugglingLab

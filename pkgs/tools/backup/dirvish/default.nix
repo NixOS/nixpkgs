@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   manpages = [ "dirvish.8" "dirvish-runall.8" "dirvish-expire.8" "dirvish-locate.8" "dirvish.conf.5" ];
 
   buildPhase = ''
-    HEADER="#!${perl}/bin/perl
+    HEADER="#!${lib.getExe perl}
 
     \$CONFDIR = \"/etc/dirvish\";
 

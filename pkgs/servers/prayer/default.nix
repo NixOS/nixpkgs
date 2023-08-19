@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       -e 's,^PREFIX .*,PREFIX='$out, \
       -e 's,^CCLIENT_DIR=.*,CCLIENT_DIR=${uwimap}/include/c-client,' \
       Config
-    sed -i -e s,/usr/bin/perl,${perl}/bin/perl, \
+    sed -i -e s,/usr/bin/perl,${lib.getExe perl}, \
       templates/src/*.pl
     sed -i -e '/<stropts.h>/d' lib/os_linux.h
   '' + /* html-tidy updates */ ''

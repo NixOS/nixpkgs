@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     mv usr/* $out
     rmdir usr
 
-    ${patchelf}/bin/patchelf \
+    ${lib.getExe patchelf} \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         lib64/snowflake/snowsql/snowsql
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ''
       install -D ${src} "$out/libexec/apktool/apktool.jar"
       mkdir -p "$out/bin"
-      makeWrapper "${jdk_headless}/bin/java" "$out/bin/apktool" \
+      makeWrapper "${lib.getExe jdk_headless}" "$out/bin/apktool" \
           --add-flags "-jar $out/libexec/apktool/apktool.jar" \
           --prefix PATH : ${lib.getBin aapt}
     '';

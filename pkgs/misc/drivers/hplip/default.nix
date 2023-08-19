@@ -122,7 +122,7 @@ python3Packages.buildPythonApplication {
       -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor,g \
       -e s,/usr/lib/systemd/system,$out/lib/systemd/system,g \
       -e s,/var/lib/hp,$out/var/lib/hp,g \
-      -e s,/usr/bin/perl,${perl}/bin/perl,g \
+      -e s,/usr/bin/perl,${lib.getExe perl},g \
       -e s,/usr/bin/file,${file}/bin/file,g \
       -e s,/usr/bin/gs,${ghostscript}/bin/gs,g \
       -e s,/usr/share/cups/fonts,${ghostscript}/share/ghostscript/fonts,g \

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     cat > $out/bin/omegat <<EOF
     #! $SHELL -e
     CLASSPATH="$out/lib"
-    exec ${jdk}/bin/java -jar -Xmx1024M $out/OmegaT.jar "\$@"
+    exec ${lib.getExe jdk} -jar -Xmx1024M $out/OmegaT.jar "\$@"
     EOF
     chmod +x $out/bin/omegat
   '';

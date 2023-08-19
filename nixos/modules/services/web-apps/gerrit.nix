@@ -29,7 +29,7 @@ let
       ${lib.escapeShellArgs cfg.jvmOpts}
       -Xmx${cfg.jvmHeapLimit}
     )
-    exec ${cfg.jvmPackage}/bin/java \
+    exec ${lib.getExe cfg.jvmPackage} \
       "''${jvmOpts[@]}" \
       -jar ${cfg.package}/webapps/${cfg.package.name}.war \
       "$@"

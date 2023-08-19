@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     # Use substitutions instead of wrapper scripts
     for file in "$out"/bin/*; do
         sed -i -e "s|/usr/bin/env bash|${stdenv.shell}|" \
-               -e "s|java|${jre}/bin/java|" \
+               -e "s|java|${lib.getExe jre}|" \
                -e "s|readlink|${coreutils}/bin/readlink|" \
                -e "s|dirname|${coreutils}/bin/dirname|" \
                -e "s|basename|${coreutils}/bin/basename|" \

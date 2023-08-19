@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${jdk11}/bin/java $out/bin/metabase --add-flags "-jar $src"
+    makeWrapper ${lib.getExe jdk11} $out/bin/metabase --add-flags "-jar $src"
     runHook postInstall
   '';
 

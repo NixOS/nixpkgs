@@ -1,7 +1,7 @@
 { lib, stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, xcbuild, makeWrapper
 , quartz-wm, fontconfig, xlsfonts, xfontsel
 , ttf_bitstream_vera, freefont_ttf, liberation_ttf
-, shell ? "${bashInteractive}/bin/bash"
+, shell ? "${lib.getExe bashInteractive}"
 , unfreeFonts ? false
 , extraFontDirs ? []
 }:
@@ -45,7 +45,7 @@ let
     tmpdir=$(/usr/bin/mktemp -d $TMPDIR/xquartz-installer-XXXXXXXX)
     agentName=org.nixos.xquartz.startx.plist
     daemonName=org.nixos.xquartz.privileged_startx.plist
-    sed=${gnused}/bin/sed
+    sed=${lib.getExe gnused}
 
     cp ${./org.nixos.xquartz.startx.plist} $tmpdir/$agentName
     $sed -i "s|@LAUNCHD_STARTX@|$NIX_LINK/libexec/launchd_startx|" $tmpdir/$agentName

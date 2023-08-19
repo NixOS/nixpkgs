@@ -186,7 +186,7 @@ let
 
       with subtest("get the password with the cli"):
           password = client.succeed(
-              f"bw --nointeraction --raw --session {key} list items | ${pkgs.jq}/bin/jq -r .[].login.password"
+              f"bw --nointeraction --raw --session {key} list items | ${lib.getExe pkgs.jq} -r .[].login.password"
           )
           assert password.strip() == "${storedPassword}"
     '';

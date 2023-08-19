@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
      substituteInPlace events/argus-extip.pl \
-       --subst-var-by PERLBIN ${perl}/bin/perl
+       --subst-var-by PERLBIN ${lib.getExe perl}
     substituteInPlace events/argus-lsof.pl \
       --replace "\`which lsof\`" "\"${lsof}/bin/lsof\"" \
-      --subst-var-by PERLBIN ${perl}/bin/perl
+      --subst-var-by PERLBIN ${lib.getExe perl}
     substituteInPlace events/argus-vmstat.sh \
       --replace vm_stat ${procps}/bin/vmstat
     substituteInPlace events/argus-snmp.sh \

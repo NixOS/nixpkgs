@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/{bin,lib/amidst}
     cp $src $out/lib/amidst/amidst.jar
-    makeWrapper ${jre}/bin/java $out/bin/amidst \
+    makeWrapper ${lib.getExe jre} $out/bin/amidst \
       --add-flags "-jar $out/lib/amidst/amidst.jar"
   '';
 

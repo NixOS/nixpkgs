@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       -e "s#%INSTALL_PATH#$out#" \
       -e 's#%USER_HOME#$HOME#' \
       -e "s#%SYSTEM_java_io_tmpdir#/tmp#" \
-      -e "s#%JAVA%#${jre}/bin/java#"
+      -e "s#%JAVA%#${lib.getExe jre}#"
     mv $out/runplain.sh $out/bin/i2prouter-plain
     mv $out/man $out/share/
     chmod +x $out/bin/* $out/i2psvc

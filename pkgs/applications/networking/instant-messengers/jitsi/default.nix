@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
     cp resources/install/generic/run.sh $out/bin/jitsi
     chmod +x $out/bin/jitsi
     substituteInPlace $out/bin/jitsi \
-      --subst-var-by JAVA ${jdk}/bin/java \
+      --subst-var-by JAVA ${lib.getExe jdk} \
       --subst-var-by EXTRALIBS ${gtk2.out}/lib
-    sed -e 's,^java\ ,${jdk}/bin/java ,' -i $out/bin/jitsi
+    sed -e 's,^java\ ,${lib.getExe jdk} ,' -i $out/bin/jitsi
     patchShebangs $out
     libPath="$libPath:${jdk.home}/lib/${jdk.architecture}"
     find $out/ -type f -name '*.so' | while read file; do

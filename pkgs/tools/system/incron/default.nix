@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patches = [ ./default_path.patch ];
 
   prePatch = ''
-    sed -i "s|/bin/bash|${bash}/bin/bash|g" usertable.cpp
+    sed -i "s|/bin/bash|${lib.getExe bash}|g" usertable.cpp
   '';
 
   installFlags = [ "PREFIX=$(out)" ];

@@ -30,7 +30,7 @@ let
 
           For mail, set this to
           ```
-          journalctl $OLD_CURSOR -u postfix.service | ''${pkgs.perl}/bin/perl ''${pkgs.awstats.out}/share/awstats/tools/maillogconvert.pl standard |
+          journalctl $OLD_CURSOR -u postfix.service | ''${lib.getExe pkgs.perl} ''${pkgs.awstats.out}/share/awstats/tools/maillogconvert.pl standard |
           ```
         '';
       };

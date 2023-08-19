@@ -26,7 +26,7 @@ in
 buildFHSEnv {
   inherit name;
 
-  runScript = "${jdk}/bin/java -jar ${src}";
+  runScript = "${lib.getExe jdk} -jar ${src}";
 
   targetPkgs = pkgs: with pkgs; [
     alsa-lib

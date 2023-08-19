@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/{share/vue,bin}
     cp ${src} "$out/share/vue/vue.jar"
     echo '#!${runtimeShell}' >> "$out/bin/vue"
-    echo '${jre}/bin/java -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue"
+    echo '${lib.getExe jre} -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue"
     chmod a+x "$out/bin/vue"
   '';
 

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/share/cytoscape.sh \
       --set JAVA_HOME "${jre}" \
-      --set JAVA  "${jre}/bin/java"
+      --set JAVA  "${lib.getExe jre}"
 
     chmod +x $out/bin/cytoscape
   '';

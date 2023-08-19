@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
   makeFlags = [
     "TOPDIR=${placeholder "out"}"
-    "PERL=${perl}/bin/perl"
+    "PERL=${lib.getExe perl}"
   ];
 
   meta = with lib; {

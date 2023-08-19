@@ -73,8 +73,8 @@ buildPythonPackage rec {
     # Tests expect these applications available as such.
     mkdir -p bin
     export PATH="$PWD/bin:$PATH"
-    printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.main "$@"\n' > bin/tempest
-    printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.subunit_describe_calls "$@"\n' > bin/subunit-describe-calls
+    printf '#!${lib.getExe bash}\nexec ${python.interpreter} -m tempest.cmd.main "$@"\n' > bin/tempest
+    printf '#!${lib.getExe bash}\nexec ${python.interpreter} -m tempest.cmd.subunit_describe_calls "$@"\n' > bin/subunit-describe-calls
     chmod +x bin/*
 
     stestr --test-path tempest/tests run -e <(echo "

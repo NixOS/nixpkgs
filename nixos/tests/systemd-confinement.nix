@@ -119,7 +119,7 @@ import ./make-test-python.nix {
               machine.succeed('test "$(chroot-exec \'/bin/sh -c "echo foo"\')" != foo')
         '';
       }
-      { config.confinement.binSh = "${pkgs.hello}/bin/hello";
+      { config.confinement.binSh = lib.getExe pkgs.hello;
         testScript = ''
           with subtest("check if we can set /bin/sh to something different"):
               machine.succeed("chroot-exec test -e /bin/sh")

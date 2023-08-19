@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     find .
     mkdir -p $out/{bin,share/nvidia-fabricmanager}
     for bin in nv{-fabricmanager,switch-audit};do
-    ${patchelf}/bin/patchelf \
+    ${lib.getExe patchelf} \
       --set-interpreter ${stdenv.cc.libc}/lib/ld-${bsys}.so.2 \
       --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc ]} \
       bin/$bin

@@ -160,7 +160,7 @@ in {
         umask 077
         # Generate key for crypting passwords
         if ! [ -f "${cfg.settings.ircService.passwordEncryptionKeyPath}" ]; then
-          ${pkgs.openssl}/bin/openssl genpkey \
+          ${lib.getExe pkgs.openssl} genpkey \
               -out "${cfg.settings.ircService.passwordEncryptionKeyPath}" \
               -outform PEM \
               -algorithm RSA \

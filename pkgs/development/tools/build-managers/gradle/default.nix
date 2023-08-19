@@ -69,7 +69,7 @@ rec {
 
           gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
           test -f $gradle_launcher_jar
-          makeWrapper ${java}/bin/java $out/bin/gradle \
+          makeWrapper ${lib.getExe java} $out/bin/gradle \
             ${varDefs}
             --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
         '';

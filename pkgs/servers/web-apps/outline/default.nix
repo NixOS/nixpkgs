@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     build=$out/share/outline/build
     server=$out/share/outline/server
 
-    makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
+    makeWrapper ${lib.getExe nodejs} $out/bin/outline-server \
       --add-flags $build/server/index.js \
       --set NODE_ENV production \
       --set NODE_PATH $node_modules

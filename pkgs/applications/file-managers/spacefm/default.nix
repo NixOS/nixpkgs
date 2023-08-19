@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   configureFlags = [
-    "--with-bash-path=${pkgs.bash}/bin/bash"
+    "--with-bash-path=${lib.getExe pkgs.bash}"
   ];
 
   preConfigure = ''

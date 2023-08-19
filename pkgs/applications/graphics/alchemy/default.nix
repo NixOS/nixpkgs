@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cat >> $out/bin/alchemy << EOF
     #!${runtimeShell}
     cd $out/share/alchemy
-    ${jre}/bin/java -jar Alchemy.jar "$@"
+    ${lib.getExe jre} -jar Alchemy.jar "$@"
     EOF
     chmod +x $out/bin/alchemy
   '';

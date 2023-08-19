@@ -20,7 +20,7 @@ let
   ourPerl = if !stdenv.isLinux then perl else (
     writeShellScriptBin "perl" ''
       export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
-      exec ${perl}/bin/perl "$@"
+      exec ${lib.getExe perl} "$@"
     '');
 in
 buildGoModule rec {

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     zip -9 -r mari0.love ./*
     strip-nondeterminism --type zip mari0.love
     install -Dm444 -t $out/share/games/lovegames/ mari0.love
-    makeWrapper ${love}/bin/love $out/bin/mari0 \
+    makeWrapper ${lib.getExe love} $out/bin/mari0 \
       --add-flags $out/share/games/lovegames/mari0.love
     runHook postInstall
   '';

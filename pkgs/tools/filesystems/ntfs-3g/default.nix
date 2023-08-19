@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "--enable-xattr-mappings"
     "--${if crypto then "enable" else "disable"}-crypto"
     "--enable-extras"
-    "--with-mount-helper=${mount}/bin/mount"
+    "--with-mount-helper=${lib.getExe mount}"
     "--with-umount-helper=${mount}/bin/umount"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-modprobe-helper=${kmod}/bin/modprobe"

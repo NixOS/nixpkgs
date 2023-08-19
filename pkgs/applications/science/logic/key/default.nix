@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/icons/hicolor/256x256/apps
     cp key.ui/src/main/resources/de/uka/ilkd/key/gui/images/key-color-icon-square.png $out/share/icons/hicolor/256x256/apps/key.png
-    makeWrapper ${jre}/bin/java $out/bin/KeY \
+    makeWrapper ${lib.getExe jre} $out/bin/KeY \
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
 
     runHook postInstall

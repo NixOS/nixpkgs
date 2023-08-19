@@ -101,7 +101,7 @@ stdenv.mkDerivation (removeAttrs ({
     (args.meta or {}) ;
 
 }
-// (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
+// (optionalAttrs setCOQBIN { COQBIN = "${lib.getBin coq}/bin/"; })
 // (optionalAttrs (!args?installPhase && !args?useMelquiondRemake) {
   installFlags =
     coqlib-flags ++ docdir-flags ++

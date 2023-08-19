@@ -78,12 +78,12 @@ in mkYarnPackage rec {
     OUT_JS_DIR="$out/${passthru.nodeAppDir}/build"
 
     # server wrapper
-    makeWrapper '${nodejs}/bin/node' "$out/bin/${pname}" \
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/${pname}" \
       --add-flags "$OUT_JS_DIR/src/discordas.js"
 
     # admin tools wrappers
     for toolPath in $OUT_JS_DIR/tools/*; do
-      makeWrapper '${nodejs}/bin/node' \
+      makeWrapper '${lib.getExe nodejs}' \
         "$out/bin/${pname}-$(basename $toolPath .js)" \
         --add-flags "$toolPath"
     done

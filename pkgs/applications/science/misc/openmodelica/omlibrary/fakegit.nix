@@ -3,7 +3,7 @@ let
   mkscript = path: text: ''
     mkdir -pv `dirname ${path}`
     cat > ${path} <<"EOF"
-    #!${bash}/bin/bash
+    #!${lib.getExe bash}
     ME=$(basename ${path})
     ${text}
     EOF

@@ -137,7 +137,7 @@ python3Packages.buildPythonApplication {
       | sort -u > plugins_available
     ${diffPlugins (attrNames builtinPlugins) "plugins_available"}
 
-    export BEETS_TEST_SHELL="${bashInteractive}/bin/bash --norc"
+    export BEETS_TEST_SHELL="${lib.getExe bashInteractive} --norc"
     export HOME="$(mktemp -d)"
 
     args=" -m pytest -r fEs"

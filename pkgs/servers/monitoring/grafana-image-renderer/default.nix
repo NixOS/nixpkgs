@@ -50,7 +50,7 @@ mkYarnPackage rec {
     mkdir -p $out/bin
     cat >$out/bin/grafana-image-renderer <<EOF
     #! ${runtimeShell}
-    ${nodejs}/bin/node $install_path/build/app.js \$@
+    ${lib.getExe nodejs} $install_path/build/app.js \$@
     EOF
     chmod +x $out/bin/grafana-image-renderer
 

@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     export sssldir="${sssd}/lib/sssd/modules"
     export HAVE_SSS_AUTOFS=1
 
-    export MOUNT=${mount}/bin/mount
+    export MOUNT=${lib.getExe mount}
     export MOUNT_NFS=${nfs-utils}/bin/mount.nfs
-    export UMOUNT=${umount}/bin/umount
+    export UMOUNT=${lib.getExe umount}
     export MODPROBE=${kmod}/bin/modprobe
     export E2FSCK=${e2fsprogs}/bin/fsck.ext2
     export E3FSCK=${e2fsprogs}/bin/fsck.ext3

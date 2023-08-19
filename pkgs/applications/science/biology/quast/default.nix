@@ -24,7 +24,7 @@ pythonPackages.buildPythonApplication rec {
 
   installPhase = ''
     substituteInPlace quast_libs/bedtools/Makefile \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace "/bin/bash" "${lib.getExe bash}"
     mkdir -p "$out/${python.sitePackages}"
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
     ${python.pythonForBuild.interpreter} setup.py install \

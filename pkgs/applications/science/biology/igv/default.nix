@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     cp -Rv * $out/share/
 
     sed -i "s#prefix=.*#prefix=$out/share#g" $out/share/igv.sh
-    sed -i 's#java#${jdk11}/bin/java#g' $out/share/igv.sh
+    sed -i 's#java#${lib.getExe jdk11}#g' $out/share/igv.sh
 
     sed -i "s#prefix=.*#prefix=$out/share#g" $out/share/igvtools
-    sed -i 's#java#${jdk11}/bin/java#g' $out/share/igvtools
+    sed -i 's#java#${lib.getExe jdk11}#g' $out/share/igvtools
 
     ln -s $out/share/igv.sh $out/bin/igv
     ln -s $out/share/igvtools $out/bin/igvtools

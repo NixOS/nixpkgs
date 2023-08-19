@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/bin $out/share/${pname}
     cp build/libs/scenicview.jar $out/share/${pname}/${pname}.jar
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar"
+    makeWrapper ${lib.getExe jdk} $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar"
 
     runHook postInstall
   '';

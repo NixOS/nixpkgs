@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     services.plausible = {
       enable = true;
       releaseCookiePath = "${pkgs.runCommand "cookie" { } ''
-        ${pkgs.openssl}/bin/openssl rand -base64 64 >"$out"
+        ${lib.getExe pkgs.openssl} rand -base64 64 >"$out"
       ''}";
       adminUser = {
         email = "admin@example.org";

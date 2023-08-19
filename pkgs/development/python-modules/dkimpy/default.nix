@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace dkim/dknewkey.py --replace \
-      /usr/bin/openssl ${openssl}/bin/openssl
+      /usr/bin/openssl ${lib.getExe openssl}
   '';
 
   checkPhase = ''

@@ -38,7 +38,7 @@ let
       sed -i -e "s|ruby '3.1.[0-9]\+'|ruby '${ruby.version}'|" Gemfile
       sed -i -e "s|ruby 3.1.[0-9]\+p[0-9]\+|ruby ${ruby.version}|" Gemfile.lock
       sed -i -e "s|3.1.[0-9]\+|${ruby.version}|" .ruby-version
-      ${jq}/bin/jq '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
+      ${lib.getExe jq} '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
     '';
   };
 

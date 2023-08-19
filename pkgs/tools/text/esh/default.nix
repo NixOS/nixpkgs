@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace esh \
         --replace '"/bin/sh"' '"${runtimeShell}"' \
         --replace '"awk"' '"${gawk}/bin/awk"' \
-        --replace 'sed' '${gnused}/bin/sed'
+        --replace 'sed' '${lib.getExe gnused}'
     substituteInPlace tests/test-dump.exp \
         --replace '#!/bin/sh' '#!${runtimeShell}'
   '';

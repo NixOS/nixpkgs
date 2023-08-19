@@ -7,7 +7,7 @@ let
   cfg = config.services.serviio;
 
   serviioStart = pkgs.writeScript "serviio.sh" ''
-    #!${pkgs.bash}/bin/sh
+    #!${lib.getExe' pkgs.bash "sh"}
 
     SERVIIO_HOME=${pkgs.serviio}
 
@@ -19,7 +19,7 @@ let
                -Dderby.system.home=${cfg.dataDir}/library -Dserviio.home=${cfg.dataDir} -Dffmpeg.location=${pkgs.ffmpeg}/bin/ffmpeg -Ddcraw.location=${pkgs.dcraw}/bin/dcraw"
 
     # Execute the JVM in the foreground
-    exec ${pkgs.jre}/bin/java -Xmx512M -Xms20M -XX:+UseG1GC -XX:GCTimeRatio=1 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 $JAVA_OPTS -classpath "$SERVIIO_CLASS_PATH" org.serviio.MediaServer "$@"
+    exec ${lib.getExe pkgs.jre} -Xmx512M -Xms20M -XX:+UseG1GC -XX:GCTimeRatio=1 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 $JAVA_OPTS -classpath "$SERVIIO_CLASS_PATH" org.serviio.MediaServer "$@"
   '';
 
 in {

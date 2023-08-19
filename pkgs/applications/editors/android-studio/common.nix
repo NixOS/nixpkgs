@@ -195,7 +195,7 @@ in runCommand
   drvName
   {
     startScript = ''
-      #!${bash}/bin/bash
+      #!${lib.getExe bash}
       ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh "$@"
     '';
     preferLocalBuild = true;

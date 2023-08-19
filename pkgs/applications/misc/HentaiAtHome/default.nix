@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
     cp build/HentaiAtHome.jar $out/share/java
 
     mkdir -p $out/bin
-    makeWrapper ${jre_headless}/bin/java $out/bin/HentaiAtHome \
+    makeWrapper ${lib.getExe jre_headless} $out/bin/HentaiAtHome \
       --add-flags "${javaOpts} -jar $out/share/java/HentaiAtHome.jar"
   '';
 

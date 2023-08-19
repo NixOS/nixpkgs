@@ -5,7 +5,7 @@ let
     set -eu
 
     readonly CFG=~/.config/Signal/config.json
-    readonly KEY="$(${pkgs.jq}/bin/jq --raw-output '.key' $CFG)"
+    readonly KEY="$(${lib.getExe pkgs.jq} --raw-output '.key' $CFG)"
     readonly DB="$1"
     readonly SQL="SELECT * FROM sqlite_master where type='table'"
     ${pkgs.sqlcipher}/bin/sqlcipher "$DB" "PRAGMA key = \"x'$KEY'\"; $SQL"

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i s,@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@,@CMAKE_INSTALL_LIBDIR@, \
       src/integration/malt.sh.in
-    sed -i -e 's,^NODE=""$,NODE=${nodejs}/bin/node,' -e s,^detectNodeJS$,, \
+    sed -i -e 's,^NODE=""$,NODE=${lib.getExe nodejs},' -e s,^detectNodeJS$,, \
       src/integration/malt-{webview,passwd}.sh.in
   '';
 

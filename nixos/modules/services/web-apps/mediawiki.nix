@@ -41,7 +41,7 @@ let
   } ''
     mkdir -p $out/bin
     for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
-      makeWrapper ${pkgs.php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
+      makeWrapper ${lib.getExe pkgs.php} $out/bin/mediawiki-$(basename $i .php) \
         --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
         --add-flags ${pkg}/share/mediawiki/maintenance/$i
     done
@@ -523,8 +523,8 @@ in
         fi
 
         echo "exit( wfGetDB( DB_MASTER )->tableExists( 'user' ) ? 1 : 0 );" | \
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${lib.getExe pkgs.php} ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
+        ${lib.getExe pkgs.php} ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver "${dbAddr}" \
@@ -538,7 +538,7 @@ in
           ${cfg.name} \
           admin
 
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
+        ${lib.getExe pkgs.php} ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
       '';
 
       serviceConfig = {

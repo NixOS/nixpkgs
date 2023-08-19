@@ -48,21 +48,21 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         raise Exception(f"Command {command} failed with exit code {r}")
 
     # Create CA
-    cmd("${pkgs.openssl}/bin/openssl genrsa -out ca-key.pem 4096")
-    cmd("${pkgs.openssl}/bin/openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -subj '/C=NL/ST=Zuid-Holland/L=The Hague/O=Stevige Balken en Planken B.V./OU=OpSec/CN=Certificate Authority' -out ca.pem")
+    cmd("${lib.getExe pkgs.openssl} genrsa -out ca-key.pem 4096")
+    cmd("${lib.getExe pkgs.openssl} req -new -x509 -days 365 -key ca-key.pem -sha256 -subj '/C=NL/ST=Zuid-Holland/L=The Hague/O=Stevige Balken en Planken B.V./OU=OpSec/CN=Certificate Authority' -out ca.pem")
 
     # Create service
-    cmd("${pkgs.openssl}/bin/openssl genrsa -out service-key.pem 4096")
-    cmd("${pkgs.openssl}/bin/openssl req -subj '/CN=service' -sha256 -new -key service-key.pem -out service.csr")
+    cmd("${lib.getExe pkgs.openssl} genrsa -out service-key.pem 4096")
+    cmd("${lib.getExe pkgs.openssl} req -subj '/CN=service' -sha256 -new -key service-key.pem -out service.csr")
     cmd("echo subjectAltName = DNS:service,IP:127.0.0.1 >> extfile.cnf")
     cmd("echo extendedKeyUsage = serverAuth >> extfile.cnf")
-    cmd("${pkgs.openssl}/bin/openssl x509 -req -days 365 -sha256 -in service.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out service-cert.pem -extfile extfile.cnf")
+    cmd("${lib.getExe pkgs.openssl} x509 -req -days 365 -sha256 -in service.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out service-cert.pem -extfile extfile.cnf")
 
     # Create client
-    cmd("${pkgs.openssl}/bin/openssl genrsa -out client-key.pem 4096")
-    cmd("${pkgs.openssl}/bin/openssl req -subj '/CN=client' -new -key client-key.pem -out client.csr")
+    cmd("${lib.getExe pkgs.openssl} genrsa -out client-key.pem 4096")
+    cmd("${lib.getExe pkgs.openssl} req -subj '/CN=client' -new -key client-key.pem -out client.csr")
     cmd("echo extendedKeyUsage = clientAuth > extfile-client.cnf")
-    cmd("${pkgs.openssl}/bin/openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile extfile-client.cnf")
+    cmd("${lib.getExe pkgs.openssl} x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile extfile-client.cnf")
 
     cmd("ls -al")
 

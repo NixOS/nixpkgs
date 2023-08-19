@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    sed -i 's|#! perl|#! ${perl}/bin/perl|g' vtwheel
+    sed -i 's|#! perl|#! ${lib.getExe perl}|g' vtwheel
     mkdir -p $out/lib/urxvt/perl
     cp vtwheel $out/lib/urxvt/perl
   '';

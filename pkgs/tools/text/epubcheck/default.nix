@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     done
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/epubcheck \
+    makeWrapper ${lib.getExe jre} $out/bin/epubcheck \
       --add-flags "-classpath $classpath com.adobe.epubcheck.tool.Checker"
   '';
 

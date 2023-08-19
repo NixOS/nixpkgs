@@ -49,7 +49,7 @@ in {
     # See https://github.com/bennofs/nix-index/issues/126
     programs.fish.interactiveShellInit = let
       wrapper = pkgs.writeScript "command-not-found" ''
-        #!${pkgs.bash}/bin/bash
+        #!${lib.getExe pkgs.bash}
         source ${cfg.package}/etc/profile.d/command-not-found.sh
         command_not_found_handle "$@"
       '';

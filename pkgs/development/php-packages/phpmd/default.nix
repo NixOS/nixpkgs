@@ -20,7 +20,7 @@ mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phpmd/phpmd.phar
-    makeWrapper ${php}/bin/php $out/bin/phpmd \
+    makeWrapper ${lib.getExe php} $out/bin/phpmd \
       --add-flags "$out/libexec/phpmd/phpmd.phar"
     runHook postInstall
   '';

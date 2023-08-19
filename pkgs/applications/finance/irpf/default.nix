@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
 
     # make xdg-open overrideable at runtime
-    makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
+    makeWrapper ${lib.getExe jdk11} $out/bin/${pname} \
       --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-Dswing.aatext=true" \
       --add-flags "-jar $BASEDIR/${pname}.jar" \

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  configureScript = "${perl}/bin/perl ./Configure.pl";
+  configureScript = "${lib.getExe perl} ./Configure.pl";
 
   # Fix for issue where nqp expects to find files from moarvm in the same output:
   # https://github.com/Raku/nqp/commit/e6e069507de135cc71f77524455fc6b03b765b2f

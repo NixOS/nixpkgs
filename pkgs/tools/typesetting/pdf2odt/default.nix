@@ -35,7 +35,7 @@ resholve.mkDerivation rec {
   solutions = {
     default = {
       scripts = [ "bin/pdf2odt" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = "${lib.getExe bash}";
       inputs = [
         coreutils
         bc

@@ -33,8 +33,8 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./mark-executables.patch;
-      git_exec = "${git}/bin/git";
-      grep_exec = "${gnugrep}/bin/grep";
+      git_exec = "${lib.getExe git}";
+      grep_exec = "${lib.getExe gnugrep}";
       gpg_exec = "${gnupg}/bin/gpg2";
       tree_exec = "${tree}/bin/tree";
       xclip_exec = "${xclip}/bin/xclip";
@@ -58,9 +58,9 @@ buildPythonPackage rec {
 
   # Configuration so that the tests work
   preCheck = ''
-    HOME=$TEMP ${git}/bin/git config --global user.email "nix-builder@nixos.org"
-    HOME=$TEMP ${git}/bin/git config --global user.name "Nix Builder"
-    HOME=$TEMP ${git}/bin/git config --global pull.ff only
+    HOME=$TEMP ${lib.getExe git} config --global user.email "nix-builder@nixos.org"
+    HOME=$TEMP ${lib.getExe git} config --global user.name "Nix Builder"
+    HOME=$TEMP ${lib.getExe git} config --global pull.ff only
     HOME=$TEMP make setup_gpg
   '';
 

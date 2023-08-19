@@ -17,7 +17,7 @@ let
 in
 
 writeScript "update-electrum" ''
-#! ${bash}/bin/bash
+#! ${lib.getExe bash}
 
 set -eu -o pipefail
 

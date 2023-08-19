@@ -27,7 +27,7 @@ buildPythonPackage {
   buildInputs = [ libcangjie sqlite ];
 
   preConfigure = ''
-    find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${bash}/bin/bash@' -i '{}' ';'
+    find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${lib.getExe bash}@' -i '{}' ';'
     sed -i 's@/usr@${libcangjie}@' tests/__init__.py
   '';
 

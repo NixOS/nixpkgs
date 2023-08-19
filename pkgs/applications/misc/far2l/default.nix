@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs python/src/prebuild.sh
     substituteInPlace far2l/src/vt/vtcompletor.cpp \
-      --replace '"/bin/bash"' '"${bash}/bin/bash"'
+      --replace '"/bin/bash"' '"${lib.getExe bash}"'
     substituteInPlace far2l/src/cfg/config.cpp \
-      --replace '"/bin/bash"' '"${bash}/bin/bash"'
+      --replace '"/bin/bash"' '"${lib.getExe bash}"'
   '';
 
   cmakeFlags = lib.mapAttrsToList (k: v: "-D${k}=${if v then "yes" else "no"}") {

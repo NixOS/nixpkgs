@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/${baseName} \
+    makeWrapper ${lib.getExe jre} $out/bin/${baseName} \
       --add-flags "-cp $CLASSPATH scalafix.cli.Cli"
 
     installShellCompletion --cmd ${baseName} \

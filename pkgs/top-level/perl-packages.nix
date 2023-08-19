@@ -744,8 +744,8 @@ with self; {
         $out/share/bash-completion/completions/clusterssh_bash_completion
       substituteInPlace $out/share/bash-completion/completions/clusterssh_bash_completion \
         --replace '/bin/true' '${pkgs.coreutils}/bin/true' \
-        --replace 'grep' '${pkgs.gnugrep}/bin/grep' \
-        --replace 'sed' '${pkgs.gnused}/bin/sed'
+        --replace 'grep' '${lib.getExe pkgs.gnugrep}' \
+        --replace 'sed' '${lib.getExe pkgs.gnused}'
     '';
     meta = {
       description = "Cluster administration tool";
@@ -1278,7 +1278,7 @@ with self; {
     };
     propagatedBuildInputs = [ pkgs.openssl IPCRun3 ];
     patchPhase = ''
-      sed -i 's|my $openssl_bin = "openssl";|my $openssl_bin = "${pkgs.openssl}/bin/openssl";|' lib/Authen/ModAuthPubTkt.pm
+      sed -i 's|my $openssl_bin = "openssl";|my $openssl_bin = "${lib.getExe pkgs.openssl}";|' lib/Authen/ModAuthPubTkt.pm
       # -dss1 doesn't exist for dgst in openssl 1.1, -sha1 can also handle DSA keys now
       sed -i 's|-dss1|-sha1|' lib/Authen/ModAuthPubTkt.pm
     '';
@@ -27302,7 +27302,7 @@ with self; {
     propagatedBuildInputs = [ HTTPRequestAsCGI WWWMechanize ];
     preConfigure = ''
       substituteInPlace t/cgi-bin/script.cgi \
-        --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
+        --replace '#!/usr/bin/perl' '#!${lib.getExe perl}'
     '';
     meta = {
       description = "Use WWW::Mechanize with CGI applications";

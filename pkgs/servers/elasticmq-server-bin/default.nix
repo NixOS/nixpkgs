@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # don't do anything?
-  unpackPhase = "${jdk}/bin/jar xf $src favicon.png";
+  unpackPhase = "${lib.getExe' jdk "jar" } xf $src favicon.png";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/elasticmq-server/elasticmq-server.jar
 
     # TODO: how to add extraArgs? current workaround is to use JAVA_TOOL_OPTIONS environment to specify properties
-    makeWrapper ${jre}/bin/java $out/bin/elasticmq-server \
+    makeWrapper ${lib.getExe jre} $out/bin/elasticmq-server \
       --add-flags "-jar $out/share/elasticmq-server/elasticmq-server.jar"
   '';
 
   passthru.tests.elasticmqTest = import ./elasticmq-test.nix {
-    inherit runCommand python3Packages writeText;
+    inherit lib runCommand python3Packages writeText;
     elasticmq-server = finalAttrs.finalPackage;
   };
 
@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ peterromfeldhk ];
+    mainProgram = "elasticmq-server";
   };
 })

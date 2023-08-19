@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp $src $out/lib/hmcl/hmcl.jar
       magick ${icon} hmcl.png
       install -Dm644 hmcl.png $out/share/icons/hicolor/32x32/apps/hmcl.png
-      makeBinaryWrapper ${jre}/bin/java $out/bin/hmcl \
+      makeBinaryWrapper ${lib.getExe jre} $out/bin/hmcl \
         --add-flags "-jar $out/lib/hmcl/hmcl.jar" \
         --set LD_LIBRARY_PATH ${libpath}
       runHook postInstall

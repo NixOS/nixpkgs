@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i \
       -e "s,\bawk\b,${gawk}/bin/awk," \
-      -e "s,\bbash\b,${bash}/bin/bash," \
+      -e "s,\bbash\b,${lib.getExe bash}," \
       -e "s,\bbat\b,${bat}/bin/bat," \
       -e "s,\bcat\b,${coreutils}/bin/cat," \
       -e "s,\bcut\b,${coreutils}/bin/cut," \
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
       -e "s,\buniq\b,${coreutils}/bin/uniq," \
       -e "s,\bcolumn\b,${util-linux}/bin/column," \
       -e "s,\bfzf-tmux\b,${fzf}/bin/fzf-tmux," \
-      -e "/display-message/!s,\bgit\b,${git}/bin/git,g" \
-      -e "s,\bgrep\b,${gnugrep}/bin/grep," \
-      -e "s,\bsed\b,${gnused}/bin/sed," \
+      -e "/display-message/!s,\bgit\b,${lib.getExe git},g" \
+      -e "s,\bgrep\b,${lib.getExe gnugrep}," \
+      -e "s,\bsed\b,${lib.getExe gnused}," \
       -e "/fzf-tmux/!s,\btmux\b,${tmux}/bin/tmux," \
       -e "s,\bxargs\b,${findutils}/bin/xargs," \
       -e "s,\bxdg-open\b,${xdg-utils}/bin/xdg-open," \

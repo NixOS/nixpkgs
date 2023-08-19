@@ -227,7 +227,7 @@ in
             ln -sf ${cfg.cssDir} ${cfg.dataDir}/static/
             ${optionalString (cfg.rpc.passwordFile != null && cfg.configFile == null) ''
               CONFIGTMP=$(mktemp)
-              ${pkgs.jq}/bin/jq ".rpc_pass = \"$(cat ${cfg.rpc.passwordFile})\"" ${configFile} > $CONFIGTMP
+              ${lib.getExe pkgs.jq} ".rpc_pass = \"$(cat ${cfg.rpc.passwordFile})\"" ${configFile} > $CONFIGTMP
               mv $CONFIGTMP ${cfg.dataDir}/${blockbookName}-config.json
             ''}
           '';

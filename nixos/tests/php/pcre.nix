@@ -47,6 +47,6 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
       response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/index.php")
       expected = 'string(${toString (builtins.stringLength testString)}) "${testString}"'
       assert expected in response, "Does not appear to be able to use subgroups."
-      machine.succeed("${php}/bin/php -f ${pcreJitSeallocForkIssue}")
+      machine.succeed("${lib.getExe php} -f ${pcreJitSeallocForkIssue}")
     '';
 })

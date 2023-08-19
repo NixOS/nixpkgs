@@ -18,10 +18,10 @@ let
       '';
       userJson = pkgs.writeText "user.json" (builtins.toJSON userCfg);
     in (pkgs.runCommand "${varName}.js" { } ''
-      ${pkgs.nodejs}/bin/node ${extractor} ${source} ${varName} > default.json
+      ${lib.getExe pkgs.nodejs} ${extractor} ${source} ${varName} > default.json
       (
         echo "var ${varName} = "
-        ${pkgs.jq}/bin/jq -s '.[0] * .[1]' default.json ${userJson}
+        ${lib.getExe pkgs.jq} -s '.[0] * .[1]' default.json ${userJson}
         echo ";"
         echo ${escapeShellArg appendExtra}
       ) > $out
@@ -303,7 +303,7 @@ in
       + optionalString cfg.prosody.enable ''
         # generate self-signed certificates
         if [ ! -f /var/lib/jitsi-meet.crt ]; then
-          ${getBin pkgs.openssl}/bin/openssl req \
+          ${lib.getExe pkgs.openssl} req \
             -x509 \
             -newkey rsa:4096 \
             -keyout /var/lib/jitsi-meet/jitsi-meet.key \

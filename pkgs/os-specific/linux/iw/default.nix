@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ viric primeos ];
     platforms = with lib.platforms; linux;
+    mainProgram = "iw";
   };
 }

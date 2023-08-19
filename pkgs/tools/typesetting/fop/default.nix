@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cat > "$out/bin/fop" <<EOF
     #!${runtimeShell}
     java_exec_args="-Djava.awt.headless=true"
-    exec ${jdk.jre}/bin/java \$java_exec_args -classpath "$out/lib/*" org.apache.fop.cli.Main "\$@"
+    exec ${lib.getExe jdk.jre} \$java_exec_args -classpath "$out/lib/*" org.apache.fop.cli.Main "\$@"
     EOF
     chmod a+x $out/bin/fop
   '';

@@ -132,7 +132,7 @@ in {
           cp -v ${configFile} ${cfg.dataDir}/.walletwasabi/backend/Config.json
           ${optionalString (cfg.rpc.passwordFile != null) ''
             CONFIGTMP=$(mktemp)
-            cat ${cfg.dataDir}/.walletwasabi/backend/Config.json | ${pkgs.jq}/bin/jq --arg rpconnection "${cfg.rpc.user}:$(cat "${cfg.rpc.passwordFile}")" '. + { BitcoinRpcConnectionString: $rpconnection }' > $CONFIGTMP
+            cat ${cfg.dataDir}/.walletwasabi/backend/Config.json | ${lib.getExe pkgs.jq} --arg rpconnection "${cfg.rpc.user}:$(cat "${cfg.rpc.passwordFile}")" '. + { BitcoinRpcConnectionString: $rpconnection }' > $CONFIGTMP
             mv $CONFIGTMP ${cfg.dataDir}/.walletwasabi/backend/Config.json
           ''}
         ''}

@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
     popd
 
-    substituteInPlace src/emilua_gperf.awk  --replace '#!/usr/bin/env -S gawk --file' '#!${gawk}/bin/gawk -f'
+    substituteInPlace src/emilua_gperf.awk  --replace '#!/usr/bin/env -S gawk --file' '#!${lib.getExe gawk} -f'
   '';
 
   meta = with lib; {

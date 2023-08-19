@@ -49,7 +49,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   '';
 
   passthru.updateScript = writeScript "update" ''
-    #! ${bash}/bin/bash
+    #! ${lib.getExe bash}
 
     set -eu -o pipefail
 

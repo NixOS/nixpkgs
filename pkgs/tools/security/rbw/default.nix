@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm755 -t $out/bin bin/rbw-fzf
     substituteInPlace $out/bin/rbw-fzf \
       --replace fzf ${fzf}/bin/fzf \
-      --replace perl ${perl}/bin/perl
+      --replace perl ${lib.getExe perl}
   '' + lib.optionalString withRofi ''
     install -Dm755 -t $out/bin bin/rbw-rofi
     substituteInPlace $out/bin/rbw-rofi \

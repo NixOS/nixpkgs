@@ -107,7 +107,7 @@ in {
         group = "mxisd";
         home = cfg.dataDir;
         createHome = true;
-        shell = "${pkgs.bash}/bin/bash";
+        shell = "${lib.getExe pkgs.bash}";
         uid = config.ids.uids.mxisd;
       };
 

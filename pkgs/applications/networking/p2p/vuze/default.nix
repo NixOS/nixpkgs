@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D dist/Vuze_0000-00.jar $out/share/java/Vuze_${version}-00.jar
-    makeWrapper ${jre}/bin/java $out/bin/vuze \
+    makeWrapper ${lib.getExe jre} $out/bin/vuze \
       --add-flags "-Xmx256m -Djava.library.path=${swt}/lib -cp $out/share/java/Vuze_${version}-00.jar:${swt}/jars/swt.jar org.gudy.azureus2.ui.swt.Main"
   '';
 

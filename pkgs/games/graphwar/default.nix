@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     mv out $out/lib/graphwar
     cp -r rsc $out/lib/graphwar/rsc
 
-    makeWrapper ${jdk}/bin/java $out/bin/graphwar \
+    makeWrapper ${lib.getExe jdk} $out/bin/graphwar \
       --add-flags "-classpath $out/lib/graphwar Graphwar.Graphwar"
-    makeWrapper ${jdk}/bin/java $out/bin/graphwar-roomserver \
+    makeWrapper ${lib.getExe jdk} $out/bin/graphwar-roomserver \
       --add-flags "-classpath $out/lib/graphwar RoomServer.RoomServer"
-    makeWrapper ${jdk}/bin/java $out/bin/graphwar-globalserver \
+    makeWrapper ${lib.getExe jdk} $out/bin/graphwar-globalserver \
       --add-flags "-classpath $out/lib/graphwar GlobalServer.GlobalServer"
 
     runHook postInstall

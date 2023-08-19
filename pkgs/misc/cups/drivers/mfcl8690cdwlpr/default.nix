@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     filter=$dir/lpd/filter_mfcl8690cdw
 
     substituteInPlace $filter \
-      --replace /usr/bin/perl ${perl}/bin/perl \
+      --replace /usr/bin/perl ${lib.getExe perl} \
       --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$dir/\"; #" \
       --replace "PRINTER =~" "PRINTER = \"mfcl8690cdw\"; #"
 

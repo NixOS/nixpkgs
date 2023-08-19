@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin";
     mkdir -p "$out/share";
     install -D -m444 -t "$out/share" *.jar
-    makeWrapper "${jre}/bin/java" "$out/bin/briss" --add-flags "-Xms128m -Xmx1024m -cp \"$out/share/\" -jar \"$out/share/briss-${version}.jar\""
+    makeWrapper "${lib.getExe jre}" "$out/bin/briss" --add-flags "-Xms128m -Xmx1024m -cp \"$out/share/\" -jar \"$out/share/briss-${version}.jar\""
   '';
 
   meta = {

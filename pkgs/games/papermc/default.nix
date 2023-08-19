@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     cat > minecraft-server << EOF
-    #!${bash}/bin/sh
-    exec ${jre}/bin/java \$@ -jar $out/share/papermc/papermc.jar nogui
+    #!${lib.getExe' bash "sh"}
+    exec ${lib.getExe jre} \$@ -jar $out/share/papermc/papermc.jar nogui
   '';
 
   installPhase = ''

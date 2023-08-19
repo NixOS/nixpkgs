@@ -45,7 +45,7 @@ maven'.buildMavenPackage rec {
   '';
 
   postFixup = ''
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeWrapper ${lib.getExe jdk} $out/bin/${pname} \
       --add-flags "--add-modules javafx.web,javafx.fxml,javafx.swing,javafx.media" \
       --add-flags "--add-opens=javafx.fxml/javafx.fxml=ALL-UNNAMED" \
       --add-flags "-cp $out/share/java/${pname}.jar" \

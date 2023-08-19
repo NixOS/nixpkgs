@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     cp "$src" "$out/webapps/jenkins.war"
 
     # Create the `jenkins-cli` command.
-    ${openjdk}/bin/jar -xf "$src" WEB-INF/lib/cli-${version}.jar \
+    ${lib.getExe' openjdk "jar"} -xf "$src" WEB-INF/lib/cli-${version}.jar \
       && mv WEB-INF/lib/cli-${version}.jar "$out/share/jenkins-cli.jar"
 
-    makeWrapper "${openjdk}/bin/java" "$out/bin/jenkins-cli" \
+    makeWrapper "${lib.getExe openjdk}" "$out/bin/jenkins-cli" \
       --add-flags "-jar $out/share/jenkins-cli.jar"
   '';
 

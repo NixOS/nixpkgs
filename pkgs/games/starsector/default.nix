@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   # additionally, add some GC options to improve performance of the game
   postPatch = ''
     substituteInPlace starsector.sh \
-      --replace "./jre_linux/bin/java" "${openjdk}/bin/java" \
+      --replace "./jre_linux/bin/java" "${lib.getExe openjdk}" \
       --replace "./native/linux" "$out/share/starsector/native/linux" \
       --replace "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
       --replace "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC"

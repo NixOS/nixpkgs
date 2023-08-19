@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     # correct Java executable (Protege is a JRE 8 application)
     substituteInPlace run.sh \
       --subst-var-by out $out \
-      --replace "java -X" "exec ${jre8.outPath}/bin/java -X"
+      --replace "java -X" "exec ${lib.getExe jre8} -X"
   '';
 
   dontConfigure = true;

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp dist/java-cup-11b-runtime.jar $out/share/java/
     cat > $out/bin/javacup <<EOF
     #! $shell
-    exec ${jdk.jre}/bin/java -jar $out/share/java-cup/java-cup-11b.jar "\$@"
+    exec ${lib.getExe jdk.jre} -jar $out/share/java-cup/java-cup-11b.jar "\$@"
     EOF
     chmod a+x $out/bin/javacup
   '';

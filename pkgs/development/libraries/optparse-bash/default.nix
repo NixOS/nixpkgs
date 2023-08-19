@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation {
 
   postPatch = ''
     substituteInPlace optparse.bash \
-      --replace sed "${gnused}/bin/sed" \
+      --replace sed "${lib.getExe gnused}" \
       --replace awk "${gawk}/bin/awk" \
       --replace printf "${coreutils}/bin/printf"
 '';

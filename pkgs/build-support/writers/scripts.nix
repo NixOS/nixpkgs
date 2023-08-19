@@ -13,10 +13,10 @@ let
 in
 rec {
   # Base implementation for non-compiled executables.
-  # Takes an interpreter, for example `${pkgs.bash}/bin/bash`
+  # Takes an interpreter, for example `${lib.getExe pkgs.bash}`
   #
   # Examples:
-  #   writeBash = makeScriptWriter { interpreter = "${pkgs.bash}/bin/bash"; }
+  #   writeBash = makeScriptWriter { interpreter = "${lib.getExe pkgs.bash}"; }
   #   makeScriptWriter { interpreter = "${pkgs.dash}/bin/dash"; } "hello" "echo hello world"
   makeScriptWriter = { interpreter, check ? "" }: nameOrPath: content:
     assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
@@ -116,7 +116,7 @@ rec {
   #     echo hello world
   #   ''
   writeBash = makeScriptWriter {
-    interpreter = "${pkgs.bash}/bin/bash";
+    interpreter = "${lib.getExe pkgs.bash}";
   };
 
   # Like writeScriptBin but the first line is a shebang to bash
@@ -225,7 +225,7 @@ rec {
     };
   in writeDash name ''
     export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content} "$@"
+    exec ${lib.getExe pkgs.nodejs} ${pkgs.writeText "js" content} "$@"
   '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)

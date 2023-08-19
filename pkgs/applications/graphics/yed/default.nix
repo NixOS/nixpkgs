@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    makeWrapper ${jre}/bin/java $out/bin/yed \
+    makeWrapper ${lib.getExe jre} $out/bin/yed \
       ''${makeWrapperArgs[@]} \
       --add-flags "-jar $out/yed/yed.jar --"
   '';

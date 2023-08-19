@@ -17,7 +17,7 @@ let makeArcWrapper = toolset: ''
   cat << WRAPPER > $out/bin/${toolset}
   #!$shell -e
   export PATH='${php}/bin:${which}/bin'\''${PATH:+':'}\$PATH
-  exec ${php}/bin/php $out/libexec/arcanist/bin/${toolset} "\$@"
+  exec ${lib.getExe php} $out/libexec/arcanist/bin/${toolset} "\$@"
   WRAPPER
   chmod +x $out/bin/${toolset}
 '';

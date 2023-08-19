@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
         --replace /sbin/cryptsetup ${cryptsetup}/sbin/cryptsetup \
         --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup \
         --replace /sbin/unix_chkpwd ${wrapperDir}/unix_chkpwd \
-        --replace /bin/bash ${bash}/bin/bash
+        --replace /bin/bash ${lib.getExe bash}
     done
   '';
 

@@ -46,7 +46,7 @@ resholve.mkDerivation rec {
         "libexec/bats-core/*"
         "lib/bats-core/*"
       ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = "${lib.getExe bash}";
       inputs = [
         bash
         coreutils
@@ -199,7 +199,7 @@ resholve.mkDerivation rec {
 
       # test generates file with absolute shebang dynamically
       substituteInPlace test/install.bats --replace \
-        "/usr/bin/env bash" "${bash}/bin/bash"
+        "/usr/bin/env bash" "${lib.getExe bash}"
 
       ${bats}/bin/bats test
       touch $out

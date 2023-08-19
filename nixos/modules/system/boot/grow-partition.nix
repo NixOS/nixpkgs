@@ -23,13 +23,13 @@ with lib;
     }];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.gawk}/bin/gawk
-      copy_bin_and_libs ${pkgs.gnused}/bin/sed
+      copy_bin_and_libs ${lib.getExe pkgs.gawk}
+      copy_bin_and_libs ${lib.getExe pkgs.gnused}
       copy_bin_and_libs ${pkgs.util-linux}/sbin/sfdisk
       copy_bin_and_libs ${pkgs.util-linux}/sbin/lsblk
 
       substitute "${pkgs.cloud-utils.guest}/bin/.growpart-wrapped" "$out/bin/growpart" \
-        --replace "${pkgs.bash}/bin/sh" "/bin/sh" \
+        --replace "${lib.getExe' pkgs.bash "sh"}" "/bin/sh" \
         --replace "awk" "gawk" \
         --replace "sed" "gnused"
 

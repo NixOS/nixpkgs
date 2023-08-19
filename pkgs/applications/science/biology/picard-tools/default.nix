@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec/picard
     cp $src $out/libexec/picard/picard.jar
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/picard --add-flags "-jar $out/libexec/picard/picard.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/picard --add-flags "-jar $out/libexec/picard/picard.jar"
   '';
 
   meta = with lib; {

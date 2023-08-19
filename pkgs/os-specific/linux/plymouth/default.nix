@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.freedesktop.org/plymouth/plymouth/-/blob/a5eda165689864cc9a25ec14fd8c6da458598f42/meson.build#L47
     crossFile = writeText "cross-file.conf" ''
       [binaries]
-      systemd-tty-ask-password-agent = '${lib.getBin systemd}/bin/systemd-tty-ask-password-agent'
+      systemd-tty-ask-password-agent = '${lib.getExe' systemd "systemd-tty-ask-password-agent"}'
     '';
   in [
     "--sysconfdir=/etc"

@@ -121,7 +121,7 @@ in
         # can create the data directory if necessary.
         ExecStartPre = let
           preStartScript = pkgs.writeScript "plex-run-prestart" ''
-            #!${pkgs.bash}/bin/bash
+            #!${lib.getExe pkgs.bash}
 
             # Create data directory if it doesn't exist
             if ! test -d "$PLEX_DATADIR"; then

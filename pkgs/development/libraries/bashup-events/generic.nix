@@ -53,8 +53,8 @@ resholve.mkDerivation rec {
 
   checkPhase = ''
     runHook preCheck
-    ${bash}/bin/bash -n ./bashup.events
-    ${bash}/bin/bash ./bashup.events
+    ${lib.getExe bash} -n ./bashup.events
+    ${lib.getExe bash} ./bashup.events
     runHook postCheck
   '';
 
@@ -71,7 +71,7 @@ resholve.mkDerivation rec {
   nativeInstallCheckInputs = [ bash ];
   installCheckPhase = ''
     runHook preInstallCheck
-    ${installCheck "${bash}/bin/bash"}
+    ${installCheck "${lib.getExe bash}"}
     runHook postInstallCheck
   '';
 

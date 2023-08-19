@@ -8,8 +8,8 @@ let
 
   bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;
-    shellDebug = "${pkgs.bashInteractive}/bin/bash";
-    shell = "${pkgs.bash}/bin/bash";
+    shellDebug = "${lib.getExe pkgs.bashInteractive}";
+    shell = "${lib.getExe pkgs.bash}";
     inherit (config.boot) readOnlyNixStore systemdExecutable extraSystemdUnitPaths;
     inherit (config.system.nixos) distroName;
     isExecutable = true;

@@ -18,7 +18,7 @@ let
       echo 'Creating initial configuration for legends-browser'
       echo "last=$(cd ..; pwd)" > legendsbrowser.properties
     fi
-    ${jre}/bin/java -jar ${jar}
+    ${lib.getExe jre} -jar ${jar}
   '';
 in
 

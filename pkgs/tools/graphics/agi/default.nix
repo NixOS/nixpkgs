@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation rec {
 
   preFixup = ''
     wrapProgram $out/bin/agi \
-      --add-flags "--vm ${jre}/bin/java" \
+      --add-flags "--vm ${lib.getExe jre}" \
       --add-flags "--adb ${android-tools}/bin/adb" \
       --add-flags "--jar $out/lib/gapic.jar" \
       "''${gappsWrapperArgs[@]-}"

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     # Fix setuid install
     substituteInPlace Makefile --replace "-m 4755" "-m 755"
     substituteInPlace sandboxX.sh \
-      --replace "#!/bin/sh" "#!${bash}/bin/sh" \
+      --replace "#!/bin/sh" "#!${lib.getExe' bash "sh"}" \
       --replace "/usr/share/sandbox/start" "${placeholder "out"}/share/sandbox/start" \
       --replace "/usr/bin/cut" "${coreutils}/bin/cut" \
       --replace "/usr/bin/Xephyr" "${xorgserver}/bin/Xepyhr" \
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/share/sandbox" "$out/share/sandbox" \
       --replace "/usr/share/locale" "${policycoreutils}/share/locale" \
       --replace "/usr/bin/openbox" "${openbox}/bin/openbox" \
-      --replace "#!/bin/sh" "#!${bash}/bin/sh" \
+      --replace "#!/bin/sh" "#!${lib.getExe' bash "sh"}" \
       --replace "dbus-" "${dbus}/bin/dbus-" \
       --replace "/usr/bin/xmodmap" "${xmodmap}/bin/xmodmap" \
       --replace "/usr/bin/shred" "${coreutils}/bin/shred" \

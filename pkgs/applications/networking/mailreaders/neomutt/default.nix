@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace auto.def --replace /usr/sbin/sendmail sendmail
     substituteInPlace contrib/smime_keys \
-      --replace /usr/bin/openssl ${openssl}/bin/openssl
+      --replace /usr/bin/openssl ${lib.getExe openssl}
 
     for f in doc/*.{xml,xsl}*  ; do
       substituteInPlace $f \

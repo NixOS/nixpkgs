@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       mkdir -p $out/bin
-      makeWrapper ${jdk}/bin/java $out/bin/rascal \
+      makeWrapper ${lib.getExe jdk} $out/bin/rascal \
         --add-flags "-jar ${src}" \
     '';
 

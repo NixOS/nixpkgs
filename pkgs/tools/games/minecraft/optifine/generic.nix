@@ -45,6 +45,6 @@ runCommand "optifine-${mcVersion}" {
   mkdir -p $out/{bin,lib/optifine}
   cp $src $out/lib/optifine/optifine.jar
 
-  makeWrapper ${jre}/bin/java $out/bin/optifine \
+  makeWrapper ${lib.getExe jre} $out/bin/optifine \
     --add-flags "-jar $out/lib/optifine/optifine.jar"
 ''

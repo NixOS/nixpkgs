@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     cat '${xorgModulePaths}' >> $out/etc/jitsi/jibri/xorg-video-dummy.conf
 
-    makeWrapper ${jdk11_headless}/bin/java $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
+    makeWrapper ${lib.getExe jdk11_headless} $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
 
     runHook postInstall
   '';

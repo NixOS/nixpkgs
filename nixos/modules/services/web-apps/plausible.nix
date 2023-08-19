@@ -285,7 +285,7 @@ in {
               ${config.services.postgresql.package}/bin/psql --port=5432 "$@"
             }
             # check if the database already exists
-            if ! PSQL -lqt | ${pkgs.coreutils}/bin/cut -d \| -f 1 | ${pkgs.gnugrep}/bin/grep -qw ${dbname} ; then
+            if ! PSQL -lqt | ${pkgs.coreutils}/bin/cut -d \| -f 1 | ${lib.getExe pkgs.gnugrep} -qw ${dbname} ; then
               PSQL -tAc "CREATE ROLE plausible WITH LOGIN;"
               PSQL -tAc "CREATE DATABASE ${dbname} WITH OWNER plausible;"
               PSQL -d ${dbname} -tAc "CREATE EXTENSION IF NOT EXISTS citext;"

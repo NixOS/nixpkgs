@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/java
     mkdir -p $out/bin
     cp $src $out/share/java/$jarName
-    makeWrapper "${jre}/bin/java" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
+    makeWrapper "${lib.getExe jre}" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
   '';
 
   meta = with lib; {

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
+      ${lib.getExe xorg.lndir} -silent $i $out
     done
   '';
 

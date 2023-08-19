@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp -r lib $out/lib
     cp bin/signal-cli $out/bin/signal-cli
   '' + (if stdenv.isLinux then ''
-    makeWrapper ${openjdk17_headless}/bin/java $out/bin/signal-cli \
+    makeWrapper ${lib.getExe openjdk17_headless} $out/bin/signal-cli \
       --set JAVA_HOME "${openjdk17_headless}" \
       --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
       --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \

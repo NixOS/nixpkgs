@@ -138,7 +138,7 @@ in python3.pkgs.buildPythonApplication rec {
   '' + optionalString _enableDitaaFilter ''
     echo "Extracting ditaa filter"
     unzip -d "$out/etc/asciidoc/filters/ditaa" "${ditaaFilterSrc}"
-    sed -i -e "s|java -jar|${jre}/bin/java -jar|" \
+    sed -i -e "s|java -jar|${lib.getExe jre} -jar|" \
         "$out/etc/asciidoc/filters/ditaa/ditaa2img.py"
   '' + optionalString _enableMscgenFilter ''
     echo "Extracting mscgen filter"

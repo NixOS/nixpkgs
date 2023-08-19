@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/gui/src/SslCertificate.cpp \
-      --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
+      --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${lib.getExe openssl}";'
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
       --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"

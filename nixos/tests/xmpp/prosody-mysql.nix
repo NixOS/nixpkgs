@@ -5,7 +5,7 @@ let
     cp key.pem cert.pem $out
   '';
   createUsers = pkgs: pkgs.writeScriptBin "create-prosody-users" ''
-    #!${pkgs.bash}/bin/bash
+    #!${lib.getExe pkgs.bash}
     set -e
 
     # Creates and set password for the 2 xmpp test users.
@@ -18,7 +18,7 @@ let
     prosodyctl register azurediamond example.com hunter2
   '';
   delUsers = pkgs: pkgs.writeScriptBin "delete-prosody-users" ''
-    #!${pkgs.bash}/bin/bash
+    #!${lib.getExe pkgs.bash}
     set -e
 
     # Deletes the test users.

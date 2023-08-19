@@ -50,7 +50,7 @@ maven.buildMavenPackage rec {
     classpath=$(find $mvnDeps/.m2 -name "*.jar" -printf ':%h/%f');
     install -Dm644 target/Digital.jar $out/share/java
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${lib.getExe jre} $out/bin/${pname} \
       --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \
       --add-flags "-jar $out/share/java/Digital.jar"
   '';

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/apacheds
     install -D $src/lib/*.jar $out/share/apacheds
     classpath=$(jars=($out/share/apacheds/*.jar); IFS=:; echo "''${jars[*]}")
-    makeWrapper ${jdk11}/bin/java $out/bin/apache-directory-server \
+    makeWrapper ${lib.getExe jdk11} $out/bin/apache-directory-server \
       --add-flags "-classpath $classpath org.apache.directory.server.UberjarMain"
   '';
 

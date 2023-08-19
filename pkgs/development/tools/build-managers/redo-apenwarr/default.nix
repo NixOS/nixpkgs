@@ -33,7 +33,7 @@
       --replace "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
 
     substituteInPlace t/200-shell/nonshelltest.do \
-      --replace "/usr/bin/env perl" "${perl}/bin/perl"
+      --replace "/usr/bin/env perl" "${lib.getExe perl}"
 
   '';
 

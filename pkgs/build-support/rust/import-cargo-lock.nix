@@ -166,14 +166,14 @@ let
         # Only check the top-level Cargo.toml, if it actually exists
         if [[ -f $tree/Cargo.toml ]]; then
           crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
-          ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
+          ${lib.getExe jq} -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
         fi
 
         # If the repository is not a workspace the package might be in a subdirectory.
         if [[ -z $crateCargoTOML ]]; then
           for manifest in $(find $tree -name "Cargo.toml"); do
             echo Looking at $manifest
-            crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path "$manifest" | ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path' || :)
+            crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path "$manifest" | ${lib.getExe jq} -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path' || :)
             if [[ ! -z $crateCargoTOML ]]; then
               break
             fi

@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     # drop upper bound of idna requirement
     sed -ri "s/'(idna)<[^']+'/'\1'/" setup.py
     substituteInPlace simp_le.py \
-      --replace "/bin/sh" "${bash}/bin/sh"
+      --replace "/bin/sh" "${lib.getExe' bash "sh"}"
   '';
 
   checkPhase = ''

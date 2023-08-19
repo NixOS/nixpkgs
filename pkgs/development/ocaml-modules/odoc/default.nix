@@ -24,7 +24,7 @@ buildDunePackage rec {
   preCheck = ''
     # some run.t files check the content of patchShebangs-ed scripts, so patch
     # them as well
-    find test \( -name '*.sh' -o -name 'run.t' \)  -execdir sed 's@#!/bin/sh@#!${bash}/bin/sh@' -i '{}' \;
+    find test \( -name '*.sh' -o -name 'run.t' \)  -execdir sed 's@#!/bin/sh@#!${lib.getExe' bash "sh"}@' -i '{}' \;
     patchShebangs test
   '';
 

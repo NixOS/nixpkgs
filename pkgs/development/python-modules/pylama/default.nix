@@ -33,7 +33,7 @@ let pylama = buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      git = "${lib.getBin git}/bin/git";
+      git = "${lib.getExe git}";
     })
   ];
 

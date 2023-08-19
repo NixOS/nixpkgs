@@ -26,7 +26,7 @@ with lib; let
         exec "$@"
       fi
     }
-    sudo ${pkgs.php}/bin/php artisan "$@"
+    sudo ${lib.getExe pkgs.php} artisan "$@"
   '';
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
@@ -419,8 +419,8 @@ in {
         fi
 
         # migrate & seed db
-        ${pkgs.php}/bin/php artisan key:generate --force
-        ${pkgs.php}/bin/php artisan setup:production -v --force
+        ${lib.getExe pkgs.php} artisan key:generate --force
+        ${lib.getExe pkgs.php} artisan setup:production -v --force
       '';
     };
 
@@ -432,7 +432,7 @@ in {
         Type = "oneshot";
         User = user;
         WorkingDirectory = "${monica}";
-        ExecStart = "${pkgs.php}/bin/php ${monica}/artisan schedule:run -v";
+        ExecStart = "${lib.getExe pkgs.php} ${monica}/artisan schedule:run -v";
       };
     };
 

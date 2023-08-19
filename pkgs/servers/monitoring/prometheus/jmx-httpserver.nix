@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec
     mkdir -p $out/bin
     cp $src $out/libexec/$jarName
-    makeWrapper "${jre}/bin/java" $out/bin/jmx_prometheus_httpserver --add-flags "-jar $out/libexec/$jarName"
+    makeWrapper "${lib.getExe jre}" $out/bin/jmx_prometheus_httpserver --add-flags "-jar $out/libexec/$jarName"
   '';
 
   meta = with lib; {

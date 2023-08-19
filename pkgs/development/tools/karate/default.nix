@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${jre}/bin/java $out/bin/karate --add-flags "-jar $src"
+    makeWrapper ${lib.getExe jre} $out/bin/karate --add-flags "-jar $src"
     runHook postInstall
   '';
 

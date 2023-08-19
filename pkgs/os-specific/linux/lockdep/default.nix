@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # there are more /bin/bash references than just shebangs
     for f in lockdep run_tests.sh tests/*.sh; do
       substituteInPlace $f \
-        --replace '/bin/bash' '${bash}/bin/bash'
+        --replace '/bin/bash' '${lib.getExe bash}'
     done
 
     ./run_tests.sh

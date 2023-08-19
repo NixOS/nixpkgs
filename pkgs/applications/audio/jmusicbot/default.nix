@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
     cp $src $out/lib/JMusicBot
 
-    makeWrapper ${jre_headless}/bin/java $out/bin/JMusicBot \
+    makeWrapper ${lib.getExe jre_headless} $out/bin/JMusicBot \
       --add-flags "-Xmx1G -Dnogui=true -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -jar $out/lib/JMusicBot"
   '';
 

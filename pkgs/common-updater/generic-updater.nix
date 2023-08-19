@@ -1,4 +1,4 @@
-{ stdenv, writeScript, coreutils, gnugrep, gnused, common-updater-scripts, nix }:
+{ lib, stdenv, writeScript, coreutils, gnugrep, gnused, common-updater-scripts, nix }:
 
 { name ? null
 , pname ? null
@@ -48,13 +48,13 @@ let
       local tag="$1"
       local enforce="$2"
       if [ -n "$odd_unstable" -o -n "$enforce" ]; then
-        local minor=$(echo "$tag" | ${gnused}/bin/sed -rne 's,^[0-9]+\.([0-9]+).*,\1,p')
+        local minor=$(echo "$tag" | ${lib.getExe gnused} -rne 's,^[0-9]+\.([0-9]+).*,\1,p')
         if [ $((minor % 2)) -eq 1 ]; then
           return 0
         fi
       fi
       if [ -n "$patchlevel_unstable" -o -n "$enforce" ]; then
-        local patchlevel=$(echo "$tag" | ${gnused}/bin/sed -rne 's,^[0-9]+\.[0-9]+\.([0-9]+).*$,\1,p')
+        local patchlevel=$(echo "$tag" | ${lib.getExe gnused} -rne 's,^[0-9]+\.[0-9]+\.([0-9]+).*$,\1,p')
         if ((patchlevel >= 90)); then
           return 0
         fi
@@ -71,13 +71,13 @@ let
 
     # cut any revision prefix not used in the NixOS package version
     if [ -n "$rev_prefix" ]; then
-      tags=$(echo "$tags" | ${gnugrep}/bin/grep "^$rev_prefix")
-      tags=$(echo "$tags" | ${gnused}/bin/sed -e "s,^$rev_prefix,,")
+      tags=$(echo "$tags" | ${lib.getExe gnugrep} "^$rev_prefix")
+      tags=$(echo "$tags" | ${lib.getExe gnused} -e "s,^$rev_prefix,,")
     fi
-    tags=$(echo "$tags" | ${gnugrep}/bin/grep "^[0-9]")
+    tags=$(echo "$tags" | ${lib.getExe gnugrep} "^[0-9]")
 
     # sort the tags in decreasing order
-    tags=$(echo "$tags" | ${coreutils}/bin/sort --reverse --version-sort)
+    tags=$(echo "$tags" | ${lib.getExe' coreutils "sort"} --reverse --version-sort)
 
     # find the newest tag
     # do not consider development versions
@@ -99,13 +99,13 @@ let
     if [ -n "$latest_tag" ]; then
       # print commands to commit the changes
       if [ "$version" != "$latest_tag" ]; then
-        pfile=$(EDITOR=echo ${nix}/bin/nix edit --extra-experimental-features nix-command -f. "$attr_path")
+        pfile=$(EDITOR=echo ${lib.getExe nix} edit --extra-experimental-features nix-command -f. "$attr_path")
         echo "   git add $pfile " >> ${fileForGitCommands}
         echo "   git commit -m '$attr_path: $version -> $latest_tag'" >> ${fileForGitCommands}
       fi
 
       # update the nix expression
-      ${common-updater-scripts}/bin/update-source-version "$attr_path" "$latest_tag"
+      ${lib.getExe' common-updater-scripts "update-source-version"} "$attr_path" "$latest_tag"
     fi
 
     echo "" >> ${fileForGitCommands}

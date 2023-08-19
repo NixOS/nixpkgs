@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./hardcode-paths.patch;
       catchsegv = "${glibc.bin}/bin/catchsegv";
-      bash = "${bash}/bin/bash";
+      bash = "${lib.getExe bash}";
       cp = "${coreutils}/bin/cp";
       dd = "${coreutils}/bin/dd";
       ls = "${coreutils}/bin/ls";

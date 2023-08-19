@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for file in ./examples/*/*.pl; do
       substituteInPlace $file \
-        --subst-var-by PERLBIN ${perl}/bin/perl
+        --subst-var-by PERLBIN ${lib.getExe perl}
     done
     '';
 
-  configureFlags = [ "--with-perl=${perl}/bin/perl" ];
+  configureFlags = [ "--with-perl=${lib.getExe perl}" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpcap bison cyrus_sasl tcp_wrappers flex libnsl ];

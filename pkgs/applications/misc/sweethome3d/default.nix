@@ -79,7 +79,7 @@ let
       # without it a "Profiles [GL4bc, GL3bc, GL2, GLES1] not available on device null"
       # exception is thrown on startup.
       # https://discourse.nixos.org/t/glx-not-recognised-after-mesa-update/6753
-      makeWrapper ${jre8}/bin/java $out/bin/$exec \
+      makeWrapper ${lib.getExe jre8} $out/bin/$exec \
         --set MESA_GL_VERSION_OVERRIDE 2.1 \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-Dsun.java2d.opengl=true -jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"

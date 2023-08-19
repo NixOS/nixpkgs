@@ -45,7 +45,7 @@ resholve.mkDerivation rec {
 
   solutions.default = {
     scripts = [ "bin/zxfer" ];
-    interpreter = "${bash}/bin/sh";
+    interpreter = "${lib.getExe' bash "sh"}";
     inputs = [
       coreutils
       gawk

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -Dm644 lib/tr-patcher-all.jar $out/lib/tr-patcher.jar
     install -Dm644 ${translation-file} $out/lib/Translation.txt
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/tr-patcher \
+    makeWrapper ${lib.getExe jre} $out/bin/tr-patcher \
     --add-flags "-jar $out/lib/tr-patcher.jar"
   '';
 

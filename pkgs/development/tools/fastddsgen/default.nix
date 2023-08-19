@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     # Override the default start script to use absolute java path
     cat  <<EOF >$out/bin/fastddsgen
     #!${runtimeShell}
-    exec ${openjdk17}/bin/java -jar "$out/share/fastddsgen/java/fastddsgen.jar" "\$@"
+    exec ${lib.getExe openjdk17} -jar "$out/share/fastddsgen/java/fastddsgen.jar" "\$@"
     EOF
     chmod a+x "$out/bin/fastddsgen"
 

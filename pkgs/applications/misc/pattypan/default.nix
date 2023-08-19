@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/bin $out/share/java
     cp pattypan.jar $out/share/java/pattypan.jar
-    makeWrapper ${jdk}/bin/java $out/bin/pattypan \
+    makeWrapper ${lib.getExe jdk} $out/bin/pattypan \
       --add-flags "-cp $out/share/java/pattypan.jar pattypan.Launcher"
     runHook postInstall
   '';

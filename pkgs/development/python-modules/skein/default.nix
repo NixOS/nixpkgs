@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace skein/core.py --replace "'yarn'" "'${hadoop}/bin/yarn'" \
-      --replace "else 'java'" "else '${hadoop.jdk}/bin/java'"
+      --replace "else 'java'" "else '${lib.getExe hadoop.jdk}'"
   '';
 
   pythonImportsCheck = [ "skein" ];

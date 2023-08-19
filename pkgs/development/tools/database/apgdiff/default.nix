@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 $src $out/lib/apgdiff.jar
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/apgdiff \
+    makeWrapper ${lib.getExe jre} $out/bin/apgdiff \
       --argv0 apgdiff \
       --add-flags "-jar $out/lib/apgdiff.jar"
   '';

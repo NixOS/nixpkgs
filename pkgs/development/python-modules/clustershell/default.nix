@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --replace '"scp"' '"${openssh}/bin/scp"'
 
     substituteInPlace lib/ClusterShell/Worker/fastsubprocess.py \
-      --replace '"/bin/sh"' '"${bash}/bin/sh"'
+      --replace '"/bin/sh"' '"${lib.getExe' bash "sh"}"'
 
     for f in tests/*; do
       substituteInPlace $f \

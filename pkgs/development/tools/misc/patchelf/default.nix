@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
+    mainProgram = "patchelf";
   };
 }

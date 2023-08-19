@@ -1,4 +1,4 @@
-{ testers, fetchurl, jq, moreutils, ... }: {
+{lib, testers, fetchurl, jq, moreutils, ... }: {
   # Tests that we can send custom headers with spaces in them
   header =
     let headerValue = "Test '\" <- These are some quotes";
@@ -7,7 +7,7 @@
       sha256 = builtins.hashString "sha256" (headerValue + "\n");
       curlOptsList = [ "-H" "Hello: ${headerValue}" ];
       postFetch = ''
-        ${jq}/bin/jq -r '.headers.Hello' $out | ${moreutils}/bin/sponge $out
+        ${lib.getExe jq} -r '.headers.Hello' $out | ${moreutils}/bin/sponge $out
       '';
     };
 }

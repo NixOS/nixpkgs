@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cat > "$out/bin/$tool" <<EOF
     #! $SHELL
     export JAVA_HOME='${jre_headless}'
-    exec '${jre_headless}/bin/java' -jar '$out/share/java/$tool.jar' "\$@"
+    exec '${lib.getExe jre_headless}' -jar '$out/share/java/$tool.jar' "\$@"
     EOF
     done
 

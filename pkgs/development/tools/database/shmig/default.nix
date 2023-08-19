@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
       --replace "\`which psql\`" "${lib.optionalString withPSQL "${postgresql}/bin/psql"}" \
       --replace "\`which sqlite3\`" "${lib.optionalString withSQLite "${sqlite}/bin/sqlite3"}" \
       --replace "awk" "${gawk}/bin/awk" \
-      --replace "grep" "${gnugrep}/bin/grep" \
+      --replace "grep" "${lib.getExe gnugrep}" \
       --replace "find" "${findutils}/bin/find" \
-      --replace "sed" "${gnused}/bin/sed"
+      --replace "sed" "${lib.getExe gnused}"
   '';
 
   preBuild = ''

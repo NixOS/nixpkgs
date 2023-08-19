@@ -21,7 +21,7 @@ let
     if [[ "$USER" != ${user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${user}'
     fi
-    $sudo ${pkgs.php}/bin/php artisan $*
+    $sudo ${lib.getExe pkgs.php} artisan $*
   '';
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
@@ -408,7 +408,7 @@ in {
         fi
 
         # migrate db
-        ${pkgs.php}/bin/php artisan migrate --force
+        ${lib.getExe pkgs.php} artisan migrate --force
       '';
     };
 

@@ -41,7 +41,7 @@ let
 
   configPath = pkgs.writeText "smokeping.conf" configFile;
   cgiHome = pkgs.writeScript "smokeping.fcgi" ''
-    #!${pkgs.bash}/bin/bash
+    #!${lib.getExe pkgs.bash}
     ${cfg.package}/bin/smokeping_cgi /etc/smokeping.conf
   '';
 in

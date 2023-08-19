@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     chmod u+w $out/lib
     for l in $out/lib/*so* ; do
       chmod u+w $l
-      ${patchelf}/bin/patchelf \
+      ${lib.getExe patchelf} \
         --set-rpath "$out/lib:${lpath}" \
         $l
     done
 
-    ${patchelf}/bin/patchelf \
+    ${lib.getExe patchelf} \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/lib:${lpath}" \
       $out/adom

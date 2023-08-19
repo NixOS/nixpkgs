@@ -46,7 +46,7 @@ haskellPackages.callPackage
         substituteInPlace zshrc.sh                       \
           --replace ':-"python"' ':-"haskell"'           \
           --replace 'python '    '${python3.interpreter} ' \
-          --replace 'git '       '${git}/bin/git '
+          --replace 'git '       '${lib.getExe git} '
      '';
      preCompileBuildDriver = "cd src";
      postInstall = ''

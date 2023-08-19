@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${jre}/bin/java $out/bin/jameica \
+    makeWrapper ${lib.getExe jre} $out/bin/jameica \
       --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${
         lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
       } de.willuhn.jameica.Main" \

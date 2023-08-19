@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       #
       # Java options, such as -Xms and Xmx can be specified by setting JAVA_OPTS.
       #
-      makeWrapper ${jdk}/bin/java $out/bin/jdt-language-server \
+      makeWrapper ${lib.getExe jdk} $out/bin/jdt-language-server \
         --add-flags "-Declipse.application=org.eclipse.jdt.ls.core.id1" \
         --add-flags "-Dosgi.bundles.defaultStartLevel=4" \
         --add-flags "-Declipse.product=org.eclipse.jdt.ls.core.product" \

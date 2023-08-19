@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureScript = "./autogen.sh";
 
   preConfigure = ''
-    find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${bash}/bin/bash@' -i '{}' ';'
+    find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${lib.getExe bash}@' -i '{}' ';'
   '';
 
   doCheck = true;

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     cp icon.png $out/share/icons/hicolor/512x512/apps/ffdec.png
     cp -r ${desktopItem}/share/applications $out/share
 
-    makeWrapper ${jdk8}/bin/java $out/bin/ffdec \
+    makeWrapper ${lib.getExe jdk8} $out/bin/ffdec \
       --add-flags "-jar $out/share/ffdec/ffdec.jar"
   '';
 

@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cat <<EOF > $out/bin/diylc
-    #!${bash}/bin/sh
+    #!${lib.getExe' bash "sh"}
     cd $out/share/diylc
-    ${jre8}/bin/java -Xms512m -Xmx2048m -Dorg.diylc.scriptRun=true -Dfile.encoding=UTF-8 -cp diylc.jar:lib org.diylc.DIYLCStarter
+    ${lib.getExe jre8} -Xms512m -Xmx2048m -Dorg.diylc.scriptRun=true -Dfile.encoding=UTF-8 -cp diylc.jar:lib org.diylc.DIYLCStarter
     EOF
     chmod +x $out/bin/diylc
 

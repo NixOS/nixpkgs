@@ -34,7 +34,7 @@ resholve.mkDerivation rec {
   solutions = {
     shunit = {
       # Caution: see __SHUNIT_CMD_ECHO_ESC before changing
-      interpreter = "${bash}/bin/sh";
+      interpreter = "${lib.getExe' bash "sh"}";
       scripts = [ "bin/shunit2" ];
       inputs = [ coreutils gnused gnugrep findutils ncurses ];
       # resholve's Nix API is analogous to the CLI flags

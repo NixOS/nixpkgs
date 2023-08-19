@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
 
     find gcs/libraries toolkit/libraries apple_stubs/ \( -name '*.jar' -and -not -name '*-src.jar' \) -exec cp '{}' $out/share/java ';'
 
-    makeWrapper ${jre8}/bin/java $out/bin/gcs \
+    makeWrapper ${lib.getExe jre8} $out/bin/gcs \
       --set GCS_LIBRARY ${library} \
       --add-flags "-cp $out/share/java/gcs-${version}.jar com.trollworks.gcs.app.GCS"
   '';

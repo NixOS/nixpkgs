@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     install -D "$src" "$out/share/java/${jarfilename}"
 
-    makeWrapper ${jre_headless}/bin/java $out/bin/trino \
+    makeWrapper ${lib.getExe jre_headless} $out/bin/trino \
       --add-flags "-jar $out/share/java/${jarfilename}"
 
     runHook postInstall

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     for file in bin/*; do
       substituteInPlace $file \
-        --replace "java " "${jre_headless}/bin/java "
+        --replace "java " "${lib.getExe jre_headless} "
     done
   '';
 

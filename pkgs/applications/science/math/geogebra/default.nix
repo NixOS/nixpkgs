@@ -60,7 +60,7 @@ let
       makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm ]}" \
         --set MESA_GL_VERSION_OVERRIDE 3.0 \
-        --set JAVACMD "${jre}/bin/java" \
+        --set JAVACMD "${lib.getExe jre}" \
         --set GG_PATH "$out/libexec/geogebra" \
         --add-flags "--language=${language}"
 

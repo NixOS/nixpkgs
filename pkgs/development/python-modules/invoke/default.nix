@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -e 's|/bin/bash|${bash}/bin/bash|g' -i invoke/config.py
+    sed -e 's|/bin/bash|${lib.getExe bash}|g' -i invoke/config.py
   '';
 
   # errors with vendored libs

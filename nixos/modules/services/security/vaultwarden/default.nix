@@ -220,7 +220,7 @@ in {
         Type = "oneshot";
         User = mkDefault user;
         Group = mkDefault group;
-        ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
+        ExecStart = "${lib.getExe pkgs.bash} ${./backup.sh}";
       };
       wantedBy = [ "multi-user.target" ];
     };

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
-    sed -e 's,/usr/local/bin/perl,${perl}/bin/perl,' \
+    sed -e 's,/usr/local/bin/perl,${lib.getExe perl},' \
       -e "s,/usr/local,$out," \
       Makefile.unix > Makefile
   '';

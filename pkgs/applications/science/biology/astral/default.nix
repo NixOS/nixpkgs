@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation rec {
     mv lib/*.jar $out/share/lib
     mv Astral.${version}.zip $out/share/
     cp -a  main/test_data $out/share/
-    makeWrapper ${jre}/bin/java $out/bin/astral \
+    makeWrapper ${lib.getExe jre} $out/bin/astral \
         --add-flags "-jar $out/share/astral.${version}.jar"
   '';
 

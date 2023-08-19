@@ -236,13 +236,13 @@ rec {
           if pkgs.stdenv.hostPlatform.canExecute final
           then "${pkgs.runtimeShell} -c '\"$@\"' --"
           else if final.isWindows
-          then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"
+          then lib.getExe' wine "wine${lib.optionalString (final.parsed.cpu.bits == 63) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
-          then "${qemu-user}/bin/qemu-${final.qemuArch}"
+          then lib.getExe' qemu-user "qemu-${final.qemuArch}"
           else if final.isWasi
-          then "${pkgs.wasmtime}/bin/wasmtime"
+          then lib.getExe pkgs.wasmtime
           else if final.isMmix
-          then "${pkgs.mmixware}/bin/mmix"
+          then lib.getExe' pkgs.mmixware "mmix"
           else null;
       in {
         emulatorAvailable = pkgs: (selectEmulator pkgs) != null;

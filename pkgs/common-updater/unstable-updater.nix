@@ -73,21 +73,21 @@ let
         cloneArgs+=(--branch="$branch")
     fi
 
-    ${git}/bin/git clone "''${cloneArgs[@]}" "$url" "$tmpdir"
+    ${lib.getExe git} clone "''${cloneArgs[@]}" "$url" "$tmpdir"
 
     pushd "$tmpdir"
-    commit_date="$(${git}/bin/git show -s --pretty='format:%cs')"
-    commit_sha="$(${git}/bin/git show -s --pretty='format:%H')"
+    commit_date="$(${lib.getExe git} show -s --pretty='format:%cs')"
+    commit_sha="$(${lib.getExe git} show -s --pretty='format:%H')"
     if [[ -z "$use_stable_version" ]]; then
         new_version="unstable-$commit_date"
     else
         depth=100
         while (( $depth < 10000 )); do
-            last_tag="$(${git}/bin/git describe --tags --abbrev=0 2> /dev/null || true)"
+            last_tag="$(${lib.getExe git} describe --tags --abbrev=0 2> /dev/null || true)"
             if [[ -n "$last_tag" ]]; then
                 break
             fi
-            ${git}/bin/git fetch --depth="$depth" --tags
+            ${lib.getExe git} fetch --depth="$depth" --tags
             depth=$(( $depth * 2 ))
         done
         if [[ -z "$last_tag" ]]; then

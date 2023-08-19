@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace postlicyd/policy_tokens.sh \
-                      --replace /bin/bash ${bash}/bin/bash;
+                      --replace /bin/bash ${lib.getExe bash};
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=nonnull-compare -Wno-error=format-truncation";

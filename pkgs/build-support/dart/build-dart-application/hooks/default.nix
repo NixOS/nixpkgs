@@ -7,7 +7,7 @@
   dartBuildHook = makeSetupHook {
     name = "dart-build-hook";
     substitutions.yq = "${yq}/bin/yq";
-    substitutions.jq = "${jq}/bin/jq";
+    substitutions.jq = "${lib.getExe jq}";
   } ./dart-build-hook.sh;
   dartInstallHook = makeSetupHook {
     name = "dart-install-hook";

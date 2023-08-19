@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
       mkdir -p $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/atlauncher \
+      makeWrapper ${lib.getExe jre} $out/bin/atlauncher \
         --add-flags "-jar $src --working-dir=\$HOME/.atlauncher" \
         --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" ${
             lib.strings.optionalString withSteamRun ''--run "${steamrun} \\"''

@@ -147,7 +147,7 @@ in
         [qualifiers]
           ${pkgs.runtimeShell} = icnu
           ${pkgs.bashInteractive}/bin/sh = icnu
-          ${pkgs.bashInteractive}/bin/bash = icnu
+          ${lib.getExe pkgs.bashInteractive} = icnu
           ${config.users.defaultUserShell} = icnu
       '';
       footer = "${pkgs.apparmor-utils}/etc/apparmor/logprof.conf";
@@ -182,7 +182,7 @@ in
         killUnconfinedConfinables = pkgs.writeShellScript "apparmor-kill" ''
           set -eu
           ${pkgs.apparmor-bin-utils}/bin/aa-status --json |
-          ${pkgs.jq}/bin/jq --raw-output '.processes | .[] | .[] | select (.status == "unconfined") | .pid' |
+          ${lib.getExe pkgs.jq} --raw-output '.processes | .[] | .[] | select (.status == "unconfined") | .pid' |
           xargs --verbose --no-run-if-empty --delimiter='\n' \
           kill
         '';

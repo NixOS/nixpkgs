@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
     cp scripts/index.js "$out/lib/napi-rs-cli"
 
-    makeWrapper ${nodejs}/bin/node "$out/bin/napi" --add-flags "$out/lib/napi-rs-cli/index.js"
+    makeWrapper ${lib.getExe nodejs} "$out/bin/napi" --add-flags "$out/lib/napi-rs-cli/index.js"
 
     runHook postInstall
   '';

@@ -570,7 +570,7 @@ in {
       home = "${libDir}";
       createHome = true;
       description = "Bacula Daemons user";
-      shell = "${pkgs.bash}/bin/bash";
+      shell = "${lib.getExe pkgs.bash}";
     };
 
     users.groups.bacula.gid = config.ids.gids.bacula;

@@ -39,7 +39,7 @@ buildPythonApplication rec {
 
     # 'cvise --command=...' generates a script with hardcoded shebang.
     substituteInPlace cvise.py \
-      --replace "#!/bin/bash" "#!${bash}/bin/bash"
+      --replace "#!/bin/bash" "#!${lib.getExe bash}"
 
     substituteInPlace cvise/utils/testing.py \
       --replace "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \

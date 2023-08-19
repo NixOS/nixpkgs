@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
     sed -i "s@/usr/bin/ssh@${openssh}/bin/ssh@g" vncviewer/vncviewer.h
 
-    sed -e 's@/usr/bin/perl@${perl}/bin/perl@' \
+    sed -e 's@/usr/bin/perl@${lib.getExe perl}@' \
         -e 's@unix/:7100@'$fontPath'@' \
         -i vncserver
 

@@ -16,7 +16,7 @@ perlPackages.buildPerlPackage {
   doCheck = false;    # hangs
 
   preConfigure = ''
-    sed -i.bak -e 's;#!/usr/bin/perl;#!${perl}/bin/perl;g' \
+    sed -i.bak -e 's;#!/usr/bin/perl;#!${lib.getExe perl};g' \
         ./bin/ninka-excel ./bin/ninka ./bin/ninka-sqlite \
         ./scripts/unify.pl ./scripts/parseLicense.pl \
         ./scripts/license_matcher_modified.pl \

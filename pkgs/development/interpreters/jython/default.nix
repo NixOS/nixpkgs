@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
      mkdir -pv $out/bin
      cp $src $out/jython.jar
-     makeWrapper ${jre}/bin/java $out/bin/jython --add-flags "-jar $out/jython.jar"
+     makeWrapper ${lib.getExe jre} $out/bin/jython --add-flags "-jar $out/jython.jar"
   '';
 
   meta = {

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       cp -R ${srcs.pkg}/usr/share $out
 
       # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
-      makeWrapper ${jre}/bin/java $out/bin/josm \
+      makeWrapper ${lib.getExe jre} $out/bin/josm \
         --add-flags "${extraJavaOpts} -jar $out/share/josm/josm.jar" \
         --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
     '';

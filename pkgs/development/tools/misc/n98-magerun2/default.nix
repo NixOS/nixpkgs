@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/libexec/n98-magerun2
 
     install -D $src $out/libexec/n98-magerun2/n98-magerun2.phar
-    makeWrapper ${php}/bin/php $out/bin/n98-magerun2 \
+    makeWrapper ${lib.getExe php} $out/bin/n98-magerun2 \
       --add-flags "$out/libexec/n98-magerun2/n98-magerun2.phar" \
       --prefix PATH : ${lib.makeBinPath [ unzip ]}
 

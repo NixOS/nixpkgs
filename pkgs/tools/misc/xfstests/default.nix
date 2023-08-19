@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
     # Fix up lots of impure paths
     for f in common/* tools/* tests/*/*; do
-      sed -i $f -e 's|/bin/bash|${bash}/bin/bash|'
+      sed -i $f -e 's|/bin/bash|${lib.getExe bash}|'
       sed -i $f -e 's|/bin/true|true|'
       sed -i $f -e 's|/usr/sbin/filefrag|${e2fsprogs}/bin/filefrag|'
       sed -i $f -e 's|hostname -s|hostname|'   # `hostname -s` seems problematic on NixOS

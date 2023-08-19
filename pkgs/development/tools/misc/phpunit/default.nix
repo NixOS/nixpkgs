@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     install -D $src $out/libexec/phpunit/phpunit.phar
-    makeWrapper ${php}/bin/php $out/bin/phpunit \
+    makeWrapper ${lib.getExe php} $out/bin/phpunit \
       --add-flags "$out/libexec/phpunit/phpunit.phar"
     runHook postInstall
   '';

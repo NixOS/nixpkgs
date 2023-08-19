@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   postPatch = ''
     substituteInPlace playlistmanager.lua \
       --replace 'youtube_dl_executable = "youtube-dl",' \
-      'youtube_dl_executable = "${lib.getBin yt-dlp}/bin/yt-dlp"',
+      'youtube_dl_executable = "${lib.getExe yt-dlp}"',
   '';
 
   dontBuild = true;
