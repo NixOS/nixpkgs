@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "2.5.0.3";
+  version = "2.5.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "precice";
     repo = "python-bindings";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SIuv3VUpEit1ed+4AEPx59bGTDfoQYcAgO1PnVb+9VM=";
+    hash = "sha256-Nau4ytOSv5WOly/hbHO2M6Rgx1ileJrzfCfNJFnwVaw=";
   };
 
   nativeBuildInputs = [
