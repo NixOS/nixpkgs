@@ -3,6 +3,8 @@
 , fetchPypi
 , pythonRelaxDepsHook
 , setuptools-scm
+, python-vagrant
+, docker
 }:
 
 buildPythonPackage rec {
@@ -24,6 +26,15 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
     setuptools-scm
   ];
+
+  passthru.optional-dependencies = {
+    docker = [
+      docker
+    ];
+    vagrant = [
+      python-vagrant
+    ];
+  };
 
   pythonImportsCheck = [ "molecule_plugins" ];
 
