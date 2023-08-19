@@ -5,7 +5,6 @@
   writeScriptBin,
   fetchFromGitHub,
   fetchurl,
-  runCommand,
   cmake,
   git,
   glew,
