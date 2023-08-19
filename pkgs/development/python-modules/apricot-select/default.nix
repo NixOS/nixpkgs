@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, nose
 , numba
 , numpy
 , pytestCheckHook
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "apricot-select";
-  version = "0.5.0";
+  version = "0.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +21,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmschrei";
     repo = "apricot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1EQW44SWn8GBrIYl1yhzM5yNRjYKQKBa9eImp8kiXFg=";
+    # https://github.com/jmschrei/apricot/issues/38
+    rev = "7389a81cfa56a1abff17ffea64c244818c943df4";
+    hash = "sha256-ChfYDlGW7OrLVuVxp/n09zCzSEP9F4/UyOJnh5nIGvk=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    nose
     pytestCheckHook
   ];
 
