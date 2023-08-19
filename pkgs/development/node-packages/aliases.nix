@@ -55,6 +55,7 @@ mapAliases {
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   flood = pkgs.flood; # Added 2023-07-25
   gtop = pkgs.gtop; # added 2023-07-31
+  inherit (pkgs) htmlhint; # added 2023-08-19
   hueadm = pkgs.hueadm; # added 2023-07-31
   karma = pkgs.karma-runner; # added 2023-07-29
   manta = pkgs.node-manta; # Added 2023-05-06

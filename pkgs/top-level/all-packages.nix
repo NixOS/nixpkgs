@@ -19356,6 +19356,8 @@ with pkgs;
 
   confluent-cli = callPackage ../development/tools/confluent-cli { };
 
+  htmlhint = callPackage ../development/tools/htmlhint { };
+
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
   hyenae = callPackage ../tools/networking/hyenae { };
