@@ -15338,6 +15338,8 @@ with pkgs;
 
   ats-acc = callPackage ../development/tools/ats-acc { };
 
+  august = callPackage ../development/compilers/august { };
+
   avra = callPackage ../development/compilers/avra { };
 
   ballerina = callPackage ../development/compilers/ballerina {
