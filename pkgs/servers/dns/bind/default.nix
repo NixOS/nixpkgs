@@ -5,15 +5,16 @@
 , enableGSSAPI ? true, libkrb5
 , buildPackages, nixosTests
 , cmocka, tzdata
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.17";
+  version = "9.18.18";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-veHFAXuB0decaeuPU38uUDL9NiOs3V7oMNT3S8JINFg=";
+    hash = "sha256-1zXNwSemxXCb3kdbW/FvohM/Nv26IC98PDfRNOUZIWA=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -75,11 +76,21 @@ stdenv.mkDerivation rec {
     sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) bind;
-    prometheus-exporter = nixosTests.prometheus-exporters.bind;
-    kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
-    kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+  passthru = {
+    tests = {
+      inherit (nixosTests) bind;
+      prometheus-exporter = nixosTests.prometheus-exporters.bind;
+      kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+      kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+    };
+
+    updateScript = gitUpdater {
+      # No nicer place to find latest stable release.
+      url = "https://gitlab.isc.org/isc-projects/bind9.git";
+      rev-prefix = "v";
+      # Avoid unstable 9.19 releases.
+      odd-unstable = true;
+    };
   };
 
   meta = with lib; {
