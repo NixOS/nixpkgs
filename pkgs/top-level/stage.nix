@@ -182,6 +182,20 @@ let
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
 
+    pkgsOn =
+      (lib.flip lib.mapAttrs) lib.systems.parse.cpuTypes (cpu: _:
+        (lib.flip lib.mapAttrs) lib.systems.parse.vendors (vendor: _:
+          (lib.flip lib.mapAttrs) lib.systems.parse.kernels (kernel: _:
+            (lib.flip lib.mapAttrs) lib.systems.parse.abis (abi: _:
+              nixpkgsFun {
+                crossSystem = {
+                  parsed = lib.systems.parse.mkSystemFromSkeleton {
+                    inherit cpu vendor kernel abi;
+                  };
+                };
+              }
+            ))));
+
     pkgsLLVM = nixpkgsFun {
       overlays = [
         (self': super': {
