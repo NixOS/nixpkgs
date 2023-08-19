@@ -40,7 +40,7 @@ let
       cpu    = cpuTypes;
       vendor = vendors;
       kernel = kernels;
-      abi    = abis;
+      abi    = builtins.removeAttrs abis [ "unknown" ];   # abis.unknown is a deprecation warning
     })
 
     # drop the structure; keep only the `name` attribute for each possibility

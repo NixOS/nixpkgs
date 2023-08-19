@@ -334,7 +334,7 @@ rec {
     merge = mergeOneOption;
   };
 
-  types.abi = enum (attrValues abis);
+  types.abi = enum (attrValues (builtins.removeAttrs abis ["unknown"]));
 
   abis = setTypes types.openAbi rec {
     cygnus       = { kernels = [ "windows" ]; };
@@ -396,8 +396,14 @@ rec {
     uclibceabihf = { float = "hard"; inherit (uclibc) kernels; };
     uclibc       = { kernels = [ "linux" ]; };
 
+    "" = { kernels = [ "darwin" "freebsd12" "freebsd13" "freebsd" "genode" "solaris2" "solaris" "ghcjs" "mmixware" "netbsd" "none" "" "openbsd" "redox" "wasi" ]; };
+
     # in gnu-config triples, this abi is actually the empty string "" rather than "-unknown"
-    unknown = { kernels = [ "darwin" "freebsd12" "freebsd13" "freebsd" "genode" "solaris2" "solaris" "ghcjs" "mmixware" "netbsd" "none" "" "openbsd" "redox" "wasi" ]; };
+    unknown =
+      # Added 2023-08-18.  When removing, please also remove the
+      # `removeAttrs ["unknown"]` in lib.tests.triples and
+      # lib.systems.types.abi
+      abis."" // { assertions = lib.warn "please use abis.\"\" instead; \"unknown\" is not a valid ABI." [ ]; };
   };
 
   ################################################################################
@@ -440,7 +446,7 @@ rec {
       !(isJavaScript components ->
         (vendor.name == "unknown" || vendor.name == "") &&
         kernel == kernels.ghcjs &&
-        abi == abis.unknown)
+        abi == abis."")
       -> throw ''
       The special "javascript" cpu may be used only in the nonstandard triple
       "javascript-unknown-ghcjs".  You tried to create
@@ -455,7 +461,7 @@ rec {
 
   mkSkeletonFromList = l: {
     "1" = if elemAt l 0 == "avr"
-      then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
+      then { cpu = elemAt l 0; kernel = "none"; abi = ""; }
       else throw "Target specification with 1 components is ambiguous";
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
@@ -541,7 +547,7 @@ rec {
           else if (isx86_64 parsed || isAarch64 parsed) &&
                   isLittleEndian parsed &&
                   parsed.kernel == kernels.darwin &&
-                  parsed.abi == abis.unknown then
+                  parsed.abi == abis."" then
                     vendors.apple    # nixpkgs-specific behavior
           else if isx86 parsed && isLinux parsed then vendors.pc
           else if ((abi=="eabi" || abi=="eabihf")) && !(isLinux parsed || isNetBSD parsed) then vendor_
@@ -562,7 +568,7 @@ rec {
             then abis.gnueabihf
             else abis.gnueabi
           else abis.gnu
-        else                     abis.unknown;
+        else                     abis."";
     };
 
   in mkSystem parsed;
@@ -603,7 +609,7 @@ rec {
     });
 
   tripleFromSkeleton = { cpu, vendor, kernel, optExecFormat?"", abi }: let
-    optAbi = lib.optionalString (abi != "unknown") "-${abi}";
+    optAbi = lib.optionalString (abi != "") "-${abi}";
     optVendor = lib.optionalString (vendor != "") "-${vendor}";
     optKernel = lib.optionalString (kernel != "") "-${kernel}";
   in
