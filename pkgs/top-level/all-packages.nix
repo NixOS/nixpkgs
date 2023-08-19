@@ -36615,6 +36615,8 @@ with pkgs;
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver { };
 
+  xsubfind3r = callPackage ../tools/security/xsubfind3r {  };
+
   xsuspender = callPackage ../applications/misc/xsuspender {  };
 
   xss-lock = callPackage ../misc/screensavers/xss-lock { };
