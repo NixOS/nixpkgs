@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "argocd-vault-plugin";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "argoproj-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9gM4CD3MbZX3ZCZ3XCAkdOkE381jgGvg/swto4B74g8=";
+    hash = "sha256-7bUpshg+OqlS5wvFkZkovQVaLglvSpp7FsVA9qNOk1U=";
   };
 
   vendorHash = "sha256-r9Pcm95gU0QTiREdiQiyJMOKZb5Lt2bIJywLerzgbdg=";
