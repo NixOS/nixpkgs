@@ -132,6 +132,6 @@ in
       platforms = ["i686-linux" "x86_64-linux"];
       license = [licenses.gpl3 licenses.cc-by-nc-sa-30];
       inherit mainProgram;
-      maintainers = with maintainers; [ashleyghooper];
+      maintainers = with maintainers; [ashleyghooper drupol];
     };
   }
