@@ -4958,6 +4958,8 @@ self: super: with self; {
 
   html-text = callPackage ../development/python-modules/html-text { };
 
+  html-void-elements = callPackage ../development/python-modules/html-void-elements { };
+
   htseq = callPackage ../development/python-modules/htseq { };
 
   httmock = callPackage ../development/python-modules/httmock { };
