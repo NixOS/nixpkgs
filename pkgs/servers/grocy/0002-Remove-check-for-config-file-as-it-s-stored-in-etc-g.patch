@@ -1,4 +1,4 @@
-From 0e834aa0ef712ce97acf24c05c43a04387fda18c Mon Sep 17 00:00:00 2001
+From b532add2d1287489d4541e79c976bb77795696cd Mon Sep 17 00:00:00 2001
 From: Ember Keske <git@n0emis.eu>
 Date: Wed, 2 Aug 2023 06:36:46 +0200
 Subject: [PATCH 2/2] Remove check for config-file as it's stored in /etc/grocy
