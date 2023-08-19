@@ -5768,6 +5768,8 @@ with pkgs;
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
+  libz = callPackage ../development/libraries/libz { };
+
   libzbc = callPackage ../os-specific/linux/libzbc { };
 
   libzbd = callPackage ../os-specific/linux/libzbd { };
