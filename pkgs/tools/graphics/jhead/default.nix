@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/joachim-reichel/jhead/commit/65de38cb68747c6f8397608b56b58ce15271a1fe.patch";
       sha256 = "sha256-xf0d2hxW4rVZwffrYJVVFQ3cDMOcPoGbCdrrQKxf16M=";
     })
+
+    (fetchpatch {
+      name = "CVE-2022-28550.patch";
+      url = "https://github.com/Matthias-Wandel/jhead/commit/9688daa7de7eb7bdc6b2223c33eb9ccc2f668b88.patch";
+      sha256 = "sha256-VKtPVyqhMcdl3OmKUshfnZjHl2YMj3C1YVhnyWKyJiI=";
+    })
   ];
 
   buildInputs = [ libjpeg ];
