@@ -95,7 +95,7 @@ in
     cmakeFlags = [
       "-DCMAKE_BUILD_TYPE=Release"
       "-DCROSS_COMPILE32=0"
-      "-DBUILD_SERVER=0"
+      "-DBUILD_SERVER=1"
       "-DBUILD_CLIENT=1"
       "-DBUNDLED_JPEG=0"
       "-DBUNDLED_LIBS=0"
@@ -116,6 +116,7 @@ in
       ln -s ${pak1} $ETMAIN/pak1.pk3
       ln -s ${pak2} $ETMAIN/pak2.pk3
       makeWrapper $out/${mainProgram} $out/bin/${mainProgram} --chdir $out
+      makeWrapper $out/etlded.* $out/bin/etlded --chdir $out
     '';
 
     meta = with lib; {
