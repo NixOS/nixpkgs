@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , setuptools
+, wheel
 
 # build
 , hassil
@@ -32,6 +34,15 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # https://github.com/home-assistant/intents-package/pull/1
+    (fetchpatch {
+      name = "unpin-setuptools-dependency.patch";
+      url = "https://github.com/home-assistant/intents-package/commit/fc03c1ec1001ba3b812f2eea670d1c447cf2acee.patch";
+      hash = "sha256-kTu1+IwDrcdqelyK/vfhxw8MQBis5I1jag7YTytKQhs=";
+    })
+  ];
+
   nativeBuildInputs = [
     hassil
     jinja2
@@ -39,6 +50,7 @@ buildPythonPackage rec {
     regex
     setuptools
     voluptuous
+    wheel
   ];
 
   postInstall = ''
