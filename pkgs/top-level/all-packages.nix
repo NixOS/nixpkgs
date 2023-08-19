@@ -4331,6 +4331,8 @@ with pkgs;
 
   bookstack = callPackage ../servers/web-apps/bookstack { };
 
+  bookxnote-pro = libsForQt5.callPackage ../applications/misc/bookxnote-pro { };
+
   boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
 
   boost-build = callPackage ../development/tools/boost-build { };
