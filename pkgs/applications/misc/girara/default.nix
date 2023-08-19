@@ -13,6 +13,7 @@
 , libiconv
 , json-glib
 , libintl
+, zathura
 }:
 
 stdenv.mkDerivation rec {
@@ -67,6 +68,10 @@ stdenv.mkDerivation rec {
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
+
+  passthru.tests = {
+    inherit zathura;
+  };
 
   meta = with lib; {
     homepage = "https://git.pwmt.org/pwmt/girara";
