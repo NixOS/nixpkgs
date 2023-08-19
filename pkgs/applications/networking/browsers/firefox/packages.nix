@@ -58,12 +58,12 @@
 
   firefox-devedition = (buildMozillaMach rec {
     pname = "firefox-devedition";
-    version = "117.0b5";
+    version = "117.0b9";
     applicationName = "Mozilla Firefox Developer Edition";
     branding = "browser/branding/aurora";
     src = fetchurl {
       url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "16f2fc0ac5d3cd76659b33b319a39367d5e37d7c2f5246f2f76a57b1455ab16af83872ec4fb74a30e127b744a06d8dc5c99a531d3bf2ff4c6465d1d5e2fcd126";
+      sha512 = "ab034e31467a7c9a57f5c32d486fb69a250d4293513babeeea8ff2042b0eac858be2c46c69469c700a7271f46a0c297ecdaa5ff651434adc8f9c157f80a97e43";
     };
 
     meta = {
