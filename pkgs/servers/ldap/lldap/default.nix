@@ -24,7 +24,7 @@ let
           cpu.name = "wasm32";
           vendor.name = "unknown";
           kernel.name = "unknown";
-          abi.name = "unknown";
+          abi.name = "";
         };
       };
     };

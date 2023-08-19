@@ -1,0 +1,43 @@
+diff --git a/config.sub b/config.sub
+index 6ae2502..c2c9200 100755
+--- a/config.sub
++++ b/config.sub
+@@ -1200,6 +1200,7 @@ case $cpu-$vendor in
+ 			| d10v | d30v | dlx | dsp16xx \
+ 			| e2k | elxsi | epiphany \
+ 			| f30[01] | f700 | fido | fr30 | frv | ft32 | fx80 \
++			| javascript \
+ 			| h8300 | h8500 \
+ 			| hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
+ 			| hexagon \
+@@ -1702,6 +1703,11 @@ case $os in
+ 	# VxWorks passes extra cpu info in the 4th filed.
+ 	simlinux | simwindows | spe)
+ 		;;
++	# The "javascript-unknown-ghcjs" triple is used by GHC; we
++	# accept it here in order to tolerate that, but reject any
++	# variations.
++	ghcjs)
++		;;
+ 	# Now accept the basic system types.
+ 	# The portable systems comes first.
+ 	# Each alternative MUST end in a * to match a version number.
+@@ -1884,6 +1890,18 @@ case $vendor in
+ 		;;
+ esac
+ 
++# Here we handle the constraint that a (synthetic) cpu and os are
++# valid only in combination with each other and nowhere else.
++case $cpu-$os in
++	javascript-ghcjs)
++		;;
++	javascript-* | *-ghcjs)
++		echo "Invalid configuration '$1': cpu '$cpu' is not valid with os '$os'" 1>&2
++		exit 1
++		;;
++esac
++
++
+ echo "$cpu-$vendor-${kernel:+$kernel-}$os"
+ exit
+ 

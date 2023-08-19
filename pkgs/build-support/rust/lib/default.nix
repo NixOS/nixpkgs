@@ -52,7 +52,7 @@ rec {
     }.${cpu.name} or cpu.name;
     vendor_ = toTargetVendor platform;
   in platform.rustc.config
-    or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+    or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "") "-${abi.name}"}";
 
   # Returns the name of the rust target if it is standard, or the json file
   # containing the custom target spec.
