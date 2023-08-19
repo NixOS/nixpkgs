@@ -104,19 +104,18 @@ in
       "-DINSTALL_GEOIP=0"
       "-DINSTALL_WOLFADMIN=0"
       "-DFEATURE_AUTOUPDATE=0"
-      "-DINSTALL_DEFAULT_BASEDIR=."
-      "-DINSTALL_DEFAULT_BINDIR=."
-      "-DINSTALL_DEFAULT_MODDIR=."
+      "-DINSTALL_DEFAULT_BASEDIR=${placeholder "out"}/lib/etlegacy"
+      "-DINSTALL_DEFAULT_BINDIR=${placeholder "out"}/bin"
     ];
 
     postInstall = ''
-      ETMAIN=$out/etmain
+      ETMAIN=$out/lib/etlegacy/etmain
       mkdir -p $ETMAIN
       ln -s ${pak0} $ETMAIN/pak0.pk3
       ln -s ${pak1} $ETMAIN/pak1.pk3
       ln -s ${pak2} $ETMAIN/pak2.pk3
-      makeWrapper $out/${mainProgram} $out/bin/${mainProgram} --chdir $out
-      makeWrapper $out/etlded.* $out/bin/etlded --chdir $out
+      makeWrapper $out/bin/etl.* $out/bin/etl
+      makeWrapper $out/bin/etlded.* $out/bin/etlded
     '';
 
     meta = with lib; {
