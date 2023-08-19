@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slweb";
-  version = "0.6.1";
+  version = "0.6.7";
 
   src = fetchFromSourcehut {
     owner = "~strahinja";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TZxnJEBodRdZzL96Ichs+oiXVltF2HXVUKDETBQcIaI=";
+    sha256 = "sha256-Y7w3yVqA8MNJJ3OcGaeziydZyzF0bap41Il6eE/Hu40=";
   };
 
   nativeBuildInputs = [ redo-apenwarr ];
