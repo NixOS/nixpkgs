@@ -5,6 +5,7 @@
 , beautifulsoup4
 , buildPythonPackage
 , certipy
+, configurable-http-proxy
 , cryptography
 , entrypoints
 , fetchPypi
@@ -96,11 +97,11 @@ buildPythonPackage rec {
 
     substituteInPlace jupyterhub/proxy.py --replace \
       "'configurable-http-proxy'" \
-      "'${nodePackages.configurable-http-proxy}/bin/configurable-http-proxy'"
+      "'${configurable-http-proxy}/bin/configurable-http-proxy'"
 
     substituteInPlace jupyterhub/tests/test_proxy.py --replace \
       "'configurable-http-proxy'" \
-      "'${nodePackages.configurable-http-proxy}/bin/configurable-http-proxy'"
+      "'${configurable-http-proxy}/bin/configurable-http-proxy'"
 
     substituteInPlace setup.py --replace \
       "'npm'" "'true'"

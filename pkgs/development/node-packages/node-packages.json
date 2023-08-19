@@ -99,7 +99,6 @@
 , "coffee-script"
 , "coinmon"
 , "concurrently"
-, "configurable-http-proxy"
 , "conventional-changelog-cli"
 , "cordova"
 , "cpy-cli"
