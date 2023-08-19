@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, SDL, libGLU, libGL, openal, curl, libXxf86vm }:
+{ lib, stdenv, fetchurl, unzip, SDL, libGLU, libGL, openal, curl, libXxf86vm, libicns, copyDesktopItems, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "urbanterror";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
        })
     ];
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip copyDesktopItems libicns ];
   buildInputs = [ SDL libGL libGLU openal curl libXxf86vm ];
   sourceRoot = "ioq3-for-UrbanTerror-4-release-${version}";
 
@@ -54,6 +54,15 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x "$out/bin/urbanterror-ded"
 
+    # Extract pngs from the Apple icon image and create
+    # the missing ones from the 1024x1024 image.
+    icns2png --extract ../UrbanTerror43/Quake3-UrT.app/Contents/Resources/quake3-urt.icns
+    ls -la .
+    for size in 16 32 128 256 512; do
+      mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
+      install -Dm644 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/urbanterror.png
+    done;
+
     runHook postInstall
   '';
 
@@ -64,6 +73,17 @@ stdenv.mkDerivation rec {
   '';
 
   hardeningDisable = [ "format" ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "urbanterror";
+      exec = "urbanterror";
+      icon = "urbanterror";
+      comment = "A multiplayer tactical FPS on top of Quake 3 engine";
+      desktopName = "Urban Terror";
+      categories = [ "Game" "ActionGame" ];
+    })
+  ];
 
   meta = with lib; {
     description = "A multiplayer tactical FPS on top of Quake 3 engine";
