@@ -338,7 +338,7 @@ rec {
     eabihf       = { float = "hard"; kernels = builtins.attrNames kernels; };
 
     # Other architectures should use ELF in embedded situations.
-    elf          = { kernels = [ "" ]; };
+    elf          = { kernels = [ "none" "" ]; };
 
     androideabi  = { inherit (android) kernels; };
     android      = { kernels = [ "linux" ];
@@ -437,7 +437,11 @@ rec {
       "javascript-unknown-ghcjs".  You tried to create
       "${cpu.name}-${vendor.name}-${kernel.name}-${abi.name}"
       '';
-
+    # The following assertions can (and must) be removed when our gnu-config is bumped to at least 2023-07-31
+    assert with components;                      vendor.name != "" && kernel.name == "none" && abi.name == "elf"
+      -> throw "two component *-*-none-elf triples are not allowed; please omit the vendor";
+    assert with components; cpu.name != "vc4" && vendor.name == "" && kernel.name == ""     && abi.name == "elf"
+      -> throw "two component *-elf triples are not allowed, except for vc4-elf";
     setType "system" components;
 
   mkSkeletonFromList = l: {
@@ -533,6 +537,7 @@ rec {
           else if isx86 parsed && isLinux parsed then vendors.pc
           else if ((abi=="eabi" || abi=="eabihf")) && !(isLinux parsed || isNetBSD parsed) then vendor_
           else if isx86 parsed then vendors.pc
+          else if isNone parsed && vendor_ == vendors."" && abi == "elf" then vendors.""
           else clobberedVendor;
 
       kernel = if hasPrefix "darwin" args.kernel      then getKernel "darwin"
