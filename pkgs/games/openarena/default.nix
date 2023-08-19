@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "openarena";
       icon = "openarena";
       comment = "A fast-paced 3D first-person shooter, similar to id Software Inc.'s Quake III Arena";
-      desktopName = "openarena";
+      desktopName = "OpenArena";
       categories = [ "Game" "ActionGame" ];
     })
   ];
