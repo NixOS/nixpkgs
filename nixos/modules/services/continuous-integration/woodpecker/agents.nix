@@ -107,14 +107,14 @@ in
         default = { };
         type = lib.types.attrsOf agentModule;
         example = {
-          docker = {
+          podman = {
             environment = {
               WOODPECKER_SERVER = "localhost:9000";
               WOODPECKER_BACKEND = "docker";
               DOCKER_HOST = "unix:///run/podman/podman.sock";
             };
 
-            extraGroups = [ "docker" ];
+            extraGroups = [ "podman" ];
 
             environmentFile = "/run/secrets/woodpecker/agent-secret.txt";
           };
