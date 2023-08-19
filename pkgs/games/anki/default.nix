@@ -46,7 +46,6 @@ let
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
-    pip
     mypy-protobuf
   ]);
 
