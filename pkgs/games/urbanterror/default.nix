@@ -1,23 +1,46 @@
-{ lib, stdenv, fetchurl, unzip, SDL, libGLU, libGL, openal, curl, libXxf86vm, libicns, copyDesktopItems, makeDesktopItem }:
+{ lib, stdenv, fetchzip, SDL, libGLU, libGL, openal, curl, libXxf86vm, libicns, copyDesktopItems, makeDesktopItem, makeBinaryWrapper, imagemagick }:
 
-stdenv.mkDerivation rec {
-  pname = "urbanterror";
+let
   version = "4.3.4";
 
-  srcs =
-    [ (fetchurl {
-         url = "http://cdn.urbanterror.info/urt/43/releases/zips/UrbanTerror434_full.zip";
-         sha256 = "1rx4nnndsk88nvd7k4p35cw6znclkkzm2bl5j6vn6mjjdk66jrki";
-       })
-      (fetchurl {
-         url = "https://github.com/FrozenSand/ioq3-for-UrbanTerror-4/archive/release-${version}.zip";
-         sha256 = "1s9pmw7rbnzwzl1llcs0kr2krf4daf8hhnz1j89qk4bq9a9qfp71";
-       })
-    ];
+  urbanterror-maps = fetchzip {
+    name = "urbanterror-maps";
+    url = "http://cdn.urbanterror.info/urt/43/releases/zips/UrbanTerror${builtins.replaceStrings ["."] [""] version}_full.zip";
+    hash = "sha256-C6Gb5PPECAOjQhmkrzkV6dpY/zHVtUj9oq3507o2PUI=";
+  };
 
-  nativeBuildInputs = [ unzip copyDesktopItems libicns ];
-  buildInputs = [ SDL libGL libGLU openal curl libXxf86vm ];
-  sourceRoot = "ioq3-for-UrbanTerror-4-release-${version}";
+  urbanterror-source = fetchzip {
+    name = "urbanterror-source";
+    url = "https://github.com/FrozenSand/ioq3-for-UrbanTerror-4/archive/release-${version}.zip";
+    hash = "sha256-zF6Tkaj5WYkFU66VwpBFr1P18OJGrGgxnc/jvcvt8hA=";
+  };
+in
+stdenv.mkDerivation {
+  pname = "urbanterror";
+  inherit version;
+
+  srcs = [
+    urbanterror-maps
+    urbanterror-source
+  ];
+
+  sourceRoot = "urbanterror-source";
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    imagemagick
+    libicns
+    makeBinaryWrapper
+  ];
+
+  buildInputs = [
+    curl
+    libGL
+    libGLU
+    openal
+    libXxf86vm
+    SDL
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -30,46 +53,28 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installTargets = [ "copyfiles" ];
+  installFlags = [ "COPYDIR=$(out)/share/urbanterror" ];
 
-    destDir="$out/opt/urbanterror"
-    mkdir -p "$destDir"
-    mkdir -p "$out/bin"
-    cp -v build/release-linux-*/Quake3-UrT.* \
-          "$destDir/Quake3-UrT"
-    cp -v build/release-linux-*/Quake3-UrT-Ded.* \
-          "$destDir/Quake3-UrT-Ded"
-    cp -rv ../UrbanTerror43/q3ut4 "$destDir"
-    cat << EOF > "$out/bin/urbanterror"
-    #! ${stdenv.shell}
-    cd "$destDir"
-    exec ./Quake3-UrT "\$@"
-    EOF
-    chmod +x "$out/bin/urbanterror"
-    cat << EOF > "$out/bin/urbanterror-ded"
-    #! ${stdenv.shell}
-    cd "$destDir"
-    exec ./Quake3-UrT-Ded "\$@"
-    EOF
-    chmod +x "$out/bin/urbanterror-ded"
-
-    # Extract pngs from the Apple icon image and create
-    # the missing ones from the 1024x1024 image.
-    icns2png --extract ../UrbanTerror43/Quake3-UrT.app/Contents/Resources/quake3-urt.icns
-    ls -la .
-    for size in 16 32 128 256 512; do
-      mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
-      install -Dm644 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/urbanterror.png
-    done;
-
-    runHook postInstall
+  preInstall = ''
+    mkdir -p $out/share/urbanterror
   '';
 
-  postFixup = ''
-    p=$out/opt/urbanterror/Quake3-UrT
-    cur_rpath=$(patchelf --print-rpath $p)
-    patchelf --set-rpath $cur_rpath:${libGL}/lib:${libGLU}/lib $p
+  postInstall = ''
+    icns2png --extract ${urbanterror-maps}/Quake3-UrT.app/Contents/Resources/quake3-urt.icns
+
+    for size in 16 24 32 48 64 128 256 512 1024; do
+      mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
+      if [ ! -e quake3-urt_"$size"x"$size"x32.png ] ; then
+        convert -resize "$size"x"$size" quake3-urt_512x512x32.png quake3-urt_"$size"x"$size"x32.png
+      fi
+      install -Dm644 quake3-urt_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/urbanterror.png
+    done;
+
+    makeWrapper $out/share/urbanterror/Quake3-UrT.* $out/bin/urbanterror
+    makeWrapper $out/share/urbanterror/Quake3-UrT-Ded.* $out/bin/urbanterror-ded
+
+    ln -s ${urbanterror-maps}/q3ut4 $out/share/urbanterror/
   '';
 
   hardeningDisable = [ "format" ];
@@ -99,6 +104,6 @@ stdenv.mkDerivation rec {
     mainProgram = "urbanterror";
     maintainers = with maintainers; [ astsmtl drupol ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }
