@@ -111,7 +111,7 @@ let
   # this is a good test of a lot of tricky glibc/libgcc corner cases
   mbuffer = let
     mbuffer = pkgs.pkgsOn.aarch64.unknown.linux.gnu.mbuffer;
-    emulator = with lib.systems; (elaborate examples.aarch64-multiplatform).emulator pkgs;
+    emulator = with lib.systems; (elaborate { config = "aarch64-unknown-linux-gnu"; }).emulator pkgs;
   in
     pkgs.runCommand "test-mbuffer" {} ''
       echo hello | ${emulator} ${mbuffer}/bin/mbuffer
