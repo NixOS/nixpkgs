@@ -1,39 +1,41 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , jax
 , jaxlib
 , multipledispatch
 , numpy
-, pytestCheckHook
-, pythonOlder
-, tensorflow-probability
 , tqdm
+, funsor
+, pytestCheckHook
+, tensorflow-probability
 }:
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.11.0";
+  version = "0.12.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-01fdGgFZ+G1FwjNwitM6PT1TQx0FtLvs4dBorkFoqo4=";
+    hash = "sha256-S3ifL/KPOJQcyBEYoE1XGxPLmSfh1uT9wJG/YtABBKQ=";
   };
 
   propagatedBuildInputs = [
     jax
     jaxlib
-    numpy
     multipledispatch
+    numpy
     tqdm
   ];
 
   nativeCheckInputs = [
-    tensorflow-probability
+    funsor
     pytestCheckHook
+    tensorflow-probability
   ];
 
   pythonImportsCheck = [
