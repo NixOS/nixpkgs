@@ -1,4 +1,5 @@
 { stdenv
+, config
 , lib
 , buildPythonPackage
 , fetchPypi
