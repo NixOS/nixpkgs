@@ -12,12 +12,12 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chessx";
   version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/chessx/chessx-${version}.tgz";
+    url = "mirror://sourceforge/chessx/chessx-${finalAttrs.version}.tgz";
     hash = "sha256-76YOe1WpB+vdEoEKGTHeaWJLpCVE4RoyYu1WLy3Dxhg=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "chessx";
   };
-}
+})
