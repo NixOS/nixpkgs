@@ -30,10 +30,11 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    export
     # build the brickd binary
     mkdir src/daemonlib
     cp -r ${daemonlib}/* src/daemonlib
+    substituteInPlace src/daemonlib/utils.{c,h} \
+      --replace "_GNU_SOURCE" "__GLIBC__"
     cd src/brickd
     make
 
