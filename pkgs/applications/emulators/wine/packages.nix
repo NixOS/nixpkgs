@@ -1,4 +1,4 @@
-{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage, substituteAll, moltenvk,
+{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsOn, callPackage, substituteAll, moltenvk,
   wineRelease ? "stable",
   supportFlags
 }:
@@ -11,7 +11,7 @@ in with src; {
     inherit src version supportFlags patches moltenvk;
     pkgArches = [ pkgsi686Linux ];
     geckos = [ gecko32 ];
-    mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc ];
+    mingwGccs = [ pkgsOn.i686.w64.windows.gnu.buildPackages.gcc ];
     monos =  [ mono ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
@@ -19,7 +19,7 @@ in with src; {
     pname = "wine64";
     inherit src version supportFlags patches moltenvk;
     pkgArches = [ pkgs ];
-    mingwGccs = with pkgsCross; [ mingwW64.buildPackages.gcc ];
+    mingwGccs = [ pkgsOn.x86_64.w64.windows.gnu.buildPackages.gcc ];
     geckos = [ gecko64 ];
     monos =  [ mono ];
     configureFlags = [ "--enable-win64" ];
@@ -32,7 +32,7 @@ in with src; {
     stdenv = stdenv_32bit;
     pkgArches = [ pkgs pkgsi686Linux ];
     geckos = [ gecko32 gecko64 ];
-    mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc mingwW64.buildPackages.gcc ];
+    mingwGccs = [ pkgsOn.i686.w64.windows.gnu.buildPackages.gcc pkgsOn.x86_64.w64.windows.gnu.buildPackages.gcc ];
     monos =  [ mono ];
     buildScript = substituteAll {
         src = ./builder-wow.sh;
@@ -46,7 +46,7 @@ in with src; {
     pname = "wine-wow64";
     inherit src version supportFlags patches moltenvk;
     pkgArches = [ pkgs ];
-    mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc mingwW64.buildPackages.gcc ];
+    mingwGccs = [ pkgsOn.i686.w64.windows.gnu.buildPackages.gcc pkgsOn.x86_64.w64.windows.gnu.buildPackages.gcc ];
     geckos = [ gecko64 ];
     monos =  [ mono ];
     configureFlags = [ "--enable-archs=x86_64,i386" ];

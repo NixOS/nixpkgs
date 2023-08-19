@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , pkg-config
-, pkgsCross
+, pkgsOn
 , bintools-unwrapped
 , libffi
 , libusb1
@@ -20,7 +20,7 @@
 
   nativeBuildInputs = [
     python3
-    pkgsCross.avr.stdenv.cc
+    pkgsOn.avr.unknown.none."".stdenv.cc
     gcc-arm-embedded
     bintools-unwrapped
     libffi

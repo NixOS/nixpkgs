@@ -34,7 +34,7 @@
 , nodejs
 , perl
 , pkg-config
-, pkgsCross # wasm32 rlbox
+, pkgsOn # wasm32 rlbox
 , python3
 , runCommand
 , rustc
@@ -171,7 +171,7 @@ let
   # We only link c++ libs here, our compiler wrapper can find wasi libc and crt itself.
   wasiSysRoot = runCommand "wasi-sysroot" {} ''
     mkdir -p $out/lib/wasm32-wasi
-    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/* ${pkgsCross.wasi32.llvmPackages.libcxxabi}/lib/*; do
+    for lib in ${pkgsOn.wasm32.unknown.wasi."".llvmPackages.libcxx}/lib/* ${pkgsOn.wasm32.unknown.wasi."".llvmPackages.libcxxabi}/lib/*; do
       ln -s $lib $out/lib/wasm32-wasi
     done
   '';
@@ -317,8 +317,8 @@ buildStdenv.mkDerivation {
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
     # RBox WASM Sandboxing
-    export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
-    export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
+    export WASM_CC=${pkgsOn.wasm32.unknown.wasi."".stdenv.cc}/bin/${pkgsOn.wasm32.unknown.wasi."".stdenv.cc.targetPrefix}cc
+    export WASM_CXX=${pkgsOn.wasm32.unknown.wasi."".stdenv.cc}/bin/${pkgsOn.wasm32.unknown.wasi."".stdenv.cc.targetPrefix}c++
   '' + lib.optionalString pgoSupport ''
     if [ -e "$TMPDIR/merged.profdata" ]; then
       echo "Configuring with profiling data"

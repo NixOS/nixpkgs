@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, pkgsCross, buildPackages
+{ lib, stdenv, fetchFromGitHub, openssl, pkgsOn, buildPackages
 
 # Warning: this blob (hdcp.bin) runs on the main CPU (not the GPU) at
 # privilege level EL3, which is above both the kernel and the
@@ -47,13 +47,13 @@ let
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
     # For Cortex-M0 firmware in RK3399
-    nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
+    nativeBuildInputs = [ pkgsOn.arm."".none.eabi.stdenv.cc ];
 
     buildInputs = [ openssl ];
 
     makeFlags = [
       "HOSTCC=$(CC_FOR_BUILD)"
-      "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
+      "M0_CROSS_COMPILE=${pkgsOn.arm."".none.eabi.stdenv.cc.targetPrefix}"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
       # binutils 2.39 regression
       # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`

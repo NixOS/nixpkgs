@@ -46,7 +46,7 @@ let
         type = types.listOf types.package;
         default = [ pkgs.OVMF.fd ];
         defaultText = literalExpression "[ pkgs.OVMF.fd ]";
-        example = literalExpression "[ pkgs.OVMFFull.fd pkgs.pkgsCross.aarch64-multiplatform.OVMF.fd ]";
+        example = literalExpression "[ pkgs.OVMFFull.fd pkgs.pkgsOn.aarch64.unknown.linux.gnu.OVMF.fd ]";
         description = lib.mdDoc ''
           List of OVMF packages to use. Each listed package must contain files names FV/OVMF_CODE.fd and FV/OVMF_VARS.fd or FV/AAVMF_CODE.fd and FV/AAVMF_VARS.fd
         '';

@@ -1,4 +1,4 @@
-{ version, lib, stdenv, pkgsCross, testers, cloudflared, runCommand, wine, wine64 }:
+{ version, lib, stdenv, pkgsOn, testers, cloudflared, runCommand, wine, wine64 }:
 
 let
   inherit (stdenv) buildPlatform;
@@ -25,7 +25,7 @@ in
   runs-through-wine = runCommand "cloudflared-${version}-runs-through-wine"
     {
       nativeBuildInputs = [ wine ];
-      exe = "${pkgsCross.mingw32.cloudflared}/bin/cloudflared.exe";
+      exe = "${pkgsOn.i686.w64.windows.gnu.cloudflared}/bin/cloudflared.exe";
     } ''
     export HOME="$(mktemp -d)"
     wine $exe help
@@ -35,7 +35,7 @@ in
   runs-through-wine64 = runCommand "cloudflared-${version}-runs-through-wine64"
     {
       nativeBuildInputs = [ wine64 ];
-      exe = "${pkgsCross.mingwW64.cloudflared}/bin/cloudflared.exe";
+      exe = "${pkgsOn.x86_64.w64.windows.gnu.cloudflared}/bin/cloudflared.exe";
     } ''
     export HOME="$(mktemp -d)"
     wine64 $exe help

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, dtc, pkgsCross }:
+{ lib, stdenv, fetchFromGitHub, dtc, pkgsOn }:
 
 stdenv.mkDerivation rec {
   pname = "spike";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase =
     let
-      riscvPkgs = pkgsCross.riscv64-embedded;
+      riscvPkgs = pkgsOn.riscv64."".none.elf;
     in
     ''
       runHook preInstallCheck

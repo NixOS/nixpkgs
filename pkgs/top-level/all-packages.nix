@@ -2477,7 +2477,7 @@ with pkgs;
     hello-x86_64 = if stdenv.hostPlatform.isx86_64 then
       hello
     else
-      pkgsCross.gnu64.hello;
+      pkgsOn.x86_64.unknown.linux.gnu.hello;
   };
 
   caprice32 = callPackage ../applications/emulators/caprice32 { };
@@ -3330,7 +3330,7 @@ with pkgs;
 
   # Derivation's result is not used by nixpkgs. Useful for validation for
   # regressions of bootstrapTools on hydra and on ofborg. Example:
-  #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
+  #     pkgsOn.aarch64.unknown.linux.gnu.freshBootstrapTools.build
   freshBootstrapTools = if stdenv.hostPlatform.isDarwin then
     callPackage ../stdenv/darwin/make-bootstrap-tools.nix {
       localSystem = stdenv.buildPlatform;
@@ -14792,7 +14792,7 @@ with pkgs;
   xbursttools = callPackage ../tools/misc/xburst-tools {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    gccCross = pkgsCross.ben-nanonote.buildPackages.gccWithoutTargetLibc;
+    gccCross = pkgsOn.mipsel.unknown.linux.uclibc.buildPackages.gccWithoutTargetLibc;
     autoconf = buildPackages.autoconf269;
   };
 
@@ -17352,8 +17352,8 @@ with pkgs;
 
   tinygo = callPackage ../development/compilers/tinygo {
     llvmPackages = llvmPackages_14;
-    avrgcc = pkgsCross.avr.buildPackages.gcc;
-    wasi-libc = pkgsCross.wasi32.wasilibc;
+    avrgcc = pkgsOn.avr.unknown.none."".buildPackages.gcc;
+    wasi-libc = pkgsOn.wasm32.unknown.wasi."".wasilibc;
     # go 1.20 build failure
     go = go_1_19;
     buildGoModule = buildGo119Module;
@@ -24863,8 +24863,8 @@ with pkgs;
   s2n-tls = callPackage ../development/libraries/s2n-tls { };
 
   simavr = callPackage ../development/tools/simavr {
-    avrgcc = pkgsCross.avr.buildPackages.gcc;
-    avrlibc = pkgsCross.avr.libcCross;
+    avrgcc = pkgsOn.avr.unknown.none."".buildPackages.gcc;
+    avrlibc = pkgsOn.avr.unknown.none."".libcCross;
     inherit (darwin.apple_sdk.frameworks) GLUT;
   };
 
@@ -40154,8 +40154,8 @@ with pkgs;
   glava = callPackage ../applications/misc/glava { };
 
   gnuk = callPackage ../misc/gnuk {
-    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
-    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+    gcc-arm-embedded = pkgsOn.arm."".none.eabi.buildPackages.gcc12;
+    binutils-arm-embedded = pkgsOn.arm."".none.eabi.buildPackages.binutils;
   };
 
   go365 = callPackage ../tools/security/go365 { };

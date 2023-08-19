@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, pkgsCross
+, pkgsOn
 , makeBinaryWrapper
 , writeText
 , runCommand
@@ -52,7 +52,11 @@ let
     "prefix"
     "suffix"
   ] makeGoldenTest // lib.optionalAttrs (! stdenv.isDarwin) {
-    cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.callPackage ./cross.nix { };
+    cross =
+      (if stdenv.buildPlatform.isAarch64
+      then pkgsOn.x86_64.unknown.linux.gnu
+      else pkgsOn.aarch64.unknown.linux.gnu)
+        .callPackage ./cross.nix { };
   };
 in
 

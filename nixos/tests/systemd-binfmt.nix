@@ -39,8 +39,8 @@ in {
     };
 
     testScript = let
-      helloArmv7l = pkgs.pkgsCross.armv7l-hf-multiplatform.hello;
-      helloAarch64 = pkgs.pkgsCross.aarch64-multiplatform.hello;
+      helloArmv7l = pkgs.pkgsOn.armv7l.unknown.linux.gnueabihf.hello;
+      helloAarch64 = pkgs.pkgsOn.aarch64.unknown.linux.gnu.hello;
     in ''
       machine.start()
 
@@ -62,7 +62,7 @@ in {
       ];
     };
     testScript = let
-      testAarch64 = expectArgv0 pkgs.pkgsCross.aarch64-multiplatform;
+      testAarch64 = expectArgv0 pkgs.pkgsOn.aarch64.unknown.linux.gnu;
     in ''
       machine.start()
       machine.succeed("exec -a meow ${testAarch64} meow")
@@ -77,8 +77,8 @@ in {
       ];
     };
     testScript = let
-      helloAarch64 = pkgs.pkgsCross.aarch64-multiplatform.hello;
-      libredirectAarch64 = pkgs.pkgsCross.aarch64-multiplatform.libredirect;
+      helloAarch64 = pkgs.pkgsOn.aarch64.unknown.linux.gnu.hello;
+      libredirectAarch64 = pkgs.pkgsOn.aarch64.unknown.linux.gnu.libredirect;
     in ''
       machine.start()
 

@@ -2,12 +2,12 @@
 , klipper
 , python3
 , gnumake
-, pkgsCross
+, pkgsOn
 }: writeShellApplication {
   name = "klipper-genconf";
   runtimeInputs = [
     python3
-    pkgsCross.avr.stdenv.cc
+    pkgsOn.avr.unknown.none."".stdenv.cc
     gnumake
   ];
   text = ''

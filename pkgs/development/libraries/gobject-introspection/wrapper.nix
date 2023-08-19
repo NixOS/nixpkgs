@@ -7,7 +7,7 @@
 }@_args:
 
 # to build, run
-# `nix build ".#pkgsCross.aarch64-multiplatform.buildPackages.gobject-introspection"`
+# `nix build ".#pkgsOn.aarch64.unknown.linux.gnu.buildPackages.gobject-introspection"`
 
 # a comment for both depsTargetTargetPropagated's
 # add self to buildInputs to avoid needing to add gobject-introspection to buildInputs in addition to nativeBuildInputs

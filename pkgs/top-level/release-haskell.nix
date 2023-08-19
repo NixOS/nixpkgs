@@ -451,7 +451,7 @@ let
             };
           };
 
-      pkgsCross.ghcjs =
+      pkgsOn.javascript.unknown.ghcjs."" =
         removePlatforms
           [
             # Hydra output size of 3GB is exceeded
@@ -459,14 +459,14 @@ let
           ]
           {
             haskellPackages = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+              inherit (packagePlatforms pkgs.pkgsOn.javascript.unknown.ghcjs."".haskellPackages)
                 ghc
                 hello
               ;
             };
 
             haskell.packages.ghcHEAD = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
+              inherit (packagePlatforms pkgs.pkgsOn.javascript.unknown.ghcjs."".haskell.packages.ghcHEAD)
                 ghc
                 hello
               ;

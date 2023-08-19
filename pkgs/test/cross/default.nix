@@ -110,7 +110,7 @@ let
   # see https://github.com/NixOS/nixpkgs/issues/213453
   # this is a good test of a lot of tricky glibc/libgcc corner cases
   mbuffer = let
-    mbuffer = pkgs.pkgsCross.aarch64-multiplatform.mbuffer;
+    mbuffer = pkgs.pkgsOn.aarch64.unknown.linux.gnu.mbuffer;
     emulator = with lib.systems; (elaborate examples.aarch64-multiplatform).emulator pkgs;
   in
     pkgs.runCommand "test-mbuffer" {} ''
@@ -129,21 +129,21 @@ let
   # calls here.
   sanity = [
     mbuffer
-    #pkgs.pkgsCross.gnu64.bash # https://github.com/NixOS/nixpkgs/issues/243164
+    #pkgs.pkgsOn.x86_64.unknown.linux.gnu.bash # https://github.com/NixOS/nixpkgs/issues/243164
     pkgs.gcc_multi.cc
     pkgs.pkgsMusl.stdenv
     pkgs.pkgsLLVM.stdenv
     pkgs.pkgsStatic.bash
-    pkgs.pkgsCross.arm-embedded.stdenv
-    pkgs.pkgsCross.sheevaplug.stdenv  # for armv5tel
-    pkgs.pkgsCross.raspberryPi.stdenv  # for armv6l
-    pkgs.pkgsCross.armv7l-hf-multiplatform.stdenv
-    pkgs.pkgsCross.m68k.stdenv
-    pkgs.pkgsCross.aarch64-multiplatform.pkgsBuildTarget.gcc
-    pkgs.pkgsCross.powernv.pkgsBuildTarget.gcc
-    pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
-    pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
-    pkgs.pkgsCross.mingwW64.stdenv
+    pkgs.pkgsOn.arm."".none.eabi.stdenv
+    pkgs.pkgsOn.armv5tel.unknown.linux.gnueabi.stdenv  # for armv5tel
+    pkgs.pkgsOn.armv6l.unknown.linux.gnueabihf.stdenv  # for armv6l
+    pkgs.pkgsOn.armv7l.unknown.linux.gnueabihf.stdenv
+    pkgs.pkgsOn.m68k.unknown.linux.gnu.stdenv
+    pkgs.pkgsOn.aarch64.unknown.linux.gnu.pkgsBuildTarget.gcc
+    pkgs.pkgsOn.powerpc64le.unknown.linux.gnu.pkgsBuildTarget.gcc
+    pkgs.pkgsOn.mips64el.unknown.linux.gnuabi64.stdenv
+    pkgs.pkgsOn.mips64el.unknown.linux.gnuabin32.stdenv
+    pkgs.pkgsOn.x86_64.w64.windows.gnu.stdenv
   ];
 
 in {

@@ -3,7 +3,7 @@
 { stdenv
 , lib
 , nixosTests
-, pkgsCross
+, pkgsOn
 , fetchFromGitHub
 , fetchpatch
 , fetchzip
@@ -74,7 +74,7 @@
   # Note: llvmPackages is explicitly taken from buildPackages instead of relying
   # on splicing. Splicing will evaluate the adjacent (pkgsHostTarget) llvmPackages
   # which is sometimes problematic: llvmPackages.clang looks at targetPackages.stdenv.cc
-  # which, in the unfortunate case of pkgsCross.ghcjs, `throw`s. If we explicitly
+  # which, in the unfortunate case of pkgsOn.javascript.unknown.ghcjs."", `throw`s. If we explicitly
   # take buildPackages.llvmPackages, this is no problem because
   # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to us. Working
   # around this is important, because systemd is in the dependency closure of
@@ -760,7 +760,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       inherit (nixosTests) switchTest;
-      cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
+      cross = if stdenv.buildPlatform.isAarch64
+              then pkgsOn.x86_64.unknown.linux.gnu.systemd
+              else pkgsOn.aarch64.unknown.linux.gnu.systemd;
     };
   };
 

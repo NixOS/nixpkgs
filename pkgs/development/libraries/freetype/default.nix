@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   postInstall = glib.flattenInclude
-    # pkgsCross.mingwW64.pkg-config doesn't build
+    # pkgsOn.x86_64.w64.windows.gnu.pkg-config doesn't build
     # makeWrapper doesn't cross-compile to windows #120726
     + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
     substituteInPlace $dev/bin/freetype-config \

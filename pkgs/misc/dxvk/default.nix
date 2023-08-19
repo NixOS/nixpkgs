@@ -1,7 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, pkgsCross
+, pkgsOn
 , stdenv
 , bash
 }:
@@ -9,11 +9,11 @@
 stdenvNoCC.mkDerivation (finalAttrs:
   let
     dxvk32 = if stdenv.isDarwin
-      then pkgsCross.mingw32.dxvk_1.override { enableMoltenVKCompat = true; }
-      else pkgsCross.mingw32.dxvk_2;
+      then pkgsOn.i686.w64.windows.gnu.dxvk_1.override { enableMoltenVKCompat = true; }
+      else pkgsOn.i686.w64.windows.gnu.dxvk_2;
     dxvk64 = if stdenv.isDarwin
-      then pkgsCross.mingwW64.dxvk_1.override { enableMoltenVKCompat = true; }
-      else pkgsCross.mingwW64.dxvk_2;
+      then pkgsOn.x86_64.w64.windows.gnu.dxvk_1.override { enableMoltenVKCompat = true; }
+      else pkgsOn.x86_64.w64.windows.gnu.dxvk_2;
   in
   {
     pname = "dxvk";
@@ -31,8 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs:
         --subst-var-by bash ${bash} \
         --subst-var-by dxvk32 ${dxvk32} \
         --subst-var-by dxvk64 ${dxvk64} \
-        --subst-var-by mcfgthreads32 "${pkgsCross.mingw32.windows.mcfgthreads_pre_gcc_13}" \
-        --subst-var-by mcfgthreads64 "${pkgsCross.mingwW64.windows.mcfgthreads_pre_gcc_13}"
+        --subst-var-by mcfgthreads32 "${pkgsOn.i686.w64.windows.gnu.windows.mcfgthreads_pre_gcc_13}" \
+        --subst-var-by mcfgthreads64 "${pkgsOn.x86_64.w64.windows.gnu.windows.mcfgthreads_pre_gcc_13}"
       chmod a+x $out/bin/setup_dxvk.sh
       declare -A dxvks=( [x32]=${dxvk32} [x64]=${dxvk64} )
       for arch in "''${!dxvks[@]}"; do

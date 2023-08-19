@@ -1,7 +1,7 @@
 { lib
 , python3
 , fetchPypi
-, pkgsCross
+, pkgsOn
 , avrdude
 , dfu-programmer
 , dfu-util
@@ -41,10 +41,10 @@ python3.pkgs.buildPythonApplication rec {
     teensy-loader-cli
     gcc-arm-embedded
     gnumake
-    pkgsCross.avr.buildPackages.binutils
-    pkgsCross.avr.buildPackages.binutils.bintools
-    pkgsCross.avr.buildPackages.gcc8
-    pkgsCross.avr.libcCross
+    pkgsOn.avr.unknown.none."".buildPackages.binutils
+    pkgsOn.avr.unknown.none."".buildPackages.binutils.bintools
+    pkgsOn.avr.unknown.none."".buildPackages.gcc8
+    pkgsOn.avr.unknown.none."".libcCross
   ];
 
   # no tests implemented

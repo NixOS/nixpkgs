@@ -2,7 +2,7 @@
 , python3Packages
 , python3
 , fetchFromGitHub
-, pkgsCross
+, pkgsOn
 , makeWrapper
 } :
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)"
   '';
 
-  nativeBuildInputs = [ pkgsCross.arm-embedded.buildPackages.gcc makeWrapper python3Packages.wrapPython ];
+  nativeBuildInputs = [ pkgsOn.arm."".none.eabi.buildPackages.gcc makeWrapper python3Packages.wrapPython ];
   buildInputs = [ python3 python3Packages.pyusb ];
   pythonPath = with python3Packages; [ pyusb ];
 

@@ -4,7 +4,7 @@
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk20-bootstrap
 , ensureNewerSourcesForZipFilesHook
 , setJavaClassPath
-# TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
+# TODO(@sternenseemann): gtk3 fails to evaluate in pkgsOn.javascript.unknown.ghcjs."".buildPackages
 # which should be fixable, this is a no-rebuild workaround for GHC.
 , headless ? stdenv.targetPlatform.isGhcjs
 , enableJavaFX ? false, openjfx

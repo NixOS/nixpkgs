@@ -10,7 +10,7 @@
 # find the downloads needed for new versions
 #
 # to test:
-# for e in cpp modeling platform sdk java jee committers rcp; do for s in pkgs pkgsCross.aarch64-multiplatform; do echo; echo $s $e; nix build -f default.nix ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done
+# for e in cpp modeling platform sdk java jee committers rcp; do for s in pkgs pkgsOn.aarch64.unknown.linux.gnu; do echo; echo $s $e; nix build -f default.nix ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done
 
 let
   platform_major = "4";
