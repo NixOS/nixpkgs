@@ -54,6 +54,7 @@ mapAliases {
   inherit (pkgs.elmPackages) elm-test;
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   flood = pkgs.flood; # Added 2023-07-25
+  inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
   hueadm = pkgs.hueadm; # added 2023-07-31
   karma = pkgs.karma-runner; # added 2023-07-29
