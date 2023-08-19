@@ -31,7 +31,8 @@ let
   hash = allHashAndPlatform."${stdenv.system}"."${if cudaSupport then "gpu" else "cpu"}"."${pyShortVersion}";
   platform = allHashAndPlatform."${stdenv.system}".platform;
   src = fetchPypi ({
-    inherit pname version format hash platform;
+    inherit version format hash platform;
+    pname = builtins.replaceStrings [ "-" ] [ "_" ] pname;
     dist = pyShortVersion;
     python = pyShortVersion;
     abi = pyShortVersion;
