@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-docutils";
-  version = "0.19.1.6";
+  version = "0.20.0.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ozSnA6hoiRDQhpRk8fb4vTMNdYQ72rT4k1R7+ylBegE=";
+    hash = "sha256-SSjnkPQrmdWDOZD5nI3Z+p8Wgl9u0wOAypgYRtNocM0=";
   };
 
   # Module doesn't have tests
