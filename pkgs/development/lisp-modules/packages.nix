@@ -269,15 +269,15 @@ let
 
   njson = build-asdf-system {
     pname = "njson";
-    version = "1.0.0";
+    version = "1.1.0";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "njson";
-      rev = "1.0.0";
-      sha256 = "sha256-zeOxkoi5cPl1sw1oEOaMsKhhs3Pb8EzzKTjvuDNj/Ko=";
+      rev = "1.1.0";
+      sha256 = "sha256-hVo5++QCns7Mv3zATpAP3EVz1pbj+jbQmzSLqs6hqQo=";
     };
-    lispLibs = [ self.nasdf super.cl-json ];
-    systems = [ "njson" "njson/cl-json" ];
+    lispLibs = [ self.nasdf super.cl-json super.com_dot_inuoe_dot_jzon];
+    systems = [ "njson" "njson/cl-json" "njson/jzon"];
   };
 
   nsymbols = build-asdf-system {
@@ -370,7 +370,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.5.0";
+    version = "3.6.0";
 
     lispLibs = (with super; [
       alexandria
@@ -420,6 +420,7 @@ let
       cl-cffi-gtk
       cl-gobject-introspection
       quri
+      sqlite
     ]) ++ (with self; [
       history-tree
       nhooks
@@ -439,8 +440,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.5.0";
-      sha256 = "sha256-/x3S4qAvvHxUxDcs6MAuZvAtqLTQdwlH7r4zFlKIjY4=";
+      rev = "3.6.0";
+      sha256 = "sha256-DaPEKdYf5R+RS7VQzbdLSqZvEQfxjeGEdX8rwmHRLrY=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
