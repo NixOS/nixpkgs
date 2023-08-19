@@ -1,12 +1,14 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, setuptools
-, pybind11
-, numpy
-, pytestCheckHook
 , absl-py
+, numpy
+, pybind11
+, pytestCheckHook
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -27,9 +29,18 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'numpy~=' 'numpy>=' \
+      --replace 'pybind11~=' 'pybind11>=' \
+      --replace 'setuptools~=' 'setuptools>='
+  '';
+
   nativeBuildInputs = [
-    setuptools
+    numpy
     pybind11
+    setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -46,6 +57,14 @@ buildPythonPackage rec {
     mv ./ml_dtypes/tests ./tests
     rm -rf ./ml_dtypes
   '';
+
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # These tests have expected RuntimeWarning: invalid value encountered in cast
+    # that have not been ignored yet upstream
+    "testArgmax_bfloat16"
+    "testArgmin_bfloat16"
+    "testRoundTripToNumpy_bfloat16"
+  ];
 
   pythonImportsCheck = [
     "ml_dtypes"
