@@ -2,7 +2,7 @@
 , lib
 , makeDesktopItem
 , makeWrapper
-, patchelf
+, autoPatchelfHook
 , writeText
 , coreutils
 , gnugrep
@@ -13,6 +13,7 @@
 , libnotify
 , e2fsprogs
 , python3
+, glib
 , vmopts ? null
 }:
 
@@ -55,19 +56,14 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
 
   vmoptsFile = lib.optionalString (vmopts != null) (writeText vmoptsName vmopts);
 
-  nativeBuildInputs = [ makeWrapper patchelf unzip ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook unzip ];
+
+  buildInputs = [ glib ];
 
   postPatch = ''
     rm -rf jbr
     # When using the IDE as a remote backend using gateway, it expects the jbr directory to contain the jdk
     ln -s ${jdk.home} jbr
-
-    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
-    if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" && -e bin/fsnotifier64 ]]; then
-      patchelf --set-interpreter "$interpreter" bin/fsnotifier64
-    else
-      patchelf --set-interpreter "$interpreter" bin/fsnotifier
-    fi
 
     if [ -d "plugins/remote-dev-server" ]; then
       patch -p1 < ${./JetbrainsRemoteDev.patch}
