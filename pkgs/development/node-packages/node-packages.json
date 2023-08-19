@@ -157,7 +157,6 @@
 , "gulp"
 , "gulp-cli"
 , "he"
-, "html-minifier"
 , "http-server"
 , "hsd"
 , "hs-airdrop"
