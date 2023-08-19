@@ -69,6 +69,7 @@ mapAliases {
   glob = pkgs.node-glob; # added 2023-08-18
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
+  inherit (pkgs) hsd; # added 2023-08-19
   inherit (pkgs) html-minifier; # added 2023-08-19
   inherit (pkgs) htmlhint; # added 2023-08-19
   hueadm = pkgs.hueadm; # added 2023-07-31

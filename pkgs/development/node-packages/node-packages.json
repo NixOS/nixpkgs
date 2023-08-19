@@ -146,7 +146,6 @@
 , "gulp-cli"
 , "he"
 , "http-server"
-, "hsd"
 , "hs-airdrop"
 , "hs-client"
 , "ijavascript"

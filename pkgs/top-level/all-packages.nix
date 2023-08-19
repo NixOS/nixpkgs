@@ -1833,6 +1833,8 @@ with pkgs;
 
   hostmux = callPackage ../tools/misc/hostmux { };
 
+  hsd = callPackage ../tools/misc/hsd { };
+
   httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
 
   hyperpotamus = callPackage ../tools/misc/hyperpotamus { };
