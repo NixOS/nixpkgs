@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-mermaid2-plugin";
-  version = "1.0.1";
+  version = "1.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "fralau";
     repo = "mkdocs-mermaid2-plugin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8/5lltOT78VSMxunIfCeGSBQ7VIRVnk3cHIzd7S+c00=";
+    hash = "sha256-0h/EMfp6D14ZJcQe3U2r/RQ/VNejOK9bLP6AMNiB0Rc=";
   };
 
   propagatedBuildInputs = [
