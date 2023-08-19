@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "k0sctl";
-  version = "0.15.4";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sMMYuE/KIWScZTCuzW9WQpCDHI+Og1zRxGlZzOuHgNo=";
+    sha256 = "sha256-ntjrk2OEIkAmNpf9Ag6HkSIOSA3NtO9hSJOBgvne4b0=";
   };
 
-  vendorSha256 = "sha256-6UWRh0NHFr7adJJSmrfTjzXH75Dmjed/+KxH6Kz//jk=";
+  vendorSha256 = "sha256-JlaXQqDO/b1xe9NA2JtuB1DZZlphWu3Mo/Mf4lhmKNo=";
 
   ldflags = [
     "-s"

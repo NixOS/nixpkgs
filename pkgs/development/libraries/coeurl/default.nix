@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
       hash = "sha256-a52Id7Nm3Mmmwv7eL58j6xovjlkpAO4KahVM/Q3H65w=";
     })
   ];
+  postPatch = ''
+    substituteInPlace subprojects/curl.wrap --replace '[provides]' '[provide]'
+  '';
 
   nativeBuildInputs = [ ninja pkg-config meson ];
 
