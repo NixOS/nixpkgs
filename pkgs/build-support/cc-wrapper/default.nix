@@ -189,7 +189,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit cc libc nativeTools nativeLibc nativePrefix isGNU isClang;
+    inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
