@@ -24,15 +24,14 @@
   cjson,
 }: let
   version = "2.81.1";
-  pkgname = "etlegacy";
-  mirror = "https://mirror.etlegacy.com";
+
   fetchAsset = {
     asset,
     sha256,
   }:
     fetchurl
     {
-      url = mirror + "/etmain/" + asset;
+      url = "https://mirror.etlegacy.com/etmain/${asset}";
       inherit sha256;
     };
   pak0 =
@@ -64,8 +63,8 @@
     then "etl.i386"
     else "etl.x86_64";
 in
-  stdenv.mkDerivation rec {
-    pname = pkgname;
+  stdenv.mkDerivation {
+    pname = "etlegacy";
     inherit version;
 
     src = fetchFromGitHub {
