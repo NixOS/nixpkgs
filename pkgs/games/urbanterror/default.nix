@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchzip, SDL, libGLU, libGL, openal, curl, libXxf86vm, libicns, copyDesktopItems, makeDesktopItem, makeBinaryWrapper, imagemagick }:
+{ lib
+, fetchzip
+, stdenv
+, copyDesktopItems
+, imagemagick
+, libicns
+, makeBinaryWrapper
+, curl
+, libGL
+, libGLU
+, openal
+, libXxf86vm
+, SDL
+, makeDesktopItem
+}:
 
 let
   version = "4.3.4";
@@ -90,8 +104,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A multiplayer tactical FPS on top of Quake 3 engine";
+    homepage = "https://www.urbanterror.info";
+    license = lib.licenses.unfreeRedistributable;
     longDescription = ''
       Urban Terror is a free multiplayer first person shooter developed by
       FrozenSand, that (thanks to the ioquake3-code) does not require
@@ -99,11 +115,8 @@ stdenv.mkDerivation {
       tactical shooter; somewhat realism based, but the motto is "fun over
       realism". This results in a very unique, enjoyable and addictive game.
     '';
-    homepage = "https://www.urbanterror.info";
-    license = licenses.unfreeRedistributable;
     mainProgram = "urbanterror";
-    maintainers = with maintainers; [ astsmtl drupol ];
-    platforms = platforms.linux;
-    hydraPlatforms = [ ];
+    maintainers = with lib.maintainers; [ astsmtl drupol ];
+    platforms = lib.platforms.linux;
   };
 }
