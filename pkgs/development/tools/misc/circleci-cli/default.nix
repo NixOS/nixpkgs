@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.28528";
+  version = "0.1.28811";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-y8KpJdJLYSsDLT6/z0/Nx9qByLdtNNBeiwFUupJxxCQ=";
+    sha256 = "sha256-HaBFKjVw6EzhH1oxSeKFmZUDZleFGrxjOegTVCGmrzI=";
   };
 
   vendorHash = "sha256-OWdJ7nFR5hrKQf2H763ezjXkEh0PvtBcjjeSNvH+ca4=";
