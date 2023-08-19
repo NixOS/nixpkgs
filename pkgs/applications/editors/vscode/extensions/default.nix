@@ -2961,6 +2961,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=RoweWilsonFrederiskHolme.wikitext";
           homepage = "https://github.com/Frederisk/Wikitext-VSCode-Extension";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.rapiteanu ];
         };
       };
 
