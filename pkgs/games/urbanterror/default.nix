@@ -20,13 +20,19 @@ stdenv.mkDerivation rec {
   sourceRoot = "ioq3-for-UrbanTerror-4-release-${version}";
 
   configurePhase = ''
+    runHook preConfigure
+
     echo "USE_OPENAL = 1" > Makefile.local
     echo "USE_OPENAL_DLOPEN = 0" >> Makefile.local
     echo "USE_CURL = 1" >> Makefile.local
     echo "USE_CURL_DLOPEN = 0" >> Makefile.local
+
+    runHook postConfigure
   '';
 
   installPhase = ''
+    runHook preInstall
+
     destDir="$out/opt/urbanterror"
     mkdir -p "$destDir"
     mkdir -p "$out/bin"
@@ -47,6 +53,8 @@ stdenv.mkDerivation rec {
     exec ./Quake3-UrT-Ded "\$@"
     EOF
     chmod +x "$out/bin/urbanterror-ded"
+
+    runHook postInstall
   '';
 
   postFixup = ''
