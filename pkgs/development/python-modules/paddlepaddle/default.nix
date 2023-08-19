@@ -8,7 +8,7 @@
 , openssl_1_1
 , zlib
 , setuptools
-, cudaSupport ? false
+, cudaSupport ? config.cudaSupport or false
 , cudaPackages_11 ? {}
 # runtime dependencies
 , httpx
