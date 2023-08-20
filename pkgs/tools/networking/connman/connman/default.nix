@@ -59,24 +59,15 @@ let inherit (lib) optionals; in
 
 stdenv.mkDerivation rec {
   pname = "connman";
-  version = "1.41";
+  version = "1.42";
+  # Work around the broken 1.42 dist tarball having a missing libppp-compat.h
+  # by not using a dist tarball
   src = fetchurl {
-    url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
-    sha256 = "sha256-eftA9P3VUwxFqo5ZL7Froj02dPOpjPELiaZXbxmN5Yk=";
+    url = "https://git.kernel.org/pub/scm/network/connman/connman.git/snapshot/connman-1.42.tar.gz";
+    sha256 = "sha256-TXBIXhAwgCDxtLpiSr72XVJK+Dl/TmtjjcbtE9LHrP4=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "pppd-2.5.0-compat.patch";
-      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=a48864a2e5d2a725dfc6eef567108bc13b43857f";
-      sha256 = "sha256-jB1qL13mceQ1riv3K+oFWw4VC7ohv/CcH9sjxZPXcG4=";
-    })
-    (fetchpatch {
-      name = "CVE-2023-28488.patch";
-      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=99e2c16ea1cced34a5dc450d76287a1c3e762138";
-      sha256 = "sha256-377CmsECji2w/c4bZXR+TxzTB7Lce0yo7KdK1oWfCVY=";
-    })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
     # Fix Musl build by avoiding a Glibc-only API.
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";
@@ -103,8 +94,10 @@ stdenv.mkDerivation rec {
     autoreconfHook  # as long as we're patching configure.ac
   ];
 
+  enableParallelBuilding = true;
+
   # fix invalid path to 'file'
-  postPatch = ''
+  preConfigure = ''
     sed -i "s/\/usr\/bin\/file/file/g" ./configure
   '';
 
