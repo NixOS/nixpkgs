@@ -60,6 +60,7 @@ mapAliases {
   inherit (pkgs) htmlhint; # added 2023-08-19
   hueadm = pkgs.hueadm; # added 2023-07-31
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
+  ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   karma = pkgs.karma-runner; # added 2023-07-29
   manta = pkgs.node-manta; # Added 2023-05-06
