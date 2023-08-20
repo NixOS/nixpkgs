@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-gZuNXQaxHJYLsEaOpNYo7ybg3f0GhkpiaLrex5lkDu4=";
   };
 
@@ -24,6 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Information gathering tool for DNS, ports and more";
     homepage = "https://github.com/edoardottt/scilla";
+    changelog = "https://github.com/edoardottt/scilla/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };
