@@ -124,6 +124,11 @@ in
       homepage = "https://etlegacy.com";
       platforms = ["i686-linux" "x86_64-linux"];
       license = [licenses.gpl3 licenses.cc-by-nc-sa-30];
+      longDescription = ''
+        ET: Legacy, an open source project fully compatible client and server
+        for the popular online FPS game Wolfenstein: Enemy Territory - whose
+        gameplay is still considered unmatched by many, despite its great age.
+      '';
       mainProgram = "etl";
       maintainers = with maintainers; [ashleyghooper drupol];
     };
