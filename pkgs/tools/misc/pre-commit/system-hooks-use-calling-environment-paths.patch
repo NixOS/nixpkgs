@@ -1,0 +1,94 @@
+diff --git a/pre_commit/all_languages.py b/pre_commit/all_languages.py
+index 476bad9..742172a 100644
+--- a/pre_commit/all_languages.py
++++ b/pre_commit/all_languages.py
+@@ -21,6 +21,7 @@ from pre_commit.languages import rust
+ from pre_commit.languages import script
+ from pre_commit.languages import swift
+ from pre_commit.languages import system
++from pre_commit.languages import meta
+ 
+ 
+ languages: dict[str, Language] = {
+@@ -44,6 +45,7 @@ languages: dict[str, Language] = {
+     'script': script,
+     'swift': swift,
+     'system': system,
++    'meta': meta,
+     # TODO: fully deprecate `python_venv`
+     'python_venv': python,
+ }
+diff --git a/pre_commit/clientlib.py b/pre_commit/clientlib.py
+index d0651ca..008307b 100644
+--- a/pre_commit/clientlib.py
++++ b/pre_commit/clientlib.py
+@@ -265,8 +265,8 @@ META_HOOK_DICT = cfgv.Map(
+     'Hook', 'id',
+     cfgv.Required('id', cfgv.check_string),
+     cfgv.Required('id', cfgv.check_one_of(tuple(k for k, _ in _meta))),
+-    # language must be system
+-    cfgv.Optional('language', cfgv.check_one_of({'system'}), 'system'),
++    # language must be meta
++    cfgv.Optional('language', cfgv.check_one_of({'meta'}), 'meta'),
+     # entry cannot be overridden
+     NotAllowed('entry', cfgv.check_any),
+     *(
+diff --git a/pre_commit/lang_base.py b/pre_commit/lang_base.py
+index 4a993ea..eba8f3e 100644
+--- a/pre_commit/lang_base.py
++++ b/pre_commit/lang_base.py
+@@ -130,6 +130,27 @@ def no_install(
+ def no_env(prefix: Prefix, version: str) -> Generator[None, None, None]:
+     yield
+ 
++@contextlib.contextmanager
++def outer_env(prefix: Prefix, version: str) -> Generator[None, None, None]:
++
++
++    # access the non-nix-modified environment
++    # which was captured pre-modifications by the wrapper script
++    # which was configured by the postFixup hook here:
++    # nixpkgs/pkgs/tools/misc/pre-commit/default.nix
++    backups = {}
++    for var in ["PATH", "PYTHONPATH"]:
++        val = os.environ.get(var)
++        outer_val = os.environ.get("OUTER_" + var)
++        if outer_val:
++            backups[var] = val
++            os.environ[var] = outer_val
++
++    yield
++
++    # restore the nix-modified environment
++    for k, v in backups.items():
++        os.environ[k] = v
+ 
+ def target_concurrency() -> int:
+     if 'PRE_COMMIT_NO_CONCURRENCY' in os.environ:
+diff --git a/pre_commit/languages/meta.py b/pre_commit/languages/meta.py
+new file mode 100644
+index 0000000..f6ad688
+--- /dev/null
++++ b/pre_commit/languages/meta.py
+@@ -0,0 +1,10 @@
++from __future__ import annotations
++
++from pre_commit import lang_base
++
++ENVIRONMENT_DIR = None
++get_default_version = lang_base.basic_get_default_version
++health_check = lang_base.basic_health_check
++install_environment = lang_base.no_install
++in_env = lang_base.no_env
++run_hook = lang_base.basic_run_hook
+diff --git a/pre_commit/languages/system.py b/pre_commit/languages/system.py
+index f6ad688..d8237e7 100644
+--- a/pre_commit/languages/system.py
++++ b/pre_commit/languages/system.py
+@@ -6,5 +6,5 @@ ENVIRONMENT_DIR = None
+ get_default_version = lang_base.basic_get_default_version
+ health_check = lang_base.basic_health_check
+ install_environment = lang_base.no_install
+-in_env = lang_base.no_env
++in_env = lang_base.outer_env
+ run_hook = lang_base.basic_run_hook
