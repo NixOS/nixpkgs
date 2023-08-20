@@ -1,15 +1,30 @@
-{ lib, buildPythonApplication, fetchFromGitHub, configargparse, setuptools, poetry-core, rbw }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, configargparse
+, setuptools
+, poetry-core
+, rbw
+
+, waylandSupport ? false
+, wl-clipboard
+, wtype
+
+, x11Support ? false
+, xclip
+, xdotool
+}:
 
 buildPythonApplication rec {
   pname = "rofi-rbw";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
     rev = "refs/tags/${version}";
-    hash = "sha256-5K6tofC1bIxxNOQ0jk6NbVoaGGyQImYiUZAaAmkwiTA=";
+    hash = "sha256-6ZM+qJvVny/h5W/+7JqD/CCf9eayExvZfC/z9rHssVU=";
   };
 
   nativeBuildInputs = [
@@ -17,12 +32,36 @@ buildPythonApplication rec {
     poetry-core
   ];
 
+  buildInputs = [
+    rbw
+  ] ++ lib.optionals waylandSupport [
+    wl-clipboard
+    wtype
+  ] ++ lib.optionals x11Support [
+    xclip
+    xdotool
+  ];
+
   propagatedBuildInputs = [ configargparse ];
 
   pythonImportsCheck = [ "rofi_rbw" ];
 
+  wrapper_paths = [
+    rbw
+  ] ++ lib.optionals waylandSupport [
+    wl-clipboard
+    wtype
+  ] ++ lib.optionals x11Support [
+    xclip
+    xdotool
+  ];
+
+  wrapper_flags =
+    lib.optionalString waylandSupport "--typer wtype --clipboarder wl-copy"
+    + lib.optionalString x11Support "--typer xdotool --clipboarder xclip";
+
   preFixup = ''
-    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ rbw ]})
+    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath wrapper_paths} --add-flags "${wrapper_flags}")
   '';
 
   meta = with lib; {

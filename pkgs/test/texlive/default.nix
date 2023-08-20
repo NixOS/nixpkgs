@@ -234,9 +234,6 @@
 
         # 'Error initialising QuantumRenderer: no suitable pipeline found'
         "tlcockpit"
-
-        # 'tlmgr: config.guess script does not exist, goodbye'
-        "tlshell"
       ] ++ lib.optional stdenv.isDarwin "epspdftk";  # wish shebang is a script, not a binary!
 
       # (1) binaries requiring -v
@@ -271,7 +268,7 @@
         "dt2dv" "dv2dt" "dvi2tty" "dvidvi" "dvispc" "otp2ocp" "outocp" "pmxab"
 
         # GUI scripts that accept no argument or crash without a graphics server; please test manualy
-        "epspdftk" "texdoctk" "xasy"
+        "epspdftk" "texdoctk" "tlshell" "xasy"
 
         # requires Cinderella, not open source and not distributed via Nixpkgs
         "ketcindy"

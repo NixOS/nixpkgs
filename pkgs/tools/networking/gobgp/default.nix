@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gobgp";
-  version = "3.16.0";
+  version = "3.17.0";
 
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
     rev = "v${version}";
-    sha256 = "sha256-RdZk2I7QvIWEeiL81N5PLJYE0KHYbkvjJeDXTg3F9c4=";
+    sha256 = "sha256-LpQMRn0mINhixbS8GpYAqr0pjwbnQdUOs2BH3rkQ3hU=";
   };
 
   vendorHash = "sha256-Z7vYpDQIKc4elVBLiGtxF3D9pec4QNvWFLpux/29t1Y=";

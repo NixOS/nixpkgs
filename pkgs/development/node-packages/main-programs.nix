@@ -7,7 +7,6 @@
   "@squoosh/cli" = "squoosh-cli";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
   coffee-script = "coffee";
-  vue-cli = "vue";
   "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable.
@@ -68,7 +67,6 @@
   react-native-cli = "react-native";
   react-tools = "jsx";
   remod-cli = "remod";
-  s3http = "s3http.js";
   svelte-language-server = "svelteserver";
   teck-programmer = "teck-firmware-upgrade";
   typescript-language-server = "typescript-language-server";

@@ -1,37 +1,61 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, zlib, curl, protobuf, prime-server, boost, sqlite, libspatialite
-, luajit, geos39, python3, zeromq }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, curl
+, geos
+, libspatialite
+, luajit
+, prime-server
+, protobuf
+, python3
+, sqlite
+, zeromq
+, zlib
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "valhalla";
-  version = "3.1.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "valhalla";
     repo = "valhalla";
-    rev = version;
-    sha256 = "04vxvzy6hnhdvb9lh1p5vqzzi2drv0g4l2gnbdp44glipbzgd4dr";
+    rev = finalAttrs.version;
+    hash = "sha256-1X9vsWsgnzmXn7bCMhN2PNwtfV0RRdzRFZIrQN2PLfA=";
     fetchSubmodules = true;
   };
 
-  # https://github.com/valhalla/valhalla/issues/2119
   postPatch = ''
-    for f in valhalla/mjolnir/transitpbf.h \
-             src/mjolnir/valhalla_query_transit.cc; do
-      substituteInPlace $f --replace 'SetTotalBytesLimit(limit, limit)' \
-                                     'SetTotalBytesLimit(limit)'
-    done
+    substituteInPlace src/bindings/python/CMakeLists.txt \
+      --replace "\''${Python_SITEARCH}" "${placeholder "out"}/${python3.sitePackages}"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    zlib curl protobuf prime-server boost sqlite libspatialite
-    luajit geos39 python3 zeromq
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
     "-DENABLE_BENCHMARKS=OFF"
+  ];
+
+  buildInputs = [
+    boost
+    curl
+    geos
+    libspatialite
+    luajit
+    prime-server
+    protobuf
+    python3
+    sqlite
+    zeromq
+    zlib
   ];
 
   postFixup = ''
@@ -40,11 +64,16 @@ stdenv.mkDerivation rec {
       --replace '=''${exec_prefix}//' '=/'
   '';
 
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/valhalla/valhalla/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Open Source Routing Engine for OpenStreetMap";
     homepage = "https://valhalla.readthedocs.io/";
     license = licenses.mit;
     maintainers = [ maintainers.Thra11 ];
     platforms = platforms.linux;
   };
-}
+})

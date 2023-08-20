@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_i18nmessageid
+, zope-i18nmessageid
 , zope_interface
 }:
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     hash = "sha256-bhv3QJdZtNpyAuL6/aZXWD1Acx8661VweWaItJPpkHk=";
   };
 
-  propagatedBuildInputs = [ zope_i18nmessageid zope_interface ];
+  propagatedBuildInputs = [ zope-i18nmessageid zope_interface ];
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.size";
