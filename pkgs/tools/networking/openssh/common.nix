@@ -13,6 +13,8 @@
 # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
 , pkgs
 , fetchurl
+, fetchpatch
+, autoreconfHook
 , zlib
 , openssl
 , libedit
@@ -42,6 +44,14 @@ stdenv.mkDerivation {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+
+    # Pull upstream zlib-1.3 support.
+    # The patch changes configure.ac, uses autoreconfHook.
+    (fetchpatch {
+      name = "zlib-1.3.patch";
+      url = "https://github.com/openssh/openssh-portable/commit/cb4ed12ffc332d1f72d054ed92655b5f1c38f621.patch";
+      hash = "sha256-3Gx0/I2n9/XaWCIefVYtvk5f+VgH6MlhMBse+PMyf34=";
+    })
   ] ++ extraPatches;
 
   postPatch =
@@ -52,7 +62,7 @@ stdenv.mkDerivation {
     '';
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs = [ autoreconfHook pkg-config ]
     # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
     # needed here to access krb5-config in order to cross compile. See:
     # https://github.com/NixOS/nixpkgs/pull/107606
