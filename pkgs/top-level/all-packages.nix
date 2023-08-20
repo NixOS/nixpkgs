@@ -1972,6 +1972,8 @@ with pkgs;
 
   trigger-control = callPackage ../tools/games/trigger-control { };
 
+  trimage = callPackage ../applications/graphics/trimage { inherit (qt5) wrapQtAppsHook; };
+
   ttchat = callPackage ../tools/misc/ttchat { };
 
   ukmm = callPackage ../tools/games/ukmm { };
