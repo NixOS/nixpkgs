@@ -23,7 +23,18 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 
 ## Quick Start to Adding a Package
 
-To add a package to Nixpkgs:
+Each new package has a cost for the maintainers, Hydra and users downloading
+Nixpkgs. Before adding a new package, please consider the following questions:
+* Does the package have a release?
+* How realistic is it that it will be used by other people?
+* Are you going to maintain the package?
+
+If any of these questions' answer is no, then you should probably not add the
+package.
+
+---
+
+Now that this is out of the way. To add a package to Nixpkgs:
 
 1. Checkout the Nixpkgs source tree:
 
@@ -67,7 +78,9 @@ To add a package to Nixpkgs:
 
    Some notes:
 
-   - All [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
+   - Add yourself as the maintainer of the package.
+
+   - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
    - You can use `nix-prefetch-url url` to get the SHA-256 hash of source distributions. There are similar commands as `nix-prefetch-git` and `nix-prefetch-hg` available in `nix-prefetch-scripts` package.
 
