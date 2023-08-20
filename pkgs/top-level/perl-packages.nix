@@ -24011,6 +24011,23 @@ with self; {
     };
   };
 
+  Test2ToolsMemoryCycle = buildPerlPackage {
+    pname = "Test2-Tools-MemoryCycle";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test2-Tools-MemoryCycle-0.01.tar.gz";
+      hash = "sha256-U1s9ylQqMyUVEq3ktafb6+PESNg/iA0ZjkPcEnl5aYs=";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ DevelCycle PadWalker ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Test2::Tools::MemoryCycle";
+      description = "Check for memory leaks and circular memory references";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   TestAbortable = buildPerlPackage {
     pname = "Test-Abortable";
     version = "0.002";
