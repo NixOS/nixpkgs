@@ -16336,6 +16336,23 @@ with self; {
     };
   };
 
+  MojoliciousPluginTemplateToolkit = buildPerlModule {
+    pname = "Mojolicious-Plugin-TemplateToolkit";
+    version = "0.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojolicious-Plugin-TemplateToolkit-0.006.tar.gz";
+      hash = "sha256-dBoFAmtTArtrKc+I3KICC3rv0iNHgWELpZNaqPCXNKY=";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ ClassMethodModifiers Mojolicious TemplateToolkit ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Mojolicious-Plugin-TemplateToolkit";
+      description = "Template Toolkit renderer plugin for Mojolicious";
+      license = with lib.licenses; [ artistic2 ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   MojoliciousPluginTextExceptions = buildPerlPackage {
     pname = "Mojolicious-Plugin-TextExceptions";
     version = "0.02";
