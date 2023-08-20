@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DENABLE_LUA=ON"
     # Otherwise, it tries to parse $out/etc/mympd.conf on startup.
     "-DCMAKE_INSTALL_SYSCONFDIR=/etc"
     # similarly here
