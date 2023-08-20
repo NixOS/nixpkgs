@@ -3,8 +3,8 @@
 let
   versions = {
     matomo = {
-      version = "4.14.2";
-      hash = "sha256-jPs/4bgt7VqeSoeLnwHr+FI426hAhwiP8RciQDNwCpo=";
+      version = "4.15.1";
+      hash = "sha256-XnfiprGLqFQqPk30gcAVLdBZ3pYMSdBPfnicm7V1PSc=";
     };
     matomo-beta = {
       version = "4.14.3";
@@ -108,7 +108,7 @@ let
           license = licenses.gpl3Plus;
           homepage = "https://matomo.org/";
           platforms = platforms.all;
-          maintainers = with maintainers; [ florianjacob kiwi sebbel twey boozedog ];
+          maintainers = with maintainers; [ florianjacob kiwi sebbel twey boozedog ] ++ teams.flyingcircus.members;
         };
       };
 in
