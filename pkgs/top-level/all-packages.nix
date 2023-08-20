@@ -14603,6 +14603,8 @@ with pkgs;
 
   xspim = callPackage ../development/tools/misc/xspim { };
 
+  xcrawl3r = callPackage ../tools/security/xcrawl3r { };
+
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
   xwallpaper = callPackage ../tools/X11/xwallpaper { };
