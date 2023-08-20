@@ -164,6 +164,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.tpm-dont-make-vendor-check-required-for-probe
       ];
     };
 
@@ -179,6 +180,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.tpm-dont-make-vendor-check-required-for-probe
       ];
     };
 

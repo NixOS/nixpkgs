@@ -57,4 +57,10 @@
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
   };
+
+  #fix https://bugzilla.kernel.org/show_bug.cgi?id=217804
+  tpm-dont-make-vendor-check-required-for-probe = {
+    name = "tpm-dont-make-vendor-check-required-for-probe";
+    patch = ./tpm-dont-make-vendor-check-required-for-probe.patch;
+  };
 }
