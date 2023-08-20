@@ -278,6 +278,25 @@ with self; {
     };
   };
 
+  AlienFFI = buildPerlPackage {
+    pname = "Alien-FFI";
+    version = "0.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-FFI-0.27.tar.gz";
+      hash = "sha256-Kbsgg/P5gqOfSFIkP09qEZFpZvIObneGTpkmnRHotl4=";
+    };
+    patches = [ ../development/perl-modules/Alien-FFI-dont-download.patch ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ pkgs.libffi CaptureTiny Test2Suite NetSSLeay MojoDOM58 IOSocketSSL ];
+    propagatedBuildInputs = [ AlienBuild ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Alien::FFI";
+      description = "Build and make available libffi";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   AlienGMP = buildPerlPackage {
     pname = "Alien-GMP";
     version = "1.16";
