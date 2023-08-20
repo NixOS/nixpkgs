@@ -9238,6 +9238,23 @@ with self; {
     };
   };
 
+  FFICStat = buildPerlPackage {
+    pname = "FFI-C-Stat";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.02.tar.gz";
+      hash = "sha256-ThXY9vn5hAfGUtnTE7URUHcTkgGOBx18GShDrILBvlk=";
+    };
+    buildInputs = [ Filechdir PathTiny Test2Suite TestScript ];
+    propagatedBuildInputs = [ FFIPlatypus RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/FFI::C::Stat";
+      description = "Object-oriented FFI interface to native stat and lstat";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   FFIPlatypus = buildPerlPackage {
     pname = "FFI-Platypus";
     version = "2.08";
