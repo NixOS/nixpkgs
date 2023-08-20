@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A daemon for managing internet connections";
     homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/";
-    maintainers = [ maintainers.matejc ];
+    maintainers = with maintainers; [ eclairevoyant ];
     platforms = platforms.linux;
     license = licenses.gpl2Only;
   };
