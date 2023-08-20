@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, php }:
+{ lib, stdenv, fetchurl, makeWrapper, php, nixosTests }:
 
 let
   versions = {
@@ -102,6 +102,10 @@ let
           done
           popd > /dev/null
         '';
+
+        passthru = {
+          tests = nixosTests.matomo."${pname}";
+        };
 
         meta = with lib; {
           description = "A real-time web analytics application";
