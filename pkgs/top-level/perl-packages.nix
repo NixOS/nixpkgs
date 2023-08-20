@@ -17040,6 +17040,22 @@ with self; {
     };
   };
 
+  TestArchiveLibarchive = buildPerlPackage {
+    pname = "Test-Archive-Libarchive";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test-Archive-Libarchive-0.02.tar.gz";
+      hash = "sha256-KxkYZx4F2i2dIiwQx9kXWFpiQYb+r7j4SQhZnDRwJ1E=";
+    };
+    propagatedBuildInputs = [ RefUtil Test2Suite ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Test::Archive::Libarchive";
+      description = "Testing tools for Archive::Libarchive";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   TestPostgreSQL = buildPerlModule {
     pname = "Test-PostgreSQL";
     version = "1.29";
