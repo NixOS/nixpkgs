@@ -16288,6 +16288,22 @@ with self; {
     };
   };
 
+  MojoliciousPluginRenderFile = buildPerlPackage {
+    pname = "Mojolicious-Plugin-RenderFile";
+    version = "0.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KO/KOORCHIK/Mojolicious-Plugin-RenderFile-0.12.tar.gz";
+      hash = "sha256-AT5CoswGvHBBuxPJ3ziK8kAQ5peTqN8PCrHSQKphFz8=";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      description = "\"render_file\" helper for Mojolicious";
+      homepage = "https://github.com/koorchik/Mojolicious-Plugin-RenderFile";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   MojoliciousPluginStatus = buildPerlPackage {
     pname = "Mojolicious-Plugin-Status";
     version = "1.17";
