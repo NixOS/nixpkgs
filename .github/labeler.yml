@@ -170,6 +170,7 @@
 
 "6.topic: TeX":
   - doc/languages-frameworks/texlive.section.md
+  - pkgs/test/texlive/**
   - pkgs/tools/typesetting/tex/**/*
 
 "6.topic: vim":
