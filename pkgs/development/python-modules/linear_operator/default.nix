@@ -2,9 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , jaxtyping
-, scipy
-, torch
 , pytestCheckHook
+, scipy
+, setuptools
+, setuptools-scm
+, torch
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -19,10 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-7NkcvVDwFaLHBZZhq7aKY3cWxe90qeKmodP6cVsdrPM=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'find_version("linear_operator", "version.py")' \"$version\"
-  '';
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     jaxtyping
@@ -30,10 +36,12 @@ buildPythonPackage rec {
     torch
   ];
 
-  checkInputs = [
+  pythonImportsCheck = [ "linear_operator" ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-  pythonImportsCheck = [ "linear_operator" ];
+
   disabledTests = [
     # flaky numerical tests
     "test_svd"
