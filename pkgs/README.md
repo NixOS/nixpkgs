@@ -25,12 +25,13 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 
 Each new package has a cost for the maintainers, Hydra and users downloading
 Nixpkgs. Before adding a new package, please consider the following questions:
-* Does the package have a release?
+* Is the package ready for general use? For example, if the author(s) is/are working towards the first release, it is probably too early.
 * How realistic is it that it will be used by other people?
 * Are you going to maintain the package?
 
 If any of these questions' answer is no, then you should probably not add the
-package.
+package. This is a general framework of understanding and exceptions might
+apply.
 
 ---
 
