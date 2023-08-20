@@ -47,11 +47,12 @@
         selfTargetTarget = pythonOnTargetForTarget.pkgs or {}; # There is no Python TargetTarget.
       };
       hooks = import ./hooks/default.nix;
-      keep = lib.extends hooks pythonPackagesFun;
+      keep = self: hooks self {};
       optionalExtensions = cond: as: lib.optionals cond as;
       pythonExtension = import ../../../top-level/python-packages.nix;
       python2Extension = import ../../../top-level/python2-packages.nix;
       extensions = lib.composeManyExtensions ([
+        hooks
         pythonExtension
       ] ++ (optionalExtensions (!self.isPy3k) [
         python2Extension
@@ -61,7 +62,7 @@
       aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
     in makeScopeWithSplicing' {
       inherit otherSplices keep;
-      f = lib.extends (lib.composeExtensions aliases extensions) keep;
+      f = lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun;
     }) {
       overrides = packageOverrides;
       python = self;
