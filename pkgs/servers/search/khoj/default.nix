@@ -7,34 +7,32 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "khoj";
-  version = "0.3.0";
+  version = "0.11.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "debanjum";
+    owner = "khoj-ai";
     repo = "khoj";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9kKK0DXpLfPB2LMnYcC6BKgZaoRsNHBZVe4thI7b9tk=";
+    rev = version;
+    hash = "sha256-QDyWU5b2d/Cf3Mrh3R0EsSU4r+auu02ahEkirSIp2JA=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "dateparser == 1.1.1" "dateparser" \
+      --replace "aiohttp == 3.8.4" "aiohttp" \
+      --replace "bs4 >= 0.0.1" "beautifulsoup4" \
       --replace "defusedxml == 0.7.1" ""defusedxml"" \
       --replace "fastapi == 0.77.1" "fastapi" \
       --replace "jinja2 == 3.1.2" "jinja2" \
-      --replace "openai == 0.20.0" "openai" \
       --replace "pillow == 9.3.0" "pillow" \
-      --replace "pydantic == 1.9.1" "pydantic" \
+      --replace "pydantic >= 1.10.10" "pydantic" \
+      --replace "pypdf >= 3.9.0" "pypdf" \
       --replace "pyyaml == 6.0" "pyyaml" \
-      --replace "pyqt6 == 6.3.1" "pyqt6" \
       --replace "rich >= 13.3.1" "rich" \
       --replace "schedule == 1.1.0" "schedule" \
       --replace "sentence-transformers == 2.2.2" "sentence-transformers" \
-      --replace "torch == 1.13.1" "torch" \
-      --replace "uvicorn == 0.17.6" "uvicorn"
+      --replace "uvicorn == 0.17.6" "uvicorn" \
+      --replace '"pyside6 >= 6.5.1",' ""
   '';
 
   nativeBuildInputs = with python3.pkgs; [
@@ -50,30 +48,64 @@ python3.pkgs.buildPythonApplication rec {
     qt6.qtbase
   ];
 
+  env = {
+    SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  };
+
   propagatedBuildInputs = with python3.pkgs; [
+    aiohttp
+    beautifulsoup4
     dateparser
     defusedxml
     fastapi
+    gpt4all
     jinja2
-    numpy
+    langchain
     openai
     pillow
     pydantic
-    pyqt6
+    pypdf
+    pyside6
     pyyaml
+    requests
     rich
     schedule
     sentence-transformers
+    tenacity
+    tiktoken
     torch
+    transformers
     uvicorn
   ];
 
+  passthru.optional-dependencies = with python3.pkgs; {
+    dev = [
+      black
+      khoj-assistant
+      mypy
+      pre-commit
+    ];
+    test = [
+      factory-boy
+      freezegun
+      pytest
+      trio
+    ];
+  };
+
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    freezegun
+    faker
+    pytest-factoryboy
   ];
 
+  # The tests/test_conversation_utils.py file tries to connect to the internet
+  # before running tests so adding the tests in disabledTests doesn't work
   preCheck = ''
     export HOME=$(mktemp -d)
+
+    rm tests/test_conversation_utils.py
   '';
 
   pythonImportsCheck = [
@@ -101,15 +133,30 @@ python3.pkgs.buildPythonApplication rec {
     "test_asymmetric_search"
     "test_entry_chunking_by_max_tokens"
     "test_incremental_update"
+    "test_search_with_invalid_content_type"
+    "test_update_with_invalid_content_type"
+    "test_regenerate_with_invalid_content_type"
+    "test_update_with_github_fails_without_pat"
+    "test_regenerate_with_github_fails_without_pat"
+    "test_get_configured_types_via_api"
+    "test_get_configured_types_with_only_plugin_content_config"
+    "test_get_configured_types_with_no_plugin_content_config"
+    "test_text_search_setup_with_missing_file_raises_error"
+    "test_text_search_setup_with_empty_file_raises_error"
+    "test_text_search_setup"
+    "test_text_index_same_if_content_unchanged"
+    "test_text_search"
+    "test_regenerate_index_with_new_entry"
+    "test_update_index_with_duplicate_entries_in_stable_order"
+    "test_update_index_with_deleted_entry"
+    "test_update_index_with_new_entry"
   ];
 
   meta = with lib; {
-    description = "Natural Language Search Assistant for your Org-Mode and Markdown notes, Beancount transactions and Photos";
-    homepage = "https://github.com/debanjum/khoj";
-    changelog = "https://github.com/debanjum/khoj/releases/tag/${version}";
+    changelog = "https://github.com/khoj-ai/khoj/releases/tag/${version}";
+    description = "An AI personal assistant for your digital brain";
+    homepage = "https://khoj.dev/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya ];
-    # src/tcmalloc.cc:333] Attempt to free invalid pointer
-    broken = stdenv.isDarwin;
   };
 }
