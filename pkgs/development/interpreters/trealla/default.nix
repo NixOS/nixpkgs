@@ -6,23 +6,24 @@
 , readline
 , valgrind
 , xxd
+, gitUpdater
 , checkLeaks ? false
 , enableFFI ? true
 , enableSSL ? true
 , enableThreads ? true
-, lineEditingLibrary ? "readline"
+, lineEditingLibrary ? "isocline"
 }:
 
 assert lib.elem lineEditingLibrary [ "isocline" "readline" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.23.48";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uL8nRVzb/PxrVvIQYRUkePTZIM8DBnc8eAU/2yfDNuQ=";
+    hash = "sha256-2VjghmQuOkPW335ryIZRSdOnYYhdJDacJ97TCizcVJ0=";
   };
 
   postPatch = ''
@@ -66,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   checkFlags = [
     "test"
   ] ++ lib.optional checkLeaks "leaks";
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://trealla-prolog.github.io/trealla/";
