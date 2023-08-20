@@ -23994,6 +23994,23 @@ with self; {
     };
   };
 
+  Test2ToolsFFI = buildPerlPackage {
+    pname = "Test2-Tools-FFI";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test2-Tools-FFI-0.06.tar.gz";
+      hash = "sha256-MA28QKEubG+7y7lv05uQK+bZZXJtrx5qtzuKCv0lLy8=";
+    };
+    buildInputs = [ FileShareDirInstall Test2Suite ];
+    propagatedBuildInputs = [ CaptureTiny FFICheckLib FFIPlatypus FileShareDirDist ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Test2::Tools::FFI";
+      description = "Tools for testing FFI";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   TestAbortable = buildPerlPackage {
     pname = "Test-Abortable";
     version = "0.002";
