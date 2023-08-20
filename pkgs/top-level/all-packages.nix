@@ -1798,6 +1798,8 @@ with pkgs;
 
   httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
 
+  immich-cli = callPackage ../tools/misc/immich-cli { };
+
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
   jobber = callPackage ../tools/system/jobber { };
