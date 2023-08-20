@@ -24,7 +24,7 @@ appimageTools.wrapType2 rec {
 
   meta = with lib; {
     description = "Bittorrent streaming software for cats. Stream anime torrents, real-time with no waiting for downloads (If xdg-open isn't working on login, try using ungoogled-chromium)";
-    homepage = "https://github.com/ThaUnknown/miru/";
+    homepage = "https://github.com/ThaUnknown/miru";
     license = lib.licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ lyonsyonii ];
