@@ -472,6 +472,19 @@ xdvi = stdenv.mkDerivation {
   # TODO: it's suspicious that mktexpk generates fonts into ~/.texlive2014
 };
 
+xpdfopen = stdenv.mkDerivation {
+  pname = "texlive-xpdfopen.bin";
+  inherit (lib.head texlive.xpdfopen.pkgs) version;
+
+  inherit (common) src;
+
+  buildInputs = [ libX11 ];
+
+  preConfigure = "cd utils/xpdfopen";
+
+  enableParallelBuilding = true;
+};
+
 } # un-indented
 
 // lib.optionalAttrs (!clisp.meta.broken) # broken on aarch64 and darwin (#20062)
