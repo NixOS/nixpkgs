@@ -13681,6 +13681,8 @@ with pkgs;
 
   timetagger = callPackage ../servers/timetagger { };
 
+  timetagger_cli = callPackage ../tools/misc/timetagger_cli { };
+
   timezonemap = callPackage ../development/libraries/timezonemap { };
 
   tzupdate = callPackage ../applications/misc/tzupdate { };
