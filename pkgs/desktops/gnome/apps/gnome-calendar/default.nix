@@ -7,7 +7,6 @@
 , wrapGAppsHook4
 , libgweather
 , geoclue2
-, geocode-glib_2
 , gettext
 , libxml2
 , gnome
@@ -22,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "44.1";
+  version = "45.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "MKG3OLZwvRJORiRo5nEYf8DbpbnuKvao69nnh0vzt34=";
+    sha256 = "mXMSqtx636LilvdmKs5n0+FSfkOEbzp5ktBbtjPPNdw=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     glib
     libgweather
     geoclue2
-    geocode-glib_2
     gsettings-desktop-schemas
     libadwaita
   ];
