@@ -1011,6 +1011,27 @@ with self; {
     };
   };
 
+  ArchiveLibarchive = buildPerlPackage {
+    pname = "Archive-Libarchive";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Archive-Libarchive-0.08.tar.gz";
+      hash = "sha256-6ONC1U/T1uXn4xYP4IjBOgpQM8/76JSBodJHHUNyAFk=";
+    };
+    patches = [ ../development/perl-modules/ArchiveLibarchive-set-findlib-path.patch ];
+    postPatch = ''
+      substituteInPlace lib/Archive/Libarchive/Lib.pm --replace "@@libarchive@@" "${pkgs.libarchive.lib}/lib"
+    '';
+    buildInputs = [ FFIC Filechdir PathTiny SubIdentify TermTable Test2Suite Test2ToolsMemoryCycle TestArchiveLibarchive TestScript ];
+    propagatedBuildInputs = [ FFICStat FFICheckLib FFIPlatypus FFIPlatypusTypeEnum FFIPlatypusTypePtrObject RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Archive::Libarchive";
+      description = "Modern Perl bindings to libarchive";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   ArrayCompare = buildPerlModule {
     pname = "Array-Compare";
     version = "3.0.7";
