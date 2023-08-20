@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = " Django admin CKEditor integration";
     homepage = "https://github.com/django-ckeditor/django-ckeditor";
+    changelog = "https://github.com/django-ckeditor/django-ckeditor/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };
