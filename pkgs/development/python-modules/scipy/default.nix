@@ -33,11 +33,9 @@ let
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
-  # Even if you do update these hashes manually, don't change their base
-  # (base16 or base64), because the update script uses sed regexes to replace
-  # them with the updated hashes.
-  version = "1.11.1";
-  srcHash = "sha256-bgnYXe3EhzL7+Gfriz1cXCl2eYQJ8zF+rcIwHyZR8bQ=";
+  # The update script uses sed regexes to replace them with the updated hashes.
+  version = "1.11.2";
+  srcHash = "sha256-7FE740/yKUXtujVX60fQB/xvCZFfV69FRihvSi6+UWo=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -80,6 +78,7 @@ in buildPythonPackage {
     })
   ];
 
+  # Relax deps a bit
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'numpy==' 'numpy>=' \
@@ -117,9 +116,6 @@ in buildPythonPackage {
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
-    # Relax deps a bit
-    substituteInPlace pyproject.toml \
-      --replace 'numpy==' 'numpy>='
     # Helps parallelization a bit
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
     # We download manually the datasets and this variable tells the pooch

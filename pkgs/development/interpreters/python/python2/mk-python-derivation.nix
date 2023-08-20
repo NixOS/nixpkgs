@@ -1,4 +1,4 @@
-# Generic builder.
+# Generic builder only used for EOL and deprecated Python 2.
 
 { lib
 , config
@@ -11,12 +11,10 @@
 , namePrefix
 , update-python-libraries
 , setuptools
-, flitBuildHook
-, pypaBuildHook
-, pypaInstallHook
+, pipBuildHook
+, pipInstallHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
-, pythonNamespacesHook
 , pythonOutputDistHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
@@ -85,7 +83,6 @@
 # Several package formats are supported.
 # "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
 # "wheel" : Install from a pre-compiled wheel.
-# "flit" : Install a flit package. This builds a wheel.
 # "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
 # "egg": Install a package from an egg.
 # "other" : Provide your own buildPhase and installPhase.
@@ -100,6 +97,8 @@
 , disabledTestPaths ? []
 
 , ... } @ attrs:
+
+assert lib.assertMsg (format != "flit") "flit is not a supported Python 2 format";
 
 let
   inherit (python) stdenv;
@@ -161,20 +160,6 @@ let
 
     in inputs: builtins.map (checkDrv) inputs;
 
-  isBootstrapInstallPackage = builtins.elem (attrs.pname or null) [
-    "flit-core" "installer"
-  ];
-
-  isBootstrapPackage = isBootstrapInstallPackage || builtins.elem (attrs.pname or null) ([
-    "build" "packaging" "pyproject-hooks" "wheel"
-  ] ++ lib.optionals (python.pythonOlder "3.11") [
-    "tomli"
-  ]);
-
-  isSetuptoolsDependency = builtins.elem (attrs.pname or null) [
-    "setuptools" "wheel"
-  ];
-
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
@@ -188,15 +173,7 @@ let
       wrapPython
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRemoveTestsDirHook
-    ] ++ lib.optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
-      #
-      # 1. When building a package that is also part of the bootstrap chain, we
-      #    must ignore conflicts after installation, because there will be one with
-      #    the package in the bootstrap.
-      #
-      # 2. When a package is a dependency of setuptools, we must ignore conflicts
-      #    because the hook that checks for conflicts uses setuptools.
-      #
+    ] ++ lib.optionals catchConflicts [
       pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
@@ -204,33 +181,17 @@ let
       unzip
     ] ++ lib.optionals (format == "setuptools") [
       setuptoolsBuildHook
-    ] ++ lib.optionals (format == "flit") [
-      flitBuildHook
     ] ++ lib.optionals (format == "pyproject") [(
-      if isBootstrapPackage then
-        pypaBuildHook.override {
-          inherit (python.pythonForBuild.pkgs.bootstrap) build;
-          wheel = null;
-        }
-      else
-        pypaBuildHook
+      pipBuildHook
     )] ++ lib.optionals (format == "wheel") [
       wheelUnpackHook
     ] ++ lib.optionals (format == "egg") [
       eggUnpackHook eggBuildHook eggInstallHook
     ] ++ lib.optionals (format != "other") [(
-      if isBootstrapInstallPackage then
-        pypaInstallHook.override {
-          inherit (python.pythonForBuild.pkgs.bootstrap) installer;
-        }
-      else
-        pypaInstallHook
+      pipInstallHook
     )] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
       # This is a test, however, it should be ran independent of the checkPhase and checkInputs
       pythonImportsCheckHook
-    ] ++ lib.optionals (python.pythonAtLeast "3.3") [
-      # Optionally enforce PEP420 for python3
-      pythonNamespacesHook
     ] ++ lib.optionals withDistOutput [
       pythonOutputDistHook
     ] ++ nativeBuildInputs;
