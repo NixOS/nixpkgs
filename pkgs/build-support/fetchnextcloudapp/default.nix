@@ -5,18 +5,10 @@
 , appVersion ? null
 , license
 , patches ? [ ]
-, name ? null
-, version ? null
 , description ? null
 , homepage ? null
 }:
-if name != null || version != null then throw ''
-  `pkgs.fetchNextcloudApp` has been changed to use `fetchzip`.
-  To update, please
-  * remove `name`/`version`
-  * update the hash
-''
-else applyPatches ({
+applyPatches ({
   inherit patches;
   src = fetchzip {
     inherit url sha256;
@@ -31,6 +23,10 @@ else applyPatches ({
     meta = {
       license = lib.licenses.${license};
       longDescription = description;
+      inherit homepage;
+    } // lib.optionalAttrs (description != null) {
+      longDescription = description;
+    } // lib.optionalAttrs (homepage != null) {
       inherit homepage;
     };
   };
