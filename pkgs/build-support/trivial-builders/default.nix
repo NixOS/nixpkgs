@@ -914,7 +914,7 @@ rec {
       installPhase = "cp -R ./ $out";
     }
     # Carry `meta` information from the underlying `src` if present.
-    // (optionalAttrs (builtins.hasAttr "meta" src) src.meta)
+    // (optionalAttrs (src?meta) { inherit (src) meta; })
     // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
 
   /* An immutable file in the store with a length of 0 bytes. */
