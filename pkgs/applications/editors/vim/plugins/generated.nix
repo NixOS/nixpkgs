@@ -2997,12 +2997,12 @@ final: prev:
 
   dressing-nvim = buildVimPluginFrom2Nix {
     pname = "dressing.nvim";
-    version = "2023-08-13";
+    version = "2023-08-19";
     src = fetchFromGitHub {
       owner = "stevearc";
       repo = "dressing.nvim";
-      rev = "6bde51adabba06f7fd4a469885a85f36d78a5f52";
-      sha256 = "00djz2ppikh911ldndcaygb95a7l48s7wmq7a9p9vr4vzwhxab5l";
+      rev = "ee571505f3566f84fd252e76c4ce6df6eaf2fb94";
+      sha256 = "0xahisrz7yz0838ijvg2s6wbskdb443fal72yxjr2h5z1dvzxswq";
     };
     meta.homepage = "https://github.com/stevearc/dressing.nvim/";
   };
@@ -4557,6 +4557,18 @@ final: prev:
     meta.homepage = "https://github.com/nanotech/jellybeans.vim/";
   };
 
+  jinja-vim = buildVimPluginFrom2Nix {
+    pname = "jinja.vim";
+    version = "2020-06-18";
+    src = fetchFromGitHub {
+      owner = "HiPhish";
+      repo = "jinja.vim";
+      rev = "51b8a2a504416c4959127c82eac26f14f3508975";
+      sha256 = "15ax7v6crdzra4sqqmjpvl9q1p9dmsksrs4j68zqqrj6kka0zkgn";
+    };
+    meta.homepage = "https://github.com/HiPhish/jinja.vim/";
+  };
+
   jq-vim = buildVimPluginFrom2Nix {
     pname = "jq.vim";
     version = "2022-11-26";
@@ -5931,8 +5943,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "NeogitOrg";
       repo = "neogit";
-      rev = "cdea52c881ea4944b46f09b5c4705a51dc5cf390";
-      sha256 = "06hi06pkr0bww1nsrx22llhgfllmbykshwb2k8y2wbl03fjqyixz";
+      rev = "7cba95de79476d28c19e8ee34b303ad60fdef59f";
+      sha256 = "18jixqv9mcvc873gs39g6fd84s0lpyglqk25gy00siznyjl2mcis";
     };
     meta.homepage = "https://github.com/NeogitOrg/neogit/";
   };
