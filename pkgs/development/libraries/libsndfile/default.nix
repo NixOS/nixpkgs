@@ -33,6 +33,14 @@ stdenv.mkDerivation rec {
   # Needed on Darwin.
   NIX_CFLAGS_LINK = "-logg -lvorbis";
 
+  doCheck = true;
+  preCheck = ''
+    patchShebangs tests/test_wrapper.sh tests/pedantic-header-test.sh
+
+    substituteInPlace tests/test_wrapper.sh \
+      --replace '/usr/bin/env' "$(type -P env)"
+  '';
+
   meta = with lib; {
     description = "A C library for reading and writing files containing sampled sound";
     homepage    = "https://libsndfile.github.io/libsndfile/";
