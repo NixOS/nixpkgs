@@ -30,9 +30,13 @@ package's `meta.maintainers` list, and send a PR with the changes.
 
 ### How to lose maintainer status
 
-Maintainers that have become inactive for more than 3 months on a given
-package can be removed. This helps us keep an accurate view of what parts of
-nixpkgs are well maintained or not.
+Maintainers that have become inactive on a given package can be removed. This
+helps us keep an accurate view of what parts of nixpkgs are well maintained or
+not.
+
+The inactivity measure is currently not strictly enforced. We would typically
+look at it if we notice that the author hasn't reacted to package-related
+notifications for more than 3 months.
 
 The maintainer is welcome to come back at any time.
 
