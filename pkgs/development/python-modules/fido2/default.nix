@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XcSVyoxZwcM3ODtLjDFNRrktXG/GUOcZhMbX+VQHn8M=";
+    hash = "sha256-YRDZExBvdhmSAbMtJisoV1YsxGuh0LnFH7zjDck2xXM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
