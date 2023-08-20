@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calc";
-  version = "2.14.1.6";
+  version = "2.14.3.5";
 
   src = fetchurl {
     urls = [
       "https://github.com/lcn2/calc/releases/download/v${finalAttrs.version}/calc-${finalAttrs.version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/calc-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-zlmzCCltGB3ipgWBF9vu2szmAZguPDiR2K3xdTnWf0A=";
+    hash = "sha256-4eXs6NDfsJO5Vr9Mo2jC16hTRAyt++1s+Z/JrWDKwUk=";
   };
 
   postPatch = ''
