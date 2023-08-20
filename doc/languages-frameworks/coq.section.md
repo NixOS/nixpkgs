@@ -7,6 +7,7 @@ The Coq derivation is overridable through the `coq.override overrides`, where ov
 * `version` (optional, defaults to the latest version of Coq selected for nixpkgs, see `pkgs/top-level/coq-packages` to witness this choice), which follows the conventions explained in the `coqPackages` section below,
 * `customOCamlPackages` (optional, defaults to `null`, which lets Coq choose a version automatically), which can be set to any of the ocaml packages attribute of `ocaml-ng` (such as `ocaml-ng.ocamlPackages_4_10` which is the default for Coq 8.11 for example).
 * `coq-version` (optional, defaults to the short version e.g. "8.10"), is a version number of the form "x.y" that indicates which Coq's version build behavior to mimic when using a source which is not a release. E.g. `coq.override { version = "d370a9d1328a4e1cdb9d02ee032f605a9d94ec7a"; coq-version = "8.10"; }`.
+* `native-compiler` (optional, defaults to `false`), enables or disables compilation of Coq files to natively executable code. Coq with this enabled is available through the `coq_native` package.
 
 The associated package set can be obtained using `mkCoqPackages coq`, where `coq` is the derivation to use.
 
@@ -88,6 +89,10 @@ with lib; mkCoqDerivation {
   };
 }
 ```
+
+## Native compilation {#coq-native-compilation}
+
+Variants of the `coq` and `coqPackages` derivations, for each version of Coq, with `native-compilation` enabled are available. These are called `coq_native` and `coq_nativePackages` respectively.
 
 ## Three ways of overriding Coq packages {#coq-overriding-packages}
 

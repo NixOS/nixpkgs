@@ -39342,20 +39342,20 @@ with pkgs;
       ocamlPackages_4_14
     ;
   }) mkCoqPackages
-    coqPackages_8_5  coq_8_5
-    coqPackages_8_6  coq_8_6
-    coqPackages_8_7  coq_8_7
-    coqPackages_8_8  coq_8_8
-    coqPackages_8_9  coq_8_9
-    coqPackages_8_10 coq_8_10
-    coqPackages_8_11 coq_8_11
-    coqPackages_8_12 coq_8_12
-    coqPackages_8_13 coq_8_13
-    coqPackages_8_14 coq_8_14
-    coqPackages_8_15 coq_8_15
-    coqPackages_8_16 coq_8_16
-    coqPackages_8_17 coq_8_17
-    coqPackages      coq
+    coqPackages_8_5  coq_8_5  coq_nativePackages_8_5  coq_native_8_5
+    coqPackages_8_6  coq_8_6  coq_nativePackages_8_6  coq_native_8_6
+    coqPackages_8_7  coq_8_7  coq_nativePackages_8_7  coq_native_8_7
+    coqPackages_8_8  coq_8_8  coq_nativePackages_8_8  coq_native_8_8
+    coqPackages_8_9  coq_8_9  coq_nativePackages_8_9  coq_native_8_9
+    coqPackages_8_10 coq_8_10 coq_nativePackages_8_10 coq_native_8_10
+    coqPackages_8_11 coq_8_11 coq_nativePackages_8_11 coq_native_8_11
+    coqPackages_8_12 coq_8_12 coq_nativePackages_8_12 coq_native_8_12
+    coqPackages_8_13 coq_8_13 coq_nativePackages_8_13 coq_native_8_13
+    coqPackages_8_14 coq_8_14 coq_nativePackages_8_14 coq_native_8_14
+    coqPackages_8_15 coq_8_15 coq_nativePackages_8_15 coq_native_8_15
+    coqPackages_8_16 coq_8_16 coq_nativePackages_8_16 coq_native_8_16
+    coqPackages_8_17 coq_8_17 coq_nativePackages_8_17 coq_native_8_17
+    coqPackages      coq      coq_nativePackages      coq_native
   ;
 
   coq2html = callPackage ../tools/typesetting/coq2html { };

@@ -10,6 +10,7 @@
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12
 , ocamlPackages_4_14
 , ncurses
+, native-compiler ? false # Whether to build with -native-compiler yes
 , buildIde ? null # default is true for Coq < 8.14 and false for Coq >= 8.14
 , glib, gnome, wrapGAppsHook, makeDesktopItem, copyDesktopItems
 , csdp ? null
@@ -67,6 +68,7 @@ let
   buildIde = args.buildIde or (!coqAtLeast "8.14");
   ideFlags = optionalString (buildIde && !coqAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
+  nativeFlags = optionalString native-compiler "-native-compiler yes";
   csdpPatch = lib.optionalString (csdp != null) ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
@@ -82,6 +84,7 @@ let
   ocamlNativeBuildInputs = with ocamlPackages; [ ocaml findlib ]
     ++ optional (coqAtLeast "8.14") dune_3;
   ocamlPropagatedBuildInputs = [ ]
+    ++ optional native-compiler [ ocamlPackages.ocaml ]
     ++ optional (!coqAtLeast "8.10") ocamlPackages.camlp5
     ++ optional (!coqAtLeast "8.13") ocamlPackages.num
     ++ optional (coqAtLeast "8.13") ocamlPackages.zarith;
@@ -175,9 +178,13 @@ self = stdenv.mkDerivation {
 
   preConfigure = if coqAtLeast "8.10" then ''
     patchShebangs dev/tools/
+    configureFlagsArray=(
+      ${nativeFlags}
+    )
   '' else ''
     configureFlagsArray=(
       ${ideFlags}
+      ${nativeFlags}
     )
   '';
 
@@ -219,7 +226,7 @@ self = stdenv.mkDerivation {
     homepage = "http://coq.inria.fr";
     license = licenses.lgpl21;
     branch = coq-version;
-    maintainers = with maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];
+    maintainers = with maintainers; [ alizter roconnor thoughtpolice vbgl Zimmi48 ];
     platforms = platforms.unix;
     mainProgram = "coqide";
   };

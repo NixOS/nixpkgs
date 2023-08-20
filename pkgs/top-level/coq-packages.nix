@@ -145,14 +145,13 @@ let
               else v))
       ) (lib.attrNames set)
     );
-  mkCoq = version: callPackage ../applications/science/logic/coq {
-    inherit version
+  mkCoq = {version, native-compiler ? false}: callPackage ../applications/science/logic/coq {
+    inherit version native-compiler
       ocamlPackages_4_05
       ocamlPackages_4_09
       ocamlPackages_4_10
       ocamlPackages_4_12
-      ocamlPackages_4_14
-    ;
+      ocamlPackages_4_14;
   };
 in rec {
 
@@ -168,25 +167,25 @@ in rec {
     let self = lib.makeScope newScope (lib.flip mkCoqPackages' coq); in
     self.filterPackages (! coq.dontFilter or false);
 
-  coq_8_5  = mkCoq "8.5";
-  coq_8_6  = mkCoq "8.6";
-  coq_8_7  = mkCoq "8.7";
-  coq_8_8  = mkCoq "8.8";
-  coq_8_9  = mkCoq "8.9";
-  coq_8_10 = mkCoq "8.10";
-  coq_8_11 = mkCoq "8.11";
-  coq_8_12 = mkCoq "8.12";
-  coq_8_13 = mkCoq "8.13";
-  coq_8_14 = mkCoq "8.14";
-  coq_8_15 = mkCoq "8.15";
-  coq_8_16 = mkCoq "8.16";
-  coq_8_17 = mkCoq "8.17";
+  coq_8_5  = mkCoq { version = "8.5"; };
+  coq_8_6  = mkCoq { version = "8.6"; };
+  coq_8_7  = mkCoq { version = "8.7"; };
+  coq_8_8  = mkCoq { version = "8.8"; };
+  coq_8_9  = mkCoq { version = "8.9"; };
+  coq_8_10 = mkCoq { version = "8.10"; };
+  coq_8_11 = mkCoq { version = "8.11"; };
+  coq_8_12 = mkCoq { version = "8.12"; };
+  coq_8_13 = mkCoq { version = "8.13"; };
+  coq_8_14 = mkCoq { version = "8.14"; };
+  coq_8_15 = mkCoq { version = "8.15"; };
+  coq_8_16 = mkCoq { version = "8.16"; };
+  coq_8_17 = mkCoq { version = "8.17"; };
 
-  coqPackages_8_5 = mkCoqPackages coq_8_5;
-  coqPackages_8_6 = mkCoqPackages coq_8_6;
-  coqPackages_8_7 = mkCoqPackages coq_8_7;
-  coqPackages_8_8 = mkCoqPackages coq_8_8;
-  coqPackages_8_9 = mkCoqPackages coq_8_9;
+  coqPackages_8_5  = mkCoqPackages coq_8_5;
+  coqPackages_8_6  = mkCoqPackages coq_8_6;
+  coqPackages_8_7  = mkCoqPackages coq_8_7;
+  coqPackages_8_8  = mkCoqPackages coq_8_8;
+  coqPackages_8_9  = mkCoqPackages coq_8_9;
   coqPackages_8_10 = mkCoqPackages coq_8_10;
   coqPackages_8_11 = mkCoqPackages coq_8_11;
   coqPackages_8_12 = mkCoqPackages coq_8_12;
@@ -198,4 +197,34 @@ in rec {
   coqPackages = recurseIntoAttrs coqPackages_8_17;
   coq = coqPackages.coq;
 
+  # Coq + native-compiler
+  coq_native_8_5  = mkCoq { version = "8.5";  native-compiler = true; };
+  coq_native_8_6  = mkCoq { version = "8.6";  native-compiler = true; };
+  coq_native_8_7  = mkCoq { version = "8.7";  native-compiler = true; };
+  coq_native_8_8  = mkCoq { version = "8.8";  native-compiler = true; };
+  coq_native_8_9  = mkCoq { version = "8.9";  native-compiler = true; };
+  coq_native_8_10 = mkCoq { version = "8.10"; native-compiler = true; };
+  coq_native_8_11 = mkCoq { version = "8.11"; native-compiler = true; };
+  coq_native_8_12 = mkCoq { version = "8.12"; native-compiler = true; };
+  coq_native_8_13 = mkCoq { version = "8.13"; native-compiler = true; };
+  coq_native_8_14 = mkCoq { version = "8.14"; native-compiler = true; };
+  coq_native_8_15 = mkCoq { version = "8.15"; native-compiler = true; };
+  coq_native_8_16 = mkCoq { version = "8.16"; native-compiler = true; };
+  coq_native_8_17 = mkCoq { version = "8.17"; native-compiler = true; };
+
+  coq_nativePackages_8_5  = mkCoqPackages coq_native_8_5;
+  coq_nativePackages_8_6  = mkCoqPackages coq_native_8_6;
+  coq_nativePackages_8_7  = mkCoqPackages coq_native_8_7;
+  coq_nativePackages_8_8  = mkCoqPackages coq_native_8_8;
+  coq_nativePackages_8_9  = mkCoqPackages coq_native_8_9;
+  coq_nativePackages_8_10 = mkCoqPackages coq_native_8_10;
+  coq_nativePackages_8_11 = mkCoqPackages coq_native_8_11;
+  coq_nativePackages_8_12 = mkCoqPackages coq_native_8_12;
+  coq_nativePackages_8_13 = mkCoqPackages coq_native_8_13;
+  coq_nativePackages_8_14 = mkCoqPackages coq_native_8_14;
+  coq_nativePackages_8_15 = mkCoqPackages coq_native_8_15;
+  coq_nativePackages_8_16 = mkCoqPackages coq_native_8_16;
+  coq_nativePackages_8_17 = mkCoqPackages coq_native_8_17;
+  coq_nativePackages = recurseIntoAttrs coq_nativePackages_8_17;
+  coq_native = coq_nativePackages.coq;
 }
