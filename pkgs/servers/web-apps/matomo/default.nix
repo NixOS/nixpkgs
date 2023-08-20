@@ -7,11 +7,11 @@ let
       hash = "sha256-XnfiprGLqFQqPk30gcAVLdBZ3pYMSdBPfnicm7V1PSc=";
     };
     matomo-beta = {
-      version = "4.14.3";
+      version = "5.0.0";
       # `beta` examples: "b1", "rc1", null
       # when updating: use null if stable version is >= latest beta or release candidate
-      beta = "b6";
-      hash = "sha256-WGyGoTugxHgB2by1F57PQhyqQRjoKBCvwFBZvpsHwZg=";
+      beta = "rc3";
+      hash = "sha256-Q5GB4i0ew6+tr8Bsm9PYkzJ8U6DmVPwG2QCi8CTge5E=";
     };
   };
   common = pname: { version, hash, beta ? null }:
@@ -39,10 +39,11 @@ let
           # TODO: is upstream interested in this?
           # -> discussion at https://github.com/matomo-org/matomo/issues/12646
           ./make-localhost-default-database-host.patch
-
           # This changes the default config for path.geoip2 so that it doesn't point
           # to the nix store.
-          ./change-path-geoip2.patch
+          (if lib.versionOlder version "5.0"
+           then ./change-path-geoip2-4.x.patch
+           else ./change-path-geoip2-5.x.patch)
         ];
 
         # this bootstrap.php adds support for getting PIWIK_USER_PATH
