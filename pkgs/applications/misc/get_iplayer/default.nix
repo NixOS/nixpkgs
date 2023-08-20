@@ -11,8 +11,8 @@ perlPackages.buildPerlPackage rec {
     sha256 = "+ChCF27nmPKbqaZVxsZ6TlbzSdEz6RfMs87NE8xaSRw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
     HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple Mojolicious
   ];
