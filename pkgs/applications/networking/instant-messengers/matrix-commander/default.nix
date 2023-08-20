@@ -23,7 +23,7 @@ buildPythonApplication rec {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    sha256 = "sha256-qL6ARkAWu0FEuYK2e9Z9hMSfK4TW0kGgoIFUfJ8Dgwk=";
+    hash = "sha256-qL6ARkAWu0FEuYK2e9Z9hMSfK4TW0kGgoIFUfJ8Dgwk=";
   };
 
   format = "pyproject";
