@@ -9221,6 +9221,23 @@ with self; {
     };
   };
 
+  FFIPlatypus = buildPerlPackage {
+    pname = "FFI-Platypus";
+    version = "2.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-2.08.tar.gz";
+      hash = "sha256-EbOrEU7ZY1YxzYWzjSKXhuFEv5Sjr5rAnD17s0M2uSQ=";
+    };
+    buildInputs = [ AlienFFI Test2Suite ];
+    propagatedBuildInputs = [ CaptureTiny FFICheckLib ];
+    meta = {
+      homepage = "https://pl.atypus.org";
+      description = "Write Perl bindings to non-Perl libraries with FFI. No XS required";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   FennecLite = buildPerlModule {
     pname = "Fennec-Lite";
     version = "0.004";
