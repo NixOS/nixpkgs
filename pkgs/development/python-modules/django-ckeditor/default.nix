@@ -1,19 +1,22 @@
 { lib
 , buildPythonPackage
 , django
+, django-extensions
 , django-js-asset
 , fetchFromGitHub
-, python
-, setuptools-scm
-, django-extensions
-, selenium
 , pillow
+, python
+, pythonOlder
+, selenium
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "django-ckeditor";
   version = "6.5.1";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django-ckeditor";
