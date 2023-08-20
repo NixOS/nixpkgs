@@ -5,7 +5,7 @@ appimageTools.wrapType2 rec {
   version = "3.11.6";
 
   src = fetchurl {
-    url = "${homepage}/releases/download/v${version}/${filename}";
+    url = "${homepage}/releases/download/v${version}/linux-Miru-${version}.AppImage";
     hash = "0abc03c5a8cf9557309d054d2281b4267951f5d929c8ee11d4f015ed335ef2f2";
   };
 
