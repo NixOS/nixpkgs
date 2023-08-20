@@ -6,7 +6,7 @@ appimageTools.wrapType2 rec {
 
   src = fetchurl {
     url = "${meta.homepage}/releases/download/v${version}/linux-Miru-${version}.AppImage";
-    hash = "0abc03c5a8cf9557309d054d2281b4267951f5d929c8ee11d4f015ed335ef2f2";
+    hash = "sha256-CrwDxajPlVcwnQVNIoG0JnlR9dkpyO4R1PAV7TNe8vI=";
   };
 
   extraInstallCommands =
