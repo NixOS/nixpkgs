@@ -1032,6 +1032,23 @@ with self; {
     };
   };
 
+  ArchiveLibarchiveExtract = buildPerlPackage {
+    pname = "Archive-Libarchive-Extract";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Archive-Libarchive-Extract-0.03.tar.gz";
+      hash = "sha256-yXfAR0hnIX6zJvte5pA04e9spBQUkWHjEpAblf0SwIE=";
+    };
+    buildInputs = [ Test2Suite TestScript ];
+    propagatedBuildInputs = [ ArchiveLibarchive Filechdir PathTiny RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Archive::Libarchive::Extract";
+      description = "An archive extracting mechanism (using libarchive)";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   ArrayCompare = buildPerlModule {
     pname = "Array-Compare";
     version = "3.0.7";
