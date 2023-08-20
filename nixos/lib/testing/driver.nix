@@ -175,7 +175,12 @@ in
   };
 
   config = {
-    _module.args.hostPkgs = config.hostPkgs;
+    _module.args = {
+      hostPkgs =
+        # Comment is in nixos/modules/misc/nixpkgs.nix
+        lib.mkOverride lib.modules.defaultOverridePriority
+          config.hostPkgs.__splicedPackages;
+    };
 
     driver = withChecks driver;
 
