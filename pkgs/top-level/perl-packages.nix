@@ -15482,6 +15482,23 @@ with self; {
     };
   };
 
+  MinionBackendRedis = buildPerlModule {
+    pname = "Minion-Backend-Redis";
+    version = "0.003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DF/DFUG/Minion-Backend-Redis-0.003.tar.gz";
+      hash = "sha256-zXZRIQbfHKmQF75fObSmXgSCawzZQxe3GsAWGzXzI6A=";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ Minion MojoRedis Mojolicious SortVersions ];
+    meta = {
+      homepage = "https://github.com/Difegue/Minion-Backend-Redis";
+      description = "Redis backend for Minion job queue";
+      license = with lib.licenses; [ artistic2 ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   MinionBackendSQLite = buildPerlModule {
     pname = "Minion-Backend-SQLite";
     version = "5.0.6";
