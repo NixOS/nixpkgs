@@ -75,6 +75,6 @@ buildGoModule rec {
       vulnerability detection when used with a scanner tool like Grype.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ jk developer-guy ];
+    maintainers = with maintainers; [ jk developer-guy kashw2 ];
   };
 }
