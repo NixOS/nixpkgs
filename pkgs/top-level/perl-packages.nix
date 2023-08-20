@@ -9238,6 +9238,23 @@ with self; {
     };
   };
 
+  FFIPlatypusTypePtrObject = buildPerlPackage {
+    pname = "FFI-Platypus-Type-PtrObject";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-Type-PtrObject-0.03.tar.gz";
+      hash = "sha256-4elJB++QtANgqabAPSlaEwR9T2ybVqyvHfK1TRcwf3Q=";
+    };
+    buildInputs = [ Test2Suite Test2ToolsFFI ];
+    propagatedBuildInputs = [ FFIPlatypus RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/FFI::Platypus::Type::PtrObject";
+      description = "Platypus custom type for an object wrapped around an opaque pointer";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   FennecLite = buildPerlModule {
     pname = "Fennec-Lite";
     version = "0.004";
