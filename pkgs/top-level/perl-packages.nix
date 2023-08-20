@@ -9206,6 +9206,23 @@ with self; {
     };
   };
 
+  FFIC = buildPerlPackage {
+    pname = "FFI-C";
+    version = "0.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-0.15.tar.gz";
+      hash = "sha256-63BgfmZzvMsY3yf0zuRZ+23EGODak+aSzcNVX+QNL04=";
+    };
+    buildInputs = [ CaptureTiny PathTiny Test2Suite ];
+    propagatedBuildInputs = [ ClassInspector FFIPlatypus FFIPlatypusTypeEnum RefUtil SubIdentify SubInstall ];
+    meta = {
+      homepage = "https://metacpan.org/pod/FFI::C";
+      description = "C data types for FFI";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   FFICheckLib = buildPerlPackage {
     pname = "FFI-CheckLib";
     version = "0.27";
