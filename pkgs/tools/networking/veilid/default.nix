@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.1.7";
+  version = "0.1.9";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-wG8uxmohIOb8V+5gqhjM4hHG/6uHg0ehAtP2z5eoflU=";
+    sha256 = "sha256-mkb10JishprTyHV5lsFp/P57E2xTX+baHkJM4K2p4x4=";
   };
 
   cargoLock = {

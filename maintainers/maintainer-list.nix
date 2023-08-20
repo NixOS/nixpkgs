@@ -5177,6 +5177,11 @@
     githubId = 1583484;
     name = "Andrey Golovizin";
   };
+  errnoh = {
+    github = "errnoh";
+    githubId = 373946;
+    name = "Erno Hopearuoho";
+  };
   ersin = {
     email = "me@ersinakinci.com";
     github = "ersinakinci";
@@ -11101,6 +11106,12 @@
     name = "Michael Vogel";
     github = "michaelCTS";
     githubId = 132582212;
+  };
+  michaeldonovan = {
+    email = "michael@mdonovan.dev";
+    name = "Michael Donovan";
+    github = "michaeldonovan";
+    githubId = 14077230;
   };
   michaelgrahamevans = {
     email = "michaelgrahamevans@gmail.com";

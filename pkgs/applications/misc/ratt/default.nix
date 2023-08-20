@@ -1,17 +1,17 @@
 { buildGoModule, fetchFromSourcehut, lib }:
 buildGoModule rec {
   pname = "ratt";
-  version = "unstable-2022-01-11";
+  version = "unstable-2023-02-12";
 
   src = fetchFromSourcehut {
     owner = "~ghost08";
     repo = "ratt";
-    rev = "eac7e14b15ad4e916e7d072780397c414c740630";
-    hash = "sha256-/WzPF98MovNg4t5NJhL2Z1bAFDG/3I56M9YgRJF7Wjk=";
+    rev = "ed1a675685b9d86d6602e168199ba9b4260f5f06";
+    hash = "sha256-HfS97Lxt6FAj/2/WAzLI06F/h6TP5m2lHHOTAs8XNFY=";
   };
 
   proxyVendor = true;
-  vendorSha256 = "sha256-4TEdnJ7lCuBka6rtoKowf5X3VqCgfwvGHeJ5B5Q5C20=";
+  vendorHash = "sha256-6cpHDwnxdc/9YPj77JVuT5ZDFjKkF6nBX4RgZr/9fFY=";
 
   # tests try to access the internet to scrape websites
   doCheck = false;
@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://git.sr.ht/~ghost08/ratt";
     license = licenses.mit;
     maintainers = with maintainers; [ kmein ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

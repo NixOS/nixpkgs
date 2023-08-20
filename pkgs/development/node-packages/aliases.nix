@@ -49,13 +49,17 @@ mapAliases {
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
+  inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
+  inherit (pkgs) clean-css-cli; # added 2023-08-18
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   flood = pkgs.flood; # Added 2023-07-25
   gtop = pkgs.gtop; # added 2023-07-31
   hueadm = pkgs.hueadm; # added 2023-07-31
+  indium = throw "indium was removed because it was broken"; # added 2023-08-19
+  inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   karma = pkgs.karma-runner; # added 2023-07-29
   manta = pkgs.node-manta; # Added 2023-05-06
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
