@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "django-ckeditor";
-  version = "6.5.1";
+  version = "6.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "django-ckeditor";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Gk8mAG0WIMQZolaE1sRDmzSkfiNHi/BWiotEtIC4WLk=";
+    hash = "sha256-mZQ5s3YbumYmT0zRWPFIvzt2TbtDLvVcJjZVAwn31E8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
