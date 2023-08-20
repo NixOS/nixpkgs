@@ -40382,6 +40382,8 @@ with pkgs;
 
   morph = callPackage ../tools/package-management/morph { };
 
+  mus = callPackage ../applications/audio/mus { };
+
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
   museeks = callPackage ../applications/audio/museeks { };
