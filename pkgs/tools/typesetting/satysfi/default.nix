@@ -65,10 +65,12 @@ in
       cp -r lib-satysfi/dist/ $out/share/satysfi/
       cp -r \
         ${ipaexfont}/share/fonts/opentype/* \
-        ${junicode}/share/fonts/junicode-ttf/* \
         ${lmodern}/share/fonts/opentype/public/lm/* \
         ${lmmath}/share/fonts/opentype/latinmodern-math.otf \
-        $out/share/satysfi/dist/fonts
+        ${junicode}/share/fonts/truetype/Junicode-{Bold,BoldItalic,Italic}.ttf \
+        $out/share/satysfi/dist/fonts/
+      cp ${junicode}/share/fonts/truetype/Junicode-Regular.ttf \
+        $out/share/satysfi/dist/fonts/Junicode.ttf
     '';
 
     meta = with lib; {
