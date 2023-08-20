@@ -19319,6 +19319,22 @@ with self; {
     };
   };
 
+  ParallelLoops = buildPerlPackage {
+    pname = "Parallel-Loops";
+    version = "0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.10.tar.gz";
+      hash = "sha256-b5Z7RuejY7FocbmZHDWeFC3Dsigc/psa85kEcEyL0qo=";
+    };
+    propagatedBuildInputs = [ ParallelForkManager ];
+    meta = {
+      description = "Execute loops using parallel forked subprocesses";
+      homepage = "https://github.com/pmorch/perl-Parallel-Loops";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   ParallelPipes = buildPerlModule {
     pname = "Parallel-Pipes";
     version = "0.102";
