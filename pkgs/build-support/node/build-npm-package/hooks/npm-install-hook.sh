@@ -25,8 +25,7 @@ npmInstallHook() {
         else "invalid type " + $typ | halt_error end' "${npmWorkspace-.}/package.json")
 
     while IFS= read -r man; do
-        mkdir -p "$out/share/man"
-        ln -s "$packageOut/$man" "$out/share/man"
+        installManPage "$packageOut/$man"
     done < <(@jq@ --raw-output '(.man | type) as $typ | if $typ == "string" then .man
         elif $typ == "list" then .man | join("\n")
         else "invalid type " + $typ | halt_error end' "${npmWorkspace-.}/package.json")

@@ -32,7 +32,6 @@
   carbon-now-cli = "carbon-now";
   cdk8s-cli = "cdk8s";
   cdktf-cli = "cdktf";
-  clean-css-cli = "cleancss";
   clipboard-cli = "clipboard";
   clubhouse-cli = "club";
   conventional-changelog-cli = "conventional-changelog";
