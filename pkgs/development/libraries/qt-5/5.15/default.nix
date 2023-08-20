@@ -7,7 +7,7 @@ Check for any minor version changes.
 
 */
 
-{ makeScopeWithSplicing, generateSplicesForMkScope
+{ makeScopeWithSplicing', generateSplicesForMkScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
@@ -265,6 +265,7 @@ let
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
+      qtremoteobjects = callPackage ../modules/qtremoteobjects.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialbus = callPackage ../modules/qtserialbus.nix {};
@@ -332,4 +333,7 @@ let
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages
+in makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "qt5";
+  f = addPackages;
+}
