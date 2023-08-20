@@ -60,6 +60,7 @@ mapAliases {
   gtop = pkgs.gtop; # added 2023-07-31
   inherit (pkgs) htmlhint; # added 2023-08-19
   hueadm = pkgs.hueadm; # added 2023-07-31
+  inherit (pkgs) hyperpotamus; # added 2023-08-19
   immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19

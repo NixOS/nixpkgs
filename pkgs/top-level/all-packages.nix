@@ -1804,6 +1804,8 @@ with pkgs;
 
   httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
 
+  hyperpotamus = callPackage ../tools/misc/hyperpotamus { };
+
   immich-cli = callPackage ../tools/misc/immich-cli { };
 
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
