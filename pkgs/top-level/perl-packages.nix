@@ -9810,6 +9810,21 @@ with self; {
     };
   };
 
+  FileShareDirDist = buildPerlPackage {
+    pname = "File-ShareDir-Dist";
+    version = "0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-ShareDir-Dist-0.07.tar.gz";
+      hash = "sha256-jX/l0O4iNR9B75Wtwi29VsMf+iqbLBmEMA6S/36f6G0=";
+    };
+    meta = {
+      homepage = "https://metacpan.org/pod/File::ShareDir::Dist";
+      description = "Locate per-dist shared files";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   FileShareDirInstall = buildPerlPackage {
     pname = "File-ShareDir-Install";
     version = "0.13";
