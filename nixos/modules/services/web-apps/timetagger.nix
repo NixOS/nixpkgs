@@ -55,7 +55,7 @@ in {
     };
 
     systemd.services.timetagger = {
-      description = "Timetagger configuration";
+      description = "Timetagger server";
       wants = [ "network-online.service" ];
       wantedBy = [ "multi-user.target" ];
       after = [
