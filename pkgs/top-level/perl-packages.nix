@@ -17863,6 +17863,20 @@ with self; {
     };
   };
 
+  NetDNSNative = buildPerlPackage {
+    pname = "Net-DNS-Native";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLEG/Net-DNS-Native-0.22.tar.gz";
+      hash = "sha256-EI2d7bq5/69qDQFSVSbeGJSITpUL/YM3F+XNOJBcMNU=";
+    };
+    meta = {
+      description = "Non-blocking system DNS resolver";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   NetIdent = buildPerlPackage {
     pname = "Net-Ident";
     version = "1.25";
