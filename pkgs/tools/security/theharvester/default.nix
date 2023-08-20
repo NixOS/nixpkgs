@@ -6,6 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
   version = "4.4.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "laramies";
@@ -63,7 +64,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/laramies/theHarvester";
     changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
-    maintainers = with maintainers; [ c0bw3b treemo ];
+    maintainers = with maintainers; [ c0bw3b fab treemo ];
     license = licenses.gpl2Only;
   };
 }
