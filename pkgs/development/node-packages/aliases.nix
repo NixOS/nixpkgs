@@ -57,6 +57,7 @@ mapAliases {
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   flood = pkgs.flood; # Added 2023-07-25
   gtop = pkgs.gtop; # added 2023-07-31
+  inherit (pkgs) htmlhint; # added 2023-08-19
   hueadm = pkgs.hueadm; # added 2023-07-31
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
