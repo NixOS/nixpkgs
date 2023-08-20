@@ -374,7 +374,7 @@ in {
             };
 
             tls_certificate_path = mkOption {
-              type = types.nullOr types.str;
+              type = types.nullOr types.path;
               default = null;
               example = "/var/lib/acme/example.com/fullchain.pem";
               description = lib.mdDoc ''
@@ -387,7 +387,7 @@ in {
             };
 
             tls_private_key_path = mkOption {
-              type = types.nullOr types.str;
+              type = types.nullOr types.path;
               default = null;
               example = "/var/lib/acme/example.com/key.pem";
               description = lib.mdDoc ''
