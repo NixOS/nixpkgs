@@ -51,10 +51,6 @@
       echo "${version}"
     fi
   '';
-  mainProgram =
-    if stdenv.hostPlatform.system == "i686-linux"
-    then "etl.i386"
-    else "etl.x86_64";
 in
   stdenv.mkDerivation {
     pname = "etlegacy";
@@ -125,7 +121,7 @@ in
       homepage = "https://etlegacy.com";
       platforms = ["i686-linux" "x86_64-linux"];
       license = [licenses.gpl3 licenses.cc-by-nc-sa-30];
-      inherit mainProgram;
+      mainProgram = "etl";
       maintainers = with maintainers; [ashleyghooper drupol];
     };
   }
