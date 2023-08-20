@@ -10,11 +10,16 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "OJ";
     repo = "gobuster";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-LZL9Zje2u0v6iAQinfjflvusV57ys5J5Il6Q7br3Suc=";
   };
 
   vendorHash = "sha256-w+G5PsWXhKipjYIHtz633sia+Wg9FSFVpcugEl8fp0E=";
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Tool used to brute-force URIs, DNS subdomains, Virtual Host names on target web servers";
