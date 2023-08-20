@@ -14099,6 +14099,21 @@ with self; {
     };
   };
 
+  LogfileRotate = buildPerlPackage {
+    pname = "Logfile-Rotate";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PA/PAULG/Logfile-Rotate-1.04.tar.gz";
+      hash = "sha256-gQ+LfM2GV9Ox71PNR1glR4Rc67WCArBVObNAhjjK2j4=";
+    };
+    meta = {
+      description = "Perl module to rotate logfiles";
+      homepage = "https://metacpan.org/dist/Logfile-Rotate";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   Logger = buildPerlPackage {
     pname = "Log-ger";
     version = "0.037";
