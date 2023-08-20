@@ -1,24 +1,28 @@
 { lib
-, fetchpatch
 , writeScript
 , buildPythonApplication
 , fetchFromGitHub
 , pythonOlder
 , setuptools
 , requests
+, protobuf
+, pycryptodome
+, zstandard
+, json5
+, platformdirs
 , cacert
 }:
 
 buildPythonApplication rec {
-  pname = "gogdl";
-  version = "0.7.3";
+  pname = "nile";
+  version = "1.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "Heroic-Games-Launcher";
-    repo = "heroic-gogdl";
-    rev = "d2fa34bfba7beb2ecc0e3fc70a657f2c612c8a10";
-    hash = "sha256-YCqtfY49lDg6sLrF/INOZVD9cMCwvejhySzUWrxHKAw=";
+    owner = "imLinguin";
+    repo = "nile";
+    rev = "f5f3b96f6483c59cfc646afbda6e97cb0bd94778";
+    hash = "sha256-HibY3U9/MibEDwHY+YiErW/pz6qwtps8wwjhznTISgA=";
   };
 
   disabled = pythonOlder "3.8";
@@ -26,34 +30,41 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     setuptools
     requests
+    protobuf
+    pycryptodome
+    zstandard
+    json5
+    platformdirs
   ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/Heroic-Games-Launcher/heroic-gogdl/pull/37.patch";
-      hash = "sha256-oZLetPoWzsEDrL0Bh89HB4hTn70FTh8aXj9mKGr4Dqw=";
-    })
-  ];
+  pyprojectAppendix = ''
+    [tool.setuptools.packages.find]
+    include = ["nile*"]
+  '';
 
-  pythonImportsCheck = [ "gogdl" ];
+  postPatch = ''
+    echo "$pyprojectAppendix" >> pyproject.toml
+  '';
+
+  pythonImportsCheck = [ "nile" ];
 
   meta = with lib; {
-    description = "GOG Downloading module for Heroic Games Launcher";
-    homepage = "https://github.com/Heroic-Games-Launcher/heroic-gogdl";
+    description = "Unofficial Amazon Games client";
+    homepage = "https://github.com/imLinguin/nile";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ aidalgol ];
   };
 
-  # Upstream no longer create git tags when bumping the version, so we have to
+  # Upstream does not create git tags when bumping the version, so we have to
   # extract it from the source code on the main branch.
   passthru.updateScript = writeScript "gogdl-update-script" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl gnused jq common-updater-scripts
     set -eou pipefail;
 
-    owner=Heroic-Games-Launcher
-    repo=heroic-gogdl
-    path='gogdl/__init__.py'
+    owner=imLinguin
+    repo=nile
+    path='nile/__init__.py'
 
     version=$(
       curl --cacert "${cacert}/etc/ssl/certs/ca-bundle.crt" \
@@ -67,7 +78,7 @@ buildPythonApplication rec {
     update-source-version \
       ${pname} \
       "$version" \
-      --file=./pkgs/games/gogdl/default.nix \
+      --file=./pkgs/games/nile/default.nix \
       --rev=$commit
   '';
 }
