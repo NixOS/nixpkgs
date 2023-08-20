@@ -1,4 +1,15 @@
-{ lib, fetchFromGitHub, stdenv, shortenPerlShebang, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, perlPackages, rtmpdump}:
+{ lib
+, perlPackages
+, fetchFromGitHub
+, makeWrapper
+, stdenv
+, shortenPerlShebang
+, perl
+, atomicparsley
+, ffmpeg
+, flvstreamer
+, rtmpdump
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "get_iplayer";
