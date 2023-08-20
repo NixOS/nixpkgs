@@ -1049,6 +1049,23 @@ with self; {
     };
   };
 
+  ArchiveLibarchivePeek = buildPerlPackage {
+    pname = "Archive-Libarchive-Peek";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Archive-Libarchive-Peek-0.04.tar.gz";
+      hash = "sha256-DYhJ4xG2RsozWz6gGodTtAIkK5XOgAo7zNXHCC4nJPo=";
+    };
+    buildInputs = [ Filechdir Test2Suite TestScript ];
+    propagatedBuildInputs = [ ArchiveLibarchive PathTiny RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Archive::Libarchive::Peek";
+      description = "Peek into archives without extracting them";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   ArrayCompare = buildPerlModule {
     pname = "Array-Compare";
     version = "3.0.7";
