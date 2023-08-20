@@ -101,11 +101,17 @@ buildPythonApplication rec {
     deactivate
   '';
 
-  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
-  # when used in nix-shell.
+
+  # Propagating inputs causes them to show up in $PYTHONPATH in a nix shell,
+  # this is problematic because they might conflict with the user's dependencies,
+  # so we remove them...
   postFixup = ''
     rm $out/nix-support/propagated-build-inputs
   '';
+
+  # ...but now we've hidden parts of pre-commit from itself (e.g. the built-in hooks)
+  # so we restore PYTHONPATH, but only inside of the wrapper.
+  makeWrapperArgs = ''--set PYTHONPATH $PYTHONPATH'';
 
   disabledTests = [
     # ERROR: The install method you used for conda--probably either `pip install conda`
