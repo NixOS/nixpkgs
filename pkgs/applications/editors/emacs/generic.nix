@@ -59,19 +59,6 @@
 , webkitgtk
 , wrapGAppsHook
 
-# macOS dependencies for NS and macPort
-, AppKit
-, Carbon
-, Cocoa
-, GSS
-, IOKit
-, ImageCaptureCore
-, ImageIO
-, OSAKit
-, Quartz
-, QuartzCore
-, WebKit
-
 # Boolean flags
 , nativeComp ? null
 , withNativeCompilation ?
@@ -87,6 +74,7 @@
 , withGTK2 ? false
 , withGTK3 ? withPgtk && !noGui
 , withGconf ? false
+, withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
 , withGpm ? stdenv.isLinux
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , withMotif ? false
@@ -109,6 +97,19 @@
   else if withMotif then "motif"
   else if withAthena then "athena"
   else "lucid")
+
+# macOS dependencies for NS and macPort
+, AppKit
+, Carbon
+, Cocoa
+, GSS
+, IOKit
+, ImageCaptureCore
+, ImageIO
+, OSAKit
+, Quartz
+, QuartzCore
+, WebKit
 }:
 
 assert (withGTK2 && !withNS && variant != "macport") -> withX;
@@ -244,7 +245,7 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
     gtk3-x11
   ] ++ lib.optionals (withX && withMotif) [
     motif
-  ] ++ lib.optionals (withX && withXwidgets) [
+  ] ++ lib.optionals withGlibNetworking [
     glib-networking
   ] ++ lib.optionals withNativeCompilation [
     libgccjit
