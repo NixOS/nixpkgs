@@ -2,7 +2,7 @@
   stdenv,
   lib,
   makeWrapper,
-  writeScriptBin,
+  writeShellApplication,
   fetchFromGitHub,
   fetchurl,
   cmake,
@@ -45,12 +45,15 @@
     hash = "sha256-pIq3SaGhKrTZE3KGsfI9ZCwp2lmEWyuvyPZOBSzwbz4=";
   };
 
-  fakeGit = writeScriptBin "git" ''
-    #! ${stdenv.shell} -e
-    if [ "$1" = "describe" ]; then
-      echo "${version}"
-    fi
-  '';
+  fakeGit = writeShellApplication {
+    name = "git";
+
+    text = ''
+      if [ "$1" = "describe" ]; then
+        echo "${version}"
+      fi
+    '';
+  };
 in
   stdenv.mkDerivation {
     pname = "etlegacy";
