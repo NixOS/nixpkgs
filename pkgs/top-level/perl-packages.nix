@@ -9255,6 +9255,23 @@ with self; {
     };
   };
 
+  FFIPlatypusTypeEnum = buildPerlPackage {
+    pname = "FFI-Platypus-Type-Enum";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-Type-Enum-0.06.tar.gz";
+      hash = "sha256-yVSmBPfWkpYk+pQT2NDh2DtL2XfQVifKznPtU6lcd98=";
+    };
+    buildInputs = [ FFIPlatypus Test2Suite ];
+    propagatedBuildInputs = [ RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/FFI::Platypus::Type::Enum";
+      description = "Custom platypus type for dealing with C enumerated types";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   FennecLite = buildPerlModule {
     pname = "Fennec-Lite";
     version = "0.004";
