@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/achillean/shodan-python";
     changelog = "https://github.com/achillean/shodan-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ lihop ];
+    maintainers = with maintainers; [ fab lihop ];
   };
 }
