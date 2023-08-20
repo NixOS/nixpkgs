@@ -1,10 +1,45 @@
 # Nixpkgs Maintainers
 
-The *Nixpkgs maintainers* are people who have assigned themselves to
-maintain specific individual packages. We encourage people who care
-about a package to assign themselves as a maintainer. When a pull
-request is made against a package, OfBorg will notify the appropriate
-maintainer(s).
+Unlike other packaging ecosystems, the maintainer doesn't have exclusive
+control over the packages and modules they maintain. This more fluid approach
+is one reason why we scale to so many packages.
+
+
+## Definition and role of the maintainer
+
+The main responsibility of a maintainer is to keep the packages they maintain
+in a functioning state, and keep up with updates. In order to do that, they
+are empowered to make decisions over the packages they maintain.
+
+By default, we expect committers to wait at least a week before merging
+changes on packages they are not maintaining. This should leave enough time
+for the maintainers to provide feedback. The only exception would be for tiny
+version bumps and security updates that could be merged faster.
+
+In case of conflict, the maintainer takes priority and is allowed to revert
+the changes. This can happen for example if the maintainer was on holiday.
+
+### How to become a maintainer
+
+We encourage people who care about a package to assign themselves as a
+maintainer. You don't require to have nixpkgs commit access to do so.
+
+In order to do so, add yourself to the
+[`maintainer-list.nix`](./maintainer-list.nix), and then to the desired
+package's `meta.maintainers` list, and send a PR with the changes.
+
+### How to lose maintainer status
+
+Maintainers that have become inactive for more than 3 months on a given
+package can be removed. This helps us keep an accurate view of what parts of
+nixpkgs are well maintained or not.
+
+The maintainer is welcome to come back at any time.
+
+### Tools for maintainers
+
+When a pull request is made against a package, OfBorg will notify the
+appropriate maintainer(s).
 
 ## Reviewing contributions
 
