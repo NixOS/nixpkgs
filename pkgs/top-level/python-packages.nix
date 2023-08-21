@@ -2005,6 +2005,8 @@ self: super: with self; {
 
   clickhouse-cli = callPackage ../development/python-modules/clickhouse-cli { };
 
+  clickhouse-connect = callPackage ../development/python-modules/clickhouse-connect { };
+
   clickhouse-driver = callPackage ../development/python-modules/clickhouse-driver { };
 
   cliff = callPackage ../development/python-modules/cliff { };

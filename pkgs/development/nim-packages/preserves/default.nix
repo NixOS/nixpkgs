@@ -1,21 +1,21 @@
 { lib, stdenv, buildNimPackage, fetchFromGitea, nim-unwrapped, npeg }:
 
-buildNimPackage rec {
+buildNimPackage (final: prev: {
   pname = "preserves";
-  version = "20230530";
+  version = "20230801";
   src = fetchFromGitea {
     domain = "git.syndicate-lang.org";
     owner = "ehmry";
-    repo = "${pname}-nim";
-    rev = version;
-    hash = "sha256-IRIBGjv4po8VyL873v++ovqz8Vg6a9Qbh/M1fxpQXvY=";
+    repo = "preserves-nim";
+    rev = final.version;
+    hash = "sha256-60QsbXMYYfEWvXQAXu7XSpvg2J9YaGKDkDrfclcK6pc=";
   };
   propagatedBuildInputs = [ npeg ];
-  nimFlags = [ "--path:${nim-unwrapped}/nim" ];
+  nimFlags = [ "--mm:refc" "--path:${nim-unwrapped}/nim" "--threads:off" ];
   doCheck = !stdenv.isDarwin;
-  meta = src.meta // {
+  meta = final.src.meta // {
     description = "Nim implementation of the Preserves data language";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ ehmry ];
   };
-}
+})

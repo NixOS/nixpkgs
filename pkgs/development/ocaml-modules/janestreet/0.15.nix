@@ -548,7 +548,8 @@ with self;
 
   ppx_bench = janePackage {
     pname = "ppx_bench";
-    hash = "0bc0gbm922417wqisafxh35jslcp7xy1s0h0a1q32rhx0ivxx3g6";
+    version = "0.15.1";
+    hash = "sha256-2uk3NfpAODScoQtqiU+ZaOE8zOqkayn/jpfn3GQ4vQg=";
     minimalOCamlVersion = "4.04.2";
     meta.description = "Syntax extension for writing in-line benchmarks in ocaml code";
     propagatedBuildInputs = [ ppx_inline_test ];

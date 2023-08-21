@@ -2182,6 +2182,8 @@ with pkgs;
 
   git-big-picture = callPackage ../applications/version-management/git-big-picture { };
 
+  git-bars = callPackage ../applications/version-management/git-bars { };
+
   git-branchless = callPackage ../applications/version-management/git-branchless {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -5767,6 +5769,8 @@ with pkgs;
   libnvme = callPackage ../os-specific/linux/libnvme { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
+
+  libz = callPackage ../development/libraries/libz { };
 
   libzbc = callPackage ../os-specific/linux/libzbc { };
 
@@ -11042,7 +11046,7 @@ with pkgs;
 
   nifi = callPackage ../servers/web-apps/nifi { };
 
-  nitter = callPackage ../servers/nitter { };
+  nitter = nim2Packages.callPackage ../servers/nitter { };
 
   noip = callPackage ../tools/networking/noip { };
 
@@ -16671,8 +16675,9 @@ with pkgs;
 
   inherit (callPackages ../development/compilers/nim
                         { inherit (darwin) Security;  }
-          ) nim-unwrapped nimble-unwrapped nim;
+          ) nim-unwrapped nim-unwrapped-2 nimble-unwrapped nim nim2;
   nimPackages = recurseIntoAttrs nim.pkgs;
+  nim2Packages = recurseIntoAttrs nim2.pkgs;
 
   nrpl = callPackage ../development/tools/nrpl { };
 
@@ -25730,6 +25735,8 @@ with pkgs;
     llvmPackages = llvmPackages_16;
   };
   zig = zig_0_11;
+
+  zig-shell-completions = callPackage ../development/compilers/zig/shell-completions.nix { };
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
@@ -38997,7 +39004,7 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  mosdepth = callPackage ../applications/science/biology/mosdepth { };
+  mosdepth = nim2Packages.callPackage ../applications/science/biology/mosdepth { };
 
   niftyreg = callPackage ../applications/science/biology/niftyreg { };
 
