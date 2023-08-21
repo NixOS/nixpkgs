@@ -1,7 +1,7 @@
 { lib, stdenv, unzip, fetchurl, electron, makeWrapper, geogebra }:
 let
   pname = "geogebra";
-  version = "6-0-785-0";
+  version = "6-0-794-0";
 
   srcIcon = geogebra.srcIcon;
   desktopItem = geogebra.desktopItem;
@@ -32,7 +32,7 @@ let
         "https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
         "https://web.archive.org/web/20230627211859/https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
       ];
-      hash = "sha256-Yv8pTCKkyM7XMUNV2Pcn/YxWo1MbOTNMQBFuJFhB/uE=";
+      hash = "sha256-sNCq1Xcx/Y5r+SIRiqQYcG9dVsfIC2Ef5KJf+tgfxC8=";
     };
 
     dontConfigure = true;
