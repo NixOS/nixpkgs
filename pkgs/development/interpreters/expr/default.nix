@@ -5,20 +5,24 @@
 
 buildGoModule rec {
   pname = "expr";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "expr";
     rev = "v${version}";
-    hash = "sha256-K5UIBkuTXsMaSUhys2Ij7JCwdLE/aZiiipiSucgtkIk=";
+    hash = "sha256-X55l2pSlwrcxM4JFcd25yfc5AQJPzNrZRHEHPWPevHw=";
   };
 
   sourceRoot = "${src.name}/repl";
 
-  vendorHash = "sha256-Sc4Md9O32SOQIyEbIkkJUiowEhLtQN6JzTymk9o3nWE=";
+  vendorHash = "sha256-pX8Yk/md6I27PPmdwoixSMMbopDjXOOnXyUxq0D97YA=";
 
   ldflags = [ "-s" "-w" ];
+
+  postInstall = ''
+    mv $out/bin/{repl,expr}
+  '';
 
   meta = with lib; {
     description = "Expression language and expression evaluation for Go";
