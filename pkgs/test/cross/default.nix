@@ -144,6 +144,8 @@ let
     pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
     pkgs.pkgsCross.mingwW64.stdenv
+    pkgs.pkgsCross.musl64.llvmPackages_16.clang.cc
+    pkgs.pkgsStatic.llvmPackages_16.clang.cc
   ];
 
 in {
