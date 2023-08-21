@@ -276,6 +276,8 @@ with pkgs;
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
+  astronomer = callPackage ../tools/misc/astronomer { };
+
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
 
   _0x =  callPackage ../tools/misc/0x { };
@@ -1799,6 +1801,8 @@ with pkgs;
   hostmux = callPackage ../tools/misc/hostmux { };
 
   httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
+
+  immich-cli = callPackage ../tools/misc/immich-cli { };
 
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
@@ -8387,6 +8391,8 @@ with pkgs;
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
 
   ggobi = callPackage ../tools/graphics/ggobi { };
+
+  ggshield = callPackage ../tools/security/ggshield { };
 
   ghost = callPackage ../tools/security/ghost { };
 
@@ -19730,6 +19736,8 @@ with pkgs;
 
   openocd = callPackage ../development/embedded/openocd { };
 
+  openocd-rp2040 = callPackage ../development/embedded/openocd-rp2040 { };
+
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
   };
@@ -22085,6 +22093,8 @@ with pkgs;
   imgui = callPackage ../development/libraries/imgui { };
 
   imtui = callPackage ../development/libraries/imtui { };
+
+  immer = callPackage ../development/libraries/immer { };
 
   imv = callPackage ../applications/graphics/imv { };
 
@@ -35724,6 +35734,8 @@ with pkgs;
   tetraproc = callPackage ../applications/audio/tetraproc { };
 
   tev = callPackage ../applications/graphics/tev { };
+
+  textual-paint = callPackage ../applications/graphics/textual-paint { };
 
   themechanger = callPackage ../applications/misc/themechanger { };
 

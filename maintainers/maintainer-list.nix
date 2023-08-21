@@ -10010,6 +10010,12 @@
     githubId = 8555953;
     name = "Laure Tavard";
   };
+  lu15w1r7h = {
+    email = "lwirth2000@gmail.com";
+    github = "LU15W1R7H";
+    githubId = 37505890;
+    name = "Luis Wirth";
+  };
   luc65r = {
     email = "lucas@ransan.tk";
     github = "luc65r";
