@@ -8648,7 +8648,7 @@ with pkgs;
   halibut = callPackage ../tools/typesetting/halibut { };
 
   halide = callPackage ../development/compilers/halide {
-    llvmPackages = llvmPackages_14;
+    llvmPackages = llvmPackages_16;
   };
 
   harePackages = recurseIntoAttrs (callPackage ../development/compilers/hare { });
