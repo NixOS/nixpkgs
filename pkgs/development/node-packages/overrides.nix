@@ -384,11 +384,6 @@ final: prev: {
     name = "rush";
   };
 
-  ssb-server = prev.ssb-server.override (oldAttrs: {
-    buildInputs = [ pkgs.automake pkgs.autoconf final.node-gyp-build ];
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
   tailwindcss = prev.tailwindcss.override {
     plugins = [ ];
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
