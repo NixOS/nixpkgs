@@ -11,18 +11,6 @@ in {
         default = ["timetagger"];
       };
 
-      user = mkOption {
-        type = types.nonEmptyStr;
-        default = "timetagger";
-        description = mdDoc "User account under which timetagger runs.";
-      };
-
-      group = mkOption {
-        type = types.nonEmptyStr;
-        default = "timetagger";
-        description = mdDoc "Group account under which timetagger runs.";
-      };
-
       address = mkOption {
         type = ipAddress;
         default = "127.0.0.1";
@@ -59,8 +47,7 @@ in {
       ];
       serviceConfig = {
         Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
+        DynamicUser = true;
         RuntimeDirectory = "timetagger";
         CacheDirectory = "timetagger";
         RuntimeDirectoryPreserve = true;
