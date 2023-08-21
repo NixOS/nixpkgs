@@ -36,19 +36,19 @@ let
   nvtop = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
-    rev = "9a8458b541a195a0c5cadafb66e240962c852b39";
-    hash = "sha256-iFBZbESRTuwgLSUuHnjcXwmpvdeQrd3oUJd7BRyxu84=";
+    rev = "be47f8c560487efc6e6a419d59c69bfbdb819324";
+    hash = "sha256-MdaZYLxCuVX4LvbwBYNfHHoJWqZAy4J8NBK7Guh2whc=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "mission-center";
-  version = "0.2.5";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     rev = "v${version}";
-    hash = "sha256-f6GkwF+3USl60pUxxTu90KzdsfxBiAkiqnBSTTmC2Lc=";
+    hash = "sha256-fiUF1mvbnguySy2ZXTi4Z61t35FO6fljqm21dMGwQMI=";
   };
 
   cargoDeps = symlinkJoin {
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
         };
       })
       (rustPlatform.importCargoLock {
-        lockFile = ./proxy-Cargo.lock;
+        lockFile = ./gatherer-Cargo.lock;
       })
     ];
   };
@@ -111,7 +111,10 @@ stdenv.mkDerivation rec {
     done
     cd ../..
     patchShebangs data/hwdb/generate_hwdb.py
-    sed -i 's|cmd.arg("dmidecode")|cmd.arg("${dmidecode}/bin/dmidecode")|g' src/sys_info_v2/mem_info.rs
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/missioncenter --prefix PATH : $out/bin:${dmidecode}/bin
   '';
 
   meta = with lib; {
