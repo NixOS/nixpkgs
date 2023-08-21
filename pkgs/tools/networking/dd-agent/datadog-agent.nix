@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , cmake
-, buildGo118Module
+, buildGoModule
 , makeWrapper
 , fetchFromGitHub
 , pythonPackages
@@ -14,34 +14,36 @@
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "5.0.89";
+  payloadVersion = "5.0.93";
   python = pythonPackages.python;
-  owner   = "DataDog";
-  repo    = "datadog-agent";
+  owner = "DataDog";
+  repo = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.45.1";
+  version = "7.46.0";
 
   src = fetchFromGitHub {
     inherit owner repo;
     rev = version;
-    sha256 = "sha256-bG8wsSQvZcG4/Th6mWVdVX9vpeYBZx8FxwdYXpIdXnU=";
+    hash = "";
   };
+
   rtloader = stdenv.mkDerivation {
     pname = "datadog-agent-rtloader";
     src = "${src}/rtloader";
     inherit version;
     nativeBuildInputs = [ cmake ];
     buildInputs = [ python ];
-    cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
+    cmakeFlags = [ "-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON" ];
   };
 
-in buildGo118Module rec {
+in
+buildGoModule rec {
   pname = "datadog-agent";
   inherit src version;
 
   doCheck = false;
 
-  vendorSha256 = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
+  vendorHash = "";
 
   subPackages = [
     "cmd/agent"
@@ -53,7 +55,7 @@ in buildGo118Module rec {
 
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [rtloader] ++ lib.optionals withSystemd [ systemd ];
+  buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
   tags = [
@@ -108,8 +110,8 @@ in buildGo118Module rec {
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
-    homepage    = "https://www.datadoghq.com";
-    license     = licenses.bsd3;
+    homepage = "https://www.datadoghq.com";
+    license = licenses.asl20;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl viraptor ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
