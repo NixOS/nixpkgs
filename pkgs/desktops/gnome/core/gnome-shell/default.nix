@@ -80,8 +80,10 @@ stdenv.mkDerivation rec {
     # Hardcode paths to various dependencies so that they can be found at runtime.
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit libgnomekbd unzip;
+      gkbd_keyboard_display = "${lib.getBin libgnomekbd}/bin/gkbd-keyboard-display";
+      glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
+      unzip = "${lib.getBin unzip}/bin/unzip";
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
