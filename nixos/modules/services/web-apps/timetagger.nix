@@ -7,11 +7,8 @@ in {
     services.timetagger = {
       enable = mkEnableOption (mdDoc "Timetagger");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.timetagger;
-        defaultText = literalExpression "pkgs.timetagger";
-        description = mdDoc "Timetagger package to use.";
+      package = mkPackageOptionMD pkgs "Timetagger" {
+        default = ["timetagger"];
       };
 
       user = mkOption {
