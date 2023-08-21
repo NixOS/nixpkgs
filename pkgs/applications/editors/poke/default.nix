@@ -21,11 +21,11 @@ let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in stdenv.mkDerivation rec {
   pname = "poke";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-dY5VHdU6bM5U7JTY/CH6TWtSon0cJmcgbVmezcdPDZc=";
+    hash = "sha256-AIBFnehQY8g7aJ/8+6NociNoA8EiQtJFpC7nk1lPlW4=";
   };
 
   outputs = [ "out" "dev" "info" "lib" ]
