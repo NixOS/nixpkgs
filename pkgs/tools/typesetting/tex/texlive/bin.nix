@@ -96,12 +96,6 @@ core = stdenv.mkDerivation rec {
     perl
   ];
 
-  patches = [
-    # Fix implicit `int` on `main`, which results in an error when building with clang 16.
-    # This is fixed upstream and can be dropped with the 2023 release.
-    ./fix-implicit-int.patch
-  ];
-
   hardeningDisable = [ "format" ];
 
   preConfigure = ''
@@ -206,14 +200,6 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=reproducible_exception_strings.patch;msg=5";
       sha256 = "sha256-RNZoEeTcWnrLaltcYrhNIORh42fFdwMzBfxMRWVurbk=";
     })
-    # fixes a security-issue in luatex that allows arbitrary code execution even with shell-escape disabled, see https://tug.org/~mseven/luatex.html
-    (fetchpatch {
-      name = "CVE-2023-32700.patch";
-      url = "https://tug.org/~mseven/luatex-files/2022/patch";
-      hash = "sha256-o9ENLc1ZIIOMX6MdwpBIgrR/Jdw6tYLmAyzW8i/FUbY=";
-      excludes = [  "build.sh" ];
-      stripLen = 1;
-    })
     # Fixes texluajitc crashes on aarch64, backport of the upstream fix
     # https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
     # to the version vendored by texlive (2.1.0-beta3)
@@ -224,9 +210,6 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       stripLen = 1;
       extraPrefix = "libs/luajit/LuaJIT-src/";
     })
-    # Fix implicit `int` on `main`, which results in an error when building with clang 16.
-    # This is fixed upstream and can be dropped with the 2023 release.
-    ./fix-implicit-int.patch
   ];
 
   hardeningDisable = [ "format" ];

@@ -339,13 +339,6 @@ in lib.recursiveUpdate orig rec {
 
   #### misc
 
-  # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
-  arabi-add.license = [  "lppl13c" ];
-
-  # TODO: remove this when updating to texlive-2023, npp-for-context is no longer in texlive
-  # tlpdb lists license as "noinfo", but it's gpl3: https://github.com/luigiScarso/context-npp
-  npp-for-context.license = [  "gpl3Only" ];
-
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";
     extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
