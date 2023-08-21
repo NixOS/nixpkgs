@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib
+{ stdenv, fetchurl, fetchpatch, lib
 , ncurses, openssl, aspell, gnutls, gettext
 , zlib, curl, pkg-config, libgcrypt
 , cmake, libobjc, libresolv, libiconv
@@ -45,6 +45,13 @@ let
         url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
         hash = "sha256-iA29zo5zs/SAKggsShp8YZQ9vFhn16lWleTkY8ZTWpI=";
       };
+
+      patches = lib.optional (perlSupport && lib.versionAtLeast perl.version "5.38") (fetchpatch {
+        name = "perl538-locale.patch";
+        url = "https://github.com/weechat/weechat/commit/c5eb982424150894959b978d98dcf6a005eb6c9f.patch";
+        excludes = [ "ChangeLog.adoc" ];
+        sha256 = "sha256-SSDZy4/c12LOxjvFMuJSv6gJEX298wF62/gQLQ/geiU=";
+      });
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
