@@ -1224,8 +1224,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.15.2";
-          sha256 = "sha256-Zu/AcV0KY3QV0hyZsGrQdbc/Qc0pKNHVkHZVJ3PL0ps=";
+          version = "0.16.0";
+          sha256 = "sha256-PZUyOZ/U6OkGid+PYY2G/pAe5R5eumUibKNel9HBI+s=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
