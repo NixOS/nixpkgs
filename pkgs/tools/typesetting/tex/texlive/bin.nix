@@ -322,6 +322,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     mv "$out/bin"/{luatex,texlua,texluac} "$luatex/bin/"
     mv "$out/bin"/luahbtex "$luahbtex/bin/"
     mv "$out/bin"/xetex "$xetex/bin/"
+    cp ../../libs/teckit/teckit_compile "$xetex/bin/"
   '' + lib.optionalString withLuaJIT ''
     mv "$out/bin"/mfluajit{,-nowin} "$mflua/bin/"
     mv "$out/bin"/{luajittex,luajithbtex,texluajit,texluajitc} "$luajittex/bin/"
