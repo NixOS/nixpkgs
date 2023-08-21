@@ -23,7 +23,7 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 
 ## Quick Start to Adding a Package
 
-Each new package has a cost for the maintainers, Hydra and users downloading
+Each new package has a cost for the maintainers, Continuous Integration, caching servers and users downloading
 Nixpkgs. Before adding a new package, please consider the following questions:
 * Is the package ready for general use? For example, if the author(s) is/are working towards the first release, it is probably too early.
 * Does the project have a license?
