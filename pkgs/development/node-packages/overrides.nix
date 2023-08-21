@@ -92,12 +92,6 @@ final: prev: {
     '';
   };
 
-  dat = prev.dat.override (oldAttrs: {
-    buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
-    meta = oldAttrs.meta // { broken = since "12"; };
-  });
-
-
   expo-cli = prev."expo-cli".override (oldAttrs: {
     # The traveling-fastlane-darwin optional dependency aborts build on Linux.
     dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
