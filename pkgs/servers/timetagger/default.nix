@@ -24,8 +24,6 @@ python3.pkgs.buildPythonApplication {
     echo "#!${python3.interpreter}" >> $out/bin/timetagger
     cat timetagger/__main__.py >> $out/bin/timetagger
     chmod +x $out/bin/timetagger
-    wrapProgram $out/bin/timetagger \
-      --set TIMETAGGER_BIND "${addr}:${toString port}"
   '';
 }
 
