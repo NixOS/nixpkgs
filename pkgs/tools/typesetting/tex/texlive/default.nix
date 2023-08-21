@@ -3,7 +3,7 @@
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { lib
-, makeScopeWithSplicing', generateSplicesForMkScope
+, makeScopeWithSplicing', pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsHostTarget
 , recurseIntoAttrs
 , fetchurl, runCommand
 , ghostscript_headless, harfbuzz, biber, asymptote
@@ -119,22 +119,15 @@ let
   };
 
   texlive = makeScopeWithSplicing' {
-    otherSplices = generateSplicesForMkScope "texlive";
+    otherSplices = {
+      selfBuildBuild = pkgsBuildBuild.callPackage ./. args;
+      selfBuildHost = pkgsBuildHost.callPackage ./. args;
+      selfBuildTarget = pkgsBuildTarget.callPackage ./. args;
+      selfHostHost = pkgsHostHost.callPackage ./. args;
+      selfHostTarget = pkgsHostTarget.callPackage ./. args;
+      selfTargetTarget = {};
+    };
     f = addPackages;
   };
 
-  applyOverScope = f: scope: f (scope // {
-      overrideScope = g: applyOverScope f (scope.overrideScope g);
-  });
-
-  # for backward compability
-  compatFixups = scope:
-    # TODO
-    scope.pkgs // # remove this line to fix cross
-    scope // {
-      bin = scope.bin // {
-        latexindent = lib.findFirst (p: p.tlType == "bin") scope.pkgs.latexindent.pkgs;
-      };
-    };
-
-in applyOverScope compatFixups texlive
+in texlive
