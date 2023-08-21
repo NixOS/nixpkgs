@@ -168,7 +168,7 @@ let
       client system-options file "dsm.sys"
     '');
     servers = mkOption {
-      type = attrsOf (submodule [ serverOptions ]);
+      type = attrsOf (submodule serverOptions);
       default = {};
       example.mainTsmServer = {
         server = "tsmserver.company.com";
