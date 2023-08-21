@@ -54,9 +54,9 @@ buildPythonPackage rec {
     ++ passthru.optional-dependencies.numpy;
 
   # these tests require a running clickhouse instance
-  pytestFlagsArray = [
-    "--deselect=tests/integration_tests"
-    "--deselect=tests/tls"
+  disabledTestPaths = [
+    "tests/integration_tests"
+    "tests/tls"
   ];
 
   pythonImportsCheck = [
