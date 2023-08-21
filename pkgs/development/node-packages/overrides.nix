@@ -116,11 +116,6 @@ final: prev: {
   };
 
 
-  git-ssb = prev.git-ssb.override (oldAttrs: {
-    buildInputs = [ final.node-gyp-build ];
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
     nativeBuildInputs = with pkgs; [ installShellFiles pkg-config ];

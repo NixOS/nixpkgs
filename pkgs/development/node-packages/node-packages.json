@@ -132,7 +132,6 @@
 , "generator-code"
 , "get-graphql-schema"
 , "git-run"
-, "git-ssb"
 , "git-standup"
 , "@gitbeaker/cli"
 , "gitmoji-cli"
