@@ -4060,6 +4060,8 @@ self: super: with self; {
 
   funcy = callPackage ../development/python-modules/funcy { };
 
+  funsor = callPackage ../development/python-modules/funsor { };
+
   furl = callPackage ../development/python-modules/furl { };
 
   furo = callPackage ../development/python-modules/furo { };
