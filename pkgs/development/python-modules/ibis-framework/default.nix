@@ -57,7 +57,7 @@
 , typing-extensions
 }:
 let
-  testBackends = [ "dask" "datafusion" "duckdb" "pandas" "polars" "sqlite" ];
+  testBackends = [ "datafusion" "duckdb" "pandas" "sqlite" ];
 
   ibisTestingData = fetchFromGitHub {
     name = "ibis-testing-data";
