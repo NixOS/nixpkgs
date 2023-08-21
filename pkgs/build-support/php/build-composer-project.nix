@@ -7,9 +7,13 @@ let
       phpDrv = finalAttrs.php or php;
       composer = finalAttrs.composer or phpDrv.packages.composer;
       composer-local-repo-plugin = callPackage ./pkgs/composer-local-repo-plugin.nix { };
-      composerLock = finalAttrs.composerLock or null;
     in
     {
+      composerLock = previousAttrs.composerLock or null;
+      composerNoDev = previousAttrs.composerNoDev or true;
+      composerNoPlugins = previousAttrs.composerNoPlugins or true;
+      composerNoScripts = previousAttrs.composerNoScripts or true;
+
       nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
         composer-local-repo-plugin
@@ -50,8 +54,13 @@ let
       '';
 
       composerRepository = phpDrv.mkComposerRepository {
-        inherit composer composer-local-repo-plugin composerLock;
+        inherit composer composer-local-repo-plugin;
         inherit (finalAttrs) patches pname src vendorHash version;
+
+        composerLock = previousAttrs.composerLock or null;
+        composerNoDev = previousAttrs.composerNoDev or true;
+        composerNoPlugins = previousAttrs.composerNoPlugins or true;
+        composerNoScripts = previousAttrs.composerNoScripts or true;
       };
 
       meta = previousAttrs.meta or { } // {

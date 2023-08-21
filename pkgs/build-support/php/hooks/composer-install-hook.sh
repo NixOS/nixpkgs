@@ -1,6 +1,8 @@
-declare composerHomeDir
 declare composerRepository
 declare version
+declare composerNoDev
+declare composerNoPlugins
+declare composerNoScripts
 
 preConfigureHooks+=(composerInstallConfigureHook)
 preBuildHooks+=(composerInstallBuildHook)
@@ -59,8 +61,9 @@ composerInstallBuildHook() {
       --no-ansi \
       --no-install \
       --no-interaction \
-      --no-plugins \
-      --no-scripts \
+      ${composerNoDev:+--no-dev} \
+      ${composerNoPlugins:+--no-plugins} \
+      ${composerNoScripts:+--no-scripts} \
       update
 
     echo "Finished composerInstallBuildHook"
@@ -88,8 +91,9 @@ composerInstallInstallHook() {
     composer \
       --no-ansi \
       --no-interaction \
-      --no-scripts \
-      --no-plugins \
+      ${composerNoDev:+--no-dev} \
+      ${composerNoPlugins:+--no-plugins} \
+      ${composerNoScripts:+--no-scripts} \
       install
 
     # Remove packages.json, we don't need it in the store.
