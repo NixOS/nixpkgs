@@ -72,7 +72,7 @@ in {
           TIMETAGGER_BIND = "${cfg.address}:${cfg.port}";
         };
 
-        ExecStart = "${cfg.packages}/bin/.timetagger-wrapper start";
+        ExecStart = "${cfg.packages}/bin/timetagger start";
       };
     };
   };
