@@ -44,6 +44,7 @@ mapAliases {
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
   "@maizzle/cli" = pkgs.maizzle; # added 2023-08-17
+  "@medable/mdctl-cli" = throw "@medable/mdctl-cli was removed because it was broken"; # added 2023-08-21
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   antennas = pkgs.antennas; # added 2023-07-30
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
@@ -77,6 +78,7 @@ mapAliases {
   manta = pkgs.node-manta; # Added 2023-05-06
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
+  mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31

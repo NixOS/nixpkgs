@@ -6,7 +6,6 @@
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
 , "@forge/cli"
-, "@medable/mdctl-cli"
 , "@mermaid-js/mermaid-cli"
 , "@microsoft/rush"
 , "@nerdwallet/shepherd"

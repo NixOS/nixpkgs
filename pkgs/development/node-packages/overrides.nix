@@ -41,25 +41,6 @@ final: prev: {
     ];
   };
 
-  "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override (oldAttrs: {
-    nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
-      glib
-      libsecret
-      pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
-      AppKit
-      Security
-    ];
-    buildInputs = [
-      final.node-gyp-build
-      final.node-pre-gyp
-      nodejs
-    ];
-
-    meta = oldAttrs.meta // { broken = since "16"; };
-  });
-  mdctl-cli = final."@medable/mdctl-cli";
-
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
