@@ -10,6 +10,7 @@
 , libyuv
 , gdk-pixbuf
 , makeWrapper
+, pcre2
 }:
 
 let
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     libjpeg
     dav1d
     libyuv
+    pcre2
   ];
 
   postPatch = ''
