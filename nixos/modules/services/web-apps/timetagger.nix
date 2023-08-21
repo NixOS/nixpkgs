@@ -49,7 +49,7 @@ in {
         RuntimeDirectoryPreserve = true;
 
         Environment = {
-          TIMETAGGER_BIND = "${cfg.address}:${cfg.port}";
+          TIMETAGGER_BIND = "${cfg.address}:${toString cfg.port}";
         };
 
         ExecStart = "${cfg.packages}/bin/timetagger start";
