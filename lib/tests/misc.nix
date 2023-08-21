@@ -948,6 +948,51 @@ runTests {
     '';
   };
 
+  testToGitINI = {
+    expr = generators.toGitINI {
+      user = {
+        email = "user@example.org";
+        name = "John Doe";
+        signingKey = "00112233445566778899AABBCCDDEEFF";
+      };
+      gpg.program = "path-to-gpg";
+      tag.gpgSign = true;
+      include.path = "~/path/to/config.inc";
+      includeIf."gitdif:~/src/dir".path = "~/path/to/conditional.inc";
+      extra = {
+        boolean = true;
+        integer = 38;
+        name = "value";
+        subsection.value = "test";
+      };};
+    expected = ''
+      [extra]
+      ${"\t"}boolean = true
+      ${"\t"}integer = 38
+      ${"\t"}name = "value"
+
+      [extra "subsection"]
+      ${"\t"}value = "test"
+
+      [gpg]
+      ${"\t"}program = "path-to-gpg"
+
+      [include]
+      ${"\t"}path = "~/path/to/config.inc"
+
+      [includeIf "gitdif:~/src/dir"]
+      ${"\t"}path = "~/path/to/conditional.inc"
+
+      [tag]
+      ${"\t"}gpgSign = true
+
+      [user]
+      ${"\t"}email = "user@example.org"
+      ${"\t"}name = "John Doe"
+      ${"\t"}signingKey = "00112233445566778899AABBCCDDEEFF"
+    '';
+  };
+
   /* right now only invocation check */
   testToJSONSimple =
     let val = {
