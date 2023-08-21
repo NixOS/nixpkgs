@@ -23,7 +23,7 @@ let
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv lib makeWrapper writeText runCommand
+    inherit bin buildEnv lib makeWrapper writeText runCommand
       stdenv perl libfaketime makeFontsConf bash tl coreutils gawk gnugrep gnused;
     ghostscript = ghostscript_headless;
   };
@@ -491,22 +491,6 @@ let
       // { inherit mirrors pname; fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { }; }
       // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); })
   ) overriddenTlpdb;
-
-  # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgList: lib.catAttrs "pkg" (
-    let
-      # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
-      # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
-      tlPkgToSets = { pkgs, ... }: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
-          # outputName required to distinguish among bin.core-big outputs
-          key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
-          inherit pkg;
-        }) pkgs;
-      pkgListToSets = lib.concatMap tlPkgToSets; in
-    builtins.genericClosure {
-      startSet = pkgListToSets pkgList;
-      operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or []);
-    });
 
   assertions = with lib;
     assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
