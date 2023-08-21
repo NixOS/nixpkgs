@@ -1,24 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "govulncheck";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    rev = "v${version}";
-    sha256 = "sha256-cewQ03dK/k3mXevE09M01Yox/3ZWP6IrG0H4QsZMzy8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cewQ03dK/k3mXevE09M01Yox/3ZWP6IrG0H4QsZMzy8=";
   };
 
-  vendorSha256 = "sha256-r9XshbgVA5rppJF46SFYPad344ZHMLWTHTnL6vbIFH8=";
+  vendorHash = "sha256-r9XshbgVA5rppJF46SFYPad344ZHMLWTHTnL6vbIFH8=";
 
-  subPackages = [ "cmd/govulncheck" ];
+  subPackages = [
+    "cmd/govulncheck"
+  ];
 
   # Vendoring breaks tests
   doCheck = false;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";
