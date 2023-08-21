@@ -7,8 +7,6 @@
 , python
 , pythonOlder
 , buildPythonPackage
-, pypaBuildHook
-, pipInstallHook
 , cython
 , gfortran
 , meson-python
@@ -57,7 +55,7 @@ let
   '';
 in buildPythonPackage {
   inherit pname version;
-  format = "other";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "scipy";
@@ -87,8 +85,6 @@ in buildPythonPackage {
   '';
 
   nativeBuildInputs = [
-    pypaBuildHook
-    pipInstallHook
     cython
     gfortran
     meson-python
