@@ -39,12 +39,8 @@ in {
 
     systemd.services.timetagger = {
       description = "Timetagger server";
-      wants = [ "network-online.service" ];
       wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-        "network-online.target"
-      ];
+      after = [ "network.target" ];
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
