@@ -253,7 +253,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
           else if atLeast6
           then "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz"
           else "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    ${if majorVersion == "11" then "hash" else "sha256"} = {
+    ${if is10 || is11 || is13 then "hash" else "sha256"} = {
       "13.2.0" = "sha256-4nXnZEKmBnNBon8Exca4PYYTFEAEwEE1KIY9xrXHQ9o=";
       "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
       "11.4.0" = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";
