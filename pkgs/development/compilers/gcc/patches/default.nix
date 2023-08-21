@@ -75,14 +75,14 @@ optionals (is49 || is6) [
 ] ++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
 ++ optional (atLeast6 && !atLeast12) ./fix-bug-80431.patch
 ++ optional (is7 || is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
-++ optional (is10) ./11/fix-struct-redefinition-on-glibc-2.36.patch
 ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
 ++ optional (atLeast7 && !atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
 ++ optional (noSysDirs) (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)
 ++ optionals (is6 && langAda) [
   ./gnat-cflags.patch
   ./6/gnat-glibc234.patch
-] ++ optional (noSysDirs && atLeast10 && (is10 || (!atLeast12 -> hostPlatform.isRiscV))) ./no-sys-dirs-riscv.patch
+] ++ optional (noSysDirs && atLeast10 && !atLeast13 && (is10 || (!atLeast12 -> hostPlatform.isRiscV))) ./no-sys-dirs-riscv.patch
+++ optional (noSysDirs && is13) ./13/no-sys-dirs-riscv.patch
 ++ optional (noSysDirs && is9 && hostPlatform.isRiscV) ./no-sys-dirs-riscv-gcc9.patch
 ++ optionals (langAda || atLeast12) [
   ./gnat-cflags-11.patch
