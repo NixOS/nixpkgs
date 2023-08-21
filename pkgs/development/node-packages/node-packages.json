@@ -356,7 +356,6 @@
 , "vscode-html-languageserver-bin"
 , "vscode-json-languageserver"
 , "vscode-json-languageserver-bin"
-, "vue-language-server"
 , "wavedrom-cli"
 , "webpack"
 , "webpack-cli"
