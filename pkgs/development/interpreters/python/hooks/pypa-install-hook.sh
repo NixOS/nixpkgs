@@ -5,9 +5,14 @@ pypaInstallPhase() {
     echo "Executing pypaInstallPhase"
     runHook preInstall
 
-    for wheel in dist/*.whl; do
+    pushd dist > /dev/null
+
+    for wheel in *.whl; do
         @pythonInterpreter@ -m installer --prefix "$out" "$wheel"
+        echo "Successfully installed $wheel"
     done
+
+    popd > /dev/null
 
     export PYTHONPATH="$out/@pythonSitePackages@:$PYTHONPATH"
 
