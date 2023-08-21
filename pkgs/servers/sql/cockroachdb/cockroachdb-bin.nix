@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "23.1.7";
+  version = "23.1.8";
   name = "cockroachdb";
 
   # For several reasons building cockroach from source has become
@@ -17,11 +17,11 @@ let
   srcs = {
     aarch64-linux = fetchzip {
       url = "https://binaries.cockroachdb.com/cockroach-v${version}.linux-arm64.tgz";
-      hash = "sha256-73qJL3o328NckH6POXv+AUvlAJextb31Vs8NGdc8dwE=";
+      hash = "sha256-Uma7iLDZ9WsVEGo3eWAVsxUFfedLssVkkhe9u1S0EgQ=";
     };
     x86_64-linux = fetchzip {
       url = "https://binaries.cockroachdb.com/cockroach-v${version}.linux-amd64.tgz";
-      hash = "sha256-FL/zDrl+QstBp54LE9/SbIfSPorneGZSef6dcOQJbSo=";
+      hash = "sha256-Cg3EIvU+vxByjlMj8TYmj0z85DRoxOJjDsw7zi3+3mA=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
