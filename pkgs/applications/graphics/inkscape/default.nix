@@ -5,6 +5,7 @@
 , cairo
 , cmake
 , desktopToDarwinBundle
+, double-conversion
 , fetchurl
 , gettext
 , ghostscript
@@ -19,6 +20,7 @@
 , lcms
 , lib2geom
 , libcdr
+, libepoxy
 , libexif
 , libpng
 , librevenge
@@ -59,11 +61,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.2.2";
+  version = "1.3";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/inkscape-${version}.tar.xz";
-    sha256 = "oMf9DQPAohU15kjvMB3PgN18/B81ReUQZfvxuj7opcQ=";
+    url = "https://inkscape.org/release/inkscape-${version}/source/archive/xz/dl/inkscape-${version}.tar.xz";
+    sha256 = "sha256-v08oawJeAWm4lIzBTVGZqbTCBNdhyJTEtISWVx7HYwc=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -114,6 +116,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boehmgc
     boost
+    double-conversion
     gettext
     glib
     glibmm
@@ -123,6 +126,7 @@ stdenv.mkDerivation rec {
     lcms
     lib2geom
     libcdr
+    libepoxy
     libexif
     libpng
     librevenge
