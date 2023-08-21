@@ -373,6 +373,5 @@
 , "yaml-language-server"
 , "yalc"
 , "yarn"
-, "yo"
 , "@zwave-js/server"
 ]

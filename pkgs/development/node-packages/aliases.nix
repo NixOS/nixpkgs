@@ -74,5 +74,6 @@ mapAliases {
   typescript = pkgs.typescript; # Added 2023-06-21
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
   vue-cli = self."@vue/cli"; # added 2023-08-18
+  inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
 }
