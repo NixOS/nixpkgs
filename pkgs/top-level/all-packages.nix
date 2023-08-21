@@ -2456,6 +2456,8 @@ with pkgs;
 
   transcrypt = callPackage ../applications/version-management/transcrypt { };
 
+  ungit = callPackage ../applications/version-management/ungit { };
+
   inherit (haskellPackages) git-annex;
 
   inherit (haskellPackages) git-brunch;
