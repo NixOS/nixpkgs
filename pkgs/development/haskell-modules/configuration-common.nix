@@ -110,6 +110,9 @@ self: super: {
     # otherwise we have different versions of ghc-paths
     # around which have the same abi-hash, which can lead to confusions and conflicts.
     ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
+
+    lsp = lself.lsp_2_1_0_0;
+    lsp-test = lself.lsp-test_0_15_0_1;
   });
 
   # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3546#issuecomment-1494139751
@@ -337,7 +340,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1i14mv8z9sr5sckckwiba4cypgs3iwk19pyrl9xzcrzz426dxrba";
+      sha256 = "0fg3q7apdijnlgyb0yps1znjjd2nv3016r9cyxyw209sqn3whnx5";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
