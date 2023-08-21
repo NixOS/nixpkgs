@@ -138,6 +138,10 @@ in (buildEnv {
     declare -i wrapCount=0
     for link in "$out"/bin/*; do
       target="$(realpath "$link")"
+
+      # don't try to wrap nonexecutable files
+      [[ -x $target ]] || continue
+
       if [[ "''${target##*/}" != "''${link##*/}" ]] ; then
         # detected alias with different basename, use immediate target of $link to preserve $0
         # relevant for mktexfmt, repstopdf, ...
@@ -294,11 +298,17 @@ in (buildEnv {
   # We use faketime to fix the embedded timestamps and patch the uuids
   # with some random but constant values.
   ''
-    if [[ -e "$out/bin/mtxrun" ]]; then
+    if [[ -e "$TEXMFDIST"/scripts/context/lua/mtxrun.lua ]]; then
       substitute "$TEXMFDIST"/scripts/context/lua/mtxrun.lua mtxrun.lua \
         --replace 'cache_uuid=osuuid()' 'cache_uuid="e2402e51-133d-4c73-a278-006ea4ed734f"' \
         --replace 'uuid=osuuid(),' 'uuid="242be807-d17e-4792-8e39-aa93326fc871",'
-      FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
+      # the ConTeXt caches for luatex and luametatex are independent
+      if [[ -e "$out/bin/luatex" ]]; then
+        FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
+      fi
+      if [[ -e "$out/bin/luametatex" ]]; then
+        FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luametatex --luaonly mtxrun.lua --generate
+      fi
     fi
   '' +
   # Get rid of all log files. They are not needed, but take up space
