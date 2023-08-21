@@ -199,7 +199,6 @@
 , "nijs"
 , "node-gyp"
 , "node-gyp-build"
-, "node-inspector"
 , "node-pre-gyp"
 , "node-red"
 , "node2nix"

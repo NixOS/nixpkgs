@@ -245,11 +245,6 @@ final: prev: {
     '';
   };
 
-  node-inspector = prev.node-inspector.override (oldAttrs: {
-    buildInputs = [ final.node-pre-gyp ];
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
   node-red = prev.node-red.override {
     buildInputs = [ final.node-pre-gyp ];
   };
