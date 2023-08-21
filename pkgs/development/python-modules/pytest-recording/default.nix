@@ -33,6 +33,8 @@ buildPythonPackage rec {
     attrs
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   checkInputs = [
     pytestCheckHook
     pytest-httpbin

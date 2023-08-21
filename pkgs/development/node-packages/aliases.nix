@@ -52,6 +52,7 @@ mapAliases {
   inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) clean-css-cli; # added 2023-08-18
+  inherit (pkgs) configurable-http-proxy; # added 2023-08-19
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
@@ -59,6 +60,7 @@ mapAliases {
   gtop = pkgs.gtop; # added 2023-07-31
   inherit (pkgs) htmlhint; # added 2023-08-19
   hueadm = pkgs.hueadm; # added 2023-07-31
+  immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   karma = pkgs.karma-runner; # added 2023-07-29

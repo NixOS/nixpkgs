@@ -10010,6 +10010,12 @@
     githubId = 8555953;
     name = "Laure Tavard";
   };
+  lu15w1r7h = {
+    email = "lwirth2000@gmail.com";
+    github = "LU15W1R7H";
+    githubId = 37505890;
+    name = "Luis Wirth";
+  };
   luc65r = {
     email = "lucas@ransan.tk";
     github = "luc65r";
@@ -15385,6 +15391,13 @@
     keys = [{
       fingerprint = "7246 B6E1 ABB9 9A48 4395  FD11 DC26 B921 A9E9 DBDE";
     }];
+  };
+  sfr = {
+    email = "sol@solfisher.com";
+    matrix = "@sfr:enby.space";
+    github = "solfisher";
+    githubId = 57151943;
+    name = "Sol Fisher Romanoff";
   };
   sfrijters = {
     email = "sfrijters@gmail.com";

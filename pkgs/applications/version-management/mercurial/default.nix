@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.5";
+    version = "6.5.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-pWA9DTlev2f+XSeruzvTf8wBhx7POUx5NnLSweaL5+c=";
+      sha256 = "sha256-M/fejYs2B/orQIzeS4cl4RfrCtQZJqeH6qtAnKik/C8=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-umjOU3OmTdPmLS4IWncqmKxSa6J4KXwTlGhylFt6TQo=";
+      sha256 = "sha256-tPv0UeZOsHDGKzXWeA/fFio7d3EN+KGioDu/1WH1drc=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;

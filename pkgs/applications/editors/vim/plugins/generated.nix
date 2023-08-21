@@ -4006,6 +4006,18 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/gv.vim/";
   };
 
+  hardtime-nvim = buildVimPluginFrom2Nix {
+    pname = "hardtime.nvim";
+    version = "2023-08-20";
+    src = fetchFromGitHub {
+      owner = "m4xshen";
+      repo = "hardtime.nvim";
+      rev = "6826c1fe8bebc63a6886833ca4ffed2fc6ec3382";
+      sha256 = "0xdyh7xd58jnh97p0vps5pzpfpzd2yifrfj4crgxhq8vm3bp2w6b";
+    };
+    meta.homepage = "https://github.com/m4xshen/hardtime.nvim/";
+  };
+
   hare-vim = buildVimPluginFrom2Nix {
     pname = "hare.vim";
     version = "2023-08-07";
