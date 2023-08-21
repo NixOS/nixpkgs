@@ -12,17 +12,18 @@
 , dbus-python
 , pyxdg
 , python-olm
+, emoji
 }:
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "6.0.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    sha256 = "sha256-NSoMGUQjy4TQXdzZcQfO2rUQDsuSzQnoGDpqFiLQHVQ=";
+    hash = "sha256-qL6ARkAWu0FEuYK2e9Z9hMSfK4TW0kGgoIFUfJ8Dgwk=";
   };
 
   format = "pyproject";
@@ -49,6 +50,7 @@ buildPythonApplication rec {
     dbus-python
     pyxdg
     python-olm
+    emoji
   ] ++ matrix-nio.optional-dependencies.e2e;
 
   meta = with lib; {
