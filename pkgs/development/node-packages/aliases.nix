@@ -77,6 +77,7 @@ mapAliases {
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
+  stf = throw "stf was removed because it was broken"; # added 2023-08-21
   thelounge = pkgs.thelounge; # Added 2023-05-22
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21

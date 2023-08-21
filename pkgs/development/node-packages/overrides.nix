@@ -389,10 +389,6 @@ final: prev: {
     meta = oldAttrs.meta // { broken = since "10"; };
   });
 
-  stf = prev.stf.override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
   tailwindcss = prev.tailwindcss.override {
     plugins = [ ];
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];

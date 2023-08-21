@@ -264,7 +264,6 @@
 , "sql-formatter"
 , "ssb-server"
 , "stackdriver-statsd-backend"
-, "stf"
 , "stylelint"
 , "surge"
 , "svelte-check"
