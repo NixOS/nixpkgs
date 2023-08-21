@@ -34,6 +34,18 @@ stdenv.mkDerivation rec {
     #define HALIDE_CPP_COMPILER_HAS_FLOAT16' \
                 '#if defined(__x86_64__) || defined(__i386__)
     #define HALIDE_CPP_COMPILER_HAS_FLOAT16'
+
+    # AvailabilityVersions.h is part of Apple SDK, and we do not want to depend on it
+    substituteInPlace 'src/runtime/HalideBuffer.h' \
+      --replace '#ifdef __APPLE__
+    #include <AvailabilityVersions.h>
+    #include <TargetConditionals.h>
+    #endif' \
+                ' ' \
+      --replace 'TARGET_OS_OSX && (__MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_15)' \
+                '0' \
+      --replace 'TARGET_OS_IPHONE && (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_14_0)' \
+                '0'
   '';
 
   cmakeFlags = [
@@ -45,6 +57,15 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  # Note: disable mullapudi2016_fibonacci because it requires too much
+  # parallelism for remote builders
+  ctestArgs = "--output-on-failure -E 'mullapudi2016_fibonacci'";
+  checkPhase = ''
+    runHook preCheck
+    ctest ${ctestArgs}
+    runHook postCheck
+  '';
 
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
