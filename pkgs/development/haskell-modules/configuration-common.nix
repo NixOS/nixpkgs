@@ -2749,12 +2749,7 @@ self: super: {
 
   # Tests fail due to the newly-build fourmolu not being in PATH
   # https://github.com/fourmolu/fourmolu/issues/231
-  fourmolu_0_13_1_0 = dontCheck (super.fourmolu_0_13_1_0.overrideScope (lself: lsuper: {
-    Cabal-syntax = lself.Cabal-syntax_3_10_1_0;
-    ghc-lib-parser = lself.ghc-lib-parser_9_6_2_20230523;
-    parsec = lself.parsec_3_1_16_1;
-    text = lself.text_2_0_2;
-  }));
+  fourmolu_0_13_1_0 = dontCheck super.fourmolu_0_13_1_0;
 
   # Merged upstream, but never released. Allows both intel and aarch64 darwin to build.
   # https://github.com/vincenthz/hs-gauge/pull/106
