@@ -116,10 +116,6 @@ self: super: {
   # There will probably be a new revision soon.
   hls-brittany-plugin = assert super.hls-brittany-plugin.version == "1.1.0.0"; doJailbreak super.hls-brittany-plugin;
 
-  hls-hlint-plugin = super.hls-hlint-plugin.override {
-    apply-refact = self.apply-refact_0_11_0_0;
-  };
-
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 
@@ -2543,16 +2539,6 @@ self: super: {
   #
   # has been resolved.
   lucid-htmx = doJailbreak super.lucid-htmx;
-
-  # Needs lsp >= 2.1
-  futhark = super.futhark.override {
-    lsp = self.lsp_2_1_0_0;
-  };
-
-  # Provide matching lsp-types version
-  lsp_2_1_0_0 = doDistribute (super.lsp_2_1_0_0.override {
-    lsp-types = self.lsp-types_2_0_1_1;
-  });
 
   # Too strict bounds on hspec
   # https://github.com/klapaucius/vector-hashtables/issues/11

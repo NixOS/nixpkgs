@@ -123,7 +123,6 @@ self: super: builtins.intersectAttrs super {
     hls-brittany-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
-    hls-cabal-plugin
     hls-overloaded-record-dot-plugin
   ;
 
@@ -134,6 +133,7 @@ self: super: builtins.intersectAttrs super {
     hls-gadt-plugin
 
     # https://github.com/haskell/haskell-language-server/pull/3431
+    hls-cabal-plugin
     hls-cabal-fmt-plugin
     hls-code-range-plugin
     hls-explicit-record-fields-plugin
