@@ -5355,6 +5355,9 @@ with pkgs;
     (import ../tools/typesetting/tex/texlive/stable.nix {
     inherit (__splicedPackages) callPackage lib fetchurl fetchpatch;
   });
+  texlive_latest = recurseIntoAttrs (import ../tools/typesetting/tex/texlive/latest {
+    inherit (__splicedPackages) callPackage lib fetchurl fetchpatch makeWrapper mupdf potrace luametatex;
+  });
 
   fop = callPackage ../tools/typesetting/fop {
     jdk = openjdk8;
