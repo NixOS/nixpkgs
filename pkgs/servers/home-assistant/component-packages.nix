@@ -328,7 +328,8 @@
       sqlalchemy
     ];
     "baf" = ps: with ps; [
-    ]; # missing inputs: aiobafi6
+      aiobafi6
+    ];
     "baidu" = ps: with ps; [
     ]; # missing inputs: baidu-aip
     "balboa" = ps: with ps; [
@@ -4887,6 +4888,7 @@
     "azure_devops"
     "azure_event_hub"
     "backup"
+    "baf"
     "balboa"
     "bayesian"
     "binary_sensor"
