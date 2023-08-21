@@ -69,7 +69,7 @@ self: super: builtins.intersectAttrs super {
         -e "s/@@GHC_VERSION@@/${self.ghc.version}/" \
         -e "s/@@BOOT_PKGS@@/$BOOT_PKGS/" \
         -e "s/@@ABI_HASHES@@/$(for dep in $BOOT_PKGS; do printf "%s:" "$dep" && ghc-pkg-${self.ghc.version} field $dep abi --simple-output ; done | tr '\n' ' ' | xargs)/" \
-        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://haskell4nix.readthedocs.io/nixpkgs-users-guide.html#how-to-install-haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
+        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://nixos.org/manual/nixpkgs/unstable/#haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
         bindist/wrapper.in > "$out/bin/haskell-language-server"
       ln -s "$out/bin/haskell-language-server" "$out/bin/haskell-language-server-${self.ghc.version}"
       chmod +x "$out/bin/haskell-language-server"
