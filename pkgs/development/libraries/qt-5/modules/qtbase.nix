@@ -175,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     # QT's configure script will refuse to use pkg-config unless these two environment variables are set
     export PKG_CONFIG_SYSROOT_DIR=/
     export PKG_CONFIG_LIBDIR=${lib.getLib pkg-config}/lib
-    echo "QMAKE_PKG_CONFIG=''$''${CROSS_COMPILE}pkg-config" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+    echo 'QMAKE_PKG_CONFIG=''$''${CROSS_COMPILE}pkg-config' >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
   '';
 
   postConfigure = ''
