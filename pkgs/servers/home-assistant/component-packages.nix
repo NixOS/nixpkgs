@@ -915,7 +915,8 @@
       pdunehd
     ];
     "duotecno" = ps: with ps; [
-    ]; # missing inputs: pyduotecno
+      pyduotecno
+    ];
     "dwd_weather_warnings" = ps: with ps; [
       dwdwfsapi
     ];
@@ -4967,6 +4968,7 @@
     "dte_energy_bridge"
     "duckdns"
     "dunehd"
+    "duotecno"
     "dwd_weather_warnings"
     "eafm"
     "easyenergy"
