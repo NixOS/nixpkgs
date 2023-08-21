@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "click-help-colors";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78cbcf30cfa81c5fc2a52f49220121e1a8190cd19197d9245997605d3405824d";
+    sha256 = "sha256-dWJF5ULSkia7O8BWv6WIhvISuiuC9OjPX8iEF2rJbXI=";
   };
 
   propagatedBuildInputs = [ click ];
