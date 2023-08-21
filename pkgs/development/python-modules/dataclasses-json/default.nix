@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-pCvVKHh2elHaukEJNTw8MgJmoTlYjO9aVWFCQXXD13c=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
