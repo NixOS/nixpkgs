@@ -16,6 +16,7 @@
 , libjpeg
 , makeDesktopItem
 , freetype
+, mumble
 }:
 
 stdenv.mkDerivation {
@@ -47,11 +48,14 @@ stdenv.mkDerivation {
     libvorbis
     libjpeg
     freetype
+    mumble
   ];
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "USE_INTERNAL_LIBS=0" "USE_FREETYPE=1" "USE_OPENAL_DLOPEN=0" "USE_CURL_DLOPEN=0" ];
+  preConfigure = ''
+    cp ${./Makefile.local} ./Makefile.local
+  '';
 
   installTargets = [ "copyfiles" ];
 
