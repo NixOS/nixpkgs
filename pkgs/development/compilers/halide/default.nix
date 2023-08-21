@@ -27,6 +27,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lJQrXkJgBmGb/QMSxwuPkkHOSgEDowLWzIolp1km2Y8=";
   };
 
+  postPatch = ''
+    # See https://github.com/halide/Halide/issues/7785
+    substituteInPlace 'src/runtime/HalideRuntime.h' \
+      --replace '#if defined(__x86_64__) || defined(__i386__) || defined(__arm__) || defined(__aarch64__)
+    #define HALIDE_CPP_COMPILER_HAS_FLOAT16' \
+                '#if defined(__x86_64__) || defined(__i386__)
+    #define HALIDE_CPP_COMPILER_HAS_FLOAT16'
+  '';
+
   cmakeFlags = [
     "-DWARNINGS_AS_ERRORS=OFF"
     "-DWITH_PYTHON_BINDINGS=OFF"
