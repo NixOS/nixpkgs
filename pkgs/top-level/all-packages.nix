@@ -14454,6 +14454,8 @@ with pkgs;
 
   wpscan = callPackage ../tools/security/wpscan { };
 
+  write-good = callPackage ../tools/text/write-good { };
+
   wsmancli = callPackage ../tools/system/wsmancli { };
 
   wstunnel = haskell.lib.compose.justStaticExecutables haskellPackages.wstunnel;

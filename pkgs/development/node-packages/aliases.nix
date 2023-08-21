@@ -77,6 +77,7 @@ mapAliases {
   vue-cli = self."@vue/cli"; # added 2023-08-18
   vue-language-server = self.vls; # added 2023-08-20
   inherit (pkgs) web-ext; # added 2023-08-20
+  inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
 }
