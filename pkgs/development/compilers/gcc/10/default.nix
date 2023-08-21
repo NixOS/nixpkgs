@@ -48,17 +48,16 @@ with lib;
 with builtins;
 
 let majorVersion = "10";
-    version = "${majorVersion}.4.0";
+    version = "${majorVersion}.5.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches = [
       # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
       ../fix-bug-80431.patch
-      ../11/fix-struct-redefinition-on-glibc-2.36.patch
     ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
-      ++ optional (noSysDirs && hostPlatform.isRiscV) ../no-sys-dirs-riscv.patch
+      ++ optional noSysDirs ../no-sys-dirs-riscv.patch
       /* ++ optional (hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
         url = "https://git.busybox.net/buildroot/plain/package/gcc/${version}/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
         sha256 = ""; # TODO: uncomment and check hash when available.
@@ -150,7 +149,7 @@ lib.pipe ((callFile ../common/builder.nix {}) ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "1wg4xdizkksmwi66mvv2v4pk3ja8x64m7v9gzhykzd3wrmdpsaf9";
+    hash = "sha256-JRCVQ/30bzl8NHtdi3osflaUpaUczkucbh6opxyjB8E=";
   };
 
   inherit patches;

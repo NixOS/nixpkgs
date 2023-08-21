@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , writeScript
 , buildPythonApplication
 , fetchFromGitHub
@@ -10,14 +11,14 @@
 
 buildPythonApplication rec {
   pname = "gogdl";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "heroic-gogdl";
-    rev = "d7f29dfef5818e8b323d04761e18a9abb750f93e";
-    hash = "sha256-9dAenawt9h/sz5paVYoqk+nmzPrInlqyh1EgshI25CE=";
+    rev = "d2fa34bfba7beb2ecc0e3fc70a657f2c612c8a10";
+    hash = "sha256-YCqtfY49lDg6sLrF/INOZVD9cMCwvejhySzUWrxHKAw=";
   };
 
   disabled = pythonOlder "3.8";
@@ -25,6 +26,13 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     setuptools
     requests
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Heroic-Games-Launcher/heroic-gogdl/pull/37.patch";
+      hash = "sha256-oZLetPoWzsEDrL0Bh89HB4hTn70FTh8aXj9mKGr4Dqw=";
+    })
   ];
 
   pythonImportsCheck = [ "gogdl" ];

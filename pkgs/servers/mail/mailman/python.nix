@@ -12,12 +12,14 @@ python3.override {
         to arise again. Since we don't want to clutter the python package-set
         itself with version overrides and don't want to change the APIs
         in here back and forth every time this comes up (and as a result
-        force users to change their code accordingly), this empty overlay
-        is kept on purpose.
+        force users to change their code accordingly), this overlay
+        is kept on purpose, even when empty.
 
         [1] 72a14ea563a3f5bf85db659349a533fe75a8b0ce
         [2] f931bc81d63f5cfda55ac73d754c87b3fd63b291
       */
+      django = super.django_3;
     })
+
     overlay;
 }

@@ -29,6 +29,8 @@ let
 
         doCheck = false;
       };
+
+      django = super.django_3;
     };
   };
 in

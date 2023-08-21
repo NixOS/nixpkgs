@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.6.5";
+  version = "2.6.6";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-Lieo1PTCr4/oQLVzJxwgqhY+JJh/l2UhRkQpD1vrONk=";
+    hash = "sha256-CC6ZjPVCmE1DY0RC2+EdqGB1nlEJBxUupXm9xC/jnqA=";
   };
 
   # TODO: separate "out" and "bin"

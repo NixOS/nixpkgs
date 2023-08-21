@@ -36,7 +36,10 @@ let
 
     debug = {
       # Necessary for BTF
-      DEBUG_INFO                = yes;
+      DEBUG_INFO                = mkMerge [
+        (whenOlder "5.2" (if (features.debug or false) then yes else no))
+        (whenBetween "5.2" "5.18" yes)
+      ];
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
@@ -59,8 +62,6 @@ let
       SUNRPC_DEBUG              = yes;
       # Provide access to tunables like sched_migration_cost_ns
       SCHED_DEBUG               = yes;
-
-      GDB_SCRIPTS               = yes;
     };
 
     power-management = {

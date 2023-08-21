@@ -9,6 +9,8 @@ let
 
   python3' = python310.override {
     packageOverrides = self: super: {
+      django = super.django_3;
+
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
         src = fetchPypi {

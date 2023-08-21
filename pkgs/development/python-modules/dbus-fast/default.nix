@@ -1,12 +1,14 @@
 { lib
 , async-timeout
 , buildPythonPackage
+, cython_3
 , fetchFromGitHub
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -23,9 +25,15 @@ buildPythonPackage rec {
     hash = "sha256-JlR2eoNOsZ/YE313fWAtoxJhlpMnUaDJcFpwA2b6p4c=";
   };
 
+  # The project can build both an optimized cython version and an unoptimized
+  # python version. This ensures we fail if we build the wrong one.
+  env.REQUIRE_CYTHON = 1;
+
   nativeBuildInputs = [
+    cython_3
     poetry-core
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

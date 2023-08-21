@@ -5,24 +5,26 @@
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.44.0";
+  version = "0.44.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-qxtYYFhABrkJlwWBx4ak7xnaqg7x+D1fUF1gcJFK0e4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zSrXfSG9GXReJ+XRx7FTBZovSvNq725zzWMje3maTx4=";
   };
+
   # hash missmatch on across linux and darwin
   proxyVendor = true;
-  vendorHash = "sha256-mE+GpD9vMhjVQsH+mckU6GhNiLMDV5H31Jj1/HLBSEs=";
+
+  vendorHash = "sha256-CEr8UvQtKZo5jahLeLx3RYT592i6SwwNLRA4IRD0mYU=";
 
   subPackages = [ "cmd/trivy" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X=main.version=v${version}"
   ];
 
   # Tests require network access
@@ -49,6 +51,6 @@ buildGoModule rec {
       application dependencies (Bundler, Composer, npm, yarn, etc.).
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ fab jk ];
   };
 }

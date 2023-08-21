@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
       url = "https://cgit.freebsd.org/ports/plain/shells/bash/files/patch-configure?id=3e147a1f594751a68fea00a28090d0792bee0b51";
       sha256 = "XHFMQ6eXTReNoywdETyrfQEv1rKF8+XFbQZP4YoVKFk=";
     })
+    # Apply parallel build fix pending upstream inclusion:
+    #   https://savannah.gnu.org/patch/index.php?10373
+    # Had to fetch manually to workaround -p0 default.
+    ./parallel.patch
   ];
 
   configureFlags = [

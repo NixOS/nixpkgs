@@ -74,6 +74,12 @@ buildPythonPackage rec {
     "tests/test_setuptools_pep518.py"
   ];
 
+  # Tries to access ninja.__version__ which our stub doesn't have.
+  # FIXME: remove for next cycle
+  disabledTests = [
+    "test_get_ninja_programs_cmake_module"
+  ];
+
   pythonImportsCheck = [
     "scikit_build_core"
   ];
