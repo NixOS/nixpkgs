@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, buildPackages
-, texlive
+, bin, combine, pkgs
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config
@@ -93,8 +93,8 @@ core = stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # configure: error: tangle was not found but is required when cross-compiling.
     # dev (himktables) is used when building hitex to generate the additional source file hitables.c
-    texlive.bin.core
-    texlive.bin.core.dev
+    bin.core
+    bin.core.dev
   ];
 
   buildInputs = [
@@ -196,7 +196,7 @@ core = stdenv.mkDerivation rec {
 };
 
 
-inherit (core-big) metafont mflua metapost luatex luahbtex luajittex xetex;
+inherit (bin.core-big) metafont mflua metapost luatex luahbtex luajittex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
@@ -394,7 +394,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   inherit (src) version;
   format = "other";
 
-  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs));
+  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") pkgs.pygmentex.pkgs));
 
   propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
@@ -475,7 +475,7 @@ xdvi = stdenv.mkDerivation {
 
 xpdfopen = stdenv.mkDerivation {
   pname = "texlive-xpdfopen.bin";
-  inherit (lib.head texlive.xpdfopen.pkgs) version;
+  inherit (lib.head pkgs.xpdfopen.pkgs) version;
 
   inherit (common) src;
 
@@ -510,7 +510,7 @@ xindy = stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config perl
-    (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
+    (combine { inherit (pkgs) scheme-basic cyrillic ec; })
   ];
   buildInputs = [ clisp libiconv perl ];
 

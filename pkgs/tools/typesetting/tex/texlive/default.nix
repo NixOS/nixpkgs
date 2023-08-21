@@ -2,46 +2,15 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
-, callPackage, ghostscript_headless, harfbuzz
-, makeWrapper, installShellFiles
-, python3, ruby, perl, tk, jdk, bash, snobol4
-, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, ncurses, zip
-, libfaketime, asymptote, biber-ms, makeFontsConf
-, useFixedHashes ? true
+{ lib
+, makeScopeWithSplicing', pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsHostTarget
 , recurseIntoAttrs
+, fetchurl, runCommand
+, ghostscript_headless, harfbuzz
+, useFixedHashes ? true
 }:
 let
-  # various binaries (compiled)
-  bin = callPackage ./bin.nix {
-    ghostscript = ghostscript_headless;
-    harfbuzz = harfbuzz.override {
-      withIcu = true; withGraphite2 = true;
-    };
-    inherit useFixedHashes;
-  };
-
-  # function for creating a working environment from a set of TL packages
-  combine = import ./combine.nix {
-    inherit bin buildEnv lib makeWrapper writeText runCommand
-      perl libfaketime makeFontsConf bash tl coreutils gawk gnugrep gnused;
-    ghostscript = ghostscript_headless;
-  };
-
   tlpdb = import ./tlpdb.nix;
-
-  tlpdbVersion = tlpdb."00texlive.config";
-
-  # the set of TeX Live packages, collections, and schemes; using upstream naming
-  overriddenTlpdb = let
-    overrides = import ./tlpdb-overrides.nix {
-      inherit
-        lib bin tlpdb tlpdbxz tl
-        installShellFiles
-        coreutils findutils gawk getopt ghostscript_headless gnugrep
-        gnumake gnupg gnused gzip ncurses perl python3 ruby zip;
-    };
-  in overrides tlpdb;
 
   version = {
     # day of the snapshot being taken
@@ -88,24 +57,26 @@ let
   # map: name -> fixed-output hash
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixed-hashes.nix);
 
-  buildTeXLivePackage = import ./build-texlive-package.nix {
-    inherit lib fetchurl runCommand bash jdk perl python3 ruby snobol4 tk;
-    texliveBinaries = bin;
-  };
-
-  tl = lib.mapAttrs (pname: { revision, extraRevision ? "", ... }@args:
-    buildTeXLivePackage (args
-      # NOTE: the fixed naming scheme must match generate-fixed-hashes.nix
-      // { inherit mirrors pname; fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { }; }
-      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); })
-  ) overriddenTlpdb;
+  tlpdbVersion = tlpdb."00texlive.config";
 
   assertions = with lib;
     assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
     assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
-in
-  tl // {
+  # the function defining the recursive attribute set that eventually makes up the texlive scope
+  addPackages = self:
+    let
+      callPackage = self.newScope {
+        ghostscript = ghostscript_headless;
+        harfbuzz = harfbuzz.override { withIcu = true; withGraphite2 = true; };
+        inherit useFixedHashes;
+        # make the tlpdb used by callPackage the "source" tlpdb above, not the one in the scope
+        # TODO: rename one of them to make things less confusing
+        inherit tlpdb;
+      };
+    in  {
+
+    inherit callPackage;
 
     tlpdb = {
       # nested in an attribute set to prevent them from appearing in search
@@ -113,12 +84,27 @@ in
       xz = tlpdbxz;
     };
 
-    bin = assert assertions; bin // {
-      # for backward compatibility
-      latexindent = lib.findFirst (p: p.tlType == "bin") tl.latexindent.pkgs;
-    };
+    bin = assert assertions; callPackage ./bin.nix { };
 
-    combine = assert assertions; combine;
+    combine = assert assertions; callPackage ./combine.nix { };
+
+    pkgs = let
+      buildTeXLivePackage = callPackage ./build-texlive-package.nix { texliveBinaries = self.bin; };
+
+      overrides = callPackage ./tlpdb-overrides.nix { tlpdbxz = self.tlpdb.xz; };
+
+      overriddenTlpdb = overrides tlpdb;
+
+      makePackageSet = tlpdb:
+        lib.mapAttrs (pname: { revision, extraRevision ? "", ... }@args:
+          buildTeXLivePackage (args
+            # NOTE: the fixed naming scheme must match generate-fixed-hashes.nix
+            // { inherit mirrors pname; fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { }; }
+            // lib.optionalAttrs (args ? deps) { deps = map (n: self.pkgs.${n}) (args.deps or [ ]); })
+        ) tlpdb;
+
+    in lib.makeOverridable makePackageSet overriddenTlpdb;
+
 
     # Pre-defined combined packages for TeX Live schemes,
     # to make nix-env usage more comfortable and build selected on Hydra.
@@ -155,15 +141,45 @@ in
             maintainers = with lib.maintainers;  [ veprbl ];
             license = licenses.${pname};
           }
-          (combine {
+          (self.combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
             extraVersion = with version; if final then "-final" else ".${year}${month}${day}";
           })
         )
-        { inherit (tl)
+        { inherit (self.pkgs)
             scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
             scheme-medium scheme-minimal scheme-small scheme-tetex;
         }
     );
-  }
+  };
+
+  texlive = makeScopeWithSplicing' {
+    # We select the things we want in the splices explicitly to avoid infinite
+    # recursion that occurs when using then compat fixups that reinsert pkgs
+    # into the toplevel
+    # TODO: switch to generateSplicesForMkScope when the compat layer is removed
+    otherSplices = {
+      selfBuildBuild   = { inherit (pkgsBuildBuild.texlive)  bin pkgs combine combined; };
+      selfBuildHost    = { inherit (pkgsBuildHost.texlive)   bin pkgs combine combined; };
+      selfBuildTarget  = { inherit (pkgsBuildTarget.texlive) bin pkgs combine combined; };
+      selfHostHost     = { inherit (pkgsHostHost.texlive)    bin pkgs combine combined; };
+      selfHostTarget   = { inherit (pkgsHostTarget.texlive)  bin pkgs combine combined; };
+      selfTargetTarget = { };
+    };
+    f = addPackages;
+  };
+
+  applyOverScope = f: scope: f (scope // {
+      overrideScope = g: applyOverScope f (scope.overrideScope g);
+  });
+
+  # for backward compability
+  compatFixups = scope:
+    scope.pkgs // scope // {
+      bin = scope.bin // {
+        latexindent = lib.findFirst (p: p.tlType == "bin") scope.pkgs.latexindent.pkgs;
+      };
+    };
+
+in applyOverScope compatFixups texlive
