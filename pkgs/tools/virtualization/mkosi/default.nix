@@ -1,10 +1,12 @@
 { lib
 , fetchFromGitHub
+, python3
 , setuptools
 , setuptools-scm
 , wheel
 , buildPythonApplication
 , pytestCheckHook
+, pefile
 , bubblewrap
 , systemd
 , stdenv
@@ -19,6 +21,10 @@ let
     withEfi = true;
     withUkify = true;
   };
+
+  python3pefile = python3.withPackages (ps: with ps; [
+    pefile
+  ]);
 in
 buildPythonApplication rec {
   pname = "mkosi";
@@ -47,6 +53,10 @@ buildPythonApplication rec {
     setuptools
     setuptools-scm
     wheel
+  ];
+
+  makeWrapperArgs = [
+    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
   ];
 
   propagatedBuildInputs = [
