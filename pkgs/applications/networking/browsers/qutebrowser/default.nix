@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication {
   ];
 
   propagatedBuildInputs = with python3.pkgs; ([
-    pyyaml pyqtwebengine jinja2 pygments
+    pyyaml pyqt6-webengine jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
     readability-lxml pykeepass stem

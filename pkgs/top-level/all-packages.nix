@@ -276,6 +276,8 @@ with pkgs;
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
+  astronomer = callPackage ../tools/misc/astronomer { };
+
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
 
   _0x =  callPackage ../tools/misc/0x { };
@@ -1799,6 +1801,8 @@ with pkgs;
   hostmux = callPackage ../tools/misc/hostmux { };
 
   httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
+
+  immich-cli = callPackage ../tools/misc/immich-cli { };
 
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
@@ -8388,6 +8392,8 @@ with pkgs;
 
   ggobi = callPackage ../tools/graphics/ggobi { };
 
+  ggshield = callPackage ../tools/security/ggshield { };
+
   ghost = callPackage ../tools/security/ghost { };
 
   ghostunnel = callPackage ../tools/networking/ghostunnel { };
@@ -13015,8 +13021,6 @@ with pkgs;
   # aka., pgp-tools
   signing-party = callPackage ../tools/security/signing-party { };
 
-  signumone-ks = callPackage ../applications/misc/signumone-ks { };
-
   sigtop = callPackage ../tools/backup/sigtop { };
 
   silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
@@ -17278,8 +17282,6 @@ with pkgs;
   scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; };
   scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
   scala_3 = callPackage ../development/compilers/scala { };
-  # deprecated
-  dotty = scala_3;
 
   scala = scala_2_13;
   scala-runners = callPackage ../development/compilers/scala-runners {
@@ -19742,6 +19744,8 @@ with pkgs;
 
   openocd = callPackage ../development/embedded/openocd { };
 
+  openocd-rp2040 = callPackage ../development/embedded/openocd-rp2040 { };
+
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
   };
@@ -22097,6 +22101,8 @@ with pkgs;
   imgui = callPackage ../development/libraries/imgui { };
 
   imtui = callPackage ../development/libraries/imtui { };
+
+  immer = callPackage ../development/libraries/immer { };
 
   imv = callPackage ../applications/graphics/imv { };
 
@@ -24612,7 +24618,7 @@ with pkgs;
   qt5 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.15) {
       inherit (__splicedPackages)
-        makeScopeWithSplicing generateSplicesForMkScope lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper
+        makeScopeWithSplicing' generateSplicesForMkScope lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper
         bison cups dconf harfbuzz libGL perl gtk3 python3
         darwin buildPackages;
       inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
@@ -27466,9 +27472,6 @@ with pkgs;
   };
 
   xorg = let
-    keep = _self: { };
-    extra = _spliced0: { };
-
     # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
     # so as not to have the newly bound xorg items already in scope,  which would
     # have created a cycle.
@@ -27483,11 +27486,10 @@ with pkgs;
 
     generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix { };
 
-    xorgPackages = makeScopeWithSplicing
-      (generateSplicesForMkScope "xorg")
-      keep
-      extra
-      (lib.extends overrides generatedPackages);
+    xorgPackages = makeScopeWithSplicing' {
+      otherSplices = generateSplicesForMkScope "xorg";
+      f = lib.extends overrides generatedPackages;
+    };
 
   in recurseIntoAttrs xorgPackages;
 
@@ -32134,6 +32136,8 @@ with pkgs;
 
   muzika = callPackage ../applications/audio/muzika { };
 
+  openutau = callPackage ../applications/audio/openutau { };
+
   pattypan = callPackage ../applications/misc/pattypan {
     jdk = jdk.override { enableJavaFX = true; };
   };
@@ -35741,6 +35745,8 @@ with pkgs;
 
   tev = callPackage ../applications/graphics/tev { };
 
+  textual-paint = callPackage ../applications/graphics/textual-paint { };
+
   themechanger = callPackage ../applications/misc/themechanger { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
@@ -36744,6 +36750,8 @@ with pkgs;
   xscope = callPackage ../applications/misc/xscope { };
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver { };
+
+  xsubfind3r = callPackage ../tools/security/xsubfind3r {  };
 
   xsuspender = callPackage ../applications/misc/xsuspender {  };
 
@@ -40466,6 +40474,8 @@ with pkgs;
   mongoose = callPackage ../development/libraries/science/math/mongoose { };
 
   morph = callPackage ../tools/package-management/morph { };
+
+  mus = callPackage ../applications/audio/mus { };
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 

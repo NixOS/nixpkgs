@@ -7321,6 +7321,8 @@ self: super: with self; {
 
   oca-port = callPackage ../development/python-modules/oca-port { };
 
+  ochre = callPackage ../development/python-modules/ochre { };
+
   oci = callPackage ../development/python-modules/oci { };
 
   ocifs = callPackage ../development/python-modules/ocifs { };
@@ -9057,6 +9059,8 @@ self: super: with self; {
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
+  pygitguardian = callPackage ../development/python-modules/pygitguardian { };
+
   pygithub = callPackage ../development/python-modules/pygithub { };
 
   pyglet = callPackage ../development/python-modules/pyglet { };
@@ -10199,6 +10203,8 @@ self: super: with self; {
   pytest-vcr = callPackage ../development/python-modules/pytest-vcr { };
 
   pytest-virtualenv = callPackage ../development/python-modules/pytest-virtualenv { };
+
+  pytest-voluptuous = callPackage ../development/python-modules/pytest-voluptuous { };
 
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
@@ -12247,6 +12253,8 @@ self: super: with self; {
   stookalert = callPackage ../development/python-modules/stookalert { };
 
   stopit = callPackage ../development/python-modules/stopit { };
+
+  stransi = callPackage ../development/python-modules/stransi { };
 
   strategies = callPackage ../development/python-modules/strategies { };
 
