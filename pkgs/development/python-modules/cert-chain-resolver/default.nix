@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rkoopmans";
     repo = "python-certificate-chain-resolver";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-2itpu/Ap5GNnqAiw3Cp+8rndreWlwfPd+WwM99G7U2E=";
   };
 
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Resolve / obtain the certificate intermediates of a x509 certificate";
     homepage = "https://github.com/rkoopmans/python-certificate-chain-resolver";
+    changelog = "https://github.com/rkoopmans/python-certificate-chain-resolver/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ veehaitch ];
   };
