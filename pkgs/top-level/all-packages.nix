@@ -20424,6 +20424,8 @@ with pkgs;
     python = python3;
   };
 
+  yo = callPackage ../development/tools/yo { };
+
   yodl = callPackage ../development/tools/misc/yodl { };
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
