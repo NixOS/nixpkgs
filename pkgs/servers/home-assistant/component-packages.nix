@@ -826,7 +826,8 @@
       nextcord
     ];
     "discovergy" = ps: with ps; [
-    ]; # missing inputs: pydiscovergy
+      pydiscovergy
+    ];
     "dlib_face_detect" = ps: with ps; [
       face-recognition
     ];
@@ -5011,6 +5012,7 @@
     "dialogflow"
     "directv"
     "discord"
+    "discovergy"
     "dlna_dmr"
     "dlna_dms"
     "dnsip"
