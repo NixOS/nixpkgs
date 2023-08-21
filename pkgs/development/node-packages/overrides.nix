@@ -92,10 +92,6 @@ final: prev: {
     '';
   };
 
-  coc-imselect = prev.coc-imselect.override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
   dat = prev.dat.override (oldAttrs: {
     buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
     meta = oldAttrs.meta // { broken = since "12"; };
