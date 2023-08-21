@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "http://python-cerberus.org/";
     changelog = "https://github.com/pyeve/cerberus/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }
