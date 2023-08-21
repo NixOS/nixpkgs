@@ -346,7 +346,6 @@
 , "typescript-language-server"
 , "uglify-js"
 , "undollar"
-, "ungit"
 , "unified-language-server"
 , "vega-cli"
 , "vega-lite"
