@@ -70,7 +70,7 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "6.0.0";
+  version = "6.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = "refs/tags/${version}";
-    hash = "sha256-qIxacrRSN/Il9cY6ZsOiYLPyxI20aI+DyDM0/9jr654=";
+    hash = "sha256-+AtXgRNxPryP/fd/GQlLNxWbP6ozikqG2yBCp3dE0tY=";
   };
 
   nativeBuildInputs = [
