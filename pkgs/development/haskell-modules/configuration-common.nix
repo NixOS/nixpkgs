@@ -110,9 +110,6 @@ self: super: {
     # otherwise we have different versions of ghc-paths
     # around which have the same abi-hash, which can lead to confusions and conflicts.
     ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
-
-    lsp = lself.lsp_2_1_0_0;
-    lsp-test = lself.lsp-test_0_15_0_1;
   });
 
   # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3546#issuecomment-1494139751
