@@ -505,7 +505,9 @@ Shortcut to setup environments with C headers/libraries and Python packages:
 nix-shell -p pythonPackages.pyramid zlib libjpeg git
 ```
 
-Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
+::: {.note}
+There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
+:::
 
 ## User Guide {#user-guide}
 
@@ -1123,16 +1125,20 @@ command provided by the setup.py (i.e. `python setup.py test`). However,
 this is currently deprecated https://github.com/pypa/setuptools/pull/1878
 and your package should provide its own checkPhase.
 
-*NOTE:* The `checkPhase` for python maps to the `installCheckPhase` on a
+::: {.note}
+The `checkPhase` for python maps to the `installCheckPhase` on a
 normal derivation. This is due to many python packages not behaving well
 to the pre-installed version of the package. Version info, and natively
 compiled extensions generally only exist in the install directory, and
 thus can cause issues when a test suite asserts on that behavior.
+:::
 
-*NOTE:* Tests should only be disabled if they don't agree with nix
+::: {.note}
+Tests should only be disabled if they don't agree with nix
 (e.g. external dependencies, network access, flakey tests), however,
 as many tests should be enabled as possible. Failing tests can still be
 a good indication that the package is not in a valid state.
+:::
 
 #### Using pytest {#using-pytest}
 
@@ -1177,8 +1183,10 @@ filtering out tests which contain `download` or `update` in their test case name
 Only one `-k` argument is allowed, and thus a long predicate should be concatenated
 with “\\” and wrapped to the next line.
 
-*NOTE:* In pytest==6.0.1, the use of “\\” to continue a line (e.g. `-k 'not download \'`) has
+::: {.note}
+In pytest==6.0.1, the use of “\\” to continue a line (e.g. `-k 'not download \'`) has
 been removed, in this case, it's recommended to use `pytestCheckHook`.
+:::
 
 #### Using pytestCheckHook {#using-pytestcheckhook}
 
