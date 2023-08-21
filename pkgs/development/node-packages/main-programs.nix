@@ -75,7 +75,6 @@
   vscode-css-languageserver-bin = "css-languageserver";
   vscode-html-languageserver-bin = "html-languageserver";
   vscode-json-languageserver-bin = "json-languageserver";
-  vue-language-server = "vls";
   webtorrent-cli = "webtorrent";
   "@zwave-js/server" = "zwave-server";
 }
