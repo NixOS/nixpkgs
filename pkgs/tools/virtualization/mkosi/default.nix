@@ -39,6 +39,8 @@ buildPythonApplication rec {
   patchPhase = lib.optionalString stdenv.isLinux ''
     substituteInPlace mkosi/run.py --replace \
       'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
+    substituteInPlace mkosi/__init__.py --replace \
+      '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
   '';
 
   nativeBuildInputs = [
