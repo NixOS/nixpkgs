@@ -7,43 +7,15 @@
 , recurseIntoAttrs
 , fetchurl, runCommand
 , ghostscript_headless, harfbuzz
-, useFixedHashes ? true
+, tlpdb, tlpdbxzHash, src, version, mirrors, useFixedHashes ? true, fixedHashes ? {}
 }:
 let
-  tlpdb = import ./tlpdb.nix;
-
-  version = {
-    # day of the snapshot being taken
-    year = "2023";
-    month = "03";
-    day = "19";
-    # TeX Live version
-    texliveYear = 2022;
-    # final (historic) release or snapshot
-    final = true;
-  };
-
-  # The tarballs on CTAN mirrors for the current release are constantly
-  # receiving updates, so we can't use those directly. Stable snapshots
-  # need to be used instead. Ideally, for the release branches of NixOS we
-  # should be switching to the tlnet-final versions
-  # (https://tug.org/historic/).
-  mirrors = with version; lib.optionals final  [
-    # tlnet-final snapshot; used when texlive.tlpdb is frozen
-    # the TeX Live yearly freeze typically happens in mid-March
-    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString texliveYear}/tlnet-final"
-    "ftp://tug.org/texlive/historic/${toString texliveYear}/tlnet-final"
-  ] ++ [
-    # daily snapshots hosted by one of the texlive release managers;
-    # used for non-final snapshots and as fallback for final snapshots that have not reached yet the historic mirrors
-    # please note that this server is not meant for large scale deployment and should be avoided on release branches
-    # https://tug.org/pipermail/tex-live/2019-November/044456.html
-    "https://texlive.info/tlnet-archive/${year}/${month}/${day}/tlnet"
-  ];
+  # the "texlive-specific" arguments passed to this function.
+  args = { inherit tlpdb tlpdbxzHash src version mirrors useFixedHashes fixedHashes; };
 
   tlpdbxz = fetchurl {
     urls = map (up: "${up}/tlpkg/texlive.tlpdb.xz") mirrors;
-    hash = "sha256-vm7DmkH/h183pN+qt1p1wZ6peT2TcMk/ae0nCXsCoMw=";
+    hash = tlpdbxzHash;
   };
 
   tlpdbNix = runCommand "tlpdb.nix" {
@@ -54,26 +26,17 @@ let
     xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq > "$out"
   '';
 
-  # map: name -> fixed-output hash
-  fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixed-hashes.nix);
-
-  tlpdbVersion = tlpdb."00texlive.config";
-
-  assertions = with lib;
-    assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
-    assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
+  assertions = let tlpdbVersion = tlpdb."00texlive.config"; in
+    lib.assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
+    lib.assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
   # the function defining the recursive attribute set that eventually makes up the texlive scope
   addPackages = self:
     let
-      callPackage = self.newScope {
+      callPackage = self.newScope (args // {
         ghostscript = ghostscript_headless;
         harfbuzz = harfbuzz.override { withIcu = true; withGraphite2 = true; };
-        inherit useFixedHashes;
-        # make the tlpdb used by callPackage the "source" tlpdb above, not the one in the scope
-        # TODO: rename one of them to make things less confusing
-        inherit tlpdb;
-      };
+      });
     in  {
       inherit callPackage;
 
