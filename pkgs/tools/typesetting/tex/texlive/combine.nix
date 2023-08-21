@@ -1,4 +1,6 @@
-params: with params;
+{ lib, buildEnv, runCommand, writeText, makeWrapper, libfaketime, makeFontsConf
+, perl, bash, coreutils, gnused, gnugrep, gawk, ghostscript
+, bin, tl }:
 # combine =
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core"

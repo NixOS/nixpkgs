@@ -24,7 +24,7 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin buildEnv lib makeWrapper writeText runCommand
-      stdenv perl libfaketime makeFontsConf bash tl coreutils gawk gnugrep gnused;
+      perl libfaketime makeFontsConf bash tl coreutils gawk gnugrep gnused;
     ghostscript = ghostscript_headless;
   };
 
