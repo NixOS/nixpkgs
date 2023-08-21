@@ -12755,6 +12755,8 @@ with pkgs;
 
   rwc = callPackage ../tools/system/rwc { };
 
+  rwedid = callPackage ../tools/video/rwedid { };
+
   rxp = callPackage ../tools/text/xml/rxp { };
 
   rzip = callPackage ../tools/compression/rzip { };
@@ -15378,6 +15380,8 @@ with pkgs;
   ats2 = callPackage ../development/compilers/ats2 { };
 
   ats-acc = callPackage ../development/tools/ats-acc { };
+
+  august = callPackage ../development/compilers/august { };
 
   avra = callPackage ../development/compilers/avra { };
 
@@ -30298,6 +30302,8 @@ with pkgs;
   adl = callPackage ../applications/video/adl { };
 
   appvm = callPackage ../applications/virtualization/appvm { };
+
+  anilibria-winmaclinux = libsForQt5.callPackage ../applications/video/anilibria-winmaclinux { };
 
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 

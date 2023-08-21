@@ -4608,6 +4608,8 @@ self: super: with self; {
 
   gsd = callPackage ../development/python-modules/gsd { };
 
+  gsm0338 = callPackage ../development/python-modules/gsm0338 { };
+
   gspread = callPackage ../development/python-modules/gspread { };
 
   gssapi = callPackage ../development/python-modules/gssapi {
@@ -8206,6 +8208,8 @@ self: super: with self; {
 
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
+  pytlv = callPackage ../development/python-modules/pytlv { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-creole = callPackage ../development/python-modules/python-creole { };
@@ -9836,6 +9840,8 @@ self: super: with self; {
   pysignalclirestapi = callPackage ../development/python-modules/pysignalclirestapi { };
 
   pysigset = callPackage ../development/python-modules/pysigset { };
+
+  pysim = callPackage ../development/python-modules/pysim { };
 
   pysimplegui = callPackage ../development/python-modules/pysimplegui { };
 
@@ -11819,6 +11825,8 @@ self: super: with self; {
   smmap = callPackage ../development/python-modules/smmap { };
 
   smpplib = callPackage ../development/python-modules/smpplib { };
+
+  smpp_pdu = callPackage ../development/python-modules/smpp.pdu { };
 
   snack = toPythonModule (pkgs.newt.override {
     inherit (self) python;
