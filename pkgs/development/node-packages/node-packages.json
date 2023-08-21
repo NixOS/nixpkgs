@@ -366,7 +366,6 @@
 , "@withgraphite/graphite-cli"
 , "wrangler"
 , "wring"
-, "write-good"
 , "@yaegassy/coc-nginx"
 , "yaml-language-server"
 , "yalc"

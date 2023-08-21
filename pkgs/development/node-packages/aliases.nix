@@ -76,6 +76,7 @@ mapAliases {
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
   vue-cli = self."@vue/cli"; # added 2023-08-18
   inherit (pkgs) web-ext; # added 2023-08-20
+  inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
 }
