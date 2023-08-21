@@ -1470,6 +1470,8 @@ let
 
     qcheck-ounit = callPackage ../development/ocaml-modules/qcheck/ounit.nix { };
 
+    qcheck-stm = callPackage ../development/ocaml-modules/qcheck/stm.nix { };
+
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
     ### R ###
