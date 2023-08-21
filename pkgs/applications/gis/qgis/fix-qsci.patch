@@ -1,0 +1,14 @@
+diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
+index 38aca73dc57..7e56f92ced3 100644
+--- a/python/CMakeLists.txt
++++ b/python/CMakeLists.txt
+@@ -355,7 +355,7 @@ if(WITH_QSCIAPI)
+   add_custom_command(
+     OUTPUT "${QGIS_PYTHON_PAP_FILE}"
+     DEPENDS "${QGIS_PYTHON_API_FILE}"
+-    COMMAND ${_python} "${APIS_SRC_DIR}/generate_console_pap.py" -platform offscreen "${QGIS_PYTHON_PAP_FILE}" "${APIS_SRC_DIR}" "${APIS_OUT_DIR}"
++    COMMAND ${_python} "${APIS_SRC_DIR}/generate_console_pap.py" -platform offscreen "${QGIS_PYTHON_PAP_FILE}" "${APIS_SRC_DIR}" "${APIS_OUT_DIR}"
+     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+     COMMENT "Generating pap file for console auto-completion" VERBATIM)
+ 
+

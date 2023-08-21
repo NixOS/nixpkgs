@@ -38,7 +38,7 @@
 , pdal
 , zstd
 , makeWrapper
-, wrapGAppsHook
+, wrapQtAppsHook
 , substituteAll
 }:
 
@@ -73,14 +73,14 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.28.3";
+  version = "3.32.2";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-nXauZSC78BX1fcx0SXniwQpRmdSLfoqZ5jlbXeHgRGI=";
+    hash = "sha256-4Hcppzgst6v7SR/06ZICSujC4Gfckd/X5Mj40fh9OOU=";
   };
 
   passthru = {
@@ -120,7 +120,7 @@ in mkDerivation rec {
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook cmake flex bison ninja ];
+  nativeBuildInputs = [ makeWrapper wrapQtAppsHook cmake flex bison ninja ];
 
   patches = [
     (substituteAll {
@@ -128,11 +128,18 @@ in mkDerivation rec {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
+    ./fix-qsci.patch
   ];
+
+  #QT_QPA_PLATFORM_PLUGIN_PATH="${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins/platforms";
+  QT_QPA_PLATFORM_PLUGIN_PATH="/nix/store/9j0acz9qqp1lygwif5jncpz8hsyfmylw-qtbase-5.15.9-bin/lib/qt-5.15.9/plugins/platforms";
 
   cmakeFlags = [
     "-DWITH_3D=True"
     "-DWITH_PDAL=TRUE"
+    "-DENABLE_TESTS=False"
+    "-DWITH_SERVER=False"
+    "-DWITH_QSCIAPI=False" # Scintilla API generation currently broken - see https://github.com/NixOS/nixpkgs/issues/248239
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
@@ -140,16 +147,23 @@ in mkDerivation rec {
       in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
     );
 
-  dontWrapGApps = true; # wrapper params passed below
+  qtWrapperArgs = [
+    "--set QT_QPA_PLATFORM_PLUGIN_PATH $out/lib/qt-plugins/platforms"
+    # For other potential options see
+    # https://github.com/NixOS/nixpkgs/blob/7eefa92432ad9234b349f943e02285643ca70445/pkgs/applications/graphics/pixinsight/default.nix#L111
+  ];
+
+  dontWrapQtApps = true; # wrapper params passed below
 
   postFixup = lib.optionalString withGrass ''
-    # grass has to be availble on the command line even though we baked in
+    # grass has to be available on the command line even though we baked in
     # the path at build time using GRASS_PREFIX.
     # using wrapGAppsHook also prevents file dialogs from crashing the program
     # on non-NixOS
     wrapProgram $out/bin/qgis \
-      "''${gappsWrapperArgs[@]}" \
+      "''${qtWrapperArgs[@]}" \
       --prefix PATH : ${lib.makeBinPath [ grass ]}
+      ln -s qgis $out/bin/qgis-latest
   '';
 
   meta = with lib; {

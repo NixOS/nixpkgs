@@ -73,7 +73,7 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.28.7";
+  version = "3.28.8";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
@@ -124,7 +124,7 @@ in mkDerivation rec {
 
   patches = [
     (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+      src = ./set-pyqt-package-dirs-ltr.patch;
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
@@ -150,6 +150,7 @@ in mkDerivation rec {
     wrapProgram $out/bin/qgis \
       "''${gappsWrapperArgs[@]}" \
       --prefix PATH : ${lib.makeBinPath [ grass ]}
+    ln -s qgis $out/bin/qgis-ltr
   '';
 
   meta = with lib; {
