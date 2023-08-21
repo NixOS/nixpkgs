@@ -106,6 +106,8 @@ let self = rec {
 
   pvr-iptvsimple = callPackage ../applications/video/kodi/addons/pvr-iptvsimple { };
 
+  pvr-vdr-vnsi = callPackage ../applications/video/kodi/addons/pvr-vdr-vnsi { };
+
   osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
   vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
