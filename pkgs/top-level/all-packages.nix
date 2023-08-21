@@ -31166,6 +31166,8 @@ with pkgs;
 
   cosmic-comp = callPackage ../applications/window-managers/cosmic/comp { };
 
+  cosmic-applets = callPackage ../applications/window-managers/cosmic/applets { };
+
   cosmic-panel = callPackage ../applications/window-managers/cosmic/panel { };
 
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
