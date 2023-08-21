@@ -189,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
       minijackson
       rodrgz
       synthetica
+      khaneliman
     ];
     inherit (wlroots.meta) platforms;
   };
