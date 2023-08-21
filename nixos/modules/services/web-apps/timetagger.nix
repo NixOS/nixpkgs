@@ -12,7 +12,7 @@ in {
       };
 
       address = mkOption {
-        type = ipAddress;
+        type = types.ipAddress;
         default = "127.0.0.1";
         description = mdDoc ''
           Address to run timetagger under
