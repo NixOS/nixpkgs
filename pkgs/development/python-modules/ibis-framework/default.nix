@@ -88,6 +88,8 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
+  POETRY_DYNAMIC_VERSIONING_BYPASS = version;
+
   propagatedBuildInputs = [
     atpublic
     bidict
@@ -139,8 +141,6 @@ buildPythonPackage rec {
   '';
 
   preCheck = ''
-    set -eo pipefail
-
     HOME="$TMPDIR"
     export IBIS_TEST_DATA_DIRECTORY="ci/ibis-testing-data"
 
