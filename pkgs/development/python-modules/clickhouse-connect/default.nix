@@ -3,22 +3,22 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-  ### build_requires
+  # build_requires
 , cython_3
-  ### install_requires
+  # install_requires
 , certifi
 , importlib-metadata
 , urllib3
 , pytz
 , zstandard
 , lz4
-  ### extras_require
+  # extras_require
 , sqlalchemy
 , numpy
 , pandas
 , pyarrow
 , orjson
-  ### not in tests_require, but should be
+  # not in tests_require, but should be
 , pytest-dotenv
 }:
 buildPythonPackage rec {
