@@ -2182,6 +2182,8 @@ with pkgs;
 
   git-big-picture = callPackage ../applications/version-management/git-big-picture { };
 
+  git-bars = callPackage ../applications/version-management/git-bars { };
+
   git-branchless = callPackage ../applications/version-management/git-branchless {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -5767,6 +5769,8 @@ with pkgs;
   libnvme = callPackage ../os-specific/linux/libnvme { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
+
+  libz = callPackage ../development/libraries/libz { };
 
   libzbc = callPackage ../os-specific/linux/libzbc { };
 
@@ -11042,7 +11046,7 @@ with pkgs;
 
   nifi = callPackage ../servers/web-apps/nifi { };
 
-  nitter = callPackage ../servers/nitter { };
+  nitter = nim2Packages.callPackage ../servers/nitter { };
 
   noip = callPackage ../tools/networking/noip { };
 
@@ -15664,14 +15668,12 @@ with pkgs;
 
   gbforth = callPackage ../development/compilers/gbforth { };
 
-  inherit (let
-      num =
-        if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
-        else 12;
-      numS = toString num;
-    in {
-      gcc = pkgs.${"gcc${numS}"};
-      gccFun = callPackage (../development/compilers/gcc + "/${numS}");
+  default-gcc-version =
+    if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
+    else 12;
+  inherit ({
+      gcc = pkgs.${"gcc${toString default-gcc-version}"};
+      gccFun = callPackage ../development/compilers/gcc;
     }) gcc gccFun;
   gcc-unwrapped = gcc.cc;
 
@@ -15772,6 +15774,7 @@ with pkgs;
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
+        majorMinorVersion = toString default-gcc-version;
 
         reproducibleBuild = true;
         profiledCompiler = false;
@@ -15799,24 +15802,25 @@ with pkgs;
   # This expression will be pushed into pkgs/development/compilers/gcc/common
   # once the top-level gcc/${version}/default.nix files are deduplicated.
   inherit
-    (lib.listToAttrs (map (version:
-      let atLeast = lib.versionAtLeast version;
-          attrName = "gcc${lib.replaceStrings ["."] [""] version}";
-          pkg = lowPrio (wrapCC (callPackage (../development/compilers/gcc + "/${version}") ({
+    (lib.listToAttrs (map (majorMinorVersion:
+      let atLeast = lib.versionAtLeast majorMinorVersion;
+          attrName = "gcc${lib.replaceStrings ["."] [""] majorMinorVersion}";
+          pkg = lowPrio (wrapCC (callPackage ../development/compilers/gcc/default.nix ({
             inherit noSysDirs;
+            inherit majorMinorVersion;
             reproducibleBuild = true;
             profiledCompiler = false;
             libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-            threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor version else { };
+            threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor majorMinorVersion else { };
             isl = if       stdenv.isDarwin then null
                   else if    atLeast "9"   then isl_0_20
                   else if    atLeast "7"   then isl_0_17
                   else if    atLeast "6"   then (if stdenv.targetPlatform.isRedox then isl_0_17 else isl_0_14)
                   else if    atLeast "4.9" then isl_0_11
                   else            /* "4.8" */   isl_0_14;
-          } // lib.optionalAttrs (version == "4.8") {
+          } // lib.optionalAttrs (majorMinorVersion == "4.8") {
             texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
-          } // lib.optionalAttrs (version == "4.9") {
+          } // lib.optionalAttrs (majorMinorVersion == "4.9") {
             # Build fails on Darwin with clang
             stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
           } // lib.optionalAttrs (!(atLeast "6")) {
@@ -16671,8 +16675,9 @@ with pkgs;
 
   inherit (callPackages ../development/compilers/nim
                         { inherit (darwin) Security;  }
-          ) nim-unwrapped nimble-unwrapped nim;
+          ) nim-unwrapped nim-unwrapped-2 nimble-unwrapped nim nim2;
   nimPackages = recurseIntoAttrs nim.pkgs;
+  nim2Packages = recurseIntoAttrs nim2.pkgs;
 
   nrpl = callPackage ../development/tools/nrpl { };
 
@@ -25722,6 +25727,8 @@ with pkgs;
     llvmPackages = llvmPackages_16;
   };
   zig = zig_0_11;
+
+  zig-shell-completions = callPackage ../development/compilers/zig/shell-completions.nix { };
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
@@ -38987,7 +38994,7 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  mosdepth = callPackage ../applications/science/biology/mosdepth { };
+  mosdepth = nim2Packages.callPackage ../applications/science/biology/mosdepth { };
 
   niftyreg = callPackage ../applications/science/biology/niftyreg { };
 

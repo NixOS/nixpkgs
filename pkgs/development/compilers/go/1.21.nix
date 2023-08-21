@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $GOROOT_FINAL
-    cp -a bin pkg src lib misc api doc $GOROOT_FINAL
+    cp -a bin pkg src lib misc api doc go.env $GOROOT_FINAL
     mkdir -p $out/bin
     ln -s $GOROOT_FINAL/bin/* $out/bin
     runHook postInstall
