@@ -10,7 +10,7 @@ let
   inherit (lib.types) addCheck attrsOf lines nonEmptyStr nullOr path port str strMatching submodule;
 
   # TSM rejects servername strings longer than 64 chars.
-  servernameType = strMatching ".{1,64}";
+  servernameType = strMatching "[^[:space:]]{1,64}";
 
   serverOptions = { name, config, ... }: {
     options.name = mkOption {
