@@ -5,7 +5,6 @@
 , yt-dlp
 , docopt
 , pythonOlder
-, urllib3
 , pythonRelaxDepsHook
 }:
 
@@ -28,12 +27,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     internetarchive
     docopt
-    urllib3
     yt-dlp
   ];
 
   pythonRelaxDeps = [
-    "urllib3"
     "docopt"
   ];
 
