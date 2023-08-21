@@ -4775,6 +4775,8 @@ with pkgs;
 
   cambalache = callPackage ../development/tools/cambalache { };
 
+  cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
+
   changedetection-io = callPackage ../servers/web-apps/changedetection-io { };
 
   clini = callPackage ../tools/misc/clini { };
