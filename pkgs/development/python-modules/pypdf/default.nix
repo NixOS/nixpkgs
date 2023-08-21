@@ -20,6 +20,7 @@
 
 # tests
 , pytestCheckHook
+, pytest-timeout
 }:
 
 buildPythonPackage rec {
@@ -50,6 +51,11 @@ buildPythonPackage rec {
     myst-parser
   ];
 
+  patches = [
+    # https://github.com/py-pdf/pypdf/security/advisories/GHSA-4vvm-4w3v-6mr8
+    ./CVE-2023-36464.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--disable-socket" ""
@@ -75,6 +81,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-timeout
   ] ++ passthru.optional-dependencies.full;
 
   pytestFlagsArray = [
