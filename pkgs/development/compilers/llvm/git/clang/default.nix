@@ -36,7 +36,8 @@ let
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      # Should use canExecute but `pkgsCross.musl64.llvmPackages_git.clang.cc` fails with `/bin/sh: clang-tblgen: not found`
+    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
       "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
       # Added in LLVM15:
