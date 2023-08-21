@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "hack_parallel";
   version = "1.0.1";
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
@@ -14,6 +13,23 @@ buildDunePackage rec {
   };
 
   patches = [ ./hack_parallel.patch ];
+
+  postPatch = ''
+    substituteInPlace src/third-party/hack_core/hack_caml.ml --replace 'include Pervasives' ""
+    substituteInPlace \
+      src/interface/hack_parallel_intf.mli \
+      src/procs/worker.ml \
+      src/third-party/hack_core/hack_core_list.ml \
+      src/third-party/hack_core/hack_result.ml* \
+      src/utils/collections/myMap.ml \
+      src/utils/daemon.ml* \
+      src/utils/exit_status.ml \
+      src/utils/hack_path.ml \
+      src/utils/measure.ml \
+      src/utils/timeout.ml \
+      --replace Pervasives. Stdlib.
+    substituteInPlace src/utils/sys_utils.ml --replace String.create Bytes.create
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
