@@ -187,7 +187,7 @@ optionals (is49 || is6) [
 
 # Obtain latest patch with ../update-mcfgthread-patches.sh
 ++ optional (atLeast6 && !atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
-  ./Added-mcf-thread-model-support-from-mcfgthread.patch
+  (./. + "/${majorVersion}/Added-mcf-thread-model-support-from-mcfgthread.patch")
 
 # Retpoline patches pulled from the branch hjl/indirect/gcc-4_9-branch (by H.J. Lu, the author of GCC upstream retpoline commits)
 ++ optionals is49
