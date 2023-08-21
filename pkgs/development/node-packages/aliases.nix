@@ -52,6 +52,7 @@ mapAliases {
   inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) clean-css-cli; # added 2023-08-18
+  inherit (pkgs) configurable-http-proxy; # added 2023-08-19
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
