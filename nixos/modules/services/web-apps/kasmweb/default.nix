@@ -132,22 +132,6 @@ in
         ];
         wants = ["network-online.target"];
         after = ["network-online.target"];
-        before = [
-          "docker-kasm_db_init.service"
-          "docker-kasm_api.service"
-          "docker-kasm_agent.service"
-          "docker-kasm_manager.service"
-          "docker-kasm_share.service"
-          "docker-kasm_guac.service"
-          "docker-kasm_proxy.service"
-          "podman-kasm_db_init.service"
-          "podman-kasm_api.service"
-          "podman-kasm_agent.service"
-          "podman-kasm_manager.service"
-          "podman-kasm_share.service"
-          "podman-kasm_guac.service"
-          "podman-kasm_proxy.service"
-        ];
         serviceConfig = {
           Type = "oneshot";
           ExecStart = pkgs.substituteAll {
@@ -179,6 +163,7 @@ in
       oci-containers.containers = {
         kasm_db = {
           image = "postgres:12-alpine";
+          autoStart = true;
           environment = {
             POSTGRES_PASSWORD = cfg.postgres.password;
             POSTGRES_USER = cfg.postgres.user;
@@ -194,6 +179,7 @@ in
         kasm_db_init = {
           image = "kasmweb/api:${pkgs.kasmweb.version}";
           user = "root:root";
+          autoStart = true;
           volumes = [
             "${cfg.datastorePath}/:/opt/kasm/current/"
             "kasmweb_api_data:/tmp"
@@ -206,6 +192,7 @@ in
         kasm_redis = {
           image = "redis:5-alpine";
           entrypoint = "/bin/sh";
+          autoStart = true;
           cmd = [
             "-c"
             "redis-server --requirepass ${cfg.redisPassword}"
@@ -268,7 +255,7 @@ in
         };
         kasm_proxy = {
           image = "kasmweb/nginx:latest";
-          autoStart = true;
+          autoStart = false;
           ports = [ "${cfg.listenAddress}:${toString cfg.listenPort}:443" ];
           user = "root:root";
           volumes = [

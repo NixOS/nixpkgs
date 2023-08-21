@@ -11,43 +11,18 @@ mkdir -p @datastorePath@/conf/nginx/containers.d
 chmod -R a+rw @datastorePath@/conf
 ln -sf @kasmweb@/www @datastorePath@
 
-
-docker network inspect kasm_default_network >/dev/null || docker network create kasm_default_network --subnet @networkSubnet@
-if docker volume inspect kasmweb_db >/dev/null; then
-    source @datastorePath@/ids.env
-    echo 'echo "skipping database init"' > @datastorePath@/init_seeds.sh
-    echo 'while true; do sleep 10 ; done' >> @datastorePath@/init_seeds.sh
-else
-    API_SERVER_ID=$(cat /proc/sys/kernel/random/uuid)
-    MANAGER_ID=$(cat /proc/sys/kernel/random/uuid)
-    SHARE_ID=$(cat /proc/sys/kernel/random/uuid)
-    SERVER_ID=$(cat /proc/sys/kernel/random/uuid)
-    echo "export API_SERVER_ID=$API_SERVER_ID" > @datastorePath@/ids.env
-    echo "export MANAGER_ID=$MANAGER_ID" >> @datastorePath@/ids.env
-    echo "export SHARE_ID=$SHARE_ID" >> @datastorePath@/ids.env
-    echo "export SERVER_ID=$SERVER_ID" >> @datastorePath@/ids.env
-
-    mkdir -p @datastorePath@/certs
-    openssl req -x509 -nodes -days 1825 -newkey rsa:2048 -keyout @datastorePath@/certs/kasm_nginx.key -out @datastorePath@/certs/kasm_nginx.crt -subj "/C=US/ST=VA/L=None/O=None/OU=DoFu/CN=$(hostname)/emailAddress=none@none.none" 2> /dev/null
-
-    mkdir -p @datastorePath@/file_mappings
-
-    docker volume create kasmweb_db
-    rm @datastorePath@/.done_initing_data
-    cat >@datastorePath@/init_seeds.sh <<EOF
+cat >@datastorePath@/init_seeds.sh <<EOF
 #!/bin/bash
 if [ ! -e /opt/kasm/current/.done_initing_data ]; then
   while true; do
-      sleep 45;
+      sleep 15;
       /usr/bin/kasm_server.so --initialize-database --cfg \
         /opt/kasm/current/conf/app/api.app.config.yaml \
         --seed-file \
         /opt/kasm/current/conf/database/seed_data/default_properties.yaml \
         --populate-production \
         && break
-  done
-
-  && /usr/bin/kasm_server.so --cfg \
+  done  && /usr/bin/kasm_server.so --cfg \
     /opt/kasm/current/conf/app/api.app.config.yaml \
     --populate-production \
     --seed-file \
@@ -70,6 +45,27 @@ else
   while true; do sleep 10 ; done
 fi
 EOF
+
+docker network inspect kasm_default_network >/dev/null || docker network create kasm_default_network --subnet @networkSubnet@
+if docker volume inspect kasmweb_db >/dev/null; then
+    source @datastorePath@/ids.env
+else
+    API_SERVER_ID=$(cat /proc/sys/kernel/random/uuid)
+    MANAGER_ID=$(cat /proc/sys/kernel/random/uuid)
+    SHARE_ID=$(cat /proc/sys/kernel/random/uuid)
+    SERVER_ID=$(cat /proc/sys/kernel/random/uuid)
+    echo "export API_SERVER_ID=$API_SERVER_ID" > @datastorePath@/ids.env
+    echo "export MANAGER_ID=$MANAGER_ID" >> @datastorePath@/ids.env
+    echo "export SHARE_ID=$SHARE_ID" >> @datastorePath@/ids.env
+    echo "export SERVER_ID=$SERVER_ID" >> @datastorePath@/ids.env
+
+    mkdir -p @datastorePath@/certs
+    openssl req -x509 -nodes -days 1825 -newkey rsa:2048 -keyout @datastorePath@/certs/kasm_nginx.key -out @datastorePath@/certs/kasm_nginx.crt -subj "/C=US/ST=VA/L=None/O=None/OU=DoFu/CN=$(hostname)/emailAddress=none@none.none" 2> /dev/null
+
+    mkdir -p @datastorePath@/file_mappings
+
+    docker volume create kasmweb_db
+    rm @datastorePath@/.done_initing_data
 fi
 
 chmod +x @datastorePath@/init_seeds.sh
@@ -80,7 +76,7 @@ if [ -e @sslCertificate@ ]; then
     cp @sslCertificateKey@ @datastorePath@/certs/kasm_nginx.key
 fi
 
-yq -i '(.server.zone_name = "'default'"' @datastorePath@/conf/app/api.app.config.yaml
+yq -i '.server.zone_name = "'default'"' @datastorePath@/conf/app/api.app.config.yaml
 yq -i '(.zones.[0]) .zone_name = "'default'"' @datastorePath@/conf/database/seed_data/default_properties.yaml
 
 sed -i -e "s/username.*/username: @postgresUser@/g" \
@@ -128,3 +124,11 @@ sed -i -e "s/GUACTOKEN/@defaultGuacToken@/g" \
 
 sed -i "s/00000000-0000-0000-0000-000000000000/$SERVER_ID/g" \
     @datastorePath@/conf/database/seed_data/default_agents.yaml
+
+
+while [ ! -e @datastorePath@/.done_initing_data ]; do
+    sleep 10;
+done
+
+systemctl restart docker-kasm_proxy.service
+
