@@ -152,6 +152,8 @@ self: super: with self; {
 
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
 
+  aiobafi6 = callPackage ../development/python-modules/aiobafi6 { };
+
   aioblescan = callPackage ../development/python-modules/aioblescan { };
 
   aiocache = callPackage ../development/python-modules/aiocache { };
