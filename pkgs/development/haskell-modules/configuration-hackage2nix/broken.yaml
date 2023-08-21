@@ -5342,7 +5342,6 @@ broken-packages:
   - sparse-linear-algebra # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230966041 at 2023-08-16
   - sparse-merkle-trees # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230948641 at 2023-08-16
   - sparse-tensor
-  - spdx # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/230970358 at 2023-08-16
   - special-functors
   - special-keys
   - spectacle
