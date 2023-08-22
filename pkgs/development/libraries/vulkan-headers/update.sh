@@ -11,6 +11,7 @@ V_PACKAGES=(
     "vulkan-tools"
     "vulkan-tools-lunarg"
     "vulkan-extension-layer"
+    "vulkan-utility-libraries"
 )
 
 SDK_PACKAGES=(
