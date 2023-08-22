@@ -11,12 +11,13 @@ makeSetupHook {
   substitutions = {
     zig_default_flags =
       let
-        cpu = "-Dcpu=baseline";
-        releaseType = if lib.versionAtLeast zig.version "0.11"
-                      then "-Doptimize=ReleaseSafe"
-                      else "-Drelease-safe=true";
+        releaseType =
+          if lib.versionAtLeast zig.version "0.11" then
+            "-Doptimize=ReleaseSafe"
+          else
+            "-Drelease-safe=true";
       in
-        lib.concatStringsSep " " [ cpu releaseType ];
+      [ "-Dcpu=baseline" releaseType ];
   };
 
   passthru = { inherit zig; };
