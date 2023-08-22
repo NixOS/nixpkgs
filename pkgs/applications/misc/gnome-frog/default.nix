@@ -9,6 +9,7 @@
 , pkg-config
 , appstream-glib
 , desktop-file-utils
+, blueprint-compiler
 , glib
 , gobject-introspection
 , libnotify
@@ -22,13 +23,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-frog";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "TenderOwl";
     repo = "Frog";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-ErDHrdD9UZxOIGwgN5eakY6vhNvE6D9SoRYXZhzmYX4=";
+    sha256 = "sha256-ZHBnPf3t5ohS7ChJiBntqx5F1nMHb28/ZOKhTQJjQH4=";
   };
 
   format = "other";
@@ -52,6 +53,7 @@ python3Packages.buildPythonApplication rec {
     glib
     wrapGAppsHook4
     gobject-introspection
+    blueprint-compiler
   ];
 
   buildInputs = [
@@ -68,6 +70,7 @@ python3Packages.buildPythonApplication rec {
     pillow
     pytesseract
     pyzbar
+    gtts
   ];
 
   # This is to prevent double-wrapping the package. We'll let
