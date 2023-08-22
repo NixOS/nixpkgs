@@ -9123,6 +9123,8 @@ self: super: with self; {
 
   pixelmatch = callPackage ../development/python-modules/pixelmatch { };
 
+  pixel-font-builder = callPackage ../development/python-modules/pixel-font-builder { };
+
   pixel-ring = callPackage ../development/python-modules/pixel-ring { };
 
   pjsua2 = (toPythonModule (pkgs.pjsip.override {
