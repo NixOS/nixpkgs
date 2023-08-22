@@ -20,6 +20,347 @@ ps
 : stands for nixpkgs python **p**ackage **s**et.
 
 
+### API {#python-API}
+
+`TODO`
+
+#### pkgs.fetchPypi {#python-pkgs-fetchPypi}
+
+`TODO`
+
+#### pkgs.mkShell.venvdir {#python-pkgs-mkShell-venvdir}
+
+`TODO`
+
+#### pkgs.${python} {#python-pkgs-varPYTHON}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv {#python-pkgs-varPYTHON-buildEnv}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.env {#python-pkgs-varPYTHON-buildEnv-env}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.extraLibs {#python-pkgs-varPYTHON-buildEnv-extraLibs}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.ignoreCollisions {#python-pkgs-varPYTHON-buildEnv-ignoreCollisions}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.permitUserSite {#python-pkgs-varPYTHON-buildEnv-permitUserSite}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.postBuild {#python-pkgs-varPYTHON-buildEnv-postBuild}
+
+`TODO`
+
+#### pkgs.${python}.executable {#python-pkgs-varPYTHON-executable}
+
+`TODO`
+
+#### pkgs.${python}.interpreter {#python-pkgs-varPYTHON-interpreter}
+
+`TODO`
+
+#### pkgs.${python}.libPrefix {#python-pkgs-varPYTHON-libPrefix}
+
+`TODO`
+
+#### pkgs.${python}.packageOverrides {#python-pkgs-varPYTHON-packageOverrides}
+
+`TODO`
+
+#### pkgs.${python}.${python}Packages {#python-pkgs-varPYTHON-varPYTHONPackages}
+
+`TODO`
+
+#### pkgs.${python}.pkgs {#python-pkgs-varPYTHON-pkgs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonApplication {#python-pkgs-varPYTHON-pkgs-buildPythonApplication}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage {#python-pkgs-varPYTHON-pkgs-buildPythonPackage}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.buildInputs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-buildInputs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.buildInputs.postShellHook {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-buildInputs-postShellHook}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.buildInputs.postVenvCreation {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-buildInputs-postVenvCreation}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.CFLAGS {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-CFLAGS}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.buildPhase {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-buildPhase}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.catchConflicts {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-catchConflicts}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.checkPhase {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-checkPhase}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.disabled {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-disabled}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.disabledTests {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-disabledTests}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.disabledTestPaths {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-disabledTestPaths}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.doCheck {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-doCheck}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.dontWrapPythonPrograms {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-dontWrapPythonPrograms}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.format {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-format}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.installCheck {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-installCheck}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.installPhase {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-installPhase}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.LDFLAGS {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-LDFLAGS}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.makeWrappersArgs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-makeWrappersArgs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.namePrefix {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-namePrefix}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.nativeBuildInputs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-nativeBuildInputs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.nativeCheckInputs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-nativeCheckInputs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.overridePythonAttrs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-overridePythonAttrs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.permitUserSite {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-permitUserSite}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pipInstallFlags {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pipInstallFlags}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.postFixup {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-postFixup}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.preInstall {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-preInstall}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.preShellHook {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-preShellHook}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.propagatedBuildInputs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-propagatedBuildInputs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pytestFlagsArray {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pytestFlagsArray}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pythonImportsCheck {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pythonImportsCheck}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pythonPath {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pythonPath}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pythonRelaxDeps {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pythonRelaxDeps}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pythonRemoveDeps {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pythonRemoveDeps}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.removeBinByteCode {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-removeBinByteCode}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.setupPyBuildFlags {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-setupPyBuildFlags}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.setupPyGlobalFlags {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-setupPyGlobalFlags}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.shellPhase {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-shellPhase}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.sphinxBuilders {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-sphinxBuilders}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.sphinxRoot {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-sphinxRoot}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.src {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-src}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.unittestFlagsArray {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-unittestFlagsArray}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.override {#python-pkgs-varPYTHON-pkgs-override}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.override.enableOptimizations {#python-pkgs-varPYTHON-pkgs-override-enableOptimizations}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.override.reproducibleBuild {#python-pkgs-varPYTHON-pkgs-override-reproducibleBuild}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.python {#python-pkgs-varPYTHON-pkgs-python}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.toPythonApplication {#python-pkgs-varPYTHON-pkgs-toPythonApplication}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.toPythonModule {#python-pkgs-varPYTHON-pkgs-toPythonModule}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.${pypkg}.overridePythonAttrs {#python-pkgs-varPYTHON-pkgs-varPYPKG-overridePythonAttrs}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks {#python-pkgs-varPYTHON-setupHooks}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.eggBuildHook {#python-pkgs-varPYTHON-setupHooks-eggBuildHook}
+
+`TODO`
+
+
+#### pkgs.${python}.setupHooks.eggInstallHook {#python-pkgs-varPYTHON-setupHooks-eggInstallHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.eggUnpackHook {#python-pkgs-varPYTHON-setupHooks-eggUnpackHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.flitBuildHook {#python-pkgs-varPYTHON-setupHooks-flitBuildHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.pipBuildHook {#python-pkgs-varPYTHON-setupHooks-pipBuildHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.pipInstallHook {#python-pkgs-varPYTHON-setupHooks-pipInstallHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.pytestCheckHook {#python-pkgs-varPYTHON-setupHooks-pytestCheckHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.pythonCatchConflictsHook {#python-pkgs-varPYTHON-setupHooks-pythonCatchConflictsHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.pythonImportsCheckHook {#python-pkgs-varPYTHON-setupHooks-pythonImportsCheckHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.pythonRelaxDepsHook {#python-pkgs-varPYTHON-setupHooks-pythonRelaxDepsHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.pythonRemoveBinBytecodeHook {#python-pkgs-varPYTHON-setupHooks-pythonRemoveBinBytecodeHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.setuptoolsBuildHook {#python-pkgs-varPYTHON-setupHooks-setuptoolsBuildHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.setuptoolsCheckHook {#python-pkgs-varPYTHON-setupHooks-setuptoolsCheckHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.sphinxHook {#python-pkgs-varPYTHON-setupHooks-sphinxHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.unittestCheckHook {#python-pkgs-varPYTHON-setupHooks-unittestCheckHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.venvShellHook {#python-pkgs-varPYTHON-setupHooks-venvShellHook}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks.wheelUnpackHook {#python-pkgs-varPYTHON-setupHooks-wheelUnpackHook}
+
+`TODO`
+
+#### pkgs.${python}.sitePackages {#python-pkgs-varPYTHON-sitePackages}
+
+`TODO`
+
+#### pkgs.${python}.withPackages {#python-pkgs-varPYTHON-withPackages}
+
+`TODO`
+
 ### Interpreters {#interpreters}
 
 | Package    | Aliases         | Interpreter |
