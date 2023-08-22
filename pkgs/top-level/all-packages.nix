@@ -4575,7 +4575,9 @@ with pkgs;
 
   map-cmd = callPackage ../tools/misc/map { };
 
-  clash = callPackage ../tools/networking/clash { };
+  clash = callPackage ../tools/networking/clash {
+    buildGoModule = buildGo121Module;
+  };
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
