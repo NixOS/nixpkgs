@@ -22,9 +22,10 @@ let
   # For systemd features used by mkosi, see
   # https://github.com/systemd/mkosi/blob/19bb5e274d9a9c23891905c4bcbb8f68955a701d/action.yaml#L64-L72
   systemdForMkosi = systemd.override {
-    # Will be added in #243242
-    # withRepart = true;
-    # withBootloader = true;
+    withRepart = true;
+    withBootloader = true;
+    withSysusers = true;
+    withFirstboot = true;
     withEfi = true;
     withUkify = true;
   };
