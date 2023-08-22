@@ -12486,6 +12486,8 @@ with pkgs;
     rekor-cli
     rekor-server;
 
+  rhai-doc = callPackage ../development/tools/misc/rhai-doc { };
+
   rich-cli = callPackage ../misc/rich-cli { };
 
   richgo = callPackage ../development/tools/richgo {  };
