@@ -202,15 +202,15 @@ stdenv'.mkDerivation {
     changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
     license = lib.licenses.cddl;
 
-    # The case-block for TARGET_CPU has branches for only five CPU families,
+    # The case-block for TARGET_CPU has branches for only some CPU families,
     # which prevents ZFS from building on any other platform.  Since the NixOS
     # `boot.zfs.enabled` property is `readOnly`, excluding platforms where ZFS
     # does not build is the only way to produce a NixOS installer on such
     # platforms.
-    # https://github.com/openzfs/zfs/blob/6a6bd493988c75331deab06e5352a9bed035a87d/config/always-arch.m4#L16
+    # https://github.com/openzfs/zfs/blob/6723d1110f6daf93be93db74d5ea9f6b64c9bce5/config/always-arch.m4#L12
     platforms =
       with lib.systems.inspect.patterns;
-      map (p: p // isLinux) [ isx86_32 isx86_64 isPower isAarch64 isSparc ];
+      map (p: p // isLinux) ([ isx86_32 isx86_64 isPower isAarch64 isSparc ] ++ isArmv7);
 
     maintainers = with lib.maintainers; [ jcumming jonringer globin raitobezarius ];
     mainProgram = "zfs";
