@@ -52,6 +52,9 @@ buildPythonPackage rec {
     openai
   ];
 
+  # As of 0.3.3, the PyPI distribution does not include any tests.
+  doCheck = false;
+
   pythonImportsCheck = [ "minichain" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
