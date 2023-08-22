@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , python3
+, fetchpatch
 , fetchPypi
 , openssl
   # Many Salt modules require various Python modules to be installed,
@@ -10,29 +11,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3006.1";
+  version = "3006.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lVh71hHepq/7aQjQ7CaGy37bhMFBRLSFF3bxJ6YOxbk=";
+    hash = "sha256-+I0aJeIw2co9/eE9rdRmB6KxdQq1WoY1nFpCUedx8Wc=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    distro
-    jinja2
-    jmespath
-    looseversion
-    markupsafe
-    msgpack
-    packaging
-    psutil
-    pycryptodomex
-    pyyaml
-    pyzmq
-    requests
-  ] ++ extraInputs;
-
   patches = [
+    # https://github.com/saltstack/salt/pull/63795
+    (fetchpatch {
+      name = "remove-duplicate-scripts.patch";
+      url = "https://github.com/saltstack/salt/commit/6b9463836e70e40409dbf653f01aa94ef869dfe7.patch";
+      hash = "sha256-VcVdKC8EH4qoWHtq6eEPl8OviR4eA2k/S2lWNQbubJw=";
+    })
     ./fix-libcrypto-loading.patch
   ];
 
@@ -50,6 +43,21 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace "requirements/zeromq.txt" \
       --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
   '';
+
+  propagatedBuildInputs = with python3.pkgs; [
+    distro
+    jinja2
+    jmespath
+    looseversion
+    markupsafe
+    msgpack
+    packaging
+    psutil
+    pycryptodomex
+    pyyaml
+    pyzmq
+    requests
+  ] ++ extraInputs;
 
   # Don't use fixed dependencies on Darwin
   USE_STATIC_REQUIREMENTS = "0";
