@@ -225,7 +225,7 @@ in buildPythonPackage rec {
 
   # Avoid using pybind11 from git submodule
   # Also avoids pytorch exporting the headers of pybind11
-  USE_SYSTEM_BIND11 = true;
+  USE_SYSTEM_PYBIND11 = true;
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
