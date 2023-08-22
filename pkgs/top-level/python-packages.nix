@@ -8920,6 +8920,8 @@ self: super: with self; {
 
   pyduke-energy = callPackage ../development/python-modules/pyduke-energy { };
 
+  pyduotecno = callPackage ../development/python-modules/pyduotecno { };
+
   pydy = callPackage ../development/python-modules/pydy { };
 
   pydyf = callPackage ../development/python-modules/pydyf { };
