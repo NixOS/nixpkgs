@@ -1,10 +1,16 @@
 { lib
+, buildPythonPackage
+, colorama
 , fetchFromGitHub
 , fetchpatch
-, python3
+, poetry-core
+, pytestCheckHook
+, setuptools
+, types-colorama
+, types-setuptools
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "beautysh";
   version = "6.2.1";
   format = "pyproject";
@@ -25,25 +31,25 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'types-setuptools = "^57.4.0"' 'types-setuptools = "*"'
+  '';
+
+  nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     colorama
     setuptools
     types-colorama
     types-setuptools
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'types-setuptools = "^57.4.0"' 'types-setuptools = "*"'
-  '';
 
   pythonImportsCheck = [
     "beautysh"

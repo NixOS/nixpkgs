@@ -1312,6 +1312,8 @@ self: super: with self; {
 
   beautifultable = callPackage ../development/python-modules/beautifultable { };
 
+  beautysh = callPackage ../development/python-modules/beautysh { };
+
   bech32 = callPackage ../development/python-modules/bech32 { };
 
   behave = callPackage ../development/python-modules/behave { };
