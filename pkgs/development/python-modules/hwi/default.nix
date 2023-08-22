@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bitcoin Hardware Wallet Interface";
     homepage = "https://github.com/bitcoin-core/hwi";
+    changelog = "https://github.com/bitcoin-core/HWI/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ prusnak ];
   };
