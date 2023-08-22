@@ -71,6 +71,8 @@ in
 , newuidmapPath ? null
   # Path to SUID-ed newgidmap executable
 , newgidmapPath ? null
+  # External LOCALSTATEDIR
+, externalLocalStateDir ? null
   # Remove the symlinks to `singularity*` when projectName != "singularity"
 , removeCompat ? false
   # Workaround #86349
@@ -106,6 +108,7 @@ in
     inherit
       enableSeccomp
       enableSuid
+      externalLocalStateDir
       projectName
       removeCompat
       starterSuidPath
@@ -141,7 +144,7 @@ in
   configureScript = "./mconfig";
 
   configureFlags = [
-    "--localstatedir=/var/lib"
+    "--localstatedir=${if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"}"
     "--runstatedir=/var/run"
   ]
   ++ lib.optional (!enableSeccomp) "--without-seccomp"
