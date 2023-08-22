@@ -7,6 +7,7 @@
 , libpng
 , zlib
 , wrapGAppsHook
+, hicolor-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   shellHook = ''
-    export XDG_DATA_DIRS="$GSETTINGS_SCHEMAS_PATH"
+    export XDG_DATA_DIRS="$GSETTINGS_SCHEMAS_PATH:${hicolor-icon-theme}/share"
   '';
 
   meta = with lib; {
