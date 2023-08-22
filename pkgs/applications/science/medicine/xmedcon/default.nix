@@ -6,6 +6,7 @@
 , pkg-config
 , libpng
 , zlib
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   meta = with lib; {
     description = "An open source toolkit for medical image conversion ";
