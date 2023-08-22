@@ -31019,6 +31019,8 @@ with pkgs;
 
   csdp = callPackage ../applications/science/math/csdp { };
 
+  csv2svg = callPackage ../tools/graphics/csv2svg { };
+
   ctop = callPackage ../tools/system/ctop { };
 
   cubicsdr = callPackage ../applications/radio/cubicsdr {
