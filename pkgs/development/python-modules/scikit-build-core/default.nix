@@ -14,7 +14,9 @@
 , pyproject-metadata
 , pytest-subprocess
 , pytestCheckHook
+, setuptools
 , tomli
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     ninja
     pytest-subprocess
     pytestCheckHook
+    setuptools
+    wheel
   ] ++ passthru.optional-dependencies.pyproject;
 
   disabledTestPaths = [
@@ -72,12 +76,6 @@ buildPythonPackage rec {
     "tests/test_pyproject_pep660.py"
     "tests/test_setuptools_pep517.py"
     "tests/test_setuptools_pep518.py"
-  ];
-
-  # Tries to access ninja.__version__ which our stub doesn't have.
-  # FIXME: remove for next cycle
-  disabledTests = [
-    "test_get_ninja_programs_cmake_module"
   ];
 
   pythonImportsCheck = [

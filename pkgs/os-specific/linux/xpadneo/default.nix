@@ -17,9 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-rT2Mq40fE055FemDG7PBjt+cxgIHJG9tTjtw2nW6B98=";
   };
 
-  setSourceRoot = ''
-    export sourceRoot=$(pwd)/source/hid-xpadneo/src
-  '';
+  sourceRoot = "${finalAttrs.src.name}/hid-xpadneo/src";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   buildInputs = [ bluez ];

@@ -8,6 +8,16 @@
 
 self: super: with self; {
 
+  bootstrap = lib.recurseIntoAttrs {
+    flit-core = toPythonModule (callPackage ../development/python-modules/bootstrap/flit-core { });
+    installer = toPythonModule (callPackage ../development/python-modules/bootstrap/installer {
+      inherit (bootstrap) flit-core;
+    });
+    build = toPythonModule (callPackage ../development/python-modules/bootstrap/build {
+      inherit (bootstrap) flit-core installer;
+    });
+  };
+
   bootstrapped-pip = toPythonModule (callPackage ../development/python-modules/bootstrapped-pip { });
 
   setuptools = callPackage ../development/python-modules/setuptools { };
@@ -903,7 +913,9 @@ self: super: with self; {
 
   awkward = callPackage ../development/python-modules/awkward { };
 
-  awkward-cpp = callPackage ../development/python-modules/awkward-cpp { };
+  awkward-cpp = callPackage ../development/python-modules/awkward-cpp {
+    inherit (pkgs) cmake ninja;
+  };
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
@@ -2044,6 +2056,8 @@ self: super: with self; {
   cma = callPackage ../development/python-modules/cma { };
 
   cmaes = callPackage ../development/python-modules/cmaes { };
+
+  cmake = callPackage ../development/python-modules/cmake { inherit (pkgs) cmake; };
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
