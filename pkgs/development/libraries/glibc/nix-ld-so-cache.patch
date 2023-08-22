@@ -23,3 +23,16 @@ index 804bf232..fda973a3 100644
  					       PROT_READ);
  
        /* We can handle three different cache file formats here:
+
+diff --git a/sysdeps/generic/unsecvars.h b/sysdeps/generic/unsecvars.h
+index 804bf232..fda973a3 100644
+--- a/sysdeps/generic/unsecvars.h
++++ b/sysdeps/generic/unsecvars.h
+@@ -12,6 +12,7 @@
+   "LOCPATH\0"								      \
+   "MALLOC_TRACE\0"							      \
+   "NIS_PATH\0"								      \
++  "NIX_LD_SO_CACHE\0"							      \
+   "NLSPATH\0"								      \
+   "RESOLV_HOST_CONF\0"							      \
+   "RES_OPTIONS\0"							      \
