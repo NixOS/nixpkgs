@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "twitch-tui";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "Xithrius";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+dKS9lp5M8vh0V4VGyWAozozdsyCPpCZR4CQK5s51Ds=";
+    hash = "sha256-oqsLqmyLrvb8u9cj68OemUfunbP98/BZjmoGl1Mctrk=";
   };
 
   cargoHash = "sha256-CzrOsLUTfZ2uEIj/AHFmdfZniwlQ6fIkL2pbBHF8YkU=";
@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Xithrius/twitch-tui";
     changelog = "https://github.com/Xithrius/twitch-tui/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.taha ];
+    maintainers = with maintainers; [ taha qjoly ];
   };
 }
