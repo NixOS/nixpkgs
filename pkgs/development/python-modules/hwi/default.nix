@@ -1,16 +1,16 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
 , bitbox02
+, buildPythonPackage
 , cbor
 , ecdsa
+, fetchFromGitHub
 , hidapi
 , libusb1
 , mnemonic
 , pyaes
 , pyserial
-, typing-extensions
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -39,16 +39,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # relax required dependencies:
-  # libusb1           - https://github.com/bitcoin-core/HWI/issues/579
-  # typing-extensions - https://github.com/bitcoin-core/HWI/issues/572
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'libusb1>=1.7,<3' 'libusb1>=1.7,<4' \
-      --replace 'typing-extensions>=3.7,<4.0' 'typing-extensions>=3.7,<5.0'
-  '';
-
-  # tests require to clone quite a few firmwares
+  # Tests require to clone quite a few firmwares
   doCheck = false;
 
   pythonImportsCheck = [
