@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , mesonEmulatorHook
@@ -33,24 +32,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.6.alpha";
+  version = "3.6.beta";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jrEFT4Sv0fGnLg2a/VtE+4Hi+NJoY+Q9Vn6I2mVu8pc=";
+    sha256 = "m8l5Qbk8M3nTKyRCKsoqnOREpJLUSP3eItrst26vZaw=";
   };
-
-  patches = [
-    # Backport sqlite-3.42.0 compatibility:
-    #   https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/600
-    (fetchpatch {
-      name = "sqlite-3.42.0.patch";
-      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/4cbbd1773a7367492fa3b3e3804839654e18a12a.patch";
-      hash = "sha256-w5D9I0P1DdyILhpjslh6ifojmlUiBoeFnxHPIr0rO3s=";
-    })
-  ];
 
   strictDeps = true;
 
