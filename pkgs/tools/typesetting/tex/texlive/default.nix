@@ -21,9 +21,10 @@ let
     inherit useFixedHashes;
   };
 
+  # texlive.combine backward compatibility: wrapped __buildEnv to provide old interface
   # function for creating a working environment from a set of TL packages
-  combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv lib makeWrapper writeText runCommand
+  combine = import ./combine-wrapper.nix {
+    inherit bin __buildEnv combinePkgs buildEnv lib makeWrapper writeText runCommand
       stdenv perl libfaketime makeFontsConf bash tl coreutils gawk gnugrep gnused;
     ghostscript = ghostscript_headless;
   };
@@ -509,10 +510,19 @@ let
       pkgs = p.pkgs;
     }) attrs.__pkgs // attrs;
 
+  __buildEnv = import ./buildenv.nix {
+    self = { inherit bin; __pkgs = tl; };
+    ghostscript = ghostscript_headless;
+    inherit lib buildEnv libfaketime makeFontsConf makeWrapper runCommand
+      writeText bash perl coreutils gawk gnugrep gnused;
+  };
+
 in
   combineCompatLayer {
     # unstable interface, subject to change!
+    inherit __buildEnv;
     __pkgs = tl;
+    __withPackages = packages: __buildEnv { inherit packages; };
 
     tlpdb = {
       # nested in an attribute set to prevent them from appearing in search
@@ -527,7 +537,7 @@ in
 
     combine = assert assertions; combine;
 
-    # Pre-defined combined packages for TeX Live schemes,
+    # Pre-defined evironment packages for TeX Live schemes,
     # to make nix-env usage more comfortable and build selected on Hydra.
     combined = with lib;
       let
@@ -554,23 +564,21 @@ in
             lppl13c mit ofl publicDomain x11];
         };
       in recurseIntoAttrs (
-      mapAttrs
-        (pname: attrs:
-          addMetaAttrs rec {
-            description = "TeX Live environment for ${pname}";
-            platforms = lib.platforms.all;
-            maintainers = with lib.maintainers;  [ veprbl ];
-            license = licenses.${pname};
-          }
-          (combine {
-            ${pname} = attrs;
+      lib.genAttrs [ "scheme-basic" "scheme-context" "scheme-full" "scheme-gust" "scheme-infraonly"
+        "scheme-medium" "scheme-minimal" "scheme-small" "scheme-tetex" ]
+        (pname:
+          (__buildEnv {
             extraName = "combined" + lib.removePrefix "scheme" pname;
             extraVersion = with version; if final then "-final" else ".${year}${month}${day}";
+            packages = ps: [ ps.${pname} ];
+            meta = {
+              description = "TeX Live environment for ${pname}";
+              platforms = lib.platforms.all;
+              maintainers = with lib.maintainers;  [ veprbl ];
+              license = licenses.${pname};
+            };
           })
         )
-        { inherit (tl)
-            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
-            scheme-medium scheme-minimal scheme-small scheme-tetex;
-        }
     );
+
   }
