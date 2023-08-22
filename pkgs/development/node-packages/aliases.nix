@@ -66,6 +66,7 @@ mapAliases {
   karma = pkgs.karma-runner; # added 2023-07-29
   manta = pkgs.node-manta; # Added 2023-05-06
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
+  inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
