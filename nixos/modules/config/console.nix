@@ -168,6 +168,9 @@ in
           # ...but only the keymaps if we don't
           "/etc/kbd/keymaps" = lib.mkIf (!cfg.earlySetup) { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps"; };
         };
+        boot.initrd.systemd.additionalUpstreamUnits = [
+          "systemd-vconsole-setup.service"
+        ];
         boot.initrd.systemd.storePaths = [
           "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
           "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
