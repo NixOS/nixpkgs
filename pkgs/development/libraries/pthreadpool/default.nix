@@ -30,8 +30,8 @@ in
     src = fetchFromGitHub {
       owner = "Maratyszcza";
       repo = finalAttrs.pname;
-      rev = "edeb5d6b967bef092ff195ab40e216fa5ac11f61";
-      hash = "sha256-A5wPra4hkalizEHh/Rgga8itI4V1N7ZzascQ68ntXn4=";
+      rev = "0961e3449544d147a8486f43a3fdbb4e5d66e162";
+      hash = "sha256-IepLMbB0TILECDiFC7f2gdHoSVKvYRDDtRBHj2trdBE=";
     };
     patches = [
       (fetchpatch {

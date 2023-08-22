@@ -27,13 +27,13 @@ in
     src = fetchFromGitHub {
       owner = "google";
       repo = finalAttrs.pname;
-      rev = "bc76fa1cd86ad73064241a257113a84e14bda1fe";
-      hash = "sha256-GHFi+v2rORu61V2d2oYQvAFXzrzeXOSnKjRRNvoo4bY=";
+      rev = "0961e3449544d147a8486f43a3fdbb4e5d66e162";
+      hash = "sha256-XX8L6OpksptB71DVjkYXRlwxR7TR4B5WWf4bldC1yG0=";
     };
     patches = [
       (fetchpatch {
         url = "https://github.com/google/XNNPACK/pull/5031.patch";
-        hash = "sha256-orYdannNK9yO+T+aKIWlXwodjVoBVRtuZ0cNdRB7AVo=";
+        hash = "sha256-lHIVi/6trStpTRVOYY1WcKFvTZQHHN6ft1gM7Twax5E=";
       })
     ];
     nativeBuildInputs = [
