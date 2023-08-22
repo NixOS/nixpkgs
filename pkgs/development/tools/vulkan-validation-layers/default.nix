@@ -14,33 +14,16 @@
 , libXrandr
 , spirv-headers
 , vulkan-headers
+, vulkan-utility-libraries
 , wayland
 }:
 
 let
   robin-hood-hashing = callPackage ./robin-hood-hashing.nix {};
-
-  # Current VVL version requires a newer spirv-headers than the latest release tag.
-  # This should hopefully not be too common and the override should be removed after
-  # the next SPIRV headers release.
-  # FIXME: if this ever becomes common, figure out a way to pull revisions directly
-  # from upstream known-good.json
-  spirv-headers' = spirv-headers.overrideAttrs(_: {
-    version = "unstable-2023-04-27";
-
-    src = fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "SPIRV-Headers";
-      rev = "7f1d2f4158704337aff1f739c8e494afc5716e7e";
-      hash = "sha256-DHOYIZQqP5uWDYdb+vePpMBaQDOCB5Pcg8wPBMF8itk=";
-    };
-
-    postPatch = "";
-  });
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.254";
+  version = "1.3.261";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
@@ -51,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "v${version}";
-    hash = "sha256-hh/lCXSKq8xmygVsFFOGu79DvBvBPcc1l1e5wQskK7M=";
+    hash = "sha256-4kE3pkyYu6hnbv19fHhON+hI2HU4vLm31tNlp5fhndM=";
   };
 
   nativeBuildInputs = [
@@ -68,12 +51,13 @@ stdenv.mkDerivation rec {
     libffi
     libxcb
     vulkan-headers
+    vulkan-utility-libraries
     wayland
   ];
 
   cmakeFlags = [
     "-DGLSLANG_INSTALL_DIR=${glslang}"
-    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers'}"
+    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
     "-DROBIN_HOOD_HASHING_INSTALL_DIR=${robin-hood-hashing}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
     "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
