@@ -33406,7 +33406,10 @@ with pkgs;
 
   lifelines = callPackage ../applications/misc/lifelines { };
 
-  liferea = callPackage ../applications/networking/newsreaders/liferea { };
+  liferea = callPackage ../applications/networking/newsreaders/liferea {
+    libsoup = libsoup_3;
+    webkitgtk = webkitgtk_4_1;
+  };
 
   lightworks = callPackage ../applications/video/lightworks { };
 
