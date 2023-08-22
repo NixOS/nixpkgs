@@ -4,25 +4,32 @@
 , fetchFromGitHub
 , pytestCheckHook
 , requests
+, segno
 }:
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.12.2";
+  version = "1.13.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kbr";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-e+w3ce6KdvbYzH48XPEQTiBgtjbKWNdQj8ie4yw0rzE=";
+    hash = "sha256-FTg5LHjti6Srmz1LcPU0bepNzn2tpmdSBM3Y2BzZEms=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
+
+  passthru.optional-dependencies = {
+    qr = [
+      segno
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -34,6 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "fritzconnection"
+  ];
+
+  disabledTestPaths = [
+    # Functional tests require network access
+    "fritzconnection/tests/test_functional.py"
   ];
 
   meta = with lib; {
