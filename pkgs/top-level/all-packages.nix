@@ -6757,6 +6757,8 @@ with pkgs;
   ;
   citrix_workspace = citrix_workspace_23_07_0;
 
+  clima = callPackage ../tools/text/clima { };
+
   cmigemo = callPackage ../tools/text/cmigemo { };
 
   cmospwd = callPackage ../tools/security/cmospwd { };
