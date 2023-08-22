@@ -33,7 +33,7 @@ in
     patches = [
       (fetchpatch {
         url = "https://github.com/google/XNNPACK/pull/5031.patch";
-        hash = "sha256-6cJ5bi59G5XfTDdCy83bLPlm3LMAK7Mg6eyk3QMAt5A=";
+        hash = "sha256-orYdannNK9yO+T+aKIWlXwodjVoBVRtuZ0cNdRB7AVo=";
       })
     ];
     nativeBuildInputs = [

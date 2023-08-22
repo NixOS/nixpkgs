@@ -40,7 +40,7 @@ in
     patches = [
       (fetchpatch {
         url = "https://github.com/pytorch/FBGEMM/pull/1859.patch";
-        hash = "sha256-htt1oDTLet1t9QUUcChf7pbC+WgMwnvMDB4xaWjh/D0=";
+        hash = "sha256-io3fgLhx8e2TrH3mu9GE7jnnWuB5Nq0uyP21nvBX6zg=";
       })
     ];
     nativeBuildInputs = [
