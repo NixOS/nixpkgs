@@ -87,9 +87,6 @@ let
       runHook preConfigure
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
-      # fixes 'GOPROXY list is not the empty string, but contains no entries'
-      # "https://proxy.golang.org,direct" is the go default
-      export GOPROXY="''${GOPROXY:-"https://proxy.golang.org,direct"}" # respect impureEnvVars
       cd "${modRoot}"
       runHook postConfigure
     '';
