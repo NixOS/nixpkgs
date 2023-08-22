@@ -9,6 +9,7 @@
 , mesa_drivers
 , numpy
 , ocl-icd
+, oldest-supported-numpy
 , opencl-headers
 , platformdirs
 , pybind11
@@ -17,6 +18,7 @@
 , pytools
 , setuptools
 , six
+, wheel
 }:
 
 let
@@ -25,7 +27,6 @@ let
 in buildPythonPackage rec {
   pname = "pyopencl";
   version = "2023.1.2";
-
   format = "pyproject";
 
   src = fetchPypi {
@@ -33,7 +34,11 @@ in buildPythonPackage rec {
     hash = "sha256-6wDNV0BJ1ZK2edz4v+erSjbJSjn9Gssaa0XWwNe+mmg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    oldest-supported-numpy
+    setuptools
+    wheel
+  ];
 
   buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 
