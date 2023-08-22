@@ -1,15 +1,22 @@
 { lib
 , fetchFromGitHub
+, stdenv
 , python3
+, bubblewrap
+, systemd
+
+  # Python packages
 , setuptools
 , setuptools-scm
 , wheel
 , buildPythonApplication
 , pytestCheckHook
 , pefile
-, bubblewrap
-, systemd
-, stdenv
+
+  # Optional dependencies
+, withQemu ? false
+, qemu
+, OVMF
 }:
 let
   # For systemd features used by mkosi, see
@@ -43,10 +50,14 @@ buildPythonApplication rec {
   # Fix ctypes finding library
   # https://github.com/NixOS/nixpkgs/issues/7307
   patchPhase = lib.optionalString stdenv.isLinux ''
-    substituteInPlace mkosi/run.py --replace \
-      'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
-    substituteInPlace mkosi/__init__.py --replace \
-      '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
+    substituteInPlace mkosi/run.py \
+      --replace 'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
+    substituteInPlace mkosi/__init__.py \
+      --replace '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
+  '' + lib.optionalString withQemu ''
+    substituteInPlace mkosi/qemu.py \
+      --replace '/usr/share/ovmf/x64/OVMF_VARS.fd' "${OVMF.variables}" \
+      --replace '/usr/share/ovmf/x64/OVMF_CODE.fd' "${OVMF.firmware}"
   '';
 
   nativeBuildInputs = [
@@ -62,6 +73,8 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     systemdForMkosi
     bubblewrap
+  ] ++ lib.optional withQemu [
+    qemu
   ];
 
   postInstall = ''
