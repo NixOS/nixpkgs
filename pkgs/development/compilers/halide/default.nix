@@ -34,8 +34,11 @@ stdenv.mkDerivation rec {
     #define HALIDE_CPP_COMPILER_HAS_FLOAT16' \
                 '#if defined(__x86_64__) || defined(__i386__)
     #define HALIDE_CPP_COMPILER_HAS_FLOAT16'
-
-    # AvailabilityVersions.h is part of Apple SDK, and we do not want to depend on it
+  ''
+  # Note: on x86_64-darwin, clang fails to find AvailabilityVersions.h, so we remove it.
+  # Halide uses AvailabilityVersions.h and TargetConditionals.h to determine whether
+  # ::aligned_alloc is available. For us, it isn't.
+  + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     substituteInPlace 'src/runtime/HalideBuffer.h' \
       --replace '#ifdef __APPLE__
     #include <AvailabilityVersions.h>
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
     #endif' \
                 ' ' \
       --replace 'TARGET_OS_OSX && (__MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_15)' \
-                '0' \
+                '1' \
       --replace 'TARGET_OS_IPHONE && (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_14_0)' \
                 '0'
   '';
