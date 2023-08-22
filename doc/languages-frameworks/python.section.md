@@ -2,6 +2,24 @@
 
 ## Reference {#reference}
 
+### Glossary {#python-glossary}
+
+pkgs
+: At root level, it corresponds with all attributes exposed by nixpkgs, e.g. `pkgs = import <nixpkgs>{}`.
+
+${python}
+: Represents a given Python interpreter attribute name. When in doubt, check for valid attribute names from:
+  - the [nixpkgs manual interpreters' table](#interpreters).
+  - <TAB>-completion of `pkgs.pythonInterpreters` in the REPL (`pkgs.pythonInterpreters.<TAB>`).
+  - evaluation of `lib.attrNames pythonInterpreters` in the REPL.
+
+${pypkg}
+: Represents a given Python package attribute name, e.g. `pandas`.
+
+ps
+: stands for nixpkgs python **p**ackage **s**et.
+
+
 ### Interpreters {#interpreters}
 
 | Package    | Aliases         | Interpreter |
