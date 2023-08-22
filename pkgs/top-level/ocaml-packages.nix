@@ -1464,7 +1464,13 @@ let
 
     qcheck-core = callPackage ../development/ocaml-modules/qcheck/core.nix { };
 
+    qcheck-lin = callPackage ../development/ocaml-modules/qcheck/lin.nix { };
+
+    qcheck-multicoretests-util = callPackage ../development/ocaml-modules/qcheck/multicoretests-util.nix { };
+
     qcheck-ounit = callPackage ../development/ocaml-modules/qcheck/ounit.nix { };
+
+    qcheck-stm = callPackage ../development/ocaml-modules/qcheck/stm.nix { };
 
     qtest = callPackage ../development/ocaml-modules/qtest { };
 

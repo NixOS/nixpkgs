@@ -52,6 +52,7 @@ mapAliases {
   inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) clean-css-cli; # added 2023-08-18
+  inherit (pkgs) configurable-http-proxy; # added 2023-08-19
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
@@ -71,7 +72,12 @@ mapAliases {
   thelounge = pkgs.thelounge; # Added 2023-05-22
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
+  inherit (pkgs) ungit; # added 2023-08-20
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
   vue-cli = self."@vue/cli"; # added 2023-08-18
+  vue-language-server = self.vls; # added 2023-08-20
+  inherit (pkgs) web-ext; # added 2023-08-20
+  inherit (pkgs) write-good; # added 2023-08-20
+  inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
 }

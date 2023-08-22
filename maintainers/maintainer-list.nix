@@ -8135,6 +8135,12 @@
     githubId = 2308444;
     name = "Joshua Gilman";
   };
+  jmillerpdt = {
+    email = "jcmiller@pdtpartners.com";
+    github = "jmillerpdt";
+    githubId = 54179289;
+    name = "Jason Miller";
+  };
   jnsgruk = {
     email = "jon@sgrs.uk";
     github = "jnsgruk";

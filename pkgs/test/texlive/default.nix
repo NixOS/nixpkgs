@@ -253,8 +253,9 @@
         "cefpdflatex" "cefslatex" "cefspdflatex" "chkdvifont" "dvi2fax" "dvired" "dviselect" "dvitodvi" "epsffit"
         "findhyph" "gbklatex" "gbkpdflatex" "komkindex" "kpsepath" "listbib" "listings-ext" "mag" "mathspic" "mf2pt1"
         "mk4ht" "mkt1font" "mkgrkindex" "musixflx" "pdf2ps" "pdftosrc" "pdfxup" "pedigree" "pfb2pfa" "pk2bm" "prepmx"
-        "ps2pk" "psselect" "pstops" "rubibtex" "rubikrotation" "sjislatex" "sjispdflatex" "srcredact" "t4ht" "tex4ht"
-        "texdiff" "texdirflatten" "texplate" "tie" "ttf2kotexfont" "ttfdump" "vlna" "vpl2ovp" "vpl2vpl" "yplan" ];
+        "ps2pk" "psselect" "pstops" "rubibtex" "rubikrotation" "sjislatex" "sjispdflatex" "srcredact" "t4ht"
+        "teckit_compile" "tex4ht" "texdiff" "texdirflatten" "texplate" "tie" "ttf2kotexfont" "ttfdump" "vlna" "vpl2ovp"
+        "vpl2vpl" "yplan" ];
       # (3) binaries requiring a .tex file
       contextTest = [ "htcontext" ];
       latexTest = [ "de-macro" "e2pall" "htlatex" "htxelatex" "makeindex" "pslatex" "rumakeindex" "tpic2pdftex"
