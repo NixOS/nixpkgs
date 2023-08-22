@@ -6,7 +6,6 @@
 , devtools
 , email-validator
 , fetchFromGitHub
-, fetchpatch
 , pytest-mock
 , pytestCheckHook
 , python-dotenv
@@ -33,8 +32,10 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.9";
+  version = "1.10.12";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   outputs = [
     "out"
@@ -42,23 +43,12 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-POqMxBJUFFS1TnO9h5W7jYwFlukBOng0zbtq4kzmMB4=";
+    hash = "sha256-3XnbPGU90wLCPEryFAOky6Iy73Dvgzzh+GbOKW8hZ4U=";
   };
-
-  patches = [
-    # Fixes racy doctests build failures on really fast machines
-    # FIXME: remove after next release
-    (fetchpatch {
-      url = "https://github.com/pydantic/pydantic/pull/6103/commits/f05014a30340e608155683aaca17d275f93a0380.diff";
-      hash = "sha256-sr47hpl37SSFFbK+/h3hGlF6Pl6L8XPKDU0lZZV7Vzs=";
-    })
-  ];
 
   postPatch = ''
     sed -i '/flake8/ d' Makefile
@@ -129,7 +119,9 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  pythonImportsCheck = [ "pydantic" ];
+  pythonImportsCheck = [
+    "pydantic"
+  ];
 
   meta = with lib; {
     description = "Data validation and settings management using Python type hinting";
