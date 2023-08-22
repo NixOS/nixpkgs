@@ -25,7 +25,7 @@ let
     src = contents;
 
     nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ zlib ];
+    buildInputs = [ zlib stdenv.cc.cc.libgcc or null ];
 
     installPhase = ''
       mkdir -p $out/bin/
