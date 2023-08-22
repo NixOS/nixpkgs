@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
+  shellHook = ''
+    export XDG_DATA_DIRS="$GSETTINGS_SCHEMAS_PATH"
+  '';
+
   meta = with lib; {
     description = "An open source toolkit for medical image conversion ";
     homepage = "https://xmedcon.sourceforge.net/";
