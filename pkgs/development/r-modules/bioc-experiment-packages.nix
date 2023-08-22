@@ -59,7 +59,7 @@ in with self; {
   EGSEAdata = derive2 { name="EGSEAdata"; version="1.28.0"; sha256="1g7vqzkljndy94rwn6xzf1b9cga3cvslcxvans2lb0dw0968sxsr"; depends=[]; };
   ELMER_data = derive2 { name="ELMER.data"; version="2.24.0"; sha256="08kaz2mzmp1flkmml11kr9pi9520qkf3hbcj4s1dnk58895rhbkc"; depends=[GenomicRanges]; };
   EatonEtAlChIPseq = derive2 { name="EatonEtAlChIPseq"; version="0.38.0"; sha256="0mzvlv2bmjkyl65473x1nrwppx7pz3sss1ch6f1x1yivrl1schns"; depends=[GenomicRanges rtracklayer ShortRead]; };
-  EpiMix_data = derive2 { name="EpiMix.data"; version="1.1.0"; sha256="16x2b0g3lmbg1x3sdv9058y7z8gpbbwxbhw0y2a25zi3jwiyhb0r"; depends=[ExperimentHub]; };
+  EpiMix_data = derive2 { name="EpiMix.data"; version="1.2.2"; sha256="01fppmxc7wrvy27lrnyri1mcphrmglf1d884hw0v6wyyl66h9n9z"; depends=[ExperimentHub]; };
   FANTOM3and4CAGE = derive2 { name="FANTOM3and4CAGE"; version="1.36.0"; sha256="0hrw0vrzs49vfp0jkql146xcmcbhx8gkqp2smw3xbnbpvmmqvp69"; depends=[]; };
   FIs = derive2 { name="FIs"; version="1.28.0"; sha256="1c9xh9izxjvl494k02sfl49ybibrac3977m10dgr554gqjqvz11i"; depends=[]; };
   FieldEffectCrc = derive2 { name="FieldEffectCrc"; version="1.10.0"; sha256="1nxm8ai37fifs3lpcrm3y36f4xdi84bvkq4hc94a8817bhbcb5la"; depends=[AnnotationHub BiocStyle DESeq2 ExperimentHub RUnit SummarizedExperiment]; };
@@ -76,9 +76,9 @@ in with self; {
   GSE103322 = derive2 { name="GSE103322"; version="1.6.0"; sha256="0h2smriyw0bvr6aigp08mlhw1dp9wgr3pcd92kazvxkak19437rm"; depends=[Biobase GEOquery]; };
   GSE13015 = derive2 { name="GSE13015"; version="1.8.0"; sha256="1hh5960780ckyv4y1p1dqba7gh48mg4cbzlfdya7rjhv3wrxjsy4"; depends=[Biobase GEOquery preprocessCore SummarizedExperiment]; };
   GSE159526 = derive2 { name="GSE159526"; version="1.6.0"; sha256="1qdhrmy6ckzvcj77ishablhwdpk3f17px35ybvqascq1a8fnh3ys"; depends=[]; };
-  GSE62944 = derive2 { name="GSE62944"; version="1.28.0"; sha256="04x0qpy7x68s9z7ap2gg5k638jq0grhrvv87vb6sn1fnifi5r5n7"; depends=[Biobase GEOquery]; };
+  GSE62944 = derive2 { name="GSE62944"; version="1.28.1"; sha256="1fvxgdbhcvg57yfwgdcc10xr6wv4fr9hfm11xy77a39nsl2qh6n7"; depends=[Biobase GEOquery]; };
   GSVAdata = derive2 { name="GSVAdata"; version="1.36.0"; sha256="1z1ibk7iifla2hv3hgmjqa6lznvwz0k022la4k6jr3ag4xzwvb1n"; depends=[Biobase GSEABase hgu95a_db]; };
-  GWASdata = derive2 { name="GWASdata"; version="1.38.0"; sha256="0c33rzk7g90fsawixr814n4fnqakk10a3v87dzdpv3p5chn6v494"; depends=[GWASTools]; };
+  GWASdata = derive2 { name="GWASdata"; version="1.38.1"; sha256="00781dqlcw1fc6gfhwby4bpa7x0v103ar5yhik4i6ivfl27sa9na"; depends=[GWASTools]; };
   GenomicDistributionsData = derive2 { name="GenomicDistributionsData"; version="1.8.0"; sha256="0s75cc0bq9j6qz2sigy6hfhnqilk2krixzn1y5krcx94c3g5vjxl"; depends=[AnnotationFilter AnnotationHub BSgenome data_table ensembldb ExperimentHub GenomeInfoDb GenomicFeatures GenomicRanges]; };
   GeuvadisTranscriptExpr = derive2 { name="GeuvadisTranscriptExpr"; version="1.28.0"; sha256="1ag28yhaq7zcny7cirh7pqs84g782nlyv5hvylwgmiwzya6zgllw"; depends=[]; };
   HCAData = derive2 { name="HCAData"; version="1.16.0"; sha256="18wvvndvjff7i2cikhmbzvpdy0vj39c9124wgrlyfk7mkic2vbvv"; depends=[AnnotationHub ExperimentHub HDF5Array SingleCellExperiment]; };
@@ -110,7 +110,7 @@ in with self; {
   KOdata = derive2 { name="KOdata"; version="1.26.0"; sha256="02hdm1q09zlpkringl9r6id3437lv8sx1w7m0z9c1q78qbwq4grl"; depends=[]; };
   LRcellTypeMarkers = derive2 { name="LRcellTypeMarkers"; version="1.8.0"; sha256="074p90hasbd1cp1y6j10fvhav1f24lzd91w8vx27lsy5b2l5bd2l"; depends=[ExperimentHub]; };
   LiebermanAidenHiC2009 = derive2 { name="LiebermanAidenHiC2009"; version="0.38.0"; sha256="0axnw804p2rnywd69a0d6sy9d5mrbhwyp9pidia53iqzvpmz9n6p"; depends=[IRanges KernSmooth]; };
-  ListerEtAlBSseq = derive2 { name="ListerEtAlBSseq"; version="1.31.0"; sha256="0kysss2f1j75y1rx07nyqp7dfd5qh48qz9ffb5rpsi43a0295pbn"; depends=[methylPipe]; };
+  ListerEtAlBSseq = derive2 { name="ListerEtAlBSseq"; version="1.32.1"; sha256="0iq60xrl9c38zr50hl1np99pjw0aqn8wa4m0hg7bgihsydxfqakk"; depends=[methylPipe]; };
   LungCancerACvsSCCGEO = derive2 { name="LungCancerACvsSCCGEO"; version="1.36.0"; sha256="0jy79a07c2bl2awinafym60x5z4yx9wwn9kpw1qdyvgd58z76cn6"; depends=[]; };
   LungCancerLines = derive2 { name="LungCancerLines"; version="0.38.0"; sha256="15gz5q3bgqd1hdb6fxvsli0d49qlmfp9nmvkascbndnzl31l4g52"; depends=[Rsamtools]; };
   M3DExampleData = derive2 { name="M3DExampleData"; version="1.26.0"; sha256="06gf301gmrjssszz73gh6l7mhsnrjsr7smr3ylp86pm031bpix0i"; depends=[]; };
@@ -151,7 +151,7 @@ in with self; {
   PWMEnrich_Hsapiens_background = derive2 { name="PWMEnrich.Hsapiens.background"; version="4.34.0"; sha256="1dzas863k8s3cr4a79iiw1750c2azhgxscbdv7qsy86kx8jzysaz"; depends=[PWMEnrich]; };
   PWMEnrich_Mmusculus_background = derive2 { name="PWMEnrich.Mmusculus.background"; version="4.34.0"; sha256="0w8f5v4j54ywv3mg9bv0sdc8wsab3crjc21qs3hl0pjihv719v3f"; depends=[PWMEnrich]; };
   PasillaTranscriptExpr = derive2 { name="PasillaTranscriptExpr"; version="1.28.0"; sha256="0wyahjm7cd53f735vlw7gfvdcryzkhdc6b2nxy4xlis11g9a890m"; depends=[]; };
-  PathNetData = derive2 { name="PathNetData"; version="1.36.0"; sha256="0bywy6p747fnbfw17yjn86b57y1xggdx5n60m5jfs6zlpd6ldg9q"; depends=[]; };
+  PathNetData = derive2 { name="PathNetData"; version="1.36.1"; sha256="0hdm4kvyzncaf5yjplfkglv7p8a87zcxck1vh9r9h761amf8samh"; depends=[]; };
   PepsNMRData = derive2 { name="PepsNMRData"; version="1.18.0"; sha256="04vff5s42bkhyl2zf05r06blvp11qpz326fd13jrgcsx8lkrr0ys"; depends=[]; };
   PhyloProfileData = derive2 { name="PhyloProfileData"; version="1.14.0"; sha256="02fhwgbd22v4ra7r3dzhz39ls2l0la5fczn38ljm3xqmvagacxw9"; depends=[BiocStyle Biostrings ExperimentHub]; };
   ProData = derive2 { name="ProData"; version="1.38.0"; sha256="1vc5zhpmv2ixcfd1sqhy6csbl458wda8wdwywqjwxsgnkpj55pba"; depends=[Biobase]; };
@@ -202,11 +202,11 @@ in with self; {
   SingleMoleculeFootprintingData = derive2 { name="SingleMoleculeFootprintingData"; version="1.8.0"; sha256="11nkyzjrc7jd88qyx5i3s0l7zzh6ld1w59fxaa9v7bx72b1yjvh4"; depends=[ExperimentHub]; };
   SomatiCAData = derive2 { name="SomatiCAData"; version="1.38.0"; sha256="0f82mxh59gsxpfggzjh4qz8pzh7bwif05kn0kpi5ja0nj8mgj0c4"; depends=[]; };
   SomaticCancerAlterations = derive2 { name="SomaticCancerAlterations"; version="1.36.0"; sha256="1j1ky7pff22h08jn9is7afwplqq8ypg7cv81i0ymjfnjlqiks1h3"; depends=[GenomicRanges IRanges S4Vectors]; };
-  SpikeIn = derive2 { name="SpikeIn"; version="1.42.0"; sha256="1zwfw7k74xnn6fa3wzrpsgb2rlf3cmc0v5r78pyrdd3il5lkkbaa"; depends=[affy]; };
-  SpikeInSubset = derive2 { name="SpikeInSubset"; version="1.40.0"; sha256="0pf497ww9x7pxmii4sww437svpms8s51hrn8n05w2xhgrpi8cysh"; depends=[affy Biobase]; };
+  SpikeIn = derive2 { name="SpikeIn"; version="1.42.1"; sha256="07a0fbpz82qb2l4b5hlg4m3xw5ls357ygqsbb39kxj05qjq8y5ra"; depends=[affy]; };
+  SpikeInSubset = derive2 { name="SpikeInSubset"; version="1.40.1"; sha256="0khjy2wngjxbfqdg332j45j8nzs5z9njzk3i99qc0z0l1xdzblvs"; depends=[affy Biobase]; };
   TBX20BamSubset = derive2 { name="TBX20BamSubset"; version="1.36.0"; sha256="17fcm8qpqrc5mwa9pyj77dh5a28k7k2wj6dipckdfpl34dg3n8nz"; depends=[Rsamtools xtable]; };
   TCGAMethylation450k = derive2 { name="TCGAMethylation450k"; version="1.36.0"; sha256="17r6vh1n1d7017717ix0scfsqzqzgldq119qyjdlg1f4qpngdlas"; depends=[]; };
-  TCGAWorkflowData = derive2 { name="TCGAWorkflowData"; version="1.24.0"; sha256="1846ss0rjm24qgl6lm6g7jmviap6gl5zcf3cskz5dj6i70afcpbm"; depends=[SummarizedExperiment]; };
+  TCGAWorkflowData = derive2 { name="TCGAWorkflowData"; version="1.24.1"; sha256="1cgpy8b2k02xl6fa84b38nx973dygw0f3i83rjinak763kcfa2gj"; depends=[SummarizedExperiment]; };
   TCGAbiolinksGUI_data = derive2 { name="TCGAbiolinksGUI.data"; version="1.20.0"; sha256="0jnm7qca2j72jhddhs10q5vfalpips7bs5mlmk4ma9gcbcjzwqql"; depends=[]; };
   TCGAcrcmRNA = derive2 { name="TCGAcrcmRNA"; version="1.20.0"; sha256="1yd68ral8v7ix2i77vph1y9kp67hrb6mz2lchjkw9x6lkagvfgh5"; depends=[Biobase]; };
   TCGAcrcmiRNA = derive2 { name="TCGAcrcmiRNA"; version="1.20.0"; sha256="1avv6skwirf0ysvppwbv9xid9dgbnbzwabkn0x5ilry8cj8qvcqy"; depends=[Biobase]; };
@@ -227,8 +227,8 @@ in with self; {
   WeberDivechaLCdata = derive2 { name="WeberDivechaLCdata"; version="1.2.0"; sha256="1m3vi57qk9ivrqjf223b839fipvllsxx8mw8x34whzv8mfj5x1mw"; depends=[ExperimentHub SingleCellExperiment SpatialExperiment]; };
   XhybCasneuf = derive2 { name="XhybCasneuf"; version="1.38.0"; sha256="1fbhypw6pa38lfr4i3f1j5d73p3hmrd9rjxmqghq3yss2jlk7hb9"; depends=[affy ath1121501cdf RColorBrewer tinesath1cdf]; };
   adductData = derive2 { name="adductData"; version="1.16.0"; sha256="1rnwlrg8m2hxclgi9c1vqzjglxafsqy6j5kd28gpfwc4ajm9a4hk"; depends=[AnnotationHub ExperimentHub]; };
-  affycompData = derive2 { name="affycompData"; version="1.38.0"; sha256="1carhmn76iwspz66rpkmchg2jsggcipy8byxcgjx5z4cgmjky6fr"; depends=[affycomp Biobase]; };
-  affydata = derive2 { name="affydata"; version="1.48.0"; sha256="1x8l03wgw4zv1g5fw33hk3wd4zmhrmknrs46bl437adzib47i61i"; depends=[affy]; };
+  affycompData = derive2 { name="affycompData"; version="1.38.1"; sha256="1idrg3kx2839vfvaxdzxvzwm1cv3qqkx81mfr5gij4zva0l50nrz"; depends=[affycomp Biobase]; };
+  affydata = derive2 { name="affydata"; version="1.48.1"; sha256="0si12yz2jmyva69g7a22sabvs7phizgvjcki3j0qall46i2hzqbm"; depends=[affy]; };
   airway = derive2 { name="airway"; version="1.20.0"; sha256="0z6p2la2va4x5ak8v7n5iwdnp4wcsy044k7sif9x98vh4wbc6s96"; depends=[SummarizedExperiment]; };
   alpineData = derive2 { name="alpineData"; version="1.26.0"; sha256="1337y1y8q5y8yh2r2bji8fz3nhcxbn5s6pfnnkb8kvg8r0avgmkz"; depends=[AnnotationHub ExperimentHub GenomicAlignments]; };
   antiProfilesData = derive2 { name="antiProfilesData"; version="1.36.0"; sha256="1flb19c5v9k7qnhc7mk686ml6lc4llgh35ajd7lnpjv9r490jbkc"; depends=[Biobase]; };
@@ -238,7 +238,7 @@ in with self; {
   benchmarkfdrData2019 = derive2 { name="benchmarkfdrData2019"; version="1.14.0"; sha256="18ihbg53054yg8vxg8g4zd4dggq20gr5bvb5ivaxphjp8z1dvdsm"; depends=[ExperimentHub SummarizedExperiment]; };
   beta7 = derive2 { name="beta7"; version="1.38.0"; sha256="0l7kskdzh3zy30g7hq3xwyjpq3iyh74qb8fbzgfjr7gy7g2f43ml"; depends=[marray]; };
   biotmleData = derive2 { name="biotmleData"; version="1.24.0"; sha256="13fm555fpfq2pziyls85gi10j5k8hmkk13i2bd1x74kc272zawqn"; depends=[]; };
-  biscuiteerData = derive2 { name="biscuiteerData"; version="1.14.0"; sha256="1m0kml2frddynmdkxk9s7sh5bqca3n6vm187jwdydv89qkwy75k5"; depends=[AnnotationHub curl ExperimentHub GenomicRanges]; };
+  biscuiteerData = derive2 { name="biscuiteerData"; version="1.14.1"; sha256="16gdjbyzzlhz9qgim122kkba0f9c3s3li08qy6r4jmfh76ixvyfh"; depends=[AnnotationHub curl ExperimentHub GenomicRanges]; };
   bladderbatch = derive2 { name="bladderbatch"; version="1.38.0"; sha256="196nnncdyzajslyd2jlsqs9b88q6rdrdl4h0sh5q0z892wpqk70h"; depends=[Biobase]; };
   blimaTestingData = derive2 { name="blimaTestingData"; version="1.20.0"; sha256="1jn0ynifm5dqf3wwfhzid1lm7zb1hvpvf8f623hd6hnryby1702a"; depends=[]; };
   bodymapRat = derive2 { name="bodymapRat"; version="1.16.0"; sha256="0ypmfdc7cgvr04vhp1x8fya933zzp2rzbfp7wzagxqh93k4515sa"; depends=[ExperimentHub SummarizedExperiment]; };
@@ -249,7 +249,7 @@ in with self; {
   breastCancerUNT = derive2 { name="breastCancerUNT"; version="1.38.0"; sha256="1a6khghn3fr6qv0k2llg0ypj94s50ndcbd2qh00mxjacz0wsf9cp"; depends=[]; };
   breastCancerUPP = derive2 { name="breastCancerUPP"; version="1.38.0"; sha256="10vz5qxdn4qrk107djs34gc0h1gw5idi0f19hj4ln4049ms0yjav"; depends=[]; };
   breastCancerVDX = derive2 { name="breastCancerVDX"; version="1.38.0"; sha256="0823c5prrbv5v3pjlnwh80hiavirlc7jk3hj5qqlj6177nx7izc4"; depends=[]; };
-  brgedata = derive2 { name="brgedata"; version="1.22.0"; sha256="0vqp4wnzm330sjvbgbmxc369m46j6i0jcawid7h63g86ywhk2js6"; depends=[Biobase SummarizedExperiment]; };
+  brgedata = derive2 { name="brgedata"; version="1.22.1"; sha256="11h4wqnz6bppynvw4vmmdslfl8kprw704y3kydb5s84rp4nqrvmw"; depends=[Biobase SummarizedExperiment]; };
   bronchialIL13 = derive2 { name="bronchialIL13"; version="1.38.0"; sha256="08rpaxbxhf8p7rm25jxy8npb5bva6l60h8v47vmdn6j8p8sd7yl7"; depends=[affy]; };
   bsseqData = derive2 { name="bsseqData"; version="0.38.0"; sha256="1ppmasfmxqw2nz6sdszgrjnbh52bzhnjyi4gi1snn8ar6x05s2px"; depends=[bsseq]; };
   cMap2data = derive2 { name="cMap2data"; version="1.36.0"; sha256="0n35j81h62rq47c9p9blksfmm2135ahhz6jlkrgbrdffn9yrrc6m"; depends=[]; };
@@ -332,14 +332,14 @@ in with self; {
   lungExpression = derive2 { name="lungExpression"; version="0.38.0"; sha256="02xmln921ak8xx040pl4hvm4dhqzvmgynmqy7a37lfccg3zvrc0q"; depends=[Biobase]; };
   lydata = derive2 { name="lydata"; version="1.26.0"; sha256="0i6xy6wczw6nhj2g07l3z39q8s2fws71gh502cdfg6d30x9ad4i5"; depends=[]; };
   mAPKLData = derive2 { name="mAPKLData"; version="1.32.0"; sha256="1p8q2swiypb3a5q4c6j9y28ddwkj5w6wqm0xsjw4rbvcb7dsbr4c"; depends=[]; };
-  mCSEAdata = derive2 { name="mCSEAdata"; version="1.20.0"; sha256="1absxkpy48gi8rdbb97vwd2g0fqb2r07plx6cg9paj3a8gb0q3ba"; depends=[]; };
+  mCSEAdata = derive2 { name="mCSEAdata"; version="1.20.1"; sha256="1w5x5j43xyh14ring2y8a2i99bcz3pc5yvr66r493viq24g2254y"; depends=[GenomicRanges]; };
   macrophage = derive2 { name="macrophage"; version="1.16.0"; sha256="02g56sxkj83bp9j2089a5mw342cp8zx55dps8wah0jyb93rh5isg"; depends=[]; };
   mammaPrintData = derive2 { name="mammaPrintData"; version="1.36.0"; sha256="1m9wnj5yg6xsglsg2qsx3igdy7a0wp9zkgpf8ycwgr425dm8fwyi"; depends=[]; };
   maqcExpression4plex = derive2 { name="maqcExpression4plex"; version="1.44.0"; sha256="1qpm40z3sl308b484nn5zkb2vnywrz7br5a070g3f63302hj306s"; depends=[]; };
   marinerData = derive2 { name="marinerData"; version="1.0.0"; sha256="0rsqz0991ykdw8l7yq1sixh6ddvzg0pnn1gyp9mwi2j4vja0w3qc"; depends=[ExperimentHub]; };
   mcsurvdata = derive2 { name="mcsurvdata"; version="1.18.0"; sha256="1qxa32vmc5zqdr48f26bfpxl3aask9isvas9wwc9dcbhivn35d2y"; depends=[AnnotationHub Biobase ExperimentHub]; };
   metaMSdata = derive2 { name="metaMSdata"; version="1.36.0"; sha256="1npbyssyvc4z6agb9m6pb1qkml25kqiirg7fpnc4saa586s2ifk8"; depends=[]; };
-  methylclockData = derive2 { name="methylclockData"; version="1.8.0"; sha256="0ghl702slnf0hayq54a7957r3d915hqn67p0bwqjxhx3bdj39n47"; depends=[ExperimentHub ExperimentHubData]; };
+  methylclockData = derive2 { name="methylclockData"; version="1.8.1"; sha256="0dsllm09hhxad3bf5l1yj1ajkxjy9ad8apihg3zj7zqdgcvgq64m"; depends=[ExperimentHub ExperimentHubData]; };
   miRNATarget = derive2 { name="miRNATarget"; version="1.38.0"; sha256="0gjhq9wiswxw75a6vm1s9l9jnhlfxp35zz85cwxg6xvcz94w4rx2"; depends=[Biobase]; };
   miRcompData = derive2 { name="miRcompData"; version="1.30.0"; sha256="1qn57qvysmpxq1k4zsv7b45a8bmi9snvkwwng9s267440w0rl0yz"; depends=[]; };
   microRNAome = derive2 { name="microRNAome"; version="1.22.0"; sha256="17dmg9lbf3j305lgyfwazqyxwlkvqxzyzfilq97kki894qyfv85l"; depends=[SummarizedExperiment]; };
@@ -383,7 +383,7 @@ in with self; {
   qPLEXdata = derive2 { name="qPLEXdata"; version="1.18.0"; sha256="1zzrsj7xdp0dzv1irj8gkar6a815253lna79vcffq7i01nx62whr"; depends=[dplyr knitr MSnbase qPLEXanalyzer]; };
   rRDPData = derive2 { name="rRDPData"; version="1.20.0"; sha256="0rby7h4xzsxjrs8s2vzfapwh01rxddickg0cxj1n0bpirmc1bn6i"; depends=[rRDP]; };
   rcellminerData = derive2 { name="rcellminerData"; version="2.22.0"; sha256="0gk037ksn7wbwbp9nvgd5kacy671fwy13sscbv73ixmxkavkn5ls"; depends=[Biobase]; };
-  restfulSEData = derive2 { name="restfulSEData"; version="1.22.0"; sha256="0lyry50izvnjqywsxsrrckbdw4ib88jphwj2yxyl0aapgdcxgzra"; depends=[DelayedArray ExperimentHub HDF5Array SummarizedExperiment]; };
+  restfulSEData = derive2 { name="restfulSEData"; version="1.22.1"; sha256="0d2dlg1cswyxsiwd4482mam3l1dcsabdrv164yrz4s63g18jgspy"; depends=[DelayedArray ExperimentHub HDF5Array SummarizedExperiment]; };
   rheumaticConditionWOLLBOLD = derive2 { name="rheumaticConditionWOLLBOLD"; version="1.38.0"; sha256="0bnrkq6impb61fj6991290bji5dba4j11favykws668lj113wk9p"; depends=[]; };
   sampleClassifierData = derive2 { name="sampleClassifierData"; version="1.24.0"; sha256="0rm9q82iiii2rnq9pqy7a0c7pbw2vwwr5132vzvsr5x7q2xfwf8v"; depends=[SummarizedExperiment]; };
   scATAC_Explorer = derive2 { name="scATAC.Explorer"; version="1.6.0"; sha256="0y9ykfl20ffww51n45i8ljg3f2jz0lc20qp81q0q3rwy7wjz28iv"; depends=[BiocFileCache data_table Matrix S4Vectors SingleCellExperiment]; };
@@ -401,7 +401,7 @@ in with self; {
   shinyMethylData = derive2 { name="shinyMethylData"; version="1.20.0"; sha256="03apywnbp4j3dhaba1ardw7wmr75py2lbjm9gfmn624fcvvs5zsm"; depends=[]; };
   signatureSearchData = derive2 { name="signatureSearchData"; version="1.14.0"; sha256="1bs3vqj67ppwl9rdkkzh2a65cj0lmss22m2gmahdj5903sdm8fbd"; depends=[affy Biobase dplyr ExperimentHub limma magrittr R_utils rhdf5]; };
   simpIntLists = derive2 { name="simpIntLists"; version="1.36.0"; sha256="1jma1gnpm8v345li6k4brjr29x5x06f33x50s6ashx28lwzf0hwg"; depends=[]; };
-  spatialDmelxsim = derive2 { name="spatialDmelxsim"; version="1.6.0"; sha256="0b3523gw7la0li9cf4p47kv8xc7r3k28dhmc816n17rrn0iqcxlz"; depends=[ExperimentHub SummarizedExperiment]; };
+  spatialDmelxsim = derive2 { name="spatialDmelxsim"; version="1.6.1"; sha256="0rid9gcy0l4fj8pdmjyspjk2bcq2kl6nni121nnkrhwcy878p1ri"; depends=[ExperimentHub SummarizedExperiment]; };
   spatialLIBD = derive2 { name="spatialLIBD"; version="1.12.0"; sha256="04g0qjxccws1pim89kb4mpxh6n26snmrh7khfp89wxkx52bj8yrd"; depends=[AnnotationHub benchmarkme BiocFileCache BiocGenerics cowplot DT edgeR ExperimentHub fields GenomicRanges ggplot2 golem IRanges jsonlite limma magick Matrix paletteer plotly png RColorBrewer rtracklayer S4Vectors scater scuttle sessioninfo shiny shinyWidgets SingleCellExperiment SpatialExperiment statmod SummarizedExperiment tibble viridisLite]; };
   spqnData = derive2 { name="spqnData"; version="1.12.0"; sha256="1l63w4ddjqp0g9bkwhyaggj9j3iva0xvwnnv5jc51dzqgg4kyffx"; depends=[SummarizedExperiment]; };
   stemHypoxia = derive2 { name="stemHypoxia"; version="1.36.0"; sha256="15mw35q2paq5wmxix9k685xxrbm0x0cn80nvk3i3mw82h829jmnm"; depends=[]; };

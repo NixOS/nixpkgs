@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , asyncssh
 , bcrypt
 , buildPythonPackage
@@ -7,6 +8,7 @@
 , mock-ssh-server
 , pytest-asyncio
 , pytestCheckHook
+, setuptools
 , setuptools-scm
 }:
 
@@ -24,6 +26,7 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -33,10 +36,17 @@ buildPythonPackage rec {
     fsspec
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     mock-ssh-server
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # test fails with sandbox enabled
+    "test_checksum"
   ];
 
   pythonImportsCheck = [

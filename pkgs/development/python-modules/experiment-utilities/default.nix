@@ -19,19 +19,15 @@
 
 buildPythonPackage rec {
   pname = "experiment-utilities";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitLab {
     owner = "creinke";
     repo = "exputils";
     domain = "gitlab.inria.fr";
     rev = "refs/tags/version_${version}";
-    hash = "sha256-zjmmLUpGjUhpw2+stLJE6cImesnBSvrcid5bHMftX/Q=";
+    hash = "sha256-y+I/TpEC1alP3145ByM6H//lZl2FrpLT/70lzn04P6w=";
   };
-
-  patches = [
-    ./unvendor-ipynbname.patch
-  ];
 
   # This dependency constraint (<=7.6.5) was due to a bug in qgrid that has been patched in its
   # owned derivation

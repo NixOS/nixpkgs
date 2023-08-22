@@ -9,20 +9,19 @@
 
 rustPlatform.buildRustPackage {
   pname = "cargo-component";
-  version = "unstable-2023-08-16";
+  version = "unstable-2023-08-19";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "cargo-component";
-    rev = "26e55d87aff076e032fbcb58b794a35d3de650dc";
-    hash = "sha256-FCuFCLRLJ50ISlahMG6tL2qeeBQh1GQ/vBH6/q2zn44=";
+    rev = "4abbb89ed356887a5b7e822c507cc1d02cbe8935";
+    hash = "sha256-MZQcyK8AN/TRplTNuPkNMFFdJIlWxHEB4W6z5PnFDxw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "warg-api-0.1.0" = "sha256-A5FQ/nbuzV8ockV6vOMKUEoJKeaId3oyZU1QeNpd1Zc=";
-      "wit-bindgen-0.9.0" = "sha256-/ozrGPnk2gYuofU7qn2qYJb6cL+7nOzj8FF0BgbKXDY=";
     };
   };
 

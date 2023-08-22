@@ -11,10 +11,7 @@
 
 let
   inherit (gdk-pixbuf) moduleDir;
-
-  # turning lib/gdk-pixbuf-#.#/#.#.#/loaders into lib/gdk-pixbuf-#.#/#.#.#/loaders.cache
-  # removeSuffix is just in case moduleDir gets a trailing slash
-  loadersPath = (lib.strings.removeSuffix "/" gdk-pixbuf.moduleDir) + ".cache";
+  loadersPath = "${gdk-pixbuf.binaryDir}/webp-loaders.cache";
 in
 stdenv.mkDerivation rec {
   pname = "webp-pixbuf-loader";
@@ -47,7 +44,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # It looks for gdk-pixbuf-thumbnailer in this package's bin rather than the gdk-pixbuf bin. We need to patch that.
     substituteInPlace webp-pixbuf.thumbnailer.in \
-      --replace "@bindir@/gdk-pixbuf-thumbnailer" "$out/bin/webp-thumbnailer"
+      --replace "@bindir@/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp"
   '';
 
   postInstall = ''
@@ -58,7 +55,7 @@ stdenv.mkDerivation rec {
     # It assumes gdk-pixbuf-thumbnailer can find the webp loader in the loaders.cache referenced by environment variable, breaking containment.
     # So we replace it with a wrapped executable.
     mkdir -p "$out/bin"
-    makeWrapper "${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer" "$out/bin/webp-thumbnailer" \
+    makeWrapper "${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp" \
       --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
   '';
 

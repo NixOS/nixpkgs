@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyflume";
-  version = "0.7.2";
+  version = "0.8.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ChrisMandich";
     repo = "PyFlume";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wmaOOM8y7LthEgf3Uyv1N4ODviPGSlIQejC01IlhaJw=";
+    hash = "sha256-RtzbAXjMtvKc8vnZIxIJnc6CS+BrYcQgdy5bVaJumg0=";
   };
 
   propagatedBuildInputs = [

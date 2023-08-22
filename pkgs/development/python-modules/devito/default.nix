@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , anytree
 , buildPythonPackage
 , cached-property
@@ -18,8 +19,8 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , scipy
-, stdenv
 , sympy
 }:
 
@@ -37,20 +38,18 @@ buildPythonPackage rec {
     hash = "sha256-LzqY//205XEOd3/f8k1g4OYndRHMTVplBogGJf5Forw=";
   };
 
-  postPatch = ''
-    # Removing unecessary dependencies
-    sed -e "s/flake8.*//g" \
-        -e "s/codecov.*//g" \
-        -e "s/pytest.*//g" \
-        -e "s/pytest-runner.*//g" \
-        -e "s/pytest-cov.*//g" \
-        -i requirements.txt
+  pythonRemoveDeps = [
+    "codecov"
+    "flake8"
+    "pytest-runner"
+    "pytest-cov"
+  ];
 
-    # Relaxing dependencies requirements
-    sed -e "s/>.*//g" \
-        -e "s/<.*//g" \
-        -i requirements.txt
-  '';
+  pythonRelaxDeps = true;
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     anytree
@@ -71,31 +70,35 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-xdist
-    matplotlib
     gcc
+    matplotlib
+    pytest-xdist
+    pytestCheckHook
   ];
+
+  pytestFlagsArray = [ "-x" ];
 
   # I've had to disable the following tests since they fail while using nix-build, but they do pass
   # outside the build. They mostly related to the usage of MPI in a sandboxed environment.
   disabledTests = [
     "test_assign_parallel"
-    "test_gs_parallel"
-    "test_if_parallel"
-    "test_if_halo_mpi"
     "test_cache_blocking_structure_distributed"
-    "test_mpi"
     "test_codegen_quality0"
-    "test_new_distributor"
-    "test_subdomainset_mpi"
-    "test_init_omp_env_w_mpi"
-    "test_mpi_nocomms"
-    "test_shortcuts"
-    "est_docstrings"
-    "test_docstrings[finite_differences.coefficients]"
     "test_coefficients_w_xreplace"
+    "test_docstrings"
+    "test_docstrings[finite_differences.coefficients]"
+    "test_gs_parallel"
+    "test_if_halo_mpi"
+    "test_if_parallel"
+    "test_init_omp_env_w_mpi"
     "test_loop_bounds_forward"
+    "test_mpi_nocomms"
+    "test_mpi"
+    "test_index_derivative"
+    "test_new_distributor"
+    "test_setupWOverQ"
+    "test_shortcuts"
+    "test_subdomainset_mpi"
   ];
 
   disabledTestPaths = [

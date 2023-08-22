@@ -18,21 +18,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "patsh";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
+    repo = "patsh";
     rev = "v${version}";
-    sha256 = "sha256-7HXJspebluQeejKYmVA7sy/F3dtU1gc4eAbKiPexMMA=";
+    sha256 = "sha256-d2Br4RAlKO7Bpse8sFbIDCIYd2fYvby0ar9oIbQS2jc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tree-sitter-bash-0.19.0" = "sha256-gTsA874qpCI/N5tmBI5eT8KDaM25gXM4VbcCbUU2EeI=";
-    };
-  };
+  cargoHash = "sha256-hAWMm3YjwTB8ajn3QeXEOJYmPzbbitdwyO4k/IyhlOI=";
 
   nativeCheckInputs = [ custom ];
 

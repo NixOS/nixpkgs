@@ -6,6 +6,7 @@
 , libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
+, biber-ms
 }:
 
 # Useful resource covering build options:
@@ -321,6 +322,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     mv "$out/bin"/{luatex,texlua,texluac} "$luatex/bin/"
     mv "$out/bin"/luahbtex "$luahbtex/bin/"
     mv "$out/bin"/xetex "$xetex/bin/"
+    cp ../../libs/teckit/teckit_compile "$xetex/bin/"
   '' + lib.optionalString withLuaJIT ''
     mv "$out/bin"/mfluajit{,-nowin} "$mflua/bin/"
     mv "$out/bin"/{luajittex,luajithbtex,texluajit,texluajitc} "$luajittex/bin/"
@@ -427,6 +429,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
 inherit asymptote;
 
 inherit biber;
+inherit biber-ms;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {
   pname = "texlive-bibtex-x.bin";
@@ -468,6 +471,19 @@ xdvi = stdenv.mkDerivation {
       --replace "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
   '';
   # TODO: it's suspicious that mktexpk generates fonts into ~/.texlive2014
+};
+
+xpdfopen = stdenv.mkDerivation {
+  pname = "texlive-xpdfopen.bin";
+  inherit (lib.head texlive.xpdfopen.pkgs) version;
+
+  inherit (common) src;
+
+  buildInputs = [ libX11 ];
+
+  preConfigure = "cd utils/xpdfopen";
+
+  enableParallelBuilding = true;
 };
 
 } # un-indented

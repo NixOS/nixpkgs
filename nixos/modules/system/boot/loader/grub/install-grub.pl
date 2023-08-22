@@ -516,37 +516,52 @@ sub addEntry {
     $conf .= "}\n\n";
 }
 
+sub addGeneration {
+    my ($name, $nameSuffix, $path, $options, $current) = @_;
+
+    # Do not search for grand children
+    my @links = sort (glob "$path/specialisation/*");
+
+    if ($current != 1 && scalar(@links) != 0) {
+        $conf .= "submenu \"> $name$nameSuffix\" --class submenu {\n";
+    }
+
+    addEntry("$name" . (scalar(@links) == 0 ? "" : " - Default") . $nameSuffix, $path, $options, $current);
+
+    # Find all the children of the current default configuration
+    # Do not search for grand children
+    foreach my $link (@links) {
+
+        my $entryName = "";
+
+        my $cfgName = readFile("$link/configuration-name");
+
+        my $date = strftime("%F", localtime(lstat($link)->mtime));
+        my $version =
+            -e "$link/nixos-version"
+            ? readFile("$link/nixos-version")
+            : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+
+        if ($cfgName) {
+            $entryName = $cfgName;
+        } else {
+            my $linkname = basename($link);
+            $entryName = "($linkname - $date - $version)";
+        }
+        addEntry("$name - $entryName", $link, "", 1);
+    }
+
+    if ($current != 1 && scalar(@links) != 0) {
+        $conf .= "}\n";
+    }
+}
 
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
-addEntry("@distroName@ - Default", $defaultConfig, $entryOptions, 1);
+addGeneration("@distroName@", "", $defaultConfig, $entryOptions, 1);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
-
-# Find all the children of the current default configuration
-# Do not search for grand children
-my @links = sort (glob "$defaultConfig/specialisation/*");
-foreach my $link (@links) {
-
-    my $entryName = "";
-
-    my $cfgName = readFile("$link/configuration-name");
-
-    my $date = strftime("%F", localtime(lstat($link)->mtime));
-    my $version =
-        -e "$link/nixos-version"
-        ? readFile("$link/nixos-version")
-        : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-
-    if ($cfgName) {
-        $entryName = $cfgName;
-    } else {
-        my $linkname = basename($link);
-        $entryName = "($linkname - $date - $version)";
-    }
-    addEntry("@distroName@ - $entryName", $link, "", 1);
-}
 
 my $grubBootPath = $grubBoot->path;
 # extraEntries could refer to @bootRoot@, which we have to substitute
@@ -577,7 +592,7 @@ sub addProfile {
             -e "$link/nixos-version"
             ? readFile("$link/nixos-version")
             : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-        addEntry("@distroName@ - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions, 0);
+        addGeneration("@distroName@ - Configuration " . nrFromGen($link), " ($date - $version)", $link, $subEntryOptions, 0);
     }
 
     $conf .= "}\n";

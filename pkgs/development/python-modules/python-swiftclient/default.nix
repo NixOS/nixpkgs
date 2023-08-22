@@ -22,6 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-Hj3fmYzL6n3CWqbfjrPffTi/S8lrBl8vhEMeglmBezM=";
   };
 
+  # remove duplicate script that will be created by setuptools from the
+  # entry_points section of setup.cfg
+  postPatch = ''
+    sed -i '/^scripts =/d' setup.cfg
+    sed -i '/bin\/swift/d' setup.cfg
+  '';
+
   nativeBuildInputs = [
     installShellFiles
   ];

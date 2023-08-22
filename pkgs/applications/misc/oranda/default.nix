@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oranda";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "oranda";
     rev = "v${version}";
-    hash = "sha256-R9b2T/Em3s4hwcXa3l2i8A3w/aBu0Dz+izFcE4Q8J/4=";
+    hash = "sha256-v/4FPDww142V5mx+pHhaHkDiIUN70dwei8mTeZELztc=";
   };
 
-  cargoHash = "sha256-0eH7LZfO5/YgXP9Hom7pgALKFksSTAiczgT7rrNnqow=";
+  cargoHash = "sha256-Q5EY9PB50DxFXFTPiv3RktI37b2TCDqLVNISxixnspY=";
 
   patches = [
     # oranda-generate-css which is used in the build script tries to download

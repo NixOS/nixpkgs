@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ip2unix";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
     rev = "v${version}";
-    hash = "sha256-7Q2s7wBkt5OTbQnx7Q5mGRWBOtr6yRsFBh+CUu8CmMQ";
+    hash = "sha256-+p5wQbX35LAjZ4vIE4AhI4M6gQ7gVviqf9jJDAr9xg8";
   };
 
   nativeBuildInputs = [

@@ -749,5 +749,3 @@ Names of files and directories should be in lowercase, with dashes between words
 
   As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
-
-- Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
