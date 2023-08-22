@@ -481,19 +481,49 @@ dont-distribute-packages:
  - alto
  - amazon-emailer-client-snap
  - amazonka
+ - amazonka-accessanalyzer
+ - amazonka-account
  - amazonka-alexa-business
+ - amazonka-amp
+ - amazonka-amplify
+ - amazonka-amplifybackend
+ - amazonka-amplifyuibuilder
  - amazonka-apigateway
+ - amazonka-apigatewaymanagementapi
+ - amazonka-apigatewayv2
+ - amazonka-appconfig
+ - amazonka-appconfigdata
+ - amazonka-appflow
+ - amazonka-appintegrations
  - amazonka-application-autoscaling
+ - amazonka-application-insights
+ - amazonka-applicationcostprofiler
+ - amazonka-appmesh
+ - amazonka-apprunner
  - amazonka-appstream
  - amazonka-appsync
+ - amazonka-arc-zonal-shift
  - amazonka-athena
+ - amazonka-auditmanager
  - amazonka-autoscaling
  - amazonka-autoscaling-plans
+ - amazonka-backup
+ - amazonka-backup-gateway
+ - amazonka-backupstorage
  - amazonka-batch
+ - amazonka-billingconductor
+ - amazonka-braket
  - amazonka-budgets
  - amazonka-certificatemanager
  - amazonka-certificatemanager-pca
+ - amazonka-chime
+ - amazonka-chime-sdk-identity
+ - amazonka-chime-sdk-media-pipelines
+ - amazonka-chime-sdk-meetings
+ - amazonka-chime-sdk-messaging
+ - amazonka-chime-sdk-voice
  - amazonka-cloud9
+ - amazonka-cloudcontrol
  - amazonka-clouddirectory
  - amazonka-cloudformation
  - amazonka-cloudfront
@@ -505,33 +535,60 @@ dont-distribute-packages:
  - amazonka-cloudwatch
  - amazonka-cloudwatch-events
  - amazonka-cloudwatch-logs
+ - amazonka-codeartifact
  - amazonka-codebuild
  - amazonka-codecommit
  - amazonka-codedeploy
+ - amazonka-codeguru-reviewer
+ - amazonka-codeguruprofiler
  - amazonka-codepipeline
  - amazonka-codestar
+ - amazonka-codestar-connections
+ - amazonka-codestar-notifications
  - amazonka-cognito-identity
  - amazonka-cognito-idp
  - amazonka-cognito-sync
  - amazonka-comprehend
+ - amazonka-comprehendmedical
+ - amazonka-compute-optimizer
  - amazonka-config
  - amazonka-connect
+ - amazonka-connect-contact-lens
+ - amazonka-connectcampaigns
+ - amazonka-connectcases
+ - amazonka-connectparticipant
  - amazonka-contrib-rds-utils
+ - amazonka-controltower
  - amazonka-cost-explorer
  - amazonka-cur
+ - amazonka-customer-profiles
+ - amazonka-databrew
+ - amazonka-dataexchange
  - amazonka-datapipeline
+ - amazonka-datasync
+ - amazonka-detective
  - amazonka-devicefarm
+ - amazonka-devops-guru
  - amazonka-directconnect
  - amazonka-discovery
+ - amazonka-dlm
  - amazonka-dms
+ - amazonka-docdb
+ - amazonka-docdb-elastic
+ - amazonka-drs
  - amazonka-ds
  - amazonka-dynamodb
  - amazonka-dynamodb-dax
  - amazonka-dynamodb-streams
+ - amazonka-ebs
  - amazonka-ec2
+ - amazonka-ec2-instance-connect
  - amazonka-ecr
+ - amazonka-ecr-public
  - amazonka-ecs
  - amazonka-efs
+ - amazonka-eks
+ - amazonka-elastic-inference
  - amazonka-elasticache
  - amazonka-elasticbeanstalk
  - amazonka-elasticsearch
@@ -539,86 +596,227 @@ dont-distribute-packages:
  - amazonka-elb
  - amazonka-elbv2
  - amazonka-emr
+ - amazonka-emr-containers
+ - amazonka-emr-serverless
+ - amazonka-evidently
+ - amazonka-finspace
+ - amazonka-finspace-data
+ - amazonka-fis
  - amazonka-fms
+ - amazonka-forecast
+ - amazonka-forecastquery
+ - amazonka-frauddetector
+ - amazonka-fsx
  - amazonka-gamelift
+ - amazonka-gamesparks
  - amazonka-glacier
+ - amazonka-globalaccelerator
  - amazonka-glue
+ - amazonka-grafana
  - amazonka-greengrass
+ - amazonka-greengrassv2
+ - amazonka-groundstation
  - amazonka-guardduty
  - amazonka-health
+ - amazonka-healthlake
+ - amazonka-honeycode
  - amazonka-iam
+ - amazonka-identitystore
+ - amazonka-imagebuilder
  - amazonka-importexport
  - amazonka-inspector
+ - amazonka-inspector2
  - amazonka-iot
  - amazonka-iot-analytics
  - amazonka-iot-dataplane
  - amazonka-iot-jobs-dataplane
+ - amazonka-iot-roborunner
+ - amazonka-iot1click-devices
+ - amazonka-iot1click-projects
+ - amazonka-iotdeviceadvisor
+ - amazonka-iotevents
+ - amazonka-iotevents-data
+ - amazonka-iotfleethub
+ - amazonka-iotfleetwise
+ - amazonka-iotsecuretunneling
+ - amazonka-iotsitewise
+ - amazonka-iotthingsgraph
+ - amazonka-iottwinmaker
+ - amazonka-iotwireless
+ - amazonka-ivs
+ - amazonka-ivschat
+ - amazonka-kafka
+ - amazonka-kafkaconnect
+ - amazonka-kendra
+ - amazonka-keyspaces
  - amazonka-kinesis
  - amazonka-kinesis-analytics
  - amazonka-kinesis-firehose
  - amazonka-kinesis-video
  - amazonka-kinesis-video-archived-media
  - amazonka-kinesis-video-media
+ - amazonka-kinesis-video-signaling
+ - amazonka-kinesis-video-webrtc-storage
+ - amazonka-kinesisanalyticsv2
  - amazonka-kms
+ - amazonka-lakeformation
  - amazonka-lambda
  - amazonka-lex-models
  - amazonka-lex-runtime
+ - amazonka-lexv2-models
+ - amazonka-license-manager
+ - amazonka-license-manager-linux-subscriptions
+ - amazonka-license-manager-user-subscriptions
  - amazonka-lightsail
+ - amazonka-location
+ - amazonka-lookoutequipment
+ - amazonka-lookoutmetrics
+ - amazonka-lookoutvision
+ - amazonka-m2
+ - amazonka-macie
+ - amazonka-maciev2
+ - amazonka-managedblockchain
  - amazonka-marketplace-analytics
+ - amazonka-marketplace-catalog
  - amazonka-marketplace-entitlement
  - amazonka-marketplace-metering
  - amazonka-mechanicalturk
+ - amazonka-mediaconnect
  - amazonka-mediaconvert
  - amazonka-medialive
  - amazonka-mediapackage
+ - amazonka-mediapackage-vod
  - amazonka-mediastore
  - amazonka-mediastore-dataplane
+ - amazonka-mediatailor
+ - amazonka-memorydb
+ - amazonka-mgn
+ - amazonka-migration-hub-refactor-spaces
  - amazonka-migrationhub
+ - amazonka-migrationhub-config
+ - amazonka-migrationhuborchestrator
+ - amazonka-migrationhubstrategy
  - amazonka-ml
  - amazonka-mobile
  - amazonka-mq
+ - amazonka-mwaa
+ - amazonka-neptune
+ - amazonka-network-firewall
+ - amazonka-networkmanager
+ - amazonka-nimble
+ - amazonka-oam
+ - amazonka-omics
+ - amazonka-opensearch
+ - amazonka-opensearchserverless
  - amazonka-opsworks
  - amazonka-opsworks-cm
  - amazonka-organizations
+ - amazonka-outposts
+ - amazonka-panorama
+ - amazonka-personalize
+ - amazonka-personalize-events
+ - amazonka-personalize-runtime
+ - amazonka-pi
  - amazonka-pinpoint
+ - amazonka-pinpoint-email
+ - amazonka-pinpoint-sms-voice
+ - amazonka-pinpoint-sms-voice-v2
+ - amazonka-pipes
  - amazonka-polly
  - amazonka-pricing
+ - amazonka-privatenetworks
+ - amazonka-proton
+ - amazonka-qldb
+ - amazonka-qldb-session
+ - amazonka-quicksight
+ - amazonka-ram
+ - amazonka-rbin
  - amazonka-rds
+ - amazonka-rds-data
  - amazonka-redshift
+ - amazonka-redshift-data
+ - amazonka-redshift-serverless
  - amazonka-rekognition
+ - amazonka-resiliencehub
+ - amazonka-resource-explorer-v2
  - amazonka-resourcegroups
  - amazonka-resourcegroupstagging
+ - amazonka-robomaker
+ - amazonka-rolesanywhere
  - amazonka-route53
  - amazonka-route53-autonaming
  - amazonka-route53-domains
+ - amazonka-route53-recovery-cluster
+ - amazonka-route53-recovery-control-config
+ - amazonka-route53-recovery-readiness
+ - amazonka-route53resolver
+ - amazonka-rum
  - amazonka-s3
+ - amazonka-s3-encryption
  - amazonka-s3-streaming
+ - amazonka-s3outposts
  - amazonka-sagemaker
+ - amazonka-sagemaker-a2i-runtime
+ - amazonka-sagemaker-edge
+ - amazonka-sagemaker-featurestore-runtime
+ - amazonka-sagemaker-geospatial
+ - amazonka-sagemaker-metrics
  - amazonka-sagemaker-runtime
+ - amazonka-savingsplans
+ - amazonka-scheduler
+ - amazonka-schemas
  - amazonka-sdb
  - amazonka-secretsmanager
+ - amazonka-securityhub
+ - amazonka-securitylake
  - amazonka-serverlessrepo
+ - amazonka-service-quotas
  - amazonka-servicecatalog
+ - amazonka-servicecatalog-appregistry
  - amazonka-ses
+ - amazonka-sesv2
  - amazonka-shield
+ - amazonka-signer
+ - amazonka-simspaceweaver
  - amazonka-sms
+ - amazonka-sms-voice
+ - amazonka-snow-device-management
  - amazonka-snowball
  - amazonka-sns
  - amazonka-sqs
  - amazonka-ssm
+ - amazonka-ssm-contacts
+ - amazonka-ssm-incidents
+ - amazonka-ssm-sap
+ - amazonka-sso
+ - amazonka-sso-admin
+ - amazonka-sso-oidc
  - amazonka-stepfunctions
  - amazonka-storagegateway
  - amazonka-sts
  - amazonka-support
+ - amazonka-support-app
  - amazonka-swf
+ - amazonka-synthetics
  - amazonka-test
+ - amazonka-textract
+ - amazonka-timestream-query
+ - amazonka-timestream-write
  - amazonka-transcribe
+ - amazonka-transfer
  - amazonka-translate
+ - amazonka-voice-id
  - amazonka-waf
  - amazonka-waf-regional
+ - amazonka-wafv2
+ - amazonka-wellarchitected
+ - amazonka-wisdom
  - amazonka-workdocs
+ - amazonka-worklink
  - amazonka-workmail
+ - amazonka-workmailmessageflow
  - amazonka-workspaces
+ - amazonka-workspaces-web
  - amazonka-xray
  - amby
  - ampersand
@@ -1325,7 +1523,6 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_0_9_5_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -2131,8 +2328,6 @@ dont-distribute-packages:
  - hasql-streams-pipes
  - hasql-streams-streaming
  - hasql-streams-streamly
- - hasqlator-mysql
- - hasqly-mysql
  - hastache-aeson
  - haste-app
  - haste-gapi
@@ -2204,7 +2399,6 @@ dont-distribute-packages:
  - hfiar
  - hfractal
  - hgalib
- - hgdal
  - hgen
  - hgeometry
  - hgeometry-combinatorial
@@ -2363,6 +2557,7 @@ dont-distribute-packages:
  - htoml-parse
  - htsn-import
  - http-client-auth
+ - http-client-restricted_0_1_0
  - http-client-rustls
  - http-client-tls_0_3_6_3
  - http-conduit_2_3_8_3
@@ -2899,7 +3094,6 @@ dont-distribute-packages:
  - mongrel2-handler
  - monky
  - monoidmap
- - monomer-hagrid
  - monte-carlo
  - moo
  - moonshine
@@ -2979,8 +3173,6 @@ dont-distribute-packages:
  - myTestlll
  - mybitcoin-sci
  - mysnapsession-example
- - mysql-haskell
- - mysql-haskell-nem
  - mysql-haskell-openssl
  - mysql-simple-typed
  - mywatch
@@ -2996,6 +3188,7 @@ dont-distribute-packages:
  - nero-wai
  - nero-warp
  - nested-routes
+ - net-mqtt_0_8_5_0
  - net-spider-cli
  - net-spider-pangraph
  - net-spider-rpl
@@ -3019,6 +3212,7 @@ dont-distribute-packages:
  - network-rpca
  - network-stream
  - network-topic-models
+ - network-unexceptional
  - network-uri-json
  - network-websocket
  - neural
@@ -3177,7 +3371,6 @@ dont-distribute-packages:
  - persistent-hssqlppp
  - persistent-map
  - persistent-mtl
- - persistent-mysql-haskell
  - persistent-protobuf
  - persistent-relational-record
  - persona-idp
@@ -3740,7 +3933,6 @@ dont-distribute-packages:
  - sessiontypes-distributed
  - sgf
  - sgrep
- - sha1
  - shady-gen
  - shady-graphics
  - shake-bindist
@@ -3896,13 +4088,13 @@ dont-distribute-packages:
  - stackage-setup
  - stackage-upload
  - stackage2nix
+ - stackctl
  - stan
  - starrover2
  - stateful-mtl
  - static-closure
  - statsd-client
  - statsdi
- - stdcxx
  - steeloverseer
  - stern-brocot
  - stm-actor
@@ -3928,7 +4120,6 @@ dont-distribute-packages:
  - stripe-http-client
  - stripe-http-streams
  - stripe-tests
- - strongswan-sql
  - structural-induction
  - structured-mongoDB
  - stunts
@@ -3984,6 +4175,9 @@ dont-distribute-packages:
  - tagged-th
  - tagsoup-navigate
  - tagstew
+ - tahoe-chk
+ - tahoe-great-black-swamp
+ - tahoe-ssk
  - tak-ai
  - tal
  - talash
@@ -4015,11 +4209,7 @@ dont-distribute-packages:
  - temporal-csound
  - ten-lens
  - ten-unordered-containers
- - tensorflow
- - tensorflow-core-ops
- - tensorflow-logging
  - tensorflow-opgen
- - tensorflow-ops
  - tensorflow-proto
  - terminal-text
  - terrahs
@@ -4203,7 +4393,6 @@ dont-distribute-packages:
  - usb-id-database
  - usb-iteratee
  - usb-safe
- - users-mysql-haskell
  - utf
  - util-exception
  - util-primitive-control
