@@ -13312,6 +13312,8 @@ self: super: with self; {
 
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
 
+  urwid-mitmproxy = callPackage ../development/python-modules/urwid-mitmproxy { };
+
   urwid-readline = callPackage ../development/python-modules/urwid-readline { };
 
   usb-devices = callPackage ../development/python-modules/usb-devices { };
