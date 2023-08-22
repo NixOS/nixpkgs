@@ -2458,6 +2458,8 @@ with pkgs;
 
   transcrypt = callPackage ../applications/version-management/transcrypt { };
 
+  ungit = callPackage ../applications/version-management/ungit { };
+
   inherit (haskellPackages) git-annex;
 
   inherit (haskellPackages) git-brunch;
@@ -4772,6 +4774,8 @@ with pkgs;
   ydotool = callPackage ../tools/wayland/ydotool { };
 
   cambalache = callPackage ../development/tools/cambalache { };
+
+  cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
 
   changedetection-io = callPackage ../servers/web-apps/changedetection-io { };
 
@@ -14452,6 +14456,8 @@ with pkgs;
 
   wpscan = callPackage ../tools/security/wpscan { };
 
+  write-good = callPackage ../tools/text/write-good { };
+
   wsmancli = callPackage ../tools/system/wsmancli { };
 
   wstunnel = haskell.lib.compose.justStaticExecutables haskellPackages.wstunnel;
@@ -17254,6 +17260,8 @@ with pkgs;
 
   opensycl = darwin.apple_sdk_11_0.callPackage ../development/compilers/opensycl { };
   opensyclWithRocm = opensycl.override { rocmSupport = true; };
+
+  pest-ide-tools = callPackage ../development/tools/misc/pest-ide-tools { };
 
   ravedude = callPackage ../development/tools/rust/ravedude { };
 
@@ -20369,6 +20377,8 @@ with pkgs;
 
   watson-ruby = callPackage ../development/tools/misc/watson-ruby { };
 
+  web-ext = callPackage ../development/tools/web-ext { };
+
   webdis = callPackage ../development/tools/database/webdis { };
 
   xmake = callPackage ../development/tools/build-managers/xmake {
@@ -20423,6 +20433,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
   };
+
+  yo = callPackage ../development/tools/yo { };
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
@@ -32656,10 +32668,6 @@ with pkgs;
   rootbar = callPackage ../applications/misc/rootbar { };
 
   waybar = callPackage ../applications/misc/waybar { };
-
-  waybar-hyprland = callPackage ../applications/misc/waybar {
-    hyprlandSupport = true;
-  };
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
