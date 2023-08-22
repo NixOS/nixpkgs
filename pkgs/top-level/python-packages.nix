@@ -15262,6 +15262,8 @@ self: super: with self; {
 
   unicrypto = callPackage ../development/python-modules/unicrypto { };
 
+  unidata-blocks = callPackage ../development/python-modules/unidata-blocks { };
+
   unidecode = callPackage ../development/python-modules/unidecode { };
 
   unidic = callPackage ../development/python-modules/unidic { };
