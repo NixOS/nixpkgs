@@ -50,6 +50,20 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           "http://localhost:8081" = { };
         };
       };
+      specialisation.rfc42.configuration = {
+        services.caddy.settings = {
+          apps.http.servers.default = {
+            listen = [ ":80" ];
+            routes = [{
+              handle = [{
+                body = "hello world";
+                handler = "static_response";
+                status_code = 200;
+              }];
+            }];
+          };
+        };
+      };
     };
   };
 
@@ -58,6 +72,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       etagSystem = "${nodes.webserver.system.build.toplevel}/specialisation/etag";
       justReloadSystem = "${nodes.webserver.system.build.toplevel}/specialisation/config-reload";
       multipleConfigs = "${nodes.webserver.system.build.toplevel}/specialisation/multiple-configs";
+      rfc42Config = "${nodes.webserver.system.build.toplevel}/specialisation/rfc42";
     in
     ''
       url = "http://localhost/example.html"
@@ -106,5 +121,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           )
           webserver.wait_for_open_port(8080)
           webserver.wait_for_open_port(8081)
+
+      with subtest("rfc42 settings config"):
+          webserver.succeed(
+              "${rfc42Config}/bin/switch-to-configuration test >&2"
+          )
+          webserver.wait_for_open_port(80)
+          webserver.succeed("curl http://localhost | grep hello")
     '';
 })
