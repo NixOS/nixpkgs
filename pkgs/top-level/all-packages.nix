@@ -7761,6 +7761,8 @@ with pkgs;
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
 
+  zotero-translation-server = callPackage ../tools/misc/zotero-translation-server { };
+
   zoxide = callPackage ../tools/misc/zoxide { };
 
   zzuf = callPackage ../tools/security/zzuf { };
