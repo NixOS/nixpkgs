@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1a7dlwuUOHeCsB+ofAOPlbyuh/QAB8kf50MsocMNz70=";
+    sha256 = "QOdGltz4wns1vq0Nv/O65koMYkLmPAAP4hKp301dAKI=";
   };
 
   nativeBuildInputs = [
