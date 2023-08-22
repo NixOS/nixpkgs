@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
@@ -11,14 +11,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-lqFhLCOLiuSQWhbcZUEj2xFRlZ+x1ZTVc8IJw7tJjhE=";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
-
   cargoHash = "sha256-3hrpg2cMvIuFy6mH1/1igIpU4nbzFQLCAhiIRZbTuaI=";
 
-  checkFlags = [
-    # failure: path::tests::test_relative_to_parent
-    "--skip=path::tests::test_relative_to_parent"
-  ];
+  # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin
+  env = lib.optionalAttrs (stdenv.isx86_64 && stdenv.isDarwin) {
+    TARGET_STRIP = "${stdenv.cc.targetPrefix}strip";
+  };
+
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config
+  '';
 
   meta = with lib; {
     description = "A hackable, minimal, fast TUI file explorer";
