@@ -75,7 +75,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.77";
+    version = "0.3.78";
 
     outputs = [
       "out"
@@ -93,7 +93,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-dRAo/GzWvXKVCGLM12YyTQmgXHEYn3QbOyaZKmlqTYY=";
+      sha256 = "sha256-tiVuab8kugp9ZOKL/m8uZQps/pcrVihwB3rRf6SGuzc=";
     };
 
     patches = [
@@ -221,7 +221,7 @@ let
       moveToOutput "bin/pw-jack" "$jack"
     '';
 
-    passthru.tests = nixosTests.installed-tests.pipewire;
+    passthru.tests.installed-tests = nixosTests.installed-tests.pipewire;
 
     meta = with lib; {
       description = "Server and user space API to deal with multimedia pipelines";
