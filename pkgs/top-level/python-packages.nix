@@ -20,6 +20,8 @@ self: super: with self; {
 
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
+  about-time = callPackage ../development/python-modules/about-time { };
+
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
