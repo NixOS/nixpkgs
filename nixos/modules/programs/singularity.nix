@@ -82,10 +82,6 @@ in
     };
     systemd.tmpfiles.rules = [
       "d /var/lib/${cfg.packageOverriden.projectName}/mnt/session 0770 root root -"
-      "d /var/lib/${cfg.packageOverriden.projectName}/mnt/final 0770 root root -"
-      "d /var/lib/${cfg.packageOverriden.projectName}/mnt/overlay 0770 root root -"
-      "d /var/lib/${cfg.packageOverriden.projectName}/mnt/container 0770 root root -"
-      "d /var/lib/${cfg.packageOverriden.projectName}/mnt/source 0770 root root -"
     ];
   };
 
