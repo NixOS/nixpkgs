@@ -5,7 +5,7 @@ with lib; let
 
   # ugly hack to extract combine from collection-latexextra, since it is masked by texlive.combine
   combine = lib.findFirst (p: (lib.head p.pkgs).pname == "combine") { pkgs = [ ]; } (lib.head texlive.collection-latexextra.pkgs).tlDeps;
-  all = filter (p: p ? pkgs) (attrValues (removeAttrs texlive [ "bin" "combine" "combined" "tlpdb" ])) ++ [ combine ];
+  all = filter (p: p ? pkgs) (attrValues (removeAttrs texlive [ "bin" "combine" "combined" "tlpdb" ])) ++ [ { inherit (combine) pkgs; } ];
   sorted = sort (a: b: (head a.pkgs).pname < (head b.pkgs).pname) all;
   fods = filter isFod (concatMap (p: p.pkgs or [ ]) all);
 

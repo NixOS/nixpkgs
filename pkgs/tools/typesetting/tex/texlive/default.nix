@@ -502,8 +502,17 @@ let
          fods = filter (p: isDerivation p && p.tlType != "bin") all;
       in builtins.all (p: assertMsg (p ? outputHash) "The TeX Live package '${p.pname + lib.optionalString (p.tlType != "run") ("." + p.tlType)}' does not have a fixed output hash. Please read UPGRADING.md on how to build a new 'fixed-hashes.nix'.") fods));
 
+  # texlive.combine compatibility layer:
+  # export packages as `texlive.pname = { pkgs = [ ... ]; };`
+  combineCompatLayer = attrs:
+    lib.mapAttrs (n: p: {
+      pkgs = p.pkgs;
+    }) attrs.__pkgs // attrs;
+
 in
-  tl // {
+  combineCompatLayer {
+    # unstable interface, subject to change!
+    __pkgs = tl;
 
     tlpdb = {
       # nested in an attribute set to prevent them from appearing in search
