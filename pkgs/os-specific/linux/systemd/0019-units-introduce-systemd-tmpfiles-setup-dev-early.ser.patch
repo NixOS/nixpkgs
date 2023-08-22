@@ -1,0 +1,249 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Sat, 12 Aug 2023 07:54:32 +0900
+Subject: [PATCH] units: introduce systemd-tmpfiles-setup-dev-early.service
+
+This makes tmpfiles, sysusers, and udevd invoked in the following order:
+1. systemd-tmpfiles-setup-dev-early.service
+   Create device nodes gracefully, that is, create device nodes anyway
+   by ignoring unknown users and groups.
+2. systemd-sysusers.service
+   Create users and groups, to make later invocations of tmpfiles and
+   udevd can resolve necessary users and groups.
+3. systemd-tmpfiles-setup-dev.service
+   Adjust owners of previously created device nodes.
+4. systemd-udevd.service
+   Process all devices. Especially to make block devices active and can
+   be mountable.
+5. systemd-tmpfiles-setup.service
+   Setup basic filesystem.
+
+Follow-up for b42482af904ae0b94a6e4501ec595448f0ba1c06.
+
+Fixes #28653.
+Replaces #28681 and #28732.
+---
+ man/systemd-tmpfiles.xml                      |  3 +
+ test/TEST-17-UDEV/test.sh                     |  4 ++
+ test/units/testsuite-17.00.sh                 | 57 +++++++++++++++++++
+ units/kmod-static-nodes.service.in            |  2 +-
+ units/meson.build                             |  5 ++
+ units/systemd-sysusers.service                |  2 +
+ .../systemd-tmpfiles-setup-dev-early.service  | 25 ++++++++
+ units/systemd-tmpfiles-setup-dev.service      |  3 +-
+ units/systemd-tmpfiles-setup.service          |  2 +-
+ 9 files changed, 100 insertions(+), 3 deletions(-)
+ create mode 100755 test/units/testsuite-17.00.sh
+ create mode 100644 units/systemd-tmpfiles-setup-dev-early.service
+
+diff --git a/man/systemd-tmpfiles.xml b/man/systemd-tmpfiles.xml
+index decd66d5c6..0db2a4b03b 100644
+--- a/man/systemd-tmpfiles.xml
++++ b/man/systemd-tmpfiles.xml
+@@ -19,6 +19,7 @@
+   <refnamediv>
+     <refname>systemd-tmpfiles</refname>
+     <refname>systemd-tmpfiles-setup.service</refname>
++    <refname>systemd-tmpfiles-setup-dev-early.service</refname>
+     <refname>systemd-tmpfiles-setup-dev.service</refname>
+     <refname>systemd-tmpfiles-clean.service</refname>
+     <refname>systemd-tmpfiles-clean.timer</refname>
+@@ -35,6 +36,7 @@
+ 
+     <para>System units:
+ <literallayout><filename>systemd-tmpfiles-setup.service</filename>
++<filename>systemd-tmpfiles-setup-dev-early.service</filename>
+ <filename>systemd-tmpfiles-setup-dev.service</filename>
+ <filename>systemd-tmpfiles-clean.service</filename>
+ <filename>systemd-tmpfiles-clean.timer</filename></literallayout></para>
+@@ -64,6 +66,7 @@
+     searched for a matching file and the file found that has the highest priority is executed.</para>
+ 
+     <para>System services (<filename>systemd-tmpfiles-setup.service</filename>,
++    <filename>systemd-tmpfiles-setup-dev-early.service</filename>,
+     <filename>systemd-tmpfiles-setup-dev.service</filename>,
+     <filename>systemd-tmpfiles-clean.service</filename>) invoke <command>systemd-tmpfiles</command> to create
+     system files and to perform system wide cleanup. Those services read administrator-controlled
+diff --git a/test/TEST-17-UDEV/test.sh b/test/TEST-17-UDEV/test.sh
+index 6b8f08fc32..f7a9075496 100755
+--- a/test/TEST-17-UDEV/test.sh
++++ b/test/TEST-17-UDEV/test.sh
+@@ -8,5 +8,9 @@ TEST_NO_NSPAWN=1
+ # shellcheck source=test/test-functions
+ . "${TEST_BASE_DIR:?}/test-functions"
+ 
++test_append_files() {
++    instmods snd_seq snd_timer tun
++    generate_module_dependencies
++}
+ 
+ do_test "$@"
+diff --git a/test/units/testsuite-17.00.sh b/test/units/testsuite-17.00.sh
+new file mode 100755
+index 0000000000..d2aec60b13
+--- /dev/null
++++ b/test/units/testsuite-17.00.sh
+@@ -0,0 +1,57 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: LGPL-2.1-or-later
++set -ex
++set -o pipefail
++
++# shellcheck source=test/units/util.sh
++. "$(dirname "$0")"/util.sh
++
++# Tests for issue #28588 and #28653.
++
++# On boot, services need to be started in the following order:
++# 1. systemd-tmpfiles-setup-dev-early.service
++# 2. systemd-sysusers.service
++# 3. systemd-tmpfiles-setup-dev.service
++# 4. systemd-udevd.service
++
++output="$(systemctl show --property After --value systemd-udevd.service)"
++assert_in "systemd-tmpfiles-setup-dev-early.service" "$output"
++assert_in "systemd-sysusers.service" "$output"
++assert_in "systemd-tmpfiles-setup-dev.service" "$output"
++
++output="$(systemctl show --property After --value systemd-tmpfiles-setup-dev.service)"
++assert_in "systemd-tmpfiles-setup-dev-early.service" "$output"
++assert_in "systemd-sysusers.service" "$output"
++
++output="$(systemctl show --property After --value systemd-sysusers.service)"
++assert_in "systemd-tmpfiles-setup-dev-early.service" "$output"
++
++check_owner_and_mode() {
++    local dev=${1?}
++    local user=${2?}
++    local group=${3?}
++    local mode=${4:-}
++
++    if [[ -e "$dev" ]]; then
++        assert_in "$user" "$(stat --format=%U "$dev")"
++        assert_in "$group" "$(stat --format=%G "$dev")"
++        if [[ -n "$mode" ]]; then
++            assert_in "$mode" "$(stat --format=%#0a "$dev")"
++        fi
++    fi
++
++    return 0
++}
++
++# Check owner and access mode specified in static-nodes-permissions.conf
++check_owner_and_mode /dev/snd/seq      root audio 0660
++check_owner_and_mode /dev/snd/timer    root audio 0660
++check_owner_and_mode /dev/loop-control root disk  0660
++check_owner_and_mode /dev/net/tun      root root  0666
++check_owner_and_mode /dev/fuse         root root  0666
++check_owner_and_mode /dev/vfio/vfio    root root  0666
++check_owner_and_mode /dev/kvm          root kvm
++check_owner_and_mode /dev/vhost-net    root kvm
++check_owner_and_mode /dev/vhost-vsock  root kvm
++
++exit 0
+diff --git a/units/kmod-static-nodes.service.in b/units/kmod-static-nodes.service.in
+index 777e82d16b..70605d997e 100644
+--- a/units/kmod-static-nodes.service.in
++++ b/units/kmod-static-nodes.service.in
+@@ -10,7 +10,7 @@
+ [Unit]
+ Description=Create List of Static Device Nodes
+ DefaultDependencies=no
+-Before=sysinit.target systemd-tmpfiles-setup-dev.service
++Before=sysinit.target systemd-tmpfiles-setup-dev-early.service
+ ConditionCapability=CAP_SYS_MODULE
+ ConditionFileNotEmpty=/lib/modules/%v/modules.devname
+ 
+diff --git a/units/meson.build b/units/meson.build
+index 5161ec5029..dc7966a772 100644
+--- a/units/meson.build
++++ b/units/meson.build
+@@ -544,6 +544,11 @@ units = [
+           'conditions' : ['ENABLE_TMPFILES'],
+           'symlinks' : ['timers.target.wants/'],
+         },
++        {
++          'file' : 'systemd-tmpfiles-setup-dev-early.service',
++          'conditions' : ['ENABLE_TMPFILES'],
++          'symlinks' : ['sysinit.target.wants/'],
++        },
+         {
+           'file' : 'systemd-tmpfiles-setup-dev.service',
+           'conditions' : ['ENABLE_TMPFILES'],
+diff --git a/units/systemd-sysusers.service b/units/systemd-sysusers.service
+index 84fd66de37..de6c71a038 100644
+--- a/units/systemd-sysusers.service
++++ b/units/systemd-sysusers.service
+@@ -16,6 +16,8 @@ ConditionCredential=|sysusers.extra
+ 
+ DefaultDependencies=no
+ After=systemd-remount-fs.service
++After=systemd-tmpfiles-setup-dev-early.service
++Before=systemd-tmpfiles-setup-dev.service
+ Before=sysinit.target systemd-update-done.service
+ Conflicts=shutdown.target initrd-switch-root.target
+ Before=shutdown.target initrd-switch-root.target
+diff --git a/units/systemd-tmpfiles-setup-dev-early.service b/units/systemd-tmpfiles-setup-dev-early.service
+new file mode 100644
+index 0000000000..0d6f0daaae
+--- /dev/null
++++ b/units/systemd-tmpfiles-setup-dev-early.service
+@@ -0,0 +1,25 @@
++#  SPDX-License-Identifier: LGPL-2.1-or-later
++#
++#  This file is part of systemd.
++#
++#  systemd is free software; you can redistribute it and/or modify it
++#  under the terms of the GNU Lesser General Public License as published by
++#  the Free Software Foundation; either version 2.1 of the License, or
++#  (at your option) any later version.
++
++[Unit]
++Description=Create Static Device Nodes in /dev gracefully
++Documentation=man:tmpfiles.d(5) man:systemd-tmpfiles(8)
++
++DefaultDependencies=no
++Before=sysinit.target local-fs-pre.target systemd-udevd.service
++Wants=local-fs-pre.target
++Conflicts=shutdown.target initrd-switch-root.target
++Before=shutdown.target initrd-switch-root.target
++
++[Service]
++Type=oneshot
++RemainAfterExit=yes
++ExecStart=systemd-tmpfiles --prefix=/dev --create --boot --graceful
++SuccessExitStatus=DATAERR CANTCREAT
++ImportCredential=tmpfiles.*
+diff --git a/units/systemd-tmpfiles-setup-dev.service b/units/systemd-tmpfiles-setup-dev.service
+index acaa9510aa..3016b49749 100644
+--- a/units/systemd-tmpfiles-setup-dev.service
++++ b/units/systemd-tmpfiles-setup-dev.service
+@@ -12,6 +12,7 @@ Description=Create Static Device Nodes in /dev
+ Documentation=man:tmpfiles.d(5) man:systemd-tmpfiles(8)
+ 
+ DefaultDependencies=no
++After=systemd-tmpfiles-setup-dev-early.service
+ Before=sysinit.target local-fs-pre.target systemd-udevd.service
+ Wants=local-fs-pre.target
+ Conflicts=shutdown.target initrd-switch-root.target
+@@ -20,6 +21,6 @@ Before=shutdown.target initrd-switch-root.target
+ [Service]
+ Type=oneshot
+ RemainAfterExit=yes
+-ExecStart=systemd-tmpfiles --prefix=/dev --create --boot --graceful
++ExecStart=systemd-tmpfiles --prefix=/dev --create --boot
+ SuccessExitStatus=DATAERR CANTCREAT
+ ImportCredential=tmpfiles.*
+diff --git a/units/systemd-tmpfiles-setup.service b/units/systemd-tmpfiles-setup.service
+index 6c5e3de8fd..6cae32850f 100644
+--- a/units/systemd-tmpfiles-setup.service
++++ b/units/systemd-tmpfiles-setup.service
+@@ -21,7 +21,7 @@ RefuseManualStop=yes
+ [Service]
+ Type=oneshot
+ RemainAfterExit=yes
+-ExecStart=systemd-tmpfiles --create --remove --boot
++ExecStart=systemd-tmpfiles --create --remove --boot --exclude-prefix=/dev
+ SuccessExitStatus=DATAERR CANTCREAT
+ ImportCredential=tmpfiles.*
+ ImportCredential=login.motd

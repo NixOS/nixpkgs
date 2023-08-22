@@ -201,6 +201,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./0016-inherit-systemd-environment-when-calling-generators.patch
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
+    # Remove when https://github.com/systemd/systemd/pull/28784 lands
+    # as a point release.
+    ./0019-units-introduce-systemd-tmpfiles-setup-dev-early.ser.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {

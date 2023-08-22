@@ -48,6 +48,7 @@ let
       "rescue.service"
 
       # Udev.
+      "systemd-tmpfiles-setup-dev-early.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
