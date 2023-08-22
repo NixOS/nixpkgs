@@ -4575,7 +4575,9 @@ with pkgs;
 
   map-cmd = callPackage ../tools/misc/map { };
 
-  clash = callPackage ../tools/networking/clash { };
+  clash = callPackage ../tools/networking/clash {
+    buildGoModule = buildGo121Module;
+  };
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
@@ -6757,6 +6759,8 @@ with pkgs;
   ;
   citrix_workspace = citrix_workspace_23_07_0;
 
+  clima = callPackage ../tools/text/clima { };
+
   cmigemo = callPackage ../tools/text/cmigemo { };
 
   cmospwd = callPackage ../tools/security/cmospwd { };
@@ -7625,6 +7629,8 @@ with pkgs;
   };
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
+
+  rune = callPackage ../development/interpreters/rune { };
 
   s9fes = callPackage ../development/interpreters/s9fes { };
 
@@ -29979,6 +29985,8 @@ with pkgs;
 
   starfetch = callPackage ../tools/misc/starfetch { };
 
+  starry = callPackage ../tools/misc/starry { };
+
   starship = callPackage ../tools/misc/starship {
     inherit (darwin.apple_sdk.frameworks) Security Foundation Cocoa;
   };
@@ -33420,7 +33428,10 @@ with pkgs;
 
   lifelines = callPackage ../applications/misc/lifelines { };
 
-  liferea = callPackage ../applications/networking/newsreaders/liferea { };
+  liferea = callPackage ../applications/networking/newsreaders/liferea {
+    libsoup = libsoup_3;
+    webkitgtk = webkitgtk_4_1;
+  };
 
   lightworks = callPackage ../applications/video/lightworks { };
 
@@ -42047,4 +42058,6 @@ with pkgs;
   wttrbar = callPackage ../applications/misc/wttrbar { };
 
   wpm = callPackage ../applications/misc/wpm { };
+
+  yazi = callPackage ../applications/file-managers/yazi { inherit (darwin.apple_sdk.frameworks) Foundation; };
 }

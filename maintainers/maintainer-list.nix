@@ -710,12 +710,6 @@
     githubId = 8316672;
     name = "Alex Chapman";
   };
-  alexeyre = {
-    email = "A.Eyre@sms.ed.ac.uk";
-    github = "alexeyre";
-    githubId = 38869148;
-    name = "Alex Eyre";
-  };
   alexfmpe = {
     email = "alexandre.fmp.esteves@gmail.com";
     github = "alexfmpe";

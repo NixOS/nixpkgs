@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.5.11";
+  version = "0.5.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,8 +24,16 @@ buildPythonPackage rec {
     owner = "liudger";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-fTjeJZhKPFi0cxZStegVdq7a48rQ236DnnCGngwZ5GU=";
+    hash = "sha256-ftu79SnVa7wOMx/RiRBDPmmG7Mmw84r30G4yDzBea2k=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace "--cov" ""
+    sed -i "/covdefaults/d" pyproject.toml
+    sed -i "/ruff/d" pyproject.toml
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -44,12 +52,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
-  '';
 
   pythonImportsCheck = [
     "bsblan"
