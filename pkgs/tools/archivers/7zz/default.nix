@@ -24,12 +24,12 @@ let
     x86_64-linux = "../../cmpl_gcc_x64.mak";
   }.${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
   version = "23.01";
 
   src = fetchurl {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.tar.xz";
+    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash = {
       free = "sha256-F1ybQsyReF2NBR/3eMZySvxVEntpwq2VUlRCHp/5nZs=";
       unfree = "sha256-NWBxAHNg5aGCTZkEmT6LJIC1G1cOjJ+vfA9Y6+S/n3Q=";
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
-    install -Dm444 -t $out/share/doc/${pname} ../../../../DOC/*.txt
+    install -Dm444 -t $out/share/doc/${finalAttrs.pname} ../../../../DOC/*.txt
 
     runHook postInstall
   '';
@@ -124,4 +124,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix ++ platforms.windows;
     mainProgram = "7zz";
   };
-}
+})
