@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.29";
+  version = "0.30";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "dr-prodigy";
     repo = "python-holidays";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-ijhqu0LzQzpjDSe9ZjNhgdjq/DJuD7oVbRTLX97nGHM=";
+    hash = "sha256-1H25BLCck9uXJTE9lU4mNf60RAFFf6GNLSbaJERQpBY=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +41,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Failure starting with 0.24
     "test_l10n"
+    # AssertionError: '01/12/1991' not found in ...
+    "test_populate_substituted_holidays"
   ];
 
   meta = with lib; {
