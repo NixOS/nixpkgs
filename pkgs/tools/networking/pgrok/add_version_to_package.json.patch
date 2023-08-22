@@ -1,0 +1,11 @@
+diff --git a/package.json b/package.json
+index 35d34c5..82eda74 100644
+--- a/package.json
++++ b/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "pgrokd",
++  "version": "0.0.0",
+   "scripts": {
+     "dev": "vite",
+     "build": "tsc && vite build --outDir=../cli/dist --emptyOutDir",
