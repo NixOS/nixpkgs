@@ -50,7 +50,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dr-prodigy/python-holidays";
     changelog = "https://github.com/dr-prodigy/python-holidays/releases/tag/v.${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [ fab jluttine ];
   };
 }
 
