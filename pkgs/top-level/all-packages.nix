@@ -20548,7 +20548,9 @@ with pkgs;
 
   armadillo = callPackage ../development/libraries/armadillo { };
 
-  arrayfire = darwin.apple_sdk_11_0.callPackage ../development/libraries/arrayfire { };
+  arrayfire = darwin.apple_sdk_11_0.callPackage ../development/libraries/arrayfire {
+    cudaPackages = cudaPackages_12;
+  };
 
   arrow-cpp = callPackage ../development/libraries/arrow-cpp { };
 
@@ -21190,9 +21192,7 @@ with pkgs;
 
   fflas-ffpack = callPackage ../development/libraries/fflas-ffpack { };
 
-  forge = callPackage ../development/libraries/forge {
-    cudatoolkit = buildPackages.cudatoolkit_11;
-  };
+  forge = callPackage ../development/libraries/forge { };
 
   linbox = callPackage ../development/libraries/linbox { };
 
