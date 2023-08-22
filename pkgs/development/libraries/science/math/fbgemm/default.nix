@@ -33,14 +33,14 @@ in
     src = fetchFromGitHub {
       owner = "pytorch";
       repo = finalAttrs.pname;
-      rev = "eea011607fed1b8f2527dca3385fed94001d4227";
+      rev = "d43717ad9f62c30a89a31d537303e7d5970c1018";
       fetchSubmodules = true;
-      hash = "sha256-PiMd+3EDKRJ/RrU3B9yduEK+lbVt2k2miRMx+ys+PSc=";
+      hash = "sha256-oZE7B23AtJYfSxYbNHlsDo/KHPWCf9FEfirTHD1guAo=";
     };
     patches = [
       (fetchpatch {
         url = "https://github.com/pytorch/FBGEMM/pull/1859.patch";
-        hash = "sha256-io3fgLhx8e2TrH3mu9GE7jnnWuB5Nq0uyP21nvBX6zg=";
+        hash = "sha256-Yme+im/6kZskWgi8LuJvQVTnTE0uKqmBErYlxGU0bLU=";
       })
     ];
     nativeBuildInputs = [
