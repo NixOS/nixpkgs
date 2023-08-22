@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   lib,
   stdenv,
   # nativeBuildInputs
@@ -21,6 +22,7 @@
   buildSharedLibs ? true,
 }: let
   gtestStatic = gtest.override {static = true;};
+  # protobuf-17 = protobuf.override {};
   setBuildSharedLibrary = bool:
     if bool
     then "shared"
@@ -29,14 +31,26 @@ in
   stdenv.mkDerivation (finalAttrs: {
     strictDeps = true;
     pname = "onnx";
-    version = "1.14.0";
+    # TODO(@connorbaker): Can't use our current version of onnx due to this issue: https://github.com/onnx/onnx/issues/5430; requires us to use a version of onnx that is not yet released because the patchset isn't clean.
+    version = "8a980683df9acbcb82dc3385fc7eb8cce4ed840f";
 
     src = fetchFromGitHub {
       owner = finalAttrs.pname;
       repo = finalAttrs.pname;
-      rev = "refs/tags/v${finalAttrs.version}";
-      hash = "sha256-f+s25Y/jGosaSdoZY6PE3j6pENkfDcD+IQndrbtuzWg=";
+      rev = "8a980683df9acbcb82dc3385fc7eb8cce4ed840f";
+      hash = "sha256-i60ypUNofpqOtnmrpkNA3j7iDEYQMtDSuSzTw4V/X3s=";
     };
+
+    # patches = [
+    #   (fetchpatch {
+    #     url = "https://github.com/onnx/onnx/pull/5119.patch";
+    #     hash = "sha256-FGLq1sLO7U+pCCPXGGLN+UcH6NjarxoSBl8UDtb5UBs=";
+    #   })
+    #   (fetchpatch {
+    #     url = "https://github.com/onnx/onnx/pull/5196.patch";
+    #     hash = "sha256-VDmhB3nNP1mPNNuBszvVTTq3appM7msA+K6WRK1Tf6Y=";
+    #   })
+    # ];
 
     doCheck = true;
 
@@ -47,6 +61,13 @@ in
       python3
       protobuf
       # pybind11
+    ];
+
+    # Though abseil-cpp is a propagatedBuildInput of protobuf, Nix doesn't see it here.
+    # Moving protobuf to buildInputs fixes this, but then we have protobuf in the runtime
+    # environment, which we don't want (it is a build-time dependency only).
+    buildInputs = [
+      protobuf.abseil-cpp
     ];
 
     # propagatedBuildInputs = [
@@ -60,6 +81,17 @@ in
     #   parameterized
     #   pytestCheckHook
     #   tabulate
+    # ];
+
+    # patches = [
+    #   (fetchpatch {
+    #     url = "https://github.com/onnx/onnx/pull/5196.patch";
+    #     hash = "sha256-VDmhB3nNP1mPNNuBszvVTTq3appM7msA+K6WRK1Tf6Y=";
+    #   })
+    #   (fetchpatch {
+    #     url = "https://github.com/onnx/onnx/pull/5355.patch";
+    #     hash = "sha256-WFcqodTydsllL4hJvKQ95D2xHNmWw7Jjwgg67a/UbZc=";
+    #   })
     # ];
 
     postPatch = ''
@@ -79,6 +111,7 @@ in
     cmakeFlags = [
       "-DBUILD_SHARED_LIBS=${setBuildSharedLibrary buildSharedLibs}"
       "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_CXX_STANDARD=17" # required by abseil-cpp; bump when abseil-cpp does
       "-DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
       "-DONNX_BUILD_TESTS=ON"
       "-Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a"
