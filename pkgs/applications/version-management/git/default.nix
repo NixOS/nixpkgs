@@ -396,7 +396,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ primeos wmertens globin ];
+    maintainers = with lib.maintainers; [ primeos wmertens globin kashw2 ];
     mainProgram = "git";
   };
 })
