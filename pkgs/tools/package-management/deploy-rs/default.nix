@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/serokell/deploy-rs";
     license = licenses.mpl20;
     maintainers = with maintainers; [ teutat3s ];
+    mainProgram = "deploy";
   };
 }
