@@ -29965,6 +29965,8 @@ with pkgs;
 
   starfetch = callPackage ../tools/misc/starfetch { };
 
+  starry = callPackage ../tools/misc/starry { };
+
   starship = callPackage ../tools/misc/starship {
     inherit (darwin.apple_sdk.frameworks) Security Foundation Cocoa;
   };
