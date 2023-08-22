@@ -80,9 +80,9 @@ buildPythonPackage rec {
     installManPage docs/build/man/*
 
     installShellCompletion --cmd pip \
-      --bash <($out/bin/pip completion --bash) \
-      --fish <($out/bin/pip completion --fish) \
-      --zsh <($out/bin/pip completion --zsh)
+      --bash <($out/bin/pip completion --bash --no-cache-dir) \
+      --fish <($out/bin/pip completion --fish --no-cache-dir) \
+      --zsh <($out/bin/pip completion --zsh --no-cache-dir)
   '';
 
   passthru.tests = { inherit pip-tools; };
