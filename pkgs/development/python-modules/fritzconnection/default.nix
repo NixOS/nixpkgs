@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , requests
+, segno
 }:
 
 buildPythonPackage rec {
@@ -11,7 +12,7 @@ buildPythonPackage rec {
   version = "1.12.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kbr";
@@ -23,6 +24,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
   ];
+
+  passthru.optional-dependencies = {
+    qr = [
+      segno
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
