@@ -43,6 +43,6 @@ buildGoModule {
     description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
     license = licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk ];
+    maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk mfrw ];
   };
 }
