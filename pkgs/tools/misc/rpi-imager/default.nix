@@ -13,6 +13,7 @@
 , qtquickcontrols2
 , qtgraphicaleffects
 , nix-update-script
+, enableTelemetry ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,12 @@ stdenv.mkDerivation rec {
     cmake
     util-linux
     wrapQtAppsHook
+  ];
+
+  # Disable telemetry and update check.
+  cmakeFlags = lib.optionals (!enableTelemetry) [
+    "-DENABLE_CHECK_VERSION=OFF"
+    "-DENABLE_TELEMETRY=OFF"
   ];
 
   buildInputs = [
