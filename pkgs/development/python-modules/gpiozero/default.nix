@@ -47,6 +47,11 @@ buildPythonPackage rec {
     "gpiozero.tools"
   ];
 
+  disabledTests = [
+    # https://github.com/gpiozero/gpiozero/issues/1087
+    "test_spi_hardware_write"
+  ];
+
   meta = with lib; {
     description = "A simple interface to GPIO devices with Raspberry Pi";
     homepage = "https://github.com/gpiozero/gpiozero";
