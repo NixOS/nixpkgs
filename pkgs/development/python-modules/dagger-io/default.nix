@@ -38,7 +38,6 @@ buildPythonPackage rec {
     attrs
     beartype
     cattrs
-    colorama
     gql
     graphql-core
     httpx
