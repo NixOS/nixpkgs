@@ -9,7 +9,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , which
-, wafHook
+, waf
 , libxcrypt
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
-    wafHook
+    waf.hook
   ];
 
   buildInputs = [
