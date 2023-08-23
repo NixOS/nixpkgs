@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs, python3, yarn, fixup_yarn_lock, CoreServices, fetchYarnDeps, removeReferencesTo }:
+{ lib, stdenv, rust, rustPlatform, fetchFromGitHub, callPackage, sqlcipher, nodejs, python3, yarn, fixup_yarn_lock, CoreServices, fetchYarnDeps, removeReferencesTo }:
 
 let
   pinData = lib.importJSON ./pin.json;
@@ -36,7 +36,8 @@ in rustPlatform.buildRustPackage rec {
     fixup_yarn_lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
-    node_modules/.bin/neon build --release
+    # Pass `--target` to allow cross-compilation, also force output name to let neon find cross-built library.
+    node_modules/.bin/neon build --release -- --target ${rust.toRustTargetSpec stdenv.hostPlatform} -Z unstable-options --out-dir target/release
     runHook postBuild
   '';
 
