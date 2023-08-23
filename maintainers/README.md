@@ -10,10 +10,23 @@ The main responsibility of a maintainer is to keep the packages they maintain
 in a functioning state, and keep up with updates. In order to do that, they
 are empowered to make decisions over the packages they maintain.
 
-By default, we expect committers to wait at least a week before merging
+That being said, the maintainer is not alone proposing changes to the
+packages. Anybody (both bots and humans) can send PRs to bump or tweak the
+package.
+
+We also allow other non-maintainer committers to merge changes to the package,
+provided enough time and priority has been given to the maintainer.
+
+For most packages, we expect committers to wait at least a week before merging
 changes on packages they are not maintaining. This should leave enough time
-for the maintainers to provide feedback. The only exception would be for tiny
-version bumps and security updates that could be merged faster.
+for the maintainers to provide feedback.
+
+For critical packages, this convention needs to be negociated with the
+maintainer. A critical package is one that causes mass-rebuild, or where an
+author is listed in the CODEOWNERS file.
+
+In case of critical security updates, the security team might override these
+heuristics in order to get the fixes in as fast as possible.
 
 In case of conflict, the maintainer takes priority and is allowed to revert
 the changes. This can happen for example if the maintainer was on holiday.
