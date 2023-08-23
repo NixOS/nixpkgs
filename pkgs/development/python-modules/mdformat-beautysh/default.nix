@@ -8,7 +8,6 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -27,7 +26,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    wheel
   ];
 
   buildInputs = [
