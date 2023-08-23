@@ -17265,6 +17265,8 @@ with pkgs;
 
   devspace = callPackage ../development/tools/misc/devspace { };
 
+  groovy-language-server = callPackage ../development/tools/groovy-language-server { };
+
   leptosfmt = callPackage ../development/tools/rust/leptosfmt { };
 
   maturin = callPackage ../development/tools/rust/maturin {
