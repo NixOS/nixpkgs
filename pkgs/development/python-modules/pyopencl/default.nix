@@ -24,13 +24,13 @@ let
     if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
 in buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2023.1.1";
+  version = "2023.1.2";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CtkleKlKC+De3Vyk/Lbie1p13k5frHV/BMkES9nUJEQ=";
+    hash = "sha256-6wDNV0BJ1ZK2edz4v+erSjbJSjn9Gssaa0XWwNe+mmg=";
   };
 
   nativeBuildInputs = [ setuptools ];
