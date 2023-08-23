@@ -3857,7 +3857,7 @@ self: super: with self; {
 
   flask-reverse-proxy-fix = callPackage ../development/python-modules/flask-reverse-proxy-fix { };
 
-  flask_script = callPackage ../development/python-modules/flask-script { };
+  flask-script = callPackage ../development/python-modules/flask-script { };
 
   flask-seasurf = callPackage ../development/python-modules/flask-seasurf { };
 
