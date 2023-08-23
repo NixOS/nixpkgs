@@ -41283,7 +41283,7 @@ with pkgs;
 
   viddy = callPackage ../tools/misc/viddy { };
 
-  ViennaRNA = callPackage ../applications/science/molecular-dynamics/viennarna { };
+  viennarna = callPackage ../applications/science/molecular-dynamics/viennarna { };
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 

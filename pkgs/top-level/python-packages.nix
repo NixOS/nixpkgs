@@ -13422,7 +13422,7 @@ self: super: with self; {
 
   vidstab = callPackage ../development/python-modules/vidstab { };
 
-  viennarna = toPythonModule pkgs.ViennaRNA;
+  viennarna = toPythonModule pkgs.viennarna;
 
   viewstate = callPackage ../development/python-modules/viewstate { };
 
