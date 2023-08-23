@@ -349,7 +349,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.sphinxHook {#python-pkgs-varPYTHON-setupHooks-sphinxHook}
 
-`TODO`
+`sphinxHook` to build documentation and manpages using Sphinx.
 
 #### pkgs.${python}.setupHooks.unittestCheckHook {#python-pkgs-varPYTHON-setupHooks-unittestCheckHook}
 
@@ -813,7 +813,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-- `sphinxHook` to build documentation and manpages using Sphinx.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
