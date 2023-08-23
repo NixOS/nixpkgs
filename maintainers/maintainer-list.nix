@@ -14099,6 +14099,8 @@
     github = "RaitoBezarius";
     githubId = 314564;
     name = "Ryan Lahfa";
+    supportedArchitectures = [ "x86_64-linux" "riscv64-linux" ];
+    limitedSupportedArchitectures = [ "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
   rakesh4g = {
     email = "rakeshgupta4u@gmail.com";
