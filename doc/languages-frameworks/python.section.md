@@ -320,7 +320,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.pytestCheckHook {#python-pkgs-varPYTHON-setupHooks-pytestCheckHook}
 
-`TODO`
+`pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 
 #### pkgs.${python}.setupHooks.pythonCatchConflictsHook {#python-pkgs-varPYTHON-setupHooks-pythonCatchConflictsHook}
 
@@ -812,7 +812,7 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-- `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
+
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
