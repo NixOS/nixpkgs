@@ -44,10 +44,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-
   meta = with lib; {
     description = "A simple interface to GPIO devices with Raspberry Pi";
     homepage = "https://github.com/gpiozero/gpiozero";
+    changelog = "https://github.com/gpiozero/gpiozero/blob/v${version}/docs/changelog.rst";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ hexa ];
