@@ -550,6 +550,8 @@ with pkgs;
   cpm-cmake = callPackage ../development/tools/cpm-cmake { };
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
+  
+  cpuinfo = callPackage ../tools/system/cpuinfo { };
 
   crackle = callPackage ../tools/networking/crackle { };
 
@@ -4306,6 +4308,8 @@ with pkgs;
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
   libtensorflow = python3.pkgs.tensorflow.libtensorflow;
+
+  libtorch = callPackage ../development/libraries/science/math/libtorch { };
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix {
     inherit (config) cudaSupport;
@@ -20493,7 +20497,8 @@ with pkgs;
   abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix { };
   abseil-cpp_202206 = callPackage ../development/libraries/abseil-cpp/202206.nix { };
   abseil-cpp_202301 = callPackage ../development/libraries/abseil-cpp/202301.nix { };
-  abseil-cpp = abseil-cpp_202301;
+  abseil-cpp_202308 = callPackage ../development/libraries/abseil-cpp/202308.nix { };
+  abseil-cpp = abseil-cpp_202308;
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
@@ -24585,6 +24590,8 @@ with pkgs;
 
   protozero = callPackage ../development/libraries/protozero { };
 
+  pthreadpool = callPackage ../development/libraries/pthreadpool { };
+
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
   nanopb = callPackage ../development/libraries/nanopb { };
@@ -25037,6 +25044,8 @@ with pkgs;
   };
 
   slang = callPackage ../development/libraries/slang { };
+
+  sleef = callPackage ../development/libraries/sleef { };
 
   slibGuile = callPackage ../development/libraries/slib {
     scheme = guile;
@@ -39181,9 +39190,17 @@ with pkgs;
 
   ecos = callPackage ../development/libraries/science/math/ecos { };
 
+  fbgemm = callPackage ../development/libraries/science/math/fbgemm { };
+
   flintqs = callPackage ../development/libraries/science/math/flintqs { };
 
+  fp16 = callPackage ../development/libraries/science/math/fp16 { };
+
+  fxdiv = callPackage ../development/libraries/science/math/fxdiv { };
+
   getdp = callPackage ../applications/science/math/getdp { stdenv = gcc10StdenvCompat; };
+
+  gloo = callPackage ../development/libraries/science/math/gloo { };
 
   gurobi = callPackage ../applications/science/math/gurobi { };
 
@@ -39287,6 +39304,8 @@ with pkgs;
 
   nauty = callPackage ../applications/science/math/nauty { };
 
+  onnx = callPackage ../development/libraries/science/math/onnx { };
+
   osi = callPackage ../development/libraries/science/math/osi { };
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
@@ -39316,6 +39335,10 @@ with pkgs;
   petsc = callPackage ../development/libraries/science/math/petsc { };
 
   parmetis = callPackage ../development/libraries/science/math/parmetis { };
+
+  pocketfft = callPackage ../development/libraries/science/math/pocketfft { };
+
+  psimd = callPackage ../development/libraries/science/math/psimd { };
 
   QuadProgpp = callPackage ../development/libraries/science/math/QuadProgpp { };
 
@@ -39356,6 +39379,8 @@ with pkgs;
   gmsh = callPackage ../applications/science/math/gmsh { };
 
   wcpg = callPackage ../development/libraries/science/math/wcpg { };
+
+  xnnpack = callPackage ../development/libraries/science/math/xnnpack { };
 
   zn_poly = callPackage ../development/libraries/science/math/zn_poly { };
 

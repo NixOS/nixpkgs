@@ -54,3 +54,65 @@ for your specific card(s).
 
 Library maintainers should consult [NVCC Docs](https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/)
 and release notes for their software package.
+
+## Adding a new CUDA release {#adding-a-new-cuda-release}
+
+> **WARNING**
+>
+> This section of the docs is still very much in progress. Feedback is welcome in GitHub Issues tagging @NixOS/cuda-maintainers or on [Matrix](https://matrix.to/#/#cuda:nixos.org).
+
+The CUDA Toolkit is a suite of CUDA libraries and software meant to provide a development environment for CUDA-accelerated applications, packaged in a multi-gigabyte monolithic installer. Since CUDA 11.4, NVIDIA has maintained CUDA redistributables (“CUDA-redist”): individually packaged components, meant to facilitate redistribution and inclusion in downstream projects.
+
+All new projects should use the CUDA redistributables, as they are much easier to maintain and update.
+
+### Updating CUDA redistributables {#updating-cuda-redistributables}
+
+1. Go to NVIDIA's index of CUDA redistributables: <https://developer.download.nvidia.com/compute/cuda/redist/>
+2. Copy the `redistrib_*.json` corresponding to the release to `pkgs/development/compilers/cudatoolkit/redist/manifests`.
+3. Generate the `redistrib_features_*.json` file by running:
+
+    ```bash
+    nix run github:ConnorBaker/cuda-redist-find-features -- <path to manifest>
+    ```
+
+    That command will generate the `redistrib_features_*.json` file in the same directory as the manifest.
+
+4. Include the path to the new manifest in `pkgs/development/compilers/cudatoolkit/redist/extension.nix`.
+
+### Updating the CUDA Toolkit {#updating-the-cuda-toolkit}
+
+> **WARNING**
+>
+> While the CUDA Toolkit is still available in Nixpkgs, it is not recommended for use and should be considered deprecated.
+>
+> However, to ensure packages relying on the CUDA Toolkit continue to build, the CUDA Toolkit will continue to be updated until a migration path is available.
+
+1. Go to NVIDIA's CUDA Toolkit download page: <https://developer.nvidia.com/cuda-downloads>
+2. Select the appropriate OS, architecture, distribution, and version, and installer type.
+
+   - For example: Linux, x86_64, Ubuntu, 22.04, runfile (local)
+   - NOTE: Typically, we use the Ubuntu runfile. It is unclear if the runfile for other distributions will work.
+
+3. Take the link provided by the installer instructions on the webpage after selecting the installer type and get its hash by running:
+
+   ```bash
+   nix store prefetch-file --hash-type sha256 <link>
+   ```
+
+4. Update `pkgs/development/compilers/cudatoolkit/versions.toml` to include the release.
+
+### Updating the CUDA package set {#updating-the-cuda-package-set}
+
+1. Include a new `cudaPackages_<major>_<minor>` package set in `pkgs/top-level/all-packages.nix`.
+
+   - NOTE: Changing the default CUDA package set should occur in a separate PR, allowing time for additional testing.
+
+2. Successfully build the closure of the new package set, updating `pkgs/development/compilers/cudatoolkit/redist/overrides.nix` as needed. Below are some common failures:
+
+| Unable to ... | During ... | Reason | Solution | Note |
+| --- | --- | --- | --- | --- |
+| Find headers | `configurePhase` or `buildPhase` | Missing dependency on a `dev` output | Add the missing dependency | The `dev` output typically contain the headers |
+| Find libraries | `configurePhase` | Missing dependency on a `dev` output | Add the missing dependency | The `dev` output typically contain CMake configuration files |
+| Find libraries | `buildPhase` or `patchelf` | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contain the libraries |
+
+In the scenario you are unable to run the resulting binary: this is arguably the most complicated as it could be any combination of the previous reasons. This type of failure typically occurs when a library attempts to load or open a library it depends on that it does not declare in its `DT_NEEDED` section. As a first step, ensure that dependencies are patched with `cudaPackages.autoAddOpenGLRunpath`. Failing that, try running the application with `nixGL` (https://github.com/guibou/nixGL) or a similar wrapper tool. If that works, it likely means that the application is attempting to load a library that is not in the `RPATH` or `RUNPATH` of the binary.
