@@ -2,9 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , installShellFiles
+, unstableGitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zig-shell-completions";
   version = "unstable-2023-08-17";
 
@@ -29,11 +30,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     homepage = "https://github.com/ziglang/shell-completions";
     description = "Shell completions for the Zig compiler";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aaronjheng ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aaronjheng ];
+    platforms = lib.platforms.all;
   };
-}
+})

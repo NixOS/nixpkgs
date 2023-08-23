@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lib
+{ stdenv, fetchurl, lib
 , ncurses, openssl, aspell, gnutls, gettext
 , zlib, curl, pkg-config, libgcrypt
 , cmake, libobjc, libresolv, libiconv
@@ -36,22 +36,15 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "4.0.3";
+      version = "4.0.4";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-        hash = "sha256-iA29zo5zs/SAKggsShp8YZQ9vFhn16lWleTkY8ZTWpI=";
+        hash = "sha256-rl9JebWtoDObhOdB1ffkge6R4/7NQKCZB7ZHUYKetvY=";
       };
-
-      patches = lib.optional (perlSupport && lib.versionAtLeast perl.version "5.38") (fetchpatch {
-        name = "perl538-locale.patch";
-        url = "https://github.com/weechat/weechat/commit/c5eb982424150894959b978d98dcf6a005eb6c9f.patch";
-        excludes = [ "ChangeLog.adoc" ];
-        sha256 = "sha256-SSDZy4/c12LOxjvFMuJSv6gJEX298wF62/gQLQ/geiU=";
-      });
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
