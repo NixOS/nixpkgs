@@ -32,8 +32,7 @@ Before adding a new package, please consider the following questions:
 * How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
 * Are you willing to maintain the package? You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
 
-If any of these questions' answer is no, then you should probably not add the
-package.
+If any of these questions' answer is no, then you should probably not add the package.
 
 This is section describes a general framework of understanding and exceptions might apply.
 
