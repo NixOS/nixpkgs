@@ -13,7 +13,7 @@
 , autoreconfHook
 , pkg-config
 , diffutils
-, glibc
+, glibc ? !stdenv.isDarwin
 }:
 
 stdenv.mkDerivation rec {
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
        --replace '"rm"' \"${coreutils}/bin/rm\" \
        --replace '"cat"' \"${coreutils}/bin/cat\" \
        --replace '"diff"' \"${diffutils}/bin/diff\"
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace src/main/help.c \
        --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
   '';
