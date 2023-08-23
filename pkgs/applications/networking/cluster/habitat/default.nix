@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.habitat.sh";
     changelog = "https://github.com/habitat-sh/habitat/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem ];
+    maintainers = with maintainers; [ rushmorem qjoly ];
     mainProgram = "hab";
     platforms = [ "x86_64-linux" ];
   };
