@@ -38494,6 +38494,8 @@ with pkgs;
 
   steamback = python311.pkgs.callPackage ../tools/games/steamback { };
 
+  steamguard-cli = callPackage ../tools/security/steamguard-cli { };
+
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     inherit winetricks steam-run yad;
   };
