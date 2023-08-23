@@ -10682,7 +10682,7 @@ self: super: with self; {
 
   pyramid = callPackage ../development/python-modules/pyramid { };
 
-  pyramid_chameleon = callPackage ../development/python-modules/pyramid_chameleon { };
+  pyramid-chameleon = callPackage ../development/python-modules/pyramid-chameleon { };
 
   pyramid_exclog = callPackage ../development/python-modules/pyramid_exclog { };
 
