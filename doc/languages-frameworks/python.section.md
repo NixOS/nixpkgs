@@ -328,7 +328,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.pythonImportsCheckHook {#python-pkgs-varPYTHON-setupHooks-pythonImportsCheckHook}
 
-`TODO`
+`pythonImportsCheckHook` to check whether importing the listed modules works.
 
 #### pkgs.${python}.setupHooks.pythonRelaxDepsHook {#python-pkgs-varPYTHON-setupHooks-pythonRelaxDepsHook}
 
@@ -812,7 +812,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-- `pythonImportsCheckHook` to check whether importing the listed modules works.
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
   See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
