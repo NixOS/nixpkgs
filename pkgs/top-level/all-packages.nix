@@ -32962,6 +32962,8 @@ with pkgs;
 
   jack_oscrolloscope = callPackage ../applications/audio/jack-oscrolloscope { };
 
+  jack-passthrough = callPackage ../applications/audio/jack-passthrough { };
+
   jack_rack = callPackage ../applications/audio/jack-rack { };
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
