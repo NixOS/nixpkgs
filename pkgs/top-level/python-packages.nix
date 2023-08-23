@@ -10688,7 +10688,7 @@ self: super: with self; {
 
   pyramid-jinja2 = callPackage ../development/python-modules/pyramid-jinja2 { };
 
-  pyramid_mako = callPackage ../development/python-modules/pyramid_mako { };
+  pyramid-mako = callPackage ../development/python-modules/pyramid-mako { };
 
   pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
 
