@@ -50,6 +50,18 @@ stdenv.mkDerivation rec {
     This patch removes the check. */
   patches = [ ./lsblkCheckFix.patch ];
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Without this, the tests fail because they cannot create the QT Window
+    export QT_QPA_PLATFORM=offscreen
+    $out/bin/rpi-imager --version
+
+    runHook postInstallCheck
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
