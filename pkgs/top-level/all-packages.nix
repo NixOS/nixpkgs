@@ -9032,6 +9032,8 @@ with pkgs;
 
   hdaps-gl = callPackage ../tools/misc/hdaps-gl { };
 
+  hddfancontrol = callPackage ../tools/system/hddfancontrol { };
+
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
   hdf4 = callPackage ../tools/misc/hdf4 { };
