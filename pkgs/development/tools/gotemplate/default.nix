@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gotemplate";
-  version = "3.7.4";
+  version = "3.7.5";
 
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-vARW8afqkcope5EcqCFju/cF6LsdEYvt3fKHEXRbmXM=";
+    hash = "sha256-BMZyq7fa57WaE0cSkGjHWxtEnbC7vEy+kLaHDoI/KZU=";
   };
 
   vendorHash = "sha256-uRB3atrJ+A1/xXvgmkyM/AKN+9VKSIDvsnPIdtsc3vc=";
