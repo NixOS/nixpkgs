@@ -324,7 +324,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.pythonCatchConflictsHook {#python-pkgs-varPYTHON-setupHooks-pythonCatchConflictsHook}
 
-`TODO`
+`pythonCatchConflictsHook` to check whether a Python package is not already existing.
 
 #### pkgs.${python}.setupHooks.pythonImportsCheckHook {#python-pkgs-varPYTHON-setupHooks-pythonImportsCheckHook}
 
@@ -812,8 +812,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-
-- `pythonCatchConflictsHook` to check whether a Python package is not already existing.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
   See [example usage](#using-pythonrelaxdepshook).
