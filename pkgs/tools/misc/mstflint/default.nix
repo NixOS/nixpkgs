@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mstflint";
-  version = "4.17.0-1";
+  version = "4.25.0-1";
 
   src = fetchurl {
     url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
-    sha256 = "030vpiv44sxmjf0dng91ziq1cggwj33yp0l4xc6cdhnrv2prjs7y";
+    sha256 = "sha256-nYGiWfr8a3q3+bGUb1ovLrAS8/LnEJf+4inIEllW95s=";
   };
 
   buildInputs = [
