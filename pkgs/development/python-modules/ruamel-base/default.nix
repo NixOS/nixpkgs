@@ -18,6 +18,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruamel.base" ];
 
+  pythonNamespaces = [ "ruamel" ];
+
   meta = with lib; {
     description = "Common routines for ruamel packages";
     homepage = "https://sourceforge.net/projects/ruamel-base/";
