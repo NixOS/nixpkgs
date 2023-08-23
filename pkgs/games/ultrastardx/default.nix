@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v2023.6.0";
-    sha256 = "sha256-JZ+QBRJmFIJIrE7G3mxK5YXxHUVhjfSvPaQvSirnVKo=";
+    hash = "sha256-JZ+QBRJmFIJIrE7G3mxK5YXxHUVhjfSvPaQvSirnVKo=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
