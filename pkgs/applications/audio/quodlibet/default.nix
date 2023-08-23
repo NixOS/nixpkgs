@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , tag ? ""
 
   # build time
@@ -57,16 +56,8 @@ python3.pkgs.buildPythonApplication rec {
     owner = "quodlibet";
     repo = "quodlibet";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-G6zcdnHkevbVCrMoseWoSia5ajEor8nZhee6NeZIs8Q=";
+    hash = "sha256-dkO/CFN7Dk72xhtmcSDcwUciOPMeEjQS2mch+jSfiII=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fixes cover globbing under python 3.10.5+
-      url = "https://github.com/quodlibet/quodlibet/commit/5eb7c30766e1dcb30663907664855ee94a3accc0.patch";
-      hash = "sha256-bDyEOE7Vs4df4BeN4QMvt6niisVEpvc1onmX5rtoAWc=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -129,15 +120,13 @@ python3.pkgs.buildPythonApplication rec {
   ]);
 
   pytestFlags = [
-    # requires networking
-    "--deselect=tests/test_browsers_iradio.py::TIRFile::test_download_tags"
     # missing translation strings in potfiles
     "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
+    # require networking
+    "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
+    "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
     # upstream does actually not enforce source code linting
     "--ignore=tests/quality"
-    # build failure on Arch Linux
-    # https://github.com/NixOS/nixpkgs/pull/77796#issuecomment-575841355
-    "--ignore=tests/test_operon.py"
   ] ++ lib.optionals (withXineBackend || !withGstPlugins) [
     "--ignore=tests/plugin/test_replaygain.py"
   ];
@@ -181,10 +170,6 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://quodlibet.readthedocs.io/en/latest";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      coroa
-      paveloom
-      pbogdan
-    ];
+    maintainers = with maintainers; [ coroa paveloom pbogdan ];
   };
 }
