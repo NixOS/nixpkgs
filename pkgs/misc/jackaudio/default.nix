@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, python3Packages, makeWrapper
 , libsamplerate, libsndfile, readline, eigen, celt
-, wafHook
+, waf
 # Darwin Dependencies
 , aften, AudioUnit, CoreAudio, libobjc, Accelerate
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
+  nativeBuildInputs = [ pkg-config python makeWrapper waf.hook ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ] ++ lib.optionals stdenv.isDarwin [
