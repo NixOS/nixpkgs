@@ -48,13 +48,13 @@
 
 mkDerivation rec {
   pname = "freecad";
-  version = "0.20.2";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = version;
-    hash = "sha256-v8hanhy0UE0o+XqqIH3ZUtVom3q0KGELcfXFRSDr0TA=";
+    hash = "sha256-m/0CUVDjlGIkh2AM8qdWAMuH/LVlfILqYybWY0KLT4g=";
   };
 
   nativeBuildInputs = [
