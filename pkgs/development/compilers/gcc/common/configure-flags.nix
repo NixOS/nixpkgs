@@ -246,7 +246,7 @@ let
     ]
     # On mips64-unknown-linux-gnu libsanitizer defines collide with
     # glibc's definitions and fail the build. It was fixed in gcc-13+.
-    ++ lib.optionals (targetPlatform.isMips && lib.versions.major version == "12") [
+    ++ lib.optionals (targetPlatform.isMips && targetPlatform.parsed.abi.name == "gnu" && lib.versions.major version == "12") [
       "--disable-libsanitizer"
     ]
   ;
