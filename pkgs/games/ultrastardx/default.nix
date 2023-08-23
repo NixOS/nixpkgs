@@ -29,14 +29,14 @@ let
     sqlite lua zlib libX11 libGLU libGL ffmpeg_4
   ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "ultrastardx";
   version = "2023.6.0";
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "d49e916705092f3d765d85d276b283b9e7e232a6";
-    sha256 = "0sdcz2vc8i2z50nj7zbkdpxx2mvx0m0927lfsj7d7qr0p8vkm0wa";
+    rev = "v2023.6.0";
+    sha256 = "sha256-JZ+QBRJmFIJIrE7G3mxK5YXxHUVhjfSvPaQvSirnVKo=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
