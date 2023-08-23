@@ -56,12 +56,12 @@ let
       xetex.scriptsFolder = "texlive-extra";
 
       #### interpreters not detected by looking at the script extensions
-      ctanbib.extraBuildInputs = [ bin.luatex ];
+      ctanbib.extraBuildInputs = [ self.bin.luatex ];
       de-macro.extraBuildInputs = [ python3 ];
       match_parens.extraBuildInputs = [ ruby ];
       optexcount.extraBuildInputs = [ python3 ];
       pdfbook2.extraBuildInputs = [ python3 ];
-      texlogsieve.extraBuildInputs = [ bin.luatex ];
+      texlogsieve.extraBuildInputs = [ self.bin.luatex ];
 
       #### perl packages
       crossrefware.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ LWP URI ])) ];
@@ -145,9 +145,9 @@ let
       pdfcrop.binlinks.rpdfcrop = "pdfcrop";
 
       ptex.binlinks = {
-        pdvitomp = bin.metapost + "/bin/pdvitomp";
-        pmpost = bin.metapost + "/bin/pmpost";
-        r-pmpost = bin.metapost + "/bin/r-pmpost";
+        pdvitomp = self.bin.metapost + "/bin/pdvitomp";
+        pmpost = self.bin.metapost + "/bin/pmpost";
+        r-pmpost = self.bin.metapost + "/bin/r-pmpost";
       };
 
       texdef.binlinks = {
@@ -156,7 +156,7 @@ let
 
       texlive-scripts.binlinks = {
         mktexfmt = "fmtutil";
-        texhash = tl."texlive.infra" + "/bin/mktexlsr";
+        texhash = self.__pkgs."texlive.infra" + "/bin/mktexlsr";
       };
 
       texlive-scripts-extra.binlinks = {
@@ -167,9 +167,9 @@ let
 
       # metapost binaries are in bin.metapost instead of bin.core
       uptex.binlinks = {
-        r-upmpost = bin.metapost + "/bin/r-upmpost";
-        updvitomp = bin.metapost + "/bin/updvitomp";
-        upmpost = bin.metapost + "/bin/upmpost";
+        r-upmpost = self.bin.metapost + "/bin/r-upmpost";
+        updvitomp = self.bin.metapost + "/bin/updvitomp";
+        upmpost = self.bin.metapost + "/bin/upmpost";
       };
 
       #### add PATH dependencies without wrappers
@@ -376,14 +376,14 @@ let
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
         postUnpack = ''
           if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
-            unxz --stdout "${tlpdbxz}" > texlive.tlpdb
+            unxz --stdout "${self.tlpdb.xz}" > texlive.tlpdb
 
             # create dummy doc file to ensure that texdoc does not return an error
             mkdir -p support/texdoc
             touch support/texdoc/NEWS
 
-            TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
-              "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
+            TEXMFCNF="${self.bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+              "${self.bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
               -c texlive_tlpdb=texlive.tlpdb -lM texdoc
 
             cp texdoc/cache-tlpdb.lua "$out"/scripts/texdoc/Data.tlpdb.lua
@@ -396,23 +396,23 @@ let
         extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
 
         # add license of tlmgr and TeXLive::* perl packages and of bin.core
-        license = [ "gpl2Plus" ] ++ lib.toList bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
+        license = [ "gpl2Plus" ] ++ lib.toList self.bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
 
         scriptsFolder = "texlive";
-        extraBuildInputs = [ coreutils gnused gnupg tl.kpathsea (perl.withPackages (ps: with ps; [ Tk ])) ];
+        extraBuildInputs = [ coreutils gnused gnupg self.__pkgs.kpathsea (perl.withPackages (ps: with ps; [ Tk ])) ];
 
         # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
         postFixup = ''
           substituteInPlace "$out"/bin/tlmgr \
             --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
           sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath [ gnupg ]}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/tlmgr
-          sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused tl.kpathsea ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
+          sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused self.__pkgs.kpathsea ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
         '';
 
         # add minimal texlive.tlpdb
         postUnpack = ''
           if [[ "$tlType" == "tlpkg" ]] ; then
-            xzcat "${tlpdbxz}" | sed -n -e '/^name \(00texlive.config\|00texlive.installation\)$/,/^$/p' > "$out"/texlive.tlpdb
+            xzcat "${self.tlpdb.xz}" | sed -n -e '/^name \(00texlive.config\|00texlive.installation\)$/,/^$/p' > "$out"/texlive.tlpdb
           fi
         '';
       };
@@ -453,7 +453,7 @@ let
   };
 
   tlpdbNix = runCommand "tlpdb.nix" {
-    inherit tlpdbxz;
+    tlpdbxz = self.tlpdb.xz;
     tl2nix = ./tl2nix.sed;
   }
   ''
@@ -472,7 +472,7 @@ let
     buildTeXLivePackage (args
       # NOTE: the fixed naming scheme must match generate-fixed-hashes.nix
       // { inherit mirrors pname; fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { }; }
-      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); })
+      // lib.optionalAttrs (args ? deps) { deps = map (n: self.__pkgs.${n}) (args.deps or [ ]); })
   ) overriddenTlpdb;
 
   # TODO the assertions are oblivious to overrides
