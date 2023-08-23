@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     GDK_PIXBUF_MODULEDIR=${gdkPixbufModuleDir} \
     GDK_PIXBUF_MODULE_FILE=${gdkPixbufModuleFile} \
     gdk-pixbuf-query-loaders --update-cache
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.buildPlatform) ''
     mkdir -p "$out/bin"
     makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
       --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
