@@ -2,7 +2,7 @@
 
 let
   pname = "miniflux";
-  version = "2.0.46";
+  version = "2.0.47";
 
 in buildGoModule {
   inherit pname version;
@@ -11,7 +11,7 @@ in buildGoModule {
     owner = pname;
     repo = "v2";
     rev = version;
-    sha256 = "sha256-a27eKOhW2vHmPktLgqHKqiwtC9T6GRwnOeNReeMsaeM=";
+    sha256 = "sha256-SJw9C6s2JaI2AOVDazn1+N23Yp+Ul5P239tdAzXOxv4=";
   };
 
   vendorHash = "sha256-Oe7el4tE/gwI6qL/fjJgnv1jbNSKrCnq1nBq+dD7Gik=";
