@@ -1,31 +1,35 @@
-{ mkDerivation,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  libarchive,
-  util-linux,
-  qtbase,
-  qtdeclarative,
-  qtsvg,
-  qttools,
-  qtquickcontrols2,
-  qtgraphicaleffects
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapQtAppsHook
+, cmake
+, util-linux
+, curl
+, libarchive
+, qtbase
+, qtdeclarative
+, qtsvg
+, qttools
+, qtquickcontrols2
+, qtgraphicaleffects
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "rpi-imager";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ahETmUhlPZ3jpxmzDK5pS6yLc6UxCJFOtWolAtSrDVQ=";
+    sha256 = "sha256-yB+H1zWL40KzxOrBuvg7nBC3zmWilsOgOW7ndiDWuDA=";
   };
 
-  nativeBuildInputs = [ cmake util-linux ];
+  nativeBuildInputs = [
+    cmake
+    util-linux
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     curl
@@ -47,7 +51,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Raspberry Pi Imaging Utility";
-    homepage = "https://www.raspberrypi.org/software/";
+    homepage = "https://www.raspberrypi.com/software/";
+    changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${version}";
     downloadPage = "https://github.com/raspberrypi/rpi-imager/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ymarkus ];
