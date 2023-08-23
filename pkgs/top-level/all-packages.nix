@@ -39547,6 +39547,8 @@ with pkgs;
 
   inherit (ocamlPackages) hol_light;
 
+  holehe = callPackage ../tools/security/holehe { };
+
   hologram = callPackage ../tools/security/hologram { };
 
   honeytrap = callPackage ../tools/security/honeytrap { };
