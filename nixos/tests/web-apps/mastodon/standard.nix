@@ -48,6 +48,7 @@ in
         configureNginx = true;
         localDomain = "mastodon.local";
         enableUnixSocket = false;
+        streamingProcesses = 2;
         smtp = {
           createLocally = false;
           fromAddress = "mastodon@mastodon.local";
