@@ -3,6 +3,7 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , poetry-core
 , pytest-asyncio
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "2022.10.0";
+  version = "2023.08.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +22,28 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    hash = "sha256-JIh6jr4pFXGZTUi6K7VsymaCxCrTNBevk9xo9TsrFnM=";
+    hash = "sha256-oTkWirq3w0DgQWWe0ziK+ry4pg6j6SQbBESLG4xgDE4=";
   };
+
+  patches = [
+    # This patch removes references to setuptools and wheel that are no longer
+    # necessary and changes poetry to poetry-core, so that we don't need to add
+    # unnecessary nativeBuildInputs.
+    #
+    #   https://github.com/bachya/aiorecollect/pull/207
+    #
+    (fetchpatch {
+      name = "clean-up-dependencies.patch";
+      url = "https://github.com/bachya/aiorecollect/commit/0bfddead1c1b176be4d599b8e12ed608eac97b8b.patch";
+      hash = "sha256-w/LAtyuyYsAAukDeIy8XLlp9QrydC1Wmi2zxEj1Zdm8=";
+      includes = [ "pyproject.toml" ];
+    })
+  ];
+
+  postPatch = ''
+    # this is not used directly by the project
+    sed -i '/certifi =/d' pyproject.toml
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -31,6 +52,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses
