@@ -3,12 +3,12 @@
 , fetchpatch
 , tag ? ""
 
-# build time
+  # build time
 , gettext
 , gobject-introspection
 , wrapGAppsHook
 
-# runtime
+  # runtime
 , adwaita-icon-theme
 , gdk-pixbuf
 , glib
@@ -23,20 +23,22 @@
 , libsoup
 , webkitgtk
 
-# optional features
+  # optional features
 , withDbusPython ? false
-, withPypresence ? false
-, withPyInotify ? false
 , withMusicBrainzNgs ? false
 , withPahoMqtt ? false
+, withPyInotify ? false
+, withPypresence ? false
 , withSoco ? false
 
-# backends
-, withGstreamerBackend ? true, gst_all_1
+  # backends
 , withGstPlugins ? withGstreamerBackend
-, withXineBackend ? true, xine-lib
+, withGstreamerBackend ? true
+, gst_all_1
+, withXineBackend ? true
+, xine-lib
 
-# tests
+  # tests
 , dbus
 , glibcLocales
 , hicolor-icon-theme
@@ -46,8 +48,10 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.5.0";
+  version = "4.6.0";
   format = "pyproject";
+
+  outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     owner = "quodlibet";
@@ -64,18 +68,13 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  outputs = [
-    "out"
-    "doc"
-  ];
-
   nativeBuildInputs = [
     gettext
     gobject-introspection
     wrapGAppsHook
   ] ++ (with python3.pkgs; [
-    sphinxHook
     sphinx-rtd-theme
+    sphinxHook
   ]);
 
   buildInputs = [
@@ -111,13 +110,11 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ]
   ++ lib.optionals withDbusPython [ dbus-python ]
-  ++ lib.optionals withPypresence [ pypresence ]
-  ++ lib.optionals withPyInotify [ pyinotify ]
   ++ lib.optionals withMusicBrainzNgs [ musicbrainzngs ]
   ++ lib.optionals withPahoMqtt [ paho-mqtt ]
+  ++ lib.optionals withPyInotify [ pyinotify ]
+  ++ lib.optionals withPypresence [ pypresence ]
   ++ lib.optionals withSoco [ soco ];
-
-  LC_ALL = "en_US.UTF-8";
 
   nativeCheckInputs = [
     dbus
@@ -145,10 +142,12 @@ python3.pkgs.buildPythonApplication rec {
     "--ignore=tests/plugin/test_replaygain.py"
   ];
 
+  env.LC_ALL = "en_US.UTF-8";
+
   preCheck = ''
-    export XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS"
     export GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
     export HOME=$(mktemp -d)
+    export XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS"
   '';
 
   checkPhase = ''
@@ -167,8 +166,6 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GTK-based audio player written in Python, using the Mutagen tagging library";
-    license = licenses.gpl2Plus;
-
     longDescription = ''
       Quod Libet is a GTK-based audio player written in Python, using
       the Mutagen tagging library. It's designed around the idea that
@@ -182,8 +179,12 @@ python3.pkgs.buildPythonApplication rec {
       player, like Unicode support, tag editing, Replay Gain, podcasts
       & internet radio, and all major audio formats.
     '';
-
-    maintainers = with maintainers; [ coroa pbogdan ];
-    homepage = "https://quodlibet.readthedocs.io/en/latest/";
+    homepage = "https://quodlibet.readthedocs.io/en/latest";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      coroa
+      paveloom
+      pbogdan
+    ];
   };
 }
