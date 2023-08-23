@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${version}";
     downloadPage = "https://github.com/raspberrypi/rpi-imager/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ymarkus ];
+    maintainers = with maintainers; [ ymarkus anthonyroussel ];
     platforms = platforms.all;
     # does not build on darwin
     broken = stdenv.isDarwin;
