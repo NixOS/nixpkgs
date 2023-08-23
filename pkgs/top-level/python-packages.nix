@@ -10678,7 +10678,7 @@ self: super: with self; {
 
   pyrainbird = callPackage ../development/python-modules/pyrainbird { };
 
-  pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
+  pyramid-beaker = callPackage ../development/python-modules/pyramid-beaker { };
 
   pyramid = callPackage ../development/python-modules/pyramid { };
 
