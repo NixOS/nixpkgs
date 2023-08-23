@@ -7,9 +7,9 @@ libraries that use ASDF (Another System Definition Facility). It lives in
 ## Overview {#lisp-overview}
 
 The main entry point of the API are the Common Lisp implementation packages
-(e.g. `abcl`, `ccl`, `clasp-common-lisp`, `clisp` `ecl`, `sbcl`)
-themselves. They have the `pkgs` and `withPackages` attributes, which can be
-used to discover available packages and to build wrappers, respectively.
+themselves (e.g. `abcl`, `ccl`, `clasp-common-lisp`, `clisp` `ecl`,
+`sbcl`). They have the `pkgs` and `withPackages` attributes, which can be used
+to discover available packages and to build wrappers, respectively.
 
 The `pkgs` attribute set contains packages that were automatically imported from
 Quicklisp, and any other manually defined ones. Not every package works for all
@@ -30,7 +30,7 @@ executables with `sb-ext:save-lisp-and-die`, are achieved via overriding the
 In addition, Lisps have the `withOverrides` function, which can be used to
 substitute any package in the scope of their `pkgs`. This will be useful
 together with `overrideLispAttrs` when dealing with slashy ASDF systems, because
-they should stay in the main package and be build by specifying the `systems`
+they should stay in the main package and be built by specifying the `systems`
 argument to `build-asdf-system`.
 
 ## The 90% use case example {#lisp-use-case-example}
@@ -42,7 +42,7 @@ The most common way to use the library is to run ad-hoc wrappers like this:
 Then, in a shell:
 
 ```
-$ result/bin/sbcl
+$ sbcl
 * (load (sb-ext:posix-getenv "ASDF"))
 * (asdf:load-system 'alexandria)
 ```
@@ -53,7 +53,7 @@ Also one can create a `pkgs.mkShell` environment in `shell.nix`/`flake.nix`:
 let
   sbcl' = sbcl.withPackages (ps: [ ps.alexandria ]);
 in mkShell {
-  buildInputs = [ sbcl' ];
+  packages = [ sbcl' ];
 }
 ```
 
@@ -67,15 +67,16 @@ buildPhase = ''
 
 ## Importing packages from Quicklisp {#lisp-importing-packages-from-quicklisp}
 
-The library is able to very quickly import all the packages distributed by
-Quicklisp by parsing its `releases.txt` and `systems.txt` files. These files are
-available from [http://beta.quicklisp.org/dist/quicklisp.txt].
+The library is able to import all the packages distributed by Quicklisp by
+parsing its `releases.txt` and `systems.txt` files. These files are available
+from [quicklisp.org](http://beta.quicklisp.org/dist/quicklisp.txt).
 
 The import process is implemented in the `import` directory as Common Lisp
-functions in the `org.lispbuilds.nix` ASDF system. To run the script, one can
+code in the `org.lispbuilds.nix` ASDF system. To run the script, one can
 execute `ql-import.lisp`:
 
 ```
+cd pkgs/development/lisp-modules
 nix-shell --run 'sbcl --script ql-import.lisp'
 ```
 
@@ -92,7 +93,7 @@ The maintainer's job there is to:
 3. For packages that still don't build, package them manually in `packages.nix`
 
 Also, the `imported.nix` file **must not be edited manually**! It should only be
-generated as described in this section.
+generated as described in this section (by running `ql-import.lisp`).
 
 ### Adding native dependencies {#lisp-quicklisp-adding-native-dependencies}
 
@@ -108,7 +109,7 @@ Packages defined in `packages.nix` contain these dependencies naturally.
 
 The previous implementation of `lisp-modules` didn't fully trust the Quicklisp
 data, because there were times where the dependencies specified were not
-complete, and caused broken builds. It instead used a `nix-shell` environment to
+complete and caused broken builds. It instead used a `nix-shell` environment to
 discover real dependencies by using the ASDF APIs.
 
 The current implementation has chosen to trust this data, because it's faster to
@@ -126,8 +127,8 @@ replace the `systems` attribute of the affected packages. (See the definition of
 
 During Quicklisp import:
 
-- `+` in names are converted to `_plus{_,}`: `cl+ssl`->`cl_plus_ssl`, `alexandria+`->`alexandria_plus`
-- `.` to `_dot_`: `iolib.base`->`iolib_dot_base`
+- `+` in names is converted to `_plus{_,}`: `cl+ssl`->`cl_plus_ssl`, `alexandria+`->`alexandria_plus`
+- `.` in names is converted to `_dot_`: `iolib.base`->`iolib_dot_base`
 - names starting with a number have a `_` prepended (`3d-vectors`->`_3d-vectors`)
 - `_` in names is converted to `__` for reversibility
 
@@ -148,11 +149,11 @@ The `build-asdf-system` function is documented with comments in
 ## Defining packages manually outside Nixpkgs {#lisp-defining-packages-outside}
 
 Lisp derivations (`abcl`, `sbcl` etc.) also export the `buildASDFSystem`
-function, which is the same as `build-asdf-system`, except for the `lisp`
-argument which is set to the given CL implementation.
+function, which is similar to `build-asdf-system` from `packages.nix`, but is
+part of the public API.
 
 It can be used to define packages outside Nixpkgs, and, for example, add them
-into the package scope with `withOverrides` which will be discussed later on.
+into the package scope with `withOverrides` which will be discussed later.
 
 ### Including an external package in scope {#lisp-including-external-pkg-in-scope}
 
