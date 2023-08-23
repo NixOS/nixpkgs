@@ -28,7 +28,7 @@ let
 
     tries = if cfg.tries == null then 0 else cfg.tries;
 
-    inherit (cfg) consoleMode graceful tries;
+    inherit (cfg) consoleMode graceful;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
