@@ -1,8 +1,10 @@
 { lib
+, fmt
 , stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
+, doxygen
 , ninja
 , gitpython
 , boost
@@ -71,7 +73,9 @@ mkDerivation rec {
     gitpython # for addon manager
     boost
     coin3d
+    doxygen
     eigen
+    fmt
     gts
     hdf5
     libGLU
