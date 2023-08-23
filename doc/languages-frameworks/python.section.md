@@ -309,7 +309,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.pipInstallHook {#python-pkgs-varPYTHON-setupHooks-pipInstallHook}
 
-`TODO`
+`pipInstallHook` to install wheels.
 
 #### pkgs.${python}.setupHooks.pytestCheckHook {#python-pkgs-varPYTHON-setupHooks-pytestCheckHook}
 
@@ -805,13 +805,10 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-
-
 - `pypaBuildHook` to build a wheel using
   [`pypa/build`](https://pypa-build.readthedocs.io/en/latest/index.html) and
   PEP 517/518. Note a build system (e.g. `setuptools` or `flit`) should still
   be added as `nativeBuildInput`.
-- `pipInstallHook` to install wheels.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
