@@ -137,6 +137,7 @@ mapAliases ({
   flask_mail = flask-mail; # added 2023-08-23
   flask_marshmallow = flask-marshmallow; # added 2023-08-16
   flask_migrate = flask-migrate; # added 2023-08-23
+  flask_principal = flask-principal; # added 2023-08-23
   flask-restplus = throw "flask-restplus is no longer maintained, use flask-restx instead"; # added 2023-02-21
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
