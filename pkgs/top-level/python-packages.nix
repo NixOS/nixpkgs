@@ -3831,7 +3831,7 @@ self: super: with self; {
 
   flask-login = callPackage ../development/python-modules/flask-login { };
 
-  flask_mail = callPackage ../development/python-modules/flask-mail { };
+  flask-mail = callPackage ../development/python-modules/flask-mail { };
 
   flask-mailman = callPackage ../development/python-modules/flask-mailman { };
 

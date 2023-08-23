@@ -144,7 +144,7 @@ pythonPackages.buildPythonApplication rec {
     flask
     flask-gravatar
     flask-login
-    flask_mail
+    flask-mail
     flask_migrate
     flask-sqlalchemy
     flask-wtf
