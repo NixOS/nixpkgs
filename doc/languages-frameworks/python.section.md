@@ -353,7 +353,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.unittestCheckHook {#python-pkgs-varPYTHON-setupHooks-unittestCheckHook}
 
-`TODO`
+`unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
 #### pkgs.${python}.setupHooks.venvShellHook {#python-pkgs-varPYTHON-setupHooks-venvShellHook}
 
@@ -818,7 +818,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
   to run commands only after venv is first created.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
-- `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
 ### Development mode {#development-mode}
 
