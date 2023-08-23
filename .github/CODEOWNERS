@@ -47,6 +47,9 @@
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
 
+# pkgs/by-name
+/pkgs/test/nixpkgs-check-by-name @infinisil
+
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
 
