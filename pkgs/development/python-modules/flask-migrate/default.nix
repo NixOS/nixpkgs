@@ -4,7 +4,7 @@
 , pythonOlder
 , alembic
 , flask
-, flask_script
+, flask-script
 , flask-sqlalchemy
 , pytestCheckHook
 , setuptools
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    flask_script
+    flask-script
   ];
 
   meta = with lib; {

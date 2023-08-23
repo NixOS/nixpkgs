@@ -198,7 +198,7 @@ python3'.pkgs.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = with python3'.pkgs; [
-    cryptography pyrad pymysql python-dateutil flask-versioned flask_script
+    cryptography pyrad pymysql python-dateutil flask-versioned flask-script
     defusedxml croniter flask-migrate pyjwt configobj sqlsoup pillow
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
