@@ -39,7 +39,6 @@
 , "bower2nix"
 , "browserify"
 , "browser-sync"
-, "btc-rpc-explorer"
 , "carbon-now-cli"
 , "cdk8s-cli"
 , "cdktf-cli"
