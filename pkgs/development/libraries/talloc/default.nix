@@ -8,7 +8,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , fixDarwinDylibNames
-, wafHook
+, waf
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     python3
-    wafHook
+    waf.hook
     docbook-xsl-nons
     docbook_xml_dtd_42
   ] ++ lib.optionals stdenv.isDarwin [
