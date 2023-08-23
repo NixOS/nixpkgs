@@ -51,7 +51,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
   meta = with lib; {
-    description = "Dagger is a programmable CI/CD engine that runs your pipelines in containers.";
+    description = "Dagger is a programmable CI/CD engine that runs your pipelines in containers";
     homepage = "https://github.com/dagger/dagger";
     changelog = "https://github.com/dagger/dagger/releases/tag/v${version}";
     license = licenses.asl20 ;
