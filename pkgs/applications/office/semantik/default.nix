@@ -3,7 +3,7 @@
 , mkDerivation
 , fetchFromGitLab
 , fetchpatch
-, wafHook
+, waf
 , pkg-config
 , cmake
 , qtbase
@@ -65,7 +65,7 @@ mkDerivation rec {
       --replace /usr/include/KF5/KDELibs4Support "${lib.getDev kdelibs4support}/include/KF5/KDELibs4Support"
   '';
 
-  nativeBuildInputs = [ (lib.getDev qtsvg) (lib.getLib qtsvg) python3 pkg-config wafHook cmake ];
+  nativeBuildInputs = [ (lib.getDev qtsvg) (lib.getLib qtsvg) python3 pkg-config waf.hook cmake ];
 
   buildInputs = [
     qtbase
