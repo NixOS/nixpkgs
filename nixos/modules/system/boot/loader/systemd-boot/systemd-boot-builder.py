@@ -56,6 +56,7 @@ def generation_conf_filename(profile: Optional[str], generation: int, specialisa
         "generation",
         str(generation),
         f"specialisation-{specialisation}" if specialisation else None,
+        f"+{tries}" if @tries@ > 0 else None,
     ]
     return "-".join(p for p in pieces if p) + ".conf"
 
@@ -66,8 +67,8 @@ def write_loader_conf(profile: Optional[str], generation: int, specialisation: O
             f.write("timeout @timeout@\n")
         f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
         if not @editor@:
-            f.write("editor 0\n");
-        f.write("console-mode @consoleMode@\n");
+            f.write("editor 0\n")
+        f.write("console-mode @consoleMode@\n")
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
 
@@ -188,8 +189,8 @@ def get_specialisations(profile: Optional[str], generation: int, _: Optional[str
 
 
 def remove_old_entries(gens: List[SystemIdentifier]) -> None:
-    rex_profile = re.compile("^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
-    rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
+    rex_profile = re.compile("^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*(+[0-9]*(-[0-9]*)?)?\.conf$")
+    rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?(+[0-9]*(-[0-9]*)?)?\.conf$")
     known_paths = []
     for gen in gens:
         known_paths.append(copy_from_profile(*gen, "kernel", True))

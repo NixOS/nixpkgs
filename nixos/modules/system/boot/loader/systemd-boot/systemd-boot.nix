@@ -26,7 +26,9 @@ let
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode graceful;
+    tries = if cfg.tries == null then 0 else cfg.tries;
+
+    inherit (cfg) consoleMode graceful tries;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -106,6 +108,20 @@ in {
 
         `null` means no limit i.e. all generations
         that were not garbage collected yet.
+      '';
+    };
+
+    tries = mkOption {
+      default = null;
+      example = 3;
+      type = types.nullOr types.int;
+      description = lib.mdDoc ''
+        How often a boot entry is allowed to fail before it is marked as
+        bad by systemd. systemd-boot will decrement this on every boot and
+        systemd jobs will mark entries as good if everything started correctly.
+        See https://systemd.io/AUTOMATIC_BOOT_ASSESSMENT/.
+
+        `null` or 0 will disable this feature.
       '';
     };
 
@@ -295,6 +311,13 @@ in {
           efi    /efi/netbootxyz/netboot.xyz.efi
         '';
       })
+    ];
+
+    # add units to handle boot counting / assessment
+    boot.initrd.systemd.additionalUpstreamUnits = lib.mkIf (cfg.tries > 0) [
+      "boot-complete.target"
+      "systemd-bless-boot-generator"
+      #"systemd-bless-boot.service"
     ];
 
     system = {
