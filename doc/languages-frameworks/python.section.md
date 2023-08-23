@@ -332,7 +332,8 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.pythonRelaxDepsHook {#python-pkgs-varPYTHON-setupHooks-pythonRelaxDepsHook}
 
-`TODO`
+`pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
+  See [example usage](#using-pythonrelaxdepshook).
 
 #### pkgs.${python}.setupHooks.pythonRemoveBinBytecodeHook {#python-pkgs-varPYTHON-setupHooks-pythonRemoveBinBytecodeHook}
 
@@ -812,8 +813,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-- `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
-  See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
