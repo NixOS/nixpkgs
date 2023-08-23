@@ -3,6 +3,7 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -25,6 +26,20 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-W5W/2gBraraZs8ai8tyg3aRWvHt6WOQCVICuiAigae0=";
   };
+
+  patches = [
+    # This patch removes references to setuptools and wheel that are no longer
+    # necessary and changes poetry to poetry-core, so that we don't need to add
+    # unnecessary nativeBuildInputs.
+    #
+    #   https://github.com/bachya/regenmaschine/pull/334
+    #
+    (fetchpatch {
+      name = "clean-up-build-dependencies.patch";
+      url = "https://github.com/bachya/regenmaschine/commit/ecc2f771e2ae2e0a8d46f5beab072df4e4727ba3.patch";
+      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
