@@ -42,7 +42,7 @@ package's `meta.maintainers` list, and send a PR with the changes.
 
 ### How to lose maintainer status
 
-Maintainers that have become inactive on a given package can be removed. This
+Maintainers who have become inactive on a given package can be removed. This
 helps us keep an accurate view of what parts of nixpkgs are well maintained or
 not.
 
