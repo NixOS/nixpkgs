@@ -2,7 +2,7 @@
 , buildPackages
 , llvmPackages_16
 , ed, gnugrep, coreutils, xdg-utils
-, glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
+, glib, glibc, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
 , lib, libkrb5
@@ -78,7 +78,12 @@ let
     (if channel == "ungoogled-chromium" then "stable" else channel);
   pkgName = "google-chrome-${pkgSuffix}";
   chromeSrc =
-    let
+    if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "https://archive.raspberrypi.org/debian/pool/main/w/widevine/libwidevinecdm0_4.10.2252.0+3_arm64.deb";
+        sha256 = "1122awhw8dxckjdi3c92dfvldw94bcdz27xvqfsv8k591hhvp2y8";
+      }
+    else let
       # Use the latest stable Chrome version if necessary:
       version = if chromium.upstream-info.sha256bin64 != null
         then chromium.upstream-info.version
@@ -104,7 +109,9 @@ let
 
     unpackCmd = let
       widevineCdmPath =
-        if (channel == "stable" || channel == "ungoogled-chromium") then
+        if stdenv.hostPlatform.system == "aarch64-linux" then
+          "./opt/WidevineCdm"
+        else if (channel == "stable" || channel == "ungoogled-chromium") then
           "./opt/google/chrome/WidevineCdm"
         else if channel == "beta" then
           "./opt/google/chrome-beta/WidevineCdm"
@@ -131,9 +138,16 @@ let
 
     PATCH_RPATH = mkrpath [ gcc.cc glib nspr nss ];
 
-    patchPhase = ''
-      patchelf --set-rpath "$PATCH_RPATH" _platform_specific/linux_x64/libwidevinecdm.so
-    '';
+    patchPhase = if stdenv.hostPlatform.system == "x86_64-linux" then
+      ''
+        patchelf --set-rpath "$PATCH_RPATH" _platform_specific/linux_x64/libwidevinecdm.so
+      ''
+     else if stdenv.hostPlatform.system == "aarch64-linux" then
+      ''
+        patchelf --set-rpath "$PATCH_RPATH:\$ORIGIN" _platform_specific/linux_arm64/libwidevinecdm.so
+        patchelf --set-rpath "$PATCH_RPATH" _platform_specific/linux_arm64/libwidevinecdm_real.so
+      ''
+     else throw "Unsupported platform";
 
     installPhase = ''
       mkdir -p $out/WidevineCdm
@@ -141,7 +155,7 @@ let
     '';
 
     meta = {
-      platforms = [ "x86_64-linux" ];
+      platforms = [ "x86_64-linux" "aarch64-linux" ];
       license = lib.licenses.unfree;
     };
   };
@@ -150,17 +164,29 @@ let
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
 
+  # aarch64's prebuilt widevine includes DT_RELR relocations without
+  # the GLIBC_ABI_DT_RELR symbol glibc expects. Disable the check for
+  # chrome. See discussion at
+  # https://github.com/raspberrypi/Raspberry-Pi-OS-64bit/issues/248
+  patchedGlibc = glibc.overrideAttrs (self: super: {
+    name = "glibc-widevine-${super.version}";
+    patches = super.patches ++ [ ./glibc-no-relr-check.patch ];
+  });
+
   # We want users to be able to enableWideVine without rebuilding all of
   # chromium, so we have a separate derivation here that copies chromium
   # and adds the unfree WidevineCdm.
   chromiumWV = let browser = chromium.browser; in if enableWideVine then
     runCommand (browser.name + "-wv") { version = browser.version; }
-      ''
-        mkdir -p $out
-        cp -a ${browser}/* $out/
-        chmod u+w $out/libexec/chromium
-        cp -a ${widevineCdm}/WidevineCdm $out/libexec/chromium/
-      ''
+      (''
+         mkdir -p $out
+         cp -a ${browser}/* $out/
+         chmod u+w $out/libexec/chromium
+         cp -a ${widevineCdm}/WidevineCdm $out/libexec/chromium/
+       '' + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
+         chmod u+w $out/libexec/chromium/chromium
+         patchelf --set-interpreter ${patchedGlibc}/lib/ld-linux-aarch64.so.1 $out/libexec/chromium/chromium
+       '')
     else browser;
 
 in stdenv.mkDerivation {
