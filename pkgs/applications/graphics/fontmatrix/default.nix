@@ -21,8 +21,6 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  hardeningDisable = [ "format" ];
-
   meta = with lib; {
     description = "Fontmatrix is a free/libre font explorer for Linux, Windows and Mac";
     homepage = "https://github.com/fontmatrix/fontmatrix";
