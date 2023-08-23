@@ -8132,6 +8132,8 @@ self: super: with self; {
 
   pyhumps = callPackage ../development/python-modules/pyhumps { };
 
+  pyinstaller-versionfile = callPackage ../development/python-modules/pyinstaller-versionfile { };
+
   pyisy = callPackage ../development/python-modules/pyisy { };
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
@@ -12406,7 +12408,11 @@ self: super: with self; {
 
   syrupy = callPackage ../development/python-modules/syrupy { };
 
+  tabcmd = callPackage ../development/python-modules/tabcmd { };
+
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
+
+  tableauserverclient = callPackage ../development/python-modules/tableauserverclient { };
 
   tabledata = callPackage ../development/python-modules/tabledata { };
 
@@ -13078,6 +13084,8 @@ self: super: with self; {
 
   typer = callPackage ../development/python-modules/typer { };
 
+  types-appdirs = callPackage ../development/python-modules/types-appdirs { };
+
   types-colorama = callPackage ../development/python-modules/types-colorama { };
 
   types-dateutil = callPackage ../development/python-modules/types-dateutil { };
@@ -13095,6 +13103,8 @@ self: super: with self; {
   types-futures = callPackage ../development/python-modules/types-futures { };
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
+
+  types-mock = callPackage ../development/python-modules/types-mock { };
 
   types-pillow = callPackage ../development/python-modules/types-pillow { };
 
