@@ -5,7 +5,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "workstyle";
-  version = "unstable-2021-05-09";
+  version = "8bde72d9a9dd67e0fc7c0545faca53df23ed3753";
 
   src = fetchFromGitHub {
     owner = "pierrechevalier83";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "04xds691sw4pi2nq8xvdhn0312wwia60gkd8b1bjqy11zrqbivbx";
   };
 
-  cargoSha256 = "0xwv8spr96z4aimjlr15bhwl6i3zqp7jr45d9zr3sbi9d8dbdja2";
+  cargoSha256 = "sha256-sefZLI9btbS3SwNL2x20WDtO1yR1jBCT3D85c6V9YGE=";
 
   doCheck = false; # No tests
 
