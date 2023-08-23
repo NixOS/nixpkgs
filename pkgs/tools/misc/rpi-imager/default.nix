@@ -12,6 +12,7 @@
 , qttools
 , qtquickcontrols2
 , qtgraphicaleffects
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +49,10 @@ stdenv.mkDerivation rec {
     but that throws an error, as /sys/dev doesn't exist in the sandbox.
     This patch removes the check. */
   patches = [ ./lsblkCheckFix.patch ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Raspberry Pi Imaging Utility";
