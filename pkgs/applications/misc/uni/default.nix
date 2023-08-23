@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "arp242";
     repo = "uni";
     rev = "v${version}";
-    sha256 = "kWiglMuJdcD7z2MDfz1MbItB8r9BJ7LUqfPfJa8QkLA=";
+    hash = "sha256-kWiglMuJdcD7z2MDfz1MbItB8r9BJ7LUqfPfJa8QkLA=";
   };
 
-  vendorSha256 = "6HNFCUSJA6oduCx/SCUQQeCHGS7ohaWRunixdwMurBw=";
+  vendorHash = "sha256-6HNFCUSJA6oduCx/SCUQQeCHGS7ohaWRunixdwMurBw=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
