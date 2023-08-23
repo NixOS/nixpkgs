@@ -300,7 +300,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.flitBuildHook {#python-pkgs-varPYTHON-setupHooks-flitBuildHook}
 
-`TODO`
+`flitBuildHook` to build a wheel using `flit`.
 
 #### pkgs.${python}.setupHooks.pipBuildHook {#python-pkgs-varPYTHON-setupHooks-pipBuildHook}
 
@@ -804,7 +804,7 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-- `flitBuildHook` to build a wheel using `flit`.
+
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
   (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
 - `pypaBuildHook` to build a wheel using
