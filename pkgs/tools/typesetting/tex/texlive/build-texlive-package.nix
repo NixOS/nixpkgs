@@ -65,18 +65,10 @@ let
     lib.optional hasInfo info;
   outputs = lib.catAttrs "tlOutputName" all;
 
-  # texlive.combine compatibility layer
-  # TODO move to upper level
-  pkgs = [ tex ] ++
-    lib.optional hasDocfiles (texdoc // { inherit hasManpages; }) ++
-    lib.optional hasSource texsource ++
-    lib.optional hasTlpkg tlpkg ++
-    lib.optional hasBinfiles out;
-
   # emulate multi-output derivation plus additional metadata
   # (out is handled in mkContainer)
   passthru = {
-    inherit all outputs pname pkgs;
+    inherit all outputs pname;
     revision = toString revision + extraRevision;
     version = version + extraVersion;
     outputSpecified = true;

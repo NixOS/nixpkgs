@@ -394,7 +394,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   inherit (src) version;
   format = "other";
 
-  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs));
+  src = assertFixedHash pname texlive.__pkgs.pygmentex.tex;
 
   propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
@@ -475,7 +475,7 @@ xdvi = stdenv.mkDerivation {
 
 xpdfopen = stdenv.mkDerivation {
   pname = "texlive-xpdfopen.bin";
-  inherit (lib.head texlive.xpdfopen.pkgs) version;
+  inherit (texlive.__pkgs.xpdfopen) version;
 
   inherit (common) src;
 
@@ -510,7 +510,7 @@ xindy = stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config perl
-    (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
+    (texlive.__withPackages (ps: with ps; [ scheme-basic cyrillic ec ]))
   ];
   buildInputs = [ clisp libiconv perl ];
 
