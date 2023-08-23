@@ -90,6 +90,9 @@ in
   mkDerivation (finalAttrs: {
     pname = "libtorch";
     version = "2.0.2";
+
+    strictDeps = true;
+
     src = fetchFromGitHub {
       owner = "pytorch";
       repo = "pytorch";
@@ -97,6 +100,7 @@ in
       fetchSubmodules = true;
       hash = "sha256-Da3Nv4+GRnZoDWO7/KNUaxfD71o/Rw86xyxYY9yAxXg=";
     };
+
     patches = [
       # USE_SYSTEM_*
       (fetchpatch {
@@ -183,11 +187,21 @@ in
       #   rm -rf cmake/Modules_CUDA_fix/{upstream,FindCUDA.cmake}
       # ''
       # TODO(@connorbaker): The NCCL version check never seems to work (blank version).
-      + ''
+      + strings.optionalString useCuda ''
         substituteInPlace cmake/Modules/FindNCCL.cmake \
           --replace \
             'if (NCCL_VERSION_DEFINED)' \
             'if (FALSE)'
+      ''
+      # TODO(@connorbaker): PyTorch checks two different values for the CUDA path instead of just
+      # using the singular value CMake wants you to use. Set the extra value equal to same CMake
+      # uses.
+      # NOTE: CUDAToolkit_INCLUDE_DIRS is populated by the CUDA setup hook.
+      # NOTE: CUDA_INCLUDE_DIRS is set here: https://github.com/pytorch/pytorch/blob/17675cb1f50d6fe685f8dcc6dc107f41f8e7ca13/cmake/Modules_CUDA_fix/upstream/FindCUDA.cmake#L808
+      # so we can't set it directly; instead we have to go through CUDA_TOOLKIT_INCLUDE.
+      # NOTE: Check for same path is here: https://github.com/pytorch/pytorch/blame/b28278740955ba15d8d33d7f39370edfd710fc5a/cmake/public/cuda.cmake#L63-L64
+      + strings.optionalString useCuda ''
+        cmakeFlagsArray+=( "-DCUDA_TOOLKIT_INCLUDE=$CUDAToolkit_INCLUDE_DIR" )
       '';
 
     # TODO(@connorbaker): Use DISABLE_NNPACK_AND_FAMILY for CUDA builds. Allows us to drop
@@ -204,27 +218,16 @@ in
       ]
       # Core dependencies
       ++ [
-        asmjit
         blas.provider
-        cpuinfo
-        fbgemm
-        flatbuffers
-        fmt
-        fp16
-        fxdiv
         gflags
         glog
-        onnx
         protobuf
-        psimd
-        pthreadpool
         python3
         python3Packages.numpy
         python3Packages.pybind11
         python3Packages.pyyaml
         python3Packages.setuptools
         python3Packages.typing-extensions
-        sleef
         zlib
       ]
       # Optional dependencies
@@ -236,46 +239,84 @@ in
           cuda_nvcc # crt/host_config.h
         ]
       )
-      ++ lists.optionals useGloo [gloo]
       ++ lists.optionals useMagma [magma]
-      ++ lists.optionals useMkldnn [oneDNN.dev] # oneDNN is the new name for MKL-DNN
       ++ lists.optionals useMpi [mpi]
-      ++ lists.optionals useNuma [numactl]
+      ++ lists.optionals useNuma [numactl];
+
+    buildInputs =
+      # Core dependencies
+      [
+        # TODO(@connorbaker): If I'm unable to use these as nativeBuildInputs, is that an
+        # indication that I've failed to package them correctly?
+        asmjit
+        cpuinfo
+        fbgemm
+        flatbuffers
+        # TDOD(@connorbaker): Check fmt version to see if this one is too new for PyTorch:
+        # libtorch> In file included from /nix/store/p6z5wfdr1djv56cz411jmppyqhj6vr1q-fmt-10.1.0-dev/include/fmt/format.h:49,
+        # libtorch>                  from /build/source/torch/csrc/distributed/rpc/agent_utils.cpp:1:
+        # libtorch> /nix/store/p6z5wfdr1djv56cz411jmppyqhj6vr1q-fmt-10.1.0-dev/include/fmt/core.h: In instantiation of 'constexpr fmt::v10::detail::value<Context> fmt::v10::detail::make_arg(T&) [with bool PACKED = true; Context = fmt::v10::basic_format_context<fmt::v10::appender, char>; T = std::atomic<int>; typename std::enable_if<PACKED, int>::type <anonymous> = 0]':
+        # libtorch> /nix/store/p6z5wfdr1djv56cz411jmppyqhj6vr1q-fmt-10.1.0-dev/include/fmt/core.h:1810:51:   required from 'constexpr fmt::v10::format_arg_store<Context, Args>::format_arg_store(T& ...) [with T = {const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::atomic<int>}; Context = fmt::v10::basic_format_context<fmt::v10::appender, char>; Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::atomic<int>}]'
+        # libtorch> /nix/store/p6z5wfdr1djv56cz411jmppyqhj6vr1q-fmt-10.1.0-dev/include/fmt/core.h:1828:18:   required from 'constexpr fmt::v10::format_arg_store<Context, typename std::remove_cv<typename std::remove_reference<T>::type>::type ...> fmt::v10::make_format_args(T& ...) [with Context = fmt::v10::basic_format_context<fmt::v10::appender, char>; T = {const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::atomic<int>}]'
+        # libtorch> /nix/store/p6z5wfdr1djv56cz411jmppyqhj6vr1q-fmt-10.1.0-dev/include/fmt/core.h:2790:44:   required from 'std::string fmt::v10::format(fmt::v10::format_string<T ...>, T&& ...) [with T = {const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, std::atomic<int>&}; std::string = std::__cxx11::basic_string<char>; fmt::v10::format_string<T ...> = fmt::v10::basic_format_string<char, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, std::atomic<int>&>]'
+        # libtorch> /build/source/torch/csrc/distributed/rpc/agent_utils.cpp:160:18:   required from here
+        # libtorch> /nix/store/p6z5wfdr1djv56cz411jmppyqhj6vr1q-fmt-10.1.0-dev/include/fmt/core.h:1577:63: error: 'fmt::v10::detail::type_is_unformattable_for<std::atomic<int>, char> _' has incomplete type
+        # libtorch>  1577 |     type_is_unformattable_for<T, typename Context::char_type> _;
+        # libtorch>       |                                                               ^
+        # libtorch> /nix/store/p6z5wfdr1djv56cz411jmppyqhj6vr1q-fmt-10.1.0-dev/include/fmt/core.h:1581:7: error: static assertion failed: Cannot format an argument. To make type T formattable provide a formatter<T> specialization: https://fmt.dev/latest/api.html#udt
+        # libtorch>  1581 |       formattable,
+        # libtorch>       |       ^~~~~~~~~~~
+        fmt
+        fp16
+        fxdiv
+        onnx
+        protobuf.abseil-cpp
+        psimd
+        pthreadpool
+        sleef
+      ]
+      # Optional dependencies
+      ++ lib.optionals useCuda (with cudaPackages;
+        [
+          # TODO(@connorbaker): Gloo compiles without NCCL support even though it is present!
+          # PyTorch correctly detects it at the least; why doesn't Gloo?
+          nccl.dev # Provides nccl.h AND a static copy of NCCL!
+          cuda_cccl.dev # <thrust/*>
+          cuda_cudart # cuda_runtime.h
+          cuda_nvcc.dev # crt/host_config.h; even though we include this in nativeBuildinputs, it's needed here too
+          cuda_nvml_dev.dev # <nvml.h>
+          cuda_nvrtc.dev
+          cuda_nvrtc.lib
+          cuda_nvtx # -llibNVToolsExt; we bundle the whole thing to pass as a CMake flag, doesn't make sense to split it up here
+          cudnn.dev
+          cudnn.lib
+          libcublas.dev
+          libcublas.lib
+          libcufft.dev
+          libcufft.lib
+          libcurand.dev
+          libcurand.lib
+          # TODO(@connorbaker): libcusolver has overrides to make it depend on libcublas, and libcusparse from CUDA 12.1
+          # Both of these currently get dragged into the closure, causing quite a bit of bloat. Find a way to
+          # remove (at least the static components) from the closure.
+          # Overrides are in pkgs/development/compilers/cudatoolkit/redist/overrides.nix.
+          # Derivations for each output should be patched, not the overall package.
+          libcusolver.dev
+          libcusolver.lib
+          libcusparse.dev
+          libcusparse.lib
+        ]
+        ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
+          # TODO(@connorbaker): Verify this works as intended
+          cuda_nvprof.dev # <cuda_profiler_api.h>
+        ]
+        ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
+          cuda_profiler_api.dev # <cuda_profiler_api.h>
+        ])
+      ++ lists.optionals useGloo [gloo]
+      ++ lists.optionals useMkldnn [oneDNN.dev] # oneDNN is the new name for MKL-DNN
       ++ lists.optionals useXnnpack [xnnpack]
       ++ lists.optionals useZstd [zstd.dev];
-
-    # TODO(@connorbaker): Currently CUDA build fails with:
-    # CMake Error at cmake/public/cuda.cmake:65 (message):
-    #   Found two conflicting CUDA installs:
-    #
-    #   V11.8.89 in
-    #   '/nix/store/rsjxr5b5zifa0wbpziwqfzg7lncfz0f0-cuda_cudart-11.8.89/include'
-    #   and
-    #
-    #   V11.8.89 in
-    #   '/nix/store/rsjxr5b5zifa0wbpziwqfzg7lncfz0f0-cuda_cudart-11.8.89/include;/nix/store/nljxvgbp6fy0q7cbrp5l5igv57p5fa3v-cuda_nvcc-11.8.89/include;/nix/store/mfk63jcw2r77asgai82rzbzbph10dhh8-cuda_cccl-11.8.89/include;/nix/store/0xhbghrnf7x289m78c8ha2dm6n83wfbg-cuda_cupti-11.8.87/include;/nix/store/4x7gb192a6pskj2skwn9s3m0vnn73bff-cuda_nvml_dev-11.8.86/include;/nix/store/00p0i6kqw6qjbrc4fddqfnv07zcg7gi1-cuda_nvrtc-11.8.89/include;/nix/store/953p97p0inb7wdj50qcz47dy3lh58vhq-cuda_nvtx-11.8.86/include;/nix/store/qsm8bjydfnapr77wzlyzyzcsnkc0yrh2-libcublas-11.11.3.6/include;/nix/store/fszipvg6jw9dsj2lz1izwy7363mwh4fj-libcufft-10.9.0.58/include;/nix/store/8r9kj0rh0kk9iqi32kkm1bdxqb8jipbr-libcurand-10.3.0.86/include;/nix/store/f0d08h7g4apgngbyrgqvpjxmlp3azf0m-libcusolver-11.4.1.48/include;/nix/store/141gw8r2ypg27186mzg81rhndl402l80-libcusparse-11.7.5.86/include;/nix/store/z5ppzlnw5wzy5bbvhm76kfmjmirpkqhb-cuda_profiler_api-11.8.86/include'
-    buildInputs = lists.optionals useCuda (with cudaPackages;
-      [
-        (lib.getDev nccl)
-        cuda_cccl # <thrust/*>
-        cuda_cupti
-        cuda_nvml_dev # <nvml.h>
-        cuda_nvrtc
-        cuda_nvtx # -llibNVToolsExt
-        libcublas
-        libcufft
-        libcurand
-        libcusolver
-        libcusparse
-        nccl
-      ]
-      ++ lists.optionals useCudnn [cudnn]
-      ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
-        cuda_nvprof # <cuda_profiler_api.h>
-      ]
-      ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
-        cuda_profiler_api # <cuda_profiler_api.h>
-      ]);
 
     cmakeFlags =
       # Core configuration options
@@ -337,7 +378,12 @@ in
       ]
       # Special handling for CUDA
       # TODO(@connorbaker): Generalize to support requested capabilities.
+      # TODO(@connorbaker): Failed to find NVToolsExt: https://github.com/pytorch/pytorch/blob/17675cb1f50d6fe685f8dcc6dc107f41f8e7ca13/cmake/public/cuda.cmake#L71
+      # Looks like the search is defined here: https://github.com/pytorch/pytorch/blob/4cc05c41fa26c3b8f76eb4005a5eae8329c1215b/cmake/Modules/FindCUDAToolkit.cmake#L1048-L1054
+      # Manually specifying either the nvToolsExt_EXTRA_PATH CMake flag or the NVTOOLSEXT_PATH
+      # environment variable work.
       ++ lists.optionals useCuda [
         "-DTORCH_CUDA_ARCH_LIST:STRING=8.9"
+        "-DnvToolsExt_EXTRA_PATH=${cudaPackages.cuda_nvtx}"
       ];
   })
