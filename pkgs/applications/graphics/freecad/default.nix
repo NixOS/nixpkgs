@@ -148,7 +148,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.freecadweb.org/";
+    homepage = "https://www.freecad.org";
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     longDescription = ''
       FreeCAD is an open-source parametric 3D modeler made primarily to design
