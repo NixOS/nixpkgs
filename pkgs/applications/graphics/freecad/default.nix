@@ -1,8 +1,10 @@
 { lib
+, fmt
 , stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
+, doxygen
 , ninja
 , gitpython
 , boost
@@ -48,13 +50,13 @@
 
 mkDerivation rec {
   pname = "freecad";
-  version = "0.20.2";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = version;
-    hash = "sha256-v8hanhy0UE0o+XqqIH3ZUtVom3q0KGELcfXFRSDr0TA=";
+    hash = "sha256-m/0CUVDjlGIkh2AM8qdWAMuH/LVlfILqYybWY0KLT4g=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +73,9 @@ mkDerivation rec {
     gitpython # for addon manager
     boost
     coin3d
+    doxygen
     eigen
+    fmt
     gts
     hdf5
     libGLU
@@ -144,7 +148,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.freecadweb.org/";
+    homepage = "https://www.freecad.org";
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     longDescription = ''
       FreeCAD is an open-source parametric 3D modeler made primarily to design
