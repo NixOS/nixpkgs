@@ -12,13 +12,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamdeck-ui";
-  version = "2.0.6";
+  version = "2.0.15";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "timothycrosley";
     rev = "v${version}";
-    sha256 = "sha256-5dk+5oefg5R68kv038gsZ2p5ixmpj/vBLBp/V7Sdos8=";
+    sha256 = "sha256-+L9OkSG1gNm7XYGTW37LvBTWxnUv1//xaqHcXu0s9gU=";
   };
 
   patches = [
