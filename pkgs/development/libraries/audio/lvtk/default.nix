@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -e '/print/d' -i wscript
   '';
 
-  wafConfigureFlags = [
+  configureFlags = [
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
   ];

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags = [
+  configureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
   ];
