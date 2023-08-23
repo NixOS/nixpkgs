@@ -33115,6 +33115,8 @@ with pkgs;
 
   kn = callPackage ../applications/networking/cluster/kn { };
 
+  kns = callPackage ../applications/networking/cluster/kns { };
+
   kondo = callPackage ../applications/misc/kondo { };
 
   kooha = callPackage ../applications/video/kooha { };
