@@ -1892,6 +1892,8 @@ with pkgs;
 
   nominatim = callPackage ../servers/nominatim { };
 
+  npm-check-updates = callPackage ../tools/package-management/npm-check-updates { };
+
   ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };

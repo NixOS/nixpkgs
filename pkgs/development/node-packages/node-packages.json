@@ -204,7 +204,6 @@
 , "nodemon"
 , "np"
 , "npm"
-, "npm-check-updates"
 , "npm-merge-driver"
 , "nrm"
 , "ocaml-language-server"
