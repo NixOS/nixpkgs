@@ -12809,6 +12809,8 @@ with pkgs;
 
   safe-rm = callPackage ../tools/system/safe-rm { };
 
+  safecloset = callPackage ../applications/misc/safecloset { };
+
   safeeyes = callPackage ../applications/misc/safeeyes { };
 
   sagoin = callPackage ../tools/misc/sagoin { };
