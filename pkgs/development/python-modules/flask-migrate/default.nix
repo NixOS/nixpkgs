@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Migrate";
+  pname = "flask-migrate";
   version = "4.0.4";
   format = "pyproject";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
-    repo = pname;
+    repo = "Flask-Migrate";
     rev = "v${version}";
     hash = "sha256-x52LGYvXuTUCP9dR3FP7a/xNRWyCAV1sReDAYJbYDvE=";
   };

@@ -3841,7 +3841,7 @@ self: super: with self; {
 
   flask-marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
 
-  flask_migrate = callPackage ../development/python-modules/flask-migrate { };
+  flask-migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
 
