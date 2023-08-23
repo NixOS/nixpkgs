@@ -6,24 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "postgres-lsp";
-  version = "unstable-2023-08-08";
+  version = "unstable-2023-08-23";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "postgres_lsp";
-    rev = "1250f5ed14a0e86b2b7fa581214284c67b960621";
-    hash = "sha256-Y43sTgKNcAI3h6McDc0g6o9CX6jOKBfURLWyjJhvmwk=";
+    rev = "47dd0132b12661ab6c97f5fba892e567a5109c84";
+    hash = "sha256-aV3QAp6DkNrHiDe1Ytiu6UyTWrelV6vO83Baiv4ONLg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  # Cargo.lock is ignored
-  # https://github.com/supabase/postgres_lsp/pull/28
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-9d/KiQ7IXhmYvTb97FKJh/cGTdnxAgCXSx4+V74b+RE=";
 
   nativeBuildInputs = [
     protobuf
