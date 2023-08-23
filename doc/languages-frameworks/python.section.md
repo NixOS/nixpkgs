@@ -357,7 +357,9 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.venvShellHook {#python-pkgs-varPYTHON-setupHooks-venvShellHook}
 
-`TODO`
+`venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
+  `venv` is created if it does not yet exist. `postVenvCreation` can be used to
+  to run commands only after venv is first created.
 
 #### pkgs.${python}.setupHooks.wheelUnpackHook {#python-pkgs-varPYTHON-setupHooks-wheelUnpackHook}
 
@@ -813,9 +815,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-- `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
-  `venv` is created if it does not yet exist. `postVenvCreation` can be used to
-  to run commands only after venv is first created.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
 
