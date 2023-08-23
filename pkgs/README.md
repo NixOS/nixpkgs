@@ -23,16 +23,21 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 
 ## Quick Start to Adding a Package
 
-Each new package has a cost for the maintainers, Continuous Integration, caching servers and users downloading
-Nixpkgs. Before adding a new package, please consider the following questions:
+Each new package has a cost for the maintainers, Continuous Integration, caching servers and users downloading Nixpkgs.
+
+Before adding a new package, please consider the following questions:
+
 * Is the package ready for general use? We don't want to include projects that are going to be abandoned immediately. In case of doubt, check with upstream.
 * Does the project have a license?
 * How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
 * Are you going to maintain the package? You should care enough about the package to be willing to maintain it for at least one release life-cycle.
 
 If any of these questions' answer is no, then you should probably not add the
-package. This is a general framework of understanding and exceptions might
-apply.
+package.
+
+This is section describes a general framework of understanding and exceptions might apply.
+
+Luckily it's pretty easy to maintain your own package set with Nix , which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
 
 ---
 
