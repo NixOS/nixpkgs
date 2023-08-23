@@ -10690,7 +10690,7 @@ self: super: with self; {
 
   pyramid-mako = callPackage ../development/python-modules/pyramid-mako { };
 
-  pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
+  pyramid-multiauth = callPackage ../development/python-modules/pyramid-multiauth { };
 
   pyrate-limiter = callPackage ../development/python-modules/pyrate-limiter { };
 
