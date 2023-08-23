@@ -282,7 +282,8 @@ ps
 
 #### pkgs.${python}.setupHooks {#python-pkgs-varPYTHON-setupHooks}
 
-`TODO`
+The following are setup hooks specifically for Python packages. Most of these
+are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.eggBuildHook {#python-pkgs-varPYTHON-setupHooks-eggBuildHook}
 
@@ -802,9 +803,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 `python.buildEnv` should be used with `ignoreCollisions = true`.
 
 #### Setup hooks {#setup-hooks}
-
-The following are setup hooks specifically for Python packages. Most of these
-are used in `buildPythonPackage`.
 
 - `eggUnpackhook` to move an egg to the correct folder so it can be installed
   with the `eggInstallHook`
