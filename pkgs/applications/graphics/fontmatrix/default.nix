@@ -2,7 +2,7 @@
 
 mkDerivation rec {
   pname = "fontmatrix";
-  version = "0.6.0-qt5";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "fcoiffie";
