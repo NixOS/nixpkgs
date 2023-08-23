@@ -1,9 +1,9 @@
-{ lib, stdenv, buildGo121Module, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, shadow, getent }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, shadow, getent }:
 
 let
   version = "1.48.1";
 in
-buildGo121Module {
+buildGoModule {
   pname = "tailscale";
   inherit version;
 
