@@ -23,7 +23,7 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 
 ## Quick Start to Adding a Package
 
-Each new package has a cost for the maintainers, Continuous Integration, caching servers and users downloading Nixpkgs.
+We welcome new contributors of new packages to Nixpkgs, arguably the greatest software database known. However, each new package comes with a cost for the maintainers, Continuous Integration, caching servers and users downloading Nixpkgs.
 
 Before adding a new package, please consider the following questions:
 
