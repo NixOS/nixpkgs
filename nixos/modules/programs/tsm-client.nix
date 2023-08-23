@@ -2,163 +2,99 @@
 
 let
 
-  inherit (lib.attrsets) attrNames filterAttrs hasAttr mapAttrs mapAttrsToList optionalAttrs;
-  inherit (lib.lists) allUnique map;
+  inherit (lib.attrsets) attrValues mapAttrsToList removeAttrs;
+  inherit (lib.lists) allUnique concatLists elem isList map;
   inherit (lib.modules) mkDefault mkIf;
-  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
+  inherit (lib.options) mkEnableOption mkOption mkPackageOption;
   inherit (lib.strings) concatLines optionalString toLower;
-  inherit (lib.types) addCheck attrsOf lines nonEmptyStr nullOr path port str strMatching submodule;
+  inherit (lib.trivial) isInt;
+  inherit (lib.types) addCheck attrsOf coercedTo either enum int lines listOf nonEmptyStr nullOr oneOf path port singleLineStr strMatching submodule;
+
+  scalarType =
+    # see the option's description below for the
+    # handling/transformation of each possible type
+    oneOf [ (enum [ true null ]) int path singleLineStr ];
 
   # TSM rejects servername strings longer than 64 chars.
   servernameType = strMatching "[^[:space:]]{1,64}";
 
   serverOptions = { name, config, ... }: {
-    options.name = mkOption {
+    freeformType = attrsOf (either scalarType (listOf scalarType));
+    # Client system-options file directives are explained here:
+    # https://www.ibm.com/docs/en/storage-protect/8.1.20?topic=commands-processing-options
+    options.servername = mkOption {
       type = servernameType;
+      default = name;
       example = "mainTsmServer";
       description = lib.mdDoc ''
         Local name of the IBM TSM server,
-        must be uncapitalized and no longer than 64 chars.
-        The value will be used for the
-        `server`
-        directive in {file}`dsm.sys`.
+        must not contain space or more than 64 chars.
       '';
     };
-    options.server = mkOption {
+    options.tcpserveraddress = mkOption {
       type = nonEmptyStr;
       example = "tsmserver.company.com";
       description = lib.mdDoc ''
         Host/domain name or IP address of the IBM TSM server.
-        The value will be used for the
-        `tcpserveraddress`
-        directive in {file}`dsm.sys`.
       '';
     };
-    options.port = mkOption {
+    options.tcpport = mkOption {
       type = addCheck port (p: p<=32767);
       default = 1500;  # official default
       description = lib.mdDoc ''
         TCP port of the IBM TSM server.
-        The value will be used for the
-        `tcpport`
-        directive in {file}`dsm.sys`.
         TSM does not support ports above 32767.
       '';
     };
-    options.node = mkOption {
+    options.nodename = mkOption {
       type = nonEmptyStr;
       example = "MY-TSM-NODE";
       description = lib.mdDoc ''
         Target node name on the IBM TSM server.
-        The value will be used for the
-        `nodename`
-        directive in {file}`dsm.sys`.
       '';
     };
     options.genPasswd = mkEnableOption (lib.mdDoc ''
       automatic client password generation.
-      This option influences the
-      `passwordaccess`
-      directive in {file}`dsm.sys`.
+      This option does *not* cause a line in
+      {file}`dsm.sys` by itself, but generates a
+      corresponding `passwordaccess` directive.
       The password will be stored in the directory
-      given by the option {option}`passwdDir`.
+      given by the option {option}`passworddir`.
       *Caution*:
       If this option is enabled and the server forces
       to renew the password (e.g. on first connection),
       a random password will be generated and stored
     '');
-    options.passwdDir = mkOption {
-      type = path;
+    options.passwordaccess = mkOption {
+      type = enum [ "generate" "prompt" ];
+      visible = false;
+    };
+    options.passworddir = mkOption {
+      type = nullOr path;
+      default = null;
       example = "/home/alice/tsm-password";
       description = lib.mdDoc ''
         Directory that holds the TSM
         node's password information.
-        The value will be used for the
-        `passworddir`
-        directive in {file}`dsm.sys`.
       '';
     };
-    options.includeExclude = mkOption {
-      type = lines;
-      default = "";
+    options.inclexcl = mkOption {
+      type = coercedTo lines
+        (pkgs.writeText "inclexcl.dsm.sys")
+        (nullOr path);
+      default = null;
       example = ''
         exclude.dir     /nix/store
         include.encrypt /home/.../*
       '';
       description = lib.mdDoc ''
-        `include.*` and
-        `exclude.*` directives to be
-        used when sending files to the IBM TSM server.
-        The lines will be written into a file that the
-        `inclexcl`
-        directive in {file}`dsm.sys` points to.
+        Text lines with `include.*` and `exclude.*` directives
+        to be used when sending files to the IBM TSM server,
+        or an absolute path pointing to a file with such lines.
       '';
     };
-    options.extraConfig = mkOption {
-      # TSM option keys are case insensitive;
-      # we have to ensure there are no keys that
-      # differ only by upper and lower case.
-      type = addCheck
-        (attrsOf (nullOr str))
-        (attrs: allUnique (map toLower (attrNames attrs)));
-      default = {};
-      example.compression = "yes";
-      example.passwordaccess = null;
-      description = lib.mdDoc ''
-        Additional key-value pairs for the server stanza.
-        Values must be strings, or `null`
-        for the key not to be used in the stanza
-        (e.g. to overrule values generated by other options).
-      '';
-    };
-    options.text = mkOption {
-      type = lines;
-      example = literalExpression
-        ''lib.modules.mkAfter "compression no"'';
-      description = lib.mdDoc ''
-        Additional text lines for the server stanza.
-        This option can be used if certion configuration keys
-        must be used multiple times or ordered in a certain way
-        as the {option}`extraConfig` option can't
-        control the order of lines in the resulting stanza.
-        Note that the `server`
-        line at the beginning of the stanza is
-        not part of this option's value.
-      '';
-    };
-    options.stanza = mkOption {
-      type = str;
-      internal = true;
-      visible = false;
-      description = lib.mdDoc "Server stanza text generated from the options.";
-    };
-    config.name = mkDefault name;
-    # Client system-options file directives are explained here:
-    # https://www.ibm.com/docs/en/storage-protect/8.1.20?topic=commands-processing-options
-    config.extraConfig =
-      mapAttrs (lib.trivial.const mkDefault) (
-        {
-          commmethod = "v6tcpip";  # uses v4 or v6, based on dns lookup result
-          tcpserveraddress = config.server;
-          tcpport = builtins.toString config.port;
-          nodename = config.node;
-          passwordaccess = if config.genPasswd then "generate" else "prompt";
-          passworddir = ''"${config.passwdDir}"'';
-        } // optionalAttrs (config.includeExclude!="") {
-          inclexcl = ''"${pkgs.writeText "inclexcl.dsm.sys" config.includeExclude}"'';
-        }
-      );
-    config.text =
-      let
-        attrset = filterAttrs (k: v: v!=null) config.extraConfig;
-        mkLine = k: v: k + optionalString (v!="") "  ${v}";
-        lines = mapAttrsToList mkLine attrset;
-      in
-        concatLines lines;
-    config.stanza = ''
-      server  ${config.name}
-      ${config.text}
-    '';
+    config.commmethod = mkDefault "v6tcpip";  # uses v4 or v6, based on dns lookup result
+    config.passwordaccess = if config.genPasswd then "generate" else "prompt";
   };
 
   options.programs.tsmClient = {
@@ -171,13 +107,24 @@ let
       type = attrsOf (submodule serverOptions);
       default = {};
       example.mainTsmServer = {
-        server = "tsmserver.company.com";
-        node = "MY-TSM-NODE";
-        extraConfig.compression = "yes";
+        tcpserveraddress = "tsmserver.company.com";
+        nodename = "MY-TSM-NODE";
+        compression = "yes";
       };
       description = lib.mdDoc ''
         Server definitions ("stanzas")
         for the client system-options file.
+        The name of each entry will be used for
+        the internal `servername` by default.
+        Each attribute will be transformed into a line
+        with a key-value pair within the server's stanza.
+        Integers as values will be
+        canonically turned into strings.
+        The boolean value `true` will be turned
+        into a line with just the attribute's name.
+        The value `null` will not generate a line.
+        A list as values generates an entry for
+        each value, according to the rules above.
       '';
     };
     defaultServername = mkOption {
@@ -225,20 +172,53 @@ let
   };
 
   cfg = config.programs.tsmClient;
+  servernames = map (s: s.servername) (attrValues cfg.servers);
 
-  assertions = [
+  assertions =
+  [
     {
-      assertion = allUnique (mapAttrsToList (k: v: toLower v.name) cfg.servers);
+      assertion = allUnique (map toLower servernames);
       message = ''
-        TSM servernames contain duplicate name
-        (note that case doesn't matter!)
+        TSM server names
+        (option `programs.tsmClient.servers`)
+        contain duplicate name
+        (note that server names are case insensitive).
       '';
     }
     {
-      assertion = (cfg.defaultServername!=null)->(hasAttr cfg.defaultServername cfg.servers);
-      message = "TSM defaultServername not found in list of servers";
+      assertion = (cfg.defaultServername!=null)->(elem cfg.defaultServername servernames);
+      message = ''
+        TSM default server name
+        `programs.tsmClient.defaultServername="${cfg.defaultServername}"`
+        not found in server names in
+        `programs.tsmClient.servers`.
+      '';
     }
   ];
+
+  makeDsmSysLines = key: value:
+    # Turn a key-value pair from the server options attrset
+    # into zero (value==null), one (scalar value) or
+    # more (value is list) configuration stanza lines.
+    if isList value then map (makeDsmSysLines key) value else  # recurse into list
+    if value == null then [ ] else  # skip `null` value
+    [ ("  ${key}${
+      if value == true then "" else  # just output key if value is `true`
+      if isInt value then "  ${builtins.toString value}" else
+      if path.check value then "  \"${value}\"" else  # enclose path in ".."
+      if singleLineStr.check value then "  ${value}" else
+      throw "assertion failed: cannot convert type"  # should never happen
+    }") ];
+
+  makeDsmSysStanza = {servername, ... }@serverCfg:
+    let
+      # drop special values that should not go into server config block
+      attrs = removeAttrs serverCfg [ "servername" "genPasswd" ];
+    in
+      ''
+        servername  ${servername}
+        ${concatLines (concatLists (mapAttrsToList makeDsmSysLines attrs))}
+      '';
 
   dsmSysText = ''
     ****  IBM Storage Protect (Tivoli Storage Manager)
@@ -248,7 +228,7 @@ let
 
     ${optionalString (cfg.defaultServername!=null) "defaultserver  ${cfg.defaultServername}"}
 
-    ${concatLines (mapAttrsToList (k: v: v.stanza) cfg.servers)}
+    ${concatLines (map makeDsmSysStanza (attrValues cfg.servers))}
   '';
 
 in
