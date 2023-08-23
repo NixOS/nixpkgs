@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.56.2";
+  version = "1.57.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Cg1dONvESb1ayz5ogv9AWHywqd0LdVsRDpIwtos+0SA=";
+    hash = "sha256-xFMqJlY+Ehn0K3bXqdiGEvL2X3Pm7IPhHHPWTi8ecOk=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'grpcio>={version}'.format(version=grpc_version.VERSION)" "'grpcio'"
+      --replace '"grpcio>={version}".format(version=grpc_version.VERSION)' '"grpcio"'
   '';
 
   propagatedBuildInputs = [

@@ -56,15 +56,8 @@ stdenv.mkDerivation {
     SDL
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    echo "USE_OPENAL = 1" > Makefile.local
-    echo "USE_OPENAL_DLOPEN = 0" >> Makefile.local
-    echo "USE_CURL = 1" >> Makefile.local
-    echo "USE_CURL_DLOPEN = 0" >> Makefile.local
-
-    runHook postConfigure
+  preConfigure = ''
+    cp ${./Makefile.local} ./Makefile.local
   '';
 
   installTargets = [ "copyfiles" ];

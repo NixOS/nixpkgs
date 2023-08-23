@@ -9977,18 +9977,6 @@ final: prev:
     meta.homepage = "https://github.com/folke/todo-comments.nvim/";
   };
 
-  todo-nvim = buildVimPluginFrom2Nix {
-    pname = "todo.nvim";
-    version = "2022-02-23";
-    src = fetchFromGitHub {
-      owner = "AmeerTaweel";
-      repo = "todo.nvim";
-      rev = "6bd31dfd64b2730b33aad89423a1055c22fe276a";
-      sha256 = "1887d1bjzixrdinr857cqq4x84760scik04r9mz9zmwdf8nfgh6b";
-    };
-    meta.homepage = "https://github.com/AmeerTaweel/todo.nvim/";
-  };
-
   todo-txt-vim = buildVimPluginFrom2Nix {
     pname = "todo.txt-vim";
     version = "2021-03-20";

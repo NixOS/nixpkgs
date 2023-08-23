@@ -254,6 +254,14 @@ in let
         [ "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt}/lib"
+
+          # Combat "__cxxabi_config.h not found". Maybe this could be fixed by
+          # copying these headers into libcxx? Note that building libcxx
+          # outside of monorepo isn't supported anymore, might be related to
+          # https://github.com/llvm/llvm-project/issues/55632
+          # ("16.0.3 libcxx, libcxxabi: circular build dependencies")
+          # Looks like the machinery changed in https://reviews.llvm.org/D120727.
+          "-I${lib.getDev targetLlvmLibraries.libcxx.cxxabi}/include/c++/v1"
         ]
         ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
         ++ lib.optional
@@ -316,7 +324,7 @@ in let
 
     compiler-rt-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
+      stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
@@ -329,7 +337,7 @@ in let
     };
 
     # N.B. condition is safe because without useLLVM both are the same.
-    compiler-rt = if stdenv.hostPlatform.isAndroid
+    compiler-rt = if stdenv.hostPlatform.isAndroid || stdenv.hostPlatform.isDarwin
       then libraries.compiler-rt-libc
       else libraries.compiler-rt-no-libc;
 

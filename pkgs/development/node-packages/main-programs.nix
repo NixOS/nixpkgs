@@ -29,7 +29,6 @@
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
   "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
-  carbon-now-cli = "carbon-now";
   cdk8s-cli = "cdk8s";
   cdktf-cli = "cdktf";
   clipboard-cli = "clipboard";
@@ -40,7 +39,6 @@
   dockerfile-language-server-nodejs = "docker-langserver";
   fast-cli = "fast";
   fauna-shell = "fauna";
-  firebase-tools = "firebase";
   fkill-cli = "fkill";
   fleek-cli = "fleek";
   git-run = "gr";
@@ -75,7 +73,6 @@
   vscode-css-languageserver-bin = "css-languageserver";
   vscode-html-languageserver-bin = "html-languageserver";
   vscode-json-languageserver-bin = "json-languageserver";
-  vue-language-server = "vls";
   webtorrent-cli = "webtorrent";
   "@zwave-js/server" = "zwave-server";
 }

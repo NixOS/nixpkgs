@@ -1,16 +1,23 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, pkgsStatic
 , byacc
 , ed
 , ncurses
 , readline
 , installShellFiles
-, pkgsStatic
 , historySupport ? true
 , readlineSupport ? true
+, lineEditingLibrary ? if (stdenv.hostPlatform.isDarwin
+                           || stdenv.hostPlatform.isStatic)
+                       then "null"
+                       else "readline"
 }:
 
+assert lib.elem lineEditingLibrary [ "null" "edit" "editline" "readline" "vrl" ];
+assert !(lib.elem lineEditingLibrary [ "edit" "editline" "vrl" ]); # broken
+assert (lineEditingLibrary == "readline") -> readlineSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "rc";
   version = "unstable-2023-06-14";
@@ -59,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
     "MANPREFIX=${placeholder "man"}/share/man"
     "CPPFLAGS=\"-DSIGCLD=SIGCHLD\""
+    "EDIT=${lineEditingLibrary}"
   ];
 
   buildFlags = [
@@ -79,9 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/rakitzis/rc";
     description = "The Plan 9 shell";
-    license = lib.licenses.zlib;
+    license = [ lib.licenses.zlib ];
+    mainProgram = "rc";
     maintainers = with lib.maintainers; [ ramkromberg AndersonTorres ];
     platforms = lib.platforms.unix;
-    mainProgram = "rc";
   };
 })
