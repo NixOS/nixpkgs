@@ -18929,6 +18929,8 @@ with pkgs;
 
   cookiecutter = with python3Packages; toPythonApplication cookiecutter;
 
+  cordova = callPackage ../development/mobile/cordova { };
+
   corrosion = callPackage ../development/tools/build-managers/corrosion { };
 
   corundum = callPackage ../development/tools/corundum { };
