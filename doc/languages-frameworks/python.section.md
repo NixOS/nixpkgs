@@ -337,7 +337,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.pythonRemoveBinBytecodeHook {#python-pkgs-varPYTHON-setupHooks-pythonRemoveBinBytecodeHook}
 
-`TODO`
+`pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 
 #### pkgs.${python}.setupHooks.setuptoolsBuildHook {#python-pkgs-varPYTHON-setupHooks-setuptoolsBuildHook}
 
@@ -813,7 +813,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-- `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
