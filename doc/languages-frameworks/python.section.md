@@ -341,7 +341,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.setuptoolsBuildHook {#python-pkgs-varPYTHON-setupHooks-setuptoolsBuildHook}
 
-`TODO`
+`setuptoolsBuildHook` to build a wheel using `setuptools`.
 
 #### pkgs.${python}.setupHooks.setuptoolsCheckHook {#python-pkgs-varPYTHON-setupHooks-setuptoolsCheckHook}
 
@@ -813,7 +813,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-- `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
