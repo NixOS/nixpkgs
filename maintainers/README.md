@@ -34,7 +34,7 @@ the changes. This can happen for example if the maintainer was on holiday.
 ### How to become a maintainer
 
 We encourage people who care about a package to assign themselves as a
-maintainer. You don't require to have nixpkgs commit access to do so.
+maintainer. Commit access to the Nixpkgs repository is not required for that.
 
 In order to do so, add yourself to the
 [`maintainer-list.nix`](./maintainer-list.nix), and then to the desired
