@@ -25,7 +25,7 @@ For critical packages, this convention needs to be negociated with the
 maintainer. A critical package is one that causes mass-rebuild, or where an
 author is listed in the CODEOWNERS file.
 
-In case of critical security updates, the security team might override these
+In case of critical security updates, the [security team](https://nixos.org/community/teams/security) might override these
 heuristics in order to get the fixes in as fast as possible.
 
 In case of conflict, the maintainer takes priority and is allowed to revert
