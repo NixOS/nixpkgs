@@ -36947,6 +36947,8 @@ with pkgs;
 
   zita-at1 = callPackage ../applications/audio/zita-at1 { };
 
+  zita-lrx = callPackage ../applications/audio/zita-lrx { };
+
   zita-njbridge = callPackage ../applications/audio/zita-njbridge { };
 
   zola = callPackage ../applications/misc/zola {
