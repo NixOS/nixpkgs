@@ -31,7 +31,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2021-04-03";
+  version = "2023.6.0";
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
