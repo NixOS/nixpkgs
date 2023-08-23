@@ -21,7 +21,7 @@ paths = os.environ.pop('NIX_PYTHONPATH', None)
 if paths:
     functools.reduce(lambda k, p: site.addsitedir(p, k), paths.split(':'), site._init_pathinfo())
 
-# Check whether we are in a venv or virtualenv. 
+# Check whether we are in a venv or virtualenv.
 # For Python 3 we check whether our `base_prefix` is different from our current `prefix`.
 # For Python 2 we check whether the non-standard `real_prefix` is set.
 # https://stackoverflow.com/questions/1871549/determine-if-python-is-running-inside-virtualenv
@@ -33,6 +33,7 @@ if not in_venv:
 
     if 'PYTHONEXECUTABLE' not in os.environ and executable is not None:
         sys.executable = executable
+        sys._base_executable = executable
     if prefix is not None:
         # Sysconfig does not like it when sys.prefix is set to None
         sys.prefix = sys.exec_prefix = prefix
