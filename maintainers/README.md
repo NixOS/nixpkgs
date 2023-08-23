@@ -18,7 +18,7 @@ We also allow other non-maintainer committers to merge changes to the package,
 provided enough time and priority has been given to the maintainer.
 
 For most packages, we expect committers to wait at least a week before merging
-changes on packages they are not maintaining. This should leave enough time
+changes not endorsed by a package maintainer (which may be themselves). This should leave enough time
 for the maintainers to provide feedback.
 
 For critical packages, this convention needs to be negociated with the
