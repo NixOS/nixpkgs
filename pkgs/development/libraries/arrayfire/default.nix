@@ -77,12 +77,6 @@ stdenv.mkDerivation rec {
     rev = "a5f533d7b864a4d8f0dd7c9aaad5ff06018c4867";
     sha256 = "sha256-AWzhsrDXyZrQN2bd0Ng/XlE8v02x7QWTiFTyaAuRXSw=";
   };
-  cub = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "cub";
-    rev = "1.10.0";
-    sha256 = "sha256-JyyNaTrtoSGiMP7tVUu9lFL07lyfJzRTVtx8yGy6/BI=";
-  };
   spdlog = fetchFromGitHub {
     owner = "gabime";
     repo = "spdlog";
@@ -119,7 +113,6 @@ stdenv.mkDerivation rec {
     cp -R --no-preserve=mode,ownership ${test-data}/* ./extern/af_test_data-src/
     cp -R --no-preserve=mode,ownership ${clfft}/* ./extern/ocl_clfft-src/
     cp -R --no-preserve=mode,ownership ${clblast}/* ./extern/ocl_clblast-src/
-    cp -R --no-preserve=mode,ownership ${cub}/* ./extern/nv_cub-src/
     cp -R --no-preserve=mode,ownership ${spdlog}/* ./extern/spdlog-src/
 
     substituteInPlace src/api/unified/symbol_manager.cpp \
@@ -168,6 +161,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withCuda [
     cudaPackages.cudatoolkit
     cudaPackages.cudnn
+    cudaPackages.cuda_cccl
   ]
   ++ lib.optionals withOpenCL [
     mesa
