@@ -2,11 +2,11 @@
 
 let
 
-  inherit (lib.attrsets) attrValues mapAttrsToList removeAttrs;
-  inherit (lib.lists) allUnique concatLists elem isList map;
+  inherit (lib.attrsets) attrNames attrValues mapAttrsToList removeAttrs;
+  inherit (lib.lists) all allUnique concatLists elem isList map;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) mkEnableOption mkOption mkPackageOption;
-  inherit (lib.strings) concatLines optionalString toLower;
+  inherit (lib.strings) concatLines match optionalString toLower;
   inherit (lib.trivial) isInt;
   inherit (lib.types) addCheck attrsOf coercedTo either enum int lines listOf nonEmptyStr nullOr oneOf path port singleLineStr strMatching submodule;
 
@@ -175,26 +175,41 @@ let
   servernames = map (s: s.servername) (attrValues cfg.servers);
 
   assertions =
-  [
-    {
-      assertion = allUnique (map toLower servernames);
+    [
+      {
+        assertion = allUnique (map toLower servernames);
+        message = ''
+          TSM server names
+          (option `programs.tsmClient.servers`)
+          contain duplicate name
+          (note that server names are case insensitive).
+        '';
+      }
+      {
+        assertion = (cfg.defaultServername!=null)->(elem cfg.defaultServername servernames);
+        message = ''
+          TSM default server name
+          `programs.tsmClient.defaultServername="${cfg.defaultServername}"`
+          not found in server names in
+          `programs.tsmClient.servers`.
+        '';
+      }
+    ] ++ (mapAttrsToList (name: serverCfg: {
+      assertion = all (key: null != match "[^[:space:]]+" key) (attrNames serverCfg);
       message = ''
-        TSM server names
-        (option `programs.tsmClient.servers`)
-        contain duplicate name
-        (note that server names are case insensitive).
+        TSM server setting names in
+        `programs.tsmClient.servers.${name}.*`
+        contain spaces, but that's not allowed.
       '';
-    }
-    {
-      assertion = (cfg.defaultServername!=null)->(elem cfg.defaultServername servernames);
+    }) cfg.servers) ++ (mapAttrsToList (name: serverCfg: {
+      assertion = allUnique (map toLower (attrNames serverCfg));
       message = ''
-        TSM default server name
-        `programs.tsmClient.defaultServername="${cfg.defaultServername}"`
-        not found in server names in
-        `programs.tsmClient.servers`.
+        TSM server setting names in
+        `programs.tsmClient.servers.${name}.*`
+        contain duplicate names
+        (note that setting names are case insensitive).
       '';
-    }
-  ];
+    }) cfg.servers);
 
   makeDsmSysLines = key: value:
     # Turn a key-value pair from the server options attrset
