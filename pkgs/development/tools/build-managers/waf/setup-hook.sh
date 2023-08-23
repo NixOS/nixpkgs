@@ -18,7 +18,7 @@ wafConfigurePhase() {
 
     local flagsArray=(
         $prefixFlag
-        $wafConfigureFlags "${wafConfigureFlagsArray[@]}"
+        $configureFlags "${configureFlagsArray[@]}"
         ${configureTargets:-configure}
     )
 
