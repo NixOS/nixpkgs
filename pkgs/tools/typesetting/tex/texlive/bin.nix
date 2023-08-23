@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, buildPackages
-, texlive
+, self
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config
@@ -74,7 +74,7 @@ let
 
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
   withLuaJIT = !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV;
-in rec { # un-indented
+in { # un-indented
 
 inherit (common) cleanBrokenLinks;
 texliveYear = year;
@@ -90,11 +90,12 @@ core = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform && self.bin.core ? __spliced) [
     # configure: error: tangle was not found but is required when cross-compiling.
     # dev (himktables) is used when building hitex to generate the additional source file hitables.c
-    texlive.bin.core
-    texlive.bin.core.dev
+    # check if __spliced exists to avoid infinite recursion in the splice hostHost
+    self.bin.core
+    self.bin.core.dev
   ];
 
   buildInputs = [
@@ -181,7 +182,7 @@ core = stdenv.mkDerivation rec {
   '' + /* install himktables in separate output for use in cross compilation */ ''
      mkdir -p $dev/bin
      cp texk/web2c/.libs/himktables $dev/bin/himktables
-  '' + cleanBrokenLinks;
+  '' + self.bin.cleanBrokenLinks;
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
   passthru = { inherit version buildInputs; };
@@ -196,12 +197,12 @@ core = stdenv.mkDerivation rec {
 };
 
 
-inherit (core-big) metafont mflua metapost luatex luahbtex luajittex xetex;
+inherit (self.bin.core-big) metafont mflua metapost luatex luahbtex luajittex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
 
-  inherit (common) src prePatch;
+  inherit (self.bin.core) src prePatch;
 
   patches = [
     # improves reproducibility of fmt files. This patch has been proposed upstream,
@@ -238,8 +239,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   hardeningDisable = [ "format" ];
 
-  inherit (core) nativeBuildInputs depsBuildBuild;
-  buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 libX11 ];
+  inherit (self.bin.core) nativeBuildInputs depsBuildBuild;
+  buildInputs = self.bin.core.buildInputs ++ [ self.bin.core cairo harfbuzz icu graphite2 libX11 ];
 
   configureFlags = common.configureFlags
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
@@ -334,11 +335,11 @@ chktex = stdenv.mkDerivation {
   pname = "texlive-chktex.bin";
   inherit version;
 
-  inherit (common) src;
+  inherit (self.bin.core) src;
 
   nativeBuildInputs = [ pkg-config ];
   # perl used in shebang of script bin/deweb
-  buildInputs = [ core/*kpathsea*/ perl ];
+  buildInputs = [ self.bin.core/*kpathsea*/ perl ];
 
   preConfigure = "cd texk/chktex";
 
@@ -353,7 +354,7 @@ dvisvgm = stdenv.mkDerivation rec {
   pname = "texlive-dvisvgm.bin";
   inherit version;
 
-  inherit (common) src;
+  inherit (self.bin.core) src;
 
   preConfigure = "cd texk/dvisvgm";
 
@@ -361,7 +362,7 @@ dvisvgm = stdenv.mkDerivation rec {
     ++ [ "--with-system-kpathsea" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core brotli ghostscript zlib freetype woff2 potrace xxHash ];
+  buildInputs = [ self.bin.core brotli ghostscript zlib freetype woff2 potrace xxHash ];
 
   enableParallelBuilding = true;
 };
@@ -371,10 +372,10 @@ dvipng = stdenv.mkDerivation {
   pname = "texlive-dvipng.bin";
   inherit version;
 
-  inherit (common) src;
+  inherit (self.bin.core) src;
 
   nativeBuildInputs = [ perl pkg-config makeWrapper ];
-  buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript ];
+  buildInputs = [ self.bin.core/*kpathsea*/ zlib libpng freetype gd ghostscript ];
 
   preConfigure = ''
     cd texk/dvipng
@@ -394,7 +395,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   inherit (src) version;
   format = "other";
 
-  src = assertFixedHash pname texlive.__pkgs.pygmentex.tex;
+  src = assertFixedHash pname self.__pkgs.pygmentex.tex;
 
   propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
@@ -430,15 +431,15 @@ inherit asymptote;
 
 inherit biber;
 inherit biber-ms;
-bibtexu = bibtex8;
+bibtexu = self.bin.bibtex8;
 bibtex8 = stdenv.mkDerivation {
   pname = "texlive-bibtex-x.bin";
   inherit version;
 
-  inherit (common) src;
+  inherit (self.bin.core) src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core/*kpathsea*/ icu ];
+  buildInputs = [ self.bin.core/*kpathsea*/ icu ];
 
   preConfigure = "cd texk/bibtex-x";
 
@@ -453,10 +454,10 @@ xdvi = stdenv.mkDerivation {
   pname = "texlive-xdvi.bin";
   inherit version;
 
-  inherit (common) src;
+  inherit (self.bin.core) src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core/*kpathsea*/ freetype ghostscript ]
+  buildInputs = [ self.bin.core/*kpathsea*/ freetype ghostscript ]
     ++ (with xorg; [ libX11 libXaw libXi libXpm libXmu libXaw libXext libXfixes ]);
 
   preConfigure = "cd texk/xdvik";
@@ -475,9 +476,9 @@ xdvi = stdenv.mkDerivation {
 
 xpdfopen = stdenv.mkDerivation {
   pname = "texlive-xpdfopen.bin";
-  inherit (texlive.__pkgs.xpdfopen) version;
+  inherit (self.__pkgs.xpdfopen) version;
 
-  inherit (common) src;
+  inherit (self.bin.core) src;
 
   buildInputs = [ libX11 ];
 
@@ -495,7 +496,7 @@ xindy = stdenv.mkDerivation {
   pname = "texlive-xindy.bin";
   inherit version;
 
-  inherit (common) src;
+  inherit (self.bin.core) src;
 
   # If unset, xindy will try to mkdir /homeless-shelter
   HOME = ".";
@@ -510,7 +511,7 @@ xindy = stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config perl
-    (texlive.__withPackages (ps: with ps; [ scheme-basic cyrillic ec ]))
+    (self.__withPackages (ps: with ps; [ scheme-basic cyrillic ec ]))
   ];
   buildInputs = [ clisp libiconv perl ];
 

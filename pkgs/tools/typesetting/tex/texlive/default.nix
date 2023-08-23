@@ -22,7 +22,7 @@ let
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
-    inherit useFixedHashes;
+    inherit self useFixedHashes;
   };
 
   tlpdb = import ./tlpdb.nix;
@@ -506,7 +506,7 @@ in
 
     bin = assert assertions; bin // {
       # for backward compatibility
-      latexindent = tl.latexindent;
+      latexindent = self.__pkgs.latexindent;
     };
 
     combine = assert assertions; combine;
