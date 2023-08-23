@@ -2588,6 +2588,8 @@ with pkgs;
 
   g810-led = callPackage ../misc/g810-led { };
 
+  gambatte = callPackage ../applications/emulators/gambatte { };
+
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
   gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
@@ -37807,8 +37809,6 @@ with pkgs;
   fsg = callPackage ../games/fsg { };
 
   galaxis = callPackage ../games/galaxis { };
-
-  gambatte = callPackage ../games/gambatte { };
 
   gambit-chess = callPackage ../games/gambit { };
 
