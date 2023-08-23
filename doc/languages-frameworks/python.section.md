@@ -287,8 +287,7 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.eggBuildHook {#python-pkgs-varPYTHON-setupHooks-eggBuildHook}
 
-`TODO`
-
+`eggBuildHook` to skip building for eggs.
 
 #### pkgs.${python}.setupHooks.eggInstallHook {#python-pkgs-varPYTHON-setupHooks-eggInstallHook}
 
@@ -806,7 +805,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 - `eggUnpackhook` to move an egg to the correct folder so it can be installed
   with the `eggInstallHook`
-- `eggBuildHook` to skip building for eggs.
 - `eggInstallHook` to install eggs.
 - `flitBuildHook` to build a wheel using `flit`.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
