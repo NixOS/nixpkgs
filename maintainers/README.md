@@ -4,7 +4,6 @@ Unlike other packaging ecosystems, the maintainer doesn't have exclusive
 control over the packages and modules they maintain. This more fluid approach
 is one reason why we scale to so many packages.
 
-
 ## Definition and role of the maintainer
 
 The main responsibility of a maintainer is to keep the packages they maintain
@@ -37,6 +36,9 @@ not.
 The inactivity measure is currently not strictly enforced. We would typically
 look at it if we notice that the author hasn't reacted to package-related
 notifications for more than 3 months.
+
+Removing the maintainer happens by making a PR on the package, adding that
+person as a reviewer, and then waiting a week for a reaction.
 
 The maintainer is welcome to come back at any time.
 
