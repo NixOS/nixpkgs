@@ -1,18 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub
-, nixosTests, postgresql, postgresqlTestHook }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script, nixosTests, postgresql
+, postgresqlTestHook }:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.12.0";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    hash = "sha256-syOLrw4ig8rmFDkxJ9KSAuzUVO8UokekV17mT1bJNNM=";
+    hash = "sha256-I8k3E/7RXJFIaEX1Zw6oFDT6UkQvZBZuyTxUZZQYr+s=";
   };
 
-  vendorHash = "sha256-nvGhKCUiyHSD0VpE4OtT9YQSHxv0d7iwOChCJl2D3zk=";
+  vendorHash = "sha256-H2wtGjGTzqN8OXAI2ksCBgTJsmJYLQu5aFu9OP03/DA=";
 
   subPackages = [
     # The server
@@ -31,10 +31,7 @@ buildGoModule rec {
     # "cmd/dendrite-demo-yggdrasil"
   ];
 
-  nativeCheckInputs = [
-    postgresqlTestHook
-    postgresql
-  ];
+  nativeCheckInputs = [ postgresqlTestHook postgresql ];
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
   preCheck = ''
@@ -44,14 +41,13 @@ buildGoModule rec {
     rm roomserver/internal/input/input_test.go
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) dendrite;
-  };
+  passthru.tests = { inherit (nixosTests) dendrite; };
 
   meta = with lib; {
     homepage = "https://matrix-org.github.io/dendrite";
     description = "A second-generation Matrix homeserver written in Go";
-    changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
+    changelog =
+      "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     platforms = platforms.unix;
