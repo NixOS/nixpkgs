@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Colorization of help messages in Click";
-    homepage    = "https://github.com/r-m-n/click-help-colors";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/click-contrib/click-help-colors";
+    changelog = "https://github.com/click-contrib/click-help-colors/blob/${version}/CHANGES.rst";
+    license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];
   };
 }
