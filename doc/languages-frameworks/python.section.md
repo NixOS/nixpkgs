@@ -295,7 +295,8 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.eggUnpackHook {#python-pkgs-varPYTHON-setupHooks-eggUnpackHook}
 
-`TODO`
+`eggUnpackhook` to move an egg to the correct folder so it can be installed
+  with the `eggInstallHook`
 
 #### pkgs.${python}.setupHooks.flitBuildHook {#python-pkgs-varPYTHON-setupHooks-flitBuildHook}
 
@@ -803,8 +804,6 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 
 #### Setup hooks {#setup-hooks}
 
-- `eggUnpackhook` to move an egg to the correct folder so it can be installed
-  with the `eggInstallHook`
 - `flitBuildHook` to build a wheel using `flit`.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
   (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
