@@ -1346,13 +1346,15 @@
       psutil-home-assistant
       sqlalchemy
       xmltodict
-    ]; # missing inputs: fritzconnection.optional-dependencies.qr
+    ]
+    ++ fritzconnection.optional-dependencies.qr;
     "fritzbox" = ps: with ps; [
       pyfritzhome
     ];
     "fritzbox_callmonitor" = ps: with ps; [
       fritzconnection
-    ]; # missing inputs: fritzconnection.optional-dependencies.qr
+    ]
+    ++ fritzconnection.optional-dependencies.qr;
     "fronius" = ps: with ps; [
       pyfronius
     ];
@@ -5032,7 +5034,9 @@
     "freebox"
     "freedns"
     "freedompro"
+    "fritz"
     "fritzbox"
+    "fritzbox_callmonitor"
     "fronius"
     "frontend"
     "frontier_silicon"

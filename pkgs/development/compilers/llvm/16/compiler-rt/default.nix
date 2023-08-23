@@ -32,9 +32,16 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  env.NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
-  ];
+  ] ++ lib.optionals (!haveLibc) [
+    # The compiler got stricter about this, and there is a usellvm patch below
+    # which patches out the assert include causing an implicit definition of
+    # assert. It would be nicer to understand why compiler-rt thinks it should
+    # be able to #include <assert.h> in the first place; perhaps it's in the
+    # wrong, or perhaps there is a way to provide an assert.h.
+    "-Wno-error=implicit-function-declaration"
+  ]);
 
   cmakeFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
@@ -102,7 +109,7 @@ stdenv.mkDerivation {
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
-  '' + lib.optionalString (useLLVM) ''
+  '' + lib.optionalString (useLLVM && !haveLibc) ''
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
     substituteInPlace lib/builtins/clear_cache.c \
@@ -117,6 +124,12 @@ stdenv.mkDerivation {
   '' + lib.optionalString (useLLVM) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
+    # Note the history of crt{begin,end}S in previous versions of llvm in nixpkg:
+    # The presence of crtbegin_shared has been added and removed; it's possible
+    # people have added/removed it to get it working on their platforms.
+    # Try each in turn for now.
+    ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbeginS.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtendS.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '' + lib.optionalString doFakeLibgcc ''
