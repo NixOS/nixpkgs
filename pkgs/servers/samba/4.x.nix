@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     export PYTHONHASHSEED=1
   '';
 
-  wafConfigureFlags = [
+  configureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
     "--enable-fhs"

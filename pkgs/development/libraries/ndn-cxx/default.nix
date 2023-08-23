@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost179 openssl sqlite ];
 
-  wafConfigureFlags = [
+  configureFlags = [
     "--with-openssl=${openssl.dev}"
     "--boost-includes=${boost179.dev}/include"
     "--boost-libs=${boost179.out}/lib"

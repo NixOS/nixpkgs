@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
     vamp-plugin-sdk
   ] ++ lib.optionals videoSupport [ harvid xjadeo ];
 
-  wafConfigureFlags = [
+  configureFlags = [
     "--cxx11"
     "--docs"
     "--freedesktop"

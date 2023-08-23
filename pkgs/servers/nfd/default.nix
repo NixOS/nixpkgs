@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config sphinx waf.hook ];
   buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
-  wafConfigureFlags = [
+  configureFlags = [
     "--boost-includes=${boost179.dev}/include"
     "--boost-libs=${boost179.out}/lib"
     "--with-tests"
