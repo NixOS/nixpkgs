@@ -363,7 +363,8 @@ are used in `buildPythonPackage`.
 
 #### pkgs.${python}.setupHooks.wheelUnpackHook {#python-pkgs-varPYTHON-setupHooks-wheelUnpackHook}
 
-`TODO`
+`wheelUnpackHook` to move a wheel to the correct folder so it can be installed
+  with the `pipInstallHook`.
 
 #### pkgs.${python}.sitePackages {#python-pkgs-varPYTHON-sitePackages}
 
@@ -812,11 +813,6 @@ need them, you have to use `python.buildEnv`.
 
 Python 2 namespace packages may provide `__init__.py` that collide. In that case
 `python.buildEnv` should be used with `ignoreCollisions = true`.
-
-#### Setup hooks {#setup-hooks}
-
-- `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
-  with the `pipInstallHook`.
 
 ### Development mode {#development-mode}
 
