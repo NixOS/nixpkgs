@@ -7343,12 +7343,12 @@ final: prev:
 
   nvim-scrollview = buildVimPluginFrom2Nix {
     pname = "nvim-scrollview";
-    version = "2023-08-17";
+    version = "2023-08-23";
     src = fetchFromGitHub {
       owner = "dstein64";
       repo = "nvim-scrollview";
-      rev = "f826e74d6c20f535a7fa6a94308eacb99c07aba8";
-      sha256 = "1kais5iqm4s4i6mwl02rn2ji1c58ni25fq4w0jd9n9cf2w7n8bch";
+      rev = "d2764f4d56e1a6a059dfe52e082e3a74b54dc8e5";
+      sha256 = "150qps936nk1g3xka7blvz56pdnnswj2v5a5qzd8ppa818pq2zgn";
     };
     meta.homepage = "https://github.com/dstein64/nvim-scrollview/";
   };
@@ -7911,8 +7911,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "stevearc";
       repo = "overseer.nvim";
-      rev = "59de79fb80f759d8909b084906d579b4f58805f4";
-      sha256 = "1hrqwf116v76gmaf7xn2rsxri0aiy0pnbap513rl5xf16sd7anxm";
+      rev = "2f4b05b553867259bfcf19d8631af4d9318a561f";
+      sha256 = "1r7fi1c1i9lqxknh1bgprj748k810fpkklgf0klfc95bzzjc4njp";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/stevearc/overseer.nvim/";
@@ -10339,18 +10339,6 @@ final: prev:
     meta.homepage = "https://github.com/konfekt/vim-DetectSpellLang/";
   };
 
-  vim-figlet = buildVimPluginFrom2Nix {
-    pname = "vim-figlet";
-    version = "2022-12-08";
-    src = fetchFromGitHub {
-      owner = "fadein";
-      repo = "vim-figlet";
-      rev = "f3141c1961e8c991cdc5ee5d9c070727d6013648";
-      sha256 = "0h4lavkg57q7cwsrlj36q2624sm7n7k6n70pl47vbwyl7d0cbga8";
-    };
-    meta.homepage = "https://github.com/fadein/vim-figlet/";
-  };
-
   vim-LanguageTool = buildVimPluginFrom2Nix {
     pname = "vim-LanguageTool";
     version = "2021-02-08";
@@ -11777,6 +11765,18 @@ final: prev:
       sha256 = "1mcn4a7n1318sgi3dd062sh1sy2b8sa4inwklcz2gh095lr9i323";
     };
     meta.homepage = "https://github.com/wsdjeg/vim-fetch/";
+  };
+
+  vim-figlet = buildVimPluginFrom2Nix {
+    pname = "vim-figlet";
+    version = "2022-12-08";
+    src = fetchFromGitHub {
+      owner = "fadein";
+      repo = "vim-figlet";
+      rev = "f3141c1961e8c991cdc5ee5d9c070727d6013648";
+      sha256 = "0h4lavkg57q7cwsrlj36q2624sm7n7k6n70pl47vbwyl7d0cbga8";
+    };
+    meta.homepage = "https://github.com/fadein/vim-figlet/";
   };
 
   vim-fireplace = buildVimPluginFrom2Nix {
