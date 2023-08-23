@@ -1,7 +1,5 @@
-diff --git C/7zVersion.rc C/7zVersion.rc
-index 6ed26de7445..675e9bb0321 100755
---- C/7zVersion.rc
-+++ C/7zVersion.rc
+--- a/C/7zVersion.rc
++++ b/C/7zVersion.rc
 @@ -5,7 +5,7 @@
  #define MY_VFT_APP  0x00000001L
  #define MY_VFT_DLL  0x00000002L
@@ -11,200 +9,52 @@ index 6ed26de7445..675e9bb0321 100755
  
  #ifndef MY_VERSION
  #include "7zVersion.h"
-diff --git C/7zip_gcc_c.mak C/7zip_gcc_c.mak
-index d41810478db..43cdd51271e 100755
---- C/7zip_gcc_c.mak
-+++ C/7zip_gcc_c.mak
-@@ -93,7 +93,7 @@ DEL_OBJ_EXE = -$(RM) $(O)\*.o $(O)\$(PROG).exe $(O)\$(PROG).dll
+--- a/C/7zip_gcc_c.mak
++++ b/C/7zip_gcc_c.mak
+@@ -106,7 +106,7 @@
  endif
  
  
--LIB2 = -lOle32 -loleaut32 -luuid -ladvapi32 -lUser32
-+LIB2 = -lole32 -loleaut32 -luuid -ladvapi32 -luser32
+-LIB2 = -lOle32 -loleaut32 -luuid -ladvapi32 -lUser32 -lShell32
++LIB2 = -lole32 -loleaut32 -luuid -ladvapi32 -luser32 -lshell32
  
- CXXFLAGS_EXTRA = -DUNICODE -D_UNICODE
+ CFLAGS_EXTRA = -DUNICODE -D_UNICODE
  # -Wno-delete-non-virtual-dtor
-diff --git C/Alloc.c C/Alloc.c
-index 142a1ea2219..0d0107c56f4 100755
---- C/Alloc.c
-+++ C/Alloc.c
-@@ -6,7 +6,7 @@
- #include <stdio.h>
- 
- #ifdef _WIN32
--#include <Windows.h>
-+#include <windows.h>
- #endif
- #include <stdlib.h>
- 
-diff --git C/CpuArch.c C/CpuArch.c
-index a0e93e8b08e..36e0be0b1c8 100755
---- C/CpuArch.c
-+++ C/CpuArch.c
-@@ -217,7 +217,7 @@ BoolInt CPU_Is_InOrder()
- }
- 
- #if !defined(MY_CPU_AMD64) && defined(_WIN32)
--#include <Windows.h>
-+#include <windows.h>
- static BoolInt CPU_Sys_Is_SSE_Supported()
- {
-   OSVERSIONINFO vi;
-@@ -275,7 +275,7 @@ BoolInt CPU_IsSupported_SHA()
- // #include <stdio.h>
- 
- #ifdef _WIN32
--#include <Windows.h>
-+#include <windows.h>
- #endif
- 
- BoolInt CPU_IsSupported_AVX2()
-@@ -351,7 +351,7 @@ BoolInt CPU_IsSupported_PageGB()
- 
- #ifdef _WIN32
- 
--#include <Windows.h>
-+#include <windows.h>
- 
- BoolInt CPU_IsSupported_CRC32()  { return IsProcessorFeaturePresent(PF_ARM_V8_CRC32_INSTRUCTIONS_AVAILABLE) ? 1 : 0; }
- BoolInt CPU_IsSupported_CRYPTO() { return IsProcessorFeaturePresent(PF_ARM_V8_CRYPTO_INSTRUCTIONS_AVAILABLE) ? 1 : 0; }
-diff --git C/DllSecur.c C/DllSecur.c
-index a37c1b3e2c5..16755bba930 100755
---- C/DllSecur.c
-+++ C/DllSecur.c
-@@ -5,7 +5,7 @@
- 
- #ifdef _WIN32
- 
--#include <Windows.h>
-+#include <windows.h>
- 
- #include "DllSecur.h"
- 
-diff --git C/Threads.h C/Threads.h
-index e9493afff62..71972558d48 100755
---- C/Threads.h
-+++ C/Threads.h
-@@ -5,7 +5,7 @@
- #define __7Z_THREADS_H
- 
- #ifdef _WIN32
--#include <Windows.h>
-+#include <windows.h>
- #else
- 
- #if defined(__linux__)
-diff --git C/Util/7zipInstall/7zipInstall.c C/Util/7zipInstall/7zipInstall.c
-index 2c498bb4392..d791bc4181c 100755
---- C/Util/7zipInstall/7zipInstall.c
-+++ C/Util/7zipInstall/7zipInstall.c
-@@ -10,7 +10,7 @@
- #endif
- 
- #include <windows.h>
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- #include "../../7z.h"
- #include "../../7zAlloc.h"
-diff --git C/Util/7zipInstall/resource.rc C/Util/7zipInstall/resource.rc
-index 4d6a91feda1..c19f601f69f 100755
---- C/Util/7zipInstall/resource.rc
-+++ C/Util/7zipInstall/resource.rc
-@@ -1,6 +1,6 @@
- #include <winnt.h>
- #include <WinUser.h>
--#include <CommCtrl.h>
-+#include <commctrl.h>
- 
- #define USE_COPYRIGHT_CR
- #include "../../7zVersion.rc"
-diff --git C/Util/7zipUninstall/7zipUninstall.c C/Util/7zipUninstall/7zipUninstall.c
-index 89cd764dbe9..32ece1c6c14 100755
---- C/Util/7zipUninstall/7zipUninstall.c
-+++ C/Util/7zipUninstall/7zipUninstall.c
-@@ -11,7 +11,7 @@
- // #define SZ_ERROR_ABORT 100
- 
- #include <windows.h>
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- #include "../../7zVersion.h"
- 
-diff --git C/Util/7zipUninstall/resource.rc C/Util/7zipUninstall/resource.rc
-index 506e0665cdd..ae1dfedc83b 100755
---- C/Util/7zipUninstall/resource.rc
-+++ C/Util/7zipUninstall/resource.rc
-@@ -1,6 +1,6 @@
- #include <winnt.h>
- #include <WinUser.h>
--#include <CommCtrl.h>
-+#include <commctrl.h>
- 
- #define USE_COPYRIGHT_CR
- #include "../../7zVersion.rc"
-diff --git CPP/7zip/7zip_gcc.mak CPP/7zip/7zip_gcc.mak
-index 2a24e06aa1f..fb32b933201 100755
---- CPP/7zip/7zip_gcc.mak
-+++ CPP/7zip/7zip_gcc.mak
-@@ -113,8 +113,8 @@ MY_MKDIR=mkdir
+--- a/CPP/7zip/7zip_gcc.mak
++++ b/CPP/7zip/7zip_gcc.mak
+@@ -124,8 +124,8 @@
  DEL_OBJ_EXE = -$(RM) $(O)\*.o $(O)\$(PROG).exe $(O)\$(PROG).dll
  endif
  
--LIB2_GUI = -lOle32 -lGdi32 -lComctl32 -lComdlg32 $(LIB_HTMLHELP)
+-LIB2_GUI = -lOle32 -lGdi32 -lComctl32 -lComdlg32 -lShell32 $(LIB_HTMLHELP)
 -LIB2 = -loleaut32 -luuid -ladvapi32 -lUser32 $(LIB2_GUI)
-+LIB2_GUI = -lole32 -lgdi32 -lcomctl32 -lcomdlg32 $(LIB_HTMLHELP)
++LIB2_GUI = -lole32 -lgdi32 -lcomctl32 -lcomdlg32 -lshell32 $(LIB_HTMLHELP)
 +LIB2 = -loleaut32 -luuid -ladvapi32 -luser32 $(LIB2_GUI)
  
  CXXFLAGS_EXTRA = -DUNICODE -D_UNICODE
  # -Wno-delete-non-virtual-dtor
-diff --git CPP/7zip/Bundles/Fm/StdAfx.h CPP/7zip/Bundles/Fm/StdAfx.h
-index c15e07939da..d1e094cc339 100755
---- CPP/7zip/Bundles/Fm/StdAfx.h
-+++ CPP/7zip/Bundles/Fm/StdAfx.h
-@@ -9,8 +9,8 @@
- 
- #include "../../../Common/Common.h"
- 
+--- a/C/Util/7zipInstall/resource.rc
++++ b/C/Util/7zipInstall/resource.rc
+@@ -1,6 +1,6 @@
+ #include <winnt.h>
+ #include <WinUser.h>
 -#include <CommCtrl.h>
--#include <ShlObj.h>
--#include <Shlwapi.h>
 +#include <commctrl.h>
-+#include <shlobj.h>
-+#include <shlwapi.h>
  
- #endif
-diff --git CPP/7zip/Bundles/SFXWin/SfxWin.cpp CPP/7zip/Bundles/SFXWin/SfxWin.cpp
-index cf3bad389a0..260484c11e4 100755
---- CPP/7zip/Bundles/SFXWin/SfxWin.cpp
-+++ CPP/7zip/Bundles/SFXWin/SfxWin.cpp
-@@ -4,7 +4,7 @@
+ #define USE_COPYRIGHT_CR
+ #include "../../7zVersion.rc"
+--- a/C/Util/7zipUninstall/resource.rc
++++ b/C/Util/7zipUninstall/resource.rc
+@@ -1,6 +1,6 @@
+ #include <winnt.h>
+ #include <WinUser.h>
+-#include <CommCtrl.h>
++#include <commctrl.h>
  
- #include "../../../Common/MyWindows.h"
- 
--#include <Shlwapi.h>
-+#include <shlwapi.h>
- 
- #include "../../../Common/MyInitGuid.h"
- 
-diff --git CPP/7zip/Bundles/SFXWin/StdAfx.h CPP/7zip/Bundles/SFXWin/StdAfx.h
-index f263ecb77c5..e96640e995c 100755
---- CPP/7zip/Bundles/SFXWin/StdAfx.h
-+++ CPP/7zip/Bundles/SFXWin/StdAfx.h
-@@ -6,7 +6,7 @@
- #include "../../../Common/Common.h"
- 
- #include <commctrl.h>
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- // #define printf(x) NO_PRINTF_(x)
- // #define sprintf(x) NO_SPRINTF_(x)
-diff --git CPP/7zip/Crypto/RandGen.cpp CPP/7zip/Crypto/RandGen.cpp
-index c123109a15b..c3709ccff6b 100755
---- CPP/7zip/Crypto/RandGen.cpp
-+++ CPP/7zip/Crypto/RandGen.cpp
+ #define USE_COPYRIGHT_CR
+ #include "../../7zVersion.rc"
+--- a/CPP/7zip/Crypto/RandGen.cpp
++++ b/CPP/7zip/Crypto/RandGen.cpp
 @@ -19,7 +19,7 @@
  
  #ifdef USE_STATIC_RtlGenRandom
@@ -214,10 +64,8 @@ index c123109a15b..c3709ccff6b 100755
  
  EXTERN_C_BEGIN
  #ifndef RtlGenRandom
-diff --git CPP/7zip/GuiCommon.rc CPP/7zip/GuiCommon.rc
-index 565ee702ef9..13043ef4c53 100755
---- CPP/7zip/GuiCommon.rc
-+++ CPP/7zip/GuiCommon.rc
+--- a/CPP/7zip/GuiCommon.rc
++++ b/CPP/7zip/GuiCommon.rc
 @@ -4,7 +4,7 @@
  // #include <WinUser.h>
  
@@ -227,186 +75,8 @@ index 565ee702ef9..13043ef4c53 100755
  
  
  LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
-diff --git CPP/7zip/MyVersionInfo.rc CPP/7zip/MyVersionInfo.rc
-index eddf8935c84..90e65376be8 100755
---- CPP/7zip/MyVersionInfo.rc
-+++ CPP/7zip/MyVersionInfo.rc
-@@ -1,2 +1,2 @@
- #include "MyVersion.h"
--#include "..\..\C\7zVersion.rc"
-+#include "../../C/7zVersion.rc"
-diff --git CPP/7zip/UI/Common/Update.cpp CPP/7zip/UI/Common/Update.cpp
-index 5490ff445a0..003ee6634ea 100755
---- CPP/7zip/UI/Common/Update.cpp
-+++ CPP/7zip/UI/Common/Update.cpp
-@@ -1163,7 +1163,7 @@ static HRESULT EnumerateInArchiveItems(
- 
- #if defined(_WIN32) && !defined(UNDER_CE)
- 
--#include <MAPI.h>
-+#include <mapi.h>
- 
- #endif
- 
-diff --git CPP/7zip/UI/Console/Main.cpp CPP/7zip/UI/Console/Main.cpp
-index 363572cd3dd..765f55293a7 100755
---- CPP/7zip/UI/Console/Main.cpp
-+++ CPP/7zip/UI/Console/Main.cpp
-@@ -5,7 +5,7 @@
- #include "../../../Common/MyWindows.h"
- 
- #ifdef _WIN32
--#include <Psapi.h>
-+#include <psapi.h>
- #else
- #include <unistd.h>
- #include <sys/ioctl.h>
-diff --git CPP/7zip/UI/Explorer/ContextMenu.h CPP/7zip/UI/Explorer/ContextMenu.h
-index e60ffccf11b..aea34e7de07 100755
---- CPP/7zip/UI/Explorer/ContextMenu.h
-+++ CPP/7zip/UI/Explorer/ContextMenu.h
-@@ -5,7 +5,7 @@
- 
- #include "../../../Common/MyWindows.h"
- 
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- #include "MyExplorerCommand.h"
- 
-diff --git CPP/7zip/UI/Explorer/DllExportsExplorer.cpp CPP/7zip/UI/Explorer/DllExportsExplorer.cpp
-index 84c92e2e2d3..df126d8d232 100755
---- CPP/7zip/UI/Explorer/DllExportsExplorer.cpp
-+++ CPP/7zip/UI/Explorer/DllExportsExplorer.cpp
-@@ -11,7 +11,7 @@
- #include "../../../Common/MyWindows.h"
- // #include "../../../Common/IntToString.h"
- 
--#include <OleCtl.h>
-+#include <olectl.h>
- 
- #include "../../../Common/MyInitGuid.h"
- 
-diff --git CPP/7zip/UI/Explorer/MyExplorerCommand.h CPP/7zip/UI/Explorer/MyExplorerCommand.h
-index b1997f0da6e..d1d038df11b 100755
---- CPP/7zip/UI/Explorer/MyExplorerCommand.h
-+++ CPP/7zip/UI/Explorer/MyExplorerCommand.h
-@@ -17,7 +17,7 @@
-     ShObjIdl.h      : old Windows SDK
-     ShObjIdl_core.h : new Windows 10 SDK */
- 
--#include <ShObjIdl.h>
-+#include <shobjidl.h>
- 
- #ifndef __IShellItem_INTERFACE_DEFINED__
- #define __IShellItem_INTERFACE_DEFINED__
-diff --git CPP/7zip/UI/Explorer/StdAfx.h CPP/7zip/UI/Explorer/StdAfx.h
-index 35e8b337d68..16883ceda1b 100755
---- CPP/7zip/UI/Explorer/StdAfx.h
-+++ CPP/7zip/UI/Explorer/StdAfx.h
-@@ -9,6 +9,6 @@
- 
- #include "../../../Common/Common.h"
- 
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- #endif
-diff --git CPP/7zip/UI/FileManager/BrowseDialog.cpp CPP/7zip/UI/FileManager/BrowseDialog.cpp
-index e43172385b6..286faeeb660 100755
---- CPP/7zip/UI/FileManager/BrowseDialog.cpp
-+++ CPP/7zip/UI/FileManager/BrowseDialog.cpp
-@@ -4,7 +4,7 @@
- 
- #include "../../../Common/MyWindows.h"
- 
--#include <CommCtrl.h>
-+#include <commctrl.h>
- 
- #ifndef UNDER_CE
- #include "../../../Windows/CommonDialog.h"
-diff --git CPP/7zip/UI/FileManager/FM.cpp CPP/7zip/UI/FileManager/FM.cpp
-index b0b3715c9a5..14af8c32288 100755
---- CPP/7zip/UI/FileManager/FM.cpp
-+++ CPP/7zip/UI/FileManager/FM.cpp
-@@ -4,7 +4,7 @@
- 
- #include "../../../Common/MyWindows.h"
- 
--#include <Shlwapi.h>
-+#include <shlwapi.h>
- 
- #include "../../../../C/Alloc.h"
- #ifdef _WIN32
-diff --git CPP/7zip/UI/FileManager/FSFolderCopy.cpp CPP/7zip/UI/FileManager/FSFolderCopy.cpp
-index b0e1146816d..16208e58f6b 100755
---- CPP/7zip/UI/FileManager/FSFolderCopy.cpp
-+++ CPP/7zip/UI/FileManager/FSFolderCopy.cpp
-@@ -4,7 +4,7 @@
- 
- #include "../../../Common/MyWindows.h"
- 
--#include <WinBase.h>
-+#include <winbase.h>
- 
- #include "../../../Common/Defs.h"
- #include "../../../Common/StringConvert.h"
-diff --git CPP/7zip/UI/FileManager/HelpUtils.cpp CPP/7zip/UI/FileManager/HelpUtils.cpp
-index 94253a70f5c..3f4479dbddd 100755
---- CPP/7zip/UI/FileManager/HelpUtils.cpp
-+++ CPP/7zip/UI/FileManager/HelpUtils.cpp
-@@ -24,7 +24,7 @@ void ShowHelpWindow(LPCSTR)
- #include "../../../Windows/FileName.h"
- 
- #else
--#include <HtmlHelp.h>
-+#include <htmlhelp.h>
- #endif
- 
- #include "../../../Common/StringConvert.h"
-diff --git CPP/7zip/UI/FileManager/MyWindowsNew.h CPP/7zip/UI/FileManager/MyWindowsNew.h
-index c0fe8439b98..ba7d608b90e 100755
---- CPP/7zip/UI/FileManager/MyWindowsNew.h
-+++ CPP/7zip/UI/FileManager/MyWindowsNew.h
-@@ -5,7 +5,7 @@
- 
- #ifdef _MSC_VER
- 
--#include <ShObjIdl.h>
-+#include <shobjidl.h>
- 
- #ifndef __ITaskbarList3_INTERFACE_DEFINED__
- #define __ITaskbarList3_INTERFACE_DEFINED__
-diff --git CPP/7zip/UI/FileManager/Panel.cpp CPP/7zip/UI/FileManager/Panel.cpp
-index f7162e502ac..2eaf9e1266b 100755
---- CPP/7zip/UI/FileManager/Panel.cpp
-+++ CPP/7zip/UI/FileManager/Panel.cpp
-@@ -2,7 +2,7 @@
- 
- #include "StdAfx.h"
- 
--#include <WindowsX.h>
-+#include <windowsx.h>
- // #include <stdio.h>
- 
- #include "../../../Common/IntToString.h"
-diff --git CPP/7zip/UI/FileManager/Panel.h CPP/7zip/UI/FileManager/Panel.h
-index 5a9fef01de2..1f2b86a8e43 100755
---- CPP/7zip/UI/FileManager/Panel.h
-+++ CPP/7zip/UI/FileManager/Panel.h
-@@ -5,7 +5,7 @@
- 
- #include "../../../Common/MyWindows.h"
- 
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- #include "../../../../C/Alloc.h"
- 
-diff --git CPP/7zip/UI/FileManager/PanelItemOpen.cpp CPP/7zip/UI/FileManager/PanelItemOpen.cpp
-index 6af42c96923..595acdbb563 100755
---- CPP/7zip/UI/FileManager/PanelItemOpen.cpp
-+++ CPP/7zip/UI/FileManager/PanelItemOpen.cpp
+--- a/CPP/7zip/UI/FileManager/PanelItemOpen.cpp
++++ b/CPP/7zip/UI/FileManager/PanelItemOpen.cpp
 @@ -4,7 +4,7 @@
  
  #include "../../../Common/MyWindows.h"
@@ -416,52 +86,8 @@ index 6af42c96923..595acdbb563 100755
  
  #include "../../../Common/IntToString.h"
  
-diff --git CPP/7zip/UI/FileManager/RootFolder.cpp CPP/7zip/UI/FileManager/RootFolder.cpp
-index 6984434026f..d50c1eb832e 100755
---- CPP/7zip/UI/FileManager/RootFolder.cpp
-+++ CPP/7zip/UI/FileManager/RootFolder.cpp
-@@ -4,7 +4,7 @@
- 
- #include "../../../Common/MyWindows.h"
- 
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- #include "../../../Common/StringConvert.h"
- 
-diff --git CPP/7zip/UI/FileManager/StdAfx.h CPP/7zip/UI/FileManager/StdAfx.h
-index 74cfbc6deef..88960aa8c58 100755
---- CPP/7zip/UI/FileManager/StdAfx.h
-+++ CPP/7zip/UI/FileManager/StdAfx.h
-@@ -14,8 +14,8 @@
- 
- // #include "../../../Common/MyWindows.h"
- 
--// #include <CommCtrl.h>
--// #include <ShlObj.h>
--// #include <Shlwapi.h>
-+// #include <commctrl.h>
-+// #include <shlobj.h>
-+// #include <shlwapi.h>
- 
- #endif
-diff --git CPP/7zip/UI/FileManager/SysIconUtils.cpp CPP/7zip/UI/FileManager/SysIconUtils.cpp
-index 43c613244a8..1cdf1d4c5b3 100755
---- CPP/7zip/UI/FileManager/SysIconUtils.cpp
-+++ CPP/7zip/UI/FileManager/SysIconUtils.cpp
-@@ -10,7 +10,7 @@
- 
- #include "SysIconUtils.h"
- 
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- #define MY_CAST_FUNC  (void(*)())
- // #define MY_CAST_FUNC
-diff --git CPP/7zip/UI/FileManager/SysIconUtils.h CPP/7zip/UI/FileManager/SysIconUtils.h
-index ba747d9ded0..2eedc4be403 100755
---- CPP/7zip/UI/FileManager/SysIconUtils.h
-+++ CPP/7zip/UI/FileManager/SysIconUtils.h
+--- a/CPP/7zip/UI/FileManager/SysIconUtils.h
++++ b/CPP/7zip/UI/FileManager/SysIconUtils.h
 @@ -5,7 +5,7 @@
  
  #include "../../../Common/MyWindows.h"
@@ -471,79 +97,8 @@ index ba747d9ded0..2eedc4be403 100755
  
  #include "../../../Common/MyString.h"
  
-diff --git CPP/7zip/UI/FileManager/SystemPage.cpp CPP/7zip/UI/FileManager/SystemPage.cpp
-index ff68172e2bf..06025259c85 100755
---- CPP/7zip/UI/FileManager/SystemPage.cpp
-+++ CPP/7zip/UI/FileManager/SystemPage.cpp
-@@ -4,7 +4,7 @@
- 
- #include "../../../Common/MyWindows.h"
- 
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- #include "../../../Common/Defs.h"
- #include "../../../Common/StringConvert.h"
-diff --git CPP/7zip/UI/GUI/GUI.cpp CPP/7zip/UI/GUI/GUI.cpp
-index 0cc2ee3afcc..4ffc2384668 100755
---- CPP/7zip/UI/GUI/GUI.cpp
-+++ CPP/7zip/UI/GUI/GUI.cpp
-@@ -8,7 +8,7 @@
- 
- #include "../../../Common/MyWindows.h"
- 
--#include <Shlwapi.h>
-+#include <shlwapi.h>
- 
- #include "../../../Common/MyInitGuid.h"
- 
-diff --git CPP/7zip/UI/GUI/StdAfx.h CPP/7zip/UI/GUI/StdAfx.h
-index 498b2fcbe4b..3c830f6a3d4 100755
---- CPP/7zip/UI/GUI/StdAfx.h
-+++ CPP/7zip/UI/GUI/StdAfx.h
-@@ -11,9 +11,9 @@
- 
- // #include "../../../Common/MyWindows.h"
- 
--// #include <CommCtrl.h>
--// #include <ShlObj.h>
--// #include <Shlwapi.h>
-+// #include <commctrl.h>
-+// #include <shlobj.h>
-+// #include <shlwapi.h>
- 
- // #define printf(x) NO_PRINTF_(x)
- // #define sprintf(x) NO_SPRINTF_(x)
-diff --git CPP/Common/MyInitGuid.h CPP/Common/MyInitGuid.h
-index 6895097371a..6b2f3f35d5a 100755
---- CPP/Common/MyInitGuid.h
-+++ CPP/Common/MyInitGuid.h
-@@ -29,7 +29,7 @@ Also we need IID_IUnknown that is initialized in some file for linking:
- #include <basetyps.h>
- #endif
- 
--#include <InitGuid.h>
-+#include <initguid.h>
- 
- #ifdef UNDER_CE
- DEFINE_GUID(IID_IUnknown,
-diff --git CPP/Common/MyWindows.h CPP/Common/MyWindows.h
-index 69eed8f6446..f48680f9d05 100755
---- CPP/Common/MyWindows.h
-+++ CPP/Common/MyWindows.h
-@@ -5,7 +5,7 @@
- 
- #ifdef _WIN32
- 
--#include <Windows.h>
-+#include <windows.h>
- 
- #ifdef UNDER_CE
-   #undef VARIANT_TRUE
-diff --git CPP/Windows/Control/ComboBox.h CPP/Windows/Control/ComboBox.h
-index 8ab9ce5027d..8b12599b785 100755
---- CPP/Windows/Control/ComboBox.h
-+++ CPP/Windows/Control/ComboBox.h
+--- a/CPP/Windows/Control/ComboBox.h
++++ b/CPP/Windows/Control/ComboBox.h
 @@ -5,7 +5,7 @@
  
  #include "../../Common/MyWindows.h"
@@ -553,10 +108,8 @@ index 8ab9ce5027d..8b12599b785 100755
  
  #include "../Window.h"
  
-diff --git CPP/Windows/Control/ImageList.h CPP/Windows/Control/ImageList.h
-index e59443058b8..f72ea0d1990 100755
---- CPP/Windows/Control/ImageList.h
-+++ CPP/Windows/Control/ImageList.h
+--- a/CPP/Windows/Control/ImageList.h
++++ b/CPP/Windows/Control/ImageList.h
 @@ -3,7 +3,7 @@
  #ifndef __WINDOWS_CONTROL_IMAGE_LIST_H
  #define __WINDOWS_CONTROL_IMAGE_LIST_H
@@ -566,10 +119,8 @@ index e59443058b8..f72ea0d1990 100755
  
  #include "../Defs.h"
  
-diff --git CPP/Windows/Control/ListView.h CPP/Windows/Control/ListView.h
-index 56e1100c726..cbd9cd1e21d 100755
---- CPP/Windows/Control/ListView.h
-+++ CPP/Windows/Control/ListView.h
+--- a/CPP/Windows/Control/ListView.h
++++ b/CPP/Windows/Control/ListView.h
 @@ -5,7 +5,7 @@
  
  #include "../../Common/MyWindows.h"
@@ -579,10 +130,8 @@ index 56e1100c726..cbd9cd1e21d 100755
  
  #include "../Window.h"
  
-diff --git CPP/Windows/Control/ProgressBar.h CPP/Windows/Control/ProgressBar.h
-index 741315dd4dd..f18d89c14f0 100755
---- CPP/Windows/Control/ProgressBar.h
-+++ CPP/Windows/Control/ProgressBar.h
+--- a/CPP/Windows/Control/ProgressBar.h
++++ b/CPP/Windows/Control/ProgressBar.h
 @@ -5,7 +5,7 @@
  
  #include "../../Common/MyWindows.h"
@@ -592,49 +141,8 @@ index 741315dd4dd..f18d89c14f0 100755
  
  #include "../Window.h"
  
-diff --git CPP/Windows/Control/PropertyPage.h CPP/Windows/Control/PropertyPage.h
-index 97c87b3b453..551c95994c2 100755
---- CPP/Windows/Control/PropertyPage.h
-+++ CPP/Windows/Control/PropertyPage.h
-@@ -5,7 +5,7 @@
- 
- #include "../../Common/MyWindows.h"
- 
--#include <PrSht.h>
-+#include <prsht.h>
- 
- #include "Dialog.h"
- 
-diff --git CPP/Windows/FileIO.h CPP/Windows/FileIO.h
-index 9146491d236..e11022f82d4 100755
---- CPP/Windows/FileIO.h
-+++ CPP/Windows/FileIO.h
-@@ -17,7 +17,7 @@
- #ifdef _WIN32
- 
- #if defined(_WIN32) && !defined(UNDER_CE)
--#include <WinIoCtl.h>
-+#include <winioctl.h>
- #endif
- 
- #else
-diff --git CPP/Windows/ProcessUtils.h CPP/Windows/ProcessUtils.h
-index 64ebe3775e4..de46c6f52a5 100755
---- CPP/Windows/ProcessUtils.h
-+++ CPP/Windows/ProcessUtils.h
-@@ -3,7 +3,7 @@
- #ifndef __WINDOWS_PROCESS_UTILS_H
- #define __WINDOWS_PROCESS_UTILS_H
- 
--#include <Psapi.h>
-+#include <psapi.h>
- 
- #include "../Common/MyString.h"
- 
-diff --git CPP/Windows/SecurityUtils.h CPP/Windows/SecurityUtils.h
-index de62035ec86..18a083fc580 100755
---- CPP/Windows/SecurityUtils.h
-+++ CPP/Windows/SecurityUtils.h
+--- a/CPP/Windows/SecurityUtils.h
++++ b/CPP/Windows/SecurityUtils.h
 @@ -3,7 +3,7 @@
  #ifndef __WINDOWS_SECURITY_UTILS_H
  #define __WINDOWS_SECURITY_UTILS_H
@@ -643,17 +151,4 @@ index de62035ec86..18a083fc580 100755
 +#include <ntsecapi.h>
  
  #include "Defs.h"
- 
-diff --git CPP/Windows/Shell.h CPP/Windows/Shell.h
-index 30388bc5a70..dc3daa5e60b 100755
---- CPP/Windows/Shell.h
-+++ CPP/Windows/Shell.h
-@@ -4,7 +4,7 @@
- #define __WINDOWS_SHELL_H
- 
- #include "../Common/MyWindows.h"
--#include <ShlObj.h>
-+#include <shlobj.h>
- 
- #include "../Common/MyString.h"
  

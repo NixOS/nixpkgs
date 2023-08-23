@@ -28,13 +28,13 @@
     "vendorHash": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk="
   },
   "aiven": {
-    "hash": "sha256-T9d1iMuFqewDVK4EOsF4uCsqZAsThMHaRa7ilGnYXCo=",
+    "hash": "sha256-Nm5flY+BN9PpQY+4LyohFwDfdEPxfVpT/rkfn8aLQyI=",
     "homepage": "https://registry.terraform.io/providers/aiven/aiven",
     "owner": "aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v4.7.0",
+    "rev": "v4.8.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-Fcu4RWgbVyAUr72h8q91HT+LbUh9+4SPDz8Vc4/u5RM="
+    "vendorHash": "sha256-eScN0by/rnCf4+p4g3yhz2kJRyfFyqlVi+0MJXPdzKw="
   },
   "akamai": {
     "hash": "sha256-LGgZF2/YCYpoDOSu0UeuPqK9wGXrvPQE4WUGGS0sx30=",
@@ -182,13 +182,13 @@
     "vendorHash": "sha256-/dOiXO2aPkuZaFiwv/6AXJdIADgx8T7eOwvJfBBoqg8="
   },
   "buildkite": {
-    "hash": "sha256-rcklWodBh5iJjxIjGhEH0l3S9bXUWfBG52V/23o8JDM=",
+    "hash": "sha256-nDJ4XsWvielQYqShBav7g/pZyDcU0jqgemXUqaNJHnA=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
     "owner": "buildkite",
     "repo": "terraform-provider-buildkite",
-    "rev": "v0.24.0",
+    "rev": "v0.25.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-3BtXtXhFyTNQD0J/5hNi0JsPcaIDWUQNEgf6r0VIfMM="
+    "vendorHash": "sha256-C/jT+vcZat8UHXgOhtj+gyl8ttCEb564byp/npI2Ei8="
   },
   "checkly": {
     "hash": "sha256-tOTrAi6hd4HFbHAj0p/LTYdxQl1R1WuQ9L4hzqmDVqI=",
@@ -445,13 +445,13 @@
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-uKImp0kcsLZL1SOAygd/ssJ7pxclUbAcDcEB3ko9Mio=",
+    "hash": "sha256-91hv73KEer3FyS9FWoQ0gV1VwRKZqAu/6fAughmX5D0=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v16.2.0",
+    "rev": "v16.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-AVTWTS16d8QsPLLAJeAfgcVDzUBMp+b2oAphaCBqhS0="
+    "vendorHash": "sha256-G7+3vqxdi4i21o1hYj2GVvoCdcmFN3ue1i4fuepucsw="
   },
   "google": {
     "hash": "sha256-tfjrVWj+l9mNdgZ+unu4NW15OAOzViTVmSTzO/ZiqRE=",

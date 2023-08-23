@@ -833,6 +833,7 @@ mapAliases ({
   kexpand = throw "kexpand awless has been dropped due to the lack of maintenance from upstream since 2017"; # Added 2022-06-01
   keybase-go = throw "'keybase-go' has been renamed to/replaced by 'keybase'"; # Converted to throw 2022-02-22
   keysmith = libsForQt5.kdeGear.keysmith; # Added 2021-07-14
+  kfctl = throw "kfctl is broken and has been archived by upstream" ; # Added 2023-08-21
   kgx = gnome-console; # Added 2022-02-19
   kibana7-oss = throw "kibana7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # Added 2021-06-09
   kicad-with-packages3d = kicad; # Added 2019-11-25

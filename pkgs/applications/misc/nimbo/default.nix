@@ -52,6 +52,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Run machine learning jobs on AWS with a single command";
     homepage = "https://github.com/nimbo-sh/nimbo";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ alexeyre noreferences ];
+    maintainers = with maintainers; [ noreferences ];
   };
 }

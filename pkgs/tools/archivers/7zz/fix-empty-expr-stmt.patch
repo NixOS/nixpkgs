@@ -1,0 +1,184 @@
+diff -Naur a/C/7zCrc.c b/C/7zCrc.c
+--- a/C/7zCrc.c
++++ b/C/7zCrc.c
+@@ -174,7 +174,7 @@
+ UInt32 Z7_FASTCALL CrcUpdateT0_32(UInt32 v, const void *data, size_t size, const UInt32 *table)
+ {
+   const Byte *p = (const Byte *)data;
+-  UNUSED_VAR(table);
++  UNUSED_VAR(table)
+ 
+   for (; size != 0 && ((unsigned)(ptrdiff_t)p & (T0_32_UNROLL_BYTES - 1)) != 0; size--)
+     v = __crc32b(v, *p++);
+@@ -206,7 +206,7 @@
+ UInt32 Z7_FASTCALL CrcUpdateT0_64(UInt32 v, const void *data, size_t size, const UInt32 *table)
+ {
+   const Byte *p = (const Byte *)data;
+-  UNUSED_VAR(table);
++  UNUSED_VAR(table)
+ 
+   for (; size != 0 && ((unsigned)(ptrdiff_t)p & (T0_64_UNROLL_BYTES - 1)) != 0; size--)
+     v = __crc32b(v, *p++);
+diff -Naur a/C/AesOpt.c b/C/AesOpt.c
+--- a/C/AesOpt.c
++++ b/C/AesOpt.c
+@@ -639,7 +639,7 @@
+   const v128 k_z0 = w[2];
+   for (; numBlocks != 0; numBlocks--, data++)
+   {
+-    MM_XOR_m (*data);
++    MM_XOR_m (*data)
+     AES_E_MC_m (k0)
+     AES_E_MC_m (k1)
+     AES_E_MC_m (k2)
+@@ -660,7 +660,7 @@
+       }
+     }
+     AES_E_m  (k_z1)
+-    MM_XOR_m (k_z0);
++    MM_XOR_m (k_z0)
+     *data = m;
+   }
+   *p = m;
+@@ -745,7 +745,7 @@
+     while (w != p);
+     WOP_KEY (AES_D,   1)
+     WOP_KEY (AES_XOR, 0)
+-    MM_XOR (m0, iv);
++    MM_XOR (m0, iv)
+     WOP_M1 (XOR_data_M1)
+     iv = data[NUM_WAYS - 1];
+     WOP (STORE_data)
+@@ -759,14 +759,14 @@
+     AES_D_IMC_m (w[2])
+     do
+     {
+-      AES_D_IMC_m (w[1]);
+-      AES_D_IMC_m (w[0]);
++      AES_D_IMC_m (w[1])
++      AES_D_IMC_m (w[0])
+       w -= 2;
+     }
+     while (w != p);
+-    AES_D_m  (w[1]);
+-    MM_XOR_m (w[0]);
+-    MM_XOR_m (iv);
++    AES_D_m  (w[1])
++    MM_XOR_m (w[0])
++    MM_XOR_m (iv)
+     iv = *data;
+     *data = m;
+   }
+@@ -809,11 +809,11 @@
+   {
+     const v128 *w = p;
+     v128 m;
+-    CTR_START (m, 0);
++    CTR_START (m, 0)
+     do
+     {
+-      AES_E_MC_m (w[0]);
+-      AES_E_MC_m (w[1]);
++      AES_E_MC_m (w[0])
++      AES_E_MC_m (w[1])
+       w += 2;
+     }
+     while (w != wEnd);
+diff -Naur a/C/LzmaEnc.c b/C/LzmaEnc.c
+--- a/C/LzmaEnc.c
++++ b/C/LzmaEnc.c
+@@ -195,11 +195,11 @@
+ unsigned GetPosSlot1(UInt32 pos)
+ {
+   unsigned res;
+-  BSR2_RET(pos, res);
++  BSR2_RET(pos, res)
+   return res;
+ }
+-#define GetPosSlot2(pos, res) { BSR2_RET(pos, res); }
+-#define GetPosSlot(pos, res) { if (pos < 2) res = pos; else BSR2_RET(pos, res); }
++#define GetPosSlot2(pos, res) { BSR2_RET(pos, res) }
++#define GetPosSlot(pos, res) { if (pos < 2) res = pos; else BSR2_RET(pos, res) }
+ 
+ 
+ #else // ! LZMA_LOG_BSR
+diff -Naur a/C/Sha1Opt.c b/C/Sha1Opt.c
+--- a/C/Sha1Opt.c
++++ b/C/Sha1Opt.c
+@@ -300,26 +300,26 @@
+     LOAD_SHUFFLE (m2, 2)
+     LOAD_SHUFFLE (m3, 3)
+                      
+-    T(m0, c0);                                  H(e1); C(e0);
+-    T(m1, c0);  SU0(m0, m1, m2);                H(e0); C(e1);
+-    T(m2, c0);  SU0(m1, m2, m3);  SU1(m0, m3);  H(e1); C(e0);
+-    T(m3, c0);  SU0(m2, m3, m0);  SU1(m1, m0);  H(e0); C(e1);
+-    T(m0, c0);  SU0(m3, m0, m1);  SU1(m2, m1);  H(e1); C(e0);
+-    T(m1, c1);  SU0(m0, m1, m2);  SU1(m3, m2);  H(e0); P(e1);
+-    T(m2, c1);  SU0(m1, m2, m3);  SU1(m0, m3);  H(e1); P(e0);
+-    T(m3, c1);  SU0(m2, m3, m0);  SU1(m1, m0);  H(e0); P(e1);
+-    T(m0, c1);  SU0(m3, m0, m1);  SU1(m2, m1);  H(e1); P(e0);
+-    T(m1, c1);  SU0(m0, m1, m2);  SU1(m3, m2);  H(e0); P(e1);
+-    T(m2, c2);  SU0(m1, m2, m3);  SU1(m0, m3);  H(e1); M(e0);
+-    T(m3, c2);  SU0(m2, m3, m0);  SU1(m1, m0);  H(e0); M(e1);
+-    T(m0, c2);  SU0(m3, m0, m1);  SU1(m2, m1);  H(e1); M(e0);
+-    T(m1, c2);  SU0(m0, m1, m2);  SU1(m3, m2);  H(e0); M(e1);
+-    T(m2, c2);  SU0(m1, m2, m3);  SU1(m0, m3);  H(e1); M(e0);
+-    T(m3, c3);  SU0(m2, m3, m0);  SU1(m1, m0);  H(e0); P(e1);
+-    T(m0, c3);  SU0(m3, m0, m1);  SU1(m2, m1);  H(e1); P(e0);
+-    T(m1, c3);                    SU1(m3, m2);  H(e0); P(e1);
+-    T(m2, c3);                                  H(e1); P(e0);
+-    T(m3, c3);                                  H(e0); P(e1);
++    T(m0, c0);                                H(e1); C(e0)
++    T(m1, c0);  SU0(m0, m1, m2)               H(e0); C(e1)
++    T(m2, c0);  SU0(m1, m2, m3)  SU1(m0, m3)  H(e1); C(e0)
++    T(m3, c0);  SU0(m2, m3, m0)  SU1(m1, m0)  H(e0); C(e1)
++    T(m0, c0);  SU0(m3, m0, m1)  SU1(m2, m1)  H(e1); C(e0)
++    T(m1, c1);  SU0(m0, m1, m2)  SU1(m3, m2)  H(e0); P(e1)
++    T(m2, c1);  SU0(m1, m2, m3)  SU1(m0, m3)  H(e1); P(e0)
++    T(m3, c1);  SU0(m2, m3, m0)  SU1(m1, m0)  H(e0); P(e1)
++    T(m0, c1);  SU0(m3, m0, m1)  SU1(m2, m1)  H(e1); P(e0)
++    T(m1, c1);  SU0(m0, m1, m2)  SU1(m3, m2)  H(e0); P(e1)
++    T(m2, c2);  SU0(m1, m2, m3)  SU1(m0, m3)  H(e1); M(e0)
++    T(m3, c2);  SU0(m2, m3, m0)  SU1(m1, m0)  H(e0); M(e1)
++    T(m0, c2);  SU0(m3, m0, m1)  SU1(m2, m1)  H(e1); M(e0)
++    T(m1, c2);  SU0(m0, m1, m2)  SU1(m3, m2)  H(e0); M(e1)
++    T(m2, c2);  SU0(m1, m2, m3)  SU1(m0, m3)  H(e1); M(e0)
++    T(m3, c3);  SU0(m2, m3, m0)  SU1(m1, m0)  H(e0); P(e1)
++    T(m0, c3);  SU0(m3, m0, m1)  SU1(m2, m1)  H(e1); P(e0)
++    T(m1, c3);                   SU1(m3, m2)  H(e0); P(e1)
++    T(m2, c3);                                H(e1); P(e0)
++    T(m3, c3);                                H(e0); P(e1)
+                                                                                                                      
+     abcd = vaddq_u32(abcd, abcd_save);
+     e0 += e0_save;
+diff -Naur a/C/Sha256Opt.c b/C/Sha256Opt.c
+--- a/C/Sha256Opt.c
++++ b/C/Sha256Opt.c
+@@ -316,10 +316,10 @@
+     LOAD_SHUFFLE (m2, 2)
+     LOAD_SHUFFLE (m3, 3)
+ 
+-    R16 ( 0, NNN, NNN, SM1, NNN, SM1, SM2, SM1, SM2 );
+-    R16 ( 1, SM1, SM2, SM1, SM2, SM1, SM2, SM1, SM2 );
+-    R16 ( 2, SM1, SM2, SM1, SM2, SM1, SM2, SM1, SM2 );
+-    R16 ( 3, SM1, SM2, NNN, SM2, NNN, NNN, NNN, NNN );
++    R16 ( 0, NNN, NNN, SM1, NNN, SM1, SM2, SM1, SM2 )
++    R16 ( 1, SM1, SM2, SM1, SM2, SM1, SM2, SM1, SM2 )
++    R16 ( 2, SM1, SM2, SM1, SM2, SM1, SM2, SM1, SM2 )
++    R16 ( 3, SM1, SM2, NNN, SM2, NNN, NNN, NNN, NNN )
+     
+     state0 = vaddq_u32(state0, state0_save);
+     state1 = vaddq_u32(state1, state1_save);
+diff -Naur a/CPP/Windows/System.h b/CPP/Windows/System.h
+--- a/CPP/Windows/System.h
++++ b/CPP/Windows/System.h
+@@ -105,7 +105,7 @@
+   }
+   
+   void CpuZero() { }
+-  void CpuSet(unsigned cpuIndex) { UNUSED_VAR(cpuIndex); }
++  void CpuSet(unsigned cpuIndex) { UNUSED_VAR(cpuIndex) }
+   int IsCpuSet(unsigned cpuIndex) const { return (cpuIndex < numSysThreads) ? 1 : 0; }
+ 
+   BOOL SetProcAffinity() const
