@@ -13271,6 +13271,8 @@ with pkgs;
 
   stabber = callPackage ../misc/stabber { };
 
+  stable-diffusion-cpp = callPackage ../tools/graphics/stable-diffusion-cpp { };
+
   stacer = libsForQt5.callPackage ../tools/system/stacer { };
 
   starcharts = callPackage ../servers/misc/starcharts { };
