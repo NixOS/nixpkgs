@@ -45,7 +45,6 @@ buildPythonPackage rec {
     platformdirs
     poetry-core
     rich
-    shellingham
     strawberry-graphql
     typer
     typing-extensions
