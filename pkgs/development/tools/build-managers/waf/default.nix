@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, callPackage
 , ensureNewerSourcesForZipFilesHook
 , python3
 # optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
@@ -58,6 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit python3 extraTools;
+    hook = callPackage ./hook.nix {
+      waf = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     homepage = "https://waf.io";
