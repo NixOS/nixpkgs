@@ -918,7 +918,7 @@ in {
     enableOCR = true;
     preBootCommands = ''
       machine.start()
-      machine.wait_for_text("enter passphrase for ")
+      machine.wait_for_text("passphrase for ")
       machine.send_chars("password\n")
     '';
 

@@ -8,6 +8,8 @@
   # them when fixed.
   inherit (import ./installer.nix { inherit system config pkgs; systemdStage1 = true; })
     # bcache
+    bcachefsSimple
+    bcachefsEncrypted
     btrfsSimple
     btrfsSubvolDefault
     btrfsSubvolEscape
