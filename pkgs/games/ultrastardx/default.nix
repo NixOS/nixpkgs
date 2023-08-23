@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "v2023.6.0";
+    rev = "v${version}";
     hash = "sha256-JZ+QBRJmFIJIrE7G3mxK5YXxHUVhjfSvPaQvSirnVKo=";
   };
 
