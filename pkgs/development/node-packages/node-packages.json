@@ -146,7 +146,6 @@
 , "graphql"
 , "graphql-cli"
 , "graphql-language-service-cli"
-, "graphqurl"
 , "grunt-cli"
 , "makam"
 , "meshcommander"
