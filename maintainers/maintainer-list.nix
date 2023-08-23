@@ -14826,6 +14826,12 @@
     githubId = 7365864;
     name = "Rafael Varago";
   };
+  rvdp = {
+    email = "ramses@well-founded.dev";
+    github = "R-VdP";
+    githubId = 141248;
+    name = "Ramses";
+  };
   rvl = {
     email = "dev+nix@rodney.id.au";
     github = "rvl";
