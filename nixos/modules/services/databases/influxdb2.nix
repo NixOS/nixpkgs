@@ -100,8 +100,7 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/influxd --bolt-path \${STATE_DIRECTORY}/influxd.bolt --engine-path \${STATE_DIRECTORY}/engine";
         StateDirectory = "influxdb2";
-        User = "influxdb2";
-        Group = "influxdb2";
+        DynamicUser = true;
         CapabilityBoundingSet = "";
         SystemCallFilter = "@system-service";
         LimitNOFILE = 65536;
@@ -164,13 +163,6 @@ in
         ''
       );
     };
-
-    users.extraUsers.influxdb2 = {
-      isSystemUser = true;
-      group = "influxdb2";
-    };
-
-    users.extraGroups.influxdb2 = {};
   };
 
   meta.maintainers = with lib.maintainers; [ nickcao oddlama ];
