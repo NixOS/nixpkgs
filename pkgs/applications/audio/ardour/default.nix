@@ -52,7 +52,7 @@
 , suil
 , taglib
 , vamp-plugin-sdk
-, wafHook
+, waf
 , xjadeo
 , videoSupport ? true
 }:
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
-    wafHook
+    waf.hook
   ];
 
   buildInputs = [
