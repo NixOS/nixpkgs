@@ -103,6 +103,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/1a1b49f814cdf4c4c8d0ac8930610f3fef6af5b0.diff";
       sha256 = "sha256-GqMgoi0tsP7zcCcPumhdsbvhPB6fgw1ufx6gHlc6iSc=";
     })
+
+    # https://github.com/sagemath/sage/pull/36006, positively reviewed
+    (fetchpatch {
+      name = "gmp-6.3-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/d88bc3815c0901bfdeaa3e4a31107c084199f614.diff";
+      sha256 = "sha256-dXaEwk2wXxmx02sCw4Vu9mF0ZrydhFD4LRwNAiQsPgM=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
