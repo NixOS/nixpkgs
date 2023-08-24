@@ -32923,6 +32923,8 @@ with pkgs;
 
   inherit (nodePackages) imapnotify;
 
+  imdshift = callPackage ../tools/security/imdshift { };
+
   img2pdf = with python3Packages; toPythonApplication img2pdf;
 
   imgbrd-grabber = qt5.callPackage ../applications/graphics/imgbrd-grabber { };
