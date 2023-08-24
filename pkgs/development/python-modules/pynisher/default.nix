@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module intended to limit a functions resources";
     homepage = "https://github.com/automl/pynisher";
+    changelog = "https://github.com/automl/pynisher/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };
