@@ -44,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_BENCHMARKS=OFF"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed for date submodule with GCC 12 https://github.com/HowardHinnant/date/issues/750
+    "-Wno-error=stringop-overflow"
+  ];
+
   buildInputs = [
     boost
     curl
