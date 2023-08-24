@@ -1,22 +1,49 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc, wayland-scanner
-, wayland, wayland-protocols, ffmpeg, x264, libpulseaudio, ocl-icd, opencl-headers
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, mesa
+, ninja
+, pkg-config
+, scdoc
+, wayland-scanner
+, wayland
+, wayland-protocols
+, ffmpeg
+, x264
+, libpulseaudio
+, ocl-icd
+, opencl-headers
 }:
 
 stdenv.mkDerivation rec {
   pname = "wf-recorder";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ammen99";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-othFp97rUrdUoAXkup8VvpcyPHs5iYNFyRE3h3rcmqE=";
+    hash = "sha256-HSNogz99fh25bGnYrIFkQC8SZ/EjG9Ak1kQpVmSlliU=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+    scdoc
+  ];
+
   buildInputs = [
-    wayland wayland-protocols ffmpeg x264 libpulseaudio ocl-icd opencl-headers
+    wayland
+    wayland-protocols
+    ffmpeg
+    x264
+    libpulseaudio
+    ocl-icd
+    opencl-headers
+    mesa # for libgbm
   ];
 
   meta = with lib; {
