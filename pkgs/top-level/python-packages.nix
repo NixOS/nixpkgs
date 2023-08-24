@@ -20,6 +20,8 @@ self: super: with self; {
 
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
+  about-time = callPackage ../development/python-modules/about-time { };
+
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
@@ -425,6 +427,8 @@ self: super: with self; {
   alexapy = callPackage ../development/python-modules/alexapy { };
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
+
+  alive-progress = callPackage ../development/python-modules/alive-progress { };
 
   aliyun-python-sdk-cdn = callPackage ../development/python-modules/aliyun-python-sdk-cdn { };
 
