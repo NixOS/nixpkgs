@@ -5861,6 +5861,8 @@ with pkgs;
 
   marlin-calc = callPackage ../tools/misc/marlin-calc { };
 
+  marp-cli = callPackage ../tools/typesetting/marp { };
+
   masscan = callPackage ../tools/security/masscan { };
 
   massren = callPackage ../tools/misc/massren { };
@@ -13737,6 +13739,8 @@ with pkgs;
   timetrap = callPackage ../applications/office/timetrap { };
 
   timetagger = callPackage ../servers/timetagger { };
+
+  timetagger_cli = callPackage ../tools/misc/timetagger_cli { };
 
   timezonemap = callPackage ../development/libraries/timezonemap { };
 
@@ -40568,6 +40572,8 @@ with pkgs;
 
   mysides = callPackage ../os-specific/darwin/mysides { };
 
+  narrowlink = callPackage ../tools/networking/narrowlink { };
+
   nar-serve = callPackage ../tools/nix/nar-serve { };
 
   neo = callPackage ../applications/misc/neo { };
@@ -40874,6 +40880,8 @@ with pkgs;
   sam-ba = callPackage ../tools/misc/sam-ba { };
 
   sndio = callPackage ../misc/sndio { };
+
+  SP800-90B_EntropyAssessment = callPackage ../tools/misc/SP800-90B_EntropyAssessment { };
 
   sticky = callPackage ../applications/misc/sticky { };
 

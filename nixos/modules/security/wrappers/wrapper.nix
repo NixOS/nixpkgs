@@ -1,4 +1,4 @@
-{ stdenv, linuxHeaders, sourceProg, debug ? false }:
+{ stdenv, linuxHeaders, parentWrapperDir, debug ? false }:
 # For testing:
 # $ nix-build -E 'with import <nixpkgs> {}; pkgs.callPackage ./wrapper.nix { parentWrapperDir = "/run/wrappers"; debug = true; }'
 stdenv.mkDerivation {
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
   hardeningEnable = [ "pie" ];
   CFLAGS = [
-    ''-DSOURCE_PROG="${sourceProg}"''
+    ''-DWRAPPER_DIR="${parentWrapperDir}"''
   ] ++ (if debug then [
     "-Werror" "-Og" "-g"
   ] else [
