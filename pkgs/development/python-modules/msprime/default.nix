@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, oldest-supported-numpy
 , setuptools-scm
+, wheel
 , pythonOlder
 , gsl
 , numpy
@@ -25,8 +27,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools-scm
     gsl
+    oldest-supported-numpy
+    setuptools-scm
+    wheel
   ];
 
   buildInputs = [

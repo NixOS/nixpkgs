@@ -4,10 +4,13 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, fetchpatch
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , setuptools
 , voluptuous
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -24,8 +27,18 @@ buildPythonPackage rec {
     hash = "sha256-bPN2h60ypjlKpXs1xDS7bZcGRXvatA3EdlAX/HLxxTM=";
   };
 
+  patches = [
+    # https://github.com/home-assistant-libs/python-otbr-api/pull/68
+    (fetchpatch {
+      name = "relax-setuptools-dependency.patch";
+      url = "https://github.com/home-assistant-libs/python-otbr-api/commit/37eb19c12d17ac7d040ded035d8401def872fbda.patch";
+      hash = "sha256-JGsaLQNbUfz0uK/MeGnR2XTJDs4RnTOEg7BavfDPArg=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -36,6 +49,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 

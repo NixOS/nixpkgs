@@ -23,7 +23,24 @@ See the [CONTRIBUTING.md](../CONTRIBUTING.md) document for more general informat
 
 ## Quick Start to Adding a Package
 
-To add a package to Nixpkgs:
+We welcome new contributors of new packages to Nixpkgs, arguably the greatest software database known. However, each new package comes with a cost for the maintainers, Continuous Integration, caching servers and users downloading Nixpkgs.
+
+Before adding a new package, please consider the following questions:
+
+* Is the package ready for general use? We don't want to include projects that are too immature or are going to be abandoned immediately. In case of doubt, check with upstream.
+* Does the project have a clear license statement? Remember that softwares are unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
+* How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
+* Are you willing to maintain the package? You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
+
+If any of these questions' answer is no, then you should probably not add the package.
+
+This is section describes a general framework of understanding and exceptions might apply.
+
+Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
+
+---
+
+Now that this is out of the way. To add a package to Nixpkgs:
 
 1. Checkout the Nixpkgs source tree:
 
@@ -67,7 +84,9 @@ To add a package to Nixpkgs:
 
    Some notes:
 
-   - All [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
+   - Add yourself as the maintainer of the package.
+
+   - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
    - You can use `nix-prefetch-url url` to get the SHA-256 hash of source distributions. There are similar commands as `nix-prefetch-git` and `nix-prefetch-hg` available in `nix-prefetch-scripts` package.
 
