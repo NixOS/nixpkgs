@@ -1,16 +1,16 @@
-{ config, lib, pkgs, buildEnv, ... }:
+{ config, lib, options, pkgs, buildEnv, ... }:
 
 with lib;
 
 let
   defaultUser = "healthchecks";
   cfg = config.services.healthchecks;
+  opt = options.services.healthchecks;
   pkg = cfg.package;
   boolToPython = b: if b then "True" else "False";
   environment = {
     PYTHONPATH = pkg.pythonPath;
     STATIC_ROOT = cfg.dataDir + "/static";
-    DB_NAME = "${cfg.dataDir}/healthchecks.sqlite";
   } // cfg.settings;
 
   environmentFile = pkgs.writeText "healthchecks-environment" (lib.generators.toKeyValue { } environment);
@@ -98,7 +98,7 @@ in
       description = lib.mdDoc ''
         Environment variables which are read by healthchecks `(local)_settings.py`.
 
-        Settings which are explicitly covered in options bewlow, are type-checked and/or transformed
+        Settings which are explicitly covered in options below, are type-checked and/or transformed
         before added to the environment, everything else is passed as a string.
 
         See <https://healthchecks.io/docs/self_hosted_configuration/>
@@ -108,7 +108,7 @@ in
         - STATIC_ROOT to set a state directory for dynamically generated static files.
         - SECRET_KEY_FILE to read SECRET_KEY from a file at runtime and keep it out of /nix/store.
       '';
-      type = types.submodule {
+      type = types.submodule (settings: {
         freeformType = types.attrsOf types.str;
         options = {
           ALLOWED_HOSTS = lib.mkOption {
@@ -143,8 +143,28 @@ in
             '';
             apply = boolToPython;
           };
+
+          DB = mkOption {
+            type = types.enum [ "sqlite" "postgres" "mysql" ];
+            default = "sqlite";
+            description = lib.mdDoc "Database engine to use.";
+          };
+
+          DB_NAME = mkOption {
+            type = types.str;
+            default =
+              if settings.config.DB == "sqlite"
+              then "${cfg.dataDir}/healthchecks.sqlite"
+              else "hc";
+            defaultText = lib.literalExpression ''
+              if config.${settings.options.DB} == "sqlite"
+              then "''${config.${opt.dataDir}}/healthchecks.sqlite"
+              else "hc"
+            '';
+            description = lib.mdDoc "Database name.";
+          };
         };
-      };
+      });
     };
   };
 
@@ -168,7 +188,7 @@ in
           StateDirectoryMode = mkIf (cfg.dataDir == "/var/lib/healthchecks") "0750";
         };
       in
-        {
+      {
         healthchecks-migration = {
           description = "Healthchecks migrations";
           wantedBy = [ "healthchecks.target" ];
