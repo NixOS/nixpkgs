@@ -19287,6 +19287,8 @@ with pkgs;
 
   funzzy = callPackage ../development/tools/misc/funzzy { };
 
+  futuresql = libsForQt5.callPackage ../development/libraries/futuresql { };
+
   fzf-make = callPackage ../development/tools/misc/fzf-make { };
 
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
@@ -30474,8 +30476,6 @@ with pkgs;
   argocd-autopilot = callPackage ../applications/networking/cluster/argocd-autopilot { };
 
   argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
-
-  arianna = libsForQt5.callPackage ../applications/misc/arianna { };
 
   ario = callPackage ../applications/audio/ario { };
 
