@@ -44,6 +44,7 @@
 
 , cavaSupport ? true
 , evdevSupport ? true
+, experimentalPatches ? true
 , hyprlandSupport ? true
 , inputSupport ? true
 , jackSupport ? true
@@ -162,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     "tests" = runTests;
     "upower_glib" = upowerSupport;
     "wireplumber" = wireplumberSupport;
-  });
+  }) ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
 
   preFixup = lib.optionalString withMediaPlayer ''
     cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
