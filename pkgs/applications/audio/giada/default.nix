@@ -24,25 +24,15 @@
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "0.24.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-pKzc+RRW3o5vYaiGqW9/VjYZZJvr6cg1kdjP9qRkHwM=";
+    rev = version;
+    sha256 = "sha256-SW2qT+pMKTMBnkaL+Dg87tqutcLTqaY4nCeFfJjHIw4=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Remove when updating to the next release, this PR is already merged
-    # Fix fmt type error: https://github.com/monocasual/giada/pull/635
-    (fetchpatch {
-      name = "fix-fmt-type-error.patch";
-      url = "https://github.com/monocasual/giada/commit/032af4334f6d2bb7e77a49e7aef5b4c4d696df9a.patch";
-      hash = "sha256-QuxETvBWzA1v2ifyNzlNMGfQ6XhYQF03sGZA9rBx1xU=";
-    })
-  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-w"
@@ -82,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kashw2 ];
     platforms = platforms.all;
   };
 }
