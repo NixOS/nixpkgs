@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, canonicalize-jars-hook
 , cmake
 , cmark
 , Cocoa
@@ -67,7 +68,7 @@ rec {
     })
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja ];
+  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja canonicalize-jars-hook ];
   buildInputs =
     [
       qtbase
