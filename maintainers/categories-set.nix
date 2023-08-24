@@ -917,6 +917,16 @@ let
       '';
       relatedCategories = [ /* Always empty*/ ];
     };
+    assembler = {
+      name = "Assembler";
+      description = ''
+        A program that converts files written in assembly language to binary
+        code.
+      '';
+      relatedCategories = [
+        allCategories.compiler
+      ];
+    };
     compiler = {
       name = "Compiler";
       description = ''
