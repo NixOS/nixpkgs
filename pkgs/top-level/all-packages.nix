@@ -3247,7 +3247,7 @@ with pkgs;
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
 
   asymptote = libsForQt5.callPackage ../tools/graphics/asymptote {
-    texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo media9 ocgx2 collection-latexextra; };
+    texLive = texlive.combine { inherit (texlive.pkgs) scheme-small epsf cm-super texinfo media9 ocgx2 collection-latexextra; };
   };
 
   async = callPackage ../development/tools/async { };
@@ -5334,6 +5334,8 @@ with pkgs;
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
+  luametatex = callPackage ../tools/typesetting/tex/luametatex { };
+
   mftrace = callPackage ../tools/typesetting/tex/mftrace { };
 
   # Keep the old PGF since some documents don't render properly with
@@ -5363,7 +5365,15 @@ with pkgs;
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
   # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
-  texlive = recurseIntoAttrs (callPackage ../tools/typesetting/tex/texlive { });
+  texlive = recurseIntoAttrs
+    # callPackage is not used here in order not to override the override-attribute
+    # from makeOverridable in stable.nix
+    (import ../tools/typesetting/tex/texlive/stable.nix {
+    inherit (__splicedPackages) callPackage lib fetchurl fetchpatch;
+  });
+  texlive_latest = recurseIntoAttrs (import ../tools/typesetting/tex/texlive/latest {
+    inherit (__splicedPackages) callPackage lib fetchurl fetchpatch makeWrapper mupdf potrace luametatex;
+  });
 
   fop = callPackage ../tools/typesetting/fop {
     jdk = openjdk8;

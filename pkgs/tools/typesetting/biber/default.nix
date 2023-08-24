@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, perlPackages, shortenPerlShebang, texlive }:
 
 let
-  biberSource = lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
+  biberSource = lib.head (builtins.filter (p: p.tlType == "source") texlive.pkgs.biber.pkgs);
 in
 
 perlPackages.buildPerlModule {

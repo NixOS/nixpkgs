@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, perlPackages, shortenPerlShebang, texlive }:
 
 let
-  biberSource = lib.head (builtins.filter (p: p.tlType == "source") texlive.biber-ms.pkgs);
+  biberSource = lib.head (builtins.filter (p: p.tlType == "source") texlive.pkgs.biber-ms.pkgs);
   # missing test file
   multiscriptBltxml = (fetchFromGitHub {
     owner = "plk";

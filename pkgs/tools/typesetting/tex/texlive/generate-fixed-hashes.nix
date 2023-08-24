@@ -1,11 +1,11 @@
-with import ../../../../.. { };
+{ pkgs ? import ../../../../.. {  }
+, texlive ? pkgs.texlive }:
 
-with lib; let
+with pkgs; with lib; let
   isFod = p: p.tlType != "bin" && isDerivation p;
 
   # ugly hack to extract combine from collection-latexextra, since it is masked by texlive.combine
-  combine = lib.findFirst (p: (lib.head p.pkgs).pname == "combine") { pkgs = [ ]; } (lib.head texlive.collection-latexextra.pkgs).tlDeps;
-  all = filter (p: p ? pkgs) (attrValues (removeAttrs texlive [ "bin" "combine" "combined" "tlpdb" ])) ++ [ combine ];
+  all = filter (p: p ? pkgs) (attrValues texlive.pkgs);
   sorted = sort (a: b: (head a.pkgs).pname < (head b.pkgs).pname) all;
   fods = filter isFod (concatMap (p: p.pkgs or [ ]) all);
 

@@ -1,4 +1,6 @@
-params: with params;
+{ lib, buildEnv, runCommand, writeText, makeWrapper, libfaketime, makeFontsConf
+, perl, bash, coreutils, gnused, gnugrep, gawk, ghostscript
+, bin, pkgs }:
 # combine =
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core"
@@ -8,6 +10,22 @@ args@{
 , ...
 }:
 let
+  # combine a set of TL packages into a single TL meta-package
+  combinePkgs = pkgList: lib.catAttrs "pkg" (
+    let
+      # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
+      # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
+      tlPkgToSets = { pkgs, ... }: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
+          # outputName required to distinguish among bin.core-big outputs
+          key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
+          inherit pkg;
+        }) pkgs;
+      pkgListToSets = lib.concatMap tlPkgToSets; in
+    builtins.genericClosure {
+      startSet = pkgListToSets pkgList;
+      operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or []);
+    });
+
   pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ];
   pkgList = rec {
     combined = combinePkgs (lib.attrValues pkgSet);
@@ -31,7 +49,7 @@ let
     paths = lib.catAttrs "outPath" pkgList.nonbin;
 
     # mktexlsr
-    nativeBuildInputs = [ (lib.last tl."texlive.infra".pkgs) ];
+    nativeBuildInputs = [ (lib.last pkgs."texlive.infra".pkgs) ];
 
     postBuild = # generate ls-R database
     ''
@@ -89,9 +107,9 @@ in (buildEnv {
   nativeBuildInputs = [
     makeWrapper
     libfaketime
-    (lib.last tl."texlive.infra".pkgs) # mktexlsr
-    (lib.last tl.texlive-scripts.pkgs) # fmtutil, updmap
-    (lib.last tl.texlive-scripts-extra.pkgs) # texlinks
+    (lib.last pkgs."texlive.infra".pkgs) # mktexlsr
+    (lib.last pkgs.texlive-scripts.pkgs) # fmtutil, updmap
+    (lib.last pkgs.texlive-scripts-extra.pkgs) # texlinks
     perl
   ];
 
@@ -120,6 +138,10 @@ in (buildEnv {
     declare -i wrapCount=0
     for link in "$out"/bin/*; do
       target="$(realpath "$link")"
+
+      # don't try to wrap nonexecutable files
+      [[ -x $target ]] || continue
+
       if [[ "''${target##*/}" != "''${link##*/}" ]] ; then
         # detected alias with different basename, use immediate target of $link to preserve $0
         # relevant for mktexfmt, repstopdf, ...
@@ -276,11 +298,17 @@ in (buildEnv {
   # We use faketime to fix the embedded timestamps and patch the uuids
   # with some random but constant values.
   ''
-    if [[ -e "$out/bin/mtxrun" ]]; then
+    if [[ -e "$TEXMFDIST"/scripts/context/lua/mtxrun.lua ]]; then
       substitute "$TEXMFDIST"/scripts/context/lua/mtxrun.lua mtxrun.lua \
         --replace 'cache_uuid=osuuid()' 'cache_uuid="e2402e51-133d-4c73-a278-006ea4ed734f"' \
         --replace 'uuid=osuuid(),' 'uuid="242be807-d17e-4792-8e39-aa93326fc871",'
-      FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
+      # the ConTeXt caches for luatex and luametatex are independent
+      if [[ -e "$out/bin/luatex" ]]; then
+        FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
+      fi
+      if [[ -e "$out/bin/luametatex" ]]; then
+        FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luametatex --luaonly mtxrun.lua --generate
+      fi
     fi
   '' +
   # Get rid of all log files. They are not needed, but take up space

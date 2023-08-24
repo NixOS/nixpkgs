@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, buildPackages
-, texlive
+, bin, combine, pkgs, src, version
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config
@@ -7,7 +7,7 @@
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
 , biber-ms
-}:
+}@args:
 
 # Useful resource covering build options:
 # http://tug.org/texlive/doc/tlbuild.html
@@ -15,21 +15,14 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = toString ((import ./tlpdb.nix)."00texlive.config").year;
-  version = year; # keep names simple for now
+  version = toString args.version.texliveYear; # keep names simple for now
 
   # detect and stop redundant rebuilds that may occur when building new fixed hashes
   assertFixedHash = name: src:
     if ! useFixedHashes || src ? outputHash then src else throw "The TeX Live package '${src.pname}' must have a fixed hash before building '${name}'.";
 
   common = {
-    src = fetchurl {
-      urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0321-source.tar.xz"
-              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0321-source.tar.xz"
-      ];
-      hash = "sha256-X/o0heUessRJBJZFD8abnXvXy55TNX2S20vNT9YXm1Y=";
-    };
+    inherit src;
 
     prePatch = ''
       for i in texk/kpathsea/mktex*; do
@@ -77,7 +70,7 @@ let
 in rec { # un-indented
 
 inherit (common) cleanBrokenLinks;
-texliveYear = year;
+texliveYear = version;
 
 
 core = stdenv.mkDerivation rec {
@@ -93,20 +86,14 @@ core = stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # configure: error: tangle was not found but is required when cross-compiling.
     # dev (himktables) is used when building hitex to generate the additional source file hitables.c
-    texlive.bin.core
-    texlive.bin.core.dev
+    bin.core
+    bin.core.dev
   ];
 
   buildInputs = [
     /*teckit*/ zziplib mpfr gmp
     pixman gd freetype libpng libpaper zlib
     perl
-  ];
-
-  patches = [
-    # Fix implicit `int` on `main`, which results in an error when building with clang 16.
-    # This is fixed upstream and can be dropped with the 2023 release.
-    ./fix-implicit-int.patch
   ];
 
   hardeningDisable = [ "format" ];
@@ -196,7 +183,7 @@ core = stdenv.mkDerivation rec {
 };
 
 
-inherit (core-big) metafont mflua metapost luatex luahbtex luajittex xetex;
+inherit (bin.core-big) metafont mflua metapost luatex luahbtex luajittex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
@@ -213,14 +200,6 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=reproducible_exception_strings.patch;msg=5";
       sha256 = "sha256-RNZoEeTcWnrLaltcYrhNIORh42fFdwMzBfxMRWVurbk=";
     })
-    # fixes a security-issue in luatex that allows arbitrary code execution even with shell-escape disabled, see https://tug.org/~mseven/luatex.html
-    (fetchpatch {
-      name = "CVE-2023-32700.patch";
-      url = "https://tug.org/~mseven/luatex-files/2022/patch";
-      hash = "sha256-o9ENLc1ZIIOMX6MdwpBIgrR/Jdw6tYLmAyzW8i/FUbY=";
-      excludes = [  "build.sh" ];
-      stripLen = 1;
-    })
     # Fixes texluajitc crashes on aarch64, backport of the upstream fix
     # https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
     # to the version vendored by texlive (2.1.0-beta3)
@@ -231,9 +210,6 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       stripLen = 1;
       extraPrefix = "libs/luajit/LuaJIT-src/";
     })
-    # Fix implicit `int` on `main`, which results in an error when building with clang 16.
-    # This is fixed upstream and can be dropped with the 2023 release.
-    ./fix-implicit-int.patch
   ];
 
   hardeningDisable = [ "format" ];
@@ -394,7 +370,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   inherit (src) version;
   format = "other";
 
-  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs));
+  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") pkgs.pygmentex.pkgs));
 
   propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
@@ -475,7 +451,7 @@ xdvi = stdenv.mkDerivation {
 
 xpdfopen = stdenv.mkDerivation {
   pname = "texlive-xpdfopen.bin";
-  inherit (lib.head texlive.xpdfopen.pkgs) version;
+  inherit (lib.head pkgs.xpdfopen.pkgs) version;
 
   inherit (common) src;
 
@@ -510,7 +486,7 @@ xindy = stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config perl
-    (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
+    (combine { inherit (pkgs) scheme-basic cyrillic ec; })
   ];
   buildInputs = [ clisp libiconv perl ];
 
