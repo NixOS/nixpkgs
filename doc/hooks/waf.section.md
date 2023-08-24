@@ -4,7 +4,7 @@
 
 In Nixpkgs, `wafHook` overrides the default configure, build, and install phases.
 
-## Variables controlling wafHook
+## Variables controlling wafHook {#variablesControllingWafHook}
 
 ### `wafPath` {#wafPath}
 
