@@ -1829,7 +1829,7 @@ mapAliases ({
   inherit (libsForQt5.mauiPackages) vvave; # added 2022-05-17
 
   ### W ###
-
+  wafHook = waf.hook; # Added 2023-08-23
   wavesurfer = throw "wavesurfer has been removed: depended on snack which has been removed"; # Added 2022-04-21
   waybar-hyprland = throw "waybar-hyprland has been removed: hyprland support is now built into waybar by default."; # Added 2023-08-21
   way-cooler = throw "way-cooler is abandoned by its author: https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"; # Added 2020-01-13
