@@ -30,11 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-9dX9+YwJdJpgU3cZkxk7+CgdRFgcVhrvU0amO8zHZhs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pytz = "^2021.1"' 'pytz = "*"'
-  '';
-
   nativeBuildInputs = [
     poetry-core
   ];

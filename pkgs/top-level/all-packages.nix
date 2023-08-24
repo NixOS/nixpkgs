@@ -2861,8 +2861,6 @@ with pkgs;
 
   ctpv = callPackage ../applications/file-managers/lf/ctpv.nix { };
 
-  llama = callPackage ../applications/file-managers/llama { };
-
   mc = callPackage ../applications/file-managers/mc {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -2897,6 +2895,8 @@ with pkgs;
     mediaSupport = true;
     inherit lib udisks2 python3;
   };
+
+  walk = callPackage ../applications/file-managers/walk { };
 
   worker = callPackage ../applications/file-managers/worker { };
 
@@ -21586,6 +21586,7 @@ with pkgs;
   glfw-wayland = glfw.override {
     waylandSupport = true;
   };
+  glfw-wayland-minecraft = callPackage ../development/libraries/glfw/3.x-wayland-minecraft.nix {};
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel OpenGL;
@@ -27415,7 +27416,9 @@ with pkgs;
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
-  tailscale = callPackage ../servers/tailscale { };
+  tailscale = callPackage ../servers/tailscale {
+    buildGoModule = buildGo121Module;
+  };
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
@@ -37015,6 +37018,8 @@ with pkgs;
 
   aperture = callPackage ../applications/blockchains/aperture { };
 
+  backdown = callPackage ../tools/misc/backdown { };
+
   balanceofsatoshis = callPackage ../tools/misc/balanceofsatoshis { };
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
@@ -41234,6 +41239,8 @@ with pkgs;
   tp-auto-kbbl = callPackage ../tools/system/tp-auto-kbbl { };
 
   tup = callPackage ../development/tools/build-managers/tup { };
+
+  turtle-build = callPackage ../development/tools/build-managers/turtle-build { };
 
   tusk = callPackage ../applications/office/tusk { };
 
