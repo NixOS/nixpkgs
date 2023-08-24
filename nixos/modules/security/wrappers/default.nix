@@ -5,8 +5,8 @@ let
 
   parentWrapperDir = dirOf wrapperDir;
 
-  securityWrapper = sourceProg : pkgs.callPackage ./wrapper.nix {
-    inherit sourceProg;
+  securityWrapper = pkgs.callPackage ./wrapper.nix {
+    inherit parentWrapperDir;
   };
 
   fileModeType =
@@ -91,7 +91,8 @@ let
     , ...
     }:
     ''
-      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
+      echo -n "${source}" > "$wrapperDir/${program}.real"
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
@@ -118,7 +119,8 @@ let
     , ...
     }:
     ''
-      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
+      echo -n "${source}" > "$wrapperDir/${program}.real"
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
