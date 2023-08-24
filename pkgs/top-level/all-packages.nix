@@ -30720,6 +30720,8 @@ with pkgs;
 
   containerd = callPackage ../applications/virtualization/containerd { };
 
+  container2wasm = callPackage ../development/tools/container2wasm { };
+
   convchain = callPackage ../tools/graphics/convchain { };
 
   cordless = callPackage ../applications/networking/instant-messengers/cordless { };
