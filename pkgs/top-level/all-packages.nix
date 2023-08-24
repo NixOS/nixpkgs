@@ -14765,7 +14765,6 @@ with pkgs;
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
   waf = callPackage ../development/tools/build-managers/waf { };
-  wafHook = waf.hook;
 
   waf-tester = callPackage ../tools/security/waf-tester { };
 
