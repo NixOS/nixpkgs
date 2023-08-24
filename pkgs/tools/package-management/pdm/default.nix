@@ -30,13 +30,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.8.0";
+  version = "2.8.2";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BgsWKP2kZfLEHgZNISyp66Yww0ajMF4RWuI6TCzwJNo=";
+    hash = "sha256-uUjQC/YgaCsKxMgNIoyzBaKwFQ5JfuaTHaMOPMMFv9w=";
   };
 
   nativeBuildInputs = [
