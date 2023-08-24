@@ -5,6 +5,7 @@
 , click
 , setuptools-scm
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
   nativeCheckInputs = [
