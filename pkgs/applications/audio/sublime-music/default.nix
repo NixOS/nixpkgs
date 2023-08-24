@@ -27,6 +27,17 @@ let
           hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
         };
       });
+
+      dataclasses-json = super.dataclasses-json.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.7";
+        src = fetchFromGitHub {
+          owner = "lidatong";
+          repo = "dataclasses-json";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-0tw5Lz+c4ymO+AGpG6THbiALWGBrehC84+yWWk1eafc=";
+        };
+        nativeBuildInputs = [ python3.pkgs.setuptools ];
+      });
     };
   };
 in
