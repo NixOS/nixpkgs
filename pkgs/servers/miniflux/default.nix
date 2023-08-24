@@ -21,7 +21,7 @@ in buildGoModule {
   checkFlags = [ "-skip=TestClient" ]; # skip client tests as they require network access
 
   ldflags = [
-    "-s" "-w" "-X miniflux.app/version.Version=${version}"
+    "-s" "-w" "-X miniflux.app/v2/internal/version.Version=${version}"
   ];
 
   postInstall = ''
