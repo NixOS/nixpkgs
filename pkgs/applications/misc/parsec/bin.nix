@@ -90,6 +90,19 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+  # Only the main binary needs to be patched, the wrapper script handles
+  # everything else. The libraries in `share/parsec/skel` would otherwise
+  # contain dangling references when copied out of the nix store.
+  dontAutoPatchelf = true;
+
+  fixupPhase = ''
+    runHook preFixup
+
+    autoPatchelf $out/bin
+
+    runHook postFixup
+  '';
+
   meta = with lib; {
     homepage = "https://parsecgaming.com/";
     changelog = "https://parsec.app/changelog";
