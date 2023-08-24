@@ -7,7 +7,6 @@
 , astropy-extension-helpers
 , cython
 , jinja2
-, oldest-supported-numpy
 , setuptools-scm
 , wheel
 
@@ -42,7 +41,7 @@ buildPythonPackage {
     astropy-extension-helpers
     cython
     jinja2
-    oldest-supported-numpy
+    numpy
     setuptools-scm
     wheel
   ];
