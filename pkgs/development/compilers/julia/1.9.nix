@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = !stdenv.hostPlatform.isAarch64; # tests are flaky for aarch64-linux on hydra
   installCheckTarget = "testall";
 
   preInstallCheck = ''

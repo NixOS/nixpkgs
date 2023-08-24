@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "specr-transpile";
-  version = "0.1.20";
+  version = "0.1.21";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-HXqUp80vPFwG0B+f/Zfem0gOHF/igmtxTvS1c8amLmo=";
+    hash = "sha256-tFiCE6UJ7Jl/KJ7efwcHrX511Rs14ck4a7eY4dpusUc=";
   };
 
-  cargoHash = "sha256-UCIXuVwMDCJkHQJtmRUw6EiGDYCF5DeUVxBrQM4lgxg=";
+  cargoHash = "sha256-zBo1tLyfNSt04TuYP/SYmqC0ov9HmuXF013EqvrvY20=";
 
   meta = with lib; {
     description = "Converts Specr lang code to Rust";

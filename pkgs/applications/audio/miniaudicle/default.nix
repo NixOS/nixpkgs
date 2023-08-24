@@ -1,13 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, qmake
+, wrapQtAppsHook
+, qscintilla-qt6
 , bison
 , flex
 , which
 , alsa-lib
 , libsndfile
-, qt4
-, qscintilla-qt4
 , libpulseaudio
 , libjack2
 , audioBackend ? "pulse" # "pulse", "alsa", or "jack"
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudicle";
-  version = "1.4.2.0";
+  version = "1.5.0.7";
 
   src = fetchFromGitHub {
     owner = "ccrma";
     repo = "miniAudicle";
-    rev = "miniAudicle-${finalAttrs.version}";
-    hash = "sha256-NENpqgCCGiVzVE6rYqBu2RwkzWSiGHe7dZVwBfSomEo=";
+    rev = "chuck-${finalAttrs.version}";
+    hash = "sha256-CqsajNLcOp7CS5RsVabWM6APnNh4alSKb2/eoZ7F4Ao=";
     fetchSubmodules = true;
   };
 
@@ -37,19 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
     which
+    qmake
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     alsa-lib
     libsndfile
-    qt4
-    qscintilla-qt4
+    qscintilla-qt6
   ] ++ lib.optional (audioBackend == "pulse") libpulseaudio
     ++ lib.optional (audioBackend == "jack")  libjack2;
 
   buildFlags = [ "linux-${audioBackend}" ];
-
-  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "A light-weight integrated development environment for the ChucK digital audio programming language";
