@@ -14047,6 +14047,8 @@ with pkgs;
 
   translatelocally = callPackage ../applications/misc/translatelocally { };
 
+  translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
+
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
