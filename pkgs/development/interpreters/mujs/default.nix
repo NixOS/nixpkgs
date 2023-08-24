@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
+  installFlags = [ "install-shared" ];
+
   passthru.updateScript = gitUpdater {
     # No nicer place to track releases
     url = "git://git.ghostscript.com/mujs.git";
