@@ -1,0 +1,138 @@
+diff --git a/tests/test-generate-files-permissions/input{{cookiecutter.permissions}}/script.sh b/tests/test-generate-files-permissions/input{{cookiecutter.permissions}}/script.sh
+index 0402dbb..ec0cb29 100755
+--- a/tests/test-generate-files-permissions/input{{cookiecutter.permissions}}/script.sh
++++ b/tests/test-generate-files-permissions/input{{cookiecutter.permissions}}/script.sh
+@@ -1,3 +1,3 @@
+-#!/bin/bash
++#!@bash@
+ 
+ # some bash script
+diff --git a/tests/test-pyshellhooks/hooks/post_gen_project.sh b/tests/test-pyshellhooks/hooks/post_gen_project.sh
+index d244dce..61cbf53 100755
+--- a/tests/test-pyshellhooks/hooks/post_gen_project.sh
++++ b/tests/test-pyshellhooks/hooks/post_gen_project.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@
+ 
+ echo 'post generation hook';
+ touch 'shell_post.txt'
+diff --git a/tests/test-pyshellhooks/hooks/pre_gen_project.sh b/tests/test-pyshellhooks/hooks/pre_gen_project.sh
+index 351b6af..3a7e383 100755
+--- a/tests/test-pyshellhooks/hooks/pre_gen_project.sh
++++ b/tests/test-pyshellhooks/hooks/pre_gen_project.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@
+ 
+ echo 'post generation hook';
+ touch 'shell_pre.txt'
+diff --git a/tests/test-shellhooks/hooks/post_gen_project.sh b/tests/test-shellhooks/hooks/post_gen_project.sh
+index d244dce..61cbf53 100755
+--- a/tests/test-shellhooks/hooks/post_gen_project.sh
++++ b/tests/test-shellhooks/hooks/post_gen_project.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@
+ 
+ echo 'post generation hook';
+ touch 'shell_post.txt'
+diff --git a/tests/test-shellhooks/hooks/pre_gen_project.sh b/tests/test-shellhooks/hooks/pre_gen_project.sh
+index 8eae15f..380e9fb 100755
+--- a/tests/test-shellhooks/hooks/pre_gen_project.sh
++++ b/tests/test-shellhooks/hooks/pre_gen_project.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@
+ 
+ echo 'pre generation hook';
+ touch 'shell_pre.txt'
+diff --git a/tests/test_generate_hooks.py b/tests/test_generate_hooks.py
+index a57e0db..1184977 100644
+--- a/tests/test_generate_hooks.py
++++ b/tests/test_generate_hooks.py
+@@ -125,7 +125,7 @@ def test_run_failing_hook_removes_output_directory():
+     hook_path = os.path.join(hooks_path, 'pre_gen_project.py')
+ 
+     with Path(hook_path).open('w') as f:
+-        f.write("#!/usr/bin/env python\n")
++        f.write("#!@python@\n")
+         f.write("import sys; sys.exit(1)\n")
+ 
+     with pytest.raises(FailedHookException) as excinfo:
+@@ -154,7 +154,7 @@ def test_run_failing_hook_preserves_existing_output_directory():
+     hook_path = os.path.join(hooks_path, 'pre_gen_project.py')
+ 
+     with Path(hook_path).open('w') as f:
+-        f.write("#!/usr/bin/env python\n")
++        f.write("#!@python@\n")
+         f.write("import sys; sys.exit(1)\n")
+ 
+     os.mkdir('inputhooks')
+diff --git a/tests/test_hooks.py b/tests/test_hooks.py
+index 9abd66a..3c44aa0 100644
+--- a/tests/test_hooks.py
++++ b/tests/test_hooks.py
+@@ -22,7 +22,7 @@ def make_test_repo(name, multiple_hooks=False):
+     Path(template, 'README.rst').write_text("foo\n===\n\nbar\n")
+ 
+     with Path(hook_dir, 'pre_gen_project.py').open('w') as f:
+-        f.write("#!/usr/bin/env python\n")
++        f.write("#!@python@\n")
+         f.write("# -*- coding: utf-8 -*-\n")
+         f.write("from __future__ import print_function\n")
+         f.write("\n")
+@@ -41,7 +41,7 @@ def make_test_repo(name, multiple_hooks=False):
+         post = 'post_gen_project.sh'
+         filename = os.path.join(hook_dir, post)
+         with Path(filename).open('w') as f:
+-            f.write("#!/bin/bash\n")
++            f.write("#!@bash@\n")
+             f.write("\n")
+             f.write("echo 'post generation hook';\n")
+             f.write("touch 'shell_post.txt'\n")
+@@ -61,7 +61,7 @@ def make_test_repo(name, multiple_hooks=False):
+             pre = 'pre_gen_project.sh'
+             filename = os.path.join(hook_dir, pre)
+             with Path(filename).open('w') as f:
+-                f.write("#!/bin/bash\n")
++                f.write("#!@bash@\n")
+                 f.write("\n")
+                 f.write("echo 'post generation hook';\n")
+                 f.write("touch 'shell_pre.txt'\n")
+@@ -189,7 +189,7 @@ class TestExternalHooks:
+                 f.write("echo. >{{cookiecutter.file}}\n")
+         else:
+             with Path(hook_path).open('w') as fh:
+-                fh.write("#!/bin/bash\n")
++                fh.write("#!@bash@\n")
+                 fh.write("\n")
+                 fh.write("echo 'post generation hook';\n")
+                 fh.write("touch 'shell_post.txt'\n")
+@@ -222,7 +222,7 @@ class TestExternalHooks:
+         tests_dir = os.path.join(self.repo_path, 'input{{hooks}}')
+ 
+         with Path(hook_path).open('w') as f:
+-            f.write("#!/usr/bin/env python\n")
++            f.write("#!@python@\n")
+             f.write("import sys; sys.exit(1)\n")
+ 
+         with utils.work_in(self.repo_path):
+@@ -239,7 +239,7 @@ def dir_with_hooks(tmp_path):
+ 
+     pre_hook_content = textwrap.dedent(
+         """
+-        #!/usr/bin/env python
++        #!@python@
+         # -*- coding: utf-8 -*-
+         print('pre_gen_project.py~')
+         """
+@@ -249,7 +249,7 @@ def dir_with_hooks(tmp_path):
+ 
+     post_hook_content = textwrap.dedent(
+         """
+-        #!/usr/bin/env python
++        #!@python@
+         # -*- coding: utf-8 -*-
+         print('post_gen_project.py~')
+         """
