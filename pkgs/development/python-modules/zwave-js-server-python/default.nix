@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.50.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
