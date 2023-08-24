@@ -12,24 +12,26 @@
 , voluptuous
 , websocket-client
 , xmltodict
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2023.8.2";
+  version = "2023.8.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ZKL973k79MhZa6dB8XGpj/x1/gxinDQw+s0MPAHGs0E=";
+    hash = "sha256-Z8aEhs23ajj5Ghwk3wgCo2GIWRYH/vU+80NFfvD04gw=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
