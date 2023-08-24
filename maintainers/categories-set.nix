@@ -917,6 +917,16 @@ let
       '';
       relatedCategories = [ /* Always empty*/ ];
     };
+    compiler = {
+      name = "Compiler";
+      description = ''
+        A program that converts a source from a language to another, usually
+        from a higher, human-readable level to a lower, machine level.
+     '';
+      relatedCategories = [
+        allCategories.development
+      ];
+    };
   };
 
   allCategories = lib.foldl lib.recursiveUpdate {} [
