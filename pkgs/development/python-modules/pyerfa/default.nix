@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , jinja2
-, oldest-supported-numpy
 , setuptools-scm
 , wheel
 , liberfa
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     jinja2
-    oldest-supported-numpy
+    numpy
     packaging
     setuptools-scm
     wheel
