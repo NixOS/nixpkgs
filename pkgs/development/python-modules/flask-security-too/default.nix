@@ -27,7 +27,7 @@
 , email-validator
 , flask
 , flask-login
-, flask_principal
+, flask-principal
 , flask-wtf
 , itsdangerous
 , passlib
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     email-validator
     flask
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
     itsdangerous
     passlib

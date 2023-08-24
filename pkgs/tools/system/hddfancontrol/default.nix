@@ -28,7 +28,7 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     description = "Dynamically control fan speed according to hard drive temperature on Linux";
     homepage = "https://github.com/desbma/hddfancontrol";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ benley ];
   };
 }
