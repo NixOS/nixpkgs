@@ -54,6 +54,7 @@ buildDotnetModule rec {
     gtk4
     libadwaita
     glib # Fixes "Could not retrieve parent type - is the typeid valid?"
+    gdk-pixpub
   ];
 
   passthru.updateScript = ./update.sh;
