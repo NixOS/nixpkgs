@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to serve static file for WSGI applications";
-    homepage = "https://whitenoise.evans.io/";
+    homepage = "https://whitenoise.readthedocs.io/";
     changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
