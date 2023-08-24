@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/yamafaktory/jql/releases/tag/${src.rev}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ akshgpt7 figsoda ];
+    mainProgram = "jql";
   };
 }
