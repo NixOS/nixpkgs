@@ -40870,6 +40870,8 @@ with pkgs;
 
   sndio = callPackage ../misc/sndio { };
 
+  SP800-90B_EntropyAssessment = callPackage ../tools/misc/SP800-90B_EntropyAssessment { };
+
   sticky = callPackage ../applications/misc/sticky { };
 
   stork = darwin.apple_sdk_11_0.callPackage ../applications/misc/stork {
