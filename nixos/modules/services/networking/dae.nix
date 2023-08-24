@@ -9,12 +9,24 @@ in
     services.dae = {
       enable = lib.options.mkEnableOption (lib.mdDoc "the dae service");
       package = lib.mkPackageOptionMD pkgs "dae" { };
+      configFile = lib.mkOption {
+        type = lib.types.path;
+        default = "/etc/dae/config.dae";
+        example = "/path/to/your/config.dae";
+        description = lib.mdDoc ''
+          The path of dae config file, end with `.dae`.
+        '';
+      };
     };
   };
 
   config = lib.mkIf config.services.dae.enable {
     networking.firewall.allowedTCPPorts = [ 12345 ];
     networking.firewall.allowedUDPPorts = [ 12345 ];
+    environment.etc."dae/config.dae" = {
+      mode = "0400";
+      source = cfg.configFile;
+    };
 
     systemd.services.dae = {
       unitConfig = {
