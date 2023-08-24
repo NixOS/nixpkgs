@@ -11620,6 +11620,8 @@ with pkgs;
 
   ostree-rs-ext = callPackage ../tools/misc/ostree-rs-ext { };
 
+  otc-auth = callPackage ../tools/admin/otc-auth { };
+
   otel-cli = callPackage ../tools/misc/otel-cli { };
 
   otfcc = callPackage ../tools/misc/otfcc { };
