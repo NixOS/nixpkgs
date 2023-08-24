@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoLock = {
-    lockFile = ./Cargo.lock;
+    lockFile = ./workstyle-Cargo.lock;
     outputHashes = {
       "swayipc-3.0.1" = "sha256-3Jhz3+LhncSRvo3n7Dh5d+RWQSvEff9teuaDZLLLEHk=";
     };
