@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub, nodejs }:
+{ lib, buildNpmPackage, fetchFromGitHub, nodejs, nixosTests }:
 
 buildNpmPackage rec {
   pname = "cryptpad";
@@ -51,6 +51,8 @@ buildNpmPackage rec {
     # so we make that one link.
     ln -s ../node_modules "$out_cryptpad/www/components"
   '';
+
+  passthru.tests.cryptpad = nixosTests.cryptpad;
 
   meta = with lib; {
     description = "Collaborative office suite, end-to-end encrypted and open-source.";
