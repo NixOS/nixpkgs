@@ -2,6 +2,8 @@
 , stdenv
 , darwin
 , fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
 , libxkbcommon
 , openssl
 , pkg-config
@@ -13,27 +15,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "23.1-alpha1";
+  version = "2023.4";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-Aq+mKctmc1RwpnUEIi+Zmr4o8n6wgQchGCunPWouLsE=";
+    hash = "sha256-j5Yw7rXdNd32RnbV2jQ+ZUjbm14AKZ7khQNX6A+qPAM=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cosmic-text-0.8.0" = "sha256-p8PtXcFH+T3z6wWPFYbHFkxrkJpK4oHJ1aJvq4zld/4=";
-      "glyphon-0.2.0" = "sha256-7h5W82zPMw9PVZiF5HCo7HyRiVhGR8MsfgGuIjo+Kfg=";
-      "iced-0.9.0" = "sha256-KEBm62lDjSKXvXZssLoBfUYDSW+OpTXutxsKZMz8SE0=";
-      "irc-0.15.0" = "sha256-ZlwfyX4tmQr9D+blY4jWl85bwJ2tXUYp3ryLqoungII=";
+      "iced-0.9.0" = "sha256-z/tkUdFXNjxR5Si8dnNrkrvFos0VAqGjnFNSs88D/5w=";
       "winit-0.28.6" = "sha256-szB1LCOPmPqhZNIWbeO8JMfRMcMRr0+Ze0f4uqyR8AE=";
     };
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     pkg-config
   ];
 
@@ -56,6 +56,25 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     wayland
   ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "org.squidowl.halloy";
+      desktopName = "Halloy";
+      comment = "IRC client written in Rust";
+      icon = "org.squidowl.halloy";
+      exec = pname;
+      terminal = false;
+      mimeTypes = [ "x-scheme-handler/irc" "x-scheme-handler/ircs" ];
+      categories = [ "Network" "IRCClient" ];
+      keywords = [ "IM" "Chat" ];
+      startupWMClass = "org.squidowl.halloy";
+    })
+  ];
+
+  postInstall = ''
+    install -Dm644 assets/linux/org.squidowl.halloy.png $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+  '';
 
   meta = with lib; {
     description = "IRC application";
