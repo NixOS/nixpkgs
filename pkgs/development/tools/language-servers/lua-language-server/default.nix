@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/LuaLS/lua-language-server/blob/${version}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda sei40kr ];
+    mainProgram = "lua-language-server";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
