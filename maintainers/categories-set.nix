@@ -46,6 +46,18 @@ let
 
   # "Custom" list of categories for the use of Nixpkgs
   nixpkgsAdditionalCategories = {
+    software = {
+      name = "Software";
+      description = ''
+        Any piece of software, here understood as a set of data, routines and
+        programs associated with the operation of a computer system.
+
+        This category is a catch-all placeholder for situations in which a more
+        specific category is not possible or desired - such as automatically
+        generated packages.
+      '';
+      relatedCategories = [ /* Always empty*/ ];
+    };
   };
 
   allCategories = lib.foldl lib.recursiveUpdate {} [
