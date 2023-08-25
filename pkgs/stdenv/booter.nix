@@ -99,7 +99,8 @@ stageFuns: let
       if args.__raw or false
       then args'
       else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
-        adjacentPackages = if args.selfBuild or true then null else rec {
+        actuallySplice = !(args.selfBuild or true);
+        adjacentPackages = rec {
           pkgsBuildBuild = prevStage.buildPackages;
           pkgsBuildHost = prevStage;
           pkgsBuildTarget =
