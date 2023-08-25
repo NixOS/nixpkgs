@@ -1,26 +1,36 @@
 { lib
+, aiohttp
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , geopy
+, pythonOlder
 , requests
+, setuptools
 , urllib3
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "aemet-opendata";
-  version = "0.2.2";
+  version = "0.3.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "AEMET-OpenData";
     rev = "refs/tags/${version}";
-    hash = "sha256-3f3hvui00oItu6t9rKecoCquqsD1Eeqz+SEsLBqGt48=";
+    hash = "sha256-Wq22OyNbEg2v6ytUY3PshtDsYllXt+31LEw+9TvC6oM=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
   propagatedBuildInputs = [
+    aiohttp
     geopy
     requests
     urllib3
