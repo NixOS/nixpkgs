@@ -27,6 +27,11 @@
 , freeglut
 , libGLU
 , xcbuild
+
+# for passthru.tests
+, cups-filters
+, python3
+, zathura
 }:
 let
 
@@ -145,6 +150,11 @@ stdenv.mkDerivation rec {
   '');
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit cups-filters zathura;
+    inherit (python3.pkgs) pikepdf pymupdf;
+  };
 
   meta = with lib; {
     homepage = "https://mupdf.com";
