@@ -134,6 +134,7 @@ in
           ProtectProc = "invisible";
           ProcSubset = "pid";
           RestrictAddressFamilies = [
+            "AF_UNIX"
             "AF_INET"
             "AF_INET6"
           ];
