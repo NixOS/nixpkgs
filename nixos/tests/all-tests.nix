@@ -766,6 +766,7 @@ in {
   systemd-initrd-networkd = handleTest ./systemd-initrd-networkd.nix {};
   systemd-initrd-networkd-ssh = handleTest ./systemd-initrd-networkd-ssh.nix {};
   systemd-initrd-networkd-openvpn = handleTest ./initrd-network-openvpn { systemdStage1 = true; };
+  systemd-initrd-vlan = handleTest ./systemd-initrd-vlan.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
