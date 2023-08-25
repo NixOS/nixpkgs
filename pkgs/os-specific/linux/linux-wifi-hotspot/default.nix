@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , which
 , pkg-config
 , glib
@@ -50,6 +51,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" ];
 
+  # Since TKIP is deprecated in hostapd, we need to modify create_ap to not use it
+  # See: https://github.com/NixOS/nixpkgs/commit/4bec3f204362fa22a0740c8a572ffef3b322596d
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/lakinduakash/linux-wifi-hotspot/commit/32fdb2bf2d3a34847270598682dec57cc3caf424.patch";
+      hash = "sha256-HUuJLOk7luQQ6xU5XKfGlV+YtLfYnFx2P6ZJF/1M7VE=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace ./src/scripts/Makefile \
       --replace "etc" "$out/etc"
@@ -59,13 +69,6 @@ stdenv.mkDerivation rec {
       --replace "/usr" "$out"
     substituteInPlace ./src/scripts/policies/polkit.policy \
       --replace "/usr" "$out"
-  '';
-
-  # Since TKIP is deprecated in hostapd, we need to modify create_ap to not use it
-  # See: https://github.com/NixOS/nixpkgs/commit/4bec3f204362fa22a0740c8a572ffef3b322596d
-  preBuild = ''
-    substituteInPlace ./src/scripts/create_ap \
-      --replace "wpa_pairwise=TKIP CCMP" "wpa_pairwise=CCMP"
   '';
 
   makeFlags = [
