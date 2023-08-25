@@ -648,6 +648,18 @@ in rec {
     inherit mkTmuxPlugin;
   };
 
+  t-smart-tmux-session-manager = mkTmuxPlugin {
+    pluginName = "t-smart-tmux-session-manager";
+    version = "unstable-2023-06-05";
+    rtpFilePath = "t-smart-tmux-session-manager.tmux";
+    src = pkgs.fetchFromGitHub {
+      owner = "joshmedeski";
+      repo = "t-smart-tmux-session-manager";
+      rev = "0a4c77c5c3858814621597a8d3997948b3cdd35d";
+      sha256 = "1dr5w02a0y84q2iw4jp1psxvkyj4g6pr87gc22syw1jd4ibkn925";
+    };
+  };
+
   urlview = mkTmuxPlugin {
     pluginName = "urlview";
     version = "unstable-2016-01-06";
