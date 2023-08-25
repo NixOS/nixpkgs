@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc_cli";
-  version = "1.56.2";
+  version = "1.57.0";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-yjEaVfyfOlH/GPZz06lKvdds88VZUygPe1OxueMDnJA=";
+    hash = "sha256-ZPhPi4ODAAohCySVKeypaDID4ZUXvnfidOGK5EMXvh4=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ automake cmake autoconf ];
