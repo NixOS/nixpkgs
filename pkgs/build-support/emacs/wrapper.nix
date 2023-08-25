@@ -224,7 +224,7 @@ runCommand
 
     mkdir -p $out/share
     # Link icons and desktop files into place
-    for dir in applications icons info man emacs; do
+    for dir in applications icons info man; do
       ln -s $emacs/share/$dir $out/share/$dir
     done
   ''
