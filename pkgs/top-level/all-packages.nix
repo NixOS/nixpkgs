@@ -20548,7 +20548,7 @@ with pkgs;
 
   armadillo = callPackage ../development/libraries/armadillo { };
 
-  arrayfire = darwin.apple_sdk_11_0.callPackage ../development/libraries/arrayfire {
+  arrayfire = callPackage ../development/libraries/arrayfire {
     cudaPackages = cudaPackages_12;
   };
 

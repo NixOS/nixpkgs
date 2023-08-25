@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    # ArrayFire have their own CMake functions for downloading the
+    # dependencies, and it uses git. Even though we bypass that system by
+    # downloading the dependencies beforehand, CMake files still invoke git for
+    # checking...
     git
     pkg-config
   ];
