@@ -1060,6 +1060,11 @@
     github = "an-empty-string";
     githubId = 681716;
   };
+  angaz = {
+    name = "Angus Dippenaar";
+    github = "angaz";
+    githubId = 10219618;
+  };
   angristan = {
     email = "angristan@pm.me";
     github = "angristan";
@@ -14164,6 +14169,12 @@
     github = "raphaelr";
     githubId = 121178;
     name = "Raphael Robatsch";
+  };
+  rapiteanu = {
+    email = "rapiteanu.catalin@gmail.com";
+    github = "Steinhagen";
+    githubId = 4029937;
+    name = "Viorel-Cătălin Răpițeanu";
   };
   raquelgb = {
     email = "raquel.garcia.bautista@gmail.com";

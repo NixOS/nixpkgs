@@ -72,12 +72,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" "WITH_ALLCOMP=yes" ];
 
-  postInstall = ''
-    # Install Emacs Mode. NOTE: We can't install the necessary
-    # dependencies (s.el) here. The user has to do this themselves.
-    mkdir -p "$out/share/emacs/site-lisp"
-    cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
-  '' + lib.optionalString dmenuSupport ''
+  postInstall = lib.optionalString dmenuSupport ''
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
