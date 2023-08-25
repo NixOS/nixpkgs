@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3
 , makeWrapper
 , nixosTests
@@ -29,6 +30,14 @@ python.pkgs.buildPythonApplication rec {
     rev = "5971bf25fe67d94ec4d9f53b785c15a098113620"; # using a fixed revision because upstream may re-tag releases :/
     sha256 = "sha256-7Exvm3EShb/1EqwA4wzWB9zCdv0P/ISmjKSoqtOMnqk=";
   };
+
+  patches = [
+    (fetchpatch {
+      # PIL update fix
+      url = "https://patch-diff.githubusercontent.com/raw/haiwen/seahub/pull/5570.patch";
+      sha256 = "sha256-7V2aRlacJ7Qhdi9k4Bs+t/Emx+EAM/NNCI+K40bMwLA=";
+    })
+  ];
 
   dontBuild = true;
 
