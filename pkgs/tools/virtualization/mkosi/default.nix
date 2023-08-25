@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , stdenv
 , python3
 , bubblewrap
@@ -21,7 +22,15 @@
 let
   # For systemd features used by mkosi, see
   # https://github.com/systemd/mkosi/blob/19bb5e274d9a9c23891905c4bcbb8f68955a701d/action.yaml#L64-L72
-  systemdForMkosi = systemd.override {
+  systemdForMkosi = (systemd.overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches ++ [
+      # Enable setting a deterministic verity seed for systemd-repart. Remove when upgrading to systemd 255.
+      (fetchpatch {
+        url = "https://github.com/systemd/systemd/commit/81e04781106e3db24e9cf63c1d5fdd8215dc3f42.patch";
+        hash = "sha256-KO3poIsvdeepPmXWQXNaJJCPpmBb4sVmO+ur4om9f5k=";
+      })
+    ];
+  })).override {
     withRepart = true;
     withBootloader = true;
     withSysusers = true;
