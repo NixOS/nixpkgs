@@ -13118,6 +13118,8 @@ self: super: with self; {
 
   types-appdirs = callPackage ../development/python-modules/types-appdirs { };
 
+  types-awscrt = callPackage ../development/python-modules/types-awscrt { };
+
   types-beautifulsoup4 = callPackage ../development/python-modules/types-beautifulsoup4 { };
 
   types-colorama = callPackage ../development/python-modules/types-colorama { };
