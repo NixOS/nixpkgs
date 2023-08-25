@@ -32,7 +32,7 @@ dotnetFixupHook() {
 
     if [ "${executables-}" ]; then
         for executable in ${executables[@]}; do
-            path="$out/lib/$pname/$executable"
+            path="${installPath-$out/lib/$pname}/$executable"
 
             if test -x "$path"; then
                 wrapDotnetProgram "$path" "$out/bin/$(basename "$executable")"
@@ -45,7 +45,7 @@ dotnetFixupHook() {
     else
         while IFS= read -d '' executable; do
             wrapDotnetProgram "$executable" "$out/bin/$(basename "$executable")" \;
-        done < <(find "$out/lib/$pname" ! -name "*.dll" -executable -type f -print0)
+        done < <(find "${installPath-$out/lib/$pname}" ! -name "*.dll" -executable -type f -print0)
     fi
 
     echo "Finished dotnetFixupPhase"
