@@ -6,6 +6,8 @@
 , fcitx5-configtool
 , fcitx5-qt
 , fcitx5-gtk
+, gdk-pixbuf
+, librsvg
 , addons ? [ ]
 }:
 
@@ -20,12 +22,18 @@ symlinkJoin {
     fcitx5-configtool
   ] ++ addons;
 
+  buildInputs = [
+    gdk-pixbuf
+    librsvg
+  ];
+
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/fcitx5 \
       --prefix FCITX_ADDON_DIRS : "$out/lib/fcitx5" \
       --suffix XDG_DATA_DIRS : "$out/share" \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --suffix PATH : "$out/bin" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath (lib.flatten (map (x: x.extraLdLibraries or []) addons))}"
 
