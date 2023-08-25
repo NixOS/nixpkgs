@@ -13134,6 +13134,8 @@ self: super: with self; {
 
   types-futures = callPackage ../development/python-modules/types-futures { };
 
+  types-html5lib = callPackage ../development/python-modules/types-html5lib { };
+
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
 
   types-mock = callPackage ../development/python-modules/types-mock { };
