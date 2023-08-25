@@ -41,8 +41,8 @@
 , messagelib
 }:
 
-mkDerivation rec {
-  pname = "kalendar";
+mkDerivation {
+  pname = "merkuro";
 
   nativeBuildInputs = [
     cmake
@@ -89,14 +89,11 @@ mkDerivation rec {
   ];
 
   propagatedUserEnvPkgs = [ akonadi kdepim-runtime akonadi-search ];
-  postFixup = ''
-    wrapProgram "$out/bin/kalendar" \
-      --prefix PATH : "${lib.makeBinPath [ akonadi kdepim-runtime akonadi-search ]}"
-  '';
+  qtWrapperArgs = [''--prefix PATH : "${lib.makeBinPath [ akonadi kdepim-runtime akonadi-search ]}"''];
 
   meta = with lib; {
     description = "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
-    homepage = "https://apps.kde.org/kalendar/";
+    homepage = "https://invent.kde.org/pim/merkuro";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Thra11 ];
     platforms = platforms.linux;
