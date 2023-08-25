@@ -10,6 +10,7 @@
 , orc
 , bzip2
 , gettext
+, libGL
 , libv4l
 , libdv
 , libavc1394
@@ -139,6 +140,7 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.isLinux [
+    libGL
     libv4l
     libpulseaudio
     libavc1394
