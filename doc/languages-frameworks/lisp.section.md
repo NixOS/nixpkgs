@@ -16,10 +16,10 @@ The `pkgs` attribute set contains packages that were automatically
 other [manually defined](#lisp-defining-packages-inside) ones. Not every package
 works for all the CL implementations (e.g. `nyxt` only makes sense for `sbcl`).
 
-The `withPackages` function is of primary utility. It is used to build 
-[runnable wrappers](#lisp-building-wrappers), with a pinned and pre-built 
-[ASDF FASL](#lisp-loading-asdf) available in the `ASDF` environment variable, 
-and `CL_SOURCE_REGISTRY`/`ASDF_OUTPUT_TRANSLATIONS` configured to 
+The `withPackages` function is of primary utility. It is used to build
+[runnable wrappers](#lisp-building-wrappers), with a pinned and pre-built
+[ASDF FASL](#lisp-loading-asdf) available in the `ASDF` environment variable,
+and `CL_SOURCE_REGISTRY`/`ASDF_OUTPUT_TRANSLATIONS` configured to
 [find the desired systems on runtime](#lisp-loading-systems).
 
 In addition, Lisps have the `withOverrides` function, which can be used to
@@ -144,8 +144,9 @@ In that file, use the `build-asdf-system` function, which is a wrapper around
 as `build-with-compile-into-pwd` for systems which create files during
 compilation (such as cl-unicode).
 
-The `build-asdf-system` function is documented with comments in
-`nix-cl.nix`. Also, `packages.nix` is full of examples of how to use it.
+The `build-asdf-system` function is documented
+[here](#lisp-defining-packages-outside). Also, `packages.nix` is full of
+examples of how to use it.
 
 ## Defining packages manually outside Nixpkgs {#lisp-defining-packages-outside}
 
@@ -153,8 +154,19 @@ Lisp derivations (`abcl`, `sbcl` etc.) also export the `buildASDFSystem`
 function, which is similar to `build-asdf-system` from `packages.nix`, but is
 part of the public API.
 
+It takes the following arguments:
+
+- `pname`: the package name
+- `version`: the package version
+- `src`: the package source
+- `patches`: patches to apply to the source before build
+- `nativeLibs`: native libraries used by CFFI and grovelling
+- `javaLibs`: Java libraries for ABCL
+- `lispLibs`: dependencies on other packages build with `buildASDFSystem`
+- `systems`: list of systems to build
+
 It can be used to define packages outside Nixpkgs, and, for example, add them
-into the package scope with `withOverrides` which will be discussed later.
+into the package scope with `withOverrides`.
 
 ### Including an external package in scope {#lisp-including-external-pkg-in-scope}
 
