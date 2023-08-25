@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg }:
+{ lib, buildPythonPackage, fetchPypi, fetchurl, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg, unzip, zip }:
 {
   # this is exposed for potential plugins to use and for nix-update
   inherit buildbot-pkg;
@@ -26,6 +26,42 @@
       description = "Buildbot UI";
       maintainers = with maintainers; [ ryansydnor lopsided98 ];
       license = licenses.gpl2;
+    };
+  };
+
+  www-react = buildPythonPackage rec {
+    pname = "buildbot-www-react";
+    inherit (buildbot-pkg) version;
+    format = "wheel";
+
+    # fetchpypy returns a 404 for the wheel?
+    # normal source release doesn't have any assets
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/buildbot_www_react-${version}-py3-none-any.whl";
+      hash = "sha256-pEzuMiDhGQtIWQm80lgKIcTjnS7Z8UJhH9plJup5O84=";
+    };
+
+    # Remove unneccessary circular dependency on buildbot
+    postPatch = ''
+      pushd dist
+      unzip buildbot_www_react-${version}-py3-none-any.whl
+      sed -i "s/Requires-Dist: buildbot//" buildbot_www_react-${version}.dist-info/METADATA
+      chmod -R u+w buildbot_www_react-${version}-py3-none-any.whl
+      zip -r buildbot_www_react-${version}-py3-none-any.whl buildbot_www_react-${version}.dist-info
+      popd
+    '';
+
+    buildInputs = [ buildbot-pkg ];
+    nativeBuildInputs = [ unzip zip ];
+
+    # No tests
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot UI (React)";
+      maintainers = with maintainers; [ mic92 ];
+      license = licenses.gpl2Only;
     };
   };
 
