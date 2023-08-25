@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "0.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
