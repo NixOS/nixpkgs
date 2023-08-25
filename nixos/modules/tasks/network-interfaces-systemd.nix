@@ -173,6 +173,19 @@ let
     }];
   }));
 
+  vlanNetworks = mkMerge (flip mapAttrsToList cfg.vlans (name: vlan: {
+    netdevs."40-${name}" = {
+      netdevConfig = {
+        Name = name;
+        Kind = "vlan";
+      };
+      vlanConfig.Id = vlan.id;
+    };
+    networks."40-${vlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+      vlan = [ name ];
+    } ]);
+  }));
+
 in
 
 {
@@ -182,7 +195,13 @@ in
     # Note this is if initrd.network.enable, not if
     # initrd.systemd.network.enable. By setting the latter and not the
     # former, the user retains full control over the configuration.
-    boot.initrd.systemd.network = mkMerge [(genericDhcpNetworks true) interfaceNetworks];
+    boot.initrd.systemd.network = mkMerge [
+      (genericDhcpNetworks true)
+      interfaceNetworks
+      vlanNetworks
+    ];
+    boot.initrd.availableKernelModules =
+      optional (cfg.vlans != {}) "8021q";
   })
 
   (mkIf cfg.useNetworkd {
@@ -377,18 +396,7 @@ in
           } ]);
         };
       })))
-      (mkMerge (flip mapAttrsToList cfg.vlans (name: vlan: {
-        netdevs."40-${name}" = {
-          netdevConfig = {
-            Name = name;
-            Kind = "vlan";
-          };
-          vlanConfig.Id = vlan.id;
-        };
-        networks."40-${vlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
-          vlan = [ name ];
-        } ]);
-      })))
+      vlanNetworks
     ];
 
     # We need to prefill the slaved devices with networking options
