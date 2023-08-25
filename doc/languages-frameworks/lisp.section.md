@@ -67,9 +67,10 @@ buildPhase = ''
 
 ## Importing packages from Quicklisp {#lisp-importing-packages-from-quicklisp}
 
-The library is able to import all the packages distributed by Quicklisp by
-parsing its `releases.txt` and `systems.txt` files. These files are available
-from [quicklisp.org](http://beta.quicklisp.org/dist/quicklisp.txt).
+To save some work of writing Nix expressions, there is a script that imports all
+the packages distributed by Quicklisp into `imported.nix`. This works by parsing
+its `releases.txt` and `systems.txt` files, which are published every couple of
+months on [quicklisp.org](http://beta.quicklisp.org/dist/quicklisp.txt).
 
 The import process is implemented in the `import` directory as Common Lisp
 code in the `org.lispbuilds.nix` ASDF system. To run the script, one can
@@ -83,13 +84,16 @@ nix-shell --run 'sbcl --script ql-import.lisp'
 The script will:
 
 1. Download the latest Quicklisp `systems.txt` and `releases.txt` files
-2. Generate an SQLite database of all QL systems in `packages.sqlite`
+2. Generate a temporary SQLite database of all QL systems in `packages.sqlite`
 3. Generate an `imported.nix` file from the database
 
-The maintainer's job there is to:
+(The `packages.sqlite` file can be deleted at will, because it is regenerated
+each time the script runs.)
 
-1. Re-run the `ql-import.lisp` script
-2. Add missing native dependencies in `ql.nix`
+The maintainer's job is to:
+
+1. Re-run the `ql-import.lisp` script when there is a new Quicklisp release
+2. [Add any missing native dependencies](#lisp-quicklisp-adding-native-dependencies) in `ql.nix`
 3. For packages that still don't build, package them manually in `packages.nix`
 
 Also, the `imported.nix` file **must not be edited manually**! It should only be
