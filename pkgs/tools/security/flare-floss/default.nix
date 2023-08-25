@@ -27,7 +27,7 @@ let
 in
 py.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -35,7 +35,7 @@ py.pkgs.buildPythonPackage rec {
     repo = "flare-floss";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-Oa0DMl7RKNfA00shcc4y1sNd2OiKCf0sA0EUC5gByBI=";
+    hash = "sha256-tOLnve5XBc3TtSgucPIddBHD0YJhsRpRduXsKrtJ/eQ=";
   };
 
   postPatch = ''
@@ -50,6 +50,7 @@ py.pkgs.buildPythonPackage rec {
     halo
     networkx
     pydantic
+    rich
     tabulate
     tqdm
     viv-utils
