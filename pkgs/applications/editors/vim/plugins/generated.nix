@@ -8304,6 +8304,18 @@ final: prev:
     meta.homepage = "https://github.com/AlphaTechnolog/pywal.nvim/";
   };
 
+  quarto-nvim = buildVimPluginFrom2Nix {
+    pname = "quarto-nvim";
+    version = "2023-07-17";
+    src = fetchFromGitHub {
+      owner = "quarto-dev";
+      repo = "quarto-nvim";
+      rev = "35f86035e7b3846dbf168267ffe0021c3d312259";
+      sha256 = "0a46bqca0f8rqd71kym07nn3vq4qfasw20fhi6s8gywmd658hx9k";
+    };
+    meta.homepage = "https://github.com/quarto-dev/quarto-nvim/";
+  };
+
   quick-scope = buildVimPluginFrom2Nix {
     pname = "quick-scope";
     version = "2023-08-08";
@@ -15814,18 +15826,6 @@ final: prev:
       sha256 = "0dc1mg9x8flda59vl8d89m1ri1n0jl72q4jhmxj7mg9gp2r39l3m";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  quarto-nvim = buildVimPluginFrom2Nix {
-    pname = "quarto-nvim";
-    version = "2023-07-17";
-    src = fetchFromGitHub {
-      owner = "quarto-dev";
-      repo = "quarto-nvim";
-      rev = "35f86035e7b3846dbf168267ffe0021c3d312259";
-      sha256 = "0a46bqca0f8rqd71kym07nn3vq4qfasw20fhi6s8gywmd658hx9k";
-    };
-    meta.homepage = "https://github.com/quarto-dev/quarto-nvim/";
   };
 
   catppuccin-nvim = buildVimPluginFrom2Nix {
