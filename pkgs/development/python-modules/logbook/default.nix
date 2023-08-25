@@ -35,6 +35,10 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
+  pythonImportsCheck = [
+    "logbook"
+  ];
+
   meta = with lib; {
     description = "A logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
