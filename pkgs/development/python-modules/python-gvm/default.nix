@@ -6,13 +6,14 @@
 , lxml
 , paramiko
 , poetry-core
+, pontos
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "23.5.0";
+  version = "23.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-84MTr9aTMB5MUj84bqbSGfX8JLA1KQ8pRE8Nr2RmoJw=";
+    hash = "sha256-jdfrmFpWOuQgYwV2NrRyRDwAZThWdBFgfLByVIZ5HhQ=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     defusedxml
     lxml
     paramiko
+    pontos
   ];
 
   nativeCheckInputs = [

@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/google/yamlfmt";
     license = licenses.asl20;
     maintainers = with maintainers; [ sno2wman ];
+    mainProgram = "yamlfmt";
   };
 }

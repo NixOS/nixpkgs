@@ -54,14 +54,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.17.0";
+  version = "4.17.2";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    hash = "sha256-j0d37C1TTb6ggXk1wTaqEcBKwsxE/B7Io90gTkc2q0M=";
+    hash = "sha256-K75frptePKfHeGQNXaX4lKsLwO6Rs6AAka6hvP8MA+k=";
   };
 
   nativeBuildInputs = [
@@ -112,6 +112,8 @@ stdenv.mkDerivation rec {
 
     mkdir -pv $out/share/pixmaps
     cp -r ../mudlet.png $out/share/pixmaps/
+
+    cp -r ../translations $out/share/
 
     makeQtWrapper $out/mudlet $out/bin/mudlet \
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \

@@ -8,20 +8,23 @@
 , python-dateutil
 , sqlite-fts4
 , tabulate
+, pluggy
 , pytestCheckHook
 , hypothesis
+, testers
+, sqlite-utils
 }:
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.32.1";
+  version = "3.35";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bCj+Mvzr1lihaR3t+k0RFJmtMCzAE5xaWJOlkNRhhIo=";
+    hash = "sha256-j2/n+NEncs1c9FlHA6mNzQw3wP1oIN0gVBunS5/KNjo=";
   };
 
   postPatch = ''
@@ -35,6 +38,7 @@ buildPythonPackage rec {
     python-dateutil
     sqlite-fts4
     tabulate
+    pluggy
   ];
 
   nativeCheckInputs = [
@@ -45,6 +49,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "sqlite_utils"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = sqlite-utils;
+  };
 
   meta = with lib; {
     description = "Python CLI utility and library for manipulating SQLite databases";

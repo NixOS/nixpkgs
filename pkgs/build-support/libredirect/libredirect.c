@@ -106,7 +106,7 @@ static int open_needs_mode(int flags)
 
 WRAPPER(int, open)(const char * path, int flags, ...)
 {
-    int (*open_real) (const char *, int, mode_t) = LOOKUP_REAL(open);
+    int (*open_real) (const char *, int, ...) = LOOKUP_REAL(open);
     mode_t mode = 0;
     if (open_needs_mode(flags)) {
         va_list ap;
@@ -139,7 +139,7 @@ WRAPPER_DEF(open64)
 
 WRAPPER(int, openat)(int dirfd, const char * path, int flags, ...)
 {
-    int (*openat_real) (int, const char *, int, mode_t) = LOOKUP_REAL(openat);
+    int (*openat_real) (int, const char *, int, ...) = LOOKUP_REAL(openat);
     mode_t mode = 0;
     if (open_needs_mode(flags)) {
         va_list ap;

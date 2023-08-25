@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-ndk";
-  version = "3.1.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "bbqsrc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-L7HZzudu26Vyz1qm2soqGlZf8sBJKcx1BoBf8zC0ee4=";
+    sha256 = "sha256-jMhDKMFJVz/PdMnSrA+moknXPfwFhPj/fggHDAUCsNY=";
   };
 
-  cargoHash = "sha256-RMP1Nz2uWVIOxSlsjTR6QsVy6Heu9dXhrBBI5xGMbtY=";
+  cargoHash = "sha256-IUMS0oCucYeBSfjxIYl0hhJw2GIpSgh+Vm1iUQ+Jceo=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreGraphics

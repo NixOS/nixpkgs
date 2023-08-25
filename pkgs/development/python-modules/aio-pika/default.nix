@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.0.7";
+  version = "9.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4RZxpLQ8YcPRXrF0mJcteUwejlIQx0CIy0cFpfMW/RU=";
+    hash = "sha256-QCM/9Vt9/uXylaU8xymXJEjVd6sFRcVhpr2CGjB0AoY=";
   };
 
   nativeBuildInputs = [

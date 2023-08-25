@@ -73,14 +73,14 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.28.5";
+  version = "3.28.7";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-3fQB0oCIZSVEVMZzmeyvw8/Ew+JjzAFnTIsnsklAayI=";
+    hash = "sha256-RWQ3RlE8fPMuDGosxKNVgbjRTigZRolqNyaJoC1xdec=";
   };
 
   passthru = {
@@ -152,11 +152,11 @@ in mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ grass ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lsix sikmir willcohen ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];
+    platforms = with platforms; linux;
   };
 }

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "5.2.5";
   outputs = [ "out" "lib" "dev" ];
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
@@ -23,10 +23,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DASSIMP_BUILD_ASSIMP_TOOLS=ON" ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString ([
     # Needed with GCC 12
     "-Wno-error=array-bounds"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    "-Wno-error=free-nonheap-object"
+  ]);
 
   meta = with lib; {
     description = "A library to import various 3D model formats";

@@ -14,13 +14,13 @@
 , libyaml
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dtc";
   version = "1.7.0";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     sha256 = "sha256-FMh3VvlY3fUK8fbd0M+aCmlUrmG9YegiOOQ7MOByffc=";
   };
 
@@ -31,26 +31,26 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-C7OzwY0zq+2CV3SB5unI7Ill2M3deF7FXeQE3B/Kx2s=";
     })
 
-    # meson.build: bump version to 1.7.0
-    (fetchpatch {
-      url = "https://github.com/dgibson/dtc/commit/64a907f08b9bedd89833c1eee674148cff2343c6.patch";
-      sha256 = "sha256-p2KGS5GW+3uIPgXfuIx6aDC54csM+5FZDkK03t58AL8=";
-    })
-
-    # Fix version in libfdt/meson.build
-    (fetchpatch {
-      url = "https://github.com/dgibson/dtc/commit/723545ebe9933b90ea58dc125e4987c6bcb04ade.patch";
-      sha256 = "sha256-5Oq7q+62ZObj3e7rguN9jhSpYoQkwjSfo/N893229dQ=";
-    })
-
     # Use #ifdef NO_VALGRIND
     (fetchpatch {
       url = "https://github.com/dgibson/dtc/commit/41821821101ad8a9f83746b96b163e5bcbdbe804.patch";
       sha256 = "sha256-7QEFDtap2DWbUGqtyT/RgJZJFldKB8oSubKiCtLZ0w4=";
     })
+
+    # dtc: Fix linker options so it also works in Darwin
+    (fetchpatch {
+      url = "https://github.com/dgibson/dtc/commit/3acde70714df3623e112cf3ec99fc9b5524220b8.patch";
+      sha256 = "sha256-uLXL0Sjcn+bnMuF+A6PjUW1Rq6uNg1dQl58zbeYpP/U=";
+    })
+
+    # meson: allow disabling tests
+    (fetchpatch {
+      url = "https://github.com/dgibson/dtc/commit/35f26d2921b68d97fefbd5a2b6e821a2f02ff65d.patch";
+      sha256 = "sha256-cO4f/jJX/pQL7kk4jpKUhsCVESW2ZuWaTr7z3BuvVkw=";
+    })
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     meson
@@ -69,6 +69,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs setup.py
+
+    # meson.build: bump version to 1.7.0
+    substituteInPlace libfdt/meson.build \
+      --replace "version: '1.6.0'," "version: '${finalAttrs.version}',"
+    substituteInPlace meson.build \
+      --replace "version: '1.6.0'," "version: '${finalAttrs.version}',"
   '';
 
   # Required for installation of Python library and is innocuous otherwise.
@@ -77,15 +83,18 @@ stdenv.mkDerivation rec {
   mesonAutoFeatures = "auto";
   mesonFlags = [
     (lib.mesonBool "static-build" stdenv.hostPlatform.isStatic)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id $out/lib/libfdt.dylib $out/lib/libfdt-${version}.dylib
-  '';
+  doCheck =
+    # Checks are broken on aarch64 darwin
+    # https://github.com/NixOS/nixpkgs/pull/118700#issuecomment-885892436
+    !stdenv.isDarwin &&
 
-  # Checks are broken on aarch64 darwin
-  # https://github.com/NixOS/nixpkgs/pull/118700#issuecomment-885892436
-  doCheck = !stdenv.isDarwin;
+    # we must explicitly disable this here so that mesonFlags receives
+    # `-Dtests=disabled`; without it meson will attempt to run
+    # hostPlatform binaries during the configurePhase.
+    (with stdenv; buildPlatform.canExecute hostPlatform);
 
   meta = with lib; {
     description = "Device Tree Compiler";
@@ -94,4 +103,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.unix;
   };
-}
+})

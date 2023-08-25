@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, cachecontrol
 , cwl-upgrader
 , cwlformat
 , fetchFromGitHub
@@ -11,12 +10,13 @@
 , pythonOlder
 , rdflib
 , requests
+, ruamel-yaml
 , schema-salad
 }:
 
 buildPythonPackage rec {
   pname = "cwl-utils";
-  version = "0.26";
+  version = "0.28";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,15 +25,15 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-T82zaXILbQFOIE0/HhNjpYutSdA1UeaxXO/M7Z4sSfo=";
+    hash = "sha256-hplpsig+phIX6WCbUV0ILcA62f5DE/yTyKfoaeumgyY=";
   };
 
   propagatedBuildInputs = [
-    cachecontrol
     cwl-upgrader
     packaging
     rdflib
     requests
+    ruamel-yaml
     schema-salad
   ];
 
@@ -55,6 +55,9 @@ buildPythonPackage rec {
     "test_graph_split"
     "test_caches_js_processes"
     "test_load_document_with_remote_uri"
+    # Don't run tests which require network access
+    "test_remote_packing"
+    "test_remote_packing_github_soft_links"
   ];
 
   meta = with lib; {

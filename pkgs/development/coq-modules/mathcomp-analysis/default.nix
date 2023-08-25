@@ -29,7 +29,6 @@ let
       { cases = [ (range "8.13" "8.15") (range "1.13" "1.14") ]; out = "0.5.1"; }
       { cases = [ (range "8.13" "8.15") (range "1.12" "1.14") ]; out = "0.3.13"; }
       { cases = [ (range "8.11" "8.14") (range "1.12" "1.13") ]; out = "0.3.10"; }
-      { cases = [ (range "8.11" "8.12") "1.11.0" ];              out = "0.3.4"; }
       { cases = [ (range "8.10" "8.12") "1.11.0" ];              out = "0.3.3"; }
       { cases = [ (range "8.10" "8.11") "1.11.0" ];              out = "0.3.1"; }
       { cases = [ (range "8.8"  "8.11") (range "1.8" "1.10") ];  out = "0.2.3"; }
@@ -39,10 +38,9 @@ let
   packages = [ "classical" "analysis" ];
 
   mathcomp_ = package: let
-      classical-deps = [ mathcomp.algebra mathcomp-finmap hierarchy-builder ];
+      classical-deps = [ mathcomp.algebra mathcomp-finmap ];
       analysis-deps = [ mathcomp.field mathcomp-bigenough ];
-      intra-deps = if package == "single" then []
-        else map mathcomp_ (head (splitList (lib.pred.equal package) packages));
+      intra-deps = lib.optionals (package != "single") (map mathcomp_ (head (splitList (lib.pred.equal package) packages)));
       pkgpath = if package == "single" then "."
         else if package == "analysis" then "theories" else "${package}";
       pname = if package == "single" then "mathcomp-analysis-single"

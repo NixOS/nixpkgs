@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "08la3jmmzlf4pm48bf9zx4cqj9gbqalpqy0s57bh5vfsdk74nnhv";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ libseccomp ];

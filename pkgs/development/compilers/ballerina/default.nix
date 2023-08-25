@@ -1,6 +1,6 @@
 { ballerina, lib, writeText, runCommand, makeWrapper, fetchzip, stdenv, openjdk }:
 let
-  version = "2201.5.0";
+  version = "2201.6.0";
   codeName = "swan-lake";
 in stdenv.mkDerivation {
   pname = "ballerina";
@@ -8,7 +8,7 @@ in stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://dist.ballerina.io/downloads/${version}/ballerina-${version}-${codeName}.zip";
-    sha256 = "sha256-6UpUKoUHkYW9aPo2AbpP5uC1rCv578ultG9II1jZPRE=";
+    sha256 = "sha256-yttRswqNq8Tam1OwnC9klwrryDDqdHMzzRs9T9pYlnU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -6,7 +6,7 @@
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
-    removeSuffix replaceStrings singleton splitString;
+    removeSuffix replaceStrings singleton splitString makeBinPath;
 
   /*
     * The attrset `exporterTests` contains one attribute
@@ -281,6 +281,46 @@ let
         succeed(
             "curl -sSf http://localhost:9133/metrics | grep 'fritzbox_exporter_collect_errors 0'"
         )
+      '';
+    };
+
+    graphite = {
+      exporterConfig = {
+        enable = true;
+        port = 9108;
+        graphitePort = 9109;
+        mappingSettings.mappings = [{
+          match = "test.*.*";
+          name = "testing";
+          labels = {
+            protocol = "$1";
+            author = "$2";
+          };
+        }];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-graphite-exporter.service")
+        wait_for_open_port(9108)
+        wait_for_open_port(9109)
+        succeed("echo test.tcp.foo-bar 1234 $(date +%s) | nc -w1 localhost 9109")
+        succeed("curl -sSf http://localhost:9108/metrics | grep 'testing{author=\"foo-bar\",protocol=\"tcp\"} 1234'")
+      '';
+    };
+
+    idrac = {
+      exporterConfig = {
+        enable = true;
+        port = 9348;
+        configuration = {
+          hosts = {
+            default = { username = "username"; password = "password"; };
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-idrac-exporter.service")
+        wait_for_open_port(9348)
+        wait_until_succeeds("curl localhost:9348")
       '';
     };
 
@@ -891,6 +931,47 @@ let
       '';
     };
 
+    php-fpm = {
+      nodeName = "php_fpm";
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeTextFile {
+          name = "/tmp/prometheus-php-fpm-exporter.env";
+          text = ''
+            PHP_FPM_SCRAPE_URI="tcp://127.0.0.1:9000/status"
+          '';
+        };
+      };
+      metricProvider = {
+        users.users."php-fpm-exporter" = {
+          isSystemUser = true;
+          group  = "php-fpm-exporter";
+        };
+        users.groups."php-fpm-exporter" = {};
+        services.phpfpm.pools."php-fpm-exporter" = {
+          user = "php-fpm-exporter";
+          group = "php-fpm-exporter";
+          settings = {
+            "pm" = "dynamic";
+            "pm.max_children" = 32;
+            "pm.max_requests" = 500;
+            "pm.start_servers" = 2;
+            "pm.min_spare_servers" = 2;
+            "pm.max_spare_servers" = 5;
+            "pm.status_path" = "/status";
+            "listen" = "127.0.0.1:9000";
+            "listen.allowed_clients" = "127.0.0.1";
+          };
+          phpEnv."PATH" = makeBinPath [ pkgs.php ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("phpfpm-php-fpm-exporter.service")
+        wait_for_unit("prometheus-php-fpm-exporter.service")
+        succeed("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 1'")
+      '';
+    };
+
     postfix = {
       exporterConfig = {
         enable = true;
@@ -1062,6 +1143,22 @@ let
       '';
     };
 
+    scaphandre = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        boot.kernelModules = [ "intel_rapl_common" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-scaphandre-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:8080/metrics'"
+        )
+      '';
+    };
+
     shelly = {
       exporterConfig = {
         enable = true;
@@ -1103,7 +1200,7 @@ let
       };
       exporterTest = ''
         wait_until_succeeds(
-            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Device unavailable"'
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Unable to detect device type"'
         )
       '';
     };

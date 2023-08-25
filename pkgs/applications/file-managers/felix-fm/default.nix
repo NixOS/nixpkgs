@@ -9,21 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "2.3.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
-    repo = pname;
+    repo = "felix";
     rev = "v${version}";
-    sha256 = "sha256-+8tYllK8UYW7hdA4qoH8Eiu6SbXvjRe4BFfEbwabuIY=";
+    hash = "sha256-d01AbHAIelwjVnVX5hn4QY0sp9n9Ez4ImYqNO/RBmEU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "syntect-5.0.0" = "sha256-Ql3zpfjZ5nopmqZyVOJ8qcRA8eXm6ZYzLsAnGA1+upY=";
-    };
-  };
+  cargoHash = "sha256-n8cVdGvh3/lQ6pF0ukxsog+XpIdpjuxGcgkDkM/3IFk=";
 
   nativeBuildInputs = [ pkg-config ];
 

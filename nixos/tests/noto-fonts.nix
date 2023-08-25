@@ -4,9 +4,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   nodes.machine = {
     imports = [ ./common/x11.nix ];
-    environment.systemPackages = [ pkgs.gnome.gedit ];
+    environment.systemPackages = [ pkgs.gedit ];
     fonts = {
-      enableDefaultFonts = false;
+      enableDefaultPackages = false;
       fonts = with pkgs;[
         noto-fonts
         noto-fonts-cjk-sans

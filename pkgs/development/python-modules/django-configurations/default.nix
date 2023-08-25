@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "A helper for organizing Django settings";
     homepage = "https://django-configurations.readthedocs.io/";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

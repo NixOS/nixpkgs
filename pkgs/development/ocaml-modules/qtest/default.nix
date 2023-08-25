@@ -4,14 +4,18 @@ buildDunePackage rec {
   pname = "qtest";
   version = "2.11.2";
 
-  duneVersion = "3";
-
   src = fetchFromGitHub {
     owner = "vincent-hugot";
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-VLY8+Nu6md0szW4RVxTFwlSQ9kyrgUqf7wQEA6GW8BE=";
   };
+
+  preBuild = ''
+    substituteInPlace src/dune \
+      --replace "(libraries bytes)" "" \
+      --replace "libraries qcheck ounit2 bytes" "libraries qcheck ounit2"
+  '';
 
   propagatedBuildInputs = [ qcheck ];
 

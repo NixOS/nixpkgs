@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "jdt-language-server";
-  version = "1.21.0";
-  timestamp = "202303161431";
+  version = "1.26.0";
+  timestamp = "202307271613";
 
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${version}/jdt-language-server-${version}-${timestamp}.tar.gz";
-    sha256 = "sha256-c8RDSvOgLbl05LDNelKgQXucbJnjJ7GVcut6mVT6GjA=";
+    sha256 = "sha256-ul/l7jsqg5UofiSu8gzm4Xg0z46HcRfmyqysamiKbFM=";
   };
 
   sourceRoot = ".";
@@ -97,5 +97,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl20;
     maintainers = with maintainers; [ matt-snider ];
+    platforms = platforms.all;
   };
 }

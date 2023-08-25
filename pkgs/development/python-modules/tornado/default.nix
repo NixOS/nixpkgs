@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "A web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

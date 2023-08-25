@@ -8,18 +8,19 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-s3";
-  version = "1.26.127";
+  version = "1.28.27";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DlSLl8aiWJ97/10mocoQFiJ0l3E3kibjrQgiYp0GE8U=";
+    hash = "sha256-8QlDRPaNH/4rmYQE4uT/mqQjlDhpIYf6g617c0c5mRw=";
   };
 
   propagatedBuildInputs = [
     boto3
+  ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Type annotations for boto3.s3";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

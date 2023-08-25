@@ -30,6 +30,8 @@ buildPythonPackage rec {
     pytoolconfig
   ] ++ pytoolconfig.optional-dependencies.global;
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook

@@ -2,38 +2,44 @@
 , backendStdenv
 , fetchFromGitHub
 , which
-, cudaPackages ? { }
-, addOpenGLRunpath
+, autoAddOpenGLRunpathHook
+, cuda_cccl
+, cuda_cudart
+, cuda_nvcc
+, cudaFlags
+, cudaVersion
 }:
-
-with cudaPackages;
-
 let
   # Output looks like "-gencode=arch=compute_86,code=sm_86 -gencode=arch=compute_86,code=compute_86"
   gencode = lib.concatStringsSep " " cudaFlags.gencode;
 in
-backendStdenv.mkDerivation rec {
-  name = "nccl-${version}-cuda-${cudaPackages.cudaMajorVersion}";
-  version = "2.16.5-1";
+backendStdenv.mkDerivation (finalAttrs: {
+  name = "nccl-${finalAttrs.version}-cuda-${cudaVersion}";
+  version = "2.18.3-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
-    rev = "v${version}";
-    hash = "sha256-JyhhYKSVIqUKIbC1rCJozPT1IrIyRLGrTjdPjJqsYaU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-v4U4IzwiuiYFyFhxVmNOCUmkbSg/AM0QtWPve0ehVhs=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     which
-    addOpenGLRunpath
+    autoAddOpenGLRunpathHook
     cuda_nvcc
   ];
 
   buildInputs = [
     cuda_cudart
-  ] ++ lib.optionals (lib.versionAtLeast cudaVersion "12.0.0") [
+  ]
+  # NOTE: CUDA versions in Nixpkgs only use a major and minor version. When we do comparisons
+  # against other version, like below, it's important that we use the same format. Otherwise,
+  # we'll get incorrect results.
+  # For example, lib.versionAtLeast "12.0" "12.0.0" == false.
+  ++ lib.optionals (lib.versionAtLeast cudaVersion "12.0") [
     cuda_cccl
   ];
 
@@ -46,26 +52,18 @@ backendStdenv.mkDerivation rec {
 
   makeFlags = [
     "CUDA_HOME=${cuda_nvcc}"
-    "CUDA_LIB=${cuda_cudart}/lib64"
-    "CUDA_INC=${cuda_cudart}/include"
+    "CUDA_LIB=${lib.getLib cuda_cudart}/lib"
+    "CUDA_INC=${lib.getDev cuda_cudart}/include"
     "PREFIX=$(out)"
   ];
 
   postFixup = ''
     moveToOutput lib/libnccl_static.a $dev
-
-    # Set RUNPATH so that libnvidia-ml in /run/opengl-driver(-32)/lib can be found.
-    # See the explanation in addOpenGLRunpath.
-    addOpenGLRunpath $out/lib/lib*.so
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
   enableParallelBuilding = true;
-
-  passthru = {
-    inherit cudaPackages;
-  };
 
   meta = with lib; {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
@@ -74,4 +72,4 @@ backendStdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ mdaiter orivej ];
   };
-}
+})

@@ -33,6 +33,10 @@ in
 buildFHSEnv {
   name = "dropbox";
 
+  # dropbox-cli (i.e. nautilus-dropbox) needs the PID to confirm dropbox is running.
+  # Dropbox's internal limit-to-one-instance check also relies on the PID.
+  unsharePid = false;
+
   targetPkgs = pkgs: with pkgs; with xorg; [
     libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
     libXxf86vm libxcb xkeyboardconfig
@@ -82,5 +86,6 @@ buildFHSEnv {
     license     = licenses.unfree;
     maintainers = with maintainers; [ ttuegel ];
     platforms   = [ "i686-linux" "x86_64-linux" ];
+    mainProgram = "dropbox";
   };
 }

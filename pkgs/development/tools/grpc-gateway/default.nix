@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "grpc-gateway";
-  version = "2.15.2";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "grpc-ecosystem";
     repo = "grpc-gateway";
     rev = "v${version}";
-    sha256 = "sha256-0fpVSFo+o+M7vwwHIrYQZcAjdZjASdWz/cKXnPr6Je8=";
+    sha256 = "sha256-oKmT1qvEWNk0q5JnzsUaCWCsllUtyIAsWXUP4DsmgnA=";
   };
 
-  vendorHash = "sha256-WHwZ0EAJIz7mZr27x+Z7PKLLAiw1z2rQvvNynpMJQDw=";
+  vendorHash = "sha256-YqDQ6dQQDzkehRN0jWmfjG4acB4rtL2HGHOl71IM8Lk=";
 
   meta = with lib; {
     description =

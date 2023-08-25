@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.unix;
+    mainProgram = "libtool";
   };
 }

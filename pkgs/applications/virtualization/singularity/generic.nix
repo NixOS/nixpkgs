@@ -93,7 +93,7 @@ in
   inherit pname version src;
 
   # Override vendorHash with the output got from
-  # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).go-modules"
+  # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
   # or with `null` when using vendored source tarball.
   inherit vendorHash deleteVendor proxyVendor;
 
@@ -148,6 +148,9 @@ in
   ++ lib.optional (enableSuid != defaultToSuid) (if enableSuid then "--with-suid" else "--without-suid")
   ++ extraConfigureFlags
   ;
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   # Packages to prefix to the Apptainer/Singularity container runtime default PATH
   # Use overrideAttrs to override
@@ -204,11 +207,15 @@ in
     substituteInPlace "$out/bin/run-singularity" \
       --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
     wrapProgram "$out/bin/${projectName}" \
-      --prefix PATH : "''${defaultPathInputs// /\/bin:}"
+      --prefix PATH : "''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}"
     # Make changes in the config file
     ${lib.optionalString enableNvidiaContainerCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
         --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
+    ''}
+    ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
+      substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
+        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
     ''}
     ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
       unlink "$out/bin/singularity"

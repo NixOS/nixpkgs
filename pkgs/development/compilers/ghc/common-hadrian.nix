@@ -57,8 +57,7 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
-  # aarch64 outputs otherwise exceed 2GB limit
-, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+, enableProfiledLibs ? true
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -143,6 +142,22 @@
         return $ verbosity >= Verbose
   ''
 
+, ghcSrc ? (if rev != null then fetchgit else fetchurl) ({
+    inherit url sha256;
+  } // lib.optionalAttrs (rev != null) {
+    inherit rev;
+  })
+
+  # GHC's build system hadrian built from the GHC-to-build's source tree
+  # using our bootstrap GHC.
+, hadrian ? bootPkgs.callPackage ../../tools/haskell/hadrian {
+    ghcSrc = ghcSrc;
+    ghcVersion = version;
+    userSettings = hadrianUserSettings;
+    # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
+    enableHyperlinkedSource = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+  }
+
 , #  Whether to build sphinx documentation.
   enableDocs ? (
     # Docs disabled for musl and cross because it's a large task to keep
@@ -161,12 +176,6 @@
 assert !enableNativeBignum -> gmp != null;
 
 let
-  src = (if rev != null then fetchgit else fetchurl) ({
-    inherit url sha256;
-  } // lib.optionalAttrs (rev != null) {
-    inherit rev;
-  });
-
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
@@ -187,14 +196,6 @@ let
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
       "*.*.ghc.c.opts += -optc-std=gnu99"
     ];
-
-  # GHC's build system hadrian built from the GHC-to-build's source tree
-  # using our bootstrap GHC.
-  hadrian = bootPkgs.callPackage ../../tools/haskell/hadrian {
-    ghcSrc = src;
-    ghcVersion = version;
-    userSettings = hadrianUserSettings;
-  };
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
@@ -258,7 +259,7 @@ stdenv.mkDerivation ({
   pname = "${targetPrefix}ghc${variantSuffix}";
   inherit version;
 
-  inherit src;
+  src = ghcSrc;
 
   enableParallelBuilding = true;
 
@@ -385,6 +386,12 @@ stdenv.mkDerivation ({
     "--enable-dwarf-unwind"
     "--with-libdw-includes=${lib.getDev elfutils}/include"
     "--with-libdw-libraries=${lib.getLib elfutils}/lib"
+  ] ++ lib.optionals targetPlatform.isDarwin [
+    # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
+    # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+    # https://github.com/haskell/cabal/issues/8882
+    "fp_cv_prog_ar_supports_dash_l=no"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.

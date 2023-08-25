@@ -3,7 +3,7 @@
 , wayland
 }:
 let
-  version = "0.4.0";
+  version = "0.5.0";
 in
 {
   inherit version;
@@ -12,7 +12,7 @@ in
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     rev = "v${version}";
-    hash = "sha256-r+XMyOoRXq+hlfjayb+fyi9kq2JK48TrwuNIAXqlj7U=";
+    hash = "sha256-C5AO0KnyAFJaCkOn+5nJfWm0kyiPn/Awh0lKTjhgr7Y=";
   };
 
   meta = with lib; {

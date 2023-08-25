@@ -1,5 +1,16 @@
-{ stdenv, lib, callPackage, fetchurl
+{ stdenv
+, lib
+, callPackage
+, fetchurl
+, nixosTests
+, srcOnly
 , isInsiders ? false
+# sourceExecutableName is the name of the binary in the source archive over
+# which we have no control and it is needed to run the insider version as
+# documented in https://nixos.wiki/wiki/Visual_Studio_Code#Insiders_Build
+# On MacOS the insider binary is still called code instead of code-insiders as
+# of 2023-08-06.
+, sourceExecutableName ? "code" + lib.optionalString (isInsiders && stdenv.isLinux) "-insiders"
 , commandLineArgs ? ""
 , useVSCodeRipgrep ? stdenv.isDarwin
 }:
@@ -19,23 +30,26 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0kir1grd150gb7im6yx2l16hi43wwsi8q3dlpgah4m7na064xgyd";
-    x86_64-darwin = "1fw73483ja4zav8xd0j03ygib5zbviy3kd02jzmgbbbsac5li96m";
-    aarch64-linux = "1w0dxpvrj06m1d15q45xi4sl4g3fk0nf04vh2ar956lg67dqj7i6";
-    aarch64-darwin = "0i5vj3km6wkdc2mrks2rjbqbn1isg4l4ss6zs7qfra3zcj62bkc2";
-    armv7l-linux = "1jx8cz43ac35as414mxsj9abpkr4a7v10fg1msjy2ykcrzv9v3dr";
+    x86_64-linux = "0j3lmyj77qalhn8hrgfg3zgw6jqv8rscfy16vhkl0ir2xnmb19jf";
+    x86_64-darwin = "06dx8lhw1cqignv06pcjjv8v743kr8bck1iqgl1881jmqyhggi4f";
+    aarch64-linux = "0nyd452wcp5qw2cx1zj89v4fgk3jvbk3hhiix9a0gv150q48vyfa";
+    aarch64-darwin = "1yfbsfnkjbf99yl1dcflpyxppa9mhnxigyyplz0jaqgpwmhs2s0b";
+    armv7l-linux = "1miz95rz2fdw7xplflnydzq57hnz894xg29mhpywwiib8kypfrm7";
   }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.78.2";
-    pname = "vscode";
+    version = "1.81.1";
+    pname = "vscode" + lib.optionalString isInsiders "-insiders";
+
+    # This is used for VS Code - Remote SSH test
+    rev = "6c3e3dba23e8fadc360aed75ce363ba185c49794";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
-    inherit commandLineArgs useVSCodeRipgrep;
+    inherit commandLineArgs useVSCodeRipgrep sourceExecutableName;
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -47,6 +61,18 @@ in
     tests = {};
 
     sourceRoot = "";
+
+    # As tests run without networking, we need to download this for the Remote SSH server
+    vscodeServer = srcOnly {
+      name = "vscode-server-${rev}.tar.gz";
+      src = fetchurl {
+        name = "vscode-server-${rev}.tar.gz";
+        url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
+        sha256 = "1xfyl81d5l2bl7k4vz4rnj84j1ijwv90sqgv9lnqzza2dfckfd6m";
+      };
+    };
+
+    tests = { inherit (nixosTests) vscode-remote-ssh; };
 
     updateScript = ./update-vscode.sh;
 
@@ -71,7 +97,7 @@ in
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 ];
+      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 Enzime ];
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

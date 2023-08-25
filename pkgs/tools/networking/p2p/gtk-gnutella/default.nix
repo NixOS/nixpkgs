@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , bison
 , pkg-config
 , gettext
@@ -10,7 +9,6 @@
 , libxml2
 , libbfd
 , zlib
-, binutils
 , gnutls
 , enableGui ? true
 }:
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++
-    lib.optionals (enableGui) [ gtk2 ]
+    lib.optionals enableGui [ gtk2 ]
   ;
 
   configureScript = "./build.sh";

@@ -25,6 +25,8 @@ let
 
       doCheck = true;
 
+      enableParallelBuilding = true;
+
       meta = with lib; {
         homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";

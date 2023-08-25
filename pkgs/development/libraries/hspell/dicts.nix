@@ -1,4 +1,4 @@
-{ stdenv, hspell }:
+{ lib, stdenv, hspell }:
 
 let
   dict = variant: a: stdenv.mkDerivation ({
@@ -8,7 +8,7 @@ let
     meta = hspell.meta // {
       broken = true;
       description = "${variant} Hebrew dictionary";
-    } // (if a ? meta then a.meta else {});
+    } // (lib.optionalAttrs (a ? meta) a.meta);
   } // (removeAttrs a ["meta"]));
 in
 {

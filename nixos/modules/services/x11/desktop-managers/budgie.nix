@@ -156,7 +156,7 @@ in {
       ++ cfg.sessionPath;
 
     # Fonts.
-    fonts.fonts = mkDefault [
+    fonts.packages = mkDefault [
       pkgs.noto-fonts
       pkgs.hack-font
     ];
@@ -235,6 +235,11 @@ in {
     # Register packages for DBus.
     services.dbus.packages = with pkgs; [
       budgie.budgie-control-center
+    ];
+
+    # Register packages for udev.
+    services.udev.packages = with pkgs; [
+      budgie.magpie
     ];
 
     # Shell integration for MATE Terminal.

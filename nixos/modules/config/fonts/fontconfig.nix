@@ -42,7 +42,7 @@ let
   # looking things up.
   makeCacheConf = { }:
     let
-      makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
+      makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.packages; };
       cache     = makeCache pkgs.fontconfig;
       cache32   = makeCache pkgs.pkgsi686Linux.fontconfig;
     in
@@ -51,7 +51,7 @@ let
       <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
         <!-- Font directories -->
-        ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
+        ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.packages)}
         ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
         <!-- Pre-generated font caches -->
         <cachedir>${cache}</cachedir>
@@ -76,18 +76,6 @@ let
         </edit>
         <edit mode="append" name="autohint">
           ${fcBool cfg.hinting.autohint}
-        </edit>
-        <edit mode="append" name="hintstyle">
-          <const>${cfg.hinting.style}</const>
-        </edit>
-        <edit mode="append" name="antialias">
-          ${fcBool cfg.antialias}
-        </edit>
-        <edit mode="append" name="rgba">
-          <const>${cfg.subpixel.rgba}</const>
-        </edit>
-        <edit mode="append" name="lcdfilter">
-          <const>lcd${cfg.subpixel.lcdfilter}</const>
         </edit>
       </match>
 
@@ -177,6 +165,13 @@ let
     </fontconfig>
   '';
 
+  # Replace default linked config with a different variant
+  replaceDefaultConfig = defaultConfig: newConfig: ''
+    rm $dst/${defaultConfig}
+    ln -s ${pkg.out}/share/fontconfig/conf.avail/${newConfig} \
+          $dst/
+  '';
+
   # fontconfig configuration package
   confPkg = pkgs.runCommand "fontconfig-conf" {
     preferLocalBuild = true;
@@ -195,6 +190,26 @@ let
     # fontconfig default config files
     ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
           $dst/
+
+    ${optionalString (!cfg.antialias)
+      (replaceDefaultConfig "10-yes-antialias.conf"
+        "10-no-antialias.conf")
+    }
+
+    ${optionalString (cfg.hinting.style != "slight")
+      (replaceDefaultConfig "10-hinting-slight.conf"
+        "10-hinting-${cfg.hinting.style}.conf")
+    }
+
+    ${optionalString (cfg.subpixel.rgba != "none")
+      (replaceDefaultConfig "10-sub-pixel-none.conf"
+        "10-sub-pixel-${cfg.subpixel.rgba}.conf")
+    }
+
+    ${optionalString (cfg.subpixel.lcdfilter != "default")
+      (replaceDefaultConfig "11-lcdfilter-default.conf"
+        "11-lcdfilter-${cfg.subpixel.lcdfilter}.conf")
+    }
 
     # 00-nixos-cache.conf
     ln -s ${cacheConf}  $dst/00-nixos-cache.conf
@@ -367,17 +382,25 @@ in
           };
 
           style = mkOption {
-            type = types.enum [ "hintnone" "hintslight" "hintmedium" "hintfull" ];
-            default = "hintslight";
+            type = types.enum ["none" "slight" "medium" "full"];
+            default = "slight";
             description = lib.mdDoc ''
               Hintstyle is the amount of font reshaping done to line up
               to the grid.
 
-              hintslight will make the font more fuzzy to line up to the grid
-              but will be better in retaining font shape, while hintfull will
-              be a crisp font that aligns well to the pixel grid but will lose
-              a greater amount of font shape.
+              slight will make the font more fuzzy to line up to the grid but
+              will be better in retaining font shape, while full will be a
+              crisp font that aligns well to the pixel grid but will lose a
+              greater amount of font shape.
             '';
+            apply =
+              val:
+              let
+                from = "fonts.fontconfig.hinting.style";
+                val' = lib.removePrefix "hint" val;
+                warning = "The option `${from}` contains a deprecated value `${val}`. Use `${val'}` instead.";
+              in
+              lib.warnIf (lib.hasPrefix "hint" val) warning val';
           };
         };
 
@@ -394,7 +417,7 @@ in
         subpixel = {
 
           rgba = mkOption {
-            default = "rgb";
+            default = "none";
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
             description = lib.mdDoc ''
               Subpixel order. The overwhelming majority of displays are

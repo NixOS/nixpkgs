@@ -59,6 +59,6 @@ buildPythonPackage rec {
     description = "Topological Data Analysis for humans";
     homepage = "https://github.com/scikit-tda/scikit-tda";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

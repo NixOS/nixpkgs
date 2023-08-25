@@ -2,9 +2,11 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , numpy
 , poetry-core
+, pygments
 , pysmb
 , pytest-aiohttp
 , pytest-asyncio
@@ -14,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "2022.12.1";
+  version = "2023.08.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,8 +25,14 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xzTho4HsIU2YLURz9DfFfaRL3tsrtVi8n5IA2bRkyzw=";
+    hash = "sha256-+yqN3q+uA/v01uCguzUSoeCJK9lRmiiYn8d272+Dd2M=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace \
+      'certifi = ">=2023.07.22"' \
+      'certifi = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -32,7 +40,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     numpy
+    pygments
     pysmb
   ];
 

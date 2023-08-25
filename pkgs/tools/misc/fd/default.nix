@@ -45,5 +45,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir figsoda globin ma27 zowoq ];
+    mainProgram = "fd";
   };
 }

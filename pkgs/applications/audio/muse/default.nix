@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rasp2v1ds2aw296lbf27rzw0l9fjl0cvbvw85d5ycvh6wkm301p";
   };
 
-  sourceRoot = "source/muse3";
+  sourceRoot = "${src.name}/muse3";
 
   patches = [ ./fix-parallel-building.patch ];
 

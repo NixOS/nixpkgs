@@ -43,6 +43,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ mpi ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [ openssh ];
 
   meta = with lib; {

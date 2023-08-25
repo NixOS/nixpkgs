@@ -13,7 +13,7 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.6";
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${edlib.src.name}/bindings/python";
 
   preBuild = ''
     ln -s ${edlib.src}/edlib .

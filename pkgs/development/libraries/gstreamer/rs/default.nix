@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , writeText
 , rustPlatform
 , meson
@@ -31,9 +32,6 @@
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null
 , hotdoc
-# TODO: required for case-insensitivity hack below
-, yq
-, moreutils
 }:
 
 let
@@ -98,11 +96,13 @@ let
     [
       "csound" # tests have weird failure on x86, does not currently work on arm or darwin
       "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
+    ] ++ lib.optionals stdenv.isAarch64 [
+      "raptorq" # pointer alignment failure in tests on aarch64
     ] ++ lib.optionals stdenv.isDarwin [
       "reqwest" # tests hang on darwin
       "threadshare" # tests cannot bind to localhost on darwin
       "webp" # not supported on darwin (upstream crate issue)
-    ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
       # these require gstreamer-gl which requires darwin sdk bump
       "gtk4"
       "livesync"
@@ -112,13 +112,25 @@ let
   ) (lib.attrNames validPlugins);
 
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
+
+  # TODO: figure out what must be done about this upstream - related lu-zero/cargo-c#323 lu-zero/cargo-c#138
+  cargo-c' = (cargo-c.__spliced.buildHost or cargo-c).overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or []) ++ [
+      (fetchpatch {
+        name = "cargo-c-test-rlib-fix.patch";
+        url = "https://github.com/lu-zero/cargo-c/commit/8421f2da07cd066d2ae8afbb027760f76dc9ee6c.diff";
+        hash = "sha256-eZSR4DKSbS5HPpb9Kw8mM2ZWg7Y92gZQcaXUEu1WNj0=";
+        revert = true;
+      })
+    ];
+  });
 in
   assert lib.assertMsg (invalidPlugins == [])
     "Invalid gst-plugins-rs plugin${lib.optionalString (lib.length invalidPlugins > 1) "s"}: ${lib.concatStringsSep ", " invalidPlugins}";
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-rs";
-  version = "0.10.7";
+  version = "0.10.11";
 
   outputs = [ "out" "dev" ];
 
@@ -127,26 +139,37 @@ stdenv.mkDerivation rec {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = version;
-    hash = "sha256-b+j7nAMK66+msRnIaj1S1DSvES5Gid3QazXgqO1II/Q=";
+    hash = "sha256-oOoUGzbg/ib1pA0T81hxgLlHnTRlNCWH5qZUNAutn8U=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
-    nativeBuildInputs = [ yq moreutils ];
     postFetch = ''
-      tomlq --toml-output '.package |= map(if .name == "color-name"
-        then (.source = "git+https://github.com/lilyinstarlight/color-name#cac0ed5b7d2e0682c08c9bfd13089d5494e81b9a" | del(.checksum))
-        else .
-      end)' $out/Cargo.lock | sponge $out/Cargo.lock
+      sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
+      \[\[package\]\]
+      name = "color-name"
+      version = "\([^"\n]*\)"
+      source = "registry+https://github.com/rust-lang/crates.io-index"
+      checksum = "[^"\n]*"
+      EOF
+      )"
+      sedReplace="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
+      [[package]]
+      name = "color-name"
+      version = "\1"
+      source = "git+https://github.com/lilyinstarlight/color-name#cac0ed5b7d2e0682c08c9bfd13089d5494e81b9a"
+      EOF
+      )"
+      sed -i -ze "s|$sedSearch|$sedReplace|g" $out/Cargo.lock
     '';
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cairo-rs-0.17.9" = "sha256-LiIb6y/Ks/o+rZhU8RpXN7jSo7JzBGmcNumxyx/lZs0=";
+      "cairo-rs-0.17.10" = "sha256-g7d1ccSbGIPVMu73mb5QvWVSN8XAB1xLZuWfgdd1cfU=";
       "color-name-1.1.0" = "sha256-RfMStbe2wX5qjPARHIFHlSDKjzx8DwJ+RjzyltM5K7A=";
       "ffv1-0.0.0" = "sha256-af2VD00tMf/hkfvrtGrHTjVJqbl+VVpLaR0Ry+2niJE=";
       "flavors-0.2.0" = "sha256-zBa0X75lXnASDBam9Kk6w7K7xuH9fP6rmjWZBUB5hxk=";
-      "gdk4-0.6.6" = "sha256-TI4F9MjIpxFEZItoewP/Zem1vM4MsKNJTzfgah1vjmI=";
-      "gstreamer-0.20.5" = "sha256-IQ56Upe73egId1IJRfzvqrJIzTc1x5FgAEbva9kuqPE=";
+      "gdk4-0.6.6" = "sha256-1WPXxsZJoYEQxVuP/CSpGs2XEZSJD//JJz4Ka2hxXHM=";
+      "gstreamer-0.20.7" = "sha256-o4o4mPFAZOshNNkCkykjG/b+UtT2z6TNLOEzJsfs+Mk=";
     };
   };
 
@@ -161,7 +184,7 @@ stdenv.mkDerivation rec {
     pkg-config
     rustc
     cargo
-    cargo-c
+    cargo-c'
     nasm
   ] ++ lib.optionals enableDocumentation [
     hotdoc
@@ -206,7 +229,7 @@ stdenv.mkDerivation rec {
     export CSOUND_LIB_DIR=${lib.getLib csound}/lib
   '' + lib.optionalString (lib.mutuallyExclusive [ "webrtc" "webrtchttp" ] selectedPlugins) ''
     sed -i "/\['gstreamer-webrtc-1\.0', 'gst-plugins-bad', 'gstwebrtc_dep', 'gstwebrtc'\]/d" meson.build
-  '' + lib.optionalString (stdenv.isDarwin && !stdenv.isAarch64) ''
+  '' + lib.optionalString (!gst-plugins-base.glEnabled) ''
     sed -i "/\['gstreamer-gl-1\.0', 'gst-plugins-base', 'gst_gl_dep', 'gstgl'\]/d" meson.build
   '';
 

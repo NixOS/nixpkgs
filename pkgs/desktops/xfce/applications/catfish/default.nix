@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
-  version = "4.16.4";
+  version = "4.18.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-hdrEFdBa/4i/PF7VyEI7ObiJXLIRW+RFSe8yGnUpqRc=";
+    sha256 = "sha256-hfbIgSFn48++eGrJXzhXRxhWkrjgTYsr7BX/n0EXhGo=";
   };
 
   nativeBuildInputs = [

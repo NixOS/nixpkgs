@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "fake-useragent";
-  version = "1.1.3";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fake-useragent";
     repo = "fake-useragent";
     rev = "refs/tags/${version}";
-    hash = "sha256-8fVNko65nP/u9vLGBPfSseKW07b4JC6kCPFCPK2f6wU=";
+    hash = "sha256-kOvVqdfK9swtjW8D7COrZksLCu1N8sQO8rzx5RZqCT0=";
   };
 
   postPatch = ''

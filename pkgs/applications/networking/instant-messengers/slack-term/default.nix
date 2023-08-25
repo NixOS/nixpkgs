@@ -17,5 +17,6 @@ buildGoModule rec {
     homepage = "https://github.com/erroneousboat/slack-term";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "slack-term";
   };
 }

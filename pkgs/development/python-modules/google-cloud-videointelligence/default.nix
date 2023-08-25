@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-videointelligence";
-  version = "2.11.1";
+  version = "2.11.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fsC8WTwrMJgXZHlOsI9TfYcM8Q5rKXuArTVM+pHpfqE=";
+    hash = "sha256-qWpj8ATCcGj0WyJ6ZidfimqMPs0Gu1gfkvppiX1bF5c=";
   };
 
   propagatedBuildInputs = [
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-videointelligence";
     changelog = "https://github.com/googleapis/python-videointelligence/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

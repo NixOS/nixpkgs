@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.9.3";
+  version = "2.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Q9rp2V8TawT5yT3TBtdUgnMFqFGRNQCDhtgMb2dS6U=";
+    hash = "sha256-OcY4nEtIfR9nvBaBwpHeUJkHXwWZp+LZxjhEkwjRC9k=";
   };
 
   propagatedBuildInputs = [

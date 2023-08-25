@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p nix curl jq nix-prefetch-github git gnused -I nixpkgs=.
+#! nix-shell -i bash -p nix curl jq git gnused -I nixpkgs=.
 
 # See regenerate-hackage-packages.sh for details on the purpose of this script.
 

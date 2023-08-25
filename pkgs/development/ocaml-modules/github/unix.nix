@@ -6,7 +6,9 @@ buildDunePackage {
   pname = "github-unix";
   inherit (github) version src;
 
-  duneVersion = "3";
+  postPatch = ''
+    substituteInPlace unix/dune --replace 'github bytes' 'github'
+  '';
 
   propagatedBuildInputs = [
     github

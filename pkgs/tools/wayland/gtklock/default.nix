@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkgs
 , pam
 , scdoc
 , gtk3
@@ -53,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ dit7ya ];
     platforms = platforms.linux;
+    mainProgram = "gtklock";
   };
 }

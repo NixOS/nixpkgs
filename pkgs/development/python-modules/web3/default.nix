@@ -16,16 +16,12 @@
 , requests
 , typing-extensions
 , websockets
-# , eth-tester
-# , py-geth
-, pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "web3";
-  version = "6.3.0";
+  version = "6.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,12 +30,8 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "web3.py";
     rev = "v${version}";
-    hash = "sha256-p3Dpmb0BST1nbh42q/eK/DjQqoIPHvNr2KllRpTgFFw=";
+    hash = "sha256-RNWCZQjcse415SSNkHhMWckDcBJGFZnjisckF7gbYY8=";
   };
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -60,16 +52,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ eth-hash.optional-dependencies.pycryptodome;
 
-  pythonRelaxDeps = true;
-
-  # TODO: package eth-tester
-  #nativeCheckInputs = [
-  #  eth-tester
-  #  eth-tester.optional-dependencies.py-evm
-  #  py-geth
-  #  pytestCheckHook
-  #];
-
+  # TODO: package eth-tester required for tests
   doCheck = false;
 
   postPatch = ''

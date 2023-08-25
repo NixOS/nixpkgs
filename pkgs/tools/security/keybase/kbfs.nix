@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, keybase }:
+{ lib, buildGoModule, keybase }:
 
 buildGoModule {
   pname = "kbfs";
@@ -14,7 +14,6 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://keybase.io/docs/kbfs";
     description = "The Keybase filesystem";
-    platforms = platforms.unix;
     maintainers = with maintainers; [ avaq rvolosatovs bennofs np shofius ];
     license = licenses.bsd3;
   };

@@ -105,10 +105,24 @@ rustPlatform.buildRustPackage rec {
     xdotool
   ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace scripts/create_bundle.sh --replace target/mac/ $out/Applications/
+    patchShebangs scripts/create_bundle.sh
+    substituteInPlace espanso/src/res/macos/Info.plist \
+      --replace "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
+    substituteInPlace espanso/src/res/macos/com.federicoterzi.espanso.plist \
+      --replace "<string>/Applications/Espanso.app/Contents/MacOS/espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>" \
+      --replace "<string>/usr/bin" "<string>${placeholder "out"}/bin:/usr/bin"
+    substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
+      --replace '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
+  '';
+
   # Some tests require networking
   doCheck = false;
 
-  postInstall = ''
+  postInstall = if stdenv.isDarwin then ''
+    EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
+  '' else ''
     wrapProgram $out/bin/espanso \
       --prefix PATH : ${lib.makeBinPath (
         lib.optionals stdenv.isLinux [

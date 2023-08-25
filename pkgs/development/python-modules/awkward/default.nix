@@ -8,20 +8,21 @@
 , numba
 , numpy
 , packaging
+, setuptools
 , typing-extensions
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.0.8";
+  version = "2.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MqV8KeE6KuO8HmrFNjeCW70ixChmlhY71Bod7ChKjuU=";
+    hash = "sha256-NLROXEbh4MKvBFuj+4+Wa2u37P9vuQ0Ww8kK+CYWt5E=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     numba
+    setuptools
   ];
 
   disabledTestPaths = [
@@ -55,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ veprbl ];
   };

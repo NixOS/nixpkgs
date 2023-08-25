@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "6.16.1";
+  version = "6.17.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Hyt5Y3n4bi3Ffxv+QoikbJdqHUBtYiHuRuOsgwf3PKM=";
+    hash = "sha256-804zPzVVyZ/zTHePYdRw0eOh623HYJDQ3XuVsslHRcI=";
   };
 
   postPatch = ''
@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     # https://github.com/ansible/ansible-lint/blob/master/.config/requirements.in
     ansible-core
+    ansible-compat
     black
     filelock
     jsonschema

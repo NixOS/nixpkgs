@@ -1,18 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script
 , nixosTests, postgresql, postgresqlTestHook }:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.12.0";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    hash = "sha256-syOLrw4ig8rmFDkxJ9KSAuzUVO8UokekV17mT1bJNNM=";
+    hash = "sha256-I8k3E/7RXJFIaEX1Zw6oFDT6UkQvZBZuyTxUZZQYr+s=";
   };
 
-  vendorHash = "sha256-nvGhKCUiyHSD0VpE4OtT9YQSHxv0d7iwOChCJl2D3zk=";
+  vendorHash = "sha256-H2wtGjGTzqN8OXAI2ksCBgTJsmJYLQu5aFu9OP03/DA=";
 
   subPackages = [
     # The server
@@ -46,6 +46,9 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) dendrite;
+  };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(.+)" ];
   };
 
   meta = with lib; {

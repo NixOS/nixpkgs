@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
 , jre, binaryen
 , llvmPackages
-, symlinkJoin, makeWrapper, substituteAll, fetchpatch
+, symlinkJoin, makeWrapper, substituteAll
 , buildNpmPackage
 , emscripten
 }:
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.24";
+  version = "3.1.42";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-ejuHR2BpAUStWjuvQuGE6ko4byF4GBl6FJBshxlknQk=";
+    npmDepsHash = "sha256-QlKm6UvPUa7+VJ9ZvXdxYZzK+U96Ju/oAHPhZ/hyv/I=";
 
     dontBuild = true;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "sha256-1jW6ThxK6dThOO90l4Mc5yehVF3tI4HWipBWZAOztrk=";
+    hash = "sha256-elp/LPd9SAuVZy42Wkgb6pCbPi2GnETTfyRJqU92S0E=";
     rev = version;
   };
 
@@ -42,17 +42,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./0001-emulate-clang-sysroot-include-logic.patch;
-      resourceDir = "${llvmEnv}/lib/clang/${llvmPackages.release_version}/";
-    })
-    # https://github.com/emscripten-core/emscripten/pull/18219
-    (fetchpatch {
-      url = "https://github.com/emscripten-core/emscripten/commit/afbc14950f021513c59cbeaced8807ef8253530a.patch";
-      sha256 = "sha256-+gJNTQJng9rWcGN3GAcMBB0YopKPnRp/r8CN9RSTClU=";
-    })
-    # https://github.com/emscripten-core/emscripten/pull/18220
-    (fetchpatch {
-      url = "https://github.com/emscripten-core/emscripten/commit/852982318f9fb692ba1dd1173f62e1eb21ae61ca.patch";
-      sha256 = "sha256-hmIOtpRx3PD3sDAahUcreSydydqcdSqArYvyLGgUgd8=";
+      resourceDir = "${llvmEnv}/lib/clang/16/";
     })
   ];
 
@@ -67,9 +57,6 @@ stdenv.mkDerivation rec {
     # disables cache in user home, use installation directory instead
     sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
-
-    # required for wasm2c
-    ln -s ${nodeModules} node_modules
 
     echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
     echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
@@ -108,17 +95,17 @@ stdenv.mkDerivation rec {
 
     # precompile libc (etc.) in all variants:
     pushd $TMPDIR
-    echo 'int __main_argc_argv() { return 42; }' >test.c
+    echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
     for LTO in -flto ""; do
-      # wasm2c doesn't work with PIC
-      $out/bin/emcc -s WASM2C -s STANDALONE_WASM $LTO test.c
-
       for BIND in "" "--bind"; do
-        for MT in "" "-s USE_PTHREADS"; do
-          for RELOCATABLE in "" "-s RELOCATABLE"; do
-            $out/bin/emcc $RELOCATABLE $BIND $MT $LTO test.c
-          done
-        done
+        # starting with emscripten 3.1.32+,
+        # if pthreads and relocatable are both used,
+        # _emscripten_thread_exit_joinable must be exported
+        # (see https://github.com/emscripten-core/emscripten/pull/18376)
+        # TODO: get library cache to build with both enabled and function exported
+        $out/bin/emcc $LTO $BIND test.c
+        $out/bin/emcc $LTO $BIND -s RELOCATABLE test.c
+        $out/bin/emcc $LTO $BIND -s USE_PTHREADS test.c
       done
     done
     popd

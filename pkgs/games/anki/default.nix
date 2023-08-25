@@ -46,7 +46,6 @@ let
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
-    pip
     mypy-protobuf
   ]);
 
@@ -277,6 +276,6 @@ python3.pkgs.buildPythonApplication {
     '';
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ oxij Profpatsch euank ];
+    maintainers = with maintainers; [ oxij euank ];
   };
 }

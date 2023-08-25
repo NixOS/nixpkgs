@@ -42,18 +42,11 @@ let
           changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
           maintainers = with maintainers; [ offline zimbatm diegolelis yurrriq ];
-          platforms = platforms.unix;
         };
       } // attrs';
 in
 rec {
   mkKops = generic;
-
-  kops_1_24 = mkKops rec {
-    version = "1.24.5";
-    sha256 = "sha256-U5OSiU0t2gyvyNd07y68Fb+HaXp5wQN4t0CBPOOMd/M=";
-    rev = "v${version}";
-  };
 
   kops_1_25 = mkKops rec {
     version = "1.25.4";
@@ -62,8 +55,14 @@ rec {
   };
 
   kops_1_26 = mkKops rec {
-    version = "1.26.3";
-    sha256 = "sha256-8IQbVFqH5r8H7z7U441Aox4yp3KF/sqs3+JpMru8qwQ=";
+    version = "1.26.5";
+    sha256 = "sha256-DbKzqfcQCHP3ZWJQcRhPDkKVzHB/MkcfukguUDG4UQg=";
+    rev = "v${version}";
+  };
+
+  kops_1_27 = mkKops rec {
+    version = "1.27.0";
+    sha256 = "sha256-XJOdqOT/vMVXZmVasXRb+pdmWcSd6lsyQDCnZKyqrto=";
     rev = "v${version}";
   };
 }

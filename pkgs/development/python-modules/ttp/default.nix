@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ttp";
-  version = "0.9.4";
+  version = "0.9.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-iZJ38NQnofW9awisY5cFBIN1rjXinA6CpJYSCCnNaOY=";
+    hash = "sha256-IWqPFspERBVkjsTYTAkOTOrugq4fD65Q140G3SCEV0w=";
   };
 
   nativeBuildInputs = [

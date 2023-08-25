@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
   ]);
 
   cargoSha256 = "sha256:1dpdlzv96kpc25yf5jgsz9qldghyw35x382qpxhkadkn5dryzjvd";
-  verifyCargoDeps = true;
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;

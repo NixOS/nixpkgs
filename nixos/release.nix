@@ -143,7 +143,7 @@ in rec {
   manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
   manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
-  manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
+  nixos-configuration-reference-manpage = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.nixos-configuration-reference-manpage);
   options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 

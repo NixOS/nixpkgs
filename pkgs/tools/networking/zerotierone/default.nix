@@ -59,10 +59,11 @@ in stdenv.mkDerivation {
     rustc
   ];
   buildInputs = [
-    iproute2
     lzo
     openssl
     zlib
+  ] ++ lib.optional stdenv.isLinux [
+    iproute2
   ];
 
   enableParallelBuilding = true;
@@ -96,6 +97,6 @@ in stdenv.mkDerivation {
     homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
     maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

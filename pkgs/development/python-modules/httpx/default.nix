@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.23.3";
+  version = "0.24.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ZLRzkyoFbAY2Xs1ORWBqvc2gpKovg9wRs/RtAryOcVg=";
+    hash = "sha256-qG6fgijNgQKjpSG6sg0+0yqeAU6qV7czR8NgWe63LIg=";
   };
 
   nativeBuildInputs = [
@@ -125,6 +125,6 @@ buildPythonPackage rec {
     description = "The next generation HTTP client";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }

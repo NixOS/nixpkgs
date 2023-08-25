@@ -46,6 +46,8 @@ buildPythonPackage rec {
     curl
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     bottle
     pytestCheckHook
@@ -82,6 +84,6 @@ buildPythonPackage rec {
     homepage = "http://pycurl.io/";
     description = "Python Interface To The cURL library";
     license = with licenses; [ lgpl2Only mit ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

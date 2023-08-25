@@ -6,38 +6,33 @@
 , fetchpatch
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "nc4nix";
-  version = "unstable-2023-05-25";
+  version = "unstable-2023-06-06";
 
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "nc4nix";
-    rev = "14cab9b2f8628ae6668c1d01519f558069f7f675";
-    sha256 = "sha256-iy9jJMRu0SkfrDufO6WAObqdiusvwhyv+GGHVrD3CV4=";
+    rev = "3e015450726533770fd00e2771530cbe90f40517";
+    sha256 = "sha256-i3lx5Q+EswtimdRMZ0OPMWh01kBK9q+UI1pY6j/ZhuY=";
   };
 
   patches = [
     # Switch hash calculation method
     # https://github.com/helsinki-systems/nc4nix/pull/3
     (fetchpatch {
-      url = "https://github.com/helsinki-systems/nc4nix/commit/88c182fbdddef148e086fa86438dcd72208efd75.patch";
-      sha256 = "sha256-zAF0+t9wHrKhhyD0+/d58BiaavLHfxO8X5J6vNlEWx0=";
+      url = "https://github.com/helsinki-systems/nc4nix/commit/a7bca4793cc12e87d381f12f6f8c00ae2ca02893.patch";
+      sha256 = "sha256-0JxyhSQLtlgLtsMv82wMjQHGdmOoQ2dcPPNAw2cFByE=";
       name = "switch_hash_calculation_method.patch";
     })
-     # Add package selection command line argument
-     # https://github.com/helsinki-systems/nc4nix/pull/2
+
+    # Fix invalid entries (pre-releases of apps are not to be taken into account,
+    # but if only pre-releases are compatible with a given Nextcloud version,
+    # invalid entries are generated)
     (fetchpatch {
-      url = "https://github.com/helsinki-systems/nc4nix/pull/2/commits/449eec89538df4e92106d06046831202eb84a1db.patch";
-      sha256 = "sha256-qAAbR1G748+2vwwfAhpe8luVEIKNGifqXqTV9QqaUFc=";
-      name = "add_package_selection_command_line_arg.patch";
-    })
-    # Only consider (new) stable releases of NC apps
-    # https://github.com/helsinki-systems/nc4nix/issues/4
-    (fetchpatch {
-      url = "https://github.com/helsinki-systems/nc4nix/pull/5/commits/076a188bf30203ddea0217d83f2e3b16f3b9392b.patch";
-      sha256 = "sha256-N7X9j0tWD8ZAWjXXCXGITl/EBbrIbKbHJHyskT1rVTs=";
-      name = "only_consider_stable_releases.patch";
+      url = "https://github.com/helsinki-systems/nc4nix/commit/c48131b5ca382585fd3294d51d59acc1e92fadb1.patch";
+      sha256 = "sha256-/zc3Smjd6CksC5wUvoB6uAyTzPcIgqimb+zASIuTft0=";
+      excludes = [ "25.json" "26.json" "27.json" ];
     })
   ];
 

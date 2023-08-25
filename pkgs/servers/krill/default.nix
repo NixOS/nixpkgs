@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "krill";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Vyz2PpsCcmr3EJRe9IOY3rpwEzHfG1IelXsy2qzjSJA=";
+    hash = "sha256-UwvSwV1EHcEsF+IScdDiuuU56sXojEWGObzPKrLvlEQ=";
   };
 
-  cargoHash = "sha256-X4PvoN2KszMYmQjErZQPUCr8WAIt8S+S1QeMlYyv8NU=";
+  cargoHash = "sha256-ts0yr1BY/StEmklUB29blR4K6RfHbH5WzIP2Zs2sVR4=";
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
   nativeBuildInputs = [ pkg-config ];

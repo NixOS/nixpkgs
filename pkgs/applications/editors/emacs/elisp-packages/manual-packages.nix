@@ -13,7 +13,11 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
+  beancount = callPackage ./manual-packages/beancount { };
+
   cask = callPackage ./manual-packages/cask { };
+
+  consult-gh = callPackage ./manual-packages/consult-gh { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
 
@@ -62,8 +66,6 @@ in
   perl-completion = callPackage ./manual-packages/perl-completion { };
 
   pod-mode = callPackage ./manual-packages/pod-mode { };
-
-  power-mode = callPackage ./manual-packages/power-mode { };
 
   prisma-mode = callPackage ./manual-packages/prisma-mode { };
 

@@ -6,7 +6,7 @@
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
-  buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
+  buildTargets = [ "run_mksnapshot_default" "chrome_sandbox" "chrome" ];
 
   outputs = ["out" "sandbox"];
 
@@ -86,7 +86,7 @@ mkChromiumDerivation (base: rec {
       else "https://www.chromium.org/";
     maintainers = with lib.maintainers; if ungoogled
       then [ squalus primeos michaeladler networkexception ]
-      else [ primeos thefloweringash ];
+      else [ primeos thefloweringash networkexception ];
     license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     mainProgram = "chromium";

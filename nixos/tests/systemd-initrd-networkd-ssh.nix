@@ -2,28 +2,32 @@ import ./make-test-python.nix ({ lib, ... }: {
   name = "systemd-initrd-network-ssh";
   meta.maintainers = [ lib.maintainers.elvishjerricco ];
 
-  nodes = with lib; {
+  nodes = {
     server = { config, pkgs, ... }: {
-      environment.systemPackages = [pkgs.cryptsetup];
+      environment.systemPackages = [ pkgs.cryptsetup ];
       boot.loader.systemd-boot.enable = true;
       boot.loader.timeout = 0;
       virtualisation = {
         emptyDiskImages = [ 4096 ];
         useBootLoader = true;
+        # Booting off the encrypted disk requires an available init script from
+        # the Nix store
+        mountHostNixStore = true;
         useEFIBoot = true;
       };
 
       specialisation.encrypted-root.configuration = {
-        virtualisation.bootDevice = "/dev/mapper/root";
+        virtualisation.rootDevice = "/dev/mapper/root";
+        virtualisation.fileSystems."/".autoFormat = true;
         boot.initrd.luks.devices = lib.mkVMOverride {
-          root.device = "/dev/vdc";
+          root.device = "/dev/vdb";
         };
         boot.initrd.systemd.enable = true;
         boot.initrd.network = {
           enable = true;
           ssh = {
             enable = true;
-            authorizedKeys = [ (readFile ./initrd-network-ssh/id_ed25519.pub) ];
+            authorizedKeys = [ (lib.readFile ./initrd-network-ssh/id_ed25519.pub) ];
             port = 22;
             # Terrible hack so it works with useBootLoader
             hostKeys = [ { outPath = "${./initrd-network-ssh/ssh_host_ed25519_key}"; } ];
@@ -35,13 +39,13 @@ import ./make-test-python.nix ({ lib, ... }: {
     client = { config, ... }: {
       environment.etc = {
         knownHosts = {
-          text = concatStrings [
+          text = lib.concatStrings [
             "server,"
             "${
-              toString (head (splitString " " (toString
-                (elemAt (splitString "\n" config.networking.extraHosts) 2))))
+              toString (lib.head (lib.splitString " " (toString
+                (lib.elemAt (lib.splitString "\n" config.networking.extraHosts) 2))))
             } "
-            "${readFile ./initrd-network-ssh/ssh_host_ed25519_key.pub}"
+            "${lib.readFile ./initrd-network-ssh/ssh_host_ed25519_key.pub}"
           ];
         };
         sshKey = {
@@ -61,7 +65,7 @@ import ./make-test-python.nix ({ lib, ... }: {
 
     server.wait_for_unit("multi-user.target")
     server.succeed(
-        "echo somepass | cryptsetup luksFormat --type=luks2 /dev/vdc",
+        "echo somepass | cryptsetup luksFormat --type=luks2 /dev/vdb",
         "bootctl set-default nixos-generation-1-specialisation-encrypted-root.conf",
         "sync",
     )

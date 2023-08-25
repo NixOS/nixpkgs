@@ -18,7 +18,7 @@ let
   }: stdenv.mkDerivation rec {
     pname = "wiringpi-${subprj}";
     inherit version src;
-    sourceRoot = "source/${subprj}";
+    sourceRoot = "${src.name}/${subprj}";
     inherit buildInputs;
     # Remove (meant for other OSs) lines from Makefiles
     preInstall = ''

@@ -5,7 +5,7 @@
 , importlib-metadata
 , pytestCheckHook
 
-# large-rebuild downstream dependencies and applications
+  # large-rebuild downstream dependencies and applications
 , flask
 , black
 , magic-wormhole
@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.3";
+  version = "8.1.6";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-doLcivswKXABZ0V16gDRgU2AjWo2r0Fagr1IHTe6e44=";
+    hash = "sha256-SO6EmVGRlSegRb/jv3uqipWcQjE04aW5jAXCC6daHL0=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
@@ -43,6 +43,6 @@ buildPythonPackage rec {
       composable way, with as little code as necessary.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

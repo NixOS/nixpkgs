@@ -49,6 +49,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gthumb/-/commit/da0d3f22a5c3a141211d943e7d963d14090011ec.patch";
       sha256 = "sha256-/l9US19rKxIUJjZ+oynGLr/9PKJPg9VUuA/VSuIT5AQ=";
     })
+
+    # Fix build with exiv2 0.28, can be removed on next update
+    # https://gitlab.gnome.org/GNOME/gthumb/-/issues/282
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gthumb/-/commit/3376550ae109286de09ce5f89e05060eb80230a7.patch";
+      sha256 = "sha256-zHX+kV7RaHXFqbR15RTaRcZJPU/P3uUj03tFUv0DR5o=";
+    })
   ];
 
   nativeBuildInputs = [

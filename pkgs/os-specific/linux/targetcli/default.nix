@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "targetcli";
-  version = "2.1.54";
+  version = "2.1.56";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
     rev = "v${version}";
-    sha256 = "1kbbvx0lba96ynr5iwws9jpi319m4rzph4bmcj7yfb37k8mi161v";
+    hash = "sha256-sWLwjfuy9WPnrGK0BxUGnNrhtGDoQyRFMY1OSlyxqs4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ configshell rtslib ];

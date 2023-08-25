@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   enableParallelBuilding = true;
 

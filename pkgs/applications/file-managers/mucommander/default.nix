@@ -10,13 +10,13 @@
 }:
 
 let
-  version = "1.2.0-1";
+  version = "1.3.0-1";
 
   src = fetchFromGitHub {
     owner = "mucommander";
     repo = "mucommander";
     rev = version;
-    sha256 = "sha256-OrtC7E/8n9uEo7zgFHYQqXV3qLpdKtxwbwZfxoOqTqA=";
+    sha256 = "sha256-rSHHv96L2EHQuKBSAdpfi1XGP2u9o2y4g1+65FHWFMw=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-T4UhEzkaYh237+ZsoQTv1RgqcAKY4dPc/3x+dEie4A8=";
+    outputHash = "sha256-9tCcUg7hDNbkZiQEWtVRsUUfms73aU+vt5tQsfknM+E=";
   };
 
 in

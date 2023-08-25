@@ -3,7 +3,6 @@
 , budgie-desktop
 , budgie-desktop-view
 , glib
-, gnome
 , gsettings-desktop-schemas
 , mate
 , nixos-artwork
@@ -57,7 +56,6 @@ let
       budgie-desktop
       budgie-desktop-view
       gsettings-desktop-schemas
-      gnome.mutter
   ] ++ extraGSettingsOverridePackages;
 
 in

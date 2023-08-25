@@ -7,16 +7,17 @@
 , stdenv
 , darwin
 , vimUtils
+, nix-update-script
 }:
 
 let
-  version = "0.43";
+  version = "0.45";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
     rev = "v${version}";
-    hash = "sha256-UHsDSah8Fn67w11s/lwL76qbGPqXhz6tYlBBuiqTNXs=";
+    hash = "sha256-espFos1Mrxdq2p+qi0ooTWAV8EgV/lTx9KuP3GkMWos=";
   };
 
   meta = with lib; {
@@ -62,5 +63,8 @@ vimUtils.buildVimPluginFrom2Nix {
 
   passthru = {
     inherit maple;
+    updateScript = nix-update-script {
+      attrPath = "vimPlugins.vim-clap.maple";
+    };
   };
 }

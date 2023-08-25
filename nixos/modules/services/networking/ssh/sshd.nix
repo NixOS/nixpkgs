@@ -279,10 +279,12 @@ in
       settings = mkOption {
         description = lib.mdDoc "Configuration for `sshd_config(5)`.";
         default = { };
-        example = literalExpression ''{
-          UseDns = true;
-          PasswordAuthentication = false;
-        }'';
+        example = literalExpression ''
+          {
+            UseDns = true;
+            PasswordAuthentication = false;
+          }
+        '';
         type = types.submodule ({name, ...}: {
           freeformType = settingsFormat.type;
           options = {
@@ -373,6 +375,13 @@ in
                 <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
                 and
                 <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
+              '';
+            };
+            StrictModes = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Whether sshd should check file modes and ownership of directories
               '';
             };
             Ciphers = mkOption {
@@ -521,7 +530,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
+    networking.firewall.allowedTCPPorts = optionals cfg.openFirewall cfg.ports;
 
     security.pam.services.sshd =
       { startSession = true;

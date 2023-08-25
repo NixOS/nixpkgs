@@ -15,7 +15,7 @@ with python3Packages; buildPythonApplication rec {
     sha256 = "0zbrvvb957z2lwbfd39ixqdsnd2w4wfjirwkqdrqm27bjz308731";
   };
 
-  sourceRoot = "source/programmer";
+  sourceRoot = "${src.name}/programmer";
 
   propagatedBuildInputs = [
     pyserial

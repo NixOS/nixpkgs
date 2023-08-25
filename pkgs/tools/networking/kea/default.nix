@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "2.2.0"; # only even minor versions are stable
+  version = "2.4.0"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-2n2QymKncmAtrG535QcxkDhCKJWtaO6xQvFIfWfVMdI=";
+    hash = "sha256-OjPNCNwzGf9UTmu/LAQpBCEG9AUevhFdwbsmJclQA/c=";
   };
 
   patches = [
@@ -80,9 +80,12 @@ stdenv.mkDerivation rec {
     kea = nixosTests.kea;
     prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
     prometheus-exporter = nixosTests.prometheus-exporters.kea;
+    networking-scripted = lib.recurseIntoAttrs { inherit (nixosTests.networking.scripted) dhcpDefault dhcpSimple dhcpOneIf; };
+    networking-networkd = lib.recurseIntoAttrs { inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf; };
   };
 
   meta = with lib; {
+    changelog = "https://downloads.isc.org/isc/kea/${version}/Kea-${version}-ReleaseNotes.txt";
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";
     longDescription = ''

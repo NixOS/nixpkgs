@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "tesserocr";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d0MNJytT2s073Ur11WP9wkrlG4b9vJzy6BRvKceryaQ=";
+    sha256 = "sha256-pz82cutgQ9ifMS6+40mcBiOsXIqeEquYdBWT+npZNPY=";
   };
 
   # https://github.com/sirfz/tesserocr/issues/314

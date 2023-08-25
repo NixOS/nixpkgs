@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "clize";
-  version = "5.0.0";
+  version = "5.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/cFpEvAN/Movd38xaE53Y+D9EYg/SFyHeqtlVUo1D0I=";
+    hash = "sha256-BH9aRHNgJxirG4VnKn4VMDOHF41agcJ13EKd+sHstRA=";
   };
 
   nativeBuildInputs = [

@@ -2,7 +2,6 @@
 , stdenv
 , lib
 , fetchgit
-, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -15,22 +14,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "plocate";
-  version = "1.1.17";
+  version = "1.1.19";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
-    sha256 = "sha256-EcWzvbY8ey5asEJxUeSl10ozApgg+wL5o8NCNw7/W7k=";
+    sha256 = "sha256-Vf/NgUPDL3KWMpjnyB2QR2sU6rQfPIADNU6OlpN+O0M=";
   };
-
-  patches = [
-    # fix redefinition error
-    (fetchpatch {
-      url = "https://git.sesse.net/?p=plocate;a=patch;h=0125004cd28c5f9124632b594e51dde73af1691c";
-      revert = true;
-      sha256 = "sha256-1TDpxIdpDZQ0IZ/wGG91RVZDrpMpWkvhRF8oE0CJWIY=";
-    })
-  ];
 
   postPatch = ''
     sed -i meson.build \

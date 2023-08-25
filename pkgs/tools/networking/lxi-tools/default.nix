@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxi-tools";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "lxi-tools";
     repo = "lxi-tools";
     rev = "v${version}";
-    sha256 = "sha256-F9svLaQnQyVyC5KzDnaGwB8J/nBZ3zzOVwYNxWBPifU=";
+    sha256 = "sha256-THtMSiGlBes9OujFEZL88Twx+etYiQRJSk9DFYeGFhY=";
   };
 
   nativeBuildInputs = [

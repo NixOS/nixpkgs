@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
     "MANDIR=$(out)/man"
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/chessdb --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
-  '';
-
   meta = {
     homepage = "https://chessdb.sourceforge.net/";
     description = "A free chess database";

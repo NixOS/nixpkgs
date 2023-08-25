@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "python screenshot";
     homepage = "https://github.com/ponty/pyscreenshot";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

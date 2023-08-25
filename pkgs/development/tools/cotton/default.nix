@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cotton";
-  version = "unstable-2023-04-13";
+  version = "unstable-2023-08-09";
 
   src = fetchFromGitHub {
     owner = "danielhuang";
     repo = pname;
-    rev = "e6aeb0757a2579de82e75e1d2e9fc20739f0ab7f";
-    sha256 = "sha256-DpwwTVlmmYxbZiJ9HAwQfomg7+WH3I3y3jZdaVbBf4w=";
+    rev = "04e2dfd123f7af6e78e3ce86b2fc04ca4c754cdc";
+    sha256 = "sha256-+HOuQyGkyS7oG0I0DkFGl+6YIDpV4GCCgC+a5Jwo4fw=";
   };
 
   cargoLock = {

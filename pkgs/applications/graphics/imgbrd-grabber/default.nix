@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/Grabber/Grabber-cli $out/bin/Grabber-cli
   '';
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   meta = with lib; {
     description = "Very customizable imageboard/booru downloader with powerful filenaming features";

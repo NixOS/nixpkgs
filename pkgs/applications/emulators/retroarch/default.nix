@@ -2,8 +2,6 @@
 , stdenv
 , nixosTests
 , enableNvidiaCgToolkit ? false
-, withAssets ? false
-, withCoreInfo ? false
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
 , withWayland ? stdenv.isLinux
@@ -61,10 +59,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  patches = [
-    ./use-default-values-for-libretro_info_path-assets_directory.patch
-  ];
-
   nativeBuildInputs = [ pkg-config wrapQtAppsHook ] ++
     lib.optional withWayland wayland ++
     lib.optional (runtimeLibs != [ ]) makeWrapper;
@@ -109,14 +103,8 @@ stdenv.mkDerivation rec {
     "--enable-systemmbedtls"
     "--disable-builtinzlib"
     "--disable-builtinflac"
-  ] ++
-  lib.optionals withAssets [
     "--disable-update_assets"
-    "--with-assets_dir=${retroarch-assets}/share"
-  ] ++
-  lib.optionals withCoreInfo [
     "--disable-update_core_info"
-    "--with-core_info_dir=${libretro-core-info}/share"
   ] ++
   lib.optionals stdenv.isLinux [
     "--enable-dbus"

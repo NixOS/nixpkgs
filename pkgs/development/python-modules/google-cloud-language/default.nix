@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-language";
-  version = "2.9.1";
+  version = "2.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sG2qgQsv1dIEI+2cICxJllmey4hbYRb8tzTcnhS3Yyg=";
+    hash = "sha256-ldI19QPZBOiFQRfpKO82rJMMJIJfy4QAw/NoqQj9vhQ=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-language";
     changelog = "https://github.com/googleapis/python-language/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

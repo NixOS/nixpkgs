@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer-vaapi";
-  version = "1.22.3";
+  version = "1.22.5";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-onhnBi6LaTBfylt9PxPtfDGLcD59cnVslDlb0wXHsyw=";
+    hash = "sha256-qaVQJnyVhN8OjHBDTTBHbo/QAYtzPBwe4z3q9CK9sks=";
   };
 
   outputs = [
@@ -62,10 +62,11 @@ stdenv.mkDerivation rec {
     xorg.libXrandr
     xorg.libSM
     xorg.libICE
-    libGL
-    libGLU
     nasm
     libvpx
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libGL
+    libGLU
   ];
 
   strictDeps = true;

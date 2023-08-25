@@ -1,11 +1,16 @@
 { lib
+, buildPlatform
+, hostPlatform
 , fetchurl
 , bash
-, tinycc
 , gnumake
+, mesBootstrap ? false, tinycc ? null
+, gcc ? null, glibc ? null, binutils ? null, gnused ? null, linux-headers, gnugrep
 }:
+assert mesBootstrap -> tinycc != null;
+assert !mesBootstrap -> gcc != null && glibc != null && binutils != null && gnused != null;
 let
-  pname = "gnused";
+  pname = "gnused" + lib.optionalString mesBootstrap "-mes";
   # last version that can be compiled with mes-libc
   version = "4.0.9";
 
@@ -25,8 +30,15 @@ bash.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
-    tinycc.compiler
     gnumake
+  ] ++ lib.optionals mesBootstrap [
+    tinycc.compiler
+  ] ++ lib.optionals (!mesBootstrap) [
+    gcc
+    glibc
+    binutils
+    gnused
+    gnugrep
   ];
 
   passthru.tests.get-version = result:
@@ -43,13 +55,14 @@ bash.runCommand "${pname}-${version}" {
     mainProgram = "sed";
     platforms = platforms.unix;
   };
-} ''
+} (''
   # Unpack
   ungz --file ${src} --output sed.tar
   untar --file sed.tar
   rm sed.tar
   cd sed-${version}
 
+'' + lib.optionalString mesBootstrap ''
   # Configure
   cp ${makefile} Makefile
   catm config.h
@@ -59,6 +72,25 @@ bash.runCommand "${pname}-${version}" {
     CC="tcc -B ${tinycc.libs}/lib" \
     LIBC=mes
 
+'' + lib.optionalString (!mesBootstrap) ''
+  # Configure
+  export CC="gcc -I${glibc}/include -I${linux-headers}/include"
+  export LIBRARY_PATH="${glibc}/lib"
+  export LIBS="-lc -lnss_files -lnss_dns -lresolv"
+  chmod +x configure
+  ./configure \
+    --build=${buildPlatform.config} \
+    --host=${hostPlatform.config} \
+    --disable-shared \
+    --disable-nls \
+    --disable-dependency-tracking \
+    --without-included-regex \
+    --prefix=$out
+
+  # Build
+  make
+
+'' + ''
   # Install
   make install PREFIX=$out
-''
+'')

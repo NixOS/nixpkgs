@@ -1,20 +1,24 @@
 { buildNpmPackage
 , fetchFromGitHub
+, fetchpatch2
 , lib
-, substituteAll
 , esbuild
 , buildGoModule
 , buildWebExtension ? false
 }:
+let
+  version = "1.4.5";
+  gitHash = "98a03c8";
+in
 buildNpmPackage rec {
   pname = "vencord";
-  version = "1.2.5";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${version}";
-    sha256 = "sha256-AqzhTzfqbYotQxLrkhkjvSPB4irL/q2fxXusWgCibpI=";
+    sha256 = "sha256-ZoHOCl0j+RBSl2lL9wO2rJ8VR+GNIeWJYe65c3lVoz8=";
   };
 
   ESBUILD_BINARY_PATH = lib.getExe (esbuild.override {
@@ -33,26 +37,42 @@ buildNpmPackage rec {
   # Supresses an error about esbuild's version.
   npmRebuildFlags = [ "|| true" ];
 
-  npmDepsHash = "sha256-Sj74qx9Tdz1EsoOVqk4ZdXTXxB4ShrFl3VRCWJ6/KcQ=";
+  npmDepsHash = "sha256-51IK95QY9YX0WerGu4GuOrYKoj8Uoo0R1b6WZpC5v4U=";
   npmFlags = [ "--legacy-peer-deps" ];
   npmBuildScript = if buildWebExtension then "buildWeb" else "build";
+  npmBuildFlags = [ "--" "--standalone" "--disable-updater" ];
 
   prePatch = ''
     cp ${./package-lock.json} ./package-lock.json
   '';
 
   patches = [
-    (substituteAll {
-      src = ./replace-git.patch;
-      inherit version;
+    (fetchpatch2 {
+      name = "allow-git-hash-remote-preset.patch";
+      url = "https://github.com/Vendicated/Vencord/commit/d9f55664428007199348123b05818f9e08c4f64d.patch";
+      hash = "sha256-l4PP8nVtyQJYUqtU9xYGT4j1Oayy08DE6TfbwPun0pY=";
+    })
+    (fetchpatch2 {
+      name = "use-source-date-epoch.patch";
+      url = "https://github.com/Vendicated/Vencord/commit/28247c88a949eeaac75b13a8d6653164d9659f56.patch";
+      hash = "sha256-mMpsB3GkI9LUiMQ/NFOiRw4z+wVkktmWgUHNTgxUFPU=";
+    })
+    (fetchpatch2 {
+      name = "allow-disabling-updater.patch";
+      url = "https://github.com/Vendicated/Vencord/commit/bad1fa0c766b2d42cd2eb0e0d1ab2e0c381bab98.patch";
+      hash = "sha256-yp453kFvVC02QEB3Op8PfopnLt3xGkjp4WfP6kPeIJ0=";
     })
   ];
 
-  installPhase = if buildWebExtension then ''
-    cp -r dist/chromium-unpacked/ $out
-  '' else ''
-    cp -r dist/ $out
-  '';
+  VENCORD_HASH = gitHash;
+  VENCORD_REMOTE = "${src.owner}/${src.repo}";
+
+  installPhase =
+    if buildWebExtension then ''
+      cp -r dist/chromium-unpacked/ $out
+    '' else ''
+      cp -r dist/ $out
+    '';
 
   meta = with lib; {
     description = "Vencord web extension";

@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
     description = "Lints and suggestions for the nix programming language";
     homepage = "https://github.com/nerdypepper/statix";
     license = licenses.mit;
+    mainProgram = "statix";
     maintainers = with maintainers; [ figsoda nerdypepper ];
   };
 }

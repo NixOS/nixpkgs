@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "keyctl link @u @s",
         "echo password | bcachefs format --encrypted --metadata_replicas 2 --label vtest /dev/vdb1 /dev/vdb2",
         "echo password | bcachefs unlock /dev/vdb1",
-        "mount -t bcachefs /dev/vdb1:/dev/vdb2 /tmp/mnt",
+        "echo password | mount -t bcachefs /dev/vdb1:/dev/vdb2 /tmp/mnt",
         "udevadm settle",
         "bcachefs fs usage /tmp/mnt",
         "umount /tmp/mnt",

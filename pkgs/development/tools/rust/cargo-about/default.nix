@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/EmbarkStudios/cargo-about";
     changelog = "https://github.com/EmbarkStudios/cargo-about/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ evanjs figsoda ];
+    maintainers = with maintainers; [ evanjs figsoda matthiasbeyer ];
   };
 }

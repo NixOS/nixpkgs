@@ -1,8 +1,6 @@
-{ stable
-, branch
+{ channel
 , version
-, sha256Hash
-, mkOverride
+, hash
 }:
 
 { lib
@@ -11,18 +9,19 @@
 , wrapQtAppsHook
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gns3-gui";
   inherit version;
 
   src = fetchFromGitHub {
+    inherit hash;
     owner = "GNS3";
     repo = pname;
     rev = "v${version}";
-    sha256 = sha256Hash;
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
     wrapQtAppsHook
   ];
 
@@ -33,25 +32,24 @@ python3.pkgs.buildPythonPackage rec {
     sentry-sdk
     setuptools
     sip_4 (pyqt5.override { withWebSockets = true; })
+    truststore
+  ];
+
+  pythonRelaxDeps = [
+    "jsonschema"
+    "sentry-sdk"
   ];
 
   doCheck = false; # Failing
 
   dontWrapQtApps = true;
 
-  postFixup = ''
-      wrapQtApp "$out/bin/gns3"
-  '';
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "psutil==" "psutil>=" \
-      --replace "jsonschema>=4.17.0,<4.18" "jsonschema" \
-      --replace "sentry-sdk==1.10.1,<1.11" "sentry-sdk"
+  preFixup = ''
+    wrapQtApp "$out/bin/gns3"
   '';
 
   meta = with lib; {
-    description = "Graphical Network Simulator 3 GUI (${branch} release)";
+    description = "Graphical Network Simulator 3 GUI (${channel} release)";
     longDescription = ''
       Graphical user interface for controlling the GNS3 network simulator. This
       requires access to a local or remote GNS3 server (it's recommended to

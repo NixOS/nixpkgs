@@ -137,7 +137,7 @@ in
         mv -f ${registrationFile}.new ${registrationFile}
 
         # Grant Synapse access to the registration
-        if ${getBin pkgs.glibc}/bin/getent group matrix-synapse > /dev/null; then
+        if ${pkgs.getent}/bin/getent group matrix-synapse > /dev/null; then
           chgrp -v matrix-synapse ${registrationFile}
           chmod -v g+r ${registrationFile}
         fi

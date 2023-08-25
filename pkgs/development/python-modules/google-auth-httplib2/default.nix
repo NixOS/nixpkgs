@@ -27,6 +27,8 @@ buildPythonPackage rec {
     httplib2
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     flask
     mock
@@ -39,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2";
     changelog = "https://github.com/googleapis/google-auth-library-python-httplib2/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

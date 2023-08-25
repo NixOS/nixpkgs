@@ -3,7 +3,6 @@
 , lib
 , makeWrapper
 , autoreconfHook
-, buildEnv
 , python3
 , fontforge
 , potrace

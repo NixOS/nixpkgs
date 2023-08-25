@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , gitpython
+, pip
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pip
     pytestCheckHook
     requests
   ];

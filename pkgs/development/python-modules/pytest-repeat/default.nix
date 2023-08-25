@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Pytest plugin for repeating tests";
     homepage = "https://github.com/pytest-dev/pytest-repeat";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

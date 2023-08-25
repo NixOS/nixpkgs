@@ -57,6 +57,7 @@ buildGoModule rec {
     homepage = "https://age-encryption.org/";
     description = "Modern encryption tool with small explicit keys";
     license = licenses.bsd3;
+    mainProgram = "age";
     maintainers = with maintainers; [ tazjin ];
   };
 }

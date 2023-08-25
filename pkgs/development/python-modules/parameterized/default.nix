@@ -2,39 +2,41 @@
 , buildPythonPackage
 , fetchPypi
 , mock
-, nose
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "parameterized";
-  version = "0.8.1";
-  format = "setuptools";
+  version = "0.9.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qbv/N9YYZDD3f5ANd35btqJJKKHEb7HeaS+LUriDO1w=";
+    hash = "sha256-f8kFJyzvpPNkwaNCnLvpwPmLeTmI77W/kKrIDwjbCbE=";
   };
+
+  postPatch = ''
+    # broken with pytest 7
+    # https://github.com/wolever/parameterized/issues/167
+    substituteInPlace parameterized/test.py \
+      --replace 'assert_equal(missing, [])' ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   checkInputs = [
     mock
-    nose
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
     "parameterized/test.py"
-  ];
-
-  disabledTests = [
-    # Tests seem outdated
-    "test_method"
-    "test_with_docstring_0_value1"
-    "test_with_docstring_1_v_l_"
-    "testCamelCaseMethodC"
   ];
 
   pythonImportsCheck = [

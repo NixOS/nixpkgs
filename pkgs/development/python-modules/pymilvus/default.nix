@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.2.8";
+  version = "2.2.15";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "milvus-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oqwa/2UT9jyGaEEzjr/phZZStLOZ6JRj+4ck0tmP0W0=";
+    hash = "sha256-wwhgO2iCzPXobyZI0narHPn2WCAB9sS1+AoLrP1Ih6Q=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

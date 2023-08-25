@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Nix-specific: ensure nnn passes correct arguments to the Nix file command on Darwin.
+    # By default, nnn expects the macOS default file command, not the one provided by Nix.
+    # However, both commands use different arguments to obtain the MIME type.
+    ./darwin-fix-file-mime-opts.patch
     # FIXME: remove for next release
     (fetchpatch {
       url = "https://github.com/jarun/nnn/commit/20e944f5e597239ed491c213a634eef3d5be735e.patch";
@@ -74,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau Br1ght0ne ];
+    mainProgram = "nnn";
   };
 })

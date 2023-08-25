@@ -1,5 +1,6 @@
 { lib, stdenv
 , build2
+, fetchpatch
 , fetchurl
 , git
 , libbpkg
@@ -21,6 +22,15 @@ stdenv.mkDerivation rec {
     url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${version}.tar.gz";
     sha256 = "sha256-3F4Pv8YX++cNa6aKhPM67mrt/5oE1IeoZUSmljHqBfI=";
   };
+
+  patches = [
+    # Patch git tests for git v2.38+
+    # Remove when bumping to v0.16.0 or greater
+    (fetchpatch {
+      url = "https://github.com/build2/bpkg/commit/a97b12a027546b37f66d3e08064f92f5539cf79.patch";
+      sha256 = "sha256-x5iJQXt84XyjZYdAmYO4FymSV2vi7nfIoeMOxFm/2eQ=";
+    })
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [

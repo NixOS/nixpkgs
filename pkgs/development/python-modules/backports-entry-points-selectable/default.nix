@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Compatibility shim providing selectable entry points for older implementations";
     homepage = "https://github.com/jaraco/backports.entry_points_selectable";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

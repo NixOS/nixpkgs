@@ -1,10 +1,10 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
   versions = if stdenv.isLinux then {
-    stable = "0.0.27";
-    ptb = "0.0.42";
-    canary = "0.0.154";
-    development = "0.0.216";
+    stable = "0.0.28";
+    ptb = "0.0.45";
+    canary = "0.0.166";
+    development = "0.0.217";
   } else {
     stable = "0.0.273";
     ptb = "0.0.59";
@@ -16,19 +16,19 @@ let
     x86_64-linux = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        sha256 = "sha256-6fHaiPBcv7TQVh+TatIEYXZ/LwPmnCmU/QWXKFgUR7U=";
+        sha256 = "sha256-JwxVVm/QIBLoVyQ2Ff/MX06UNgZ+dAsD960GsCg1M+U=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        sha256 = "ZAMyAqyFEBJeTUqQzr5wK+BOFGURqhoHL8w2hJvL0vI=";
+        sha256 = "cN70ZYl9hxWU5FSCpDbpOuR2Wsz6XtPSDoXOTvcCe7g=";
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "sha256-rtqPQZBrmxnHuXgzmC7VNiucXBBmtrn8AiKNDtxaR7c=";
+        sha256 = "sha256-bUbJpaHUf0ALJ1+4ACcVz0kpZpoXi0S4QO5yLiUZSgs=";
       };
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
-        sha256 = "sha256-lQnIQC7Wek7OYDzZvLIJfb8I4oATD8pSB+mjQMPyqYQ=";
+        sha256 = "sha256-fzNFKrYo5qckrWZAkkiK337czCt6nOM1O8FeG18Q8Y0=";
       };
     };
     x86_64-darwin = {
@@ -61,6 +61,7 @@ let
     license = licenses.unfree;
     maintainers = with maintainers; [ MP2E Scrumplex artturin infinidoge jopejoe1 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "discord";
   };
   package =
     if stdenv.isLinux

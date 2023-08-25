@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , sunwait
 , wallutils
-, rPackages
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -27,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
       --replace "sunwait" "${sunwait}/bin/sunwait" \
       --replace "setwallpaper" "${wallutils}/bin/setwallpaper" \
       --replace '$HOME/sunpaper/images/' "$out/share/sunpaper/images/"
-    '';
+  '';
 
   installPhase = ''
     mkdir -p "$out/bin" "$out/share/sunpaper/images"

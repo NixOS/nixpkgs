@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, nettle, fetchpatch
+{ lib, stdenv, fetchurl, pkg-config, nettle
 , libidn, libnetfilter_conntrack, buildPackages
 , dbusSupport ? stdenv.isLinux
 , dbus

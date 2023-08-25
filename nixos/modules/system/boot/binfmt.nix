@@ -137,14 +137,8 @@ let
       magicOrExtension = ''\x00asm'';
       mask = ''\xff\xff\xff\xff'';
     };
-    x86_64-windows = {
-      magicOrExtension = "exe";
-      recognitionType = "extension";
-    };
-    i686-windows = {
-      magicOrExtension = "exe";
-      recognitionType = "extension";
-    };
+    x86_64-windows.magicOrExtension = "MZ";
+    i686-windows.magicOrExtension = "MZ";
   };
 
 in {
@@ -317,7 +311,8 @@ in {
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
       (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations));
     system.activationScripts.binfmt = stringAfter [ "specialfs" ] ''
-      mkdir -p -m 0755 /run/binfmt
+      mkdir -p /run/binfmt
+      chmod 0755 /run/binfmt
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet config.boot.binfmt.registrations)}
     '';
     systemd = lib.mkIf (config.boot.binfmt.registrations != {}) {

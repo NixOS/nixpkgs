@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-hack";
-  version = "0.5.28";
+  version = "0.5.29";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-434imb66AINKeW50ITc4RRYO9v7sH3fs1DEwSBc3mys=";
+    sha256 = "sha256-Z3UExZghVw7Pbgh5nHuiC8cFVefBE0yZ2k5laam8myY=";
   };
 
-  cargoSha256 = "sha256-oDrpQskQV5hG9Ksp0TJcXjm/J9q/K831mOzxH+CXjfg=";
+  cargoSha256 = "sha256-5X3MX2KV87mOcN/cL/lFU9K9/j04zn5C7teIXFqj7Wk=";
 
   # some necessary files are absent in the crate version
   doCheck = false;

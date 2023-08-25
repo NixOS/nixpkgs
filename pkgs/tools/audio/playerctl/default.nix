@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ puffnfresh ];
     broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "playerctl";
   };
 }

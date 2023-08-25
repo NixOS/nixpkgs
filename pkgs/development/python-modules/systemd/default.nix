@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://www.freedesktop.org/software/systemd/python-systemd/";
     changelog = "https://github.com/systemd/python-systemd/blob/v${version}/NEWS";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

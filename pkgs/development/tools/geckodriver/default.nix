@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mozilla/geckodriver";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jraygauthier ];
+    mainProgram = "geckodriver";
   };
 }

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       especially over Wi-Fi, cellular, and long-distance links.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric SuperSandro2000 ];
+    maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
   };
 }

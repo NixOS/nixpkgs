@@ -210,9 +210,7 @@ in {
 
       preStart =
         let replacePlugins =
-              if cfg.plugins == null
-              then ""
-              else
+              optionalString (cfg.plugins != null) (
                 let pluginCmds = lib.attrsets.mapAttrsToList
                       (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
                       cfg.plugins;
@@ -220,7 +218,7 @@ in {
                   rm -r ${cfg.home}/plugins || true
                   mkdir -p ${cfg.home}/plugins
                   ${lib.strings.concatStringsSep "\n" pluginCmds}
-                '';
+                '');
         in ''
           rm -rf ${cfg.home}/war
           ${replacePlugins}

@@ -26,7 +26,11 @@ let
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres {};
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
-      CoLoR = callPackage ../development/coq-modules/CoLoR {};
+      CoLoR = callPackage ../development/coq-modules/CoLoR (
+        (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
+          bignums = self.bignums.override { version = "8.13.0"; };
+        })
+      );
       compcert = callPackage ../development/coq-modules/compcert {
         inherit fetchpatch makeWrapper coq2html lib stdenv;
       };
@@ -36,7 +40,11 @@ let
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
-      coqeal = callPackage ../development/coq-modules/coqeal {};
+      coqeal = callPackage ../development/coq-modules/coqeal (
+        (lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
+          bignums = self.bignums.override { version = "${self.coq.coq-version}.0"; };
+        })
+      );
       coqhammer = callPackage ../development/coq-modules/coqhammer {};
       coqide = callPackage ../development/coq-modules/coqide {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
@@ -118,7 +126,10 @@ let
         (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override { version = "3.11"; };
         }) // (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
-          ITree = self.ITree.override { version = "4.0.0"; };
+          ITree = self.ITree.override {
+            version = "4.0.0";
+            paco = self.paco.override { version = "4.1.2"; };
+          };
        }));
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiofile";
-  version = "3.8.5";
+  version = "3.8.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jQ97jtYhkqQgQjtHhtlk5JlvkzbFQw3kY6uXuV81ZkQ=";
+    hash = "sha256-KBly/aeHHZh7mL8MJ9gmxbqS7PmR4sedtBY/2HCXt54=";
   };
 
   propagatedBuildInputs = [

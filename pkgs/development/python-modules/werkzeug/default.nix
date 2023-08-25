@@ -69,6 +69,6 @@ buildPythonPackage rec {
       utility libraries.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

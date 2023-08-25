@@ -39,11 +39,8 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? true
 , enableJemalloc ? !stdenv.isDarwin
-  # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
-  # non-existent in older versions
-  # see https://github.com/boostorg/process/issues/55
-, enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-, enableGcs ? (!stdenv.isDarwin) && (lib.versionAtLeast grpc.cxxStandard "17") # google-cloud-cpp is not supported on darwin, needs to support C++17
+, enableS3 ? true
+, enableGcs ? !stdenv.isDarwin
 }:
 
 assert lib.asserts.assertMsg
@@ -81,11 +78,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "12.0.0";
+  version = "12.0.1";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-3dg0eIJ3XlOvfQlloZArfY/NCgMP0U94PU+F6CE1LVI=";
+    hash = "sha256-NIHEETk6oVx16I2Tz4MV+vf0PhgP4HkBKNOEDUF96Fg=";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -125,6 +122,7 @@ stdenv.mkDerivation rec {
   patches = [
     # patch to fix python-test
     ./darwin.patch
+    ./cmake-find-protobuf.patch
   ];
 
   nativeBuildInputs = [
@@ -172,6 +170,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
     "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
     "-DARROW_BUILD_TESTS=ON"

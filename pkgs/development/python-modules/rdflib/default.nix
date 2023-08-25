@@ -18,6 +18,7 @@
 , html5lib
 
 # tests
+, pip
 , pytest-cov
 , pytestCheckHook
 }:
@@ -53,7 +54,10 @@ buildPythonPackage rec {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
+    pip
     pytest-cov
     pytestCheckHook
   ]

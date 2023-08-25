@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kubecfg";
-  version = "0.29.2";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "kubecfg";
     repo = "kubecfg";
     rev = "v${version}";
-    hash = "sha256-toB0rRkqRTjf51g+BcMZiHjlG/slMyzA5OfO4DbTCH8=";
+    hash = "sha256-a/2qKiqn9en67uJD/jzU3G1k6gT73DTzjY32mi51xSQ=";
   };
 
-  vendorHash = "sha256-sntlF8VCOtIB6kFJZaDs2Uu8zWZwMLcnHWuZy2D30Zg=";
+  vendorHash = "sha256-mSYc12pjx34PhMx7jbKD/nPhPaK7jINmUSWxomikx7U=";
 
   ldflags = [
     "-s"
@@ -36,7 +36,6 @@ buildGoModule rec {
     homepage = "https://github.com/kubecfg/kubecfg";
     changelog = "https://github.com/kubecfg/kubecfg/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ benley qjoly ];
   };
 }

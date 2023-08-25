@@ -17,6 +17,8 @@ let
 in
 
 final: prev: {
+  inherit nodejs;
+
   "@angular/cli" = prev."@angular/cli".override {
     prePatch = ''
       export NG_CLI_ANALYTICS=false
@@ -38,25 +40,6 @@ final: prev: {
       darwin.apple_sdk.frameworks.Security
     ];
   };
-
-  "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override (oldAttrs: {
-    nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
-      glib
-      libsecret
-      pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
-      AppKit
-      Security
-    ];
-    buildInputs = [
-      final.node-gyp-build
-      final.node-pre-gyp
-      nodejs
-    ];
-
-    meta = oldAttrs.meta // { broken = since "16"; };
-  });
-  mdctl-cli = final."@medable/mdctl-cli";
 
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -81,31 +64,6 @@ final: prev: {
     meta = oldAttrs.meta // { platforms = lib.platforms.linux; };
   });
 
-  balanceofsatoshis = prev.balanceofsatoshis.override {
-    nativeBuildInputs = [ pkgs.installShellFiles ];
-    postInstall = ''
-      installShellCompletion --cmd bos\
-        --bash <($out/bin/bos completion bash)\
-        --zsh <($out/bin/bos completion zsh)\
-        --fish <($out/bin/bos completion fish)
-    '';
-  };
-
-  bitwarden-cli = prev."@bitwarden/cli".override {
-    name = "bitwarden-cli";
-    nativeBuildInputs = with pkgs; [
-      pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.CoreText
-    ];
-    buildInputs = with pkgs; [
-      pixman
-      cairo
-      pango
-      giflib
-    ];
-  };
-
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -113,30 +71,6 @@ final: prev: {
         wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ pkgs.git pkgs.nix ]}
       done
     '';
-  };
-
-  carbon-now-cli = prev.carbon-now-cli.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    prePatch = ''
-      export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-    '';
-    postInstall = ''
-      wrapProgram $out/bin/carbon-now \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-    '';
-  };
-
-  coc-imselect = prev.coc-imselect.override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
-  dat = prev.dat.override (oldAttrs: {
-    buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
-    meta = oldAttrs.meta // { broken = since "12"; };
-  });
-
-  eask = prev."@emacs-eask/cli".override {
-    name = "eask";
   };
 
   expo-cli = prev."expo-cli".override (oldAttrs: {
@@ -162,22 +96,11 @@ final: prev: {
     '';
   };
 
-  firebase-tools = prev.firebase-tools.override {
-    nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
-  };
-
-  flood = prev.flood.override {
-    buildInputs = [ final.node-pre-gyp ];
-  };
-
-  git-ssb = prev.git-ssb.override (oldAttrs: {
-    buildInputs = [ final.node-gyp-build ];
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
 
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
-    nativeBuildInputs = [ pkgs.installShellFiles ];
+    nativeBuildInputs = with pkgs; [ installShellFiles pkg-config ];
+    buildInputs = with pkgs; [ cairo pango pixman ];
     # 'gt completion' auto-detects zshell from environment variables:
     # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
     postInstall = ''
@@ -303,11 +226,6 @@ final: prev: {
     '';
   };
 
-  node-inspector = prev.node-inspector.override (oldAttrs: {
-    buildInputs = [ final.node-pre-gyp ];
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
   node-red = prev.node-red.override {
     buildInputs = [ final.node-pre-gyp ];
   };
@@ -393,11 +311,12 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha512-L9mqjnSmvWIRCYJ9mQkwCtj4+JDYYTdhoyo8hlsHNDXaZLh/b4hR0IoKIBbTKxZuyHQzLopb/+0Rvb69uGV7uA==";
+      hash = "sha256-0NxYp+W2KbR3xEV2OCXCIL3RqkvLfJHNKgl/PxapVbI=";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
-        --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
+        --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
+        --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
         --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
         --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
         --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
@@ -422,51 +341,9 @@ final: prev: {
     '';
   };
 
-  readability-cli = prev.readability-cli.override (oldAttrs: {
-    # Wrap src to fix this build error:
-    # > readability-cli/readable.ts: unsupported interpreter directive "#!/usr/bin/env -S deno..."
-    #
-    # Need to wrap the source, instead of patching in patchPhase, because
-    # buildNodePackage only unpacks sources in the installPhase.
-    src = pkgs.srcOnly {
-      src = oldAttrs.src;
-      name = oldAttrs.name;
-      patchPhase = "chmod a-x readable.ts";
-    };
-
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = with pkgs; [
-      pixman
-      cairo
-      pango
-    ];
-  });
-
-  reveal-md = prev.reveal-md.override (
-    lib.optionalAttrs (!stdenv.isDarwin) {
-      nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-      prePatch = ''
-        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      '';
-      postInstall = ''
-        wrapProgram $out/bin/reveal-md \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-      '';
-    }
-  );
-
   rush = prev."@microsoft/rush".override {
     name = "rush";
   };
-
-  ssb-server = prev.ssb-server.override (oldAttrs: {
-    buildInputs = [ pkgs.automake pkgs.autoconf final.node-gyp-build ];
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
-  stf = prev.stf.override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
 
   tailwindcss = prev.tailwindcss.override {
     plugins = [ ];
@@ -530,7 +407,7 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
       wrapProgram "$out/bin/ts-node" \
-      --prefix NODE_PATH : ${final.typescript}/lib/node_modules
+      --prefix NODE_PATH : ${pkgs.typescript}/lib/node_modules
     '';
   };
 
@@ -538,14 +415,14 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
       wrapProgram "$out/bin/tsun" \
-      --prefix NODE_PATH : ${final.typescript}/lib/node_modules
+      --prefix NODE_PATH : ${pkgs.typescript}/lib/node_modules
     '';
   };
 
   typescript-language-server = prev.typescript-language-server.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
-      ${pkgs.xorg.lndir}/bin/lndir ${final.typescript} $out
+      ${pkgs.xorg.lndir}/bin/lndir ${pkgs.typescript} $out
     '';
   };
 
@@ -606,6 +483,11 @@ final: prev: {
 
   wrangler = prev.wrangler.override (oldAttrs: {
     meta = oldAttrs.meta // { broken = before "16.13"; };
+    buildInputs = [ pkgs.llvmPackages.libcxx pkgs.llvmPackages.libunwind ] ++ lib.optional stdenv.isLinux pkgs.autoPatchelfHook;
+    preFixup = ''
+      # patch elf is trying to patch binary for sunos
+      rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
+    '';
   });
 
   yaml-language-server = prev.yaml-language-server.override {

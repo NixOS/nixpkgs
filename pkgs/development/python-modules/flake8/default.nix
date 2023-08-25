@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pycqa/flake8";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "flake8";
   };
 }

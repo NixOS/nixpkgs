@@ -2,7 +2,7 @@
 , stdenv
 , pythonAtLeast
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , python
 , buildPythonPackage
 , setuptools
@@ -14,34 +14,44 @@
 , runCommand
 , fetchpatch
 
+, config
+
 # CUDA-only dependencies:
 , addOpenGLRunpath ? null
 , cudaPackages ? {}
 
 # CUDA flags:
-, cudaSupport ? false
+, cudaSupport ? config.cudaSupport
 }:
 
 let
   inherit (cudaPackages) cudatoolkit;
 in buildPythonPackage rec {
-  version = "0.56.4";
+  # Using an untagged version, with numpy 1.25 support, when it's released
+  # also drop the versioneer patch in postPatch
+  version = "unstable-2023-08-11";
   pname = "numba";
   format = "setuptools";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Mtn+9BLIFIPX7+DOts9NMxD96LYkqc7MoA95BXOslu4=";
+  src = fetchFromGitHub {
+    owner = "numba";
+    repo = "numba";
+    rev = "6f0c5060a69656319ab0bae1d8bb89484cd5631f";
+    # Upstream uses .gitattributes to inject information about the revision
+    # hash and the refname into `numba/_version.py`, see:
+    #
+    # - https://git-scm.com/docs/gitattributes#_export_subst and
+    # - https://github.com/numba/numba/blame/5ef7c86f76a6e8cc90e9486487294e0c34024797/numba/_version.py#L25-L31
+    #
+    # Hence this hash may change if GitHub / Git will change it's behavior.
+    # Hopefully this will not happen until the next release. We are fairly sure
+    # that upstream relies on those strings to be valid, that's why we don't
+    # use `forceFetchGit = true;`.` If in the future we'll observe the hash
+    # changes too often, we can always use forceFetchGit, and inject the
+    # relevant strings ourselves, using `sed` commands, in extraPostFetch.
+    hash = "sha256-34qEn/i2X6Xu1cjuiRrmrm/HryNoN+Am4A4pJ90srAE=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'max_numpy_run_version = "1.24"' 'max_numpy_run_version = "1.25"'
-    substituteInPlace numba/__init__.py \
-      --replace "elif numpy_version > (1, 23):" "elif numpy_version > (1, 24):"
-  '';
-
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   nativeBuildInputs = [
@@ -61,23 +71,20 @@ in buildPythonPackage rec {
     cudatoolkit.lib
   ];
 
-  patches = [
-    # fix failure in test_cache_invalidate (numba.tests.test_caching.TestCache)
-    # remove when upgrading past version 0.56
-    (fetchpatch {
-      name = "fix-test-cache-invalidate-readonly.patch";
-      url = "https://github.com/numba/numba/commit/993e8c424055a7677b2755b184fc9e07549713b9.patch";
-      hash = "sha256-IhIqRLmP8gazx+KWIyCxZrNLMT4jZT8CWD3KcH4KjOo=";
-    })
-    # Backport numpy 1.24 support from https://github.com/numba/numba/pull/8691
-    ./numpy-1.24.patch
-  ] ++ lib.optionals cudaSupport [
+  patches = lib.optionals cudaSupport [
     (substituteAll {
       src = ./cuda_path.patch;
       cuda_toolkit_path = cudatoolkit;
       cuda_toolkit_lib_path = cudatoolkit.lib;
     })
   ];
+  # with untagged version we need to specify the correct version ourselves
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "version=versioneer.get_version()" "version='0.57.1'"
+    substituteInPlace numba/_version.py \
+      --replace 'git_refnames = " (HEAD -> main)"' 'git_refnames = "tag: 0.57.1"'
+  '';
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
@@ -124,6 +131,7 @@ in buildPythonPackage rec {
     description = "Compiling Python code using LLVM";
     homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;
+    mainProgram = "numba";
     maintainers = with maintainers; [ fridh ];
   };
 }

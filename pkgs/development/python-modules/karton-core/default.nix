@@ -2,6 +2,7 @@
 , boto3
 , buildPythonPackage
 , fetchFromGitHub
+, orjson
 , unittestCheckHook
 , pythonOlder
 , redis
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "karton-core";
-  version = "5.0.1";
+  version = "5.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,11 +19,12 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = "karton";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TKO0l0AKsC9MMB58ao/EXcJ9k/J3y3S9tc127H7vA6w=";
+    hash = "sha256-1Bv0e218cvLuv/go0L13C39fFAeo0FJeCoU+XFUBhzk=";
   };
 
   propagatedBuildInputs = [
     boto3
+    orjson
     redis
   ];
 

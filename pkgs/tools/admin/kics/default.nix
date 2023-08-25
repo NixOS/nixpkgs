@@ -1,23 +1,22 @@
-{ stdenv
+{ lib
 , buildGoModule
 , fetchFromGitHub
-, lib
 , testers
 , kics
 }:
 
 buildGoModule rec {
   pname = "kics";
-  version = "1.7.1";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "Checkmarx";
     repo = "kics";
     rev = "v${version}";
-    sha256 = "sha256-9Pr8h6q/Au5fDgtAhKpOXNj3ldsLTwqGnduTAiUYdvE=";
+    hash = "sha256-+/wqwWRJQKfmh4JuWppcE2444lD1PQ9rDGOsFh57AKs=";
   };
 
-  vendorHash = "sha256-Sg8f6fqe7DAsNsEGU1Ml42qgSuE5CrD+YrFqZKpNKtU=";
+  vendorHash = "sha256-ipXfxqHdushJ2P//oyGGjZsq5EypDEpHKlW32VHaMXw=";
 
   subPackages = [ "cmd/console" ];
 

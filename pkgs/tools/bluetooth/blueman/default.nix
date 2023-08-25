@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
-, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
+, obex_data_server, xdg-utils, dnsmasq, dhcpcd, iproute2
 , gnome, librsvg, wrapGAppsHook, gobject-introspection
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcp iproute2 ]}"
+    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcpcd iproute2 ]}"
     "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
   ];
 

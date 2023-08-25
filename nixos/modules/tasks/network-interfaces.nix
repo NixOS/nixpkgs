@@ -1496,7 +1496,7 @@ in
           in
           ''
             # override to ${msg} for ${i.name}
-            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
+            ACTION=="add", SUBSYSTEM=="net", NAME=="${i.name}", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
           '') (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})

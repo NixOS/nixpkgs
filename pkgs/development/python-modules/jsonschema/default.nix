@@ -5,12 +5,13 @@
 , hatch-fancy-pypi-readme
 , hatch-vcs
 , hatchling
-, importlib-metadata
 , importlib-resources
-, pyrsistent
+, jsonschema-specifications
+, pkgutil-resolve-name
+, pytestCheckHook
 , pythonOlder
-, twisted
-, typing-extensions
+, referencing
+, rpds-py
 
 # optionals
 , fqdn
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.17.3";
+  version = "4.18.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-D4ZEN6uLYHa6ZwdFPvj5imoNUSqA6T+KvbZ29zfstg0=";
+    hash = "sha256-+zZCc1OZ+pWMDSqtcFeQFVRZbGM0n09rKDxJPPaSol0=";
   };
 
   postPatch = ''
@@ -48,12 +49,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
-    pyrsistent
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    typing-extensions
+    jsonschema-specifications
+    referencing
+    rpds-py
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
+    pkgutil-resolve-name
   ];
 
   passthru.optional-dependencies = {
@@ -80,20 +81,15 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    twisted
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    export JSON_SCHEMA_TEST_SUITE=json
-    trial jsonschema
-  '';
 
   pythonImportsCheck = [
     "jsonschema"
   ];
 
   meta = with lib; {
-    description = "An implementation of JSON Schema validation for Python";
+    description = "An implementation of JSON Schema validation";
     homepage = "https://github.com/python-jsonschema/jsonschema";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];

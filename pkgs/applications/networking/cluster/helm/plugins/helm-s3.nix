@@ -2,25 +2,30 @@
 
 buildGoModule rec {
   pname = "helm-s3";
-  version = "0.10.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "hypnoglow";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2BQ/qtoL+iFbuLvrJGUuxWFKg9u1sVDRcRm2/S0mgyc=";
+    sha256 = "sha256-81Rzqu2fj6xSZbKvAhHzaGnr/3ACZvqJhYe+6Vyc0qk=";
   };
 
-  vendorSha256 = "sha256-/9TiY0XdkiNxW5JYeC5WD9hqySCyYYU8lB+Ft5Vm96I=";
+  vendorSha256 = "sha256-Jvfl0sdZXV497RIgoZUJD0zK/pXK6yeAnuSdq42nky8=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''
     sed -i '/^hooks:/,+2 d' plugin.yaml
   '';
 
+  # NOTE: make test-unit, but skip awsutil, which needs internet access
   checkPhase = ''
-    make test-unit
+    go test $(go list ./... | grep -vE '(awsutil|e2e)')
   '';
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  subPackages = [ "cmd/helm-s3" ];
 
   postInstall = ''
     install -dm755 $out/${pname}

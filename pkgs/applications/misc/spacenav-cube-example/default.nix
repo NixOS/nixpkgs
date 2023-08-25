@@ -2,11 +2,9 @@
 
 stdenv.mkDerivation {
   pname = "spacenav-cube-example";
-  version = libspnav.version;
+  inherit (libspnav) version src;
 
-  src = libspnav.src;
-
-  sourceRoot = "source/examples/cube";
+  sourceRoot = "${libspnav.src.name}/examples/cube";
 
   buildInputs = [ libX11 mesa_glu libspnav ];
 

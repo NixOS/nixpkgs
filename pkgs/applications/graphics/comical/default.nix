@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, wxGTK32, util-linux, zlib, Cocoa }:
+{ lib
+, stdenv
+, fetchurl
+, hexdump
+, wxGTK32
+, zlib
+, Cocoa
+}:
 
 stdenv.mkDerivation rec {
   pname = "comical";
@@ -6,14 +13,19 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/comical/comical-${version}.tar.gz";
-    sha256 = "0b6527cc06b25a937041f1eb248d0fd881cf055362097036b939817f785ab85e";
+    hash = "sha256-C2UnzAayWpNwQfHrJI0P2IHPBVNiCXA2uTmBf3hauF4=";
   };
 
-  patches = [ ./wxgtk-3.2.patch ];
+  patches = [
+    ./wxgtk-3.2.patch
+  ];
+
+  nativeBuildInputs = [
+    hexdump
+  ];
 
   buildInputs = [
     wxGTK32
-    util-linux
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
@@ -25,7 +37,9 @@ stdenv.mkDerivation rec {
     "CXX=${stdenv.cc.targetPrefix}c++"
   ];
 
-  preInstall = "mkdir -pv $out/bin";
+  preInstall = ''
+    mkdir -p $out/bin
+  '';
 
   meta = {
     description = "Viewer of CBR and CBZ files, often used to store scanned comics";

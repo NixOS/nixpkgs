@@ -55,8 +55,7 @@ let
   packages = [ "ssreflect" "fingroup" "algebra" "solvable" "field" "character" "all" ];
 
   mathcomp_ = package: let
-      mathcomp-deps = if package == "single" then []
-        else map mathcomp_ (head (splitList (lib.pred.equal package) packages));
+      mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ (head (splitList (lib.pred.equal package) packages)));
       pkgpath = if package == "single" then "mathcomp" else "mathcomp/${package}";
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''

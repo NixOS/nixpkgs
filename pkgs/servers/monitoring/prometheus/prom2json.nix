@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/prom2json";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
-    platforms = platforms.unix;
   };
 }

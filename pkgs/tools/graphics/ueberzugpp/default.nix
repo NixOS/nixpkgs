@@ -18,7 +18,7 @@
 , chafa
 , enableOpencv ? stdenv.isLinux
 , opencv
-, enableSway ? stdenv.isLinux
+, enableWayland ? stdenv.isLinux
 , extra-cmake-modules
 , wayland
 , wayland-protocols
@@ -30,24 +30,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.6";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-FNDFNPNiTLAB90dRpVX3XmbzB5pkkJmnhENmsPRldVE=";
+    hash = "sha256-n1cSHHPCx6igJmBxAbny7gntZQk4cMb358zx7f2lMi8=";
   };
-
-  # error: no member named 'ranges' in namespace 'std'
-  postPatch = lib.optionalString withoutStdRanges ''
-    for f in src/canvas/chafa.cpp src/canvas/iterm2/iterm2.cpp; do
-      sed -i "1i #include <range/v3/algorithm/for_each.hpp>" $f
-      substituteInPlace $f \
-        --replace "#include <ranges>" "" \
-        --replace "std::ranges" "ranges"
-    done
-  '';
 
   strictDeps = true;
 
@@ -72,7 +62,7 @@ stdenv.mkDerivation rec {
     cli11
   ] ++ lib.optionals enableOpencv [
     opencv
-  ] ++ lib.optionals enableSway [
+  ] ++ lib.optionals enableWayland [
     extra-cmake-modules
     wayland
     wayland-protocols
@@ -85,8 +75,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals (!enableOpencv) [
     "-DENABLE_OPENCV=OFF"
-  ] ++ lib.optionals enableSway [
-    "-DENABLE_SWAY=ON"
+  ] ++ lib.optionals enableWayland [
+    "-DENABLE_WAYLAND=ON"
   ] ++ lib.optionals (!enableX11) [
     "-DENABLE_X11=OFF"
   ];
@@ -94,10 +84,6 @@ stdenv.mkDerivation rec {
   # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.14 or newer
   preBuild = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
     export MACOSX_DEPLOYMENT_TARGET=10.14
-  '';
-
-  postInstall = ''
-    ln -s $out/bin/ueberzug $out/bin/ueberzugpp
   '';
 
   meta = with lib; {

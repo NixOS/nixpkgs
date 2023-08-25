@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   checkPhase = ''
     cd test
-    for p in Argv.v Example.v HelloWorld.v TestExtraction.v TestPervasives.v
+    for p in Argv.v Example.v HelloWorld.v TestExtraction.v TestOcamlbuild.v TestPervasives.v
     do
       [ -f $p ] && echo $p && coqc $p
     done

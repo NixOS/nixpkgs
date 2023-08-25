@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediainfo-gui";
-  version = "23.04";
+  version = "23.06";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "sha256-Uiut1rHk6LV+giW6e0nvgn35ffTLaLbU/HkQ92xf32k=";
+    hash = "sha256-TJd+6wzoN4co5k7yTyf+YrLFEW+/BUHIJKRDCfgP+Io=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];
+    mainProgram = "mediainfo-gui";
   };
 }

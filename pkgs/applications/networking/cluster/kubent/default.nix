@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "doitintl";
     repo = "kube-no-trouble";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-QIvMhKAo30gInqJBpHvhcyjgVkdRqgBKwLQ80ng/75U=";
   };
 

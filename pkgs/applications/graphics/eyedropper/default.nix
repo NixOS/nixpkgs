@@ -17,19 +17,19 @@
 
 stdenv.mkDerivation rec {
   pname = "eyedropper";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kc/UREQpmw3suA6bYEr9fCIwMzNMrEY9E5qf+rhKsC4=";
+    hash = "sha256-ZlqRTTSQHmsOhQNg8W2hKL2/zCOu2ECEUrTQ507WN90=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-/eas1PObrj9IuDIzlBVbfhEhH8eDyZ7CD871JmAqnyY=";
+    hash = "sha256-/CIheSIFrymYcCip3NmozAS8ojPnF0qO+oXI15zttkE=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A powerful color picker and formatter";
+    description = "Pick and format colors";
     homepage = "https://github.com/FineFindus/eyedropper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

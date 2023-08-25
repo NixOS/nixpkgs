@@ -15,13 +15,13 @@
 , withJson ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fossil";
-  version = "2.21";
+  version = "2.22";
 
   src = fetchurl {
-    url = "https://www.fossil-scm.org/home/tarball/version-${version}/fossil-${version}.tar.gz";
-    hash = "sha256-wf7sp4ISTN52mSQHxw8s7//L4beLZtwkaJDYMVnvgIQ=";
+    url = "https://www.fossil-scm.org/home/tarball/version-${finalAttrs.version}/fossil-${finalAttrs.version}.tar.gz";
+    hash = "sha256-gdgj/29dF1s4TfqE7roNBS2nOjfNZs1yt4bnFnEhDWs=";
   };
 
   # required for build time tool `./tools/translate.c`
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ maggesi viric ];
     platforms = platforms.all;
   };
-}
+})

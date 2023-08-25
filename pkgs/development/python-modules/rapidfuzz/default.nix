@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.0.0";
+  version = "3.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rpUrMHIBr7sb0Cib6WYdLJ3KOPEgRnB0DCV/df1uE1A=";
+    hash = "sha256-Lt5m1SdZBzId6nvXXrEDQR3ZdA3yjoj15o3/nPeXPPs=";
   };
 
   nativeBuildInputs = [

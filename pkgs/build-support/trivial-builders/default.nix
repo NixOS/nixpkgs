@@ -88,6 +88,12 @@ rec {
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
     }
+    // lib.optionalAttrs (! derivationArgs?meta) {
+      pos = let args = builtins.attrNames derivationArgs; in
+        if builtins.length args > 0
+        then builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
+        else null;
+    }
     // (lib.optionalAttrs runLocal {
           preferLocalBuild = true;
           allowSubstitutes = false;
@@ -141,7 +147,7 @@ rec {
     runCommand name
       { inherit text executable checkPhase allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
-        meta = lib.optionalAttrs (toString executable != "" && matches != null) {
+        meta = lib.optionalAttrs (executable && matches != null) {
           mainProgram = lib.head matches;
         } // meta;
       }
@@ -236,7 +242,11 @@ rec {
 
 
   */
-  writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
+  writeScriptBin = name: text: writeTextFile {
+    inherit name text;
+    executable = true;
+    destination = "/bin/${name}";
+  };
 
   /*
     Similar to writeScript. Writes a Shell script and checks its syntax.
@@ -294,6 +304,7 @@ rec {
       checkPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
+      meta.mainProgram = name;
     };
 
   /*
@@ -347,12 +358,20 @@ rec {
       '';
 
       checkPhase =
+        # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
+        # but we still want to use writeShellApplication on those platforms
+        let
+          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck.compiler;
+          shellcheckCommand = lib.optionalString shellcheckSupported ''
+            # use shellcheck which does not include docs
+            # pandoc takes long to build and documentation isn't needed for just running the cli
+            ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
+          '';
+        in
         if checkPhase == null then ''
           runHook preCheck
           ${stdenv.shellDryRun} "$target"
-          # use shellcheck which does not include docs
-          # pandoc takes long to build and documentation isn't needed for in nixpkgs usage
-          ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
+          ${shellcheckCommand}
           runHook postCheck
         ''
         else checkPhase;
@@ -368,6 +387,9 @@ rec {
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
+      meta = {
+        mainProgram = name;
+      };
     }
     ''
       n=$out/bin/$name
@@ -620,6 +642,10 @@ rec {
     script:
     runCommand name
       (substitutions // {
+        # TODO(@Artturin:) substitutions should be inside the env attrset
+        # but users are likely passing non-substitution arguments through substitutions
+        # turn off __structuredAttrs to unbreak substituteAll
+        __structuredAttrs = false;
         inherit meta;
         inherit depsTargetTargetPropagated;
         propagatedBuildInputs =
@@ -807,9 +833,10 @@ rec {
         or
           nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
       '';
-      hashAlgo = if hash != null then ""
+      hashAlgo = if hash != null then (builtins.head (lib.strings.splitString "-" hash))
             else if sha256 != null then "sha256"
             else "sha1";
+      hashAlgo_ = if hash != null then "" else hashAlgo;
       hash_ = if hash != null then hash
          else if sha256 != null then sha256
          else sha1;
@@ -818,7 +845,7 @@ rec {
     stdenvNoCC.mkDerivation {
       name = name_;
       outputHashMode = hashMode;
-      outputHashAlgo = hashAlgo;
+      outputHashAlgo = hashAlgo_;
       outputHash = hash_;
       preferLocalBuild = true;
       allowSubstitutes = false;

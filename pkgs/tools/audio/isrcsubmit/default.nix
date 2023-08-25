@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "isrcsubmit";

@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

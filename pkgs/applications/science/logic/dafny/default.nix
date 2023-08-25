@@ -8,20 +8,20 @@
 
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.0.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
     rev = "v${version}";
-    sha256 = "sha256-7mVFDORbu9KsJ4IH8PrrpXE7xFrWVTyBmRaL8Kt/ghY=";
+    sha256 = "sha256-RSGaOgGf3m94t3SKnvSPqz0VHhWr6NmIMtGsmOynMaM=";
   };
 
   postPatch = ''
     cp ${writeScript "fake-gradlew-for-dafny" ''
       mkdir -p build/libs/
       javac $(find -name "*.java" | grep "^./src/main") -d classes
-      jar cf build/libs/DafnyRuntime.jar -C classes dafny
+      jar cf build/libs/DafnyRuntime-${version}.jar -C classes dafny
     ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
 
     # Needed to fix

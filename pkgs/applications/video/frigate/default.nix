@@ -10,14 +10,14 @@
 }:
 
 let
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     #name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kJ0MnmWThiFbXvrN+zL5pZHq+Ig3DhCc8wPlWX2+nP8=";
+    hash = "sha256-kNvYsHoObi6b9KT/LYhTGK4uJ/uAHnYhyoQkiXIA/s8=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -92,11 +92,11 @@ python.pkgs.buildPythonApplication rec {
 
     substituteInPlace frigate/const.py \
       --replace "/media/frigate" "/var/lib/frigate" \
-      --replace "/tmp/cache" "/var/cache/frigate"
+      --replace "/tmp/cache" "/var/cache/frigate/"
 
     substituteInPlace frigate/http.py \
       --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}" \
-      --replace "/tmp/cache/" "/var/cache/frigate"
+      --replace "/tmp/cache/" "/var/cache/frigate/"
 
     substituteInPlace frigate/output.py \
       --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"

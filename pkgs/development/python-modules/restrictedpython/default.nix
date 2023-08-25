@@ -3,12 +3,13 @@
 , fetchPypi
 , pytest-mock
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "6.0";
+  version = "6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,12 +17,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "RestrictedPython";
     inherit version;
-    hash = "sha256-QFzwvZ7sLxmxMmtfSCKO/lbWWQtOkYJrjMOyzUAKlq0=";
+    hash = "sha256-fljqFcySoLkW4MjKKV6LLG1A/uTRLhorUGPYbvwnmpw=";
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    "test_compile__compile_restricted_exec__5"
   ];
 
   pythonImportsCheck = [

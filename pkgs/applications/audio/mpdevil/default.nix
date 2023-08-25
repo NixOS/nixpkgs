@@ -51,5 +51,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ apfelkuchen6 ];
+    mainProgram = "mpdevil";
   };
 }

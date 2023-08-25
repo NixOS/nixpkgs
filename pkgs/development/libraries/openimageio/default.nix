@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.4.11.1";
+  version = "2.4.14.0";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "v${version}";
-    hash = "sha256-Q8Gb/zscZre7fJPyLlZn04Xp3VFFbr6Z007mDPzownc=";
+    hash = "sha256-iHXU3Zr32XNn2Q2Pn/sgF6E1q/FXbdmVrOKC4lhGx3k=";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];

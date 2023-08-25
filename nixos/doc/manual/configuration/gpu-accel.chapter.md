@@ -189,7 +189,7 @@ Older Intel GPUs use the i965 driver, which can be installed with:
 
 ```nix
 hardware.opengl.extraPackages = [
-  vaapiIntel
+  intel-vaapi-driver
 ];
 ```
 

@@ -24,8 +24,6 @@ maturinBuildHook() {
         ${maturinBuildFlags-}
     )
 
-    runHook postBuild
-
     if [ ! -z "${buildAndTestSubdir-}" ]; then
         popd
     fi
@@ -33,6 +31,9 @@ maturinBuildHook() {
     # Move the wheel to dist/ so that regular Python tooling can find it.
     mkdir -p dist
     mv target/wheels/*.whl dist/
+
+    # These are python build hooks and may depend on ./dist
+    runHook postBuild
 
     echo "Finished maturinBuildHook"
 }

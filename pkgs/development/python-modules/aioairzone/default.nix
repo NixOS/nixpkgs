@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "aioairzone";
-  version = "0.5.5";
+  version = "0.6.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6PBNwCfh5ryR3Jub3GDykY6lRQt9wdkV8yWkvivuQpM=";
+    hash = "sha256-/LUTHeApktB4okt9bVkZe7G1dApVaYUdwty4sbK7IKQ=";
   };
 
   nativeBuildInputs = [

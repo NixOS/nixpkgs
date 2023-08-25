@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.20.1";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pDyF8KCgAhugzTuMSVqfCda5kRAvJwR+OF+G+ZfjeDo=";
+    hash = "sha256-Qb01NLWCD7nglceJdUTnlf/XtPHl1P6ukr+QsjxMMos=";
   };
 
-  cargoSha256 = "sha256-zbraVGjEayJJcBH9/GVnTcQGLcNgxaRhbgdJeHCGEEo=";
+  cargoHash = "sha256-Qe/AGLoaCpbo001JkCN5qFytL4vWIPWhy3/pfBRoMmo=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -36,6 +36,9 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     git
   ];
+
+  # use system openssl
+  buildNoDefaultFeatures = true;
 
   checkFlags = [
     # requires nightly version of cargo-rustdoc
@@ -52,9 +55,6 @@ rustPlatform.buildRustPackage rec {
     git init
     scripts/regenerate_test_rustdocs.sh
   '';
-
-  # use system openssl
-  OPENSSL_NO_VENDOR = true;
 
   meta = with lib; {
     description = "A tool to scan your Rust crate for semver violations";

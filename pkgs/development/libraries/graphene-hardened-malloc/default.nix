@@ -7,23 +7,21 @@
 , stress-ng
 }:
 
-lib.fix (self: stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphene-hardened-malloc";
   version = "11";
 
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-BbjL0W12QXFmGCzFrFYY6CZZeFbUt0elCGhM+mbL/IU=";
   };
 
   doCheck = true;
   nativeCheckInputs = [ python3 ];
   # these tests cover use as a build-time-linked library
-  checkPhase = ''
-    make test
-  '';
+  checkTarget = "test";
 
   installPhase = ''
     install -Dm444 -t $out/include include/*
@@ -38,8 +36,8 @@ lib.fix (self: stdenv.mkDerivation rec {
 
   passthru = {
     ld-preload-tests = stdenv.mkDerivation {
-      name = "${self.name}-ld-preload-tests";
-      src = self.src;
+      name = "${finalAttrs.pname}-ld-preload-tests";
+      inherit (finalAttrs) src;
 
       nativeBuildInputs = [ makeWrapper ];
 
@@ -66,13 +64,13 @@ lib.fix (self: stdenv.mkDerivation rec {
       '';
     };
     tests = {
-      ld-preload = runCommand "ld-preload-test-run" {} ''
-        ${self}/bin/preload-hardened-malloc ${self.ld-preload-tests}/bin/run-tests
+      ld-preload = runCommand "ld-preload-test-run" { } ''
+        ${finalAttrs.finalPackage}/bin/preload-hardened-malloc ${finalAttrs.passthru.ld-preload-tests}/bin/run-tests
         touch $out
       '';
       # to compensate for the lack of tests of correct normal malloc operation
-      stress = runCommand "stress-test-run" {} ''
-        ${self}/bin/preload-hardened-malloc ${stress-ng}/bin/stress-ng \
+      stress = runCommand "stress-test-run" { } ''
+        ${finalAttrs.finalPackage}/bin/preload-hardened-malloc ${stress-ng}/bin/stress-ng \
           --no-rand-seed \
           --malloc 8 \
           --malloc-ops 1000000 \

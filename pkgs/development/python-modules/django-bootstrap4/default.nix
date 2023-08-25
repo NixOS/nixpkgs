@@ -3,30 +3,32 @@
 , fetchFromGitHub
 
 # build-system
-, setuptools
+, hatchling
+
+# non-propagates
+, django
 
 # dependencies
 , beautifulsoup4
 
 # tests
-, django
 , python
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap4";
-  version = "23.1";
+  version = "23.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
-    rev = "v${version}";
-    hash = "sha256-55pfUPwxDzpDn4stMEPvrQAexs+goN5SKFvwSR3J4aM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RYGwi+hRfTqPAikrv33w27v1/WLwRvXexSusJKdr2o8=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    hatchling
   ];
 
   propagatedBuildInputs = [

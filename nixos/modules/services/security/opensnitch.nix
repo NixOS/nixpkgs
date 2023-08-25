@@ -147,7 +147,7 @@ in {
   config = mkIf cfg.enable {
 
     # pkg.opensnitch is referred to elsewhere in the module so we don't need to worry about it being garbage collected
-    services.opensnitch.settings = mapAttrs (_: v: mkDefault v) (builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile "${pkgs.opensnitch}/etc/default-config.json")));
+    services.opensnitch.settings = mapAttrs (_: v: mkDefault v) (builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile "${pkgs.opensnitch}/etc/opensnitchd/default-config.json")));
 
     systemd = {
       packages = [ pkgs.opensnitch ];
@@ -171,9 +171,19 @@ in {
       ${concatMapStrings ({ file, local }: ''
         ln -sf '${file}' "${local}"
       '') rules}
+
+      if [ ! -f /etc/opensnitch-system-fw.json ]; then
+        cp "${pkgs.opensnitch}/etc/opensnitchd/system-fw.json" "/etc/opensnitchd/system-fw.json"
+      fi
     '');
 
-    environment.etc."opensnitchd/default-config.json".source = format.generate "default-config.json" cfg.settings;
+    environment.etc = mkMerge [ ({
+      "opensnitchd/default-config.json".source = format.generate "default-config.json" cfg.settings;
+    }) (mkIf (cfg.settings.ProcMonitorMethod == "ebpf") {
+      "opensnitchd/opensnitch.o".source = "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd/opensnitch.o";
+      "opensnitchd/opensnitch-dns.o".source = "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd/opensnitch-dns.o";
+      "opensnitchd/opensnitch-procs.o".source = "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd/opensnitch-procs.o";
+    })];
 
   };
 }

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchurl
 , fetchFromGitHub
 , makeWrapper
@@ -10,17 +9,19 @@
 , runtimeShell
 , installShellFiles
 
-, platform-tools
+, android-tools
 , ffmpeg
 , libusb1
 , SDL2
 }:
 
 let
-  version = "2.0";
+  version = "2.1.1";
   prebuilt_server = fetchurl {
+    name = "scrcpy-server";
+    inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-niQWFfV4zWkLtDMRAA3r3s9qnFCnCCsAGVLxj28h3cI=";
+    sha256 = "sha256-lVjbbFZ0Oh3AOzj1mAH7QOkcyJH4/AyJ5bCwZ3YfFI4=";
   };
 in
 stdenv.mkDerivation rec {
@@ -31,24 +32,14 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PWH+XLKraFfjXovnZpREXBaQVyOyP8yIMYDMiF6ddXg=";
+    sha256 = "sha256-SRIQqmvqB1kudUvt0HTFPMdk7MLWEcK2jOT0on1rh+E=";
   };
 
-  # Remove in the next patch release
-  patches = [
-    (fetchpatch {
-      name = "fix-macos-build-error.patch";
-      url = "https://github.com/Genymobile/scrcpy/commit/6b769675fa68e60c9765022e43c4d7b1e329353a.patch";
-      hash = "sha256-lQx01HI0nTWdZFusLIswZT2iOgkP84btqF6F58tGNko=";
-    })
-  ];
-
-  # postPatch:
-  #   screen.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
+  #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
   #   This can happen when running on non-NixOS because then scrcpy seems to have a hard time using the host OpenGL-supporting hardware.
   #   It would be better to fix the OpenGL problem, but that seems much more intrusive.
   postPatch = ''
-    substituteInPlace app/src/screen.c \
+    substituteInPlace app/src/display.c \
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
@@ -66,7 +57,7 @@ stdenv.mkDerivation rec {
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
     # runtime dep on `adb` to push the server
-    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
+    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace $out/share/applications/scrcpy-console.desktop \
       --replace "/bin/bash" "${runtimeShell}"

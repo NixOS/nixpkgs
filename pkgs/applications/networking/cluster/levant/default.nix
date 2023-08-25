@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/hashicorp/levant";
     license = licenses.mpl20;
     maintainers = with maintainers; [ max-niederman ];
-    platforms = platforms.unix;
   };
 }

@@ -4,10 +4,10 @@
 , SDL2
 , cmake
 , copyDesktopItems
+, cubeb
 , curl
 , extra-cmake-modules
 , libXrandr
-, libpulseaudio
 , makeDesktopItem
 , mesa # for libgbm
 , ninja
@@ -48,7 +48,6 @@ stdenv.mkDerivation {
   buildInputs = [
     SDL2
     curl
-    libpulseaudio
     libXrandr
     mesa
     qtbase
@@ -58,7 +57,8 @@ stdenv.mkDerivation {
   ++ lib.optionals enableWayland [
     qtwayland
     wayland
-  ];
+  ]
+  ++ cubeb.passthru.backendLibs;
 
   cmakeFlags = [
     "-DUSE_DRMKMS=ON"
@@ -100,13 +100,14 @@ stdenv.mkDerivation {
   '';
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio vulkan-loader ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ vulkan-loader ] ++ cubeb.passthru.backendLibs)}"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/stenzek/duckstation";
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
     license = licenses.gpl3Only;
+    mainProgram = "duckstation-qt";
     maintainers = with maintainers; [ guibou AndersonTorres ];
     platforms = platforms.linux;
   };

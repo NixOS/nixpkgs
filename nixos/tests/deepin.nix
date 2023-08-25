@@ -1,14 +1,14 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "deepin";
 
-  meta = with lib; {
-    maintainers = teams.deepin.members;
-  };
+  meta.maintainers = lib.teams.deepin.members;
 
   nodes.machine = { ... }: {
     imports = [
       ./common/user-account.nix
     ];
+
+    virtualisation.memorySize = 2048;
 
     services.xserver.enable = true;
 

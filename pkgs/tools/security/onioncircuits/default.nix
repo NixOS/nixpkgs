@@ -2,9 +2,7 @@
 , lib
 , fetchFromGitLab
 , fetchpatch
-, gnome
 , gobject-introspection
-, gtk3
 , intltool
 , python3
 , wrapGAppsHook

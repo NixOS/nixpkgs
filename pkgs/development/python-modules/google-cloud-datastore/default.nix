@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.15.2";
+  version = "2.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PnPP7FRrxKyuYTcFuSZdwUs+Ff06yPyJ8Omk6Zaufv0=";
+    hash = "sha256-/q+th07TdqnR8Imer8llDSH9siKPkN6bh0GoBsITtCI=";
   };
 
   propagatedBuildInputs = [
@@ -71,6 +71,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-datastore";
     changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

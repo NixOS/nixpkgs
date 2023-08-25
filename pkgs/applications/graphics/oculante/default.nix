@@ -21,13 +21,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.6.64";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7Xe01Z4ea+EHaMHwb81cjJkCW/HDobmFZ29YxKcaYJg=";
+    hash = "sha256-Q4YEBEA+Kt09Se9b03EZ6phm+6Q3fAxXCZRXQeqPA2k=";
   };
 
   cargoLock = {
@@ -58,6 +58,10 @@ rustPlatform.buildRustPackage rec {
     wayland
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
+  ];
+
+  checkFlags = [
+    "--skip=bench"
   ];
 
   postFixup = lib.optionalString stdenv.isLinux ''

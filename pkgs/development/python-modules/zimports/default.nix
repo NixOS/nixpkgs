@@ -1,5 +1,4 @@
 { lib
-, isPy3k
 , fetchFromGitHub
 , buildPythonPackage
 , flake8-import-order
@@ -7,21 +6,23 @@
 , tomli
 , setuptools
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "zimports";
-  version = "0.6.0";
+  version = "0.6.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  # upstream technically support 3.7 through 3.9, but 3.10 happens to work while 3.11 breaks with an import error
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "sqlalchemyorg";
     repo = "zimports";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qm5mA8pCSLbkupGBo+ppHSW6uy1j/FfV3idvGQGhjqU=";
+    hash = "sha256-+sDvl8z0O0cZyS1oZgt924hlOkYeHiStpXL9y9+JZ5I=";
   };
 
   propagatedBuildInputs = [

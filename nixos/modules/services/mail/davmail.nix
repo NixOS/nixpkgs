@@ -91,6 +91,33 @@ in
           Restart = "on-failure";
           DynamicUser = "yes";
           LogsDirectory = "davmail";
+
+          CapabilityBoundingSet = [ "" ];
+          DeviceAllow = [ "" ];
+          LockPersonality = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectSystem = "strict";
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          RemoveIPC = true;
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = "@system-service";
+          SystemCallErrorNumber = "EPERM";
+          UMask = "0077";
+
         };
       };
 

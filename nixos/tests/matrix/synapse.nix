@@ -65,7 +65,7 @@ in {
 
   nodes = {
     # Since 0.33.0, matrix-synapse doesn't allow underscores in server names
-    serverpostgres = { pkgs, nodes, ... }: let
+    serverpostgres = { pkgs, nodes, config, ... }: let
       mailserverIP = nodes.mailserver.config.networking.primaryIPAddress;
     in
     {
@@ -76,6 +76,11 @@ in {
           database = {
             name = "psycopg2";
             args.password = "synapse";
+          };
+          redis = {
+            enabled = true;
+            host = "localhost";
+            port = config.services.redis.servers.matrix-synapse.port;
           };
           tls_certificate_path = "${cert}";
           tls_private_key_path = "${key}";
@@ -105,6 +110,11 @@ in {
             LC_COLLATE = "C"
             LC_CTYPE = "C";
         '';
+      };
+
+      services.redis.servers.matrix-synapse = {
+        enable = true;
+        port = 6380;
       };
 
       networking.extraHosts = ''
@@ -207,6 +217,9 @@ in {
     serverpostgres.wait_for_unit("matrix-synapse.service")
     serverpostgres.wait_until_succeeds(
         "curl --fail -L --cacert ${ca_pem} https://localhost:8448/"
+    )
+    serverpostgres.wait_until_succeeds(
+        "journalctl -u matrix-synapse.service | grep -q 'Connected to redis'"
     )
     serverpostgres.require_unit_state("postgresql.service")
     serverpostgres.succeed("register_new_matrix_user -u ${testUser} -p ${testPassword} -a -k ${registrationSharedSecret} https://localhost:8448/")

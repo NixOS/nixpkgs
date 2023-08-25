@@ -286,7 +286,7 @@ This is where “sum-like” comes in from above: We can just sum all of the hos
 
 Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package. In the other case, `h + 1` is skipped over between the host and target offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependencies’ offset is that one.
 
-Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the dependending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforagable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
+Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the depending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforgeable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
 
 #### Variables specifying dependencies {#variables-specifying-dependencies}
 
@@ -425,6 +425,16 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
   };
   ```
 
+::: {.tip}
+A common pattern is to use the [`nix-update-script`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/common-updater/nix-update.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
+
+```nix
+passthru.updateScript = nix-update-script { };
+```
+
+For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://ryantm.github.io/nixpkgs-update) when a new version is released. The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set. While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
+:::
+
 ##### How update scripts are executed? {#var-passthru-updateScript-execution}
 
 Update scripts are to be invoked by `maintainers/scripts/update.nix` script. You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it. `update.nix` offers several modes for selecting packages to update (e.g. select by attribute path, traverse Nixpkgs and filter by maintainer, etc.), and it will execute update scripts for all matched packages that have an `updateScript` attribute.
@@ -464,10 +474,8 @@ The commit object contains the following values:
 
 If the returned array contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
 
-```{=docbook}
-<example>
-<title>Standard output of an update script using commit feature</title>
-```
+::: {.example #var-passthru-updateScript-example-commit}
+# Standard output of an update script using commit feature
 
 ```json
 [
@@ -481,10 +489,7 @@ If the returned array contains exactly one object (e.g. `[{}]`), all values are 
   }
 ]
 ```
-
-```{=docbook}
-</example>
-```
+:::
 
 ### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
 
@@ -619,13 +624,18 @@ The list of source files or directories to be unpacked or copied. One of these m
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
-After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory. Set `sourceRoot = ".";` if you use `srcs` and control the unpack phase yourself.
+After unpacking all of `src` and `srcs`, if neither of `sourceRoot` and `setSourceRoot` are set, `unpackPhase` of the generic builder checks that the unpacking produced a single directory and moves the current working directory into it.
 
-By default the `sourceRoot` is set to `"source"`. If you want to point to a sub-directory inside your project, you therefore need to set `sourceRoot = "source/my-sub-directory"`.
+If `unpackPhase` produces multiple source directories, you should set `sourceRoot` to the name of the intended directory.
+You can also set `sourceRoot = ".";` if you want to control it yourself in a later phase.
+
+For example, if your want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
 Alternatively to setting `sourceRoot`, you can set `setSourceRoot` to a shell command to be evaluated by the unpack phase after the sources have been unpacked. This command must set `sourceRoot`.
+
+For example, if you are using `fetchurl` on an archive file that gets unpacked into a single directory the name of which changes between package versions, and you want your build to start in its sub-directory, you need to set `setSourceRoot = "sourceRoot=$(echo */my-sub-directory)";`, or in the case of multiple sources, you could use something more specific, like `setSourceRoot = "sourceRoot=$(echo ${pname}-*/my-sub-directory)";`.
 
 ##### `preUnpack` {#var-stdenv-preUnpack}
 
@@ -971,7 +981,8 @@ to `~/.gdbinit`. GDB will then be able to find debug information installed via `
 
 The installCheck phase checks whether the package was installed correctly by running its test suite against the installed directories. The default `installCheck` calls `make installcheck`.
 
-It is often better to add tests that are not part of the source distribution to `passthru.tests` (see <xref linkend="var-meta-tests"/>). This avoids adding overhead to every build and enables us to run them independently.
+It is often better to add tests that are not part of the source distribution to `passthru.tests` (see
+[](#var-meta-tests)). This avoids adding overhead to every build and enables us to run them independently.
 
 #### Variables controlling the installCheck phase {#variables-controlling-the-installcheck-phase}
 
@@ -1234,7 +1245,7 @@ This runs the strip command on installed binaries and libraries. This removes un
 
 This setup hook patches installed scripts to add Nix store paths to their shebang interpreter as found in the build environment. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system which interpreter to use to execute the script's contents.
 
-::: note
+::: {.note}
 The [generic builder][generic-builder] populates `PATH` from inputs of the derivation.
 :::
 
@@ -1272,7 +1283,7 @@ patchShebangs --build configure
 
 Interpreter paths that point to a valid Nix store location are not changed.
 
-::: note
+::: {.note}
 A script file must be marked as executable, otherwise it will not be
 considered.
 :::

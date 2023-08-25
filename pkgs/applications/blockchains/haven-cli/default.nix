@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , cmake, pkg-config
-, boost, miniupnpc, openssl, unbound
+, boost179, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
 , easyloggingpp
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    boost miniupnpc openssl unbound
+    boost179 miniupnpc openssl unbound
     zeromq pcsclite readline
     libsodium hidapi randomx rapidjson
     protobuf

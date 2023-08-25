@@ -16,13 +16,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.47.0";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "sha256-P54ck7gkDgz6G8/3N1fxvx2R7cMUaDKnUtLgPzoUrtI=";
+    hash = "sha256-CC06Bryn5VNEsW4Wwbo+ubifizCWgpWUE1FsAozZcdg=";
   };
 
   cargoLock = {

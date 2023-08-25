@@ -33,6 +33,6 @@ buildGoModule rec {
     homepage = "https://github.com/dim-an/cod/";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    broken = true;
+    broken = stdenv.isDarwin;
   };
 }

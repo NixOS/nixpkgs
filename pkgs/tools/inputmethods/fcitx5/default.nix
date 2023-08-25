@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , extra-cmake-modules
@@ -42,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.23";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-zS25XeNtBN7QIi+Re/p1uLoH/Q4xKAsFrEmgk2LYRu8=";
+    hash = "sha256-tnYyHhldPmMZcygpcOcbaYFQbRQjPr/FlvyYfRylTmQ=";
   };
 
   prePatch = ''

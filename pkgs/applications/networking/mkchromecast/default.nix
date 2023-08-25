@@ -13,6 +13,7 @@
 , opusTools
 , gst_all_1
 , enableSonos ? true
+, qtwayland
 }:
 let packages = [
   vorbis-tools
@@ -27,17 +28,18 @@ let packages = [
 ] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
 
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
   version = "2022-10-31";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
     rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
     sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
   };
 
+  buildInputs = lib.optional stdenv.isLinux qtwayland;
   propagatedBuildInputs = with python3Packages; ([
     pychromecast
     psutil

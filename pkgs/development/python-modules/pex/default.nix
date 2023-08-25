@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.1.137";
+  version = "2.1.144";
   format = "flit";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ywzmz2R1fdW6TzTEYHq0hfeQnmwkzUecoozlIgXw7es=";
+    hash = "sha256-wugHG/ZfyfNgd2znDS7FXu34LsUVMcwDswFkh4lRIXo=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pantsbuild/pex";
     changelog = "https://github.com/pantsbuild/pex/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ copumpkin phaer ];
   };
 }

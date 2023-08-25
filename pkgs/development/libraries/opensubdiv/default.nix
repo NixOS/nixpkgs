@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchFromGitHub, cmake, pkg-config, xorg, libGLU
 , libGL, glew, ocl-icd, python3
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, cudaSupport ? config.cudaSupport, cudatoolkit
   # For visibility mostly. The whole approach to cuda architectures and capabilities
   # will be reworked soon.
 , cudaArch ? "compute_37"

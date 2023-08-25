@@ -55,11 +55,6 @@ packages = ( self:
 {"""
             )
             for pluginDesc, plugin in sorted_plugins:
-                if plugin.has_submodules:
-                    submodule_attr = "\n      fetchSubmodules = true;"
-                else:
-                    submodule_attr = ""
-
                 f.write(
                     f"""
   {plugin.normalized_name} = buildKakounePluginFrom2Nix {{

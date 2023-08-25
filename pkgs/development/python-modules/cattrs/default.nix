@@ -1,6 +1,7 @@
 { lib
 , attrs
 , buildPythonPackage
+, cbor2
 , fetchFromGitHub
 , exceptiongroup
 , hypothesis
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "22.2.0";
+  version = "23.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "python-attrs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Qnrq/mIA/t0mur6IAen4vTmMIhILWS6v5nuf+Via2hA=";
+    hash = "sha256-YO4Clbo5fmXbysxwwM2qCHJwO5KwDC05VctRVFruJcw=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +41,11 @@ buildPythonPackage rec {
     attrs
   ] ++ lib.optionals (pythonOlder "3.11") [
     exceptiongroup
-  ] ++ lib.optionals (pythonOlder "3.7") [
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    cbor2
     hypothesis
     immutables
     motor
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     tomlkit
+    typing-extensions
     ujson
   ];
 
@@ -94,6 +96,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python custom class converters for attrs";
     homepage = "https://github.com/python-attrs/cattrs";
+    changelog = "https://github.com/python-attrs/cattrs/blob/${src.rev}/HISTORY.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

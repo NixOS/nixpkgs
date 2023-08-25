@@ -7,18 +7,20 @@
 , sqlite
 , stdenv
 , darwin
+, testers
+, leetcode-cli
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "leetcode-cli";
-  version = "0.3.11";
+  version = "0.4.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-DHtIhiRPRGuO6Rf1d9f8r0bMOHqAaJleUvYNyPiX6mc=";
+    sha256 = "sha256-Yr8Jsy8863O6saaFRAxssni+PtK7XYe+Iifgxu8Rx6Q=";
   };
 
-  cargoSha256 = "sha256-Suk/nQ+JcoD9HO9x1lYp+p4qx0DZ9dt0p5jPz0ZQB+k=";
+  cargoHash = "sha256-rab/oLr27UOlnwUUB1RXC/egLoYyzmVtzN1L+AGed8o=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,6 +31,12 @@ rustPlatform.buildRustPackage rec {
     dbus
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
+  passthru.tests = testers.testVersion {
+    package = leetcode-cli;
+    command = "leetcode -V";
+    version = "leetcode ${version}";
+  };
 
   meta = with lib; {
     description = "May the code be with you 👻";

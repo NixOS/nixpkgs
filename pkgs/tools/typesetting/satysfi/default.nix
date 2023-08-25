@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, ruby, ocamlPackages
+{ lib, fetchFromGitHub, ocamlPackages
 , ipaexfont, junicode, lmodern, lmmath
 }:
 let
-  camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
+  camlpdf = ocamlPackages.camlpdf.overrideAttrs {
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "camlpdf";
       rev = "v2.3.1+satysfi";
       sha256 = "1s8wcqdkl1alvfcj67lhn3qdz8ikvd1v64f4q6bi4c0qj9lmp30k";
     };
-  });
+  };
   otfm = ocamlPackages.otfm.overrideAttrs (o: {
     src = fetchFromGitHub {
       owner = "gfngfn";

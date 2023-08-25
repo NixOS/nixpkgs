@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-relaxed";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Szc8x1Rmb/YPVCWmnLQUZCwqEc56RsjOBmpzjkCSyjk=";
+    hash = "sha256-U6c3Lj/qpSdAm7QDU/gTxZt2Dl2L1H5vb88YfF2W3Qw=";
   };
 
   buildInputs = [
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Relaxed test discovery/organization for pytest";
     changelog = "https://github.com/bitprophet/pytest-relaxed/blob/${version}/docs/changelog.rst";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

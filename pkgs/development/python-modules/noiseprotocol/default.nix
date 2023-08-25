@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Noise Protocol Framework";
     homepage = "https://github.com/plizonczyk/noiseprotocol/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

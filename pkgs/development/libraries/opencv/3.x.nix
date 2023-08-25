@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
-, glog, boost, gflags, protobuf
+, glog, boost, gflags, protobuf3_21
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -14,7 +14,7 @@
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
-, enableCuda      ? (config.cudaSupport or false) &&
+, enableCuda      ? config.cudaSupport &&
                     stdenv.hostPlatform.isx86_64
 , cudaPackages ? { }
 , enableUnfree    ? false
@@ -187,7 +187,7 @@ stdenv.mkDerivation {
 
   buildInputs =
        [ zlib pcre hdf5 glog boost gflags ]
-    ++ lib.optional useSystemProtobuf protobuf
+    ++ lib.optional useSystemProtobuf protobuf3_21
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3

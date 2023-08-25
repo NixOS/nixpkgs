@@ -51,7 +51,7 @@ in
 rustPlatform.buildRustPackage {
   inherit version src pname;
 
-  sourceRoot = "source/src-tauri";
+  sourceRoot = "${src.name}/src-tauri";
 
   cargoLock = {
     lockFile = ./Cargo.lock;

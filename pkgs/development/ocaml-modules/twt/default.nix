@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "twt is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-twt";
   version = "0.94.0";

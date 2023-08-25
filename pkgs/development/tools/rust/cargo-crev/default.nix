@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-crev";
-  version = "0.23.3";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
     rev = "v${version}";
-    sha256 = "sha256-wMF2uF6h06c/vBBXr2IGk/9RsOxnxvffEtIOR+s+iVk=";
+    sha256 = "sha256-CCTG58dwO9gYe0WSUXFeaBSgvZ7pbX9S3B3hzabzkjo=";
   };
 
-  cargoSha256 = "sha256-UF0bEV77IqGBmqGCqg2cHzom7JDRqlLpoSxbNQsKKiY=";
+  cargoHash = "sha256-p2qAWAZ1Y0GI0t9wHmn5Ww3o5vXpA6rsA/D7HD2x6o0=";
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -41,6 +41,6 @@ rustPlatform.buildRustPackage rec {
     description = "A cryptographically verifiable code review system for the cargo (Rust) package manager";
     homepage = "https://github.com/crev-dev/cargo-crev";
     license = with licenses; [ asl20 mit mpl20 ];
-    maintainers = with maintainers; [ b4dm4n ];
+    maintainers = with maintainers; [ b4dm4n matthiasbeyer ];
   };
 }

@@ -27,6 +27,18 @@ in {
         Specify a path to a configuration file that Tempo should use.
       '';
     };
+
+    extraFlags = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = lib.literalExpression
+        ''
+          [ "-config.expand-env=true" ]
+        '';
+      description = lib.mdDoc ''
+        Additional flags to pass to the `ExecStart=` in `tempo.service`.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -54,7 +66,7 @@ in {
                else cfg.configFile;
       in
       {
-        ExecStart = "${pkgs.tempo}/bin/tempo --config.file=${conf}";
+        ExecStart = "${pkgs.tempo}/bin/tempo --config.file=${conf} ${lib.escapeShellArgs cfg.extraFlags}";
         DynamicUser = true;
         Restart = "always";
         ProtectSystem = "full";

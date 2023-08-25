@@ -42,7 +42,7 @@ rec {
     dontInstall = true;
 
     buildPhase = ''
-      convert ./libgui/src/icons/logo.png -resize ${size}x${size} $out
+      convert ./libgui/src/icons/octave/128x128/logo.png -resize ${size}x${size} $out
     '';
   };
 

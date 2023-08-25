@@ -1,27 +1,48 @@
-{ lib, stdenv, fetchurl, libpcap, perl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, installShellFiles
+, libpcap
+}:
 
 stdenv.mkDerivation rec {
   pname = "dhcpdump";
-  version = "1.8";
+  version = "1.9";
 
-  src = fetchurl {
-    url = "mirror://ubuntu/pool/universe/d/dhcpdump/dhcpdump_${version}.orig.tar.gz";
-    sha256 = "143iyzkqvhj4dscwqs75jvfr4wvzrs11ck3fqn5p7yv2h50vjpkd";
+  src = fetchFromGitHub {
+    owner = "bbonev";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ck6DLsLQ00unNqPLBKkxaJLDCaPFjTFJcQjTbKSq0U8=";
   };
 
-  buildInputs = [libpcap perl];
+  strictDeps = true;
 
-  hardeningDisable = [ "fortify" ];
+  nativeBuildInputs = [
+    perl # pod2man
+    installShellFiles
+  ];
+
+  buildInputs = [
+    libpcap
+  ];
 
   installPhase = ''
-    mkdir -pv $out/bin
-    cp dhcpdump $out/bin
+    runHook preBuild
+
+    install -Dm555 dhcpdump "$out/bin/dhcpdump"
+    installManPage dhcpdump.8
+
+    runHook postBuild
   '';
 
   meta = with lib; {
     description = "A tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
-    homepage = "http://www.mavetju.org/unix/dhcpdump-man.php";
+    homepage = "https://github.com/bbonev/dhcpdump";
+    changelog = "https://github.com/bbonev/dhcpdump/releases/tag/v${version}";
     platforms = platforms.linux;
+    maintainers = with maintainers; [ nickcao ];
     license = licenses.bsd2;
   };
 }

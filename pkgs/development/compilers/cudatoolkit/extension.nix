@@ -38,10 +38,39 @@ final: prev: let
 
   cudaFlags = final.callPackage ./flags.nix {};
 
+  # Internal hook, used by cudatoolkit and cuda redist packages
+  # to accommodate automatic CUDAToolkit_ROOT construction
+  markForCudatoolkitRootHook = (final.callPackage
+    ({ makeSetupHook }:
+      makeSetupHook
+        { name = "mark-for-cudatoolkit-root-hook"; }
+        ./hooks/mark-for-cudatoolkit-root-hook.sh)
+    { });
+
+  # Normally propagated by cuda_nvcc or cudatoolkit through their depsHostHostPropagated
+  setupCudaHook = (final.callPackage
+    ({ makeSetupHook, backendStdenv }:
+      makeSetupHook
+        {
+          name = "setup-cuda-hook";
+
+          substitutions.ccRoot = "${backendStdenv.cc}";
+
+          # Required in addition to ccRoot as otherwise bin/gcc is looked up
+          # when building CMakeCUDACompilerId.cu
+          substitutions.ccFullPath = "${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++";
+        }
+        ./hooks/setup-cuda-hook.sh)
+    { });
+
 in
 {
   inherit
     backendStdenv
     cudatoolkit
-    cudaFlags;
+    cudaFlags
+    markForCudatoolkitRootHook
+    setupCudaHook;
+
+    saxpy = final.callPackage ./saxpy { };
 }

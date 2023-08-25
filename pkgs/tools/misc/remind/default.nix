@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchurl
 , tk
 , tcllib
@@ -8,7 +7,7 @@
 }:
 
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib) optionals optionalString;
   tclLibraries = optionals tkremind [ tcllib tk ];
   tkremindPatch = optionalString tkremind ''
     substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"

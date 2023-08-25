@@ -1,9 +1,10 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{ pkgs, lib, bundlerApp, bundlerUpdateScript }:
 
 bundlerApp {
   pname = "mailcatcher";
   gemdir = ./.;
   exes = [ "mailcatcher" "catchmail" ];
+  ruby = pkgs.ruby_3_0;
 
   passthru.updateScript = bundlerUpdateScript "mailcatcher";
 

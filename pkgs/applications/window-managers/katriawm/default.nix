@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "katriawm";
-  version = "22.12";
+  version = "23.06";
 
   src = fetchzip {
     name = finalAttrs.pname + "-" + finalAttrs.version;
     url = "https://www.uninformativ.de/git/katriawm/archives/katriawm-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-xFKr4PxqvnQEAWplhRsaL5rhmSJpnImpk1eXFX0N1tc=";
+    hash = "sha256-4vdBX5biakoxiOyz7DPNgkLxlzi27kZ9rC20g+pn3N4=";
   };
 
   nativeBuildInputs = [

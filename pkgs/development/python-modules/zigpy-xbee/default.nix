@@ -1,8 +1,6 @@
 { lib
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pyserial
 , pyserial-asyncio
 , pytest-asyncio
@@ -13,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.18.0";
+  version = "0.18.1";
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
   # is used exclusively by home-assistant with python 3.8
@@ -23,7 +21,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-xbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-zSaT9WdA4tR8tJAShSzqL+f/nTLQJbeIZnbSBe1EOks=";
+    hash = "sha256-vR+oLshiIYmMdAvir+TGBqVkTGXKAVnUWnQPR3YwuUk=";
   };
 
   buildInputs = [
@@ -33,7 +31,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     pytest-asyncio
     pytestCheckHook
   ];

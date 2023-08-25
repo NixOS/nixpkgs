@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, libtool, automake, autoconf, ucx
-, enableCuda ? false
+, config
+, enableCuda ? config.cudaSupport
 , cudatoolkit
 , enableAvx ? stdenv.hostPlatform.avxSupport
 , enableSse41 ? stdenv.hostPlatform.sse4_1Support
@@ -8,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ucc";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     rev = "v${version}";
-    sha256 = "sha256-5rf08SXy+vCfnz4zLJ0cMnxwso4WpZOt0jRRAUviVFU=";
+    sha256 = "sha256-7Mo9zU0sogGyDdWIfTgUPoR5Z8D722asC2y7sHnKbzs=";
   };
 
   enableParallelBuilding = true;

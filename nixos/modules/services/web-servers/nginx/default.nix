@@ -261,23 +261,6 @@ let
 
       ${proxyCachePathConfig}
 
-      ${optionalString cfg.statusPage ''
-        server {
-          listen ${toString cfg.defaultHTTPListenPort};
-          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
-
-          server_name localhost;
-
-          location /nginx_status {
-            stub_status on;
-            access_log off;
-            allow 127.0.0.1;
-            ${optionalString enableIPv6 "allow ::1;"}
-            deny all;
-          }
-        }
-      ''}
-
       ${vhosts}
 
       ${cfg.appendHttpConfig}
@@ -352,7 +335,7 @@ let
           + ";"))
           + "
             listen ${addr}:${toString port} "
-          + optionalString (ssl && vhost.http2) "http2 "
+          + optionalString (ssl && vhost.http2 && oldHTTP2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
@@ -362,7 +345,9 @@ let
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
-        acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
+        # The acme-challenge location doesn't need to be added if we are not using any automated
+        # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
+        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
@@ -395,6 +380,9 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString (hasSSL && vhost.http2 && !oldHTTP2) ''
+            http2 on;
+          ''}
           ${optionalString (hasSSL && vhost.quic) ''
             http3 ${if vhost.http3 then "on" else "off"};
             http3_hq ${if vhost.http3_hq then "on" else "off"};
@@ -478,6 +466,8 @@ let
   );
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+
+  oldHTTP2 = versionOlder cfg.package.version "1.25.1";
 in
 
 {
@@ -713,7 +703,7 @@ in
           Configuration lines appended to the generated Nginx
           configuration file. Commonly used by different modules
           providing http snippets. {option}`appendConfig`
-          can be specified more than once and it's value will be
+          can be specified more than once and its value will be
           concatenated (contrary to {option}`config` which
           can be set only once).
         '';
@@ -1174,6 +1164,21 @@ in
 
     services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
+
+    services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
+      listenAddresses = lib.mkDefault ([
+        "0.0.0.0"
+      ] ++ lib.optional enableIPv6 "[::]");
+      locations."/nginx_status" = {
+        extraConfig = ''
+          stub_status on;
+          access_log off;
+          allow 127.0.0.1;
+          ${optionalString enableIPv6 "allow ::1;"}
+          deny all;
+        '';
+      };
+    };
 
     systemd.services.nginx = {
       description = "Nginx Web Server";

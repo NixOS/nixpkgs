@@ -16,6 +16,7 @@ use walkdir::WalkDir;
 
 mod cacache;
 mod parse;
+mod util;
 
 fn cache_map_path() -> Option<PathBuf> {
     env::var_os("CACHE_MAP_PATH").map(PathBuf::from)
@@ -172,6 +173,8 @@ fn map_cache() -> anyhow::Result<HashMap<Url, String>> {
 }
 
 fn main() -> anyhow::Result<()> {
+    env_logger::init();
+
     let args = env::args().collect::<Vec<_>>();
 
     if args.len() < 2 {
@@ -180,6 +183,18 @@ fn main() -> anyhow::Result<()> {
         println!("Prefetches npm dependencies for usage by fetchNpmDeps.");
 
         process::exit(1);
+    }
+
+    if let Ok(jobs) = env::var("NIX_BUILD_CORES") {
+        if !jobs.is_empty() {
+            rayon::ThreadPoolBuilder::new()
+                .num_threads(
+                    jobs.parse()
+                        .expect("NIX_BUILD_CORES must be a whole number"),
+                )
+                .build_global()
+                .unwrap();
+        }
     }
 
     if args[1] == "--fixup-lockfile" {

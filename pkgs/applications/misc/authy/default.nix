@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ iammrinal0 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "authy";
   };
 }

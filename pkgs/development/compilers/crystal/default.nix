@@ -17,7 +17,8 @@
 , libxml2
 , libyaml
 , libffi
-, llvmPackages
+, llvmPackages_13
+, llvmPackages_15
 , makeWrapper
 , openssl
 , pcre2
@@ -41,7 +42,6 @@ let
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
-  isAarch64Darwin = stdenv.system == "aarch64-darwin";
 
   nativeCheckInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
 
@@ -54,33 +54,34 @@ let
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
   genericBinary = { version, sha256s, rel ? 1 }:
-    stdenv.mkDerivation rec {
-      pname = "crystal-binary";
-      inherit version;
+  stdenv.mkDerivation rec {
+    pname = "crystal-binary";
+    inherit version;
 
-      src = fetchurl {
-        url = binaryUrl version rel;
-        sha256 = sha256s.${stdenv.system};
-      };
-
-      buildCommand = ''
-        mkdir -p $out
-        tar --strip-components=1 -C $out -xf ${src}
-        patchShebangs $out/bin/crystal
-      '';
-
-      meta.platforms = lib.attrNames sha256s;
+    src = fetchurl {
+      url = binaryUrl version rel;
+      sha256 = sha256s.${stdenv.system};
     };
 
-  generic = (
+    buildCommand = ''
+      mkdir -p $out
+      tar --strip-components=1 -C $out -xf ${src}
+      patchShebangs $out/bin/crystal
+    '';
+
+    meta.platforms = lib.attrNames sha256s;
+  };
+
+  generic =
     { version
     , sha256
     , binary
+    , llvmPackages
     , doCheck ? true
     , extraBuildInputs ? [ ]
     , buildFlags ? [ "all" "docs" "release=1"]
     }:
-    lib.fix (compiler: stdenv.mkDerivation (finalAttrs: {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
       inherit buildFlags doCheck version;
 
@@ -235,7 +236,7 @@ let
 
       passthru.buildBinary = binary;
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
-        crystal = compiler;
+        crystal = finalAttrs.finalPackage;
       };
 
       meta = with lib; {
@@ -243,11 +244,9 @@ let
         description = "A compiled language with Ruby like syntax and type inference";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
-        maintainers = with maintainers; [ david50407 manveru peterhoeg ];
+        maintainers = with maintainers; [ david50407 manveru peterhoeg donovanglover ];
       };
-    }))
-  );
-
+    });
 in
 rec {
   binaryCrystal_1_2 = genericBinary {
@@ -264,6 +263,7 @@ rec {
     version = "1.2.2";
     sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_13;
     extraBuildInputs = [ libatomic_ops ];
   };
 
@@ -271,13 +271,22 @@ rec {
     version = "1.7.3";
     sha256 = "sha256-ULhLGHRIZbsKhaMvNhc+W74BwNgfEjHcMnVNApWY+EE=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_13;
   };
 
   crystal_1_8 = generic {
-    version = "1.8.1";
-    sha256 = "sha256-t+1vM1m62UftCvfa90Dg6nqt6Zseh/GP/Gc1VfOa4+c=";
+    version = "1.8.2";
+    sha256 = "sha256-YAORdipzpC9CrFgZUFlFfjzlJQ6ZeA2ekVu8IfPOxR8=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_15;
   };
 
-  crystal = crystal_1_8;
+  crystal_1_9 = generic {
+    version = "1.9.2";
+    sha256 = "sha256-M1oUFs7/8ljszga3StzLOLM1aA4fSfVPQlsbuDHGd84=";
+    binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_15;
+  };
+
+  crystal = crystal_1_9;
 }

@@ -268,6 +268,17 @@ in
     environment.systemPackages = [ sddm ];
     services.dbus.packages = [ sddm ];
 
+    # We're not using the upstream unit, so copy these: https://github.com/sddm/sddm/blob/develop/services/sddm.service.in
+    systemd.services.display-manager.after = [
+      "systemd-user-sessions.service"
+      "getty@tty7.service"
+      "plymouth-quit.service"
+      "systemd-logind.service"
+    ];
+    systemd.services.display-manager.conflicts = [
+      "getty@tty7.service"
+    ];
+
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;
     services.xserver.display = null;

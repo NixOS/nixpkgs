@@ -13,7 +13,7 @@
 , Accelerate, CoreGraphics, CoreVideo
 , lmdbSupport ? true, lmdb
 , leveldbSupport ? true, leveldb, snappy
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , cudnnSupport ? cudaSupport
 , ncclSupport ? false
 , pythonSupport ? false, python ? null, numpy ? null

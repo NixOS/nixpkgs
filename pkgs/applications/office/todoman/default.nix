@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "4.1.0";
-  format = "setuptools";
+  version = "4.3.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MItFZ+4Q7UKeIWHl8KFiWOLNgFcfb0h1YWjPd+g48Wg=";
+    hash = "sha256-pa1zzu0ITJObzhSmohjgiGTCoautXrY+SQQ3hxEtQcE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -48,14 +48,10 @@ python3.pkgs.buildPythonApplication rec {
     hypothesis
     pytestCheckHook
     glibcLocales
+    pytest-cov
   ];
 
   LC_ALL = "en_US.UTF-8";
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=todoman --cov-report=term-missing" ""
-  '';
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
@@ -67,7 +63,6 @@ python3.pkgs.buildPythonApplication rec {
     # Testing of the CLI part and output
     "test_color_due_dates"
     "test_color_flag"
-    "test_datetime_serialization"  # Will be fixed in versions after 4.1.0
     "test_default_command"
     "test_main"
     "test_missing_cache_dir"
@@ -98,5 +93,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ leenaars ];
+    mainProgram = "todo";
   };
 }

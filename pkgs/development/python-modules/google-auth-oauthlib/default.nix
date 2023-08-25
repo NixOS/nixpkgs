@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Google Authentication Library: oauthlib integration";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 terlar ];
+    maintainers = with maintainers; [ terlar ];
   };
 }

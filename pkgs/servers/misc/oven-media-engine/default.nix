@@ -19,16 +19,16 @@
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.15.11";
+  version = "0.15.14";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "sha256-PkdzxLIch0OObFs1zFE7gg6R7bwP2qwpqQqvY3SMnuY=";
+    sha256 = "sha256-pLLnk0FXJ6gb0WSdWGEzJSEbKdOpjdWECIRzrHvi8HQ=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
   makeFlags = [ "release" "CONFIG_LIBRARY_PATHS=" "CONFIG_PKG_PATHS=" "GLOBAL_CC=$(CC)" "GLOBAL_CXX=$(CXX)" "GLOBAL_LD=$(CXX)" "SHELL=${stdenv.shell}" ];
   enableParallelBuilding = true;
 

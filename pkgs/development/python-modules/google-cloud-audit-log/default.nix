@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-audit-log";
     changelog = "https://github.com/googleapis/python-audit-log/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

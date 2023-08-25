@@ -55,11 +55,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.26.5";
+  version = "2.28.1";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-rY/qPaG+ZMg8RbHTY6a0uo/WD1veOyPsc4VXCexeq/c=";
+    sha256 = "sha256-SXfOulwAVNvmwvEUZBrO1DzjvytB6mS2o3LWuhKcsV0=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
   dlopenPropagatedBuildInputs = [ ]
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
-    ++ lib.optional openglSupport libGL
+    ++ lib.optional (openglSupport && !stdenv.isDarwin) libGL
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
     ++ lib.optionals x11Support [ libX11 ];
 

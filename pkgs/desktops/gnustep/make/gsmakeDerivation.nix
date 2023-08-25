@@ -15,5 +15,5 @@ stdenv.mkDerivation (args // {
 
     maintainers = with lib.maintainers; [ ashalkhakov matthewbauer ];
     platforms = lib.platforms.linux;
-  } // (if builtins.hasAttr "meta" args then args.meta else {});
+  } // (lib.optionalAttrs (builtins.hasAttr "meta" args) args.meta);
 })

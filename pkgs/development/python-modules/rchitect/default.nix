@@ -2,25 +2,31 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cffi
-, six
 , pytestCheckHook
 , pytest-mock
+, pythonOlder
 , R
-, rPackages }:
+, rPackages
+, six
+}:
 
 buildPythonPackage rec {
   pname = "rchitect";
-  version = "0.3.40";
+  version = "0.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "yJMiPmusZ62dd6+5VkA2uSjq57a0C3arG8CgiUUHKpk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fXL2UX0n9kKAVwMUP0z8V3UtJAy4xbAjnPIggUHllN0=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner"' ""
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
   '';
 
   propagatedBuildInputs = [
@@ -46,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Interoperate R with Python";
     homepage = "https://github.com/randy3k/rchitect";
+    changelog = "https://github.com/randy3k/rchitect/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ savyajha ];
   };

@@ -1,35 +1,47 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
-  version = "0.5.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "nvarner";
-    repo = pname;
+    repo = "typst-lsp";
     rev = "v${version}";
-    hash = "sha256-UY7HfUNssOgEuBBPpUFJZs1TM4IT0/kRcjqrXPFoShI=";
+    hash = "sha256-qbmNZFXg+XaDkHdBA3dU0ICKovEQrl7AAcMkElMLbMA=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "elsa-1.8.1" = "sha256-/85IriplPxx24TE/CsvjIsve100QUZiVqS0TWgPFRbw=";
-      "svg2pdf-0.4.1" = "sha256-WeVP+yhqizpTdRfyoj2AUxFKhGvVJIIiRV0GTXkgLtQ=";
-      "typst-0.4.0" = "sha256-S8J2D87Zvyh501d8LG69in9om/nTS6Y+IDhJvjm/H0w=";
+      "typst-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
     };
   };
 
-  cargoHash = "sha256-ISkw0lhUKJG8nWUHcR93sLUFt5dDEyK7EORcOXEmVbE=";
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  checkFlags = [
+    # requires internet access
+    "--skip=workspace::package::external::remote_repo::test::full_download"
+  ];
+
+  # workspace::package::external::manager::test::local_package tries to access the data directory
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "A brand-new language server for Typst";
     homepage = "https://github.com/nvarner/typst-lsp";
     changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${src.rev}";
-    license = with licenses; [ mit ];
+    license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda GaetanLepage ];
   };
 }

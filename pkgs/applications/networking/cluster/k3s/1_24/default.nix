@@ -313,6 +313,9 @@ buildGoModule rec {
     wrapProgram $out/bin/k3s \
       --prefix PATH : ${lib.makeBinPath k3sRuntimeDeps} \
       --prefix PATH : "$out/bin"
+    ln -s $out/bin/k3s $out/bin/kubectl
+    ln -s $out/bin/k3s $out/bin/crictl
+    ln -s $out/bin/k3s $out/bin/ctr
   '';
 
   doInstallCheck = true;

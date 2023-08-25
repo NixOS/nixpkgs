@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DOpenMVG_BUILD_EXAMPLES=${if enableExamples then "ON" else "OFF"}"
     "-DOpenMVG_BUILD_DOC=${if enableDocs then "ON" else "OFF"}"
     "-DTARGET_ARCHITECTURE=generic"

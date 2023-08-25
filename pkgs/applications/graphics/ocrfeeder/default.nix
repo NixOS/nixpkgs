@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     intltool
     itstool
     libxml2
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3
-    gobject-introspection
     goocanvas2
     gtkspell3
     isocodes

@@ -1,7 +1,5 @@
 { lib
-, pkgs
 , fetchFromGitHub
-, fetchpatch
 , python3
 , ffmpeg
 }:
@@ -10,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "3.1.2";
   format = "pyproject";
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   src = fetchFromGitHub {
     owner = "gilesknap";
@@ -24,9 +22,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+
   pythonRelaxDeps = [
     "psutil"
     "exif"
+    "pyyaml"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

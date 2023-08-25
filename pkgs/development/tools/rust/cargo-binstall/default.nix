@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "0.23.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     rev = "v${version}";
-    hash = "sha256-Dpo/J6FTW95rODWeIqD+8YnN4dt5yhLPxoezA1CTM4A=";
+    hash = "sha256-xqY1C3ZPGY9GeyuSgV0s4+eSkm4r+jOQkNgSzqE2QUI=";
   };
 
-  cargoHash = "sha256-Nc/kdrLsAooM41pwlkZ3zWsLvFlnxHG/2ZQhPsEyPkI=";
+  cargoHash = "sha256-yAda80b62WGYuKo5YtCLRtx08fmNs5HLDcNWhq+FG/I=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "fancy-no-backtrace"
+    "git"
     "pkg-config"
     "rustls"
     "trust-dns"
@@ -52,11 +53,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_no_such_release"
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_v0_20_1"
   ];
-
-  # remove cargo config so it can find the linker on aarch64-unknown-linux-gnu
-  postPatch = ''
-    rm .cargo/config
-  '';
 
   meta = with lib; {
     description = "A tool for installing rust binaries as an alternative to building from source";

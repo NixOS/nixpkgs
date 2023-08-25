@@ -118,7 +118,7 @@ let
 
     optionalLocation = let
         pos = builtins.unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
-      in if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+      in lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
     leftPadName = name: against: let
         len = lib.max (lib.stringLength name) (lib.stringLength against);

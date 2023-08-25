@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "qc";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "qownnotes";
     repo = "qc";
     rev = "v${version}";
-    hash = "sha256-6dH7pmsd7kUgwHplvCfNqoq/ucDY/UZnyVxC3VvV+fQ=";
+    hash = "sha256-lNS2wrjG70gi6mpIYMvuusuAJL3LkAVh8za+KnBTioc=";
   };
 
   vendorHash = "sha256-7t5rQliLm6pMUHhtev/kNrQ7AOvmA/rR93SwNQhov6o=";
@@ -26,8 +26,11 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    export HOME=$(mktemp -d)
     installShellCompletion --cmd qc \
-      --zsh ./misc/completions/zsh/_qc
+      --bash <($out/bin/qc completion bash) \
+      --fish <($out/bin/qc completion fish) \
+      --zsh <($out/bin/qc completion zsh)
   '';
 
   meta = with lib; {

@@ -8,7 +8,7 @@
 , symlinkJoin
 , tbb
 , hostSystem ? "CPP"
-, deviceSystem ? if config.cudaSupport or false then "CUDA" else "OMP"
+, deviceSystem ? if config.cudaSupport then "CUDA" else "OMP"
 }:
 
 # Policy for device_vector<T>

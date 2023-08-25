@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "valent";
-  version = "unstable-2023-05-01";
+  version = "unstable-2023-07-31";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "74f5d9349a60f0d9fcf88cda01713980a221d639";
+    rev = "698f39b496957d50c68437f16e74a7ac41eb5147";
     fetchSubmodules = true;
-    sha256 = "sha256-wqdujEKizrDFXtsjSTWpFgDL7MH3tsLTc7yd3LFgIQU=";
+    hash = "sha256-AdW6oMRVIgat8XlH342PEwe6BfkzKVLSadGOTLGwzwo=";
   };
 
   nativeBuildInputs = [

@@ -1,17 +1,16 @@
 { lib
 , aiohttp
-, aiounittest
 , buildPythonPackage
 , fetchFromGitHub
 , ffmpeg-python
-, pytestCheckHook
+, orjson
 , pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "reolink-aio";
-  version = "0.5.16";
+  version = "0.7.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "starkillerOG";
     repo = "reolink_aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-FyrTZqp4h4GOCxld+y3wDEfLOl6a6dCgs/LJetjmr8I=";
+    hash = "sha256-vbSt1rD25Bt3Qac0uO0Z63JhbU5HU0p2ox046W6xyJU=";
   };
 
   postPatch = ''
@@ -28,34 +27,16 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "ffmpeg" "ffmpeg-python"
   '';
+
   propagatedBuildInputs = [
     aiohttp
     ffmpeg-python
+    orjson
     requests
   ];
 
-  doCheck = false; # all testse require a network device
-
-  nativeCheckInputs = [
-    aiounittest
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "tests/test.py"
-  ];
-
-  disabledTests = [
-    # Tests require network access
-    "test1_settings"
-    "test2_states"
-    "test3_images"
-    "test4_properties"
-    "test_succes"
-    "test_wrong_host"
-    "test_wrong_password"
-    "test_wrong_user"
-  ];
+  # All tests require a network device
+  doCheck = false;
 
   pythonImportsCheck = [
     "reolink_aio"

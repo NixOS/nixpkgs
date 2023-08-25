@@ -1,6 +1,6 @@
-From c46323dfc4a3d5bf17f7508f5b5f223858a598c3 Mon Sep 17 00:00:00 2001
-From: Maximilian Bosch <maximilian@mbosch.me>
-Date: Tue, 22 Dec 2020 15:39:15 +0100
+From 0e834aa0ef712ce97acf24c05c43a04387fda18c Mon Sep 17 00:00:00 2001
+From: Ember Keske <git@n0emis.eu>
+Date: Wed, 2 Aug 2023 06:36:46 +0200
 Subject: [PATCH 2/2] Remove check for config-file as it's stored in /etc/grocy
 
 ---
@@ -8,17 +8,17 @@ Subject: [PATCH 2/2] Remove check for config-file as it's stored in /etc/grocy
  1 file changed, 1 deletion(-)
 
 diff --git a/helpers/PrerequisiteChecker.php b/helpers/PrerequisiteChecker.php
-index cbe0a3a..a484db2 100644
+index da431b4b..6b878627 100644
 --- a/helpers/PrerequisiteChecker.php
 +++ b/helpers/PrerequisiteChecker.php
-@@ -11,7 +11,6 @@ class PrerequisiteChecker
- {
+@@ -17,7 +17,6 @@ class PrerequisiteChecker
  	public function checkRequirements()
  	{
+ 		self::checkForPhpVersion();
 -		self::checkForConfigFile();
  		self::checkForConfigDistFile();
  		self::checkForComposer();
  		self::checkForPhpExtensions();
 -- 
-2.29.2
+2.41.0
 

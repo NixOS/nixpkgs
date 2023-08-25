@@ -82,7 +82,7 @@ let
                 homepage = meta.homepage or "https://kde.org";
                 license = meta.license or license;
                 maintainers = (meta.maintainers or []) ++ maintainers;
-                platforms = meta.platforms or lib.platforms.linux;
+                platforms = meta.platforms or lib.platforms.all;
               };
 
           in mkDerivation (args // {

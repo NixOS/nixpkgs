@@ -15,7 +15,7 @@
 , pytz
 , requests
 , six
-, zope_component
+, zope-component
 , zope_interface
 , dialog
 , gnureadline
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     hash = "sha256-BQsdhlYABZtz5+SORiCVnWMZdMmiWGM9W1YLqObyFo8=";
   };
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   propagatedBuildInputs = [
     configargparse
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytz
     requests
     six
-    zope_component
+    zope-component
     zope_interface
   ];
 

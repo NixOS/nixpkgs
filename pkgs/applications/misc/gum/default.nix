@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gum";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SP8n9PGfn4Oe+3+i7gT4i2WKgO35igPu+86SGp65R7g=";
+    hash = "sha256-qPo7PmxNCEjrGWNZ/CBpGrbjevbcmnDGy/C1F1TT9zA=";
   };
 
-  vendorSha256 = "sha256-gA545IqG3us0mmWxbw3fu3mFLqJzluH/T6d3ilfnLyM=";
+  vendorHash = "sha256-47rrSj2bI8oe62CSlxrSBsEPM4I6ybDKzrctTB2MFB0=";
 
   nativeBuildInputs = [
     installShellFiles

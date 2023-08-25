@@ -82,6 +82,9 @@
 , bpftools
 , libbpf
 
+  # Needed to produce a ukify that works for cross compiling UKIs.
+, targetPackages
+
 , withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
@@ -145,7 +148,7 @@ assert withUkify -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "253.3";
+  version = "253.6";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -162,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-iy1kyqiVeXIhFJAQ+nYorrXm/xb2gfakyrEfMyNR5l8=";
+    hash = "sha256-LZs6QuBe23W643bTuz+MD2pzHiapsBJBHoFXi/QjzG4=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -174,22 +177,22 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
-    ./0004-fsck-look-for-fsck-binary-not-just-in-sbin.patch
-    ./0005-Add-some-NixOS-specific-unit-directories.patch
-    ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
-    ./0008-Fix-hwdb-paths.patch
-    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-add-rootprefix-to-lookup-dir-paths.patch
-    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0016-pkg-config-derive-prefix-from-prefix.patch
-    ./0017-inherit-systemd-environment-when-calling-generators.patch
-    ./0018-core-don-t-taint-on-unmerged-usr.patch
-    ./0019-tpm2_context_init-fix-driver-name-checking.patch
+    ./0004-Add-some-NixOS-specific-unit-directories.patch
+    ./0005-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0007-Fix-hwdb-paths.patch
+    ./0008-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0009-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0010-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0011-add-rootprefix-to-lookup-dir-paths.patch
+    ./0012-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0013-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0014-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0015-pkg-config-derive-prefix-from-prefix.patch
+    ./0016-inherit-systemd-environment-when-calling-generators.patch
+    ./0017-core-don-t-taint-on-unmerged-usr.patch
+    ./0018-tpm2_context_init-fix-driver-name-checking.patch
+    ./0019-bootctl-also-print-efi-files-not-owned-by-systemd-in.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -209,7 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
       (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
       (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
       (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
       (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
       (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
@@ -235,6 +237,16 @@ stdenv.mkDerivation (finalAttrs: {
     # BPF does not work with stack protector
     substituteInPlace src/core/bpf/meson.build \
       --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
+  '' + lib.optionalString withUkify ''
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'readelf'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'"
+    # The objcopy dependency is removed in v254
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'objcopy'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -508,9 +520,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dsulogin-path=${util-linux}/bin/sulogin"
-    "-Dmount-path=${util-linux}/bin/mount"
-    "-Dumount-path=${util-linux}/bin/umount"
+    "-Dsulogin-path=${util-linux.login}/bin/sulogin"
+    "-Dnologin-path=${util-linux.login}/bin/nologin"
+    "-Dmount-path=${lib.getOutput "mount" util-linux}/bin/mount"
+    "-Dumount-path=${lib.getOutput "mount" util-linux}/bin/umount"
     "-Dcreate-log-dirs=false"
 
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
@@ -561,8 +574,8 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-makefs@.service.xml"
           ];
         }
-        { search = "/sbin/swapon"; replacement = "${lib.getBin util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
-        { search = "/sbin/swapoff"; replacement = "${lib.getBin util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        { search = "/sbin/swapon"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
+        { search = "/sbin/swapoff"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
@@ -723,6 +736,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
+  '' + lib.optionalString withUkify ''
+    # To cross compile a derivation that builds a UKI with ukify, we need to wrap
+    # ukify with the correct binutils. When wrapping, no splicing happens so we
+    # have to explicitly pull binutils from targetPackages.
+    wrapProgram $out/lib/systemd/ukify --set PATH ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }
   '';
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)

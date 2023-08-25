@@ -7,14 +7,15 @@
   AddressBookCore = { inherit ContactsPersistence; };
   AudioToolboxCore = {};
   ContactsPersistence = {};
-  UIFoundation = {};
   GameCenterFoundation = {};
   GameCenterUI = {};
   GameCenterUICore = {};
-  URLFormatting = {};
-  SignpostMetrics = {};
+  MediaRemote = {};
   PassKitCore = {};
+  SignpostMetrics = {};
   SkyLight = {};
+  UIFoundation = {};
+  URLFormatting = {};
 
   # Also expose CoreSymbolication; used by `root` package.
   CoreSymbolication = {};

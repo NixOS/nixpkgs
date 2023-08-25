@@ -1,11 +1,25 @@
-{ lib, appleDerivation, xcbuild, ncurses, libutil, Libc }:
+{ stdenv, lib, appleDerivation, xcbuild, ncurses, libutil, Libc }:
 
+let
+  # Libc conflicts with libc++ 16, so provide only the header from it that’s needed to build.
+  msgcat = stdenv.mkDerivation {
+    pname = "Libc-msgcat";
+    version = lib.getVersion Libc;
+
+    buildCommand = ''
+      mkdir -p "$out/include"
+      ln -s ${lib.getDev Libc}/include/msgcat.h "$out/include/"
+    '';
+  };
+in
 appleDerivation {
   # We can't just run the root build, because https://github.com/facebook/xcbuild/issues/264
 
   patchPhase = ''
     substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
       --replace '/usr/lib/libtermcap.dylib' 'libncurses.dylib'
+    substituteInPlace colldef/scan.l \
+      --replace 'static orderpass = 0;' 'static int orderpass = 0;'
   '';
 
   # pkill requires special private headers that are unavailable in
@@ -42,7 +56,7 @@ appleDerivation {
   '';
 
   nativeBuildInputs = [ xcbuild ];
-  buildInputs = [ ncurses libutil Libc ];
+  buildInputs = [ ncurses libutil msgcat ];
 
   meta = {
     platforms = lib.platforms.darwin;

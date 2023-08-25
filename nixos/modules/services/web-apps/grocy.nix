@@ -115,10 +115,8 @@ in {
       user = "grocy";
       group = "nginx";
 
-      # PHP 8.0 is the only version which is supported/tested by upstream:
-      # https://github.com/grocy/grocy/blob/v3.3.0/README.md#how-to-install
-      # Compatibility with PHP 8.1 is available on their development branch:
-      # https://github.com/grocy/grocy/commit/38a4ad8ec480c29a1bff057b3482fd103b036848
+      # PHP 8.1 is the only version which is supported/tested by upstream:
+      # https://github.com/grocy/grocy/blob/v4.0.0/README.md#platform-support
       phpPackage = pkgs.php81;
 
       inherit (cfg.phpfpm) settings;
@@ -168,7 +166,7 @@ in {
   };
 
   meta = {
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ n0emis ];
     doc = ./grocy.md;
   };
 }

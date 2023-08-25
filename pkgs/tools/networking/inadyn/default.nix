@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnutls libite libconfuse ];
 
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {

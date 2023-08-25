@@ -283,7 +283,7 @@ let
     cat <<EOF > $out/EFI/boot/grub.cfg
 
     set with_fonts=false
-    set textmode=false
+    set textmode=${boolToString (!config.isoImage.graphicalGrub)}
     # If you want to use serial for "terminal_*" commands, you need to set one up:
     #   Example manual configuration:
     #    → serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
@@ -655,6 +655,16 @@ in
         string, like for example if it is set to `XXX`:
 
         `NixOS 99.99-pre666XXX`
+      '';
+    };
+
+    isoImage.graphicalGrub = mkOption {
+      default = false;
+      type = types.bool;
+      example = true;
+      description = lib.mdDoc ''
+        Whether to use textmode or graphical grub.
+        false means we use textmode grub.
       '';
     };
 

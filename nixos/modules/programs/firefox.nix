@@ -53,7 +53,7 @@ in
     };
 
     preferences = mkOption {
-      type = with types; attrsOf (oneOf [ bool int string ]);
+      type = with types; attrsOf (oneOf [ bool int str ]);
       default = { };
       description = mdDoc ''
         Preferences to set from `about:config`.
@@ -233,7 +233,6 @@ in
     nixpkgs.config.firefox = {
       enableBrowserpass = nmh.browserpass;
       enableBukubrow = nmh.bukubrow;
-      enableEUWebID = nmh.euwebid;
       enableTridactylNative = nmh.tridactyl;
       enableUgetIntegrator = nmh.ugetIntegrator;
       enableFXCastBridge = nmh.fxCast;

@@ -16,6 +16,7 @@ let
 
   baseOS =
     import ../eval-config.nix {
+      inherit lib;
       system = null; # use modularly defined system
       inherit (config.node) specialArgs;
       modules = [ config.defaults ];

@@ -47,14 +47,14 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.1.1";
+  version = "8.2.1";
 
   src = fetchurl {
     urls = [
-      "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
-      "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
+      "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
+      "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-UdKvcieZE7XUyrH+Hzi5RM9wkEyIvuJGtb1XWETnA1o=";
+    hash = "sha256-3TIva9CiDmzr39OI9p6Yw9GDvteSz0cTyKfvSYy6SJQ=";
   };
 
   patches = [
@@ -196,5 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
     pkgConfigModules = [ "libcurl" ];
+    mainProgram = "curl";
   };
 })

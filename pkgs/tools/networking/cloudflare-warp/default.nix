@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
-  version = "2023.3.398";
+  version = "2023.3.470";
 
   src = fetchurl {
-    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2023_3_398_1_amd64_002e48d521.deb";
-    hash = "sha256-1var+/G3WwICRLXsMHke277tmPYRPFW8Yf9b1Ex9OmU=";
+    url = "https://pkg.cloudflareclient.com/pool/jammy/main/c/cloudflare-warp/cloudflare-warp_2023.3.470-1_amd64.deb";
+    hash = "sha256-AYnmisEQKFiEB2iRJifEqRbdzAyBcfrU0ITeUokKLag=";
   };
 
   nativeBuildInputs = [
@@ -44,10 +44,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  unpackPhase = ''
-    dpkg-deb -x ${src} ./
-  '';
-
   installPhase = ''
     runHook preInstall
 
@@ -72,7 +68,10 @@ stdenv.mkDerivation rec {
     homepage = "https://pkg.cloudflareclient.com/packages/cloudflare-warp";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [
+      wolfangaukang
+      devpikachu
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -50,7 +50,8 @@ let
   libPathFor = pkgs: lib.makeLibraryPath (with pkgs; [
     libdrm xorg.libXext xorg.libX11
     xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc
-    wayland mesa libGL
+    wayland mesa libGL openssl
+    dbus # for nvidia-powerd
   ]);
 
   self = stdenv.mkDerivation {

@@ -3,23 +3,19 @@
 , ocamlPackages
 , pkg-config
 , libdrm
+, unstableGitUpdater
 }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "wayland-proxy-virtwl";
-  version = "unstable-2022-09-22";
+  version = "unstable-2023-08-13";
 
   src = fetchFromGitHub {
     owner = "talex5";
     repo = pname;
-    rev = "5940346db2a4427f21c7b30a2593b179af36a935";
-    sha256 = "0jnr5q52nb3yqr7ykvvb902xsad24cdi9imkslcsa5cnzb4095rw";
+    rev = "050c49a377808105b895e81e7e498f35cc151e58";
+    sha256 = "sha256-6YJv3CCED6LUSPFwYQyHUFkkvOWZGPNHVzw60b5F8+c=";
   };
-
-  postPatch = ''
-    # no need to vendor
-    rm -r ocaml-wayland
-  '';
 
   minimalOCamlVersion = "4.12";
   duneVersion = "3";
@@ -40,11 +36,13 @@ ocamlPackages.buildDunePackage rec {
 
   doCheck = true;
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     homepage = "https://github.com/talex5/wayland-virtwl-proxy";
     description = "Proxy Wayland connections across a VM boundary";
     license = licenses.asl20;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ maintainers.qyliss maintainers.sternenseemann ];
     platforms = platforms.linux;
   };
 }

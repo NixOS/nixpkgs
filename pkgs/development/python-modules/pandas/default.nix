@@ -2,120 +2,218 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, python
 , pythonOlder
+
+# build-system
 , cython
+, setuptools
+, versioneer
+
+# propagates
 , numpy
 , python-dateutil
 , pytz
+, tzdata
+
+# optionals
+, beautifulsoup4
+, bottleneck
+, blosc2
+, brotlipy
+, fsspec
+, gcsfs
+, html5lib
+, jinja2
+, lxml
+, matplotlib
+, numba
+, numexpr
+, odfpy
+, openpyxl
+, psycopg2
+, pyarrow
+, pymysql
+, pyqt5
+, pyreadstat
+, python-snappy
+, qtpy
+, s3fs
 , scipy
 , sqlalchemy
 , tables
+, tabulate
+, xarray
 , xlrd
-, xlwt
-# Test inputs
+, xlsxwriter
+, zstandard
+
+# tests
+, adv_cmds
+, glibc
 , glibcLocales
 , hypothesis
-, jinja2
 , pytestCheckHook
 , pytest-xdist
 , pytest-asyncio
-, xlsxwriter
-# Darwin inputs
+, python
 , runtimeShell
-, libcxx
 }:
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.5.3";
-  format = "setuptools";
+  version = "2.0.3";
+  format = "pyproject";
+
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dKP9flp+wFLxgyc9x7Cs06hj7fdSD106F2XAT/2zsLE=";
+    hash = "sha256-wC83Kojg0X820wk6ZExzz8F4jodqfEvLQCCndRLiBDw=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    setuptools
+    cython
+    numpy
+    versioneer
+  ] ++ versioneer.optional-dependencies.toml;
 
-  buildInputs = lib.optional stdenv.isDarwin libcxx;
+  enableParallelBuilding = true;
 
   propagatedBuildInputs = [
     numpy
     python-dateutil
     pytz
+    tzdata
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-    # hypothesis indirectly depends on pandas to build its documentation
-    (hypothesis.override { enableDocumentation = false; })
-    jinja2
-    pytest-asyncio
-    pytest-xdist
-    pytestCheckHook
-    xlsxwriter
-  ];
+  passthru.optional-dependencies = let
+    extras = {
+      aws = [
+        s3fs
+      ];
+      clipboard = [
+        pyqt5
+        qtpy
+      ];
+      compression = [
+        brotlipy
+        python-snappy
+        zstandard
+      ];
+      computation = [
+        scipy
+        xarray
+      ];
+      excel = [
+        odfpy
+        openpyxl
+        # TODO: pyxlsb
+        xlrd
+        xlsxwriter
+      ];
+      feather = [
+        pyarrow
+      ];
+      fss = [
+        fsspec
+      ];
+      gcp = [
+        gcsfs
+        # TODO: pandas-gqb
+      ];
+      hdf5 = [
+        blosc2
+        tables
+      ];
+      html = [
+        beautifulsoup4
+        html5lib
+        lxml
+      ];
+      mysql = [
+        sqlalchemy
+        pymysql
+      ];
+      output_formatting = [
+        jinja2
+        tabulate
+      ];
+      parquet = [
+        pyarrow
+      ];
+      performance = [
+        bottleneck
+        numba
+        numexpr
+      ];
+      plot = [
+        matplotlib
+      ];
+      postgresql = [
+        sqlalchemy
+        psycopg2
+      ];
+      spss = [
+        pyreadstat
+      ];
+      sql-other = [
+        sqlalchemy
+      ];
+      xml = [
+        lxml
+      ];
+    };
+  in extras // {
+    all = lib.concatLists (lib.attrValues extras);
+  };
 
   # Doesn't work with -Werror,-Wunused-command-line-argument
   # https://github.com/NixOS/nixpkgs/issues/39687
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
-  doCheck = !stdenv.isAarch32 && !stdenv.isAarch64; # upstream doesn't test this architecture
+  nativeCheckInputs = [
+    glibcLocales
+    hypothesis
+    pytest-asyncio
+    pytest-xdist
+    pytestCheckHook
+  ] ++ lib.optionals (stdenv.isLinux) [
+    # for locale executable
+    glibc
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # for locale executable
+    adv_cmds
+  ];
 
   # don't max out build cores, it breaks tests
   dontUsePytestXdist = true;
+
+  __darwinAllowLocalNetworking = true;
 
   pytestFlagsArray = [
     # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
     "--skip-db"
     "--skip-slow"
     "--skip-network"
-    "-m" "'not single_cpu'"
+    "-m" "'not single_cpu and not slow_arm'"
     "--numprocesses" "4"
   ];
 
   disabledTests = [
-    # Locale-related
-    "test_names"
-    "test_dt_accessor_datetime_name_accessors"
-    "test_datetime_name_accessors"
-    # Disable IO related tests because IO data is no longer distributed
-    "io"
-    # Tries to import from pandas.tests post install
-    "util_in_top_level"
-    # Tries to import compiled C extension locally
-    "test_missing_required_dependency"
-    # AssertionError with 1.2.3
-    "test_from_coo"
-    # AssertionError: No common DType exists for the given inputs
-    "test_comparison_invalid"
-    # AssertionError: Regex pattern '"quotechar" must be string, not int'
-    "python-kwargs2"
-    # Tests for rounding errors and fails if we have better precision
-    # than expected, e.g. on amd64 with FMA or on arm64
-    # https://github.com/pandas-dev/pandas/issues/38921
-    "test_rolling_var_numerical_issues"
-    # Requires mathplotlib
-    "test_subset_for_boolean_cols"
-    # DeprecationWarning from numpy
-    "test_sort_values_sparse_no_warning"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_locale"
-    "test_clipboard"
-    # ValueError: cannot reindex on an axis with duplicate labels
-    #
-    # Attempts to reproduce this problem outside of Hydra failed.
-    "test_reindex_timestamp_with_fold"
+    # AssertionError: Did not see expected warning of class 'FutureWarning'
+    "test_parsing_tzlocal_deprecated"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # tests/generic/test_finalize.py::test_binops[and_-args4-right] - AssertionError: assert {} == {'a': 1}
+    "test_binops"
   ];
 
   # Tests have relative paths, and need to reference compiled C extensions
   # so change directory where `import .test` is able to be resolved
   preCheck = ''
-    cd $out/${python.sitePackages}/pandas
+    export HOME=$TMPDIR
     export LC_ALL="en_US.UTF-8"
-    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+    cd $out/${python.sitePackages}/pandas
   ''
   # TODO: Get locale and clipboard support working on darwin.
   #       Until then we disable the tests.
@@ -127,19 +225,24 @@ buildPythonPackage rec {
     export PATH=$(pwd):$PATH
   '';
 
-  enableParallelBuilding = true;
-
-  pythonImportsCheck = [ "pandas" ];
+  pythonImportsCheck = [
+    "pandas"
+  ];
 
   meta = with lib; {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = "https://pandas.pydata.org/";
     changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
-    description = "Python Data Analysis Library";
+    description = "Powerful data structures for data analysis, time series, and statistics";
+    downloadPage = "https://github.com/pandas-dev/pandas";
+    homepage = "https://pandas.pydata.org";
     license = licenses.bsd3;
+    longDescription = ''
+      Flexible and powerful data analysis / manipulation library for
+      Python, providing labeled data structures similar to R data.frame
+      objects, statistical functions, and much more.
+    '';
     maintainers = with maintainers; [ raskin fridh knedlsepp ];
-    platforms = platforms.unix;
   };
 }

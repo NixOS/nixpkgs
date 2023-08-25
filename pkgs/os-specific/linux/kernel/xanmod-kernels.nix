@@ -3,14 +3,14 @@
 let
   # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "6.1.30";
-    hash = "sha256-F5N0PkjVBSpidP08SdBtOx5n+97RUqN32bwyQ6y+CYY=";
+    version = "6.1.46";
+    hash = "sha256-E9DEWfhl9hUAQXOvJVYJsKBFIen0xHrmiUdTUvGeKxE=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.3.3";
-    hash = "sha256-3vkY79dmRUITXUIStYVlrR/JVLtLH2hfH1YKCF03Wmo=";
+    version = "6.4.11";
+    hash = "sha256-HZTLuxdlkVRBe8C95vr6Fk9YjlCXZEpK3gfbtzLqwLQ=";
     variant = "main";
   };
 
@@ -29,9 +29,9 @@ let
       # AMD P-state driver
       X86_AMD_PSTATE = lib.mkOverride 60 yes;
 
-      # Google's BBRv2 TCP congestion Control
-      TCP_CONG_BBR2 = yes;
-      DEFAULT_BBR2 = yes;
+      # Google's BBRv3 TCP congestion Control
+      TCP_CONG_BBR = yes;
+      DEFAULT_BBR = yes;
 
       # FQ-PIE Packet Scheduling
       NET_SCH_DEFAULT = yes;

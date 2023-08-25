@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -37,6 +38,10 @@ buildPythonPackage rec {
     msgpack
   ];
 
+  preBuild = if (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) then ''
+    export DISABLE_NUMCODECS_AVX2=
+  '' else null;
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -61,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zarr-developers/numcodecs";
     license = licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

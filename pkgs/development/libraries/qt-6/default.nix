@@ -48,6 +48,9 @@ let
           ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
           ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
           ./patches/0007-qtbase-find-qt-tools-in-QTTOOLSPATH.patch
+          ./patches/0008-qtbase-find-qmlimportscanner-in-macdeployqt-via-environment.patch
+          ./patches/0009-qtbase-check-in-the-QML-folder-of-this-library-does-actuall.patch
+          ./patches/0010-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
         ];
       };
       env = callPackage ./qt-env.nix { };
@@ -133,7 +136,7 @@ let
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
         inherit (darwin) bootstrap_cmds cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind llvmPackages_14;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks)
           AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
@@ -166,7 +169,7 @@ let
         } ./hooks/qmake-hook.sh;
     };
 
-  # TODO(@Artturin): convert to makeScopeWithSplicing
+  # TODO(@Artturin): convert to makeScopeWithSplicing'
   # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
   self = lib.makeScope newScope addPackages;
 in

@@ -1,21 +1,20 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, pkgs
 }:
 
 buildGoModule rec {
   pname = "jfrog-cli";
-  version = "2.38.2";
+  version = "2.45.0";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oCcpW4JP61w7TIWR11g/NaHri93cgGorEmRndZXZyE0=";
+    hash = "sha256-NSkSE1NZIwCCSlCo7hGWq82JvH48uI8fV2RIZHwS5JI=";
   };
 
-  vendorHash = "sha256-voMKA7NpQHF4DIZP+vO/ZwlOcBNFwp3vThCM7s8RSpY=";
+  vendorHash = "sha256-fk+Lhmb+LgjSuGlDfHkentF10TOgqIxbZ1VVGmAmkME=";
 
   postInstall = ''
     # Name the output the same way as the original build script does

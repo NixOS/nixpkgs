@@ -142,7 +142,19 @@ let
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
       ++ lib.optional withZlib "zlib"
-      ;
+      ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
+      # This is necessary in order to avoid openssl adding -march
+      # flags which ultimately conflict with those added by
+      # cc-wrapper.  Openssl assumes that it can scan CFLAGS to
+      # detect any -march flags, using this perl code:
+      #
+      #   && !grep { $_ =~ /-m(ips|arch=)/ } (@{$config{CFLAGS}})
+      #
+      # The following bogus CFLAGS environment variable triggers the
+      # the code above, inhibiting `./Configure` from adding the
+      # conflicting flags.
+      "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
+    ];
 
     makeFlags = [
       "MANDIR=$(man)/share/man"
@@ -220,10 +232,12 @@ let
 
 in {
 
-
+  # If you do upgrade here, please update in pkgs/top-level/release.nix
+  # the permitted insecure version to ensure it gets cached for our users
+  # and backport this to stable release (23.05).
   openssl_1_1 = common {
-    version = "1.1.1u";
-    sha256 = "sha256-4vjYS1I+7NBse+diaDA3AwD7zBU4a/UULXJ1j2lj68Y=";
+    version = "1.1.1v";
+    sha256 = "sha256-1ml+KHHncjhGBALpNi1H0YOCsV758karpse9eA04prA=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -240,8 +254,8 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.8";
-    sha256 = "sha256-bBPSvzj98x6sPOKjRwc2c/XWMmM5jx9p0N9KQSU+Sz4=";
+    version = "3.0.10";
+    sha256 = "sha256-F2HU9bE6ECi5tvPUuOF/6wztyTcPav5h1xk9LNzoMyM=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

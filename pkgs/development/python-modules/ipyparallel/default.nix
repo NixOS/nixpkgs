@@ -6,9 +6,7 @@
 , hatchling
 , ipykernel
 , ipython
-, ipython_genutils
 , jupyter-client
-, packaging
 , psutil
 , python-dateutil
 , pythonOlder
@@ -39,9 +37,7 @@ buildPythonPackage rec {
     entrypoints
     ipykernel
     ipython
-    ipython_genutils
     jupyter-client
-    packaging
     psutil
     python-dateutil
     pyzmq

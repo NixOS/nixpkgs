@@ -4,14 +4,13 @@
 
 buildDunePackage rec {
   pname   = "functoria";
-  version = "4.3.4";
+  version = "4.3.6";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage/releases/download/v${version}/mirage-${version}.tbz";
-    hash = "sha256-ZN8La2+N19wVo/vBUfIj17JU6FSp0jX7h2nDoIpR1XY=";
+    hash = "sha256-i/5sZHfxECoKYMdGje+U21GWxJ6dDZreVcQGtbuo4SE=";
   };
 
   propagatedBuildInputs = [ cmdliner rresult astring fmt logs bos fpath emile uri ];

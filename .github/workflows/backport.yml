@@ -24,7 +24,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Create backport PRs
-        uses: korthout/backport-action@v1.2.0
+        uses: korthout/backport-action@v1.3.1
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           copy_labels_pattern: 'severity:\ssecurity'

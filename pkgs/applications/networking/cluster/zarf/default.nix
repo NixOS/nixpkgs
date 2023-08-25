@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.27.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "defenseunicorns";
     repo = "zarf";
     rev = "v${version}";
-    hash = "sha256-AHS9V0vPTA1ltBo6TynZfWjg5eCY1tB7wn4z8WG2EtQ=";
+    hash = "sha256-MpjxyVOouivB1FT8ejKhq3lPSfCaXwxMXpyxoaNxVEk=";
   };
 
-  vendorHash = "sha256-6hd1OEmEQ6bYdYa1UCSXfNDFM1aAiBF6tvPmAMulRyc=";
+  vendorHash = "sha256-h/N50x64ROW3KJ5965vauSpkIoeq8Zn26eCEmJqU0Zg=";
   proxyVendor = true;
 
   preBuild = ''

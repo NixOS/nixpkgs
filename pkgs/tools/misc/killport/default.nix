@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "killport";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-aGnjLgDn86OUFQGj7K7+DUSGJuNEIL52yXJz/Mt5DT0=";
+    hash = "sha256-aaKvrWJGZ26wyqoblAcUkGUPkbt8XNx9Z4xT+qI2B3o=";
   };
 
-  cargoHash = "sha256-Z3+hqssm5g7rl3XCnrmjuPhsG8E0Yc2Qg8/mjGlnaT4=";
+  cargoHash = "sha256-4CUMt5aDHq943uU5PAY1TJtmCqlBvgOruGQ69OG5fB4=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 

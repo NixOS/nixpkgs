@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    mainProgram = "rsync";
     maintainers = with lib.maintainers; [ ehmry kampfschlaefer ivan ];
+    platforms = platforms.unix;
   };
 }

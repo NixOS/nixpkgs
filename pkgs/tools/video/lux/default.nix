@@ -2,12 +2,12 @@
 
 buildGoModule rec {
   pname = "lux";
-  version = "0.18.0";
+  version = "0.19.0";
   src = fetchFromGitHub {
     owner = "iawia002";
     repo = "lux";
     rev = "v${version}";
-    sha256 = "sha256-A3DDKpoaZlDUpafAGs5zCknhTeCuwMPnyBHtxke0Bi8=";
+    sha256 = "sha256-klm1985qBErFfYIWPjr1/n6nYr/jA9dbrDMfw4bf1tM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

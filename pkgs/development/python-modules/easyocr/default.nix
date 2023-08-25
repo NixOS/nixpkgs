@@ -3,58 +3,67 @@
 , fetchFromGitHub
 , hdf5
 , numpy
+, onnx
 , opencv3
 , pillow
 , pyaml
 , pyclipper
 , python-bidi
-, torch
+, pythonOlder
 , scikit-image
 , scipy
 , shapely
+, torch
 , torchvision
-, onnx
 }:
 
 buildPythonPackage rec {
   pname = "easyocr";
-  version = "1.6.2";
+  version = "1.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JaidedAI";
     repo = "EasyOCR";
-    rev = "v${version}";
-    hash = "sha256-f+JBSnFMRvVlhRRiL1rJb7a0CNjZPuh6r8r3K1meQCk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-01Exz55eTIO/xzdq/dzV+ELkU75hpxe/EbjIqLBA8h0=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "opencv-python-headless<=4.5.4.60" "" \
+      --replace "opencv-python-headless" "" \
       --replace "ninja" ""
   '';
 
   propagatedBuildInputs = [
-    scikit-image
     hdf5
-    python-bidi
     numpy
     opencv3
-    torchvision
     pillow
     pyaml
     pyclipper
-    torch
+    python-bidi
+    scikit-image
     scipy
     shapely
+    torch
+    torchvision
   ];
 
-  nativeCheckInputs = [ onnx ];
+  nativeCheckInputs = [
+    onnx
+  ];
 
-  pythonImportsCheck = [ "easyocr" ];
+  pythonImportsCheck = [
+    "easyocr"
+  ];
 
   meta = with lib; {
     description = "Ready-to-use OCR with 80+ supported languages and all popular writing scripts";
     homepage = "https://github.com/JaidedAI/EasyOCR";
+    changelog = "https://github.com/JaidedAI/EasyOCR/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
   };

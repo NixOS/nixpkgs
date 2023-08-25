@@ -27,6 +27,11 @@
 , freeglut
 , libGLU
 , xcbuild
+
+# for passthru.tests
+, cups-filters
+, python3
+, zathura
 }:
 let
 
@@ -47,12 +52,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  version = "1.21.1";
+  version = "1.22.1";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "sha256-sk3b4SUGzILeCNXNSUYUugg0b4F12x2YvPk4/5SSWlQ=";
+    sha256 = "sha256-1i88DkVuu8QucfWkfw+M0SzsK/Co1yt541+jWmU4slo=";
   };
 
   patches = [ ./0001-Use-command-v-in-favor-of-which.patch
@@ -146,11 +151,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    inherit cups-filters zathura;
+    inherit (python3.pkgs) pikepdf pymupdf;
+  };
+
   meta = with lib; {
     homepage = "https://mupdf.com";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra fpletz ];
     platforms = platforms.unix;
+    mainProgram = "mupdf";
   };
 }

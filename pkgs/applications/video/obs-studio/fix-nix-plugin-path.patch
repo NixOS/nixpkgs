@@ -1,0 +1,13 @@
+diff --git a/libobs/obs-nix.c b/libobs/obs-nix.c
+index 36aac7097..801cec788 100644
+--- a/libobs/obs-nix.c
++++ b/libobs/obs-nix.c
+@@ -56,7 +56,7 @@ const char *get_module_extension(void)
+ #define FLATPAK_PLUGIN_PATH "/app/plugins"
+ 
+ static const char *module_bin[] = {
+-	OBS_INSTALL_PREFIX "/" OBS_PLUGIN_DESTINATION,
++	OBS_PLUGIN_DESTINATION,
+ 	"../../obs-plugins/" BIT_STRING,
+ 	FLATPAK_PLUGIN_PATH "/" OBS_PLUGIN_DESTINATION,
+ };

@@ -1,4 +1,5 @@
 { lib
+, installShellFiles
 , rustPlatform
 , fetchgit
 }:
@@ -18,6 +19,22 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-+4uqC0VoBSmkS9hYC1lzWeJmK873slZT04TljHPE+Eo=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = "installShellCompletion --cmd ${pname} "
+    + builtins.concatStringsSep
+      " "
+      (builtins.map
+        (shell: "--${shell} <($out/bin/${pname} self completions ${shell})")
+        [
+          "bash"
+          "fish"
+          "zsh"
+        ]
+      );
 
   meta = {
     description = "A task runner with DAG-based parallelism";

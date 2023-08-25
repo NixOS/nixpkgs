@@ -18,6 +18,8 @@ let
     else a;
 in
 rec {
+  mkDriver = generic;
+
   # Official Unix Drivers - https://www.nvidia.com/en-us/drivers/unix/
   # Branch/Maturity data - http://people.freedesktop.org/~aplattner/nvidia-versions.txt
 
@@ -25,14 +27,12 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "525.116.04";
-    sha256_64bit = "sha256-hhDsgkR8/3LLXxizZX7ppjSlFRZiuK2QHrgfTE+2F/4=";
-    sha256_aarch64 = "sha256-k7k22z5PYZdBVfuYXVcl9SFUMqZmK4qyxoRwlYyRdgU=";
-    openSha256 = "sha256-dktHCoESqoNfu5M73aY5MQGROlZawZwzBqs3RkOyfoQ=";
-    settingsSha256 = "sha256-qNjfsT9NGV151EHnG4fgBonVFSKc4yFEVomtXg9uYD4=";
-    persistencedSha256 = "sha256-ci86XGlno6DbHw6rkVSzBpopaapfJvk0+lHcR4LDq50=";
-
-    ibtSupport = true;
+    version = "535.98";
+    sha256_64bit = "sha256-E1DAmVLTe+L5DWCONq47BQtE/Rb22akZMHGhK/0FTsM=";
+    sha256_aarch64 = "sha256-ikqj7bvSvCGlkDviaqagyoSZhpf6ZU3TiKKxNDZm3RU=";
+    openSha256 = "sha256-dgc5Z70NSpBARelNy6XaZ4e7Tz9vWJWeNek3TSztJus=";
+    settingsSha256 = "sha256-jCRfeB1w6/dA27gaz6t5/Qo7On0zbAPIi74LYLel34s=";
+    persistencedSha256 = "sha256-WviDU6B50YG8dO64CGvU3xK8WFUX8nvvVYm/fuGyroM=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -54,24 +54,24 @@ rec {
   });
 
   beta = selectHighestVersion latest (generic {
-    version = "530.30.02";
-    sha256_64bit = "sha256-R/3bvXoiumYZI9vObn9R7sVN9oBQxAbMBJDDv77eeWM=";
-    sha256_aarch64 = "sha256-/b5Jdow+O7ExXjtXTzDX38qgmBDUYDUl+5zxXvbi1ts=";
-    openSha256 = "sha256-LCtTyuJ8s8isTBt9HetItLqSjL1GOn0tPUarjuxHpMk=";
-    settingsSha256 = "sha256-6mynLNSaWeiB52HdwZ0EQNyPg+tuat0oEqpZGSb2yQo=";
-    persistencedSha256 = "sha256-h6iq0iD9F41a7s6jWKPTI+oVzgDRIr1Kk97LNH9rg7E=";
+    version = "535.43.02";
+    sha256_64bit = "sha256-4KTdk4kGDmBGyHntMIzWRivUpEpzmra+p7RBsTL8mYM=";
+    sha256_aarch64 = "sha256-0blD8R+xpOVlitWefIbtw1d3KAnmWHBy7hkxGZHBrE4=";
+    openSha256 = "sha256-W1fwbbEEM7Z/S3J0djxGTtVTewbSALqX1G1OSpdajCM=";
+    settingsSha256 = "sha256-j0sSEbtF2fapv4GSthVTkmJga+ycmrGc1OnGpV6jEkc=";
+    persistencedSha256 = "sha256-M0ovNaJo8SZwLW4CQz9accNK79Z5JtTJ9kKwOzicRZ4=";
   });
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "525.47.26";
-    persistencedVersion = "525.116.04";
-    settingsVersion = "525.116.04";
-    sha256_64bit = "sha256-QfxEUTi71Pav1qzO0mObmKbsyg6FHTAyc7jkOj9D4lY=";
-    openSha256 = "sha256-QFpFRPpBXAB7v2+NP/M/1T1qKDqjdhigHkktnVyWw20=";
-    settingsSha256 = "sha256-qNjfsT9NGV151EHnG4fgBonVFSKc4yFEVomtXg9uYD4=";
-    persistencedSha256 = "sha256-ci86XGlno6DbHw6rkVSzBpopaapfJvk0+lHcR4LDq50=";
+    version = "535.43.08";
+    persistencedVersion = "535.98";
+    settingsVersion = "535.98";
+    sha256_64bit = "sha256-u9OJ4xaHGDb5iA5+5jwJhWQGRDa5R6piF1c+K2DGaJs=";
+    openSha256 = "sha256-kbH/6yDhh44SB08xcX6+tm70PuUHF0tfbvHfIwx7o/U=";
+    settingsSha256 = "sha256-jCRfeB1w6/dA27gaz6t5/Qo7On0zbAPIi74LYLel34s=";
+    persistencedSha256 = "sha256-WviDU6B50YG8dO64CGvU3xK8WFUX8nvvVYm/fuGyroM=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
   };
 
@@ -81,23 +81,18 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-    version = "470.182.03";
-    sha256_64bit = "sha256-PbwUCPxIuGXT3azvxF9KP8E7kLg6Yo7lRrAIKrLD/Hk=";
-    sha256_aarch64 = "sha256-FEoWikgQjZKkHvAHgtkxnDhB41GdYplZTttEUBit4QQ=";
-    settingsSha256 = "sha256-TRKQ4brLnCbBZt1smGSIHTfwW+wEFPWWPEwDxjVXN7s=";
-    persistencedSha256 = "sha256-fSJMx49z9trdNxx0iPI45oG57smvvhaqVNxsRnfXKCI=";
+    version = "470.199.02";
+    sha256_64bit = "sha256-/fggDt8RzjLDW0JiGjr4aV4RGnfEKL8MTTQ4tCjXaP0=";
+    sha256_aarch64 = "sha256-UmF7LszdrO2d+bOaoQYrTVKXUwDqzMy1UDBW5SPuZy4=";
+    settingsSha256 = "sha256-FkKPE4QV5IiVizGYUNUYoEXRpEhojt/cbH/I8iCn3hw=";
+    persistencedSha256 = "sha256-JP71wt3uCNOgheLNlQbW3DqVFQNTC5vj4y4COWKQzAs=";
 
     patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [
-      # source: https://gist.github.com/joanbm/d10e9cbbbb8e245b6e7e27b2db338faf
+      # source: https://gist.github.com/joanbm/dfe8dc59af1c83e2530a1376b77be8ba
       (fetchpatch {
-        url = "https://gist.github.com/joanbm/d10e9cbbbb8e245b6e7e27b2db338faf/raw/f5d5238bdbaa16cd4008658a0f82b9dd84f1b38f/nvidia-470xx-fix-linux-6.3.patch";
-        hash = "sha256-mR+vXDHgVhWC0JeLgGlbNVCH8XTs7XnhEJS6BV75tI8=";
-      })
-      # source: https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c
-      (fetchpatch {
-        url = "https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c/raw/688b612624945926676de28059fe749203b4b549/nvidia-470xx-fix-linux-6.4.patch";
-        hash = "sha256-OyRmezyzqAi7mSJHDjsWQVocSsgJPTW5DvHDFVNX7Dk=";
+        url = "https://gist.github.com/joanbm/dfe8dc59af1c83e2530a1376b77be8ba/raw/37ff2b5ccf99f295ff958c9a44ca4ed4f42503b4/nvidia-470xx-fix-linux-6.5.patch";
+        hash = "sha256-s5r7nwuMva0BLy2qJBVKqNtnUN9am5+PptnVwNdzdbk=";
       })
     ];
   };

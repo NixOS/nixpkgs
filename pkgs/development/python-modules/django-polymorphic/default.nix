@@ -25,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/django-polymorphic/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

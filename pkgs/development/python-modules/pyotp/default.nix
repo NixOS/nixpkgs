@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyotp";
-  version = "2.8.0";
+  version = "2.9.0";
   disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wvXhfZ2pLY7B995jMasIEWuRFa26vLpuII1G/EmpjFo=";
+    hash = "sha256-NGtmQuDb3eO0/1qTC2ZMqCq/oRY1btSMxCx9ZZDTb2M=";
   };
 
   nativeCheckInputs = [

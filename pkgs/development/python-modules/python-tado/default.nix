@@ -1,20 +1,33 @@
-{ buildPythonPackage, fetchFromGitHub, lib, pytestCheckHook, pythonOlder, requests }:
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, pythonOlder
+, requests
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-tado";
-  version = "0.12.0";
+  version = "0.16.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
-    rev = version;
-    hash = "sha256-n+H6H2ORLizv9cn1P5Cd8wHDWMNonPrs+x+XMQbEzZQ=";
+    # https://github.com/wmalgadey/PyTado/issues/62
+    rev = "674dbc450170a380e76460c22d6ba943dfedb8e9";
+    hash = "sha256-gduqQVw/a64aDzTHFmgZu7OVB53jZb7L5vofzL3Ho6s=";
   };
 
-  propagatedBuildInputs = [ requests ];
-  nativeCheckInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    requests
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description =

@@ -111,8 +111,11 @@ in
           (submodule {
             options = {
               enable = mkEnableOption (lib.mdDoc ''
-                building of firmware and addition of klipper-flash tools for manual flashing.
-                This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
+                building of firmware for manual flashing.
+              '');
+              enableKlipperFlash = mkEnableOption (lib.mdDoc ''
+                flashings scripts for firmware. This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
+                Please check the configs at [klipper](https://github.com/Klipper3d/klipper/tree/master/config) whether your board supports flashing via `make flash`.
               '');
               serial = mkOption {
                 type = types.nullOr path;
@@ -213,11 +216,14 @@ in
       with pkgs;
       let
         default = a: b: if a != null then a else b;
-        firmwares = filterAttrs (n: v: v!= null) (mapAttrs
-          (mcu: { enable, configFile, serial }: if enable then pkgs.klipper-firmware.override {
-            mcu = lib.strings.sanitizeDerivationName mcu;
-            firmwareConfig = configFile;
-          } else null)
+        firmwares = filterAttrs (n: v: v != null) (mapAttrs
+          (mcu: { enable, enableKlipperFlash, configFile, serial }:
+            if enable then
+              pkgs.klipper-firmware.override
+                {
+                  mcu = lib.strings.sanitizeDerivationName mcu;
+                  firmwareConfig = configFile;
+                } else null)
           cfg.firmwares);
         firmwareFlasher = mapAttrsToList
           (mcu: firmware: pkgs.klipper-flash.override {
@@ -226,7 +232,7 @@ in
             flashDevice = default cfg.firmwares."${mcu}".serial cfg.settings."${mcu}".serial;
             firmwareConfig = cfg.firmwares."${mcu}".configFile;
           })
-          firmwares;
+          (filterAttrs (mcu: firmware: cfg.firmwares."${mcu}".enableKlipperFlash) firmwares);
       in
       [ klipper-genconf ] ++ firmwareFlasher ++ attrValues firmwares;
   };

@@ -4,14 +4,14 @@
 , cmake
 }:
 
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "wavm";
   version = "2022-05-14";
 
   src = fetchFromGitHub {
     owner = "WAVM";
     repo = "WAVM";
-    rev = "nightly/${version}";
+    rev = "nightly/${finalAttrs.version}";
     hash = "sha256-SHz+oOOkwvVZucJYFSyZc3MnOAy1VatspmZmOAXYAWA=";
   };
 
@@ -23,4 +23,4 @@ llvmPackages.stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ereslibre ];
   };
-}
+})

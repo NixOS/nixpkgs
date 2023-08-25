@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "generic";
-  version = "1.1.1";
+  version = "1.1.2";
   disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UHz2v6K5lNYb7cxBViTfPkpu2M8LItApGoSg3Bb2bqI=";
+    hash = "sha256-NfUvmkUIAdm+UZqmBWh0MZTViLJSkeRonPNSnVd+RbA=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +32,7 @@ buildPythonPackage rec {
     description = "Generic programming (Multiple dispatch) library for Python";
     maintainers = with maintainers; [ wolfangaukang ];
     homepage = "https://github.com/gaphor/generic";
-    license = licenses.bsdOriginal;
+    changelog = "https://github.com/gaphor/generic/releases/tag/${version}";
+    license = licenses.bsd3;
   };
 }

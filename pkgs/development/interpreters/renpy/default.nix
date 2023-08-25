@@ -8,8 +8,8 @@ let
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
-  base_version = "8.1.0";
-  vc_version = "23051307";
+  base_version = "8.1.1";
+  vc_version = "23060707";
 in stdenv.mkDerivation rec {
   pname = "renpy";
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     owner = "renpy";
     repo = "renpy";
     rev = version;
-    sha256 = "sha256-5EU4jaBTU+a9UNHRs7xrKQ7ZivhDEqisO3l4W2E6F+c=";
+    sha256 = "sha256-aJ/MobZ6SNBYRC/EpUxAMLJ3pwK6PC92DV0YL/LF5Ew=";
   };
 
   nativeBuildInputs = [
@@ -49,9 +49,11 @@ in stdenv.mkDerivation rec {
     cp tutorial/game/tutorial_director.rpy{m,}
 
     cat > renpy/vc_version.py << EOF
-    vc_version = ${vc_version}
+    version = '${version}'
     official = False
     nightly = False
+    # Look at https://renpy.org/latest.html for what to put.
+    version_name = 'Where No One Has Gone Before'
     EOF
   '';
 

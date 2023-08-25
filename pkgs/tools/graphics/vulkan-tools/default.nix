@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, python3
 , glslang
 , libffi
 , libX11
@@ -21,18 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.249";
+  version = "1.3.254";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "v${version}";
-    hash = "sha256-+d0Yp+e/wzlRmUIs4SffiphkqmM/7avJrt3JNOgO19I=";
+    hash = "sha256-MyYngyoIGpGu1jFN1GDm9BcFye1JRz1cN6SaZue1ZGQ=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
   ];
 
   buildInputs = [

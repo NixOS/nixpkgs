@@ -3,11 +3,14 @@ use lock::UrlOrString;
 use rayon::prelude::*;
 use serde_json::{Map, Value};
 use std::{
-    fs, io,
+    fs,
+    io::{self, Read},
     process::{Command, Stdio},
 };
 use tempfile::{tempdir, TempDir};
 use url::Url;
+
+use crate::util;
 
 pub mod lock;
 
@@ -103,7 +106,7 @@ impl Package {
 
         let specifics = match get_hosted_git_url(&resolved)? {
             Some(hosted) => {
-                let mut body = ureq::get(hosted.as_str()).call()?.into_reader();
+                let mut body = util::get_url_with_retry(&hosted)?;
 
                 let workdir = tempdir()?;
 
@@ -154,10 +157,7 @@ impl Package {
             Specifics::Registry { .. } => {
                 let mut body = Vec::new();
 
-                ureq::get(self.url.as_str())
-                    .call()?
-                    .into_reader()
-                    .read_to_end(&mut body)?;
+                util::get_url_with_retry(&self.url)?.read_to_end(&mut body)?;
 
                 Ok(body)
             }

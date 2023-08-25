@@ -17,11 +17,11 @@
 disabledIf (pythonAtLeast "3.11") (
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.15.5";
+  version = "5.15.10";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
-    sha256 = "0cwvw6695215498rsbm2xzkwaxdr3w7zfvy4kc62c01k6pxs881r";
+    sha256 = "sha256-KvaR02E6Qfg6YEObRlaPwsaW2/rkL3zXsHFS0RXq0zo=";
   };
 
   patches = [

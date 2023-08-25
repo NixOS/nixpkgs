@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     owner = "vector-im";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    sha256 = webSrcHash;
+    hash = webSrcHash;
   };
 
   offlineCache = fetchYarnDeps {

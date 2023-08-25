@@ -18,11 +18,11 @@
 
 mkDerivation rec {
   pname = "kphotoalbum";
-  version = "5.10.0";
+  version = "5.11.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-rdEXgg5hwu52XJit07AbrSw7kLDNK+IpbIwKCV/Lhp8=";
+    hash = "sha256-NWtOIHJXtc8PlltYbbp2YwDf/3QI3MdHNDX7WVQMig4=";
   };
 
   # not sure if we really need phonon when we have vlc, but on KDE it's bound to

@@ -13,16 +13,16 @@ let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.23.4";
+      version = "1.23.7";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         rev = "v${version}";
-        hash = "sha256-a2ulTP7J5+f5ikdKVIq4l6GQEJ8PH+MGNV4C0NReFyQ=";
+        hash = "sha256-LwjqMEfCdMvNoxn88H3+VyX31G5IlRohpfp++oNCfEc=";
       };
 
-      vendorHash = "sha256-d/So51ZMDdduUEgOOu9wc3kLh4dRzFR6S5BxcCVtiXI=";
+      vendorHash = "sha256-nk80Y5RBoUCp+xYNYYnVWVBkCLCgvgKZFpV5CfS2p/s=";
 
       nativeBuildInputs = lib.optionals stdenv.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when

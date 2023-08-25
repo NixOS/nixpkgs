@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ jfrankenau koral lovek323 ];
     platforms   = platforms.all;
+    mainProgram = "ncmpcpp";
   };
 }

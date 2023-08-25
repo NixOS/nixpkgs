@@ -15,9 +15,7 @@ let
     storage = {
       cache.blobdescriptor = blobCache;
       delete.enabled = cfg.enableDelete;
-    } // (if cfg.storagePath != null
-          then { filesystem.rootdirectory = cfg.storagePath; }
-          else {});
+    } // (optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
     http = {
       addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
@@ -48,6 +46,14 @@ let
 in {
   options.services.dockerRegistry = {
     enable = mkEnableOption (lib.mdDoc "Docker Registry");
+
+    package = mkOption {
+      type = types.package;
+      description = mdDoc "Which Docker registry package to use.";
+      default = pkgs.docker-distribution;
+      defaultText = literalExpression "pkgs.docker-distribution";
+      example = literalExpression "pkgs.gitlab-container-registry";
+    };
 
     listenAddress = mkOption {
       description = lib.mdDoc "Docker registry host or ip to bind to.";
@@ -117,7 +123,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       script = ''
-        ${pkgs.docker-distribution}/bin/registry serve ${configFile}
+        ${cfg.package}/bin/registry serve ${configFile}
       '';
 
       serviceConfig = {
@@ -136,7 +142,7 @@ in {
       serviceConfig.Type = "oneshot";
 
       script = ''
-        ${pkgs.docker-distribution}/bin/registry garbage-collect ${configFile}
+        ${cfg.package}/bin/registry garbage-collect ${configFile}
         /run/current-system/systemd/bin/systemctl restart docker-registry.service
       '';
 
@@ -144,12 +150,10 @@ in {
     };
 
     users.users.docker-registry =
-      (if cfg.storagePath != null
-      then {
+      (optionalAttrs (cfg.storagePath != null) {
         createHome = true;
         home = cfg.storagePath;
-      }
-      else {}) // {
+      }) // {
         group = "docker-registry";
         isSystemUser = true;
       };

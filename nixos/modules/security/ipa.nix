@@ -86,7 +86,7 @@ in {
       };
 
       ifpAllowedUids = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = ["root"];
         description = lib.mdDoc "A list of users allowed to access the ifp dbus interface.";
       };

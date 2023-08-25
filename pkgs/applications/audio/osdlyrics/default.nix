@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osdlyrics";
-  version = "0.5.13";
+  version = "0.5.14";
 
   src = fetchFromGitHub {
     owner = "osdlyrics";
     repo = "osdlyrics";
     rev = version;
-    sha256 = "sha256-E4pVXopqQYJW+a5nUf9dMabxJ9nYPu3C2ti8LlY470c=";
+    sha256 = "sha256-NVUQLmddXnpryt1AuHSwgPnWkgxWMBNJac09TJ12Yzo=";
   };
 
   nativeBuildInputs = [

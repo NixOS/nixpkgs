@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.16";
+  version = "0.17";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = pname;
     rev = version;
-    hash = "sha256-W9sXtYI8gEwQPRo50taEGT6AQG1tdAbeCtX49eHVvFQ=";
+    hash = "sha256-wa/IeNGZynU/xKwyFwebXcFaruhBFqGWsrZYaIEVa8Q=";
   };
 
   propagatedBuildInputs = [

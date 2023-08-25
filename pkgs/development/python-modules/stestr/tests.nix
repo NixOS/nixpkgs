@@ -2,11 +2,10 @@
 , stestr
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "stestr-tests";
-  inherit (stestr) version;
-
-  src = stestr.src;
+  inherit (stestr) version src;
+  format = "other";
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.14";
+  version = "1.26.16";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B2kHv4/TVc3ndyhHExZiWk0vfnE8El9RlTu1s+7PT3I=";
+    hash = "sha256-jxNfZQJ1a95rKpsomJ31++h8mXDOyqaQQe3M5/BYmxQ=";
   };
 
   # FIXME: remove backwards compatbility hack

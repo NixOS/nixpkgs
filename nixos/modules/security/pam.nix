@@ -484,6 +484,9 @@ let
           optionalString cfg.mysqlAuth ''
             account sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
+          optionalString (config.services.kanidm.enablePam) ''
+            account sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user
+          '' +
           optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false) ''
             account sufficient ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
@@ -544,6 +547,9 @@ let
           '') +
           (let yubi = config.security.pam.yubico; in optionalString cfg.yubicoAuth ''
             auth ${yubi.control} ${pkgs.yubico-pam}/lib/security/pam_yubico.so mode=${toString yubi.mode} ${optionalString (yubi.challengeResponsePath != null) "chalresp_path=${yubi.challengeResponsePath}"} ${optionalString (yubi.mode == "client") "id=${toString yubi.id}"} ${optionalString yubi.debug "debug"}
+          '') +
+          (let dp9ik = config.security.pam.dp9ik; in optionalString dp9ik.enable ''
+            auth ${dp9ik.control} ${pkgs.pam_dp9ik}/lib/security/pam_p9.so ${dp9ik.authserver}
           '') +
           optionalString cfg.fprintAuth ''
             auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so
@@ -617,6 +623,9 @@ let
           optionalString use_ldap ''
             auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass
           '' +
+          optionalString config.services.kanidm.enablePam ''
+            auth sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user use_first_pass
+          '' +
           optionalString config.services.sssd.enable ''
             auth sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_first_pass
           '' +
@@ -653,6 +662,9 @@ let
           optionalString cfg.mysqlAuth ''
             password sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
+          optionalString config.services.kanidm.enablePam ''
+            password sufficient ${pkgs.kanidm}/lib/pam_kanidm.so
+          '' +
           optionalString config.services.sssd.enable ''
             password sufficient ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
@@ -685,7 +697,7 @@ let
             session required ${config.systemd.package}/lib/security/pam_systemd_home.so
           '' +
           optionalString cfg.makeHomeDir ''
-            session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0077
+            session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=${config.security.pam.makeHomeDir.umask}
           '' +
           optionalString cfg.updateWtmp ''
             session required ${pkgs.pam}/lib/security/pam_lastlog.so silent
@@ -713,6 +725,9 @@ let
           '' +
           optionalString cfg.mysqlAuth ''
             session optional ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
+          '' +
+          optionalString config.services.kanidm.enablePam ''
+            session optional ${pkgs.kanidm}/lib/pam_kanidm.so
           '' +
           optionalString config.services.sssd.enable ''
             session optional ${pkgs.sssd}/lib/security/pam_sss.so
@@ -887,6 +902,16 @@ in
       '';
     };
 
+    security.pam.makeHomeDir.umask = mkOption {
+      type = types.str;
+      default = "0077";
+      example = "0022";
+      description = lib.mdDoc ''
+        The user file mode creation mask to use on home directories
+        newly created by `pam_mkhomedir`.
+      '';
+    };
+
     security.pam.enableSSHAgentAuth = mkOption {
       type = types.bool;
       default = false;
@@ -900,6 +925,32 @@ in
     };
 
     security.pam.enableOTPW = mkEnableOption (lib.mdDoc "the OTPW (one-time password) PAM module");
+
+    security.pam.dp9ik = {
+      enable = mkEnableOption (
+        lib.mdDoc ''
+          the dp9ik pam module provided by tlsclient.
+
+          If set, users can be authenticated against the 9front
+          authentication server given in {option}`security.pam.dp9ik.authserver`.
+        ''
+      );
+      control = mkOption {
+        default = "sufficient";
+        type = types.str;
+        description = lib.mdDoc ''
+          This option sets the pam "control" used for this module.
+        '';
+      };
+      authserver = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        description = lib.mdDoc ''
+          This controls the hostname for the 9front authentication server
+          that users will be authenticated against.
+        '';
+      };
+    };
 
     security.pam.krb5 = {
       enable = mkOption {
@@ -1298,6 +1349,7 @@ in
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
+      ++ optional config.services.kanidm.enablePam pkgs.kanidm
       ++ optional config.services.sssd.enable pkgs.sssd
       ++ optionals config.security.pam.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
@@ -1363,6 +1415,9 @@ in
       '' +
       optionalString use_ldap ''
          mr ${pam_ldap}/lib/security/pam_ldap.so,
+      '' +
+      optionalString config.services.kanidm.enablePam ''
+        mr ${pkgs.kanidm}/lib/pam_kanidm.so,
       '' +
       optionalString config.services.sssd.enable ''
         mr ${pkgs.sssd}/lib/security/pam_sss.so,

@@ -18,6 +18,7 @@ let
           ExecStart = "${pkgs.liquidsoap}/bin/liquidsoap ${stream}";
           User = "liquidsoap";
           LogsDirectory = "liquidsoap";
+          Restart = "always";
         };
       };
     };

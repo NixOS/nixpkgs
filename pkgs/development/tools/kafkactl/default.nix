@@ -32,6 +32,5 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ grburst ];
-    platforms = platforms.unix;
   };
 }

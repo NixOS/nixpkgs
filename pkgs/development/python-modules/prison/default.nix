@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Rison encoder/decoder";
     homepage = "https://github.com/betodealmeida/python-rison";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,5 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
-, nix-gitignore
 , makeWrapper
 , stdenv
 , darwin

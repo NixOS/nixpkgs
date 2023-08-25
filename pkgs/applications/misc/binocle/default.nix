@@ -44,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     description = "Graphical tool to visualize binary data";
     homepage = "https://github.com/sharkdp/binocle";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

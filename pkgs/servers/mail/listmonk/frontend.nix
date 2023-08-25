@@ -5,13 +5,13 @@
 
 yarn2nix-moretea.mkYarnPackage rec {
   pname = "listmonk-frontend";
-  version = "2.2.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${version}";
-    sha256 = "sha256-dtIM0dkr8y+GbyCqrBlR5VRq6qMiZdmQyFvIoVY1eUg=";
+    sha256 = "sha256-gCnIblc83CmG1auvYYxqW/xBl6Oy1KHGkqSY/3yIm3I=";
   };
 
   packageJSON = ./package.json;

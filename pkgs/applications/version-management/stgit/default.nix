@@ -1,32 +1,48 @@
 { stdenv
 , lib
+, rustPlatform
 , fetchFromGitHub
+, pkg-config
 , installShellFiles
-, python3Packages
+, makeWrapper
 , asciidoc
 , docbook_xsl
 , docbook_xml_dtd_45
+, xmlto
+, curl
 , git
 , perl
-, xmlto
+, darwin
 }:
 
-python3Packages.buildPythonApplication rec {
+rustPlatform.buildRustPackage rec {
   pname = "stgit";
-  version = "1.5";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "sha256-TsJr2Riygz/DZrn6UZMPvq1tTfvl3dFEZZNq2wVj1Nw=";
+    sha256 = "sha256-pGGLY/Hu62dT3KP9GH9YmPg6hePDoPdijJtmap5gpEA=";
   };
+  cargoHash = "sha256-f0MQvCkFYR7ErbBDJ3n0r9ZetKfcWg9twhc4r4EpPS4=";
 
-  nativeBuildInputs = [ installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45 python3Packages.setuptools ];
+  nativeBuildInputs = [
+    pkg-config installShellFiles makeWrapper asciidoc xmlto docbook_xsl
+    docbook_xml_dtd_45 perl
+  ];
+  buildInputs = [ curl ];
 
-  format = "other";
+  nativeCheckInputs = [
+    git perl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.system_cmds darwin.libiconv
+  ];
 
-  nativeCheckInputs = [ git perl ];
+  patches = [
+    # Fixes tests, can be removed when stgit 2.3.1 is released
+    ./0001-fix-use-canonical-Message-ID-spelling.patch
+  ];
 
   postPatch = ''
     for f in Documentation/*.xsl; do
@@ -40,25 +56,28 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace Documentation/texi.xsl \
       --replace http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd \
                 ${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd
-
-    cat > stgit/_version.py <<EOF
-    __version__ = "${version}"
-    EOF
   '';
 
-  makeFlags = [
+  makeFlags = lib.strings.concatStringsSep " " [
     "prefix=${placeholder "out"}"
     "MAN_BASE_URL=${placeholder "out"}/share/man"
     "XMLTO_EXTRA=--skip-validation"
+    "PERL_PATH=${perl}/bin/perl"
   ];
 
-  buildFlags = [ "all" "doc" ];
+  buildPhase = ''
+    make all ${makeFlags}
+  '';
 
-  checkTarget = "test";
-  checkFlags = [ "PERL_PATH=${perl}/bin/perl" ];
+  checkPhase = ''
+    make test ${makeFlags}
+  '';
 
-  installTargets = [ "install" "install-doc" "install-html" ];
-  postInstall = ''
+  installPhase = ''
+    make install install-man install-html ${makeFlags}
+
+    wrapProgram $out/bin/stg --prefix PATH : ${lib.makeBinPath [ git ]}
+
     installShellCompletion --cmd stg \
       --fish completion/stg.fish \
       --bash completion/stgit.bash \

@@ -7,6 +7,9 @@
 }:
 
 let fhsEnv = {
+  # Many WINE games need 32bit
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
     bottles-unwrapped
     # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)

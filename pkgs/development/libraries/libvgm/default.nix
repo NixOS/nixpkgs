@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libvgm";
-  version = "unstable-2023-04-22";
+  version = "unstable-2023-08-14";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "libvgm";
-    rev = "669a7566a356393d4e5b1030a9f9cdd3486bb41b";
-    sha256 = "U/PO/YtS8bOb2yKk57UQKH4eRNysYC/hrmUR5YZyYlw=";
+    rev = "079c4e737e6a73b38ae20125521d7d9eafda28e9";
+    sha256 = "hmaGIf9AQOYqrpnmKAB9I2vO+EXrzvoRaQ6Epdygy4o=";
   };
 
   outputs = [

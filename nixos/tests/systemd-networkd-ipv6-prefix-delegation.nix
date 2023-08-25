@@ -67,14 +67,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             interfaces-config.interfaces = [ "eth1" ];
             subnet6 = [ {
               interface = "eth1";
-              subnet = "2001:DB8:F::/36";
+              subnet = "2001:DB8::/32";
               pd-pools = [ {
-                prefix = "2001:DB8:F::";
+                prefix = "2001:DB8:1000::";
                 prefix-len = 36;
                 delegated-len = 48;
               } ];
               pools = [ {
-                pool = "2001:DB8:0000:0000:FFFF::-2001:DB8:0000:0000:FFFF::FFFF";
+                pool = "2001:DB8:0000:0000::-2001:DB8:0FFF:FFFF::FFFF";
               } ];
             } ];
 

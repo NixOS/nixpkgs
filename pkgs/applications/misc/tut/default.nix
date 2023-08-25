@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/RasmusLindroth/tut";
     license = licenses.mit;
     maintainers = with maintainers; [ equirosa ];
-    platforms = platforms.unix;
   };
 }

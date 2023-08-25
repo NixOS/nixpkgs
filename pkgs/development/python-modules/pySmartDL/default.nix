@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "A Smart Download Manager for Python";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ WeebSorceress ];
+    maintainers = with maintainers; [ ];
   };
 }

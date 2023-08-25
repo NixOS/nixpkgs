@@ -5,22 +5,35 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "unstable-2023-05-19";
+  version = "unstable-2023-07-19";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "d867bf17e6d2f9a7c83c9a1ffafda5184a24c0e3";
-    sha256 = "sha256-W7/8/3FzwErPkRlfuyqajova6LRKarANPtc6L/z20CI=";
+    rev = "a446dea1bb492eac417de9a900fae7cdf94aeec0";
+    sha256 = "sha256-iZDaKCkDlp3O3IixWdXVykNRIxas+irG0dWAOU4wycI=";
   };
 
   postPatch = ''
     sed -i 's/==.*$//' requirements.txt
   '';
 
-  preBuild = ''
-    export SEARX_DEBUG="true";
-  '';
+  preBuild =
+    let
+      versionString = lib.concatStringsSep "." (builtins.tail (lib.splitString "-" version));
+      commitAbbrev = builtins.substring 0 8 src.rev;
+    in
+    ''
+      export SEARX_DEBUG="true";
+
+      cat > searx/version_frozen.py <<EOF
+      VERSION_STRING="${versionString}+${commitAbbrev}"
+      VERSION_TAG="${versionString}+${commitAbbrev}"
+      DOCKER_TAG="${versionString}-${commitAbbrev}"
+      GIT_URL="https://github.com/searxng/searxng"
+      GIT_BRANCH="master"
+      EOF
+    '';
 
   propagatedBuildInputs = with python3.pkgs; [
     babel
@@ -33,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     jinja2
     lxml
     pygments
+    pytomlpp
     pyyaml
     redis
     uvloop
@@ -50,6 +64,9 @@ python3.pkgs.buildPythonApplication rec {
     # Create a symlink for easier access to static data
     mkdir -p $out/share
     ln -s ../${python3.sitePackages}/searx/static $out/share/
+
+    # copy config schema for the limiter
+    cp searx/botdetection/limiter.toml $out/${python3.sitePackages}/searx/botdetection/limiter.toml
   '';
 
   meta = with lib; {

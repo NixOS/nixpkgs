@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
-, dnspython
 , deprecat
+, dnspython
 , fetchFromGitHub
 , loguru
 , passlib
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , toml
 }:
 
@@ -25,12 +26,25 @@ buildPythonPackage rec {
     hash = "sha256-vL/CQdYcOP356EyRToviWylP1EBtxmeov6qkhfQNZ2Y=";
   };
 
+  pythonRelaxDeps = [
+    "loguru"
+  ];
+
   postPatch = ''
+    # The line below is in the [build-system] section, which is invalid and
+    # rejected by PyPA's build tool. It belongs in [project] but upstream has
+    # had problems with putting that there (see comment in pyproject.toml).
+    sed -i '/requires-python/d' pyproject.toml
+
+    substituteInPlace pyproject.toml \
+      --replace '"poetry>=1.3.2",' ""
+
     patchShebangs tests
   '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

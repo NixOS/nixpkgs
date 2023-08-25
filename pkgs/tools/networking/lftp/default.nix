@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnutls, pkg-config, readline, zlib, libidn2, gmp, libiconv, libunistring, gettext }:
+{ lib, stdenv, fetchurl, openssl, pkg-config, readline, zlib, libidn2, gmp, libiconv, libunistring, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "lftp";
@@ -14,11 +14,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gnutls readline zlib libidn2 gmp libiconv libunistring gettext ];
+  buildInputs = [ openssl readline zlib libidn2 gmp libiconv libunistring gettext ];
 
   hardeningDisable = lib.optional stdenv.isDarwin "format";
 
   configureFlags = [
+    "--with-openssl"
     "--with-readline=${readline.dev}"
     "--with-zlib=${zlib.dev}"
     "--without-expat"

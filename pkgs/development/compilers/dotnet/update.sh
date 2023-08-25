@@ -2,7 +2,7 @@
 #!nix-shell -I nixpkgs=../../../../. -i bash -p curl jq nix gnused
 # shellcheck shell=bash
 
-set -euo pipefail
+set -Eeuo pipefail
 
 release () {
   local content="$1"
@@ -64,6 +64,11 @@ generate_package_list() {
         local url hash
         url="${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg"
         hash="$(nix-prefetch-url "$url")"
+        if [[ -z "$hash" ]]; then
+            echo "Failed to fetch hash for $url" >&2
+            exit 1
+        fi
+
         echo "      (fetchNuGet { pname = \"${pkg}\"; version = \"${version}\"; sha256 = \"${hash}\"; })"
     done
 }
@@ -241,6 +246,14 @@ sdk_packages () {
       "runtime.osx-arm64.Microsoft.NETCore.DotNetHost" \
       "runtime.osx-arm64.Microsoft.NETCore.DotNetHostPolicy" \
       "runtime.osx-arm64.Microsoft.NETCore.DotNetHostResolver" \
+      "Microsoft.NETCore.App.Crossgen2.linux-musl-arm" \
+      "Microsoft.NETCore.App.Crossgen2.linux-musl-arm64" \
+      "Microsoft.NETCore.App.Crossgen2.linux-musl-x64" \
+      "Microsoft.NETCore.App.Crossgen2.linux-arm" \
+      "Microsoft.NETCore.App.Crossgen2.linux-arm64" \
+      "Microsoft.NETCore.App.Crossgen2.linux-x64" \
+      "Microsoft.NETCore.App.Crossgen2.osx-x64" \
+      "Microsoft.NETCore.App.Crossgen2.osx-arm64"
     )
 
     # Packages that only apply to .NET 7 and up
@@ -319,6 +332,10 @@ Examples:
 
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
+
+    result=$(mktemp)
+    trap "rm -f $result" TERM INT EXIT
+
     echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
 # v$channel_version ($support_phase)
@@ -341,7 +358,9 @@ $(aspnetcore_packages "${aspnetcore_version}")
 $(sdk_packages "${runtime_version}")
     ];
   };
-}" > "./versions/${sem_version}.nix"
+}" > "${result}"
+
+    cp "${result}" "./versions/${sem_version}.nix"
     echo "Generated ./versions/${sem_version}.nix"
   done
 }

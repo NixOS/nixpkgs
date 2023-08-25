@@ -59,6 +59,7 @@ printf "Conversion done\n"
 
 printf "Will now do some regex substitution post-processing\n"
 sed -i -E "s|(.), |\1\", \"|g" yarn_v1.lock
+sed -i -E "s|npm:||g" yarn_v1.lock
 printf "Substituion done\n"
 
 printf "Will now add missing github packages back to the v1 yarn.lock file\n"

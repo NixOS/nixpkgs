@@ -9,6 +9,8 @@ let
 
   python3' = python310.override {
     packageOverrides = self: super: {
+      django = super.django_3;
+
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
         src = fetchPypi {
@@ -22,7 +24,7 @@ let
       alembic = super.alembic.overridePythonAttrs (lib.const {
         doCheck = false;
       });
-      flask_migrate = super.flask_migrate.overridePythonAttrs (oldAttrs: rec {
+      flask-migrate = super.flask-migrate.overridePythonAttrs (oldAttrs: rec {
         version = "2.7.0";
         src = fetchPypi {
           pname = "Flask-Migrate";
@@ -103,6 +105,7 @@ let
           inherit version;
           hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
         };
+        disabledTests = [ "test_bytes_args" ]; # https://github.com/pallets/click/commit/6e05e1fa1c2804
       });
       # Now requires `lingua` as check input that requires a newer `click`,
       # however `click-7` is needed by the older flask we need here. Since it's just
@@ -141,9 +144,6 @@ let
         sphinxHook = null;
         sphinx-better-theme = null;
       }).overridePythonAttrs dropDocOutput;
-      hypothesis = super.hypothesis.override {
-        enableDocumentation = false;
-      };
       pyjwt = (super.pyjwt.override {
         sphinxHook = null;
         sphinx-rtd-theme = null;
@@ -198,8 +198,8 @@ python3'.pkgs.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = with python3'.pkgs; [
-    cryptography pyrad pymysql python-dateutil flask-versioned flask_script
-    defusedxml croniter flask_migrate pyjwt configobj sqlsoup pillow
+    cryptography pyrad pymysql python-dateutil flask-versioned flask-script
+    defusedxml croniter flask-migrate pyjwt configobj sqlsoup pillow
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
     pydash ecdsa google-auth importlib-metadata argon2-cffi bcrypt segno

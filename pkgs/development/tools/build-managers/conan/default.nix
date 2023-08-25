@@ -19,6 +19,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-+ohUOQ9WBER/X0TDklf/qZCm9LhM1I1QRmED4FnkweM=";
   };
 
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     bottle
     colorama
@@ -39,6 +43,11 @@ python3.pkgs.buildPythonApplication rec {
     idna
     cryptography
     pyopenssl
+  ];
+
+  pythonRelaxDeps = [
+    # This can be removed once conan is updated to 2.0.7+
+    "PyYAML"
   ];
 
   nativeCheckInputs = [

@@ -1,58 +1,69 @@
 { lib
 , stdenv
-, buildPythonPackage
-, fetchPypi
-# install requirements
-, pycryptodome
-, yarl
-, flatdict
-, python-jose
 , aenum
 , aiohttp
+, buildPythonPackage
+, fetchPypi
+, flatdict
+, pycryptodome
+, pycryptodomex
 , pydash
-, xmltodict
-, pyyaml
-# test requirements
-, pytestCheckHook
-, pytest-recording
+, pyfakefs
 , pytest-asyncio
 , pytest-mock
-, pyfakefs
+, pytest-recording
+, pytestCheckHook
+, python-jose
+, pythonOlder
+, pyyaml
+, xmltodict
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.8.0";
+  version = "2.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yIVJoKX9b9Y7Ydl28twHxgPbUa58LJ12Oz3tvpU7CAc=";
+    hash = "sha256-kbzqriybzN/86vov3Q+kH2lj9plK1GzWPlc/Nc/nWF0=";
   };
 
   propagatedBuildInputs = [
-    pycryptodome
-    yarl
-    flatdict
-    python-jose
     aenum
     aiohttp
+    flatdict
+    pycryptodome
+    pycryptodomex
     pydash
-    xmltodict
+    python-jose
     pyyaml
+    xmltodict
+    yarl
   ];
 
   checkInputs = [
-    pytestCheckHook
+    pyfakefs
     pytest-asyncio
     pytest-mock
     pytest-recording
-    pyfakefs
+    pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/" ];
+  pytestFlagsArray = [
+    "tests/"
+  ];
 
   disabledTests = [
     "test_client_raise_exception"
+    # vcr.errors.CannotOverwriteExistingCassetteException: Can't overwrite existing cassette
+    "test_get_org_contact_user"
+    "test_update_org_contact_user"
+    "test_get_role_subscription"
+    "test_subscribe_unsubscribe"
   ];
 
   pythonImportsCheck = [
@@ -68,6 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for the Okta Management API";
     homepage = "https://github.com/okta/okta-sdk-python";
+    changelog = "https://github.com/okta/okta-sdk-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jbgosselin ];
   };

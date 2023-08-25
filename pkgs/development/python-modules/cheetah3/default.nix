@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "cheetah3";
-  version = "3.3.1";
+  version = "3.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "CheetahTemplate3";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-op8CwYISD2Gfsh0Olr8H07yvaT1maKyizb/IN9ZHwmQ=";
+    hash = "sha256-okQz1wM3k43okKcZDRgHAnn5ScL0Pe1OtUvDBScEamY=";
   };
 
   doCheck = false; # Circular dependency

@@ -70,7 +70,7 @@ buildPythonPackage rec {
     description = "Securely transfer data between computers";
     homepage = "https://github.com/magic-wormhole/magic-wormhole";
     license = licenses.mit;
-    maintainers = with maintainers; [ asymmetric SuperSandro2000 ];
+    maintainers = with maintainers; [ asymmetric ];
     mainProgram = "wormhole";
   };
 }

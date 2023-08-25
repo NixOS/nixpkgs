@@ -109,5 +109,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ psydvl shamilton ];
     platforms = platforms.linux;
+    mainProgram = "bottles";
   };
 }

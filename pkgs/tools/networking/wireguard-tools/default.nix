@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ makeWrapper ];
 

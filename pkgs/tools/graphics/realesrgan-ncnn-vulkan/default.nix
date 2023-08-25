@@ -3,7 +3,6 @@
 , fetchzip
 , fetchFromGitHub
 , cmake
-, spirv-headers
 , vulkan-headers
 , vulkan-loader
 , glslang
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-eLAIlOl1sUxijeVPFG+NscZGxDdtrQqVkMuxhegESHk=";
   };
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   models = fetchzip {
     # Choose the newst release from https://github.com/xinntao/Real-ESRGAN/releases to update

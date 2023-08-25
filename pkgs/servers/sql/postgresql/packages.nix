@@ -2,6 +2,8 @@ self: super: {
 
     age = super.callPackage ./ext/age.nix { };
 
+    apache_datasketches = super.callPackage ./ext/apache_datasketches.nix { };
+
     jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
@@ -45,6 +47,8 @@ self: super: {
     pg_cron = super.callPackage ./ext/pg_cron.nix { };
 
     pg_topn = super.callPackage ./ext/pg_topn.nix { };
+
+    pg_net = super.callPackage ./ext/pg_net.nix { };
 
     pgtap = super.callPackage ./ext/pgtap.nix { };
 

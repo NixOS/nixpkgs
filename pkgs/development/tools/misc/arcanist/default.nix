@@ -25,13 +25,13 @@ let makeArcWrapper = toolset: ''
 in
 stdenv.mkDerivation {
   pname = "arcanist";
-  version = "20220517";
+  version = "20230530";
 
   src = fetchFromGitHub {
     owner = "phacility";
     repo = "arcanist";
-    rev = "85c953ebe4a6fef332158fd757d97c5a58682d3a";
-    sha256 = "0x847fw74mzrbhzpgc4iqgvs6dsf4svwfa707dsbxi78fn2lxbl7";
+    rev = "e50d1bc4eabac9c37e3220e9f3fb8e37ae20b957";
+    hash = "sha256-u+HRsaCuAAyLrEihrZtLrdZ6NTVjPshieJATK3t5Fo4=";
   };
 
   patches = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Command line interface to Phabricator";
-    homepage = "http://phabricator.org";
+    homepage = "https://www.phacility.com/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];

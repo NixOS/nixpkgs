@@ -38,7 +38,7 @@
 , makeWrapper
 , ncurses5
 , nspr
-, nss
+, nss_latest
 , pciutils
 , pkgsi686Linux
 , ps
@@ -146,7 +146,7 @@ let
           libXfixes
           libGL
           nspr
-          nss
+          nss_latest
           systemd
 
           # For GTKLookAndFeel

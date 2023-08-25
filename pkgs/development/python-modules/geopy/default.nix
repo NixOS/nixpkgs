@@ -1,5 +1,5 @@
 { lib
-, async_generator
+, async-generator
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    async_generator
+    async-generator
     docutils
     pytestCheckHook
     pytz

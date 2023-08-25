@@ -3,7 +3,7 @@
 { lib }:
 let
   inherit (lib.strings) toInt;
-  inherit (lib.trivial) compare min;
+  inherit (lib.trivial) compare min id;
   inherit (lib.attrsets) mapAttrs;
 in
 rec {
@@ -180,6 +180,57 @@ rec {
       else if len != 1 then multiple
       else head found;
 
+  /* Find the first index in the list matching the specified
+     predicate or return `default` if no such element exists.
+
+     Type: findFirstIndex :: (a -> Bool) -> b -> [a] -> (Int | b)
+
+     Example:
+       findFirstIndex (x: x > 3) null [ 0 6 4 ]
+       => 1
+       findFirstIndex (x: x > 9) null [ 0 6 4 ]
+       => null
+  */
+  findFirstIndex =
+    # Predicate
+    pred:
+    # Default value to return
+    default:
+    # Input list
+    list:
+    let
+      # A naive recursive implementation would be much simpler, but
+      # would also overflow the evaluator stack. We use `foldl'` as a workaround
+      # because it reuses the same stack space, evaluating the function for one
+      # element after another. We can't return early, so this means that we
+      # sacrifice early cutoff, but that appears to be an acceptable cost. A
+      # clever scheme with "exponential search" is possible, but appears over-
+      # engineered for now. See https://github.com/NixOS/nixpkgs/pull/235267
+
+      # Invariant:
+      # - if index < 0 then el == elemAt list (- index - 1) and all elements before el didn't satisfy pred
+      # - if index >= 0 then pred (elemAt list index) and all elements before (elemAt list index) didn't satisfy pred
+      #
+      # We start with index -1 and the 0'th element of the list, which satisfies the invariant
+      resultIndex = foldl' (index: el:
+        if index < 0 then
+          # No match yet before the current index, we need to check the element
+          if pred el then
+            # We have a match! Turn it into the actual index to prevent future iterations from modifying it
+            - index - 1
+          else
+            # Still no match, update the index to the next element (we're counting down, so minus one)
+            index - 1
+        else
+          # There's already a match, propagate the index without evaluating anything
+          index
+      ) (-1) list;
+    in
+    if resultIndex < 0 then
+      default
+    else
+      resultIndex;
+
   /* Find the first element in the list matching the specified
      predicate or return `default` if no such element exists.
 
@@ -198,8 +249,13 @@ rec {
     default:
     # Input list
     list:
-    let found = filter pred list;
-    in if found == [] then default else head found;
+    let
+      index = findFirstIndex pred null list;
+    in
+    if index == null then
+      default
+    else
+      elemAt list index;
 
   /* Return true if function `pred` returns true for at least one
      element of `list`.
@@ -582,6 +638,40 @@ rec {
     # Input list
     list: sublist count (length list) list;
 
+  /* Whether the first list is a prefix of the second list.
+
+  Type: hasPrefix :: [a] -> [a] -> bool
+
+  Example:
+    hasPrefix [ 1 2 ] [ 1 2 3 4 ]
+    => true
+    hasPrefix [ 0 1 ] [ 1 2 3 4 ]
+    => false
+  */
+  hasPrefix =
+    list1:
+    list2:
+    take (length list1) list2 == list1;
+
+  /* Remove the first list as a prefix from the second list.
+  Error if the first list isn't a prefix of the second list.
+
+  Type: removePrefix :: [a] -> [a] -> [a]
+
+  Example:
+    removePrefix [ 1 2 ] [ 1 2 3 4 ]
+    => [ 3 4 ]
+    removePrefix [ 0 1 ] [ 1 2 3 4 ]
+    => <error>
+  */
+  removePrefix =
+    list1:
+    list2:
+    if hasPrefix list1 list2 then
+      drop (length list1) list2
+    else
+      throw "lib.lists.removePrefix: First argument is not a list prefix of the second argument";
+
   /* Return a list consisting of at most `count` elements of `list`,
      starting at index `start`.
 
@@ -606,6 +696,32 @@ rec {
       (if start >= len then 0
        else if start + count > len then len - start
        else count);
+
+  /* The common prefix of two lists.
+
+  Type: commonPrefix :: [a] -> [a] -> [a]
+
+  Example:
+    commonPrefix [ 1 2 3 4 5 6 ] [ 1 2 4 8 ]
+    => [ 1 2 ]
+    commonPrefix [ 1 2 3 ] [ 1 2 3 4 5 ]
+    => [ 1 2 3 ]
+    commonPrefix [ 1 2 3 ] [ 4 5 6 ]
+    => [ ]
+  */
+  commonPrefix =
+    list1:
+    list2:
+    let
+      # Zip the lists together into a list of booleans whether each element matches
+      matchings = zipListsWith (fst: snd: fst != snd) list1 list2;
+      # Find the first index where the elements don't match,
+      # which will then also be the length of the common prefix.
+      # If all elements match, we fall back to the length of the zipped list,
+      # which is the same as the length of the smaller list.
+      commonPrefixLength = findFirstIndex id (length matchings) matchings;
+    in
+    take commonPrefixLength list1;
 
   /* Return the last element of a list.
 

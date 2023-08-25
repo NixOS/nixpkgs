@@ -28,14 +28,14 @@ let
 in
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.3.8";
+  version = "0.3.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-x3MTKxXZgAT35o8pekGxSXhcr5MrrRPr86+3Lab4qn8=";
+    sha256 = "sha256-4UBSH4qRBgsy+VO9XzosWedM65R1lTo9ml2C95T9OAA=";
   };
 
   nativeBuildInputs = [

@@ -34,7 +34,7 @@
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
 , withCrystalhd ? withFullDeps
-, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch))
+, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
@@ -58,8 +58,8 @@
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
-, withNvdec ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
-, withNvenc ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
+, withNvdec ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
+, withNvenc ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
@@ -126,7 +126,6 @@
 , withMultithread ? true # Multithreading via pthreads/win32 threads
 , withNetwork ? withHeadlessDeps # Network support
 , withPixelutils ? withHeadlessDeps # Pixel utils in libavutil
-, withLTO ? false # build with link-time optimization
 /*
  *  Program options
  */
@@ -331,7 +330,7 @@ assert buildPostproc -> buildAvutil;
 assert buildSwscale -> buildAvutil;
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ffmpeg" + (if ffmpegVariant == "small" then "" else "-${ffmpegVariant}");
+  pname = "ffmpeg" + (optionalString (ffmpegVariant != "small") "-${ffmpegVariant}");
   inherit version;
 
   src = fetchgit {
@@ -384,7 +383,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     (enableFeature withSmallBuild "small")
     (enableFeature withRuntimeCPUDetection "runtime-cpudetect")
-    (enableFeature withLTO "lto")
     (enableFeature withGrayscale "gray")
     (enableFeature withSwscaleAlpha "swscale-alpha")
     (enableFeature withHardcodedTables "hardcoded-tables")
@@ -544,9 +542,10 @@ stdenv.mkDerivation (finalAttrs: {
   # outputs where we don't want them. Patch the generated config.h to remove all
   # such references except for data.
   postConfigure = let
-    toStrip = lib.remove "data" finalAttrs.outputs; # We want to keep references to the data dir.
+    toStrip = map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
+      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc;
   in
-    "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${placeholder o}") toStrip)} config.h";
+    "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
 
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ];
 

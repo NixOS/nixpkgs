@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.10.3";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-AqIPdKdNKLnAHIlqgs8zzm7j+iwNvDFWslvp8RjQPnI=";
+    hash = "sha256-AGHPczGh4z0bla034FGSTmaRgMIfBNYFBUPevJ9LHqI=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   # AOT native-comp, mostly copied from pkgs/build-support/emacs/generic.nix
-  postInstall = lib.optionalString (emacs.nativeComp or false) ''
+  postInstall = lib.optionalString (emacs.withNativeCompilation or false) ''
     mkdir -p $out/share/emacs/native-lisp
     export EMACSLOADPATH=$out/share/emacs/site-lisp/mu4e:
     export EMACSNATIVELOADPATH=$out/share/emacs/native-lisp:
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
     maintainers = with maintainers; [ antono chvp peterhoeg ];
+    mainProgram = "mu";
     platforms = platforms.unix;
   };
 }

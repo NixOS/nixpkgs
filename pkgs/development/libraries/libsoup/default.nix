@@ -99,5 +99,9 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/libsoup";
     license = lib.licenses.lgpl2Plus;
     inherit (glib.meta) maintainers platforms;
+    pkgConfigModules = [
+      "libsoup-2.4"
+      "libsoup-gnome-2.4"
+    ];
   };
 }

@@ -47,45 +47,34 @@ self: super: {
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
+
+  # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
+  Cabal-syntax = self.Cabal-syntax_3_6_0_0;
+  # These core package only exist for GHC >= 9.4. The best we can do is feign
+  # their existence to callPackages, but their is no shim for lower GHC versions.
+  system-cxx-std-lib = null;
 
   # Jailbreaks & Version Updates
 
-  # This `doJailbreak` can be removed once the following PR is released to Hackage:
-  # https://github.com/thsutton/aeson-diff/pull/58
-  aeson-diff = doJailbreak super.aeson-diff;
+  # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  hashable = addBuildDepends [
+    self.data-array-byte
+    self.base-orphans
+  ] super.hashable;
 
-  async = doJailbreak super.async;
-  data-fix = doJailbreak super.data-fix;
-  dec = doJailbreak super.dec;
-  ed25519 = doJailbreak super.ed25519;
-  hackage-security = doJailbreak super.hackage-security;
-  hashable =
-    pkgs.lib.pipe
-      super.hashable
-      [ (overrideCabal (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; }))
-        doJailbreak
-        dontCheck
-        (addBuildDepend self.base-orphans)
-      ];
   hashable-time = doJailbreak super.hashable-time;
-  HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
-  integer-logarithms = overrideCabal (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; }) (doJailbreak super.integer-logarithms);
-  lukko = doJailbreak super.lukko;
-  parallel = doJailbreak super.parallel;
-  primitive = doJailbreak (dontCheck super.primitive);
-  regex-posix = doJailbreak super.regex-posix;
-  resolv = doJailbreak super.resolv;
-  singleton-bool = doJailbreak super.singleton-bool;
-  split = doJailbreak super.split;
-  tar = doJailbreak super.tar;
-  time-compat = doJailbreak super.time-compat;
   tuple = addBuildDepend self.base-orphans super.tuple;
-  vector-binary-instances = doJailbreak super.vector-binary-instances;
   vector-th-unbox = doJailbreak super.vector-th-unbox;
-  zlib = doJailbreak super.zlib;
-  # 2021-11-08: Fixed in autoapply-0.4.2
-  autoapply = doJailbreak super.autoapply;
+
+  ormolu = self.ormolu_0_5_2_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  };
+
+  fourmolu = self.fourmolu_0_10_1_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  };
 
   doctest = dontCheck super.doctest;
   # Apply patches from head.hackage.
@@ -106,6 +95,7 @@ self: super: {
     # Needed for modern ormolu and fourmolu.
     # Apply this here and not in common, because other ghc versions offer different Cabal versions.
     Cabal = lself.Cabal_3_6_3_0;
+    hls-overloaded-record-dot-plugin = null;
   }));
 
   # Needs to use ghc-lib due to incompatible GHC
@@ -122,16 +112,6 @@ self: super: {
     hls-graph hls-plugin-api hls-refactor-plugin hyphenation lens lsp megaparsec
     parser-combinators prettyprinter refinery retrie syb unagi-chan unordered-containers
   ]) super.hls-tactics-plugin);
-
-  # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
-  unordered-containers = dontCheck super.unordered-containers;
-
-  # The test suite seems pretty broken.
-  base64-bytestring = dontCheck super.base64-bytestring;
-
-  # GHC 9.0.x doesn't like `import Spec (main)` in Main.hs
-  # https://github.com/snoyberg/mono-traversable/issues/192
-  mono-traversable = dontCheck super.mono-traversable;
 
   # Test suite sometimes segfaults with GHC 9.0.1 and 9.0.2
   # https://github.com/ekmett/reflection/issues/51
@@ -162,8 +142,14 @@ self: super: {
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
     super.inline-c-cpp;
 
-  # 2022-05-31: weeder 2.3.0 requires GHC 9.2
+  # 2022-05-31: weeder 2.4.* requires GHC 9.2
   weeder = doDistribute self.weeder_2_3_1;
+  # Unnecessarily strict upper bound on lens
+  weeder_2_3_1 = doJailbreak (super.weeder_2_3_1.override {
+    # weeder < 2.6 only supports algebraic-graphs < 0.7
+    # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
+    algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
+  });
 
   # Restrictive upper bound on base and containers
   sv2v = doJailbreak super.sv2v;
@@ -181,4 +167,7 @@ self: super: {
 
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
+
+  # Requires GHC < 9.4
+  ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
 }

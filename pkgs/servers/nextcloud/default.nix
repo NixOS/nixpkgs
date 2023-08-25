@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests
+, nextcloud27Packages
+, nextcloud26Packages
+, nextcloud25Packages
+}:
 
 let
   generic = {
-    version, sha256,
-    eol ? false, extraVulnerabilities ? []
+    version, sha256
+  , eol ? false, extraVulnerabilities ? []
+  , packages
   }: let
     major = lib.versions.major version;
   in stdenv.mkDerivation rec {
@@ -18,7 +23,10 @@ let
     # This patch is only necessary for NC version <26.
     patches = lib.optional (lib.versionOlder major "26") (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch");
 
-    passthru.tests = nixosTests.nextcloud;
+    passthru = {
+      tests = nixosTests.nextcloud;
+      inherit packages;
+    };
 
     installPhase = ''
       runHook preInstall
@@ -52,13 +60,21 @@ in {
   '';
 
   nextcloud25 = generic {
-    version = "25.0.6";
-    sha256 = "sha256-fYtO3CZ5oNpaIs+S+emMrxqYNlck0AC43fxdiomsjDg=";
+    version = "25.0.10";
+    sha256 = "sha256-alvh0fWESSS5KbfiKI1gaoahisDWnfT/bUhsSEEXfQI=";
+    packages = nextcloud25Packages;
   };
 
   nextcloud26 = generic {
-    version = "26.0.2";
-    sha256 = "sha256-89sOxeCq/3wIjrNPdS1315kTvGeE4PxHqEzaoo5WejM=";
+    version = "26.0.5";
+    sha256 = "sha256-nhq0aAY4T1hUZdKJY66ZSlirCSgPQet8YJpciwJw1b4=";
+    packages = nextcloud26Packages;
+  };
+
+  nextcloud27 = generic {
+    version = "27.0.2";
+    sha256 = "sha256-ei3OpDqjuPswM0fv2kxvN3M8yhE8juFt2fDl+2jHIS8=";
+    packages = nextcloud27Packages;
   };
 
   # tip: get the sha with:

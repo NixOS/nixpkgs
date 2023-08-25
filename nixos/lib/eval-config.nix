@@ -31,7 +31,7 @@ evalConfigArgs@
 , prefix ? []
 , lib ? import ../../lib
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                 in if e == "" then [] else [(import e)]
+                 in lib.optional (e != "") (import e)
 }:
 
 let pkgs_ = pkgs;
@@ -109,8 +109,10 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
+  withExtraArgs = nixosSystem: nixosSystem // {
+    inherit extraArgs;
+    inherit (nixosSystem._module.args) pkgs;
+    extendModules = args: withExtraArgs (nixosSystem.extendModules args);
+  };
 in
-withWarnings nixosWithUserModules // {
-  inherit extraArgs;
-  inherit (nixosWithUserModules._module.args) pkgs;
-}
+withWarnings (withExtraArgs nixosWithUserModules)

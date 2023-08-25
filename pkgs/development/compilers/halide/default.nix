@@ -1,10 +1,13 @@
-{ llvmPackages
+{ stdenv
+, llvmPackages
 , lib
 , fetchFromGitHub
 , cmake
+, libffi
 , libpng
 , libjpeg
 , mesa
+, libGL
 , eigen
 , openblas
 , blas
@@ -13,7 +16,7 @@
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
-llvmPackages.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "halide";
   version = "15.0.1";
 
@@ -24,7 +27,15 @@ llvmPackages.stdenv.mkDerivation rec {
     sha256 = "sha256-mnZ6QMqDr48bH2W+andGZj2EhajXKApjuW6B50xtzx0=";
   };
 
-  cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" "-DTARGET_WEBASSEMBLY=OFF" ];
+  cmakeFlags = [
+    "-DWARNINGS_AS_ERRORS=OFF"
+    "-DWITH_PYTHON_BINDINGS=OFF"
+    "-DTARGET_WEBASSEMBLY=OFF"
+    # Disable performance tests since they may fail on busy machines
+    "-DWITH_TEST_PERFORMANCE=OFF"
+  ];
+
+  doCheck = true;
 
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
@@ -34,11 +45,14 @@ llvmPackages.stdenv.mkDerivation rec {
     llvmPackages.lld
     llvmPackages.openmp
     llvmPackages.libclang
+    libffi
     libpng
     libjpeg
-    mesa
     eigen
     openblas
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    mesa
+    libGL
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -48,6 +62,6 @@ llvmPackages.stdenv.mkDerivation rec {
     homepage = "https://halide-lang.org";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ck3d atila ];
+    maintainers = with maintainers; [ ck3d atila twesterhout ];
   };
 }

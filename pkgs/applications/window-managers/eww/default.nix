@@ -2,8 +2,9 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, wrapGAppsHook
 , gtk3
-, gdk-pixbuf
+, librsvg
 , withWayland ? false
 , gtk-layer-shell
 , stdenv
@@ -11,25 +12,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
-  version = "0.4.0";
+  version = "unstable-2023-06-10";
 
   src = fetchFromGitHub {
     owner = "elkowar";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-wzgWx3QxZvCAzRKLFmo/ru8hsIQsEDNeb4cPdlEyLxE=";
+    repo = "eww";
+    rev = "25e50eda46379bccd8a7887c18ee35833e0460e8";
+    hash = "sha256-8e6gHSg6FDp6nU5v89D44Tqb1lR5aQpS0lXOVqzoUS4=";
   };
 
-  cargoSha256 = "sha256-9RfYDF31wFYylhZv53PJpZofyCdMiUiH/nhRB2Ni/Is=";
+  cargoHash = "sha256-dC7yVJdR7mO0n+sxWwigM1Q4tbDv5ZuOINHHlUIPdA0=";
 
-  cargoPatches = [ ./Cargo.lock.patch ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gtk3 librsvg ] ++ lib.optional withWayland gtk-layer-shell;
 
-  buildInputs = [ gtk3 gdk-pixbuf ] ++ lib.optional withWayland gtk-layer-shell;
-
-  buildNoDefaultFeatures = withWayland;
-  buildFeatures = lib.optional withWayland "wayland";
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    (if withWayland then "wayland" else "x11")
+  ];
 
   cargoBuildFlags = [ "--bin" "eww" ];
 
@@ -43,6 +44,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/elkowar/eww";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda lom ];
+    mainProgram = "eww";
     broken = stdenv.isDarwin;
   };
 }

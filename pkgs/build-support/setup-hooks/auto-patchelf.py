@@ -109,7 +109,14 @@ def osabi_are_compatible(wanted: str, got: str) -> bool:
 
 
 def glob(path: Path, pattern: str, recursive: bool) -> Iterator[Path]:
-    return path.rglob(pattern) if recursive else path.glob(pattern)
+    if path.is_dir():
+        return path.rglob(pattern) if recursive else path.glob(pattern)
+    else:
+        # path.glob won't return anything if the path is not a directory.
+        # We extend that behavior by matching the file name against the pattern.
+        # This allows to pass single files instead of dirs to auto_patchelf,
+        # for greater control on the files to consider.
+        return [path] if path.match(pattern) else []
 
 
 cached_paths: Set[Path] = set()
@@ -305,16 +312,21 @@ def main() -> None:
         "--no-recurse",
         dest="recursive",
         action="store_false",
-        help="Patch only the provided paths, and ignore their children")
+        help="Disable the recursive traversal of paths to patch.")
     parser.add_argument(
         "--paths", nargs="*", type=Path,
-        help="Paths whose content needs to be patched.")
+        help="Paths whose content needs to be patched."
+             " Single files and directories are accepted."
+             " Directories are traversed recursively by default.")
     parser.add_argument(
         "--libs", nargs="*", type=Path,
-        help="Paths where libraries are searched for.")
+        help="Paths where libraries are searched for."
+             " Single files and directories are accepted."
+             " Directories are not searched recursively.")
     parser.add_argument(
         "--runtime-dependencies", nargs="*", type=Path,
-        help="Paths to prepend to the runtime path of executable binaries.")
+        help="Paths to prepend to the runtime path of executable binaries."
+             " Subject to deduplication, which may imply some reordering.")
     parser.add_argument(
         "--append-rpaths",
         nargs="*",

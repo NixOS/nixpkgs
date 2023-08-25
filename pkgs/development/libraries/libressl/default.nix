@@ -62,7 +62,7 @@ let
       ''}
     '';
 
-    doCheck = !stdenv.hostPlatform.isPower64;
+    doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV);
     preCheck = ''
       export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
       export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
@@ -91,29 +91,13 @@ let
   };
 
 in {
-  libressl_3_4 = generic {
-    version = "3.4.3";
-    hash = "sha256-/4i//jVIGLPM9UXjyv5FTFAxx6dyFwdPUzJx1jw38I0=";
-    knownVulnerabilities = [ "Support ended 2022-10-14." ];
-    patches = [
-      (fetchpatch {
-        # https://marc.info/?l=libressl&m=167582148932407&w=2
-        name = "backport-type-confusion-fix.patch";
-        url = "https://raw.githubusercontent.com/libressl/portable/30dc760ed1d7c70766b135500950d8ca9d17b13a/patches/x509_genn.c.diff";
-        sha256 = "sha256-N9jsOueqposDWZwaR+n/v/cHgNiZbZ644d8/wKjN2/M=";
-        stripLen = 2;
-        extraPrefix = "crypto/";
-      })
-    ];
-  };
-
   libressl_3_6 = generic {
-    version = "3.6.2";
-    hash = "sha256-S+gP/wc3Rs9QtKjlur4nlayumMaxMqngJRm0Rd+/0DM=";
+    version = "3.6.3";
+    hash = "sha256-h7G7426e7I0K5fBMg9NrLFsOWBeEx+sIFwJe0p6t6jc=";
   };
 
   libressl_3_7 = generic {
-    version = "3.7.2";
-    hash = "sha256-sGqlOP78nGszxNtJMaCaX1LZ0jVyGa/L/32T/hLr9vc=";
+    version = "3.7.3";
+    hash = "sha256-eUjIVqkMglvXJotvhWdKjc0lS65C4iF4GyTj+NwzXbM=";
   };
 }

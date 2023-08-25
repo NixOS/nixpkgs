@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Enum field for Marshmallow";
     homepage = "https://github.com/justanr/marshmallow_enum";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

@@ -11,7 +11,6 @@
 
 # dependencies
 , django
-, django_compat
 
 # tests
 , pytest-django
@@ -54,7 +53,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
-    django_compat
   ];
 
   nativeCheckInputs = [

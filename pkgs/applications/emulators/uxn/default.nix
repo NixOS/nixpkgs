@@ -2,27 +2,37 @@
 , stdenv
 , fetchFromSourcehut
 , SDL2
+, unstableGitUpdater
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "unstable-2022-10-22";
+  version = "unstable-2023-08-10";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "1b2049e238df96f32335edf1c6db35bd09f8b42d";
-    hash = "sha256-lwms+qUelfpTC+i2m5b3dW7ww9298YMPFdPVsFrwcDQ=";
+    rev = "a394dcb999525ac56ea37d0563d35849964b6d6a";
+    hash = "sha256-3Q8460pkoATKCEqfa+OfpQ4Lp18Ro5i84s88pkz+uzU=";
   };
+
+  outputs = [ "out" "projects" ];
+
+  nativeBuildInputs = [
+    SDL2
+  ];
 
   buildInputs = [
     SDL2
   ];
 
-  dontConfigure = true;
+  strictDeps = true;
 
   postPatch = ''
-     sed -i -e 's|UXNEMU_LDFLAGS="$(brew.*$|UXNEMU_LDFLAGS="$(sdl2-config --cflags --libs)"|' build.sh
+    patchShebangs build.sh
+    substituteInPlace build.sh \
+      --replace "-L/usr/local/lib " "" \
+      --replace "\$(brew --prefix)/lib/libSDL2.a " ""
   '';
 
   buildPhase = ''
@@ -33,22 +43,31 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
+  # ./build.sh --install is meant to install in $HOME, therefore not useful for
+  # package maintainers
   installPhase = ''
     runHook preInstall
 
-    install -d $out/bin/ $out/share/uxn/
-
+    install -d $out/bin/
     cp bin/uxnasm bin/uxncli bin/uxnemu $out/bin/
-    cp -r projects $out/share/uxn/
+    install -d $projects/share/uxn/
+    cp -r projects $projects/share/uxn/
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     description = "An assembler and emulator for the Uxn stack machine";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ AndersonTorres kototama ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    mainProgram = "uxnemu";
+    inherit (SDL2.meta) platforms;
+    # ofborg complains about an error trying to link inexistent SDL2 library
+    # For full logs, run:
+    # 'nix log /nix/store/bmyhh0lpifl9swvkpflqldv43vcrgci1-uxn-unstable-2023-08-10.drv'.
+    broken = stdenv.isDarwin;
   };
-}
+})

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    # Make sure Jack is avalable in $PATH for tetraproc
+    # Make sure Jack is available in $PATH for tetraproc
     wrapProgram $out/bin/tetraproc --prefix PATH : "${jack2}/bin"
   '';
 

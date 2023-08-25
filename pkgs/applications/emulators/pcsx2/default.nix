@@ -1,89 +1,116 @@
-{ alsa-lib
-, cmake
+{ cmake
 , fetchFromGitHub
-, fmt
-, gettext
-, glib
-, gtk3
-, harfbuzz
 , lib
+, llvmPackages_16
+, cubeb
+, curl
+, ffmpeg
+, fmt_8
+, gettext
+, harfbuzz
 , libaio
+, libbacktrace
 , libpcap
-, libpng
-, libpulseaudio
 , libsamplerate
-, libXdmcp
-, openssl
-, pcre
-, perl
+, libXrandr
+, libzip
 , pkg-config
-, portaudio
+, qtbase
+, qtsvg
+, qttools
+, qttranslations
+, qtwayland
+, rapidyaml
 , SDL2
 , soundtouch
-, stdenv
-, udev
+, strip-nondeterminism
 , vulkan-headers
 , vulkan-loader
-, wrapGAppsHook
-, wxGTK
-, zlib
 , wayland
+, wrapQtAppsHook
+, xz
+, zip
 }:
 
-stdenv.mkDerivation rec {
+let
+  # The pre-zipped files in releases don't have a versioned link, we need to zip them ourselves
+  pcsx2_patches = fetchFromGitHub {
+    owner = "PCSX2";
+    repo = "pcsx2_patches";
+    rev = "c09d842168689aeba88b656e3e0a042128673a7c";
+    sha256 = "sha256-h1jqv3a3Ib/4C7toZpSlVB1VFNNF1MrrUxttqKJL794=";
+  };
+in
+llvmPackages_16.stdenv.mkDerivation rec {
   pname = "pcsx2";
-  version = "1.7.3331";
-  # nixpkgs-update: no auto update
+  version = "1.7.4658";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${version}";
-    hash = "sha256-0RcmBMxKj/gnkNEjn2AUSSO1DzyNSf1lOZWPSUq6764=";
+    sha256 = "sha256-5y7CYFWgNh9oCBuTITvw7Rn4sC6MbMczVMAwtWFkn9A=";
   };
 
   cmakeFlags = [
     "-DDISABLE_ADVANCE_SIMD=TRUE"
-    "-DDISABLE_PCSX2_WRAPPER=TRUE"
-    "-DPACKAGE_MODE=TRUE"
-    "-DWAYLAND_API=TRUE"
-    "-DXDG_STD=TRUE"
-    "-DUSE_VULKAN=TRUE"
+    "-DUSE_SYSTEM_LIBS=ON"
+    "-DUSE_LINKED_FFMPEG=ON"
+    "-DDISABLE_BUILD_DATE=TRUE"
   ];
 
-  nativeBuildInputs = [ cmake perl pkg-config vulkan-headers wrapGAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    strip-nondeterminism
+    wrapQtAppsHook
+    zip
+  ];
 
   buildInputs = [
-    alsa-lib
-    fmt
+    curl
+    ffmpeg
+    fmt_8
     gettext
-    glib
-    gtk3
     harfbuzz
     libaio
+    libbacktrace
     libpcap
-    libpng
-    libpulseaudio
     libsamplerate
-    libXdmcp
-    openssl
-    pcre
-    portaudio
+    libXrandr
+    libzip
+    qtbase
+    qtsvg
+    qttools
+    qttranslations
+    qtwayland
+    rapidyaml
     SDL2
     soundtouch
-    udev
+    vulkan-headers
     vulkan-loader
     wayland
-    wxGTK
-    zlib
-  ];
+    xz
+  ]
+  ++ cubeb.passthru.backendLibs;
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
-    )
+  installPhase = ''
+    mkdir -p $out/bin
+    cp -a bin/pcsx2-qt bin/resources $out/bin/
+
+    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
+    install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
+
+    zip -jq $out/bin/resources/patches.zip ${pcsx2_patches}/patches/*
+    strip-nondeterminism $out/bin/resources/patches.zip
   '';
+
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([
+      vulkan-loader
+    ] ++ cubeb.passthru.backendLibs)}"
+  ];
 
   meta = with lib; {
     description = "Playstation 2 emulator";
@@ -95,13 +122,9 @@ stdenv.mkDerivation rec {
       PC, with many additional features and benefits.
     '';
     homepage = "https://pcsx2.net";
+    license = with licenses; [ gpl3 lgpl3 ];
     maintainers = with maintainers; [ hrdinka govanify ];
-
-    # PCSX2's source code is released under LGPLv3+. It However ships
-    # additional data files and code that are licensed differently.
-    # This might be solved in future, for now we should stick with
-    # license.free
-    license = licenses.free;
+    mainProgram = "pcsx2-qt";
     platforms = platforms.x86_64;
   };
 }

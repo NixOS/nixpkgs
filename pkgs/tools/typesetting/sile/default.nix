@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.14.9";
+  version = "0.14.10";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0528835iir2ws14fwb7w4dqs3wlzzcv5arjxs8v13drb194rlwcs";
+    sha256 = "05jqr9lqy33zgi1wb0gn3j9w78sswznwbpaaz8i3jvrs1l1wd2i0";
   };
 
   configureFlags = [
@@ -108,8 +108,14 @@ stdenv.mkDerivation rec {
       --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    for f in "$out"/bin/*; do
+      if isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
+  '';
 
   outputs = [ "out" "doc" "man" "dev" ];
 

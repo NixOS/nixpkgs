@@ -1,9 +1,9 @@
-self: super: with self;
+self: dontUse: with self;
 
 let
-  pythonInterpreter = super.python.pythonForBuild.interpreter;
-  pythonSitePackages = super.python.sitePackages;
-  pythonCheckInterpreter = super.python.interpreter;
+  pythonInterpreter = python.pythonForBuild.interpreter;
+  pythonSitePackages = python.sitePackages;
+  pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in {
   makePythonHook = args: pkgs.makeSetupHook ({passthru.provides.setupHook = true; } // args);
@@ -62,6 +62,16 @@ in {
       };
     } ./pip-build-hook.sh) {};
 
+  pypaBuildHook = callPackage ({ makePythonHook, build, wheel }:
+    makePythonHook {
+      name = "pypa-build-hook.sh";
+      propagatedBuildInputs = [ build wheel ];
+      substitutions = {
+        inherit pythonInterpreter;
+      };
+    } ./pypa-build-hook.sh) {};
+
+
   pipInstallHook = callPackage ({ makePythonHook, pip }:
     makePythonHook {
       name = "pip-install-hook";
@@ -97,11 +107,12 @@ in {
       };
     } ./python-imports-check-hook.sh) {};
 
-  pythonNamespacesHook = callPackage ({ makePythonHook, findutils }:
+  pythonNamespacesHook = callPackage ({ makePythonHook, buildPackages }:
     makePythonHook {
       name = "python-namespaces-hook.sh";
       substitutions = {
-        inherit pythonSitePackages findutils;
+        inherit pythonSitePackages;
+        inherit (buildPackages) findutils;
       };
     } ./python-namespaces-hook.sh) {};
 
@@ -159,6 +170,20 @@ in {
         inherit pythonCheckInterpreter setuppy;
       };
     } ./setuptools-check-hook.sh) {};
+
+    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust, rust }:
+      makePythonHook {
+        name = "setuptools-rust-setup-hook";
+        propagatedBuildInputs = [ setuptools-rust ];
+        substitutions = {
+          pyLibDir = "${python}/lib/${python.libPrefix}";
+          cargoBuildTarget = rust.toRustTargetSpec stdenv.hostPlatform;
+          cargoLinkerVar = lib.toUpper (
+              builtins.replaceStrings ["-"] ["_"] (
+                rust.toRustTarget stdenv.hostPlatform));
+          targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+        };
+      } ./setuptools-rust-hook.sh) {};
 
   unittestCheckHook = callPackage ({ makePythonHook }:
     makePythonHook {

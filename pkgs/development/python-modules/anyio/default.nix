@@ -3,38 +3,44 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+
+# build-system
 , setuptools
 , setuptools-scm
+
+# dependencies
+, exceptiongroup
 , idna
 , sniffio
-, typing-extensions
-, curio
+
+# optionals
+, trio
+
+# tests
 , hypothesis
-, mock
+, psutil
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
-, trio
 , trustme
 , uvloop
 }:
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.6.2";
+  version = "3.7.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    hash = "sha256-bootaulvx9zmobQGDirsMz5uxuLeCD9ggAvYkPaKnWo=";
+    hash = "sha256-uXPp2ycYl3T/ybZihDchImC/Yi4qgHI37ZeA+I6dg4c=";
   };
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
-  '';
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -44,50 +50,51 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     idna
     sniffio
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
   ];
+
+  passthru.optional-dependencies = {
+    trio = [
+      trio
+    ];
+  };
 
   # trustme uses pyopenssl
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   nativeCheckInputs = [
-    curio
     hypothesis
+    psutil
     pytest-mock
     pytest-xdist
     pytestCheckHook
-    trio
     trustme
+  ] ++ lib.optionals (pythonOlder "3.12") [
     uvloop
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    mock
-  ];
+  ] ++ passthru.optional-dependencies.trio;
 
   pytestFlagsArray = [
     "-W" "ignore::trio.TrioDeprecationWarning"
+    "-m" "'not network'"
   ];
 
   disabledTests = [
-    # block devices access
-    "test_is_block_device"
     # INTERNALERROR> AttributeError: 'NonBaseMultiError' object has no attribute '_exceptions'. Did you mean: 'exceptions'?
     "test_exception_group_children"
     "test_exception_group_host"
     "test_exception_group_filtering"
-    # regression in python 3.11.3 and 3.10.11
-    # https://github.com/agronholm/anyio/issues/550
-    "TestTLSStream"
-    "TestTLSListener"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
+    "test_is_block_device"
   ];
 
   disabledTestPaths = [
     # lots of DNS lookups
     "tests/test_sockets.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin sandboxing limitations
-    "tests/streams/test_tls.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "anyio" ];
 

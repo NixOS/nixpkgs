@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.67";
+  version = "1.69";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    sha256 = "sha256-v/yGHWd/hhE2jDdAQhyQbZOuHSS0FSG4WlVe8Oc6tMc=";
+    sha256 = "sha256-tm0yTh46UKnsjH9hv3cMW0YL2x3OTRL+14x4c7w124U=";
   };
 
   # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)

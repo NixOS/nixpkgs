@@ -1,4 +1,4 @@
-{ lib, buildNimPackage, fetchFromGitHub }:
+{ lib, buildNimPackage, fetchFromGitHub, illwill }:
 
 buildNimPackage rec {
   pname = "illwillwidgets";
@@ -10,6 +10,9 @@ buildNimPackage rec {
     rev = "04f507cfd651df430b1421403b3a70cb061c4624";
     hash = "sha256-YVNdgs8jquJ58qbcyNMMJt+hJYcvahYpkSrDBbO4ILU=";
   };
+
+  propagatedBuildInputs = [ illwill ];
+  doCheck = false;
 
   meta = with lib;
     src.meta // {

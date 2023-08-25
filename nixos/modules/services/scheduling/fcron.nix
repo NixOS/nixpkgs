@@ -6,7 +6,7 @@ let
 
   cfg = config.services.fcron;
 
-  queuelen = if cfg.queuelen == null then "" else "-q ${toString cfg.queuelen}";
+  queuelen = optionalString (cfg.queuelen != null) "-q ${toString cfg.queuelen}";
 
   # Duplicate code, also found in cron.nix. Needs deduplication.
   systemCronJobs =

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "dvc-s3";
-  version = "2.22.0";
+  version = "2.23.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-19j/JD8KZEQKaj55HYEucHwh/LUJ+88PPFEqAWov2Gg=";
+    hash = "sha256-HyhZj1sN70o1CTNCiroGKjaMk7tBGqPG2PRsrnm1uVc=";
   };
 
   # Prevent circular dependency

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-logging";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zTVOt3175ruIHatHTemOAt9VF4pvJn/fQIvm/DXXw9M=";
+    hash = "sha256-e6ZCsdEstzxMjaJdubslQ4Lchr3FmBCdtTZ0xVsCl14=";
   };
 
   propagatedBuildInputs = [

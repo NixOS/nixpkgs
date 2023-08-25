@@ -13,15 +13,15 @@
 , olm
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "quaternion";
-  version = "0.0.95.81";
+  version = "0.0.96-beta4";
 
   src = fetchFromGitHub {
-    owner = "QMatrixClient";
+    owner = "quotient-im";
     repo = "Quaternion";
-    rev = "5f639d8c84ed1475057b2cb3f7d0cb0abe77203b";
-    hash = "sha256-/1fich97oqSSDpfOjaYghYzHfu3MDrh77nanbIN/v/w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yItl31Ze48lRIIey+FlRLMVAkg4mHu8G1sFOceHvTJw=";
   };
 
   buildInputs = [
@@ -35,6 +35,10 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+
+  cmakeFlags = [
+    "-DBUILD_WITH_QT6=OFF"
+  ];
 
   postInstall =
     if stdenv.isDarwin then ''

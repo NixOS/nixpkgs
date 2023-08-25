@@ -33,9 +33,14 @@ buildPythonPackage rec {
   buildInputs = [ mock ];
   propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
 
+  __darwinAllowLocalNetworking = true;
+
    nativeCheckInputs = [ stestr testscenarios requests-mock ];
    checkPhase = ''
-     stestr run
+     # Skip tests that fail due to setuptools>=66.0.0 rejecting PEP 440
+     # non-conforming versions. See
+     # https://github.com/pypa/setuptools/issues/2497 for details.
+     stestr run -E "tests.test_plugins.(PluginsTestScenarios.test_plugin_version_comparison|PluginsTestScenarios.test_plugin_version_object_comparison|PluginsTest.test_plugin_equal|PluginsTest.test_plugin_not_equal)"
    '';
 
   meta = with lib; {

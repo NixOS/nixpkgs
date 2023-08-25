@@ -3,13 +3,13 @@
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "4.6";
+    version = "4.7";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      sha256 = "sha256-wMNmc7UIpvYPREpPK/2aKaqUDc6uifuxsXTNFH5SHyI=";
+      sha256 = "sha256-WblpRrvfFp4PlyH4RS2VNKXYD911H+OcnSL5rctyxiM=";
     };
 
     enableParallelBuilding = true;

@@ -139,6 +139,13 @@ stdenv.mkDerivation (finalAttrs: {
       done
     done
 
+    # add pkg-config aliases for libraries that are built-in to libncurses(w)
+    for library in tinfo tic; do
+      for suffix in "" w; do
+        ln -svf ncurses$suffix.pc $dev/lib/pkgconfig/$library$suffix.pc
+      done
+    done
+
     # move some utilities to $bin
     # these programs are used at runtime and don't really belong in $dev
     moveToOutput "bin/clear" "$out"

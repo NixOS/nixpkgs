@@ -2,6 +2,7 @@
 , fetchFromGitHub
 }: rec {
   version = "3.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openrazer";

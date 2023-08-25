@@ -2,7 +2,7 @@
 , config
 , stdenv
 , fetchFromGitHub
-, boost
+, boost179
 , cmake
 , expat
 , harfbuzz
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost179
     expat
     ffmpeg
     ffms

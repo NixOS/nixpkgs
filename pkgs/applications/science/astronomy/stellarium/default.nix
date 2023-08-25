@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , perl
 , wrapGAppsHook
@@ -21,14 +22,22 @@
 
 stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "23.1";
+  version = "23.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    hash = "sha256-7jzS3pRklPsCTgCr3nrywfHCNlBDHuyuGGvrVoI9+A0=";
+    hash = "sha256-8Iheb/9wjf0u10ZQRkLMLNN2s7P++Fqcr26iatiKcTo=";
   };
+
+  patches = [
+    # Compatibility with INDI 2.0 series from https://github.com/Stellarium/stellarium/pull/3269
+    (fetchpatch {
+      url = "https://github.com/Stellarium/stellarium/commit/31fd7bebf33fa710ce53ac8375238a24758312bc.patch";
+      hash = "sha256-eJEqqitZgtV6noeCi8pDBYMVTFIVWXZU1fiEvoilX8o=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \

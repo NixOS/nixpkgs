@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, rustPlatform, makeWrapper, Security, gnutar, gzip, nix, testers, fetchurl, prefetch-npm-deps, fetchNpmDeps }:
+{ lib, stdenvNoCC, rustPlatform, makeWrapper, pkg-config, curl, gnutar, gzip, nix, testers, fetchurl, cacert, prefetch-npm-deps, fetchNpmDeps }:
 
 {
   prefetch-npm-deps = rustPlatform.buildRustPackage {
@@ -16,8 +16,8 @@
 
     cargoLock.lockFile = ./Cargo.lock;
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = lib.optional stdenvNoCC.isDarwin Security;
+    nativeBuildInputs = [ makeWrapper pkg-config ];
+    buildInputs = [ curl ];
 
     postInstall = ''
       wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip nix ]}
@@ -115,7 +115,7 @@
 
     meta = with lib; {
       description = "Prefetch dependencies from npm (for use with `fetchNpmDeps`)";
-      maintainers = with maintainers; [ winter ];
+      maintainers = with maintainers; [ lilyinstarlight winter ];
       license = licenses.mit;
     };
   };
@@ -164,6 +164,12 @@
       '';
 
       dontInstall = true;
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
+      SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash)
+        then "${cacert}/etc/ssl/certs/ca-bundle.crt"
+        else "/no-cert-file.crt";
 
       outputHashMode = "recursive";
     } // hash_ // forceGitDeps_);

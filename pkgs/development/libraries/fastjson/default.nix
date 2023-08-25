@@ -1,21 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, libtool, autoconf, automake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.2304.0";
   pname = "fastjson";
+  version = "1.2304.0";
+
   src = fetchFromGitHub {
-    repo = "libfastjson";
     owner = "rsyslog";
-    rev = "v${version}";
-    sha256 = "sha256-WnM6lQjHz0n5BwWWZoDBavURokcaROXJW46RZen9vj4=";
+    repo = "libfastjson";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WnM6lQjHz0n5BwWWZoDBavURokcaROXJW46RZen9vj4=";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [ libtool ];
-
-  preConfigure = ''
-    sh autogen.sh
-  '';
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   meta = with lib; {
     description = "A fast json library for C";

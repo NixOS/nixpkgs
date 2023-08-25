@@ -1,6 +1,5 @@
 { lib
 , fetchFromSourcehut
-, makeWrapper
 , rustPlatform
 , wayland
 }:

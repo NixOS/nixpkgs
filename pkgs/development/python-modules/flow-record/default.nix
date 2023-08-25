@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , elasticsearch
+, fastavro
 , fetchFromGitHub
 , lz4
 , msgpack
@@ -14,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.9";
+  version = "3.11";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
     rev = "refs/tags/${version}";
-    hash = "sha256-hvd5I1n3lOuP9sUtVO69yGCVOVEWYKKfFf7OjAJCXIg=";
+    hash = "sha256-/mrsm7WoqnTIaGOHuIZk1eMXAMi38eVpctgi6+RQ3WQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -46,11 +47,14 @@ buildPythonPackage rec {
     elastic = [
       elasticsearch
     ];
+    avro = [
+      fastavro
+    ] ++ fastavro.optional-dependencies.snappy;
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "flow.record"
@@ -60,7 +64,6 @@ buildPythonPackage rec {
     # Test requires rdump
     "tests/test_rdump.py"
   ];
-
 
   disabledTests = [
     "test_rdump_fieldtype_path_json"

@@ -9,29 +9,29 @@
 , h2
 , httpx
 , idna
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , requests
 , requests-toolbelt
-, setuptools-scm
 , sniffio
 , trio
 }:
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "2.4.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ik4ysD60a+cOEu9tZOC+Ejpk5iGrTAgi/21FDVKlQLk=";
+    hash = "sha256-wzlxx5r1vpaLuJfpXCRI4RpkXuhNk7Jlzgt6q+Xf3Kg=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    poetry-core
   ];
 
   passthru.optional-dependencies = {

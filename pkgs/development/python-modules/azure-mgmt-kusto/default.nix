@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.2.0";
   pname = "azure-mgmt-kusto";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dkuVCFR+w3Yr764izDqxGfKtDvgRmAuziSPpkKDWcxc=";
+    hash = "sha256-zgkFMrufHoX3gq9QXo8SlJYZOfV5GlY3pVQXmIWyx7c=";
     extension = "zip";
   };
 

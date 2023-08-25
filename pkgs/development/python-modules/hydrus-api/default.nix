@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "hydrus-api";
-  version = "5.0.0";
+  version = "5.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "hydrus_api";
     inherit version;
-    hash = "sha256-s6gS1rVcbg7hcE63hGdPhJCcgS4N4d58MpSrECAfe0U=";
+    hash = "sha256-3Roeab9/woGF/aZYm9nbqrcyYN8CKA1k66cTRxx6jM4=";
   };
 
   postPatch = ''

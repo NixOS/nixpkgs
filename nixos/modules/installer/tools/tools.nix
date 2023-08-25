@@ -9,12 +9,19 @@ let
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
     isExecutable = true;
+    nativeBuildInputs = [
+      pkgs.installShellFiles
+    ];
+    postInstall = ''
+      installManPage ${args.manPage}
+    '';
   });
 
   nixos-build-vms = makeProg {
     name = "nixos-build-vms";
     src = ./nixos-build-vms/nixos-build-vms.sh;
     inherit (pkgs) runtimeShell;
+    manPage = ./manpages/nixos-build-vms.8;
   };
 
   nixos-install = makeProg {
@@ -27,6 +34,7 @@ let
       nixos-enter
       pkgs.util-linuxMinimal
     ];
+    manPage = ./manpages/nixos-install.8;
   };
 
   nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
@@ -35,17 +43,15 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    system = pkgs.stdenv.hostPlatform.system;
+    hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
     detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
+    manPage = ./manpages/nixos-generate-config.8;
   };
 
-  nixos-option =
-    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
-    then null
-    else pkgs.nixos-option;
+  inherit (pkgs) nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -60,6 +66,7 @@ let
     } // optionalAttrs (config.system.configurationRevision != null) {
       configurationRevision = config.system.configurationRevision;
     });
+    manPage = ./manpages/nixos-version.8;
   };
 
   nixos-enter = makeProg {
@@ -69,6 +76,7 @@ let
     path = makeBinPath [
       pkgs.util-linuxMinimal
     ];
+    manPage = ./manpages/nixos-enter.8;
   };
 
 in
@@ -129,7 +137,7 @@ in
       # your system.  Help is available in the configuration.nix(5) man page
       # and in the NixOS manual (accessible by running `nixos-help`).
 
-      { config, pkgs, ... }:
+      { config, lib, pkgs, ... }:
 
       {
         imports =
@@ -232,9 +240,10 @@ in
         nixos-install
         nixos-rebuild
         nixos-generate-config
+        nixos-option
         nixos-version
         nixos-enter
-      ] ++ lib.optional (nixos-option != null) nixos-option;
+      ];
 
     documentation.man.man-db.skipPackages = [ nixos-version ];
 

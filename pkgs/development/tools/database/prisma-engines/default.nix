@@ -14,13 +14,13 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "4.13.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-NJQvu+EREF40u5P3i8h2yGYC1vM6Q8xEXX9WyOnJkBM=";
+    sha256 = "sha256-/1wTqVvGUmN6PmoP6jXgUIB7QKkvkT5Rsg+L5zr4oN0=";
   };
 
   # Use system openssl.
@@ -31,10 +31,8 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "barrel-0.6.6-alpha.0" = "sha256-USh0lQ1z+3Spgc69bRFySUzhuY79qprLlEExTmYWFN8=";
       "graphql-parser-0.3.0" = "sha256-0ZAsj2mW6fCLhwTETucjbu4rPNzfbNiHu2wVTBlTNe4=";
-      "mobc-0.7.3" = "sha256-Ts2VVAuZakS+Sy/rEUrCe7RJX5MWs/TTO60c7mH+5sU=";
-      "mysql_async-0.31.3" = "sha256-hvuZTJ8W6L2s2gYAGJXBezkeAHTu06zIvJGQjoYX+7Q=";
+      "mysql_async-0.31.3" = "sha256-QIO9s0Upc0/1W7ux1RNJNGKqzO4gB4gMV3NoakAbxkQ=";
       "postgres-native-tls-0.5.0" = "sha256-OYbtGYAvDDCTeYfhav/BI2LJSyMyUERD7xa8GA/57rI=";
-      "quaint-0.2.0-alpha.13" = "sha256-Z7Zl1ZXzP3YE1Z1iuuj9V6dYBD2DpJngVbDLb4l/gjc=";
     };
   };
 
@@ -75,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pimeys tomhoule ivan ];
+    maintainers = with maintainers; [ pimeys tomhoule ivan aqrln ];
   };
 }
 

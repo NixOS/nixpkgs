@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jreese/aiosqlite";
     changelog = "https://github.com/omnilib/aiosqlite/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

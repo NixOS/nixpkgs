@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+# Although we include upstream patches that fix compilation with fmt_10, we
+# still use fmt_9 because this dependency is propagated, and many of spdlog's
+# reverse dependencies don't support fmt_10 yet.
+, fmt_9
 , staticBuild ? stdenv.hostPlatform.isStatic
+
+# tests
+, bear, tiledb
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +24,20 @@ stdenv.mkDerivation rec {
     hash  = "sha256-kA2MAb4/EygjwiLEjF9EA7k8Tk//nwcKB1+HlzELakQ=";
   };
 
+  patches = [
+    # Fix compatiblity with fmt 10.0. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/gabime/spdlog/commit/0ca574ae168820da0268b3ec7607ca7b33024d05.patch";
+      hash = "sha256-cRsQilkyUQW47PFpDwKgU/pm+tOeLvwPx32gNOPAO1U=";
+    })
+    (fetchpatch {
+      url = "https://github.com/gabime/spdlog/commit/af1785b897c9d1098d4aa7213fad232be63c19b4.patch";
+      hash = "sha256-zpfLiBeDAOsvk4vrIyXC0kvFe2WkhAhersd+fhA8DFY=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ fmt ];
+  propagatedBuildInputs = [ fmt_9 ];
 
   cmakeFlags = [
     "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
@@ -33,6 +56,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit bear tiledb;
+  };
 
   meta = with lib; {
     description    = "Very fast, header only, C++ logging library";

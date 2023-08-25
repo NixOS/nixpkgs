@@ -7,15 +7,15 @@
 , openssl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "entwine";
-  version = "unstable-2022-08-03";
+  version = "unstable-2023-04-27";
 
   src = fetchFromGitHub {
     owner = "connormanning";
     repo = "entwine";
-    rev = "c776d51fd6ab94705b74f78b26de7f853e6ceeae";
-    sha256 = "sha256-dhYJhXtfMmqQLWuV3Dux/sGTsVxCI7RXR2sPlwIry0g=";
+    rev = "8bd179c38e6da1688f42376b88ff30427672c4e3";
+    sha256 = "sha256-RlNxTtqxQoniI1Ugj5ot0weu7ji3WqDJZpMu2n8vBkw=";
   };
 
   buildInputs = [

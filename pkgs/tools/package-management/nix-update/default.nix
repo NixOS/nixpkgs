@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-update";
-  version = "0.17.2";
+  version = "0.19.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    hash = "sha256-W2vBKgdPOLGdAIxbHD4Qi4ivAabFSuu7ikvu5kItwN8=";
+    hash = "sha256-+WD+SV/L3TvksWBIg6jk+T0dUTNdp4VKONzdzVT+pac=";
   };
 
   makeWrapperArgs = [

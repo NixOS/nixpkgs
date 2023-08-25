@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ent-go";
-  version = "0.11.0";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "ent";
     rev = "v${version}";
-    sha256 = "sha256-EPUaBOvEAOjA24EYD0pyuNRdyX9qPxERXrBzHXC6cLI=";
+    sha256 = "sha256-ryOpaRQi30NPDNe9rUmW+fEqWSKWEsvHl/Bd1+i88y4=";
   };
 
-  vendorSha256 = "sha256-Q5vnfhUcbTmk3+t0D0z4dwU6pXKT7/hTfVHOUPXEzrg=";
+  vendorSha256 = "sha256-67+4r4ByVS0LgfL7eUOdEoQ+CMRzqNjPgkq3dNfNwBY=";
 
   subPackages = [ "cmd/ent" ];
 

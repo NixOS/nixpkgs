@@ -24,7 +24,6 @@ buildGoModule rec {
     description = "A build system for microservices";
     homepage = "https://bob.build";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ zuzuleinen ];
   };
 }

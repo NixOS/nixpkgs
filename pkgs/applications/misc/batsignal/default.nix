@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ SlothOfAnarchy ];
     platforms = platforms.linux;
+    mainProgram = "batsignal";
   };
 }

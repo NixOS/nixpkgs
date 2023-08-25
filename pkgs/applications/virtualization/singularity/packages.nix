@@ -18,7 +18,7 @@ let
       };
 
       # Update by running
-      # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).go-modules"
+      # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
       # at the root directory of the Nixpkgs repository
       vendorHash = "sha256-PfFubgR/W1WBXIsRO+Kg7hA6ebeAcRiJlTlAZbnl19A=";
 
@@ -49,7 +49,7 @@ let
       };
 
       # Update by running
-      # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).go-modules"
+      # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).goModules"
       # at the root directory of the Nixpkgs repository
       vendorHash = "sha256-mBhlH6LSmcJuc6HbU/3Q9ii7vJkW9jcikBWCl8oeMOk=";
 

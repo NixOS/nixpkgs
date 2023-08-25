@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "A Sphinx extension for BibTeX style citations";
     homepage = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

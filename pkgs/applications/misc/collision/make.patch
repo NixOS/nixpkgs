@@ -1,0 +1,20 @@
+--- a/Makefile	2023-07-09 10:49:31.064190374 +0300
++++ b/Makefile	2023-07-19 11:19:37.415480179 +0300
+@@ -6,7 +6,7 @@
+ all: desktop bindings build
+ 
+ bindings: 
+-	./bin/gi-crystal || $(CRYSTAL_LOCATION)shards install && ./bin/gi-crystal
++	gi-crystal
+ 
+ build:
+ 	COLLISION_LOCALE_LOCATION="$(PREFIX)$(LOCALE_LOCATION)" $(CRYSTAL_LOCATION)shards build -Dpreview_mt --release --no-debug
+@@ -43,7 +43,7 @@
+ 	install -D -m 0644 data/dev.geopjr.Collision.desktop $(PREFIX)/share/applications/dev.geopjr.Collision.desktop
+ 	install -D -m 0644 data/icons/dev.geopjr.Collision.svg $(PREFIX)/share/icons/hicolor/scalable/apps/dev.geopjr.Collision.svg
+ 	install -D -m 0644 data/icons/dev.geopjr.Collision-symbolic.svg $(PREFIX)/share/icons/hicolor/symbolic/apps/dev.geopjr.Collision-symbolic.svg
+-	gtk-update-icon-cache $(PREFIX)/share/icons/hicolor
++	gtk4-update-icon-cache --ignore-theme-index $(PREFIX)/share/icons/hicolor
+ 	glib-compile-schemas $(PREFIX)/share/glib-2.0/schemas/
+ 
+ uninstall:

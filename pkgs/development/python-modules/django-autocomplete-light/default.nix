@@ -7,7 +7,7 @@
 , django-debug-toolbar
 , django-extensions
 , django-taggit
-, django_tagging
+, django-tagging
 , mock
 , pytest-django
 , selenium
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     django-debug-toolbar
     django-extensions
     django-taggit
-    django_tagging
+    django-tagging
     mock
     pytest-django
     selenium

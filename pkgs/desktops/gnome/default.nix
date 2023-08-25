@@ -150,8 +150,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   file-roller = callPackage ./apps/file-roller { };
 
-  gedit = callPackage ./apps/gedit { };
-
   ghex = callPackage ./apps/ghex { };
 
   gnome-boxes = callPackage ./apps/gnome-boxes { };
@@ -263,6 +261,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
   empathy = throw "The ‘gnome.empathy’ package was removed as it is unmaintained and no longer launches due to libsoup3 migration."; # added 2023-01-20
+  gedit = pkgs.gedit; # added 2023-07-05
   gnome-desktop = throw "The ‘gnome.gnome-desktop’ alias was removed. Please use ‘pkgs.gnome-desktop’ directly."; # converted to throw on 2022-10-26
   gnome-todo = pkgs.endeavour; # added 2022-07-30
   libgnome-games-support = throw "The ‘gnome.libgnome-games-support’ alias was removed. Please use ‘pkgs.libgnome-games-support’ directly."; # converted to throw on 2022-10-26

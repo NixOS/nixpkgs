@@ -46,7 +46,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
             type = "custom";
             status = {
               source = "script";
-              cmd = "/bin/sh -c 'echo charger status F'";
+              cmd = "/bin/sh -c 'echo charger status A'";
             };
             enabled = {
               source = "script";

@@ -1,58 +1,110 @@
 { lib
 , amqp
+, azure-identity
 , azure-servicebus
+, azure-storage-queue
+, backports-zoneinfo
+, boto3
 , buildPythonPackage
-, cached-property
 , case
+, confluent-kafka
 , fetchPypi
-, importlib-metadata
-, pyro4
+, hypothesis
+, kazoo
+, msgpack
+, pycurl
+, pymongo
+  #, pyro4
 , pytestCheckHook
 , pythonOlder
-, pytz
+, pyyaml
+, redis
+, sqlalchemy
+, typing-extensions
+, urllib3
 , vine
 }:
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.2.4";
+  version = "5.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N87j7nJflOqLsXPqq3wXYCA+pTu+uuImMoYA+dJ5lhA=";
+    hash = "sha256-+9dXLZLAv3HBEqa0UWMVPepae2pwHsFrVown0P0jcPI=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements/test.txt \
-      --replace "pytz>dev" "pytz"
-  '';
 
   propagatedBuildInputs = [
     amqp
     vine
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
-    importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
   ];
 
+  passthru.optional-dependencies = {
+    msgpack = [
+      msgpack
+    ];
+    yaml = [
+      pyyaml
+    ];
+    redis = [
+      redis
+    ];
+    mongodb = [
+      pymongo
+    ];
+    sqs = [
+      boto3
+      urllib3
+      pycurl
+    ];
+    zookeeper = [
+      kazoo
+    ];
+    sqlalchemy = [
+      sqlalchemy
+    ];
+    azurestoragequeues = [
+      azure-identity
+      azure-storage-queue
+    ];
+    azureservicebus = [
+      azure-servicebus
+    ];
+    confluentkafka = [
+      confluent-kafka
+    ];
+    # pyro4 doesn't suppport Python 3.11
+    #pyro = [
+    #  pyro4
+    #];
+  };
+
   nativeCheckInputs = [
-    azure-servicebus
     case
-    pyro4
+    hypothesis
     pytestCheckHook
-    pytz
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "kombu"
   ];
 
+  disabledTests = [
+    # Disable pyro4 test
+    "test_driver_version"
+  ];
+
   meta = with lib; {
     description = "Messaging library for Python";
     homepage = "https://github.com/celery/kombu";
+    changelog = "https://github.com/celery/kombu/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

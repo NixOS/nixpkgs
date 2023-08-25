@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fastnumbers
 , fetchFromGitHub
 , hypothesis
 , numpy
@@ -41,6 +40,10 @@ buildPythonPackage rec {
     hypothesis
     numpy
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--hypothesis-profile=standard"
   ];
 
   pythonImportsCheck = [

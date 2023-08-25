@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, fetchpatch, bash, cmake
 , opencv3, gtest, blas, gomp, llvmPackages, perl
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}, nvidia_x11
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }, nvidia_x11
 , cudnnSupport ? cudaSupport
 }:
 
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
-    "-Wno-error=maybe-uninitialized"
     "-Wno-error=uninitialized"
   ];
 

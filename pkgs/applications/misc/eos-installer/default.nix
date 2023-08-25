@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     description = "Installer UI which writes images to disk";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qyliss ];
+    mainProgram = "gnome-image-installer";
     platforms = platforms.linux;
   };
 }

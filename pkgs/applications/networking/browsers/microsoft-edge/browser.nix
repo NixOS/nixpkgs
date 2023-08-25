@@ -46,13 +46,9 @@ let
              then baseName
              else baseName + "-" + channel;
 
-  iconSuffix = if channel == "stable"
-               then ""
-               else "_${channel}";
+  iconSuffix = lib.optionalString (channel != "stable") "_${channel}";
 
-  desktopSuffix = if channel == "stable"
-                  then ""
-                  else "-${channel}";
+  desktopSuffix = lib.optionalString (channel != "stable") "-${channel}";
 in
 
 stdenv.mkDerivation rec {

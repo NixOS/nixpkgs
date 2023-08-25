@@ -153,6 +153,18 @@ in {
       type = types.bool;
     };
 
+    processAgentPackage = mkOption {
+      default = pkgs.datadog-process-agent;
+      defaultText = literalExpression "pkgs.datadog-process-agent";
+      description = lib.mdDoc ''
+        Which DataDog v7 agent package to use. Note that the provided
+        package is expected to have an overridable `pythonPackages`-attribute
+        which configures the Python environment with the Datadog
+        checks.
+      '';
+      type = types.package;
+    };
+
     enableTraceAgent = mkOption {
       description = lib.mdDoc ''
         Whether to enable the trace agent.
@@ -270,7 +282,7 @@ in {
         path = [ ];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          ${pkgs.datadog-process-agent}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
+          ${cfg.processAgentPackage}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
         '';
       });
 

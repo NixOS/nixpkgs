@@ -16,6 +16,13 @@ buildPythonPackage rec {
     sha256 = "5a6188fe2666c484a12159c18be97a1977a71d632ef5bb867ef15f54af39cc4e";
   };
 
+  # With python 3.11.4, invalid IPv6 address does throw ValueError
+  # https://github.com/gruns/furl/issues/164#issuecomment-1595637359
+  postPatch = ''
+    substituteInPlace tests/test_furl.py \
+      --replace '[0:0:0:0:0:0:0:1:1:1:1:1:1:1:1:9999999999999]' '[2001:db8::9999]'
+  '';
+
   propagatedBuildInputs = [
     orderedmultidict
     six

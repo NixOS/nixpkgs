@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     "ARGON2_VERSION=${version}"
     "LIBRARY_REL=lib"
     "PKGCONFIG_REL=lib"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "LIBRARIES=$(LIB_ST)"
   ];
 
   meta = with lib; {

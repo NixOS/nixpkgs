@@ -41,5 +41,6 @@ buildGoModule rec {
     description = "Modern and intuitive terminal-based text editor";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "micro";
   };
 }

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   datasrc = fetchFromGitHub {
     owner = "hadiasghari";
     repo = "pyasn";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-R7Vi1Mn44Mg3HQLDk9O43MkXXwbLRr/jjVKSHJvgYj0";
   };
 

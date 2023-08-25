@@ -4,6 +4,7 @@
 , fetchurl
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
+, markForCudatoolkitRootHook
 }:
 
 pname:
@@ -28,6 +29,7 @@ backendStdenv.mkDerivation {
     # directory to the rpath of all ELF binaries.
     # Check e.g. with `patchelf --print-rpath path/to/my/binary
     autoAddOpenGLRunpathHook
+    markForCudatoolkitRootHook
   ];
 
   buildInputs = [

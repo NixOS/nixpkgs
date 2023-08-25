@@ -15,7 +15,6 @@
 , libxml2
 , meson
 , ninja
-, packagekit
 , pkg-config
 , python3
 , vala
@@ -25,20 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.2.1";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jtNPRsq33bIn3jy3F63UNrwrhaTBYbRYLDxyxgAXjIc=";
+    sha256 = "sha256-Lj3j812XaCIN+TFSDAvIgtl49n5jG4fVlAFvrWqngpM=";
   };
-
-  patches = [
-    # Having a working nix packagekit backend will supersede this.
-    # https://github.com/NixOS/nixpkgs/issues/177946
-    ./disable-packagekit-backend.patch
-  ];
 
   nativeBuildInputs = [
     dbus # for pkg-config
@@ -61,11 +54,13 @@ stdenv.mkDerivation rec {
     libhandy
     libsoup
     libxml2
-    packagekit
     polkit
   ];
 
   mesonFlags = [
+    # We don't have a working nix packagekit backend yet.
+    "-Dpackagekit_backend=false"
+    "-Dubuntu_drivers_backend=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];

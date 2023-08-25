@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.5.0";
+  version = "4.7.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "typing_extensions";
     inherit version;
-    hash = "sha256-XLX0p5E51plgez72IqHe2vqE4RWrACTg2cBEqUecp8s=";
+    hash = "sha256-t13cJk8LpWFdt7ohfa65lwGtKVNTxF+elZYzN87u/7I=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Backported and Experimental Type Hints for Python 3.5+";
+    description = "Backported and Experimental Type Hints for Python";
+    changelog = "https://github.com/python/typing_extensions/blob/${version}/CHANGELOG.md";
     homepage = "https://github.com/python/typing";
     license = licenses.psfl;
     maintainers = with maintainers; [ pmiddend ];

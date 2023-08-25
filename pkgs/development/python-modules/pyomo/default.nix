@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.5.0";
+  version = "6.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     repo = "pyomo";
     owner = "pyomo";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZsoWz+35hQS15dbpe1IOzft6JwZygKjv5AQWjVe+8kQ=";
+    hash = "sha256-hh2sfWOUp3ac75NEuTrw3YkvS7hXpzJp39v6cfrhNiQ=";
   };
 
   propagatedBuildInputs = [
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     homepage = "http://pyomo.org";
     changelog = "https://github.com/Pyomo/pyomo/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

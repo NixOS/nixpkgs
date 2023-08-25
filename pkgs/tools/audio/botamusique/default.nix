@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
 , ffmpeg
 , makeWrapper

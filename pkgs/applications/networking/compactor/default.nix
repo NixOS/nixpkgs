@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "compactor";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "dns-stats";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-SgmtlbYOrSMzVfzsrbg4qs+yGkXQialiJTI99EBsUjQ=";
+    hash = "sha256-5Z14suhO5ghhmZsSj4DsSoKm+ct2gQFO6qxhjmx4Xm4=";
   };
 
   nativeBuildInputs = [

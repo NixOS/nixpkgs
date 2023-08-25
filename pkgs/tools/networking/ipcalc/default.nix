@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ipcalc";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitLab {
     owner = "ipcalc";
     repo = "ipcalc";
     rev = version;
-    hash = "sha256-HlAGAjNUjfr/Ysjiml54vph/S5pS6fTMWYJwLFr1NSI=";
+    hash = "sha256-9eaR1zG8tjSGlkpyY1zTHAVgN5ypuyRfeRq6ct6zsLU=";
   };
 
   patches = [
@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/ipcalc/ipcalc";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
   };
 }

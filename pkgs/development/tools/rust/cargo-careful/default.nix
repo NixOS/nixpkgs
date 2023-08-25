@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to execute Rust code carefully, with extra checking along the way";
     homepage = "https://github.com/RalfJung/cargo-careful";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

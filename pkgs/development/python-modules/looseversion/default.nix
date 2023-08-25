@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "looseversion";
-  version = "1.1.2";
+  version = "1.3.0";
   format = "flit";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "sha256-lNgL29C21XwRuIYUe6FgH30VMVcWIbgZM7NFN8vkaa0=";
+    sha256 = "sha256-695l8/a7lTGoEBbG/vPrlaYRga3Ee3+UnpwOpHkRZp4=";
   };
 
   nativeCheckInputs = [

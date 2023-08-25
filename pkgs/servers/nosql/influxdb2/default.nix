@@ -8,6 +8,7 @@
 , rustPlatform
 , stdenv
 , libiconv
+, nixosTests
 }:
 
 let
@@ -39,7 +40,7 @@ let
       rev = "v${libflux_version}";
       sha256 = "sha256-Xmh7V/o1Gje62kcnTeB9h/fySljhfu+tjbyvryvIGRc=";
     };
-    sourceRoot = "source/libflux";
+    sourceRoot = "${src.name}/libflux";
     cargoSha256 = "sha256-9rPW0lgi3lXJARa1KXgSY8LVJsoFjppok5ODGlqYeYw=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
@@ -106,6 +107,8 @@ in buildGoModule {
   tags = [ "assets" ];
 
   ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];
+
+  passthru.tests = { inherit (nixosTests) influxdb2; };
 
   meta = with lib; {
     description = "An open-source distributed time series database";

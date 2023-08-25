@@ -24,12 +24,12 @@
 }:
 
 let
-  version = "6.2.0";
+  version = "6.3.2";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-8ej3iGN6xXTUcdYZ0glrqsoEoZtXoDQ5ngeWM9tEGUU=";
+    hash = "sha256-jNf+rFgZO+K8ukUbpmiKRoJNN8pjWf9Y4NROuY8EKUg=";
   };
 
   # Update with
@@ -223,7 +223,7 @@ stdenv.mkDerivation rec {
 
   # Additional tests that check bazel’s functionality. Execute
   #
-  #     nix-build . -A bazel_5.tests
+  #     nix-build . -A bazel_6.tests
   #
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests =
@@ -295,10 +295,10 @@ stdenv.mkDerivation rec {
         sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
-    in (if !stdenv.hostPlatform.isDarwin then {
+    in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
       shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
-    } else {}) // {
+    }) // {
       bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self;};
       cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
       java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
@@ -624,6 +624,12 @@ stdenv.mkDerivation rec {
     }
 
     cd ./bazel_src
+
+    # If .bazelversion file is present in dist files and doesn't match `bazel` version
+    # running `bazel` command within bazel_src will fail.
+    # Let's remove .bazelversion within the test, if present it is meant to indicate bazel version
+    # to compile bazel with, not version of bazel to be built and tested.
+    rm -f .bazelversion
 
     # test whether $WORKSPACE_ROOT/tools/bazel works
 

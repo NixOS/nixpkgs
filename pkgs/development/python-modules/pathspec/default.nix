@@ -4,6 +4,12 @@
 , pythonOlder
 , flit-core
 , unittestCheckHook
+
+# for passthru.tests
+, awsebcli
+, black
+, hatchling
+, yamllint
 }:
 
 buildPythonPackage rec {
@@ -27,6 +33,10 @@ buildPythonPackage rec {
   checkInputs = [
     unittestCheckHook
   ];
+
+  passthru.tests = {
+    inherit awsebcli black hatchling yamllint;
+  };
 
   meta = {
     description = "Utility library for gitignore-style pattern matching of file paths";

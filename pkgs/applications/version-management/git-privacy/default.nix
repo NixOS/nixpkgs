@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "git-privacy";
-  version = "2.1.0";
+  version = "2.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "EMPRI-DEVOPS";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hfy43fip1l81672xfwqrz1jryzkjy7h9f2lyikxgibibil0p444";
+    hash = "sha256-b2RkRL8/mZwqc3xCs+oltzualhQtp/7F9POlLlT3UUU=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

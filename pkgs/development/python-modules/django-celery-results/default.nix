@@ -7,14 +7,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "django_celery_results";
+  pname = "django-celery-results";
   version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "django_celery_results";
+    inherit version;
     hash = "sha256-dapRlw21aRy/JCxqD/UMjN9BniZc0Om3cjNdBkNsS5k=";
   };
 

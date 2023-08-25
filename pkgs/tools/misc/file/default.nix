@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.bsd2;
     platforms = platforms.all;
+    mainProgram = "file";
   };
 }

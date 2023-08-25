@@ -1,9 +1,14 @@
 { lib, stdenv
+, addOpenGLRunpath
+, config
+, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport
 , fetchurl
 , makeWrapper
 , opencl-headers
 , ocl-icd
 , xxHash
+, Foundation, IOKit, Metal, OpenCL, libiconv
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +20,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sl4Qd7zzSQjMjxjBppouyYsEeyy88PURRNzzuh4Leyo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ opencl-headers xxHash ];
+  postPatch = ''
+     # Remove hardcoded paths on darwin
+    substituteInPlace src/Makefile \
+      --replace "/usr/bin/ar" "ar" \
+      --replace "/usr/bin/sed" "sed" \
+      --replace '-i ""' '-i'
+  '';
+
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals cudaSupport [
+    addOpenGLRunpath
+  ];
+
+  buildInputs = [ opencl-headers xxHash ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation IOKit Metal OpenCL libiconv ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -26,6 +45,8 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_XXHASH=1"
   ];
 
+  enableParallelBuilding = true;
+
   preFixup = ''
     for f in $out/share/hashcat/OpenCL/*.cl; do
       # Rewrite files to be included for compilation at runtime for opencl offload
@@ -34,15 +55,27 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib
+  postFixup = let
+    LD_LIBRARY_PATH = builtins.concatStringsSep ":" ([
+      "${ocl-icd}/lib"
+    ] ++ lib.optionals cudaSupport [
+      "${cudaPackages.cudatoolkit}/lib"
+    ]);
+  in ''
+    wrapProgram $out/bin/hashcat \
+      --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg LD_LIBRARY_PATH}
+  '' + lib.optionalString cudaSupport ''
+    for program in $out/bin/hashcat $out/bin/.hashcat-wrapped; do
+      isELF "$program" || continue
+      addOpenGLRunpath "$program"
+    done
   '';
 
   meta = with lib; {
     description = "Fast password cracker";
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ kierdavis zimbatm ];
   };
 }

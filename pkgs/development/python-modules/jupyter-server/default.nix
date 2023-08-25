@@ -16,7 +16,6 @@
 , tornado
 , pyzmq
 , ipykernel
-, ipython_genutils
 , traitlets
 , jupyter-core
 , jupyter-client
@@ -24,25 +23,27 @@
 , jupyter-server-terminals
 , nbformat
 , nbconvert
+, packaging
 , send2trash
 , terminado
 , prometheus-client
 , anyio
 , websocket-client
+, overrides
 , requests
-, requests-unixsocket
+, flaky
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.0.6";
+  version = "2.7.0";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash= "sha256-jddZkukLfKVWeUoe1cylEmPGl6vG0N9WGvV0qhwKAz8=";
+    hash = "sha256-NtoKJm0xpBrDNaNmyIkzwX36W7gXpI9cAsFtMDvJR38=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +56,6 @@ buildPythonPackage rec {
     jinja2
     tornado
     pyzmq
-    ipython_genutils
     traitlets
     jupyter-core
     jupyter-client
@@ -63,23 +63,27 @@ buildPythonPackage rec {
     jupyter-server-terminals
     nbformat
     nbconvert
+    packaging
     send2trash
     terminado
     prometheus-client
     anyio
     websocket-client
-    requests-unixsocket
+    overrides
   ];
 
   nativeCheckInputs = [
     ipykernel
-    pandoc
     pytestCheckHook
     pytest-console-scripts
     pytest-jupyter
     pytest-timeout
-    pytest-tornasync
     requests
+    flaky
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   preCheck = ''
@@ -88,12 +92,18 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    "test_server_extension_list"
     "test_cull_idle"
+    "test_server_extension_list"
   ] ++ lib.optionals stdenv.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"
     # test is presumable broken in sandbox
     "test_authorized_requests"
+    # Insufficient access privileges for operation
+    "test_regression_is_hidden"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    "test_copy_big_dir"
   ];
 
   disabledTestPaths = [
@@ -107,9 +117,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/jupyter-server/jupyter_server/blob/v${version}/CHANGELOG.md";
     description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
     homepage = "https://github.com/jupyter-server/jupyter_server";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.elohmeier ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

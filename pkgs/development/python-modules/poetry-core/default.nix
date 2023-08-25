@@ -11,7 +11,6 @@
 , pytest-mock
 , pytestCheckHook
 , setuptools
-, tomlkit
 , virtualenv
 }:
 
@@ -54,7 +53,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     setuptools
-    tomlkit
     virtualenv
   ];
 
@@ -72,6 +70,8 @@ buildPythonPackage rec {
   pythonNamespaces = [
     "poetry"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
   meta = with lib; {
     changelog = "https://github.com/python-poetry/poetry-core/blob/${src.rev}/CHANGELOG.md";

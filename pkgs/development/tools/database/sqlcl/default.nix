@@ -1,17 +1,12 @@
 { lib, stdenv, makeWrapper, requireFile, unzip, jdk }:
 
-let
-  version = "22.4.0.342.1212";
-  fileVersion = "1032835-01";
-in
-  stdenv.mkDerivation {
-
-  inherit version;
+stdenv.mkDerivation rec {
   pname = "sqlcl";
+  version = "23.2.0.178.1027";
 
   src = requireFile rec {
     url = "https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/download/";
-    name = "V${fileVersion}.zip";
+    name = "sqlcl-${version}.zip";
     message = ''
       This Nix expression requires that ${name} already be part of the store. To
       obtain it you need to
@@ -37,7 +32,7 @@ in
 
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
-    sha256 = "0i4xsj502s465fgmlcqn80r8rqzr11mv74x9fzrlbqmkkh5c782k";
+    hash = "sha256-wGqLlV88yYJrVblKzeG6VerfsEgCi1JQd49ONZmUB4Y=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];

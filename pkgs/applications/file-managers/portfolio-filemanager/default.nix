@@ -49,7 +49,6 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     glib
     gtk3
-    gobject-introspection
     libhandy
     librsvg
   ];
@@ -67,9 +66,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "portfolio-filemanager";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

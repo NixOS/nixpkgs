@@ -7,6 +7,8 @@
 , installShellFiles
 , libxml2
 , libxslt
+, testers
+, offlineimap
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -58,10 +60,13 @@ python3.pkgs.buildPythonApplication rec {
     "offlineimap"
   ];
 
+  passthru.tests.version = testers.testVersion { package = offlineimap; };
+
   meta = with lib; {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ endocrimes ];
+    mainProgram = "offlineimap";
   };
 }

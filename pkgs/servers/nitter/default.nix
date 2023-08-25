@@ -1,19 +1,33 @@
 { lib
+, buildNimPackage
 , fetchFromGitHub
 , nimPackages
 , nixosTests
 , substituteAll
+, unstableGitUpdater
+, flatty
+, jester
+, jsony
+, karax
+, markdown
+, nimcrypto
+, packedjson
+, redis
+, redpool
+, sass
+, supersnappy
+, zippy
 }:
 
-nimPackages.buildNimPackage rec {
+buildNimPackage rec {
   pname = "nitter";
-  version = "unstable-2023-05-19";
+  version = "unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "zedeus";
     repo = "nitter";
-    rev = "e3b3b38a2d43a83b5fc2239ab41e864ee686fb2f";
-    hash = "sha256-1BEZcrraPc9qOWLy3Bq8M8G5P4fUmb2IX+T+cStHpmQ=";
+    rev = "d7ca353a55ea3440a2ec1f09155951210a374cc7";
+    hash = "sha256-nlpUzbMkDzDk1n4X+9Wk7+qQk+KOfs5ID6euIfHBoa8=";
   };
 
   patches = [
@@ -25,7 +39,7 @@ nimPackages.buildNimPackage rec {
     })
   ];
 
-  buildInputs = with nimPackages; [
+  buildInputs = [
     flatty
     jester
     jsony
@@ -42,6 +56,8 @@ nimPackages.buildNimPackage rec {
 
   nimBinOnly = true;
 
+  nimFlags = [ "--mm:refc" ];
+
   postBuild = ''
     nim c --hint[Processing]:off -r tools/gencss
     nim c --hint[Processing]:off -r tools/rendermd
@@ -52,6 +68,11 @@ nimPackages.buildNimPackage rec {
     cp -r public $out/share/nitter/public
   '';
 
+  passthru = {
+    tests = { inherit (nixosTests) nitter; };
+    updateScript = unstableGitUpdater {};
+  };
+
   meta = with lib; {
     homepage = "https://github.com/zedeus/nitter";
     description = "Alternative Twitter front-end";
@@ -59,6 +80,4 @@ nimPackages.buildNimPackage rec {
     maintainers = with maintainers; [ erdnaxe infinidoge ];
     mainProgram = "nitter";
   };
-
-  passthru.tests = { inherit (nixosTests) nitter; };
 }

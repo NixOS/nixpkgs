@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "txr";
-  version = "285";
+  version = "291";
 
   src = fetchurl {
-    url = "http://www.kylheku.com/cgit/txr/snapshot/txr-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-cI1wjxKPivTXwCSuhl6sIuRk68ZBUsOWTjQktGmmP6M=";
+    url = "https://www.kylheku.com/cgit/txr/snapshot/txr-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Btk3PanJa6hyoM+hfQq+EhIMaL2edyhfxx96Kpy+aaA=";
   };
 
   buildInputs = [ libffi ];
@@ -69,5 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ AndersonTorres dtzWill ];
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin && stdenv.isx86_64; # ofborg fails while testing
   };
 })

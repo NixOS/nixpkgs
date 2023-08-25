@@ -5,6 +5,7 @@
 , python3
 , meson
 , ninja
+, sassc
 , vala
 , pkg-config
 , libgee
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "7.2.0";
+  version = "7.3.0";
 
   outputs = [ "out" "dev" ];
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LU2eIeaNqO4/6dPUuzOQ/w4tx0dEm26JwZ87yQ16c4o=";
+    sha256 = "sha256-siFS8BiHVlDtM5odL0Lf1aRMoG6qqQOnbsXGKVyc218=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    sassc
     vala
     wrapGAppsHook4
   ];

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytrafikverket";
-  version = "0.3.3";
+  version = "0.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lq6YAYScBYRA2ltv+ohWfMasqohCH5zrnCi+sQbQWLI=";
+    hash = "sha256-dBD8CpEiCDhuabUEPzbvhl3WnEcJU9T910VCAI2jDrA=";
   };
 
   propagatedBuildInputs = [

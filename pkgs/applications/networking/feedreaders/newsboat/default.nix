@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.31";
+  version = "2.32";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    hash = "sha256-e06QsfcAo/iYlvtdYZ8hX0EIMCDcwRrsJGjUxCrthUo=";
+    hash = "sha256-ACPnCm2cu9BEpMd02t+G4mg6DZ8jCydfK4p+Ad87Hek=";
   };
 
-  cargoHash = "sha256-MJkiC+UoiO4DiSvHLAklBdla+RmMYaxA/8oXNblYMF4=";
+  cargoHash = "sha256-HHc8HSNWoBkDR7lQgvXUML5ly8sShDn16DWNf/Jig2g=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.isDarwin ''

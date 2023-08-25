@@ -3,22 +3,22 @@
 , fetchFromGitHub
 , installShellFiles
 , makeWrapper
-, dart-sass-embedded
+, dart-sass
 }:
 
 buildGoModule rec {
   pname = "shopware-cli";
-  version = "0.1.73";
+  version = "0.2.1";
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "FriendsOfShopware";
     rev = version;
-    hash = "sha256-yjWLWTM6ybrNUMTMHQ3oHXTEp8MGI/qH7Y+gft5RXY8=";
+    hash = "sha256-3upZmqsKCg98j/HTwFp0L7MMspCw7Dj6dRoyEPW287k=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  vendorHash = "sha256-eaD2vdiAmP2/cMtc1wN0qaMBRvrEckGBf0p5MI1T4gI=";
+  vendorHash = "sha256-KEWACwZka4WMQS4/O6WkIdeeUnxtcpEwQmMlNBLUjbI=";
 
   postInstall = ''
     export HOME="$(mktemp -d)"
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   preFixup = ''
     wrapProgram $out/bin/shopware-cli \
-      --prefix PATH : ${lib.makeBinPath [ dart-sass-embedded ]}
+      --prefix PATH : ${lib.makeBinPath [ dart-sass ]}
   '';
 
   ldflags = [

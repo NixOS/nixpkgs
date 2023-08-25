@@ -79,6 +79,8 @@ buildPythonPackage rec {
     xmltodict
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     freezegun
     pytestCheckHook

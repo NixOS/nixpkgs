@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2023.4.1";
+  version = "2023.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-KCgftu3i8N0WSelHiqWqa1vLN5gUtleftSUx1Zu4nZg=";
+    hash = "sha256-FvNh7gfxUR1iIUY3kMolhzcbWupQL39E9JXWip8bdrQ=";
   };
 
   postPatch = ''
@@ -78,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://distributed.readthedocs.io/";
     changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh costrouc ];
+    maintainers = with maintainers; [ teh ];
   };
 }

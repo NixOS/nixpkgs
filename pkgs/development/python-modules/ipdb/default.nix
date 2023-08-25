@@ -45,7 +45,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/gotcha/ipdb";
     description = "IPython-enabled pdb";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 
 }

@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, libarchive }:
+
 stdenv.mkDerivation rec {
   pname = "win-virtio";
   version = "0.1.229-1";
@@ -23,11 +24,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Windows VirtIO Drivers";
     homepage = "https://docs.fedoraproject.org/en-US/quick-docs/creating-windows-virtual-machines-using-virtio-drivers/index.html";
+    changelog = "https://fedorapeople.org/groups/virt/virtio-win/CHANGELOG";
     license = [ licenses.bsd3 ];
-    maintainers = [ ];
+    maintainers = with maintainers; [ anthonyroussel ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
   };
 }

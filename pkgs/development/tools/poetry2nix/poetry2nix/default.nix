@@ -4,7 +4,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.41.0";
+  version = "1.42.1";
 
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
@@ -17,7 +17,7 @@ let
   toPluginAble = (import ./plugins.nix { inherit pkgs lib; }).toPluginAble;
 
   # List of known build systems that are passed through from nixpkgs unmodified
-  knownBuildSystems = lib.importJSON ./known-build-systems.json;
+  knownBuildSystems = builtins.fromJSON (builtins.readFile ./known-build-systems.json);
   nixpkgsBuildSystems = lib.subtractLists [ "poetry" "poetry-core" ] knownBuildSystems;
 
   mkInputAttrs =
@@ -324,6 +324,7 @@ lib.makeScope pkgs.newScope (self: {
     , editablePackageSources ? { }
     , extraPackages ? ps: [ ]
     , groups ? [ "dev" ]
+    , checkGroups ? [ "dev" ]
     , extras ? [ "*" ]
     }:
     let
@@ -357,7 +358,7 @@ lib.makeScope pkgs.newScope (self: {
         excludedEditablePackageNames;
 
       poetryPython = self.mkPoetryPackages {
-        inherit pyproject poetrylock overrides python pwd preferWheels pyProject groups extras;
+        inherit pyproject poetrylock overrides python pwd preferWheels pyProject groups checkGroups extras;
         editablePackageSources = editablePackageSources';
       };
 

@@ -352,13 +352,6 @@ in
         })
       ];
 
-      # Harmonize Qt application style and also make them use the portal for file chooser dialog.
-      qt = {
-        enable = mkDefault true;
-        platformTheme = mkDefault "gnome";
-        style = mkDefault "adwaita";
-      };
-
       networking.networkmanager.enable = mkDefault true;
 
       services.xserver.updateDbusEnvironment = true;
@@ -432,7 +425,7 @@ in
         isSystem = true;
       };
 
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         cantarell-fonts
         dejavu_fonts
         source-code-pro # Default monospace font in 3.32

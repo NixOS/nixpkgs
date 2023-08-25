@@ -1,4 +1,4 @@
-{ async_generator
+{ async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
@@ -36,7 +36,7 @@ let nbclient = buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    async_generator
+    async-generator
     traitlets
     nbformat
     nest-asyncio

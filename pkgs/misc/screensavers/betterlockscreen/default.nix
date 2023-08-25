@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast and sweet looking lockscreen for linux systems with effects!";
     homepage = "https://github.com/pavanjadhaw/betterlockscreen";
+    mainProgram = "betterlockscreen";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ eyjhb sebtm ];

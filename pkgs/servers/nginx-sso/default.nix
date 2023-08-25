@@ -31,6 +31,6 @@ buildGoModule rec {
     homepage = "https://github.com/Luzifer/nginx-sso";
     license = licenses.asl20;
     maintainers = with maintainers; [ delroth ];
-    platforms = platforms.unix;
+    mainProgram = "nginx-sso";
   };
 }

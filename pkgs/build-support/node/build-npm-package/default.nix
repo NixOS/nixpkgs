@@ -22,7 +22,7 @@
 , npmBuildScript ? "build"
   # Flags to pass to all npm commands.
 , npmFlags ? [ ]
-  # Flags to pass to `npm ci` and `npm prune`.
+  # Flags to pass to `npm ci`.
 , npmInstallFlags ? [ ]
   # Flags to pass to `npm rebuild`.
 , npmRebuildFlags ? [ ]
@@ -30,6 +30,10 @@
 , npmBuildFlags ? [ ]
   # Flags to pass to `npm pack`.
 , npmPackFlags ? [ ]
+  # Flags to pass to `npm prune`.
+, npmPruneFlags ? npmInstallFlags
+  # Value for npm `--workspace` flag and directory in which the files to be installed are found.
+, npmWorkspace ? null
 , ...
 } @ args:
 
@@ -52,8 +56,6 @@ stdenv.mkDerivation (args // {
 
   # Stripping takes way too long with the amount of files required by a typical Node.js project.
   dontStrip = args.dontStrip or true;
-
-  passthru = { inherit npmDeps; } // (args.passthru or { });
 
   meta = (args.meta or { }) // { platforms = args.meta.platforms or nodejs.meta.platforms; };
 })

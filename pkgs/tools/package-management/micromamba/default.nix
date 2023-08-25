@@ -14,7 +14,6 @@
 , python3
 , reproc
 , spdlog
-, termcolor
 , tl-expected
 }:
 
@@ -36,13 +35,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
-  version = "1.2.0";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     rev = "micromamba-" + version;
-    sha256 = "sha256-KGlH5i/lI6c1Jj1ttAOrip8BKECaea5D202TJMcFDmM=";
+    hash = "sha256-Z6hED0fiXzEKpVm8tUBR9ynqWCvHGXkXHzAXbbWlq9Y=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
     libsolv'
     reproc
     spdlog
-    termcolor
     ghc_filesystem
     python3
     tl-expected
