@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${version}";
-    sha256 = "sha256-O+sHkmQ47FbqsgWpaqAc/j2AJ5xzsvpBj/p0Zea1nSI=";
+    sha256 = "sha256-QKR5S7FlMFDw4+VpyRdqixMWyzLpQkf3QCUceQvsliU=";
   };
 
   nativeBuildInputs = [

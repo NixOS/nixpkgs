@@ -42,20 +42,21 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.185.1";
+  version = "0.205.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-PwhTD1k2GOVf6ACNDY1atLLP1jjAF6eTDCE3eLUIpJA=";
+    hash = "sha256-58pBsTQM3t5rj4AywhMqmCUzUQB4BH9FAF7J3p6Qkok=";
   };
 
   patches = [
     (fetchpatch {
+      # https://github.com/strawberry-graphql/strawberry/pull/2199
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
       hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
@@ -64,7 +65,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --emoji --mypy-ini-file=mypy.ini --benchmark-disable" "" \
+      --replace "--emoji --mypy-ini-file=mypy.ini" "" \
   '';
 
   nativeBuildInputs = [
