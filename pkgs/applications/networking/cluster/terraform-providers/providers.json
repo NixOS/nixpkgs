@@ -1106,11 +1106,11 @@
     "vendorHash": "sha256-7qDPVKcBQuJQlya6UHjo5YPLgKl0qz1NlU2TuEf8T+0="
   },
   "talos": {
-    "hash": "sha256-GRwzR2L6PKx6Us1ci3cs2+DU7TQvhEPcOLyn73dS96Y=",
+    "hash": "sha256-9A14x7A5F11PzrJfBg4ZC63of4s4OzfNAYeJIPlHWlI=",
     "homepage": "https://registry.terraform.io/providers/siderolabs/talos",
     "owner": "siderolabs",
     "repo": "terraform-provider-talos",
-    "rev": "v0.3.0",
+    "rev": "v0.3.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-0HRhwUGDE4y7UFlXyD0w8zl4NV5436L4SRhrb8vQGyc="
   },
