@@ -33681,6 +33681,8 @@ with pkgs;
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
+  neosay = callPackage ../applications/networking/instant-messengers/neosay { };
+
   natron = libsForQt5.callPackage ../applications/video/natron { };
 
   natural-docs = callPackage ../applications/misc/natural-docs { };
