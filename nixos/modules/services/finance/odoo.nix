@@ -31,6 +31,12 @@ in
         description = lib.mdDoc ''
           Odoo configuration settings. For more details see <https://www.odoo.com/documentation/15.0/administration/install/deploy.html>
         '';
+        example = literalExpression ''
+          options = {
+            db_user = "odoo";
+            db_password="odoo";
+          };
+        '';
       };
 
       domain = mkOption {
@@ -112,11 +118,11 @@ in
     services.postgresql = {
       enable = true;
 
+      ensureDatabases = [ "odoo" ];
       ensureUsers = [{
         name = "odoo";
         ensurePermissions = { "DATABASE odoo" = "ALL PRIVILEGES"; };
       }];
-      ensureDatabases = [ "odoo" ];
     };
   });
 }
