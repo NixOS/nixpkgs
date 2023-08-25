@@ -6756,6 +6756,12 @@
     githubId = 22756350;
     name = "Emile Hansmaennel";
   };
+  hansfbaier = {
+    email = "hansfbaier@gmail.com";
+    github = "hansfbaier";
+    githubId = 148607;
+    name = "Hans Florian Baier";
+  };
   hansjoergschurr = {
     email = "commits@schurr.at";
     github = "hansjoergschurr";
