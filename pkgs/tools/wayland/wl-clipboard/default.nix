@@ -7,6 +7,7 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols ];
+  buildInputs = [ wayland wayland-protocols xdg-utils ];
 
   mesonFlags = [
     "-Dfishcompletiondir=share/fish/vendor_completions.d"
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bugaevc/wl-clipboard";
     description = "Command-line copy/paste utilities for Wayland";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [ dywedir kashw2 ];
     platforms = platforms.unix;
   };
 }
