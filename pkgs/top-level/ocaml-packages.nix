@@ -347,6 +347,8 @@ let
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
+    domain_shims = callPackage ../development/ocaml-modules/domain_shims { };
+
     domainslib = callPackage ../development/ocaml-modules/domainslib { };
 
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
