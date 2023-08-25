@@ -133,6 +133,8 @@ buildPythonPackage {
     grpcio
   ];
 
+  passthru.optional-dependencies = optional-dependencies;
+
   meta = with lib; {
     description = "Open source libraries and APIs to build custom preprocessing pipelines for labeling, training, or production machine learning pipelines";
     homepage = "https://github.com/Unstructured-IO/unstructured";
