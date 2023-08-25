@@ -1,20 +1,23 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "gickup";
-  version = "0.10.17";
+  version = "0.10.18";
 
   src = fetchFromGitHub {
     owner = "cooperspencer";
     repo = "gickup";
-    rev = "v${version}";
-    hash = "sha256-tiQmb7bBWb99k23lS+d+YR14y4YeYPWqccl/2DLv7Dk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9qaGPmrBA/VdXF9D4eSfjZ3xYBSbPKpwG9t2q37sq3I=";
   };
 
-  vendorHash = "sha256-DWGrs/ZKMKgVfwU7W+dktLELbW9Co7cmDy9pWVP5p2w=";
+  vendorHash = "sha256-uDZCeIdyx60XJ3Cu2M4HocfDysOu5Edp81/eUf45NcE=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tool to backup repositories";
