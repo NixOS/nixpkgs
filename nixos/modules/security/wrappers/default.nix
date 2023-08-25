@@ -248,11 +248,14 @@ in
       export PATH="${wrapperDir}:$PATH"
     '';
 
-    security.apparmor.includes."nixos/security.wrappers" = ''
-      include "${pkgs.apparmorRulesFromClosure { name="security.wrappers"; } [
+    security.apparmor.includes = lib.mapAttrs' (wrapName: wrap: lib.nameValuePair
+     "nixos/security.wrappers/${wrapName}" ''
+      include "${pkgs.apparmorRulesFromClosure { name="security.wrappers.${wrapName}"; } [
         securityWrapper
       ]}"
-    '';
+      mrpx ${wrap.source},
+      r /run/wrappers/wrappers.*/${wrapName}.real,
+    '') wrappers;
 
     ###### wrappers activation script
     system.activationScripts.wrappers =
