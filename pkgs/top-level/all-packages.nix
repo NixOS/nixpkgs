@@ -7374,6 +7374,10 @@ with pkgs;
 
   diction = callPackage ../tools/text/diction { };
 
+  diffoci = callPackage ../tools/misc/diffoci {
+    buildGoModule = buildGo121Module;
+  };
+
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk8;
   };
