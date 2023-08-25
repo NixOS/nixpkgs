@@ -1,51 +1,52 @@
 { lib
 , mkDerivation
-, fetchurl
 , cmake
 , extra-cmake-modules
-, pkg-config
-, baloo
-, kfilemetadata
-, kirigami2
-, kirigami-addons
-, kitemmodels
-, kquickcharts
-, plasma-framework
-, qqc2-desktop-style
 , qtbase
+, qtdeclarative
 , qtquickcontrols2
-, qtwebsockets
+, qtwebchannel
 , qtwebengine
+, qtwebsockets
+, baloo
+, karchive
+, kconfig
+, kcoreaddons
+, kdbusaddons
+, kfilemetadata
+, ki18n
+, kirigami-addons
+, kquickcharts
+, kwindowsystem
+, qqc2-desktop-style
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "arianna";
-  version = "1.1.0";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/arianna/arianna-${version}.tar.xz";
-    hash = "sha256-C60PujiUTyw2DwImu8PVmU687CP9CuWZ+d8LuZKthKY=";
-  };
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    pkg-config
   ];
 
   buildInputs = [
-    baloo
-    kfilemetadata
-    kirigami2
-    kirigami-addons
-    kitemmodels
-    kquickcharts
-    plasma-framework
-    qqc2-desktop-style
     qtbase
+    qtdeclarative
     qtquickcontrols2
-    qtwebsockets
+    qtwebchannel
     qtwebengine
+    qtwebsockets
+    baloo
+    karchive
+    kconfig
+    kcoreaddons
+    kdbusaddons
+    kfilemetadata
+    ki18n
+    kirigami-addons
+    kquickcharts
+    kwindowsystem
+    qqc2-desktop-style
   ];
 
   meta = with lib; {

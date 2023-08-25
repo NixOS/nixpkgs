@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/russelltg/wl-screenrec";
     license = licenses.asl20;
     platforms = platforms.linux;
+    mainProgram = "wl-screenrec";
     maintainers = with maintainers; [ colemickens ];
   };
 }
