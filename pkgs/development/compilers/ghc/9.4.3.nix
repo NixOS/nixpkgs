@@ -288,6 +288,10 @@ stdenv.mkDerivation (rec {
       'MinBootGhcVersion="8.10"'
   '';
 
+  # Silence unused function warning due to `popcount16` being defined on all platforms but used only
+  # on x86_64. This results in an error due to `-Werror`.
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && !targetPlatform.isx86_64) "-Wno-unused-function";
+
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ]
     ++ lib.optional (targetPlatform != hostPlatform) "target";
