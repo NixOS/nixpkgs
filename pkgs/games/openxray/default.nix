@@ -51,10 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = "RelWithDebInfo";
   dontStrip = true;
 
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
+    # Needed because of dlopen module loading code
+    "--prefix LD_LIBRARY_PATH : $out/lib"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Because we work around https://github.com/OpenXRay/xray-16/issues/1224 by using GCC,
+    # we need a followup workaround for Darwin locale stuff when using GCC:
+    # runtime error: locale::facet::_S_create_c_locale name not valid
+    "--run 'export LC_ALL=C'"
+  ];
+
   postInstall = ''
-    # needed because of SDL_LoadObject library loading code
-    wrapProgram $out/bin/xr_3da \
-      --prefix LD_LIBRARY_PATH : $out/lib
+    wrapProgram $out/bin/xr_3da ${toString finalAttrs.makeWrapperArgs}
   '';
 
   meta = with lib; {
@@ -65,6 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OpenXRay/xray-16/blob/${version}/License.txt";
     };
     maintainers = with maintainers; [ OPNA2608 ];
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 })
