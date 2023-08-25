@@ -1060,6 +1060,11 @@
     github = "an-empty-string";
     githubId = 681716;
   };
+  angaz = {
+    name = "Angus Dippenaar";
+    github = "angaz";
+    githubId = 10219618;
+  };
   angristan = {
     email = "angristan@pm.me";
     github = "angristan";
@@ -3926,6 +3931,12 @@
     githubId = 11422515;
     name = "David Sánchez";
   };
+  dawidd6 = {
+    email = "dawidd0811@gmail.com";
+    github = "dawidd6";
+    githubId = 9713907;
+    name = "Dawid Dziurla";
+  };
   dawidsowa = {
     email = "dawid_sowa@posteo.net";
     github = "dawidsowa";
@@ -6106,6 +6117,12 @@
     github = "gebner";
     githubId = 313929;
     name = "Gabriel Ebner";
+  };
+  geluk = {
+    email = "johan+nix@geluk.io";
+    github = "geluk";
+    githubId = 1516985;
+    name = "Johan Geluk";
   };
   genericnerdyusername = {
     name = "GenericNerdyUsername";
@@ -10887,13 +10904,15 @@
     name = "Matthias C. M. Troffaes";
   };
   McSinyx = {
-    email = "mcsinyx@disroot.org";
+    email = "cnx@loang.net";
     github = "McSinyx";
     githubId = 13689192;
+    matrix = "@cnx:loang.net";
     name = "Nguyễn Gia Phong";
-    keys = [{
-      fingerprint = "E90E 11B8 0493 343B 6132  E394 2714 8B2C 06A2 224B";
-    }];
+    keys = [
+      { fingerprint = "E90E 11B8 0493 343B 6132  E394 2714 8B2C 06A2 224B"; }
+      { fingerprint = "838A FE0D 55DC 074E 360F  943A 84B6 9CE6 F3F6 B767"; }
+    ];
   };
   mcwitt = {
     email = "mcwitt@gmail.com";
@@ -11006,6 +11025,12 @@
     github = "mfossen";
     githubId = 3300322;
     name = "Mitchell Fossen";
+  };
+  mfrw = {
+    email = "falakreyaz@gmail.com";
+    github = "mfrw";
+    githubId = 4929861;
+    name = "Muhammad Falak R Wani";
   };
   mgdelacroix = {
     email = "mgdelacroix@gmail.com";
@@ -14144,6 +14169,12 @@
     github = "raphaelr";
     githubId = 121178;
     name = "Raphael Robatsch";
+  };
+  rapiteanu = {
+    email = "rapiteanu.catalin@gmail.com";
+    github = "Steinhagen";
+    githubId = 4029937;
+    name = "Viorel-Cătălin Răpițeanu";
   };
   raquelgb = {
     email = "raquel.garcia.bautista@gmail.com";

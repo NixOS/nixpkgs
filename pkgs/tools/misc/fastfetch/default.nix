@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.0.1";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-7Sk2Fd9u5c1XLTd9vl32TpD10M1JeB9V05yF/dF+Sfk=";
+    hash = "sha256-8A00XGKX/dbJElrHQrtoDCEGZJ8ktpFJ6zsxu2qZcxI=";
   };
 
   nativeBuildInputs = [

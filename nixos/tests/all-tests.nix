@@ -341,6 +341,7 @@ in {
   hbase2 = handleTest ./hbase.nix { package=pkgs.hbase2; };
   hbase_2_4 = handleTest ./hbase.nix { package=pkgs.hbase_2_4; };
   hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
+  hddfancontrol = handleTest ./hddfancontrol.nix {};
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
   homepage-dashboard = handleTest ./homepage-dashboard.nix {};
@@ -433,7 +434,7 @@ in {
   lightdm = handleTest ./lightdm.nix {};
   lighttpd = handleTest ./lighttpd.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
-  listmonk = handleTest ./listmonk.nix {};
+  listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix {};
   litestream = handleTest ./litestream.nix {};
   lldap = handleTest ./lldap.nix {};
   locate = handleTest ./locate.nix {};
@@ -442,10 +443,8 @@ in {
   loki = handleTest ./loki.nix {};
   luks = handleTest ./luks.nix {};
   lvm2 = handleTest ./lvm2 {};
-  lxd = handleTest ./lxd.nix {};
-  lxd-nftables = handleTest ./lxd-nftables.nix {};
+  lxd = handleTest ./lxd {};
   lxd-image-server = handleTest ./lxd-image-server.nix {};
-  lxd-ui = handleTest ./lxd-ui.nix {};
   #logstash = handleTest ./logstash.nix {};
   lorri = handleTest ./lorri/default.nix {};
   maddy = discoverTests (import ./maddy { inherit handleTest; });

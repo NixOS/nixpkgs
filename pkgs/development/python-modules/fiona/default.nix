@@ -5,6 +5,7 @@
 , cython
 , gdal
 , setuptools
+, wheel
 , attrs
 , certifi
 , click
@@ -31,10 +32,20 @@ buildPythonPackage rec {
     hash = "sha256-CeGdWAmWteVtL0BoBQ1sB/+1AWkmxogtK99bL5Fpdbw=";
   };
 
+  postPatch = ''
+    # Remove after https://github.com/Toblerity/Fiona/pull/1225 is released
+    sed -i '/"oldest-supported-numpy"/d' pyproject.toml
+
+    # Remove after https://github.com/Toblerity/Fiona/pull/1281 is released,
+    # after which cython also needs to be updated to cython_3
+    sed -i 's/Cython~=/Cython>=/' pyproject.toml
+  '';
+
   nativeBuildInputs = [
     cython
     gdal # for gdal-config
     setuptools
+    wheel
   ];
 
   buildInputs = [

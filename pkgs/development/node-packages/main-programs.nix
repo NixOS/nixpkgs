@@ -17,7 +17,6 @@
   "@commitlint/cli" = "commitlint";
   "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
-  "@medable/mdctl-cli" = "mdctl";
   "@mermaid-js/mermaid-cli" = "mmdc";
   "@nerdwallet/shepherd" = "shepherd";
   "@prisma/language-server" = "prisma-language-server";
@@ -29,7 +28,6 @@
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
   "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
-  carbon-now-cli = "carbon-now";
   cdk8s-cli = "cdk8s";
   cdktf-cli = "cdktf";
   clipboard-cli = "clipboard";
@@ -40,7 +38,6 @@
   dockerfile-language-server-nodejs = "docker-langserver";
   fast-cli = "fast";
   fauna-shell = "fauna";
-  firebase-tools = "firebase";
   fkill-cli = "fkill";
   fleek-cli = "fleek";
   git-run = "gr";

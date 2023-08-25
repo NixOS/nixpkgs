@@ -11,13 +11,13 @@ in
 stdenvNoCC.mkDerivation {
   inherit pname;
 
-  version = "unstable-2023-06-25";
+  version = "unstable-2023-07-25";
 
   src = fetchFromGitHub {
     owner = "minoki";
     repo = "LunarML";
-    rev = "f58f90cf7a2f26340403245907ed183f6a12ab52";
-    sha256 = "djHJfUAPplsejFW9L3fbwTeeWgvR+gKkI8TmwIh8n7E=";
+    rev = "4a5f9c7d42c6b1fcd3d73ab878321f887a153aa7";
+    sha256 = "dpYUXMbYPRvk+t6Cnc4uh8w5MwuPXuKPgZQl2P0EBZU=";
   };
 
   outputs = [ "out" "doc" ];
