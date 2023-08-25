@@ -1,45 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, appstream-glib
-, cargo
-, cmake
-, desktop-file-utils
-, glib
-, gstreamer
-, gtk4
-, libadwaita
-, libxml2
-, meson
-, ninja
-, pkg-config
-, poppler
-, python3
-, rustPlatform
-, rustc
-, shared-mime-info
-, wrapGAppsHook4
-, AudioUnit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  appstream-glib,
+  cargo,
+  cmake,
+  desktop-file-utils,
+  glib,
+  gstreamer,
+  gtk4,
+  libadwaita,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  python3,
+  rustPlatform,
+  rustc,
+  shared-mime-info,
+  wrapGAppsHook4,
+  AudioUnit,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-QcgmL6lLi/3QXnlcEsVyTqNUfjSm+R+nhRzRvw8M9Qc=";
+    hash = "sha256-+3Hy2t3ZN7mkIuonHHRP6rinBY00jL8VylGq9JQVgNk=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ink-stroke-modeler-rs-0.1.0" = "sha256-1abfrPehOGc/ye/iFIwYPd6HJX6P8OP2vGBSJfeo+c8=";
-      "librsvg-2.56.2" = "sha256-uCHKDC4nc7J0k9qsmzF6etkWOoNq51Dddd9uQw5DOT0=";
-      "piet-0.6.2" = "sha256-If0qiZkgXeLvsrECItV9/HmhTk1H52xmVO7cUsD9dcU=";
+      "ink-stroke-modeler-rs-0.1.0" = "sha256-r4ZIP1Dfl5hDg7EbNrnm4YFYEoDFkIRo6NL2qXkIMqg=";
+      "librsvg-2.57.0-beta.2" = "sha256-8k5KWhm9PIpdmf2DByTyrqX5mGAa+a7ZDGmVO2ERhTU=";
+      "piet-0.6.2" = "sha256-WrQok0T7uVQEp8SvNWlgqwQHfS7q0510bnP1ecr+s1Q=";
     };
   };
 
@@ -65,18 +65,21 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "cli" true)
   ];
 
-  buildInputs = [
-    glib
-    gstreamer
-    gtk4
-    libadwaita
-    libxml2
-    poppler
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    AudioUnit
-  ];
+  buildInputs =
+    [
+      glib
+      gstreamer
+      gtk4
+      libadwaita
+      libxml2
+      poppler
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AudioUnit
+    ];
 
   postPatch = ''
     pushd build-aux
@@ -90,7 +93,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
     description = "Simple drawing application to create handwritten notes";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda yrd ];
+    maintainers = with maintainers; [dotlambda yrd];
     platforms = platforms.unix;
   };
 }
