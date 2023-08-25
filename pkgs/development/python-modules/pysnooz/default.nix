@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-X7RjI4KytJI9raHAJHLygV3J4zHKuHk8Kq+3JfktPeg=";
   };
 
@@ -62,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control SNOOZ white noise machines";
     homepage = "https://github.com/AustinBrunkhorst/pysnooz";
+    changelog = "https://github.com/AustinBrunkhorst/pysnooz/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
