@@ -32,7 +32,6 @@ python310Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    wlr-randr
     atk
     gdk-pixbuf
     gtk-layer-shell
@@ -40,6 +39,7 @@ python310Packages.buildPythonApplication rec {
     python310Packages.gst-python
     python310Packages.i3ipc
     python310Packages.pygobject3
+    wlr-randr
   ];
 
   dontWrapGApps = true;
