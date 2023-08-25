@@ -1,9 +1,11 @@
 1{
   /python/{
-    N;
+    N
     # add script folder to path, unless we interfere with a docstring
     /\nr"""/b skip-python-path-patch
-    s!\n!\nimport sys; sys.path.insert(0,'@scriptsFolder@')\n!
+    # skip encoding declarations
+    /\n\s*#.*coding[=:]\s*[-a-zA-Z0-9_.]/N
+    s!\n\([^\n]*\)$!\nimport sys; sys.path.insert(0,'@scriptsFolder@')\n\1!
     :skip-python-path-patch
   }
 
