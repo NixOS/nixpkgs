@@ -6,7 +6,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/vial-kb/vial-gui/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
-    sha256 = "sha256-IvOjwboxc3KRKUMXW3dWoHMy8Oh7NGsu0GIJcLZ6WR8=";
+    hash = "sha256-IvOjwboxc3KRKUMXW3dWoHMy8Oh7NGsu0GIJcLZ6WR8=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit name src; };
@@ -23,11 +23,13 @@ appimageTools.wrapType2 {
     echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/92-viia.rules
   '';
 
-  meta = with lib; {
-    description = "An Open-source QMK GUI fork for configuring your keyboard in real time";
+  meta = {
+    description = "An Open-source GUI and QMK fork for configuring your keyboard in real time";
     homepage = "https://get.vial.today";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "vial";
+    maintainers = with lib.maintainers; [ kranzes ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
