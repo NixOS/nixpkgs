@@ -33,6 +33,27 @@ in lib.init bootStages ++ [
     allowCustomOverrides = true;
   })
 
+  # Prevent (some) unwanted assumptions about the number of stages
+  # from creeping in.  Previously, nixpkgs contained code which
+  # assumed that `pkgs.stdenv.__bootPackages == pkgs.stdenv.pkgsBuildHost`.
+  #
+  # We add this no-op stage here, between pkgsBuildHost and
+  # pkgsHostHost, in order to deliberately break any code which
+  # makes that assumption -- such code will likely fail since
+  # `pkgs.stdenv.__bootPackages.hostPlatform !=
+  # pkgs.stdenv.pkgsBuildHost.hostPlatform`, and will end up trying
+  # to run `hostPlatform` binaries during the build.
+  #
+  # We previously had two additional no-op stages: one before
+  # `pkgsBuildHost`, and one after `pkgsHostHost`.  However these
+  # appeared to increase eval-time CPU usage by 1%, which was deemed
+  # undesirable.  See https://github.com/NixOS/nixpkgs/pull/251299
+  #
+  (prevStage: {
+    inherit config overlays;
+    inherit (prevStage) stdenv;
+  })
+
   # Run Packages
   (buildPackages: let
     adaptStdenv =
