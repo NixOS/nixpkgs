@@ -1,6 +1,6 @@
-{ lib, fetchurl, appimageTools, mkDesktopItem }:
+{ lib, fetchurl, appimageTools, mkDesktopItem, stdenv }:
 
-appimageTools.wrapType2 rec {
+let
   pname = "remnote";
   version = "1.12.18";
   src = fetchurl {
@@ -11,7 +11,10 @@ appimageTools.wrapType2 rec {
     url = "https://www.remnote.io/remnote.png";
     sha256 = "sha256-BylzKYH4Kk4N6AI1FrvOtpZEpRSUqBy3zuHh+XMjhA4=";
   };
-  desktopItem = makeDesktopItem {
+  appexec = appimageTools.wrapType2 {
+    inherit pname version src;
+  };
+  desktopItem = mkDesktopItem {
     type = "Application";
     name = "remnote";
     desktopName = "RemNote";
@@ -21,7 +24,22 @@ appimageTools.wrapType2 rec {
     categories = [ "Office" ];
     mimeTypes = [ "x-scheme-handler/remnote" "x-scheme-handler/rn" ];
   };
-
+in
+stdenv.mkDerivation { 
+  inherit pname version src;
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin
+    install ${appexec}/bin/remnote-${version} $out/bin/remnote
+    mkdir -p $out/share/applications
+    install -D "${desktopItem}/share/applications/"* -t $out/share/applications/
+    mkdir -p $out/share/pixmaps
+    install ${icon} $out/share/pixmaps/remnote.png
+    runHook postInstall
+  ''; 
   meta = with lib; {
     description = "A note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
