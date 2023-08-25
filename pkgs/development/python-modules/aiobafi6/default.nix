@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiobafi6";
-  version = "0.8.2";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "jfroy";
     repo = "aiobafi6";
     rev = "refs/tags/${version}";
-    hash = "sha256-ng+WpLhAfsouFA9biomc0V+L9XQHDthJeJLv8ttnYBc=";
+    hash = "sha256-QxjrspvNrcMcGChjj1B4QF/SnWCsGmPxnI2bWAL6BiI=";
   };
 
   nativeBuildInputs = [
