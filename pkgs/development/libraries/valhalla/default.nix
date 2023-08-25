@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , boost
@@ -28,6 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1X9vsWsgnzmXn7bCMhN2PNwtfV0RRdzRFZIrQN2PLfA=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix build
+    (fetchpatch {
+      url = "https://github.com/valhalla/valhalla/commit/e4845b68e8ef8de9eabb359b23bf34c879e21f2b.patch";
+      hash = "sha256-xCufmXHGj1JxaMwm64JT9FPY+o0+x4glfJSYLdvHI8U=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/bindings/python/CMakeLists.txt \
