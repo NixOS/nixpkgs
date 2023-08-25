@@ -1,5 +1,6 @@
 { blas
 , boost
+, clblast
 , cmake
 , config
 , cudaPackages
@@ -21,10 +22,17 @@
 , python3
 , span-lite
 , stdenv
+  # NOTE: We disable tests by default, because they cannot be run easily on
+  # non-NixOS systems when either CUDA or OpenCL support is enabled (CUDA and
+  # OpenCL need access to drivers that are installed outside of Nix on
+  # non-NixOS systems).
 , doCheck ? false
-, withCPU ? true
-, withCuda ? config.cudaSupport
-, withOpenCL ? stdenv.isLinux
+, cpuSupport ? true
+, cudaSupport ? config.cudaSupport
+  # OpenCL needs mesa which is broken on Darwin
+, openclSupport ? !stdenv.isDarwin
+  # This argument lets one run CUDA & OpenCL tests on non-NixOS systems by
+  # telling Nix where to find the drivers.
 , nvidiaComputeDrivers ? null
 }:
 
@@ -41,18 +49,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-9r1w0U9MvhduHwBpEWpqkrQPawd94EY3FAqSJghi09I=";
   };
 
-  assets = fetchFromGitHub {
-    owner = pname;
-    repo = "assets";
-    rev = "cd08d749611b324012555ad6f23fd76c5465bd6c";
-    sha256 = "sha256-v4uhqPz1P1g1430FTmMp22xJS50bb5hZTeEX49GgMWg=";
-  };
-  clblast = fetchFromGitHub {
-    owner = "cnugteren";
-    repo = "CLBlast";
-    rev = "4500a03440e2cc54998c0edab366babf5e504d67";
-    sha256 = "sha256-I25ylQp6kHZx6Q7Ph5r3abWlQ6yeIHIDdS1eGCyArZ0=";
-  };
+  # We cannot use the clfft from Nixpkgs because ArrayFire maintain a fork
+  # of clfft where they've modified the CMake build system, and the
+  # CMakeLists.txt of ArrayFire assumes that we're using that fork.
+  #
+  # This can be removed once ArrayFire upstream their changes.
   clfft = fetchFromGitHub {
     owner = pname;
     repo = "clfft";
@@ -77,6 +78,9 @@ stdenv.mkDerivation rec {
     rev = "a5f533d7b864a4d8f0dd7c9aaad5ff06018c4867";
     sha256 = "sha256-AWzhsrDXyZrQN2bd0Ng/XlE8v02x7QWTiFTyaAuRXSw=";
   };
+  # ArrayFire fails to compile with newer versions of spdlog, so we can't use
+  # the one in Nixpkgs. Once they upgrade, we can switch to using spdlog from
+  # Nixpkgs.
   spdlog = fetchFromGitHub {
     owner = "gabime";
     repo = "spdlog";
@@ -86,35 +90,46 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_TESTING=ON"
+    # We do not build examples, because building tests already takes long enough...
     "-DAF_BUILD_EXAMPLES=OFF"
-    "-DAF_COMPUTE_LIBRARY='FFTW/LAPACK/BLAS'"
-    "-DAF_TEST_WITH_MTX_FILES=OFF"
-    "-DAF_WITH_SPDLOG_HEADER_ONLY=ON"
+    # No need to build forge, because it's a separate package
     "-DAF_BUILD_FORGE=OFF"
-    (if withCPU then "-DAF_BUILD_CPU=ON" else "-DAF_BUILD_CPU=OFF")
-    (if withOpenCL then "-DAF_BUILD_OPENCL=ON" else "-DAF_BUILD_OPENCL=OFF")
-    (if withCuda then "-DAF_BUILD_CUDA=ON" else "-DAF_BUILD_CUDA=OFF")
-  ] ++ lib.optionals withCuda [
+    "-DAF_COMPUTE_LIBRARY='FFTW/LAPACK/BLAS'"
+    # Prevent ArrayFire from trying to download some matrices from the Internet
+    "-DAF_TEST_WITH_MTX_FILES=OFF"
+    # Have to use the header-only version, because we're not using the version
+    # from Nixpkgs. Otherwise, libaf.so won't be able to find the shared
+    # library, because ArrayFire's CMake files do not run the install step of
+    # spdlog.
+    "-DAF_WITH_SPDLOG_HEADER_ONLY=ON"
+    (if cpuSupport then "-DAF_BUILD_CPU=ON" else "-DAF_BUILD_CPU=OFF")
+    (if openclSupport then "-DAF_BUILD_OPENCL=ON" else "-DAF_BUILD_OPENCL=OFF")
+    (if cudaSupport then "-DAF_BUILD_CUDA=ON" else "-DAF_BUILD_CUDA=OFF")
+  ] ++ lib.optionals cudaSupport [
+    # ArrayFire use deprecated FindCUDA in their CMake files, so we help CMake
+    # locate cudatoolkit.
     "-DCUDA_LIBRARIES_PATH=${cudaPackages.cudatoolkit}/lib"
   ];
+
+  # ArrayFire have a repo with assets for the examples. Since we don't build
+  # the examples anyway, remove the dependency on assets.
+  patches = [ ./no-assets.patch ];
 
   postPatch = ''
     mkdir -p ./extern/af_glad-src
     mkdir -p ./extern/af_threads-src
-    mkdir -p ./extern/af_assets-src
     mkdir -p ./extern/af_test_data-src
     mkdir -p ./extern/ocl_clfft-src
-    mkdir -p ./extern/ocl_clblast-src
-    mkdir -p ./extern/nv_cub-src
     mkdir -p ./extern/spdlog-src
     cp -R --no-preserve=mode,ownership ${glad}/* ./extern/af_glad-src/
     cp -R --no-preserve=mode,ownership ${threads}/* ./extern/af_threads-src/
-    cp -R --no-preserve=mode,ownership ${assets}/* ./extern/af_assets-src/
     cp -R --no-preserve=mode,ownership ${test-data}/* ./extern/af_test_data-src/
     cp -R --no-preserve=mode,ownership ${clfft}/* ./extern/ocl_clfft-src/
-    cp -R --no-preserve=mode,ownership ${clblast}/* ./extern/ocl_clblast-src/
     cp -R --no-preserve=mode,ownership ${spdlog}/* ./extern/spdlog-src/
 
+    # libaf.so (the unified backend) tries to load the right shared library at
+    # runtime, and the search paths are hard-coded... We tweak them to point to
+    # the installation directory in the Nix store.
     substituteInPlace src/api/unified/symbol_manager.cpp \
       --replace '"/opt/arrayfire-3/lib/",' \
                 "\"$out/lib/\", \"/opt/arrayfire-3/lib/\","
@@ -125,29 +140,36 @@ stdenv.mkDerivation rec {
     let
       LD_LIBRARY_PATH = builtins.concatStringsSep ":" (
         [ "${forge}/lib" "${freeimage}/lib" ]
-        ++ lib.optional withCuda "${cudaPackages.cudatoolkit}/lib64"
+        ++ lib.optional cudaSupport "${cudaPackages.cudatoolkit}/lib64"
+        # On non-NixOS systems, help the tests find Nvidia drivers
         ++ lib.optional (nvidiaComputeDrivers != null) "${nvidiaComputeDrivers}/lib"
       );
       ctestFlags = builtins.concatStringsSep " " (
+        # We have to run with "-j1" otherwise various segfaults occur on non-NixOS systems.
         [ "--output-on-errors" "-j1" ]
         # See https://github.com/arrayfire/arrayfire/issues/3484
-        ++ lib.optional withOpenCL "-E '(inverse_dense|cholesky_dense)'"
+        ++ lib.optional openclSupport "-E '(inverse_dense|cholesky_dense)'"
       );
     in
     ''
       export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
-    '' + lib.optionalString (withOpenCL && nvidiaComputeDrivers != null) ''
+    '' +
+    # On non-NixOS systems, help the tests find Nvidia drivers
+    lib.optionalString (openclSupport && nvidiaComputeDrivers != null) ''
       export OCL_ICD_VENDORS=${nvidiaComputeDrivers}/etc/OpenCL/vendors
     '' + ''
-      AF_TRACE=all AF_PRINT_ERRORS=1 ctest ${ctestFlags}
+      # Note: for debugging, enable AF_TRACE=all
+      AF_PRINT_ERRORS=1 ctest ${ctestFlags}
     '';
 
   buildInputs = [
     blas
     boost.dev
     boost.out
+    clblast
     fftw
     fftwFloat
+    # We need fmt_9 because ArrayFire fails to compile with newer versions.
     fmt_9
     forge
     freeimage
@@ -158,17 +180,21 @@ stdenv.mkDerivation rec {
     opencl-clhpp
     span-lite
   ]
-  ++ lib.optionals withCuda [
+  ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
     cudaPackages.cudnn
     cudaPackages.cuda_cccl
   ]
-  ++ lib.optionals withOpenCL [
+  ++ lib.optionals openclSupport [
     mesa
   ];
 
   nativeBuildInputs = [
     cmake
+    # ArrayFire have their own CMake functions for downloading the
+    # dependencies, and it uses git. Even though we bypass that system by
+    # downloading the dependencies beforehand, CMake files still invoke git for
+    # checking...
     git
     pkg-config
     python3
