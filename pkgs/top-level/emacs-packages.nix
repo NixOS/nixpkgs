@@ -7,18 +7,11 @@
 # Alternative: use `emacs`, install everything to a system or user profile
 # and then add this at the start your `init.el`:
 /*
-  (require 'package)
-
-  ;; optional. makes unpure packages archives unavailable
-  (setq package-archives nil)
-
   ;; optional. use this if you install emacs packages to the system profile
   (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
 
   ;; optional. use this if you install emacs packages to user profiles (with nix-env)
   (add-to-list 'package-directory-list "~/.nix-profile/share/emacs/site-lisp/elpa")
-
-  (package-initialize)
 */
 
 { pkgs'
