@@ -2,11 +2,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "remnote";
-  version = "1.12.9";
+  version = "1.12.18";
 
   src = fetchurl {
     url = "https://download.remnote.io/remnote-desktop/RemNote-${version}.AppImage";
-    sha256 = "sha256-ZBo7yxbTS+2pWecbPGxp0UMy16HRMwuuUUejb6DUHic=";
+    sha256 = "sha256-z/LTsX65rN+AJbpCTzIabpgUadFe6SnRRDKOkexZyjQ=";
   };
 
   meta = with lib; {
