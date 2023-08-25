@@ -1,37 +1,80 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pytestCheckHook
-, mock
 , brotli
+, buildPythonPackage
+, cython
+, execnet
+, fetchFromGitHub
+, jinja2
+, pytestCheckHook
+, pythonOlder
+, pyzmq
+, redis
+, setuptools
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
   pname = "logbook";
-  version = "1.5.3";
+  version = "1.6.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    pname = "Logbook";
-    inherit version;
-    sha256 = "1s1gyfw621vid7qqvhddq6c3z2895ci4lq3g0r1swvpml2nm9x36";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "getlogbook";
+    repo = "logbook";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2K6fM6MFrh3l0smhSz8RFd79AIOXQZJQbNLTJM4WZUo=";
+  };
+
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
+
+  passthru.optional-dependencies = {
+    execnet = [
+      execnet
+    ];
+    sqlalchemy = [
+      sqlalchemy
+    ];
+    redis = [
+      redis
+    ];
+    zmq = [
+      pyzmq
+    ];
+    compression = [
+      brotli
+    ];
+    jinja = [
+      jinja2
+    ];
+    all = [
+      brotli
+      execnet
+      jinja2
+      pyzmq
+      redis
+      sqlalchemy
+    ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (!isPy3k) [
-    mock
-  ];
-
-  propagatedBuildInputs = [
-    brotli
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "logbook"
+  ];
+
+  disabledTests = [
+    # Test require Redis instance
+    "test_redis_handler"
   ];
 
   meta = with lib; {
