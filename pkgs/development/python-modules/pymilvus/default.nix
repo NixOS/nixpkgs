@@ -2,6 +2,7 @@
 , buildPythonPackage
 , environs
 , fetchFromGitHub
+, gitpython
 , grpcio
 , grpcio-testing
 , mmh3
@@ -13,6 +14,7 @@
 , scikit-learn
 , setuptools-scm
 , ujson
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -29,15 +31,17 @@ buildPythonPackage rec {
     hash = "sha256-wwhgO2iCzPXobyZI0narHPn2WCAB9sS1+AoLrP1Ih6Q=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
     "grpcio"
   ];
 
   nativeBuildInputs = [
+    gitpython
     pythonRelaxDepsHook
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
