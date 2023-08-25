@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lief.quarkslab.com/";
     license = [ licenses.asl20 ];
     platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.lassulus ];
+    maintainers = with maintainers; [ lassulus genericnerdyusername ];
   };
 }
