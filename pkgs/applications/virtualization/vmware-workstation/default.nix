@@ -32,14 +32,14 @@
 
 let
   # macOS - versions
-  fusionVersion = "13.0.0";
-  fusionBuild = "20802013";
+  fusionVersion = "13.0.2";
+  fusionBuild = "21581413";
   unlockerVersion = "3.0.4";
 
   # macOS - ISOs
   darwinIsoSrc = fetchurl {
-    url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/x86/core/com.vmware.fusion.zip.tar";
-    sha256 = "sha256-cSboek+nhkVj8rjdic6yzWQfjXiiLlch6gBWn73BzRU=";
+    url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/universal/core/com.vmware.fusion.zip.tar";
+    sha256 = "sha256-8IaEQn1+e+WtjRX9Aopbi6tVTNt9RVyGrpaARtVH6j0=";
   };
 
   # macOS - Unlocker
@@ -71,8 +71,8 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vmware-workstation";
-  version = "17.0.0";
-  build = "20800274";
+  version = "17.0.2";
+  build = "21581411";
 
   buildInputs = [
     libxslt
@@ -100,8 +100,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableMacOSGuests [ gnutar unzip ];
 
   src = fetchurl {
-    url = "https://download3.vmware.com/software/WKST-1700-LX/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
-    sha256 = "sha256-kBTocGb1tg5i+dvWmOaPfPUHxrWcX8/obeKqRGR+mRA=";
+    url = "https://download3.vmware.com/software/WKST-${builtins.replaceStrings ["."] [""] version}-LX/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
+    sha256 = "sha256-9ONh+uvL4YGNGxbpPX1mWO8P4oKPUpwzTsKKBJNxHMc=";
   };
 
   unpackPhase = ''
