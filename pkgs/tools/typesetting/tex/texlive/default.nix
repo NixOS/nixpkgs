@@ -5,12 +5,16 @@
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper
+, generateSplicesForMkScope, makeScopeWithSplicing', texliveAttr ? "texlive"
 , python3, ruby, perl, tk, jdk, bash, snobol4
 , coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, ncurses, zip
 , libfaketime, asymptote, biber-ms, makeFontsConf
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
+
+# function whose fixed point is the texlive scope
+let makeTeXLive = self:
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
@@ -18,14 +22,7 @@ let
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
-    inherit useFixedHashes;
-  };
-
-  # function for creating a working environment from a set of TL packages
-  combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv lib makeWrapper writeText runCommand
-      stdenv perl libfaketime makeFontsConf bash tl coreutils gawk gnugrep gnused;
-    ghostscript = ghostscript_headless;
+    inherit self useFixedHashes;
   };
 
   tlpdb = import ./tlpdb.nix;
@@ -59,12 +56,12 @@ let
       xetex.scriptsFolder = "texlive-extra";
 
       #### interpreters not detected by looking at the script extensions
-      ctanbib.extraBuildInputs = [ bin.luatex ];
+      ctanbib.extraBuildInputs = [ self.bin.luatex ];
       de-macro.extraBuildInputs = [ python3 ];
       match_parens.extraBuildInputs = [ ruby ];
       optexcount.extraBuildInputs = [ python3 ];
       pdfbook2.extraBuildInputs = [ python3 ];
-      texlogsieve.extraBuildInputs = [ bin.luatex ];
+      texlogsieve.extraBuildInputs = [ self.bin.luatex ];
 
       #### perl packages
       crossrefware.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ LWP URI ])) ];
@@ -148,9 +145,9 @@ let
       pdfcrop.binlinks.rpdfcrop = "pdfcrop";
 
       ptex.binlinks = {
-        pdvitomp = bin.metapost + "/bin/pdvitomp";
-        pmpost = bin.metapost + "/bin/pmpost";
-        r-pmpost = bin.metapost + "/bin/r-pmpost";
+        pdvitomp = self.bin.metapost + "/bin/pdvitomp";
+        pmpost = self.bin.metapost + "/bin/pmpost";
+        r-pmpost = self.bin.metapost + "/bin/r-pmpost";
       };
 
       texdef.binlinks = {
@@ -159,7 +156,7 @@ let
 
       texlive-scripts.binlinks = {
         mktexfmt = "fmtutil";
-        texhash = (lib.last tl."texlive.infra".pkgs) + "/bin/mktexlsr";
+        texhash = self.__pkgs."texlive.infra" + "/bin/mktexlsr";
       };
 
       texlive-scripts-extra.binlinks = {
@@ -170,9 +167,9 @@ let
 
       # metapost binaries are in bin.metapost instead of bin.core
       uptex.binlinks = {
-        r-upmpost = bin.metapost + "/bin/r-upmpost";
-        updvitomp = bin.metapost + "/bin/updvitomp";
-        upmpost = bin.metapost + "/bin/upmpost";
+        r-upmpost = self.bin.metapost + "/bin/r-upmpost";
+        updvitomp = self.bin.metapost + "/bin/updvitomp";
+        upmpost = self.bin.metapost + "/bin/upmpost";
       };
 
       #### add PATH dependencies without wrappers
@@ -379,14 +376,14 @@ let
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
         postUnpack = ''
           if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
-            unxz --stdout "${tlpdbxz}" > texlive.tlpdb
+            unxz --stdout "${self.tlpdb.xz}" > texlive.tlpdb
 
             # create dummy doc file to ensure that texdoc does not return an error
             mkdir -p support/texdoc
             touch support/texdoc/NEWS
 
-            TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
-              "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
+            TEXMFCNF="${self.bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+              "${self.bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
               -c texlive_tlpdb=texlive.tlpdb -lM texdoc
 
             cp texdoc/cache-tlpdb.lua "$out"/scripts/texdoc/Data.tlpdb.lua
@@ -399,23 +396,23 @@ let
         extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
 
         # add license of tlmgr and TeXLive::* perl packages and of bin.core
-        license = [ "gpl2Plus" ] ++ lib.toList bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
+        license = [ "gpl2Plus" ] ++ lib.toList self.bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
 
         scriptsFolder = "texlive";
-        extraBuildInputs = [ coreutils gnused gnupg (lib.last tl.kpathsea.pkgs) (perl.withPackages (ps: with ps; [ Tk ])) ];
+        extraBuildInputs = [ coreutils gnused gnupg self.__pkgs.kpathsea (perl.withPackages (ps: with ps; [ Tk ])) ];
 
         # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
         postFixup = ''
           substituteInPlace "$out"/bin/tlmgr \
             --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
           sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath [ gnupg ]}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/tlmgr
-          sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused (lib.last tl.kpathsea.pkgs) ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
+          sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused self.__pkgs.kpathsea ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
         '';
 
         # add minimal texlive.tlpdb
         postUnpack = ''
           if [[ "$tlType" == "tlpkg" ]] ; then
-            xzcat "${tlpdbxz}" | sed -n -e '/^name \(00texlive.config\|00texlive.installation\)$/,/^$/p' > "$out"/texlive.tlpdb
+            xzcat "${self.tlpdb.xz}" | sed -n -e '/^name \(00texlive.config\|00texlive.installation\)$/,/^$/p' > "$out"/texlive.tlpdb
           fi
         '';
       };
@@ -456,7 +453,7 @@ let
   };
 
   tlpdbNix = runCommand "tlpdb.nix" {
-    inherit tlpdbxz;
+    tlpdbxz = self.tlpdb.xz;
     tl2nix = ./tl2nix.sed;
   }
   ''
@@ -475,25 +472,10 @@ let
     buildTeXLivePackage (args
       # NOTE: the fixed naming scheme must match generate-fixed-hashes.nix
       // { inherit mirrors pname; fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { }; }
-      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); })
+      // lib.optionalAttrs (args ? deps) { deps = map (n: self.__pkgs.${n}) (args.deps or [ ]); })
   ) overriddenTlpdb;
 
-  # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgList: lib.catAttrs "pkg" (
-    let
-      # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
-      # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
-      tlPkgToSets = { pkgs, ... }: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
-          # outputName required to distinguish among bin.core-big outputs
-          key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
-          inherit pkg;
-        }) pkgs;
-      pkgListToSets = lib.concatMap tlPkgToSets; in
-    builtins.genericClosure {
-      startSet = pkgListToSets pkgList;
-      operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or []);
-    });
-
+  # TODO the assertions are oblivious to overrides
   assertions = with lib;
     assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
     assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate" &&
@@ -502,8 +484,19 @@ let
          fods = filter (p: isDerivation p && p.tlType != "bin") all;
       in builtins.all (p: assertMsg (p ? outputHash) "The TeX Live package '${p.pname + lib.optionalString (p.tlType != "run") ("." + p.tlType)}' does not have a fixed output hash. Please read UPGRADING.md on how to build a new 'fixed-hashes.nix'.") fods));
 
+  __buildEnv = import ./buildenv.nix {
+    self = { inherit bin; __pkgs = tl; };
+    ghostscript = ghostscript_headless;
+    inherit lib buildEnv libfaketime makeFontsConf makeWrapper runCommand
+      writeText bash perl coreutils gawk gnugrep gnused;
+  };
+
 in
-  tl // {
+  {
+    # unstable interface, subject to change!
+    inherit __buildEnv;
+    __pkgs = tl;
+    __withPackages = packages: __buildEnv { inherit packages; };
 
     tlpdb = {
       # nested in an attribute set to prevent them from appearing in search
@@ -513,12 +506,12 @@ in
 
     bin = assert assertions; bin // {
       # for backward compatibility
-      latexindent = lib.findFirst (p: p.tlType == "bin") tl.latexindent.pkgs;
+      latexindent = self.__pkgs.latexindent;
     };
 
     combine = assert assertions; combine;
 
-    # Pre-defined combined packages for TeX Live schemes,
+    # Pre-defined evironment packages for TeX Live schemes,
     # to make nix-env usage more comfortable and build selected on Hydra.
     combined = with lib;
       let
@@ -545,23 +538,70 @@ in
             lppl13c mit ofl publicDomain x11];
         };
       in recurseIntoAttrs (
-      mapAttrs
-        (pname: attrs:
-          addMetaAttrs rec {
-            description = "TeX Live environment for ${pname}";
-            platforms = lib.platforms.all;
-            maintainers = with lib.maintainers;  [ veprbl ];
-            license = licenses.${pname};
-          }
-          (combine {
-            ${pname} = attrs;
+      lib.genAttrs [ "scheme-basic" "scheme-context" "scheme-full" "scheme-gust" "scheme-infraonly"
+        "scheme-medium" "scheme-minimal" "scheme-small" "scheme-tetex" ]
+        (pname:
+          (__buildEnv {
             extraName = "combined" + lib.removePrefix "scheme" pname;
             extraVersion = with version; if final then "-final" else ".${year}${month}${day}";
+            packages = ps: [ ps.${pname} ];
+            meta = {
+              description = "TeX Live environment for ${pname}";
+              platforms = lib.platforms.all;
+              maintainers = with lib.maintainers;  [ veprbl ];
+              license = licenses.${pname};
+            };
           })
         )
-        { inherit (tl)
-            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
-            scheme-medium scheme-minimal scheme-small scheme-tetex;
-        }
     );
-  }
+
+  };
+
+  ### texlive.combine compatibility layer:
+  # convert multi-output packages to lists of packages
+  toListOfPkgs = p: p.pkgs or
+    (lib.optional (p ? tex) (p.tex // { tlType = "run"; })
+      ++ lib.optional (p ? texdoc) (p.texdoc // { tlType = "doc"; } // lib.optionalAttrs (p ? man) { hasManpages = true; })
+      ++ lib.optional (p ? texsource) (p.texsource // { tlType = "source"; })
+      ++ lib.optional (p ? tlpkg) (p.tlpkg // { tlType = "tlpkg"; })
+      ++ lib.optional (p ? out) (p.out // { tlType = "bin"; }));
+
+  # combine a set of TL packages into a single TL meta-package
+  combinePkgs = pkgList: lib.catAttrs "pkg" (
+    let
+      # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
+      # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
+      tlPkgToSets = p: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
+          # outputName required to distinguish among bin.core-big outputs
+          key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
+          inherit pkg;
+        }) (toListOfPkgs p);
+      pkgListToSets = lib.concatMap tlPkgToSets; in
+    builtins.genericClosure {
+      startSet = pkgListToSets pkgList;
+      operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or []);
+    });
+
+  # wrapped __buildEnv that accepts old packages
+  combine = attrs: import ./combine-wrapper.nix {
+    inherit (attrs) __buildEnv;
+    inherit combinePkgs buildEnv lib makeWrapper writeText runCommand
+      stdenv perl libfaketime makeFontsConf bash coreutils gawk gnugrep gnused;
+    ghostscript = ghostscript_headless;
+  };
+
+  # export packages as `texlive.pname = { pkgs = [ ... ]; };`
+  combineCompatLayer = attrs:
+    lib.mapAttrs (n: p: { pkgs = toListOfPkgs p; }) attrs.__pkgs
+    // attrs
+    // {
+      combine = combine attrs;
+      # reapply the compatibility layer after overrides
+      overrideScope = g: combineCompatLayer (attrs.overrideScope g);
+    };
+
+in
+combineCompatLayer (makeScopeWithSplicing' {
+  f = makeTeXLive;
+  otherSplices = generateSplicesForMkScope texliveAttr;
+})
