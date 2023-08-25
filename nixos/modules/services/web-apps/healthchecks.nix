@@ -107,6 +107,8 @@ in
         We add two variables to this list inside the packages `local_settings.py.`
         - STATIC_ROOT to set a state directory for dynamically generated static files.
         - SECRET_KEY_FILE to read SECRET_KEY from a file at runtime and keep it out of /nix/store.
+        - EMAIL_HOST_PASSWORD_FILE to read EMAIL_HOST_PASSWORD from a file at runtime and keep it
+          out of /nix/store.
       '';
       type = types.submodule (settings: {
         freeformType = types.attrsOf types.str;
@@ -162,6 +164,12 @@ in
               else "hc"
             '';
             description = lib.mdDoc "Database name.";
+          };
+
+          EMAIL_HOST_PASSWORD_FILE = mkOption {
+            type = types.str;
+            default = "";
+            description = lib.mdDoc "Path to a file containing the email password.";
           };
         };
       });
