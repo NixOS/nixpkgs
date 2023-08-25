@@ -17726,6 +17726,8 @@ with pkgs;
 
   expr = callPackage ../development/interpreters/expr { };
 
+  genemichaels = callPackage ../development/tools/rust/genemichaels { };
+
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
