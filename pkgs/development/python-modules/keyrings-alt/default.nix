@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "keyrings.alt";
+  pname = "keyrings-alt";
   version = "4.2.0";
   format = "pyproject";
   disabled = isPy27;
