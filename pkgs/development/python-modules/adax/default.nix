@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyadax";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-y4c1RBy/UxmKP7+mHXi86XJ2/RXGrqkj94I2Q699EJU=";
   };
 
@@ -28,11 +28,14 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "adax" ];
+  pythonImportsCheck = [
+    "adax"
+  ];
 
   meta = with lib; {
     description = "Python module to communicate with Adax";
     homepage = "https://github.com/Danielhiversen/pyAdax";
+    changelog = "https://github.com/Danielhiversen/pyAdax/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
