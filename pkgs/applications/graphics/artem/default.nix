@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "artem";
-  version = "2.0.1_2";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "finefindus";
     repo = "artem";
     rev = "v${version}";
-    hash = "sha256-R7ouOFeLKnTZI6NbAg8SkkSo4zh9AwPiMPNqhPthpCk=";
+    hash = "sha256-t8L1lylaacEHGg3wxVgiB2XmBHDGzql774oHrg/vUC0=";
   };
 
-  cargoHash = "sha256-sbIINbuIbu38NrYr87ljJJD7Y9Px0o6Qv/MGX8N54Rc=";
+  cargoHash = "sha256-rsgl8g6AqNmdq2gJ3PHvKMb7eid8ewtheajGWSWbeBw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,11 +35,6 @@ rustPlatform.buildRustPackage rec {
     # flaky
     "--skip=full_file_compare_html"
   ];
-
-  # Cargo.lock is outdated
-  postConfigure = ''
-    cargo metadata --offline
-  '';
 
   postInstall = ''
     installManPage $releaseDir/build/artem-*/out/artem.1
