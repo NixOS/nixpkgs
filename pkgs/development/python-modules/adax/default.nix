@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "adax";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyadax";
     rev = version;
-    hash = "sha256-EMSX2acklwWOYiEeLHYG5mwdiGnWAUo5dGMiHCmZrko=";
+    hash = "sha256-y4c1RBy/UxmKP7+mHXi86XJ2/RXGrqkj94I2Q699EJU=";
   };
 
   propagatedBuildInputs = [
