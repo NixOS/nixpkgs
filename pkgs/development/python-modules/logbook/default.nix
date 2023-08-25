@@ -22,9 +22,11 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = {
-    homepage = "https://pythonhosted.org/Logbook/";
+  meta = with lib; {
     description = "A logging replacement for Python";
-    license = lib.licenses.bsd3;
+    homepage = "https://logbook.readthedocs.io/";
+    changelog = "https://github.com/getlogbook/logbook/blob/${version}/CHANGES";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }
