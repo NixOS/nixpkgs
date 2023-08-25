@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "troposphere";
-  version = "4.3.2";
+  version = "4.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "cloudtools";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-8vIpwZBUdU9gD1Ya0+L1phMDMcAABtuyRx4quDfQWGA=";
+    hash = "sha256-ecRpp8XsP/iv4G8m85qcGJXHXH4CPdgBO8c0IZU56wU=";
   };
 
   propagatedBuildInputs = [
