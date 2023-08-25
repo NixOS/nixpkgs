@@ -8,6 +8,8 @@
 , libpulseaudio
 , ncurses
 , pkgconf
+, SDL2
+, withSDL2 ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     ncurses
     iniparser
-  ];
+  ]++ lib.optional withSDL2 SDL2;
 
   nativeBuildInputs = [
     autoreconfHook
