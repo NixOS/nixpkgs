@@ -1,14 +1,15 @@
 { lib, fetchurl, jdk, buildFHSEnv, unzip, makeDesktopItem }:
 let
-  version = "2023.7.2";
+  version = "2023.9.4";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
+      "https://portswigger-cdn.net/burp/releases/download?product=community&version=${version}&type=Jar"
       "https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
       "https://web.archive.org/web/https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
     ];
-    hash = "sha256-mpOG8sx+L+/kwgB3X9ALOvq+Rx1GC3JE2G7yVt1iQYg=";
+    hash = "sha256-OqtbimeWDZDePKvH0SKvfZxAXKhqFIQ49rdj7vkPckU=";
   };
 
   name = "burpsuite-${version}";
@@ -69,11 +70,11 @@ buildFHSEnv {
       exploiting security vulnerabilities.
     '';
     homepage = "https://portswigger.net/burp/";
-    downloadPage = "https://portswigger.net/burp/freedownload";
+    downloadPage = "https://portswigger.net/burp/communitydownload";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [ arcayr bennofs ];
   };
 }
