@@ -15,6 +15,7 @@
 , matplotlib
 , ipython
 , numpy
+, oldest-supported-numpy
 , packaging
 , pytest-randomly
 , pytestCheckHook
@@ -22,6 +23,7 @@
 , setuptools
 , shapely
 , snuggs
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -41,6 +43,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     gdal
+    numpy
+    oldest-supported-numpy
+    setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
