@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, gtk3, gtk-layer-shell }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, librsvg
+, pkg-config
+, gtk3
+, gtk-layer-shell
+, wrapGAppsHook }:
 
 buildGoModule rec {
   pname = "nwg-bar";
@@ -19,9 +26,9 @@ buildGoModule rec {
 
   vendorHash = "sha256-mqcXhnja8ed7vXIqOKBsNrcbrcaycTQXG1jqdc6zcyI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gtk-layer-shell ];
+  buildInputs = [ gtk3 gtk-layer-shell librsvg ];
 
   preInstall = ''
     mkdir -p $out/share/nwg-bar
