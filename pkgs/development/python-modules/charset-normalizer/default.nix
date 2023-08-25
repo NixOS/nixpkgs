@@ -1,11 +1,9 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
-
-  # popular downstream dependencies
-, aiohttp
 , requests
 }:
 
@@ -23,14 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-CfL5rlrwJs9453z+1xPUzs1B3OyjFBaU6klzY7gJCzA=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace " --cov=charset_normalizer --cov-report=term-missing" ""
   '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "charset_normalizer"
@@ -41,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for encoding and language detection";
     homepage = "https://charset-normalizer.readthedocs.io/";
+    changelog = "https://github.com/Ousret/charset_normalizer/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
