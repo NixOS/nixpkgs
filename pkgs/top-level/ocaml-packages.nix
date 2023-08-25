@@ -876,8 +876,6 @@ let
 
     lo = callPackage ../development/ocaml-modules/lo { };
 
-    lockfree = callPackage ../development/ocaml-modules/lockfree { };
-
     logs = callPackage ../development/ocaml-modules/logs { };
 
     lru = callPackage ../development/ocaml-modules/lru { };
@@ -1538,6 +1536,10 @@ let
     sail = callPackage ../development/ocaml-modules/sail { };
 
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
+
+    saturn = callPackage ../development/ocaml-modules/saturn { };
+
+    saturn_lockfree = callPackage ../development/ocaml-modules/saturn/lockfree.nix { };
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
 
