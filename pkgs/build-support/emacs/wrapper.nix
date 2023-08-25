@@ -160,11 +160,9 @@ runCommand
         cat >"$siteStart" <<EOF
         (let ((inhibit-message t))
           (load-file "$emacs/share/emacs/site-lisp/site-start.el"))
-        (add-to-list 'load-path "$out/share/emacs/site-lisp")
+        ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
+        ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
         (add-to-list 'exec-path "$out/bin")
-        ${lib.optionalString withNativeCompilation ''
-          (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
-        ''}
         ${lib.optionalString withTreeSitter ''
           (add-to-list 'treesit-extra-load-path "$out/lib/")
         ''}
