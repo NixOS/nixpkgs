@@ -24,7 +24,6 @@ in lib.init bootStages ++ [
   # Build tool Packages
   (vanillaPackages: {
     inherit config overlays;
-    selfBuild = false;
     stdenv =
       assert vanillaPackages.stdenv.buildPlatform == localSystem;
       assert vanillaPackages.stdenv.hostPlatform == localSystem;
@@ -43,7 +42,6 @@ in lib.init bootStages ++ [
   in {
     inherit config;
     overlays = overlays ++ crossOverlays;
-    selfBuild = false;
     stdenv = adaptStdenv (buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;
       hostPlatform = crossSystem;

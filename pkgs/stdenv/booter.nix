@@ -98,8 +98,8 @@ stageFuns: let
     thisStage =
       if args.__raw or false
       then args'
-      else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
-        actuallySplice = !(args.selfBuild or true);
+      else allPackages (args' // {
+        actuallySplice = thisStage.stdenv.buildPlatform != thisStage.stdenv.targetPlatform;
         adjacentPackages = rec {
           pkgsBuildBuild = prevStage.buildPackages;
           pkgsBuildHost = prevStage;
