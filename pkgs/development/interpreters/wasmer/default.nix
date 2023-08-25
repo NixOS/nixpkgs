@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-862XDe/kmqlInu6bBvAsuR+6nYZ2Bsg+CApl1z0Epzo=";
+    hash = "sha256-GmoRcZHRbSlsplF6XOnHsDiC+cvLE8XpD1W+a5PV+lo=";
   };
 
-  cargoHash = "sha256-mDTFJwQ4ONQXJGg54w0P2HUBzNjgeq+i/nFI952Ozow=";
+  cargoHash = "sha256-f0M2sm5zOesLhPbmiGFAQ/+AgkvCmRjC1L1sgZ/porA=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
