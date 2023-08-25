@@ -1,21 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jsonpath";
-  version = "0.82";
+  version = "0.82.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "46d3fd2016cd5b842283d547877a02c418a0fe9aa7a6b0ae344115a2c990fef4";
+    hash = "sha256-2H7yvLze1o7pa8NMGAm2lFfs7JsMTdRxZYoSvTkQAtE=";
   };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "jsonpath"
+  ];
+
+  pytestFlagsArray = [
+    "test/test*.py"
+  ];
 
   meta = with lib; {
     description = "An XPath for JSON";
     homepage = "https://github.com/json-path/JsonPath";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }
