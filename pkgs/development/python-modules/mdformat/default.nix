@@ -55,7 +55,7 @@ let
     src = fetchFromGitHub {
       owner = "executablebooks";
       repo = pname;
-      rev = version;
+      rev = "refs/tags/${version}";
       hash = "sha256-umtfbhN6sDR/rFr1LwmJ21Ph9bK1Qq43bmMVzGCPD5s=";
     };
 
@@ -93,6 +93,7 @@ let
     meta = with lib; {
       description = "CommonMark compliant Markdown formatter";
       homepage = "https://mdformat.rtfd.io/";
+      changelog = "https://github.com/executablebooks/mdformat/blob/${version}/docs/users/changelog.md";
       license = with licenses; [ mit ];
       maintainers = with maintainers; [ fab aldoborrero ];
       mainProgram = "mdformat";
