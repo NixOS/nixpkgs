@@ -25,7 +25,7 @@ let
     mimeTypes = [ "x-scheme-handler/remnote" "x-scheme-handler/rn" ];
   };
 in
-stdenv.mkDerivation { 
+stdenv.mkDerivation {
   inherit pname version src;
   dontUnpack = true;
   dontConfigure = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     mkdir -p $out/share/pixmaps
     install ${icon} $out/share/pixmaps/remnote.png
     runHook postInstall
-  ''; 
+  '';
   meta = with lib; {
     description = "A note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
