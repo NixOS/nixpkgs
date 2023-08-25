@@ -7374,6 +7374,10 @@ with pkgs;
 
   diction = callPackage ../tools/text/diction { };
 
+  diffoci = callPackage ../tools/misc/diffoci {
+    buildGoModule = buildGo121Module;
+  };
+
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk8;
   };
@@ -17721,6 +17725,8 @@ with pkgs;
     lfe lfe_2_1;
 
   expr = callPackage ../development/interpreters/expr { };
+
+  genemichaels = callPackage ../development/tools/rust/genemichaels { };
 
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;

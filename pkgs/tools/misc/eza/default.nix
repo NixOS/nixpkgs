@@ -57,6 +57,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/eza-community/eza";
     license = licenses.mit;
+    mainProgram = "eza";
     maintainers = with maintainers; [ cafkafk ];
   };
 }

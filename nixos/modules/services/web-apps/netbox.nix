@@ -169,6 +169,13 @@ in {
         AUTH_LDAP_FIND_GROUP_PERMS = True
       '';
     };
+    keycloakClientSecret = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = lib.mdDoc ''
+        File that contains the keycloak client secret.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -227,7 +234,10 @@ in {
       extraConfig = ''
         with open("${cfg.secretKeyFile}", "r") as file:
             SECRET_KEY = file.readline()
-      '';
+      '' + (lib.optionalString (cfg.keycloakClientSecret != null) ''
+        with open("${cfg.keycloakClientSecret}", "r") as file:
+            SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
+      '');
     };
 
     services.redis.servers.netbox.enable = true;
