@@ -15,13 +15,13 @@ let
 in
 backendStdenv.mkDerivation (finalAttrs: {
   name = "nccl-${finalAttrs.version}-cuda-${cudaVersion}";
-  version = "2.16.5-1";
+  version = "2.18.3-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JyhhYKSVIqUKIbC1rCJozPT1IrIyRLGrTjdPjJqsYaU=";
+    hash = "sha256-v4U4IzwiuiYFyFhxVmNOCUmkbSg/AM0QtWPve0ehVhs=";
   };
 
   outputs = [ "out" "dev" ];
