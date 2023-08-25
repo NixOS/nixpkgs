@@ -45,6 +45,7 @@ in
   # avoid expensive splicing. `pkgsHostTarget` is skipped because it is always
   # defined as the current stage.
   adjacentPackages
+, actuallySplice
 
 , # The standard environment to use for building packages.
   stdenv
@@ -117,7 +118,7 @@ let
 
   stdenvBootstappingAndPlatforms = self: super: let
     withFallback = thisPkgs:
-      (if adjacentPackages == null then self else thisPkgs)
+      (if actuallySplice then thisPkgs else self)
       // { recurseForDerivations = false; };
   in {
     # Here are package sets of from related stages. They are all in the form
@@ -145,7 +146,7 @@ let
     inherit stdenv;
   };
 
-  splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
+  splice = self: super: import ./splice.nix lib self actuallySplice;
 
   allPackages = self: super:
     let res = import ./all-packages.nix
