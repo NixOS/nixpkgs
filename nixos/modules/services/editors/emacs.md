@@ -286,11 +286,11 @@ The server should now be ready to serve Emacs clients.
 
 ### Starting the client {#module-services-emacs-starting-client}
 
-Ensure that the emacs server is enabled, either by customizing the
+Ensure that the Emacs server is enabled, either by customizing the
 {var}`server-mode` variable, or by adding
 `(server-start)` to {file}`~/.emacs`.
 
-To connect to the emacs daemon, run one of the following:
+To connect to the Emacs daemon, run one of the following:
 ```
 emacsclient FILENAME
 emacsclient --create-frame  # opens a new frame (window)
@@ -356,7 +356,7 @@ startup:
 ```
 :::
 
-After the declarative emacs package configuration has been tested,
+After the declarative Emacs package configuration has been tested,
 previously downloaded packages can be cleaned up by removing
 {file}`~/.emacs.d/elpa` (do make a backup first, in case you
 forgot a package).
