@@ -3,6 +3,9 @@
 , fetchFromGitHub
 , linear_operator
 , scikit-learn
+, setuptools
+, setuptools-scm
+, wheel
 , torch
 , pytestCheckHook
 }:
@@ -19,10 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-cpkfjx5G/4duL1Rr4nkHTHi03TDcYbcx3bKP2Ny7Ijo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'find_version("gpytorch", "version.py")' \"$version\"
-  '';
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     linear_operator
@@ -33,7 +39,9 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
   pythonImportsCheck = [ "gpytorch" ];
+
   disabledTests = [
     # AssertionError on number of warnings emitted
     "test_deprecated_methods"
