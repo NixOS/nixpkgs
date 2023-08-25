@@ -47,7 +47,7 @@ let
 
   package = buildPythonPackage rec {
     pname = "mdformat";
-    version = "0.7.16";
+    version = "0.7.17";
     format = "pyproject";
 
     disabled = pythonOlder "3.7";
@@ -56,7 +56,7 @@ let
       owner = "executablebooks";
       repo = pname;
       rev = version;
-      hash = "sha256-6MWUkvZp5CYUWsbMGXM2gudjn5075j5FIuaNnCrgRNs=";
+      hash = "sha256-umtfbhN6sDR/rFr1LwmJ21Ph9bK1Qq43bmMVzGCPD5s=";
     };
 
     nativeBuildInputs = [
