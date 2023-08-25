@@ -4,16 +4,17 @@ IFS=:
 
 newLoadPath=()
 newNativeLoadPath=()
-added=
+addedNewLoadPath=
+addedNewNativeLoadPath=
 
 if [[ -n $EMACSLOADPATH ]]
 then
     while read -rd: entry
     do
-        if [[ -z $entry && -z $added ]]
+        if [[ -z $entry && -z $addedNewLoadPath ]]
         then
             newLoadPath+=(@wrapperSiteLisp@)
-            added=1
+            addedNewLoadPath=1
         fi
         newLoadPath+=("$entry")
     done <<< "$EMACSLOADPATH:"
@@ -26,10 +27,10 @@ if [[ -n $EMACSNATIVELOADPATH ]]
 then
     while read -rd: entry
     do
-        if [[ -z $entry && -z $added ]]
+        if [[ -z $entry && -z $addedNewNativeLoadPath ]]
         then
             newNativeLoadPath+=(@wrapperSiteLispNative@)
-            added=1
+            addedNewNativeLoadPath=1
         fi
         newNativeLoadPath+=("$entry")
     done <<< "$EMACSNATIVELOADPATH:"
