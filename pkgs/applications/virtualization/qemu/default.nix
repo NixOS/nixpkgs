@@ -35,8 +35,6 @@
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
-, doCheck ? false
-, qemu  # for passthru.tests
 , gitUpdater
 }:
 
@@ -44,7 +42,7 @@ let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
@@ -52,7 +50,7 @@ stdenv.mkDerivation rec {
   version = "8.0.4";
 
   src = fetchurl {
-    url = "https://download.qemu.org/qemu-${version}.tar.xz";
+    url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
     hash = "sha256-gcgX3aOK+Vi+W+8abPVbZYuy0/uHwealcd5reyxEUWw=";
   };
 
@@ -207,7 +205,7 @@ stdenv.mkDerivation rec {
   preBuild = "cd build";
 
   # tests can still timeout on slower systems
-  inherit doCheck;
+  doCheck = false;
   nativeCheckInputs = [ socat ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
@@ -248,7 +246,7 @@ stdenv.mkDerivation rec {
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
     tests = {
-      qemu-tests = qemu.override { doCheck = true; };
+      qemu-tests = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
     };
     updateScript = gitUpdater {
       # No nicer place to find latest release.
@@ -269,4 +267,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;
   };
-}
+})

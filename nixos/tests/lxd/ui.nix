@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ../make-test-python.nix ({ pkgs, lib, ... }: {
   name = "lxd-ui";
 
   meta = with pkgs.lib.maintainers; {

@@ -5,20 +5,21 @@
 , pythonOlder
 , aiohttp
 , backoff
+, fastavro
 , importlib-metadata
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "4.16.0";
+  version = "4.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i6kbjugulAcmmInFb+rH4WB50dM7SDO1HNW/JgD4OTQ=";
+    hash = "sha256-9hFDj0Cd/F1aChU6WFNJ9agLFpxxArWZTZmZ7PhECGY=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     backoff
+    fastavro
     importlib-metadata
     requests
   ];
