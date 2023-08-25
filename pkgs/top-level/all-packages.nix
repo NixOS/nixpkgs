@@ -1884,6 +1884,8 @@ with pkgs;
 
   nominatim = callPackage ../servers/nominatim { };
 
+  ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
+
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
