@@ -1,10 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, Carbon
-, Cocoa
+, AppKit
+, CoreAudio
 , CoreWLAN
+, CoreVideo
 , DisplayServices
+, IOKit
 , MediaRemote
 , SkyLight
 }:
@@ -18,20 +20,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
-  version = "2.15.2";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-13wc+1IgplB+L0j1AbBr/MUjEo4W38ZgJwrAhbdOroE=";
+    hash = "sha256-H+bR5ZhUTrN2KAEdY/hnq6c3TEb1NQvPQ9uPo09gSM8=";
   };
 
   buildInputs = [
-    Carbon
-    Cocoa
+    AppKit
+    CoreAudio
     CoreWLAN
+    CoreVideo
     DisplayServices
+    IOKit
     MediaRemote
     SkyLight
   ];
