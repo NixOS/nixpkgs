@@ -1,8 +1,8 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, poetry-core
+, hatchling
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiofiles";
-  version = "23.1.0";
+  version = "23.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,11 +19,11 @@ buildPythonPackage rec {
     owner = "Tinche";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ouBqqt0CJYxxQqbG9jn4p8zO+nKjqZgPjZpiZic67ss=";
+    hash = "sha256-EbRQD/AoTMWAlPOMWmD0UdFjRyjt5MUBkJtcydUCdHM=";
   };
 
   nativeBuildInputs = [
-    poetry-core
+    hatchling
   ];
 
   nativeCheckInputs = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "File support for asyncio";
     homepage = "https://github.com/Tinche/aiofiles";
+    changelog = "https://github.com/Tinche/aiofiles/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fridh ];
   };
