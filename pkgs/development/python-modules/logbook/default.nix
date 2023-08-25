@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
-, pytest
+, pytestCheckHook
 , mock
 , brotli
 }:
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
   ] ++ lib.optionals (!isPy3k) [
     mock
   ];
@@ -26,11 +26,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     brotli
   ];
-
-  checkPhase = ''
-    find tests -name \*.pyc -delete
-    py.test tests
-  '';
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
