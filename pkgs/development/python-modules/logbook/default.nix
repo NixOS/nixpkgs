@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, pytest, mock, brotli }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, pytest
+, mock
+, brotli
+}:
 
 buildPythonPackage rec {
   pname = "logbook";
@@ -10,9 +17,15 @@ buildPythonPackage rec {
     sha256 = "1s1gyfw621vid7qqvhddq6c3z2895ci4lq3g0r1swvpml2nm9x36";
   };
 
-  nativeCheckInputs = [ pytest ] ++ lib.optionals (!isPy3k) [ mock ];
+  nativeCheckInputs = [
+    pytest
+  ] ++ lib.optionals (!isPy3k) [
+    mock
+  ];
 
-  propagatedBuildInputs = [ brotli ];
+  propagatedBuildInputs = [
+    brotli
+  ];
 
   checkPhase = ''
     find tests -name \*.pyc -delete
