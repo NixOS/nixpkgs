@@ -1,19 +1,22 @@
 { lib
+, aiofiles
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
 , python-dateutil
 , python-slugify
-, pythonAtLeast
 , pythonOlder
 , requests
+, setuptools
 , sortedcontainers
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.21.0";
-  format = "setuptools";
+  version = "0.22.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -21,10 +24,17 @@ buildPythonPackage rec {
     owner = "fronzbot";
     repo = "blinkpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0sEZlnS6CJj8nMyjtSFZRALRKdmY0Uu5N6sozPiDG6w=";
+    hash = "sha256-r8kf5L6bvtivqd9dSi8om1wIi8IHmipKFckNMPT515I=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
   propagatedBuildInputs = [
+    aiofiles
+    aiohttp
     python-dateutil
     python-slugify
     requests
@@ -43,12 +53,6 @@ buildPythonPackage rec {
     "blinkpy.camera"
     "blinkpy.helpers.util"
     "blinkpy.sync_module"
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    "test_download_video_exit"
-    "test_parse_camera_not_in_list"
-    "test_parse_downloaded_items"
   ];
 
   meta = with lib; {
