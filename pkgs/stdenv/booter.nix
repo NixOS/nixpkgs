@@ -99,20 +99,25 @@ stageFuns: let
       if args.__raw or false
       then args'
       else allPackages (args' // {
-        actuallySplice = thisStage.stdenv.buildPlatform != thisStage.stdenv.targetPlatform;
-        adjacentPackages = rec {
-          pkgsBuildBuild = prevStage.buildPackages;
-          pkgsBuildHost = prevStage;
-          pkgsBuildTarget =
-            if args.stdenv.targetPlatform == args.stdenv.hostPlatform
-            then pkgsBuildHost
-            else assert args.stdenv.hostPlatform == args.stdenv.buildPlatform; thisStage;
-          pkgsHostHost =
-            if args.stdenv.hostPlatform == args.stdenv.targetPlatform
-            then thisStage
-            else assert args.stdenv.buildPlatform == args.stdenv.hostPlatform; pkgsBuildHost;
-          pkgsTargetTarget = nextStage;
-        };
+        # Technically we only need to check `build!=target` since nixpkgs currently doesn't allow
+        # both `build!=host` and `host!=target` at the same time, but we check both in order to be
+        # future-proof.
+        actuallySplice = with thisStage.stdenv; buildPlatform != hostPlatform || hostPlatform  != targetPlatform;
+        adjacentPackages =
+          let
+            # search backwards from `stage` for the most recent stage containing packages which execute on `on` and target `for`
+            seek = stage: { on, for }@args:
+              if on  == stage.stdenv.hostPlatform &&
+                 for == stage.stdenv.targetPlatform
+              then stage
+              else seek stage.stdenv.__bootPackages or (throw "nixpkgs internal error: Bootstrapping stage with requested host and target platform not found.") args;
+            in rec {
+              pkgsBuildBuild   = seek thisStage { on = thisStage.stdenv.buildPlatform; for = thisStage.stdenv.buildPlatform;  };
+              pkgsBuildHost    = seek thisStage { on = thisStage.stdenv.buildPlatform; for = thisStage.stdenv.hostPlatform;   };
+              pkgsBuildTarget  = seek thisStage { on = thisStage.stdenv.buildPlatform; for = thisStage.stdenv.targetPlatform; };
+              pkgsHostHost     = seek thisStage { on = thisStage.stdenv.hostPlatform;  for = thisStage.stdenv.hostPlatform;   };
+              pkgsTargetTarget = nextStage;
+            };
       });
   in thisStage;
 
