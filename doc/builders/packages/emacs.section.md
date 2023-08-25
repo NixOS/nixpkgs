@@ -26,10 +26,6 @@ You can install it like any other packages via `nix-env -iA myEmacs`. However, t
 {
   packageOverrides = pkgs: with pkgs; rec {
     myEmacsConfig = writeText "default.el" ''
-      ;; initialize package
-
-      (require 'package)
-      (package-initialize 'noactivate)
       (eval-when-compile
         (require 'use-package))
 

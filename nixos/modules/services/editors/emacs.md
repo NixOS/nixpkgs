@@ -339,22 +339,8 @@ This will add the symlink
 
 ## Configuring Emacs {#module-services-emacs-configuring}
 
-The Emacs init file should be changed to load the extension packages at
-startup:
-
-::: {.example #module-services-emacs-package-initialisation}
-### Package initialization in `.emacs`
-
-```
-(require 'package)
-
-;; optional. makes unpure packages archives unavailable
-(setq package-archives nil)
-
-(setq package-enable-at-startup nil)
-(package-initialize)
-```
-:::
+If you want to only use extension packages from Nixpkgs, you can add
+`(setq package-archives nil)` to your init file.
 
 After the declarative Emacs package configuration has been tested,
 previously downloaded packages can be cleaned up by removing
