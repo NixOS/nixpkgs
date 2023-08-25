@@ -62,7 +62,7 @@ let
         libdir = "lib/${libPrefix}";
         tclPackageHook = callPackage ({ buildPackages }: makeSetupHook {
           name = "tcl-package-hook";
-          propagatedBuildInputs = [ buildPackages.makeWrapper ];
+          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
         } ./tcl-package-hook.sh) {};
         # verify that Tcl's clock library can access tzdata
         tests.tzdata = runCommand "${pname}-test-tzdata" {} ''
