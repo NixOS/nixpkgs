@@ -17753,7 +17753,8 @@ with pkgs;
     electron_22-bin
     electron_23-bin
     electron_24-bin
-    electron_25-bin;
+    electron_25-bin
+    electron_26-bin;
 
   electron = electron-bin;
   electron_9 = electron_9-bin;
@@ -17773,6 +17774,7 @@ with pkgs;
   electron_23 = electron_23-bin;
   electron_24 = electron_24-bin;
   electron_25 = electron_25-bin;
+  electron_26 = electron_26-bin;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -38479,9 +38481,7 @@ with pkgs;
   gap-full = lowPrio (gap.override { packageSet = "full"; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
-  geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix {
-    electron = electron_14;
-   };
+  geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix { };
 
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
