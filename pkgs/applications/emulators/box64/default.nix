@@ -41,12 +41,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DNOGIT=ON"
-    "-DARM_DYNAREC=${if withDynarec then "ON" else "OFF"}"
-    "-DRV64=${if stdenv.hostPlatform.isRiscV64 then "ON" else "OFF"}"
-    "-DPPC64LE=${if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then "ON" else "OFF"}"
+
+    # Arch mega-option
+    "-DARM64=${lib.boolToString stdenv.hostPlatform.isAarch64}"
+    "-DRV64=${lib.boolToString stdenv.hostPlatform.isRiscV64}"
+    "-DPPC64LE=${lib.boolToString (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)}"
   ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
     "-DLD80BITS=ON"
     "-DNOALIGN=ON"
+  ] ++ [
+    # Arch dynarec
+    "-DARM_DYNAREC=${lib.boolToString (withDynarec && stdenv.hostPlatform.isAarch64)}"
   ];
 
   installPhase = ''
@@ -57,9 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  doInstallCheck = true;
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   installCheckPhase = ''
     runHook preInstallCheck
@@ -91,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Lets you run x86_64 Linux programs on non-x86_64 Linux systems";
     license = licenses.mit;
     maintainers = with maintainers; [ gador OPNA2608 ];
+    mainProgram = "box64";
     platforms = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" "powerpc64le-linux" ];
   };
 })
