@@ -1,31 +1,31 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , azure-common
 , azure-mgmt-core
-, msrest
-, msrestazure
+, buildPythonPackage
+, fetchPypi
+, isodate
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  version = "24.0.0";
   pname = "azure-mgmt-network";
+  version = "25.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-LtahQ2PnJC2jlD3pHp+IBLaUaNXTamZqdFdE/iJ4840=";
+    hash = "sha256-rZPbkUQJFIeNSSPWHTK79INWeRX5+GJ7o7mEMLhyJ9E=";
   };
 
   propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
-    msrest
-    msrestazure
+    isodate
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
   # Module has no tests

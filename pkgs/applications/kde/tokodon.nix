@@ -20,6 +20,7 @@
 , qtwebsockets
 , kitemmodels
 , pimcommon
+, mpv
 }:
 
 mkDerivation {
@@ -47,6 +48,7 @@ mkDerivation {
     qtwebsockets
     kitemmodels
     pimcommon
+    mpv
   ];
 
   meta = with lib; {

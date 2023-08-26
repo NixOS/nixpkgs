@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, nixosTests }:
 
 python3Packages.buildPythonApplication rec {
   pname = "toot";
@@ -19,6 +19,8 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     py.test
   '';
+
+  passthru.tests.toot = nixosTests.pleroma;
 
   meta = with lib; {
     description = "Mastodon CLI interface";
