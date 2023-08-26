@@ -36,30 +36,28 @@ rec {
     diff -u "''${nixpkgsTlpdbNix}" "''${tlpdbNix}" | tee "$out/tlpdb.nix.patch"
   '';
 
-  opentype-fonts = runCommand "texlive-test-opentype" {
-    nativeBuildInputs = [
-      (with texlive; combine { inherit scheme-medium libertinus-fonts; })
-    ];
-    input = builtins.toFile "opentype-testfile.tex" ''
-      \documentclass{article}
-      \usepackage{fontspec}
-      \setmainfont{Libertinus Serif}
-      \begin{document}
-        \LaTeX{} is great
-      \end{document}
-    '';
-  }
-  ''
-    export HOME="$(mktemp -d)"
-    # We use the same testfile to test two completely different
-    # font discovery mechanisms, both of which were once broken:
-    #  - lualatex uses its own luaotfload script (#220228)
-    #  - xelatex uses fontconfig (#228196)
-    # both of the following two commands need to succeed.
-    lualatex -halt-on-error "$input"
-    xelatex -halt-on-error "$input"
-    echo success > $out
-  '';
+  # test two completely different font discovery mechanisms, both of which were once broken:
+  #  - lualatex uses its own luaotfload script (#220228)
+  #  - xelatex uses fontconfig (#228196)
+  opentype-fonts = lib.recurseIntoAttrs rec {
+    lualatex = mkTeXTest {
+      name = "opentype-fonts-lualatex";
+      format = "lualatex";
+      texLive = texlive.combine { inherit (texlive) scheme-medium libertinus-fonts; };
+      text = ''
+        \documentclass{article}
+        \usepackage{fontspec}
+        \setmainfont{Libertinus Serif}
+        \begin{document}
+          \LaTeX{} is great
+        \end{document}
+      '';
+    };
+    xelatex = lualatex.override {
+      name = "opentype-fonts-xelatex";
+      format = "xelatex";
+    };
+  };
 
   chktex = runCommand "texlive-test-chktex" {
     nativeBuildInputs = [
