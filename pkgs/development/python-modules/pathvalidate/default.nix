@@ -24,8 +24,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library to sanitize/validate a string such as filenames/file-paths/etc";
+    description = "Library to sanitize/validate a string such as filenames/file-paths/etc";
     homepage = "https://github.com/thombashi/pathvalidate";
+    changelog = "https://github.com/thombashi/pathvalidate/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ oxalica ];
   };
