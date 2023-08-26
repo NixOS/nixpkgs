@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Drop-in replacement for smbus-cffi/smbus-python";
     homepage = "https://smbus2.readthedocs.io/";
+    changelog = "https://github.com/kplindegaard/smbus2/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
