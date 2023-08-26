@@ -2,8 +2,8 @@
 WFS (WiiU File System) Tools based on [wfslib](https://github.com/koolkdev/wfslib)
 
 ## Status
-[![Build status](https://img.shields.io/github/workflow/status/koolkdev/wfs-tools/Build.svg?style=flat&logo=github)](https://github.com/koolkdev/wfs-tools/actions)
-[![Github stats](https://img.shields.io/github/downloads/koolkdev/wfslib/total.svg?style=flat&logo=github)](https://github.com/koolkdev/wfs-tools/releases)
+[![Build status](https://img.shields.io/github/actions/workflow/status/koolkdev/wfs-tools/build.yml?branch=master&style=flat&logo=github)](https://github.com/koolkdev/wfs-tools/actions)
+[![Github stats](https://img.shields.io/github/downloads/koolkdev/wfs-tools/total.svg?style=flat&logo=github)](https://github.com/koolkdev/wfs-tools/releases)
 [![Latest release](https://img.shields.io/github/release-pre/koolkdev/wfs-tools?style=flat&logo=github)](https://github.com/koolkdev/wfs-tools/releases)
 
 ## Usage
