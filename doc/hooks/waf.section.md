@@ -12,13 +12,9 @@ Location of the `waf` tool. It defaults to `./waf`, to honor software projects t
 
 If `wafPath` doesn't exist, then `waf.hook` will copy the `waf` provided from Nixpkgs to it.
 
-### `wafConfigureFlags` {#wafConfigureFlags}
-
-Controls the flags passed to waf tool during configure phase.
-
 ### `wafFlags` {#wafFlags}
 
-Controls the flags passed to waf tool during build and install phases.
+Controls the flags passed to waf tool during build and install phases. For settings specific to build or install phases, use `buildFlags` or `installFlags` respectively.
 
 ### `dontAddWafCrossFlags` {#dontAddWafCrossFlags}
 
@@ -41,6 +37,7 @@ When set to true, don't use the predefined `wafInstallPhase`.
 The following variables commonly used by `stdenv.mkDerivation` are also honored by `waf.hook`.
 
 - `prefixKey`
+- `configureFlags`
 - `configureTargets`
 - `enableParallelBuilding`
 - `enableParallelInstalling`
