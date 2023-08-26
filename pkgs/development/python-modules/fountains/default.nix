@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , setuptools
 , wheel
@@ -19,15 +18,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-MhOQ4pemxmjfp7Uy5hLA8i8BBI5QbvD4EjEcKMM/u3I=";
   };
-
-  patches = [
-    # https://github.com/reity/fountains/pull/1
-    (fetchpatch {
-      name = "relax-setuptools-dependency.patch";
-      url = "https://github.com/reity/fountains/commit/50a6c0e5e0484ba1724320bf82facb29d2c7166e.patch";
-      hash = "sha256-TVWj1tRE+IJ/ukGf3PSdEhHR/oLjKbT9ExqM4iczu1Q=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
