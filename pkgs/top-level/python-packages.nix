@@ -1677,8 +1677,6 @@ self: super: with self; {
 
   caio = callPackage ../development/python-modules/caio { };
 
-  cairo-lang = callPackage ../development/python-modules/cairo-lang { };
-
   cairocffi = callPackage ../development/python-modules/cairocffi { };
 
   cairosvg = callPackage ../development/python-modules/cairosvg { };
