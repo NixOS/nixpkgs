@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , dill
+, fetchFromGitHub
+, multiprocess
 , pox
 , ppft
-, multiprocess
 , pythonOlder
 }:
 
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Parallel graph management and execution in heterogeneous computing";
     homepage = "https://pathos.readthedocs.io/";
+    changelog = "https://github.com/uqfoundation/pathos/releases/tag/pathos-${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
