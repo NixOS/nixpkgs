@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gfortran, perl
-, mpi, blas, lapack, scalapack, openssh
+{ lib, stdenv, fetchurl, autoreconfHook, mpiCheckPhaseHook
+, gfortran, perl, mpi, blas, lapack, scalapack, openssh
 # CPU optimizations
 , avxSupport ? stdenv.hostPlatform.avxSupport
 , avx2Support ? stdenv.hostPlatform.avx2Support
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace '#!/bin/bash' '#!${stdenv.shell}'
   '';
 
-  nativeBuildInputs = [ autoreconfHook perl openssh ];
+  nativeBuildInputs = [ autoreconfHook perl ];
 
   buildInputs = [ mpi blas lapack scalapack ]
     ++ lib.optional enableCuda cudatoolkit;
@@ -76,14 +76,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
   preCheck = ''
     #patchShebangs ./
-
-    # make sure the test starts even if we have less than 4 cores
-    export OMPI_MCA_rmaps_base_oversubscribe=1
-
-    # Fix to make mpich run in a sandbox
-    export HYDRA_IFACE=lo
 
     # Run dual threaded
     export OMP_NUM_THREADS=2

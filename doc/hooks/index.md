@@ -17,6 +17,7 @@ installShellFiles.section.md
 libiconv.section.md
 libxml2.section.md
 meson.section.md
+mpi-check-hook.section.md
 ninja.section.md
 patch-rc-path-hooks.section.md
 perl.section.md
