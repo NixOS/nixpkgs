@@ -121,6 +121,9 @@ let
       azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "4.0.0" "zip"
         "sha256-AiTjLJ28g80xnrRFLfPUevJgeaxLpuGmvkd3+FskNiw=";
 
+      azure-mgmt-appcontainers = overrideAzureMgmtPackage super.azure-mgmt-appcontainers "2.0.0" "zip"
+        "sha256-ccdIdvdgTYPWEZCWqkLc8lEuMuAEERvl5B1huJyBkvU=";
+
       azure-mgmt-batch = overrideAzureMgmtPackage super.azure-mgmt-batch "17.0.0" "zip"
         "sha256-hkM4WVLuwxj4qgXsY8Ya7zu7/v37gKdP0Xbf2EqrsWo=";
 
