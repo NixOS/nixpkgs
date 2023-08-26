@@ -22331,6 +22331,8 @@ with pkgs;
 
   judy = callPackage ../development/libraries/judy { };
 
+  kcp = callPackage ../development/libraries/kcp { };
+
   kddockwidgets = libsForQt5.callPackage ../development/libraries/kddockwidgets { };
 
   keybinder = callPackage ../development/libraries/keybinder {
