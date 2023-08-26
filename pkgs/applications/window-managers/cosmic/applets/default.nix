@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ cargo just pkg-config rustPlatform.cargoSetupHook util-linux ];
+  nativeBuildInputs = [ cargo just pkg-config util-linux ];
   buildInputs = [ dbus glib libxkbcommon pulseaudio wayland ];
 
   justFlags = [ "--set" "prefix" (placeholder "out") ];

@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     };
   };
 
-  nativeBuildInputs = [ cargo just pkg-config rustPlatform.cargoSetupHook ];
+  nativeBuildInputs = [ cargo just pkg-config ];
   buildInputs = [ libglvnd libxkbcommon wayland ];
 
   justFlags = [ "--set" "prefix" (placeholder "out") ];
