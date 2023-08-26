@@ -4,11 +4,14 @@
 , cacert
 , cmake
 , fetchFromGitHub
+, gcc
 , git
 , ninja
 , nix-update-script
 , perl
 , python3
+, runCommand
+, zlib
 }:
 
 let
@@ -101,6 +104,20 @@ stdenv.mkDerivation {
   patches = [
     # Without the hash, CMake will try to replace the `.zip` file
     ./Add-a-hash-to-the-googletest-binary.patch
+    # Make sure `CXX` calls can find the shared libraries
+    (runCommand "Add-run-time-search-paths-and-override-the-CXX-compiler.patch"
+      {
+        CXX = "${gcc}/bin/c++";
+        NIX_RPATHS = lib.concatStringsSep ", "
+          (map (s: "\"" + s + "/lib\"") (map lib.getLib [ zlib ]));
+      }
+      ''
+        substitute \
+          ${./Add-run-time-search-paths-and-override-the-CXX-compiler.patch} \
+          $out \
+          --subst-var CXX \
+          --subst-var NIX_RPATHS \
+      '')
   ];
 
   nativeBuildInputs = [
@@ -109,6 +126,11 @@ stdenv.mkDerivation {
     ninja
     perl
     python3
+  ];
+
+  depsHostHost = [
+    # Compiling to executable with optimizations enabled fails without it
+    gcc
   ];
 
   postUnpack = ''
