@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , gitUpdater
 , cmake
 , python3
@@ -23,6 +24,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-iCZv/WvqZkH6i23fSLA/p0nG5/CgzjyU5glVgje4c3w=";
   };
+
+  patches = [
+    # Fix crash due to regression in SDL1 AudioCallback signature in 0.2.4
+    # Remove when version > 0.2.4
+    (fetchpatch {
+      name = "0001-box64-Fixed_signature_of_SDL1_AudioCallback.patch";
+      url = "https://github.com/ptitSeb/box64/commit/5fabd602aea1937e3c5ce58843504c2492b8c0ec.patch";
+      hash = "sha256-dBdKijTljCFtSJ2smHrbjH/ok0puGw4YEy/kluLl4AQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
