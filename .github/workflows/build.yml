@@ -1,6 +1,6 @@
 name: Build
 
-on: 
+on:
   push:
   schedule:
     # Every week
@@ -23,7 +23,7 @@ jobs:
             configure_preset: 'windows-static'
             build_preset: 'windows-static-release'
             release_name: 'windows-x64'
-  
+
     runs-on: ${{matrix.platform}}
 
     steps:
@@ -69,7 +69,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: wfs-fuse-${{matrix.release_name}}
-        path: build/${{matrix.configure_preset}}/wfs-extract/Release
+        path: build/${{matrix.configure_preset}}/wfs-fuse/Release
       if: matrix.platform != 'windows-latest'
     - name: Upload wfs-info
       uses: actions/upload-artifact@v2
