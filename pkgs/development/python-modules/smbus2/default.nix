@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "smbus2";
   version = "0.4.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
