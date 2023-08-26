@@ -2,21 +2,42 @@
 let
   revision = pkgs.lib.trivial.revisionWithDefault (nixpkgs.rev or "master");
 
-  libDefPos = prefix: set:
+  skiplist = [
+    "lib.attrsets.zip"
+    "lib.lists.crossLists"
+    "lib.options.literalExample"
+    "lib.sources.pathIsDirectory"
+    "lib.sources.pathIsRegularFile"
+    "lib.sources.pathIsRegularFilereplaceChars"
+    "lib.sources.pathType"
+    "lib.strings.isCoercibleToString"
+    "lib.strings.readPathsFromFile"
+    "lib.strings.replaceChars"
+    "lib.trivial.nixpkgsVersion"
+  ];
+
+  libDefPos = subsetname: prefix: set:
+    let
+      fullName = name:
+        builtins.concatStringsSep "." (["lib" subsetname] ++ prefix ++ [name]);
+    in
     builtins.concatMap
       (name: [{
         name = builtins.concatStringsSep "." (prefix ++ [name]);
         location = builtins.unsafeGetAttrPos name set;
       }] ++ nixpkgsLib.optionals
         (builtins.length prefix == 0 && builtins.isAttrs set.${name})
-        (libDefPos (prefix ++ [name]) set.${name})
-      ) (builtins.attrNames set);
+        (libDefPos subsetname (prefix ++ [name]) set.${name})
+      )
+      (builtins.filter (name: (!(builtins.elem (fullName name) skiplist)))
+      (builtins.attrNames set))
+    ;
 
   libset = toplib:
     builtins.map
       (subsetname: {
         subsetname = subsetname;
-        functions = libDefPos [] toplib.${subsetname};
+        functions = libDefPos subsetname [] toplib.${subsetname};
       })
       (builtins.map (x: x.name) libsets);
 

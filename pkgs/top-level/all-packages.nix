@@ -40193,6 +40193,10 @@ with pkgs;
 
   nixos-render-docs = callPackage ../tools/nix/nixos-render-docs { };
 
+  nixos-doc-src = ../../nixos/doc/manual;
+  nixpkgs-doc-src = ../../doc;
+  nixpkgs-doc-lib-function-docs = ../../doc/doc-support/lib-function-docs.nix;
+
   nixdoc = callPackage ../tools/nix/nixdoc { };
 
   dnadd = callPackage ../tools/nix/dnadd { };
