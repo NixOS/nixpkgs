@@ -9,12 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ydz8srxyca1g2wrbvskx69s874rksn2nh4rj54s4xvd5pblyiqq";
   };
 
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
+  unpackPhase = ''
+    tar -xf ${src}
+  '';
 
   installPhase = ''
-    tar -xf ${src} -C ./
     mkdir -p $out/bin/
     cp harsh $out/bin/
   '';
