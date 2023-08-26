@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "url-parser";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-A+uoxwPdWdy12Avl2Ci+zd9TFmQFA22pMbsxtWpNPpc=";
   };
 
@@ -26,6 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Simple command-line URL parser";
     homepage = "https://github.com/thegeeklab/url-parser";
+    changelog = "https://github.com/thegeeklab/url-parser/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
   };
