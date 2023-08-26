@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "odd-unstable";
       # 1.90 is alpha for API 2.
-      freeze = true;
+      freeze = "1.90.0";
     };
   };
 
