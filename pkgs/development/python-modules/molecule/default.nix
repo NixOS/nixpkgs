@@ -4,7 +4,6 @@
 , ansible-compat
 , ansible-core
 , click-help-colors
-, cookiecutter
 , enrich
 , jsonschema
 , withPlugins ? true, molecule-plugins
@@ -13,29 +12,30 @@
 , rich
 , setuptools
 , yamllint
+, wcmatch
 }:
 
 buildPythonPackage rec {
   pname = "molecule";
-  version = "5.1.0";
+  version = "6.0.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+nr4n9+TF1OcPsqZyx5edSLXpX4LZ/W2mORCdvmNnYI=";
+    hash = "sha256-ssARHVtEp3pW7364WhxhtHAWW5fRFXiioWgEczTI3yM=";
   };
 
   propagatedBuildInputs = [
     ansible-compat
     ansible-core
     click-help-colors
-    cookiecutter
     enrich
     jsonschema
     packaging
     pluggy
     rich
     yamllint
+    wcmatch
   ] ++ lib.optional withPlugins molecule-plugins;
 
   nativeBuildInputs = [
