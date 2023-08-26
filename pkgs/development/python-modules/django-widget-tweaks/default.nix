@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "django-widget-tweaks";
-  version = "1.4.12";
+  version = "1.5.0";
 
   src = fetchFromGitHub { # package from Pypi missing runtests.py
     owner = "jazzband";
     repo = pname;
-    rev = version;
-    sha256 = "1rhn2skx287k6nnkxlwvl9snbia6w6z4c2rqg22hwzbz5w05b24h";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-/3UIsg75X3R9YGv9cEcoPw3IN2vkhUb+HCy68813d2E=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
