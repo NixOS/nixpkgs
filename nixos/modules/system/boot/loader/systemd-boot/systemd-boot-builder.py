@@ -148,14 +148,6 @@ def write_entry(profile: Optional[str], generation: int, specialisation: Optiona
     os.rename(tmp_path, entry_file)
 
 
-def mkdir_p(path: str) -> None:
-    try:
-        os.makedirs(path)
-    except OSError as e:
-        if e.errno != errno.EEXIST or not os.path.isdir(path):
-            raise
-
-
 def get_generations(profile: Optional[str] = None) -> List[SystemIdentifier]:
     gen_list = subprocess.check_output([
         "@nix@/bin/nix-env",
@@ -282,8 +274,8 @@ def install_bootloader(args: argparse.Namespace) -> None:
                 print("updating systemd-boot from %s to %s" % (installed_version, available_version))
                 subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["update"])
 
-    mkdir_p("@efiSysMountPoint@/efi/nixos")
-    mkdir_p("@efiSysMountPoint@/loader/entries")
+    os.makedirs("@efiSysMountPoint@/efi/nixos", exist_ok=True)
+    os.makedirs("@efiSysMountPoint@/loader/entries", exist_ok=True)
 
     gens = get_generations()
     for profile in get_profiles():
@@ -320,7 +312,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
             os.rmdir(actual_root)
         os.rmdir(root)
 
-    mkdir_p("@efiSysMountPoint@/efi/nixos/.extra-files")
+    os.makedirs("@efiSysMountPoint@/efi/nixos/.extra-files", exist_ok=True)
 
     subprocess.check_call("@copyExtraFiles@")
 
