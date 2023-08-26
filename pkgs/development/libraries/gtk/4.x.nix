@@ -3,7 +3,6 @@
 , buildPackages
 , substituteAll
 , fetchurl
-, fetchpatch
 , pkg-config
 , gettext
 , graphene
@@ -69,7 +68,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.12.0";
+  version = "4.12.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -81,19 +80,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "ptEIKfQFsa/Atl4qlkLAQSah0bY40Rxtl0JtpPhPH28=";
+    sha256 = "uLYdbPlPrGS/Ogv8evE3yd0vg2ADP96wz+lhK3epmnI=";
   };
 
   patches = [
     # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
     ./patches/4.0-fix-darwin-build.patch
-
-    # Fixes "undefined symbol: gtk_printer_option_set"
-    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/6250
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/4d7277f72c8f4915f237e36982ffd7dfba524b15.patch";
-      sha256 = "nLNvrfrgF/Ssr2XUQDV8Qbszw5OUA4CnkZ6okrSlzOc=";
-    })
   ];
 
   depsBuildBuild = [
