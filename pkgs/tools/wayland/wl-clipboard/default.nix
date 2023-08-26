@@ -8,6 +8,7 @@
 , wayland-protocols
 , wayland-scanner
 , xdg-utils
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -22,12 +23,18 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols xdg-utils ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner makeWrapper ];
+  buildInputs = [ wayland wayland-protocols ];
 
   mesonFlags = [
     "-Dfishcompletiondir=share/fish/vendor_completions.d"
   ];
+
+  # Fix for https://github.com/NixOS/nixpkgs/issues/251261
+  postInstall = lib.optionalString (!xdg-utils.meta.broken) ''
+    wrapProgram $out/bin/wl-copy \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/bugaevc/wl-clipboard";
