@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cargo, just, pkg-config, rustPlatform
 , dbus, glib, libxkbcommon, pulseaudio, wayland
 , unstableGitUpdater
+, util-linux
 }:
 
 stdenv.mkDerivation {
@@ -34,7 +35,7 @@ stdenv.mkDerivation {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ cargo just pkg-config rustPlatform.cargoSetupHook ];
+  nativeBuildInputs = [ cargo just pkg-config rustPlatform.cargoSetupHook util-linux ];
   buildInputs = [ dbus glib libxkbcommon pulseaudio wayland ];
 
   justFlags = [ "--set" "prefix" (placeholder "out") ];
