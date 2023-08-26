@@ -43,7 +43,7 @@ rec {
     lualatex = mkTeXTest {
       name = "opentype-fonts-lualatex";
       format = "lualatex";
-      texLive = texlive.combine { inherit (texlive) scheme-medium libertinus-fonts; };
+      texLive = texlive.combine { inherit (texlive) scheme-small libertinus-fonts; };
       text = ''
         \documentclass{article}
         \usepackage{fontspec}
