@@ -284,8 +284,8 @@ let
     );
 
     preStop = if cfg.backend == "podman"
-      then "[ $SERVICE_RESULT = success ] || podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
-      else "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}";
+      then "podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
+      else "${cfg.backend} stop ${name}";
     postStop =  if cfg.backend == "podman"
       then "podman rm -f --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
       else "${cfg.backend} rm -f ${name} || true";
