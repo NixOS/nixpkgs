@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchzip, python3
+{ stdenv, lib, fetchurl, fetchzip, fetchFromGitHub, python3
 , wrapQtAppsHook, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
@@ -8,14 +8,16 @@
 , pipewireSupport    ? stdenv.isLinux
 , pipewire
 , qtwayland
-, qtbase
-, qtwebengine
-, wrapGAppsHook
+, mkDerivationWith ? null
+, qtbase ? null
+, qtwebengine ? null
+, wrapGAppsHook ? null
 , enableWideVine ? false
 , widevine-cdm
-}:
+}: let
+  isQt6 = mkDerivationWith == null;
 
-let
+  python3Packages = python3.pkgs;
   pdfjs = let
     version = "3.9.179";
   in
@@ -25,21 +27,40 @@ let
     stripRoot = false;
   };
 
+  backendPackage =
+   if backend == "webengine" then if isQt6 then python3Packages.pyqt6-webengine else python3Packages.pyqtwebengine else
+   if backend == "webkit"    then python3Packages.pyqt5_with_qtwebkit else
+   throw ''
+     Unknown qutebrowser backend "${backend}".
+     Valid choices are qtwebengine (recommended) or qtwebkit.
+   '';
+
+  buildPythonApplication = if isQt6 then python3Packages.buildPythonApplication else mkDerivationWith python3Packages.buildPythonApplication;
+
   pname = "qutebrowser";
-  version = "3.0.0";
+  version = if isQt6 then "unstable-2023-04-18" else "2.5.4";
 in
 
 assert withMediaPlayback -> gst_all_1 != null;
-assert lib.assertMsg (backend != "webkit") ''
-  Support for the QtWebKit backend has been removed.
-  Please remove the `backend = "webkit"` option from your qutebrowser override.
-'';
+assert isQt6 -> backend != "webkit";
 
-python3.pkgs.buildPythonApplication {
+buildPythonApplication {
   inherit pname version;
-  src = fetchurl {
+
+  src = if isQt6 then
+    # comes from the master branch of upstream
+    # https://github.com/qutebrowser/qutebrowser/issues/7202
+    # https://github.com/qutebrowser/qutebrowser/discussions/7628
+    fetchFromGitHub {
+      owner = "qutebrowser";
+      repo = "qutebrowser";
+      rev = "d4cafc0019a4a5574caa11966fc40ede89076d26";
+      hash = "sha256-Ma79EPvnwmQkeXEG9aSnD/Vt1DGhK2JX9dib7uARH8M=";
+    }
+  # the release tarballs are different from the git checkout!
+   else fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-Oer0p/DwUfOejUCgSCSkMvLLAjNyJx51qgN7bcQQ2Pw=";
+    hash = "sha256-pGCyICUn5CpnDCbSJdn6ZBfQkswfFvOpXnvJXdicGrE=";
   };
 
   # Needs tox
@@ -56,18 +77,20 @@ python3.pkgs.buildPythonApplication {
   nativeBuildInputs = [
     wrapQtAppsHook wrapGAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
-    python3.pkgs.pygments
-  ];
+  ]
+    ++ lib.optional isQt6 python3Packages.pygments;
 
   propagatedBuildInputs = with python3.pkgs; ([
-    pyyaml pyqt6-webengine jinja2 pygments
+    pyyaml backendPackage jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
     readability-lxml pykeepass stem
     pynacl
     # extensive ad blocking
     adblock
-  ] ++ lib.optional stdenv.isLinux qtwayland
+  ]
+    ++ lib.optional (pythonOlder "3.9") importlib-resources
+    ++ lib.optional stdenv.isLinux qtwayland
   );
 
   patches = [
@@ -76,6 +99,10 @@ python3.pkgs.buildPythonApplication {
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
+
+  preConfigure = lib.optionalString isQt6 ''
+    python scripts/asciidoc2html.py
+  '';
 
   postPatch = ''
     substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
@@ -114,7 +141,10 @@ python3.pkgs.buildPythonApplication {
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
-      ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+      --add-flags '--backend ${backend}'
+      --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
+      ${lib.optionalString isQt6 ''--set QUTE_QT_WRAPPER "PyQt6"''}
+      ${lib.optionalString (pipewireSupport && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
       ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
     )
   '';
@@ -123,7 +153,7 @@ python3.pkgs.buildPythonApplication {
     homepage    = "https://github.com/qutebrowser/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    platforms   = if enableWideVine then [ "x86_64-linux" ] else qtwebengine.meta.platforms;
+    platforms   = if enableWideVine then [ "x86_64-linux" ] else backendPackage.meta.platforms;
     maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda nrdxp ];
   };
 }
