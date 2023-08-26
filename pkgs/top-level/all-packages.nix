@@ -30260,6 +30260,8 @@ with pkgs;
     gtk = res.gtk2;
   };
 
+  tau-hydrogen = callPackage ../data/icons/tau-hydrogen { };
+
   theme-jade1 = callPackage ../data/themes/jade1 { };
 
   theme-obsidian2 = callPackage ../data/themes/obsidian2 { };
