@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -20,14 +20,8 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [
     "smbus2"
