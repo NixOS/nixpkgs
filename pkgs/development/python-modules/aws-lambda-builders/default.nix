@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-cHpeNY0WY4yai/yWw2Oy1QLLjlj8PFNdB3BMbkP31Ds=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=read_version()," 'version="${version}",'
+  '';
+
   propagatedBuildInputs = [
     six
   ];
