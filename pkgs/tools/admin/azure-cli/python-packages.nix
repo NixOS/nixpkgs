@@ -5,7 +5,7 @@ let
 
   overrideAzureMgmtPackage = package: version: extension: hash:
     # check to make sure overriding is even necessary
-    package.overrideAttrs(oldAttrs: rec {
+    package.overridePythonAttrs(oldAttrs: rec {
       inherit version;
 
       src = fetchPypi {

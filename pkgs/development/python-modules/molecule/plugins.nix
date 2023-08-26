@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "molecule-plugins";
-  version = "23.4.1";
+  version = "23.5.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NMR+4sEcNbowyoTqaEwe4Wac9+WNIZesnb/L9C0KG3s=";
+    hash = "sha256-8T6gR7hlDIkmBLgbdjgryAu0riXqULI/MOgf2dWAKv8=";
   };
 
   # reverse the dependency
