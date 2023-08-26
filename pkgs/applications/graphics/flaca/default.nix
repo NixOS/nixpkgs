@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flaca";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "Blobfolio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RXMqPpQM2h6EtIIH8Ix31euC7zK3v2QohZqouNlK7rM=";
+    hash = "sha256-YLJ8jeJhpxmSfF0PObd7FSFdVbEVhHYIaUJusAIEIx4=";
   };
 
   # upstream does not provide a Cargo.lock

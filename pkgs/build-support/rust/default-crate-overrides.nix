@@ -40,6 +40,7 @@
 , autoconf
 , automake
 , libtool
+, seatd # =libseat
 , ...
 }:
 
@@ -170,6 +171,11 @@ in
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl zlib libgit2 ];
+  };
+
+  libseat-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ seatd ];
   };
 
   libsqlite3-sys = attrs: {

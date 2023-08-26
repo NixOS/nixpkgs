@@ -1537,6 +1537,8 @@ self: super: with self; {
 
   botocore = callPackage ../development/python-modules/botocore { };
 
+  botocore-stubs = callPackage ../development/python-modules/botocore-stubs { };
+
   botorch = callPackage ../development/python-modules/botorch { };
 
   bottle = callPackage ../development/python-modules/bottle { };
@@ -13133,6 +13135,8 @@ self: super: with self; {
   typer = callPackage ../development/python-modules/typer { };
 
   types-appdirs = callPackage ../development/python-modules/types-appdirs { };
+
+  types-awscrt = callPackage ../development/python-modules/types-awscrt { };
 
   types-beautifulsoup4 = callPackage ../development/python-modules/types-beautifulsoup4 { };
 

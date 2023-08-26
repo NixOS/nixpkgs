@@ -46,7 +46,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magpie";
-  version = "0.9.2";
+  version = "0.9.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BuddiesOfBudgie";
     repo = "magpie";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GoilHdESFgpwt8+Uqzrnf8jBpeaSak1uHTlkNcQdgtk=";
+    hash = "sha256-A8FmW2o2p5B5pxTZ6twwufyhfppuMXjnMKopZRD+XdE=";
   };
 
   patches = [
@@ -124,8 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
-    # Magpie doesn't install any .desktop files
-    substituteInPlace meson/meson-postinstall.sh --replace "update-desktop-database" "# update-desktop-database"
+    # Magpie does not install any .desktop files
+    substituteInPlace scripts/mesonPostInstall.sh --replace "update-desktop-database" "# update-desktop-database"
   '';
 
   postFixup = ''
