@@ -4,16 +4,16 @@
 
 buildGoModule rec {
   pname = "guest-agent";
-  version = "20230726.00";
+  version = "20230821.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = version;
-    sha256 = "sha256-p+gjiaUaBBGhCVkbXrubfV/xZWvanC8ktlfIfjyUQSA=";
+    sha256 = "sha256-DP15KDnD09edBxOQDwP0cjVIFxjMzE1hu1Sbu6Faj9Y=";
   };
 
-  vendorHash = "sha256-Xw/5yHW9DRtZFC6cECLI0RncgzSGB5/Y0yjW7hz247s=";
+  vendorHash = "sha256-PGvyDjhLwIKhR6NmwzbzjfkBK+FqsziAdsybQmCbtCc=";
 
   patches = [ ./disable-etc-mutation.patch ];
 
