@@ -37502,6 +37502,8 @@ with pkgs;
 
   meritous = callPackage ../games/meritous { };
 
+  natural-pong = callPackage ../games/natural-pong { };
+
   oh-my-git = callPackage ../games/oh-my-git { };
 
   opendune = callPackage ../games/opendune { };
