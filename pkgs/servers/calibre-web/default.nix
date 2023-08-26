@@ -44,6 +44,7 @@ python.pkgs.buildPythonApplication rec {
     flask-wtf
     flask-limiter
     iso-639
+    jsonschema
     lxml
     pypdf
     requests
