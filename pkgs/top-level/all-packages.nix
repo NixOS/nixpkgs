@@ -30918,6 +30918,8 @@ with pkgs;
 
   cbc = callPackage ../applications/science/math/cbc { };
 
+  ccoctl = callPackage ../applications/networking/cluster/ccoctl { };
+
   cddiscid = callPackage ../applications/audio/cd-discid {
     inherit (darwin) IOKit;
   };
