@@ -1,22 +1,22 @@
 #! @python3@/bin/python3 -B
 import argparse
-import shutil
-import os
-import sys
-import errno
-import subprocess
-import glob
-import tempfile
-import errno
-import warnings
 import ctypes
-libc = ctypes.CDLL("libc.so.6")
-import re
 import datetime
+import errno
 import glob
+import os
 import os.path
-from typing import NamedTuple, List, Optional
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import warnings
+from typing import NamedTuple
+
 from packaging import version
+
+libc = ctypes.CDLL("libc.so.6")
 
 class SystemIdentifier(NamedTuple):
     profile: Optional[str]
