@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-/3UIsg75X3R9YGv9cEcoPw3IN2vkhUb+HCy68813d2E=";
+    hash = "sha256-/3UIsg75X3R9YGv9cEcoPw3IN2vkhUb+HCy68813d2E=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -38,11 +38,10 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Tweak the form field rendering in templates, not in python-level form definitions.";
+    description = "Tweak the form field rendering in templates, not in python-level form definitions";
     homepage = "https://github.com/jazzband/django-widget-tweaks";
+    changelog = "https://github.com/jazzband/django-widget-tweaks/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      maxxk
-    ];
+    maintainers = with maintainers; [ maxxk ];
   };
 }
