@@ -133,15 +133,15 @@ stdenv.mkDerivation {
     gcc
   ];
 
-  postUnpack = ''
-    mkdir -p $sourceRoot/build
-    tar -xf ${codon-deps} -C $sourceRoot/build
-  '';
-
   cmakeFlags = [
     "-DCPM_SOURCE_CACHE=${depsDir}"
     "-DLLVM_DIR=${codon-llvm}/lib/cmake/llvm"
   ];
+
+  postUnpack = ''
+    mkdir -p $sourceRoot/build
+    tar -xf ${codon-deps} -C $sourceRoot/build
+  '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     ln -s $out/lib/codon/*.dylib $out/lib/
