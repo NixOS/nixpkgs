@@ -33345,10 +33345,6 @@ with pkgs;
     components = ["kuma-dp"];
     pname = "kuma-dp";
   };
-  kuma-prometheus-sd = callPackage ../applications/networking/cluster/kuma {
-    components = ["kuma-prometheus-sd"];
-    pname = "kuma-prometheus-sd";
-  };
 
   kile-wl = callPackage ../applications/misc/kile-wl { };
 
