@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://looking-glass.io/";
     license = licenses.gpl2Plus;
+    mainProgram = "looking-glass-client";
     maintainers = with maintainers; [ alexbakker babbaj j-brn ];
     platforms = [ "x86_64-linux" ];
   };
