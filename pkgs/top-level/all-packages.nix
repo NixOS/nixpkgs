@@ -3330,6 +3330,8 @@ with pkgs;
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
+  bark = callPackage ../tools/audio/bark { };
+
   bashblog = callPackage ../tools/text/bashblog { };
 
   berglas = callPackage ../tools/admin/berglas { };
