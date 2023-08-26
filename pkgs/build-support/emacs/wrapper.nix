@@ -159,7 +159,7 @@ runCommand
         rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
         cat >"$siteStart" <<EOF
         (let ((inhibit-message t))
-          (load-file "$emacs/share/emacs/site-lisp/site-start.el"))
+          (load "$emacs/share/emacs/site-lisp/site-start"))
         ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
         ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
         (add-to-list 'exec-path "$out/bin")
