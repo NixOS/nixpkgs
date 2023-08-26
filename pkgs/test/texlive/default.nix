@@ -180,6 +180,41 @@ rec {
     grep texdoc.pdf "$out"
   '';
 
+  # check that the default language is US English
+  defaultLanguage = lib.recurseIntoAttrs rec {
+    # language.def
+    etex = mkTeXTest {
+      name = "default-language-etex";
+      format = "etex";
+      text = ''
+        \catcode`\@=11
+        \ifnum\language=\lang@USenglish \message{[tests.texlive] Default language is US English.}
+        \else\errmessage{[tests.texlive] Error: default language is NOT US English.}\fi
+        \ifnum\language=0\message{[tests.texlive] Default language has id 0.}
+        \else\errmessage{[tests.texlive] Error: default language does NOT have id 0.}\fi
+        \bye
+      '';
+    };
+    # language.dat
+    latex = mkTeXTest {
+      name = "default-language-latex";
+      format = "latex";
+      text = ''
+        \makeatletter
+        \ifnum\language=\l@USenglish \GenericWarning{}{[tests.texlive] Default language is US English}
+        \else\GenericError{}{[tests.texlive] Error: default language is NOT US English}{}{}\fi
+        \ifnum\language=0\GenericWarning{}{[tests.texlive] Default language has id 0}
+        \else\GenericError{}{[tests.texlive] Error: default language does NOT have id 0}{}{}\fi
+        \stop
+      '';
+    };
+    # language.dat.lua
+    luatex = etex.override {
+      name = "default-language-luatex";
+      format = "luatex";
+    };
+  };
+
   # test that language files are generated as expected
   hyphen-base = runCommand "texlive-test-hyphen-base" {
     hyphenBase = lib.head texlive.hyphen-base.pkgs;
