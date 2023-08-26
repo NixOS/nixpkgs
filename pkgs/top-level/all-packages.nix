@@ -15330,7 +15330,7 @@ with pkgs;
   ciao = callPackage ../development/compilers/ciao { };
 
   codon = callPackage ../development/compilers/codon {
-    inherit (llvmPackages_14) lld stdenv;
+    inherit (llvmPackages_14) stdenv;
   };
 
   colm = callPackage ../development/compilers/colm { };

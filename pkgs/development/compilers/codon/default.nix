@@ -1,14 +1,14 @@
-{ cacert
+{ lib
+, stdenv
+
+, cacert
 , cmake
 , fetchFromGitHub
 , git
-, lib
-, lld
 , ninja
 , nix-update-script
 , perl
 , python3
-, stdenv
 }:
 
 let
@@ -37,7 +37,6 @@ let
     nativeBuildInputs = [
       cmake
       git
-      lld
       ninja
       python3
     ];
@@ -48,7 +47,6 @@ let
       "-DLLVM_ENABLE_ZLIB=OFF"
       "-DLLVM_INCLUDE_TESTS=OFF"
       "-DLLVM_TARGETS_TO_BUILD=all"
-      "-DLLVM_USE_LINKER=lld"
       "-S ../llvm"
     ];
   };
@@ -108,7 +106,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     git
-    lld
     ninja
     perl
     python3
@@ -122,7 +119,6 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DCPM_SOURCE_CACHE=${depsDir}"
     "-DLLVM_DIR=${codon-llvm}/lib/cmake/llvm"
-    "-DLLVM_USE_LINKER=lld"
   ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
