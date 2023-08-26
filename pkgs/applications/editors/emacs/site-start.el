@@ -40,7 +40,7 @@ least specific (the system profile)"
                                 (mapconcat 'identity new-env-list ":"))))))
 
 ;;; Set up native-comp load path.
-(when (featurep 'comp)
+(when (featurep 'native-compile)
   ;; Append native-comp subdirectories from `NIX_PROFILES'.
   (setq native-comp-eln-load-path
         (append (mapcar (lambda (profile-dir)
