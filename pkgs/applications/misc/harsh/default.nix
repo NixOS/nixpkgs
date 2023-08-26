@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wakatara/harsh";
     description = "CLI habit tracking for geeks";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ LAURAilway ];
     platforms = platforms.linux;
     mainProgram = "harsh";
   };
