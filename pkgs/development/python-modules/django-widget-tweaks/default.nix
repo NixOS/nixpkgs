@@ -1,22 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-
-# native
 , setuptools-scm
-
-# propagated
 , django
-
-# tests
 , python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "django-widget-tweaks";
   version = "1.5.0";
+  format = "setuptools";
 
-  src = fetchFromGitHub { # package from Pypi missing runtests.py
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
     rev = "refs/tags/${version}";
