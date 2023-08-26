@@ -35047,6 +35047,10 @@ with pkgs;
     inherit (qt6Packages) qtbase qtwebengine wrapQtAppsHook qtwayland;
   };
 
+  qutebrowser-qt5 = callPackage ../applications/networking/browsers/qutebrowser {
+    inherit (__splicedPackages.libsForQt5) qtbase qtwebengine wrapQtAppsHook qtwayland;
+  };
+
   qxw = callPackage ../applications/editors/qxw { };
 
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs { };

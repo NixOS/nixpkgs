@@ -26,14 +26,14 @@ let
     stripRoot = false;
   };
 
-  pname = "qutebrowser";
   version = "3.0.2";
 in
 
 python3.pkgs.buildPythonApplication {
-  inherit pname version;
+  pname = "qutebrowser" + lib.optionalString (!isQt6) "-qt5";
+  inherit version;
   src = fetchurl {
-    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
     hash = "sha256-pRiT3koSNRmvuDcjuc7SstmPTKUoUnjIHpvdqR7VvFE=";
   };
 
