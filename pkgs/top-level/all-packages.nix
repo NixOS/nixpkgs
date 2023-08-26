@@ -30266,6 +30266,8 @@ with pkgs;
 
   tau-hydrogen = callPackage ../data/icons/tau-hydrogen { };
 
+  tau-helium = callPackage ../data/themes/tau-helium { };
+
   theme-jade1 = callPackage ../data/themes/jade1 { };
 
   theme-obsidian2 = callPackage ../data/themes/obsidian2 { };
