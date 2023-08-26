@@ -38,7 +38,7 @@
   buildPythonApplication = if isQt6 then python3Packages.buildPythonApplication else mkDerivationWith python3Packages.buildPythonApplication;
 
   pname = "qutebrowser";
-  version = if isQt6 then "unstable-2023-04-18" else "2.5.4";
+  version = if isQt6 then "3.0.0" else "2.5.4";
 in
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -47,20 +47,12 @@ assert isQt6 -> backend != "webkit";
 buildPythonApplication {
   inherit pname version;
 
-  src = if isQt6 then
-    # comes from the master branch of upstream
-    # https://github.com/qutebrowser/qutebrowser/issues/7202
-    # https://github.com/qutebrowser/qutebrowser/discussions/7628
-    fetchFromGitHub {
-      owner = "qutebrowser";
-      repo = "qutebrowser";
-      rev = "d4cafc0019a4a5574caa11966fc40ede89076d26";
-      hash = "sha256-Ma79EPvnwmQkeXEG9aSnD/Vt1DGhK2JX9dib7uARH8M=";
-    }
-  # the release tarballs are different from the git checkout!
-   else fetchurl {
+  src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-pGCyICUn5CpnDCbSJdn6ZBfQkswfFvOpXnvJXdicGrE=";
+    hash = {
+      "2.5.4" = "sha256-pGCyICUn5CpnDCbSJdn6ZBfQkswfFvOpXnvJXdicGrE=";
+      "3.0.0" = "sha256-Oer0p/DwUfOejUCgSCSkMvLLAjNyJx51qgN7bcQQ2Pw=";
+    }."${version}";
   };
 
   # Needs tox
