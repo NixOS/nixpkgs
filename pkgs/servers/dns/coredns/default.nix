@@ -38,6 +38,8 @@ buildGoModule rec {
     installManPage man/*
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "https://coredns.io";
     description = "A DNS server that runs middleware";
