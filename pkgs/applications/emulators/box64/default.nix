@@ -5,13 +5,13 @@
 , gitUpdater
 , cmake
 , python3
-, withDynarec ? stdenv.hostPlatform.isAarch64
+, withDynarec ? (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64)
 , runCommand
 , hello-x86_64
 }:
 
-# Currently only supported on ARM
-assert withDynarec -> stdenv.hostPlatform.isAarch64;
+# Currently only supported on ARM & RISC-V
+assert withDynarec -> (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DARM64=${lib.boolToString stdenv.hostPlatform.isAarch64}"
     "-DRV64=${lib.boolToString stdenv.hostPlatform.isRiscV64}"
     "-DPPC64LE=${lib.boolToString (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)}"
+    "-DLARCH64=${lib.boolToString stdenv.hostPlatform.isLoongArch64}"
   ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
     "-DLD80BITS=ON"
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ [
     # Arch dynarec
     "-DARM_DYNAREC=${lib.boolToString (withDynarec && stdenv.hostPlatform.isAarch64)}"
+    "-DRV64_DYNAREC=${lib.boolToString (withDynarec && stdenv.hostPlatform.isRiscV64)}"
   ];
 
   installPhase = ''
@@ -98,6 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ gador OPNA2608 ];
     mainProgram = "box64";
-    platforms = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" "powerpc64le-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" "powerpc64le-linux" "loongarch64-linux" "mips64el-linux" ];
   };
 })
