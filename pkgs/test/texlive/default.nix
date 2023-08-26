@@ -215,6 +215,80 @@ rec {
     };
   };
 
+  # check that all languages are available, including synonyms
+  allLanguages = let hyphenBase = lib.head texlive.hyphen-base.pkgs; texLive = texlive.combined.scheme-full; in
+    lib.recurseIntoAttrs {
+      # language.def
+      etex = mkTeXTest {
+        name = "all-languages-etex";
+        format = "etex";
+        inherit hyphenBase texLive;
+        text = ''
+          \catcode`\@=11
+          \input kvsetkeys.sty
+          \def\CheckLang#1{
+            \ifcsname lang@#1\endcsname\message{[tests.texlive] Found language #1}
+            \else\errmessage{[tests.texlive] Error: missing language #1}\fi
+          }
+          \comma@parse{@texLanguages@}\CheckLang
+          \bye
+        '';
+        preTest = ''
+          texLanguages="$(sed -n -E 's/^\\addlanguage\s*\{([^}]+)\}.*$/\1/p' < "$hyphenBase"/tex/generic/config/language.def)"
+          texLanguages="''${texLanguages//$'\n'/,}"
+          substituteInPlace "$name.tex" --subst-var texLanguages
+        '';
+      };
+      # language.dat
+      latex = mkTeXTest {
+        name = "all-languages-latex";
+        format = "latex";
+        inherit hyphenBase texLive;
+        text = ''
+          \makeatletter
+          \@for\Lang:=italian,@texLanguages@\do{
+            \ifcsname l@\Lang\endcsname
+              \GenericWarning{}{[tests.texlive] Found language \Lang}
+            \else
+              \GenericError{}{[tests.texlive] Error: missing language \Lang}{}{}
+            \fi
+          }
+          \stop
+        '';
+        preTest = ''
+          texLanguages="$(sed -n -E 's/^([^%= \t]+).*$/\1/p' < "$hyphenBase"/tex/generic/config/language.dat)"
+          texLanguages="''${texLanguages//$'\n'/,}"
+          substituteInPlace "$name.tex" --subst-var texLanguages
+        '';
+      };
+      # language.dat.lua
+      luatex = mkTeXTest {
+        name = "all-languages-luatex";
+        format = "luatex";
+        inherit hyphenBase texLive;
+        text = ''
+          \directlua{
+            require('luatex-hyphen.lua')
+            langs = '@texLanguages@,'
+            texio.write('\string\n')
+            for l in langs:gmatch('([^,]+),') do
+              if luatexhyphen.lookupname(l) \string~= nil then
+                texio.write('[tests.texlive] Found language '..l..'.\string\n')
+              else
+                error('[tests.texlive] Error: missing language '..l..'.', 2)
+              end
+            end
+          }
+          \bye
+        '';
+        preTest = ''
+          texLanguages="$(sed -n -E 's/^.*\[("|'\''')(.*)("|'\''')].*$/\2/p' < "$hyphenBase"/tex/generic/config/language.dat.lua)"
+          texLanguages="''${texLanguages//$'\n'/,}"
+          substituteInPlace "$name.tex" --subst-var texLanguages
+        '';
+      };
+    };
+
   # test that language files are generated as expected
   hyphen-base = runCommand "texlive-test-hyphen-base" {
     hyphenBase = lib.head texlive.hyphen-base.pkgs;
