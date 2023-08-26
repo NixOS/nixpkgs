@@ -8,8 +8,11 @@ least specific (the system profile)"
 ;;; Extend `load-path' to search for elisp files in subdirectories of all folders in `NIX_PROFILES'.
 ;;; Non-Nix distros have similar logic in /usr/share/emacs/site-lisp/subdirs.el.
 ;;; See https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Search.html
-(dolist (profile (nix--profile-paths))
-  (let ((default-directory (expand-file-name "share/emacs/site-lisp/" profile)))
+(dolist (profile (reverse (nix--profile-paths)))
+  ;; `directory-file-name' is important to add sub dirs to the right place of `load-path'
+  ;; see the source code of `normal-top-level-add-to-load-path'
+  (let ((default-directory (directory-file-name
+                            (expand-file-name "share/emacs/site-lisp/" profile))))
     (when (file-exists-p default-directory)
       (setq load-path (cons default-directory load-path))
       (normal-top-level-add-subdirs-to-load-path))))
