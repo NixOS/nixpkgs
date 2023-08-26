@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pkgconf";
-  version = "1.9.5";
+  version = "2.0.2";
 
   src = fetchurl {
     url = "https://distfiles.dereferenced.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-GsFlbeuydJdWMDb3v/woFJD4P5uEV8DWC8+2OPtrYXE=";
+    hash = "sha256-6lol748lHrU3fsDiHHX7YYlEM8+9vwslWboz5MJmRAE=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "doc" ];
