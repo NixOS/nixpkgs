@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , python
 , setuptools
+, pythonOlder
 
 # passthru tests
 , apache-beam
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "uqfoundation";
     repo = pname;
     rev = "refs/tags/dill-${version}";
-    hash = "sha256-lh1o/TqnqtYN9xTZom33y1/7ZhMEAFpheLdtalwgObQ=";
+    hash = "sha256-1cRGA5RuNjlpc3jq9SAsUYgmPauIV8zRF9SxOmveljI=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +38,9 @@ buildPythonPackage rec {
     inherit apache-beam datasets;
   };
 
-  pythonImportsCheck = [ "dill" ];
+  pythonImportsCheck = [
+    "dill"
+  ];
 
   meta = with lib; {
     description = "Serialize all of python (almost)";
