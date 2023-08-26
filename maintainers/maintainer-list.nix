@@ -1516,6 +1516,11 @@
     githubId = 11037075;
     name = "Ashley Hooper";
   };
+  ashvith-shetty = {
+    github = "Ashvith10";
+    githubId = 113123021;
+    name = "Ashvith Shetty";
+  };
   aske = {
     email = "aske@fmap.me";
     github = "aske";
