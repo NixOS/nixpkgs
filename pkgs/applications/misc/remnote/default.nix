@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools }:
+{ lib, fetchurl, appimageTools, makeDesktopItem }:
 
 appimageTools.wrapType2 rec {
   pname = "remnote";
@@ -10,6 +10,16 @@ appimageTools.wrapType2 rec {
   icon = fetchurl {
     url = "https://www.remnote.io/icon.png";
     sha256 = "sha256-r5D7fNefKPdjtmV7f/88Gn3tqeEG8LGuD4nHI/sCk94=";
+  };
+  desktopItem = makeDesktopItem {
+    type = "Application";
+    name = "remnote";
+    desktopName = "RemNote";
+    comment = "Spaced Repetition";
+    icon = "remnote";
+    exec = "remnote %u";
+    categories = [ "Office" ];
+    mimeTypes = [ "x-scheme-handler/remnote" "x-scheme-handler/rn" ];
   };
 
   meta = with lib; {
