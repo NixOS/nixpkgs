@@ -93,6 +93,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.unix;
+    mainProgram = "virt-manager";
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

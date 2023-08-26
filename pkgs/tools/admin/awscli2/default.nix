@@ -3,7 +3,6 @@
 , groff
 , less
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , testers
 , awscli2
@@ -24,31 +23,27 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.13.7"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.13.13"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
-    rev = version;
-    hash = "sha256-SQ9ggHSpQioptic5qjrhCB63t9pld7KGAeCNtq4OJyQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0Wx/Ze6W0Fa8OzM79PFu2liSxl1UwuUqIoYT0WhTk5k=";
   };
-
-  patches = [
-    # https://github.com/aws/aws-cli/pull/7912
-    (fetchpatch {
-      name = "update-flit-core.patch";
-      url = "https://github.com/aws/aws-cli/commit/83412a4b2ec750bada640a34a87bfe07ce41fb50.patch";
-      hash = "sha256-uhO6aOSptsARYWuXXEFhx+6rCW5/uGn2KQ15BnhzH68=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
-      --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1'
+      --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1' \
+      --replace 'awscrt>=0.16.4,<=0.16.16' 'awscrt>=0.16.4'
 
-    # upstream needs pip to build and install dependencies and validates this
+    substituteInPlace requirements-base.txt \
+      --replace "wheel==0.38.4" "wheel>=0.38.4" \
+      --replace "flit_core==3.8.0" "flit_core>=3.8.0"
+
+    # Upstream needs pip to build and install dependencies and validates this
     # with a configure script, but we don't as we provide all of the packages
     # through PYTHONPATH
     sed -i '/pip>=/d' requirements/bootstrap.txt
@@ -61,18 +56,18 @@ with py.pkgs; buildPythonApplication rec {
   propagatedBuildInputs = [
     awscrt
     bcdoc
+    botocore
     colorama
     cryptography
     distro
     docutils
     groff
+    jmespath
     less
     prompt-toolkit
-    pyyaml
-    rsa
-    ruamel-yaml
     python-dateutil
-    jmespath
+    pyyaml
+    ruamel-yaml
     urllib3
   ];
 
@@ -131,9 +126,9 @@ with py.pkgs; buildPythonApplication rec {
   };
 
   meta = with lib; {
+    description = "Unified tool to manage your AWS services";
     homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
-    description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
     mainProgram = "aws";

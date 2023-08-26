@@ -1689,8 +1689,6 @@ self: super: with self; {
 
   caio = callPackage ../development/python-modules/caio { };
 
-  cairo-lang = callPackage ../development/python-modules/cairo-lang { };
-
   cairocffi = callPackage ../development/python-modules/cairocffi { };
 
   cairosvg = callPackage ../development/python-modules/cairosvg { };
@@ -13147,6 +13145,8 @@ self: super: with self; {
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
   types-deprecated = callPackage ../development/python-modules/types-deprecated { };
+
+  types-docopt = callPackage ../development/python-modules/types-docopt { };
 
   types-docutils = callPackage ../development/python-modules/types-docutils { };
 

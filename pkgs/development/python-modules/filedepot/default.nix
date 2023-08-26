@@ -2,10 +2,10 @@
 , anyascii
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , flaky
 , google-cloud-storage
 , mock
-, paste
 , pillow
 , pymongo
 , pytestCheckHook
@@ -28,6 +28,15 @@ buildPythonPackage rec {
     hash = "sha256-vPceky5cvmy3MooWz7dRdy68VoAHN7i3a7egBs4dPE8=";
   };
 
+  patches = [
+    # Add support for Pillow 10, https://github.com/amol-/depot/pull/84
+    (fetchpatch {
+      name = "support-pillow-10.patch";
+      url = "https://github.com/amol-/depot/commit/bdb73d1b3898279068b421bc061ecc18c5108fa4.patch";
+      hash = "sha256-7+VGrdJstkiy0bYAqA9FjF1NftZiurgyPd8Wlz6GUy8=";
+    })
+  ];
+
   propagatedBuildInputs = [
     anyascii
     google-cloud-storage
@@ -36,7 +45,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flaky
     mock
-    paste
     pillow
     pymongo
     pytestCheckHook
@@ -45,6 +53,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # ModuleNotFoundError: No module named 'depot._pillow_compat'
+    "tests/test_fields_sqlalchemy.py"
     # The examples have tests
     "examples"
     # Missing dependencies (TurboGears2 and ming)
