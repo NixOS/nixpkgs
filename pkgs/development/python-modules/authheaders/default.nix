@@ -7,6 +7,7 @@
 , publicsuffix2
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
     dnspython
     dkimpy
     publicsuffix2
+    setuptools
   ];
 
   nativeCheckInputs = [
