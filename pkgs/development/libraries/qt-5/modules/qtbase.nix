@@ -29,10 +29,15 @@
 , developerBuild ? false
 , decryptSslTraffic ? false
 , testers
+, buildPackages
 }:
 
 let
   debugSymbols = debug || developerBuild;
+  qtPlatformCross = plat: with plat;
+    if isLinux
+    then "linux-generic-g++"
+    else throw "Please add a qtPlatformCross entry for ${plat.config}";
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -82,6 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+
+  # `qtbase` expects to find `cc` (with no prefix) in the
+  # `$PATH`, so the following is needed even if
+  # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -162,6 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
     export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
 
     ./bin/syncqt.pl -version $version
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # QT's configure script will refuse to use pkg-config unless these two environment variables are set
+    export PKG_CONFIG_SYSROOT_DIR=/
+    export PKG_CONFIG_LIBDIR=${lib.getLib pkg-config}/lib
+    echo 'QMAKE_PKG_CONFIG=''$''${CROSS_COMPILE}pkg-config' >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
   '';
 
   postConfigure = ''
@@ -209,6 +224,8 @@ stdenv.mkDerivation (finalAttrs: {
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
+  # do not pass --host and --build to configureFlags as QT's configure script doesn't understand them
+  configurePlatforms = [ ];
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags = [
     "-plugindir $(out)/$(qtPluginPrefix)"
@@ -235,6 +252,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-L" "${icu.out}/lib"
     "-I" "${icu.dev}/include"
     "-pch"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-device ${qtPlatformCross stdenv.hostPlatform}"
+    "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
   ++ lib.optional debugSymbols "-debug"
   ++ lib.optionals developerBuild [

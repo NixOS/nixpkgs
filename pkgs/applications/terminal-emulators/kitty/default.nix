@@ -102,9 +102,6 @@ buildPythonApplication rec {
   hardeningDisable = [
     # causes redefinition of _FORTIFY_SOURCE
     "fortify3"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    # Causes build failure due to warning
-    "strictoverflow"
   ];
 
   CGO_ENABLED = 0;

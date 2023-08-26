@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "typstfmt";
-  version = "unstable-2023-08-15";
+  version = "unstable-2023-08-22";
 
   src = fetchFromGitHub {
     owner = "astrale-sharp";
     repo = "typstfmt";
-    rev = "0e5cf2769ef46ca8f6627c688cb8f848ee279a88";
-    hash = "sha256-xdmEixbINjVjXlGwdBqDPcd4YHcT/WeswlRNEwpnfx4=";
+    rev = "578d39fb304020d0c26118e4eeab272868c9d525";
+    hash = "sha256-pF0i3yqGOzbN3CMELhZ7JElOUdBZCnp3cLqa9VONHhI=";
   };
 
   cargoLock = {
