@@ -599,10 +599,10 @@
       elpaBuild {
         pname = "cape";
         ename = "cape";
-        version = "0.16";
+        version = "0.17";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/cape-0.16.tar";
-          sha256 = "1l9zw71dl5g3q9iysd64l27id63w3klqy9dzc1fn1q6y5gsf8bl4";
+          url = "https://elpa.gnu.org/packages/cape-0.17.tar";
+          sha256 = "1kby5qbw2z5c6629vfx6dx4f1a8gx58ciif9b9589drc6fnnsnlr";
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -907,10 +907,10 @@
       elpaBuild {
         pname = "corfu";
         ename = "corfu";
-        version = "0.37";
+        version = "0.38";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/corfu-0.37.tar";
-          sha256 = "0r5c8960nxfdn0kc0x7v0sla0mqids54s5xw9rj6818w1vk9r7g7";
+          url = "https://elpa.gnu.org/packages/corfu-0.38.tar";
+          sha256 = "1pj7zdcqfk77fvfqgvp1gri4m11akn5hd87av28k745i7s0nq0i6";
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -1507,10 +1507,10 @@
       elpaBuild {
         pname = "ef-themes";
         ename = "ef-themes";
-        version = "1.2.0";
+        version = "1.3.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ef-themes-1.2.0.tar";
-          sha256 = "1s4kw4y8k66x76j6c03gr2my2s95ymdjxwh01lzhyy5xkggikqfj";
+          url = "https://elpa.gnu.org/packages/ef-themes-1.3.0.tar";
+          sha256 = "1cchc1cfp2y32d736r4523gjzvg4rd1nqddxsjsk5kialz06alms";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1696,10 +1696,10 @@
       elpaBuild {
         pname = "ement";
         ename = "ement";
-        version = "0.10";
+        version = "0.11";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ement-0.10.tar";
-          sha256 = "0iw4vk99h15zhq507praqqar9sc5yyk5hbckygbr4x6af88jc02i";
+          url = "https://elpa.gnu.org/packages/ement-0.11.tar";
+          sha256 = "0hsing0iwb69qmnzqii66rqb0cwy3k35ybl68a9jh7iw97jcxm73";
         };
         packageRequires = [
           emacs
@@ -1860,6 +1860,21 @@
         packageRequires = [];
         meta = {
           homepage = "https://elpa.gnu.org/packages/expand-region.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    expreg = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "expreg";
+        ename = "expreg";
+        version = "1.0.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/expreg-1.0.0.tar";
+          sha256 = "0fyyp1cqhgbqmyjb4dyr49zg3jpj3hkhgzl1lh2gcp08d83jl6av";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/expreg.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -2524,10 +2539,10 @@
       elpaBuild {
         pname = "inspector";
         ename = "inspector";
-        version = "0.31";
+        version = "0.33";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/inspector-0.31.tar";
-          sha256 = "0h6qc9g7glxvc4ap9jm0zifljgaxc3291m1dqjprl0f48li4wphd";
+          url = "https://elpa.gnu.org/packages/inspector-0.33.tar";
+          sha256 = "1kap3z68sjjaszmmznl4kk6mr31yd99cqv4yj34zb94vsb2xb6xj";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2864,10 +2879,10 @@
       elpaBuild {
         pname = "latex-table-wizard";
         ename = "latex-table-wizard";
-        version = "1.5.2";
+        version = "1.5.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/latex-table-wizard-1.5.2.tar";
-          sha256 = "0vm4iv0ryff95yld8hlrlmn0wfgkj9690yiwd8pvja2w5m578mf2";
+          url = "https://elpa.gnu.org/packages/latex-table-wizard-1.5.3.tar";
+          sha256 = "1lwnz3c4228cnbxnqrm6g476khb0gqgh1qdjm39q8w89nw47vvfy";
         };
         packageRequires = [ auctex emacs transient ];
         meta = {
@@ -3638,10 +3653,10 @@
       elpaBuild {
         pname = "org";
         ename = "org";
-        version = "9.6.7";
+        version = "9.6.8";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-9.6.7.tar";
-          sha256 = "1wj9sj9ybfkwsk6chxs4pk7fxmnw3r6ai9xj9rr0wrvk0771350c";
+          url = "https://elpa.gnu.org/packages/org-9.6.8.tar";
+          sha256 = "1drkpwpjkbi5q6hnifi1x6ib0fp51isga2gl0hj7q0shy161ajv0";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3728,10 +3743,10 @@
       elpaBuild {
         pname = "org-remark";
         ename = "org-remark";
-        version = "1.1.0";
+        version = "1.2.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-remark-1.1.0.tar";
-          sha256 = "0vbs4dz86bz1s5crf7gfm4h4wpb7ibky3698ghdb4v4d5piz86ld";
+          url = "https://elpa.gnu.org/packages/org-remark-1.2.1.tar";
+          sha256 = "0xf10kgb0g4y9i4s1d3a1i5a119a1pijzhp5xxj2b2wyvjs2g3yk";
         };
         packageRequires = [ emacs org ];
         meta = {
@@ -4103,10 +4118,10 @@
       elpaBuild {
         pname = "pulsar";
         ename = "pulsar";
-        version = "0.5.0";
+        version = "1.0.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/pulsar-0.5.0.tar";
-          sha256 = "1bs6f8j1a7vypwm087zsrccv5kbahxyg3nhc65ffgpwrnxfp4v96";
+          url = "https://elpa.gnu.org/packages/pulsar-1.0.1.tar";
+          sha256 = "0qknyd6ihqg4n940yll5v2hz3w07fsp4mbdfh7drbws13c1ivnly";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -5322,10 +5337,10 @@
       elpaBuild {
         pname = "tramp";
         ename = "tramp";
-        version = "2.6.1.1";
+        version = "2.6.1.1.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/tramp-2.6.1.1.tar";
-          sha256 = "0bjj4r46jgrh72p5fxyv0h0r7cx6x0l3abfcyj91hmyfgifkc5cv";
+          url = "https://elpa.gnu.org/packages/tramp-2.6.1.1.1.tar";
+          sha256 = "1aclan50xl0cgsxy9l7c1dd73w4kklmap9c74gndcssdi6p1mw69";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -5382,10 +5397,10 @@
       elpaBuild {
         pname = "transient";
         ename = "transient";
-        version = "0.4.1";
+        version = "0.4.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/transient-0.4.1.tar";
-          sha256 = "0mw619057spgz9rrf8rws1zywpjl8ri7hz30f4g8wxqsgrk4ph79";
+          url = "https://elpa.gnu.org/packages/transient-0.4.3.tar";
+          sha256 = "1aqw7fr5p2f1xs5pvfpmhhvh16491qvcbg40993siqkdi05w4i1j";
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -5442,10 +5457,10 @@
       elpaBuild {
         pname = "triples";
         ename = "triples";
-        version = "0.3.4";
+        version = "0.3.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/triples-0.3.4.tar";
-          sha256 = "1y0qqa51iaj62yishyl3j2j9s2p1wzg6yasq417ls3x4rdccji0g";
+          url = "https://elpa.gnu.org/packages/triples-0.3.5.tar";
+          sha256 = "086w3izri2fvg2w9lq4srjcq9gc6amz5vj2iihhysd10ypj3zxwy";
         };
         packageRequires = [ emacs seq ];
         meta = {
@@ -5773,10 +5788,10 @@
       elpaBuild {
         pname = "vertico-posframe";
         ename = "vertico-posframe";
-        version = "0.7.2";
+        version = "0.7.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/vertico-posframe-0.7.2.tar";
-          sha256 = "1sbgg0syyk24phwzji40lyw5dmwxssgvwv2fs8mbmkhv0q44f9ny";
+          url = "https://elpa.gnu.org/packages/vertico-posframe-0.7.3.tar";
+          sha256 = "1gfapchkj9jkzlyz3hzkb9kpifcak0fn4y5jw6f2cs6379sjwvzm";
         };
         packageRequires = [ emacs posframe vertico ];
         meta = {
@@ -5926,10 +5941,10 @@
       elpaBuild {
         pname = "websocket";
         ename = "websocket";
-        version = "1.14";
+        version = "1.15";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/websocket-1.14.tar";
-          sha256 = "0g75kaw9bdk30apiyk09583amnw9458kkmgbbcl2myqfqspywnva";
+          url = "https://elpa.gnu.org/packages/websocket-1.15.tar";
+          sha256 = "0mvvq9gsx856ip2gkrvjw4k8a85vrrkp27dcpkvamxq93lfd7hin";
         };
         packageRequires = [ cl-lib ];
         meta = {
