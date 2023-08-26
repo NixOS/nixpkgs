@@ -1,6 +1,31 @@
 { lib, stdenv, buildEnv, runCommand, fetchurl, file, texlive, writeShellScript, writeText }:
 
-{
+rec {
+
+  mkTeXTest = lib.makeOverridable (
+    { name
+    , format
+    , text
+    , texLive ? texlive.combined.scheme-small
+    , options ? "-interaction=errorstopmode"
+    , preTest ? ""
+    , postTest ? ""
+    , ...
+    }@attrs: runCommand "texlive-test-tex-${name}"
+      ({
+        nativeBuildInputs = [ texLive ] ++ attrs.nativeBuildInputs or [ ];
+        text = builtins.toFile "${name}.tex" text;
+      } // builtins.removeAttrs attrs [ "nativeBuildInputs" "text" "texLive" ])
+      ''
+        export HOME="$(mktemp -d)"
+        mkdir "$out"
+        cd "$out"
+        cp "$text" "$name.tex"
+        ${preTest}
+        $format $options "$name.tex"
+        ${postTest}
+      ''
+  );
 
   tlpdbNix = runCommand "texlive-test-tlpdb-nix" {
     nixpkgsTlpdbNix = ../../tools/typesetting/tex/texlive/tlpdb.nix;
@@ -38,7 +63,7 @@
 
   chktex = runCommand "texlive-test-chktex" {
     nativeBuildInputs = [
-      (with texlive; combine { inherit scheme-infraonly chktex; })
+      (texlive.combine { inherit (texlive) scheme-infraonly chktex; })
     ];
     input = builtins.toFile "chktex-sample.tex" ''
       \documentclass{article}
@@ -76,7 +101,7 @@
 
     # test dvipng's limited capability to render postscript specials via GS
     ghostscript = runCommand "texlive-test-ghostscript" {
-      nativeBuildInputs = [ file (with texlive; combine { inherit scheme-small dvipng; }) ];
+      nativeBuildInputs = [ file (texlive.combine { inherit (texlive) scheme-small dvipng; }) ];
       input = builtins.toFile "postscript-sample.tex" ''
         \documentclass{minimal}
         \begin{document}
@@ -143,8 +168,8 @@
 
   texdoc = runCommand "texlive-test-texdoc" {
     nativeBuildInputs = [
-      (with texlive; combine {
-        inherit scheme-infraonly luatex texdoc;
+      (texlive.combine {
+        inherit (texlive) scheme-infraonly luatex texdoc;
         pkgFilter = pkg: lib.elem pkg.tlType [ "run" "bin" "doc" ];
       })
     ];
