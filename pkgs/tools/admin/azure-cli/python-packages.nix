@@ -5,7 +5,7 @@ let
 
   overrideAzureMgmtPackage = package: version: extension: hash:
     # check to make sure overriding is even necessary
-    package.overridePythonAttrs(oldAttrs: rec {
+    package.overridePythonAttrs (oldAttrs: rec {
       inherit version;
 
       src = fetchPypi {
@@ -164,7 +164,7 @@ let
         "sha256-eNQ3rbKFdPRIyDjtXwH5ztN4GWCYBh3rWdn3AxcEwX4=";
 
       azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "25.0.0" "zip"
-      "sha256-je7O92bklsbIlfsTUF2TXUqztAZxn8ep4ezCUHeLuhE=";
+        "sha256-je7O92bklsbIlfsTUF2TXUqztAZxn8ep4ezCUHeLuhE=";
 
       azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "9.2.0" "zip"
         "sha256-PAaBkR77Ho2YI5I+lmazR/8vxEZWpbvM427yRu1ET0k=";
@@ -223,7 +223,7 @@ let
       azure-mgmt-media = overrideAzureMgmtPackage super.azure-mgmt-media "9.0.0" "zip"
         "sha256-TI7l8sSQ2QUgPqiE3Cu/F67Wna+KHbQS3fuIjOb95ZM=";
 
-      azure-mgmt-msi = super.azure-mgmt-msi.overridePythonAttrs(old: rec {
+      azure-mgmt-msi = super.azure-mgmt-msi.overridePythonAttrs (old: rec {
         version = "7.0.0";
         src = old.src.override {
           inherit version;
@@ -312,7 +312,7 @@ let
       azure-multiapi-storage = overrideAzureMgmtPackage super.azure-multiapi-storage "1.2.0" "tar.gz"
         "sha256-CQuoWHeh0EMitTRsvifotrTwpWd/Q9LWWD7jZ2w9r8I=";
 
-      azure-appconfiguration = super.azure-appconfiguration.overrideAttrs(oldAttrs: rec {
+      azure-appconfiguration = super.azure-appconfiguration.overrideAttrs (oldAttrs: rec {
         version = "1.1.1";
 
         src = fetchPypi {
@@ -323,7 +323,7 @@ let
         };
       });
 
-      azure-graphrbac = super.azure-graphrbac.overrideAttrs(oldAttrs: rec {
+      azure-graphrbac = super.azure-graphrbac.overrideAttrs (oldAttrs: rec {
         version = "0.60.0";
 
         src = fetchPypi {
@@ -334,7 +334,7 @@ let
         };
       });
 
-      azure-storage-blob = super.azure-storage-blob.overrideAttrs(oldAttrs: rec {
+      azure-storage-blob = super.azure-storage-blob.overrideAttrs (oldAttrs: rec {
         version = "1.5.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
@@ -343,7 +343,7 @@ let
         };
       });
 
-      azure-storage-common = super.azure-storage-common.overrideAttrs(oldAttrs: rec {
+      azure-storage-common = super.azure-storage-common.overrideAttrs (oldAttrs: rec {
         version = "1.4.2";
         src = fetchPypi {
           inherit (oldAttrs) pname;
@@ -352,7 +352,7 @@ let
         };
       });
 
-      azure-synapse-artifacts = super.azure-synapse-artifacts.overrideAttrs(oldAttrs: rec {
+      azure-synapse-artifacts = super.azure-synapse-artifacts.overrideAttrs (oldAttrs: rec {
         version = "0.15.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
@@ -365,7 +365,7 @@ let
         ];
       });
 
-      azure-synapse-accesscontrol = super.azure-synapse-accesscontrol.overrideAttrs(oldAttrs: rec {
+      azure-synapse-accesscontrol = super.azure-synapse-accesscontrol.overrideAttrs (oldAttrs: rec {
         version = "0.5.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
@@ -375,7 +375,7 @@ let
         };
       });
 
-      azure-synapse-managedprivateendpoints = super.azure-synapse-managedprivateendpoints.overrideAttrs(oldAttrs: rec {
+      azure-synapse-managedprivateendpoints = super.azure-synapse-managedprivateendpoints.overrideAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
@@ -385,7 +385,7 @@ let
         };
       });
 
-      azure-synapse-spark = super.azure-synapse-spark.overrideAttrs(oldAttrs: rec {
+      azure-synapse-spark = super.azure-synapse-spark.overrideAttrs (oldAttrs: rec {
         version = "0.2.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
@@ -395,7 +395,7 @@ let
         };
       });
 
-      azure-keyvault = super.azure-keyvault.overrideAttrs(oldAttrs: rec {
+      azure-keyvault = super.azure-keyvault.overrideAttrs (oldAttrs: rec {
         version = "1.1.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
@@ -415,7 +415,7 @@ let
         pythonImportsCheck = [ ];
       });
 
-      azure-keyvault-administration = super.azure-keyvault-administration.overridePythonAttrs(oldAttrs: rec {
+      azure-keyvault-administration = super.azure-keyvault-administration.overridePythonAttrs (oldAttrs: rec {
         version = "4.3.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
@@ -425,7 +425,7 @@ let
         };
       });
 
-      azure-keyvault-keys = super.azure-keyvault-keys.overridePythonAttrs(oldAttrs: rec {
+      azure-keyvault-keys = super.azure-keyvault-keys.overridePythonAttrs (oldAttrs: rec {
         version = "4.8.0b2";
         src = fetchPypi {
           inherit (oldAttrs) pname;
@@ -437,7 +437,7 @@ let
 
 
       # part of azure.mgmt.datalake namespace
-      azure-mgmt-datalake-analytics = super.azure-mgmt-datalake-analytics.overrideAttrs(oldAttrs: rec {
+      azure-mgmt-datalake-analytics = super.azure-mgmt-datalake-analytics.overrideAttrs (oldAttrs: rec {
         version = "0.2.1";
 
         src = fetchPypi {
@@ -454,7 +454,7 @@ let
         '';
       });
 
-      azure-mgmt-datalake-store = super.azure-mgmt-datalake-store.overrideAttrs(oldAttrs: rec {
+      azure-mgmt-datalake-store = super.azure-mgmt-datalake-store.overrideAttrs (oldAttrs: rec {
         version = "0.5.0";
 
         src = fetchPypi {
@@ -471,7 +471,7 @@ let
         '';
       });
 
-      adal = super.adal.overridePythonAttrs(oldAttrs: rec {
+      adal = super.adal.overridePythonAttrs (oldAttrs: rec {
         version = "1.2.7";
 
         src = fetchPypi {
@@ -484,7 +484,7 @@ let
         doCheck = false;
       });
 
-      msal = super.msal.overridePythonAttrs(oldAttrs: rec {
+      msal = super.msal.overridePythonAttrs (oldAttrs: rec {
         version = "1.24.0b1";
 
         src = fetchPypi {
@@ -494,7 +494,7 @@ let
         };
       });
 
-      semver = super.semver.overridePythonAttrs(oldAttrs: rec {
+      semver = super.semver.overridePythonAttrs (oldAttrs: rec {
         version = "2.13.0";
 
         src = fetchPypi {
@@ -504,7 +504,7 @@ let
         };
       });
 
-      jsondiff = super.jsondiff.overridePythonAttrs(oldAttrs: rec {
+      jsondiff = super.jsondiff.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.0";
 
         src = oldAttrs.src.override {
@@ -513,7 +513,7 @@ let
         };
       });
 
-      knack = super.knack.overridePythonAttrs(oldAttrs: rec {
+      knack = super.knack.overridePythonAttrs (oldAttrs: rec {
         version = "0.11.0";
 
         src = fetchPypi {
@@ -523,7 +523,7 @@ let
         };
       });
 
-      argcomplete = super.argcomplete.overridePythonAttrs(oldAttrs: rec {
+      argcomplete = super.argcomplete.overridePythonAttrs (oldAttrs: rec {
         version = "3.1.1";
 
         src = fetchPypi {
@@ -533,7 +533,7 @@ let
         };
       });
 
-      sshtunnel = super.sshtunnel.overridePythonAttrs(oldAttrs: rec {
+      sshtunnel = super.sshtunnel.overridePythonAttrs (oldAttrs: rec {
         name = "sshtunnel-${version}";
         version = "0.1.5";
 
@@ -544,7 +544,7 @@ let
         };
       });
 
-      websocket-client = super.websocket-client.overridePythonAttrs(oldAttrs: rec {
+      websocket-client = super.websocket-client.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.1";
 
         src = oldAttrs.src.override {
@@ -553,7 +553,7 @@ let
         };
       });
 
-      azure-mgmt-resource = super.azure-mgmt-resource.overridePythonAttrs(oldAttrs: rec {
+      azure-mgmt-resource = super.azure-mgmt-resource.overridePythonAttrs (oldAttrs: rec {
         version = "23.1.0b2";
 
         src = oldAttrs.src.override {
@@ -564,4 +564,4 @@ let
     };
   };
 in
-  py
+py
