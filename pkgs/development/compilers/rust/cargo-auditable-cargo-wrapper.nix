@@ -1,5 +1,8 @@
 { lib, runCommand, makeBinaryWrapper, rust-audit-info, cargo, cargo-auditable }:
 
+if cargo-auditable.meta.broken then
+  cargo
+else
 runCommand "auditable-${cargo.name}" {
   nativeBuildInputs = [ makeBinaryWrapper ];
 
