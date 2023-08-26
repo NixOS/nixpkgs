@@ -37,6 +37,10 @@ with self; with super; {
 
   more-itertools = callPackage ../development/python2-modules/more-itertools { };
 
+  # ninja python stub was created to help simplify python builds using PyPA's
+  # build tool in Python 3, but it does not yet support Python 2
+  ninja = pkgs.buildPackages.ninja;
+
   packaging = callPackage ../development/python2-modules/packaging { };
 
   pip = callPackage ../development/python2-modules/pip { };
