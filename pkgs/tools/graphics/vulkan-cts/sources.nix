@@ -4,8 +4,8 @@ rec {
   ESExtractor = fetchFromGitHub {
     owner = "Igalia";
     repo = "ESExtractor";
-    rev = "v0.3.3";
-    hash = "sha256-qqhDv08cLQlLaEj0qfghByK+IohdvQdI2ePfUNFEArQ=";
+    rev = "v0.2.5";
+    hash = "sha256-A3lyTTarR1ZJrXcrLDR5D7H1kBwJNyrPPjEklRM9YBY=";
   };
 
   amber = fetchFromGitHub {
@@ -18,8 +18,8 @@ rec {
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "0bbec2e8f6eca92e925bc589725b108788fc0733";
-    hash = "sha256-ZX1WkG2eqDjC/swNBQjG0RvTaijc3U6ehS6qsd19b1g=";
+    rev = "77417d5c9e0a5d4c79ddd0285d530b45f7259f0d";
+    hash = "sha256-BNgnhTl7/+nC5D7Jl7QME5+qIbm+I0Wh/tf9F4WhW3U=";
   };
 
   jsoncpp = fetchFromGitHub {
@@ -32,15 +32,15 @@ rec {
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "8e2ad27488ed2f87c068c01a8f5e8979f7086405";
-    hash = "sha256-EU69D5+ToET2No2h7MsWuuSwjbl/8TDDDHuVnkUNs/E=";
+    rev = "1feaf4414eb2b353764d01d88f8aa4bcc67b60db";
+    hash = "sha256-VOq3r6ZcbDGGxjqC4IoPMGC5n1APUPUAs9xcRzxdyfk=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "6f276e05ccab210584996bc40a0bef82b91f4f40";
-    hash = "sha256-qnFOROpvdUcxohMDlvdiupOoBCoeDUiYtlX8DKbSPgw=";
+    rev = "01828dac778d08f4ebafd2e06bd419f6c84e5984";
+    hash = "sha256-i1rDMVpUiNdacDe20DsN67/rzK5V434EzfSv97y+xGU=";
   };
 
   video-parser = fetchFromGitHub {
@@ -53,8 +53,8 @@ rec {
   vulkan-docs = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
-    rev = "2f4ef8371aa309f91954536996582066900ef2a0";
-    hash = "sha256-uvsDH1emOdw+t/jmqAXG6ssCtLcHZbzAg0SGDxLNrvc=";
+    rev = "9fff8b252a3688c0231fa78709084bbe677d3bf7";
+    hash = "sha256-KpKsKTY5xCSZ5Y92roa0fq/iqc1hVJNS7l87RFcxyRQ=";
   };
 
 

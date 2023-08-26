@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.6.0";
+  version = "1.3.6.3";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-PWkY5PFoxKosteRgbo6aRqGFHBkoEPFcg6NN8EquD8U=";
+    hash = "sha256-jpKPmUduH3IuUYzBAZJFl/w1FqjGC8sXSTnet8YEZ0I=";
   };
 
   outputs = [ "out" "lib" ];
