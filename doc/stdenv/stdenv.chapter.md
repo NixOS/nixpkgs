@@ -667,13 +667,17 @@ The patch phase applies the list of patches defined in the `patches` variable.
 
 Set to true to skip the patch phase.
 
+##### `patchCommand` {#var-stdenv-patchCommand}
+
+The patch command to use. If not set, the `patch` utility is used.
+
 ##### `patches` {#var-stdenv-patches}
 
 The list of patches. They must be in the format accepted by the `patch` command, and may optionally be compressed using `gzip` (`.gz`), `bzip2` (`.bz2`) or `xz` (`.xz`).
 
 ##### `patchFlags` {#var-stdenv-patchFlags}
 
-Flags to be passed to `patch`. If not set, the argument `-p1` is used, which causes the leading directory component to be stripped from the file names in each patch.
+Flags to be passed to `$patchCommand`. If not set, the argument `-p1` is used, which causes the leading directory component to be stripped from the file names in each patch.
 
 ##### `prePatch` {#var-stdenv-prePatch}
 

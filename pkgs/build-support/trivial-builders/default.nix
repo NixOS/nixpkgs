@@ -905,9 +905,10 @@ rec {
              ) + "-patched"
     , patches   ? []
     , postPatch ? ""
+    , patchCommand ? "patch"
     , ...
     }@args: stdenvNoCC.mkDerivation {
-      inherit name src patches postPatch;
+      inherit name src patches patchCommand postPatch;
       preferLocalBuild = true;
       allowSubstitutes = false;
       phases = "unpackPhase patchPhase installPhase";
@@ -915,7 +916,7 @@ rec {
     }
     # Carry `meta` information from the underlying `src` if present.
     // (optionalAttrs (src?meta) { inherit (src) meta; })
-    // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
+    // (removeAttrs args [ "src" "name" "patches" "patchCommand" "postPatch" ]);
 
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file" {
