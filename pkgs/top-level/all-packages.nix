@@ -674,6 +674,8 @@ with pkgs;
 
   goda = callPackage ../development/tools/goda { };
 
+  gokrazy = callPackage ../development/misc/gokrazy { };
+
   gojq = callPackage ../development/tools/gojq { };
 
   govulncheck = callPackage ../tools/security/govulncheck { };
