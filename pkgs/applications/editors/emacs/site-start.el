@@ -42,11 +42,17 @@ least specific (the system profile)"
 ;;; Set up native-comp load path.
 (when (featurep 'native-compile)
   ;; Append native-comp subdirectories from `NIX_PROFILES'.
+  ;; Emacs writes asynchronous native-compilation files to the first writable directory[1].
+  ;; At this time, (car native-comp-eln-load-path) is a writable one in `user-emacs-directory'[2].
+  ;; So we keep that one unchanged.
+  ;; [1]: info "(elisp) Native-Compilation Variables"
+  ;; [2]: https://git.savannah.gnu.org/cgit/emacs.git/tree/lisp/startup.el?id=3685387e609753293c4518be75e77c659c3b2d8d#n601
   (setq native-comp-eln-load-path
-        (append (mapcar (lambda (profile-dir)
+        (append (list (car native-comp-eln-load-path))
+                (mapcar (lambda (profile-dir)
                           (concat profile-dir "/share/emacs/native-lisp/"))
                         (nix--profile-paths))
-                native-comp-eln-load-path)))
+                (cdr native-comp-eln-load-path))))
 
 ;;; Make `woman' find the man pages
 (defvar woman-manpath)
