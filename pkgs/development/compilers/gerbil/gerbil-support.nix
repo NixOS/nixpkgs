@@ -11,11 +11,11 @@ with pkgs.gerbil-support; {
     ppplToPpa
       [ ./gerbil-leveldb.nix ./gerbil-lmdb.nix ./gerbil-mysql.nix
         ./gerbil-libxml.nix ./gerbil-libyaml.nix
-        ./smug-gerbil.nix ./ftw.nix
+        ./smug-gerbil.nix # ./ftw.nix
         ./gerbil-utils.nix ./gerbil-crypto.nix ./gerbil-poo.nix
         ./gerbil-persist.nix ./gerbil-ethereum.nix
         # ./gerbil-libp2p.nix
-        # ./glow-lang.nix
+        ./glow-lang.nix
       ];
 
   prePackage-defaults = {

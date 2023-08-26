@@ -2,18 +2,18 @@
 
 {
   pname = "gerbil-utils";
-  version = "unstable-2023-09-18";
-  git-version = "0.2-199-ga604965";
+  version = "unstable-2023-10-08";
+  git-version = "0.3-3-g2914428";
   softwareName = "Gerbil-utils";
   gerbil-package = "clan";
   version-path = "version";
 
   pre-src = {
     fun = fetchFromGitHub;
-    owner = "fare";
+    owner = "mighty-gerbils";
     repo = "gerbil-utils";
-    rev = "a6049651d163a23bb4a876b9745dd572f1eaf536";
-    sha256 = "1k4g4qdzrx72bb14y5cb045bwkfzvmlsaxlga1j7w1vm6ann5lp2";
+    rev = "29144289b40ce624adf30eab23b796ddd6b6b55d";
+    sha256 = "0qysw2zs5acgri3wrjb3ngnnhd17xpr9hcdr4ya383k8k7jacr8a";
   };
 
   meta = with lib; {
