@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Serialize all of python (almost)";
     homepage = "https://github.com/uqfoundation/dill/";
+    changelog = "https://github.com/uqfoundation/dill/releases/tag/dill-${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ tjni ];
   };
