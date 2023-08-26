@@ -1,13 +1,14 @@
 { lib
 , fetchFromSourcehut
+, buildGoModule
 , buildPythonPackage
 , srht
 , pyyaml
 , python
+, unzip
 }:
 
-buildPythonPackage rec {
-  pname = "pastesrht";
+let
   version = "0.15.1";
 
   src = fetchFromSourcehut {
@@ -16,6 +17,17 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-IUFX7/V8AWqN+iuisLAyu7lMNIUCzSMoOfcZiYJTnrM=";
   };
+
+  pastesrht-api = buildGoModule ({
+    inherit src version;
+    pname = "pastesrht-api";
+    modRoot = "api";
+    vendorSha256 = "sha256-jiE73PUPSHxtWp7XBdH4mJw95pXmZjCl4tk2wQUf2M4";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+in
+buildPythonPackage rec {
+  inherit src version;
+  pname = "pastesrht";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -30,6 +42,11 @@ buildPythonPackage rec {
   preBuild = ''
     export PKGVER=${version}
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  '';
+
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s ${pastesrht-api}/bin/api $out/bin/pastesrht-api
   '';
 
   pythonImportsCheck = [ "pastesrht" ];
