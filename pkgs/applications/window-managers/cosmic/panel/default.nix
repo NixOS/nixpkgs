@@ -3,7 +3,7 @@
 , unstableGitUpdater
 }:
 
-stdenv.mkDerivation {
+rustPlatform.buildRustPackage {
   pname = "cosmic-panel";
   version = "unstable-2023-08-03";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     hash = "sha256-H3QuiP7Og69wm9yCX/uoSG0aQ3B/61q9Sdj+rW4KZMU=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
+  cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "cosmic-config-0.1.0" = "sha256-ENdQkLo4MSH/oe6vFr8qByWehch0nMngBr9/6hF7iVk=";
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   buildInputs = [ libglvnd libxkbcommon wayland ];
 
   justFlags = [ "--set" "prefix" (placeholder "out") ];
+  dontUseJustBuild = 1;  # we need to let cargo-setup-hook do this; it knows the correct flags
 
   # Force linking to libEGL, which is always dlopen()ed.
   "CARGO_TARGET_${rust.lib.toRustTargetForUseInEnvVars stdenv.hostPlatform}_RUSTFLAGS" = map (a: "-C link-arg=${a}") [
@@ -38,6 +39,12 @@ stdenv.mkDerivation {
     "-lEGL"
     "-Wl,--pop-state"
   ];
+
+  # upstream justfile `install` target does not understand non-native compilation
+  preInstall = lib.optionalString (rust.lib.toRustTarget stdenv.buildPlatform != rust.lib.toRustTarget stdenv.hostPlatform) ''
+    rm -rf target/release
+    mv target/${rust.lib.toRustTarget stdenv.hostPlatform}/release target/release
+  '';
 
   passthru.updateScript = unstableGitUpdater { };
 

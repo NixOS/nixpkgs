@@ -4,7 +4,7 @@
 , util-linux
 }:
 
-stdenv.mkDerivation {
+rustPlatform.buildRustPackage {
   pname = "cosmic-applets";
   version = "unstable-2023-08-23";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     hash = "sha256-gf8xf/vzVw3yg+LpmOR+z7VJQtEoMEJ+CFO2vgMmFtM=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
+  cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "accesskit-0.11.0" = "sha256-/6KUCH1CwMHd5YEMOpAdVeAxpjl9JvrzDA4Xnbd1D9k=";
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
   buildInputs = [ dbus glib libxkbcommon pulseaudio wayland ];
 
   justFlags = [ "--set" "prefix" (placeholder "out") ];
+  dontUseJustBuild = 1;  # we need to let cargo-setup-hook do this; it knows the correct flags
 
   # Force linking to libwayland-client, which is always dlopen()ed.
   "CARGO_TARGET_${rust.lib.toRustTargetForUseInEnvVars stdenv.hostPlatform}_RUSTFLAGS" = map (a: "-C link-arg=${a}") [
@@ -46,6 +47,12 @@ stdenv.mkDerivation {
     "-lwayland-client"
     "-Wl,--pop-state"
   ];
+
+  # upstream justfile `install` target does not understand non-native compilation
+  preInstall = lib.optionalString (rust.lib.toRustTarget stdenv.buildPlatform != rust.lib.toRustTarget stdenv.hostPlatform) ''
+    rm -rf target/release
+    mv target/${rust.lib.toRustTarget stdenv.hostPlatform}/release target/release
+  '';
 
   passthru.updateScript = unstableGitUpdater { };
 
