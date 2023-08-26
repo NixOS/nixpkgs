@@ -34846,9 +34846,17 @@ with pkgs;
 
   poke = callPackage ../applications/editors/poke { };
 
+  pokecrystal = callPackage ../games/pokecrystal { };
+
   pokefinder = qt6Packages.callPackage ../tools/games/pokefinder { };
 
+  pokegold = callPackage ../games/pokegold { };
+
   pokemonsay = callPackage ../tools/misc/pokemonsay { };
+
+  pokered = callPackage ../games/pokered { };
+
+  pokeyellow = callPackage ../games/pokeyellow { };
 
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
 
