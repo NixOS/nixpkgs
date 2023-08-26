@@ -59,6 +59,17 @@ rec {
     then builtins.toFile (toRustTarget platform + ".json") (builtins.toJSON platform.rustc.platform)
     else toRustTarget platform;
 
+  # When used as part of an environment variable name, triples are
+  # uppercased and have all hyphens replaced by underscores:
+  #
+  # https://github.com/rust-lang/cargo/pull/9169
+  # https://github.com/rust-lang/cargo/issues/8285#issuecomment-634202431
+  #
+  toRustTargetForUseInEnvVars = platform:
+    lib.strings.replaceStrings ["-"] ["_"]
+      (lib.strings.toUpper
+        (toRustTarget platform));
+
   # Returns true if the target is no_std
   # https://github.com/rust-lang/rust/blob/2e44c17c12cec45b6a682b1e53a04ac5b5fcc9d2/src/bootstrap/config.rs#L415-L421
   IsNoStdTarget = platform: let rustTarget = toRustTarget platform; in
