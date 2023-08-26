@@ -12102,6 +12102,12 @@
     githubId = 2590830;
     name = "Sage Raflik";
   };
+  neosam = {
+    email = "simon.goller@posteo.de";
+    github = "neosam";
+    githubId = 22085;
+    name = "Simon Goller";
+  };
   neosimsim = {
     email = "me@abn.sh";
     github = "neosimsim";
