@@ -8,20 +8,19 @@
 , withDynarec ? stdenv.hostPlatform.isAarch64
 , runCommand
 , hello-x86_64
-, box64
 }:
 
 # Currently only supported on ARM
 assert withDynarec -> stdenv.hostPlatform.isAarch64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
-    repo = pname;
-    rev = "v${version}";
+    repo = "box64";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iCZv/WvqZkH6i23fSLA/p0nG5/CgzjyU5glVgje4c3w=";
   };
 
@@ -79,7 +78,7 @@ stdenv.mkDerivation rec {
       rev-prefix = "v";
     };
     tests.hello = runCommand "box64-test-hello" {
-      nativeBuildInputs = [ box64 hello-x86_64 ];
+      nativeBuildInputs = [ finalAttrs.finalPackage ];
     } ''
       # There is no actual "Hello, world!" with any of the logging enabled, and with all logging disabled it's hard to
       # tell what problems the emulator has run into.
@@ -94,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ gador OPNA2608 ];
     platforms = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" "powerpc64le-linux" ];
   };
-}
+})
