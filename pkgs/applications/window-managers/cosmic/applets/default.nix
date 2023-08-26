@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cargo, just, pkg-config, rustPlatform
+{ lib, stdenv, fetchFromGitHub, rust, cargo, just, pkg-config, rustPlatform
 , dbus, glib, libxkbcommon, pulseaudio, wayland
 , unstableGitUpdater
 , util-linux
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   justFlags = [ "--set" "prefix" (placeholder "out") ];
 
   # Force linking to libwayland-client, which is always dlopen()ed.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+  "CARGO_TARGET_${rust.lib.toRustTargetForUseInEnvVars stdenv.hostPlatform}_RUSTFLAGS" = map (a: "-C link-arg=${a}") [
     "-Wl,--push-state,--no-as-needed"
     "-lwayland-client"
     "-Wl,--pop-state"

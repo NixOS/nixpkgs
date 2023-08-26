@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, makeBinaryWrapper, pkg-config
+{ lib, stdenv, rust, rustPlatform, fetchFromGitHub, makeBinaryWrapper, pkg-config
 , libinput, libglvnd, libxkbcommon, mesa, seatd, udev, wayland, xorg
 , unstableGitUpdater
 }:
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage {
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client, which is always dlopen()ed except by the
   # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+  "CARGO_TARGET_${rust.lib.toRustTargetForUseInEnvVars stdenv.hostPlatform}_RUSTFLAGS" = map (a: "-C link-arg=${a}") [
     "-Wl,--push-state,--no-as-needed"
     "-lEGL"
     "-lwayland-client"

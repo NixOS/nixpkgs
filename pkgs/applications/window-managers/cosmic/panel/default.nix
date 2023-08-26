@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cargo, just, pkg-config, rustPlatform
+{ lib, stdenv, fetchFromGitHub, rust, cargo, just, pkg-config, rustPlatform
 , libglvnd, libxkbcommon, wayland
 , unstableGitUpdater
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   justFlags = [ "--set" "prefix" (placeholder "out") ];
 
   # Force linking to libEGL, which is always dlopen()ed.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+  "CARGO_TARGET_${rust.lib.toRustTargetForUseInEnvVars stdenv.hostPlatform}_RUSTFLAGS" = map (a: "-C link-arg=${a}") [
     "-Wl,--push-state,--no-as-needed"
     "-lEGL"
     "-Wl,--pop-state"
