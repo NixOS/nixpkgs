@@ -1,15 +1,11 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-
-# build time
-, setuptools-scm
-
-# tests
-, pytestCheckHook
 , appdirs
+, buildPythonPackage
+, fetchPypi
 , packaging
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -45,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Object-oriented file system path manipulation";
     homepage = "https://github.com/jaraco/path";
+    changelog = "https://github.com/jaraco/path/blob/v${version}/NEWS.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
