@@ -15,15 +15,15 @@
   dev = {
     deps = {
       gn = {
-        rev = "fae280eabe5d31accc53100137459ece19a7a295";
-        sha256 = "02javy4jsllwl4mxl2zmg964jvzw800w6gbmr5z6jdkip24fw0kj";
+        rev = "cc56a0f98bb34accd5323316e0292575ff17a5d4";
+        sha256 = "1ly7z48v147bfdb1kqkbc98myxpgqq3g6vgr8bjx1ikrk17l82ab";
         url = "https://gn.googlesource.com/gn";
-        version = "2023-07-12";
+        version = "2023-08-10";
       };
     };
-    sha256 = "0pyf3k58m26lkc6v6mqpwvhyaj6bbyywl4c17cxb5zmzc1zmc5ia";
-    sha256bin64 = "10w5dm68aaffgdq0xqi4ans2w7byisqqld09pz5vpk350gy16fjh";
-    version = "117.0.5897.3";
+    sha256 = "1z01b6w4sgndrlcd26jgimk3rhv3wzpn67nv1fd5ln7dwfwkyq20";
+    sha256bin64 = "11y09hsy7y1vg65xfilq44ffsmn15dqy80fa57psj1kin4a52v2x";
+    version = "118.0.5966.0";
   };
   stable = {
     chromedriver = {
