@@ -2003,6 +2003,10 @@ self: super: with self; {
 
   click-log = callPackage ../development/python-modules/click-log { };
 
+  click-odoo = callPackage ../development/python-modules/click-odoo { };
+
+  click-odoo-contrib = callPackage ../development/python-modules/click-odoo-contrib { };
+
   click-option-group = callPackage ../development/python-modules/click-option-group { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
@@ -6326,6 +6330,10 @@ self: super: with self; {
   };
 
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
+
+  manifestoo = callPackage ../development/python-modules/manifestoo { };
+
+  manifestoo-core = callPackage ../development/python-modules/manifestoo-core { };
 
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
 
