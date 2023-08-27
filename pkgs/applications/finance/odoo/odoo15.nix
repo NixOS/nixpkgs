@@ -109,7 +109,6 @@ in python.pkgs.buildPythonApplication rec {
   dontStrip = true;
 
   passthru = {
-    updateScript = ./update.sh;
     tests = { inherit (nixosTests) odoo15; };
   };
 
