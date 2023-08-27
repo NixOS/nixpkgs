@@ -18,8 +18,8 @@ let
     sha256Hash = "sha256-0sN+B1RxxlbgxXrEs8gft4qjvIYtazJS6DllHZ2h768=";
   };
   latestVersion = {
-    version = "2023.1.1.14"; # Android Studio Hedgehog (2023.1.1) Canary 14
-    sha256Hash = "sha256-MgZDUpRyM0XDfgqfYjtJJyG2CBaNB06PgtoJltDwNwk=";
+    version = "2023.2.1.1"; # Android Studio Iguana (2023.2.1) Canary 1
+    sha256Hash = "sha256-7ub9GkJd9J37nG2drXOuU7r4w/gI+m9nlWANqIk2ddk=";
   };
 in {
   # Attributes are named by their corresponding release channels
