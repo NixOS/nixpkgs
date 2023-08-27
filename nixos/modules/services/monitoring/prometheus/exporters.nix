@@ -184,15 +184,14 @@ let
         isSystemUser = true;
         inherit (conf) group;
       });
-      users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
-        "${name}-exporter" = {};
-      });
+      users.groups."${name}-exporter" = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {});
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
+      users.groups.rawio = (mkIf ("${name}" == "smartctl") {});
       services.udev.extraRules = mkIf ("${name}" == "smartctl") ''
-        SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", GROUP="disk"
+        SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", GROUP="rawio"
       '';
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
         wantedBy = [ "multi-user.target" ];
