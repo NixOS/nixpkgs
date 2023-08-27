@@ -4,7 +4,7 @@
 , dpkg
 , undmg
 , makeWrapper
-, nodePackages
+, asar
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -143,7 +143,7 @@ let
       gtk3 # needed for GSETTINGS_SCHEMAS_PATH
     ];
 
-    nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
+    nativeBuildInputs = [ dpkg makeWrapper asar ];
 
     dontUnpack = true;
     dontBuild = true;

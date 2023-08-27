@@ -8,7 +8,7 @@
 , tests
 
 # needed to fix "Save as Root"
-, nodePackages, bash
+, asar, bash
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot, commandLineArgs
@@ -74,7 +74,7 @@ let
     nativeBuildInputs = [ unzip ]
       ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
-        nodePackages.asar
+        asar
         # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
         (buildPackages.wrapGAppsHook.override { inherit (buildPackages) makeWrapper; })
       ];

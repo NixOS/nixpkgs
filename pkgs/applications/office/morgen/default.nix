@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, nodePackages, alsa-lib, gtk3, libxshmfence, mesa, nss }:
+, asar, alsa-lib, gtk3, libxshmfence, mesa, nss }:
 
 stdenv.mkDerivation rec {
   pname = "morgen";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     dpkg
     autoPatchelfHook
     makeWrapper
-    nodePackages.asar
+    asar
   ];
 
   buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
