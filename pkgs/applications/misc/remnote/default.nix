@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://remnote.com/";
     maintainers = with maintainers; [ max-niederman jgarcia ];
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
