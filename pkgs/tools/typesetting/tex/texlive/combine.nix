@@ -1,6 +1,6 @@
 { lib, buildEnv, runCommand, writeText, makeWrapper, libfaketime, makeFontsConf
 , perl, bash, coreutils, gnused, gnugrep, gawk, ghostscript
-, bin, tl }:
+, bin, tl, toTLPkgList }:
 # combine =
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core"
@@ -15,11 +15,11 @@ let
     let
       # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
       # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
-      tlPkgToSets = { pkgs, ... }: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
+      tlPkgToSets = drv: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
           # outputName required to distinguish among bin.core-big outputs
           key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
           inherit pkg;
-        }) pkgs;
+        }) (drv.pkgs or (toTLPkgList drv));
       pkgListToSets = lib.concatMap tlPkgToSets; in
     builtins.genericClosure {
       startSet = pkgListToSets pkgList;
@@ -49,7 +49,7 @@ let
     paths = lib.catAttrs "outPath" pkgList.nonbin;
 
     # mktexlsr
-    nativeBuildInputs = [ (lib.last tl."texlive.infra".pkgs) ];
+    nativeBuildInputs = [ tl."texlive.infra" ];
 
     postBuild = # generate ls-R database
     ''
@@ -107,9 +107,9 @@ in (buildEnv {
   nativeBuildInputs = [
     makeWrapper
     libfaketime
-    (lib.last tl."texlive.infra".pkgs) # mktexlsr
-    (lib.last tl.texlive-scripts.pkgs) # fmtutil, updmap
-    (lib.last tl.texlive-scripts-extra.pkgs) # texlinks
+    tl."texlive.infra" # mktexlsr
+    tl.texlive-scripts # fmtutil, updmap
+    tl.texlive-scripts-extra # texlinks
     perl
   ];
 
