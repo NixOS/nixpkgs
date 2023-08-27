@@ -12205,6 +12205,8 @@ with pkgs;
 
   ps3-disc-dumper = callPackage ../tools/games/ps3-disc-dumper { };
 
+  ps3iso-utils = callPackage ../tools/games/ps3iso-utils { };
+
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
   pscircle = callPackage ../os-specific/linux/pscircle { };
