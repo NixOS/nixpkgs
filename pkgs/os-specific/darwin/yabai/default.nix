@@ -3,7 +3,6 @@
 , stdenvNoCC
 , fetchFromGitHub
 , fetchzip
-, writeShellScript
 , installShellFiles
 , testers
 , yabai
