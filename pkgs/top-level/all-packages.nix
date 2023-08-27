@@ -6099,6 +6099,7 @@ with pkgs;
   };
 
   odoo = callPackage ../applications/finance/odoo { };
+  odoo15 = callPackage ../applications/finance/odoo/odoo15.nix { };
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter { };
 
@@ -20692,6 +20693,8 @@ with pkgs;
   ayatana-ido = callPackage ../development/libraries/ayatana-ido { };
 
   ayatana-webmail = callPackage ../applications/networking/mailreaders/ayatana-webmail { };
+
+  azmq = callPackage ../development/libraries/azmq { };
 
   babl = callPackage ../development/libraries/babl { };
 

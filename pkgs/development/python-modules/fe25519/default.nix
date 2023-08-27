@@ -1,7 +1,6 @@
 { lib
 , bitlist
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , fountains
 , parts
@@ -22,15 +21,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-la+17tPHjceMTe7Wk8DGVaSptk8XJa+l7GTeqLIFDvs=";
   };
-
-  patches = [
-    # https://github.com/nthparty/fe25519/pull/1
-    (fetchpatch {
-      name = "relax-setuptools-dependency.patch";
-      url = "https://github.com/nthparty/fe25519/commit/0565f60ddbb1aa4755c68edc85b7df12a3a7311e.patch";
-      hash = "sha256-FcqkHPdkYN6y+Pvviul2wDsmhhcycfRGqFhmX5sxo1k=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools

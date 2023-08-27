@@ -17,12 +17,13 @@
 
 buildPythonPackage rec {
   pname = "recordlinkage";
-  version = "0.15";
+  version = "0.16";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aIrx54vnf85I/Kit/4njg/VIOu6H0SE7NdQ1GbeP8Cc=";
+    hash = "sha256-7NoMEN/xOLFwaBXeMysShfZwrn6MzpJZYhNQHVieaqQ=";
   };
 
   propagatedBuildInputs = [
