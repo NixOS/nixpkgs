@@ -2,6 +2,7 @@
 , stdenv
 , cmake
 , fetchFromGitHub
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,11 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin grpc_node_plugin
     install -Dm755 -t $out/bin deps/protobuf/protoc
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/grpc/grpc-node.git";
+    rev-prefix = "grpc-tools@";
+  };
 
   meta = with lib; {
     description = "Distribution of protoc and the gRPC Node protoc plugin for ease of installation with npm";
