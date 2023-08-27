@@ -3,11 +3,13 @@
 , fetchFromGitHub
 , cython
 , numpy
+, oldest-supported-numpy
 , scipy
 , scikit-learn
 , pytestCheckHook
 , nix-update-script
 , setuptools
+, wheel
 }:
 
 let
@@ -23,8 +25,14 @@ let
       hash = "sha256-L5Qx6dMJlXF3EaWwlFTQ3dkhGXc5PvQBXYJo+QO+Hxc=";
     };
 
+    nativeBuildInputs = [
+      cython
+      oldest-supported-numpy
+      setuptools
+      wheel
+    ];
+
     propagatedBuildInputs = [ numpy scipy scikit-learn ];
-    nativeBuildInputs = [ cython setuptools ];
 
     pythonImportsCheck = [ "openTSNE" ];
     doCheck = false;
