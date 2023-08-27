@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Visualize logs and time-stamped data";
     homepage = "http://www.elasticsearch.org/overview/kibana";
-    license = licenses.elastic;
+    license = licenses.elastic20;
     maintainers = with maintainers; [ offline basvandijk ];
     platforms = with platforms; unix;
   };

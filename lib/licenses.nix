@@ -413,9 +413,9 @@ in mkLicense lset) ({
     fullName = "Eiffel Forum License v2.0";
   };
 
-  elastic = {
-    fullName = "ELASTIC LICENSE";
-    url = "https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt";
+  elastic20 = {
+    fullName = "Elastic License 2.0";
+    url = "https://github.com/elastic/elasticsearch/blob/main/licenses/ELASTIC-LICENSE-2.0.txt";
     free = false;
   };
 

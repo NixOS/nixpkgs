@@ -72,7 +72,7 @@ let
         binaryBytecode  # source bundles dependencies as jars
         binaryNativeCode  # bundled jruby includes native code
       ];
-      license = if enableUnfree then licenses.elastic else licenses.asl20;
+      license = if enableUnfree then licenses.elastic20 else licenses.asl20;
       platforms = platforms.unix;
       maintainers = with maintainers; [ wjlroe offline basvandijk ];
     };
