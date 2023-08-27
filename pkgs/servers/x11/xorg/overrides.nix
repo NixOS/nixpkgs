@@ -390,6 +390,11 @@ self: super:
     };
   });
 
+  libpthreadstubs = super.libpthreadstubs.overrideAttrs (attrs: {
+    # only contains a pkgconfig file on linux and windows
+    meta = attrs.meta // { platforms = lib.platforms.unix ++ lib.platforms.windows; };
+  });
+
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall =
       ''
