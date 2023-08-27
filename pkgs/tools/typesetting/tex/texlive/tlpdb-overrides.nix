@@ -340,6 +340,9 @@ in lib.recursiveUpdate orig rec {
 
   #### misc
 
+  # chktex looks up config in CHKTEX_CONFIG, TEXMFMAIN, regardless of TEXMFAUXTREES
+  chktex.allowedAsBuildInput = false;
+
   # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
   arabi-add.license = [  "lppl13c" ];
 

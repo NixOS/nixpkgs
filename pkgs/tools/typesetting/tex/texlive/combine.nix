@@ -163,6 +163,7 @@ in (buildEnv {
     # patch texmf-dist  -> $TEXMFDIST
     # patch texmf-local -> $out/share/texmf-local
     # patch texmf.cnf   -> $TEXMFSYSVAR/web2c/texmf.cnf
+    # add TEXMFAUXTREES to texmfcnf.lua to support setup hooks
     # TODO: perhaps do lua actions?
     # tried inspiration from install-tl, sub do_texmf_cnf
   ''
@@ -174,6 +175,7 @@ in (buildEnv {
         -e "s,\(TEXMFSYSVAR[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSVAR\",g" \
         -e "s,\(TEXMFSYSCONFIG[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSCONFIG\",g" \
         -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
+        -e 's/\$TEXMFHOME,!!\$TEXMFSYSCONFIG/$TEXMFAUXTREES,$TEXMFHOME,!!$TEXMFSYSCONFIG/g' \
         -e "s,\$SELFAUTOLOC,$out,g" \
         -e "s,selfautodir:/,$out/share/,g" \
         -e "s,selfautodir:,$out/share/,g" \
