@@ -24,7 +24,19 @@ stdenv.mkDerivation rec {
     categories = [ "Office" ];
     mimeTypes = [ "x-scheme-handler/remnote" "x-scheme-handler/rn" ];
   };
-
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin
+    install ${appexec}/bin/remnote-${version} $out/bin/remnote
+    mkdir -p $out/share/applications
+    install -D "${desktopItem}/share/applications/"* -t $out/share/applications/
+    mkdir -p $out/share/pixmaps
+    install ${icon} $out/share/pixmaps/remnote.png
+    runHook postInstall
+  '';
   meta = with lib; {
     description = "A note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
