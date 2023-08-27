@@ -3,10 +3,12 @@
 stdenv.mkDerivation rec {
   pname = "remnote";
   version = "1.12.18";
-
   src = fetchurl {
     url = "https://download.remnote.io/remnote-desktop/RemNote-${version}.AppImage";
     sha256 = "sha256-z/LTsX65rN+AJbpCTzIabpgUadFe6SnRRDKOkexZyjQ=";
+  };
+  appexec = appimageTools.wrapType2 {
+    inherit pname version src;
   };
 
   meta = with lib; {
