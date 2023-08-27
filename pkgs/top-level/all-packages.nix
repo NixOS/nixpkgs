@@ -35272,6 +35272,8 @@ with pkgs;
 
   runc = callPackage ../applications/virtualization/runc { };
 
+  rust-traverse = callPackage ../applications/misc/rust-traverse { };
+
   rusty-psn = callPackage ../applications/misc/rusty-psn { };
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
