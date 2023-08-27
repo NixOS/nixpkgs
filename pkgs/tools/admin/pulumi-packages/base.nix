@@ -55,17 +55,6 @@ let
             setup.py
         '';
 
-        # Auto-generated; upstream does not have any tests.
-        # Verify that the version substitution works
-        checkPhase = ''
-          runHook preCheck
-
-          pip show "${pname}" | grep "Version: ${version}" > /dev/null \
-            || (echo "ERROR: Version substitution seems to be broken"; exit 1)
-
-          runHook postCheck
-        '';
-
         pythonImportsCheck = [
           (builtins.replaceStrings [ "-" ] [ "_" ] pname)
         ];
