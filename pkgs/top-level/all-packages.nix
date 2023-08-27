@@ -42092,6 +42092,10 @@ with pkgs;
     buildGoModule = buildGo119Module; # build fails with 1.20
   };
 
+  vinegar = callPackage ../games/vinegar {
+    wine = wineWowPackages.staging;
+  };
+
   code-maat = callPackage ../development/tools/code-maat {};
 
   mdhtml = callPackage ../tools/text/mdhtml { };
