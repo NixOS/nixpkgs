@@ -191,7 +191,6 @@ core = stdenv.mkDerivation rec {
      cp texk/web2c/.libs/himktables $dev/bin/himktables
   '' + common.moveBins;
 
-  setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
   passthru = { inherit version buildInputs; };
 
   meta = with lib; {
