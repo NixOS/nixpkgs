@@ -152,10 +152,10 @@
     "dependencies": [
       "characters",
       "collection",
-      "js",
       "material_color_utilities",
       "meta",
       "vector_math",
+      "web",
       "sky_engine"
     ]
   },
@@ -167,6 +167,13 @@
     "dependencies": []
   },
   {
+    "name": "web",
+    "version": "0.1.4-beta",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
     "name": "vector_math",
     "version": "2.1.4",
     "kind": "transitive",
@@ -175,23 +182,16 @@
   },
   {
     "name": "material_color_utilities",
-    "version": "0.2.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": []
-  },
-  {
-    "name": "js",
-    "version": "0.6.7",
+    "version": "0.5.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
-      "meta"
+      "collection"
     ]
   },
   {
     "name": "collection",
-    "version": "1.17.1",
+    "version": "1.17.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
@@ -268,7 +268,7 @@
   },
   {
     "name": "source_span",
-    "version": "1.9.1",
+    "version": "1.10.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -418,6 +418,15 @@
     ]
   },
   {
+    "name": "js",
+    "version": "0.6.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
     "name": "convert",
     "version": "3.1.1",
     "kind": "transitive",
@@ -492,7 +501,6 @@
       "collection",
       "fake_async",
       "file",
-      "js",
       "matcher",
       "material_color_utilities",
       "meta",
@@ -504,6 +512,7 @@
       "term_glyph",
       "test_api",
       "vector_math",
+      "web",
       "webdriver"
     ]
   },
@@ -537,7 +546,7 @@
   },
   {
     "name": "matcher",
-    "version": "0.12.15",
+    "version": "0.12.16",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -550,7 +559,7 @@
   },
   {
     "name": "test_api",
-    "version": "0.5.1",
+    "version": "0.6.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -562,8 +571,7 @@
       "stack_trace",
       "stream_channel",
       "string_scanner",
-      "term_glyph",
-      "matcher"
+      "term_glyph"
     ]
   },
   {
@@ -604,7 +612,7 @@
   },
   {
     "name": "vm_service",
-    "version": "11.3.0",
+    "version": "11.7.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
@@ -617,6 +625,7 @@
     "dependencies": [
       "flutter",
       "test_api",
+      "matcher",
       "path",
       "fake_async",
       "clock",
@@ -626,14 +635,13 @@
       "boolean_selector",
       "characters",
       "collection",
-      "js",
-      "matcher",
       "material_color_utilities",
       "meta",
       "source_span",
       "stream_channel",
       "string_scanner",
-      "term_glyph"
+      "term_glyph",
+      "web"
     ]
   },
   {
@@ -655,7 +663,6 @@
       "characters",
       "clock",
       "collection",
-      "js",
       "matcher",
       "material_color_utilities",
       "platform",
@@ -667,7 +674,8 @@
       "sync_http",
       "term_glyph",
       "test_api",
-      "vector_math"
+      "vector_math",
+      "web"
     ]
   },
   {
@@ -776,12 +784,12 @@
     "source": "sdk",
     "dependencies": [
       "flutter",
-      "js",
       "characters",
       "collection",
       "material_color_utilities",
       "meta",
-      "vector_math"
+      "vector_math",
+      "web"
     ]
   },
   {
@@ -1983,7 +1991,7 @@
   },
   {
     "name": "intl",
-    "version": "0.18.0",
+    "version": "0.18.1",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -2720,11 +2728,11 @@
       "characters",
       "clock",
       "collection",
-      "js",
       "material_color_utilities",
       "meta",
       "path",
-      "vector_math"
+      "vector_math",
+      "web"
     ]
   },
   {
