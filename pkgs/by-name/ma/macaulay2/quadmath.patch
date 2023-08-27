@@ -1,0 +1,17 @@
+diff --git a/M2/Macaulay2/d/CMakeLists.txt b/M2/Macaulay2/d/CMakeLists.txt
+index b71a81980..957e73588 100644
+--- a/M2/Macaulay2/d/CMakeLists.txt
++++ b/M2/Macaulay2/d/CMakeLists.txt
+@@ -147,10 +147,8 @@ add_library(M2-interpreter OBJECT ${CLIST} ${CXXLIST} ${TAGS}
+ target_link_libraries(M2-interpreter PRIVATE M2-supervisor Boost::regex TBB::tbb
+   $<$<BOOL:${WITH_FFI}>:FFI::ffi>)
+ 
+-# TODO: c.f. https://github.com/Macaulay2/M2/issues/2682
+-if(NOT APPLE)
+-  target_link_libraries(M2-interpreter PRIVATE quadmath)
+-endif()
++CHECK_LIBRARY_EXISTS(quadmath "ldexpq" "" HAVE_QUADMATH)
++target_link_libraries(M2-interpreter PRIVATE $<$<BOOL:${HAVE_QUADMATH}>:quadmath>)
+ 
+ target_include_directories(M2-interpreter
+   PUBLIC

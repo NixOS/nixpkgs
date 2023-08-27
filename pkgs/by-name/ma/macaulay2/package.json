@@ -1,0 +1,6 @@
+{
+  "workspaces": [
+    "Macaulay2/editors/highlightjs",
+    "Macaulay2/editors/prism"
+  ]
+}
