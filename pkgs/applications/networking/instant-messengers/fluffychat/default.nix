@@ -24,7 +24,7 @@ flutter.buildFlutterApplication rec {
   };
 
   depsListFile = ./deps.json;
-  vendorHash = "sha256-Ot96+EF8PgYQmXn0hvIWzN8StuzTgQzakRO3yf7PJAU=";
+  vendorHash = "sha256-dkH+iI1KLsAJtSt6ndc3ZRBllZ9n21RNONqeeUzNQCE=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
