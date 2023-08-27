@@ -29,6 +29,16 @@
 , common-updater-scripts
 , jq
 , nix
+
+# for passthru.tests
+, enlightenment
+, ffmpeg
+, gegl
+, gimp
+, imagemagick
+, imlib2
+, vips
+, xfce
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -193,6 +203,17 @@ stdenv.mkDerivation (finalAttrs: {
         updateSource
         updateLockfile
       ];
+    tests = {
+      inherit
+        gegl
+        gimp
+        imagemagick
+        imlib2
+        vips;
+      inherit (enlightenment) efl;
+      inherit (xfce) xfwm4;
+      ffmpeg = ffmpeg.override { withSvg = true; };
+    };
   };
 
   meta = with lib; {
