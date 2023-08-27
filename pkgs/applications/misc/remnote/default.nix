@@ -1,6 +1,6 @@
-{ lib, fetchurl, appimageTools }:
+{ lib, stdenv, fetchurl, appimageTools }:
 
-appimageTools.wrapType2 rec {
+stdenv.mkDerivation rec {
   pname = "remnote";
   version = "1.12.18";
 
