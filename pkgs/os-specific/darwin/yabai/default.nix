@@ -42,6 +42,7 @@ let
       cmacrae
       shardy
       ivar
+      khaneliman
     ];
   };
 in
