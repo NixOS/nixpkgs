@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taskwarrior-tui";
-  version = "0.25.1";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "taskwarrior-tui";
     rev = "v${version}";
-    sha256 = "sha256-m/VExBibScZt8zlxbTSQtZdbcc1EBZ+k0DXu+pXFUnA=";
+    sha256 = "sha256-HC81GA/kTyppCDLo47tFU08veViGlwwi6U92CP+5X9c=";
   };
 
-  cargoHash = "sha256-DFf4leS8/891YzZCkkd/rU+cUm94nOnXYDZgJK+NoCY=";
+  cargoHash = "sha256-M+Kgq8iSHdzAoIqnqP1NV0LWt6AComsaSlX0aypEOeA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
