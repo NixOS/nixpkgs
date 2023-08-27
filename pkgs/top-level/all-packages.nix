@@ -6099,6 +6099,7 @@ with pkgs;
   };
 
   odoo = callPackage ../applications/finance/odoo { };
+  odoo15 = callPackage ../applications/finance/odoo/odoo15.nix { };
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter { };
 
