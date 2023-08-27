@@ -12,13 +12,13 @@
 buildPythonPackage rec {
   pname = "hdfs";
   # See https://github.com/mtth/hdfs/issues/176.
-  version = "2.5.8";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "mtth";
     repo = pname;
-    rev = version;
-    hash = "sha256-94Q3IUoX1Cb+uRqvsfpVZJ1koJSx5cQ3/XpYJ0gkQNU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KXJDQEc4+T9r8sB41SOgcx8Gth3qAOZceoOpsLbJ+ak=";
   };
 
   propagatedBuildInputs = [ docopt requests six ];
