@@ -1,8 +1,4 @@
-{ lib
-, stdenv
-, mkDerivation, perl
-, buildPackages
-}:
+{ lib, mkDerivation, perl }:
 
 let inherit (lib) licenses maintainers platforms; in
 
@@ -21,8 +17,7 @@ mkDerivation (args // {
   patches = (args.patches or []) ++ (patches.${pname} or []);
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
-  propagatedBuildInputs = (args.qtInputs or []) ++ (args.propagatedBuildInputs or []);
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
@@ -79,7 +74,4 @@ mkDerivation (args // {
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
   } // (args.meta or {});
-
-} // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-  dontWorryAboutQtMismatch = true;
 })
