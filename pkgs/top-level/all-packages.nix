@@ -3859,6 +3859,8 @@ with pkgs;
 
   hakrawler = callPackage ../tools/security/hakrawler { };
 
+  harsh = callPackage ../applications/misc/harsh { };
+
   harvid = callPackage ../tools/video/harvid { };
 
   headset = callPackage ../applications/audio/headset { };
