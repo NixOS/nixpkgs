@@ -31103,6 +31103,8 @@ with pkgs;
 
   denaro = callPackage ../applications/finance/denaro { };
 
+  inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
+
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
   dfilemanager = libsForQt5.callPackage ../applications/file-managers/dfilemanager { };
