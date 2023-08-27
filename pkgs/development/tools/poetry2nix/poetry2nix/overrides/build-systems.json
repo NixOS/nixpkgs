@@ -2505,8 +2505,14 @@
     "setuptools"
   ],
   "build": [
-    "flit-core",
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "0.10.0"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "0.10.0"
+    }
   ],
   "buildbot": [
     "setuptools"
@@ -5812,11 +5818,7 @@
     "setuptools"
   ],
   "flit": [
-    "flit-core",
-    "setuptools"
-  ],
-  "flit-core": [
-    "setuptools"
+    "flit-core"
   ],
   "flit-scm": [
     "flit-core",
@@ -7540,8 +7542,7 @@
     "setuptools"
   ],
   "installer": [
-    "flit-core",
-    "setuptools"
+    "flit-core"
   ],
   "insteon-frontend-home-assistant": [
     "setuptools"
@@ -10863,8 +10864,24 @@
     "setuptools"
   ],
   "packaging": [
-    "flit-core",
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "20.4"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "20.4",
+      "until": "20.8"
+    },
+    {
+      "buildSystem": "setuptools",
+      "from": "20.8",
+      "until": "22.0"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "22.0"
+    }
   ],
   "packbits": [
     "setuptools"
@@ -18088,8 +18105,14 @@
     "poetry"
   ],
   "tomli": [
-    "flit-core",
-    "setuptools"
+    {
+      "buildSystem": "poetry-core",
+      "until": "1.0.2"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "1.0.2"
+    }
   ],
   "tomli-w": [
     "flit-core",
@@ -19331,7 +19354,14 @@
     "setuptools"
   ],
   "wheel": [
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "0.40.0"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "0.40.0"
+    }
   ],
   "wheel-filename": [
     "setuptools"

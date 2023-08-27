@@ -5,8 +5,10 @@
 , isPyPy
 , lazy-object-proxy
 , setuptools
+, wheel
 , typing-extensions
 , typed-ast
+, pip
 , pylint
 , pytestCheckHook
 , wrapt
@@ -28,6 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -40,6 +43,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pip
     pytestCheckHook
     typing-extensions
   ];

@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchPypi
 , jupyter-packaging
+, jupyterlab
 , bqscales
 , ipywidgets
 , numpy
@@ -23,8 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-FNjeb5pNGUW76mwTIOpNHJMlb3JoN3T24AINzFefPdI=";
   };
 
+  # upstream seems in flux for 0.13 release. they seem to want to migrate from
+  # jupyter_packaging to hatch, so let's patch instead of fixing upstream
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "jupyter_packaging~=" "jupyter_packaging>=" \
+      --replace "jupyterlab~=" "jupyterlab>="
+  '';
+
   nativeBuildInputs = [
     jupyter-packaging
+    jupyterlab
   ];
 
   propagatedBuildInputs = [

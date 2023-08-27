@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, wheel
 , bitlist
 , pythonOlder
 }:
@@ -20,6 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

@@ -8,6 +8,7 @@
 , importlib-resources
 , jsonschema-specifications
 , pkgutil-resolve-name
+, pip
 , pytestCheckHook
 , pythonOlder
 , referencing
@@ -81,6 +82,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pip
     pytestCheckHook
   ];
 
