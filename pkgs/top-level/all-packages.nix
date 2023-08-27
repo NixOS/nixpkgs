@@ -6305,6 +6305,8 @@ with pkgs;
 
   stacs = callPackage ../tools/security/stacs { };
 
+  stag-audio-tagger = callPackage ../applications/audio/stag { };
+
   stagit = callPackage ../development/tools/stagit { };
 
   starboard = callPackage ../applications/networking/cluster/starboard { };
