@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "curtsies";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YtEPNJxVOEUwZVan8mY86WsJjYxbvEDa7Hpu7d4WIrA=";
+    hash = "sha256-br4zIVvXyShRpQYEnHIMykz1wZLBZlwdepigTEcCdg4=";
   };
 
   propagatedBuildInputs = [
