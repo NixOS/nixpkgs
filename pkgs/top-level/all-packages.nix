@@ -1304,6 +1304,8 @@ with pkgs;
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
+  stacktile = callPackage ../tools/wayland/stacktile { };
+
   sirula = callPackage ../tools/wayland/sirula { };
 
   sitelen-seli-kiwen = callPackage ../data/fonts/sitelen-seli-kiwen { };
@@ -3857,6 +3859,8 @@ with pkgs;
 
   hakrawler = callPackage ../tools/security/hakrawler { };
 
+  harsh = callPackage ../applications/misc/harsh { };
+
   harvid = callPackage ../tools/video/harvid { };
 
   headset = callPackage ../applications/audio/headset { };
@@ -5681,8 +5685,6 @@ with pkgs;
 
   jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
-    # Disable pipewire to avoid segfault, see https://github.com/jellyfin/jellyfin-media-player/issues/341
-    mpv = wrapMpv (mpv-unwrapped.override { pipewireSupport = false; }) { };
   };
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
@@ -6459,6 +6461,8 @@ with pkgs;
   mcelog = callPackage ../os-specific/linux/mcelog {
     util-linux = util-linuxMinimal;
   };
+
+  sqldef = callPackage ../development/tools/sqldef { };
 
   sqlint = callPackage ../development/tools/sqlint { };
 
@@ -12198,6 +12202,8 @@ with pkgs;
   progress = callPackage ../tools/misc/progress { };
 
   ps3-disc-dumper = callPackage ../tools/games/ps3-disc-dumper { };
+
+  ps3iso-utils = callPackage ../tools/games/ps3iso-utils { };
 
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
