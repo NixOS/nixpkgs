@@ -5230,6 +5230,8 @@ with pkgs;
 
   eternal-terminal = callPackage ../tools/networking/eternal-terminal { };
 
+  excelcompare = callPackage ../applications/office/excelcompare { };
+
   extism-cli = callPackage ../development/tools/extism-cli { };
 
   extrude = callPackage ../tools/security/extrude { };
