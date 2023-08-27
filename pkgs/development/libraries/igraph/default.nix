@@ -83,6 +83,27 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  checkPhase = let
+    excludedTests = lib.optionals stdenv.isDarwin [
+      # Let's skip this test, because even though it catches a bug in macOS 13,
+      # it should not stop this package from being used.
+      #
+      #   https://github.com/igraph/igraph/issues/2340
+      #
+      "example::safelocale"
+    ];
+    excludedTestsRegex = lib.optionalString (excludedTests != [])
+      "(${lib.concatStringsSep "|" excludedTests})";
+  in ''
+    runHook preCheck
+
+    cmake --build . --target build_tests
+    ctest -j4 --progress --output-on-failure --timeout 60 \
+      -E "${excludedTestsRegex}"
+
+    runHook postCheck
+  '';
+
   postInstall = ''
     mkdir -p "$out/share"
     cp -r doc "$out/share"
