@@ -292,7 +292,7 @@ in
         RemainAfterExit = true;
         ExecStart = [ ensureDeletions rulesScript ];
         ExecStartPost = saveDeletionsScript;
-        ExecReload = [ rulesScript saveDeletionsScript ];
+        ExecReload = [ ensureDeletions rulesScript saveDeletionsScript ];
         ExecStop = [ deletionsScriptVar cleanupDeletionsScript ];
         StateDirectory = "nftables";
       };
