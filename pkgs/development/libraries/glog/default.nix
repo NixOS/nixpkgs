@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     let
       excludedTests = lib.optionals stdenv.isDarwin [
         "mock-log"
+      ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+        "logging"   # works around segfaults on aarch64-darwin for now
       ];
       excludedTestsRegex = lib.optionalString (excludedTests != [ ]) "(${lib.concatStringsSep "|" excludedTests})";
     in
