@@ -1304,6 +1304,8 @@ with pkgs;
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
+  stacktile = callPackage ../tools/wayland/stacktile { };
+
   sirula = callPackage ../tools/wayland/sirula { };
 
   sitelen-seli-kiwen = callPackage ../data/fonts/sitelen-seli-kiwen { };
