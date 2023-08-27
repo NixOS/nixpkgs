@@ -208,7 +208,8 @@ let
         import ../qtModule.nix
         {
           inherit perl;
-          inherit lib;
+          inherit lib stdenv;
+          inherit buildPackages;
           # Use a variant of mkDerivation that does not include wrapQtApplications
           # to avoid cyclic dependencies between Qt modules.
           mkDerivation =

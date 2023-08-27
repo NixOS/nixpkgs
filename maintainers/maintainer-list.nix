@@ -15512,6 +15512,15 @@
     githubId = 293035;
     name = "Shawn Dellysse";
   };
+  shayne = {
+    email = "shaynesweeney@gmail.com";
+    github = "shayne";
+    githubId = 79330;
+    name = "Shayne Sweeney";
+    keys = [{
+      fingerprint = "AFCB 29A0 F12E F367 9575  DABE 69DA 13E8 6BF4 03B0";
+    }];
+  };
   shazow = {
     email = "andrey.petrov@shazow.net";
     github = "shazow";
