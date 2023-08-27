@@ -6216,6 +6216,10 @@ with pkgs;
 
   rare = python3Packages.callPackage ../games/rare { };
 
+  rblake2sum = callPackage ../tools/security/rblake2sum {
+      inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   reg = callPackage ../tools/virtualization/reg { };
 
   retool = callPackage ../applications/misc/retool { };
