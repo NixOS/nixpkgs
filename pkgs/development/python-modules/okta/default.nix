@@ -20,20 +20,30 @@
 , yarl
 }:
 
+let
+  aenum_fixed = aenum.overridePythonAttrs (oldAttrs: rec {
+    version = "3.1.11";
+    src = fetchPypi {
+      inherit (oldAttrs) pname;
+      inherit version;
+      hash = "sha256-rtLCc1R65yoNXuhpcZwCpkPaFr9QfICVj6rcfgOOP3M=";
+    };
+  });
+in
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.2";
+  version = "2.9.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kbzqriybzN/86vov3Q+kH2lj9plK1GzWPlc/Nc/nWF0=";
+    hash = "sha256-mOKVCRp8cLY7p0AVbvphWdB3II6eB6HlN8i1HrVUH+o=";
   };
 
   propagatedBuildInputs = [
-    aenum
+    aenum_fixed
     aiohttp
     flatdict
     pycryptodome
@@ -59,11 +69,6 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_client_raise_exception"
-    # vcr.errors.CannotOverwriteExistingCassetteException: Can't overwrite existing cassette
-    "test_get_org_contact_user"
-    "test_update_org_contact_user"
-    "test_get_role_subscription"
-    "test_subscribe_unsubscribe"
   ];
 
   pythonImportsCheck = [
