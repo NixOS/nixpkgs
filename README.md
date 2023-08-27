@@ -127,5 +127,5 @@ xcode-select --install
 [Install Homebrew](https://brew.sh/)  
 ```
 brew install cmake ninja pkg-config
-brew cask install osxfuse
+brew install macfuse
 ```
