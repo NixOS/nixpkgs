@@ -1,0 +1,13 @@
+diff --git a/src/helper/helper.cpp b/src/helper/helper.cpp
+index 5c291c8..382c18f 100644
+--- a/src/helper/helper.cpp
++++ b/src/helper/helper.cpp
+@@ -57,7 +57,7 @@ bool Helper::isEcSysModuleLoaded() const {
+ bool Helper::loadEcSysModule() const {
+     fprintf(stderr, "%s\n", qPrintable("Trying to load the ec_sys kernel module"));
+     auto *process = new QProcess();
+-    process->start("sh", QStringList() << "-c" << "/usr/sbin/modprobe ec_sys write_support=1 2>&1");
++    process->start("sh", QStringList() << "-c" << "/run/current-system/sw/bin/modprobe ec_sys write_support=1 2>&1");
+     process->waitForFinished(1000);
+     if (QByteArray output = process->readAllStandardOutput(); output != "")
+         fprintf(stderr, "%s", qPrintable(output));
