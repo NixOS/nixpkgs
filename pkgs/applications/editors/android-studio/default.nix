@@ -10,8 +10,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2022.3.1.18"; # "Android Studio Giraffe (2022.3.1)"
-    sha256Hash = "sha256-JCFeEySmrJEYELLMGvstc1z3Rd+8BpGKQrjW+8a/dDM=";
+    version = "2022.3.1.19"; # "Android Studio Giraffe (2022.3.1)"
+    sha256Hash = "sha256-JQYl3KsYPgxo6/Eu+KUir3NpUn128e/HBPk8BbAv+p4=";
   };
   betaVersion = {
     version = "2022.3.1.17"; # "Android Studio Giraffe (2022.3.1) RC 1"
