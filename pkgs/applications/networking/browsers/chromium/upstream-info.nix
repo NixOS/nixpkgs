@@ -2,15 +2,15 @@
   beta = {
     deps = {
       gn = {
-        rev = "e9e83d9095d3234adf68f3e2866f25daf766d5c7";
-        sha256 = "0y07c18xskq4mclqiz3a63fz8jicz2kqridnvdhqdf75lhp61f8a";
+        rev = "811d332bd90551342c5cbd39e133aa276022d7f8";
+        sha256 = "0jlg3d31p346na6a3yk0x29pm6b7q03ck423n5n6mi8nv4ybwajq";
         url = "https://gn.googlesource.com/gn";
-        version = "2023-05-19";
+        version = "2023-08-01";
       };
     };
-    sha256 = "1wbasmwdqkg5jcmzpidvzjsq2n2dr73bxz85pr8a5j4grw767gpz";
-    sha256bin64 = "0xbizb3d539h1cw1kj9ahd8azmkcdfjdmqb5bpp8cr21bh2qbqp5";
-    version = "115.0.5790.98";
+    sha256 = "1wf0j189cxpayy6ffmj5j6h5yg3amivryilimjc2ap0jkyj4xrbi";
+    sha256bin64 = "11w1di146mjb9ql30df9yk9x4b9amc6514jzyfbf09mqsrw88dvr";
+    version = "117.0.5938.22";
   };
   dev = {
     deps = {
