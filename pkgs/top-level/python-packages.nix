@@ -1525,6 +1525,8 @@ self: super: with self; {
 
   botocore = callPackage ../development/python-modules/botocore { };
 
+  botocore-stubs = callPackage ../development/python-modules/botocore-stubs { };
+
   botorch = callPackage ../development/python-modules/botorch { };
 
   bottle = callPackage ../development/python-modules/bottle { };
@@ -1674,8 +1676,6 @@ self: super: with self; {
   });
 
   caio = callPackage ../development/python-modules/caio { };
-
-  cairo-lang = callPackage ../development/python-modules/cairo-lang { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi { };
 
@@ -13118,6 +13118,8 @@ self: super: with self; {
 
   types-appdirs = callPackage ../development/python-modules/types-appdirs { };
 
+  types-awscrt = callPackage ../development/python-modules/types-awscrt { };
+
   types-beautifulsoup4 = callPackage ../development/python-modules/types-beautifulsoup4 { };
 
   types-colorama = callPackage ../development/python-modules/types-colorama { };
@@ -13127,6 +13129,8 @@ self: super: with self; {
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
   types-deprecated = callPackage ../development/python-modules/types-deprecated { };
+
+  types-docopt = callPackage ../development/python-modules/types-docopt { };
 
   types-docutils = callPackage ../development/python-modules/types-docutils { };
 

@@ -37,6 +37,7 @@ let
     changelog = "https://github.com/koekeishiya/yabai/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.darwin;
+    mainProgram = "yabai";
     maintainers = with maintainers; [
       cmacrae
       shardy

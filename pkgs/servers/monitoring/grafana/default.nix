@@ -15,7 +15,7 @@ buildGoModule rec {
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    hash = "sha256-lgCSJgFcrZb4ki4/YdVRgXvVBjQrmEoTPf/KficA3sM=";
+    hash = "sha256-QFRahjDyL7BNikK2cCsFLfu4/odDbkCxplf6f7yCezE=";
   };
 
   vendorHash = "sha256-mnrGnQ7clzu2dkAHyCuxfX0sGU5EcHybut6GfpmOSoU=";

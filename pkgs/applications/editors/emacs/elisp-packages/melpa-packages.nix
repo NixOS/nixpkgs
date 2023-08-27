@@ -535,6 +535,13 @@ let
             (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
         });
 
+        typst-mode = super.typst-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace typst-mode.el \
+              --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+          '';
+        });
+
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
           nativeBuildInputs =
             (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];

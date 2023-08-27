@@ -311,6 +311,17 @@ let
         '';
       };
 
+      expires = mkOption {
+        type = types.nullOr (types.strMatching "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}");
+        default = null;
+        description = lib.mdDoc ''
+          Set the date on which the user's account will no longer be
+          accessible. The date is expressed in the format YYYY-MM-DD, or null
+          to disable the expiry.
+          A user whose account is locked must contact the system
+          administrator before being able to use the system again.
+        '';
+      };
     };
 
     config = mkMerge
@@ -438,7 +449,7 @@ let
           name uid group description home homeMode createHome isSystemUser
           password passwordFile hashedPassword
           autoSubUidGidRange subUidRanges subGidRanges
-          initialPassword initialHashedPassword;
+          initialPassword initialHashedPassword expires;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
     groups = attrValues cfg.groups;
@@ -637,7 +648,7 @@ in {
         install -m 0700 -d /root
         install -m 0755 -d /home
 
-        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
+        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON p.DateTime ])}/bin/perl \
         -w ${./update-users-groups.pl} ${spec}
       '';
     };

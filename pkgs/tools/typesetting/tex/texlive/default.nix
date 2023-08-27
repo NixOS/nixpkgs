@@ -4,7 +4,7 @@
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
-, makeWrapper
+, makeWrapper, installShellFiles
 , python3, ruby, perl, tk, jdk, bash, snobol4
 , coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, ncurses, zip
 , libfaketime, asymptote, biber-ms, makeFontsConf
@@ -376,6 +376,8 @@ let
         extraRevision = "-tlpdb${toString tlpdbVersion.revision}";
         extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
 
+        extraNativeBuildInputs = [ installShellFiles ];
+
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
         postUnpack = ''
           if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
@@ -391,6 +393,18 @@ let
 
             cp texdoc/cache-tlpdb.lua "$out"/scripts/texdoc/Data.tlpdb.lua
           fi
+        '';
+
+        # install zsh completion
+        postFixup = ''
+          TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$scriptsFolder/../.." \
+            texlua "$out"/bin/texdoc --print-completion zsh > "$TMPDIR"/_texdoc
+          substituteInPlace "$TMPDIR"/_texdoc \
+            --replace 'compdef __texdoc texdoc' '#compdef texdoc' \
+            --replace '$(kpsewhich -var-value TEXMFROOT)/tlpkg/texlive.tlpdb' '$(kpsewhich Data.tlpdb.lua)' \
+            --replace '/^name[^.]*$/ {print $2}' '/^  \["[^"]*"\] = {$/ { print substr($1,3,length($1)-4) }'
+          echo '__texdoc' >> "$TMPDIR"/_texdoc
+          installShellCompletion --zsh "$TMPDIR"/_texdoc
         '';
       };
 
@@ -496,11 +510,7 @@ let
 
   assertions = with lib;
     assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
-    assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate" &&
-    (!useFixedHashes ||
-      (let all = concatLists (catAttrs "pkgs" (attrValues tl));
-         fods = filter (p: isDerivation p && p.tlType != "bin") all;
-      in builtins.all (p: assertMsg (p ? outputHash) "The TeX Live package '${p.pname + lib.optionalString (p.tlType != "run") ("." + p.tlType)}' does not have a fixed output hash. Please read UPGRADING.md on how to build a new 'fixed-hashes.nix'.") fods));
+    assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
 in
   tl // {
