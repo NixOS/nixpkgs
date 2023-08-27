@@ -1,10 +1,12 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
 , pytest
 , unicodecsv
 , rustPlatform
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -23,6 +25,10 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     maturinBuildHook
     cargoSetupHook
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
   ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {

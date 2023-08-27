@@ -11,8 +11,10 @@
 , pluggy
 , rich
 , setuptools
+, setuptools-scm
 , yamllint
 , wcmatch
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -24,6 +26,12 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-ssARHVtEp3pW7364WhxhtHAWW5fRFXiioWgEczTI3yM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     ansible-compat
@@ -37,10 +45,6 @@ buildPythonPackage rec {
     yamllint
     wcmatch
   ] ++ lib.optional withPlugins molecule-plugins;
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   pythonImportsCheck = [ "molecule" ];
 
