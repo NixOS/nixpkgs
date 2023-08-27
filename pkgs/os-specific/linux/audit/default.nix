@@ -18,20 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "https://people.redhat.com/sgrubb/audit/audit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-RuRrN2I8zgnm7hNOeNZor8NPThyHDIU+8S5BkweM/oc=";
+    hash = "sha256-wLF5LR8KiMbxgocQUJy7mHBZ/GhxLJdmnKkOrhA9KH0=";
   };
 
-  patches = [
-    ./000-fix-static-attribute-malloc.diff
-    ./001-ignore-flexible-array.patch
-  ];
-
   postPatch = ''
-    sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
     substituteInPlace bindings/swig/src/auditswig.i \
       --replace "/usr/include/linux/audit.h" \
                 "${linuxHeaders}/include/linux/audit.h"
