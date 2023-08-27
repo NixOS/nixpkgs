@@ -7,14 +7,14 @@
 , redisSupport ? false, hiredis
 , mysqlSupport ? false, libmysqlclient, mariadb }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
   version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-BYZoMesDquXaphZvnf2Vd/RuOC9jsOjZsGNbDmQ3u+c=";
     fetchSubmodules = true;
   };
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_TESTING=${if doInstallCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTING=${if finalAttrs.finalPackage.doInstallCheck then "ON" else "OFF"}"
     "-DBUILD_EXAMPLES=OFF"
   ];
 
@@ -49,11 +49,13 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     (
       cd ..
-      PATH=$PATH:$out/bin bash test.sh
+      PATH=$PATH:$out/bin $SHELL test.sh
     )
   '';
 
-  doInstallCheck = true;
+  # this excludes you, pkgsStatic (cmake wants to run built binaries
+  # in the buildPhase)
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = "https://github.com/drogonframework/drogon";
@@ -62,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ urlordjames ];
     platforms = platforms.all;
   };
-}
+})
