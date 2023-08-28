@@ -12,14 +12,21 @@
 buildPythonPackage rec {
   pname = "zeversolarlocal";
   version = "1.1.0";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ExZy5k5RE7k+D0lGmuIkGWrWQ+m24K2oqbUEg4BAVuY=";
+    hash = "sha256-ExZy5k5RE7k+D0lGmuIkGWrWQ+m24K2oqbUEg4BAVuY=";
   };
+
+  # https://github.com/sander76/zeversolarlocal/pull/4 but doesn't merge cleanly
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "flit_core >=2,<3" "flit_core >=2" \
+      --replace "--cov zeversolarlocal --cov-report xml:cov.xml --cov-report term-missing -vv" ""
+  '';
 
   nativeBuildInputs = [
     flit-core
@@ -34,11 +41,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov zeversolarlocal --cov-report xml:cov.xml --cov-report term-missing -vv" ""
-  '';
 
   disabledTests = [
     # Test requires network access
