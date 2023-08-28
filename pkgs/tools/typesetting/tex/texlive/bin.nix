@@ -132,7 +132,7 @@ core = stdenv.mkDerivation rec {
 
   inherit (common) binToOutput src prePatch;
 
-  outputs = [ "out" "doc" "dev" ]
+  outputs = [ "out" "dev" "man" "info" ]
     ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
 
   nativeBuildInputs = [
@@ -191,10 +191,6 @@ core = stdenv.mkDerivation rec {
        note: for unlinking, the texlinks patch is irrelevant, so we use
        the included texlinks.sh to avoid the dependency on bin.texlinks */ ''
     PATH="$out/bin:$PATH" sh ../texk/texlive/linked_scripts/texlive-extra/texlinks.sh --cnffile "../texk/texlive/tl_support/fmtutil.cnf" --unlink "$out/bin"
-  '' +
-  /* doc location identical with individual TeX pkgs */ ''
-    mkdir -p "$doc/doc"
-    mv "$out"/share/{man,info} "$doc"/doc
   '' + /* remove redundant texmf-dist (content provided by TeX Live packages) */
   ''
     rm -fr "$out"/share/texmf-dist
