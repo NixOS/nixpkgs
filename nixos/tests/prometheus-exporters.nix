@@ -1422,8 +1422,7 @@ let
     unbound = {
       exporterConfig = {
         enable = true;
-        fetchType = "uds";
-        controlInterface = "/run/unbound/unbound.ctl";
+        unbound.host = "unix:///run/unbound/unbound.ctl";
       };
       metricProvider = {
         services.unbound = {
@@ -1438,7 +1437,7 @@ let
         wait_for_unit("unbound.service")
         wait_for_unit("prometheus-unbound-exporter.service")
         wait_for_open_port(9167)
-        succeed("curl -sSf localhost:9167/metrics | grep 'unbound_up 1'")
+        wait_until_succeeds("curl -sSf localhost:9167/metrics | grep 'unbound_up 1'")
       '';
     };
 
