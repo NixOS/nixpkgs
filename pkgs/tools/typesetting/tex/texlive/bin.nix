@@ -294,7 +294,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   doCheck = false; # fails
 
-  outputs = [ "out" ]
+  outputs = [ "out" "dev" "man" "info" ]
     ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
     # some outputs of metapost, omegaware are for ptex/uptex
     ++ [ "ptex" "uptex" ]
