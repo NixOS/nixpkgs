@@ -331,7 +331,7 @@ in
                 nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
               )
               backup.rcloneConfig);
-            path = [ pkgs.openssh ];
+            path = [ config.programs.ssh.package ];
             restartIfChanged = false;
             serviceConfig = {
               Type = "oneshot";
