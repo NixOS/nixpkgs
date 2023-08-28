@@ -11,6 +11,7 @@
 , jinja2
 , lxml
 , markupsafe
+, platformdirs
 , pycairo
 , pycountry
 , pyflakes
@@ -26,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.17.3";
+  version = "3.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5RL4DkWcQRxzi1dhSJlGgoU0BU3aUWOfBNINFKiOwLg=";
+    hash = "sha256-yhzOfX2umux1ulDiInbbKXvATA+k1TLQrSa9vcR/i58=";
   };
 
   postPatch = ''
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     jinja2
     lxml
     markupsafe
+    platformdirs
     pycountry
     pyflakes
     pypdf2
