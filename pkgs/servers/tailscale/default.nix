@@ -1,16 +1,19 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, shadow, getent }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2
+, procps, shadow, getent }:
 
-buildGoModule rec {
+let version = "1.46.1";
+
+in buildGoModule {
   pname = "tailscale";
-  version = "1.42.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-J7seajRoUOG/nm5iYuiv3lcS5vTT1XxZTxiSmf/TjGI=";
+    hash = "sha256-aweJys46MMnkSKJoLUFCzc6sWUP+Cv5+IFVVe9iEPGI=";
   };
-  vendorHash = "sha256-7L+dvS++UNfMVcPUCbK/xuBPwtrzW4RpZTtcl7VCwQs=";
+  vendorHash = "sha256-oELDIt+mRiBGAdoEUkSAs2SM6urkHm1aAtJnev8jDYM=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
@@ -28,7 +31,9 @@ buildGoModule rec {
   doCheck = false;
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/tailscaled --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]}
+    wrapProgram $out/bin/tailscaled --prefix PATH : ${
+      lib.makeBinPath [ iproute2 iptables getent shadow ]
+    }
     wrapProgram $out/bin/tailscale --suffix PATH : ${lib.makeBinPath [ procps ]}
 
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
@@ -40,6 +45,12 @@ buildGoModule rec {
     description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
     license = licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk mfrw ];
+    maintainers = with maintainers; [
+      danderson
+      mbaillie
+      twitchyliquid64
+      jk
+      mfrw
+    ];
   };
 }
