@@ -13,7 +13,9 @@ let
     # so we remove them from binfiles, and add back the ones texlinks purposefully ignore (e.g. mptopdf)
     removeFormatLinks = lib.mapAttrs (_: attrs:
       if (attrs ? formats && attrs ? binfiles)
-      then let formatLinks = lib.catAttrs "name" (lib.filter (f: f.name != f.engine) attrs.formats);
+      # TLPDB reports erroneously that various metafont binaries like "mf" are format links to engines
+      # like "mf-nowin"; core-big provides both binaries and links so we simply skip them here
+      then let formatLinks = lib.catAttrs "name" (lib.filter (f: f.name != f.engine && ! lib.hasSuffix "-nowin" f.engine) attrs.formats);
                binNotFormats = lib.subtractLists formatLinks attrs.binfiles;
            in if binNotFormats != [] then attrs // { binfiles = binNotFormats; } else removeAttrs attrs [ "binfiles" ]
       else attrs);
@@ -122,12 +124,6 @@ in lib.recursiveUpdate orig rec {
   epstopdf.binlinks.repstopdf = "epstopdf";
   pdfcrop.binlinks.rpdfcrop = "pdfcrop";
 
-  ptex.binlinks = {
-    pdvitomp = bin.metapost + "/bin/pdvitomp";
-    pmpost = bin.metapost + "/bin/pmpost";
-    r-pmpost = bin.metapost + "/bin/r-pmpost";
-  };
-
   texdef.binlinks = {
     latexdef = "texdef";
   };
@@ -141,13 +137,6 @@ in lib.recursiveUpdate orig rec {
     allec = "allcm";
     kpsepath = "kpsetool";
     kpsexpand = "kpsetool";
-  };
-
-  # metapost binaries are in bin.metapost instead of bin.core
-  uptex.binlinks = {
-    r-upmpost = bin.metapost + "/bin/r-upmpost";
-    updvitomp = bin.metapost + "/bin/updvitomp";
-    upmpost = bin.metapost + "/bin/upmpost";
   };
 
   #### add PATH dependencies without wrappers

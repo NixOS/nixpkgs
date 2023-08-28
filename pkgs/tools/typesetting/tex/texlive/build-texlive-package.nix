@@ -120,7 +120,9 @@ let
         inherit meta;
         # shebang interpreters and compiled binaries
         buildInputs = let outName = builtins.replaceStrings [ "-" ] [ "_" ] pname; in
-          [ texliveBinaries.${pname} or texliveBinaries.core.${outName} or null ]
+          [ texliveBinaries.core.${outName} or null
+            texliveBinaries.${pname} or null
+            texliveBinaries.core-big.${outName} or null ]
           ++ (args.extraBuildInputs or [ ]) ++ [ bash perl ]
           ++ (lib.attrVals (args.scriptExts or [ ]) extToInput);
         nativeBuildInputs = extraNativeBuildInputs;

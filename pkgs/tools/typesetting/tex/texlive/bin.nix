@@ -33,7 +33,9 @@ let
     "ps2eps" "ps2pk" "psutils"  "ptex" "seetexk" "synctex" "t1utils" "tex"
     "tex4ht" "texlive-scripts-extra" "texware" "tie" "tpic2pdftex" "ttfutils"
     "uptex" "velthuis" "vlna" "web" "xml2pmx" ];
-  binPackages = lib.getAttrs corePackages tlpdb;
+  coreBigPackages = [ "metafont" "mflua" "metapost" "luatex" "luahbtex"
+    "xetex" ] ++ lib.optional withLuaJIT "luajittex";
+  binPackages = lib.getAttrs (corePackages ++ coreBigPackages) tlpdb;
 
   common = {
     src = fetchurl {
@@ -215,12 +217,15 @@ core = stdenv.mkDerivation rec {
 };
 
 
-inherit (core-big) metafont mflua metapost luatex luahbtex luajittex xetex;
+inherit (core-big) metafont mflua metapost luatex luahbtex xetex;
+luajittex = core.big.luajittex or null;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
 
-  inherit (common) src prePatch;
+  __structuredAttrs = true;
+
+  inherit (common) binToOutput src prePatch;
 
   patches = [
     # improves reproducibility of fmt files. This patch has been proposed upstream,
@@ -293,34 +298,13 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   doCheck = false; # fails
 
-  # now distribute stuff into outputs, roughly as upstream TL
-  # (uninteresting stuff remains in $out, typically duplicates from `core`)
-  outputs = [
-    "out"
-    "metafont"
-    "mflua"
-    "metapost"
-    "luatex"
-    "luahbtex"
-    "luajittex"
-    "xetex"
-  ];
-  postInstall = ''
-    for output in $(getAllOutputNames); do
-      mkdir -p "''${!output}/bin"
-    done
-
-    mv "$out/bin"/{inimf,mf,mf-nowin} "$metafont/bin/"
-    mv "$out/bin"/mflua{,-nowin} "$mflua/bin/"
-    mv "$out/bin"/{*tomp,mfplain,*mpost} "$metapost/bin/"
-    mv "$out/bin"/{luatex,texlua,texluac} "$luatex/bin/"
-    mv "$out/bin"/luahbtex "$luahbtex/bin/"
-    mv "$out/bin"/xetex "$xetex/bin/"
-    cp libs/teckit/teckit_compile "$xetex/bin/"
-  '' + lib.optionalString withLuaJIT ''
-    mv "$out/bin"/mfluajit{,-nowin} "$mflua/bin/"
-    mv "$out/bin"/{luajittex,luajithbtex,texluajit,texluajitc} "$luajittex/bin/"
-  '' ;
+  outputs = [ "out" ]
+    ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
+    # some outputs of metapost, omegaware are for ptex/uptex
+    ++ [ "ptex" "uptex" ]
+    # unavoidable duplicates from core
+    ++ [ "ctie" "cweb" "omegaware" "texlive_scripts_extra" "tie" "web" ];
+  postInstall = common.moveBins;
 };
 
 
