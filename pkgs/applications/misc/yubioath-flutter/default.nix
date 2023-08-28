@@ -70,9 +70,6 @@ flutter.buildFlutterApplication rec {
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
       --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
       --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
-
-    # Remove unnecessary references to Flutter.
-    remove-references-to -t ${flutter37.unwrapped} $out/app/data/flutter_assets/shaders/ink_sparkle.frag
   '';
 
   nativeBuildInputs = [
@@ -85,11 +82,6 @@ flutter.buildFlutterApplication rec {
     pcre2
     libnotify
     libappindicator
-  ];
-
-  disallowedReferences = [
-    flutter37
-    flutter37.unwrapped
   ];
 
   meta = with lib; {
