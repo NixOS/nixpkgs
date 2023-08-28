@@ -452,6 +452,8 @@ self: super: builtins.intersectAttrs super {
   wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
 
+  shellify = enableSeparateBinOutput super.shellify;
+
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;

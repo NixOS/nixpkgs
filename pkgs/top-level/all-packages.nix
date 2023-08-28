@@ -13014,6 +13014,8 @@ with pkgs;
 
   shelldap = callPackage ../tools/misc/shelldap { };
 
+  shellify = haskellPackages.shellify.bin;
+
   shellspec = callPackage ../tools/misc/shellspec { };
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
