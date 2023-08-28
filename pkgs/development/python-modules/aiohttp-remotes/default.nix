@@ -1,7 +1,9 @@
 { lib
 , aiohttp
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
+, flit-core
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
@@ -11,25 +13,23 @@
 buildPythonPackage rec {
   pname = "aiohttp-remotes";
   version = "1.2.0";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "aiohttp_remotes";
     inherit version;
-    sha256 = "f95c3a6be5e2de746a85ce9af49ec548da6db8378d7e81bb171ec77b13562a6c";
+    hash = "sha256-+Vw6a+Xi3nRqhc6a9J7FSNptuDeNfoG7Fx7HexNWKmw=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing-extensions
-  ];
-
-  nativeCheckInputs = [
-    pytest-aiohttp
-    pytestCheckHook
+  patches = [
+    # https://github.com/aio-libs/aiohttp-remotes/pull/355
+    (fetchpatch {
+      name = "replace-flit-with-flit-core.patch";
+      url = "https://github.com/aio-libs/aiohttp-remotes/commit/3d39ee9a03a1c96b8e798dc6acf98165da31da1f.patch";
+      hash = "sha256-PSxEYHtl8R7m7fOUmyYukkKHXww0HbmGGfXEVgU092U=";
+    })
   ];
 
   postPatch = ''
@@ -37,8 +37,25 @@ buildPythonPackage rec {
       --replace " --no-cov-on-fail --cov-branch --cov=aiohttp_remotes --cov-report=term --cov-report=html" ""
   '';
 
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  propagatedBuildInputs = [
+    aiohttp
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    typing-extensions
+  ];
+
   pythonImportsCheck = [
     "aiohttp_remotes"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytest-aiohttp
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [
