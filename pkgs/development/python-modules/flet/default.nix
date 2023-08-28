@@ -33,6 +33,11 @@ buildPythonPackage rec {
       --replace 'watchdog = "^2' 'watchdog = ">=2'
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/flet \
+      --prefix PYTHONPATH : $PYTHONPATH
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
