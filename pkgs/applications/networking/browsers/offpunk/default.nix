@@ -32,7 +32,7 @@ in
 python3Packages.buildPythonPackage rec {
   pname = "offpunk";
   version = "1.10";
-  format = "flit";
+  format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.7";
 
@@ -43,7 +43,11 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-+jGKPPnKZHn+l6VAwuae6kICwR7ymkYJjsM2OHQAEmU=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    python3Packages.flit-core
+  ];
+
   propagatedBuildInputs = otherDependencies ++ pythonDependencies;
 
   postInstall = ''
