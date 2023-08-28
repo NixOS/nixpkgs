@@ -27564,6 +27564,8 @@ with pkgs;
 
   vmagent = callPackage ../servers/monitoring/vmagent { };
 
+  vmctl = callPackage ../servers/monitoring/vmctl { };
+
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
   wallabag = callPackage ../servers/web-apps/wallabag { };
