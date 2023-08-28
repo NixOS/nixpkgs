@@ -9,8 +9,7 @@
 buildPythonPackage rec {
   pname = "sphinx-design";
   version = "0.5.0";
-
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
