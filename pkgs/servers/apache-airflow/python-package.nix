@@ -46,6 +46,8 @@
 , mdit-py-plugins
 , numpy
 , openapi-spec-validator
+, opentelemetry-api
+, opentelemetry-exporter-otlp
 , pandas
 , pathspec
 , pendulum
@@ -59,6 +61,7 @@
 , python-slugify
 , python3-openid
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , rich
 , rich-argparse
@@ -83,7 +86,7 @@
 , enabledProviders ? []
 }:
 let
-  version = "2.6.3";
+  version = "2.7.0";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
@@ -92,7 +95,7 @@ let
     # Download using the git protocol rather than using tarballs, because the
     # GitHub archive tarballs don't appear to include tests
     forceFetchGit = true;
-    hash = "sha256-7+Zo+kfzB1f4R5HDSxGvjVfGeep/sJy1POxy5ZVi+w8=";
+    hash = "sha256-zB4PWcPkm+lat4tNfVld051RHlC1dW2EbgyoxDao52o=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -187,6 +190,8 @@ buildPythonPackage rec {
     mdit-py-plugins
     numpy
     openapi-spec-validator
+    opentelemetry-api
+    opentelemetry-exporter-otlp
     pandas
     pathspec
     pendulum
@@ -218,6 +223,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     airflow-frontend
+    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [
@@ -233,15 +239,21 @@ buildPythonPackage rec {
   INSTALL_PROVIDERS_FROM_SOURCES = "true";
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "colorlog>=4.0.2, <5.0" "colorlog" \
-      --replace "flask-appbuilder==4.3.0" "flask-appbuilder>=4.3.0" \
-      --replace "pathspec~=0.9.0" "pathspec"
+    # https://github.com/apache/airflow/issues/33854
+    substituteInPlace pyproject.toml \
+      --replace '[project]' $'[project]\nname = "apache-airflow"\nversion = "${version}"'
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix failing test on Hydra
     substituteInPlace airflow/utils/db.py \
       --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
   '';
+
+  pythonRelaxDeps = [
+    "colorlog"
+    "flask-appbuilder"
+    "opentelemetry-api"
+    "pathspec"
+  ];
 
   # allow for gunicorn processes to have access to Python packages
   makeWrapperArgs = [
