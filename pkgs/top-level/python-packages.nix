@@ -2996,6 +2996,8 @@ self: super: with self; {
 
   django-simple-captcha = callPackage ../development/python-modules/django-simple-captcha { };
 
+  django-simple-history = callPackage ../development/python-modules/django-simple-history { };
+
   django-sites = callPackage ../development/python-modules/django-sites { };
 
   django-sr = callPackage ../development/python-modules/django-sr { };
