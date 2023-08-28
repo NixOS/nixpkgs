@@ -5,8 +5,6 @@ let
     inherit openssl;
     python = python3;
   };
-
-  crossPatches = callPackage ./cross-patches.nix { };
 in
 buildNodejs {
   inherit enableNpm;
@@ -17,5 +15,5 @@ buildNodejs {
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
-  ] ++ crossPatches;
+  ];
 }
