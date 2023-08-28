@@ -16,7 +16,8 @@
 , geocode-glib_2
 , vala
 , gnome
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
+# comments in build-aux/meson/gen_location_variants.py suggest that location de/serialization doesn't normalize for endianness
+, withIntrospection ? stdenv.buildPlatform.isLittleEndian == stdenv.hostPlatform.isLittleEndian
 }:
 
 stdenv.mkDerivation rec {
@@ -69,6 +70,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs build-aux/meson/gen_locations_variant.py
+    # prevent gen_locations_variant.py from trying to import host glib
+    sed -i '2i import os; os.environ["GI_TYPELIB_PATH"] = ""' build-aux/meson/gen_locations_variant.py
 
     # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
     # it should be a build-time dep for build
@@ -77,9 +80,12 @@ stdenv.mkDerivation rec {
       --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
       --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
 
+    substituteInPlace libgweather/meson.build \
+      --replace "'vapigen', req" "'vapigen', native:true, req"
+
     # gir works for us even when cross-compiling
     # TODO: send upstream because downstream users can use the option to disable gir if they don't have it working
-    substituteInPlace libgweather/meson.build \
+    substituteInPlace meson.build \
       --replace "g_ir_scanner.found() and not meson.is_cross_build()" "g_ir_scanner.found()"
   '';
 
