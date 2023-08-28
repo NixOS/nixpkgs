@@ -11893,6 +11893,8 @@ with pkgs;
 
   peco = callPackage ../tools/text/peco { };
 
+  percollate = callPackage ../tools/text/percollate { };
+
   pg_activity = callPackage ../development/tools/database/pg_activity { };
 
   pg_checksums = callPackage ../development/tools/database/pg_checksums { };
