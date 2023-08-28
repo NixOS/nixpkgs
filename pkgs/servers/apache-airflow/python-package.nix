@@ -288,7 +288,7 @@ buildPythonPackage rec {
     update-source-version ${pname} "$new_version"
 
     # Update frontend
-    cd ./pkgs/development/python-modules/apache-airflow
+    cd ./pkgs/servers/apache-airflow
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
     yarn2nix > yarn.nix

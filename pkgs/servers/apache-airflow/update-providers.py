@@ -46,7 +46,7 @@ def get_file_from_github(version: str, path: str):
 
 
 def repository_root() -> Path:
-    return Path(os.path.dirname(sys.argv[0])) / "../../../.."
+    return Path(os.path.dirname(sys.argv[0])) / "../../.."
 
 
 def dump_packages() -> Dict[str, Dict[str, str]]:
