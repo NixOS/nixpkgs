@@ -91,23 +91,4 @@ in
     };
     patches = flutter3Patches;
   };
-
-  v37 = mkFlutter {
-    version = "3.7.12";
-    engineVersion = "1a65d409c7a1438a34d21b60bf30a6fd5db59314";
-    dartVersion = "2.19.6";
-    dartHash = {
-      x86_64-linux = "sha256-4ezRuwhQHVCxZg5WbzU/tBUDvZVpfCo6coDE4K0UzXo=";
-      aarch64-linux = "sha256-pYmClIqOo0sRPOkrcF4xQbo0mHlrr1TkhT1fnNyYNck=";
-      x86_64-darwin = "sha256-tuIQhIOX2ub0u99CW/l7nCya9YVNokCZNgbVFqO4ils=";
-      aarch64-darwin = "sha256-Oe8/0ygDN3xf5/2I3N/OBzF0bps7Mg0K2zJKj+E9Nak=";
-    };
-    flutterHash = rec {
-      x86_64-linux = "sha256-5ExDBQXIpoZ5NwS66seY3m9/V8xDiyq/RdzldAyHdEE=";
-      aarch64-linux = x86_64-linux;
-      x86_64-darwin = "sha256-cJF8KB9fNb3hTZShDAPsMmr1neRdIMLvIl/m2tpzwQs=";
-      aarch64-darwin = "sha256-yetEE65UP2Wh9ocx7nClQjYLHO6lIbZPay1+I2tDSM4=";
-    };
-    patches = flutter3Patches;
-  };
 }
