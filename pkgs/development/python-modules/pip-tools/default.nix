@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "7.2.0";
+  version = "7.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YWSItTnhS4qoVDbtWXozwpH0iFwdLgvsl0AKvlr/LA0=";
+    hash = "sha256-jpyZEn/gJMAltGoLLRXHvUfxjzMibPczDTVJNmP8HR0=";
   };
 
   patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
