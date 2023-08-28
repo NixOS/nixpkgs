@@ -84,20 +84,12 @@ let
     ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
       "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
 
-    # clean broken links to stuff not built
-    cleanBrokenLinks = ''
-      for f in "$out"/bin/*; do
-        if [[ ! -x "$f" ]]; then rm "$f"; fi
-      done
-    '';
-
     # move binaries to corresponding split outputs, based on content of texlive.tlpdb
     binToOutput = lib.listToAttrs
       (lib.concatMap
         (n: map (v: { name = v; value = builtins.replaceStrings [ "-" ] [ "_" ] n; }) binPackages.${n}.binfiles or [ ])
         (builtins.attrNames binPackages));
 
-    # (must be run after cleanBrokenLinks)
     moveBins = ''
       for bin in "$out/bin"/* ; do
         bin="''${bin##*/}"
@@ -120,7 +112,6 @@ let
   withLuaJIT = !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV;
 in rec { # un-indented
 
-inherit (common) cleanBrokenLinks;
 texliveYear = year;
 
 
@@ -198,7 +189,7 @@ core = stdenv.mkDerivation rec {
   '' + /* install himktables in separate output for use in cross compilation */ ''
      mkdir -p $dev/bin
      cp texk/web2c/.libs/himktables $dev/bin/himktables
-  '' + cleanBrokenLinks + common.moveBins;
+  '' + common.moveBins;
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
   passthru = { inherit version buildInputs; };
