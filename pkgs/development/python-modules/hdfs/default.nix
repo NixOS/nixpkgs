@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API and command line interface for HDFS";
     homepage = "https://github.com/mtth/hdfs";
+    changelog = "https://github.com/mtth/hdfs/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };
