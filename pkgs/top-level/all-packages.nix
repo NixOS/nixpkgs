@@ -1890,6 +1890,8 @@ with pkgs;
 
   nominatim = callPackage ../servers/nominatim { };
 
+  ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
+
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
@@ -9604,6 +9606,14 @@ with pkgs;
   jupp = callPackage ../applications/editors/jupp { };
 
   jupyter = callPackage ../applications/editors/jupyter { };
+
+  jupyter-all = jupyter.override {
+    definitions = {
+      clojure = clojupyter.definition;
+      octave = octave-kernel.definition;
+      # wolfram = wolfram-for-jupyter-kernel.definition; # unfree
+    };
+  };
 
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
 
