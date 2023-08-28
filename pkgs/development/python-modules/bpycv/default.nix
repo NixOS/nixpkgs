@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "bpycv";
-  version = "0.3.6";
+  version = "0.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4N4rCVhbfJx7H7jS88QR3EcRupISIhnLuZ+cgfwIzg4=";
+    hash = "sha256-qqNGemDB0aagCXjrECuh6kLksf+KujPejpnXVqFG8GY=";
   };
 
   propagatedBuildInputs = [
