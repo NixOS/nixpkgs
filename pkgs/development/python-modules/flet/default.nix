@@ -29,6 +29,12 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace 'httpx = "^0.23' 'httpx = ">=0.23' \
       --replace 'watchdog = "^2' 'watchdog = ">=2'
+
+    substituteInPlace src/flet/flet.py \
+      --replace 'if not temp_flet_dir.exists()' 'if False' \
+      --replace 'str(app_path)' '"${flet-client-flutter}/bin/flet"'
+
+    cat src/flet/flet.py
   '';
 
   postFixup = ''
