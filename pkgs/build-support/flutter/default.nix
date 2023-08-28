@@ -2,8 +2,10 @@
 , callPackage
 , stdenvNoCC
 , makeWrapper
+, wrapGAppsHook
 , llvmPackages_13
 , cacert
+, glib
 , flutter
 , jq
 }:
@@ -47,7 +49,11 @@ let
       deps
       flutter
       jq
+      glib
+      wrapGAppsHook
     ] ++ nativeBuildInputs;
+
+    dontWrapGApps = true;
 
     preUnpack = ''
       ${lib.optionalString (!autoDepsList) ''
@@ -123,6 +129,7 @@ let
       for f in "$out"/bin/*; do
         wrapProgram "$f" \
           --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath finalAttrs.runtimeDependencies}' \
+          ''${gappsWrapperArgs[@]} \
           ${extraWrapProgramArgs}
       done
 
