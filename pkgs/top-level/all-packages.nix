@@ -31752,6 +31752,8 @@ with pkgs;
 
   geoipupdate = callPackage ../applications/misc/geoipupdate { };
 
+  glicol-cli = callPackage ../applications/audio/glicol-cli { };
+
   globe-cli = callPackage ../applications/misc/globe-cli { };
 
   gnmic = callPackage ../applications/networking/gnmic { };
