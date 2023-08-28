@@ -79,7 +79,8 @@ let
       # see "from TL tree" vs. "Using installed"  in configure output
       "zziplib" "mpfr" "gmp"
       "pixman" "potrace" "gd" "freetype2" "libpng" "libpaper" "zlib"
-    ];
+    ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+      "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
 
     # clean broken links to stuff not built
     cleanBrokenLinks = ''
@@ -166,7 +167,6 @@ core = stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   configureFlags = common.configureFlags
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc" ]
     ++ [ "--without-x" ] # disable xdvik and xpdfopen
     ++ map (what: "--disable-${what}") [
       "chktex"
@@ -260,60 +260,35 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   inherit (core) nativeBuildInputs depsBuildBuild;
   buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 libX11 ];
 
+  /* deleting the unused packages speeds up configure by a considerable margin
+     and ensures we do not rebuild existing libraries by mistake */
+  preConfigure = ''
+    rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
+      libs/{mpfr,pixman,xpdf,zlib,zziplib} \
+      texk/{afm2pl,bibtex-x,chktex,cjkutils,detex,dtl,dvi2tty,dvidvi,dviljk,dviout-util} \
+      texk/{dvipdfm-x,dvipng,dvipos,dvipsk,dvisvgm,gregorio,gsftopk,kpathsea} \
+      texk/{lcdf-typetools,makeindexk,makejvf,mendexk,musixtnt,ps2pk,psutils,ptexenc} \
+      texk/{seetexk,tex4htk,texlive,ttf2pk2,ttfdump,upmendex,xdvik} \
+      utils/{asymptote,autosp,axodraw2,devnag,lacheck,m-tx,pmx,ps2eps,t1utils,texdoctk} \
+      utils/{tpic2pdftex,vlna,xindy,xml2pmx,xpdfopen}
+    mkdir WorkDir
+    cd WorkDir
+  '';
+
   configureFlags = common.configureFlags
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
     ++ map (prog: "--disable-${prog}") # don't build things we already have
-      ([ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "pdftex"
+      # list from texk/web2c/configure
+      ([ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "hitex" "pdftex"
         "web-progs" "synctex"
-      ] ++ lib.optionals (!withLuaJIT) [ "luajittex" "luajithbtex" "mfluajit" ]);
+      ] ++ lib.optionals (!withLuaJIT) [ "luajittex" "luajithbtex" "mfluajit" ])
+    /* disable all packages, re-enable web2c package */
+    ++ [ "--disable-all-pkgs" "--enable-web2c" ]
+    /* kpathsea requires specifying the kpathsea location manually */
+    ++ [ "--with-kpathsea-includes=${core.dev}/include" ];
 
-  configureScript = ":";
+  configureScript = "../configure";
 
-  # we use static libtexlua, because it's only used by a single binary
-  postConfigure = let
-    luajit = lib.optionalString withLuaJIT ",luajit";
-  in
-  lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
-  # without this, the native builds attempt to use the binary
-  # ${target-triple}-gcc, but we need to use the wrapper script.
-  ''
-    export BUILDCC=${buildPackages.stdenv.cc}/bin/cc
-  ''
-  +
-  ''
-    mkdir ./WorkDir && cd ./WorkDir
-    for path in libs/{pplib,teckit,lua53${luajit}} texk/web2c; do
-      (
-        if [[ "$path" =~ "libs/lua" ]]; then
-          extraConfig="--enable-static --disable-shared"
-        else
-          extraConfig=""
-        fi
-  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-    # results of the tests performed by the configure scripts are
-    # toolchain-dependent, so native components and cross components cannot use
-    # the same cached test results.
-    # Disable the caching for components with native subcomponents.
-  ''
-        if [[ "$path" =~ "libs/luajit" ]] || [[ "$path" =~ "texk/web2c" ]]; then
-          extraConfig="$extraConfig --cache-file=/dev/null"
-        fi
-  ''
-  +
-  ''
-        mkdir -p "$path" && cd "$path"
-        "../../../$path/configure" $configureFlags $extraConfig
-
-        if [[ "$path" =~ "libs/luajit" ]] || [[ "$path" =~ "libs/pplib" ]]; then
-          # ../../../texk/web2c/mfluadir/luapeg/lpeg.h:29:10: fatal error: 'lua.h' file not found
-          # ../../../texk/web2c/luatexdir/luamd5/md5lib.c:197:10: fatal error: 'utilsha.h' file not found
-          make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
-        fi
-      )
-    done
-  '';
-
-  preBuild = "cd texk/web2c";
   enableParallelBuilding = true;
 
   doCheck = false; # fails
@@ -341,7 +316,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     mv "$out/bin"/{luatex,texlua,texluac} "$luatex/bin/"
     mv "$out/bin"/luahbtex "$luahbtex/bin/"
     mv "$out/bin"/xetex "$xetex/bin/"
-    cp ../../libs/teckit/teckit_compile "$xetex/bin/"
+    cp libs/teckit/teckit_compile "$xetex/bin/"
   '' + lib.optionalString withLuaJIT ''
     mv "$out/bin"/mfluajit{,-nowin} "$mflua/bin/"
     mv "$out/bin"/{luajittex,luajithbtex,texluajit,texluajitc} "$luajittex/bin/"
