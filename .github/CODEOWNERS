@@ -17,6 +17,7 @@
 # GitHub actions
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/merge-staging @FRidh
+/.github/workflows/channel-pin.yml @infinisil
 
 # EditorConfig
 /.editorconfig @Mic92 @zowoq
@@ -29,6 +30,7 @@
 /lib/debug.nix              @edolstra @Profpatsch
 /lib/asserts.nix            @edolstra @Profpatsch
 /lib/path.*                 @infinisil @fricklerhandwerk
+/lib/channel.*              @infinisil
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314

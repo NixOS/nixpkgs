@@ -1,0 +1,118 @@
+name: Update channel pins
+
+on:
+  push:
+    branches:
+      - nixos-unstable
+      # Any release branches like nixos-23.05
+      - 'nixos-[0-9][0-9].[0-9][0-9]'
+
+# cancel any other workflows in progress
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+# Needed to create PRs
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update_pin:
+    name: Update channel pin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cachix/install-nix-action@v22
+      - name: Compute development branch
+        id: dev-branch
+        run: |
+          if [[ "$GITHUB_REF_NAME" == nixos-unstable ]]; then
+            branch=master
+          else
+            # Removes the "nixos" prefix and replaces it with "release"
+            branch=release${GITHUB_REF_NAME#nixos}
+          fi
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+      - name: Check out development branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.dev-branch.outputs.branch }}
+      - name: Update pin
+        id: update
+        run: |
+          newRev=$GITHUB_SHA
+          pinFile=lib/channel/pin.json
+
+          echo "Fetching new revision $newRev"
+          stdout=$(nix-prefetch-url \
+              "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tarball/$newRev" \
+              --type sha256 --unpack --print-path --name nixpkgs)
+          mapfile -t newInfo <<<"$stdout"
+          newHash=${newInfo[0]}
+          newPath=${newInfo[1]}
+          newPinFileContents=$(jq -n \
+              --arg rev "$newRev" \
+              --arg sha256 "$newHash" \
+              '$ARGS.named')
+
+          echo -e "File $pinFile would be updated to:\n$newPinFileContents"
+
+          echo "Comparing this with the revision of the existing file"
+          if ! oldRev=$(jq -r '.rev' "$pinFile"); then
+            echo "There is no existing file, make sure to initialize it properly, possibly using the above value"
+            exit 1
+          else
+            echo "The existing file has revision $oldRev, now fetching that too"
+            stdout=$(nix-prefetch-url \
+                "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tarball/$oldRev" \
+                --type sha256 --unpack --print-path --name nixpkgs)
+            mapfile -t newInfo <<<"$stdout"
+            oldHash=${oldInfo[0]}
+            oldPath=${oldInfo[1]}
+
+            change_url="$GITHUB_SERVER_URL"/"$GITHUB_REPOSITORY"/compare/"$oldRev".."$newRev"
+
+            echo "Checking if anything other than $pinFile changed between $oldRev and $newRev"
+            # Only don't make a PR if only the pin file changed, not if it was added/removed
+            if [[ -f "$oldPath"/"$pinFile" ]] \
+              && [[ -f "$newPath"/"$pinFile" ]] \
+              && diff --recursive --exclude "$pinFile" "$oldPath" "$newPath"; then
+              echo "Nothing changed, no PR to update the pin necessary"
+              create_pr=
+            else
+              echo "The channel changed, PR to update the pin is necessary"
+              create_pr=1
+            fi
+          fi
+          echo "create_pr=$create_pr" >> "$GITHUB_OUTPUT"
+
+          if [[ -n "$create_pr" ]]; then
+            echo "Updating $pinFile"
+            printf "%s\n" "$newPinFileContents" > "$pinFile"
+
+            echo "Assembling PR title and body"
+            if [[ "$GITHUB_REF_NAME" != nixos-unstable ]]; then
+              pr_title="[${GITHUB_REF_NAME#nixos-}] "
+            fi
+            pr_title="${pr_title}Update pinned channel commit"
+
+            pr_body_path=$(mktemp)
+            {
+              echo "Automated PR to update the pin of the $GITHUB_REF_NAME channel in the ${{ steps.dev_branch.outputs.branch }} branch to the latest commit $GITHUB_SHA."
+              echo ""
+              echo "[Channel changes]($change_url)"
+            } > "$pr_body_path"
+
+            echo "pr_title=$pr_title" >> "$GITHUB_OUTPUT"
+            echo "pr_body_path=$pr_body_path" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        if: ${{ steps.update.outputs.create_pr != '' }}
+        with:
+          branch: "update-channel-pin/${{ steps.dev-branch.outputs.branch }}"
+          commit-message: "Update pinned channel commit"
+          title: "${{ steps.update.outputs.pr_title }}"
+          author: "GitHub <noreply@github.com>"
+          body-path: "${{ steps.update.outputs.pr_body_path }}"
+
