@@ -3,6 +3,7 @@
 
 # build-system
 , poetry-core
+, pytestCheckHook
 
 # propagates
 , typing-extensions
@@ -21,6 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pytestCheckHook
   ];
 
   propagatedBuildInputs = [
