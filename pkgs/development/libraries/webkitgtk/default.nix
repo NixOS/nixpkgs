@@ -106,6 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
     # this, maybe make cmake not look up executables in
     # CMAKE_PREFIX_PATH.
     cmakeFlags+=" -DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin"
+  '' + ''
+    # the various components of webkitgtk take a massive amount of memory to build
+    export NIX_BUILD_CORES=$((NIX_BUILD_CORES > 12 ? 12 : NIX_BUILD_CORES))
   '';
 
   nativeBuildInputs = [
