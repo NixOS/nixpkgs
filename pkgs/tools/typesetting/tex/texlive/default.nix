@@ -37,7 +37,7 @@ let
   overriddenTlpdb = let
     overrides = import ./tlpdb-overrides.nix {
       inherit
-        lib bin tlpdb tlpdbxz tl
+        stdenv lib bin tlpdb tlpdbxz tl
         installShellFiles
         coreutils findutils gawk getopt ghostscript_headless gnugrep
         gnumake gnupg gnused gzip ncurses perl python3 ruby zip;

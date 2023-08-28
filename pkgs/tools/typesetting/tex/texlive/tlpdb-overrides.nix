@@ -1,4 +1,4 @@
-{ lib, tlpdb, bin, tlpdbxz, tl
+{ stdenv, lib, tlpdb, bin, tlpdbxz, tl
 , installShellFiles
 , coreutils, findutils, gawk, getopt, ghostscript_headless, gnugrep
 , gnumake, gnupg, gnused, gzip, ncurses, perl, python3, ruby, zip
@@ -328,6 +328,11 @@ in lib.recursiveUpdate orig rec {
   collection-plaingeneric.deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
 
   #### misc
+
+  # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
+  luajittex.binfiles = lib.optionals
+    (!(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV)
+    orig.luajittex.binfiles;
 
   # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
   arabi-add.license = [  "lppl13c" ];
