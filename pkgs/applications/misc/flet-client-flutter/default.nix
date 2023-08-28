@@ -6,12 +6,12 @@
 , libunwind
 , makeWrapper
 , orc
+, nix-update-script
 }:
 
 flutter.buildFlutterApplication rec {
   pname = "flet-client-flutter";
   version = "0.7.4";
-
 
   src = fetchFromGitHub {
     owner = "flet-dev";
@@ -37,6 +37,8 @@ flutter.buildFlutterApplication rec {
     libunwind
     orc
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A framework that enables you to easily build realtime web, mobile, and desktop apps in Python. The frontend part.";
