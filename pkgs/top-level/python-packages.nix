@@ -2868,6 +2868,8 @@ self: super: with self; {
 
   django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
 
+  django-google-analytics-app = callPackage ../development/python-modules/django-google-analytics-app { };
+
   django-guardian = callPackage ../development/python-modules/django-guardian { };
 
   django-haystack = callPackage ../development/python-modules/django-haystack { };
