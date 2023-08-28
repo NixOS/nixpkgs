@@ -79,7 +79,10 @@ python3.pkgs.buildPythonApplication rec {
     "test_discover_lintables_umlaut"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ ansible ]}"
+    "--unset PYTHONPATH"
+  ];
 
   meta = with lib; {
     description = "Best practices checker for Ansible";
