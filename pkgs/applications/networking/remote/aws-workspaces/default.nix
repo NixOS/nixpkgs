@@ -1,19 +1,19 @@
 { stdenv, lib
 , makeWrapper, dpkg, fetchurl, autoPatchelfHook
-, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu70, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking, graphicsmagick_q16, libva, libusb1, hiredis
+, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl, icu70, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking, graphicsmagick_q16, libva, libusb1, hiredis, pcsclite, jbigkit, libvdpau
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-workspaces";
-  version = "4.6.0.4187";
+  version = "2023.0.4395";
 
   src = fetchurl {
-    # ref https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/focal/main/binary-amd64/Packages
     urls = [
-      "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/focal/main/binary-amd64/workspacesclient_${version}_amd64.deb"
-      "https://archive.org/download/workspacesclient_${version}_amd64/workspacesclient_${version}_amd64.deb"
+      # Original source is https://d3nt0h4h6pmmc4.cloudfront.net/new_workspacesclient_jammy_amd64.deb.
+      # It doesn't seem like Amazon provides a repository for Ubuntu 22.04 (jammy) - at least not yet, so I am using archive.org to pin the version.
+      "https://archive.org/download/new_workspacesclient_jammy_2023.0.4395_amd64/new_workspacesclient_jammy_2023.0.4395_amd64.deb"
     ];
-    sha256 = "sha256-A+b79ewh4hBIf8jgK0INILFktTqRRpOgXRH0FGziV6c=";
+    sha256 = "sha256-w6056o4mAI39SEq94s5UabdPllCrSaK11LMi97XeDYA=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     lttng-ust
     libpulseaudio
     gtk3
-    openssl_1_1.out
+    openssl
     icu70
     webkitgtk
     librsvg
@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     hiredis
     libusb1
     libva
+    pcsclite
+    jbigkit
+    libvdpau
   ];
 
   unpackPhase = ''
@@ -50,17 +53,15 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
-    patchelf --replace-needed libGraphicsMagick++-Q16.so.12 libGraphicsMagick++.so.12 $out/usr/lib/x86_64-linux-gnu/pcoip-client/vchan_plugins/libvchan-plugin-clipboard.so
-    patchelf --replace-needed libhiredis.so.0.14 libhiredis.so $out/lib/libpcoip_core.so
+    patchelf --replace-needed libjbig.so.0 libjbig.so $out/bin/workspacesclient/dcv/libtiff.so.6
   '';
 
   installPhase = ''
     mkdir -p $out/bin $out/lib
-    mv $out/opt/workspacesclient/* $out/lib
+    mv $out/usr/lib/x86_64-linux-gnu/* $out/lib
     rm -rf $out/opt
 
-    wrapProgram $out/lib/workspacesclient \
+    wrapProgram $out/usr/bin/workspacesclient \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
       --set GIO_EXTRA_MODULES "${glib-networking.out}/lib/gio/modules"
