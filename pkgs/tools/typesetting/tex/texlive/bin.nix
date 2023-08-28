@@ -7,6 +7,7 @@
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
 , biber-ms
+, tlpdb
 }:
 
 # Useful resource covering build options:
@@ -21,6 +22,18 @@ let
   # detect and stop redundant rebuilds that may occur when building new fixed hashes
   assertFixedHash = name: src:
     if ! useFixedHashes || src ? outputHash then src else throw "The TeX Live package '${src.pname}' must have a fixed hash before building '${name}'.";
+
+  # list of packages whose binaries are built in core, core-big
+  # generated manually by inspecting ${core}/bin
+  corePackages = [ "afm2pl" "aleph" "autosp" "axodraw2" "bibtex" "cjkutils"
+    "ctie" "cweb" "detex" "dtl" "dvi2tty" "dvicopy" "dvidvi" "dviljk"
+    "dviout-util" "dvipdfmx" "dvipos" "dvips" "fontware" "gregoriotex"
+    "gsftopk" "hitex" "kpathsea" "lacheck" "lcdftypetools" "m-tx" "makeindex"
+    "mfware" "musixtnt" "omegaware" "patgen" "pdftex" "pdftosrc" "pmx"
+    "ps2eps" "ps2pk" "psutils"  "ptex" "seetexk" "synctex" "t1utils" "tex"
+    "tex4ht" "texlive-scripts-extra" "texware" "tie" "tpic2pdftex" "ttfutils"
+    "uptex" "velthuis" "vlna" "web" "xml2pmx" ];
+  binPackages = lib.getAttrs corePackages tlpdb;
 
   common = {
     src = fetchurl {
@@ -56,6 +69,7 @@ let
       "--disable-missing" "--disable-native-texlive-build"
       "--enable-shared" # "--enable-cxx-runtime-hack" # static runtime
       "--enable-tex-synctex"
+      "--disable-linked-scripts"
       "-C" # use configure cache to speed up
     ]
       ++ withSystemLibs [
@@ -68,6 +82,30 @@ let
     cleanBrokenLinks = ''
       for f in "$out"/bin/*; do
         if [[ ! -x "$f" ]]; then rm "$f"; fi
+      done
+    '';
+
+    # move binaries to corresponding split outputs, based on content of texlive.tlpdb
+    binToOutput = lib.listToAttrs
+      (lib.concatMap
+        (n: map (v: { name = v; value = builtins.replaceStrings [ "-" ] [ "_" ] n; }) binPackages.${n}.binfiles or [ ])
+        (builtins.attrNames binPackages));
+
+    # (must be run after cleanBrokenLinks)
+    moveBins = ''
+      for bin in "$out/bin"/* ; do
+        bin="''${bin##*/}"
+        package="''${binToOutput[$bin]}"
+        if [[ -n "$package" ]] ; then
+          if [[ -z "''${!package}" ]] ; then
+            echo "WARNING: missing output '$package' for binary '$bin', leaving in 'out'"
+          else
+            mkdir -p "''${!package}"/bin
+            mv "$out/bin/$bin" "''${!package}"/bin/
+          fi
+        else
+          echo "WARNING: no output known for binary '$bin', leaving in 'out'"
+        fi
       done
     '';
   };
@@ -84,18 +122,21 @@ core = stdenv.mkDerivation rec {
   pname = "texlive-bin";
   inherit version;
 
-  inherit (common) src prePatch;
+  __structuredAttrs = true;
 
-  outputs = [ "out" "doc" "dev" ];
+  inherit (common) binToOutput src prePatch;
+
+  outputs = [ "out" "doc" "dev" ]
+    ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (with texlive.bin.core; [
     # configure: error: tangle was not found but is required when cross-compiling.
     # dev (himktables) is used when building hitex to generate the additional source file hitables.c
-    texlive.bin.core
-    texlive.bin.core.dev
-  ];
+    web/*tangle*/ cweb/*ctangle*/ omegaware/*otangle*/ tie/*tie*/ # see "Building TeX Live" 6.4.2 Cross problems
+    dev/*himktables*/
+  ]);
 
   buildInputs = [
     /*teckit*/ zziplib mpfr gmp
@@ -181,7 +222,7 @@ core = stdenv.mkDerivation rec {
   '' + /* install himktables in separate output for use in cross compilation */ ''
      mkdir -p $dev/bin
      cp texk/web2c/.libs/himktables $dev/bin/himktables
-  '' + cleanBrokenLinks;
+  '' + cleanBrokenLinks + common.moveBins;
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
   passthru = { inherit version buildInputs; };

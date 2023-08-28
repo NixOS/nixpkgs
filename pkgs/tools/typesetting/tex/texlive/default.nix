@@ -19,6 +19,7 @@ let
       withIcu = true; withGraphite2 = true;
     };
     inherit useFixedHashes;
+    tlpdb = overriddenTlpdb;
   };
 
   # function for creating a working environment from a set of TL packages
