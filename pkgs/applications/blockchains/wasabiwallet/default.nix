@@ -31,11 +31,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wasabiwallet";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/Wasabi-${version}.tar.gz";
-    sha256 = "sha256-RlWaeOK6XqxyCIQQp1/X6iG9t7f3ER5K+S3ZvPg6wBg=";
+    sha256 = "sha256-VYyf9rKBRPpnxuaeO6aAq7cQwDfBRLRbH4SlPS+bxFQ=";
   };
 
   dontBuild = true;
@@ -60,6 +60,10 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${dotnet-runtime}/bin/dotnet" "$out/bin/${pname}" \
       --add-flags "$out/opt/${pname}/WalletWasabi.Fluent.Desktop.dll" \
+      --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
+
+    makeWrapper "${dotnet-runtime}/bin/dotnet" "$out/bin/${pname}d" \
+      --add-flags "$out/opt/${pname}/WalletWasabi.Daemon.dll" \
       --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
 
     cp -v $desktopItem/share/applications/* $out/share/applications
