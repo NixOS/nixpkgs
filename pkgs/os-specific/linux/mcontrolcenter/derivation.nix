@@ -57,6 +57,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     description = "An application that allows you to change the settings of MSI laptops running Linux.";
     licencse = licenses.gpl3;
     platforms = with platforms; linux;
-    # maintainers = [ maintainers.nadimkobeissi ];
+    maintainers = [ maintainers.nadimkobeissi ];
   };
 })

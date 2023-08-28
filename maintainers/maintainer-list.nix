@@ -11931,6 +11931,13 @@
       fingerprint = "9E6A 25F2 C1F2 9D76 ED00  1932 1261 173A 01E1 0298";
     }];
   };
+  nadimkobeissi = {
+    name = "Nadim Kobeissi";
+    email = "nadim@symbolic.software";
+    github = "nadimkobeissi";
+    githubId = 9953;
+    matrix = "@nadimkobeissi:matrix.org";
+  };
   nadrieril = {
     email = "nadrieril@gmail.com";
     github = "Nadrieril";
