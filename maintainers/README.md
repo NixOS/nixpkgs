@@ -21,7 +21,7 @@ For most packages, we expect committers to wait at least a week before merging
 changes not endorsed by a package maintainer (which may be themselves). This should leave enough time
 for the maintainers to provide feedback.
 
-For critical packages, this convention needs to be negociated with the
+For critical packages, this convention needs to be negotiated with the
 maintainer. A critical package is one that causes mass-rebuild, or where an
 author is listed in the [`CODEOWNERS`](../.github/CODEOWNERS) file.
 
