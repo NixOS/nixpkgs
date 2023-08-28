@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flit-core
 , linkify-it-py
 , markdown-it-py
 , mdformat
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "mdformat-frontmatter";
   version = "2.0.1";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-PhT5whtvvcYSs5gHQEsIvV1evhx7jR+3DWFMHrF0uMw=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   buildInputs = [
     mdformat
