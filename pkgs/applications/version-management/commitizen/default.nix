@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
-  version = "3.5.2";
+  version = "3.7.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4m3NCnGUX9lHCk6czwzxXLqf8GLi2u2A/crBZYTyplA=";
+    hash = "sha256-KfPIGQ4kIjV/Vuza5wdzp0R62LUluJQ5tY6I8BPFmGk=";
   };
 
   pythonRelaxDeps = [
