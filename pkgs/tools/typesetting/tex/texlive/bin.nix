@@ -206,7 +206,7 @@ core = stdenv.mkDerivation rec {
 
 inherit (core-big) metafont mflua metapost luatex luahbtex xetex;
 luajittex = core.big.luajittex or null;
-core-big = stdenv.mkDerivation { #TODO: upmendex
+core-big = stdenv.mkDerivation {
   pname = "texlive-core-big.bin";
   inherit version;
 
@@ -260,7 +260,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       texk/{afm2pl,bibtex-x,chktex,cjkutils,detex,dtl,dvi2tty,dvidvi,dviljk,dviout-util} \
       texk/{dvipdfm-x,dvipng,dvipos,dvipsk,dvisvgm,gregorio,gsftopk,kpathsea} \
       texk/{lcdf-typetools,makeindexk,makejvf,mendexk,musixtnt,ps2pk,psutils,ptexenc} \
-      texk/{seetexk,tex4htk,texlive,ttf2pk2,ttfdump,upmendex,xdvik} \
+      texk/{seetexk,tex4htk,texlive,ttf2pk2,ttfdump,xdvik} \
       utils/{asymptote,autosp,axodraw2,devnag,lacheck,m-tx,pmx,ps2eps,t1utils,texdoctk} \
       utils/{tpic2pdftex,vlna,xindy,xml2pmx,xpdfopen}
     mkdir WorkDir
@@ -274,8 +274,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       ([ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "hitex" "pdftex"
         "web-progs" "synctex"
       ] ++ lib.optionals (!withLuaJIT) [ "luajittex" "luajithbtex" "mfluajit" ])
-    /* disable all packages, re-enable web2c package */
-    ++ [ "--disable-all-pkgs" "--enable-web2c" ]
+    /* disable all packages, re-enable upmendex, web2c packages */
+    ++ [ "--disable-all-pkgs" "--enable-upmendex" "--enable-web2c" ]
     /* kpathsea requires specifying the kpathsea location manually */
     ++ [ "--with-kpathsea-includes=${core.dev}/include" ];
 

@@ -106,10 +106,6 @@ in lib.recursiveUpdate orig rec {
 
   # remove man
   texlive-scripts.binfiles = lib.remove "man" orig.texlive-scripts.binfiles;
-
-  # upmendex is "TODO" in bin.nix
-  uptex.binfiles = lib.remove "upmendex" orig.uptex.binfiles;
-
   # xindy is broken on some platforms unfortunately
   xindy.binfiles = if bin ? xindy
     then lib.subtractLists [ "xindy.mem" "xindy.run" ] orig.xindy.binfiles
