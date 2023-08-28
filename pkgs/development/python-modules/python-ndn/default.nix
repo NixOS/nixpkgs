@@ -4,16 +4,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , lark
+, poetry-core
+, poetry-dynamic-versioning
 , pycryptodomex
 , pygtrie
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "python-ndn";
-  version = "0.3-3";
+  version = "0.4.1";
 
   format = "pyproject";
 
@@ -21,16 +24,19 @@ buildPythonPackage rec {
     owner = "named-data";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XS71oIydyLYtx6OQGO5NrhjVSyZxnhufrZ1y/6TffPo=";
+    hash = "sha256-ArTP4LQu7VNjI/N13gMTc1SDiNmW5l4GdLYOk8JEfKg=";
   };
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   nativeBuildInputs = [
     setuptools
+    poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
+    poetry-dynamic-versioning
     pycryptodomex
     lark
     pygtrie
@@ -42,7 +48,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "ndn" ];
+  pythonRelaxDeps = [
+    "lark"
+  ];
+
+  pythonImportChecks = [ "ndn" ];
 
   meta = with lib; {
     description = "An NDN client library with AsyncIO support";
