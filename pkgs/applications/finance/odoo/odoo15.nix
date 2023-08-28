@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, python310, nodePackages, wkhtmltopdf
+{ stdenv, lib, fetchFromGitHub, fetchzip, python310, nodePackages, wkhtmltopdf
 , nixosTests }:
 
 let
@@ -38,7 +38,7 @@ let
   };
 
   odoo_version = "15.0";
-  odoo_release = "20230720";
+  odoo_release = "20230816";
 in python.pkgs.buildPythonApplication rec {
   pname = "odoo15";
   version = "${odoo_version}.${odoo_release}";
@@ -46,17 +46,11 @@ in python.pkgs.buildPythonApplication rec {
   format = "setuptools";
 
   # latest release is at https://github.com/odoo/docker/blob/master/15.0/Dockerfile
-  src = fetchurl {
-    url =
-      "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.tar.gz";
+  src = fetchzip {
+    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "${pname}-${version}";
-    hash = "sha256-XH4cN2OrPvMjN3VcDJFxCacNxKkrN65jwhUN1dnGwgo="; # odoo
+    hash = "sha256-h81JA0o44DVtl/bZ52rGQfg54TigwQcNpcMjQbi0zIQ="; # odoo
   };
-
-  unpackPhase = ''
-    tar xfz $src
-    cd odoo*
-  '';
 
   # needs some investigation
   doCheck = false;
@@ -115,7 +109,6 @@ in python.pkgs.buildPythonApplication rec {
   dontStrip = true;
 
   passthru = {
-    updateScript = ./update.sh;
     tests = { inherit (nixosTests) odoo15; };
   };
 

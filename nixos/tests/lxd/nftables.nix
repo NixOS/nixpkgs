@@ -20,8 +20,8 @@ import ../make-test-python.nix ({ pkgs, ...} : {
     networking = {
       firewall.enable = false;
       nftables.enable = true;
-      nftables.ruleset = ''
-        table inet filter {
+      nftables.tables."filter".family = "inet";
+      nftables.tables."filter".content = ''
           chain incoming {
             type filter hook input priority 0;
             policy accept;
@@ -36,7 +36,6 @@ import ../make-test-python.nix ({ pkgs, ...} : {
             type filter hook output priority 0;
             policy accept;
           }
-        }
       '';
     };
   };
