@@ -450,12 +450,25 @@ in {
           ];
         };
 
-        mountModified.configuration = {
+        mountOptionsModified.configuration = {
           systemd.mounts = [
             {
               description = "Testmount";
               what = "tmpfs";
               type = "tmpfs";
+              where = "/testmount";
+              options = "size=10M";
+              wantedBy = [ "local-fs.target" ];
+            }
+          ];
+        };
+
+        mountModified.configuration = {
+          systemd.mounts = [
+            {
+              description = "Testmount";
+              what = "ramfs";
+              type = "ramfs";
               where = "/testmount";
               options = "size=10M";
               wantedBy = [ "local-fs.target" ];
@@ -1137,7 +1150,8 @@ in {
         switch_to_specialisation("${machine}", "mount")
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=1024k")
-        out = switch_to_specialisation("${machine}", "mountModified")
+        # Changing options reloads the unit
+        out = switch_to_specialisation("${machine}", "mountOptionsModified")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: testmount.mount\n")
@@ -1147,6 +1161,17 @@ in {
         # It changed
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=10240k")
+        # Changing anything but `Options=` restarts the unit
+        out = switch_to_specialisation("${machine}", "mountModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: testmount.mount\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # It changed
+        out = machine.succeed("mount | grep 'on /testmount'")
+        assert_contains(out, "ramfs")
 
     with subtest("timers"):
         switch_to_specialisation("${machine}", "timer")
