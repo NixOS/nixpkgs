@@ -30,14 +30,14 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 }:
 
 mkDerivation rec {
-  version = "1.4.1";
+  version = "1.4.5";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "sha256-6s78vytYxU7FWGQRO56qgmtZBlHbXMz3iVAbBXycDmI=";
+    sha256 = "sha256-EizKDw5Fv2qXxmiCx4NAvwxBZ+qhTIx4NMZedZ9OuyA=";
   };
 
   buildInputs = [
@@ -70,7 +70,8 @@ mkDerivation rec {
   cmakeFlags = [
     "-DAUTOSTART_EXEC_PATH=${autostartExecPath}"
     # See https://github.com/Martchus/syncthingtray/issues/42
-    "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"
+    "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+    "-DBUILD_SHARED_LIBS=ON"
   ] ++ lib.optionals (!plasmoidSupport) ["-DNO_PLASMOID=ON"]
     ++ lib.optionals (!kioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
