@@ -39337,7 +39337,7 @@ with pkgs;
 
   inherit (callPackage ../development/libraries/science/math/magma {
     inherit (llvmPackages_rocm) openmp;
-  }) magma magma_2_7_1 magma_2_6_2;
+  }) magma magma_2_7_2 magma_2_6_2;
 
   magma-cuda = magma.override {
     cudaSupport = true;
