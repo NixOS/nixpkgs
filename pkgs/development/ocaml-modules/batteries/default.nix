@@ -8,13 +8,13 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-batteries";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "ocaml-batteries-team";
     repo = "batteries-included";
     rev = "v${version}";
-    hash = "sha256-D/0h0/70V8jmzHIUR6i2sT2Jz9/+tfR2dQgp4Bxtimc=";
+    hash = "sha256-FovXArHoaISAz8jqw2z6ttdmozz3BN/lYAP9LY3uaQQ=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
