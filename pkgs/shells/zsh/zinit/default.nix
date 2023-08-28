@@ -26,13 +26,12 @@ stdenvNoCC.mkDerivation rec {
 
     # Zplugin autocompletion
     installShellCompletion --zsh _zinit
+    installManPage doc/*.1
 
     #TODO:Zplugin-module files
     # find zmodules/ -type d -exec install -dm 755 "{}" "$outdir/{}" \;
     # find zmodules/ -type f -exec install -m 744 "{}" "$outdir/{}" \;
-
   '';
-  #TODO:doc output
 
   meta = with lib; {
     homepage = "https://github.com/zdharma-continuum/zinit";
