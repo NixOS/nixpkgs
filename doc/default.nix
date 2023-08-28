@@ -21,6 +21,7 @@ let
       { name = "filesystem"; description = "filesystem functions"; }
       { name = "sources"; description = "source filtering functions"; }
       { name = "cli"; description = "command-line serialization functions"; }
+      { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
     ];
   };
 
