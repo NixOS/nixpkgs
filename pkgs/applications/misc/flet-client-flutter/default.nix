@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , pkg-config
-, python3Packages
 , flutter
 , gst_all_1
 , libunwind
@@ -11,18 +10,16 @@
 
 flutter.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  inherit (python3Packages.flet) version;
+  version = "0.7.4";
 
-  sourceRoot = "source/client"; # the flutter code is not on the root of the repo
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     rev = "v${version}";
-    hash = { # avoid stale hashes after a update
-      "0.7.4" = "sha256-HUT3+Pvys3VI5oHnCTe2JTUyusq8t2890cj2pbf3e6s=";
-    }.${version} or "sha256:${lib.fakeSha256}";
+    hash = "sha256-HUT3+Pvys3VI5oHnCTe2JTUyusq8t2890cj2pbf3e6s=";
   };
+  sourceRoot = "source/client";
 
   depsListFile = ./deps.json;
   vendorHash = "sha256-bDH5Bfr1MkNo8ze1D4RAXfMlCklGnsv9bR+1uSnb2Nw=";

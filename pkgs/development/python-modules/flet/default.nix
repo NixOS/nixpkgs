@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 
 # build-system
 , poetry-core
@@ -15,6 +14,7 @@
 , websocket-client
 , websockets
 
+, flet-client-flutter
 }:
 
 buildPythonPackage rec {
@@ -22,10 +22,8 @@ buildPythonPackage rec {
   version = "0.7.4";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vFPjN+5wIygtP035odAOSdF9PQe6eXz6CJ9Q0d8ScFo=";
-  };
+  inherit (flet-client-flutter) src;
+  sourceRoot = "source/sdk/python/packages/flet";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
