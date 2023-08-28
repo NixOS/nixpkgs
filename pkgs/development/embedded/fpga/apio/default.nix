@@ -2,6 +2,7 @@
 , buildPythonApplication
 , fetchFromGitHub
 , click
+, flit-core
 , semantic-version
 , requests
 , colorama
@@ -16,13 +17,13 @@
 buildPythonApplication rec {
   pname = "apio";
   version = "0.8.1";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "apio";
     rev = "v${version}";
-    sha256 = "sha256-04qAGTzusMT3GsaRxDoXNJK1Mslzxu+ugQclBJx8xzE=";
+    hash = "sha256-04qAGTzusMT3GsaRxDoXNJK1Mslzxu+ugQclBJx8xzE=";
   };
 
   postPatch = ''
@@ -46,6 +47,10 @@ buildPythonApplication rec {
         'version = semantic_version.Version(pkg_version)' \
         'version = semantic_version.Version(pkg_version.replace(".dev", "-dev"))'
   '';
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     click
