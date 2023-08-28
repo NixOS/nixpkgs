@@ -27486,6 +27486,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
   };
 
+  unstructured-api = callPackage ../servers/unstructured-api { };
+
   urserver = callPackage ../servers/urserver { };
 
   uxplay = callPackage ../servers/uxplay { };
