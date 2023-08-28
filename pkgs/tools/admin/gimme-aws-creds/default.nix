@@ -42,14 +42,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gimme-aws-creds";
-  version = "2.7.1"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.7.2"; # N.B: if you change this, check if overrides are still up-to-date
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nike-Inc";
     repo = "gimme-aws-creds";
     rev = "v${version}";
-    hash = "sha256-vn3DzDqu19g6Z/RcWsktJxmeg6oK9NIEyjpH9g1tXNs=";
+    hash = "sha256-ydzGaUQ43vvQqU9xvhPJqHG/2PUtBbASIVpZCDnsR60=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -70,6 +70,11 @@ python.pkgs.buildPythonApplication rec {
     okta
     pyjwt
   ];
+
+  preCheck = ''
+    # Disable using platform's keyring unavailable in sandbox
+    export PYTHON_KEYRING_BACKEND="keyring.backends.fail.Keyring"
+  '';
 
   checkInputs = with python.pkgs; [
     pytestCheckHook
