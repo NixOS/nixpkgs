@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, cryptography
 , django
 , djangorestframework
 , fetchPypi
@@ -30,8 +31,16 @@ buildPythonPackage rec {
     django
     djangorestframework
     pyjwt
-    python-jose
   ];
+
+  passthru.optional-dependencies = {
+    python-jose = [
+      python-jose
+    ];
+    crypto = [
+      cryptography
+    ];
+  };
 
   # Test raises django.core.exceptions.ImproperlyConfigured
   doCheck = false;
