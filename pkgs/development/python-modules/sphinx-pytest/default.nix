@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "sphinx-pytest";
   version = "0.0.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "chrisjsewell";
@@ -17,8 +18,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-vRHPq6BAuhn5QvHG2BGen9v6ezA3RgFVtustsNxU+n8=";
   };
-
-  format = "flit";
 
   nativeBuildInputs = [ flit-core ];
 
