@@ -107,7 +107,29 @@ let
     command = "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus ${toString keys}";
   };
 
-  createImportService = { pool, systemd, force, prefix ? "" }:
+  passwordFallbackKeyScript = {systemd}: ''
+    filesystem="$1"
+    echo "Falling back to password for $filesystem"
+    tries=3
+    success=false
+    while [[ $success != true ]] && [[ $tries -gt 0 ]]; do
+      ${systemd}/bin/systemd-ask-password --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $filesystem:" | ${cfgZfs.package}/sbin/zfs load-key "$filesystem" \
+        && success=true \
+        || tries=$((tries - 1))
+    done
+    [[ $success = true ]]
+  '';
+
+  keyScripts = cfgZfs.keyScripts ++ [passwordFallbackKeyScript];
+
+  createKeyScriptPaths = {systemd}: map (scriptContent:
+          pkgs.writeShellScript "zfs-key-load-script" (
+            if isString scriptContent then scriptContent
+            else (scriptContent { inherit systemd; })
+          )
+  ) keyScripts;
+
+  createImportService = { pool, systemd, force, keyScriptPaths, prefix ? "" }:
     nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
       # We wait for systemd-udev-settle to ensure devices are available,
@@ -158,14 +180,7 @@ let
                 none )
                   ;;
                 prompt )
-                  tries=3
-                  success=false
-                  while [[ $success != true ]] && [[ $tries -gt 0 ]]; do
-                    ${systemd}/bin/systemd-ask-password --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
-                      && success=true \
-                      || tries=$((tries - 1))
-                  done
-                  [[ $success = true ]]
+                  ${concatMapStringsSep " || " (scriptPath: "${scriptPath} \"$ds\"") keyScriptPaths}
                   ;;
                 * )
                   ${cfgZfs.package}/sbin/zfs load-key "$ds"
@@ -312,6 +327,30 @@ in
           are requested. To only decrypt selected datasets supply a list of dataset
           names instead. For root pools the encryption key can be supplied via both
           an interactive prompt (keylocation=prompt) and from a file (keylocation=file://).
+        '';
+      };
+
+      keyScripts = mkOption {
+        type = types.listOf types.string;
+        default = [];
+        example = [
+          ''
+          echo invalid-password | zfs load-key "$1"
+          ''
+          ''
+          echo valid-password | zfs load-key "$1"
+          ''
+        ];
+        description = lib.mdDoc ''
+          Scripts to load encryption keys or passwords for all encrypted datasets.
+
+          Scripts should return a non-zero exit code if it failed to retrieve the key
+          and is giving up. In this case, the next script will be tried. If all
+          scripts fail, the password can be supplied through an interactive prompt.
+          Encrypted datasets should have keylocation=prompt for scripts to be tried.
+          The first argument ($1) of scripts are the dataset's name which is being unlocked.
+
+          Defaults to [], falling back to interactive password prompt.
         '';
       };
 
@@ -621,11 +660,14 @@ in
         '') rootPools));
 
         # Systemd in stage 1
-        systemd = {
+        systemd = let
+          systemdPackage = config.boot.initrd.systemd.package;
+          keyScriptPaths = createKeyScriptPaths { systemd = systemdPackage; };
+        in {
           packages = [cfgZfs.package];
-          services = listToAttrs (map (pool: createImportService {
-            inherit pool;
-            systemd = config.boot.initrd.systemd.package;
+          services = listToAttrs (map (pool: createImportService rec {
+            inherit pool keyScriptPaths;
+            systemd = systemdPackage;
             force = cfgZfs.forceImportRoot;
             prefix = "/sysroot";
           }) rootPools);
@@ -635,6 +677,7 @@ in
             # zpool and zfs are already in thanks to fsPackages
             awk = "${pkgs.gawk}/bin/awk";
           };
+          storePaths = keyScriptPaths;
         };
       };
 
@@ -708,9 +751,10 @@ in
       };
 
       systemd.services = let
-        createImportService' = pool: createImportService {
+        createImportService' = pool: createImportService rec {
           inherit pool;
           systemd = config.systemd.package;
+          keyScriptPaths = createKeyScriptPaths { inherit systemd; };
           force = cfgZfs.forceImportAll;
         };
 
