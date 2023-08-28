@@ -3,10 +3,8 @@
 , fetchFromGitHub
 , qmake
 , nix-update-script
-, substituteAll
 , qtbase
 , qttools
-, qttranslations
 , qtlocation ? null # qt5 only
 , qtpositioning ? null # qt6 only
 , qtpbfimageplugin
@@ -30,12 +28,6 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-Zf2eyDx5QK69W6HNz/IGGHkX2qCDnxYsU8KLCgU9teY=";
   };
-
-  patches = (substituteAll {
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    src = ./fix-qttranslations-path.diff;
-    inherit qttranslations;
-  });
 
   buildInputs = [ qtpbfimageplugin qtserialport ]
     ++ (if isQt6 then [

@@ -13,13 +13,16 @@ let
     packageOverrides = self: super: {
       shapely = super.shapely.overridePythonAttrs (old: rec {
         version = "1.8.4";
+
         src = fetchPypi {
           pname = "Shapely";
           inherit version;
           hash = "sha256-oZXlHKr6IYKR8suqP+9p/TNTyT7EtlsqRyLEz0DDGYw=";
         };
+
         # Environment variable used in shapely/_buildcfg.py
         GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
+
         patches = [
           # Patch to search form GOES .so/.dylib files in a Nix-aware way
           (substituteAll {
@@ -28,6 +31,11 @@ let
             libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
           })
         ];
+
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace 'setuptools<64' 'setuptools'
+        '';
       });
     };
   };

@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , poetry-core
 , pythonOlder
@@ -21,6 +22,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-9hFDj0Cd/F1aChU6WFNJ9agLFpxxArWZTZmZ7PhECGY=";
   };
+
+  patches = [
+    # https://github.com/cohere-ai/cohere-python/pull/289
+    (fetchpatch {
+      name = "replace-poetry-with-poetry-core.patch";
+      url = "https://github.com/cohere-ai/cohere-python/commit/e86480336331c0cf6f67e26b0825467dfca5b277.patch";
+      hash = "sha256-P1Ioq5ypzT3tx6cxrI3ep34Fi4cUx88YkfJ5ErN3VHk=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core

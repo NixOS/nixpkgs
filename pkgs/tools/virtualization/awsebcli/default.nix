@@ -33,6 +33,11 @@ with localPython.pkgs; buildPythonApplication rec {
     hash = "sha256-DxjoEkFnY4aSfxVKPpnJLmnjLtZnlM74XXd0K8mcdoY=";
   };
 
+  postPatch = ''
+    # https://github.com/aws/aws-elastic-beanstalk-cli/pull/469
+    substituteInPlace setup.py --replace "scripts=['bin/eb']," ""
+  '';
+
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];

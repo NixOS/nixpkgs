@@ -474,6 +474,13 @@ let
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
 
+        pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace pikchr-mode.el \
+              --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
+          '';
+        });
+
         rtags = dontConfigure (externalSrc super.rtags pkgs.rtags);
 
         rtags-xref = dontConfigure super.rtags;

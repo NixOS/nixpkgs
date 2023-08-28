@@ -6,7 +6,7 @@ pypaBuildPhase() {
     runHook preBuild
 
     echo "Creating a wheel..."
-    @pythonInterpreter@ -m build --no-isolation --outdir dist/ --wheel $pypaBuildFlags
+    pyproject-build --no-isolation --outdir dist/ --wheel $pypaBuildFlags
     echo "Finished creating a wheel..."
 
     runHook postBuild

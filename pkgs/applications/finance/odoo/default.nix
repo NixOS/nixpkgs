@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchurl
+, fetchzip
 , python310
 , nodePackages
 , wkhtmltopdf
@@ -53,16 +53,11 @@ in python.pkgs.buildPythonApplication rec {
   format = "setuptools";
 
   # latest release is at https://github.com/odoo/docker/blob/master/16.0/Dockerfile
-  src = fetchurl {
-    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.tar.gz";
+  src = fetchzip {
+    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "${pname}-${version}";
-    hash = "sha256-DV5JBY+2gq5mUfcvN9S5xkd+ufgEBjvyvBY1X7pPFPk="; # odoo
+    hash = "sha256-pSycpYSiqJ6DKENvCWwLz+JaPUXT5dmaq8x4Aency60="; # odoo
   };
-
-  unpackPhase = ''
-    tar xfz $src
-    cd odoo*
-  '';
 
   # needs some investigation
   doCheck = false;

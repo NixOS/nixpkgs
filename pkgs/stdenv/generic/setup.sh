@@ -933,7 +933,7 @@ _allFlags() {
     export system pname name version
     for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
         if (( "${NIX_DEBUG:-0}" >= 1 )); then
-            printf "@%s@ -> %q\n" "${varName}" "${!varName}"
+            printf "@%s@ -> %q\n" "${varName}" "${!varName}" >&2
         fi
         args+=("--subst-var" "$varName")
     done

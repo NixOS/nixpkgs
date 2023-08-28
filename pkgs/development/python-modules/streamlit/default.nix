@@ -18,10 +18,12 @@
 , pympler
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , rich
 , tenacity
 , toml
+, tornado
 , typing-extensions
 , tzlocal
 , validators
@@ -30,15 +32,22 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.24.1";
+  version = "1.26.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-/V8LZHmOlwY2RAj7WJt3WVMUpjFdE7LXULljx66X82I=";
+    hash = "sha256-JUdfsVo8yfsYSUXz/JNvARmYvYOG4MiS/r4UyWJb9Ho=";
   };
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  pythonRelaxDeps = [
+    "pillow"
+    "pydeck"
+  ];
 
   propagatedBuildInputs = [
     altair
@@ -60,6 +69,7 @@ buildPythonPackage rec {
     rich
     tenacity
     toml
+    tornado
     typing-extensions
     tzlocal
     validators

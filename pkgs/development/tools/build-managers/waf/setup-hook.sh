@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2206
+
 wafConfigurePhase() {
     runHook preConfigure
 
@@ -7,7 +9,7 @@ wafConfigurePhase() {
     fi
 
     if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then
-        wafConfigureFlags="${prefixKey:---prefix=}$prefix $wafConfigureFlags"
+        local prefixFlag="${prefixKey:---prefix=}$prefix"
     fi
 
     if [ -n "${PKG_CONFIG}" ]; then
@@ -15,13 +17,15 @@ wafConfigurePhase() {
     fi
 
     local flagsArray=(
-        "${flagsArray[@]}"
+        $prefixFlag
         $wafConfigureFlags "${wafConfigureFlagsArray[@]}"
         ${configureTargets:-configure}
     )
+
     if [ -z "${dontAddWafCrossFlags:-}" ]; then
         flagsArray+=(@crossFlags@)
     fi
+
     echoCmd 'configure flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
@@ -38,15 +42,11 @@ wafConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "${dontUseWafConfigure-}" -a -z "${configurePhase-}" ]; then
-    configurePhase=wafConfigurePhase
-fi
-
 wafBuildPhase () {
     runHook preBuild
 
     # set to empty if unset
-    : ${wafFlags=}
+    : "${wafFlags=}"
 
     local flagsArray=(
       ${enableParallelBuilding:+-j ${NIX_BUILD_CORES}}
@@ -60,10 +60,6 @@ wafBuildPhase () {
 
     runHook postBuild
 }
-
-if [ -z "${dontUseWafBuild-}" -a -z "${buildPhase-}" ]; then
-    buildPhase=wafBuildPhase
-fi
 
 wafInstallPhase() {
     runHook preInstall
@@ -85,6 +81,14 @@ wafInstallPhase() {
     runHook postInstall
 }
 
-if [ -z "${dontUseWafInstall-}" -a -z "${installPhase-}" ]; then
+if [ -z "${dontUseWafConfigure-}" ] && [ -z "${configurePhase-}" ]; then
+    configurePhase=wafConfigurePhase
+fi
+
+if [ -z "${dontUseWafBuild-}" ] && [ -z "${buildPhase-}" ]; then
+    buildPhase=wafBuildPhase
+fi
+
+if [ -z "${dontUseWafInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=wafInstallPhase
 fi

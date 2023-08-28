@@ -7,7 +7,6 @@
 , hatchling
 , importlib-metadata
 , ipywidgets
-, jupyterlab
 , psygnal
 , typing-extensions
 , watchfiles
@@ -25,10 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-OUKxmYceEKURJeQTVI7oLT4SdZM90V7BoZf0UykkEV4=";
   };
 
+  # We do not need the jupyterlab build dependency, because we do not need to
+  # build any JS components; these are present already in the PyPI artifact.
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"jupyterlab==3.*"' ""
+  '';
+
   nativeBuildInputs = [
     hatch-jupyter-builder
     hatchling
-    jupyterlab
   ];
 
   propagatedBuildInputs = [

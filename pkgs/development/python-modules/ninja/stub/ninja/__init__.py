@@ -2,6 +2,8 @@ import os
 import subprocess
 import sys
 
+__version__ = '@version@'
+
 BIN_DIR = '@BIN_DIR@'
 
 def _program(name, args):

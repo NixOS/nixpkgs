@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://github.com/coqui-ai/STT/releases/download/v${version}/native_client.tflite.Linux.tar.xz";
     hash = "sha256-RVYc64pLYumQoVUEFZdxfUUaBMozaqgD0h/yiMaWN90=";
   };
-  setSourceRoot = "sourceRoot=`pwd`";
+
+  sourceRoot = ".";
 
   nativeBuildInputs = [
     autoPatchelfHook

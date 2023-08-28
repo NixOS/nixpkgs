@@ -1,6 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub
 , cmake, gcc-arm-embedded, python3Packages
-, qtbase, qtmultimedia, qttranslations, SDL, gtest
+, qtbase, qtmultimedia, qttools, SDL, gtest
 , dfu-util, avrdude
 }:
 
@@ -15,9 +15,9 @@ mkDerivation rec {
     sha256 = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
   };
 
-  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
+  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
 
-  buildInputs = [ qtbase qtmultimedia qttranslations SDL ];
+  buildInputs = [ qtbase qtmultimedia SDL ];
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
@@ -27,7 +27,6 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGTEST_ROOT=${gtest.src}/googletest"
-    "-DQT_TRANSLATIONS_DIR=${qttranslations}/translations"
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"

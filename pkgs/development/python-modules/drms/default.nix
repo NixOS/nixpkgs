@@ -5,10 +5,12 @@
 , pandas
 , six
 , astropy
+, oldest-supported-numpy
 , pytestCheckHook
 , pytest-doctestplus
 , pythonOlder
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -23,7 +25,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    numpy
+    oldest-supported-numpy
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
