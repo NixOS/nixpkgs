@@ -362,7 +362,7 @@ in lib.recursiveUpdate orig rec {
         mkdir -p support/texdoc
         touch support/texdoc/NEWS
 
-        TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+        TEXMFCNF="${lib.head tl.kpathsea.pkgs}/web2c" TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
           "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
           -c texlive_tlpdb=texlive.tlpdb -lM texdoc
 
@@ -372,7 +372,7 @@ in lib.recursiveUpdate orig rec {
 
     # install zsh completion
     postFixup = ''
-      TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$scriptsFolder/../.." \
+      TEXMFCNF="${lib.head tl.kpathsea.pkgs}"/web2c TEXMF="$scriptsFolder/../.." \
         texlua "$out"/bin/texdoc --print-completion zsh > "$TMPDIR"/_texdoc
       substituteInPlace "$TMPDIR"/_texdoc \
         --replace 'compdef __texdoc texdoc' '#compdef texdoc' \

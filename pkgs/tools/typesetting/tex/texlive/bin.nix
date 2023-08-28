@@ -66,10 +66,13 @@ let
 
     configureFlags = [
       "--with-banner-add=/nixos.org"
-      "--disable-missing" "--disable-native-texlive-build"
+      "--disable-missing" # terminate if a requested program or feature must be
+                          # disabled, e.g., due to missing libraries
+      "--disable-native-texlive-build" # do not build for the TeX Live binary distribution
       "--enable-shared" # "--enable-cxx-runtime-hack" # static runtime
       "--enable-tex-synctex"
-      "--disable-linked-scripts"
+      "--disable-texlive" # do not build the texlive (TeX Live scripts) package
+      "--disable-linked-scripts" # do not install the linked scripts
       "-C" # use configure cache to speed up
     ]
       ++ withSystemLibs [
@@ -185,40 +188,15 @@ core = stdenv.mkDerivation rec {
     /* links format -> engine will be regenerated in texlive.combine
        note: for unlinking, the texlinks patch is irrelevant, so we use
        the included texlinks.sh to avoid the dependency on bin.texlinks */ ''
-    PATH="$out/bin:$PATH" sh ../texk/texlive/linked_scripts/texlive-extra/texlinks.sh --cnffile "$out/share/texmf-dist/web2c/fmtutil.cnf" --unlink "$out/bin"
-  '' + /* a few texmf-dist files are useful; take the rest from pkgs */ ''
-    mv "$out/share/texmf-dist/web2c/texmf.cnf" .
-    rm -r "$out/share/texmf-dist"
-    mkdir -p "$out"/share/texmf-dist/{web2c,scripts/texlive/TeXLive}
-    mv ./texmf.cnf "$out/share/texmf-dist/web2c/"
-    cp ../texk/tests/TeXLive/*.pm "$out/share/texmf-dist/scripts/texlive/TeXLive/"
-    cp ../texk/texlive/linked_scripts/scripts.lst "$out/share/texmf-dist/scripts/texlive/"
+    PATH="$out/bin:$PATH" sh ../texk/texlive/linked_scripts/texlive-extra/texlinks.sh --cnffile "../texk/texlive/tl_support/fmtutil.cnf" --unlink "$out/bin"
   '' +
-    (let extraScripts =
-          ''
-            tex4ht/ht.sh
-            tex4ht/htcontext.sh
-            tex4ht/htcopy.pl
-            tex4ht/htlatex.sh
-            tex4ht/htmex.sh
-            tex4ht/htmove.pl
-            tex4ht/httex.sh
-            tex4ht/httexi.sh
-            tex4ht/htxelatex.sh
-            tex4ht/htxetex.sh
-            tex4ht/mk4ht.pl
-            tex4ht/xhlatex.sh
-          '';
-      in
-        ''
-          echo -e 'texmf_scripts="$texmf_scripts\n${extraScripts}"' \
-            >> "$out/share/texmf-dist/scripts/texlive/scripts.lst"
-        '')
-  + /* doc location identical with individual TeX pkgs */ ''
+  /* doc location identical with individual TeX pkgs */ ''
     mkdir -p "$doc/doc"
     mv "$out"/share/{man,info} "$doc"/doc
-  '' + /* remove manpages for utils that live in texlive.texlive-scripts to avoid a conflict in buildEnv */ ''
-    (cd "$doc"/doc/man/man1; rm {fmtutil-sys.1,fmtutil.1,mktexfmt.1,mktexmf.1,mktexpk.1,mktextfm.1,texhash.1,updmap-sys.1,updmap.1})
+  '' + /* remove redundant texmf-dist (content provided by TeX Live packages) */
+  ''
+    rm -fr "$out"/share/texmf-dist
+    rm "$out"/bin/texdoctk # installed even with --disable-linked-scripts
   '' + /* install himktables in separate output for use in cross compilation */ ''
      mkdir -p $dev/bin
      cp texk/web2c/.libs/himktables $dev/bin/himktables
