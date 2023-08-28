@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , click
 , cryptography
 , ecdsa
 , fido2
+, flit-core
 , intelhex
 , pyserial
 , pyusb
@@ -15,7 +17,7 @@
 buildPythonPackage rec {
   pname = "solo-python";
   version = "0.1.1";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -25,6 +27,19 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
+
+  patches = [
+    # https://github.com/solokeys/solo1-cli/pull/166
+    (fetchpatch {
+      name = "replace-flit-with-flit-core.patch";
+      url = "https://github.com/solokeys/solo1-cli/commit/d6abda1fa5b061d8d96c4d4bb6b8da3ba48591e6.patch";
+      hash = "sha256-dDphWP7g0C8yE9Pi0ObPq/8m749GV21FZq9cSIT5FkE=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     click
