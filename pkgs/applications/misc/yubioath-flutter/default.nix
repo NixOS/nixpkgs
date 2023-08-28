@@ -1,5 +1,6 @@
 { lib
-, flutter37
+, writeText
+, flutter
 , python3
 , fetchFromGitHub
 , pcre2
@@ -11,7 +12,7 @@
 , removeReferencesTo
 }:
 
-flutter37.buildFlutterApplication rec {
+flutter.buildFlutterApplication rec {
   pname = "yubioath-flutter";
   version = "6.2.0";
 
@@ -24,10 +25,16 @@ flutter37.buildFlutterApplication rec {
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
+  pubspecLockFile = ./pubspec.lock;
   depsListFile = ./deps.json;
-  vendorHash = "sha256-q/dNj9Pu7zg0HkV2QkXBbXiTsljsSJOqXhvAQlnoLlA=";
+  vendorHash = "sha256-RV7NoXJnd1jYGcU5YE0VV7VlMM7bz2JTMJTImOY3m38=";
 
   postPatch = ''
+    rm -f pubspec.lock
+    ln -s "${writeText "${pname}-overrides.yaml" (builtins.toJSON {
+      dependency_overrides.intl = "^0.18.1";
+    })}" pubspec_overrides.yaml
+
     substituteInPlace linux/CMakeLists.txt \
       --replace "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
