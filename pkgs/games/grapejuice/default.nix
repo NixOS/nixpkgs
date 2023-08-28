@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec  {
     desktop-file-utils
     glib
     wrapGAppsHook
+    python3Packages.pip
   ];
 
   buildInputs = [
