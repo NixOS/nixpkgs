@@ -1,14 +1,14 @@
 { lib, fetchFromGitHub, nimPackages, libX11, libXft, libXinerama }:
 nimPackages.buildNimPackage rec {
   pname = "nimdow";
-  version = "0.7.36";
 
+  version = "0.7.37";
 
   src = fetchFromGitHub {
     owner = "avahe-kellenberger";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+36wxKgboOd3HvGnD555WySzJWGL39DaFXmIaFYtSN8=";
+    hash = "sha256-930wDS0UW65QzpUHHOuM25oi/OhFmG0Q7N05ftu7XlI=";
   };
 
 
