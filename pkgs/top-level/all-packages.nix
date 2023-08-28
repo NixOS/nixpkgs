@@ -25747,6 +25747,8 @@ with pkgs;
 
   yubioath-flutter = callPackage ../applications/misc/yubioath-flutter { };
 
+  flet-client-flutter = callPackage ../applications/misc/flet-client-flutter { };
+
   yyjson = callPackage ../development/libraries/yyjson { };
 
   zchunk = callPackage ../development/libraries/zchunk { };
