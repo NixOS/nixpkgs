@@ -34309,6 +34309,8 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+  ragnarwm = callPackage ../applications/window-managers/ragnarwm {};
+
   rime-cli = callPackage ../applications/office/rime-cli { };
 
   roxctl = callPackage ../applications/networking/cluster/roxctl {
@@ -42170,4 +42172,6 @@ with pkgs;
   wpm = callPackage ../applications/misc/wpm { };
 
   yazi = callPackage ../applications/file-managers/yazi { inherit (darwin.apple_sdk.frameworks) Foundation; };
+
+  ssl-proxy = callPackage ../tools/networking/ssl-proxy { };
 }
