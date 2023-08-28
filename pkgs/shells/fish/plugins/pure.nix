@@ -2,13 +2,13 @@
 
 buildFishPlugin rec {
   pname = "pure";
-  version = "4.1.1";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "pure-fish";
     repo = "pure";
     rev = "v${version}";
-    sha256 = "1x1h65l8582p7h7w5986sc9vfd7b88a7hsi68dbikm090gz8nlxx";
+    hash = "sha256-2ZNb6aB7rIubTfRVRb42xmCdImQmtGGubo0TBwSPHEo=";
   };
 
   # The tests aren't passing either on the project's CI.
