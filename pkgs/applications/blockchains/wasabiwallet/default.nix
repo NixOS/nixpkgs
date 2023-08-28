@@ -3,24 +3,18 @@
 , makeWrapper
 , fetchurl
 , makeDesktopItem
-, curl
-, dotnetCorePackages
 , lttng-ust_2_12
 , fontconfig
-, krb5
 , openssl
 , xorg
 , zlib
 }:
 
 let
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
   # These libraries are dynamically loaded by the application,
   # and need to be present in LD_LIBRARY_PATH
   runtimeLibs = [
-    curl
     fontconfig.lib
-    krb5
     openssl
     stdenv.cc.cc.lib
     xorg.libX11
@@ -58,12 +52,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/${pname} $out/bin $out/share/applications
     cp -Rv . $out/opt/${pname}
 
-    makeWrapper "${dotnet-runtime}/bin/dotnet" "$out/bin/${pname}" \
-      --add-flags "$out/opt/${pname}/WalletWasabi.Fluent.Desktop.dll" \
+    makeWrapper "$out/opt/${pname}/wassabee" "$out/bin/${pname}" \
       --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
 
-    makeWrapper "${dotnet-runtime}/bin/dotnet" "$out/bin/${pname}d" \
-      --add-flags "$out/opt/${pname}/WalletWasabi.Daemon.dll" \
+    makeWrapper "$out/opt/${pname}/wassabeed" "$out/bin/${pname}d" \
       --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
 
     cp -v $desktopItem/share/applications/* $out/share/applications
