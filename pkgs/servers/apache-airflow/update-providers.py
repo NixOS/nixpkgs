@@ -21,6 +21,7 @@ PKG_PREFERENCES = {
     "dnspython": "dnspython",
     "elasticsearch-dsl": "elasticsearch-dsl",
     "google-api-python-client": "google-api-python-client",
+    "protobuf": "protobuf",
     "psycopg2-binary": "psycopg2",
     "requests_toolbelt": "requests-toolbelt",
 }

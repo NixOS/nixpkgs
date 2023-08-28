@@ -26,6 +26,7 @@
 , flask-session
 , flask-wtf
 , gitpython
+, google-re2
 , graphviz
 , gunicorn
 , httpx
@@ -82,7 +83,7 @@
 , enabledProviders ? []
 }:
 let
-  version = "2.6.2";
+  version = "2.6.3";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
@@ -91,7 +92,7 @@ let
     # Download using the git protocol rather than using tarballs, because the
     # GitHub archive tarballs don't appear to include tests
     forceFetchGit = true;
-    hash = "sha256-ejZw71lMhfnqy4Ziha8/ufmX+SkOfopkeCskf02ZQgA=";
+    hash = "sha256-7+Zo+kfzB1f4R5HDSxGvjVfGeep/sJy1POxy5ZVi+w8=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -167,6 +168,7 @@ buildPythonPackage rec {
     flask-wtf
     flask-login
     gitpython
+    google-re2
     graphviz
     gunicorn
     httpx
