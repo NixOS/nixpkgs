@@ -8378,7 +8378,7 @@ with pkgs;
   })
     garage
       garage_0_7 garage_0_8
-      garage_0_7_3 garage_0_8_2;
+      garage_0_7_3 garage_0_8_3;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin { };
 
