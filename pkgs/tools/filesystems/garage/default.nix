@@ -57,7 +57,7 @@ let
       "sqlite"
     ]);
 
-    passthru = nixosTests.garage;
+    passthru.tests = nixosTests.garage;
 
     meta = {
       description = "S3-compatible object store for small self-hosted geo-distributed deployments";
