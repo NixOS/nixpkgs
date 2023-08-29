@@ -584,6 +584,8 @@ self: super: with self; {
 
   apispec-webframeworks = callPackage ../development/python-modules/apispec-webframeworks { };
 
+  apkit = callPackage ../development/python-modules/apkit { };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   app-model = callPackage ../development/python-modules/app-model { };
