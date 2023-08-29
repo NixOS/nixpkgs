@@ -17,4 +17,8 @@ in {
 
   sources = import ./sources.nix;
 
+  # Components
+
+  tqt3 = callPackage ./tqt3 { };
+
 })
