@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication rec  {
     unidecode
     click
     pydantic
+    pip
   ];
 
   dontWrapGApps = true;
