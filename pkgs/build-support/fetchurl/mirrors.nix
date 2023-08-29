@@ -284,6 +284,18 @@
     "ftp://ftp.funet.fi/pub/unix/shells/tcsh/old/"
   ];
 
+  # Trinity Desktop Environment
+  # Mirrorlist taken from https://www.trinitydesktop.org/mirrorstatus.php
+  tde = [
+    "https://mirror.ppa.trinitydesktop.org/trinity/"
+    "https://tde-mirror.yosemite.net/trinity/"
+    "http://kuiper.mirrorservice.org/sites/trinitydesktop.org/trinity/"
+    "http://copernicus.mirrorservice.org/sites/trinitydesktop.org/trinity/"
+    "http://ftp.fau.de/trinity/"
+    "http://tde-mirror-01.inet-design.com/trinity/"
+    "http://mirror.nasutek.com/trinity/"
+  ];
+
   # XFCE
   xfce = [
     "https://archive.xfce.org/"
