@@ -191,6 +191,7 @@
 , "mathjax"
 , "meat"
 , "mocha"
+, "@mockoon/cli"
 , "multi-file-swagger"
 , "musescore-downloader"
 , "near-cli"
