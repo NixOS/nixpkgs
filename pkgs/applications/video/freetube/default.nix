@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron }:
+{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron_22 }:
 
 stdenv.mkDerivation rec {
   pname = "freetube";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar
   '';
 
