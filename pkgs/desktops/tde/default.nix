@@ -13,4 +13,8 @@ in {
     inherit (pkgs) fetchurl;
   };
 
+  # Sources
+
+  sources = import ./sources.nix;
+
 })
