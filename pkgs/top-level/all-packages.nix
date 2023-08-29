@@ -26596,6 +26596,8 @@ with pkgs;
 
   phlare = callPackage ../servers/monitoring/phlare { };
 
+  pyroscope = callPackage ../servers/monitoring/pyroscope { };
+
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
