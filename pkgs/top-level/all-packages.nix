@@ -3078,6 +3078,8 @@ with pkgs;
 
   termsyn = callPackage ../data/fonts/termsyn { };
 
+  timedoctor-desktop = callPackage ../applications/office/timedoctor-desktop { };
+
   tvnamer = callPackage ../tools/misc/tvnamer { };
 
   twine = with python3Packages; toPythonApplication twine;

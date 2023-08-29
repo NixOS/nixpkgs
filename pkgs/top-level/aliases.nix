@@ -1728,7 +1728,7 @@ mapAliases ({
   thunderbird-bin-68 = thunderbird-68;
   thunderbird-wayland = thunderbird; # Added 2022-11-15
   timescale-prometheus = promscale; # Added 2020-09-29
-  timedoctor = throw "'timedoctor' has been removed from nixpkgs"; # Added 2022-10-09
+  timedoctor = timedoctor-desktop; # Added 2023-08-29
   timetable = throw "timetable has been removed, as the upstream project has been abandoned"; # Added 2021-09-05
   tinygltf = throw "TinyglTF has been embedded in draco due to lack of other users and compatibility breaks."; # Added 2023-06-25
   tixati = throw "'tixati' has been removed from nixpkgs as it is unfree and unmaintained"; # Added 2023-03-17
