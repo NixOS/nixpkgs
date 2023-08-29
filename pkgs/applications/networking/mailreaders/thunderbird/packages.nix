@@ -22,6 +22,7 @@ rec {
       changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
       homepage = "https://thunderbird.net/";
+      mainProgram = "thunderbird";
       maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
       platforms = platforms.unix;
       badPlatforms = platforms.darwin;
@@ -59,6 +60,7 @@ rec {
       changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
       homepage = "https://thunderbird.net/";
+      mainProgram = "thunderbird";
       maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
       platforms = platforms.unix;
       badPlatforms = platforms.darwin;

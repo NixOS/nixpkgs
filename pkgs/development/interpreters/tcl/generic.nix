@@ -1,4 +1,5 @@
-{ lib, stdenv, callPackage, makeSetupHook
+{ lib, stdenv, callPackage, makeSetupHook, runCommand
+, tzdata
 
 # Version specific stuff
 , release, version, src
@@ -7,13 +8,21 @@
 
 let
   baseInterp =
-    stdenv.mkDerivation {
+    stdenv.mkDerivation rec {
       pname = "tcl";
       inherit version src;
 
       outputs = [ "out" "man" ];
 
       setOutputFlags = false;
+
+      postPatch = ''
+        substituteInPlace library/clock.tcl \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
+          --replace "/usr/share/lib/zoneinfo" "" \
+          --replace "/usr/lib/zoneinfo" "" \
+          --replace "/usr/local/etc/zoneinfo" ""
+      '';
 
       preConfigure = ''
         cd unix
@@ -55,6 +64,12 @@ let
           name = "tcl-package-hook";
           propagatedBuildInputs = [ buildPackages.makeWrapper ];
         } ./tcl-package-hook.sh) {};
+        # verify that Tcl's clock library can access tzdata
+        tests.tzdata = runCommand "${pname}-test-tzdata" {} ''
+          ${baseInterp}/bin/tclsh <(echo "set t [clock scan {2004-10-30 05:00:00} \
+                                        -format {%Y-%m-%d %H:%M:%S} \
+                                        -timezone :America/New_York]") > $out
+        '';
       };
     };
 

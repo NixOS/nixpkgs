@@ -4,32 +4,36 @@
 , pythonOlder
 , azure-common
 , azure-mgmt-core
-, msrest
-, msrestazure
+, isodate
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
   pname = "azure-mgmt-appcontainers";
+  version = "3.0.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ccdIdvdgTYPWEZCWqkLc8lEuMuAEERvl5B1huJyBkvU=";
-    extension = "zip";
+    hash = "sha256-oqKPEOnZaIU7IMzDqT552IBJr9RtWt3vFO3SlG8igs0=";
   };
 
   propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
-    msrest
-    msrestazure
+    isodate
+  ]  ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.mgmt.appcontainers" ];
+  pythonImportsCheck = [
+    "azure.mgmt.appcontainers"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure Appcontainers Management Client Library for Python";

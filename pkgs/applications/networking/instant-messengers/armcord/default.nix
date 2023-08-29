@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src =
     let
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          hash = "sha256-d8Xv9ecXxkUAIqCS82VKlLNne56hESYvYtSDvNvGul0=";
+          hash = "sha256-IUHcDHIJeGx7QKjxl3fUFHqUfs1JdIFxesvDXt3mVw0=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          hash = "sha256-yqZ4hl+E4IEEEuKhfyDYY1Lyz5/Nekrf8uxoJr1B8w8=";
+          hash = "sha256-TWVlEjakdRyZmOuBq9HLO+R7y5jmgstFtyEHjf8nxxM=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/ArmCord/ArmCord";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.osl3;
-    maintainers = with maintainers; [ wrmilling ];
+    maintainers = with maintainers; [ ludovicopiero wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "armcord";
   };

@@ -1,9 +1,10 @@
-self: super: with self;
+self: dontUse: with self;
 
 let
-  pythonInterpreter = super.python.pythonForBuild.interpreter;
-  pythonSitePackages = super.python.sitePackages;
-  pythonCheckInterpreter = super.python.interpreter;
+  inherit (python) pythonForBuild;
+  pythonInterpreter = pythonForBuild.interpreter;
+  pythonSitePackages = python.sitePackages;
+  pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in {
   makePythonHook = args: pkgs.makeSetupHook ({passthru.provides.setupHook = true; } // args);
@@ -66,11 +67,9 @@ in {
     makePythonHook {
       name = "pypa-build-hook.sh";
       propagatedBuildInputs = [ build wheel ];
-      substitutions = {
-        inherit pythonInterpreter;
-      };
-    } ./pypa-build-hook.sh) {};
-
+    } ./pypa-build-hook.sh) {
+      inherit (pythonForBuild.pkgs) build;
+    };
 
   pipInstallHook = callPackage ({ makePythonHook, pip }:
     makePythonHook {
@@ -80,6 +79,17 @@ in {
         inherit pythonInterpreter pythonSitePackages;
       };
     } ./pip-install-hook.sh) {};
+
+  pypaInstallHook = callPackage ({ makePythonHook, installer }:
+    makePythonHook {
+      name = "pypa-install-hook";
+      propagatedBuildInputs = [ installer ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./pypa-install-hook.sh) {
+      inherit (pythonForBuild.pkgs) installer;
+    };
 
   pytestCheckHook = callPackage ({ makePythonHook, pytest }:
     makePythonHook {
@@ -134,9 +144,8 @@ in {
   pythonRelaxDepsHook = callPackage ({ makePythonHook, wheel }:
     makePythonHook {
       name = "python-relax-deps-hook";
-      propagatedBuildInputs = [ wheel ];
       substitutions = {
-        inherit pythonInterpreter;
+        inherit pythonInterpreter pythonSitePackages wheel;
       };
     } ./python-relax-deps-hook.sh) {};
 

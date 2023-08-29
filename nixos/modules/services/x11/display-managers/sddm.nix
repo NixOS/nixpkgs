@@ -267,6 +267,7 @@ in
 
     environment.systemPackages = [ sddm ];
     services.dbus.packages = [ sddm ];
+    systemd.tmpfiles.packages = [ sddm ];
 
     # We're not using the upstream unit, so copy these: https://github.com/sddm/sddm/blob/develop/services/sddm.service.in
     systemd.services.display-manager.after = [

@@ -11,13 +11,13 @@
 }:
 buildPythonPackage rec {
   pname = "picosvg";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-J06ijF1c3ZKPqKiQha6yqfj8EjFZoZzA6i6UCCrexi8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jG1rfamegnX8GXDwqkGFBFzUeycRLDObJvGbxNk6OpM=";
   };
 
   patches = [

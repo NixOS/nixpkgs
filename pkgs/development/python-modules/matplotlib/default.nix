@@ -8,10 +8,13 @@
 
 # https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst
 # build-system
+, certifi
+, oldest-supported-numpy
 , pkg-config
 , pybind11
 , setuptools
 , setuptools-scm
+, wheel
 
 # native libraries
 , ffmpeg-headless
@@ -116,11 +119,14 @@ buildPythonPackage rec {
     '';
 
   nativeBuildInputs = [
+    certifi
+    numpy
+    oldest-supported-numpy # TODO remove after updating to 3.8.0
     pkg-config
     pybind11
     setuptools
     setuptools-scm
-    numpy
+    wheel
   ] ++ lib.optionals enableGtk3 [
     gobject-introspection
   ];

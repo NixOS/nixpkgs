@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "mscerts";
-  version = "2023.4.26";
+  version = "2023.8.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "ralphje";
     repo = "mscerts";
     rev = "refs/tags/${version}";
-    hash = "sha256-7aiSFMZsUtuSqXQ1jJ3OhyBhzAH70ZX5+NqOtrpRmmw=";
+    hash = "sha256-Oc02yi7N2W/DekmTxdYllN6UBD1phbVdSBN2dcPo1oI=";
   };
 
   # extras_require contains signify -> circular dependency

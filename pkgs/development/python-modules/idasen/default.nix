@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , bleak
 , pyyaml
 , voluptuous
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "idasen";
-  version = "0.9.6";
+  version = "0.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,16 +21,8 @@ buildPythonPackage rec {
     owner = "newAM";
     repo = "idasen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t8w4USDzyS0k5yk0XtQF8fVffzdf+udKSkdveMlseHk=";
+    hash = "sha256-aCVKnKWJlrlKD+74KL9JKlNpMGOzg/iWmB+1IMn0V/E=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "replace-poetry-with-poetry-core.patch";
-      url = "https://github.com/newAM/idasen/commit/b9351d5c9def0687e4ae4cb65f38d14ed9ff2df5.patch";
-      hash = "sha256-Qi3psPZExJ5tBJ4IIvDC3JnWf4Gym6Z7akGCV8GZUNY=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core

@@ -110,7 +110,7 @@ in stdenv.mkDerivation {
   # This changes `ir/opt` to `ir/var/empty` in `externals/dynarmic/src/dynarmic/CMakeLists.txt`
   # making the build fail, as that path does not exist
   dontFixCmake = true;
-  patches = [./vulkan_version.patch];
+
   cmakeFlags = [
     # actually has a noticeable performance impact
     "-DYUZU_ENABLE_LTO=ON"

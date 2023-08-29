@@ -322,6 +322,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     mv "$out/bin"/{luatex,texlua,texluac} "$luatex/bin/"
     mv "$out/bin"/luahbtex "$luahbtex/bin/"
     mv "$out/bin"/xetex "$xetex/bin/"
+    cp ../../libs/teckit/teckit_compile "$xetex/bin/"
   '' + lib.optionalString withLuaJIT ''
     mv "$out/bin"/mfluajit{,-nowin} "$mflua/bin/"
     mv "$out/bin"/{luajittex,luajithbtex,texluajit,texluajitc} "$luajittex/bin/"
@@ -470,6 +471,19 @@ xdvi = stdenv.mkDerivation {
       --replace "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
   '';
   # TODO: it's suspicious that mktexpk generates fonts into ~/.texlive2014
+};
+
+xpdfopen = stdenv.mkDerivation {
+  pname = "texlive-xpdfopen.bin";
+  inherit (lib.head texlive.xpdfopen.pkgs) version;
+
+  inherit (common) src;
+
+  buildInputs = [ libX11 ];
+
+  preConfigure = "cd utils/xpdfopen";
+
+  enableParallelBuilding = true;
 };
 
 } # un-indented

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2023.4.4";
+  version = "2023.4.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "natekspencer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vsnxb597HOu1zHXqZjC3rsjyEQYoSNQcXiArzqOWBUQ=";
+    hash = "sha256-y5UZWId3RhOlnq9sHo7eeKOem55/e6F4ioYa+uprZtA=";
   };
 
   nativeBuildInputs = [

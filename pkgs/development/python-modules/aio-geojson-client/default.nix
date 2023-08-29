@@ -31,6 +31,8 @@ buildPythonPackage rec {
     haversine
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     aresponses
     mock

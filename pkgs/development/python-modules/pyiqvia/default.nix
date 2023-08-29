@@ -4,6 +4,7 @@
 , aresponses
 , backoff
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -25,6 +26,20 @@ buildPythonPackage rec {
     hash = "sha256-4xoK/SwpcsjIpGUertWoSlRsKIpgpV1XmuIzDJcZMZg=";
   };
 
+  patches = [
+    # This patch removes references to setuptools and wheel that are no longer
+    # necessary and changes poetry to poetry-core, so that we don't need to add
+    # unnecessary nativeBuildInputs.
+    #
+    #   https://github.com/bachya/pyiqvia/pull/245
+    #
+    (fetchpatch {
+      name = "clean-up-build-dependencies.patch";
+      url = "https://github.com/bachya/pyiqvia/commit/760d5bd1f4d60f3a97f6ea9a9a57860f4be3abdd.patch";
+      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+    })
+  ];
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -33,6 +48,8 @@ buildPythonPackage rec {
     aiohttp
     backoff
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

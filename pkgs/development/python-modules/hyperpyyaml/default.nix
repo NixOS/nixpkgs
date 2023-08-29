@@ -1,9 +1,9 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
-, pytestCheckHook
 , pyyaml
 , ruamel-yaml
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -35,5 +35,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/speechbrain/HyperPyYAML/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ GaetanLepage ];
+    # hyperpyyaml is not compatible with the too new version of `ruaml-yaml`
+    broken = true;
   };
 }

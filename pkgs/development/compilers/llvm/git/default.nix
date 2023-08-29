@@ -313,6 +313,19 @@ in let
       # what stdenv we use here, as long as CMake is happy.
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
+        # Note that if we use the regular stdenv here we'll get cycle errors
+        # when attempting to use this compiler in the stdenv.
+        #
+        # The final stdenv pulls `cxx-headers` from the package set where
+        # hostPlatform *is* the target platform which means that `stdenv` at
+        # that point attempts to use this toolchain.
+        #
+        # So, we use `stdenv_` (the stdenv containing `clang` from this package
+        # set, defined below) to sidestep this issue.
+        #
+        # Because we only use `cxx-headers` in `libcxxabi` (which depends on the
+        # clang stdenv _anyways_), this is okay.
+        stdenv = stdenv_;
         headersOnly = true;
       };
 

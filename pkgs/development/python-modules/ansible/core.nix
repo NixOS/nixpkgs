@@ -13,6 +13,7 @@
 , ncclient
 , packaging
 , paramiko
+, ansible-pylibssh
 , passlib
 , pexpect
 , psutil
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     lxml
     ncclient
     paramiko
+    ansible-pylibssh
     pexpect
     psutil
     pycrypto

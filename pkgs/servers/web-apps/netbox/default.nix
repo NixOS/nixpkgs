@@ -17,20 +17,23 @@ in
       })
     ];
 
-    tests.netbox = nixosTests.netbox_3_3;
+    tests = {
+      netbox = nixosTests.netbox_3_3;
+      inherit (nixosTests) netbox-upgrade;
+    };
     maintainers = with lib.maintainers; [ n0emis raitobezarius ];
     eol = true;
   };
 
   netbox = callPackage generic {
-    version = "3.5.6";
-    hash = "sha256-n5EJQcC5uVoL5KjGzF7bLF8c4Wke/YBJpx2V9KZz5Qo=";
+    version = "3.5.8";
+    hash = "sha256-i8LwMZYItDG5wz0yVn59710R615i81/KYT58og1Ut6A=";
     extraPatches = [
       # Allow setting the STATIC_ROOT from within the configuration and setting a custom redis URL
       ./config.patch
     ];
     tests = {
-      inherit (nixosTests) netbox;
+      inherit (nixosTests) netbox netbox-upgrade;
     };
 
     maintainers = with lib.maintainers; [ minijackson n0emis raitobezarius ];

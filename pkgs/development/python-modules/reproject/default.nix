@@ -6,6 +6,7 @@
 , cython
 , fetchPypi
 , numpy
+, oldest-supported-numpy
 , pytest-astropy
 , pytestCheckHook
 , pythonOlder
@@ -25,9 +26,16 @@ buildPythonPackage rec {
     hash = "sha256-OKxPPKcVVrEVUGR8Zaphn7ur9HOuqQKa9gnMo2RQQME=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "cython==" "cython>="
+  '';
+
   nativeBuildInputs = [
     astropy-extension-helpers
     cython
+    numpy
+    oldest-supported-numpy
     setuptools-scm
   ];
 

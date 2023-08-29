@@ -21,7 +21,18 @@ buildPythonPackage rec {
     hash = "sha256-kym7949VI6C+62p3IOQ2QIzWnuSBcrmySb83oqUwhjI=";
   };
 
-  nativeBuildInputs = [ hatchling hatch-jupyter-builder ];
+  # We do not need the jupyterlab build dependency, because we do not need to
+  # build any JS components; these are present already in the PyPI artifact.
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"jupyterlab==3.*",' ""
+  '';
+
+  nativeBuildInputs = [
+    hatchling
+    hatch-jupyter-builder
+  ];
 
   propagatedBuildInputs = [ ipywidgets jupyter-ui-poll ];
 

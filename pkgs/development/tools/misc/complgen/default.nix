@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "complgen";
-  version = "unstable-2023-08-07";
+  version = "unstable-2023-08-22";
 
   src = fetchFromGitHub {
     owner = "adaszko";
     repo = "complgen";
-    rev = "7c81398e66e5728e0247b61e2210aad0b7a1d002";
-    hash = "sha256-ToyvyXuesBKxi8qLo1YLUvIlhjEmkoiOu8+inPCgyU8=";
+    rev = "8c9b9c51f3465c6d858e15f442b63e94b2f5ed1b";
+    hash = "sha256-oYRaH3FbAFY7QujgFpUDD8gVam4+Gm9qROxCTMYBg9I=";
   };
 
-  cargoHash = "sha256-fH+yeuup2USkW8L2/CEmSx++u0wHrCsMuugCmJ+L6jw=";
+  cargoHash = "sha256-LHnIIkQLuY+A09qhxSiyLmUpX/dES7xBE5m1uRPI0i0=";
 
   meta = with lib; {
     description = "Generate {bash,fish,zsh} completions from a single EBNF-like grammar";

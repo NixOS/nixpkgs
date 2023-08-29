@@ -92,12 +92,7 @@ rec {
       passAsFile = [ "content" ];
     } else {
       contentPath = content;
-    }) // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
-      # post-link-hook expects codesign_allocate to be in PATH
-      # https://github.com/NixOS/nixpkgs/issues/154203
-      # https://github.com/NixOS/nixpkgs/issues/148189
-      nativeBuildInputs = [ stdenv.cc.bintools ];
-    } // lib.optionalAttrs (nameOrPath == "/bin/${name}") {
+    }) // lib.optionalAttrs (nameOrPath == "/bin/${name}") {
       meta.mainProgram = name;
     }) ''
       ${compileScript}

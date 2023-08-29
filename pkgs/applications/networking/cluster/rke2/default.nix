@@ -35,5 +35,6 @@ buildGoModule rec {
     changelog = "https://github.com/rancher/rke2/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm zygot ];
+    mainProgram = "rke2";
   };
 }

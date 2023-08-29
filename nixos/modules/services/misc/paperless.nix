@@ -43,6 +43,8 @@ let
       "-/etc/nsswitch.conf"
       "-/etc/hosts"
       "-/etc/localtime"
+      "-/etc/ssl/certs"
+      "-/etc/static/ssl/certs"
       "-/run/postgresql"
     ] ++ (optional enableRedis redisServer.unixSocket);
     BindPaths = [

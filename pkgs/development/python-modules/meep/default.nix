@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
+, mpiCheckPhaseHook
 , gfortran
 , mpi
 , blas
@@ -108,15 +109,11 @@ buildPythonPackage rec {
   errors can be caught.
   */
   doCheck = true;
+  nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
   checkPhase = ''
-    export PATH=$PATH:${openssh}/bin
+    runHook preCheck
+
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-    export OMP_NUM_THREADS=1
-
-    # Fix to make mpich run in a sandbox
-    export HYDRA_IFACE=lo
-    export OMPI_MCA_rmaps_base_oversubscribe=1
 
     # Generate a python test script
     cat > test.py << EOF
@@ -139,6 +136,8 @@ buildPythonPackage rec {
     EOF
 
     ${mpi}/bin/mpiexec -np 2 python3 test.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {

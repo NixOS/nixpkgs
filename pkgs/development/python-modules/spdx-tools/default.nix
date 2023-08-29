@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "spdx";
     repo = "tools-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TMiaxapJuiLqm+x9K49MIzeWOE/CRAI+M1+9OeU0YvM=";
+    hash = "sha256-/iBy6i4J/IiJzfNdW6pN3VTE9PVED4ckoe4OBlw8wnI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

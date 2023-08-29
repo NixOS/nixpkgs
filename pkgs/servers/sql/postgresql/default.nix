@@ -311,46 +311,48 @@ let
   };
 
   mkPackages = self: {
+    # TODO: remove ahead of 23.11 branchoff
+    # "PostgreSQL 11 will stop receiving fixes on November 9, 2023"
     postgresql_11 = self.callPackage generic {
-      version = "11.20";
+      version = "11.21";
       psqlSchema = "11.1"; # should be 11, but changing it is invasive
-      hash = "sha256-PXyIgvZKfphTSgRCV9/uerrXelt9oSUI2F1yK5i1rM4=";
+      hash = "sha256-B7CDdHHV3XeyUWazRxjzuhCBa2rWHmkeb8VHzz/P+FA=";
       this = self.postgresql_11;
       thisAttr = "postgresql_11";
       inherit self;
     };
 
     postgresql_12 = self.callPackage generic {
-      version = "12.15";
+      version = "12.16";
       psqlSchema = "12";
-      hash = "sha256-u1IG4oZMHEV5k4uW6mCW0VXyKr8tLMKqV1cePEyxKzY=";
+      hash = "sha256-xfH/96D5Ph7DdGQXsFlCkOzmF7SZXtlbjVJ68LoOOPM=";
       this = self.postgresql_12;
       thisAttr = "postgresql_12";
       inherit self;
     };
 
     postgresql_13 = self.callPackage generic {
-      version = "13.11";
+      version = "13.12";
       psqlSchema = "13";
-      hash = "sha256-SZL/ZHIDVmtnDU5U3FMXSZomhWyTV20OqVG99r7lC/s=";
+      hash = "sha256-DaHtzuNRS3vHum268MAEmeisFZBmjoeJxQJTpiSfIYs=";
       this = self.postgresql_13;
       thisAttr = "postgresql_13";
       inherit self;
     };
 
     postgresql_14 = self.callPackage generic {
-      version = "14.8";
+      version = "14.9";
       psqlSchema = "14";
-      hash = "sha256-OdOPADBzftA4Nd6+7+47N9M1RizkmV4kl7w41iHr5Fo=";
+      hash = "sha256-sf47qbGn86ljfdFlbf2tKIkBYHP9TTXxO1AUPLu2qO8=";
       this = self.postgresql_14;
       thisAttr = "postgresql_14";
       inherit self;
     };
 
     postgresql_15 = self.callPackage generic {
-      version = "15.3";
+      version = "15.4";
       psqlSchema = "15";
-      hash = "sha256-/8fUiR8A/79cP06rf7vO2EYLjA7mPFpRZxM7nmWZ2TI=";
+      hash = "sha256-uuxaS9xENzNmU7bLXZ7Ym+W9XAxYuU4L7O4KmZ5jyPk=";
       this = self.postgresql_15;
       thisAttr = "postgresql_15";
       inherit self;

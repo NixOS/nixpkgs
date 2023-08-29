@@ -16,7 +16,7 @@
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.64";
+  version = "9.2.65";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wF3T8Kr09jqe4b/qctKXzFAnaTTtOkceHEoEN8J0mTs=";
+    hash = "sha256-reJRy2KNk4YrkPkVH7eitMVS7V9MPTZNjo9+Wmgx5vQ=";
   };
 
   nativeBuildInputs = [

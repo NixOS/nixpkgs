@@ -1,9 +1,9 @@
 {
   "bookmarks": {
-    "sha256": "0xx331bgly91y8ncxk36ha3ncrr2xlivblfi7rix6ffkrdx73yb9",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.0.1/bookmarks-13.0.1.tar.gz",
-    "version": "13.0.1",
-    "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP v7.4+\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
+    "sha256": "16j10gj5nghgji36jhng60291wl4h9c3vndjx9j8jij9qn6hz23f",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.1.0/bookmarks-13.1.0.tar.gz",
+    "version": "13.1.0",
+    "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
       "agpl"
@@ -140,9 +140,9 @@
     ]
   },
   "news": {
-    "sha256": "1z08k8xnyv71zj0djlv339faq9lx23mlqgjanf2jhv6jhh8cy5c6",
-    "url": "https://github.com/nextcloud/news/releases/download/22.0.0/news.tar.gz",
-    "version": "22.0.0",
+    "sha256": "1j9dhqz5anwsmw3f8hbhvqc2h1fp15zmxzdbpnz1p3vwqf8f5cjs",
+    "url": "https://github.com/nextcloud/news/releases/download/23.0.0/news.tar.gz",
+    "version": "23.0.0",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [

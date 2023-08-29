@@ -6,16 +6,17 @@ set -euf -o pipefail
 V_PACKAGES=(
     "vulkan-headers"
     "vulkan-loader"
-    "spirv-tools"
     "vulkan-validation-layers"
     "vulkan-tools"
     "vulkan-tools-lunarg"
     "vulkan-extension-layer"
+    "vulkan-utility-libraries"
 )
 
 SDK_PACKAGES=(
     "spirv-headers"
     "spirv-cross"
+    "spirv-tools"
 )
 
 nix-update glslang --version-regex '(\d+\.\d+\.\d+)' --commit

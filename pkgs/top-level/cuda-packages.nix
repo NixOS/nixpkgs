@@ -47,6 +47,8 @@ let
 
     nccl = final.callPackage ../development/libraries/science/math/nccl { };
 
+    nccl-tests = final.callPackage ../development/libraries/science/math/nccl/tests.nix { };
+
     autoAddOpenGLRunpathHook = final.callPackage ( { makeSetupHook, addOpenGLRunpath }:
       makeSetupHook {
         name = "auto-add-opengl-runpath-hook";

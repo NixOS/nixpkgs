@@ -2412,6 +2412,38 @@ let
         };
       };
 
+      ms-python.black-formatter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "black-formatter";
+          publisher = "ms-python";
+          version = "2023.4.1";
+          sha256 = "sha256-IJaLke0WF1rlKTiuwJHAXDQB1SS39AoQhc4iyqqlTyY=";
+        };
+        meta = with lib; {
+          description = "Formatter extension for Visual Studio Code using black";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter";
+          homepage = "https://github.com/microsoft/vscode-black-formatter";
+          license = licenses.mit;
+          maintainers = with maintainers; [ sikmir ];
+        };
+      };
+
+      ms-python.isort = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "isort";
+          publisher = "ms-python";
+          version = "2023.10.1";
+          sha256 = "sha256-NRsS+mp0pIhGZiqxAMXNZ7SwLno9Q8pj+RS1WB92HzU=";
+        };
+        meta = with lib; {
+          description = "Import sorting extension for Visual Studio Code using isort";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.isort";
+          homepage = "https://github.com/microsoft/vscode-isort";
+          license = licenses.mit;
+          maintainers = with maintainers; [ sikmir ];
+        };
+      };
+
       ms-python.python = callPackage ./ms-python.python { };
 
       ms-python.vscode-pylance = buildVscodeMarketplaceExtension {
@@ -2575,6 +2607,22 @@ let
           homepage = "https://github.com/microsoft/vscode-themes";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.ratsclub ];
+        };
+      };
+
+      ms-vscode-remote.remote-containers = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "remote-containers";
+          publisher = "ms-vscode-remote";
+          version = "0.305.0";
+          sha256 = "sha256-srSRD/wgDbQo9P1uJk8YtcXPZO62keG5kRnp1TmHqOc=";
+        };
+        meta = {
+          description = "Open any folder or repository inside a Docker container.";
+          downloadPage = "Use a container as your development environment";
+          homepage = "https://code.visualstudio.com/docs/devcontainers/containers";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.anthonyroussel ];
         };
       };
 
@@ -2929,6 +2977,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=RoweWilsonFrederiskHolme.wikitext";
           homepage = "https://github.com/Frederisk/Wikitext-VSCode-Extension";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.rapiteanu ];
         };
       };
 

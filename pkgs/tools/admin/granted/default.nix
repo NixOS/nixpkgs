@@ -1,7 +1,10 @@
 { bash
 , buildGoModule
 , fetchFromGitHub
+
+, withFish ? false
 , fish
+
 , lib
 , makeWrapper
 , xdg-utils
@@ -36,6 +39,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    ln -s $out/bin/granted $out/bin/assumego
+
     # Install shell script
     install -Dm755 $src/scripts/assume $out/bin/assume
     substituteInPlace $out/bin/assume \
@@ -44,6 +49,7 @@ buildGoModule rec {
     wrapProgram $out/bin/assume \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
+  '' + lib.optionalString withFish ''
     # Install fish script
     install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
     substituteInPlace $out/share/assume.fish \
@@ -56,5 +62,10 @@ buildGoModule rec {
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ maintainers.ivankovnatsky ];
+    # Could not figure out how to use this application without any hustle. Weird
+    # linking of binary, aliases for god knows what.
+    # https://docs.commonfate.io/granted/usage/assuming-roles.
+    # Will mark as broken until maybe someone fixes it. Switched to aws-sso.
+    broken = true;
   };
 }

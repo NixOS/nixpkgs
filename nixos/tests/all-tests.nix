@@ -210,6 +210,7 @@ in {
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
   darling = handleTest ./darling.nix {};
+  dconf = handleTest ./dconf.nix {};
   deepin = handleTest ./deepin.nix {};
   deluge = handleTest ./deluge.nix {};
   dendrite = handleTest ./matrix/dendrite.nix {};
@@ -341,13 +342,16 @@ in {
   hbase2 = handleTest ./hbase.nix { package=pkgs.hbase2; };
   hbase_2_4 = handleTest ./hbase.nix { package=pkgs.hbase_2_4; };
   hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
+  hddfancontrol = handleTest ./hddfancontrol.nix {};
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
   homepage-dashboard = handleTest ./homepage-dashboard.nix {};
+  honk = runTest ./honk.nix;
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
   oci-containers = handleTestOn ["aarch64-linux" "x86_64-linux"] ./oci-containers.nix {};
   odoo = handleTest ./odoo.nix {};
+  odoo15 = handleTest ./odoo.nix { package = pkgs.odoo15; };
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
@@ -433,7 +437,7 @@ in {
   lightdm = handleTest ./lightdm.nix {};
   lighttpd = handleTest ./lighttpd.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
-  listmonk = handleTest ./listmonk.nix {};
+  listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix {};
   litestream = handleTest ./litestream.nix {};
   lldap = handleTest ./lldap.nix {};
   locate = handleTest ./locate.nix {};
@@ -442,10 +446,8 @@ in {
   loki = handleTest ./loki.nix {};
   luks = handleTest ./luks.nix {};
   lvm2 = handleTest ./lvm2 {};
-  lxd = handleTest ./lxd.nix {};
-  lxd-nftables = handleTest ./lxd-nftables.nix {};
+  lxd = pkgs.recurseIntoAttrs (handleTest ./lxd {});
   lxd-image-server = handleTest ./lxd-image-server.nix {};
-  lxd-ui = handleTest ./lxd-ui.nix {};
   #logstash = handleTest ./logstash.nix {};
   lorri = handleTest ./lorri/default.nix {};
   maddy = discoverTests (import ./maddy { inherit handleTest; });
@@ -525,6 +527,7 @@ in {
   networking.scripted = handleTest ./networking.nix { networkd = false; };
   netbox = handleTest ./web-apps/netbox.nix { inherit (pkgs) netbox; };
   netbox_3_3 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_3; };
+  netbox-upgrade = handleTest ./web-apps/netbox-upgrade.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
   nextcloud = handleTest ./nextcloud {};
@@ -672,6 +675,7 @@ in {
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
+  ragnarwm = handleTest ./ragnarwm.nix {};
   rasdaemon = handleTest ./rasdaemon.nix {};
   readarr = handleTest ./readarr.nix {};
   redis = handleTest ./redis.nix {};
@@ -831,6 +835,7 @@ in {
   uptime-kuma = handleTest ./uptime-kuma.nix {};
   usbguard = handleTest ./usbguard.nix {};
   user-activation-scripts = handleTest ./user-activation-scripts.nix {};
+  user-expiry = runTest ./user-expiry.nix;
   user-home-mode = handleTest ./user-home-mode.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};

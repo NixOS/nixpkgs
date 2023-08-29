@@ -73,6 +73,7 @@ grimshot = stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A helper for screenshots within sway";
     maintainers = with maintainers; [ evils ];
+    mainProgram = "grimshot";
   };
 };
 

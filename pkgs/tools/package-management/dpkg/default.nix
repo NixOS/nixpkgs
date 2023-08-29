@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchgit, perl, gnutar, zlib, bzip2, xz, zstd
-, libmd, makeWrapper, coreutils, autoreconfHook, pkg-config
+{ lib
+, stdenv
+, fetchgit
+, perl
+, gnutar
+, zlib
+, bzip2
+, xz
+, zstd
+, libmd
+, makeWrapper
+, coreutils
+, autoreconfHook
+, pkg-config
+, diffutils
+, glibc ? !stdenv.isDarwin
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +28,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-dselect"
+    "--disable-start-stop-daemon"
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
     "TAR=${gnutar}/bin/tar"
-    (lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
-    (lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
-  ];
+  ] ++ lib.optional stdenv.isDarwin "--disable-linker-optimisations";
 
   enableParallelBuilding = true;
 
@@ -37,7 +50,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
 
     # Dpkg commands sometimes calls out to shell commands
@@ -52,7 +65,10 @@ stdenv.mkDerivation rec {
        --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
        --replace '"rm"' \"${coreutils}/bin/rm\" \
        --replace '"cat"' \"${coreutils}/bin/cat\" \
-       --replace '"diff"' \"${coreutils}/bin/diff\"
+       --replace '"diff"' \"${diffutils}/bin/diff\"
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    substituteInPlace src/main/help.c \
+       --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
   '';
 
   buildInputs = [ perl zlib bzip2 xz zstd libmd ];

@@ -49,7 +49,7 @@
 assert withQt -> qt6 != null;
 
 let
-  version = "4.0.7";
+  version = "4.0.8";
   variant = if withQt then "qt" else "cli";
 in
 stdenv.mkDerivation {
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-CjSf4CfzgiXvmraM3lYBVLSfdDBSuFNIgeatj0OjYSQ=";
+    hash = "sha256-bNg0yhNb1GRsTclNWWO+Bamm2wOnUjVKU+JftJu+LTo=";
   };
 
   cmakeFlags = [

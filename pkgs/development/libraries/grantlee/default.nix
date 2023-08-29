@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "grantlee";
-  version = "5.2.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "steveire";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mAbgzdBdIW1wOTQNBePQuyTgkKdpn1c+zR3H7mXHvgk=";
+    hash = "sha256-enP7b6A7Ndew2LJH569fN3IgPu2/KL5rCmU/jmKb9sY=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];

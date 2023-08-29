@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, setuptools
 
 # build
 , hassil
@@ -11,6 +10,8 @@
 , regex
 , voluptuous
 , python
+, setuptools
+, wheel
 
 # tests
 , pytest-xdist
@@ -32,12 +33,17 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace 'requires = ["setuptools~=62.3", "wheel~=0.37.1"]' 'requires = ["setuptools", "wheel"]'
+  '';
+
   nativeBuildInputs = [
     hassil
     jinja2
     pyyaml
     regex
     setuptools
+    wheel
     voluptuous
   ];
 

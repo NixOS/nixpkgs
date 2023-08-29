@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused nix-prefetch common-updater-scripts node2nix
+#!nix-shell -i bash -p curl gnused nix-prefetch common-updater-scripts node2nix jq
 set -euo pipefail
 
 root="$(dirname "$(readlink -f "$0")")"

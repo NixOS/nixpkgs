@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, qtsvg, qtwebengine, qttranslations, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, cmake, qtsvg, qtwebengine, wrapQtAppsHook, qttools }:
 
 stdenv.mkDerivation rec {
   pname = "pageedit";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-naoflFANeMwabbdrNL3+ndvEXYT4Yqf+Mo77HcCexHE=";
   };
 
-  nativeBuildInputs = [ cmake qttranslations wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook qttools ];
   propagatedBuildInputs = [ qtsvg qtwebengine ];
   cmakeFlags = [ "-DINSTALL_BUNDLED_DICTS=0" ];
 

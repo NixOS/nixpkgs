@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CEGUXJXqXmD8uT93T9dg49Lf5vTpAzQjdnhYmbR5zTI=";
   };
 
-  sourceRoot = "${src.name}/src/";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = lib.optionals withUdisks [ udisks glib ]

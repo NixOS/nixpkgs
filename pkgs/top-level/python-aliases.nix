@@ -98,6 +98,7 @@ mapAliases ({
   django_classytags = django-classy-tags; # added 2023-07-25
   django_colorful = django-colorful; # added 2023-07-25
   django_compat = django-compat; # added 2023-07-25
+  django-compat = throw "django-compat has been removed. It provided forward/backport compat for django 1.x, which is long end of life."; # added 2023-07-26
   django_contrib_comments = django-contrib-comments; # added 2023-07-25
   django-discover-runner = throw "django-discover-runner was removed because it is no longer maintained."; # added 2022-11-21
   django_environ = django-environ; # added 2021-12-25
@@ -130,9 +131,15 @@ mapAliases ({
   inherit (super.pkgs) fetchPypi; # added 2023-05-25
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
   flaskbabel = flask-babel; # added 2023-01-19
+  flask_assets = flask-assets; # added 2023-08-23
+  flask_elastic = flask-elastic; # added 2023-08-23
   flask_login = flask-login; # added 2022-10-17
+  flask_mail = flask-mail; # added 2023-08-23
   flask_marshmallow = flask-marshmallow; # added 2023-08-16
+  flask_migrate = flask-migrate; # added 2023-08-23
+  flask_principal = flask-principal; # added 2023-08-23
   flask-restplus = throw "flask-restplus is no longer maintained, use flask-restx instead"; # added 2023-02-21
+  flask_script = flask-script; # added 2023-08-23
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24
@@ -216,6 +223,7 @@ mapAliases ({
   mutmut = throw "mutmut has been promoted to a top-level attribute"; # added 2022-10-02
   net2grid = gridnet; # add 2022-04-22
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
+  ninja-python = ninja; # add 2022-08-03
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   nose_progressive = throw "nose_progressive has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; #added 2023-02-21
   notifymuch = throw "notifymuch has been promoted to a top-level attribute"; # added 2022-10-02

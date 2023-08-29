@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.82.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    hash = "sha256-EYkHfqwCxNIrE+wRMo/kwOVfuQfgrgcpmSL1gVwDebo=";
+    hash = "sha256-e2wcRawTEyK/NwSwd2WUgOnQnAj8Z7DQrrx32ksfHeU=";
   };
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcorecol";
-  vendorHash = "sha256-lebysPwGTOj2W0OKmj/2sIH5wMKfhZYwHWYjqa2dfKw=";
+  vendorHash = "sha256-HZ7aKLVjDMdMuq8IQ/6EgqCXWeYHmrJtf1fJyrLbPuU=";
 
   # upstream strongly recommends disabling CGO
   # additionally dependencies have had issues when GCO was enabled that weren't caught upstream

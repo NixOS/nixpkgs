@@ -96,6 +96,8 @@ buildPythonPackage rec {
     sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';

@@ -1,0 +1,18 @@
+diff --git a/cmake_modules/FindProtobufAlt.cmake b/cmake_modules/FindProtobufAlt.cmake
+index d29f757ae..61c6e16e1 100644
+--- a/cmake_modules/FindProtobufAlt.cmake
++++ b/cmake_modules/FindProtobufAlt.cmake
+@@ -22,11 +22,8 @@ else()
+ endif()
+ 
+ set(find_package_args)
+-if(ProtobufAlt_FIND_VERSION)
+-  list(APPEND find_package_args ${ProtobufAlt_FIND_VERSION})
+-endif()
+ if(ProtobufAlt_FIND_QUIETLY)
+   list(APPEND find_package_args QUIET)
+ endif()
+-find_package(Protobuf ${find_package_args})
+-set(ProtobufAlt_FOUND ${Protobuf_FOUND})
++find_package(protobuf ${find_package_args})
++set(ProtobufAlt_FOUND ${protobuf_FOUND})

@@ -1,20 +1,33 @@
 { lib
+, buildNimPackage
 , fetchFromGitHub
 , nimPackages
 , nixosTests
 , substituteAll
 , unstableGitUpdater
+, flatty
+, jester
+, jsony
+, karax
+, markdown
+, nimcrypto
+, packedjson
+, redis
+, redpool
+, sass
+, supersnappy
+, zippy
 }:
 
-nimPackages.buildNimPackage rec {
+buildNimPackage rec {
   pname = "nitter";
-  version = "unstable-2023-07-21";
+  version = "unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "zedeus";
     repo = "nitter";
-    rev = "cc5841df308506356d329662d0f0c2ec4713a35c";
-    hash = "sha256-QuWLoKy7suUCTYK79ghdf3o/FGFIDNyN1Iu69DFp6wg=";
+    rev = "d7ca353a55ea3440a2ec1f09155951210a374cc7";
+    hash = "sha256-nlpUzbMkDzDk1n4X+9Wk7+qQk+KOfs5ID6euIfHBoa8=";
   };
 
   patches = [
@@ -26,7 +39,7 @@ nimPackages.buildNimPackage rec {
     })
   ];
 
-  buildInputs = with nimPackages; [
+  buildInputs = [
     flatty
     jester
     jsony
@@ -42,6 +55,8 @@ nimPackages.buildNimPackage rec {
   ];
 
   nimBinOnly = true;
+
+  nimFlags = [ "--mm:refc" ];
 
   postBuild = ''
     nim c --hint[Processing]:off -r tools/gencss

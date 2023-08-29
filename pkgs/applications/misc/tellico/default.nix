@@ -34,11 +34,6 @@ mkDerivation rec {
     hash = "sha256-opg4FbfOM48eqWQUJnMHH7KSo6x4S2DHd7ucPw6iTzg=";
   };
 
-  postPatch = ''
-    substituteInPlace src/gui/imagewidget.h \
-      --replace ksane_version.h KF5/ksane_version.h
-  '';
-
   nativeBuildInputs = [
     cmake
     extra-cmake-modules

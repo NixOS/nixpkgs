@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, mpiCheckPhaseHook
 , autoreconfHook, pkg-config
 , p4est-sc-debugEnable ? true, p4est-sc-mpiSupport ? true
 , mpi, openssh, zlib
@@ -47,10 +47,10 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   makeFlags = [ "V=0" ];
 
-  preCheck = ''
-    export OMPI_MCA_rmaps_base_oversubscribe=1
-    export HYDRA_IFACE=lo
-  '';
+  nativeCheckInputs = lib.optionals mpiSupport [
+    mpiCheckPhaseHook
+    openssh
+  ];
 
   # disallow Darwin checks due to prototype incompatibility of qsort_r
   # to be fixed in a future version of the source code

@@ -281,11 +281,11 @@ rec {
   /* backward compatibility with old uncurried form; deprecated */
   makeScopeWithSplicing =
     splicePackages: newScope: otherSplices: keep: extra: f:
-    makeScopeWithSplicing' {
-      inherit splicePackages newScope otherSplices keep extra f;
-    };
+    makeScopeWithSplicing'
+    { inherit splicePackages newScope; }
+    { inherit otherSplices keep extra f; };
 
-  /* Like the above, but aims to support cross compilation. It's still ugly, but
+  /* Like makeScope, but aims to support cross compilation. It's still ugly, but
      hopefully it helps a little bit. */
   makeScopeWithSplicing' =
     { splicePackages

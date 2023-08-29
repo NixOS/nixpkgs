@@ -2,21 +2,24 @@
 , rustPlatform
 , fetchFromGitHub
 , makeBinaryWrapper
+, runtimeShell
+, bat
+, gnugrep
 , gnumake
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fzf-make";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "kyu08";
     repo = "fzf-make";
     rev = "v${version}";
-    hash = "sha256-Rpz10sHu/pzy/WX1yj0N78gVaw0fO8D92TSdtkmL/MU=";
+    hash = "sha256-QxEYa8+sY7fQVvoXkUJOJkbumus2tYM6T1GmkJRnUHY=";
   };
 
-  cargoHash = "sha256-vy1LJciZMwMo0gxoEtfgESYnUPRhbpnyvciRZHk1Oao=";
+  cargoHash = "sha256-EpFSZlzzoZ+Wzsvj5pSk5UhesbftcTFn6t1ZUOHdZsk=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -24,7 +27,8 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/fzf-make \
-      --suffix PATH : ${lib.makeBinPath [ gnumake ]}
+      --set SHELL ${runtimeShell} \
+      --suffix PATH : ${lib.makeBinPath [ bat gnugrep gnumake ]}
   '';
 
   meta = with lib; {

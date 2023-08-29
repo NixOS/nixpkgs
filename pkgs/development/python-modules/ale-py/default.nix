@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
     setuptools
     wheel
     pybind11

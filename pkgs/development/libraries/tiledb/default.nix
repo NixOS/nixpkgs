@@ -17,6 +17,7 @@
 , gtest
 , doxygen
 , fixDarwinDylibNames
+, useAVX2 ? stdenv.hostPlatform.avx2Support
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   # unaccelerated routines.
   cmakeFlags = [
     "-DTILEDB_WERROR=0"
-  ];
+  ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
     clang-tools

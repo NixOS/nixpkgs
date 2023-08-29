@@ -16,7 +16,7 @@ in mkCoqDerivation {
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
-    { case = "8.17"; out = "1.17.0"; }
+    { case = "8.17"; out = "1.18.0"; }
     { case = "8.16"; out = "1.15.6"; }
     { case = "8.15"; out = "1.14.0"; }
     { case = "8.14"; out = "1.11.2"; }
@@ -24,6 +24,7 @@ in mkCoqDerivation {
     { case = "8.12"; out = "1.8.3_8.12"; }
     { case = "8.11"; out = "1.6.3_8.11"; }
   ] null;
+  release."1.18.0".sha256     = "sha256-2fCOlhqi4YkiL5n8SYHuc3pLH+DArf9zuMH7IhpBc2Y=";
   release."1.17.0".sha256     = "sha256-J8GatRKFU0ekNCG3V5dBI+FXypeHcLgC5QJYGYzFiEM=";
   release."1.15.6".sha256     = "sha256-qc0q01tW8NVm83801HHOBHe/7H1/F2WGDbKO6nCXfno=";
   release."1.15.1".sha256     = "sha256-NT2RlcIsFB9AvBhMxil4ZZIgx+KusMqDflj2HgQxsZg=";

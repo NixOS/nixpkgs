@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitea, qmake, qttools, qtbase, qtserialport
-, qtconnectivity, qtcharts, qttranslations, wrapQtAppsHook }:
+, qtconnectivity, qtcharts, wrapQtAppsHook }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ubpm";
@@ -15,7 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace sources/mainapp/mainapp.pro \
-      --replace '$$[QT_INSTALL_TRANSLATIONS]' '${qttranslations}/translations' \
       --replace 'INSTALLDIR = /tmp/ubpm.AppDir' "INSTALLDIR = $out" \
       --replace '/usr/bin' '/bin' \
       --replace 'INSTALLS += target translations themes devices help lin' 'INSTALLS += target translations themes devices help'
@@ -40,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   # *.so plugins are being wrapped automatically which breaks them
   dontWrapQtApps = true;
 
-  buildInputs = [ qtbase qtserialport qtconnectivity qtcharts qttranslations ];
+  buildInputs = [ qtbase qtserialport qtconnectivity qtcharts ];
 
   meta = with lib; {
     homepage = "https://codeberg.org/LazyT/ubpm";

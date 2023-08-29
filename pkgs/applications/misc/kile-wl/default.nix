@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kile-wl";
-  version = "unstable-2021-09-30";
+  version = "2.0";
 
   src = fetchFromGitLab {
     owner = "snakedye";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     url = "https://gitlab.com/snakedye/kile.git";
   };
 
-  cargoSha256 = "sha256-W7rq42Pz+l4TSsR/h2teRTbl3A1zjOcIx6wqgnwyQNA=";
+  cargoSha256 = "sha256-xXliFNm9YDGsAATpMATui7f2IcfKCrB0B7O5dSYuBVQ=";
 
   nativeBuildInputs = [ scdoc ];
 

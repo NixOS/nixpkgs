@@ -716,6 +716,41 @@ let
       '';
     };
 
+    mysqld = {
+      exporterConfig = {
+        enable = true;
+        runAsLocalSuperUser = true;
+        configFile = pkgs.writeText "test-prometheus-exporter-mysqld-config.my-cnf" ''
+          [client]
+          user = exporter
+          password = snakeoilpassword
+        '';
+      };
+      metricProvider = {
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+          initialScript = pkgs.writeText "mysql-init-script.sql" ''
+            CREATE USER 'exporter'@'localhost'
+            IDENTIFIED BY 'snakeoilpassword'
+            WITH MAX_USER_CONNECTIONS 3;
+            GRANT PROCESS, REPLICATION CLIENT, SLAVE MONITOR, SELECT ON *.* TO 'exporter'@'localhost';
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-mysqld-exporter.service")
+        wait_for_open_port(9104)
+        wait_for_unit("mysql.service")
+        succeed("curl -sSf http://localhost:9104/metrics | grep 'mysql_up 1'")
+        systemctl("stop mysql.service")
+        succeed("curl -sSf http://localhost:9104/metrics | grep 'mysql_up 0'")
+        systemctl("start mysql.service")
+        wait_for_unit("mysql.service")
+        succeed("curl -sSf http://localhost:9104/metrics | grep 'mysql_up 1'")
+      '';
+    };
+
     nextcloud = {
       exporterConfig = {
         enable = true;

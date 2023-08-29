@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage {
   pname = "typstfmt";
-  version = "unstable-2023-08-06";
+  version = "unstable-2023-08-22";
 
   src = fetchFromGitHub {
     owner = "astrale-sharp";
     repo = "typstfmt";
-    rev = "825d328a593451f0cae36aa4a3d23ee8ed95f6aa";
-    hash = "sha256-NRVczIIRKPztrIE6KqohMN4i5S8ywa0eXHiqsvemKU0=";
+    rev = "578d39fb304020d0c26118e4eeab272868c9d525";
+    hash = "sha256-pF0i3yqGOzbN3CMELhZ7JElOUdBZCnp3cLqa9VONHhI=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-syntax-0.6.0" = "sha256-oAn783W7P8zY8gqPyy/w1goW/tdLJgf0qm2qAEJ9Vto=";
+      "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
     };
   };
 

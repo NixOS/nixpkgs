@@ -1,7 +1,6 @@
 { boost
 , cargo
 , cmake
-, config
 , CoreServices
 , cpptoml
 , double-conversion
@@ -22,9 +21,8 @@
 , libunwind
 , lz4
 , openssl
-, pcre
+, pcre2
 , pkg-config
-, python3
 , rustPlatform
 , rustc
 , stateDir ? "/tmp"
@@ -36,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "watchman";
-  version = "2023.01.30.00";
+  version = "2023.08.14.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    sha256 = "sha256-ZtCUlxx3YgfwKa9J8o9GkdkHquJbh+EytLiGNRlABls=";
+    hash = "sha256-41bBPFlLYFHySyX4/GUllT1pNywSRcH7x/pnb5iN/1o=";
   };
 
   cmakeFlags = [
@@ -64,9 +62,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pcre
+    pcre2
     openssl
-    python3
     gtest
     glog
     boost

@@ -3,6 +3,7 @@
 , bash
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , gnumake
 , httpx
 , openssl
@@ -13,6 +14,7 @@
 , pythonOlder
 , setuptools-scm
 , typing-extensions
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -29,6 +31,22 @@ buildPythonPackage rec {
     hash = "sha256-dA7a9RicBFCSf6IoGX/CdvI8x/xMOFfNtyuvFn9YmHI=";
   };
 
+  patches = [
+    # this patch is so that the one following it applies cleanly
+    # https://github.com/abhinavsingh/proxy.py/pull/1209
+    (fetchpatch {
+      name = "update-build-dependencies.patch";
+      url = "https://github.com/abhinavsingh/proxy.py/commit/2e535360ce5ed9734f2c00dc6aefe5ebd281cea5.patch";
+      hash = "sha256-eR3R4M7jwQMnY5ob0V6G71jXcrkV7YZvo1JOUG4gnrY=";
+    })
+    # https://github.com/abhinavsingh/proxy.py/pull/1345
+    (fetchpatch {
+      name = "remove-setuptools-scm-git-archive-dependency.patch";
+      url = "https://github.com/abhinavsingh/proxy.py/commit/027bfa6b912745f588d272f1a1082f6ca416f815.patch";
+      hash = "sha256-O2LlSrSrB3u2McAZRY+KviuU7Hv1tOuf0n+D/H4BWvI=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace Makefile \
     --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
@@ -40,6 +58,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [

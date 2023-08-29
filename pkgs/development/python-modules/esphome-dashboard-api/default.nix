@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
+, wheel
 , aiohttp
 }:
 
@@ -17,8 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-RFfS0xzRXoM6ETXmviiMPxffPzspjTqpkvHOlTJXN9g=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools~=65.6" "setuptools" \
+      --replace "wheel~=0.37.1" "wheel"
+  '';
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

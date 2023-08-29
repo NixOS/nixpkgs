@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "wormhole-william";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "psanford";
     repo = "wormhole-william";
     rev = "v${version}";
-    sha256 = "sha256-L/0zgQkwADElpIzOJAROa3CN/YNl76Af2pAhX8y2Wxs=";
+    sha256 = "sha256-KLj9ZeLcIOWA4VeuxfoOr99kUCDb7OARX/h9DSG1WHw=";
   };
 
-  vendorSha256 = "sha256-J6iht3cagcwFekydShgaYJtkNLfEvSDqonkC7+frldM=";
+  vendorHash = "sha256-oJz7HgtjuP4ooXdpofIKaDndGg4WqVZgbT8Yb1AyaMs=";
 
   preCheck = ''
     # wormhole_test.go:692: failed to establish connection

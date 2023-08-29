@@ -44,7 +44,8 @@
 
 , cavaSupport ? true
 , evdevSupport ? true
-, hyprlandSupport ? false
+, experimentalPatches ? true
+, hyprlandSupport ? true
 , inputSupport ? true
 , jackSupport ? true
 , mpdSupport ? true
@@ -89,10 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  # Patch for workspaces support in wlr/workspaces
-  # See https://wiki.hyprland.org/Useful-Utilities/Status-Bars/#waybar
-  patches = lib.optional hyprlandSupport [ ./hyprland.diff ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -120,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wlroots
   ]
-  ++ lib.optionals cavaSupport  [
+  ++ lib.optionals cavaSupport [
     SDL2
     alsa-lib
     fftw
@@ -166,8 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     "tests" = runTests;
     "upower_glib" = upowerSupport;
     "wireplumber" = wireplumberSupport;
-  })
-  ++ lib.optional hyprlandSupport (lib.mesonBool "experimental" true);
+  }) ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
 
   preFixup = lib.optionalString withMediaPlayer ''
     cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
@@ -189,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
       minijackson
       rodrgz
       synthetica
+      khaneliman
     ];
     inherit (wlroots.meta) platforms;
   };

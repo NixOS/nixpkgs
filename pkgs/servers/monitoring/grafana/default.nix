@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "10.0.3";
+  version = "10.1.0";
 
-  excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" ];
+  excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" "modowners" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    hash = "sha256-2LHCG2x4SJzUgBfYZFQCTlrUGule9j+1x3R1vDmBlAs=";
+    hash = "sha256-u+Jug4U2dq6naHRMOwpm7/18o6Kk9/6fw/42XLT7C1s=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    hash = "sha256-2ut+7hMnttQHzarxojTsnY4q5abQheD9PYxgYhTrYDI=";
+    hash = "sha256-QFRahjDyL7BNikK2cCsFLfu4/odDbkCxplf6f7yCezE=";
   };
 
-  vendorHash = "sha256-VMy7RGp5F5cc1nBpt5Fm1LbY6IK1/JHLEEGIoYzUvdw=";
+  vendorHash = "sha256-mnrGnQ7clzu2dkAHyCuxfX0sGU5EcHybut6GfpmOSoU=";
 
   nativeBuildInputs = [ wire ];
 
@@ -51,6 +51,13 @@ buildGoModule rec {
 
     # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
     rm -r scripts/go
+
+    # Requires making API calls against storage.googleapis.com:
+    #
+    # [...]
+    # grafana> 2023/08/24 08:30:23 failed to copy objects, err: Post "https://storage.googleapis.com/upload/storage/v1/b/grafana-testing-repo/o?alt=json&name=test-path%2Fbuild%2FTestCopyLocalDir2194093976%2F001%2Ffile2.txt&prettyPrint=false&projection=full&uploadType=multipart": dial tcp: lookup storage.googleapis.com on [::1]:53: read udp [::1]:36436->[::1]:53: read: connection refused
+    # grafana> panic: test timed out after 10m0s
+    rm pkg/build/gcloud/storage/gsutil_test.go
   '';
 
   ldflags = [

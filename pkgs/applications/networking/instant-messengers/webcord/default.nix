@@ -84,6 +84,7 @@ buildNpmPackage rec {
     downloadPage = "https://github.com/SpacingBat3/WebCord/releases";
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "webcord";
     maintainers = with maintainers; [ huantian ];
     platforms = electron_25.meta.platforms;
   };

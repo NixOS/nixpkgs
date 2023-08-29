@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pallets-sphinx-themes";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "pallets-sphinx-themes";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-u1sHeO0fk11+M5M0yqDcWsMJKBMeAGW+GPOgu1oniok=";
+    sha256 = "sha256-Z03rsqkwF2rYaqRZflf5qc5EdHPIEcEcB1ftYIm5DQs=";
   };
 
   propagatedBuildInputs = [ packaging sphinx ];

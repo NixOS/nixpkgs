@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
     bash
   ];
 
+  # Remove uses of the `register` storage class specifier, which was removed in C++17.
+  # Fixes compilation with clang 16, which defaults to C++17.
+  patches = [ ./c++17-register-class.patch ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {

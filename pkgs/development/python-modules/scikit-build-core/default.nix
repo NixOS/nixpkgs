@@ -14,7 +14,9 @@
 , pyproject-metadata
 , pytest-subprocess
 , pytestCheckHook
+, setuptools
 , tomli
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     ninja
     pytest-subprocess
     pytestCheckHook
+    setuptools
+    wheel
   ] ++ passthru.optional-dependencies.pyproject;
 
   disabledTestPaths = [

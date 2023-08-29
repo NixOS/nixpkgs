@@ -12,7 +12,7 @@ let
   python = python3;
 
   pythonDeps = with python.pkgs; [
-    flask flask_assets flask-login flask-sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-session-captcha flask-sslify
+    flask flask-assets flask-login flask-sqlalchemy flask-migrate flask-seasurf flask-mail flask-session flask-session-captcha flask-sslify
     mysqlclient psycopg2 sqlalchemy
     certifi cffi configobj cryptography bcrypt requests python-ldap pyotp qrcode dnspython
     gunicorn itsdangerous python3-saml pytz rcssmin rjsmin authlib bravado-core

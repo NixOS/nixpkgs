@@ -30,7 +30,7 @@ let
   autoreconfHook = buildPackages.autoreconfHook269;
 in
 assert xarSupport -> libxml2 != null;
-(stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
   version = "3.6.2";
 
@@ -42,6 +42,16 @@ assert xarSupport -> libxml2 != null;
   };
 
   outputs = [ "out" "lib" "dev" ];
+
+  patches = [
+    # fixes static linking; upstream in releases after 3.6.2
+    # https://github.com/libarchive/libarchive/pull/1825 merged upstream
+    (assert finalAttrs.version == "3.6.2"; fetchpatch {
+      name = "001-only-add-iconv-to-pc-file-if-needed.patch";
+      url = "https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2.patch";
+      hash = "sha256-lb+zwWSH6/MLUIROvu9I/hUjSbb2jOWO755WC/r+lbY=";
+    })
+  ];
 
   postPatch = let
     skipTestPaths = [
@@ -119,16 +129,4 @@ assert xarSupport -> libxml2 != null;
   passthru.tests = {
     inherit cmake nix samba;
   };
-})).overrideAttrs(previousAttrs:
-  assert previousAttrs.version == "3.6.2";
-  lib.optionalAttrs stdenv.hostPlatform.isStatic {
-    patches = [
-      # fixes static linking; upstream in releases after 3.6.2
-      # https://github.com/libarchive/libarchive/pull/1825 merged upstream
-      (fetchpatch {
-        name = "001-only-add-iconv-to-pc-file-if-needed.patch";
-        url = "https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2.patch";
-        hash = "sha256-lb+zwWSH6/MLUIROvu9I/hUjSbb2jOWO755WC/r+lbY=";
-      })
-    ];
-  })
+})

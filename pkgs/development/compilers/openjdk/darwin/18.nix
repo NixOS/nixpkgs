@@ -1,36 +1,47 @@
-{ lib, stdenv, fetchurl, unzip, setJavaClassPath }:
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, setJavaClassPath
+, enableJavaFX ? false
+}:
 let
   # Details from https://www.azul.com/downloads/?version=java-18-sts&os=macos&package=jdk
   # Note that the latest build may differ by platform
   dist = {
     x86_64-darwin = {
       arch = "x64";
-      zuluVersion = "18.28.13";
-      jdkVersion = "18.0.0";
-      sha256 = "0hc5m3d4q3n7sighq3pxkdg93vsrgj1kzla1py9nfnm9pnj9l2kq";
+      zuluVersion = "18.32.13";
+      jdkVersion = "18.0.2.1";
+      hash =
+        if enableJavaFX then "sha256-ZVZ1gbpJwxTduq2PPOCKqbSl+shq2NTFgqG++OXvFcg="
+        else "sha256-uHPcyOgxUdTgzmIVRp/awtwve9zSt+1TZNef7DUuoRg=";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "18.28.13";
-      jdkVersion = "18.0.0";
-      sha256 = "0ch4jp2d4pjvxbmbswvjwf7w2flajrvjg5f16ggiy80y8l0y15cm";
+      zuluVersion = "18.32.13";
+      jdkVersion = "18.0.2.1";
+      hash =
+        if enableJavaFX then "sha256-tNx0a1u9iamcN9VFOJ3eqDEA6C204dtIBJZvuAH2Vjk="
+        else "sha256-jAZDgxtWMq/74yKAxA69oOU0C9nXvKG5MjmZLsK04iM=";
     };
   }."${stdenv.hostPlatform.system}";
 
   jce-policies = fetchurl {
-    # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
-    url = "http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
-    sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
+    url = "https://web.archive.org/web/20211126120343/http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
+    hash = "sha256-gCGii4ysQbRPFCH9IQoKCCL8r4jWLS5wo1sv9iioZ1o=";
   };
 
+  javaPackage = if enableJavaFX then "ca-fx-jdk" else "ca-jdk";
+
   jdk = stdenv.mkDerivation rec {
-    pname = "zulu${dist.zuluVersion}-ca-jdk";
+    pname = "zulu${dist.zuluVersion}-${javaPackage}";
     version = dist.jdkVersion;
 
     src = fetchurl {
-      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-ca-jdk${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
-      inherit (dist) sha256;
+      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
+      inherit (dist) hash;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 

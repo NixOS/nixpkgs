@@ -4,6 +4,7 @@
 , ncurses
 , zig_0_11
 , installShellFiles
+, pie ? stdenv.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ncurses
   ];
+
+  zigBuildFlags = lib.optional pie "-Dpie=true";
 
   postInstall = ''
     installManPage ncdu.1

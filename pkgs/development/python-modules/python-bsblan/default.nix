@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , aresponses
+, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , packaging
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.5.11";
+  version = "0.5.15";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,8 +25,16 @@ buildPythonPackage rec {
     owner = "liudger";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-fTjeJZhKPFi0cxZStegVdq7a48rQ236DnnCGngwZ5GU=";
+    hash = "sha256-PNgv3QXl3iyDX0KOn1egQrt6D64i3eCUyCPtXe94y0U=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace "--cov" ""
+    sed -i "/covdefaults/d" pyproject.toml
+    sed -i "/ruff/d" pyproject.toml
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -33,6 +42,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
     packaging
     pydantic
     yarl
@@ -44,12 +54,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
-  '';
 
   pythonImportsCheck = [
     "bsblan"

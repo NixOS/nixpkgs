@@ -36,6 +36,7 @@
 , av
 , opencv4
 , pytest-mock
+, pybind11
 }:
 
 let
@@ -74,6 +75,8 @@ buildPythonPackage {
     ninja
     which
   ];
+
+  buildInputs = [ pybind11 ];
 
   pythonRelaxDeps = [
     "black"

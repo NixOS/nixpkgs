@@ -7,7 +7,6 @@
 , meson
 , ninja
 , vala
-, python3
 , desktop-file-utils
 , libcanberra
 , gtk3
@@ -29,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.4.1";
+  version = "6.5.0";
 
   outputs = [ "out" "dev" ];
 
@@ -37,15 +36,15 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-s4Df2eLnr+RnbTwPzjt9bVA+xZ9xca2hiFdGlRUZRfU=";
+    sha256 = "sha256-E1e2eXGpycl2VXEUvUir5G3MRLz/4TQMvmOuWgU9JNc=";
   };
 
   patches = [
-    # Fix log spam with new GLib
-    # https://github.com/elementary/files/pull/2257
+    # meson: Don't run gtk-update-icon-cache
+    # https://github.com/elementary/files/pull/2294
     (fetchpatch {
-      url = "https://github.com/elementary/files/commit/7bd542fa0a646b5cb0972f5575c56a9ee4d9dce7.patch";
-      hash = "sha256-C+oSx0xn3YPuwEC0K+3ZmKeQrroKreJo1tfcpLGQ1S4=";
+      url = "https://github.com/elementary/files/commit/758ece9fb29eb4a25f47065710dad4ac547ca2ce.patch";
+      hash = "sha256-+OASDsOPH0g5Cyxw4JmVxA70zQHhcpqLMKKYP4VLTO0=";
     })
   ];
 
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -76,11 +74,6 @@ stdenv.mkDerivation rec {
     systemd
     zeitgeist
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

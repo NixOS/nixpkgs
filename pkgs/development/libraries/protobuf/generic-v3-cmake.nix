@@ -68,16 +68,17 @@ let
     ];
 
     buildInputs = [
-      abseil-cpp
       zlib
     ];
 
-    # After 3.20, CMakeLists.txt can now be found at the top-level, however
-    # a stub cmake/CMakeLists.txt still exists for compatibility with previous build assumptions
-    cmakeDir = "../cmake";
+    propagatedBuildInputs = [
+      abseil-cpp
+    ];
+
+    cmakeDir = if lib.versionOlder version "3.22" then "../cmake" else null;
     cmakeFlags = [
       "-Dprotobuf_ABSL_PROVIDER=package"
-      ] ++ lib.optionals (!stdenv.targetPlatform.isStatic) [
+    ] ++ lib.optionals (!stdenv.targetPlatform.isStatic) [
       "-Dprotobuf_BUILD_SHARED_LIBS=ON"
     ]
     # Tests fail to build on 32-bit platforms; fixed in 3.22
@@ -95,6 +96,8 @@ let
           protobuf = self;
         });
       };
+
+      inherit abseil-cpp;
     };
 
     meta = {

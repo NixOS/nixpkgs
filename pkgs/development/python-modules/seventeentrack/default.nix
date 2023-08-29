@@ -1,10 +1,10 @@
 { lib
 , aiohttp
 , aresponses
-, async-timeout
 , attrs
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
@@ -26,16 +26,31 @@ buildPythonPackage rec {
     hash = "sha256-vMdRXcd0es/LjgsVyWItSLFzlSTEa3oaA6lr/NL4i8U=";
   };
 
+  patches = [
+    # This patch removes references to setuptools and wheel that are no longer
+    # necessary and changes poetry to poetry-core, so that we don't need to add
+    # unnecessary nativeBuildInputs.
+    #
+    #   https://github.com/McSwindler/seventeentrack/pull/4
+    #
+    (fetchpatch {
+      name = "clean-up-build-dependencies.patch";
+      url = "https://github.com/McSwindler/seventeentrack/commit/9a21e22f796a17628a9628f54e19d19d002b4d0a.patch";
+      hash = "sha256-UvxUpiSkDbP8Jum5XbrWHBnH1HLBYEKUKw6GTV+Kvys=";
+    })
+  ];
+
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
     aiohttp
-    async-timeout
     attrs
     pytz
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

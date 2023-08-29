@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , passlib
+, pip
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -9,6 +10,7 @@
 , twine
 , watchdog
 , webtest
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -26,11 +28,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-git
+    wheel
   ];
 
   propagatedBuildInputs = [
-    setuptools
+    pip
   ];
 
   passthru.optional-dependencies = {
@@ -42,12 +46,21 @@ buildPythonPackage rec {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
+  # Tests need these permissions in order to use the FSEvents API on macOS.
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.FSEvents"))
+  '';
+
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
   nativeCheckInputs = [
+    pip
     pytestCheckHook
+    setuptools
     twine
     webtest
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
@@ -57,11 +70,6 @@ buildPythonPackage rec {
     "test_hash_algos"
     "test_pip_install_authed_succeeds"
     "test_pip_install_open_succeeds"
-    "test_pip_install_authed_fails"
-    # Tests want to tests upload
-    "upload"
-    "register"
-    "test_partial_authed_open_download"
   ];
 
   disabledTestPaths = [

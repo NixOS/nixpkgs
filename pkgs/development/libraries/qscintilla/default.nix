@@ -3,7 +3,7 @@
 , fetchurl
 , unzip
 , qtbase
-, qtmacextras
+, qtmacextras ? null
 , qmake
 , fixDarwinDylibNames
 }:
@@ -63,5 +63,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
+    # ld: library not found for -lcups
+    broken = stdenv.isDarwin && lib.versionAtLeast qtbase.version "6";
   };
 }

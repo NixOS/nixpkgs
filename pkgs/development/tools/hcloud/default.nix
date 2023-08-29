@@ -1,21 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "hcloud";
-  version = "1.36.0";
+  version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-BmV+g0Geue41KNcB++TaoSsuGG1HA+uH5GHye7QRWOM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6UQaO2ArAYd6Lr1maciC83k1GlR8FLx+acAZh6SjI3g=";
   };
 
-  vendorHash = "sha256-eGeaH9nIjBSZLxNlsQtas122eEXrIbrGn/GYVB4KhvY=";
+  vendorHash = "sha256-mxAG3o3IY70xn8WymUzF96Q2XWwQ0efWrrw1VV4Y8HU=";
 
   ldflags = [
-    "-s" "-w"
-    "-X github.com/hetznercloud/cli/internal/version.Version=${version}"
+    "-s"
+    "-w"
+    "-X=github.com/hetznercloud/cli/internal/version.Version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

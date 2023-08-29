@@ -3,6 +3,7 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , poetry-core
 , pyjwt
@@ -29,6 +30,20 @@ buildPythonPackage rec {
     hash = "sha256-8EPELXxSq+B9o9eMFeM5ZPVYTa1+kT/S6cO7hKtD18s=";
   };
 
+  patches = [
+    # This patch removes references to setuptools and wheel that are no longer
+    # necessary and changes poetry to poetry-core, so that we don't need to add
+    # unnecessary nativeBuildInputs.
+    #
+    #   https://github.com/bachya/aioridwell/pull/234
+    #
+    (fetchpatch {
+      name = "clean-up-build-dependencies.patch";
+      url = "https://github.com/bachya/aioridwell/commit/79a9dd7462dcfeb0833abca73a1f184827120a6f.patch";
+      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+    })
+  ];
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -39,6 +54,8 @@ buildPythonPackage rec {
     pytz
     titlecase
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

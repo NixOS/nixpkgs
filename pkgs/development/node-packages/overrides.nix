@@ -41,25 +41,6 @@ final: prev: {
     ];
   };
 
-  "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override (oldAttrs: {
-    nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
-      glib
-      libsecret
-      pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
-      AppKit
-      Security
-    ];
-    buildInputs = [
-      final.node-gyp-build
-      final.node-pre-gyp
-      nodejs
-    ];
-
-    meta = oldAttrs.meta // { broken = since "16"; };
-  });
-  mdctl-cli = final."@medable/mdctl-cli";
-
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -92,27 +73,6 @@ final: prev: {
     '';
   };
 
-  carbon-now-cli = prev.carbon-now-cli.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    prePatch = ''
-      export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-    '';
-    postInstall = ''
-      wrapProgram $out/bin/carbon-now \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-    '';
-  };
-
-  coc-imselect = prev.coc-imselect.override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
-  dat = prev.dat.override (oldAttrs: {
-    buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
-    meta = oldAttrs.meta // { broken = since "12"; };
-  });
-
-
   expo-cli = prev."expo-cli".override (oldAttrs: {
     # The traveling-fastlane-darwin optional dependency aborts build on Linux.
     dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
@@ -136,14 +96,6 @@ final: prev: {
     '';
   };
 
-  firebase-tools = prev.firebase-tools.override {
-    nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
-  };
-
-  git-ssb = prev.git-ssb.override (oldAttrs: {
-    buildInputs = [ final.node-gyp-build ];
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
 
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
@@ -274,11 +226,6 @@ final: prev: {
     '';
   };
 
-  node-inspector = prev.node-inspector.override (oldAttrs: {
-    buildInputs = [ final.node-pre-gyp ];
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
   node-red = prev.node-red.override {
     buildInputs = [ final.node-pre-gyp ];
   };
@@ -397,15 +344,6 @@ final: prev: {
   rush = prev."@microsoft/rush".override {
     name = "rush";
   };
-
-  ssb-server = prev.ssb-server.override (oldAttrs: {
-    buildInputs = [ pkgs.automake pkgs.autoconf final.node-gyp-build ];
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
-
-  stf = prev.stf.override (oldAttrs: {
-    meta = oldAttrs.meta // { broken = since "10"; };
-  });
 
   tailwindcss = prev.tailwindcss.override {
     plugins = [ ];

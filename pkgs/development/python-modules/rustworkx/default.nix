@@ -15,18 +15,18 @@
 
 buildPythonPackage rec {
   pname = "rustworkx";
-  version = "0.12.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    hash = "sha256-d/KCxhJdyzhTjwJZ+GsXJE4ww30iPaXcPngpCi4hBZw=";
+    hash = "sha256-WwQuvRMDGiY9VrWPfxL0OotPCUhCsvbXoVSCNhmIF/g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-imhiPj763iumRQb+oeBOpICD1nCvzZx+3yQWu1QRRQQ=";
+    hash = "sha256-QuzBJyM83VtB6CJ7i9/SFE8h6JbxkX/LQ9lOFSQIidU=";
   };
 
   nativeBuildInputs = [

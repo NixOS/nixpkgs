@@ -5,8 +5,8 @@
 # install dependencies
 , pytest
 , vcrpy
-, attrs
 # test dependencies
+, hatchling
 , pytestCheckHook
 , pytest-httpbin
 , pytest-mock
@@ -15,23 +15,26 @@
 
 buildPythonPackage rec {
   pname = "pytest-recording";
-  version = "0.12.2";
+  version = "0.13.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kiwicom";
     repo = "pytest-recording";
     rev = "v${version}";
-    hash = "sha256-nivwxaW8AIrBtPkzPJYfxlPxWn2NuYcaMry/IrBnnl0=";
+    hash = "sha256-SCHdzii6GYVWVY7MW/IW6CNZMuu5h/jXEj49P0jvhoE=";
   };
 
   buildInputs = [
+    hatchling
     pytest
   ];
 
   propagatedBuildInputs = [
     vcrpy
-    attrs
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   checkInputs = [
     pytestCheckHook

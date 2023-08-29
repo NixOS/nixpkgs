@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonAtLeast
 , pythonOlder
@@ -61,11 +62,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # Pèython 3.11 support, https://github.com/graphql-python/graphene-django/pull/1365
+    # Python 3.11 support, https://github.com/graphql-python/graphene-django/pull/1365
     "test_django_objecttype_convert_choices_enum_naming_collisions"
     "test_django_objecttype_choices_custom_enum_name"
     "test_django_objecttype_convert_choices_enum_list"
     "test_schema_representation"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # this test touches files in the "/" directory and fails in darwin sandbox
+    "test_should_filepath_convert_string"
   ];
 
   meta = with lib; {

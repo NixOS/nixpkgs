@@ -27,7 +27,7 @@
 , email-validator
 , flask
 , flask-login
-, flask_principal
+, flask-principal
 , flask-wtf
 , itsdangerous
 , passlib
@@ -57,12 +57,17 @@ buildPythonPackage rec {
     hash = "sha256-lZzm43m30y+2qjxNddFEeg9HDlQP9afq5VtuR25zaLc=";
   };
 
+  postPatch = ''
+    # This should be removed after updating to version 5.3.0.
+    sed -i '/filterwarnings =/a ignore:pkg_resources is deprecated:DeprecationWarning' pytest.ini
+  '';
+
   propagatedBuildInputs = [
     blinker
     email-validator
     flask
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
     itsdangerous
     passlib

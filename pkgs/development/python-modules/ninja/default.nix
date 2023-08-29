@@ -1,72 +1,48 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, fetchurl
-, cmake
-, setuptools-scm
-, scikit-build
-, pytestCheckHook
-, pytest-virtualenv
+, flit-core
+, ninja
 }:
-let
-  # these must match NinjaUrls.cmake
-  ninja_src_url = "https://github.com/Kitware/ninja/archive/v1.11.1.g95dee.kitware.jobserver-1.tar.gz";
-  ninja_src_sha256 = "7ba84551f5b315b4270dc7c51adef5dff83a2154a3665a6c9744245c122dd0db";
-  ninja_src = fetchurl {
-    url = ninja_src_url;
-    sha256 = ninja_src_sha256;
-  };
-in
+
 buildPythonPackage rec {
   pname = "ninja";
-  version = "1.11.1";
+  inherit (ninja) version;
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "scikit-build";
-    repo = "ninja-python-distributions";
-    rev = version;
-    hash = "sha256-scCYsSEyN+u3qZhNhWYqHpJCl+JVJJbKz+T34gOXGJM=";
-  };
-  patches = [
-    # make sure cmake doesn't try to download the ninja sources
-    ./no-download.patch
-  ];
+  src = ./stub;
 
-  inherit ninja_src;
   postUnpack = ''
-    # assume that if the hash matches, the source should be fine
-    if ! grep "${ninja_src_sha256}" $sourceRoot/NinjaUrls.cmake; then
-      echo "ninja_src_sha256 doesn't match the hash in NinjaUrls.cmake!"
-      exit 1
-    fi
-    mkdir -p "$sourceRoot/Ninja-src"
-    pushd "$sourceRoot/Ninja-src"
-    tar -xavf ${ninja_src} --strip-components 1
-    popd
+    substituteInPlace "$sourceRoot/pyproject.toml" \
+      --subst-var version
+
+    substituteInPlace "$sourceRoot/ninja/__init__.py" \
+      --subst-var version \
+      --subst-var-by BIN_DIR "${ninja}/bin"
   '';
 
-  postPatch = ''
-    sed -i '/cov/d' setup.cfg
-  '';
-
-  dontUseCmakeConfigure = true;
+  inherit (ninja) setupHook;
 
   nativeBuildInputs = [
-    setuptools-scm
-    scikit-build
-    cmake
+    flit-core
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-virtualenv
+  preBuild = ''
+    cp "${ninja.src}/misc/ninja_syntax.py" ninja/ninja_syntax.py
+  '';
+
+  pythonImportsCheck = [
+    "ninja"
+    "ninja.ninja_syntax"
   ];
 
   meta = with lib; {
     description = "A small build system with a focus on speed";
+    longDescription = ''
+      This is a stub of the ninja package on PyPI that uses the ninja program
+      provided by nixpkgs instead of downloading ninja from the web.
+    '';
     homepage = "https://github.com/scikit-build/ninja-python-distributions";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle ];
+    maintainers = with maintainers; [ _999eagle tjni ];
   };
 }

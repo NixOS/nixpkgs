@@ -4,6 +4,7 @@
 }:
 
 { src
+, sourceRoot ? null
 , patches ? [ ]
 , pname
 , version
@@ -19,23 +20,31 @@
 let
   fetchedMavenDeps = stdenv.mkDerivation ({
     name = "${pname}-${version}-maven-deps";
-    inherit src patches;
+    inherit src sourceRoot patches;
 
     nativeBuildInputs = [
       maven
     ];
 
     buildPhase = ''
+      runHook preBuild
+
       mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}
+
+      runHook postBuild
     '';
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
     installPhase = ''
+      runHook preInstall
+
       find $out -type f \( \
         -name \*.lastUpdated \
         -o -name resolver-status.properties \
         -o -name _remote.repositories \) \
         -delete
+
+      runHook postInstall
     '';
 
     # don't do any fixup

@@ -1,10 +1,24 @@
-{ config, stdenv, lib, fetchurl, fetchpatch
-, perl, pkg-config
-, libcap, libtool, libxml2, openssl, libuv, nghttp2, jemalloc
-, enablePython ? false, python3
-, enableGSSAPI ? true, libkrb5
-, buildPackages, nixosTests
-, cmocka, tzdata
+{ stdenv
+, lib
+, fetchurl
+, perl
+, pkg-config
+, libcap
+, libidn2
+, libtool
+, libxml2
+, openssl
+, libuv
+, nghttp2
+, jemalloc
+, enablePython ? false
+, python3
+, enableGSSAPI ? true
+, libkrb5
+, buildPackages
+, nixosTests
+, cmocka
+, tzdata
 , gitUpdater
 }:
 
@@ -24,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ perl pkg-config ];
-  buildInputs = [ libtool libxml2 openssl libuv nghttp2 jemalloc ]
+  buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
@@ -34,8 +48,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--without-lmdb"
+    "--with-libidn2"
   ] ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
@@ -64,7 +79,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   # TODO: investigate the aarch64-linux failures; see this and linked discussions:
   # https://github.com/NixOS/nixpkgs/pull/192962
-  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux);
+  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux) && !isi686;
   checkTarget = "unit";
   checkInputs = [
     cmocka

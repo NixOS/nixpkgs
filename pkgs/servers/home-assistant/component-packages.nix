@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.8.3";
+  version = "2023.8.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -328,7 +328,8 @@
       sqlalchemy
     ];
     "baf" = ps: with ps; [
-    ]; # missing inputs: aiobafi6
+      aiobafi6
+    ];
     "baidu" = ps: with ps; [
     ]; # missing inputs: baidu-aip
     "balboa" = ps: with ps; [
@@ -915,7 +916,8 @@
       pdunehd
     ];
     "duotecno" = ps: with ps; [
-    ]; # missing inputs: pyduotecno
+      pyduotecno
+    ];
     "dwd_weather_warnings" = ps: with ps; [
       dwdwfsapi
     ];
@@ -1344,13 +1346,15 @@
       psutil-home-assistant
       sqlalchemy
       xmltodict
-    ]; # missing inputs: fritzconnection.optional-dependencies.qr
+    ]
+    ++ fritzconnection.optional-dependencies.qr;
     "fritzbox" = ps: with ps; [
       pyfritzhome
     ];
     "fritzbox_callmonitor" = ps: with ps; [
       fritzconnection
-    ]; # missing inputs: fritzconnection.optional-dependencies.qr
+    ]
+    ++ fritzconnection.optional-dependencies.qr;
     "fronius" = ps: with ps; [
       pyfronius
     ];
@@ -4887,6 +4891,7 @@
     "azure_devops"
     "azure_event_hub"
     "backup"
+    "baf"
     "balboa"
     "bayesian"
     "binary_sensor"
@@ -4967,6 +4972,7 @@
     "dte_energy_bridge"
     "duckdns"
     "dunehd"
+    "duotecno"
     "dwd_weather_warnings"
     "eafm"
     "easyenergy"
@@ -5028,7 +5034,9 @@
     "freebox"
     "freedns"
     "freedompro"
+    "fritz"
     "fritzbox"
+    "fritzbox_callmonitor"
     "fronius"
     "frontend"
     "frontier_silicon"
