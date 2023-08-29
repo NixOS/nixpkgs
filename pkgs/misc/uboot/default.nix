@@ -333,6 +333,7 @@ in {
     defconfig = "a64-olinuxino-emmc_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -346,6 +347,7 @@ in {
     defconfig = "orangepi_zero_plus2_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -366,6 +368,7 @@ in {
     defconfig = "orangepi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinnerH6}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -379,6 +382,7 @@ in {
     defconfig = "pine64_plus_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -386,6 +390,7 @@ in {
     defconfig = "pine64-lts_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -393,6 +398,7 @@ in {
     defconfig = "pinebook_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -534,6 +540,7 @@ in {
     defconfig = "sopine_baseboard_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
