@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # Electron version is set to 22 in order to match upstream
   postFixup = ''
     makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar
