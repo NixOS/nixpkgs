@@ -91,7 +91,7 @@
 , "coc-yaml"
 , "coc-yank"
 , "code-theme-converter"
-, "coffee-script"
+, "coffeescript"
 , "coinmon"
 , "concurrently"
 , "conventional-changelog-cli"
