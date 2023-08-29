@@ -15,6 +15,10 @@ stdenv.mkDerivation {
     hash = "sha256-8A8JcKHIBgXpUuIP4zs3Q1yBs5jCGd5F3H2E8UN/S2g=";
   };
 
+  patches = [
+    ./wchar-imports-skip.patch
+  ];
+
   installPhase = ''
     runHook preInstall
 
