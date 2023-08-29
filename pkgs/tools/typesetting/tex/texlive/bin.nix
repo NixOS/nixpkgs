@@ -176,15 +176,11 @@ core = stdenv.mkDerivation rec {
   doCheck = false; # triptest fails, likely due to missing TEXMF tree
   preCheck = "patchShebangs ../texk/web2c";
 
-  installTargets = [ "install" "texlinks" ];
+  installTargets = [ "install" ];
 
   # TODO: perhaps improve texmf.cnf search locations
   postInstall =
-    /* links format -> engine will be regenerated in texlive.combine
-       note: for unlinking, the texlinks patch is irrelevant, so we use
-       the included texlinks.sh to avoid the dependency on bin.texlinks */ ''
-    PATH="$out/bin:$PATH" sh ../texk/texlive/linked_scripts/texlive-extra/texlinks.sh --cnffile "../texk/texlive/tl_support/fmtutil.cnf" --unlink "$out/bin"
-  '' + /* remove redundant texmf-dist (content provided by TeX Live packages) */
+       /* remove redundant texmf-dist (content provided by TeX Live packages) */
   ''
     rm -fr "$out"/share/texmf-dist
   '' + /* install himktables in separate output for use in cross compilation */ ''
