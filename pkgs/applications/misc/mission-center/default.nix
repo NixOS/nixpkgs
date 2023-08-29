@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       (rustPlatform.importCargoLock {
         lockFile = ./Cargo.lock;
         outputHashes = {
-         "pathfinder_canvas-0.5.0" = "sha256-k2Sj69hWA0UzRfv91aG1TAygVIuOX3gmipcDbuZxxc8=";
+          "pathfinder_canvas-0.5.0" = "sha256-k2Sj69hWA0UzRfv91aG1TAygVIuOX3gmipcDbuZxxc8=";
         };
       })
       (rustPlatform.importCargoLock {
@@ -123,5 +123,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ GaetanLepage ];
     platforms = platforms.linux;
+    mainProgram = "missioncenter";
   };
 }
