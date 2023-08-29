@@ -2,7 +2,6 @@
 , bitlist
 , buildPythonPackage
 , fe25519
-, fetchpatch
 , fetchPypi
 , fountains
 , parts
@@ -14,24 +13,15 @@
 
 buildPythonPackage rec {
   pname = "ge25519";
-  version = "1.4.3";
+  version = "1.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oOvrfRSpvwfCcmpV7FOxcBOW8Ex89d2+otjORrzX4o0=";
+    hash = "sha256-VKDPiSdufWwrNcZSRTByFU4YGoJrm48TDm1nt4VyclA=";
   };
-
-  patches = [
-    # https://github.com/nthparty/ge25519/pull/1
-    (fetchpatch {
-      name = "relax-setuptools-dependency.patch";
-      url = "https://github.com/nthparty/ge25519/commit/64de94aa67387a30905057c39729d24feaba9064.patch";
-      hash = "sha256-UTT7VD4lscEA2JiGLx9CRVD1ygXgzcOWqgh5jGMS64Y=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools

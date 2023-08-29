@@ -378,6 +378,8 @@ with pkgs;
 
   circumflex = callPackage ../applications/networking/circumflex { };
 
+  citron = callPackage ../tools/misc/citron { };
+
   cxx-rs = callPackage ../development/libraries/cxx-rs { };
 
   elfcat = callPackage ../tools/misc/elfcat { };
@@ -1887,6 +1889,8 @@ with pkgs;
   };
 
   nominatim = callPackage ../servers/nominatim { };
+
+  ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
@@ -9603,6 +9607,14 @@ with pkgs;
 
   jupyter = callPackage ../applications/editors/jupyter { };
 
+  jupyter-all = jupyter.override {
+    definitions = {
+      clojure = clojupyter.definition;
+      octave = octave-kernel.definition;
+      # wolfram = wolfram-for-jupyter-kernel.definition; # unfree
+    };
+  };
+
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
 
   justify = callPackage ../tools/text/justify { };
@@ -13224,7 +13236,9 @@ with pkgs;
   };
 
   soapui = callPackage ../applications/networking/soapui {
-    jdk = jdk11;
+    jdk = if stdenv.isDarwin
+      then (jdk11.override { enableJavaFX = true; })
+      else jdk11;
   };
 
   sockdump = callPackage ../tools/networking/sockdump { };
@@ -26154,17 +26168,17 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/bootstrap.nix {};
     faslExt = "fasl";
   };
-  sbcl_2_3_6 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.6"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_3_7 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.7"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_3_7;
+  sbcl_2_3_8 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.8"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_3_8;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -31747,6 +31761,8 @@ with pkgs;
   genxword = callPackage ../applications/misc/genxword { };
 
   geoipupdate = callPackage ../applications/misc/geoipupdate { };
+
+  glicol-cli = callPackage ../applications/audio/glicol-cli { };
 
   globe-cli = callPackage ../applications/misc/globe-cli { };
 
@@ -39339,7 +39355,7 @@ with pkgs;
 
   inherit (callPackage ../development/libraries/science/math/magma {
     inherit (llvmPackages_rocm) openmp;
-  }) magma magma_2_7_1 magma_2_6_2;
+  }) magma magma_2_7_2 magma_2_6_2;
 
   magma-cuda = magma.override {
     cudaSupport = true;

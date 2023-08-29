@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eza";
-  version = "0.10.8";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "eza-community";
     repo = "eza";
     rev = "v${version}";
-    hash = "sha256-3g4eauJqnbIqWtDmRvKsDiZh1eAz171FP9idF2nBXLQ=";
+    hash = "sha256-ssP4jPO7Yt98ZCKOpQi7RwKfUBOHQ1dK5rzWxAJD9Jc=";
   };
 
-  cargoHash = "sha256-HS/nmLxr5zvyneiSJk9tPUhszF5vFwSo5HMsRql9I38=";
+  cargoHash = "sha256-XxqAAs44iZuqcAsixIqEgUHWytwS9umuM/KIPosrfRo=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
