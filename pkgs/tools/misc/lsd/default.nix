@@ -1,7 +1,9 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
+, darwin
 , pandoc
 , testers
 , lsd
@@ -21,6 +23,9 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-viLr76Bq9OkPMp+BoprQusMDgx59nbevVi4uxjZ+eZg=";
 
   nativeBuildInputs = [ installShellFiles pandoc ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
   postInstall = ''
     pandoc --standalone --to man doc/lsd.md -o lsd.1
     installManPage lsd.1
