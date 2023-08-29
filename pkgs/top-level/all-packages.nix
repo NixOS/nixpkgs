@@ -676,6 +676,8 @@ with pkgs;
 
   glade = callPackage ../development/tools/glade { };
 
+  gobble = callPackage ../tools/X11/gobble { };
+
   goda = callPackage ../development/tools/goda { };
 
   gokrazy = callPackage ../development/misc/gokrazy { };
@@ -4149,6 +4151,8 @@ with pkgs;
   at = callPackage ../tools/system/at { };
 
   atftp = callPackage ../tools/networking/atftp { };
+
+  atlas = callPackage ../development/tools/database/atlas { };
 
   authoscope = callPackage ../tools/security/authoscope {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -11823,9 +11827,7 @@ with pkgs;
 
   patchage = callPackage ../applications/audio/patchage { };
 
-  patchance = python3Packages.callPackage ../applications/audio/patchance {
-    inherit (qt5) qttools;
-  };
+  patchance = python3Packages.callPackage ../applications/audio/patchance { };
 
   patatt = callPackage ../development/tools/patatt { };
 
@@ -12304,9 +12306,7 @@ with pkgs;
 
   pystring = callPackage ../development/libraries/pystring { };
 
-  raysession = python3Packages.callPackage ../applications/audio/raysession {
-    inherit (qt5) qttools;
-  };
+  raysession = python3Packages.callPackage ../applications/audio/raysession {};
 
   revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
 
@@ -35324,6 +35324,8 @@ with pkgs;
   };
 
   runc = callPackage ../applications/virtualization/runc { };
+
+  rust-traverse = callPackage ../applications/misc/rust-traverse { };
 
   rusty-psn = callPackage ../applications/misc/rusty-psn { };
 
