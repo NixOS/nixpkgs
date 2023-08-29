@@ -10645,6 +10645,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
+
   lxd = callPackage ../tools/admin/lxd/wrapper.nix { };
   lxd-unwrapped = callPackage ../tools/admin/lxd { };
 

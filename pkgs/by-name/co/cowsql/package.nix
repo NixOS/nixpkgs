@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cowsql/cowsql";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ adamcstephens ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
