@@ -25373,6 +25373,8 @@ with pkgs;
 
   whereami = callPackage ../development/libraries/whereami { };
 
+  where-is-my-sddm-theme = libsForQt5.callPackage ../data/themes/where-is-my-sddm-theme { };
+
   wildmidi = callPackage ../development/libraries/wildmidi {
     inherit (darwin.apple_sdk.frameworks) OpenAL;
   };
