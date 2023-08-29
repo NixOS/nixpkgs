@@ -2,10 +2,10 @@
 
 let
   pname = "firefly-desktop";
-  version = "1.3.3";
+  version = "2.1.5";
   src = fetchurl {
     url = "https://github.com/iotaledger/firefly/releases/download/desktop-${version}/${pname}-${version}.AppImage";
-    sha256 = "a052efa29aa692eeafc921a2be4a5cbf71ae0b4216bd4759ea179086fb44c6d6";
+    sha256 = "sha256-33LQedZTfps7uAB5LGGXM/YB7SySTJLp70+yS5pMvIk=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
