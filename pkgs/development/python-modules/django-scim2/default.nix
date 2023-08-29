@@ -27,8 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-larDh4f9/xVr11/n/WfkJ2Tx45DMQqyK3ZzkWAvzeig=";
   };
 
+  # remove this when upstream releases a new version > 0.19.0
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace "poetry>=0.12" "poetry-core>=1.5.2" \
       --replace "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 

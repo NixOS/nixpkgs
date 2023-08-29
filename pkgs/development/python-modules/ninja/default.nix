@@ -16,6 +16,7 @@ buildPythonPackage rec {
       --subst-var version
 
     substituteInPlace "$sourceRoot/ninja/__init__.py" \
+      --subst-var version \
       --subst-var-by BIN_DIR "${ninja}/bin"
   '';
 

@@ -1179,7 +1179,7 @@ someVar=$(stripHash $name)
 
 ### `wrapProgram` \<executable\> \<makeWrapperArgs\> {#fun-wrapProgram}
 
-Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
+Convenience function for `makeWrapper` that replaces `<executable>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
 

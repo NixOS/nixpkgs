@@ -96,6 +96,7 @@ mapAliases ({
   arduino_core = throw "'arduino_core' has been renamed to/replaced by 'arduino-core'"; # Converted to throw 2022-02-22
   arora = throw "arora has been removed"; # Added 2020-09-09
   asciidocFull = throw "'asciidocFull' has been renamed to/replaced by 'asciidoc-full'"; # Converted to throw 2022-02-22
+  aseprite-unfree = aseprite; # Added 2023-08-26
   asls = throw "asls has been removed: abandoned by upstream"; # Added 2023-03-16
   asterisk_13 = throw "asterisk_13: Asterisk 13 is end of life and has been removed"; # Added 2022-04-06
   asterisk_15 = throw "asterisk_15: Asterisk 15 is end of life and has been removed"; # Added 2020-10-07
@@ -855,6 +856,7 @@ mapAliases ({
   kubei = kubeclarity; # Added 2023-05-20
   kubeless = throw "kubeless is deprecated and archived by upstream"; # Added 2022-04-05
   kubicorn = throw "kubicorn has been dropped due to the lack of maintenance from upstream since 2019"; # Added 2022-05-30
+  kuma-prometheus-sd = throw "kuma-prometheus-sd has been deprecated upstream"; # Added 2023-07-02
   kvm = throw "'kvm' has been renamed to/replaced by 'qemu_kvm'"; # Converted to throw 2022-02-22
 
   ### L ###
@@ -971,6 +973,7 @@ mapAliases ({
   linuxPackages_6_2 = linuxKernel.packages.linux_6_2;
   linuxPackages_6_3 = linuxKernel.packages.linux_6_3;
   linuxPackages_6_4 = linuxKernel.packages.linux_6_4;
+  linuxPackages_6_5 = linuxKernel.packages.linux_6_5;
   linuxPackages_hardkernel_4_14 = linuxKernel.packages.hardkernel_4_14;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
@@ -995,6 +998,7 @@ mapAliases ({
   linux_6_2 = linuxKernel.kernels.linux_6_2;
   linux_6_3 = linuxKernel.kernels.linux_6_3;
   linux_6_4 = linuxKernel.kernels.linux_6_4;
+  linux_6_5 = linuxKernel.kernels.linux_6_5;
   linuxPackages_mptcp = throw "'linuxPackages_mptcp' has been moved to https://github.com/teto/mptcp-flake"; # Converted to throw 2022-10-04
   linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake"; # Converted to throw 2022-10-04
   linux_mptcp_95 = throw "'linux_mptcp_95' has been moved to https://github.com/teto/mptcp-flake"; # Converted to throw 2022-10-04

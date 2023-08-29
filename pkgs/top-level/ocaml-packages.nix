@@ -347,6 +347,8 @@ let
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
+    domain_shims = callPackage ../development/ocaml-modules/domain_shims { };
+
     domainslib = callPackage ../development/ocaml-modules/domainslib { };
 
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
@@ -874,8 +876,6 @@ let
 
     lo = callPackage ../development/ocaml-modules/lo { };
 
-    lockfree = callPackage ../development/ocaml-modules/lockfree { };
-
     logs = callPackage ../development/ocaml-modules/logs { };
 
     lru = callPackage ../development/ocaml-modules/lru { };
@@ -1055,8 +1055,6 @@ let
     mirage-random-test = callPackage ../development/ocaml-modules/mirage-random-test { };
 
     mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
-
-    mirage-stack = callPackage ../development/ocaml-modules/mirage-stack { };
 
     mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
@@ -1536,6 +1534,10 @@ let
     sail = callPackage ../development/ocaml-modules/sail { };
 
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
+
+    saturn = callPackage ../development/ocaml-modules/saturn { };
+
+    saturn_lockfree = callPackage ../development/ocaml-modules/saturn/lockfree.nix { };
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
 

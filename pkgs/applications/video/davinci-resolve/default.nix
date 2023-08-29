@@ -109,9 +109,7 @@ let
       '';
 
       # The unpack phase won't generate a directory
-      setSourceRoot = ''
-        sourceRoot=$PWD
-      '';
+      sourceRoot = ".";
 
       installPhase = ''
         runHook preInstall

@@ -2,6 +2,35 @@
 with lib;
 let
   cfg = config.networking.nftables;
+
+  tableSubmodule = { name, ... }: {
+    options = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc "Enable this table.";
+      };
+
+      name = mkOption {
+        type = types.str;
+        description = lib.mdDoc "Table name.";
+      };
+
+      content = mkOption {
+        type = types.lines;
+        description = lib.mdDoc "The table content.";
+      };
+
+      family = mkOption {
+        description = lib.mdDoc "Table family.";
+        type = types.enum [ "ip" "ip6" "inet" "arp" "bridge" "netdev" ];
+      };
+    };
+
+    config = {
+      name = mkDefault name;
+    };
+  };
 in
 {
   ###### interface
@@ -54,6 +83,24 @@ in
       '';
     };
 
+    networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "Flush the entire ruleset on each reload.");
+
+    networking.nftables.extraDeletions = mkOption {
+      type = types.lines;
+      default = "";
+      example = ''
+        # this makes deleting a non-existing table a no-op instead of an error
+        table inet some-table;
+
+        delete table inet some-table;
+      '';
+      description =
+        lib.mdDoc ''
+          Extra deletion commands to be run on every firewall start, reload
+          and after stopping the firewall.
+        '';
+    };
+
     networking.nftables.ruleset = mkOption {
       type = types.lines;
       default = "";
@@ -103,7 +150,10 @@ in
         lib.mdDoc ''
           The ruleset to be used with nftables.  Should be in a format that
           can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
-          This option conflicts with rulesetFile.
+          Note that if the tables should be cleaned first, either:
+          - networking.nftables.flushRuleset = true; needs to be set (flushes all tables)
+          - networking.nftables.extraDeletions needs to be set
+          - or networking.nftables.tables can be used, which will clean up the table automatically
         '';
     };
     networking.nftables.rulesetFile = mkOption {
@@ -113,8 +163,63 @@ in
         lib.mdDoc ''
           The ruleset file to be used with nftables.  Should be in a format that
           can be loaded using "nft -f".  The ruleset is updated atomically.
-          This option conflicts with ruleset and nftables based firewall.
         '';
+    };
+    networking.nftables.tables = mkOption {
+      type = types.attrsOf (types.submodule tableSubmodule);
+
+      default = {};
+
+      description = lib.mdDoc ''
+        Tables to be added to ruleset.
+        Tables will be added together with delete statements to clean up the table before every update.
+      '';
+
+      example = {
+        filter = {
+          family = "inet";
+          content = ''
+            # Check out https://wiki.nftables.org/ for better documentation.
+            # Table for both IPv4 and IPv6.
+            # Block all incoming connections traffic except SSH and "ping".
+            chain input {
+              type filter hook input priority 0;
+
+              # accept any localhost traffic
+              iifname lo accept
+
+              # accept traffic originated from us
+              ct state {established, related} accept
+
+              # ICMP
+              # routers may also want: mld-listener-query, nd-router-solicit
+              ip6 nexthdr icmpv6 icmpv6 type { destination-unreachable, packet-too-big, time-exceeded, parameter-problem, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert } accept
+              ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem } accept
+
+              # allow "ping"
+              ip6 nexthdr icmpv6 icmpv6 type echo-request accept
+              ip protocol icmp icmp type echo-request accept
+
+              # accept SSH connections (required for a server)
+              tcp dport 22 accept
+
+              # count and drop any other traffic
+              counter drop
+            }
+
+            # Allow all outgoing connections.
+            chain output {
+              type filter hook output priority 0;
+              accept
+            }
+
+            chain forward {
+              type filter hook forward priority 0;
+              accept
+            }
+          '';
+        };
+      };
     };
   };
 
@@ -124,6 +229,8 @@ in
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
     networking.networkmanager.firewallBackend = mkDefault "nftables";
+    # versionOlder for backportability, remove afterwards
+    networking.nftables.flushRuleset = mkDefault (versionOlder config.system.stateVersion "23.11" || (cfg.rulesetFile != null || cfg.ruleset != ""));
     systemd.services.nftables = {
       description = "nftables firewall";
       before = [ "network-pre.target" ];
@@ -131,18 +238,49 @@ in
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = let
+        enabledTables = filterAttrs (_: table: table.enable) cfg.tables;
+        deletionsScript = pkgs.writeScript "nftables-deletions" ''
+          #! ${pkgs.nftables}/bin/nft -f
+          ${if cfg.flushRuleset then "flush ruleset"
+            else concatStringsSep "\n" (mapAttrsToList (_: table: ''
+              table ${table.family} ${table.name}
+              delete table ${table.family} ${table.name}
+            '') enabledTables)}
+          ${cfg.extraDeletions}
+        '';
+        deletionsScriptVar = "/var/lib/nftables/deletions.nft";
+        ensureDeletions = pkgs.writeShellScript "nftables-ensure-deletions" ''
+          touch ${deletionsScriptVar}
+          chmod +x ${deletionsScriptVar}
+        '';
+        saveDeletionsScript = pkgs.writeShellScript "nftables-save-deletions" ''
+          cp ${deletionsScript} ${deletionsScriptVar}
+        '';
+        cleanupDeletionsScript = pkgs.writeShellScript "nftables-cleanup-deletions" ''
+          rm ${deletionsScriptVar}
+        '';
         rulesScript = pkgs.writeTextFile {
           name =  "nftables-rules";
           executable = true;
           text = ''
             #! ${pkgs.nftables}/bin/nft -f
-            flush ruleset
-            ${if cfg.rulesetFile != null then ''
+            # previous deletions, if any
+            include "${deletionsScriptVar}"
+            # current deletions
+            include "${deletionsScript}"
+            ${concatStringsSep "\n" (mapAttrsToList (_: table: ''
+              table ${table.family} ${table.name} {
+                ${table.content}
+              }
+            '') enabledTables)}
+            ${cfg.ruleset}
+            ${lib.optionalString (cfg.rulesetFile != null) ''
               include "${cfg.rulesetFile}"
-            '' else cfg.ruleset}
+            ''}
           '';
           checkPhase = lib.optionalString cfg.checkRuleset ''
             cp $out ruleset.conf
+            sed 's|include "${deletionsScriptVar}"||' -i ruleset.conf
             ${cfg.preCheckRuleset}
             export NIX_REDIRECTS=/etc/protocols=${pkgs.buildPackages.iana-etc}/etc/protocols:/etc/services=${pkgs.buildPackages.iana-etc}/etc/services
             LD_PRELOAD="${pkgs.buildPackages.libredirect}/lib/libredirect.so ${pkgs.buildPackages.lklWithFirewall.lib}/lib/liblkl-hijack.so" \
@@ -152,9 +290,11 @@ in
       in {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = rulesScript;
-        ExecReload = rulesScript;
-        ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
+        ExecStart = [ ensureDeletions rulesScript ];
+        ExecStartPost = saveDeletionsScript;
+        ExecReload = [ ensureDeletions rulesScript saveDeletionsScript ];
+        ExecStop = [ deletionsScriptVar cleanupDeletionsScript ];
+        StateDirectory = "nftables";
       };
     };
   };

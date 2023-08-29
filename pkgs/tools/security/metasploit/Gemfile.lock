@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: e15c05b0bd8774e33c33c100965ec7e301e4f295
-  ref: refs/tags/6.3.30
+  revision: a97e8a0e2a3b15f3b3710f04def1178139ae0fa2
+  ref: refs/tags/6.3.31
   specs:
-    metasploit-framework (6.3.30)
+    metasploit-framework (6.3.31)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -41,6 +41,7 @@ GIT
       mqtt
       msgpack (~> 1.6.0)
       nessus_rest
+      net-imap
       net-ldap
       net-smtp
       net-ssh
@@ -104,25 +105,25 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    actionpack (7.0.7)
-      actionview (= 7.0.7)
-      activesupport (= 7.0.7)
+    actionpack (7.0.7.2)
+      actionview (= 7.0.7.2)
+      activesupport (= 7.0.7.2)
       rack (~> 2.0, >= 2.2.4)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actionview (7.0.7)
-      activesupport (= 7.0.7)
+    actionview (7.0.7.2)
+      activesupport (= 7.0.7.2)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    activemodel (7.0.7)
-      activesupport (= 7.0.7)
-    activerecord (7.0.7)
-      activemodel (= 7.0.7)
-      activesupport (= 7.0.7)
-    activesupport (7.0.7)
+    activemodel (7.0.7.2)
+      activesupport (= 7.0.7.2)
+    activerecord (7.0.7.2)
+      activemodel (= 7.0.7.2)
+      activesupport (= 7.0.7.2)
+    activesupport (7.0.7.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -133,13 +134,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.806.0)
-    aws-sdk-core (3.180.3)
+    aws-partitions (1.811.0)
+    aws-sdk-core (3.181.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.399.0)
+    aws-sdk-ec2 (1.402.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-ec2instanceconnect (1.32.0)
@@ -151,8 +152,8 @@ GEM
     aws-sdk-kms (1.71.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.132.1)
-      aws-sdk-core (~> 3, >= 3.179.0)
+    aws-sdk-s3 (1.134.0)
+      aws-sdk-core (~> 3, >= 3.181.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.6)
     aws-sdk-ssm (1.156.0)
@@ -172,6 +173,7 @@ GEM
     cookiejar (0.3.3)
     crass (1.0.6)
     daemons (1.4.1)
+    date (3.3.3)
     dnsruby (1.70.0)
       simpleidn (~> 0.2.1)
     domain_name (0.5.20190701)
@@ -271,6 +273,9 @@ GEM
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     nessus_rest (0.1.6)
+    net-imap (0.3.7)
+      date
+      net-protocol
     net-ldap (0.18.0)
     net-protocol (0.2.1)
       timeout
@@ -317,9 +322,9 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
-    railties (7.0.7)
-      actionpack (= 7.0.7)
-      activesupport (= 7.0.7)
+    railties (7.0.7.2)
+      actionpack (= 7.0.7.2)
+      activesupport (= 7.0.7.2)
       method_source
       rake (>= 12.2)
       thor (~> 1.0)
@@ -331,7 +336,7 @@ GEM
     recog (3.1.2)
       nokogiri
     redcarpet (3.6.0)
-    reline (0.3.7)
+    reline (0.3.8)
       io-console (~> 0.5)
     rex-arch (0.1.14)
       rex-text
@@ -407,7 +412,7 @@ GEM
       tilt (~> 2.0)
     sqlite3 (1.6.3)
       mini_portile2 (~> 2.8.0)
-    sshkey (2.0.0)
+    sshkey (3.0.0)
     strptime (0.2.5)
     swagger-blocks (3.0.0)
     thin (1.8.2)

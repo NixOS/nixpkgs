@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
     "--disable-precompiled-headers"
     "--disable-profiling"
     "--disable-static-qt"
+    "--disable-update-check"
     "--enable-optimization"
     "--with-boost-libdir=${lib.getLib boost}/lib"
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"

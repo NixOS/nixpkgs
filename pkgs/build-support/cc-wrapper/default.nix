@@ -69,7 +69,7 @@ let
 
   includeFortifyHeaders' = if includeFortifyHeaders != null
     then includeFortifyHeaders
-    else targetPlatform.libc == "musl";
+    else (targetPlatform.libc == "musl" && isGNU);
 
   # Prefix for binaries. Customarily ends with a dash separator.
   #

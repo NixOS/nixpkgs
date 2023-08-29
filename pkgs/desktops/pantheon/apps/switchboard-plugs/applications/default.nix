@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-applications";
-  version = "7.0.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-M9JMrxhMiDC/qrrnPaBm6Kf3CAkxrhGWwJF8jVm2G5c=";
+    sha256 = "sha256-r2JKiTewsLQSZPriC0w72CFevRQXytrFcO2VfA9BKHA=";
   };
 
   nativeBuildInputs = [

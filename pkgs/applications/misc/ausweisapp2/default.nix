@@ -14,6 +14,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
+  # The build scripts copy the entire translations directory from Qt
+  # which ends up being read-only because it's in the store.
+  preBuild = ''
+    chmod +w resources/translations
+  '';
+
   buildInputs = [ qtsvg qttools qtwebsockets qtquickcontrols2 qtgraphicaleffects pcsclite ];
 
   meta = with lib; {

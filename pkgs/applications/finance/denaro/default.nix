@@ -14,13 +14,13 @@
 
 buildDotnetModule rec {
   pname = "denaro";
-  version = "2023.6.2";
+  version = "2023.8.1";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Denaro";
     rev = version;
-    hash = "sha256-wnqk+UuOQc/Yph9MbQU8FRsNC/8ZQ9FxgF205pdHf+s=";
+    hash = "sha256-wq5dwSgfmEHy38LPjWOE+J+prjIYy2z4Hezq/45Ddjk=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
@@ -54,6 +54,7 @@ buildDotnetModule rec {
     gtk4
     libadwaita
     glib # Fixes "Could not retrieve parent type - is the typeid valid?"
+    gdk-pixbuf
   ];
 
   passthru.updateScript = ./update.sh;

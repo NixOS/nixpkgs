@@ -10,11 +10,11 @@ assert jdk != null;
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apache-maven";
-  version = "3.9.3";
+  version = "3.9.4";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/${finalAttrs.pname}-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-4eE6wMQvO2TZAMV//GUuzvaCuCVdfTVO+7tPYlGdpPE=";
+    hash = "sha256-/2a3DIMKONMx1E9sJaN7WCRx3vmhYck5ArrHvqMJgxk=";
   };
 
   sourceRoot = ".";

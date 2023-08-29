@@ -5,7 +5,6 @@
 , cryptography
 , fetchFromGitHub
 , freezegun
-, openssl
 , oscrypto
 , pytest-asyncio
 , pytestCheckHook
@@ -28,6 +27,11 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-q2YxncyMHmbRmcoLb68huK02CYiKqF2CFRl8vkUfxg4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "pytest-runner",' ""
+  '';
 
   nativeBuildInputs = [
     setuptools

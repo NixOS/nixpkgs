@@ -10,6 +10,7 @@
 , which
 , freetype
 , libglvnd
+, libjpeg
 , libogg
 , libvorbis
 , libxmp
@@ -25,25 +26,18 @@ let
     url = "https://download.tuxfamily.org/openarena/rel/088/openarena-0.8.8.zip";
     hash = "sha256-Rup1n14k9sKcyVFYzFqPYV+BEBCnUNwpnFsnyGrhl20=";
   };
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "openarena";
+  version = "unstable-2023-03-02";
 
-  openarena-source = fetchFromGitHub {
+  src = fetchFromGitHub {
     name = "openarena-source";
     owner = "OpenArena";
     repo = "engine";
     rev = "075cb860a4d2bc43e75e5f506eba7da877708aba";
     hash = "sha256-ofQKQyS3ti5TSN+zqwPFYuJiB9kvdER6zTWn8yrOpQU=";
   };
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "openarena";
-  version = "unstable-2023-03-02";
-
-  srcs = [
-    openarena-source
-    openarena-maps
-  ];
-
-  sourceRoot = "openarena-source";
 
   patches = [
     # Fix Makefile `copyFiles` target
@@ -65,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     freetype
     libglvnd
+    libjpeg
     libogg
     libvorbis
     libxmp
@@ -75,13 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  makeFlags = [
-    "USE_INTERNAL_LIBS=0"
-    "USE_FREETYPE=1"
-    "USE_OPENAL_DLOPEN=0"
-    "USE_CURL_DLOPEN=0"
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ];
+  preConfigure = ''
+    cp ${./Makefile.local} ./Makefile.local
+  '';
 
   installTargets = [ "copyfiles" ];
   installFlags = [ "COPYDIR=$(out)/share/openarena" ];

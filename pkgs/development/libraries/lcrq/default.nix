@@ -5,14 +5,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "lcrq";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "librecast";
     repo = "lcrq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GvfmHST53qwVrztnmCzUVbVkgNGtAl5adqdNWOHItiU=";
+    hash = "sha256-r4UiZ9oNDxF3rHMqg+1NLLjm6LPZtzgtZOs7pRe5SdQ=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -23,6 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://librecast.net/lcrq.html";
     license = [ lib.licenses.gpl2 lib.licenses.gpl3 ];
     maintainers = with lib.maintainers; [ albertchae aynish DMills27 jasonodoom jleightcap ];
-    platforms = lib.platforms.gnu;
+    platforms = lib.platforms.unix;
   };
 })

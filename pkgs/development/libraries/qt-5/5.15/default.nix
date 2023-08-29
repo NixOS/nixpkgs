@@ -46,6 +46,7 @@ let
       ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
+      ./qtbase.patch.d/9999-backport-dbus-crash.patch
     ];
     qtdeclarative = [
       ./qtdeclarative.patch
@@ -333,7 +334,17 @@ let
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-in makeScopeWithSplicing' {
-  otherSplices = generateSplicesForMkScope "qt5";
-  f = addPackages;
-}
+  baseScope = makeScopeWithSplicing' {
+    otherSplices = generateSplicesForMkScope "qt5";
+    f = addPackages;
+  };
+
+  bootstrapScope = baseScope.overrideScope(final: prev: {
+    qtbase = prev.qtbase.override { qttranslations = null; };
+    qtdeclarative = null;
+  });
+
+  finalScope = baseScope.overrideScope(final: prev: {
+    qttranslations = bootstrapScope.qttranslations;
+  });
+in finalScope

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmediainfo wxGTK32 desktop-file-utils libSM imagemagick ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  sourceRoot = "./MediaInfo/Project/GNU/GUI/";
+  sourceRoot = "MediaInfo/Project/GNU/GUI";
 
   enableParallelBuilding = true;
 

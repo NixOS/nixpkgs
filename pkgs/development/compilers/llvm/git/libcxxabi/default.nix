@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) || !stdenv.hostPlatform.isDarwin) [
     # libcxxabi's CMake looks as though it treats -nostdlib++ as implying -nostdlib,
     # but that does not appear to be the case for example when building
     # pkgsLLVM.libcxxabi (which uses clangNoCompilerRtWithLibc).

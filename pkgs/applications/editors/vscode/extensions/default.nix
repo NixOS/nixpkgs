@@ -2610,6 +2610,22 @@ let
         };
       };
 
+      ms-vscode-remote.remote-containers = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "remote-containers";
+          publisher = "ms-vscode-remote";
+          version = "0.305.0";
+          sha256 = "sha256-srSRD/wgDbQo9P1uJk8YtcXPZO62keG5kRnp1TmHqOc=";
+        };
+        meta = {
+          description = "Open any folder or repository inside a Docker container.";
+          downloadPage = "Use a container as your development environment";
+          homepage = "https://code.visualstudio.com/docs/devcontainers/containers";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.anthonyroussel ];
+        };
+      };
+
       ms-vscode-remote.remote-ssh = callPackage ./ms-vscode-remote.remote-ssh { };
 
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };

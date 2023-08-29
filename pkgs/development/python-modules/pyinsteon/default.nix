@@ -4,6 +4,7 @@
 , async-generator
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pypubsub
 , pyserial
 , pyserial-asyncio
@@ -11,6 +12,7 @@
 , pythonOlder
 , setuptools
 , voluptuous
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -27,8 +29,18 @@ buildPythonPackage rec {
     hash = "sha256-KKF+XYQgdmLbbicyMFyZBG4ol69xAWCF2W/r15gH2Mo=";
   };
 
+  patches = [
+    # https://github.com/pyinsteon/pyinsteon/pull/361
+    (fetchpatch {
+      name = "relax-setuptools-dependency.patch";
+      url = "https://github.com/pyinsteon/pyinsteon/commit/676bc5fff11b73a4c3fd189a6ac6d3de9ca21ae0.patch";
+      hash = "sha256-kTu1+IwDrcdqelyK/vfhxw8MQBis5I1jag7YTytKQhs=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

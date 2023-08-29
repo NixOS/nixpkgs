@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, mkDerivation
+{ lib, fetchFromGitHub, nix-update-script, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
 , qtconnectivity, qtcharts, libusb-compat-0_1, gsl, blas
 , bison, flex, zlib, qmake, makeDesktopItem, wrapQtAppsHook
@@ -16,13 +16,13 @@ let
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.6-RC4";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2cwxsfy4Zc9fF3fe6QcZp3LPd2yWw2rDlYrK/QGiJYw=";
+    hash = "sha256-Ntim1/ZPaTPCHQ5p8xF5LWpqq8+OgkPfaQqqysv9j/c=";
   };
 
   buildInputs = [
@@ -72,10 +72,12 @@ in mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ adamcstephens ];
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ adamcstephens ];
+    license = lib.licenses.gpl2Plus;
   };
 }

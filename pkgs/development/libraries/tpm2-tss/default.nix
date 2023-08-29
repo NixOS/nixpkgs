@@ -31,16 +31,16 @@ stdenv.mkDerivation rec {
     shadow
   ];
 
-  # cmocka is checked / used(?) in the configure script
+  buildInputs = [
+    openssl json_c curl libgcrypt uthash libuuid
+  ]
+  # cmocka is checked in the configure script
   # when unit and/or integration testing is enabled
-  buildInputs = [ openssl json_c curl libgcrypt uthash libuuid ]
-    # cmocka doesn't build with pkgsStatic, and we don't need it anyway
-    # when tests are not run
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    cmocka
-  ];
+  # cmocka doesn't build with pkgsStatic, and we don't need it anyway
+  # when tests are not run
+  ++ lib.optional doInstallCheck cmocka;
 
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
   ];
 
@@ -70,26 +70,23 @@ stdenv.mkDerivation rec {
       --replace 'git describe --tags --always --dirty' 'echo "${version}"'
   '';
 
-  configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+  configureFlags = lib.optionals doInstallCheck [
     "--enable-unit"
     "--enable-integration"
   ];
-
-  doCheck = true;
-  preCheck = ''
-    # Since we rewrote the load path in the dynamic loader for the TCTI
-    # The various tcti implementation should be placed in their target directory
-    # before we could run tests
-    installPhase
-    # install already done, dont need another one
-    dontInstall=1
-  '';
 
   postInstall = ''
     # Do not install the upstream udev rules, they rely on specific
     # users/groups which aren't guaranteed to exist on the system.
     rm -R $out/lib/udev
   '';
+
+  doCheck = false;
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  # Since we rewrote the load path in the dynamic loader for the TCTI
+  # The various tcti implementation should be placed in their target directory
+  # before we could run tests, so we make turn checkPhase into installCheckPhase
+  installCheckTarget = "check";
 
   meta = with lib; {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";

@@ -12,8 +12,9 @@ buildGoModule rec {
   };
 
   patches = [
+    # Ensure that listmonk supports Go 1.20
     (fetchpatch {
-      url = "https://github.com/knadh/listmonk/pull/1479.patch";
+      url = "https://github.com/knadh/listmonk/commit/25513b81044803b104ada63c0be57a913960484e.patch";
       hash = "sha256-SYACM8r+NgeSWn9VJV4+wkm+6s/MhNGwn5zyc2tw7FU=";
     })
   ];

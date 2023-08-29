@@ -27,6 +27,15 @@ buildPythonPackage rec {
     hash = "sha256-14vIih+r/PHLxhgG29YtwuosSBLpewD2CluWpH2+pLc=";
   };
 
+  # Opened https://github.com/progressivis/ipytablewidgets/issues/3 to ask if
+  # jupyterlab can be updated upstream. (From commits, it looks like it was
+  # set to this version on purpose.) In the meantime, the build still works.
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'jupyterlab>=3.0.0,<3.7' 'jupyterlab>=3.0.0'
+  '';
+
   nativeBuildInputs = [
     jupyter-packaging
     jupyterlab

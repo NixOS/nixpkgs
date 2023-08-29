@@ -33,7 +33,7 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  propagatedBuildInput = [
+  propagatedBuildInputs = [
     pip
   ];
 

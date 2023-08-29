@@ -8,20 +8,22 @@
 , cuda_nvcc
 , cudaFlags
 , cudaVersion
+# passthru.updateScript
+, gitUpdater
 }:
 let
   # Output looks like "-gencode=arch=compute_86,code=sm_86 -gencode=arch=compute_86,code=compute_86"
   gencode = lib.concatStringsSep " " cudaFlags.gencode;
 in
 backendStdenv.mkDerivation (finalAttrs: {
-  name = "nccl-${finalAttrs.version}-cuda-${cudaVersion}";
-  version = "2.18.3-1";
+  pname = "nccl";
+  version = "2.18.5-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = "nccl";
+    repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v4U4IzwiuiYFyFhxVmNOCUmkbSg/AM0QtWPve0ehVhs=";
+    hash = "sha256-vp2WitKateEt1AzSeeEvY/wM4NnUmV7XgL/gfPRUObY=";
   };
 
   outputs = [ "out" "dev" ];
@@ -62,6 +64,12 @@ backendStdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
+
+  # Run the update script with: `nix-shell maintainers/scripts/update.nix --argstr package cudaPackages.nccl`
+  passthru.updateScript = gitUpdater {
+    inherit (finalAttrs) pname version;
+    rev-prefix = "v";
+  };
 
   enableParallelBuilding = true;
 

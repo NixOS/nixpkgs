@@ -11,13 +11,13 @@
 , qtpositioning
 , qtmultimedia
 , qtserialport
-, qttranslations
 , qtwayland
 , qtwebengine
 , calcmysky
 , qxlsx
 , indilib
 , libnova
+, qttools
 }:
 
 stdenv.mkDerivation rec {
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     perl
     wrapGAppsHook
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
@@ -60,7 +61,6 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtmultimedia
     qtserialport
-    qttranslations
     qtwebengine
     calcmysky
     qxlsx

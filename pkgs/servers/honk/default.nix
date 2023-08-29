@@ -3,6 +3,7 @@
 , fetchurl
 , sqlite
 , installShellFiles
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -48,6 +49,10 @@ buildGoModule rec {
     mv docs/{*.html,*.txt,*.jpg,*.png} $out/share/doc/${pname}
     mv views $out/share/${pname}
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) honk;
+  };
 
   meta = {
     changelog = "https://humungus.tedunangst.com/r/honk/v/v${version}/f/docs/changelog.txt";

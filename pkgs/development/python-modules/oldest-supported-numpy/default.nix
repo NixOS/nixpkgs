@@ -25,10 +25,11 @@ buildPythonPackage rec {
       --replace 'numpy==' 'numpy>='
   '';
 
-  nativeBuildInputs = [
+  propagatedBuildInputs = [
     numpy
   ];
 
+  # package has no tests
   doCheck = false;
 
   meta = with lib; {

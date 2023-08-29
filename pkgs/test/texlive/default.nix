@@ -1,6 +1,31 @@
 { lib, stdenv, buildEnv, runCommand, fetchurl, file, texlive, writeShellScript, writeText }:
 
-{
+rec {
+
+  mkTeXTest = lib.makeOverridable (
+    { name
+    , format
+    , text
+    , texLive ? texlive.combined.scheme-small
+    , options ? "-interaction=errorstopmode"
+    , preTest ? ""
+    , postTest ? ""
+    , ...
+    }@attrs: runCommand "texlive-test-tex-${name}"
+      ({
+        nativeBuildInputs = [ texLive ] ++ attrs.nativeBuildInputs or [ ];
+        text = builtins.toFile "${name}.tex" text;
+      } // builtins.removeAttrs attrs [ "nativeBuildInputs" "text" "texLive" ])
+      ''
+        export HOME="$(mktemp -d)"
+        mkdir "$out"
+        cd "$out"
+        cp "$text" "$name.tex"
+        ${preTest}
+        $format $options "$name.tex"
+        ${postTest}
+      ''
+  );
 
   tlpdbNix = runCommand "texlive-test-tlpdb-nix" {
     nixpkgsTlpdbNix = ../../tools/typesetting/tex/texlive/tlpdb.nix;
@@ -11,34 +36,32 @@
     diff -u "''${nixpkgsTlpdbNix}" "''${tlpdbNix}" | tee "$out/tlpdb.nix.patch"
   '';
 
-  opentype-fonts = runCommand "texlive-test-opentype" {
-    nativeBuildInputs = [
-      (with texlive; combine { inherit scheme-medium libertinus-fonts; })
-    ];
-    input = builtins.toFile "opentype-testfile.tex" ''
-      \documentclass{article}
-      \usepackage{fontspec}
-      \setmainfont{Libertinus Serif}
-      \begin{document}
-        \LaTeX{} is great
-      \end{document}
-    '';
-  }
-  ''
-    export HOME="$(mktemp -d)"
-    # We use the same testfile to test two completely different
-    # font discovery mechanisms, both of which were once broken:
-    #  - lualatex uses its own luaotfload script (#220228)
-    #  - xelatex uses fontconfig (#228196)
-    # both of the following two commands need to succeed.
-    lualatex -halt-on-error "$input"
-    xelatex -halt-on-error "$input"
-    echo success > $out
-  '';
+  # test two completely different font discovery mechanisms, both of which were once broken:
+  #  - lualatex uses its own luaotfload script (#220228)
+  #  - xelatex uses fontconfig (#228196)
+  opentype-fonts = lib.recurseIntoAttrs rec {
+    lualatex = mkTeXTest {
+      name = "opentype-fonts-lualatex";
+      format = "lualatex";
+      texLive = texlive.combine { inherit (texlive) scheme-small libertinus-fonts; };
+      text = ''
+        \documentclass{article}
+        \usepackage{fontspec}
+        \setmainfont{Libertinus Serif}
+        \begin{document}
+          \LaTeX{} is great
+        \end{document}
+      '';
+    };
+    xelatex = lualatex.override {
+      name = "opentype-fonts-xelatex";
+      format = "xelatex";
+    };
+  };
 
   chktex = runCommand "texlive-test-chktex" {
     nativeBuildInputs = [
-      (with texlive; combine { inherit scheme-infraonly chktex; })
+      (texlive.combine { inherit (texlive) scheme-infraonly chktex; })
     ];
     input = builtins.toFile "chktex-sample.tex" ''
       \documentclass{article}
@@ -76,7 +99,7 @@
 
     # test dvipng's limited capability to render postscript specials via GS
     ghostscript = runCommand "texlive-test-ghostscript" {
-      nativeBuildInputs = [ file (with texlive; combine { inherit scheme-small dvipng; }) ];
+      nativeBuildInputs = [ file (texlive.combine { inherit (texlive) scheme-small dvipng; }) ];
       input = builtins.toFile "postscript-sample.tex" ''
         \documentclass{minimal}
         \begin{document}
@@ -143,8 +166,8 @@
 
   texdoc = runCommand "texlive-test-texdoc" {
     nativeBuildInputs = [
-      (with texlive; combine {
-        inherit scheme-infraonly luatex texdoc;
+      (texlive.combine {
+        inherit (texlive) scheme-infraonly luatex texdoc;
         pkgFilter = pkg: lib.elem pkg.tlType [ "run" "bin" "doc" ];
       })
     ];
@@ -154,6 +177,115 @@
     texdoc --debug --list texdoc | tee "$out"
     grep texdoc.pdf "$out"
   '';
+
+  # check that the default language is US English
+  defaultLanguage = lib.recurseIntoAttrs rec {
+    # language.def
+    etex = mkTeXTest {
+      name = "default-language-etex";
+      format = "etex";
+      text = ''
+        \catcode`\@=11
+        \ifnum\language=\lang@USenglish \message{[tests.texlive] Default language is US English.}
+        \else\errmessage{[tests.texlive] Error: default language is NOT US English.}\fi
+        \ifnum\language=0\message{[tests.texlive] Default language has id 0.}
+        \else\errmessage{[tests.texlive] Error: default language does NOT have id 0.}\fi
+        \bye
+      '';
+    };
+    # language.dat
+    latex = mkTeXTest {
+      name = "default-language-latex";
+      format = "latex";
+      text = ''
+        \makeatletter
+        \ifnum\language=\l@USenglish \GenericWarning{}{[tests.texlive] Default language is US English}
+        \else\GenericError{}{[tests.texlive] Error: default language is NOT US English}{}{}\fi
+        \ifnum\language=0\GenericWarning{}{[tests.texlive] Default language has id 0}
+        \else\GenericError{}{[tests.texlive] Error: default language does NOT have id 0}{}{}\fi
+        \stop
+      '';
+    };
+    # language.dat.lua
+    luatex = etex.override {
+      name = "default-language-luatex";
+      format = "luatex";
+    };
+  };
+
+  # check that all languages are available, including synonyms
+  allLanguages = let hyphenBase = lib.head texlive.hyphen-base.pkgs; texLive = texlive.combined.scheme-full; in
+    lib.recurseIntoAttrs {
+      # language.def
+      etex = mkTeXTest {
+        name = "all-languages-etex";
+        format = "etex";
+        inherit hyphenBase texLive;
+        text = ''
+          \catcode`\@=11
+          \input kvsetkeys.sty
+          \def\CheckLang#1{
+            \ifcsname lang@#1\endcsname\message{[tests.texlive] Found language #1}
+            \else\errmessage{[tests.texlive] Error: missing language #1}\fi
+          }
+          \comma@parse{@texLanguages@}\CheckLang
+          \bye
+        '';
+        preTest = ''
+          texLanguages="$(sed -n -E 's/^\\addlanguage\s*\{([^}]+)\}.*$/\1/p' < "$hyphenBase"/tex/generic/config/language.def)"
+          texLanguages="''${texLanguages//$'\n'/,}"
+          substituteInPlace "$name.tex" --subst-var texLanguages
+        '';
+      };
+      # language.dat
+      latex = mkTeXTest {
+        name = "all-languages-latex";
+        format = "latex";
+        inherit hyphenBase texLive;
+        text = ''
+          \makeatletter
+          \@for\Lang:=italian,@texLanguages@\do{
+            \ifcsname l@\Lang\endcsname
+              \GenericWarning{}{[tests.texlive] Found language \Lang}
+            \else
+              \GenericError{}{[tests.texlive] Error: missing language \Lang}{}{}
+            \fi
+          }
+          \stop
+        '';
+        preTest = ''
+          texLanguages="$(sed -n -E 's/^([^%= \t]+).*$/\1/p' < "$hyphenBase"/tex/generic/config/language.dat)"
+          texLanguages="''${texLanguages//$'\n'/,}"
+          substituteInPlace "$name.tex" --subst-var texLanguages
+        '';
+      };
+      # language.dat.lua
+      luatex = mkTeXTest {
+        name = "all-languages-luatex";
+        format = "luatex";
+        inherit hyphenBase texLive;
+        text = ''
+          \directlua{
+            require('luatex-hyphen.lua')
+            langs = '@texLanguages@,'
+            texio.write('\string\n')
+            for l in langs:gmatch('([^,]+),') do
+              if luatexhyphen.lookupname(l) \string~= nil then
+                texio.write('[tests.texlive] Found language '..l..'.\string\n')
+              else
+                error('[tests.texlive] Error: missing language '..l..'.', 2)
+              end
+            end
+          }
+          \bye
+        '';
+        preTest = ''
+          texLanguages="$(sed -n -E 's/^.*\[("|'\''')(.*)("|'\''')].*$/\2/p' < "$hyphenBase"/tex/generic/config/language.dat.lua)"
+          texLanguages="''${texLanguages//$'\n'/,}"
+          substituteInPlace "$name.tex" --subst-var texLanguages
+        '';
+      };
+    };
 
   # test that language files are generated as expected
   hyphen-base = runCommand "texlive-test-hyphen-base" {
@@ -511,4 +643,25 @@
           echo "$errorText"
           false
         '');
+
+  # verify that all fixed hashes are present
+  # this is effectively an eval-time assertion, converted into a derivation for
+  # ease of testing
+  fixedHashes = with lib; let
+    combine = findFirst (p: (head p.pkgs).pname == "combine") { pkgs = []; } (head texlive.collection-latexextra.pkgs).tlDeps;
+    all = concatLists (map (p: p.pkgs or []) (attrValues (removeAttrs texlive [ "bin" "combine" "combined" "tlpdb" ]))) ++ combine.pkgs;
+    fods = filter (p: isDerivation p && p.tlType != "bin") all;
+    errorText = concatMapStrings (p: optionalString (! p ? outputHash) "${p.pname + optionalString (p.tlType != "run") ("." + p.tlType)} does not have a fixed output hash\n") fods;
+  in runCommand "texlive-test-fixed-hashes" {
+    inherit errorText;
+    passAsFile = [ "errorText" ];
+  } ''
+    if [[ -s "$errorTextPath" ]] ; then
+      cat "$errorTextPath"
+      echo Failed: some TeX Live packages do not have fixed output hashes. Please read UPGRADING.md for how to generate a new fixed-hashes.nix.
+      exit 1
+    else
+      touch "$out"
+    fi
+  '';
 }

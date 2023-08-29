@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-testinfra";
-  version = "8.1.0";
+  version = "9.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m0CCi1j7esK/8pzBRlk0rfQ08Q3VoQj2BTXe5SZgpj0=";
+    hash = "sha256-UxGzaeBUaSD85GTDv5RbVevnWhJ1aPbWFelLiJE0AUk=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   # markers don't get added when docker is not available (leads to warnings):
-  # https://github.com/pytest-dev/pytest-testinfra/blob/8.1.0/test/conftest.py#L228
+  # https://github.com/pytest-dev/pytest-testinfra/blob/9.0.0/test/conftest.py#L223
   preCheck = ''
     export HOME=$(mktemp -d)
     sed -i '54imarkers = \

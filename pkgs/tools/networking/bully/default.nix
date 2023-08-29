@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sourceRoot = "./${src.name}/src";
+  sourceRoot = "${src.name}/src";
 
   installPhase = ''
     install -Dm555 -t $out/bin bully

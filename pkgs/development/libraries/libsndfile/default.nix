@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsndfile";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-zd0HDUzVYLyFjhIudBJQaKJUtYMjZeQRLALSkyD9tXU=";
+    hash = "sha256-MOOX/O0UaoeMaQPW9PvvE0izVp+6IoE5VbtTx0RvMkI=";
   };
 
   nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];

@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , setuptools
+, setuptools-scm
+, wheel
 , buildPythonApplication
 , pytestCheckHook
 , bubblewrap
@@ -41,8 +43,9 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
-
 
   propagatedBuildInputs = [
     systemdForMkosi

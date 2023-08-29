@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       advanced code editor, a visual debugger and a GUI designer.
     '';
     homepage = "https://wiki.qt.io/Qt_Creator";
-    license = licenses.lgpl3Plus;
+    license = licenses.gpl3Only; # annotated with The Qt Company GPL Exception 1.0
     maintainers = [ maintainers.rewine ];
     platforms = platforms.linux;
   };

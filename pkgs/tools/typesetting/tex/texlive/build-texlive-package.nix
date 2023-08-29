@@ -29,6 +29,7 @@
 , hasManpages ? false
 , hasRunfiles ? false
 , hasTlpkg ? false
+, extraNativeBuildInputs ? [ ]
 , ...
 }@args:
 
@@ -119,6 +120,7 @@ let
         inherit meta;
         # shebang interpreters
         buildInputs = (args.extraBuildInputs or [ ]) ++ [ bash perl ] ++ (lib.attrVals (args.scriptExts or [ ]) extToInput);
+        nativeBuildInputs = extraNativeBuildInputs;
         # absolute scripts folder
         scriptsFolder = lib.optionalString (run ? outPath) (run.outPath + "/scripts/" + args.scriptsFolder or pname);
         # binaries info

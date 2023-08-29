@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "vsure";
-  version = "2.6.5";
+  version = "2.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2w1D0380ljgRa5NSPAUlUPFTmGzjl79hyLwirmuHmGo=";
+    hash = "sha256-ecrBvKOhW3znVoXHQeKKW4o/hbA4fLhxJrWZObwtki8=";
   };
 
   propagatedBuildInputs = [

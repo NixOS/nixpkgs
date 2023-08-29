@@ -10,6 +10,7 @@
 , jupyter-server
 , jupyter-server-fileid
 , jupyter-ydoc
+, jupyterlab
 , ypy-websocket
 , pytest-asyncio
 , pytest-jupyter
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     hatch-jupyter-builder
     hatch-nodejs-version
     hatchling
+    jupyterlab
     pythonRelaxDepsHook
   ];
 

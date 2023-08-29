@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  sourceRoot = "./";
+  sourceRoot = ".";
 
   unpackCmd = ''
     ttfName=$(basename $(stripHash $curSrc))

@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , aresponses
+, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , packaging
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.5.12";
+  version = "0.5.15";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "liudger";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ftu79SnVa7wOMx/RiRBDPmmG7Mmw84r30G4yDzBea2k=";
+    hash = "sha256-PNgv3QXl3iyDX0KOn1egQrt6D64i3eCUyCPtXe94y0U=";
   };
 
   postPatch = ''
@@ -41,6 +42,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
     packaging
     pydantic
     yarl
