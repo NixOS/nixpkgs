@@ -51,6 +51,7 @@
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";
+  "@mockoon/cli" = "mockoon-cli";
   near-cli = "near";
   neovim = "neovim-node-host";
   parcel-bundler = "parcel";
