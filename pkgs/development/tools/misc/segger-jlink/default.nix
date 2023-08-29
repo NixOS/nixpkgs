@@ -12,25 +12,25 @@ let
   supported = {
     x86_64-linux = {
       name = "x86_64";
-      sha256 = "90aa7e4f5eae6e60fd41978111b3ff124ba0269562d0d0ec3110d3cb4bb51fe2";
+      sha256 = "sha256-7+85/uiOyKKwmV2jZQsUy/RASa5AOHqLyW2Azbkg6DY=";
     };
     i686-linux = {
       name = "i386";
-      sha256 = "18aea42cd17591cada78af7cba0f94a9d851e9d29995b6c8e1e7033d0af35d1c";
+      sha256 = "sha256-o6deenN4UbzsXx7lMqWGHpqVeik4dZBDnjxKZUBDIKY=";
     };
     aarch64-linux = {
       name = "arm64";
-      sha256 = "db410c1df80748827b4e25ff3abceee29e28305a0a7e30e4e39bb5c7e32f1aa2";
+      sha256 = "sha256-mo1J+cW1GBi7Hkh5Idm6cSA+kEsDZ3BQyURiEnFtTcU=";
     };
     armv7l-linux = {
       name = "arm";
-      sha256 = "abcdaf44aeb2ad4e769709ec4fe971e259b23d297a98f58199c7bdf26db82e84";
+      sha256 = "sha256-XAA1WECrzrRYRZrF7DGE7LzIWP6BS1J2qyYoJJnAVkA=";
     };
   };
 
   platform = supported.${stdenv.system} or (throw "unsupported platform ${stdenv.system}");
 
-  version = "766";
+  version = "792b";
 
   url = "https://www.segger.com/downloads/jlink/JLink_Linux_V${version}_${platform.name}.tgz";
 
