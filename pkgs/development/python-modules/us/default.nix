@@ -7,18 +7,25 @@
 buildPythonPackage rec {
   pname = "us";
   version = "3.1.1";
+  format = "setuptools";
 
-  propagatedBuildInputs = [ jellyfish ];
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-40eWPo0kocp0N69EP6aFkXdoR7UMhlDY7w61NILnBcI=";
+    hash = "sha256-40eWPo0kocp0N69EP6aFkXdoR7UMhlDY7w61NILnBcI=";
   };
 
-  # Upstream requires jellyfish==0.5.6 but we have 0.6.1
+  # Upstream spins jellyfish
   postPatch = ''
-    substituteInPlace setup.py --replace "jellyfish==" "jellyfish>="
+    substituteInPlace setup.py \
+      --replace "jellyfish==" "jellyfish>="
   '';
+
+  propagatedBuildInputs = [
+    jellyfish
+  ];
+
 
   doCheck = false; # pypi version doesn't include tests
 
