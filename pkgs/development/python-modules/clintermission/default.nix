@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "clintermission";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "sebageek";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HPeO9K91a0MacSUN0SR0lPEWRTQgP/cF1FZaNvZLxAg=";
+    hash = "sha256-e7C9IDr+mhVSfU8lMywjX1BYwFo/qegPNzabak7UPcY=";
   };
 
   propagatedBuildInputs = [

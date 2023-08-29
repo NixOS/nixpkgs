@@ -4785,7 +4785,9 @@ with pkgs;
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
-  wl-gammactl = callPackage ../tools/wayland/wl-gammactl { };
+  wl-gammactl = callPackage ../tools/wayland/wl-gammactl {
+    wlroots = wlroots_0_15;
+  };
 
   wluma = callPackage ../tools/wayland/wluma {  };
 
@@ -5405,7 +5407,9 @@ with pkgs;
 
   flashfocus = callPackage ../misc/flashfocus { };
 
-  qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
+  qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr {
+    wlroots = wlroots_0_15;
+  };
 
   fwup = callPackage ../tools/misc/fwup {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration;
@@ -5641,7 +5645,9 @@ with pkgs;
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
-  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker { };
+  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
+    wlroots = wlroots_0_15;
+  };
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
@@ -11920,7 +11926,9 @@ with pkgs;
 
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
-  phoc = callPackage ../applications/misc/phoc { };
+  phoc = callPackage ../applications/misc/phoc {
+    wlroots = wlroots_0_15;
+  };
 
   phockup = callPackage ../applications/misc/phockup { };
 
@@ -22289,7 +22297,7 @@ with pkgs;
 
   ispc = callPackage ../development/compilers/ispc {
     xcode = darwin.xcode_14;
-    llvmPackages = llvmPackages_14;
+    llvmPackages = llvmPackages_15;
   };
 
   isso = callPackage ../servers/isso {
@@ -26381,7 +26389,11 @@ with pkgs;
 
   bind = callPackage ../servers/dns/bind { };
   dnsutils = bind.dnsutils;
-  dig = bind.dnsutils;
+  dig = bind.dnsutils // {
+    meta = bind.dnsutils.meta // {
+      mainProgram = "dig";
+    };
+  };
 
   bird = callPackage ../servers/bird { };
 
@@ -31373,7 +31385,9 @@ with pkgs;
 
   dyff = callPackage ../development/tools/dyff { };
 
-  dwl = callPackage ../applications/window-managers/dwl { };
+  dwl = callPackage ../applications/window-managers/dwl {
+    wlroots = wlroots_0_16;
+  };
 
   dwm = callPackage ../applications/window-managers/dwm {
     # dwm is configured entirely through source modification. Allow users to
@@ -32798,7 +32812,9 @@ with pkgs;
 
   rootbar = callPackage ../applications/misc/rootbar { };
 
-  waybar = callPackage ../applications/misc/waybar { };
+  waybar = callPackage ../applications/misc/waybar {
+    wlroots = wlroots_0_15;
+  };
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
@@ -32810,7 +32826,9 @@ with pkgs;
 
   wbg = callPackage ../applications/misc/wbg { };
 
-  hikari = callPackage ../applications/window-managers/hikari { };
+  hikari = callPackage ../applications/window-managers/hikari {
+    wlroots = wlroots_0_15;
+  };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
@@ -32876,7 +32894,9 @@ with pkgs;
 
   kitti3 = python3.pkgs.callPackage ../applications/window-managers/i3/kitti3.nix { };
 
-  waybox = callPackage ../applications/window-managers/waybox { };
+  waybox = callPackage ../applications/window-managers/waybox {
+    wlroots = wlroots_0_15;
+  };
 
   workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };
 
@@ -33423,7 +33443,9 @@ with pkgs;
 
   lame = callPackage ../development/libraries/lame { };
 
-  labwc = callPackage ../applications/window-managers/labwc { };
+  labwc = callPackage ../applications/window-managers/labwc {
+    wlroots = wlroots_0_16;
+  };
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
@@ -34085,7 +34107,9 @@ with pkgs;
   wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
   mpv = wrapMpv mpv-unwrapped { };
 
-  mpvpaper = callPackage ../tools/wayland/mpvpaper { };
+  mpvpaper = callPackage ../tools/wayland/mpvpaper {
+    wlroots = wlroots_0_15;
+  };
 
   mpvScripts = import ../applications/video/mpv/scripts { inherit lib callPackage config; };
 
@@ -35871,6 +35895,8 @@ with pkgs;
   termdbms = callPackage ../development/tools/database/termdbms { };
 
   termdown = python3Packages.callPackage ../applications/misc/termdown { };
+
+  termimage = callPackage ../tools/graphics/termimage { };
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier { };
 
