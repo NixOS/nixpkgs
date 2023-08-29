@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   doCheck = false; # pypi version doesn't include tests
 
-  meta = {
+  meta = with lib; {
     description = "A package for easily working with US and state metadata";
     longDescription = ''
     all US states and territories, postal abbreviations, Associated Press style
@@ -38,6 +38,7 @@ buildPythonPackage rec {
     census, congressional districts, counties, and census tracts
     '';
     homepage = "https://github.com/unitedstates/python-us/";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }
