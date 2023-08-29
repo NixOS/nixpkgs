@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pipenv-poetry-migrate";
-  version = "0.3.2";
+  version = "0.4.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aPG0MgChnJbivJRjYx9aQE5OPhL4WlPyt5uKCHZUpeE=";
+    hash = "sha256-QNp+KYOJIKV1fROmIhnWgDXFU8CymXkS2p90bOEPeoQ=";
   };
 
   nativeBuildInputs = [
@@ -32,11 +32,6 @@ buildPythonPackage rec {
     tomlkit
     typer
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'typer = "^0.4.0"' 'typer = ">=0.4"'
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
