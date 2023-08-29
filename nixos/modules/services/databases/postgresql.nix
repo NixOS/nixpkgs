@@ -158,6 +158,24 @@ in
               '';
             };
 
+            ensureRoles = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = lib.mdDoc ''
+                Roles to ensure for the user, specified as a list of strings.
+
+                For more information on how to specify the role, see the
+                [GRANT syntax](https://www.postgresql.org/docs/current/sql-grant.html).
+                The attributes are used as `GRANT ''${role}.
+              '';
+              example = literalExpression ''
+                [
+                  "pg_read_all_data"
+                  "pg_write_all_data"
+                ]
+              '';
+            };
+
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
@@ -565,7 +583,11 @@ in
               )
               cfg.ensureUsers
             }
-          '';
+          '' + concatMapStrings (user: let
+            userRoles = concatStringsSep "," user.ensureRoles;
+          in ''
+            $PSQL -tAc 'GRANT "${userRoles}" TO "${user.name}"'
+          '') (filter (user: length user.ensureRoles != 0) cfg.ensureUsers);
 
         serviceConfig = mkMerge [
           { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
