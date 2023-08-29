@@ -10098,7 +10098,7 @@
     name = "Ludovic Courtès";
   };
   ludovicopiero = {
-    email = "ludovicopiero@pm.me";
+    email = "lewdovico@gnuweeb.org";
     github = "ludovicopiero";
     githubId = 44255157;
     name = "Ludovico Piero";
