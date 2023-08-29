@@ -4,12 +4,15 @@
 , setuptools
 , setuptools-scm
 , fsspec
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "universal-pathlib";
   version = "0.1.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "universal_pathlib";
