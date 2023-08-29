@@ -13888,6 +13888,16 @@
     githubId = 33375;
     name = "Peter Sanford";
   };
+  pschmitt = {
+    email = "philipp@schmitt.co";
+    github = "pschmitt";
+    githubId = 37886;
+    name = "Philipp Schmitt";
+    matrix = "@pschmitt:one.ems.host";
+    keys = [{
+      fingerprint = "9FBF 2ABF FB37 F7F3 F502  44E5 DC43 9C47 EACB 17F9";
+    }];
+  };
   pshirshov = {
     email = "pshirshov@eml.cc";
     github = "pshirshov";
@@ -14865,6 +14875,12 @@
     github = "rvarago";
     githubId = 7365864;
     name = "Rafael Varago";
+  };
+  rvdp = {
+    email = "ramses@well-founded.dev";
+    github = "R-VdP";
+    githubId = 141248;
+    name = "Ramses";
   };
   rvl = {
     email = "dev+nix@rodney.id.au";
@@ -18114,6 +18130,12 @@
     githubId = 16415673;
     name = "Van Tuan Vo";
   };
+  vuimuich = {
+    email = "vuimuich@quantentunnel.de";
+    github = "VuiMuich";
+    githubId = 4779365;
+    name = "Johannes Mayrhofer";
+  };
   vyorkin = {
     email = "vasiliy.yorkin@gmail.com";
     github = "vyorkin";
@@ -18618,6 +18640,12 @@
     email = "i@xyenon.bid";
     github = "XYenon";
     githubId = 20698483;
+  };
+  xyven1 = {
+    name = "Xyven";
+    email = "nix@xyven.dev";
+    github = "xyven1";
+    githubId = 35360746;
   };
   xzfc = {
     email = "xzfcpw@gmail.com";

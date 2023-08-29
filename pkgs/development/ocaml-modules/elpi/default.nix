@@ -12,6 +12,9 @@
     else if lib.versionAtLeast ocaml.version "4.07" then "1.15.2" else "1.14.1"
 }:
 
+let p5 = camlp5; in
+let camlp5 = p5.override { legacy = true; }; in
+
 let fetched = coqPackages.metaFetch ({
     release."1.16.5".sha256 = "sha256-tKX5/cVPoBeHiUe+qn7c5FIRYCwY0AAukN7vSd/Nz9A=";
     release."1.15.2".sha256 = "sha256-XgopNP83POFbMNyl2D+gY1rmqGg03o++Ngv3zJfCn2s=";

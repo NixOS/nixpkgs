@@ -15,17 +15,18 @@
 , wine
 , glxinfo
 , xrandr
+, bash
 }:
 
 python3Packages.buildPythonApplication rec  {
   pname = "grapejuice";
-  version = "7.8.3";
+  version = "7.14.4";
 
   src = fetchFromGitLab {
     owner = "BrinkerVII";
     repo = "grapejuice";
     rev = "v${version}";
-    sha256 = "sha256-jNh3L6JDuJryFpHQaP8UesBmepmJopoHxb/XUfOwZz4=";
+    hash = "sha256-CWTnofJXx9T/hGXx3rdephXHjpiVRdFEJQ1u2v6n7yo=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +34,14 @@ python3Packages.buildPythonApplication rec  {
     desktop-file-utils
     glib
     wrapGAppsHook
+    python3Packages.pip
   ];
 
   buildInputs = [
     cairo
     gettext
     gtk3
+    bash
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -57,7 +60,6 @@ python3Packages.buildPythonApplication rec  {
   dontWrapGApps = true;
 
   makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
     "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs wine winetricks pciutils glxinfo xrandr ]}"
     # make xdg-open overrideable at runtime
     "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
@@ -77,7 +79,7 @@ python3Packages.buildPythonApplication rec  {
       --replace \$GRAPEJUICE_EXECUTABLE "$out/bin/grapejuice" \
       --replace \$PLAYER_ICON "grapejuice-roblox-player"
 
-    substituteInPlace src/grapejuice_common/assets/desktop/roblox-studio.desktop \
+    substituteInPlace src/grapejuice_common/assets/desktop/roblox-studio.desktop src/grapejuice_common/assets/desktop/roblox-studio-auth.desktop \
       --replace \$GRAPEJUICE_EXECUTABLE "$out/bin/grapejuice" \
       --replace \$STUDIO_ICON "grapejuice-roblox-studio"
 
@@ -86,29 +88,38 @@ python3Packages.buildPythonApplication rec  {
 
     substituteInPlace src/grapejuice_common/models/settings_model.py \
       --replace 'default_wine_home: Optional[str] = ""' 'default_wine_home: Optional[str] = "${wine}"'
+
+    substituteInPlace src/grapejuice_packaging/builders/linux_package_builder.py \
+      --replace '"--no-dependencies",' '"--no-dependencies", "--no-build-isolation",'
+
+    substituteInPlace src/grapejuice_packaging/packaging_resources/bin/grapejuice src/grapejuice_packaging/packaging_resources/bin/grapejuice-gui \
+      --replace "/usr/bin/env python3" "${python3Packages.python.interpreter}"
   '';
 
-  postInstall = ''
-    mkdir -p "$out/share/icons" "$out/share/applications" "$out/share/mime/packages"
-    cp -r src/grapejuice_common/assets/desktop/* $out/share/applications/
-    cp -r src/grapejuice_common/assets/icons $out/share/
-    cp src/grapejuice_common/assets/mime_xml/*.xml $out/share/mime/packages/
+  installPhase = ''
+    runHook preInstall
 
-    # compile locales (*.po -> *.mo)
-    # from https://gitlab.com/brinkervii/grapejuice/-/blob/master/src/grapejuice_common/util/mo_util.py
-    LOCALE_DIR="$out/share/locale"
-    PO_DIR="src/grapejuice_common/assets/po"
-    LINGUAS_FILE="src/grapejuice_common/assets/po/LINGUAS"
+    PYTHONPATH=$(pwd)/src:$PYTHONPATH python3 -m grapejuice_packaging linux_package
 
-    for lang in $(<"$LINGUAS_FILE") # extract langs from LINGUAS_FILE
-    do
-      po_file="$PO_DIR/$lang.po"
-      mo_file_dir="$LOCALE_DIR/$lang/LC_MESSAGES"
+    mkdir -p "$out" "$out/${python3Packages.python.sitePackages}"
+    tar -xvf ./dist/linux_package/grapejuice-''${version}.tar.gz --strip-components=1 -C "$out"
 
-      mkdir -p $mo_file_dir
+    mv "$out/lib/python3/dist-packages/"* "$out/${python3Packages.python.sitePackages}"
+    rmdir --ignore-fail-on-non-empty -p "$out/lib/python3/dist-packages"
 
-      mo_file="$mo_file_dir/grapejuice.mo"
-      msgfmt $po_file -o $mo_file # msgfmt from gettext
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    patchShebangs "$out/bin/grapejuice{,-gui}"
+
+    buildPythonPath "$out $pythonPath"
+
+    for bin in grapejuice grapejuice-gui; do
+    wrapProgram "$out/bin/$bin" \
+      --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)" \
+      ''${makeWrapperArgs[@]} \
+      ''${gappsWrapperArgs[@]}
     done
   '';
 

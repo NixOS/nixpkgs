@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
+, python
 , poetry-core
 , pytest
 , colored
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "4.0.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8.1";
+  disabled = lib.versionOlder python.version "3.8.1";
 
   src = fetchFromGitHub {
     owner = "tophat";

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "1.73.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -28,18 +28,17 @@ buildPythonPackage rec {
     hash = "sha256-rj+q/06gIvPYTJP/EH9ZrP0Sp4J3K1aCRyNkgpphWP4=";
   };
 
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --cov samtranslator --cov-report term-missing --cov-fail-under 95" ""
+  '';
+
   propagatedBuildInputs = [
     boto3
     jsonschema
     pydantic
     typing-extensions
   ];
-
-  preCheck = ''
-    sed -i '2ienv =\n\tAWS_DEFAULT_REGION=us-east-1' pytest.ini
-    substituteInPlace pytest.ini \
-      --replace " --cov samtranslator --cov-report term-missing --cov-fail-under 95" ""
-  '';
 
   nativeCheckInputs = [
     parameterized
@@ -53,6 +52,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "samtranslator"
   ];
+
+  preCheck = ''
+    sed -i '2ienv =\n\tAWS_DEFAULT_REGION=us-east-1' pytest.ini
+  '';
 
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";

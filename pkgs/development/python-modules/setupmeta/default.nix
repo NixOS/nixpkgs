@@ -4,10 +4,12 @@
 , git
 , mock
 , pep440
+, pip
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
 , six
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -30,12 +32,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    wheel
   ];
 
   nativeCheckInputs = [
     git
     mock
     pep440
+    pip
     pytestCheckHook
     six
   ];

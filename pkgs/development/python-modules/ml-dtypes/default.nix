@@ -27,6 +27,14 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "numpy~=1.21.2" "numpy" \
+      --replace "numpy~=1.23.3" "numpy" \
+      --replace "pybind11~=2.10.0" "pybind11" \
+      --replace "setuptools~=67.6.0" "setuptools"
+  '';
+
   nativeBuildInputs = [
     setuptools
     pybind11

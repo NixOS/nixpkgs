@@ -127,6 +127,7 @@ mkDerivation {
     ./hwclock-path.patch
     ./tzdir.patch
     ./kcm-access.patch
+    ./no-discover-shortcut.patch
   ];
   CXXFLAGS =
     [

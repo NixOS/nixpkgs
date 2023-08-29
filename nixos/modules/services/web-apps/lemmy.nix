@@ -160,7 +160,7 @@ in
               root * ${cfg.ui.package}/dist
               file_server
             }
-            handle_path /static/undefined/* {
+            handle_path /static/${cfg.ui.package.passthru.commit_sha}/* {
               root * ${cfg.ui.package}/dist
               file_server
             }
