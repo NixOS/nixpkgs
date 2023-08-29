@@ -87,6 +87,8 @@ in stdenv.mkDerivation rec {
     homepage    = "https://ccl.clozure.com/";
     maintainers = lib.teams.lisp.members;
     platforms   = attrNames options;
+    # assembler failures during build, x86_64-darwin broken since 2020-10-14
+    broken      = (stdenv.isDarwin && stdenv.isx86_64);
     license     = licenses.asl20;
   };
 }
