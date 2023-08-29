@@ -2565,6 +2565,8 @@ self: super: with self; {
 
   debian = callPackage ../development/python-modules/debian { };
 
+  debianbts = callPackage ../development/python-modules/debianbts { };
+
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
 
   debtcollector = callPackage ../development/python-modules/debtcollector { };
@@ -8243,6 +8245,8 @@ self: super: with self; {
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
+
+  pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
 
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
 
