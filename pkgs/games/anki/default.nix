@@ -278,5 +278,7 @@ python3.pkgs.buildPythonApplication {
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ oxij euank ];
+    # Reported to crash at launch on darwin (as of 2.1.65)
+    broken = stdenv.isDarwin;
   };
 }
