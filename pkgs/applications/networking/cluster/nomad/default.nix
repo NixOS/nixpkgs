@@ -82,7 +82,7 @@ rec {
     vendorSha256 = "sha256-y3WiQuoQn6SdwTgtPWuB6EBtsJC+YleQPzownZQNkno=";
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
-      export PATH="$PATH:/build/go/bin"
+      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
     '';
   };
 
@@ -93,7 +93,7 @@ rec {
     vendorSha256 = "sha256-Y3O7ADzZPlLWFbXSYBcI6b5MAhMD0UnkhQxO9VJMpOY=";
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
-      export PATH="$PATH:/build/go/bin"
+      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
     '';
   };
 }
