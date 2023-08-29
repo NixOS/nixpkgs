@@ -46,10 +46,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/ddcpci/Makefile.am    \
        --replace "chmod 4711" "chmod 0711"
-  '' + lib.optionalString (lib.versionAtLeast "0.6.2" version) ''
-    # Upstream PR: https://github.com/ddccontrol/ddccontrol/pull/115
-    substituteInPlace src/lib/Makefile.am       \
-      --replace "/etc/" "\$""{sysconfdir}/"
   '';
 
   preConfigure = ''
