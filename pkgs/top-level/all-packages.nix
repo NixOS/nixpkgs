@@ -22590,6 +22590,8 @@ with pkgs;
     then pkgs.libcanberra
     else pkgs.libcanberra-gtk2;
 
+  libcaption = callPackage ../development/libraries/libcaption { };
+
   libcbor = callPackage ../development/libraries/libcbor { };
 
   libccd = callPackage ../development/libraries/libccd { };
