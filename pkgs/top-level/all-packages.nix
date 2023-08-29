@@ -4691,6 +4691,8 @@ with pkgs;
 
   cowsay = callPackage ../tools/misc/cowsay { };
 
+  fw-ectool = callPackage ../os-specific/linux/fw-ectool { };
+
   czkawka = callPackage ../tools/misc/czkawka {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
