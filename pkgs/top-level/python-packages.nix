@@ -8794,6 +8794,8 @@ self: super: with self; {
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
+  pybox2d = callPackage ../development/python-modules/pybox2d { };
+
   pybravia = callPackage ../development/python-modules/pybravia { };
 
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
