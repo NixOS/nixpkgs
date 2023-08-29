@@ -979,6 +979,9 @@ self: super:
     postInstall = ''
       rm $out/bin/xkeystone
     '';
+    meta = attrs.meta // {
+      mainProgram = "xrandr";
+    };
   });
 
   xset = super.xset.overrideAttrs (attrs: {
