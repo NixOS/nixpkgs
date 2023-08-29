@@ -29,6 +29,11 @@ let
         url = "https://github.com/systemd/systemd/commit/81e04781106e3db24e9cf63c1d5fdd8215dc3f42.patch";
         hash = "sha256-KO3poIsvdeepPmXWQXNaJJCPpmBb4sVmO+ur4om9f5k=";
       })
+      # Propagate SOURCE_DATE_EPOCH to mcopy. Remove when upgrading to systemd 255.
+      (fetchpatch {
+        url = "https://github.com/systemd/systemd/commit/4947de275a5553399854cc748f4f13e4ae2ba069.patch";
+        hash = "sha256-YIZZyc3f8pQO9fMAxiNhDdV8TtL4pXoh+hwHBzRWtfo=";
+      })
     ];
   })).override {
     withRepart = true;
