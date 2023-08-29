@@ -23670,6 +23670,8 @@ with pkgs;
 
   libuecc = callPackage ../development/libraries/libuecc { };
 
+  libuev = callPackage ../development/libraries/libuev {};
+
   libui = callPackage ../development/libraries/libui {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
