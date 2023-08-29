@@ -651,6 +651,28 @@ in rec {
     inherit mkTmuxPlugin;
   };
 
+  t-smart-tmux-session-manager = mkTmuxPlugin rec {
+    pluginName = "t-smart-tmux-session-manager";
+    version = "2.8.0";
+    rtpFilePath = "t-smart-tmux-session-manager.tmux";
+    src = pkgs.fetchFromGitHub {
+      owner = "joshmedeski";
+      repo = "t-smart-tmux-session-manager";
+      rev = "v${version}";
+      sha256 = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
+          --prefix PATH : ${with pkgs; lib.makeBinPath (
+            [ pkgs.fzf pkgs.zoxide ]
+          )}
+
+      find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
+      find $target -type f -print0 | xargs -0 sed -i -e 's|zoxide |${pkgs.zoxide}/bin/zoxide |g'
+    '';
+  };
+
   urlview = mkTmuxPlugin {
     pluginName = "urlview";
     version = "unstable-2016-01-06";
