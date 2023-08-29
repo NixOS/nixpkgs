@@ -93,4 +93,6 @@ with pkgs;
   };
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
+
+  nixpkgs-check-by-name = callPackage ./nixpkgs-check-by-name { };
 }
