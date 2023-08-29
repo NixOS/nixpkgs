@@ -16431,6 +16431,12 @@
     githubId = 543055;
     name = "Shadaj Laddad";
   };
+  shaddydc = {
+    email = "nixpkgs@shaddy.dev";
+    github = "ShaddyDC";
+    githubId = 18403034;
+    name = "Shaddy";
+  };
   shadowrz = {
     email = "shadowrz+nixpkgs@disroot.org";
     matrix = "@ShadowRZ:matrixim.cc";
