@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, llhttp
 , pkg-config, which, buildPackages
 # for `.pkgs` attribute
 , callPackage
@@ -21,7 +21,7 @@ let
 
   useSharedHttpParser = !stdenv.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
 
-  sharedLibDeps = { inherit openssl zlib libuv; } // (lib.optionalAttrs useSharedHttpParser { inherit http-parser; });
+  sharedLibDeps = { inherit openssl zlib libuv; } // (lib.optionalAttrs useSharedHttpParser { inherit llhttp; });
 
   sharedConfigureFlags = lib.concatMap (name: [
     "--shared-${name}"
@@ -53,7 +53,7 @@ let
     depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib ];
 
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-      ++ [ zlib libuv openssl http-parser icu ];
+      ++ [ zlib libuv openssl llhttp icu ];
 
     nativeBuildInputs = [ which pkg-config python ]
       ++ lib.optionals stdenv.isDarwin [ xcbuild ];
