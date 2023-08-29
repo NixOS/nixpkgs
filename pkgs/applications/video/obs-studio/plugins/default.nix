@@ -42,6 +42,8 @@
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+  obs-replay-source = qt6Packages.callPackage ./obs-replay-source.nix { };
+
   obs-rgb-levels-filter = callPackage ./obs-rgb-levels-filter.nix { };
 
   obs-scale-to-sound = callPackage ./obs-scale-to-sound.nix { };
