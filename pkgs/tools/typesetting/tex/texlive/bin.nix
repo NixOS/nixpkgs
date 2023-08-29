@@ -151,7 +151,9 @@ core = stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
-      libs/{lua53,luajit,mpfr,pixman,zlib,zziplib}
+      libs/{lua53,luajit,mpfr,pixman,pplib,teckit,zlib,zziplib} \
+      texk/{bibtex-x,chktex,dvipng,dvisvgm,upmendex,xdvik} \
+      utils/{asymptote,texdoctk,xindy,xpdfopen}
     mkdir WorkDir
     cd WorkDir
   '';
@@ -185,7 +187,6 @@ core = stdenv.mkDerivation rec {
   '' + /* remove redundant texmf-dist (content provided by TeX Live packages) */
   ''
     rm -fr "$out"/share/texmf-dist
-    rm "$out"/bin/texdoctk # installed even with --disable-linked-scripts
   '' + /* install himktables in separate output for use in cross compilation */ ''
      mkdir -p $dev/bin
      cp texk/web2c/.libs/himktables $dev/bin/himktables
