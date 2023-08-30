@@ -57,7 +57,7 @@ let
       "sqlite"
     ]);
 
-    passthru = nixosTests.garage;
+    passthru.tests = nixosTests.garage;
 
     meta = {
       description = "S3-compatible object store for small self-hosted geo-distributed deployments";
@@ -83,13 +83,13 @@ in
 
     garage_0_7 = garage_0_7_3;
 
-    garage_0_8_2 = generic {
-      version = "0.8.2";
-      sha256 = "sha256-IlDWbNWI1yXvPPF3HIqQvo79M2FQCtoX1wRLJrDbd9k=";
-      cargoSha256 = "sha256-6l4tDBMcOvckTkEO05rman4hHlmVbBt1nCeX5/dETKk=";
+    garage_0_8_3 = generic {
+      version = "0.8.3";
+      sha256 = "sha256-NxkFj76L+LpCWzOWbnN3zdhw9Q16uzPibDs+C+voM/0=";
+      cargoSha256 = "sha256-hbBuUjdlw//s6d24dPBu3R/BTJvmOW1B7tSIXNxLXlU=";
     };
 
-    garage_0_8 = garage_0_8_2;
+    garage_0_8 = garage_0_8_3;
 
     garage = garage_0_8;
   }
