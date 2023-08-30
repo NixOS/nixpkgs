@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "joshuto";
@@ -13,9 +19,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-gMX8hvt20V4XUd0nnXGA4fyOUfB7ZY1eeme9HgYopL0=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd joshuto \
+      --bash <($out/bin/joshuto completions bash) \
+      --zsh <($out/bin/joshuto completions zsh) \
+      --fish <($out/bin/joshuto completions fish)
+  '';
 
   meta = with lib; {
     description = "Ranger-like terminal file manager written in Rust";
