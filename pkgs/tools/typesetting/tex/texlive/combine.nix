@@ -1,6 +1,6 @@
-{ lib, buildEnv, runCommand, writeText, makeWrapper, libfaketime, makeFontsConf
+{ lib, buildEnv, makeSetupHook, runCommand, writeText, makeWrapper, libfaketime, makeFontsConf
 , perl, bash, coreutils, gnused, gnugrep, gawk, ghostscript
-, bin, tl }:
+, bin, tl, toTLPkgList }:
 # combine =
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core"
@@ -15,11 +15,11 @@ let
     let
       # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
       # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
-      tlPkgToSets = { pkgs, ... }: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
+      tlPkgToSets = drv: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
           # outputName required to distinguish among bin.core-big outputs
           key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
           inherit pkg;
-        }) pkgs;
+        }) (drv.pkgs or (toTLPkgList drv));
       pkgListToSets = lib.concatMap tlPkgToSets; in
     builtins.genericClosure {
       startSet = pkgListToSets pkgList;
@@ -49,7 +49,7 @@ let
     paths = lib.catAttrs "outPath" pkgList.nonbin;
 
     # mktexlsr
-    nativeBuildInputs = [ (lib.last tl."texlive.infra".pkgs) ];
+    nativeBuildInputs = [ tl."texlive.infra" ];
 
     postBuild = # generate ls-R database
     ''
@@ -87,6 +87,12 @@ let
     ];
   };
 
+  # necessary for XeTeX to find the fonts distributed with texlive
+  fontconfigFile = makeFontsConf { fontDirectories = [ "${texmfdist}/fonts" ]; };
+
+  # very common dependencies that are not detected by tests.texlive.binaries
+  extraPropagatedBuildInputs = [ coreutils gnugrep gawk gnused ] ++ lib.optional needsGhostscript ghostscript;
+
 in (buildEnv {
 
   inherit name;
@@ -107,15 +113,15 @@ in (buildEnv {
   nativeBuildInputs = [
     makeWrapper
     libfaketime
-    (lib.last tl."texlive.infra".pkgs) # mktexlsr
-    (lib.last tl.texlive-scripts.pkgs) # fmtutil, updmap
-    (lib.last tl.texlive-scripts-extra.pkgs) # texlinks
+    tl."texlive.infra" # mktexlsr
+    tl.texlive-scripts # fmtutil, updmap
+    tl.texlive-scripts-extra # texlinks
     perl
   ];
 
   passthru = {
     # This is set primarily to help find-tarballs.nix to do its job
-    packages = pkgList.all;
+    packages = lib.filter lib.isDerivation pkgList.all;
     # useful for inclusion in the `fonts.packages` nixos option or for use in devshells
     fonts = "${texmfroot}/texmf-dist/fonts";
   };
@@ -147,14 +153,9 @@ in (buildEnv {
       rm "$link"
       makeWrapper "$target" "$link" \
         --inherit-argv0 \
-        --prefix PATH : "${
-          # very common dependencies that are not detected by tests.texlive.binaries
-          lib.makeBinPath ([ coreutils gawk gnugrep gnused ] ++ lib.optional needsGhostscript ghostscript)}:$out/bin" \
+        --prefix PATH : "${lib.makeBinPath extraPropagatedBuildInputs}:$out/bin" \
         --set-default TEXMFCNF "$TEXMFCNF" \
-        --set-default FONTCONFIG_FILE "${
-          # necessary for XeTeX to find the fonts distributed with texlive
-          makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; }
-        }"
+        --set-default FONTCONFIG_FILE "${fontconfigFile}"
       wrapCount=$((wrapCount + 1))
     done
     echo "wrapped $wrapCount binaries and scripts"
@@ -162,6 +163,7 @@ in (buildEnv {
     # patch texmf-dist  -> $TEXMFDIST
     # patch texmf-local -> $out/share/texmf-local
     # patch texmf.cnf   -> $TEXMFSYSVAR/web2c/texmf.cnf
+    # add TEXMFAUXTREES to texmfcnf.lua to support setup hooks
     # TODO: perhaps do lua actions?
     # tried inspiration from install-tl, sub do_texmf_cnf
   ''
@@ -173,6 +175,7 @@ in (buildEnv {
         -e "s,\(TEXMFSYSVAR[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSVAR\",g" \
         -e "s,\(TEXMFSYSCONFIG[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSCONFIG\",g" \
         -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
+        -e 's/\$TEXMFHOME,!!\$TEXMFSYSCONFIG/$TEXMFAUXTREES,$TEXMFHOME,!!$TEXMFSYSCONFIG/g' \
         -e "s,\$SELFAUTOLOC,$out,g" \
         -e "s,selfautodir:/,$out/share/,g" \
         -e "s,selfautodir:,$out/share/,g" \
@@ -310,6 +313,16 @@ in (buildEnv {
   # link TEXMFDIST in $out/share for backward compatibility
   ''
     ln -s "$TEXMFDIST" "$out"/share/texmf
+  '' +
+  # install setup hook, record propagated build inputs, etc
+  ''
+    export texmfCnf="$TEXMFCNF"
+    export fontconfigFile="${fontconfigFile}"
+    fixupPhase
   ''
   ;
-}).overrideAttrs (_: { allowSubstitutes = true; })
+}).overrideAttrs (prev: {
+  allowSubstitutes = true;
+  propagatedBuildInputs = prev.propagatedBuildInputs or [ ] ++ extraPropagatedBuildInputs;
+  setupHook = ./env-setup-hook.sh;
+})

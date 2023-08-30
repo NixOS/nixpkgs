@@ -2,7 +2,7 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
+{ stdenv, lib, fetchurl, makeSetupHook, runCommand, writeText, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, installShellFiles
 , python3, ruby, perl, tk, jdk, bash, snobol4
@@ -23,7 +23,7 @@ let
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin buildEnv lib makeWrapper writeText runCommand
+    inherit bin buildEnv lib makeSetupHook makeWrapper writeText runCommand toTLPkgList
       perl libfaketime makeFontsConf bash tl coreutils gawk gnugrep gnused;
     ghostscript = ghostscript_headless;
   };
@@ -89,7 +89,7 @@ let
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixed-hashes.nix);
 
   buildTeXLivePackage = import ./build-texlive-package.nix {
-    inherit lib fetchurl runCommand bash jdk perl python3 ruby snobol4 tk;
+    inherit lib fetchurl makeSetupHook runCommand bash jdk perl python3 ruby snobol4 tk;
     texliveBinaries = bin;
   };
 
@@ -100,12 +100,41 @@ let
       // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); })
   ) overriddenTlpdb;
 
+  ### texlive.combine compatibility layer:
+  # convert TeX packages to { pkgs = [ ... ]; } lists
+  toTLPkgList = drv: [ (drv.tex // { tlType = "run"; }) ] ++
+      lib.optional (drv ? texdoc) (drv.texdoc // { tlType = "doc"; } // lib.optionalAttrs (drv ? man) { hasManpages = true; }) ++
+      lib.optional (drv ? texsource) (drv.texsource // { tlType = "source"; }) ++
+      lib.optional (drv ? tlpkg) (drv.tlpkg // { tlType = "tlpkg"; }) ++
+      lib.optional (drv ? out) (drv.out // { tlType = "bin"; });
+
+  # export TeX packages as { pkgs = [ ... ]; } in the top attribute set
+  allPkgLists = lib.mapAttrs (n: drv: { pkgs = toTLPkgList drv; }) tl;
+
+  # combine a set of TL packages into a single TL meta-package
+  combinePkgs = pkgList: lib.catAttrs "pkg" (
+    let
+      # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
+      # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
+      tlPkgToSets = drv: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
+          # outputName required to distinguish among bin.core-big outputs
+          key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
+          inherit pkg;
+        }) (drv.pkgs or (toTLPkgList drv));
+      pkgListToSets = lib.concatMap tlPkgToSets; in
+    builtins.genericClosure {
+      startSet = pkgListToSets pkgList;
+      operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or []);
+    });
+
   assertions = with lib;
     assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
     assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
 in
-  tl // {
+  allPkgLists // {
+    # unstable interface, subject to change!
+    __pkgs = tl;
 
     tlpdb = {
       # nested in an attribute set to prevent them from appearing in search
@@ -115,7 +144,7 @@ in
 
     bin = assert assertions; bin // {
       # for backward compatibility
-      latexindent = lib.findFirst (p: p.tlType == "bin") tl.latexindent.pkgs;
+      latexindent = tl.latexindent;
     };
 
     combine = assert assertions; combine;
