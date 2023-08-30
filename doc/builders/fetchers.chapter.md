@@ -86,7 +86,7 @@ Most other fetchers return a directory rather than a single file.
 ## `fetchDebianPatch` {#fetchdebianpatch}
 
 A wrapper around `fetchpatch`, which takes:
-- `name` and `hash`: the patch's filename without the `.patch` suffix,
+- `patch` and `hash`: the patch's filename without the `.patch` suffix,
   and its hash after normalization by `fetchpatch` ;
 - `pname`: the Debian source package's name ;
 - `version`: the upstream version number ;
