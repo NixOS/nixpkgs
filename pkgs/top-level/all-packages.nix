@@ -1173,7 +1173,10 @@ with pkgs;
       tests = pkgs.tests.fetchzip;
     };
 
-  fetchDebianPatch = callPackage ../build-support/fetchdebianpatch { };
+  fetchDebianPatch = callPackage ../build-support/fetchdebianpatch { }
+    // {
+      tests = pkgs.tests.fetchDebianPatch;
+    };
 
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
