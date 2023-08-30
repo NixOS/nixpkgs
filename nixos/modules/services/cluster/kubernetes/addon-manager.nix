@@ -6,7 +6,7 @@ let
   top = config.services.kubernetes;
   cfg = top.addonManager;
 
-  isRBACEnabled = elem "RBAC" top.apiserver.authorizationMode;
+  isRBACEnabled = elem "RBAC" top.apiserver.settings.authorization-mode;
 
   addons = pkgs.runCommand "kubernetes-addons" { } ''
     mkdir -p $out

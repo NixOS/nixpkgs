@@ -7,311 +7,93 @@ let
   otop = options.services.kubernetes;
   cfg = top.apiserver;
 
-  isRBACEnabled = elem "RBAC" cfg.authorizationMode;
+  isRBACEnabled = elem "RBAC" cfg.settings.authorization-mode;
 
   apiserverServiceIP = (concatStringsSep "." (
-    take 3 (splitString "." cfg.serviceClusterIpRange
+    take 3 (splitString "." cfg.settings.service-cluster-ip-range
   )) + ".1");
-in
-{
 
-  imports = [
-    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
-    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
-    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "insecureBindAddress" ] "")
-    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "insecurePort" ] "")
-    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "publicAddress" ] "")
-    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "servers" ] [ "services" "kubernetes" "apiserver" "etcd" "servers" ])
-    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "keyFile" ] [ "services" "kubernetes" "apiserver" "etcd" "keyFile" ])
-    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "certFile" ] [ "services" "kubernetes" "apiserver" "etcd" "certFile" ])
-    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "caFile" ] [ "services" "kubernetes" "apiserver" "etcd" "caFile" ])
-  ];
-
-  ###### interface
-  options.services.kubernetes.apiserver = with lib.types; {
-
-    advertiseAddress = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes apiserver IP address on which to advertise the apiserver
-        to members of the cluster. This address must be reachable by the rest
-        of the cluster.
-      '';
-      default = null;
-      type = nullOr str;
-    };
-
-    allowPrivileged = mkOption {
-      description = lib.mdDoc "Whether to allow privileged containers on Kubernetes.";
-      default = false;
-      type = bool;
-    };
-
-    authorizationMode = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/Webhook/RBAC/Node). See
-        <https://kubernetes.io/docs/reference/access-authn-authz/authorization/>
-      '';
-      default = ["RBAC" "Node"]; # Enabling RBAC by default, although kubernetes default is AllowAllow
-      type = listOf (enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "Webhook" "RBAC" "Node"]);
-    };
-
-    authorizationPolicy = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes apiserver authorization policy file. See
-        <https://kubernetes.io/docs/reference/access-authn-authz/authorization/>
-      '';
-      default = [];
-      type = listOf attrs;
-    };
-
-    basicAuthFile = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes apiserver basic authentication file. See
-        <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
-      '';
-      default = null;
-      type = nullOr path;
-    };
-
-    bindAddress = mkOption {
-      description = lib.mdDoc ''
-        The IP address on which to listen for the --secure-port port.
-        The associated interface(s) must be reachable by the rest
-        of the cluster, and by CLI/web clients.
-      '';
-      default = "0.0.0.0";
-      type = str;
-    };
-
-    clientCaFile = mkOption {
-      description = lib.mdDoc "Kubernetes apiserver CA file for client auth.";
-      default = top.caFile;
-      defaultText = literalExpression "config.${otop.caFile}";
-      type = nullOr path;
-    };
-
-    disableAdmissionPlugins = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes admission control plugins to disable. See
-        <https://kubernetes.io/docs/admin/admission-controllers/>
-      '';
-      default = [];
-      type = listOf str;
-    };
-
-    enable = mkEnableOption (lib.mdDoc "Kubernetes apiserver");
-
-    enableAdmissionPlugins = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes admission control plugins to enable. See
-        <https://kubernetes.io/docs/admin/admission-controllers/>
-      '';
-      default = [
-        "NamespaceLifecycle" "LimitRanger" "ServiceAccount"
-        "ResourceQuota" "DefaultStorageClass" "DefaultTolerationSeconds"
-        "NodeRestriction"
-      ];
-      example = [
-        "NamespaceLifecycle" "NamespaceExists" "LimitRanger"
-        "SecurityContextDeny" "ServiceAccount" "ResourceQuota"
-        "PodSecurityPolicy" "NodeRestriction" "DefaultStorageClass"
-      ];
-      type = listOf str;
-    };
-
-    etcd = {
-      servers = mkOption {
-        description = lib.mdDoc "List of etcd servers.";
-        default = ["http://127.0.0.1:2379"];
-        type = types.listOf types.str;
-      };
-
-      keyFile = mkOption {
-        description = lib.mdDoc "Etcd key file.";
-        default = null;
-        type = types.nullOr types.path;
-      };
-
-      certFile = mkOption {
-        description = lib.mdDoc "Etcd cert file.";
-        default = null;
-        type = types.nullOr types.path;
-      };
-
-      caFile = mkOption {
-        description = lib.mdDoc "Etcd ca file.";
-        default = top.caFile;
-        defaultText = literalExpression "config.${otop.caFile}";
-        type = types.nullOr types.path;
-      };
-    };
-
-    extraOpts = mkOption {
-      description = lib.mdDoc "Kubernetes apiserver extra command line options.";
-      default = "";
-      type = separatedString " ";
-    };
-
-    extraSANs = mkOption {
-      description = lib.mdDoc "Extra x509 Subject Alternative Names to be added to the kubernetes apiserver tls cert.";
-      default = [];
-      type = listOf str;
-    };
-
-    featureGates = mkOption {
-      description = lib.mdDoc "List set of feature gates";
-      default = top.featureGates;
-      defaultText = literalExpression "config.${otop.featureGates}";
-      type = listOf str;
-    };
-
-    kubeletClientCaFile = mkOption {
-      description = lib.mdDoc "Path to a cert file for connecting to kubelet.";
-      default = top.caFile;
-      defaultText = literalExpression "config.${otop.caFile}";
-      type = nullOr path;
-    };
-
-    kubeletClientCertFile = mkOption {
-      description = lib.mdDoc "Client certificate to use for connections to kubelet.";
-      default = null;
-      type = nullOr path;
-    };
-
-    kubeletClientKeyFile = mkOption {
-      description = lib.mdDoc "Key to use for connections to kubelet.";
-      default = null;
-      type = nullOr path;
-    };
-
-    preferredAddressTypes = mkOption {
-      description = lib.mdDoc "List of the preferred NodeAddressTypes to use for kubelet connections.";
-      type = nullOr str;
-      default = null;
-    };
-
-    proxyClientCertFile = mkOption {
-      description = lib.mdDoc "Client certificate to use for connections to proxy.";
-      default = null;
-      type = nullOr path;
-    };
-
-    proxyClientKeyFile = mkOption {
-      description = lib.mdDoc "Key to use for connections to proxy.";
-      default = null;
-      type = nullOr path;
-    };
-
-    runtimeConfig = mkOption {
-      description = lib.mdDoc ''
-        Api runtime configuration. See
-        <https://kubernetes.io/docs/tasks/administer-cluster/cluster-management/>
-      '';
-      default = "authentication.k8s.io/v1beta1=true";
-      example = "api/all=false,api/v1=true";
-      type = str;
-    };
-
-    storageBackend = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes apiserver storage backend.
-      '';
-      default = "etcd3";
-      type = enum ["etcd2" "etcd3"];
-    };
-
-    securePort = mkOption {
-      description = lib.mdDoc "Kubernetes apiserver secure port.";
-      default = 6443;
-      type = int;
-    };
-
-    apiAudiences = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes apiserver ServiceAccount issuer.
-      '';
-      default = "api,https://kubernetes.default.svc";
-      type = str;
-    };
-
-    serviceAccountIssuer = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes apiserver ServiceAccount issuer.
-      '';
-      default = "https://kubernetes.default.svc";
-      type = str;
-    };
-
-    serviceAccountSigningKeyFile = mkOption {
-      description = lib.mdDoc ''
-        Path to the file that contains the current private key of the service
-        account token issuer. The issuer will sign issued ID tokens with this
-        private key.
-      '';
-      type = path;
-    };
-
-    serviceAccountKeyFile = mkOption {
-      description = lib.mdDoc ''
-        File containing PEM-encoded x509 RSA or ECDSA private or public keys,
-        used to verify ServiceAccount tokens. The specified file can contain
-        multiple keys, and the flag can be specified multiple times with
-        different files. If unspecified, --tls-private-key-file is used.
-        Must be specified when --service-account-signing-key is provided
-      '';
-      type = path;
-    };
-
-    serviceClusterIpRange = mkOption {
-      description = lib.mdDoc ''
-        A CIDR notation IP range from which to assign service cluster IPs.
-        This must not overlap with any IP ranges assigned to nodes for pods.
-      '';
-      default = "10.0.0.0/24";
-      type = str;
-    };
-
-    tlsCertFile = mkOption {
-      description = lib.mdDoc "Kubernetes apiserver certificate file.";
-      default = null;
-      type = nullOr path;
-    };
-
-    tlsKeyFile = mkOption {
-      description = lib.mdDoc "Kubernetes apiserver private key file.";
-      default = null;
-      type = nullOr path;
-    };
-
-    tokenAuthFile = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes apiserver token authentication file. See
-        <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
-      '';
-      default = null;
-      type = nullOr path;
-    };
-
-    verbosity = mkOption {
-      description = lib.mdDoc ''
-        Optional glog verbosity level for logging statements. See
-        <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
-      '';
-      default = null;
-      type = nullOr int;
-    };
-
-    webhookConfig = mkOption {
-      description = lib.mdDoc ''
-        Kubernetes apiserver Webhook config file. It uses the kubeconfig file format.
-        See <https://kubernetes.io/docs/reference/access-authn-authz/webhook/>
-      '';
-      default = null;
-      type = nullOr path;
-    };
-
+  # TODO: Remove in NixOS 24.05
+  removedOptions = {
+    "authorizationPolicy" = "Generate a policy file and set 'settings.authorization-policy-file' to its path";
+    "basicAuthFile" = "Support for basic auth was removed in Kubernetes v1.19";
+    "extraOpts" = "Use freeform settings";
   };
 
+  # TODO: Remove in NixOS 24.05
+  optName = n: builtins.filter (f: f != []) (builtins.split "\\." n);
+
+  # TODO: Remove in NixOS 24.05
+  renamedOptions = {
+    "apiAudiences" = "api-audiences";
+    "allowPrivileged" = "allow-privileged";
+    "authorizationMode" = "authorization-mode";
+    "advertiseAddress" = "advertise-address";
+    "bindAddress" = "bind-address";
+    "clientCaFile" = "client-ca-file";
+    "disableAdmissionPlugins" = "disable-admission-plugins";
+    "enableAdmissionPlugins" = "enable-admission-plugins";
+    "etcd.caFile" = "etcd-cafile";
+    "etcd.certFile" = "etcd-certfile";
+    "etcd.keyFile" = "etcd-keyfile";
+    "etcd.servers" = "etcd-servers";
+    "featureGates" = "feature-gates";
+    "kubeletClientCaFile" = "kubelet-certificate-authority";
+    "kubeletClientCertFile" = "kubelet-client-certificate";
+    "kubeletClientKeyFile" = "kubelet-client-key";
+    "preferredAddressTypes" = "kubelet-preferred-address-types";
+    "proxyClientCertFile" = "proxy-client-cert-file";
+    "proxyClientKeyFile" = "proxy-client-key-file";
+    "runtimeConfig" = "runtime-config";
+    "storageBackend" = "storage-backend";
+    "securePort" = "secure-port";
+    "serviceAccountIssuer" = "service-account-issuer";
+    "serviceAccountSigningKeyFile" = "service-account-signing-key-file";
+    "serviceAccountKeyFile" = "service-account-key-file";
+    "serviceClusterIpRange" = "service-cluster-ip-range";
+    "tlsCertFile" = "tls-cert-file";
+    "tlsKeyFile" = "tls-private-key-file";
+    "tokenAuthFile" = "token-auth-file";
+    "verbosity" = "v";
+    "webhookConfig" = "authentication-token-webhook-config-file";
+  };
+in
+{
+  # TODO: Remove in NixOS 24.05
+  imports =
+    let
+      base = ["services" "kubernetes" "apiserver"];
+    in
+      [
+        (mkRenamedOptionModule (base ++ ["extraSANs"]) ["services" "kubernetes" "pki" "apiServerExtraSANs"])
+      ] ++
+      (mapAttrsToList (n: v: mkRemovedOptionModule (base ++ [n]) v) removedOptions) ++
+      (mapAttrsToList (n: v: mkRenamedOptionModule (base ++ (optName n)) (base ++ ["settings" v])) renamedOptions);
+
+  ###### interface
+  options.services.kubernetes.apiserver = with types; {
+    enable = mkEnableOption (mdDoc "Kubernetes apiserver");
+
+    settings = mkOption {
+      description = ''
+        Configuration for kube-apiserver, see:
+          <https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver>.
+        All attrs defined here translates directly to flags of syntax `--<name>="<value>"`
+        which is provided as command line argument to the kube-apiserver binary.
+      '';
+      type = types.submodule {
+        freeformType = attrsOf (oneOf [
+          bool
+          float
+          int
+          (listOf str)
+          package
+          path
+          str
+        ]);
+      };
+    };
+  };
 
   ###### implementation
   config = mkMerge [
@@ -324,64 +106,7 @@ in
           serviceConfig = {
             Slice = "kubernetes.slice";
             ExecStart = ''${top.package}/bin/kube-apiserver \
-              --allow-privileged=${boolToString cfg.allowPrivileged} \
-              --authorization-mode=${concatStringsSep "," cfg.authorizationMode} \
-                ${optionalString (elem "ABAC" cfg.authorizationMode)
-                  "--authorization-policy-file=${
-                    pkgs.writeText "kube-auth-policy.jsonl"
-                    (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.authorizationPolicy)
-                  }"
-                } \
-                ${optionalString (elem "Webhook" cfg.authorizationMode)
-                  "--authorization-webhook-config-file=${cfg.webhookConfig}"
-                } \
-              --bind-address=${cfg.bindAddress} \
-              ${optionalString (cfg.advertiseAddress != null)
-                "--advertise-address=${cfg.advertiseAddress}"} \
-              ${optionalString (cfg.clientCaFile != null)
-                "--client-ca-file=${cfg.clientCaFile}"} \
-              --disable-admission-plugins=${concatStringsSep "," cfg.disableAdmissionPlugins} \
-              --enable-admission-plugins=${concatStringsSep "," cfg.enableAdmissionPlugins} \
-              --etcd-servers=${concatStringsSep "," cfg.etcd.servers} \
-              ${optionalString (cfg.etcd.caFile != null)
-                "--etcd-cafile=${cfg.etcd.caFile}"} \
-              ${optionalString (cfg.etcd.certFile != null)
-                "--etcd-certfile=${cfg.etcd.certFile}"} \
-              ${optionalString (cfg.etcd.keyFile != null)
-                "--etcd-keyfile=${cfg.etcd.keyFile}"} \
-              ${optionalString (cfg.featureGates != [])
-                "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-              ${optionalString (cfg.basicAuthFile != null)
-                "--basic-auth-file=${cfg.basicAuthFile}"} \
-              ${optionalString (cfg.kubeletClientCaFile != null)
-                "--kubelet-certificate-authority=${cfg.kubeletClientCaFile}"} \
-              ${optionalString (cfg.kubeletClientCertFile != null)
-                "--kubelet-client-certificate=${cfg.kubeletClientCertFile}"} \
-              ${optionalString (cfg.kubeletClientKeyFile != null)
-                "--kubelet-client-key=${cfg.kubeletClientKeyFile}"} \
-              ${optionalString (cfg.preferredAddressTypes != null)
-                "--kubelet-preferred-address-types=${cfg.preferredAddressTypes}"} \
-              ${optionalString (cfg.proxyClientCertFile != null)
-                "--proxy-client-cert-file=${cfg.proxyClientCertFile}"} \
-              ${optionalString (cfg.proxyClientKeyFile != null)
-                "--proxy-client-key-file=${cfg.proxyClientKeyFile}"} \
-              ${optionalString (cfg.runtimeConfig != "")
-                "--runtime-config=${cfg.runtimeConfig}"} \
-              --secure-port=${toString cfg.securePort} \
-              --api-audiences=${toString cfg.apiAudiences} \
-              --service-account-issuer=${toString cfg.serviceAccountIssuer} \
-              --service-account-signing-key-file=${cfg.serviceAccountSigningKeyFile} \
-              --service-account-key-file=${cfg.serviceAccountKeyFile} \
-              --service-cluster-ip-range=${cfg.serviceClusterIpRange} \
-              --storage-backend=${cfg.storageBackend} \
-              ${optionalString (cfg.tlsCertFile != null)
-                "--tls-cert-file=${cfg.tlsCertFile}"} \
-              ${optionalString (cfg.tlsKeyFile != null)
-                "--tls-private-key-file=${cfg.tlsKeyFile}"} \
-              ${optionalString (cfg.tokenAuthFile != null)
-                "--token-auth-file=${cfg.tokenAuthFile}"} \
-              ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-              ${cfg.extraOpts}
+              ${concatStringsSep " \\\n" (mapAttrsToList (n: v: ''--${n}="${top.lib.renderArg v}"'') cfg.settings)}
             '';
             WorkingDirectory = top.dataDir;
             User = "kubernetes";
@@ -390,7 +115,6 @@ in
             Restart = "on-failure";
             RestartSec = 5;
           };
-
           unitConfig = {
             StartLimitIntervalSec = 0;
           };
@@ -435,11 +159,11 @@ in
           hosts = [
                     "kubernetes.default.svc"
                     "kubernetes.default.svc.${top.addons.dns.clusterDomain}"
-                    cfg.advertiseAddress
+                    cfg.settings.advertise-address
                     top.masterAddress
                     apiserverServiceIP
                     "127.0.0.1"
-                  ] ++ cfg.extraSANs;
+                  ] ++ top.pki.apiServerExtraSANs;
           action = "systemctl restart kube-apiserver.service";
         };
         apiserverProxyClient = mkCert {
@@ -472,7 +196,7 @@ in
                     "etcd.local"
                     "etcd.${top.addons.dns.clusterDomain}"
                     top.masterAddress
-                    cfg.advertiseAddress
+                    cfg.settings.advertise-address
                   ];
           privateKeyOwner = "etcd";
           action = "systemctl restart etcd.service";

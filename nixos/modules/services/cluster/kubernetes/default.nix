@@ -6,6 +6,13 @@ let
   cfg = config.services.kubernetes;
   opt = options.services.kubernetes;
 
+  renderArg = v:
+    if isList v
+    then concatStringsSep "," v
+    else if isBool v
+    then boolToString v
+    else toString v;
+
   defaultContainerdSettings = {
     version = 2;
     root = "/var/lib/containerd";
@@ -102,11 +109,6 @@ let
   };
 in {
 
-  imports = [
-    (mkRemovedOptionModule [ "services" "kubernetes" "addons" "dashboard" ] "Removed due to it being an outdated version")
-    (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
-  ];
-
   ###### interface
 
   options.services.kubernetes = {
@@ -188,6 +190,7 @@ in {
         inherit mkCert;
         inherit mkKubeConfig;
         inherit mkKubeConfigOptions;
+        inherit renderArg;
       };
       type = types.attrs;
     };
@@ -220,20 +223,9 @@ in {
       services.etcd.enable = true; # Cannot mkDefault because of flannel default options
       services.kubernetes.kubelet = {
         enable = mkDefault true;
-        taints = mkIf (!(elem "node" cfg.roles)) {
-          master = {
-            key = "node-role.kubernetes.io/master";
-            value = "true";
-            effect = "NoSchedule";
-          };
-        };
+        settings.register-with-taints = mkIf (!(elem "node" cfg.roles))
+          "node-role.kubernetes.io/master=true:NoSchedule";
       };
-    })
-
-
-    (mkIf (all (el: el == "master") cfg.roles) {
-      # if this node is only a master make it unschedulable by default
-      services.kubernetes.kubelet.unschedulable = mkDefault true;
     })
 
     (mkIf (elem "node" cfg.roles) {
@@ -246,11 +238,40 @@ in {
       services.kubernetes.flannel.enable = mkDefault true;
       services.flannel.etcd.endpoints = mkDefault etcdEndpoints;
       services.kubernetes.easyCerts = mkDefault true;
+
+      # these are some defaults which were previously option defaults in nixpkgs
+      # they are kept here to make at least some easy/minimal configuration of a Kubernetes cluster possible
+      # and to not surprise users of this feature too much, yet
+      services.kubernetes.apiserver.settings = rec{
+        api-audiences = "api,${service-account-issuer}";
+        authorization-mode = ["RBAC" "Node"];
+        service-cluster-ip-range = "10.0.0.0/24";
+        service-account-issuer = "https://kubernetes.default.svc";
+      };
+
+      services.kubernetes.controllerManager.settings = {
+        allocate-node-cidrs = true;
+        cluster-cidr = cfg.clusterCidr;
+        use-service-account-credentials = true;
+      };
+
+      services.kubernetes.kubelet.settings = {
+        cgroup-driver = "systemd";
+      };
+
+      services.kubernetes.proxy.settings = {
+        cluster-cidr = cfg.clusterCidr;
+        hostname-override = cfg.kubelet.hostname;
+      };
+
+      services.kubernetes.addons.dns.clusterIp = concatStringsSep "." (
+        take 3 (splitString "." cfg.apiserver.settings.service-cluster-ip-range
+      )) + ".254";
     })
 
     (mkIf cfg.apiserver.enable {
       services.kubernetes.pki.etcClusterAdminKubeconfig = mkDefault "kubernetes/cluster-admin.kubeconfig";
-      services.kubernetes.apiserver.etcd.servers = mkDefault etcdEndpoints;
+      services.kubernetes.apiserver.settings.etcd-servers = mkDefault etcdEndpoints;
     })
 
     (mkIf cfg.kubelet.enable {
@@ -305,9 +326,9 @@ in {
       # dns addon is enabled by default
       services.kubernetes.addons.dns.enable = mkDefault true;
 
-      services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.advertiseAddress != null
-                          then cfg.apiserver.advertiseAddress
-                          else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
+      services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.settings.advertise-address != null
+                          then cfg.apiserver.settings.advertise-address
+                          else "${cfg.masterAddress}:${toString cfg.apiserver.settings.secure-port}"}");
     })
   ];
 
