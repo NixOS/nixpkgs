@@ -4358,6 +4358,8 @@ with pkgs;
     libtool = if stdenv.hostPlatform.isDarwin then cctools else libtool;
   };
 
+  mailsend-go = callPackage ../tools/networking/mailsend-go { };
+
   mailutils = callPackage ../tools/networking/mailutils {
     sasl = gsasl;
   };
