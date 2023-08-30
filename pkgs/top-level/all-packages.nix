@@ -20279,6 +20279,8 @@ with pkgs;
 
   supabase-cli = callPackage ../development/tools/supabase-cli { };
 
+  surge-cli = callPackage ../development/tools/surge-cli { };
+
   svlint = callPackage ../development/tools/analysis/svlint { };
 
   swarm = callPackage ../development/tools/analysis/swarm { };
