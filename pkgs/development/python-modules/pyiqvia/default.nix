@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "2022.10.0";
+  version = "2023.08.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4xoK/SwpcsjIpGUertWoSlRsKIpgpV1XmuIzDJcZMZg=";
+    hash = "sha256-vPcb0mwREQri9FuYhWXihWSYnZ2ywBVujPMaNThTbVI=";
   };
 
   patches = [

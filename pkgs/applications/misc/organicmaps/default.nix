@@ -1,5 +1,4 @@
 { lib
-, mkDerivation
 , stdenv
 , fetchFromGitHub
 , cmake
@@ -8,6 +7,7 @@
 , which
 , python3
 , rsync
+, wrapQtAppsHook
 , qtbase
 , qtsvg
 , libGLU
@@ -19,15 +19,22 @@
 , nix-update-script
 }:
 
-mkDerivation rec {
+let
+  world_feed_integration_tests_data = fetchFromGitHub {
+    owner = "organicmaps";
+    repo = "world_feed_integration_tests_data";
+    rev = "3b66e59eaae85ebc583ce20baa3bdf27811349c4";
+    hash = "sha256-wOZKqwYxJLllyxCr44rAcropKhohLUIVCtsR5tz9TRw=";
+  };
+in stdenv.mkDerivation rec {
   pname = "organicmaps";
-  version = "2023.06.04-13";
+  version = "2023.08.18-8";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    hash = "sha256-HoEOKN99ClR1sa8YFZcS9XomtXnTRdAXS0iQEdDrhvc=";
+    hash = "sha256-vdleO4jNKibyDlqrfZsOCScpQ9zreuYSw2BSoNpmeLY=";
     fetchSubmodules = true;
   };
 
@@ -40,6 +47,9 @@ mkDerivation rec {
 
     # TODO use system boost instead, see https://github.com/organicmaps/organicmaps/issues/5345
     patchShebangs 3party/boost/tools/build/src/engine/build.sh
+
+    # Prefetch test data, or the build system will try to fetch it with git.
+    ln -s ${world_feed_integration_tests_data} data/world_feed_integration_tests_data
   '';
 
   nativeBuildInputs = [
@@ -49,6 +59,7 @@ mkDerivation rec {
     which
     python3
     rsync
+    wrapQtAppsHook
   ];
 
   # Most dependencies are vendored

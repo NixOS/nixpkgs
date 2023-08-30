@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.11.0";
+  version = "0.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.10";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pymill";
     rev = "refs/tags/${version}";
-    hash = "sha256-NECGUosjrhRCVGHOFV+YjY8o3heoA7qi9kKsgXpeHh0=";
+    hash = "sha256-RlnZUI7F1u1rjmuPc2guqVomR25Izf5jejN6LlMZYS8=";
   };
 
   propagatedBuildInputs = [
