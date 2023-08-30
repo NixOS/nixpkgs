@@ -370,11 +370,12 @@ in
         '';
       };
 
-      enableFccUnlock = mkOption {
+      enableBundledFccUnlockScripts = mkOption {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Enable FCC unlock procedures. Since release 1.18.4, the ModemManager daemon no longer
+          Enable FCC unlock procedures shipped with ModemManager.
+          Since release 1.18.4, the ModemManager daemon no longer
           automatically performs the FCC unlock procedure by default. See
           [the docs](https://modemmanager.org/docs/modemmanager/fcc-unlock/)
           for more details.
@@ -388,6 +389,7 @@ in
       [ "networking" "networkmanager" "packages" ]
       [ "networking" "networkmanager" "plugins" ])
     (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
+    (mkRenamedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] [ "networking" "networkmanager" "enableBundledFccUnlockScripts" ])
     (mkRemovedOptionModule [ "networking" "networkmanager" "dynamicHosts" ] ''
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
@@ -423,7 +425,7 @@ in
         source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
       })
       cfg.plugins)
-    // optionalAttrs cfg.enableFccUnlock
+    // optionalAttrs cfg.enableBundledFccUnlockScripts
       {
         "ModemManager/fcc-unlock.d".source =
           "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/*";
