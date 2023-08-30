@@ -5658,6 +5658,8 @@ with pkgs;
 
   hyprland-share-picker = libsForQt5.callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland/hyprland-share-picker.nix { };
 
+  hyprnome = callPackage ../applications/misc/hyprnome { };
+
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
   hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
