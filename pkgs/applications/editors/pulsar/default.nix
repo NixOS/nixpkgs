@@ -17,7 +17,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , makeWrapper
-, nodePackages
+, asar
 , python3
 }:
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     wrapGAppsHook
     copyDesktopItems
-    nodePackages.asar
+    asar
   ];
 
   buildInputs = [
