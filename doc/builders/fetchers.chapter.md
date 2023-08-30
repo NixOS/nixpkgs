@@ -123,8 +123,8 @@ Patches are fetched from `sources.debian.org`, and so must come from a
 package version that was uploaded to the Debian archive.  Packages may
 be removed from there once that specific version isn't in any suite
 anymore (stable, testing, unstable, etc.), so maintainers should use
-`copy-tarballs.pl` to archive the patch if it needs to be available in
-the very long-term.
+`copy-tarballs.pl` to archive the patch if it needs to be available
+longer-term.
 
 [Debian revision number]: https://www.debian.org/doc/debian-policy/ch-controlfields.html#version
 
