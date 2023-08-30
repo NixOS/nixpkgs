@@ -42,12 +42,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Fast and friendly network scanner";
+    description = "Angry IP Scanner - fast and friendly network scanner";
     homepage = "https://angryip.org";
+    downloadPage = "https://github.com/angryip/ipscan/releases/tag/${version}";
     changelog = "https://github.com/angryip/ipscan/blob/${version}/CHANGELOG";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kylesferrazza ];
+    maintainers = with maintainers; [ kylesferrazza totoroot ];
   };
 }
