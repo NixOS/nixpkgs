@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flit-core
 , mdformat
 , mdformat-gfm
 , mdit-py-plugins
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
   version = "1.0.4";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-mGWeG8clWJ7obsvO+gYaVzfAyDOh9HNdyWW5KgOgfmM=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   buildInputs = [
     mdformat

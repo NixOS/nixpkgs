@@ -11,12 +11,31 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "pynitrokey";
   version = "0.4.39";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-KXYHeWwV9Tw1ZpO/vASHjDnceeb+1K0yIUohb7EcRAI=";
   };
+
+  # We need to replace the dynamic version with a hardcoded one. The upstream
+  # project reads from a file to set the __version__ attribute, but flit-core
+  # cannot get that value unless it imports the module. In order to import the
+  # module, it thinks it needs all of the runtime dependencies at build-time.
+  # This is wasteful, but it also does not work well with our method of relaxing
+  # overly tight dependency constraints.
+  #
+  postPatch = ''
+    sed -i '/name = "pynitrokey"/a version = "${version}"' pyproject.toml
+
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version", "description"]' 'dynamic = ["description"]'
+  '';
+
+  nativeBuildInputs = [
+    flit-core
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     certifi
@@ -39,10 +58,6 @@ buildPythonApplication rec {
     urllib3
     tlv8
     typing-extensions
-  ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

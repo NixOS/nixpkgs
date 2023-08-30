@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "confuse";
   version = "1.7.0";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 

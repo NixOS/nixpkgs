@@ -1,10 +1,17 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromSourcehut
-, kubo, packaging, tomli }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromSourcehut
+, flit-core
+, kubo
+, packaging
+, tomli
+}:
 
 buildPythonPackage rec {
   pname = "ipwhl";
   version = "1.1.0";
-  format = "flit";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromSourcehut {
@@ -13,6 +20,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-YaIYcoUnbiv9wUOFIzGj2sWGbh7NsqRQcqOR2X6+QZA=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   buildInputs = [ kubo ];
   propagatedBuildInputs = [ packaging tomli ];

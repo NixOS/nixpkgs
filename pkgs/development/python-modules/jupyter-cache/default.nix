@@ -16,13 +16,13 @@
 buildPythonPackage rec {
   pname = "jupyter-cache";
   version = "0.6.1";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Jvg5ARQ+30ry8/9akeLSrSmORuLO4DyAcdN6I6Y8y/w=";
+    hash = "sha256-Jvg5ARQ+30ry8/9akeLSrSmORuLO4DyAcdN6I6Y8y/w=";
   };
 
   nativeBuildInputs = [

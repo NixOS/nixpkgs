@@ -168,11 +168,10 @@ following are specific to `buildPythonPackage`:
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
 * `format ? "setuptools"`: Format of the source. Valid options are
-  `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, and `"other"`.
+  `"setuptools"`, `"pyproject"`, `"wheel"`, and `"other"`.
   `"setuptools"` is for when the source has a `setup.py` and `setuptools` is
-  used to build a wheel, `flit`, in case `flit` should be used to build a wheel,
-  and `wheel` in case a wheel is provided. Use `other` when a custom
-  `buildPhase` and/or `installPhase` is needed.
+  used to build a wheel and `wheel` in case a wheel is provided. Use `other`
+  when a custom `buildPhase` and/or `installPhase` is needed.
 * `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to
   `makeWrapper`, which wraps generated binaries. By default, the arguments to
   `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling
@@ -451,14 +450,11 @@ are used in `buildPythonPackage`.
   with the `eggInstallHook`
 - `eggBuildHook` to skip building for eggs.
 - `eggInstallHook` to install eggs.
-- `flitBuildHook` to build a wheel using `flit`.
-- `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
-  (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
 - `pypaBuildHook` to build a wheel using
   [`pypa/build`](https://pypa-build.readthedocs.io/en/latest/index.html) and
-  PEP 517/518. Note a build system (e.g. `setuptools` or `flit`) should still
+  PEP 517/518. Note a build system (e.g. `setuptools` or `flit-core`) should still
   be added as `nativeBuildInput`.
-- `pipInstallHook` to install wheels.
+- `pypaInstallHook` to install wheels.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.

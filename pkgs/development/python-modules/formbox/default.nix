@@ -1,9 +1,16 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromSourcehut, bleach, markdown }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromSourcehut
+, flit-core
+, bleach
+, markdown
+}:
 
 buildPythonPackage rec {
   pname = "formbox";
   version = "0.4.1";
-  format = "flit";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromSourcehut {
@@ -12,6 +19,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-zOvXmSeBiwc0Z5mRMwMsHLU3A/iP7rpjXm0T0I2gUTk=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [ bleach markdown ];
   doCheck = false; # there's no test

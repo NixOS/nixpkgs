@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "sphinx-notfound-page";
   version = "0.8.3";
-  format = "flit";
+  format = "pyproject";
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {

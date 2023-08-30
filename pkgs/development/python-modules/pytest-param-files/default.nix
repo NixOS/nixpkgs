@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pytest-param-files";
   version = "0.3.4";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "chrisjsewell";
@@ -16,8 +17,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-Q7wWoggJN2w2a2umQHx5TsVcugqpovBEtOKruNMZQ8A=";
   };
-
-  format = "flit";
 
   nativeBuildInputs = [ flit-core ];
 

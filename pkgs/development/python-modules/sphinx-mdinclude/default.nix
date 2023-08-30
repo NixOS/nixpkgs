@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "sphinx-mdinclude";
   version = "0.5.3";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "sphinx_mdinclude";

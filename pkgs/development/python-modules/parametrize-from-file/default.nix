@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, flit-core
 , pytestCheckHook
 , coveralls
 , numpy
@@ -16,7 +17,7 @@
 buildPythonPackage rec {
   pname = "parametrize-from-file";
   version = "0.17.0";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
@@ -30,6 +31,10 @@ buildPythonPackage rec {
       url = "https://github.com/kalekundert/parametrize_from_file/commit/edee706770a713130da7c4b38b0a07de1bd79c1b.patch";
       hash = "sha256-VkPKGkYYTB5XCavtEEnFJ+EdNUUhITz/euwlYAPC/tQ=";
     })
+  ];
+
+  nativeBuildInputs = [
+    flit-core
   ];
 
   # patch out coveralls since it doesn't provide us value
