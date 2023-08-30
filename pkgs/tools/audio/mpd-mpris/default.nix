@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+}:
 
 buildGoModule rec {
   pname = "mpd-mpris";
