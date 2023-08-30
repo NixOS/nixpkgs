@@ -2,7 +2,6 @@
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
 , e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
-, desktopToDarwinBundle, stdenv
 , spiceSupport ? true, spice-gtk ? null
 }:
 
@@ -27,8 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
     libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
-  ] ++ lib.optional spiceSupport spice-gtk
-    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3 libvirt libxml2 requests cdrtools
