@@ -31,6 +31,7 @@ buildGoModule rec {
 
   postInstall = ''
     install -Dm644 mpd-mpris.service $out/lib/systemd/user/mpd-mpris.service
+    install -Dm644 mpd-mpris.desktop $out/etc/xdg/autostart/mpd-mpris.desktop
   '';
 
   meta = with lib; {
