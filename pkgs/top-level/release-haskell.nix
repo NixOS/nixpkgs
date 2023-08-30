@@ -70,6 +70,7 @@ let
     ghc928
     ghc945
     ghc946
+    ghc947
     ghc961
     ghc962
   ];
@@ -546,6 +547,7 @@ let
         compilerNames.ghc928
         compilerNames.ghc945
         compilerNames.ghc946
+        compilerNames.ghc947
       ];
       weeder = [
         compilerNames.ghc8107
@@ -557,6 +559,7 @@ let
         compilerNames.ghc928
         compilerNames.ghc945
         compilerNames.ghc946
+        compilerNames.ghc947
       ];
     })
     {
