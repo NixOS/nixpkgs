@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cfdyndns";
-  version = "0.0.4";
+  version = "0.0.5";
   src = fetchFromGitHub {
     owner = "colemickens";
     repo = "cfdyndns";
     rev = "v${version}";
-    hash = "sha256-kgpTKhMvxuy+Q9M5U/PKJt7pZ2kSQxkCNjNu8aIyutg=";
+    hash = "sha256-oaoUnl5cdOtgVXRYZURoeYSCSWyN/emTg6jcu7BIIGg=";
   };
 
-  cargoHash = "sha256-78TQkRHEbSaCyCM48hH1h8GG0BGJmC2zc7gTZc2t9Nc=";
+  cargoHash = "sha256-4vCvWTL9GV9tcoq5YfziPUBBgdt4cPA2/ekOlP8EkNA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
