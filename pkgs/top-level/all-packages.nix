@@ -34668,7 +34668,7 @@ with pkgs;
 
   orca-c = callPackage ../applications/audio/orca-c { };
 
-  organicmaps = libsForQt5.callPackage ../applications/misc/organicmaps { };
+  organicmaps = qt6Packages.callPackage ../applications/misc/organicmaps { };
 
   osm2xmap = callPackage ../applications/misc/osm2xmap { };
 
