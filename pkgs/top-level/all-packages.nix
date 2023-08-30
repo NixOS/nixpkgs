@@ -13460,6 +13460,8 @@ with pkgs;
 
   sudo = callPackage ../tools/security/sudo { };
 
+  sudo-rs = callPackage ../tools/security/sudo-rs { };
+
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
   sundtek = callPackage ../misc/drivers/sundtek { };
