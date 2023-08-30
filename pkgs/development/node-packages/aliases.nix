@@ -47,6 +47,7 @@ mapAliases {
   "@medable/mdctl-cli" = throw "@medable/mdctl-cli was removed because it was broken"; # added 2023-08-21
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   antennas = pkgs.antennas; # added 2023-07-30
+  inherit (pkgs) asar; # added 2023-08-26
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25

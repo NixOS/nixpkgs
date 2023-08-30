@@ -26,7 +26,6 @@
 , {"@webassemblyjs/wast-refmt": "1.11.1"}
 , "alex"
 , "alloy"
-, "asar"
 , "audiosprite"
 , "autoprefixer"
 , "auto-changelog"

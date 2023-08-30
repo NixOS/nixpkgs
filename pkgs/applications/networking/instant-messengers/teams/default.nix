@@ -14,7 +14,7 @@
 , gawk
 , xdg-utils
 , systemd
-, nodePackages
+, asar
 , xar
 , cpio
 , makeWrapper
@@ -55,7 +55,7 @@ let
       hash = hashes.linux;
     };
 
-    nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook nodePackages.asar ];
+    nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook asar ];
 
     unpackCmd = "dpkg -x $curSrc .";
 
