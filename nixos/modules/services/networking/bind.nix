@@ -274,12 +274,9 @@ in
         ${pkgs.coreutils}/bin/mkdir -p ${cfg.directory}
         chown ${bindUser} ${cfg.directory}
       '';
-
-      serviceConfig = {
-        ExecStart = "${bindPkg.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
-        ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
-        ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
-      };
+      script = "${bindPkg.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
+      reload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
+      preStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
 
       unitConfig.Documentation = "man:named(8)";
     };
