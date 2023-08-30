@@ -18483,6 +18483,8 @@ with pkgs;
 
   dot-language-server = callPackage ../development/tools/language-servers/dot-language-server { };
 
+  emmet-ls = callPackage ../development/tools/language-servers/emmet-ls { };
+
   fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
 
   fortran-language-server = python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server { };
