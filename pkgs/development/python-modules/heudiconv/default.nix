@@ -3,6 +3,8 @@
 , fetchPypi
 , pythonOlder
 , pytestCheckHook
+, setuptools
+, wheel
 , datalad
 , git
 , dcm2niix
@@ -23,8 +25,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UUBRC6RToj4XVbJnxG+EKdue4NVpTAW31RNm9ieF1lU=";
+    hash = "sha256-UUBRC6RToj4XVbJnxG+EKdue4NVpTAW31RNm9ieF1lU=";
   };
+
+  postPatch = ''
+    # the package builds without versioningit
+    sed -i '/versioningit ~=/d' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     nibabel
