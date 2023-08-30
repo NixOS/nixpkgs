@@ -142,31 +142,87 @@ rec {
     , preferLocalBuild ? true
     }:
     let
-      matches = builtins.match "/bin/([^/]+)" destination;
-    in
-    runCommand name
-      { inherit text executable checkPhase allowSubstitutes preferLocalBuild;
-        passAsFile = [ "text" ];
-        meta = lib.optionalAttrs (executable && matches != null) {
-          mainProgram = lib.head matches;
-        } // meta;
-      }
-      ''
-        target=$out${lib.escapeShellArg destination}
-        mkdir -p "$(dirname "$target")"
+      builder = writeCBin "write-text" ''
+        #include<stdio.h>
+        #include<stdlib.h>
+        #include<string.h>
+        #include<sys/stat.h>
+        #include<errno.h>
 
-        if [ -e "$textPath" ]; then
-          mv "$textPath" "$target"
-        else
-          echo -n "$text" > "$target"
-        fi
+        const char* nix_fd_line = "@nix { \"action\": \"setPhase\", \"phase\": \"generateFile\" }\n";
 
-        if [ -n "$executable" ]; then
-          chmod +x "$target"
-        fi
+        int main() {
+          char* env_out = getenv("out");
+          char* env_text = getenv("text");
+          char* env_NIX_LOG_FD = getenv("NIX_LOG_FD");
 
-        eval "$checkPhase"
+          int nix_fd = atoi(env_NIX_LOG_FD);
+          fprintf(stderr, "fd: %i\n", nix_fd);
+
+          FILE *f;
+          if ((f = fopen(env_out, "w")) == NULL) {
+            fprintf(stderr, "can't open output file: %s\n", strerror(errno));
+            exit(1);
+          }
+          fprintf(stderr, "writing...\n");
+          if (fprintf(f, "%s", env_text)) {
+            fprintf(stderr, "can't write to the output file: %s\n", strerror(errno));
+            exit(1);
+          }
+          fflush(f);
+          fclose(f);
+          chmod(env_out, 0444);
+          struct stat statbuf;
+          if (stat(env_out, &statbuf)) {
+            fprintf(stderr, "can't write out file: %s\n", strerror(errno));
+          }
+          fprintf(stderr, "finishing...\n");
+          fflush(stderr);
+          exit(0);
+        }
       '';
+      file = builtins.derivation {
+        inherit name text allowSubstitutes preferLocalBuild;
+        inherit (stdenv) system;
+        builder = "${builder}/bin/${builder.name}";
+        args = [];
+
+        outputHashMode = "flat";
+        outputHashAlgo = "sha256";
+        outputHash = builtins.hashString "sha256" text;
+
+        # inherit meta;
+      };
+      needPostBuild = (destination != "") || (checkPhase != "") || executable;
+
+      matches = builtins.match "/bin/([^/]+)" destination;
+      postBuild = runCommand name
+        { inherit executable checkPhase allowSubstitutes preferLocalBuild;
+
+          inherit file;
+
+          meta = lib.optionalAttrs (executable && matches != null) {
+            mainProgram = lib.head matches;
+          } // meta;
+        }
+        ''
+          destination="${lib.escapeShellArg destination}"
+          target="$out$destination"
+
+          if [ ! -z "$destination" ]; then
+            mkdir -p "$(dirname "$target")"
+          fi
+
+          cp "$file" "$target"
+
+          if [ -n "$executable" ]; then
+            chmod +x "$target"
+          fi
+
+          eval "$checkPhase"
+        '';
+    in if needPostBuild then postBuild else file;
+
 
   /*
    Writes a text file to nix store with no optional parameters available.
