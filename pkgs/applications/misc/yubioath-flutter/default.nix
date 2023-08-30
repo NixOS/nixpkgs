@@ -1,5 +1,6 @@
 { lib
-, flutter37
+, writeText
+, flutter
 , python3
 , fetchFromGitHub
 , pcre2
@@ -11,7 +12,7 @@
 , removeReferencesTo
 }:
 
-flutter37.buildFlutterApplication rec {
+flutter.buildFlutterApplication rec {
   pname = "yubioath-flutter";
   version = "6.2.0";
 
@@ -24,10 +25,16 @@ flutter37.buildFlutterApplication rec {
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
+  pubspecLockFile = ./pubspec.lock;
   depsListFile = ./deps.json;
-  vendorHash = "sha256-q/dNj9Pu7zg0HkV2QkXBbXiTsljsSJOqXhvAQlnoLlA=";
+  vendorHash = "sha256-RV7NoXJnd1jYGcU5YE0VV7VlMM7bz2JTMJTImOY3m38=";
 
   postPatch = ''
+    rm -f pubspec.lock
+    ln -s "${writeText "${pname}-overrides.yaml" (builtins.toJSON {
+      dependency_overrides.intl = "^0.18.1";
+    })}" pubspec_overrides.yaml
+
     substituteInPlace linux/CMakeLists.txt \
       --replace "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
@@ -63,9 +70,6 @@ flutter37.buildFlutterApplication rec {
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
       --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
       --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
-
-    # Remove unnecessary references to Flutter.
-    remove-references-to -t ${flutter37.unwrapped} $out/app/data/flutter_assets/shaders/ink_sparkle.frag
   '';
 
   nativeBuildInputs = [
@@ -78,11 +82,6 @@ flutter37.buildFlutterApplication rec {
     pcre2
     libnotify
     libappindicator
-  ];
-
-  disallowedReferences = [
-    flutter37
-    flutter37.unwrapped
   ];
 
   meta = with lib; {
