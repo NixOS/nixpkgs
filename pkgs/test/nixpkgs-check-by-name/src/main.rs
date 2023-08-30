@@ -85,49 +85,87 @@ pub fn check_nixpkgs<W: io::Write>(
 #[cfg(test)]
 mod tests {
     use crate::check_nixpkgs;
+    use crate::structure;
     use anyhow::Context;
     use std::env;
     use std::fs;
-    use std::path::PathBuf;
+    use std::path::Path;
+    use tempfile::{tempdir, tempdir_in};
 
     #[test]
-    fn test_cases() -> anyhow::Result<()> {
-        let extra_nix_path = PathBuf::from("tests/mock-nixpkgs.nix");
-
-        // We don't want coloring to mess up the tests
-        env::set_var("NO_COLOR", "1");
-
-        for entry in PathBuf::from("tests").read_dir()? {
+    fn tests_dir() -> anyhow::Result<()> {
+        for entry in Path::new("tests").read_dir()? {
             let entry = entry?;
             let path = entry.path();
             let name = entry.file_name().to_string_lossy().into_owned();
 
-            if !entry.path().is_dir() {
+            if !path.is_dir() {
                 continue;
             }
 
-            // This test explicitly makes sure we don't add files that would cause problems on
-            // Darwin, so we cannot test it on Darwin itself
-            #[cfg(not(target_os = "linux"))]
-            if name == "case-sensitive-duplicate-package" {
-                continue;
-            }
-
-            let mut writer = vec![];
-            check_nixpkgs(&path, vec![&extra_nix_path], &mut writer)
-                .context(format!("Failed test case {name}"))?;
-
-            let actual_errors = String::from_utf8_lossy(&writer);
             let expected_errors =
                 fs::read_to_string(path.join("expected")).unwrap_or(String::new());
 
-            if actual_errors != expected_errors {
-                panic!(
-                    "Failed test case {name}, expected these errors:\n\n{}\n\nbut got these:\n\n{}",
-                    expected_errors, actual_errors
-                );
-            }
+            test_nixpkgs(&name, &path, &expected_errors)?;
         }
         Ok(())
+    }
+
+    // We cannot check case-conflicting files into Nixpkgs (the channel would fail to
+    // build), so we generate the case-conflicting file instead.
+    #[test]
+    fn test_case_sensitive() -> anyhow::Result<()> {
+        let temp_nixpkgs = tempdir()?;
+        let path = temp_nixpkgs.path();
+
+        if is_case_insensitive_fs(&path)? {
+            eprintln!("We're on a case-insensitive filesystem, skipping case-sensitivity test");
+            return Ok(());
+        }
+
+        let base = path.join(structure::BASE_SUBPATH);
+
+        fs::create_dir_all(base.join("fo/foo"))?;
+        fs::write(base.join("fo/foo/package.nix"), "{ someDrv }: someDrv")?;
+
+        fs::create_dir_all(base.join("fo/foO"))?;
+        fs::write(base.join("fo/foO/package.nix"), "{ someDrv }: someDrv")?;
+
+        test_nixpkgs(
+            "case_sensitive",
+            &path,
+            "pkgs/by-name/fo: Duplicate case-sensitive package directories \"foO\" and \"foo\".\n",
+        )?;
+
+        Ok(())
+    }
+
+    fn test_nixpkgs(name: &str, path: &Path, expected_errors: &str) -> anyhow::Result<()> {
+        let extra_nix_path = Path::new("tests/mock-nixpkgs.nix");
+
+        // We don't want coloring to mess up the tests
+        env::set_var("NO_COLOR", "1");
+
+        let mut writer = vec![];
+        check_nixpkgs(&path, vec![&extra_nix_path], &mut writer)
+            .context(format!("Failed test case {name}"))?;
+
+        let actual_errors = String::from_utf8_lossy(&writer);
+
+        if actual_errors != expected_errors {
+            panic!(
+                "Failed test case {name}, expected these errors:\n\n{}\n\nbut got these:\n\n{}",
+                expected_errors, actual_errors
+            );
+        }
+        Ok(())
+    }
+
+    /// Check whether a path is in a case-insensitive filesystem
+    fn is_case_insensitive_fs(path: &Path) -> anyhow::Result<bool> {
+        let dir = tempdir_in(path)?;
+        let base = dir.path();
+        fs::write(base.join("aaa"), "")?;
+        Ok(base.join("AAA").exists())
     }
 }

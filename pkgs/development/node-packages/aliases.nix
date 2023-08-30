@@ -67,6 +67,7 @@ mapAliases {
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
+  inherit (pkgs) html-minifier; # added 2023-08-19
   inherit (pkgs) htmlhint; # added 2023-08-19
   hueadm = pkgs.hueadm; # added 2023-07-31
   inherit (pkgs) hyperpotamus; # added 2023-08-19
@@ -80,6 +81,7 @@ mapAliases {
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) npm-check-updates; # added 2023-08-22
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18

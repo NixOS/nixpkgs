@@ -1,75 +1,71 @@
 { lib
 , stdenv
+, boost
+, cmake
 , fetchFromGitHub
 , fetchpatch
-, cmake
+, graphviz
+, igraph
+, llvmPackages
 , ninja
 , pkg-config
 , python3Packages
-, boost
-, rapidjson
 , qtbase
 , qtsvg
-, igraph
+, quazip
+, rapidjson
 , spdlog
-, wrapQtAppsHook
-, graphviz
-, llvmPackages
-, z3
-, fmt_8
 , suitesparse
+, wrapQtAppsHook
+, z3
 }:
 
 let
-  igraph' = igraph.overrideAttrs (old: rec {
+  # hal doesn't work with igraph 0.10.x yet https://github.com/emsec/hal/pull/487
+  igraph' = igraph.overrideAttrs (final: prev: {
     version = "0.9.10";
     src = fetchFromGitHub {
       owner = "igraph";
-      repo = "igraph";
-      rev = version;
+      repo = final.pname;
+      rev = final.version;
       hash = "sha256-prDadHsNhDRkNp1i0niKIYxE0g85Zs0ngvUy6uK8evk=";
     };
-    postPatch = old.postPatch + lib.optionalString stdenv.isAarch64 ''
+    patches = (prev.patches or []) ++ [
+      # needed by clang
+      (fetchpatch {
+        name = "libxml2-2.11-compat.patch";
+        url = "https://github.com/igraph/igraph/commit/5ad464be5ae2f6ebb69c97cb0140c800cc8d97d6.patch";
+        hash = "sha256-adU5SctH+H54UaAmr5BZInytD3wjUzLtQbCwngAWs4o=";
+      })
+    ];
+    postPatch = prev.postPatch + lib.optionalString stdenv.isAarch64 ''
       # https://github.com/igraph/igraph/issues/1694
       substituteInPlace tests/CMakeLists.txt \
         --replace "igraph_scg_grouping3" "" \
         --replace "igraph_scg_semiprojectors2" ""
     '';
-    buildInputs = old.buildInputs ++ [ suitesparse ];
-    cmakeFlags = old.cmakeFlags ++ [ "-DIGRAPH_USE_INTERNAL_CXSPARSE=OFF" ];
+    # general options brought back from the old 0.9.x package
+    buildInputs = prev.buildInputs ++ [ suitesparse ];
+    cmakeFlags = prev.cmakeFlags ++ [ "-DIGRAPH_USE_INTERNAL_CXSPARSE=OFF" ];
   });
-  # no stable hal release yet with recent spdlog/fmt support, remove
-  # once 4.0.0 is released - see https://github.com/emsec/hal/issues/452
-  spdlog' = spdlog.override {
-    fmt_9 = fmt_8.overrideAttrs (_: rec {
-      version = "8.0.1";
-      src = fetchFromGitHub {
-        owner = "fmtlib";
-        repo = "fmt";
-        rev = version;
-        sha256 = "1mnvxqsan034d2jiqnw2yvkljl7lwvhakmj5bscwp1fpkn655bbw";
-      };
-    });
-  };
+
 in stdenv.mkDerivation rec {
-  version = "3.3.0";
+  version = "4.2.0";
   pname = "hal-hardware-analyzer";
 
   src = fetchFromGitHub {
     owner = "emsec";
     repo = "hal";
     rev = "v${version}";
-    sha256 = "sha256-uNpELHhSAVRJL/4iypvnl3nX45SqB419r37lthd2WmQ=";
+    sha256 = "sha256-Yl86AClE3vWygqj1omCOXX8koJK2SjTkMZFReRThez0=";
   };
 
   patches = [
     (fetchpatch {
-      # Fix build with python 3.10
-      # https://github.com/emsec/hal/pull/463
-      name = "hal-fix-python-3.10.patch";
-      url = "https://github.com/emsec/hal/commit/f695f55cb2209676ef76366185b7c419417fbbc9.patch";
-      sha256 = "sha256-HsCdG3tPllUsLw6kQtGaaEGkEHqZPSC2v9k6ycO2I/8=";
-      includes = [ "plugins/gui/src/python/python_context.cpp" ];
+      name = "cmake-add-no-vendored-options.patch";
+      # https://github.com/emsec/hal/pull/529
+      url = "https://github.com/emsec/hal/commit/37d5c1a0eacb25de57cc552c13e74f559a5aa6e8.patch";
+      hash = "sha256-a30VjDt4roJOTntisixqnH17wwCgWc4VWeh1+RgqFuY=";
     })
   ];
 
@@ -77,14 +73,30 @@ in stdenv.mkDerivation rec {
   # copies them in full to the output, bloating the package
   postPatch = ''
     shopt -s extglob
-    rm -rf deps/!(sanitizers-cmake)/*
+    rm -rf deps/!(abc|sanitizers-cmake|subprocess)/*
     shopt -u extglob
   '';
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
-  buildInputs = [ qtbase qtsvg boost rapidjson igraph' spdlog' graphviz wrapQtAppsHook z3 ]
-    ++ (with python3Packages; [ python pybind11 ])
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    boost
+    rapidjson
+    igraph'
+    spdlog
+    graphviz
+    z3
+    quazip
+  ]
+  ++ (with python3Packages; [ python pybind11 ])
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+  ;
 
   cmakeFlags = with lib.versions; [
     "-DHAL_VERSION_RETURN=${version}"
@@ -96,11 +108,22 @@ in stdenv.mkDerivation rec {
     "-DHAL_VERSION_DIRTY=false"
     "-DHAL_VERSION_BROKEN=false"
     "-DENABLE_INSTALL_LDCONFIG=off"
+    "-DUSE_VENDORED_PYBIND11=off"
+    "-DUSE_VENDORED_SPDLOG=off"
+    "-DUSE_VENDORED_QUAZIP=off"
+    "-DUSE_VENDORED_IGRAPH=off"
     "-DBUILD_ALL_PLUGINS=on"
   ];
   # needed for macos build - this is why we use wrapQtAppsHook instead of
   # the qt mkDerivation - the latter forcibly overrides this.
   cmakeBuildType = "MinSizeRel";
+
+  # some plugins depend on other plugins and need to be able to load them
+  postFixup = lib.optionalString stdenv.isLinux ''
+    find $out/lib/hal_plugins -name '*.so*' | while read -r f ; do
+      patchelf --set-rpath "$(patchelf --print-rpath "$f"):$out/lib/hal_plugins" "$f"
+    done
+  '';
 
   meta = with lib; {
     description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";

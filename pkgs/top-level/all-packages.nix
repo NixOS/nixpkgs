@@ -1892,6 +1892,8 @@ with pkgs;
 
   nominatim = callPackage ../servers/nominatim { };
 
+  npm-check-updates = callPackage ../tools/package-management/npm-check-updates { };
+
   ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
@@ -12133,9 +12135,7 @@ with pkgs;
 
   porsmo = callPackage ../applications/misc/porsmo { };
 
-  pantum-driver = callPackage ../misc/drivers/pantum-driver {
-    libjpeg8 = libjpeg.override { enableJpeg8 = true; };
-  };
+  pantum-driver = callPackage ../misc/drivers/pantum-driver { };
 
   posteid-seed-extractor = callPackage ../tools/security/posteid-seed-extractor { };
 
@@ -14872,7 +14872,6 @@ with pkgs;
   wkhtmltopdf = libsForQt5.callPackage ../tools/graphics/wkhtmltopdf { };
 
   wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin {
-    libjpeg8 = libjpeg.override { enableJpeg8 = true; };
     openssl = openssl_1_1;
   };
 
@@ -19506,6 +19505,8 @@ with pkgs;
 
   confluent-cli = callPackage ../development/tools/confluent-cli { };
 
+  html-minifier = callPackage ../development/tools/html-minifier { };
+
   htmlhint = callPackage ../development/tools/htmlhint { };
 
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
@@ -23271,6 +23272,7 @@ with pkgs;
   # also known as libturbojpeg
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
   libjpeg = libjpeg_turbo;
+  libjpeg8 = libjpeg_turbo.override { enableJpeg8 = true; };
 
   libjreen = callPackage ../development/libraries/libjreen { };
 
@@ -25701,6 +25703,8 @@ with pkgs;
 
   whereami = callPackage ../development/libraries/whereami { };
 
+  where-is-my-sddm-theme = libsForQt5.callPackage ../data/themes/where-is-my-sddm-theme { };
+
   wildmidi = callPackage ../development/libraries/wildmidi {
     inherit (darwin.apple_sdk.frameworks) OpenAL;
   };
@@ -27319,9 +27323,7 @@ with pkgs;
   prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
   prometheus-systemd-exporter = callPackage ../servers/monitoring/prometheus/systemd-exporter.nix { };
   prometheus-tor-exporter = callPackage ../servers/monitoring/prometheus/tor-exporter.nix { };
-  prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix { };
   prometheus-v2ray-exporter = callPackage ../servers/monitoring/prometheus/v2ray-exporter.nix { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
@@ -30803,10 +30805,10 @@ with pkgs;
   };
   bitwig-studio3 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix { };
   bitwig-studio4 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
-    libjpeg = libjpeg.override { enableJpeg8 = true; };
+    libjpeg = libjpeg8;
   };
   bitwig-studio5 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio5.nix {
-    libjpeg = libjpeg.override { enableJpeg8 = true; };
+    libjpeg = libjpeg8;
   };
 
   bitwig-studio = bitwig-studio5;
@@ -35431,7 +35433,7 @@ with pkgs;
   sish = callPackage ../tools/networking/sish { };
 
   sky = libsForQt5.callPackage ../applications/networking/instant-messengers/sky {
-    libjpeg_turbo = libjpeg_turbo.override { enableJpeg8 = true; };
+    libjpeg_turbo = libjpeg8;
   };
 
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
