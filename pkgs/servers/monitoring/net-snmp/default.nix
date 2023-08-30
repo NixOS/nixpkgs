@@ -10,11 +10,11 @@
 
 in stdenv.mkDerivation rec {
   pname = "net-snmp";
-  version = "5.9.3";
+  version = "5.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/net-snmp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-IJfym34b8/EwC0uuUvojCNC7jV05mNvgL5RipBOi7wo=";
+    sha256 = "sha256-i03gE5HnTjxwFL60OWGi1tb6A6zDQoC5WF9JMHRbBUQ=";
   };
 
   patches =
