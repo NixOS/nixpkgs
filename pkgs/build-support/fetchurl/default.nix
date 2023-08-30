@@ -120,8 +120,8 @@ let
     else throw "fetchurl requires either `url` or `urls` to be set";
 
   hash_ =
-    # Many other combinations don't make sense, but this is the most common one:
-    if hash != "" && sha256 != "" then throw "multiple hashes passed to fetchurl" else
+    if with lib.lists; length (filter (s: s != "") [ hash outputHash sha1 sha256 sha512 ]) > 1
+    then throw "multiple hashes passed to fetchurl" else
 
     if hash != "" then { outputHashAlgo = null; outputHash = hash; }
     else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
