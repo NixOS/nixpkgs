@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchPypi
+, fetchpatch
 , git
 , postgresql
 , postgresqlTestHook
@@ -21,6 +22,14 @@ let
       });
       starlette = prev.starlette.overridePythonAttrs (oldAttrs: rec {
         version = "0.20.4";
+        patches = [
+          (fetchpatch {
+            name = "CVE-2023-29159.no-tests.patch";
+            url = "https://github.com/encode/starlette/commit/1797de464124b090f10cf570441e8292936d63e3.patch";
+            excludes = ["tests/test_staticfiles.py"];
+            hash = "sha256-bFcbM7rbopot/Fh7y86zbPj+73mK3ml39JtJAykomKI=";
+          })
+        ];
         src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
