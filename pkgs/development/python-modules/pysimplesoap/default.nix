@@ -3,12 +3,15 @@
 , fetchPypi
 , buildPythonPackage
 , m2crypto
+, nix-update-script
 }:
 
 buildPythonPackage rec {
   pname = "pysimplesoap";
   # Unfortunately, the latest stable release is broken on Python 3.
   version = "1.16.2";
+
+  passthru.updateScript = nix-update-script { };
 
   src = fetchPypi {
     pname = "PySimpleSOAP";
