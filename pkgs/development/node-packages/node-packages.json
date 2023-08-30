@@ -243,7 +243,6 @@
 , "rimraf"
 , "rollup"
 , {"rust-analyzer-build-deps": "../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps"}
-, "rtlcss"
 , "sass"
 , "semver"
 , "serve"

@@ -24955,6 +24955,8 @@ with pkgs;
 
   rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
 
+  rtlcss = callPackage ../development/libraries/rtlcss { };
+
   rttr = callPackage ../development/libraries/rttr { };
 
   rubberband = callPackage ../development/libraries/rubberband { };
