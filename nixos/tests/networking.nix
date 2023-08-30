@@ -457,6 +457,10 @@ let
           import json
 
           machine.wait_for_unit("network.target")
+          machine.succeed("grep foo-over-udp-fou1 /etc/services")
+          machine.succeed("grep foo-over-udp-fou2 /etc/services")
+          machine.succeed("grep foo-over-udp-fou3 /etc/services")
+          machine.succeed("grep foo-over-udp-fou4 /etc/services")
           fous = json.loads(machine.succeed("ip -json fou show"))
           assert {"port": 9001, "gue": None, "family": "inet"} in fous, "fou1 exists"
           assert {"port": 9002, "ipproto": 41, "family": "inet"} in fous, "fou2 exists"

@@ -1385,6 +1385,15 @@ in
           val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr" val));
 
+    networking.services = lib.mkIf hasFous (lib.attrsets.mapAttrs'
+      (name: { port, ... }: {
+        name = "foo-over-udp-${name}";
+        value = {
+          inherit port;
+          protocols = [ "udp" ];
+        };
+      }) cfg.fooOverUDP);
+
     security.wrappers = {
       ping = {
         owner = "root";
