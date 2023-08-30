@@ -34776,6 +34776,8 @@ with pkgs;
 
   metal-cli = callPackage ../development/tools/metal-cli { };
 
+  pb = callPackage ../tools/misc/pb { };
+
   pb_cli = callPackage ../tools/misc/pb_cli { };
 
   capture = callPackage ../tools/misc/capture { };
