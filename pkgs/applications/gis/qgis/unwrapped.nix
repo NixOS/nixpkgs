@@ -152,6 +152,7 @@ in mkDerivation rec {
   cmakeFlags = [
     "-DWITH_3D=True"
     "-DWITH_PDAL=TRUE"
+    "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
