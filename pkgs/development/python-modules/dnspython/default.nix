@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.4.1";
+  version = "2.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wzlxx5r1vpaLuJfpXCRI4RpkXuhNk7Jlzgt6q+Xf3Kg=";
+    hash = "sha256-jc+ujHRgovhLQHLibxyfQQHKIMBxZJy3w06LapPViYQ=";
   };
 
   nativeBuildInputs = [
