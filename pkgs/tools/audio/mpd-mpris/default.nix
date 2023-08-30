@@ -30,8 +30,7 @@ buildGoModule rec {
   subPackages = [ "cmd/${pname}" ];
 
   postInstall = ''
-    mkdir -p $out/lib/systemd/user
-    cp mpd-mpris.service $out/lib/systemd/user
+    install -Dm644 mpd-mpris.service $out/lib/systemd/user/mpd-mpris.service
   '';
 
   meta = with lib; {
