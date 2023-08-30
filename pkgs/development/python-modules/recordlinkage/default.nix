@@ -15,6 +15,7 @@
 , scipy
 , setuptools
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
