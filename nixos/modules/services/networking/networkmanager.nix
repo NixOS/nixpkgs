@@ -381,6 +381,27 @@ in
           for more details.
         '';
       };
+
+      fccUnlockScripts = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            id = mkOption {
+              type = types.str;
+              description = lib.mdDoc "vid:pid of either the PCI or USB vendor and product ID";
+            };
+            path = mkOption {
+              type = types.path;
+              description = lib.mdDoc "Path to the unlock script";
+            };
+          };
+        });
+        default = [ ];
+        example = literalExpression ''[{ name = "03f0:4e1d"; script = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
+        description = lib.mdDoc ''
+          List of FCC unlock scripts to enable on the system, behaving as described in
+          https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.
+        '';
+      };
     };
   };
 
@@ -425,11 +446,11 @@ in
         source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
       })
       cfg.plugins)
-    // optionalAttrs cfg.enableBundledFccUnlockScripts
-      {
-        "ModemManager/fcc-unlock.d".source =
-          "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/*";
-      }
+    // builtins.listToAttrs (map
+      (e: nameValuePair "ModemManager/fcc-unlock.d/${e.id}" {
+        source = e.path;
+      })
+      cfg.fccUnlockScripts)
     // optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ])
       {
         "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
@@ -517,6 +538,16 @@ in
           networkmanager-sstp
         ];
       }
+
+      # if cfg.enableBundledFccUnlockScripts is set, populate
+      # networking.networkmanager.fccUnlockScripts with the values from
+      # pkgs.modemmanager.passthru.fccUnlockScripts.
+      (mkIf cfg.enableBundledFccUnlockScripts {
+        networkmanager.fccUnlockScripts = lib.optionals cfg.enableBundledFccUnlockScripts
+          lib.mapAttrsToList
+          (id: path: { inherit id path; })
+          pkgs.modemmanager.passthru.fccUnlockScripts;
+      })
 
       (mkIf cfg.enableStrongSwan {
         networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
