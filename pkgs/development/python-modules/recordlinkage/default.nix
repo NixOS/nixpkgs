@@ -12,6 +12,9 @@
 , pytest
 , scikit-learn
 , scipy
+, setuptools
+, setuptools-scm
+, wheel
 , pythonOlder
 }:
 
@@ -21,10 +24,17 @@ buildPythonPackage rec {
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-7NoMEN/xOLFwaBXeMysShfZwrn6MzpJZYhNQHVieaqQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     pyarrow
