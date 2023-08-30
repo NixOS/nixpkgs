@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "Web3 library for interactions";
     homepage = "https://github.com/ethereum/web3";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ hellwolf ];
   };
 }
