@@ -82,6 +82,53 @@ Note that because the checksum is computed after applying these effects, using o
 
 Most other fetchers return a directory rather than a single file.
 
+
+## `fetchDebianPatch` {#fetchdebianpatch}
+
+A wrapper around `fetchpatch`, which takes:
+- `patch` and `hash`: the patch's filename without the `.patch` suffix,
+  and its hash after normalization by `fetchpatch` ;
+- `pname`: the Debian source package's name ;
+- `version`: the upstream version number ;
+- `debianRevision`: the [Debian revision number] if applicable ;
+- the `area` of the Debian archive: `main` (default), `contrib`, or `non-free`.
+
+Here is an example of `fetchDebianPatch` in action:
+
+```nix
+{ lib
+, fetchDebianPatch
+, buildPythonPackage
+}:
+
+buildPythonPackage rec {
+  pname = "pysimplesoap";
+  version = "1.16.2";
+  src = ...;
+
+  patches = [
+    (fetchDebianPatch {
+      inherit pname version;
+      debianRevision = "5";
+      name = "Add-quotes-to-SOAPAction-header-in-SoapClient";
+      hash = "sha256-xA8Wnrpr31H8wy3zHSNfezFNjUJt1HbSXn3qUMzeKc0=";
+    })
+  ];
+
+  ...
+}
+```
+
+Patches are fetched from `sources.debian.org`, and so must come from a
+package version that was uploaded to the Debian archive.  Packages may
+be removed from there once that specific version isn't in any suite
+anymore (stable, testing, unstable, etc.), so maintainers should use
+`copy-tarballs.pl` to archive the patch if it needs to be available
+longer-term.
+
+[Debian revision number]: https://www.debian.org/doc/debian-policy/ch-controlfields.html#version
+
+
 ## `fetchsvn` {#fetchsvn}
 
 Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`.
