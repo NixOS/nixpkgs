@@ -30,5 +30,6 @@ buildGoModule rec {
     changelog = "https://github.com/vultr/vultr-cli/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "vultr-cli";
   };
 }
