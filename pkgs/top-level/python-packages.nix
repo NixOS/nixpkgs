@@ -584,6 +584,8 @@ self: super: with self; {
 
   apispec-webframeworks = callPackage ../development/python-modules/apispec-webframeworks { };
 
+  apkit = callPackage ../development/python-modules/apkit { };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   app-model = callPackage ../development/python-modules/app-model { };
@@ -1977,6 +1979,8 @@ self: super: with self; {
 
   cock = callPackage ../development/python-modules/cock { };
 
+  cobs = callPackage ../development/python-modules/cobs { };
+
   class-doc = callPackage ../development/python-modules/class-doc { };
 
   cliche = callPackage ../development/python-modules/cliche { };
@@ -2560,6 +2564,8 @@ self: super: with self; {
   deap = callPackage ../development/python-modules/deap { };
 
   debian = callPackage ../development/python-modules/debian { };
+
+  debianbts = callPackage ../development/python-modules/debianbts { };
 
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
 
@@ -8240,6 +8246,8 @@ self: super: with self; {
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
 
+  pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
+
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
 
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
@@ -8785,6 +8793,8 @@ self: super: with self; {
   };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
+
+  pybox2d = callPackage ../development/python-modules/pybox2d { };
 
   pybravia = callPackage ../development/python-modules/pybravia { };
 
@@ -10764,7 +10774,9 @@ self: super: with self; {
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
-  pywlroots = callPackage ../development/python-modules/pywlroots { };
+  pywlroots = callPackage ../development/python-modules/pywlroots {
+    wlroots = pkgs.wlroots_0_15;
+  };
 
   pyws66i = callPackage ../development/python-modules/pyws66i { };
 
@@ -10878,7 +10890,9 @@ self: super: with self; {
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
-  qtile = callPackage ../development/python-modules/qtile { };
+  qtile = callPackage ../development/python-modules/qtile {
+    wlroots = pkgs.wlroots_0_15;
+  };
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };

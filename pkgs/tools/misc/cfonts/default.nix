@@ -1,17 +1,14 @@
-{ lib
-, rustPlatform
-, fetchCrate
-}:
+{ lib, rustPlatform, fetchCrate }:
 rustPlatform.buildRustPackage rec {
   pname = "cfonts";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-STeLEHgggshhyLCfqiJmDcmwxqQ1AOGHj2ATliEY+DA=";
+    hash = "sha256-bnjrbcQ2MMZsM0rWWk+xkA58rSREHWfSvlGDAHKIPAw=";
   };
 
-  cargoHash = "sha256-GGi4OduO9FPIWllxlx4tK3lix36zF0FNDyptzftV0GY=";
+  cargoHash = "sha256-8NgEsFglt+JyP5D61mT4Z8SIbPATJskiEpn8tWy+yjk=";
 
   meta = with lib; {
     homepage = "https://github.com/dominikwilkowski/cfonts";

@@ -129,7 +129,7 @@ let
       ${postFixup}
     '';
 
-    passthru = {
+    passthru = (args.passthru or {}) // {
       inherit (deps) depsListFile;
     };
   });

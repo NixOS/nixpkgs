@@ -9052,6 +9052,13 @@
     githubId = 691290;
     name = "Keshav Kini";
   };
+  kip93 = {
+    name = "Leandro Reina Kiperman";
+    email = "leandro@kip93.net";
+    matrix = "@kip93:matrix.org";
+    github = "kip93";
+    githubId = 26793632;
+  };
   kira-bruneau = {
     email = "kira.bruneau@pm.me";
     name = "Kira Bruneau";
@@ -10091,7 +10098,7 @@
     name = "Ludovic Courtès";
   };
   ludovicopiero = {
-    email = "ludovicopiero@pm.me";
+    email = "lewdovico@gnuweeb.org";
     github = "ludovicopiero";
     githubId = 44255157;
     name = "Ludovico Piero";
@@ -17933,6 +17940,12 @@
     github = "veprbl";
     githubId = 245573;
     name = "Dmitry Kalinkin";
+  };
+  victormeriqui = {
+    name = "Victor Meriqui";
+    email = "victor.meriqui@ororatech.com";
+    github = "victormeriqui";
+    githubId = 1396008;
   };
   victormignot = {
     email = "root@victormignot.fr";
