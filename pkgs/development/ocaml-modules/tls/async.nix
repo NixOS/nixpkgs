@@ -8,6 +8,11 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.11";
   duneVersion = "3";
 
+  patches = [
+    # Remove when TLS gets updated to v0.17.1.
+    ./janestreet-0.16.patch
+  ];
+
   doCheck = true;
 
   propagatedBuildInputs = [
