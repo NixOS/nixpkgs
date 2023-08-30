@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "3.9.0";
 
   src = fetchurl {
-    url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_all.deb";
+    url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_amd64.deb";
     sha256 = "sha256-HpsEp5XSz118cbV2wT81hzQT4cgDEBnpUbpl45ZVvlg=";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share
-    cp usr/lib/ipscan/ipscan-any-${version}.jar $out/share/${pname}-${version}.jar
+    cp usr/lib/ipscan/ipscan-linux64-${version}.jar $out/share/${pname}-${version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt xorg.libXtst ]}" \
