@@ -1,9 +1,10 @@
 { lib
-, stdenv
-, fetchurl
+, buildNpmPackage
+, fetchFromGitHub
+, writeText
 , autoPatchelfHook
-, dpkg
 , makeWrapper
+, callPackage
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -34,16 +35,21 @@
 , xorg
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  deps = callPackage ./deps { };
+in
+buildNpmPackage rec {
   pname = "tidal-hifi";
   version = "5.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-fA6zXmLfcZJt5/umdY4gdqGdbH3afsaanmK/i+Js5HQ=";
+  src = fetchFromGitHub {
+    owner = "Mastermindzh";
+    repo = pname;
+    rev = version;
+    hash = "sha256-uZCZDnD1xJm5YrHiJ9U3+SuREpLfCLD3wCIkfoS9g+Q=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   buildInputs = [
     alsa-lib
@@ -89,30 +95,54 @@ stdenv.mkDerivation (finalAttrs: {
   runtimeDependencies =
     [ (lib.getLib systemd) libnotify libdbusmenu xdg-utils ];
 
-  unpackPhase = "dpkg-deb -x $src .";
+  # set -x
+  # ${jq} \
+  #   '.devDependencies.electron = "path:${electronSrc}"' \
+  #   package.json > package.json.new
+  # ${jq} \
+  #   '.packages."".devDependencies.electron = "path:${electronSrc}"' \
+  #   package-lock.json > package-lock.json.new
 
-  installPhase = ''
-    runHook preInstall
+  # mv package.json.new package.json
+  # mv package-lock.json.new package-lock.json
 
-    mkdir -p "$out/bin"
-    cp -R "opt" "$out"
-    cp -R "usr/share" "$out/share"
-    chmod -R g-w "$out"
+  patches = [
+    ./package-lock.json.patch
+  ];
 
-    runHook postInstall
+  npmDepPath_electron = "${deps.electron}/lib/node_modules/electron";
+  npmDepPath_register-scheme = "${deps.register-scheme}/lib/node_modules/register-scheme";
+  postPatch = ''
+    substituteAllInPlace package-lock.json
   '';
+  npmDepsHash = "sha256-fHo8aW6tMOyev9akhENlxpxuAGZ0q4MR+FW9WrM7YmU=";
 
-  postFixup = ''
-    makeWrapper $out/opt/tidal-hifi/tidal-hifi $out/bin/tidal-hifi \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      "''${gappsWrapperArgs[@]}"
-    substituteInPlace $out/share/applications/tidal-hifi.desktop \
-      --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"
-  '';
+  # ELECTRON_OVERRIDE_DIST_PATH = "${deps.electron_24-bin}/bin/";
+
+  npmBuildScript = "build-unpacked";
+
+  # installPhase = ''
+  #   runHook preInstall
+
+  #   mkdir -p "$out/bin"
+  #   cp -R "opt" "$out"
+  #   cp -R "usr/share" "$out/share"
+  #   chmod -R g-w "$out"
+
+  #   runHook postInstall
+  # '';
+
+  # postFixup = ''
+  #   makeWrapper $out/opt/tidal-hifi/tidal-hifi $out/bin/tidal-hifi \
+  #     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
+  #     --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+  #     "''${gappsWrapperArgs[@]}"
+  #   substituteInPlace $out/share/applications/tidal-hifi.desktop \
+  #     --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"
+  # '';
 
   meta = {
-    changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${version}";
     description = "The web version of Tidal running in electron with hifi support thanks to widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
@@ -120,4 +150,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "tidal-hifi";
   };
-})
+}
