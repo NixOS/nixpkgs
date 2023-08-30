@@ -7929,6 +7929,18 @@ final: prev:
     meta.homepage = "https://github.com/rgroli/other.nvim/";
   };
 
+  otter-nvim = buildVimPluginFrom2Nix {
+    pname = "otter.nvim";
+    version = "2023-08-27";
+    src = fetchFromGitHub {
+      owner = "jmbuhr";
+      repo = "otter.nvim";
+      rev = "849259c0458a13a1018e7a04e5d30d84e23c2333";
+      sha256 = "18rdra1bs51mgs6zk8cdn6yhl2pazkcqf96p5qnp2lhdy6gy6h84";
+    };
+    meta.homepage = "https://github.com/jmbuhr/otter.nvim/";
+  };
+
   overseer-nvim = buildVimPluginFrom2Nix {
     pname = "overseer.nvim";
     version = "2023-08-23";
@@ -15850,18 +15862,6 @@ final: prev:
       sha256 = "0dc1mg9x8flda59vl8d89m1ri1n0jl72q4jhmxj7mg9gp2r39l3m";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  otter-nvim = buildVimPluginFrom2Nix {
-    pname = "otter.nvim";
-    version = "2023-08-27";
-    src = fetchFromGitHub {
-      owner = "jmbuhr";
-      repo = "otter.nvim";
-      rev = "849259c0458a13a1018e7a04e5d30d84e23c2333";
-      sha256 = "18rdra1bs51mgs6zk8cdn6yhl2pazkcqf96p5qnp2lhdy6gy6h84";
-    };
-    meta.homepage = "https://github.com/jmbuhr/otter.nvim/";
   };
 
   catppuccin-nvim = buildVimPluginFrom2Nix {
