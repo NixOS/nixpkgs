@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, nix-update-script
 , pysimplesoap
 , pytest , pytest-xdist
 , pythonOlder
@@ -13,6 +14,7 @@ buildPythonPackage rec {
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
+  passthru.updateScript = nix-update-script { };
 
   src = fetchPypi {
     inherit pname version;
