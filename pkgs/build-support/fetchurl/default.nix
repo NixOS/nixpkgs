@@ -124,7 +124,9 @@ let
     then throw "multiple hashes passed to fetchurl" else
 
     if hash != "" then { outputHashAlgo = null; outputHash = hash; }
-    else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
+    else if outputHash != "" then
+      if outputHashAlgo != "" then { inherit outputHashAlgo outputHash; }
+      else throw "fetchurl was passed outputHash without outputHashAlgo"
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
