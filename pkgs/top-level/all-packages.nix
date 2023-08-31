@@ -34901,6 +34901,8 @@ with pkgs;
 
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
+  plugdata = callPackage ../applications/audio/plugdata { };
+
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
   poke = callPackage ../applications/editors/poke { };
