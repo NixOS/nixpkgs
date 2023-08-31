@@ -1,0 +1,23 @@
+diff --git a/async/tls_async.mli b/async/tls_async.mli
+index b4894b8..101f27f 100644
+--- a/async/tls_async.mli
++++ b/async/tls_async.mli
+@@ -55,4 +55,4 @@ val connect
+       -> 'addr Tcp.Where_to_connect.t
+       -> host:[ `host ] Domain_name.t option
+       -> (Session.t * Reader.t * Writer.t) Deferred.Or_error.t)
+-       Tcp.with_connect_options
++       Tcp.Aliases.with_connect_options
+diff --git a/async/x509_async.ml b/async/x509_async.ml
+index d4fad8c..4ee466a 100644
+--- a/async/x509_async.ml
++++ b/async/x509_async.ml
+@@ -9,7 +9,7 @@ let file_contents file =
+ let load_all_in_directory ~directory ~f =
+   let open Deferred.Or_error.Let_syntax in
+   let%bind files = Deferred.Or_error.try_with (fun () -> Sys.ls_dir directory) in
+-  Deferred.Or_error.List.map files ~f:(fun file ->
++  Deferred.Or_error.List.map ~how:`Sequential files ~f:(fun file ->
+     let%bind contents = file_contents (directory ^/ file) in
+     f ~contents)
+ ;;
