@@ -4,6 +4,7 @@
 , kernel
 , bluez
 , nixosTests
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     xpadneo = nixosTests.xpadneo;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Advanced Linux driver for Xbox One wireless controllers";
