@@ -13,10 +13,14 @@
 , qttools
 , wrapQtAppsHook
 , gitUpdater
-}:
 
+, qt5Kvantum ? null
+}:
+let
+  isQt6 = lib.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation rec {
-  pname = "qtstyleplugin-kvantum";
+  pname = "qtstyleplugin-kvantum${lib.optionalString isQt6 "6"}";
   version = "1.0.10";
 
   src = fetchFromGitHub {
@@ -37,8 +41,8 @@ stdenv.mkDerivation rec {
     qtsvg
     libX11
     libXext
-  ] ++ lib.optionals (lib.versionOlder qtbase.version "6") [ qtx11extras kwindowsystem ]
-    ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland;
+  ] ++ lib.optionals (!isQt6) [ qtx11extras kwindowsystem ]
+    ++ lib.optional isQt6 qtwayland;
 
   sourceRoot = "${src.name}/Kvantum";
 
@@ -55,6 +59,12 @@ stdenv.mkDerivation rec {
     # Fix plugin dir
     substituteInPlace style/style.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+  '';
+
+  postInstall = lib.optionalString isQt6 ''
+    # make default Kvantum themes available for Qt 6 apps
+    mkdir -p "$out/share"
+    ln -s "${qt5Kvantum}/share/Kvantum" "$out/share/Kvantum"
   '';
 
   passthru.updateScript = gitUpdater {
