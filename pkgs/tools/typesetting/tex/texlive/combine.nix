@@ -1,6 +1,6 @@
 { lib, buildEnv, runCommand, writeText, makeWrapper, libfaketime, makeFontsConf
 , perl, bash, coreutils, gnused, gnugrep, gawk, ghostscript
-, bin, tl }:
+, bin, pkgs }:
 # combine =
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core"
@@ -49,7 +49,7 @@ let
     paths = lib.catAttrs "outPath" pkgList.nonbin;
 
     # mktexlsr
-    nativeBuildInputs = [ (lib.last tl."texlive.infra".pkgs) ];
+    nativeBuildInputs = [ (lib.last pkgs."texlive.infra".pkgs) ];
 
     postBuild = # generate ls-R database
     ''
@@ -107,9 +107,9 @@ in (buildEnv {
   nativeBuildInputs = [
     makeWrapper
     libfaketime
-    (lib.last tl."texlive.infra".pkgs) # mktexlsr
-    (lib.last tl.texlive-scripts.pkgs) # fmtutil, updmap
-    (lib.last tl.texlive-scripts-extra.pkgs) # texlinks
+    (lib.last pkgs."texlive.infra".pkgs) # mktexlsr
+    (lib.last pkgs.texlive-scripts.pkgs) # fmtutil, updmap
+    (lib.last pkgs.texlive-scripts-extra.pkgs) # texlinks
     perl
   ];
 

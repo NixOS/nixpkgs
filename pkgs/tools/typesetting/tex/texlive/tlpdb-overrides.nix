@@ -1,4 +1,4 @@
-{ lib, tlpdb, bin, tlpdbxz, tl
+{ lib, tlpdb, bin, tlpdbxz, pkgs
 , installShellFiles
 , coreutils, findutils, gawk, getopt, ghostscript_headless, gnugrep
 , gnumake, gnupg, gnused, gzip, ncurses, perl, python3, ruby, zip
@@ -134,7 +134,7 @@ in lib.recursiveUpdate orig rec {
 
   texlive-scripts.binlinks = {
     mktexfmt = "fmtutil";
-    texhash = (lib.last tl."texlive.infra".pkgs) + "/bin/mktexlsr";
+    texhash = (lib.last pkgs."texlive.infra".pkgs) + "/bin/mktexlsr";
   };
 
   texlive-scripts-extra.binlinks = {
@@ -391,14 +391,14 @@ in lib.recursiveUpdate orig rec {
     license = [ "gpl2Plus" ] ++ lib.toList bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
 
     scriptsFolder = "texlive";
-    extraBuildInputs = [ coreutils gnused gnupg (lib.last tl.kpathsea.pkgs) (perl.withPackages (ps: with ps; [ Tk ])) ];
+    extraBuildInputs = [ coreutils gnused gnupg (lib.last pkgs.kpathsea.pkgs) (perl.withPackages (ps: with ps; [ Tk ])) ];
 
     # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
     postFixup = ''
       substituteInPlace "$out"/bin/tlmgr \
         --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
       sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath [ gnupg ]}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/tlmgr
-      sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused (lib.last tl.kpathsea.pkgs) ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
+      sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused (lib.last pkgs.kpathsea.pkgs) ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
     '';
 
     # add minimal texlive.tlpdb

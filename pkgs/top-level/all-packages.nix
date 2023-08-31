@@ -5400,7 +5400,12 @@ with pkgs;
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
   # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
-  texlive = recurseIntoAttrs (callPackage ../tools/typesetting/tex/texlive { });
+  texlive = recurseIntoAttrs
+    # callPackage is not used here in order not to override the override-attribute
+    # from makeOverridable in stable.nix
+    (import ../tools/typesetting/tex/texlive/stable.nix {
+    inherit (__splicedPackages) callPackage lib fetchurl fetchpatch;
+  });
 
   fop = callPackage ../tools/typesetting/fop {
     jdk = openjdk8;
