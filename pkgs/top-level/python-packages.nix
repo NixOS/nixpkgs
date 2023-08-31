@@ -8224,6 +8224,8 @@ self: super: with self; {
 
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
 
+  pyqt5-stubs = callPackage ../development/python-modules/pyqt5-stubs { };
+
   pyrdfa3 = callPackage ../development/python-modules/pyrdfa3 { };
 
   pyre-extensions = callPackage ../development/python-modules/pyre-extensions { };
