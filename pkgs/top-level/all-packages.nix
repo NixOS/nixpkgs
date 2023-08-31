@@ -1903,6 +1903,8 @@ with pkgs;
     systemd = pkgs.systemd;
   };
 
+  node-glob = callPackage ../tools/misc/node-glob { };
+
   nominatim = callPackage ../servers/nominatim { };
 
   npm-check-updates = callPackage ../tools/package-management/npm-check-updates { };
@@ -9992,6 +9994,8 @@ with pkgs;
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
   matrix-hookshot = callPackage ../servers/matrix-synapse/matrix-hookshot { };
+
+  mautrix-discord = callPackage ../servers/mautrix-discord { };
 
   mautrix-facebook = callPackage ../servers/mautrix-facebook { };
 
@@ -26651,7 +26655,7 @@ with pkgs;
 
   hiraeth = callPackage ../servers/hiraeth { };
 
-  hoard = callPackage ../tools/misc/hoard { inherit (darwin) Security; };
+  hoard = callPackage ../tools/misc/hoard { };
 
   home-assistant = callPackage ../servers/home-assistant { };
 
@@ -31490,7 +31494,7 @@ with pkgs;
 
   em = callPackage ../applications/editors/em { };
 
-  inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
+  inherit (recurseIntoAttrs (darwin.apple_sdk_11_0.callPackage ../applications/editors/emacs { }))
     emacs28
     emacs28-gtk2
     emacs28-gtk3

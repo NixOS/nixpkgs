@@ -137,7 +137,7 @@ in
       default = { };
       description = lib.mdDoc ''
         Settings for Kanidm, see
-        [the documentation](https://github.com/kanidm/kanidm/blob/master/kanidm_book/src/server_configuration.md)
+        [the documentation](https://kanidm.github.io/kanidm/stable/server_configuration.html)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/server.toml)
         for possible values.
       '';
@@ -155,7 +155,7 @@ in
       };
       description = lib.mdDoc ''
         Configure Kanidm clients, needed for the PAM daemon. See
-        [the documentation](https://github.com/kanidm/kanidm/blob/master/kanidm_book/src/client_tools.md#kanidm-configuration)
+        [the documentation](https://kanidm.github.io/kanidm/stable/client_tools.html#kanidm-configuration)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/config)
         for possible values.
       '';
@@ -173,7 +173,7 @@ in
       };
       description = lib.mdDoc ''
         Configure Kanidm unix daemon.
-        See [the documentation](https://github.com/kanidm/kanidm/blob/master/kanidm_book/src/pam_and_nsswitch.md#the-unix-daemon)
+        See [the documentation](https://kanidm.github.io/kanidm/stable/integrations/pam_and_nsswitch.html#the-unix-daemon)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/unixd)
         for possible values.
       '';
