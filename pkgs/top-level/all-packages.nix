@@ -1903,6 +1903,8 @@ with pkgs;
     systemd = pkgs.systemd;
   };
 
+  node-glob = callPackage ../tools/misc/node-glob { };
+
   nominatim = callPackage ../servers/nominatim { };
 
   npm-check-updates = callPackage ../tools/package-management/npm-check-updates { };
