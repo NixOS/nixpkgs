@@ -1197,12 +1197,12 @@
     "vendorHash": "sha256-D7geLjmJoelbHolyS5IhnGNNl6kD8ZGtCRWcy+j2dxA="
   },
   "vault": {
-    "hash": "sha256-lnM52d7J36wu9MYh13IFSR15rMfJpXP4tw47LzRy4o4=",
+    "hash": "sha256-IPVD4VVC6jn3BWltqfCk2+GFSkQRNK7jkJ3/QmgBxqg=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vault",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-vault",
-    "rev": "v3.19.0",
+    "rev": "v3.20.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-xd2tsJ5k/8PCSegHqeyJ1ePFBS0ho8SD+4m4QyFMTL0="
   },
