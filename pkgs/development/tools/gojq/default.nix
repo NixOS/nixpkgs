@@ -25,5 +25,6 @@ buildGoModule rec {
     changelog = "https://github.com/itchyny/gojq/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "gojq";
   };
 }
