@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , hatchling
 
 # runtime
@@ -33,6 +34,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-/zYqYmmCcOLU8Di9b4BzDLFtB5wYEEF1bYN6u2rb8Lg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-29159.patch";
+      url = "https://github.com/encode/starlette/commit/1797de464124b090f10cf570441e8292936d63e3.patch";
+      hash = "sha256-IZFFc0hE4eBFMltpsNPMJ0u6mobrXtd87LXrUIGbBa0=";
+    })
+  ];
 
   nativeBuildInputs = [
     hatchling

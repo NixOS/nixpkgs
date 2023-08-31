@@ -9379,6 +9379,15 @@
     githubId = 1168435;
     name = "Ludovic Courtès";
   };
+  ludovicopiero = {
+    email = "ludovicopiero@pm.me";
+    github = "ludovicopiero";
+    githubId = 44255157;
+    name = "Ludovico Piero";
+    keys = [{
+      fingerprint = "72CA 4F61 46C6 0DAB 6193  4D35 3911 DD27 6CFE 779C";
+    }];
+  };
   lufia = {
     email = "lufia@lufia.org";
     github = "lufia";
@@ -10245,6 +10254,12 @@
     github = "mfossen";
     githubId = 3300322;
     name = "Mitchell Fossen";
+  };
+  mfrw = {
+    email = "falakreyaz@gmail.com";
+    github = "mfrw";
+    githubId = 4929861;
+    name = "Muhammad Falak R Wani";
   };
   mgdelacroix = {
     email = "mgdelacroix@gmail.com";
