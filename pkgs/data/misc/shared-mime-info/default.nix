@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "shared-mime-info";
-  version = "2.2";
+  version = "2.2-37-g9b8ad99";
 
   outputs = [ "out" "dev" ];
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-QrRe/DcjpTMejHXDSOLbjpJywod8qIjP6/leTZ21rhE=";
+    rev = "9b8ad99a33973e5ed70ad698f9a89f5779e19f16";
+    sha256 = "sha256-9nl68gLn+IdBIeUebgCaJ1ZH9RwTnK/xLCRwJJAhXYk=";
   };
 
   nativeBuildInputs = [
