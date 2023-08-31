@@ -7183,6 +7183,12 @@
       fingerprint = "1412 816B A9FA F62F D051 1975 D3E1 B013 B463 1293";
     }];
   };
+  itcger = {
+    email = "nixpkgs@dirk-osburg.de";
+    github = "itc-ger";
+    githubId = 17527538;
+    name = "Dirk Osburg";
+  };
   ius = {
     email = "j.de.gram@gmail.com";
     name = "Joerie de Gram";
