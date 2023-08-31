@@ -93,7 +93,7 @@ let
             --what="sleep" \
             --why="Scheduled backup" \
         '' + backupScript;
-      serviceConfig = {
+      serviceConfig = lib.attrsets.recursiveUpdate cfg.service {
         User = cfg.user;
         Group = cfg.group;
         # Only run when no other process is using CPU or disk
@@ -353,6 +353,14 @@ in {
               {manpage}`systemd.timer(5)`
               which triggers the backup immediately if the last trigger
               was missed (e.g. if the system was powered down).
+            '';
+          };
+
+          service = mkOption {
+            type = types.attrs;
+            default = { };
+            description = lib.mdDoc ''
+              Systemd configuration specific to this job.
             '';
           };
 
