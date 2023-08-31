@@ -8818,6 +8818,8 @@ self: super: with self; {
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
+  pycardano = callPackage ../development/python-modules/pycardano { };
+
   pycrc = callPackage ../development/python-modules/pycrc { };
 
   pycritty = callPackage ../development/python-modules/pycritty { };
