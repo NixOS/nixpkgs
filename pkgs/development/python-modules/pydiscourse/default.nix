@@ -13,10 +13,6 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
-
   src = fetchFromGitHub {
     owner = "pydiscourse";
     repo = pname;
@@ -24,14 +20,22 @@ buildPythonPackage rec {
     hash = "sha256-peDkXRcD/ieWYWXqv8hPxTSNRXBHcb/3sj/JJSF2RYg=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  pythonImportsCheck = [ "pydiscourse" ];
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pydiscourse"
+  ];
 
   meta = with lib; {
+    description = "A Python library for working with Discourse";
     homepage = "https://github.com/pydiscourse/pydiscourse";
     changelog = "https://github.com/pydiscourse/pydiscourse/releases/tag/v${version}";
-    description = "A Python library for working with Discourse";
     license = licenses.mit;
     maintainers = with maintainers; [ Dettorer ];
   };
