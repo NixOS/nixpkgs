@@ -92,6 +92,7 @@
 , withVmaf ? withFullDeps && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
 , withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
+, withVpl ? false # Hardware acceleration via intel libvpl
 , withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
 , withVulkan ? withFullDeps && !stdenv.isDarwin
 , withWebp ? withFullDeps # WebP encoder
@@ -237,6 +238,7 @@
 , libvdpau
 , libvmaf
 , libvorbis
+, libvpl
 , libvpx
 , libwebp
 , libX11
@@ -319,6 +321,7 @@ assert withGPLv3 -> withGPL && withVersion3;
  *  Build dependencies
  */
 assert withPixelutils -> buildAvutil;
+assert !(withMfx && withVpl); # incompatible features
 /*
  *  Program dependencies
  */
@@ -529,6 +532,9 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withV4l2M2m "v4l2-m2m")
     (enableFeature withVaapi "vaapi")
     (enableFeature withVdpau "vdpau")
+  ] ++ optionals (versionAtLeast version "6.0")  [
+    (enableFeature withVpl "libvpl")
+  ] ++ [
     (enableFeature withVidStab "libvidstab") # Actual min. version 2.0
     (enableFeature withVmaf "libvmaf")
     (enableFeature withVoAmrwbenc "libvo-amrwbenc")
@@ -643,6 +649,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withVmaf [ libvmaf ]
   ++ optionals withVoAmrwbenc [ vo-amrwbenc ]
   ++ optionals withVorbis [ libvorbis ]
+  ++ optionals withVpl [ libvpl ]
   ++ optionals withVpx [ libvpx ]
   ++ optionals withVulkan [ vulkan-headers vulkan-loader ]
   ++ optionals withWebp [ libwebp ]
