@@ -24,7 +24,7 @@ buildPythonPackage rec {
   version = "2.14.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
