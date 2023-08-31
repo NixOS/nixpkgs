@@ -31,7 +31,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python binding for Tado web API";
     homepage = "https://github.com/wmalgadey/PyTado";
-    license = licenses.gpl3;
+    changelog = "https://github.com/wmalgadey/PyTado/releases/tag/${version}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
   };
 }
