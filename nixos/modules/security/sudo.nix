@@ -205,17 +205,20 @@ in
       }
     ];
 
-    security.sudo.configFile =
+    security.sudo.configFile = concatStringsSep "\n" [
       ''
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
         # or ‘security.sudo.extraRules’ instead.
-
+      ''
+      ''
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
-
+      ''
+      ''
         # "root" is allowed to do anything.
         root        ALL=(ALL:ALL) SETENV: ALL
-
+      ''
+      ''
         # extraRules
         ${concatStringsSep "\n" (
           lists.flatten (
@@ -227,9 +230,12 @@ in
             ) cfg.extraRules
           )
         )}
-
+      ''
+      ''
+        # extraConfig
         ${cfg.extraConfig}
-      '';
+      ''
+    ];
 
     security.wrappers = let
       owner = "root";
