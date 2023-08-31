@@ -3,7 +3,9 @@
 , dpkg
 , fetchurl
 , autoPatchelfHook
+, wrapGAppsHook
 , webkitgtk
+, glib-networking
 , libappindicator
 , libayatana-appindicator
 }:
@@ -14,18 +16,20 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/SpikeHD/Dorion/releases/download/v${version}/dorion_${version}_amd64.deb";
-    sha256 = "sha256-RKqu+aNLCbjH+802PCboiayYqGlTTOJDjzHaAMyIbj8=";
+    sha256 = "sha256-IYqJ5mz+XGHf4GVSW2Mq/z8xWLs4Y4KRWZ6fAtIg2tk=";
   };
 
-  runtimeDependencies = [ libappindicator libayatana-appindicator ];
+  runtimeDependencies = [ libappindicator libayatana-appindicator glib-networking ];
 
   nativeBuildInputs = [
     dpkg
+    wrapGAppsHook
     autoPatchelfHook
   ];
 
   buildInputs = [
     webkitgtk
+    glib-networking
   ];
 
   unpackCmd = "dpkg-deb -x $curSrc source";
