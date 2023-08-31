@@ -1822,7 +1822,8 @@
       pygti
     ];
     "hydrawise" = ps: with ps; [
-    ]; # missing inputs: pydrawise
+      pydrawise
+    ];
     "hyperion" = ps: with ps; [
       hyperion-py
     ];
