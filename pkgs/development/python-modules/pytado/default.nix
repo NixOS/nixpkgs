@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pytado";
-  version = "0.16.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
     # Upstream hasn't tagged 0.13.0 yet
     rev = "refs/tags/${version}";
-    sha256 = "sha256-tpWr+VlkJ9svN9XtBIDEAos4uxYCl6njvUBPIJG++Yg=";
+    sha256 = "sha256-w1qtSEpnZCs7+M/0Gywz9AeMxUzz2csHKm9SxBKzmz4=";
   };
 
   propagatedBuildInputs = [
