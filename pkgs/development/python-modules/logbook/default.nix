@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, pytest, mock, brotli }:
+{ lib
+, brotli
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, mock
+, pip
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "logbook";
@@ -10,14 +18,13 @@ buildPythonPackage rec {
     sha256 = "1s1gyfw621vid7qqvhddq6c3z2895ci4lq3g0r1swvpml2nm9x36";
   };
 
-  nativeCheckInputs = [ pytest ] ++ lib.optionals (!isPy3k) [ mock ];
 
   propagatedBuildInputs = [ brotli ];
 
-  checkPhase = ''
-    find tests -name \*.pyc -delete
-    py.test tests
-  '';
+  nativeCheckInputs = [
+    pip
+    pytestCheckHook
+  ] ++ lib.optionals (!isPy3k) [ mock ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -26,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://pythonhosted.org/Logbook/";
     description = "A logging replacement for Python";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
   };
 }
