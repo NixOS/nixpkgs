@@ -141,23 +141,23 @@ buildPythonPackage rec {
 
 The `buildPythonPackage` mainly does four things:
 
-* In the `buildPhase`, it calls `${python.pythonForBuild.interpreter} setup.py bdist_wheel` to
+* In the [`buildPhase`](#build-phase), it calls `${python.pythonForBuild.interpreter} setup.py bdist_wheel` to
   build a wheel binary zipfile.
-* In the `installPhase`, it installs the wheel file using `pip install *.whl`.
-* In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
+* In the [`installPhase`](#ssec-install-phase), it installs the wheel file using `pip install *.whl`.
+* In the [`postFixup`](#var-stdenv-postFixup) phase, the `wrapPythonPrograms` bash function is called to
   wrap all programs in the `$out/bin/*` directory to include `$PATH`
   environment variable and add dependent libraries to script's `sys.path`.
-* In the `installCheck` phase, `${python.interpreter} setup.py test` is run.
+* In the [`installCheck`](#ssec-installCheck-phase) phase, `${python.interpreter} setup.py test` is run.
 
 By default tests are run because `doCheck = true`. Test dependencies, like
-e.g. the test runner, should be added to `nativeCheckInputs`.
+e.g. the test runner, should be added to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs).
 
 By default `meta.platforms` is set to the same value
 as the interpreter unless overridden otherwise.
 
 ##### `buildPythonPackage` parameters {#buildpythonpackage-parameters}
 
-All parameters from `stdenv.mkDerivation` function are still supported. The
+All parameters from [`stdenv.mkDerivation`](#sec-using-stdenv) function are still supported. The
 following are specific to `buildPythonPackage`:
 
 * `catchConflicts ? true`: If `true`, abort package build if a package name
@@ -172,10 +172,10 @@ following are specific to `buildPythonPackage`:
   `"setuptools"` is for when the source has a `setup.py` and `setuptools` is
   used to build a wheel, `flit`, in case `flit` should be used to build a wheel,
   and `wheel` in case a wheel is provided. Use `other` when a custom
-  `buildPhase` and/or `installPhase` is needed.
+  [`buildPhase`](#build-phase) and/or [`installPhase`](#ssec-install-phase) is needed.
 * `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to
-  `makeWrapper`, which wraps generated binaries. By default, the arguments to
-  `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling
+  [`makeWrapper`](#fun-makeWrapper), which wraps generated binaries. By default, the arguments to
+  [`makeWrapper`](#fun-makeWrapper) set `PATH` and `PYTHONPATH` environment variables before calling
   the binary. Additional arguments here can allow a developer to set environment
   variables which will be available when the binary is run. For example,
   `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
@@ -195,7 +195,7 @@ following are specific to `buildPythonPackage`:
 * `setupPyGlobalFlags ? []`: List of flags passed to `setup.py` command.
 * `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
 
-The `stdenv.mkDerivation` function accepts various parameters for describing
+The [`stdenv.mkDerivation`](#sec-using-stdenv) function accepts various parameters for describing
 build inputs (see "Specifying dependencies"). The following are of special
 interest for Python packages, either because these are primarily used, or
 because their behaviour is different:
@@ -205,8 +205,8 @@ because their behaviour is different:
 * `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
-* `nativeCheckInputs ? []`: Dependencies needed for running the `checkPhase`. These
-  are added to `nativeBuildInputs` when `doCheck = true`. Items listed in
+* `nativeCheckInputs ? []`: Dependencies needed for running the [`checkPhase`](#ssec-check-phase). These
+  are added to `nativeBuildInputs` when [`doCheck = true`](#var-stdenv-doCheck). Items listed in
   `tests_require` go here.
 * `propagatedBuildInputs ? []`: Aside from propagating dependencies,
   `buildPythonPackage` also injects code into and wraps executables with the
@@ -962,7 +962,7 @@ arguments `buildInputs` and `propagatedBuildInputs` to specify dependencies. If
 something is exclusively a build-time dependency, then the dependency should be
 included in `buildInputs`, but if it is (also) a runtime dependency, then it
 should be added to `propagatedBuildInputs`. Test dependencies are considered
-build-time dependencies and passed to `nativeCheckInputs`.
+build-time dependencies and passed to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs).
 
 The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
@@ -1010,7 +1010,7 @@ buildPythonPackage rec {
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`python-dateutil`. Furthermore, we have `nativeCheckInputs` with `pytest`.
+`python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytest`.
 `pytest` is a test runner and is only used during the `checkPhase` and is
 therefore not added to `propagatedBuildInputs`.
 
@@ -1854,7 +1854,7 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
 * `setup_requires` corresponds to `nativeBuildInputs`
 * `install_requires` corresponds to `propagatedBuildInputs`
-* `tests_require` corresponds to `nativeCheckInputs`
+* `tests_require` corresponds to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs)
 
 ### How to enable interpreter optimizations? {#optimizations}
 
