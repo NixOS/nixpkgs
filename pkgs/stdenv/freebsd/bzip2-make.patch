@@ -1,0 +1,11 @@
+--- a/Makefile   2023-08-20 17:15:28.172279000 -0700
++++ b/Makefile   2023-08-20 17:15:34.293006000 -0700
+@@ -15,7 +15,7 @@
+ SHELL=/bin/sh
+
+ # To assist in cross-compiling
+-CC=gcc
++CC=clang
+ AR=ar
+ RANLIB=ranlib
+ LDFLAGS=

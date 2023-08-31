@@ -4,57 +4,9 @@
 
 assert crossSystem == localSystem;
 let inherit (localSystem) system;
-  trivialBuilder = (import ./trivial-builder.nix);
-in
-[
-  ({}: rec {
-    __raw = true;
-    hostTools = derivation ({
-      inherit system;
-      name = "host-tools";
-      version = "9.9.9";
-      builder = ./host-bootstrap.sh;
-      args = ["curl" "bash" "objdump" "objcopy" "size" "strings" "as" "ar" "nm" "gprof" "dwp" "c++filt" "addr2line" "ranlib" "readelf" "elfedit"];
-      shellPath = "bash";
-      prefix = "";
-    });
-
-    stdenv = import ../generic {
-      name = "stdenv-freebsd-boot-0";
-      buildPlatform = localSystem;
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
-      inherit config;
-      initialPath = [ "/" "/usr" ];
-      shell = "${hostTools}/bin/bash";
-      fetchurlBoot = fetchurl;
-      cc = null;
-      overrides = self: super: {
-        inherit world hostTools;
-      };
-    };
-
-    fetchurl = import ../../build-support/fetchurl {
-      inherit lib;
-      stdenvNoCC = stdenv;
-      curl = hostTools;
-    };
-
-    world = derivation (rec {
-      inherit system;
-      name = "world";
-      pname = "world";
-      version = "14.0-CURRENT";
-      rev = "d1d7a273707a50d4ad1691b2c4dbf645dfa253ea";
-      src = fetchurl {
-        url = "https://github.com/freebsd/freebsd-src/archive/${rev}.tar.gz";
-        sha256 = "sha256-D7pTkW4DLKqS/HxyERI/oUh+/Qh/5ri5Z3O5RcooUVI=";
-      };
-      dname = "freebsd-src-${rev}";
-      builder = ./world-builder.sh;
-    });
-
-    gmake = trivialBuilder rec {
+    fetchURL = import <nix/fetchurl.nix>;
+    trivialBuilder = (import ./trivial-builder.nix);
+    make = trivialBuilder rec {
       inherit (localSystem) system;
       name = "make";
       ver = "4.3";
@@ -79,9 +31,9 @@ in
     coreutils = trivialBuilder rec {
       inherit (localSystem) system;
       name = "coreutils";
-      ver = "9.3";
+      ver = "8.31";
       url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "rbz8/omSNbceh2jc8HzVMlILf1T5qAZIQ/jRmakEu6o=";
+      sha256 = "1zg9m79x1i2nifj4kb0waf9x3i5h6ydkypkjnbsb9rnwis8rqypz";
       configureArgs = [ "--disable-nls"
                         "--without-libintl-prefix"
                         "--without-libiconv-prefix"
@@ -117,9 +69,9 @@ in
     grep = trivialBuilder rec {
       inherit (localSystem) system;
       name = "grep";
-      ver = "3.11";
+      ver = "3.4";
       url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
+      sha256 = "1yy33kiwrxrwj2nxa4fg15bvmwyghqbs8qwkdvy5phm784f7brjq";
       configureArgs = [ "--disable-nls"
                         "--without-libintl-prefix"
                         "--without-libiconv-prefix"
@@ -172,15 +124,15 @@ in
     sed = trivialBuilder rec {
       inherit (localSystem) system;
       name = "sed";
-      ver = "4.9";
+      ver = "4.8";
       url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "biJrcy4c1zlGStaGK9Ghq6QteYKSLaelNRljHSSXUYE=";
+      sha256 = "0cznxw73fzv1n3nj2zsq6nf73rvsbxndp444xkpahdqvlzz0r6zp";
       configureArgs = [ "--disable-nls"
                         "--without-libintl-prefix"
                         "--without-libiconv-prefix"
                       ];
     };
-    cacert = fetchurl {
+    cacert = fetchURL rec {
       url = "https://curl.haxx.se/ca/cacert-2020-01-01.pem";
       sha256 = "07q808n307gzaga93abpf6an7c3rd35p18psdc1dd83lspgp1xxd";
       executable = false;
@@ -229,153 +181,207 @@ in
       url = "https://github.com/madler/zlib/releases/download/v${ver}/zlib-${ver}.tar.gz";
       sha256 = "s6JN6XqP28g1uYMxaVAQMLiXcDG8tUs7OsE3QPhGqzA=";
     };
+    bashExe = "${bash}/bin/bash";
+in
+[
 
-    binutils = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "binutils";
-      ver = "2.41";
-      url = "https://ftp.gnu.org/gnu/binutils/binutils-${ver}.tar.gz";
-      sha256 = "SNAKjcc6p9I5Sn3Aablhkdlejejw2m3JHaXM5lXCDkU=";
-      make = "${gmake}/bin/make";
-    };
+  ({}: {
+    __raw = true;
 
-    patchelf = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "patchelf";
-      ver = "0.15.0";
-      url = "https://github.com/NixOS/${name}/releases/download/${ver}/${name}-${ver}.tar.bz2";
-      sha256 = "9ANtPuTY4ijewb7/8PbkbYpA6eVw4AaOOdd+YuLIvcI=";
-    };
+    bootstrapTools = derivation ({
+      inherit system;
+      inherit make bash coreutils findutils
+        diffutils grep patch gawk cpio tar sed
+        curl zlib;
 
-    world-patched = derivation ({
-      inherit system world;
-      name = "world-patched";
-      pname = "world-patched";
-      version = "14.0-CURRENT";
-      builder = ./world-patcher.sh;
-      outputs = ["lib" "corebin" "etc" "cc" "sh" "zip"];  # misbehaves when bin is named bin?
-      patchelf = "${patchelf}/bin/patchelf";
-      readelf = "${hostTools}/bin/readelf";
+      name = "trivial-bootstrap-tools";
+      version = "9.9.9";
+      builder = bashExe;
+      args = [ ./trivial-bootstrap.sh ];
+      buildInputs = [ make ];
+      mkdir = "/bin/mkdir";
+      ln = "/bin/ln";
+      outputs = [ "out" ];
+    } // lib.optionalAttrs config.contentAddressedByDefault {
+      __contentAddressed = true;
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
     });
   })
 
-  (prevStage: rec {
-    inherit config overlays;
+  ({ bootstrapTools, ... }: rec {
+    __raw = true;
 
-    stdenv = import ../generic rec {
-        name = "stdenv-freebsd-boot-1";
-        inherit config;
-        initialPath = [ prevStage.coreutils prevStage.tar prevStage.findutils prevStage.gmake prevStage.sed prevStage.patchelf prevStage.grep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.world-patched.sh prevStage.world-patched.zip ];
-        extraNativeBuildInputs = [];
-        inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
-        shell = "${prevStage.bash}/bin/bash";
-        cc = import ../../build-support/cc-wrapper ({
-          inherit lib;
-          name = "stdenv-freebsd-boot-1-cc-wrapper";
-          stdenvNoCC = prevStage.stdenv;
-          cc = prevStage.world-patched.cc;
-          libc = prevStage.world-patched.lib;
-          gnugrep = prevStage.grep;
-          coreutils = prevStage.coreutils;
-          nativeTools = false;
-          nativeLibc = false;
-          isClang = true;
-          bintools = import ../../build-support/bintools-wrapper {
-            inherit lib;
-            stdenvNoCC = prevStage.stdenv;
-            name = "stdenv-freebsd-boot-1-bintools-wrapper";
-            libc = prevStage.world-patched.lib;
-            propagateDoc = false;
-            nativeTools = false;
-            nativeLibc = false;
-            bintools = prevStage.binutils;
-            gnugrep = prevStage.grep;
-            coreutils = prevStage.coreutils;
-          };
-        });
-        fetchurlBoot = import ../../build-support/fetchurl {
-          inherit lib;
-          stdenvNoCC = stdenv;
-          curl = prevStage.hostTools;
-        };
+    inherit bootstrapTools;
 
-        overrides = self: super: ({
-          world-patched = prevStage.world-patched;
-          curl = prevStage.hostTools;
-          fetchurl = prevStage.fetchurl;
-          xz = super.xz.overrideAttrs {
-            NIX_DEBUG=1;
-          };
-        });
+    fetchurl = import ../../build-support/fetchurl {
+      inherit lib;
+      stdenvNoCC = stdenv;
+      curl = bootstrapTools;
+    };
+
+    stdenv = import ../generic {
+      name = "stdenv-freebsd-boot-1";
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      inherit config;
+      initialPath = [ "/" "/usr" ];
+      shell = "${bootstrapTools}/bin/bash";
+      fetchurlBoot = fetchurl;
+      cc = null;
+      overrides = self: super: {
       };
+    };
   })
 
-  #(prevStage: rec {
-  #  inherit config overlays;
+  (prevStage: {
+    __raw = true;
 
-  #  stdenv = import ../generic rec {
-  #    name = "stdenv-freebsd-boot-2";
-  #    inherit config;
-  #    initialPath = [ prevStage.boot-coreutils prevStage.boot-tar ];
-  #    inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
-  #    shell = "${prevStage.hostTools}/bin/bash";
-  #    cc = import ../../build-support/cc-wrapper ({
-  #      inherit lib;
-  #      name = "stdenv-freebsd-boot-2-cc-wrapper";
-  #      stdenvNoCC = prevStage.stdenv;
-  #      cc = prevStage.world-patched;
-  #      libc = prevStage.world-patched;
-  #      coreutils = prevStage.world-patched;
-  #      gnugrep = prevStage.gnugrep;
-  #      nativeTools = false;
-  #      nativeLibc = false;
-  #      isClang = true;
-  #      #bintools = prevStage.bintools;
-  #      bintools = import ../../build-support/bintools-wrapper {
-  #        inherit lib;
-  #        stdenvNoCC = prevStage.stdenv;
-  #        name = "stdenv-freebsd-boot-2-bintools-wrapper";
-  #        libc = prevStage.world-patched;
-  #        propagateDoc = false;
-  #        nativeTools = false;
-  #        nativeLibc = false;
-  #        bintools = prevStage.bintools-unwrapped;
-  #        coreutils = prevStage.world-patched;
-  #        gnugrep = prevStage.grep;
-  #      };
-  #    });
-  #    fetchurlBoot = prevStage.curl;
-  #    overrides = self: super: {
-  #      inherit (prevStage) world-patched gnutgrep bintools;
-  #    };
-  #  };
-  #})
+    inherit (prevStage) bootstrapTools;
 
-  #(prevStage: rec {
-  #  inherit config overlays;
+    stdenv = import ../generic {
+      name = "stdenv-freebsd-boot-0";
+      inherit config;
+      initialPath = [ prevStage.bootstrapTools ];
+      inherit (prevStage.stdenv)
+        buildPlatform hostPlatform targetPlatform
+        shell;
+      fetchurlBoot = prevStage.fetchurl;
+      cc = null;
+    };
+  })
 
-  #  stdenv = import ../generic rec {
-  #    name = "stdenv-freebsd";
-  #    inherit config;
-  #    initialPath = [ prevStage.world-patched ];
-  #    inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
-  #    shell = prevStage.bash;
-  #    cc = import ../../build-support/cc-wrapper ({
-  #      inherit lib;
-  #      name = "stdenv-freebsd-cc-wrapper";
-  #      stdenvNoCC = prevStage.stdenv;
-  #      cc = prevStage.world-patched;
-  #      libc = prevStage.world-patched;
-  #      coreutils = prevStage.world-patched;
-  #      gnugrep = prevStage.gnugrep;
-  #      nativeTools = false;
-  #      nativeLibc = false;
-  #      isClang = true;
-  #      bintools = prevStage.bintools;
-  #    });
-  #    fetchurlBoot = prevStage.curl;
-  #    overrides = self: super: {
-  #    };
-  #  };
-  #})
+  (prevStage: {
+    inherit config overlays;
+    stdenv = import ../generic rec {
+      name = "stdenv-freebsd-boot-3";
+      inherit config;
+
+      inherit (prevStage.stdenv)
+        buildPlatform hostPlatform targetPlatform
+        initialPath shell fetchurlBoot;
+
+      cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
+        inherit lib;
+        name = "stdenv-freebsd-boot-3-cc-wrapper";
+        nativeTools  = true;
+        nativePrefix = "/usr";
+        nativeLibc   = true;
+        stdenvNoCC = prevStage.stdenv;
+        buildPackages = {
+          inherit (prevStage) stdenv;
+        };
+        cc = prevStage.bootstrapTools;
+        zlib = prevStage.bootstrapTools;
+        isClang      = true;
+        bintools = import ../../build-support/bintools-wrapper {
+          inherit lib;
+          stdenvNoCC = prevStage.stdenv;
+          name = "stdenv-freebsd-boot-3-bintools-wrapper";
+          nativeTools  = true;
+          nativeLibc   = true;
+          propagateDoc = false;
+          nativePrefix = "/usr";
+          bintools     = { name = "${name}-binutils";
+                           outPath = prevStage.bootstrapTools; };
+        };
+      };
+
+      preHook = "export NIX_NO_SELF_RPATH=1";
+
+      overrides = self: super: ({
+        bootstrapTools = prevStage.bootstrapTools;
+        bootstrapStdenv = prevStage.stdenv;
+      });
+    };
+  })
+
+  (prevStage: {
+    inherit config overlays;
+    stdenv  = import ../generic rec {
+      name = "stdenv-freebsd-boot-4";
+      inherit config;
+
+      inherit (prevStage.stdenv)
+        buildPlatform hostPlatform targetPlatform
+        initialPath shell fetchurlBoot;
+
+      cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
+        inherit lib;
+        name = "stdenv-freebsd-boot-4-cc-wrapper";
+        nativeTools  = false;
+        nativePrefix = "/usr";
+        nativeLibc   = true;
+        stdenvNoCC = prevStage.stdenv;
+        #buildPackages = {
+        #  inherit (prevStage) bootstrapStdenv;
+        #};
+        cc = prevStage.bootstrapTools;
+        zlib = prevStage.bootstrapTools;
+        isGNU      = false;
+        isClang    = true;
+        coreutils = prevStage.coreutils;
+        gnugrep = prevStage.gnugrep;
+        bintools = import ../../build-support/bintools-wrapper {
+          inherit lib;
+          name = "stdenv-freebsd-boot-4-bintools-wrapper";
+          stdenvNoCC = prevStage.stdenv;
+          nativeTools  = false;
+          nativeLibc   = true;
+          propagateDoc = false;
+          nativePrefix = "/usr";
+          bintools     = prevStage.binutils-unwrapped;
+          coreutils = prevStage.coreutils;
+          gnugrep = prevStage.gnugrep;
+        };
+      };
+
+      preHook = "export NIX_NO_SELF_RPATH=1";
+    };
+  })
+
+  (prevStage: {
+    inherit config overlays;
+    stdenv  = import ../generic {
+      name = "stdenv-freebsd-boot-5";
+      inherit config;
+
+      inherit (prevStage.stdenv)
+        buildPlatform hostPlatform targetPlatform
+        initialPath shell fetchurlBoot;
+
+      cc = prevStage.gcc;
+      #cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
+      #  inherit lib;
+      #  name = "stdenv-freebsd-boot-5-cc-wrapper";
+      #  nativeTools  = false;
+      #  nativePrefix = "/usr";
+      #  nativeLibc   = true;
+      #  stdenvNoCC = prevStage.stdenv;
+      #  #buildPackages = {
+      #  #  inherit (prevStage) bootstrapStdenv;
+      #  #};
+      #  cc = prevStage.gcc-unwrapped;
+      #  isGNU      = true;
+      #  isClang    = false;
+      #  coreutils = prevStage.coreutils;
+      #  gnugrep = prevStage.gnugrep;
+      #  bintools = import ../../build-support/bintools-wrapper {
+      #    inherit lib;
+      #    name = "stdenv-freebsd-boot-5-bintools-wrapper";
+      #    stdenvNoCC = prevStage.stdenv;
+      #    nativeTools  = false;
+      #    nativeLibc   = true;
+      #    propagateDoc = false;
+      #    nativePrefix = "/usr";
+      #    bintools     = prevStage.binutils-unwrapped;
+      #    coreutils = prevStage.coreutils;
+      #    gnugrep = prevStage.gnugrep;
+      #  };
+      #};
+
+      preHook = "export NIX_NO_SELF_RPATH=1";
+    };
+  })
 ]

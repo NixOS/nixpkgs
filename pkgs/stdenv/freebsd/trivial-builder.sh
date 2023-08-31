@@ -10,5 +10,5 @@ for PATCH in $patches; do
 done
 mkdir -p $out/bin
 ./configure --prefix=$out $configureArgs
-make
-make install
+$make -j $NIX_BUILD_CORES
+$make install PREFIX=$out
