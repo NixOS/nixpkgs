@@ -12,7 +12,6 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
-    # Upstream hasn't tagged 0.13.0 yet
     rev = "refs/tags/${version}";
     sha256 = "sha256-w1qtSEpnZCs7+M/0Gywz9AeMxUzz2csHKm9SxBKzmz4=";
   };
