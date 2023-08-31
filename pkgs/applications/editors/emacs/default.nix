@@ -8,9 +8,9 @@ lib.makeScope pkgs.newScope (self:
       inherit gconf;
 
       inherit (pkgs.darwin) sigtool;
-      inherit (pkgs.darwin.apple_sdk.frameworks)
-        AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
-        QuartzCore WebKit;
+      inherit (pkgs.darwin.apple_sdk_11_0.frameworks)
+        Accelerate AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit
+        Quartz QuartzCore UniformTypeIdentifiers WebKit;
     };
   in {
     sources = import ./sources.nix {
