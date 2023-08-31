@@ -9993,6 +9993,8 @@ with pkgs;
 
   matrix-hookshot = callPackage ../servers/matrix-synapse/matrix-hookshot { };
 
+  mautrix-discord = callPackage ../servers/mautrix-discord { };
+
   mautrix-facebook = callPackage ../servers/mautrix-facebook { };
 
   mautrix-googlechat = callPackage ../servers/mautrix-googlechat { };
