@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux
 , pkg-config, which, buildPackages
 # for `.pkgs` attribute
 , callPackage
@@ -15,13 +15,10 @@ let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
   majorVersion = lib.versions.major version;
-  minorVersion = lib.versions.minor version;
 
   pname = if enableNpm then "nodejs" else "nodejs-slim";
 
-  useSharedHttpParser = !stdenv.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
-
-  sharedLibDeps = { inherit openssl zlib libuv; } // (lib.optionalAttrs useSharedHttpParser { inherit http-parser; });
+  sharedLibDeps = { inherit openssl zlib libuv; };
 
   sharedConfigureFlags = lib.concatMap (name: [
     "--shared-${name}"
@@ -53,7 +50,7 @@ let
     depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib ];
 
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-      ++ [ zlib libuv openssl http-parser icu ];
+      ++ [ zlib libuv openssl icu ];
 
     nativeBuildInputs = [ which pkg-config python ]
       ++ lib.optionals stdenv.isDarwin [ xcbuild ];
