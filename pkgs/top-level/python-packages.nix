@@ -2201,6 +2201,8 @@ self: super: with self; {
 
   corsair-scan = callPackage ../development/python-modules/corsair-scan { };
 
+  cose = callPackage ../development/python-modules/cose { };
+
   cot = callPackage ../development/python-modules/cot { };
 
   covCore = callPackage ../development/python-modules/cov-core { };
