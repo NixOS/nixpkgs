@@ -692,6 +692,8 @@ with pkgs;
 
   gpick = callPackage ../tools/misc/gpick { };
 
+  gradescope-submit = callPackage ../tools/misc/gradescope-submit { };
+
   gridlock = callPackage ../tools/nix/gridlock { };
   inherit (gridlock) nyarr;
 
