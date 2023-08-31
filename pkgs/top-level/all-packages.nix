@@ -28541,6 +28541,8 @@ with pkgs;
 
   gci = callPackage ../development/tools/gci { };
 
+  gcov2lcov = callPackage ../development/tools/gcov2lcov { };
+
   ginkgo = callPackage ../development/tools/ginkgo { };
 
   gdlv = darwin.apple_sdk_11_0.callPackage ../development/tools/gdlv {
