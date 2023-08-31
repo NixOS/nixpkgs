@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pysnooz";
-  version = "0.8.5";
+  version = "0.8.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "AustinBrunkhorst";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-X7RjI4KytJI9raHAJHLygV3J4zHKuHk8Kq+3JfktPeg=";
+    hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
   };
 
   postPatch = ''
