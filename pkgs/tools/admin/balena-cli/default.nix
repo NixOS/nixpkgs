@@ -7,6 +7,7 @@
 , nodePackages
 , python3
 , udev
+, darwin
 }:
 
 buildNpmPackage rec {
@@ -30,10 +31,15 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     nodePackages.node-gyp
     python3
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.cctools
   ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
+  buildInputs = lib.optionals stdenv.isLinux [
     udev
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
+    darwin.apple_sdk.frameworks.Cocoa
   ];
 
   passthru.tests.version = testers.testVersion {
