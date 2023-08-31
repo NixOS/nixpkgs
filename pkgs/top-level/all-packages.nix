@@ -350,6 +350,8 @@ with pkgs;
 
   bibtex-tidy = callPackage ../tools/typesetting/bibtex-tidy { };
 
+  bililiverecorder = callPackage ../servers/bililiverecorder { };
+
   binbloom = callPackage ../tools/security/binbloom { };
 
   bingo = callPackage ../development/tools/bingo { };
