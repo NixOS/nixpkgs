@@ -29,7 +29,7 @@ in buildPythonApplication rec {
     owner = "mypaint";
     repo = "mypaint";
     rev = "v${version}";
-    sha256 = "rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
+    hash = "sha256-rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,13 @@ in buildPythonApplication rec {
     # https://github.com/mypaint/mypaint/pull/1183
     (fetchpatch {
       url = "https://github.com/mypaint/mypaint/commit/423950bec96d6057eac70442de577364d784a847.patch";
-      sha256 = "OxJJOi20bFMRibL59zx6svtMrkgeMYyEvbdSXbZHqpc=";
+      hash = "sha256-OxJJOi20bFMRibL59zx6svtMrkgeMYyEvbdSXbZHqpc=";
+    })
+    # https://github.com/mypaint/mypaint/pull/1193
+    (fetchpatch {
+      name = "python-3.11-compatibility.patch";
+      url = "https://github.com/mypaint/mypaint/commit/032a155b72f2b021f66a994050d83f07342d04af.patch";
+      hash = "sha256-EI4WJbpZrCtFMKd6QdXlWpRpIHi37gJffDjclzTLaLc=";
     })
   ];
 
