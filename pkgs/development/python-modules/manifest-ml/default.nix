@@ -99,6 +99,10 @@ buildPythonPackage rec {
     "test_timing"
   ];
 
+  pythonImportsCheck = [
+    "manifest"
+  ];
+
   meta = with lib; {
     description = "Manifest for Prompting Foundation Models";
     homepage = "https://github.com/HazyResearch/manifest";
