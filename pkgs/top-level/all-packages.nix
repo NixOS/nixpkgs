@@ -9456,6 +9456,7 @@ with pkgs;
   ipinfo = callPackage ../tools/networking/ipinfo { };
 
   ipscan = callPackage ../tools/security/ipscan { };
+  angryipscanner = ipscan;
 
   ipv6calc = callPackage ../tools/networking/ipv6calc { };
 
