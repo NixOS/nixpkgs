@@ -140,12 +140,7 @@ let
            then llvmPackages_14.stdenv
            else stdenv) mkDerivation;
 in
-mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
-  env = {
-    NATIVE_FULL_AOT = "1";
-    LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
-  };
-} // {
+mkDerivation (finalAttrs: {
   pname = pname
           + (if noGui then "-nox"
              else if variant == "macport" then "-macport"
@@ -341,10 +336,14 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
   ++ lib.optional withXwidgets "--with-xwidgets"
   ;
 
-  # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
-  # See https://github.com/NixOS/nixpkgs/issues/127902
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (variant == "macport")
-    "-include ${./macport_noescape_noop.h}";
+  env = lib.optionalAttrs withNativeCompilation {
+    NATIVE_FULL_AOT = "1";
+    LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
+  } // lib.optionalAttrs (variant == "macport") {
+    # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
+    # See https://github.com/NixOS/nixpkgs/issues/127902
+    NIX_CFLAGS_COMPILE = "-include ${./macport_noescape_noop.h}";
+  };
 
   enableParallelBuilding = true;
 
@@ -405,4 +404,4 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
   meta = meta // {
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
-}))
+})
