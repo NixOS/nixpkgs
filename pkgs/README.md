@@ -68,7 +68,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
    You can have a look at the existing Nix expressions under `pkgs/` to see how it’s done, some of which are also using the [category hierarchy](#category-hierarchy).
    Here are some good ones:
 
-   - GNU Hello: [`pkgs/applications/misc/hello/default.nix`](applications/misc/hello/default.nix). Trivial package, which specifies some `meta` attributes which is good practice.
+   - GNU Hello: [`pkgs/by-name/he/hello/package.nix`](./by-name/he/hello/package.nix). Trivial package, which specifies some `meta` attributes which is good practice.
 
    - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
 
