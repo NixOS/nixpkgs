@@ -12924,6 +12924,8 @@ self: super: with self; {
 
   torch-cluster = callPackage ../development/python-modules/torch-cluster { };
 
+  torch-scatter = callPackage ../development/python-modules/torch-scatter { };
+
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
 
   torchaudio = callPackage ../development/python-modules/torchaudio { };
