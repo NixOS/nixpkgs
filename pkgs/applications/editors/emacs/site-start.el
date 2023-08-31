@@ -68,7 +68,9 @@ least specific (the system profile)"
   ;; TODO: We should also add the other `NIX_PROFILES' to this path.
   ;; However, these are user-specific, so we would need to discover
   ;; them dynamically after connecting via `tramp'
-  '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
+  '(progn
+     (add-to-list 'tramp-remote-path "/run/current-system/sw/bin")
+     (add-to-list 'tramp-remote-path "/run/wrappers/bin")))
 
 ;;; C source directory
 ;;;
