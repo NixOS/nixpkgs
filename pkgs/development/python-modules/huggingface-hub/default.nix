@@ -4,7 +4,6 @@
 , pythonOlder
 , filelock
 , fsspec
-, importlib-metadata
 , packaging
 , pyyaml
 , requests
@@ -14,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.15.1";
+  version = "0.16.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q30/oNP1NjyxiJuSfxyjFgciydImMUgPdGJ/tqVtwZk=";
+    hash = "sha256-fWvEvYiaLiVGmDdfibIHJAsu7nUX+eaE0QGolS3LHO8=";
   };
 
   propagatedBuildInputs = [
@@ -34,8 +33,6 @@ buildPythonPackage rec {
     requests
     tqdm
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   # Tests require network access.
@@ -45,7 +42,7 @@ buildPythonPackage rec {
     "huggingface_hub"
   ];
 
-   meta = with lib; {
+  meta = with lib; {
     description = "Download and publish models and other files on the huggingface.co hub";
     homepage = "https://github.com/huggingface/huggingface_hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
