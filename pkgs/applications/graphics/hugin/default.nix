@@ -2,6 +2,7 @@
 , stdenv
 , cmake
 , fetchurl
+, fetchpatch
 , gnumake
 , makeWrapper
 , pkg-config
@@ -41,8 +42,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/hugin-${version}.tar.bz2";
-    sha256 = "sha256-l8hWKgupp0PguVWkPf3gSLHGDNnl8u4rad4agWRuBac=";
+    hash = "sha256-l8hWKgupp0PguVWkPf3gSLHGDNnl8u4rad4agWRuBac=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "hugin-2022.0.0-exiv2-0.28.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/hugin/files/hugin-2022.0.0-exiv2-0.28.patch?id=d18335caa756f5e5c1478d5fe3ba17f011a78c80";
+      hash = "sha256-Y+79bFb926GW5oLOL0e5y7kLhqU/vZcry+kLL4H2fUE=";
+    })
+  ];
 
   buildInputs = [
     boost

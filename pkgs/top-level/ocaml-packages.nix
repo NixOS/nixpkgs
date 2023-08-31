@@ -60,9 +60,7 @@ let
 
     ### B ###
 
-    bap = callPackage ../development/ocaml-modules/bap {
-      inherit (pkgs.llvmPackages) llvm;
-    };
+    bap = janeStreet_0_15.bap;
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
@@ -86,7 +84,7 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
-    biocaml = callPackage ../development/ocaml-modules/biocaml { };
+    biocaml = janeStreet_0_15.biocaml;
 
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
 
@@ -718,7 +716,9 @@ let
 
     # Jane Street
     janePackage =
-      if lib.versionOlder "4.10.2" ocaml.version
+      if lib.versionOlder "4.13.1" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/janePackage_0_16.nix {}
+      else if lib.versionOlder "4.10.2" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_15.nix {}
       else if lib.versionOlder "4.08" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_14.nix {}
@@ -727,7 +727,12 @@ let
       else callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
 
     janeStreet =
-      if lib.versionOlder "4.10.2" ocaml.version
+      if lib.versionOlder "4.13.1" ocaml.version
+      then import ../development/ocaml-modules/janestreet/0.16.nix {
+        inherit self;
+        inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
+      }
+      else if lib.versionOlder "4.10.2" ocaml.version
       then import ../development/ocaml-modules/janestreet/0.15.nix {
         inherit self;
         inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
@@ -750,6 +755,75 @@ let
         };
         inherit (pkgs) openssl;
       };
+
+    janeStreet_0_15 = (lib.makeScope self.newScope (self': with self'; {
+
+      # ocamlPackages that janestreet v0.15 packages depend on.
+      jsDeps = let
+        uri-sexp = self.uri-sexp.override { inherit (self') ppx_sexp_conv sexplib0; };
+        cohttp = self.cohttp.override {
+          inherit (self') ppx_sexp_conv;
+          inherit uri-sexp;
+        };
+        ipaddr-sexp = self.ipaddr-sexp.override { inherit (self') ppx_sexp_conv; };
+        conduit = self.conduit.override {
+          inherit (self') ppx_sexp_conv sexplib;
+          inherit ipaddr-sexp;
+        };
+        conduit-async = self.conduit-async.override {
+          inherit (self') async ppx_sexp_conv ppx_here core sexplib async_ssl;
+          inherit conduit ipaddr-sexp;
+        };
+      in {
+        inherit (self) dune-configurator alcotest re num octavius uutf ounit ctypes;
+        ppxlib = self.ppxlib.override { inherit (self') stdio; };
+        cohttp-async = self.cohttp-async.override {
+          inherit (self') ppx_sexp_conv base async async_kernel async_unix core_unix sexplib0 core;
+          inherit uri-sexp cohttp conduit-async;
+        };
+        janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage_0_15.nix { };
+      };
+
+      janeStreet = import ../development/ocaml-modules/janestreet/0.15.nix {
+        self = self' // jsDeps;
+        inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
+      };
+
+      # Packages that are not part of janestreet libraries, but still depend
+      # on v0.15 are kept in this scope, too.
+
+      bap = let
+        ppxlib = jsDeps.ppxlib;
+        lwt_ppx = self.lwt_ppx.override { inherit ppxlib; };
+        sedlex = self.sedlex.override { inherit ppxlib ppx_expect; };
+        in callPackage ../development/ocaml-modules/bap {
+          inherit (pkgs.llvmPackages) llvm;
+          ezjsonm = self.ezjsonm.override { inherit sexplib0; };
+          ppx_bitstring = self.ppx_bitstring.override { inherit ppxlib; };
+          ocurl = self.ocurl.override { inherit lwt_ppx; };
+          piqi = self.piqi.override { inherit sedlex; };
+          piqi-ocaml = self.piqi-ocaml.override { inherit piqi; };
+        };
+
+      biocaml = let
+        angstrom = self.angstrom.override { inherit ppx_let; };
+      in callPackage ../development/ocaml-modules/biocaml {
+        uri = self.uri.override { inherit angstrom; };
+        cfstream = self.cfstream.override { inherit core_kernel; };
+      };
+
+      magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
+
+      phylogenetics = let
+        angstrom = self.angstrom.override { inherit ppx_let; };
+      in callPackage ../development/ocaml-modules/phylogenetics {
+        inherit biocaml;
+        ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
+        angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
+      };
+
+      ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
+    })).overrideScope' liftJaneStreet;
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
       self = self.janeStreet_0_9_0;
@@ -930,7 +1004,7 @@ let
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
-    magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
+    magic-trace = janeStreet_0_15.magic-trace;
 
     mariadb = callPackage ../development/ocaml-modules/mariadb {
       inherit (pkgs) mariadb;
@@ -1332,7 +1406,7 @@ let
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
-    phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
+    phylogenetics = janeStreet_0_15.phylogenetics;
 
     piaf = callPackage ../development/ocaml-modules/piaf { };
 
@@ -1366,7 +1440,7 @@ let
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
-    ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
+    ppx_bap = janeStreet_0_15.ppx_bap;
 
     ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
 
@@ -1856,6 +1930,13 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_latest = ocamlPackages_5_0;
 
   ocamlPackages = ocamlPackages_4_14;
+
+  # This is a nasty way to replace toplevel janestreet attributes in the scope,
+  # so that modules outside of ocamlPackages that depend on JS OCaml libraries
+  # *and* non-JS OCaml libraries can pull in the same version of JS transitive
+  # dependencies. Remove this once ligo and stanc can be compiled against
+  # janestreet 0.16 libraries.
+  ocamlPackages_4_14_janeStreet_0_15 = ocamlPackages_4_14.overrideScope' (self: super: super // super.janeStreet_0_15);
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

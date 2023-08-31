@@ -18984,6 +18984,12 @@
     githubId = 1319905;
     name = "Uma Zalakain";
   };
+  zaldnoay = {
+    email = "zunway@outlook.com";
+    github = "zaldnoay";
+    githubId = 5986078;
+    name = "Zunway Liang";
+  };
   zanculmarktum = {
     name = "Azure Zanculmarktum";
     email = "zanculmarktum@gmail.com";
