@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "13.4";
+  version = "13.7";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    hash = "sha256-Zf2eyDx5QK69W6HNz/IGGHkX2qCDnxYsU8KLCgU9teY=";
+    hash = "sha256-Y3JcWkg0K724i/5Leyi8r26uKpq/aDwghJBG8xfxpd4=";
   };
 
   buildInputs = [ qtpbfimageplugin qtserialport ]
