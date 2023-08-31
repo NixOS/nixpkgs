@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, jinja2
 , packaging
 , poetry-core
 , pyparsing
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma";
-  version = "0.9.11";
+  version = "0.10.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,19 +24,20 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lbpx5THSegZK09jREH15RpokmdfOng2vX4tClsc/x/A=";
+    hash = "sha256-pEw0CmQYwZmfpN1mAv04eeOBTVX6JfW3aKhfofZaKYo=";
   };
+
+  pythonRelaxDeps = [
+    "packaging"
+  ];
 
   nativeBuildInputs = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "packaging"
-  ];
-
   propagatedBuildInputs = [
+    jinja2
     packaging
     pyparsing
     pyyaml
