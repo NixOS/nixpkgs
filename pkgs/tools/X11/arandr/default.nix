@@ -1,5 +1,6 @@
 { lib
 , fetchurl
+, fetchFromGitLab
 , python3Packages
 , gobject-introspection
 , gsettings-desktop-schemas
@@ -13,11 +14,13 @@ let
 in
 buildPythonApplication rec {
   pname = "arandr";
-  version = "0.1.10";
+  version = "0.1.11";
 
-  src = fetchurl {
-    url = "https://christian.amsuess.com/tools/arandr/files/${pname}-${version}.tar.gz";
-    sha256 = "135q0llvm077jil2fr92ssw3p095m4r8jfj0lc5rr3m71n4srj6v";
+  src = fetchFromGitLab {
+    owner = "${pname}";
+    repo = "${pname}";
+    rev = "${version}";
+    sha256 = "sha256-nQtfOKAnWKsy2DmvtRGJa4+Y9uGgX41BeHpd9m4d9YA=";
   };
 
   preBuild = ''
@@ -31,10 +34,10 @@ buildPythonApplication rec {
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
   propagatedBuildInputs = [ xrandr pygobject3 ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://christian.amsuess.com/tools/arandr/";
     description = "A simple visual front end for XRandR";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.domenkozar ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ domenkozar itcger ];
   };
 }
