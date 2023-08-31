@@ -14,6 +14,7 @@
 , findutils
 , gawk
 , procps
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -99,6 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
         procps
       ]}
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Optimise Linux system performance on demand";
