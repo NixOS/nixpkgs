@@ -78,11 +78,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "12.0.1";
+  version = "13.0.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-NIHEETk6oVx16I2Tz4MV+vf0PhgP4HkBKNOEDUF96Fg=";
+    hash = "sha256-Nd/aGRJip1a+k07viv7o0JdiytJQIdqmJuskniUayeY=";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -120,8 +120,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # patch to fix python-test
-    ./darwin.patch
+    # Protobuf switched to lower case project name.
     ./cmake-find-protobuf.patch
   ];
 
