@@ -17,6 +17,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./wchar-imports-skip.patch
+    ./restore-macros.patch
   ];
 
   installPhase = ''
