@@ -42,6 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/extrawurst/gitui";
     changelog = "https://github.com/extrawurst/gitui/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne yanganto ];
+    maintainers = with maintainers; [ Br1ght0ne yanganto mfrw ];
   };
 }
