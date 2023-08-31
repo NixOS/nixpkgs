@@ -3,11 +3,15 @@
 , fetchFromGitHub
 , pytestCheckHook
 , requests
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytado";
   version = "0.17.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wmalgadey";
