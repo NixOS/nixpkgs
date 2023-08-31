@@ -11,7 +11,7 @@ flutter.buildFlutterApplication rec {
   };
 
   depsListFile = ./deps.json;
-  vendorHash = "sha256-m2GCLC4ZUvDdBVKjxZjelrZZHY3+R7DilOOT84Twrxg=";
+  vendorHash = "sha256-7d8hsqXD7oqUN8VjQczSCyqytubDRq0os8wGnOfdSvs=";
 
   postInstall = ''
     rm $out/bin/file_manager

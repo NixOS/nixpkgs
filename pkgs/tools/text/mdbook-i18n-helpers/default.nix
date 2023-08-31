@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-i18n-helpers";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mdbook-i18n-helpers";
     rev = "refs/tags/${version}";
-    hash = "sha256-j5nbAgbCuz8urvdYPTTtGDnWwY/FxKNnwbeSTcuyIKw=";
+    hash = "sha256-ea/z5+QAvQVacP2Yxz9hGh8REjsNbp/rfkDV0f9KyPg=";
   };
 
-  cargoHash = "sha256-lDHq4KRYIeCddhFGQDWOx9olcOASjOke/h22Qm4wv6Q=";
+  cargoHash = "sha256-4Bf6R8sVwJCFiF+j+WePxWy43KuArIuMCzXKc58+TAw=";
 
   meta = with lib; {
     description = "Helpers for a mdbook i18n workflow based on Gettext";

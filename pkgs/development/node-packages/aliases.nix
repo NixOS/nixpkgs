@@ -47,6 +47,7 @@ mapAliases {
   "@medable/mdctl-cli" = throw "@medable/mdctl-cli was removed because it was broken"; # added 2023-08-21
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   antennas = pkgs.antennas; # added 2023-07-30
+  inherit (pkgs) asar; # added 2023-08-26
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
@@ -84,6 +85,7 @@ mapAliases {
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
+  inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
   stf = throw "stf was removed because it was broken"; # added 2023-08-21

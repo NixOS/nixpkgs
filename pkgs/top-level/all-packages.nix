@@ -336,7 +336,9 @@ with pkgs;
 
   banana-accounting = callPackage ../applications/office/banana-accounting { };
 
-  beebeep = libsForQt5.callPackage ../applications/office/beebeep {};
+  beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
+
+  beeper = qt5.callPackage ../applications/networking/instant-messengers/beeper { };
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
@@ -1173,6 +1175,11 @@ with pkgs;
       tests = pkgs.tests.fetchzip;
     };
 
+  fetchDebianPatch = callPackage ../build-support/fetchdebianpatch { }
+    // {
+      tests = pkgs.tests.fetchDebianPatch;
+    };
+
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
   fetchFromGitea = callPackage ../build-support/fetchgitea { };
@@ -1655,6 +1662,8 @@ with pkgs;
   auditwheel = callPackage ../tools/package-management/auditwheel { };
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
+
+  asar = callPackage ../tools/compression/asar { };
 
   askalono = callPackage ../tools/misc/askalono { };
 
@@ -8382,7 +8391,7 @@ with pkgs;
   })
     garage
       garage_0_7 garage_0_8
-      garage_0_7_3 garage_0_8_2;
+      garage_0_7_3 garage_0_8_3;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin { };
 
@@ -15076,6 +15085,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  yx = callPackage ../tools/text/yx { };
+
   zarchive = callPackage ../tools/archivers/zarchive { };
 
   zprint = callPackage ../development/tools/zprint { };
@@ -15501,8 +15512,8 @@ with pkgs;
   colmap = libsForQt5.callPackage ../applications/science/misc/colmap { inherit (config) cudaSupport; };
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
-  chickenPackages_4 = callPackage ../development/compilers/chicken/4 { };
-  chickenPackages_5 = callPackage ../development/compilers/chicken/5 { };
+  chickenPackages_4 = recurseIntoAttrs (callPackage ../development/compilers/chicken/4 { });
+  chickenPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/chicken/5 { });
   chickenPackages = dontRecurseIntoAttrs chickenPackages_5;
 
   inherit (chickenPackages_5)
@@ -15726,9 +15737,7 @@ with pkgs;
   flutterPackages =
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter-unwrapped = flutterPackages.stable;
-  flutter37-unwrapped = flutterPackages.v37;
   flutter = flutterPackages.wrapFlutter flutter-unwrapped;
-  flutter37 = flutterPackages.wrapFlutter flutter37-unwrapped;
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
@@ -24956,6 +24965,8 @@ with pkgs;
   rqlite = callPackage ../servers/sql/rqlite { };
 
   rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
+
+  rtlcss = callPackage ../development/libraries/rtlcss { };
 
   rttr = callPackage ../development/libraries/rttr { };
 
@@ -34666,7 +34677,7 @@ with pkgs;
 
   orca-c = callPackage ../applications/audio/orca-c { };
 
-  organicmaps = libsForQt5.callPackage ../applications/misc/organicmaps { };
+  organicmaps = qt6Packages.callPackage ../applications/misc/organicmaps { };
 
   osm2xmap = callPackage ../applications/misc/osm2xmap { };
 

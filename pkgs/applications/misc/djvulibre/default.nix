@@ -30,11 +30,15 @@ stdenv.mkDerivation rec {
     bash
   ];
 
-  # Remove uses of the `register` storage class specifier, which was removed in C++17.
-  # Fixes compilation with clang 16, which defaults to C++17.
-  patches = [ ./c++17-register-class.patch ];
-
   enableParallelBuilding = true;
+
+  patches = [
+    # Remove uses of the `register` storage class specifier, which was removed in C++17.
+    # Fixes compilation with clang 16, which defaults to C++17.
+    ./c++17-register-class.patch
+
+    ./CVE-2021-3500+CVE-2021-32490+CVE-2021-32491+CVE-2021-32492+CVE-2021-32493.patch
+  ];
 
   meta = with lib; {
     description = "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
