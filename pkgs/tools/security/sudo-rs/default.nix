@@ -1,6 +1,7 @@
 { lib
 , bash
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , pam
 , pandoc
@@ -22,6 +23,15 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles pandoc ];
 
   buildInputs = [ pam ];
+
+  patches = [
+    (fetchpatch {
+      # @R-VdP's patch to work with NixOS' suid wrappers
+      name = "Skip self_check when executed as root.patch";
+      url = "https://github.com/R-VdP/sudo-rs/commit/a44541dcb36b94f938daaed66b3ff06cfc1c2b40.patch";
+      hash = "sha256-PdmOqp/NDjFy8ve4jEOi58e0N9xUnaVKioQwdC5Jf1U=";
+    })
+  ];
 
   # Don't attempt to generate the docs in a (pan)Docker container
   postPatch = ''
