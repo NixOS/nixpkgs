@@ -2450,8 +2450,8 @@ let
         mktplcRef = {
           name = "vscode-pylance";
           publisher = "MS-python";
-          version = "2022.7.11";
-          sha256 = "sha256-JatjLZXO7iwpBwjL1hrNafBiF81CaozWWANyRm8A36Y=";
+          version = "2023.8.50";
+          sha256 = "sha256-xJU/j5r/Idp/0VorEfciT4SFKRBpMCv9Z0LKO/++1Gk=";
         };
 
         buildInputs = [ nodePackages.pyright ];
@@ -2462,6 +2462,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance";
           homepage = "https://github.com/microsoft/pylance-release";
           license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.ericthemagician ];
         };
       };
 
