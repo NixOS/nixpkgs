@@ -8190,6 +8190,8 @@ self: super: with self; {
 
   pyheos = callPackage ../development/python-modules/pyheos { };
 
+  pyhepmc = callPackage ../development/python-modules/pyhepmc { };
+
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
 
   pyhumps = callPackage ../development/python-modules/pyhumps { };
