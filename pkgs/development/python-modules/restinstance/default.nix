@@ -22,6 +22,9 @@ buildPythonPackage rec {
     nox -s test
   '';
 
+  pythonImportsCheck = [
+    "REST"
+  ];
   meta = with lib; {
     description = "Robot Framework library for RESTful JSON APIs";
     homepage = "https://asyrjasalo.github.io/RESTinstance";
