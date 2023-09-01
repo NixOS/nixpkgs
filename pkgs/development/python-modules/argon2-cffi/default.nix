@@ -1,12 +1,8 @@
-{ six
-, enum34
-, hypothesis
+{ hypothesis
 , pytest
-, wheel
 , buildPythonPackage
 , fetchPypi
 , flit-core
-, isPy3k
 , lib
 , stdenv
 , argon2-cffi-bindings
@@ -26,10 +22,9 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [ six argon2-cffi-bindings ]
-    ++ lib.optional (!isPy3k) enum34;
+  propagatedBuildInputs = [ argon2-cffi-bindings ];
 
-  nativeCheckInputs = [ hypothesis pytest wheel ];
+  nativeCheckInputs = [ hypothesis pytest ];
   checkPhase = ''
     pytest tests
   '';
