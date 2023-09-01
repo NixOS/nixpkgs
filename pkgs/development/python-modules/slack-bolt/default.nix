@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "1.18.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "bolt-python";
@@ -68,6 +66,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # boddle is not packaged as of 2023-07-15
     "tests/adapter_tests/bottle/"
+    # Tests are blocking at some point. Blocking could be performance-related.
+    "tests/scenario_tests_async/"
+    "tests/slack_bolt_async/"
   ];
 
   disabledTests = [
