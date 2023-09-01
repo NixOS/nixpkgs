@@ -2,11 +2,14 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyinstrument";
   version = "4.5.2";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "joerick";
