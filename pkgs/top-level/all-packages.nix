@@ -658,6 +658,8 @@ with pkgs;
 
   femtolisp = callPackage ../development/interpreters/femtolisp { };
 
+  fh = callPackage ../tools/nix/fh { };
+
   figma-agent = callPackage ../applications/graphics/figma-agent { };
 
   figma-linux = callPackage ../applications/graphics/figma-linux { };
