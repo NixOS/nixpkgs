@@ -11700,6 +11700,8 @@ with pkgs;
 
   oxker = callPackage ../applications/misc/oxker { };
 
+  oxlint = callPackage ../development/tools/oxlint { };
+
   ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
 
   ovito = libsForQt5.callPackage ../applications/graphics/ovito {
