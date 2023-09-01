@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "landscapeio";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-qmrHFQRypBJOI1N6W/Dtc5ss9JGqoPhFlbqrLHcb6vc=";
   };
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tool to find and list requirements of a Python project";
     homepage = "https://github.com/landscapeio/requirements-detector";
+    changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
   };
