@@ -29,8 +29,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six argon2-cffi-bindings ]
     ++ lib.optional (!isPy3k) enum34;
 
-  ARGON2_CFFI_USE_SSE2 = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) "0";
-
   nativeCheckInputs = [ hypothesis pytest wheel ];
   checkPhase = ''
     pytest tests
