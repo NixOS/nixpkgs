@@ -10,7 +10,8 @@
 , qemu
 , scribus
 , tigervnc
-, wlroots
+, wlroots_0_15
+, wlroots_0_16
 , xwayland
 }:
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
   postInstall = glib.flattenInclude;
 
   passthru.tests = {
-    inherit cairo qemu scribus tigervnc wlroots xwayland;
+    inherit cairo qemu scribus tigervnc wlroots_0_15 wlroots_0_16 xwayland;
   };
 
   meta = with lib; {
