@@ -46,7 +46,7 @@ let
 
     hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
 
-    outputs = [ "out" "lib" "doc" "man" ];
+    outputs = [ "out" "lib" "dev" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs = [
@@ -145,6 +145,8 @@ let
 
     postInstall =
       ''
+        moveToOutput "bin/pg_config" "$dev"
+
         moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
         moveToOutput "lib/libpgcommon*.a" "$out"
         moveToOutput "lib/libpgport*.a" "$out"
