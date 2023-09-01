@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fh";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
     rev = "v${version}";
-    hash = "sha256-lTm4C06FtlaIJyhqZ4POubiR4qc0fPHawLS4cpneACg=";
+    hash = "sha256-4IpfVkmSTMTZKsm+eXPtcenMgbis12RaPrJpM1kYaE8=";
   };
 
-  cargoHash = "sha256-CvuQeS+g9bdpYzop63BL0UKQsdOELGt1tR2Xz4FLxpE=";
+  cargoHash = "sha256-RHUMrA+mzvT9xXOt/flGfvK0uBBUnAtgHOrgvYivTGs=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -32,11 +32,6 @@ rustPlatform.buildRustPackage rec {
   env = lib.optionalAttrs stdenv.isDarwin {
     NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
   };
-
-  # Cargo.lock is outdated
-  postConfigure = ''
-    cargo metadata --offline
-  '';
 
   meta = with lib; {
     description = "The official FlakeHub CLI";
