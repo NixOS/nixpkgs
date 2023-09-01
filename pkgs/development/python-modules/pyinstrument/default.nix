@@ -25,6 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Call stack profiler for Python";
     homepage = "https://github.com/joerick/pyinstrument";
+    changelog = "https://github.com/joerick/pyinstrument/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };
