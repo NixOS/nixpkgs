@@ -34138,6 +34138,8 @@ with pkgs;
     inherit lua;
   };
 
+  shaka-packager = callPackage ../applications/video/shaka-packager { };
+
   # Wraps without triggering a rebuild
   wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
   mpv = wrapMpv mpv-unwrapped { };
