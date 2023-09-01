@@ -30,7 +30,7 @@ in
       fetchurlBoot = fetchurl;
       cc = null;
       overrides = self: super: {
-        inherit world hostTools;
+        inherit fbworld hostTools;
       };
     };
 
@@ -40,18 +40,21 @@ in
       curl = hostTools;
     };
 
-    world = derivation (rec {
+    fbworld = derivation (rec {
       inherit system;
-      name = "world";
-      pname = "world";
+      name = "fbworld";
+      pname = "fbworld";
       version = "14.0-CURRENT";
       rev = "d1d7a273707a50d4ad1691b2c4dbf645dfa253ea";
       src = fetchurl {
         url = "https://github.com/freebsd/freebsd-src/archive/${rev}.tar.gz";
         sha256 = "sha256-D7pTkW4DLKqS/HxyERI/oUh+/Qh/5ri5Z3O5RcooUVI=";
       };
+      outputs = ["lib" "out" "corebin" "cc" "sh" "zip"];  # misbehaves when bin is named bin?
       dname = "freebsd-src-${rev}";
       builder = ./world-builder.sh;
+      patchelf = "${patchelf_}/bin/patchelf";
+      #readelf = "${hostTools}/bin/readelf";
     });
 
     gmake = trivialBuilder rec {
@@ -239,24 +242,13 @@ in
       make = "${gmake}/bin/make";
     };
 
-    patchelf = trivialBuilder rec {
+    patchelf_ = trivialBuilder rec {
       inherit (localSystem) system;
       name = "patchelf";
       ver = "0.15.0";
       url = "https://github.com/NixOS/${name}/releases/download/${ver}/${name}-${ver}.tar.bz2";
       sha256 = "9ANtPuTY4ijewb7/8PbkbYpA6eVw4AaOOdd+YuLIvcI=";
     };
-
-    world-patched = derivation ({
-      inherit system world;
-      name = "world-patched";
-      pname = "world-patched";
-      version = "14.0-CURRENT";
-      builder = ./world-patcher.sh;
-      outputs = ["lib" "corebin" "etc" "cc" "sh" "zip"];  # misbehaves when bin is named bin?
-      patchelf = "${patchelf}/bin/patchelf";
-      readelf = "${hostTools}/bin/readelf";
-    });
   })
 
   (prevStage: rec {
@@ -265,7 +257,7 @@ in
     stdenv = import ../generic rec {
         name = "stdenv-freebsd-boot-1";
         inherit config;
-        initialPath = [ prevStage.coreutils prevStage.tar prevStage.findutils prevStage.gmake prevStage.sed prevStage.patchelf prevStage.grep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.world-patched.sh prevStage.world-patched.zip ];
+        initialPath = [ prevStage.coreutils prevStage.tar prevStage.findutils prevStage.gmake prevStage.sed prevStage.patchelf_ prevStage.grep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.fbworld.sh prevStage.fbworld.zip ];
         extraNativeBuildInputs = [];
         inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
         shell = "${prevStage.bash}/bin/bash";
@@ -273,8 +265,8 @@ in
           inherit lib;
           name = "stdenv-freebsd-boot-1-cc-wrapper";
           stdenvNoCC = prevStage.stdenv;
-          cc = prevStage.world-patched.cc;
-          libc = prevStage.world-patched.lib;
+          cc = prevStage.fbworld.cc;
+          libc = prevStage.fbworld.lib;
           gnugrep = prevStage.grep;
           coreutils = prevStage.coreutils;
           nativeTools = false;
@@ -284,7 +276,7 @@ in
             inherit lib;
             stdenvNoCC = prevStage.stdenv;
             name = "stdenv-freebsd-boot-1-bintools-wrapper";
-            libc = prevStage.world-patched.lib;
+            libc = prevStage.fbworld.lib;
             propagateDoc = false;
             nativeTools = false;
             nativeLibc = false;
@@ -300,56 +292,57 @@ in
         };
 
         overrides = self: super: ({
-          world-patched = prevStage.world-patched;
-          curl = prevStage.hostTools;
+          fbworld = prevStage.fbworld;
+          #curl = prevStage.hostTools;
           fetchurl = prevStage.fetchurl;
-          xz = super.xz.overrideAttrs {
-            NIX_DEBUG=1;
-          };
         });
       };
   })
 
-  #(prevStage: rec {
-  #  inherit config overlays;
+  (prevStage: rec {
+    inherit config overlays;
 
-  #  stdenv = import ../generic rec {
-  #    name = "stdenv-freebsd-boot-2";
-  #    inherit config;
-  #    initialPath = [ prevStage.boot-coreutils prevStage.boot-tar ];
-  #    inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
-  #    shell = "${prevStage.hostTools}/bin/bash";
-  #    cc = import ../../build-support/cc-wrapper ({
-  #      inherit lib;
-  #      name = "stdenv-freebsd-boot-2-cc-wrapper";
-  #      stdenvNoCC = prevStage.stdenv;
-  #      cc = prevStage.world-patched;
-  #      libc = prevStage.world-patched;
-  #      coreutils = prevStage.world-patched;
-  #      gnugrep = prevStage.gnugrep;
-  #      nativeTools = false;
-  #      nativeLibc = false;
-  #      isClang = true;
-  #      #bintools = prevStage.bintools;
-  #      bintools = import ../../build-support/bintools-wrapper {
-  #        inherit lib;
-  #        stdenvNoCC = prevStage.stdenv;
-  #        name = "stdenv-freebsd-boot-2-bintools-wrapper";
-  #        libc = prevStage.world-patched;
-  #        propagateDoc = false;
-  #        nativeTools = false;
-  #        nativeLibc = false;
-  #        bintools = prevStage.bintools-unwrapped;
-  #        coreutils = prevStage.world-patched;
-  #        gnugrep = prevStage.grep;
-  #      };
-  #    });
-  #    fetchurlBoot = prevStage.curl;
-  #    overrides = self: super: {
-  #      inherit (prevStage) world-patched gnutgrep bintools;
-  #    };
-  #  };
-  #})
+    stdenv = import ../generic rec {
+      name = "stdenv-freebsd-boot-2";
+      inherit config;
+      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz  ];
+      inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
+      shell = "${prevStage.bash}/bin/bash";
+      cc = import ../../build-support/cc-wrapper ({
+        inherit lib;
+        name = "stdenv-freebsd-boot-2-cc-wrapper";
+        stdenvNoCC = prevStage.stdenv;
+        cc = prevStage.fbworld.cc;
+        libc = prevStage.fbworld.lib;
+        coreutils = prevStage.coreutils;
+        gnugrep = prevStage.gnugrep;
+        nativeTools = false;
+        nativeLibc = false;
+        isClang = true;
+        #bintools = prevStage.bintools;
+        bintools = import ../../build-support/bintools-wrapper {
+          inherit lib;
+          stdenvNoCC = prevStage.stdenv;
+          name = "stdenv-freebsd-boot-2-bintools-wrapper";
+          libc = prevStage.fbworld.lib;
+          propagateDoc = false;
+          nativeTools = false;
+          nativeLibc = false;
+          bintools = prevStage.bintools-unwrapped;
+          coreutils = prevStage.coreutils;
+          gnugrep = prevStage.gnugrep;
+        };
+      });
+        fetchurlBoot = import ../../build-support/fetchurl {
+          inherit lib;
+          stdenvNoCC = stdenv;
+          curl = prevStage.curl;
+        };
+      overrides = self: super: {
+        inherit (prevStage) fbworld bash;
+      };
+    };
+  })
 
   #(prevStage: rec {
   #  inherit config overlays;
@@ -357,16 +350,16 @@ in
   #  stdenv = import ../generic rec {
   #    name = "stdenv-freebsd";
   #    inherit config;
-  #    initialPath = [ prevStage.world-patched ];
+  #    initialPath = [ prevStage.fbworld ];
   #    inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
   #    shell = prevStage.bash;
   #    cc = import ../../build-support/cc-wrapper ({
   #      inherit lib;
   #      name = "stdenv-freebsd-cc-wrapper";
   #      stdenvNoCC = prevStage.stdenv;
-  #      cc = prevStage.world-patched;
-  #      libc = prevStage.world-patched;
-  #      coreutils = prevStage.world-patched;
+  #      cc = prevStage.fbworld;
+  #      libc = prevStage.fbworld;
+  #      coreutils = prevStage.fbworld;
   #      gnugrep = prevStage.gnugrep;
   #      nativeTools = false;
   #      nativeLibc = false;
