@@ -12926,6 +12926,8 @@ self: super: with self; {
 
   torch-scatter = callPackage ../development/python-modules/torch-scatter { };
 
+  torch-sparse = callPackage ../development/python-modules/torch-sparse { };
+
   torch-spline-conv = callPackage ../development/python-modules/torch-spline-conv { };
 
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
