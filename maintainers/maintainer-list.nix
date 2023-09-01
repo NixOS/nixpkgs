@@ -10490,7 +10490,7 @@
     github = "manipuladordedados";
     githubId = 1189862;
     name = "Valter Nazianzeno";
-  };  
+  };
   manojkarthick = {
     email = "smanojkarthick@gmail.com";
     github = "manojkarthick";

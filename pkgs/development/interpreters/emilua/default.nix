@@ -111,3 +111,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ manipuladordedados ];
     platforms = platforms.linux;
   };
+}
