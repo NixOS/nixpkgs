@@ -1,7 +1,6 @@
 { lib
 , fmt
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , cmake
 , doxygen
@@ -48,15 +47,15 @@
 , zlib
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
-    rev = version;
-    hash = "sha256-m/0CUVDjlGIkh2AM8qdWAMuH/LVlfILqYybWY0KLT4g=";
+    rev = finalAttrs.version;
+    hash = "sha256-rwt81Z+Bp8uZlR4iuGQEDKBu/Dr9Rqg7d9SsCdofTUU=";
   };
 
   nativeBuildInputs = [
@@ -147,7 +146,7 @@ mkDerivation rec {
     ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freecad.org";
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     longDescription = ''
@@ -166,8 +165,8 @@ mkDerivation rec {
       programmer, an experienced CAD user, a student or a teacher, you will feel
       right at home with FreeCAD.
     '';
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ viric gebner AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ viric gebner AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})
