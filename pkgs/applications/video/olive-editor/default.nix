@@ -37,10 +37,6 @@ stdenv.mkDerivation {
   # https://github.com/olive-editor/olive/issues/2200
   patchPhase = ''
     runHook prePatch
-    substituteInPlace ./app/node/project/serializer/serializer.h \
-      --replace 'QStringRef' 'QStringView'
-    substituteInPlace ./app/node/project/serializer/serializer.cpp \
-      --replace 'QStringRef' 'QStringView'
     substituteInPlace ./app/node/project/serializer/serializer230220.cpp \
       --replace 'QStringRef' 'QStringView'
     runHook postPatch
