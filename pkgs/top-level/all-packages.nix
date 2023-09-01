@@ -22122,6 +22122,8 @@ with pkgs;
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
+  hax11 = callPackage ../development/libraries/hax11 { };
+
   haxor-news = callPackage ../applications/misc/haxor-news { };
 
   hdt = callPackage ../misc/hdt { };
