@@ -3,11 +3,14 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyinstrument";
   version = "4.5.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -17,6 +20,11 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-VL/JzgMxn5zABfmol+5oofR1RjyxTdzvUi6JnwsSFao=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   # Module import recursion
   doCheck = false;
