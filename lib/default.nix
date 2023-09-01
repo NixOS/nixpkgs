@@ -78,7 +78,7 @@ let
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
-      getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
+      getAttrFromPath attrVals attrValues attrsToList getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
       mapAttrs' mapAttrsToList concatMapAttrs mapAttrsRecursive mapAttrsRecursiveCond
       genAttrs isDerivation toDerivation optionalAttrs

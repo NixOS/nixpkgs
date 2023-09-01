@@ -261,6 +261,19 @@ rec {
   */
   attrValues = builtins.attrValues or (attrs: attrVals (attrNames attrs) attrs);
 
+  /* Return an list of key-value pairs (attribute sets with `name` and `value` attributes) representing the attributes in an attribute set.
+
+     Example:
+     attrsToList { a = 3; b = null; }
+     => [ { name = "a"; value = 3; } { name = "b"; value = null; } ]
+
+     Type:
+       attrsToList :: AttrSet -> [{ name :: String; value :: Any; }]
+
+  */
+  attrsToList = attrs:
+    map (name: { inherit name; value = attrs.${name}; }) (builtins.attrNames attrs);
+
 
   /* Given a set of attribute names, return the set of the corresponding
      attributes from the given set.
