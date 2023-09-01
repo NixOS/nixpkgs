@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubefirst";
-  version = "2.2.7";
+  version = "2.2.9";
 
   src = fetchFromGitHub {
     owner = "kubefirst";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sIX+B08JNwWr4QsWWi4kpqaY9uZbIeiM2sVvMCvSb0I=";
+    hash = "sha256-QxIbBxNTVONf4x06nuYhY38+pYDwsT3C6yToq7/dHIk=";
   };
 
   vendorHash = "sha256-F+kzj2lBSFawfc8OyPf6V2XVB1418uhv+cv3CHpXUk0=";
