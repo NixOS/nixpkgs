@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.21.0";
+  version = "0.22.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "dry-python";
     repo = "returns";
     rev = "refs/tags/${version}";
-    hash = "sha256-oYOCoh/pF2g4KGWC2mEnFD+zm2CKL+3x5JjzuZ3QHVQ=";
+    hash = "sha256-0eFirhBsj8SWfoAPWEMuFa+EvBgHKpNeKVj3qJ4L6hE=";
   };
 
   postPatch = ''
