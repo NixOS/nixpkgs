@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-B/jGsHImRfj0iEio2b6R6laWBI1LL3OI407O7sren8s=";
   };
 
+  patches = [
+    ./001-use-local-pybind11.diff
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

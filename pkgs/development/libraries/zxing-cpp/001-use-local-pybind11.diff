@@ -1,0 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5b2a415..ac43a98 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,13 +18,12 @@ if (NOT hasParent)
+     set(BUILD_DEPENDENCIES "AUTO")
+     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/core)
+         add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/core ZXing EXCLUDE_FROM_ALL)
+-        include(${CMAKE_CURRENT_SOURCE_DIR}/zxing.cmake)
+     else()
+         message(FATAL_ERROR "Unable to locate zxing source code")
+     endif()
+ endif()
+ 
+-zxing_add_package(pybind11 pybind11 ${pybind11_git_repo} ${pybind11_git_rev})
++find_package(pybind11 CONFIG)
+ 
+ # build the python module
+ pybind11_add_module(zxingcpp zxing.cpp)
