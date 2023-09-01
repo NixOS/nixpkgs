@@ -348,14 +348,15 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
   * Not start with the package name.
     * More generally, it should not refer to the package name.
   * Not end with a period (or any punctuation for that matter).
-  * Aim to inform while avoiding subjective language.
-* `meta.license` must be set and fit the upstream license.
+  * Provide factual information.
+    * Avoid subjective language.
+* `meta.license` must be set and match the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
 * `meta.mainProgram` must be set when appropriate.
 * `meta.maintainers` should be set.
 
-See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
+See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
 ### Import From Derivation
 
