@@ -9423,6 +9423,18 @@ final: prev:
     meta.homepage = "https://github.com/gcmt/taboo.vim/";
   };
 
+  tabout-nvim = buildVimPluginFrom2Nix {
+    pname = "tabout.nvim";
+    version = "2023-03-29";
+    src = fetchFromGitHub {
+      owner = "abecodes";
+      repo = "tabout.nvim";
+      rev = "0d275c8d25f32457e67b5c66d6ae43f26a61bce5";
+      sha256 = "11zly7bfdz110a7ififylzgizin06ia0i3jipzp12n2n2paarp1f";
+    };
+    meta.homepage = "https://github.com/abecodes/tabout.nvim/";
+  };
+
   tabpagebuffer-vim = buildVimPluginFrom2Nix {
     pname = "tabpagebuffer.vim";
     version = "2014-09-30";
