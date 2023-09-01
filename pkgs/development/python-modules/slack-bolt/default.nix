@@ -109,6 +109,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A framework to build Slack apps using Python";
     homepage = "https://github.com/slackapi/bolt-python";
+    changelog = "https://github.com/slackapi/bolt-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };
