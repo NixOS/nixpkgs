@@ -79,7 +79,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   # TODO: investigate the aarch64-linux failures; see this and linked discussions:
   # https://github.com/NixOS/nixpkgs/pull/192962
-  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux) && !isi686;
+  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
+    # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
+    && !is32bit;
   checkTarget = "unit";
   checkInputs = [
     cmocka
