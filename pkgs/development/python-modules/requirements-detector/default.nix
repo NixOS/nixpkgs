@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "requirements-detector";
-  version = "1.1.0";
+  version = "1.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "landscapeio";
     repo = pname;
     rev = version;
-    hash = "sha256-H+h/PN1TrlpDRgI7tMWUhXlxj4CChwcxIR/BvyO261c=";
+    hash = "sha256-qmrHFQRypBJOI1N6W/Dtc5ss9JGqoPhFlbqrLHcb6vc=";
   };
 
   nativeBuildInputs = [
