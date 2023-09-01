@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildPythonPackage, jsonschema, nox }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, jsonschema
+, nox
+}:
 
 buildPythonPackage rec {
   pname = "RESTinstance";
