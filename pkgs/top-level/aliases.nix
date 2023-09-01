@@ -1933,8 +1933,7 @@ mapAliases ({
   zinc = zincsearch; # Added 2023-05-28
   zq = zed.overrideAttrs (old: { meta = old.meta // { mainProgram = "zq"; }; }); # Added 2023-02-06
 
-  # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
-  # branch-off
+  ### UNSORTED ###
 
   ocamlPackages_latest = throw "'ocamlPackages_latest' has been renamed to/replaced by 'ocaml-ng.ocamlPackages_latest'"; # Converted to throw 2022-02-22
 
