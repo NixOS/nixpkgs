@@ -32,7 +32,9 @@ buildPythonPackage rec {
     sphinx-better-theme
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    postgresql
+  ] ++ lib.optionals stdenv.isDarwin [
     openssl
   ];
 
