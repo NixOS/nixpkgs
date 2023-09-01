@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "RESTinstance";
+  pname = "restinstance";
   version = "1.3.0";
 
   src = fetchFromGitHub {
