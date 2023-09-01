@@ -266,6 +266,14 @@ final: prev: {
     '';
   };
 
+  perlnavigator = prev.perlnavigator.override {
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    postInstall = ''
+      makeWrapper '${nodejs}/bin/node' "$out/bin/perlnavigator" \
+        --add-flags "$out/lib/node_modules/perlnavigator-server/out/server.js"
+    '';
+  };
+
   pnpm = prev.pnpm.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
 

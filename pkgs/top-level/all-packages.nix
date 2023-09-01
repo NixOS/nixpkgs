@@ -26237,6 +26237,8 @@ with pkgs;
 
   perlcritic = perlPackages.PerlCritic;
 
+  perlnavigator = nodePackages.perlnavigator;
+
   sqitchMysql = (callPackage ../development/tools/misc/sqitch {
     mysqlSupport = true;
   }).overrideAttrs { pname = "sqitch-mysql"; };

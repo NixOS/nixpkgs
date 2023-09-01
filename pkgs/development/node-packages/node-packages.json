@@ -211,6 +211,7 @@
 , "patch-package"
 , "peerflix"
 , "peerflix-server"
+, "perlnavigator"
 , "pkg"
 , "pm2"
 , "pnpm"
