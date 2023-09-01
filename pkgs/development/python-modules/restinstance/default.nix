@@ -25,6 +25,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Robot Framework library for RESTful JSON APIs";
     homepage = "https://asyrjasalo.github.io/RESTinstance";
+    changelog = "https://github.com/asyrjasalo/RESTinstance/releases/tag/${version}";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ asyrjasalo ];
   };
