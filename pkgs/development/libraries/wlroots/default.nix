@@ -123,6 +123,4 @@ rec {
         --replace /usr/share/hwdata/ ${hwdata}/share/hwdata/
     '';
   };
-
-  wlroots = wlroots_0_16;
 }
