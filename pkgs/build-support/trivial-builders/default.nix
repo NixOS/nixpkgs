@@ -336,10 +336,11 @@ rec {
     { name
     , text
     , runtimeInputs ? [ ]
+    , meta ? { }
     , checkPhase ? null
     }:
     writeTextFile {
-      inherit name;
+      inherit name meta;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
