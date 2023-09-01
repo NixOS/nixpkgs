@@ -51,6 +51,7 @@ buildPythonPackage rec {
     "click"
     "mashumaro"
     "networkx"
+    "logbook"
   ];
 
   propagatedBuildInputs = [
