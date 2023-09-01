@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkgs, autoPatchelfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkgs,
+  autoPatchelfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "latvia-eid-middleware";
