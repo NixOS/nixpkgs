@@ -31,12 +31,19 @@ find $corebin -type f | while read FILE; do
     fi
 done
 
+for f in $(find $lib/lib -lname '../../lib/*'); do
+    LINK="$(readlink $f)"
+    RELINK="${LINK#../../lib/}"
+    rm $f
+    ln -s $RELINK $f
+done
+
 for f in cc clang clang++ ld ld.lld cpp ar; do
     mv $corebin/bin/$f $cc/bin
 done
 for f in sh; do
     mv $corebin/bin/$f $sh/bin
 done
-for f in gzip bzip2 xz gunzip unxz bzip2recover minigzip xzcat xzdec xzdiff xzegrep xzfgrep xzgrep xzless; do
+for f in gzip bzip2 xz gunzip unxz bzip2recover xzcat xzdec xzdiff xzegrep xzfgrep xzgrep xzless; do
     mv $corebin/bin/$f $zip/bin
 done

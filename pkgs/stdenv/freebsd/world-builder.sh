@@ -7,4 +7,4 @@ export MAKEOBJDIRPREFIX="$(realpath obj)"
 tar -zxvf $src
 cd $dname
 
-make world DESTDIR=$out -j $NIX_BUILD_CORES -DNO_ROOT CFLAGS.amd64=-fPIC MK_BOOT=no
+make world DESTDIR=$out -j $NIX_BUILD_CORES -DNO_ROOT MK_BOOT=no # CFLAGS.amd64=-fPIC
