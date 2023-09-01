@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "ztags";
-  version = "unstable-2023-08-03";
+  version = "unstable-2023-08-29";
 
   src = fetchFromGitHub {
     owner = "gpanders";
     repo = "ztags";
-    rev = "6ef039047f6580772c5ff97e8770d919dc07a4fa";
-    hash = "sha256-WuDEHzNU3I4VPHEAkRdIUE5LPbQEKbUnITdFutGV58Y=";
+    rev = "87dbc4ba7993fa1537ddce942c6ce4cf90ce0809";
+    hash = "sha256-FZZZnTmz4mxhiRXs16A41fz0WYIg6oGM7xj2cECRkrM=";
   };
 
   nativeBuildInputs = [
