@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
 , pythonOlder
 , substituteAll
@@ -77,6 +76,10 @@ let
       postgresql
       setuptools
       tomli
+    ];
+
+    buildInputs = [
+      postgresql
     ];
 
     # tested in psycopg
@@ -173,7 +176,7 @@ buildPythonPackage rec {
     pytestCheckHook
     postgresql
   ]
-  ++ lib.optional (stdenv.isLinux) postgresqlTestHook
+  ++ lib.optional stdenv.isLinux postgresqlTestHook
   ++ passthru.optional-dependencies.c
   ++ passthru.optional-dependencies.pool;
 
@@ -184,7 +187,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     cd ..
-  '' + lib.optionalString (stdenv.isLinux) ''
+  '' + lib.optionalString stdenv.isLinux ''
     export PSYCOPG_TEST_DSN="host=127.0.0.1 user=$PGUSER"
   '';
 
