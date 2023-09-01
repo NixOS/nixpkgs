@@ -21,8 +21,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ postgresql ];
+
+  buildInputs = [ postgresql ];
+
   propagatedBuildInputs = [ six cffi ];
-  nativeCheckInputs = [ pytestCheckHook ];
 
   # NB: The tests need a postgres instance running to test against, and so we
   # disable them.
