@@ -444,6 +444,8 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
 checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
 
+checkConfigOutput '^true$' config.success ./recursive.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

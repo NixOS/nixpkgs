@@ -393,16 +393,34 @@ let
             disabled = concatLists (catAttrs "disabled" modules);
             inherit modules;
           };
-        in parentFile: parentKey: initialModules: args: collectResults (imap1 (n: x:
-          let
-            module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
-            collectedImports = collectStructuredModules module._file module.key module.imports args;
-          in {
-            key = module.key;
-            module = module;
-            modules = collectedImports.modules;
-            disabled = (if module.disabledModules != [] then [{ file = module._file; disabled = module.disabledModules; }] else []) ++ collectedImports.disabled;
-          }) initialModules);
+
+          doCollectStructuredModules =
+            keysVisited:
+            parentFile:
+            parentKey:
+            initialModules:
+            args:
+            let
+              filterDuplicateKeys = lib.filter (module:
+                let visited = lib.hasAttr (builtins.unsafeDiscardStringContext module.key) keysVisited;
+                in lib.warnIf visited "the module ${module.key} imports itself recursively." (!visited));
+              checkedModules = filterDuplicateKeys (
+                lib.imap1 (n: m: checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" m))
+                  initialModules
+              );
+            in
+            collectResults (map (module:
+              let
+                newKeysVisited = keysVisited // { ${builtins.unsafeDiscardStringContext module.key} = true; };
+                collectedImports = doCollectStructuredModules newKeysVisited module._file module.key module.imports args;
+              in {
+                inherit (module) key;
+                inherit module;
+                inherit (collectedImports) modules;
+                disabled = (if module.disabledModules != [] then [{ file = module._file; disabled = module.disabledModules; }] else []) ++ collectedImports.disabled;
+              }) checkedModules);
+        in
+        doCollectStructuredModules {};
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
       #
