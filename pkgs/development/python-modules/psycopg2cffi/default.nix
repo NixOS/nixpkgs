@@ -20,7 +20,17 @@ buildPythonPackage rec {
     sha256 = "09hsnjkix1c0vlhmfvrp8pchpnz2ya4xrchyq15czj527nx2dmy2";
   };
 
-  nativeBuildInputs = [ postgresql ];
+  nativeBuildInputs = [
+    # needed to find pg_config with strictDeps
+    # TODO: switch to pkg-config upstream
+    # https://github.com/psycopg/psycopg2/issues/1001
+    postgresql
+  ];
+
+  buildInputs = [
+    postgresql
+  ];
+
   propagatedBuildInputs = [ six cffi ];
   nativeCheckInputs = [ pytestCheckHook ];
 
