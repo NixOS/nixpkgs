@@ -1,19 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
 , cmake
+, pkg-config
 , python3
+, gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zxing-cpp";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "zxing-cpp";
     repo = "zxing-cpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-B/jGsHImRfj0iEio2b6R6laWBI1LL3OI407O7sren8s=";
   };
 
@@ -27,11 +28,16 @@ stdenv.mkDerivation rec {
     "-DBUILD_BLACKBOX_TESTS=OFF"
   ];
 
-  passthru.tests = {
-    inherit (python3.pkgs) zxing_cpp;
+  passthru = {
+    tests = {
+      inherit (python3.pkgs) zxing_cpp;
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zxing-cpp/zxing-cpp";
     description = "C++ port of zxing (a Java barcode image processing library)";
     longDescription = ''
@@ -43,8 +49,8 @@ stdenv.mkDerivation rec {
       and performance. It can both read and write barcodes in a number of
       formats.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ AndersonTorres lukegb ];
+    platforms = lib.platforms.unix;
   };
-}
+})
