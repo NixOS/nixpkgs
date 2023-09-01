@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, dpkg
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook
-, webkitgtk
-, glib-networking
-, libappindicator
-, libayatana-appindicator
-, gst_all_1
+{
+  stdenv,
+  lib,
+  dpkg,
+  fetchurl,
+  autoPatchelfHook,
+  wrapGAppsHook,
+  webkitgtk,
+  glib-networking,
+  libappindicator,
+  libayatana-appindicator,
+  gst_all_1,
 }:
-
 stdenv.mkDerivation rec {
   name = "dorion";
   version = "1.0.1";
+  sourceRoot = ".";
 
   src = fetchurl {
-    url = "https://github.com/SpikeHD/Dorion/releases/download/v${version}/dorion_${version}_amd64.deb";
-    sha256 = "sha256-IYqJ5mz+XGHf4GVSW2Mq/z8xWLs4Y4KRWZ6fAtIg2tk=";
+    url = "https://github.com/SpikeHD/Dorion/releases/download/v${version}/Dorion_${version}_amd64_portable.tar.gz";
+    sha256 = "sha256-QvETUcnN2pFSlaXPzylmrqxDrI3aT0/YqwjHsiPpFNk=";
   };
 
   runtimeDependencies = [
@@ -40,20 +41,17 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
   ];
 
-  unpackCmd = ''
-    dpkg-deb -x $curSrc source
-  '';
-
   installPhase = ''
-    mv usr $out
+    mkdir -p $out/bin
+    mv html icons injection plugins themes dorion $out/bin
   '';
 
   meta = with lib; {
     description = "Tiny alternative Discord client with a smaller footprint, themes and plugins, multi-profile, and more!";
     homepage = "https://github.com/SpikeHD/Dorion";
-    maintainers = [ maintainers.knarkzel ];
+    maintainers = with maintainers; [knarkzel nyanbinary];
     license = licenses.gpl3Only;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [binaryNativeCode];
     platforms = platforms.linux;
     mainProgram = "dorion";
   };
