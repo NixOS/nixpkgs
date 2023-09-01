@@ -316,6 +316,7 @@ let
         lambdabot
         lhs2tex
         madlang
+        mailctl
         matterhorn
         mueval
         naproche
