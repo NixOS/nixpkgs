@@ -1747,6 +1747,15 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  ayham = {
+    email = "me@ayham.xyz";
+    name = "ayham";
+    github = "ayham";
+    githubId = 56314286;
+    keys = [{
+      fingerprint = "8C38 DD3A 3030 F8AE B8A9  A2BC 783F 6DE2 77DA 7BFF";
+    }];
+  };
   aynish = {
     github = "Chickensoupwithrice";
     githubId = 22575913;
