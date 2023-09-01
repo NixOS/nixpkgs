@@ -1215,6 +1215,8 @@ self: super: with self; {
 
   paddle2onnx = callPackage ../development/python-modules/paddle2onnx { };
 
+  paddleocr = callPackage ../development/python-modules/paddleocr { };
+
   paddlepaddle = callPackage ../development/python-modules/paddlepaddle { };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
@@ -7982,6 +7984,8 @@ self: super: with self; {
 
   pkgutil-resolve-name = callPackage ../development/python-modules/pkgutil-resolve-name { };
 
+  pkg-about = callPackage ../development/python-modules/pkg-about { };
+
   micloud = callPackage ../development/python-modules/micloud { };
 
   mqtt2influxdb = callPackage ../development/python-modules/mqtt2influxdb { };
@@ -8189,6 +8193,8 @@ self: super: with self; {
   pyheck = callPackage ../development/python-modules/pyheck { };
 
   pyheos = callPackage ../development/python-modules/pyheos { };
+
+  pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
 

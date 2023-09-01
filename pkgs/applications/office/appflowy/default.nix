@@ -6,7 +6,6 @@
 , copyDesktopItems
 , makeDesktopItem
 , gtk3
-, openssl_1_1
 , xdg-user-dirs
 , keybinder3
 }:
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    openssl_1_1
     keybinder3
   ];
 
