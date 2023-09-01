@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cmaes";
-  version = "0.9.1";
+  version = "0.10.0";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "CyberAgentAILab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dd5vLT4Q0cI5ts0WgBpjPtOA81exGNjWSNHEiPggYbg=";
+    hash = "sha256-1mXulG/yqNwKQKDFGBh8uxIYOPSsm8+PNp++CSswc50=";
   };
 
   nativeBuildInputs = [ setuptools ];
