@@ -8541,6 +8541,8 @@ self: super: with self; {
 
   process-tests = callPackage ../development/python-modules/process-tests { };
 
+  procmon-parser = callPackage ../development/python-modules/procmon-parser { };
+
   proglog = callPackage ../development/python-modules/proglog { };
 
   progressbar2 = callPackage ../development/python-modules/progressbar2 { };
