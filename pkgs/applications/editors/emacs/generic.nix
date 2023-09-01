@@ -32,6 +32,7 @@
 , libXaw
 , libXcursor
 , libXft
+, libXi
 , libXpm
 , libgccjit
 , libjpeg
@@ -274,6 +275,8 @@ mkDerivation (finalAttrs: {
     libpng
     librsvg
     libtiff
+  ] ++ lib.optionals withXinput2 [
+    libXi
   ] ++ lib.optionals withXwidgets [
     webkitgtk
   ] ++ lib.optionals stdenv.isDarwin [
