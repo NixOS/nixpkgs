@@ -1,16 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 , setuptools-scm
 , tempora
-, six
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-logging";
   version = "3.2.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jaraco.logging";
@@ -29,7 +31,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     tempora
-    six
   ];
 
   # test no longer packaged with pypi
