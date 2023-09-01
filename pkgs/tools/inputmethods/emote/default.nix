@@ -29,9 +29,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    dbus-python
+    dbus-python.out # don't propagate dev output
     manimpango
-    pygobject3 # not listed in setup.py
+    pygobject3.out # not listed in setup.py, don't propagate dev output
     setproctitle
   ];
 
