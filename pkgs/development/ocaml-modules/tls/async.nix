@@ -3,14 +3,9 @@
 buildDunePackage rec {
   pname = "tls-async";
 
-  inherit (tls) src meta version;
+  inherit (tls) src version;
 
-  minimalOCamlVersion = "4.13";
-
-  patches = [
-    # Remove when TLS gets updated to v0.17.1.
-    ./janestreet-0.16.patch
-  ];
+  minimalOCamlVersion = "4.14";
 
   doCheck = true;
 
@@ -22,4 +17,8 @@ buildDunePackage rec {
     mirage-crypto-rng-async
     tls
   ];
+
+  meta = tls.meta // {
+    description = "Transport Layer Security purely in OCaml, Async layer";
+  };
 }
