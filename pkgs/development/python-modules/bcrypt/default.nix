@@ -5,10 +5,8 @@
 , rustc
 , setuptools
 , setuptools-rust
-, isPyPy
 , fetchPypi
 , pythonOlder
-, cffi
 , pytestCheckHook
 , libiconv
 , stdenv
@@ -50,14 +48,6 @@ buildPythonPackage rec {
 
   # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
   buildInputs = lib.optional stdenv.isDarwin libiconv;
-
-  propagatedBuildInputs = [
-    cffi
-  ];
-
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
