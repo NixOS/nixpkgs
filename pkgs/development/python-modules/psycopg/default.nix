@@ -73,9 +73,15 @@ let
 
     nativeBuildInputs = [
       cython_3
+      # needed to find pg_config with strictDeps
+      # TODO: switch to pkg-config upstream
       postgresql
       setuptools
       tomli
+    ];
+
+    buildInputs = [
+      postgresql
     ];
 
     # tested in psycopg
@@ -172,7 +178,7 @@ buildPythonPackage rec {
     pytestCheckHook
     postgresql
   ]
-  ++ lib.optional (stdenv.isLinux) postgresqlTestHook
+  ++ lib.optional stdenv.isLinux postgresqlTestHook
   ++ passthru.optional-dependencies.c
   ++ passthru.optional-dependencies.pool;
 
@@ -184,7 +190,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     cd ..
-  '' + lib.optionalString (stdenv.isLinux) ''
+  '' + lib.optionalString stdenv.isLinux ''
     export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
   '';
 
