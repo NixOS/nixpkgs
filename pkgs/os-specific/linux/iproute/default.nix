@@ -27,9 +27,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure = ''
+  postPatch = ''
     # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
+
+    substituteInPlace Makefile \
+      --replace "CC := gcc" "CC ?= $CC"
   '';
 
   outputs = [ "out" "dev" ];
