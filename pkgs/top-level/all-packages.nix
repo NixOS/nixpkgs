@@ -31539,6 +31539,8 @@ with pkgs;
 
   eos-installer = callPackage ../applications/misc/eos-installer { };
 
+  eparakstitajs3 = callPackage ../applications/misc/eparakstitajs3 { };
+
   latvia-eid-middleware = callPackage ../tools/misc/latvia-eid-middleware { };
 
   epdfview = callPackage ../applications/misc/epdfview { };
