@@ -1,5 +1,4 @@
-{ cffi
-, six
+{ six
 , enum34
 , hypothesis
 , pytest
@@ -27,13 +26,8 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  propagatedBuildInputs = [ cffi six argon2-cffi-bindings ]
+  propagatedBuildInputs = [ six argon2-cffi-bindings ]
     ++ lib.optional (!isPy3k) enum34;
-
-  propagatedNativeBuildInputs = [
-    argon2-cffi-bindings
-    cffi
-  ];
 
   ARGON2_CFFI_USE_SSE2 = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) "0";
 
@@ -41,6 +35,8 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest tests
   '';
+
+  pythonImportsCheck = [ "argon2" ];
 
   meta = with lib; {
     description = "Secure Password Hashes for Python";

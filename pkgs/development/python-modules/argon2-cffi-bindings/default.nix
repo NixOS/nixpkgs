@@ -16,6 +16,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    cffi
   ];
 
   propagatedBuildInputs = [
