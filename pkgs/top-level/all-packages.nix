@@ -3551,6 +3551,8 @@ with pkgs;
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
+  btrfsmaintenance = callPackage ../tools/misc/btrfsmaintenance { };
+
   bucklespring = bucklespring-x11;
   bucklespring-libinput = callPackage ../applications/audio/bucklespring { };
   bucklespring-x11 = callPackage ../applications/audio/bucklespring { legacy = true; };
