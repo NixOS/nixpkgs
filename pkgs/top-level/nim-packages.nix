@@ -96,6 +96,8 @@ lib.makeScope newScope (self:
       inherit (pkgs) rocksdb;
     };
 
+    safeseq = callPackage ../development/nim-packages/safeseq { };
+
     safeset = callPackage ../development/nim-packages/safeset { };
 
     sass = callPackage ../development/nim-packages/sass { };
