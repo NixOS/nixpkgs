@@ -5,6 +5,7 @@
 , lib
 , openssl
 , zstd
+, krb5
 }:
 
 with self;
@@ -426,6 +427,13 @@ with self;
     '';
   };
 
+  hex_encode = janePackage {
+    pname = "hex_encode";
+    hash = "sha256-jnsf5T1D1++AUdrato/NO3gTVXu14klXozHFIG9HH/o=";
+    meta.description = "Hexadecimal encoding library";
+    propagatedBuildInputs = [ core ppx_jane ounit ];
+  };
+
   higher_kinded = janePackage {
     pname = "higher_kinded";
     hash = "sha256-aCpYc7f4mrPsGp038YabEyw72cA6GbCKsok+5Hej5P0=";
@@ -523,6 +531,13 @@ with self;
     hash = "sha256-GviY+zYza7UNYOlAnfAz0aH4LH2B5xA+7iELLuZLgQQ=";
     meta.description = "Compile-time configuration for Jane Street libraries";
     buildInputs = [ dune-configurator ppx_assert stdio ];
+  };
+
+  krb = janePackage {
+    pname = "krb";
+    hash = "sha256-+XwYKwpl668fZ23YEbL1wW9PlaIIjbP/hHwNanf3dAY=";
+    meta.description = "A library for using Kerberos for both Rpc and Tcp communication";
+    propagatedBuildInputs = [ async base core env_config hex_encode ppx_jane protocol_version_header username_kernel dune-configurator krb5 ];
   };
 
   lru_cache = janePackage {
@@ -1182,6 +1197,13 @@ with self;
     hash = "sha256-iJnIjWZYCTaH29x7nFviCrbnTmHRChZkkj6E5sgi4mU=";
     meta.description = "Typerep is a library for runtime types";
     propagatedBuildInputs = [ base ];
+  };
+
+  username_kernel = janePackage {
+    pname = "username_kernel";
+    hash = "sha256-UvFL/M9OsD+SOs9MYMKiKzZilLJHzriop6SPA4bOhZQ=";
+    meta.description = "An identifier for a user";
+    propagatedBuildInputs = [ core ppx_jane ];
   };
 
   variantslib = janePackage {
