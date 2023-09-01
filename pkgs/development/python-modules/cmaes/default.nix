@@ -11,8 +11,9 @@
 buildPythonPackage rec {
   pname = "cmaes";
   version = "0.10.0";
-  disabled = pythonOlder "3.7";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CyberAgentAILab";
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for CMA evolution strategy";
     homepage = "https://github.com/CyberAgentAILab/cmaes";
+    changelog = "https://github.com/CyberAgentAILab/cmaes/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = [ maintainers.bcdarwin ];
   };
