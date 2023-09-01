@@ -5599,6 +5599,8 @@ with pkgs;
 
   has = callPackage ../applications/misc/has { };
 
+  hax11 = callPackage ../games/hax11 { };
+
   hdate = callPackage ../applications/misc/hdate { };
 
   headache = callPackage ../development/tools/headache { };
