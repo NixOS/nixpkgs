@@ -37,7 +37,7 @@
 }:
 
 let
-self = buildPythonPackage rec {
+  self = buildPythonPackage rec {
     pname = "orange3";
     version = "3.35.0";
     format = "pyproject";
@@ -153,12 +153,14 @@ self = buildPythonPackage rec {
       });
     };
 
-    meta = {
-      mainProgram = "orange-canvas";
+    meta = with lib; {
       description = "Data mining and visualization toolbox for novice and expert alike";
       homepage = "https://orangedatamining.com/";
-      license = [ lib.licenses.gpl3Plus ];
-      maintainers = [ lib.maintainers.lucasew ];
+      changelog = "https://github.com/biolab/orange3/blob/${version}/CHANGELOG.md";
+      license = with licenses; [ gpl3Plus ];
+      maintainers = with maintainers; [ lucasew ];
+      mainProgram = "orange-canvas";
     };
   };
-in self
+in
+self
