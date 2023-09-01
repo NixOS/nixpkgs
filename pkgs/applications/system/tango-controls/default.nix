@@ -13,25 +13,19 @@
 , stdenv
 , systemd
 , zeromq
+, omniorb
 , zlib
 }:
 let
-  # omniorb is in nixpkgs, but tango doesn't support the latest version
-  omniorb_4_2 = stdenv.mkDerivation rec {
-    pname = "omniorb";
+  # tango doesn't support the latest version of omniorb
+  omniorb_4_2 = omniorb.overrideAttrs (self: super: rec {
     version = "4.2.5";
 
     src = fetchurl {
       url = "mirror://sourceforge/project/omniorb/omniORB/omniORB-${version}/omniORB-${version}.tar.bz2";
       sha256 = "1fvkw3pn9i2312n4k3d4s7892m91jynl8g1v2z0j8k1gzfczjp7h";
     };
-
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ python3 ];
-
-    enableParallelBuilding = true;
-    hardeningDisable = [ "format" ];
-  };
+  });
 in
 stdenv.mkDerivation rec {
   pname = "tango-controls";
@@ -55,7 +49,7 @@ stdenv.mkDerivation rec {
     doxygen
     # needed for the docs
     graphviz
-  ] ++ lib.optional (!stdenv.isDarwin) systemd;
+  ] ++ lib.optional stdenv.isLinux systemd;
   propagatedBuildInputs = [ omniorb_4_2 cppzmq zeromq libjpeg_turbo ];
 
   cmakeFlags = [
@@ -70,7 +64,7 @@ stdenv.mkDerivation rec {
 
   # To build proper systemd services for Tango, we need a way to tell when the DB service is started.
   # This patch adds systemd support for this.
-  patches = lib.optional (!stdenv.isDarwin) ./sd_notify_cmake.patch;
+  patches = lib.optional stdenv.isLinux ./sd_notify_cmake.patch;
 
   postPatch = ''
     sed -i -e 's#Requires: libzmq#Requires: libzmq cppzmq#' -e 's#libdir=.*#libdir=@CMAKE_INSTALL_FULL_LIBDIR@#' lib/cpp/tango.pc.cmake
@@ -91,7 +85,7 @@ stdenv.mkDerivation rec {
       Tango Controls is a toolkit for connecting hardware and software together. It is a mature software which is used by tens of sites to run highly complicated accelerator complexes and experiments 24 hours a day. It is free and Open Source. It is ideal for small and large installations. It provides full support for 3 programming languages - C++, Python and Java.
     '';
     homepage = "https://www.tango-controls.org";
-    changelog = "https://gitlab.com/tango-controls/cppTango/-/blob/main/RELEASE_NOTES.md";
+    changelog = "https://gitlab.com/tango-controls/cppTango/-/blob/${version}/RELEASE_NOTES.md";
     downloadPage = "https://gitlab.com/tango-controls/TangoSourceDistribution/-/releases";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pmiddend ];
