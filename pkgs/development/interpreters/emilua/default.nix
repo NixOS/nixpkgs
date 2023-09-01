@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   cd ..
   '';
 
-  meta = with lib; = {
+  meta = with lib; {
     description = "Lua execution engine";
     homepage = "https://gitlab.com/emilua/emilua";
     license = licenses.boost;
