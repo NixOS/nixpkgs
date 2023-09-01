@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256:06wgvfbc6nh5c7yili47h2gzl0ykcwnvyizy499kb6gsplflf9gh";
+    sha256 = "sha256:029rlkh7vh8hxg8ygpspxb9hvw5q97m460zbxwb7xnx1jnq8msh4";
   };
 
   nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]; # TODO: buildable on more platforms?
-    maintainers = with maintainers; [ aristid thoughtpolice athas ];
+    maintainers = with maintainers; [ aristid thoughtpolice athas alexfmpe ];
   };
 }

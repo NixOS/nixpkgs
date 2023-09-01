@@ -1,16 +1,16 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 3d7fc79..8ce72b9 100644
+index 170ce7a..063a137 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -229,11 +229,6 @@ else()
+@@ -332,11 +332,6 @@ else()
          if (NOT LSBLK)
              message(FATAL_ERROR "Unable to locate lsblk (used for disk enumeration)")
          endif()
 -
--        execute_process(COMMAND "${LSBLK}" "--json" RESULT_VARIABLE ret)
+-        execute_process(COMMAND "${LSBLK}" "--json" OUTPUT_QUIET RESULT_VARIABLE ret)
 -        if (ret EQUAL "1")
 -            message(FATAL_ERROR "util-linux package too old. lsblk does not support --json (used for disk enumeration)")
 -        endif()
      endif()
- 
+
      configure_file(
