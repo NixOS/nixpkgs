@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       "--enable-capabilities"
       "--enable-delayacct"
     ]
-    ++ lib.optional sensorsSupport "--with-sensors"
+    ++ lib.optional sensorsSupport "--enable-sensors"
   ;
 
   postFixup =

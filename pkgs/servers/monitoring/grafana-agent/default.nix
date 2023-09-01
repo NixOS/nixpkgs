@@ -14,21 +14,21 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.35.4";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-3pUKqmqnRm3/e/fhAV5cq16wcK/f7KWb3aoFbPXCC3o=";
+    hash = "sha256-YUEla8VvLi0H0Utu0vQNqSbZH8C9BeF8BGWRb2R61P8=";
   };
 
-  vendorHash = "sha256-vzrp20Mg6AA0h3+5+qbKRa7nhx/hgiIHG6RNXLATpHE=";
+  vendorHash = "sha256-Si7qZYq23XlWFPp+C5qIJw7n0Zk/Rx+yo643m+gSRcg=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/web/ui/yarn.lock";
-    hash = "sha256-xJEPubIDjlZQL70UGha1MHbeek6KFPaxZGb5IRgMlTA=";
+    hash = "sha256-sUFxuliLupGEJY1xFA2V4W2gwHxtUgst3Vrywh1owAo=";
   };
 
   ldflags = let
@@ -69,6 +69,12 @@ buildGoModule rec {
     yarn --offline run build
     popd
   '';
+
+  # do not pass preBuild to go-modules.drv, as it would otherwise fail to build.
+  # but even if it would work, it simply isn't needed in that scope.
+  overrideModAttrs = (_: {
+    preBuild = null;
+  });
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
