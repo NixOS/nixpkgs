@@ -1,38 +1,44 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
+, cerberus
 , fetchFromGitHub
 , fetchpatch
-, lib
-, cerberus
+, pythonOlder
 , pyyaml
 , ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "riscv-config";
-  version = "3.5.2";
+  version = "3.13.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-K7W6yyqy/2c4WHyOojuvw2P/v7bND5K6WFfTujkofBw=";
+    hash = "sha256-SnUt6bsTEC7abdQr0nWyNOAJbW64B1K3yy1McfkdxAc=";
   };
 
-  patches = [
-    # Remove when updating to v3.8.0+
-    (fetchpatch {
-      name = "remove-dangling-pip-import.patch";
-      url = "https://github.com/riscv-software-src/riscv-config/commit/f75e7e13fe600b71254b0391be015ec533d3c3ef.patch";
-      hash = "sha256-oVRynBIJevq3UzlMDRh2rVuBJZoEwEYhDma3Bb/QV2E=";
-    })
+  propagatedBuildInputs = [
+    cerberus
+    pyyaml
+    ruamel-yaml
   ];
 
-  propagatedBuildInputs = [ cerberus pyyaml ruamel-yaml ];
+  # Module has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "riscv_config"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/riscv/riscv-config";
     description = "RISC-V configuration validator";
+    homepage = "https://github.com/riscv/riscv-config";
+    changelog = "https://github.com/riscv-software-src/riscv-config/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
   };
