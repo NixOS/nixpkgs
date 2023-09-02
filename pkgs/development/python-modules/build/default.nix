@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "build";
-  version = "0.10.0";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
-    rev = version;
-    hash = "sha256-kXFrfTb7+68EV+gSENL81IFSR+ue7Fl6R2gsuFFBJhI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ZFvS/46d7xLQ0E01crGlcAa8S2LflRXjKhhp3XTD/ZE=";
   };
 
   nativeBuildInputs = [
