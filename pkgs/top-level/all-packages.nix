@@ -41465,6 +41465,8 @@ with pkgs;
 
   vault-medusa = callPackage ../tools/security/vault-medusa { };
 
+  vault-ssh-helper = callPackage ../tools/security/vault-ssh-helper { };
+
   vault-ssh-plus = callPackage ../tools/security/vault-ssh-plus { };
 
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
