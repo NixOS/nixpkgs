@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "blspy";
-  version = "1.0.16";
+  version = "2.0.2";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XABdS6CCUJpZ9N1Vra078V0HoDU32u1l3yz96ZKHwFc=";
+    hash = "sha256-mxLWhfPBBNP+D682GPa4JCctExuOo4QxkK1nBhhzZ3U=";
   };
 
   patches = [
@@ -26,11 +26,11 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./dont_fetch_dependencies.patch;
       pybind11_src = pybind11.src;
-      relic_src = fetchFromGitHub {
-        owner = "Chia-Network";
-        repo = "relic";
-        rev = "215c69966cb78b255995f0ee9c86bbbb41c3c42b"; # pinned by blspy
-        hash = "sha256-wivK18Cp7BMZJvrYxJgSHInRZgFgsgSzd0YIy5IWoYA=";
+      blst_src = fetchFromGitHub {
+        owner = "supranational";
+        repo = "blst";
+        rev = "6b837a0921cf41e501faaee1976a4035ae29d893"; # pinned by blspy
+        hash = "sha256-6iNpxaMRy438XoC0wk/c/tInNg1I0VuyGFV9sUFk5sc=";
       };
       sodium_src = fetchFromGitHub {
         owner = "AmineKhaldi";
@@ -42,8 +42,8 @@ buildPythonPackage rec {
       catch2_src = fetchFromGitHub {
         owner = "catchorg";
         repo = "Catch2";
-        rev = "v3.0.0-preview5"; # pinned by blspy
-        hash = "sha256-IQ1yGZo3nKHTqScUoq3i3Njxqvk7uW8hQ3GT0/SxGaw=";
+        rev = "v3.3.2"; # pinned by blspy
+        hash = "sha256-t/4iCrzPeDZNNlgibVqx5rhe+d3lXwm1GmBMDDId0VQ=";
       };
     })
   ];

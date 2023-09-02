@@ -1,41 +1,43 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 7922652..d85b058 100644
+index cda04d1..9d42fc9 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -31,29 +31,18 @@ set(CMAKE_MODULE_PATH
+@@ -38,31 +38,16 @@ set(CMAKE_MODULE_PATH
  include(FetchContent)
  
  FetchContent_Declare(Sodium
 -  GIT_REPOSITORY https://github.com/AmineKhaldi/libsodium-cmake.git
+-
 -  # Latest commit at the moment this was added here
 -  # Anchored to libsodium v1.0.18
 -  GIT_TAG f73a3fe1afdc4e37ac5fe0ddd401bf521f6bba65
-+  URL /nix/store/2nj48a8vb7rzxhwaigdcpa0yyax7yrv7-source
++  URL @sodium_src@
  )
  set(SODIUM_PCH "on" CACHE STRING "")
  set(SODIUM_DISABLE_TESTS "on" CACHE STRING "")
  set(SODIUM_CHIA_MINIMAL "on" CACHE STRING "")
  FetchContent_MakeAvailable(Sodium)
  
--if (DEFINED ENV{RELIC_MAIN})
--  set(RELIC_GIT_TAG "origin/main")
+-if (DEFINED ENV{BLST_MAIN})
+-  set(BLST_GIT_TAG "origin/master")
 -else ()
--  # This is currently anchored to upstream aecdcae7956f542fbee2392c1f0feb0a8ac41dc5
--  set(RELIC_GIT_TAG "215c69966cb78b255995f0ee9c86bbbb41c3c42b")
+-  # This is currently anchored to upstream 6b837a0921cf41e501faaee1976a4035ae29d893 dated 2023-06-16
+-  set(BLST_GIT_TAG "6b837a0921cf41e501faaee1976a4035ae29d893")
 -endif ()
+-set(BLST_REPOSITORY "https://github.com/supranational/blst.git")
 -
- message(STATUS "Relic will be built from: ${RELIC_GIT_TAG}")
- 
+-message(STATUS "blst will be built from: ${BLST_GIT_TAG} and repository ${BLST_REPOSITORY}")
+-
  FetchContent_Declare(
-   relic
--  GIT_REPOSITORY https://github.com/Chia-Network/relic.git
--  GIT_TAG ${RELIC_GIT_TAG}
-+  SOURCE_DIR /nix/store/6r9v1cmmy535q2y0pk0bkjh3ppyzb2ch-source
+   blst
+-  GIT_REPOSITORY ${BLST_REPOSITORY}
+-  GIT_TAG ${BLST_GIT_TAG}
++  URL @blst_src@
  )
+ FetchContent_MakeAvailable(blst)
  
- # Relic related options
 diff --git a/python-bindings/CMakeLists.txt b/python-bindings/CMakeLists.txt
-index 2e331c3..d9aa940 100644
+index 0e77050..3cb6187 100644
 --- a/python-bindings/CMakeLists.txt
 +++ b/python-bindings/CMakeLists.txt
 @@ -1,8 +1,7 @@
@@ -43,22 +45,22 @@ index 2e331c3..d9aa940 100644
  FetchContent_Declare(
    pybind11
 -  GIT_REPOSITORY https://github.com/pybind/pybind11.git
--  GIT_TAG        v2.10.0
-+  SOURCE_DIR @pybind11_src@
+-  GIT_TAG v2.10.0
++  URL @pybind11_src@
  )
- FetchContent_MakeAvailable(pybind11 relic)
+ FetchContent_MakeAvailable(pybind11)
  
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 3164f7f..15a955e 100644
+index 5d35c78..34192d5 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -37,8 +37,7 @@ install(FILES $<TARGET_FILE:bls> DESTINATION lib)
+@@ -60,8 +60,7 @@ install(FILES $<TARGET_FILE:bls> DESTINATION lib)
  if(BUILD_BLS_TESTS)
    FetchContent_Declare(
      Catch2
 -    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
--    GIT_TAG        v3.0.0-preview5
+-    GIT_TAG v3.3.2
 +    URL @catch2_src@
    )
    FetchContent_MakeAvailable(Catch2)
-   add_executable(runtest test.cpp)
+   find_package(Threads REQUIRED)
