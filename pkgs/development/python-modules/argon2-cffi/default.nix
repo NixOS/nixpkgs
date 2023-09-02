@@ -1,5 +1,5 @@
 { hypothesis
-, pytest
+, pytestCheckHook
 , buildPythonPackage
 , fetchPypi
 , lib
@@ -24,10 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ argon2-cffi-bindings ];
 
-  nativeCheckInputs = [ hypothesis pytest ];
-  checkPhase = ''
-    pytest tests
-  '';
+  nativeCheckInputs = [ hypothesis pytestCheckHook ];
 
   pythonImportsCheck = [ "argon2" ];
 
