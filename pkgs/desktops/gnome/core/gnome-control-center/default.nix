@@ -49,6 +49,7 @@
 , polkit
 , python3
 , samba
+, setxkbmap
 , shadow
 , shared-mime-info
 , sound-theme-freedesktop
@@ -61,15 +62,16 @@
 , gnome-user-share
 , gnome-remote-desktop
 , wrapGAppsHook
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "45.beta";
+  version = "45.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DGwHNKAbNK+RSMzx28xalZ88+bsEpTvTB6nykORe8p4=";
+    sha256 = "sha256-kiyRn4VMZZcXelwXK5Q5zLIB9OYerMVD4GGJmPuo63M=";
   };
 
   patches = [
@@ -137,9 +139,32 @@ stdenv.mkDerivation rec {
     upower
   ];
 
+  nativeCheckInputs = [
+    python3.pkgs.python-dbusmock
+    setxkbmap
+    xvfb-run
+  ];
+
+  doCheck = true;
+
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    testEnvironment=(
+      # Basically same as https://github.com/NixOS/nixpkgs/pull/141299
+      "ADW_DISABLE_PORTAL=1"
+      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+    )
+
+    env "''${testEnvironment[@]}" xvfb-run \
+      meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
   postInstall = ''
