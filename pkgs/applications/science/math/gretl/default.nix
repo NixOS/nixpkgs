@@ -13,6 +13,7 @@
 , mpfr
 , openblas
 , readline
+, Accelerate
 , pkg-config
 }:
 
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     openblas
     readline
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Accelerate
   ];
 
   nativeBuildInputs = [
