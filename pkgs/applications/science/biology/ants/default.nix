@@ -8,14 +8,14 @@
 , Cocoa
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ANTs";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "ANTsX";
     repo = "ANTs";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-rSibcsprhMC1qsuZN8ou32QPLf8n62BiDzpnTRWRx0Q=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.unix;
   };
-}
+})
