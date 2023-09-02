@@ -3,23 +3,35 @@
 , cmake
 , fetchFromGitHub
 , fixDarwinDylibNames
+, static ? stdenv.hostPlatform.isStatic
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "capstone";
-  version = "4.0.2";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "aquynh";
     repo = "capstone";
-    rev = version;
-    sha256 = "sha256-XMwQ7UaPC8YYu4yxsE4bbR3leYPfBHu5iixSLz05r3g=";
+    rev = finalAttrs.finalPackage.version;
+    sha256 = "sha256-kKmL5sae9ruWGu1gas1mel9qM52qQOD+zLj8cRE3isg=";
   };
+
+  # can remove once upstream get their own version right
+  postPatch = ''
+    sed -E -i 's/^(\s+VERSION )[0-9.]+/\1${finalAttrs.version}/' CMakeLists.txt
+  '';
 
   nativeBuildInputs = [
     cmake
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+    "-DCAPSTONE_BUILD_CSTOOL=ON"
+    "-DCAPSTONE_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ];
 
   doCheck = true;
@@ -32,4 +44,4 @@ stdenv.mkDerivation rec {
     mainProgram = "cstool";
     platforms   = lib.platforms.unix;
   };
-}
+})

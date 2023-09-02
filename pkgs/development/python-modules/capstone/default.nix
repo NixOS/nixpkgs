@@ -17,6 +17,10 @@ buildPythonPackage rec {
     ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
     ln -s ${capstone}/lib/libcapstone.a prebuilt/
     substituteInPlace setup.py --replace manylinux1 manylinux2014
+
+    # Doesn't actually need static lib and it's painful to get cmake
+    # to build both at the same time - stop it insisting on finding this
+    substituteInPlace setup.py --replace 'STATIC_LIBRARY_FILE = ' 'STATIC_LIBRARY_FILE = None #'
   '';
 
   # aarch64 only available from MacOS SDK 11 onwards, so fix the version tag.
