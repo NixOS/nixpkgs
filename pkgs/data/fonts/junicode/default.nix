@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "junicode";
-  version = "2.002";
+  version = "2.003";
 
   src = fetchzip {
     url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
-    hash = "sha256-AHy4uT0LEof69+ECoFlKmALPTTPbvRNjmFD240koWAE=";
+    hash = "sha256-PD4rAZKTLVVblrQZgWKuuSF693nv2Od/uj1IOav+8/0=";
   };
 
   outputs = [ "out" "doc" ];
@@ -14,11 +14,11 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dt $out/share/fonts/truetype TTF/*.ttf VAR/*.ttf
-    install -Dt $out/share/fonts/opentype OTF/*.otf
-    install -Dt $out/share/fonts/woff2 WOFF2/*.woff2
+    install -Dm 444 -t $out/share/fonts/truetype TTF/*.ttf VAR/*.ttf
+    install -Dm 444 -t $out/share/fonts/opentype OTF/*.otf
+    install -Dm 444 -t $out/share/fonts/woff2 WOFF2/*.woff2
 
-    install -Dt $doc/share/doc/${pname}-${version} docs/*.pdf
+    install -Dm 444 -t $doc/share/doc/${pname}-${version} docs/*.pdf
 
     runHook postInstall
   '';
