@@ -282,6 +282,15 @@ in {
       };
     };
 
+    confinement = mkOption {
+      type = types.bool;
+      default = false;
+      description = mdDoc ''
+        Enable the nixos systemd.services.cryptpad.confinement setting, including the necessary
+        extra bind mounts.
+      '';
+    };
+
     config = mkOption {
       description = mdDoc ''
         cryptpad backend settings.
@@ -387,6 +396,24 @@ in {
         };
       };
     }
+    (mkIf cfg.confinement {
+      systemd.services.cryptpad = {
+        serviceConfig.BindReadOnlyPaths = [
+          conf_file
+          # apparently needs proc for workers management
+          "/proc"
+          "/dev/urandom"
+        ] ++ (if ! cfg.config.blockDailyCheck then [
+          "/etc/resolv.conf"
+          "/etc/hosts"
+        ] else []);
+        confinement = {
+          enable = true;
+          binSh = null;
+          mode = "chroot-only";
+        };
+      };
+    })
     (mkIf cfg.nginx.enable {
       assertions = [
         { assertion = nginx.enable;
