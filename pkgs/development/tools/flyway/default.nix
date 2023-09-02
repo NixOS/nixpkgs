@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, jre_headless, makeWrapper }:
-stdenv.mkDerivation rec{
+{ lib, stdenv, fetchurl, jre_headless, makeWrapper, testers }:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";
   version = "9.21.2";
   src = fetchurl {
-    url = "mirror://maven/org/flywaydb/flyway-commandline/${version}/flyway-commandline-${version}.tar.gz";
+    url = "mirror://maven/org/flywaydb/flyway-commandline/${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-7MIjXF1qgEye2Z/cyeuSFkEmXT8AxkwYfw+/UevsPFg=";
   };
   nativeBuildInputs = [ makeWrapper ];
@@ -19,6 +20,9 @@ stdenv.mkDerivation rec{
       --add-flags "org.flywaydb.commandline.Main" \
       --add-flags "-jarDirs='$out/share/flyway/jars'"
   '';
+  passthru.tests = {
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
   meta = with lib; {
     description = "Evolve your Database Schema easily and reliably across all your instances";
     longDescription = ''
@@ -35,4 +39,4 @@ stdenv.mkDerivation rec{
     platforms = platforms.unix;
     maintainers = [ maintainers.cmcdragonkai ];
   };
-}
+})
