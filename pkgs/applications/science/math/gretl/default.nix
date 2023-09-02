@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, curl, fftw, gmp, gnuplot, gtk3, gtksourceview3, json-glib
-, lapack, libxml2, mpfr, openblas, pkg-config, readline }:
+{ lib
+, stdenv
+, fetchurl
+, curl
+, fftw
+, gmp
+, gnuplot
+, gtk3
+, gtksourceview3
+, json-glib
+, lapack
+, libxml2
+, mpfr
+, openblas
+, readline
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "gretl";
@@ -7,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/gretl/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Hf025JjFxde43TN/1m9PeA1uHqxKTZMI8+1qf3XJLGs=";
+    hash = "sha256-Hf025JjFxde43TN/1m9PeA1uHqxKTZMI8+1qf3XJLGs=";
   };
 
   buildInputs = [
@@ -25,7 +40,9 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   enableParallelBuilding = true;
   # Missing install depends:
@@ -33,15 +50,15 @@ stdenv.mkDerivation rec {
   #  make[1]: *** [Makefile:73: install_datafiles] Error 1
   enableParallelInstalling = false;
 
-  meta = with lib; {
+  meta = {
     description = "A software package for econometric analysis";
+    homepage = "https://gretl.sourceforge.net";
+    license = lib.licenses.gpl3;
     longDescription = ''
       gretl is a cross-platform software package for econometric analysis,
       written in the C programming language.
     '';
-    homepage = "https://gretl.sourceforge.net";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ dmrauh ];
-    platforms = with platforms; all;
+    maintainers = with lib.maintainers; [ dmrauh ];
+    platforms = lib.platforms.all;
   };
 }
