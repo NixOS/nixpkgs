@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
-    changelog = "https://git.enlightenment.org/legacy/imlib2.git/plain/ChangeLog?h=v${version}";
+    changelog = "https://git.enlightenment.org/old/legacy-imlib2/raw/tag/v${finalAttrs.version}/ChangeLog";
     license = licenses.imlib2;
     pkgConfigModules = [ "imlib2" ];
     platforms = platforms.unix;
