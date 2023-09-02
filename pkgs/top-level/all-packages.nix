@@ -5672,6 +5672,8 @@ with pkgs;
     wlroots = wlroots_0_15;
   };
 
+  hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
+
   hysteria = callPackage ../tools/networking/hysteria { };
 
   hyx = callPackage ../tools/text/hyx { };
