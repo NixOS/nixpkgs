@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
-  version = "1.9.1";
+  version = "1.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DLB2mBjHPVT2Fg2Kr0WUDuu5nqBCbdu525wAD3ERKV8=";
+    hash = "sha256-Co9NbSaemkFND06NIyytICOo/bcdIjKU5dOliBdKTkk=";
   };
 
   # The project can build both an optimized cython version and an unoptimized
