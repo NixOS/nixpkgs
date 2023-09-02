@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , meson
 , ninja
 , sysprof
@@ -18,7 +19,6 @@ stdenv.mkDerivation rec {
     "-Dsysprofd=none"
     "-Dgtk=false"
     "-Dlibsysprof=false"
-    "-Dlibunwind=false"
     "-Dhelp=false"
     "-Dtools=false"
     "-Dtests=false"
