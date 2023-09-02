@@ -140,14 +140,9 @@ buildPythonPackage rec {
     # twisted.python.runtime.platform.supportsINotify() == False
     substituteInPlace src/twisted/python/_inotify.py --replace \
       "ctypes.util.find_library(\"c\")" "'${stdenv.cc.libc}/lib/libc.so.6'"
-  '' + lib.optionalString (stdenv.isAarch64 && stdenv.isDarwin) ''
-    echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
-    echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
-
-    echo 'PosixReactorBaseTests.test_removeAllSkipsInternalReaders.skip = "Fails due to unclosed event loop"' >> src/twisted/internet/test/test_posixbase.py
-    echo 'PosixReactorBaseTests.test_wakerIsInternalReader.skip = "Fails due to unclosed event loop"' >> src/twisted/internet/test/test_posixbase.py
-
-    echo 'TCPPortTests.test_connectionLostFailed.skip = "Fails due to unclosed event loop"' >> src/twisted/internet/test/test_posixbase.py
+  '' + lib.optionalString stdenv.isDarwin ''
+    echo 'ProcessTestsBuilder_AsyncioSelectorReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
+    echo 'ProcessTestsBuilder_SelectReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
   '';
 
   # Generate Twisted's plug-in cache. Twisted users must do it as well. See
@@ -171,7 +166,7 @@ buildPythonPackage rec {
     export SOURCE_DATE_EPOCH=315532800
     export PATH=$out/bin:$PATH
     # race conditions when running in paralell
-    ${python.interpreter} -m twisted.trial twisted
+    ${python.interpreter} -m twisted.trial -j1 twisted
   '';
 
   passthru = {
