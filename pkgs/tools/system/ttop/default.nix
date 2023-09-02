@@ -14,6 +14,10 @@ nimPackages.buildNimPackage (finalAttrs: {
 
   buildInputs = with nimPackages; [ asciigraph illwill jsony parsetoml zippy ];
 
+  nimFlags = [
+    "-d:NimblePkgVersion=${finalAttrs.version}"
+  ];
+
   meta = with lib;
     finalAttrs.src.meta // {
       description = "Top-like system monitoring tool";
