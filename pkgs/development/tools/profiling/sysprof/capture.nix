@@ -1,4 +1,6 @@
-{ lib, stdenv
+{ stdenv
+, lib
+, libunwind
 , meson
 , ninja
 , sysprof
@@ -14,11 +16,14 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
+  buildInputs = [
+    libunwind
+  ];
+
   mesonFlags = [
     "-Dsysprofd=none"
     "-Dgtk=false"
     "-Dlibsysprof=false"
-    "-Dlibunwind=false"
     "-Dhelp=false"
     "-Dtools=false"
     "-Dtests=false"
