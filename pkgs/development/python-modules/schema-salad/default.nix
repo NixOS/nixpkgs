@@ -1,29 +1,30 @@
 { lib
 , black
 , buildPythonPackage
-, fetchPypi
-, setuptools-scm
 , cachecontrol
+, fetchPypi
+, importlib-resources
 , lockfile
 , mistune
 , mypy
+, pytestCheckHook
+, pythonOlder
 , rdflib
 , ruamel-yaml
 , setuptools
-, pytestCheckHook
-, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.4.20230606143604";
+  version = "8.4.20230808163024";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8Zo9ZhS0r+zsk7nHEh0x7gHYwaoWmyctQYRMph09mvY=";
+    hash = "sha256-ai4vv6EFX4yTR8sgRspiG+M8a8oa83LIlJPGX7q+Kd0=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cachecontrol
+    importlib-resources
     lockfile
     mistune
     mypy
