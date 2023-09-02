@@ -2864,6 +2864,21 @@ let
         };
       };
 
+      qufiwefefwoyn.kanagawa = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "Kanagawa";
+          publisher = "qufiwefefwoyn";
+          version = "1.5.1";
+          sha256 = "sha256-fRsrlk25fTr9pL9prJRJ9BJ5HWc1pRRXL5nYCn/tsV4=";
+        };
+        meta = {
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=qufiwefefwoyn.kanagawa";
+          description = "Port of the Kanagawa.nvim - dark theme inspired by the colors of the famous painting by Katsushika Hokusai.";
+          homepage = "https://github.com/barklan/kanagawa.vscode";
+          license = lib.licenses.mit;
+        };
+      };
+
       rebornix.ruby = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ruby";
