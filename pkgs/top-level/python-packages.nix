@@ -11576,6 +11576,8 @@ self: super: with self; {
 
   schema = callPackage ../development/python-modules/schema { };
 
+  schemainspect = callPackage ../development/python-modules/schemainspect { };
+
   schema-salad = callPackage ../development/python-modules/schema-salad { };
 
   schemdraw = callPackage ../development/python-modules/schemdraw { };
