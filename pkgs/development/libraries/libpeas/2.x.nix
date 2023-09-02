@@ -10,19 +10,19 @@
 , glib
 , lua5_1
 , python3
-, spidermonkey_102
+, spidermonkey_115
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "1.99.0";
+  version = "1.99.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-BODO8oG8kCYo4IU+0+e8KOSrYxFjgUCb/UDBrEvdMnQ=";
+    hash = "sha256-81O9usCGjFQziwZ6OmuEWr+kKfFRHN+AVgML7j8qUvo=";
   };
 
   depsBuildBuild = [
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     lua5_1.pkgs.lgi
     python3
     python3.pkgs.pygobject3
+    spidermonkey_115
   ];
 
   propagatedBuildInputs = [
@@ -54,10 +55,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
   ];
-
-  # Direct usage in `loaders/gjs/peas-plugin-loader-gjs.cpp`.
-  # https://gitlab.gnome.org/GNOME/libpeas/-/issues/51
-  env.NIX_CFLAGS_COMPILE = "-I${spidermonkey_102.dev}/include/mozjs-102";
 
   postPatch = ''
     # Checks lua51 and lua5.1 executable but we have non of them.
