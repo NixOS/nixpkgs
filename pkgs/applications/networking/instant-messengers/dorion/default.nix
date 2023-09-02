@@ -14,11 +14,10 @@
 stdenv.mkDerivation rec {
   name = "dorion";
   version = "1.0.1";
-  sourceRoot = ".";
 
   src = fetchurl {
-    url = "https://github.com/SpikeHD/Dorion/releases/download/v${version}/Dorion_${version}_amd64_portable.tar.gz";
-    sha256 = "sha256-QvETUcnN2pFSlaXPzylmrqxDrI3aT0/YqwjHsiPpFNk=";
+    url = "https://github.com/SpikeHD/Dorion/releases/download/v${version}/Dorion_${version}_amd64.deb";
+    sha256 = "sha256-IYqJ5mz+XGHf4GVSW2Mq/z8xWLs4Y4KRWZ6fAtIg2tk=";
   };
 
   runtimeDependencies = [
@@ -41,9 +40,14 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
   ];
 
+  unpackCmd = "dpkg-deb -x $curSrc source";
+
   installPhase = ''
     mkdir -p $out/bin
-    mv html icons injection plugins themes dorion $out/bin
+    mv usr/share/ $out
+    mkdir -p $out/usr/lib/dorion/data/usr
+    mv usr/{bin,lib} $out/usr/lib/dorion/data/usr
+    ln -s $out/usr/lib/dorion/data/usr/bin/dorion $out/bin/dorion
   '';
 
   meta = with lib; {
