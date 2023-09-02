@@ -107,6 +107,16 @@ buildPythonPackage rec {
     "test_python"
     # Timing-based, flaky on darwin and possibly others
     "TestServerV1Source.test_idle_timer"
+    # arrow-cpp-13 related
+    "test_read"
+    "test_pickle"
+    "test_read_dask"
+    "test_read_list"
+    "test_read_list_with_glob"
+    "test_to_dask"
+    "test_columns"
+    "test_df_transform"
+    "test_pipeline_apply"
   ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     # Flaky with older low-res mtime on darwin < 10.13 (#143987)
     "test_second_load_timestamp"
