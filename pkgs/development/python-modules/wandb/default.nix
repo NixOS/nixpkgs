@@ -29,7 +29,6 @@
 , pandas
 , parameterized
 , pathtools
-, promise
 , protobuf
 , psutil
 , pydantic
@@ -46,7 +45,6 @@
 , sentry-sdk
 , setproctitle
 , setuptools
-, shortuuid
 , substituteAll
 , torch
 , tqdm
@@ -54,8 +52,8 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.15.5";
-  format = "setuptools";
+  version = "0.15.10";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -63,7 +61,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-etS1NkkskA5Lg/38QIdzCVWgqZpjpT2LwaWF1k7WVXs=";
+    hash = "sha256-MuYaeg7+lMOOSalnLyKsCw+f44daDDayvyKvY8z697c=";
   };
 
   patches = [
@@ -76,6 +74,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   # setuptools is necessary since pkg_resources is required at runtime.
@@ -85,7 +84,6 @@ buildPythonPackage rec {
     docker_pycreds
     gitpython
     pathtools
-    promise
     protobuf
     psutil
     pyyaml
@@ -93,7 +91,6 @@ buildPythonPackage rec {
     sentry-sdk
     setproctitle
     setuptools
-    shortuuid
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -139,6 +136,11 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "protobuf" ];
 
+  pytestFlagsArray = [
+    # We want to run only unit tests
+    "tests/pytest_tests"
+  ];
+
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
     "tests/pytest_tests/system_tests/test_notebooks/test_notebooks.py"
@@ -165,7 +167,6 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_aws.py"
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_cli.py"
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_docker.py"
-    "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_kubernetes.py"
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch.py"
     "tests/pytest_tests/unit_tests/test_cli.py"
     "tests/pytest_tests/unit_tests/test_data_types.py"
@@ -207,6 +208,7 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_core/test_time_resolution.py"
     "tests/pytest_tests/system_tests/test_core/test_torch_full.py"
     "tests/pytest_tests/system_tests/test_core/test_validation_data_logger.py"
+    "tests/pytest_tests/system_tests/test_core/test_wandb_init.py"
     "tests/pytest_tests/system_tests/test_core/test_wandb_integration.py"
     "tests/pytest_tests/system_tests/test_core/test_wandb_run.py"
     "tests/pytest_tests/system_tests/test_core/test_wandb_settings.py"
@@ -214,6 +216,7 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_core/test_wandb_verify.py"
     "tests/pytest_tests/system_tests/test_core/test_wandb.py"
     "tests/pytest_tests/system_tests/test_importers/test_import_mlflow.py"
+    "tests/pytest_tests/system_tests/test_nexus/test_nexus.py"
     "tests/pytest_tests/system_tests/test_sweep/test_public_api.py"
     "tests/pytest_tests/system_tests/test_sweep/test_sweep_scheduler.py"
     "tests/pytest_tests/system_tests/test_sweep/test_sweep_utils.py"
@@ -228,6 +231,7 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_launch/test_launch_kubernetes.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch_local_container.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch_run.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_sagemaker.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch_sweep_cli.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch_sweep.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch.py"
@@ -241,7 +245,7 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_jobs.py"
 
     # Requires google-cloud-aiplatform which is not packaged as of 2023-04-25.
-    "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_gcp.py"
+    "tests/pytest_tests/unit_tests/test_launch/test_runner/test_vertex.py"
 
     # Requires google-cloud-artifact-registry which is not packaged as of 2023-04-25.
     "tests/pytest_tests/unit_tests_old/tests_launch/test_kaniko_build.py"
@@ -255,6 +259,9 @@ buildPythonPackage rec {
 
     # Requires tensorflow which is broken as of 2023-09-03
     "tests/pytest_tests/unit_tests/test_keras.py"
+
+    # Try to get hardware information, not possible in the nix build environment
+    "tests/pytest_tests/unit_tests/test_system_metrics/test_disk.py"
 
     # See https://github.com/wandb/wandb/issues/5423
     "tests/pytest_tests/unit_tests/test_docker.py"
