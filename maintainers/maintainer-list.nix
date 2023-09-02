@@ -10485,6 +10485,12 @@
     githubId = 40720523;
     name = "MangoIV";
   };
+  manipuladordedados = {
+    email = "manipuladordedados@gmail.com";
+    github = "manipuladordedados";
+    githubId = 1189862;
+    name = "Valter Nazianzeno";
+  };
   manojkarthick = {
     email = "smanojkarthick@gmail.com";
     github = "manojkarthick";
