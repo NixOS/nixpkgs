@@ -3,12 +3,12 @@
 , fetchFromGitHub
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mona-sans";
   version = "1.0.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "github";
     repo = "mona-sans";
     sha256 = "sha256-XvqLFzlgIqx9aZH2SEAtwMiuWgUiDi/gHGSpfreUHuk=";
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "A variable font from GitHub";
     homepage = "https://github.com/github/mona-sans";
-    changelog = "https://github.com/github/mona-sans/releases/tag/v${version}";
+    changelog = "https://github.com/github/mona-sans/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.ofl;
     longDescription = ''
       A strong and versatile typeface, designed together with Degarism and
@@ -38,4 +38,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.all;
   };
-}
+})
