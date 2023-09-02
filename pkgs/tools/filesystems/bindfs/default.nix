@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A FUSE filesystem for mounting a directory to another location";
     homepage    = "https://bindfs.org";
+    changelog   = "https://github.com/mpartel/bindfs/raw/${version}/ChangeLog";
     license     = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ lovek323 lovesegfault ];
     platforms   = lib.platforms.unix;
