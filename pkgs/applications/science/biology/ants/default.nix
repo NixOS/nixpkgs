@@ -43,9 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/ANTsX/ANTs/releases/tag/v${finalAttrs.version}";
     description = "Advanced normalization toolkit for medical image registration and other processing";
     homepage = "https://github.com/ANTsX/ANTs";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.asl20;
+    mainProgram = "antsRegistration";
     maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.unix;
   };
