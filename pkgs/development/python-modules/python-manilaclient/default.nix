@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "4.5.1";
+  version = "4.6.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jtcY0yPD6eBcTFNVgANY4brQkrAscADeY8hbfw6M/tI=";
+    hash = "sha256-JFdpPX2lVSGN/jVsKMOOKrPm51fwpD476TnQo/0AYWQ=";
   };
 
   nativeBuildInputs = [
