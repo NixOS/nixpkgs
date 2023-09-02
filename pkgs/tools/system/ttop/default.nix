@@ -1,4 +1,4 @@
-{ lib, nimPackages, fetchFromGitHub }:
+{ lib, nimPackages, fetchFromGitHub, testers }:
 
 nimPackages.buildNimPackage (finalAttrs: {
   pname = "ttop";
@@ -17,6 +17,12 @@ nimPackages.buildNimPackage (finalAttrs: {
   nimFlags = [
     "-d:NimblePkgVersion=${finalAttrs.version}"
   ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib;
     finalAttrs.src.meta // {
