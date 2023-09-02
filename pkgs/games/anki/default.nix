@@ -27,14 +27,14 @@
 
 let
   pname = "anki";
-  version = "2.1.65";
-  rev = "aa9a734f695d0b0981aa3c0aaa2745ce86832f08";
+  version = "2.1.66";
+  rev = "70506aeb99d4afbe73321feaf75a2fabaa011d55";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-l+RTot8pJFJDDiapmQdKJ9WfwAuwRFiNJMbX+fBETeU=";
+    hash = "sha256-eE64i/jTMvipakbQXzKu/dN+dyim7E4M+eP3d9GZhII=";
     fetchSubmodules = true;
   };
 
@@ -49,7 +49,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-66mYsHojQQBfLTHd12+/HEf7FKF5Y2RZRFeYRS2yZco=";
+    hash = "sha256-3DUiwGTg7Nzd+bPJlc8aUW8bYrl7BF+CcjqkF6nW0qc=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
@@ -111,7 +111,6 @@ let
       fixup_yarn_lock yarn.lock
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules/
-      yarn run postinstall --offline
     '';
 
     installPhase = ''
