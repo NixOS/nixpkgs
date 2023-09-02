@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, cryptography
 , cython_3
 , poetry-core
 , pytestCheckHook
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
-  version = "1.10.0";
+  version = "1.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Co9NbSaemkFND06NIyytICOo/bcdIjKU5dOliBdKTkk=";
+    hash = "sha256-iyfk0OOJezNCNyqRCbR2cTTTdgdYQM6hExTngd/3CtA=";
   };
 
   # The project can build both an optimized cython version and an unoptimized
@@ -30,6 +31,10 @@ buildPythonPackage rec {
     cython_3
     poetry-core
     setuptools
+  ];
+
+  propagatedBuildInputs = [
+    cryptography
   ];
 
   nativeCheckInputs = [
