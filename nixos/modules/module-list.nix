@@ -594,6 +594,7 @@
   ./services/mail/rss2email.nix
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix
+  ./services/mail/stalwart-mail.nix
   ./services/mail/sympa.nix
   ./services/mail/zeyple.nix
   ./services/matrix/appservice-discord.nix
