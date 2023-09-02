@@ -18380,6 +18380,12 @@
     githubId = 20464732;
     name = "Willi Butz";
   };
+  willswats = {
+    email = "williamstuwatson@gmail.com";
+    github = "willswats";
+    githubId = 86304139;
+    name = "William Watson";
+  };
   wilsonehusin = {
     name = "Wilson E. Husin";
     email = "wilsonehusin@gmail.com";
