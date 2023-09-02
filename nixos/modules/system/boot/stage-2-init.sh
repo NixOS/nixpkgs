@@ -104,7 +104,10 @@ fi
 
 
 # Required by the activation script
-install -m 0755 -d /etc /etc/nixos
+install -m 0755 -d /etc
+if [ -d "/etc/nixos" ]; then
+    install -m 0755 -d /etc/nixos
+fi
 install -m 01777 -d /tmp
 
 
