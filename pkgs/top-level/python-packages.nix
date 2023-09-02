@@ -1336,6 +1336,8 @@ self: super: with self; {
 
   beartype = callPackage ../development/python-modules/beartype { };
 
+  beautiful-date = callPackage ../development/python-modules/beautiful-date { };
+
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 {
     inherit (python.pythonForBuild.pkgs) sphinxHook; # hook splicing broken since #194205
   };
