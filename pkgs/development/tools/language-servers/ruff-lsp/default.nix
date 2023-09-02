@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.37";
+  version = "0.0.38";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "v${version}";
-    hash = "sha256-B77q2qB0X8K8YkUjL5Hm7/aa/p3YCyhys5JnPjPQ+ZU=";
+    hash = "sha256-JWobbaXmIcd+c/EikiuUva5aHm3VDdeAQK60Krl6tVE=";
   };
 
   postPatch = ''
