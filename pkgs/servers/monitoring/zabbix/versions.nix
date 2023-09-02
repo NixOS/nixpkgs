@@ -1,7 +1,7 @@
 generic: {
   v60 = generic {
-    version = "6.0.14";
-    sha256 = "sha256-YxrVl12OBxkB/cEvlGR+mV7bTBe6nRi71wLCtZPCzlg=";
+    version = "6.0.21";
+    sha256 = "sha256-hdKPI5UEQvF/URH2eLWW32az3LMEse3UXIELOsfvwzk=";
     vendorSha256 = null;
   };
 
