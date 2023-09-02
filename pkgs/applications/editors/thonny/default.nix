@@ -4,13 +4,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DlizSm5cDvYXQ8Gok+W/RTSaAWJTkdyTQ4uewOiDVXg=";
+    hash = "sha256-vVDTizU+WDWJ75Ln93TAFYn7PJq5qc3hxVJiNGtK24g=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];

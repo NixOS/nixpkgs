@@ -230,5 +230,9 @@ in {
           });
         })
         cfg.tmpfiles.users;
+
+    system.userActivationScripts.tmpfiles = ''
+      ${config.systemd.package}/bin/systemd-tmpfiles --user --create --remove
+    '';
   };
 }
