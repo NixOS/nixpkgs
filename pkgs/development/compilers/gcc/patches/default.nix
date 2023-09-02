@@ -200,7 +200,8 @@ in
 
 ## gcc 8.0 and older ##############################################################################
 
-++ optional (atLeast49 && !atLeast9) ./libsanitizer-no-cyclades-9.patch
+# for 49 this is applied later
+++ optional (atLeast49 && !is49 && !atLeast9) ./libsanitizer-no-cyclades-9.patch
 ++ optional (is7 || is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
 
 
@@ -250,6 +251,8 @@ in
     url = "https://gitweb.gentoo.org/proj/gcc-patches.git/plain/4.9.4/gentoo/100_all_avoid-ustat-glibc-2.28.patch?id=55fcb515620a8f7d3bb77eba938aa0fcf0d67c96";
     sha256 = "0b32sb4psv5lq0ij9fwhi1b4pjbwdjnv24nqprsk14dsc6xmi1g0";
   })
+  # has to be applied after "avoid-ustat-glibc-2.28.patch"
+  ./libsanitizer-no-cyclades-9.patch
   # glibc-2.26
   ./struct-ucontext.patch
   ./struct-sigaltstack-4.9.patch
