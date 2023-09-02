@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, makeWrapper, freetype, SDL2
 , glib, pcre2, openal, rtmidi, fluidsynth, jack2, alsa-lib, qt5, libvncserver
-, discord-gamesdk, libpcap
+, discord-gamesdk, libpcap, libslirp
 
 , enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch
 , enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "86Box";
-  version = "3.11";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     rev = "v${version}";
-    hash = "sha256-n3Q/NUiaC6/EZyBUn6jUomnQCqr8tvYKPI5JrRRFScI=";
+    hash = "sha256-VTfYCVEbArcYVzh3NkX1yBXhtRnGZ/+khk0KG42fs24=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freetype
+    fluidsynth
     SDL2
     glib
     openal
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     pcre2
     jack2
     libpcap
+    libslirp
     qt5.qtbase
     qt5.qttools
   ] ++ lib.optional stdenv.isLinux alsa-lib
@@ -60,7 +62,6 @@ stdenv.mkDerivation rec {
   postFixup = let
     libPath = lib.makeLibraryPath ([
       libpcap
-      fluidsynth
     ] ++ lib.optional unfreeEnableDiscord discord-gamesdk);
     libPathVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
   in
