@@ -658,6 +658,8 @@ with pkgs;
 
   femtolisp = callPackage ../development/interpreters/femtolisp { };
 
+  fh = callPackage ../tools/nix/fh { };
+
   figma-agent = callPackage ../applications/graphics/figma-agent { };
 
   figma-linux = callPackage ../applications/graphics/figma-linux { };
@@ -2407,6 +2409,8 @@ with pkgs;
   gitmux = callPackage ../applications/version-management/gitmux { };
 
   gitnuro = callPackage ../applications/version-management/gitnuro { };
+
+  gitnr = callPackage ../applications/version-management/gitnr { };
 
   gitprompt-rs = callPackage ../applications/version-management/gitprompt-rs/default.nix { };
 
@@ -22116,6 +22120,8 @@ with pkgs;
   };
 
   hawknl = callPackage ../development/libraries/hawknl { };
+
+  hax11 = callPackage ../development/libraries/hax11 { };
 
   haxor-news = callPackage ../applications/misc/haxor-news { };
 
