@@ -210,6 +210,7 @@ in {
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
   darling = handleTest ./darling.nix {};
+  dae = handleTest ./dae.nix {};
   dconf = handleTest ./dconf.nix {};
   deepin = handleTest ./deepin.nix {};
   deluge = handleTest ./deluge.nix {};
