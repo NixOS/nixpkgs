@@ -27,8 +27,7 @@ let
       repo = "boost.http";
       rev = "93ae527c89ffc517862e1f5f54c8a257278f1195";
       name = "emilua-http";
-      sha256 = "MN29YwkTi0TJ2V+vRI9nUIxvJKsG+j3nT3o0yQB3p0o=";
-      fetchSubmodules = false;
+      hash = "sha256-MN29YwkTi0TJ2V+vRI9nUIxvJKsG+j3nT3o0yQB3p0o=";
   };
 
   trial-protocol-wrap = fetchFromGitHub {
@@ -36,8 +35,7 @@ let
       repo = "trial.protocol";
       rev = "79149f604a49b8dfec57857ca28aaf508069b669";
       name = "trial-protocol";
-      sha256 = "Xd8bX3z9PZWU17N9R95HXdj6qo9at5FBL/+PTVaJgkw=";
-      fetchSubmodules = false;
+      hash = "sha256-Xd8bX3z9PZWU17N9R95HXdj6qo9at5FBL/+PTVaJgkw=";
   };
 in
 stdenv.mkDerivation rec {
@@ -49,8 +47,7 @@ stdenv.mkDerivation rec {
       repo = "emilua";
       rev = "v${version}";
       name = pname;
-      sha256 = "vZITPQ1qUHhw24c0HKdR6VenviOc6JizQQ8w7K94irc=";
-      fetchSubmodules = false;
+      hash = "sha256-vZITPQ1qUHhw24c0HKdR6VenviOc6JizQQ8w7K94irc=";
   };
 
   buildInputs = [
