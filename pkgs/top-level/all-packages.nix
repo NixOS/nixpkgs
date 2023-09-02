@@ -1969,7 +1969,9 @@ with pkgs;
 
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
-  smb3-foundry = callPackage ../applications/misc/smb3-foundry { };
+  smb3-foundry = callPackage ../applications/misc/smb3-foundry {
+    python3 = python311;
+  };
 
   smbmap = callPackage ../tools/security/smbmap { };
 
