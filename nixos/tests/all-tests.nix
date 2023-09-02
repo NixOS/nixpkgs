@@ -846,6 +846,7 @@ in {
   vault-agent = handleTest ./vault-agent.nix {};
   vault-dev = handleTest ./vault-dev.nix {};
   vault-postgresql = handleTest ./vault-postgresql.nix {};
+  vault-ssh-helper = handleTest ./vault-ssh-helper.nix {};
   vaultwarden = handleTest ./vaultwarden.nix {};
   vector = handleTest ./vector.nix {};
   vengi-tools = handleTest ./vengi-tools.nix {};
