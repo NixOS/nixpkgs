@@ -6,16 +6,20 @@
 with lib;
 
 let
-  makeProg = args: pkgs.substituteAll (args // {
-    dir = "bin";
-    isExecutable = true;
-    nativeBuildInputs = [
-      pkgs.installShellFiles
-    ];
-    postInstall = ''
-      installManPage ${args.manPage}
-    '';
-  });
+  makeProg = args: pkgs.substituteAll (lib.recursiveUpdate
+    {
+      dir = "bin";
+      isExecutable = true;
+      nativeBuildInputs = [
+        pkgs.installShellFiles
+      ];
+      postInstall = ''
+        installManPage ${args.manPage}
+      '';
+      meta.license = lib.licenses.mit;
+    }
+    args
+  );
 in
 
 {
@@ -114,6 +118,10 @@ in
             src = ./nixos-build-vms/nixos-build-vms.sh;
             inherit (pkgs) runtimeShell;
             manPage = ./manpages/nixos-build-vms.8;
+            meta = {
+              maintainers = [ lib.maintainers.rvdp ];
+              mainProgram = "nixos-build-vms";
+            };
           });
         };
 
@@ -126,6 +134,10 @@ in
               pkgs.util-linuxMinimal
             ];
             manPage = ./manpages/nixos-enter.8;
+            meta = {
+              maintainers = [ lib.maintainers.rvdp ];
+              mainProgram = "nixos-enter";
+            };
           });
         };
 
@@ -140,6 +152,10 @@ in
             inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
             xserverEnabled = config.services.xserver.enable;
             manPage = ./manpages/nixos-generate-config.8;
+            meta = {
+              maintainers = [ ];
+              mainProgram = "nixos-generate-config";
+            };
           });
         };
 
@@ -155,6 +171,10 @@ in
               pkgs.util-linuxMinimal
             ];
             manPage = ./manpages/nixos-install.8;
+            meta = {
+              maintainers = [ lib.maintainers.rvdp ];
+              mainProgram = "nixos-install";
+            };
           });
         };
 
@@ -181,6 +201,10 @@ in
               configurationRevision = config.system.configurationRevision;
             });
             manPage = ./manpages/nixos-version.8;
+            meta = {
+              maintainers = [ lib.maintainers.rvdp ];
+              mainProgram = "nixos-version";
+            };
           });
         };
       };
