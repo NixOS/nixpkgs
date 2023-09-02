@@ -12344,6 +12344,8 @@ self: super: with self; {
 
   sqlalchemy-views = callPackage ../development/python-modules/sqlalchemy-views { };
 
+  sqlbag = callPackage ../development/python-modules/sqlbag { };
+
   sqlglot = callPackage ../development/python-modules/sqlglot { };
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
