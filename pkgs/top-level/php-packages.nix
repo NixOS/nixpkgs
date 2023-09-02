@@ -497,7 +497,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "pdo_pgsql";
           internalDeps = [ php.extensions.pdo ];
-          configureFlags = [ "--with-pdo-pgsql=${postgresql}" ];
+          configureFlags = [ "--with-pdo-pgsql=${postgresql.dev}" ];
           doCheck = false;
         }
         {
