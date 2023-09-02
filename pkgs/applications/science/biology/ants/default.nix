@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     for file in $out/bin/*; do
-      wrapProgram $file --set ANTSPATH "$out/bin"
+      wrapProgram $file --set PATH "$out/bin"
     done
   '';
 
