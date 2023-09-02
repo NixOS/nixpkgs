@@ -23,8 +23,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ipyvue" ];
 
   meta = with lib; {
-    description = "Jupyter widgets base for Vue libraries.";
-    homepage = "https://github.com/mariobuikhuizen/ipyvuetify";
+    description = "Jupyter widgets base for Vue libraries";
+    homepage = "https://github.com/mariobuikhuizen/ipyvue";
     license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];
   };
