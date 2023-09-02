@@ -7,19 +7,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nimbo";
-  version = "0.2.4";
+  version = "0.3.0";
   disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nimbo-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fs28s9ynfxrb4rzba6cmik0kl0q0vkpb4zdappsq62jqf960k24";
+    sha256 = "YC5T02Sw22Uczufbyts8l99oCQW4lPq0gPMRXCoKsvw=";
   };
 
+  # Rich + Colorama are added in `propagatedBuildInputs`
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awscli>=1.19<2.0" ""
+      --replace "awscli>=1.19<2.0" "" \
+      --replace "colorama==0.4.3" "" \
+      --replace "rich>=10.1.0" ""
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -31,6 +34,8 @@ python3.pkgs.buildPythonApplication rec {
     click
     pyyaml
     pydantic
+    rich
+    colorama
   ];
 
   # nimbo tests require an AWS instance

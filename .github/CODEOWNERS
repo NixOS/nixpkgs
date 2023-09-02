@@ -29,6 +29,8 @@
 /lib/debug.nix              @edolstra @Profpatsch
 /lib/asserts.nix            @edolstra @Profpatsch
 /lib/path.*                 @infinisil @fricklerhandwerk
+/lib/fileset                @infinisil
+/doc/functions/fileset.section.md @infinisil
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
