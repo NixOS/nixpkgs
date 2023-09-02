@@ -1,30 +1,31 @@
 { lib
 , stdenv
-, buildPythonPackage
-, pythonAtLeast
-, pythonOlder
-, fetchPypi
-, fetchpatch
-, python
 , appdirs
 , attrs
 , automat
 , bcrypt
+, buildPythonPackage
 , constantly
 , cryptography
+, fetchpatch
+, fetchPypi
 , git
 , glibcLocales
 , h2
+, hatch-fancy-pypi-readme
+, hatchling
 , hyperlink
 , hypothesis
 , idna
 , incremental
 , priority
-, pyasn1
 , pyhamcrest
 , pynacl
 , pyopenssl
 , pyserial
+, python
+, pythonAtLeast
+, pythonOlder
 , service-identity
 , setuptools
 , typing-extensions
@@ -46,49 +47,23 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "22.10.0";
-  format = "setuptools";
+  version = "23.8.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "Twisted";
-    inherit version;
-    extension = "tar.gz";
-    hash = "sha256-Mqy9QKlPX0bntCwQm/riswIlCUVWF4Oot6BZBI8tTTE=";
+    inherit pname version;
+    hash = "sha256-PHM2Ct0XM2piLA2BHCos4phmtuWbESX9ZQmxclIJiiQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/twisted/twisted/pull/11787.diff";
-      hash = "sha256-bQgUmbvDa61Vg8p/o/ivfkOAHyj1lTgHkrRVEGLM9aU=";
-    })
-    (fetchpatch {
-      # Conditionally skip tests that require METHOD_CRYPT
-      # https://github.com/twisted/twisted/pull/11827
-      url = "https://github.com/mweinelt/twisted/commit/e69e652de671aac0abf5c7e6c662fc5172758c5a.patch";
-      hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
-    })
-    # remove half broken pyasn1 integration that blow up with pyasn 0.5.0
-    # https://github.com/twisted/twisted/pull/11843
-    (fetchpatch {
-      url = "https://github.com/twisted/twisted/commit/bdee0eb835a76b2982beaf10c85269ff25ea09fa.patch";
-      excludes = [ "pyproject.toml" "tox.ini" ];
-      hash = "sha256-oGAHmZMpMWfK+2zEDjHD115sW7exCYqfORVOLw+Wa6M=";
-    })
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    (fetchpatch {
-      url = "https://github.com/twisted/twisted/pull/11734.diff";
-      excludes = [ ".github/workflows/*" ];
-      hash = "sha256-Td08pDxHwl7fPLCA6rUySuXpy8YmZfvXPHGsBpdcmSo=";
-    })
-    (fetchpatch {
-      url = "https://github.com/twisted/twisted/commit/00bf5be704bee022ba4d9b24eb6c2c768b4a1921.patch";
-      hash = "sha256-fnBzczm3OlhbjRcePIQ7dSX6uldlCZ9DJTS+UFO2nAQ=";
-    })
-  ];
-
   __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatchling
+    incremental
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -102,30 +77,53 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"pyasn1 >= 0.4",' ""
-
-    echo 'ListingTests.test_localeIndependent.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
-    echo 'ListingTests.test_newFile.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
-    echo 'ListingTests.test_newSingleDigitDayOfMonth.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
-    echo 'ListingTests.test_oldFile.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
-    echo 'ListingTests.test_oldSingleDigitDayOfMonth.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
+    echo 'ListingTests.test_localeIndependent.skip = "Timezone issue"' >> src/twisted/conch/test/test_cftp.py
+    echo 'ListingTests.test_newFile.skip = "Timezone issue" '>> src/twisted/conch/test/test_cftp.py
+    echo 'ListingTests.test_newSingleDigitDayOfMonth.skip = "Timezone issue"' >> src/twisted/conch/test/test_cftp.py
+    echo 'ListingTests.test_oldFile.skip = "Timezone issue"' >> src/twisted/conch/test/test_cftp.py
+    echo 'ListingTests.test_oldSingleDigitDayOfMonth.skip = "Timezone issue"' >> src/twisted/conch/test/test_cftp.py
 
     echo 'WrapClientTLSParserTests.test_tls.skip = "pyopenssl update"' >> src/twisted/internet/test/test_endpoints.py
-    echo 'UNIXTestsBuilder_AsyncioSelectorReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
-    echo 'UNIXTestsBuilder_SelectReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
+    echo 'UNIXTestsBuilder_AsyncioSelectorReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"' >> src/twisted/internet/test/test_unix.py
+    echo 'UNIXTestsBuilder_SelectReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"' >> src/twisted/internet/test/test_unix.py
 
-    echo 'FileObserverTests.test_getTimezoneOffsetEastOfUTC.skip = "mktime argument out of range"'>> src/twisted/test/test_log.py
-    echo 'FileObserverTests.test_getTimezoneOffsetWestOfUTC.skip = "mktime argument out of range"'>> src/twisted/test/test_log.py
-    echo 'FileObserverTests.test_getTimezoneOffsetWithoutDaylightSavingTime.skip = "tuple differs, values not"'>> src/twisted/test/test_log.py
+    echo 'FileObserverTests.test_getTimezoneOffsetEastOfUTC.skip = "mktime argument out of range"' >> src/twisted/test/test_log.py
+    echo 'FileObserverTests.test_getTimezoneOffsetWestOfUTC.skip = "mktime argument out of range"' >> src/twisted/test/test_log.py
+    echo 'FileObserverTests.test_getTimezoneOffsetWithoutDaylightSavingTime.skip = "tuple differs, values not"' >> src/twisted/test/test_log.py
 
-    echo 'MulticastTests.test_joinLeave.skip = "No such device"'>> src/twisted/test/test_udp.py
-    echo 'MulticastTests.test_loopback.skip = "No such device"'>> src/twisted/test/test_udp.py
-    echo 'MulticastTests.test_multicast.skip = "Reactor was unclean"'>> src/twisted/test/test_udp.py
-    echo 'MulticastTests.test_multiListen.skip = "No such device"'>> src/twisted/test/test_udp.py
+    # Timestamp is not an exact match
+    echo 'EventAsTextTests.test_eventAsTextTimestampOnly.skip = "Timestamp differs"' >> src/twisted/logger/test/test_format.py
+    echo 'ClassicLogFormattingTests.test_formatTimeDefault.skip = "Timestamp differs"' >> src/twisted/logger/test/test_format.py
+    echo 'TimeFormattingTests.test_formatTimeWithDefaultFormat.skip = "Timestamp differs"' >> src/twisted/logger/test/test_format.py
 
-    # fails since migrating to libxcrypt
-    echo 'HelperTests.test_refuteCryptedPassword.skip = "OSError: Invalid argument"' >> src/twisted/conch/test/test_checkers.py
+    echo 'MulticastTests.test_joinLeave.skip = "No such device"' >> src/twisted/test/test_udp.py
+    echo 'MulticastTests.test_loopback.skip = "No such device"' >> src/twisted/test/test_udp.py
+    echo 'MulticastTests.test_multicast.skip = "Reactor was unclean"' >> src/twisted/test/test_udp.py
+    echo 'MulticastTests.test_multiListen.skip = "No such device"' >> src/twisted/test/test_udp.py
+
+    # Tests fail since migrating to libxcrypt
+    echo 'CryptTests.test_verifyCryptedPassword.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_strcred.py
+    echo 'CryptTests.test_verifyCryptedPasswordOSError.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_strcred.py
+    echo 'HashedPasswordOnDiskDatabaseTests.testBadCredentials.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_cred.py
+    echo 'HashedPasswordOnDiskDatabaseTests.testGoodCredentials_login.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_cred.py
+    echo 'HashedPasswordOnDiskDatabaseTests.testGoodCredentials.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_cred.py
+    echo 'HashedPasswordOnDiskDatabaseTests.testHashedCredentials.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_cred.py
+    echo 'HelperTests.test_refuteCryptedPassword.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/conch/test/test_checkers.py
+    echo 'HelperTests.test_verifyCryptedPassword.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/conch/test/test_checkers.py
+    echo 'HelperTests.test_verifyCryptedPasswordMD5.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/conch/test/test_checkers.py
+    echo 'UnixCheckerTests.test_isChecker.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_strcred.py
+    echo 'UnixCheckerTests.test_unixCheckerFailsPassword.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_strcred.py
+    echo 'UnixCheckerTests.test_unixCheckerFailsPasswordBytes.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_strcred.py
+    echo 'UnixCheckerTests.test_unixCheckerFailsUsername.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_strcred.py
+    echo 'UnixCheckerTests.test_unixCheckerFailsUsernameBytes.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_strcred.py
+    echo 'UnixCheckerTests.test_unixCheckerSucceeds.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_strcred.py
+    echo 'UnixCheckerTests.test_unixCheckerSucceedsBytes.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/cred/test/test_strcred.py
+    echo 'UNIXPasswordDatabaseTests.test_defaultCheckers.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/conch/test/test_checkers.py
+    echo 'UNIXPasswordDatabaseTests.test_passInCheckers.skip = "builtins.OSError: [Errno 22] Invalid argument"' >> src/twisted/conch/test/test_checkers.py
+
+    # New failures with 23.8.0
+    echo 'MainTests.test_trial.skip = "False is not true : b"' >> src/twisted/test/test_main.py
+    echo 'MainTests.test_twisted.skip = "False is not true : b"' >> src/twisted/test/test_main.py
 
     # not packaged
     substituteInPlace src/twisted/test/test_failure.py \
@@ -170,17 +168,32 @@ buildPythonPackage rec {
   checkPhase = ''
     export SOURCE_DATE_EPOCH=315532800
     export PATH=$out/bin:$PATH
-    # race conditions when running in paralell
+    # race conditions when running in parallel
     ${python.interpreter} -m twisted.trial twisted
   '';
 
   passthru = {
     optional-dependencies = rec {
-      conch = [ appdirs bcrypt cryptography pyasn1 ];
-      conch_nacl = conch ++ [ pynacl ];
-      http2 = [ h2 priority ];
-      serial = [ pyserial ];
-      tls = [ idna pyopenssl service-identity ];
+      conch = [
+        appdirs
+        bcrypt
+        cryptography
+      ];
+      conch_nacl = conch ++ [
+        pynacl
+      ];
+      http2 = [
+        h2
+        priority
+      ];
+      serial = [
+        pyserial
+      ];
+      tls = [
+        idna
+        pyopenssl
+        service-identity
+      ];
     };
 
     tests = {
@@ -200,8 +213,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/twisted/twisted";
     description = "Asynchronous networking framework written in Python";
+    homepage = "https://github.com/twisted/twisted";
+    changelog = "https://github.com/twisted/twisted/blob/twisted-${version}/NEWS.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
