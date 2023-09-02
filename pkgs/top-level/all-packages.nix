@@ -39253,6 +39253,8 @@ with pkgs;
 
   raxml-mpi = raxml.override { useMpi = true; };
 
+  raxml-ng = callPackage ../applications/science/biology/raxml-ng { };
+
   sambamba = callPackage ../applications/science/biology/sambamba { };
 
   samblaster = callPackage ../applications/science/biology/samblaster { };

@@ -4815,6 +4815,12 @@
     githubId = 1148549;
     name = "Eelco Dolstra";
   };
+  egorlappo = {
+    email = "egor.lappo.512@gmail.com";
+    github = "egorlappo";
+    githubId = 38843345;
+    name = "Egor Lappo";
+  };
   ehegnes = {
     email = "eric.hegnes@gmail.com";
     github = "ehegnes";
