@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d1dd25d..96abc65 100644
+index 207aacc..e6a6f5a 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -21,23 +21,20 @@ include(${CMAKE_INSTALL_PREFIX}/share/cmake/pybind11/pybind11Config.cmake)
+@@ -21,16 +21,14 @@ include(${CMAKE_INSTALL_PREFIX}/share/cmake/pybind11/pybind11Config.cmake)
  else()
  FetchContent_Declare(
    pybind11-src
@@ -21,6 +21,18 @@ index d1dd25d..96abc65 100644
  )
  FetchContent_MakeAvailable(cxxopts)
  
+@@ -45,8 +43,7 @@ endif()
+ if (${CP_BUILD_BLADEBIT_HARVESTER})
+   FetchContent_Declare(
+     bladebit
+-    GIT_REPOSITORY https://github.com/Chia-Network/bladebit.git
+-    GIT_TAG        cuda-compression
++    SOURCE_DIR @bladebit_src@
+   )
+ 
+   set(BB_HARVESTER_ONLY ON)
+@@ -56,8 +53,7 @@ endif()
+ 
  FetchContent_Declare(
    gulrak
 -  GIT_REPOSITORY https://github.com/gulrak/filesystem.git
@@ -29,12 +41,12 @@ index d1dd25d..96abc65 100644
  )
  FetchContent_MakeAvailable(gulrak)
  
-@@ -150,8 +147,7 @@ ENDIF()
+@@ -174,8 +170,7 @@ ENDIF()
  
  FetchContent_Declare(
    Catch2
 -  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
--  GIT_TAG        v2.13.7
+-  GIT_TAG        v3.3.2
 +  SOURCE_DIR     @catch2_src@
  )
  FetchContent_MakeAvailable(Catch2)

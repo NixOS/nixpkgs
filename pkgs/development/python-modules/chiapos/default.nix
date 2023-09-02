@@ -3,6 +3,8 @@
 , substituteAll
 , buildPythonPackage
 , fetchPypi
+, fetchFromGitHub
+, bladebit
 , catch2
 , cmake
 , cxxopts
@@ -16,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "chiapos";
-  version = "1.0.11";
+  version = "2.0.2";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TMRf9549z3IQzGt5c53Rk1Vq3tdrpZ3Pqc8jhj4AKzo=";
+    hash = "sha256-YY7GPgifMMeHxlW9sIA+youj+XTMu9zNDBeP5hR5sUY=";
   };
 
   patches = [
@@ -29,8 +31,14 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./dont_fetch_dependencies.patch;
       inherit cxxopts ghc_filesystem;
-      catch2_src = catch2.src;
+      bladebit = bladebit.src;
       pybind11_src = pybind11.src;
+      catch2_src = fetchFromGitHub {
+        owner = "catchorg";
+        repo = "Catch2";
+        rev = "v3.3.2"; # pinned by src
+        hash = "sha256-t/4iCrzPeDZNNlgibVqx5rhe+d3lXwm1GmBMDDId0VQ=";
+      };
     })
   ];
 
