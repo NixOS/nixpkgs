@@ -48,7 +48,6 @@
 , setuptools
 , shortuuid
 , substituteAll
-, tensorflow
 , torch
 , tqdm
 }:
@@ -128,7 +127,6 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
     scikit-learn
-    tensorflow
     torch
     tqdm
   ];
@@ -254,6 +252,9 @@ buildPythonPackage rec {
 
     # Requires metaflow which is not packaged as of 2023-04-25.
     "tests/pytest_tests/unit_tests/test_metaflow.py"
+
+    # Requires tensorflow which is broken as of 2023-09-03
+    "tests/pytest_tests/unit_tests/test_keras.py"
 
     # See https://github.com/wandb/wandb/issues/5423
     "tests/pytest_tests/unit_tests/test_docker.py"
