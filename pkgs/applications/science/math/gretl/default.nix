@@ -16,12 +16,12 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gretl";
   version = "2023b";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gretl/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/gretl/gretl-${finalAttrs.version}.tar.xz";
     hash = "sha256-Hf025JjFxde43TN/1m9PeA1uHqxKTZMI8+1qf3XJLGs=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dmrauh ];
     platforms = lib.platforms.all;
   };
-}
+})
