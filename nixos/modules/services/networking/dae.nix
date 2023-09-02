@@ -69,6 +69,14 @@ in
         '';
       };
 
+      configFile = mkOption {
+        type = types.path;
+        default = "/etc/dae/config.dae";
+        example = "/path/to/your/config.dae";
+        description = mdDoc ''
+          The path of dae config file, end with `.dae`.
+        '';
+      };
 
       config = mkOption {
         type = types.str;
