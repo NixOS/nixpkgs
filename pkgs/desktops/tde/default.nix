@@ -21,5 +21,6 @@ in {
 
   tde-cmake = callPackage ./tde-cmake { };
   tqt3 = callPackage ./tqt3 { };
+  tqtinterface = callPackage ./tqtinterface { };
 
 })
