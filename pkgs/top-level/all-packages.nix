@@ -35803,6 +35803,11 @@ with pkgs;
 
   sunvox = callPackage ../applications/audio/sunvox { };
 
+  supersonic = callPackage ../applications/audio/supersonic { };
+  supersonic-wayland = supersonic.override {
+    forceWayland = true;
+  };
+
   svkbd = callPackage ../applications/accessibility/svkbd { };
 
   swaglyrics = callPackage ../tools/misc/swaglyrics { };
