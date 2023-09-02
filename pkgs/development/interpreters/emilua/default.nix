@@ -21,38 +21,37 @@
 , asciidoctor
 }:
 
-stdenv.mkDerivation rec {
-  pname = "emilua";
-  version = "0.4.3";
-
-  srcs = [
-    (fetchFromGitLab {
-      owner = "emilua";
-      repo = "emilua";
-      rev = "v${version}";
-      name = pname;
-      sha256 = "vZITPQ1qUHhw24c0HKdR6VenviOc6JizQQ8w7K94irc=";
-      fetchSubmodules = false;
-    })
-    (fetchFromGitHub {
+let
+  emilua-http-wrap = fetchFromGitHub {
       owner = "BoostGSoC14";
       repo = "boost.http";
       rev = "93ae527c89ffc517862e1f5f54c8a257278f1195";
       name = "emilua-http";
       sha256 = "MN29YwkTi0TJ2V+vRI9nUIxvJKsG+j3nT3o0yQB3p0o=";
       fetchSubmodules = false;
-    })
-    (fetchFromGitHub {
+  };
+
+  trial-protocol-wrap = fetchFromGitHub {
       owner = "breese";
       repo = "trial.protocol";
       rev = "79149f604a49b8dfec57857ca28aaf508069b669";
       name = "trial-protocol";
       sha256 = "Xd8bX3z9PZWU17N9R95HXdj6qo9at5FBL/+PTVaJgkw=";
       fetchSubmodules = false;
-    })
-  ];
+  };
+in
+stdenv.mkDerivation rec {
+  pname = "emilua";
+  version = "0.4.3";
 
-  sourceRoot = ".";
+  src = fetchFromGitLab {
+      owner = "emilua";
+      repo = "emilua";
+      rev = "v${version}";
+      name = pname;
+      sha256 = "vZITPQ1qUHhw24c0HKdR6VenviOc6JizQQ8w7K94irc=";
+      fetchSubmodules = false;
+  };
 
   buildInputs = [
     luajit_openresty
@@ -93,15 +92,16 @@ stdenv.mkDerivation rec {
     "-Denable_manpages=true"
   ];
 
-  postUnpack = ''mv emilua-http emilua/
-  mv trial-protocol emilua/
-  substituteInPlace emilua/src/emilua_gperf.awk  --replace '#!/usr/bin/env -S gawk --file' '#!${gawk}/bin/gawk -f'
-  cd emilua/subprojects
-  ln -s ../emilua-http .
-  cp "packagefiles/emilua-http/meson.build" "emilua-http/"
-  ln -s ../trial-protocol .
-  cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
-  cd ..
+  postPatch = ''
+    pushd subprojects
+    cp -r ${emilua-http-wrap} ${emilua-http-wrap.name}
+    cp -r ${trial-protocol-wrap} ${trial-protocol-wrap.name}
+    chmod +w emilua-http trial-protocol
+    cp "packagefiles/emilua-http/meson.build" "emilua-http/"
+    cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
+    popd
+
+    substituteInPlace src/emilua_gperf.awk  --replace '#!/usr/bin/env -S gawk --file' '#!${gawk}/bin/gawk -f'
   '';
 
   meta = with lib; {
