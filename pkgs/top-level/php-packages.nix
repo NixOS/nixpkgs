@@ -557,7 +557,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "pgsql";
           buildInputs = [ pcre2 ];
-          configureFlags = [ "--with-pgsql=${postgresql}" ];
+          configureFlags = [ "--with-pgsql=${lib.getDev postgresql}" ];
           doCheck = false;
         }
         { name = "posix"; doCheck = false; }
