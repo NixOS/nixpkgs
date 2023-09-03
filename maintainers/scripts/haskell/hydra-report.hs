@@ -151,15 +151,18 @@ data Build = Build
    }
    deriving (Generic, ToJSON, FromJSON, Show)
 
+data RequestLogsFlag = RequestLogs | NoRequestLogs
+
 main :: IO ()
 main = do
    args <- getArgs
    case args of
       ["get-report"] -> getBuildReports
       ["ping-maintainers"] -> printMaintainerPing
-      ["mark-broken-list"] -> printMarkBrokenList
+      ["mark-broken-list", "--no-request-logs"] -> printMarkBrokenList NoRequestLogs
+      ["mark-broken-list"] -> printMarkBrokenList RequestLogs
       ["eval-info"] -> printEvalInfo
-      _ -> putStrLn "Usage: get-report | ping-maintainers | mark-broken-list | eval-info"
+      _ -> putStrLn "Usage: get-report | ping-maintainers | mark-broken-list [--no-request-logs] | eval-info"
 
 reportFileName :: IO FilePath
 reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
@@ -775,16 +778,20 @@ printMaintainerPing = do
        textBuildSummary = printBuildSummary eval fetchTime buildSum topBrokenRdeps
    Text.putStrLn textBuildSummary
 
-printMarkBrokenList :: IO ()
-printMarkBrokenList = do
+printMarkBrokenList :: RequestLogsFlag -> IO ()
+printMarkBrokenList reqLogs = do
    (_, fetchTime, buildReport) <- readBuildReports
    runReq defaultHttpConfig $ forM_ buildReport \build@Build{job, id} ->
       case (getBuildState build, Text.splitOn "." $ unJobName job) of
          (Failed, ["haskellPackages", name, "x86_64-linux"]) -> do
-            -- Fetch build log from hydra to figure out the cause of the error.
-            build_log <- ByteString.lines <$> hydraPlainQuery ["build", showT id, "nixlog", "1", "raw"]
             -- We use the last probable error cause found in the build log file.
-            let error_message = fromMaybe " failure " $ safeLast $ mapMaybe probableErrorCause build_log
+            error_message <- fromMaybe "failure" <$>
+              case reqLogs of
+                NoRequestLogs -> pure Nothing
+                RequestLogs -> do
+                  -- Fetch build log from hydra to figure out the cause of the error.
+                  build_log <- ByteString.lines <$> hydraPlainQuery ["build", showT id, "nixlog", "1", "raw"]
+                  pure $ safeLast $ mapMaybe probableErrorCause build_log
             liftIO $ putStrLn $ "  - " <> Text.unpack name <> " # " <> error_message <> " in job https://hydra.nixos.org/build/" <> show id <> " at " <> formatTime defaultTimeLocale "%Y-%m-%d" fetchTime
          _ -> pure ()
 
