@@ -9724,7 +9724,17 @@ with pkgs;
 
   kestrel = callPackage ../tools/security/kestrel { };
 
-  kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
+  kexec-tools = callPackage ../os-specific/linux/kexec-tools {
+    # clangStdenv fails with
+    # purgatory/arch/i386/entry32-16.S:23:2: error: unknown directive
+    #  .arch i386
+    #  ^
+    # purgatory/arch/i386/entry32-16.S:115:11: error: unknown token in expression
+    #  ljmp %cs:*(realdest - entry16)
+    #           ^
+    # make: *** [Makefile:128: purgatory/arch/i386/entry32-16.o] Error 1
+    stdenv = gccStdenv;
+  };
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
 
