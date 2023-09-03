@@ -86,11 +86,13 @@ in
         '';
         description = mdDoc ''
           Config text for dae.
+
+          See <https://github.com/daeuniverse/dae/blob/main/example.dae>.
         '';
       };
 
       disableTxChecksumIpGeneric =
-        mkEnableOption (mdDoc "See https://github.com/daeuniverse/dae/issues/43");
+        mkEnableOption (mdDoc "See <https://github.com/daeuniverse/dae/issues/43>");
 
     };
   };
