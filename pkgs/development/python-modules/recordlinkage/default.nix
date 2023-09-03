@@ -10,9 +10,11 @@
 , pandas
 , pyarrow
 , pytest
+, pythonOlder
 , scikit-learn
 , scipy
-, pythonOlder
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -21,10 +23,16 @@ buildPythonPackage rec {
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-7NoMEN/xOLFwaBXeMysShfZwrn6MzpJZYhNQHVieaqQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     pyarrow
