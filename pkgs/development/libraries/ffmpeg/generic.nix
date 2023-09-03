@@ -1,4 +1,4 @@
-{ version, sha256, extraPatches ? [], knownVulnerabilities ? [] }:
+{ version, sha256, extraPatches ? [] }:
 
 { lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
 
@@ -33,7 +33,6 @@
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
-, withCrystalhd ? withFullDeps
 , withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
@@ -49,7 +48,6 @@
 , withGnutls ? withHeadlessDeps
 , withGsm ? withFullDeps # GSM de/encoder
 , withIconv ? withHeadlessDeps
-, withIlbc ? withFullDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLibplacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
