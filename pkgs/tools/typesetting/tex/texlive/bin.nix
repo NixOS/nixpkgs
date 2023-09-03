@@ -436,7 +436,7 @@ xdvi = stdenv.mkDerivation {
 
 xpdfopen = stdenv.mkDerivation {
   pname = "texlive-xpdfopen.bin";
-  inherit (lib.head texlive.xpdfopen.pkgs) version;
+  inherit (texlive.pkgs.xpdfopen) version;
 
   inherit (common) src;
 
