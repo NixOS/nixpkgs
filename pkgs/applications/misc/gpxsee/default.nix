@@ -7,7 +7,6 @@
 , qttools
 , qtlocation ? null # qt5 only
 , qtpositioning ? null # qt6 only
-, qtpbfimageplugin
 , qtserialport
 , qtsvg
 , qt5compat ? null # qt6 only
@@ -16,21 +15,21 @@
 
 let
   isQt6 = lib.versions.major qtbase.version == "6";
-
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "13.4";
+  version = "13.7";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
-    rev = version;
-    hash = "sha256-Zf2eyDx5QK69W6HNz/IGGHkX2qCDnxYsU8KLCgU9teY=";
+    rev = finalAttrs.version;
+    hash = "sha256-Y3JcWkg0K724i/5Leyi8r26uKpq/aDwghJBG8xfxpd4=";
   };
 
-  buildInputs = [ qtpbfimageplugin qtserialport ]
-    ++ (if isQt6 then [
+  buildInputs = [
+    qtserialport
+  ] ++ (if isQt6 then [
     qtbase
     qtpositioning
     qtsvg
@@ -39,7 +38,11 @@ stdenv.mkDerivation rec {
     qtlocation
   ]);
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   preConfigure = ''
     lrelease gpxsee.pro
@@ -56,17 +59,17 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
+    broken = isQt6 && stdenv.isDarwin;
+    changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     description = "GPS log file viewer and analyzer";
+    homepage = "https://www.gpxsee.org/";
+    license = lib.licenses.gpl3Only;
     longDescription = ''
       GPXSee is a Qt-based GPS log file viewer and analyzer that supports
       all common GPS log file formats.
     '';
-    homepage = "https://www.gpxsee.org/";
-    changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ womfoo sikmir ];
-    platforms = platforms.unix;
-    broken = isQt6 && stdenv.isDarwin;
+    maintainers = with lib.maintainers; [ womfoo sikmir ];
+    platforms = lib.platforms.unix;
   };
-}
+})
