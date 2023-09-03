@@ -1879,6 +1879,12 @@ with pkgs;
 
   mbidled = callPackage ../tools/networking/mbidled { };
 
+  mcaselector = callPackage ../tools/games/minecraft/mcaselector {
+    jre = jre.override {
+      enableJavaFX = true;
+    };
+  };
+
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   memos = callPackage ../servers/memos { };
