@@ -18198,8 +18198,8 @@ with pkgs;
 
   rbenv = callPackage ../development/ruby-modules/rbenv { };
 
-  rubyfmt = callPackage ../development/tools/rubyfmt {
-    inherit (darwin.apple_sdk.frameworks) Foundation Security;
+  rubyfmt = darwin.apple_sdk_11_0.callPackage ../development/tools/rubyfmt {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
     inherit (darwin) libobjc;
   };
 
