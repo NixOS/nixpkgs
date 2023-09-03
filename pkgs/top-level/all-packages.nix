@@ -18253,6 +18253,9 @@ with pkgs;
   spidermonkey_102 = callPackage ../development/interpreters/spidermonkey/102.nix {
     inherit (darwin) libobjc;
   };
+  spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
+    inherit (darwin) libobjc;
+  };
 
   ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
   ssm-session-manager-plugin = callPackage ../applications/networking/cluster/ssm-session-manager-plugin { };
