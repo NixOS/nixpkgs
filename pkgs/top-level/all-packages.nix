@@ -13971,6 +13971,8 @@ with pkgs;
 
   tpm2-tools = callPackage ../tools/security/tpm2-tools { };
 
+  treedome = callPackage ../applications/misc/treedome { };
+
   trezor-udev-rules = callPackage ../os-specific/linux/trezor-udev-rules { };
 
   trezorctl = with python3Packages; toPythonApplication trezor;
