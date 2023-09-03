@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , pkg-config
 , cmake
 , hunspell
@@ -14,15 +14,16 @@ stdenv.mkDerivation rec {
   pname = "focuswriter";
   version = "1.8.5";
 
-  src = fetchurl {
-    url = "https://gottcode.org/focuswriter/focuswriter-${version}.tar.bz2";
-    sha256 = "sha256-O0GHzpA8Vap/rWiLF2j9zMyfAm2ko1Vk3KqZyyvudlQ=";
+  src = fetchFromGitHub {
+    owner = "gottcode";
+    repo = "focuswriter";
+    rev = "v${version}";
+    hash = "sha256-6wvTlC/NCCcN2jpwqtoOsCln3ViY/vj7NpMsbYHBGiI=";
   };
 
   nativeBuildInputs = [ pkg-config cmake qttools ];
   buildInputs = [ hunspell qtbase qtmultimedia qt5compat ];
 
-  # Causes an error during compilation if not set
   dontWrapQtApps = true;
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
