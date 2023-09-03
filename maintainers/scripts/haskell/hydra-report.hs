@@ -30,7 +30,7 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE DataKinds #-}
 
-import Control.Monad (forM_, (<=<))
+import Control.Monad (forM_, forM, (<=<))
 import Control.Monad.Trans (MonadIO (liftIO))
 import Data.Aeson (
    FromJSON,
@@ -108,6 +108,7 @@ newtype JobsetEvalInputs = JobsetEvalInputs {nixpkgs :: Nixpkgs}
 data Eval = Eval
    { id :: Int
    , jobsetevalinputs :: JobsetEvalInputs
+   , builds :: Seq Int
    }
    deriving (Generic, ToJSON, FromJSON, Show)
 
@@ -151,18 +152,20 @@ data Build = Build
    }
    deriving (Generic, ToJSON, FromJSON, Show)
 
+data HydraSlownessWorkaroundFlag = HydraSlownessWorkaround | NoHydraSlownessWorkaround
 data RequestLogsFlag = RequestLogs | NoRequestLogs
 
 main :: IO ()
 main = do
    args <- getArgs
    case args of
-      ["get-report"] -> getBuildReports
+      ["get-report", "--slow"] -> getBuildReports HydraSlownessWorkaround
+      ["get-report"] -> getBuildReports NoHydraSlownessWorkaround
       ["ping-maintainers"] -> printMaintainerPing
       ["mark-broken-list", "--no-request-logs"] -> printMarkBrokenList NoRequestLogs
       ["mark-broken-list"] -> printMarkBrokenList RequestLogs
       ["eval-info"] -> printEvalInfo
-      _ -> putStrLn "Usage: get-report | ping-maintainers | mark-broken-list [--no-request-logs] | eval-info"
+      _ -> putStrLn "Usage: get-report [--slow] | ping-maintainers | mark-broken-list [--no-request-logs] | eval-info"
 
 reportFileName :: IO FilePath
 reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
@@ -170,17 +173,26 @@ reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
 showT :: Show a => a -> Text
 showT = Text.pack . show
 
-getBuildReports :: IO ()
-getBuildReports = runReq defaultHttpConfig do
+getBuildReports :: HydraSlownessWorkaroundFlag -> IO ()
+getBuildReports opt = runReq defaultHttpConfig do
    evalMay <- Seq.lookup 0 . evals <$> hydraJSONQuery mempty ["jobset", "nixpkgs", "haskell-updates", "evals"]
    eval@Eval{id} <- maybe (liftIO $ fail "No Evalution found") pure evalMay
    liftIO . putStrLn $ "Fetching evaluation " <> show id <> " from Hydra. This might take a few minutes..."
-   buildReports :: Seq Build <- hydraJSONQuery (responseTimeout 600000000) ["eval", showT id, "builds"]
+   buildReports <- getEvalBuilds opt id
    liftIO do
       fileName <- reportFileName
       putStrLn $ "Finished fetching all builds from Hydra, saving report as " <> fileName
       now <- getCurrentTime
       encodeFile fileName (eval, now, buildReports)
+
+getEvalBuilds :: HydraSlownessWorkaroundFlag -> Int -> Req (Seq Build)
+getEvalBuilds NoHydraSlownessWorkaround id =
+  hydraJSONQuery (responseTimeout 600000000) ["eval", showT id, "builds"]
+getEvalBuilds HydraSlownessWorkaround id = do
+  Eval{builds} <- hydraJSONQuery mempty [ "eval", showT id ]
+  forM builds $ \buildId -> do
+    liftIO $ putStrLn $ "Querying build " <> show buildId
+    hydraJSONQuery mempty [ "build", showT buildId ]
 
 hydraQuery :: HttpResponse a => Proxy a -> Option 'Https -> [Text] -> Req (HttpResponseBody a)
 hydraQuery responseType option query =
@@ -190,7 +202,7 @@ hydraQuery responseType option query =
          (foldl' (/:) (https "hydra.nixos.org") query)
          NoReqBody
          responseType
-         (header "User-Agent" "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell)" <> option)
+         (header "User-Agent" "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell) pls fix https://github.com/NixOS/nixos-org-configurations/issues/270" <> option)
 
 hydraJSONQuery :: FromJSON a => Option 'Https -> [Text] -> Req a
 hydraJSONQuery = hydraQuery jsonResponse
