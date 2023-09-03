@@ -105,7 +105,6 @@
 , "dhcp"
 , "diagnostic-languageserver"
 , "diff2html-cli"
-, "dockerfile-language-server-nodejs"
 , "dotenv-cli"
 , "dotenv-vault"
 , "elasticdump"
