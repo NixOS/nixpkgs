@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple, distraction-free writing environment";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ madjar ];
+    maintainers = with maintainers; [ madjar kashw2 ];
     platforms = platforms.linux;
     homepage = "https://gottcode.org/focuswriter/";
   };
