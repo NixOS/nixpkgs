@@ -210,6 +210,20 @@ let
         };
       };
 
+      antfu.unocss = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "antfu";
+          name = "unocss";
+          version = "0.55.6";
+          sha256 = "sha256-sFoQNv8LiD9/KC4jHmE31V55NINgCKrpVFtmZzAf8g0=";
+        };
+        meta = {
+          description = "UnoCSS for VS Code";
+          homepage = "https://github.com/unocss/unocss";
+          license = lib.licenses.mit;
+        };
+      };
+
       antyos.openscad = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "openscad";
