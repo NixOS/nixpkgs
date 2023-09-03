@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     zita-resampler
   ];
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--no-font-cache-update"
     "--shared-lib"
     "--no-desktop-update"
