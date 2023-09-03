@@ -14,6 +14,7 @@
 
   mkDefaults = lib.mapAttrsRecursive (n: v: lib.mkDefault v);
   defaultConfig = {
+    homeserver.address = "http://localhost:8448";
     appservice = {
       hostname = "[::]";
       port = appservicePort;
