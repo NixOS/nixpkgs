@@ -1,4 +1,4 @@
-{ lib, nimPackages, fetchFromGitHub }:
+{ lib, nimPackages, fetchFromGitHub, testers }:
 
 nimPackages.buildNimPackage (finalAttrs: {
   pname = "ttop";
@@ -14,11 +14,22 @@ nimPackages.buildNimPackage (finalAttrs: {
 
   buildInputs = with nimPackages; [ asciigraph illwill jsony parsetoml zippy ];
 
-  meta = with lib;
-    finalAttrs.src.meta // {
-      description = "Top-like system monitoring tool";
-      license = licenses.mit;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ sikmir ];
+  nimFlags = [
+    "-d:NimblePkgVersion=${finalAttrs.version}"
+  ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
     };
+  };
+
+  meta = with lib; {
+    description = "Top-like system monitoring tool";
+    homepage = "https://github.com/inv2004/ttop";
+    changelog = "https://github.com/inv2004/ttop/releases/tag/${finalAttrs.src.rev}";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ figsoda sikmir ];
+  };
 })
