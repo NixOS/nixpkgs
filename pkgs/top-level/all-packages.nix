@@ -1879,6 +1879,12 @@ with pkgs;
 
   mbidled = callPackage ../tools/networking/mbidled { };
 
+  mcaselector = callPackage ../tools/games/minecraft/mcaselector {
+    jre = jre.override {
+      enableJavaFX = true;
+    };
+  };
+
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   memos = callPackage ../servers/memos { };
@@ -3354,6 +3360,8 @@ with pkgs;
   iamy = callPackage ../tools/admin/iamy { };
 
   iam-policy-json-to-terraform = callPackage ../tools/misc/iam-policy-json-to-terraform { };
+
+  azeret-mono = callPackage ../data/fonts/azeret-mono { };
 
   azure-cli = callPackage ../tools/admin/azure-cli { };
 
@@ -18242,6 +18250,9 @@ with pkgs;
     inherit (darwin) libobjc;
   };
   spidermonkey_102 = callPackage ../development/interpreters/spidermonkey/102.nix {
+    inherit (darwin) libobjc;
+  };
+  spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
     inherit (darwin) libobjc;
   };
 
