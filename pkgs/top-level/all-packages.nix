@@ -4798,6 +4798,8 @@ with pkgs;
 
   wl-screenrec = callPackage ../tools/wayland/wl-screenrec { };
 
+  wleave = callPackage ../tools/wayland/wleave { };
+
   wlogout = callPackage ../tools/wayland/wlogout { };
 
   wlopm = callPackage ../tools/wayland/wlopm { };
@@ -34381,6 +34383,8 @@ with pkgs;
   };
 
   yambar = callPackage ../applications/misc/yambar { };
+
+  yambar-hyprland-wses = callPackage ../applications/misc/yambar-hyprland-wses { };
 
   polyphone = libsForQt5.callPackage ../applications/audio/polyphone { };
 
