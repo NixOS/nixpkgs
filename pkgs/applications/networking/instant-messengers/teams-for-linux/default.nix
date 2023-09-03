@@ -13,17 +13,19 @@
 , pipewire
 , alsa-utils
 , which
+, testers
+, teams-for-linux
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.2";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2WoTbkRGH9l6cQrveyxGvO/Dy+0NV4UTDaooYn8k06s=";
+    hash = "sha256-G0UBzSXoZPLHBsM0nslPLNBZs0sUAQYJ403nPV+3Qu4=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -91,12 +93,16 @@ stdenv.mkDerivation (finalAttrs: {
   })];
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion rec {
+    package = teams-for-linux;
+    command = "HOME=$TMPDIR ${package.meta.mainProgram or package.pname} --version";
+  };
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight ];
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
