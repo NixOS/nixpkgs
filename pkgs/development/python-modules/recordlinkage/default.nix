@@ -41,14 +41,19 @@ buildPythonPackage rec {
 
   # pytestCheckHook does not work
   # Reusing their CI setup which involves 'rm -rf recordlinkage' in preCheck phase do not work too.
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytest
+  ];
 
-  pythonImportsCheck = [ "recordlinkage" ];
+  pythonImportsCheck = [
+    "recordlinkage"
+  ];
 
   meta = with lib; {
     description = "Library to link records in or between data sources";
     homepage = "https://recordlinkage.readthedocs.io/";
+    changelog = "https://github.com/J535D165/recordlinkage/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.raitobezarius ];
+    maintainers = with maintainers; [ raitobezarius ];
   };
 }
