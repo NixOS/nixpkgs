@@ -17,14 +17,14 @@ let
     , withAda ? true
     }:
 
-    stdenvNoCC.mkDerivation rec {
+    stdenvNoCC.mkDerivation {
       pname = "coreboot-toolchain-${arch}";
-      version = "4.20";
+      version = "4.21";
 
       src = fetchgit {
         url = "https://review.coreboot.org/coreboot";
-        rev = "465fbbe93ee01b4576689a90b7ddbeec23cdace2";
-        hash = "sha256-vzXOl+Z8VYh9Iq6+AMNb3apMv185J3mODauKMinSOI4=";
+        rev = "c1386ef6128922f49f93de5690ccd130a26eecf2";
+        hash = "sha256-tFGyI170vbhRgJZDix69DfOD5nIY8T4chSP+qTt3kC8=";
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''

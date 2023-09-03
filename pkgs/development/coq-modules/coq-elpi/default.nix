@@ -7,8 +7,8 @@ with builtins; with lib; let
     { case = "8.13"; out = { version = "1.13.7"; };}
     { case = "8.14"; out = { version = "1.13.7"; };}
     { case = "8.15"; out = { version = "1.15.0"; };}
-    { case = "8.16"; out = { version = "1.16.5"; };}
-    { case = "8.17"; out = { version = "1.16.5"; };}
+    { case = "8.16"; out = { version = "1.17.0"; };}
+    { case = "8.17"; out = { version = "1.17.0"; };}
   ] {} );
 in mkCoqDerivation {
   pname = "elpi";

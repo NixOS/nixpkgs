@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libisoburn";
-  version = "1.5.4";
+  version = "1.5.6";
 
   src = fetchurl {
     url = "http://files.libburnia-project.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-LYmEbUOIDxf6WRxTs76kL/uANijk5jDGgPwskYT3kTI=";
+    sha256 = "sha256-K4Cm9z3WM6XSQ/rL6XoV5cmgdkSl4aJCwhm5N1pF9xs=";
   };
 
   buildInputs = [ attr zlib libburn libisofs ];

@@ -24,13 +24,13 @@ assert withEmojis -> (withIcons == false && withNerdIcons == false);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";
-  version = "4.8";
+  version = "4.9";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "nnn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QbKW2wjhUNej3zoX18LdeUHqjNLYhEKyvPH2MXzp/iQ=";
+    hash = "sha256-g19uI36HyzTF2YUQKFP4DE2ZBsArGryVHhX79Y0XzhU=";
   };
 
   patches = [
@@ -38,11 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     # By default, nnn expects the macOS default file command, not the one provided by Nix.
     # However, both commands use different arguments to obtain the MIME type.
     ./darwin-fix-file-mime-opts.patch
-    # FIXME: remove for next release
-    (fetchpatch {
-      url = "https://github.com/jarun/nnn/commit/20e944f5e597239ed491c213a634eef3d5be735e.patch";
-      hash = "sha256-RxG3AU8i3lRPCjRVZPnej4m1No/SKtsHwbghj9JQ7RQ=";
-    })
   ];
 
   configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);

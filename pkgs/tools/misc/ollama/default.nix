@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ollama";
-  version = "0.0.15";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-p2YLgLyjmf2MPvFue45+wW7kqKpUli9rX3aWNH08cDk=";
+    hash = "sha256-idsFcjsRD1zPmG742gnYQJcgSWDA2DLMHksCFNe2GiY=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [

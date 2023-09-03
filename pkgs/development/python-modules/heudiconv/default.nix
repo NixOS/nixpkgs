@@ -1,30 +1,44 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
 , datalad
-, git
 , dcm2niix
-, nibabel
-, pydicom
-, nipype
 , dcmstack
 , etelemetry
+, fetchPypi
 , filelock
+, git
+, nibabel
+, nipype
+, pydicom
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, versioningit
+, wheel
 }:
 
 buildPythonPackage rec {
-  version = "0.13.1";
   pname = "heudiconv";
+  version = "0.13.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UUBRC6RToj4XVbJnxG+EKdue4NVpTAW31RNm9ieF1lU=";
+    hash = "sha256-UUBRC6RToj4XVbJnxG+EKdue4NVpTAW31RNm9ieF1lU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "versioningit ~=" "versioningit >="
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    versioningit
+    wheel
+  ];
 
   propagatedBuildInputs = [
     nibabel
@@ -42,7 +56,13 @@ buildPythonPackage rec {
     git
   ];
 
-  preCheck = ''export HOME=$(mktemp -d)'';
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [
+    "heudiconv"
+  ];
 
   meta = with lib; {
     homepage = "https://heudiconv.readthedocs.io";

@@ -1,4 +1,6 @@
-{ buildPythonPackage
+{ aiohttp
+, bottle
+, buildPythonPackage
 , chalice
 , cherrypy
 , django
@@ -7,23 +9,31 @@
 , fetchFromGitHub
 , flask
 , flask-sockets
+, gunicorn
 , lib
 , moto
 , numpy
 , pyramid
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , sanic
 , sanic-testing
 , slack-sdk
 , starlette
 , tornado
+, uvicorn
+, websocket-client
+, websockets
+, werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "slack-bolt";
   version = "1.18.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "slackapi";
@@ -40,23 +50,37 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ slack-sdk ];
 
+  passthru.optional-dependencies = {
+    async = [
+      aiohttp
+      websockets
+    ];
+    adapter = [
+      bottle
+      chalice
+      cherrypy
+      django
+      falcon
+      fastapi
+      flask
+      flask-sockets
+      gunicorn
+      moto
+      pyramid
+      sanic
+      sanic-testing
+      starlette
+      tornado
+      uvicorn
+      websocket-client
+      werkzeug
+    ];
+  };
+
   nativeCheckInputs = [
-    chalice
-    cherrypy
-    django
-    falcon
-    fastapi
-    flask
-    flask-sockets
-    moto
-    pyramid
     pytest-asyncio
     pytestCheckHook
-    sanic
-    sanic-testing
-    starlette
-    tornado
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # Work around "Read-only file system: '/homeless-shelter'" errors
   preCheck = ''
@@ -66,6 +90,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # boddle is not packaged as of 2023-07-15
     "tests/adapter_tests/bottle/"
+    # Tests are blocking at some point. Blocking could be performance-related.
+    "tests/scenario_tests_async/"
+    "tests/slack_bolt_async/"
   ];
 
   disabledTests = [
@@ -82,6 +109,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A framework to build Slack apps using Python";
     homepage = "https://github.com/slackapi/bolt-python";
+    changelog = "https://github.com/slackapi/bolt-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };

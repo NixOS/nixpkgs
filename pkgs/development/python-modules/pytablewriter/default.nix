@@ -105,11 +105,13 @@ buildPythonPackage rec {
     "pathvalidate"
   ];
 
-  # Circular dependency
   disabledTests = [
+    # Circular dependency
     "test_normal_from_file"
     "test_normal_from_text"
     "test_normal_clear_theme"
+    # Test compares CLI output
+    "test_normal"
   ];
 
   disabledTestPaths = [

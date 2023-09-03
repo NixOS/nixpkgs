@@ -10,20 +10,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.1.10";
+  version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-43VCv0MqRIqKioM5Uj3sap9SvGnjgrZFxGPG98hk1v0=";
+    sha256 = "sha256-OgV6Rp5Az5iPUekeO8L28bxlXj/wZ5mOGmlXz14wcoQ=";
   };
 
   cargoLock = {
      lockFile = ./Cargo.lock;
      outputHashes = {
        "bugsalot-0.2.2" = "sha256-9zLzK22dOB7w+ejk1SfkA98z4rEzrB6mAVUpPFuDUnY=";
+       "keychain-services-0.1.2" = "sha256-gkiE9PoSIgHngXc/BLMTL97/6dSnqAj42+q01CLbu+E=";
      };
    };
 

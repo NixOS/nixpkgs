@@ -373,7 +373,7 @@ rec {
       # (1) binaries requiring --help or -h
       help = [ "arlatex" "bundledoc" "cachepic" "checklistings" "dvipos" "extractres" "fig4latex" "fragmaster"
         "kpsewhere" "latex-git-log" "ltxfileinfo" "mendex" "perltex" "pn2pdf" "psbook" "psnup" "psresize" "purifyeps"
-        "simpdftex" "tex2xindy" "texluac" "texluajitc" "urlbst" "yplan" ];
+        "simpdftex" "tex2xindy" "texluac" "texluajitc" "upmendex" "urlbst" "yplan" ];
       shortHelp = [ "adhocfilelist" "authorindex" "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "ctanupload"
         "disdvi" "dvibook" "dviconcat" "getmapdl" "latex2man" "listings-ext.sh" "pygmentex" ];
       # (2) binaries that return non-zero exit code even if correctly asked for help

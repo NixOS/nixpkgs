@@ -2732,9 +2732,12 @@
   };
   CardboardTurkey = {
     name = "Kiran Ostrolenk";
-    email = "kostrolenk@gmail.com";
+    email = "kiran@ostrolenk.co.uk";
     github = "CardboardTurkey";
     githubId = 34030186;
+    keys = [{
+      fingerprint = "8BC7 74E4 A2EC 7507 3B61  A647 0BBB 1C8B 1C36 39EE";
+    }];
   };
   carlosdagos = {
     email = "m@cdagostino.io";
@@ -5813,6 +5816,12 @@
     github = "FredeEB";
     githubId = 7551358;
     name = "Frede Emil";
+  };
+  frederictobiasc = {
+    email = "dev@ntr.li";
+    github = "frederictobiasc";
+    githubId = 26125115;
+    name = "Frédéric Christ";
   };
   Freed-Wu = {
     email = "wuzhenyu@ustc.edu";
@@ -17997,6 +18006,12 @@
     keys = [{
       fingerprint = "5814 50EB 6E17 E715 7C63  E7F1 9879 8C3C 4D68 8D6D";
     }];
+  };
+  viktornordling = {
+    email = "antique_paler_0i@icloud.com";
+    github = "viktornordling";
+    githubId = 90482;
+    name = "Viktor Nordling";
   };
   viluon = {
     email = "nix@viluon.me";
