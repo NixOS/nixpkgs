@@ -2,14 +2,18 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
+, autoconf-archive
 , alsa-lib
 , fftw
 , iniparser
 , libpulseaudio
+, pipewire
 , ncurses
 , pkgconf
 , SDL2
+, libGL
 , withSDL2 ? false
+, withPipewire ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -29,10 +33,16 @@ stdenv.mkDerivation rec {
     libpulseaudio
     ncurses
     iniparser
-  ]++ lib.optional withSDL2 SDL2;
+  ] ++ lib.optionals withSDL2 [
+    SDL2
+    libGL
+  ] ++ lib.optionals withPipewire [
+    pipewire
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
+    autoconf-archive
     pkgconf
   ];
 
