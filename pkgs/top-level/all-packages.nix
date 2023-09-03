@@ -30044,6 +30044,8 @@ with pkgs;
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
+  posy-cursors = callPackage ../data/icons/posy-cursors { };
+
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
 
   pop-icon-theme = callPackage ../data/icons/pop-icon-theme {
