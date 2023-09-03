@@ -19606,6 +19606,8 @@ with pkgs;
 
   jacoco = callPackage ../development/tools/analysis/jacoco { };
 
+  jake = callPackage ../development/tools/jake { };
+
   inherit (callPackage ../development/tools/build-managers/jam { })
     jam
     ftjam;
