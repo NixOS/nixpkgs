@@ -7,7 +7,6 @@
 , qttools
 , qtlocation ? null # qt5 only
 , qtpositioning ? null # qt6 only
-, qtpbfimageplugin
 , qtserialport
 , qtsvg
 , qt5compat ? null # qt6 only
@@ -29,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    qtpbfimageplugin
     qtserialport
   ] ++ (if isQt6 then [
     qtbase
