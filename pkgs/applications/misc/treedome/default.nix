@@ -18,7 +18,6 @@
 }:
 
 let
-
   pname = "treedome";
   version = "0.3.2";
 
@@ -57,7 +56,6 @@ let
     dontInstall = true;
   };
 in
-
 rustPlatform.buildRustPackage {
   inherit version pname src;
   sourceRoot = "src-tauri";
@@ -95,17 +93,23 @@ rustPlatform.buildRustPackage {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     mkdir -p $out/share/
 
     cp target/release/bundle/deb/treedome_0.0.0_amd64/data/usr/bin/treedome $out/bin/treedome
     cp -R target/release/bundle/deb/treedome_0.0.0_amd64/data/usr/share/** $out/share/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "A local-first, encrypted, note taking application with tree-like structures, all written and saved in markdown.";
     homepage = "https://gitlab.com/treedome/treedome";
     license = licenses.gpl3Plus;
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "treedome";
     maintainers = with maintainers; [ tengkuizdihar ];
   };
 }
