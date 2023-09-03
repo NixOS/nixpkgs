@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   unpackCmd = ''
     dpkg-deb -x $curSrc source
   '';
-  
+
   runtimeDependencies = [
     glib-networking
     libappindicator
