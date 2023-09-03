@@ -11,7 +11,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , cmocka
-, waf
+, wafHook
 , libxcrypt
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     python3
-    waf.hook
+    wafHook
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42

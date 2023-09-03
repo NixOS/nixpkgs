@@ -1,7 +1,7 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
-, waf
+, wafHook
 , pkg-config
 , bison
 , flex
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     python3Packages.python
-    waf.hook
+    wafHook
     pkg-config
     bison
     flex
