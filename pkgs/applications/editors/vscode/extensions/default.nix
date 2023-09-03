@@ -186,6 +186,20 @@ let
         };
       };
 
+      antfu.iconify = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "iconify";
+          publisher = "antfu";
+          version = "0.7.0";
+          sha256 = "sha256-BTV1zkFQ06w+XokMaI3lh8jZZMlgMYt1tmHkLTTJC+0=";
+        };
+        meta = {
+          description = "Intelligent Iconify previewing and searching for VS Code";
+          homepage = "https://github.com/antfu/vscode-iconify";
+          license = lib.licenses.mit;
+        };
+      };
+
       antfu.icons-carbon = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "icons-carbon";
