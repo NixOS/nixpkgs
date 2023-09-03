@@ -601,7 +601,17 @@ self: super: builtins.intersectAttrs super {
   #
   # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
   # so disable this on Darwin only
-  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = addPkgconfigDepend pkgs.freeglut (appendPatch ./patches/GLUT.patch super.GLUT);
+  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = overrideCabal (drv: {
+    pkg-configDepends = drv.pkg-configDepends or [] ++ [
+      pkgs.freeglut
+    ];
+    patches = drv.patches or [] ++ [
+      ./patches/GLUT.patch
+    ];
+    prePatch = drv.prePatch or "" + ''
+      ${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+    '';
+  }) super.GLUT;
 
   libsystemd-journal = doJailbreak (addExtraLibrary pkgs.systemd super.libsystemd-journal);
 
