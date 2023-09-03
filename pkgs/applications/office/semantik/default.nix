@@ -85,7 +85,7 @@ mkDerivation rec {
     kdelibs4support
   ];
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--qtlibs=${lib.getLib qtbase}/lib"
   ];
 
