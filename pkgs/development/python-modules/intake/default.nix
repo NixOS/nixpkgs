@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.7.0";
+  version = "unstable-2023-08-24";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-2LUblA8eVCOfVJ6BJayralNiv6EFt6MzR5ptKksVNA4=";
+    rev = "81b1567a2030adfb22b856b4f63cefe35de68983";
+    hash = "sha256-S2PoUN0Bao5VULfHhgbXXowopPLm/njAHO3dIM8ILno=";
   };
 
   propagatedBuildInputs = [
