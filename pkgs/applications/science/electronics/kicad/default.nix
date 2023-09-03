@@ -229,18 +229,9 @@ stdenv.mkDerivation rec {
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ evils kiwi ];
-    # kicad is cross platform
+    maintainers = with lib.maintainers; [ evils ];
     platforms = lib.platforms.all;
     broken = stdenv.isDarwin;
-
-    hydraPlatforms = if (with3d) then [ ] else platforms;
-    # We can't download the 3d models on Hydra,
-    # they are a ~1 GiB download and they occupy ~5 GiB in store.
-    # as long as the base and libraries (minus 3d) are build,
-    # this wrapper does not need to get built
-    # the kicad-*small "packages" cause this to happen
-
     mainProgram = "kicad";
   };
 }
