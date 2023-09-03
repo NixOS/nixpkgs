@@ -10,6 +10,13 @@ for flag in ${NIX_HARDENING_ENABLE_@suffixSalt@-}; do
   hardeningEnableMap["$flag"]=1
 done
 
+# fortify3 implies fortify enablement - make explicit before
+# we filter unsupported flags because unsupporting fortify3
+# doesn't mean we should unsupport fortify too
+if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
+  hardeningEnableMap["fortify"]=1
+fi
+
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
   unset -v "hardeningEnableMap[$flag]"
@@ -19,7 +26,7 @@ for flag in @hardening_unsupported_flags@; do
   fi
 done
 
-# make fortify and fortify3 mutually exclusive
+# now make fortify and fortify3 mutually exclusive
 if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
   unset -v "hardeningEnableMap['fortify']"
 fi
