@@ -37,16 +37,11 @@
     };
     logging = {
       min_level = "info";
-      writers = [
-        {
-          type = "stdout";
-          format = "pretty-colored";
-        }
-        {
-          type = "file";
-          format = "json";
-        }
-      ];
+      writers = lib.singleton {
+        type = "stdout";
+        format = "pretty-colored";
+        time_format = " ";
+      };
     };
   };
 
