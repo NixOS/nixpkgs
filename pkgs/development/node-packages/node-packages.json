@@ -169,7 +169,6 @@
 , "katex"
 , "keyoxide"
 , "lcov-result-merger"
-, "leetcode-cli"
 , "vsc-leetcode-cli"
 , "lerna"
 , "less"
