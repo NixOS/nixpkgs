@@ -10,6 +10,7 @@
 , gmime3
 , texinfo
 , xapian
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-x1TsyTOK5U6/Y3QInm+XQ7T32X49iwa+4UnaHdiyqCI=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "add-mu4e-pkg.el";
+      url = "https://github.com/djcb/mu/commit/00f7053d51105eea0c72151f1a8cf0b6d8478e4e.patch";
+      hash = "sha256-21c7djmYTcqyyygqByo9vu/GsH8WMYcq8NOAvJsS5AQ=";
+    })
+  ];
+
   postPatch = ''
     # Fix mu4e-builddir (set it to $out)
     substituteInPlace mu4e/mu4e-config.el.in \
@@ -33,17 +42,8 @@ stdenv.mkDerivation rec {
       --replace "/bin/rm" "${coreutils}/bin/rm"
   '';
 
-  # AOT native-comp, mostly copied from pkgs/build-support/emacs/generic.nix
-  postInstall = lib.optionalString (emacs.withNativeCompilation or false) ''
-    mkdir -p $mu4e/share/emacs/native-lisp
-    export EMACSLOADPATH=$mu4e/share/emacs/site-lisp/mu4e:
-    export EMACSNATIVELOADPATH=$mu4e/share/emacs/native-lisp:
-
-    find $mu4e/share/emacs -type f -name '*.el' -print0 \
-      | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
-          "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
-  '' + ''
-    emacs --batch -l package --eval "(package-generate-autoloads \"mu4e\" \"$mu4e/share/emacs/site-lisp/mu4e\")"
+  postInstall = ''
+    rm --verbose $mu4e/share/emacs/site-lisp/mu4e/*.elc
   '';
 
   # move only the mu4e info manual
