@@ -3725,6 +3725,20 @@ let
         };
       };
 
+      Vue.volar = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "volar";
+          publisher = "Vue";
+          version = "1.8.8";
+          sha256 = "sha256-+lNyotrDzJDFfut+XCSIzAgLs+M6Y1uXN8iLRpue6ag=";
+        };
+        meta = {
+          description = "Language support for Vue 3";
+          homepage = "https://github.com/vuejs/language-tools";
+          license = lib.licenses.mit;
+        };
+      };
+
       waderyan.gitblame = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gitblame";
@@ -3921,6 +3935,7 @@ let
     ms-vscode.PowerShell = super.ms-vscode.powershell;
     rioj7.commandOnAllFiles = super.rioj7.commandonallfiles;
     WakaTime.vscode-wakatime = super.wakatime.vscode-wakatime;
+    vue.volar = super.Vue.volar;
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix
