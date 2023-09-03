@@ -5,7 +5,7 @@
 , pkg-config
 , python3
 , python3Packages
-, waf
+, wafHook
 , boost179
 , openssl
 , sqlite
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nnnxlkYVTSRB6ZcuIUDFol999+amGtqegHXK+06ITK8=";
   };
 
-  nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx waf.hook ];
+  nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
 
   buildInputs = [ boost179 openssl sqlite ];
 
