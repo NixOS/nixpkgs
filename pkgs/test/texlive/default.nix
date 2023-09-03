@@ -564,8 +564,7 @@ rec {
 
   # check that all scripts have a Nix shebang
   shebangs = let
-      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
-      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+      binPackages = lib.catAttrs "out" (lib.attrValues texlive.pkgs);
     in
     runCommand "texlive-test-shebangs" { }
       (''
