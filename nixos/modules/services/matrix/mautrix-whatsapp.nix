@@ -117,6 +117,16 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+
+    users.users.mautrix-whatsapp = {
+      isSystemUser = true;
+      group = "mautrix-whatsapp";
+      home = dataDir;
+      description = "Mautrix-WhatsApp bridge user";
+    };
+
+    users.groups.mautrix-whatsapp = {};
+
     services.mautrix-whatsapp.settings = {
       homeserver.domain = lib.mkDefault config.services.matrix-synapse.settings.server_name;
     };
@@ -158,10 +168,11 @@ in {
       '';
 
       serviceConfig = {
-        DynamicUser = true;
+        User = "mautrix-whatsapp";
+        Group = "mautrix-whatsapp";
         EnvironmentFile = cfg.environmentFile;
         StateDirectory = baseNameOf dataDir;
-        WorkingDirectory = "${dataDir}";
+        WorkingDirectory = dataDir;
         ExecStart = ''
           ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp \
           --config='${settingsFile}' \
