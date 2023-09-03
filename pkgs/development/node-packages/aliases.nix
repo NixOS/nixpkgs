@@ -86,6 +86,7 @@ mapAliases {
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
+  musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   inherit (pkgs) react-static; # added 2023-08-21
