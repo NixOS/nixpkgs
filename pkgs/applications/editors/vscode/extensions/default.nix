@@ -1137,6 +1137,20 @@ let
         };
       };
 
+      dprint.dprint = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "dprint";
+          publisher = "dprint";
+          version = "0.15.0";
+          sha256 = "sha256-MXosaLZL3uSpMl4slOuFWy1iKZqs/TJ5cDVOtfgVoBo=";
+        };
+        meta = {
+          description = "Formats code in VSCode using dprint.";
+          homepage = "https://github.com/dprint/dprint-vscode";
+          license = lib.licenses.mit;
+        };
+      };
+
       dracula-theme.theme-dracula = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "theme-dracula";
