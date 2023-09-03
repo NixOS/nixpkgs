@@ -4014,6 +4014,12 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL;
   };
 
+  openllm = callPackage ../development/python-modules/openllm { };
+
+  openllm-client = callPackage ../development/python-modules/openllm-client { };
+
+  openllm-core = callPackage ../development/python-modules/openllm-core { };
+
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
   glyphslib = callPackage ../development/python-modules/glyphslib { };

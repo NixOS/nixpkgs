@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "rchitect";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "randy3k";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-fXL2UX0n9kKAVwMUP0z8V3UtJAy4xbAjnPIggUHllN0=";
+    hash = "sha256-e0xCUp5WBP4UKPkwPfrouNNYTBEnhlHHlkBQmghQfdk=";
   };
 
   postPatch = ''
