@@ -16,12 +16,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.4";
+  version = "1.2.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pL1U6UaegbejCmcRQjEVq8gY2c2ETsscoOYQS8U3Tag=";
+    hash = "sha256-t6b48IYDnu7HkHC5FPPGUe1/NhLJZTdK+RDSd8eiE50=";
   };
 
   postPatch = ''

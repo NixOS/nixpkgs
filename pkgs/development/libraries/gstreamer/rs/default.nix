@@ -103,7 +103,7 @@ let
       "threadshare" # tests cannot bind to localhost on darwin
       "webp" # not supported on darwin (upstream crate issue)
     ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
-      # these require gstreamer-gl which requires darwin sdk bump
+      # these require gstreamer-gl
       "gtk4"
       "livesync"
       "fallbackswitch"
@@ -130,7 +130,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-rs";
-  version = "0.10.11";
+  version = "0.11.0+fixup";
 
   outputs = [ "out" "dev" ];
 
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = version;
-    hash = "sha256-oOoUGzbg/ib1pA0T81hxgLlHnTRlNCWH5qZUNAutn8U=";
+    hash = "sha256-nvDvcY/WyVhcxitcoqgEUT8A1synZqxG2e51ct7Fgss=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -164,12 +164,12 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cairo-rs-0.17.10" = "sha256-g7d1ccSbGIPVMu73mb5QvWVSN8XAB1xLZuWfgdd1cfU=";
+      "cairo-rs-0.18.1" = "sha256-k+YIAZXxejbxPQqbUU91qbx2AR98gTrseknLHtNZDEE=";
       "color-name-1.1.0" = "sha256-RfMStbe2wX5qjPARHIFHlSDKjzx8DwJ+RjzyltM5K7A=";
       "ffv1-0.0.0" = "sha256-af2VD00tMf/hkfvrtGrHTjVJqbl+VVpLaR0Ry+2niJE=";
       "flavors-0.2.0" = "sha256-zBa0X75lXnASDBam9Kk6w7K7xuH9fP6rmjWZBUB5hxk=";
-      "gdk4-0.6.6" = "sha256-1WPXxsZJoYEQxVuP/CSpGs2XEZSJD//JJz4Ka2hxXHM=";
-      "gstreamer-0.20.7" = "sha256-o4o4mPFAZOshNNkCkykjG/b+UtT2z6TNLOEzJsfs+Mk=";
+      "gdk4-0.7.1" = "sha256-UMGmZivVdvmKRAjIGlj6pjDxwfNJyz8/6C0eYH1OOw4=";
+      "gstreamer-0.21.0" = "sha256-2uilK8wYG8e59fdL3q+kmixc1zw+EBwqvGs/EgfCGhk=";
     };
   };
 
