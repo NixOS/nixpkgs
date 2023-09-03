@@ -2762,6 +2762,8 @@ with pkgs;
 
   vice = callPackage ../applications/emulators/vice { };
 
+  virtualxt = callPackage ../applications/emulators/virtualxt { };
+
   winetricks = callPackage ../applications/emulators/wine/winetricks.nix {
     inherit (gnome) zenity;
   };
