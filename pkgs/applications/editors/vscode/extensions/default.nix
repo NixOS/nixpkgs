@@ -788,6 +788,20 @@ let
         };
       };
 
+      csstools.postcss = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "postcss";
+          publisher = "csstools";
+          version = "1.0.9";
+          sha256 = "sha256-5pGDKme46uT1/35WkTGL3n8ecc7wUBkHVId9VpT7c2U=";
+        };
+        meta = {
+          description = "Syntax highlighting for modern and experimental CSS in VSCode";
+          homepage = "https://github.com/csstools/postcss-language";
+          license = lib.licenses.cc0;
+        };
+      };
+
       w88975.code-translate = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "code-translate";
