@@ -2475,6 +2475,8 @@ self: super: with self; {
 
   databricks-sql-connector = callPackage ../development/python-modules/databricks-sql-connector { };
 
+  dataclass-factory = callPackage ../development/python-modules/dataclass-factory { };
+
   dataclass-wizard = callPackage ../development/python-modules/dataclass-wizard { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
