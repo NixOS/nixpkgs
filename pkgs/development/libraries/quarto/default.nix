@@ -9,7 +9,9 @@
 , rPackages
 , extraRPackages ? []
 , makeWrapper
+, runCommand
 , python3
+, quarto
 , extraPythonPackages ? ps: with ps; []
 }:
 
@@ -60,6 +62,14 @@ stdenv.mkDerivation (final: {
 
       runHook preInstall
   '';
+
+  passthru.tests = {
+    quarto-check = runCommand "quarto-check" {} ''
+      export HOME="$(mktemp -d)"
+      ${quarto}/bin/quarto check
+      touch $out
+    '';
+  };
 
   meta = with lib; {
     description = "Open-source scientific and technical publishing system built on Pandoc";
