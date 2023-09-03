@@ -8570,6 +8570,12 @@
     name = "John Soo";
     githubId = 10039785;
   };
+  jsusk = {
+    email = "joshua@suskalo.org";
+    github = "IGJoshua";
+    name = "Joshua Suskalo";
+    githubId = 27734541;
+  };
   jtbx = {
     email = "jtbx@duck.com";
     name = "Jeremy Baxter";
