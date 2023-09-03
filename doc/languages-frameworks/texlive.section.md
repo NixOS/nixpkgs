@@ -38,6 +38,24 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
 
 - Note that the wrapper assumes that the result has a chance to be useful. For example, the core executables should be present, as well as some core data files. The supported way of ensuring this is by including some scheme, for example `scheme-basic`, into the combination.
 
+- TeX Live packages are also available under `texlive.pkgs` as derivations with outputs `out`, `tex`, `texdoc`, `texsource`, `tlpkg`, `man`, `info`. They cannot be installed outside of `texlive.combine` but are available for other uses. To repackage a font, for instance, use
+
+  ```nix
+  stdenvNoCC.mkDerivation rec {
+    src = texlive.pkgs.iwona;
+
+    inherit (src) pname version;
+
+    installPhase = ''
+      runHook preInstall
+      install -Dm644 fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
+      runHook postInstall
+    '';
+  }
+  ```
+
+  See `biber`, `iwona` for complete examples.
+
 ## Custom packages {#sec-language-texlive-custom-packages}
 
 You may find that you need to use an external TeX package. A derivation for such package has to provide the contents of the "texmf" directory in its output and provide the appropriate `tlType` attribute (one of `"run"`, `"bin"`, `"doc"`, `"source"`). Dependencies on other TeX packages can be listed in the attribute `tlDeps`.
