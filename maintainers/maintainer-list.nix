@@ -5720,6 +5720,12 @@
     githubId = 74379;
     name = "Florian Pester";
   };
+  fmahnke = {
+    email = "bulk@mahnke.tech";
+    github = "fmahnke";
+    githubId = 610099;
+    name = "Fritz Mahnke";
+  };
   fmoda3 = {
     email = "fmoda3@mac.com";
     github = "fmoda3";
