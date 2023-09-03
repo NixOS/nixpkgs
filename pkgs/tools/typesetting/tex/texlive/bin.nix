@@ -355,7 +355,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   inherit (src) version;
   format = "other";
 
-  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs));
+  src = assertFixedHash pname texlive.pkgs.pygmentex.tex;
 
   propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
