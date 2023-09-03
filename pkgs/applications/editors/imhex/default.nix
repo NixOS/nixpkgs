@@ -22,7 +22,7 @@
 }:
 
 let
-  version = "1.29.0";
+  version = "1.30.1";
 
   patterns_src = fetchFromGitHub {
     owner = "WerWolv";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "WerWolv";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dghyv7rpqGs5dt51ziAaeb/Ba7rGEcJ54AYKRJ2xXuk=";
+    hash = "sha256-3s9Dgdhl+k2KjMoSHNl59YOoCEwqK+37DOzKdGP88/4=";
   };
 
   nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
