@@ -13,11 +13,11 @@
 , extraPythonPackages ? ps: with ps; []
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (final: {
   pname = "quarto";
   version = "1.3.450";
   src = fetchurl {
-    url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${version}/quarto-${version}-linux-amd64.tar.gz";
+    url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
     sha256 = "sha256-bcj7SzEGfQxsw9P8WkcLrKurPupzwpgIGtxoE3KVwAU=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
   };
-}
+})
