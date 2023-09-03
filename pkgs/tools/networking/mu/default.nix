@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   pname = "mu";
   version = "1.10.7";
 
+  outputs = [ "out" "mu4e" ];
+
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
@@ -33,15 +35,30 @@ stdenv.mkDerivation rec {
 
   # AOT native-comp, mostly copied from pkgs/build-support/emacs/generic.nix
   postInstall = lib.optionalString (emacs.withNativeCompilation or false) ''
-    mkdir -p $out/share/emacs/native-lisp
-    export EMACSLOADPATH=$out/share/emacs/site-lisp/mu4e:
-    export EMACSNATIVELOADPATH=$out/share/emacs/native-lisp:
+    mkdir -p $mu4e/share/emacs/native-lisp
+    export EMACSLOADPATH=$mu4e/share/emacs/site-lisp/mu4e:
+    export EMACSNATIVELOADPATH=$mu4e/share/emacs/native-lisp:
 
-    find $out/share/emacs -type f -name '*.el' -print0 \
+    find $mu4e/share/emacs -type f -name '*.el' -print0 \
       | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
           "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
   '' + ''
-    emacs --batch -l package --eval "(package-generate-autoloads \"mu4e\" \"$out/share/emacs/site-lisp/mu4e\")"
+    emacs --batch -l package --eval "(package-generate-autoloads \"mu4e\" \"$mu4e/share/emacs/site-lisp/mu4e\")"
+  '';
+
+  # move only the mu4e info manual
+  # this has to be after preFixup otherwise the info manual may be moved back by _multioutDocs()
+  # we manually move the mu4e info manual instead of setting
+  # outputInfo to mu4e because we do not want to move the mu-guile
+  # info manual (if it exists)
+  postFixup = ''
+    moveToOutput share/info/mu4e.info.gz $mu4e
+    install-info $mu4e/share/info/mu4e.info.gz $mu4e/share/info/dir
+    if [[ -a ''${!outputInfo}/share/info/mu-guile.info.gz ]]; then
+      install-info --delete $mu4e/share/info/mu4e.info.gz ''${!outputInfo}/share/info/dir
+    else
+      rm --verbose --recursive ''${!outputInfo}/share/info
+    fi
   '';
 
   buildInputs = [ emacs glib gmime3 texinfo xapian ];
@@ -49,6 +66,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dguile=disabled"
     "-Dreadline=disabled"
+    "-Dlispdir=${placeholder "mu4e"}/share/emacs/site-lisp"
   ];
 
   nativeBuildInputs = [ pkg-config meson ninja ];
