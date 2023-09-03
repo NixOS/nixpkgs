@@ -229,7 +229,6 @@
 , "pyright"
 , "quicktype"
 , "react-native-cli"
-, "react-static"
 , "react-tools"
 , "redoc-cli"
 , "remod-cli"
