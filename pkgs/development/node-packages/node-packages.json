@@ -100,7 +100,6 @@
 , "create-react-native-app"
 , "cspell"
 , "csslint"
-, "degit"
 , "dhcp"
 , "diagnostic-languageserver"
 , "diff2html-cli"

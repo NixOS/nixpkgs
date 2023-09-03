@@ -60,6 +60,7 @@ mapAliases {
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
   inherit (pkgs) cordova; # added 2023-08-18
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) degit; # added 2023-08-18
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
