@@ -237,8 +237,7 @@ buildStdenv.mkDerivation {
       url = "https://git.alpinelinux.org/aports/plain/community/firefox/avoid-redefinition.patch?id=2f620d205ed0f9072bbd7714b5ec1b7bf6911c12";
       hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
     })
-  ]
-  ++ lib.optionals (lib.versionOlder version "102.13") [
+  ] ++ lib.optionals (lib.versionOlder version "102.13") [
     # cherry-pick bindgen change to fix build with clang 16
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/community/firefox-esr/bindgen.patch?id=4c4b0c01c808657fffc5b796c56108c57301b28f";
@@ -248,6 +247,27 @@ buildStdenv.mkDerivation {
     # original change: https://github.com/mozilla/mp4parse-rust/commit/8b5b652d38e007e736bb442ccd5aa5ed699db100
     # vendored to update checksums
     ./mp4parse-rust-170.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox/disable-moz-stackwalk.patch?id=9e1401da95a214030b273f3bcb3b94466508fc82";
+      hash = "sha256-Srck0uWJLyeHure/qETA8v8hpx9yMhCci0XtpkLPFHs=";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isPower [
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox/sqlite-ppc.patch?id=9e1401da95a214030b273f3bcb3b94466508fc82";
+      hash = "sha256-vBTtNW5Ofv6E1J324+1GJEh8pZSl3K3G+IE6e5pV9NE=";
+    })
+    # these two patches enable firefox to build on ppc64 with clang's integrated assembler
+    # chimera uses this because they only have clang. for LTO builds this is our easiest option
+    # since clang bintools doesn't have `as`
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/chimera-linux/cports/99571baa0511eb1d79b48557165c0f2320dd3e58/contrib/firefox/patches/xptcall-integrated-as.patch";
+      hash = "sha256-OsrluMcOLbNTol8OFOixjgiJnzK9xerIJyWWGRNhftI=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/chimera-linux/cports/99571baa0511eb1d79b48557165c0f2320dd3e58/contrib/firefox/patches/clang-ias.patch";
+      hash = "sha256-x2moJRfabz/ZGGosVsGXp6kDbzC3kXIebGSUPbjwejc=";
+    })
   ]
   ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
@@ -366,10 +386,10 @@ buildStdenv.mkDerivation {
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
   '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+  '' + lib.optionalString stdenv.buildPlatform.isMusl ''
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
-    export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
+    export LD_PRELOAD=${pkgsBuildBuild.mimalloc}/lib/libmimalloc.so
   '';
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
