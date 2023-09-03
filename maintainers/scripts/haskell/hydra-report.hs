@@ -187,7 +187,7 @@ getBuildReports opt = runReq defaultHttpConfig do
 
 getEvalBuilds :: HydraSlownessWorkaroundFlag -> Int -> Req (Seq Build)
 getEvalBuilds NoHydraSlownessWorkaround id =
-  hydraJSONQuery (responseTimeout 600000000) ["eval", showT id, "builds"]
+  hydraJSONQuery (responseTimeout 900000000) ["eval", showT id, "builds"]
 getEvalBuilds HydraSlownessWorkaround id = do
   Eval{builds} <- hydraJSONQuery mempty [ "eval", showT id ]
   forM builds $ \buildId -> do
