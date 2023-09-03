@@ -454,8 +454,7 @@ rec {
       '';
 
       # link all binaries in single derivation
-      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
-      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+      binPackages = lib.catAttrs "out" (lib.attrValues texlive.pkgs);
       binaries = buildEnv { name = "texlive-binaries"; paths = binPackages; };
     in
     runCommand "texlive-test-binaries"
