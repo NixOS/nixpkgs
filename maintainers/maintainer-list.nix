@@ -11451,6 +11451,11 @@
     githubId = 5698461;
     name = "Maciej Kazulak";
   };
+  mkez = {
+    github = "mk3z";
+    githubId = 52108954;
+    name = "Matias Zwinger";
+  };
   mkf = {
     email = "m@mikf.pl";
     github = "mkf";
