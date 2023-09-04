@@ -22,9 +22,11 @@ with lib;
       foot
       kitty
       mtm
+      rio
       rxvt-unicode-unwrapped
       rxvt-unicode-unwrapped-emoji
       termite
+      tmux
       wezterm
     ]));
 
