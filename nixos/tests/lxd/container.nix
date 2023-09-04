@@ -1,7 +1,7 @@
 import ../make-test-python.nix ({ pkgs, lib, ... } :
 
 let
-  lxd-image = import ../../release.nix {
+  releases = import ../../release.nix {
     configuration = {
       # Building documentation makes the test unnecessarily take a longer time:
       documentation.enable = lib.mkForce false;
@@ -11,14 +11,14 @@ let
     };
   };
 
-  lxd-image-metadata = lxd-image.lxdMeta.${pkgs.stdenv.hostPlatform.system};
-  lxd-image-rootfs = lxd-image.lxdImage.${pkgs.stdenv.hostPlatform.system};
+  lxd-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
+  lxd-image-rootfs = releases.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
 
 in {
-  name = "lxd";
+  name = "lxd-container";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ patryk27 ];
+    maintainers = [ patryk27 adamcstephens ];
   };
 
   nodes.machine = { lib, ... }: {
