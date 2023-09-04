@@ -6,6 +6,10 @@ let
 
   cfg = config.security.sudo;
 
+  enableSSHAgentAuth =
+    with config.security;
+    pam.enableSSHAgentAuth && pam.sudo.sshAgentAuth;
+
   inherit (pkgs) sudo;
 
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
@@ -210,10 +214,10 @@ in
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
         # or ‘security.sudo.extraRules’ instead.
       ''
-      ''
+      (optionalString enableSSHAgentAuth ''
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
-      ''
+      '')
       ''
         # "root" is allowed to do anything.
         root        ALL=(ALL:ALL) SETENV: ALL
