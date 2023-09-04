@@ -3110,6 +3110,11 @@
       fingerprint = "9C56 1D64 30B2 8D6B DCBC 9CEB 73D5 E7FD EE3D E49A";
     }];
   };
+  chrpinedo = {
+    github = "chrpinedo";
+    githubId = 2324630;
+    name = "Christian Pinedo";
+  };
   chuahou = {
     email = "human+github@chuahou.dev";
     github = "chuahou";
