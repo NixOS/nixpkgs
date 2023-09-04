@@ -1,9 +1,12 @@
 { lib
 , stdenv
 , symlinkJoin
-, prismlauncher-unwrapped
+, makeWrapper
 , wrapQtAppsHook
 , addOpenGLRunpath
+
+, prismlauncher-unwrapped
+
 , qtbase  # needed for wrapQtAppsHook
 , qtsvg
 , qtwayland
@@ -11,6 +14,7 @@
 , libpulseaudio
 , libGL
 , glfw
+, glfw-wayland-minecraft
 , openal
 , jdk8
 , jdk17
@@ -24,10 +28,17 @@
 , gamemodeSupport ? stdenv.isLinux
 , textToSpeechSupport ? stdenv.isLinux
 , controllerSupport ? stdenv.isLinux
+, withWaylandGLFW ? false
+, shellWrapper ? withWaylandGLFW
+
 , jdks ? [ jdk17 jdk8 ]
 , additionalLibs ? [ ]
 , additionalPrograms ? [ ]
 }:
+
+assert lib.assertMsg (withWaylandGLFW -> stdenv.isLinux) "withWaylandGLFW is only available on Linux";
+assert lib.assertMsg (withWaylandGLFW -> shellWrapper) "withWaylandGLFW requires shellWrapper";
+
 let
   prismlauncherFinal = prismlauncher-unwrapped.override {
     inherit msaClientID gamemodeSupport;
@@ -40,7 +51,8 @@ symlinkJoin {
 
   nativeBuildInputs = [
     wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optional shellWrapper makeWrapper;
 
   buildInputs = [
     qtbase
@@ -48,20 +60,29 @@ symlinkJoin {
   ]
   ++ lib.optional (lib.versionAtLeast qtbase.version "6" && stdenv.isLinux) qtwayland;
 
+  waylandPreExec = ''
+    if [ -n "$WAYLAND_DISPLAY" ]; then
+      export LD_LIBRARY_PATH=${lib.getLib glfw-wayland-minecraft}/lib:"$LD_LIBRARY_PATH"
+    fi
+  '';
+
   postBuild = ''
+    ${lib.optionalString withWaylandGLFW ''
+      qtWrapperArgs+=(--run "$waylandPreExec")
+    ''}
+
     wrapQtAppsHook
   '';
 
   qtWrapperArgs =
     let
-      runtimeLibs = (with xorg; [
-        libX11
-        libXext
-        libXcursor
-        libXrandr
-        libXxf86vm
-      ])
-      ++ [
+      runtimeLibs = [
+        xorg.libX11
+        xorg.libXext
+        xorg.libXcursor
+        xorg.libXrandr
+        xorg.libXxf86vm
+
         # lwjgl
         libpulseaudio
         libGL
