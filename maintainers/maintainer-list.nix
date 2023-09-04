@@ -13850,6 +13850,13 @@
       fingerprint = "DD54 130B ABEC B65C 1F6B  2A38 8312 4F97 A318 EA18";
     }];
   };
+  p-rintz = {
+    email = "nix@rintz.net";
+    github = "p-rintz";
+    githubId = 13933258;
+    name = "Philipp Rintz";
+    matrix = "@philipp:srv.icu";
+  };
   ProducerMatt = {
     name = "Matthew Pherigo";
     email = "ProducerMatt42@gmail.com";

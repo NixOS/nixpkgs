@@ -1933,6 +1933,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd { };
 
+  pocket-updater-utility = callPackage ../tools/games/pocket-updater-utility { };
+
   polygon-cli = callPackage ../tools/networking/polygon-cli { };
 
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout { };
