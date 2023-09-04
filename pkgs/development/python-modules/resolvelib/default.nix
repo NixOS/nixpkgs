@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , commentjson
 , pytestCheckHook
 }:
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/128636
   # https://github.com/ansible/ansible/blob/devel/requirements.txt
   version = "0.5.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sarugaku";
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "198vfv78hilpg0d0mjzchzp9zk6239wnra61vlsgwpcgz66d2bgv";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     commentjson
@@ -45,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Resolve abstract dependencies into concrete ones";
     homepage = "https://github.com/sarugaku/resolvelib";
+    changelog = "https://github.com/sarugaku/resolvelib/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ ];
   };
