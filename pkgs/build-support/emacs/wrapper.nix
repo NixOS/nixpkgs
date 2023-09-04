@@ -32,7 +32,7 @@ in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
 
 */
 
-{ lib, lndir, makeWrapper, runCommand, gcc }:
+{ lib, lndir, runCommand, gcc }:
 self:
 let
   inherit (self) emacs;
@@ -50,7 +50,7 @@ runCommand
   (lib.appendToName "with-packages" emacs).name
   {
     inherit emacs explicitRequires;
-    nativeBuildInputs = [ emacs lndir makeWrapper ];
+    nativeBuildInputs = [ emacs lndir ];
 
     preferLocalBuild = true;
     allowSubstitutes = false;
