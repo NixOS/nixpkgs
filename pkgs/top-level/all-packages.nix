@@ -1935,6 +1935,8 @@ with pkgs;
 
   polygon-cli = callPackage ../tools/networking/polygon-cli { };
 
+  pricehist = python3Packages.callPackage ../tools/misc/pricehist { };
+
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout { };
 
   q = callPackage ../tools/networking/q { };
