@@ -44,6 +44,7 @@ stdenv.mkDerivation {
     description = "A convenient free open source bilibili live recording tool";
     homepage = "https://rec.danmuji.org/";
     changelog = "https://github.com/BililiveRecorder/BililiveRecorder/releases/tag/${version}";
+    mainProgram = "BililiveRecorder";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ zaldnoay ];
     platforms = platforms.unix;
