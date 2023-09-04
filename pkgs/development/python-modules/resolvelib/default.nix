@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Resolve abstract dependencies into concrete ones";
     homepage = "https://github.com/sarugaku/resolvelib";
+    changelog = "https://github.com/sarugaku/resolvelib/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ hexa ];
   };
