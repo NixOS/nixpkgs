@@ -2,21 +2,19 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.virtualisation.lxd;
 in {
   imports = [
-    (mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
+    (lib.mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
   ];
 
   ###### interface
 
   options = {
     virtualisation.lxd = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = lib.mdDoc ''
           This option enables lxd, a daemon that manages
@@ -32,28 +30,28 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
+      package = lib.mkOption {
+        type = lib.types.package;
         default = pkgs.lxd;
-        defaultText = literalExpression "pkgs.lxd";
+        defaultText = lib.literalExpression "pkgs.lxd";
         description = lib.mdDoc ''
           The LXD package to use.
         '';
       };
 
-      lxcPackage = mkOption {
-        type = types.package;
+      lxcPackage = lib.mkOption {
+        type = lib.types.package;
         default = pkgs.lxc;
-        defaultText = literalExpression "pkgs.lxc";
+        defaultText = lib.literalExpression "pkgs.lxc";
         description = lib.mdDoc ''
           The LXC package to use with LXD (required for AppArmor profiles).
         '';
       };
 
-      zfsSupport = mkOption {
-        type = types.bool;
+      zfsSupport = lib.mkOption {
+        type = lib.types.bool;
         default = config.boot.zfs.enabled;
-        defaultText = literalExpression "config.boot.zfs.enabled";
+        defaultText = lib.literalExpression "config.boot.zfs.enabled";
         description = lib.mdDoc ''
           Enables lxd to use zfs as a storage for containers.
 
@@ -62,8 +60,8 @@ in {
         '';
       };
 
-      recommendedSysctlSettings = mkOption {
-        type = types.bool;
+      recommendedSysctlSettings = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = lib.mdDoc ''
           Enables various settings to avoid common pitfalls when
@@ -75,8 +73,8 @@ in {
         '';
       };
 
-      startTimeout = mkOption {
-        type = types.int;
+      startTimeout = lib.mkOption {
+        type = lib.types.int;
         default = 600;
         apply = toString;
         description = lib.mdDoc ''
@@ -91,13 +89,13 @@ in {
           Enables the (experimental) LXD UI.
         '');
 
-        package = mkPackageOption pkgs.lxd-unwrapped "ui" { };
+        package = lib.mkPackageOption pkgs.lxd-unwrapped "ui" { };
       };
     };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     # Note: the following options are also declared in virtualisation.lxc, but
@@ -139,19 +137,19 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [
         "network-online.target"
-        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+        (lib.mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
       ];
       requires = [
         "network-online.target"
         "lxd.socket"
-        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+        (lib.mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
       ];
       documentation = [ "man:lxd(1)" ];
 
       path = [ pkgs.util-linux ]
-        ++ optional cfg.zfsSupport config.boot.zfs.package;
+        ++ lib.optional cfg.zfsSupport config.boot.zfs.package;
 
-      environment = mkIf (cfg.ui.enable) {
+      environment = lib.mkIf (cfg.ui.enable) {
         "LXD_UI" = cfg.ui.package;
       };
 
@@ -173,7 +171,7 @@ in {
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
         # explicitly tell it where the actual configuration files are
-        Environment = mkIf (config.virtualisation.lxc.lxcfs.enable)
+        Environment = lib.mkIf (config.virtualisation.lxc.lxcfs.enable)
           "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
       };
     };
@@ -185,7 +183,7 @@ in {
       subGidRanges = [ { startGid = 1000000; count = 65536; } ];
     };
 
-    boot.kernel.sysctl = mkIf cfg.recommendedSysctlSettings {
+    boot.kernel.sysctl = lib.mkIf cfg.recommendedSysctlSettings {
       "fs.inotify.max_queued_events" = 1048576;
       "fs.inotify.max_user_instances" = 1048576;
       "fs.inotify.max_user_watches" = 1048576;
@@ -197,6 +195,6 @@ in {
     };
 
     boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" "vhost_vsock" ]
-      ++ optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+      ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
   };
 }
