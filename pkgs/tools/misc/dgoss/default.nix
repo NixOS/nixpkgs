@@ -43,6 +43,6 @@ resholve.mkDerivation rec {
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual ];
+    maintainers = with maintainers; [ hyzual anthonyroussel ];
   };
 }
