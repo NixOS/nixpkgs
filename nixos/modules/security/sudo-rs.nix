@@ -220,10 +220,6 @@ in
         # Don't edit this file. Set the NixOS options ‘security.sudo-rs.configFile’
         # or ‘security.sudo-rs.extraRules’ instead.
       ''
-      (optionalString enableSSHAgentAuth ''
-        # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
-        Defaults env_keep+=SSH_AUTH_SOCK
-      '')
       (pipe cfg.extraRules [
         (filter (rule: length rule.commands != 0))
         (map (rule: [
