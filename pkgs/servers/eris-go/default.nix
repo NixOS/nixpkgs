@@ -2,19 +2,21 @@
 
 buildGoModule rec {
   pname = "eris-go";
-  version = "20230729";
+  version = "20230904";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "eris";
     repo = "eris-go";
     rev = version;
-    hash = "sha256-yFWmfWmlGL4fC36XsjO/ao/v8FVI20EpXSblZ0EcosI=";
+    hash = "sha256-HwXjF0VypN2AktYA3jNuVPmParZDYxQcZcJPrEDAFTU=";
   };
 
   vendorHash = "sha256-Z6rirsiiBzH0herQAkxZp1Xr++489qNoiD4fqoLt9/A=";
 
   passthru.tests = { inherit (nixosTests) eris-server; };
+
+  skipNetworkTests = true;
 
   meta = src.meta // {
     description = "Implementation of ERIS for Go";
