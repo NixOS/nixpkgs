@@ -4,6 +4,7 @@
 
 let
   cfg = config.virtualisation.lxd;
+  preseedFormat = pkgs.formats.yaml {};
 in {
   imports = [
     (lib.mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
@@ -70,6 +71,65 @@ in {
           "neighbour: ndisc_cache: neighbor table overflow!".
           See https://lxd.readthedocs.io/en/latest/production-setup/
           for details.
+        '';
+      };
+
+      preseed = lib.mkOption {
+        type = lib.types.nullOr (lib.types.submodule {
+          freeformType = preseedFormat.type;
+        });
+
+        default = null;
+
+        description = lib.mdDoc ''
+          Configuration for LXD preseed, see
+          <https://documentation.ubuntu.com/lxd/en/latest/howto/initialize/#initialize-preseed>
+          for supported values.
+
+          Changes to this will be re-applied to LXD which will overwrite existing entities or create missing ones,
+          but entities will *not* be removed by preseed.
+        '';
+
+        example = lib.literalExpression ''
+          {
+            networks = [
+              {
+                name = "lxdbr0";
+                type = "bridge";
+                config = {
+                  "ipv4.address" = "10.0.100.1/24";
+                  "ipv4.nat" = "true";
+                };
+              }
+            ];
+            profiles = [
+              {
+                name = "default";
+                devices = {
+                  eth0 = {
+                    name = "eth0";
+                    network = "lxdbr0";
+                    type = "nic";
+                  };
+                  root = {
+                    path = "/";
+                    pool = "default";
+                    size = "35GiB";
+                    type = "disk";
+                  };
+                };
+              }
+            ];
+            storage_pools = [
+              {
+                name = "default";
+                driver = "dir";
+                config = {
+                  source = "/var/lib/lxd/storage-pools/default";
+                };
+              }
+            ];
+          }
         '';
       };
 
@@ -173,6 +233,21 @@ in {
         # explicitly tell it where the actual configuration files are
         Environment = lib.mkIf (config.virtualisation.lxc.lxcfs.enable)
           "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
+      };
+    };
+
+    systemd.services.lxd-preseed = lib.mkIf (cfg.preseed != null) {
+      description = "LXD initialization with preseed file";
+      wantedBy = ["multi-user.target"];
+      requires = ["lxd.service"];
+      after = ["lxd.service"];
+
+      script = ''
+        ${pkgs.coreutils}/bin/cat ${preseedFormat.generate "lxd-preseed.yaml" cfg.preseed} | ${cfg.package}/bin/lxd init --preseed
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
       };
     };
 
