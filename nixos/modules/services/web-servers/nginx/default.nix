@@ -334,8 +334,8 @@ let
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
           + optionalString (extraParameters != []) (concatStringsSep " "
-            (let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
-                isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
+            (let inCompatibleParameters = [ "accept_filter" "backlog" "deferred" "fastopen" "http2" "proxy_protocol" "so_keepalive" "ssl" ];
+                isCompatibleParameter = param: !(any (p: lib.hasPrefix p param) inCompatibleParameters);
             in filter isCompatibleParameter extraParameters))
           + ";"))
           + "
