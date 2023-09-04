@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , writeShellScript
 , pkg-config
@@ -17,19 +18,28 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libredwg";
-  version = "0.12.5";
+  version = "0.12.5.6248";
 
   src = fetchFromGitHub {
     owner = "LibreDWG";
     repo = pname;
     rev = version;
-    sha256 = "sha256-s9aiOKSM7+3LJNE+jRrEMcL1QKRWrlTKbwO7oL9VhuE=";
+    hash = "sha256-EHfqj+FeZZpQzF9/LFWg+onTMz2/9tvXNcdpZrdjry0=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "dwg2svg-strcasestr-musl-fix.patch";
+      # https://github.com/LibreDWG/libredwg/pull/822
+      url = "https://github.com/LibreDWG/libredwg/commit/eec0b7aac6d2f695b7b258f47c3bde3f71f963ee.patch";
+      hash = "sha256-TjpJuhRl9t0b9NOJ1FEOO0/y586WwaJcNzTM0cTwmYI=";
+    })
+  ];
+
   postPatch = let
     printVersion = writeShellScript "print-version" ''
-      echo ${lib.escapeShellArg version}
+      echo -n ${lib.escapeShellArg version}
     '';
   in ''
     # avoid git dependency
