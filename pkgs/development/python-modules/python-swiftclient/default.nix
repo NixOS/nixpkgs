@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-swiftclient";
-  version = "4.3.0";
+  version = "4.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Hj3fmYzL6n3CWqbfjrPffTi/S8lrBl8vhEMeglmBezM=";
+    hash = "sha256-p32Xqw5AEsZ4cy5XW9/u0oKzSJuRdegsRqR6yEke7oQ=";
   };
 
   # remove duplicate script that will be created by setuptools from the
