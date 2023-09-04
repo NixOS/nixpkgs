@@ -56,6 +56,31 @@ buildPythonPackage rec {
   disabledTests = [
     # Expected: (<class 'wormhole.errors.WrongPasswordError'>,) Got: Failure instance: Traceback (failure with no frames): <class 'wormhole.errors.LonelyError'>:
     "test_welcome"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # These tests doesn't work within Darwin's sandbox
+    "test_version"
+    "test_text"
+    "test_receiver"
+    "test_sender"
+    "test_sender_allocation"
+    "test_text_wrong_password"
+    "test_override"
+    "test_allocate_port"
+    "test_allocate_port_no_reuseaddr"
+    "test_ignore_localhost_hint"
+    "test_ignore_localhost_hint_orig"
+    "test_keep_only_localhost_hint"
+    "test_get_direct_hints"
+    "test_listener"
+    "test_success_direct"
+    "test_direct"
+    "test_relay"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # These tests doesn't work within Darwin's sandbox
+    "src/wormhole/test/test_xfer_util.py"
+    "src/wormhole/test/test_wormhole.py"
   ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
