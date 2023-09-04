@@ -4175,6 +4175,8 @@ self: super: with self; {
 
   gcs-oauth2-boto-plugin = callPackage ../development/python-modules/gcs-oauth2-boto-plugin { };
 
+  gcsa = callPackage ../development/python-modules/gcsa { };
+
   gcsfs = callPackage ../development/python-modules/gcsfs { };
 
   gdal = toPythonModule (pkgs.gdal.override { python3 = python; });
