@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ buildGoModule
+, fetchFromGitHub
+, goss
+, nix-update-script
+, lib
+, testers
+}:
 
 buildGoModule rec {
   pname = "goss";
@@ -25,6 +31,15 @@ buildGoModule rec {
     # See https://github.com/goss-org/goss/blob/master/ci/go-test.sh
     "-skip" "^TestPrometheus"
   ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      command = "goss --version";
+      package = goss;
+      version = "v${version}";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/goss-org/goss/";
