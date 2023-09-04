@@ -79,6 +79,8 @@ buildPythonPackage rec {
       --replace "'pytest-runner'" ""
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     export HOME=$(mktemp -d);
     export PATH="$PATH:$out/bin";
@@ -106,7 +108,7 @@ buildPythonPackage rec {
     "test_ndarray"
     "test_python"
     # Timing-based, flaky on darwin and possibly others
-    "TestServerV1Source.test_idle_timer"
+    "test_idle_timer"
     # arrow-cpp-13 related
     "test_read"
     "test_pickle"
