@@ -1933,6 +1933,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd { };
 
+  pocket-updater-utility = callPackage ../tools/games/pocket-updater-utility { };
+
   polygon-cli = callPackage ../tools/networking/polygon-cli { };
 
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout { };
@@ -22053,8 +22055,6 @@ with pkgs;
 
   gnote = callPackage ../applications/office/gnote { };
 
-  elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
-
   gtk2 = callPackage ../development/libraries/gtk/2.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
@@ -39724,6 +39724,7 @@ with pkgs;
     coqPackages_8_15 coq_8_15
     coqPackages_8_16 coq_8_16
     coqPackages_8_17 coq_8_17
+    coqPackages_8_18 coq_8_18
     coqPackages      coq
   ;
 

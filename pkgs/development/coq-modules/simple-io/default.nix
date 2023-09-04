@@ -6,7 +6,7 @@
   repo = "coq-simple-io";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.11" "8.17"; out = "1.8.0"; }
+    { case = range "8.11" "8.18"; out = "1.8.0"; }
     { case = range "8.7"  "8.13"; out = "1.3.0"; }
   ] null;
   release."1.8.0".sha256 = "sha256-3ADNeXrBIpYRlfUW+LkLHUWV1w1HFrVc/TZISMuwvRY=";
