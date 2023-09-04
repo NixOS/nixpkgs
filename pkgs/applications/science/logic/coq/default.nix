@@ -55,6 +55,7 @@ let
    "8.16.1".sha256   = "sha256-n7830+zfZeyYHEOGdUo57bH6bb2/SZs8zv8xJhV+iAc=";
    "8.17.0".sha256   = "sha256-TGwm7S6+vkeZ8cidvp8pkiAd9tk008jvvPvYgfEOXhM=";
    "8.17.1".sha256   = "sha256-x+RwkbxMg9aR0L3WSCtpIz8jwA5cJA4tXAtHMZb20y4=";
+   "8.18+rc1".sha256   = "sha256-TmV0lzfzhpSnBoVyfTfVFUyBrXpUWSnyN1Le7b8IPTs=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -73,7 +74,7 @@ let
   '';
   ocamlPackages = if customOCamlPackages != null then customOCamlPackages
     else with versions; switch coq-version [
-      { case = range "8.16" "8.17"; out = ocamlPackages_4_14; }
+      { case = range "8.16" "8.18"; out = ocamlPackages_4_14; }
       { case = range "8.14" "8.15"; out = ocamlPackages_4_12; }
       { case = range "8.11" "8.13"; out = ocamlPackages_4_10; }
       { case = range "8.7" "8.10";  out = ocamlPackages_4_09; }
