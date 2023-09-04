@@ -12640,7 +12640,7 @@ with pkgs;
 
   rewrk = callPackage ../tools/networking/rewrk { };
 
-  inherit (callPackage ../tools/security/rekor { })
+  inherit (callPackage ../tools/security/rekor { buildGoModule = buildGo121Module; })
     rekor-cli
     rekor-server;
 
