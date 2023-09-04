@@ -2409,10 +2409,10 @@ self: super: with self; {
   cython = callPackage ../development/python-modules/Cython { };
 
   cython_3 = self.cython.overridePythonAttrs (old: rec {
-    version = "3.0.0";
+    version = "3.0.2";
     src = old.src.override {
       inherit version;
-      hash = "sha256-NQsY+Wc+YxAdu/z3dO4vV8IKxGNtJVdB12ynkBaxvYI=";
+      hash = "sha256-lZSBjcqLsirmWAxSItorxcwyM0NQvS0pSgDYZpvMYbU=";
     };
     patches = [ ];
   });
