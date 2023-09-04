@@ -205,7 +205,7 @@ in
       }
     ];
 
-    security.sudo.configFile = concatStringsSep "\n" [
+    security.sudo.configFile = concatStringsSep "\n" (filter (s: s != "") [
       ''
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
         # or ‘security.sudo.extraRules’ instead.
@@ -218,7 +218,7 @@ in
         # "root" is allowed to do anything.
         root        ALL=(ALL:ALL) SETENV: ALL
       ''
-      ''
+      (optionalString (cfg.extraRules != []) ''
         # extraRules
         ${concatStringsSep "\n" (
           lists.flatten (
@@ -230,12 +230,12 @@ in
             ) cfg.extraRules
           )
         )}
-      ''
-      ''
+      '')
+      (optionalString (cfg.extraConfig != "") ''
         # extraConfig
         ${cfg.extraConfig}
-      ''
-    ];
+      '')
+    ]);
 
     security.wrappers = let
       owner = "root";
