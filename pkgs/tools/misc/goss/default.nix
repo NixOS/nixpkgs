@@ -37,6 +37,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual jk ];
+    maintainers = with maintainers; [ hyzual jk anthonyroussel ];
   };
 }
