@@ -2370,6 +2370,8 @@ self: super: with self; {
 
   curio = callPackage ../development/python-modules/curio { };
 
+  curlify = callPackage ../development/python-modules/curlify { };
+
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
