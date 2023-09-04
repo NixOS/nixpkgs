@@ -189,6 +189,19 @@ let
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
 
+    # The logical inverse of pkgsCross, so that pkgs.pkgsCross.*.pkgsNative == pkgs,
+    # (and pkgs.pkgsNative == pkgs).
+    # This way, you can cross compile most things; but replace that one specific
+    # package that fails to be cross compiled with the native one.
+    pkgsNative = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsNative = super'.pkgsNative or super';
+        })
+      ] ++ overlays;
+      localSystem = stdenv.hostPlatform; crossSystem = null;
+    };
+
     pkgsLLVM = nixpkgsFun {
       overlays = [
         (self': super': {
