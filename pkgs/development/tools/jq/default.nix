@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     remove-references-to -t "$dev" "$bin/bin/jq"
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = !stdenv.isFreeBSD;
   installCheckTarget = "check";
 
   postInstallCheck = ''

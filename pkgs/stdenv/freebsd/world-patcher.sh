@@ -2,28 +2,36 @@
 
 export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
-mkdir -p $corebin/bin $etc/etc $lib/lib $lib/libexec $cc/bin $sh/bin $zip/bin
+mkdir -p $out $outbin
+cp -r $world/* $out
+chmod -R +w $out
 
-tar -C $world/bin -c . | tar -C $corebin/bin -x
-tar -C $world/sbin -c . | tar -C $corebin/bin -x
-tar -C $world/usr/bin -c . | tar -C $corebin/bin -x
-tar -C $world/usr/sbin -c . | tar -C $corebin/bin -x
-tar -C $world/etc -c . | tar -C $etc/etc -x
-tar -C $world/lib -c . | tar -C $lib/lib -x
-tar -C $world/usr/lib -c . | tar -C $lib/lib -x
-tar -C $world/libexec -c . | tar -C $lib/libexec -x
+# UGHHHHHHHHHHH
+mv $out/bin $outbin/bin
+mv $out/sbin $outbin/sbin
+mkdir $outbin/usr
+mv $out/usr/bin $outbin/usr/bin
+mv $out/usr/sbin $outbin/usr/sbin
 
-chmod -R +w $corebin
-find $corebin -type f | while read FILE; do
+mkdir -p $corebin/bin $lib/lib $cc/bin $sh/bin $zip/bin
+ln -sf $outbin/usr/bin/* $corebin/bin
+ln -sf $outbin/usr/sbin/* $corebin/bin
+ln -sf $outbin/bin/* $corebin/bin
+ln -sf $outbin/sbin/* $corebin/bin
+ln -sf $out/lib/* $lib/lib
+ln -sf $out/usr/lib/* $lib/lib
+ln -sf $out/libexec $lib/libexec
+
+find $outbin/bin $outbin/sbin $outbin/usr/bin $outbin/usr/sbin -type f | while read FILE; do
     INTERPRETER="$($patchelf --print-interpreter $FILE 2>/dev/null)"
     if [ -n "$INTERPRETER" ]; then
-        INTERPRETER="$(echo "$INTERPRETER" | sed -e "s,^/libexec/,$lib/libexec/,")"
-        $patchelf --set-interpreter $INTERPRETER --set-rpath $lib/lib $FILE
+        INTERPRETER="$(echo "$INTERPRETER" | sed -e "s,^/libexec/,$out/libexec/,")"
+        $patchelf --set-interpreter $INTERPRETER --set-rpath $out/lib $FILE
     fi
     SHEBANG="$(head -n1 $FILE)"
     if [ "$(echo "$SHEBANG" | cut -c -2)" = '#!' ]; then
         TEMP=$(mktemp)
-        SHEBANG='#!'"$(echo "$SHEBANG" | cut -c 3- | sed -e "s,^/bin/,$corebin/bin/," -e "s,^/usr/bin/,$corebin/bin/," -e "s,^/sbin/,$corebin/bin/," -e "s,^/usr/sbin/,$corebin/bin/,")"
+        SHEBANG='#!'"$(echo "$SHEBANG" | cut -c 3- | sed -e "s,^/bin/,$outbin/bin/," -e "s,^/usr/bin/,$outbin/usr/bin/," -e "s,^/sbin/,$outbin/sbin/," -e "s,^/usr/sbin/,$outbin/usr/sbin/,")"
         echo "$SHEBANG" >$TEMP
         tail +2 $FILE >>$TEMP
         mv $TEMP $FILE
@@ -31,19 +39,18 @@ find $corebin -type f | while read FILE; do
     fi
 done
 
-for f in $(find $lib/lib -lname '../../lib/*'); do
-    LINK="$(readlink $f)"
-    RELINK="${LINK#../../lib/}"
-    rm $f
-    ln -s $RELINK $f
+for f in cc clang clang++ ld ld.lld cpp ar; do
+    ln -s $corebin/bin/$f $cc/bin
 done
 
-for f in cc clang clang++ ld ld.lld cpp ar; do
-    mv $corebin/bin/$f $cc/bin
-done
+# sigh
+mkdir -p $outbin/usr/lib $cc/lib
+ln -s $lib/lib/clang $outbin/usr/lib
+ln -s $lib/lib/clang $cc/lib
+
 for f in sh; do
-    mv $corebin/bin/$f $sh/bin
+    ln -s $corebin/bin/$f $sh/bin
 done
 for f in gzip bzip2 xz gunzip unxz bzip2recover xzcat xzdec xzdiff xzegrep xzfgrep xzgrep xzless; do
-    mv $corebin/bin/$f $zip/bin
+    ln -s $corebin/bin/$f $zip/bin
 done

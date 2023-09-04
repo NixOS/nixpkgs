@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
     ++ lib.optionals staticOnly [ "--enable-static" "--disable-shared" ]
     ++ lib.optional withVerto "--with-system-verto"
-    ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
+    ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=''
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
        [ "krb5_cv_attr_constructor_destructor=yes,yes"
          "ac_cv_func_regcomp=yes"

@@ -1,0 +1,8 @@
+--- a/librhash/Makefile
++++ b/librhash/Makefile
+@@ -32,1 +32,1 @@
+-	  ln -s $(LIBRHASH_SHARED) $(LIBDIR)/$(LIBRHASH_SO_MAJ)
++	  ln -s $(LIBRHASH_SHARED) $(LIBDIR)/$(LIBRHASH_SO_MAJ) || true
+@@ -180,1 +180,1 @@
+-	  ln -s $(LIBRHASH_SHARED) $(LIBRHASH_SO_MAJ)
++	  ln -s $(LIBRHASH_SHARED) $(LIBRHASH_SO_MAJ) || true

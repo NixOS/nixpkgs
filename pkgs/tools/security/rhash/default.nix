@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
   };
 
+  patches = [ ./dont-fail-ln.patch ];
+
   nativeBuildInputs = [ which ];
 
   # configure script is not autotools-based, doesn't support these options
