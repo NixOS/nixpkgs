@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-jinja";
-  version = "2.10.2";
+  version = "2.11.0";
 
   disabled = pythonOlder "3.6";
 
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niwinz";
     repo = "django-jinja";
-    rev = version;
-    hash = "sha256-IZ4HjBQt6K8xbaYfO5DVlGKUVCQ3UciAUpfnqCjzyCE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0gkv9xinHux8TRiNBLl/JgcimXU3CzysxzGR2jn7OZ4=";
   };
 
   propagatedBuildInputs = [
