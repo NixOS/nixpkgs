@@ -937,6 +937,28 @@ Like `stripDebugList`, but only applies to packages’ target platform. By defau
 
 Flags passed to the `strip` command applied to the files in the directories listed in `stripDebugList`. Defaults to `-S` (i.e. `--strip-debug`).
 
+##### `stripExclude` {#var-stdenv-stripExclude}
+
+A list of filenames or path patterns to avoid stripping. A file is excluded if its name _or_ path (from the derivation root) matches.
+
+This example prevents all `*.rlib` files from being stripped:
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  stripExclude = [ "*.rlib" ]
+}
+```
+
+This example prevents files within certain paths from being stripped:
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  stripExclude = [ "lib/modules/*/build/* ]
+}
+```
+
 ##### `dontPatchELF` {#var-stdenv-dontPatchELF}
 
 If set, the `patchelf` command is not used to remove unnecessary `RPATH` entries. Only applies to Linux.
