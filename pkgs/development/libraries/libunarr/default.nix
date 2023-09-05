@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libunarr";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/selmf/unarr/releases/download/v${version}/unarr-${version}.tar.xz";
-    sha256 = "1db500k6w90qn6qb4j3zcczailmmv81q9lv4bwq516hbncg5p4sl";
+    sha256 = "sha256-5wCnhjoj+GTmaeDTCrUnm1Wt9SsWAbQcPSYM//FNeOA=";
   };
 
   nativeBuildInputs = [ cmake ];
