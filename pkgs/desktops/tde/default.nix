@@ -19,6 +19,7 @@ in {
 
   # Components
 
+  arts = callPackage ./arts { };
   tde-cmake = callPackage ./tde-cmake { };
   tqt3 = callPackage ./tqt3 { };
   tqtinterface = callPackage ./tqtinterface { };
