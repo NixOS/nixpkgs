@@ -170,7 +170,7 @@ let
   # are not documented, and must be derived from the configure script (see links
   # below).
   sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
-    machdep = if isWindows then "win32" else parsed.kernel.name; # win32 is added by Fedora’s patch
+    machdep = if isWindows then "win32" else (parsed.kernel.name + (lib.optionalString stdenv.isFreeBSD builtins.toString parsed.kernel.version)); # win32 is added by Fedora’s patch
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
     # The configure script uses "arm" as the CPU name for all 32-bit ARM
@@ -214,6 +214,7 @@ let
 
     multiarch =
       if isDarwin then "darwin"
+      else if isFreeBSD then ""
       else if isWindows then ""
       else "${multiarchCpu}-${machdep}-${pythonAbiName}";
 
