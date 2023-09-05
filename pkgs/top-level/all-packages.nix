@@ -13460,6 +13460,8 @@ with pkgs;
 
   sudo = callPackage ../tools/security/sudo { };
 
+  sudo-rs = callPackage ../tools/security/sudo-rs { };
+
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
   sundtek = callPackage ../misc/drivers/sundtek { };
@@ -42198,4 +42200,6 @@ with pkgs;
   yazi = callPackage ../applications/file-managers/yazi { inherit (darwin.apple_sdk.frameworks) Foundation; };
 
   ssl-proxy = callPackage ../tools/networking/ssl-proxy { };
+
+  code-maat = callPackage ../development/tools/code-maat {};
 }
