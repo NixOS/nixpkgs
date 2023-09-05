@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.14.8";
+  version = "1.14.10";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
-    sha256 = "sha256-pr1brFzxnww8WUva4lZaCVaWmApoOg7zfLYhLgk73jU=";
+    sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
   };
 
   patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
