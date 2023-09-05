@@ -22,14 +22,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.4.25";
+  version = "2.4.27";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IVmC3/TbdVjbbWBY8Buw7CxiZs2D0X375D2dCT3UnM4=";
+    hash = "sha256-HTYxPHCMDYRg4UR2Nm7cHNP9mi0tOPjCTzv3z175YE4=";
   };
 
   patches = [
