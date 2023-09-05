@@ -1,4 +1,5 @@
 { coreutils, db, fetchurl, openssl, pcre2, perl, pkg-config, lib, stdenv
+, procps, killall
 , enableLDAP ? false, openldap
 , enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
@@ -94,6 +95,11 @@ stdenv.mkDerivation rec {
       #/^\s*#.*/d
       #/^\s*$/d
     ' < src/EDITME > Local/Makefile
+
+    {
+      echo EXIWHAT_PS_CMD=${procps}/bin/ps
+      echo EXIWHAT_MULTIKILL_CMD=${killall}/bin/killall
+    } >> Local/Makefile
 
     runHook postConfigure
   '';

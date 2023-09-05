@@ -137,6 +137,17 @@
     };
     version = "2.3.9";
   };
+  asciidoctor-reducer = {
+    dependencies = ["asciidoctor"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1708fi4bxjpkdszm6a4naa0qcsl0vqnhcklryn2sysl24zaz07h5";
+      type = "gem";
+    };
+    version = "1.0.5";
+  };
   asciidoctor-revealjs = {
     dependencies = ["asciidoctor"];
     groups = ["default"];

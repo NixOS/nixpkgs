@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gh-markdown-preview";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "yusukebe";
     repo = "gh-markdown-preview";
     rev = "v${version}";
-    hash = "sha256-Q+e3j+X/ZsLdkTBkuu028Rl4iw+oES2w6CDQiwN+CtU=";
+    hash = "sha256-UBveXL4/3GxxIVjqG0GuTbkGkzXFc/stew2s+dTj9BI=";
   };
 
   vendorHash = "sha256-O6Q9h5zcYAoKLjuzGu7f7UZY0Y5rL2INqFyJT2QZJ/E=";
