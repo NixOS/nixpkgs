@@ -164,7 +164,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.tpm-crb-v3
+        kernelPatches.tpm-crb-v4
       ];
     };
 
@@ -180,7 +180,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.tpm-crb-v3
+        kernelPatches.tpm-crb-v4
       ];
     };
 
@@ -188,7 +188,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.tpm-crb-v3
+        kernelPatches.tpm-crb-v4
       ];
     };
 

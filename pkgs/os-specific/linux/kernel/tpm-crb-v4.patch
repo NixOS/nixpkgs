@@ -2,8 +2,15 @@ Cc: stable@vger.kernel.org
 Fixes: 554b841d4703 ("tpm: Disable RNG for all AMD fTPMs")
 Reported-by: Todd Brandt <todd.e.brandt@intel.com>
 Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217804
+Reported-by: Patrick Steinhardt <ps@pks.im>
+Reported-by: Raymond Jay Golo <rjgolo@gmail.com>
+Reported-by: Ronan Pigott <ronan@rjp.ie>
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
+v4:
+* Report the victim: Lenovo Legion Y540
+* Add reported-by's back due popular request.
 v3:
 * Forgot to amend config flags.
 v2:
@@ -65,3 +72,4 @@ index 65ff4d2fbe8d..ea085b14ab7c 100644
  
  	rc = tpm_chip_register(chip);
  
+-- 

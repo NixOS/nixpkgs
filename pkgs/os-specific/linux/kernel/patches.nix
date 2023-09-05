@@ -59,8 +59,8 @@
   };
 
   #fix https://bugzilla.kernel.org/show_bug.cgi?id=217804
-  tpm-crb-v3 = {
-    name = "tpm-crb-v3";
-    patch = ./tpm-crb-v3.patch;
+  tpm-crb-v4 = {
+    name = "tpm-crb-v4";
+    patch = ./tpm-crb-v4.patch;
   };
 }
