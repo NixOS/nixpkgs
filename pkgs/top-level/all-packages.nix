@@ -3770,6 +3770,8 @@ with pkgs;
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
+  gitx-bin = callPackage ../os-specific/darwin/gitx-bin { };
+
   goku = callPackage ../os-specific/darwin/goku { };
 
   grandperspective = callPackage ../os-specific/darwin/grandperspective { };
