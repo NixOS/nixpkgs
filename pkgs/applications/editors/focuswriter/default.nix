@@ -8,6 +8,8 @@
 , qtmultimedia
 , qttools
 , qt5compat
+, qtwayland
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -21,10 +23,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-6wvTlC/NCCcN2jpwqtoOsCln3ViY/vj7NpMsbYHBGiI=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake qttools ];
-  buildInputs = [ hunspell qtbase qtmultimedia qt5compat ];
-
-  dontWrapQtApps = true;
+  nativeBuildInputs = [ pkg-config cmake qttools wrapQtAppsHook ];
+  buildInputs = [ hunspell qtbase qtmultimedia qt5compat qtwayland ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
