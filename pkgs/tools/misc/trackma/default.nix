@@ -42,9 +42,9 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; ([ urllib3 ]
     ++ lib.optionals withQT [ pyqt5 ]
-    ++ lib.optionals withGTK [ pycairo ]
+    ++ lib.optionals withGTK [ pycairo pygobject3 ]
     ++ lib.optionals withCurses [ urwid ]
-    ++ lib.optionals stdenv.isLinux [ dbus-python pygobject3 pyinotify ]
+    ++ lib.optionals stdenv.isLinux [ pydbus pyinotify ]
     ++ lib.optionals (withGTK || withQT) [ pillow ]);
 
   # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
