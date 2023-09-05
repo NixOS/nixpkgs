@@ -113,6 +113,17 @@ in buildPythonPackage {
     pytest-xdist
   ];
 
+  # The following tests are broken on aarch64-darwin with newer compilers and library versions.
+  # See https://github.com/scipy/scipy/issues/18308
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    "test_a_b_neg_int_after_euler_hypergeometric_transformation"
+    "test_dst4_definition_ortho"
+    "test_load_mat4_le"
+    "hyp2f1_test_case47"
+    "hyp2f1_test_case3"
+    "test_uint64_max"
+  ];
+
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
