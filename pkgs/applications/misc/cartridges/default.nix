@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kra-mo";
     repo = "cartridges";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-d0c0043kssPvGxs6FygDkTKZoYtFge2cH4MIhz2vVYk=";
+    hash = "sha256-d0c0043kssPvGxs6FygDkTKZoYtFge2cH4MIhz2vVYk=";
   };
 
   buildInputs = [
