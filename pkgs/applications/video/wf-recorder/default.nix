@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wf-recorder";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "ammen99";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HSNogz99fh25bGnYrIFkQC8SZ/EjG9Ak1kQpVmSlliU=";
+    hash = "sha256-SXPXvKXn236oO1WakkMNql3lj2flYYlmArVHGomH0/k=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc ];
