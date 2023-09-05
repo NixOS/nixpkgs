@@ -1,5 +1,6 @@
 { lib
 , fetchurl
+, fetchpatch
 , stdenv
 , testers
 , cmake
@@ -13,6 +14,16 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://download.osgeo.org/geos/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     hash = "sha256-sfB3ZpSBxaPmKv/EnpbrBvKBmHpdNv2rIlIX5bgl5Mw=";
   };
+
+  patches = [
+    # Pull upstream fix of `gcc-13` build failure:
+    #   https://github.com/libgeos/geos/pull/805
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/libgeos/geos/commit/bea3188be44075034fd349f5bb117c943bdb7fb1.patch";
+      hash = "sha256-dQT3Hf9YJchgjon/r46TLIXXbE6C0ZnewyvfYJea4jM=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
