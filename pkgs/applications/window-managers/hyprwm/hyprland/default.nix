@@ -11,6 +11,7 @@
 , hyprland-protocols
 , jq
 , libdrm
+, libexecinfo
 , libinput
 , libxcb
 , libxkbcommon
@@ -96,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       pciutils
       (wlroots.override { inherit enableNvidiaPatches; })
     ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
     ++ lib.optionals enableXWayland [ libxcb xcbutilwm xwayland ]
     ++ lib.optionals withSystemd [ systemd ];
 
