@@ -49,7 +49,6 @@
   lua-fmt = "luafmt";
   near-cli = "near";
   neovim = "neovim-node-host";
-  parcel-bundler = "parcel";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";

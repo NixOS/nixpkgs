@@ -193,7 +193,6 @@
 , "npm-merge-driver"
 , "nrm"
 , "orval"
-, "parcel-bundler"
 , "parcel"
 , "parsoid"
 , "patch-package"
