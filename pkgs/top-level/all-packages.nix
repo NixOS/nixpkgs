@@ -18549,6 +18549,8 @@ with pkgs;
 
   openscad-lsp = callPackage ../development/tools/language-servers/openscad-lsp { };
 
+  perlnavigator = callPackage ../development/tools/language-servers/perlnavigator { };
+
   postgres-lsp = callPackage ../development/tools/language-servers/postgres-lsp { };
 
   pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
