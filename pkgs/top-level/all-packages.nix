@@ -32509,8 +32509,6 @@ with pkgs;
 
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
-  hello = callPackage ../applications/misc/hello { };
-
   hello-wayland = callPackage ../applications/graphics/hello-wayland { };
 
   hello-unfree = callPackage ../applications/misc/hello-unfree { };
