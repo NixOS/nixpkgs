@@ -83,13 +83,13 @@ in
 
     garage_0_7 = garage_0_7_3;
 
-    garage_0_8_3 = generic {
-      version = "0.8.3";
-      sha256 = "sha256-NxkFj76L+LpCWzOWbnN3zdhw9Q16uzPibDs+C+voM/0=";
-      cargoSha256 = "sha256-hbBuUjdlw//s6d24dPBu3R/BTJvmOW1B7tSIXNxLXlU=";
+    garage_0_8_4 = generic {
+      version = "0.8.4";
+      sha256 = "sha256-YgMw41ofM59h7OnHK1H8+Se5mZEdYypPIdkqbyX9qfs=";
+      cargoSha256 = "sha256-dEtksOVqy5wAPoqCuXJj3c4TB6UbR8PTaB70fbL6iR8=";
     };
 
-    garage_0_8 = garage_0_8_3;
+    garage_0_8 = garage_0_8_4;
 
     garage = garage_0_8;
   }
