@@ -64,5 +64,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r moody ];
     platforms = platforms.linux;
+    mainProgram = "drawterm";
   };
 }
