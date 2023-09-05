@@ -4592,8 +4592,6 @@ with pkgs;
 
   cardpeek = callPackage ../applications/misc/cardpeek { inherit (darwin.apple_sdk.frameworks) PCSC; };
 
-  cawbird = callPackage ../applications/networking/cawbird { };
-
   cde = callPackage ../tools/package-management/cde { };
 
   cdxgen = callPackage ../tools/security/cdxgen { };
