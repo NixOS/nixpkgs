@@ -176,7 +176,7 @@ showT = Text.pack . show
 getBuildReports :: HydraSlownessWorkaroundFlag -> IO ()
 getBuildReports opt = runReq defaultHttpConfig do
    evalMay <- Seq.lookup 0 . evals <$> hydraJSONQuery mempty ["jobset", "nixpkgs", "haskell-updates", "evals"]
-   eval@Eval{id} <- maybe (liftIO $ fail "No Evalution found") pure evalMay
+   eval@Eval{id} <- maybe (liftIO $ fail "No Evaluation found") pure evalMay
    liftIO . putStrLn $ "Fetching evaluation " <> show id <> " from Hydra. This might take a few minutes..."
    buildReports <- getEvalBuilds opt id
    liftIO do
