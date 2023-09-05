@@ -2,7 +2,7 @@
 
 let emojiJSON = fetchurl {
   url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.10/dist/emoji-en-US.json";
-  sha256 = "sha256-UhAB5hVp5vV2d1FjIb2TBd2FJ6OPBbiP31HGAEDQFnA=";};
+  hash = "sha256-UhAB5hVp5vV2d1FjIb2TBd2FJ6OPBbiP31HGAEDQFnA=";};
 in
 stdenv.mkDerivation rec {
   pname = "wofi-emoji";
