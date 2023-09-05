@@ -123,6 +123,7 @@
   ./misc/label.nix
   ./misc/lib.nix
   ./misc/locate.nix
+  ./misc/machine-info.nix
   ./misc/man-db.nix
   ./misc/mandoc.nix
   ./misc/meta.nix
