@@ -24259,6 +24259,8 @@ with pkgs;
 
   nanosvg = callPackage ../development/libraries/nanosvg { };
 
+  nanovna-qt = libsForQt5.callPackage ../applications/science/electronics/nanovna-qt { };
+
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
   nanotts = callPackage ../tools/audio/nanotts { };
