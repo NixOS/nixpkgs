@@ -17,12 +17,12 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     aiohttp
+    aiohttp-openmetrics
     dulwich
     defusedxml
     icalendar
     jinja2
     multidict
-    prometheus-client
   ];
 
   passthru.tests.xandikos = nixosTests.xandikos;
