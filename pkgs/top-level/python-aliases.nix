@@ -193,6 +193,7 @@ mapAliases ({
   JPype1 = jpype1; # added 2023-02-19
   jsonschema_3 = throw "jsonschema 3 is neither the latest version nor needed inside nixpkgs anymore"; # added 2023-06-28
   jupyter_client = jupyter-client; # added 2021-10-15
+  jupyter_console = jupyter-console; # added  2023-07-31
   jupyter_core = jupyter-core; # added 2023-01-05
   jupyter_server = jupyter-server; # added 2023-01-05
   jupyter-server-ydoc = jupyter-collaboration; # added 2023-07-18
