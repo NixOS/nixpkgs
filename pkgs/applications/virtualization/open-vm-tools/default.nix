@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "12.2.5";
+  version = "12.3.0";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "open-vm-tools";
     rev = "stable-${version}";
-    hash = "sha256-Aa2OzY3x8yRn/uFaCbbKihpsPueup7doPp5i8I04iaQ=";
+    hash = "sha256-YVpWomLED5sBKXKdJtuDjb7/aKB2flVIm2ED3xSsccE=";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
