@@ -41,8 +41,14 @@
       fetchSubmodules = true;
     };
 
+    patches = [
+      # Fix `call to undeclared function 'sleep'` with clang 16
+      ./mariadb-connector-odbc-unistd.patch
+    ];
+
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC openssl libiconv ];
+    buildInputs = [ unixODBC openssl libiconv zlib ]
+      ++ lib.optionals stdenv.isDarwin [ libkrb5 ];
 
     preConfigure = ''
       # we don't want to build a .pkg
@@ -52,6 +58,7 @@
     '';
 
     cmakeFlags = [
+      "-DWITH_EXTERNAL_ZLIB=ON"
       "-DODBC_LIB_DIR=${lib.getLib unixODBC}/lib"
       "-DODBC_INCLUDE_DIR=${lib.getDev unixODBC}/include"
       "-DWITH_OPENSSL=ON"
