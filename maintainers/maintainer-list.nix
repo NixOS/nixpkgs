@@ -12878,6 +12878,12 @@
     githubId = 915970;
     name = "Austin Platt";
   };
+  onur-ozkan = {
+    name = "Onur Ozkan";
+    email = "contact@onurozkan.dev";
+    github = "onur-ozkan";
+    githubId = 39852038;
+  };
   ony = {
     name = "Mykola Orliuk";
     email = "virkony@gmail.com";
