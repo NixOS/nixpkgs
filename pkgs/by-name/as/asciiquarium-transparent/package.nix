@@ -4,7 +4,6 @@
   fetchFromGitHub,
   makeWrapper,
   perlPackages,
-  ...
 }:
 stdenv.mkDerivation {
   pname = "asciiquarium-transparent";
@@ -18,14 +17,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [makeWrapper];
   buildInputs = [perlPackages.perl];
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp asciiquarium $out/bin/asciiquarium
     wrapProgram $out/bin/asciiquarium --set PERL5LIB ${perlPackages.makeFullPerlPath [perlPackages.TermAnimation]}
+    runHook postInstall
   '';
   meta = with lib; {
-    description = mdDoc ''
-      Asciiquarum with a few patches
-    '';
+    description = "An aquarium/sea animation in ASCII art (with option of transparent background)";
     mainProgram = "asciiquarium";
     homepage = "https://github.com/nothub/asciiquarium";
     license = with licenses; [gpl2Only];
