@@ -17,9 +17,12 @@ buildGoModule rec {
     "-X=gopkg.in/k8snetworkplumbingwg/multus-cni.v3/pkg/multus.version=${version}"
   ];
 
-  preInstall = ''
-    mv $GOPATH/bin/cmd $GOPATH/bin/multus
-  '';
+  subPackages = [
+    "cmd/multus-daemon"
+    "cmd/multus-shim"
+    "cmd/multus"
+    "cmd/thin_entrypoint"
+  ];
 
   vendorHash = null;
 
