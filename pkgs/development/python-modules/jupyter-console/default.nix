@@ -18,15 +18,16 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jupyter_console";
-  version = "6.6.1";
+  pname = "jupyter-console";
+  version = "6.6.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WTEhLVy8H5Vvb9YVdVteFfOJqOqmlyiNu+Q3cBdhXsw=";
+    pname = "jupyter_console";
+    inherit version;
+    hash = "sha256-VmpL8xyHrb+t8izfhG4wabWace1dpx1rpNiqrRSlNTk=";
   };
 
   nativeBuildInputs = [
@@ -71,5 +72,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/jupyter_console";
     changelog = "https://github.com/jupyter/jupyter_console/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+    maintainers = lib.teams.jupyter.members;
   };
 }
