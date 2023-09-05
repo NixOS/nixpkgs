@@ -292,6 +292,8 @@ with pkgs;
 
   cve = with python3Packages; toPythonApplication cvelib;
 
+  db-rest = callPackage ../servers/db-rest { };
+
   fiche = callPackage ../servers/fiche { };
 
   fishnet = callPackage ../servers/fishnet { };
