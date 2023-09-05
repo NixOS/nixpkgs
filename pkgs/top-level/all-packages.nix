@@ -42209,6 +42209,8 @@ with pkgs;
 
   wpm = callPackage ../applications/misc/wpm { };
 
+  weggli = callPackage ../tools/security/weggli { };
+
   yazi = callPackage ../applications/file-managers/yazi { inherit (darwin.apple_sdk.frameworks) Foundation; };
 
   ssl-proxy = callPackage ../tools/networking/ssl-proxy { };
