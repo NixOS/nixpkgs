@@ -9,7 +9,7 @@ let
 
   cfg = config.environment;
 
-  exportedEnvVars =
+  finalEnvironment =
     let
       absoluteVariables =
         mapAttrs (n: toList) cfg.variables;
@@ -22,10 +22,7 @@ let
       allVariables =
         zipAttrsWith (n: concatLists) [ absoluteVariables suffixedVariables ];
 
-      exportVariables =
-        mapAttrsToList (n: v: ''export ${n}="${concatStringsSep ":" v}"'') allVariables;
-    in
-      concatStringsSep "\n" exportVariables;
+  in mapAttrs (n: concatStringsSep ":") allVariables;
 in
 
 {
@@ -189,7 +186,13 @@ in
     # and discoverability (see motivation of #30418).
     environment.etc.set-environment.source = config.system.build.setEnvironment;
 
-    system.build.setEnvironment = pkgs.writeText "set-environment"
+    # Not all shells are POSIX, so also expose the raw data here.
+    system.build.environment = finalEnvironment;
+
+    system.build.setEnvironment = let
+      exportVariables = mapAttrsToList (n: v: ''export ${n}="${v}"'') finalEnvironment;
+      exportedEnvVars = concatStringsSep "\n" exportVariables;
+    in pkgs.writeText "set-environment"
       ''
         # DO NOT EDIT -- this file has been generated automatically.
 
