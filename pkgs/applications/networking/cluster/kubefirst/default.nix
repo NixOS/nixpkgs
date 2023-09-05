@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubefirst";
-  version = "2.2.9";
+  version = "2.2.17";
 
   src = fetchFromGitHub {
     owner = "kubefirst";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QxIbBxNTVONf4x06nuYhY38+pYDwsT3C6yToq7/dHIk=";
+    hash = "sha256-cqKnoGRW+IquuZ7wvCRipRJ6mO18w/yhf5nS094vs7c=";
   };
 
-  vendorHash = "sha256-F+kzj2lBSFawfc8OyPf6V2XVB1418uhv+cv3CHpXUk0=";
+  vendorHash = "sha256-0J27JSewc0DCcc3xvl2DBZE/b0qKuozuP7tFdbrRX7I=";
 
   ldflags = [ "-s" "-w" "-X github.com/kubefirst/runtime/configs.K1Version=v${version}"];
 
