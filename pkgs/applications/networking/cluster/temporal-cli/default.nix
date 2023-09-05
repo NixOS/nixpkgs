@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin, stdenv }:
 
 let
   metaCommon = with lib; {
@@ -39,6 +39,9 @@ let
       "-w"
       "-X github.com/temporalio/cli/headers.Version=${version}"
     ];
+
+    # Tests fail with x86 on macOS Rosetta 2
+    doCheck = !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64);
 
     preCheck = ''
       export HOME=$(mktemp -d)
