@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Zeioth";
     repo = pname;
     rev = "796d688b71ac9fa1e5b2c1b9a3fa11dba801b02b";
-    sha256="sha256-HBsqekNuKqxaKaSeLboukLm4Lkg9JakPO7uN3Z8QBC8=";
+    hash = "sha256-HBsqekNuKqxaKaSeLboukLm4Lkg9JakPO7uN3Z8QBC8=";
   };
 
   nativeBuildInputs = [ jq ];
