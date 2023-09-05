@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v22
+      - uses: cachix/install-nix-action@v23
       - name: Determining channel to use for dependencies
         run: |
           echo "Determining which channel to use for PR base branch $GITHUB_BASE_REF"
