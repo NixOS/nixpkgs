@@ -79,6 +79,9 @@ self: super: {
   aeson = doJailbreak super.aeson;
   free = doJailbreak super.free;
 
+  # Requires filepath >= 1.4.100.0 <=> GHC >= 9.6
+  file-io = unmarkBroken super.file-io;
+
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/pull/21
   th-extras = doJailbreak super.th-extras;
