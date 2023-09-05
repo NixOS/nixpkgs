@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "44.2";
+  version = "45.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "ndOJwUnQwPpXRW7DY9UaiCVflFVY+530KJTOeO+F34k=";
+    sha256 = "4tK9TCAU8VuphAyzpqCa3bcfhTnr+fYKx/E2HBInroE=";
   };
 
   patches = [
