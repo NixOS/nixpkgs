@@ -205,7 +205,6 @@
 , "pm2"
 , "pnpm"
 , "poor-mans-t-sql-formatter-cli"
-, "postcss"
 , "postcss-cli"
 , "prebuild-install"
 , "prettier"
