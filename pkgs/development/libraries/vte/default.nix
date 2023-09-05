@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.73.93";
+  version = "0.73.99";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2t4EyN0/mntvfdD4htI+G0HevhdaFc5A86lJIdsa4K4=";
+    sha256 = "sha256-HDjtdW9T+zVifbTYH8vhcyJZ7kwosvfku2aoJWGnRu8=";
   };
 
   patches = [
