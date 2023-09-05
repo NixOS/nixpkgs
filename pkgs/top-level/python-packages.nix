@@ -1336,6 +1336,8 @@ self: super: with self; {
 
   beartype = callPackage ../development/python-modules/beartype { };
 
+  beautiful-date = callPackage ../development/python-modules/beautiful-date { };
+
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 {
     inherit (python.pythonForBuild.pkgs) sphinxHook; # hook splicing broken since #194205
   };
@@ -9689,8 +9691,6 @@ self: super: with self; {
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
 
-  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { };
-
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
 
   pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
@@ -9896,16 +9896,6 @@ self: super: with self; {
   pyside6 = toPythonModule (callPackage ../development/python-modules/pyside6 {
     inherit (pkgs) cmake ninja qt6;
   });
-
-  pyside = callPackage ../development/python-modules/pyside {
-    inherit (pkgs) mesa;
-  };
-
-  pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
-    inherit (pkgs) libxml2 libxslt;
-  };
-
-  pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 
@@ -10899,8 +10889,6 @@ self: super: with self; {
   qrcode = callPackage ../development/python-modules/qrcode { };
 
   qreactor = callPackage ../development/python-modules/qreactor { };
-
-  qscintilla-qt4 = callPackage ../development/python-modules/qscintilla-qt4 { };
 
   qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
     pythonPackages = self;
@@ -12419,8 +12407,6 @@ self: super: with self; {
   stytra = callPackage ../development/python-modules/stytra { };
 
   subarulink = callPackage ../development/python-modules/subarulink { };
-
-  subdownloader = callPackage ../development/python-modules/subdownloader { };
 
   subliminal = callPackage ../development/python-modules/subliminal { };
 

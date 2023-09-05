@@ -1,9 +1,4 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
+{ pkgs, runTest }:
 
 let
   inherit (pkgs) lib;
@@ -23,7 +18,6 @@ let
       description = "Mock webserver";
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.Restart = "always";
       script = ''
         while true; do
         {
@@ -40,7 +34,7 @@ let
 in
 
 {
-  siit = makeTest {
+  siit = runTest {
     # This test simulates the setup described in [1] with two IPv6 and
     # IPv4-only devices on different subnets communicating through a border
     # relay running Jool in SIIT mode.
@@ -49,8 +43,7 @@ in
     meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
     # Border relay
-    nodes.relay = { ... }: {
-      imports = [ ../modules/profiles/minimal.nix ];
+    nodes.relay = {
       virtualisation.vlans = [ 1 2 ];
 
       # Enable packet routing
@@ -65,20 +58,13 @@ in
         eth2.ipv4.addresses = [ { address = "192.0.2.1";  prefixLength = 24; } ];
       };
 
-      networking.jool = {
-        enable = true;
-        siit.enable = true;
-        siit.config.global.pool6 = "fd::/96";
-      };
+      networking.jool.enable = true;
+      networking.jool.siit.default.global.pool6 = "fd::/96";
     };
 
     # IPv6 only node
-    nodes.alice = { ... }: {
-      imports = [
-        ../modules/profiles/minimal.nix
-        ipv6Only
-        (webserver 6 "Hello, Bob!")
-      ];
+    nodes.alice = {
+      imports = [ ipv6Only (webserver 6 "Hello, Bob!") ];
 
       virtualisation.vlans = [ 1 ];
       networking.interfaces.eth1.ipv6 = {
@@ -89,12 +75,8 @@ in
     };
 
     # IPv4 only node
-    nodes.bob = { ... }: {
-      imports = [
-        ../modules/profiles/minimal.nix
-        ipv4Only
-        (webserver 4 "Hello, Alice!")
-      ];
+    nodes.bob = {
+      imports = [ ipv4Only (webserver 4 "Hello, Alice!") ];
 
       virtualisation.vlans = [ 2 ];
       networking.interfaces.eth1.ipv4 = {
@@ -107,17 +89,17 @@ in
     testScript = ''
       start_all()
 
-      relay.wait_for_unit("jool-siit.service")
+      relay.wait_for_unit("jool-siit-default.service")
       alice.wait_for_unit("network-addresses-eth1.service")
       bob.wait_for_unit("network-addresses-eth1.service")
 
       with subtest("Alice and Bob can't ping each other"):
-        relay.systemctl("stop jool-siit.service")
+        relay.systemctl("stop jool-siit-default.service")
         alice.fail("ping -c1 fd::192.0.2.16")
         bob.fail("ping -c1 198.51.100.8")
 
       with subtest("Alice and Bob can ping using the relay"):
-        relay.systemctl("start jool-siit.service")
+        relay.systemctl("start jool-siit-default.service")
         alice.wait_until_succeeds("ping -c1 fd::192.0.2.16")
         bob.wait_until_succeeds("ping -c1 198.51.100.8")
 
@@ -132,7 +114,7 @@ in
     '';
   };
 
-  nat64 = makeTest {
+  nat64 = runTest {
     # This test simulates the setup described in [1] with two IPv6-only nodes
     # (a client and a homeserver) on the LAN subnet and an IPv4 node on the WAN.
     # The router runs Jool in stateful NAT64 mode, masquarading the LAN and
@@ -142,8 +124,7 @@ in
     meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
     # Router
-    nodes.router = { ... }: {
-      imports = [ ../modules/profiles/minimal.nix ];
+    nodes.router = {
       virtualisation.vlans = [ 1 2 ];
 
       # Enable packet routing
@@ -158,32 +139,29 @@ in
         eth2.ipv4.addresses = [ { address = "203.0.113.1"; prefixLength = 24; } ];
       };
 
-      networking.jool = {
-        enable = true;
-        nat64.enable = true;
-        nat64.config = {
-          bib = [
-            { # forward HTTP 203.0.113.1 (router) → 2001:db8::9 (homeserver)
-              "protocol"     = "TCP";
-              "ipv4 address" = "203.0.113.1#80";
-              "ipv6 address" = "2001:db8::9#80";
-            }
-          ];
-          pool4 = [
-            # Ports for dynamic translation
-            { protocol =  "TCP";  prefix = "203.0.113.1/32"; "port range" = "40001-65535"; }
-            { protocol =  "UDP";  prefix = "203.0.113.1/32"; "port range" = "40001-65535"; }
-            { protocol = "ICMP";  prefix = "203.0.113.1/32"; "port range" = "40001-65535"; }
-            # Ports for static BIB entries
-            { protocol =  "TCP";  prefix = "203.0.113.1/32"; "port range" = "80"; }
-          ];
-        };
+      networking.jool.enable = true;
+      networking.jool.nat64.default = {
+        bib = [
+          { # forward HTTP 203.0.113.1 (router) → 2001:db8::9 (homeserver)
+            "protocol"     = "TCP";
+            "ipv4 address" = "203.0.113.1#80";
+            "ipv6 address" = "2001:db8::9#80";
+          }
+        ];
+        pool4 = [
+          # Ports for dynamic translation
+          { protocol =  "TCP";  prefix = "203.0.113.1/32"; "port range" = "40001-65535"; }
+          { protocol =  "UDP";  prefix = "203.0.113.1/32"; "port range" = "40001-65535"; }
+          { protocol = "ICMP";  prefix = "203.0.113.1/32"; "port range" = "40001-65535"; }
+          # Ports for static BIB entries
+          { protocol =  "TCP";  prefix = "203.0.113.1/32"; "port range" = "80"; }
+        ];
       };
     };
 
     # LAN client (IPv6 only)
-    nodes.client = { ... }: {
-      imports = [ ../modules/profiles/minimal.nix ipv6Only ];
+    nodes.client = {
+      imports = [ ipv6Only ];
       virtualisation.vlans = [ 1 ];
 
       networking.interfaces.eth1.ipv6 = {
@@ -194,12 +172,8 @@ in
     };
 
     # LAN server (IPv6 only)
-    nodes.homeserver = { ... }: {
-      imports = [
-        ../modules/profiles/minimal.nix
-        ipv6Only
-        (webserver 6 "Hello from IPv6!")
-      ];
+    nodes.homeserver = {
+      imports = [ ipv6Only (webserver 6 "Hello from IPv6!") ];
 
       virtualisation.vlans = [ 1 ];
       networking.interfaces.eth1.ipv6 = {
@@ -210,12 +184,8 @@ in
     };
 
     # WAN server (IPv4 only)
-    nodes.server = { ... }: {
-      imports = [
-        ../modules/profiles/minimal.nix
-        ipv4Only
-        (webserver 4 "Hello from IPv4!")
-      ];
+    nodes.server = {
+      imports = [ ipv4Only (webserver 4 "Hello from IPv4!") ];
 
       virtualisation.vlans = [ 2 ];
       networking.interfaces.eth1.ipv4.addresses =
@@ -229,7 +199,7 @@ in
         node.wait_for_unit("network-addresses-eth1.service")
 
       with subtest("Client can ping the WAN server"):
-        router.wait_for_unit("jool-nat64.service")
+        router.wait_for_unit("jool-nat64-default.service")
         client.succeed("ping -c1 64:ff9b::203.0.113.16")
 
       with subtest("Client can connect to the WAN webserver"):

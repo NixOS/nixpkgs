@@ -4,13 +4,13 @@ let
   pythonEnv = python3.withPackages(ps: with ps; [ cheetah3 lxml ]);
 in stdenv.mkDerivation rec {
   pname = "sickgear";
-  version = "0.25.60";
+  version = "3.29.3";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     rev = "release_${version}";
-    sha256 = "sha256-5I6hJgUN2BdHc80RrcmWWxdq0iz6rcO4aX16CDtwu/g=";
+    hash = "sha256-aPpzWGVQS7waPJXHSdL/6cBhARgpE7/uIdvSadvsB0A=";
   };
 
   patches = [
@@ -23,15 +23,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ pythonEnv libarchive ];
 
-  postPatch = ''
-    substituteInPlace sickgear.py --replace "/usr/bin/env python2" "/usr/bin/env python"
-  '';
-
   installPhase = ''
     mkdir -p $out/bin $out/opt/sickgear
-    cp -R {autoProcessTV,gui,lib,sickbeard,sickgear.py} $out/opt/sickgear/
+    cp -R {autoProcessTV,gui,lib,sickgear,sickgear.py} $out/opt/sickgear/
 
-    makeWrapper $out/opt/sickgear/sickgear.py $out/bin/sickgear
+    makeWrapper $out/opt/sickgear/sickgear.py $out/bin/sickgear \
+      --suffix PATH : ${lib.makeBinPath [ libarchive ]}
   '';
 
   meta = with lib; {

@@ -11,13 +11,13 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2023.08.12",
-    "hash": "sha256-YBIuwiHE83mxxtl9PNrQN3LrEBFHvYY74zhV+UtAbZ4="
+    "rev": "2023.09.03",
+    "hash": "sha256-8mopVCqhmDW5MkrOzjt9+iBVgOf7/SbZy0Y40CzuNG0="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.08.12",
-    "hash": "sha256-hFDWb7gMQiTkItFC5KfSrpAW3FSkmAhxcc5GOdov3EE="
+    "rev": "2023.09.03",
+    "hash": "sha256-Sk7G4dP5703yq26MC/c1EBhphBVWIbanvHJMcFJDqfk="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",

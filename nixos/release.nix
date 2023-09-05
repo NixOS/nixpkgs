@@ -313,7 +313,7 @@ in rec {
   );
 
   # An image that can be imported into lxd and used for container creation
-  lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -322,14 +322,14 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
         ];
     }).config.system.build.tarball)
 
   );
 
   # Metadata for the lxd image
-  lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+  lxdContainerMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
@@ -338,7 +338,39 @@ in rec {
       modules =
         [ configuration
           versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
+          ./maintainers/scripts/lxd/lxd-container-image.nix
+        ];
+    }).config.system.build.metadata)
+
+  );
+
+  # An image that can be imported into lxd and used for container creation
+  lxdVirtualMachineImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
+        ];
+    }).config.system.build.qemuImage)
+
+  );
+
+  # Metadata for the lxd image
+  lxdVirtualMachineImageMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
         ];
     }).config.system.build.metadata)
 

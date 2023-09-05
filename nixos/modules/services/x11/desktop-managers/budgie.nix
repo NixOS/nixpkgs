@@ -134,6 +134,7 @@ in {
         # Update user directories.
         xdg-user-dirs
       ]
+      ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ (utils.removePackagesByName [
           cinnamon.nemo
           mate.eom
@@ -192,7 +193,7 @@ in {
     # Required by Budgie Panel plugins and/or Budgie Control Center panels.
     networking.networkmanager.enable = mkDefault true; # for BCC's Network panel.
     programs.nm-applet.enable = config.networking.networkmanager.enable; # Budgie has no Network applet.
-    programs.nm-applet.indicator = false; # Budgie doesn't support AppIndicators.
+    programs.nm-applet.indicator = true; # Budgie uses AppIndicators.
 
     hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Bluetooth panel.
     hardware.pulseaudio.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Sound panel.
