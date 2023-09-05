@@ -9,12 +9,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
-  version = "2.6.0";
+  version = "2.9.0";
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";
-    sha256 = "sha256-qwH2mt3Va62QJKJGOpt5WV3QksqQaRGEif4CcPC5F2E=";
+    hash = "sha256-hXescSJbtsmbh6XEY6lf7LzP/51dYcVugXR5NbvXkWw=";
   };
 
   nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems wrapGAppsHook ];
