@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonApplication
+, fetchpatch
 , fetchPypi
 , pytestCheckHook
 , pkg-config
@@ -27,12 +28,21 @@
 
 buildPythonApplication rec {
   pname = "hotdoc";
-  version = "0.13.7";
+  version = "0.15";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ESOmWeLJSXLDKBPsMBGR0zPbJHEqg/fj0G3VjUfPAJg=";
+    hash = "sha256-sfQ/iBd1Z+YqnaOg8j32rC2iucdiiK3Tff9NfYFnQyc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-test-hotdoc.patch";
+      url = "https://github.com/hotdoc/hotdoc/commit/d2415a520e960a7b540742a0695b699be9189540.patch";
+      hash = "sha256-9ORZ91c+/oRqEp2EKXjKkz7u8mLnWCq3uPsc3G4NB9E=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
