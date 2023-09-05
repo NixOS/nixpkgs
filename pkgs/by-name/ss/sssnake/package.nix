@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   ncurses,
-  ...
 }:
 stdenv.mkDerivation rec {
   pname = "sssnake";
@@ -14,14 +13,12 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-zkErOV6Az0kJdwyXzMCnVW1997zpAB79TBvf/41Igic=";
   };
-  nativeBuildInputs = [ncurses];
+  buildInputs = [ncurses];
   makeFlags = [
     "PREFIX=$(out)"
   ];
   meta = with lib; {
-    description = mdDoc ''
-      Cli snake game that plays itself
-    '';
+    description = "Cli snake game that plays itself";
     homepage = "https://github.com/angeljumbo/sssnake";
     license = with licenses; [mit];
     platforms = platforms.unix;
