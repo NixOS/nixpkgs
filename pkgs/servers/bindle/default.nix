@@ -11,6 +11,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xehn74fqP0tEtP4Qy9TRGv+P2QoHZLxRHzGoY5cQuv0=";
   };
 
+  postPatch = ''
+    rm .cargo/config
+  '';
+
   doCheck = false; # Tests require a network
 
   nativeBuildInputs = [ pkg-config ];
