@@ -13451,6 +13451,10 @@ self: super: with self; {
 
   umodbus = callPackage ../development/python-modules/umodbus { };
 
+  umi_tools = callPackage ../development/python-modules/umi_tools {
+    inherit (self) numpy pandas pysam future six regex scipy matplotlib pybktree;
+  };
+
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
   unasync = callPackage ../development/python-modules/unasync { };
