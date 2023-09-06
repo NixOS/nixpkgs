@@ -10623,6 +10623,8 @@ self: super: with self; {
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
+  python-xz = callPackage ../development/python-modules/python-xz { };
+
   python-zbar = callPackage ../development/python-modules/python-zbar { };
 
   pythran = callPackage ../development/python-modules/pythran {
