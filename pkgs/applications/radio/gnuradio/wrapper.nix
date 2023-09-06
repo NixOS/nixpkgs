@@ -84,9 +84,7 @@ let
         at-spi2-core
       ]}"
     ]
-    ++ lib.optionals (extraPackages != []) [
-      "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" extraPackages}"
-    ]
+    ++ [ "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" (extraPackages ++ [ unwrapped ])}" ]
     ++ lib.optionals (unwrapped.hasFeature "gr-qtgui")
       # 3.7 builds with qt4
       (if lib.versionAtLeast unwrapped.versionAttr.major "3.8" then
