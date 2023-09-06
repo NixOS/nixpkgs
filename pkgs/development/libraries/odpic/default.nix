@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fixDarwinDylibNames, oracle-instantclient, libaio }:
 
 let
-  version = "4.6.1";
+  version = "5.0.0";
   libPath = lib.makeLibraryPath [ oracle-instantclient.lib ];
 
 in stdenv.mkDerivation {
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     owner = "oracle";
     repo = "odpi";
     rev = "v${version}";
-    sha256 = "sha256-3kJI3qRgqrithhGq7lO1r94T/P3SamDgLN13hKzmj5I=";
+    sha256 = "sha256-ZRkXd7D4weCfP6R7UZD2+saNiNa+XXVhfiWIlxBObmU=";
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
