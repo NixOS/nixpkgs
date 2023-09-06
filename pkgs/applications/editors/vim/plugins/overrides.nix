@@ -834,6 +834,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   };
 
+  nvim-bqf = super.nvim-bqf.overrideAttrs {
+    dependencies = with self; [ fzfWrapper ];
+  };
+
   nvim-coverage = super.nvim-coverage.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
   };
