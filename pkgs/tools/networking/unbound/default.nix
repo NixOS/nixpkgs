@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.17.1";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    hash = "sha256-7kCFzszhJYTmAPPYFKKPqCLfqs7B+UyEv9Z/ilVxpfQ=";
+    hash = "sha256-PalUkKhc/2Qg8m+uC4Skn1ES3xvxt/w0+HJPAggstxI=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -152,6 +152,7 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit gnutls;
     nixos-test = nixosTests.unbound;
+    nixos-test-exporter = nixosTests.prometheus-exporters.unbound;
   };
 
   meta = with lib; {
