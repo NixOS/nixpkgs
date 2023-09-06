@@ -80,6 +80,7 @@
 , pytestCheckHook
 , time-machine
 , mkYarnPackage
+, fetchYarnDeps
 , writeScript
 
 # Extra airflow providers to enable
@@ -101,13 +102,16 @@ let
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
   # This replicates this shell script, fixing bugs in yarn.lock and package.json
 
-  airflow-frontend = mkYarnPackage {
+  airflow-frontend = mkYarnPackage rec {
     name = "airflow-frontend";
 
     src = "${airflow-src}/airflow/www";
     packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      hash = "sha256-ZUvjSA6BKj27xTNieVBBXm6oCTAWIvxk2menQMt91uE=";
+    };
 
     distPhase = "true";
 
