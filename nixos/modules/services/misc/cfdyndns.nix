@@ -23,6 +23,15 @@ in
         '';
       };
 
+      apiTokenFile = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        description = lib.mdDoc ''
+          The path to a file containing the API Token
+          used to authenticate with CloudFlare.
+        '';
+      };
+
       apikeyFile = mkOption {
         default = null;
         type = types.nullOr types.str;
@@ -55,12 +64,15 @@ in
         Group = config.ids.gids.cfdyndns;
       };
       environment = {
-        CLOUDFLARE_EMAIL="${cfg.email}";
         CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
       };
       script = ''
         ${optionalString (cfg.apikeyFile != null) ''
           export CLOUDFLARE_APIKEY="$(cat ${escapeShellArg cfg.apikeyFile})"
+          export CLOUDFLARE_EMAIL="${cfg.email}"
+        ''}
+        ${optionalString (cfg.apiTokenFile != null) ''
+          export CLOUDFLARE_APITOKEN="$(cat ${escapeShellArg cfg.apiTokenFile})"
         ''}
         ${pkgs.cfdyndns}/bin/cfdyndns
       '';
