@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "django-jinja";
   version = "2.11.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   format = "setuptools";
 
