@@ -9310,9 +9310,9 @@ with pkgs;
   idevicerestore = callPackage ../tools/misc/idevicerestore { };
 
   inherit (callPackages ../tools/filesystems/irods rec {
-    stdenv = llvmPackages.libcxxStdenv;
-    libcxx = llvmPackages.libcxx;
-    boost = boost179.override { inherit stdenv; };
+    stdenv = llvmPackages_13.libcxxStdenv;
+    libcxx = llvmPackages_13.libcxx;
+    boost = boost178.override { inherit stdenv; };
     fmt = fmt_8.override { inherit stdenv; };
     nanodbc_llvm = nanodbc.override { inherit stdenv; };
     avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
