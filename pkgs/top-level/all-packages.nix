@@ -5778,6 +5778,8 @@ with pkgs;
 
   komorebi = callPackage ../applications/graphics/komorebi { };
 
+  konsave = callPackage ../applications/misc/konsave { };
+
   krapslog = callPackage ../tools/misc/krapslog { };
 
   krelay = callPackage ../applications/networking/cluster/krelay { };
