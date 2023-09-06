@@ -184,11 +184,28 @@ in let
       inherit llvm_meta;
     };
 
-    lldb = callPackage ./lldb {
-      inherit llvm_meta;
-      inherit (darwin) libobjc bootstrap_cmds;
-      inherit (darwin.apple_sdk.libs) xpc;
-      inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
+    lldb = callPackage ../common/lldb.nix {
+      src = callPackage ({ runCommand }: runCommand "lldb-src-${version}" {} ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/lldb "$out"
+      '') { };
+      patches =
+        let
+          resourceDirPatch = callPackage
+            ({ substituteAll, libclang }: substituteAll
+              {
+                src = ./lldb/resource-dir.patch;
+                clangLibDir = "${libclang.lib}/lib";
+              })
+            { };
+        in
+        [
+          ./lldb/procfs.patch # FIXME: do we need this?
+          resourceDirPatch
+          ./lldb/gnu-install-dirs.patch
+        ];
+      inherit llvm_meta release_version;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
