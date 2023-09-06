@@ -9354,6 +9354,8 @@ with pkgs;
 
   incron = callPackage ../tools/system/incron { };
 
+  indexed-bzip2 = with python3Packages; toPythonApplication indexed-bzip2;
+
   industrializer = callPackage ../applications/audio/industrializer { };
 
   inetutils = callPackage ../tools/networking/inetutils { };

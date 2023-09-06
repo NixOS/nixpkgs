@@ -5176,6 +5176,8 @@ self: super: with self; {
 
   incremental = callPackage ../development/python-modules/incremental { };
 
+  indexed-bzip2 = callPackage ../development/python-modules/indexed-bzip2 { };
+
   infinity = callPackage ../development/python-modules/infinity { };
 
   inflect = callPackage ../development/python-modules/inflect { };
