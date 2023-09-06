@@ -45,7 +45,7 @@ let
     ];
 
     patches = [
-      ./purity.patch
+      ../../common/clang/5-8-purity.patch
       # make clang -xhip use $PATH to find executables
       ./HIP-use-PATH-7.patch
       # Backport for the `--unwindlib=[libgcc|compiler-rt]` flag, which is
