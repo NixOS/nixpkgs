@@ -457,6 +457,11 @@
       fingerprint = "51E4 F5AB 1B82 BE45 B422  9CC2 43A5 E25A A5A2 7849";
     }];
   };
+  aehmlo = {
+    github = "Aehmlo";
+    githubId = 1622250;
+    name = "Alex";
+  };
   aerialx = {
     email = "aaron+nixos@aaronlindsay.com";
     github = "AerialX";
