@@ -5453,6 +5453,13 @@
     githubId = 1931963;
     name = "David Sferruzza";
   };
+  dstengele = {
+    name = "Dennis Stengele";
+    email = "dennis@stengele.me";
+    matrix = "@dstengele:pango.place";
+    github = "dstengele";
+    githubId = 1706418;
+  };
   dsuetin = {
     name = "Danil Suetin";
     email = "suetin085+nixpkgs@protonmail.com";
