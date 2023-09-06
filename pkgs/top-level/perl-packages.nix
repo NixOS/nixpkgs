@@ -1052,6 +1052,20 @@ with self; {
     };
   };
 
+  ArrayUtils = buildPerlPackage {
+    pname = "ArrayUtils";
+    version = "0.5";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/Z/ZM/ZMIJ/Array/Array-Utils-0.5.tar.gz";
+      hash = "sha256-id0bf82bQ3lJKjp3SW45/mzTebdz/QOmsWDdJu3mN3A=";
+    };
+    meta = {
+      description = "Small utils for array manipulation";
+      homepage = "https://metacpan.org/pod/Array::Utils";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AsyncPing = buildPerlPackage {
     pname = "AsyncPing";
     version = "2016.1207";
