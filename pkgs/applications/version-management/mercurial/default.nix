@@ -90,6 +90,7 @@ let
       description = "A fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
+      changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;
