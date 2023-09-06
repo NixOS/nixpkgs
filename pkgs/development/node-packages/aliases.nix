@@ -113,6 +113,7 @@ mapAliases {
   vue-language-server = self.vls; # added 2023-08-20
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) write-good; # added 2023-08-20
+  inherit (pkgs) yaml-language-server; # added 2023-09-05
   inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
 }

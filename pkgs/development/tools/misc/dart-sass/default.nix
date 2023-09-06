@@ -29,7 +29,7 @@ buildDartApplication rec {
   };
 
   pubspecLockFile = ./pubspec.lock;
-  vendorHash = "sha256-YWxVpwuo97i00/F4WOn2AWiRFYSFIWbEbmxDF77gWsE=";
+  vendorHash = "sha256-oLHHKV5tTgEkCzqRscBXMNafKg4jdH2U9MhVY/Myfv4=";
 
   nativeBuildInputs = [
     buf

@@ -50,6 +50,7 @@ stdenv.mkDerivation (overridable // {
   # some older dependencies still use rebar
   MIX_REBAR = "${rebar}/bin/rebar";
   MIX_REBAR3 = "${rebar3}/bin/rebar3";
+  LC_ALL = "C.UTF-8";
 
   postUnpack = ''
     export HEX_HOME="$TEMPDIR/hex"
