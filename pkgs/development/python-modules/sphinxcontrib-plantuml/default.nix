@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
-  version = "0.25";
+  version = "0.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j95THZLRz8KBf+Nkez8tB+dmgsSoSInASlPoMffFRDI=";
+    hash = "sha256-rbM5fVywYTYyzT2teJQ4FCK6wkRkw5PLBQQE3WcSsac=";
   };
 
   propagatedBuildInputs = [

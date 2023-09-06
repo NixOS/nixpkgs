@@ -49,6 +49,9 @@ in {
     # Wait for lxd to settle
     machine.succeed("lxd waitready")
 
+    # no preseed should mean no service
+    machine.fail("systemctl status lxd-preseed.service")
+
     machine.succeed("lxd init --minimal")
 
     machine.succeed(

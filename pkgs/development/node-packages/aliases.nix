@@ -93,6 +93,7 @@ mapAliases {
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) npm-check-updates; # added 2023-08-22
+  ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   inherit (pkgs) react-static; # added 2023-08-21
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
@@ -112,6 +113,7 @@ mapAliases {
   vue-language-server = self.vls; # added 2023-08-20
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) write-good; # added 2023-08-20
+  inherit (pkgs) yaml-language-server; # added 2023-09-05
   inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
 }

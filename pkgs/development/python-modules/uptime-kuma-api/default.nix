@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "uptime-kuma-api";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "uptime_kuma_api";
     inherit version;
-    hash = "sha256-3Y7PGidtmBjrIXGAElzRAv//kvX0ZcK3OX0xnfeuLWE=";
+    hash = "sha256-owRLc6823jJbEEzdJ3ORCkQfaEvxxs0uwYLzzCa17zI=";
   };
 
   propagatedBuildInputs = [
