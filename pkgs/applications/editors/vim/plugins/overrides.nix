@@ -789,6 +789,10 @@ self: super: {
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
   };
 
+  multicursors-nvim = super.multicursors-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter hydra-nvim ];
+  };
+
   ncm2 = super.ncm2.overrideAttrs {
     dependencies = with self; [ nvim-yarp ];
   };
