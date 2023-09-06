@@ -2,16 +2,21 @@
 
 let
   pname = "localsend";
-  version = "1.11.0";
+  version = "1.11.1";
+
+  hashes = {
+    x86_64-linux = "sha256-K4M9cks0FNsCLIqQhSgUAz3tRMKng6JkZ/ZfwG2hZJA=";
+    x86_64-darwin = "sha256-Cixo00I4BBAmUnszsz+CxPX3EY175UTufCmwQmIsEgg=";
+  };
 
   srcs = rec {
     x86_64-linux = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}-linux-x86-64.AppImage";
-      hash = "sha256-IIxknLzlAjH27o54R0Zm7T8bhDRAIgh58Evs7zPMrPk=";
+      hash = hashes.x86_64-linux;
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-NSwyyfFPQpcVZLKGqZbaBCYSQdlNxxpI8EJo49eYB/A=";
+      hash = hashes.x86_64-darwin;
     };
     aarch64-darwin = x86_64-darwin;
   };
