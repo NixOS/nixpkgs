@@ -177,8 +177,12 @@ let
   # following package sets are provided:
   #
   # - pkgsCross.<system> where system is a member of lib.systems.examples
+  # - pkgsNative
+  # - pkgsLLVM
   # - pkgsMusl
   # - pkgsi686Linux
+  # - pkgsx86_64Darwin
+  # - pkgsStatic
   otherPackageSets = self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
