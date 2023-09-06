@@ -1,10 +1,11 @@
 { lib
 , stdenv
+
 , buildEnv
+, cargo
 , fetchFromGitHub
 , fetchYarnDeps
 , fixup_yarn_lock
-, cargo
 , installShellFiles
 , lame
 , mpv-unwrapped
@@ -18,24 +19,24 @@
 , rustPlatform
 , writeShellScriptBin
 , yarn
-, swift
+
 , AVKit
 , CoreAudio
+, swift
 }:
 
 let
   pname = "anki";
-  version = "2.1.65";
-  rev = "aa9a734f695d0b0981aa3c0aaa2745ce86832f08";
+  version = "2.1.66";
+  rev = "70506aeb99d4afbe73321feaf75a2fabaa011d55";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-l+RTot8pJFJDDiapmQdKJ9WfwAuwRFiNJMbX+fBETeU=";
+    hash = "sha256-eE64i/jTMvipakbQXzKu/dN+dyim7E4M+eP3d9GZhII=";
     fetchSubmodules = true;
   };
-
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
@@ -44,6 +45,11 @@ let
       "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
+  };
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-3DUiwGTg7Nzd+bPJlc8aUW8bYrl7BF+CcjqkF6nW0qc=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
@@ -87,20 +93,16 @@ let
     pathsToLink = [ "/bin" ];
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-66mYsHojQQBfLTHd12+/HEf7FKF5Y2RZRFeYRS2yZco=";
-  };
-
   # https://discourse.nixos.org/t/mkyarnpackage-lockfile-has-incorrect-entry/21586/3
   anki-nodemodules = stdenv.mkDerivation {
     pname = "anki-nodemodules";
+
     inherit version src yarnOfflineCache;
 
     nativeBuildInputs = [
       fixup_yarn_lock
-      yarn
       nodejs-slim
+      yarn
     ];
 
     configurePhase = ''
@@ -109,7 +111,6 @@ let
       fixup_yarn_lock yarn.lock
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules/
-      yarn run postinstall --offline
     '';
 
     installPhase = ''
@@ -118,35 +119,37 @@ let
   };
 in
 python3.pkgs.buildPythonApplication {
-  inherit pname version src;
+  inherit pname version;
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [ "doc" "man" "out" ];
+
+  inherit src;
 
   patches = [
     ./patches/gl-fixup.patch
     ./patches/no-update-check.patch
-    ./patches/0001-Skip-formatting-python-code.patch
+    ./patches/skip-formatting-python-code.patch
   ];
 
-  inherit cargoDeps;
+  inherit cargoDeps yarnOfflineCache;
 
   nativeBuildInputs = [
     fakeGit
     fixup_yarn_lock
     offlineYarn
 
-    installShellFiles
     cargo
-    rustPlatform.cargoSetupHook
+    installShellFiles
     ninja
     qt6.wrapQtAppsHook
     rsync
+    rustPlatform.cargoSetupHook
   ] ++ lib.optional stdenv.isDarwin swift;
-  nativeCheckInputs = with python3.pkgs; [ pytest mock astroid  ];
 
   buildInputs = [
     qt6.qtbase
   ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
+
   propagatedBuildInputs = with python3.pkgs; [
     # This rather long list came from running:
     #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_4.txt} | \
@@ -174,13 +177,13 @@ python3.pkgs.buildPythonApplication {
     markupsafe
     orjson
     pep517
-    python3.pkgs.protobuf
     pyparsing
     pyqt6
     pyqt6-sip
     pyqt6-webengine
     pyrsistent
     pysocks
+    python3.pkgs.protobuf
     requests
     send2trash
     six
@@ -194,23 +197,30 @@ python3.pkgs.buildPythonApplication {
     CoreAudio
   ];
 
-  # Activate optimizations
-  RELEASE = true;
+  nativeCheckInputs = with python3.pkgs; [ pytest mock astroid ];
 
-  PROTOC_BINARY = lib.getExe protobuf;
-  NODE_BINARY = lib.getExe nodejs;
-  YARN_BINARY = lib.getExe offlineYarn;
-  PYTHON_BINARY = lib.getExe python3;
+  # tests fail with to many open files
+  # TODO: verify if this is still true (I can't, no mac)
+  doCheck = !stdenv.isDarwin;
 
-  inherit yarnOfflineCache;
   dontUseNinjaInstall = false;
+  dontWrapQtApps = true;
+
+  env = {
+    # Activate optimizations
+    RELEASE = true;
+
+    NODE_BINARY = lib.getExe nodejs;
+    PROTOC_BINARY = lib.getExe protobuf;
+    PYTHON_BINARY = lib.getExe python3;
+    YARN_BINARY = lib.getExe offlineYarn;
+  };
 
   buildPhase = ''
     export RUST_BACKTRACE=1
     export RUST_LOG=debug
 
-    mkdir -p out/pylib/anki \
-             .git
+    mkdir -p out/pylib/anki .git
 
     echo ${builtins.substring 0 8 rev} > out/buildhash
     touch out/env
@@ -228,9 +238,6 @@ python3.pkgs.buildPythonApplication {
     PIP_USER=1 ./ninja build wheels
   '';
 
-  # tests fail with to many open files
-  # TODO: verify if this is still true (I can't, no mac)
-  doCheck = !stdenv.isDarwin;
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
   checkPhase = ''
     HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
@@ -252,7 +259,6 @@ python3.pkgs.buildPythonApplication {
     installManPage qt/bundle/lin/anki.1
   '';
 
-  dontWrapQtApps = true;
   preFixup = ''
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
@@ -261,7 +267,6 @@ python3.pkgs.buildPythonApplication {
   '';
 
   meta = with lib; {
-    homepage = "https://apps.ankiweb.net/";
     description = "Spaced repetition flashcard program";
     longDescription = ''
       Anki is a program which makes remembering things easy. Because it is a lot
@@ -275,9 +280,10 @@ python3.pkgs.buildPythonApplication {
       people's names and faces, brushing up on geography, mastering long poems,
       or even practicing guitar chords!
     '';
+    homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ oxij euank ];
+    maintainers = with maintainers; [ euank oxij paveloom ];
     # Reported to crash at launch on darwin (as of 2.1.65)
     broken = stdenv.isDarwin;
   };
