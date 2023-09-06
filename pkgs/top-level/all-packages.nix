@@ -9310,9 +9310,9 @@ with pkgs;
   idevicerestore = callPackage ../tools/misc/idevicerestore { };
 
   inherit (callPackages ../tools/filesystems/irods rec {
-    stdenv = llvmPackages.libcxxStdenv;
-    libcxx = llvmPackages.libcxx;
-    boost = boost179.override { inherit stdenv; };
+    stdenv = llvmPackages_13.libcxxStdenv;
+    libcxx = llvmPackages_13.libcxx;
+    boost = boost178.override { inherit stdenv; };
     fmt = fmt_8.override { inherit stdenv; };
     nanodbc_llvm = nanodbc.override { inherit stdenv; };
     avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
@@ -19230,9 +19230,7 @@ with pkgs;
 
   dive = callPackage ../development/tools/dive { };
 
-  dioxus-cli = callPackage ../development/tools/rust/dioxus-cli {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  dioxus-cli = callPackage ../development/tools/rust/dioxus-cli { };
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
@@ -25574,6 +25572,11 @@ with pkgs;
 
   valhalla = callPackage ../development/libraries/valhalla {
     boost = boost.override { enablePython = true; python = python38; };
+    protobuf = protobuf3_21.override {
+      abseil-cpp = abseil-cpp_202103.override {
+        cxxStandard = "17";
+      };
+    };
   };
 
   vamp-plugin-sdk = callPackage ../development/libraries/audio/vamp-plugin-sdk { };
@@ -34756,7 +34759,13 @@ with pkgs;
 
   osmo-sip-connector = callPackage ../servers/osmocom/osmo-sip-connector { };
 
-  osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
+  osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server {
+    protobuf = protobuf3_21.override {
+      abseil-cpp = abseil-cpp_202103.override {
+        cxxStandard = "17";
+      };
+    };
+  };
 
   palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
 
@@ -35153,14 +35162,17 @@ with pkgs;
     keybinder3 = null;
     libappindicator-gtk3 = null;
     libmodplug = null;
+    libsoup = libsoup_3;
   };
 
   quodlibet-without-gst-plugins = quodlibet.override {
+    libsoup = libsoup_3;
     tag = "-without-gst-plugins";
     withGstPlugins = false;
   };
 
   quodlibet-xine = quodlibet.override {
+    libsoup = libsoup_3;
     tag = "-xine";
     withGstreamerBackend = false;
     withXineBackend = true;
@@ -35172,6 +35184,7 @@ with pkgs;
     keybinder3 = keybinder3;
     libappindicator-gtk3 = libappindicator-gtk3;
     libmodplug = libmodplug;
+    libsoup = libsoup_3;
     tag = "-full";
     withDbusPython = true;
     withMusicBrainzNgs = true;
@@ -35182,6 +35195,7 @@ with pkgs;
   };
 
   quodlibet-xine-full = quodlibet-full.override {
+    libsoup = libsoup_3;
     tag = "-xine-full";
     withGstreamerBackend = false;
     withXineBackend = true;

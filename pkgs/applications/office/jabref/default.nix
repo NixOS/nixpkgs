@@ -93,6 +93,11 @@ stdenv.mkDerivation rec {
         'org.jabref:afterburner.fx:${versionReplace.afterburner.pin}' \
       --replace 'com.tobiasdiez:easybind:${versionReplace.easybind.snapshot}' \
         'com.tobiasdiez:easybind:${versionReplace.easybind.pin}'
+
+    # Disable update check
+    substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
+      --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
+        'VERSION_CHECK_ENABLED, Boolean.FALSE'
   '';
 
   preBuild = ''
