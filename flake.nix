@@ -9,24 +9,31 @@
         nixpkgs = self;
       };
 
-      lib = import ./lib;
+      lib = (import ./lib).extend libVersionInfoOverlay;
+
+      libVersionInfoOverlay = finalLib: prevLib: {
+        trivial = prevLib.trivial // {
+          versionSuffix =
+            ".${finalLib.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
+          version = finalLib.trivial.release + finalLib.trivial.versionSuffix;
+          revisionWithDefault = default: self.rev or default;
+        };
+      };
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
     {
+      overlays.setLibVersionInfo = final: prev: {
+        lib = prev.lib.extend libVersionInfoOverlay;
+      };
+
       lib = lib.extend (final: prev: {
 
         nixos = import ./nixos/lib { lib = final; };
 
         nixosSystem = args:
           import ./nixos/lib/eval-config.nix (
-            args // {
-              modules = args.modules ++ [{
-                system.nixos.versionSuffix =
-                  ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
-                system.nixos.revision = final.mkIf (self ? rev) self.rev;
-              }];
-            } // lib.optionalAttrs (! args?system) {
+            args // { inherit (self) lib; } // lib.optionalAttrs (! args?system) {
               # Allow system to be set modularly in nixpkgs.system.
               # We set it to null, to remove the "legacy" entrypoint's
               # non-hermetic default.
@@ -53,7 +60,10 @@
       # attribute it displays `omitted` instead of evaluating all packages,
       # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
       # information rich.
-      legacyPackages = forAllSystems (system: import ./. { inherit system; });
+      legacyPackages = forAllSystems (system: import ./. {
+        inherit system;
+        overlays = [ self.overlays.setLibVersionInfo ];
+      });
 
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
