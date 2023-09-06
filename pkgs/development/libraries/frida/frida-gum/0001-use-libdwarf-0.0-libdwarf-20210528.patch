@@ -1,0 +1,25 @@
+From ba0c5b7958484042b28b310ef30533f5d8e10e16 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Wed, 1 Feb 2023 09:49:02 +0100
+Subject: [PATCH 1/5] use libdwarf 0.0 = libdwarf 20210528
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 0ad28b24..1d607a50 100644
+--- a/meson.build
++++ b/meson.build
+@@ -483,7 +483,7 @@ if host_os_family in ['linux', 'freebsd', 'qnx']
+     endif
+   endif
+ 
+-  libdwarf_dep = dependency('libdwarf', required: false)
++  libdwarf_dep = dependency('libdwarf', required: false, version: '< 0.1')
+   if not libdwarf_dep.found()
+     found = false
+     if not meson.is_cross_build()
+-- 
+2.42.0
+

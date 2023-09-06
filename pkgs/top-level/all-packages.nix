@@ -689,6 +689,8 @@ with pkgs;
 
   frece = callPackage ../development/tools/frece { };
 
+  fridaPackages = recurseIntoAttrs (callPackage ../development/libraries/frida { });
+
   frida-tools = callPackage ../tools/security/frida-tools { };
 
   frink = callPackage ../development/tools/frink { };

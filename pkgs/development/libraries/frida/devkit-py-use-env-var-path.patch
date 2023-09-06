@@ -1,0 +1,29 @@
+diff --git a/releng/devkit.py b/releng/devkit.py
+index 45a422a..109d297 100755
+--- a/releng/devkit.py
++++ b/releng/devkit.py
+@@ -11,6 +11,7 @@ import shlex
+ import shutil
+ import subprocess
+ import tempfile
++import os
+ 
+ if platform.system() == "Windows":
+     import winenv
+@@ -19,6 +20,7 @@ if platform.system() == "Windows":
+ 
+ 
+ FRIDA_ROOT = Path(__file__).resolve().parent.parent
++FRIDA_ROOT2 = Path(os.environ['FRIDA_LIB_ROOT'])
+ 
+ INCLUDE_PATTERN = re.compile("#include\s+[<\"](.*?)[>\"]")
+ 
+@@ -162,7 +164,7 @@ def generate_header(package, host, kit, flavor, meson_config, umbrella_header_pa
+             check=True).stdout
+         header_lines = header_dependencies.strip().split("\n")[1:]
+         header_files = [Path(line.rstrip("\\").strip()) for line in header_lines]
+-        header_files = [h for h in header_files if h.is_relative_to(FRIDA_ROOT)]
++        header_files = [h for h in header_files if h.is_relative_to(FRIDA_ROOT) or h.is_relative_to(FRIDA_ROOT2)]
+ 
+     devkit_header_lines = []
+     umbrella_header = header_files[0]

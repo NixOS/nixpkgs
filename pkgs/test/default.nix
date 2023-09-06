@@ -155,6 +155,8 @@ with pkgs;
 
   dotnet = recurseIntoAttrs (callPackages ./dotnet { });
 
+  frida = callPackage ../development/libraries/frida/platforms/test.nix { };
+
   makeHardcodeGsettingsPatch = callPackage ./make-hardcode-gsettings-patch { };
 
   makeWrapper = callPackage ./make-wrapper { };
