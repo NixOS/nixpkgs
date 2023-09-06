@@ -42175,6 +42175,8 @@ with pkgs;
 
   udict = callPackage ../applications/misc/udict { };
 
+  zeronsd = callPackage ../servers/zeronsd { };
+
   duden = callPackage ../applications/misc/duden { };
 
   zf = callPackage ../tools/misc/zf { };
