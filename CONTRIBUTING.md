@@ -535,6 +535,11 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
 
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
+  When adding yourself as maintainer, in the same pull request, make a separate
+  commit with the message `maintainers: add <handle>`.
+  Add the commit before those making changes to the package or module.
+  See [Nixpkgs Maintainers](../maintainers/README.md) for details.
+
 ### Writing good commit messages
 
 In addition to writing properly formatted commit messages, it's important to include relevant information so other developers can later understand *why* a change was made. While this information usually can be found by digging code, mailing list/Discourse archives, pull request discussions or upstream changes, it may require a lot of work.

@@ -4,6 +4,7 @@
 , buildGoModule
 , sqlite
 , callPackage
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -39,6 +40,9 @@ buildGoModule rec {
 
   passthru = {
     updateScript = ./update.sh;
+    tests = {
+      nixos = nixosTests.gotify-server;
+    };
   };
 
   # Otherwise, all other subpackages are built as well and from some reason,
