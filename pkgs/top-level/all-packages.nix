@@ -5762,6 +5762,8 @@ with pkgs;
 
   joystickwake = callPackage ../tools/games/joystickwake { };
 
+  juce = darwin.apple_sdk_11_0.callPackage ../development/misc/juce { };
+
   jumppad = callPackage ../tools/virtualization/jumppad { };
 
   jwt-cli = callPackage ../tools/security/jwt-cli {
