@@ -5178,6 +5178,8 @@ self: super: with self; {
 
   indexed-bzip2 = callPackage ../development/python-modules/indexed-bzip2 { };
 
+  indexed-gzip = callPackage ../development/python-modules/indexed-gzip { inherit (pkgs) zlib; };
+
   infinity = callPackage ../development/python-modules/infinity { };
 
   inflect = callPackage ../development/python-modules/inflect { };
