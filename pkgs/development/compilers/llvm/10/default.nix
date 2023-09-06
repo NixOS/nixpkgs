@@ -137,7 +137,7 @@ let
         ./lldb/procfs.patch
         ./lldb/gnu-install-dirs.patch
       ];
-      inherit llvm_meta release_version;
+      inherit llvm_meta;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
