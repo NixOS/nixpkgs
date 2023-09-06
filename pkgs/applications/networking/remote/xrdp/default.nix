@@ -34,7 +34,7 @@ let
   };
 
   xrdp = stdenv.mkDerivation rec {
-    version = "0.9.22.1";
+    version = "0.9.23";
     pname = "xrdp";
 
     src = fetchFromGitHub {
@@ -42,7 +42,7 @@ let
       repo = "xrdp";
       rev = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-8gAP4wOqSmar8JhKRt4qRRwh23coIn0Q8Tt9ClHQSt8=";
+      hash = "sha256-14qsRfLn+26rm+vyMmOtaBEs8mWfSTIsIVseSC2FjXc=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm perl ];
