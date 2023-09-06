@@ -18253,6 +18253,21 @@ with self; {
     };
   };
 
+  NetMPD = buildPerlModule {
+    pname = "Net-MPD";
+    version = "0.07";
+    buildInputs = [ ModuleBuildTiny ];
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/A/AB/ABERNDT/Net-MPD-0.07.tar.gz";
+      hash = "sha256-M4L7nG9cJd4mKPVhRCn6igB5FSFnjELaBoyZ57KU6VM=";
+    };
+    meta = {
+      description = "Communicate with an MPD server";
+      homepage = "https://metacpan.org/pod/Net::MPD";
+      license = with lib.licenses; [ mit ];
+    };
+  };
+
   NetMQTTSimple = buildPerlPackage {
     pname = "Net-MQTT-Simple";
     version = "1.26";
