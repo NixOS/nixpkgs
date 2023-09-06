@@ -52,10 +52,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for f in meson_vapi_link.py meson_python_compile.py; do
-      chmod +x $f
-      patchShebangs $f
-    done
+    chmod +x meson_python_compile.py
+    patchShebangs meson_python_compile.py
   '';
 
   passthru = {
