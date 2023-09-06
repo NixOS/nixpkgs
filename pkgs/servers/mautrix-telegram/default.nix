@@ -60,6 +60,8 @@ python.pkgs.buildPythonPackage rec {
     prometheus-client
     # sqlite
     aiosqlite
+    # proxy support
+    pysocks
   ] ++ lib.optionals withE2BE [
     # e2be
     python-olm
