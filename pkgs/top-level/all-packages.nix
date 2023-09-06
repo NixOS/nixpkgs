@@ -5694,8 +5694,6 @@ with pkgs;
 
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
 
-  hyprland-share-picker = libsForQt5.callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland/hyprland-share-picker.nix { };
-
   hyprnome = callPackage ../applications/misc/hyprnome { };
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
@@ -36884,7 +36882,10 @@ with pkgs;
 
   xdg-desktop-portal-gtk = callPackage ../development/libraries/xdg-desktop-portal-gtk { };
 
-  xdg-desktop-portal-hyprland = callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland { };
+  xdg-desktop-portal-hyprland = callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland {
+    stdenv = gcc13Stdenv;
+    inherit (qt6) qtbase qttools qtwayland wrapQtAppsHook;
+  };
 
   xdg-desktop-portal-wlr = callPackage ../development/libraries/xdg-desktop-portal-wlr { };
 
