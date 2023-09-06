@@ -248,11 +248,10 @@ in {
             # setup
             ${cfg.package}/createdb.sh
             ${cfg.package}/migrate.sh
+            export IP_GEOLOCATION_DB=${pkgs.dbip-country-lite}/share/dbip/dbip-country-lite.mmdb
             ${cfg.package}/bin/plausible eval "(Plausible.Release.prepare() ; Plausible.Auth.create_user(\"$ADMIN_USER_NAME\", \"$ADMIN_USER_EMAIL\", \"$ADMIN_USER_PWD\"))"
             ${optionalString cfg.adminUser.activate ''
-              if ! ${cfg.package}/init-admin.sh | grep 'already exists'; then
-                psql -d plausible <<< "UPDATE users SET email_verified=true;"
-              fi
+              psql -d plausible <<< "UPDATE users SET email_verified=true where email = '$ADMIN_USER_EMAIL';"
             ''}
 
             exec plausible start

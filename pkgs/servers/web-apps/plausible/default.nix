@@ -1,53 +1,44 @@
 { lib
-, stdenv
 , beamPackages
 , fetchFromGitHub
-, glibcLocales
-, cacert
-, mkYarnModules
-, fetchYarnDeps
 , nodejs
+, npmHooks
+, fetchNpmDeps
 , nixosTests
 }:
 
 let
   pname = "plausible";
-  version = "1.5.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "plausible";
     repo = "analytics";
     rev = "v${version}";
-    hash = "sha256-KcIZMsWlKGCZFi7DrTS8JMWEahdERoExtpBj+7Ec+FQ=";
+    hash = "sha256-yrTwxBguAZbfEKucUL+w49Hr6D7v9/2OjY1h27+w5WI=";
   };
 
   # TODO consider using `mix2nix` as soon as it supports git dependencies.
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "${pname}-deps";
     inherit src version;
-    hash = "sha256-rLkD2FuNFKU3nB8FT/qPgSVP8H60qEmHtPvcdw4JUF8=";
-  };
-
-  yarnDeps = mkYarnModules {
-    pname = "${pname}-yarn-deps";
-    inherit version;
-    packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
-    preBuild = ''
-      mkdir -p tmp/deps
-      cp -r ${mixFodDeps}/phoenix tmp/deps/phoenix
-      cp -r ${mixFodDeps}/phoenix_html tmp/deps/phoenix_html
-    '';
-    postBuild = ''
-      echo 'module.exports = {}' > $out/node_modules/flatpickr/dist/postcss.config.js
-    '';
+    hash = "sha256-CAyZLpjmw1JreK3MopqI0XsWhP+fJEMpXlww7CibSaM=";
   };
 in
 beamPackages.mixRelease {
   inherit pname version src mixFodDeps;
 
-  nativeBuildInputs = [ nodejs ];
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  npmDeps = fetchNpmDeps {
+    src = "${src}/assets";
+    hash = "sha256-2t1M6RQhBjZxx36qawVUVC+ob9SvQIq5dy4HgVeY2Eo=";
+  };
+
+  npmRoot = "assets";
 
   passthru = {
     tests = { inherit (nixosTests) plausible; };
@@ -61,7 +52,6 @@ beamPackages.mixRelease {
   postBuild = ''
     export HOME=$TMPDIR
     export NODE_OPTIONS=--openssl-legacy-provider # required for webpack compatibility with OpenSSL 3 (https://github.com/webpack/webpack/issues/14532)
-    ln -sf ${yarnDeps}/node_modules assets/node_modules
     npm run deploy --prefix ./assets
 
     # for external task you need a workaround for the no deps check flag
@@ -72,7 +62,8 @@ beamPackages.mixRelease {
   meta = with lib; {
     license = licenses.agpl3Plus;
     homepage = "https://plausible.io/";
-    description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.";
+    changelog = "https://github.com/plausible/analytics/blob/${src.rev}/CHANGELOG.md";
+    description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
