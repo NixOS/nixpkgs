@@ -8,7 +8,7 @@
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
   ApplicationServices, Carbon, Cocoa, Xplugin,
-  xorg
+  xorg, windows
 }:
 
 let
@@ -80,6 +80,8 @@ self: super:
   mkfontdir = xorg.mkfontscale;
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
+    # $dev/include/xcb/xcb.h includes pthread.h
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
     configureFlags = [ "--enable-xkb" "--enable-xinput" ]
       ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
     outputs = [ "out" "dev" "man" "doc" ];
@@ -110,6 +112,7 @@ self: super:
         "xcb-xvmc"
         "xcb"
       ];
+      platforms = lib.platforms.unix ++ lib.platforms.windows;
     };
   });
 
@@ -385,6 +388,11 @@ self: super:
       platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) []
         [ "cygwin" "freebsd" "linux" "netbsd" "openbsd" "illumos" ];
     };
+  });
+
+  libpthreadstubs = super.libpthreadstubs.overrideAttrs (attrs: {
+    # only contains a pkgconfig file on linux and windows
+    meta = attrs.meta // { platforms = lib.platforms.unix ++ lib.platforms.windows; };
   });
 
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
@@ -671,6 +679,14 @@ self: super:
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
     # adds support for printproto needed for libXp
     mesonFlags = [ "-Dlegacy=true" ];
+
+    patches = [
+      (fetchpatch {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/meson.patch?h=mingw-w64-xorgproto&id=7b817efc3144a50e6766817c4ca7242f8ce49307";
+        sha256 = "sha256-Izzz9In53W7CC++k1bLr78iSrmxpFm1cH8qcSpptoUQ=";
+      })
+    ];
+    meta = attrs.meta // { platforms = lib.platforms.unix ++ lib.platforms.windows; };
   });
 
   xorgserver = with xorg; super.xorgserver.overrideAttrs (attrs_passed:
