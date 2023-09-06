@@ -8905,6 +8905,8 @@ self: super: with self; {
 
   pybindgen = callPackage ../development/python-modules/pybindgen { };
 
+  pybktree = callPackage ../development/python-modules/pybktree { };
+
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
   pybluez = callPackage ../development/python-modules/pybluez {
