@@ -8,6 +8,7 @@
 , asciidoc
 , wrapGAppsHook
 , glib
+, libei
 , libepoxy
 , libdrm
 , nv-codec-headers-11
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     fuse3
     gdk-pixbuf # For libnotify
     glib
+    libei
     libepoxy
     libdrm
     nv-codec-headers-11
