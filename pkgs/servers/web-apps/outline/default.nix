@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchYarnDeps
 , makeWrapper
 , nodejs
 , yarn
@@ -22,7 +23,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
   buildInputs = [ yarn nodejs ];
 
-  yarnOfflineCache = yarn2nix-moretea.importOfflineCache ./yarn.nix;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-j9iaxXfMlG9dT6fvYgPQg6Y0QvCRiBU1peO0YgsGHOY=";
+  };
 
   configurePhase = ''
     export HOME=$(mktemp -d)/yarn_home
