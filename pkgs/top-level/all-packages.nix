@@ -12537,6 +12537,8 @@ with pkgs;
 
   ratman = callPackage ../tools/networking/ratman { };
 
+  ratarmount = with python3Packages; toPythonApplication ratarmount;
+
   ratools = callPackage ../tools/networking/ratools { };
 
   ratt = callPackage ../applications/misc/ratt { };

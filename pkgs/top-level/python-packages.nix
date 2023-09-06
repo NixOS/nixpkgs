@@ -11013,6 +11013,8 @@ self: super: with self; {
 
   ratarmountcore = callPackage ../development/python-modules/ratarmountcore { inherit (pkgs) zstd; };
 
+  ratarmount = callPackage ../development/python-modules/ratarmount { };
+
   ratelim = callPackage ../development/python-modules/ratelim { };
 
   ratelimit = callPackage ../development/python-modules/ratelimit { };
