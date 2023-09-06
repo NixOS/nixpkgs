@@ -5535,7 +5535,6 @@ broken-packages:
   - turing-machines # failure in job https://hydra.nixos.org/build/233195604 at 2023-09-02
   - turing-music # failure in job https://hydra.nixos.org/build/233203435 at 2023-09-02
   - turtle-options # failure in job https://hydra.nixos.org/build/233255831 at 2023-09-02
-  - twain # failure in job https://hydra.nixos.org/build/233200486 at 2023-09-02
   - tweak # failure in job https://hydra.nixos.org/build/233211020 at 2023-09-02
   - twentefp-websockets # failure in job https://hydra.nixos.org/build/233207022 at 2023-09-02
   - twhs # failure in job https://hydra.nixos.org/build/233201182 at 2023-09-02
