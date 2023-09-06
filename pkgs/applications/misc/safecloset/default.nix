@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "safecloset";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "safecloset";
     rev = "v${version}";
-    hash = "sha256-HY8HaWGsqKUsqNLFpxrGJvAcVD68fqKX2v7xCiEKuDM=";
+    hash = "sha256-ZvJbPbKS7HZ9R4Z9bMrXVjKtIdKE5dkp115dmHv7uJY=";
   };
 
-  cargoHash = "sha256-geZoqfPgYUd4X903EM7+gq/VPvIClAmlC0nkqWriB0M=";
+  cargoHash = "sha256-vyn/rcptkJLjXg8qjAnzc2bDjz2r0LsGa8toyybgdbM=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
