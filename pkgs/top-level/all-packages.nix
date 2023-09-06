@@ -32440,6 +32440,8 @@ with pkgs;
 
   gossa = callPackage ../applications/networking/gossa { };
 
+  gossip = callPackage ../applications/networking/instant-messengers/gossip { };
+
   gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
 
   gpsbabel-gui = gpsbabel.override {
