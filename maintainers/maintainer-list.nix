@@ -5541,11 +5541,11 @@
     matrix = "@felipeqq2:pub.solar";
   };
   felixalbrigtsen = {
-    email = "felixalbrigtsen@gmail.com";
+    email = "felix@albrigtsen.it";
     github = "felixalbrigtsen";
     githubId = 64613093;
     name = "Felix Albrigtsen";
-    matrix = "@felixalb:pvv.ntnu.no";
+    matrix = "@felixalb:feal.no";
   };
   felixscheinost = {
     name = "Felix Scheinost";
