@@ -1,12 +1,17 @@
 { yarn2nix-moretea
 , fetchFromGitHub, applyPatches
+, fetchYarnDeps
 }:
 
 yarn2nix-moretea.mkYarnPackage rec {
   pname = "gotify-ui";
 
   packageJSON = ./package.json;
-  yarnNix = ./yarndeps.nix;
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-ejHzo6NHCMlNiYePWvfMY9Blb58pj3UQ5PFI0V84flI=";
+  };
 
   version = import ./version.nix;
 
