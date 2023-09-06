@@ -41,7 +41,7 @@ let
     ];
 
     patches = [
-      ./purity.patch
+      ../../common/clang/5-8-purity.patch
       ./gnu-install-dirs.patch
       (substituteAll {
         src = ../../clang-6-10-LLVMgold-path.patch;
