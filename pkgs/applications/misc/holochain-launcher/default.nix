@@ -8,6 +8,8 @@
 , webkitgtk
 , libappindicator
 , wrapGAppsHook
+, shared-mime-info
+, glib-networking
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     openssl
     webkitgtk
     libappindicator
+
+    glib-networking
   ];
 
   unpackCmd = "dpkg-deb -x $curSrc source";
@@ -41,6 +45,11 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     patchelf --add-needed "libappindicator3.so" "$out/bin/holochain-launcher"
+
+    # without this the DevTools will just display an unparsed HTML file (see https://github.com/tauri-apps/tauri/issues/5711#issuecomment-1336409601)
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
   '';
 
   meta = with lib; {
