@@ -1418,6 +1418,11 @@
     githubId = 338268;
     name = "Alexei Robyn";
   };
+  arrie78 = {
+    github = "arrie78";
+    githubId = 117209328;
+    name = "arrie78";
+  };
   artemist = {
     email = "me@artem.ist";
     github = "artemist";
