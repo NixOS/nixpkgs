@@ -1,5 +1,5 @@
 {
-  "linux": {
+  "x86_64-linux": {
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.tar.gz",
@@ -111,6 +111,121 @@
       "version": "2023.2",
       "sha256": "cc97c8ba44560dea41de1c03fd6023a287c3dca6476c297f02a473af124c073f",
       "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.tar.gz",
+      "build_number": "232.8660.143"
+    }
+  },
+  "aarch64-linux": {
+    "clion": {
+      "update-channel": "CLion RELEASE",
+      "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "3088fe06e75af6f1bc2374843360a9b7242684802727aa3ce9900063d4dd9b4b",
+      "url": "https://download.jetbrains.com/cpp/CLion-2023.2-aarch64.tar.gz",
+      "build_number": "232.8660.186"
+    },
+    "datagrip": {
+      "update-channel": "DataGrip RELEASE",
+      "url-template": "https://download.jetbrains.com/datagrip/datagrip-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "65c01cc877bb2f9162520fe190560ef3b88dcc171e76c03f0c83206b4938f066",
+      "url": "https://download.jetbrains.com/datagrip/datagrip-2023.2-aarch64.tar.gz",
+      "build_number": "232.8660.111"
+    },
+    "dataspell": {
+      "update-channel": "DataSpell RELEASE",
+      "url-template": "https://download.jetbrains.com/python/dataspell-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "43bd591c640a08c93c9b201a408601f1ec8f8163c8d1cda0ffccfed5cbd37f26",
+      "url": "https://download.jetbrains.com/python/dataspell-2023.2-aarch64.tar.gz",
+      "build_number": "232.8660.202"
+    },
+    "gateway": {
+      "update-channel": "Gateway RELEASE",
+      "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.tar.gz",
+      "version": "2023.2",
+      "sha256": "8b4064670f42d1812cf44068dd989d518b46fd04a8bd4b6b5e8f84e9a44f58b2",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.2.tar.gz",
+      "build_number": "232.8660.185"
+    },
+    "goland": {
+      "update-channel": "GoLand RELEASE",
+      "url-template": "https://download.jetbrains.com/go/goland-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "5b8622498df0a3ca30ec6b053a0f4b10831d6da979907fb869322aecd96e861b",
+      "url": "https://download.jetbrains.com/go/goland-2023.2-aarch64.tar.gz",
+      "build_number": "232.8660.185"
+    },
+    "idea-community": {
+      "update-channel": "IntelliJ IDEA RELEASE",
+      "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "aa4c5c7c940858e8ecc2420708de1ec40fa38c9cc78496b51a6b35886b1a8333",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2023.2-aarch64.tar.gz",
+      "build_number": "232.8660.185"
+    },
+    "idea-ultimate": {
+      "update-channel": "IntelliJ IDEA RELEASE",
+      "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "2bd1142fa91ff36c913fa1f8d57094d233c523dc66f5034d2c7335257077aaee",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2023.2-aarch64.tar.gz",
+      "build_number": "232.8660.185"
+    },
+    "mps": {
+      "update-channel": "MPS RELEASE",
+      "url-template": "https://download.jetbrains.com/mps/{versionMajorMinor}/MPS-{version}-aarch64.tar.gz",
+      "version": "2022.3",
+      "sha256": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "url": "https://download.jetbrains.com/mps/2022.3/MPS-2022.3-aarch64.tar.gz",
+      "build_number": "223.8836.1185"
+    },
+    "phpstorm": {
+      "update-channel": "PhpStorm RELEASE",
+      "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "build_number": "232.8660.205",
+      "sha256": "2c589d0880af69ac8816c2363484fcf2b9d8b9d886b1f0a5cdc708aed0c2ae2a",
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2-aarch64.tar.gz",
+      "version-major-minor": "2022.3"
+    },
+    "pycharm-community": {
+      "update-channel": "PyCharm RELEASE",
+      "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "a8d45df364e34e948234431c38c4553402cd61cea9c8b2c72e32d2d605db931b",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2023.2-aarch64.tar.gz",
+      "build_number": "232.8660.197"
+    },
+    "pycharm-professional": {
+      "update-channel": "PyCharm RELEASE",
+      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "533916df23c39ac06df41bb98b7611b707492e51e5ad4b4a9aab8a7391edd9f2",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2023.2-aarch64.tar.gz",
+      "build_number": "232.8660.197"
+    },
+    "rider": {
+      "update-channel": "Rider RELEASE",
+      "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "5cf6f3779eb19874021a87c97ecd4401ecc823c3830f25b73e10331b38397a17",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2023.2-aarch64.tar.gz",
+      "build_number": "232.8660.212"
+    },
+    "ruby-mine": {
+      "update-channel": "RubyMine RELEASE",
+      "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2-aarch64.tar.gz",
+      "sha256": "6b392a66d29198c6d4e6fa84bbb1e8744bab1a9d768d87424664d97fedca42e4",
+      "build_number": "232.8660.186"
+    },
+    "webstorm": {
+      "update-channel": "WebStorm RELEASE",
+      "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}-aarch64.tar.gz",
+      "version": "2023.2",
+      "sha256": "e8d861c89500b6cd272e9a56710b0e3dc9952cc0cddab490e30d748b164219a5",
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2-aarch64.tar.gz",
       "build_number": "232.8660.143"
     }
   },

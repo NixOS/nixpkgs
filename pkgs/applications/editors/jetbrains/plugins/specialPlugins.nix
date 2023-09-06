@@ -28,7 +28,8 @@
     buildPhase =
       let
         arch = (if stdenv.isLinux then "linux" else "mac") + (if stdenv.isAarch64 then "arm" else "");
-      in ''
+      in
+      ''
         runHook preBuild
         ln -sf ${delve}/bin/dlv lib/dlv/${arch}/dlv
         runHook postBuild

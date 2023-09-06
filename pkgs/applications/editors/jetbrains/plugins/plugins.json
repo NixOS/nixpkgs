@@ -38,11 +38,28 @@
     },
     "6954": {
       "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
         "idea-community",
-        "idea-ultimate"
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "webstorm"
       ],
       "builds": {
-        "232.8660.185": null
+        "223.8836.1185": "https://plugins.jetbrains.com/files/6954/357004/kotlin-plugin-223-1.9.0-release-358-IJ8836.35.zip",
+        "232.8660.111": null,
+        "232.8660.143": null,
+        "232.8660.185": null,
+        "232.8660.186": null,
+        "232.8660.197": null,
+        "232.8660.205": null,
+        "232.8660.212": null
       },
       "name": "kotlin"
     },
@@ -79,8 +96,8 @@
         "phpstorm"
       ],
       "builds": {
-        "232.8660.185": "https://plugins.jetbrains.com/files/7219/355564/Symfony_Plugin-2022.1.253.zip",
-        "232.8660.205": "https://plugins.jetbrains.com/files/7219/355564/Symfony_Plugin-2022.1.253.zip"
+        "232.8660.185": "https://plugins.jetbrains.com/files/7219/376592/Symfony_Plugin-2022.1.254.zip",
+        "232.8660.205": "https://plugins.jetbrains.com/files/7219/376592/Symfony_Plugin-2022.1.254.zip"
       },
       "name": "symfony-support"
     },
@@ -368,14 +385,14 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": "https://plugins.jetbrains.com/files/17718/373346/github-copilot-intellij-1.2.18.2908.zip",
-        "232.8660.111": "https://plugins.jetbrains.com/files/17718/373346/github-copilot-intellij-1.2.18.2908.zip",
-        "232.8660.143": "https://plugins.jetbrains.com/files/17718/373346/github-copilot-intellij-1.2.18.2908.zip",
-        "232.8660.185": "https://plugins.jetbrains.com/files/17718/373346/github-copilot-intellij-1.2.18.2908.zip",
-        "232.8660.186": "https://plugins.jetbrains.com/files/17718/373346/github-copilot-intellij-1.2.18.2908.zip",
-        "232.8660.197": "https://plugins.jetbrains.com/files/17718/373346/github-copilot-intellij-1.2.18.2908.zip",
-        "232.8660.205": "https://plugins.jetbrains.com/files/17718/373346/github-copilot-intellij-1.2.18.2908.zip",
-        "232.8660.212": "https://plugins.jetbrains.com/files/17718/373346/github-copilot-intellij-1.2.18.2908.zip"
+        "223.8836.1185": "https://plugins.jetbrains.com/files/17718/377609/github-copilot-intellij-1.2.21.2995.zip",
+        "232.8660.111": "https://plugins.jetbrains.com/files/17718/377609/github-copilot-intellij-1.2.21.2995.zip",
+        "232.8660.143": "https://plugins.jetbrains.com/files/17718/377609/github-copilot-intellij-1.2.21.2995.zip",
+        "232.8660.185": "https://plugins.jetbrains.com/files/17718/377609/github-copilot-intellij-1.2.21.2995.zip",
+        "232.8660.186": "https://plugins.jetbrains.com/files/17718/377609/github-copilot-intellij-1.2.21.2995.zip",
+        "232.8660.197": "https://plugins.jetbrains.com/files/17718/377609/github-copilot-intellij-1.2.21.2995.zip",
+        "232.8660.205": "https://plugins.jetbrains.com/files/17718/377609/github-copilot-intellij-1.2.21.2995.zip",
+        "232.8660.212": "https://plugins.jetbrains.com/files/17718/377609/github-copilot-intellij-1.2.21.2995.zip"
       },
       "name": "github-copilot"
     },
@@ -419,11 +436,12 @@
     "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar": "sha256-eXInfAqY3yEZRXCAuv3KGldM1pNKEioNwPB0rIGgJFw=",
     "https://plugins.jetbrains.com/files/164/275091/IdeaVim-2.1.0.zip": "sha256-2dM/r79XT+1MHDeRAUnZw6WO3dmw7MZfx9alHmBqMk0=",
     "https://plugins.jetbrains.com/files/164/369533/IdeaVim-2.4.1-signed.zip": "sha256-dI+Oh6Z+OuqiS8yJI/PbelZdg2YCmoGw9NGotvKc0no=",
-    "https://plugins.jetbrains.com/files/17718/373346/github-copilot-intellij-1.2.18.2908.zip": "sha256-pSbM2BkXrWdEVedLIh89sQ1FDnlgO+saXyZsfkI2qYA=",
+    "https://plugins.jetbrains.com/files/17718/377609/github-copilot-intellij-1.2.21.2995.zip": "sha256-jbnhHbEz78dhOH24VyuJRYLAMIiiqdViQlAELg3wypg=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
     "https://plugins.jetbrains.com/files/631/368891/python-232.8660.185.zip": "sha256-SqHA6I+mJeBH/Gjos+OiTayClesl5YBLqHvXIVL5o9k=",
+    "https://plugins.jetbrains.com/files/6954/357004/kotlin-plugin-223-1.9.0-release-358-IJ8836.35.zip": "sha256-lwqj32/9MyjPlnPNMPvJHYi8YLSU6swJMxYLPjsfbSk=",
     "https://plugins.jetbrains.com/files/6981/370741/ini-232.8660.205.zip": "sha256-qxTbWKdYSb4b6CRDKup7rL8EO2qZLM9bctMlTDHfrBk=",
-    "https://plugins.jetbrains.com/files/7219/355564/Symfony_Plugin-2022.1.253.zip": "sha256-vE+fobPbtWlaSHGTLlbDcC6NkaJiA4Qp50h8flXHaJc=",
+    "https://plugins.jetbrains.com/files/7219/376592/Symfony_Plugin-2022.1.254.zip": "sha256-6JarHJ+VrvkkbUswfPI74dRxSI0RkEWhEKbxpEl1XHI=",
     "https://plugins.jetbrains.com/files/7320/346181/PHP_Annotations-9.4.0.zip": "sha256-hT5K4w4lhvNwDzDMDSvsIDGj9lyaRqglfOhlbNdqpWs=",
     "https://plugins.jetbrains.com/files/7322/368904/python-ce-232.8660.185.zip": "sha256-MD2HNM9ltLK/0KKB6Ly1qu3J8B8QD/8t0FjWEcalIkE=",
     "https://plugins.jetbrains.com/files/8182/329558/intellij-rust-0.4.194.5382-223.zip": "sha256-AgaKH4ZaxLhumk1P9BVJGpvluKnpYIulCDIRQpaWlKA=",
