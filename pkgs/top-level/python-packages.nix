@@ -396,6 +396,8 @@ self: super: with self; {
 
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
+  aiovodafone = callPackage ../development/python-modules/aiovodafone { };
+
   aiowatttime = callPackage ../development/python-modules/aiowatttime { };
 
   aioweenect = callPackage ../development/python-modules/aioweenect { };
