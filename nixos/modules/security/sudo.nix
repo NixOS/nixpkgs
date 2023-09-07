@@ -38,6 +38,15 @@ in
 
   options.security.sudo = {
 
+    defaultOptions = mkOption {
+      type = with types; listOf str;
+      default = [ "SETENV" ];
+      description = mdDoc ''
+        Options used for the default rules, granting `root` and the
+        `wheel` group permission to run any command as any user.
+      '';
+    };
+
     enable = mkOption {
       type = types.bool;
       default = true;
@@ -206,8 +215,8 @@ in
           inherit users groups;
           commands = [ {
             command = "ALL";
-            options = opts ++ [ "SETENV" ];
-	  } ];
+            options = opts ++ cfg.defaultOptions;
+          } ];
         } ];
       in mkMerge [
         # This is ordered before users' `mkBefore` rules,
