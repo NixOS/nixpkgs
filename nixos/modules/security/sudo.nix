@@ -41,18 +41,17 @@ in
     enable = mkOption {
       type = types.bool;
       default = true;
-      description =
-        lib.mdDoc ''
-          Whether to enable the {command}`sudo` command, which
-          allows non-root users to execute commands as root.
-        '';
+      description = mdDoc ''
+        Whether to enable the {command}`sudo` command, which
+        allows non-root users to execute commands as root.
+      '';
     };
 
     package = mkOption {
       type = types.package;
       default = pkgs.sudo;
       defaultText = literalExpression "pkgs.sudo";
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Which package to use for `sudo`.
       '';
     };
@@ -60,17 +59,16 @@ in
     wheelNeedsPassword = mkOption {
       type = types.bool;
       default = true;
-      description =
-        lib.mdDoc ''
-          Whether users of the `wheel` group must
-          provide a password to run commands as super user via {command}`sudo`.
-        '';
+      description = mdDoc ''
+        Whether users of the `wheel` group must
+        provide a password to run commands as super user via {command}`sudo`.
+      '';
       };
 
     execWheelOnly = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Only allow members of the `wheel` group to execute sudo by
         setting the executable's permissions accordingly.
         This prevents users that are not members of `wheel` from
@@ -82,15 +80,14 @@ in
       type = types.lines;
       # Note: if syntax errors are detected in this file, the NixOS
       # configuration will fail to build.
-      description =
-        lib.mdDoc ''
-          This string contains the contents of the
-          {file}`sudoers` file.
-        '';
+      description = mdDoc ''
+        This string contains the contents of the
+        {file}`sudoers` file.
+      '';
     };
 
     extraRules = mkOption {
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Define specific rules to be in the {file}`sudoers` file.
         More specific rules should come after more general ones in order to
         yield the expected behavior. You can use mkBefore/mkAfter to ensure
@@ -120,7 +117,7 @@ in
         options = {
           users = mkOption {
             type = with types; listOf (either str int);
-            description = lib.mdDoc ''
+            description = mdDoc ''
               The usernames / UIDs this rule should apply for.
             '';
             default = [];
@@ -128,7 +125,7 @@ in
 
           groups = mkOption {
             type = with types; listOf (either str int);
-            description = lib.mdDoc ''
+            description = mdDoc ''
               The groups / GIDs this rule should apply for.
             '';
             default = [];
@@ -137,7 +134,7 @@ in
           host = mkOption {
             type = types.str;
             default = "ALL";
-            description = lib.mdDoc ''
+            description = mdDoc ''
               For what host this rule should apply.
             '';
           };
@@ -145,7 +142,7 @@ in
           runAs = mkOption {
             type = with types; str;
             default = "ALL:ALL";
-            description = lib.mdDoc ''
+            description = mdDoc ''
               Under which user/group the specified command is allowed to run.
 
               A user can be specified using just the username: `"foo"`.
@@ -155,7 +152,7 @@ in
           };
 
           commands = mkOption {
-            description = lib.mdDoc ''
+            description = mdDoc ''
               The commands for which the rule should apply.
             '';
             type = with types; listOf (either str (submodule {
@@ -163,7 +160,7 @@ in
               options = {
                 command = mkOption {
                   type = with types; str;
-                  description = lib.mdDoc ''
+                  description = mdDoc ''
                     A command being either just a path to a binary to allow any arguments,
                     the full command with arguments pre-set or with `""` used as the argument,
                     not allowing arguments to the command at all.
@@ -172,7 +169,7 @@ in
 
                 options = mkOption {
                   type = with types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" ]);
-                  description = lib.mdDoc ''
+                  description = mdDoc ''
                     Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/man/1.7.10/sudoers.man.html).
                   '';
                   default = [];
@@ -188,7 +185,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Extra configuration text appended to {file}`sudoers`.
       '';
     };
