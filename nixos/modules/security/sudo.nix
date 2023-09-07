@@ -264,7 +264,8 @@ in
         source = "${cfg.package.out}/bin/sudo";
         inherit owner group setuid permissions;
       };
-      sudoedit = {
+      # sudo-rs does not yet ship a sudoedit (as of v0.2.0)
+      sudoedit = mkIf usingMillersSudo {
         source = "${cfg.package.out}/bin/sudoedit";
         inherit owner group setuid permissions;
       };
