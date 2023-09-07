@@ -4630,11 +4630,9 @@ with pkgs;
 
   cht-sh = callPackage ../tools/misc/cht.sh { };
 
-  cinny = callPackage ../applications/networking/instant-messengers/cinny { stdenv = stdenvNoCC; };
+  cinny = callPackage ../applications/networking/instant-messengers/cinny { };
 
-  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop {
-    openssl = openssl_1_1;
-  };
+  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
