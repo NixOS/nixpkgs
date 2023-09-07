@@ -31782,7 +31782,7 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
-  k3s_1_26 = callPackage ../applications/networking/cluster/k3s/1_26 { };
+  k3s_1_26 = (callPackage ../applications/networking/cluster/k3s { }).k3s_1_26;
   k3s = k3s_1_26;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
