@@ -11,7 +11,15 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     security.apparmor.enable = true;
 
-    services.transmission.enable = true;
+    services.transmission = {
+      enable = true;
+      credentialsFile = pkgs.writeTextFile {
+        name = "settings.json";
+        text = ''
+          { "rpc-password": "5up3r53cr37" }
+        '';
+      };
+    };
   };
 
   testScript =
