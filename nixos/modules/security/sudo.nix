@@ -4,13 +4,15 @@ with lib;
 
 let
 
+  inherit (pkgs) sudo;
+
   cfg = config.security.sudo;
 
   enableSSHAgentAuth =
     with config.security;
     pam.enableSSHAgentAuth && pam.sudo.sshAgentAuth;
 
-  inherit (pkgs) sudo;
+  usingMillersSudo = cfg.package.pname == sudo.pname;
 
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
@@ -197,8 +199,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.package.pname != "sudo-rs";
-        message = "The NixOS `sudo` module does not work with `sudo-rs` yet."; }
+      { assertion = usingMillersSudo;
+        message = "The NixOS `sudo` module does not yet work with other implementations."; }
     ];
 
     # We `mkOrder 600` so that the default rule shows up first, but there is
