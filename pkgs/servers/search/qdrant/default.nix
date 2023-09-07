@@ -11,19 +11,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-28ugr0AiAgyE3KGK3LYHti2iTRslAhEKfy35xKyW/N8=";
+    sha256 = "sha256-kJfLaXJEeAkn5dh/m6NPLQ8T8ec53jBlT4E0CdnRCSI=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "quantization-0.1.0" = "sha256-pV+lfO0LV/+jOV+v/oQADsde6a8XKNah0OVJdTnzdvw=";
+      "quantization-0.1.0" = "sha256-FfjLNSPjgVTx2ReqqMeyYujnCz9fPgjWX99r3Lik8oA=";
       "tonic-0.9.2" = "sha256-ZlcDUZy/FhxcgZE7DtYhAubOq8DMSO17T+TCmXar1jE=";
       "wal-0.1.2" = "sha256-sMleBUAZcSnUx7/oQZr9lSDmVHxUjfGaVodvVtFEle0=";
     };
