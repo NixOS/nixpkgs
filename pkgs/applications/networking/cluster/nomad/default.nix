@@ -42,7 +42,7 @@ let
         platforms = platforms.unix;
         license = licenses.mpl20;
         maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes maxeaubrey techknowlogick ];
-      };
+      } // (attrs'.meta or {});
     } // attrs');
 in
 rec {
@@ -59,6 +59,10 @@ rec {
     version = "1.2.16";
     sha256 = "sha256-fhfUpcG91EgIzJ4mCS7geyIJyTSHS2e8t4yYiI3PqpQ=";
     vendorSha256 = "sha256-kwCDsGFw+25Mimgt/cTK/Z2H7Qh5n4rjr3kIBvjcPL8=";
+    meta.knownVulnerabilities = [
+      "CVE-2023-3072"
+      "CVE-2023-3300"
+    ];
   };
 
   nomad_1_3 = generic {
@@ -66,6 +70,10 @@ rec {
     version = "1.3.9";
     sha256 = "sha256-xfoIzLDG/OfqAPQqeLvQZ11uESWFNyOyLP6Imi+S96w=";
     vendorSha256 = "sha256-kW0goicoM1lM1NEHPTfozg2EKR1daf33UxT/mVabyfY=";
+    meta.knownVulnerabilities = [
+      "CVE-2023-3072"
+      "CVE-2023-3300"
+    ];
   };
 
   nomad_1_4 = generic {
