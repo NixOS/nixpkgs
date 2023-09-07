@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl libevent ];
 
-  wafConfigureFlags = [ "--saldl-version ${version}" "--no-werror" ];
+  configureFlags = [ "--saldl-version ${version}" "--no-werror" ];
 
   outputs = [ "out" "man" ];
 

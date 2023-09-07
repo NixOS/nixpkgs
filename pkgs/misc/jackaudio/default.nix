@@ -51,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontAddWafCrossFlags = true;
-  wafConfigureFlags = [
+
+  configureFlags = [
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
   ] ++ lib.optional (optDbus != null) "--dbus"

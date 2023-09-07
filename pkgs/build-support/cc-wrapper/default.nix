@@ -107,6 +107,8 @@ let
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
     && !(stdenv.targetPlatform.isiOS or false)
     && gccForLibs != null;
+  gccForLibs_solib = getLib gccForLibs
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
   isGccArchSupported = arch:
@@ -374,7 +376,7 @@ stdenv.mkDerivation {
     ''
     + optionalString useGccForLibs ''
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
-      echo "-L${gccForLibs.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
+      echo "-L${gccForLibs_solib}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     # TODO We would like to connect this to `useGccForLibs`, but we cannot yet
