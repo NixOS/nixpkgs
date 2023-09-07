@@ -4,6 +4,7 @@
 , fetchpatch
 , installShellFiles
 , nix-update-script
+, nixosTests
 , pam
 , pandoc
 , rustPlatform
@@ -73,7 +74,10 @@ rustPlatform.buildRustPackage rec {
     "su::context::tests::invalid_shell"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = nixosTests.sudo-rs;
+  };
 
   meta = with lib; {
     description = "A memory safe implementation of sudo and su.";
