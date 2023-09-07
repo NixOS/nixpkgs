@@ -128,6 +128,29 @@ longer-term.
 
 [Debian revision number]: https://www.debian.org/doc/debian-policy/ch-controlfields.html#version
 
+## `fetchEris` {#fetcheris}
+
+Fetches a file for the given [ERIS URN](https://eris.codeberg.page/). The required arguments are `name`, `urn`, and, `hash`. The optional but recommended arguments are `erisStores` and `alternateInstructions`. This is a list of ERIS store URLS and a message to display if the ERIS URN cannot be resolved.
+
+The `$ERIS_STORE_URL` environmental variable is passed through to the builder and can be used to fetch from a locally configure ERIS store in parallel with `erisStores`.
+
+Note that for any file there is a single convergent (deterministic) URN but an unlimited number of non-convergent URNs. Please use convergent URNs within Nixpkgs and other public repositories so that the convergent encoding can be recreated and propagated.
+
+Example:
+```nix
+{
+  src = fetchEris {
+    name = "null";
+    urn = "urn:eris:BIADFUKDPYKJNLGCVSIIDI3FVKND7MO5AGOCXBK2C4ITT5MAL4LSCZF62B4PDOFQCLLNL7AXXSJFGINUYXVGVTDCQ2V7S7W5S234WFXCJ4";
+    erisStores = [ "coap+tcp://eris.example.org:5683" ];
+    hash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
+    alternateInstructions = ''
+      This URN corresponds to an empty file.
+      Add it manually with "nix-store --add-fixed sha256 $(mktemp)".
+    '';
+  };
+}
+```
 
 ## `fetchsvn` {#fetchsvn}
 

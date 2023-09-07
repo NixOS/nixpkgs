@@ -978,6 +978,8 @@ with pkgs;
 
   fetchDockerLayer = callPackage ../build-support/fetchdocker/fetchDockerLayer.nix { };
 
+  fetchEris = callPackage ../build-support/fetcheris { };
+
   fetchfossil = callPackage ../build-support/fetchfossil { };
 
   fetchgit = (callPackage ../build-support/fetchgit {
