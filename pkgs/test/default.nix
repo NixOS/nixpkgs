@@ -27,11 +27,7 @@ with pkgs;
         (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64) &&
         (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
       )) [
-        # Is a throw
         (filter (n: !lib.hasSuffix "MultiStdenv" n))
-      ] ++ [
-        # Has to be after the previous filter
-        (filter (n: lib.meta.availableOn stdenv.hostPlatform pkgs.${n}.cc ))
       ]);
     in lib.genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
   in recurseIntoAttrs {
