@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.12.0";
+  version = "0.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "scottbonline";
     repo = "sense";
     rev = "refs/tags/${version}";
-    hash = "sha256-LVpTB7Q78N/cRbneJJ1aT+lFE790ssdMHo8VRirtDHY=";
+    hash = "sha256-6zhbchCRHyltJ/EP9Hnj4LoRn7/0PDJCmWNjF+IsQdM=";
   };
 
   postPatch = ''
