@@ -1,46 +1,51 @@
 {
   lib, stdenv,
   cmake,
-  fetchpatch,
   fetchFromGitHub,
-  boost,
   xercesc,
-  icu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libe57format";
-  version = "2.2.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "asmaloney";
     repo = "libE57Format";
-    rev = "v${version}";
-    sha256 = "15l23spjvak5h3n7aj3ggy0c3cwcg8mvnc9jlbd9yc2ra43bx7bp";
+    rev = "v${finalAttrs.version}";
+    sha256 = "1kiinxwhnwp60zmivmsf3ai2yqjf09jn2ga8xn6nvaz7vdaz3rbz";
+    fetchSubmodules = true; # for submodule-vendored libraries such as `gtest`
   };
 
-  patches = [
-    # gcc11 header fix
-    (fetchpatch {
-      url = "https://github.com/asmaloney/libE57Format/commit/13f6a16394ce3eb50ea4cd21f31f77f53294e8d0.patch";
-      sha256 = "sha256-4vVhKrCxnWO106DSAk+xxo4uk6zC89m9VQAPaDJ8Ed4=";
-    })
-  ];
+  # Repository of E57 files used for testing.
+  libE57Format-test-data_src = fetchFromGitHub {
+    owner = "asmaloney";
+    repo = "libE57Format-test-data";
+    rev = "1e6edb0f6e261a6d37599440b8f5f3bba59ecd4b";
+    sha256 = "1cah10ifi0l2lq1afzkvbrxal18prq24v2r0ka8qg248nz5xvnjk";
+  };
 
   nativeBuildInputs = [
     cmake
   ];
 
   buildInputs = [
-    boost
-    icu
-  ];
-
-  propagatedBuildInputs = [
-    # Necessary for projects that try to find libE57Format via CMake
-    # due to the way that libe57format's CMake config is written.
     xercesc
   ];
+
+  cmakeFlags = [
+    # See https://github.com/asmaloney/libE57Format/blob/9372bdea8db2cc0c032a08f6d655a53833d484b8/test/README.md
+    (if finalAttrs.doCheck
+      then "-DE57_TEST_DATA_PATH=${finalAttrs.libE57Format-test-data_src}"
+      else "-DE57_BUILD_TEST=OFF"
+    )
+  ];
+
+  doCheck = true;
+
+  postCheck = ''
+    ./testE57
+  '';
 
   # The build system by default builds ONLY static libraries, and with
   # `-DE57_BUILD_SHARED=ON` builds ONLY shared libraries, see:
@@ -66,4 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ chpatrick nh2 ];
     platforms = platforms.linux; # because of the .so buiding in `postInstall` above
   };
-}
+})
