@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, mkYarnPackage, nixosTests, writeText, python3 }:
+{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, mkYarnPackage, nixosTests, writeText, python3 }:
 
 let
   version = "0.4.1";
@@ -22,7 +22,12 @@ let
   assets = mkYarnPackage {
     inherit src version;
     packageJSON = ./package.json;
-    yarnNix = ./yarndeps.nix;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      hash = "sha256-3ebT19LrbYuypdJaoB3tClVVP0Fi8tHx3Xi6ge/DpA4=";
+    };
+
     # Copied from package.json, see also
     # https://github.com/NixOS/nixpkgs/pull/214952
     packageResolutions = {
