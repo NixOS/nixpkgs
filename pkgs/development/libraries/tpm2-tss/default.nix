@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     # TCTI loader relies on dlopen(), this patch prefixes all calls with the output directory
     ./no-dynamic-loader-path.patch
     (fetchurl {
-      name = "skip-test-fapi-fix-provisioning-with template-if-no-certificate-available.patch";
+      name = "skip-test-fapi-fix-provisioning-with-template-if-no-certificate-available.patch";
       url = "https://github.com/tpm2-software/tpm2-tss/commit/218c0da8d9f675766b1de502a52e23a3aa52648e.patch";
       sha256 = "sha256-dnl9ZAknCdmvix2TdQvF0fHoYeWp+jfCTg8Uc7h0voA=";
     })

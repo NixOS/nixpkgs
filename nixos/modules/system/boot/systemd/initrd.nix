@@ -351,7 +351,7 @@ in {
       "autofs4"
       # systemd-cryptenroll
     ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
-    ++ lib.optional (cfg.enableTpm2 && pkgs.stdenv.hostPlatform.system != "riscv64-linux") "tpm-crb";
+    ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb";
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
