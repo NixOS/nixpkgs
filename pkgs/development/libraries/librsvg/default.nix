@@ -43,7 +43,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.56.3";
+  version = "2.56.93";
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -51,13 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WjKASKAtAUZFzSf2EUD04LESgPssfyohhk/gxZrBzog=";
+    hash = "sha256-sOOIBmJa3X4/ctO1ncTR6VTlgLAmCfNKubomKbXtJrk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-s7eNMSdajr2VhB/BPVUFftHhHKCqpR9sTfxfWwag1mI=";
+    hash = "sha256-hO2ukoOuTddSY8an+PrW+PQ902mkDLSVchnlL4RrG6I=";
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
