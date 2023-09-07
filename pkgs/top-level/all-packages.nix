@@ -39407,6 +39407,8 @@ with pkgs;
 
   cups-brother-hl1210w = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1210w { };
 
+  cups-brother-hl2260d = pkgsi686Linux.callPackage ../misc/cups/drivers/hl2260d { };
+
   cups-brother-hl3140cw = pkgsi686Linux.callPackage ../misc/cups/drivers/hl3140cw { };
 
   cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
