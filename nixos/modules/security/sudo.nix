@@ -182,36 +182,43 @@ in
         message = "The NixOS `sudo` module does not work with `sudo-rs` yet."; }
     ];
 
-    # We `mkOrder 600` so that the default rule shows up first, but there is
-    # still enough room for a user to `mkBefore` it.
-    security.sudo.extraRules = mkOrder 600 [
-      { groups = [ "wheel" ];
-        commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "SETENV" ] else [ "NOPASSWD" "SETENV" ]); } ];
-      }
-    ];
+    security.sudo.extraRules =
+      let
+        defaultRule = { users ? [], groups ? [], opts ? [] }: [ {
+          inherit users groups;
+          commands = [ {
+            command = "ALL";
+            options = opts ++ [ "SETENV" ];
+	  } ];
+        } ];
+      in mkMerge [
+        # This is ordered before users' `mkBefore` rules,
+        # so as not to introduce unexpected changes.
+        (mkOrder 400 (defaultRule { users = [ "root" ]; }))
+
+        # This is ordered to show before (most) other rules, but
+        # late-enough for a user to `mkBefore` it.
+        (mkOrder 600 (defaultRule {
+          groups = [ "wheel" ];
+          opts = (optional (!cfg.wheelNeedsPassword) "NOPASSWD");
+        }))
+      ];
 
     security.sudo.configFile = concatStringsSep "\n" (filter (s: s != "") [
       ''
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
         # or ‘security.sudo.extraRules’ instead.
       ''
-      ''
-        # "root" is allowed to do anything.
-        root        ALL=(ALL:ALL) SETENV: ALL
-      ''
-      (optionalString (cfg.extraRules != []) ''
-        # extraRules
-        ${concatStringsSep "\n" (
-          lists.flatten (
-            map (
-              rule: optionals (length rule.commands != 0) [
-                (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
-                (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
-              ]
-            ) cfg.extraRules
-          )
-        )}
-      '')
+      (concatStringsSep "\n" (
+        lists.flatten (
+          map (
+            rule: optionals (length rule.commands != 0) [
+              (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
+              (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
+            ]
+          ) cfg.extraRules
+        )
+      ) + "\n")
       (optionalString (cfg.extraConfig != "") ''
         # extraConfig
         ${cfg.extraConfig}
