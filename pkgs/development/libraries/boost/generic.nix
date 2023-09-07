@@ -149,13 +149,11 @@ stdenv.mkDerivation {
     description = "Collection of C++ libraries";
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
+    # boost-context lacks support for the N32 ABI on mips64.  The build
+    # will succeed, but packages depending on boost-context will fail with
+    # a very cryptic error message.
+    badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     maintainers = with maintainers; [ hjones2199 ];
-
-    broken =
-      # boost-context lacks support for the N32 ABI on mips64.  The build
-      # will succeed, but packages depending on boost-context will fail with
-      # a very cryptic error message.
-      stdenv.hostPlatform.isMips64n32;
   };
 
   passthru = {
