@@ -33792,6 +33792,8 @@ with pkgs;
 
   melody = callPackage ../tools/misc/melody { };
 
+  meme-bingo-web = callPackage ../servers/web-apps/meme-bingo-web { };
+
   meme-image-generator = callPackage ../applications/graphics/meme-image-generator { };
 
   meme-suite = callPackage ../applications/science/biology/meme-suite { };
