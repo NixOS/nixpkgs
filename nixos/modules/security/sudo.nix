@@ -240,19 +240,16 @@ in
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
       '')
-      (optionalString (cfg.extraRules != []) ''
-        # extraRules
-        ${concatStringsSep "\n" (
-          lists.flatten (
-            map (
-              rule: optionals (length rule.commands != 0) [
-                (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
-                (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
-              ]
-            ) cfg.extraRules
-          )
-        )}
-      '')
+      (concatStringsSep "\n" (
+        lists.flatten (
+          map (
+            rule: optionals (length rule.commands != 0) [
+              (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
+              (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
+            ]
+          ) cfg.extraRules
+        )
+      ) + "\n")
       (optionalString (cfg.extraConfig != "") ''
         # extraConfig
         ${cfg.extraConfig}
