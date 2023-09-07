@@ -82,7 +82,7 @@
 , withSvtav1 ? withFullDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support
 , withTheora ? withHeadlessDeps # Theora encoder
-, withV4l2 ? withFullDeps && !stdenv.isDarwin # Video 4 Linux support
+, withV4l2 ? withHeadlessDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps # Vdpau hardware acceleration
