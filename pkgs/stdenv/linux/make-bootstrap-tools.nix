@@ -78,7 +78,8 @@ in with pkgs; rec {
         cp -d ${libc.out}/lib/libutil*.so* $out/lib
         cp -d ${libc.out}/lib/libnss*.so* $out/lib
         cp -d ${libc.out}/lib/libresolv*.so* $out/lib
-        cp -d ${libc.out}/lib/crt?.o $out/lib
+        # Copy all runtime files to enable non-PIE, PIE, static PIE and profile-generated builds
+        cp -d ${libc.out}/lib/*.o $out/lib
 
         # Hacky compat with our current unpack-bootstrap-tools.sh
         ln -s librt.so "$out"/lib/librt-dummy.so
