@@ -29,31 +29,35 @@ stdenv.mkDerivation {
 
 ## Variables controlling zig.hook {#variables-controlling-zig-hook}
 
-### `dontUseZigBuild` {#dontUseZigBuild}
+### `zig.hook` Exclusive Variables {#zigHookExclusiveVariables}
+
+The variables below are exclusive to `zig.hook`.
+
+#### `dontUseZigBuild` {#dontUseZigBuild}
 
 Disables using `zigBuildPhase`.
 
-### `zigBuildFlags` {#zigBuildFlags}
-
-Controls the flags passed to the build phase.
-
-### `dontUseZigCheck` {#dontUseZigCheck}
+#### `dontUseZigCheck` {#dontUseZigCheck}
 
 Disables using `zigCheckPhase`.
 
-### `zigCheckFlags` {#zigCheckFlags}
-
-Controls the flags passed to the check phase.
-
-### `dontUseZigInstall` {#dontUseZigInstall}
+#### `dontUseZigInstall` {#dontUseZigInstall}
 
 Disables using `zigInstallPhase`.
 
-### `zigInstallFlags` {#zigInstallFlags}
+### Similar variables {#similarVariables}
 
-Controls the flags passed to the install phase.
+The following variables are similar to their `stdenv.mkDerivation` counterparts.
+
+| `zig.hook` Variable | `stdenv.mkDerivation` Counterpart |
+|---------------------|-----------------------------------|
+| `zigBuildFlags`     | `buildFlags`                      |
+| `zigCheckFlags`     | `checkFlags`                      |
+| `zigInstallFlags`   | `installFlags`                    |
 
 ### Variables honored by zig.hook {#variables-honored-by-zig-hook}
+
+The following variables commonly used by `stdenv.mkDerivation` are honored by `zig.hook`.
 
 - `prefixKey`
 - `dontAddPrefix`
