@@ -200,13 +200,27 @@ in
         message = "The NixOS `sudo` module does not yet work with other implementations."; }
     ];
 
-    # We `mkOrder 600` so that the default rule shows up first, but there is
-    # still enough room for a user to `mkBefore` it.
-    security.sudo.extraRules = mkOrder 600 [
-      { groups = [ "wheel" ];
-        commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "SETENV" ] else [ "NOPASSWD" "SETENV" ]); } ];
-      }
-    ];
+    security.sudo.extraRules =
+      let
+        defaultRule = { users ? [], groups ? [], opts ? [] }: [ {
+          inherit users groups;
+          commands = [ {
+            command = "ALL";
+            options = opts ++ [ "SETENV" ];
+	  } ];
+        } ];
+      in mkMerge [
+        # This is ordered before users' `mkBefore` rules,
+        # so as not to introduce unexpected changes.
+        (mkOrder 400 (defaultRule { users = [ "root" ]; }))
+
+        # This is ordered to show before (most) other rules, but
+        # late-enough for a user to `mkBefore` it.
+        (mkOrder 600 (defaultRule {
+          groups = [ "wheel" ];
+          opts = (optional (!cfg.wheelNeedsPassword) "NOPASSWD");
+        }))
+      ];
 
     security.sudo.configFile = concatStringsSep "\n" (filter (s: s != "") [
       ''
@@ -217,10 +231,6 @@ in
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
       '')
-      ''
-        # "root" is allowed to do anything.
-        root        ALL=(ALL:ALL) SETENV: ALL
-      ''
       (optionalString (cfg.extraRules != []) ''
         # extraRules
         ${concatStringsSep "\n" (
