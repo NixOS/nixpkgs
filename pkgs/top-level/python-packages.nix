@@ -11798,6 +11798,8 @@ self: super: with self; {
 
   simplenote = callPackage ../development/python-modules/simplenote { };
 
+  simplepush = callPackage ../development/python-modules/simplepush { };
+
   simplesat = callPackage ../development/python-modules/simplesat { };
 
   simple-di = callPackage ../development/python-modules/simple-di { };
