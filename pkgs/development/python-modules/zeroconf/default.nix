@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.98.0";
+  version = "0.99.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = "refs/tags/${version}";
-    hash = "sha256-oajSXGQTsJsajRAnS/MkkbSyxTeVvdjvw1eiJaPzZMY=";
+    hash = "sha256-T9CDJIK/wMGExk+1Fahbq4gm+t+RRSUxca3SxkHXtJQ=";
   };
 
   nativeBuildInputs = [
