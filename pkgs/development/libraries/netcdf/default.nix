@@ -16,11 +16,11 @@ let
   inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
-  version = "4.9.0";
+  version = "4.9.2";
 
   src = fetchurl {
     url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
-    hash = "sha256-TJVgIrecCOXhTu6N9RsTwo5hIcK35/qtwhs3WUlAC0k=";
+    hash = "sha256-zxG6u725lj8J9VB54LAZ9tA3H1L44SZKW6jp/asabEg=";
   };
 
   postPatch = ''
