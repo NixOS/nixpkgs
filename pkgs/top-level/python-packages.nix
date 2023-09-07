@@ -9046,6 +9046,8 @@ self: super: with self; {
     inherit (pkgs) enchant2;
   };
 
+  pyenphase = callPackage ../development/python-modules/pyenphase { };
+
   pyenvisalink = callPackage ../development/python-modules/pyenvisalink { };
 
   pyephember = callPackage ../development/python-modules/pyephember { };
