@@ -172,6 +172,8 @@ self: super: with self; {
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
 
+  aiocomelit = callPackage ../development/python-modules/aiocomelit { };
+
   aioconsole = callPackage ../development/python-modules/aioconsole { };
 
   aiocontextvars = callPackage ../development/python-modules/aiocontextvars { };
