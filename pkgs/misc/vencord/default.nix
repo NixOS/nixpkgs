@@ -1,20 +1,23 @@
 { buildNpmPackage
 , fetchFromGitHub
 , lib
-, substituteAll
 , esbuild
 , buildGoModule
 , buildWebExtension ? false
 }:
+let
+  version = "1.4.6";
+  gitHash = "9b987d1";
+in
 buildNpmPackage rec {
   pname = "vencord";
-  version = "1.3.4";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${version}";
-    sha256 = "sha256-r+VgxXwsBOfMggcVlr5q1/ONfp13CpX4ssrLQtmdLe8=";
+    sha256 = "sha256-LVFCf2BdTdl4t+Fp2oM7jAskzGx/fhSr6tNcaZ1X8xA=";
   };
 
   ESBUILD_BINARY_PATH = lib.getExe (esbuild.override {
@@ -33,22 +36,17 @@ buildNpmPackage rec {
   # Supresses an error about esbuild's version.
   npmRebuildFlags = [ "|| true" ];
 
-  npmDepsHash = "sha256-HJK88z4Gs8mqd28zKrsTtk34VcRqIyb6aURbvRZLN0I=";
+  npmDepsHash = "sha256-GoVVOLg20oi0MJGLqevpiqHDM/7yaRJSQnM/tt+AkQ8=";
   npmFlags = [ "--legacy-peer-deps" ];
   npmBuildScript = if buildWebExtension then "buildWeb" else "build";
-  npmBuildFlags = [ "--" "--standalone" ];
+  npmBuildFlags = [ "--" "--standalone" "--disable-updater" ];
 
   prePatch = ''
     cp ${./package-lock.json} ./package-lock.json
   '';
 
-  patches = [
-    (substituteAll {
-      src = ./replace-git.patch;
-      inherit version;
-    })
-    ./disable-updater-ui.patch
-  ];
+  VENCORD_HASH = gitHash;
+  VENCORD_REMOTE = "${src.owner}/${src.repo}";
 
   installPhase =
     if buildWebExtension then ''
