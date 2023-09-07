@@ -13,6 +13,7 @@
   "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
+  "@commitlint/config-conventional" = "commitlint-config-conventional";
   "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
   "@mermaid-js/mermaid-cli" = "mmdc";
