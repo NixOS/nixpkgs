@@ -1,6 +1,9 @@
 { lib, stdenv, fetchurl
 , pkg-config, buildPackages
 , CoreAudio, alsa-lib, libjack2, ncurses
+
+## Additional optional output modes
+, enableVorbis ? false, libvorbis
 }:
 
 stdenv.mkDerivation rec {
@@ -22,19 +25,31 @@ stdenv.mkDerivation rec {
     alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     CoreAudio
+  ] ++ lib.optionals enableVorbis [
+    libvorbis
+  ];
+
+  enabledOutputModes = [
+    "jack"
+  ] ++ lib.optionals stdenv.isLinux [
+    "oss"
+    "alsa"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "darwin"
+  ] ++ lib.optionals enableVorbis [
+    "vorbis"
   ];
 
   configureFlags = [
     "--enable-ncurses"
+    ("--enable-audio=" + builtins.concatStringsSep "," enabledOutputModes)
     "lib_cv_va_copy=yes"
     "lib_cv___va_copy=yes"
   ] ++ lib.optionals stdenv.isLinux [
-    "--enable-audio=oss,alsa,jack"
     "--enable-alsaseq"
     "--with-default-output=alsa"
     "lib_cv_va_val_copy=yes"
   ] ++ lib.optionals stdenv.isDarwin [
-    "--enable-audio=darwin,jack"
     "lib_cv_va_val_copy=no"
   ];
 

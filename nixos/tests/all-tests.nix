@@ -806,6 +806,7 @@ in {
   timescaledb = handleTest ./timescaledb.nix {};
   promscale = handleTest ./promscale.nix {};
   timezone = handleTest ./timezone.nix {};
+  timidity = handleTest ./timidity {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
   tinywl = handleTest ./tinywl.nix {};
