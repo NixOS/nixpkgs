@@ -25341,6 +25341,8 @@ with pkgs;
 
   sqlcipher = callPackage ../development/libraries/sqlcipher { };
 
+  standard = callPackage ../development/tools/standard { };
+
   standardnotes = callPackage ../applications/editors/standardnotes { };
 
   stfl = callPackage ../development/libraries/stfl { };
