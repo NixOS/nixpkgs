@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "1.6.0";
+  version = "1.6.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "python";
     rev = "refs/tags/${version}";
-    hash = "sha256-r9zboUvF1IH32d6jQ+nRbzXejlZADt5+YNZ/LdFyULk=";
+    hash = "sha256-zbF+fqgXb8BAN+Nf2pRV/SeOXnJXLXJBIWZyZ6a9zP4=";
   };
 
   nativeBuildInputs = [
