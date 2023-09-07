@@ -2551,6 +2551,8 @@ with pkgs;
       pkgsCross.gnu64.hello;
   };
 
+  box86 = callPackage ../applications/emulators/box86 { };
+
   caprice32 = callPackage ../applications/emulators/caprice32 { };
 
   ccemux = callPackage ../applications/emulators/ccemux { };
