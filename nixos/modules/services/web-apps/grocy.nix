@@ -115,9 +115,9 @@ in {
       user = "grocy";
       group = "nginx";
 
-      # PHP 8.1 is the only version which is supported/tested by upstream:
-      # https://github.com/grocy/grocy/blob/v4.0.0/README.md#platform-support
-      phpPackage = pkgs.php81;
+      # PHP 8.1 and 8.2 are the only version which are supported/tested by upstream:
+      # https://github.com/grocy/grocy/blob/v4.0.2/README.md#platform-support
+      phpPackage = pkgs.php82;
 
       inherit (cfg.phpfpm) settings;
 
@@ -128,6 +128,16 @@ in {
         GROCY_PLUGIN_DIR = "${cfg.dataDir}/plugins";
         GROCY_CACHE_DIR = "${cfg.dataDir}/viewcache";
       };
+    };
+
+    # After an update of grocy, the viewcache needs to be deleted. Otherwise grocy will not work
+    # https://github.com/grocy/grocy#how-to-update
+    systemd.services.grocy-setup = {
+      wantedBy = [ "multi-user.target" ];
+      before = [ "phpfpm-grocy.service" ];
+      script = ''
+        rm -rf ${cfg.dataDir}/viewcache/*
+      '';
     };
 
     services.nginx = {
