@@ -9,10 +9,14 @@ let
   );
   staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
   emulator = stdenv.hostPlatform.emulator buildPackages;
+  libcxxStdenvSuffix = lib.optionalString (stdenv.cc.libcxx != null) "-libcxx";
 in stdenv.mkDerivation {
-  name = "cc-wrapper-test";
+  pname = "cc-wrapper-test-${stdenv.cc.cc.pname}${libcxxStdenvSuffix}";
+  version = stdenv.cc.version;
 
   buildCommand = ''
+    echo "Testing: ${stdenv.cc.name}" >&2
+    echo "With libc: ${stdenv.cc.libc.name}" >&2
     set -o pipefail
 
     NIX_DEBUG=1 $CC -v
