@@ -5,11 +5,15 @@
 , pytestCheckHook
 , hypothesis
 , readme_renderer
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "marisa-trie";
   version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
