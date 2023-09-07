@@ -478,6 +478,9 @@ let
           ''
             # Account management.
           '' +
+          optionalString config.security.pam.access.enable ''
+            account required pam_access.so accessfile=${accessConf}
+          '' +
           optionalString use_ldap ''
             account sufficient ${pam_ldap}/lib/security/pam_ldap.so
           '' +
@@ -831,6 +834,8 @@ let
   motd = if config.users.motdFile == null
          then pkgs.writeText "motd" config.users.motd
          else config.users.motdFile;
+
+  accessConf = pkgs.writeText "access.conf" config.security.pam.access.accessConf;
 
   makePAMService = name: service:
     { name = "pam.d/${name}";
@@ -1310,6 +1315,25 @@ in
       use something other than pam_unix to verify user passwords, please remember to
       adjust this PAM service.
     '');
+
+    security.pam.access = {
+      enable = mkEnableOption (lib.mdDoc ''
+        Enables the `pam_access` module, for logdaemon-style login access control.
+
+        If set, the access control table in `accessConf` is
+        consulted when allowing or disallowing specific users or groups to
+        log in from specific hosts or terminals.
+
+        See {manpage}`access.conf(5)`.
+      '');
+      accessConf = mkOption {
+        type = types.lines;
+        description = lib.mdDoc ''
+          The contents of `/etc/security/access.conf`.
+          See {manpage}`access.conf(5)`.
+        '';
+      };
+    };
 
     users.motd = mkOption {
       default = null;
