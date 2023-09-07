@@ -29973,6 +29973,8 @@ with pkgs;
   paratype-pt-mono = callPackage ../data/fonts/paratype-pt/mono.nix { };
   paratype-pt-sans = callPackage ../data/fonts/paratype-pt/sans.nix { };
   paratype-pt-serif = callPackage ../data/fonts/paratype-pt/serif.nix { };
+  paratype-pt-astra-sans = callPackage ../data/fonts/paratype-pt/astra-sans.nix { };
+  paratype-pt-astra-serif = callPackage ../data/fonts/paratype-pt/astra-serif.nix { };
 
   pari-galdata = callPackage ../data/misc/pari-galdata { };
 
