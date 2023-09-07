@@ -9,6 +9,7 @@
 , onnxruntime
 , transformers
 , detectron2
+, paddleocr
 # check inputs
 , pytestCheckHook
 , coverage
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     onnxruntime
     transformers
     detectron2
-    # paddleocr
+    paddleocr
     # yolox
   ]
     ++ layoutparser.optional-dependencies.layoutmodels
@@ -71,8 +72,6 @@ buildPythonPackage rec {
     "test_get_path_oob_move_nested[False]"
     # requires yolox
     "test_yolox"
-    # requires paddleocr
-    "test_table_prediction"
   ];
 
   disabledTestPaths = [
@@ -90,10 +89,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "unstructured_inference" ];
 
   meta = with lib; {
-    description = "";
+    description = "hosted model inference code for layout parsing models";
     homepage = "https://github.com/Unstructured-IO/unstructured-inference";
     changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }
