@@ -11,7 +11,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , cmocka
-, waf
+, wafHook
 , libxcrypt
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     python3
-    waf.hook
+    wafHook
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
     "--without-ldb-lmdb"

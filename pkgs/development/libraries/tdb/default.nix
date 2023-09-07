@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
-, waf
+, wafHook
 , python3
 , readline
 , libxslt
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     python3
     pkg-config
-    waf.hook
+    wafHook
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_45
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
   ];

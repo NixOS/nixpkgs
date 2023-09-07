@@ -10,7 +10,7 @@
 , libjack2
 , pkg-config
 , python3
-, waf
+, wafHook
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gtkmm2
     libjack2
     python3
-    waf.hook
+    wafHook
   ];
 
   meta = {

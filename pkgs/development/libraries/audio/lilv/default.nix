@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, waf
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook
 
 # test derivations
 , pipewire
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./lilv-pkgconfig.patch ];
 
-  nativeBuildInputs = [ pkg-config python3 waf.hook ];
+  nativeBuildInputs = [ pkg-config python3 wafHook ];
   buildInputs = [ serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
   dontAddWafCrossFlags = true;

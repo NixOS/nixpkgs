@@ -50,7 +50,7 @@
 , suil
 , taglib
 , vamp-plugin-sdk
-, waf
+, wafHook
 , xjadeo
 , videoSupport ? true
 }:
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
-    waf.hook
+    wafHook
   ];
 
   buildInputs = [
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
     vamp-plugin-sdk
   ] ++ lib.optionals videoSupport [ harvid xjadeo ];
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--cxx11"
     "--docs"
     "--freedesktop"
