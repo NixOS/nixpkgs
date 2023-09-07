@@ -40,7 +40,10 @@ in
 
     defaultOptions = mkOption {
       type = with types; listOf str;
-      default = [ "SETENV" ];
+      default = optional usingMillersSudo "SETENV";
+      defaultText = literalMD ''
+        `[ "SETENV" ]` if using the default `sudo` implementation
+      '';
       description = mdDoc ''
         Options used for the default rules, granting `root` and the
         `wheel` group permission to run any command as any user.
@@ -204,11 +207,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [
-      { assertion = usingMillersSudo;
-        message = "The NixOS `sudo` module does not yet work with other implementations."; }
-    ];
-
     security.sudo.extraRules =
       let
         defaultRule = { users ? [], groups ? [], opts ? [] }: [ {

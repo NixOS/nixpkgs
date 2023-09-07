@@ -16,7 +16,10 @@ with lib;
     };
 
     security.sudo.keepTerminfo = mkOption {
-      default = true;
+      default = config.security.sudo.package.pname != "sudo-rs";
+      defaultText = literalMD ''
+        `true` unless using `sudo-rs`
+      '';
       type = types.bool;
       description = lib.mdDoc ''
         Whether to preserve the `TERMINFO` and `TERMINFO_DIRS`
