@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gql";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "AmrDeveloper";
     repo = "GQL";
     rev = version;
-    hash = "sha256-UTyP9ugUXiPMzkeIvPJUtORvcJ93YOBltglmlcym3sI=";
+    hash = "sha256-eWupAfe2lOcOp8hC4sx8Wl1jaVZT4E99I5V9YsMcDZA=";
   };
 
-  cargoHash = "sha256-AIt7Ns3vNrHQxJU7cSNr+h3tFGZ9hL1OMBqPHS61YUQ=";
+  cargoHash = "sha256-O6Y+JOMpucrjvYAJZe2D97vODFXVysuiitXzMkfcSpI=";
 
   nativeBuildInputs = [
     pkg-config

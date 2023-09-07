@@ -30,6 +30,7 @@
 , postgresql
 , nodejs
 , mkYarnModules
+, fetchYarnDeps
 , qmake
 , server ? false # build server version
 , sqlite
@@ -64,11 +65,14 @@ let
     sha256 = "sha256-ULyWdSgGPSAwMt0t4QPuzeUE6Bo6IJh+5BMgW1bFN+Y=";
   };
 
-  panmirrorModules = mkYarnModules {
+  panmirrorModules = mkYarnModules rec {
     inherit pname version;
     packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarndeps.nix;
+    yarnLock = "${src}/src/gwt/panmirror/src/editor/yarn.lock";
+    offlineCache = fetchYarnDeps {
+      inherit yarnLock;
+      hash = "sha256-v05Up6VMlYlvgUYQVYo+YfpcsMohliNfMgyjq6QymCI=";
+    };
   };
 
   description = "Set of integrated tools for the R language";

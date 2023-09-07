@@ -10635,6 +10635,8 @@ self: super: with self; {
 
   pytimeparse = callPackage ../development/python-modules/pytimeparse { };
 
+  pytimeparse2 = callPackage ../development/python-modules/pytimeparse2 { };
+
   pytm = callPackage ../development/python-modules/pytm { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };

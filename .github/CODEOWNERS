@@ -101,6 +101,10 @@
 /nixos/lib/systemd-*.nix                    @NixOS/systemd
 /pkgs/os-specific/linux/systemd             @NixOS/systemd
 
+# Images and installer media
+/nixos/modules/installer/cd-dvd/            @samueldr
+/nixos/modules/installer/sd-card/           @samueldr
+
 # Updaters
 ## update.nix
 /maintainers/scripts/update.nix   @jtojnar

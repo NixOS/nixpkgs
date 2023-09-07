@@ -7983,10 +7983,6 @@ with pkgs;
 
   eva = callPackage ../tools/misc/eva { };
 
-  exa = callPackage ../tools/misc/exa {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   exactaudiocopy = callPackage ../applications/audio/exact-audio-copy { };
 
   exempi = callPackage ../development/libraries/exempi { };
@@ -11168,8 +11164,6 @@ with pkgs;
 
   inherit (callPackage ../applications/networking/cluster/nomad { })
     nomad
-    nomad_1_2
-    nomad_1_3
     nomad_1_4
     nomad_1_5
     nomad_1_6
@@ -12774,6 +12768,8 @@ with pkgs;
   rockbox-utility = libsForQt5.callPackage ../tools/misc/rockbox-utility { };
 
   rosegarden = libsForQt5.callPackage ../applications/audio/rosegarden { };
+
+  rot8 = callPackage ../tools/misc/rot8 { };
 
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
 
@@ -27516,6 +27512,8 @@ with pkgs;
 
   static-web-server = callPackage ../servers/static-web-server { };
 
+  stone = callPackage ../servers/stone { };
+
   storm = callPackage ../servers/computing/storm { };
 
   surrealdb = callPackage ../servers/nosql/surrealdb {
@@ -28874,6 +28872,8 @@ with pkgs;
   };
 
   skopeo = callPackage ../development/tools/skopeo { };
+
+  srisum = callPackage ../tools/misc/srisum { };
 
   smem = callPackage ../os-specific/linux/smem { };
 

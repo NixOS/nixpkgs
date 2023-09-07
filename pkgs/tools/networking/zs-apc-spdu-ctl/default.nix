@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.0.2";
 
   src = fetchFromGitHub {
-    owner = "zseri";
+    owner = "fogti";
     repo = "zs-apc-spdu-ctl";
     rev = "v${version}";
     sha256 = "TMV9ETWBVeXq6tZ2e0CrvHBXoyKfOLCQurjBdf/iw/M=";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "APC SPDU control utility";
     license = licenses.mit;
-    maintainers = with maintainers; [ zseri ];
+    maintainers = [ maintainers.fogti ];
     platforms = platforms.linux;
   };
 }
