@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "nuitka";
-  version = "1.1.5";
+  version = "1.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
     rev = version;
-    hash = "sha256-8eWOcxATVS866nlN39b2VU1CuXAfcn0yQsDweHS2yDU=";
+    hash = "sha256-SsRvgyV5FKe3MuNMACT8WVB51cYxgNjAT9IjvOOI1LA=";
   };
 
   nativeCheckInputs = [ vmprof ];
