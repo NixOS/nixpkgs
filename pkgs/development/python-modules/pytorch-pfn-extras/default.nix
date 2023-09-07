@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy packaging torch typing-extensions ];
 
-  nativeCheckInputs = [ onnx pytestCheckHook torchvision ];
+  nativeCheckInputs = [ pytestCheckHook torchvision ];
 
   # ignore all pytest warnings
   preCheck = ''
@@ -41,6 +41,15 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_torchvision.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/utils.py"
+
+    # exclude all other onnx tests since the build currently fails with
+    # a mismatched version.
+    # See https://github.com/NixOS/nixpkgs/issues/252741
+    "tests/pytorch_pfn_extras_tests/onnx_tests/test_annotate.py"
+    "tests/pytorch_pfn_extras_tests/onnx_tests/test_as_output.py"
+    "tests/pytorch_pfn_extras_tests/onnx_tests/test_export_testcase.py"
+    "tests/pytorch_pfn_extras_tests/onnx_tests/test_load_model.py"
+    "tests/pytorch_pfn_extras_tests/runtime_tests/test_jit_runtime.py"
 
     # RuntimeError: No Op registered for Gradient with domain_version of 9
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_grad.py"
