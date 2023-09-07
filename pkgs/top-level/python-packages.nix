@@ -402,6 +402,8 @@ self: super: with self; {
 
   aiowatttime = callPackage ../development/python-modules/aiowatttime { };
 
+  aiowaqi = callPackage ../development/python-modules/aiowaqi { };
+
   aioweenect = callPackage ../development/python-modules/aioweenect { };
 
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
