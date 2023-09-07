@@ -2706,6 +2706,8 @@ with pkgs;
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
+  pcsx-redux = callPackage ../applications/emulators/pcsx-redux { };
+
   ppsspp = callPackage ../applications/emulators/ppsspp { };
 
   ppsspp-sdl = ppsspp;
