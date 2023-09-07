@@ -7,20 +7,20 @@ let
   apptainer = callPackage
     (import ./generic.nix rec {
       pname = "apptainer";
-      version = "1.2.2";
+      version = "1.1.9";
       projectName = "apptainer";
 
       src = fetchFromGitHub {
         owner = "apptainer";
         repo = "apptainer";
         rev = "v${version}";
-        hash = "sha256-CpNuoG+QykP+HDCyFuIbZKYez5XnYrE75SWFoWu34rg=";
+        hash = "sha256-D4TszvtVmi61je8c2H3zRJVX+S4JKHLDiJIQwSalQmA=";
       };
 
       # Update by running
       # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).go-modules"
       # at the root directory of the Nixpkgs repository
-      vendorHash = "sha256-Y0gOqg+WGgssXGEYHc9IFwiIpkb3hetlQI89vseAQPc=";
+      vendorHash = "sha256-PfFubgR/W1WBXIsRO+Kg7hA6ebeAcRiJlTlAZbnl19A=";
 
       extraDescription = " (previously known as Singularity)";
       extraMeta.homepage = "https://apptainer.org";
