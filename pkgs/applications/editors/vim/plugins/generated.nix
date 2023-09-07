@@ -11550,6 +11550,18 @@ final: prev:
     meta.homepage = "https://github.com/will133/vim-dirdiff/";
   };
 
+  vim-dirtytalk = buildVimPluginFrom2Nix {
+    pname = "vim-dirtytalk";
+    version = "2022-10-31";
+    src = fetchFromGitHub {
+      owner = "psliwka";
+      repo = "vim-dirtytalk";
+      rev = "4046f35cb9795e9edd109fea0159cbf027ad590c";
+      sha256 = "0sl4l2sc5ph1pri3l81p86d4h62vidfwmkp33qss04pcyzyvmdi9";
+    };
+    meta.homepage = "https://github.com/psliwka/vim-dirtytalk/";
+  };
+
   vim-dirvish = buildVimPluginFrom2Nix {
     pname = "vim-dirvish";
     version = "2023-06-18";
