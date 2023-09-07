@@ -19,11 +19,16 @@ with pkgs;
     in
       recurseIntoAttrs tests;
     gccTests = let
-      pkgSets = lib.pipe (attrNames pkgs) [
+      pkgSets = lib.pipe (attrNames pkgs) ([
         (filter (lib.hasPrefix "gcc"))
         (filter (lib.hasSuffix "Stdenv"))
         (filter (n: n != "gccCrossLibcStdenv"))
-      ];
+      ] ++ lib.optionals (!(
+        (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64) &&
+        (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
+      )) [
+        (filter (n: !lib.hasSuffix "MultiStdenv" n))
+      ]);
     in lib.genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
   in recurseIntoAttrs {
     default = callPackage ./cc-wrapper { };
