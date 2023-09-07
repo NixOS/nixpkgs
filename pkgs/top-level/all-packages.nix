@@ -1711,6 +1711,8 @@ with pkgs;
 
   crypto-tracker = callPackage ../tools/misc/crypto-tracker { };
 
+  ejs = callPackage ../development/tools/ejs { };
+
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
@@ -5982,7 +5984,7 @@ with pkgs;
   };
 
   micropad = callPackage ../applications/office/micropad {
-    electron = electron_23;
+    electron = electron_25;
   };
 
   midicsv = callPackage ../tools/audio/midicsv { };
@@ -6000,6 +6002,10 @@ with pkgs;
   mmctl = callPackage ../tools/misc/mmctl { };
 
   moar = callPackage ../tools/misc/moar { };
+
+  mobilizon = callPackage ../servers/mobilizon {
+    mobilizon-frontend = callPackage ../servers/mobilizon/frontend.nix { };
+  };
 
   molly-brown = callPackage ../servers/gemini/molly-brown { };
 
@@ -11804,6 +11810,10 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  parrot = callPackage ../applications/audio/parrot {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   patchutils = callPackage ../tools/text/patchutils { };
 
   patchutils_0_3_3 = callPackage ../tools/text/patchutils/0.3.3.nix { };
@@ -12322,6 +12332,8 @@ with pkgs;
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
   teapot = callPackage ../applications/office/teapot { };
+
+  ticktick = callPackage ../applications/office/ticktick { };
 
   pyditz = callPackage ../applications/misc/pyditz {
     pythonPackages = python3Packages;
@@ -32780,7 +32792,7 @@ with pkgs;
 
   srain = callPackage ../applications/networking/irc/srain { };
 
-  streamdeck-ui = libsForQt5.callPackage ../applications/misc/streamdeck-ui { };
+  streamdeck-ui = callPackage ../applications/misc/streamdeck-ui { };
 
   super-productivity = callPackage ../applications/office/super-productivity { };
 
@@ -34792,6 +34804,8 @@ with pkgs;
   packet-sd = callPackage ../development/tools/packet-sd { };
 
   metal-cli = callPackage ../development/tools/metal-cli { };
+
+  pb = callPackage ../tools/misc/pb { };
 
   pb_cli = callPackage ../tools/misc/pb_cli { };
 

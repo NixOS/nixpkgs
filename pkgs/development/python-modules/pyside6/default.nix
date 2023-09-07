@@ -2,7 +2,6 @@
 , stdenv
 , cmake
 , ninja
-, qt6
 , python
 , moveBuildTree
 , shiboken6
@@ -34,9 +33,12 @@ stdenv.mkDerivation rec {
     moveBuildTree
   ];
 
-  buildInputs = with qt6; [
+  buildInputs = with python.pkgs.qt6; [
     # required
     qtbase
+    python.pkgs.ninja
+    python.pkgs.packaging
+    python.pkgs.setuptools
   ] ++ lib.optionals stdenv.isLinux [
     # optional
     qt3d
@@ -68,6 +70,12 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapQtApps = true;
+
+  postInstall = ''
+    cd ../../..
+    ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=pyside6
+    cp -r PySide6.egg-info $out/${python.sitePackages}/
+  '';
 
   meta = with lib; {
     description = "Python bindings for Qt";
