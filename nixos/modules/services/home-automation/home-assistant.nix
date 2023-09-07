@@ -586,11 +586,12 @@ in {
           "~@privileged"
         ] ++ optionals (any useComponent componentsUsingPing) [
           "capset"
+          "setuid"
         ];
         UMask = "0077";
       };
       path = [
-        "/run/wrappers" # needed for ping
+        pkgs.unixtools.ping # needed for ping
       ];
     };
 
