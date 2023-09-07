@@ -67,7 +67,7 @@ So instead it is preferable to use the same generic parameter name `libbar`
 and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-packages.nix):
 
 ```nix
-libfoo = callPackage ../by-name/so/somePackage/package.nix {
+libfoo = callPackage ../by-name/so/some-package/package.nix {
   libbar = libbar_2;
 };
 ```

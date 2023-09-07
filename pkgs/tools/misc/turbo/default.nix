@@ -24,12 +24,12 @@
 , CoreFoundation
 }:
 let
-  version = "1.10.7";
+  version = "1.10.13";
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
-    sha256 = "sha256-AkrwaaXUiFPZqOO1mX/1XBOZRFRtCdgI7glzdv8ZOfU=";
+    sha256 = "sha256-7bEHE/bHRVOXMP7+oo+4k8yn6d+LkXBi8JcDeR0ajww";
   };
 
   ffi = rustPlatform.buildRustPackage {
@@ -37,7 +37,7 @@ let
     inherit src version;
     cargoBuildFlags = [ "--package" "turborepo-ffi" ];
 
-    cargoHash = "sha256-j+r1irE0OGMfr9TAYhTOsFjBNzxjmF5/e7EebtshuG8=";
+    cargoHash = "sha256-CIKuW8qKJiqgDBPfuCIBcWUP41BHwAa1m9vmcQ9ZmAY=";
 
     RUSTC_BOOTSTRAP = 1;
     nativeBuildInputs = [
@@ -138,7 +138,7 @@ rustPlatform.buildRustPackage {
   ];
   RELEASE_TURBO_CLI = "true";
 
-  cargoHash = "sha256-GCo1PRB4JkHSXz7nBiKhJsC1xhMTlA136gGpUblPpVk=";
+  cargoHash = "sha256-rKdonANA6WvXPMpK8sC95hsX9Yb5zedeBezY4LWzsZE=";
 
   RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [

@@ -6,6 +6,8 @@ lib.makeScope newScope (self: with self; {
 
   cygwinSetup = callPackage ./cygwin-setup { };
 
+  dlfcn = callPackage ./dlfcn { };
+
   w32api = callPackage ./w32api { };
 
   mingwrt = callPackage ./mingwrt { };

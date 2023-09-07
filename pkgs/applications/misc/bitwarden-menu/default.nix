@@ -27,6 +27,6 @@ buildPythonApplication rec {
     description = "Dmenu/Rofi frontend for managing Bitwarden vaults. Uses the Bitwarden CLI tool to interact with the Bitwarden database.";
     homepage = "https://github.com/firecat53/bitwarden-menu";
     license = licenses.mit;
-    maintainers = [ maintainers.rodrgz ];
+    maintainers = [ ];
   };
 }

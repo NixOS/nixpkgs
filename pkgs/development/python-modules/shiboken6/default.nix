@@ -9,17 +9,20 @@
 , libxcrypt
 }:
 
-llvmPackages.stdenv.mkDerivation rec {
+let
+  stdenv' = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
+in
+stdenv'.mkDerivation rec {
   pname = "shiboken6";
-  version = "6.5.0";
+  version = "6.5.2";
 
   src = fetchurl {
     # https://download.qt.io/official_releases/QtForPython/shiboken6/
     url = "https://download.qt.io/official_releases/QtForPython/shiboken6/PySide6-${version}-src/pyside-setup-everywhere-src-${version}.tar.xz";
-    sha256 = "sha256-bvU7KRJyZ+OBkX5vk5nOdg7cBkTNWDGYix3nLJ1YOrQ=";
+    sha256 = "sha256-kNvx0U/NQcmKfL6kS4pJUeENC3mOFUdJdW5JRmVNG6g";
   };
 
-  sourceRoot = "pyside-setup-everywhere-src-${lib.versions.majorMinor version}/sources/${pname}";
+  sourceRoot = "pyside-setup-everywhere-src-${version}/sources/${pname}";
 
   patches = [
     ./fix-include-qt-headers.patch

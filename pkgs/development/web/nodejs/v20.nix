@@ -5,7 +5,6 @@ let
     inherit openssl;
     python = python3;
   };
-
 in
 buildNodejs {
   inherit enableNpm;
