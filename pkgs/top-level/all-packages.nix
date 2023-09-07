@@ -31741,9 +31741,7 @@ with pkgs;
 
   fontpreview = callPackage ../applications/misc/fontpreview { };
 
-  fossil = callPackage ../applications/version-management/fossil {
-    sqlite = sqlite.override { enableDeserialize = true; };
-  };
+  fossil = callPackage ../applications/version-management/fossil { };
 
   freebayes = callPackage ../applications/science/biology/freebayes { };
 

@@ -5,8 +5,7 @@
 
 # uses readline & ncurses for a better interactive experience if set to true
 , interactive ? false
-# TODO: can be removed since 3.36 since it is the default now.
-, enableDeserialize ? false
+, enableRecommended ? false
 }:
 
 let
@@ -39,7 +38,6 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
-    "-DSQLITE_ENABLE_JSON1"
     "-DSQLITE_ENABLE_FTS3"
     "-DSQLITE_ENABLE_FTS3_PARENTHESIS"
     "-DSQLITE_ENABLE_FTS3_TOKENIZER"
@@ -52,9 +50,10 @@ stdenv.mkDerivation rec {
     "-DSQLITE_SECURE_DELETE"
     "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
     "-DSQLITE_MAX_EXPR_DEPTH=10000"
-  ] ++ lib.optionals enableDeserialize [
-    # Can be removed in v3.36+, as this will become the default
-    "-DSQLITE_ENABLE_DESERIALIZE"
+  ] ++ lib.optionals enableRecommended [
+    # Some recommended options not activated by default for backward compatibility
+    "-DSQLITE_DQS=0"
+    "-DSQLITE_DEFAULT_FOREIGN_KEYS=1"
   ]);
 
   # Test for features which may not be available at compile time
@@ -94,7 +93,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
-    description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
+    description = "A self-contained, serverless, zero-configuration, transactional SQL database engine ${lib.optionalString interactive "(readline enabled)"}";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;
