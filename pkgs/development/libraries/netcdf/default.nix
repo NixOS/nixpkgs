@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
     remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
   '';
 
-  doCheck = !(mpiSupport || (stdenv.isDarwin && stdenv.isAarch64));
+  doCheck = !mpiSupport;
   nativeCheckInputs = [ unzip ];
 
   preCheck = ''
