@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchYarnDeps
 , fetchzip
 , makeWrapper
 , makeDesktopItem
@@ -29,8 +30,11 @@ in
     };
 
     packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      hash = "sha256-3p+fTyei6THZIYbxg30ybr1r+PxbLyO0ypt+bP5P9QM=";
+    };
 
     nativeBuildInputs = [ copyDesktopItems makeWrapper ]
       ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
