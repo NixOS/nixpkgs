@@ -64,6 +64,7 @@ let
           zimbatm
           zowoq
           techknowlogick
+          qjoly
         ];
         mainProgram = "terraform";
       };
