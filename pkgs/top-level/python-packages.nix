@@ -3083,7 +3083,7 @@ self: super: with self; {
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
   dm-tree = callPackage ../development/python-modules/dm-tree {
-    abseil-cpp = pkgs.abseil-cpp.override {
+    abseil-cpp = pkgs.abseil-cpp_202103.override {
       cxxStandard = "14";
     };
   };
