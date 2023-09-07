@@ -34,9 +34,9 @@ in
 
   ###### interface
 
-  options = {
+  options.security.sudo = {
 
-    security.sudo.enable = mkOption {
+    enable = mkOption {
       type = types.bool;
       default = true;
       description =
@@ -46,7 +46,7 @@ in
         '';
     };
 
-    security.sudo.package = mkOption {
+    package = mkOption {
       type = types.package;
       default = pkgs.sudo;
       defaultText = literalExpression "pkgs.sudo";
@@ -55,7 +55,7 @@ in
       '';
     };
 
-    security.sudo.wheelNeedsPassword = mkOption {
+    wheelNeedsPassword = mkOption {
       type = types.bool;
       default = true;
       description =
@@ -65,7 +65,7 @@ in
         '';
       };
 
-    security.sudo.execWheelOnly = mkOption {
+    execWheelOnly = mkOption {
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
@@ -76,7 +76,7 @@ in
       '';
     };
 
-    security.sudo.configFile = mkOption {
+    configFile = mkOption {
       type = types.lines;
       # Note: if syntax errors are detected in this file, the NixOS
       # configuration will fail to build.
@@ -87,7 +87,7 @@ in
         '';
     };
 
-    security.sudo.extraRules = mkOption {
+    extraRules = mkOption {
       description = lib.mdDoc ''
         Define specific rules to be in the {file}`sudoers` file.
         More specific rules should come after more general ones in order to
@@ -183,7 +183,7 @@ in
       });
     };
 
-    security.sudo.extraConfig = mkOption {
+    extraConfig = mkOption {
       type = types.lines;
       default = "";
       description = lib.mdDoc ''
