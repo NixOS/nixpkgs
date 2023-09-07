@@ -169,7 +169,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     # Do some IP traffic
     output_ping = machine.succeed(
-        "systemd-run --wait -- /run/wrappers/bin/ping -c 1 127.0.0.1 2>&1"
+        "systemd-run --wait -- ping -c 1 127.0.0.1 2>&1"
     )
 
     with subtest("systemd reports accounting data on system.slice"):
