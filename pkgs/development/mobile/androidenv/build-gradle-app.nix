@@ -6,14 +6,13 @@ args@{ name, src, platformVersions ? [ "8" ]
      , useGoogleAPIs ? false, useGooglePlayServices ? false
      , release ? false, keyStore ? null, keyAlias ? null
      , keyStorePassword ? null, keyAliasPassword ? null
-     , useNDK ? false, buildInputs ? [], mavenDeps, gradleTask
-     , buildDirectory ? "./.", acceptAndroidSdkLicenses ? false }:
+     , useNDK ? false, nativeBuildInputs ? [], mavenDeps ? null, gradleTask
+     , buildDirectory ? "./." }:
 
 assert release -> keyStore != null;
 assert release -> keyAlias != null;
 assert release -> keyStorePassword != null;
 assert release -> keyAliasPassword != null;
-assert acceptAndroidSdkLicenses;
 
 let
   inherit (lib) optionalString optional;
@@ -60,11 +59,11 @@ stdenv.mkDerivation ({
   ANDROID_HOME = "${androidsdkComposition.androidsdk}/libexec";
   ANDROID_NDK_HOME = "${androidsdkComposition.ndk-bundle}/libexec/android-sdk/ndk-bundle";
 
-  buildInputs = [ jdk gradle ] ++ buildInputs ++ lib.optional useNDK [ androidsdkComposition.ndk-bundle gnumake gawk file which ];
+  nativeBuildInputs = [ jdk gradle ] ++ nativeBuildInputs ++ lib.optional useNDK [ androidsdkComposition.ndk-bundle gnumake gawk file which ];
 
-  DEPENDENCIES = buildEnv { name = "${name}-maven-deps";
+  DEPENDENCIES = if mavenDeps != null then buildEnv { name = "${name}-maven-deps";
                             paths = map m2install mavenDeps;
-                          };
+                          } else null;
 
   buildPhase = ''
     ${optionalString release ''
