@@ -11013,6 +11013,8 @@ self: super: with self; {
 
   ray = callPackage ../development/python-modules/ray { redis = pkgs.redis; };
 
+  razdel = callPackage ../development/python-modules/razdel { };
+
   rbtools = callPackage ../development/python-modules/rbtools { };
 
   rchitect = callPackage ../development/python-modules/rchitect { };
