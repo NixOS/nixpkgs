@@ -413,6 +413,7 @@ in python.pkgs.buildPythonApplication rec {
     jinja2
     lru-dict
     orjson
+    packaging
     pip
     pyopenssl
     pyjwt
