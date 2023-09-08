@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -16,6 +17,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-FZ92JoyPYysYhl7iQZ8X32BDyNKL1UbOgq7EhHyqb5A=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   overrideModAttrs = _: {
     preBuild = ''
       go generate ./...
@@ -25,6 +28,13 @@ buildGoModule rec {
   doCheck = false;
 
   subPackages = [ "." ];
+
+  postInstall = ''
+    installShellCompletion --cmd aws-nuke \
+      --bash <($out/bin/aws-nuke completion bash) \
+      --fish <($out/bin/aws-nuke completion fish) \
+      --zsh <($out/bin/aws-nuke completion zsh)
+  '';
 
   meta = with lib; {
     description = "Nuke a whole AWS account and delete all its resources";
