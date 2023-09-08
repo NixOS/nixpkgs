@@ -578,11 +578,13 @@ in
           };
         });
         default = [];
-        example = literalExpression ''[
-          { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
-          { addr = "0.0.0.0"; }
-          { addr = "[::0]"; }
-        ]'';
+        example = literalExpression ''
+          [
+            { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
+            { addr = "0.0.0.0"; }
+            { addr = "[::0]"; }
+          ]
+        '';
         description = lib.mdDoc ''
           If vhosts do not specify listen, use these addresses by default.
           This option takes precedence over {option}`defaultListenAddresses` and

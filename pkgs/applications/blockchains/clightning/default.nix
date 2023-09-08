@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
       tools/generate-wire.py \
       tools/update-mocks.sh \
       tools/mockup.sh \
-      devtools/sql-rewrite.py
+      devtools/sql-rewrite.py \
+      plugins/clnrest/clnrest.py
   '' else ''
     substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
     substituteInPlace external/libwally-core/configure.ac --replace gsed sed
