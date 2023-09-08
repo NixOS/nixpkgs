@@ -13440,6 +13440,8 @@ self: super: with self; {
 
   uptime-kuma-monitor = callPackage ../development/python-modules/uptime-kuma-monitor { };
 
+  uqbar = callPackage ../development/python-modules/uqbar { };
+
   uranium = callPackage ../development/python-modules/uranium { };
 
   uritemplate = callPackage ../development/python-modules/uritemplate { };
