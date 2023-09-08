@@ -5292,6 +5292,8 @@ self: super: with self; {
 
   ipykernel = callPackage ../development/python-modules/ipykernel { };
 
+  ipymarkup = callPackage ../development/python-modules/ipymarkup { };
+
   ipympl = callPackage ../development/python-modules/ipympl { };
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
