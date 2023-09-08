@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/zint/zint/blob/${version}/ChangeLog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ azahi ];
+    platforms = platforms.all;
   };
 }

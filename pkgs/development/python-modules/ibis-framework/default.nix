@@ -130,6 +130,19 @@ buildPythonPackage rec {
     # tries to download duckdb extensions
     "--deselect=ibis/backends/duckdb/tests/test_register.py::test_register_sqlite"
     "--deselect=ibis/backends/duckdb/tests/test_register.py::test_read_sqlite"
+    # pyarrow13 is not supported yet.
+    "--deselect=ibis/backends/tests/test_temporal.py::test_date_truncate"
+    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
+    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
+    "--deselect=ibis/backends/tests/test_temporal.py::test_interval_add_cast_column"
+    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
+    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
+    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
+    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
+    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_filter_before_window"
+    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_window_udf"
+    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_window_udf"
+    "--deselect=ibis/backends/tests/test_aggregation.py::test_aggregate_grouped"
   ];
 
   # patch out tests that check formatting with black

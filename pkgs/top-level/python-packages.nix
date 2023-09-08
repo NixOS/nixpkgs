@@ -172,6 +172,8 @@ self: super: with self; {
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
 
+  aiocomelit = callPackage ../development/python-modules/aiocomelit { };
+
   aioconsole = callPackage ../development/python-modules/aioconsole { };
 
   aiocontextvars = callPackage ../development/python-modules/aiocontextvars { };
@@ -344,6 +346,8 @@ self: super: with self; {
 
   aiortm = callPackage ../development/python-modules/aiortm { };
 
+  aioruckus = callPackage ../development/python-modules/aioruckus { };
+
   aiorun = callPackage ../development/python-modules/aiorun { };
 
   aioruuvigateway = callPackage ../development/python-modules/aioruuvigateway { };
@@ -394,7 +398,11 @@ self: super: with self; {
 
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
+  aiovodafone = callPackage ../development/python-modules/aiovodafone { };
+
   aiowatttime = callPackage ../development/python-modules/aiowatttime { };
+
+  aiowaqi = callPackage ../development/python-modules/aiowaqi { };
 
   aioweenect = callPackage ../development/python-modules/aioweenect { };
 
@@ -2330,6 +2338,8 @@ self: super: with self; {
   cson  = callPackage ../development/python-modules/cson { };
 
   csrmesh  = callPackage ../development/python-modules/csrmesh { };
+
+  cssbeautifier = callPackage ../development/python-modules/cssbeautifier { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor { };
 
@@ -4944,7 +4954,11 @@ self: super: with self; {
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
+  html-tag-names = callPackage ../development/python-modules/html-tag-names { };
+
   html-text = callPackage ../development/python-modules/html-text { };
+
+  html-void-elements = callPackage ../development/python-modules/html-void-elements { };
 
   htseq = callPackage ../development/python-modules/htseq { };
 
@@ -9839,8 +9853,6 @@ self: super: with self; {
 
   pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
 
-  pyruckus = callPackage ../development/python-modules/pyruckus { };
-
   pysaj = callPackage ../development/python-modules/pysaj { };
 
   pysam = callPackage ../development/python-modules/pysam { };
@@ -10781,6 +10793,8 @@ self: super: with self; {
   pywavelets = callPackage ../development/python-modules/pywavelets { };
 
   pywayland = callPackage ../development/python-modules/pywayland { };
+
+  pywaze = callPackage ../development/python-modules/pywaze { };
 
   pywbem = callPackage ../development/python-modules/pywbem {
     inherit (pkgs) libxml2;
@@ -13383,6 +13397,8 @@ self: super: with self; {
   univers = callPackage ../development/python-modules/univers { };
 
   universal-pathlib = callPackage ../development/python-modules/universal-pathlib { };
+
+  universal-silabs-flasher = callPackage ../development/python-modules/universal-silabs-flasher { };
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
