@@ -1,4 +1,17 @@
-{ lib, stdenv, pkgs, fetchFromGitHub, runCommand, buildNpmPackage, nodejs_18, tone, ffmpeg-full, util-linux, python3 }:
+{
+  lib,
+  stdenv,
+  pkgs,
+  fetchFromGitHub,
+  runCommand,
+  buildNpmPackage,
+  nodejs_18,
+  tone,
+  ffmpeg-full,
+  util-linux,
+  python3,
+  getopt
+}:
 
 let
   nodejs = nodejs_18;
@@ -28,7 +41,7 @@ let
   };
 
   wrapper = import ./wrapper.nix {
-    inherit stdenv ffmpeg-full tone pname nodejs;
+    inherit stdenv ffmpeg-full tone pname nodejs getopt;
   };
 
 in buildNpmPackage {
