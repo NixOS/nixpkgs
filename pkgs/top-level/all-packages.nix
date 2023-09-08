@@ -682,6 +682,8 @@ with pkgs;
 
   glade = callPackage ../development/tools/glade { };
 
+  glamoroustoolkit = callPackage ../development/tools/glamoroustoolkit { };
+
   gobble = callPackage ../tools/X11/gobble { };
 
   goda = callPackage ../development/tools/goda { };
