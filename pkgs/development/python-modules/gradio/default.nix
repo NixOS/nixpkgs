@@ -3,7 +3,6 @@
 , fetchPypi
 , pythonOlder
 , pythonRelaxDepsHook
-, writeText
 
 # pyproject
 , hatchling
@@ -55,7 +54,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "3.20.1";
+  version = "3.43.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -64,7 +63,7 @@ buildPythonPackage rec {
   # and has more frequent releases compared to github tags
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oG97GwehyBWjWXzDqyfj+x2mAfM6OQhYKdA3j0Rv8Vs=";
+    hash = "sha256-a8eHw8jedrse1dpgup9BL60oXx4wvOk8X5z5DP1DWOs=";
   };
 
   pythonRelaxDeps = [
@@ -126,8 +125,7 @@ buildPythonPackage rec {
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
-  preCheck = let
-  in ''
+  preCheck = ''
     export HOME=$TMPDIR
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
