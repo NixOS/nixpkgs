@@ -20118,7 +20118,9 @@ with pkgs;
     withPEPatterns = true;
   };
 
-  reviewdog = callPackage ../development/tools/misc/reviewdog { };
+  reviewdog = callPackage ../development/tools/misc/reviewdog {
+    buildGoModule = buildGo121Module;
+  };
 
   revive = callPackage ../development/tools/revive { };
 
