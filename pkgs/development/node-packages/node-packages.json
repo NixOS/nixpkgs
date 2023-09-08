@@ -240,7 +240,6 @@
 , "sql-formatter"
 , "stackdriver-statsd-backend"
 , "stylelint"
-, "surge"
 , "svelte-check"
 , "svelte-language-server"
 , "svgo"
