@@ -15,6 +15,8 @@
 , readline
 , zita-alsa-pcmi
 , zita-resampler
+
+, enableAlsa ? stdenv.isLinux
 }:
 
 stdenv.mkDerivation (final: {
@@ -28,21 +30,27 @@ stdenv.mkDerivation (final: {
     hash = "sha256-5jmynNxwNVLxEZ1MaqQUG6kRwipDkjhrdDCbZHtmAHk=";
   };
 
+  postPatch = ''
+    patchShebangs scripts
+  '';
+
   nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [
     jack
-    alsa-lib
     libopus
     libsamplerate
     libsndfile
     readline
+  ] ++ lib.optionals enableAlsa [
+    alsa-lib
     zita-alsa-pcmi
     zita-resampler
   ];
 
-  postPatch = ''
-    patchShebangs scripts
-  '';
+  mesonFlags = [
+    (lib.mesonEnable "alsa_in_out" enableAlsa)
+    (lib.mesonEnable "zalsa" enableAlsa)
+  ];
 
   # no tests defined, but prepare for some in the future.
   doCheck = true;
@@ -52,7 +60,6 @@ stdenv.mkDerivation (final: {
     homepage = "https://jackaudio.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ pennae ];
   };
 })
