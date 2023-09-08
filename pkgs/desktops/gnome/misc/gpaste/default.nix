@@ -19,14 +19,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "44.1";
+  version = "45.alpha-unstable";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
-    rev = "v${version}";
-    sha256 = "sha256-c/q8VTzFOz8nzidPB3qnYw9+AkdKfTdUD4AcxyHKrqo=";
+    # rev = "v${version}";
+    rev = "734286a8bd76d3a76a9d5f2f1651b8be36be17f9";
+    sha256 = "sha256-b1bPiLffqvdD6ZTQsqL+dfiEm5i9h6IpKzebXyHmWUk=";
   };
 
   patches = [

@@ -1,42 +1,47 @@
 diff --git a/src/gnome-shell/extension.js b/src/gnome-shell/extension.js
-index c8773fd6..9efbed67 100644
+index cb862a30..2bd41363 100644
 --- a/src/gnome-shell/extension.js
 +++ b/src/gnome-shell/extension.js
-@@ -6,6 +6,8 @@
+@@ -10,6 +10,10 @@ import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/ex
+ import checkerBypass from './checkerBypass.js';
+ import { GPasteIndicator } from './indicator.js';
  
- const Config = imports.misc.config;
- 
-+imports.gi.GIRepository.Repository.prepend_search_path('@typelibPath@');
++import GIRepository from 'gi://GIRepository';
 +
- imports.gi.versions.Clutter = Config.LIBMUTTER_API_VERSION;
- imports.gi.versions.GLib = '2.0';
- imports.gi.versions.GPaste = '2';
++GIRepository.Repository.prepend_search_path('@typelibDir@');
++
+ export default class GPasteExtension extends Extension {
+     enable() {
+         checkerBypass();
 diff --git a/src/gnome-shell/prefs.js b/src/gnome-shell/prefs.js
-index 32244ab2..74b85572 100644
+index 4c0d9bde..5740d8f6 100644
 --- a/src/gnome-shell/prefs.js
 +++ b/src/gnome-shell/prefs.js
-@@ -6,6 +6,8 @@
+@@ -5,8 +5,11 @@
+  */
  
- imports.gi.versions.GPasteGtk = '4';
+ import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
++import GIRepository from 'gi://GIRepository';
  
-+imports.gi.GIRepository.Repository.prepend_search_path('@typelibPath@');
+-import GPasteGtk from 'gi://GPasteGtk?version=4';
++GIRepository.Repository.prepend_search_path('@typelibDir@');
 +
- const ExtensionUtils = imports.misc.extensionUtils;
++const {default: GPasteGtk} = await import('gi://GPasteGtk?version=4');
  
- const { GPasteGtk } = imports.gi;
+ export default class GPastePreferences extends ExtensionPreferences {
+     getPreferencesWidget() {
 diff --git a/src/libgpaste/gpaste/gpaste-settings.c b/src/libgpaste/gpaste/gpaste-settings.c
-index 7e53eb64..57c399fc 100644
+index 7e53eb64..ee620070 100644
 --- a/src/libgpaste/gpaste/gpaste-settings.c
 +++ b/src/libgpaste/gpaste/gpaste-settings.c
-@@ -1013,7 +1013,11 @@ create_g_settings (void)
+@@ -1013,7 +1013,10 @@ create_g_settings (void)
      }
      else
      {
 -        return g_settings_new (G_PASTE_SETTINGS_NAME);
 +        // library used by introspection requires schemas but we cannot set XDG_DATA_DIRS for the library
-+        GSettingsSchemaSource *schema_source = g_settings_schema_source_new_from_directory ("@gschemasCompiled@", NULL, FALSE, NULL);
++        g_autoptr (GSettingsSchemaSource) schema_source = g_settings_schema_source_new_from_directory ("@gschemasCompiled@", NULL, FALSE, NULL);
 +        g_autoptr (GSettingsSchema) schema = g_settings_schema_source_lookup (schema_source, G_PASTE_SETTINGS_NAME, FALSE);
-+        g_settings_schema_source_unref (schema_source);
 +        return g_settings_new_full (schema, NULL, NULL);
      }
  }
