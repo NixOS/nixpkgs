@@ -41,6 +41,8 @@ in mkDerivation {
 
   patches = [ ./r13y.patch ];
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
   buildInputs = [ ffmpeg openssl qtbase zlib ];
