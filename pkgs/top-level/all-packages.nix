@@ -1833,6 +1833,8 @@ with pkgs;
 
   hexdiff = callPackage ../tools/misc/hexdiff { };
 
+  hexo-cli = callPackage ../development/tools/hexo-cli { };
+
   hostmux = callPackage ../tools/misc/hostmux { };
 
   hsd = callPackage ../tools/misc/hsd { };
