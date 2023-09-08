@@ -526,8 +526,8 @@ let
           optionalString cfg.mysqlAuth ''
             auth sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
-          optionalString (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth) ''
-            auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=${lib.concatStringsSep ":" config.services.openssh.authorizedKeysFiles}
+          optionalString (config.security.pam.sshAgentAuth.enable && cfg.sshAgentAuth) ''
+            auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=${lib.concatStringsSep ":" config.security.pam.sshAgentAuth.authorizedKeysFiles}
           '' +
           (let p11 = config.security.pam.p11; in optionalString cfg.p11Auth ''
             auth ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so
@@ -843,6 +843,31 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
+    (mkRemovedOptionModule [ "security" "pam" "enableSSHAgentAuth" ] ''
+      TO PREVENT BEING LOCKED OUT OF YOUR SYSTEM, READ THE FOLLOWING CAREFULLY:
+
+      The sshAgentAuth module no longer reads authorized keys files from the
+      same locations as configured for openssh. The new default looks only in
+      /etc/ssh/authorized_keys.d/<username> which is automatically populated by
+      the users.users.<username>.openssh.authorizedKeys.keys option.
+
+      If you set public keys anywhere else (e.g. ~/.ssh/authorized_keys) or you
+      changed services.openssh.authorizedKeysFiles from its default, then you
+      should do one of the following:
+
+        1. (Recommended) Configure your user's public keys declaratively with
+           the users.users.<username>.openssh.authorizedKeys.keys option.
+
+        2. Configure security.pam.sshAgentAuth.authorizedKeysFiles with paths
+           to your authorized keys. Read the option description carefully to
+           prevent privilege escalation attacks.
+
+      If you already configure your public keys declaratively, you don't need
+      to change them.
+
+      Once you have completed the above instructions, you can re-enable SSH
+      agent auth by setting the security.pam.sshAgentAuth.enable option.
+    '')
   ];
 
   ###### interface
@@ -912,16 +937,33 @@ in
       '';
     };
 
-    security.pam.enableSSHAgentAuth = mkOption {
+    security.pam.sshAgentAuth.enable = mkOption {
       type = types.bool;
       default = false;
       description =
         lib.mdDoc ''
           Enable sudo logins if the user's SSH agent provides a key
-          present in {file}`~/.ssh/authorized_keys`.
+          present in {option}`security.pam.sshAgentAuth.authorizedKeysFiles`.
           This allows machines to exclusively use SSH keys instead of
           passwords.
         '';
+    };
+
+    security.pam.sshAgentAuth.authorizedKeysFiles = mkOption {
+      type = types.listOf types.str;
+      default = [ "/etc/ssh/authorized_keys.d/%u" ];
+      description = lib.mdDoc ''
+        The paths to the authorized_keys files to use for authentication.
+
+        ::: {.warning}
+        Adding a user writable path with `~` or `%h` allows any program running
+        as a user to elevate privileges by adding a new key to the authorized
+        keys file.
+        :::
+
+        These paths are subject to certain token expansion rules.
+        See EXPANSIONS in `man pam_ssh_agent_auth` for details.
+      '';
     };
 
     security.pam.enableOTPW = mkEnableOption (lib.mdDoc "the OTPW (one-time password) PAM module");
@@ -1433,7 +1475,7 @@ in
       optionalString (isEnabled (cfg: cfg.googleOsLoginAuthentication)) ''
         mr ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so,
       '' +
-      optionalString (config.security.pam.enableSSHAgentAuth
+      optionalString (config.security.pam.sshAgentAuth.enable
                      && isEnabled (cfg: cfg.sshAgentAuth)) ''
         mr ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so,
       '' +
