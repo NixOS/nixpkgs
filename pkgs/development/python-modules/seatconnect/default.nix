@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "seatconnect";
-  version = "1.1.7";
+  version = "1.1.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "farfar";
     repo = pname;
-    rev = version;
-    hash = "sha256-8QZtivHG+tf7S2hVlFaQ7yCeCCI7ft/EIr0D73mcURw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HITVrI0o94a61gy/TYSGFtLBYX4Rw/dK1o2/KsvHLTQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
