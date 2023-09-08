@@ -134,6 +134,16 @@ let
         };
       });
 
+      plexapi = super.plexapi.overridePythonAttrs (oldAttrs: rec {
+        version = "4.13.2";
+        src = fetchFromGitHub {
+          owner = "pkkid";
+          repo = "python-plexapi";
+          rev = "refs/tags/${version}";
+          hash = "sha256-5YwINPgQ4efZBvu5McsLYicW/7keKSi011lthJUR9zw=";
+        };
+      });
+
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
