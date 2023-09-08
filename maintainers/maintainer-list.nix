@@ -3343,6 +3343,12 @@
     githubId = 5561189;
     name = "Cody Opel";
   };
+  coffeeispower = {
+    email = "tiagodinis33@proton.me";
+    github = "coffee-is-power";
+    name = "Tiago Dinis";
+    githubId = 92828847;
+  };
   cofob = {
     name = "Egor Ternovoy";
     email = "cofob@riseup.net";
