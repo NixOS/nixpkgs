@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jtesta";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-+v+DLZPDC5uffTIJPzMvY/nLoy7BGiAsTddjNZZhTpo=";
   };
 
@@ -18,6 +18,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool for ssh server auditing";
     homepage = "https://github.com/jtesta/ssh-audit";
+    changelog = "https://github.com/jtesta/ssh-audit/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ tv SuperSandro2000 ];
