@@ -40,13 +40,6 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest>=5,<6'," ""
-    substituteInPlace requirements.txt \
-      --replace "pytest-asyncio" ""
-  '';
-
   # Project only has a dummy test
   doCheck = false;
 
