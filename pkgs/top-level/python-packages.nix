@@ -11126,6 +11126,8 @@ self: super: with self; {
 
   reprshed = callPackage ../development/python-modules/reprshed { };
 
+  reptor = callPackage ../development/python-modules/reptor { };
+
   reqif = callPackage ../development/python-modules/reqif { };
 
   requests-aws4auth = callPackage ../development/python-modules/requests-aws4auth { };

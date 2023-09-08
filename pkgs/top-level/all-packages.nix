@@ -12668,6 +12668,8 @@ with pkgs;
 
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
+  reptor = with python3.pkgs; toPythonApplication reptor;
+
   reptyr = callPackage ../os-specific/linux/reptyr { };
 
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
