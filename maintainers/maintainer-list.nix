@@ -9486,6 +9486,11 @@
     githubId = 894884;
     name = "Jakub Kozłowski";
   };
+  kupac = {
+    github = "Kupac";
+    githubId = 8224569;
+    name = "László Kupcsik";
+  };
   kurnevsky = {
     email = "kurnevsky@gmail.com";
     github = "kurnevsky";
