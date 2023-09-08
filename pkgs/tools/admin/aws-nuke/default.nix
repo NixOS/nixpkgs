@@ -41,6 +41,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Nuke a whole AWS account and delete all its resources";
     homepage = "https://github.com/rebuy-de/aws-nuke";
+    changelog = "https://github.com/rebuy-de/aws-nuke/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ grahamc ];
   };
