@@ -22,6 +22,6 @@ buildPecl rec {
     description = "Phalcon is a full stack PHP framework offering low resource consumption and high performance.";
     license = licenses.bsd3;
     homepage = "https://phalcon.io";
-    maintainers = teams.php.members;
+    maintainers = teams.php.members ++ [ maintainers.krzaczek ];
   };
 }
