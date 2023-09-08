@@ -30,14 +30,14 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 }:
 
 mkDerivation rec {
-  version = "1.4.5";
+  version = "1.4.6";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "sha256-EizKDw5Fv2qXxmiCx4NAvwxBZ+qhTIx4NMZedZ9OuyA=";
+    sha256 = "sha256-/HAqO0eVFt4YLGeTbZSZcH2pOojvykukAGTBHZTfKLQ=";
   };
 
   buildInputs = [
