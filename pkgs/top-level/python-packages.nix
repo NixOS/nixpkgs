@@ -2339,6 +2339,8 @@ self: super: with self; {
 
   csrmesh  = callPackage ../development/python-modules/csrmesh { };
 
+  cssbeautifier = callPackage ../development/python-modules/cssbeautifier { };
+
   csscompressor = callPackage ../development/python-modules/csscompressor { };
 
   cssmin = callPackage ../development/python-modules/cssmin { };
@@ -4952,7 +4954,11 @@ self: super: with self; {
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
+  html-tag-names = callPackage ../development/python-modules/html-tag-names { };
+
   html-text = callPackage ../development/python-modules/html-text { };
+
+  html-void-elements = callPackage ../development/python-modules/html-void-elements { };
 
   htseq = callPackage ../development/python-modules/htseq { };
 

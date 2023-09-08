@@ -682,6 +682,8 @@ with pkgs;
 
   glade = callPackage ../development/tools/glade { };
 
+  glamoroustoolkit = callPackage ../development/tools/glamoroustoolkit { };
+
   gobble = callPackage ../tools/X11/gobble { };
 
   goda = callPackage ../development/tools/goda { };
@@ -17373,6 +17375,8 @@ with pkgs;
 
   devspace = callPackage ../development/tools/misc/devspace { };
 
+  djlint = callPackage ../development/tools/djlint { };
+
   leptosfmt = callPackage ../development/tools/rust/leptosfmt { };
 
   maturin = callPackage ../development/tools/rust/maturin {
@@ -20840,6 +20844,7 @@ with pkgs;
     boost180
     boost181
     boost182
+    boost183
   ;
 
   boost = boost181;
@@ -26223,11 +26228,10 @@ with pkgs;
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = import ../development/interpreters/perl { inherit callPackage; };
-  inherit (perlInterpreters) perl536 perl538 perldevel;
+  inherit (perlInterpreters) perl536 perl538;
 
   perl536Packages = recurseIntoAttrs perl536.pkgs;
   perl538Packages = recurseIntoAttrs perl538.pkgs;
-  perldevelPackages = perldevel.pkgs;
 
   perl = perl538;
   perlPackages = perl538Packages;
@@ -26462,6 +26466,8 @@ with pkgs;
   couchdb3 = callPackage ../servers/http/couchdb/3.nix { };
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
+
+  deconz = qt5.callPackage ../servers/deconz { };
 
   dendrite = callPackage ../servers/dendrite { };
 
@@ -40602,6 +40608,11 @@ with pkgs;
   };
 
   libjack2 = jack2.override { prefix = "lib"; };
+
+  jack-example-tools = callPackage ../misc/jackaudio/tools.nix {
+    libopus = libopus.override { withCustomModes = true; };
+    jack = jack2;
+  };
 
   jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
   jack_autoconnect = jack-autoconnect;
