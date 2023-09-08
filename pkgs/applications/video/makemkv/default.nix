@@ -80,7 +80,7 @@ in mkDerivation {
       expiration date.
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = [ licenses.unfree licenses.lgpl21 ];
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ titanous ];
