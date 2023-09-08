@@ -6993,6 +6993,8 @@ self: super: with self; {
 
   navec = callPackage ../development/python-modules/navec { };
 
+  natasha = callPackage ../development/python-modules/natasha { };
+
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
   nox = callPackage ../development/python-modules/nox { };
