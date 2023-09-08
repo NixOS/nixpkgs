@@ -6991,6 +6991,8 @@ self: super: with self; {
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
+  navec = callPackage ../development/python-modules/navec { };
+
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
   nox = callPackage ../development/python-modules/nox { };
