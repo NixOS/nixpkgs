@@ -271,8 +271,8 @@ let
 
               ./buildconf --copy --force
 
-              if test -f $src/genfiles; then
-                ./genfiles
+              if [ -f "scripts/dev/genfiles" ]; then
+                ./scripts/dev/genfiles
               fi
             '' + lib.optionalString stdenv.isDarwin ''
               substituteInPlace configure --replace "-lstdc++" "-lc++"
