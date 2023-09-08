@@ -42,30 +42,20 @@ mixRelease rec {
         fast_html = prev.fast_html.override {
           nativeBuildInputs = [ cmake ];
         };
-        ex_cldr = prev.ex_cldr.overrideAttrs (old: {
-          preBuild = "touch config/prod.exs";
+        ex_cldr = prev.ex_cldr.overrideAttrs (old: rec {
+          version = "2.37.2";
           # We have to use the GitHub sources, as it otherwise tries to download
           # the locales at build time.
           src = fetchFromGitHub {
-            owner = "erictapen";
+            owner = "elixir-cldr";
             repo = "cldr";
-            # tip of 2.37.1/compile_env-fix
-            rev = "3a0dcf91132542a739f7b2450c6df12d40edeb0a";
-            sha256 = "sha256-QQRt1HOuajCANbKxikdgN3oK9BdZJjg1qg+WHm4DuqY=";
+            rev = "v${version}";
+            sha256 = "sha256-dDOQzLIi3zjb9xPyR7Baul96i9Mb3CFHUA+AWSexrk4=";
           };
           postInstall = ''
             cp $src/priv/cldr/locales/* $out/lib/erlang/lib/ex_cldr-${old.version}/priv/cldr/locales/
           '';
         });
-        ex_cldr_currencies = prev.ex_cldr_currencies.override {
-          preBuild = "touch config/prod.exs";
-        };
-        ex_cldr_numbers = prev.ex_cldr_numbers.override {
-          preBuild = "touch config/prod.exs";
-        };
-        ex_cldr_dates_times = prev.ex_cldr_dates_times.override {
-          preBuild = "touch config/prod.exs";
-        };
         # Upstream issue: https://github.com/bryanjos/geo_postgis/pull/87
         geo_postgis = prev.geo_postgis.overrideAttrs (old: {
           propagatedBuildInputs = old.propagatedBuildInputs ++ [ final.ecto ];
@@ -93,16 +83,6 @@ mixRelease rec {
             sha256 = "sha256-N3bJZznNazLewHS4c2B7LP1lgxd1wev+EWVlQ7rOwfU=";
           };
           beamDeps = with final; [ mix_test_watch ex_doc timex ];
-        };
-        erlport = buildRebar3 rec {
-          name = "erlport";
-          version = "0.10.1-compat";
-          src = fetchFromGitHub {
-            owner = "tcitworld";
-            repo = name;
-            rev = "1f8f4b1a50ecdf7e959090fb566ac45c63c39b0b";
-            sha256 = "sha256-NkoGAW+1MTL0p7uUHl89GcQsbcfyAg/sMr417jUWMNM=";
-          };
         };
         exkismet = buildMix rec {
           name = "exkismet";
