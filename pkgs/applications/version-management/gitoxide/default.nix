@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , stdenv
@@ -23,6 +24,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-WZctsAxGojrGufF8CwUiw1xWzn9qVZUphDE3KmGTGy4=";
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Byron/gitoxide/pull/1024.patch";
+      hash = "sha256-rzZxo9szOHCMloyn+2+UKj1Brw7KZqe3YoeAKfZSMgk=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
