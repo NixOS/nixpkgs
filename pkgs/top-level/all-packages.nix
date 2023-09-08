@@ -22245,6 +22245,8 @@ with pkgs;
 
   imlibsetroot = callPackage ../applications/graphics/imlibsetroot { libXinerama = xorg.libXinerama; } ;
 
+  imposm = callPackage ../tools/misc/imposm { };
+
   impy = callPackage ../development/libraries/impy { };
 
   ineffassign = callPackage ../development/tools/ineffassign { };
