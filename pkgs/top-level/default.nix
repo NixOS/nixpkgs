@@ -16,10 +16,19 @@
    evaluation is taking place, and the configuration from environment variables
    or dot-files. */
 
-{ # The system packages will be built on. See the manual for the
+{ # Represents the system on which to build nixpkgs as a string. Eg:
+  # "x86_64-linux". For more sophisticated scenarios, use localSystem and
+  # crossSystem.
+  system ? null
+
+, # The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
   # `*Platform`s.
-  localSystem
+  #
+  # We put legacy `system` into `localSystem`, if `localSystem` was not passed.
+  # If neither is passed, assume we are building packages on the current
+  # (build, in GNU Autotools parlance) platform.
+  localSystem ? { inherit system; }
 
 , # The system packages will ultimately be run on.
   crossSystem ? localSystem
@@ -42,10 +51,14 @@
   ...
 } @ args:
 
-let # Rename the function arguments
-  config0 = config;
-  crossSystem0 = crossSystem;
+# Check that either system or localSystem was passed
+assert ((localSystem.system or null) != null || !localSystem ? device);
 
+let
+  # Rename the function arguments
+  localSystem0 = localSystem;
+  crossSystem0 = crossSystem;
+  config0 = config;
 in let
   lib = import ../../lib;
 
@@ -58,11 +71,11 @@ in let
     lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r) crossOverlays
     ;
 
-  localSystem = lib.systems.elaborate args.localSystem;
+  localSystem = lib.systems.elaborate localSystem0;
 
   # Condition preserves sharing which in turn affects equality.
   crossSystem =
-    if crossSystem0 == null || crossSystem0 == args.localSystem
+    if crossSystem0 == null || crossSystem0 == localSystem0
     then localSystem
     else lib.systems.elaborate crossSystem0;
 
