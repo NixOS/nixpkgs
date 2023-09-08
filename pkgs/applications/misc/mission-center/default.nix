@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mission-center";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     rev = "v${version}";
-    hash = "sha256-fiUF1mvbnguySy2ZXTi4Z61t35FO6fljqm21dMGwQMI=";
+    hash = "sha256-KuaVivW/i+1Pw6ShpvBYbwPMUHsEJ7FR80is0DBMbXM=";
   };
 
   cargoDeps = symlinkJoin {
