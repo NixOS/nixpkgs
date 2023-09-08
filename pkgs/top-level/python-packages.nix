@@ -11898,6 +11898,8 @@ self: super: with self; {
 
   slob = callPackage ../development/python-modules/slob { };
 
+  slovnet = callPackage ../development/python-modules/slovnet { };
+
   slowapi = callPackage ../development/python-modules/slowapi { };
 
   slugid = callPackage ../development/python-modules/slugid { };
