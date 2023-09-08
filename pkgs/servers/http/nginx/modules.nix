@@ -1,4 +1,5 @@
 { lib
+, applyPatches
 , config
 , fetchFromGitHub
 , fetchFromGitLab
@@ -1018,12 +1019,17 @@ let self = {
 
   zstd = {
     name = "zstd";
-    src = fetchFromGitHub {
-      name = "zstd";
-      owner = "tokers";
-      repo = "zstd-nginx-module";
-      rev = "25d88c262be47462cf90015ee7ebf6317b6848f9";
-      sha256 = "sha256-YRluKekhx1tb6e5IL1FPK05jPtzfQPaHI47cdada928=";
+    src = applyPatches {
+      src = fetchFromGitHub {
+        name = "zstd";
+        owner = "tokers";
+        repo = "zstd-nginx-module";
+        rev = "25d88c262be47462cf90015ee7ebf6317b6848f9";
+        sha256 = "sha256-YRluKekhx1tb6e5IL1FPK05jPtzfQPaHI47cdada928=";
+      };
+      patches = [
+        ./zstd-fix-deprecation.patch # https://github.com/tokers/zstd-nginx-module/pull/26
+      ];
     };
 
     inputs = [ zstd ];

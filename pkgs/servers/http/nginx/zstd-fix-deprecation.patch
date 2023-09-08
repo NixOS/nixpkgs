@@ -1,0 +1,39 @@
+From 61fe122c75d6720e9ea667ec7ec516b049aa091a Mon Sep 17 00:00:00 2001
+From: Andrew Marshall <andrew@johnandrewmarshall.com>
+Date: Thu, 7 Sep 2023 08:39:11 -0400
+Subject: [PATCH] bugfix: fix deprecation warning with zstd 1.5+
+
+See https://github.com/facebook/zstd/releases/tag/v1.5.0
+---
+ filter/ngx_http_zstd_filter_module.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/filter/ngx_http_zstd_filter_module.c b/filter/ngx_http_zstd_filter_module.c
+index d5784ba..a5e9d55 100644
+--- a/filter/ngx_http_zstd_filter_module.c
++++ b/filter/ngx_http_zstd_filter_module.c
+@@ -603,6 +603,16 @@ ngx_http_zstd_filter_create_cstream(ngx_http_request_t *r,
+     /* TODO use the advanced initialize functions */
+ 
+     if (zlcf->dict) {
++#if ZSTD_VERSION_MAJOR > 1 || (ZSTD_VERSION_MAJOR == 1 && ZSTD_VERSION_MINOR >= 5)
++        rc = ZSTD_CCtx_refCDict(cstream, zlcf->dict);
++        if (ZSTD_isError(rc)) {
++            ngx_log_error(NGX_LOG_ALERT, r->connection->log, 0,
++                          "ZSTD_CCtx_refCDict() failed: %s",
++                          ZSTD_getErrorName(rc));
++
++            goto failed;
++        }
++#else
+         rc = ZSTD_initCStream_usingCDict(cstream, zlcf->dict);
+         if (ZSTD_isError(rc)) {
+             ngx_log_error(NGX_LOG_ALERT, r->connection->log, 0,
+@@ -611,6 +621,7 @@ ngx_http_zstd_filter_create_cstream(ngx_http_request_t *r,
+ 
+             goto failed;
+         }
++#endif
+ 
+     } else {
+         rc = ZSTD_initCStream(cstream, zlcf->level);
