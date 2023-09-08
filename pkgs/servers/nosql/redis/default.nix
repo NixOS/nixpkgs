@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-ixLiQmR2NbQZoOGDPtoCtlv2TjnrnlCdnbSIj7MSSUM=";
+    hash = "sha256-XHbZkKGxxflJvNHu2Q0Mik9wNpvb3LQCiMVh3fiJZ6Q=";
   };
 
   patches = lib.optionals useSystemJemalloc [
