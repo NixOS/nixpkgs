@@ -2,7 +2,6 @@
 , fetchurl
 , llvmPackages
 , python
-, qt6
 , cmake
 , autoPatchelfHook
 , stdenv
@@ -38,7 +37,10 @@ stdenv'.mkDerivation rec {
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.libclang
-    qt6.qtbase
+    python.pkgs.qt6.qtbase
+    python.pkgs.ninja
+    python.pkgs.packaging
+    python.pkgs.setuptools
   ];
 
   cmakeFlags = [
@@ -55,6 +57,12 @@ stdenv'.mkDerivation rec {
     install_name_tool -change {@rpath,$out/lib}/libshiboken6.abi3.6.5.dylib $out/${python.sitePackages}/shiboken6/Shiboken.abi3.so
   '' + lib.optionalString stdenv.isLinux ''
     patchelf $out/${python.sitePackages}/shiboken6/Shiboken.abi3.so --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir}
+  '';
+
+  postInstall = ''
+    cd ../../..
+    ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=shiboken6
+    cp -r shiboken6.egg-info $out/${python.sitePackages}/
   '';
 
   dontWrapQtApps = true;

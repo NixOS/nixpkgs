@@ -31,5 +31,5 @@ jobs:
           pull_description: |-
             Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
 
-            * [ ] Before merging, ensure that this backport complies with the [Criteria for Backporting](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#criteria-for-backporting-changes).
-              * Even as a non-commiter, if you find that it does not comply, leave a comment.
+            * [ ] Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
+              * Even as a non-commiter, if you find that it is not acceptable, leave a comment.

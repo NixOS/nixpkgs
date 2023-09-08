@@ -5,7 +5,7 @@ python3Packages.buildPythonPackage rec {
   version = "unstable-2022-08-03";
   format = "setuptools";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "JelmerT";
     repo = pname;
     rev = "538ea0deb99530e28fdf1b454e9c9d79d85a3970";

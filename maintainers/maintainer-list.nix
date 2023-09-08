@@ -6717,6 +6717,12 @@
     githubId = 1379411;
     name = "Georg Haas";
   };
+  hbjydev = {
+    email = "hayden@kuraudo.io";
+    github = "hbjydev";
+    githubId = 22327045;
+    name = "Hayden Young";
+  };
   hbunke = {
     email = "bunke.hendrik@gmail.com";
     github = "hbunke";

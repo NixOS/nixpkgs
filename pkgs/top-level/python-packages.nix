@@ -3083,7 +3083,7 @@ self: super: with self; {
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
   dm-tree = callPackage ../development/python-modules/dm-tree {
-    abseil-cpp = pkgs.abseil-cpp.override {
+    abseil-cpp = pkgs.abseil-cpp_202103.override {
       cxxStandard = "14";
     };
   };
@@ -9060,6 +9060,8 @@ self: super: with self; {
     inherit (pkgs) enchant2;
   };
 
+  pyenphase = callPackage ../development/python-modules/pyenphase { };
+
   pyenvisalink = callPackage ../development/python-modules/pyenvisalink { };
 
   pyephember = callPackage ../development/python-modules/pyephember { };
@@ -9900,7 +9902,7 @@ self: super: with self; {
   });
 
   pyside6 = toPythonModule (callPackage ../development/python-modules/pyside6 {
-    inherit (pkgs) cmake ninja qt6;
+    inherit (pkgs) cmake ninja;
   });
 
   pysigma = callPackage ../development/python-modules/pysigma { };
@@ -10910,6 +10912,10 @@ self: super: with self; {
 
   qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
+  qt6 = pkgs.qt6.override {
+    python3 = self.python;
+  };
+
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
@@ -11737,7 +11743,7 @@ self: super: with self; {
   });
 
   shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
-    inherit (pkgs) cmake llvmPackages qt6;
+    inherit (pkgs) cmake llvmPackages;
   });
 
   shippai = callPackage ../development/python-modules/shippai { };
@@ -11797,6 +11803,8 @@ self: super: with self; {
   simplekv = callPackage ../development/python-modules/simplekv { };
 
   simplenote = callPackage ../development/python-modules/simplenote { };
+
+  simplepush = callPackage ../development/python-modules/simplepush { };
 
   simplesat = callPackage ../development/python-modules/simplesat { };
 
