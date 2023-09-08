@@ -47,7 +47,7 @@ let
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
   disableBootstrap' = disableBootstrap && !langFortran && !langGo;
 
-  crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
+  crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)

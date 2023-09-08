@@ -19,7 +19,7 @@ drv: lib.pipe drv
   (pkg: pkg.overrideAttrs (previousAttrs:
     lib.optionalAttrs (
       targetPlatform != hostPlatform &&
-      (enableShared || targetPlatform.libc == "msvcrt") &&
+      (enableShared || targetPlatform.isMinGW) &&
       withoutTargetLibc
     ) {
       makeFlags = [ "all-gcc" "all-target-libgcc" ];

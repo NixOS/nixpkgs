@@ -17,7 +17,7 @@
     (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
 , icuSupport ? false
 , icu
-, enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 , gnome
 }:
