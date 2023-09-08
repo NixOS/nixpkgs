@@ -164,7 +164,7 @@ rec {
     sha256 = "sha256-y1103SS0qkZMhEL5+7kQZ+OBs5tRaqkqOcs4796Fzhg=";
   };
 
-  noto-fonts-emoji =
+  noto-fonts-color-emoji =
     let
       version = "2.038";
       emojiPythonEnv =
@@ -217,7 +217,7 @@ rec {
       '';
 
       meta = with lib; {
-        description = "Color and Black-and-White emoji fonts";
+        description = "Color emoji font";
         homepage = "https://github.com/googlefonts/noto-emoji";
         license = with licenses; [ ofl asl20 ];
         platforms = platforms.all;
