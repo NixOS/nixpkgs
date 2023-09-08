@@ -83,6 +83,7 @@ python3Packages.buildPythonApplication rec {
     description =
       "Intuitive text extraction tool (OCR) for GNOME desktop";
     license = licenses.mit;
+    mainProgram = "frog";
     maintainers = with maintainers; [ foo-dogsquared ];
     platforms = platforms.linux;
   };
