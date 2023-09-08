@@ -524,6 +524,8 @@ self: super: with self; {
 
   ansi2html = callPackage ../development/python-modules/ansi2html { };
 
+  ansi2image = callPackage ../development/python-modules/ansi2image { };
+
   ansible = callPackage ../development/python-modules/ansible { };
 
   ansible-compat = callPackage ../development/python-modules/ansible-compat { };
