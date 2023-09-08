@@ -9784,6 +9784,8 @@ with pkgs;
 
   knockpy = callPackage ../tools/security/knockpy { };
 
+  knowsmore = callPackage ../tools/security/knowsmore { };
+
   kool = callPackage ../development/tools/misc/kool { };
 
   kore = callPackage ../development/web/kore {
