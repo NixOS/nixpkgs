@@ -5,6 +5,7 @@
 , cmake
 , boost
 , cgal_5
+, draco
 , eigen
 , flann
 , gdal
@@ -42,6 +43,7 @@ mkDerivation rec {
   buildInputs = [
     boost
     cgal_5
+    draco
     flann
     gdal
     gmp
@@ -68,6 +70,8 @@ mkDerivation rec {
     "-DPLUGIN_IO_QADDITIONAL=ON"
     "-DPLUGIN_IO_QCORE=ON"
     "-DPLUGIN_IO_QCSV_MATRIX=ON"
+    "-DPLUGIN_IO_QCSV_MATRIX=ON"
+    "-DPLUGIN_IO_QDRACO=ON"
     "-DPLUGIN_IO_QE57=ON"
     "-DPLUGIN_IO_QFBX=OFF" # Autodesk FBX SDK is gratis+proprietary; not packaged in nixpkgs
     "-DPLUGIN_IO_QPDAL=ON" # required for .las/.laz support
