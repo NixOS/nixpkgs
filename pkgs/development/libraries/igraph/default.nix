@@ -92,6 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 
+  passthru.tests = {
+    python = python3.pkgs.igraph;
+  };
+
   meta = with lib; {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
