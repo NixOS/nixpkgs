@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "tidalapi";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CyyvzhuDB9XgroeP+WPTJIufT3VU9fD6Pg2Q1prB0Mo=";
+    hash = "sha256-sIPuo1kd08Quflf7oFxoo1H56cdUDlbNTfFkn8j3jVE=";
   };
 
   nativeBuildInputs = [
