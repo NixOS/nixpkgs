@@ -57,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to communicate with Seat Connect";
     homepage = "https://github.com/farfar/seatconnect";
+    changelog = "https://github.com/Farfar/seatconnect/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
