@@ -8156,6 +8156,8 @@ self: super: with self; {
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
 
+  proxy-db = callPackage ../development/python-modules/proxy-db { };
+
   py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
 
   py65 = callPackage ../development/python-modules/py65 { };
