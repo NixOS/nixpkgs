@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "valentina";
-  version = "0.7.51";
+  version = "0.7.52";
 
   src = fetchFromGitLab {
     owner = "smart-pattern";
     repo = "valentina";
     rev = "v${version}";
-    hash = "sha256-N9fC2tCP4TVNncatHaz5W5Mp3jOmAcEWYCl30+0myaE=";
+    hash = "sha256-DmNRBxqyBvDTdA7Sz9X04Dhejtxx7tOVpST+SkUNguM=";
   };
 
   postPatch = ''
