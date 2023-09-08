@@ -241,6 +241,9 @@ in {
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
+      # https://www.openssl.org/news/secadv/20230908.txt
+      ./1.1/CVE-2023-4807.patch
+
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
