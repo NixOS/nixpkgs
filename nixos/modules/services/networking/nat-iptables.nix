@@ -60,6 +60,7 @@ let
     ${concatMapStrings (fwd: ''
       ${iptables} -w -t nat -A nixos-nat-pre \
         -i ${toString cfg.externalInterface} -p ${fwd.proto} \
+        ${optionalString (cfg.externalIP != null) "-d ${cfg.externalIP}"} \
         --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
 

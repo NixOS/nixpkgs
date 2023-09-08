@@ -80,9 +80,10 @@ in
       example = "203.0.113.123";
       description = lib.mdDoc ''
         The public IP address to which packets from the local
-        network are to be rewritten.  If this is left empty, the
-        IP address associated with the external interface will be
-        used.
+        network are to be rewritten, and from which the packets
+        from the external network are to be forwarded. If this is
+        left empty, the IP address associated with the external
+        interface will be used.
       '';
     };
 
