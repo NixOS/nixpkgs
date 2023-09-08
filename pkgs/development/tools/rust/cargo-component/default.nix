@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "cargo-component";
-  version = "unstable-2023-08-31";
+  version = "unstable-2023-09-06";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "cargo-component";
-    rev = "e57d1d1405ed2d76f1f3d8647480dea700379ff8";
-    hash = "sha256-mN0GDyQemk71im074laeRDzWpVRUWJUFaRJenJGDwLs=";
+    rev = "aa6e3c1168273b5cf6221fa0206f07f2ffb8567d";
+    hash = "sha256-80076K+KfvFxyUxneEGAs8U7b+DoJLgUioIOTv+PWtI=";
   };
 
   cargoLock = {
