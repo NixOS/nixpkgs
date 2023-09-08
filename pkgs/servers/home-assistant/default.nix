@@ -282,6 +282,16 @@ let
         };
       });
 
+      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
+        version = "0.91.1";
+        src = fetchFromGitHub {
+          owner = "python-zeroconf";
+          repo = "python-zeroconf";
+          rev = "refs/tags/${version}";
+          hash = "sha256-HHADcxXjfukRJtqRjfKI/spZIqOfDT0Etg4oYzNdXIs=";
+        };
+      });
+
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
