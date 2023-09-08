@@ -39,6 +39,8 @@ in mkDerivation {
 
   sourceRoot = "makemkv-oss-${version}";
 
+  patches = [ ./r13y.patch ];
+
   nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
   buildInputs = [ ffmpeg openssl qtbase zlib ];
