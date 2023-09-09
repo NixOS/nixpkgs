@@ -663,6 +663,7 @@ unsupported-platforms:
   SDL-mpeg:                                     [ platforms.darwin ] # depends on mesa
   sdl2-mixer:                                   [ platforms.darwin ]
   sdl2-ttf:                                     [ platforms.darwin ]
+  sdr:                                          [ platforms.darwin ] # depends on rtlsdr
   sensei:                                       [ platforms.darwin ]
   spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
