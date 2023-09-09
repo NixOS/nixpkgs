@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.5.0";
+  version = "3.5.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZoGpMhJng46nW7v/QgjGCsFZV6xV4PSh9/DH1d2dzdg=";
+    hash = "sha256-YFA9msaPOPDbQPkDbT8Rl7jWafUX8eFnV4JimSg+mmc=";
   };
 
   passthru.optional-dependencies = {
