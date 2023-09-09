@@ -22,6 +22,7 @@ with lib;
     #  pkgs)
     environment.systemPackages = mkIf config.environment.enableAllTerminfo (map (x: x.terminfo) (with pkgs; [
       alacritty
+      contour
       foot
       kitty
       mtm
