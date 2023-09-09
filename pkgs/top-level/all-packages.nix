@@ -413,6 +413,8 @@ with pkgs;
 
   c64-debugger = callPackage ../applications/emulators/c64-debugger { };
 
+  camunda-modeler = callPackage ../applications/misc/camunda-modeler { };
+
   caroline = callPackage ../development/libraries/caroline { };
 
   cartridges = callPackage ../applications/misc/cartridges { };
@@ -3532,6 +3534,8 @@ with pkgs;
   bkt = callPackage ../tools/misc/bkt {  };
 
   bkyml = callPackage ../tools/misc/bkyml { };
+
+  blackmagic-desktop-video = callPackage ../tools/video/blackmagic-desktop-video { };
 
   blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
 
@@ -9794,6 +9798,8 @@ with pkgs;
 
   knockpy = callPackage ../tools/security/knockpy { };
 
+  knowsmore = callPackage ../tools/security/knowsmore { };
+
   kool = callPackage ../development/tools/misc/kool { };
 
   kore = callPackage ../development/web/kore {
@@ -10325,7 +10331,7 @@ with pkgs;
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
-  ldeep = python3Packages.callPackage ../tools/security/ldeep { };
+  ldeep = callPackage ../tools/security/ldeep { };
 
   ldns = callPackage ../development/libraries/ldns { };
 
@@ -28528,7 +28534,7 @@ with pkgs;
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
 
   nushellPlugins = callPackage ../shells/nushell/plugins {
-    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation;
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation Foundation Security;
   };
 
   nettools = if stdenv.isLinux
@@ -32080,7 +32086,6 @@ with pkgs;
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-beta-unwrapped = firefoxPackages.firefox-beta;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
-  firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
   firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
 
@@ -32091,7 +32096,6 @@ with pkgs;
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr = firefox-esr-115;
-  firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
   firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
@@ -37554,6 +37558,10 @@ with pkgs;
   keeperrl = callPackage ../games/keeperrl { };
 
   shipwright = callPackage ../games/shipwright { };
+
+  wipeout-rewrite = callPackage ../games/wipeout-rewrite {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   ### GAMES/DOOM-PORTS
 

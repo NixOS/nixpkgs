@@ -225,6 +225,9 @@ in stdenv'.mkDerivation (finalAttrs: {
   # See the explanation in addOpenGLRunpath.
   postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/bin/mpv
+  '' + lib.optionalString (stdenv.isDarwin && javascriptSupport) ''
+    ${stdenv.cc.targetPrefix}install_name_tool -change "build/release/libmujs.dylib" \
+      "${mujs}/lib/libmujs.dylib" $out/bin/mpv
   '';
 
   passthru = {

@@ -26614,6 +26614,11 @@ with self; {
       url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.036.tar.gz";
       hash = "sha256-Mqpycaa9/twzMBGbOCXa3dCqS1yTb4StdOq7kyogCl4=";
     };
+    patches = [
+      # Fix failing configure test due to implicit int return value of main, which results
+      # in an error with clang 16.
+      ../development/perl-modules/tk-configure-implicit-int-fix.patch
+    ];
     makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
     doCheck = false;            # Expects working X11.
