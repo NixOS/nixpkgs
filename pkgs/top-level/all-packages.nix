@@ -342,6 +342,8 @@ with pkgs;
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
+  bazecor = callPackage ../applications/misc/bazecor { };
+
   bearer = callPackage ../development/tools/bearer { };
 
   benthos = callPackage ../development/tools/benthos { };
