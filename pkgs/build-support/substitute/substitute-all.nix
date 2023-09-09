@@ -9,5 +9,5 @@ stdenvNoCC.mkDerivation {
   inherit (args) src;
   preferLocalBuild = true;
   allowSubstitutes = false;
-  env = removeAttrs args ["name" "src"];
+  env = removeAttrs args ["name" "src" "meta"];
 }
