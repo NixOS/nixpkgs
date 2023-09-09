@@ -169,6 +169,7 @@ package-maintainers:
     - patat
     - svgcairo
   danielrolls:
+    - byte-count-reader
     - shellify
   domenkozar:
     - cachix
