@@ -22,28 +22,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight-electron";
-  version = "2.30.0";
+  version = "2.32";
 
   src = fetchFromGitHub {
     owner = "RedisInsight";
     repo = "RedisInsight";
     rev = "${finalAttrs.version}";
-    hash = "sha256-TzqbMycKcOlUSKvfghip/KdMRiwstkFP+iJG5/9JVlA=";
+    hash = "sha256-esaH10AyEooym/62F5LJL7oP5UmD6T2UX8g/9QniL9s=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    sha256 = "sha256-aDr5wxM/Rp3Tj09nPpLPJHSG5A73+4rAfrMCcxCr7so=";
+    sha256 = "NHKttywAaWAYkciGzYCnm1speHrWsv1t+dxL1DZgM7o=";
   };
 
   feOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/redisinsight/yarn.lock";
-    sha256 = "sha256-O+8lNDrqPdxE+tgjpKbgm9Q66VlJaJgZRHlNyaFkumM=";
+    sha256 = "1S1KNUOtmywQ0eyqVS2oRlhpjcL9eps8CR7AtC9ujSU=";
   };
 
   apiOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/redisinsight/api/yarn.lock";
-    sha256 = "sha256-2Tvck+9MDj6s+7jehUEyPfJiFFxbMOYDFD/Qgt2En6c=";
+    sha256 = "P99+1Dhdg/vznC2KepPrVGNlrofJFydXkZVxgwprIx4=";
   };
 
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper python3 nest-cli libsass pkg-config ]
