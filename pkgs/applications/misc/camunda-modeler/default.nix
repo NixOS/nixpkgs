@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchurl
 , electron
