@@ -5762,6 +5762,8 @@ with pkgs;
 
   joystickwake = callPackage ../tools/games/joystickwake { };
 
+  juce = darwin.apple_sdk_11_0.callPackage ../development/misc/juce { };
+
   jumppad = callPackage ../tools/virtualization/jumppad { };
 
   jwt-cli = callPackage ../tools/security/jwt-cli {
@@ -27780,8 +27782,6 @@ with pkgs;
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
-  alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
-
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
   tinyalsa = callPackage ../os-specific/linux/tinyalsa { };
@@ -34280,6 +34280,8 @@ with pkgs;
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
+
+  nwg-look = callPackage ../applications/misc/nwg-look { };
 
   nwg-menu = callPackage ../applications/misc/nwg-menu { };
 
