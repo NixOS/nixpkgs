@@ -387,19 +387,19 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
     # Cross-compiling, we need gcc not to read ./specs in order to build the g++
     # compiler (after the specs for the cross-gcc are created). Having
     # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
-    CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+    CPATH = toString (optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
       ++ optional (zlib != null) zlib
       ++ optional langJava boehmgc
       ++ optionals javaAwtGtk xlibs
       ++ optionals javaAwtGtk [ gmp mpfr ]
-    ));
+    )));
 
-    LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (
+    LIBRARY_PATH = toString (optionals (targetPlatform == hostPlatform) (makeLibraryPath (
       optional (zlib != null) zlib
       ++ optional langJava boehmgc
       ++ optionals javaAwtGtk xlibs
       ++ optionals javaAwtGtk [ gmp mpfr ]
-    ));
+    )));
 
     inherit (callFile ./common/extra-target-flags.nix { })
       EXTRA_FLAGS_FOR_TARGET
