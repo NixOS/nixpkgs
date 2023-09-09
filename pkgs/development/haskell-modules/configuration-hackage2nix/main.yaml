@@ -847,6 +847,7 @@ dont-distribute-packages:
   - distributed-process-zookeeper # depends on hzk
   - HDRUtils # depends on pfstools, which depends on imagemagick
   - hzk # depends on zookeeper_mt, which depends on openssl-1.1
+  - jobqueue # depends on hzk
   - persistent-zookeper # depends on hzk
   - pocket-dns # depends on persistent-zookeeper
   - zoovisitor # depends on zookeeper_mt, which depends on openssl-1.1
