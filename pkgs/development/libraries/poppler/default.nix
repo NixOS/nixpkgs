@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitLab
+, fetchpatch
 , cairo
 , cmake
 , pcre
@@ -55,6 +56,14 @@ stdenv.mkDerivation (finalAttrs: rec {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
     hash = "sha256-MxXdonD+KzXPH0HSdZSMOWUvqGO5DeB2b2spPZpVj8k=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-34872.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/591235c8b6c65a2eee88991b9ae73490fd9afdfe.patch";
+      hash = "sha256-4dceVcfn1bFjL14iuyr7fG35WGkigRFjT/qpeiC1PDk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
