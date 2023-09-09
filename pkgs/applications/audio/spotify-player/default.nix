@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals withSixel [ libsixel ]
     ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
     ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
-    ++ lib.optionals (withAudioBackend == "rodio") [ alsa-lib ]
+    ++ lib.optionals (withAudioBackend == "rodio" && stdenv.isLinux) [ alsa-lib ]
     ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
     ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
     ++ lib.optionals (withAudioBackend == "rodiojack") [ alsa-lib libjack2 ]
