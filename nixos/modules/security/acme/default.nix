@@ -279,7 +279,7 @@ let
 
     renewService = {
       description = "Renew ACME certificate for ${cert}";
-      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps;
+      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps ++ data.after;
       wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
 
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
@@ -500,6 +500,14 @@ let
         type = types.str;
         inherit (defaultAndText "group" "acme") default defaultText;
         description = lib.mdDoc "Group running the ACME client.";
+      };
+
+      after = mkOption {
+        type = types.listOf types.str;
+        inherit (defaultAndText "after" []) default defaultText;
+        description = lib.mdDoc ''
+          List of systemd units to wait for before starting certificate renewal.
+        '';
       };
 
       reloadServices = mkOption {
