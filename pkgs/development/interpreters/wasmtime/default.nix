@@ -15,6 +15,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-SG/SFskr6ywCtJu2WVWTJC9GUKJJB0fUb+hZUaxag0M=";
 
   cargoBuildFlags = [ "--package" "wasmtime-cli" "--package" "wasmtime-c-api" ];
+  cargoPatches = [
+    # this patch is necessary until cargo-auditable is bumped on the rust platform
+    ./patches/0001-Use-dep-dependency-due-to-cargo-auditable-limitation.patch
+  ];
 
   outputs = [ "out" "dev" ];
 

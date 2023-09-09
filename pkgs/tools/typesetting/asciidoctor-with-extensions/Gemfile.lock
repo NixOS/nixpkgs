@@ -42,6 +42,8 @@ GEM
       prawn-table (~> 0.2.0)
       prawn-templates (~> 0.1.0)
       treetop (~> 1.6.0)
+    asciidoctor-reducer (1.0.5)
+      asciidoctor (~> 2.0)
     asciidoctor-revealjs (5.0.1)
       asciidoctor (>= 2.0.0, < 3.0.0)
     asciimath (2.0.5)
@@ -127,6 +129,7 @@ DEPENDENCIES
   asciidoctor-mathematical
   asciidoctor-multipage
   asciidoctor-pdf
+  asciidoctor-reducer
   asciidoctor-revealjs
   coderay
   pygments.rb

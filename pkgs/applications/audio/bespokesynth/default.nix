@@ -36,6 +36,7 @@
 , CoreServices
 , CoreAudioKit
 , IOBluetooth
+, MetalKit
   # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
   # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
   # Read more in https://github.com/NixOS/nixpkgs/issues/145607
@@ -58,19 +59,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bespokesynth";
-  version = "1.1.0";
+  version = "unstable-2023-08-17";
 
   src = fetchFromGitHub {
     owner = "BespokeSynth";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-PN0Q6/gI1PeMaF/8EZFGJdLR8JVHQZfWunAhOIQxkHw=";
+    rev = "c6b1410afefc8b0b9aeb4aa11ad5c32651879c9f";
+    hash = "sha256-MLHlHSszD2jEN4/f2jC4vjAidr3gVOSK606qs5bq+Sc=";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    sed '1i#include <memory>' -i Source/TitleBar.h # gcc12
-  '';
 
   cmakeBuildType = "Release";
 
@@ -79,7 +76,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python3 makeWrapper cmake pkg-config ninja ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    # List obtained in https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
+    # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
     libX11
     libXrandr
     libXinerama
@@ -110,6 +107,7 @@ stdenv.mkDerivation rec {
     CoreServices
     CoreAudioKit
     IOBluetooth
+    MetalKit
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
@@ -133,23 +131,27 @@ stdenv.mkDerivation rec {
         --prefix PATH : '${lib.makeBinPath [
           gnome.zenity
           (python3.withPackages (ps: with ps; [ jedi ]))
-        ]}' \
-        --prefix LD_LIBRARY_PATH : '${lib.makeLibraryPath [
-          libXrandr
-          libXinerama
-          libXcursor
-          libXScrnSaver
         ]}'
     '';
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${lib.makeLibraryPath ([
+    libX11
+    libXrandr
+    libXinerama
+    libXext
+    libXcursor
+    libXScrnSaver
+  ])}";
+  dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
 
   meta = with lib; {
     description =
       "Software modular synth with controllers support, scripting and VST";
-    homepage = "https://github.com/awwbees/BespokeSynth";
+    homepage = "https://www.bespokesynth.com/";
     license = with licenses; [
       gpl3Plus
     ] ++ lib.optional enableVST2 unfree;
-    maintainers = with maintainers; [ astro tobiasBora OPNA2608 ];
+    maintainers = with maintainers; [ astro tobiasBora OPNA2608 PowerUser64 ];
     mainProgram = "BespokeSynth";
     platforms = platforms.all;
   };

@@ -61,6 +61,8 @@ in
     _map = self.map;
   };
 
+  mu4e = callPackage ./manual-packages/mu4e { };
+
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
   perl-completion = callPackage ./manual-packages/perl-completion { };

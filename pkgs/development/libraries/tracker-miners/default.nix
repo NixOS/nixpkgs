@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -46,12 +47,21 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.5.0";
+  version = "3.5.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "F5ZmA9xDKphSa0kFhqSKzX+fWZNfeJXfxRcppGppAaM=";
+    sha256 = "QPuR+svZRo4m6+zHEdg2Mc2K6TkcYV1o27A8vKsbbGk=";
   };
+
+  patches = [
+    # Use cc.has_header_symbol to check for BTRFS_IOC_INO_LOOKUP
+    # https://github.com/NixOS/nixpkgs/issues/228639
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/c08fbe0650d4a2ae915a21764f54c02eda9406d5.patch";
+      sha256 = "U81+yfg2sUkKl4tKMeB7pXJRNSeIE+2loT3/bvnhoKM=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc

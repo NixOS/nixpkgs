@@ -63,6 +63,7 @@
   ./hardware/gpgsmartcards.nix
   ./hardware/hackrf.nix
   ./hardware/i2c.nix
+  ./hardware/infiniband.nix
   ./hardware/keyboard/qmk.nix
   ./hardware/keyboard/teck.nix
   ./hardware/keyboard/uhk.nix
@@ -163,6 +164,7 @@
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
+  ./programs/ecryptfs.nix
   ./programs/environment.nix
   ./programs/evince.nix
   ./programs/extra-container.nix
@@ -393,7 +395,6 @@
   ./services/continuous-integration/gitlab-runner.nix
   ./services/continuous-integration/gocd-agent/default.nix
   ./services/continuous-integration/gocd-server/default.nix
-  ./services/continuous-integration/hail.nix
   ./services/continuous-integration/hercules-ci-agent/default.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/jenkins/default.nix
@@ -594,6 +595,7 @@
   ./services/mail/rss2email.nix
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix
+  ./services/mail/stalwart-mail.nix
   ./services/mail/sympa.nix
   ./services/mail/zeyple.nix
   ./services/matrix/appservice-discord.nix
@@ -1258,6 +1260,7 @@
   ./services/web-apps/node-red.nix
   ./services/web-apps/onlyoffice.nix
   ./services/web-apps/openvscode-server.nix
+  ./services/web-apps/mobilizon.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
   ./services/web-apps/peering-manager.nix

@@ -1,21 +1,12 @@
-From e97f418803c1db9a753fa755a9ee0cf04eabaed3 Mon Sep 17 00:00:00 2001
-From: rembo10 <rembo10@users.noreply.github.com>
-Date: Sun, 11 Sep 2022 13:00:29 +0530
-Subject: [PATCH] Allow running on unsupported Python versions
-
----
- sickgear.py | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
 diff --git a/sickgear.py b/sickgear.py
-index 9d0440bb..6d65e65d 100755
+index c37e2b01..d69704a3 100755
 --- a/sickgear.py
 +++ b/sickgear.py
-@@ -43,10 +43,7 @@ versions = [((2, 7, 9), (2, 7, 18)), ((3, 7, 1), (3, 8, 14)),
-             ((3, 9, 0), (3, 9, 2)), ((3, 9, 4), (3, 9, 14)),
-             ((3, 10, 0), (3, 10, 7))]  # inclusive version ranges
+@@ -41,10 +41,7 @@ versions = [((3, 8, 0), (3, 8, 16)),
+             ((3, 10, 0), (3, 11, 3))]  # inclusive version ranges
  if not any(list(map(lambda v: v[0] <= sys.version_info[:3] <= v[1], versions))) and not int(os.environ.get('PYT', 0)):
--    print('Python %s.%s.%s detected.' % sys.version_info[:3])
+     major, minor, micro = sys.version_info[:3]
+-    print('Python %s.%s.%s detected.' % (major, minor, micro))
 -    print('Sorry, SickGear requires a Python version %s' % ', '.join(map(
 -        lambda r: '%s - %s' % tuple(map(lambda v: str(v).replace(',', '.')[1:-1], r)), versions)))
 -    sys.exit(1)
@@ -23,6 +14,3 @@ index 9d0440bb..6d65e65d 100755
  
  sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__), 'lib')))
  is_win = 'win' == sys.platform[0:3]
--- 
-2.37.2
-

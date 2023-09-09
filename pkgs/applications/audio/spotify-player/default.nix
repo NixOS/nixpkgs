@@ -28,6 +28,9 @@
 , withImage ? true
 , withNotify ? true
 , withSixel ? true
+, stdenv
+, darwin
+, makeBinaryWrapper
 }:
 
 assert lib.assertOneOf "withAudioBackend" withAudioBackend [ "" "pulseaudio" "rodio" "portaudio" "jackaudio" "rodiojack" "sdl" "gstreamer" ];
@@ -48,10 +51,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ]
-    ++ lib.optionals stdenv.isDarwin [
-      fixDarwinDylibNames rustPlatform.bindgenHook
-    ];
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    makeBinaryWrapper
+  ];
 
   buildInputs = [
     openssl
@@ -65,23 +68,12 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals (withAudioBackend == "rodiojack" && stdenv.isLinux) [ alsa-lib ]
     ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
     ++ lib.optionals (withAudioBackend == "gstreamer") [ gst_all_1.gstreamer gst_all_1.gst-devtools gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ]
-    ++ lib.optionals stdenv.isLinux [
-      fontconfig
-      dbus
-    ]
+    ++ lib.optionals (stdenv.isDarwin && withMediaControl) [ darwin.apple_sdk.frameworks.MediaPlayer ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      Cocoa AppKit Security AudioUnit MediaPlayer
+      AppKit
+      AudioUnit
+      Cocoa
     ]);
-
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    # TODO: Figure out why fixDarwinDylibNames isn't doing this. Is it
-    #       because the filename is different?
-
-    # Get full path for the lib with "~+"
-    for lib in $(find ~+ -name "libsixel*.dylib"); do
-        install_name_tool -change $lib ${libsixel}/lib/libsixel.dylib $out/bin/spotify_player
-    done
-  '';
 
   buildNoDefaultFeatures = true;
 
@@ -94,6 +86,12 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals withNotify [ "notify" ]
     ++ lib.optionals withStreaming [ "streaming" ]
     ++ lib.optionals withSixel [ "sixel" ];
+
+  # sixel-sys is dynamically linked to libsixel
+  postInstall = lib.optionals (stdenv.isDarwin && withSixel) ''
+    wrapProgram $out/bin/spotify_player \
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [libsixel]}"
+  '';
 
   meta = {
     description = "A terminal spotify player that has feature parity with the official client";

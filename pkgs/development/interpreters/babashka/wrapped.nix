@@ -35,6 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       makeWrapper "${babashka-unwrapped}/bin/bb" "$out/bin/bb" \
         --inherit-argv0 \
         --set-default DEPS_CLJ_TOOLS_DIR $out/clojure_tools \
+        --set-default DEPS_CLJ_TOOLS_VERSION ${clojure.version} \
         --set-default JAVA_HOME ${jdkBabashka}
 
     '' +

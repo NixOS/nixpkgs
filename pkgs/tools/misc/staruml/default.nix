@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src =
     fetchurl {
-      url = "https://staruml-7a0.kxcdn.com/releases-v5/StarUML_${version}_amd64.deb";
+      url = "https://files.staruml.io/releases-v5/StarUML_${version}_amd64.deb";
       sha256 = "sha256-da1mY3OW24g6Ix0L57CBPbaMeSLzhOOjoBsyZszmNOc=";
     };
 

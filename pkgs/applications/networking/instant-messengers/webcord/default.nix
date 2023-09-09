@@ -6,23 +6,23 @@
 , pipewire
 , libpulseaudio
 , xdg-utils
-, electron_25
+, electron_26
 , makeDesktopItem
 , nix-update-script
 }:
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     rev = "v${version}";
-    hash = "sha256-E/WXAVSCNTDEDaz71LXOHUf/APFO2uSpkTRhlZfQp0E=";
+    hash = "sha256-Kiw3pebjH9Pz5oi6Gbjxrjd/kvozapLNqfWLVuTXF/I=";
   };
 
-  npmDepsHash = "sha256-vGaYjM13seVmRbVPyDIM+qhGTCj6rw/el6Dq3KMzDks=";
+  npmDepsHash = "sha256-CPGfhV8VXbpX9UB5oQhI+IwFWPgYq2dGnSuyByMNGg4=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -56,7 +56,7 @@ buildNpmPackage rec {
     install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
     # Add xdg-utils to path via suffix, per PR #181171
-    makeWrapper '${electron_25}/bin/electron' $out/bin/webcord \
+    makeWrapper '${electron_26}/bin/electron' $out/bin/webcord \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}" \
@@ -86,6 +86,6 @@ buildNpmPackage rec {
     license = licenses.mit;
     mainProgram = "webcord";
     maintainers = with maintainers; [ huantian ];
-    platforms = electron_25.meta.platforms;
+    platforms = platforms.linux;
   };
 }

@@ -113,6 +113,13 @@ stdenv.mkDerivation {
     relative = "include";
     sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
   })
+  # Fixes ABI detection
+  ++ lib.optional (version == "1.83.0") (fetchpatch {
+    url = "https://github.com/boostorg/context/commit/6fa6d5c50d120e69b2d8a1c0d2256ee933e94b3b.patch";
+    stripLen = 1;
+    extraPrefix = "libs/context/";
+    sha256 = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
+  })
   # This fixes another issue regarding ill-formed constant expressions, which is a default error
   # in clang 16 and will be a hard error in clang 17.
   ++ lib.optional (lib.versionOlder version "1.80") (fetchpatch {
@@ -149,13 +156,11 @@ stdenv.mkDerivation {
     description = "Collection of C++ libraries";
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
+    # boost-context lacks support for the N32 ABI on mips64.  The build
+    # will succeed, but packages depending on boost-context will fail with
+    # a very cryptic error message.
+    badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     maintainers = with maintainers; [ hjones2199 ];
-
-    broken =
-      # boost-context lacks support for the N32 ABI on mips64.  The build
-      # will succeed, but packages depending on boost-context will fail with
-      # a very cryptic error message.
-      stdenv.hostPlatform.isMips64n32;
   };
 
   passthru = {

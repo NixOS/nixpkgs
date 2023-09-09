@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, python3, cairo, libjpeg, ntk, libjack2
-, libsndfile, ladspaH, liblo, libsigcxx, lrdf, wafHook
+, libsndfile, ladspaH, liblo, libsigcxx, lrdf, waf
 }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-iMJNMDytNXpEkUhL0RILSd25ixkm8HL/edtOZta0Pf4=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook ];
+  nativeBuildInputs = [ pkg-config waf.hook ];
   buildInputs = [ python3 cairo libjpeg ntk libjack2 libsndfile
                   ladspaH liblo libsigcxx lrdf
   ];

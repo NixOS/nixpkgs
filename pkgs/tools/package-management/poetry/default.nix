@@ -10,34 +10,13 @@ let
       poetry = self.callPackage ./unwrapped.nix { };
 
       # version overrides required by poetry and its plugins
-      cachecontrol = super.cachecontrol.overridePythonAttrs (old: rec {
-        version = "0.12.14";
-        format = "setuptools";
-        src = fetchFromGitHub {
-          owner = "ionrock";
-          repo = "cachecontrol";
-          rev = "v${version}";
-          hash = "sha256-BuBaKP7OAYoT+SPVhtE6l9U/KmN21OKTL6poV5a6+0c=";
-        };
-        nativeCheckInputs = old.nativeCheckInputs ++ [
-          self.lockfile
-        ];
-      });
-      keyring = super.keyring.overridePythonAttrs (old: rec {
-        version = "23.13.1";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-ui4VqbNeIZCNCq9OCkesxS1q4zRE3w2itJ1BpG721ng=";
-        };
-      });
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.6.1";
+        version = "1.7.0";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           rev = version;
-          hash = "sha256-Gc22Y2T4uO39jiOqEUFeOfnVCbknuDjmzFPZgk2eY74=";
+          hash = "sha256-OfY2zc+5CgOrgbiPVnvMdT4h1S7Aek8S7iThl6azmsk=";
         };
       });
     } // (plugins self);

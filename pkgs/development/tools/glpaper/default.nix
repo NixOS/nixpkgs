@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
+{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wayland
 , libX11, libGL }:
 
 stdenv.mkDerivation rec {

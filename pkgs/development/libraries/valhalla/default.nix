@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , boost
@@ -29,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix build
+    (fetchpatch {
+      url = "https://github.com/valhalla/valhalla/commit/e4845b68e8ef8de9eabb359b23bf34c879e21f2b.patch";
+      hash = "sha256-xCufmXHGj1JxaMwm64JT9FPY+o0+x4glfJSYLdvHI8U=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace src/bindings/python/CMakeLists.txt \
       --replace "\''${Python_SITEARCH}" "${placeholder "out"}/${python3.sitePackages}"
@@ -42,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
     "-DENABLE_BENCHMARKS=OFF"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed for date submodule with GCC 12 https://github.com/HowardHinnant/date/issues/750
+    "-Wno-error=stringop-overflow"
   ];
 
   buildInputs = [

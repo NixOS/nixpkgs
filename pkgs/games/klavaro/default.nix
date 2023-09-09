@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "klavaro";
-  version = "3.13";
+  version = "3.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
-    sha256 = "0z6c3lqikk50mkz3ipm93l48qj7b98lxyip8y6ndg9y9k0z0n878";
+    hash = "sha256-hxh+SdMBxRDmlkCYzbYSEmvwMNKodf15nq3K0+rlbas=";
   };
 
   nativeBuildInputs = [ intltool makeWrapper pkg-config ];
@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/tutor.c --replace '"espeak ' '"${espeak}/bin/espeak '
   '';
-
-  patches = [ ./icons.patch ./trans_lang_get_similar.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/klavaro \

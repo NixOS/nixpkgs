@@ -51,6 +51,9 @@
 
 # pkgs/by-name
 /pkgs/test/nixpkgs-check-by-name @infinisil
+/pkgs/by-name/README.md @infinisil
+/pkgs/top-level/by-name-overlay.nix @infinisil
+/.github/workflows/check-by-name.nix @infinisil
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
@@ -97,6 +100,10 @@
 /nixos/modules/system/boot/systemd          @NixOS/systemd
 /nixos/lib/systemd-*.nix                    @NixOS/systemd
 /pkgs/os-specific/linux/systemd             @NixOS/systemd
+
+# Images and installer media
+/nixos/modules/installer/cd-dvd/            @samueldr
+/nixos/modules/installer/sd-card/           @samueldr
 
 # Updaters
 ## update.nix

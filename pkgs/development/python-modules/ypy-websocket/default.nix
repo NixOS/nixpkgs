@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "ypy-websocket";
-  version = "0.12.1";
+  version = "0.12.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "y-crdt";
     repo = "ypy-websocket";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JsSOh7CSHUnGJmNAP87fMMsRgdj6nNna1XVe15MYqoA=";
+    hash = "sha256-3ANuIwRxUoFo5SSdTvBhTHExrYR7timu7XkE0t+UyWk=";
   };
 
   pythonRelaxDeps = [

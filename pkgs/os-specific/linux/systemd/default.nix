@@ -95,6 +95,7 @@
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
+, withFirstboot ? false # conflicts with the NixOS /etc management
 , withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
@@ -121,6 +122,7 @@
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
+, withSysusers ? false # conflicts with the NixOS user management
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
@@ -494,6 +496,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
     "-Dlibidn2=${lib.boolToString withLibidn2}"
+    "-Dfirstboot=${lib.boolToString withFirstboot}"
+    "-Dsysusers=${lib.boolToString withSysusers}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"

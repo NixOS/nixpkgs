@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , gnome
 , pkg-config
 , meson
@@ -20,6 +19,7 @@
 , libchamplain
 , librsvg
 , libwebp
+, libX11
 , json-glib
 , webkitgtk
 , lcms2
@@ -35,28 +35,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.12.2";
+  version = "3.12.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-l/iv5SJTUhZUHrvx47VG0Spr6zio8OuF8m5naTSq1CU=";
+    sha256 = "sha256-k9s11xQCxIoILVDPQIW7a4DkvVyLmxYaH3tRhBsQBxE=";
   };
-
-  patches = [
-    # Fix build with libraw 0.21, can be removed on next update
-    # https://hydra.nixos.org/build/209327709/nixlog/1
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gthumb/-/commit/da0d3f22a5c3a141211d943e7d963d14090011ec.patch";
-      sha256 = "sha256-/l9US19rKxIUJjZ+oynGLr/9PKJPg9VUuA/VSuIT5AQ=";
-    })
-
-    # Fix build with exiv2 0.28, can be removed on next update
-    # https://gitlab.gnome.org/GNOME/gthumb/-/issues/282
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gthumb/-/commit/3376550ae109286de09ce5f89e05060eb80230a7.patch";
-      sha256 = "sha256-zHX+kV7RaHXFqbR15RTaRcZJPU/P3uUj03tFUv0DR5o=";
-    })
-  ];
 
   nativeBuildInputs = [
     bison
@@ -93,6 +77,7 @@ stdenv.mkDerivation rec {
     libsoup
     libtiff
     libwebp
+    libX11
     webkitgtk
   ];
 

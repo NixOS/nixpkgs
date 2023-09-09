@@ -2,14 +2,14 @@
 
 let
   pname = "phpunit";
-  version = "10.2.6";
+  version = "10.3.3";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://phar.phpunit.de/phpunit-${version}.phar";
-    hash = "sha256-F2YKbAZtWIgwuFIg+wf57LaWPcY5mzYGR7sNDLH9Bb0=";
+    hash = "sha256-fhgsP/sA2nQXBQ34V2/Zvc+SPiDYWfkEXKKHoD+Heak=";
   };
 
   dontUnpack = true;

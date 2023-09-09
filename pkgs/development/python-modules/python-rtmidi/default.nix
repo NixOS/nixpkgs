@@ -6,6 +6,7 @@
 , CoreAudio
 , CoreMIDI
 , CoreServices
+, Foundation
 , cython_3
 , fetchPypi
 , flake8
@@ -40,13 +41,14 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    libjack2
   ] ++ lib.optionals stdenv.isLinux [
+    libjack2
     alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     CoreAudio
     CoreMIDI
     CoreServices
+    Foundation
   ];
 
   nativeCheckInputs = [

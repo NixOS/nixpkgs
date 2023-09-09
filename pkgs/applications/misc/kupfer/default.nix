@@ -10,7 +10,7 @@
 , desktop-file-utils
 , shared-mime-info
 , wrapGAppsHook
-, wafHook
+, waf
 , bash
 , dbus
 }:
@@ -31,7 +31,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsHook intltool
     # For setup hook
-    gobject-introspection wafHook
+    gobject-introspection waf.hook
     itstool            # for help pages
     desktop-file-utils # for update-desktop-database
     shared-mime-info   # for update-mime-info

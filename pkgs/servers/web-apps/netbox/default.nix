@@ -26,8 +26,8 @@ in
   };
 
   netbox = callPackage generic {
-    version = "3.5.8";
-    hash = "sha256-i8LwMZYItDG5wz0yVn59710R615i81/KYT58og1Ut6A=";
+    version = "3.5.9";
+    hash = "sha256-CJbcuCyTuihDXrObSGyJi2XF+zgWAwcJzjxtkX8pmKs=";
     extraPatches = [
       # Allow setting the STATIC_ROOT from within the configuration and setting a custom redis URL
       ./config.patch

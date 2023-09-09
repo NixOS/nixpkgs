@@ -118,8 +118,13 @@ let
       {
         passthru = commonPassthru // { tlType = "bin"; };
         inherit meta;
-        # shebang interpreters
-        buildInputs = (args.extraBuildInputs or [ ]) ++ [ bash perl ] ++ (lib.attrVals (args.scriptExts or [ ]) extToInput);
+        # shebang interpreters and compiled binaries
+        buildInputs = let outName = builtins.replaceStrings [ "-" ] [ "_" ] pname; in
+          [ texliveBinaries.core.${outName} or null
+            texliveBinaries.${pname} or null
+            texliveBinaries.core-big.${outName} or null ]
+          ++ (args.extraBuildInputs or [ ]) ++ [ bash perl ]
+          ++ (lib.attrVals (args.scriptExts or [ ]) extToInput);
         nativeBuildInputs = extraNativeBuildInputs;
         # absolute scripts folder
         scriptsFolder = lib.optionalString (run ? outPath) (run.outPath + "/scripts/" + args.scriptsFolder or pname);
@@ -127,8 +132,6 @@ let
         inherit (args) binfiles;
         binlinks = builtins.attrNames (args.binlinks or { });
         bintargets = builtins.attrValues (args.binlinks or { });
-        binfolders = [ (lib.getBin texliveBinaries.core) ] ++
-          lib.optional (texliveBinaries ? ${pname}) (lib.getBin texliveBinaries.${pname});
         # build scripts
         patchScripts = ./patch-scripts.sed;
         makeBinContainers = ./make-bin-containers.sh;

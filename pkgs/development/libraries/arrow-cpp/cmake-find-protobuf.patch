@@ -1,18 +1,105 @@
-diff --git a/cmake_modules/FindProtobufAlt.cmake b/cmake_modules/FindProtobufAlt.cmake
-index d29f757ae..61c6e16e1 100644
+diff --git a/cmake_modules/FindProtobufAlt.cmake b/cmake_modules/FindprotobufAlt.cmake
+similarity index 60%
+rename from cmake_modules/FindProtobufAlt.cmake
+rename to cmake_modules/FindprotobufAlt.cmake
+index 15fe1b4f2..19bdd6291 100644
 --- a/cmake_modules/FindProtobufAlt.cmake
-+++ b/cmake_modules/FindProtobufAlt.cmake
-@@ -22,11 +22,8 @@ else()
++++ b/cmake_modules/FindprotobufAlt.cmake
+@@ -16,24 +16,24 @@
+ # under the License.
+ 
+ if(ARROW_PROTOBUF_USE_SHARED)
+-  set(Protobuf_USE_STATIC_LIBS OFF)
++  set(protobuf_USE_STATIC_LIBS OFF)
+ else()
+-  set(Protobuf_USE_STATIC_LIBS ON)
++  set(protobuf_USE_STATIC_LIBS ON)
  endif()
  
  set(find_package_args)
 -if(ProtobufAlt_FIND_VERSION)
 -  list(APPEND find_package_args ${ProtobufAlt_FIND_VERSION})
--endif()
- if(ProtobufAlt_FIND_QUIETLY)
++if(protobufAlt_FIND_VERSION)
++  list(APPEND find_package_args ${protobufAlt_FIND_VERSION})
+ endif()
+-if(ProtobufAlt_FIND_QUIETLY)
++if(protobufAlt_FIND_QUIETLY)
    list(APPEND find_package_args QUIET)
  endif()
 -find_package(Protobuf ${find_package_args})
 -set(ProtobufAlt_FOUND ${Protobuf_FOUND})
-+find_package(protobuf ${find_package_args})
-+set(ProtobufAlt_FOUND ${protobuf_FOUND})
+-if(ProtobufAlt_FOUND)
+-  set(ProtobufAlt_VERSION ${Protobuf_VERSION})
+-  set(ProtobufAlt_VERSION_MAJOR ${Protobuf_VERSION_MAJOR})
+-  set(ProtobufAlt_VERSION_MINOR ${Protobuf_VERSION_MINOR})
+-  set(ProtobufAlt_VERSION_PATCH ${Protobuf_VERSION_PATCH})
+-  set(ProtobufAlt_VERSION_TWEEK ${Protobuf_VERSION_TWEEK})
++find_package(protobuf ${find_package_args} CONFIG)
++set(protobufAlt_FOUND ${protobuf_FOUND})
++if(protobufAlt_FOUND)
++  set(protobufAlt_VERSION ${protobuf_VERSION})
++  set(protobufAlt_VERSION_MAJOR ${protobuf_VERSION_MAJOR})
++  set(protobufAlt_VERSION_MINOR ${protobuf_VERSION_MINOR})
++  set(protobufAlt_VERSION_PATCH ${protobuf_VERSION_PATCH})
++  set(protobufAlt_VERSION_TWEEK ${protobuf_VERSION_TWEEK})
+ endif()
+diff --git a/cmake_modules/ThirdpartyToolchain.cmake b/cmake_modules/ThirdpartyToolchain.cmake
+index 94f926039..8efc98323 100644
+--- a/cmake_modules/ThirdpartyToolchain.cmake
++++ b/cmake_modules/ThirdpartyToolchain.cmake
+@@ -63,7 +63,7 @@ set(ARROW_THIRDPARTY_DEPENDENCIES
+     opentelemetry-cpp
+     ORC
+     re2
+-    Protobuf
++    protobuf
+     RapidJSON
+     Snappy
+     Substrait
+@@ -189,7 +189,7 @@ macro(build_dependency DEPENDENCY_NAME)
+     build_opentelemetry()
+   elseif("${DEPENDENCY_NAME}" STREQUAL "ORC")
+     build_orc()
+-  elseif("${DEPENDENCY_NAME}" STREQUAL "Protobuf")
++  elseif("${DEPENDENCY_NAME}" STREQUAL "protobuf")
+     build_protobuf()
+   elseif("${DEPENDENCY_NAME}" STREQUAL "RapidJSON")
+     build_rapidjson()
+@@ -1722,7 +1722,7 @@ if(ARROW_WITH_PROTOBUF)
+   # "3" for 3.12.0 are different. So 23.4 is rejected with 3.12.0. If
+   # we use FORCE_ANY_NEWER_VERSION here, we can bypass the check and
+   # use 23.4.
+-  resolve_dependency(Protobuf
++  resolve_dependency(protobuf
+                      FORCE_ANY_NEWER_VERSION
+                      TRUE
+                      HAVE_ALT
+@@ -1732,7 +1732,7 @@ if(ARROW_WITH_PROTOBUF)
+                      PC_PACKAGE_NAMES
+                      protobuf)
+ 
+-  if(NOT Protobuf_USE_STATIC_LIBS AND MSVC_TOOLCHAIN)
++  if(NOT protobuf_USE_STATIC_LIBS AND MSVC_TOOLCHAIN)
+     add_definitions(-DPROTOBUF_USE_DLLS)
+   endif()
+ 
+@@ -1768,8 +1768,8 @@ if(ARROW_WITH_PROTOBUF)
+   message(STATUS "Found protoc: ${PROTOBUF_PROTOC_EXECUTABLE}")
+   get_target_property(PROTOBUF_TYPE ${ARROW_PROTOBUF_LIBPROTOBUF} TYPE)
+   if(NOT STREQUAL "INTERFACE_LIBRARY")
+-    # Protobuf_PROTOC_LIBRARY is set by all versions of FindProtobuf.cmake
+-    message(STATUS "Found libprotoc: ${Protobuf_PROTOC_LIBRARY}")
++    # protobuf_PROTOC_LIBRARY is set by all versions of FindProtobuf.cmake
++    message(STATUS "Found libprotoc: ${protobuf_PROTOC_LIBRARY}")
+     get_target_property(PROTOBUF_LIBRARY ${ARROW_PROTOBUF_LIBPROTOBUF} IMPORTED_LOCATION)
+     message(STATUS "Found libprotobuf: ${PROTOBUF_LIBRARY}")
+     message(STATUS "Found protobuf headers: ${PROTOBUF_INCLUDE_DIR}")
+@@ -3986,7 +3986,7 @@ endmacro()
+ 
+ if(ARROW_WITH_GRPC)
+   set(ARROW_GRPC_REQUIRED_VERSION "1.30.0")
+-  if(NOT Protobuf_SOURCE STREQUAL gRPC_SOURCE)
++  if(NOT protobuf_SOURCE STREQUAL gRPC_SOURCE)
+     # ARROW-15495: Protobuf/gRPC must come from the same source
+     message(STATUS "Forcing gRPC_SOURCE to Protobuf_SOURCE (${Protobuf_SOURCE})")
+     set(gRPC_SOURCE "${Protobuf_SOURCE}")

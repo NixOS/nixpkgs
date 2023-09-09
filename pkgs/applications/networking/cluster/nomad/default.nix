@@ -53,25 +53,11 @@ rec {
 
   nomad = nomad_1_5;
 
-  nomad_1_2 = generic {
-    buildGoModule = buildGo120Module;
-    version = "1.2.16";
-    sha256 = "sha256-fhfUpcG91EgIzJ4mCS7geyIJyTSHS2e8t4yYiI3PqpQ=";
-    vendorSha256 = "sha256-kwCDsGFw+25Mimgt/cTK/Z2H7Qh5n4rjr3kIBvjcPL8=";
-  };
-
-  nomad_1_3 = generic {
-    buildGoModule = buildGo120Module;
-    version = "1.3.9";
-    sha256 = "sha256-xfoIzLDG/OfqAPQqeLvQZ11uESWFNyOyLP6Imi+S96w=";
-    vendorSha256 = "sha256-kW0goicoM1lM1NEHPTfozg2EKR1daf33UxT/mVabyfY=";
-  };
-
   nomad_1_4 = generic {
     buildGoModule = buildGo120Module;
-    version = "1.4.6";
-    sha256 = "sha256-l4GvQIS5JSSgjBjPivAKAb7gKlVLw4WoZpPR8LxnLNc=";
-    vendorSha256 = "sha256-05BhKF6kx0wbu74cidpTFhUN668R/AxV6qWmchCm/WE=";
+    version = "1.4.12";
+    sha256 = "sha256-dO98FOaO5MB5pWzeF705s/aBDTaF0OyWnVxWGB91suI=";
+    vendorSha256 = "sha256-D5TcTZa64Jr47u4mrTXK4lUIC5gfBQNVgL6QKh1CaQM=";
     passthru.tests.nomad = nixosTests.nomad;
   };
 

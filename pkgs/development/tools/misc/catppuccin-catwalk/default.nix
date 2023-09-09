@@ -1,41 +1,37 @@
 { lib
-, fetchPypi
-, python3
-,
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
 }:
 
-python3.pkgs.buildPythonApplication rec {
+rustPlatform.buildRustPackage {
   pname = "catppuccin-catwalk";
-  version = "0.4.0";
-  format = "pyproject";
+  version = "0.1.0";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "catppuccin_catwalk";
-    hash = "sha256-5TAw5H3soxe9vLhfj1qs8uMr4ybrHlCj4zdsMzvPo6s=";
+  src = fetchFromGitHub {
+    owner = "catppuccin";
+    repo = "toolbox";
+    rev = "b38153e94622bab574224bb24a6ae953b3a849da";
+    hash = "sha256-zZRl6Xem41pBQmEoK24YR4TKiQ84nU5phBih2TF8G8g=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'Pillow = "^' 'Pillow = ">='
+  buildAndTestSubdir = "catwalk";
+  cargoHash = "sha256-KoxivYLzJEjWbxIkizrMpmVwUF7bfVxl13H774lzQRg=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd catwalk \
+      --bash <("$out/bin/catwalk" completion bash) \
+      --zsh <("$out/bin/catwalk" completion zsh) \
+      --fish <("$out/bin/catwalk" completion fish)
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    pillow
-  ];
-
-  pythonImports = [
-    "catwalk"
-  ];
-
   meta = with lib; {
-    homepage = "https://github.com/catppuccin/toolbox";
+    homepage = "https://github.com/catppuccin/toolbox/tree/main/catwalk";
     description = "A CLI for Catppuccin that takes in four showcase images and displays them all at once";
     license = licenses.mit;
     maintainers = with maintainers; [ ryanccn ];
+    mainProgram = "catwalk";
   };
 }

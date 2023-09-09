@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma";
-  version = "0.10.4";
+  version = "0.10.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pEw0CmQYwZmfpN1mAv04eeOBTVX6JfW3aKhfofZaKYo=";
+    hash = "sha256-iiE6XHj5632sBlivUHz7HiNRjNpEh+OMqcJ65o2km6I=";
   };
 
   pythonRelaxDeps = [

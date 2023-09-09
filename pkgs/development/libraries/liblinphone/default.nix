@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "5.2.17";
+  version = "5.2.98";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    hash = "sha256-zxp+jcClfKm+VsylRtydF2rlDCkO+sa9vw8GpwAfKHM=";
+    hash = "sha256-kQZePMa7MTaSJLEObM8khfSFYLqhlgTcVyKfTPLwKYU=";
   };
 
   postPatch = ''

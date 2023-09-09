@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
-, wafHook
+, waf
 , python3
 , readline
 , libxslt
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     python3
     pkg-config
-    wafHook
+    waf.hook
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_45

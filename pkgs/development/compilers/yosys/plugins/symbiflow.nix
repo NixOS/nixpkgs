@@ -11,17 +11,16 @@
 , capnproto
 , surelog
 , antlr4
-, flatbuffers
 , pkg-config
 }: let
 
-  version = "1.20230425";
+  version = "1.20230808";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo  = "yosys-f4pga-plugins";
     rev   = "v${version}";
-    hash  = "sha256-KNkmhvpKTby85P88+DqCOOGxIKpzbw5KF9ymqy40pfw=";
+    hash  = "sha256-wksAHLgLjVZE4Vk2QVcJN1mnQ9mxWCZHk55oO99cVJ0=";
   };
 
   # Supported symbiflow plugins.

@@ -4,6 +4,7 @@
 , budgie-desktop-view
 , glib
 , gsettings-desktop-schemas
+, magpie
 , mate
 , nixos-artwork
 , nixos-background-light ? nixos-artwork.wallpapers.nineish
@@ -31,8 +32,14 @@ let
     document-font-name="Noto Sans 10"
     monospace-font-name="Hack 10"
 
+    [org.gnome.desktop.peripherals.touchpad:Budgie]
+    tap-to-click=true
+
     [org.gnome.desktop.wm.preferences:Budgie]
     titlebar-font="Noto Sans Bold 10"
+
+    [org.gnome.mutter:Budgie]
+    edge-tiling=true
 
     [com.solus-project.budgie-menu:Budgie]
     use-default-menu-icon=true
@@ -56,6 +63,7 @@ let
       budgie-desktop
       budgie-desktop-view
       gsettings-desktop-schemas
+      magpie
   ] ++ extraGSettingsOverridePackages;
 
 in

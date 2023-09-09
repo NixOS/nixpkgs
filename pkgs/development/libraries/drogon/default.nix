@@ -7,22 +7,22 @@
 , redisSupport ? false, hiredis
 , mysqlSupport ? false, libmysqlclient, mariadb }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
-  version = "1.8.3";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
-    rev = "v${version}";
-    sha256 = "sha256-I3f/8TMGm1G4CFMJJLyiVYso9yTHjeLefS5eaGySvC4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-BYZoMesDquXaphZvnf2Vd/RuOC9jsOjZsGNbDmQ3u+c=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_TESTING=${if doInstallCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTING=${if finalAttrs.finalPackage.doInstallCheck then "ON" else "OFF"}"
     "-DBUILD_EXAMPLES=OFF"
   ];
 
@@ -43,21 +43,19 @@ stdenv.mkDerivation rec {
     # this part of the test would normally fail because it attempts to configure a CMake project that uses find_package on itself
     # this patch makes drogon and trantor visible to the test
     ./fix_find_package.patch
-
-    # see https://github.com/drogonframework/drogon/issues/1491
-    (fetchpatch {
-      url = "https://github.com/drogonframework/drogon/commit/7d87d7e0b264ce53aa5ee006fb022d3516c9d666.patch";
-      sha256 = "sha256-C4zH9oNMfhkaeVNvZuBuzu1v2vNgg/t+YPitbrmHg+Y=";
-    })
   ];
 
   # modifying PATH here makes drogon_ctl visible to the test
   installCheckPhase = ''
-    cd ..
-    PATH=$PATH:$out/bin bash test.sh
+    (
+      cd ..
+      PATH=$PATH:$out/bin $SHELL test.sh
+    )
   '';
 
-  doInstallCheck = true;
+  # this excludes you, pkgsStatic (cmake wants to run built binaries
+  # in the buildPhase)
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = "https://github.com/drogonframework/drogon";
@@ -66,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ urlordjames ];
     platforms = platforms.all;
   };
-}
+})

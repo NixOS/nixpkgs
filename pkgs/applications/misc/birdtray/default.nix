@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "birdtray";
-  version = "1.9.0";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "gyunaev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1469ng6zk0qx0qfsihrnlz1j9i1wk0hx4vqdaplz9mdpyxvmlryk";
+    sha256 = "sha256-3SZf0ZK4AV/kuFttaHnPJuOJ9rn7CqFfv28d8ancPKw=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

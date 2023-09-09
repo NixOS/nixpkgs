@@ -10,9 +10,14 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [
-    python3.pkgs.setuptools-scm
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
+    sphinxHook
+    sphinx-autoapi
+    sphinx-autodoc-typehints
   ];
+
+  sphinxBuilders = [ "man" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
@@ -40,5 +45,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Console carddav client";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+    mainProgram = "khard";
   };
 }

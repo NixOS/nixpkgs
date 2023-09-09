@@ -23,15 +23,15 @@
 , xorg
 }:
 let
-  id = "123365359";
+  id = "123219506";
 in
 stdenvNoCC.mkDerivation rec {
   pname = "multiviewer-for-f1";
-  version = "1.26.4";
+  version = "1.26.2";
 
   src = fetchurl {
     url = "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
-    sha256 = "sha256-VKpEE1o24Wc4IOagIC62kzPf7nCkgAWsXbeOQXNN4O4=";
+    sha256 = "sha256-nibPVqc4B3PHF/3wR5FsYZGVkkReQjy+4glfdnBysSU=";
   };
 
   nativeBuildInputs = [

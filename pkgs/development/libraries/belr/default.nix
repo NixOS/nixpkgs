@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "belr";
-  version = "5.1.55";
+  version = "5.2.98";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0JDwNKqPkzbXqDhgMV+okPMHPFJwmLwLsDrdD55Jcs4=";
+    hash = "sha256-4keVUAsTs1DAhOfV71VD28I0PEHnyvW95blplY690LY=";
   };
 
   buildInputs = [ bctoolbox ];

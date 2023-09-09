@@ -789,6 +789,10 @@ self: super: {
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
   };
 
+  multicursors-nvim = super.multicursors-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter hydra-nvim ];
+  };
+
   ncm2 = super.ncm2.overrideAttrs {
     dependencies = with self; [ nvim-yarp ];
   };
@@ -966,7 +970,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-BXmf/eUxfsqq49K31k1+KjMHTV7KBTh0Sse/hCcFjqw=";
+        cargoHash = "sha256-1mb99WtELS64kfA2exUlVLzOj82xkFhWx0JHayosZL0=";
 
         nativeBuildInputs = [ pkg-config ];
 

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "browsr";
-  version = "1.13.0";
+  version = "1.15.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
     rev = "v${version}";
-    hash = "sha256-vYb4XWBdQ4HJzICXNiBXit4aVgjYA9SCX15MppVtTS8=";
+    hash = "sha256-v3DNk0wNG/TISP609YsVfgOFcr+ZOtdOXrm4j81dtLE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

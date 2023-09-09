@@ -17,6 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rrn+ZTAsFs7UTP4xQL3Cy8G6RG7vwT0wMKnXHHIkB90=";
 
+  checkFlags = [
+    # https://github.com/containers/aardvark-dns/issues/379
+    "--skip=test::test::tests::test_backend_network_scoped_custom_dns_server"
+  ];
+
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {

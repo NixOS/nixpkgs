@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , pkg-config
-, wafHook
+, waf
 , python3
 , asciidoc
 , docbook_xml_dtd_45
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wafHook
+    waf.hook
     python3
     asciidoc
     docbook_xml_dtd_45

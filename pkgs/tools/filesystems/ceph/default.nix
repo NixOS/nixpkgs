@@ -11,6 +11,7 @@
 , fmt
 , git
 , makeWrapper
+, nasm
 , pkg-config
 , which
 
@@ -23,14 +24,13 @@
 , boost179
 , bzip2
 , cryptsetup
-, cimg
 , cunit
 , doxygen
 , gperf
 , graphviz
 , gtest
 , icu
-, jsoncpp
+, libcap
 , libcap_ng
 , libnl
 , libxml2
@@ -225,10 +225,10 @@ let
   ]);
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "17.2.5";
+  version = "18.2.0";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-NiJpwUeROvh0siSaRoRrDm+C0s61CvRiIrbd7JmRspo=";
+    hash = "sha256:0k9nl6xi5brva51rr14m7ig27mmmd7vrpchcmqc40q3c2khn6ns9";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -240,6 +240,7 @@ in rec {
       fmt
       git
       makeWrapper
+      nasm
       pkg-config
       python
       python.pkgs.python # for the toPythonPath function
@@ -259,14 +260,12 @@ in rec {
       boost
       bzip2
       ceph-python-env
-      cimg
       cryptsetup
       cunit
       gperf
       gtest
-      jsoncpp
       icu
-      libcap_ng
+      libcap
       libnl
       libxml2
       lttng-ust
@@ -287,6 +286,7 @@ in rec {
       zstd
     ] ++ lib.optionals stdenv.isLinux [
       keyutils
+      libcap_ng
       liburing
       libuuid
       linuxHeaders
@@ -314,22 +314,38 @@ in rec {
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
       export PYTHONPATH=${ceph-python-env}/${sitePackages}:$lib/${sitePackages}:$out/${sitePackages}
-      patchShebangs src/script src/spdk src/test src/tools
+      patchShebangs src/
     '';
 
     cmakeFlags = [
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
-      "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_CEPHFS_SHELL:BOOL=ON"
       "-DWITH_SYSTEMD:BOOL=OFF"
+      # `WITH_JAEGER` requires `thrift` as a depenedncy (fine), but the build fails with:
+      #     CMake Error at src/opentelemetry-cpp-stamp/opentelemetry-cpp-build-Release.cmake:49 (message):
+      #     Command failed: 2
+      #
+      #        'make' 'opentelemetry_trace' 'opentelemetry_exporter_jaeger_trace'
+      #
+      #     See also
+      #
+      #        /build/ceph-18.2.0/build/src/opentelemetry-cpp/src/opentelemetry-cpp-stamp/opentelemetry-cpp-build-*.log
+      # and that file contains:
+      #     /build/ceph-18.2.0/src/jaegertracing/opentelemetry-cpp/exporters/jaeger/src/TUDPTransport.cc: In member function 'virtual void opentelemetry::v1::exporter::jaeger::TUDPTransport::close()':
+      #     /build/ceph-18.2.0/src/jaegertracing/opentelemetry-cpp/exporters/jaeger/src/TUDPTransport.cc:71:7: error: '::close' has not been declared; did you mean 'pclose'?
+      #       71 |     ::THRIFT_CLOSESOCKET(socket_);
+      #          |       ^~~~~~~~~~~~~~~~~~
+      # Looks like `close()` is somehow not included.
+      # But the relevant code is already removed in `open-telemetry` 1.10: https://github.com/open-telemetry/opentelemetry-cpp/pull/2031
+      # So it's proably not worth trying to fix that for this Ceph version,
+      # and instead just disable Ceph's Jaeger support.
+      "-DWITH_JAEGER:BOOL=OFF"
       "-DWITH_TESTS:BOOL=OFF"
 
       # Use our own libraries, where possible
-      "-DWITH_SYSTEM_ARROW:BOOL=ON"
+      "-DWITH_SYSTEM_ARROW:BOOL=ON" # Only used if other options enable Arrow support.
       "-DWITH_SYSTEM_BOOST:BOOL=ON"
-      "-DWITH_SYSTEM_CIMG:BOOL=ON"
-      "-DWITH_SYSTEM_JSONCPP:BOOL=ON"
       "-DWITH_SYSTEM_GTEST:BOOL=ON"
       "-DWITH_SYSTEM_ROCKSDB:BOOL=ON"
       "-DWITH_SYSTEM_UTF8PROC:BOOL=ON"
@@ -337,8 +353,6 @@ in rec {
 
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
-      # no matching function for call to 'parquet::PageReader::Open(std::shared_ptr<arrow::io::InputStream>&, int64_t, arrow::Compression::type, parquet::MemoryPool*, parquet::CryptoContext*)'
-      "-DWITH_RADOSGW_SELECT_PARQUET:BOOL=OFF"
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
     ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";

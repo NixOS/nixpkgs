@@ -69,6 +69,9 @@ buildPythonPackage rec {
   doCheck = false; # Upstream has no tests
 
   meta = with lib; {
+    # Both protobuf3 and protobuf4 in the build closure.
+    # related: https://github.com/onnx/onnx/issues/5563
+    broken = true;
     description = "State-of-the-art 2D and 3D Face Analysis Project";
     homepage = "https://github.com/deepinsight/insightface";
     license = licenses.mit;

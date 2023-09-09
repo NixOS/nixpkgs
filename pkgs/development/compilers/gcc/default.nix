@@ -450,7 +450,7 @@ ${""}          done
 }
 ))
 ([
-  (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
+  (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared libcCross; })
 ] ++ optionals atLeast11 [
   (callPackage ./common/checksum.nix { inherit langC langCC; })
 ])

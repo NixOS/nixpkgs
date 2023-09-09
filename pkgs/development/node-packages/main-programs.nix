@@ -4,9 +4,7 @@
   "@antfu/ni" = "ni";
   "@electron-forge/cli" = "electron-forge";
   "@microsoft/rush" = "rush";
-  "@squoosh/cli" = "squoosh-cli";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
-  coffee-script = "coffee";
   "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable.
@@ -35,7 +33,6 @@
   conventional-changelog-cli = "conventional-changelog";
   cpy-cli = "cpy";
   diff2html-cli = "diff2html";
-  dockerfile-language-server-nodejs = "docker-langserver";
   fast-cli = "fast";
   fauna-shell = "fauna";
   fkill-cli = "fkill";
@@ -47,7 +44,6 @@
   grunt-cli = "grunt";
   gulp-cli = "gulp";
   kaput-cli = "kaput";
-  leetcode-cli = "leetcode";
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";

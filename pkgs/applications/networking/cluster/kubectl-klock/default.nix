@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGo121Module, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "kubectl-klock";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jillejr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tXsRifIZRS2W4O4VOONuLsunYGLG5C9KfgnZQQqKACg=";
+    sha256 = "sha256-HO9/hr/CBmJkrbNdX8tp2pNRfZDaWNW8shyCR46G77A=";
   };
 
-  vendorSha256 = "sha256-r4oAmD/7CXYiWEWR/FC/Ab0LNxehWv6oCWjQ/fGU2rU=";
+  vendorSha256 = "sha256-QvD5yVaisq5Zz/M81HAMKpgQJRB5qPCYveLgldHHGf0=";
 
   meta = with lib; {
     description = "A kubectl plugin to render watch output in a more readable fashion";

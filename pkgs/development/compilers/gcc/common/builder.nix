@@ -219,6 +219,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.la"  "''${!outputLib}"
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dylib" "''${!outputLib}"
     moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll.a" "''${!outputLib}"
+    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll" "''${!outputLib}"
     moveToOutput "share/gcc-*/python" "''${!outputLib}"
 
     if [ -z "$enableShared" ]; then
@@ -233,6 +234,8 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
         moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.so*" "''${!outputLib}"
         moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.la"  "''${!outputLib}"
         moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dylib" "''${!outputLib}"
+        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dll.a" "''${!outputLib}"
+        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dll" "''${!outputLib}"
 
         for i in "''${!outputLib}/''${targetConfig}"/lib64/*.{la,py}; do
             substituteInPlace "$i" --replace "$out" "''${!outputLib}"

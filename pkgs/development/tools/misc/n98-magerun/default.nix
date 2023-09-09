@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.3.0";
 
   src = fetchurl {
-    url = "https://github.com/netz98/n98-magerun/releases/download/${finalAttrs.version}/n98-magerun-${finalAttrs.version}.phar";
+    url = "https://github.com/netz98/n98-magerun/releases/download/${finalAttrs.version}/n98-magerun.phar";
     hash = "sha256-s+Cdr8zU3VBaBzxOh4nXjqPe+JPPxHWiFOEVS/86qOQ=";
   };
 

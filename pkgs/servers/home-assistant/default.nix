@@ -134,6 +134,16 @@ let
         };
       });
 
+      plexapi = super.plexapi.overridePythonAttrs (oldAttrs: rec {
+        version = "4.13.2";
+        src = fetchFromGitHub {
+          owner = "pkkid";
+          repo = "python-plexapi";
+          rev = "refs/tags/${version}";
+          hash = "sha256-5YwINPgQ4efZBvu5McsLYicW/7keKSi011lthJUR9zw=";
+        };
+      });
+
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
@@ -272,6 +282,16 @@ let
         };
       });
 
+      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
+        version = "0.91.1";
+        src = fetchFromGitHub {
+          owner = "python-zeroconf";
+          repo = "python-zeroconf";
+          rev = "refs/tags/${version}";
+          hash = "sha256-HHADcxXjfukRJtqRjfKI/spZIqOfDT0Etg4oYzNdXIs=";
+        };
+      });
+
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -296,7 +316,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.8.4";
+  hassVersion = "2023.9.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -312,7 +332,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Mu3DyCtF/bTrTvRKPLVEGSZfWZrF7QQy/ZvBi5IIH3s=";
+    hash = "sha256-XdZYVv60ZCkK0fKmt2kmThRxhv+hfJMtHwgBu3iaW9w=";
   };
 
   # Secondary source is git for tests
@@ -320,7 +340,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-N06e2QSt34l4T0hulndZR/czjaPcmw8YXF0iAN/XmgQ=";
+    hash = "sha256-B+GdUXRvQyBMR7PbVGEZr7hZm7wslBskUTB23APJLIU=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -393,6 +413,7 @@ in python.pkgs.buildPythonApplication rec {
     jinja2
     lru-dict
     orjson
+    packaging
     pip
     pyopenssl
     pyjwt

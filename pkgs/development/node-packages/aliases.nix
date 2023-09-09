@@ -46,6 +46,7 @@ mapAliases {
   "@maizzle/cli" = pkgs.maizzle; # added 2023-08-17
   "@medable/mdctl-cli" = throw "@medable/mdctl-cli was removed because it was broken"; # added 2023-08-21
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  alloy = pkgs.titanium-alloy; # added 2023-08-17
   antennas = pkgs.antennas; # added 2023-07-30
   inherit (pkgs) asar; # added 2023-08-26
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
@@ -57,9 +58,12 @@ mapAliases {
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) clean-css-cli; # added 2023-08-18
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
+  coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
   inherit (pkgs) cordova; # added 2023-08-18
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) degit; # added 2023-08-18
+  inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
@@ -67,8 +71,11 @@ mapAliases {
   flood = pkgs.flood; # Added 2023-07-25
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
   glob = pkgs.node-glob; # added 2023-08-18
+  inherit (pkgs) gqlint; # added 2023-08-19
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
+  hs-client = pkgs.hsd; # added 2023-08-20
+  inherit (pkgs) hsd; # added 2023-08-19
   inherit (pkgs) html-minifier; # added 2023-08-19
   inherit (pkgs) htmlhint; # added 2023-08-19
   hueadm = pkgs.hueadm; # added 2023-07-31
@@ -76,21 +83,31 @@ mapAliases {
   immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
+  inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   karma = pkgs.karma-runner; # added 2023-07-29
+  leetcode-cli = vsc-leetcode-cli; # added 2023-08-31
   manta = pkgs.node-manta; # Added 2023-05-06
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
+  musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) npm-check-updates; # added 2023-08-22
+  ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
+  inherit (pkgs) react-static; # added 2023-08-21
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
+  inherit (pkgs) snyk; # Added 2023-08-30
+  "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
+  surge = pkgs.surge-cli; # Added 2023-09-08
   thelounge = pkgs.thelounge; # Added 2023-05-22
+  three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
+  inherit (pkgs) titanium; # added 2023-08-17
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
   inherit (pkgs) ungit; # added 2023-08-20
@@ -99,6 +116,7 @@ mapAliases {
   vue-language-server = self.vls; # added 2023-08-20
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) write-good; # added 2023-08-20
+  inherit (pkgs) yaml-language-server; # added 2023-09-05
   inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
 }

@@ -59,7 +59,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
-    homepage = "https://github.com/aws/serverless-application-model";
+    homepage = "https://github.com/awslabs/serverless-application-model";
+    changelog = "https://github.com/aws/serverless-application-model/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

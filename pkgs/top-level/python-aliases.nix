@@ -193,6 +193,7 @@ mapAliases ({
   JPype1 = jpype1; # added 2023-02-19
   jsonschema_3 = throw "jsonschema 3 is neither the latest version nor needed inside nixpkgs anymore"; # added 2023-06-28
   jupyter_client = jupyter-client; # added 2021-10-15
+  jupyter_console = jupyter-console; # added  2023-07-31
   jupyter_core = jupyter-core; # added 2023-01-05
   jupyter_server = jupyter-server; # added 2023-01-05
   jupyter-server-ydoc = jupyter-collaboration; # added 2023-07-18
@@ -273,6 +274,7 @@ mapAliases ({
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
+  pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
   pyramid_hawkauth = throw "pyramid_hawkauth has been removed because it is no longer maintained"; # added 2023-02-2
   pyramid_jinja2 = pyramid-jinja2; # added 2023-06-06
   pyreadability = readability-lxml; # added 2022-05-24
@@ -288,6 +290,7 @@ mapAliases ({
   Pyro4 = pyro4; # added 2023-02-19
   Pyro5 = pyro5; # added 2023-02-19
   PyRSS2Gen = pyrss2gen; # added 2023-02-19
+  pyruckus = throw "pyruckus has been removed, it was deprecrated in favor of aioruckus."; # added 2023-09-07
   pysha3 = throw "pysha3 has been removed, use safe-pysha3 instead"; # added 2023-05-20
   pysmart-smartx = pysmart; # added 2021-10-22
   pysparse = throw "pysparse has been abandoned upstream."; # added 2023-02-28
@@ -363,6 +366,7 @@ mapAliases ({
   sphinx-navtree = throw "sphinx-navtree has been removed since it is not compatible with sphinx 3.3 and unmaintained"; # added 2023-07-03
   sqlalchemy_migrate = sqlalchemy-migrate; # added 2021-10-28
   SQLAlchemy-ImageAttach = throw "sqlalchemy-imageattach has been removed as it is incompatible with sqlalchemy 1.4 and unmaintained"; # added 2022-04-23
+  subdownloader = throw "subdownloader has been removed, because it depended on pyqt4"; # added 2022-06-09
   suds-jurko = throw "suds-jurko has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-02-27
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25

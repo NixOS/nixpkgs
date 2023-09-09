@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eza";
-  version = "0.10.9";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "eza-community";
     repo = "eza";
     rev = "v${version}";
-    hash = "sha256-ssP4jPO7Yt98ZCKOpQi7RwKfUBOHQ1dK5rzWxAJD9Jc=";
+    hash = "sha256-qA9oXAHJyEf5yI1AlofAKs5fNpNQev9FlY/GHNsfo2Q=";
   };
 
-  cargoHash = "sha256-XxqAAs44iZuqcAsixIqEgUHWytwS9umuM/KIPosrfRo=";
+  cargoHash = "sha256-xcw2fhEnUheDSJ5vE7Z1EqahVdCluClC7TmC1PFUUV4=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
@@ -56,8 +56,10 @@ rustPlatform.buildRustPackage rec {
       written in Rust, so it’s small, fast, and portable.
     '';
     homepage = "https://github.com/eza-community/eza";
+    changelog = "https://github.com/eza-community/eza/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "eza";
     maintainers = with maintainers; [ cafkafk ];
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

@@ -118,9 +118,6 @@ final: prev: {
     '';
   };
 
-  hsd = prev.hsd.override {
-    buildInputs = [ final.node-gyp-build pkgs.unbound ];
-  };
 
   ijavascript = prev.ijavascript.override (oldAttrs: {
     preRebuild = ''
@@ -311,12 +308,11 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-0NxYp+W2KbR3xEV2OCXCIL3RqkvLfJHNKgl/PxapVbI=";
+      hash = "sha256-HiZtNHXkoSl3Q4cAerUs8c138AiDJJxzYNQT3I4+ea8=";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
         --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
-        --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
         --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
         --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
         --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
@@ -489,12 +485,4 @@ final: prev: {
       rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
     '';
   });
-
-  yaml-language-server = prev.yaml-language-server.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/yaml-language-server" \
-      --prefix NODE_PATH : ${final.prettier}/lib/node_modules
-    '';
-  };
 }

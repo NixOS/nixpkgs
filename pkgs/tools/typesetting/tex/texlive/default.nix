@@ -19,6 +19,7 @@ let
       withIcu = true; withGraphite2 = true;
     };
     inherit useFixedHashes;
+    tlpdb = overriddenTlpdb;
   };
 
   # function for creating a working environment from a set of TL packages
@@ -36,7 +37,7 @@ let
   overriddenTlpdb = let
     overrides = import ./tlpdb-overrides.nix {
       inherit
-        lib bin tlpdb tlpdbxz tl
+        stdenv lib bin tlpdb tlpdbxz tl
         installShellFiles
         coreutils findutils gawk getopt ghostscript_headless gnugrep
         gnumake gnupg gnused gzip ncurses perl python3 ruby zip;

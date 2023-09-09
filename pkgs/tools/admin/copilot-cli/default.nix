@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "copilot-cli";
-  version = "1.30.0";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Q495MJlvElm5yrX4QWrwvB62Tdzq0W5pTYsTXyw9Idw=";
+    hash = "sha256-ldSF+M6gYKJ6EDJ4jKpPS+XTyybynsRhibNtLG1+DlE=";
   };
 
   vendorHash = "sha256-/2uUiFL2wL+gAzqY2S3sqytPLKB5+QkYXCBNLqSJSWU=";

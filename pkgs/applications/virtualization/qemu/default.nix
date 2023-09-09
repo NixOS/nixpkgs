@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
 , pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, runtimeShell, removeReferencesTo
+, makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
 , guestAgentSupport ? with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows
@@ -9,6 +9,7 @@
 , seccompSupport ? stdenv.isLinux, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
 , pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
+, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner, pipewire
 , sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
 , jackSupport ? !stdenv.isDarwin && !nixosTestRunner, libjack2
 , gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
@@ -47,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "8.0.4";
+  version = "8.1.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gcgX3aOK+Vi+W+8abPVbZYuy0/uHwealcd5reyxEUWw=";
+    hash = "sha256-cQwQEZjjNNR2Lu9l9km8Q/qKXddTA1VLis/sPrJfDlU=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals pulseSupport [ libpulseaudio ]
+    ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
@@ -153,9 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-tools"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    # Always use our Meson, not the bundled version, which doesn't
-    # have our patches and will be subtly broken because of that.
-    "--meson=meson"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
@@ -219,6 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # point tests towards correct binaries
     substituteInPlace ../tests/unit/test-qga.c \
+      --replace '/bin/bash' "$(type -P bash)" \
       --replace '/bin/echo' "$(type -P echo)"
     substituteInPlace ../tests/unit/test-io-channel-command.c \
       --replace '/bin/socat' "$(type -P socat)"

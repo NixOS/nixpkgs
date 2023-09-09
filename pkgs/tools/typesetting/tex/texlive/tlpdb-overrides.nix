@@ -1,4 +1,4 @@
-{ lib, tlpdb, bin, tlpdbxz, tl
+{ stdenv, lib, tlpdb, bin, tlpdbxz, tl
 , installShellFiles
 , coreutils, findutils, gawk, getopt, ghostscript_headless, gnugrep
 , gnumake, gnupg, gnused, gzip, ncurses, perl, python3, ruby, zip
@@ -13,7 +13,9 @@ let
     # so we remove them from binfiles, and add back the ones texlinks purposefully ignore (e.g. mptopdf)
     removeFormatLinks = lib.mapAttrs (_: attrs:
       if (attrs ? formats && attrs ? binfiles)
-      then let formatLinks = lib.catAttrs "name" (lib.filter (f: f.name != f.engine) attrs.formats);
+      # TLPDB reports erroneously that various metafont binaries like "mf" are format links to engines
+      # like "mf-nowin"; core-big provides both binaries and links so we simply skip them here
+      then let formatLinks = lib.catAttrs "name" (lib.filter (f: f.name != f.engine && ! lib.hasSuffix "-nowin" f.engine) attrs.formats);
                binNotFormats = lib.subtractLists formatLinks attrs.binfiles;
            in if binNotFormats != [] then attrs // { binfiles = binNotFormats; } else removeAttrs attrs [ "binfiles" ]
       else attrs);
@@ -104,10 +106,6 @@ in lib.recursiveUpdate orig rec {
 
   # remove man
   texlive-scripts.binfiles = lib.remove "man" orig.texlive-scripts.binfiles;
-
-  # upmendex is "TODO" in bin.nix
-  uptex.binfiles = lib.remove "upmendex" orig.uptex.binfiles;
-
   # xindy is broken on some platforms unfortunately
   xindy.binfiles = if bin ? xindy
     then lib.subtractLists [ "xindy.mem" "xindy.run" ] orig.xindy.binfiles
@@ -122,12 +120,6 @@ in lib.recursiveUpdate orig rec {
   epstopdf.binlinks.repstopdf = "epstopdf";
   pdfcrop.binlinks.rpdfcrop = "pdfcrop";
 
-  ptex.binlinks = {
-    pdvitomp = bin.metapost + "/bin/pdvitomp";
-    pmpost = bin.metapost + "/bin/pmpost";
-    r-pmpost = bin.metapost + "/bin/r-pmpost";
-  };
-
   texdef.binlinks = {
     latexdef = "texdef";
   };
@@ -141,13 +133,6 @@ in lib.recursiveUpdate orig rec {
     allec = "allcm";
     kpsepath = "kpsetool";
     kpsexpand = "kpsetool";
-  };
-
-  # metapost binaries are in bin.metapost instead of bin.core
-  uptex.binlinks = {
-    r-upmpost = bin.metapost + "/bin/r-upmpost";
-    updvitomp = bin.metapost + "/bin/updvitomp";
-    upmpost = bin.metapost + "/bin/upmpost";
   };
 
   #### add PATH dependencies without wrappers
@@ -340,6 +325,11 @@ in lib.recursiveUpdate orig rec {
 
   #### misc
 
+  # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
+  luajittex.binfiles = lib.optionals
+    (!(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV)
+    orig.luajittex.binfiles;
+
   # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
   arabi-add.license = [  "lppl13c" ];
 
@@ -362,7 +352,7 @@ in lib.recursiveUpdate orig rec {
         mkdir -p support/texdoc
         touch support/texdoc/NEWS
 
-        TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+        TEXMFCNF="${lib.head tl.kpathsea.pkgs}/web2c" TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
           "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
           -c texlive_tlpdb=texlive.tlpdb -lM texdoc
 
@@ -372,7 +362,7 @@ in lib.recursiveUpdate orig rec {
 
     # install zsh completion
     postFixup = ''
-      TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$scriptsFolder/../.." \
+      TEXMFCNF="${lib.head tl.kpathsea.pkgs}"/web2c TEXMF="$scriptsFolder/../.." \
         texlua "$out"/bin/texdoc --print-completion zsh > "$TMPDIR"/_texdoc
       substituteInPlace "$TMPDIR"/_texdoc \
         --replace 'compdef __texdoc texdoc' '#compdef texdoc' \

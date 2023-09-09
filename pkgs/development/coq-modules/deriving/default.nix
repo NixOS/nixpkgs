@@ -8,7 +8,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.11" "8.17"; out = "0.1.1"; }
+    { case = range "8.11" "8.18"; out = "0.1.1"; }
   ] null;
 
   releaseRev = v: "v${v}";
