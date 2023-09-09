@@ -11669,9 +11669,7 @@ with pkgs;
 
   optifine = optifinePackages.optifine-latest;
 
-  optipng = callPackage ../tools/graphics/optipng {
-    libpng = libpng12;
-  };
+  optipng = callPackage ../tools/graphics/optipng { };
 
   olsrd = callPackage ../tools/networking/olsrd { };
 
