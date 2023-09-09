@@ -104,7 +104,9 @@ mapAliases {
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
+  surge = pkgs.surge-cli; # Added 2023-09-08
   thelounge = pkgs.thelounge; # Added 2023-05-22
+  three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
   inherit (pkgs) titanium; # added 2023-08-17
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21

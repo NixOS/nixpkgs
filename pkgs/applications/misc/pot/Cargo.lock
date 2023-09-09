@@ -1139,14 +1139,15 @@ dependencies = [
 
 [[package]]
 name = "enigo"
-version = "0.1.2"
-source = "git+https://github.com/enigo-rs/enigo?rev=c53be78#c53be78a4cdbd2d19ccda59f990050d8591bb969"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "802e4b2ae123615659085369b453cba87c5562e46ed8050a909fee18a9bc3157"
 dependencies = [
- "core-graphics 0.22.3",
+ "core-graphics 0.23.1",
  "libc",
  "objc",
  "pkg-config",
- "windows 0.48.0",
+ "windows 0.51.1",
 ]
 
 [[package]]
@@ -4050,8 +4051,9 @@ dependencies = [
 
 [[package]]
 name = "selection"
-version = "0.1.0"
-source = "git+https://github.com/pot-app/Selection#8b44b68fbfe614aff190610ec03d52b6f3b57f19"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "09de39c8f10d37a7b9c2a9cb224dbe4535525cbe17ccf37c21419123ab54a197"
 dependencies = [
  "arboard",
  "enigo",
@@ -5743,6 +5745,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "windows"
+version = "0.51.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ca229916c5ee38c2f2bc1e9d8f04df975b4bd93f9955dc69fabb5d91270045c9"
+dependencies = [
+ "windows-core",
+ "windows-targets 0.48.5",
+]
+
+[[package]]
 name = "windows-bindgen"
 version = "0.39.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5750,6 +5762,15 @@ checksum = "68003dbd0e38abc0fb85b939240f4bce37c43a5981d3df37ccbaaa981b47cb41"
 dependencies = [
  "windows-metadata",
  "windows-tokens",
+]
+
+[[package]]
+name = "windows-core"
+version = "0.51.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f1f8cf84f35d2db49a46868f947758c7a1138116f7fac3bc844f43ade1292e64"
+dependencies = [
+ "windows-targets 0.48.5",
 ]
 
 [[package]]

@@ -11090,6 +11090,8 @@ with pkgs;
 
   netlify-cli = callPackage ../development/web/netlify-cli { };
 
+  netlistsvg = callPackage ../applications/science/logic/netlistsvg { };
+
   netpbm = callPackage ../tools/graphics/netpbm { };
 
   netproc = callPackage ../tools/networking/netproc { };
@@ -14035,6 +14037,8 @@ with pkgs;
   transifex-client = python39.pkgs.callPackage ../tools/text/transifex-client { };
 
   transifex-cli = callPackage ../applications/misc/transifex-cli { };
+
+  translatelocally = callPackage ../applications/misc/translatelocally { };
 
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
@@ -20093,6 +20097,8 @@ with pkgs;
 
   redis-plus-plus = callPackage ../development/libraries/redis-plus-plus { };
 
+  redisinsight = callPackage ../development/tools/redisinsight { };
+
   redo = callPackage ../development/tools/build-managers/redo { };
 
   redo-apenwarr = callPackage ../development/tools/build-managers/redo-apenwarr { };
@@ -20130,7 +20136,9 @@ with pkgs;
     withPEPatterns = true;
   };
 
-  reviewdog = callPackage ../development/tools/misc/reviewdog { };
+  reviewdog = callPackage ../development/tools/misc/reviewdog {
+    buildGoModule = buildGo121Module;
+  };
 
   revive = callPackage ../development/tools/revive { };
 
@@ -20345,6 +20353,8 @@ with pkgs;
   summon = callPackage ../development/tools/summon { };
 
   supabase-cli = callPackage ../development/tools/supabase-cli { };
+
+  surge-cli = callPackage ../development/tools/surge-cli { };
 
   svlint = callPackage ../development/tools/analysis/svlint { };
 
@@ -32644,6 +32654,8 @@ with pkgs;
 
   hugo = callPackage ../applications/misc/hugo { };
 
+  ghosttohugo = callPackage ../applications/misc/ghosttohugo {};
+
   gatekeeper = callPackage ../applications/networking/cluster/gatekeeper { };
 
   go-org = callPackage ../applications/misc/go-org { };
@@ -37515,7 +37527,10 @@ with pkgs;
 
   gotypist = callPackage ../games/gotypist { };
 
-  heroic-unwrapped = callPackage ../games/heroic { };
+  heroic-unwrapped = callPackage ../games/heroic {
+    # Match the version used by the upstream package.
+    electron = electron_24;
+  };
 
   heroic = callPackage ../games/heroic/fhsenv.nix { };
 

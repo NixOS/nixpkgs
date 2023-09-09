@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "dataclass-factory";
-  version = "2.13";
+  version = "2.16";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "reagento";
     repo = "dataclass-factory";
     rev = version;
-    hash = "sha256-hNPuqs3TvDleIxflCW5rutbXjDotFRLCNJlcTBFxFAw=";
+    hash = "sha256-0BIWgyAV1hJzFX4xYFqswvQi5F1Ce+V9FKSmNYuJfZM=";
   };
 
   nativeCheckInputs = [

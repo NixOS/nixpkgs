@@ -31,12 +31,6 @@ assert useCudatoolkitRunfile || (libcublas != null); let
   # versionTriple :: String
   # Version with three components: major.minor.patch
   versionTriple = majorMinorPatch version;
-
-  # cudatoolkit_root :: Derivation
-  cudatoolkit_root =
-    if useCudatoolkitRunfile
-    then cudatoolkit
-    else libcublas;
 in
   backendStdenv.mkDerivation {
     pname = "cudatoolkit-${cudaMajorVersion}-cudnn";
@@ -65,7 +59,10 @@ in
       stdenv.cc.cc.lib
 
       zlib
-      cudatoolkit_root
+    ] ++ lists.optionals useCudatoolkitRunfile [
+      cudatoolkit
+    ] ++ lists.optionals (!useCudatoolkitRunfile) [
+      libcublas.lib
     ];
 
     # We used to patch Runpath here, but now we use autoPatchelfHook
