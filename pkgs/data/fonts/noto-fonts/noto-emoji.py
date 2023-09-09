@@ -3,10 +3,10 @@
 
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional
 from urllib import request
 
-import json
+import hashlib, json
 
 
 def getMetadata(apiKey: str, family: str = "Noto Emoji"):
@@ -37,9 +37,9 @@ def hashUrl(url: str, *, hash: str = 'sha256'):
 
     The `hash` must be an algorithm name `hashlib.new` accepts.
     '''
-    import hashlib
     with request.urlopen(url) as req:
         return hashlib.new(hash, req.read())
+
 
 def sriEncode(h) -> str:
     '''Encode a hash in the SRI format.
@@ -49,6 +49,29 @@ def sriEncode(h) -> str:
     '''
     from base64 import b64encode
     return f"{h.name}-{b64encode(h.digest()).decode()}"
+
+def validateSRI(sri: Optional[str]) -> Optional[str]:
+    '''Decode an SRI hash, return `None` if invalid.
+
+    This is not a full SRI hash parser, hash options aren't supported.
+    '''
+    from base64 import b64decode
+
+    if sri is None:
+        return None
+
+    try:
+        hashName, b64 = sri.split('-', 1)
+
+        h = hashlib.new(hashName)
+        digest = b64decode(b64, validate=True)
+        assert len(digest) == h.digest_size
+
+    except:
+        return None
+    else:
+        return sri
+
 
 def hashUrls(
     urls: Iterable[str],
@@ -60,7 +83,7 @@ def hashUrls(
     re-downloading files whose URL have not changed.
     '''
     return {
-        url: knownHashes.get(url) or sriEncode(hashUrl(url))
+        url: validateSRI(knownHashes.get(url)) or sriEncode(hashUrl(url))
         for url in urls
     }
 
