@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jcupitt/vipsdisp";
     description = "Tiny image viewer with libvips";
     license = licenses.mit;
+    mainProgram = "vipsdisp";
     maintainers = with maintainers; [ foo-dogsquared ];
   };
 }
