@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "4th";
   version = "3.64.1";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/forth-4th/files/${pname}-${version}/${pname}-${version}-unix.tar.gz";
+    url = "https://sourceforge.net/projects/forth-4th/files/4th-${finalAttrs.version}/4th-${finalAttrs.version}-unix.tar.gz";
     hash = "sha256-+W6nTNsqrf3Dvr+NbSz3uJdrXVbBI3OHR5v/rs7en+M=";
   };
+
+  outputs = [ "out" "man" ];
 
   patches = [
     # Fix install manual; report this patch to upstream
@@ -23,24 +28,25 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     install -d ${placeholder "out"}/bin \
-      ${placeholder "out"}/lib \
-      ${placeholder "out"}/share/doc/${pname} \
-      ${placeholder "out"}/share/man
+               ${placeholder "out"}/lib \
+               ${placeholder "out"}/share/doc/4th \
+               ${placeholder "man"}/share/man
   '';
 
   installFlags = [
     "BINARIES=${placeholder "out"}/bin"
     "LIBRARIES=${placeholder "out"}/lib"
     "DOCDIR=${placeholder "out"}/share/doc"
-    "MANDIR=${placeholder "out"}/share/man"
+    "MANDIR=${placeholder "man"}/share/man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://thebeez.home.xs4all.nl/4tH/index.html";
     description = "A portable Forth compiler";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    mainProgram = "4th";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
 # TODO: set Makefile according to platform
