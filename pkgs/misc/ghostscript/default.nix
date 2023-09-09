@@ -2,6 +2,7 @@
 , stdenv
 , lib
 , fetchurl
+, fetchpatch
 , pkg-config
 , zlib
 , expat
@@ -71,6 +72,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
+    (fetchpatch {
+      name = "CVE-2023-38559.patch";
+      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=d81b82c70bc1fb9991bb95f1201abb5dea55f57f";
+      hash = "sha512-58meVzUl0JHR0tDGJHCzJYjEs17MakzYEnzCt3ALscalO0rCA6ymheyRz0+Dt6VOlS67lrd3vTatDxqhsP068Q==";
+    })
   ];
 
   outputs = [ "out" "man" "doc" ];
