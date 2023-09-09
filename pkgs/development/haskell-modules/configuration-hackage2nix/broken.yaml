@@ -5314,6 +5314,10 @@ broken-packages:
   - tempus # failure in job https://hydra.nixos.org/build/233245670 at 2023-09-02
   - ten # failure in job https://hydra.nixos.org/build/233216705 at 2023-09-02
   - tensor # failure in job https://hydra.nixos.org/build/233233707 at 2023-09-02
+  - tensorflow # failure building python tensorflow dependency 2023-09-09
+  - tensorflow-core-ops # failure building python tensorflow dependency 2023-09-09
+  - tensorflow-logging # failure building python tensorflow dependency 2023-09-09
+  - tensorflow-ops # failure building python tensorflow dependency 2023-09-09
   - tensor-safe # failure in job https://hydra.nixos.org/build/233239719 at 2023-09-02
   - termbox-bindings # failure in job https://hydra.nixos.org/build/233257579 at 2023-09-02
   - termination-combinators # failure in job https://hydra.nixos.org/build/233202329 at 2023-09-02
