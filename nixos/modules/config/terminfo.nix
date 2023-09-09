@@ -33,6 +33,7 @@ with lib;
       termite
       tmux
       wezterm
+      yaft
     ]));
 
     environment.pathsToLink = [
