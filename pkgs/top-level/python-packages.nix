@@ -532,6 +532,8 @@ self: super: with self; {
 
   ansi2html = callPackage ../development/python-modules/ansi2html { };
 
+  ansi2image = callPackage ../development/python-modules/ansi2image { };
+
   ansible = callPackage ../development/python-modules/ansible { };
 
   ansible-compat = callPackage ../development/python-modules/ansible-compat { };
@@ -3217,6 +3219,8 @@ self: super: with self; {
   drivelib = callPackage ../development/python-modules/drivelib { };
 
   drms = callPackage ../development/python-modules/drms { };
+
+  dronecan = callPackage ../development/python-modules/dronecan { };
 
   dropbox = callPackage ../development/python-modules/dropbox { };
 
@@ -8188,6 +8192,8 @@ self: super: with self; {
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
 
+  proxy-db = callPackage ../development/python-modules/proxy-db { };
+
   py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
 
   py65 = callPackage ../development/python-modules/py65 { };
@@ -9013,6 +9019,8 @@ self: super: with self; {
   pydigiham = callPackage ../development/python-modules/pydigiham { };
 
   pydiscourse = callPackage ../development/python-modules/pydiscourse { };
+
+  pydiscovergy = callPackage ../development/python-modules/pydiscovergy { };
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 

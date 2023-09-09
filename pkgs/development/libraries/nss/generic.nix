@@ -182,9 +182,9 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.sh;
 
   passthru.tests = lib.optionalAttrs (lib.versionOlder version nss_latest.version) {
-    inherit (nixosTests) firefox-esr-102;
+    inherit (nixosTests) firefox-esr-115;
   } // lib.optionalAttrs (lib.versionAtLeast version nss_latest.version) {
-    inherit (nixosTests) firefox firefox-esr-115;
+    inherit (nixosTests) firefox;
   };
 
   meta = with lib; {

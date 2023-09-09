@@ -339,6 +339,8 @@ in {
 
     dddvb = callPackage ../os-specific/linux/dddvb { };
 
+    decklink = callPackage ../os-specific/linux/decklink { };
+
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
