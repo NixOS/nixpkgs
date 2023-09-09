@@ -50,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     pkgConfigModules = [ "libzip" ];
     platforms = platforms.unix;
-    changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
+    changelog = "https://github.com/nih-at/libzip/blob/v${finalAttrs.version}/NEWS.md";
   };
 })
