@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "gotify-server";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "gotify";
     repo = "server";
     rev = "v${version}";
-    hash = "sha256-jhCS9UBzvOEoXTNw87wmUgTJb0/BP9TToifCDEuihM0=";
+    hash = "sha256-fWcdnmpLZycg7hmPNnphGcuSMTI4bsq57XPoSyQSGDA=";
   };
 
   # With `allowGoReference = true;`, `buildGoModule` adds the `-trimpath`
@@ -25,7 +25,7 @@ buildGoModule rec {
   #   server[780]: stat /var/lib/private/ui/build/index.html: no such file or directory
   allowGoReference = true;
 
-  vendorHash = "sha256-TxxiyfWzlzQ2R2hgeBzB11FIiOz5rIBfaIm15DQ+dL0=";
+  vendorHash = "sha256-im7Pauit0tWi0BcyKtxybOqsu7rrIHZwY5Olta3nJJI=";
 
   doCheck = false;
 
@@ -38,7 +38,7 @@ buildGoModule rec {
   preBuild = ''
     if [ -n "$ui" ] # to make the preBuild a no-op inside the goModules fixed-output derivation, where it would fail
     then
-      cp -r $ui ui/build && go run hack/packr/packr.go
+      cp -r $ui ui/build
     fi
   '';
 
