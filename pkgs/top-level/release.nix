@@ -89,9 +89,9 @@ let
 
               # Tests
               /*
-              jobs.tests.cc-wrapper.x86_64-darwin
-              jobs.tests.cc-wrapper-clang.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx.x86_64-darwin
+              jobs.tests.cc-wrapper.default.x86_64-darwin
+              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
+              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
@@ -124,18 +124,18 @@ let
               jobs.cachix.x86_64-linux
 
               /*
-              jobs.tests.cc-wrapper.x86_64-linux
-              jobs.tests.cc-wrapper-gcc7.x86_64-linux
-              jobs.tests.cc-wrapper-gcc8.x86_64-linux
+              jobs.tests.cc-wrapper.default.x86_64-linux
+              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-linux
+              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-linux
 
               # broken see issue #40038
 
-              jobs.tests.cc-wrapper-clang.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx.x86_64-linux
-              jobs.tests.cc-wrapper-clang-5.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx-5.x86_64-linux
-              jobs.tests.cc-wrapper-clang-6.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx-6.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_5.clang.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_5.libcxx.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-linux
               jobs.tests.cc-multilib-gcc.x86_64-linux
               jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
@@ -158,15 +158,15 @@ let
               jobs.inkscape.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
               /*
-              jobs.tests.cc-wrapper.x86_64-darwin
-              jobs.tests.cc-wrapper-gcc7.x86_64-darwin
-              # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
-              jobs.tests.cc-wrapper-clang.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-5.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-6.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
+              jobs.tests.cc-wrapper.default.x86_64-darwin
+              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-darwin
+              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-darwin
+              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
+              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
+              jobs.tests.cc-wrapper.llvmPackages_5.clang.x86_64-darwin
+              jobs.tests.cc-wrapper.llvmPackages_5.libcxx.x86_64-darwin
+              jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-darwin
+              jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin

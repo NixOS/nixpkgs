@@ -7,9 +7,12 @@
 , httpx
 , pycryptodome
 , pyjwt
+, pytest-asyncio
 , pytestCheckHook
+, python
 , respx
 , time-machine
+, tzdata
 }:
 
 buildPythonPackage rec {
@@ -39,11 +42,20 @@ buildPythonPackage rec {
     pyjwt
   ];
 
+  postInstall = ''
+    cp -R bimmer_connected/tests/responses $out/${python.sitePackages}/bimmer_connected/tests/
+  '';
+
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     respx
     time-machine
   ];
+
+  preCheck = ''
+    export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+  '';
 
   pythonImportsCheck = [
     "bimmer_connected"

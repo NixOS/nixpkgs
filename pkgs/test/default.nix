@@ -3,23 +3,84 @@
 with pkgs;
 
 {
-  cc-wrapper = callPackage ./cc-wrapper { };
-  cc-wrapper-gcc = callPackage ./cc-wrapper { stdenv = gccStdenv; };
-  cc-wrapper-gcc7 = callPackage ./cc-wrapper { stdenv = gcc7Stdenv; };
-  cc-wrapper-gcc8 = callPackage ./cc-wrapper { stdenv = gcc8Stdenv; };
-  cc-wrapper-gcc9 = callPackage ./cc-wrapper { stdenv = gcc9Stdenv; };
-  cc-wrapper-clang = callPackage ./cc-wrapper { stdenv = llvmPackages.stdenv; };
-  cc-wrapper-libcxx = callPackage ./cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
-  cc-wrapper-clang-5 = callPackage ./cc-wrapper { stdenv = llvmPackages_5.stdenv; };
-  cc-wrapper-libcxx-5 = callPackage ./cc-wrapper { stdenv = llvmPackages_5.libcxxStdenv; };
-  cc-wrapper-clang-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.stdenv; };
-  cc-wrapper-libcxx-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.libcxxStdenv; };
-  cc-wrapper-clang-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.stdenv; };
-  cc-wrapper-libcxx-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.libcxxStdenv; };
-  cc-wrapper-clang-8 = callPackage ./cc-wrapper { stdenv = llvmPackages_8.stdenv; };
-  cc-wrapper-libcxx-8 = callPackage ./cc-wrapper { stdenv = llvmPackages_8.libcxxStdenv; };
-  cc-wrapper-clang-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.stdenv; };
-  cc-wrapper-libcxx-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.libcxxStdenv; };
+  cc-wrapper = with builtins; let
+    pkgNames = (attrNames pkgs);
+    llvmTests = let
+      pkgSets = lib.pipe pkgNames [
+        (filter (lib.hasPrefix "llvmPackages"))
+        (filter (n: n != "llvmPackages_rocm"))
+        (filter (n: n != "llvmPackages_latest"))
+        (filter (n: n != "llvmPackages_git"))
+      ];
+      tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
+        clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
+        libcxx = callPackage ./cc-wrapper { stdenv = pkgs.${name}.libcxxStdenv; };
+      });
+    in
+      tests;
+    gccTests = let
+      pkgSets = lib.pipe (attrNames pkgs) ([
+        (filter (lib.hasPrefix "gcc"))
+        (filter (lib.hasSuffix "Stdenv"))
+        (filter (n: n != "gccCrossLibcStdenv"))
+      ] ++ lib.optionals (!(
+        (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64) &&
+        (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
+      )) [
+        (filter (n: !lib.hasSuffix "MultiStdenv" n))
+      ]);
+    in lib.genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
+  in recurseIntoAttrs {
+    default = callPackage ./cc-wrapper { };
+
+    supported = stdenv.mkDerivation {
+      name = "cc-wrapper-supported";
+      builtGCC =
+        let
+          names = lib.pipe (attrNames gccTests) ([
+            (filter (n: lib.meta.availableOn stdenv.hostPlatform pkgs.${n}.cc))
+            # Broken
+            (filter (n: n != "gcc49Stdenv"))
+            (filter (n: n != "gccMultiStdenv"))
+          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+            # fails with things like
+            # ld: warning: ld: warning: object file (trunctfsf2_s.o) was built for newer macOS version (11.0) than being linked (10.5)
+            # ld: warning: ld: warning: could not create compact unwind for ___fixunstfdi: register 20 saved somewhere other than in frame
+            (filter (n: n != "gcc11Stdenv"))
+          ]);
+        in
+        toJSON (lib.genAttrs names (name: { name = pkgs.${name};  }));
+
+      builtLLVM =
+        let
+          names = lib.pipe (attrNames llvmTests) ([
+            (filter (n: lib.meta.availableOn stdenv.hostPlatform pkgs.${n}.stdenv.cc))
+            (filter (n: lib.meta.availableOn stdenv.hostPlatform pkgs.${n}.libcxxStdenv.cc))
+
+            # libcxxStdenv broken
+            # fix in https://github.com/NixOS/nixpkgs/pull/216273
+          ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+            # libcxx does not build for some reason on aarch64-linux
+            (filter (n: n != "llvmPackages_7"))
+          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+            (filter (n: n != "llvmPackages_5"))
+            (filter (n: n != "llvmPackages_6"))
+            (filter (n: n != "llvmPackages_7"))
+            (filter (n: n != "llvmPackages_8"))
+            (filter (n: n != "llvmPackages_9"))
+            (filter (n: n != "llvmPackages_10"))
+          ]);
+        in
+        toJSON (lib.genAttrs names (name: { stdenv = pkgs.${name}.stdenv; libcxx = pkgs.${name}.libcxxStdenv;  }));
+        buildCommand = ''
+          touch $out
+        '';
+    };
+
+    llvmTests = recurseIntoAttrs llvmTests;
+    inherit gccTests;
+  };
+
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };
 
