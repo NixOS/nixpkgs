@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     version = "1.1";
   };
 
-  PERL_USE_UNSAFE_INC = "1";
+  env.PERL_USE_UNSAFE_INC = "1";
 
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
