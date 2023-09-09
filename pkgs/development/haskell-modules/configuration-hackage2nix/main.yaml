@@ -610,7 +610,6 @@ unsupported-platforms:
   gtk-sni-tray:                                 [ platforms.darwin ]
   h-raylib:                                     [ platforms.darwin ] # depends on mesa
   haskell-snake:                                [ platforms.darwin ]
-  hb3sum:                                       [ aarch64-linux ] # depends on blake3, which is not supported on aarch64-linux
   hcwiid:                                       [ platforms.darwin ]
   HDRUtils:                                     [ platforms.darwin ]
   hidapi:                                       [ platforms.darwin ]
@@ -711,6 +710,7 @@ supported-platforms:
   gtk3-mac-integration:                         [ platforms.darwin ]
   halide-haskell:                               [ platforms.linux ]
   halide-JuicyPixels:                           [ platforms.linux ]
+  hb3sum:                                       [ platforms.x86 ] # due to blake3
   hommage-ds:                                   [ platforms.windows ]
   hpapi:                                        [ platforms.linux ] # limited by pkgs.papi
   hsignal:                                      [ platforms.x86 ] # -msse2
