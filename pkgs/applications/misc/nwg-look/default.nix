@@ -31,7 +31,7 @@ buildGoModule rec {
   patches = [ ./fix-paths.patch ];
 
   postPatch = ''
-    sed -i 's|@out@|'"''${out}"'|g' main.go tools.go
+    substituteInPlace main.go tools.go --replace '@out@' $out
   '';
 
   ldflags = [ "-s" "-w" ];
