@@ -260,6 +260,16 @@ in
             Restic package to use.
           '';
         };
+
+        createWrapper = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Whether to generate and add a script to the system path, that has the same environment variables set
+            as the systemd service. This can be used to e.g. mount snapshots or perform other opterations, without
+            having to manually specify most options.
+          '';
+        };
       };
     }));
     default = { };
@@ -316,7 +326,8 @@ in
           in
           nameValuePair "restic-backups-${name}" ({
             environment = {
-              RESTIC_CACHE_DIR = "%C/restic-backups-${name}";
+              # not %C, because that wouldn't work in the wrapper script
+              RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
               RESTIC_PASSWORD_FILE = backup.passwordFile;
               RESTIC_REPOSITORY = backup.repository;
               RESTIC_REPOSITORY_FILE = backup.repositoryFile;
@@ -331,7 +342,7 @@ in
                 nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
               )
               backup.rcloneConfig);
-            path = [ pkgs.openssh ];
+            path = [ config.programs.ssh.package ];
             restartIfChanged = false;
             wants = [ "network-online.target" ];
             after = [ "network-online.target" ];
@@ -378,5 +389,22 @@ in
           timerConfig = backup.timerConfig;
         })
         config.services.restic.backups;
+
+    # generate wrapper scripts, as described in the createWrapper option
+    environment.systemPackages = lib.mapAttrsToList (name: backup: let
+      extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
+      resticCmd = "${backup.package}/bin/restic${extraOptions}";
+    in pkgs.writeShellScriptBin "restic-${name}" ''
+      set -a  # automatically export variables
+      ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
+      # set same environment variables as the systemd service
+      ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
+        (lib.filterAttrs (_: v: v != null))
+        (lib.mapAttrsToList (n: v: "${n}=${v}"))
+        (lib.concatStringsSep "\n")
+      ]}
+
+      exec ${resticCmd} $@
+    '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
 }
