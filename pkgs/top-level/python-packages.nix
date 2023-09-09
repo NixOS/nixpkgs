@@ -3695,6 +3695,8 @@ self: super: with self; {
 
   fastecdsa = callPackage ../development/python-modules/fastecdsa { };
 
+  fastembed = callPackage ../development/python-modules/fastembed { };
+
   fasteners = callPackage ../development/python-modules/fasteners { };
 
   fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
