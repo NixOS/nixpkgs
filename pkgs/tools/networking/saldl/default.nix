@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , pkg-config
-, waf
+, wafHook
 , python3
 , asciidoc
 , docbook_xml_dtd_45
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    waf.hook
+    wafHook
     python3
     asciidoc
     docbook_xml_dtd_45
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl libevent ];
 
-  configureFlags = [ "--saldl-version ${version}" "--no-werror" ];
+  wafConfigureFlags = [ "--saldl-version ${version}" "--no-werror" ];
 
   outputs = [ "out" "man" ];
 

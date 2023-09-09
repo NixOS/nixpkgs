@@ -8,7 +8,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , fixDarwinDylibNames
-, waf
+, wafHook
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     python3
-    waf.hook
+    wafHook
     docbook-xsl-nons
     docbook_xml_dtd_42
   ] ++ lib.optionals stdenv.isDarwin [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--enable-talloc-compat1"
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
