@@ -1775,8 +1775,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
-
   gfshare = callPackage ../tools/security/gfshare { };
 
   gh-actions-cache = callPackage ../tools/misc/gh-actions-cache { };
