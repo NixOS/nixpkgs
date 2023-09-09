@@ -9018,6 +9018,8 @@ self: super: with self; {
 
   pydiscourse = callPackage ../development/python-modules/pydiscourse { };
 
+  pydiscovergy = callPackage ../development/python-modules/pydiscovergy { };
+
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 
   pydmd = callPackage ../development/python-modules/pydmd { };
