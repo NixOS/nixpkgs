@@ -9,6 +9,20 @@ from urllib import request
 import json
 
 
+def getMetadata(apiKey: str, family: str = "Noto Emoji"):
+    '''Fetch the Google Fonts metadata for a given family.
+
+    An API key can be obtained by anyone with a Google account (🚮) from
+      `https://developers.google.com/fonts/docs/developer_api#APIKey`
+    '''
+    from urllib.parse import urlencode
+
+    with request.urlopen(
+            "https://www.googleapis.com/webfonts/v1/webfonts?" +
+            urlencode({ 'key': apiKey, 'family': family })
+    ) as req:
+        return json.load(req)
+
 def getUrls(metadata) -> Iterable[str]:
     '''Fetch all files' URLs from Google Fonts' metadata.
 
@@ -81,10 +95,45 @@ def atomicFileUpdate(target: Path):
 
 
 if __name__ == "__main__":
-    currentDir = Path(__file__).parent
+    from os import environ
+    from urllib.error import HTTPError
 
-    with (currentDir / 'noto-emoji.json').open() as f:
-        metadata = json.load(f)
+    environVar = 'GOOGLE_FONTS_TOKEN'
+    currentDir = Path(__file__).parent
+    metadataPath = currentDir / 'noto-emoji.json'
+
+    try:
+        apiToken = environ[environVar]
+        metadata = getMetadata(apiToken)
+
+    except (KeyError, HTTPError) as exn:
+        # No API key in the environment, or the query was rejected.
+        match exn:
+            case KeyError if exn.args[0] == environVar:
+                print(f"No '{environVar}' in the environment, "
+                       "skipping metadata update")
+            case HTTPError if exn.getcode() == 400:
+                # Printing the supposed token should be fine, as this is
+                #  what the API returns on invalid tokens.
+                print(f"Got HTTP 400 (Bad Request), is this really an API token: '{apiToken}' ?")
+            case _:
+                # Unknown error, let's bubble it up
+                raise
+
+        # In that case just use the existing metadata
+        with metadataPath.open() as metadataFile:
+            metadata = json.load(metadataFile)
+
+        lastModified = metadata["items"][0]["lastModified"];
+        print(f"Using metadata from file, last modified {lastModified}")
+
+    else:
+        # If metadata was successfully fetched, validate and persist it
+        lastModified = metadata["items"][0]["lastModified"];
+        print(f"Fetched current metadata, last modified {lastModified}")
+        with atomicFileUpdate(metadataPath) as metadataFile:
+            json.dump(metadata, metadataFile, indent = 2)
+            metadataFile.write("\n")  # Pacify nixpkgs' dumb editor config check
 
     hashPath = currentDir / 'noto-emoji.hashes.json'
     try:
