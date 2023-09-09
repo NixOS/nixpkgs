@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
   # at install time but Meson does not support this
   # so we need to convince it to install all files to a temporary
   # location using DESTDIR and then move it to proper one in postInstall.
-  DESTDIR = "${placeholder "out"}/dest";
+  env.DESTDIR = "${placeholder "out"}/dest";
 
   inherit doCheck;
 
@@ -166,17 +166,17 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Move stuff from DESTDIR to proper location.
     # We use rsync to merge the directories.
-    rsync --archive "${DESTDIR}/etc" "$out"
-    rm --recursive "${DESTDIR}/etc"
-    rsync --archive "${DESTDIR}${system}"/* "$out"
-    rm --recursive "${DESTDIR}${system}"/*
-    rmdir --parents --ignore-fail-on-non-empty "${DESTDIR}${system}"
+    rsync --archive "''${DESTDIR}/etc" "$out"
+    rm --recursive "''${DESTDIR}/etc"
+    rsync --archive "''${DESTDIR}${system}"/* "$out"
+    rm --recursive "''${DESTDIR}${system}"/*
+    rmdir --parents --ignore-fail-on-non-empty "''${DESTDIR}${system}"
     for o in $(getAllOutputNames); do
-        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
-        rm --recursive "${DESTDIR}/''${!o}"
+        rsync --archive "''${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
+        rm --recursive "''${DESTDIR}/''${!o}"
     done
     # Ensure the DESTDIR is removed.
-    destdirContainer="$(dirname "${DESTDIR}")"
+    destdirContainer="$(dirname "''${DESTDIR}")"
     pushd "$destdirContainer"; rmdir --parents "''${DESTDIR##$destdirContainer/}${builtins.storeDir}"; popd
   '';
 
