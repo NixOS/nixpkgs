@@ -595,6 +595,7 @@ unsupported-platforms:
   gi-dbusmenugtk3:                              [ platforms.darwin ]
   gi-dbusmenu:                                  [ platforms.darwin ]
   gi-ggit:                                      [ platforms.darwin ]
+  gi-gtk-layer-shell:                           [ platforms.darwin ] # depends on gtk-layer-shell which is not supported on darwin
   gi-ibus:                                      [ platforms.darwin ]
   gi-javascriptcore:                            [ platforms.darwin ] # webkitgtk marked broken on darwin
   gi-ostree:                                    [ platforms.darwin ]
