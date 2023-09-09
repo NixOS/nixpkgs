@@ -47,7 +47,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Draw SVG digital circuits schematics from yosys JSON netlists";
-    homepage = "https://neilturley.dev/netlistsvg/";
+    homepage = "https://github.com/nturley/netlistsvg";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
