@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
     rev = "v${version}";
-    sha256 = "1zypzmkiwc14b9224nr37y7wviasirmwhfmifb7q1b33877g41ji";
+    hash = "sha256-UQbyzkFjrIDPcrE6yGuOWsXNjz8jWyJEWiQwHmf91/8=";
   };
 
   nativeBuildInputs = [
