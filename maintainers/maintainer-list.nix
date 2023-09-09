@@ -8281,6 +8281,16 @@
     githubId = 32305209;
     name = "John Children";
   };
+  johnhamelink = {
+    name = "John Hamelink";
+    email = "me@johnhame.link";
+    matrix = "@johnamelink:matrix.org";
+    github = "johnhamelink";
+    githubId = 101739;
+      keys = [{
+        "fingerprint" = "F98B 7F37 E9EF 3FCC 0ED8 0715 153D DFE9 A54A 9A4C";
+      }];
+  };
   johnmh = {
     email = "johnmh@openblox.org";
     github = "JohnMH";

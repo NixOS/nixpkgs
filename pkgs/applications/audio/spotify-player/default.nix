@@ -1,9 +1,13 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fixDarwinDylibNames
+, stdenv
+, darwin
 , pkg-config
 , openssl
 , cmake
+
 # deps for audio backends
 , alsa-lib
 , libpulseaudio
@@ -26,7 +30,7 @@
 , withSixel ? true
 }:
 
-assert lib.assertOneOf "withAudioBackend" withAudioBackend [ "" "alsa" "pulseaudio" "rodio" "portaudio" "jackaudio" "rodiojack" "sdl" "gstreamer" ];
+assert lib.assertOneOf "withAudioBackend" withAudioBackend [ "" "pulseaudio" "rodio" "portaudio" "jackaudio" "rodiojack" "sdl" "gstreamer" ];
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
@@ -44,22 +48,40 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ];
+  ]
+    ++ lib.optionals stdenv.isDarwin [
+      fixDarwinDylibNames rustPlatform.bindgenHook
+    ];
 
   buildInputs = [
     openssl
-    dbus
-    fontconfig
   ]
     ++ lib.optionals withSixel [ libsixel ]
     ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
     ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
-    ++ lib.optionals (withAudioBackend == "rodio") [ alsa-lib ]
+    ++ lib.optionals (withAudioBackend == "rodio" && stdenv.isLinux) [ alsa-lib ]
     ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
-    ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
-    ++ lib.optionals (withAudioBackend == "rodiojack") [ alsa-lib libjack2 ]
+    ++ lib.optionals (withAudioBackend == "jackaudio" || withAudioBackend == "rodiojack") [ libjack2 ]
+    ++ lib.optionals (withAudioBackend == "rodiojack" && stdenv.isLinux) [ alsa-lib ]
     ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
-    ++ lib.optionals (withAudioBackend == "gstreamer") [ gst_all_1.gstreamer gst_all_1.gst-devtools gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
+    ++ lib.optionals (withAudioBackend == "gstreamer") [ gst_all_1.gstreamer gst_all_1.gst-devtools gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ]
+    ++ lib.optionals stdenv.isLinux [
+      fontconfig
+      dbus
+    ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      Cocoa AppKit Security AudioUnit MediaPlayer
+    ]);
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    # TODO: Figure out why fixDarwinDylibNames isn't doing this. Is it
+    #       because the filename is different?
+
+    # Get full path for the lib with "~+"
+    for lib in $(find ~+ -name "libsixel*.dylib"); do
+        install_name_tool -change $lib ${libsixel}/lib/libsixel.dylib $out/bin/spotify_player
+    done
+  '';
 
   buildNoDefaultFeatures = true;
 
@@ -79,6 +101,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
     mainProgram = "spotify_player";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya xyven1 ];
+    maintainers = with lib.maintainers; [ dit7ya xyven1 johnhamelink ];
   };
 }
