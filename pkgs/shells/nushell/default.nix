@@ -19,6 +19,8 @@
 , testers
 , nushell
 , nix-update-script
+, makeBinaryWrapper
+, plugins ? []
 }:
 
 let
@@ -38,7 +40,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-NtTCuTWbGTrGKF7ulm3Bfal/WuBtPEX7QvHoOyKY1V8=";
 
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs = [ pkg-config makeBinaryWrapper ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
     ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
@@ -58,6 +60,20 @@ rustPlatform.buildRustPackage {
     HOME=$(mktemp -d) cargo test
     runHook postCheck
   '';
+
+  postInstall = lib.optional (plugins != []) (
+    let
+      pluginRegistryPath = "$out/share/nushell/plugins.nu";
+      pluginRegistrations = (map (p: ''$out/bin/nu --plugin-config ${pluginRegistryPath} -c "register ${p}/bin/${p.meta.mainProgram}"'') plugins);
+    in
+    ''
+      mkdir -p "$(dirname ${pluginRegistryPath})"
+      touch ${pluginRegistryPath}
+      ${builtins.concatStringsSep "\n" pluginRegistrations}
+      wrapProgram $out/bin/nu \
+        --add-flags --plugin-config \
+        --add-flags "${pluginRegistryPath}"
+    '');
 
   passthru = {
     shellPath = "/bin/nu";

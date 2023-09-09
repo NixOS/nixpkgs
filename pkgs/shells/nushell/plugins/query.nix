@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage {
     license = licenses.mpl20;
     maintainers = with maintainers; [ happysalada ];
     platforms = with platforms; all;
+    mainProgram = "nu_plugin_query";
   };
 }

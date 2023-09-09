@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage {
     license = licenses.mpl20;
     maintainers = with maintainers; [ mrkkrp ];
     platforms = with platforms; all;
+    mainProgram = "nu_plugin_gstat";
   };
 }
