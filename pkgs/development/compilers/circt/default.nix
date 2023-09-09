@@ -6,6 +6,7 @@
 , git
 , fetchFromGitHub
 , ninja
+, gitUpdater
 }:
 
 let
@@ -68,6 +69,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "check-circt check-circt-integration";
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "firtool-";
+  };
 
   meta = {
     description = "Circuit IR compilers and tools";
