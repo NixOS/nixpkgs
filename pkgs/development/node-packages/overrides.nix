@@ -256,13 +256,6 @@ final: prev: {
     '';
   };
 
-  parcel = prev.parcel.override {
-    buildInputs = [ final.node-gyp-build ];
-    preRebuild = ''
-      sed -i -e "s|#!/usr/bin/env node|#! ${nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
-    '';
-  };
-
   pnpm = prev.pnpm.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
 
