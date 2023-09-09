@@ -3,6 +3,7 @@
 , fetchurl
 , SDL2
 , curl
+, darwin
 , docbook_xml_dtd_45
 , docbook_xsl
 , gtk3
@@ -10,13 +11,12 @@
 , libGLU
 , libX11
 , libXpm
-, libobjc
 , libtool
 , ncurses
 , pkg-config
 , readline
 , wget
-, wxGTK
+, wxGTK32
 , enableSDL2 ? true
 , enableTerm ? true
 , enableWx ? !stdenv.isDarwin
@@ -49,14 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ] ++ lib.optionals enableWx [
     gtk3
-    wxGTK
+    wxGTK32
   ] ++ lib.optionals enableX11 [
     libGL
     libGLU
     libX11
     libXpm
   ] ++ lib.optionals stdenv.isDarwin [
-    libobjc
+    darwin.libobjc
   ];
 
   configureFlags = [
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bochs.sourceforge.io/";
     description = "An open-source IA-32 (x86) PC emulator";
     longDescription = ''
@@ -142,9 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
       in C++, that runs on most popular platforms. It includes emulation of the
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 })
 # TODO: a better way to organize the options
