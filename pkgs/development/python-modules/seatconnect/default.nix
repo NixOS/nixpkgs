@@ -40,13 +40,6 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest>=5,<6'," ""
-    substituteInPlace requirements.txt \
-      --replace "pytest-asyncio" ""
-  '';
-
   # Project only has a dummy test
   doCheck = false;
 
@@ -57,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to communicate with Seat Connect";
     homepage = "https://github.com/farfar/seatconnect";
+    changelog = "https://github.com/Farfar/seatconnect/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
