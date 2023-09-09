@@ -123,6 +123,8 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
     cargoInstallHook
     cargoSetupHook
     rustc
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    ./freebsd-ldflags.sh
   ];
 
   buildInputs = buildInputs

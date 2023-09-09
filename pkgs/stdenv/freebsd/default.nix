@@ -59,7 +59,7 @@ in
       pname = "fbworld";
       version = "14.0-CURRENT";
       world = fbworld-base;
-      outputs = ["lib" "out" "outbin" "corebin" "cc" "sh" "zip"];  # misbehaves when bin is named bin?
+      outputs = ["lib" "out" "dev" "outbin" "corebin" "cc" "sh" "zip"];  # misbehaves when bin is named bin?
       builder = ./world-patcher.sh;
       patchelf = "${patchelf_}/bin/patchelf";
       readelf = "${hostTools}/bin/readelf";
@@ -328,7 +328,6 @@ in
       shell = "${prevStage.bash}/bin/bash";
       cc = import ../../build-support/cc-wrapper ({
         inherit lib;
-        nixSupport = { cc-ldflags = "--allow-shlib-undefined"; };
         name = "stdenv-freebsd-boot-2-cc-wrapper";
         stdenvNoCC = prevStage.stdenv;
         cc = prevStage.fbworld.cc;
@@ -358,9 +357,7 @@ in
       };
       overrides = self: super: {
         inherit (prevStage) fbworld bash;
-        gcc = super.gcc.override {
-          nixSupport = { cc-ldflags = "--allow-shlib-undefined"; };
-        };
+        libkrb5 = prevStage.fbworld // { override = _: prevStage.fbworld; };
       };
     };
   })
@@ -385,7 +382,12 @@ in
           ) ];
       inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
       shell = "${prevStage.bash}/bin/bash";
-      cc = prevStage.gcc;
+      cc = (prevStage.gcc.overrideAttrs (self: super: {
+        setupHooks = super.setupHooks ++ [ ./cc-wrapper-setup-hook-hook.sh ];
+        gnused = prevStage.gnused;
+      })).override {
+        nixSupport = { cc-ldflags = "--allow-shlib-undefined"; };
+      };
       fetchurlBoot = import ../../build-support/fetchurl {
         inherit lib;
         stdenvNoCC = stdenv;
@@ -393,7 +395,13 @@ in
       };
       overrides = self: super: {
         inherit (prevStage) fbworld bash;
+        libkrb5 = prevStage.fbworld // { override = _: prevStage.fbworld; };
       };
+      preHook =
+        ''
+          export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+          #export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+        '';
     };
   })
 ]

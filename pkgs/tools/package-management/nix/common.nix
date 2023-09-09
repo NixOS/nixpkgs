@@ -64,7 +64,7 @@ in
     !stdenv.buildPlatform.isRiscV
   )
 , enableStatic ? stdenv.hostPlatform.isStatic
-, withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
+, withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin || stdenv.isFreeBSD), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
 
 , confDir

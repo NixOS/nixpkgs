@@ -13,7 +13,7 @@ mkdir $outbin/usr
 mv $out/usr/bin $outbin/usr/bin
 mv $out/usr/sbin $outbin/usr/sbin
 
-mkdir -p $corebin/bin $lib/lib $cc/bin $sh/bin $zip/bin
+mkdir -p $corebin/bin $lib/lib $cc/bin $sh/bin $zip/bin $dev
 ln -sf $outbin/usr/bin/* $corebin/bin
 ln -sf $outbin/usr/sbin/* $corebin/bin
 ln -sf $outbin/bin/* $corebin/bin
@@ -21,6 +21,7 @@ ln -sf $outbin/sbin/* $corebin/bin
 ln -sf $out/lib/* $lib/lib
 ln -sf $out/usr/lib/* $lib/lib
 ln -sf $out/libexec $lib/libexec
+ln -sf $out/usr/include $dev/include
 
 find $outbin/bin $outbin/sbin $outbin/usr/bin $outbin/usr/sbin -type f | while read FILE; do
     INTERPRETER="$($patchelf --print-interpreter $FILE 2>/dev/null)"
@@ -39,6 +40,12 @@ find $outbin/bin $outbin/sbin $outbin/usr/bin $outbin/usr/sbin -type f | while r
     fi
 done
 
+find $out/lib $out/usr/lib -type f | while read FILE; do
+    if grep -I /lib $FILE >/dev/null; then
+        sed -i '' -e "s, /lib/, $out/lib/,g" -e "s, /usr/lib/, $out/usr/lib/,g" -e "s,(/lib/,($out/lib/,g" -e "s,(/usr/lib/,($out/usr/lib/,g" $FILE
+    fi
+done
+
 for f in cc clang clang++ ld ld.lld cpp ar; do
     ln -s $corebin/bin/$f $cc/bin
 done
@@ -47,6 +54,7 @@ done
 mkdir -p $outbin/usr/lib $cc/lib
 ln -s $lib/lib/clang $outbin/usr/lib
 ln -s $lib/lib/clang $cc/lib
+ln -s $out/usr/include $out/include
 
 for f in sh; do
     ln -s $corebin/bin/$f $sh/bin
