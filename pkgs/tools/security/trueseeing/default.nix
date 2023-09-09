@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "alterakey";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-pnIn+Rqun5J3F9cgeBUBX4e9WP5fgbm+vwN3Wqh/yEc=";
   };
 
@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Non-decompiling Android vulnerability scanner";
     homepage = "https://github.com/alterakey/trueseeing";
+    changelog = "https://github.com/alterakey/trueseeing/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };
