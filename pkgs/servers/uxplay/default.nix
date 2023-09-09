@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxplay";
-  version = "1.65.3";
+  version = "1.66";
 
   src = fetchFromGitHub {
     owner = "FDH2";
