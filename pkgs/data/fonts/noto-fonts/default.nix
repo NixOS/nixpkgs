@@ -229,6 +229,7 @@ rec {
     # Metadata fetched from
     #  https://www.googleapis.com/webfonts/v1/webfonts?key=${GOOGLE_FONTS_TOKEN}&family=Noto+Emoji
     let metadata = with builtins; head (fromJSON (readFile ./noto-emoji.json)).items;
+        urlHashes = with builtins; fromJSON (readFile ./noto-emoji.hashes.json);
 
     in
     stdenvNoCC.mkDerivation {
@@ -245,17 +246,10 @@ rec {
           "600"   = "SemiBold";
           "700"   = "Bold";
         };
-        fileHashes = {
-          "NotoEmoji-Bold.ttf"     = "ce426e27c6254eb515fb6f301c8aa7cb7c90be3bd9a843c6e165d899a2dc63c0";
-          "NotoEmoji-Light.ttf"    = "f67750a89273b02911e8a71844d556df05d6331707fb44331604107421bcbd2a";
-          "NotoEmoji-Medium.ttf"   = "c3317d90a34c7904d86764144f9a4881aba1976a8ca59da730b35378026eaad4";
-          "NotoEmoji-Regular.ttf"  = "01718b75679b75dc8985328c5bf0ffead5bc38371a5eb50cf7a9b684df706258";
-          "NotoEmoji-SemiBold.ttf" = "3487a513c5fe94ab47eb24f77853d957bcd8511dd8e469cda1b01b7fb01c911d";
-        };
       in lib.mapAttrsToList
-        (variant: url: fetchurl rec { name = "NotoEmoji-${weightNames.${variant}}.ttf";
-                                      sha256 = fileHashes.${name};
-                                      inherit url; } )
+        (variant: url: fetchurl { name = "NotoEmoji-${weightNames.${variant}}.ttf";
+                                  hash = urlHashes.${url};
+                                  inherit url; } )
         metadata.files;
 
       installPhase = ''
