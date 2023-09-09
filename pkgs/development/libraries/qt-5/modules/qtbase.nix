@@ -139,10 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     ''
   );
 
-  qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
-  qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
-  qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
-
   setOutputFlags = false;
   prefixKey = "-prefix ";
 
@@ -207,6 +203,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
     fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
+
+    qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
+    qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
+    qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
   };
 
   preHook = ''

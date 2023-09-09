@@ -1,6 +1,8 @@
 . @fix_qmake_libtool@
 
-qmakeFlags=( ${qmakeFlags-} )
+if [ -z "$__structuredAttrs" ]; then
+    qmakeFlags=( ${qmakeFlags-} )
+fi
 
 qmakePrePhase() {
     qmakeFlags_orig=( "${qmakeFlags[@]}" )
