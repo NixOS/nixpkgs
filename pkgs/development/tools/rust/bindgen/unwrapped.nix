@@ -26,7 +26,7 @@ in rustPlatform.buildRustPackage rec {
   doCheck = true;
   nativeCheckInputs = [ clang ];
 
-  RUSTFMT = "${rustfmt-nightly}/bin/rustfmt";
+  env.RUSTFMT = "${rustfmt-nightly}/bin/rustfmt";
 
   preCheck = ''
     # for the ci folder, notably
