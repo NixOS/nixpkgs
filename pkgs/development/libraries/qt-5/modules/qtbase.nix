@@ -97,15 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit patches;
 
-  fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
-  fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
-  preHook = ''
-    . "$fix_qt_builtin_paths"
-    . "$fix_qt_module_paths"
-    . ${../hooks/move-qt-dev-tools.sh}
-    . ${../hooks/fix-qmake-libtool.sh}
-  '';
-
   postPatch = ''
     for prf in qml_plugin.prf qt_plugin.prf qt_docs.prf qml_module.prf create_cmake.prf; do
         substituteInPlace "mkspecs/features/$prf" \
@@ -153,7 +144,13 @@ stdenv.mkDerivation (finalAttrs: {
   qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
 
   setOutputFlags = false;
+  prefixKey = "-prefix ";
+
   preConfigure = ''
+    if [ -n "$__structuredAttrs" ]; then
+        configureFlags+=( -prefix "$prefix" )
+        dontAddPrefix=true
+    fi
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
@@ -186,34 +183,44 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
-    ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
-    ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
-    ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
-  ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
-    ++ lib.optional stdenv.isLinux "-DUSE_X11"
-    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-      # ignore "is only available on macOS 10.12.2 or newer" in obj-c code
-      "-Wno-error=unguarded-availability"
-    ]
-    ++ lib.optionals withGtk3 [
-         ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-         ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-  ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
+  env = {
+    NIX_CFLAGS_COMPILE = toString ([
+      "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
+      ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
+      ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
+      ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
+    ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
+      ++ lib.optional stdenv.isLinux "-DUSE_X11"
+      ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+        # ignore "is only available on macOS 10.12.2 or newer" in obj-c code
+        "-Wno-error=unguarded-availability"
+      ]
+      ++ lib.optionals withGtk3 [
+           ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+           ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+    ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
 
-  prefixKey = "-prefix ";
+    # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
+    # if dependency paths contain the string "pq", which can occur in the hash.
+    # To prevent these failures, we need to override PostgreSQL detection.
+    PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
-  # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
-  # if dependency paths contain the string "pq", which can occur in the hash.
-  # To prevent these failures, we need to override PostgreSQL detection.
-  PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
+    fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
+    fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
+  };
+
+  preHook = ''
+    . "$fix_qt_builtin_paths"
+    . "$fix_qt_module_paths"
+    . ${../hooks/move-qt-dev-tools.sh}
+    . ${../hooks/fix-qmake-libtool.sh}
+  '';
 
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags = [
-    "-plugindir $(out)/$(qtPluginPrefix)"
-    "-qmldir $(out)/$(qtQmlPrefix)"
-    "-docdir $(out)/$(qtDocPrefix)"
+    "-plugindir" "$(out)/$(qtPluginPrefix)"
+    "-qmldir" "$(out)/$(qtQmlPrefix)"
+    "-docdir" "$(out)/$(qtDocPrefix)"
 
     "-verbose"
     "-confirm-license"
@@ -230,7 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     "-gui"
     "-widgets"
-    "-opengl desktop"
+    "-opengl" "desktop"
     "-icu"
     "-L" "${icu.out}/lib"
     "-I" "${icu.dev}/include"
@@ -272,10 +279,10 @@ stdenv.mkDerivation (finalAttrs: {
     ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
-    "-make libs"
-    "-make tools"
-    ''-${lib.optionalString (!buildExamples) "no"}make examples''
-    ''-${lib.optionalString (!buildTests) "no"}make tests''
+    "-make" "libs"
+    "-make" "tools"
+    ''-${lib.optionalString (!buildExamples) "no"}make'' "examples"
+    ''-${lib.optionalString (!buildTests) "no"}make'' "tests"
   ]
     ++ (
       if stdenv.isDarwin then [
@@ -287,7 +294,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-rpath"
     ] ++ [
       "-xcb"
-      "-qpa xcb"
+      "-qpa" "xcb"
       "-L" "${libX11.out}/lib"
       "-I" "${libX11.out}/include"
       "-L" "${libXext.out}/lib"
