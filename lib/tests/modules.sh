@@ -433,6 +433,9 @@ checkConfigError 'Could not load a value as a module, because it is of type "fla
 checkConfigOutput '^true$' "$@" config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
 checkConfigError 'Could not load a value as a module, because it is of type "configuration", in file .*/import-configuration.nix.*please only import the modules that make up the configuration.*' config ./import-configuration.nix
 
+checkConfigOutput '"foo"' config.foo ./no-ellipsis-module.nix
+checkConfigOutput '"foo"' config.foo ./module-with-at-pattern.nix
+
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
 # doRename adds a warning.
