@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     mainProgram = "vipsdisp";
     maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = platforms.unix;
   };
 }
