@@ -5,7 +5,7 @@ let
 in
   import ./make-test-python.nix ({ lib, pkgs, ...} : {
     name = "sudo";
-    meta.maintainers = with lib.maintainers; [ lschuermann ];
+    meta.maintainers = pkgs.sudo.meta.maintainers;
 
     nodes.machine =
       { lib, ... }:
