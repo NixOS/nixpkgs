@@ -29,6 +29,7 @@ with lib;
       rio
       rxvt-unicode-unwrapped
       rxvt-unicode-unwrapped-emoji
+      st
       termite
       tmux
       wezterm
