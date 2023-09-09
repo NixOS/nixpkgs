@@ -8212,6 +8212,8 @@ self: super: with self; {
 
   pyflick = callPackage ../development/python-modules/pyflick { };
 
+  pyfluidsynth = callPackage ../development/python-modules/pyfluidsynth { };
+
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
 
   pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
