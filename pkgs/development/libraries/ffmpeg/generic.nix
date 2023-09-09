@@ -469,7 +469,6 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withModplug "libmodplug")
     (enableFeature withMysofa "libmysofa")
     (enableFeature withOpus "libopus")
-    (optionalString (versionAtLeast version "5.0" && withLibplacebo) "--enable-libplacebo")
     (enableFeature withSvg "librsvg")
     (enableFeature withSrt "libsrt")
     (enableFeature withSsh "libssh")
@@ -526,6 +525,8 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOptimisations "optimizations")
     (enableFeature withExtraWarnings "extra-warnings")
     (enableFeature withStripping "stripping")
+  ] ++ optionals (versionAtLeast version "5.0" && withLibplacebo) [
+    "--enable-libplacebo"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--enable-cross-compile"
