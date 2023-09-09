@@ -7,9 +7,9 @@
 , darwin
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sound-of-sorting";
-  version = "unstable-2022-10-12";
+  version = "0.6.5-unstable-2022-10-12";
 
   src = fetchFromGitHub {
     owner = "bingmann";
@@ -26,13 +26,16 @@ stdenv.mkDerivation {
     wxGTK32
     SDL2
   ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa ;
+  ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+  ];
 
   meta = {
     description = "Audibilization and Visualization of Sorting Algorithms";
     homepage = "https://panthema.net/2013/sound-of-sorting/";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "sound-of-sorting";
     maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    inherit (SDL2.meta) platforms;
   };
-}
+})
