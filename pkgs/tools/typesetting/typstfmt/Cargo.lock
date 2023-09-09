@@ -504,7 +504,7 @@ dependencies = [
 
 [[package]]
 name = "typstfmt"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "lexopt",
  "typstfmt_lib",
@@ -512,7 +512,7 @@ dependencies = [
 
 [[package]]
 name = "typstfmt_lib"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "globmatch",
  "insta",
