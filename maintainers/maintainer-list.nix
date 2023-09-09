@@ -9392,6 +9392,12 @@
     name = "Tomas Krupka";
     matrix = "@krupkat:matrix.org";
   };
+  krzaczek = {
+    name = "Pawel Krzaczkowski";
+    email = "pawel@printu.pl";
+    github = "krzaczek";
+    githubId = 5773701;
+  };
   ktf = {
     email = "giulio.eulisse@cern.ch";
     github = "ktf";
