@@ -12555,8 +12555,6 @@ with pkgs;
 
   ratt = callPackage ../applications/misc/ratt { };
 
-  rc = callPackage ../shells/rc { };
-
   rc-9front = callPackage ../shells/rc-9front { };
 
   rcon = callPackage ../tools/networking/rcon { };
