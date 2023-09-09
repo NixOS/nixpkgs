@@ -36,6 +36,28 @@ let
         '';
       };
 
+      securetty = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = lib.mdDoc ''
+            Allows root logins only if the user is logging in on a "secure" tty.
+
+            See {manpage}`pam_securetty(8)` for details.
+          '';
+        };
+
+        noconsole = mkOption {
+          default = false;
+          type = types.bool;
+          description = lib.mdDoc ''
+            Do not automatically allow root logins on the kernel console device,
+            as specified on the kernel command line or by the sys file, if it is
+            not also specified in {option}`security.pam.securetty`.
+          '';
+        };
+      };
+
       p11Auth = mkOption {
         default = config.security.pam.p11.enable;
         defaultText = literalExpression "config.security.pam.p11.enable";
@@ -516,6 +538,9 @@ let
           '' +
           optionalString cfg.rootOK ''
             auth sufficient pam_rootok.so
+          '' +
+          optionalString cfg.securetty.enable ''
+            auth required pam_securetty.so ${optionalString cfg.securetty.noconsole "noconsole"}
           '' +
           optionalString cfg.requireWheel ''
             auth required pam_wheel.so use_uid
@@ -1001,6 +1026,17 @@ in
       };
     };
 
+    security.pam.securetty = mkOption {
+      default = [];
+      example = [ "ttyS1" ];
+      type = types.listOf types.str;
+      description = lib.mdDoc ''
+        List of terminals from which root can log in. Each entry is a device name without the leading `/dev/`.
+
+        The pam_securetty module must be enabled with {option}`security.pam.services.<name>.securetty.enable`.
+      '';
+    };
+
     security.pam.u2f = {
       enable = mkOption {
         default = false;
@@ -1369,7 +1405,9 @@ in
       };
     };
 
-    environment.etc = mapAttrs' makePAMService config.security.pam.services;
+    environment.etc =
+      (mapAttrs' makePAMService config.security.pam.services) //
+      { securetty.text = concatLines config.security.pam.securetty; };
 
     security.pam.services =
       { other.text =
