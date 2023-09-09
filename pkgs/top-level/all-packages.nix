@@ -36670,8 +36670,7 @@ with pkgs;
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
-  windowmaker = callPackage ../applications/window-managers/windowmaker { };
-  dockapps = callPackage ../applications/window-managers/windowmaker/dockapps { };
+  dockapps = callPackage ../by-name/wi/windowmaker/dockapps { };
 
   wily = callPackage ../applications/editors/wily { };
 
