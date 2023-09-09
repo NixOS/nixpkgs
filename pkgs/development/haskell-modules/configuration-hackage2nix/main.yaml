@@ -577,6 +577,8 @@ unsupported-platforms:
   bustle:                                       [ platforms.darwin ] # uses glibc-specific ptsname_r
   bytelog:                                      [ platforms.darwin ] # due to posix-api
   camfort:                                      [ aarch64-linux ]
+  chalkboard:                                   [ platforms.darwin ] # depends on Codec-Image-DevIL
+  chalkboard-viewer:                            [ platforms.darwin ] # depends on chalkboard
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   Codec-Image-DevIL:                            [ platforms.darwin ] # depends on mesa
   coinor-clp:                                   [ aarch64-linux ] # aarch64-linux is not supported by required system dependency clp
