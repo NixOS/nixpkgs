@@ -19,7 +19,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
-    repo = pname;
+    repo = "nwg-look";
     rev = "v${version}";
     hash = "sha256-wUI58qYkVYgES87HQ4octciDlOJ10oJldbUkFgxRUd4=";
   };
