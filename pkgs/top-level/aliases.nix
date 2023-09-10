@@ -367,6 +367,7 @@ mapAliases ({
 
   ### D ###
 
+  oroborus = throw "oroborus was removed, because it was abandoned years ago."; #Added 2023-09-10
   d1x_rebirth = throw "'d1x_rebirth' has been renamed to/replaced by 'dxx-rebirth'"; # Converted to throw 2022-02-22
   d2x_rebirth = throw "'d2x_rebirth' has been renamed to/replaced by 'dxx-rebirth'"; # Converted to throw 2022-02-22
   dart_dev = throw "Non-stable versions of Dart have been removed"; # Added 2020-01-15
