@@ -14,6 +14,20 @@ let
                       else
                         pkgs.postgresql_13;
 
+  # gitlab 16.3.0 requires git 2.41.0, but nixos 23.05 is at 2.40.1
+  gitPackage = if
+    versionOlder pkgs.git.version "2.41.0" && lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "16.3"
+  then
+    pkgs.git.overrideAttrs (old: rec {
+      version = "2.41.0";
+      src = pkgs.fetchurl {
+        url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
+        hash = "sha256-50i6/UJM/oCyEsvG8bvMw6R9SGL7HreYiHd1BHhWgEA=";
+      };
+    })
+  else
+    pkgs.git;
+
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
@@ -43,7 +57,7 @@ let
     prometheus_listen_addr = "localhost:9236"
 
     [git]
-    bin_path = "${pkgs.git}/bin/git"
+    bin_path = "${gitPackage}/bin/git"
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
@@ -179,7 +193,7 @@ let
   runtimeDeps = with pkgs; [
     nodejs
     gzip
-    git
+    gitPackage
     gnutar
     postgresqlPackage
     coreutils
@@ -1088,6 +1102,11 @@ in {
         ''Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
           Please back up your data and migrate to the gitlab-container-registry package.''
       )
+      (mkIf
+        (versionAtLeast (getVersion cfg.packages.gitlab) "16.2.0" && versionOlder (getVersion cfg.packages.gitlab) "16.5.0")
+        ''GitLab instances created or updated between versions [15.11.0, 15.11.2] have an incorrect database schema.
+        Check the upstream documentation for a workaround: https://docs.gitlab.com/ee/update/versions/gitlab_16_changes.html#undefined-column-error-upgrading-to-162-or-later''
+      )
     ];
 
     assertions = [
@@ -1125,7 +1144,7 @@ in {
       }
     ];
 
-    environment.systemPackages = [ pkgs.git gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
+    environment.systemPackages = [ gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
 
     systemd.targets.gitlab = {
       description = "Common target for all GitLab services.";
@@ -1299,7 +1318,7 @@ in {
         jq
         openssl
         replace-secret
-        git
+        gitPackage
       ];
       serviceConfig = {
         Type = "oneshot";
@@ -1454,7 +1473,7 @@ in {
       });
       path = with pkgs; [
         postgresqlPackage
-        git
+        gitPackage
         ruby
         openssh
         nodejs
@@ -1484,7 +1503,7 @@ in {
       partOf = [ "gitlab.target" ];
       path = with pkgs; [
         openssh
-        git
+        gitPackage
         gzip
         bzip2
       ];
@@ -1567,7 +1586,7 @@ in {
       path = with pkgs; [
         remarshal
         exiftool
-        git
+        gitPackage
         gnutar
         gzip
         openssh
@@ -1640,7 +1659,7 @@ in {
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        git
+        gitPackage
         openssh
         nodejs
         procps
@@ -1655,7 +1674,7 @@ in {
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart = concatStringsSep " " [
-          "${cfg.packages.gitlab.rubyEnv}/bin/puma"
+          "${cfg.packages.gitlab.rubyEnv}/bin/bundle" "exec" "puma"
           "-e production"
           "-C ${cfg.statePath}/config/puma.rb"
           "-w ${cfg.puma.workers}"

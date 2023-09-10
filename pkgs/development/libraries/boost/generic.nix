@@ -9,7 +9,7 @@
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
-, enableShared ? !(with stdenv.hostPlatform; isStatic || libc == "msvcrt") # problems for now
+, enableShared ? !(with stdenv.hostPlatform; isStatic || isMinGW) # problems for now
 , enableStatic ? !enableShared
 , enablePython ? false
 , enableNumpy ? false
@@ -91,7 +91,7 @@ let
     ++ lib.optional (!enablePython) "--without-python"
     ++ lib.optional needUserConfig "--user-config=user-config.jam"
     ++ lib.optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
-    ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "threadapi=win32"
   ] ++ extraB2Args
   );
@@ -240,7 +240,7 @@ stdenv.mkDerivation {
     # Make boost header paths relative so that they are not runtime dependencies
     cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
       -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
-  '' + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
+  '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
     $RANLIB "$out/lib/"*.a
   '';
 
