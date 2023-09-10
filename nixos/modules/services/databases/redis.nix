@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -343,7 +343,7 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/redis-server /var/lib/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
+        ExecStart = "${cfg.package}/bin/redis-server /var/lib/${redisName name}/redis.conf ${utils.escapeSystemdExecArgs conf.extraParams}";
         ExecStartPre = "+"+pkgs.writeShellScript "${redisName name}-prep-conf" (let
           redisConfVar = "/var/lib/${redisName name}/redis.conf";
           redisConfRun = "/run/${redisName name}/nixos.conf";
