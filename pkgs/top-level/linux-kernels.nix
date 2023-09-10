@@ -164,7 +164,9 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.tpm-crb-v4
+
+        # From 6.1.46, remove wit when upstream included
+        kernelPatches.tpm-crb
       ];
     };
 
@@ -180,7 +182,9 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.tpm-crb-v4
+
+        # From 6.4.11, remove wit when upstream 
+        kernelPatches.tpm-crb
       ];
     };
 
@@ -188,7 +192,9 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.tpm-crb-v4
+
+        # From 6.5.0, remove wit when upstream included
+        kernelPatches.tpm-crb
       ];
     };
 

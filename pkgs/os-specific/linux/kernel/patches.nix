@@ -59,8 +59,12 @@
   };
 
   #fix https://bugzilla.kernel.org/show_bug.cgi?id=217804
-  tpm-crb-v4 = {
-    name = "tpm-crb-v4";
-    patch = ./tpm-crb-v4.patch;
+  tpm-crb = rec {
+    name = "tpm-crb";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://github.com/torvalds/linux/commit/8f7f35e5aa6f2182eabcfa3abef4d898a48e9aa8.patch";
+      sha256 = "sha256-j+wtITmYwqm1Oa6BUGO1t2sg/glAZPLvdZLV6PwdKAQ=";
+    };
   };
 }
