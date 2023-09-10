@@ -4,19 +4,20 @@
 , installShellFiles
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mksh";
   version = "59c";
 
   src = fetchurl {
     urls = [
-      "http://www.mirbsd.org/MirOS/dist/mir/mksh/${pname}-R${version}.tgz"
-      "http://pub.allbsd.org/MirOS/dist/mir/mksh/${pname}-R${version}.tgz"
+      "http://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R${finalAttrs.version}.tgz"
+      "http://pub.allbsd.org/MirOS/dist/mir/mksh/mksh-R${finalAttrs.version}.tgz"
     ];
     hash = "sha256-d64WZaM38cSMYda5Yds+UhGbOOWIhNHIloSvMfh7xQY=";
   };
 
   strictDeps = true;
+
   nativeBuildInputs = [
     installShellFiles
   ];
@@ -37,7 +38,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru = {
+    shellPath = "/bin/mksh";
+  };
+
+  meta = {
     homepage = "http://www.mirbsd.org/mksh.htm";
     description = "MirBSD Korn Shell";
     longDescription = ''
@@ -47,14 +52,10 @@ stdenv.mkDerivation rec {
       also to be readily available under other UNIX(R)-like operating
       systems.
     '';
-    license = with licenses; [ miros isc unicode-dfs-2016 ];
-    maintainers = with maintainers; [ AndersonTorres joachifm ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ miros isc unicode-dfs-2016 ];
+    maintainers = with lib.maintainers; [ AndersonTorres joachifm ];
+    platforms = lib.platforms.unix;
   };
-
-  passthru = {
-    shellPath = "/bin/mksh";
-  };
-}
+})
 # TODO [ AndersonTorres ]: lksh
 # TODO [ AndersonTorres ]: a more accurate licensing info

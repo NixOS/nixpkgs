@@ -15400,8 +15400,6 @@ with pkgs;
 
   liquidprompt = callPackage ../shells/liquidprompt { };
 
-  mksh = callPackage ../shells/mksh { };
-
   murex = callPackage ../shells/murex { };
 
   oh = callPackage ../shells/oh { };
