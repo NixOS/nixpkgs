@@ -1,33 +1,38 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromRepoOrCz
+, autoreconfHook
 , pkg-config
+, imagemagick
 , libX11
 , libXext
 , libXft
-, libXmu
 , libXinerama
-, libXrandr
+, libXmu
 , libXpm
-, imagemagick
-, libpng
-, libjpeg
+, libXrandr
+, libXres
 , libexif
+, libjpeg
+, libpng
 , libtiff
 , giflib
 , libwebp
+, pango
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "windowmaker";
-  version = "0.95.9";
+  version = "0.96.0";
 
-  src = fetchurl {
-    url = "http://windowmaker.org/pub/source/release/WindowMaker-${finalAttrs.version}.tar.gz";
-    hash = "sha256-8iNY/2AwFnDh4rUC+q0PLaf/iXZjLVOPlf5GOOnGtxQ=";
+  src = fetchFromRepoOrCz {
+    repo = "wmaker-crm";
+    rev = "wmaker-${finalAttrs.version}";
+    hash = "sha256-6DS5KztCNWPQL6/qJ5vlkOup2ourxSNf6LLTFYpPWi8=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
   ];
 
@@ -41,15 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
     libXmu
     libXpm
     libXrandr
+    libXres
     libexif
     libjpeg
     libpng
     libtiff
     libwebp
+    pango
   ];
 
   configureFlags = [
-    "--disable-magick" # Many distros reported imagemagick fails to be found
     "--enable-modelock"
     "--enable-randr"
     "--enable-webp"
