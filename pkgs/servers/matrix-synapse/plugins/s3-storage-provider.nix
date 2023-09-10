@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, matrix-synapse, twisted, humanize, boto3, tqdm }:
+{ lib
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, humanize
+, matrix-synapse
+, tqdm
+, twisted
+}:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-s3-storage-provider";
@@ -7,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse-s3-storage-provider";
-    rev = "v${version}";
-    sha256 = "sha256-92Xkq54jrUE2I9uVOxI72V9imLNU6K4JqDdOZb+4f+Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-92Xkq54jrUE2I9uVOxI72V9imLNU6K4JqDdOZb+4f+Y=";
   };
 
   postPatch = ''
@@ -16,13 +24,25 @@ buildPythonPackage rec {
       --replace "humanize>=0.5.1,<0.6" "humanize>=0.5.1"
   '';
 
-  doCheck = false;
-  pythonImportsCheck = [ "s3_storage_provider" ];
+  buildInputs = [
+    matrix-synapse
+  ];
 
-  buildInputs = [ matrix-synapse ];
-  propagatedBuildInputs = [ twisted humanize boto3 tqdm ]
-    # for the s3_media_upload script
-    ++ matrix-synapse.propagatedBuildInputs;
+  propagatedBuildInputs = [
+    boto3
+    humanize
+    tqdm
+    twisted
+  ]
+  # For the s3_media_upload script
+  ++ matrix-synapse.propagatedBuildInputs;
+
+  # Tests need network access
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "s3_storage_provider"
+  ];
 
   meta = with lib; {
     description = "Synapse storage provider to fetch and store media in Amazon S3";
