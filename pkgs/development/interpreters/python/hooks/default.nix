@@ -221,9 +221,9 @@ in {
     inherit (pkgs.buildPackages) makeWrapper;
   };
 
-  sphinxHook = callPackage ({ makePythonHook, sphinx, installShellFiles }:
+  sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      propagatedBuildInputs = [ sphinx installShellFiles ];
+      propagatedBuildInputs = [ pythonForBuild.pkgs.sphinx installShellFiles ];
     } ./sphinx-hook.sh) {};
 }
