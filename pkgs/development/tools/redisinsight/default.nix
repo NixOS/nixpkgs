@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     runHook postBuild

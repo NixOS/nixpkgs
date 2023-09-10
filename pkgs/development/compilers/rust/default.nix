@@ -15,12 +15,15 @@
 , buildPackages
 , newScope, callPackage
 , CoreFoundation, Security, SystemConfiguration
+, pkgsBuildBuild
 , makeRustPlatform
 }:
 
 let
   # Use `import` to make sure no packages sneak in here.
   lib' = import ../../../build-support/rust/lib { inherit lib; };
+  # Allow faster cross compiler generation by reusing Build artifacts
+  fastCross = (stdenv.buildPlatform == stdenv.hostPlatform) && (stdenv.hostPlatform != stdenv.targetPlatform);
 in
 {
   lib = lib';
@@ -48,7 +51,10 @@ in
       # Like `buildRustPackages`, but may also contain prebuilt binaries to
       # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
       # nothing in the final package set should refer to this.
-      bootstrapRustPackages = self.buildRustPackages.overrideScope (_: _:
+      bootstrapRustPackages = if fastCross
+      then pkgsBuildBuild.rustPackages
+      else
+        self.buildRustPackages.overrideScope (_: _:
         lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
           (selectRustPackage buildPackages).packages.prebuilt);
       bootRustPlatform = makeRustPlatform bootstrapRustPackages;
@@ -61,7 +67,7 @@ in
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
-        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackages;
+        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackages fastCross;
 
         patches = rustcPatches;
 
@@ -72,11 +78,11 @@ in
         inherit Security;
         inherit (self.buildRustPackages) rustc;
       };
-      cargo = self.callPackage ./cargo.nix {
+      cargo = if (!fastCross) then self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
         inherit CoreFoundation Security;
-      };
+      } else self.callPackage ./cargo_cross.nix {};
       cargo-auditable = self.callPackage ./cargo-auditable.nix { };
       cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
       clippy = self.callPackage ./clippy.nix {
