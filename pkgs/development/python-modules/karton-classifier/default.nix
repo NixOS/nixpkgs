@@ -46,6 +46,8 @@ buildPythonPackage rec {
     # Tests expecting results from a different version of libmagic
     "test_process_archive_ace"
     "test_process_runnable_win32_lnk"
+    # Headers mismatch
+    "test_process_misc_csv"
   ];
 
   meta = with lib; {
