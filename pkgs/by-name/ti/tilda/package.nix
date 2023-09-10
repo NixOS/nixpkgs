@@ -1,40 +1,47 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkg-config
 , expat
 , gettext
-, gtk
+, gtk3
 , libconfuse
-, pcre2
-, vte
 , makeWrapper
+, pcre2
+, pkg-config
+, vte
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tilda";
   version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "lanoxx";
     repo = "tilda";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-uDx28jmjNUyzJbgTJiHbjI9U5mYb9bnfl/9AjbxNUWA=";
+    rev = "tilda-${finalAttrs.version}";
+    hash = "sha256-uDx28jmjNUyzJbgTJiHbjI9U5mYb9bnfl/9AjbxNUWA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+  ];
+
   buildInputs = [
     gettext
-    gtk
+    gtk3
     libconfuse
     pcre2
     vte
   ];
 
-  LD_LIBRARY_PATH = "${expat.out}/lib"; # ugly hack for xgettext to work during build
+  # ugly hack for xgettext to work during build
+  env.LD_LIBRARY_PATH = "${lib.getLib expat}/lib";
 
-  # The config locking scheme relies on the binary being called "tilda",
+  # The config locking scheme relies on the binary being called "tilda"
   # (`pgrep -C tilda`), so a simple `wrapProgram` won't suffice:
   postInstall = ''
     mkdir $out/bin/wrapped
@@ -45,12 +52,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.tilda;
 
-  meta = with lib; {
-    description = "A Gtk based drop down terminal for Linux and Unix";
+  meta = {
     homepage = "https://github.com/lanoxx/tilda/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    description = "A Gtk based drop down terminal for Linux and Unix";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
-
+})
