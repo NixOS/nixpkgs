@@ -183,7 +183,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
 
-        # From 6.4.11, remove wit when upstream 
+        # From 6.4.11, remove wit when upstream included
         kernelPatches.tpm-crb
       ];
     };
