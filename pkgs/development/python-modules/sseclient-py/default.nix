@@ -1,8 +1,16 @@
-{ buildPythonPackage, fetchFromGitHub, lib, python }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "sseclient-py";
   version = "1.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mpetazzoni";
