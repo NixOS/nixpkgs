@@ -1901,6 +1901,8 @@ self: super: with self; {
 
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
+  checkdmarc = callPackage ../development/python-modules/checkdmarc { };
+
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
 
   cheroot = callPackage ../development/python-modules/cheroot { };
@@ -6124,6 +6126,8 @@ self: super: with self; {
     inherit (self) python libxml2;
   })).py;
 
+  liccheck = callPackage ../development/python-modules/liccheck { };
+
   license-expression = callPackage ../development/python-modules/license-expression { };
 
   lief = (toPythonModule (pkgs.lief.override {
@@ -8688,6 +8692,8 @@ self: super: with self; {
 
   pulp = callPackage ../development/python-modules/pulp { };
 
+  pulsectl-asyncio = callPackage ../development/python-modules/pulsectl-asyncio { };
+
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
@@ -9355,6 +9361,8 @@ self: super: with self; {
   pylaunches = callPackage ../development/python-modules/pylaunches { };
 
   pyld = callPackage ../development/python-modules/pyld { };
+
+  pyleri = callPackage ../development/python-modules/pyleri { };
 
   pylev = callPackage ../development/python-modules/pylev { };
 

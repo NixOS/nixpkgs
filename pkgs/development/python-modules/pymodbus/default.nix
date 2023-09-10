@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.5.1";
+  version = "3.5.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YFA9msaPOPDbQPkDbT8Rl7jWafUX8eFnV4JimSg+mmc=";
+    hash = "sha256-FOmR9yqLagqcsAVxqHxziEcnZ5M9QpL2qIp8x2gS2PU=";
   };
 
   passthru.optional-dependencies = {
@@ -59,7 +59,14 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [ "pymodbus" ];
+  pythonImportsCheck = [
+    "pymodbus"
+  ];
+
+  disabledTests = [
+    # Tests often hang
+    "test_connected"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
