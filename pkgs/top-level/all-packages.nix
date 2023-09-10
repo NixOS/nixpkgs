@@ -3087,10 +3087,6 @@ with pkgs;
 
   termonad = callPackage ../applications/terminal-emulators/termonad { };
 
-  tilda = callPackage ../applications/terminal-emulators/tilda {
-    gtk = gtk3;
-  };
-
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
   tym = callPackage ../applications/terminal-emulators/tym { };
