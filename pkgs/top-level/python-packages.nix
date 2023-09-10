@@ -2719,6 +2719,8 @@ self: super: with self; {
 
   diffimg = callPackage ../development/python-modules/diffimg { };
 
+  diffsync = callPackage ../development/python-modules/diffsync { };
+
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
