@@ -910,6 +910,8 @@ self: super: with self; {
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
+  autoslot = callPackage ../development/python-modules/autoslot { };
+
   avahi = toPythonModule (pkgs.avahi.override {
     inherit python;
     withPython = true;
