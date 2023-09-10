@@ -17100,6 +17100,12 @@
     github = "thenonameguy";
     githubId = 2217181;
   };
+  thepixelcode = {
+    email = "thepixelcode@duck.com";
+    name = "Samuel B.";
+    github = "ThePixelCode";
+    githubId = 72231627;
+  };
   therealansh = {
     email = "tyagiansh23@gmail.com";
     github = "therealansh";

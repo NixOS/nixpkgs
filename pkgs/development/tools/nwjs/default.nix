@@ -89,7 +89,7 @@ in stdenv.mkDerivation rec {
     description = "An app runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = ["i686-linux" "x86_64-linux"];
-    maintainers = [ maintainers.offline ];
+    maintainers = [ maintainers.offline maintainers.thepixelcode ];
     license = licenses.bsd3;
   };
 }
