@@ -893,6 +893,11 @@ self: super: builtins.intersectAttrs super {
       '';
     }) (addBuildTool pkgs.buildPackages.makeWrapper super.cut-the-crap);
 
+  # aeson 2.2.0.0 requires th-abstraction >= 0.5 & < 0.6
+  aeson_2_2_0_0 = super.aeson_2_2_0_0.overrideScope (hfinal: hprev: {
+    th-abstraction = hfinal.th-abstraction_0_5_0_0;
+  });
+
   # Compiling the readme throws errors and has no purpose in nixpkgs
   aeson-gadt-th =
     disableCabalFlag "build-readme" (doJailbreak super.aeson-gadt-th);
