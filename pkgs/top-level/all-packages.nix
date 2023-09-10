@@ -413,6 +413,8 @@ with pkgs;
 
   c64-debugger = callPackage ../applications/emulators/c64-debugger { };
 
+  camunda-modeler = callPackage ../applications/misc/camunda-modeler { };
+
   caroline = callPackage ../development/libraries/caroline { };
 
   cartridges = callPackage ../applications/misc/cartridges { };
@@ -1704,6 +1706,8 @@ with pkgs;
   cidrgrep = callPackage ../tools/text/cidrgrep { };
 
   clematis = callPackage ../tools/misc/clematis { };
+
+  clubhouse-cli = callPackage ../tools/misc/clubhouse-cli { };
 
   colorless = callPackage ../tools/misc/colorless { };
 
@@ -3535,6 +3539,8 @@ with pkgs;
   bkt = callPackage ../tools/misc/bkt {  };
 
   bkyml = callPackage ../tools/misc/bkyml { };
+
+  blackmagic-desktop-video = callPackage ../tools/video/blackmagic-desktop-video { };
 
   blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
 
@@ -5764,6 +5770,8 @@ with pkgs;
   joycond = callPackage ../os-specific/linux/joycond { };
 
   joystickwake = callPackage ../tools/games/joystickwake { };
+
+  juce = darwin.apple_sdk_11_0.callPackage ../development/misc/juce { };
 
   jumppad = callPackage ../tools/virtualization/jumppad { };
 
@@ -9785,6 +9793,8 @@ with pkgs;
 
   knockpy = callPackage ../tools/security/knockpy { };
 
+  knowsmore = callPackage ../tools/security/knowsmore { };
+
   kool = callPackage ../development/tools/misc/kool { };
 
   kore = callPackage ../development/web/kore {
@@ -10316,7 +10326,7 @@ with pkgs;
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
-  ldeep = python3Packages.callPackage ../tools/security/ldeep { };
+  ldeep = callPackage ../tools/security/ldeep { };
 
   ldns = callPackage ../development/libraries/ldns { };
 
@@ -12692,6 +12702,8 @@ with pkgs;
   remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
 
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
+
+  reptor = with python3.pkgs; toPythonApplication reptor;
 
   reptyr = callPackage ../os-specific/linux/reptyr { };
 
@@ -21761,7 +21773,7 @@ with pkgs;
   # These are used when buiding compiler-rt / libgcc, prior to building libc.
   preLibcCrossHeaders = let
     inherit (stdenv.targetPlatform) libc;
-  in     if libc == "msvcrt" then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
+  in     if stdenv.targetPlatform.isMinGW then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
     else if libc == "nblibc" then targetPackages.netbsdCross.headers or netbsdCross.headers
     else if libc == "libSystem" && stdenv.targetPlatform.isAarch64 then targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
     else null;
@@ -21782,6 +21794,7 @@ with pkgs;
     else if name == "newlib-nano" then targetPackages.newlib-nanoCross or newlib-nanoCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
+    else if name == "ucrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if name == "libSystem" then
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
@@ -27772,8 +27785,6 @@ with pkgs;
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
-  alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
-
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
   tinyalsa = callPackage ../os-specific/linux/tinyalsa { };
@@ -28514,7 +28525,7 @@ with pkgs;
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
 
   nushellPlugins = callPackage ../shells/nushell/plugins {
-    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation;
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation Foundation Security;
   };
 
   nettools = if stdenv.isLinux
@@ -32066,7 +32077,6 @@ with pkgs;
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-beta-unwrapped = firefoxPackages.firefox-beta;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
-  firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
   firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
 
@@ -32077,7 +32087,6 @@ with pkgs;
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr = firefox-esr-115;
-  firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
   firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
@@ -34272,6 +34281,8 @@ with pkgs;
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
+
+  nwg-look = callPackage ../applications/misc/nwg-look { };
 
   nwg-menu = callPackage ../applications/misc/nwg-menu { };
 
@@ -37538,6 +37549,10 @@ with pkgs;
   keeperrl = callPackage ../games/keeperrl { };
 
   shipwright = callPackage ../games/shipwright { };
+
+  wipeout-rewrite = callPackage ../games/wipeout-rewrite {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   ### GAMES/DOOM-PORTS
 

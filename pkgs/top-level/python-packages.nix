@@ -512,6 +512,8 @@ self: super: with self; {
 
   androguard = callPackage ../development/python-modules/androguard { };
 
+  anel-pwrctrl-homeassistant = callPackage ../development/python-modules/anel-pwrctrl-homeassistant { };
+
   angr = callPackage ../development/python-modules/angr { };
 
   angrcli = callPackage ../development/python-modules/angrcli {
@@ -531,6 +533,8 @@ self: super: with self; {
   anonip = callPackage ../development/python-modules/anonip { };
 
   ansi2html = callPackage ../development/python-modules/ansi2html { };
+
+  ansi2image = callPackage ../development/python-modules/ansi2image { };
 
   ansible = callPackage ../development/python-modules/ansible { };
 
@@ -1346,9 +1350,7 @@ self: super: with self; {
 
   beautiful-date = callPackage ../development/python-modules/beautiful-date { };
 
-  beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 {
-    inherit (python.pythonForBuild.pkgs) sphinxHook; # hook splicing broken since #194205
-  };
+  beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
   beautifultable = callPackage ../development/python-modules/beautifultable { };
 
@@ -3218,6 +3220,8 @@ self: super: with self; {
 
   drms = callPackage ../development/python-modules/drms { };
 
+  dronecan = callPackage ../development/python-modules/dronecan { };
+
   dropbox = callPackage ../development/python-modules/dropbox { };
 
   ds-store = callPackage ../development/python-modules/ds-store { };
@@ -3696,6 +3700,8 @@ self: super: with self; {
   fastdtw = callPackage ../development/python-modules/fastdtw { };
 
   fastecdsa = callPackage ../development/python-modules/fastecdsa { };
+
+  fastembed = callPackage ../development/python-modules/fastembed { };
 
   fasteners = callPackage ../development/python-modules/fasteners { };
 
@@ -4580,6 +4586,8 @@ self: super: with self; {
   gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
 
   gradio = callPackage ../development/python-modules/gradio { };
+
+  gradio-client = callPackage ../development/python-modules/gradio/client.nix { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -8186,6 +8194,8 @@ self: super: with self; {
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
 
+  proxy-db = callPackage ../development/python-modules/proxy-db { };
+
   py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
 
   py65 = callPackage ../development/python-modules/py65 { };
@@ -9011,6 +9021,8 @@ self: super: with self; {
   pydigiham = callPackage ../development/python-modules/pydigiham { };
 
   pydiscourse = callPackage ../development/python-modules/pydiscourse { };
+
+  pydiscovergy = callPackage ../development/python-modules/pydiscovergy { };
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 
@@ -11153,6 +11165,8 @@ self: super: with self; {
   reproject = callPackage ../development/python-modules/reproject { };
 
   reprshed = callPackage ../development/python-modules/reprshed { };
+
+  reptor = callPackage ../development/python-modules/reptor { };
 
   reqif = callPackage ../development/python-modules/reqif { };
 

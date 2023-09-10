@@ -4651,6 +4651,16 @@
       fingerprint = "5DD7 C6F6 0630 F08E DAE7  4711 1525 585D 1B43 C62A";
     }];
   };
+  dunxen = {
+    email = "git@dunxen.dev";
+    matrix = "@dunxen:x0f.org";
+    github = "dunxen";
+    githubId = 3072149;
+    name = "Duncan Dean";
+    keys = [{
+      fingerprint = "9484 44FC E03B 05BA 5AB0  591E C37B 1C1D 44C7 86EE";
+    }];
+  };
   dwarfmaster = {
     email = "nixpkgs@dwarfmaster.net";
     github = "dwarfmaster";
@@ -8560,6 +8570,12 @@
     name = "John Soo";
     githubId = 10039785;
   };
+  jsusk = {
+    email = "joshua@suskalo.org";
+    github = "IGJoshua";
+    name = "Joshua Suskalo";
+    githubId = 27734541;
+  };
   jtbx = {
     email = "jtbx@duck.com";
     name = "Jeremy Baxter";
@@ -9391,6 +9407,12 @@
     githubId = 6817216;
     name = "Tomas Krupka";
     matrix = "@krupkat:matrix.org";
+  };
+  krzaczek = {
+    name = "Pawel Krzaczkowski";
+    email = "pawel@printu.pl";
+    github = "krzaczek";
+    githubId = 5773701;
   };
   ktf = {
     email = "giulio.eulisse@cern.ch";
@@ -10820,7 +10842,7 @@
     }];
   };
   max-amb = {
-    email = "maxpeterambaum@gmail.com";
+    email = "max_a@e.email";
     github = "max-amb";
     githubId = 137820334;
     name = "Max Ambaum";

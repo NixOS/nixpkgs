@@ -37,7 +37,7 @@
   (fetchNuGet { pname = "Microsoft.NETCore.Targets"; version = "5.0.0"; sha256 = "0z3qyv7qal5irvabc8lmkh58zsl42mrzd1i0sssvzhv4q4kl3cg6"; })
   (fetchNuGet { pname = "Microsoft.Win32.Primitives"; version = "4.3.0"; sha256 = "0j0c1wj4ndj21zsgivsc24whiya605603kxrbiw6wkfdync464wq"; })
   (fetchNuGet { pname = "NETStandard.Library"; version = "1.6.1"; sha256 = "1z70wvsx2d847a2cjfii7b83pjfs34q05gb037fdjikv5kbagml8"; })
-  (fetchNuGet { pname = "Nickvision.Aura"; version = "2023.8.8"; sha256 = "0l8khkg0df26dqra26wl74s73cxidbqw3k5l7jv0579gvkkv9893"; })
+  (fetchNuGet { pname = "Nickvision.Aura"; version = "2023.9.1"; sha256 = "sha256-+6CXO7K/liVUHFPwdBUEUi2r5d5+/cHfoiZ15xURBBg="; })
   (fetchNuGet { pname = "Nickvision.GirExt"; version = "2023.7.3"; sha256 = "1ahf4mld9khk2gaja30zfcjmhclz2l2nims0q4l7jk2nm9p7rzi9"; })
   (fetchNuGet { pname = "OfxSharp.NetStandard"; version = "1.0.0"; sha256 = "1v7yw2glyywb4s0y5fw306bzh2vw175bswrhi5crvd92wf93makj"; })
   (fetchNuGet { pname = "PdfSharpCore"; version = "1.3.56"; sha256 = "0a01b2a14gygh25rq3509rky85331l8808q052br2fzidhb2vc10"; })

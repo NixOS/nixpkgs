@@ -68,6 +68,7 @@ mapAliases ({
   aircrackng = throw "'aircrackng' has been renamed to/replaced by 'aircrack-ng'"; # Converted to throw 2022-02-22
   airfield = throw "airfield has been removed due to being unmaintained"; # Added 2023-05-19
   airtame = throw "airtame has been removed due to being unmaintained"; # Added 2022-01-19
+  alertmanager-bot = throw "alertmanager-bot is broken and has been archived by upstream" ; # Added 2023-07-28
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream"; # Added 2020-11-30
   aliza = throw "aliza has been removed, because it depended on qt4 and was unmaintained in nixpkgs"; # Added 2022-05-12
   alsaLib = alsa-lib; # Added 2021-06-09
@@ -1304,6 +1305,8 @@ mapAliases ({
   percona-server = percona-server56; # Added 2022-11-01
   percona-server56 = throw "'percona-server56' has been dropped due to lack of maintenance, no upstream support and security issues"; # Added 2022-11-01
   percona-xtrabackup_2_4 = throw "'percona-xtrabackup_2_4' has been renamed to/replaced by 'percona-xtrabackup'"; # Added 2022-12-23
+  perldevel = throw "'perldevel' has been dropped due to lack of updates in nixpkgs and lack of consistent support for devel versions by 'perl-cross' releases, use 'perl' instead";
+  perldevelPackages = perldevel;
   perlXMLParser = throw "'perlXMLParser' has been renamed to/replaced by 'perlPackages.XMLParser'"; # Converted to throw 2022-02-22
   perlArchiveCpio = throw "'perlArchiveCpio' has been renamed to/replaced by 'perlPackages.ArchiveCpio'"; # Converted to throw 2022-02-22
   pgadmin = pgadmin4;

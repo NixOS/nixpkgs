@@ -3,7 +3,6 @@
 , fetchPypi
 , pythonOlder
 , pythonRelaxDepsHook
-, writeText
 
 # pyproject
 , hatchling
@@ -13,49 +12,48 @@
 # runtime
 , setuptools
 , aiofiles
-, aiohttp
 , altair
 , fastapi
 , ffmpy
-, markdown-it-py
-, mdit-py-plugins
+, gradio-client
+, httpx
+, huggingface-hub
+, importlib-resources
+, jinja2
 , markupsafe
 , matplotlib
 , numpy
 , orjson
+, packaging
 , pandas
 , pillow
-, pycryptodome
+, pydantic
 , python-multipart
 , pydub
 , pyyaml
 , requests
-, uvicorn
-, jinja2
-, fsspec
-, httpx
-, pydantic
-, websockets
+, semantic-version
 , typing-extensions
+, uvicorn
+, websockets
 
 # check
 , pytestCheckHook
+, boto3
+, ffmpeg
+, ipython
 , pytest-asyncio
-, mlflow
-, huggingface-hub
-, transformers
-, wandb
 , respx
 , scikit-image
-, ipython
-, ffmpeg
+, torch
+, tqdm
+, transformers
 , vega_datasets
-, boto3
 }:
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "3.20.1";
+  version = "3.43.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -64,12 +62,13 @@ buildPythonPackage rec {
   # and has more frequent releases compared to github tags
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oG97GwehyBWjWXzDqyfj+x2mAfM6OQhYKdA3j0Rv8Vs=";
+    hash = "sha256-a8eHw8jedrse1dpgup9BL60oXx4wvOk8X5z5DP1DWOs=";
   };
 
-  pythonRelaxDeps = [
-    "mdit-py-plugins"
-  ];
+  # fix packaging.ParserSyntaxError, which can't handle comments
+  postPatch = ''
+    sed -ie "s/ #.*$//g" requirements*.txt
+  '';
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -79,55 +78,52 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    setuptools # needs pkg_resources
+    setuptools # needed for 'pkg_resources'
     aiofiles
-    aiohttp
     altair
     fastapi
     ffmpy
-    markdown-it-py
-    mdit-py-plugins
+    gradio-client
+    httpx
+    huggingface-hub
+    importlib-resources
+    jinja2
     markupsafe
     matplotlib
     numpy
     orjson
+    packaging
     pandas
     pillow
-    pycryptodome
+    pydantic
     python-multipart
     pydub
     pyyaml
     requests
-    uvicorn
-    jinja2
-    fsspec
-    httpx
-    pydantic
-    websockets
+    semantic-version
     typing-extensions
-  ] ++ markdown-it-py.optional-dependencies.linkify;
+    uvicorn
+    websockets
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    boto3
+    ffmpeg
+    ipython
     pytest-asyncio
-    mlflow
-    #comet-ml # FIXME: enable once packaged
-    huggingface-hub
-    transformers
-    wandb
     respx
     scikit-image
-    ipython
-    ffmpeg
-    vega_datasets
-    boto3
     # shap is needed as well, but breaks too often
+    torch
+    tqdm
+    transformers
+    vega_datasets
   ];
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
-  preCheck = let
-  in ''
+  preCheck = ''
     export HOME=$TMPDIR
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
@@ -136,9 +132,8 @@ buildPythonPackage rec {
     # Actually broken
     "test_mount_gradio_app"
 
-    # FIXME: enable once comet-ml is packaged
-    "test_inline_display"
-    "test_integration_comet"
+    # requires network, it caught our xfail exception
+    "test_error_analytics_successful"
 
     # Flaky, tries to pin dependency behaviour. Sensitive to dep versions
     # These error only affect downstream use of the check dependencies.
@@ -156,12 +151,16 @@ buildPythonPackage rec {
     # makes pytest freeze 50% of the time
     "test/test_interfaces.py"
   ];
-  #pytestFlagsArray = [ "-x" "-W" "ignore" ]; # uncomment for debugging help
+  pytestFlagsArray = [
+    "-x"  # abort on first failure
+    #"-m" "not flaky" # doesn't work, even when advertised
+    #"-W" "ignore" # uncomment for debugging help
+  ];
 
   # check the binary works outside the build env
   doInstallCheck = true;
   postInstallCheck = ''
-    env --ignore-environment $out/bin/gradio --help >/dev/null
+    env --ignore-environment $out/bin/gradio environment >/dev/null
   '';
 
   pythonImportsCheck = [ "gradio" ];

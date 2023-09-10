@@ -57,6 +57,7 @@ mapAliases {
   inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) clean-css-cli; # added 2023-08-18
+  inherit (pkgs) clubhouse-cli; # added 2023-08-18
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
@@ -95,6 +96,7 @@ mapAliases {
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
+  parcel-bundler = parcel; # added 2023-09-04
   inherit (pkgs) react-static; # added 2023-08-21
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
