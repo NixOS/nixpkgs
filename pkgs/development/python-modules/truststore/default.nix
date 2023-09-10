@@ -39,6 +39,10 @@ buildPythonPackage rec {
   # tests requires networking
   doCheck = false;
 
+  pythonImportsCheck = [
+    "truststore"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/sethmlarson/truststore";
     description = "Verify certificates using native system trust stores";
