@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , six
+, stdenv
 , urllib3
 }:
 
@@ -35,6 +36,9 @@ buildPythonPackage rec {
     pytestCheckHook
     urllib3
   ];
+
+  # lots of: [Errno 48] Address already in use: ('127.0.0.1', 54323)
+  doCheck = !stdenv.isDarwin;
 
   __darwinAllowLocalNetworking = true;
 
