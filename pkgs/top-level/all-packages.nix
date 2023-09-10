@@ -3017,8 +3017,6 @@ with pkgs;
 
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 { };
 
-  kermit-terminal = callPackage ../applications/terminal-emulators/kermit-terminal { };
-
   kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
     go = go_1_21;
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };

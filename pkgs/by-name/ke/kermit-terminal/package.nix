@@ -15,10 +15,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "orhun";
-    repo = finalAttrs.pname;
+    repo = "kermit";
     rev = finalAttrs.version;
     hash = "sha256-XPHF33Nu+H8OcQFwsuUOhDBDWKm8sh5B36sfROeSWPg=";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     cmake
@@ -33,12 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.test = nixosTests.terminal-emulators.kermit;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/orhun/kermit";
     description = "A VTE-based, simple and froggy terminal emulator";
     changelog = "https://github.com/orhun/kermit/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3Only;
+    mainProgram = "kermit";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 })
