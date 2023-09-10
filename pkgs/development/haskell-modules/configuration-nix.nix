@@ -704,6 +704,11 @@ self: super: builtins.intersectAttrs super {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }) super.LDAP);
 
+  # lsp 2.1.0.0 requires lsp-types >= 2.0.1 & < 2.1
+  lsp_2_1_0_0 = super.lsp_2_1_0_0.overrideScope (hfinal: hprev: {
+    lsp-types = hfinal.lsp-types_2_0_1_0;
+  });
+
   # Not running the "example" test because it requires a binary from lsps test
   # suite which is not part of the output of lsp.
   lsp-test = overrideCabal (old: { testTarget = "tests func-test"; }) super.lsp-test;
