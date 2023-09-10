@@ -19,6 +19,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pure-Python Server Side Events (SSE) client";
     homepage = "https://github.com/mpetazzoni/sseclient";
+    changelog = "https://github.com/mpetazzoni/sseclient/releases/tag/sseclient-py-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jamiemagee ];
   };
