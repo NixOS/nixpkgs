@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "sethmlarson";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-K11nHzpckNR8pqmgLOo/yCJ2cNQnqPHgjMDPQkpeRkQ=";
+    hash = "sha256-K11nHzpckNR8pqmgLOo/yCJ2cNQnqPHgjMDPQkpeRkQ=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/sethmlarson/truststore";
     description = "Verify certificates using native system trust stores";
-    changelog = "https://github.com/sethmlarson/truststore/releases/tag/v${version}";
+    changelog = "https://github.com/sethmlarson/truststore/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ anthonyroussel ];
   };
