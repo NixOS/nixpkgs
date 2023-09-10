@@ -37,6 +37,7 @@ mkDerivation rec {
     homepage = "https://github.com/corrados/jamulus/wiki";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "jamulus";
     maintainers = [ lib.maintainers.seb314 ];
   };
 }
