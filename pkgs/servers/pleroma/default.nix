@@ -7,14 +7,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.5.4";
+  version = "2.5.5";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-V/q6qpQkdrtMLzihV/0d3B+QUWwG4cYy8c2jNd5npww=";
+    sha256 = "sha256-9gD39eHIQEd59UNlz/Sw7V7ekBvk/pHETfo8HzfdQDQ=";
   };
 
   patches = [
