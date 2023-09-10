@@ -34,6 +34,8 @@ in {
     gitlab = { ... }: {
       imports = [ common/user-account.nix ];
 
+      environment.systemPackages = [ pkgs.git ];
+
       virtualisation.memorySize = if pkgs.stdenv.is64bit then 4096 else 2047;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;
