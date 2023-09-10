@@ -64,8 +64,8 @@ rec {
     let
       s = if builtins.isPath arg then "${arg}"
         else if builtins.isString arg then arg
-        else if builtins.isInt arg || builtins.isFloat arg then toString arg
-        else throw "escapeSystemdExecArg only allows strings, paths and numbers";
+        else if builtins.isInt arg || builtins.isFloat arg || lib.isDerivation arg then toString arg
+        else throw "escapeSystemdExecArg only allows strings, paths, packages and numbers";
     in
       replaceStrings [ "%" "$" ] [ "%%" "$$" ] (builtins.toJSON s);
 
