@@ -318,7 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
-    ] ++ lib.optional (qttranslations != null) [
+    ] ++ lib.optionals (qttranslations != null) [
       "-translationdir" "${qttranslations}/translations"
     ]
   );
