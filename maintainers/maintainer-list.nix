@@ -10328,6 +10328,12 @@
     githubId = 782440;
     name = "Luna Nova";
   };
+  luochen1990 = {
+    email = "luochen1990@gmail.com";
+    github = "luochen1990";
+    githubId = 2309868;
+    name = "Luo Chen";
+  };
   lurkki = {
     email = "jussi.kuokkanen@protonmail.com";
     github = "Lurkki14";
