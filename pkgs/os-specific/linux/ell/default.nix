@@ -3,18 +3,20 @@
 , autoreconfHook
 , pkg-config
 , dbus
+, fetchpatch
+, sysctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.57";
+  version = "0.58";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    sha256 = "sha256-9d9WMCByQ1TKWpzWe5msts1LG+BKKqwCgaMBbD74/+4=";
+    hash = "sha256-CwUwwvyT541aIvypVMqRhHkVJLna121Cme+v7c0FLWo=";
   };
 
   nativeBuildInputs = [
@@ -24,8 +26,18 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     dbus
+    # required as the sysctl test works on some machines
+    sysctl
   ];
 
+  patches = [
+    # /proc/sys/net/core/somaxconn doesn't always exist in the nix build environment
+    (fetchpatch {
+      name = "skip-sysctl-test-if-sysfs-not-available.patch";
+      url = "https://patchwork.kernel.org/project/ell/patch/526DA75D-01AB-4D85-BF5C-5F25E5C39480@kloenk.dev/raw/";
+      hash = "sha256-YYGYWQ67cbMLt6RnqZmHt+tpvVIDKPbSCqPIouk6alU=";
+    })
+  ];
   enableParallelBuilding = true;
 
   # tests sporadically fail on musl
