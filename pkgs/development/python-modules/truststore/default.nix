@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "truststore";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Q3HSHcqoG2DEXujL05lj3GLNu4jJ61i7VFxMou8c0cE=";
+    sha256 = "sha256-K11nHzpckNR8pqmgLOo/yCJ2cNQnqPHgjMDPQkpeRkQ=";
   };
 
   nativeBuildInputs = [
