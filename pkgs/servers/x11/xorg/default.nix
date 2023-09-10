@@ -1455,11 +1455,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxcb = callPackage ({ stdenv, pkg-config, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python3 }: stdenv.mkDerivation {
     pname = "libxcb";
-    version = "1.15";
+    version = "1.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libxcb-1.15.tar.xz";
-      sha256 = "0nd035rf83xf531cnjzsf9ykb5w9rdzz6bbyhi683xkwh57p8f6c";
+      url = "mirror://xorg/individual/lib/libxcb-1.16.tar.xz";
+      sha256 = "0w8xf6ff6axvla734lfb2291hrjrqqhn6mqabvdrdwgvl1m5cj23";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
