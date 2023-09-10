@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
 , pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,13 +16,20 @@ buildPythonPackage rec {
     owner = "mpetazzoni";
     repo = "sseclient";
     rev = "sseclient-py-${version}";
-    sha256 = "sha256-rNiJqR7/e+Rhi6kVBY8gZJZczqSUsyszotXkb4OKfWk=";
+    hash = "sha256-rNiJqR7/e+Rhi6kVBY8gZJZczqSUsyszotXkb4OKfWk=";
   };
 
-  # based on tox.ini
-  checkPhase = ''
-    ${python.interpreter} tests/unittests.py
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "sseclient"
+  ];
+
+  pytestFlagsArray = [
+    "tests/unittests.py"
+  ];
 
   meta = with lib; {
     description = "Pure-Python Server Side Events (SSE) client";
