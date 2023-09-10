@@ -6498,6 +6498,8 @@ self: super: with self; {
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
+  mcuuid = callPackage ../development/python-modules/mcuuid { };
+
   md-toc = callPackage ../development/python-modules/md-toc { };
 
   mdx-truly-sane-lists = callPackage ../development/python-modules/mdx-truly-sane-lists { };
