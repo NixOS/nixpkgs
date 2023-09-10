@@ -2814,9 +2814,8 @@ let
 
       systemd.services.systemd-networkd = let
         isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
-        partitionedUnitFiles = lib.partition isReloadableUnitFileName unitFiles;
-        reloadableUnitFiles = partitionedUnitFiles.right;
-        nonReloadableUnitFiles = partitionedUnitFiles.wrong;
+        reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
+        nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
         unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
       in {
         wantedBy = [ "multi-user.target" ];
