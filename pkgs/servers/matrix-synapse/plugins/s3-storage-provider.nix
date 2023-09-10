@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , humanize
-, matrix-synapse
+, matrix-synapse-unwrapped
 , pythonOlder
 , tqdm
 , twisted
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [
-    matrix-synapse
+    matrix-synapse-unwrapped
   ];
 
   propagatedBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     twisted
   ]
   # For the s3_media_upload script
-  ++ matrix-synapse.propagatedBuildInputs;
+  ++ matrix-synapse-unwrapped.propagatedBuildInputs;
 
   # Tests need network access
   doCheck = false;
