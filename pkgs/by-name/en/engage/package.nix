@@ -5,7 +5,7 @@
 
 let
   pname = "engage";
-  version = "0.1.2";
+  version = "0.1.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage {
   src = fetchgit {
     url = "https://or.computer.surgery/charles/${pname}";
     rev = "v${version}";
-    hash = "sha256-7zLFgTLeAIaMMoj0iThH/5UhnV9OUGe9CVwbbShCieo=";
+    hash = "sha256-B7pDJDoQiigaxcia0LfG7zHEzYtvhCUNpbmfR2ny4ZE=";
   };
 
-  cargoHash = "sha256-+4uqC0VoBSmkS9hYC1lzWeJmK873slZT04TljHPE+Eo=";
+  cargoHash = "sha256-Akk7fh7/eyN8gyuh3y3aeeKD2STtrEx+trOm5ww9lgw=";
 
   meta = {
     description = "A task runner with DAG-based parallelism";
