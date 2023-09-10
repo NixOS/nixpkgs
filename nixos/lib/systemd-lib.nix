@@ -317,16 +317,19 @@ in rec {
     config.environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
   };
 
-  stage2ServiceConfig = {
+  stage2ServiceConfig = { config, ... }: {
     imports = [ serviceConfig ];
-    # Default path for systemd services. Should be quite minimal.
-    config.path = mkAfter [
-      pkgs.coreutils
-      pkgs.findutils
-      pkgs.gnugrep
-      pkgs.gnused
-      systemd
-    ];
+    # Default path for regular systemd services. Should be quite minimal.
+    # Ensure we don't clobber PATH for dropin service units
+    config = mkIf (config.overrideStrategy != "asDropin") {
+      path = mkAfter [
+        pkgs.coreutils
+        pkgs.findutils
+        pkgs.gnugrep
+        pkgs.gnused
+        systemd
+      ];
+    };
   };
 
   stage1ServiceConfig = serviceConfig;
