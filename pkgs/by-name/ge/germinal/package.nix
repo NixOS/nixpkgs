@@ -1,29 +1,35 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, autoreconfHook
-, pkg-config
 , appstream-glib
+, autoreconfHook
 , dbus
 , pango
 , pcre2
+, pkg-config
 , tmux
 , vte
 , wrapGAppsHook
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "germinal";
   version = "26";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "Germinal";
-    rev = "v${version}";
-    sha256 = "sha256-HUi+skF4bJj5CY2cNTOC4tl7jhvpXYKqBx2rqKzjlo0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-HUi+skF4bJj5CY2cNTOC4tl7jhvpXYKqBx2rqKzjlo0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    wrapGAppsHook
+  ];
+
   buildInputs = [
     appstream-glib
     dbus
@@ -48,11 +54,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.germinal;
 
-  meta = with lib; {
+  meta = {
     description = "A minimal terminal emulator";
     homepage = "https://github.com/Keruspe/Germinal";
-    license = with licenses; gpl3Plus;
-    platforms = with platforms; unix;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "germinal";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
