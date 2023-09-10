@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, freezegun
 , poetry-core
 , pydantic
 , pytest-asyncio
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.0.24";
+  version = "0.0.35";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Uv6zzSWs+Fvb0ztwgkbkZcaNJOFpt8pWh88HZHsTris=";
+    hash = "sha256-TR4vBsRImMLs7CTlBt1NHL+n65jXxBNbOY7wIlfFBfM=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytestCheckHook
   ];
