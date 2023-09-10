@@ -91,6 +91,9 @@ in
 
   youtube-dl = callPackage ./manual-packages/youtube-dl { };
 
+  # Exclude builtins
+  sql = null;
+
   # From old emacsPackages (pre emacsPackagesNg)
   cedille = callPackage ./manual-packages/cedille { inherit (pkgs) cedille; };
   color-theme-solarized = callPackage ./manual-packages/color-theme-solarized { };
