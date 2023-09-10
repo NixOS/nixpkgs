@@ -135,6 +135,15 @@ if __name__ == "__main__":
             case KeyError if exn.args[0] == environVar:
                 print(f"No '{environVar}' in the environment, "
                        "skipping metadata update")
+
+            case HTTPError if exn.getcode() == 403:
+                print("Got HTTP 403 (Forbidden)")
+                if apiToken != '':
+                    print("Your Google API key appears to be valid "
+                          "but does not grant access to the fonts API.")
+                    print("Aborting!")
+                    raise SystemExit(1)
+
             case HTTPError if exn.getcode() == 400:
                 # Printing the supposed token should be fine, as this is
                 #  what the API returns on invalid tokens.
