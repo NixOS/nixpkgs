@@ -42220,4 +42220,6 @@ with pkgs;
   ssl-proxy = callPackage ../tools/networking/ssl-proxy { };
 
   code-maat = callPackage ../development/tools/code-maat {};
+
+  standard = callPackage ../development/tools/standard { };
 }
