@@ -959,8 +959,8 @@ in {
               (
                 listener:
                   listener.port == main.port
-                  && (lib.any (resource: lib.any (name: name == "replication") resource.names) listener.resources)
-                  && (lib.any (bind: bind == main.host || bind == "0.0.0.0") listener.bind_addresses)
+                  && (lib.any (resource: builtins.elem "replication" resource.names) listener.resources)
+                  && (lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses)
               )
               null
               cfg.settings.listeners;
