@@ -67,13 +67,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "45.beta.1";
+  version = "45.rc";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "n5OWijQm4DiCeIo3J7DKZ9zGaKkXddzUeRj5zylcFM4=";
+    sha256 = "fKGtpMnI7APbQuTG1fOimqlrv7Y5F7pDlIAXIIzXFg8=";
   };
 
   mesonFlags = [
@@ -163,10 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
-
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3142
-    substituteInPlace meson.build \
-      --replace "dependency('sysprof-4')" "dependency('sysprof-6')"
   '';
 
   postInstall = ''
