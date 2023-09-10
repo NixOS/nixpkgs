@@ -1,10 +1,11 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
-, aiohttp
 , httpx
 , pyopenssl
+, pythonOlder
 , requests
 , trustme
 }:
@@ -13,6 +14,8 @@ buildPythonPackage rec {
   pname = "truststore";
   version = "0.8.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "sethmlarson";
