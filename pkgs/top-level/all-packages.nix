@@ -40851,6 +40851,9 @@ with pkgs;
 
   nixos-install-tools = callPackage ../tools/nix/nixos-install-tools { };
 
+  nixos-manual-mmdoc = callPackage ../tools/nix/nixos-manual-mmdoc { };
+  nixos-manual-mmdoc-watch = callPackage ../tools/nix/nixos-manual-mmdoc-watch { };
+
   nixos-render-docs = callPackage ../tools/nix/nixos-render-docs { };
 
   nixdoc = callPackage ../tools/nix/nixdoc { };
