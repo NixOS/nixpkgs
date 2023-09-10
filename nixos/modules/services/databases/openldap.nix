@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 let
@@ -307,11 +307,11 @@ in {
           "!${pkgs.coreutils}/bin/mkdir -p ${configDir}"
           "+${pkgs.coreutils}/bin/chown $USER ${configDir}"
         ] ++ (lib.optional (cfg.configDir == null) writeConfig)
-        ++ (mapAttrsToList (dn: content: lib.escapeShellArgs [
+        ++ (mapAttrsToList (dn: content: utils.escapeSystemdExecArgs [
           writeContents dn (getAttr dn dbSettings).olcDbDirectory content
         ]) contentsFiles)
         ++ [ "${openldap}/bin/slaptest -u -F ${configDir}" ];
-        ExecStart = lib.escapeShellArgs ([
+        ExecStart = utils.escapeSystemdExecArgs ([
           "${openldap}/libexec/slapd" "-d" "0" "-F" configDir "-h" (lib.concatStringsSep " " cfg.urlList)
         ]);
         Type = "notify";
