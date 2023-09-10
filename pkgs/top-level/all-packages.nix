@@ -15412,8 +15412,6 @@ with pkgs;
 
   scponly = callPackage ../shells/scponly { };
 
-  tcsh = callPackage ../shells/tcsh { };
-
   rush = callPackage ../shells/rush { };
 
   xonsh = callPackage ../shells/xonsh/wrapper.nix { };
