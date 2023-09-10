@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, haskell }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, haskell, jq }:
 
 let
   inherit (lib)
@@ -542,12 +542,13 @@ rec {
       args = removeAttrs args_ [ "name" "postBuild" ]
         // {
           inherit preferLocalBuild allowSubstitutes;
-          passAsFile = [ "paths" ];
+          __structuredAttrs = true;
         }; # pass the defaults
     in runCommand name args
       ''
         mkdir -p $out
-        for i in $(cat $pathsPath); do
+        ${jq}/bin/jq -r ".paths[]" < .attrs.json > paths
+        for i in $(cat paths); do
           ${lndir}/bin/lndir -silent $i $out
         done
         ${postBuild}

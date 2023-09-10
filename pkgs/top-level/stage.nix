@@ -111,7 +111,7 @@ let
     import ../build-support/trivial-builders {
       inherit lib;
       inherit (self) runtimeShell stdenv stdenvNoCC haskell;
-      inherit (self.pkgsBuildHost) shellcheck;
+      inherit (self.pkgsBuildHost) shellcheck jq;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
