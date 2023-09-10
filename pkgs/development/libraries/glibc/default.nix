@@ -145,7 +145,7 @@ in
       ln -sf $out/lib/libpthread.so.0 $out/lib/libpthread.so
       ln -sf $out/lib/librt.so.1 $out/lib/librt.so
       ln -sf $out/lib/libdl.so.2 $out/lib/libdl.so
-      ln -sf $out/lib/libutil.so.1 $out/lib/libutil.so
+      test -f $out/lib/libutil.so.1 && ln -sf $out/lib/libutil.so.1 $out/lib/libutil.so
       touch $out/lib/libpthread.a
 
       # Put libraries for static linking in a separate output.  Note
@@ -154,6 +154,8 @@ in
       mkdir -p $static/lib
       mv $out/lib/*.a $static/lib
       mv $static/lib/lib*_nonshared.a $out/lib
+      # If libutil.so.1 is missing, libutil.a is required.
+      test -f $out/lib/libutil.so.1 || mv $static/lib/libutil.a $out/lib
       # Some of *.a files are linker scripts where moving broke the paths.
       sed "/^GROUP/s|$out/lib/lib|$static/lib/lib|g" \
         -i "$static"/lib/*.a
