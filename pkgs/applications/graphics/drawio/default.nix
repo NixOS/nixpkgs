@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
     yarn --offline run electron-builder --dir \
       --config electron-builder-linux-mac.json \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
