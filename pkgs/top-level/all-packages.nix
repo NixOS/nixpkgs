@@ -3009,8 +3009,6 @@ with pkgs;
 
   foot = callPackage ../applications/terminal-emulators/foot { };
 
-  germinal = callPackage ../applications/terminal-emulators/germinal { };
-
   guake = callPackage ../applications/terminal-emulators/guake { };
 
   havoc = callPackage ../applications/terminal-emulators/havoc { };
