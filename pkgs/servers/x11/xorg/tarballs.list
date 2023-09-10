@@ -209,7 +209,7 @@ mirror://xorg/individual/lib/libXxf86dga-1.1.6.tar.xz
 mirror://xorg/individual/lib/libXxf86misc-1.0.4.tar.bz2
 mirror://xorg/individual/lib/libXxf86vm-1.1.5.tar.xz
 mirror://xorg/individual/lib/xtrans-1.5.0.tar.xz
-mirror://xorg/individual/proto/xcb-proto-1.15.2.tar.xz
+mirror://xorg/individual/proto/xcb-proto-1.16.0.tar.xz
 mirror://xorg/individual/proto/xorgproto-2023.2.tar.xz
 mirror://xorg/individual/util/bdftopcf-1.1.1.tar.xz
 mirror://xorg/individual/util/gccmakedep-1.0.3.tar.bz2

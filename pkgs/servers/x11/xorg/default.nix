@@ -1807,11 +1807,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbproto = callPackage ({ stdenv, pkg-config, fetchurl, python3 }: stdenv.mkDerivation {
     pname = "xcb-proto";
-    version = "1.15.2";
+    version = "1.16.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xcb-proto-1.15.2.tar.xz";
-      sha256 = "1vak6q53abwxnkfn6by7j24m48kd2iy7jnskkqzzx8l0ysqvwwkh";
+      url = "mirror://xorg/individual/proto/xcb-proto-1.16.0.tar.xz";
+      sha256 = "06aij66rs8g378wg8swd7b3g73wqrrbbwl8shhnsi29amm41hnm7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
