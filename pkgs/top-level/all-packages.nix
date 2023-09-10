@@ -5241,8 +5241,6 @@ with pkgs;
 
   encpipe = callPackage ../tools/misc/encpipe { };
 
-  engage = callPackage ../tools/misc/engage { };
-
   ent = callPackage ../tools/misc/ent { };
 
   entwine = callPackage ../applications/graphics/entwine { };
