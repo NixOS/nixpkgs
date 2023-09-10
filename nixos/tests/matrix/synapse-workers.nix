@@ -35,10 +35,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
           };
           configureRedisLocally = true;
           workers = {
-            enable = true;
-            config = {
-              "federation_sender" = { };
-            };
+            "federation_sender" = { };
           };
         };
       };

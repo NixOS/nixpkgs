@@ -13,7 +13,7 @@ let
   usePostgresql = cfg.settings.database.name == "psycopg2";
   hasLocalPostgresDB = let args = cfg.settings.database.args; in
     usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
-  hasWorkers = cfg.workers.enable && (cfg.workers.config != { });
+  hasWorkers = cfg.workers != { };
 
   registerNewMatrixUser =
     let
@@ -832,90 +832,74 @@ in {
       workers = lib.mkOption {
         default = { };
         description = lib.mdDoc ''
-          Options for configuring workers. See `services.matrix-synapse.workers.enable`
-          for a more detailed description.
+          Options for configuring workers. Worker support will be enabled if at least one worker is configured here.
+
+          See the [worker documention](https://matrix-org.github.io/synapse/latest/workers.html#worker-configuration)
+          for possible options for each worker. Worker-specific options overriding the shared homeserver configuration can be
+          specified here for each worker.
+
+          ::: {.note}
+            Worker support will add a replication listener to the default
+            value of [`services.matrix-synapse.settings.listeners`](#opt-services.matrix-synapse.settings.listeners) and configure that
+            listener as `services.matrix-synapse.settings.instance_map.main`.
+            If you set either of those options, make sure to configure a replication listener yourself.
+
+            A redis server is required for running workers. A local one can be enabled
+            using [`services.matrix-synapse.configureRedisLocally`](#opt-services.matrix-synapse.configureRedisLocally).
+          :::
         '';
-        type = types.submodule {
+        type = types.attrsOf (types.submodule ({name, ...}: {
+          freeformType = format.type;
           options = {
-            enable = lib.mkOption {
-              type = types.bool;
-              default = false;
+            worker_app = lib.mkOption {
+              type = types.enum [
+                "synapse.app.generic_worker"
+                "synapse.app.media_repository"
+              ];
+              description = "Type of this worker";
+              default = "synapse.app.generic_worker";
+            };
+            worker_listeners = lib.mkOption {
+              default = [ ];
+              type = types.listOf listenerType;
               description = lib.mdDoc ''
-                Whether to enable matrix synapse workers.
-
-                ::: {.note}
-                  Enabling this will add a replication listener to the default
-                  value of `services.matrix-synapse.settings.listeners` and configure that
-                  listener as `services.matrix-synapse.settings.instance_map.main`.
-                  If you set either of those options, make sure to configure a replication
-                  listener yourself.
-
-                  A redis server is required for running workers. A local one can be enabled
-                  using `services.matrix-synapse.configureRedisLocally`.
-                :::
+                List of ports that this worker should listen on, their purpose and their configuration.
               '';
             };
-            config = lib.mkOption {
-              type = types.attrsOf (types.submodule ({name, ...}: {
-                freeformType = format.type;
-                options = {
-                  worker_app = lib.mkOption {
-                    type = types.enum [
-                      "synapse.app.generic_worker"
-                      "synapse.app.media_repository"
-                    ];
-                    description = "Type of this worker";
-                    default = "synapse.app.generic_worker";
-                  };
-                  worker_listeners = lib.mkOption {
-                    default = [ ];
-                    type = types.listOf listenerType;
-                    description = lib.mdDoc ''
-                      List of ports that this worker should listen on, their purpose and their configuration.
-                    '';
-                  };
-                  worker_log_config = lib.mkOption {
-                    type = types.path;
-                    default = genLogConfigFile "synapse-${name}";
-                    defaultText = logConfigText "synapse-${name}";
-                    description = lib.mdDoc ''
-                      The file for log configuration.
-
-                      See the [python documentation](https://docs.python.org/3/library/logging.config.html#configuration-dictionary-schema)
-                      for the schema and the [upstream repository](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_log_config.yaml)
-                      for an example.
-                    '';
-                  };
-                };
-              }));
-              default = { };
+            worker_log_config = lib.mkOption {
+              type = types.path;
+              default = genLogConfigFile "synapse-${name}";
+              defaultText = logConfigText "synapse-${name}";
               description = lib.mdDoc ''
-                List of workers to configure. See the
-                [worker documention](https://matrix-org.github.io/synapse/latest/workers.html#worker-configuration)
-                for possible values.
-              '';
-              example = lib.literalExpression ''
-                {
-                  "federation_sender" = { };
-                  "federation_receiver" = {
-                    worker_listeners = [
-                      {
-                        type = "http";
-                        port = 8009;
-                        bind_addresses = [ "127.0.0.1" ];
-                        tls = false;
-                        x_forwarded = true;
-                        resources = [{
-                          names = [ "federation" ];
-                        }];
-                      }
-                    ];
-                  };
-                }
+                The file for log configuration.
+
+                See the [python documentation](https://docs.python.org/3/library/logging.config.html#configuration-dictionary-schema)
+                for the schema and the [upstream repository](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_log_config.yaml)
+                for an example.
               '';
             };
           };
-        };
+        }));
+        default = { };
+        example = lib.literalExpression ''
+          {
+            "federation_sender" = { };
+            "federation_receiver" = {
+              worker_listeners = [
+                {
+                  type = "http";
+                  port = 8009;
+                  bind_addresses = [ "127.0.0.1" ];
+                  tls = false;
+                  x_forwarded = true;
+                  resources = [{
+                    names = [ "federation" ];
+                  }];
+                }
+              ];
+            };
+          }
+        '';
       };
 
       extraConfigFiles = mkOption {
@@ -1131,7 +1115,7 @@ in {
           }
         ];
       }
-      // (lib.mapAttrs' genWorkerService cfg.workers.config);
+      // (lib.mapAttrs' genWorkerService cfg.workers);
 
     services.redis.servers.matrix-synapse = lib.mkIf cfg.configureRedisLocally {
       enable = true;
