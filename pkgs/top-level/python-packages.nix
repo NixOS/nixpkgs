@@ -12959,6 +12959,8 @@ self: super: with self; {
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
+  tokentrim = callPackage ../development/python-modules/tokentrim { };
+
   tololib = callPackage ../development/python-modules/tololib { };
 
   toml = callPackage ../development/python-modules/toml { };
