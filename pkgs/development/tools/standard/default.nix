@@ -11,15 +11,14 @@ buildNpmPackage rec {
     hash = "sha256-paLvnwXOeTC4SSc+j/LhMLd4j8FgRa1QzGg6bxtlvTs=";
   };
 
-  npmDepsHash = "sha256-Bfyu2XeJwbBiIevuNKSdeg7SO5j3Typgb+bIHZJSi7k=";
-
-  makeCacheWritable = true;
+  npmDepsHash = "sha256-TrU4kGoGD4nbFx1wdNWQlahYFYi2r08NEeCb9xOg3sQ=";
 
   prePatch = ''
     cp ${./package-lock.json} ./package-lock.json
   '';
 
-  npmFlags = [ "--legacy-peer-deps" ];
+  dontNpmBuild = true;
+  dontNpmPrune = true;
 
   meta = with lib; {
     description = "JavaScript Style Guide, with linter & automatic code fixer";
