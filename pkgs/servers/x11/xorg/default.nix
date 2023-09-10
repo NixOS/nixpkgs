@@ -714,11 +714,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontutil = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "font-util";
-    version = "1.4.0";
+    version = "1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-util-1.4.0.tar.xz";
-      sha256 = "0z8gsi0bz5nnpsl008fyb4isrkrqrmhxjar5ywwpx30j83wlnwlz";
+      url = "mirror://xorg/individual/font/font-util-1.4.1.tar.xz";
+      sha256 = "15fcd3rzlgm51fwgfapg6vzyd1kkd28rj149xq7iajqr7h9697sw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
