@@ -14,7 +14,7 @@ npmInstallHook() {
         local dest="$packageOut/$(dirname "$file")"
         mkdir -p "$dest"
         cp "${npmWorkspace-.}/$file" "$dest"
-    done < <(@jq@ --raw-output '.[0].files | map(.path) | join("\n")' <<< "$(npm pack --json --dry-run ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
+    done < <(@jq@ --raw-output '.[0].files | map(.path) | join("\n")' <<< "$(npm pack --json --dry-run --loglevel=warn --no-foreground-scripts ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
 
     while IFS=" " read -ra bin; do
         mkdir -p "$out/bin"
