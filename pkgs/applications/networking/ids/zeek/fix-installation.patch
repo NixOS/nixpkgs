@@ -1,0 +1,28 @@
+From f8c42a712db42cfd00fca75be2ce63c3aad2aad1 Mon Sep 17 00:00:00 2001
+From: Tobias Mayer <tobim@fastmail.fm>
+Date: Sun, 13 Nov 2022 21:48:36 +0100
+Subject: [PATCH] Fix installation
+
+---
+ CMakeLists.txt | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 846b65efd..d8b0be169 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -81,11 +81,6 @@ if ( NOT ZEEK_LOG_DIR )
+     set(ZEEK_LOG_DIR ${ZEEK_ROOT_DIR}/logs)
+ endif ()
+ 
+-install(DIRECTORY DESTINATION ${ZEEK_ETC_INSTALL_DIR})
+-install(DIRECTORY DESTINATION ${ZEEK_STATE_DIR})
+-install(DIRECTORY DESTINATION ${ZEEK_SPOOL_DIR})
+-install(DIRECTORY DESTINATION ${ZEEK_LOG_DIR})
+-
+ configure_file(zeek-path-dev.in ${CMAKE_CURRENT_BINARY_DIR}/zeek-path-dev)
+ execute_process(COMMAND "${CMAKE_COMMAND}" -E create_symlink
+                 "${CMAKE_CURRENT_BINARY_DIR}/zeek-wrapper.in"
+-- 
+2.37.3
+

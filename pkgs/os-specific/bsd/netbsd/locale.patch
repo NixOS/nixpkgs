@@ -1,0 +1,85 @@
+--- a/usr.bin/locale/locale.c	2018-06-11 14:39:06.449762000 -0400
++++ b/usr.bin/locale/locale.c	2018-06-11 14:42:28.461122899 -0400
+@@ -56,14 +56,8 @@
+ #include <stringlist.h>
+ #include <unistd.h>
+ 
+-#include "citrus_namespace.h"
+-#include "citrus_region.h"
+-#include "citrus_lookup.h"
+-#include "setlocale_local.h"
+-
+ /* Local prototypes */
+ void	init_locales_list(void);
+-void	init_locales_list_alias(void);
+ void	list_charmaps(void);
+ void	list_locales(void);
+ const char *lookup_localecat(int);
+@@ -221,6 +215,8 @@
+ };
+ #define NKWINFO (sizeof(kwinfo)/sizeof(kwinfo[0]))
+ 
++const char *_PathLocale = NULL;
++
+ int
+ main(int argc, char *argv[])
+ {
+@@ -411,8 +407,7 @@
+ 	while ((dp = readdir(dirp)) != NULL) {
+ 		/* exclude "." and "..", _LOCALE_ALIAS_NAME */
+ 		if ((dp->d_name[0] != '.' || (dp->d_name[1] != '\0' &&
+-		    (dp->d_name[1] != '.' ||  dp->d_name[2] != '\0'))) &&
+-		    strcmp(_LOCALE_ALIAS_NAME, dp->d_name) != 0) {
++		    (dp->d_name[1] != '.' ||  dp->d_name[2] != '\0')))) {
+ 			s = strdup(dp->d_name);
+ 			if (s == NULL)
+ 				err(1, "could not allocate memory");
+@@ -431,48 +426,10 @@
+ 	if (sl_find(locales, "C") == NULL)
+ 		sl_add(locales, "C");
+ 
+-	init_locales_list_alias();
+-
+ 	/* make output nicer, sort the list */
+ 	qsort(locales->sl_str, locales->sl_cur, sizeof(char *), scmp);
+ }
+ 
+-void
+-init_locales_list_alias(void)
+-{
+-	char aliaspath[PATH_MAX];
+-	struct _lookup *hlookup;
+-	struct _region key, dat;
+-	size_t n;
+-	char *s, *t;
+-
+-	_DIAGASSERT(locales != NULL);
+-	_DIAGASSERT(_PathLocale != NULL);
+-
+-	(void)snprintf(aliaspath, sizeof(aliaspath),
+-		"%s/" _LOCALE_ALIAS_NAME, _PathLocale);
+-
+-	if (_lookup_seq_open(&hlookup, aliaspath,
+-	    _LOOKUP_CASE_SENSITIVE) == 0) {
+-		while (_lookup_seq_next(hlookup, &key, &dat) == 0) {
+-			n = _region_size((const struct _region *)&key);
+-			s = _region_head((const struct _region *)&key);
+-			for (t = s; n > 0 && *s!= '/'; --n, ++s);
+-			n = (size_t)(s - t);
+-			s = malloc(n + 1);
+-			if (s == NULL)
+-				err(1, "could not allocate memory");
+-			memcpy(s, t, n);
+-			s[n] = '\0';
+-			if (sl_find(locales, s) == NULL)
+-				sl_add(locales, s);
+-			else
+-				free(s);
+-		}
+-		_lookup_seq_close(hlookup);
+-	}
+-}
+-
+ /*
+  * Show current locale status, depending on environment variables
+  */

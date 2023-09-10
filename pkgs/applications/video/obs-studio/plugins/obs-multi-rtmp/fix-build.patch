@@ -1,0 +1,54 @@
+From 72aeddb52c2b656bfec918097ad07a0ff092008b Mon Sep 17 00:00:00 2001
+From: Raphael Robatsch <raphael-git@tapesoftware.net>
+Date: Thu, 13 Oct 2022 21:34:21 +0200
+Subject: [PATCH] Link against OBS public interface instead of sources
+
+---
+ CMakeLists.txt | 22 ++++------------------
+ 1 file changed, 4 insertions(+), 18 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 27e20f8..8725c5b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -65,15 +65,9 @@ if (WIN32)
+         "/def:${CMAKE_CURRENT_BINARY_DIR}/obs-frontend-api.def"
+         "/out:${CMAKE_CURRENT_BINARY_DIR}/obs-frontend-api.lib"
+     )
+-elseif (APPLE)
+-    # macOS
+-    find_library(_LIB_OBS "${LIB_OBS}.0.dylib" PATHS ${OBS_BIN_DIR} REQUIRED)
+-    set(LIB_OBS "${_LIB_OBS}")
+-elseif (UNIX)
+-    # Linux
+-    find_package(LibObs REQUIRED)
+ else ()
+-    message(FATAL_ERROR "Unsupported OS!")
++    find_package(libobs REQUIRED)
++    find_package(obs-frontend-api REQUIRED)
+ endif ()
+
+
+@@ -96,18 +90,10 @@ if (WIN32)
+         "${CMAKE_CURRENT_BINARY_DIR}/version.rc"
+     )
+ endif ()
+-target_include_directories(obs-multi-rtmp PRIVATE
+-    "${OBS_SRC_DIR}/libobs"
+-    "${OBS_SRC_DIR}/UI/obs-frontend-api"
+-)
+-target_link_directories(obs-multi-rtmp PRIVATE
+-    "${CMAKE_CURRENT_BINARY_DIR}"
+-    ${OBS_BIN_DIR}
+-)
+ target_link_libraries(obs-multi-rtmp PRIVATE
+     Qt6::Widgets
+-    ${LIB_OBS}
+-    obs-frontend-api
++    OBS::libobs
++    OBS::obs-frontend-api
+ )
+
+ if (WIN32)
+-- 
+2.37.3

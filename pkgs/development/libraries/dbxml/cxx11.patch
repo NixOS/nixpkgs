@@ -1,0 +1,59 @@
+diff -urN dbxml-6.1.4.orig/dbxml/src/dbxml/nodeStore/NsUpdate.cpp dbxml-6.1.4/dbxml/src/dbxml/nodeStore/NsUpdate.cpp
+--- dbxml-6.1.4.orig/dbxml/src/dbxml/nodeStore/NsUpdate.cpp	2017-05-01 16:05:29.000000000 +0100
++++ dbxml-6.1.4/dbxml/src/dbxml/nodeStore/NsUpdate.cpp	2017-09-04 11:50:20.000000000 +0100
+@@ -1359,21 +1359,13 @@
+ void NsUpdate::attributeRemoved(const DbXmlNodeImpl &node)
+ {
+ 	string key = makeKey(node);
+-#if defined(_MSC_VER) && (_MSC_VER>1600)
+ 	attrMap_.insert(make_pair(key,node.getIndex()));
+-#else
+-	attrMap_.insert(make_pair<const std::string, int>(key,node.getIndex()));
+-#endif
+ }
+ 
+ void NsUpdate::textRemoved(const DbXmlNodeImpl &node)
+ {
+ 	string key = makeKey(node);
+-#if defined(_MSC_VER) && (_MSC_VER>1600)
+ 	textDeleteMap_.insert(make_pair(key,node.getIndex()));
+-#else
+-	textDeleteMap_.insert(make_pair<const std::string, int>(key,node.getIndex()));
+-#endif
+ }
+ 
+ void NsUpdate::textRemoved(int index, const NsNid &nid,
+@@ -1381,21 +1373,13 @@
+ 			   const std::string &cname)
+ {
+ 	string key = makeKey(nid, did, cname);
+-#if defined(_MSC_VER) && (_MSC_VER>1600)
+ 	textDeleteMap_.insert(make_pair(key,index));
+-#else
+-	textDeleteMap_.insert(make_pair<const std::string, int>(key,index));
+-#endif
+ }
+ 
+ void NsUpdate::textInserted(int index, const DbXmlNodeImpl &node)
+ {
+ 	string key = makeKey(node);
+-#if defined(_MSC_VER) && (_MSC_VER>1600)
+ 	textInsertMap_.insert(make_pair(key,index));
+-#else
+-	textInsertMap_.insert(make_pair<const std::string, int>(key,index));
+-#endif
+ }
+ 
+ void NsUpdate::textInserted(int index, const NsNid &nid,
+@@ -1403,11 +1387,7 @@
+ 			    const std::string &cname)
+ {
+ 	string key = makeKey(nid, did, cname);
+-#if defined(_MSC_VER) && (_MSC_VER>1600)
+ 	textInsertMap_.insert(make_pair(key,index));
+-#else
+-	textInsertMap_.insert(make_pair<const std::string, int>(key,index));
+-#endif
+ }
+ 
+ //

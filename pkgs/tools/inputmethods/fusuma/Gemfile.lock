@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    fusuma (3.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  fusuma
+
+BUNDLED WITH
+   2.1.4

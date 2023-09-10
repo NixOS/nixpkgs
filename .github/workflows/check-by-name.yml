@@ -1,0 +1,49 @@
+# Checks pkgs/by-name (see pkgs/by-name/README.md)
+# using the nixpkgs-check-by-name tool (see pkgs/test/nixpkgs-check-by-name)
+name: Check pkgs/by-name
+
+# The pre-built tool is fetched from a channel,
+# making it work predictable on all PRs
+on: pull_request
+
+# The tool doesn't need any permissions, it only outputs success or not based on the checkout
+permissions: {}
+
+jobs:
+  check:
+    # This is x86_64-linux, for which the tool is always prebuilt on the nixos-* channels,
+    # as specified in nixos/release-combined.nix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v22
+      - name: Determining channel to use for dependencies
+        run: |
+          echo "Determining which channel to use for PR base branch $GITHUB_BASE_REF"
+          if [[ "$GITHUB_BASE_REF" =~ ^(release|staging|staging-next)-([0-9][0-9]\.[0-9][0-9])$ ]]; then
+              # Use the release channel for all PRs to release-XX.YY, staging-XX.YY and staging-next-XX.YY
+              channel=nixos-${BASH_REMATCH[2]}
+              echo "PR is for a release branch, using release channel $channel"
+          else
+              # Use the nixos-unstable channel for all other PRs
+              channel=nixos-unstable
+              echo "PR is for a non-release branch, using unstable channel $channel"
+          fi
+          echo "channel=$channel" >> "$GITHUB_ENV"
+      - name: Fetching latest version of channel
+        run: |
+          echo "Fetching latest version of channel $channel"
+          # This is probably the easiest way to get Nix to output the path to a downloaded channel!
+          nixpkgs=$(nix-instantiate --find-file nixpkgs -I nixpkgs=channel:"$channel")
+          # This file only exists in channels
+          rev=$(<"$nixpkgs"/.git-revision)
+          echo "Channel $channel is at revision $rev"
+          echo "nixpkgs=$nixpkgs" >> "$GITHUB_ENV"
+          echo "rev=$rev" >> "$GITHUB_ENV"
+      - name: Fetching pre-built nixpkgs-check-by-name from the channel
+        run: |
+          echo "Fetching pre-built nixpkgs-check-by-name from channel $channel at revision $rev"
+          # Passing --max-jobs 0 makes sure that we won't build anything
+          nix-build "$nixpkgs" -A tests.nixpkgs-check-by-name --max-jobs 0
+      - name: Running nixpkgs-check-by-name
+        run: result/bin/nixpkgs-check-by-name .

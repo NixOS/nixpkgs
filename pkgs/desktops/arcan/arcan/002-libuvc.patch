@@ -1,0 +1,15 @@
+diff -Naur source-old/src/frameserver/decode/default/CMakeLists.txt source-new/src/frameserver/decode/default/CMakeLists.txt
+--- source-old/src/frameserver/decode/default/CMakeLists.txt	1969-12-31 21:00:01.000000000 -0300
++++ source-new/src/frameserver/decode/default/CMakeLists.txt	2021-10-29 12:01:31.989933725 -0300
+@@ -62,10 +62,8 @@
+ 		if (STATIC_LIBUVC)
+ 			pkg_check_modules(LIBUSB_1 REQUIRED libusb-1.0)
+ 			ExternalProject_Add(libuvc
+-				SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/frameserver/decode/libuvc"
++				SOURCE_DIR "${EXTERNAL_SRC_DIR}/git/libuvc"
+ 				BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/libuvc_static"
+-				UPDATE_COMMAND ""
+-				GIT_REPOSITORY "${EXTERNAL_SRC_DIR}/git/libuvc"
+ 				${EXTERNAL_DEFS}
+ 				${CMAKE_EXTERNAL_DEFS}
+ 				-DBUILD_UVC_STATIC=ON

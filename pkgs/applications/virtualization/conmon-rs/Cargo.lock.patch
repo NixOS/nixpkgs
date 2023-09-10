@@ -1,0 +1,31 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 4cd154b..fee3267 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -323,7 +323,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "conmon-common"
+-version = "0.5.1"
++version = "0.6.0"
+ dependencies = [
+  "capnp",
+  "capnpc",
+@@ -331,7 +331,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "conmonrs"
+-version = "0.5.1"
++version = "0.6.0"
+ dependencies = [
+  "anyhow",
+  "capnp",
+@@ -376,7 +376,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "conmonrs-cli"
+-version = "0.5.1"
++version = "0.6.0"
+ dependencies = [
+  "capnp",
+  "capnp-rpc",

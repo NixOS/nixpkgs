@@ -1,0 +1,24 @@
+diff --git a/src/backend/main.ts b/src/backend/main.ts
+index 2cd1a28f..a60e04d0 100644
+--- a/src/backend/main.ts
++++ b/src/backend/main.ts
+@@ -19,8 +19,7 @@ import {
+   powerSaveBlocker,
+   protocol,
+   screen,
+-  clipboard,
+-  components
++  clipboard
+ } from 'electron'
+ import 'backend/updater'
+ import { autoUpdater } from 'electron-updater'
+@@ -286,8 +285,7 @@ if (!gotTheLock) {
+     initImagesCache()
+ 
+     if (!process.env.CI) {
+-      await components.whenReady()
+-      logInfo(['DRM module staus', components.status()])
++      logInfo('DRM modules disabled for nixpkgs')
+     }
+ 
+     // try to fix notification app name on windows

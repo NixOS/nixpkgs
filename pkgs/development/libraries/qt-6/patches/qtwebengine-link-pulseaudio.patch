@@ -1,0 +1,10 @@
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -341,6 +341,7 @@
+             devtools_fast_bundle=false
+             devtools_skip_typecheck=false
+             enable_jxl_decoder=false # temporarily because libjxl causes internal compiler error on armv7
++            link_pulseaudio=true
+         )
+
+         extend_gn_list(gnArgArg

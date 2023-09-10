@@ -1,0 +1,49 @@
+commit b273c9f7ab10475787db4d6e09bd4b71b374d0ec
+Author: sternenseemann <0rpkxez4ksa01gb3typccl0i@systemli.org>
+Date:   Thu Mar 18 01:28:46 2021 +0100
+
+    Let user specify solo5-binding to use
+    
+    This is a little feature for the configure script I wanted to have for
+    the NixOS package: It allows the user to set PKG_CONFIG_DEPS before
+    running configure.sh to disable the autodetection mechanism. This is
+    useful for NixOS as we have all bindings bundled in the solo5 package,
+    so the result would also be solo5-bindings-xen. Additionally, it allows
+    us to do the binding selection declaratively and minimize the risk of
+    accidentally switching backend.
+    
+    PKG_CONFIG_DEPS seems like a bit of an unappropriate variable name for a
+    user “interface”, let me know if you want a dedicated environment
+    variable for this in case there will be more PKG_CONFIG_DEPS.
+
+diff --git a/configure.sh b/configure.sh
+index c254f7b..c675a02 100755
+--- a/configure.sh
++++ b/configure.sh
+@@ -11,13 +11,19 @@ if pkg_exists solo5-bindings-hvt solo5-bindings-spt solo5-bindings-virtio solo5-
+     echo "ERROR: Only one of solo5-bindings-hvt, solo5-bindings-spt, solo5-bindings-virtio, solo5-bindings-muen, solo5-bindings-genode, solo5-bindings-xen can be installed." 1>&2
+     exit 1
+ fi
+-PKG_CONFIG_DEPS=
+-pkg_exists solo5-bindings-hvt && PKG_CONFIG_DEPS=solo5-bindings-hvt
+-pkg_exists solo5-bindings-spt && PKG_CONFIG_DEPS=solo5-bindings-spt
+-pkg_exists solo5-bindings-muen && PKG_CONFIG_DEPS=solo5-bindings-muen
+-pkg_exists solo5-bindings-virtio && PKG_CONFIG_DEPS=solo5-bindings-virtio
+-pkg_exists solo5-bindings-genode && PKG_CONFIG_DEPS=solo5-bindings-genode
+-pkg_exists solo5-bindings-xen && PKG_CONFIG_DEPS=solo5-bindings-xen
++if [ -z "${PKG_CONFIG_DEPS}" ]; then
++    PKG_CONFIG_DEPS=
++    pkg_exists solo5-bindings-hvt && PKG_CONFIG_DEPS=solo5-bindings-hvt
++    pkg_exists solo5-bindings-spt && PKG_CONFIG_DEPS=solo5-bindings-spt
++    pkg_exists solo5-bindings-muen && PKG_CONFIG_DEPS=solo5-bindings-muen
++    pkg_exists solo5-bindings-virtio && PKG_CONFIG_DEPS=solo5-bindings-virtio
++    pkg_exists solo5-bindings-genode && PKG_CONFIG_DEPS=solo5-bindings-genode
++    pkg_exists solo5-bindings-xen && PKG_CONFIG_DEPS=solo5-bindings-xen
++else
++    pkg_exists "${PKG_CONFIG_DEPS}" \
++        || (echo "ERROR: ${PKG_CONFIG_DEPS} is not installed" 1>&2; exit 1) \
++        || exit 1
++fi
+ if [ -z "${PKG_CONFIG_DEPS}" ]; then
+     echo "ERROR: No supported Solo5 bindings package found." 1>&2
+     echo "ERROR: solo5-bindings-hvt, solo5-bindings-spt, solo5-bindings-virtio, solo5-bindings-muen, solo5-bindings-genode or solo5-bindings-xen must be installed." 1>&2

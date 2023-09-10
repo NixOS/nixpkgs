@@ -1,0 +1,13 @@
+diff --git a/src/qml/jsruntime/qv4engine.cpp b/src/qml/jsruntime/qv4engine.cpp
+index 852cde9e..165f1b57 100644
+--- a/src/qml/jsruntime/qv4engine.cpp
++++ b/src/qml/jsruntime/qv4engine.cpp
+@@ -2093,7 +2093,7 @@ void ExecutionEngine::registerModule(const QString &_name, const QJSValue &modul
+ 
+ bool ExecutionEngine::diskCacheEnabled() const
+ {
+-    return (!disableDiskCache() && !debugger()) || forceDiskCache();
++    return forceDiskCache();
+ }
+ 
+ void ExecutionEngine::callInContext(QV4::Function *function, QObject *self,

@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/eonpatapon/tree-sitter-cue",
+  "rev": "0deecf48944aa54bb73e5383ba8acfbf9f2c44b4",
+  "date": "2023-06-01T08:40:59+02:00",
+  "path": "/nix/store/rxrhvk8icz9l668bl5sjwxfsz8yy9d7z-tree-sitter-cue",
+  "sha256": "0wbwsdilw39plw5nvn6bkr27ximf57dgd32jpp4ryz69bmifw8cv",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

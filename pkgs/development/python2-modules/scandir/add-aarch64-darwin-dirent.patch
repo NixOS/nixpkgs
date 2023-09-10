@@ -1,0 +1,28 @@
+diff --git a/scandir.py b/scandir.py
+index 3f602fb..40af3e5 100644
+--- a/scandir.py
++++ b/scandir.py
+@@ -23,6 +23,7 @@ from os import listdir, lstat, stat, strerror
+ from os.path import join, islink
+ from stat import S_IFDIR, S_IFLNK, S_IFREG
+ import collections
++import platform
+ import sys
+ 
+ try:
+@@ -432,6 +433,15 @@ elif sys.platform.startswith(('linux', 'darwin', 'sunos5')) or 'bsd' in sys.plat
+                     ('__d_padding', ctypes.c_uint8 * 4),
+                     ('d_name', ctypes.c_char * 256),
+                 )
++            elif 'darwin' in sys.platform and 'arm64' in platform.machine():
++                _fields_ = (
++                    ('d_ino', ctypes.c_uint64),
++                    ('d_off', ctypes.c_uint64),
++                    ('d_reclen', ctypes.c_uint16),
++                    ('d_namlen', ctypes.c_uint16),
++                    ('d_type', ctypes.c_uint8),
++                    ('d_name', ctypes.c_char * 1024),
++                )
+             else:
+                 _fields_ = (
+                     ('d_ino', ctypes.c_uint32),  # must be uint32, not ulong

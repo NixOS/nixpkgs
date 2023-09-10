@@ -1,0 +1,50 @@
+From 4f95ab1f8110a8ab9d7b0e192731ce467f6e5c26 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Janne=20He=C3=9F?= <janne@hess.ooo>
+Date: Sun, 4 Sep 2022 11:15:02 -0600
+Subject: [PATCH] Allow loading token handlers from the default search path
+
+Since [1] landed in cryptsetup, token handlers (libcryptsetup-token-*.so)
+are loaded from a fixed path defined at compile-time. This is
+problematic with NixOS since it introduces a dependency cycle
+between cryptsetup and systemd.
+
+This downstream patch [2] allows loading token plugins from the
+default library search path. This approach is not accepted upstream [3]
+due to security concerns, but the potential attack vectors require
+root access and they are sufficiently addressed:
+
+* cryptsetup could be used as a setuid binary (not used in NixOS).
+  In this case, LD_LIBRARY_PATH is ignored because of secure-execution
+  mode.
+* cryptsetup running as root could lead to a malicious token handler
+  being loaded through LD_LIBRARY_PATH. However, fixing the path
+  doesn't prevent the same malicious .so being loaded through LD_PRELOAD.
+
+[1] https://gitlab.com/cryptsetup/cryptsetup/-/commit/5b9e98f94178d3cd179d9f6e2a0a68c7d9eb6507
+[2] https://github.com/NixOS/nixpkgs/issues/167994#issuecomment-1094249369
+[3] https://gitlab.com/cryptsetup/cryptsetup/-/issues/733
+---
+ lib/luks2/luks2_token.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/lib/luks2/luks2_token.c b/lib/luks2/luks2_token.c
+index 26467253..6f8329f0 100644
+--- a/lib/luks2/luks2_token.c
++++ b/lib/luks2/luks2_token.c
+@@ -151,12 +151,10 @@ crypt_token_load_external(struct crypt_device *cd, const char *name, struct cryp
+ 
+ 	token = &ret->u.v2;
+ 
+-	r = snprintf(buf, sizeof(buf), "%s/libcryptsetup-token-%s.so", crypt_token_external_path(), name);
++	r = snprintf(buf, sizeof(buf), "libcryptsetup-token-%s.so", name);
+ 	if (r < 0 || (size_t)r >= sizeof(buf))
+ 		return -EINVAL;
+ 
+-	assert(*buf == '/');
+-
+ 	log_dbg(cd, "Trying to load %s.", buf);
+ 
+ 	h = dlopen(buf, RTLD_LAZY);
+-- 
+2.37.2
+

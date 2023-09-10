@@ -1,0 +1,13 @@
+diff --git a/tools/include/uapi/linux/types.h b/tools/include/uapi/linux/types.h
+index 91fa51a9c31d..bfbd9b47277f 100644
+--- a/tools/include/uapi/linux/types.h
++++ b/tools/include/uapi/linux/types.h
+@@ -2,7 +2,7 @@
+ #ifndef _UAPI_LINUX_TYPES_H
+ #define _UAPI_LINUX_TYPES_H
+ 
+-#include <asm-generic/int-ll64.h>
++#include <asm/types.h>
+ 
+ /* copied from linux:include/uapi/linux/types.h */
+ #define __bitwise
