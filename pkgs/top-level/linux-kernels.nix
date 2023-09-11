@@ -410,6 +410,8 @@ in {
     nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
     nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
+    nvidia_dc              = nvidiaPackages.dc;
+    nvidia_dc_520          = nvidiaPackages.dc_520;
 
     # this is not a replacement for nvidia_x11*
     # only the opensource kernel driver exposed for hydra to build
