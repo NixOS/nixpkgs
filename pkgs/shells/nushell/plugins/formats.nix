@@ -5,6 +5,7 @@
 , pkg-config
 , IOKit
 , Foundation
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,6 +18,7 @@ rustPlatform.buildRustPackage rec {
   checkPhase = ''
     cargo test --manifest-path crates/nu_plugin_formats/Cargo.toml
   '';
+  passthru.updateScript = nix-update-script { };
   meta = with lib; {
     description = "A formats plugin for Nushell";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_formats";
