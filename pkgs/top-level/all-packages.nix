@@ -21344,6 +21344,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  fastcdr = callPackage ../development/libraries/fastcdr { };
+
   fbthrift = callPackage ../development/libraries/fbthrift { };
 
   fb303 = callPackage ../development/libraries/fb303 { };
