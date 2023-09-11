@@ -1,10 +1,30 @@
 { lib
 , fetchFromGitLab
-, python
+, fetchPypi
 , apksigner
+, buildPythonApplication
+, python3
+, pythonRelaxDepsHook
+, androguard
+, babel
+, clint
+, defusedxml
+, gitpython
+, libcloud
+, mwclient
+, paramiko
+, pillow
+, pyasn1
+, pyasn1-modules
+, python-vagrant
+, pyyaml
+, qrcode
+, requests
+, ruamel-yaml
+, yamllint
 }:
 
-python.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "fdroidserver";
   version = "2.2.1";
   format = "setuptools";
@@ -27,7 +47,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   preConfigure = ''
-    ${python.pythonForBuild.interpreter} setup.py compile_catalog
+    ${python3.pythonForBuild.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''
@@ -35,15 +55,15 @@ python.pkgs.buildPythonApplication rec {
     install -m 0755 gradlew-fdroid $out/bin
   '';
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  buildInputs = with python.pkgs; [
+  buildInputs = [
     babel
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = [
     androguard
     clint
     defusedxml
@@ -83,5 +103,4 @@ python.pkgs.buildPythonApplication rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ obfusk ];
   };
-
 }
