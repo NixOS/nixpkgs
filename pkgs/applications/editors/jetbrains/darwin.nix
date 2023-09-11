@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation {
   inherit pname meta src version plugins;
   passthru.buildNumber = buildNumber;
   desktopName = product;
+  dontFixup = true;
   installPhase = ''
     runHook preInstall
     APP_DIR="$out/Applications/${product}.app"
