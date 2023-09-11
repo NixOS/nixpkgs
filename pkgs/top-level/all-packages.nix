@@ -2547,11 +2547,6 @@ with pkgs;
 
   basiliskii = callPackage ../applications/emulators/basiliskii { };
 
-  bochs = callPackage ../applications/emulators/bochs {
-    inherit (darwin) libobjc;
-    wxGTK = wxGTK32;
-  };
-
   box64 = callPackage ../applications/emulators/box64 {
     hello-x86_64 = if stdenv.hostPlatform.isx86_64 then
       hello
@@ -4744,6 +4739,8 @@ with pkgs;
   corosync = callPackage ../servers/corosync { };
 
   cowsay = callPackage ../tools/misc/cowsay { };
+
+  fw-ectool = callPackage ../os-specific/linux/fw-ectool { };
 
   czkawka = callPackage ../tools/misc/czkawka {
     inherit (darwin.apple_sdk.frameworks) Foundation;
@@ -15401,8 +15398,6 @@ with pkgs;
 
   scponly = callPackage ../shells/scponly { };
 
-  tcsh = callPackage ../shells/tcsh { };
-
   rush = callPackage ../shells/rush { };
 
   xonsh = callPackage ../shells/xonsh/wrapper.nix { };
@@ -25742,6 +25737,8 @@ with pkgs;
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
+  wfa2-lib = callPackage ../development/libraries/wfa2-lib { };
+
   webrtc-audio-processing_1 = callPackage ../development/libraries/webrtc-audio-processing {
     stdenv = gcc10StdenvCompat;
     abseil-cpp = abseil-cpp.override {
@@ -27417,6 +27414,8 @@ with pkgs;
   radicale = radicale3;
 
   qcal = callPackage ../tools/networking/qcal/default.nix { };
+
+  qcard = callPackage ../tools/networking/qcard { };
 
   rake = callPackage ../development/tools/build-managers/rake { };
 
@@ -34300,7 +34299,10 @@ with pkgs;
 
   okteto = callPackage ../development/tools/okteto { };
 
-  onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
+  onlyoffice-bin_7_2 = callPackage ../applications/office/onlyoffice-bin/7_2.nix { };
+  onlyoffice-bin_7_4 = callPackage ../applications/office/onlyoffice-bin/7_4.nix { };
+  onlyoffice-bin = onlyoffice-bin_7_2;
+  onlyoffice-bin_latest = onlyoffice-bin_7_4;
 
   onmetal-image = callPackage ../tools/virtualization/onmetal-image { };
 
@@ -36677,8 +36679,7 @@ with pkgs;
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
-  windowmaker = callPackage ../applications/window-managers/windowmaker { };
-  dockapps = callPackage ../applications/window-managers/windowmaker/dockapps { };
+  dockapps = callPackage ../by-name/wi/windowmaker/dockapps { };
 
   wily = callPackage ../applications/editors/wily { };
 
@@ -38576,6 +38577,8 @@ with pkgs;
   steam-acf = callPackage ../tools/games/steam-acf { };
 
   steamback = python311.pkgs.callPackage ../tools/games/steamback { };
+
+  steamguard-cli = callPackage ../tools/security/steamguard-cli { };
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     inherit winetricks steam-run yad;

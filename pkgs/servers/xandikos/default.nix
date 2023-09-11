@@ -6,34 +6,37 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.2.8";
+  version = "0.2.10";
+  format = "pyproject";
+
+  disabled = python3Packages.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
     rev = "v${version}";
-    sha256 = "sha256-KDDk0QSOjwivJFz3vLk+g4vZMlSuX2FiOgHJfDJkpwg=";
+    hash = "sha256-SqU/K3b8OML3PvFmP7L5R3Ub9vbW66xRpf79mgFZPfc=";
   };
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     aiohttp
+    aiohttp-openmetrics
     dulwich
     defusedxml
     icalendar
     jinja2
     multidict
-    prometheus-client
+    vobject
   ];
 
   passthru.tests.xandikos = nixosTests.xandikos;
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
-  disabledTests = [
-    # these tests are failing due to the following error:
-    # TypeError: expected str, bytes or os.PathLike object, not int
-    "test_iter_with_etag"
-    "test_iter_with_etag_missing_uid"
-  ];
 
   meta = with lib; {
     description = "Lightweight CalDAV/CardDAV server";

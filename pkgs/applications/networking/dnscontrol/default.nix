@@ -24,9 +24,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Synchronize your DNS to multiple providers from a simple DSL";
-    homepage = "https://stackexchange.github.io/dnscontrol/";
+    homepage = "https://dnscontrol.org/";
     changelog = "https://github.com/StackExchange/dnscontrol/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut SuperSandro2000 ];
+    mainProgram = "dnscontrol";
   };
 }

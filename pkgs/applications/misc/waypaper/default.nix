@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "waypaper";
-  version = "1.5";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
     rev = "refs/tags/${version}";
-    hash = "sha256-lK4TygR9cwEHcnrC0E5vE7Jor6afEiM9TmEgGXj+hNA=";
+    hash = "sha256-6hv+f2fbrbLodJIRHl5MYTkiZ51iZOAK42Vg73zSw/E=";
   };
 
   nativeBuildInputs = [

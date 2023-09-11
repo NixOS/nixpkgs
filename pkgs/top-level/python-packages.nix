@@ -1901,6 +1901,8 @@ self: super: with self; {
 
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
+  checkdmarc = callPackage ../development/python-modules/checkdmarc { };
+
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
 
   cheroot = callPackage ../development/python-modules/cheroot { };
@@ -2716,6 +2718,8 @@ self: super: with self; {
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
   diffimg = callPackage ../development/python-modules/diffimg { };
+
+  diffsync = callPackage ../development/python-modules/diffsync { };
 
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
@@ -6124,6 +6128,8 @@ self: super: with self; {
     inherit (self) python libxml2;
   })).py;
 
+  liccheck = callPackage ../development/python-modules/liccheck { };
+
   license-expression = callPackage ../development/python-modules/license-expression { };
 
   lief = (toPythonModule (pkgs.lief.override {
@@ -7372,6 +7378,8 @@ self: super: with self; {
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
+  python-yate = callPackage ../development/python-modules/python-yate { };
+
   python-youtube = callPackage ../development/python-modules/python-youtube { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
@@ -8222,6 +8230,8 @@ self: super: with self; {
 
   pyflick = callPackage ../development/python-modules/pyflick { };
 
+  pyfluidsynth = callPackage ../development/python-modules/pyfluidsynth { };
+
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
 
   pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
@@ -8685,6 +8695,8 @@ self: super: with self; {
   pudb = callPackage ../development/python-modules/pudb { };
 
   pulp = callPackage ../development/python-modules/pulp { };
+
+  pulsectl-asyncio = callPackage ../development/python-modules/pulsectl-asyncio { };
 
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
@@ -9353,6 +9365,8 @@ self: super: with self; {
   pylaunches = callPackage ../development/python-modules/pylaunches { };
 
   pyld = callPackage ../development/python-modules/pyld { };
+
+  pyleri = callPackage ../development/python-modules/pyleri { };
 
   pylev = callPackage ../development/python-modules/pylev { };
 
