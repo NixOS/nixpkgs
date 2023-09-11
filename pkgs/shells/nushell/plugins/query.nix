@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
     description = "A Nushell plugin to query JSON, XML, and various web data";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_query";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [ happysalada aidalgol ];
     platforms = with platforms; all;
   };
 }
