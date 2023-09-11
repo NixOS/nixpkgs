@@ -201,6 +201,11 @@ self: super: {
     })
   ] super.aeson);
 
+  # aeson 2.2.0.0 requires th-abstraction >= 0.5 & < 0.6
+  aeson_2_2_0_0 = super.aeson_2_2_0_0.overrideScope (hfinal: hprev: {
+    th-abstraction = hfinal.th-abstraction_0_5_0_0;
+  });
+
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
 

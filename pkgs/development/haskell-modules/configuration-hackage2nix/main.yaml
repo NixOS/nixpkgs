@@ -128,6 +128,7 @@ extra-packages:
   - sbv == 7.13                         # required for pkgs.petrinizer
   - stylish-haskell == 0.14.3.0         # 2022-09-19: needed for hls on ghc 8.8
   - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
+  - th-abstraction < 0.6                # 2023-09-11: needed for aeson-2.2.0.0
   - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
