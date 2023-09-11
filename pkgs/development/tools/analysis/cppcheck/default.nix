@@ -1,5 +1,5 @@
-{ docbook_xsl
-, docbook_xml_dtd_45
+{ docbook_xml_dtd_45
+, docbook_xsl
 , fetchFromGitHub
 , installShellFiles
 , lib
@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
   version = "2.11.1";
 
+  outputs = [ "out" "man" ];
+
   src = fetchFromGitHub {
     owner = "danmar";
     repo = "cppcheck";
@@ -22,11 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZQ1EgnC2JBc0AvSW8PtgMzJoWSPt04Xfh8dqOU+KMfw=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
-    docbook_xsl
     docbook_xml_dtd_45
+    docbook_xsl
     installShellFiles
     libxslt
     pkg-config
@@ -41,9 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ];
 
-  outputs = [ "out" "man" ];
-
   enableParallelBuilding = true;
+  strictDeps = true;
+
+  # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doInstallCheck = true;
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -58,10 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage cppcheck.1
   '';
 
-  # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
-
-  doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -73,13 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "A static analysis tool for C/C++ code";
-    homepage = "http://cppcheck.sourceforge.net/";
+    homepage = "http://cppcheck.sourceforge.net";
     license = lib.licenses.gpl3Plus;
     longDescription = ''
       Check C/C++ code for memory leaks, mismatching allocation-deallocation,
       buffer overruns and more.
     '';
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = with lib.maintainers; [ joachifm paveloom ];
     platforms = lib.platforms.unix;
   };
 })
