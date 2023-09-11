@@ -15,7 +15,9 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit Foundation ];
   cargoBuildFlags = [ "--package nu_plugin_formats" ];
-  doCheck = false;
+  checkPhase = ''
+    cargo test --manifest-path crates/nu_plugin_formats/Cargo.toml
+  '';
   meta = with lib; {
     description = "A formats plugin for Nushell";
     homepage = "https://github.com/nushell/nushell/tree/main/crates/nu_plugin_formats";
