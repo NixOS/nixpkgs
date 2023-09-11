@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, ubootTools
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, ubootTools, kmod
 , fetchpatch
 }:
 
@@ -106,7 +106,8 @@ stdenv.mkDerivation ({
   ] ++ optional  (lib.versionOlder version "5.8") libelf
     ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
     ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-    ++ optional  (lib.versionAtLeast version "5.8")  elfutils;
+    ++ optional  (lib.versionAtLeast version "5.8")  elfutils
+    ++ optional  (lib.versionAtLeast version "6.6")  kmod;
 
   patches =
     map (p: p.patch) kernelPatches
@@ -308,7 +309,7 @@ stdenv.mkDerivation ({
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
     unlink $out/lib/modules/${modDirVersion}/build
-    unlink $out/lib/modules/${modDirVersion}/source
+    rm -f $out/lib/modules/${modDirVersion}/source
 
     mkdir $dev/lib/modules/${modDirVersion}/build
 
