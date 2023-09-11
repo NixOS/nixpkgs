@@ -4,12 +4,12 @@
 , unzip
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scimark";
   version = "4c";
 
   src = fetchurl {
-    url = "https://math.nist.gov/scimark2/${pname}${version}.zip";
+    url = "https://math.nist.gov/scimark2/scimark${finalAttrs.version}.zip";
     hash = "sha256-kcg5vKYp0B7+bC/CmFMO/tMwxf9q6nvuFv0vRSy3MbE=";
   };
 
@@ -20,17 +20,21 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   installPhase = ''
-    install -d $out/bin/
-    install scimark4 $out/bin/
+    runHook preInstall
+
+    install -Dm755 scimark4 -t $out/bin/
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://math.nist.gov/scimark2/index.html";
     description = "Scientific and numerical computing benchmark (ANSI C version)";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ AndersonTorres ];
+    downloadPage = "https://math.nist.gov/scimark2/download_c.html";
+    license = lib.licenses.publicDomain;
     mainProgram = "scimark4";
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})
 # TODO [ AndersonTorres ]: Java version

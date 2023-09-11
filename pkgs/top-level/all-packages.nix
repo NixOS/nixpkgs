@@ -13012,8 +13012,6 @@ with pkgs;
 
   scream = callPackage ../applications/audio/scream { };
 
-  scimark = callPackage ../misc/scimark { };
-
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
   };
