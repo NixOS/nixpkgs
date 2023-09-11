@@ -40482,6 +40482,8 @@ with pkgs;
 
   faustPhysicalModeling = callPackage ../applications/audio/faustPhysicalModeling  { };
 
+  flashprint = libsForQt5.callPackage ../applications/misc/flashprint { };
+
   flockit = callPackage ../tools/backup/flockit { };
 
   fahclient = callPackage ../applications/science/misc/foldingathome/client.nix { };
