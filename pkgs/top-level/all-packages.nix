@@ -38620,8 +38620,6 @@ with pkgs;
 
   tcl2048 = callPackage ../games/tcl2048 { };
 
-  the-legend-of-edgar = callPackage ../games/the-legend-of-edgar { };
-
   the-powder-toy = callPackage ../games/the-powder-toy {
     lua = lua5_1;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
