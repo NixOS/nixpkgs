@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cvc5";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner  = "cvc5";
     repo   = "cvc5";
     rev    = "cvc5-${version}";
-    hash  = "sha256-0uT2Lzz0ZbfNWZBptjaGI1fN0mMniBz41eEwipGc5fc=";
+    hash  = "sha256-2sJKHD7Wzznut4hKOyxgc4LR4H+4u3m8Gq02+v+m5lM=";
   };
 
   nativeBuildInputs = [ pkg-config cmake flex ];
