@@ -7,11 +7,8 @@
 , Security
 }:
 
-let
-  pname = "nushell_plugin_gstat";
-in
 rustPlatform.buildRustPackage {
-  inherit pname;
+  pname = "nushell_plugin_gstat";
   version = "0.85.0";
   src = nushell.src;
   cargoHash = "sha256-6luY3SIRRd9vaY9KIJcj8Q974FW0LtAvRjVpdpzkdLo=";

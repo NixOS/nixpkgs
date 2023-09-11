@@ -7,11 +7,8 @@
 , Foundation
 }:
 
-let
-  pname = "nushell_plugin_formats";
-in
 rustPlatform.buildRustPackage {
-  inherit pname;
+  pname = "nushell_plugin_formats";
   version = "0.85.0";
   src = nushell.src;
   cargoHash = "sha256-WS8VRpJnn/VWS7GUkGowFf51ifUx0SbEZzcoTfx2dp0=";
