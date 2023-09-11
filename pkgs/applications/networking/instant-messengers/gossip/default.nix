@@ -51,14 +51,6 @@ rustPlatform.buildRustPackage rec {
     export CARGO_TARGET_DIR=target
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    cargo build --release --all-features
-
-    runHook postBuild
-  '';
-
   buildInputs = [
     ffmpeg
     openssl
