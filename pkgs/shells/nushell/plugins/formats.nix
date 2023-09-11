@@ -7,10 +7,9 @@
 , Foundation
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_formats";
-  version = "0.85.0";
-  src = nushell.src;
+  inherit (nushell) version src;
   cargoHash = "sha256-WS8VRpJnn/VWS7GUkGowFf51ifUx0SbEZzcoTfx2dp0=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit Foundation ];
