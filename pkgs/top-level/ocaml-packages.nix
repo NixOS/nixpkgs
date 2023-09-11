@@ -1438,6 +1438,8 @@ let
 
     pp = callPackage ../development/ocaml-modules/pp { };
 
+    pp_loc = callPackage ../development/ocaml-modules/pp_loc { };
+
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
     ppx_bap = janeStreet_0_15.ppx_bap;
