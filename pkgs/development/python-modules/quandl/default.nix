@@ -29,8 +29,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Quandl";
-    sha256 = "6e0b82fbc7861610b3577c5397277c4220e065eee0fed4e46cd6b6021655b64c";
+    hash = "sha256-bguC+8eGFhCzV3xTlyd8QiDgZe7g/tTkbNa2AhZVtkw=";
   };
+
+  patches = [
+    ./pandas2-datetime-removal.patch
+  ];
 
   propagatedBuildInputs = [
     pandas

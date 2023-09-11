@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , kcoreaddons
 , kwindowsystem
@@ -7,16 +7,18 @@
 , systemsettings
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation(finalAttrs: {
   pname = "kzones";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "gerritdevriese";
     repo = "kzones";
-    rev = "v${version}";
-    sha256 = "sha256-0f7Fv5cvRvqNrKjHpU/tLpjiBPN0ExwTDq1p9sdLd4o=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-OAgzuX05dvotjRWiyPPeUieVJbQoy/opGYu6uVKQM60=";
   };
+
+  nativeBuildInputs = [ plasma-framework ];
 
   buildInputs = [
     kcoreaddons
@@ -27,13 +29,16 @@ mkDerivation rec {
 
   dontBuild = true;
 
+  # we don't have anything to wrap anyway
+  dontWrapQtApps = true;
+
   # 1. --global still installs to $HOME/.local/share so we use --packageroot
   # 2. plasmapkg2 doesn't copy metadata.desktop into place, so we do that manually
   installPhase = ''
     runHook preInstall
 
-    plasmapkg2 --type kwinscript --install ${src} --packageroot $out/share/kwin/scripts
-    install -Dm644 ${src}/metadata.desktop $out/share/kservices5/kwin-script-kzones.desktop
+    plasmapkg2 --type kwinscript --install ${finalAttrs.src} --packageroot $out/share/kwin/scripts
+    install -Dm644 ${finalAttrs.src}/metadata.desktop $out/share/kservices5/kwin-script-kzones.desktop
 
     runHook postInstall
   '';
@@ -42,8 +47,7 @@ mkDerivation rec {
     description = "KWin Script for snapping windows into zones";
     maintainers = with maintainers; [ matthiasbeyer ];
     license = licenses.gpl3Plus;
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;
   };
-}
-
+})

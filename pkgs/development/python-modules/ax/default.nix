@@ -6,8 +6,10 @@
 , jinja2
 , pandas
 , plotly
+, setuptools
 , setuptools-scm
 , typeguard
+, wheel
 , hypothesis
 , mercurial
 , pyfakefs
@@ -17,15 +19,21 @@
 
 buildPythonPackage rec {
   pname = "ax";
-  version = "0.3.2";
+  version = "0.3.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = version;
-    hash = "sha256-1KLLjeUktXvIDOlTQzMmpbL/On8PTxZQ44Qi4BT3nPk=";
+    hash = "sha256-Yc6alEKXbtQ0hitIdPhkJWhZQg150b0NJJRLZ+f1hdY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     botorch
@@ -33,7 +41,6 @@ buildPythonPackage rec {
     jinja2
     pandas
     plotly
-    setuptools-scm
     typeguard
   ];
 
@@ -58,6 +65,10 @@ buildPythonPackage rec {
     "--ignore=ax/service/tests/test_scheduler.py"
     "--ignore=ax/service/tests/test_with_db_settings_base.py"
     "--ignore=ax/storage"
+  ];
+  disabledTests = [
+    # exact comparison of floating points
+    "test_optimize_l0_homotopy"
   ];
   pythonImportsCheck = [ "ax" ];
 

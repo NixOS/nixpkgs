@@ -25,11 +25,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchurl {
     url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
-    hash = "sha256-VOG//e0wMoKKcN4iwqGpTRwJf8RRPg/b/P2/O/9rcJI=";
+    hash = "sha256-Z5CQPNu14ORxlmkeuaXyz4BQJi3vlB4Dnm1L9AQ6XjA=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -109,6 +109,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.postfix.org/";
+    changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;

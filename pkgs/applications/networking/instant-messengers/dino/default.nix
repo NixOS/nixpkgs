@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook
     gettext
+    gobject-introspection
   ];
 
   buildInputs = [
     qrencode
-    gobject-introspection
     glib
     glib-networking # required for TLS support
     libadwaita

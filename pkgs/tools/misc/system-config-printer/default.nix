@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib udev libusb1 cups
     python3Packages.python
-    libnotify gobject-introspection gdk-pixbuf pango atk packagekit
+    libnotify gdk-pixbuf pango atk packagekit
     libsecret
   ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     intltool pkg-config
     xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
     python3Packages.wrapPython
-    wrapGAppsHook autoreconfHook
+    wrapGAppsHook autoreconfHook gobject-introspection
   ];
 
   pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];

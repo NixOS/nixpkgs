@@ -49,6 +49,32 @@ poetry2nix.mkPoetryApplication {
   # Fails because of impurities (network, git etc etc)
   doCheck = false;
 
+  overrides = [
+    poetry2nix.defaultPoetryOverrides
+    (self: super: {
+      cryptography = super.cryptography.overridePythonAttrs (old: {
+        meta = old.meta // {
+          knownVulnerabilities = old.meta.knownVulnerabilities or [ ]
+            ++ lib.optionals (lib.versionOlder old.version "41.0.0") [
+              "CVE-2023-2650"
+              "CVE-2023-2975"
+              "CVE-2023-3446"
+              "CVE-2023-3817"
+              "CVE-2023-38325"
+            ];
+        };
+      });
+      requests = super.requests.overridePythonAttrs (old: {
+        meta = old.meta // {
+          knownVulnerabilities = old.meta.knownVulnerabilities or [ ]
+          ++ lib.optionals (lib.versionOlder old.version "2.31.0") [
+            "CVE-2023-32681"
+          ];
+        };
+      });
+    })
+  ];
+
   meta = with lib; {
     inherit (python.meta) platforms;
     maintainers = with maintainers; [ adisbladis jakewaksbaum ];

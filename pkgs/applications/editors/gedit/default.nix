@@ -96,5 +96,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "gedit";
   };
 }

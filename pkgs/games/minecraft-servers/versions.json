@@ -1,8 +1,8 @@
 {
   "1.20": {
-    "url": "https://piston-data.mojang.com/v1/objects/15c777e2cfe0556eef19aab534b186c0c6f277e1/server.jar",
-    "sha1": "15c777e2cfe0556eef19aab534b186c0c6f277e1",
-    "version": "1.20",
+    "url": "https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar",
+    "sha1": "84194a2f286ef7c14ed7ce0090dba59902951553",
+    "version": "1.20.1",
     "javaVersion": 17
   },
   "1.19": {
@@ -78,9 +78,9 @@
     "javaVersion": 8
   },
   "1.7": {
-    "url": "https://launcher.mojang.com/v1/objects/4cec86a928ec171fdc0c6b40de2de102f21601b5/server.jar",
-    "sha1": "4cec86a928ec171fdc0c6b40de2de102f21601b5",
-    "version": "1.7.9",
+    "url": "https://launcher.mojang.com/v1/objects/952438ac4e01b4d115c5fc38f891710c4941df29/server.jar",
+    "sha1": "952438ac4e01b4d115c5fc38f891710c4941df29",
+    "version": "1.7.10",
     "javaVersion": 8
   },
   "1.6": {

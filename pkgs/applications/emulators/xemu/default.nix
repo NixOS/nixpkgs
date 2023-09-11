@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.7.104";
+  version = "0.7.111";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Oo8YwCDl2E8wW4NIO2KeGRX3GZ/pDVsnHEzEDXkLkN8=";
+    hash = "sha256-j7VNNKGm8mFEz+8779ylw1Yjd+jDuoL19Sw52kJll4s=";
     fetchSubmodules = true;
   };
 
@@ -133,5 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres genericnerdyusername ];
     platforms = lib.platforms.linux;
+    mainProgram = "xemu";
   };
 })

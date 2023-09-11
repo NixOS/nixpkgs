@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.16.1";
+  version = "2.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cQ7yfr37UDQPRnHFMq1MFSVmWYXpQhmE/81rlrV+NLs=";
+    hash = "sha256-/q+th07TdqnR8Imer8llDSH9siKPkN6bh0GoBsITtCI=";
   };
 
   propagatedBuildInputs = [

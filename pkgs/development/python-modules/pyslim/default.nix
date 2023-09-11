@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyslim";
-  version = "1.0.3";
+  version = "1.0.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BRfv5AcdRpnvk7zGeYYWweh+foFEOSZjz3pTjX8KOnA=";
+    hash = "sha256-valAhPEVZNv/IYe85a88SGE+2/9O1omvBywz/HeeRco=";
   };
 
   nativeBuildInputs = [

@@ -1,12 +1,10 @@
-# This module adds Memtest86+/Memtest86 to the GRUB boot menu.
-
+# This module adds Memtest86+ to the GRUB boot menu.
 { config, lib, pkgs, ... }:
 
 with lib;
 
 let
   memtest86 = pkgs.memtest86plus;
-  efiSupport = config.boot.loader.grub.efiSupport;
   cfg = config.boot.loader.grub.memtest86;
 in
 
@@ -19,11 +17,8 @@ in
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Make Memtest86+ (or MemTest86 if EFI support is enabled),
-          a memory testing program, available from the
-          GRUB boot menu. MemTest86 is an unfree program, so
-          this requires `allowUnfree` to be set to
-          `true`.
+          Make Memtest86+, a memory testing program, available from the GRUB
+          boot menu.
         '';
       };
 
@@ -63,34 +58,12 @@ in
     };
   };
 
-  config = mkMerge [
-    (mkIf (cfg.enable && efiSupport) {
-      assertions = [
-        {
-          assertion = cfg.params == [];
-          message = "Parameters are not available for MemTest86";
-        }
-      ];
-
-      boot.loader.grub.extraFiles = {
-        "memtest86.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
-      };
-
-      boot.loader.grub.extraEntries = ''
-        menuentry "Memtest86" {
-          chainloader /memtest86.efi
-        }
-      '';
-    })
-
-    (mkIf (cfg.enable && !efiSupport) {
-      boot.loader.grub.extraEntries = ''
-        menuentry "Memtest86+" {
-          linux16 @bootRoot@/memtest.bin ${toString cfg.params}
-        }
-      '';
-
-      boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
-    })
-  ];
+  config = mkIf cfg.enable {
+    boot.loader.grub.extraEntries = ''
+      menuentry "Memtest86+" {
+        linux @bootRoot@/memtest.bin ${toString cfg.params}
+      }
+    '';
+    boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
+  };
 }

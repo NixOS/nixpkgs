@@ -299,6 +299,7 @@ let
       license = licenses.gpl2;
       platforms = platforms.unix;
       maintainers = with maintainers; [ cole-h winter srapenne ];
+      mainProgram = "fish";
     };
 
     passthru = {

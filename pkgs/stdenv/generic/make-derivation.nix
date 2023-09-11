@@ -48,7 +48,7 @@ let
 
     in finalPackage;
 
-  # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
+  #makeDerivationExtensibleConst = attrs: makeDerivationExtensible (_: attrs);
   # but pre-evaluated for a slight improvement in performance.
   makeDerivationExtensibleConst = attrs:
     mkDerivationSimple

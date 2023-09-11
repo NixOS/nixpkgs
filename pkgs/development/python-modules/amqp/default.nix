@@ -3,6 +3,7 @@
 , case
 , fetchPypi
 , pytestCheckHook
+, pytest-rerunfailures
 , pythonOlder
 , vine
 }:
@@ -23,9 +24,12 @@ buildPythonPackage rec {
     vine
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     case
     pytestCheckHook
+    pytest-rerunfailures
   ];
 
   disabledTests = [

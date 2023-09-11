@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "7.16.0";
+  version = "7.18.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    hash = "sha256-Ed9CHaeJ8Rkrvfq/dZVOn/5lhHLH7B6A1Qf2xOQfWik=";
+    hash = "sha256-3qvMuBr2w/gedTDIjG6ezatleXuQSnKX4SkBShzj6aw=";
   };
 
   nativeBuildInputs = [

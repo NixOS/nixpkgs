@@ -12,6 +12,7 @@
 , cloudpickle
 , deepmerge
 , fs
+, inflection
 , jinja2
 , numpy
 , opentelemetry-api
@@ -67,7 +68,7 @@
 }:
 
 let
-  version = "1.1.0";
+  version = "1.1.4";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -103,7 +104,7 @@ buildPythonPackage {
     owner = "bentoml";
     repo = "BentoML";
     rev = "v${version}";
-    hash = "sha256-ZhgBw/zBazfVNPvcfAlHEGvc9hzVm7aKLXmwwvMmF0A=";
+    hash = "sha256-aGSw40haVGo4UpUItStsFxfgjAnY4Rhiat4qDUIINWU=";
   };
 
   pythonRelaxDeps = [
@@ -125,6 +126,7 @@ buildPythonPackage {
     cloudpickle
     deepmerge
     fs
+    inflection
     jinja2
     numpy
     opentelemetry-api

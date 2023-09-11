@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "23.6.1";
+  version = "23.8.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-RkYLTZ40ZINg3cNPBJrSOGOzSSfislBmwdUOQHDu32U=";
+    sha256 = "sha256-sdhTrRh6xkkIDZDGE22hSr5dD179VWdMVs6L1cJ9yiw=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

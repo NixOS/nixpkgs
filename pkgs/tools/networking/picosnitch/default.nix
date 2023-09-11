@@ -6,11 +6,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "picosnitch";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b87654b4b92e28cf5418388ba1d3165b9fa9b17ba91af2a1a942f059128f68bc";
+    sha256 = "b58255a78a0bf652224ee22ca83137d75ea77b7eb1ad2d11159b56b6788f6201";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,9 +22,12 @@ python3.pkgs.buildPythonApplication rec {
     pandas
     plotly
     dash
+    geoip2
   ];
 
-  patches = [ ./picosnitch.patch ];
+  postInstall = ''
+    substituteInPlace $out/${python3.sitePackages}/picosnitch.py --replace '/run/picosnitch.pid' '/run/picosnitch/picosnitch.pid'
+  '';
 
   pythonImportsCheck = [ "picosnitch" ];
 

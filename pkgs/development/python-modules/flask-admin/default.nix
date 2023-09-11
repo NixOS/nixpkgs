@@ -6,6 +6,7 @@
 , colour
 , email-validator
 , enum34
+, fetchpatch
 , fetchPypi
 , flask
 , flask-babelex
@@ -38,6 +39,15 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-JMrir4MramEaAdfcNfQtJmwdbHWkJrhp2MskG3gjM2k=";
   };
+
+  patches = [
+    # https://github.com/flask-admin/flask-admin/pull/2374
+    (fetchpatch {
+      name = "pillow-10-compatibility.patch";
+      url = "https://github.com/flask-admin/flask-admin/commit/96b92deef8b087e86a9dc3e84381d254ea5c0342.patch";
+      hash = "sha256-iR5kxyeZaEyved5InZuPmcglTD77zW18/eSHGwOuW40=";
+    })
+  ];
 
   propagatedBuildInputs = [
     flask

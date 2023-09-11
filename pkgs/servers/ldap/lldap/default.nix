@@ -32,6 +32,12 @@ let
     configureFlags = attrs.configureFlags ++ ["--set=build.docs=false"];
   });
 
+  wasm-bindgen-84 = wasm-bindgen-cli.override {
+    version = "0.2.84";
+    hash = "sha256-0rK+Yx4/Jy44Fw5VwJ3tG243ZsyOIBBehYU54XP/JGk=";
+    cargoHash = "sha256-vcpxcRlW1OKoD64owFF6mkxSqmNrvY+y3Ckn5UwEQ50=";
+  };
+
   commonDerivationAttrs = rec {
     pname = "lldap";
     version = "0.4.3";
@@ -65,7 +71,7 @@ let
     pname = commonDerivationAttrs.pname + "-frontend";
 
     nativeBuildInputs = [
-      wasm-pack wasm-bindgen-cli binaryen which rustc-wasm rustc-wasm.llvmPackages.lld
+      wasm-pack wasm-bindgen-84 binaryen which rustc-wasm rustc-wasm.llvmPackages.lld
     ];
 
     buildPhase = ''
@@ -110,5 +116,6 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ emilylange bendlas ];
+    mainProgram = "lldap";
   };
 })

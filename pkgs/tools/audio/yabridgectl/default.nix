@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage {
   version = yabridge.version;
 
   src = yabridge.src;
-  sourceRoot = "source/tools/yabridgectl";
+  sourceRoot = "${yabridge.src.name}/tools/yabridgectl";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

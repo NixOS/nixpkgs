@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/${cargoRoot}";
+    sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
     hash = "sha256-rPB3bAMdvjgsT3jkEDoWatW8LPwgIaFSbFPqiqANtBY=";
   };

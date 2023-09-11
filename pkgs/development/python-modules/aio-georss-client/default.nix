@@ -35,6 +35,8 @@ buildPythonPackage rec {
     dateparser
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     aresponses
     mock

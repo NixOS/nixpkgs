@@ -8,11 +8,15 @@
 , ppxlib, ppx_deriving
 , ppxlib_0_15, ppx_deriving_0_15
 , coqPackages
-, version ? if lib.versionAtLeast ocaml.version "4.08" then "1.16.5"
+, version ? if lib.versionAtLeast ocaml.version "4.08" then "1.17.0"
     else if lib.versionAtLeast ocaml.version "4.07" then "1.15.2" else "1.14.1"
 }:
 
+let p5 = camlp5; in
+let camlp5 = p5.override { legacy = true; }; in
+
 let fetched = coqPackages.metaFetch ({
+    release."1.17.0".sha256 = "sha256-DTxE8CvYl0et20pxueydI+WzraI6UPHMNvxyp2gU/+w=";
     release."1.16.5".sha256 = "sha256-tKX5/cVPoBeHiUe+qn7c5FIRYCwY0AAukN7vSd/Nz9A=";
     release."1.15.2".sha256 = "sha256-XgopNP83POFbMNyl2D+gY1rmqGg03o++Ngv3zJfCn2s=";
     release."1.15.0".sha256 = "sha256:1ngdc41sgyzyz3i3lkzjhnj66gza5h912virkh077dyv17ysb6ar";
@@ -31,7 +35,7 @@ buildDunePackage rec {
   pname = "elpi";
   inherit (fetched) version src;
 
-  patches = lib.optional (lib.versionAtLeast version "1.16" || version == "dev")
+  patches = lib.optional (version == "1.16.5")
     ./atd_2_10.patch;
 
   minimalOCamlVersion = "4.04";

@@ -17,7 +17,7 @@ let
     pname = "opentelemetry-sdk";
     disabled = pythonOlder "3.7";
 
-    sourceRoot = "source/opentelemetry-sdk";
+    sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-sdk";
 
     format = "pyproject";
 

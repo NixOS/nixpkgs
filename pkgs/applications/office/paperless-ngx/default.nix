@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildNpmPackage
 , nixosTests
@@ -14,16 +15,17 @@
 , unpaper
 , poppler_utils
 , liberation_ttf
+, xcbuild
 }:
 
 let
-  version = "1.16.5";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-suwXFqq3QSdY0KzSpr6NKPwm6xtMBR8aP5VV3XTynqI=";
+    hash = "sha256-/0Ml3NRTghqNykB1RZfqDW9TtENnSRM7wqG7Vn4Kl04=";
   };
 
   # Use specific package versions required by paperless-ngx
@@ -49,10 +51,12 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-rzIDivZTZZWt6kgLt8mstYmvv5TlC+O8O/g01+aLMHQ=";
+    npmDepsHash = "sha256-6EvC9Ka8gl0eRgJtHooB3yQNVGYzuH/WRga4AtzQ0EY=";
 
     nativeBuildInputs = [
       python3
+    ] ++ lib.optionals stdenv.isDarwin [
+      xcbuild
     ];
 
     postPatch = ''
@@ -244,6 +248,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-django
     pytest-env
     pytest-httpx
+    pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
     reportlab
@@ -279,6 +284,8 @@ python.pkgs.buildPythonApplication rec {
     "testNormalOperation"
   ];
 
+  doCheck = !stdenv.isDarwin;
+
   passthru = {
     inherit python path frontend;
     tests = { inherit (nixosTests) paperless; };
@@ -289,7 +296,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://docs.paperless-ngx.com/";
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
   };
 }

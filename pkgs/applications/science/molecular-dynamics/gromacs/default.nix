@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gromacs.org";
-    license = licenses.gpl2;
+    license = licenses.lgpl21Plus;
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
       reference or manual for details), but there are also quite a
       few features that make it stand out from the competition.
 
-      See: https://www.gromacs.org/About_Gromacs for details.
+      See: https://www.gromacs.org/about.html for details.
     '';
     platforms = platforms.unix;
     maintainers = with maintainers; [ sheepforce markuskowa ];

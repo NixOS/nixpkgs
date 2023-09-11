@@ -2,12 +2,14 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cryptography
 , ifaddr
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -24,8 +26,17 @@ buildPythonPackage rec {
     hash = "sha256-rKvHb0wkWVuZO8M8uIQdOiY1N6DmGSpqUgz4YYbUfSM=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "unpin-setuptools.patch";
+      url = "https://github.com/XKNX/xknx/commit/c0826aec52ab69b8bd81f600bea154fae16f334e.patch";
+      hash = "sha256-EpfgEq4pIx7ahqJZalzo30ruj8NlZYHcKHxFXCGL98w=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

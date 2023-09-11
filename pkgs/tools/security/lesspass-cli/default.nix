@@ -14,7 +14,7 @@ buildPythonApplication rec {
     rev = version;
     sha256 = "126zk248s9r72qk9b8j27yvb8gglw49kazwz0sd69b5kkxvhz2dh";
   };
-  sourceRoot = "source/cli";
+  sourceRoot = "${src.name}/cli";
 
   # some tests are designed to run against code in the source directory - adapt to run against
   # *installed* code

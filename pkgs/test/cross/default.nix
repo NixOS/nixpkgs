@@ -115,6 +115,7 @@ let
   in
     pkgs.runCommand "test-mbuffer" {} ''
       echo hello | ${emulator} ${mbuffer}/bin/mbuffer
+      touch $out
     '';
 
   # This is meant to be a carefully curated list of builds/packages
@@ -127,13 +128,16 @@ let
   # of things that often break.  So, no buckshot `mapTestOnCross`
   # calls here.
   sanity = [
-    #pkgs.mbuffer              # https://github.com/NixOS/nixpkgs/issues/213453
+    mbuffer
     #pkgs.pkgsCross.gnu64.bash # https://github.com/NixOS/nixpkgs/issues/243164
     pkgs.gcc_multi.cc
     pkgs.pkgsMusl.stdenv
     pkgs.pkgsLLVM.stdenv
     pkgs.pkgsStatic.bash
     pkgs.pkgsCross.arm-embedded.stdenv
+    pkgs.pkgsCross.sheevaplug.stdenv  # for armv5tel
+    pkgs.pkgsCross.raspberryPi.stdenv  # for armv6l
+    pkgs.pkgsCross.armv7l-hf-multiplatform.stdenv
     pkgs.pkgsCross.m68k.stdenv
     pkgs.pkgsCross.aarch64-multiplatform.pkgsBuildTarget.gcc
     pkgs.pkgsCross.powernv.pkgsBuildTarget.gcc

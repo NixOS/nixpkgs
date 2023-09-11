@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gradle_7, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, openjdk, openjfx, gradle_7, makeDesktopItem, perl, writeText, makeWrapper }:
 let
+  jdk = openjdk.override (lib.optionalAttrs stdenv.isLinux {
+    enableJavaFX = true;
+    openjfx = openjfx.override { withWebKit = true; };
+  });
+
   pname = "scenic-view";
   version = "11.0.2";
 

@@ -64,6 +64,18 @@ in stdenv'.mkDerivation rec {
       url = "https://github.com/doronbehar/MuseScore/commit/f48448a3ede46f5a7ef470940072fbfb6742487c.patch";
       hash = "sha256-UEc7auscnW0KMfWkLKQtm+UstuTNsuFeoNJYIidIlwM=";
     })
+    # Upstream removed the option to use system freetype library in v4.1.0,
+    # causing the app to crash on systems when the outdated bundled freetype
+    # tries to load the Noto Sans font. For more info on the crash itself,
+    # see #244409 and https://github.com/musescore/MuseScore/issues/18795.
+    # For now, re-add the option ourselves. The fix has been merged upstream,
+    # so we can remove this patch with the next version. In the future, we
+    # may replace the other bundled thirdparty libs with system libs, see
+    # https://github.com/musescore/MuseScore/issues/11572.
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/9ab6b32b1c3b990cfa7bb172ee8112521dc2269c.patch";
+      hash = "sha256-5GA29Z+o3I/uDTTDbkauZ8/xSdCE6yY93phMSY0ea7s=";
+    })
   ];
 
   cmakeFlags = [
@@ -73,7 +85,7 @@ in stdenv'.mkDerivation rec {
     # https://github.com/musescore/MuseScore/issues/15571
     "-DMUE_BUILD_CRASHPAD_CLIENT=OFF"
     # Use our freetype
-    "-DUSE_SYSTEM_FREETYPE=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
     # From some reason, in $src/build/cmake/SetupBuildEnvironment.cmake,
     # upstream defaults to compiling to x86_64 only, unless this cmake flag is
     # set
@@ -141,13 +153,16 @@ in stdenv'.mkDerivation rec {
     ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore.
   '';
 
+  # Don't run bundled upstreams tests, as they require a running X window system.
+  doCheck = false;
+
   passthru.tests = nixosTests.musescore;
 
   meta = with lib; {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ vandenoever turion doronbehar ];
+    maintainers = with maintainers; [ vandenoever doronbehar ];
     # on aarch64-linux:
     # error: cannot convert '<brace-enclosed initializer list>' to 'float32x4_t' in assignment
     broken = (stdenv.isLinux && stdenv.isAarch64);

@@ -18,7 +18,6 @@
 , qtbase
 , qtsvg
 , qttools
-, qttranslations
 , qtwayland
 , rapidyaml
 , SDL2
@@ -83,7 +82,6 @@ llvmPackages_16.stdenv.mkDerivation rec {
     qtbase
     qtsvg
     qttools
-    qttranslations
     qtwayland
     rapidyaml
     SDL2

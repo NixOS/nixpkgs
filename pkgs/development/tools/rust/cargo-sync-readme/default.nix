@@ -18,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/phaazon/cargo-sync-readme";
     changelog = "https://github.com/phaazon/cargo-sync-readme/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ b4dm4n ];
+    maintainers = with maintainers; [ b4dm4n matthiasbeyer ];
   };
 }

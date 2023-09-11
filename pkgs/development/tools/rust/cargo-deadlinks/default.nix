@@ -27,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/deadlinks/cargo-deadlinks";
     changelog = "https://github.com/deadlinks/cargo-deadlinks/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ newam ];
+    maintainers = with maintainers; [ newam matthiasbeyer ];
   };
 }

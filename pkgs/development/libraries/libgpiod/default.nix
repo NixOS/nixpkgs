@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config, kmod
-, enable-tools ? true
-, enablePython ? false, python3, ncurses }:
+{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config
+, enable-tools ? true }:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
@@ -8,16 +7,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    sha256 = "sha256-M68o6YheNXZrDYu6u7pEvyPt2tXhTkVZD3Kv/AXYXA8=";
+    hash = "sha256-tu2lU1YWCo5zkG49SOlZ74EpZ4fXZJdbEPJX6WYGaOk=";
   };
 
-  patches = [
-    # cross compiling fix
-    # https://github.com/brgl/libgpiod/pull/45
-    ./0001-Drop-AC_FUNC_MALLOC-and-_REALLOC-and-check-for-them-.patch
-  ];
-
-  buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
   nativeBuildInputs = [
     autoconf-archive
     pkg-config
@@ -27,8 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-tools=${if enable-tools then "yes" else "no"}"
     "--enable-bindings-cxx"
-    "--prefix=${placeholder "out"}"
-  ] ++ lib.optional enablePython "--enable-bindings-python";
+  ];
 
   meta = with lib; {
     description = "C library and tools for interacting with the linux GPIO character device";
@@ -38,7 +29,10 @@ stdenv.mkDerivation rec {
       data structures behind a straightforward API.
     '';
     homepage = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/";
-    license = licenses.lgpl2;
+    license = with licenses; [
+      lgpl21Plus # libgpiod
+      lgpl3Plus # C++ bindings
+    ] ++ lib.optional enable-tools gpl2Plus;
     maintainers = [ maintainers.expipiplus1 ];
     platforms = platforms.linux;
   };

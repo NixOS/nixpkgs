@@ -50,7 +50,7 @@ let
   # lispLibs ofpackages in this file.
   ql = quicklispPackagesFor spec;
 
-  packages = ql.overrideScope' (self: super: {
+  packages = ql.overrideScope (self: super: {
 
   cffi = let
     jna = pkgs.fetchMavenArtifact {
@@ -269,15 +269,15 @@ let
 
   njson = build-asdf-system {
     pname = "njson";
-    version = "1.0.0";
+    version = "1.1.0";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "njson";
-      rev = "1.0.0";
-      sha256 = "sha256-zeOxkoi5cPl1sw1oEOaMsKhhs3Pb8EzzKTjvuDNj/Ko=";
+      rev = "1.1.0";
+      sha256 = "sha256-hVo5++QCns7Mv3zATpAP3EVz1pbj+jbQmzSLqs6hqQo=";
     };
-    lispLibs = [ self.nasdf super.cl-json ];
-    systems = [ "njson" "njson/cl-json" ];
+    lispLibs = [ self.nasdf super.cl-json super.com_dot_inuoe_dot_jzon];
+    systems = [ "njson" "njson/cl-json" "njson/jzon"];
   };
 
   nsymbols = build-asdf-system {
@@ -370,7 +370,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.5.0";
+    version = "3.6.0";
 
     lispLibs = (with super; [
       alexandria
@@ -420,6 +420,7 @@ let
       cl-cffi-gtk
       cl-gobject-introspection
       quri
+      sqlite
     ]) ++ (with self; [
       history-tree
       nhooks
@@ -439,8 +440,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.5.0";
-      sha256 = "sha256-/x3S4qAvvHxUxDcs6MAuZvAtqLTQdwlH7r4zFlKIjY4=";
+      rev = "3.6.0";
+      sha256 = "sha256-DaPEKdYf5R+RS7VQzbdLSqZvEQfxjeGEdX8rwmHRLrY=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -533,88 +534,6 @@ let
     version = "f19162e76";
   });
 
-
-  qt = let
-    rev = "dffff3ee3dbd0686c85c323f579b8bbf4881e60e";
-  in build-with-compile-into-pwd rec {
-    pname = "commonqt";
-    version = builtins.substring 0 7 rev;
-    src = pkgs.fetchFromGitHub {
-      inherit rev;
-      owner = pname;
-      repo = pname;
-      hash = "sha256-GAgwT0D9mIkYPTHfCH/KxxIv7b6QGwcxwZE7ehH5xug=";
-    };
-
-    buildInputs = [ pkgs.qt4 ];
-    nativeBuildInputs = [ pkgs.smokegen pkgs.smokeqt ];
-    nativeLibs = [ pkgs.qt4 pkgs.smokegen pkgs.smokeqt ];
-
-    systems = [ "qt" ];
-
-    lispLibs = with super; [
-      cffi named-readtables cl-ppcre alexandria
-      closer-mop iterate trivial-garbage bordeaux-threads
-    ];
-  };
-
-  qt-libs = build-with-compile-into-pwd {
-    inherit (super.qt-libs) pname version src;
-    patches = [ ./patches/qt-libs-dont-download.patch ];
-    prePatch = ''
-      substituteInPlace systems/*.asd --replace ":qt+libs" ":qt"
-    '';
-    lispLibs = super.qt-libs.lispLibs ++ [ self.qt ];
-    systems = [
-      "qt-libs"
-      "commonqt"
-      # "phonon"
-      # "qimageblitz"
-      # "qsci"
-      "qt3support"
-      "qtcore"
-      "qtdbus"
-      "qtdeclarative"
-      "qtgui"
-      "qthelp"
-      "qtnetwork"
-      "qtopengl"
-      "qtscript"
-      "qtsql"
-      "qtsvg"
-      "qttest"
-      "qtuitools"
-      # "qtwebkit"
-      "qtxml"
-      "qtxmlpatterns"
-      # "qwt"
-      "smokebase"
-    ];
-  };
-
-  commonqt = self.qt-libs;
-  qt3support = self.qt-libs;
-  qtcore = self.qt-libs;
-  qtdbus = self.qt-libs;
-  qtdeclarative = self.qt-libs;
-  qtgui = self.qt-libs;
-  qthelp = self.qt-libs;
-  qtnetwork = self.qt-libs;
-  qtopengl = self.qt-libs;
-  qtscript = self.qt-libs;
-  qtsql = self.qt-libs;
-  qtsvg = self.qt-libs;
-  qttest = self.qt-libs;
-  qtuitools = self.qt-libs;
-  qtxml = self.qt-libs;
-  qtxmlpatterns = self.qt-libs;
-  smokebase = self.qt-libs;
-
-  qtools = build-with-compile-into-pwd {
-    inherit (super.qtools) pname version src nativeLibs;
-    lispLibs = [ self.qt ] ++ remove super.qt_plus_libs super.qtools.lispLibs ++ [ self.qt-libs ];
-    patches = [ ./patches/qtools-use-nix-libs.patch ];
-  };
 
   magicl = build-with-compile-into-pwd {
     inherit (super.magicl) pname version src lispLibs;
@@ -798,6 +717,22 @@ let
       org_dot_melusina_dot_confidence
     ];
   };
+
+  sb-cga = build-asdf-system {
+    pname = "sb-cga";
+    version = "1.0.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "nikodemus";
+      repo = "sb-cga";
+      rev = "9a554ea1c01cac998ff7eaa5f767bc5bcdc4c094";
+      sha256 = "sha256-iBM+VXu6JRqGmeIFzfXbGot+elvangmfSpDB7DjFpPg";
+    };
+    lispLibs = [ super.alexandria ];
+  };
+
+  nsb-cga = super.nsb-cga.overrideLispAttrs (oa: {
+    lispLibs = oa.lispLibs ++ [ self.sb-cga ];
+  });
 
   });
 

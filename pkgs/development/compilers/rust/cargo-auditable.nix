@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, makeRustPlatform, rustc, cargo, installShellFiles, stdenv }:
+{ lib, buildPackages, fetchFromGitHub, makeRustPlatform, installShellFiles, stdenv }:
 
 let
   args = rec {
@@ -30,8 +30,8 @@ let
   };
 
   rustPlatform = makeRustPlatform {
-    inherit rustc;
-    cargo = cargo.override {
+    inherit (buildPackages) rustc;
+    cargo = buildPackages.cargo.override {
       auditable = false;
     };
   };

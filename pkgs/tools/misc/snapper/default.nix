@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
     description = "Tool for Linux filesystem snapshot management";
     homepage = "http://snapper.io";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    mainProgram = "snapper";
     maintainers = with maintainers; [ markuskowa ];
+    platforms = platforms.linux;
   };
 }

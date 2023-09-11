@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-plugins";
-  version = "11.0.0";
+  version = "12.0.0";
 
   src = fetchFromGitHub {
     owner = "shlevy";
     repo = "nix-plugins";
     rev = version;
-    hash = "sha256-sJL8g+UVFvJTqujS9F6gy8tairYUztHCSILkQlwDADU";
+    hash = "sha256-VJqLfOT7y32Jupl57YXxqeDPy0tOWi46tRLN1QUDIow=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

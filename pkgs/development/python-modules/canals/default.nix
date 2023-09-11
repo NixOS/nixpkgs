@@ -1,43 +1,30 @@
 { lib
 , buildPythonPackage
-, pythonOlder
-, pythonAtLeast
 , fetchFromGitHub
-# native build inputs
 , hatchling
-# build input
-, networkx
-# check inputs
-, pytestCheckHook
-# optional dependencies
-, pygraphviz
-, requests
 , mkdocs-material
 , mkdocs-mermaid2-plugin
 , mkdocstrings
+, networkx
+, pygraphviz
+, pytestCheckHook
+, pythonOlder
+, requests
 }:
-let
+
+buildPythonPackage rec {
   pname = "canals";
-  version = "0.2.2";
-  optional-dependencies = {
-    graphviz = [ pygraphviz ];
-    mermaid = [ requests ];
-    docs = [ mkdocs-material mkdocs-mermaid2-plugin mkdocstrings ];
-  };
-in
-buildPythonPackage {
-  inherit version pname;
+  version = "0.6.0";
   format = "pyproject";
 
-  # Pypi source package doesn't contain tests
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-dF0bkY4DFJIovaseNiOLgF8lmha+njTTTzr2/4LzZEc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-s4nKPywfRn2hNhn/coWGqShv7D+MCEHblVzfweQJlnM=";
   };
-
-  disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [
     hatchling
@@ -47,18 +34,37 @@ buildPythonPackage {
     networkx
   ];
 
-  passthru = { inherit optional-dependencies; };
+  passthru.optional-dependencies = {
+    graphviz = [
+      pygraphviz
+    ];
+    mermaid = [
+      requests
+    ];
+    docs = [
+      mkdocs-material
+      mkdocs-mermaid2-plugin
+      mkdocstrings
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ optional-dependencies.mermaid;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTestPaths = [
-    # requires internet connection to mermaid.ink
+    # Test requires internet connection to mermaid.ink
     "test/pipelines/integration"
   ];
 
-  pythonImportsCheck = [ "canals" ];
+  disabledTests = [
+    # Path issue
+    "test_draw_pygraphviz"
+  ];
+
+  pythonImportsCheck = [
+    "canals"
+  ];
 
   meta = with lib; {
     description = "A component orchestration engine";

@@ -56,7 +56,10 @@
 }:
 
 let
-  engineArtifacts = callPackage ./engine-artifacts { inherit (flutter) engineVersion; };
+  engineArtifacts = callPackage ./engine-artifacts {
+    inherit (flutter) engineVersion;
+    flutterVersion = flutter.version;
+  };
   mkCommonArtifactLinkCommand = { artifact }:
     ''
       mkdir -p $out/artifacts/engine/common

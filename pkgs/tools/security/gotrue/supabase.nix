@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gotrue";
-  version = "2.83.1";
+  version = "2.92.0";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3H2B6gEL9qatR49P+0E+O0EDd+uylb0nDETqxW+XuFY=";
+    hash = "sha256-acOTuvs9AFDGdmj4dwTAabhO31MAJgYOVZghlPQiXT4=";
   };
 
-  vendorHash = "sha256-eG6zB/nfsYYvvLf5i8AySkTfXv9rIGTTmyMA4PtcGjg=";
+  vendorHash = "sha256-r1xJka1ISahaHJOkFwjn/Nrf2EU0iGVosz8PZnH31TE=";
 
   ldflags = [
     "-s"

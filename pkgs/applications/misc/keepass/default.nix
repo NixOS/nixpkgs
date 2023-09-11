@@ -117,5 +117,6 @@ in buildDotnetPackage rec {
     maintainers = with lib.maintainers; [ amorsillo obadz ];
     platforms = with lib.platforms; all;
     license = lib.licenses.gpl2;
+    mainProgram = "keepass";
   };
 }

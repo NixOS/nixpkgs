@@ -18,11 +18,11 @@
 
 buildGoModule rec {
   pname = "lxd-unwrapped";
-  version = "5.16";
+  version = "5.17";
 
   src = fetchurl {
     url = "https://github.com/canonical/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz";
-    hash = "sha256-evtNPZvnx8rzr/tJkEp0E7BhUBWHBSJdMtZJQk3VZI8=";
+    hash = "sha256-21pw8Q8UYjuxdaKzNXoTanxxyTNRXXbuerIZPIQK4yg=";
   };
 
   vendorHash = null;
@@ -76,8 +76,6 @@ buildGoModule rec {
   '';
 
   passthru.tests.lxd = nixosTests.lxd;
-  passthru.tests.lxd-nftables = nixosTests.lxd-nftables;
-  passthru.tests.lxd-ui = nixosTests.lxd-ui;
   passthru.ui = callPackage ./ui.nix { };
   passthru.updateScript = gitUpdater {
     url = "https://github.com/canonical/lxd.git";

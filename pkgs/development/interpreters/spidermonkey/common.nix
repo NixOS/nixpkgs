@@ -157,10 +157,13 @@ stdenv.mkDerivation (finalAttrs: rec {
     export AS=$CC
     export AC_MACRODIR=$PWD/build/autoconf/
 
+  '' + lib.optionalString (lib.versionAtLeast version "91" && lib.versionOlder version "115") ''
     pushd js/src
     sh ../../build/autoconf/autoconf.sh --localdir=$PWD configure.in > configure
     chmod +x configure
     popd
+  '' + lib.optionalString (lib.versionAtLeast version "115") ''
+    patchShebangs build/cargo-linker
   '' + ''
     # We can't build in js/src/, so create a build dir
     mkdir obj
@@ -184,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
     maintainers = with maintainers; [ abbradar lostnet catap ];
+    broken = stdenv.isDarwin && versionAtLeast version "115"; # Requires SDK 13.3 (see #242666).
     platforms = platforms.unix;
   };
 })

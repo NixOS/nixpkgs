@@ -47,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "44.0";
+  version = "44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "gBSsWorTxURMpWl32a0QBr1vTvXJLkNzXFEw3o7ckJ0=";
+    sha256 = "fRHLbhxQThCMLckaoiVqRATcq+fRyHPY1glOLfM1onc=";
   };
 
   nativeBuildInputs = [

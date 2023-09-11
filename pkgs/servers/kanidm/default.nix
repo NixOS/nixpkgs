@@ -4,13 +4,13 @@
 , nixosTests
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , pkg-config
 , udev
 , openssl
 , sqlite
 , pam
+, bashInteractive
 }:
 
 let
@@ -18,45 +18,35 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.1.0-alpha.12";
+  version = "1.1.0-beta.13";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "f5924443f08e462067937a5dd0e2c19e5e1255da";
-    hash = "sha256-kJUxVrGpczIdOqKQbgRp1xERfKP6C0SDQgWdjtSuvZ8=";
+    # Latest 1.1.0-beta.13 tip
+    rev = "5d1e2f90e6901017ab3ef9b5fbc10e25a5451fd2";
+    hash = "sha256-70yeHVOrCuC+H96UC84kly3CCQ+y1RGzF5K/2FIag/o=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tracing-forest-0.1.5" = "sha256-L6auSKB4DCnZBZpx7spiikhSOD6i1W3erc3zjn+26Ao=";
-    };
-  };
+  cargoHash = "sha256-Qdc+E5+k9NNE4s6eAnpkam56pc2JJPahkuT4lB328cY=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
-
-  patches = [
-    (fetchpatch {
-      # Bring back x86_64-v1 microarchitecture level
-      name = "cpu-opt-level.patch";
-      url = "https://github.com/kanidm/kanidm/commit/59c6723f7dfb2266eae45c3b2ddd377872a7a113.patch";
-      hash = "sha256-8rVEYitxvdVduQ/+AD/UG3v+mgT/VxkLoxNIXczUfCQ=";
-    })
-  ];
 
   postPatch =
     let
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
       profile = {
-        web_ui_pkg_path = "@web_ui_pkg_path@";
+        admin_bind_path = "/run/kanidmd/sock";
         cpu_flags = if stdenv.isx86_64 then "x86_64_legacy" else "none";
+        default_config_path = "/etc/kanidm/server.toml";
+        default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+        web_ui_pkg_path = "@web_ui_pkg_path@";
       };
     in
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml \
-        --replace '@web_ui_pkg_path@' "$out/ui"
+        --replace '@web_ui_pkg_path@' "${placeholder "out"}/ui"
     '';
 
   nativeBuildInputs = [
@@ -92,6 +82,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = { inherit (nixosTests) kanidm; };
 
   meta = with lib; {
+    changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
     description = "A simple, secure and fast identity management platform";
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;

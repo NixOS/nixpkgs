@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/spkr-beep/beep";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
+    mainProgram = "beep";
   };
 }

@@ -49,6 +49,12 @@ buildPythonPackage rec {
       sha256 = "sha256-VFq3Hv4I8U8ifP/aSjyu0BiW/4jfPlRDKqRcqUGw6UQ=";
     })
 
+    (fetchpatch {
+      name = "test-new-cryptography.patch";
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/e4006e6066c015d9ed55befa9b98247fbdcafd7d.diff";
+      sha256 = "sha256-Wxe9u7Cvv2vKMGTcK3X8W1Mq/nCt70zrzWUKA+83Sas=";
+    })
+
     # Fix hardcoded `fapi-config.json` configuration path
     ./fapi-config.patch
   ];
@@ -56,6 +62,14 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i "s#@TPM2_TSS@#${tpm2-tss.out}#" src/tpm2_pytss/FAPI.py
   '';
+
+  # Hardening has to be disabled
+  # due to pycparsing handling it poorly.
+  # See https://github.com/NixOS/nixpkgs/issues/252023
+  # for more details.
+  hardeningDisable = [
+    "fortify"
+  ];
 
   nativeBuildInputs = [
     cffi

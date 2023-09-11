@@ -1,45 +1,47 @@
 { lib
-, mkDerivation
 , fetchFromGitHub
-, cmake
-, ninja
-, flex
+, makeWrapper
+, mkDerivation
+, substituteAll
+, wrapGAppsHook
+
+, withGrass ? true
+, withWebKit ? false
+
 , bison
-, proj
-, geos
-, sqlite
-, gsl
-, qwt
+, cmake
+, exiv2
 , fcgi
-, python3
+, flex
+, geos
+, grass
+, gsl
+, hdf5
 , libspatialindex
 , libspatialite
-, postgresql
-, txt2tags
-, openssl
 , libzip
-, hdf5
 , netcdf
-, exiv2
-, protobuf
-, qtbase
-, qtsensors
-, qca-qt5
-, qtkeychain
-, qt3d
-, qscintilla
-, qtlocation
-, qtserialport
-, qtxmlpatterns
-, withGrass ? true
-, grass
-, withWebKit ? false
-, qtwebkit
+, ninja
+, openssl
 , pdal
+, postgresql
+, proj
+, protobuf
+, python3
+, qca-qt5
+, qscintilla
+, qt3d
+, qtbase
+, qtkeychain
+, qtlocation
+, qtsensors
+, qtserialport
+, qtwebkit
+, qtxmlpatterns
+, qwt
+, sqlite
+, txt2tags
 , zstd
-, makeWrapper
-, wrapGAppsHook
-, substituteAll
 }:
 
 let
@@ -53,40 +55,50 @@ let
   };
 
   pythonBuildInputs = with py.pkgs; [
-    qscintilla-qt5
+    chardet
     gdal
     jinja2
     numpy
-    psycopg2
-    chardet
-    python-dateutil
-    pyyaml
-    pytz
-    requests
-    urllib3
-    pygments
-    pyqt5
-    pyqt-builder
-    sip
-    setuptools
     owslib
+    psycopg2
+    pygments
+    pyqt-builder
+    pyqt5
+    python-dateutil
+    pytz
+    pyyaml
+    qscintilla-qt5
+    requests
+    setuptools
+    sip
     six
+    urllib3
   ];
 in mkDerivation rec {
-  version = "3.28.7";
+  version = "3.28.10";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-RWQ3RlE8fPMuDGosxKNVgbjRTigZRolqNyaJoC1xdec=";
+    hash = "sha256-5TGcXYfOJonpqecV59dhFcl4rNXbBSofdoTz5o5FFcc=";
   };
 
   passthru = {
     inherit pythonBuildInputs;
     inherit py;
   };
+
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook
+
+    bison
+    cmake
+    flex
+    ninja
+  ];
 
   buildInputs = [
     openssl
@@ -120,11 +132,9 @@ in mkDerivation rec {
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook cmake flex bison ninja ];
-
   patches = [
     (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+      src = ./set-pyqt-package-dirs-ltr.patch;
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
@@ -133,6 +143,7 @@ in mkDerivation rec {
   cmakeFlags = [
     "-DWITH_3D=True"
     "-DWITH_PDAL=TRUE"
+    "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
@@ -143,10 +154,10 @@ in mkDerivation rec {
   dontWrapGApps = true; # wrapper params passed below
 
   postFixup = lib.optionalString withGrass ''
-    # grass has to be availble on the command line even though we baked in
+    # GRASS has to be availble on the command line even though we baked in
     # the path at build time using GRASS_PREFIX.
-    # using wrapGAppsHook also prevents file dialogs from crashing the program
-    # on non-NixOS
+    # Using wrapGAppsHook also prevents file dialogs from crashing the program
+    # on non-NixOS.
     wrapProgram $out/bin/qgis \
       "''${gappsWrapperArgs[@]}" \
       --prefix PATH : ${lib.makeBinPath [ grass ]}

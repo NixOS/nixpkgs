@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
+, nixosTests
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-terminal";
-  version = "6.0.5";
+  version = "6.0.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pRTdvR3hyiJVpi38Ex58X74ns+rSWuytsOXemvdW1Rk=";
+    hash = "sha256-LzCbh+BErgh7Ojbw314oHB8QvyS6UeJkDUkNngzVm+A=";
   };
 
   cmakeFlags = [ "-DVERSION=${version}" ];
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+
+  passthru.tests.test = nixosTests.terminal-emulators.deepin-terminal;
 
   meta = with lib; {
     description = "Terminal emulator with workspace, multiple windows, remote management, quake mode and other features";

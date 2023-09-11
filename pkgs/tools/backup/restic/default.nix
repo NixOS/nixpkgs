@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    hash = "sha256-YJBHk/B8+q5f0k5i5hpucsJK4T/cRu9Jv7+O6vlT64Q=";
+    hash = "sha256-kxxQlU3bKBjCb1aEtcLBmcnPg4KFgFlbFhs9MmbAgk8=";
   };
 
   patches = [
@@ -17,7 +17,7 @@ buildGoModule rec {
     ./0001-Skip-testing-restore-with-permission-failure.patch
   ];
 
-  vendorHash = "sha256-GWFaCfiE8Ph2uBTBI0E47pH+EJsMsMr1NDuaIGvyXRM=";
+  vendorHash = "sha256-m5smEyAt9RxgvUf1pZqIhgja2h8MWfEgjJ4jUgrPMPY=";
 
   subPackages = [ "cmd/restic" ];
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   passthru.tests.restic = nixosTests.restic;
 
   postPatch = ''
-    rm cmd/restic/integration_fuse_test.go
+    rm cmd/restic/cmd_mount_integration_test.go
   '';
 
   postInstall = ''

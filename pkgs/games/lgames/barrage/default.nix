@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (SDL.meta) platforms;
+    broken = stdenv.isDarwin;
   };
 }

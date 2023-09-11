@@ -9,17 +9,17 @@
 stdenv.mkDerivation {
   inherit pname;
 
-  version = "1.2.15.828.g79f41970";
+  version = "1.2.17.834.g26ee1129";
 
   src = if stdenv.isAarch64 then (
     fetchurl {
-      url = "https://web.archive.org/web/20230710021420/https://download.scdn.co/SpotifyARM64.dmg";
-      sha256 = "sha256-1X0Mln47uYs5l1t+5BFBk5lLnXZgnSqZLX41yA91I0s=";
+      url = "https://web.archive.org/web/20230808124344/https://download.scdn.co/SpotifyARM64.dmg";
+      sha256 = "sha256-u22hIffuCT6DwN668TdZXYedY9PSE7ZnL+ITK78H7FI=";
     })
   else (
     fetchurl {
-      url = "https://web.archive.org/web/20230710021726/https://download.scdn.co/Spotify.dmg";
-      sha256 = "sha256-CmKZx8Ad0w6STBN0O4Sc4XqidOM6fCl74u2sI8w+Swk=";
+      url = "https://web.archive.org/web/20230808124637/https://download.scdn.co/Spotify.dmg";
+      sha256 = "sha256-aaYMbZpa2LvyBeXmEAjrRYfYqbudhJHR/hvCNTsNQmw=";
     });
 
   nativeBuildInputs = [ undmg ];
@@ -27,8 +27,12 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     cp -r *.app $out/Applications
+
+    runHook postInstall
   '';
 
   meta = meta // {

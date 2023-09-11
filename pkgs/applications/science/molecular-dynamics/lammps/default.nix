@@ -7,6 +7,7 @@
 , blas
 , lapack
 , cmake
+, cudaPackages
 , pkg-config
 # Available list of packages can be found near here:
 #
@@ -44,14 +45,14 @@
 
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
-  version = "23Jun2022_update4";
+  version = "2Aug2023";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = "stable_${version}";
-    hash = "sha256-zGztc+iUFNIa0KKtfpAhwitInvMmXeTHp1XsOLibfzM=";
+    hash = "sha256-6T4YAa4iN3pJpODGPW+faR16xxyYYdkHLavtiPUbZ4o=";
   };
   preConfigure = ''
     cd cmake
@@ -59,6 +60,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    # Although not always needed, it is needed if cmakeFlags include
+    # GPU_API=cuda, and it doesn't users that don't enable the GPU package.
+    cudaPackages.autoAddOpenGLRunpathHook
   ];
 
   passthru = {
@@ -84,9 +88,14 @@ stdenv.mkDerivation rec {
   ] ++ extraBuildInputs
   ;
 
-  # For backwards compatibility
   postInstall = ''
+    # For backwards compatibility
     ln -s $out/bin/lmp $out/bin/lmp_serial
+    # Install vim and neovim plugin
+    install -Dm644 ../../tools/vim/lammps.vim $out/share/vim-plugins/lammps/syntax/lammps.vim
+    install -Dm644 ../../tools/vim/filetype.vim $out/share/vim-plugins/lammps/ftdetect/lammps.vim
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/lammps $out/share/nvim/site
   '';
 
   meta = with lib; {
@@ -106,5 +115,6 @@ stdenv.mkDerivation rec {
     # support.
     broken = (blas.isILP64 && lapack.isILP64);
     maintainers = [ maintainers.costrouc maintainers.doronbehar ];
+    mainProgram = "lmp";
   };
 }

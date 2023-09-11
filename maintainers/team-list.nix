@@ -181,6 +181,19 @@ with lib.maintainers; {
     shortName = "Cosmopolitan";
   };
 
+  dotnet = {
+    members = [
+      ivar
+      mdarocha
+      corngood
+      raphaelr
+      jamiemagee
+      anpin
+    ];
+    scope = "Maintainers of the .NET build tools and packages";
+    shortName = "dotnet";
+  };
+
   deepin = {
     members = [
       rewine
@@ -279,6 +292,17 @@ with lib.maintainers; {
     shortName = "flutter";
     enableFeatureFreezePing = false;
     githubTeams = [ "flutter" ];
+  };
+
+  flyingcircus = {
+    # Verify additions by approval of an already existing member of the team.
+    members = [
+      theuni
+      dpausp
+      leona
+    ];
+    scope = "Team for Flying Circus employees who collectively maintain packages.";
+    shortName = "Flying Circus employees";
   };
 
   freedesktop = {
@@ -413,6 +437,7 @@ with lib.maintainers; {
 
   jupyter = {
     members = [
+      GaetanLepage
       natsukium
     ];
     scope = "Maintain Jupyter and related packages.";
@@ -425,7 +450,6 @@ with lib.maintainers; {
       offline
       saschagrunert
       srhb
-      zowoq
     ];
     scope = "Maintain the Kubernetes package and module";
     shortName = "Kubernetes";
@@ -668,6 +692,17 @@ with lib.maintainers; {
     shortName = "OpenStack";
   };
 
+  ororatech = {
+    # email: nixdevs@ororatech.com
+    shortName = "OroraTech GmbH. employees";
+    scope = "Team for packages maintained by employees of OroraTech GmbH.";
+    # Edits to this list should only be done by an already existing member.
+    members = [
+      kip93
+      victormeriqui
+    ];
+  };
+
   pantheon = {
     members = [
       davidak
@@ -712,7 +747,6 @@ with lib.maintainers; {
       adisbladis
       saschagrunert
       vdemeester
-      zowoq
     ];
     githubTeams = [
       "podman"
@@ -734,6 +768,7 @@ with lib.maintainers; {
       fridh
       hexa
       jonringer
+      tjni
     ];
     scope = "Maintain the Python interpreter and related packages.";
     shortName = "Python";
@@ -891,6 +926,16 @@ with lib.maintainers; {
     ];
     scope = "Maintain Xfce desktop environment and related packages.";
     shortName = "Xfce";
+    enableFeatureFreezePing = true;
+  };
+
+  zig = {
+    members = [
+      AndersonTorres
+      figsoda
+    ];
+    scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
+    shortName = "Zig";
     enableFeatureFreezePing = true;
   };
 }

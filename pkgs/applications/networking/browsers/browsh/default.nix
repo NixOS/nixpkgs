@@ -18,7 +18,7 @@ buildGoModule rec {
 
   pname = "browsh";
 
-  sourceRoot = "source/interfacer";
+  sourceRoot = "${src.name}/interfacer";
 
   src = fetchFromGitHub {
     owner = "browsh-org";

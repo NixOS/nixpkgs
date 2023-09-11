@@ -1,9 +1,9 @@
 diff --git a/app/AppKernel.php b/app/AppKernel.php
-index 347197e..902b558 100644
+index 61b734e06..d25d1aaa3 100644
 --- a/app/AppKernel.php
 +++ b/app/AppKernel.php
-@@ -69,19 +69,24 @@ class AppKernel extends Kernel
-         return __DIR__;
+@@ -62,14 +62,19 @@ class AppKernel extends Kernel
+         return $bundles;
      }
  
 +    public function getProjectDir()
@@ -24,9 +24,3 @@ index 347197e..902b558 100644
      }
  
      public function registerContainerConfiguration(LoaderInterface $loader)
-     {
--        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
-+        $loader->load($this->getProjectDir() . '/app/config/config_' . $this->getEnvironment() . '.yml');
- 
-         $loader->load(function ($container) {
-             if ($container->getParameter('use_webpack_dev_server')) {

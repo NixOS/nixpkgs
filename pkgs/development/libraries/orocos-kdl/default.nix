@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  sourceRoot = "source/orocos_kdl";
+  sourceRoot = "${src.name}/orocos_kdl";
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ eigen ];

@@ -23,16 +23,16 @@
 
 buildPythonPackage rec {
   pname = "aesara";
-  version = "2.8.12";
+  version = "2.9.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aesara-devs";
     repo = "aesara";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-lRc0IGpxkSnVeziFOYX7f99P7WNvz1KHy73qMPrU24I=";
+    hash = "sha256-eanFkEiuPzm4InLd9dFmoLs/IOofObn9NIzaqzINdMQ=";
   };
 
   nativeBuildInputs = [

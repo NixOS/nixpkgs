@@ -2,16 +2,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-cross";
-  version = "1.3.250.0";
+  version = "1.3.261.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Cross";
     rev = "sdk-${finalAttrs.version}";
-    hash = "sha256-H4UkR/EiBWpdhdPHNBrdRkl4eN8kD9gEOzpnwfFSdpI=";
+    hash = "sha256-abVqLovvcKBJhGhSCbyD5mc1DSfvh4TWssGxi52ukQ8=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
+
+  postFixup = ''
+    substituteInPlace $out/lib/pkgconfig/*.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
 
   meta = with lib; {
     description = "A tool designed for parsing and converting SPIR-V to other shader languages";

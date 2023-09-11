@@ -71,6 +71,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "250f629c0161ad8107cf89319e990051fae62832fd343083bea452d93e2205fd"
 
 [[package]]
+name = "allocator-api2"
+version = "0.2.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0942ffc6dcaadf03badf6e6a2d0228460359d5e34b57ccdc720b7382dfbd5ec5"
+
+[[package]]
 name = "android-activity"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -161,13 +167,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "bincode"
-version = "1.3.3"
+name = "base64"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
-dependencies = [
- "serde",
-]
+checksum = "604178f6c5c21f02dc555784810edfb88d34ac2c73b2eae109655649ee73ce3d"
 
 [[package]]
 name = "bit-set"
@@ -452,8 +455,9 @@ dependencies = [
 
 [[package]]
 name = "cosmic-text"
-version = "0.8.0"
-source = "git+https://github.com/hecrj/cosmic-text.git?rev=e8b10fd675832cb9c1cc9de30922beb4cf883876#e8b10fd675832cb9c1cc9de30922beb4cf883876"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b0b68966c2543609f8d92f9d33ac3b719b2a67529b0c6c0b3e025637b477eef9"
 dependencies = [
  "aliasable",
  "fontdb",
@@ -542,7 +546,7 @@ dependencies = [
 name = "data"
 version = "0.1.0"
 dependencies = [
- "bincode",
+ "base64",
  "chrono",
  "dirs-next",
  "flate2",
@@ -556,6 +560,7 @@ dependencies = [
  "rand_chacha",
  "seahash",
  "serde",
+ "serde_json",
  "serde_yaml",
  "thiserror",
  "tokio",
@@ -624,70 +629,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "encoding"
-version = "0.2.33"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6b0d943856b990d12d3b55b359144ff341533e516d94098b1d3fc1ac666d36ec"
-dependencies = [
- "encoding-index-japanese",
- "encoding-index-korean",
- "encoding-index-simpchinese",
- "encoding-index-singlebyte",
- "encoding-index-tradchinese",
-]
-
-[[package]]
-name = "encoding-index-japanese"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04e8b2ff42e9a05335dbf8b5c6f7567e5591d0d916ccef4e0b1710d32a0d0c91"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding-index-korean"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4dc33fb8e6bcba213fe2f14275f0963fd16f0a02c878e3095ecfdf5bee529d81"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding-index-simpchinese"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d87a7194909b9118fc707194baa434a4e3b0fb6a5a757c73c3adb07aa25031f7"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding-index-singlebyte"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3351d5acffb224af9ca265f435b859c7c01537c0849754d3db3fdf2bfe2ae84a"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding-index-tradchinese"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd0e20d5688ce3cab59eb3ef3a2083a5c77bf496cb798dc6fcdb75f323890c18"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding_index_tests"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a246d82be1c9d791c5dfde9a2bd045fc3cbba3fa2b11ad558f27d01712f00569"
-
-[[package]]
 name = "errno"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -720,9 +661,9 @@ dependencies = [
 
 [[package]]
 name = "etagere"
-version = "0.2.7"
+version = "0.2.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6301151a318f367f392c31395beb1cfba5ccd9abc44d1db0db3a4b27b9601c89"
+checksum = "fcf22f748754352918e082e0039335ee92454a5d62bcaf69b5e8daf5907d9644"
 dependencies = [
  "euclid",
  "svg_fmt",
@@ -939,9 +880,9 @@ dependencies = [
 
 [[package]]
 name = "getrandom"
-version = "0.2.9"
+version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c85e1d9ab2eadba7e5040d4e09cbd6d072b76a557ad64e797c2cb9d4da21d7e4"
+checksum = "be4136b2a15dd319360be1c07d9933517ccf0be8f16bf62a3bee4f0d618df427"
 dependencies = [
  "cfg-if",
  "js-sys",
@@ -986,8 +927,9 @@ dependencies = [
 
 [[package]]
 name = "glyphon"
-version = "0.2.0"
-source = "git+https://github.com/hecrj/glyphon.git?rev=8dbf36020e5759fa9144517b321372266160113e#8dbf36020e5759fa9144517b321372266160113e"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5e87caa7459145f5e5f167bf34db4532901404c679e62339fb712a0e3ccf722a"
 dependencies = [
  "cosmic-text",
  "etagere",
@@ -1059,9 +1001,9 @@ dependencies = [
 
 [[package]]
 name = "half"
-version = "2.3.0"
+version = "2.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9906a89f1724975a455316ae0554ceaa45ad83bb336f1125a87bfbdb9197cfa0"
+checksum = "bc52e53916c08643f1b56ec082790d1e86a32e58dc5268f897f313fbae7b4872"
 dependencies = [
  "cfg-if",
  "crunchy",
@@ -1076,7 +1018,9 @@ dependencies = [
  "embed-resource",
  "fern",
  "iced",
+ "image",
  "log",
+ "once_cell",
  "open",
  "palette",
  "thiserror",
@@ -1096,11 +1040,12 @@ dependencies = [
 
 [[package]]
 name = "hashbrown"
-version = "0.13.2"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43a3c133739dddd0d2990f9a4bdf8eb4b21ef50e4851ca85ab661199821d510e"
+checksum = "2c6201b9ff9fd90a5a3bac2e56a830d0caa509576f0e503818ee82c181b3437a"
 dependencies = [
  "ahash 0.8.3",
+ "allocator-api2",
 ]
 
 [[package]]
@@ -1135,9 +1080,9 @@ dependencies = [
 
 [[package]]
 name = "hermit-abi"
-version = "0.3.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fed44880c466736ef9a5c5b5facefb5ed0785676d0c02d612db14e54f0d84286"
+checksum = "443144c8cdadd93ebf52ddb4056d257f5b52c04d3c804e657d19eb73fc33668b"
 
 [[package]]
 name = "hexf-parse"
@@ -1171,7 +1116,7 @@ dependencies = [
 [[package]]
 name = "iced"
 version = "0.9.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "iced_core",
  "iced_futures",
@@ -1185,7 +1130,7 @@ dependencies = [
 [[package]]
 name = "iced_core"
 version = "0.9.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "bitflags 1.3.2",
  "instant",
@@ -1198,7 +1143,7 @@ dependencies = [
 [[package]]
 name = "iced_futures"
 version = "0.6.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "futures",
  "iced_core",
@@ -1211,28 +1156,29 @@ dependencies = [
 [[package]]
 name = "iced_graphics"
 version = "0.8.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "bitflags 1.3.2",
  "bytemuck",
  "glam",
+ "half",
  "iced_core",
  "image",
  "kamadak-exif",
  "log",
  "raw-window-handle",
  "thiserror",
- "tiny-skia 0.9.1",
 ]
 
 [[package]]
 name = "iced_renderer"
 version = "0.1.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "iced_graphics",
  "iced_tiny_skia",
  "iced_wgpu",
+ "log",
  "raw-window-handle",
  "thiserror",
 ]
@@ -1240,7 +1186,7 @@ dependencies = [
 [[package]]
 name = "iced_runtime"
 version = "0.1.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "iced_core",
  "iced_futures",
@@ -1250,7 +1196,7 @@ dependencies = [
 [[package]]
 name = "iced_style"
 version = "0.8.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "iced_core",
  "once_cell",
@@ -1260,7 +1206,7 @@ dependencies = [
 [[package]]
 name = "iced_tiny_skia"
 version = "0.1.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "bytemuck",
  "cosmic-text",
@@ -1270,14 +1216,14 @@ dependencies = [
  "raw-window-handle",
  "rustc-hash",
  "softbuffer",
- "tiny-skia 0.9.1",
+ "tiny-skia 0.10.0",
  "twox-hash",
 ]
 
 [[package]]
 name = "iced_wgpu"
 version = "0.10.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "bitflags 1.3.2",
  "bytemuck",
@@ -1297,7 +1243,7 @@ dependencies = [
 [[package]]
 name = "iced_widget"
 version = "0.1.0"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "iced_renderer",
  "iced_runtime",
@@ -1311,7 +1257,7 @@ dependencies = [
 [[package]]
 name = "iced_winit"
 version = "0.9.1"
-source = "git+https://github.com/tarkah/iced?rev=d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65#d73dba1f1c2dda7f58c9983e7ee8fbac6f563a65"
+source = "git+https://github.com/iced-rs/iced?rev=78dc341ea82449f1e075e37e67c1ccf66b88e8d6#78dc341ea82449f1e075e37e67c1ccf66b88e8d6"
 dependencies = [
  "iced_graphics",
  "iced_runtime",
@@ -1372,44 +1318,31 @@ version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eae7b9aee968036d54dce06cebaefd919e4472e753296daccd6d344e3e2df0c2"
 dependencies = [
- "hermit-abi 0.3.1",
+ "hermit-abi 0.3.2",
  "libc",
  "windows-sys 0.48.0",
 ]
 
 [[package]]
 name = "irc"
-version = "0.15.0"
-source = "git+https://github.com/aatxe/irc.git?rev=8eef9c56881670aa614782ab4321fb8ae3975fa0#8eef9c56881670aa614782ab4321fb8ae3975fa0"
+version = "0.1.0"
 dependencies = [
- "chrono",
- "encoding",
- "futures-util",
- "irc-proto",
- "log",
- "native-tls",
- "parking_lot 0.12.1",
- "pin-project",
- "serde",
- "serde_derive",
+ "bytes",
+ "futures",
+ "irc_proto",
  "thiserror",
  "tokio",
  "tokio-native-tls",
- "tokio-stream",
  "tokio-util",
- "toml",
 ]
 
 [[package]]
-name = "irc-proto"
-version = "0.15.0"
-source = "git+https://github.com/aatxe/irc.git?rev=8eef9c56881670aa614782ab4321fb8ae3975fa0#8eef9c56881670aa614782ab4321fb8ae3975fa0"
+name = "irc_proto"
+version = "0.1.0"
 dependencies = [
- "bytes",
- "encoding",
+ "itertools",
+ "nom",
  "thiserror",
- "tokio",
- "tokio-util",
 ]
 
 [[package]]
@@ -1439,6 +1372,12 @@ checksum = "b0fd2260e829bddf4cb6ea802289de2f86d6a7a690192fbe91b3f46e0f2c8473"
 dependencies = [
  "either",
 ]
+
+[[package]]
+name = "itoa"
+version = "1.0.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af150ab688ff2122fcef229be89cb50dd66af9e01a4ff320cc137eecc9bacc38"
 
 [[package]]
 name = "jni-sys"
@@ -1516,9 +1455,9 @@ checksum = "03087c2bad5e1034e8cace5926dec053fb3790248370865f5117a7d0213354c8"
 
 [[package]]
 name = "libc"
-version = "0.2.144"
+version = "0.2.147"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2b00cc1c228a6782d0f076e7b232802e0c5689d41bb5df366f2a6b6621cfdfe1"
+checksum = "b4668fb0ea861c1df094127ac5f1da3409a82116a4ba74fca2e58ef927159bb3"
 
 [[package]]
 name = "libloading"
@@ -1576,11 +1515,11 @@ checksum = "518ef76f2f87365916b142844c16d8fefd85039bc5699050210a7778ee1cd1de"
 
 [[package]]
 name = "lru"
-version = "0.9.0"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71e7d46de488603ffdd5f30afbc64fbba2378214a2c3a2fb83abf3d33126df17"
+checksum = "eedb2bdbad7e0634f83989bf596f497b070130daaa398ab22d84c39e266deec5"
 dependencies = [
- "hashbrown 0.13.2",
+ "hashbrown 0.14.0",
 ]
 
 [[package]]
@@ -1991,9 +1930,9 @@ dependencies = [
 
 [[package]]
 name = "openssl"
-version = "0.10.54"
+version = "0.10.55"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69b3f656a17a6cbc115b5c7a40c616947d213ba182135b014d6051b73ab6f019"
+checksum = "345df152bc43501c5eb9e4654ff05f794effb78d4efe3d53abc158baddc0703d"
 dependencies = [
  "bitflags 1.3.2",
  "cfg-if",
@@ -2023,9 +1962,9 @@ checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
 
 [[package]]
 name = "openssl-sys"
-version = "0.9.88"
+version = "0.9.90"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2ce0f250f34a308dcfdbb351f511359857d4ed2134ba715a4eadd46e1ffd617"
+checksum = "374533b0e45f3a7ced10fcaeccca020e66656bc03dac384f852e4e5a7a8104a6"
 dependencies = [
  "cc",
  "libc",
@@ -2603,6 +2542,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_json"
+version = "1.0.99"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46266871c240a00b8f503b877622fe33430b3c7d963bdc0f2adc511e54a1eae3"
+dependencies = [
+ "itoa",
+ "ryu",
+ "serde",
+]
+
+[[package]]
 name = "serde_spanned"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2900,9 +2850,9 @@ dependencies = [
 
 [[package]]
 name = "tiny-skia"
-version = "0.9.1"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ce2986c82f77818c7b9144c70818fdde98db15308e329ae2f7204d767808fd3c"
+checksum = "7db11798945fa5c3e5490c794ccca7c6de86d3afdd54b4eb324109939c6f37bc"
 dependencies = [
  "arrayref",
  "arrayvec",
@@ -2910,7 +2860,7 @@ dependencies = [
  "cfg-if",
  "log",
  "png",
- "tiny-skia-path 0.9.0",
+ "tiny-skia-path 0.10.0",
 ]
 
 [[package]]
@@ -2926,9 +2876,9 @@ dependencies = [
 
 [[package]]
 name = "tiny-skia-path"
-version = "0.9.0"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7acb0ccda1ac91084353a56d0b69b0e29c311fd809d2088b1ed2f9ae1841c47"
+checksum = "2f60aa35c89ac2687ace1a2556eaaea68e8c0d47408a2e3e7f5c98a489e7281c"
 dependencies = [
  "arrayref",
  "bytemuck",
@@ -2952,19 +2902,33 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.28.2"
+version = "1.29.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "94d7b1cfd2aa4011f2de74c2c4c63665e27a71006b0a192dcd2710272e73dfa2"
+checksum = "532826ff75199d5833b9d2c5fe410f29235e25704ee5f0ef599fb51c21f4a4da"
 dependencies = [
  "autocfg",
+ "backtrace",
  "bytes",
  "libc",
  "mio",
  "num_cpus",
+ "parking_lot 0.12.1",
  "pin-project-lite",
  "signal-hook-registry",
  "socket2",
+ "tokio-macros",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "tokio-macros"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "630bdcf245f78637c13ec01ffae6187cca34625e8c63150d424b59e55af2675e"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.18",
 ]
 
 [[package]]

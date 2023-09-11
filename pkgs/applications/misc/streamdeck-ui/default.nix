@@ -1,48 +1,46 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, fetchpatch
 , copyDesktopItems
-, wrapQtAppsHook
 , writeText
 , makeDesktopItem
 , xvfb-run
-, qt5
+, qt6
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamdeck-ui";
-  version = "2.0.6";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
-    repo = pname;
-    owner = "timothycrosley";
+    repo = "streamdeck-linux-gui";
+    owner = "streamdeck-linux-gui";
     rev = "v${version}";
-    sha256 = "sha256-5dk+5oefg5R68kv038gsZ2p5ixmpj/vBLBp/V7Sdos8=";
+    sha256 = "sha256-AIE9j022L4WSlHBAu3TT5uE4Ilgk/jYSmU03K8Hs8xY=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "use-poetry-core.patch";
-      url = "https://github.com/timothycrosley/streamdeck-ui/commit/e271656c1f47b1619d1b942e2ebb01ab2d6a68a9.patch";
-      hash = "sha256-wqYwX6eSqMnW6OG7wSprD62Dz818ayFduVrqW9E/ays=";
-    })
-    (fetchpatch {
-      name = "update-python-xlib-0.33.patch";
-      url = "https://github.com/timothycrosley/streamdeck-ui/commit/07d7fdd33085b413dd26b02d8a02820edad2d568.patch";
-      hash = "sha256-PylTrbfB8RJ0+kbgJlRdcvfdahGoob8LabwhuFNsUpY=";
-    })
+    # nixpkgs has a newer pillow version
+    ./update-pillow.patch
   ];
 
-  desktopItems = [ (makeDesktopItem {
-    name = "streamdeck-ui";
-    desktopName = "Stream Deck UI";
-    icon = "streamdeck-ui";
-    exec = "streamdeck --no-ui";
-    comment = "UI for the Elgato Stream Deck";
-    categories = [ "Utility" ];
-    noDisplay = true;
-  }) ];
+  desktopItems = let
+    common = {
+      name = "streamdeck-ui";
+      desktopName = "Stream Deck UI";
+      icon = "streamdeck-ui";
+      exec = "streamdeck";
+      comment = "UI for the Elgato Stream Deck";
+      categories = [ "Utility" ];
+    };
+  in builtins.map makeDesktopItem [
+    common
+    (common // {
+      name = "${common.name}-noui";
+      exec = "${common.exec} --no-ui";
+      noDisplay = true;
+    })
+  ];
 
   postInstall =
     let
@@ -51,6 +49,10 @@ python3Packages.buildPythonApplication rec {
       '';
     in
       ''
+        mkdir -p $out/lib/systemd/user
+        substitute scripts/streamdeck.service $out/lib/systemd/user/streamdeck.service \
+          --replace '<path to streamdeck>' $out/bin/streamdeck
+
         mkdir -p "$out/etc/udev/rules.d"
         cp ${writeText "70-streamdeck.rules" udevRules} $out/etc/udev/rules.d/70-streamdeck.rules
 
@@ -66,7 +68,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     python3Packages.poetry-core
     copyDesktopItems
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -75,32 +77,25 @@ python3Packages.buildPythonApplication rec {
     cairosvg
     pillow
     pynput
-    pyside2
+    pyside6
     streamdeck
     xlib
   ] ++ lib.optionals stdenv.isLinux [
-    qt5.qtwayland
+    qt6.qtwayland
   ];
 
   nativeCheckInputs = [
     xvfb-run
     python3Packages.pytest
-    python3Packages.hypothesis-auto
   ];
 
-  # Ignored tests are not in a running or passing state.
-  # Fixes have been merged upstream but not yet released.
-  # Revisit these ignored tests on each update.
   checkPhase = ''
-    xvfb-run pytest tests \
-      --ignore=tests/test_api.py \
-      --ignore=tests/test_filter.py \
-      --ignore=tests/test_stream_deck_monitor.py
+    xvfb-run pytest tests
   '';
 
   meta = with lib; {
     description = "Linux compatible UI for the Elgato Stream Deck";
-    homepage = "https://timothycrosley.github.io/streamdeck-ui/";
+    homepage = "https://streamdeck-linux-gui.github.io/streamdeck-linux-gui/";
     license = licenses.mit;
     maintainers = with maintainers; [ majiir ];
   };

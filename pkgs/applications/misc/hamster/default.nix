@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, python3Packages, intltool, glib, itstool, gtk3
-, wrapGAppsHook, gobject-introspection, pango, gdk-pixbuf, atk, wafHook }:
+, wrapGAppsHook, gobject-introspection, pango, gdk-pixbuf, atk, waf }:
 
 python3Packages.buildPythonApplication rec {
   pname = "hamster";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
     intltool
     itstool
-    wafHook
+    waf.hook
     glib
     gobject-introspection
   ];

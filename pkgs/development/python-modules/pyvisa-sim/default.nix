@@ -7,6 +7,9 @@
 , stringparser
 , typing-extensions
 , pytestCheckHook
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -19,8 +22,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyVISA-sim";
     inherit version;
-    sha256 = "sha256-vWxW941/1e58pqL/Rzq+eoZJpwsvLphgIe48SuJtohY=";
+    hash = "sha256-vWxW941/1e58pqL/Rzq+eoZJpwsvLphgIe48SuJtohY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     pyvisa

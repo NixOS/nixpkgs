@@ -11,9 +11,10 @@
 , typing-extensions
 , pandas
 , jinja2
-, importlib-metadata
+, packaging
 
 # Build, dev and test dependencies
+, anywidget
 , ipython
 , pytestCheckHook
 , vega_datasets
@@ -22,15 +23,17 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "5.0.1";
+  # current version, 5.0.1, is broken with jsonschema>=4.18
+  # we use unstable version instead of patch due to many changes
+  version = "unstable-2023-08-12";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7bTrfryu4oaodVGNFNlVk9vXmDA5/9ahvCmvUGzZ5OQ=";
+    rev = "56b3b66daae7160c8d82777d2646131afcc3dab4";
+    hash = "sha256-uVE3Bth1D1mIhaULB4IxEtOzhQd51Pscqyfdys65F6A=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +44,13 @@ buildPythonPackage rec {
     jinja2
     jsonschema
     numpy
+    packaging
     pandas
     toolz
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata
-    ++ lib.optional (pythonOlder "3.11") typing-extensions;
+  ] ++ lib.optional (pythonOlder "3.11") typing-extensions;
 
   nativeCheckInputs = [
+    anywidget
     ipython
     sphinx
     vega_datasets
@@ -62,6 +66,8 @@ buildPythonPackage rec {
     "tests/vegalite/v5/test_api.py"
     # avoid updating files and dependency on black
     "tests/test_toplevel.py"
+    # require vl-convert package
+    "tests/utils/test_compiler.py"
   ];
 
   meta = with lib; {

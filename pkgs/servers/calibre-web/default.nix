@@ -40,7 +40,7 @@ python.pkgs.buildPythonApplication rec {
     chardet
     flask-babel
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
     flask-limiter
     iso-639

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pylint-venv";
-  version = "3.0.1";
+  version = "3.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "jgosmann";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-GkUdIG+Mp2/POOPJZ/vtONYrd26GB44dxh9455aWZuU=";
+    hash = "sha256-mYG9iZHbA67oJc2sshtV3w8AQaqPsXGqMuLJFI4jAI0=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to make pylint respect virtual environments";
     homepage = "https://github.com/jgosmann/pylint-venv/";
+    changelog = "https://github.com/jgosmann/pylint-venv/blob/v${version}/CHANGES.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

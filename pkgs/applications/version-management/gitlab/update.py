@@ -187,7 +187,7 @@ def update_rubyenv():
     )
 
     # Fetch vendored dependencies temporarily in order to build the gemset.nix
-    subprocess.check_output(["mkdir", "-p", "vendor/gems"], cwd=rubyenv_dir)
+    subprocess.check_output(["mkdir", "-p", "vendor/gems", "gems"], cwd=rubyenv_dir)
     subprocess.check_output(
         [
             "sh",
@@ -195,6 +195,14 @@ def update_rubyenv():
             f"curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=vendor/gems | tar -xj --strip-components=3",
         ],
         cwd=f"{rubyenv_dir}/vendor/gems",
+    )
+    subprocess.check_output(
+        [
+            "sh",
+            "-c",
+            f"curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=gems | tar -xj --strip-components=3",
+        ],
+        cwd=f"{rubyenv_dir}/gems",
     )
 
     # Undo our gemset.nix patches so that bundix runs through
@@ -213,11 +221,13 @@ def update_rubyenv():
             "1i\\src:",
             "-e",
             's:path = \\(vendor/[^;]*\\);:path = "${src}/\\1";:g',
+            "-e",
+            's:path = \\(gems/[^;]*\\);:path = "${src}/\\1";:g',
             "gemset.nix",
         ],
         cwd=rubyenv_dir,
     )
-    subprocess.check_output(["rm", "-rf", "vendor"], cwd=rubyenv_dir)
+    subprocess.check_output(["rm", "-rf", "vendor", "gems"], cwd=rubyenv_dir)
 
 
 @cli.command("update-gitaly")

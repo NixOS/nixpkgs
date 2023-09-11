@@ -309,6 +309,38 @@ in
 
         system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
+        # Not required for, e.g., containers as they don't have their own kernel or initrd.
+        # They boot directly into stage 2.
+        system.systemBuilderArgs.kernelParams = config.boot.kernelParams;
+        system.systemBuilderCommands =
+          let
+            kernelPath = "${config.boot.kernelPackages.kernel}/" +
+              "${config.system.boot.loader.kernelFile}";
+            initrdPath = "${config.system.build.initialRamdisk}/" +
+              "${config.system.boot.loader.initrdFile}";
+          in
+          ''
+            if [ ! -f ${kernelPath} ]; then
+              echo "The bootloader cannot find the proper kernel image."
+              echo "(Expecting ${kernelPath})"
+              false
+            fi
+
+            ln -s ${kernelPath} $out/kernel
+            ln -s ${config.system.modulesTree} $out/kernel-modules
+            ${optionalString (config.hardware.deviceTree.package != null) ''
+              ln -s ${config.hardware.deviceTree.package} $out/dtbs
+            ''}
+
+            echo -n "$kernelParams" > $out/kernel-params
+
+            ln -s ${initrdPath} $out/initrd
+
+            ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+
+            ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
+          '';
+
         # Implement consoleLogLevel both in early boot and using sysctl
         # (so you don't need to reboot to have changes take effect).
         boot.kernelParams =

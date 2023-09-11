@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
   };
-  patchPhase = ''
+  prePatch = ''
     substituteInPlace unix/Makefile --replace 'CC = cc' ""
   '';
 
@@ -26,7 +26,14 @@ stdenv.mkDerivation rec {
     "INSTALL=cp"
   ];
 
-  patches = lib.optionals (enableNLS && !stdenv.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
+  patches = [
+    # Trying to use `memset` without declaring it is flagged as an error with clang 16, causing
+    # the `configure` script to incorrectly define `ZMEM`. That causes the build to fail due to
+    # incompatible redeclarations of `memset`, `memcpy`, and `memcmp` in `zip.h`.
+    ./fix-memset-detection.patch
+    # Implicit declaration of `closedir` and `opendir` cause dirent detection to fail with clang 16.
+    ./fix-implicit-declarations.patch
+  ] ++ lib.optionals (enableNLS && !stdenv.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
 
   buildInputs = lib.optional enableNLS libnatspec
     ++ lib.optional stdenv.isCygwin libiconv;
@@ -37,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     platforms = platforms.all;
     maintainers = [ ];
+    mainProgram = "zip";
   };
 }

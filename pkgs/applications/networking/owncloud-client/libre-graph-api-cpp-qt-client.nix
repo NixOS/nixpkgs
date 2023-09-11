@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-wbdamPi2XSLWeprrYZtBUDH1A2gdp6/5geFZv+ZqSWk=";
   };
 
-  sourceRoot = "source/client";
+  sourceRoot = "${src.name}/client";
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [ qtbase ];

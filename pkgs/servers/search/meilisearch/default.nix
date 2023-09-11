@@ -7,7 +7,7 @@
 , nix-update-script
 }:
 
-let version = "1.2.0";
+let version = "1.3.1";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j+tz47dQFyKy51UAzFOc2YkAeYDUdsiteenC38cWrLI=";
+    hash = "sha256-jttT4qChoqwTnjjoW0Zc15ZieZN7KD1Us64Tk0eDG3Y=";
   };
 
   cargoBuildFlags = [
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "actix-web-static-files-3.0.5" = "sha256-2BN0RzLhdykvN3ceRLkaKwSZtel2DBqZ+uz4Qut+nII=";
-      "heed-0.12.5" = "sha256-WOdpgc3sDNKBSYWB102xTxmY1SWljH9Q1+6xmj4Rb8Q=";
+      "heed-0.12.7" = "sha256-mthHMaTqmNae8gpe4ZnozABKBrgFQdn9KWCvIzJJ+u4=";
       "lmdb-rkv-sys-0.15.1" = "sha256-zLHTprwF7aa+2jaD7dGYmOZpJYFijMTb4I3ODflNUII=";
       "nelson-0.1.0" = "sha256-eF672quU576wmZSisk7oDR7QiDafuKlSg0BTQkXnzqY=";
     };

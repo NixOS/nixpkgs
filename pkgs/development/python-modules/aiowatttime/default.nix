@@ -3,6 +3,7 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiowatttime";
-  version = "2022.10.0";
+  version = "2023.08.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +22,22 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-rqmsUvVwXC/XkR/v2d9d3t7u6Poms4ORiOci41ajXIo=";
+    hash = "sha256-/ulDImbLOTcoA4iH8e65A01aqqnCLn+01DWuM/4H4p4=";
   };
+
+  patches = [
+    # This patch removes references to setuptools and wheel that are no longer
+    # necessary and changes poetry to poetry-core, so that we don't need to add
+    # unnecessary nativeBuildInputs.
+    #
+    #   https://github.com/bachya/aiowatttime/pull/206
+    #
+    (fetchpatch {
+      name = "clean-up-build-dependencies.patch";
+      url = "https://github.com/bachya/aiowatttime/commit/c3cd53f794964c5435148caacd04f4e0ab8f550a.patch";
+      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -31,6 +46,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

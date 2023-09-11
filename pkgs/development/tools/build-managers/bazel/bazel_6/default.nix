@@ -24,12 +24,12 @@
 }:
 
 let
-  version = "6.2.0";
+  version = "6.3.2";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-8ej3iGN6xXTUcdYZ0glrqsoEoZtXoDQ5ngeWM9tEGUU=";
+    hash = "sha256-jNf+rFgZO+K8ukUbpmiKRoJNN8pjWf9Y4NROuY8EKUg=";
   };
 
   # Update with
@@ -624,6 +624,12 @@ stdenv.mkDerivation rec {
     }
 
     cd ./bazel_src
+
+    # If .bazelversion file is present in dist files and doesn't match `bazel` version
+    # running `bazel` command within bazel_src will fail.
+    # Let's remove .bazelversion within the test, if present it is meant to indicate bazel version
+    # to compile bazel with, not version of bazel to be built and tested.
+    rm -f .bazelversion
 
     # test whether $WORKSPACE_ROOT/tools/bazel works
 

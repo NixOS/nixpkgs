@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
@@ -47,6 +48,12 @@ buildPythonPackage rec {
     mock
     twisted
   ];
+
+  # Fails in Darwin's sandbox
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    echo 'LogRequests.skip = "Operation not permitted"' >> src/wormhole_mailbox_server/test/test_web.py
+    echo 'WebSocketAPI.skip = "Operation not permitted"' >> src/wormhole_mailbox_server/test/test_web.py
+  '';
 
   checkPhase = ''
     trial -j$NIX_BUILD_CORES wormhole_mailbox_server

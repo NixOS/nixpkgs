@@ -333,6 +333,14 @@ in {
       visible = "shallow";
       description = lib.mdDoc "Definition of slice configurations.";
     };
+
+    enableTpm2 = mkOption {
+      default = true;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Whether to enable TPM2 support in the initrd.
+      '';
+    };
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
@@ -342,8 +350,8 @@ in {
       # systemd needs this for some features
       "autofs4"
       # systemd-cryptenroll
-      "tpm-tis"
-    ] ++ lib.optional (pkgs.stdenv.hostPlatform.system != "riscv64-linux") "tpm-crb";
+    ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
+    ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb";
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
@@ -421,11 +429,11 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
-      ] ++ optionals cfg.package.withCryptsetup [
+      ] ++ optionals (cfg.package.withCryptsetup && cfg.enableTpm2) [
         # tpm2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
         pkgs.tpm2-tss
-
+      ] ++ optionals cfg.package.withCryptsetup [
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"

@@ -17,6 +17,7 @@
 , knotifyconfig
 , kplotting
 , ktextwidgets
+, mediainfo
 , mlt
 , shared-mime-info
 , libv4l
@@ -58,6 +59,7 @@ mkDerivation {
     knotifyconfig
     kplotting
     ktextwidgets
+    mediainfo
     mlt
     phonon-backend-gstreamer
     qtdeclarative
@@ -77,9 +79,11 @@ mkDerivation {
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
-  patches = [ ./mlt-path.patch ./ffmpeg-path.patch ];
-  inherit mlt;
+  patches = [ ./dependency-paths.patch ];
+
+  inherit mlt mediainfo;
   ffmpeg = ffmpeg-full;
+
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.
     ''

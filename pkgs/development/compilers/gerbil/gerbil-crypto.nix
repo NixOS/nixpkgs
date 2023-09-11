@@ -1,28 +1,29 @@
-{ pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
+{ pkgs, lib, fetchFromGitHub, gerbilPackages, ... }:
 
-gerbil-support.gerbilPackage {
+{
   pname = "gerbil-crypto";
-  version = "unstable-2020-08-01";
-  git-version = "0.0-6-ga228862";
+  version = "unstable-2023-03-27";
+  git-version = "0.0-18-ge57f887";
   gerbil-package = "clan/crypto";
-  gerbil = gerbil-unstable;
-  gerbilInputs = [gerbil-support.gerbilPackages-unstable.gerbil-utils];
+  gerbilInputs = with gerbilPackages; [ gerbil-utils gerbil-poo ];
   nativeBuildInputs = [ pkgs.pkg-config ];
-  buildInputs = [pkgs.secp256k1 ];
-  gambit-params = gambit-support.unstable-params;
+  buildInputs = [ pkgs.secp256k1 ];
   version-path = "version";
   softwareName = "Gerbil-crypto";
-  src = fetchFromGitHub {
+
+  pre-src = {
+    fun = fetchFromGitHub;
     owner = "fare";
     repo = "gerbil-crypto";
-    rev = "a22886260849ec92c3a34bfeedc1574e41e49e33";
-    sha256 = "0qbanw2vnw2ymmr4pr1jap29cyc3icbhyq0apibpfnj2znns7w47";
+    rev = "e57f88742d9b41640b4a7d9bd3e86c688d4a83f9";
+    sha256 = "08hrk3s82hbigvza75vgx9kc7qf64yhhn3xm5calc859sy6ai4ka";
   };
-  meta = {
+
+  meta = with lib; {
     description = "Gerbil Crypto: Extra Cryptographic Primitives for Gerbil";
     homepage    = "https://github.com/fare/gerbil-crypto";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    license     = licenses.asl20;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ fare ];
   };
 }

@@ -21,7 +21,7 @@ set which contains `emacs.pkgs.withPackages`. For example, to override
 `emacs.pkgs.emacs.pkgs.withPackages`,
 ```
 let customEmacsPackages =
-      emacs.pkgs.overrideScope' (self: super: {
+      emacs.pkgs.overrideScope (self: super: {
         # use a custom version of emacs
         emacs = ...;
         # use the unstable MELPA version of magit
@@ -159,12 +159,10 @@ runCommand
         rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
         cat >"$siteStart" <<EOF
         (let ((inhibit-message t))
-          (load-file "$emacs/share/emacs/site-lisp/site-start.el"))
-        (add-to-list 'load-path "$out/share/emacs/site-lisp")
+          (load "$emacs/share/emacs/site-lisp/site-start"))
+        ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
+        ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
         (add-to-list 'exec-path "$out/bin")
-        ${lib.optionalString withNativeCompilation ''
-          (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
-        ''}
         ${lib.optionalString withTreeSitter ''
           (add-to-list 'treesit-extra-load-path "$out/lib/")
         ''}
@@ -200,7 +198,7 @@ runCommand
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
-        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
+        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
         --subst-var prog
       chmod +x $out/bin/$progname
     done
@@ -219,14 +217,14 @@ runCommand
       substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
-        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
+        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
       chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
     fi
 
     mkdir -p $out/share
     # Link icons and desktop files into place
-    for dir in applications icons info man emacs; do
+    for dir in applications icons info man; do
       ln -s $emacs/share/$dir $out/share/$dir
     done
   ''

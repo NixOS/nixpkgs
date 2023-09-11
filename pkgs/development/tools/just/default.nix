@@ -72,6 +72,8 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/just.zsh
   '';
 
+  setupHook = ./setup-hook.sh;
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
@@ -80,5 +82,6 @@ rustPlatform.buildRustPackage rec {
     description = "A handy way to save and run project-specific commands";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd jk adamcstephens ];
+    mainProgram = "just";
   };
 }

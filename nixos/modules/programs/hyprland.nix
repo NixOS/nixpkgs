@@ -32,11 +32,10 @@ in
       readOnly = true;
       default = cfg.package.override {
         enableXWayland = cfg.xwayland.enable;
-        hidpiXWayland = cfg.xwayland.hidpi;
-        nvidiaPatches = cfg.nvidiaPatches;
+        enableNvidiaPatches = cfg.enableNvidiaPatches;
       };
       defaultText = literalExpression
-        "`wayland.windowManager.hyprland.package` with applied configuration";
+        "`programs.hyprland.package` with applied configuration";
       description = mdDoc ''
         The Hyprland package after applying configuration.
       '';
@@ -44,17 +43,9 @@ in
 
     portalPackage = mkPackageOptionMD pkgs "xdg-desktop-portal-hyprland" { };
 
-    xwayland = {
-      enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
-      hidpi = mkEnableOption null // {
-        description = mdDoc ''
-          Enable HiDPI XWayland, based on [XWayland MR 733](https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/733).
-          See <https://wiki.hyprland.org/Nix/Options-Overrides/#xwayland-hidpi> for more info.
-        '';
-      };
-    };
+    xwayland.enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
 
-    nvidiaPatches = mkEnableOption (mdDoc "patching wlroots for better Nvidia support");
+    enableNvidiaPatches = mkEnableOption (mdDoc "patching wlroots for better Nvidia support");
   };
 
   config = mkIf cfg.enable {
@@ -77,4 +68,15 @@ in
       extraPortals = [ finalPortalPackage ];
     };
   };
+
+  imports = with lib; [
+    (mkRemovedOptionModule
+      [ "programs" "hyprland" "xwayland" "hidpi" ]
+      "XWayland patches are deprecated. Refer to https://wiki.hyprland.org/Configuring/XWayland"
+    )
+    (mkRenamedOptionModule
+      [ "programs" "hyprland" "nvidiaPatches" ]
+      [ "programs" "hyprland" "enableNvidiaPatches" ]
+    )
+  ];
 }

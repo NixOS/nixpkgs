@@ -11,11 +11,12 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 # Run patch shebangs on a directory or file.
 # Can take multiple paths as arguments.
-# patchShebangs [--build | --host] PATH...
+# patchShebangs [--build | --host | --update] [--] PATH...
 
 # Flags:
 # --build : Lookup commands available at build-time
 # --host  : Lookup commands available at runtime
+# --update : Update shebang paths that are in Nix store
 
 # Example use cases,
 # $ patchShebangs --host /nix/store/...-hello-1.0/bin
@@ -23,14 +24,35 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 patchShebangs() {
     local pathName
+    local update
 
-    if [[ "$1" == "--host" ]]; then
-        pathName=HOST_PATH
-        shift
-    elif [[ "$1" == "--build" ]]; then
-        pathName=PATH
-        shift
-    fi
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        --host)
+            pathName=HOST_PATH
+            shift
+            ;;
+        --build)
+            pathName=PATH
+            shift
+            ;;
+        --update)
+            update=true
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*|--*)
+            echo "Unknown option $1 supplied to patchShebangs" >&2
+            return 1
+            ;;
+        *)
+            break
+            ;;
+        esac
+    done
 
     echo "patching script interpreter paths in $@"
     local f
@@ -93,7 +115,7 @@ patchShebangs() {
         newInterpreterLine="$newPath $args"
         newInterpreterLine=${newInterpreterLine%${newInterpreterLine##*[![:space:]]}}
 
-        if [[ -n "$oldPath" && "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]]; then
+        if [[ -n "$oldPath" && ( "$update" == true || "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ) ]]; then
             if [[ -n "$newPath" && "$newPath" != "$oldPath" ]]; then
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
                 # escape the escape chars so that sed doesn't interpret them

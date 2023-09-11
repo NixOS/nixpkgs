@@ -33,7 +33,7 @@
 }:
 let
   pname = "gamescope";
-  version = "3.12.0-beta10";
+  version = "3.12.3";
 
   vkroots = fetchFromGitHub {
     owner = "Joshua-Ashton";
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
-    hash = "sha256-31zGo22Z0+zQ81LmzI+Xif9eREzRpS0S9+nK1i/cBCY=";
+    hash = "sha256-eo3c+s+sB20wrzbe2H/pMAYdvKeYOpWwEqmuuLY6ZJA=";
   };
 
   patches = [

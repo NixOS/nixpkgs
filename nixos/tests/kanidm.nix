@@ -67,9 +67,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
       ''
         start_all()
         server.wait_for_unit("kanidm.service")
+        client.wait_for_unit("network-online.target")
 
         with subtest("Test HTTP interface"):
-            server.wait_until_succeeds("curl -sf https://${serverDomain} | grep Kanidm")
+            server.wait_until_succeeds("curl -Lsf https://${serverDomain} | grep Kanidm")
 
         with subtest("Test LDAP interface"):
             server.succeed("ldapsearch -H ldaps://${serverDomain}:636 -b '${ldapBaseDN}' -x '(name=test)'")
@@ -80,15 +81,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
             client.succeed("kanidm logout")
 
         with subtest("Recover idm_admin account"):
-            # Must stop the server for account recovery or else kanidmd fails with
-            # "unable to lock kanidm exclusive lock at /var/lib/kanidm/kanidm.db.klock".
-            server.succeed("systemctl stop kanidm")
             idm_admin_password = server.succeed("su - kanidm -c 'kanidmd recover-account -c ${serverConfigFile} idm_admin 2>&1 | rg -o \'[A-Za-z0-9]{48}\' '").strip().removeprefix("'").removesuffix("'")
-            server.succeed("systemctl start kanidm")
 
         with subtest("Test unixd connection"):
             client.wait_for_unit("kanidm-unixd.service")
-            # TODO: client.wait_for_file("/run/kanidm-unixd/sock")
+            client.wait_for_file("/run/kanidm-unixd/sock")
             client.wait_until_succeeds("kanidm-unix status | grep working!")
 
         with subtest("Test user creation"):

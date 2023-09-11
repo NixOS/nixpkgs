@@ -12,26 +12,20 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "7.0.12";
+  version = "7.2.1";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-ndg9WyeLsr8OOb/rdcPoFwAk7brxG6E7cDeylFz0irc=";
+    hash = "sha256-XHbZkKGxxflJvNHu2Q0Mik9wNpvb3LQCiMVh3fiJZ6Q=";
   };
 
-  patches = [
-    # Fix flaky test tests/unit/memefficiency.tcl
-    (fetchpatch {
-      url = "https://github.com/redis/redis/commit/bfe50a30edff6837897964ac3374c082b0d9e5da.patch";
-      sha256 = "sha256-0GMiygbO7LbL1rnuOByOJYE2BKUSI+yy6YH781E2zBw=";
-    })
-  ] ++ lib.optional useSystemJemalloc
+  patches = lib.optionals useSystemJemalloc [
     # use system jemalloc
     (fetchurl {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/redis/-/raw/102cc861713c796756abd541bf341a4512eb06e6/redis-5.0-use-system-jemalloc.patch";
       hash = "sha256-VPRfoSnctkkkzLrXEWQX3Lh5HmZaCXoJafyOG007KzM=";
     })
-  ;
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,6 +33,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional useSystemJemalloc jemalloc
     ++ lib.optional withSystemd systemd
     ++ lib.optionals tlsSupport [ openssl ];
+
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/Makefile --replace "-flto" ""
+  '';
+
   # More cross-compiling fixes.
   makeFlags = [ "PREFIX=${placeholder "out"}" ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" ]
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 

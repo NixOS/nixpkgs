@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pop";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "pop";
     rev = "v${version}";
-    sha256 = "VzSPQZfapB44hzGumy8JKe+v+n6af9fRSlAq1F7olCo=";
+    hash = "sha256-ZGJkpa1EIw3tt1Ww2HFFoYsnnmnSAiv86XEB5TPf4/k=";
   };
 
-  vendorSha256 = "VowqYygRKxpDJPfesJXBp00sBiHb57UMR/ZV//v7+90=";
+  vendorHash = "sha256-8YcJXvR0cdL9PlP74Qh6uN2XZoN16sz/yeeZlBsk5N8=";
 
   GOWORK = "off";
 

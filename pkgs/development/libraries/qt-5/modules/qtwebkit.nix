@@ -47,11 +47,12 @@ qtModule {
 
   doCheck = false; # fails 13 out of 13 tests (ctest)
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''
-    rm -rf "$(pwd)"
-    mkdir "$(pwd)"
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/libexec/*
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     maintainers = with lib.maintainers; [ abbradar periklis ];

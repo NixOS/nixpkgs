@@ -2812,9 +2812,15 @@ let
 
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
 
-      systemd.services.systemd-networkd = {
+      systemd.services.systemd-networkd = let
+        isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
+        reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
+        nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
+        unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
+      in {
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = map (x: x.source) (attrValues unitFiles) ++ [
+        reloadTriggers = unitFileSources reloadableUnitFiles;
+        restartTriggers = unitFileSources nonReloadableUnitFiles ++ [
           config.environment.etc."systemd/networkd.conf".source
         ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];

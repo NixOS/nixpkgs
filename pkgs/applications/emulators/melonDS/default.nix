@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ artemist benley shamilton xfix ];
     platforms = platforms.linux;
+    mainProgram = "melonDS";
   };
 }

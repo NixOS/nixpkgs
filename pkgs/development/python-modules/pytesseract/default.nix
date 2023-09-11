@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytesseract";
-  version = "0.3.10";
+  version = "0.3.11";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "madmaze";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-CyKXtaIE/8iPLqi0GHVUgTeJDYZyWBjkRvOKJJKCxZo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8obU1QFlboQnFjb3JUkVG+tt0wDlRffVH/PBmN1r3dk=";
   };
 
   patches = [

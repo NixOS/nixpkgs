@@ -17,7 +17,7 @@ mkDerivation (args // {
   patches = (args.patches or []) ++ (patches.${pname} or []);
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
-  propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
+  propagatedBuildInputs = (args.qtInputs or []) ++ (args.propagatedBuildInputs or []);
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;

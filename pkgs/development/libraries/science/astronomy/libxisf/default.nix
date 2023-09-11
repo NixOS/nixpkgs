@@ -6,18 +6,19 @@
 , lz4
 , pugixml
 , zlib
+, zstd
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxisf";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitea {
     domain = "gitea.nouspiro.space";
     owner = "nou";
     repo = "libXISF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YB97vMz2+cFRYq8x2Su3Eh952U6kGIVLYV7kDEd5S8g=";
+    hash = "sha256-Jh3NWtQSV0uePDMCDNzdI4qpRGbHTel3neRZAA3anQk=";
   };
 
   patches = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     pugixml
     zlib
+    zstd
   ];
 
   doCheck = true;

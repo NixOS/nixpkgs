@@ -6,12 +6,12 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman-web";
-  version = "0.0.5";
+  version = "0.0.6";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9pvs/VATAsMcGNrj58b/LifysEPTNhrAP57sfp4nX6Q=";
+    sha256 = "sha256-UWdqrcx529r6kwgf0YEHiDrpZlGoUBR6OdYtHMTPMGY=";
   };
 
   postPatch = ''
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    homepage = "https://gitlab.com/mailman/mailman-web";
     description = "Django project for Mailman 3 web interface";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ qyliss m1cr0man ];

@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     absl-py
     fonttools
     lxml
-    ninja-python
+    ninja
     picosvg
     pillow
     regex
@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
 
-    ninja-python
+    ninja
     picosvg
   ];
 

@@ -1,35 +1,49 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
-  version = "0.7.2";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "nvarner";
-    repo = pname;
+    repo = "typst-lsp";
     rev = "v${version}";
-    hash = "sha256-z6IG0qJXzwisazR/tLq6dwsZzgzhYKh/NnKmnYySS18=";
+    hash = "sha256-rV7vzI4PPyBJX/ofVCXnXd8eH6+UkGaAL7PwhP71t0k=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "elsa-1.8.1" = "sha256-/85IriplPxx24TE/CsvjIsve100QUZiVqS0TWgPFRbw=";
-      "svg2pdf-0.5.0" = "sha256-v/ARFI+Uw5KtLe2F3ty9u3uKkWSradRmLnD2VJ+jmSI=";
-      "typst-0.5.0" = "sha256-obUe9OVQ8M7MORudQGN7zaYjUv4zjeh7XidHHmUibTA=";
+      "typst-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
+      "typstfmt_lib-0.2.0" = "sha256-DOh7WQowJXTxI9GDXfy73hvr3J+VcDqSDaClLlUpMsM=";
     };
   };
 
   patches = [
-    # typst-library tries to access the workspace with include_bytes, which
-    # fails when it is vendored as its own separate crate
-    # this patch moves the required assets into the crate and fixes the issue
-    # see https://github.com/typst/typst/pull/1515
-    ./move-typst-assets.patch
+    # update typstfmt to symlink its README.md into the library crate
+    # without this patch, typst-lsp fails to build when dependencies are vendored
+    # https://github.com/astrale-sharp/typstfmt/pull/81
+    ./update-typstfmt.patch
   ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  checkFlags = [
+    # requires internet access
+    "--skip=workspace::package::external::remote_repo::test::full_download"
+  ];
+
+  # workspace::package::external::manager::test::local_package tries to access the data directory
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "A brand-new language server for Typst";

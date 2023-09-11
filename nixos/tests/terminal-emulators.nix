@@ -35,6 +35,8 @@ let tests = {
 
       darktile.pkg = p: p.darktile;
 
+      deepin-terminal.pkg = p: p.deepin.deepin-terminal;
+
       eterm.pkg = p: p.eterm;
       eterm.executable = "Eterm";
       eterm.pinkValue = "#D40055";
@@ -121,7 +123,7 @@ in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}
     maintainers = [ jjjollyjim ];
   };
 
-  machine = { pkgsInner, ... }:
+  nodes.machine = { pkgsInner, ... }:
 
   {
     imports = [ ./common/x11.nix ./common/user-account.nix ];

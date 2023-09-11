@@ -16,10 +16,6 @@ maven.buildMavenPackage {
 
   mvnHash = "sha256-vNPSNoOmtD1UMfWvLm8CH7RRatyeu3fnX9zteZpkay0=";
 
-  nativeBuildInputs = [
-    maven
-  ];
-
   installPhase = ''
     install -D "target/scim-user-spi-0.0.1-SNAPSHOT.jar" "$out/scim-user-spi-0.0.1-SNAPSHOT.jar"
   '';

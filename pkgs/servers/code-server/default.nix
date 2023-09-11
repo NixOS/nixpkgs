@@ -70,19 +70,19 @@ let
   #
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
-  # Example: `$ git rev-parse v4.14.1`
-  commit = "e37b35278d4b529fd774469c3e1807ec8f4d1eb0";
+  # Example: `$ git rev-parse v4.16.1`
+  commit = "94ef3776ad7bebfb5780dfc9632e04d20d5c9a6c";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.16.0";
+  version = "4.16.1";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-oGtYrCW9ZweWEkx7uQkQCQx53QoyV5Y3BMsvApGiY9Y=";
+    hash = "sha256-h4AooHHKV/EfN2S1z7CQKqnYW3uA3sKhSW4senlzjxI=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -322,5 +322,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ offline henkery code-asher ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    mainProgram = "code-server";
   };
 })

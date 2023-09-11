@@ -68,7 +68,7 @@ let
   # https://github.com/pytorch/pytorch/blob/v2.0.1/torch/utils/cpp_extension.py#L1744
   supportedTorchCudaCapabilities =
     let
-      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6" "8.9" "9.0"];
+      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6" "8.7" "8.9" "9.0"];
       ptx = lists.map (x: "${x}+PTX") real;
     in
     real ++ ptx;
@@ -196,7 +196,8 @@ in buildPythonPackage rec {
     export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
-    export CUDNN_INCLUDE_DIR=${cudnn}/include
+    export CUDNN_INCLUDE_DIR=${cudnn.dev}/include
+    export CUDNN_LIB_DIR=${cudnn.lib}/lib
   '' + lib.optionalString rocmSupport ''
     export ROCM_PATH=${rocmtoolkit_joined}
     export ROCM_SOURCE_DIR=${rocmtoolkit_joined}
@@ -225,7 +226,7 @@ in buildPythonPackage rec {
 
   # Avoid using pybind11 from git submodule
   # Also avoids pytorch exporting the headers of pybind11
-  USE_SYSTEM_BIND11 = true;
+  USE_SYSTEM_PYBIND11 = true;
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -290,7 +291,7 @@ in buildPythonPackage rec {
 
   buildInputs = [ blas blas.provider pybind11 ]
     ++ lib.optionals stdenv.isLinux [ linuxHeaders_5_19 ] # TMP: avoid "flexible array member" errors for now
-    ++ lib.optionals cudaSupport [ cudnn nccl ]
+    ++ lib.optionals cudaSupport [ cudnn.dev cudnn.lib nccl ]
     ++ lib.optionals rocmSupport [ openmp ]
     ++ lib.optionals (cudaSupport || rocmSupport) [ magma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]

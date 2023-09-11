@@ -1,0 +1,26 @@
+https://github.com/gfx/p5-Data-Clone/pull/3
+
+From 43102a83d15aedc61e5904eb5a6dab33c3c02b40 Mon Sep 17 00:00:00 2001
+From: Yves Orton <demerphq@gmail.com>
+Date: Thu, 9 Feb 2023 16:24:45 +0100
+Subject: [PATCH] t/07_stack.t - isn't is deprecated, use isnt instead
+
+As of 5.37.8 use of apostrophe for a package separator is deprecated,
+and in 5.40 it will be removed entirely. Switch to isnt() instead
+of isn't().
+---
+ t/07_stack.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/07_stack.t b/t/07_stack.t
+index 165e6a5..a750366 100644
+--- a/t/07_stack.t
++++ b/t/07_stack.t
+@@ -17,6 +17,6 @@ use Data::Clone;
+ 
+ my $before = bless [], Bar::;
+ my $after  = clone($before);
+-isn't $after, $before, 'stack reallocation during callback';
++isnt $after, $before, 'stack reallocation during callback';
+ 
+ done_testing;

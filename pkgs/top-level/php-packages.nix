@@ -31,6 +31,7 @@
 , pam
 , pcre2
 , postgresql
+, bison
 , re2c
 , readline
 , rsync
@@ -101,13 +102,21 @@ lib.makeScope pkgs.newScope (self: with self; {
         autoconf
         pkg-config
         re2c
+        bison
       ];
 
       inherit configureFlags internalDeps buildInputs zendExtension doCheck;
 
       preConfigurePhases = [
+        "genfiles"
         "cdToExtensionRootPhase"
       ];
+
+      genfiles = ''
+        if [ -f "scripts/dev/genfiles" ]; then
+          ./scripts/dev/genfiles
+        fi
+      '';
 
       cdToExtensionRootPhase = ''
         # Go to extension source root.
@@ -168,6 +177,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   # This is a set of interactive tools based on PHP.
   tools = {
     box = callPackage ../development/php-packages/box { };
+
+    castor = callPackage ../development/php-packages/castor { };
 
     composer = callPackage ../development/php-packages/composer { };
 
@@ -254,6 +265,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     oci8 = callPackage ../development/php-packages/oci8 { };
 
+    opentelemetry = callPackage ../development/php-packages/opentelemetry { };
+
     openswoole = callPackage ../development/php-packages/openswoole { };
 
     pdlib = callPackage ../development/php-packages/pdlib { };
@@ -280,6 +293,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
+    phalcon = callPackage ../development/php-packages/phalcon { };
+
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
@@ -303,6 +318,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     swoole = callPackage ../development/php-packages/swoole { };
 
     uv = callPackage ../development/php-packages/uv { };
+
+    vld = callPackage ../development/php-packages/vld { };
 
     xdebug = callPackage ../development/php-packages/xdebug { };
 

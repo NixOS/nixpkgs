@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "cirq-google";
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \

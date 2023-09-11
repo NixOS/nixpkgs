@@ -123,7 +123,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.3";
+  version = "1.9.4";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-IVP5RVHRxWkvPqndiuCxiguYWN5d32qJo9YzBOHoyUk";
+    hash = "sha256-xjN6nHqg7sQzgojClySQEjLQBdI5291TxPhgLjKzKvk=";
   };
 
   patches = [
@@ -212,9 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugin_dummy=true"
     # We are building the official releases.
     "-Dsupported_build=enabled"
-    # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
-    # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
-    "-Dsoup_session_compat=false"
     "-Dudevdir=lib/udev"
     "-Dsystemd_root_prefix=${placeholder "out"}"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
@@ -399,7 +396,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rvdp ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

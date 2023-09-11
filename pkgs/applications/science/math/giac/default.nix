@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "pari_2_11.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/pari_2_11.patch?id=21ba7540d385a9864b44850d6987893dfa16bfc0";
+      url = "https://raw.githubusercontent.com/sagemath/sage/21ba7540d385a9864b44850d6987893dfa16bfc0/build/pkgs/giac/patches/pari_2_11.patch";
       sha256 = "sha256-vEo/5MNzMdYRPWgLFPsDcMT1W80Qzj4EPBjx/B8j68k=";
     })
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     # means some outputs differ in the make check. Patch around this:
     (fetchpatch {
       name = "nofltk-check.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/nofltk-check.patch?id=7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26";
+      url = "https://raw.githubusercontent.com/sagemath/sage/7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26/build/pkgs/giac/patches/nofltk-check.patch";
       sha256 = "sha256-nAl5q3ufLjK3X9s0qMlGNowdRRf3EaC24eVtJABzdXY=";
     })
   ];

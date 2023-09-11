@@ -10,17 +10,18 @@
 , pamixer          # pamixer
 , pulseaudio       # pactl
 , libdbusmenu-gtk3 # tray
+, playerctl
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
-  version = "0.7.17";
+  version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-HGbPBHf5PIjbuMSd/2fFSCLQ/7s1Xbys+KoGXctQOvM=";
+    rev = "v${version}";
+    hash = "sha256-lCo58v2UGolFagci2xHcieTUvqNc1KKNj3Z92oG5WPI=";
   };
 
   # No tests
@@ -30,7 +31,7 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
   dontWrapGApps = true;
 
-  buildInputs = [ atk gdk-pixbuf gtk-layer-shell pango ];
+  buildInputs = [ atk gdk-pixbuf gtk-layer-shell pango playerctl ];
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
   propagatedBuildInputs = (with python3Packages;
     [ i3ipc netifaces psutil pybluez pygobject3 requests dasbus setuptools ])
@@ -56,6 +57,7 @@ python3Packages.buildPythonApplication rec {
     description = "GTK3-based panel for Sway window manager";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ludovicopiero ];
+    mainProgram = "nwg-panel";
   };
 }

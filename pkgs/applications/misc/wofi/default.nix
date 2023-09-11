@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
+    mainProgram = "wofi";
   };
 }

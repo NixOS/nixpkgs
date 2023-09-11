@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IYkx6OKypzpY6zVKKI4DoP1fscRYMmGsbkwHhmZGjJM=";
+    hash = "sha256-lyhS9sZfkz4VpKIQwrlpMHY7Rxl830ql9b6kNe+2Juc=";
   };
 
   propagatedBuildInputs = [

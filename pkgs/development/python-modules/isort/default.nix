@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , colorama
 , hypothesis
 , poetry-core
@@ -77,5 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/isort";
     license = licenses.mit;
     maintainers = with maintainers; [ couchemar ];
+    mainProgram = "isort";
   };
 }

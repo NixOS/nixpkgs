@@ -57,8 +57,7 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
-  # aarch64 outputs otherwise exceed 2GB limit
-, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+, enableProfiledLibs ? true
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -155,6 +154,8 @@
     ghcSrc = ghcSrc;
     ghcVersion = version;
     userSettings = hadrianUserSettings;
+    # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
+    enableHyperlinkedSource = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
   }
 
 , #  Whether to build sphinx documentation.

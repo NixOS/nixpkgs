@@ -4,6 +4,7 @@
 , cmake
 , corrosion
 , extra-cmake-modules
+, futuresql
 , kconfig
 , kcoreaddons
 , kdbusaddons
@@ -13,6 +14,7 @@
 , knotifications
 , kpurpose
 , kwindowsystem
+, qcoro
 , qtfeedback
 , qtquickcontrols2
 , qqc2-desktop-style
@@ -22,7 +24,7 @@
 , srcs
 
 # provided as callPackage input to enable easier overrides through overlays
-, cargoSha256 ? "sha256-Wthw7foadXO6jYJO1TB4OOYtpwnp8iCdda4tdiYg41A="
+, cargoSha256 ? "sha256-FI94TU3MgIl1tcjwJnzb2PKO1rbZ3uRB1mzXXkNU95I="
 }:
 
 mkDerivation rec {
@@ -45,6 +47,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    futuresql
     kconfig
     kcoreaddons
     kdbusaddons
@@ -54,6 +57,7 @@ mkDerivation rec {
     knotifications
     kpurpose
     kwindowsystem
+    qcoro
     qtfeedback
     qtquickcontrols2
     qqc2-desktop-style

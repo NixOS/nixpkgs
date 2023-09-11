@@ -1,38 +1,80 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
-, numpy
+, glfw
 , moderngl
-, pyglet
+, numpy
 , pillow
+, pygame
+, pyglet
+, pyqt5
 , pyrr
-, glcontext
+, pysdl2
+, pyside2
+, pythonOlder
+, scipy
+, trimesh
 }:
 
 buildPythonPackage rec {
-  pname = "moderngl_window";
-  version = "2.4.2";
+  pname = "moderngl-window";
+  version = "2.4.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "moderngl";
-    repo = pname;
+    repo = "moderngl_window";
     rev = "refs/tags/${version}";
-    hash = "sha256-jsASGYrsH9UNanswX2bZyWS3co/2Y1joaQ98virWcBE=";
+    hash = "sha256-mg3j5ZoMwdk39L5xjcoEJo9buqssM1VLJtndSFsuCB0=";
   };
 
-  propagatedBuildInputs = [ numpy moderngl pyglet pillow pyrr glcontext ];
+  propagatedBuildInputs = [
+    numpy
+    moderngl
+    pyglet
+    pillow
+    pyrr
+  ];
 
-  disabled = !isPy3k;
+  passthru.optional-dependencies = {
+    trimesh = [
+      trimesh
+      scipy
+    ];
+    glfw = [
+      glfw
+    ];
+    pygame = [
+      pygame
+    ];
+    PySDL2 = [
+      pysdl2
+    ];
+    PySide2 = [
+      pyside2
+    ];
+    pyqt5 = [
+      pyqt5
+    ];
+  };
 
   # Tests need a display to run.
   doCheck = false;
 
+  pythonImportsCheck = [
+    "moderngl_window"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/moderngl/moderngl_window";
     description = "Cross platform helper library for ModernGL making window creation and resource loading simple";
+    homepage = "https://github.com/moderngl/moderngl-window";
+    changelog = "https://github.com/moderngl/moderngl-window/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    platforms = platforms.linux; # should be mesaPlatforms, darwin build breaks.
     maintainers = with maintainers; [ c0deaddict ];
+    platforms = platforms.mesaPlatforms;
+    broken = versionAtLeast pillow.version "2" || stdenv.isDarwin;
   };
 }

@@ -1,17 +1,31 @@
 # Testers {#chap-testers}
 This chapter describes several testing builders which are available in the `testers` namespace.
 
-## `hasPkgConfigModule` {#tester-hasPkgConfigModule}
+## `hasPkgConfigModules` {#tester-hasPkgConfigModules}
 
-Checks whether a package exposes a certain `pkg-config` module.
+<!-- Old anchor name so links still work -->
+[]{#tester-hasPkgConfigModule}
+Checks whether a package exposes a given list of `pkg-config` modules.
+If the `moduleNames` argument is omitted, `hasPkgConfigModules` will
+use `meta.pkgConfigModules`.
 
 Example:
 
 ```nix
-passthru.tests.pkg-config = testers.hasPkgConfigModule {
+passthru.tests.pkg-config = testers.hasPkgConfigModules {
   package = finalAttrs.finalPackage;
-  moduleName = "libfoo";
-}
+  moduleNames = [ "libfoo" ];
+};
+```
+
+If the package in question has `meta.pkgConfigModules` set, it is even simpler:
+
+```nix
+passthru.tests.pkg-config = testers.hasPkgConfigModules {
+  package = finalAttrs.finalPackage;
+};
+
+meta.pkgConfigModules = [ "libfoo" ];
 ```
 
 ## `testVersion` {#tester-testVersion}

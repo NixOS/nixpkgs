@@ -36,7 +36,10 @@ let
 
     debug = {
       # Necessary for BTF
-      DEBUG_INFO                = yes;
+      DEBUG_INFO                = mkMerge [
+        (whenOlder "5.2" (if (features.debug or false) then yes else no))
+        (whenBetween "5.2" "5.18" yes)
+      ];
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
@@ -59,8 +62,6 @@ let
       SUNRPC_DEBUG              = yes;
       # Provide access to tunables like sched_migration_cost_ns
       SCHED_DEBUG               = yes;
-
-      GDB_SCRIPTS               = yes;
     };
 
     power-management = {
@@ -1034,6 +1035,10 @@ let
 
       # Fresh toolchains frequently break -Werror build for minor issues.
       WERROR = whenAtLeast "5.15" no;
+
+      # > CONFIG_KUNIT should not be enabled in a production environment. Enabling KUnit disables Kernel Address-Space Layout Randomization (KASLR), and tests may affect the state of the kernel in ways not suitable for production.
+      # https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html
+      KUNIT = whenAtLeast "5.5" no;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

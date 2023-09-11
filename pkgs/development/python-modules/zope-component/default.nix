@@ -6,7 +6,7 @@
 , zope_deprecation
 , zope_event
 , zope-hookable
-, zope_i18nmessageid
+, zope-i18nmessageid
 , zope_interface
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     zope_deprecation
     zope_event
     zope-hookable
-    zope_i18nmessageid
+    zope-i18nmessageid
     zope_interface
   ];
 

@@ -5,7 +5,6 @@
 , dvc-objects
 , fetchFromGitHub
 , funcy
-, nanotime
 , pygtrie
 , pythonOlder
 , setuptools-scm
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-data";
-  version = "2.6.0";
+  version = "2.16.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Tqo2dhTes/HHhWqBZkJ9qW8i6FGWRx1Uk+0Q3pwsD+M=";
+    hash = "sha256-hnKOSo/RUzGnj7JbdKOGogVN925LZQiL3uvy5+dQfPw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     diskcache
     dvc-objects
     funcy
-    nanotime
     pygtrie
     shortuuid
     sqltrie

@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
     "-Ddocs=disabled"
   ];
 
+  postFixup = ''
+    # remove once updated to 0.6.15 or above
+    for f in $dev/lib/pkgconfig/*; do
+      echo "Requires: lv2 >=  1.18.4, serd-0 >=  0.30.10, sord-0 >=  0.16.10" >> "$f"
+    done
+  '';
+
   passthru = {
     updateScript = writeScript "update-sratom" ''
       #!/usr/bin/env nix-shell

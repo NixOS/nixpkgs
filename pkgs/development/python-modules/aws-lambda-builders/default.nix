@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , mock
 , parameterized
+, pip
 , pyelftools
 , pytestCheckHook
 , pythonOlder
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.34.0";
+  version = "1.37.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +21,13 @@ buildPythonPackage rec {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MjX0im9GX0mdWkumUoJUIBjPZl/Ok5+sR6Dgq6vVGKM=";
+    hash = "sha256-ukHDrxx+Jxlp/Ypg1ltz7WN07X16spNdC7YygJhTBJo=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=read_version()," 'version="${version}",'
+  '';
 
   propagatedBuildInputs = [
     six
@@ -30,6 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     parameterized
+    pip
     pyelftools
     pytestCheckHook
   ];

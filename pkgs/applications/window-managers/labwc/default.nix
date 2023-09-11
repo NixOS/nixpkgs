@@ -17,14 +17,11 @@
 , wayland-scanner
 , wayland
 , wayland-protocols
-, wlroots_0_16
+, wlroots
 , xcbutilwm
 , xwayland
 }:
 
-let
-  wlroots = wlroots_0_16;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
   version = "0.6.4";

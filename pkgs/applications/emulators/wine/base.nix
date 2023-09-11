@@ -90,7 +90,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
   ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
-     CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
+     CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration PCSC Security
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
   ])
   ++ lib.optionals (stdenv.isLinux && !waylandSupport) (with pkgs.xorg; [
@@ -103,13 +103,26 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 
   patches = [ ]
     ++ lib.optionals stdenv.isDarwin [
-      # Wine requires `MTLDevice.registryID` for `winemac.drv`, but that property is not available
-      # in the 10.12 SDK (current SDK on x86_64-darwin). Work around that by using selector syntax.
+      # Wine uses `MTLDevice.registryID` in `winemac.drv`, but that property is not available in
+      # the 10.12 SDK (current SDK on x86_64-darwin). That can be worked around by using selector
+      # syntax. As of Wine 8.12, the logic has changed and uses selector syntax, but it still
+      # uses property syntax in one place. The first patch is necessary only with older
+      # versions of Wine. The second is needed on all versions of Wine.
+      (lib.optional (lib.versionOlder version "8.12") ./darwin-metal-compat-pre8.12.patch)
       ./darwin-metal-compat.patch
       # Wine requires `qos.h`, which is not included by default on the 10.12 SDK in nixpkgs.
       ./darwin-qos.patch
     ]
     ++ patches';
+
+  # Because the 10.12 SDK doesn’t define `registryID`, clang assumes the undefined selector returns
+  # `id`, which is a pointer. This causes implicit pointer to integer errors in clang 15+.
+  # The following post-processing step adds a cast to `uint64_t` before the selector invocation to
+  # silence these errors.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -e 's|\(\[[A-Za-z_][][A-Za-z_0-9]* registryID\]\)|(uint64_t)\1|' \
+      -i dlls/winemac.drv/cocoa_display.m
+  '';
 
   configureFlags = prevConfigFlags
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
@@ -192,7 +205,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     ];
     description = if supportFlags.waylandSupport then "An Open Source implementation of the Windows API on top of OpenGL and Unix (with experimental Wayland support)" else "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     platforms = if supportFlags.waylandSupport then (lib.remove "x86_64-darwin" prevPlatforms) else prevPlatforms;
-    maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira ];
+    maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira reckenrode ];
     inherit mainProgram;
   };
 })

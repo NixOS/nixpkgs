@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "Lighthouse";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "ShayBox";
     repo = pname;
     rev = version;
-    sha256 = "0628v6fq9dcv1w4spgnypgyxf1qw5x03yhasink5s9nqpcip0w4h";
+    sha256 = "0g0cs54j1vmcig5nc8sqgx30nfn2zjs40pvv30j5g9cyyszbzwkw";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "clap-verbosity-flag-2.0.0" = "125b8ki3dqj2kilimmvpi9wslwky8xacydi75c2bdrxpi926nya6";
+      "clap-verbosity-flag-2.1.1" = "1213bsb0bpvv6621j9zicjsqy05sv21gh6inrvszqwcmj6fxxc7j";
     };
   };
 

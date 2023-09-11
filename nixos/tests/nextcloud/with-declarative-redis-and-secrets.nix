@@ -1,6 +1,6 @@
 args@{ nextcloudVersion ? 27, ... }:
 (import ../make-test-python.nix ({ pkgs, ...}: let
-  username = "custom_admin_username";
+  adminuser = "custom_admin_username";
   # This will be used both for redis and postgresql
   pass = "hunter2";
   # Don't do this at home, use a file outside of the nix store instead
@@ -34,9 +34,9 @@ in {
         config = {
           dbtype = "pgsql";
           dbname = "nextcloud";
-          dbuser = username;
+          dbuser = adminuser;
           dbpassFile = passFile;
-          adminuser = username;
+          adminuser = adminuser;
           adminpassFile = passFile;
         };
         secretFile = "/etc/nextcloud-secrets.json";
@@ -66,9 +66,9 @@ in {
       systemd.services.postgresql.postStart = pkgs.lib.mkAfter ''
         password=$(cat ${passFile})
         ${config.services.postgresql.package}/bin/psql <<EOF
-          CREATE ROLE ${username} WITH LOGIN PASSWORD '$password' CREATEDB;
+          CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '$password' CREATEDB;
           CREATE DATABASE nextcloud;
-          GRANT ALL PRIVILEGES ON DATABASE nextcloud TO ${username};
+          GRANT ALL PRIVILEGES ON DATABASE nextcloud TO ${adminuser};
         EOF
       '';
 
@@ -89,9 +89,9 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
-      export RCLONE_CONFIG_NEXTCLOUD_USER="${username}"
+      export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${pass})"
       "''${@}"
     '';

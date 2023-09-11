@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , makeWrapper
 , pkg-config
 , rsync
@@ -18,14 +17,19 @@
 , libgudev
 , libusb1
 , glib
-, gobject-introspection
 , gettext
 , systemd
+, nixosTests
 , useIMobileDevice ? true
 , libimobiledevice
-, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
-, nixosTests
+, withDocs ? withIntrospection
+, mesonEmulatorHook
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
 }:
+
+assert withDocs -> withIntrospection;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
@@ -60,14 +64,19 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     python3
-    gtk-doc
     docbook-xsl-nons
     gettext
-    gobject-introspection
     libxslt
     makeWrapper
     pkg-config
     rsync
+    glib
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ] ++ lib.optionals withDocs [
+    gtk-doc
+  ] ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -110,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
     "-Dudevhwdbdir=${placeholder "out"}/lib/udev/hwdb.d"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "auto" else "disabled"}"
-    "-Dgtk-doc=${lib.boolToString withDocs}"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonBool "gtk-doc" withDocs)
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 

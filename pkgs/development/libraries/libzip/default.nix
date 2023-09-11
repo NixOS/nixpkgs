@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libzip";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "https://libzip.org/download/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-UqYLRhglh+CDtx4rgvyqumTdXrAcWx8bxxBpo4WOQP4=";
+    sha256 = "sha256-lmmuXf46xbOJdTbchGaodMjPLA47H90I11snOIQpk2M=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -50,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     pkgConfigModules = [ "libzip" ];
     platforms = platforms.unix;
-    changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
+    changelog = "https://github.com/nih-at/libzip/blob/v${finalAttrs.version}/NEWS.md";
   };
 })

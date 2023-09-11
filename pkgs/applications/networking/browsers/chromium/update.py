@@ -1,8 +1,8 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3 nix nix-prefetch-git
+#! nix-shell -i python -p python3 nix nixfmt nix-prefetch-git
 
 """This script automatically updates chromium, google-chrome, chromedriver, and ungoogled-chromium
-via upstream-info.json."""
+via upstream-info.nix."""
 # Usage: ./update.py [--commit]
 
 import base64
@@ -23,16 +23,23 @@ RELEASES_URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/linux/
 DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
 BUCKET_URL = 'https://commondatastorage.googleapis.com/chromium-browser-official'
 
-JSON_PATH = dirname(abspath(__file__)) + '/upstream-info.json'
+PIN_PATH = dirname(abspath(__file__)) + '/upstream-info.nix'
 UNGOOGLED_FLAGS_PATH = dirname(abspath(__file__)) + '/ungoogled-flags.toml'
 COMMIT_MESSAGE_SCRIPT = dirname(abspath(__file__)) + '/get-commit-message.py'
 
 
-def load_json(path):
-    """Loads the given JSON file."""
-    with open(path, 'r') as f:
-        return json.load(f)
+def load_as_json(path):
+    """Loads the given nix file as JSON."""
+    out = subprocess.check_output(['nix-instantiate', '--eval', '--strict', '--json', path])
+    return json.loads(out)
 
+def save_dict_as_nix(path, input):
+    """Saves the given dict/JSON as nix file."""
+    json_string = json.dumps(input)
+    nix = subprocess.check_output(['nix-instantiate', '--eval', '--expr', '{ json }: builtins.fromJSON json', '--argstr', 'json', json_string])
+    formatted = subprocess.check_output(['nixfmt'], input=nix)
+    with open(path, 'w') as out:
+        out.write(formatted.decode())
 
 def nix_prefetch_url(url, algo='sha256'):
     """Prefetches the content of the given URL."""
@@ -56,21 +63,26 @@ def get_file_revision(revision, file_path):
         return base64.b64decode(resp)
 
 
-def get_matching_chromedriver(version):
-    """Gets the matching chromedriver version for the given Chromium version."""
-    # See https://chromedriver.chromium.org/downloads/version-selection
-    build = re.sub('.[0-9]+$', '', version)
-    chromedriver_version_url = f'https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{build}'
-    with urlopen(chromedriver_version_url) as http_response:
-        chromedriver_version = http_response.read().decode()
-        def get_chromedriver_url(system):
-            return ('https://chromedriver.storage.googleapis.com/' +
-                    f'{chromedriver_version}/chromedriver_{system}.zip')
+def get_chromedriver(channel):
+    """Get the latest chromedriver builds given a channel"""
+    # See https://chromedriver.chromium.org/downloads/version-selection#h.4wiyvw42q63v
+    chromedriver_versions_url = f'https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json'
+    print(f'GET {chromedriver_versions_url}')
+    with urlopen(chromedriver_versions_url) as http_response:
+        chromedrivers = json.load(http_response)
+        channel = chromedrivers['channels'][channel]
+        downloads = channel['downloads']['chromedriver']
+
+        def get_chromedriver_url(platform):
+            for download in downloads:
+                if download['platform'] == platform:
+                    return download['url']
+
         return {
-            'version': chromedriver_version,
+            'version': channel['version'],
             'sha256_linux': nix_prefetch_url(get_chromedriver_url('linux64')),
-            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac64')),
-            'sha256_darwin_aarch64': nix_prefetch_url(get_chromedriver_url('mac_arm64'))
+            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac-x64')),
+            'sha256_darwin_aarch64': nix_prefetch_url(get_chromedriver_url('mac-arm64'))
         }
 
 
@@ -160,7 +172,7 @@ def print_updates(channels_old, channels_new):
 
 
 channels = {}
-last_channels = load_json(JSON_PATH)
+last_channels = load_as_json(PIN_PATH)
 
 
 print(f'GET {RELEASES_URL}', file=sys.stderr)
@@ -205,7 +217,7 @@ with urlopen(RELEASES_URL) as resp:
 
         channel['deps'] = get_channel_dependencies(channel['version'])
         if channel_name == 'stable':
-            channel['chromedriver'] = get_matching_chromedriver(channel['version'])
+            channel['chromedriver'] = get_chromedriver('Stable')
         elif channel_name == 'ungoogled-chromium':
             ungoogled_repo_url = 'https://github.com/ungoogled-software/ungoogled-chromium.git'
             channel['deps']['ungoogled-patches'] = {
@@ -225,9 +237,7 @@ if len(sys.argv) == 2 and sys.argv[1] == '--commit':
         version_new = sorted_channels[channel_name]['version']
         if LooseVersion(version_old) < LooseVersion(version_new):
             last_channels[channel_name] = sorted_channels[channel_name]
-            with open(JSON_PATH, 'w') as out:
-                json.dump(last_channels, out, indent=2)
-                out.write('\n')
+            save_dict_as_nix(PIN_PATH, last_channels)
             attr_name = channel_name_to_attr_name(channel_name)
             commit_message = f'{attr_name}: {version_old} -> {version_new}'
             if channel_name == 'stable':
@@ -238,7 +248,5 @@ if len(sys.argv) == 2 and sys.argv[1] == '--commit':
             subprocess.run(['git', 'add', JSON_PATH], check=True)
             subprocess.run(['git', 'commit', '--file=-'], input=commit_message.encode(), check=True)
 else:
-    with open(JSON_PATH, 'w') as out:
-        json.dump(sorted_channels, out, indent=2)
-        out.write('\n')
+    save_dict_as_nix(PIN_PATH, sorted_channels)
     print_updates(last_channels, sorted_channels)

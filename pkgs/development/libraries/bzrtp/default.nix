@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bzrtp";
-  version = "5.2.16";
+  version = "5.2.98";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -16,18 +16,19 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    hash = "sha256-nrnGmJxAeobejS6zdn5Z/kOFOxyepZcxW/G4nXAt2DY=";
+    hash = "sha256-p3r8GVhxShTanEI/tS8Dq59I7VKMDX1blz6S236XFqQ=";
   };
 
   buildInputs = [ bctoolbox sqlite ];
   nativeBuildInputs = [ cmake ];
 
   # Do not build static libraries
-  cmakeFlags = [ "-DENABLE_STATIC=NO" "-DCMAKE_C_FLAGS=-Wno-error=cast-function-type" ];
+  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=stringop-overflow"
+    "-Wno-error=unused-parameter"
   ];
 
   meta = with lib; {

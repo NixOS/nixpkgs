@@ -36,6 +36,7 @@ let
     "fastly"
     "fritzbox"
     "graphite"
+    "idrac"
     "influxdb"
     "ipmi"
     "json"
@@ -49,6 +50,7 @@ let
     "mikrotik"
     "minio"
     "modemmanager"
+    "mysqld"
     "nextcloud"
     "nginx"
     "nginxlog"
@@ -296,6 +298,12 @@ in
           or 'services.prometheus.exporters.mail.configFile'.
       '';
     } {
+      assertion = cfg.mysqld.runAsLocalSuperUser -> config.services.mysql.enable;
+      message = ''
+        The exporter is configured to run as 'services.mysql.user', but
+          'services.mysql.enable' is set to false.
+      '';
+    } {
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );
@@ -318,6 +326,14 @@ in
       message = ''
         Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
       '';
+    } {
+      assertion = cfg.idrac.enable -> (
+        (cfg.idrac.configurationPath == null) != (cfg.idrac.configuration == null)
+      );
+      message = ''
+        Please ensure you have either `services.prometheus.exporters.idrac.configuration'
+          or `services.prometheus.exporters.idrac.configurationPath' set!
+      '';
     } ] ++ (flip map (attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
       message = ''
@@ -325,7 +341,12 @@ in
         `openFirewall' is set to `true'!
       '';
     })) ++ config.services.prometheus.exporters.assertions;
-    warnings = config.services.prometheus.exporters.warnings;
+    warnings = [(mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
+        Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
+        `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
+        Consider using `services.prometheus.exporters.idrac.configuration` instead.
+      ''
+    )] ++ config.services.prometheus.exporters.warnings;
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;

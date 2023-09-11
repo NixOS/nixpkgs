@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "11r5ag2l5xn4pr7ycicm30w9c3ldn9yiqj1sqnjc79csxl2vrcfw";
   };
 
-  sourceRoot = "source/host";
+  sourceRoot = "${src.name}/host";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libbtbb libpcap libusb1 bluez ];

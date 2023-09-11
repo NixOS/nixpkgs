@@ -79,7 +79,7 @@ buildPythonPackage rec {
     lockFile = ./Cargo.lock;
   };
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
     pkg-config

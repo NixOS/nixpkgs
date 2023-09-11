@@ -629,10 +629,10 @@ rec {
             This behavior is deprecated and will throw an error in the future.''
     (let
       preLen = stringLength prefix;
-      sLen = stringLength str;
     in
       if substring 0 preLen str == prefix then
-        substring preLen (sLen - preLen) str
+        # -1 will take the string until the end
+        substring preLen (-1) str
       else
         str);
 

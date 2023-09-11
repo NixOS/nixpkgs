@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ytt";
-  version = "0.45.3";
+  version = "0.45.4";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-ytt";
     rev = "v${version}";
-    sha256 = "sha256-2Q/a5GXHLh8RO6SLSqh6tiq5D8rPu9ftCQ1FaELwcv0=";
+    sha256 = "sha256-mv0o0Wyfpzifl7yqQy8AWKlzUlr3S4IdYVzwsf17boM=";
   };
 
   vendorHash = null;

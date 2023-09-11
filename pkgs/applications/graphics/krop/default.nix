@@ -19,6 +19,7 @@ python3Packages.buildPythonApplication rec {
   ];
   buildInputs = [
     libsForQt5.poppler
+    libsForQt5.qtwayland
   ];
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];

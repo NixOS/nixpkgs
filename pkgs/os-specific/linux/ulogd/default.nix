@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, gnumake, libnetfilter_acct, libnetfilter_conntrack
 , libnetfilter_log, libmnl, libnfnetlink, automake, autoconf, autogen, libtool
+, postgresql, libmysqlclient, sqlite
 , pkg-config, libpcap, linuxdoc-tools, autoreconfHook, nixosTests }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,9 @@ stdenv.mkDerivation rec {
     libmnl
     libnfnetlink
     libpcap
+    postgresql
+    libmysqlclient
+    sqlite
   ];
 
   nativeBuildInputs = [

@@ -49,7 +49,7 @@
 assert withQt -> qt6 != null;
 
 let
-  version = "4.0.6";
+  version = "4.0.8";
   variant = if withQt then "qt" else "cli";
 in
 stdenv.mkDerivation {
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-hQpnD1BWOdb1YuG2BaQI+q1EkkTF1Du/HezrYr/Fl7w=";
+    hash = "sha256-bNg0yhNb1GRsTclNWWO+Bamm2wOnUjVKU+JftJu+LTo=";
   };
 
   cmakeFlags = [
@@ -177,7 +177,7 @@ stdenv.mkDerivation {
     '';
 
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor fpletz ];
+    maintainers = with maintainers; [ bjornfor fpletz paveloom ];
     mainProgram = if withQt then "wireshark" else "tshark";
   };
 }

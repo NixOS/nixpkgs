@@ -1,6 +1,11 @@
-{ gccStdenv, lib, git, openssl, autoconf, pkgs, makeStaticLibraries, gcc, coreutils, gnused, gnugrep,
-  src, version, git-version, stampYmd ? 0, stampHms ? 0,
-  gambit-support, optimizationSetting ? "-O1", gambit-params ? pkgs.gambit-support.stable-params }:
+{ gccStdenv, lib, pkgs,
+  git, openssl, autoconf, gcc, coreutils, gnused, gnugrep,
+  makeStaticLibraries,
+  src, version, git-version,
+  stampYmd ? 0, stampHms ? 0,
+  gambit-support,
+  optimizationSetting ? "-O1",
+  gambit-params ? pkgs.gambit-support.stable-params }:
 
 # Note that according to a benchmark run by Marc Feeley on May 2018,
 # clang is 10x (with default settings) to 15% (with -O2) slower than GCC at compiling
@@ -45,6 +50,7 @@ gccStdenv.mkDerivation rec {
     "--enable-shared"
     "--enable-absolute-shared-libs" # Yes, NixOS will want an absolute path, and fix it.
     "--enable-openssl"
+    "--enable-dynamic-clib"
     #"--enable-default-compile-options='(compactness 9)'" # Make life easier on the JS backend
     "--enable-default-runtime-options=${gambit-params.defaultRuntimeOptions}"
     # "--enable-rtlib-debug" # used by Geiser, but only on recent-enough gambit, and messes js runtime
@@ -62,6 +68,7 @@ gccStdenv.mkDerivation rec {
     # "--enable-coverage"
     # "--enable-inline-jumps"
     # "--enable-char-size=1" # default is 4
+    # "--enable-march=native" # Nope, makes it not work on machines older than the builder
   ] ++ gambit-params.extraOptions
     # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
     ++ lib.optional (!gccStdenv.isDarwin) "--enable-poll";

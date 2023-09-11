@@ -27,12 +27,12 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "535.86.05";
-    sha256_64bit = "sha256-QH3wyjZjLr2Fj8YtpbixJP/DvM7VAzgXusnCcaI69ts=";
-    sha256_aarch64 = "sha256-ON++eWPDWHnm/NuJmDSYkR4sKKvCdX+kwxS7oA2M5zU=";
-    openSha256 = "sha256-qCYEQP54cT7G+VrLmuMT+RWIwuGdBhlbYTrCDcztfNs=";
-    settingsSha256 = "sha256-0NAxQosC+zPz5STpELuRKDMap4KudoPGWKL4QlFWjLQ=";
-    persistencedSha256 = "sha256-Ak4Wf59w9by08QJ0x15Zs5fHOhiIatiJfjBQfnY65Mg=";
+    version = "535.104.05";
+    sha256_64bit = "sha256-L51gnR2ncL7udXY2Y1xG5+2CU63oh7h8elSC4z/L7ck=";
+    sha256_aarch64 = "sha256-J4uEQQ5WK50rVTI2JysBBHLpmBEWQcQ0CihgEM6xuvk=";
+    openSha256 = "sha256-0ng4hyiUt0rHZkNveFTo+dSaqkMFO4UPXh85/js9Zbw=";
+    settingsSha256 = "sha256-pS9W5LMenX0Rrwmpg1cszmpAYPt0Mx+apVQmOmLWTog=";
+    persistencedSha256 = "sha256-uqT++w0gZRNbzyqbvP3GBqgb4g18r6VM3O8AMEfM7GU=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -65,13 +65,13 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "525.47.35";
-    persistencedVersion = "525.116.04";
-    settingsVersion = "525.116.04";
-    sha256_64bit = "sha256-HnjCHsHHH/fqqyc8dXDx/wQhVkXWoH5Z9jJ+/zQWNFc=";
-    openSha256 = "sha256-/qkCMybr8sC/Da9zi2KbSkLBeQcSbVURnAg1IbjZiBk=";
-    settingsSha256 = "sha256-qNjfsT9NGV151EHnG4fgBonVFSKc4yFEVomtXg9uYD4=";
-    persistencedSha256 = "sha256-ci86XGlno6DbHw6rkVSzBpopaapfJvk0+lHcR4LDq50=";
+    version = "535.43.09";
+    persistencedVersion = "535.98";
+    settingsVersion = "535.98";
+    sha256_64bit = "sha256-7QDp+VDgxH7RGW40kbQp4F/luh0DCYb4BS0gU/6wn+c=";
+    openSha256 = "sha256-7MOwKQCTaOo1//8OlSaNdpKeDXejZvmKFFeqhFrhAk8=";
+    settingsSha256 = "sha256-jCRfeB1w6/dA27gaz6t5/Qo7On0zbAPIi74LYLel34s=";
+    persistencedSha256 = "sha256-WviDU6B50YG8dO64CGvU3xK8WFUX8nvvVYm/fuGyroM=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
   };
 

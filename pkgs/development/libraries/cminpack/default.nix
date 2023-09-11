@@ -1,31 +1,48 @@
-{lib, stdenv, fetchurl}:
+{ lib
+, stdenv
+, cmake
+, darwin
+, fetchFromGitHub
+, fetchurl
+, withBlas ? true, blas
+}:
 
 stdenv.mkDerivation rec {
   pname = "cminpack";
-  version = "1.3.6";
+  version = "1.3.8";
 
-  src = fetchurl {
-    url = "http://devernay.free.fr/hacks/cminpack/cminpack-${version}.tar.gz";
-    sha256 = "17yh695aim508x1kn9zf6g13jxwk3pi3404h5ix4g5lc60hzs1rw";
+  src = fetchFromGitHub {
+    owner = "devernay";
+    repo = "cminpack";
+    rev = "v${version}";
+    hash = "sha256-eFJ43cHbSbWld+gPpMaNiBy1X5TIcN9aVxjh8PxvVDU=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace '/usr/local' '${placeholder "out"}' \
-      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
-      --replace 'ranlib -t' '${stdenv.cc.targetPrefix}ranlib' \
-      --replace 'ranlib' '${stdenv.cc.targetPrefix}ranlib'
-  '';
+  strictDeps = true;
 
-  preInstall = ''
-    mkdir -p $out/lib $out/include
-  '';
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = lib.optionals withBlas [
+    blas
+  ] ++ lib.optionals (withBlas && stdenv.isDarwin) [
+    darwin.apple_sdk.frameworks.Accelerate
+    darwin.apple_sdk.frameworks.CoreGraphics
+    darwin.apple_sdk.frameworks.CoreVideo
+  ];
+
+  cmakeFlags = [
+    "-DUSE_BLAS=${if withBlas then "ON" else "OFF"}"
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+  ];
 
   meta = {
-    homepage = "http://devernay.free.fr/hacks/cminpack/cminpack.html";
-    license = lib.licenses.bsd3;
     description = "Software for solving nonlinear equations and nonlinear least squares problems";
+    homepage = "http://devernay.free.fr/hacks/cminpack/";
+    changelog = "https://github.com/devernay/cminpack/blob/v${version}/README.md#history";
+    license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    maintainers = [ ];
   };
-
 }

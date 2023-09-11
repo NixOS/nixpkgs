@@ -4,7 +4,7 @@
 , buildPackages
 , docbook_xml_dtd_44
 , docbook_xsl
-, libcap
+, withLibcap ? stdenv.isLinux, libcap
 , pkg-config
 , meson
 , ninja
@@ -25,9 +25,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  mesonFlags = [
+    (lib.mesonEnable "use_libcap" withLibcap)
+  ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ docbook_xml_dtd_44 docbook_xsl meson ninja pkg-config xmlto ];
-  buildInputs = [ libcap ];
+  buildInputs = lib.optionals withLibcap [ libcap ];
   # Needed for lddtree
   propagatedBuildInputs = [ (python3.withPackages (p: with p; [ pyelftools ])) ];
 

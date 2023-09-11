@@ -7,34 +7,23 @@
   , qtbase
   , qttools
   , qtx11extras
-  , qttranslations
 }:
 
 mkDerivation rec {
   pname = "birdtray";
-  version = "1.9.0";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "gyunaev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1469ng6zk0qx0qfsihrnlz1j9i1wk0hx4vqdaplz9mdpyxvmlryk";
+    sha256 = "sha256-3SZf0ZK4AV/kuFttaHnPJuOJ9rn7CqFfv28d8ancPKw=";
   };
-
-  patches = [
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    ./fix-qttranslations-path.diff
-  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     qtbase qttools qtx11extras
   ];
-
-  postPatch = ''
-    substituteInPlace src/birdtrayapp.cpp \
-      --subst-var-by qttranslations ${qttranslations}
-  '';
 
   # Wayland support is broken.
   # https://github.com/gyunaev/birdtray/issues/113#issuecomment-621742315

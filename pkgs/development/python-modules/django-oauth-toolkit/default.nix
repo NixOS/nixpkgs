@@ -47,10 +47,12 @@ buildPythonPackage rec {
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
+  # xdist is disabled right now because it can cause race conditions on high core machines
+  # https://github.com/jazzband/django-oauth-toolkit/issues/1300
   nativeCheckInputs = [
     djangorestframework
     pytest-django
-    pytest-xdist
+    # pytest-xdist
     pytest-mock
     pytestCheckHook
   ];

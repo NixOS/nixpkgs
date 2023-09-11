@@ -8,7 +8,7 @@
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
   ApplicationServices, Carbon, Cocoa, Xplugin,
-  xorg
+  xorg, windows
 }:
 
 let
@@ -80,9 +80,40 @@ self: super:
   mkfontdir = xorg.mkfontscale;
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
+    # $dev/include/xcb/xcb.h includes pthread.h
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
     configureFlags = [ "--enable-xkb" "--enable-xinput" ]
       ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
     outputs = [ "out" "dev" "man" "doc" ];
+    meta = attrs.meta // {
+      pkgConfigModules = [
+        "xcb-composite"
+        "xcb-damage"
+        "xcb-dpms"
+        "xcb-dri2"
+        "xcb-dri3"
+        "xcb-glx"
+        "xcb-present"
+        "xcb-randr"
+        "xcb-record"
+        "xcb-render"
+        "xcb-res"
+        "xcb-screensaver"
+        "xcb-shape"
+        "xcb-shm"
+        "xcb-sync"
+        "xcb-xf86dri"
+        "xcb-xfixes"
+        "xcb-xinerama"
+        "xcb-xinput"
+        "xcb-xkb"
+        "xcb-xtest"
+        "xcb-xv"
+        "xcb-xvmc"
+        "xcb"
+      ];
+      platforms = lib.platforms.unix ++ lib.platforms.windows;
+    };
   });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
@@ -119,6 +150,15 @@ self: super:
 
   libXdmcp = super.libXdmcp.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
+    meta = attrs.meta // {
+      pkgConfigModules = [ "xdmcp" ];
+    };
+  });
+
+  libXtst = super.libXtst.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      pkgConfigModules = [ "xtst" ];
+    };
   });
 
   libXfont = super.libXfont.overrideAttrs (attrs: {
@@ -161,6 +201,9 @@ self: super:
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
     '';
+    meta = attrs.meta // {
+      mainProgram = "xdpyinfo";
+    };
   });
 
   xdm = super.xdm.overrideAttrs (attrs: {
@@ -345,6 +388,11 @@ self: super:
       platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) []
         [ "cygwin" "freebsd" "linux" "netbsd" "openbsd" "illumos" ];
     };
+  });
+
+  libpthreadstubs = super.libpthreadstubs.overrideAttrs (attrs: {
+    # only contains a pkgconfig file on linux and windows
+    meta = attrs.meta // { platforms = lib.platforms.unix ++ lib.platforms.windows; };
   });
 
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
@@ -631,6 +679,14 @@ self: super:
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
     # adds support for printproto needed for libXp
     mesonFlags = [ "-Dlegacy=true" ];
+
+    patches = [
+      (fetchpatch {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/meson.patch?h=mingw-w64-xorgproto&id=7b817efc3144a50e6766817c4ca7242f8ce49307";
+        sha256 = "sha256-Izzz9In53W7CC++k1bLr78iSrmxpFm1cH8qcSpptoUQ=";
+      })
+    ];
+    meta = attrs.meta // { platforms = lib.platforms.unix ++ lib.platforms.windows; };
   });
 
   xorgserver = with xorg; super.xorgserver.overrideAttrs (attrs_passed:
@@ -814,6 +870,7 @@ self: super:
         --replace '_X_NORETURN' '__attribute__((noreturn))' \
         --replace 'n_dirs--;' ""
     '';
+    meta.mainProgram = "lndir";
   });
 
   twm = super.twm.overrideAttrs (attrs: {
@@ -938,6 +995,15 @@ self: super:
     postInstall = ''
       rm $out/bin/xkeystone
     '';
+    meta = attrs.meta // {
+      mainProgram = "xrandr";
+    };
+  });
+
+  xset = super.xset.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      mainProgram = "xset";
+    };
   });
 
   # convert Type1 vector fonts to OpenType fonts

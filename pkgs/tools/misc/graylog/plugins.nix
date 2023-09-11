@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, graylog-5_0 }:
+{ lib, stdenv, fetchurl, unzip, graylog-5_1 }:
 
 with lib;
 
@@ -17,7 +17,7 @@ let
       dontUnpack = true;
       nativeBuildInputs = [ unzip ];
       meta = a.meta // {
-        platforms = graylog-5_0.meta.platforms;
+        platforms = graylog-5_1.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];
         sourceProvenance = with sourceTypes; [ binaryBytecode ];
       };

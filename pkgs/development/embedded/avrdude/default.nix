@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "avrdude";
-  version = "7.1";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "avrdudes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pGjOefWnf11kG/zFGwYGet1OjAhKsULNGgh6vqvIQ7c=";
+    sha256 = "sha256-/JyhMBcjNklyyXZEFZGTjrTNyafXEdHEhcLz6ZQx9aU=";
   };
 
   nativeBuildInputs = [ cmake bison flex ] ++ lib.optionals docSupport [

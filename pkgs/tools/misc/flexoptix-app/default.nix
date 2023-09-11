@@ -1,4 +1,4 @@
-{ lib, appimageTools, fetchurl, nodePackages }: let
+{ lib, appimageTools, fetchurl, asar }: let
   pname = "flexoptix-app";
   version = "5.13.4";
 
@@ -18,9 +18,9 @@
       ${oA.buildCommand}
 
       # Get rid of the autoupdater
-      ${nodePackages.asar}/bin/asar extract $out/resources/app.asar app
+      ${asar}/bin/asar extract $out/resources/app.asar app
       sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
-      ${nodePackages.asar}/bin/asar pack app $out/resources/app.asar
+      ${asar}/bin/asar pack app $out/resources/app.asar
     '';
   });
 

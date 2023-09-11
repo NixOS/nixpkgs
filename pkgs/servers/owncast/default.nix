@@ -2,6 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , nixosTests
+, bash
+, which
 , ffmpeg
 , makeBinaryWrapper
 }:
@@ -25,7 +27,7 @@ in buildGoModule {
 
   postInstall = ''
     wrapProgram $out/bin/owncast \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ bash which ffmpeg ]}
   '';
 
   installCheckPhase = ''

@@ -3,6 +3,7 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , poetry-core
 , pytest-asyncio
@@ -12,17 +13,22 @@
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "2022.10.0";
+  version = "2023.09.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    hash = "sha256-JIh6jr4pFXGZTUi6K7VsymaCxCrTNBevk9xo9TsrFnM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-45LgfCA8037GqP4WfEjE4hj2YdKUGu2hGrQ/f0r1PAI=";
   };
+
+  postPatch = ''
+    # this is not used directly by the project
+    sed -i '/certifi =/d' pyproject.toml
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -31,6 +37,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses
@@ -57,6 +65,7 @@ buildPythonPackage rec {
       and more.
     '';
     homepage = "https://github.com/bachya/aiorecollect";
+    changelog = "https://github.com/bachya/aiorecollect/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

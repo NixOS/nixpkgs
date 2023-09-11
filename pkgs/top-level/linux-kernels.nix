@@ -182,6 +182,13 @@ in {
       ];
     };
 
+    linux_6_5 = callPackage ../os-specific/linux/kernel/linux-6.5.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
@@ -332,6 +339,8 @@ in {
 
     dddvb = callPackage ../os-specific/linux/dddvb { };
 
+    decklink = callPackage ../os-specific/linux/decklink { };
+
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
@@ -347,7 +356,6 @@ in {
     fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
 
     gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
-    hid-nintendo = callPackage ../os-specific/linux/hid-nintendo { };
 
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
@@ -372,6 +380,8 @@ in {
     kvdo = callPackage ../os-specific/linux/kvdo {};
 
     lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
+
+    linux-gpib = callPackage ../applications/science/electronics/linux-gpib/kernel.nix { };
 
     liquidtux = callPackage ../os-specific/linux/liquidtux {};
 
@@ -441,13 +451,14 @@ in {
     rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
 
     rtw88 = callPackage ../os-specific/linux/rtw88 { };
-    rtlwifi_new = rtw88;
 
     rtw89 = if lib.versionOlder kernel.version "5.16" then callPackage ../os-specific/linux/rtw89 { } else null;
 
     openafs_1_8 = callPackage ../servers/openafs/1.8/module.nix { };
     # Current stable release; don't backport release updates!
     openafs = openafs_1_8;
+
+    opensnitch-ebpf = if lib.versionAtLeast kernel.version "5.10" then callPackage ../os-specific/linux/opensnitch-ebpf { } else null;
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
@@ -556,6 +567,7 @@ in {
 
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
+    hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
     sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
     rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
@@ -572,6 +584,7 @@ in {
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_4 = recurseIntoAttrs (packagesFor kernels.linux_6_4);
+    linux_6_5 = recurseIntoAttrs (packagesFor kernels.linux_6_5);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
@@ -633,7 +646,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_4;
+    linux_latest = packages.linux_6_5;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;

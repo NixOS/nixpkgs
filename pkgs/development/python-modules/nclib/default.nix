@@ -6,17 +6,22 @@
 
 buildPythonPackage rec {
   pname = "nclib";
-  version = "1.0.3";
-  disabled = pythonOlder "3.5";
+  version = "1.0.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-26KjYMxJMj5ANb2ej9hVl689sAcGHp89QUkH2xiLhZk=";
+    hash = "sha256-sKbISlL5hOBu1j6zWSib2HjJCvEoMrqdwzgG2keMqDE=";
   };
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "nclib" ];
+
+  pythonImportsCheck = [
+    "nclib"
+  ];
 
   meta = with lib; {
     description = "Python module that provides netcat features";

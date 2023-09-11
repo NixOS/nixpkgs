@@ -9,7 +9,6 @@
 , logs
 , lwt
 , macaddr
-, mirage-profile
 , mirage-time
 , alcotest
 , mirage-clock-unix
@@ -23,15 +22,14 @@
 
 buildDunePackage rec {
   pname = "arp";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "1x3l8v96ywc3wrcwbf0j04b8agap4fif0fz6ki2ndzx57yqcjszn";
+    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    hash = "sha256-g/aEhpufQcyS/vCtKk0Z1sYaYNRmQFaZ9rTp9F4nq54=";
   };
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   nativeBuildInputs = [
     bisect_ppx
@@ -45,7 +43,6 @@ buildDunePackage rec {
     logs
     lwt
     macaddr
-    mirage-profile
     mirage-time
   ];
 

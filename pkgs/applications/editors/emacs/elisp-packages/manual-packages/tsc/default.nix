@@ -28,7 +28,7 @@ let
     pname = "tsc";
     commit = version;
 
-    sourceRoot = "source/core";
+    sourceRoot = "${src.name}/core";
 
     recipe = writeText "recipe" ''
       (tsc
@@ -44,7 +44,7 @@ let
     pname = "tsc-dyn";
 
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
-    sourceRoot = "source/core";
+    sourceRoot = "${src.name}/core";
 
     postInstall = ''
       LIB=($out/lib/libtsc_dyn.*)

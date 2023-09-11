@@ -1,4 +1,4 @@
-{ lib, buildGraalvmNativeImage, fetchurl  }:
+{ lib, buildGraalvmNativeImage, fetchurl }:
 
 buildGraalvmNativeImage rec {
   pname = "zprint";
@@ -28,5 +28,6 @@ buildGraalvmNativeImage rec {
     homepage = "https://github.com/kkinnear/zprint";
     license = licenses.mit;
     maintainers = with maintainers; [ stelcodes ];
+    mainProgram = "zprint";
   };
 }

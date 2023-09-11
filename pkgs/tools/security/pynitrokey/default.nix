@@ -46,6 +46,7 @@ buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "click"
     "cryptography"
     "protobuf"
     "python-dateutil"

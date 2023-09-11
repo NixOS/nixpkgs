@@ -12,7 +12,7 @@
 }:
 
 let
-  self = buildPythonPackage {
+  self = buildPythonPackage rec {
     pname = "opentelemetry-api";
     version = "1.18.0";
     disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ let
       hash = "sha256-8xf4TqEkBeueejQBckFGwBNN4Gyo+/7/my6Z1Mnei5Q=";
     };
 
-    sourceRoot = "source/opentelemetry-api";
+    sourceRoot = "${src.name}/opentelemetry-api";
 
     format = "pyproject";
 

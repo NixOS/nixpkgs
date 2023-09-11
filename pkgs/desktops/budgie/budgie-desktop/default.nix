@@ -23,6 +23,7 @@
 , libpulseaudio
 , libuuid
 , libwnck
+, magpie
 , mesa
 , meson
 , ninja
@@ -36,14 +37,14 @@
 
 stdenv.mkDerivation rec {
   pname = "budgie-desktop";
-  version = "10.7.2";
+  version = "10.8";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fd3B2DMZxCI4Gb9mwdACjIPydKghXx8IkhFpMS/Clps=";
+    hash = "sha256-fOsTBnKtwBGQSPkBBrzwHEB3+OcJYtPIdvZsV31oi6g=";
   };
 
   patches = [
@@ -70,7 +71,6 @@ stdenv.mkDerivation rec {
     gnome-menus
     gnome.gnome-bluetooth_1_0
     gnome.gnome-settings-daemon
-    gnome.mutter
     gnome.zenity
     graphene
     gtk3
@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libuuid
     libwnck
+    magpie
     mesa
     polkit
     sassc
@@ -101,6 +102,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
     platforms = platforms.linux;
     maintainers = [ maintainers.federicoschonborn ];
-    license = with licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30];
+    license = with licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
   };
 }

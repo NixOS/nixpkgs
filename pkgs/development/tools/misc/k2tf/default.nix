@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "k2tf";
@@ -11,7 +11,16 @@ buildGoModule rec {
     sha256 = "sha256-zkkRzCTZCvbwBj4oIhTo5d3PvqLMJPzT3zV9jU3PEJs=";
   };
 
-  vendorSha256 = "sha256-iCRiBCppqCZrCUQipoVgc4jUnLkX6QVFjxI6sv6n7tU=";
+  patches = [
+    # update dependencies
+    # https://github.com/sl1pm4t/k2tf/pull/111
+    (fetchpatch {
+      url = "https://github.com/sl1pm4t/k2tf/commit/7e7b778eeb80400cb0dadb1cdea4e617b5738147.patch";
+      hash = "sha256-ZGQUuH7u3aNLml6rvOzOxVwSTlbhZLknXbHKeY4lp00=";
+    })
+  ];
+
+  vendorSha256 = "sha256-yGuoE1bgwVHk3ym382OC93me9HPlVoNgGo/3JROVC2E=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" ];
 

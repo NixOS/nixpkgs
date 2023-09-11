@@ -12,6 +12,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , yarn2nix-moretea
+, fetchYarnDeps
 , chromium
 }:
 
@@ -51,7 +52,7 @@ stdenvNoCC.mkDerivation rec {
         yt-dlp
       ]);
 
-      modules = yarn2nix-moretea.mkYarnModules {
+      modules = yarn2nix-moretea.mkYarnModules rec {
         name = "${pname}-modules-${version}";
         inherit pname version;
 
@@ -87,7 +88,11 @@ stdenvNoCC.mkDerivation rec {
 
         packageJSON = "${src}/package.json";
         yarnLock = ./yarn.lock;
-        yarnNix = ./yarndeps.nix;
+
+        offlineCache = fetchYarnDeps {
+          inherit yarnLock;
+          hash = "sha256-NzWzkZbf5R1R72K7KVJbZUCzso1UZ0p3+lRYZE2M/dI=";
+        };
       };
     in
     ''

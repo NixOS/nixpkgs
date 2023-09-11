@@ -16,12 +16,13 @@ rec {
         --replace "echo > stamp.h;" "(echo '#define ___STAMP_VERSION \"${git-version}\"'; echo '#define ___STAMP_YMD ${toString stampYmd}'; echo '#define ___STAMP_HMS ${toString stampHms}';) > stamp.h;";
     '';
     modules = true;
-    extraOptions = [];
+    #extraOptions = [];
+    extraOptions = ["--enable-trust-c-tco" "CFLAGS=-foptimize-sibling-calls"];
   };
 
   unstable-params = stable-params // {
     stable = false;
-    extraOptions = ["--enable-trust-c-tco"];
+    extraOptions = ["--enable-trust-c-tco"]; # "CFLAGS=-foptimize-sibling-calls" not necessary in latest unstable
   };
 
   export-gambopt = params : "export GAMBOPT=${params.buildRuntimeOptions} ;";

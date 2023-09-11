@@ -13,7 +13,7 @@ let
 in
 {
   name = "mastodon-remote-postgresql";
-  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin turion ];
+  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin ];
 
   nodes = {
     database = {

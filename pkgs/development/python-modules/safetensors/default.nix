@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/bindings/python";
+    sourceRoot = "${src.name}/bindings/python";
     hash = "sha256-tC0XawmKWNGCaByHQfJEfmHM3m/qgTuIpcRaEFJC6dM";
   };
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
     setuptools-rust

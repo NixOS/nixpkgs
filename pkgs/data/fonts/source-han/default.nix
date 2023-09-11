@@ -11,6 +11,7 @@ let
     , rev
     , hash
     , zip ? ""
+    , prefix ? ""
     }:
     let Family =
       lib.toUpper (lib.substring 0 1 family) +
@@ -21,7 +22,7 @@ let
       version = lib.removeSuffix "R" rev;
 
       src = fetchurl {
-        url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc${zip}";
+        url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/${prefix}SourceHan${Family}.ttc${zip}";
         inherit hash;
       };
 
@@ -61,9 +62,10 @@ in
   serif = makePackage {
     family = "serif";
     description = "serif";
-    rev = "2.000R";
-    hash = "sha256-RDgywab7gwT+YBO7F1KJvKOv0E/3+7Zi/pQl+UDsGcM=";
+    rev = "2.001R";
+    hash = "sha256-ULdrtPLtzsgfZEHWkr4ebC/FSROHBWJJVD+PzdIJ6Og=";
     zip = ".zip";
+    prefix = "01_";
   };
 
   mono = makePackage {

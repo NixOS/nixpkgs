@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hQaVUBw8X60DW1Ox4GzO+OCWMHmVYuCkjH5x/sMULiE=";
   };
 
-  sourceRoot = "source/cargo-insta";
+  sourceRoot = "${src.name}/cargo-insta";
 
   cargoHash = "sha256-q6Ups4SDGjT5Zc9ujhRpRdh3uWq99lizgA7gpPVSl+A=";
 
@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mitsuhiko/insta";
     changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda oxalica ];
+    maintainers = with lib.maintainers; [ figsoda oxalica matthiasbeyer ];
   };
 }

@@ -5,6 +5,7 @@
 , django
 , factory_boy
 , mock
+, pip
 , pygments
 , pytest-django
 , pytestCheckHook
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     factory_boy
     mock
+    pip
     pygments # not explicitly declared in setup.py, but some tests require it
     pytest-django
     pytestCheckHook

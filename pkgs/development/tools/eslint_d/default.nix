@@ -20,5 +20,6 @@ buildNpmPackage rec {
     homepage = "github.com/mantoni/eslint_d.js";
     license = licenses.mit;
     maintainers = [ maintainers.ehllie ];
+    mainProgram = "eslint_d";
   };
 }

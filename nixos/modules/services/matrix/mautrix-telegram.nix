@@ -159,7 +159,6 @@ in {
         if [ ! -f '${registrationFile}' ]; then
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
             --generate-registration \
-            --base-config='${pkgs.mautrix-telegram}/${pkgs.mautrix-telegram.pythonModule.sitePackages}/mautrix_telegram/example-config.yaml' \
             --config='${settingsFile}' \
             --registration='${registrationFile}'
         fi

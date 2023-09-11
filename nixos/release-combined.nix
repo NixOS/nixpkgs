@@ -158,6 +158,11 @@ in rec {
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
         ["nixpkgs.tarball"]
+
+        # Ensure that nixpkgs-check-by-name is available in all release channels and nixos-unstable,
+        # so that a pre-built version can be used in CI for PR's on the corresponding development branches.
+        # See ../pkgs/test/nixpkgs-check-by-name/README.md
+        (onSystems ["x86_64-linux"] "nixpkgs.tests.nixpkgs-check-by-name")
       ];
     };
 }

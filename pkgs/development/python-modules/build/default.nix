@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, build
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
@@ -41,36 +42,52 @@ buildPythonPackage rec {
     tomli
   ];
 
-  nativeCheckInputs = [
-    filelock
-    pytest-mock
-    pytest-rerunfailures
-    pytest-xdist
-    pytestCheckHook
-    setuptools
-    toml
-  ];
+  # We need to disable tests because this package is part of the bootstrap chain
+  # and its test dependencies cannot be built yet when this is being built.
+  doCheck = false;
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
+  passthru.tests = {
+    pytest = buildPythonPackage {
+      pname = "${pname}-pytest";
+      inherit version;
+      format = "other";
 
-  __darwinAllowLocalNetworking = true;
+      dontBuild = true;
+      dontInstall = true;
 
-  disabledTests = [
-    # Tests often fail with StopIteration
-    "test_isolat"
-    "test_default_pip_is_never_too_old"
-    "test_build"
-    "test_with_get_requires"
-    "test_init"
-    "test_output"
-    "test_wheel_metadata"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Expects Apple's Python and its quirks
-    "test_can_get_venv_paths_with_conflicting_default_scheme"
-  ];
+      nativeCheckInputs = [
+        build
+        filelock
+        pytest-mock
+        pytest-rerunfailures
+        pytest-xdist
+        pytestCheckHook
+        setuptools
+        toml
+      ];
+
+      pytestFlagsArray = [
+        "-W"
+        "ignore::DeprecationWarning"
+      ];
+
+      __darwinAllowLocalNetworking = true;
+
+      disabledTests = [
+        # Tests often fail with StopIteration
+        "test_isolat"
+        "test_default_pip_is_never_too_old"
+        "test_build"
+        "test_with_get_requires"
+        "test_init"
+        "test_output"
+        "test_wheel_metadata"
+      ] ++ lib.optionals stdenv.isDarwin [
+        # Expects Apple's Python and its quirks
+        "test_can_get_venv_paths_with_conflicting_default_scheme"
+      ];
+    };
+  };
 
   pythonImportsCheck = [
     "build"
@@ -86,6 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/build";
     changelog = "https://github.com/pypa/build/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = teams.python.members ++ [ maintainers.fab ];
   };
 }

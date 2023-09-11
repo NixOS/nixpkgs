@@ -43,7 +43,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "numba>=0.57.0" "numba"
+      --replace "numba>=0.57.0" "numba" \
+      --replace "numpy>=1.22.0,<1.25" "numpy"
   '';
 
   nativeBuildInputs = [

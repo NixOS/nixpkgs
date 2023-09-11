@@ -6,13 +6,47 @@
 , fetchzip
 , autoPatchelfHook
 , gtk3
+, flutterVersion
 , unzip
+, stdenvNoCC
 }:
 
 let
   hashes = (import ./hashes.nix).${engineVersion} or
     (throw "There are no known artifact hashes for Flutter engine version ${engineVersion}.");
+  noticeText = stdenvNoCC.mkDerivation (finalAttrs: {
+    pname = "flutter-notice";
+    version = engineVersion;
+    dontUnpack = true;
+    src = fetchurl {
+      pname = "flutter-sky_engine-LICENSE";
+      version = engineVersion;
+      url = "https://raw.githubusercontent.com/flutter/engine/${engineVersion}/sky/packages/sky_engine/LICENSE";
+      sha256 = hashes.skyNotice;
+    };
+    flutterNotice = fetchurl {
+      pname = "flutter-LICENSE";
+      version = engineVersion;
+      url = "https://raw.githubusercontent.com/flutter/flutter/${flutterVersion}/LICENSE";
+      sha256 = hashes.flutterNotice;
+    };
+    installPhase =
+      ''
+        SRC_TEXT="$(cat $src)"
+        FLUTTER_NOTICE_TEXT="$(cat $flutterNotice)"
+        cat << EOF > $out
+        This artifact is from the Flutter SDK's engine.
+        This file carries third-party notices for its dependencies.
+        See also other files, that have LICENSE in the name, in the artifact directory.
 
+        Appendix 1/2: merged sky_engine LICENSE file (also found at ${finalAttrs.src.url})
+        $SRC_TEXT
+
+        Appendix 2/2: Flutter license (also found at ${finalAttrs.flutterNotice.url})
+        $FLUTTER_NOTICE_TEXT
+        EOF
+      '';
+  });
   artifacts =
     {
       common = {
@@ -157,7 +191,7 @@ let
             hash = (if artifactDirectory == null then hashes else hashes.${artifactDirectory}).${archive};
           });
 
-      setSourceRoot = if overrideUnpackCmd then "sourceRoot=`pwd`" else null;
+      sourceRoot = if overrideUnpackCmd then "." else null;
       unpackCmd = if overrideUnpackCmd then "unzip -o $src -d $out" else null;
 
       installPhase =
@@ -165,6 +199,17 @@ let
           destination = "$out/${if subdirectory == true then archiveBasename else if subdirectory != null then subdirectory else "."}";
         in
         ''
+          # ship the notice near all artifacts. if the artifact directory is / multiple directories are nested in $src, link it there. If there isn't a directory, link it in root
+          # this *isn't the same as the subdirectory variable above*
+          DIR_CNT="$(echo */ | wc -w)"
+          if [[ "$DIR_CNT" == 0 ]]; then
+            ln -s ${noticeText} LICENSE.README
+          else
+            for dir in */
+            do
+              ln -s ${noticeText} "$dir/LICENSE.README"
+            done
+          fi
           mkdir -p "${destination}"
           cp -r . "${destination}"
         '';

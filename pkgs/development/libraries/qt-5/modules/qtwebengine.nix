@@ -9,6 +9,7 @@
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
 , alsa-lib
+, pulseaudio
 , libcap
 , pciutils
 , systemd
@@ -145,6 +146,7 @@ qtModule {
 
     # Audio formats
     alsa-lib
+    pulseaudio
 
     # Text rendering
     fontconfig freetype

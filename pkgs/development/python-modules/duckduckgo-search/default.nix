@@ -2,19 +2,24 @@
 , fetchFromGitHub
 , lib
 , setuptools
-, requests
+, aiofiles
 , click
+, h2
+, httpx
+, lxml
+, requests
+, socksio
 }:
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "2.8.5";
+  version = "3.8.5";
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "duckduckgo_search";
     rev = "v${version}";
-    hash = "sha256-UXh3+kBfkylt5CIXbYTa/vniEETUvh4steUrUg5MqYU=";
+    hash = "sha256-FOGMqvr5+O3+UTdM0m1nJBAcemP6hpAOXv0elvnCUHU=";
   };
 
   format = "pyproject";
@@ -22,9 +27,16 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
-    requests
+    aiofiles
     click
-  ];
+    h2
+    httpx
+    lxml
+    requests
+    socksio
+  ] ++ httpx.optional-dependencies.brotli
+    ++ httpx.optional-dependencies.http2
+    ++ httpx.optional-dependencies.socks;
 
   pythonImportsCheck = [ "duckduckgo_search" ];
 

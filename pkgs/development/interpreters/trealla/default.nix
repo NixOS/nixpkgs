@@ -6,23 +6,24 @@
 , readline
 , valgrind
 , xxd
+, gitUpdater
 , checkLeaks ? false
 , enableFFI ? true
 , enableSSL ? true
 , enableThreads ? true
-, lineEditingLibrary ? "readline"
+, lineEditingLibrary ? "isocline"
 }:
 
 assert lib.elem lineEditingLibrary [ "isocline" "readline" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.23.35";
+  version = "2.25.2";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yCVBjxO9tEKlyWo6RlK4EdyUxCkxp0z2EzJ2np0xOUU=";
+    hash = "sha256-3NBrJFSTcjftvTYn26SMeU2HtR81J2qlDAwAZRdis4M=";
   };
 
   postPatch = ''
@@ -41,9 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional enableSSL openssl
     ++ lib.optional (lineEditingLibrary == "readline") readline;
 
-  checkInputs = lib.optionals finalAttrs.doCheck [ valgrind ];
+  nativeCheckInputs = lib.optionals finalAttrs.doCheck [ valgrind ];
 
-  dontConfigure = true;
+  strictDeps = true;
 
   makeFlags = [
     "GIT_VERSION=\"v${finalAttrs.version}\""
@@ -67,7 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
     "test"
   ] ++ lib.optional checkLeaks "leaks";
 
-  meta =  {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     homepage = "https://trealla-prolog.github.io/trealla/";
     description = "A compact, efficient Prolog interpreter written in ANSI C";
     longDescription = ''

@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , wrapQtAppsHook
 , fetchFromGitHub
 , cmake
@@ -9,28 +9,32 @@
 , zlib
 , libpng
 , boost
-, guile_3_0
-, stdenv
+, guile
+, qtbase
+, darwin
 }:
 
-mkDerivation {
-  pname = "libfive-unstable";
-  version = "2022-05-19";
+stdenv.mkDerivation {
+  pname = "libfive";
+  version = "unstable-2023-06-07";
 
   src = fetchFromGitHub {
     owner = "libfive";
     repo = "libfive";
-    rev = "d83cc22709ff1f7c478be07ff2419e30e024834e";
-    sha256 = "lNJg2LCpFcTewSA00s7omUtzhVxycAXvo6wEM/JjrN0=";
+    rev = "c85ffe1ba1570c2551434c5bad731884aaf80598";
+    hash = "sha256-OITy3fJx+Z6856V3D/KpSQRJztvOdJdqUv1c65wNgCc=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config ];
-  buildInputs = [ eigen zlib libpng boost guile_3_0 ];
+  buildInputs = [ eigen zlib libpng boost guile qtbase ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Cocoa ];
 
   preConfigure = ''
     substituteInPlace studio/src/guile/interpreter.cpp \
-      --replace "qputenv(\"GUILE_LOAD_COMPILED_PATH\", \"libfive/bind/guile\");" \
-                "qputenv(\"GUILE_LOAD_COMPILED_PATH\", \"libfive/bind/guile:$out/lib/guile/3.0/ccache\");"
+      --replace '"libfive/bind/guile"' \
+                '"libfive/bind/guile:${placeholder "out"}/${guile.siteCcacheDir}"' \
+      --replace '(app_resource_dir + ":" + finder_build_dir).toLocal8Bit()' \
+                '"libfive/bind/guile:${placeholder "out"}/${guile.siteCcacheDir}"'
 
     substituteInPlace libfive/bind/guile/CMakeLists.txt \
       --replace "LIBFIVE_FRAMEWORK_DIR=$<TARGET_FILE_DIR:libfive>" \
@@ -42,19 +46,21 @@ mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DGUILE_CCACHE_DIR=${placeholder "out"}/lib/guile/3.0/ccache"
+    "-DGUILE_CCACHE_DIR=${placeholder "out"}/${guile.siteCcacheDir}"
+  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") [
+    # warning: 'aligned_alloc' is only available on macOS 10.15 or newer
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15"
   ];
 
-  postInstall = if stdenv.isDarwin then ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     # No rules to install the mac app, so do it manually.
     mkdir -p $out/Applications
     cp -r studio/Studio.app $out/Applications/Studio.app
 
-    install_name_tool \
-      -change libfive.dylib $out/lib/libfive.dylib \
-      -change libfive-guile.dylib $out/lib/libfive-guile.dylib \
-      $out/Applications/Studio.app/Contents/MacOS/Studio
-  '' else ''
+    install_name_tool -add_rpath $out/lib $out/Applications/Studio.app/Contents/MacOS/Studio
+
+    makeWrapper $out/Applications/Studio.app/Contents/MacOS/Studio $out/bin/Studio
+  '' + ''
     # Link "Studio" binary to "libfive-studio" to be more obvious:
     ln -s "$out/bin/Studio" "$out/bin/libfive-studio"
   '';
@@ -64,6 +70,6 @@ mkDerivation {
     homepage = "https://libfive.com/";
     maintainers = with maintainers; [ hodapp kovirobi ];
     license = with licenses; [ mpl20 gpl2Plus ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with platforms; all;
   };
 }

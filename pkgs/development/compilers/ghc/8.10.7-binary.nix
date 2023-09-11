@@ -417,7 +417,10 @@ stdenv.mkDerivation rec {
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
-  } // lib.optionalAttrs (binDistUsed.isHadrian or false) {
+  }
+  # We duplicate binDistUsed here since we have a sensible default even if no bindist is avaible,
+  # this makes sure that getting the `meta` attribute doesn't throw even on unsupported platforms.
+  // lib.optionalAttrs (ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}.isHadrian or false) {
     # Normal GHC derivations expose the hadrian derivation used to build them
     # here. In the case of bindists we just make sure that the attribute exists,
     # as it is used for checking if a GHC derivation has been built with hadrian.

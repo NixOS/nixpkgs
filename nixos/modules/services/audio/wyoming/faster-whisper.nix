@@ -71,7 +71,7 @@ in
               ];
               default = "cpu";
               description = mdDoc ''
-                Id of a speaker in a multi-speaker model.
+                Determines the platform faster-whisper is run on. CPU works everywhere, CUDA requires a compatible NVIDIA GPU.
               '';
             };
 

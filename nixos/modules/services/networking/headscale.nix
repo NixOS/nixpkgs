@@ -292,7 +292,7 @@ in {
               };
 
               client_secret_path = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.str;
                 default = null;
                 description = lib.mdDoc ''
                   Path to OpenID Connect client secret file. Expands environment variables in format ''${VAR}.

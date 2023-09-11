@@ -53,6 +53,32 @@ self: let
     super = removeAttrs imported [ "dash" ];
 
     overrides = {
+      eglot = super.eglot.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          local info_file=eglot.info
+          pushd $out/share/emacs/site-lisp/elpa/eglot-*
+          # specify output info file to override the one defined in eglot.texi
+          makeinfo --output=$info_file eglot.texi
+          install-info $info_file dir
+          popd
+        '';
+      });
+
+      xeft = super.xeft.overrideAttrs (old: let
+        libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+      in {
+        dontUnpack = false;
+
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.xapian ];
+        buildPhase = (old.buildPhase or "") + ''
+          $CXX -shared -o xapian-lite${libExt} xapian-lite.cc $NIX_CFLAGS_COMPILE -lxapian
+        '';
+        postInstall = (old.postInstall or "") + "\n" + ''
+          outd=$out/share/emacs/site-lisp/elpa/xeft-*
+          install -m444 -t $outd xapian-lite${libExt}
+          rm $outd/xapian-lite.cc $outd/emacs-module.h $outd/emacs-module-prelude.h $outd/demo.gif $outd/Makefile
+        '';
+      });
     };
 
     elpaDevelPackages = super // overrides;

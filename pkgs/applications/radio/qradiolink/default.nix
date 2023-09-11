@@ -23,13 +23,13 @@
 
 gnuradio3_8.pkgs.mkDerivation rec {
   pname = "qradiolink";
-  version = "0.8.9-1";
+  version = "0.8.10-1";
 
   src = fetchFromGitHub {
     owner = "qradiolink";
     repo = "qradiolink";
     rev = version;
-    sha256 = "sha256-yY9sdLFaG0fX/4obImxVAyJk13RklYjX99Ch9hgzTe8=";
+    sha256 = "sha256-DOf5Ct8a9EGpO3YLef+Hw87m5tCVqD30weVOeis9agI=";
   };
 
   preBuild = ''

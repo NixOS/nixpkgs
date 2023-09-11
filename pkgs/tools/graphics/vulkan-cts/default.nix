@@ -32,81 +32,29 @@ let
   # It also expects the version specified in the repository, which can be incompatible
   # with the version in nixpkgs (e.g. for SPIRV-Headers), so we don't want to patch in our packages.
   # The revisions are extracted from https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/fetch_sources.py#L290
-  amber = fetchFromGitHub {
-    owner = "google";
-    repo = "amber";
-    rev = "933ecb4d6288675a92eb1650e0f52b1d7afe8273";
-    hash = "sha256-v9z4gv/mTjaCkByZn6uDpMteQuIf0FzZXeKyoXfFjXo=";
-  };
-  esextractor = fetchFromGitHub {
-    owner = "Igalia";
-    repo = "ESExtractor";
-    rev = "v0.2.5";
-    hash = "sha256-A3lyTTarR1ZJrXcrLDR5D7H1kBwJNyrPPjEklRM9YBY=";
-  };
-  jsoncpp = fetchFromGitHub {
-    owner = "open-source-parsers";
-    repo = "jsoncpp";
-    rev = "9059f5cad030ba11d37818847443a53918c327b1";
-    hash = "sha256-m0tz8w8HbtDitx3Qkn3Rxj/XhASiJVkThdeBxIwv3WI=";
-  };
-  glslang = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "glslang";
-    rev = "cd2082e0584d4e39d11e3f401184e0d558ab304f";
-    hash = "sha256-j7O0j4E8lQ9tqAiuhnD/t6VL45OUvntsoKlhiuCXet4=";
-  };
-  spirv-tools = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "SPIRV-Tools";
-    rev = "01828dac778d08f4ebafd2e06bd419f6c84e5984";
-    hash = "sha256-i1rDMVpUiNdacDe20DsN67/rzK5V434EzfSv97y+xGU=";
-  };
-  spirv-headers = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "SPIRV-Headers";
-    rev = "1feaf4414eb2b353764d01d88f8aa4bcc67b60db";
-    hash = "sha256-VOq3r6ZcbDGGxjqC4IoPMGC5n1APUPUAs9xcRzxdyfk=";
-  };
-  video-parser = fetchFromGitHub {
-    owner = "nvpro-samples";
-    repo = "vk_video_samples";
-    rev = "7d68747d3524842afaf050c5e00a10f5b8c07904";
-    hash = "sha256-L5IYDm0bLq+NlNrzozu0VQx8zL1na6AhrkjZKxOWSnU=";
-  };
-  vulkan-docs = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "Vulkan-Docs";
-    rev = "9fff8b252a3688c0231fa78709084bbe677d3bf7";
-    hash = "sha256-KpKsKTY5xCSZ5Y92roa0fq/iqc1hVJNS7l87RFcxyRQ=";
-  };
+  # with the vk-cts-sources.py script.
+  sources = import ./sources.nix { inherit fetchurl fetchFromGitHub; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.6.0";
+  version = "1.3.6.3";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-PWkY5PFoxKosteRgbo6aRqGFHBkoEPFcg6NN8EquD8U=";
+    hash = "sha256-jpKPmUduH3IuUYzBAZJFl/w1FqjGC8sXSTnet8YEZ0I=";
   };
 
   outputs = [ "out" "lib" ];
 
   prePatch = ''
-    mkdir -p external/ESExtractor external/renderdoc/src external/spirv-headers external/video-parser external/vulkan-docs
+    mkdir -p external/renderdoc/src
 
     cp -r ${renderdoc} external/renderdoc/src/renderdoc_app.h
 
-    cp -r ${amber} external/amber/src
-    cp -r ${esextractor} external/ESExtractor/src
-    cp -r ${jsoncpp} external/jsoncpp/src
-    cp -r ${glslang} external/glslang/src
-    cp -r ${spirv-tools} external/spirv-tools/src
-    cp -r ${spirv-headers} external/spirv-headers/src
-    cp -r ${video-parser} external/video-parser/src
-    cp -r ${vulkan-docs} external/vulkan-docs/src
+    ${sources.prePatch}
+
     chmod u+w -R external
   '';
 
@@ -120,8 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     libXau
     libXdmcp
     libxcb
-    spirv-headers
-    spirv-tools
     wayland
     wayland-protocols
     zlib
@@ -129,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    glslang
     makeWrapper
     ninja
     pkg-config
@@ -158,6 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags '--deqp-vk-library-path=${vulkan-loader}/lib/libvulkan.so' \
       --add-flags "--deqp-archive-dir=$out/archive-dir"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Khronos Vulkan Conformance Tests";

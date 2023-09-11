@@ -1,22 +1,26 @@
 { lib
+, beautifulsoup4
 , buildPythonPackage
 , drawio-headless
-, fetchPypi
-, pythonOlder
+, fetchFromGitHub
 , mkdocs
-, beautifulsoup4
+, pathspec
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-swagger-ui-tag";
-  version = "0.6.2";
+  version = "0.6.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-H/eqrwlZntEYoKkJZKiRV+KyzkrDKRirMDDSciFNIGo=";
+  src = fetchFromGitHub {
+    owner = "Blueswen";
+    repo = "mkdocs-swagger-ui-tag";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/Spvj3lt7p+ZUbA/7xaQMLCSmHOOsoCRliqaAN+YU3g=";
   };
 
   propagatedBuildInputs = [
@@ -24,8 +28,20 @@ buildPythonPackage rec {
     beautifulsoup4
   ];
 
+  nativeCheckInputs = [
+    pathspec
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [
     "mkdocs_swagger_ui_tag"
+  ];
+
+  disabledTests = [
+    # Don't actually build results
+    "test_material"
+    "test_material_dark_scheme_name"
+    "test_template"
   ];
 
   meta = with lib; {

@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "riemann-c-client";
-  version = "1.10.5";
+  version = "2.1.1";
 
   src = fetchFromGitea {
     domain = "git.madhouse-project.org";
     owner = "algernon";
     repo = "riemann-c-client";
     rev = "riemann-c-client-${version}";
-    sha256 = "1w4wi5mr0vgbsx8pv9s08i409qqlfivsa979zyq4miyga1f3vqif";
+    sha256 = "sha256-FIhTT57g2uZBaH3EPNxNUNJn9n+0ZOhI6WMyF+xIr/Q=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

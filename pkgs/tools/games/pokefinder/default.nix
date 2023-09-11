@@ -14,21 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pokefinder";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "Admiral-Fish";
     repo = "PokeFinder";
     rev = "v${version}";
-    sha256 = "fYBeWc9eYLbj4+ku1jwaO5ISL8a7WJnBHJ4qz4W8RHA=";
+    sha256 = "ps8F6IcbCNybrZ02tbLNyB3YEvKlcYgCpv5Em7Riv+Q=";
     fetchSubmodules = true;
-    # the repo has identical cmake and CMake folders, causing issues on macOS
-    postFetch = if stdenv.isDarwin then ''
-    mv $out/cmake $out/cmake.tmp
-    mv $out/cmake.tmp $out/CMake
-    '' else ''
-    rm -rf $out/cmake
-    '';
   };
 
   patches = [ ./set-desktop-file-name.patch ];

@@ -5,6 +5,7 @@
 , python3
 , jq
 , expat
+, jsoncpp
 , libX11
 , libXdmcp
 , libXrandr
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  version = "1.3.250";
+  version = "1.3.261";
 
   src = fetchFromGitHub {
    owner = "LunarG";
    repo = "VulkanTools";
    rev = "v${version}";
-   hash = "sha256-oI2ITvciuE/f8ojFpIwcH+HnYCasz43nKkER3wJxX+c=";
+   hash = "sha256-Kem3nWVaMeDEsidKYMsWr9Bu0yBgjjennDB0sKBDogA=";
    fetchSubmodules = true;
  };
 
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
+    jsoncpp
     libX11
     libXdmcp
     libXrandr
@@ -70,6 +72,8 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/*
     sed -i '/^git /d' $update
     ./$update
+
+    substituteInPlace via/CMakeLists.txt --replace "jsoncpp_static" "jsoncpp"
   '';
 
   # Include absolute paths to layer libraries in their associated
@@ -82,14 +86,6 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    # Redefine an internal macro removed in vulkan-validation-layers
-    # FIXME: remove when fixed upstream
-    ./add-missing-macro-definition.patch
-
-    # Skip QNX-specific extension causing build failures
-    # FIXME: remove when fixed upstream
-    ./skip-qnx-extension.patch
-
     ./gtest.patch
   ];
 

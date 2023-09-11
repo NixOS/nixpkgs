@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://tart.run";
     license = licenses.fairsource09;
     maintainers = with maintainers; [ emilytrau Enzime ];
+    mainProgram = finalAttrs.pname;
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

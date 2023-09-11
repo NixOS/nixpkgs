@@ -15,6 +15,7 @@ let
     APP_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
+    WORK_PATH = ${cfg.stateDir}
 
     ${generators.toINI {} cfg.settings}
 
@@ -665,6 +666,7 @@ in
          USER = cfg.user;
          HOME = cfg.stateDir;
          GITEA_WORK_DIR = cfg.stateDir;
+         GITEA_CUSTOM = cfg.customDir;
        };
 
        serviceConfig = {

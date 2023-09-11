@@ -14,7 +14,7 @@ buildPythonPackage {
   pname = "opentelemetry-exporter-prometheus";
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "source/exporter/opentelemetry-exporter-prometheus";
+  sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-prometheus";
 
   format = "pyproject";
 

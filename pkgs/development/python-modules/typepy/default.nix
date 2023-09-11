@@ -26,14 +26,23 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     mbstrdecoder
-    python-dateutil
-    pytz
-    packaging
   ];
+
+  passthru.optional-dependencies = {
+    datetime = [
+      python-dateutil
+      pytz
+      packaging
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
     tcolorpy
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [
+    "typepy"
   ];
 
   meta = with lib; {

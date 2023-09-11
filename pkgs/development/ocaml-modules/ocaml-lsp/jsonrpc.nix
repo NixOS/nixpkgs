@@ -7,41 +7,55 @@
 , fetchurl
 , lib
 , ocaml
+, version ?
+    if lib.versionAtLeast ocaml.version "4.14" then
+      "1.16.2"
+    else if lib.versionAtLeast ocaml.version "4.13" then
+      "1.10.5"
+    else if lib.versionAtLeast ocaml.version "4.12" then
+      "1.9.0"
+    else
+      "1.4.1"
 }:
 
-let params =
-  if lib.versionAtLeast ocaml.version "4.14"
-  then {
+let params = {
+  "1.16.2" = {
     name = "lsp";
-    version = "1.14.2";
+    minimalOCamlVersion = "4.14";
+    sha256 = "sha256-FIfVpOLy1PAjNBBYVRvbi6hsIzZ7fFtP3aOqfcAqrsQ=";
+  };
+  "1.14.2" = {
+    name = "lsp";
+    minimalOCamlVersion = "4.14";
     sha256 = "sha256-1R+HYaGbPLGDs5DMN3jmnrZFMhMmPUHgF+s+yNzIVJQ=";
-  } else if lib.versionAtLeast ocaml.version "4.13"
-  then {
+  };
+  "1.10.5" = {
     name = "jsonrpc";
-    version = "1.10.5";
+    minimalOCamlVersion = "4.13";
     sha256 = "sha256-TeJS6t1ruWhWPvWNatrnSUWI6T17XKiosHLYizBDDcw=";
-  } else if lib.versionAtLeast ocaml.version "4.12"
-  then {
+  };
+  "1.9.0" = {
     name = "jsonrpc";
-    version = "1.9.0";
+    minimalOCamlVersion = "4.12";
     sha256 = "sha256:1ac44n6g3rf84gvhcca545avgf9vpkwkkkm0s8ipshfhp4g4jikh";
-  } else {
+  };
+  "1.4.1" = {
     name = "jsonrpc";
-    version = "1.4.1";
+    minimalOCamlVersion = "4.06";
     sha256 = "1ssyazc0yrdng98cypwa9m3nzfisdzpp7hqnx684rqj8f0g3gs6f";
-  }
-; in
+  };
+}."${version}"; in
 
 buildDunePackage rec {
   pname = "jsonrpc";
-  inherit (params) version;
+  inherit version;
   src = fetchurl {
     url = "https://github.com/ocaml/ocaml-lsp/releases/download/${version}/${params.name}-${version}.tbz";
     inherit (params) sha256;
   };
 
   duneVersion = "3";
-  minimalOCamlVersion = "4.06";
+  inherit (params) minimalOCamlVersion;
 
   buildInputs =
     if lib.versionAtLeast version "1.7.0" then

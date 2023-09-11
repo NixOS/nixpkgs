@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "dask-image";
-  version = "2023.3.0";
+  version = "2023.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M6qckhUG2DvBw2uY5pAJFyuvatC7owVlb6XWkkrzAys=";
+    hash = "sha256-XpqJhbBSehtZQsan50Tg5X0mTiIscFjwW664HDdNBLY=";
   };
 
   propagatedBuildInputs = [

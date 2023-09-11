@@ -8,20 +8,21 @@
 , CoreFoundation
 , libiconv
 , Security
+, rav1e
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
-  version = "0.9.20";
+  version = "0.9.24";
 
   src = fetchCrate {
     inherit pname;
     # this version may need to be updated along with package version
-    version = "${version}+cargo-0.71";
-    hash = "sha256-T0/gqzeJxDSZDoi8tl4vgYEAFbJDlCoxuqoi6rnf5U4=";
+    version = "${version}+cargo-0.73.0";
+    hash = "sha256-eNaK+SRrHz/DXkCcJP040R6bdhyFmjxkwHbXVFlHub8=";
   };
 
-  cargoHash = "sha256-tArfCEGFRgJPERZW1HzfdDedc+FD8bpc+LX4wNwdv6Q=";
+  cargoHash = "sha256-Us50BbdNSJAx7JTKkvA4tjbGNueCJsAwGEelc1sP5pc=";
 
   nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
   buildInputs = [ openssl curl ] ++ lib.optionals stdenv.isDarwin [
@@ -39,6 +40,10 @@ rustPlatform.buildRustPackage rec {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests = {
+    inherit rav1e;
+  };
 
   meta = with lib; {
     description = "A cargo subcommand to build and install C-ABI compatible dynamic and static libraries";

@@ -6,6 +6,7 @@
 , nose
 , ptyprocess
 }:
+
 buildPythonPackage rec {
   pname = "vncdo";
   version = "0.12.0";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     description = "A command line VNC client and python library";
     license = licenses.mit;
     maintainers = with maintainers; [ elitak ];
+    mainProgram = pname;
     platforms = with platforms; linux ++ darwin;
   };
-
 }

@@ -48,6 +48,7 @@ in
       homepage = "https://www.scuttlebutt.nz/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ asymmetric ninjatrappeur cyplo ];
+      mainProgram = "ssb-patchwork";
       platforms = [ "x86_64-linux" ];
     };
   }

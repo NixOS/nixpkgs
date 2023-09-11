@@ -18,6 +18,7 @@ let
     {
       pythonInterpreter = "${python3.interpreter}";
       configDirName = lib.toLower binaryName;
+      meta.mainProgram = "disable-breaking-updates.py";
     } ''
     mkdir -p $out/bin
     cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py

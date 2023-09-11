@@ -3,33 +3,46 @@
 , fetchFromGitHub
 , setuptools
 , setuptools-scm
+, pythonRelaxDepsHook
 , pyasn1
 , pyasn1-modules
 , cryptography
+, tinydb
+, joblib
+, tinyrecord
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.15.3";
+  version = "0.17.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
     rev = "v${version}";
-    hash = "sha256-PWjevYUts0dQMBmABpU8neuTqDlglTCCQmuvnVndfto=";
+    hash = "sha256-US9m7weW11+VxX6ZsKP5tYKp+bQoiI+TZ3YWE97D/f0=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "tinydb"
+    "joblib"
   ];
 
   propagatedBuildInputs = [
     pyasn1
     pyasn1-modules
     cryptography
+    tinydb
+    joblib
+    tinyrecord
   ];
 
   nativeCheckInputs = [

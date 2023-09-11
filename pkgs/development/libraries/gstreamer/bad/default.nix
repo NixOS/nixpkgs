@@ -109,13 +109,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.22.4";
+  version = "1.22.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-6q9TIkVl6qvVBco5xtV2lxm0V5XPUyzhzrYOGy6+maw=";
+    hash = "sha256-5k51za/X/y/H/DToVbBrHj7SJ8wG+jeNF7vNdngMM4w=";
   };
 
   patches = [
@@ -142,7 +142,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     gst-plugins-base
     orc
     json-glib

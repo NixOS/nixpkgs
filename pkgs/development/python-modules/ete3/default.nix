@@ -7,7 +7,6 @@
 , withTreeVisualization ? false
 , lxml
 , withXmlSupport ? false
-, pyqt4
 , pyqt5
 }:
 
@@ -25,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ete3" ];
 
   propagatedBuildInputs = [ six numpy ]
-    ++ lib.optional withTreeVisualization (if isPy3k then pyqt5 else pyqt4)
+    ++ lib.optional withTreeVisualization pyqt5
     ++ lib.optional withXmlSupport lxml;
 
   meta = with lib; {

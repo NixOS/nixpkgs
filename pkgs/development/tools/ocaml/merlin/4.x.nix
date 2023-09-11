@@ -15,7 +15,7 @@
 }:
 
 let
-  merlinVersion = if lib.versionAtLeast ocaml.version "4.14" then "4.9" else "4.7";
+  merlinVersion = if lib.versionAtLeast ocaml.version "4.14" then "4.10" else "4.7";
 
   hashes = {
     "4.7-412" = "sha256-0U3Ia7EblKULNy8AuXFVKACZvGN0arYJv7BWiBRgT0Y=";
@@ -24,6 +24,8 @@ let
     "4.8-500" = "sha256-n5NHKuo0/lZmfe7WskqnW3xm1S0PmXKSS93BDKrpjCI=";
     "4.9-414" = "sha256-4j/EeBNZEmn/nSfIIJiOUgpmLIndCvfqZSshUXSZy/0=";
     "4.9-500" = "sha256-uQfGazoxTxclHSiTfjji+tKJv8MKqRdHMPD/xfMZlSY=";
+    "4.10-414" = "sha256-/a1OqASISpb06eh2gsam1rE3wovM4CT8ybPV86XwR2c=";
+    "4.10-500" = "sha256-m9+Qz8DT94yNSwpamTVLQKISHtRVBWnZD3t/yyujSZ0=";
   };
 
   ocamlVersionShorthand = lib.substring 0 3

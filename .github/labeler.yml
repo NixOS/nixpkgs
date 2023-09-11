@@ -170,6 +170,7 @@
 
 "6.topic: TeX":
   - doc/languages-frameworks/texlive.section.md
+  - pkgs/test/texlive/**
   - pkgs/tools/typesetting/tex/**/*
 
 "6.topic: vim":
@@ -187,6 +188,10 @@
   - nixos/modules/services/x11/desktop-managers/xfce.nix
   - nixos/tests/xfce.nix
   - pkgs/desktops/xfce/**/*
+
+"6.topic: zig":
+  - pkgs/development/compilers/zig/**/*
+  - doc/hooks/zig.section.md
 
 "8.has: changelog":
   - nixos/doc/manual/release-notes/**/*

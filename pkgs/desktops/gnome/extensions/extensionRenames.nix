@@ -64,6 +64,9 @@
   "true-color-invert@jackkenney" = "true-color-invert";
   "true-color-window-invert@lynet101" = "true-color-window-invert";
 
+  "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
+  "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
+
   # ####### GNOME 41 #######
 
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
@@ -89,9 +92,6 @@
 
   "Hide_Activities@shay.shayel.org" = "hide-activities-button";
   "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-2";
-
-  "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
-  "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
 
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug

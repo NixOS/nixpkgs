@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     description = "See what Rust is doing behind the curtains";
     homepage = "https://github.com/mre/cargo-inspect";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ minijackson ];
+    maintainers = with maintainers; [ minijackson matthiasbeyer ];
   };
 }

@@ -7,11 +7,12 @@
 , pythonOlder
 , pytest-asyncio
 , pytestCheckHook
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "odp-amsterdam";
-  version = "5.1.1";
+  version = "5.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,13 +21,12 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-odp-amsterdam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DaL2CTrhWqBwl3kktF1wndxzrreA24C3zXmp4ghf/4s=";
+    hash = "sha256-HesAg6hJ8Al/ZZRBTXZM0EVv1kjYmmA66W+crwtWhf4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace '"0.0.0"' '"${version}"'
-
     sed -i '/addopts/d' pyproject.toml
   '';
 
@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    pytz
   ];
 
   nativeCheckInputs = [

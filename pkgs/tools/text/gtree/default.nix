@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gtree";
-  version = "1.9.3";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
     owner = "ddddddO";
     repo = "gtree";
     rev = "v${version}";
-    hash = "sha256-cQO34m78lvgfbDf+Ok0Yo3rnou8ndGfegeIy1Z8xuPU=";
+    hash = "sha256-CBD01MIKrd/KSQvJg9xyS7V/ed/nfQ2CQe8C3Z9+lwM=";
   };
 
   vendorHash = "sha256-QxcDa499XV43p8fstENOtfe3iZ176R5/Ub5iovXlYIM=";

@@ -26,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmplay2";
-  version = "23.06.17";
+  version = "23.08.22";
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-f4lIXB0eTyteCJdWFP0XnsnxGWc32CV+HlqpaCjmgOE=";
+    hash = "sha256-Ug7WAqZ+BxspQUXweL/OnVBGCsU60DOWNexbi0GpDo0=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres kashw2 ];
     platforms = lib.platforms.linux;
   };
 })

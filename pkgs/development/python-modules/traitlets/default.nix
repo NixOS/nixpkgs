@@ -1,13 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, glibcLocales
-, pytest
-, mock
-, ipython_genutils
-, decorator
+, pytestCheckHook
 , pythonOlder
-, six
 , hatchling
 }:
 
@@ -23,16 +18,12 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ hatchling ];
-  nativeCheckInputs = [ glibcLocales pytest mock ];
-  propagatedBuildInputs = [ ipython_genutils decorator six ];
 
-  checkPhase = ''
-    LC_ALL="en_US.UTF-8" py.test
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Traitlets Python config system";
-    homepage = "https://ipython.org/";
+    homepage = "https://github.com/ipython/traitlets";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

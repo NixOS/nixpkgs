@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.3.6";
+  version = "0.3.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dfMlM7IRP1PG7Ynr+MR4OPeKnHBbhhWKSug7UQ4/4rI=";
+    hash = "sha256-bjagT0I0/N76CGf1b8EBNyOTzPBWybr2I2yO5NWO3po=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
-    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

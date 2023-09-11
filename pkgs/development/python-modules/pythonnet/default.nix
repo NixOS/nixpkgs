@@ -12,11 +12,11 @@
 
 let
   pname = "pythonnet";
-  version = "3.0.1";
+  version = "3.0.2";
   src = fetchPypi {
     pname = "pythonnet";
     inherit version;
-    sha256 = "sha256-7U9/f5VRVAQRLds9oWOOGhATy1bmTEjE+mAwPwKwo90=";
+    sha256 = "sha256-LN0cztxkp8m9cRvj0P0MSniTJHQTncVKppe+3edBx0Y=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual

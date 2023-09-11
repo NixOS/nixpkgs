@@ -15,7 +15,7 @@ buildGoModule rec {
   };
 
   # The new and improved "License Classifier v2" is hidden in a subdirectory.
-  sourceRoot = "source/v2";
+  sourceRoot = "${src.name}/v2";
 
   vendorHash = "sha256-u0VR8DCmbZS0MF26Y4HfqtLaGyX2n2INdAidVNbnXPE=";
 

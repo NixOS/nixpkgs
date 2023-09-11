@@ -1,29 +1,25 @@
 { lib
 , clang
 , fetchFromGitHub
-, symlinkJoin
 , buildGoModule
-, makeWrapper
-, v2ray-geoip
-, v2ray-domain-list-community
 }:
 buildGoModule rec {
   pname = "dae";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
-    repo = pname;
+    repo = "dae";
     rev = "v${version}";
-    sha256 = "sha256-PAdhIhX2hXCgg3NAZR0k8d1I/qQ8Cs8bNT6s6tZ5t4E=";
+    hash = "sha256-WiJqhXYehuUCLEuVbsQkmTntuH1srtePtZgYBSTbxiw=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-DCEvE2ES7GwiXKyD7tRlykqiIaKdmo7TczutPeGurKw=";
+  vendorHash = "sha256-fb4PEMhV8+5zaRJyl+nYi2BHcOUDUVAwxce2xaRt5JA=";
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ clang makeWrapper ];
+  nativeBuildInputs = [ clang ];
 
   ldflags = [
     "-s"
@@ -33,7 +29,7 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector" \
+    make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector -Wno-unused-command-line-argument" \
     NOSTRIP=y \
     ebpf
   '';
@@ -41,15 +37,8 @@ buildGoModule rec {
   # network required
   doCheck = false;
 
-  assetsDrv = symlinkJoin {
-    name = "dae-assets";
-    paths = [ v2ray-geoip v2ray-domain-list-community ];
-  };
-
   postInstall = ''
     install -Dm444 install/dae.service $out/lib/systemd/system/dae.service
-    wrapProgram $out/bin/dae \
-      --suffix DAE_LOCATION_ASSET : $assetsDrv/share/v2ray
     substituteInPlace $out/lib/systemd/system/dae.service \
       --replace /usr/bin/dae $out/bin/dae
   '';
@@ -58,7 +47,8 @@ buildGoModule rec {
     description = "A Linux high-performance transparent proxy solution based on eBPF";
     homepage = "https://github.com/daeuniverse/dae";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ oluceps ];
+    maintainers = with maintainers; [ oluceps pokon548 ];
     platforms = platforms.linux;
+    mainProgram = "dae";
   };
 }

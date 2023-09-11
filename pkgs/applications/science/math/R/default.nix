@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
-, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
+, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texlive, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata
 , withRecommendedPackages ? true
@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-jdC/JPECPG9hjDsxc4PSkbSklPQNc7mDrCL/6pnkupk=";
   };
+
+  outputs = [ "out" "tex" ];
 
   dontUseImakeConfigure = true;
 
@@ -89,6 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
+  # move tex files to $tex for use with texlive.combine
+  # add link in $out since ${R_SHARE_DIR}/texmf is hardcoded in several places
+  postInstall = ''
+    mv -T "$out/lib/R/share/texmf" "$tex"
+    ln -s "$tex" "$out/lib/R/share/texmf"
+  '';
+
   # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
   # but Nix cannot detect it as a run-time dependency because the installed file
   # is compiled and compressed, which hides the store path.
@@ -102,6 +111,12 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  # make tex output available to texlive.combine
+  passthru.pkgs = [ finalAttrs.finalPackage.tex ];
+  passthru.tlType = "run";
+  # dependencies (based on \RequirePackage in jss.cls, Rd.sty, Sweave.sty)
+  passthru.tlDeps = with texlive; [ amsfonts amsmath fancyvrb graphics hyperref iftex jknapltx latex lm tools upquote url ];
 
   meta = with lib; {
     homepage = "http://www.r-project.org/";

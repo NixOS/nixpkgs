@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sharkdp";
-    repo = pname;
+    repo = "bat";
     rev = "v${version}";
     hash = "sha256-cGHxB3Wp8yEcJBMtSOec6l7iBsMLhUtJ7nh5fijnWZs=";
   };
@@ -58,6 +58,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
+    mainProgram = "bat";
     maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
   };
 }

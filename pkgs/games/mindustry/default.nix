@@ -243,7 +243,7 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chkno fgaz thekostins ];
-    platforms = platforms.x86_64;
+    platforms = if enableClient then platforms.x86_64 else platforms.linux;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
     broken = stdenv.isDarwin;

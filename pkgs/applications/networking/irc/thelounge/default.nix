@@ -88,5 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ winter raitobezarius ];
     license = licenses.mit;
     inherit (nodejs.meta) platforms;
+    mainProgram = "thelounge";
   };
 })

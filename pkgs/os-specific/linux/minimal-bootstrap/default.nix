@@ -48,6 +48,12 @@ lib.makeScope
       glibc = glibc22;
     };
 
+    findutils = callPackage ./findutils {
+      bash = bash_2_05;
+      gcc = gcc2;
+      glibc = glibc22;
+    };
+
     gawk = callPackage ./gawk {
       bash = bash_2_05;
       tinycc = tinycc-mes;
@@ -65,6 +71,11 @@ lib.makeScope
       tinycc = tinycc-mes;
       binutils = binutils-mes;
       mesBootstrap = true;
+    };
+
+    gcc46 = callPackage ./gcc/4.6.nix {
+      gcc = gcc2;
+      glibc = glibc22;
     };
 
     inherit (callPackage ./glibc {
@@ -141,9 +152,11 @@ lib.makeScope
       echo ${binutils-mes.tests.get-version}
       echo ${bzip2.tests.get-version}
       echo ${diffutils.tests.get-version}
+      echo ${findutils.tests.get-version}
       echo ${gawk.tests.get-version}
       echo ${gcc2.tests.get-version}
       echo ${gcc2-mes.tests.get-version}
+      echo ${gcc46.tests.get-version}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}

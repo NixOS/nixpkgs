@@ -2,7 +2,7 @@
 , monorepoSrc, runCommand
 , cmake, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
-, libcxxabi, libcxxrt
+, libcxxabi, libcxxrt, libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.
@@ -47,8 +47,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
   ];
 
   postPatch = ''
@@ -62,7 +60,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
+  buildInputs =
+    lib.optionals (!headersOnly) [ cxxabi ]
+    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [ libunwind ];
 
   cmakeFlags = let
     # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
@@ -75,8 +75,15 @@ stdenv.mkDerivation rec {
     "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
   ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optionals stdenv.hostPlatform.isWasm [
+    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+      "-DLIBCXX_USE_COMPILER_RT=ON"
+      # There's precedent for this in llvm-project/libcxx/cmake/caches.
+      # In a monorepo build you might do the following in the libcxxabi build:
+      #   -DLLVM_ENABLE_PROJECTS=libcxxabi;libunwinder
+      #   -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=On
+      # libcxx appears to require unwind and doesn't pull it in via other means.
+      "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
+    ] ++ lib.optionals stdenv.hostPlatform.isWasm [
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"

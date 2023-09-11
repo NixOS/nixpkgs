@@ -21,9 +21,9 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.18.6";
+  version = "4.18.7";
 
-  sha256 = "sha256-7SWpIBGm/YhnQSWYi5BgYjx8WCiEqxZRTagz/cY0p3E=";
+  sha256 = "sha256-pxIblhC40X0wdE6+uvmV5ypp4sOZtzn/evcS33PlNpU=";
 
   nativeBuildInputs = [
     docbook_xsl
@@ -58,6 +58,7 @@ let unwrapped = mkXfceDerivation {
 
   meta = with lib; {
     description = "Xfce file manager";
+    mainProgram = "thunar";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 };

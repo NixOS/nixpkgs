@@ -9,23 +9,15 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo  = "bpftrace";
     rev   = "v${version}";
-    hash  = "sha256-+SBLcMyOf1gZN8dG5xkNLsqIcK1eVlswjY1GRXepFVg=";
+    hash  = "sha256-hwxArrTdjJoab7Twf57PRmRhghV/9EcjRXI0lKRQC0k=";
   };
 
-  patches = [
-    # fails to build - https://github.com/iovisor/bpftrace/issues/2598
-    (fetchpatch {
-      name = "link-binaries-against-zlib";
-      url = "https://github.com/iovisor/bpftrace/commit/a60b171eb288250c3f1d6f065b05d8a87aff3cdd.patch";
-      hash = "sha256-b/0pKDjolo2RQ/UGjEfmWdG0tnIiFX8PJHhRCXvzyxA=";
-    })
-  ];
 
   buildInputs = with llvmPackages; [
     llvm libclang
@@ -67,7 +59,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
     homepage    = "https://github.com/iovisor/bpftrace";
+    changelog   = "https://github.com/iovisor/bpftrace/releases/tag/v${version}";
+    mainProgram = "bpftrace";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ rvl thoughtpolice martinetd ];
+    maintainers = with maintainers; [ rvl thoughtpolice martinetd mfrw ];
   };
 }

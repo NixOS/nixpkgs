@@ -2,8 +2,10 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -20,8 +22,18 @@ buildPythonPackage rec {
     hash = "sha256-XRtbb7kceiqi8pioTWStRo0drCtQfy1t62jCMihlIec=";
   };
 
+  patches = [
+    # https://github.com/home-assistant-libs/pyprusalink/pull/55
+    (fetchpatch {
+      name = "unpin-setuptools-dependency.patch";
+      url = "https://github.com/home-assistant-libs/pyprusalink/commit/8efc3229c491a1763456f0f4017251d5789c6d0a.patch";
+      hash = "sha256-kTu1+IwDrcdqelyK/vfhxw8MQBis5I1jag7YTytKQhs=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

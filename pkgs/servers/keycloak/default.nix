@@ -5,12 +5,18 @@
 , jre
 , nixosTests
 , callPackage
-
 , confFile ? null
 , plugins ? [ ]
+, extraFeatures ? [ ]
+, disabledFeatures ? [ ]
 }:
 
-stdenv.mkDerivation rec {
+let
+  featuresSubcommand = ''
+    ${lib.optionalString (extraFeatures != [ ]) "--features=${lib.concatStringsSep "," extraFeatures}"} \
+    ${lib.optionalString (disabledFeatures != [ ]) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
+  '';
+in stdenv.mkDerivation rec {
   pname = "keycloak";
   version = "22.0.1";
 
@@ -44,7 +50,7 @@ stdenv.mkDerivation rec {
     patchShebangs bin/kc.sh
     export KC_HOME_DIR=$(pwd)
     export KC_CONF_DIR=$(pwd)/conf
-    bin/kc.sh build
+    bin/kc.sh build ${featuresSubcommand}
 
     runHook postBuild
   '';

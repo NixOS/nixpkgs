@@ -1,6 +1,7 @@
 { lib
 , boto3
 , buildPythonPackage
+, cython_3
 , fetchPypi
 , pythonOlder
 , typing-extensions
@@ -8,19 +9,23 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-s3";
-  version = "1.28.12";
+  version = "1.28.36";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fVSwPgvXLMH+aQ79zp7qyeKFXfuvoVOQoPUYyunigNI=";
+    hash = "sha256-RNo3X9TXWxxczCbc075IKUxwYURe/W2Q6/ykP/67s+Q=";
   };
+
+  nativeBuildInputs = [
+    cython_3
+  ];
 
   propagatedBuildInputs = [
     boto3
-  ] ++ lib.optionals (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
   ];
 

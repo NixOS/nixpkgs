@@ -5,9 +5,10 @@
 , pythonOlder
 , dnspython
 , greenlet
+, isPyPy
 , monotonic
 , six
-, nose
+, nose3
 , iana-etc
 , pytestCheckHook
 , libredirect
@@ -35,10 +36,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    nose
+    nose3
   ];
 
-  doCheck = !stdenv.isDarwin;
+  # libredirect is not available on darwin
+  # tests hang on pypy indefinitely
+  doCheck = !stdenv.isDarwin && !isPyPy;
 
   preCheck = lib.optionalString doCheck ''
     echo "nameserver 127.0.0.1" > resolv.conf

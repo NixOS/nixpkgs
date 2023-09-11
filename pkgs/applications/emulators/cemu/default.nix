@@ -128,5 +128,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ zhaofengli baduhai ];
+    mainProgram = "cemu";
   };
 }

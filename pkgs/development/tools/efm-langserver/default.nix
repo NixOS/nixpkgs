@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "efm-langserver";
-  version = "0.0.46";
+  version = "0.0.48";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "efm-langserver";
     rev = "v${version}";
-    sha256 = "sha256-mGcpV4PDD6HJZH+3Lybsds4xPJS5rkOouKqKX7j+7WA=";
+    sha256 = "sha256-do/p4sQ/OoswiC/19gKk5xeWbZ8iEOX5oPg5cY7ofYA=";
   };
 
-  vendorHash = "sha256-KABezphT5/o3XWSFNe2OvfawFR8uwsGMnjsI9xh378Q=";
+  vendorHash = "sha256-+QYJijb5l++fX7W4xVtAZyQwjEsGEuStFAUHPB4cVHE=";
   subPackages = [ "." ];
 
   meta = with lib; {

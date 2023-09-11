@@ -70,26 +70,7 @@ Linux distribution. The [GitHub Insights](https://github.com/NixOS/nixpkgs/pulse
 page gives a sense of the project activity.
 
 Community contributions are always welcome through GitHub Issues and
-Pull Requests. When pull requests are made, our tooling automation bot,
-[OfBorg](https://github.com/NixOS/ofborg) will perform various checks
-to help ensure expression quality.
-
-The *Nixpkgs maintainers* are people who have assigned themselves to
-maintain specific individual packages. We encourage people who care
-about a package to assign themselves as a maintainer. When a pull
-request is made against a package, OfBorg will notify the appropriate
-maintainer(s). The *Nixpkgs committers* are people who have been given
-permission to merge.
-
-Most contributions are based on and merged into these branches:
-
-* `master` is the main branch where all small contributions go
-* `staging` is branched from master, changes that have a big impact on
-  Hydra builds go to this branch
-* `staging-next` is branched from staging and only fixes to stabilize
-  and security fixes with a big impact on Hydra builds should be
-  contributed to this branch. This branch is merged into master when
-  deemed of sufficiently high quality
+Pull Requests.
 
 For more information about contributing to the project, please visit
 the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).

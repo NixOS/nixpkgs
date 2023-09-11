@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pgcat";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "postgresml";
     repo = "pgcat";
     rev = "v${version}";
-    hash = "sha256-ESHBOh9JSzu6Zxh0z/+nebumi/zyFVdTK0DIwR/46Xo=";
+    hash = "sha256-BERxdGgPk8POnhLsyy4lKV4LCoHsJTmv2OhAOz6CKKc=";
   };
 
-  cargoHash = "sha256-2wZADXEi8bfNgSQuL7yAmDYd/a0LOssdPFa/kvSSLFU=";
+  cargoHash = "sha256-GwcqR8pEvz42NEmcuXpcoPdChzRBYsDEnllX62T8ulQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [mit];
     platforms = platforms.unix;
     maintainers = with maintainers; [cathalmullan];
+    mainProgram = "pgcat";
   };
 }

@@ -1,24 +1,36 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, setuptools
+, fetchFromGitHub
+
+# build-system
+, hatchling
+
+# non-propagates
 , django
+
+# tests
 , pytest-django
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "23.1";
+  version = "23.4";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cJW3xmqJ87rreOoCh5nr15XSlzn8hgJGBCLnwqGUrTA=";
+  src = fetchFromGitHub {
+    owner = "zostera";
+    repo = "django-bootstrap3";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1/JQ17GjBHH0JbY4EnHOS2B3KhEJdG2yL6O2nc1HNNc=";
   };
 
+  postPatch = ''
+    sed -i '/beautifulsoup4/d' pyproject.toml
+  '';
+
   nativeBuildInputs = [
-    setuptools
+    hatchling
   ];
 
   buildInputs = [
@@ -39,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bootstrap 3 integration for Django";
     homepage = "https://github.com/zostera/django-bootstrap3";
-    changelog = "https://github.com/zostera/django-bootstrap3/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/zostera/django-bootstrap3/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];
   };

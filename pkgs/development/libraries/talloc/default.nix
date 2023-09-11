@@ -8,22 +8,22 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , fixDarwinDylibNames
-, wafHook
+, waf
 }:
 
 stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-bfNoYsQkZu+I82BERROHDvRpNPkBbIQ4PMQAin0MRro=";
+    sha256 = "sha256-QQpUfwhVcAe+DogZTyGIaDWO3Aq5jJi6jBZ5MNs9M/k=";
   };
 
   nativeBuildInputs = [
     pkg-config
     python3
-    wafHook
+    waf.hook
     docbook-xsl-nons
     docbook_xml_dtd_42
   ] ++ lib.optionals stdenv.isDarwin [
@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tdb.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.all;
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }

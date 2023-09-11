@@ -166,7 +166,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $GOROOT_FINAL
     cp -a bin pkg src lib misc api doc $GOROOT_FINAL
-    ln -s $GOROOT_FINAL/bin $out/bin
+    mkdir -p $out/bin
+    ln -s $GOROOT_FINAL/bin/* $out/bin
     runHook postInstall
   '';
 

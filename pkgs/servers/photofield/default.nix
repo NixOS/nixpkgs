@@ -22,7 +22,7 @@ let
     inherit src version;
     pname = "photofield-ui";
 
-    sourceRoot = "source/ui";
+    sourceRoot = "${src.name}/ui";
 
     npmDepsHash = "sha256-YVyaZsFh5bolDzMd5rXWrbbXQZBeEIV6Fh/kwN+rvPk=";
 

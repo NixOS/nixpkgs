@@ -11,7 +11,7 @@ buildPythonPackage {
 
   inherit (dbt-core) version src;
 
-  sourceRoot = "source/plugins/postgres";
+  sourceRoot = "${dbt-core.src.name}/plugins/postgres";
 
   env.DBT_PSYCOPG2_NAME = "psycopg2";
 

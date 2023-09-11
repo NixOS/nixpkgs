@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lua-language-server";
-  version = "3.6.25";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-fERsqOjuZSIPpTEAQbKZ/ZYzQENxJi8Gibb6Oi073pA=";
+    sha256 = "sha256-kUtiMNwJJN7ZAktSC7tZriAcTDFhvcfSwBE6KFzceMg=";
     fetchSubmodules = true;
   };
 
@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/LuaLS/lua-language-server/blob/${version}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda sei40kr ];
+    mainProgram = "lua-language-server";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

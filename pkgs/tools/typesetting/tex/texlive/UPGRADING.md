@@ -98,3 +98,34 @@ a message like
 
 Please make sure to follow the [CONTRIBUTING](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md)
 guidelines.
+
+## Reviewing the bin containers
+
+Most `tlType == "bin"` containers consist of links to scripts distributed in
+`$TEXMFDIST/scripts` with a number of patches applied within `default.nix`.
+
+At each upgrade, please run the tests `tests.texlive.shebangs` to verify that
+all shebangs have been patched and in case add the relevant interpreters, and
+use `tests.texlive.binaries` to check if basic execution of all binaries works.
+
+Please review manually all binaries in the `broken` and `ignored` lists of
+`tests.texlive.binaries` at least once for major TeX Live release.
+
+Since the tests cannot catch all runtime dependencies, you should grep the
+`$TEXMFDIST/scripts` folder for common cases, for instance (where `$scripts`
+points to the relevant folder of `scheme-full`):
+- Calls to `exec $interpreter`
+  ```
+  grep -IRS 'exec ' "$TEXMFDIST/scripts" | cut -d: -f2 | sort -u | less -S
+  ```
+- Calls to Ghostscripts (see `needsGhostscript` in `combine.nix`)
+  ```
+  grep -IR '\([^a-zA-Z]\|^\)gs\( \|$\|"\)' "$TEXMFDIST"/scripts
+  grep -IR 'rungs' "$TEXMFDIST"
+  ```
+
+As a general rule, if a runtime dependency as above is essential for the core
+functionality of the package, then it should be made available in the bin
+containers (by patching `PATH`), or in `texlive.combine` (as we do for
+Ghostscript). Non-essential runtime dependencies should be ignored if they
+increase the closure substantially.

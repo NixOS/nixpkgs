@@ -147,14 +147,6 @@ with lib;
       defaultText = lib.literalExpression ''if config.proxmox.qemuConf.bios == "seabios" then "legacy" else "efi"'';
       example = "hybrid";
     };
-    additionalSpace = mkOption {
-      type = types.str;
-      default = "512M";
-      description = lib.mdDoc ''
-        Additional disk space to be added to the image.
-        Defaults to 512M (Megabytes), Suffix can also be specified with `G` (gigabyte) or `K` (kilobyte).
-        '';
-    };
     filenameSuffix = mkOption {
       type = types.str;
       default = config.proxmox.qemuConf.name;
@@ -205,7 +197,7 @@ with lib;
     ];
     system.build.VMA = import ../../lib/make-disk-image.nix {
       name = "proxmox-${cfg.filenameSuffix}";
-      inherit (cfg) partitionTableType additionalSpace;
+      inherit (cfg) partitionTableType;
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
         vma = (pkgs.qemu_kvm.override {

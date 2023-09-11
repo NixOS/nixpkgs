@@ -55,6 +55,13 @@ mkYarnPackage {
     hash = pinData.uiYarnDepsHash;
   };
 
+  patchPhase = ''
+    substituteInPlace ./package.json \
+      --replace '$(git rev-parse --short HEAD)' "${src.rev}" \
+      --replace 'yarn clean' 'yarn --offline clean' \
+      --replace 'yarn run rimraf dist' 'yarn --offline run rimraf dist'
+  '';
+
   yarnPreBuild = ''
     export npm_config_nodedir=${nodejs}
   '';
@@ -79,6 +86,7 @@ mkYarnPackage {
 
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-ui = nixosTests.lemmy;
+  passthru.commit_sha = src.rev;
 
   meta = with lib; {
     description = "Building a federated alternative to reddit in rust";

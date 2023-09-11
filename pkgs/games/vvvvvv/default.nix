@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-sLNO4vkmlirsqJmCV9YWpyNnIiigU1KMls7rOgWgSmQ=";
   };
-  sourceRoot = "source/desktop_version";
+  sourceRoot = "${src.name}/desktop_version";
   dataZip = fetchurl {
     url = "https://thelettervsixtim.es/makeandplay/data.zip";
     name = "data.zip";

@@ -7,7 +7,7 @@ Check for any minor version changes.
 
 */
 
-{ makeScopeWithSplicing, generateSplicesForMkScope
+{ makeScopeWithSplicing', generateSplicesForMkScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
@@ -46,6 +46,7 @@ let
       ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
+      ./qtbase.patch.d/9999-backport-dbus-crash.patch
     ];
     qtdeclarative = [
       ./qtdeclarative.patch
@@ -170,6 +171,7 @@ let
         extraPrefix = "src/3rdparty/";
         hash = "sha256-s4GsGMJTBNWw2gTJuIEP3tqT82AmTsR2mbj59m2p6rM=";
       })
+      ./qtwebengine-link-pulseaudio.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
@@ -264,6 +266,7 @@ let
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
+      qtremoteobjects = callPackage ../modules/qtremoteobjects.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialbus = callPackage ../modules/qtserialbus.nix {};
@@ -329,9 +332,19 @@ let
         propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeBinaryWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
-    } // lib.optionalAttrs config.allowAliases {
-      # remove before 23.11
-      overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
     };
 
-in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages
+  baseScope = makeScopeWithSplicing' {
+    otherSplices = generateSplicesForMkScope "qt5";
+    f = addPackages;
+  };
+
+  bootstrapScope = baseScope.overrideScope(final: prev: {
+    qtbase = prev.qtbase.override { qttranslations = null; };
+    qtdeclarative = null;
+  });
+
+  finalScope = baseScope.overrideScope(final: prev: {
+    qttranslations = bootstrapScope.qttranslations;
+  });
+in finalScope

@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     description = "A time traveling resource monitor for modern Linux systems";
     license = licenses.asl20;
     homepage = "https://github.com/facebookincubator/below";
+    mainProgram = "below";
   };
 }

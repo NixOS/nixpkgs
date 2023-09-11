@@ -1,4 +1,6 @@
-import ../make-test-python.nix ({ pkgs, ... }: {
+{ lib, pkgs, ... }:
+
+{
   name = "dnscrypt-wrapper";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ rnhmjoj ];
@@ -50,23 +52,23 @@ import ../make-test-python.nix ({ pkgs, ... }: {
         server.wait_for_unit("dnscrypt-wrapper")
         server.wait_for_file("/var/lib/dnscrypt-wrapper/2.dnscrypt-cert.server.key")
         server.wait_for_file("/var/lib/dnscrypt-wrapper/2.dnscrypt-cert.server.crt")
+        almost_expiration = server.succeed("date --date '4days 23 hours 56min'").strip()
 
     with subtest("The client can connect to the server"):
         server.wait_for_unit("tinydns")
         client.wait_for_unit("dnscrypt-proxy2")
-        assert "1.2.3.4" in client.succeed(
+        assert "1.2.3.4" in client.wait_until_succeeds(
             "host it.works"
         ), "The IP address of 'it.works' does not match 1.2.3.4"
 
     with subtest("The server rotates the ephemeral keys"):
         # advance time by a little less than 5 days
-        server.succeed("date -s \"$(date --date '4 days 6 hours')\"")
-        client.succeed("date -s \"$(date --date '4 days 6 hours')\"")
+        server.succeed(f"date -s '{almost_expiration}'")
+        client.succeed(f"date -s '{almost_expiration}'")
         server.wait_for_file("/var/lib/dnscrypt-wrapper/oldkeys")
 
     with subtest("The client can still connect to the server"):
         server.wait_for_unit("dnscrypt-wrapper")
         client.succeed("host it.works")
   '';
-})
-
+}

@@ -13,7 +13,7 @@ let
   fs-repo-common = pname: version: buildGoModule {
     inherit pname version;
     inherit (kubo-migrator-unwrapped) src;
-    sourceRoot = "source/${pname}";
+    sourceRoot = "${kubo-migrator-unwrapped.src.name}/${pname}";
     vendorSha256 = null;
     # Fix build on Go 1.17 and later: panic: qtls.ClientHelloInfo doesn't match
     # See https://github.com/ipfs/fs-repo-migrations/pull/163

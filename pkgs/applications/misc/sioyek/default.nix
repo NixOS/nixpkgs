@@ -2,6 +2,7 @@
 , stdenv
 , installShellFiles
 , fetchFromGitHub
+, fetchurl
 , freetype
 , gumbo
 , harfbuzz
@@ -25,6 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-GFZaTXJhoBB+rSe7Qk6H6FZJVXr3nO9XgM+LAbS4te4=";
   };
+
+  patches = [
+    # Fixed compatibility with mupdf-0.23.0
+    # https://github.com/ahrm/sioyek/issues/804
+    (fetchurl {
+      url = "https://git.alpinelinux.org/aports/plain/community/sioyek/mupdf-0.23.0.patch?id=86e913eccf19b97a16f25d9b6cdf0f50232f1226";
+      hash = "sha256-sEqhpk7/h6g/fIhbu5LgpKKnbnIFLInrTP1k+/GhrXE=";
+    })
+  ];
 
   buildInputs = [
     gumbo

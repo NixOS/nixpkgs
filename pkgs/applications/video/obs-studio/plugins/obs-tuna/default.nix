@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-tuna";
-  version = "1.9.6";
+  version = "1.9.7";
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [ obs-studio qtbase zlib curl taglib dbus ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "univrsal";
     repo = "tuna";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+AgRaivvYhogX4CLGK2ylvE8tQoauC/UMvXK6W0Tvog=";
+    hash = "sha256-NpfQ3zi+1kQNt2Lj4+1kX2bW9A/E2/MhUV1BA1UX4y0=";
     fetchSubmodules = true;
   };
 

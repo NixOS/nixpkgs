@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     python3
+    gobject-introspection
   ];
 
   buildInputs = [
     glib
-    gobject-introspection
     gtk-doc
     libtool
     libxml2

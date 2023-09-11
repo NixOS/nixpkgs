@@ -14,7 +14,7 @@
 , unstableGitUpdater
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
   version = "2023-05-30";
 
@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation {
         ]
       }" \
       --subst-var-by HOME_MANAGER_LIB '${placeholder "out"}/share/bash/home-manager.sh' \
-      --subst-var-by HOME_MANAGER_PATH "" \
+      --subst-var-by HOME_MANAGER_PATH "${finalAttrs.src}" \
       --subst-var-by OUT '${placeholder "out"}'
 
     installShellCompletion --bash --name home-manager.bash home-manager/completion.bash
@@ -85,8 +85,8 @@ stdenvNoCC.mkDerivation {
       found in Nixpkgs. It allows declarative configuration of user specific
       (non global) packages and dotfiles.
     '';
-    platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})

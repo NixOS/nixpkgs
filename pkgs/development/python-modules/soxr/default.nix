@@ -2,9 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# build-sytem
+# build-system
 , cython_3
 , numpy
+, oldest-supported-numpy
 , setuptools
 , setuptools-scm
 , gnutar
@@ -29,12 +30,13 @@ buildPythonPackage rec {
     hash = "sha256-q/K7XlqvDHAna+fqN6iiJ9wD8efsuwHiEfKjXS46jz8=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     cython_3
     gnutar
     numpy
+    oldest-supported-numpy
     setuptools
     setuptools-scm
   ];

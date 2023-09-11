@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchurl
 , fetchFromGitHub
 , wrapGAppsHook
 , makeDesktopItem
@@ -10,6 +11,7 @@
 , jdk
 , gradle
 , perl
+, python3
 }:
 
 let
@@ -19,20 +21,20 @@ let
       pin = "2.2.1-20230117.075740-16";
     };
     afterburner = {
-      snapshot = "testmoduleinfo-SNAPSHOT";
-      pin = "0e337d8773";
+      snapshot = "1.1.0-SNAPSHOT";
+      pin = "1.1.0-20221226.155809-7";
     };
   };
 in
 stdenv.mkDerivation rec {
-  version = "5.9";
+  version = "5.10";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     rev = "v${version}";
-    hash = "sha256-uACmXas5L1NcxLwllkcbgCCt9bRicpQkiJkhkkVWDDY=";
+    hash = "sha256-Yj4mjXOZVM0dKcMfTjmnZs/kIs8AR0KJ9HKlyPM96j8=";
   };
 
   desktopItems = [
@@ -49,37 +51,53 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit src version postPatch;
+  deps =
+    let
+      javafx-web = fetchurl {
+        url = "https://repo1.maven.org/maven2/org/openjfx/javafx-web/20/javafx-web-20.jar";
+        hash = "sha256-qRtVN34KURlVM5Ie/x25IfKsKsUcux7V2m3LML74G/s=";
+      };
+    in
+    stdenv.mkDerivation {
+      pname = "${pname}-deps";
+      inherit src version postPatch;
 
-    nativeBuildInputs = [ gradle perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon downloadDependencies -Dos.arch=amd64
-      gradle --no-daemon downloadDependencies -Dos.arch=aarch64
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
-        | sh
-      mv $out/com/tobiasdiez/easybind/${versionReplace.easybind.pin} \
-        $out/com/tobiasdiez/easybind/${versionReplace.easybind.snapshot}
-    '';
-    # Don't move info to share/
-    forceShare = [ "dummy" ];
-    outputHashMode = "recursive";
-    outputHash = "sha256-s6GA8iT3UEVuELBgpBvzPJlVX+9DpfOQrEd3KIth8eA=";
-  };
+      nativeBuildInputs = [ gradle perl ];
+      buildPhase = ''
+        export GRADLE_USER_HOME=$(mktemp -d)
+        gradle --no-daemon downloadDependencies -Dos.arch=amd64
+        gradle --no-daemon downloadDependencies -Dos.arch=aarch64
+      '';
+      # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
+      installPhase = ''
+        find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
+          | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
+          | sh
+        mv $out/org/jabref/afterburner.fx/${versionReplace.afterburner.pin} \
+          $out/org/jabref/afterburner.fx/${versionReplace.afterburner.snapshot}
+        mv $out/com/tobiasdiez/easybind/${versionReplace.easybind.pin} \
+          $out/com/tobiasdiez/easybind/${versionReplace.easybind.snapshot}
+        # This jar is required but not used or cached for unknown reason.
+        cp ${javafx-web} $out/org/openjfx/javafx-web/20/javafx-web-20.jar
+      '';
+      # Don't move info to share/
+      forceShare = [ "dummy" ];
+      outputHashMode = "recursive";
+      outputHash = "sha256-XswHEKjzErL+znau/F6mTORVJlFSgVuT0svK29v5dEU=";
+    };
 
   postPatch = ''
     # Pin the version
     substituteInPlace build.gradle \
-      --replace 'com.github.JabRef:afterburner.fx:${versionReplace.afterburner.snapshot}' \
-        'com.github.JabRef:afterburner.fx:${versionReplace.afterburner.pin}' \
+      --replace 'org.jabref:afterburner.fx:${versionReplace.afterburner.snapshot}' \
+        'org.jabref:afterburner.fx:${versionReplace.afterburner.pin}' \
       --replace 'com.tobiasdiez:easybind:${versionReplace.easybind.snapshot}' \
         'com.tobiasdiez:easybind:${versionReplace.easybind.pin}'
+
+    # Disable update check
+    substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
+      --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
+        'VERSION_CHECK_ENABLED, Boolean.FALSE'
   '';
 
   preBuild = ''
@@ -91,6 +109,18 @@ stdenv.mkDerivation rec {
       build.gradle \
       buildSrc/build.gradle \
       settings.gradle
+
+    # The `plugin {}` block can't resolve plugins from the deps repo
+    sed -e '/plugins {/,/^}/d' buildSrc/build.gradle > buildSrc/build.gradle.tmp
+    cat > buildSrc/build.gradle <<EOF
+    buildscript {
+      repositories { maven { url uri("${deps}") } }
+      dependencies { classpath 'org.openjfx:javafx-plugin:0.0.14' }
+    }
+    apply plugin: 'java'
+    apply plugin: 'org.openjfx.javafxplugin'
+    EOF
+    cat buildSrc/build.gradle.tmp >> buildSrc/build.gradle
   '';
 
   nativeBuildInputs = [
@@ -101,7 +131,10 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  buildInputs = [ gtk3 ];
+  buildInputs = [
+    gtk3
+    python3
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -129,6 +162,7 @@ stdenv.mkDerivation rec {
 
     # script to support browser extensions
     install -Dm755 buildres/linux/jabrefHost.py $out/lib/jabrefHost.py
+    patchShebangs $out/lib/jabrefHost.py
     install -Dm644 buildres/linux/native-messaging-host/firefox/org.jabref.jabref.json $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
     sed -i -e "s|/opt/jabref|$out|" $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
 
@@ -137,11 +171,8 @@ stdenv.mkDerivation rec {
 
     tar xf build/distributions/JabRef-${version}.tar -C $out --strip-components=1
 
-    # remove openjfx libs for other platforms
-    rm $out/lib/javafx-*-win.jar ${lib.optionalString stdenv.isAarch64 "$out/lib/javafx-*-linux.jar"}
-
     # workaround for https://github.com/NixOS/nixpkgs/issues/162064
-    unzip $out/lib/javafx-web-*.jar libjfxwebkit.so -d $out/lib/
+    unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
 
     DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
 

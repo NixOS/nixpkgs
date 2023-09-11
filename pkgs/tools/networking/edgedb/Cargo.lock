@@ -884,7 +884,7 @@ checksum = "9ea835d29036a4087793836fa931b08837ad5e957da9e23886b29586fb9b6650"
 
 [[package]]
 name = "edgedb-cli"
-version = "3.3.0"
+version = "3.4.0"
 dependencies = [
  "anyhow",
  "arc-swap",

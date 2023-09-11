@@ -11,18 +11,17 @@
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.24.1";
+  version = "0.37.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
-  # Fetching from GitHub as Pypi contains different versions
   src = fetchFromGitHub {
     owner = "harfbuzz";
     repo = "uharfbuzz";
     rev = "v${version}";
-    hash = "sha256-DyFXbwB28JH2lvmWDezRh49tjCvleviUNSE5LHG3kUg=";
     fetchSubmodules = true;
+    hash = "sha256-CZp+/5fG5IBawnIZLeO9lXke8rodqRcSf+ofyF584mc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -44,6 +43,6 @@ buildPythonPackage rec {
     description = "Streamlined Cython bindings for the harfbuzz shaping engine";
     homepage = "https://github.com/harfbuzz/uharfbuzz";
     license = licenses.asl20;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [ ];
   };
 }

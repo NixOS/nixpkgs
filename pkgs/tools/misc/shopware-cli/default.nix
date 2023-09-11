@@ -4,21 +4,23 @@
 , installShellFiles
 , makeWrapper
 , dart-sass
+, git
 }:
 
 buildGoModule rec {
   pname = "shopware-cli";
-  version = "0.2.1";
+  version = "0.2.8";
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "FriendsOfShopware";
     rev = version;
-    hash = "sha256-3upZmqsKCg98j/HTwFp0L7MMspCw7Dj6dRoyEPW287k=";
+    hash = "sha256-ThjSp7WBAWBUXDRN0mJvIb7uWTjYtVa53b+BoWCPuvo=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeCheckInputs = [ git ];
 
-  vendorHash = "sha256-KEWACwZka4WMQS4/O6WkIdeeUnxtcpEwQmMlNBLUjbI=";
+  vendorHash = "sha256-JRzF2eYHnFO/2Tqnc4DMMGSV8gDKDiu8ZjELcn/Wur0=";
 
   postInstall = ''
     export HOME="$(mktemp -d)"

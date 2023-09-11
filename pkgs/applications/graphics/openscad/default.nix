@@ -109,5 +109,6 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
+    mainProgram = "openscad";
   };
 }

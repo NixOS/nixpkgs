@@ -11,7 +11,9 @@
 , hypothesis
 , pytestCheckHook
 , pytest-subtesthack
+, setuptools
 , setuptools-scm
+, wheel
 , aiostream
 , aiohttp-oauthlib
 , aiohttp
@@ -37,6 +39,12 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i -e '/--cov/d' -e '/--no-cov/d' pyproject.toml
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     atomicwrites

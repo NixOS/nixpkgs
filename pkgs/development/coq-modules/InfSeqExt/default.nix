@@ -5,7 +5,7 @@ mkCoqDerivation {
   owner = "DistributedComponents";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.version [
-    { case = range "8.9" "8.17"; out = "20230107"; }
+    { case = range "8.9" "8.18"; out = "20230107"; }
     { case = range "8.5" "8.16"; out = "20200131"; }
   ] null;
   release."20230107".rev    = "601e89ec019501c48c27fcfc14b9a3c70456e408";

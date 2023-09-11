@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ moody ];
     platforms = lib.platforms.unix;
+    mainProgram = "pc";
   };
 })

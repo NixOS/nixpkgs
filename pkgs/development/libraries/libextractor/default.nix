@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, substituteAll
+{ lib, stdenv, fetchurl, fetchpatch, substituteAll
 , libtool, gettext, zlib, bzip2, flac, libvorbis
 , exiv2, libgsf, rpm, pkg-config
 , gstreamerSupport ? true, gst_all_1
@@ -25,7 +25,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FvYzq4dGo4VHxKHaP0WRGSsIJa2DxDNvBXW4WEPYvY8=";
   };
 
-  patches = lib.optionals gstreamerSupport [
+  patches = [
+    (fetchpatch {
+      name = "libextractor-exiv2-0.28.patch";
+      url = "https://git.pld-linux.org/?p=packages/libextractor.git;a=blob_plain;f=libextractor-exiv2-0.28.patch;h=d763b65f2578f1127713de8dc82f432d34f95a85;hb=0e7de1c6794e8c331a1a1a6a829993c7cd217d3a";
+      hash = "sha256-szAv2A+NmiQyj2+R7BO6fHX588vlTgljPtrnMR6mgGY=";
+    })
+  ] ++ lib.optionals gstreamerSupport [
 
     # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
     (substituteAll {

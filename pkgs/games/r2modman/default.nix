@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "r2modman";
-  version = "3.1.42";
+  version = "3.1.43";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${version}";
-    hash = "sha256-16sE706iivYoI40JJUkqVmtxkYsgAFBg+0tXOc6scqc=";
+    hash = "sha256-qZeBF58VB/wW0N2MZgZfiIJdDqHUdfruAoCuDEFeCPA=";
   };
 
   offlineCache = fetchYarnDeps {

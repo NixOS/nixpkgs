@@ -15,20 +15,19 @@
 , mutter
 , mesa
 , json-glib
-, python3
 , elementary-gtk-theme
 , elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dShC6SXjOJmiLI6TUEZsthv5scnm9Jzum+sG/NkWAyM=";
+    sha256 = "sha256-WU2TSMuR+RRleR6ZbIXymG31l2f8XLINPkh5X9rUDcY=";
   };
 
   patches = [
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -55,11 +53,6 @@ stdenv.mkDerivation rec {
     mutter
     mesa # for libEGL
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

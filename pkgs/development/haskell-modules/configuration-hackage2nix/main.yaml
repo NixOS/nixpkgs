@@ -36,18 +36,6 @@ default-package-overrides:
   # hnix < 0.17 (unreleased) needs hnix-store-* 0.5.*
   - hnix-store-core == 0.5.0.0            # 2022-06-17: Until hnix 0.17
   - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
-  # reflex-dom-core 0.7.0.2 has no reflex 0.9 compatible release and most likely most people will want to use them together
-  - reflex < 0.9.0.0
-  # required by haskell-language-server 1.9.0.0
-  - implicit-hie < 0.1.3
-  # latest version requires Cabal >= 3.8
-  - shake-cabal < 0.2.2.3
-  # needed as long as we have pandoc < 3.0, i.e. stackage lts 20
-  - pandoc-crossref < 0.3.15.0
-  # Needs to match hspec which is tracked in stackage
-  - hspec-api < 2.10
-  # 2023-04-13: latest version requires ghc-events >= 0.19 but it's not on LTS yet
-  - eventlog2html < 0.10
 
   # 2023-04-22: For dhall < 1.42 compatibility
   - dhall-nixpkgs == 1.0.9
@@ -58,14 +46,25 @@ default-package-overrides:
   - lsp-types == 1.6.*
   - lsp-test == 0.14.*
 
+  # 2023-07-06: ghcide-2.0.0.1 explicitly needs implicit-hie < 0.1.3, because some sort of
+  # breaking change was introduced in implicit-hie-0.1.3.0.
+  # https://github.com/haskell/haskell-language-server/blob/feb596592de95f09cf4ee885f3e74178161919f1/ghcide/ghcide.cabal#L107-L111
+  - implicit-hie < 0.1.3
+
+  # 2023-07-06: newer versions of stylish-haskell require
+  # ghc-lib-parser-ex >= 9.6, but LTS-21 contains ghc-lib-parser-ex-9.4
+  - stylish-haskell < 0.14.5.0
+
+  # Only an older version of dependent-sum-template is compatible with ghc 9.4
+  # https://github.com/obsidiansystems/dependent-sum-template/issues/5
+  - dependent-sum-template < 0.1.2
+
 extra-packages:
-  - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
-  - Cabal == 2.4.*                      # required for cabal-install etc.
-  - Cabal == 3.2.*                      # required for cabal2spec
-  - Cabal == 3.4.*                      # required for cabal-install etc.
-  - Cabal == 3.6.*
-  - Cabal-syntax == 3.8.*               # required for cabal-install{,-parsers}
-  - Cabal == 3.8.*                      # required for cabal-install{,-parsers}
+  - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
+  - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
+  - Cabal == 3.6.*                      # used for packages needing newer Cabal on ghc 8.10 and 9.0
+  - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.2 and 9.0
+  - Cabal-syntax == 3.10.*              # newest version required for cabal-install and other packages
   - cachix < 1.4                        # 2023-04-02: cachix 1.4{,.1} have known on multi-user Nix systems
   - directory == 1.3.7.*                # required to build cabal-install 3.10.* with GHC 9.2
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
@@ -86,10 +85,10 @@ extra-packages:
   - dhall == 1.38.1                     # required for spago
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
   - foundation < 0.0.29                 # 2022-08-30: last version to support GHC < 8.10
-  - fourmolu == 0.3.0.0                 # 2022-09-21: needed for hls on ghc 8.8
   - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
+  - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
   - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
@@ -105,11 +104,9 @@ extra-packages:
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
-  - hermes-json == 0.2.*                # 2023-03-22: for nix-output-monitor-2.0.0.5
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
-  - hpack == 0.35.0                     # 2022-09-29: Needed for stack-2.9.1
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
@@ -124,26 +121,28 @@ extra-packages:
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
-  - ormolu == 0.1.4.1                   # 2022-09-21: needed for hls on ghc 8.8
-  - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
-  - ormolu == 0.5.*                     # 2022-04-12: For ghc 9.4
+  - ormolu == 0.5.0.1                   # 2022-02-21: for hls on ghc 8.10
+  - ormolu == 0.5.2.0                   # 2023-08-08: for hls on ghc 9.0 and 9.2
+  - fourmolu == 0.9.0.0                 # 2022-09-21: for hls on ghc 8.10
+  - fourmolu == 0.10.1.0                # 2023-04-18: for hls on ghc 9.0 and 9.2
+  - mod == 0.1.2.2                      # needed for hls on ghc 8.10
   - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
-  - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
-  - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
+  - resolv < 0.2                        # required to build cabal-install-3.10.1.0 with Stackage LTS 21
   - sbv == 7.13                         # required for pkgs.petrinizer
-  - stylish-haskell == 0.13.0.0         # 2022-09-19: needed for hls on ghc 8.8
+  - stylish-haskell == 0.14.3.0         # 2022-09-19: needed for hls on ghc 8.8
   - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
   - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
   - commonmark-extensions < 0.2.3.3     # 2022-12-17: required by emanote 1.0.0.0 (to avoid a bug in 0.2.3.3)
-  - ShellCheck == 0.8.0                 # 2022-12-28: required by haskell-ci 0.14.3
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
-  - primitive == 0.7.4.0                # 2023-03-04: primitive 0.8 is not compatible with too many packages on ghc 9.4 as of now
-  - fourmolu == 0.10.1.0                # 2023-04-18: for hls-fourmolu-plugin 1.1.1.0
+  - ghc-tags == 1.6.*                   # 2023-02-18: preserve for ghc-lib == 9.4.*
+  - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
+  - unix-compat < 0.7                   # 2023-07-04: Need System.PosixCompat.User for git-annex
+  - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
 
 package-maintainers:
   abbradar:
@@ -164,8 +163,6 @@ package-maintainers:
     - password
     - password-instances
     - pretty-simple
-    - purenix
-    - spago
     - stack
     - termonad
   centromere:
@@ -175,6 +172,8 @@ package-maintainers:
     - ghc-vis
     - patat
     - svgcairo
+  danielrolls:
+    - shellify
   domenkozar:
     - cachix
     - cachix-api
@@ -352,8 +351,13 @@ package-maintainers:
     - shakespeare
   raehik:
     - strongweak
+    - generic-data-functions
     - binrep
     - bytepatch
+    - heystone
+    - refined
+    - refined1
+    - flatparse
   roberth:
     - arion-compose
     - cabal-pkg-config-version-hook
@@ -425,6 +429,8 @@ package-maintainers:
     - irc-client
     - chatter
     - envy
+  tbidne:
+    - rest-rewrite
   terlar:
     - nix-diff
   turion:
@@ -741,6 +747,7 @@ supported-platforms:
   seqalign:                                     [ platforms.x86 ] # x86 intrinsics
   streamed:                                     [ platforms.linux] # alsa-core only supported on linux
   swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
+  systemd-api:                                  [ platforms.linux ]
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
   udev:                                         [ platforms.linux ]
   Win32-console:                                [ platforms.windows ]

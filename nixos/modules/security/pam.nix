@@ -697,7 +697,7 @@ let
             session required ${config.systemd.package}/lib/security/pam_systemd_home.so
           '' +
           optionalString cfg.makeHomeDir ''
-            session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0077
+            session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=${config.security.pam.makeHomeDir.umask}
           '' +
           optionalString cfg.updateWtmp ''
             session required ${pkgs.pam}/lib/security/pam_lastlog.so silent
@@ -902,6 +902,16 @@ in
       '';
     };
 
+    security.pam.makeHomeDir.umask = mkOption {
+      type = types.str;
+      default = "0077";
+      example = "0022";
+      description = lib.mdDoc ''
+        The user file mode creation mask to use on home directories
+        newly created by `pam_mkhomedir`.
+      '';
+    };
+
     security.pam.enableSSHAgentAuth = mkOption {
       type = types.bool;
       default = false;
@@ -934,7 +944,7 @@ in
       };
       authserver = mkOption {
         default = null;
-        type = with types; nullOr string;
+        type = with types; nullOr str;
         description = lib.mdDoc ''
           This controls the hostname for the 9front authentication server
           that users will be authenticated against.
@@ -1293,7 +1303,7 @@ in
 
     security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
     security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
-      Enables fscrypt to automatically unlock directories with the user's login password.
+      fscrypt to automatically unlock directories with the user's login password.
 
       This also enables a service at security.pam.services.fscrypt which is used by
       fscrypt to verify the user's password when setting up a new protector. If you

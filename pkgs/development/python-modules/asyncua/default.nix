@@ -5,6 +5,7 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, pyopenssl
 , pytest-asyncio
 , pytest-mock
 , pytestCheckHook
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.0.2";
+  version = "1.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DnBxR4nD3dBBhiElDuRgljHaoBPiakdjY/VFn3VsKEQ=";
+    hash = "sha256-gAyvo+VJPdS/UpXN/h8LqbIRyx84fifSUsW2GUzLgfo=";
     fetchSubmodules = true;
   };
 
@@ -42,12 +43,13 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    aiosqlite
     aiofiles
-    pytz
-    python-dateutil
-    sortedcontainers
+    aiosqlite
     cryptography
+    pyopenssl
+    python-dateutil
+    pytz
+    sortedcontainers
     typing-extensions
   ];
 

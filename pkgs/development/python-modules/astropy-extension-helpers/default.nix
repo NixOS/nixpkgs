@@ -4,7 +4,9 @@
 , findutils
 , pytestCheckHook
 , pythonOlder
+, pip
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -21,12 +23,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    wheel
   ];
 
   patches = [ ./permissions.patch ];
 
   nativeCheckInputs = [
     findutils
+    pip
     pytestCheckHook
   ];
 

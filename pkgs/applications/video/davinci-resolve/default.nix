@@ -99,7 +99,6 @@ let
 
         curl \
           --retry 3 --retry-delay 3 \
-          --header "Host: sw.cloud.blackmagicdesign.com" \
           --header "Upgrade-Insecure-Requests: 1" \
           --header "$USERAGENT" \
           --header "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" \
@@ -110,9 +109,7 @@ let
       '';
 
       # The unpack phase won't generate a directory
-      setSourceRoot = ''
-        sourceRoot=$PWD
-      '';
+      sourceRoot = ".";
 
       installPhase = ''
         runHook preInstall
@@ -231,6 +228,7 @@ buildFHSEnv {
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = licenses.unfree;
     maintainers = with maintainers; [ jshcmpbll ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

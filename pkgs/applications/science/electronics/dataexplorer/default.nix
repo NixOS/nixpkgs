@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dataexplorer";
-  version = "3.7.8";
+  version = "3.8.0";
 
   src = fetchurl {
     url = "mirror://savannah/dataexplorer/dataexplorer-${version}-src.tar.gz";
-    sha256 = "sha256-NiCtUqavYNUXsTkgi2V9u2qn8dBTLTEm52ju450d5Lw=";
+    sha256 = "sha256-ZluT/jCjcOrlh2nqe0j56shmtGqfm11BCnsp6mWDXkQ=";
   };
 
   nativeBuildInputs = [ ant makeWrapper ];

@@ -128,7 +128,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     systemd
     libselinux
     audit

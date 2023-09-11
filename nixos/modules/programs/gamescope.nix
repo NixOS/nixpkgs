@@ -42,7 +42,7 @@ in
     };
 
     args = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [ ];
       example = [ "--rt" "--prefer-vk-device 8086:9bc4" ];
       description = mdDoc ''
@@ -51,7 +51,7 @@ in
     };
 
     env = mkOption {
-      type = types.attrsOf types.string;
+      type = types.attrsOf types.str;
       default = { };
       example = literalExpression ''
         # for Prime render offload on Nvidia laptops.

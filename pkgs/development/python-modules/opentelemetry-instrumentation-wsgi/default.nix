@@ -15,7 +15,7 @@ buildPythonPackage {
   pname = "opentelemetry-instrumentation-wsgi";
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "source/instrumentation/opentelemetry-instrumentation-wsgi";
+  sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-wsgi";
 
   format = "pyproject";
 

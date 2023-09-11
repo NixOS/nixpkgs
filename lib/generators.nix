@@ -230,6 +230,14 @@ rec {
     in
       toINI_ (gitFlattenAttrs attrs);
 
+  # mkKeyValueDefault wrapper that handles dconf INI quirks.
+  # The main differences of the format is that it requires strings to be quoted.
+  mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (lib.gvariant.mkValue v); } "=";
+
+  # Generates INI in dconf keyfile style. See https://help.gnome.org/admin/system-admin-guide/stable/dconf-keyfiles.html.en
+  # for details.
+  toDconfINI = toINI { mkKeyValue = mkDconfKeyValue; };
+
   /* Generates JSON from an arbitrary (non-function) value.
     * For more information see the documentation of the builtin.
     */

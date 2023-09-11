@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
   patches = extraPatches;
   inherit postPatch;
 
-  buildInputs = [ python3 bzip2 zlib gmp boost ]
+  nativeBuildInputs = [ python3 ];
+  buildInputs = [ bzip2 zlib gmp boost ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
     runHook preConfigure
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"}
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"} ${lib.optionalString stdenv.hostPlatform.isAarch64 " --cpu=aarch64"}
     runHook postConfigure
   '';
 

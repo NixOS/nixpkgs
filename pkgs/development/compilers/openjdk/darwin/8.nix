@@ -11,26 +11,26 @@ let
   dist = {
     x86_64-darwin = {
       arch = "x64";
-      zuluVersion = "8.54.0.21";
-      jdkVersion = "8.0.292";
-      sha256 =
-        if enableJavaFX then "e671f8990229b1ca2a76faabb21ba2f1a9e1f7211392e0f657225559be9b05c8"
-        else "1pgl0bir4r5v349gkxk54k6v62w241q7vw4gjxhv2g6pfq6hv7in";
+      zuluVersion = "8.72.0.17";
+      jdkVersion = "8.0.382";
+      hash =
+        if enableJavaFX then "sha256-/x8FqygivzddXsOwIV8aj/u+LPXMmokgu97vLAVEv80="
+        else "sha256-3dTPIPGUeT6nb3gncNvEa4VTRyQIBJpp8oZadrT2ToE=";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "8.54.0.21";
-      jdkVersion = "8.0.292";
-      sha256 =
-        if enableJavaFX then "8e901075cde2c31f531a34e8321ea4201970936abf54240a232e9389952afe84"
-        else "05w89wfjlfbpqfjnv6wisxmaf13qb28b2223f9264jyx30qszw1c";
+      zuluVersion = "8.72.0.17";
+      jdkVersion = "8.0.382";
+      hash =
+        if enableJavaFX then "sha256-FkQ+0MzSZWUzc/HmiDVZEHGOrdKAVCdK5pm9wXXzzaU="
+        else "sha256-rN5AI4xAWppE4kJlzMod0JmGyHdHjTXYtx8/wOW6CFk=";
     };
   }."${stdenv.hostPlatform.system}";
 
   jce-policies = fetchurl {
     url = "https://web.archive.org/web/20211126120343/http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
-    sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
+    hash = "sha256-gCGii4ysQbRPFCH9IQoKCCL8r4jWLS5wo1sv9iioZ1o=";
   };
 
   javaPackage = if enableJavaFX then "ca-fx-jdk" else "ca-jdk";
@@ -44,7 +44,7 @@ let
 
     src = fetchurl {
       url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
-      inherit (dist) sha256;
+      inherit (dist) hash;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 

@@ -107,5 +107,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "easyeffects";
   };
 }

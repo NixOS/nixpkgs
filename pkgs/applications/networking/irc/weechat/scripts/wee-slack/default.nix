@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
-  version = "2.9.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
-    sha256 = "sha256-f5CRJmvNZlKOE1XsU214R42dYo0s5xSRXC8TKOniEf4=";
+    sha256 = "sha256-SxmMCD7FdkmZ0ccDbuY2XUGcLxHlv62x4Pj55Wzf0AA=";
   };
 
   patches = [

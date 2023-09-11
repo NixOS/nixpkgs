@@ -12,7 +12,7 @@
 }:
 
 buildPecl rec {
-  pname = "datadog_trace";
+  pname = "ddtrace";
   version = "0.89.0";
 
   src = fetchFromGitHub {

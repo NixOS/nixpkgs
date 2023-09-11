@@ -13,6 +13,7 @@
 , json-glib
 , glib
 , glib-networking
+, gobject-introspection
 , gtksourceview5
 , libxml2
 , libgee
@@ -26,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.4.0";
+  version = "0.4.1";
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-sLdkSIevz2spL+Q5sS+ugqEbqJTXrLxmszzijtKvY6k=";
+    hash = "sha256-1XbgsdIcnlXJtNEzDgEfHVJHF9naz3HplCPc2cKFUWw=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook4
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [

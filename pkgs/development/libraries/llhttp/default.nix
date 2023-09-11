@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "llhttp";
-  version = "8.1.1";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
     rev = "release/v${version}";
-    hash = "sha256-srAHKyYvdEGtjV7BwcKQArwAChRoZqTCfa/RefI/8wQ=";
+    hash = "sha256-cXqc6/lQUhp9GV8msXsPokd6OGSczvz8uAXkM16GEE0=";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Port of http_parser to llparse";
     homepage = "https://llhttp.org/";
+    changelog = "https://github.com/nodejs/llhttp/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;

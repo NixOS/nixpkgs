@@ -27,6 +27,16 @@ buildPythonPackage rec {
     hash = "sha256-H/HFEpg1bkgaC+AJzN/ySYMs5T8wVZwTOPIqDg0XJQw=";
   };
 
+  # This project doesn't seem to actually need setuptools. To find out why it
+  # specifies it, follow up in:
+  #
+  #   https://github.com/graphql-python/graphql-relay-py/issues/49
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools>=59,<70"' ""
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];

@@ -17,6 +17,8 @@ in
 
   cask = callPackage ./manual-packages/cask { };
 
+  consult-gh = callPackage ./manual-packages/consult-gh { };
+
   control-lock = callPackage ./manual-packages/control-lock { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
@@ -59,13 +61,13 @@ in
     _map = self.map;
   };
 
+  mu4e = callPackage ./manual-packages/mu4e { };
+
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
   perl-completion = callPackage ./manual-packages/perl-completion { };
 
   pod-mode = callPackage ./manual-packages/pod-mode { };
-
-  power-mode = callPackage ./manual-packages/power-mode { };
 
   prisma-mode = callPackage ./manual-packages/prisma-mode { };
 

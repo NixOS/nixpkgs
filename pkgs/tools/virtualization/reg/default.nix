@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "genuinetools";
     repo = "reg";
     rev = "v${version}";
-    sha256 = "1jlza1czfssssi3y9zi6kr8k9msfa7vp215ibhwbz4h97av5xw5m";
+    hash = "sha256-tfBetjoJkr84XLEEcfdRTtc0UZ4m/uRH1Fpr91lQn8o=";
   };
 
   patches = [
@@ -29,7 +29,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorSha256 = null;
+  vendorHash = null;
   doCheck = false;
 
   meta = with lib; {

@@ -8,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "3.1.2";
   format = "pyproject";
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   src = fetchFromGitHub {
     owner = "gilesknap";
@@ -21,10 +21,24 @@ python3.pkgs.buildPythonApplication rec {
     ./skip-network-tests.patch
   ];
 
-  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+  # Consider fixing this upstream by following up on:
+  # https://github.com/gilesknap/gphotos-sync/issues/441
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools<57" "setuptools" \
+      --replace "wheel==0.33.1" "wheel"
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+    setuptools
+    wheel
+  ];
+
   pythonRelaxDeps = [
     "psutil"
     "exif"
+    "pyyaml"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

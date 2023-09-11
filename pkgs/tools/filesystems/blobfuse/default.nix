@@ -12,7 +12,7 @@ let
     pname = "cpplite";
     inherit version src;
 
-    sourceRoot = "source/cpplite";
+    sourceRoot = "${src.name}/cpplite";
     patches = [ ./install-adls.patch ];
 
     cmakeFlags = [ "-DBUILD_ADLS=ON" "-DUSE_OPENSSL=OFF" ];

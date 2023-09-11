@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mc";
-  version = "4.8.29";
+  version = "4.8.30";
 
   src = fetchurl {
     url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-AdijuU9YGAzKW/FyV7UHjR/W/SeptcDpcOx2dUlUCtQ=";
+    sha256 = "sha256-Xrw8shRLlwxRSf2lVsStULeHgElGls3y0UpTIEyVx98=";
   };
 
   nativeBuildInputs = [ pkg-config unzip ]
@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "mc";
   };
 }

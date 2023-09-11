@@ -13,6 +13,7 @@
 , ncclient
 , packaging
 , paramiko
+, ansible-pylibssh
 , passlib
 , pexpect
 , psutil
@@ -27,11 +28,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.15.2";
+  version = "2.15.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hCUbAB8vnAkUvu3/zxlSnnRaExCBWdH+J96eOmpjrFo=";
+    hash = "sha256-JhvAGhUnT8WmlQ1bkrmqG318bo91Q8kUUF5b/ZdEeTo=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     lxml
     ncclient
     paramiko
+    ansible-pylibssh
     pexpect
     psutil
     pycrypto

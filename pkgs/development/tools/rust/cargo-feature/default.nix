@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Riey/cargo-feature";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ riey ];
+    maintainers = with maintainers; [ riey matthiasbeyer ];
   };
 }
 

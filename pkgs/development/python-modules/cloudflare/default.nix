@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cloudflare";
-  version = "2.11.6";
+  version = "2.11.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZTHUyvFguvME0Jl0JRzwWmJOaWPUz4RFeMEVTvupb14=";
+    hash = "sha256-e7DRZa7qB4n9B+UMZ4pT38Uj7ENEl8WZVj+rvHvFQcM=";
   };
 
   propagatedBuildInputs = [

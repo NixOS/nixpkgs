@@ -269,17 +269,33 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          overrideScope = g: lib.warn
-            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
-            (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
-          overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
+          overrideScope = g: makeScope newScope (lib.fixedPoints.extends g f);
+          # Remove after 24.11 is released.
+          overrideScope' = g: lib.warnIf (lib.isInOldestRelease 2311)
+            "`overrideScope'` (from `lib.makeScope`) has been renamed to `overrideScope`."
+            (makeScope newScope (lib.fixedPoints.extends g f));
           packages = f;
         };
     in self;
 
-  /* Like the above, but aims to support cross compilation. It's still ugly, but
+  /* backward compatibility with old uncurried form; deprecated */
+  makeScopeWithSplicing =
+    splicePackages: newScope: otherSplices: keep: extra: f:
+    makeScopeWithSplicing'
+    { inherit splicePackages newScope; }
+    { inherit otherSplices keep extra f; };
+
+  /* Like makeScope, but aims to support cross compilation. It's still ugly, but
      hopefully it helps a little bit. */
-  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: extra: f:
+  makeScopeWithSplicing' =
+    { splicePackages
+    , newScope
+    }:
+    { otherSplices
+    , keep ? (_self: {})
+    , extra ? (_spliced0: {})
+    , f
+    }:
     let
       spliced0 = splicePackages {
         pkgsBuildBuild = otherSplices.selfBuildBuild;
@@ -295,13 +311,11 @@ rec {
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
         # overridden.
-        overrideScope = g: makeScopeWithSplicing
-          splicePackages
-          newScope
-          otherSplices
-          keep
-          extra
-          (lib.fixedPoints.extends g f);
+        overrideScope = g: (makeScopeWithSplicing'
+          { inherit splicePackages newScope; }
+          { inherit otherSplices keep extra;
+            f = lib.fixedPoints.extends g f;
+          });
         packages = f;
       };
     in self;

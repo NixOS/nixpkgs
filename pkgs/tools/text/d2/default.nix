@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "d2";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "terrastruct";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Oq6bJ/cX+kDyVUVP/RpCIcNeWpT3HESUMmR6mEi9X4Q=";
+    hash = "sha256-MF8RqwoMc48JYgNUJTQKHlGl59xyHOALnFL2BWQAl24=";
   };
 
   vendorHash = "sha256-SocBC/1LrdSQNfcNVa9nnPaq/UvLVIghHlUSJB7ImBk=";
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X oss.terrastruct.com/d2/lib/version.Version=${version}"
+    "-X oss.terrastruct.com/d2/lib/version.Version=v${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -41,7 +41,10 @@ buildGoModule rec {
     export TESTDATA_ACCEPT=1
   '';
 
-  passthru.tests.version = testers.testVersion { package = d2; };
+  passthru.tests.version = testers.testVersion {
+    package = d2;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "A modern diagram scripting language that turns text to diagrams";

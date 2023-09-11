@@ -97,7 +97,6 @@ in
   };
 
   config = mkIf (cfg.provider != "libc") {
-    boot.kernel.sysctl."vm.max_map_count" = mkIf (cfg.provider == "graphene-hardened") (mkDefault 1048576); # TODO: Default vm.max_map_count has been increased system-wide
     environment.etc."ld-nix.so.preload".text = ''
       ${providerLibPath}
     '';

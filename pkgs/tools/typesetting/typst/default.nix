@@ -8,20 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     rev = "v${version}";
-    hash = "sha256-8e6BNffKgAUNwic4uEfDh77y2nIyYt9BwZr+ypv+d5A=";
+    hash = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "iai-0.1.1" = "sha256-EdNzCPht5chg7uF9O8CtPWR/bzSYyfYIXNdLltqdlR0=";
-      "svg2pdf-0.4.1" = "sha256-WeVP+yhqizpTdRfyoj2AUxFKhGvVJIIiRV0GTXkgLtQ=";
     };
   };
 
@@ -38,10 +37,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   postInstall = ''
-    installManPage cli/artifacts/*.1
+    installManPage crates/typst-cli/artifacts/*.1
     installShellCompletion \
-      cli/artifacts/typst.{bash,fish} \
-      --zsh cli/artifacts/_typst
+      crates/typst-cli/artifacts/typst.{bash,fish} \
+      --zsh crates/typst-cli/artifacts/_typst
   '';
 
   meta = with lib; {
@@ -50,5 +49,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ drupol figsoda kanashimia ];
+    mainProgram = "typst";
   };
 }

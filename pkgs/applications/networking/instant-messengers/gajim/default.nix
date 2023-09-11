@@ -21,17 +21,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-EgH8mt0am2l9z4csGHH6rpLqTzFiBRzOPB4NCEP8TUM=";
+    hash = "sha256-Erh7tR6WX8pt89PRicgbVZd8CLlv18Vyq44O+ZnJVzU=";
   };
 
   format = "pyproject";
 
   buildInputs = [
-    gobject-introspection gtk3 gnome.adwaita-icon-theme
+    gtk3 gnome.adwaita-icon-theme
     gtksourceview4
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook
+    gettext wrapGAppsHook gobject-introspection
   ];
 
   dontWrapGApps = true;

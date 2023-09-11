@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   daemon = stdenv.mkDerivation {
     pname = "jami-daemon";
     inherit src version meta;
-    sourceRoot = "source/daemon";
+    sourceRoot = "${src.name}/daemon";
 
     nativeBuildInputs = [
       autoreconfHook

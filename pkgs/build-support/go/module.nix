@@ -52,6 +52,9 @@ assert (args' ? vendorHash && args' ? vendorSha256) -> throw "both `vendorHash` 
 let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
 
+  GO111MODULE = "on";
+  GOTOOLCHAIN = "local";
+
   goModules = if (vendorHash == null) then "" else
   (stdenv.mkDerivation {
     name = "${name}-go-modules";
@@ -60,6 +63,7 @@ let
 
     inherit (args) src;
     inherit (go) GOOS GOARCH;
+    inherit GO111MODULE GOTOOLCHAIN;
 
     # The following inheritence behavior is not trivial to expect, and some may
     # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
@@ -72,8 +76,6 @@ let
     preBuild = args.preBuild or "";
     postBuild = args.modPostBuild or "";
     sourceRoot = args.sourceRoot or "";
-
-    GO111MODULE = "on";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -149,9 +151,8 @@ let
 
     inherit (go) GOOS GOARCH;
 
-    GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
-    inherit CGO_ENABLED enableParallelBuilding;
+    inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure

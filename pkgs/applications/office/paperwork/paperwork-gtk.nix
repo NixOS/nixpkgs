@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     src = sample_documents;
   };
 
-  sourceRoot = "source/paperwork-gtk";
+  sourceRoot = "${src.name}/paperwork-gtk";
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''

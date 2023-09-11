@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
     vala
     wrapGAppsHook
     dbus-launch
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -142,7 +143,6 @@ stdenv.mkDerivation rec {
     systemd
     dconf
     gdk-pixbuf
-    gobject-introspection
     python3.pkgs.pygobject3 # for pygobject overrides
     gtk2
     gtk3

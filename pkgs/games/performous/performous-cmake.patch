@@ -1,21 +1,17 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 48af2a89..43786c31 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -75,15 +75,7 @@ else()
- 	message(STATUS "Localization disabled: Gettext tools (msgfmt) missing")
- endif()
- 
--include(FetchContent)
--FetchContent_Declare(ced-sources
--  GIT_REPOSITORY https://github.com/performous/compact_enc_det.git
--  #https://github.com/google/compact_enc_det.git
--  GIT_TAG        master
--  SOURCE_DIR ced-src
--)
+diff --git a/cmake/Modules/FindCed.cmake b/cmake/Modules/FindCed.cmake
+index d6e2aca..3085adb 100644
+--- a/cmake/Modules/FindCed.cmake
++++ b/cmake/Modules/FindCed.cmake
+@@ -1,11 +1 @@
+-include(LibFetchMacros)
 -
--FetchContent_MakeAvailable(ced-sources)
-+add_subdirectory(ced-src)
- 
- option(USE_SELF_BUILT_AUBIO "Use custom aubio local build instead of using system lib (if available)" FALSE)
- 
+-set(Ced_GIT_VERSION "master")
+-
+-libfetch_git_pkg(Ced
+-	REPOSITORY ${SELF_BUILT_GIT_BASE}/compact_enc_det.git
+-	#https://github.com/google/compact_enc_det.git
+-	REFERENCE  ${Ced_GIT_VERSION}
+-	FIND_PATH  compact_enc_det/compact_enc_det.h
+-)
+-message(STATUS "Found Google CED ${Ced_VERSION}")
++add_subdirectory(../ced-src ced-src)

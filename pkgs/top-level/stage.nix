@@ -8,6 +8,13 @@
    arguments. Normal users should not import this directly but instead
    import `pkgs/default.nix` or `default.nix`. */
 
+let
+  # An overlay to auto-call packages in ../by-name.
+  # By defining it at the top of the file,
+  # this value gets reused even if this file is imported multiple times,
+  # thanks to Nix's import-value cache.
+  autoCalledPackages = import ./by-name-overlay.nix ../by-name;
+in
 
 { ## Misc parameters kept the same for all stages
   ##
@@ -279,6 +286,7 @@ let
     stdenvAdapters
     trivialBuilders
     splice
+    autoCalledPackages
     allPackages
     otherPackageSets
     aliases

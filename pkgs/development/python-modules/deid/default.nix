@@ -36,7 +36,7 @@ let
 in
 buildPythonPackage rec {
   pname = "deid";
-  version = "0.3.21";
+  version = "0.3.22";
 
   format = "pyproject";
   disabled = pythonOlder "3.7";
@@ -46,8 +46,8 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = pname;
     # the github repo does not contain Pypi version tags:
-    rev = "38717b8cbfd69566ba489dd0c9858bb93101e26d";
-    hash = "sha256-QqofxNjshbNfu8vZ37rB6pxj5R8q0wlUhJRhrpkKySk=";
+    rev = "40dc96125daeb65856d643e12c3d6dfec756be0d";
+    hash = "sha256-OtxQPF29eqt8I1Q12ga8a1IjBVO+VBk6y0DQmRtCNoU=";
   };
 
   propagatedBuildInputs = [

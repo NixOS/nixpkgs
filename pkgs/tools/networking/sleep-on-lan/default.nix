@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
   vendorSha256 = "sha256-JqDDG53khtDdMLVOscwqi0oGviF+3DMkv5tkHvp1gJc=";
 
   ldflags = [

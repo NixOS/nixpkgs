@@ -12,13 +12,13 @@
 let
   thunderbird-unwrapped = thunderbirdPackages.thunderbird-102;
 
-  version = "102.12.0";
+  version = "102.15.0";
   majVer = lib.versions.major version;
 
   betterbird-patches = fetchFromGitHub {
     owner = "Betterbird";
     repo = "thunderbird-patches";
-    rev = "${version}-bb37";
+    rev = "${version}-bb40";
     postFetch = ''
       echo "Retrieving external patches"
 
@@ -36,7 +36,7 @@ let
       . ./external.sh
       rm external.sh
     '';
-    sha256 = "sha256-LH0dgWqariutfaOCPIUZrHzZ8oCbZF1VaaKQIQS4aL8=";
+    hash = "sha256-7/JEcP76rp0hSSxzlIlHqkcxTSEJQswFhCoOLYntQ5I=";
   };
 in ((buildMozillaMach {
   pname = "betterbird";
@@ -49,7 +49,7 @@ in ((buildMozillaMach {
   src = fetchurl {
     # https://download.cdn.mozilla.net/pub/thunderbird/releases/
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "303787a8f22a204e48784d54320d5f4adaeeeedbe4c2294cd26ad75792272ffc9453be7f0ab1434214b61a2cc46982c23c4fd447c4d80d588df4a7800225ddee";
+    sha512 = "11d4c77049c532753c9b693d69ab9a0bcd0eb13d49f87a511ad8ba680b70041ac6f64c5f9cd5dd44246d46e7695d9bd51146b1fe62b0b7c9fbc862eb53d5cfda";
   };
 
   extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
@@ -102,6 +102,7 @@ in ((buildMozillaMach {
   meta = with lib; {
     description = "Betterbird is a fine-tuned version of Mozilla Thunderbird, Thunderbird on steroids, if you will";
     homepage = "https://www.betterbird.eu/";
+    mainProgram = "betterbird";
     maintainers = with maintainers; [ SuperSandro2000 ];
     inherit (thunderbird-unwrapped.meta) platforms badPlatforms broken license;
   };

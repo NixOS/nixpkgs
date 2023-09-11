@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
     description = "NetworkManager control applet for GNOME";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
+    mainProgram = "nm-applet";
     platforms = platforms.linux;
   };
 }

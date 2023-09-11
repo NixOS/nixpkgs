@@ -5,7 +5,7 @@
 , db
 , lib
 , libffiBoot
-, makeScopeWithSplicing
+, makeScopeWithSplicing'
 , pythonPackagesExtensions
 , stdenv
 }@args:

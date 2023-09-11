@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode
-
+, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode, tbb
   # the default test target is sse4, but that is not supported by all Hydra agents
 , testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
 }:
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.19.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256:0yhcgyzjlrgs920lm0l6kygj2skanfb6qkxbdgm69r8c2xkzkaa3";
+    sha256 = "sha256:029rlkh7vh8hxg8ygpspxb9hvw5q97m460zbxwb7xnx1jnq8msh4";
   };
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
+  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
+
   buildInputs = with llvmPackages; [
     libllvm libclang openmp ncurses
   ];
@@ -52,7 +52,10 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DFILE_CHECK_EXECUTABLE=${llvmPackages.llvm}/bin/FileCheck"
+    "-DLLVM_AS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-as"
     "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
+    "-DLLVM_DIS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-dis"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
@@ -68,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]; # TODO: buildable on more platforms?
-    maintainers = with maintainers; [ aristid thoughtpolice athas ];
+    maintainers = with maintainers; [ aristid thoughtpolice athas alexfmpe ];
   };
 }

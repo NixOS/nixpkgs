@@ -140,6 +140,7 @@ rustPlatform.buildRustPackage rec {
     description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
+    mainProgram = "wezterm";
     maintainers = with maintainers; [ SuperSandro2000 mimame ];
   };
 }

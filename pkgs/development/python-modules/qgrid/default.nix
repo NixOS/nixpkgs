@@ -39,6 +39,8 @@ buildPythonPackage rec {
   # Those tests are also failing upstream
   disabledTests = [
     "test_edit_date"
+    "test_edit_multi_index_df"
+    "test_multi_index"
     "test_period_object_column"
   ];
 

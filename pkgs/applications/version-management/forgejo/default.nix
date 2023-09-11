@@ -39,17 +39,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.20.2-0";
+  version = "1.20.4-0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-8mFI5Zt2J6EQZqu/qcirFp8WMz+IlrkvHeA+oUb0X5U=";
+    hash = "sha256-guKU3VG1Wyhr5p6w0asL/CopQ5b7HiNi26Tw8WCEpwE=";
   };
 
-  vendorHash = "sha256-ZoFs2T3NNixrbTDdp7fqTgjJ+G8DpkxHW8K6BM8tZ9w=";
+  vendorHash = "sha256-dgtZjsLBwblhdge3BvdbK/mN/TeZKps9K5dJbqomtjo=";
 
   subPackages = [ "." ];
 

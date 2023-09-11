@@ -58,6 +58,8 @@ buildPythonPackage rec {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     openssh
     openssl

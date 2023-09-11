@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "otel-cli";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "equinix-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-edxDPxUamZiBezMj2SII/zq8atnyZVWtboUJsShDAyw=";
+    hash = "sha256-xIvxjmrZd/2eT2JAagH+mMyYkDjc7La5dUqsmNnOtrc=";
   };
 
-  vendorHash = "sha256-MlLFTi+O925NA73zDRrk0AgJzwtdNBhCxDjmniNPwio=";
+  vendorHash = "sha256-mnMtvR2r5HbKC0P5iGFkwLcpx3IvmhgCI8/CCVJunXw=";
 
   preCheck = ''
     ln -s $GOPATH/bin/otel-cli .

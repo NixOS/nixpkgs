@@ -43,6 +43,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
+    broken = true;
     description = "Redpanda client";
     homepage = "https://redpanda.com/";
     license = licenses.bsl11;

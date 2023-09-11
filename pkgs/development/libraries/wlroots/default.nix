@@ -124,5 +124,5 @@ rec {
     '';
   };
 
-  wlroots = wlroots_0_15;
+  wlroots = wlroots_0_16;
 }

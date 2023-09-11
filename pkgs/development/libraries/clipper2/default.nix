@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-u/4GG1A2PAlk8VEWgJX8+EnZ5hpGhu1QbvHwct58sF4=";
   };
 
-  sourceRoot = "source/CPP";
+  sourceRoot = "${src.name}/CPP";
 
   nativeBuildInputs = [
     cmake

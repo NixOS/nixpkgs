@@ -96,5 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ];
+    mainProgram = "sway";
   };
 })

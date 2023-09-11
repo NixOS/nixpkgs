@@ -80,13 +80,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.9.1";
+              version = "1.9.2";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                hash = "sha256-T0kK9JaaX8+hUxsnG/TftGPHWwkhPDx4nqGrplmIiI0=";
+                hash = "sha256-DSngV8nWHNqfPEBIfGq3HQeC1p9s6Q+GX+LcJiAiS4E=";
               };
 
               propagatedBuildInputs = with self; [
@@ -100,7 +100,7 @@ let
                 filetype
                 flask
                 flask-babel
-                flask_assets
+                flask-assets
                 flask-login
                 flask-limiter
                 frozendict

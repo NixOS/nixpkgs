@@ -30,25 +30,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.9";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-RW2dKueidFM/RkGfOAorHukGVm1srbuAlyUP/r+JWi0=";
+    hash = "sha256-zI+ctJHxjDbAKjCFDpNgpQ6m6pPffd7TV5gmfPP/yv4=";
   };
-
-  # error: no member named 'ranges' in namespace 'std'
-  postPatch = lib.optionalString withoutStdRanges ''
-    for f in src/canvas/chafa.cpp src/canvas/iterm2/iterm2.cpp src/terminal.cpp; do
-      sed -i "1i #include <range/v3/algorithm/for_each.hpp>" $f
-      sed -i "2i #include <range/v3/algorithm/reverse.hpp>" $f
-      substituteInPlace $f \
-        --replace "#include <ranges>" "" \
-        --replace "std::ranges" "ranges"
-    done
-  '';
 
   strictDeps = true;
 

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mercury";
-  version = "22.01.6";
+  version = "22.01.7";
 
   src = fetchurl {
     url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
-    sha256 = "sha256-dpRW+DRGJZPIvUv6/y1TLAFjrPOldKBtpwn87nOgIt8=";
+    sha256 = "sha256-PctyVKlV2cnHoBSAXjMTSPvWY7op9D6kIMypYDRgvGw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -54,9 +54,10 @@ stdenv.mkDerivation rec {
       allowing modularity, separate compilation, and numerous optimization/time
       trade-offs.
     '';
-    homepage    = "http://mercurylang.org";
-    license     = lib.licenses.gpl2;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    homepage    = "https://mercurylang.org/";
+    changelog   = "https://dl.mercurylang.org/release/release-notes-${version}.html";
+    license     = lib.licenses.gpl2Only;
+    platforms   = lib.platforms.all;
     maintainers = [ ];
   };
 }

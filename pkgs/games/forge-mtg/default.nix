@@ -8,13 +8,13 @@
 }:
 
 let
-  version = "1.6.56";
+  version = "1.6.57";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-VB/ToTq1XwHPEUNmbocwUoCP4DfyAFdlRAwxrx4tNJU=";
+    hash = "sha256-pxnnqLfyblbIgIRZZrx8Y8K43zUv9mu7PzZ7zltpEUQ=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -27,9 +27,9 @@ maven.buildMavenPackage {
 
   # Tests need a running Xorg.
   mvnParameters = "-DskipTests";
-  mvnHash = "sha256-ajrHnaiJS7ZnR9BjLaXK2bnAKCp5UWQqYpjWbz3z6bw=";
+  mvnHash = "sha256-QK9g0tG75lIhEtf4jW03N32YbD9Fe5iI0JTuqmCTtnE=";
 
-  nativeBuildInputs = [ maven makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -59,7 +59,6 @@ maven.buildMavenPackage {
   meta = with lib; {
     description = "Magic: the Gathering card game with rules enforcement";
     homepage = "https://www.slightlymagic.net/forum/viewforum.php?f=26";
-    platforms = openjdk.meta.platforms;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ eigengrau ];
   };

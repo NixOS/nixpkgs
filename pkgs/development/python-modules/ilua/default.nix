@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, jupyter_console
+, jupyter-console
 , jupyter-core
 , pygments
 , termcolor
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jupyter_console
+    jupyter-console
     jupyter-core
     pygments
     termcolor

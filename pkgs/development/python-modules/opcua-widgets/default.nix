@@ -24,7 +24,7 @@ buildPythonPackage rec {
     asyncua
   ];
 
-  pythonImportChecks = [ "opcua-widgets" ];
+  pythonImportsCheck = [ "uawidgets" ];
 
   #This test is broken, when updating this package check if the test was fixed.
   doCheck = false;

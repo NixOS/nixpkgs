@@ -22,7 +22,7 @@
 , pypugjs
 , boto3
 , moto
-, mock
+, markdown
 , lz4
 , setuptoolsTrial
 , buildbot-worker
@@ -65,14 +65,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.8.0";
+    version = "3.9.2";
     format = "setuptools";
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Z4BmC6Ed+7y4rJologiLXhkIvucXz65KEBxX3LFqExY=";
+      hash = "sha256-7QhIMUpzmxbh8qjz0hgqzibLkWADhTV523neo1wpGSA=";
     };
 
     propagatedBuildInputs = [
@@ -98,7 +98,7 @@ let
       pypugjs
       boto3
       moto
-      mock
+      markdown
       lz4
       setuptoolsTrial
       buildbot-worker

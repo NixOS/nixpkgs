@@ -4,6 +4,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
+, wrapGAppsHook
 , ...
 }:
 with lib;
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+xiXEwSSxpt1/Eu9g57/L+Il/Av+a/mgGBQl/4LKR74=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
 
   buildInputs = with pkgs;[
     alsa-lib

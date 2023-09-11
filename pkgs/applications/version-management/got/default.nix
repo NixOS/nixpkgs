@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "got";
-  version = "0.91";
+  version = "0.92";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    hash = "sha256-ebFetQhgEBjy3aq3TfK9veeevbmSAEv9kaUohsnsrlU=";
+    hash = "sha256-HaNCxgbl0ewvI96jr9/BgJphqoQC5P2atj5a51bj99c=";
   };
 
   nativeBuildInputs = [ pkg-config bison ]
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl libbsd libevent libuuid libmd zlib ncurses ]
   ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
+
+  configureFlags = [ "--enable-gotd" ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     # The configure script assumes dependencies on Darwin are install via

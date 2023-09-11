@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, openjdk, glib, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, openjdk, glib, wrapGAppsHook, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "bluej";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchurl {
     # We use the deb here. First instinct might be to go for the "generic" JAR
     # download, but that is actually a graphical installer that is much harder
     # to unpack than the deb.
     url = "https://www.bluej.org/download/files/BlueJ-linux-${builtins.replaceStrings ["."] [""] version}.deb";
-    sha256 = "sha256-tOb15wU9OjUt0D8l/JkaGYj84L7HV4FUnQQB5cRAxG0=";
+    sha256 = "sha256-sOT86opMa9ytxJlfURIsD06HiP+j+oz3lQ0DqmLV1wE=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ zstd wrapGAppsHook ];
   buildInputs = [ glib ];
 
   sourceRoot = ".";
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     unpackCmdHooks+=(_tryDebData)
     _tryDebData() {
       if ! [[ "$1" =~ \.deb$ ]]; then return 1; fi
-      ar xf "$1"
-      if ! [[ -e data.tar.xz ]]; then return 1; fi
-      unpackFile data.tar.xz
+      ar xf $src
+      if ! [[ -e data.tar.zst ]]; then return 1; fi
+      unpackFile data.tar.zst
     }
   '';
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}" \
       --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
                    --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \
-                   -jar $out/share/bluej/bluej.jar"
+                   -cp $out/share/bluej/boot.jar bluej.Boot"
 
     runHook postInstall
   '';

@@ -34,7 +34,7 @@
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
 , withCrystalhd ? withFullDeps
-, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch))
+, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
@@ -58,8 +58,8 @@
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
-, withNvdec ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
-, withNvenc ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
+, withNvdec ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
+, withNvenc ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps

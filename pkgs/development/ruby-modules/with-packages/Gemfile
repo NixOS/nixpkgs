@@ -113,6 +113,7 @@ gem 'pry-byebug'
 gem 'pry-doc'
 gem 'public_suffix'
 gem 'puma'
+gem 'pwntools'
 gem 'rails'
 gem 'rainbow'
 # gem 'rbczmq' deprecated

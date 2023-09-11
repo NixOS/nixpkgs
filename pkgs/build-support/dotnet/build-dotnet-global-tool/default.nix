@@ -32,7 +32,7 @@ buildDotnetModule (args // {
 
   useDotnetFromEnv = true;
 
-  dontBuld = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall

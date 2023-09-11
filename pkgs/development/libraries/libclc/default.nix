@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     rev = "llvmorg-${version}";
     hash = "sha256-paWwnoU3XMqreRgh9JbT1tDMTwq/ZL0ss3SJTteEGL0=";
   };
-  sourceRoot = "source/libclc";
+  sourceRoot = "${src.name}/libclc";
 
   outputs = [ "out" "dev" ];
 

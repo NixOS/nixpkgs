@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wyoming-faster-whisper";
-  version = "0.0.3";
+  version = "1.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "wyoming_faster_whisper";
     inherit version;
-    hash = "sha256-uqepa70lprzV3DJK2wrNAAyZkMMJ5S86RKK716zxYU4=";
+    hash = "sha256-wo62m8gIP9hXihkd8j2haVvz3TlJv3m5WWthTPFwesk=";
   };
 
   patches = [

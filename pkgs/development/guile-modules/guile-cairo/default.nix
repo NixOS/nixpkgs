@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }

@@ -39,45 +39,36 @@ let
       };
     };
   };
-in buildPythonPackage (rec {
+in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.24.2";
+  version = "1.25.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-ADqfUw6IDLLNF3y6GvciC5qkLe+cSvwqL8Pua+frKyI=";
+    hash = "sha256-mjqfOmFIDMCGEXtCaovYaGnCE/xAcuYG8BxOS2brkr8=";
   };
 
-  patches = lib.optionals python.hasDistutilsCxxPatch [
-    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
-    # Patching of numpy.distutils is needed to prevent it from undoing the
-    # patch to distutils.
-    ./numpy-distutils-C++.patch
-  ]
-  ++ lib.optionals stdenv.cc.isClang [
+  patches = [
     # f2py.f90mod_rules generates code with invalid function pointer conversions, which are
     # clang 16 makes an error by default.
     (fetchpatch {
       url = "https://github.com/numpy/numpy/commit/609fee4324f3521d81a3454f5fcc33abb0d3761e.patch";
       hash = "sha256-6Dbmf/RWvQJPTIjvchVaywHGcKCsgap/0wAp5WswuCo=";
     })
-  ]
-  ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # Backport from 1.25. `platform.machine` returns `arm64` on aarch64-darwin, which causes
-    # differing results between `_selected_real_kind_func` and Fortran’s `selected_real_kind`.
-    (fetchpatch {
-      url = "https://github.com/numpy/numpy/commit/afcedf4b63f4a94187e6995c2adea0da3bb18e83.patch";
-      hash = "sha256-cxBoimX5a9wC2qUIGAo5o/M2E9+eV63bV2/wLmfDYKg=";
-    })
-  ]
-  ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+
     # Disable `numpy/core/tests/test_umath.py::TestComplexFunctions::test_loss_of_precision[complex256]`
     # on x86_64-darwin because it fails under Rosetta 2 due to issues with trig functions and
     # 80-bit long double complex numbers.
     ./disable-failing-long-double-test-Rosetta-2.patch
+  ]
+  # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+  # Patching of numpy.distutils is needed to prevent it from undoing the
+  # patch to distutils.
+  ++ lib.optionals python.hasDistutilsCxxPatch [
+    ./numpy-distutils-C++.patch
   ];
 
   postPatch = ''
@@ -90,6 +81,9 @@ in buildPythonPackage (rec {
 
   nativeBuildInputs = [ gfortran cython ];
   buildInputs = [ blas lapack ];
+
+  # Causes `error: argument unused during compilation: '-fno-strict-overflow'` due to `-Werror`.
+  hardeningDisable = lib.optionals stdenv.cc.isClang [ "strictoverflow" ];
 
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
@@ -137,7 +131,4 @@ in buildPythonPackage (rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };
-} // lib.optionalAttrs stdenv.cc.isClang {
-  # Causes `error: argument unused during compilation: '-fno-strict-overflow'` due to `-Werror`.
-  hardeningDisable = [ "strictoverflow" ];
-})
+}

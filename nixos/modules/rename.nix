@@ -114,6 +114,16 @@ in
     (mkRemovedOptionModule [ "services" "rtsp-simple-server" ] "Package has been completely rebranded by upstream as mediamtx, and thus the service and the package were renamed in NixOS as well.")
 
     (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Please use fcitx5 instead")
+    (mkRemovedOptionModule [ "services" "dhcpd4" ] ''
+      The dhcpd4 module has been removed because ISC DHCP reached its end of life.
+      See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
+      Please switch to a different implementation like kea or dnsmasq.
+    '')
+    (mkRemovedOptionModule [ "services" "dhcpd6" ] ''
+      The dhcpd6 module has been removed because ISC DHCP reached its end of life.
+      See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
+      Please switch to a different implementation like kea or dnsmasq.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];

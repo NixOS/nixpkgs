@@ -87,6 +87,10 @@ in
     then [
       ./janestreet-0.15.patch
     ]
+    else if version == "8.17.0+0.17.0"
+    then [
+      ./janestreet-0.16.patch
+    ]
     else [
     ];
 

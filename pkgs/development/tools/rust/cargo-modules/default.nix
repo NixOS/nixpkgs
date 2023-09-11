@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/regexident/cargo-modules";
     changelog = "https://github.com/regexident/cargo-modules/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ figsoda rvarago ];
+    maintainers = with maintainers; [ figsoda rvarago matthiasbeyer ];
   };
 }

@@ -102,9 +102,6 @@ buildPythonApplication rec {
   hardeningDisable = [
     # causes redefinition of _FORTIFY_SOURCE
     "fortify3"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    # Causes build failure due to warning
-    "strictoverflow"
   ];
 
   CGO_ENABLED = 0;
@@ -239,6 +236,7 @@ buildPythonApplication rec {
     license = licenses.gpl3Only;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
+    mainProgram = "kitty";
     maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens ];
   };
 }

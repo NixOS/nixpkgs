@@ -24,6 +24,8 @@ buildPythonPackage rec {
     six
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   checkPhase = ''
     ${python.interpreter} -m unittest
   '';

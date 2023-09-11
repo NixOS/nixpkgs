@@ -1,17 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ cmake
+, fetchFromGitHub
+, lib
+, stdenv
+}:
 
 # This was originally called mkl-dnn, then it was renamed to dnnl, and it has
 # just recently been renamed again to oneDNN. See here for details:
 # https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oneDNN";
-  version = "3.2";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneDNN";
-    rev = "v${version}";
-    sha256 = "sha256-V+0NyQMa4pY9Rhw6bLuqTom0ps/+wm4mGfn1rTi+0YM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/LbT2nHPpZHjY3xbJ9bDabR7aIMvetNP4mB+rxuTfy8=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -30,12 +34,12 @@ stdenv.mkDerivation rec {
       --replace "\''${_IMPORT_PREFIX}/" ""
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${finalAttrs.version}";
     description = "oneAPI Deep Neural Network Library (oneDNN)";
     homepage = "https://01.org/oneDNN";
-    changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bhipple ];
+    platforms = lib.platforms.all;
   };
-}
+})

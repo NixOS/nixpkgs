@@ -630,7 +630,13 @@ let
           loc = prefix ++ [name];
           defns = pushedDownDefinitionsByName.${name} or [];
           defns' = rawDefinitionsByName.${name} or [];
-          optionDecls = filter (m: isOption m.options) decls;
+          optionDecls = filter
+            (m: m.options?_type
+                && (m.options._type == "option"
+                    || throwDeclarationTypeError loc m.options._type m._file
+                )
+            )
+            decls;
         in
           if length optionDecls == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
@@ -691,6 +697,32 @@ let
             }) defs
           ) unmatchedDefnsByName);
     };
+
+  throwDeclarationTypeError = loc: actualTag: file:
+    let
+      name = lib.strings.escapeNixIdentifier (lib.lists.last loc);
+      path = showOption loc;
+      depth = length loc;
+
+      paragraphs = [
+        "In module ${file}: expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
+      ] ++ optional (actualTag == "option-type") ''
+          When declaring an option, you must wrap the type in a `mkOption` call. It should look somewhat like:
+              ${comment}
+              ${name} = lib.mkOption {
+                description = ...;
+                type = <the type you wrote for ${name}>;
+                ...
+              };
+        '';
+
+      # Ideally we'd know the exact syntax they used, but short of that,
+      # we can only reliably repeat the last. However, we repeat the
+      # full path in a non-misleading way here, in case they overlook
+      # the start of the message. Examples attract attention.
+      comment = optionalString (depth > 1) "\n    # ${showOption loc}";
+    in
+    throw (concatStringsSep "\n\n" paragraphs);
 
   /* Merge multiple option declarations into a single declaration.  In
      general, there should be only one declaration of each option.

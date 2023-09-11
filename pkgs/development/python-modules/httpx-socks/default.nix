@@ -54,6 +54,8 @@ buildPythonPackage rec {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     flask
     hypercorn

@@ -1,26 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script
 , nixosTests, postgresql, postgresqlTestHook }:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    hash = "sha256-2DqEfTXD3W6MxfBb6aHaKH+zpxLc2tHaGuWGQuncySo=";
+    hash = "sha256-I8k3E/7RXJFIaEX1Zw6oFDT6UkQvZBZuyTxUZZQYr+s=";
   };
 
-  patches = [
-    # Fix SQLite db lockup
-    (fetchpatch {
-      url = "https://github.com/matrix-org/dendrite/commit/c08c7405dbe9d88c1364f6f1f2466db5045506cc.patch";
-      hash = "sha256-gTF9jK5Ihfe1v49gPCK68BLeiUZa2Syo+7D9r62iEXQ=";
-    })
-  ];
-
-  vendorHash = "sha256-dc0zpKh7J+fi2b5GD/0BQ120UXbBvJLUF74RmYMSOMw=";
+  vendorHash = "sha256-H2wtGjGTzqN8OXAI2ksCBgTJsmJYLQu5aFu9OP03/DA=";
 
   subPackages = [
     # The server
@@ -54,6 +46,9 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) dendrite;
+  };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(.+)" ];
   };
 
   meta = with lib; {

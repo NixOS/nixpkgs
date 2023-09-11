@@ -29,6 +29,9 @@ buildPythonPackage rec {
       url = "https://github.com/SAML-Toolkits/python3-saml/commit/bd65578e5a21494c89320094c61c1c77250bea33.diff";
       hash = "sha256-9Trew6R5JDjtc0NRGoklqMVDEI4IEqFOdK3ezyBU6gI=";
     })
+    # skip tests with expired test data
+    # upstream issue: https://github.com/SAML-Toolkits/python3-saml/issues/373
+    ./skip-broken-tests.patch
   ];
 
   propagatedBuildInputs = [

@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "skl2onnx";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VLEKfGLOKu5PlHvTqW1+2t75HV2mjeezPkzu0/0H1dw=";
+    hash = "sha256-BbLCZDrQNX7B6mhNE4Q4ot9lffgo5X0Hy3jC52viDjc=";
   };
 
   propagatedBuildInputs = [

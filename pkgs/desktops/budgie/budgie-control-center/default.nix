@@ -39,6 +39,7 @@
 , libwacom
 , libxml2
 , libxslt
+, magpie
 , meson
 , modemmanager
 , networkmanager
@@ -58,14 +59,14 @@
 
 stdenv.mkDerivation rec {
   pname = "budgie-control-center";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-z9apestNLEUKzrCMNo0BNAWeyE6FsUCAzcHIom8LcUs=";
+    sha256 = "sha256-7E23cgX7TkBJT/yansBfvMx0ddfAwrF7mGfqzbyLY4Q=";
   };
 
   patches = [
@@ -108,7 +109,6 @@ stdenv.mkDerivation rec {
     gnome.gnome-remote-desktop
     gnome.gnome-settings-daemon
     gnome.gnome-user-share
-    gnome.mutter
     gsettings-desktop-schemas
     gsound
     gtk3
@@ -126,6 +126,7 @@ stdenv.mkDerivation rec {
     libsecret
     libwacom
     libxml2
+    magpie
     modemmanager
     networkmanager
     polkit
@@ -158,7 +159,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       # WM keyboard shortcuts
-      --prefix XDG_DATA_DIRS : "${gnome.mutter}/share"
+      --prefix XDG_DATA_DIRS : "${magpie}/share"
     )
   '';
 

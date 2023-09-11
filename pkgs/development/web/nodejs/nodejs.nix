@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, bash
 , pkg-config, which, buildPackages
 # for `.pkgs` attribute
 , callPackage
@@ -13,6 +13,8 @@
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;
@@ -48,12 +50,17 @@ let
       inherit sha256;
     };
 
+    strictDeps = true;
+
     CC_host = "cc";
     CXX_host = "c++";
-    depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib ];
+    depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib icu ];
 
+    # NB: technically, we do not need bash in build inputs since all scripts are
+    # wrappers over the corresponding JS scripts. There are some packages though
+    # that use bash wrappers, e.g. polaris-web.
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-      ++ [ zlib libuv openssl http-parser icu ];
+      ++ [ zlib libuv openssl http-parser icu bash ];
 
     nativeBuildInputs = [ which pkg-config python ]
       ++ lib.optionals stdenv.isDarwin [ xcbuild ];
@@ -63,14 +70,11 @@ let
     moveToDev = false;
 
     configureFlags = let
-      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
       inherit (stdenv.hostPlatform) gcc isAarch32;
     in sharedConfigureFlags ++ lib.optionals (lib.versionOlder version "19") [
       "--without-dtrace"
     ] ++ (lib.optionals isCross [
       "--cross-compiling"
-      "--without-intl"
-      "--without-snapshot"
       "--dest-cpu=${let platform = stdenv.hostPlatform; in
                     if      platform.isAarch32 then "arm"
                     else if platform.isAarch64 then "arm64"
@@ -116,32 +120,28 @@ let
 
     inherit patches;
 
-    postPatch = ''
-      patchShebangs .
+    doCheck = lib.versionAtLeast version "16"; # some tests fail on v14
 
-      # fix tests
-      for a in test/parallel/test-child-process-env.js \
-               test/parallel/test-child-process-exec-env.js \
-               test/parallel/test-child-process-default-options.js \
-               test/fixtures/syntax/good_syntax_shebang.js \
-               test/fixtures/syntax/bad_syntax_shebang.js ; do
-        substituteInPlace $a \
-          --replace "/usr/bin/env" "${coreutils}/bin/env"
-      done
-    '' + lib.optionalString stdenv.isDarwin ''
-      sed -i -e "s|tr1/type_traits|type_traits|g" \
-             -e "s|std::tr1|std|" src/util.h
-    '';
+    # Some dependencies required for tools/doc/node_modules (and therefore
+    # test-addons, jstest and others) target are not included in the tarball.
+    # Run test targets that do not require network access.
+    checkTarget = lib.concatStringsSep " " [
+      "build-js-native-api-tests"
+      "build-node-api-tests"
+      "tooltest"
+      "cctest"
+    ];
 
-    nativeCheckInputs = [ procps ];
-    doCheck = false; # fails 4 out of 1453 tests
+    # Do not create __pycache__ when running tests.
+    checkFlags = [ "PYTHONDONTWRITEBYTECODE=1" ];
 
     postInstall = ''
-      PATH=$out/bin:$PATH patchShebangs $out
+      HOST_PATH=$out/bin patchShebangs --host $out
 
-      ${lib.optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
-        mkdir -p $out/share/bash-completion/completions/
-        HOME=$TMPDIR $out/bin/npm completion > $out/share/bash-completion/completions/npm
+      ${lib.optionalString (enableNpm) ''
+        mkdir -p $out/share/bash-completion/completions
+        ln -s $out/lib/node_modules/npm/lib/utils/completion.sh \
+          $out/share/bash-completion/completions/npm
         for dir in "$out/lib/node_modules/npm/man/"*; do
           mkdir -p $out/share/man/$(basename "$dir")
           for page in "$dir"/*; do
@@ -203,6 +203,14 @@ let
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
       knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+
+      # Node.js build system does not have separate host and target OS
+      # configurations (architectures are defined as host_arch and target_arch,
+      # but there is no such thing as host_os and target_os).
+      #
+      # We may be missing something here, but it doesn’t look like it is
+      # possible to cross-compile between different operating systems.
+      broken = stdenv.buildPlatform.parsed.kernel.name != stdenv.hostPlatform.parsed.kernel.name;
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version
