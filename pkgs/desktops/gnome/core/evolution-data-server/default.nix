@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      --subst-var-by EDS ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
       --subst-var-by GDS ${glib.getSchemaPath gsettings-desktop-schemas}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
