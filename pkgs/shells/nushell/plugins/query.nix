@@ -13,16 +13,13 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-xyty3GfI+zNkuHs7LYHBctqXUHZ4/MNNcnnfYvI18do=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit CoreFoundation ];
-
   cargoBuildFlags = [ "--package nu_plugin_query" ];
 
   checkPhase = ''
     cargo test --manifest-path crates/nu_plugin_query/Cargo.toml
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Nushell plugin to query JSON, XML, and various web data";
