@@ -1,8 +1,7 @@
 { lib
-, python3
 , fetchFromGitHub
 , gobject-introspection
-, gtk3
+, python3
 , wrapGAppsHook
 }:
 
@@ -38,13 +37,13 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${version}";
     description = "GUI wallpaper setter for Wayland-based window managers";
+    homepage = "https://github.com/anufrievroman/waypaper";
+    license = licenses.gpl3Only;
     longDescription = ''
       GUI wallpaper setter for Wayland-based window managers that works as a frontend for popular backends like swaybg and swww.
 
       If wallpaper does not change, make sure that swaybg or swww is installed.
     '';
-    homepage = "https://github.com/anufrievroman/waypaper";
-    license = licenses.gpl3Only;
     mainProgram = "waypaper";
     maintainers = with maintainers; [ totalchaos ];
     platforms = platforms.linux;
