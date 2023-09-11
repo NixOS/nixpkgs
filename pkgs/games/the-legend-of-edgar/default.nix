@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export CFLAGS=$(sdl2-config --cflags)
   '';
+  hardeningDisable = [
+    "fortify"
+  ];
 
   meta = with lib; {
     homepage = "https://www.parallelrealities.co.uk/games/edgar";
