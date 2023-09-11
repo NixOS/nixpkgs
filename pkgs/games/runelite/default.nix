@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ kmeakin ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "runelite";
   };
 })
