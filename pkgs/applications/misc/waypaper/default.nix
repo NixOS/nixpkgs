@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/anufrievroman/waypaper";
     license = licenses.gpl3Only;
+    mainProgram = "waypaper";
     maintainers = with maintainers; [ totalchaos ];
     platforms = platforms.linux;
   };
