@@ -32,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtest ];
 
+  patches = [
+    ./fix-ppc-musl.patch
+  ];
+
   meta = with lib; {
     description = "An open-source collection of C++ code designed to augment the C++ standard library";
     homepage = "https://abseil.io/";
