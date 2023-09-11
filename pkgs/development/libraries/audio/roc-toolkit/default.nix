@@ -9,7 +9,7 @@
   openfecSupport ? true,
   openfec,
   speexdsp,
-  libunwindSupport ? true,
+  libunwindSupport ? !stdenv.hostPlatform.isMusl,
   libunwind,
   pulseaudioSupport ? true,
   libpulseaudio,
