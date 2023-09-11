@@ -79,6 +79,7 @@ buildPythonPackage rec {
     deepmerge
     fastjsonschema
     hexdump
+    importlib-metadata
     jinja2
     libusbsio
     oscrypto
@@ -93,7 +94,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    importlib-metadata
     pyftdi
     pytestCheckHook
     voluptuous
