@@ -40,6 +40,10 @@ let
       rev = "v${libflux_version}";
       sha256 = "sha256-Xmh7V/o1Gje62kcnTeB9h/fySljhfu+tjbyvryvIGRc=";
     };
+    # since rust 1.72.0: error: private item shadows public glob re-export
+    postPatch = ''
+      substituteInPlace flux/src/lib.rs --replace "deny(warnings, " "deny("
+    '';
     sourceRoot = "${src.name}/libflux";
     cargoSha256 = "sha256-9rPW0lgi3lXJARa1KXgSY8LVJsoFjppok5ODGlqYeYw=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
