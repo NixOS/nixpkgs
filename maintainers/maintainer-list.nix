@@ -9245,6 +9245,12 @@
     github = "KnairdA";
     githubId = 498373;
   };
+  knarkzel = {
+    email = "knarkzel@gmail.com";
+    name = "Knarkzel";
+    github = "Knarkzel";
+    githubId = 85593302;
+  };
   knedlsepp = {
     email = "josef.kemetmueller@gmail.com";
     github = "knedlsepp";
@@ -12741,6 +12747,12 @@
     github = "nviets";
     githubId = 16027994;
     name = "Nathan Viets";
+  };
+  nyanbinary = {
+    email = "vextium@skiff.com";
+    github = "nyabinary";
+    githubId = 97130632;
+    name = "Niko";
   };
   nyanloutre = {
     email = "paul@nyanlout.re";
