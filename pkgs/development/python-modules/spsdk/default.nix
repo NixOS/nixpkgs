@@ -28,6 +28,8 @@
 , pyserial
 , ruamel-yaml
 , sly
+, spsdk
+, testers
 , typing-extensions
 , pytestCheckHook
 , voluptuous
@@ -100,6 +102,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "spsdk" ];
+
+  passthru.tests.version = testers.testVersion { package = spsdk; };
 
   meta = with lib; {
     changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
