@@ -7,10 +7,9 @@
 , Security
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_gstat";
-  version = "0.85.0";
-  src = nushell.src;
+  inherit (nushell) version src;
   cargoHash = "sha256-6luY3SIRRd9vaY9KIJcj8Q974FW0LtAvRjVpdpzkdLo=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
