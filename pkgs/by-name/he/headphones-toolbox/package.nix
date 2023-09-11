@@ -15,9 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r+ybcD6koSIJ/6cck3RNXmf758sRnhS1Y4kaYCNbveA=";
   };
 
-  unpackCmd = ''
-    dpkg-deb -x $curSrc source
-  '';
 
   nativeBuildInputs = [
     dpkg
