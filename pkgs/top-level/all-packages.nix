@@ -27105,7 +27105,6 @@ with pkgs;
   mariadb-galera = callPackage ../servers/sql/mariadb/galera { };
 
   inherit (import ../servers/sql/mariadb pkgs)
-    mariadb_104
     mariadb_105
     mariadb_106
     mariadb_1010
