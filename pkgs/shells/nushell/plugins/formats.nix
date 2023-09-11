@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   '';
   meta = with lib; {
     description = "A formats plugin for Nushell";
-    homepage = "https://github.com/nushell/nushell/tree/main/crates/nu_plugin_formats";
+    homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_formats";
     license = licenses.mpl20;
     maintainers = with maintainers; [ viraptor ];
     platforms = with platforms; all;
