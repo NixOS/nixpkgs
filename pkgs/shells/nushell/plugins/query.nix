@@ -19,8 +19,9 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "--package nu_plugin_query" ];
 
-  # compilation fails with a missing symbol
-  doCheck = false;
+  checkPhase = ''
+    cargo test --manifest-path crates/nu_plugin_query/Cargo.toml
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
