@@ -13215,6 +13215,12 @@
     githubId = 20536514;
     name = "Magdalena Haselsteiner";
   };
+  miallo = {
+    name = "Michael Lohmann";
+    email = "mi.al.lohmann@gmail.com";
+    github = "miallo";
+    githubId = 6929993;
+  };
   miangraham = {
     github = "miangraham";
     githubId = 704580;
