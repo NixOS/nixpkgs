@@ -3,6 +3,7 @@ use isahc::{
     config::{CaCertificate, Configurable, RedirectPolicy, SslOption},
     Body, Request, RequestExt,
 };
+use serde_json::{Map, Value};
 use std::{env, path::Path};
 use url::Url;
 
@@ -19,6 +20,18 @@ pub fn get_url(url: &Url) -> Result<Body, isahc::Error> {
             // therefore do not need to check certificates, since the output is
             // already hashed.
             request = request.ssl_options(SslOption::DANGER_ACCEPT_INVALID_CERTS);
+        }
+    }
+
+    // Respect NIX_NPM_TOKENS environment variable, which should be a JSON mapping in the shape of:
+    // `{ "registry.example.com": "example-registry-bearer-token", ... }`
+    if let Some(host) = url.host_str() {
+        if let Ok(npm_tokens) = env::var("NIX_NPM_TOKENS") {
+            if let Ok(tokens) = serde_json::from_str::<Map<String, Value>>(&npm_tokens) {
+                if let Some(token) = tokens.get(host).and_then(|val| val.as_str()) {
+                    request = request.header("Authorization", format!("Bearer {token}"));
+                }
+            }
         }
     }
 
