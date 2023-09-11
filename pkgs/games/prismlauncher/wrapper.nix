@@ -28,7 +28,18 @@
 , gamemodeSupport ? stdenv.isLinux
 , textToSpeechSupport ? stdenv.isLinux
 , controllerSupport ? stdenv.isLinux
+
+# The flag `withWaylandGLFW` enables runtime-checking of `WAYLAND_DISPLAY`;
+# if the option is enabled, a patched version of GLFW will be added to
+# `LD_LIBRARY_PATH` so that the launcher can use the correct one
+# depending on the desktop environment used.
 , withWaylandGLFW ? false
+# By default, this package uses a binary wrapper for `wrapQtAppsHook`.
+# Enabling `shellWrapper` will add `makeWrapper` to `nativeBuildInputs`,
+# causing `wrapQtAppsHook` to output a shell wrapper instead.
+# This is needed for checking environment variables at runtime
+# and modifying others if necessary (see above option for example).
+# Warning: This can make the program start slower, by about four milliseconds.
 , shellWrapper ? withWaylandGLFW
 
 , jdks ? [ jdk17 jdk8 ]
