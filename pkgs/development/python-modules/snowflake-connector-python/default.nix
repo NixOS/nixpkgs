@@ -1,6 +1,7 @@
 { lib
 , asn1crypto
 , buildPythonPackage
+, pythonRelaxDepsHook
 , certifi
 , cffi
 , charset-normalizer
@@ -8,6 +9,7 @@
 , filelock
 , idna
 , oscrypto
+, packaging
 , pycryptodomex
 , pyjwt
 , pyopenssl
@@ -16,25 +18,46 @@
 , requests
 , setuptools
 , typing-extensions
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.0.0";
+  version = "3.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F0EbgRSS/kYKUDPhf6euM0eLqIqVjQsHC6C9ZZSRCIE=";
+    hash = "sha256-wMLn7PMcnmaRzn/VbcLVw60dOzJAWTpkEw5HFrCncLY=";
   };
 
+  # snowflake-connector-python requires arrow 10.0.1, which we don't have in
+  # nixpkgs, so we cannot build the C extensions that use it. thus, patch out
+  # cython and pyarrow from the build dependencies
+  #
+  # keep an eye on following issue for improvements to this situation:
+  #
+  #   https://github.com/snowflakedb/snowflake-connector-python/issues/1144
+  #
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "charset_normalizer>=2,<3" "charset_normalizer" \
-      --replace "pyOpenSSL>=16.2.0,<23.0.0" "pyOpenSSL"
+    substituteInPlace pyproject.toml \
+      --replace '"cython",' "" \
+      --replace '"pyarrow>=10.0.1,<10.1.0",' ""
   '';
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+    wheel
+  ];
+
+  pythonRelaxDeps = [
+    "pyOpenSSL"
+    "charset-normalizer"
+    "cryptography"
+  ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -44,12 +67,12 @@ buildPythonPackage rec {
     filelock
     idna
     oscrypto
+    packaging
     pycryptodomex
     pyjwt
     pyopenssl
     pytz
     requests
-    setuptools
     typing-extensions
   ];
 
