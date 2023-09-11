@@ -11,16 +11,15 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "the-legend-of-edgar";
-  version = "1.36";
+  version = "1.36-unstable-2023-07-11";
 
   src = fetchFromGitHub {
-    name = "${pname}-${version}-src";
     owner = "riksweeney";
     repo = "edgar";
-    rev = version;
-    hash = "sha256-u2mg4hpcjPXzuZjYKIC4lgqGJPFRB9baHvaiu/YafZw=";
+    rev = "8344b385b65e8226455c7e88bd5aca57caa3c520";
+    hash = "sha256-dOLKMsyQkVZ7gBiURfr/tFbu3xSqei8A/M2HSZgAFnI=";
   };
 
   nativeBuildInputs = [
@@ -46,16 +45,11 @@ stdenv.mkDerivation rec {
     "BIN_DIR=${placeholder "out"}/bin/"
   ];
 
-  # TODO: remove the setting below when the next version arrives
-  # https://github.com/riksweeney/edgar/pull/57
-  preBuild = ''
-    export CFLAGS=$(sdl2-config --cflags)
-  '';
   hardeningDisable = [
     "fortify"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.parallelrealities.co.uk/games/edgar";
     description = "A 2D platform game with a persistent world";
     longDescription = ''
@@ -70,9 +64,10 @@ stdenv.mkDerivation rec {
       Amiga and SNES. Edgar must battle his way across the world, solving
       puzzles and defeating powerful enemies to achieve his quest.
     '';
-    license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl1Plus;
+    mainProgram = "edgar";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
-}
+})
