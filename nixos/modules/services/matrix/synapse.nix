@@ -198,7 +198,7 @@ in {
   ];
 
   options = let
-    listenerType = types.submodule {
+    listenerType = workerContext: types.submodule {
       options = {
         port = mkOption {
           type = types.port;
@@ -241,7 +241,7 @@ in {
 
         tls = mkOption {
           type = types.bool;
-          default = true;
+          default = !workerContext;
           example = false;
           description = lib.mdDoc ''
             Whether to enable TLS on the listener socket.
@@ -553,7 +553,7 @@ in {
             };
 
             listeners = mkOption {
-              type = types.listOf listenerType;
+              type = types.listOf (listenerType false);
               default = [{
                 port = 8008;
                 bind_addresses = [ "127.0.0.1" ];
@@ -580,6 +580,10 @@ in {
               };
               description = lib.mdDoc ''
                 List of ports that Synapse should listen on, their purpose and their configuration.
+
+                By default, synapse will be configured for client and federation traffic on port 8008, and
+                for worker replication traffic on port 9093. See [`services.matrix-synapse.workers`](#opt-services.matrix-synapse.workers)
+                for more details.
               '';
             };
 
@@ -839,7 +843,7 @@ in {
           specified here for each worker.
 
           ::: {.note}
-            Worker support will add a replication listener to the default
+            Worker support will add a replication listener on port 9093 to the main synapse process using the default
             value of [`services.matrix-synapse.settings.listeners`](#opt-services.matrix-synapse.settings.listeners) and configure that
             listener as `services.matrix-synapse.settings.instance_map.main`.
             If you set either of those options, make sure to configure a replication listener yourself.
@@ -861,7 +865,7 @@ in {
             };
             worker_listeners = lib.mkOption {
               default = [ ];
-              type = types.listOf listenerType;
+              type = types.listOf (listenerType true);
               description = lib.mdDoc ''
                 List of ports that this worker should listen on, their purpose and their configuration.
               '';
