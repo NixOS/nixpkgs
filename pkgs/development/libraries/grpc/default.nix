@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [
     (fetchpatch {
       # armv6l support, https://github.com/grpc/grpc/pull/21341
@@ -92,6 +94,10 @@ stdenv.mkDerivation rec {
   # crash if build and host architecture are compatible (e. g. pkgsLLVM).
   preBuild = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+  '';
+
+  preInstall = ''
+    mkdir $out $dev
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option"
