@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   '';
   meta = with lib; {
     description = "A git status plugin for Nushell";
-    homepage = "https://github.com/nushell/nushell/tree/main/crates/nu_plugin_gstat";
+    homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_gstat";
     license = licenses.mpl20;
     maintainers = with maintainers; [ mrkkrp ];
     platforms = with platforms; all;
