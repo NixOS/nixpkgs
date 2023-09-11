@@ -1,4 +1,5 @@
 { fetchurl, lib, stdenv
+, cmake
 , CoreServices
 }:
 
@@ -13,6 +14,10 @@ stdenv.mkDerivation rec {
 
   # Test can randomly fail: https://hydra.nixos.org/build/7243912
   doCheck = false;
+
+  # this project supports both autotools and cmake, but using autotools causes issues with snprintf
+  # functions when compiling for powerpc64-musl with fortify enabled
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = lib.optional stdenv.isDarwin CoreServices;
 
