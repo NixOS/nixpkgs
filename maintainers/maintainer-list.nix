@@ -7180,6 +7180,12 @@
     githubId = 69209;
     name = "Ian Duncan";
   };
+  ianliu = {
+    email = "ian.liu88@gmail.com";
+    github = "ianliu";
+    githubId = 30196;
+    name = "Ian Liu Rodrigues";
+  };
   ianmjones = {
     email = "ian@ianmjones.com";
     github = "ianmjones";
