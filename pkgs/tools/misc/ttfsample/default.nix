@@ -1,4 +1,6 @@
-{ buildGoModule , fetchFromGitHub , lib
+{ lib
+, buildGoModule
+, fetchFromGitHub
 }:
 buildGoModule rec {
         pname = "ttfsample";
