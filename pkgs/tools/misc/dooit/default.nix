@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "1.0.1";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7a6xoqbAmnGVUVppQTSo4hH44XFCqBnF7xO7sOVySY0=";
+    hash = "sha256-4D8X+VtESII1c2b7r6BeCbeULW25uki3y4TcNER/zZU=";
   };
 
   # Required versions not available
