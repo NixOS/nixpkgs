@@ -60,6 +60,7 @@
 , vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" "intel-nullhw" ] # No Vulkan support on Darwin
 , OpenGL, Xplugin
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
+, withLibunwind ? !stdenv.hostPlatform.isMusl
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
@@ -198,6 +199,8 @@ self = stdenv.mkDerivation {
     # meson auto_features enables these features, but we do not want them
     "-Dandroid-libbacktrace=disabled"
 
+    (lib.mesonEnable "valgrind" withValgrind)
+    (lib.mesonEnable "libunwind" withLibunwind)
   ] ++ lib.optionals stdenv.isLinux [
     "-Dglvnd=true"
 
@@ -211,22 +214,20 @@ self = stdenv.mkDerivation {
     # Rusticl, new OpenCL frontend
     "-Dgallium-rusticl=true" "-Drust_std=2021"
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
-  ]  ++ lib.optionals (!withValgrind) [
-    "-Dvalgrind=disabled"
-  ] ++ lib.optional enablePatentEncumberedCodecs
-    "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
-  ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
+  ] ++ lib.optional enablePatentEncumberedCodecs "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
+    ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
 
   buildInputs = with xorg; [
     expat llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
-    zstd libunwind
+    zstd
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
     ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
+    ++ lib.optional withLibunwind libunwind
     ++ lib.optional haveZink vulkan-loader
     ++ lib.optional haveDozen directx-headers;
 
