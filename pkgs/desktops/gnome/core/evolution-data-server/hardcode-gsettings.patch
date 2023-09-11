@@ -202,14 +202,15 @@ index 2525856..7ecc1a8 100644
  				g_clear_object (&settings);
  			}
 diff --git a/src/calendar/libecal/e-reminder-watcher.c b/src/calendar/libecal/e-reminder-watcher.c
-index 5a08490..34c51f4 100644
+index 2dbdd99..a6cf45c 100644
 --- a/src/calendar/libecal/e-reminder-watcher.c
 +++ b/src/calendar/libecal/e-reminder-watcher.c
-@@ -2592,7 +2592,19 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
+@@ -2646,8 +2646,33 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
  
  	watcher->priv = e_reminder_watcher_get_instance_private (watcher);
  	watcher->priv->cancellable = g_cancellable_new ();
 -	watcher->priv->settings = g_settings_new ("org.gnome.evolution-data-server.calendar");
+-	watcher->priv->desktop_settings = g_settings_new ("org.gnome.desktop.interface");
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
@@ -223,9 +224,23 @@ index 5a08490..34c51f4 100644
 +		watcher->priv->settings = g_settings_new_full(schema, NULL,
 +							      NULL);
 +	}
- 	watcher->priv->scheduled = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, e_reminder_watcher_free_rd_slist);
- 	watcher->priv->default_zone = e_cal_util_copy_timezone (zone);
- 	watcher->priv->timers_enabled = TRUE;
++	{
++		g_autoptr(GSettingsSchemaSource) schema_source;
++		g_autoptr(GSettingsSchema) schema;
++		schema_source = g_settings_schema_source_new_from_directory("@GDS@",
++									    g_settings_schema_source_get_default(),
++									    TRUE,
++									    NULL);
++		schema = g_settings_schema_source_lookup(schema_source,
++							 "org.gnome.desktop.interface",
++							 FALSE);
++		watcher->priv->desktop_settings = g_settings_new_full(schema,
++								      NULL,
++								      NULL);
++	}
+ 	if (watcher->priv->desktop_settings) {
+ 		g_signal_connect_object (
+ 			watcher->priv->desktop_settings,
 diff --git a/src/calendar/libedata-cal/e-cal-meta-backend.c b/src/calendar/libedata-cal/e-cal-meta-backend.c
 index 27fa153..3679d72 100644
 --- a/src/calendar/libedata-cal/e-cal-meta-backend.c
@@ -297,7 +312,7 @@ index bef9188..ce92f6c 100644
  	g_clear_object (&settings);
  
 diff --git a/src/camel/camel-gpg-context.c b/src/camel/camel-gpg-context.c
-index fd7ec52..338a73b 100644
+index db5fc2e..162e00f 100644
 --- a/src/camel/camel-gpg-context.c
 +++ b/src/camel/camel-gpg-context.c
 @@ -747,7 +747,18 @@ gpg_ctx_get_executable_name (void)
@@ -346,10 +361,10 @@ index e61160c..b6553a4 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index 3180db6..ba3d679 100644
+index ef34665..59f294b 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
-@@ -5618,7 +5618,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
+@@ -5627,7 +5627,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
  	if (do_old_flags_update) {
  		GSettings *eds_settings;
  
@@ -490,7 +505,7 @@ index 3bb1071..199e822 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index 7eca355..795d822 100644
+index 2364f3e..e8f59f2 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
 @@ -94,7 +94,18 @@ eos_default_guess_can_process (EOAuth2Service *service,

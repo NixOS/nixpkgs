@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchzip
 , substituteAll
 , pkg-config
 , gnome
@@ -23,6 +23,7 @@
 , gperf
 , wrapGAppsHook
 , glib-networking
+, gsettings-desktop-schemas
 , pcre
 , vala
 , cmake
@@ -50,13 +51,20 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.49.2";
+  version = "3.49.3";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "qSpw64nbRPRt5Ss3avusRkzP5Q/xPz5frzx6VkAMf7Q=";
+    sha256 = "ZhvSPatxG/gjXqtKeFXEpZ4jA9psTKkhl9U9xTKb7hY=";
+
+    postFetch = ''
+      # Very dirty hack to make update script happy.
+      substituteInPlace $out/src/calendar/libecal/e-reminder-watcher.c \
+        --replace "settings = g_settings_new (schema_id)" "settings = NULL" \
+        --replace 'e_reminder_watcher_load_settings_tentative ("' 'g_settings_new ("'
+    '';
   };
 
   patches = [
@@ -68,7 +76,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      --subst-var-by EDS ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
+      --subst-var-by GDS ${glib.getSchemaPath gsettings-desktop-schemas}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
 
@@ -86,6 +95,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    libsecret
     libsoup_3
     gnome-online-accounts
     p11-kit
@@ -116,7 +126,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     db
-    libsecret
     nss
     nspr
     libical
@@ -158,7 +167,7 @@ stdenv.mkDerivation rec {
         "org.gnome.evolution-data-server.addressbook" = "EDS";
         "org.gnome.evolution-data-server.calendar" = "EDS";
         "org.gnome.evolution-data-server" = "EDS";
-
+        "org.gnome.desktop.interface" = "GDS";
       };
       inherit src;
     };
