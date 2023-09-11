@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # remove cryptography pin
-    sed "/cryptography/ s/,<[0-9]*//g" setup.py
+    sed -i "/cryptography/ s/,<[0-9]*//g" setup.py
   '';
 
   propagatedBuildInputs = [
