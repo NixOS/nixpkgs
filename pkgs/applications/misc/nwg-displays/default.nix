@@ -46,6 +46,12 @@ python310Packages.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
+  postInstall = ''
+    mkdir -p $out/share/pixmaps/ $out/share/applications/
+    cp nwg-displays.svg $out/share/pixmaps/
+    cp nwg-displays.desktop $out/share/applications/
+  '';
+
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}");
   '';
