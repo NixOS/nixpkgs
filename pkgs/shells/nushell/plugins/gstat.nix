@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "A git status plugin for Nushell";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_gstat";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ mrkkrp ];
+    maintainers = with maintainers; [ mrkkrp aidalgol ];
     platforms = with platforms; all;
   };
 }
