@@ -107,5 +107,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = licenses.bsd3;
     maintainers = with maintainers; [ frogamic sbruder ];
+    mainProgram = "spsdk";
   };
 }
