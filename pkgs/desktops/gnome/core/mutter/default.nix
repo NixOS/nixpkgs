@@ -163,10 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
-
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3142
-    substituteInPlace meson.build \
-      --replace "dependency('sysprof-4')" "dependency('sysprof-6')"
   '';
 
   postInstall = ''
