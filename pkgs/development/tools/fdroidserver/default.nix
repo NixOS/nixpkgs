@@ -107,6 +107,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/f-droid/fdroidserver/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ obfusk ];
+    maintainers = with maintainers; [ linsui jugendhacker ];
   };
 }
