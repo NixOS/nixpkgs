@@ -889,7 +889,6 @@ rec {
         contentsList = if builtins.isList contents then contents else [ contents ];
         bind-paths = builtins.toString (builtins.map (path: "--bind=${path}:${path}!") [
           "/dev/"
-          "/proc/"
           "/sys/"
           "${builtins.storeDir}/"
           "$out/layer.tar"
