@@ -2980,8 +2980,6 @@ with pkgs;
 
   dterm = callPackage ../applications/terminal-emulators/dterm { };
 
-  eterm = callPackage ../applications/terminal-emulators/eterm { };
-
   foot = callPackage ../applications/terminal-emulators/foot { };
 
   germinal = callPackage ../applications/terminal-emulators/germinal { };
