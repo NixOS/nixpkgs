@@ -5241,8 +5241,6 @@ with pkgs;
 
   encpipe = callPackage ../tools/misc/encpipe { };
 
-  engage = callPackage ../tools/misc/engage { };
-
   ent = callPackage ../tools/misc/ent { };
 
   entwine = callPackage ../applications/graphics/entwine { };
@@ -19787,6 +19785,8 @@ with pkgs;
 
   lurk = callPackage ../development/tools/lurk { };
 
+  lutgen = callPackage ../applications/graphics/lutgen { };
+
   maizzle = callPackage ../development/tools/maizzle { };
 
   malt = callPackage ../development/tools/profiling/malt { };
@@ -34315,8 +34315,6 @@ with pkgs;
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
   opsdroid = callPackage ../applications/networking/opsdroid { };
-
-  oroborus = callPackage ../applications/window-managers/oroborus { };
 
   osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
