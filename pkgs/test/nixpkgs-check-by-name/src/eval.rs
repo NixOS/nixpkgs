@@ -30,9 +30,15 @@ pub fn check_values<W: io::Write>(
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
     let attrs_file = NamedTempFile::new().context("Failed to create a temporary file")?;
+    // We need to canonicalise this path because if it's a symlink (which can be the case on
+    // Darwin), Nix would need to read both the symlink and the target path, therefore need 2
+    // NIX_PATH entries for restrict-eval. But if we resolve the symlinks then only one predictable
+    // entry is needed.
+    let attrs_file_path = attrs_file.path().canonicalize()?;
+
     serde_json::to_writer(&attrs_file, &nixpkgs.package_names).context(format!(
         "Failed to serialise the package names to the temporary path {}",
-        attrs_file.path().display()
+        attrs_file_path.display()
     ))?;
 
     // With restrict-eval, only paths in NIX_PATH can be accessed, so we explicitly specify the
@@ -57,9 +63,9 @@ pub fn check_values<W: io::Write>(
         // Pass the path to the attrs_file as an argument and add it to the NIX_PATH so it can be
         // accessed in restrict-eval mode
         .args(["--arg", "attrsPath"])
-        .arg(attrs_file.path())
+        .arg(&attrs_file_path)
         .arg("-I")
-        .arg(attrs_file.path())
+        .arg(&attrs_file_path)
         // Same for the nixpkgs to test
         .args(["--arg", "nixpkgsPath"])
         .arg(&nixpkgs.path)
