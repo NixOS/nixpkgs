@@ -13608,6 +13608,8 @@ self: super: with self; {
 
   veryprettytable = callPackage ../development/python-modules/veryprettytable { };
 
+  vg = callPackage ../development/python-modules/vg { };
+
   videocr = callPackage ../development/python-modules/videocr { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
