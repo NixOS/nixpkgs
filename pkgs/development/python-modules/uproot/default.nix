@@ -69,6 +69,7 @@ buildPythonPackage rec {
     "tests/test_0088-read-with-http.py"
     "tests/test_0220-contiguous-byte-ranges-in-http.py"
     "tests/test_0916-read-from-s3.py"
+    "tests/test_0930-expressions-in-pandas.py"
   ];
 
   pythonImportsCheck = [
