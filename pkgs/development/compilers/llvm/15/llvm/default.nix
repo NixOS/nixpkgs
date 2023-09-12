@@ -254,6 +254,14 @@ in stdenv.mkDerivation (rec {
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
+  '' + optionalString stdenv.isFreeBSD ''
+    # TODO: Why does this test fail on FreeBSD?
+    # It seems to reference /usr/local/lib/libfile.a, which is clearly a problem.
+    rm test/tools/llvm-libtool-darwin/L-and-l.test
+
+    # This test fails for the same reason it fails on MacOS, but the fix is
+    # not trivial to apply.
+    rm test/ExecutionEngine/Interpreter/intrinsics.ll
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
   '';

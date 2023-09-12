@@ -310,62 +310,6 @@ in
     inherit config overlays;
 
     stdenv = import ../generic rec {
-      name = "stdenv-freebsd-boot-2";
-      inherit config;
-      extraNativeBuildInputs = [./unpack-source.sh];
-      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz (
-              prevStage.stdenv.mkDerivation {
-                name = "freebsd-cp";
-                fbworld = prevStage.fbworld.corebin;
-                phases = [ "installPhase" ];
-                installPhase = ''
-                  mkdir -p $out/bin
-                  cp $fbworld/bin/cp $out/bin/freebsd-cp
-                '';
-              }
-          ) ];
-      inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
-      shell = "${prevStage.bash}/bin/bash";
-      cc = import ../../build-support/cc-wrapper ({
-        inherit lib;
-        name = "stdenv-freebsd-boot-2-cc-wrapper";
-        stdenvNoCC = prevStage.stdenv;
-        cc = prevStage.fbworld.cc;
-        libc = prevStage.fbworld.lib;
-        coreutils = prevStage.coreutils;
-        gnugrep = prevStage.gnugrep;
-        nativeTools = false;
-        nativeLibc = false;
-        isClang = true;
-        bintools = import ../../build-support/bintools-wrapper {
-          inherit lib;
-          stdenvNoCC = prevStage.stdenv;
-          name = "stdenv-freebsd-boot-2-bintools-wrapper";
-          libc = prevStage.fbworld.lib;
-          propagateDoc = false;
-          nativeTools = false;
-          nativeLibc = false;
-          bintools = prevStage.bintools-unwrapped;
-          coreutils = prevStage.coreutils;
-          gnugrep = prevStage.gnugrep;
-        };
-      });
-      fetchurlBoot = import ../../build-support/fetchurl {
-        inherit lib;
-        stdenvNoCC = stdenv;
-        curl = prevStage.curl;
-      };
-      overrides = self: super: {
-        inherit (prevStage) fbworld bash;
-        libkrb5 = prevStage.fbworld // { override = _: prevStage.fbworld; };
-      };
-    };
-  })
-
-  (prevStage: rec {
-    inherit config overlays;
-
-    stdenv = import ../generic rec {
       name = "stdenv-freebsd";
       inherit config;
       extraNativeBuildInputs = [./unpack-source.sh];
@@ -386,16 +330,38 @@ in
         setupHooks = super.setupHooks ++ [ ./cc-wrapper-setup-hook-hook.sh ];
         gnused = prevStage.gnused;
       })).override {
-        nixSupport = { cc-ldflags = "--allow-shlib-undefined"; };
+        nixSupport = {
+          cc-ldflags = "--allow-shlib-undefined";
+          libcxx-cxxflags = "-isystem ${prevStage.fbworld}/usr/include/c++/v1";
+        };
       };
       fetchurlBoot = import ../../build-support/fetchurl {
         inherit lib;
         stdenvNoCC = stdenv;
         curl = prevStage.curl;
       };
-      overrides = self: super: {
-        inherit (prevStage) fbworld bash;
+      overrides = self: super: let
+          stdenvNoAllow = stdenv.override {
+            cc = (prevStage.gcc.overrideAttrs (self: super: {
+              #name = "based-cc";
+              setupHooks = super.setupHooks ++ [ ./cc-wrapper-setup-hook-hook.sh ];
+              gnused = prevStage.gnused;
+            }));
+          };
+      in {
+        inherit (prevStage) fbworld coreutils gnutar findutils gnumake gnused patchelf gnugrep gawk diffutils patch bash gzip bzip2 xz;
         libkrb5 = prevStage.fbworld // { override = _: prevStage.fbworld; };
+        shadow = prevStage.fbworld.corebin;
+        # FreeBSD requires using --allow-shlib-undefined most of the time in order to link with libc,
+        # due to some exports (notably environ) not actually being provided by libc but instead being
+        # transitive dependencies to ld-elf.so (?)
+        # rust packages seem to sometimes use symbol linkage visibility that gcc rejects under
+        # --allow-shlib-undefined, so we must turn it off
+        # We must FURTHER not just use --no-allow-shlib-undefined, because rustc (?) will sometimes
+        # add it explicity
+        makeRustPlatform = super.makeRustPlatform.override {
+          callPackage = super.newScope { stdenv = stdenvNoAllow; buildPackages = super.buildPackages // { stdenv = stdenvNoAllow; }; };
+        };
       };
       preHook =
         ''

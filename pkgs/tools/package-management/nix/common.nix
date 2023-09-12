@@ -74,7 +74,7 @@ in
   # passthru tests
 , pkgsi686Linux
 }: let
-self = stdenv.mkDerivation {
+self = stdenv.mkDerivation ({
   pname = "nix";
 
   version = "${version}${suffix}";
@@ -248,5 +248,9 @@ self = stdenv.mkDerivation {
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
     mainProgram = "nix";
   };
-};
+} // (lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+  # FreeBSD requires linking without -z defs
+  libutil_ALLOW_UNDEFINED = 1;
+  libcmd_ALLOW_UNDEFINED = 1;
+}));
 in self

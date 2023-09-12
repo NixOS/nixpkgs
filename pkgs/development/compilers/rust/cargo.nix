@@ -48,17 +48,20 @@ rustPlatform.buildRustPackage.override {
   # when cross-compiling.
   #
   # [1]: https://github.com/rust-lang/compiler-team/issues/422
-  postPatch = lib.optionalString (with stdenv.buildPlatform; isMusl && !isStatic) ''
+  postPatch = lib.optionalString (with stdenv.buildPlatform; isMusl && !isStatic) (
+    let stdenv = pkgsBuildHost.stdenvNoAllowShlibUndefined; in
+  ''
     mkdir -p .cargo
     cat <<EOF >> .cargo/config
     [host]
+    # I am begging you to acknowledge me: ${stdenv.name}
     rustflags = "-C target-feature=-crt-static"
-    linker = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}cc"
+    linker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     [unstable]
     host-config = true
     target-applies-to-host = true
     EOF
-  '';
+  '');
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;

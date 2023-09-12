@@ -243,6 +243,10 @@ in lib.makeExtensible (self: ({
   nix_2_19 = common {
     version = "2.19.2";
     hash = "sha256-iA8DqS+W2fWTfR+nNJSvMHqQ+4NpYMRT3b+2zS6JTvE=";
+    patches = lib.optionals aws-sdk-cpp.stdenv.hostPlatform.isFreeBSD [
+      ./patches/FreeBSD-tests-restricted.sh.patch
+      ./patches/FreeBSD-configure.ac.patch
+    ];
   };
 
   # The minimum Nix version supported by Nixpkgs

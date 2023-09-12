@@ -1,0 +1,14 @@
+diff --git a/configure.ac b/configure.ac
+index 6d78237f0..526114c6a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -33,6 +33,9 @@ AC_ARG_WITH(system, AS_HELP_STRING([--with-system=SYSTEM],[Platform identifier (
+      linux-gnu*|linux-musl*)
+         # For backward compatibility, strip the `-gnu' part.
+         system="$machine_name-linux";;
++     freebsd*)
++        # freebsd does not have ABI compatibility and cannot have major version stripped
++        system="$machine_name-`echo $host_os | "$SED" -e's/\..*$//g'`";;
+      *)
+         # Strip the version number from names such as `gnu0.3',
+         # `darwin10.2.0', etc.
