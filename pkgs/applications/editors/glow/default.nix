@@ -3,19 +3,28 @@
 , fetchFromGitHub
 , installShellFiles
 , stdenv
+, fetchpatch
 }:
+
 buildGoModule rec {
   pname = "glow";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "glow";
     rev = "v${version}";
-    sha256 = "sha256-CI0S9XJtJQClpQvI6iSb5rcHafEUwr2V6+Fq560lRfM=";
+    hash = "sha256-12UziCf3BO1z+W02slNCCvXhIkvZuVgXk++BdHG3gDI=";
   };
 
-  vendorHash = "sha256-2QrHBbhJ04r/vPK2m8J2KZSFrREDCc18tlKd7evghBc=";
+  vendorHash = "sha256-xxFC87t12bZKea9Snscul+xx8IGFAcoIr9Z8wxHL7nM=";
+
+  # Remove whenever a release with it is available
+  patches = [(fetchpatch {
+    url = "https://github.com/charmbracelet/glow/commit/f0734709f0be19a34e648caaf63340938a50caa2.patch";
+    name = "go-1-17-patch";
+    hash = "sha256-vpMiVb/7SFT9xcSpVGQriEjkexh1F/ljpfpIswdBx2Y=";
+  })];
 
   doCheck = false;
 
