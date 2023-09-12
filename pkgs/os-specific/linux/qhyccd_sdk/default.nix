@@ -1,48 +1,77 @@
 # This package provides the QHYCCD SDK, which is intended for non-commercial use only.
-
-{ lib
-, stdenv
-, libusb1
-, fxload
-, fetchurl
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fxload,
+  fetchurl,
+  makeWrapper,
 }:
-
 stdenv.mkDerivation rec {
   pname = "qhyccd_sdk";
-  version = "23.01.11";
-  linux64Sha256 = "3y26mskckf58fnl0l0zbs2v9l3z7kx1xjhxbm61p3qgr3dpzahfw";
-  arm64Sha256 = "1qgjmdhqiz9bjf7v58yblcvh8s27w2nzd1z7vynhvrsscg8fv9n6";
+  version = "23.09.06";
+  linux64Sha256 = "17ayxxf5wk2k14jyry3c5m5mwnyh9r0ykyh8iaxdlsk9dzjw0chp";
+  arm64Sha256 = "1ag70zpzqp6dp0rvz974vsnfyll7jvwq69s1hai3v2chvywllhs5";
 
-  archSuffix = if stdenv.system == "aarch64-linux" then "Arm64" else "linux64";
-  strippedVersion = builtins.replaceStrings [ "." "" ] version;
+  dontConfigure = true;
+  dontPatch = true;
+  dontPatchELF = true;
+
+  strippedVersion = builtins.replaceStrings ["."] [""] version;
+
+  archSuffix =
+    if stdenv.system == "aarch64-linux"
+    then "Arm64"
+    else "linux64";
+
+  archSha256 =
+    if stdenv.system == "aarch64-linux"
+    then arm64Sha256
+    else linux64Sha256;
 
   src = fetchurl {
-    url = "https://www.qhyccd.com/file/repository/publish/SDK/${version}/sdk_${archSuffix}_${strippedVersion}.tgz";
-    sha256 = if stdenv.system == "aarch64-linux" then arm64Sha256 else linux64Sha256;
+    url = "https://www.qhyccd.com/file/repository/publish/SDK/${strippedVersion}/sdk_${archSuffix}_${version}.tgz";
+    sha256 = archSha256;
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInput = [makeWrapper];
+  # builder = ''./install.sh'';
+
+  buildPhase = ''
+    chmod +x ./install.sh
+    chmod +x ./distclean.sh
+    chmod +x ./uninstall.sh
+
+    mkdir -p $out/sbin
+
+    substituteInPlace ./install.sh ./distclean.sh ./uninstall.sh \
+      --replace /lib/udev $out/lib/udev \
+      --replace /etc/udev $out/etc/udev \
+      --replace "cp -a sbin/fxload" "# cp -a /sbin/fxload" \
+      --replace /usr/local $out/usr/local \
+      --replace /lib/firmware $out/lib/firmware \
+      --replace /usr/share/usb $out/usr/share/usb \
+      --replace ldconfig '# ldconfig'
+
+      # udev rules
+      #option 1: services.udev.packages = [ pkgs.qhyccd_sdk ];
+
+      echo -################
+      cat ./install.sh # grep sbin
+      echo -################
+  '';
 
   installPhase = ''
-    tar xf ${src}
-    cd sdk_${archSuffix}_${version}
-    sudo ./distclean.sh
-    sudo ./install.sh
+    ln -s ${fxload}/bin/fxload $out/sbin/fxload
+      echo -################
+    source ./install.sh
+    echo ou2
+    ls -la $out
+    echo -################
   '';
 
   uninstallPhase = ''
     cd sdk_${archSuffix}_${version}
     sudo ./uninstall.sh
-  '';
-
-  shellHook = ''
-    echo "Entering QHYCCD SDK shell..."
-
-    installPhase
-
-    # Run the uninstall script when exiting the shell
-    trap "sudo ./uninstall.sh" EXIT
   '';
 
   meta = with lib; {
@@ -51,6 +80,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.unfree;
     requireAllowUnfree = true;
-    maintainers = with maintainers; [ realsnick ];
+    maintainers = with maintainers; [realsnick];
   };
 }
