@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "hypothesmith";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vc6EXsmE5uP+0h5l0ugrjrxt5cpeuTZJ39dgNMWQakY=";
+    hash = "sha256-Uj2gTAY7hzko1sKO8WUGz2S/MXdwOYN+F+a73G4szNs=";
   };
 
   patches = [
