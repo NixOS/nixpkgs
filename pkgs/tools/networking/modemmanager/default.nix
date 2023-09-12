@@ -12,7 +12,6 @@
 , python3
 , libmbim
 , libqmi
-, modemmanager
 , systemd
 , bash-completion
 , meson
@@ -93,21 +92,6 @@ stdenv.mkDerivation rec {
     patchShebangs tools/tests/test-wrapper.sh
   '';
   installCheckTarget = "check";
-
-  passthru = {
-    # provided FCC unlock scripts. Used by the NixOS module system to symlink
-    # to them from /etc/ModemManager/fcc-unlock.d/….
-    # Most of them actually symlink to a "common" unlock script
-    fccUnlockScripts = {
-      "03f0:4e1d" = "${modemmanager}/share/ModemManager/fcc-unlock.available.d/1199";
-      "105b:e0ab" = "${modemmanager}/share/ModemManager/fcc-unlock.available.d/105b";
-      "1199:9079" = "${modemmanager}/share/ModemManager/fcc-unlock.available.d/1199";
-      "1eac:1001" = "${modemmanager}/share/ModemManager/fcc-unlock.available.d/1eac";
-      "2c7c:030a" = "${modemmanager}/share/ModemManager/fcc-unlock.available.d/2c7c";
-      "413c:81a3" = "${modemmanager}/share/ModemManager/fcc-unlock.available.d/1199";
-      "413c:81a8" = "${modemmanager}/share/ModemManager/fcc-unlock.available.d/1199";
-    };
-  };
 
   meta = with lib; {
     description = "WWAN modem manager, part of NetworkManager";
