@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rope";
-  version = "1.6.0";
+  version = "1.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "python-rope";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-avNCti288dY9pl5AVTmUzZU/vb6WDkXEtELNlEi6L/o=";
+    hash = "sha256-j65C3x3anhH23D4kic5j++r/Ft0RqgZ/jFrNrNHVcXA=";
   };
 
   nativeBuildInputs = [
