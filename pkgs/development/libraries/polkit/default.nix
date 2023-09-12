@@ -39,7 +39,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "122";
+  version = "123";
 
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     owner = "polkit";
     repo = "polkit";
     rev = version;
-    sha256 = "fLY8i8h4McAnwVt8dLOqbyHM7v3SkbWqATz69NkUudU=";
+    hash = "sha256-/kjWkh6w2FYgtYWzw3g3GlWJKKpkJ3cqwfE0iDqJctw=";
   };
 
   patches = [
