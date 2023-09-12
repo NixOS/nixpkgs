@@ -58,7 +58,7 @@ let
     buildDrvArgs = args;
   };
 
-  baseDerivation = llvmPackages_13.stdenv.mkDerivation (finalAttrs: args // {
+  baseDerivation = llvmPackages_13.stdenv.mkDerivation (finalAttrs: {
     inherit flutterBuildFlags runtimeDependencies;
 
     outputs = [ "out" "debug" ];
@@ -153,7 +153,7 @@ let
     passthru = (args.passthru or {}) // {
       inherit (deps) depsListFile;
     };
-  });
+  } // args);
 
   packageOverrideRepository = (callPackage ../../development/compilers/flutter/package-overrides { }) // customPackageOverrides;
   productPackages = builtins.filter (package: package.kind != "dev")
