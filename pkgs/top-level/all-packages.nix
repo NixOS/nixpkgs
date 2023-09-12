@@ -38436,6 +38436,7 @@ with pkgs;
   rkpd2 = callPackage ../games/shattered-pixel-dungeon/rkpd2.nix { };
   rat-king-adventure = callPackage ../games/shattered-pixel-dungeon/rat-king-adventure.nix { };
   experienced-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/experienced-pixel-dungeon.nix { };
+  summoning-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/summoning-pixel-dungeon.nix { };
 
   shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
 
