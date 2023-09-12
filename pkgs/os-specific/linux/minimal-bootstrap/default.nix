@@ -65,6 +65,13 @@ lib.makeScope
       gnused = gnused-mes;
     };
 
+    gawk = callPackage ./gawk {
+      bash = bash_2_05;
+      gcc = gcc2;
+      glibc = glibc22;
+      bootGawk = gawk-mes;
+    };
+
     gcc2 = callPackage ./gcc/2.nix {
       bash = bash_2_05;
       gcc = gcc2-mes;
@@ -162,6 +169,7 @@ lib.makeScope
       echo ${diffutils.tests.get-version}
       echo ${findutils.tests.get-version}
       echo ${gawk-mes.tests.get-version}
+      echo ${gawk.tests.get-version}
       echo ${gcc2.tests.get-version}
       echo ${gcc2-mes.tests.get-version}
       echo ${gcc46.tests.get-version}
