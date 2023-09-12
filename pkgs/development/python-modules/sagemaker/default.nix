@@ -29,7 +29,7 @@ buildPythonPackage rec {
   version = "2.184.0.post0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";
