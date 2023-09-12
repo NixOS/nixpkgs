@@ -18320,8 +18320,6 @@ with pkgs;
 
   eltclsh = callPackage ../development/tools/eltclsh { };
 
-  trealla = callPackage ../development/interpreters/trealla { };
-
   waagent = callPackage ../applications/networking/cluster/waagent { };
 
   wapm-cli = callPackage ../tools/package-management/wapm/cli {
