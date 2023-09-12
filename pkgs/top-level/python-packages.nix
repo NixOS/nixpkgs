@@ -1685,6 +1685,8 @@ self: super: with self; {
 
   canopen = callPackage ../development/python-modules/canopen { };
 
+  cantools = callPackage ../development/python-modules/cantools { };
+
   camelot = callPackage ../development/python-modules/camelot { };
 
   capstone = callPackage ../development/python-modules/capstone {
