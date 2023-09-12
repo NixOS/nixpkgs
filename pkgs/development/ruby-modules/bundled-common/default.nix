@@ -23,6 +23,7 @@
 , nativeBuildInputs ? []
 , buildInputs ? []
 , extraConfigPaths ? []
+, gemfileExtraFiles ? []
 , ...
 }@args:
 
@@ -85,6 +86,7 @@ let
     ${maybeCopyAll mainGemName}
     cp ${gemFiles.gemfile} $out/Gemfile || ls -l $out/Gemfile
     cp ${gemFiles.lockfile} $out/Gemfile.lock || ls -l $out/Gemfile.lock
+    cp ${builtins.concatStringsSep " " gemfileExtraFiles} $out
 
     ${lib.concatMapStringsSep "\n" (path: "cp -r ${path} $out/") extraConfigPaths}
   '';
