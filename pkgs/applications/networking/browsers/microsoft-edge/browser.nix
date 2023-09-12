@@ -4,6 +4,7 @@
 , fetchurl
 , lib
 , makeWrapper
+, nixosTests
 
 , binutils-unwrapped
 , xz
@@ -188,6 +189,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = ./update.py;
+  passthru.tests = {
+    inherit (nixosTests) microsoft-edge;
+  };
 
   meta = with lib; {
     homepage = "https://www.microsoft.com/en-us/edge";
