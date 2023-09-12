@@ -1,5 +1,4 @@
-{ lib
-, gcc11Stdenv
+{ gcc11Stdenv
 , fetchFromGitHub
 , cmake
 , nasm
@@ -7,29 +6,24 @@
 , python3
 , extraCmakeFlags ? [ ]
 }:
-
 gcc11Stdenv.mkDerivation rec {
   pname = "ipp-crypto";
-  version = "2021.3";
+  version = "2021.7";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipp-crypto";
     rev = "ippcp_${version}";
-    hash = "sha256-QEJXvQ//zhQqibFxXwPMdS1MHewgyb24LRmkycVSGrM=";
+    hash = "sha256-3W0LlJgmrp2Rk7xQ+0GQfkF2UpH4htx9R7IL86smtnY=";
   };
-
-  # Fix typo: https://github.com/intel/ipp-crypto/pull/33
-  postPatch = ''
-    substituteInPlace sources/cmake/ippcp-gen-config.cmake \
-      --replace 'ippcpo-config.cmake' 'ippcp-config.cmake'
-  '';
 
   cmakeFlags = [ "-DARCH=intel64" ] ++ extraCmakeFlags;
 
   nativeBuildInputs = [
     cmake
     nasm
+    # TODO(phlip9): The most recent `ipp-crypto` version (2021.9) now uses
+    # OpenSSL v3 so we can avoid this EOL version when sgx-sdk updates.
     openssl_1_1
     python3
   ];
