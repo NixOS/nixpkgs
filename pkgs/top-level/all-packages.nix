@@ -37556,6 +37556,8 @@ with pkgs;
 
   shipwright = callPackage ../games/shipwright { };
 
+  starruler2 = callPackage ../games/starruler2 { };
+
   wipeout-rewrite = callPackage ../games/wipeout-rewrite {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
