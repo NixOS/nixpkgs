@@ -1,18 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, bison, buildPackages, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, buildPackages
+, installShellFiles
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nawk";
   version = "20230909";
 
   src = fetchFromGitHub {
     owner = "onetrueawk";
     repo = "awk";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sBJ+ToFkhU5Ei84nqzbS0bUbsa+60iLSz2oeV5+PXEk=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison installShellFiles ];
+
+  nativeBuildInputs = [
+    bison
+    installShellFiles
+  ];
+
+  outputs = [ "out" "man" ];
+
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "HOSTCC=${if stdenv.buildPlatform.isDarwin then "clang" else "cc"}"
@@ -21,20 +34,23 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 a.out "$out/bin/nawk"
-    installManPage awk.1
+    mv awk.1 nawk.1
+    installManPage nawk.1
     runHook postInstall
   '';
 
   meta = {
+    homepage = "https://github.com/onetrueawk/awk";
     description = "The one, true implementation of AWK";
     longDescription = ''
-       This is the version of awk described in "The AWK Programming
-       Language", by Al Aho, Brian Kernighan, and Peter Weinberger
-       (Addison-Wesley, 1988, ISBN 0-201-07981-X).
+      This is the version of awk described in "The AWK Programming Language", by
+      Al Aho, Brian Kernighan, and Peter Weinberger (Addison-Wesley, 1988, ISBN
+      0-201-07981-X).
     '';
-    homepage = "https://www.cs.princeton.edu/~bwk/btl.mirror/";
+    changelog = "https://github.com/onetrueawk/awk/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.konimex ];
+    mainProgram = "nawk";
+    maintainers = with lib.maintainers; [ AndersonTorres konimex ];
     platforms = lib.platforms.all;
   };
-}
+})
