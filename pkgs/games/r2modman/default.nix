@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-CXitb/b2tvTfrkFrFv4KP4WdmMg+1sDtC/s2u5ezDfI=";
   };
 
+  patches = [
+    # Make it possible to launch Steam games from r2modman.
+    ./steam-launch-fix.patch
+  ];
+
   nativeBuildInputs = [
     yarn
     fixup_yarn_lock
