@@ -365,7 +365,7 @@ with lib.maintainers; {
       hedning
       jtojnar
       dasj19
-      maxeaubrey
+      amaxine
     ];
     githubTeams = [
       "gnome"
