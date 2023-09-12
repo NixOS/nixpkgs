@@ -2,6 +2,378 @@
 
 ## Reference {#reference}
 
+### Glossary {#python-glossary}
+
+pkgs
+: At root level, it corresponds with all attributes exposed by nixpkgs, e.g. `pkgs = import <nixpkgs>{}`.
+
+${python}
+: Represents a given Python interpreter attribute name. When in doubt, check for valid attribute names from:
+  - the [nixpkgs manual interpreters' table](#interpreters).
+  - <TAB>-completion of `pkgs.pythonInterpreters` in the REPL (`pkgs.pythonInterpreters.<TAB>`).
+  - evaluation of `lib.attrNames pythonInterpreters` in the REPL.
+
+${pypkg}
+: Represents a given Python package attribute name, e.g. `pandas`.
+
+ps
+: stands for nixpkgs python **p**ackage **s**et.
+
+
+### API {#python-API}
+
+`TODO`
+
+#### pkgs.fetchPypi {#python-pkgs-fetchPypi}
+
+`TODO`
+
+#### pkgs.mkShell.venvdir {#python-pkgs-mkShell-venvdir}
+
+`TODO`
+
+#### pkgs.${python} {#python-pkgs-varPYTHON}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv {#python-pkgs-varPYTHON-buildEnv}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.env {#python-pkgs-varPYTHON-buildEnv-env}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.extraLibs {#python-pkgs-varPYTHON-buildEnv-extraLibs}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.ignoreCollisions {#python-pkgs-varPYTHON-buildEnv-ignoreCollisions}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.permitUserSite {#python-pkgs-varPYTHON-buildEnv-permitUserSite}
+
+`TODO`
+
+#### pkgs.${python}.buildEnv.postBuild {#python-pkgs-varPYTHON-buildEnv-postBuild}
+
+`TODO`
+
+#### pkgs.${python}.executable {#python-pkgs-varPYTHON-executable}
+
+`TODO`
+
+#### pkgs.${python}.interpreter {#python-pkgs-varPYTHON-interpreter}
+
+`TODO`
+
+#### pkgs.${python}.libPrefix {#python-pkgs-varPYTHON-libPrefix}
+
+`TODO`
+
+#### pkgs.${python}.packageOverrides {#python-pkgs-varPYTHON-packageOverrides}
+
+`TODO`
+
+#### pkgs.${python}.${python}Packages {#python-pkgs-varPYTHON-varPYTHONPackages}
+
+`TODO`
+
+#### pkgs.${python}.pkgs {#python-pkgs-varPYTHON-pkgs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonApplication {#python-pkgs-varPYTHON-pkgs-buildPythonApplication}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage {#python-pkgs-varPYTHON-pkgs-buildPythonPackage}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.buildInputs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-buildInputs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.buildInputs.postShellHook {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-buildInputs-postShellHook}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.buildInputs.postVenvCreation {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-buildInputs-postVenvCreation}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.CFLAGS {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-CFLAGS}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.buildPhase {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-buildPhase}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.catchConflicts {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-catchConflicts}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.checkPhase {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-checkPhase}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.disabled {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-disabled}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.disabledTests {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-disabledTests}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.disabledTestPaths {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-disabledTestPaths}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.doCheck {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-doCheck}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.dontWrapPythonPrograms {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-dontWrapPythonPrograms}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.format {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-format}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.installCheck {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-installCheck}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.installPhase {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-installPhase}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.LDFLAGS {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-LDFLAGS}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.makeWrappersArgs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-makeWrappersArgs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.namePrefix {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-namePrefix}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.nativeBuildInputs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-nativeBuildInputs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.nativeCheckInputs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-nativeCheckInputs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.overridePythonAttrs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-overridePythonAttrs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.permitUserSite {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-permitUserSite}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pipInstallFlags {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pipInstallFlags}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.postFixup {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-postFixup}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.preInstall {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-preInstall}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.preShellHook {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-preShellHook}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.propagatedBuildInputs {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-propagatedBuildInputs}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pytestFlagsArray {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pytestFlagsArray}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pythonImportsCheck {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pythonImportsCheck}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pythonPath {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pythonPath}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pythonRelaxDeps {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pythonRelaxDeps}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.pythonRemoveDeps {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-pythonRemoveDeps}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.removeBinByteCode {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-removeBinByteCode}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.setupPyBuildFlags {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-setupPyBuildFlags}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.setupPyGlobalFlags {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-setupPyGlobalFlags}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.shellPhase {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-shellPhase}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.sphinxBuilders {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-sphinxBuilders}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.sphinxRoot {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-sphinxRoot}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.src {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-src}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.buildPythonPackage.unittestFlagsArray {#python-pkgs-varPYTHON-pkgs-buildPythonPackage-unittestFlagsArray}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.override {#python-pkgs-varPYTHON-pkgs-override}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.override.enableOptimizations {#python-pkgs-varPYTHON-pkgs-override-enableOptimizations}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.override.reproducibleBuild {#python-pkgs-varPYTHON-pkgs-override-reproducibleBuild}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.python {#python-pkgs-varPYTHON-pkgs-python}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.toPythonApplication {#python-pkgs-varPYTHON-pkgs-toPythonApplication}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.toPythonModule {#python-pkgs-varPYTHON-pkgs-toPythonModule}
+
+`TODO`
+
+#### pkgs.${python}.pkgs.${pypkg}.overridePythonAttrs {#python-pkgs-varPYTHON-pkgs-varPYPKG-overridePythonAttrs}
+
+`TODO`
+
+#### pkgs.${python}.setupHooks {#python-pkgs-varPYTHON-setupHooks}
+
+The following are setup hooks specifically for Python packages. Most of these
+are used in `buildPythonPackage`.
+
+#### pkgs.${python}.setupHooks.eggBuildHook {#python-pkgs-varPYTHON-setupHooks-eggBuildHook}
+
+`eggBuildHook` to skip building for eggs.
+
+#### pkgs.${python}.setupHooks.eggInstallHook {#python-pkgs-varPYTHON-setupHooks-eggInstallHook}
+
+`eggInstallHook` to install eggs.
+
+#### pkgs.${python}.setupHooks.eggUnpackHook {#python-pkgs-varPYTHON-setupHooks-eggUnpackHook}
+
+`eggUnpackhook` to move an egg to the correct folder so it can be installed
+  with the `eggInstallHook`
+
+#### pkgs.${python}.setupHooks.flitBuildHook {#python-pkgs-varPYTHON-setupHooks-flitBuildHook}
+
+`flitBuildHook` to build a wheel using `flit`.
+
+#### pkgs.${python}.setupHooks.pipBuildHook {#python-pkgs-varPYTHON-setupHooks-pipBuildHook}
+
+`pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
+  (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
+
+#### pkgs.${python}.setupHooks.pipInstallHook {#python-pkgs-varPYTHON-setupHooks-pipInstallHook}
+
+`pipInstallHook` to install wheels.
+
+#### pkgs.${python}.setupHooks.pypaBuildHook {#python-pkgs-varPYTHON-setupHooks-pypaBuildHook}
+
+`pypaBuildHook` to build a wheel using
+  [`pypa/build`](https://pypa-build.readthedocs.io/en/latest/index.html) and
+  PEP 517/518. Note a build system (e.g. `setuptools` or `flit`) should still
+  be added as `nativeBuildInput`.
+
+#### pkgs.${python}.setupHooks.pytestCheckHook {#python-pkgs-varPYTHON-setupHooks-pytestCheckHook}
+
+`pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
+
+#### pkgs.${python}.setupHooks.pythonCatchConflictsHook {#python-pkgs-varPYTHON-setupHooks-pythonCatchConflictsHook}
+
+`pythonCatchConflictsHook` to check whether a Python package is not already existing.
+
+#### pkgs.${python}.setupHooks.pythonImportsCheckHook {#python-pkgs-varPYTHON-setupHooks-pythonImportsCheckHook}
+
+`pythonImportsCheckHook` to check whether importing the listed modules works.
+
+#### pkgs.${python}.setupHooks.pythonRelaxDepsHook {#python-pkgs-varPYTHON-setupHooks-pythonRelaxDepsHook}
+
+`pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
+  See [example usage](#using-pythonrelaxdepshook).
+
+#### pkgs.${python}.setupHooks.pythonRemoveBinBytecodeHook {#python-pkgs-varPYTHON-setupHooks-pythonRemoveBinBytecodeHook}
+
+`pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
+
+#### pkgs.${python}.setupHooks.setuptoolsBuildHook {#python-pkgs-varPYTHON-setupHooks-setuptoolsBuildHook}
+
+`setuptoolsBuildHook` to build a wheel using `setuptools`.
+
+#### pkgs.${python}.setupHooks.setuptoolsCheckHook {#python-pkgs-varPYTHON-setupHooks-setuptoolsCheckHook}
+
+`setuptoolsCheckHook` to run tests with `python setup.py test`.
+
+#### pkgs.${python}.setupHooks.sphinxHook {#python-pkgs-varPYTHON-setupHooks-sphinxHook}
+
+`sphinxHook` to build documentation and manpages using Sphinx.
+
+#### pkgs.${python}.setupHooks.unittestCheckHook {#python-pkgs-varPYTHON-setupHooks-unittestCheckHook}
+
+`unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
+
+#### pkgs.${python}.setupHooks.venvShellHook {#python-pkgs-varPYTHON-setupHooks-venvShellHook}
+
+`venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
+  `venv` is created if it does not yet exist. `postVenvCreation` can be used to
+  to run commands only after venv is first created.
+
+#### pkgs.${python}.setupHooks.wheelUnpackHook {#python-pkgs-varPYTHON-setupHooks-wheelUnpackHook}
+
+`wheelUnpackHook` to move a wheel to the correct folder so it can be installed
+  with the `pipInstallHook`.
+
+#### pkgs.${python}.sitePackages {#python-pkgs-varPYTHON-sitePackages}
+
+`TODO`
+
+#### pkgs.${python}.withPackages {#python-pkgs-varPYTHON-withPackages}
+
+`TODO`
+
 ### Interpreters {#interpreters}
 
 | Package    | Aliases         | Interpreter |
@@ -441,39 +813,6 @@ need them, you have to use `python.buildEnv`.
 
 Python 2 namespace packages may provide `__init__.py` that collide. In that case
 `python.buildEnv` should be used with `ignoreCollisions = true`.
-
-#### Setup hooks {#setup-hooks}
-
-The following are setup hooks specifically for Python packages. Most of these
-are used in `buildPythonPackage`.
-
-- `eggUnpackhook` to move an egg to the correct folder so it can be installed
-  with the `eggInstallHook`
-- `eggBuildHook` to skip building for eggs.
-- `eggInstallHook` to install eggs.
-- `flitBuildHook` to build a wheel using `flit`.
-- `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
-  (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
-- `pypaBuildHook` to build a wheel using
-  [`pypa/build`](https://pypa-build.readthedocs.io/en/latest/index.html) and
-  PEP 517/518. Note a build system (e.g. `setuptools` or `flit`) should still
-  be added as `nativeBuildInput`.
-- `pipInstallHook` to install wheels.
-- `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
-- `pythonCatchConflictsHook` to check whether a Python package is not already existing.
-- `pythonImportsCheckHook` to check whether importing the listed modules works.
-- `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
-  See [example usage](#using-pythonrelaxdepshook).
-- `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
-- `setuptoolsBuildHook` to build a wheel using `setuptools`.
-- `setuptoolsCheckHook` to run tests with `python setup.py test`.
-- `sphinxHook` to build documentation and manpages using Sphinx.
-- `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
-  `venv` is created if it does not yet exist. `postVenvCreation` can be used to
-  to run commands only after venv is first created.
-- `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
-  with the `pipInstallHook`.
-- `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
 ### Development mode {#development-mode}
 
