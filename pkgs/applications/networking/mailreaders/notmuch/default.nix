@@ -136,6 +136,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
+    changelog   = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${version}";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;
