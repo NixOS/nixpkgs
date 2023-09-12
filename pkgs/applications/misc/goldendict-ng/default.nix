@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goldendict-ng";
-  version = "23.07.23";
+  version = "23.09.10";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ZKbrO5L4KFmr2NsGDihRWBeW0OXHoPRwZGj6kt1Anc8=";
+    rev = "v${finalAttrs.version}-WhiteDew.54c8bd56";
+    hash = "sha256-X9xqodCqHjppz1zIHLnb87NiDE4FWlXiQufhDu/rJq4=";
   };
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook ];
