@@ -899,6 +899,7 @@
   ./services/networking/flannel.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
+  ./services/networking/frp.nix
   ./services/networking/frr.nix
   ./services/networking/gateone.nix
   ./services/networking/gdomap.nix
