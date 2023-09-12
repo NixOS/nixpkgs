@@ -25,6 +25,8 @@ with pkgs;
 
   config = callPackage ./config.nix { };
 
+  top-level = callPackage ./top-level { };
+
   haskell = callPackage ./haskell { };
 
   hooks = callPackage ./hooks { };
