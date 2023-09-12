@@ -12472,6 +12472,8 @@ self: super: with self; {
 
   textile = callPackage ../development/python-modules/textile { };
 
+  textparser = callPackage ../development/python-modules/textparser { };
+
   textual = callPackage ../development/python-modules/textual { };
 
   textual-universal-directorytree = callPackage ../development/python-modules/textual-universal-directorytree { };
