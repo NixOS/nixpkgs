@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
       --fish completions/fish/eza.fish \
       --zsh completions/zsh/_eza
   '' + lib.optionalString exaAlias ''
-    ln -s $out/bin/eza $out/bin/exa
+    ln -s eza $out/bin/exa
   '';
 
   meta = with lib; {
