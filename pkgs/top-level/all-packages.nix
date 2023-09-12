@@ -1837,6 +1837,8 @@ with pkgs;
 
   hexdiff = callPackage ../tools/misc/hexdiff { };
 
+  hexo-cli = callPackage ../development/tools/hexo-cli { };
+
   hostmux = callPackage ../tools/misc/hostmux { };
 
   hsd = callPackage ../tools/misc/hsd { };
@@ -2982,8 +2984,6 @@ with pkgs;
   darktile = callPackage ../applications/terminal-emulators/darktile { };
 
   dterm = callPackage ../applications/terminal-emulators/dterm { };
-
-  eterm = callPackage ../applications/terminal-emulators/eterm { };
 
   foot = callPackage ../applications/terminal-emulators/foot { };
 
@@ -5244,8 +5244,6 @@ with pkgs;
 
   encpipe = callPackage ../tools/misc/encpipe { };
 
-  engage = callPackage ../tools/misc/engage { };
-
   ent = callPackage ../tools/misc/ent { };
 
   entwine = callPackage ../applications/graphics/entwine { };
@@ -5703,6 +5701,8 @@ with pkgs;
   hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
     wlroots = wlroots_0_15;
   };
+
+  hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
@@ -6179,6 +6179,10 @@ with pkgs;
   oil-buku = callPackage ../applications/misc/oil-buku { };
 
   ondir = callPackage ../tools/misc/ondir { };
+
+  opencomposite = callPackage ../development/libraries/opencomposite { };
+
+  opencomposite-helper = callPackage ../development/libraries/opencomposite/helper.nix { };
 
   osdlyrics = callPackage ../applications/audio/osdlyrics { };
 
@@ -7392,9 +7396,7 @@ with pkgs;
 
   ddrutility = callPackage ../tools/system/ddrutility { };
 
-  inherit (callPackages ../applications/networking/p2p/deluge {
-    libtorrent-rasterbar = libtorrent-rasterbar-1_2_x;
-  })
+  inherit (callPackages ../applications/networking/p2p/deluge { })
     deluge-gtk
     deluged
     deluge;
@@ -12784,6 +12786,8 @@ with pkgs;
   rockbox-utility = libsForQt5.callPackage ../tools/misc/rockbox-utility { };
 
   rosegarden = libsForQt5.callPackage ../applications/audio/rosegarden { };
+
+  rosenpass = callPackage ../tools/networking/rosenpass  { };
 
   rot8 = callPackage ../tools/misc/rot8 { };
 
@@ -19791,6 +19795,8 @@ with pkgs;
     });
 
   lurk = callPackage ../development/tools/lurk { };
+
+  lutgen = callPackage ../applications/graphics/lutgen { };
 
   maizzle = callPackage ../development/tools/maizzle { };
 
@@ -30416,8 +30422,10 @@ with pkgs;
   };
 
   zeal-qt5 = libsForQt5.callPackage ../data/documentation/zeal { };
-  zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal { };
   zeal = zeal-qt5;
+  zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal {
+    qtx11extras = null; # Because it does not exist in qt6
+  };
 
   zilla-slab = callPackage ../data/fonts/zilla-slab { };
 
@@ -34320,8 +34328,6 @@ with pkgs;
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
   opsdroid = callPackage ../applications/networking/opsdroid { };
-
-  oroborus = callPackage ../applications/window-managers/oroborus { };
 
   osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
@@ -38617,8 +38623,6 @@ with pkgs;
 
   tcl2048 = callPackage ../games/tcl2048 { };
 
-  the-legend-of-edgar = callPackage ../games/the-legend-of-edgar { };
-
   the-powder-toy = callPackage ../games/the-powder-toy {
     lua = lua5_1;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -39777,6 +39781,7 @@ with pkgs;
 
   lean = callPackage ../applications/science/logic/lean { };
   lean2 = callPackage ../applications/science/logic/lean2 { };
+  lean4 = callPackage ../applications/science/logic/lean4 { };
   lean3 = lean;
   elan = callPackage ../applications/science/logic/elan { };
   mathlibtools = with python3Packages; toPythonApplication mathlibtools;
