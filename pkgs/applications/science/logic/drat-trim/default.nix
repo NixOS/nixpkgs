@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "marijnheule";
     repo = "drat-trim";
-    rev = "2e5e29cb0019d5cfd547d4208dca1b3ec290349f";
+    rev = "refs/tags/v05.22.2023";
     hash = "sha256-sV3A0f1TLSaTIdAtT6y8rU3ZS2UqEePJYSf3UySOlSA=";
   };
 
