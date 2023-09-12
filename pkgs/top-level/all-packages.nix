@@ -17321,6 +17321,9 @@ with pkgs;
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-rdme = callPackage ../by-name/ca/cargo-rdme/package.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme { };
   cargo-risczero = callPackage ../development/tools/rust/cargo-risczero { };
   cargo-run-bin = callPackage ../development/tools/rust/cargo-run-bin {};
