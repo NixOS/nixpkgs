@@ -36,4 +36,15 @@ buildPackage {
     mv doc $doc/share/doc/s6-linux-init/html
   '';
 
+  passthru = {
+    tests = {
+      usage = runCommand "s6-linux-init-usage-test" { } ''
+        mkdir $out
+        ${pkg}/bin/s6-linux-init -h &> $out/success || true
+        [ -s $out/success ]
+        grep -q usage $out/success
+      '';
+    };
+  };
+
 }
