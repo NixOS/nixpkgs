@@ -1,16 +1,20 @@
-{lib, stdenv, fetchurl, autoreconfHook, texinfo, mpfr}:
+{lib, stdenv, fetchFromGitLab, autoreconfHook, texinfo, mpfr}:
 stdenv.mkDerivation rec {
   pname = "mpfi";
   version = "1.5.4";
-  file_nr = "38111";
 
-  src = fetchurl {
-    # NOTE: the file_nr is whats important here. The actual package name (including the version)
-    # is ignored. To find out the correct file_nr, go to https://gforge.inria.fr/projects/mpfi/
-    # and click on Download in the section "Latest File Releases".
-    url = "https://gforge.inria.fr/frs/download.php/file/${file_nr}/mpfi-${version}.tgz";
-    sha256 = "sha256-Ozk4WV1yCvF5c96vcnz8DdQcixbCCtwQOpcPSkOuOlY=";
-  };
+  src = fetchFromGitLab {
+    domain = "gitlab.inria.fr";
+    owner = pname;
+    repo = pname;
+    rev = "${version}";
+    hash = "sha256-EZMJa6+HRsNyVWy+hZD/srm8Fj02VsHFXXA4WHcwNKM=";
+  } + "/${pname}";
+
+  postPatch = ''
+    # apparently, they tagged a version with a missing file
+    sed -i 's/ div_ext.c / /' src/Makefile.am
+  '';
 
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ mpfr ];
