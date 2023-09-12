@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchurl
 , lib
 , curl
 , nlohmann_json
@@ -9,7 +8,6 @@
 , linkFarmFromDrvs
 , callPackage
 }:
-
 let
   # Although those headers are also included in the source of `sgx-psw`, the `azure-dcap-client` build needs specific versions
   filterSparse = list: ''
@@ -21,16 +19,8 @@ let
     (fetchFromGitHub rec {
       name = "${repo}-headers";
       owner = "intel";
-      repo = "SGXDataCenterAttestationPrimitives";
-      rev = "0436284f12f1bd5da7e7a06f6274d36b4c8d39f9";
-      sparseCheckout = [ "QuoteGeneration/quote_wrapper/common/inc/sgx_ql_lib_common.h" ];
-      hash = "sha256-ipKpYHbiwjCUXF/pCArJZy5ko1YX2wqMMdSnMUzhkgY=";
-      postFetch = filterSparse sparseCheckout;
-    })
-    (fetchFromGitHub rec {
-      name = "${repo}-headers";
-      owner = "intel";
       repo = "linux-sgx";
+      # See: <src/Linux/configure> for the revision `azure-dcap-client` uses.
       rev = "1ccf25b64abd1c2eff05ead9d14b410b3c9ae7be";
       hash = "sha256-WJRoS6+NBVJrFmHABEEDpDhW+zbWFUl65AycCkRavfs=";
       sparseCheckout = [
@@ -44,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "azure-dcap-client";
-  version = "1.11.2";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = pname;
     rev = version;
-    hash = "sha256-EYj3jnzTyJRl6N7avNf9VrB8r9U6zIE6wBNeVsMtWCA=";
+    hash = "sha256-q0dI4WdA1ue4sw+QfSherh31Ldf9gnhoft66o3E9gnU=";
   };
 
   nativeBuildInputs = [
