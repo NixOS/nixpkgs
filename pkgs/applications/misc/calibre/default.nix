@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = if unrarSupport
               then lib.licenses.unfreeRedistributable
               else lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pSub AndersonTorres ];
+    maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
