@@ -17112,6 +17112,15 @@
     github = "thenonameguy";
     githubId = 2217181;
   };
+  thepixelcode = {
+    email = "thepixelcode@duck.com";
+    name = "Samuel B.";
+    github = "ThePixelCode";
+    githubId = 72231627;
+    keys = [{
+      fingerprint = "1EF0 5842 E1A3 0B5E 8BC7  9C45 5857 82E5 A293 CE70";
+    }];
+  };
   therealansh = {
     email = "tyagiansh23@gmail.com";
     github = "therealansh";
