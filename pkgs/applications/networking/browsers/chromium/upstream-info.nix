@@ -41,9 +41,9 @@
         version = "2023-06-09";
       };
     };
-    sha256 = "09b0i48sr5ynlhpya4lwnhgp081q4lqd23cc5l59dsxzh5ivbycb";
-    sha256bin64 = "1d49qcjh5mhfzqzjn4ilj23dpzd6nyl1pij5iv43dwxl8z2r3l3m";
-    version = "116.0.5845.179";
+    sha256 = "152lyrw8k36gbmf4fmfny4ajqh0523y5d48yrshbgwn5klmbhaji";
+    sha256bin64 = "118sk39939d52srws2vgs1mfizpikswxh5ihd9x053vzn0aj8cfa";
+    version = "116.0.5845.187";
   };
   ungoogled-chromium = {
     deps = {
