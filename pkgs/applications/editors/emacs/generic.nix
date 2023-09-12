@@ -65,7 +65,7 @@
 , withNativeCompilation ?
   if nativeComp != null
   then lib.warn "nativeComp option is deprecated and will be removed; use withNativeCompilation instead" nativeComp
-  else true
+  else stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , noGui ? false
 , srcRepo ? true
 , withAcl ? false
@@ -405,6 +405,6 @@ mkDerivation (finalAttrs: {
   };
 
   meta = meta // {
-    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 })
