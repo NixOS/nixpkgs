@@ -7333,6 +7333,8 @@ with pkgs;
 
   deluge-2_x = deluge;
 
+  der-ascii = callPackage ../tools/security/der-ascii { };
+
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
 
   dfc  = callPackage ../tools/system/dfc { };
