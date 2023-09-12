@@ -5,6 +5,8 @@
 }:
 
 webcord.overrideAttrs (old: {
+  pname = "webcord-vencord";
+
   patches = (old.patches or [ ]) ++ [
     (substituteAll {
       src = ./add-extension.patch;
