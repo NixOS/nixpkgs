@@ -7,6 +7,7 @@
 , emacs
 , ruby
 , testers
+, gitUpdater
 , which, dtach, openssl, bash, gdb, man, git
 , withEmacs ? true
 , withRuby ? true
@@ -131,6 +132,11 @@ stdenv.mkDerivation rec {
     pythonSourceRoot = "notmuch-${version}/bindings/python";
     tests.version = testers.testVersion { package = notmuch; };
     inherit version;
+
+    updateScript = gitUpdater {
+      url = "https://git.notmuchmail.org/git/notmuch";
+      ignoredVersions = "_rc.*";
+    };
   };
 
   meta = with lib; {
