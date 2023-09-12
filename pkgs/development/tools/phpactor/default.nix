@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, php, phpPackages }:
+{ lib, stdenvNoCC, fetchFromGitHub, makeBinaryWrapper, php, phpPackages }:
 
 let
   version = "2023.06.17";
@@ -51,6 +51,10 @@ stdenvNoCC.mkDerivation {
   pname = "phpactor";
   inherit src version;
 
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
   buildInputs = [
     php
   ];
@@ -63,7 +67,8 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/share/php/phpactor $out/bin
     cp -r . $out/share/php/phpactor
     cp -r ${vendor}/vendor $out/share/php/phpactor
-    ln -s $out/share/php/phpactor/bin/phpactor $out/bin/phpactor
+    makeWrapper ${php}/bin/php "$out/bin/phpactor" \
+      --add-flags $out/share/php/phpactor/bin/phpactor
 
     runHook postInstall
   '';
