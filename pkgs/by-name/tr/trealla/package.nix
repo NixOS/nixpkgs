@@ -17,13 +17,13 @@
 assert lib.elem lineEditingLibrary [ "isocline" "readline" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.25.2";
+  version = "2.26.9";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3NBrJFSTcjftvTYn26SMeU2HtR81J2qlDAwAZRdis4M=";
+    hash = "sha256-p2fntQKaVdgM94b2EBfTdUpdsEUlbnma+6arP/f+FQs=";
   };
 
   postPatch = ''
