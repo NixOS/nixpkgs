@@ -838,6 +838,18 @@ with lib.maintainers; {
     shortName = "Vim/Neovim";
   };
 
+  wdz = {
+    members = [
+      n0emis
+      netali
+      vidister
+      johannwagner
+      yuka
+    ];
+    scope = "Group registration for WDZ GmbH team members who collectively maintain packages.";
+    shortName = "WDZ GmbH";
+  };
+
   xfce = {
     members = [
       bobby285271
