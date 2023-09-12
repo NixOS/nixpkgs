@@ -3,7 +3,7 @@
 , glib, gdk-pixbuf, cairo
 , mailcap, pango, gtk3
 , glib-networking, gsettings-desktop-schemas
-, xclip, notify-osd, enchant
+, xclip, wl-clipboard, notify-osd, enchant
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +41,8 @@ stdenv.mkDerivation rec {
       cp -f $src/assets/nyxt_''${i}x''${i}.png "$out/share/icons/hicolor/''${i}x''${i}/apps/nyxt.png"
     done
 
-    # Need to suffix PATH with xclip to be able to copy/paste in Nyxt even if xclip/xsel/wl-clipboard are not in the user's PATH
     mkdir -p $out/bin && makeWrapper $src/bin/nyxt $out/bin/nyxt \
-      --suffix PATH : ${lib.makeBinPath [ xclip ]} \
+      --prefix PATH : ${lib.makeBinPath [ xclip wl-clipboard ]} \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${GST_PLUGIN_SYSTEM_PATH_1_0}" \
       --argv0 nyxt "''${gappsWrapperArgs[@]}"
   '';

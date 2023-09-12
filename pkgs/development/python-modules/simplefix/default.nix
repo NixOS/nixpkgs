@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "simplefix";
-  version = "1.0.15";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     repo = "simplefix";
     owner = "da4089";
-    rev = "v${version}";
-    hash = "sha256-GQHMotxNRuRv6zXhrD02T+aFgfYe3RnvUGADsBeSPbA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dkwmWCOeTAoeSY8+1wg7RWX/d57JWc8bGagzrEPMAIU=";
   };
 
   checkPhase = ''
