@@ -36670,6 +36670,10 @@ with pkgs;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
+  chatterino7 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino7 {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
+
   weston = callPackage ../applications/window-managers/weston { };
 
   wgnord = callPackage ../applications/networking/wgnord/default.nix { };
