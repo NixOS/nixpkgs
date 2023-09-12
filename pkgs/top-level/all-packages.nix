@@ -12827,6 +12827,8 @@ with pkgs;
 
   rosenpass = callPackage ../tools/networking/rosenpass  { };
 
+  rosenpass-tools = callPackage ../tools/networking/rosenpass/tools.nix  { };
+
   rot8 = callPackage ../tools/misc/rot8 { };
 
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
