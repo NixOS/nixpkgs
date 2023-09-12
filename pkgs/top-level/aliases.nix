@@ -46,7 +46,7 @@ let
     else
       let trailer =
         with lib; optionalString (isDerivation v)
-          ", use `${v.pname}` instead";
+          ", use `${v.pname or v.name}` instead";
       in lib.warn "`pkgs.${n}` is deprecated${trailer}" v;
 
   mapAliases = aliases:
