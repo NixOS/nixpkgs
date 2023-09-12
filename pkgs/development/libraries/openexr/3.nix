@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
+  patches =
+    # Disable broken test on musl libc
+    # https://github.com/AcademySoftwareFoundation/openexr/issues/1556
+    lib.optional stdenv.hostPlatform.isMusl ./disable-iex-test.patch
+  ;
+
   # tests are determined to use /var/tmp on unix
   postPatch = ''
     cat <(find . -name tmpDir.h) <(echo src/test/OpenEXRCoreTest/main.cpp) | while read -r f ; do
