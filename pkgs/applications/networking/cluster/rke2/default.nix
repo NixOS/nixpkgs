@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "rke2";
@@ -36,5 +36,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm zygot ];
     mainProgram = "rke2";
+    broken = stdenv.isDarwin;
   };
 }
