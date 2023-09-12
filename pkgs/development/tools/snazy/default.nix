@@ -7,24 +7,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "snazy";
-  version = "0.51.2";
+  version = "0.51.3";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = pname;
     rev = version;
-    hash = "sha256-k8dcALE5+5kqNKhmiLT0Ir8SRYOIp8eV3a/xYWrKpNw=";
+    hash = "sha256-YE11ypzOhRNjoi+X9Khp6qxqhD1f/hslr1t2cEeUTbs=";
   };
 
-  cargoHash = "sha256-mBA2BhGeYR57UrqI1qtByTkTocMymjCWlWhh4+Ko8wY=";
+  cargoHash = "sha256-8oT9tdGeU/1mtgf470Ps4EwQmWxPhxAzmA8D30UG60o=";
 
   cargoPatches = [
     # update Cargo.toml to fix the version
-    # https://github.com/chmouel/snazy/pull/178
+    # https://github.com/chmouel/snazy/pull/217
     (fetchpatch {
       name = "update-version-in-cargo-toml.patch";
-      url = "https://github.com/chmouel/snazy/commit/4fd92c7336f51d032a0baf60fd5ab8c1056ad14f.patch";
-      hash = "sha256-WT/HHB9HB+X/L5FZdvQAG8K7PrYHQD8F5aWQVaMJuIU=";
+      url = "https://github.com/chmouel/snazy/commit/199f560e12d07c07c240bc91e7f929831af2cc4d.patch";
+      hash = "sha256-X1oi4Mf1m/k/HYYJvqIrN14JJSEPUmWJt9PhzLiyYUs=";
     })
   ];
 
