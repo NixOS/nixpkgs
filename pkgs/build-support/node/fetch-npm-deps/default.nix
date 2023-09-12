@@ -165,7 +165,9 @@
 
       dontInstall = true;
 
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+      # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
+      # `{ "registry.example.com": "example-registry-bearer-token", ... }`
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
 
       SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash)
         then "${cacert}/etc/ssl/certs/ca-bundle.crt"
