@@ -1,9 +1,11 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, gettext
+
 , chromaprint
+, gettext
 , qt5
+
 , enablePlayback ? true
 , gst_all_1
 }:
@@ -20,6 +22,7 @@ in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
   version = "2.9.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
@@ -48,13 +51,13 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     chromaprint
-    python-dateutil
     discid
     fasteners
-    mutagen
-    pyqt5
     markdown
+    mutagen
     pyjwt
+    pyqt5
+    python-dateutil
     pyyaml
   ];
 
@@ -67,14 +70,13 @@ pythonPackages.buildPythonApplication rec {
   # In order to spare double wrapping, we use:
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-  ''
-  + lib.optionalString (pyqt5.multimediaEnabled) ''
+  '' + lib.optionalString (pyqt5.multimediaEnabled) ''
     makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
   meta = with lib; {
-    homepage = "https://picard.musicbrainz.org/";
-    changelog = "https://picard.musicbrainz.org/changelog/";
+    homepage = "https://picard.musicbrainz.org";
+    changelog = "https://picard.musicbrainz.org/changelog";
     description = "The official MusicBrainz tagger";
     maintainers = with maintainers; [ ehmry paveloom ];
     license = licenses.gpl2Plus;
