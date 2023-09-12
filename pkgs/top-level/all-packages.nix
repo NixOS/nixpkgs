@@ -11542,6 +11542,8 @@ with pkgs;
 
   open-ecard = callPackage ../tools/security/open-ecard { };
 
+  open-interpreter = callPackage ../tools/llm/open-interpreter { };
+
   openjade = callPackage ../tools/text/sgml/openjade { };
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };

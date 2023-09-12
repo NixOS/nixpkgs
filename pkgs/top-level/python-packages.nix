@@ -6198,6 +6198,8 @@ self: super: with self; {
 
   lit = callPackage ../development/python-modules/lit { };
 
+  litellm = callPackage ../development/python-modules/litellm { };
+
   litemapy = callPackage ../development/python-modules/litemapy { };
 
   littleutils = callPackage ../development/python-modules/littleutils { };
@@ -12956,6 +12958,8 @@ self: super: with self; {
   tokenize-rt = toPythonModule (callPackage ../development/python-modules/tokenize-rt { });
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
+
+  tokentrim = callPackage ../development/python-modules/tokentrim { };
 
   tololib = callPackage ../development/python-modules/tololib { };
 
