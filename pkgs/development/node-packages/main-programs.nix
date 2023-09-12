@@ -46,7 +46,6 @@
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";
-  near-cli = "near";
   neovim = "neovim-node-host";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
