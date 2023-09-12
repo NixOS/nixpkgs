@@ -1919,6 +1919,8 @@ with pkgs;
 
   mymcplus = python3Packages.callPackage ../tools/games/mymcplus { };
 
+  near-cli = callPackage ../tools/misc/near-cli { };
+
   networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
     systemd = pkgs.systemd;
   };
@@ -11552,6 +11554,8 @@ with pkgs;
 
   open-ecard = callPackage ../tools/security/open-ecard { };
 
+  open-interpreter = callPackage ../tools/llm/open-interpreter { };
+
   openjade = callPackage ../tools/text/sgml/openjade { };
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
@@ -18681,7 +18685,6 @@ with pkgs;
 
   inherit (callPackages ../development/tools/electron/binary { })
     electron-bin
-    electron_9-bin
     electron_10-bin
     electron_11-bin
     electron_12-bin
@@ -18701,7 +18704,6 @@ with pkgs;
     electron_26-bin;
 
   electron = electron-bin;
-  electron_9 = electron_9-bin;
   electron_10 = electron_10-bin;
   electron_11 = electron_11-bin;
   electron_12 = electron_12-bin;
@@ -29940,8 +29942,10 @@ with pkgs;
     noto-fonts-lgc-plus
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
-    noto-fonts-emoji
-    noto-fonts-emoji-blob-bin;
+    noto-fonts-color-emoji
+    noto-fonts-emoji-blob-bin
+    noto-fonts-monochrome-emoji
+    ;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
@@ -31391,6 +31395,8 @@ with pkgs;
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
   docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
   docker-compose_1 = python3Packages.callPackage ../applications/virtualization/docker/compose_1.nix { };
+  docker-sbom = callPackage ../applications/virtualization/docker/sbom.nix { };
+
 
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
@@ -33796,10 +33802,6 @@ with pkgs;
 
   markets = callPackage ../applications/misc/markets { };
 
-  markmind = callPackage ../applications/misc/markmind {
-    electron = electron_9;
-  };
-
   markscribe = callPackage ../tools/text/markscribe { };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
@@ -35017,10 +35019,6 @@ with pkgs;
 
   pomodoro = callPackage ../applications/misc/pomodoro {
     inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-
-  pomotroid = callPackage ../applications/misc/pomotroid {
-    electron = electron_9;
   };
 
   ponymix = callPackage ../applications/audio/ponymix { };

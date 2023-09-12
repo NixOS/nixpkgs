@@ -8,7 +8,7 @@
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
-, noto-fonts-emoji
+, noto-fonts-color-emoji
 , pkg-config
 , python3
 , roboto
@@ -85,7 +85,7 @@ buildNpmPackage rec {
     install -D build/icon.png \
       $out/share/icons/hicolor/scalable/apps/deltachat.png
 
-    ln -sf ${noto-fonts-emoji}/share/fonts/noto/NotoColorEmoji.ttf \
+    ln -sf ${noto-fonts-color-emoji}/share/fonts/noto/NotoColorEmoji.ttf \
       $out/lib/node_modules/deltachat-desktop/html-dist/fonts/noto/emoji
     for font in $out/lib/node_modules/deltachat-desktop/html-dist/fonts/Roboto-*.ttf; do
       ln -sf ${roboto}/share/fonts/truetype/$(basename $font) \

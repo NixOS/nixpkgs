@@ -16,16 +16,24 @@ with lib;
 
   config = {
 
-    # can be generated with: filter (drv: (builtins.tryEval (drv ? terminfo)).value) (attrValues pkgs)
+    # can be generated with:
+    # attrNames (filterAttrs
+    #  (_: drv: (builtins.tryEval (isDerivation drv && drv ? terminfo)).value)
+    #  pkgs)
     environment.systemPackages = mkIf config.environment.enableAllTerminfo (map (x: x.terminfo) (with pkgs; [
       alacritty
+      contour
       foot
       kitty
       mtm
+      rio
       rxvt-unicode-unwrapped
       rxvt-unicode-unwrapped-emoji
+      st
       termite
+      tmux
       wezterm
+      yaft
     ]));
 
     environment.pathsToLink = [

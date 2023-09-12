@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   version = "0.2.9";
   pname = "yaft";
 
+  outputs = [ "out" "terminfo" ];
+
   src = fetchFromGitHub {
     owner = "uobikiemukot";
     repo = "yaft";
@@ -14,6 +16,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   installFlags = [ "PREFIX=$(out)" "MANPREFIX=$(out)/share/man" ];
+
+  postInstall = ''
+    mkdir -p $out/nix-support $terminfo/share
+    mv $out/share/terminfo $terminfo/share/
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
 
   meta = {
     homepage = "https://github.com/uobikiemukot/yaft";
