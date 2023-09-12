@@ -26,6 +26,11 @@ in stdenv.mkDerivation (finalAttrs: {
       3rd_party/bergamot-translator/3rd_party/marian-dev/src/common/git_revision.h
   '';
 
+  # https://github.com/XapaJIaMnu/translateLocally/blob/81ed8b9/.github/workflows/build.yml#L330
+  postConfigure = lib.optionalString stdenv.isAarch64 ''
+    bash ../cmake/fix_ruy_build.sh .. .
+  '';
+
   nativeBuildInputs = [
     cmake
     protobuf
@@ -55,8 +60,5 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ pacien ];
     platforms = platforms.linux;
-
-    # https://github.com/XapaJIaMnu/translateLocally/issues/150
-    broken = stdenv.isAarch64;
   };
 })
