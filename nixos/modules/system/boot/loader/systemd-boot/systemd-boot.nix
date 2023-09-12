@@ -147,7 +147,7 @@ in {
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Make MemTest86+ available from the systemd-boot menu. MemTest86+ is a
+          Make Memtest86+ available from the systemd-boot menu. Memtest86+ is a
           program for testing memory.
         '';
       };
@@ -191,7 +191,7 @@ in {
       default = {};
       example = literalExpression ''
         { "memtest86.conf" = '''
-          title MemTest86+
+          title Memtest86+
           efi /efi/memtest86/memtest.efi
         '''; }
       '';
@@ -285,7 +285,7 @@ in {
     boot.loader.systemd-boot.extraEntries = mkMerge [
       (mkIf cfg.memtest86.enable {
         "${cfg.memtest86.entryFilename}" = ''
-          title  MemTest86
+          title  Memtest86+
           efi    /efi/memtest86/memtest.efi
         '';
       })
