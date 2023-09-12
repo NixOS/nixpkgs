@@ -19,16 +19,17 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-6y/7RR7O2xYKXdxaFtkRfnSlwygp/LRDUozUJo6ue7s=";
   };
 
-  patches = [
-    # pythonRelaxDepsHook will not work in this package until
-    # https://github.com/NixOS/nixpkgs/pull/248516 hits master
-    ./relax_deps.patch
-  ];
-
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
     qt6.wrapQtAppsHook
   ];
+
+  pythonRelaxDeps = true;
+
+  # ERROR: Could not find a version that satisfies the requirement PySide6 (from retool) (from versions: none)
+  # ERROR: No matching distribution found for PySide6
+  pythonRemoveDeps = [ "PySide6" ];
 
   buildInputs = [
     qt6.qtbase

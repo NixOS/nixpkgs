@@ -1,42 +1,42 @@
-# wafHook {#wafHook}
+# wafHook {#waf-hook}
 
 [Waf](https://waf.io) is a Python-based software building system.
 
 In Nixpkgs, `wafHook` overrides the default configure, build, and install phases.
 
-## Variables controlling wafHook {#variablesControllingWafHook}
+## Variables controlling wafHook {#waf-hook-variables-controlling}
 
-### `wafHook` Exclusive Variables {#wafHookExclusiveVariables}
+### `wafHook` Exclusive Variables {#waf-hook-exclusive-variables}
 
 The variables below are exclusive of `wafHook`.
 
-#### `wafPath` {#wafPath}
+#### `wafPath` {#waf-path}
 
 Location of the `waf` tool. It defaults to `./waf`, to honor software projects that include it directly inside their source trees.
 
 If `wafPath` doesn't exist, then `wafHook` will copy the `waf` provided from Nixpkgs to it.
 
-#### `wafFlags` {#wafFlags}
+#### `wafFlags` {#waf-flags}
 
 Controls the flags passed to waf tool during build and install phases. For settings specific to build or install phases, use `wafBuildFlags` or `wafInstallFlags` respectively.
 
-#### `dontAddWafCrossFlags` {#dontAddWafCrossFlags}
+#### `dontAddWafCrossFlags` {#dont-add-waf-cross-flags}
 
 When set to `true`, don't add cross compilation flags during configure phase.
 
-#### `dontUseWafConfigure` {#dontUseWafConfigure}
+#### `dontUseWafConfigure` {#dont-use-waf-configure}
 
 When set to true, don't use the predefined `wafConfigurePhase`.
 
-#### `dontUseWafBuild` {#dontUseWafBuild}
+#### `dontUseWafBuild` {#dont-use-waf-build}
 
 When set to true, don't use the predefined `wafBuildPhase`.
 
-#### `dontUseWafInstall` {#dontUseWafInstall}
+#### `dontUseWafInstall` {#dont-use-waf-install}
 
 When set to true, don't use the predefined `wafInstallPhase`.
 
-### Similar variables {#similarVariables}
+### Similar variables {#waf-hook-similar-variables}
 
 The following variables are similar to their `stdenv.mkDerivation` counterparts.
 
@@ -49,7 +49,7 @@ The following variables are similar to their `stdenv.mkDerivation` counterparts.
 | `wafInstallFlags`     | `installFlags`                    |
 | `wafInstallTargets`   | `installTargets`                  |
 
-### Honored variables {#honoredVariables}
+### Honored variables {#waf-hook-honored-variables}
 
 The following variables commonly used by `stdenv.mkDerivation` are honored by `wafHook`.
 

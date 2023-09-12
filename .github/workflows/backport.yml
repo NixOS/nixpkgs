@@ -20,7 +20,7 @@ jobs:
     if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true && (github.event_name != 'labeled' || startsWith('backport', github.event.label.name))
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Create backport PRs
