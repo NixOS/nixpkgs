@@ -67,7 +67,7 @@ in {
         $out/bin/mdadm --version
       '';
 
-      extraFiles."/etc/mdadm.conf" = mdadm_conf;
+      extraFiles."/etc/mdadm.conf".source = pkgs.writeText "mdadm.conf" mdadm_conf.text;
 
       systemd = {
         contents."/etc/mdadm.conf".text = mdadm_conf.text;

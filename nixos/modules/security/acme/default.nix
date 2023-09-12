@@ -362,8 +362,14 @@ let
           "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
         ];
 
-        # Only try loading the credentialsFile if the dns challenge is enabled
-        EnvironmentFile = mkIf useDns data.credentialsFile;
+        # Only try loading the environmentFile if the dns challenge is enabled
+        EnvironmentFile = mkIf useDns data.environmentFile;
+
+        Environment = mkIf useDns
+          (mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles);
+
+        LoadCredential = mkIf useDns
+          (mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles);
 
         # Run as root (Prefixed with +)
         ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
@@ -496,6 +502,10 @@ let
       defaultText = if isDefaults then default else literalExpression "config.security.acme.defaults.${name}";
     };
   in {
+    imports = [
+      (mkRenamedOptionModule [ "credentialsFile" ] [ "environmentFile" ])
+    ];
+
     options = {
       validMinDays = mkOption {
         type = types.int;
@@ -607,9 +617,9 @@ let
         '';
       };
 
-      credentialsFile = mkOption {
+      environmentFile = mkOption {
         type = types.nullOr types.path;
-        inherit (defaultAndText "credentialsFile" null) default defaultText;
+        inherit (defaultAndText "environmentFile" null) default defaultText;
         description = lib.mdDoc ''
           Path to an EnvironmentFile for the cert's service containing any required and
           optional environment variables for your selected dnsProvider.
@@ -617,6 +627,24 @@ let
           <https://go-acme.github.io/lego/dns/> for the corresponding dnsProvider.
         '';
         example = "/var/src/secrets/example.org-route53-api-token";
+      };
+
+      credentialFiles = mkOption {
+        type = types.attrsOf (types.path);
+        inherit (defaultAndText "credentialFiles" {}) default defaultText;
+        description = lib.mdDoc ''
+          Environment variables suffixed by "_FILE" to set for the cert's service
+          for your selected dnsProvider.
+          To find out what values you need to set, consult the documentation at
+          <https://go-acme.github.io/lego/dns/> for the corresponding dnsProvider.
+          This allows to securely pass credential files to lego by leveraging systemd
+          credentials.
+        '';
+        example = literalExpression ''
+          {
+            "RFC2136_TSIG_SECRET_FILE" = "/run/secrets/tsig-secret-example.org";
+          }
+        '';
       };
 
       dnsPropagationCheck = mkOption {
@@ -927,6 +955,13 @@ in {
             One of `security.acme.certs.${cert}.dnsProvider`,
             `security.acme.certs.${cert}.webroot`, or
             `security.acme.certs.${cert}.listenHTTP` must be provided.
+          '';
+        }
+        {
+          assertion = all (hasSuffix "_FILE") (attrNames data.credentialFiles);
+          message = ''
+            Option `security.acme.certs.${cert}.credentialFiles` can only be
+            used for variables suffixed by "_FILE".
           '';
         }
       ]) cfg.certs));

@@ -52,6 +52,8 @@ self: super: with self; {
 
   actdiag = callPackage ../development/python-modules/actdiag { };
 
+  acunetix = callPackage ../development/python-modules/acunetix { };
+
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
 
   adafruit-nrfutil = callPackage ../development/python-modules/adafruit-nrfutil { };
@@ -909,6 +911,8 @@ self: super: with self; {
   autopage = callPackage ../development/python-modules/autopage { };
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
+
+  autoslot = callPackage ../development/python-modules/autoslot { };
 
   avahi = toPythonModule (pkgs.avahi.override {
     inherit python;
@@ -2718,6 +2722,8 @@ self: super: with self; {
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
   diffimg = callPackage ../development/python-modules/diffimg { };
+
+  diffsync = callPackage ../development/python-modules/diffsync { };
 
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
@@ -5320,6 +5326,8 @@ self: super: with self; {
 
   ipykernel = callPackage ../development/python-modules/ipykernel { };
 
+  ipymarkup = callPackage ../development/python-modules/ipymarkup { };
+
   ipympl = callPackage ../development/python-modules/ipympl { };
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
@@ -7018,6 +7026,10 @@ self: super: with self; {
   nanoid = callPackage ../development/python-modules/nanoid { };
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
+
+  navec = callPackage ../development/python-modules/navec { };
+
+  natasha = callPackage ../development/python-modules/natasha { };
 
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
@@ -11063,6 +11075,8 @@ self: super: with self; {
 
   ray = callPackage ../development/python-modules/ray { redis = pkgs.redis; };
 
+  razdel = callPackage ../development/python-modules/razdel { };
+
   rbtools = callPackage ../development/python-modules/rbtools { };
 
   rchitect = callPackage ../development/python-modules/rchitect { };
@@ -11949,6 +11963,8 @@ self: super: with self; {
   };
 
   slob = callPackage ../development/python-modules/slob { };
+
+  slovnet = callPackage ../development/python-modules/slovnet { };
 
   slowapi = callPackage ../development/python-modules/slowapi { };
 
@@ -14067,6 +14083,8 @@ self: super: with self; {
   yaramod = callPackage ../development/python-modules/yaramod { };
 
   yarg = callPackage ../development/python-modules/yarg { };
+
+  yagry = callPackage ../development/python-modules/yargy { };
 
   yark = callPackage ../development/python-modules/yark { };
 

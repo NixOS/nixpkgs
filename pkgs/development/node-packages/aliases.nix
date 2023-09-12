@@ -107,6 +107,7 @@ mapAliases {
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
   surge = pkgs.surge-cli; # Added 2023-09-08
+  swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
   thelounge = pkgs.thelounge; # Added 2023-05-22
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
   inherit (pkgs) titanium; # added 2023-08-17

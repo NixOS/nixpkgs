@@ -1,0 +1,112 @@
+From 5430196765402655715f759e3de0166ad3fbe1fe Mon Sep 17 00:00:00 2001
+From: Sefa Eyeoglu <contact@scrumplex.net>
+Date: Fri, 28 Jul 2023 12:26:58 +0200
+Subject: [PATCH] cmake: use find_package where needed
+
+Signed-off-by: Sefa Eyeoglu <contact@scrumplex.net>
+---
+ CMakeLists.txt | 62 ++++----------------------------------------------
+ 1 file changed, 4 insertions(+), 58 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bb3c49a..e9d6d56 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -98,66 +98,13 @@ endif ()
+ # === OpenXR ===
+ # Building CMake subprojects is a real pain (IMO), so just build this here
+ 
+-set(XrDir libs/openxr-sdk)
+-set(XrDirLoader libs/openxr-sdk/src/loader)
+-set(XrDirCommon libs/openxr-sdk/src/common)
+-if (ANDROID)
+-	# Whatever consumes this library must then link to an OpenXR loader, such as the Oculus one
+-	add_library(OpenXR STATIC scripts/empty.c) # Doesn't do anything
+-else ()
+-add_library(OpenXR STATIC
+-	${XrDirLoader}/api_layer_interface.cpp
+-	${XrDirLoader}/api_layer_interface.hpp
+-	${XrDirLoader}/loader_core.cpp
+-	${XrDirLoader}/loader_instance.cpp
+-	${XrDirLoader}/loader_instance.hpp
+-	${XrDirLoader}/loader_logger.cpp
+-	${XrDirLoader}/loader_logger.hpp
+-	${XrDirLoader}/loader_logger_recorders.cpp
+-	${XrDirLoader}/loader_logger_recorders.hpp
+-	${XrDirLoader}/manifest_file.cpp
+-	${XrDirLoader}/manifest_file.hpp
+-	${XrDirLoader}/runtime_interface.cpp
+-	${XrDirLoader}/runtime_interface.hpp
+-
+-	${XrDirLoader}/xr_generated_loader.hpp
+-	${XrDirLoader}/xr_generated_loader.cpp
+-	${XrDir}/src/xr_generated_dispatch_table.h
+-	${XrDir}/src/xr_generated_dispatch_table.c
+-
+-	${XrDirCommon}/filesystem_utils.cpp
+-	${XrDirCommon}/object_info.cpp
+-
+-	${XrDir}/src/external/jsoncpp/src/lib_json/json_reader.cpp
+-	${XrDir}/src/external/jsoncpp/src/lib_json/json_value.cpp
+-	${XrDir}/src/external/jsoncpp/src/lib_json/json_writer.cpp
+-)
+-endif()
+-target_include_directories(OpenXR PRIVATE ${XrDirCommon} ${XrDir}/src ${XrDir}/src/external/jsoncpp/include)
+-target_include_directories(OpenXR PUBLIC ${XrDir}/include)
+-# Platform-dependent flags
+-if (WIN32)
+-	target_compile_definitions(OpenXR PRIVATE -DXR_OS_WINDOWS -DXR_USE_PLATFORM_WIN32
+-	-DXR_USE_GRAPHICS_API_D3D11 -DXR_USE_GRAPHICS_API_D3D12 -DXR_USE_GRAPHICS_API_OPENGL)
+-	target_link_libraries(OpenXR PUBLIC advapi32 pathcch OpenGL32)
+-else()
+-	# TODO Turtle1331 should we include -DXR_USE_PLATFORM_(XLIB|XCB|WAYLAND) here?
+-	target_compile_definitions(OpenXR PRIVATE -DXR_OS_LINUX
+-	-DXR_USE_GRAPHICS_API_OPENGL -DXR_USE_GRAPHICS_API_VULKAN)
+-	target_link_libraries(OpenXR PUBLIC -ldl)
+-endif()
+-target_link_libraries(OpenXR PUBLIC Vulkan)
+-
+-if (ANDROID)
+-	target_compile_definitions(OpenXR PUBLIC -DXR_USE_PLATFORM_ANDROID -DXR_USE_GRAPHICS_API_OPENGL_ES)
+-endif()
++find_package(OpenXR REQUIRED)
+ 
+ # === glm ===
+ # Since we used to use LibOVR's maths library, we need a replacement
+ # glm is an obvious choice
+ 
+-add_library(glm INTERFACE)
+-target_include_directories(glm INTERFACE libs/glm) # No separate include directory :(
++find_package(glm REQUIRED)
+ 
+ # === DrvOpenXR ===
+ add_library(DrvOpenXR STATIC
+@@ -189,7 +136,7 @@ add_library(DrvOpenXR STATIC
+ )
+ target_include_directories(DrvOpenXR PUBLIC DrvOpenXR/pub ${CMAKE_BINARY_DIR})
+ target_include_directories(DrvOpenXR PRIVATE DrvOpenXR OpenOVR)
+-target_link_libraries(DrvOpenXR PUBLIC OpenVR OpenXR glm)
++target_link_libraries(DrvOpenXR PUBLIC OpenVR OpenXR::openxr_loader glm::glm)
+ target_compile_definitions(DrvOpenXR PRIVATE ${GRAPHICS_API_SUPPORT_FLAGS} -D_CRT_SECURE_NO_WARNINGS)
+ source_group(Public REGULAR_EXPRESSION DrvOpenXR/pub/*)
+ 
+@@ -357,7 +304,7 @@ target_include_directories(OCCore PUBLIC OpenOVR ${CMAKE_BINARY_DIR})  # TODO ma
+ target_include_directories(OCCore PRIVATE BundledLibs OpenVRHeaders)
+ target_compile_definitions(OCCore PRIVATE ${GRAPHICS_API_SUPPORT_FLAGS})
+ 
+-target_link_libraries(OCCore OpenVR OpenXR Vulkan glm)
++target_link_libraries(OCCore OpenVR OpenXR::openxr_loader Vulkan glm::glm)
+ 
+ if (NOT WIN32 AND NOT ANDROID)
+ 	find_package(OpenGL REQUIRED) # for glGetError()
+@@ -411,7 +358,6 @@ endif ()
+ if (WIN32)
+ else ()
+ 	target_compile_options(DrvOpenXR PRIVATE -fPIC)
+-	target_compile_options(OpenXR PRIVATE -fPIC)
+ 	target_compile_options(OCCore PRIVATE -fPIC)
+ endif ()
+ 
+-- 
+2.41.0
+

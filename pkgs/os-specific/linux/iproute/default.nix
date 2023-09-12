@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     "SHARED_LIBS=n"
     # all build .so plugins:
     "TC_CONFIG_NO_XT=y"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "HOSTCC=$(CC_FOR_BUILD)"
   ];
 
   buildFlags = [
