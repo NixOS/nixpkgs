@@ -11026,8 +11026,6 @@ with pkgs;
 
   navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
 
-  nawk = callPackage ../tools/text/nawk { };
-
   nbd = callPackage ../tools/networking/nbd { };
   xnbd = callPackage ../tools/networking/xnbd { };
 
