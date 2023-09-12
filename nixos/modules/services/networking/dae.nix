@@ -48,7 +48,7 @@ in
           options = {
             enable = mkEnableOption "enable";
             port = mkOption {
-              type = types.int;
+              type = types.port;
               description = ''
                 Port to be opened. Consist with field `tproxy_port` in config file.
               '';
