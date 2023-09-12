@@ -35,18 +35,18 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nwjs";
-  version = "0.54.1";
+  version = "0.79.1";
 
   src = if sdk then fetchurl {
     url = "https://dl.nwjs.io/v${version}/nwjs-sdk-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "sha256-1qeU4+EIki0M7yJPkRuzFwMdswfDOni5gltdmM6A/ds=" else
-      "sha256-wDEGePE9lrKa6OAzeiDLhVj992c0TJgiMHb8lJ4PF80=";
+      "sha256-+08sHFgFPK2a3RoQWNFLi4ySQx4WXpvVLGXG7gdlxPo=" else
+      "sha256-oGv5tqLAurNoMC39VWioM7ia2s56YSR0qK2kaUgGkqE=";
   } else fetchurl {
     url = "https://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "sha256-TACEM06K2t6dDXRD44lSW7GRi77yzSW4BZJw8gT+fl4=" else
-      "sha256-yX9knqFV5VQTT3TJDmQoDgt17NqH8fLt+bLQAqKleTU=";
+      "sha256-jo78P0BGQvtWpwJ5NONY06tB/ZhqJa5QxiS+w8QKGBM=" else
+      "sha256-HzEPE600Z7VLm2liEYg5qXpVFbTlwntpszWhUCMdlmU=";
   };
 
   # we have runtime deps like sqlite3 that should remain
@@ -59,18 +59,15 @@ in stdenv.mkDerivation rec {
       cp -R * $out/share/nwjs
       find $out/share/nwjs
 
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nw
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $(find $out/share/nwjs -type f -exec file {} \; | grep ELF | grep -i interpreter | cut -d: -f1)
 
       ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
       libpath="$out/share/nwjs/lib/"
-      for f in "$libpath"/*.so; do
-        patchelf --set-rpath "${nwEnv}/lib:${ccPath}:$libpath" "$f"
-      done
-      patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:${ccPath}:$libpath" $out/share/nwjs/nw
+      patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:${ccPath}:$libpath" $(find $out/share/nwjs -type f -exec file {} \; | grep ELF | grep -v statically | grep -v "LSB relocatable" | cut -d: -f1)
       # check, whether all RPATHs are correct (all dependencies found)
       checkfile=$(mktemp)
-      for f in "$libpath"/*.so "$out/share/nwjs/nw"; do
+      for f in $(find $out/share/nwjs -type f -exec file {} \; | grep ELF | grep -v statically | grep -v "LSB relocatable" | cut -d: -f1); do
          (echo "$f:";
           ldd "$f"  ) > "$checkfile"
       done
@@ -92,7 +89,7 @@ in stdenv.mkDerivation rec {
     description = "An app runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = ["i686-linux" "x86_64-linux"];
-    maintainers = [ maintainers.offline ];
+    maintainers = [ maintainers.offline maintainers.thepixelcode ];
     license = licenses.bsd3;
   };
 }
