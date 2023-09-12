@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 56595d7..4856d6f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -100,8 +100,7 @@ if(NOT ${BB_HARVESTER_ONLY})
+     # BLS
+     FetchContent_Declare(
+     bls
+-    GIT_REPOSITORY https://github.com/Chia-Network/bls-signatures.git
+-    GIT_TAG        2.0.2
++    SOURCE_DIR @blspy_src@
+     EXCLUDE_FROM_ALL ${BB_IS_DEPENDENCY}
+     )
+ 

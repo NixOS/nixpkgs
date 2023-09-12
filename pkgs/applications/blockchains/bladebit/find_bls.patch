@@ -1,0 +1,115 @@
+diff --git a/.gitignore b/.gitignore
+index 76391d1..21f14bf 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -19,3 +19,5 @@ park*_hash.txt
+ lib/*
+ build*/
+ cmake-build*/
++
++.idea/
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a802237..3adb4fb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,6 +14,7 @@ endif()
+ 
+ set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "macOS minimum supported version.")
+ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STRING "MSVC Runtime Library")
++set(BUILD_BLADEBIT_TESTS "1" CACHE STRING "")
+ 
+ project(bladebit C CXX ASM)
+ 
+@@ -36,23 +37,11 @@ set(CMAKE_MODULE_PATH
+ #
+ set(platform_libs)
+ 
+-# BLS
+-include(FetchContent)
+-
+-FetchContent_Declare(
+-  bls
+-  GIT_REPOSITORY https://github.com/Chia-Network/bls-signatures.git
+-  GIT_TAG        1.0.10
+-)
+-
+-set(BUILD_BLS_PYTHON_BINDINGS "0" CACHE STRING "0")
+-set(BUILD_BLS_TESTS "0" CACHE STRING "")
+-set(BUILD_BLS_BENCHMARKS "0" CACHE STRING "")
+-FetchContent_MakeAvailable(bls)
+-
+ # Threads
+ find_package(Threads REQUIRED)
+ 
++
++
+ # NUMA
+ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+     find_package(NUMA REQUIRED)
+@@ -61,9 +50,11 @@ endif()
+ 
+ # Catch
+ # TODO: Add configuration var to disable this
+-include(cmake_modules/FindCatch2.cmake)
+-set_target_properties(Catch2 PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+-set_target_properties(Catch2WithMain PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
++if(BUILD_BLADEBIT_TESTS)
++    include(cmake_modules/FindCatch2.cmake)
++    set_target_properties(Catch2 PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
++    set_target_properties(Catch2WithMain PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
++endif()
+ 
+ 
+ # Config
+@@ -196,15 +187,15 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+ 
+     # Dependency config
+     target_compile_options(bls     PRIVATE /MP)
+-    target_compile_options(relic_s PRIVATE /MP)
++    target_compile_options(relic_s   PRIVATE /MP)
+     target_compile_options(sodium  PRIVATE /MP)
+ 
+     target_compile_options(bls     PRIVATE $<$<CONFIG:Release>:/MT>)
+-    target_compile_options(relic_s PRIVATE $<$<CONFIG:Release>:/MT>)
++    target_compile_options(relic_s   PRIVATE $<$<CONFIG:Release>:/MT>)
+     target_compile_options(sodium  PRIVATE $<$<CONFIG:Release>:/MT>)
+ 
+     target_compile_options(bls     PRIVATE $<$<CONFIG:Debug>:/MTd>)
+-    target_compile_options(relic_s PRIVATE $<$<CONFIG:Debug>:/MTd>)
++    target_compile_options(relic_s   PRIVATE $<$<CONFIG:Debug>:/MTd>)
+     target_compile_options(sodium  PRIVATE $<$<CONFIG:Debug>:/MTd>)
+     
+ else()
+@@ -380,6 +371,7 @@ set(bb_include_dirs
+ #     target_include_directories(${tgt} PRIVATE ${bb_include_dirs})
+ # endmacro()
+ 
++
+ # BladeBit
+ add_library(lib_bladebit ${bb_sources} ${bb_headers} src/plotdisk/k32/FpMatchBounded.inl src/plotdisk/k32/F1Bounded.inl)
+ 
+@@ -387,8 +379,8 @@ set_target_properties(lib_bladebit PROPERTIES
+         OUTPUT_NAME bladebit
+         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+ )
+-target_link_libraries(lib_bladebit PUBLIC Threads::Threads bls ${platform_libs})
+-target_include_directories(lib_bladebit PUBLIC ${bb_include_dirs})
++target_link_libraries(lib_bladebit PUBLIC Threads::Threads @gmp@/lib/libgmp.so  @bls@/lib/libbls.a @relic@/lib/librelic_s.a @sodium@/lib/libsodium.so ${platform_libs})
++target_include_directories(lib_bladebit PUBLIC ${bb_include_dirs} @gmpdev@/include/ @relic@/include/relic @bls@/include/chiabls)
+ 
+ target_compile_options(lib_bladebit PUBLIC $<$<CONFIG:Release>:${c_opts} ${release_c_opts}>)
+ target_compile_options(lib_bladebit PUBLIC $<$<CONFIG:Debug>:${c_opts} ${debug_c_opts}>)
+@@ -415,11 +407,13 @@ target_link_libraries(fsegen PRIVATE lib_bladebit)
+ # target_link_libraries(plot_tool PRIVATE lib_bladebit)
+ 
+ # Tests
++if(BUILD_BLADEBIT_TESTS)
+ add_executable(tests ${src_tests} ${bb_headers})
+ target_compile_options(tests PUBLIC $<$<CONFIG:Release>:${c_opts} ${release_c_opts} ${tests_c_opts}>)
+ target_compile_options(tests PUBLIC $<$<CONFIG:Debug>:${c_opts} ${debug_c_opts} ${tests_c_opts}>)
+ set_target_properties(tests PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+ target_link_libraries(tests PRIVATE lib_bladebit Catch2::Catch2WithMain)
++endif()
+ 
+ # Pretty source view for IDE projects
+ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src 

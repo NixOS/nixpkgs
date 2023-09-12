@@ -37015,6 +37015,8 @@ with pkgs;
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
 
+  bladebit = callPackage ../applications/blockchains/bladebit { };
+
   chia = callPackage ../applications/blockchains/chia { };
 
   chia-dev-tools = callPackage ../applications/blockchains/chia-dev-tools { };
