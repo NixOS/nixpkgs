@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://freetubeapp.io/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ ryneeverett alyaeanyx ];
-    platforms = [ "x86_64-linux" ];
+    inherit (electron_22.meta) platforms;
   };
 }
