@@ -45,6 +45,12 @@ stdenv.mkDerivation rec {
       revert = true;
       hash = "sha256-yy/T0IZolk5JLbVRevtLWErOSVQIZqNRg/a6J6JHDHg=";
     })
+
+    # Commit 902bc919 from upstream, mangled slightly to apply onto 1.3.1.
+    # There is currently (2023-09-12) no confirmation that this is the fix for
+    # CVE-2023-4863, but it is linked to the right crbug, and matches the
+    # description of that (critical sev, exploited in the wild) CVE.
+    ./CVE-2023-4863.patch
   ];
 
   configureFlags = [
