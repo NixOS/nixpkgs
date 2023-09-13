@@ -11093,8 +11093,6 @@ with pkgs;
 
   netpbm = callPackage ../tools/graphics/netpbm { };
 
-  netproc = callPackage ../tools/networking/netproc { };
-
   netrw = callPackage ../tools/networking/netrw { };
 
   netselect = callPackage ../tools/networking/netselect { };

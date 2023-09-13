@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netproc";
-  version = "unstable-2022-02-11";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "berghetti";
     repo = "netproc";
-    rev = "87a10ce31ae150847674ad87ef84ef2fd374b420";
-    sha256 = "sha256-YSKDOvqWLCrnP1qjmzMuRgjXiXZ9D4AuxXm/3xzS4gc=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-OQWlFwCga33rTseLeO8rAd+pkLHbSNf3YI5OSwrdIyk=";
   };
 
   buildInputs = [ ncurses ];
@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to monitor network traffic based on processes";
-    license = licenses.gpl3;
     homepage = "https://github.com/berghetti/netproc";
-    platforms = platforms.linux;
+    license = licenses.gpl3;
+    mainProgram = "netproc";
     maintainers = [ maintainers.azuwis ];
+    platforms = platforms.linux;
   };
-}
+})
