@@ -50,27 +50,37 @@ with lib;
 with internal;
 with lib.fileset;'
 
-# Check that a nix expression evaluates successfully (strictly, coercing to json, read-write-mode).
-# The expression has `lib.fileset` in scope.
-# If a second argument is provided, the result is checked against it as a regex.
-# Otherwise, the result is output.
-# Usage: expectSuccess NIX [REGEX]
-expectSuccess() {
-    local expr=$1
-    if [[ "$#" -gt 1 ]]; then
-        local expectedResultRegex=$2
+# Check that two nix expression successfully evaluate to the same value.
+# The expressions have `lib.fileset` in scope.
+# Usage: expectEqual NIX NIX
+expectEqual() {
+    local actualExpr=$1
+    local expectedExpr=$2
+    if ! actualResult=$(nix-instantiate --eval --strict --show-trace \
+        --expr "$prefixExpression ($actualExpr)"); then
+        die "$actualExpr failed to evaluate, but it was expected to succeed"
     fi
+    if ! expectedResult=$(nix-instantiate --eval --strict --show-trace \
+        --expr "$prefixExpression ($expectedExpr)"); then
+        die "$expectedExpr failed to evaluate, but it was expected to succeed"
+    fi
+
+    if [[ "$actualResult" != "$expectedResult" ]]; then
+        die "$actualExpr should have evaluated to $expectedExpr:\n$expectedResult\n\nbut it evaluated to\n$actualResult"
+    fi
+}
+
+# Check that a nix expression evaluates successfully to a store path and returns it (without quotes).
+# The expression has `lib.fileset` in scope.
+# Usage: expectStorePath NIX
+expectStorePath() {
+    local expr=$1
     if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace \
-        --expr "$prefixExpression $expr"); then
+        --expr "$prefixExpression ($expr)"); then
         die "$expr failed to evaluate, but it was expected to succeed"
     fi
-    if [[ -v expectedResultRegex ]]; then
-        if [[ ! "$result" =~ $expectedResultRegex ]]; then
-            die "$expr should have evaluated to this regex pattern:\n\n$expectedResultRegex\n\nbut this was the actual result:\n\n$result"
-        fi
-    else
-        echo "$result"
-    fi
+    # This is safe because we assume to get back a store path in a string
+    crudeUnquoteJSON <<< "$result"
 }
 
 # Check that a nix expression fails to evaluate (strictly, coercing to json, read-write-mode).
@@ -164,8 +174,7 @@ checkFileset() (
 
     # Call toSource with the fileset, triggering open events for all files that are added to the store
     expression="toSource { root = ./.; fileset = $fileset; }"
-    # crudeUnquoteJSON is safe because we get back a store path in a string
-    storePath=$(expectSuccess "$expression" | crudeUnquoteJSON)
+    storePath=$(expectStorePath "$expression")
 
     # Remove all files immediately after, triggering delete_self events for all of them
     rm -rf -- *
@@ -262,15 +271,15 @@ expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 
 \s*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
 
 # _create followed by _coerce should give the inputs back without any validation
-expectSuccess '{
-  inherit (_coerce "<test>" (_create "base" "tree"))
+expectEqual '{
+  inherit (_coerce "<test>" (_create ./. "directory"))
     _internalVersion _internalBase _internalTree;
-}' '\{"_internalBase":"base","_internalTree":"tree","_internalVersion":0\}'
+}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 0; }'
 
 #### Resulting store path ####
 
 # The store path name should be "source"
-expectSuccess 'toSource { root = ./.; fileset = ./.; }' '"'"${NIX_STORE_DIR:-/nix/store}"'/.*-source"'
+expectEqual 'toSource { root = ./.; fileset = ./.; }' 'sources.cleanSourceWith { name = "source"; src = ./.; }'
 
 # We should be able to import an empty directory and end up with an empty result
 tree=(
@@ -341,9 +350,9 @@ checkFileset './c'
 
 # Test the source filter for the somewhat special case of files in the filesystem root
 # We can't easily test this with the above functions because we can't write to the filesystem root and we don't want to make any assumptions which files are there in the sandbox
-expectSuccess '_toSourceFilter (_create /. null) "/foo" ""' 'false'
-expectSuccess '_toSourceFilter (_create /. { foo = "regular"; }) "/foo" ""' 'true'
-expectSuccess '_toSourceFilter (_create /. { foo = null; }) "/foo" ""' 'false'
+expectEqual '_toSourceFilter (_create /. null) "/foo" ""' 'false'
+expectEqual '_toSourceFilter (_create /. { foo = "regular"; }) "/foo" ""' 'true'
+expectEqual '_toSourceFilter (_create /. { foo = null; }) "/foo" ""' 'false'
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 
