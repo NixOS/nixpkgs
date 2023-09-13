@@ -47,10 +47,15 @@ let
       fetchSubmodules = true;
     };
 
-    # wxScintilla is not used on macOS
+    # - wxScintilla is not used on macOS
+    # - Partially applied upstream changes cause a bug when trying to link against a nonexistent libexpat
     prePatch = super.prePatch + ''
       substituteInPlace src/CMakeLists.txt \
-        --replace "scintilla" ""
+        --replace "scintilla" "" \
+        --replace "list(APPEND wxWidgets_LIBRARIES libexpat)" "list(APPEND wxWidgets_LIBRARIES EXPAT::EXPAT)"
+
+      substituteInPlace src/libslic3r/CMakeLists.txt \
+        --replace "libexpat" "EXPAT::EXPAT"
     '';
 
     # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
