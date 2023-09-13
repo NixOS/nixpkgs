@@ -36,7 +36,7 @@ mavenJdk11.buildMavenPackage rec {
     '';
   };
 
-  mvnHash = "sha256-TspWKitRfbrg6vRd6pmRAkbF0m7PqHSvcrT+wwyLzvg=";
+  mvnHash = "sha256-mN8FfPAGhjJVHGAfd0AYwLuzkE4uaQjE1mr1AKuQapo=";
 
   nativeBuildInputs = [ makeWrapper ];
 
