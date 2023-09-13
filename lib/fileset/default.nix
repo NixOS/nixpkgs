@@ -58,16 +58,51 @@ in {
       } -> SourceLike
 
     Example:
-      # Import the current directory into the store but only include files under ./src
-      toSource { root = ./.; fileset = ./src; }
+      # Import the current directory into the store
+      # but only include files under ./src
+      toSource {
+        root = ./.;
+        fileset = ./src;
+      }
       => "/nix/store/...-source"
 
-      # The file set coerced from path ./bar could contain files outside the root ./foo, which is not allowed
-      toSource { root = ./foo; fileset = ./bar; }
+      # Import the current directory into the store
+      # but only include ./Makefile and all files under ./src
+      toSource {
+        root = ./.;
+        fileset = union
+          ./Makefile
+          ./src;
+      }
+      => "/nix/store/...-source"
+
+      # Trying to include a file outside the root will fail
+      toSource {
+        root = ./.;
+        fileset = unions [
+          ./Makefile
+          ./src
+          ../LICENSE
+        ];
+      }
       => <error>
 
+      # The root needs to point to a directory that contains all the files
+      toSource {
+        root = ../.;
+        fileset = unions [
+          ./Makefile
+          ./src
+          ../LICENSE
+        ];
+      }
+      => "/nix/store/...-source"
+
       # The root has to be a local filesystem path
-      toSource { root = "/nix/store/...-source"; fileset = ./.; }
+      toSource {
+        root = "/nix/store/...-source";
+        fileset = ./.;
+      }
       => <error>
   */
   toSource = {
@@ -85,18 +120,24 @@ The only way to change which files get added to the store is by changing the `fi
     root,
     /*
       (required) The file set whose files to import into the store.
-      Currently the only way to construct file sets is using [implicit coercion from paths](#sec-fileset-path-coercion).
-      If a directory does not recursively contain any file, it is omitted from the store path contents.
+      File sets can be created using other functions in this library.
+      This argument can also be a path,
+      which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed -->
+:::{.note}
+If a directory does not recursively contain any file, it is omitted from the store path contents.
+:::
+
     */
     fileset,
   }:
     let
       # We cannot rename matched attribute arguments, so let's work around it with an extra `let in` statement
-      # For now filesets are always paths
-      filesetPath = fileset;
+      maybeFileset = fileset;
     in
     let
-      fileset = _coerce "lib.fileset.toSource: `fileset`" filesetPath;
+      fileset = _coerce "lib.fileset.toSource: `fileset`" maybeFileset;
       rootFilesystemRoot = (splitRoot root).root;
       filesetFilesystemRoot = (splitRoot fileset._internalBase).root;
       filter = _toSourceFilter fileset;

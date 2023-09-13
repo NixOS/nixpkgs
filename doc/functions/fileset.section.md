@@ -9,7 +9,7 @@ File sets are easy and safe to use, providing obvious and composable semantics w
 These sections apply to the entire library.
 See the [function reference](#sec-functions-library-fileset) for function-specific documentation.
 
-The file set library is currently very limited but is being expanded to include more functions over time.
+The file set library is currently somewhat limited but is being expanded to include more functions over time.
 
 ## Implicit coercion from paths to file sets {#sec-fileset-path-coercion}
 
