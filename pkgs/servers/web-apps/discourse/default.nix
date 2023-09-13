@@ -37,7 +37,7 @@
 , yarn
 , fixup_yarn_lock
 , nodePackages
-, nodejs_16
+, nodejs_18
 , jq
 , moreutils
 
@@ -161,9 +161,9 @@ let
                 cd ../..
 
                 mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-                ln -s "${nodejs_16.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+                ln -s "${nodejs_18.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-                ln -s ${nodejs_16.libv8}/include vendor/v8/include
+                ln -s ${nodejs_18.libv8}/include vendor/v8/include
 
                 mkdir -p ext/libv8-node
                 echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -211,7 +211,9 @@ let
       nodePackages.terser
       nodePackages.patch-package
       yarn
-      nodejs_16
+      nodejs_18
+      jq
+      moreutils
     ];
 
     outputs = [ "out" "javascripts" ];
