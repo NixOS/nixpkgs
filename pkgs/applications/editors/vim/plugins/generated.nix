@@ -7353,6 +7353,18 @@ final: prev:
     meta.homepage = "https://github.com/yorickpeterse/nvim-pqf/";
   };
 
+  nvim-remote-containers = buildVimPluginFrom2Nix {
+    pname = "nvim-remote-containers";
+    version = "2023-08-01";
+    src = fetchFromGitHub {
+      owner = "jamestthompson3";
+      repo = "nvim-remote-containers";
+      rev = "ac76b4b193962dfc0be872feeaf10756aea459e2";
+      sha256 = "0ww40yw1fdlanl5wxisqn2c7qlagcn3nkxjafg3nbzd4spi5vg91";
+    };
+    meta.homepage = "https://github.com/jamestthompson3/nvim-remote-containers/";
+  };
+
   nvim-rename-state = buildVimPluginFrom2Nix {
     pname = "nvim-rename-state";
     version = "2023-01-30";
