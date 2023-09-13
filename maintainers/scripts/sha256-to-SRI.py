@@ -1,10 +1,14 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i "python3 -I" -p python3
+#! nix-shell -i "python3 -I" -p "python3.withPackages(p: with p; [ rich structlog ])"
 
 from contextlib import contextmanager
 from pathlib import Path
+from structlog.contextvars import bound_contextvars as log_context
 
-import logging, re
+import re, structlog
+
+
+logger = structlog.getLogger("sha256-to-SRI")
 
 
 nix32alphabet = "0123456789abcdfghijklmnpqrsvwxyz"
@@ -78,9 +82,8 @@ def defToSRI(s: str) -> str:
             begin, end = m.span()
             match = m.string[begin:end]
 
-            logging.error(
-                f"Skipping '%s': an exception was raised during rewriting",
-                match,
+            logger.error(
+                "Skipping",
                 exc_info = exn,
             )
             return match
@@ -124,8 +127,9 @@ def atomicFileUpdate(target: Path):
 
 def fileToSRI(p: Path):
     with atomicFileUpdate(p) as (og, new):
-        for line in og:
-            new.write(defToSRI(line))
+        for i, line in enumerate(og):
+            with log_context(line=i):
+                new.write(defToSRI(line))
 
 
 if __name__ == "__main__":
@@ -133,8 +137,13 @@ if __name__ == "__main__":
 
     for arg in argv[1:]:
         p = Path(arg)
-        if not p.is_file():
-            print(f"Argument '{arg}' is not a regular file's path", file=stderr)
-        else:
-            print(f"Processing '{arg}'")
-            fileToSRI(p)
+        with log_context(path=str(p)):
+            try:
+                fileToSRI(p)
+            except Exception as exn:
+                logger.error(
+                    "Unhandled exception, skipping file!",
+                    exc_info = exn,
+                )
+            else:
+                logger.info("Finished processing file")
