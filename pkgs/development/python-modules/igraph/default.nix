@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.10.7";
+  version = "0.10.8";
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "igraph";
     repo = "python-igraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-BdMybNo2CiC0Yv9jfiFVuiwBRy4eMtz654JRvaPph9E=";
+    hash = "sha256-EpWkFKN8fhKkzR2g9Uv0/LxSwi4TkraH5rjde7yR+C8=";
   };
 
   postPatch = ''
