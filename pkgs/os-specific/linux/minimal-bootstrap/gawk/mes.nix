@@ -3,41 +3,37 @@
 , hostPlatform
 , fetchurl
 , bash
-, gcc
-, glibc
-, binutils
-, linux-headers
+, tinycc
 , gnumake
-, gnugrep
+, gnupatch
 , gnused
-, gnutar
-, gzip
-, bootGawk
+, gnugrep
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "gawk";
-  # >= 4.2.0 fails to cleanly build. may be worth investigating in the future.
-  # for now this version is sufficient to build glibc 2.16
-  version = "4.1.4";
+  pname = "gawk-mes";
+  # >=3.1.x is incompatible with mes-libc
+  version = "3.0.6";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/gawk-${version}.tar.gz";
-    sha256 = "0dadjkpyyizmyd0l098qps8lb39r0vrz3xl3hwz2cmjs5c70h0wc";
+    sha256 = "1z4bibjm7ldvjwq3hmyifyb429rs2d9bdwkvs0r171vv1khpdwmb";
   };
+
+  patches = [
+    # for reproducibility don't generate date stamp
+    ./no-stamp.patch
+  ];
 in
 bash.runCommand "${pname}-${version}" {
   inherit pname version meta;
 
   nativeBuildInputs = [
-    gcc
-    binutils
+    tinycc.compiler
     gnumake
+    gnupatch
     gnused
     gnugrep
-    gnutar
-    gzip
-    bootGawk
   ];
 
   passthru.tests.get-version = result:
@@ -47,17 +43,23 @@ bash.runCommand "${pname}-${version}" {
     '';
 } ''
   # Unpack
-  tar xzf ${src}
+  ungz --file ${src} --output gawk.tar
+  untar --file gawk.tar
+  rm gawk.tar
   cd gawk-${version}
 
+  # Patch
+  ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
+
   # Configure
-  export C_INCLUDE_PATH="${glibc}/include:${linux-headers}/include"
-  export LIBRARY_PATH="${glibc}/lib"
-  export LIBS="-lc -lnss_files -lnss_dns -lresolv"
+  export CC="tcc -B ${tinycc.libs}/lib"
+  export ac_cv_func_getpgrp_void=yes
+  export ac_cv_func_tzset=yes
   bash ./configure \
-    --prefix=$out \
     --build=${buildPlatform.config} \
-    --host=${hostPlatform.config}
+    --host=${hostPlatform.config} \
+    --disable-nls \
+    --prefix=$out
 
   # Build
   make gawk
