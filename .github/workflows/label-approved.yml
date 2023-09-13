@@ -1,0 +1,19 @@
+name: Update Pull Request Approval Labels
+on:
+  pull_request_review:
+  pull_request:
+    types: [synchronize]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  label-approved:
+    runs-on: ubuntu-latest
+    if: "github.repository_owner == 'NixOS'"
+    steps:
+      - uses: nix-community/label-approved@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_number: ${{ github.event.pull_request.number || github.event.number }}
