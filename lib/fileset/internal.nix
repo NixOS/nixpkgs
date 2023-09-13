@@ -23,7 +23,9 @@ let
   inherit (lib.lists)
     all
     elemAt
+    foldl'
     length
+    sublist
     ;
 
   inherit (lib.path)
@@ -50,24 +52,48 @@ in
 rec {
 
   # If you change the internal representation, make sure to:
-  # - Update this version
-  # - Adjust _coerce to also accept and coerce older versions
+  # - Increment this version
+  # - Add an additional migration function below
   # - Update the description of the internal representation in ./README.md
-  _currentVersion = 0;
+  _currentVersion = 1;
+
+  # Migrations between versions. The 0th element converts from v0 to v1, and so on
+  migrations = [
+    # Convert v0 into v1: Add the _internalBase{Root,Components} attributes
+    (
+      filesetV0:
+      let
+        parts = splitRoot filesetV0._internalBase;
+      in
+      filesetV0 // {
+        _internalVersion = 1;
+        _internalBaseRoot = parts.root;
+        _internalBaseComponents = components parts.subpath;
+      }
+    )
+  ];
 
   # Create a fileset, see ./README.md#fileset
   # Type: path -> filesetTree -> fileset
-  _create = base: tree: {
-    _type = "fileset";
+  _create = base: tree:
+    let
+      # Decompose the base into its components
+      # See ../path/README.md for why we're not just using `toString`
+      parts = splitRoot base;
+    in
+    {
+      _type = "fileset";
 
-    _internalVersion = _currentVersion;
-    _internalBase = base;
-    _internalTree = tree;
+      _internalVersion = _currentVersion;
+      _internalBase = base;
+      _internalBaseRoot = parts.root;
+      _internalBaseComponents = components parts.subpath;
+      _internalTree = tree;
 
-    # Double __ to make it be evaluated and ordered first
-    __noEval = throw ''
-      lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'';
-  };
+      # Double __ to make it be evaluated and ordered first
+      __noEval = throw ''
+        lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'';
+    };
 
   # Coerce a value to a fileset, erroring when the value cannot be coerced.
   # The string gives the context for error messages.
@@ -80,6 +106,12 @@ rec {
               - Internal version of the file set: ${toString value._internalVersion}
               - Internal version of the library: ${toString _currentVersion}
               Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.''
+      else if value._internalVersion < _currentVersion then
+        let
+          # Get all the migration functions necessary to convert from the old to the current version
+          migrationsToApply = sublist value._internalVersion (_currentVersion - value._internalVersion) migrations;
+        in
+        foldl' (value: migration: migration value) value migrationsToApply
       else
         value
     else if ! isPath value then
@@ -193,17 +225,13 @@ rec {
       # which has the effect that they aren't included in the result
       tree = _simplifyTree fileset._internalBase fileset._internalTree;
 
-      # Decompose the base into its components
-      # See ../path/README.md for why we're not just using `toString`
-      baseComponents = components (splitRoot fileset._internalBase).subpath;
-
       # The base path as a string with a single trailing slash
       baseString =
-        if baseComponents == [] then
+        if fileset._internalBaseComponents == [] then
           # Need to handle the filesystem root specially
           "/"
         else
-          "/" + concatStringsSep "/" baseComponents + "/";
+          "/" + concatStringsSep "/" fileset._internalBaseComponents + "/";
 
       baseLength = stringLength baseString;
 

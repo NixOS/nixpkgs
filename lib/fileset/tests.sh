@@ -264,17 +264,21 @@ expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `
 # File sets cannot be evaluated directly
 expectFailure '_create ./. null' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
 
+# Past versions of the internal representation are supported
+expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
+    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalVersion = 1; _type = "fileset"; }'
+
 # Future versions of the internal representation are unsupported
-expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 1; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
-\s*- Internal version of the file set: 1
-\s*- Internal version of the library: 0
+expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 2; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
+\s*- Internal version of the file set: 2
+\s*- Internal version of the library: 1
 \s*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
 
 # _create followed by _coerce should give the inputs back without any validation
 expectEqual '{
   inherit (_coerce "<test>" (_create ./. "directory"))
     _internalVersion _internalBase _internalTree;
-}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 0; }'
+}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 1; }'
 
 #### Resulting store path ####
 

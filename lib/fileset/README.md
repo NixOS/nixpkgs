@@ -41,12 +41,20 @@ An attribute set with these values:
 - `_type` (constant string `"fileset"`):
   Tag to indicate this value is a file set.
 
-- `_internalVersion` (constant string equal to the current version):
-  Version of the representation
+- `_internalVersion` (constant `1`, the current version):
+  Version of the representation.
 
 - `_internalBase` (path):
   Any files outside of this path cannot influence the set of files.
   This is always a directory.
+
+- `_internalBaseRoot` (path):
+  The filesystem root of `_internalBase`, same as `(lib.path.splitRoot _internalBase).root`.
+  This is here because this needs to be computed anyways, and this computation shouldn't be duplicated.
+
+- `_internalBaseComponents` (list of strings):
+  The path components of `_internalBase`, same as `lib.path.subpath.components (lib.path.splitRoot _internalBase).subpath`.
+  This is here because this needs to be computed anyways, and this computation shouldn't be duplicated.
 
 - `_internalTree` ([filesetTree](#filesettree)):
   A tree representation of all included files under `_internalBase`.
