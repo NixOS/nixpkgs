@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
-      "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
+      "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
     hash = "sha256-3TIva9CiDmzr39OI9p6Yw9GDvteSz0cTyKfvSYy6SJQ=";
   };
