@@ -177,6 +177,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";
+    longDescription = ''
+      The latest versions of OnlyOffice are currently broken on wlroots environments (e.g. Hyprland, Sway).
+      If you are using a different environment, you can get the latest version using `onlyoffice-bin_latest`.
+    '';
     homepage = "https://www.onlyoffice.com/";
     downloadPage = "https://github.com/ONLYOFFICE/DesktopEditors/releases";
     changelog = "https://github.com/ONLYOFFICE/DesktopEditors/blob/master/CHANGELOG.md";
