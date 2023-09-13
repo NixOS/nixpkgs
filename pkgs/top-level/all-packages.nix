@@ -2674,8 +2674,11 @@ with pkgs;
 
   mainsail = callPackage ../applications/misc/mainsail { };
 
-  # Does not build with default Haskell version because upstream uses a newer Cabal version.
-  mailctl = haskell.packages.ghc94.callPackage ../tools/networking/mailctl { };
+  mailctl = (haskellPackages.callPackage ../tools/networking/mailctl {}).overrideScope (final: prev: {
+    # Dependency twain requires an older version of http2, and we cannot mix
+    # versions of transitive dependencies.
+    http2 = final.http2_3_0_3;
+  });
 
   mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
@@ -13101,6 +13104,8 @@ with pkgs;
   shell2http = callPackage ../servers/misc/shell2http { };
 
   shelldap = callPackage ../tools/misc/shelldap { };
+
+  shellify = haskellPackages.shellify.bin;
 
   shellspec = callPackage ../tools/misc/shellspec { };
 
