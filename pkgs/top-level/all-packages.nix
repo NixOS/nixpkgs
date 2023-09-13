@@ -38500,8 +38500,6 @@ with pkgs;
     ncurses = ncurses5;
   };
 
-  robotfindskitten = callPackage ../games/robotfindskitten { };
-
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
 
   rott = callPackage ../games/rott { SDL = SDL_compat; };
