@@ -135,6 +135,6 @@ buildPythonPackage rec {
     homepage = "https://optuna.org/";
     changelog = "https://github.com/optuna/optuna/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ natsukium ];
   };
 }
