@@ -1,7 +1,7 @@
-diff --git a/cppserver/database/CMakeLists.txt b/cppserver/database/CMakeLists.txt
+diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 00c89fd..89ed4e1 100644
---- a/cppserver/database/CMakeLists.txt
-+++ b/cppserver/database/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
 @@ -29,8 +29,9 @@ set(ADDITIONAL_SOURCES  DataBaseUtils.cpp
                          update_starter.cpp)
  
@@ -14,10 +14,10 @@ index 00c89fd..89ed4e1 100644
  
  if (WIN32 AND (Tango_IS_STATIC OR Tango_FORCE_STATIC))
      set_target_properties(Databaseds PROPERTIES
-diff --git a/cppserver/database/main.cpp b/cppserver/database/main.cpp
+diff --git a/main.cpp b/main.cpp
 index 2d7b369..2f4686b 100644
---- a/cppserver/database/main.cpp
-+++ b/cppserver/database/main.cpp
+--- a/main.cpp
++++ b/main.cpp
 @@ -37,6 +37,7 @@
  // along with Tango.  If not, see <http://www.gnu.org/licenses/>.
  //

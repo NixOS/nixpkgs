@@ -1,0 +1,26 @@
+diff --git a/lib/cpp/tango.pc.cmake b/lib/cpp/tango.pc.cmake
+index 39facaf..2ac216c 100644
+--- a/lib/cpp/tango.pc.cmake
++++ b/lib/cpp/tango.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}/bin
+ includedir=${prefix}/include
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: @CMAKE_PROJECT_NAME@
+ Description: Tango client/server API library
+diff --git a/lib/idl/tangoidl.pc.cmake b/lib/idl/tangoidl.pc.cmake
+index 8ff1231..dde5aeb 100644
+--- a/lib/idl/tangoidl.pc.cmake
++++ b/lib/idl/tangoidl.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ includedir=${prefix}/include
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: @CMAKE_PROJECT_NAME@
+ Description: TANGO IDL
