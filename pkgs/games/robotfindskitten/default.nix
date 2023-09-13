@@ -1,30 +1,49 @@
-{ lib, stdenv, fetchurl, pkg-config, ncurses }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, ncurses
+, pkg-config
+, texinfo
+}:
 
-with lib;
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "robotfindskitten";
   version = "2.8284271.702";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/rfk/robotfindskitten-POSIX/ship_it_anyway/${pname}-${version}.tar.gz";
-    sha256 = "1bwrkxm83r9ajpkd6x03nqvmdfpf5vz6yfy0c97pq3v3ykj74082";
+  src = fetchFromGitHub {
+    owner = "robotfindskitten";
+    repo = "robotfindskitten";
+    rev = finalAttrs.version;
+    hash = "sha256-z6//Yfp3BtJAtUdY05m1eKVrTdH19MvK7LZOwX5S1CM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses ];
+  outputs = [ "out" "man" "info" ];
 
-  makeFlags = [ "execgamesdir=$(out)/bin" ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    texinfo
+  ];
+
+  buildInputs = [
+    ncurses
+  ];
+
+  makeFlags = [
+    "execgamesdir=$(out)/bin"
+  ];
 
   postInstall = ''
-    install -Dm644 {nki,$out/share/games/robotfindskitten}/vanilla.nki
+    install -Dm644 nki/vanilla.nki -t $out/share/games/robotfindskitten/
   '';
 
   meta = {
     description = "Yet another zen simulation; A simple find-the-kitten game";
     homepage = "http://robotfindskitten.org/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "robotfindskitten";
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
