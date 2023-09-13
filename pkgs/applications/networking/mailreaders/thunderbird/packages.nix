@@ -1,7 +1,7 @@
 { stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu, fetchpatch2 }:
 
 rec {
-  thunderbird = thunderbird-102;
+  thunderbird = thunderbird-115;
 
   thunderbird-102 = (buildMozillaMach rec {
     pname = "thunderbird";
@@ -42,13 +42,13 @@ rec {
 
   thunderbird-115 = (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "115.1.1";
+    version = "115.2.1";
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "26f69dded43bd24ffce9acb0de204bef8c10c8df3cb82b33594d035e41179cb7450cb7c10470bfc92a933c1d801fb968049ea8a17d838d16de9973f5dddff9fc";
+      sha512 = "375c66efe9637c41e4758fdc7477b64fa700032fecc0e5e93fb6a4659c1ceee99b2c366e19beb96252e60dbbec78ec37433c3f70f7fcc0f305a927f95d753c05";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
