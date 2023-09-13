@@ -7131,8 +7131,8 @@ with pkgs;
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
-  clamav = callPackage ../tools/security/clamav {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
+  clamav = darwin.apple_sdk_11_0.callPackage ../tools/security/clamav {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
   client-ip-echo = callPackage ../servers/misc/client-ip-echo { };
