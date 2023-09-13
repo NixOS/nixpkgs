@@ -41,7 +41,7 @@ in buildGoModule rec {
 
   doCheck = false;
 
-  vendorSha256 = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
+  vendorHash = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
 
   subPackages = [
     "cmd/agent"

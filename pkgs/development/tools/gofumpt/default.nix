@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-uXRYVLFDyRZ83mth8Fh+MG9fNv2lUfE3BTljM9v9rjI=";
   };
 
-  vendorSha256 = "sha256-Il1E1yOejLEdKRRMqelGeJbHRjx4qFymf7N98BEdFzg=";
+  vendorHash = "sha256-Il1E1yOejLEdKRRMqelGeJbHRjx4qFymf7N98BEdFzg=";
 
   meta = with lib; {
     description = "A stricter gofmt";

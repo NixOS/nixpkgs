@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-FNPAsslKmsLrUtiw+GlXLppsEk/VB02jkZLmrB8zZOI=";
   };
 
-  vendorSha256 = "sha256-QXmy+Ph0lKguAoIWfc41z7XH7jXGc601DD6v292Hzj0=";
+  vendorHash = "sha256-QXmy+Ph0lKguAoIWfc41z7XH7jXGc601DD6v292Hzj0=";
 
   # Tests require network access
   doCheck = false;

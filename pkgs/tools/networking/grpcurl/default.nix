@@ -13,7 +13,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/grpcurl" ];
 
-  vendorSha256 = "sha256-xe3xb1+qa53Xph+CLcUqxJYeD9d4kBaY6SJfc7bhjQY=";
+  vendorHash = "sha256-xe3xb1+qa53Xph+CLcUqxJYeD9d4kBaY6SJfc7bhjQY=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 

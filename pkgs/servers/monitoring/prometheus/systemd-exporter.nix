@@ -4,7 +4,7 @@ buildGoModule rec {
   pname = "systemd_exporter";
   version = "0.5.0";
 
-  vendorSha256 = "sha256-XkwBhj2M1poirPkWzS71NbRTshc8dTKwaHoDfFxpykU=";
+  vendorHash = "sha256-XkwBhj2M1poirPkWzS71NbRTshc8dTKwaHoDfFxpykU=";
 
   src = fetchFromGitHub {
     owner = "povilasv";
