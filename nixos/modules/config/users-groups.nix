@@ -264,7 +264,7 @@ let
       };
 
       passwordFile = mkOption {
-        type = with types; nullOr (passwdEntry str);
+        type = with types; nullOr str;
         default = null;
         visible = false;
         description = lib.mdDoc "Deprecated alias of hashedPasswordFile";
