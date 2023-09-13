@@ -60,13 +60,13 @@ in
   options = {
     services.mobilizon = {
       enable = mkEnableOption
-        "Mobilizon federated organization and mobilization platform";
+        (lib.mdDoc "Mobilizon federated organization and mobilization platform");
 
       nginx.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
-          Whether an <literal>nginx</literal> virtual host should be
+        description = lib.mdDoc ''
+          Whether an Nginx virtual host should be
           set up to serve Mobilizon.
         '';
       };
@@ -87,10 +87,10 @@ in
                 "Mobilizon.Web.Endpoint" = {
                   url.host = mkOption {
                     type = elixirTypes.str;
-                    defaultText = literalExpression ''
+                    defaultText = lib.literalMD ''
                       ''${settings.":mobilizon".":instance".hostname}
                     '';
-                    description = ''
+                    description = lib.mdDoc ''
                       Your instance's hostname for generating URLs throughout the app
                     '';
                   };
@@ -99,14 +99,14 @@ in
                     port = mkOption {
                       type = elixirTypes.port;
                       default = 4000;
-                      description = ''
+                      description = lib.mdDoc ''
                         The port to run the server
                       '';
                     };
                     ip = mkOption {
                       type = elixirTypes.tuple;
                       default = settingsFormat.lib.mkTuple [ 0 0 0 0 0 0 0 1 ];
-                      description = ''
+                      description = lib.mdDoc ''
                         The IP address to listen on. Defaults to [::1] notated as a byte tuple.
                       '';
                     };
@@ -115,7 +115,7 @@ in
                   has_reverse_proxy = mkOption {
                     type = elixirTypes.bool;
                     default = true;
-                    description = ''
+                    description = lib.mdDoc ''
                       Whether you use a reverse proxy
                     '';
                   };
@@ -124,14 +124,14 @@ in
                 ":instance" = {
                   name = mkOption {
                     type = elixirTypes.str;
-                    description = ''
+                    description = lib.mdDoc ''
                       The fallback instance name if not configured into the admin UI
                     '';
                   };
 
                   hostname = mkOption {
                     type = elixirTypes.str;
-                    description = ''
+                    description = lib.mdDoc ''
                       Your instance's hostname
                     '';
                   };
@@ -141,7 +141,7 @@ in
                     defaultText = literalExpression ''
                       noreply@''${settings.":mobilizon".":instance".hostname}
                     '';
-                    description = ''
+                    description = lib.mdDoc ''
                       The email for the From: header in emails
                     '';
                   };
@@ -151,7 +151,7 @@ in
                     defaultText = literalExpression ''
                       ''${email_from}
                     '';
-                    description = ''
+                    description = lib.mdDoc ''
                       The email for the Reply-To: header in emails
                     '';
                   };
@@ -161,7 +161,7 @@ in
                   socket_dir = mkOption {
                     type = types.nullOr elixirTypes.str;
                     default = postgresqlSocketDir;
-                    description = ''
+                    description = lib.mdDoc ''
                       Path to the postgres socket directory.
 
                       Set this to null if you want to connect to a remote database.
@@ -171,14 +171,14 @@ in
 
                       If connecting to a remote database, please follow the
                       instructions on how to setup your database:
-                      <link xlink:href="https://docs.joinmobilizon.org/administration/install/release/#database-setup"/>
+                      <https://docs.joinmobilizon.org/administration/install/release/#database-setup>
                     '';
                   };
 
                   username = mkOption {
                     type = types.nullOr elixirTypes.str;
                     default = user;
-                    description = ''
+                    description = lib.mdDoc ''
                       User used to connect to the database
                     '';
                   };
@@ -186,7 +186,7 @@ in
                   database = mkOption {
                     type = types.nullOr elixirTypes.str;
                     default = "mobilizon_prod";
-                    description = ''
+                    description = lib.mdDoc ''
                       Name of the database
                     '';
                   };
@@ -196,9 +196,9 @@ in
           };
         default = { };
 
-        description = ''
+        description = lib.mdDoc ''
           Mobilizon Elixir documentation, see
-          <link xlink:href="https://docs.joinmobilizon.org/administration/configure/reference/"/>
+          <https://docs.joinmobilizon.org/administration/configure/reference/>
           for supported values.
         '';
       };
