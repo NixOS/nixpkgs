@@ -80,8 +80,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-KcTh6Fd1EUXcXByPSwMVy5J/6VSVGWBmHr8asS1/ffU=";
-      aarch64-linux = "sha256-v1T6/qfVapsNFQiB9vdZvxBZ3RoNO7MxgRh3s9dA+pQ=";
+      x86_64-linux = "sha256-+8MnbcFUyAE2122VA5olWAW8ZgjGweumRI62bxi9KOI=";
+      aarch64-linux = "sha256-4PH8rgsHxEwtx8RQGjLbAxHpLfWVqRLOvSX9sqQoy4Y=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -102,6 +102,9 @@ buildBazelPackage rec {
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
+
+      # Remove compiled python
+      find $bazelOut -name '*.pyc' -delete
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
