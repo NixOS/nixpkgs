@@ -27,13 +27,13 @@ autoconf in the bootstrap loop just to regenerate a patched configure.ac.
  
  curl_includes_winsock2="\
 diff --git a/lib/curl_setup.h b/lib/curl_setup.h
-index 727d123e5..f78d8be4a 100644
+index b43714da7..7674778b7 100644
 --- a/lib/curl_setup.h
 +++ b/lib/curl_setup.h
-@@ -250,19 +250,6 @@
-
+@@ -250,20 +250,6 @@
+ 
  #include <curl/system.h>
-
+ 
 -/*
 - * Use getaddrinfo to resolve the IPv4 address literal. If the current network
 - * interface doesn't support IPv4, but supports IPv6, NAT64, and DNS64,
@@ -42,8 +42,9 @@ index 727d123e5..f78d8be4a 100644
 -#if defined(__APPLE__) && !defined(USE_ARES)
 -#include <TargetConditionals.h>
 -#define USE_RESOLVE_ON_IPS 1
--#  if !defined(TARGET_OS_OSX) || TARGET_OS_OSX
--#    define CURL_OSX_CALL_COPYPROXIES 1
+-#  if TARGET_OS_MAC && !(defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) && \
+-     defined(ENABLE_IPV6)
+-#    define CURL_MACOS_CALL_COPYPROXIES 1
 -#  endif
 -#endif
 -
