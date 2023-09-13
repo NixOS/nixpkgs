@@ -49,7 +49,7 @@ buildGoModule rec {
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-ihQd/RAjAQhgQZHbNiWmAD0eOo1MvqAR/OwIOUWtdAM=";
+  vendorHash = "sha256-ihQd/RAjAQhgQZHbNiWmAD0eOo1MvqAR/OwIOUWtdAM=";
 
   patches = [
     ./0001-Makefile.patch

@@ -14,7 +14,7 @@ buildGoModule rec {
 
   patches = [ ./remove-hardcoded-locations.patch ];
 
-  vendorSha256 = "sha256-Lqo0fdrYEHOKjF/XT3c1VjVQc1YxeBy6yW69IxXZAow=";
+  vendorHash = "sha256-Lqo0fdrYEHOKjF/XT3c1VjVQc1YxeBy6yW69IxXZAow=";
 
   postInstall = ''
     cp -r "$NIX_BUILD_TOP/source"/bin/* $out/bin

@@ -18,7 +18,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/server";
 
-  vendorSha256 = "sha256-249LWguTHIF0HNIo8CsE/HWpAtBw4P46VPvlTARLTpw=";
+  vendorHash = "sha256-249LWguTHIF0HNIo8CsE/HWpAtBw4P46VPvlTARLTpw=";
   doCheck = false;
 
   meta = with lib; {
