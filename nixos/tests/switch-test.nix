@@ -62,6 +62,10 @@ in {
           echo "systemd 0" > $out/init-interface-version
         '';
 
+        modifiedSystemConf.configuration.systemd.extraConfig = ''
+          # Hello world!
+        '';
+
         simpleService.configuration = {
           systemd.services.test = {
             wantedBy = [ "multi-user.target" ];
@@ -655,6 +659,11 @@ in {
     with subtest("init interface version"):
         # Do not try to switch to an invalid init interface version
         assert "incompatible" in switch_to_specialisation("${machine}", "brokenInitInterface", fail=True)
+
+    with subtest("systemd restarts"):
+        # systemd is restarted when its system.conf changes
+        out = switch_to_specialisation("${machine}", "modifiedSystemConf")
+        assert_contains(out, "restarting systemd...")
 
     with subtest("services"):
         switch_to_specialisation("${machine}", "")
