@@ -23,7 +23,7 @@ release_platform_attr () {
   local platform="$2"
   local attr="$3"
 
-  jq -r '.[] | select(.rid == "'"$platform"'") | ."'"$attr"'"' <<< "$release_files"
+  jq -r '.[] | select((.rid == "'"$platform"'") and (.name | contains("composite") | not)) | ."'"$attr"'"' <<< "$release_files"
 }
 
 platform_sources () {
@@ -116,11 +116,17 @@ aspnetcore_packages () {
       "Microsoft.AspNetCore.App.Runtime.linux-musl-x64" \
       "Microsoft.AspNetCore.App.Runtime.linux-x64" \
       "Microsoft.AspNetCore.App.Runtime.osx-x64" \
-      "Microsoft.AspNetCore.App.Runtime.win-arm" \
       "Microsoft.AspNetCore.App.Runtime.win-arm64" \
       "Microsoft.AspNetCore.App.Runtime.win-x64" \
       "Microsoft.AspNetCore.App.Runtime.win-x86" \
     )
+
+    # These packages are currently broken on .NET 8
+    if version_older "$version" "8"; then
+        pkgs+=( \
+            "Microsoft.AspNetCore.App.Runtime.win-arm" \
+        )
+    fi
 
     # Packages that only apply to .NET 6 and up
     if ! version_older "$version" "6"; then
@@ -166,7 +172,6 @@ sdk_packages () {
       "Microsoft.NETCore.App.Host.linux-musl-x64" \
       "Microsoft.NETCore.App.Host.linux-x64" \
       "Microsoft.NETCore.App.Host.osx-x64" \
-      "Microsoft.NETCore.App.Host.win-arm" \
       "Microsoft.NETCore.App.Host.win-arm64" \
       "Microsoft.NETCore.App.Host.win-x64" \
       "Microsoft.NETCore.App.Host.win-x86" \
@@ -176,7 +181,6 @@ sdk_packages () {
       "Microsoft.NETCore.App.Runtime.linux-musl-x64" \
       "Microsoft.NETCore.App.Runtime.linux-x64" \
       "Microsoft.NETCore.App.Runtime.osx-x64" \
-      "Microsoft.NETCore.App.Runtime.win-arm" \
       "Microsoft.NETCore.App.Runtime.win-arm64" \
       "Microsoft.NETCore.App.Runtime.win-x64" \
       "Microsoft.NETCore.App.Runtime.win-x86" \
@@ -212,10 +216,6 @@ sdk_packages () {
       "runtime.win-arm64.Microsoft.NETCore.DotNetHost" \
       "runtime.win-arm64.Microsoft.NETCore.DotNetHostPolicy" \
       "runtime.win-arm64.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.win-arm.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.win-arm.Microsoft.NETCore.DotNetHost" \
-      "runtime.win-arm.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.win-arm.Microsoft.NETCore.DotNetHostResolver" \
       "runtime.win-x64.Microsoft.NETCore.DotNetAppHost" \
       "runtime.win-x64.Microsoft.NETCore.DotNetHost" \
       "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy" \
@@ -224,7 +224,6 @@ sdk_packages () {
       "runtime.win-x86.Microsoft.NETCore.DotNetHost" \
       "runtime.win-x86.Microsoft.NETCore.DotNetHostPolicy" \
       "runtime.win-x86.Microsoft.NETCore.DotNetHostResolver" \
-      "Microsoft.NETCore.App.Composite" \
       "Microsoft.NETCore.App.Host.linux-musl-arm" \
       "Microsoft.NETCore.App.Host.osx-arm64" \
       "Microsoft.NETCore.App.Runtime.linux-musl-arm" \
@@ -256,9 +255,22 @@ sdk_packages () {
       "Microsoft.NETCore.App.Crossgen2.osx-arm64"
     )
 
+    # These packages are currently broken on .NET 8
+    # When .NET 8 officialy launches, these should be checked and added back if fixed
+    if version_older "$version" "8"; then
+        pkgs+=( \
+            "Microsoft.NETCore.App.Host.win-arm" \
+            "Microsoft.NETCore.App.Runtime.win-arm" \
+            "runtime.win-arm.Microsoft.NETCore.DotNetAppHost" \
+            "runtime.win-arm.Microsoft.NETCore.DotNetHost" \
+            "runtime.win-arm.Microsoft.NETCore.DotNetHostPolicy" \
+            "runtime.win-arm.Microsoft.NETCore.DotNetHostResolver" \
+            "Microsoft.NETCore.App.Composite" \
+        )
+    fi
+
     # Packages that only apply to .NET 7 and up
     if ! version_older "$version" "7"; then
-        # ILCompiler requires nixpkgs#181373 to be fixed to work properly
         pkgs+=( \
           "runtime.linux-arm64.Microsoft.DotNet.ILCompiler" \
           "runtime.linux-musl-arm64.Microsoft.DotNet.ILCompiler" \
