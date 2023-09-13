@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-HGzgqUH9OxwjfYR9I9JzcP11+SB8A3hC/3Uk1dOCq+k=";
   };
 
-  vendorSha256 = "sha256-vuNOOPVGUkmKJ477N20DvhJTcMIW1lNmrgJLeMpNImM=";
+  vendorHash = "sha256-vuNOOPVGUkmKJ477N20DvhJTcMIW1lNmrgJLeMpNImM=";
 
   meta = with lib; {
     description = "A simple Go-based server for map tiles stored in mbtiles format";

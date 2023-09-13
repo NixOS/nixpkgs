@@ -52,7 +52,7 @@ Not all the configuration options are available directly in this module, but you
     extraConfig = {
       "server.basicAuthEnabled" = true;
       "server.basicAuthUsername" = "username";
-      "server.basicAuthPassword" = "password";      
+      "server.basicAuthPassword" = "password";
     };
   };
 }

@@ -160,7 +160,6 @@
 , "katex"
 , "keyoxide"
 , "lcov-result-merger"
-, "vsc-leetcode-cli"
 , "lerna"
 , "less"
 , "less-plugin-clean-css"
@@ -234,7 +233,6 @@
 , "speed-test"
 , "sql-formatter"
 , "stackdriver-statsd-backend"
-, "stylelint"
 , "svelte-check"
 , "svelte-language-server"
 , "svgo"
@@ -242,7 +240,6 @@
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
 , "teck-programmer"
 , "tern"
-, "terser"
 , "textlint"
 , "textlint-plugin-latex"
 , "textlint-rule-abbr-within-parentheses"

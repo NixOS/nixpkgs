@@ -24,7 +24,7 @@ buildGoModule rec {
     pkg-config
   ];
 
-  vendorSha256 = "sha256-4zgsoExdhEqvycGerNVxZ6LnjeRRO+f6DhJdINR5ZyI=";
+  vendorHash = "sha256-4zgsoExdhEqvycGerNVxZ6LnjeRRO+f6DhJdINR5ZyI=";
 
   postInstall = ''
     mkdir -p $out/share/thumbnailers

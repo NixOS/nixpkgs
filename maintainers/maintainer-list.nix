@@ -18145,6 +18145,12 @@
     githubId = 90482;
     name = "Viktor Nordling";
   };
+  vilsol = {
+    email = "me@vil.so";
+    github = "vilsol";
+    githubId = 1759390;
+    name = "Vilsol";
+  };
   viluon = {
     email = "nix@viluon.me";
     github = "viluon";
@@ -18400,7 +18406,7 @@
   };
   weathercold = {
     name = "Weathercold";
-    email = "weathercold.scr@gmail.com";
+    email = "weathercold.scr@proton.me";
     matrix = "@weathercold:matrix.org";
     github = "Weathercold";
     githubId = 49368953;

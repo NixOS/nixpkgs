@@ -154,7 +154,7 @@ Here is how your `default.nix` file would look for a phoenix project.
 with import <nixpkgs> { };
 
 let
-  # beam.interpreters.erlang_23 is available if you need a particular version
+  # beam.interpreters.erlang_26 is available if you need a particular version
   packages = beam.packagesWith beam.interpreters.erlang;
 
   pname = "your_project";

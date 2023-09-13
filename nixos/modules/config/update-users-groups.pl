@@ -239,12 +239,12 @@ foreach my $u (@{$spec->{users}}) {
         chmod oct($u->{homeMode}), $u->{home};
     }
 
-    if (defined $u->{passwordFile}) {
-        if (-e $u->{passwordFile}) {
-            $u->{hashedPassword} = read_file($u->{passwordFile});
+    if (defined $u->{hashedPasswordFile}) {
+        if (-e $u->{hashedPasswordFile}) {
+            $u->{hashedPassword} = read_file($u->{hashedPasswordFile});
             chomp $u->{hashedPassword};
         } else {
-            warn "warning: password file ‘$u->{passwordFile}’ does not exist\n";
+            warn "warning: password file ‘$u->{hashedPasswordFile}’ does not exist\n";
         }
     } elsif (defined $u->{password}) {
         $u->{hashedPassword} = hashPassword($u->{password});

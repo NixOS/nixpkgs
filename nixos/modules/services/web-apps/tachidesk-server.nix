@@ -8,18 +8,18 @@ let
 in {
   options = {
     services.tachidesk-server = {
-      enable = mkEnableOption (mkdoc "A free and open source manga reader server that runs extensions built for Tachiyomi.");
+      enable = mkEnableOption (mdDoc "A free and open source manga reader server that runs extensions built for Tachiyomi.");
 
       package = mkOption {
         type = types.package;
-        description = mkdoc "Which package to use for the Tachidesk-Server instance";
+        description = mdDoc "Which package to use for the Tachidesk-Server instance";
         relatedPackages = [ "tachidesk-server" ];
       };
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/tachidesk-server";
-        description = mkdoc ''
+        description = mdDoc ''
           The path to the data directory in which Tachidesk will download scans.
         '';
       };
@@ -43,16 +43,16 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = mkdoc ''
+        description = mdDoc ''
           Whether to open the firewall for the port in {option}`services.tachidesk-server.config.port`.
         '';
       };
-      
+
       config = {
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = mkdoc ''
+          description = mdDoc ''
             The ip that Tachidesk will bind to.
           '';
         };
@@ -60,7 +60,7 @@ in {
         port = mkOption {
           type = types.port;
           default = 8080;
-          description = mkDoc ''
+          description = mdDoc ''
             The port that Tachidesk will listen to.
           '';
         };
@@ -69,7 +69,7 @@ in {
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        description = mkDoc ''
+        description = mdDoc ''
           Extra configuration to write in the file `server.conf`.
           See [https://github.com/Suwayomi/Tachidesk-Server/wiki/Configuring-Tachidesk-Server] for more informations.
         '';
@@ -99,7 +99,7 @@ in {
       };
     };
 
-    systemd.services.tachidesk-server = 
+    systemd.services.tachidesk-server =
       let
         mapAttrToString = attr: (
           let
@@ -116,7 +116,7 @@ in {
           ''
 
           (strings.concatMapStrings (s: s + "\n") ((
-            concatLists (mapAttrsToList (name: value: 
+            concatLists (mapAttrsToList (name: value:
               optional (value != null) ''${name} = ${mapAttrToString value}''
             ) cfg.extraConfig)
           )))
@@ -143,6 +143,6 @@ in {
         StateDirectory = mkIf (cfg.dataDir == "/var/lib/tachidesk-server") "tachidesk-server";
       };
     };
-    
+
   };
 }
