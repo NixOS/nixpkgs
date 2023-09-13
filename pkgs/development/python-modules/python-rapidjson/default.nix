@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, fetchPypi
 , pythonOlder
 , rapidjson
 , pytestCheckHook
@@ -16,8 +15,8 @@ let
     src = fetchFromGitHub {
       owner = "Tencent";
       repo = "rapidjson";
-      rev = "083f359f5c36198accc2b9360ce1e32a333231d9";
-      hash = "sha256-8O5KwZcvoEkpE+O0Twn2CKHjV2AYh8qnSaBofoWEBs8=";
+      rev = "5e17dbed34eef33af8f3e734820b5dc547a2a3aa";
+      hash = "sha256-CTy42X6P6+Gz4WbJ3tCpAw3qqlJ+mU1PaWW9LGG+6nU=";
     };
     patches = [
       (fetchpatch {
@@ -30,15 +29,17 @@ let
     cmakeFlags = old.cmakeFlags ++ [ "-DCMAKE_CTEST_ARGUMENTS=-E;valgrind_unittest" ];
   });
 in buildPythonPackage rec {
-  version = "1.10";
+  version = "1.11";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rP7L9e25HscqIKEl3n9WuML2Fh7/TGU4LI7mokhNNUA=";
+  src = fetchFromGitHub {
+    owner = "python-rapidjson";
+    repo = "python-rapidjson";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Jnnr4MCopx2YJTqbHqSCzPBzUl0T8SqcznRGSI14d2Q=";
   };
 
   setupPyBuildFlags = [
@@ -55,7 +56,7 @@ in buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/python-rapidjson/python-rapidjson/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/python-rapidjson/python-rapidjson/blob/${src.rev}/CHANGES.rst";
     homepage = "https://github.com/python-rapidjson/python-rapidjson";
     description = "Python wrapper around rapidjson";
     license = licenses.mit;
