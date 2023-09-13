@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) sudo;
+  inherit (pkgs) sudo sudo-rs;
 
   cfg = config.security.sudo;
 
@@ -13,6 +13,7 @@ let
     pam.enableSSHAgentAuth && pam.sudo.sshAgentAuth;
 
   usingMillersSudo = cfg.package.pname == sudo.pname;
+  usingSudoRs = cfg.package.pname == sudo-rs.pname;
 
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
@@ -274,6 +275,8 @@ in
     environment.systemPackages = [ sudo ];
 
     security.pam.services.sudo = { sshAgentAuth = true; usshAuth = true; };
+    security.pam.services.sudo-i = mkIf usingSudoRs
+      { sshAgentAuth = true; usshAuth = true; };
 
     environment.etc.sudoers =
       { source =
