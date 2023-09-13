@@ -43,7 +43,6 @@ let
 
   defaultPackageNames =
     [ "nano"
-      "perl"
       "rsync"
       "strace"
     ];
