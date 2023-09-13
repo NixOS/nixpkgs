@@ -816,6 +816,7 @@ dont-distribute-packages:
  - cfopu
  - chainweb-mining-client
  - chakra
+ - chalkboard-viewer
  - chapelure
  - charade
  - chart-cli
