@@ -2168,6 +2168,8 @@ with pkgs;
 
   commitlint = nodePackages."@commitlint/cli";
 
+  commitlint-config-conventional = nodePackages."@commitlint/config-conventional";
+
   conform = callPackage ../applications/version-management/conform { };
 
   datalad = callPackage ../applications/version-management/datalad { };
