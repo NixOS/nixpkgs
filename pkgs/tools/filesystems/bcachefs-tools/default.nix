@@ -23,16 +23,16 @@
 , fuseSupport ? false
 }:
 let
-  rev = "cfa816bf3f823a3bedfedd8e214ea929c5c755fe";
+  rev = "9fe08ba354453dddc527313f6787ddaaf5361a5e";
 in stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "unstable-2023-06-28";
+  version = "unstable-2023-09-08";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     inherit rev;
-    hash = "sha256-XgXUwyZV5N8buYTuiu1Y1ZU3uHXjZ/OZ1kbZ9d6Rt5I=";
+    hash = "sha256-BE0PKSsexb5LaZySOjAgjgefuMz0ck3PDu+gH/UGqcM=";
   };
 
   # errors on fsck_err function. Maybe miss-detection?
