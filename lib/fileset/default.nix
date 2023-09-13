@@ -3,7 +3,9 @@ let
 
   inherit (import ./internal.nix { inherit lib; })
     _coerce
+    _coerceMany
     _toSourceFilter
+    _unionMany
     ;
 
   inherit (builtins)
@@ -130,4 +132,47 @@ The only way to change which files get added to the store is by changing the `fi
         src = root;
         inherit filter;
       };
+
+  /*
+    The file set containing all files that are in either of two given file sets.
+    See also [Union (set theory)](https://en.wikipedia.org/wiki/Union_(set_theory)).
+
+    The given file sets are evaluated as lazily as possible,
+    with the first argument being evaluated first if needed.
+
+    Type:
+      union :: FileSet -> FileSet -> FileSet
+
+    Example:
+      # Create a file set containing the file `Makefile`
+      # and all files recursively in the `src` directory
+      union ./Makefile ./src
+
+      # Create a file set containing the file `Makefile`
+      # and the LICENSE file from the parent directory
+      union ./Makefile ../LICENSE
+  */
+  union =
+    # The first file set.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset1:
+    # The second file set.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset2:
+    let
+      filesets = _coerceMany "lib.fileset.union" [
+        {
+          context = "first argument";
+          value = fileset1;
+        }
+        {
+          context = "second argument";
+          value = fileset2;
+        }
+      ];
+    in
+    _unionMany filesets;
+
 }

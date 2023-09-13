@@ -22,10 +22,15 @@ let
 
   inherit (lib.lists)
     all
+    commonPrefix
+    drop
     elemAt
+    findFirstIndex
     foldl'
+    head
     length
     sublist
+    tail
     ;
 
   inherit (lib.path)
@@ -35,6 +40,7 @@ let
 
   inherit (lib.path.subpath)
     components
+    join
     ;
 
   inherit (lib.strings)
@@ -127,6 +133,31 @@ rec {
         ${context} ${toString value} does not exist.''
     else
       _singleton value;
+
+  # Coerce many values to filesets, erroring when any value cannot be coerced,
+  # or if the filesystem root of the values doesn't match.
+  # Type: String -> [ { context :: String, value :: fileset | Path } ] -> [ fileset ]
+  _coerceMany = functionContext: list:
+    let
+      filesets = map ({ context, value }:
+        _coerce "${functionContext}: ${context}" value
+      ) list;
+
+      firstBaseRoot = (head filesets)._internalBaseRoot;
+
+      # Finds the first element with a filesystem root different than the first element, if any
+      differentIndex = findFirstIndex (fileset:
+        firstBaseRoot != fileset._internalBaseRoot
+      ) null filesets;
+    in
+    if differentIndex != null then
+      throw ''
+        ${functionContext}: Filesystem roots are not the same:
+            ${(head list).context}: root "${toString firstBaseRoot}"
+            ${(elemAt list differentIndex).context}: root "${toString (elemAt filesets differentIndex)._internalBaseRoot}"
+            Different roots are not supported.''
+    else
+      filesets;
 
   # Create a file set from a path.
   # Type: Path -> fileset
@@ -300,4 +331,86 @@ rec {
     else
       nonEmpty;
 
+  # Computes the union of a list of filesets.
+  # The filesets must already be coerced and validated to be in the same filesystem root
+  # Type: [ Fileset ] -> Fileset
+  _unionMany = filesets:
+    let
+      first = head filesets;
+
+      # To be able to union filesetTree's together, they need to have the same base path.
+      # Base paths can be unioned by taking their common prefix,
+      # e.g. such that `union /foo/bar /foo/baz` has the base path `/foo`
+
+      # A list of path components common to all base paths
+      commonBaseComponents = foldl'
+        (components: el: commonPrefix components el._internalBaseComponents)
+        first._internalBaseComponents
+        # We could also not do the `tail` here to avoid a list allocation,
+        # but then we'd have to pay for a potentially expensive
+        # but unnecessary `commonPrefix` call
+        (tail filesets);
+
+      # The common base path assembled from a filesystem root and the common components
+      commonBase = append first._internalBaseRoot (join commonBaseComponents);
+
+      # The number of path components common to all base paths
+      commonBaseComponentsCount = length commonBaseComponents;
+
+      # A list of filesetTree's that all have the same base path
+      # This is achieved by nesting the trees into the components they have over the common base path
+      # E.g. `union /foo/bar /foo/baz` has the base path /foo
+      # So the tree under `/foo/bar` gets nested under `{ bar = ...; ... }`,
+      # while the tree under `/foo/baz` gets nested under `{ baz = ...; ... }`
+      # Therefore allowing combined operations over them.
+      trees = map (fileset:
+        _nestTree
+          commonBase
+          (drop commonBaseComponentsCount fileset._internalBaseComponents)
+          fileset._internalTree
+        ) filesets;
+
+      # Folds all trees together into a single one using _unionTree
+      resultTree = foldl'
+        _unionTree
+        (head trees)
+        # We could also not do the `tail` here to avoid a list allocation,
+        # but then we'd have to pay for a potentially expensive
+        # but unnecessary `_unionTree (head trees) (head trees)` call.
+        (tail trees);
+    in
+    _create commonBase resultTree;
+
+
+  # Legend for branch tables in the below tree combinator functions
+  # - lhs\rhs  : The values for the left hand side (columns) and right hand side (rows) arguments
+  # - null     : Value `null`, a file/directory that's not included
+  # - attrs    : Satisfies `isAttrs value`, an explicitly listed directory containing nested trees
+  # - str      : Satisfies `isString value`, either "directory" or a file type, a fully included file/directory
+  # - rec      : A result computed by recursing
+  # - <number> : Indicates that the result is computed by the branch with that number
+  # - *        : Only the lhs/rhs needs to be evaluated, the result is always the same no matter the other side
+
+  # The union of two filesetTree's with the same base path.
+  # The second argument is only evaluated if necessary.
+  # Type: filesetTree -> filesetTree -> filesetTree
+  _unionTree = lhs: rhs:
+    # This branch table shows the correctness of the branch conditions,
+    # see the legend above for more details
+    #
+    # lhs\rhs |   null  |   attrs |   str |
+    # ------- | ------- | ------- | ----- |
+    #   null  | 1 null  | 3 attrs | 3 str |
+    #   attrs | 1 attrs | 2 rec   | 3 str |
+    # * str   | 1 str   | 1 str   | 1 str |
+
+    if isString lhs || rhs == null then
+      # Branch 1
+      lhs
+    else if isAttrs lhs && isAttrs rhs then
+      # Branch 2
+      mapAttrs (name: _unionTree lhs.${name}) rhs
+    else
+      # Branch 3
+      rhs;
 }
