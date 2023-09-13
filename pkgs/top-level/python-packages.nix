@@ -1229,6 +1229,8 @@ self: super: with self; {
 
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
+  pynitrokey = callPackage ../development/python-modules/pynitrokey { };
+
   backcall = callPackage ../development/python-modules/backcall { };
 
   backoff = callPackage ../development/python-modules/backoff { };
