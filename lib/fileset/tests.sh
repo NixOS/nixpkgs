@@ -246,6 +246,9 @@ expectFailure 'toSource { root = ./a; fileset = ./a; }' 'lib.fileset.toSource: `
 \s*- If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as '"$work"', and set `fileset` to the file path.'
 rm -rf *
 
+# The fileset argument should be evaluated, even if the directory is empty
+expectFailure 'toSource { root = ./.; fileset = abort "This should be evaluated"; }' 'evaluation aborted with the following error message: '\''This should be evaluated'\'
+
 # Only paths under `root` should be able to influence the result
 mkdir a
 expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` '"$work"'/a. Potential solutions:

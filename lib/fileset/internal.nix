@@ -294,6 +294,7 @@ rec {
     in
     # Special case because the code below assumes that the _internalBase is always included in the result
     # which shouldn't be done when we have no files at all in the base
+    # This also forces the tree before returning the filter, leads to earlier error messages
     if tree == null then
       empty
     else

@@ -92,6 +92,7 @@ The only way to change which files get added to the store is by changing the `fi
       fileset = _coerce "lib.fileset.toSource: `fileset`" filesetPath;
       rootFilesystemRoot = (splitRoot root).root;
       filesetFilesystemRoot = (splitRoot fileset._internalBase).root;
+      filter = _toSourceFilter fileset;
     in
     if ! isPath root then
       if isStringLike root then
@@ -123,9 +124,10 @@ The only way to change which files get added to the store is by changing the `fi
             - Set `root` to ${toString fileset._internalBase} or any directory higher up. This changes the layout of the resulting store path.
             - Set `fileset` to a file set that cannot contain files outside the `root` ${toString root}. This could change the files included in the result.''
     else
+      builtins.seq filter
       cleanSourceWith {
         name = "source";
         src = root;
-        filter = _toSourceFilter fileset;
+        inherit filter;
       };
 }
