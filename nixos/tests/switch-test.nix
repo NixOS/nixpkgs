@@ -58,6 +58,10 @@ in {
       '');
 
       specialisation = rec {
+        brokenInitInterface.configuration.config.system.extraSystemBuilderCmds = ''
+          echo "systemd 0" > $out/init-interface-version
+        '';
+
         simpleService.configuration = {
           systemd.services.test = {
             wantedBy = [ "multi-user.target" ];
@@ -646,7 +650,11 @@ in {
         # invalid action fails the script
         switch_to_specialisation("${machine}", "", action="broken-action", fail=True)
         # no action fails the script
-        "Usage:" in machine.fail("${machine}/bin/switch-to-configuration")
+        assert "Usage:" in machine.fail("${machine}/bin/switch-to-configuration 2>&1")
+
+    with subtest("init interface version"):
+        # Do not try to switch to an invalid init interface version
+        assert "incompatible" in switch_to_specialisation("${machine}", "brokenInitInterface", fail=True)
 
     with subtest("services"):
         switch_to_specialisation("${machine}", "")
