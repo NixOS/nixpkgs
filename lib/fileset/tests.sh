@@ -361,6 +361,88 @@ expectEqual '_toSourceFilter (_create /. null) "/foo" ""' 'false'
 expectEqual '_toSourceFilter (_create /. { foo = "regular"; }) "/foo" ""' 'true'
 expectEqual '_toSourceFilter (_create /. { foo = null; }) "/foo" ""' 'false'
 
+
+## lib.fileset.union, lib.fileset.unions
+
+
+# Different filesystem roots in root and fileset are not supported
+mkdir -p {foo,bar}/mock-root
+expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
+  toSource { root = ./.; fileset = union ./foo/mock-root ./bar/mock-root; }
+' 'lib.fileset.union: Filesystem roots are not the same:
+\s*first argument: root "'"$work"'/foo/mock-root"
+\s*second argument: root "'"$work"'/bar/mock-root"
+\s*Different roots are not supported.'
+
+expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
+  toSource { root = ./.; fileset = unions [ ./foo/mock-root ./bar/mock-root ]; }
+' 'lib.fileset.unions: Filesystem roots are not the same:
+\s*element 0 of the argument: root "'"$work"'/foo/mock-root"
+\s*element 1 of the argument: root "'"$work"'/bar/mock-root"
+\s*Different roots are not supported.'
+rm -rf *
+
+# Coercion errors show the correct context
+expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: first argument '"$work"'/a does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: second argument '"$work"'/b does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: element 0 of the argument '"$work"'/a does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: element 1 of the argument '"$work"'/b does not exist.'
+
+# unions needs a list with at least 1 element
+expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Expected argument to be a list, but got a null.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ]; }' 'lib.fileset.unions: Expected argument to be a list with at least one element, but it contains no elements.'
+
+# The tree of later arguments should not be evaluated if a former argument already includes all files
+tree=()
+checkFileset 'union ./. (_create ./. (abort "This should not be used!"))'
+checkFileset 'unions [ ./. (_create ./. (abort "This should not be used!")) ]'
+
+# union doesn't include files that weren't specified
+tree=(
+    [x]=1
+    [y]=1
+    [z]=0
+)
+checkFileset 'union ./x ./y'
+checkFileset 'unions [ ./x ./y ]'
+
+# Also for directories
+tree=(
+    [x/a]=1
+    [x/b]=1
+    [y/a]=1
+    [y/b]=1
+    [z/a]=0
+    [z/b]=0
+)
+checkFileset 'union ./x ./y'
+checkFileset 'unions [ ./x ./y ]'
+
+# And for very specific paths
+tree=(
+    [x/a]=1
+    [x/b]=0
+    [y/a]=0
+    [y/b]=1
+    [z/a]=0
+    [z/b]=0
+)
+checkFileset 'union ./x/a ./y/b'
+checkFileset 'unions [ ./x/a ./y/b ]'
+
+# unions or chained union's can include more paths
+tree=(
+    [x/a]=1
+    [x/b]=1
+    [y/a]=1
+    [y/b]=0
+    [z/a]=0
+    [z/b]=1
+)
+checkFileset 'unions [ ./x/a ./x/b ./y/a ./z/b ]'
+checkFileset 'union (union ./x/a ./x/b) (union ./y/a ./z/b)'
+checkFileset 'union (union (union ./x/a ./x/b) ./y/a) ./z/b'
+
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 
 echo >&2 tests ok
