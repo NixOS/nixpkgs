@@ -85,6 +85,10 @@ in {
           virtualisation.fileSystems."/".device = lib.mkForce "auto";
         };
 
+        swap.configuration.swapDevices = lib.mkVMOverride [
+          { device = "/swapfile"; size = 1; }
+        ];
+
         simpleService.configuration = {
           systemd.services.test = {
             wantedBy = [ "multi-user.target" ];
@@ -736,6 +740,26 @@ in {
         out = switch_to_specialisation("${machine}", "storeMountModified")
         assert_lacks(out, "stopping the following units:")
         assert_contains(out, "NOT restarting the following changed units: -.mount")
+        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+
+    with subtest("swaps"):
+        switch_to_specialisation("${machine}", "")
+        # add a swap
+        out = switch_to_specialisation("${machine}", "swap")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: swapfile.swap")
+        # remove it
+        out = switch_to_specialisation("${machine}", "")
+        assert_contains(out, "stopping swap device: /swapfile")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: dbus.service\n")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
