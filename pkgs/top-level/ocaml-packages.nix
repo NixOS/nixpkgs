@@ -337,6 +337,8 @@ let
 
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
+    dolmen_type =  callPackage ../development/ocaml-modules/dolmen/type.nix { };
+
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
     domain-local-await = callPackage ../development/ocaml-modules/domain-local-await { };
