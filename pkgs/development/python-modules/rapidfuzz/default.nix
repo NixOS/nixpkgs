@@ -26,8 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
-    #rev = "refs/tags/v${version}";
-    rev = "b7c5908a226b186ffdb6fd59509826623cf4dc96"; # called 3.3.0 but missing tag
+    rev = "refs/tags/v${version}";
     hash = "sha256-5JlEd7X0I/OmL260v2OMVI3h99TIpglv6Nt3EciEBEM=";
   };
 
