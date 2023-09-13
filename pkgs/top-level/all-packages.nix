@@ -19964,6 +19964,8 @@ with pkgs;
 
   xc3sprog = callPackage ../development/embedded/xc3sprog { stdenv = gcc10StdenvCompat; };
 
+  bootcommander = callPackage ../development/embedded/bootcommander {};
+
   xcb-imdkit = callPackage ../development/libraries/xcb-imdkit { };
 
   xcode-install = callPackage ../development/tools/xcode-install { };
