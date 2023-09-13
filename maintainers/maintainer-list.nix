@@ -14360,6 +14360,16 @@
     githubId = 1891350;
     name = "Michael Raskin";
   };
+  ratcornu = {
+    email = "ratcornu@skaven.org";
+    github = "RatCornu";
+    matrix = "@ratcornu:skweel.skaven.org";
+    githubId = 98173832;
+
+    keys = [{
+      fingerprint = "1B91 F087 3D06 1319 D3D0  7F91 FA47 BDA2 6048 9ADA";
+    }];
+  };
   ratsclub = {
     email = "victor@freire.dev.br";
     github = "ratsclub";

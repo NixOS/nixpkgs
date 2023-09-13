@@ -73,6 +73,11 @@ in {
           Extra configuration to write in the file `server.conf`.
           See [https://github.com/Suwayomi/Tachidesk-Server/wiki/Configuring-Tachidesk-Server] for more informations.
         '';
+        example = {
+          "server.socksProxyEnabled" = true;
+          "server.socksProxyHost" = "yourproxyhost.com";
+          "server.socksProxyPort" = "8080";
+        };
       };
     };
   };
