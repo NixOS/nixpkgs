@@ -31042,6 +31042,10 @@ with pkgs;
 
   boops = callPackage ../applications/audio/boops { };
 
+  bumblebee-status = callPackage ../applications/window-managers/i3/bumblebee-status {
+    python = python3;
+  };
+
   cgif = callPackage ../tools/graphics/cgif { };
 
   ChowCentaur  = callPackage ../applications/audio/ChowCentaur { };
