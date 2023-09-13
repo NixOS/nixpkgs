@@ -20430,6 +20430,8 @@ with pkgs;
 
   terrascan = callPackage ../tools/security/terrascan { };
 
+  terser = callPackage ../development/tools/misc/terser { };
+
   tesh = callPackage ../tools/text/tesh {};
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
