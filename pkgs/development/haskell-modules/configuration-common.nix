@@ -319,7 +319,9 @@ self: super: {
   patat = super.patat.override { pandoc = self.pandoc_3_1_6_1; };
 
   # http2 also overridden in all-packages.nix for mailctl.
-  twain = super.twain.override { http2 = self.http2_3_0_3; };
+  # twain is currently only used by mailctl, so the .overrideScope shouldn't
+  # negatively affect any other packages, at least currently...
+  twain = super.twain.overrideScope (self: _: { http2 = self.http2_3_0_3; });
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
