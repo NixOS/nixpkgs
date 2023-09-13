@@ -66,6 +66,25 @@ in {
           # Hello world!
         '';
 
+        addedMount.configuration.virtualisation.fileSystems."/test" = {
+          device = "tmpfs";
+          fsType = "tmpfs";
+        };
+
+        addedMountOptsModified.configuration = {
+          imports = [ addedMount.configuration ];
+          virtualisation.fileSystems."/test".options = [ "x-test" ];
+        };
+
+        addedMountDevModified.configuration = {
+          imports = [ addedMountOptsModified.configuration ];
+          virtualisation.fileSystems."/test".device = lib.mkForce "ramfs";
+        };
+
+        storeMountModified.configuration = {
+          virtualisation.fileSystems."/".device = lib.mkForce "auto";
+        };
+
         simpleService.configuration = {
           systemd.services.test = {
             wantedBy = [ "multi-user.target" ];
@@ -671,6 +690,56 @@ in {
         machine.succeed("echo dbus.service > /run/nixos/start-list")
         out = switch_to_specialisation("${machine}", "modifiedSystemConf")
         assert_contains(out, "starting the following units: dbus.service\n")
+
+    with subtest("fstab mounts"):
+        switch_to_specialisation("${machine}", "")
+        # add a mountpoint
+        out = switch_to_specialisation("${machine}", "addedMount")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: test.mount\n")
+        # modify the mountpoint's options
+        out = switch_to_specialisation("${machine}", "addedMountOptsModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: test.mount\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # modify the device
+        out = switch_to_specialisation("${machine}", "addedMountDevModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.mount\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # modify both
+        out = switch_to_specialisation("${machine}", "addedMount")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.mount\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # remove the mount
+        out = switch_to_specialisation("${machine}", "")
+        assert_contains(out, "stopping the following units: test.mount\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # change something about the / mount
+        out = switch_to_specialisation("${machine}", "storeMountModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_contains(out, "NOT restarting the following changed units: -.mount")
+        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
 
     with subtest("services"):
         switch_to_specialisation("${machine}", "")
