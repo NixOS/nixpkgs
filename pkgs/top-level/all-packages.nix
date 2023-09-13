@@ -26036,9 +26036,9 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_20;
-  buildGoModule = buildGo120Module;
-  buildGoPackage = buildGo120Package;
+  go = go_1_21;
+  buildGoModule = buildGo121Module;
+  buildGoPackage = buildGo121Package;
 
   # requires a newer Apple SDK
   go_1_18 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.18.nix {
