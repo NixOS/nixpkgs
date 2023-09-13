@@ -26,15 +26,6 @@ rec {
 
   electron-bin = electron_26-bin;
 
-  electron_9-bin = mkElectron "9.4.4" {
-    x86_64-linux = "781d6ca834d415c71078e1c2c198faba926d6fce19e31448bbf4450869135450";
-    x86_64-darwin = "f41c0bf874ddbba00c3d6989d07f74155a236e2d5a3eaf3d1d19ef8d3eb2256c";
-    i686-linux = "40e37f8f908a81c9fac1073fe22309cd6df2d68e685f83274c6d2f0959004187";
-    armv7l-linux = "2dfe3e21d30526688cc3d3215d06dfddca597a2cb62ff0c9d0d5f33d3e464a33";
-    aarch64-linux = "f1145e9a1feb5f2955e5f5565962423ac3c52ffe45ccc3b96c6ca485fa35bf27";
-    headers = "0yx8mkrm15ha977hzh7g2sc5fab9sdvlk1bk3yxignhxrqqbw885";
-  };
-
   electron_10-bin = mkElectron "10.4.7" {
     x86_64-linux = "e3ea75fcedce588c6b59cfa3a6e46ba67b789e14dc2e5b9dfe1ddf3f82b0f995";
     x86_64-darwin = "8f01e020563b7fce68dc2e3d4bbf419320d13b088e89eb64f9645e9d73ad88fb";
@@ -187,12 +178,12 @@ rec {
     headers = "1v7ap1v520hhghw358k41aahpnaif54qbg6a9dwgmg1di0qwn735";
   };
 
-  electron_26-bin = mkElectron "26.1.0" {
-    armv7l-linux = "4a4a6587bddce4554657f40fd9d39645ede03a375a1c42455c9b8d556698e5f5";
-    aarch64-linux = "1ed0996a06e97f5c23ceb8ae767873915c432c0aca5ffd4b37ab5fb1002d9d65";
-    x86_64-linux = "de78aed71ce17395675a29dcd20c1370473713eb234143dd0fa3e4c5a39504eb";
-    x86_64-darwin = "39a336baca218058011f39c4fa9a4275348ec7f411789262799d23c9669060d9";
-    aarch64-darwin = "f39aafcf480ef581161d3dc0b89a91c556dcaed45927ee0b612368016afe7b89";
-    headers = "134iqsjg6b80jwywccrhkhlrk6vj12d1nmfqbvlcl0d6cyqw6hys";
+  electron_26-bin = mkElectron "26.2.1" {
+    armv7l-linux = "27469331e1b19f732f67e4b3ae01bba527b2744e31efec1ef76748c45fe7f262";
+    aarch64-linux = "fe634b9095120d5b5d2c389ca016c378d1c3ba4f49b33912f9a6d8eb46f76163";
+    x86_64-linux = "be4ca43f4dbc82cacb4c48a04f3c4589fd560a80a77dbb9bdf6c81721c0064df";
+    x86_64-darwin = "007413187793c94cd248f52d3e00e2d95ed73b7a3b2c5a618f22eba7af94cd1a";
+    aarch64-darwin = "4e095994525a0e97e897aad9c1940c8160ce2c9aaf7b6792f31720abc3e04ee6";
+    headers = "02z604nzcm8iw29s5lsgjlzwn666h3ikxpdfjg2h0mffm82d0wfk";
   };
 }

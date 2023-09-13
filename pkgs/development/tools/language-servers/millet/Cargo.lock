@@ -28,7 +28,7 @@ dependencies = [
 
 [[package]]
 name = "analysis"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "config",
  "diagnostic",
@@ -118,7 +118,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "chain-map"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "fast-hash",
  "str-util",
@@ -131,7 +131,7 @@ source = "git+https://github.com/azdavis/language-util.git#5e9a78d6f82e6129a7847
 
 [[package]]
 name = "cm-syntax"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "lex-util",
  "paths",
@@ -160,7 +160,7 @@ dependencies = [
 
 [[package]]
 name = "config"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "fast-hash",
  "serde",
@@ -188,7 +188,7 @@ checksum = "7704b5fdd17b18ae31c4c1da5a2e0305a2bf17b5249300a9ee9ed7b72114c636"
 
 [[package]]
 name = "cov-mark"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "fast-hash",
  "once_cell",
@@ -427,7 +427,7 @@ dependencies = [
 
 [[package]]
 name = "input"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "cm-syntax",
  "config",
@@ -475,7 +475,7 @@ checksum = "3752f229dcc5a481d60f385fa479ff46818033d881d2d801aa27dffcfb5e8306"
 
 [[package]]
 name = "lang-srv"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "analysis",
  "anyhow",
@@ -503,7 +503,7 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lex-util"
-version = "0.13.1"
+version = "0.13.2"
 
 [[package]]
 name = "libc"
@@ -575,7 +575,7 @@ dependencies = [
 
 [[package]]
 name = "millet-cli"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "analysis",
  "codespan-reporting",
@@ -593,7 +593,7 @@ dependencies = [
 
 [[package]]
 name = "millet-ls"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -613,7 +613,7 @@ dependencies = [
 
 [[package]]
 name = "mlb-hir"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "fast-hash",
  "paths",
@@ -624,7 +624,7 @@ dependencies = [
 
 [[package]]
 name = "mlb-statics"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "config",
  "diagnostic",
@@ -648,7 +648,7 @@ dependencies = [
 
 [[package]]
 name = "mlb-syntax"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "lex-util",
  "paths",
@@ -711,7 +711,7 @@ checksum = "dd8b5dd2ae5ed71462c540258bedcb51965123ad7e7ccf4b9a8cafaa4a63576d"
 
 [[package]]
 name = "panic-hook"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "better-panic",
 ]
@@ -924,7 +924,7 @@ dependencies = [
 
 [[package]]
 name = "slash-var-path"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "fast-hash",
  "str-util",
@@ -932,14 +932,14 @@ dependencies = [
 
 [[package]]
 name = "sml-comment"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "sml-syntax",
 ]
 
 [[package]]
 name = "sml-dynamics"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "fast-hash",
  "fmt-util",
@@ -950,7 +950,7 @@ dependencies = [
 
 [[package]]
 name = "sml-dynamics-tests"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "config",
  "pretty_assertions",
@@ -966,7 +966,7 @@ dependencies = [
 
 [[package]]
 name = "sml-file-syntax"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "config",
  "elapsed",
@@ -980,7 +980,7 @@ dependencies = [
 
 [[package]]
 name = "sml-fixity"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "fast-hash",
  "once_cell",
@@ -989,7 +989,7 @@ dependencies = [
 
 [[package]]
 name = "sml-hir"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "la-arena",
  "sml-lab",
@@ -1000,7 +1000,7 @@ dependencies = [
 
 [[package]]
 name = "sml-hir-lower"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "config",
  "cov-mark",
@@ -1015,14 +1015,14 @@ dependencies = [
 
 [[package]]
 name = "sml-lab"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "str-util",
 ]
 
 [[package]]
 name = "sml-lex"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "cov-mark",
  "diagnostic",
@@ -1037,7 +1037,7 @@ source = "git+https://github.com/azdavis/sml-libs.git#0d94e3ce13f2a489dff86151f7
 
 [[package]]
 name = "sml-naive-fmt"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "fast-hash",
  "sml-comment",
@@ -1046,11 +1046,11 @@ dependencies = [
 
 [[package]]
 name = "sml-namespace"
-version = "0.13.1"
+version = "0.13.2"
 
 [[package]]
 name = "sml-parse"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "diagnostic",
  "event-parse",
@@ -1062,14 +1062,14 @@ dependencies = [
 
 [[package]]
 name = "sml-path"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "str-util",
 ]
 
 [[package]]
 name = "sml-scon"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "num-bigint",
  "num-traits",
@@ -1078,7 +1078,7 @@ dependencies = [
 
 [[package]]
 name = "sml-statics"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "chain-map",
  "config",
@@ -1101,7 +1101,7 @@ dependencies = [
 
 [[package]]
 name = "sml-statics-types"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "chain-map",
  "code-h2-md-map",
@@ -1120,7 +1120,7 @@ dependencies = [
 
 [[package]]
 name = "sml-symbol-kind"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "sml-namespace",
  "sml-statics-types",
@@ -1128,7 +1128,7 @@ dependencies = [
 
 [[package]]
 name = "sml-syntax"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "code-h2-md-map",
  "fast-hash",
@@ -1139,7 +1139,7 @@ dependencies = [
 
 [[package]]
 name = "sml-ty-var-scope"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "fast-hash",
  "sml-hir",
@@ -1210,7 +1210,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "analysis",
  "cm-syntax",
@@ -1554,7 +1554,7 @@ dependencies = [
 
 [[package]]
 name = "xtask"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "anyhow",
  "flate2",

@@ -1919,6 +1919,8 @@ with pkgs;
 
   mymcplus = python3Packages.callPackage ../tools/games/mymcplus { };
 
+  near-cli = callPackage ../tools/misc/near-cli { };
+
   networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
     systemd = pkgs.systemd;
   };
@@ -11545,6 +11547,8 @@ with pkgs;
 
   open-ecard = callPackage ../tools/security/open-ecard { };
 
+  open-interpreter = callPackage ../tools/llm/open-interpreter { };
+
   openjade = callPackage ../tools/text/sgml/openjade { };
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
@@ -17322,6 +17326,9 @@ with pkgs;
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-rdme = callPackage ../by-name/ca/cargo-rdme/package.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme { };
   cargo-risczero = callPackage ../development/tools/rust/cargo-risczero { };
   cargo-run-bin = callPackage ../development/tools/rust/cargo-run-bin {};
@@ -18670,7 +18677,6 @@ with pkgs;
 
   inherit (callPackages ../development/tools/electron/binary { })
     electron-bin
-    electron_9-bin
     electron_10-bin
     electron_11-bin
     electron_12-bin
@@ -18690,7 +18696,6 @@ with pkgs;
     electron_26-bin;
 
   electron = electron-bin;
-  electron_9 = electron_9-bin;
   electron_10 = electron_10-bin;
   electron_11 = electron_11-bin;
   electron_12 = electron_12-bin;
@@ -29929,8 +29934,10 @@ with pkgs;
     noto-fonts-lgc-plus
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
-    noto-fonts-emoji
-    noto-fonts-emoji-blob-bin;
+    noto-fonts-color-emoji
+    noto-fonts-emoji-blob-bin
+    noto-fonts-monochrome-emoji
+    ;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
@@ -30264,6 +30271,8 @@ with pkgs;
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
     gtk = res.gtk2;
   };
+
+  tau-hydrogen = callPackage ../data/icons/tau-hydrogen { };
 
   theme-jade1 = callPackage ../data/themes/jade1 { };
 
@@ -31378,6 +31387,8 @@ with pkgs;
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
   docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
   docker-compose_1 = python3Packages.callPackage ../applications/virtualization/docker/compose_1.nix { };
+  docker-sbom = callPackage ../applications/virtualization/docker/sbom.nix { };
+
 
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
@@ -33783,10 +33794,6 @@ with pkgs;
 
   markets = callPackage ../applications/misc/markets { };
 
-  markmind = callPackage ../applications/misc/markmind {
-    electron = electron_9;
-  };
-
   markscribe = callPackage ../tools/text/markscribe { };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
@@ -33842,6 +33849,8 @@ with pkgs;
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
   melody = callPackage ../tools/misc/melody { };
+
+  meme-bingo-web = callPackage ../servers/web-apps/meme-bingo-web { };
 
   meme-image-generator = callPackage ../applications/graphics/meme-image-generator { };
 
@@ -35002,10 +35011,6 @@ with pkgs;
 
   pomodoro = callPackage ../applications/misc/pomodoro {
     inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-
-  pomotroid = callPackage ../applications/misc/pomotroid {
-    electron = electron_9;
   };
 
   ponymix = callPackage ../applications/audio/ponymix { };
@@ -38442,7 +38447,10 @@ with pkgs;
 
   r2mod_cli = callPackage ../games/r2mod_cli { };
 
-  r2modman = callPackage ../games/r2modman { };
+  r2modman = callPackage ../games/r2modman {
+    # Electron 26 has regressions making applications unusable.
+    electron = electron_25;
+  };
 
   racer = callPackage ../games/racer { };
 
@@ -42266,6 +42274,8 @@ with pkgs;
   zf = callPackage ../tools/misc/zf { };
 
   isolate = callPackage ../tools/security/isolate { };
+
+  dtool = callPackage ../tools/misc/dtool { };
 
   tremotesf = libsForQt5.callPackage ../applications/networking/p2p/tremotesf { };
 

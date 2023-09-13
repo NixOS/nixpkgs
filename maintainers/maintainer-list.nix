@@ -876,6 +876,12 @@
     githubId = 153175;
     name = "Andrew Marshall";
   };
+  amaxine = {
+    email = "max@ine.dev";
+    github = "amaxine";
+    githubId = 35892750;
+    name = "Maxine Aubrey";
+  };
   ambroisie = {
     email = "bruno.nixpkgs@belanyi.fr";
     github = "ambroisie";
@@ -1515,6 +1521,11 @@
     github = "ashleyghooper";
     githubId = 11037075;
     name = "Ashley Hooper";
+  };
+  ashvith-shetty = {
+    github = "Ashvith10";
+    githubId = 113123021;
+    name = "Ashvith Shetty";
   };
   aske = {
     email = "aske@fmap.me";
@@ -10323,6 +10334,12 @@
     githubId = 782440;
     name = "Luna Nova";
   };
+  luochen1990 = {
+    email = "luochen1990@gmail.com";
+    github = "luochen1990";
+    githubId = 2309868;
+    name = "Luo Chen";
+  };
   lurkki = {
     email = "jussi.kuokkanen@protonmail.com";
     github = "Lurkki14";
@@ -10873,12 +10890,6 @@
     github = "Maxdamantus";
     githubId = 502805;
     name = "Max Zerzouri";
-  };
-  maxeaubrey = {
-    email = "maxeaubrey@gmail.com";
-    github = "maxeaubrey";
-    githubId = 35892750;
-    name = "Maxine Aubrey";
   };
   maxhbr = {
     email = "nixos@maxhbr.dev";

@@ -58,8 +58,7 @@ let
           Chili-Man
           babariviere
           kalbasit
-          marsam
-          maxeaubrey
+          amaxine
           timstott
           zimbatm
           zowoq

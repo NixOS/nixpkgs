@@ -6198,6 +6198,8 @@ self: super: with self; {
 
   lit = callPackage ../development/python-modules/lit { };
 
+  litellm = callPackage ../development/python-modules/litellm { };
+
   litemapy = callPackage ../development/python-modules/litemapy { };
 
   littleutils = callPackage ../development/python-modules/littleutils { };
@@ -6505,6 +6507,8 @@ self: super: with self; {
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
+
+  mcuuid = callPackage ../development/python-modules/mcuuid { };
 
   md-toc = callPackage ../development/python-modules/md-toc { };
 
@@ -12957,6 +12961,8 @@ self: super: with self; {
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
+  tokentrim = callPackage ../development/python-modules/tokentrim { };
+
   tololib = callPackage ../development/python-modules/tololib { };
 
   toml = callPackage ../development/python-modules/toml { };
@@ -13604,6 +13610,8 @@ self: super: with self; {
 
   veryprettytable = callPackage ../development/python-modules/veryprettytable { };
 
+  vg = callPackage ../development/python-modules/vg { };
+
   videocr = callPackage ../development/python-modules/videocr { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
@@ -13857,6 +13865,8 @@ self: super: with self; {
   wifi = callPackage ../development/python-modules/wifi { };
 
   wikipedia = callPackage ../development/python-modules/wikipedia { };
+
+  wikitextparser = callPackage ../development/python-modules/wikitextparser { };
 
   willow = callPackage ../development/python-modules/willow { };
 
