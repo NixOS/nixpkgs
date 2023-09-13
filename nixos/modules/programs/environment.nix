@@ -37,7 +37,6 @@ in
     environment.profileRelativeSessionVariables =
       { PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
-        KDEDIRS = [ "" ];
         QTWEBKIT_PLUGIN_PATH = [ "/lib/mozilla/plugins/" ];
         GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" "/lib/gtk-4.0" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ];
