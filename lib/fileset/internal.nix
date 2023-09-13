@@ -97,7 +97,7 @@ rec {
 
   # Coerce a value to a fileset, erroring when the value cannot be coerced.
   # The string gives the context for error messages.
-  # Type: String -> Path -> fileset
+  # Type: String -> (fileset | Path) -> fileset
   _coerce = context: value:
     if value._type or "" == "fileset" then
       if value._internalVersion > _currentVersion then
