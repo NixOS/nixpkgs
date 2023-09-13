@@ -2,11 +2,12 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
+, callPackage
 , pkg-config
 , pcre
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ucg";
   version = "unstable-2022-09-03";
 
@@ -28,20 +29,11 @@ stdenv.mkDerivation {
     pcre
   ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    testFile=$(mktemp /tmp/ucg-test.XXXX)
-    echo -ne 'Lorem ipsum dolor sit amet\n2.7182818284590' > $testFile
-    $out/bin/ucg 'dolor' $testFile || { rm $testFile; exit -1; }
-    $out/bin/ucg --ignore-case 'lorem' $testFile || { rm $testFile; exit -1; }
-    $out/bin/ucg --word-regexp '2718' $testFile && { rm $testFile; exit -1; }
-    $out/bin/ucg 'pisum' $testFile && { rm $testFile; exit -1; }
-    rm $testFile
-
-    runHook postInstallCheck
-  '';
+  passthru.tests = {
+    simple = callPackage ./tests/simple.nix {
+      ucg = finalAttrs.finalPackage;
+    };
+  };
 
   meta =  {
     homepage = "https://gvansickle.github.io/ucg/";
@@ -53,9 +45,10 @@ stdenv.mkDerivation {
       appropriate with grep. Search patterns are specified as PCRE regexes.
     '';
     license = lib.licenses.gpl3Plus;
+    mainProgram = "ucg";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
     broken = stdenv.isAarch64 || stdenv.isDarwin;
   };
-}
+})
 # TODO: report upstream
