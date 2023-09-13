@@ -22853,6 +22853,8 @@ with pkgs;
 
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
+  libopenblt = callPackage ../development/libraries/libopenblt {};
+
   libotr = callPackage ../development/libraries/libotr { };
 
   libow = callPackage ../development/libraries/libow { };
