@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
   # available in Nix sandbox. Fails with VK_ERROR_INCOMPATIBLE_DRIVER.
   doCheck = false;
 
+  separateDebugInfo = true;
+
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.
   preFixup = ''

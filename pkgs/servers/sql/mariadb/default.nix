@@ -6,7 +6,7 @@ let
     # Native buildInputs components
     , bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
     # Common components
-    , curl, libiconv, ncurses, openssl, openssl_1_1, pcre, pcre2
+    , curl, libiconv, ncurses, openssl, pcre2
     , libkrb5, libaio, liburing, systemd
     , CoreServices, cctools, perl
     , jemalloc, less, libedit
@@ -44,14 +44,13 @@ let
 
       buildInputs = [
         libiconv ncurses zlib
+        pcre2
+        openssl
+        curl
       ] ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
         ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
-        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
-        ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
-        ++ (if (lib.versionOlder version "10.5")
-            then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
-            else [ openssl curl ]);
+        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
 
       prePatch = ''
         sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -244,13 +243,6 @@ let
 in
   self: {
     # see https://mariadb.org/about/#maintenance-policy for EOLs
-    mariadb_104 = self.callPackage generic {
-      # Supported until 2024-06-18
-      version = "10.4.31";
-      hash = "sha256-Uqv1Q0xqQuCgSKY6uZo4mPt/yhWA+t16Yb0OnOm4UFQ=";
-      inherit (self.darwin) cctools;
-      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
-    };
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
       version = "10.5.22";

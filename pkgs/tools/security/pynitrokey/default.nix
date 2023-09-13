@@ -39,6 +39,7 @@ buildPythonApplication rec {
     urllib3
     tlv8
     typing-extensions
+    importlib-metadata
   ];
 
   nativeBuildInputs = [
