@@ -233,7 +233,6 @@
 , "speed-test"
 , "sql-formatter"
 , "stackdriver-statsd-backend"
-, "stylelint"
 , "svelte-check"
 , "svelte-language-server"
 , "svgo"

@@ -108,6 +108,7 @@ mapAliases {
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) stylelint; # added 2023-09-13
   surge = pkgs.surge-cli; # Added 2023-09-08
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31
