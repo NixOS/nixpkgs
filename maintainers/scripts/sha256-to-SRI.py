@@ -4,12 +4,11 @@
 from contextlib import contextmanager
 from pathlib import Path
 
-import re
+import logging, re
 
 
 nix32alphabet = "0123456789abcdfghijklmnpqrsvwxyz"
 nix32inverted  = { c: i for i, c in enumerate(nix32alphabet) }
-
 
 def nix32decode(s: str) -> bytes:
     # only support sha256 hashes for now
@@ -60,9 +59,7 @@ def sha256toSRI(m: re.Match) -> str:
         from base64 import b64decode
         return toSRI(b64decode(m['base64']))
 
-    begin, end = m.span()
-    raise ValueError("Got a match where none of the groups captured:\n"
-                     f"'{m.string[begin:end]}'")
+    raise ValueError("Got a match where none of the groups captured")
 
 
 # Ohno I used evil, irregular backrefs instead of making 2 variants  ^^'
@@ -73,10 +70,22 @@ _def_re = re.compile(
 )
 
 def defToSRI(s: str) -> str:
-    return _def_re.sub(
-        lambda m: f'hash = "{sha256toSRI(m)}";',
-        s,
-    )
+    def f(m: re.Match[str]) -> str:
+        try:
+            return f'hash = "{sha256toSRI(m)}";'
+
+        except ValueError as exn:
+            begin, end = m.span()
+            match = m.string[begin:end]
+
+            logging.error(
+                f"Skipping '%s': an exception was raised during rewriting",
+                match,
+                exc_info = exn,
+            )
+            return match
+
+    return _def_re.sub(f, s)
 
 
 @contextmanager
