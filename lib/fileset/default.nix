@@ -9,9 +9,14 @@ let
     ;
 
   inherit (builtins)
+    isList
     isPath
     pathExists
     typeOf
+    ;
+
+  inherit (lib.lists)
+    imap0
     ;
 
   inherit (lib.path)
@@ -135,6 +140,8 @@ The only way to change which files get added to the store is by changing the `fi
 
   /*
     The file set containing all files that are in either of two given file sets.
+    This is the same as [`unions`](#function-library-lib.fileset.unions),
+    but takes just two file sets instead of a list.
     See also [Union (set theory)](https://en.wikipedia.org/wiki/Union_(set_theory)).
 
     The given file sets are evaluated as lazily as possible,
@@ -174,5 +181,63 @@ The only way to change which files get added to the store is by changing the `fi
       ];
     in
     _unionMany filesets;
+
+  /*
+    The file set containing all files that are in any of the given file sets.
+    This is the same as [`union`](#function-library-lib.fileset.unions),
+    but takes a list of file sets instead of just two.
+    See also [Union (set theory)](https://en.wikipedia.org/wiki/Union_(set_theory)).
+
+    The given file sets are evaluated as lazily as possible,
+    with earlier elements being evaluated first if needed.
+
+    Type:
+      unions :: [ FileSet ] -> FileSet
+
+    Example:
+      # Create a file set containing selected files
+      unions [
+        # Include the single file `Makefile` in the current directory
+        # This errors if the file doesn't exist
+        ./Makefile
+
+        # Recursively include all files in the `src/code` directory
+        # If this directory is empty this has no effect
+        ./src/code
+
+        # Include the files `run.sh` and `unit.c` from the `tests` directory
+        ./tests/run.sh
+        ./tests/unit.c
+
+        # Include the `LICENSE` file from the parent directory
+        ../LICENSE
+      ]
+  */
+  unions =
+    # A list of file sets.
+    # Must contain at least 1 element.
+    # The elements can also be paths,
+    # which get [implicitly coerced to file sets](#sec-fileset-path-coercion).
+    filesets:
+    let
+      # We cannot rename matched attribute arguments, so let's work around it with an extra `let in` statement
+      maybeFilesets = filesets;
+    in
+    let
+      # Annotate the elements with context, used by _coerceMany for better errors
+      annotated = imap0 (i: el: {
+        context = "element ${toString i} of the argument";
+        value = el;
+      }) maybeFilesets;
+
+      filesets = _coerceMany "lib.fileset.unions" annotated;
+    in
+    if ! isList maybeFilesets then
+      throw "lib.fileset.unions: Expected argument to be a list, but got a ${typeOf maybeFilesets}."
+    else if maybeFilesets == [ ] then
+      # TODO: This could be supported, but requires an extra internal representation for the empty file set
+      throw "lib.fileset.unions: Expected argument to be a list with at least one element, but it contains no elements."
+    else
+      _unionMany filesets;
 
 }
