@@ -665,6 +665,13 @@ in {
         out = switch_to_specialisation("${machine}", "modifiedSystemConf")
         assert_contains(out, "restarting systemd...")
 
+    with subtest("continuing from an aborted switch"):
+        # An aborted switch will write into a file what it tried to start
+        # and a second switch should continue from this
+        machine.succeed("echo dbus.service > /run/nixos/start-list")
+        out = switch_to_specialisation("${machine}", "modifiedSystemConf")
+        assert_contains(out, "starting the following units: dbus.service\n")
+
     with subtest("services"):
         switch_to_specialisation("${machine}", "")
         # Nothing happens when nothing is changed
