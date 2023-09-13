@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-c8wBwmXFjpst6UxL5zmTxMR4bhzpHYljQHiJFKiNDms=";
   };
 
-  vendorSha256 = "sha256-iMMkjJ5dnlr0oSCifBQPWkInQBCp1bh23s+BcKzDNCg=";
+  vendorHash = "sha256-iMMkjJ5dnlr0oSCifBQPWkInQBCp1bh23s+BcKzDNCg=";
 
   meta = with lib; {
     broken = stdenv.isDarwin;

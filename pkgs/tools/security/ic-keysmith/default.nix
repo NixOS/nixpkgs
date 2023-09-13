@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-+wYWIoPYc7qpTRS4Zlxp50Up8obZOmfQpiT0SWwVJE0=";
   };
 
-  vendorSha256 = "sha256-rIH10TRWOgmJM8bnKXYTsmmAtlrMMxHc8rnaCmMJGdw=";
+  vendorHash = "sha256-rIH10TRWOgmJM8bnKXYTsmmAtlrMMxHc8rnaCmMJGdw=";
 
   meta = with lib; {
     description = "Hierarchical Deterministic Key Derivation for the Internet Computer";

@@ -63,7 +63,7 @@ let
     pname = "go-turbo";
     modRoot = "cli";
 
-    vendorSha256 = "sha256-8quDuT8VwT3B56jykkbX8ov+DNFZwxPf31+NLdfX1p0=";
+    vendorHash = "sha256-8quDuT8VwT3B56jykkbX8ov+DNFZwxPf31+NLdfX1p0=";
 
     nativeBuildInputs = [
       git

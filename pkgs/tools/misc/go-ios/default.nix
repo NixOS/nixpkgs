@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-pvgdGBLgRHvnGdAyA4Rrexkh5oRzVT7AYgKfLNfSf7M=";
   };
 
-  vendorSha256 = "sha256-lLpvpT0QVVyy12HmtOQxagT0JNwRO7CcfkGhCpouH8w=";
+  vendorHash = "sha256-lLpvpT0QVVyy12HmtOQxagT0JNwRO7CcfkGhCpouH8w=";
 
   excludedPackages = [
     "restapi"

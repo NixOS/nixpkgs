@@ -21,7 +21,7 @@ buildGoModule rec {
     go run ./build-aux/package_embedded_chart/main.go ${src.rev}
   '';
 
-  vendorSha256 = "sha256-aa40+6cjpA6/bqpFiqayCkX0PBToPmsp99ykv6e7Huc=";
+  vendorHash = "sha256-aa40+6cjpA6/bqpFiqayCkX0PBToPmsp99ykv6e7Huc=";
 
   ldflags = [
     "-s" "-w" "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
