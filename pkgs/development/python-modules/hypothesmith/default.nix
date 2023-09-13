@@ -7,11 +7,15 @@
 , parso
 , pytestCheckHook
 , pytest-xdist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
   version = "0.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -56,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Hypothesis strategies for generating Python programs, something like CSmith";
     homepage = "https://github.com/Zac-HD/hypothesmith";
+    changelog = "https://github.com/Zac-HD/hypothesmith/blob/master/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ];
   };
