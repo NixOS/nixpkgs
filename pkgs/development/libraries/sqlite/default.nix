@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2023/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-RtsvEPMG4WPkVxuJdNRM03B4quBClbvwiyU2Vd8yZfQ=";
+    hash = "sha256-ORFslOdmMPItVM2Cw86jCFZfFxX3FtGyUn8cnJabpNk=";
   };
 
   outputs = [ "bin" "dev" "out" ];
