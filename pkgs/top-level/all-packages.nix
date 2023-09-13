@@ -3223,7 +3223,9 @@ with pkgs;
 
   arandr = callPackage ../tools/X11/arandr { };
 
-  arangodb = callPackage ../servers/nosql/arangodb { };
+  arangodb_3_10 = callPackage ../servers/nosql/arangodb { };
+
+  arangodb = arangodb_3_10;
 
   arcanist = callPackage ../development/tools/misc/arcanist { php = php81; };
 
