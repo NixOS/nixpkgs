@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , playwright
-, playwright-browsers
+, playwright-driver
 , pytest
 , pytest-base-url
 , python-slugify
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   preCheck = ''
-    export PLAYWRIGHT_BROWSERS_PATH=${playwright-browsers}
+    export PLAYWRIGHT_BROWSERS_PATH=${playwright-driver.browsers}
   '';
 
   pythonImportsCheck = [

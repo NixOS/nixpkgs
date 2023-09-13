@@ -12125,7 +12125,6 @@ with pkgs;
 
   playwright = with python3Packages; toPythonApplication playwright;
 
-  playwright-browsers = callPackage ../development/web/playwright/browsers.nix { };
   playwright-driver = callPackage ../development/web/playwright/driver.nix { };
   playwright-test = callPackage ../development/web/playwright-test/wrapped.nix { };
 

@@ -11,6 +11,7 @@
 , makeWrapper
 , runCommand
 , unzip
+, callPackage
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -68,15 +69,17 @@ let
       runHook postInstall
     '';
 
-    passthru = {
+    passthru = let
+      browsers = callPackage ./browsers.nix { };
+    in {
       inherit filename;
-      # browsers = {
-      #   x86_64-linux = browsers-linux { };
-      #   aarch64-linux = browsers-linux { };
-      #   x86_64-darwin = browsers-mac;
-      #   aarch64-darwin = browsers-mac;
-      # }.${system} or throwSystem;
-      # browsers-chromium = browsers-linux {};
+      browsers = {
+        x86_64-linux = browsers.browsers-linux { };
+        aarch64-linux = browsers.browsers-linux { };
+        x86_64-darwin = browsers.browsers-mac;
+        aarch64-darwin = browsers.browsers-mac;
+      }.${system} or throwSystem;
+      browsers-chromium = browsers.browsers-linux {};
     };
   });
 

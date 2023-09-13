@@ -4,11 +4,12 @@
 , fetchurl
 , python3
 , playwright-driver
-, playwright-browsers
 , makeWrapper
 }:
 let
   driver = playwright-driver;
+  browsers = playwright-driver.browsers;
+
 
   # nodeDependencies / package / shell
   playwright-test-raw = (callPackage ./default.nix { })."@playwright/test-${driver.version}";
@@ -26,7 +27,7 @@ let
     postInstall = ''
       # you need to set both the path and version else playwright looks into the wrong one
       wrapProgram $out/bin/playwright \
-          --set-default PLAYWRIGHT_BROWSERS_PATH "${playwright-browsers}" \
+          --set-default PLAYWRIGHT_BROWSERS_PATH "${browsers}" \
           --prefix NODE_PATH : ${placeholder "out"}/lib/node_modules
     '';
   });
