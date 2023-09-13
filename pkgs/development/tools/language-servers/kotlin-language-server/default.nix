@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-language-server";
-  version = "1.3.3";
+  version = "1.3.5";
   src = fetchzip {
     url = "https://github.com/fwcd/kotlin-language-server/releases/download/${version}/server.zip";
-    hash = "sha256-m0AgPJ8KgzOxHPB33pgSFe7JQxidPkhDUga56LuaDBA=";
+    hash = "sha256-hoZDbhedauW1TK78rX37Gwn/6OWLXZzy8wKsUrbTmKI=";
   };
 
   dontBuild = true;
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/fwcd/kotlin-language-server/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 }
