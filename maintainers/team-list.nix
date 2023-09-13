@@ -287,7 +287,7 @@ with lib.maintainers; {
   };
 
   flutter = {
-    members = [ gilice mkg20001 RossComputerGuy FlafyDev hacker1024 ];
+    members = [ mkg20001 RossComputerGuy FlafyDev hacker1024 ];
     scope = "Maintain Flutter and Dart-related packages and build tools";
     shortName = "flutter";
     enableFeatureFreezePing = false;
