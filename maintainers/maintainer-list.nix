@@ -12311,6 +12311,12 @@
     githubId = 248016;
     name = "Solène Rapenne";
   };
+  sree = {
+    email = "sreec@canva.com";
+    github = "pathway27";
+    githubId = 1563316;
+    name = "Sreekara Chelamalla";
+  };
   srghma = {
     email = "srghma@gmail.com";
     github = "srghma";
