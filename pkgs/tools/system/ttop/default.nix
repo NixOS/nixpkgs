@@ -2,14 +2,14 @@
 
 nimPackages.buildNimPackage (finalAttrs: {
   pname = "ttop";
-  version = "1.2.4";
+  version = "1.2.5";
   nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner = "inv2004";
     repo = "ttop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kOYgqFKZ0TC54o6tQaxGA1i12sU8Mg9bEwbGoZiBZ0Y=";
+    hash = "sha256-GMGGkpBX+pmZ+TSDRs2N3H4Bwa3oXSDo9vM192js7Ww=";
   };
 
   buildInputs = with nimPackages; [ asciigraph illwill jsony parsetoml zippy ];
