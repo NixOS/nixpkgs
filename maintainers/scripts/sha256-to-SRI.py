@@ -7,18 +7,18 @@ from pathlib import Path
 import re
 
 
-alphabet = "0123456789abcdfghijklmnpqrsvwxyz"
-inverted_alphabet = { c: i for i, c in enumerate(alphabet) }
+nix32alphabet = "0123456789abcdfghijklmnpqrsvwxyz"
+nix32inverted  = { c: i for i, c in enumerate(nix32alphabet) }
 
 
-def decode(s: str) -> bytes:
+def nix32decode(s: str) -> bytes:
     # only support sha256 hashes for now
     assert len(s) == 52
     out = [ 0 for _ in range(32) ]
     # TODO: Do better than a list of byte-sized ints
 
     for n, c in enumerate(reversed(s)):
-        digit = inverted_alphabet[c]
+        digit = nix32inverted[c]
         i, j = divmod(5 * n, 8)
         out[i] = out[i] | (digit << j) & 0xff
         rem = digit >> (8 - j)
@@ -32,21 +32,49 @@ def decode(s: str) -> bytes:
     return bytes(out)
 
 
-def toSRI(s: str) -> str:
+def toSRI(digest: bytes) -> str:
     from base64 import b64encode
-
-    digest = decode(s)
-    assert(len(digest) == 32)
+    assert len(digest) == 32
     return f"sha256-{b64encode(digest).decode()}"
 
 
-RE = f"[{alphabet}]" "{52}";
-# Ohno I used evil, irregular backrefs  ^^'
-_sha256_re = re.compile(f'sha256 = (?P<quote>["\'])(?P<nix32>{RE})(?P=quote);')
+RE = {
+    'nix32': f"[{nix32alphabet}]" "{52}",
+    'hex':    "[0-9A-Fa-f]{64}",
+    'base64': "[A-Za-z0-9+/]{43}=",
+}
+RE['sha256'] = '|'.join(
+    f"{'(sha256-)?' if name == 'base64' else ''}"
+    f"(?P<{name}>{r})"
+    for name, r in RE.items()
+)
+
+def sha256toSRI(m: re.Match) -> str:
+    """Produce the equivalent SRI string for any match of RE['sha256']"""
+    if m['nix32'] is not None:
+        return toSRI(nix32decode(m['nix32']))
+    if m['hex'] is not None:
+        from binascii import unhexlify
+        return toSRI(unhexlify(m['hex']))
+    if m['base64'] is not None:
+        from base64 import b64decode
+        return toSRI(b64decode(m['base64']))
+
+    begin, end = m.span()
+    raise ValueError("Got a match where none of the groups captured:\n"
+                     f"'{m.string[begin:end]}'")
+
+
+# Ohno I used evil, irregular backrefs instead of making 2 variants  ^^'
+_def_re = re.compile(
+    "sha256 = (?P<quote>[\"'])"
+    f"({RE['sha256']})"
+    "(?P=quote);"
+)
 
 def defToSRI(s: str) -> str:
-    return _sha256_re.sub(
-        lambda m: f'hash = "{toSRI(m["nix32"])}";',
+    return _def_re.sub(
+        lambda m: f'hash = "{sha256toSRI(m)}";',
         s,
     )
 
