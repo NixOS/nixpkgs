@@ -3011,8 +3011,6 @@ with pkgs;
 
   guake = callPackage ../applications/terminal-emulators/guake { };
 
-  havoc = callPackage ../applications/terminal-emulators/havoc { };
-
   hyper = callPackage ../applications/terminal-emulators/hyper { };
 
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 { };

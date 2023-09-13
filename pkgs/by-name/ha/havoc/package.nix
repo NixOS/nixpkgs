@@ -3,19 +3,19 @@
 , fetchFromGitHub
 , libxkbcommon
 , pkg-config
+, wayland
 , wayland-protocols
 , wayland-scanner
-, wayland
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "havoc";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ii8";
-    repo = pname;
-    rev = version;
+    repo = "havoc";
+    rev = finalAttrs.version;
     hash = "sha256-jvGm2gFdMS61otETF7gOEpYn6IuLfqI95IpEVfIv+C4=";
   };
 
@@ -38,19 +38,19 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$$out" ];
 
   postInstall = ''
-    install -D -m 644 havoc.cfg -t $out/etc/${pname}/
-    install -D -m 644 README.md -t $out/share/doc/${pname}-${version}/
+    install -Dm 644 havoc.cfg -t $out/etc/havoc/
+    install -Dm 644 README.md -t $out/share/doc/havoc-${finalAttrs.version}/
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ii8/havoc";
     description = "A minimal terminal emulator for Wayland";
-    license = with licenses; [ mit publicDomain ];
-    platforms = with platforms; unix;
-    maintainers = with maintainers; [ AndersonTorres ];
-    # fatal error: 'sys/epoll.h' file not found
-    broken = stdenv.isDarwin;
+    license = with lib.licenses; [ mit publicDomain ];
+    mainProgram = "havoc";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (wayland.meta) platforms;
+    broken = stdenv.isDarwin; # fatal error: 'sys/epoll.h' file not found
   };
-}
+})
