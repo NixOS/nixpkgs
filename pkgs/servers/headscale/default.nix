@@ -25,6 +25,12 @@ buildGoModule rec {
 
   tags = ["ts2019"];
 
+  patches = [
+    # fix for headscale not reacting to SIGTERM
+    # see https://github.com/juanfont/headscale/pull/1480 and https://github.com/juanfont/headscale/issues/1461
+    ./sigterm-fix.patch
+  ];
+
   postInstall = ''
     installShellCompletion --cmd headscale \
       --bash <($out/bin/headscale completion bash) \
