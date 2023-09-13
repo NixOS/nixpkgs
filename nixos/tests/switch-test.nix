@@ -643,6 +643,11 @@ in {
 
         # test and dry-activate actions are tested further down below
 
+        # invalid action fails the script
+        switch_to_specialisation("${machine}", "", action="broken-action", fail=True)
+        # no action fails the script
+        "Usage:" in machine.fail("${machine}/bin/switch-to-configuration")
+
     with subtest("services"):
         switch_to_specialisation("${machine}", "")
         # Nothing happens when nothing is changed

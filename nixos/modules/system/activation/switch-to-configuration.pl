@@ -74,7 +74,7 @@ if ("@localeArchive@" ne "") {
 
 if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
     print STDERR <<"EOF";
-Usage: $0 [switch|boot|test]
+Usage: $0 [switch|boot|test|dry-activate]
 
 switch:       make the configuration the boot default and activate now
 boot:         make the configuration the boot default
