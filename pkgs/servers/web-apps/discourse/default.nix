@@ -38,7 +38,8 @@
 , fixup_yarn_lock
 , nodePackages
 , nodejs_16
-, dart-sass-embedded
+, jq
+, moreutils
 
 , plugins ? []
 }@args:
@@ -185,20 +186,6 @@ let
             # libpsl.x86_64.so or it isn't found.
             postPatch = ''
               cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
-            '';
-          };
-          sass-embedded = gems.sass-embedded // {
-            dontBuild = false;
-            # `sass-embedded` depends on `dart-sass-embedded` and tries to
-            # fetch that as `.tar.gz` from GitHub releases. That `.tar.gz`
-            # can also be specified via `SASS_EMBEDDED`. But instead of
-            # compressing our `dart-sass-embedded` just to decompress it
-            # again, we simply patch the Rakefile to symlink that path.
-            patches = [
-              ./rubyEnv/sass-embedded-static.patch
-            ];
-            postPatch = ''
-              export SASS_EMBEDDED=${dart-sass-embedded}/bin
             '';
           };
         };
