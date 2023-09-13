@@ -10,7 +10,7 @@ NixOS has an option to link the xkb data files to /etc/X11, but not to
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/locale/localectl.c b/src/locale/localectl.c
-index fb83881cc7..c47a33134a 100644
+index d8db9d9d22..4601bb5431 100644
 --- a/src/locale/localectl.c
 +++ b/src/locale/localectl.c
 @@ -297,7 +297,7 @@ static int list_x11_keymaps(int argc, char **argv, void *userdata) {
