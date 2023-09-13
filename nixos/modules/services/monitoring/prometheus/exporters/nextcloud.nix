@@ -34,9 +34,9 @@ in
       '';
     };
     tokenFile = mkOption {
-      type = types.path;
+      type = with types; nullOr path;
       example = "/path/to/token-file";
-      default = "";
+      default = null;
       description = lib.mdDoc ''
         File containing the token for connecting to Nextcloud.
         Make sure that this file is readable by the exporter user.
@@ -58,7 +58,7 @@ in
           --addr ${cfg.listenAddress}:${toString cfg.port} \
           --timeout ${cfg.timeout} \
           --server ${cfg.url} \
-          ${if cfg.tokenFile == "" then ''
+          ${if cfg.tokenFile == null then ''
             --username ${cfg.username} \
             --password ${escapeShellArg "@${cfg.passwordFile}"} \
          '' else ''
