@@ -1,8 +1,8 @@
 { lib
-, beam
 , callPackage
 , writeShellScriptBin
 , writeText
+, beamPackages
 , yarn2nix
 , mix2nix
 , fetchFromGitLab
@@ -16,9 +16,6 @@
 }:
 
 let
-  beamPackages = beam.packages.erlangR25.extend (self: super: {
-    elixir = super.elixir_1_14;
-  });
   inherit (beamPackages) mixRelease buildMix buildRebar3 fetchHex;
   common = callPackage ./common.nix { };
 in

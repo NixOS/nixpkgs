@@ -60,8 +60,8 @@ in
       startAt = "*:0/5";
       serviceConfig = {
         Type = "simple";
-        User = config.ids.uids.cfdyndns;
-        Group = config.ids.gids.cfdyndns;
+        LoadCredential = lib.optional (cfg.apiTokenFile != null) "CLOUDFLARE_APITOKEN_FILE:${cfg.apiTokenFile}";
+        DynamicUser = true;
       };
       environment = {
         CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
@@ -72,23 +72,10 @@ in
           export CLOUDFLARE_EMAIL="${cfg.email}"
         ''}
         ${optionalString (cfg.apiTokenFile != null) ''
-          export CLOUDFLARE_APITOKEN="$(cat ${escapeShellArg cfg.apiTokenFile})"
+          export CLOUDFLARE_APITOKEN=$(${pkgs.systemd}/bin/systemd-creds cat CLOUDFLARE_APITOKEN_FILE)
         ''}
         ${pkgs.cfdyndns}/bin/cfdyndns
       '';
-    };
-
-    users.users = {
-      cfdyndns = {
-        group = "cfdyndns";
-        uid = config.ids.uids.cfdyndns;
-      };
-    };
-
-    users.groups = {
-      cfdyndns = {
-        gid = config.ids.gids.cfdyndns;
-      };
     };
   };
 }
