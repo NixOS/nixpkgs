@@ -5,6 +5,7 @@
 
 { src
 , sourceRoot ? null
+, buildOffline ? false
 , patches ? [ ]
 , pname
 , version
@@ -28,19 +29,28 @@ let
       maven
     ];
 
-    buildPhase = ''
-      runHook preBuild
+    buildPhase =
+      if buildOffline
+      then ''
+        runHook preBuild
 
-      mvn dependency:go-offline -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}
+        mvn dependency:go-offline -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}
 
-      for artifactId in ${builtins.toString manualMvnArtifactIds}
-      do
-        echo "downloading manual $artifactId"
-        mvn dependency:get -Dartifact="$artifactId" -Dmaven.repo.local=$out/.m2
-      done
+        for artifactId in ${builtins.toString manualMvnArtifactIds}
+        do
+          echo "downloading manual $artifactId"
+          mvn dependency:get -Dartifact="$artifactId" -Dmaven.repo.local=$out/.m2
+        done
 
-      runHook postBuild
-    '';
+        runHook postBuild
+      ''
+      else ''
+        runHook preBuild
+
+        mvn package -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}
+
+        runHook postBuild
+      '';
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
     installPhase = ''
