@@ -1,0 +1,20 @@
+diff --git a/test.py b/test.py
+index 93d2603e0440..078246bee35e 100644
+--- a/test.py
++++ b/test.py
+@@ -5,7 +5,7 @@ import libusb_package
+ import usb.core
+ import usb.backend.libusb1
+ 
+-def main():
++def test_main():
+     # Test get_library_path().
+     path = libusb_package.get_library_path()
+     print(f"Path to included library: {path}")
+@@ -29,6 +29,4 @@ def main():
+         except Exception as err:
+             print(f"{dev.idVendor:04x}:{dev.idProduct:04x}: error reading strings ({err})")
+ 
+-if __name__ == "__main__":
+-    main()
+ 
