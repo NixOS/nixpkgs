@@ -60,7 +60,7 @@ let
   pkgs = import <nixpkgs> { config = {}; overlays = []; };
 in
 pkgs.mkShell {
-  packages = with pkgs.beamPackages; [ rebar3 erlang-ls ];
+  packages = [ pkgs.beamPackages.rebar3 ];
 }
 ```
 
