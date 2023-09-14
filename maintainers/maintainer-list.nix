@@ -18457,6 +18457,12 @@
     github = "vbrandl";
     githubId = 20639051;
   };
+  vbruegge = {
+    email = "lina@vanbruegge.de";
+    github = "vBruegge";
+    githubId = 113902289;
+    name = "Lina van Brügge";
+  };
   vcanadi = {
     email = "vito.canadi@gmail.com";
     github = "vcanadi";
