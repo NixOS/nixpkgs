@@ -24,7 +24,7 @@ It is expected that each meta-attribute is one of the following:
 
 ### `description` {#var-meta-description}
 
-A short (one-line) description of the package. This is shown by `nix-env -q --description` and also on the Nixpkgs release pages.
+A short (one-line) description of the package. This is displayed on the [NixOS search page](https://search.nixos.org/packages?show=hello) as well as the Nixpkgs release pages.
 
 Don’t include a period at the end. Don’t include newline characters. Capitalise the first character. For brevity, don’t repeat the name of package --- just describe what it does.
 
