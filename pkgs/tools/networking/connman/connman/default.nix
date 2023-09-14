@@ -71,9 +71,9 @@ stdenv.mkDerivation rec {
     ./create-libppp-compat.h.patch
   ] ++ optionals stdenv.hostPlatform.isMusl [
     # Fix Musl build by avoiding a Glibc-only API.
-    (fetchpatch {
+    (fetchurl {
       url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";
-      hash = "sha256-gzQUkUEunqTuSE78K0Ujvre/rx1KP1igQKy3e2i14s0=";
+      hash = "sha256-7Q1bp8rD/gGVYUqnIXqjr9vypR8jlC926p3KYWl9kLw=";
     })
   ];
 
