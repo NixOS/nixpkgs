@@ -13,7 +13,7 @@
 , gzip
 }:
 let
-  pname = "musl";
+  inherit (import ./common.nix { inherit lib; }) pname meta;
   version = "1.2.4";
 
   src = fetchurl {
@@ -22,7 +22,7 @@ let
   };
 in
 bash.runCommand "${pname}-${version}" {
-  inherit pname version;
+  inherit pname version meta;
 
   nativeBuildInputs = [
     gcc
@@ -50,14 +50,6 @@ bash.runCommand "${pname}-${version}" {
         ./test
         mkdir $out
       '';
-
-  meta = with lib; {
-    description = "An efficient, small, quality libc implementation";
-    homepage = "https://musl.libc.org";
-    license = licenses.mit;
-    maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.unix;
-  };
 } ''
   # Unpack
   tar xzf ${src}

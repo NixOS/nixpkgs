@@ -144,6 +144,13 @@ lib.makeScope
     mes = lib.recurseIntoAttrs (callPackage ./mes { });
     mes-libc = callPackage ./mes/libc.nix { };
 
+    musl11 = callPackage ./musl/1.1.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+      gnused = gnused-mes;
+      gawk = gawk-mes;
+    };
+
     musl = callPackage ./musl {
       gcc = gcc46;
       gawk = gawk-mes;
