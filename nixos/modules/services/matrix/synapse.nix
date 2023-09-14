@@ -850,6 +850,12 @@ in {
 
             A redis server is required for running workers. A local one can be enabled
             using [`services.matrix-synapse.configureRedisLocally`](#opt-services.matrix-synapse.configureRedisLocally).
+
+            Workers also require a proper reverse proxy setup to direct incoming requests to the appropriate process. See
+            the [reverse proxy documentation](https://matrix-org.github.io/synapse/latest/reverse_proxy.html) for a
+            general reverse proxying setup and
+            the [worker documentation](https://matrix-org.github.io/synapse/latest/workers.html#available-worker-applications)
+            for the available endpoints per worker application.
           :::
         '';
         type = types.attrsOf (types.submodule ({name, ...}: {
