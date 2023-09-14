@@ -2136,6 +2136,10 @@ self: super: with self; {
 
   cf-xarray = callPackage ../development/python-modules/cf-xarray { };
 
+  cfclient = callPackage ../development/python-modules/cfclient {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
+
   cffconvert = callPackage ../development/python-modules/cffconvert { };
 
   cffi = callPackage ../development/python-modules/cffi { };
