@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p sta jq bc nix -I nixpkgs=../..
 
 # Benchmarks lib.fileset
 # Run:
