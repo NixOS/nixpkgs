@@ -30,7 +30,7 @@
 , serd
 , sord
 , sratom
-, waf
+, wafHook
 , wrapGAppsHook
 , zita-convolver
 , zita-resampler
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     intltool
     pkg-config
     python3
-    waf.hook
+    wafHook
     wrapGAppsHook
   ];
 

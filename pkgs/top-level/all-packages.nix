@@ -9740,7 +9740,17 @@ with pkgs;
 
   kestrel = callPackage ../tools/security/kestrel { };
 
-  kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
+  kexec-tools = callPackage ../os-specific/linux/kexec-tools {
+    # clangStdenv fails with
+    # purgatory/arch/i386/entry32-16.S:23:2: error: unknown directive
+    #  .arch i386
+    #  ^
+    # purgatory/arch/i386/entry32-16.S:115:11: error: unknown token in expression
+    #  ljmp %cs:*(realdest - entry16)
+    #           ^
+    # make: *** [Makefile:128: purgatory/arch/i386/entry32-16.o] Error 1
+    stdenv = gccStdenv;
+  };
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
 
@@ -14868,6 +14878,12 @@ with pkgs;
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
   waf = callPackage ../development/tools/build-managers/waf { };
+  # An alias to work around the splicing incidents
+  # Related:
+  # https://github.com/NixOS/nixpkgs/issues/204303
+  # https://github.com/NixOS/nixpkgs/issues/211340
+  # https://github.com/NixOS/nixpkgs/issues/227327
+  wafHook = waf.hook;
 
   waf-tester = callPackage ../tools/security/waf-tester { };
 
