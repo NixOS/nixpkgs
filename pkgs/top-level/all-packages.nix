@@ -29097,6 +29097,8 @@ with pkgs;
   bibata-extra-cursors = callPackage ../data/icons/bibata-cursors/extra.nix { };
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
+  bitcraze-udev-rules = callPackage ../os-specific/linux/bitcraze-udev-rules { };
+
   apple-cursor = callPackage ../data/icons/apple-cursor { };
 
   blackbird = callPackage ../data/themes/blackbird { };
