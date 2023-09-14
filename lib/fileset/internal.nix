@@ -14,6 +14,7 @@ let
   inherit (lib.attrsets)
     attrValues
     mapAttrs
+    zipAttrsWith
     ;
 
   inherit (lib.filesystem)
@@ -25,6 +26,7 @@ let
     commonPrefix
     drop
     elemAt
+    filter
     findFirstIndex
     foldl'
     head
@@ -342,7 +344,9 @@ rec {
       # Base paths can be unioned by taking their common prefix,
       # e.g. such that `union /foo/bar /foo/baz` has the base path `/foo`
 
-      # A list of path components common to all base paths
+      # A list of path components common to all base paths.
+      # Note that commonPrefix can only be fully evaluated,
+      # so this cannot cause a stack overflow due to a build-up of unevaluated thunks.
       commonBaseComponents = foldl'
         (components: el: commonPrefix components el._internalBaseComponents)
         first._internalBaseComponents
@@ -371,46 +375,29 @@ rec {
         ) filesets;
 
       # Folds all trees together into a single one using _unionTree
-      resultTree = foldl'
-        _unionTree
-        (head trees)
-        # We could also not do the `tail` here to avoid a list allocation,
-        # but then we'd have to pay for a potentially expensive
-        # but unnecessary `_unionTree (head trees) (head trees)` call.
-        (tail trees);
+      # We do not use a fold here because it would cause a thunk build-up
+      # which could cause a stack overflow for a large number of trees
+      resultTree = _unionTrees trees;
     in
     _create commonBase resultTree;
 
-
-  # Legend for branch tables in the below tree combinator functions
-  # - lhs\rhs  : The values for the left hand side (columns) and right hand side (rows) arguments
-  # - null     : Value `null`, a file/directory that's not included
-  # - attrs    : Satisfies `isAttrs value`, an explicitly listed directory containing nested trees
-  # - str      : Satisfies `isString value`, either "directory" or a file type, a fully included file/directory
-  # - rec      : A result computed by recursing
-  # - <number> : Indicates that the result is computed by the branch with that number
-  # - *        : Only the lhs/rhs needs to be evaluated, the result is always the same no matter the other side
-
-  # The union of two filesetTree's with the same base path.
-  # The second argument is only evaluated if necessary.
-  # Type: filesetTree -> filesetTree -> filesetTree
-  _unionTree = lhs: rhs:
-    # This branch table shows the correctness of the branch conditions,
-    # see the legend above for more details
-    #
-    # lhs\rhs |   null  |   attrs |   str |
-    # ------- | ------- | ------- | ----- |
-    #   null  | 1 null  | 3 attrs | 3 str |
-    #   attrs | 1 attrs | 2 rec   | 3 str |
-    # * str   | 1 str   | 1 str   | 1 str |
-
-    if isString lhs || rhs == null then
-      # Branch 1
-      lhs
-    else if isAttrs lhs && isAttrs rhs then
-      # Branch 2
-      mapAttrs (name: _unionTree lhs.${name}) rhs
+  # The union of multiple filesetTree's with the same base path.
+  # Later elements are only evaluated if necessary.
+  # Type: [ filesetTree ] -> filesetTree
+  _unionTrees = trees:
+    let
+      stringIndex = findFirstIndex isString null trees;
+      withoutNull = filter (tree: tree != null) trees;
+    in
+    if stringIndex != null then
+      # If there's a string, it's always a fully included tree (dir or file),
+      # no need to look at other elements
+      elemAt trees stringIndex
+    else if withoutNull == [ ] then
+      # If all trees are null, then the resulting tree is also null
+      null
     else
-      # Branch 3
-      rhs;
+      # The non-null elements have to be attribute sets representing partial trees
+      # We need to recurse into those
+      zipAttrsWith (name: _unionTrees) withoutNull;
 }

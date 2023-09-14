@@ -457,6 +457,19 @@ checkFileset 'unions [ ./x/a ./x/b ./y/a ./z/b ]'
 checkFileset 'union (union ./x/a ./x/b) (union ./y/a ./z/b)'
 checkFileset 'union (union (union ./x/a ./x/b) ./y/a) ./z/b'
 
+# unions should not stack overflow, even if many elements are passed
+tree=()
+for i in $(seq 1000); do
+    tree[$i/a]=1
+    tree[$i/b]=0
+done
+(
+    # Locally limit the maximum stack size to 100 * 1024 bytes
+    # If unions was implemented recursively, this would stack overflow
+    ulimit -s 100
+    checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.readDir ./.))'
+)
+
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 
 echo >&2 tests ok
