@@ -7297,6 +7297,10 @@ self: super: with self; {
 
   libtorrent-rasterbar = (toPythonModule (pkgs.libtorrent-rasterbar.override { python3 = python; })).python;
 
+  libusb-package = callPackage ../development/python-modules/libusb-package {
+    inherit (pkgs) libusb1;
+  };
+
   libusb1 = callPackage ../development/python-modules/libusb1 {
     inherit (pkgs) libusb1;
   };
