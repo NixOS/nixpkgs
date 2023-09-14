@@ -2172,6 +2172,8 @@ self: super: with self; {
 
   cfn-lint = callPackage ../development/python-modules/cfn-lint { };
 
+  cflib = callPackage ../development/python-modules/cflib { };
+
   cfscrape = callPackage ../development/python-modules/cfscrape { };
 
   cftime = callPackage ../development/python-modules/cftime { };
