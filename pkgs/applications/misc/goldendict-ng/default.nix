@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://xiaoyifang.github.io/goldendict-ng/";
-    description = "Advanced multi-dictionary lookup program.";
+    description = "An advanced multi-dictionary lookup program";
     platforms = platforms.linux;
     mainProgram = "goldendict";
     maintainers = with maintainers; [ slbtty ];
