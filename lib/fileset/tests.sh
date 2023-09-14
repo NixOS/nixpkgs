@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2016
 
 # Tests lib.fileset
 # Run:
@@ -178,6 +179,7 @@ checkFileset() (
         }
         # This will trigger when this subshell exits, no matter if successful or not
         # After exiting the subshell, the parent shell will continue executing
+        # shellcheck disable=SC2154
         trap 'kill "${watcher_PID}"' exit
 
         # Synchronously wait until inotifywait is ready

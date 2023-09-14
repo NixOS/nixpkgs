@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p sta jq bc nix -I nixpkgs=../..
+# shellcheck disable=SC2016
 
 # Benchmarks lib.fileset
 # Run:
