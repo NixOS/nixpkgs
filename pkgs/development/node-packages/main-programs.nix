@@ -61,7 +61,6 @@
   typescript-language-server = "typescript-language-server";
   uglify-js = "uglifyjs";
   undollar = "$";
-  vsc-leetcode-cli = "leetcode";
   vscode-css-languageserver-bin = "css-languageserver";
   vscode-html-languageserver-bin = "html-languageserver";
   vscode-json-languageserver-bin = "json-languageserver";
