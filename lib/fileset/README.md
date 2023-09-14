@@ -50,11 +50,11 @@ An attribute set with these values:
 
 - `_internalBaseRoot` (path):
   The filesystem root of `_internalBase`, same as `(lib.path.splitRoot _internalBase).root`.
-  This is here because this needs to be computed anyways, and this computation shouldn't be duplicated.
+  This is here because this needs to be computed anyway, and this computation shouldn't be duplicated.
 
 - `_internalBaseComponents` (list of strings):
   The path components of `_internalBase`, same as `lib.path.subpath.components (lib.path.splitRoot _internalBase).subpath`.
-  This is here because this needs to be computed anyways, and this computation shouldn't be duplicated.
+  This is here because this needs to be computed anyway, and this computation shouldn't be duplicated.
 
 - `_internalTree` ([filesetTree](#filesettree)):
   A tree representation of all included files under `_internalBase`.

@@ -36,6 +36,10 @@ let
     cleanSourceWith
     ;
 
+  inherit (lib.trivial)
+    pipe
+    ;
+
 in {
 
   /*
@@ -111,7 +115,7 @@ in {
       Paths in [strings](https://nixos.org/manual/nix/stable/language/values.html#type-string), including Nix store paths, cannot be passed as `root`.
       `root` has to be a directory.
 
-<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed -->
+<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed: https://github.com/nix-community/nixdoc/issues/75 -->
 :::{.note}
 Changing `root` only affects the directory structure of the resulting store path, it does not change which files are added to the store.
 The only way to change which files get added to the store is by changing the `fileset` attribute.
@@ -124,7 +128,7 @@ The only way to change which files get added to the store is by changing the `fi
       This argument can also be a path,
       which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
 
-<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed -->
+<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed: https://github.com/nix-community/nixdoc/issues/75 -->
 :::{.note}
 If a directory does not recursively contain any file, it is omitted from the store path contents.
 :::
@@ -134,18 +138,18 @@ If a directory does not recursively contain any file, it is omitted from the sto
   }:
     let
       # We cannot rename matched attribute arguments, so let's work around it with an extra `let in` statement
-      maybeFileset = fileset;
+      filesetArg = fileset;
     in
     let
-      fileset = _coerce "lib.fileset.toSource: `fileset`" maybeFileset;
+      fileset = _coerce "lib.fileset.toSource: `fileset`" filesetArg;
       rootFilesystemRoot = (splitRoot root).root;
       filesetFilesystemRoot = (splitRoot fileset._internalBase).root;
-      filter = _toSourceFilter fileset;
+      sourceFilter = _toSourceFilter fileset;
     in
     if ! isPath root then
       if isStringLike root then
         throw ''
-          lib.fileset.toSource: `root` "${toString root}" is a string-like value, but it should be a path instead.
+          lib.fileset.toSource: `root` ("${toString root}") is a string-like value, but it should be a path instead.
               Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
       else
         throw ''
@@ -154,29 +158,29 @@ If a directory does not recursively contain any file, it is omitted from the sto
     # See also ../path/README.md
     else if rootFilesystemRoot != filesetFilesystemRoot then
       throw ''
-        lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` "${toString root}":
+        lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` ("${toString root}"):
             `root`: root "${toString rootFilesystemRoot}"
             `fileset`: root "${toString filesetFilesystemRoot}"
             Different roots are not supported.''
     else if ! pathExists root then
       throw ''
-        lib.fileset.toSource: `root` ${toString root} does not exist.''
+        lib.fileset.toSource: `root` (${toString root}) does not exist.''
     else if pathType root != "directory" then
       throw ''
-        lib.fileset.toSource: `root` ${toString root} is a file, but it should be a directory instead. Potential solutions:
+        lib.fileset.toSource: `root` (${toString root}) is a file, but it should be a directory instead. Potential solutions:
             - If you want to import the file into the store _without_ a containing directory, use string interpolation or `builtins.path` instead of this function.
             - If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as ${toString (dirOf root)}, and set `fileset` to the file path.''
     else if ! hasPrefix root fileset._internalBase then
       throw ''
-        lib.fileset.toSource: `fileset` could contain files in ${toString fileset._internalBase}, which is not under the `root` ${toString root}. Potential solutions:
+        lib.fileset.toSource: `fileset` could contain files in ${toString fileset._internalBase}, which is not under the `root` (${toString root}). Potential solutions:
             - Set `root` to ${toString fileset._internalBase} or any directory higher up. This changes the layout of the resulting store path.
-            - Set `fileset` to a file set that cannot contain files outside the `root` ${toString root}. This could change the files included in the result.''
+            - Set `fileset` to a file set that cannot contain files outside the `root` (${toString root}). This could change the files included in the result.''
     else
-      builtins.seq filter
+      builtins.seq sourceFilter
       cleanSourceWith {
         name = "source";
         src = root;
-        inherit filter;
+        filter = sourceFilter;
       };
 
   /*
@@ -209,8 +213,8 @@ If a directory does not recursively contain any file, it is omitted from the sto
     # This argument can also be a path,
     # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
     fileset2:
-    let
-      filesets = _coerceMany "lib.fileset.union" [
+    _unionMany
+      (_coerceMany "lib.fileset.union" [
         {
           context = "first argument";
           value = fileset1;
@@ -219,9 +223,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
           context = "second argument";
           value = fileset2;
         }
-      ];
-    in
-    _unionMany filesets;
+      ]);
 
   /*
     The file set containing all files that are in any of the given file sets.
@@ -260,25 +262,20 @@ If a directory does not recursively contain any file, it is omitted from the sto
     # The elements can also be paths,
     # which get [implicitly coerced to file sets](#sec-fileset-path-coercion).
     filesets:
-    let
-      # We cannot rename matched attribute arguments, so let's work around it with an extra `let in` statement
-      maybeFilesets = filesets;
-    in
-    let
-      # Annotate the elements with context, used by _coerceMany for better errors
-      annotated = imap0 (i: el: {
-        context = "element ${toString i} of the argument";
-        value = el;
-      }) maybeFilesets;
-
-      filesets = _coerceMany "lib.fileset.unions" annotated;
-    in
-    if ! isList maybeFilesets then
-      throw "lib.fileset.unions: Expected argument to be a list, but got a ${typeOf maybeFilesets}."
-    else if maybeFilesets == [ ] then
-      # TODO: This could be supported, but requires an extra internal representation for the empty file set
+    if ! isList filesets then
+      throw "lib.fileset.unions: Expected argument to be a list, but got a ${typeOf filesets}."
+    else if filesets == [ ] then
+      # TODO: This could be supported, but requires an extra internal representation for the empty file set, which would be special for not having a base path.
       throw "lib.fileset.unions: Expected argument to be a list with at least one element, but it contains no elements."
     else
-      _unionMany filesets;
+      pipe filesets [
+        # Annotate the elements with context, used by _coerceMany for better errors
+        (imap0 (i: el: {
+          context = "element ${toString i}";
+          value = el;
+        }))
+        (_coerceMany "lib.fileset.unions")
+        _unionMany
+      ];
 
 }

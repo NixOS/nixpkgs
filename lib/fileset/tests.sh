@@ -236,7 +236,7 @@ checkFileset() (
 #### Error messages #####
 
 # Absolute paths in strings cannot be passed as `root`
-expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` "/nix/store/foobar" is a string-like value, but it should be a path instead.
+expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \("/nix/store/foobar"\) is a string-like value, but it should be a path instead.
 \s*Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 # Only paths are accepted as `root`
@@ -246,18 +246,18 @@ expectFailure 'toSource { root = 10; fileset = ./.; }' 'lib.fileset.toSource: `r
 mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./foo/mock-root; fileset = ./bar/mock-root; }
-' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` "'"$work"'/foo/mock-root":
+' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` \("'"$work"'/foo/mock-root"\):
 \s*`root`: root "'"$work"'/foo/mock-root"
 \s*`fileset`: root "'"$work"'/bar/mock-root"
 \s*Different roots are not supported.'
 rm -rf *
 
 # `root` needs to exist
-expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` '"$work"'/a does not exist.'
+expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) does not exist.'
 
 # `root` needs to be a file
 touch a
-expectFailure 'toSource { root = ./a; fileset = ./a; }' 'lib.fileset.toSource: `root` '"$work"'/a is a file, but it should be a directory instead. Potential solutions:
+expectFailure 'toSource { root = ./a; fileset = ./a; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) is a file, but it should be a directory instead. Potential solutions:
 \s*- If you want to import the file into the store _without_ a containing directory, use string interpolation or `builtins.path` instead of this function.
 \s*- If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as '"$work"', and set `fileset` to the file path.'
 rm -rf *
@@ -267,18 +267,18 @@ expectFailure 'toSource { root = ./.; fileset = abort "This should be evaluated"
 
 # Only paths under `root` should be able to influence the result
 mkdir a
-expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` '"$work"'/a. Potential solutions:
+expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` \('"$work"'/a\). Potential solutions:
 \s*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
-\s*- Set `fileset` to a file set that cannot contain files outside the `root` '"$work"'/a. This could change the files included in the result.'
+\s*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
 rm -rf *
 
 # Path coercion only works for paths
 expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a path instead.'
-expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` "/some/path" is a string-like value, but it should be a path instead.
+expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` \("/some/path"\) is a string-like value, but it should be a path instead.
 \s*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 # Path coercion errors for non-existent paths
-expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` '"$work"'/a does not exist.'
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) does not exist.'
 
 # File sets cannot be evaluated directly
 expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
@@ -395,16 +395,16 @@ expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = unions [ ./foo/mock-root ./bar/mock-root ]; }
 ' 'lib.fileset.unions: Filesystem roots are not the same:
-\s*element 0 of the argument: root "'"$work"'/foo/mock-root"
-\s*element 1 of the argument: root "'"$work"'/bar/mock-root"
+\s*element 0: root "'"$work"'/foo/mock-root"
+\s*element 1: root "'"$work"'/bar/mock-root"
 \s*Different roots are not supported.'
 rm -rf *
 
 # Coercion errors show the correct context
-expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: first argument '"$work"'/a does not exist.'
-expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: second argument '"$work"'/b does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: element 0 of the argument '"$work"'/a does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: element 1 of the argument '"$work"'/b does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: first argument \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: second argument \('"$work"'/b\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: element 0 \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: element 1 \('"$work"'/b\) does not exist.'
 
 # unions needs a list with at least 1 element
 expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Expected argument to be a list, but got a null.'

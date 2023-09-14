@@ -135,14 +135,14 @@ rec {
     else if ! isPath value then
       if isStringLike value then
         throw ''
-          ${context} "${toString value}" is a string-like value, but it should be a path instead.
+          ${context} ("${toString value}") is a string-like value, but it should be a path instead.
               Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
       else
         throw ''
           ${context} is of type ${typeOf value}, but it should be a path instead.''
     else if ! pathExists value then
       throw ''
-        ${context} ${toString value} does not exist.''
+        ${context} (${toString value}) does not exist.''
     else
       _singleton value;
 
@@ -341,9 +341,6 @@ rec {
       # The common base path assembled from a filesystem root and the common components
       commonBase = append first._internalBaseRoot (join commonBaseComponents);
 
-      # The number of path components common to all base paths
-      commonBaseComponentsCount = length commonBaseComponents;
-
       # A list of filesetTree's that all have the same base path
       # This is achieved by nesting the trees into the components they have over the common base path
       # E.g. `union /foo/bar /foo/baz` has the base path /foo
@@ -352,7 +349,7 @@ rec {
       # Therefore allowing combined operations over them.
       trees = map (fileset:
         setAttrByPath
-          (drop commonBaseComponentsCount fileset._internalBaseComponents)
+          (drop (length commonBaseComponents) fileset._internalBaseComponents)
           fileset._internalTree
         ) filesets;
 
