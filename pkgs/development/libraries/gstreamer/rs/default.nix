@@ -242,6 +242,14 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+  doInstallCheck = (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic &&
+    stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    readelf -a $out/lib/gstreamer-1.0/libgstrswebp.so | grep -F 'Shared library: [libwebpdemux.so'
+    runHook postInstallCheck
+  '';
+
   passthru.updateScript = nix-update-script {
     # use numbered releases rather than gstreamer-* releases
     extraArgs = [ "--version-regex" "([0-9.]+)" ];
