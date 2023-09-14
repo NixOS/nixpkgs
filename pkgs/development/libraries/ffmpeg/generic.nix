@@ -545,6 +545,8 @@ stdenv.mkDerivation (finalAttrs: {
   in
     "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
 
+  strictDeps = true;
+
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
   ++ optionals withCudaLLVM [ clang ];
 
