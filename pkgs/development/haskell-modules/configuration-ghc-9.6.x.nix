@@ -176,7 +176,7 @@ self: super: {
     };
 
   fourmolu = super.fourmolu_0_14_0_0;
-  ormolu = super.ormolu_0_7_1_0;
+  ormolu = super.ormolu_0_7_2_0;
   stylish-haskell = super.stylish-haskell_0_14_5_0;
 
   # Newer version of servant required for GHC 9.6
