@@ -2,47 +2,76 @@
 
 This chapter describes how to extend and change Nixpkgs using overlays.  Overlays are used to add layers in the fixed-point used by Nixpkgs to compose the set of all packages.
 
-Nixpkgs can be configured with a list of overlays, which are applied in order. This means that the order of the overlays can be significant if multiple layers override the same package.
+## Applying overlays
 
-## Installing overlays {#sec-overlays-install}
+There are various ways of applying overlays.
 
-The list of overlays can be set either explicitly in a Nix expression, or through `<nixpkgs-overlays>` or user configuration files.
+### Applying overlays when importing Nixpkgs
 
-### Set overlays in NixOS or Nix expressions {#sec-overlays-argument}
+When importing Nixpkgs, a list of overlays can be specified using the `overlays` attribute in the argument:
+```nix
+pkgs = import <nixpkgs> {
+  overlays = [
+    firstOverlay
+    secondOverlay
+  ];
+}
+```
 
-On a NixOS system the value of the `nixpkgs.overlays` option, if present, is passed to the system Nixpkgs directly as an argument. Note that this does not affect the overlays for non-NixOS operations (e.g.  `nix-env`), which are [looked up](#sec-overlays-lookup) independently.
-
-The list of overlays can be passed explicitly when importing nixpkgs, for example `import <nixpkgs> { overlays = [ overlay1 overlay2 ]; }`.
-
-NOTE: DO NOT USE THIS in nixpkgs. Further overlays can be added by calling the `pkgs.extend` or `pkgs.appendOverlays`, although it is often preferable to avoid these functions, because they recompute the Nixpkgs fixpoint, which is somewhat expensive to do.
-
-### Install overlays via configuration lookup {#sec-overlays-lookup}
-
-The list of overlays is determined as follows.
-
-1.  First, if an [`overlays` argument](#sec-overlays-argument) to the Nixpkgs function itself is given, then that is used and no path lookup will be performed.
-
-2.  Otherwise, if the Nix path entry `<nixpkgs-overlays>` exists, we look for overlays at that path, as described below.
+If the `overlays` argument is not passed, these defaults are used:
+- If the Nix path entry `<nixpkgs-overlays>` exists, we look for overlays at that path, as described below.
 
     See the section on `NIX_PATH` in the Nix manual for more details on how to set a value for `<nixpkgs-overlays>.`
+- If one of `~/.config/nixpkgs/overlays.nix` and `~/.config/nixpkgs/overlays/` exists, then we look for overlays at that path, as described below. It is an error if both exist.
 
-3.  If one of `~/.config/nixpkgs/overlays.nix` and `~/.config/nixpkgs/overlays/` exists, then we look for overlays at that path, as described below. It is an error if both exist.
+#### How paths get turned into overlays
+- If the path is a file, then the file is imported as a Nix expression and used as the list of overlays.
 
-If we are looking for overlays at a path, then there are two cases:
+- If the path is a directory, then we take the content of the directory, order it lexicographically, and attempt to interpret each as an overlay by:
 
--   If the path is a file, then the file is imported as a Nix expression and used as the list of overlays.
+  - Importing the file, if it is a `.nix` file.
 
--   If the path is a directory, then we take the content of the directory, order it lexicographically, and attempt to interpret each as an overlay by:
+  - Importing a top-level `default.nix` file, if it is a directory.
 
-    -   Importing the file, if it is a `.nix` file.
+### Applying further overlays on top of an imported Nixpkgs
 
-    -   Importing a top-level `default.nix` file, if it is a directory.
+If you already have an imported Nixpkgs, you can apply further overlays on top using:
+```nix
+pkgs.appendOverlays [
+  firstAdditionalOverlay
+  secondAdditionalOverlay
+]
+```
 
+Or for just a single overlay:
+```nix
+pkgs.extend additionalOverlay
+```
+
+:::{.warning}
+These functions recompute the Nixpkgs fixpoint, which is somewhat expensive to do.
+:::
+
+### Setting overlays for a NixOS configuration
+
+(link to nixpkgs.overlays option in the NixOS manual)
+
+Note that this does not affect the overlays for non-NixOS operations (e.g.  `nix-env`), which are [looked up](#sec-overlays-lookup) independently.
+
+## Sharing overlays between a NixOS configuration and nix commands
+
+TODO: Rewrite
 Because overlays that are set in NixOS configuration do not affect non-NixOS operations such as `nix-env`, the `overlays.nix` option provides a convenient way to use the same overlays for a NixOS system configuration and user configuration: the same file can be used as `overlays.nix` and imported as the value of `nixpkgs.overlays`.
+
+```nix
+# configuration.nix
+
+nixpkgs.overlays = import ~/.config/nixpkgs/overlays.nix;
+```
 
 ## Defining overlays {#sec-overlays-definition}
 
-Overlays are Nix functions which accept two arguments, conventionally called `self` and `super`, and return a set of packages. For example, the following is a valid overlay.
+Overlays are Nix functions which accept two arguments, conventionally called `self` and `super`, and return a set of attributes. For example, the following is a valid overlay.
 
 ```nix
 self: super:
@@ -64,6 +93,8 @@ The second argument (`super`) corresponds to the result of the evaluation of the
 The value returned by this function should be a set similar to `pkgs/top-level/all-packages.nix`, containing overridden and/or new packages.
 
 Overlays are similar to other methods for customizing Nixpkgs, in particular the `packageOverrides` attribute described in [](#sec-modify-via-packageOverrides). Indeed, `packageOverrides` acts as an overlay with only the `super` argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
+
+Note that the order of the overlays can matter if multiple overlays set the same attributes.
 
 ## Using overlays to configure alternatives {#sec-overlays-alternatives}
 
