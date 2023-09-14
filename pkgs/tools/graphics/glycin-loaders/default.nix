@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "glycin-loaders";
-  version = "0.1.rc";
+  version = "0.1.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin-loaders/${lib.versions.majorMinor version}/glycin-loaders-${version}.tar.xz";
-    hash = "sha256-q0MMcOnFLhSjeGQnByuKrKC7IdMgYcE52dgldXmKHkI=";
+    hash = "sha256-pMd8+u2015zN9PBntrR9Wo1EfCmbeblQRSzy7u3GCOs=";
   };
 
   nativeBuildInputs = [
