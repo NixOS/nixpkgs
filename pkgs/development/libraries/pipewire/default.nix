@@ -22,7 +22,7 @@
 , libsndfile
 , vulkan-headers
 , vulkan-loader
-, webrtc-audio-processing
+, webrtc-audio-processing_1
 , ncurses
 , readline # meson can't find <7 as those versions don't have a .pc file
 , lilv
@@ -79,7 +79,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.79";
+    version = "0.3.80";
 
     outputs = [
       "out"
@@ -97,7 +97,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-pqs991pMqz3IQE+NUk0VNzZS4ExwfoZqBQDWBSGdWcs=";
+      sha256 = "sha256-6Ka83Bqd/nsfp8rv0GTBerpGP226MeZvC5u/j62FzP0=";
     };
 
     patches = [
@@ -142,7 +142,7 @@ let
       udev
       vulkan-headers
       vulkan-loader
-      webrtc-audio-processing
+      webrtc-audio-processing_1
       tinycompress
     ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
     ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
