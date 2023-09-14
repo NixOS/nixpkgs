@@ -1396,6 +1396,8 @@ let
 
     pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
 
+    pbrt = callPackage ../development/ocaml-modules/pbrt { };
+
     pcap-format = callPackage ../development/ocaml-modules/pcap-format { };
 
     pecu = callPackage ../development/ocaml-modules/pecu { };

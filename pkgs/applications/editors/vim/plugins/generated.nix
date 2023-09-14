@@ -7724,6 +7724,18 @@ final: prev:
     meta.homepage = "https://github.com/AckslD/nvim-whichkey-setup.lua/";
   };
 
+  nvim-window-picker = buildVimPluginFrom2Nix {
+    pname = "nvim-window-picker";
+    version = "2023-07-29";
+    src = fetchFromGitHub {
+      owner = "s1n7ax";
+      repo = "nvim-window-picker";
+      rev = "1b1bb834b0acb9eebb11a61664efc665757f1ba2";
+      sha256 = "1ds2x5hnliw8c7zkqvmnij9bycnxgf3q0vnl0bzb7ki3jc2qg1r8";
+    };
+    meta.homepage = "https://github.com/s1n7ax/nvim-window-picker/";
+  };
+
   nvim-yarp = buildVimPluginFrom2Nix {
     pname = "nvim-yarp";
     version = "2022-06-08";

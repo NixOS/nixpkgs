@@ -5,15 +5,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svg2pdf";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "svg2pdf";
     rev = "v${version}";
-    hash = "sha256-X5L3UA/BJw8M2G35biCQjExYe68fB14meW4ILPEyesc=";
+    hash = "sha256-XTOGxuytbkaq4ZV6rXKJF9A/KSX6naYQ3kdICDQU4JA=";
   };
-  cargoHash = "sha256-zR4nKzbbCzSM1JVxj3nk6yQAfpPmfVQGabkU7lzLAi0=";
+  cargoHash = "sha256-CQPkVJ3quQlnIS05tAj+i7kGk2l0RvGM/FRNvgQ0mHM=";
   buildFeatures = [ "cli" ];
 
   meta = with lib; {

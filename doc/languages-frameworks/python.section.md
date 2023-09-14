@@ -101,7 +101,7 @@ The following is an example:
 buildPythonPackage rec {
   pname = "pytest";
   version = "3.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -167,12 +167,15 @@ following are specific to `buildPythonPackage`:
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
-* `format ? "setuptools"`: Format of the source. Valid options are
-  `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, and `"other"`.
-  `"setuptools"` is for when the source has a `setup.py` and `setuptools` is
-  used to build a wheel, `flit`, in case `flit` should be used to build a wheel,
-  and `wheel` in case a wheel is provided. Use `other` when a custom
-  `buildPhase` and/or `installPhase` is needed.
+* `pyproject`: Whether the pyproject format should be used. When set to `true`,
+  `pypaBuildHook` will be used, and you can add the required build dependencies
+  from `build-system.requires` to `nativeBuildInputs`. Note that the pyproject
+  format falls back to using `setuptools`, so you can use `pyproject = true`
+  even if the package only has a `setup.py`. When set to `false`, you can
+  use the existing [hooks](#setup-hooks0 or provide your own logic to build the
+  package. This can be useful for packages that don't support the pyproject
+  format. When unset, the legacy `setuptools` hooks are used for backwards
+  compatibility.
 * `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to
   `makeWrapper`, which wraps generated binaries. By default, the arguments to
   `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling
@@ -286,12 +289,17 @@ specifying an interpreter version), like this:
 python3.pkgs.buildPythonApplication rec {
   pname = "luigi";
   version = "2.7.9";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
+
+  nativeBuildInputs = [
+    python3.pkgs.setuptools
+    python3.pkgs.wheel
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     tornado
@@ -299,7 +307,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    ...
+    # ...
   };
 }
 ```
@@ -716,8 +724,8 @@ We've now seen how to create an ad-hoc temporary shell session, and how to
 create a single script with Python dependencies, but in the course of normal
 development we're usually working in an entire package repository.
 
-As explained in the Nix manual, `nix-shell` can also load an expression from a
-`.nix` file. Say we want to have Python 3.11, `numpy` and `toolz`, like before,
+As explained [in the `nix-shell` section](https://nixos.org/manual/nix/stable/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
+Say we want to have Python 3.11, `numpy` and `toolz`, like before,
 in an environment. We can add a `shell.nix` file describing our dependencies:
 
 ```nix
@@ -858,17 +866,24 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "toolz";
   version = "0.10.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   # has no tests
   doCheck = false;
@@ -918,12 +933,17 @@ with import <nixpkgs> {};
     my_toolz = python311.pkgs.buildPythonPackage rec {
       pname = "toolz";
       version = "0.10.0";
-      format = "setuptools";
+      pyproject = true;
 
       src = fetchPypi {
         inherit pname version;
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
+
+      nativeBuildInputs = [
+        python311.pkgs.setuptools
+        python311.pkgs.wheel
+      ];
 
       # has no tests
       doCheck = false;
@@ -972,6 +992,9 @@ order to build [`datashape`](https://github.com/blaze/datashape).
 , buildPythonPackage
 , fetchPypi
 
+# build dependencies
+, setuptools, wheel
+
 # dependencies
 , numpy, multipledispatch, python-dateutil
 
@@ -982,12 +1005,17 @@ order to build [`datashape`](https://github.com/blaze/datashape).
 buildPythonPackage rec {
   pname = "datashape";
   version = "0.4.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     multipledispatch
@@ -1023,6 +1051,8 @@ when building the bindings and are therefore added as `buildInputs`.
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
+, wheel
 , libxml2
 , libxslt
 }:
@@ -1030,12 +1060,17 @@ when building the bindings and are therefore added as `buildInputs`.
 buildPythonPackage rec {
   pname = "lxml";
   version = "3.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   buildInputs = [
     libxml2
@@ -1067,6 +1102,10 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
 , buildPythonPackage
 , fetchPypi
 
+# build dependencies
+, setuptools
+, wheel
+
 # dependencies
 , fftw
 , fftwFloat
@@ -1078,12 +1117,17 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
 buildPythonPackage rec {
   pname = "pyFFTW";
   version = "0.9.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   buildInputs = [
     fftw
@@ -1334,9 +1378,7 @@ instead of a dev dependency).
 
 Keep in mind that while the examples above are done with `requirements.txt`,
 `pythonRelaxDepsHook` works by modifying the resulting wheel file, so it should
-work in any of the formats supported by `buildPythonPackage` currently,
-with the exception of `other` (see `format` in
-[`buildPythonPackage` parameters](#buildpythonpackage-parameters) for more details).
+work with any of the existing [hooks](#setup-hooks).
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
@@ -1461,17 +1503,25 @@ We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 ```nix
 { lib
 , buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "toolz";
   version = "0.10.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
