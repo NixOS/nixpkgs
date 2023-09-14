@@ -49,6 +49,7 @@
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/apple-touchbar.nix
+  ./hardware/bitcraze.nix
   ./hardware/bladeRF.nix
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
