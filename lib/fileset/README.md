@@ -41,7 +41,7 @@ An attribute set with these values:
 - `_type` (constant string `"fileset"`):
   Tag to indicate this value is a file set.
 
-- `_internalVersion` (constant `1`, the current version):
+- `_internalVersion` (constant `2`, the current version):
   Version of the representation.
 
 - `_internalBase` (path):
@@ -67,8 +67,8 @@ An attribute set with these values:
 One of the following:
 
 - `{ <name> = filesetTree; }`:
-  A directory with a nested `filesetTree` value for every directory entry.
-  Even entries that aren't included are present as `null` because it improves laziness and allows using this as a sort of `builtins.readDir` cache.
+  A directory with a nested `filesetTree` value for directory entries.
+  Entries not included may either be omitted or set to `null`, as necessary to improve efficiency or laziness.
 
 - `"directory"`:
   A directory with all its files included recursively, allowing early cutoff for some operations.

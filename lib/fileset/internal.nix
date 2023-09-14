@@ -14,6 +14,7 @@ let
   inherit (lib.attrsets)
     attrValues
     mapAttrs
+    setAttrByPath
     zipAttrsWith
     ;
 
@@ -63,7 +64,7 @@ rec {
   # - Increment this version
   # - Add an additional migration function below
   # - Update the description of the internal representation in ./README.md
-  _currentVersion = 1;
+  _currentVersion = 2;
 
   # Migrations between versions. The 0th element converts from v0 to v1, and so on
   migrations = [
@@ -77,6 +78,15 @@ rec {
         _internalVersion = 1;
         _internalBaseRoot = parts.root;
         _internalBaseComponents = components parts.subpath;
+      }
+    )
+
+    # Convert v1 into v2: filesetTree's can now also omit attributes to signal paths not being included
+    (
+      filesetV1:
+      # This change is backwards compatible (but not forwards compatible, so we still need a new version)
+      filesetV1 // {
+        _internalVersion = 2;
       }
     )
   ];
@@ -174,50 +184,23 @@ rec {
       # - _internalBase: ./.
       # - _internalTree: {
       #     "default.nix" = <type>;
-      #     # Other directory entries
-      #     <name> = null;
       #   }
       # See ./README.md#single-files
       _create (dirOf path)
-        (_nestTree
-          (dirOf path)
-          [ (baseNameOf path) ]
-          type
-        );
+        {
+          ${baseNameOf path} = type;
+        };
 
-  /*
-    Nest a filesetTree under some extra components, while filling out all the other directory entries that aren't included with null
-
-    _nestTree ./. [ "foo" "bar" ] tree == {
-      foo = {
-        bar = tree;
-        <other-entries> = null;
-      }
-      <other-entries> = null;
-    }
-
-    Type: Path -> [ String ] -> filesetTree -> filesetTree
-  */
-  _nestTree = targetBase: extraComponents: tree:
-    let
-      recurse = index: focusPath:
-        if index == length extraComponents then
-          tree
-        else
-          mapAttrs (_: _: null) (readDir focusPath)
-          // {
-            ${elemAt extraComponents index} = recurse (index + 1) (append focusPath (elemAt extraComponents index));
-          };
-    in
-    recurse 0 targetBase;
-
-  # Expand "directory" filesetTree representation to the equivalent { <name> = filesetTree; }
+  # Expand a directory representation to an equivalent one in attribute set form.
+  # All directory entries are included in the result.
   # Type: Path -> filesetTree -> { <name> = filesetTree; }
   _directoryEntries = path: value:
-    if isAttrs value then
-      value
+    if value == "directory" then
+      readDir path
     else
-      readDir path;
+      # Set all entries not present to null
+      mapAttrs (name: value: null) (readDir path)
+      // value;
 
   /*
     Simplify a filesetTree recursively:
@@ -368,8 +351,7 @@ rec {
       # while the tree under `/foo/baz` gets nested under `{ baz = ...; ... }`
       # Therefore allowing combined operations over them.
       trees = map (fileset:
-        _nestTree
-          commonBase
+        setAttrByPath
           (drop commonBaseComponentsCount fileset._internalBaseComponents)
           fileset._internalTree
         ) filesets;

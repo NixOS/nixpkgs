@@ -285,19 +285,21 @@ expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is no
 
 # Past versions of the internal representation are supported
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
-    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalVersion = 1; _type = "fileset"; }'
+    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalVersion = 2; _type = "fileset"; }'
+expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 1; }' \
+    '{ _type = "fileset"; _internalVersion = 2; }'
 
 # Future versions of the internal representation are unsupported
-expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 2; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
-\s*- Internal version of the file set: 2
-\s*- Internal version of the library: 1
+expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 3; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
+\s*- Internal version of the file set: 3
+\s*- Internal version of the library: 2
 \s*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
 
 # _create followed by _coerce should give the inputs back without any validation
 expectEqual '{
   inherit (_coerce "<test>" (_create ./. "directory"))
     _internalVersion _internalBase _internalTree;
-}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 1; }'
+}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 2; }'
 
 #### Resulting store path ####
 
