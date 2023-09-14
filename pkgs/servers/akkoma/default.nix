@@ -9,14 +9,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "3.9.3";
+  version = "3.10.4";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     rev = "v${version}";
-    hash = "sha256-vXE7jv1GPAMKpWEAE9IUgWo7A+zkGYUzu0jlZ9oSbjA=";
+    hash = "sha256-MPUZFcIxZ21fe3edwi+/Kt8qpwNBCh40wheC3QMqw2M=";
   };
 
   postPatch = ''
@@ -45,19 +45,20 @@ beamPackages.mixRelease rec {
           group = "pleroma";
           owner = "elixir-libraries";
           repo = "elixir-captcha";
-          rev = "e0f16822d578866e186a0974d65ad58cddc1e2ab";
-          sha256 = "0qbf86l59kmpf1nd82v4141ba9ba75xwmnqzpgbm23fa1hh8pi9c";
+          rev = "3bbfa8b5ea13accc1b1c40579a380d8e5cfd6ad2";
+          hash = "sha256-skZ0QwF46lUTfsgACMR0AR5ymY2F50BQy1AUBjWVdro=";
         };
       };
-      credo = beamPackages.buildMix rec {
-        name = "credo";
-        version = "1.7.0-dev";
+      concurrent_limiter = beamPackages.buildMix rec {
+        name = "concurrent_limiter";
+        version = "0.1.1";
 
-        src = fetchFromGitHub {
-          owner = "rrrene";
-          repo = "credo";
-          rev = "1c1b99ea41a457761383d81aaf6a606913996fe7";
-          hash = "sha256-NdOg6p2J1D8VGGWabAMLs/qRVbi4BzN2DTHci++dJnA=";
+        src = fetchFromGitea {
+          domain = "akkoma.dev";
+          owner = "AkkomaGang";
+          repo = "concurrent-limiter";
+          rev = "a9e0b3d64574bdba761f429bb4fba0cf687b3338";
+          hash = "sha256-A7ucZnXks4K+JDVY5vV2cT5KfEOUOo/OHO4rga5mGys=";
         };
       };
       elasticsearch = beamPackages.buildMix rec {

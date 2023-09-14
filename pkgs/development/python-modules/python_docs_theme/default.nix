@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "python_docs_theme";
-  version = "2023.3.1";
+  version = "2023.7";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "python-docs-theme";
-    rev = version;
-    sha256 = "sha256-WyO5Xc67k5ExB4eCFd17sZCBMaV5djle9BAM0tn5CPc=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-43/TlgYm7Q4ZtY25MiLU9fd1atDmiDUeUK6AYfDfmag=";
   };
 
   propagatedBuildInputs = [ sphinx ];

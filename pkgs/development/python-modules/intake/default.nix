@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.7.0";
+  version = "unstable-2023-08-24";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-2LUblA8eVCOfVJ6BJayralNiv6EFt6MzR5ptKksVNA4=";
+    rev = "81b1567a2030adfb22b856b4f63cefe35de68983";
+    hash = "sha256-S2PoUN0Bao5VULfHhgbXXowopPLm/njAHO3dIM8ILno=";
   };
 
   propagatedBuildInputs = [
@@ -79,6 +79,8 @@ buildPythonPackage rec {
       --replace "'pytest-runner'" ""
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     export HOME=$(mktemp -d);
     export PATH="$PATH:$out/bin";
@@ -106,7 +108,17 @@ buildPythonPackage rec {
     "test_ndarray"
     "test_python"
     # Timing-based, flaky on darwin and possibly others
-    "TestServerV1Source.test_idle_timer"
+    "test_idle_timer"
+    # arrow-cpp-13 related
+    "test_read"
+    "test_pickle"
+    "test_read_dask"
+    "test_read_list"
+    "test_read_list_with_glob"
+    "test_to_dask"
+    "test_columns"
+    "test_df_transform"
+    "test_pipeline_apply"
   ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     # Flaky with older low-res mtime on darwin < 10.13 (#143987)
     "test_second_load_timestamp"

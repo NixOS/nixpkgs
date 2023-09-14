@@ -23,8 +23,12 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Version=v${version}"
-    "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.BuildDate=1970-01-01_00:00:00"
+    "-X github.com/crowdsecurity/go-cs-lib/pkg/version.Version=v${version}"
+    "-X github.com/crowdsecurity/go-cs-lib/pkg/version.BuildDate=1970-01-01_00:00:00"
+    "-X github.com/crowdsecurity/go-cs-lib/pkg/version.Tag=${src.rev}"
+    "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Codename=alphaga"
+    "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultConfigDir=/etc/crowdsec"
+    "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultDataDir=/var/lib/crowdsec/data"
   ];
 
   postBuild = "mv $GOPATH/bin/{crowdsec-cli,cscli}";

@@ -603,8 +603,8 @@ let
 
     microcode = {
       MICROCODE       = yes;
-      MICROCODE_INTEL = yes;
-      MICROCODE_AMD   = yes;
+      MICROCODE_INTEL = whenOlder "6.6" yes;
+      MICROCODE_AMD   = whenOlder "6.6" yes;
       # Write Back Throttling
       # https://lwn.net/Articles/682582/
       # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
@@ -913,7 +913,7 @@ let
       SECCOMP             = yes; # used by systemd >= 231
       SECCOMP_FILTER      = yes; # ditto
       POSIX_MQUEUE        = yes;
-      FRONTSWAP           = yes;
+      FRONTSWAP           = whenOlder "6.6" yes;
       FUSION              = yes; # Fusion MPT device support
       IDE                 = whenOlder "5.14" no; # deprecated IDE support, removed in 5.14
       IDLE_PAGE_TRACKING  = yes;

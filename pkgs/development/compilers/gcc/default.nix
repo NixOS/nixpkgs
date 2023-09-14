@@ -115,7 +115,7 @@ let inherit version;
     patches = callFile ./patches {};
 
     /* Cross-gcc settings (build == host != target) */
-    crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
+    crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
     stageNameAddon = if withoutTargetLibc then "stage-static" else "stage-final";
     crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
 
@@ -450,7 +450,7 @@ ${""}          done
 }
 ))
 ([
-  (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
+  (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared libcCross; })
 ] ++ optionals atLeast11 [
   (callPackage ./common/checksum.nix { inherit langC langCC; })
 ])

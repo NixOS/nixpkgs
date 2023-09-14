@@ -228,6 +228,7 @@ buildFHSEnv {
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = licenses.unfree;
     maintainers = with maintainers; [ jshcmpbll ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

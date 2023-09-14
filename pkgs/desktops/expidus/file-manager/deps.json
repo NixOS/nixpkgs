@@ -1,7 +1,7 @@
 [
   {
     "name": "file_manager",
-    "version": "0.2.0+65656565656565",
+    "version": "0.2.1+65656565656565",
     "kind": "root",
     "source": "root",
     "dependencies": [
@@ -38,7 +38,7 @@
   },
   {
     "name": "flutter_lints",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
@@ -301,7 +301,7 @@
   },
   {
     "name": "ffi",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
@@ -319,7 +319,7 @@
   },
   {
     "name": "plugin_platform_interface",
-    "version": "2.1.4",
+    "version": "2.1.5",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -375,7 +375,7 @@
   },
   {
     "name": "flutter_adaptive_scaffold",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -384,7 +384,7 @@
   },
   {
     "name": "flutter_markdown",
-    "version": "0.6.15",
+    "version": "0.6.17+1",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -396,7 +396,7 @@
   },
   {
     "name": "markdown",
-    "version": "7.1.0",
+    "version": "7.1.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -493,7 +493,7 @@
   },
   {
     "name": "sentry_flutter",
-    "version": "7.7.0",
+    "version": "7.9.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -506,7 +506,7 @@
   },
   {
     "name": "sentry",
-    "version": "7.7.0",
+    "version": "7.9.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -536,7 +536,7 @@
   },
   {
     "name": "path_provider_platform_interface",
-    "version": "2.0.6",
+    "version": "2.1.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -554,7 +554,7 @@
   },
   {
     "name": "path_provider_windows",
-    "version": "2.1.7",
+    "version": "2.2.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -567,7 +567,7 @@
   },
   {
     "name": "permission_handler",
-    "version": "10.3.0",
+    "version": "10.4.3",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -581,7 +581,7 @@
   },
   {
     "name": "permission_handler_platform_interface",
-    "version": "3.10.0",
+    "version": "3.11.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -592,7 +592,7 @@
   },
   {
     "name": "permission_handler_windows",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -602,7 +602,7 @@
   },
   {
     "name": "permission_handler_apple",
-    "version": "9.1.0",
+    "version": "9.1.4",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -612,7 +612,7 @@
   },
   {
     "name": "permission_handler_android",
-    "version": "10.2.3",
+    "version": "10.3.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -632,7 +632,7 @@
   },
   {
     "name": "shared_preferences",
-    "version": "2.1.2",
+    "version": "2.2.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -647,7 +647,7 @@
   },
   {
     "name": "shared_preferences_windows",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -661,7 +661,7 @@
   },
   {
     "name": "shared_preferences_platform_interface",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -681,7 +681,7 @@
   },
   {
     "name": "shared_preferences_web",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -692,7 +692,7 @@
   },
   {
     "name": "shared_preferences_linux",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -706,7 +706,7 @@
   },
   {
     "name": "path_provider_linux",
-    "version": "2.1.11",
+    "version": "2.2.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -719,29 +719,17 @@
   },
   {
     "name": "xdg_directories",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "meta",
-      "path",
-      "process"
-    ]
-  },
-  {
-    "name": "process",
-    "version": "4.2.4",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "file",
-      "path",
-      "platform"
+      "path"
     ]
   },
   {
     "name": "shared_preferences_foundation",
-    "version": "2.2.2",
+    "version": "2.3.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -751,7 +739,7 @@
   },
   {
     "name": "shared_preferences_android",
-    "version": "2.1.4",
+    "version": "2.2.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -860,7 +848,7 @@
   },
   {
     "name": "url_launcher",
-    "version": "6.1.11",
+    "version": "6.1.12",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -876,7 +864,7 @@
   },
   {
     "name": "url_launcher_windows",
-    "version": "3.0.6",
+    "version": "3.0.7",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -886,7 +874,7 @@
   },
   {
     "name": "url_launcher_platform_interface",
-    "version": "2.1.2",
+    "version": "2.1.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -896,7 +884,7 @@
   },
   {
     "name": "url_launcher_web",
-    "version": "2.0.17",
+    "version": "2.0.18",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -907,7 +895,7 @@
   },
   {
     "name": "url_launcher_macos",
-    "version": "3.0.5",
+    "version": "3.0.6",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -937,7 +925,7 @@
   },
   {
     "name": "url_launcher_android",
-    "version": "6.0.35",
+    "version": "6.0.38",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -947,7 +935,7 @@
   },
   {
     "name": "path_provider",
-    "version": "2.0.15",
+    "version": "2.1.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -961,7 +949,7 @@
   },
   {
     "name": "path_provider_foundation",
-    "version": "2.2.3",
+    "version": "2.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -971,7 +959,7 @@
   },
   {
     "name": "path_provider_android",
-    "version": "2.0.27",
+    "version": "2.1.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [

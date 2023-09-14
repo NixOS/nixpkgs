@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-Sro0EwHP1pszuOYP6abZO5XjJvbXrDDeSAbzPA2p00M=";
   };
 
-  vendorSha256 = "sha256-HSKBUw9ZO150hLXyGX66U9XpLX2yowxYVdcdDVdqrAc=";
+  vendorHash = "sha256-HSKBUw9ZO150hLXyGX66U9XpLX2yowxYVdcdDVdqrAc=";
 
   meta = with lib; {
     description = "NATS Command Line Interface";

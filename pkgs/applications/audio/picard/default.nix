@@ -58,6 +58,8 @@ pythonPackages.buildPythonApplication rec {
     pyyaml
   ];
 
+  setupPyGlobalFlags = [ "build" "--disable-autoupdate" ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';

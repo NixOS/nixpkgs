@@ -10,6 +10,7 @@ lib.makeScope pkgs.newScope (self:
       inherit stdenv;
 
       inherit (pkgs.darwin) sigtool;
+      inherit (pkgs.darwin.apple_sdk_11_0) llvmPackages_14;
       inherit (pkgs.darwin.apple_sdk_11_0.frameworks)
         Accelerate AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit
         Quartz QuartzCore UniformTypeIdentifiers WebKit;

@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
   ];
 
+  cmakeFlags = [
+    "-DSVT_AV1_LTO=ON"
+  ];
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
@@ -43,7 +47,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ aom bsd3 ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
-    # error: use of undeclared identifier 'kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange'
-    broken = stdenv.isAarch64 && stdenv.isDarwin;
   };
 })

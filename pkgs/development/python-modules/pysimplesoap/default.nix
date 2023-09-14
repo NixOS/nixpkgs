@@ -3,12 +3,14 @@
 , fetchPypi
 , buildPythonPackage
 , m2crypto
+, nix-update-script
 }:
 
 buildPythonPackage rec {
   pname = "pysimplesoap";
-  # Unfortunately, the latest stable release is broken on Python 3.
   version = "1.16.2";
+
+  passthru.updateScript = nix-update-script { };
 
   src = fetchPypi {
     pname = "PySimpleSOAP";
@@ -20,6 +22,7 @@ buildPythonPackage rec {
     m2crypto
   ];
 
+  # Patches necessary for Python 3 compatibility plus bugfixes
   patches = map (args: fetchDebianPatch ({
     inherit pname version;
     debianRevision = "5";

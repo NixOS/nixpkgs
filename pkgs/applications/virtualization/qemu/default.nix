@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
 , pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, runtimeShell, removeReferencesTo
+, makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
 , guestAgentSupport ? with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows
@@ -9,6 +9,7 @@
 , seccompSupport ? stdenv.isLinux, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
 , pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
+, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner, pipewire
 , sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
 , jackSupport ? !stdenv.isDarwin && !nixosTestRunner, libjack2
 , gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals pulseSupport [ libpulseaudio ]
+    ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals gtkSupport [ gtk3 gettext vte ]

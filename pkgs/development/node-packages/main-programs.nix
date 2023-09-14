@@ -5,7 +5,6 @@
   "@electron-forge/cli" = "electron-forge";
   "@microsoft/rush" = "rush";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
-  coffee-script = "coffee";
   "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable.
@@ -30,7 +29,6 @@
   cdk8s-cli = "cdk8s";
   cdktf-cli = "cdktf";
   clipboard-cli = "clipboard";
-  clubhouse-cli = "club";
   conventional-changelog-cli = "conventional-changelog";
   cpy-cli = "cpy";
   diff2html-cli = "diff2html";
@@ -48,9 +46,7 @@
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";
-  near-cli = "near";
   neovim = "neovim-node-host";
-  parcel-bundler = "parcel";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
@@ -65,7 +61,6 @@
   typescript-language-server = "typescript-language-server";
   uglify-js = "uglifyjs";
   undollar = "$";
-  vsc-leetcode-cli = "leetcode";
   vscode-css-languageserver-bin = "css-languageserver";
   vscode-html-languageserver-bin = "html-languageserver";
   vscode-json-languageserver-bin = "json-languageserver";

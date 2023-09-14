@@ -1,10 +1,10 @@
 { lib
 , stdenv
-, callPackage
 , buildPythonPackage
-, fetchPypi
+, callPackage
 , cargo
 , cffi
+, fetchPypi
 , hypothesis
 , iso8601
 , isPyPy
@@ -14,8 +14,8 @@
 , pkg-config
 , pretend
 , py
-, pytestCheckHook
 , pytest-subtests
+, pytestCheckHook
 , pythonOlder
 , pytz
 , rustc
@@ -29,20 +29,20 @@ let
 in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "41.0.2"; # Also update the hash in vectors.nix
+  version = "41.0.3"; # Also update the hash in vectors.nix
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fSML+FYWTeFk7LYVzMFMf8beaQbd1bSR86+Q01FMklw=";
+    hash = "sha256-bRknQRE+9eMNidy1uVbvThV48wRwhwG4tz044+FGHzQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-hkuoICa/suMXlr4u95JbMlFzi27lJqJRmWnX3nZfzKU=";
+    hash = "sha256-LQu7waympGUs+CZun2yDQd2gUUAgyisKBG5mddrfSo0=";
   };
 
   postPatch = ''
@@ -62,9 +62,14 @@ buildPythonPackage rec {
     cffi
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ]
-    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    libiconv
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi

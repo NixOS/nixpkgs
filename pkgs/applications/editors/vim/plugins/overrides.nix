@@ -11,6 +11,8 @@
 , substituteAll
 
   # Language dependencies
+, fetchYarnDeps
+, mkYarnModules
 , python3
 , rustPlatform
 
@@ -730,8 +732,14 @@ self: super: {
 
   markdown-preview-nvim =  let
     # We only need its dependencies `node-modules`.
-    nodeDep = nodePackages."markdown-preview-nvim-../../applications/editors/vim/plugins/markdown-preview-nvim".overrideAttrs {
-      dontNpmInstall = true;
+    nodeDep = mkYarnModules rec {
+      inherit (super.markdown-preview-nvim) pname version;
+      packageJSON = ./markdown-preview-nvim/package.json;
+      yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
+      offlineCache = fetchYarnDeps {
+        inherit yarnLock;
+        hash = "sha256-kzc9jm6d9PJ07yiWfIOwqxOTAAydTpaLXVK6sEWM8gg=";
+      };
     };
   in super.markdown-preview-nvim.overrideAttrs {
     patches = [
@@ -741,7 +749,7 @@ self: super: {
       })
     ];
     postInstall = ''
-      ln -s ${nodeDep}/lib/node_modules/markdown-preview/node_modules $out/app
+      ln -s ${nodeDep}/node_modules $out/app
     '';
 
     nativeBuildInputs = [ nodejs ];
@@ -787,6 +795,10 @@ self: super: {
       sha256 = "1db5az5civ2bnqg7v3g937mn150ys52258c3glpvdvyyasxb4iih";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
+  };
+
+  multicursors-nvim = super.multicursors-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter hydra-nvim ];
   };
 
   ncm2 = super.ncm2.overrideAttrs {
@@ -966,7 +978,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-1mb99WtELS64kfA2exUlVLzOj82xkFhWx0JHayosZL0=";
+        cargoHash = "sha256-JwEOfxGH2wiFkdepxBsUYrpQ2kMV6koqpkD7s+gbWw8=";
 
         nativeBuildInputs = [ pkg-config ];
 

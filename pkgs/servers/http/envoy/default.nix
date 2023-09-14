@@ -24,8 +24,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.26.3";
-    rev = "ea9d25e93cef74b023c95ca1a3f79449cdf7fa9a";
+    version = "1.26.4";
+    rev = "cfa32deca25ac57c2bbecdad72807a9b13493fc1";
   };
 in
 buildBazelPackage rec {
@@ -36,7 +36,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     inherit (srcVer) rev;
-    sha256 = "sha256-ZZAVuelcPzFQRqh9SwRxt+odEjF0jTNh/KkLWHKiZ3o=";
+    hash = "sha256-j5QyqT+9tpChg5JxdSw21rtb9AI036vIiAmzCNzGWGc=";
 
     postFetch = ''
       chmod -R +w $out
@@ -80,8 +80,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-IykwwjRWIxruV7kSU1EYx6sQoUtFctcVqs22dCQuEDA=";
-      aarch64-linux = "sha256-YtII4hSVp9CFWvlRgjQ3l7/nHvkVKJOImtmBxYwleOQ=";
+      x86_64-linux = "sha256-+8MnbcFUyAE2122VA5olWAW8ZgjGweumRI62bxi9KOI=";
+      aarch64-linux = "sha256-4PH8rgsHxEwtx8RQGjLbAxHpLfWVqRLOvSX9sqQoy4Y=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -102,6 +102,9 @@ buildBazelPackage rec {
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
+
+      # Remove compiled python
+      find $bazelOut -name '*.pyc' -delete
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}

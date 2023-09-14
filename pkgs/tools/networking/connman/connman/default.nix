@@ -59,28 +59,21 @@ let inherit (lib) optionals; in
 
 stdenv.mkDerivation rec {
   pname = "connman";
-  version = "1.41";
+  version = "1.42";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
-    sha256 = "sha256-eftA9P3VUwxFqo5ZL7Froj02dPOpjPELiaZXbxmN5Yk=";
+    hash = "sha256-o+a65G/Age8una48qk92Sd6JLD3mIsICg6wMqBQjwqo=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "pppd-2.5.0-compat.patch";
-      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=a48864a2e5d2a725dfc6eef567108bc13b43857f";
-      sha256 = "sha256-jB1qL13mceQ1riv3K+oFWw4VC7ohv/CcH9sjxZPXcG4=";
-    })
-    (fetchpatch {
-      name = "CVE-2023-28488.patch";
-      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=99e2c16ea1cced34a5dc450d76287a1c3e762138";
-      sha256 = "sha256-377CmsECji2w/c4bZXR+TxzTB7Lce0yo7KdK1oWfCVY=";
-    })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # simply the middle section of upstream commit a48864a2e5d2a725dfc6eef567108bc13b43857f
+    # dist tarball is broken, hence this patch as a workaround
+    ./create-libppp-compat.h.patch
+  ] ++ optionals stdenv.hostPlatform.isMusl [
     # Fix Musl build by avoiding a Glibc-only API.
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";
-      sha256 = "1kg2nml7pdxc82h5hgsa3npvzdxy4d2jpz2f93pa97if868i8d43";
+      hash = "sha256-7Q1bp8rD/gGVYUqnIXqjr9vypR8jlC926p3KYWl9kLw=";
     })
   ];
 
@@ -190,7 +183,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A daemon for managing internet connections";
     homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/";
-    maintainers = [ maintainers.matejc ];
+    maintainers = with maintainers; [ eclairevoyant ];
     platforms = platforms.linux;
     license = licenses.gpl2Only;
   };

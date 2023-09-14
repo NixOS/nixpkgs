@@ -36,7 +36,7 @@ buildGoModule {
     })
   ];
 
-  vendorSha256 = "sha256-uhINWxFny/OY7M2vV3ehFzP90J6Z8cn5IZHWOuEg91M=";
+  vendorHash = "sha256-uhINWxFny/OY7M2vV3ehFzP90J6Z8cn5IZHWOuEg91M=";
 
  nativeBuildInputs = [
     makeWrapper

@@ -915,13 +915,23 @@ rec {
     license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
   };
 
-  # Portugese
+  /* PORTUGUESE */
+
   pt_BR = pt-br;
   pt-br = mkDictFromLibreOffice {
     shortName = "pt-br";
     dictFileName = "pt_BR";
-    shortDescription = "Brazillian Portugese (Brazil)";
+    shortDescription = "Portuguese (Brazil)";
     readmeFile = "README_pt_BR.txt";
     license = with lib.licenses; [ lgpl3 ];
+  };
+
+  pt_PT = pt-pt;
+  pt-pt = mkDictFromLibreOffice {
+    shortName = "pt-pt";
+    dictFileName = "pt_PT";
+    shortDescription = "Portuguese (Portugal)";
+    readmeFile = "README_pt_PT.txt";
+    license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
   };
 }

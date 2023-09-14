@@ -3,8 +3,10 @@
 name: Check pkgs/by-name
 
 # The pre-built tool is fetched from a channel,
-# making it work predictable on all PRs
-on: pull_request
+# making it work predictable on all PRs.
+on:
+  # Using pull_request_target instead of pull_request avoids having to approve first time contributors
+  pull_request_target
 
 # The tool doesn't need any permissions, it only outputs success or not based on the checkout
 permissions: {}
@@ -15,8 +17,11 @@ jobs:
     # as specified in nixos/release-combined.nix
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v22
+      - uses: actions/checkout@v4
+        with:
+          # pull_request_target checks out the base branch by default
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+      - uses: cachix/install-nix-action@v23
       - name: Determining channel to use for dependencies
         run: |
           echo "Determining which channel to use for PR base branch $GITHUB_BASE_REF"

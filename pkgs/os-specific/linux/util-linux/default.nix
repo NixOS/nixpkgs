@@ -15,15 +15,16 @@
 , writeSupport ? stdenv.isLinux
 , shadowSupport ? stdenv.isLinux
 , memstreamHook
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.39.1";
+  version = "2.39.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-iQro/4ECR70Z4nTfdug3HSAs2gGtJ3aBsOqI7qoAKGs=";
+    hash = "sha256-h6vfqo5JD4vm3el298gLm1/58wHhtn44meHwWlmhUx8=";
   };
 
   patches = [
@@ -110,6 +111,15 @@ stdenv.mkDerivation rec {
 
     installShellCompletion --bash bash-completion/*
   '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";
+      rev-prefix = "v";
+      ignoredVersions = "(-rc).*";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";

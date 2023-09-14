@@ -18,7 +18,7 @@ in {
       default = { };
       description = mdDoc ''
         Configuration options for the Stalwart email server.
-        See <https://stalw.art/docs/> for available options.
+        See <https://stalw.art/docs/category/configuration> for available options.
 
         By default, the module is configured to store everything locally.
       '';

@@ -2,6 +2,8 @@
 
   cfg = config.boot.swraid;
 
+  mdadm_conf = config.environment.etc."mdadm.conf";
+
 in {
   imports = [
     (lib.mkRenamedOptionModule [ "boot" "initrd" "services" "swraid" "enable" ] [ "boot" "swraid" "enable" ])
@@ -36,7 +38,13 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.mkIf
+        ((builtins.match ".*(MAILADDR|PROGRAM).*" mdadm_conf.text) == null)
+        [ "mdadm: Neither MAILADDR nor PROGRAM has been set. This will cause the `mdmon` service to crash." ];
+
     environment.systemPackages = [ pkgs.mdadm ];
+
+    environment.etc."mdadm.conf".text = lib.mkAfter cfg.mdadmConf;
 
     services.udev.packages = [ pkgs.mdadm ];
 
@@ -59,12 +67,10 @@ in {
         $out/bin/mdadm --version
       '';
 
-      extraFiles."/etc/mdadm.conf".source = pkgs.writeText "mdadm.conf" config.boot.swraid.mdadmConf;
+      extraFiles."/etc/mdadm.conf".source = pkgs.writeText "mdadm.conf" mdadm_conf.text;
 
       systemd = {
-        contents."/etc/mdadm.conf" = lib.mkIf (cfg.mdadmConf != "") {
-          text = cfg.mdadmConf;
-        };
+        contents."/etc/mdadm.conf".text = mdadm_conf.text;
 
         packages = [ pkgs.mdadm ];
         initrdBin = [ pkgs.mdadm ];

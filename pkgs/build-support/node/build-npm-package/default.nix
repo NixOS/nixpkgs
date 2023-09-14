@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchNpmDeps, npmHooks, nodejs }:
+{ lib, stdenv, fetchNpmDeps, buildPackages, nodejs }:
 
 { name ? "${args.pname}-${args.version}"
 , src ? null
@@ -44,7 +44,12 @@ let
     hash = npmDepsHash;
   };
 
-  inherit (npmHooks.override { inherit nodejs; }) npmConfigHook npmBuildHook npmInstallHook;
+  # .override {} negates splicing, so we need to use buildPackages explicitly
+  npmHooks = buildPackages.npmHooks.override {
+    inherit nodejs;
+  };
+
+  inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
 in
 stdenv.mkDerivation (args // {
   inherit npmDeps npmBuildScript;

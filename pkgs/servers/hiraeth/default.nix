@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-IjHQAJH6Kv65iDkVtJaVeAiMXCEyTTpUTTbW7I2Gxrc=";
   };
 
-  vendorSha256 = "sha256-tyFAd5S1RUn1AA5DbUGsAuvwtLgOgTE6LUzW3clQE9I=";
+  vendorHash = "sha256-tyFAd5S1RUn1AA5DbUGsAuvwtLgOgTE6LUzW3clQE9I=";
 
   meta = {
     description = "Share files with an expiration date";

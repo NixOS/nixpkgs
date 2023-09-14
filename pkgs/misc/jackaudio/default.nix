@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontAddWafCrossFlags = true;
+
   wafConfigureFlags = [
     "--classic"
     "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = (if libOnly then ''
     rm -rf $out/{bin,share}
     rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
-  '' else ''
+  '' else lib.optionalString (optDbus != null) ''
     wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
   '');
 

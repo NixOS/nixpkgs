@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pot";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = version;
-    hash = "sha256-VgEDV7bD5EfT5ZG7wuj5Ch3mfZ6x8a8473AvX96C64Q=";
+    hash = "sha256-PvbqPGT8BTHEufYp+TUSd0tTSBnTBDIYHxaeI7FEVDE=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-+/GDP3IFCidIs2/ZqQX7pZmZNQrCHNT6uy+x1CKkCmI=";
+    outputHash = "sha256-iHFzv8dMC0TT6PtMJmL0EufZ8TnbyjmsoBH3Z8U48D0=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -74,8 +74,6 @@ stdenv.mkDerivation rec {
     outputHashes = {
       # All other crates in the same workspace reuse this hash.
       "tauri-plugin-autostart-0.0.0" = "sha256-7Qi07yRb+ww569+sEXFIwAtS8jbUNQx6LsrUnMl5YOo=";
-      "enigo-0.1.2" = "sha256-99VJ0WYD8jV6CYUZ1bpYJBwIE2iwOZ9SjOvyA2On12Q=";
-      "selection-0.1.0" = "sha256-V4vixiyKqhpZeTXiFw0HKz5xr0zHd4DkC/hovJ8Y2a8=";
       "reqwest_dav-0.1.3" = "sha256-nWOH1SOoNA2o2lmGAIEJj3OLOlP39FjlXqK8LPZ95hI=";
     };
   };

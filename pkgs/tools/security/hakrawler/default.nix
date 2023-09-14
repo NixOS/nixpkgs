@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-ZJG5KlIlzaztG27NoSlILj0I94cm2xZq28qx1ebrSmc=";
   };
 
-  vendorSha256 = "sha256-NzgFwPvuEZ2/Ks5dZNRJjzzCNPRGelQP/A6eZltqkmM=";
+  vendorHash = "sha256-NzgFwPvuEZ2/Ks5dZNRJjzzCNPRGelQP/A6eZltqkmM=";
 
   meta = with lib; {
     description = "Web crawler for the discovery of endpoints and assets";

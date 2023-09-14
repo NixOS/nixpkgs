@@ -75,6 +75,18 @@ rec {
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
   };
 
+  # data center driver compatible with current default cudaPackages
+  dc = dc_520;
+  dc_520 = generic rec {
+    version = "520.61.05";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-EPYWZwOur/6iN/otDMrNDpNXr1mzu8cIqQl8lXhQlzU==";
+    fabricmanagerSha256 = "sha256-o8Kbmkg7qczKQclaGvEyXNzEOWq9ZpQZn9syeffnEiE==";
+    useSettings = false;
+    usePersistenced = false;
+    useFabricmanager = true;
+  };
+
   # Update note:
   # If you add a legacy driver here, also update `top-level/linux-kernels.nix`,
   # adding to the `nvidia_x11_legacy*` entries.

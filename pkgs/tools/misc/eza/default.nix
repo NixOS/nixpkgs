@@ -10,6 +10,9 @@
 , Security
 , libiconv
 , installShellFiles
+  # once eza upstream gets support for setting up a compatibilty symlink for exa, we should change
+  # the handling here from postInstall to passing the required argument to the builder.
+, exaAlias ? true
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,6 +46,8 @@ rustPlatform.buildRustPackage rec {
       --bash completions/bash/eza \
       --fish completions/fish/eza.fish \
       --zsh completions/zsh/_eza
+  '' + lib.optionalString exaAlias ''
+    ln -s eza $out/bin/exa
   '';
 
   meta = with lib; {

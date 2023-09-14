@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , nixosTests
 , alsa-lib
@@ -22,10 +23,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tm0yTh46UKnsjH9hv3cMW0YL2x3OTRL+14x4c7w124U=";
   };
 
-  # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i -e 's@__LINUX_ALSA__@__MACOSX_CORE__@' -e 's@asound@@' CMakeLists.txt
-  '';
+  patches = [
+    # Adapt CMake script to be Darwin-compatible
+    # https://github.com/8bitbubsy/ft2-clone/pull/30
+    (fetchpatch {
+      name = "0001-ft2-clone-Make-CMake-script-macOS-compatible.patch";
+      url = "https://github.com/8bitbubsy/ft2-clone/pull/30/commits/0033a567abf7ddbdb2bc59c7f730d22f986010aa.patch";
+      hash = "sha256-fhA+T6RI+Qmhr7mbG9lEA7esWskgK8+DkWzol0J2lUo=";
+    })
+    (fetchpatch {
+      name = "0002-ft2-clone-Fix-__MACOSX_CORE__-typo.patch";
+      url = "https://github.com/8bitbubsy/ft2-clone/pull/30/commits/fe50aff9233130150a6631875611c7db67a2d705.patch";
+      hash = "sha256-X4AVuJ0iRlpH1N/YzjdVk5+yv7eiDNoZkk0mhOizgOg=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
@@ -37,13 +48,6 @@ stdenv.mkDerivation rec {
          CoreServices
          Cocoa
        ];
-
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
-    "-framework CoreAudio"
-    "-framework CoreMIDI"
-    "-framework CoreServices"
-    "-framework Cocoa"
-  ];
 
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;

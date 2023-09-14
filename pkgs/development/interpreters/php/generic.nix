@@ -159,7 +159,7 @@ let
                 nixos = lib.recurseIntoAttrs nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                 package = tests.php;
               };
-              inherit (php-packages) extensions buildPecl mkExtension;
+              inherit (php-packages) extensions buildPecl mkComposerRepository buildComposerProject composerHooks mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
@@ -271,8 +271,8 @@ let
 
               ./buildconf --copy --force
 
-              if test -f $src/genfiles; then
-                ./genfiles
+              if [ -f "scripts/dev/genfiles" ]; then
+                ./scripts/dev/genfiles
               fi
             '' + lib.optionalString stdenv.isDarwin ''
               substituteInPlace configure --replace "-lstdc++" "-lc++"

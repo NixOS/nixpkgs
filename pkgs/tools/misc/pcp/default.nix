@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-aZO8VuOiYhOPctFKZ6a2psJB0lKHlPc+NLy2RWDU4JI=";
   };
 
-  vendorSha256 = "sha256-3bkzBQ950Phg4A9p+IjeUx7Xw7eVmUbeYnQViNjghFk=";
+  vendorHash = "sha256-3bkzBQ950Phg4A9p+IjeUx7Xw7eVmUbeYnQViNjghFk=";
 
   meta = with lib; {
     description = "Command line peer-to-peer data transfer tool based on libp2p";

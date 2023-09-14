@@ -41,9 +41,9 @@
         version = "2023-06-09";
       };
     };
-    sha256 = "0v3i688wszchyfs10zgax6yyig2wrdb38fhlzmlsbfh5vawpg5pq";
-    sha256bin64 = "1y442x3n76x9ahsw45m8yw65854h7b5zpmp4ipyvlwm5fx15zn6d";
-    version = "116.0.5845.140";
+    sha256 = "152lyrw8k36gbmf4fmfny4ajqh0523y5d48yrshbgwn5klmbhaji";
+    sha256bin64 = "118sk39939d52srws2vgs1mfizpikswxh5ihd9x053vzn0aj8cfa";
+    version = "116.0.5845.187";
   };
   ungoogled-chromium = {
     deps = {
@@ -54,12 +54,12 @@
         version = "2023-06-09";
       };
       ungoogled-patches = {
-        rev = "116.0.5845.140-1";
-        sha256 = "1ydki4hmrx01q39jprv2drln934b589lgy0j7g0y1df7lp02h95n";
+        rev = "116.0.5845.187-1";
+        sha256 = "0br5lms6mxg2mg8ix5mkb79bg6wk5f2hn0xy1xc7gk9h3rl58is1";
       };
     };
-    sha256 = "0v3i688wszchyfs10zgax6yyig2wrdb38fhlzmlsbfh5vawpg5pq";
-    sha256bin64 = "1y442x3n76x9ahsw45m8yw65854h7b5zpmp4ipyvlwm5fx15zn6d";
-    version = "116.0.5845.140";
+    sha256 = "152lyrw8k36gbmf4fmfny4ajqh0523y5d48yrshbgwn5klmbhaji";
+    sha256bin64 = "118sk39939d52srws2vgs1mfizpikswxh5ihd9x053vzn0aj8cfa";
+    version = "116.0.5845.187";
   };
 }

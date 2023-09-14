@@ -128,6 +128,7 @@ stdenv.mkDerivation rec {
     homepage = "https://exim.org/";
     description = "A mail transfer agent (MTA)";
     license = with licenses; [ gpl2Plus bsd3 ];
+    mainProgram = "exim";
     platforms = platforms.linux;
     maintainers = with maintainers; [ tv ajs124 das_j ];
     changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";

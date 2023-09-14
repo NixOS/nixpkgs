@@ -409,9 +409,9 @@ dependencies = [
 
 [[package]]
 name = "codspeed"
-version = "2.1.0"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5aeec2fbed4969dc38b5ca201115dd5c2614b8ef78e0a7221dd5f0977fb1552b"
+checksum = "9b3238416c10f19985b52a937c5b3efc3ed7efe8f7ae263d2aab29a09bca9f57"
 dependencies = [
  "colored",
  "libc",
@@ -420,9 +420,9 @@ dependencies = [
 
 [[package]]
 name = "codspeed-criterion-compat"
-version = "2.1.0"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b13f0a08d40ce7c95bdf288f725b975e62fcadfa8ba152340943bab6de43af7"
+checksum = "fecc18f65b942d2b033545bb3bd8430a23eecbbe53fad3b1342fb0e5514bca7b"
 dependencies = [
  "codspeed",
  "colored",
@@ -522,8 +522,6 @@ dependencies = [
  "num-traits",
  "once_cell",
  "oorandom",
- "plotters",
- "rayon",
  "regex",
  "serde",
  "serde_derive",
@@ -823,7 +821,7 @@ checksum = "0ce7134b9999ecaf8bcd65542e436736ef32ddca1b3e06094cb6ec5755203b80"
 
 [[package]]
 name = "flake8-to-ruff"
-version = "0.0.287"
+version = "0.0.289"
 dependencies = [
  "anyhow",
  "clap",
@@ -1114,9 +1112,21 @@ dependencies = [
  "lazy_static",
  "linked-hash-map",
  "regex",
+ "serde",
  "similar",
  "walkdir",
  "yaml-rust",
+]
+
+[[package]]
+name = "insta-cmd"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "809d3023d1d6e8d5c2206f199251f75cb26180e41f18cb0f22dd119161cb5127"
+dependencies = [
+ "insta",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -1269,12 +1279,12 @@ checksum = "b4668fb0ea861c1df094127ac5f1da3409a82116a4ba74fca2e58ef927159bb3"
 [[package]]
 name = "libcst"
 version = "0.1.0"
-source = "git+https://github.com/Instagram/LibCST.git?rev=3cacca1a1029f05707e50703b49fe3dd860aa839#3cacca1a1029f05707e50703b49fe3dd860aa839"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7773d520d4292e200ab1838f2daabe2feed7549f93b0a3c7582160a09e79ffde"
 dependencies = [
  "chic",
- "itertools",
  "libcst_derive",
- "once_cell",
+ "memchr",
  "paste",
  "peg",
  "regex",
@@ -1284,7 +1294,8 @@ dependencies = [
 [[package]]
 name = "libcst_derive"
 version = "0.1.0"
-source = "git+https://github.com/Instagram/LibCST.git?rev=3cacca1a1029f05707e50703b49fe3dd860aa839#3cacca1a1029f05707e50703b49fe3dd860aa839"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "520197c50ba477f258cd7005ec5ed3a7393693ae6bec664990c7c8d9306a7c0d"
 dependencies = [
  "quote",
  "syn 1.0.109",
@@ -1718,34 +1729,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8afb450f006bf6385ca15ef45d71d2288452bc3683ce2e2cacc0d18e4be60b58"
 
 [[package]]
-name = "plotters"
-version = "0.3.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2c224ba00d7cadd4d5c660deaf2098e5e80e07846537c51f9cfa4be50c1fd45"
-dependencies = [
- "num-traits",
- "plotters-backend",
- "plotters-svg",
- "wasm-bindgen",
- "web-sys",
-]
-
-[[package]]
-name = "plotters-backend"
-version = "0.3.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e76628b4d3a7581389a35d5b6e2139607ad7c75b17aed325f210aa91f4a9609"
-
-[[package]]
-name = "plotters-svg"
-version = "0.3.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38f6d39893cca0701371e3c27294f09797214b86f1fb951b89ade8ec04e2abab"
-dependencies = [
- "plotters-backend",
-]
-
-[[package]]
 name = "pmutil"
 version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2054,7 +2037,7 @@ dependencies = [
 
 [[package]]
 name = "ruff"
-version = "0.0.287"
+version = "0.0.289"
 dependencies = [
  "annotate-snippets 0.9.1",
  "anyhow",
@@ -2152,7 +2135,7 @@ dependencies = [
 
 [[package]]
 name = "ruff_cli"
-version = "0.0.287"
+version = "0.0.289"
 dependencies = [
  "annotate-snippets 0.9.1",
  "anyhow",
@@ -2170,6 +2153,7 @@ dependencies = [
  "glob",
  "ignore",
  "insta",
+ "insta-cmd",
  "is-macro",
  "itertools",
  "itoa",
@@ -2199,6 +2183,7 @@ dependencies = [
  "similar",
  "strum",
  "tempfile",
+ "test-case",
  "thiserror",
  "tikv-jemallocator",
  "tracing",
@@ -2353,7 +2338,6 @@ dependencies = [
  "clap",
  "countme",
  "insta",
- "is-macro",
  "itertools",
  "memchr",
  "once_cell",
@@ -2369,7 +2353,9 @@ dependencies = [
  "serde_json",
  "similar",
  "smallvec",
+ "static_assertions",
  "thiserror",
+ "tracing",
  "unicode-width",
 ]
 
@@ -2415,10 +2401,8 @@ dependencies = [
  "ruff_text_size",
  "rustc-hash",
  "static_assertions",
- "test-case",
  "tiny-keccak",
- "unic-emoji-char",
- "unic-ucd-ident",
+ "unicode-ident",
  "unicode_names2",
 ]
 
@@ -2452,6 +2436,9 @@ dependencies = [
 [[package]]
 name = "ruff_python_stdlib"
 version = "0.0.0"
+dependencies = [
+ "unicode-ident",
+]
 
 [[package]]
 name = "ruff_python_trivia"
@@ -2464,7 +2451,7 @@ dependencies = [
  "ruff_source_file",
  "ruff_text_size",
  "smallvec",
- "unic-ucd-ident",
+ "unicode-ident",
 ]
 
 [[package]]
@@ -3263,34 +3250,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "80d7ff825a6a654ee85a63e80f92f054f904f21e7d12da4e22f9834a4aaa35bc"
 
 [[package]]
-name = "unic-emoji-char"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b07221e68897210270a38bde4babb655869637af0f69407f96053a34f76494d"
-dependencies = [
- "unic-char-property",
- "unic-char-range",
- "unic-ucd-version",
-]
-
-[[package]]
 name = "unic-ucd-category"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1b8d4591f5fcfe1bd4453baaf803c40e1b1e69ff8455c47620440b46efef91c0"
 dependencies = [
  "matches",
- "unic-char-property",
- "unic-char-range",
- "unic-ucd-version",
-]
-
-[[package]]
-name = "unic-ucd-ident"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e230a37c0381caa9219d67cf063aa3a375ffed5bf541a452db16e744bdab6987"
-dependencies = [
  "unic-char-property",
  "unic-char-range",
  "unic-ucd-version",

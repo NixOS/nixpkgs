@@ -10,6 +10,9 @@ let
       poetry = self.callPackage ./unwrapped.nix { };
 
       # version overrides required by poetry and its plugins
+      deepdiff = super.deepdiff.overridePythonAttrs (old: rec {
+        doCheck = false;
+      });
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
         version = "1.7.0";
         src = fetchFromGitHub {
@@ -18,6 +21,7 @@ let
           rev = version;
           hash = "sha256-OfY2zc+5CgOrgbiPVnvMdT4h1S7Aek8S7iThl6azmsk=";
         };
+        patches = [ ];
       });
     } // (plugins self);
   };
