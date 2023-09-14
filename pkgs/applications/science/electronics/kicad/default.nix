@@ -2,22 +2,26 @@
 , runCommand
 , newScope
 , fetchFromGitLab
-, gnome
-, dconf
-, wxGTK32
-, gtk3
 , makeWrapper
-, gsettings-desktop-schemas
-, hicolor-icon-theme
+, symlinkJoin
 , callPackage
 , callPackages
+
+, gnome
+, dconf
+, gtk3
+, wxGTK32
 , librsvg
 , cups
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+
 , unzip
 , jq
 
 , pname ? "kicad"
 , stable ? true
+, testing ? false
 , withNgspice ? !stdenv.isDarwin
 , libngspice
 , withScripting ? true
@@ -29,7 +33,6 @@
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
-, symlinkJoin
 }:
 
 # `addons`: https://dev-docs.kicad.org/en/addons/
@@ -75,7 +78,9 @@
 # }
 
 let
-  baseName = if (stable) then "kicad" else "kicad-unstable";
+  baseName = if (testing) then "kicad-testing"
+    else if (stable) then "kicad"
+    else "kicad-unstable";
   versionsImport = import ./versions.nix;
 
   # versions.nix does not provide us with version, src and rev. We
@@ -154,7 +159,7 @@ stdenv.mkDerivation rec {
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
   passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
-    inherit stable baseName;
+    inherit stable testing baseName;
     inherit kicadSrc kicadVersion;
     inherit wxGTK python wxPython;
     inherit withNgspice withScripting withI18n;
@@ -272,7 +277,8 @@ stdenv.mkDerivation rec {
   meta = rec {
     description = (if (stable)
     then "Open Source Electronics Design Automation suite"
-    else "Open Source EDA suite, development build")
+    else if (testing) then "Open Source EDA suite, latest on stable branch"
+    else "Open Source EDA suite, latest on master branch")
     + (lib.optionalString (!with3d) ", without 3D models");
     homepage = "https://www.kicad.org/";
     longDescription = ''

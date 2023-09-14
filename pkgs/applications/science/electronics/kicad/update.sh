@@ -25,32 +25,44 @@ export TMPDIR=/tmp
 # if there is, default to commiting?
 #   won't work when running in parallel?
 # remove items left in /nix/store?
+# reuse hashes of already checked revs (to avoid redownloading testing's packages3d)
 
 # get the latest tag that isn't an RC or *.99
 latest_tags="$(git ls-remote --tags --sort -version:refname https://gitlab.com/kicad/code/kicad.git)"
 # using a scratch variable to ensure command failures get caught (SC2312)
 scratch="$(grep -o 'refs/tags/[0-9]*\.[0-9]*\.[0-9]*$' <<< "${latest_tags}")"
 scratch="$(grep -ve '\.99' -e '\.9\.9' <<< "${scratch}")"
-scratch="$(head -n 1 <<< "${scratch}")"
+scratch="$(sed -n '1p' <<< "${scratch}")"
 latest_tag="$(cut -d '/' -f 3 <<< "${scratch}")"
 
-all_versions=( "${latest_tag}" master )
+# get the latest branch name for testing
+branches="$(git ls-remote --heads --sort -version:refname https://gitlab.com/kicad/code/kicad.git)"
+scratch="$(grep -o 'refs/heads/[0-9]*\.[0-9]*$' <<< "${branches}")"
+scratch="$(sed -n '1p' <<< "${scratch}")"
+testing_branch="$(cut -d '/' -f 3 <<< "${scratch}")"
+
+# "latest_tag" and "master" directly refer to what we want
+# "testing" uses "testing_branch" found above
+all_versions=( "${latest_tag}" testing master )
 
 prefetch="nix-prefetch-url --unpack --quiet"
 
 clean=""
 check_stable=""
 check_unstable=1
+check_testing=1
 commit=""
 
 for arg in "$@"; do
   case "${arg}" in
     help|-h|--help) echo "Read me!" >&2; exit 1; ;;
-    kicad|release|tag|stable|*small|5*|6*) check_stable=1; check_unstable="" ;;
-    all|both|full) check_stable=1; check_unstable=1 ;;
+    kicad|release|tag|stable|*small|5*|6*|7*|8*) check_stable=1; check_testing=""; check_unstable="" ;;
+    testing) check_testing=1; check_unstable="" ;;
+    master|*unstable) check_unstable=1; check_testing="" ;;
+    latest|now|today) check_unstable=1; check_testing=1 ;;
+    all|both|full) check_stable=1; check_testing=1; check_unstable=1 ;;
+    clean|fix|*fuck) check_stable=1; check_testing=1; check_unstable=1; clean=1 ;;
     commit) commit=1 ;;
-    clean|fix|*fuck) check_stable=1; check_unstable=1; clean=1 ;;
-    master|*unstable|latest|now|today) check_unstable=1 ;;
     *) ;;
   esac
 done
@@ -65,11 +77,7 @@ tmp="${here}/,versions.nix.${RANDOM}"
 libs=( symbols templates footprints packages3d )
 
 get_rev() {
-  if [[ ${version} == "master" ]]; then
-    git ls-remote --heads "$@"
-  else
-    git ls-remote --tags "$@"
-  fi
+    git ls-remote "$@"
 }
 
 gitlab="https://gitlab.com/kicad"
@@ -84,7 +92,7 @@ printf "Latest tag is\t%s\n" "${latest_tag}" >&2
 
 if [[ ! -f ${file} ]]; then
   echo "No existing file, generating from scratch" >&2
-  check_stable=1; check_unstable=1; clean=1
+  check_stable=1; check_testing=1; check_unstable=1; clean=1
 fi
 
 printf "Writing %s\n" "${tmp}" >&2
@@ -100,12 +108,27 @@ for version in "${all_versions[@]}"; do
   if [[ ${version} == "master" ]]; then
     pname="kicad-unstable"
     today="${now}"
+  elif [[ ${version} == "testing" ]]; then
+    pname="kicad-testing"
+    today="${testing_branch}-${now}"
   else
     pname="kicad"
     today="${version}"
   fi
+
+  src_version=${version};
+  lib_version=${version};
+  # testing is the stable branch on the main repo
+  # but the libraries don't have such a branch
+  # only the latest release tag and a master branch
+  if [[ ${version} == "testing" ]]; then
+      src_version=${testing_branch};
+      lib_version=${latest_tag};
+  fi
+
   # skip a version if we don't want to check it
-  if [[ (${version} != "master" && -n ${check_stable}) \
+  if [[ (${version} != "master" && ${version} != "testing" && -n ${check_stable}) \
+     || (${version} == "testing" && -n ${check_testing}) \
      || (${version} == "master" && -n ${check_unstable}) ]]; then
 
     printf "\nChecking %s\n" "${pname}" >&2
@@ -116,7 +139,7 @@ for version in "${all_versions[@]}"; do
         printf "%6ssrc = {\n" ""
 
     echo "Checking src" >&2
-    scratch="$(get_rev "${gitlab}"/code/kicad.git "${version}")"
+    scratch="$(get_rev "${gitlab}"/code/kicad.git "${src_version}")"
     src_rev="$(cut -f1 <<< "${scratch}")"
     has_rev="$(grep -sm 1 "\"${pname}\"" -A 4 "${file}" | grep -sm 1 "${src_rev}" || true)"
     has_hash="$(grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "sha256" || true)"
@@ -141,7 +164,7 @@ for version in "${all_versions[@]}"; do
           for lib in "${libs[@]}"; do
             echo "Checking ${lib}" >&2
             url="${gitlab}/libraries/kicad-${lib}.git"
-            scratch="$(get_rev "${url}" "${version}")"
+            scratch="$(get_rev "${url}" "${lib_version}")"
             scratch="$(cut -f1 <<< "${scratch}")"
             lib_rev="$(tail -n1 <<< "${scratch}")"
             has_rev="$(grep -sm 1 "\"${pname}\"" -A 19 "${file}" | grep -sm 1 "${lib_rev}" || true)"
