@@ -88,7 +88,7 @@ self: super: {
 
   ghc-lib = doDistribute self.ghc-lib_9_6_2_20230523;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_1;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
 
   # v0.1.6 forbids base >= 4.18
   singleton-bool = doDistribute super.singleton-bool_0_1_7;
