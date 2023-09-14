@@ -105,6 +105,14 @@
       "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.2.tar.gz",
       "build_number": "232.9921.48"
     },
+    "rust-rover": {
+      "update-channel": "RustRover EAP",
+      "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.tar.gz",
+      "version": "2023.2 EAP",
+      "sha256": "5a51bcae179467e9c6440bc0c31bffd27c6fc58d593a0cbecd5aeb51508d27b6",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.46.tar.gz",
+      "build_number": "232.9921.46"
+    },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}.tar.gz",

@@ -291,6 +291,18 @@ let
       };
     });
 
+  buildRustRover = { pname, version, src, license, description, wmClass, buildNumber, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk buildNumber;
+      product = "RustRover";
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/rust/";
+        inherit description license platforms;
+        longDescription = description;
+        maintainers = with maintainers; [];
+      };
+    });
+
   buildWebStorm = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
@@ -498,6 +510,20 @@ in
     };
     wmClass = "jetbrains-rubymine";
     update-channel = products.ruby-mine.update-channel;
+  };
+
+  rust-rover = buildRustRover rec {
+    pname = "rust-rover";
+    version = products.rust-rover.version;
+    buildNumber = products.rust-rover.build_number;
+    description = "A cross-platform Rust IDE";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = products.rust-rover.url;
+      sha256 = products.rust-rover.sha256;
+    };
+    wmClass = "jetbrains-rustrover";
+    update-channel = products.rust-rover.update-channel;
   };
 
   webstorm = buildWebStorm rec {
