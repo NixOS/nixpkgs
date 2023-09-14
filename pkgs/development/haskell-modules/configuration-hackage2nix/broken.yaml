@@ -413,7 +413,6 @@ broken-packages:
   - bindings-wlc # failure in job https://hydra.nixos.org/build/233332720 at 2023-09-02
   - bind-marshal # failure in job https://hydra.nixos.org/build/233196758 at 2023-09-02
   - binembed # failure in job https://hydra.nixos.org/build/233219100 at 2023-09-02
-  - binrep # failure in job https://hydra.nixos.org/build/233208877 at 2023-09-02
   - binsm # failure in job https://hydra.nixos.org/build/233232355 at 2023-09-02
   - biocore # failure in job https://hydra.nixos.org/build/233229466 at 2023-09-02
   - bio # failure in job https://hydra.nixos.org/build/233225273 at 2023-09-02
