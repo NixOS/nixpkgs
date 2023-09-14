@@ -20,7 +20,7 @@
 
 let
   pname = "astropy";
-  version = "5.2.1";
+  version = "5.3.3";
 in
 buildPythonPackage {
   inherit pname version;
@@ -30,7 +30,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9q4noHf46oSQPvp2x5C5hWFzQaAISw0hw5H3o/MyrCM=";
+    hash = "sha256-AzDfn116IlQ2fpuM9EJVuhBwsGEjGIxqcu3BgEk/k7s=";
   };
 
   postPatch = ''
