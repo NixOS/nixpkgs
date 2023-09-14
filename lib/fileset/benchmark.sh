@@ -101,3 +101,7 @@ touch d{0..5}/d{0..5}/d{0..5}/d{0..5}/f{0..5}
 bench 'toSource { root = ./.; fileset = ./.; }'
 
 rm -rf -- *
+
+touch {0..1000}
+bench 'toSource { root = ./.; fileset = unions (mapAttrsToList (name: value: ./. + "/${name}") (builtins.readDir ./.)); }'
+rm -rf -- *
