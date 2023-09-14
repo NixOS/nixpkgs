@@ -65,7 +65,7 @@ self: super: {
   # Version deviations from Stackage LTS
   #
 
-  doctest = doDistribute super.doctest_0_22_0;
+  doctest = doDistribute super.doctest_0_22_1;
   http-api-data = doDistribute self.http-api-data_0_6; # allows base >= 4.18
   some = doDistribute self.some_1_0_5;
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
