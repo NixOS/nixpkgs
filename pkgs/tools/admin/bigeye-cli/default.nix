@@ -12,6 +12,16 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-NcSOnsEvyrqGmoFXiqdLCPoC62/Hwd2waiWtMwevUqY=";
   };
 
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    typer
+    importlib-metadata
+    bigeye-sdk
+  ];
+
   meta = with lib; {
     homepage = "https://pypi.org/project/bigeye-cli/";
     description = "Bigeye CLI offers developer tools for maintaining your developer workspace.";

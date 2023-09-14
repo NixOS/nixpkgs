@@ -1398,6 +1398,8 @@ self: super: with self; {
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
 
+  bigeye-sdk = callPackage ../development/python-modules/bigeye-sdk { };
+
   binary = callPackage ../development/python-modules/binary { };
 
   binaryornot = callPackage ../development/python-modules/binaryornot { };
@@ -9013,6 +9015,8 @@ self: super: with self; {
   pydantic-core = callPackage ../development/python-modules/pydantic-core { };
 
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
+
+  pydantic-yaml = callPackage ../development/python-modules/pydantic-yaml { };
 
   pydash = callPackage ../development/python-modules/pydash { };
 
