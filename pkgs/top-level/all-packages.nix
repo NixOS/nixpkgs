@@ -27406,9 +27406,7 @@ with pkgs;
 
   tailscale = callPackage ../servers/tailscale { };
 
-  tailscale-nginx-auth = callPackage ../by-name/ta/tailscale-nginx-auth/package.nix {
-    buildGoModule = buildGo121Module;
-  };
+  tailscale-nginx-auth = callPackage ../by-name/ta/tailscale-nginx-auth/package.nix { };
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
