@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xiaoyifang.github.io/goldendict-ng/";
     description = "Advanced multi-dictionary lookup program.";
     platforms = platforms.linux;
+    mainProgram = "goldendict";
     maintainers = with maintainers; [ slbtty ];
     license = licenses.gpl3Plus;
   };
