@@ -368,7 +368,7 @@ stdenv.mkDerivation (finalAttrs: {
   # when cross-compiling.
   + ''
     shopt -s extglob
-    patchShebangs tools test src/!(rpm|ukify) src/kernel-install/test-kernel-install.sh
+    patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
   outputs = [ "out" "man" "dev" ];
