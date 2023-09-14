@@ -19,6 +19,8 @@ mavenJdk11.buildMavenPackage rec {
     hash = "sha256-e2uZgq57Xf9b2i0ZBkijoMWjSGtmgJ+nz8NVT1qMQE4=";
   };
 
+  patches = [ ./pogo-pom-version-enforce.patch ];
+
   postUnpack = ''
     rm -r source/org.tango.pogo.pogo_gui/src/existingcode
   '';
@@ -36,7 +38,7 @@ mavenJdk11.buildMavenPackage rec {
     '';
   };
 
-  mvnHash = "sha256-mN8FfPAGhjJVHGAfd0AYwLuzkE4uaQjE1mr1AKuQapo=";
+  mvnHash = "sha256-o+sz1r/IsDQ+kSSROHaH/UPNyrluGd687iXFTnylXCQ=";
 
   nativeBuildInputs = [ makeWrapper ];
 

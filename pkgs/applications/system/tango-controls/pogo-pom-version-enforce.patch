@@ -1,0 +1,53 @@
+diff --git a/fr.esrf.tango.pogo.parent/pom.xml b/fr.esrf.tango.pogo.parent/pom.xml
+index b64de38..6083d28 100755
+--- a/fr.esrf.tango.pogo.parent/pom.xml
++++ b/fr.esrf.tango.pogo.parent/pom.xml
+@@ -91,8 +91,46 @@
+     </distributionManagement>
+ 
+     <build>
+-        <plugins>
+-            <plugin>
++      <plugins>
++	<plugin>
++	  <groupId>org.apache.maven.plugins</groupId>
++	  <artifactId>maven-install-plugin</artifactId>
++	  <version>2.4</version>
++	</plugin>
++	<plugin>
++	  <groupId>org.apache.maven.plugins</groupId>
++	  <artifactId>maven-site-plugin</artifactId>
++	  <version>3.3</version>
++	</plugin>
++	<plugin>
++	  <groupId>org.apache.maven.plugins</groupId>
++	  <artifactId>maven-surefire-plugin</artifactId>
++	  <version>2.12.4</version>
++	</plugin>
++	<plugin>
++	  <groupId>org.apache.maven.plugins</groupId>
++	  <artifactId>maven-jar-plugin</artifactId>
++	  <version>2.4</version>
++	</plugin>
++	  <plugin>
++	    <groupId>org.apache.maven.plugins</groupId>
++	    <artifactId>maven-enforcer-plugin</artifactId>
++	    <version>3.3.0</version>
++	    <executions>
++	      <execution>
++		<id>enforce-plugin-versions</id>
++		<goals>
++		  <goal>enforce</goal>
++		</goals>
++		<configuration>
++		  <rules>
++		    <requirePluginVersions />
++		  </rules>
++		</configuration>
++	      </execution>
++	    </executions>
++	  </plugin>
++	  <plugin>
+                 <artifactId>maven-deploy-plugin</artifactId>
+                 <version>3.0.0-M1</version>
+             </plugin>
