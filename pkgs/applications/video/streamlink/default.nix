@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "6.1.0";
+  version = "6.2.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FwsgJ9TYBzCHxYlBwxrsOEy/mQH8tAH4JOkZrjh8Q4U=";
+    hash = "sha256-rq4beEhEb5CZjGIyTnEHyPQfjAgmbbxBm4HhzBs1VZo=";
   };
 
   nativeCheckInputs = with python3Packages; [
