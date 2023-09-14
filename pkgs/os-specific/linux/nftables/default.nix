@@ -1,9 +1,10 @@
 { lib, stdenv, fetchurl, pkg-config, bison, flex
 , asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
 , libmnl, libnftnl, libpcap
-, gmp, jansson, libedit
+, gmp, jansson
 , autoreconfHook
 , withDebugSymbols ? false
+, withCli ? true, libedit
 , withPython ? false, python3
 , withXtables ? true, iptables
 , nixosTests
@@ -26,8 +27,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libmnl libnftnl libpcap
-    gmp jansson libedit
-  ] ++ lib.optional withXtables iptables
+    gmp jansson
+  ] ++ lib.optional withCli libedit
+    ++ lib.optional withXtables iptables
     ++ lib.optionals withPython [
       python3
       python3.pkgs.setuptools
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-json"
-    "--with-cli=editline"
+    (lib.withFeatureAs withCli "cli" "editline")
   ] ++ lib.optional (!withDebugSymbols) "--disable-debug"
     ++ lib.optional (!withPython) "--disable-python"
     ++ lib.optional withPython "--enable-python"
