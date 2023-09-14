@@ -13,7 +13,7 @@
 , SDL2
 , libGL
 , withSDL2 ? false
-, withPipewire ? false
+, withPipewire ? true
 }:
 
 stdenv.mkDerivation rec {

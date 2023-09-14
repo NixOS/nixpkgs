@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "pytest-cid";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "flit";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ntninja";
     repo = pname;
-    rev = "1ff9ec43ac9eaf76352ea7e7a060cd081cb8b68a"; # Version has no git tag
-    hash = "sha256-H2RtMGYWukowTTfqZSx+hikxzkqw1v5bA4AfZfiVl8U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dcL/i5+scmdXh7lfE8+32w9PdHWf+mkunJL1vpJ5+Co=";
   };
 
   postPatch = ''

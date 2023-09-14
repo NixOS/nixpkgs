@@ -45,5 +45,9 @@ in
         names);
     };
   };
-  meta.maintainers = with lib.maintainers; [ linsui ];
+  meta = {
+    maintainers = with lib.maintainers; [ linsui ];
+    # The version of the package is used in the doc.
+    buildDocsInSandbox = false;
+  };
 }

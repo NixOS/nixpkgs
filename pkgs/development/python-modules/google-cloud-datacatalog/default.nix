@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datacatalog";
-  version = "3.15.0";
+  version = "3.15.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TY/HrTDlo6cq50bSaRVuZyt1rThB9BPiQW0RS98gIo8=";
+    hash = "sha256-XihIFu8TUrZgQqJ43LJVB0vCIjf89MpGfmDXS5yUuoM=";
   };
 
   propagatedBuildInputs = [

@@ -41,6 +41,7 @@
 , dart-sass-embedded
 , jq
 , moreutils
+, terser
 
 , plugins ? []
 }@args:
@@ -223,7 +224,7 @@ let
       postgresql
       redis
       nodePackages.uglify-js
-      nodePackages.terser
+      terser
       nodePackages.patch-package
       yarn
       nodejs_16

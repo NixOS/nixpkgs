@@ -1695,7 +1695,9 @@ let
 
     tar = callPackage ../development/ocaml-modules/tar { };
 
-    tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix { };
+    tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix {
+      inherit (pkgs) git;
+    };
 
     tcpip = callPackage ../development/ocaml-modules/tcpip { };
 

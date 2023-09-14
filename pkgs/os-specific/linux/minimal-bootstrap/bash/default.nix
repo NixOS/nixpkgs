@@ -95,4 +95,5 @@ bootBash.runCommand "${pname}-${version}" {
 
   # Install
   make install
+  ln -s bash $out/bin/sh
 ''
