@@ -124,18 +124,19 @@ checkFileset() (
     local fileset=$1
 
     # Process the tree into separate arrays for included paths, excluded paths and excluded files.
-    # Also create all the paths in the local directory
     local -a included=()
     local -a excluded=()
     local -a excludedFiles=()
+    # Track which paths need to be created
+    local -a dirsToCreate=()
+    local -a filesToCreate=()
     for p in "${!tree[@]}"; do
         # If keys end with a `/` we treat them as directories, otherwise files
         if [[ "$p" =~ /$ ]]; then
-            mkdir -p "$p"
+            dirsToCreate+=("$p")
             isFile=
         else
-            mkdir -p "$(dirname "$p")"
-            touch "$p"
+            filesToCreate+=("$p")
             isFile=1
         fi
         case "${tree[$p]}" in
@@ -152,6 +153,19 @@ checkFileset() (
                 die "Unsupported tree value: ${tree[$p]}"
         esac
     done
+
+    # Create all the necessary paths.
+    # This is done with only a fixed number of processes,
+    # in order to not be too slow
+    # Though this does mean we're a bit limited with how many files can be created
+    if (( ${#dirsToCreate[@]} != 0 )); then
+        mkdir -p "${dirsToCreate[@]}"
+    fi
+    if (( ${#filesToCreate[@]} != 0 )); then
+        readarray -d '' -t parentsToCreate < <(dirname -z "${filesToCreate[@]}")
+        mkdir -p "${parentsToCreate[@]}"
+        touch "${filesToCreate[@]}"
+    fi
 
     # Start inotifywait in the background to monitor all excluded files (if any)
     if [[ -n "$canMonitorFiles" ]] && (( "${#excludedFiles[@]}" != 0 )); then
