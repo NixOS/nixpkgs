@@ -9,15 +9,16 @@ in {
 
   options = {
     virtualisation.lxc = {
-      privilegedContainer = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether this LXC container will be running as a privileged container or not. If set to `true` then
-          additional configuration will be applied to the `systemd` instance running within the container as
-          recommended by [distrobuilder](https://linuxcontainers.org/distrobuilder/introduction/).
-        '';
-      };
+      nestedContainer = lib.mkEnableOption (lib.mdDoc ''
+        Whether this container is configured as a nested container. On LXD containers this is recommended
+          for all containers and is enabled with `security.nesting = true`.
+      '');
+
+      privilegedContainer = lib.mkEnableOption (lib.mdDoc ''
+        Whether this LXC container will be running as a privileged container or not. If set to `true` then
+        additional configuration will be applied to the `systemd` instance running within the container as
+        recommended by [distrobuilder](https://linuxcontainers.org/distrobuilder/introduction/).
+      '');
     };
   };
 
