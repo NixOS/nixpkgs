@@ -322,9 +322,12 @@ rec {
 
   # BSDs
 
-  x86_64-freebsd = {
-    config = "x86_64-freebsd13";
+  x86_64-freebsd13 = {
+    config = "x86_64-unknown-freebsd13";
     useLLVM = true;
+  };
+  x86_64-freebsd14 = {
+    config = "x86_64-unknown-freebsd14";
   };
 
   x86_64-netbsd = {
