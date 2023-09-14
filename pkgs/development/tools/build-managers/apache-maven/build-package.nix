@@ -10,6 +10,8 @@
 , version
 , mvnHash ? ""
 , mvnFetchExtraArgs ? { }
+, mvnDepsParameters ? ""
+, manualMvnArtifactIds ? [ ]
 , mvnParameters ? ""
 , ...
 } @args:
@@ -29,7 +31,13 @@ let
     buildPhase = ''
       runHook preBuild
 
-      mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}
+      mvn dependency:go-offline -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}
+
+      for artifactId in ${builtins.toString manualMvnArtifactIds}
+      do
+        echo "downloading manual $artifactId"
+        mvn dependency:get -Dartifact="$artifactId" -Dmaven.repo.local=$out/.m2
+      done
 
       runHook postBuild
     '';
@@ -65,7 +73,7 @@ stdenv.mkDerivation (builtins.removeAttrs args [ "mvnFetchExtraArgs" ] // {
     runHook preBuild
 
     mvnDeps=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)
-    mvn package --offline "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnParameters}
+    mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnParameters}
 
     runHook postBuild
   '';
