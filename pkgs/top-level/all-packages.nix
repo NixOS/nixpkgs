@@ -17209,6 +17209,8 @@ with pkgs;
 
   cauwugo = callPackage ../development/tools/rust/cauwugo { };
 
+  cfclient = with python3Packages; toPythonApplication cfclient;
+
   crate2nix = callPackage ../development/tools/rust/crate2nix { };
 
   critcmp = callPackage ../development/tools/rust/critcmp { };

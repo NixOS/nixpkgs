@@ -1900,6 +1900,10 @@ self: super: with self; {
 
   certvalidator = callPackage ../development/python-modules/certvalidator { };
 
+  cfclient = callPackage ../development/python-modules/cfclient {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
+
   cffi = callPackage ../development/python-modules/cffi { };
 
   cffsubr = callPackage ../development/python-modules/cffsubr { };
