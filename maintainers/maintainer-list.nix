@@ -301,6 +301,12 @@
     githubId = 1174810;
     name = "Nikolay Amiantov";
   };
+  abdiramen = {
+    email = "abdirahman.osmanthus@gmail.com";
+    github = "Abdiramen";
+    githubId = 15805292;
+    name = "Abdirahman Osman";
+  };
   abhi18av = {
     email = "abhi18av@gmail.com";
     github = "abhi18av";
