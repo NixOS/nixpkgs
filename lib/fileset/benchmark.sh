@@ -45,12 +45,29 @@ declare -a stats=(
     ".values.number"
 )
 
-# TODO: Measure time
+runs=10
+
 run() {
-    NIX_PATH=nixpkgs=$1 NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH=$tmp/stats.json \
-        nix-instantiate --eval --strict --show-trace >/dev/null \
-        --expr 'with import <nixpkgs/lib>; with fileset; '"$2"
-    cat "$tmp/stats.json"
+    # Empty the file
+    : > cpuTimes
+
+    for i in $(seq 0 "$runs"); do
+        NIX_PATH=nixpkgs=$1 NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH=$tmp/stats.json \
+            nix-instantiate --eval --strict --show-trace >/dev/null \
+            --expr 'with import <nixpkgs/lib>; with fileset; '"$2"
+
+        # Only measure the time after the first run, one is warmup
+        if (( i > 0 )); then
+            jq '.cpuTime' "$tmp/stats.json" >> cpuTimes
+        fi
+    done
+
+    # Compute mean and standard deviation
+    read -r mean sd < <(sta --mean --sd --brief <cpuTimes)
+
+    jq --argjson mean "$mean" --argjson sd "$sd" \
+        '.cpuTimeMean = $mean | .cpuTimeSd = $sd' \
+        "$tmp/stats.json"
 }
 
 bench() {
@@ -64,6 +81,20 @@ bench() {
         #echo "Running benchmark on $compareTo" >&2
         run "$tmp/worktree" "$1" > "$tmp/old.json"
     )
+
+    read -r oldMean oldSd newMean newSd percentageMean percentageSd < \
+        <(jq -rn --slurpfile old "$tmp/old.json" --slurpfile new "$tmp/new.json" \
+        ' $old[0].cpuTimeMean as $om
+        | $old[0].cpuTimeSd as $os
+        | $new[0].cpuTimeMean as $nm
+        | $new[0].cpuTimeSd as $ns
+        | (100 / $om * $nm) as $pm
+        # Copied from https://github.com/sharkdp/hyperfine/blob/b38d550b89b1dab85139eada01c91a60798db9cc/src/benchmark/relative_speed.rs#L46-L53
+        | ($pm * pow(pow($ns / $nm; 2) + pow($os / $om; 2); 0.5)) as $ps
+        | [ $om, $os, $nm, $ns, $pm, $ps ]
+        | @sh')
+
+    echo -e "Mean CPU time $newMean (σ = $newSd) for $runs runs is \e[0;33m$percentageMean% (σ = $percentageSd%)\e[0m of the old value $oldMean (σ = $oldSd)" >&2
 
     different=0
     for stat in "${stats[@]}"; do
