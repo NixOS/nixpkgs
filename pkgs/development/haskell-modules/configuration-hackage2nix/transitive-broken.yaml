@@ -741,7 +741,6 @@ dont-distribute-packages:
  - bytable
  - bytehash
  - bytelog
- - bytepatch
  - bytestring-builder-varword
  - bytestring-read
  - ca
