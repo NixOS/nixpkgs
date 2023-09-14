@@ -569,8 +569,27 @@ in {
             };
 
             url_preview_url_blacklist = mkOption {
-              type = types.listOf types.str;
+              # FIXME revert to just `listOf (attrsOf str)` after some time(tm).
+              type = types.listOf (
+                types.coercedTo
+                  types.str
+                  (const (throw ''
+                    Setting `config.services.matrix-synapse.settings.url_preview_url_blacklist`
+                    to a list of strings has never worked. Due to a bug, this was the type accepted
+                    by the module, but in practice it broke on runtime and as a result, no URL
+                    preview worked anywhere if this was set.
+
+                    See https://matrix-org.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
+                    on how to configure it properly.
+                  ''))
+                  (types.attrsOf types.str));
               default = [];
+              example = literalExpression ''
+                [
+                  { scheme = "http"; } # no http previews
+                  { netloc = "www.acme.com"; path = "/foo"; } # block http(s)://www.acme.com/foo
+                ]
+              '';
               description = lib.mdDoc ''
                 Optional list of URL matches that the URL preview spider is
                 denied from accessing.
