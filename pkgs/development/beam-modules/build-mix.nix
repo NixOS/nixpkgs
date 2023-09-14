@@ -87,6 +87,12 @@ let
         fi
       done
 
+      # Copy the source so it can be used by dependent packages. For example,
+      # phoenix applications need the source of phoenix and phoenix_html to
+      # build javascript and css assets.
+      mkdir -p $out/src
+      cp -r $src/* "$out/src"
+
       runHook postInstall
     '';
 

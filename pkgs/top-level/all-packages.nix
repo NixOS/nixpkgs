@@ -5684,8 +5684,8 @@ with pkgs;
   hyprdim = callPackage ../applications/misc/hyprdim { };
 
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
-    wlroots = pkgs.callPackage ../applications/window-managers/hyprwm/hyprland/wlroots.nix { };
-    udis86 = pkgs.callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
+    wlroots = callPackage ../applications/window-managers/hyprwm/hyprland/wlroots.nix { };
+    udis86 = callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
   };
 
   hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
@@ -5693,8 +5693,6 @@ with pkgs;
   hyprland-per-window-layout = callPackage ../tools/wayland/hyprland-per-window-layout { };
 
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
-
-  hyprland-share-picker = libsForQt5.callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland/hyprland-share-picker.nix { };
 
   hyprnome = callPackage ../applications/misc/hyprnome { };
 
@@ -15444,8 +15442,6 @@ with pkgs;
   powerline = with python3Packages; toPythonApplication powerline;
 
   ### DEVELOPMENT / COMPILERS
-
-  _4th = callPackage ../development/compilers/4th { };
 
   temurin-bin-20 = javaPackages.compiler.temurin-bin.jdk-20;
   temurin-jre-bin-20 = javaPackages.compiler.temurin-bin.jre-20;
@@ -36888,7 +36884,10 @@ with pkgs;
 
   xdg-desktop-portal-gtk = callPackage ../development/libraries/xdg-desktop-portal-gtk { };
 
-  xdg-desktop-portal-hyprland = callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland { };
+  xdg-desktop-portal-hyprland = callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland {
+    stdenv = gcc13Stdenv;
+    inherit (qt6) qtbase qttools qtwayland wrapQtAppsHook;
+  };
 
   xdg-desktop-portal-wlr = callPackage ../development/libraries/xdg-desktop-portal-wlr { };
 

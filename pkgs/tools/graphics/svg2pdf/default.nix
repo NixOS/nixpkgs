@@ -1,26 +1,26 @@
 { lib
 , rustPlatform
-, fetchCrate
+, fetchFromGitHub
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "svg2pdf";
-  version = "0.6.0";
-  # This cargo package is usually a library, hence it does not track a
-  # Cargo.lock by default so we use fetchCrate
-  src = fetchCrate {
-    inherit version pname;
-    sha256 = "sha256-RZpJ2HNqO1y6ZQjxdd7LEH2yS5QyjSqQFuyU4BwFA+4=";
-  };
-  cargoHash = "sha256-wJr1K/PUewScGjVLBmg9lpDKyn5CIUK2zac9/+JvnbE=";
-  buildFeatures = [ "cli" ];
+  version = "0.7.0";
 
-  doCheck = true;
+  src = fetchFromGitHub {
+    owner = "typst";
+    repo = "svg2pdf";
+    rev = "v${version}";
+    hash = "sha256-X5L3UA/BJw8M2G35biCQjExYe68fB14meW4ILPEyesc=";
+  };
+  cargoHash = "sha256-zR4nKzbbCzSM1JVxj3nk6yQAfpPmfVQGabkU7lzLAi0=";
+  buildFeatures = [ "cli" ];
 
   meta = with lib; {
     description = "Convert SVG files to PDFs";
     homepage = "https://github.com/typst/svg2pdf";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ doronbehar ];
+    changelog = "https://github.com/typst/svg2pdf/releases/tag/${src.rev}";
+    license = with licenses; [ asl20 mit ];
+    maintainers = with maintainers; [ doronbehar figsoda ];
   };
 }
