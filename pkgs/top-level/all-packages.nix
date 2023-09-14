@@ -2674,8 +2674,11 @@ with pkgs;
 
   mainsail = callPackage ../applications/misc/mainsail { };
 
-  # Does not build with default Haskell version because upstream uses a newer Cabal version.
-  mailctl = haskell.packages.ghc94.callPackage ../tools/networking/mailctl { };
+  mailctl = (haskellPackages.callPackage ../tools/networking/mailctl {}).overrideScope (final: prev: {
+    # Dependency twain requires an older version of http2, and we cannot mix
+    # versions of transitive dependencies.
+    http2 = final.http2_3_0_3;
+  });
 
   mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
@@ -13112,6 +13115,8 @@ with pkgs;
 
   shelldap = callPackage ../tools/misc/shelldap { };
 
+  shellify = haskellPackages.shellify.bin;
+
   shellspec = callPackage ../tools/misc/shellspec { };
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
@@ -20371,6 +20376,8 @@ with pkgs;
   strace = callPackage ../development/tools/misc/strace { };
 
   strace-analyzer = callPackage ../development/tools/misc/strace-analyzer { };
+
+  stylelint = callPackage ../development/tools/analysis/stylelint { };
 
   stylua = callPackage ../development/tools/stylua { };
 
@@ -30766,7 +30773,9 @@ with pkgs;
 
   ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
 
-  schismtracker = callPackage ../applications/audio/schismtracker { };
+  schismtracker = callPackage ../applications/audio/schismtracker {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   jnetmap = callPackage ../applications/networking/jnetmap { };
 
@@ -41571,6 +41580,8 @@ with pkgs;
   vokoscreen-ng = libsForQt5.callPackage ../applications/video/vokoscreen-ng {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly;
   };
+
+  vsc-leetcode-cli = callPackage ../tools/misc/vsc-leetcode-cli { };
 
   vsh = callPackage ../tools/misc/vsh { };
 

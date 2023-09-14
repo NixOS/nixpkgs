@@ -17,8 +17,6 @@ let
         (haskell.lib.compose.overrideCabal (oldAttrs: {
           changelog = "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
         }))
-        haskell.lib.compose.unmarkBroken
-        haskell.lib.compose.doDistribute
       ];
 in
 
