@@ -44,7 +44,7 @@ yarn2nix-moretea.mkYarnPackage {
 
   meta = with lib; {
     description = "Computer management web app";
-    homepage = "https://meshcentral.com/info/";
+    homepage = "https://meshcentral.com/";
     maintainers = [ maintainers.lheckemann ];
     license = licenses.asl20;
   };
