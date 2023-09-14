@@ -23,7 +23,7 @@ in stdenv'.mkDerivation (rec {
   nativeBuildInputs = with pkgs; with buildPackages.freebsd; [
     bsdSetupHook freebsdSetupHook
     makeMinimal
-    install tsort lorder mandoc groff #statHook
+    install tsort lorder mandoc groff #statHook # TODO remove gnugrep and coreutils
   ];
   buildInputs = compatIfNeeded;
 
