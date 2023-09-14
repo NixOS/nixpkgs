@@ -5,34 +5,27 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "1.0.1";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7a6xoqbAmnGVUVppQTSo4hH44XFCqBnF7xO7sOVySY0=";
+    hash = "sha256-Ipj3ltuewbMIUYRffxxPcJgIPxP5dJAkHpo14ZZKq+k=";
   };
-
-  # Required versions not available
-  pythonRelaxDeps = [
-    "textual"
-    "tzlocal"
-  ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    textual
-    pyperclip
-    pyyaml
-    dateparser
-    tzlocal
     appdirs
+    pyperclip
+    python-dateutil
+    pyyaml
+    textual
+    tzlocal
   ];
 
   # No tests available
