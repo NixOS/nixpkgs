@@ -28,38 +28,6 @@ work="$tmp/work"
 mkdir "$work"
 cd "$work"
 
-# Create a fairly populated tree
-touch f{0..5}
-mkdir d{0..5}
-mkdir e{0..5}
-touch d{0..5}/f{0..5}
-mkdir -p d{0..5}/d{0..5}
-mkdir -p e{0..5}/e{0..5}
-touch d{0..5}/d{0..5}/f{0..5}
-mkdir -p d{0..5}/d{0..5}/d{0..5}
-mkdir -p e{0..5}/e{0..5}/e{0..5}
-touch d{0..5}/d{0..5}/d{0..5}/f{0..5}
-mkdir -p d{0..5}/d{0..5}/d{0..5}/d{0..5}
-mkdir -p e{0..5}/e{0..5}/e{0..5}/e{0..5}
-touch d{0..5}/d{0..5}/d{0..5}/d{0..5}/f{0..5}
-
-bench() {
-    NIX_PATH=nixpkgs=$1 NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH=$tmp/stats.json \
-        nix-instantiate --eval --strict --show-trace >/dev/null \
-        --expr '(import <nixpkgs/lib>).fileset.toSource { root = ./.; fileset = ./.; }'
-    cat "$tmp/stats.json"
-}
-
-echo "Running benchmark on index" >&2
-bench "$nixpkgs" > "$tmp/new.json"
-(
-    echo "Checking out $compareTo" >&2
-    git -C "$nixpkgs" worktree add --quiet "$tmp/worktree" "$compareTo"
-    trap 'git -C "$nixpkgs" worktree remove "$tmp/worktree"' EXIT
-    echo "Running benchmark on $compareTo" >&2
-    bench "$tmp/worktree" > "$tmp/old.json"
-)
-
 declare -a stats=(
     ".envs.elements"
     ".envs.number"
@@ -77,18 +45,59 @@ declare -a stats=(
     ".values.number"
 )
 
-different=0
-for stat in "${stats[@]}"; do
-    oldValue=$(jq "$stat" "$tmp/old.json")
-    newValue=$(jq "$stat" "$tmp/new.json")
-    if (( oldValue != newValue )); then
-        percent=$(bc <<< "scale=100; result = 100/$oldValue*$newValue; scale=4; result / 1")
-        if (( oldValue < newValue )); then
-            echo -e "Statistic $stat ($newValue) is \e[0;31m$percent% (+$(( newValue - oldValue )))\e[0m of the old value $oldValue" >&2
-        else
-            echo -e "Statistic $stat ($newValue) is \e[0;32m$percent% (-$(( oldValue - newValue )))\e[0m of the old value $oldValue" >&2
+# TODO: Measure time
+run() {
+    NIX_PATH=nixpkgs=$1 NIX_SHOW_STATS=1 NIX_SHOW_STATS_PATH=$tmp/stats.json \
+        nix-instantiate --eval --strict --show-trace >/dev/null \
+        --expr 'with import <nixpkgs/lib>; with fileset; '"$2"
+    cat "$tmp/stats.json"
+}
+
+bench() {
+    echo "Benchmarking expression $1" >&2
+    #echo "Running benchmark on index" >&2
+    run "$nixpkgs" "$1" > "$tmp/new.json"
+    (
+        #echo "Checking out $compareTo" >&2
+        git -C "$nixpkgs" worktree add --quiet "$tmp/worktree" "$compareTo"
+        trap 'git -C "$nixpkgs" worktree remove "$tmp/worktree"' EXIT
+        #echo "Running benchmark on $compareTo" >&2
+        run "$tmp/worktree" "$1" > "$tmp/old.json"
+    )
+
+    different=0
+    for stat in "${stats[@]}"; do
+        oldValue=$(jq "$stat" "$tmp/old.json")
+        newValue=$(jq "$stat" "$tmp/new.json")
+        if (( oldValue != newValue )); then
+            percent=$(bc <<< "scale=100; result = 100/$oldValue*$newValue; scale=4; result / 1")
+            if (( oldValue < newValue )); then
+                echo -e "Statistic $stat ($newValue) is \e[0;31m$percent% (+$(( newValue - oldValue )))\e[0m of the old value $oldValue" >&2
+            else
+                echo -e "Statistic $stat ($newValue) is \e[0;32m$percent% (-$(( oldValue - newValue )))\e[0m of the old value $oldValue" >&2
+            fi
+            (( different++ )) || true
         fi
-        (( different++ )) || true
-    fi
-done
-echo "$different stats differ between the current tree and $compareTo"
+    done
+    echo "$different stats differ between the current tree and $compareTo"
+    echo ""
+}
+
+# Create a fairly populated tree
+touch f{0..5}
+mkdir d{0..5}
+mkdir e{0..5}
+touch d{0..5}/f{0..5}
+mkdir -p d{0..5}/d{0..5}
+mkdir -p e{0..5}/e{0..5}
+touch d{0..5}/d{0..5}/f{0..5}
+mkdir -p d{0..5}/d{0..5}/d{0..5}
+mkdir -p e{0..5}/e{0..5}/e{0..5}
+touch d{0..5}/d{0..5}/d{0..5}/f{0..5}
+mkdir -p d{0..5}/d{0..5}/d{0..5}/d{0..5}
+mkdir -p e{0..5}/e{0..5}/e{0..5}/e{0..5}
+touch d{0..5}/d{0..5}/d{0..5}/d{0..5}/f{0..5}
+
+bench 'toSource { root = ./.; fileset = ./.; }'
+
+rm -rf -- *
