@@ -60,7 +60,8 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/twisted/twisted/pull/11787.diff";
+      name = "11787.diff";
+      url = "https://github.com/twisted/twisted/commit/da3bf3dc29f067e7019b2a1c205834ab64b2139a.diff";
       hash = "sha256-bQgUmbvDa61Vg8p/o/ivfkOAHyj1lTgHkrRVEGLM9aU=";
     })
     (fetchpatch {
