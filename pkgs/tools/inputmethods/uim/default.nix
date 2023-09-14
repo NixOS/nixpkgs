@@ -6,7 +6,7 @@
 , withGtk ? true
 , withGtk2 ? withGtk, gtk2 ? null
 , withGtk3 ? withGtk, gtk3 ? null
-, withQt ? true
+, withQt ? false # Build with qt5 support is broken and qt4 support has been removed; no qt for now
 , withQt5 ? withQt, qt5 ? null
 , withLibnotify ? true, libnotify ? null
 , withSqlite ? true, sqlite ? null
