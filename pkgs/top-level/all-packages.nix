@@ -15541,6 +15541,8 @@ with pkgs;
 
   bfc = callPackage ../development/compilers/bfc { };
 
+  bigeye-cli = python3Packages.callPackage ../tools/admin/bigeye-cli { };
+
   bigloo = callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen {
