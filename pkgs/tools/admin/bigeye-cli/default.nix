@@ -2,13 +2,15 @@
 , python3
 , fetchPypi
 }:
+
 python3.pkgs.buildPythonApplication rec {
-  pname = "bigeye_cli";
+  pname = "bigeye-cli";
   version = "0.3.42";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "bigeye_cli";
+    inherit version;
     hash = "sha256-NcSOnsEvyrqGmoFXiqdLCPoC62/Hwd2waiWtMwevUqY=";
   };
 
@@ -20,12 +22,14 @@ python3.pkgs.buildPythonApplication rec {
     typer
     importlib-metadata
     bigeye-sdk
+    # (pydantic-yaml.overrideAttrs(_: { version = "0.8.1"; }))
   ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/bigeye-cli/";
-    description = "Bigeye CLI offers developer tools for maintaining your developer workspace.";
+    description = "Offers developer tools for maintaining your developer workspace.";
     mainProgram = "bigeye";
-    maintainers = with maintainers; [ ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ sree ];
   };
 }

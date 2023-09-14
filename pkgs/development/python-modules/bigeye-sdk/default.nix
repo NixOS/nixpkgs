@@ -2,13 +2,24 @@
 , python3
 , fetchPypi
 }:
-python3.pkgs.buildPythonPackage rec {
-  pname = "bigeye_sdk";
+
+let 
+  old-pydantic-yaml = python3.pkgs.pydantic-yaml.overrideAttrs(_: {
+    version = "0.8.1";
+    src = fetchPypi {
+      pname = "pydantic_yaml";
+      version = "0.8.1";
+      hash = "sha256-c5BaTmeCZtq+QXk93RaeqUUPkYE1gyLgCAL6Tugf+BY=";
+    };
+  });
+in python3.pkgs.buildPythonPackage rec {
+  pname = "bigeye-sdk";
   version = "0.4.62";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "bigeye_sdk";
+    inherit version;
     hash = "sha256-nP/TArEJ9Zt98hBSz4oZNSohjdK06XIs3JmKNYvrCyo=";
   };
 
@@ -32,13 +43,14 @@ python3.pkgs.buildPythonPackage rec {
     smart-open
     boto3
     secretstorage
-    pydantic-yaml
+    old-pydantic-yaml
   ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/bigeye-sdk/";
-    description = "Bigeye SDK offers developer tools and clients to interact with Bigeye programmatically.";
+    description = "Offers developer tools and clients to interact with Bigeye programmatically.";
     mainProgram = "bigeye";
-    maintainers = with maintainers; [ ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ sree ];
   };
 }
