@@ -14,5 +14,8 @@ in {
       path = [ pkgs.gnupg ];
       wantedBy = [ "graphical-session.target" ];
     };
+    systemd.user.sockets.yubikey-touch-detector = {
+      wantedBy = [ "sockets.target" ];
+    };
   };
 }
