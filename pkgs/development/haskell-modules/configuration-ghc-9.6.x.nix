@@ -175,7 +175,7 @@ self: super: {
       hls-floskell-plugin = null;
     };
 
-  fourmolu = super.fourmolu_0_13_1_0;
+  fourmolu = super.fourmolu_0_14_0_0;
   ormolu = super.ormolu_0_7_1_0;
   stylish-haskell = super.stylish-haskell_0_14_5_0;
 

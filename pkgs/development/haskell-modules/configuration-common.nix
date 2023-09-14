@@ -316,7 +316,7 @@ self: super: {
 
   # Overriding the version pandoc dependency uses as the latest release has version bounds
   # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  patat = super.patat.override { pandoc = self.pandoc_3_1_6_1; };
+  patat = super.patat.override { pandoc = self.pandoc_3_1_8; };
 
   # http2 also overridden in all-packages.nix for mailctl.
   # twain is currently only used by mailctl, so the .overrideScope shouldn't
@@ -1923,10 +1923,10 @@ self: super: {
   inherit (let
     pandoc-cli-overlay = self: super: {
       # pandoc-cli requires pandoc >= 3.1
-      pandoc = self.pandoc_3_1_6_1;
+      pandoc = self.pandoc_3_1_8;
 
       # pandoc depends on crypton-connection, which requires tls >= 1.7
-      tls = self.tls_1_7_1;
+      tls = self.tls_1_9_0;
       crypton-connection = unmarkBroken super.crypton-connection;
 
       # pandoc depends on http-client-tls, which only starts depending
@@ -1935,11 +1935,11 @@ self: super: {
     };
   in {
     pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
-    pandoc_3_1_6_1 = doDistribute (super.pandoc_3_1_6_1.overrideScope pandoc-cli-overlay);
+    pandoc_3_1_8 = doDistribute (super.pandoc_3_1_8.overrideScope pandoc-cli-overlay);
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
     pandoc-cli
-    pandoc_3_1_6_1
+    pandoc_3_1_8
     pandoc-lua-engine
     ;
 
@@ -2765,7 +2765,7 @@ self: super: {
 
   # Tests fail due to the newly-build fourmolu not being in PATH
   # https://github.com/fourmolu/fourmolu/issues/231
-  fourmolu_0_13_1_0 = dontCheck super.fourmolu_0_13_1_0;
+  fourmolu_0_14_0_0 = dontCheck super.fourmolu_0_14_0_0;
 
   # Merged upstream, but never released. Allows both intel and aarch64 darwin to build.
   # https://github.com/vincenthz/hs-gauge/pull/106

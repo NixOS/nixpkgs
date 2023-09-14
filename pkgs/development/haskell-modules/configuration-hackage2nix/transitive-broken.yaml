@@ -1121,7 +1121,6 @@ dont-distribute-packages:
  - dfinity-radix-tree
  - dhall-secret
  - dia-functions
- - diagrams-reflex
  - diagrams-wx
  - dialog
  - diff
@@ -1468,6 +1467,7 @@ dont-distribute-packages:
  - gargoyle-postgresql
  - gargoyle-postgresql-connect
  - gargoyle-postgresql-nix
+ - gbs-downloader
  - gbu
  - gdax
  - gdiff-ig
@@ -2210,6 +2210,8 @@ dont-distribute-packages:
  - http-client-rustls
  - http-client-tls_0_3_6_3
  - http-enumerator
+ - http-exchange
+ - http-exchange-instantiations
  - http-io-streams
  - http-response-decoder
  - http2-client-exe
@@ -2391,7 +2393,6 @@ dont-distribute-packages:
  - json-query
  - json-rpc-client
  - json-schema
- - json-spec
  - json-spec-openapi
  - json-togo
  - json-tokens
@@ -2833,7 +2834,7 @@ dont-distribute-packages:
  - nero-wai
  - nero-warp
  - nested-routes
- - net-mqtt_0_8_5_0
+ - net-mqtt_0_8_6_0
  - net-spider
  - net-spider-cli
  - net-spider-pangraph
@@ -2865,6 +2866,7 @@ dont-distribute-packages:
  - neuron
  - newsletter-mailgun
  - newsynth
+ - ngx-export-distribution
  - ngx-export-tools-extra
  - nikepub
  - nirum
@@ -3168,9 +3170,6 @@ dont-distribute-packages:
  - proton
  - psc-ide
  - psql
- - ptera
- - ptera-core
- - ptera-th
  - puffytools
  - pugs-compat
  - pugs-hsregex
@@ -3267,6 +3266,7 @@ dont-distribute-packages:
  - rbr
  - rc
  - rdioh
+ - react
  - react-flux-servant
  - reactive
  - reactive-banana-sdl
@@ -3292,14 +3292,12 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
- - reflex-dom-colonnade
  - reflex-dynamic-containers
  - reflex-gadt-api
  - reflex-ghci
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
- - reflex-localize-dom
  - reflex-monad-auth
  - reflex-potatoes
  - reflex-process
@@ -3847,6 +3845,7 @@ dont-distribute-packages:
  - tagsoup-navigate
  - tagstew
  - tahoe-chk
+ - tahoe-directory
  - tahoe-great-black-swamp
  - tahoe-ssk
  - tak-ai
@@ -3918,11 +3917,6 @@ dont-distribute-packages:
  - tip-haskell-frontend
  - tip-lib
  - titan
- - tlex
- - tlex-core
- - tlex-debug
- - tlex-encoding
- - tlex-th
  - tls-extra
  - tmpl
  - tn
@@ -3960,7 +3954,6 @@ dont-distribute-packages:
  - trasa-client
  - trasa-extra
  - trasa-form
- - trasa-reflex
  - trasa-server
  - trasa-th
  - traversal-template
