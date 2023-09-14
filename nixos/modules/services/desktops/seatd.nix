@@ -28,7 +28,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ seatd ];
+    environment.systemPackages = with pkgs; [ seatd sdnotify-wrapper ];
     users.groups.seat = lib.mkIf (cfg.group == "seat") {};
 
     systemd.services.seatd = {
@@ -39,8 +39,10 @@ in
       restartIfChanged = false;
 
       serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.seatd.bin}/bin/seatd -u ${cfg.user} -g ${cfg.group} -l ${cfg.logLevel}";
+        Type = "notify";
+        NotifyAccess = "all";
+        SyslogIdentifier = "seatd";
+        ExecStart = "${pkgs.sdnotify-wrapper}/bin/sdnotify-wrapper ${pkgs.seatd.bin}/bin/seatd -n 1 -u ${cfg.user} -g ${cfg.group} -l ${cfg.logLevel}";
         RestartSec = 1;
         Restart = "always";
       };
