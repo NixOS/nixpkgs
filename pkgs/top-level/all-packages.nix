@@ -1819,6 +1819,8 @@ with pkgs;
 
   github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
 
+  gfn-electron = callPackage ../games/gfn-electron { };
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gh-actions-cache = callPackage ../tools/misc/gh-actions-cache { };
