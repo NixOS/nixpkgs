@@ -13751,8 +13751,6 @@ with pkgs;
 
   tdns-cli = callPackage ../tools/networking/tdns-cli { };
 
-  tea = callPackage ../tools/misc/tea { };
-
   teavpn2 = callPackage ../tools/networking/teavpn2 { };
 
   inherit (nodePackages) teck-programmer;
