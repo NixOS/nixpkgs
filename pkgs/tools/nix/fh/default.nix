@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , stdenv
 , darwin
 , gcc
@@ -9,18 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fh";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
     rev = "v${version}";
-    hash = "sha256-9dWd0syDzoyjnhVoOCazRVA4pAAXud+cxggVlxXzJFg=";
+    hash = "sha256-Fxwy+PagG9FYeURQxM0rV1Lx9T+SFt58d2HfiFD5XTc=";
   };
 
-  cargoHash = "sha256-GzS/grxiMlrpJ2OG5BSne4RmSMUXXjKiwYyW4Aj69gc=";
+  cargoHash = "sha256-WbwAW9+c9cemog5Mlb/Czc5VZwFkGLJZzSVckgomiDw=";
 
   nativeBuildInputs = [
+    installShellFiles
     rustPlatform.bindgenHook
   ];
 
@@ -32,6 +34,13 @@ rustPlatform.buildRustPackage rec {
   env = lib.optionalAttrs stdenv.isDarwin {
     NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
   };
+
+  postInstall = ''
+    installShellCompletion --cmd fh \
+      --bash <($out/bin/fh completion bash) \
+      --fish <($out/bin/fh completion fish) \
+      --zsh <($out/bin/fh completion zsh)
+  '';
 
   meta = with lib; {
     description = "The official FlakeHub CLI";
