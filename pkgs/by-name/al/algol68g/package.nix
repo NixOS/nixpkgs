@@ -9,19 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "2.8.4";
+  version = "3.3.22";
 
   src = fetchurl {
     url = "https://jmvdveer.home.xs4all.nl/algol68g-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WCPM0MGP4Qo2ihF8w5JHSMSl0P6N/w2dgY/3PDQlZfA=";
+    hash = "sha256-cSD6lngCy7SC2P7GyUCajk6i863a3vvCjtgZLF0TrIA=";
   };
 
-  outputs = [ "out" ] ++ lib.optional withPDFDoc "doc";
-
-  patches = [
-    # add PNG support
-    ./0001-plotutils-png-support.diff
-  ];
+  outputs = [ "out" "man" ] ++ lib.optional withPDFDoc "doc";
 
   buildInputs = [
     gsl
