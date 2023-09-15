@@ -2,22 +2,25 @@
 
 buildDotnetModule rec {
   pname = "Boogie";
-  version = "2.15.7";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
     rev = "v${version}";
-    sha256 = "16kdvkbx2zwj7m43cra12vhczbpj23wyrdnj0ygxf7np7c2aassp";
+    sha256 = "sha256-yebThnIOpZ5crYsSZtbDj8Gn6DznTNJ4T/TsFR3gWvs=";
   };
 
   projectFile = [ "Source/Boogie.sln" ];
   nugetDeps = ./deps.nix;
 
-  postInstall = ''
-      mkdir -pv "$out/lib/dotnet/${pname}"
-      ln -sv "${z3}/bin/z3" "$out/lib/dotnet/${pname}/z3.exe"
+  executables = [ "BoogieDriver" ];
 
+  makeWrapperArgs = [
+    "--prefix PATH : ${z3}/bin"
+  ];
+
+  postInstall = ''
       # so that this derivation can be used as a vim plugin to install syntax highlighting
       vimdir=$out/share/vim-plugins/boogie
       install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
@@ -30,6 +33,11 @@ buildDotnetModule rec {
   postFixup = ''
       ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
       rm -f $out/bin/{Microsoft,NUnit3,System}.* "$out/bin"/*Tests
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/boogie ${./install-check-file.bpl}
   '';
 
   meta = with lib; {
