@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "chardet";
-  version = "5.1.0";
+  version = "5.2.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DWJxK5VrwVT4X7CiZuKjxZE8KWfgA0hwGzJBHW3vMeU=";
+    hash = "sha256-Gztv9HmoxBS8P6LAhSmVaVxKAm3NbQYzst0JLKOcHPc=";
   };
 
   nativeBuildInputs = [
