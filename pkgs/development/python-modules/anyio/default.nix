@@ -84,6 +84,10 @@ buildPythonPackage rec {
     "test_exception_group_children"
     "test_exception_group_host"
     "test_exception_group_filtering"
+    # timing sensitive
+    # assert threading.active_count() == initial_count + 1
+    # assert 4 == (4 + 1)
+    "test_run_sync_from_thread_pooling"
   ] ++ lib.optionals stdenv.isDarwin [
     # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
     "test_is_block_device"
