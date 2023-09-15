@@ -33,22 +33,14 @@
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "8.5.1";
+  version = "8.5.3";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-dK6eVYj9OIVChnR90FDTB7ow93nLLNRaOG8YEXxh8UQ=";
+    hash = "sha256-icqZ4a0q4tzgW5O4QEpxzRfVo+UGBL15310DdBnVPF4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2023-31490.patch";
-      url = "https://github.com/FRRouting/frr/commit/06431bfa7570f169637ebb5898f0b0cc3b010802.patch";
-      hash = "sha256-Ix+xOWXIjkbeIPGtddi4F2BNesx+U9uXP4b6LtCPYdM=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
