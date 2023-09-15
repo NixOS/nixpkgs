@@ -25,6 +25,7 @@
 , python3
 , readline
 , rtrlib
+, protobufc
 
 # tests
 , nettools
@@ -47,6 +48,7 @@
 , rtadvSupport ? true
 , irdpSupport ? true
 , routeReplacementSupport ? true
+, mgmtdSupport ? true
 
 # routing daemon options
 , bgpdSupport ? true
@@ -83,13 +85,13 @@ lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "8.5.2";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-xJCaVh/PlV6WRv/JRHO/vzF72E6Ap8/RaqLnkYTnk14=";
+    hash = "sha256-o0AVx7sDRowQz6NpKPQThC8NcGA3QN8xFzfE0k4AIVg=";
   };
 
   nativeBuildInputs = [
@@ -114,6 +116,7 @@ stdenv.mkDerivation rec {
     python3
     readline
     rtrlib
+    protobufc
   ] ++ lib.optionals stdenv.isLinux [
     libcap
   ] ++ lib.optionals snmpSupport [
@@ -149,6 +152,8 @@ stdenv.mkDerivation rec {
     (lib.strings.enableFeature rtadvSupport "rtadv")
     (lib.strings.enableFeature irdpSupport "irdp")
     (lib.strings.enableFeature routeReplacementSupport "rr-semantics")
+    (lib.strings.enableFeature mgmtdSupport "mgmtd")
+
     # routing protocols
     (lib.strings.enableFeature bgpdSupport "bgpd")
     (lib.strings.enableFeature ripdSupport "ripd")
