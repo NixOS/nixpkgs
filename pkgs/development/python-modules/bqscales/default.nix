@@ -3,6 +3,8 @@
 , pythonOlder
 , fetchPypi
 , hatchling
+, hatch-jupyter-builder
+, jupyterlab
 , jupyter-packaging
 , ipywidgets
 , numpy
@@ -12,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "bqscales";
-  version = "0.3.1";
+  version = "0.3.3";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C+/GLpqYpePngbn5W0MwvpdmVgFZF7aGHyKMgO5XM90=";
+    hash = "sha256-SlnNw4dWOzRedwIN3kCyl95qVqkY92QGOMS3Eyoqk0I=";
   };
 
   # We relax dependencies here instead of pulling in a patch because upstream
@@ -35,7 +37,9 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    hatch-jupyter-builder
     hatchling
+    jupyterlab
     jupyter-packaging
   ];
 
