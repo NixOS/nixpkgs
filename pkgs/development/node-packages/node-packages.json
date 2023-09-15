@@ -126,6 +126,7 @@
 , "git-run"
 , "git-standup"
 , "@gitbeaker/cli"
+, "gitmoji-changelog"
 , "gitmoji-cli"
 , "gramma"
 , "grammarly-languageserver"
