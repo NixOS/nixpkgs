@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpbin";
-  version = "1.0.2";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kevin1024";
     repo = "pytest-httpbin";
-    rev = "v${version}";
-    hash = "sha256-S4ThQx4H3UlKhunJo35esPClZiEn7gX/Qwo4kE1QMTI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tq9nz2na94HkLACt7xB1MUanh9/JOoe2vyEm5sAq0/4=";
   };
 
   buildInputs = [
@@ -31,12 +31,6 @@ buildPythonPackage rec {
     httpbin
     six
   ];
-
-  preCheck = ''
-    # Remove assertion that doesn't hold for Flask 2.1.0
-    substituteInPlace tests/test_server.py \
-      --replace "assert response.headers['Location'].startswith('https://')" ""
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
