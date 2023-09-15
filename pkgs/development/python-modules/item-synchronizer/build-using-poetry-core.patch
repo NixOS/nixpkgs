@@ -1,0 +1,26 @@
+From 7ed05a4ed22095bc6923fd1d28f81c6b1edf2dc9 Mon Sep 17 00:00:00 2001
+From: Raito Bezarius <masterancpp@gmail.com>
+Date: Fri, 15 Sep 2023 22:54:12 +0200
+Subject: [PATCH] pyproject: use poetry-core instead of poetry
+
+The PEP517 backend for poetry has been extracted in a separate package
+as per https://pypi.org/project/poetry-core/
+---
+ pyproject.toml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 3cf88c1..02f439c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -113,5 +113,5 @@ addopts = "--ignore=quickstart* --doctest-modules"
+ 
+ # build-system -----------------------------------------------------------------
+ [build-system]
+-requires = ["poetry>=0.12"]
+-build-backend = "poetry.masonry.api"
++requires = ["poetry-core"]
++build-backend = "poetry.core.masonry.api"
+-- 
+2.42.0
+
