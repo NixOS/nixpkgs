@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (attrs: {
   pname = "Nuget";
-  version = "6.3.1.1";
+  version = "6.6.1.2";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "linux-packaging-nuget";
     rev = "upstream/${attrs.version}.bin";
-    sha256 = "sha256-D7F4B23HK5ElY68PYKVDsyi8OF0DLqqUqQzj5CpMfkc=";
+    sha256 = "sha256-9/dSeVshHbpYIgGE/8OzrB4towrWVB3UxDi8Esmbu7Y=";
   };
 
   nativeBuildInputs = [
@@ -16,6 +16,8 @@ stdenv.mkDerivation (attrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/${attrs.pname}
     cp -r . $out/lib/${attrs.pname}/
 
@@ -24,6 +26,8 @@ stdenv.mkDerivation (attrs: {
       "${mono}/bin/mono" \
       "$out/bin/nuget" \
       --add-flags "$out/lib/${attrs.pname}/nuget.exe"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
