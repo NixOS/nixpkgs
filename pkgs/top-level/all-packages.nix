@@ -15420,8 +15420,6 @@ with pkgs;
 
   loksh = callPackage ../shells/loksh { };
 
-  pash = callPackage ../shells/pash { };
-
   scponly = callPackage ../shells/scponly { };
 
   rush = callPackage ../shells/rush { };
