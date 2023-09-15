@@ -5,6 +5,7 @@
 , certifi
 , cryptography
 , fetchPypi
+, hatchling
 , idna
 , isPyPy
 , mock
@@ -20,13 +21,17 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.16";
-  format = "setuptools";
+  version = "2.0.4";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jxNfZQJ1a95rKpsomJ31++h8mXDOyqaQQe3M5/BYmxQ=";
+    hash = "sha256-jSL4aq6O9eQQ1PU5/enOayEToAG7TRieCu1wZC1gKxE=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   # FIXME: remove backwards compatbility hack
   propagatedBuildInputs = passthru.optional-dependencies.brotli
