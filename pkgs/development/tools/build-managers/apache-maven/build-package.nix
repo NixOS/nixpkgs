@@ -12,7 +12,7 @@
 , mvnHash ? ""
 , mvnFetchExtraArgs ? { }
 , mvnDepsParameters ? ""
-, manualMvnArtifactIds ? [ ]
+, manualMvnArtifacts ? [ ]
 , mvnParameters ? ""
 , ...
 } @args:
@@ -36,7 +36,7 @@ let
 
         mvn dependency:go-offline -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}
 
-        for artifactId in ${builtins.toString manualMvnArtifactIds}
+        for artifactId in ${builtins.toString manualMvnArtifacts}
         do
           echo "downloading manual $artifactId"
           mvn dependency:get -Dartifact="$artifactId" -Dmaven.repo.local=$out/.m2
