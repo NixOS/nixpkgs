@@ -105,6 +105,14 @@
       "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.1.tar.gz",
       "build_number": "232.9559.58"
     },
+    "rust-rover": {
+      "update-channel": "RustRover EAP",
+      "url-template": "https://download.jetbrains.com/rustrover/RustRover-{build_number}.tar.gz",
+      "version": "2023.2",
+      "sha256": "5a51bcae179467e9c6440bc0c31bffd27c6fc58d593a0cbecd5aeb51508d27b6",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.46.tar.gz",
+      "build_number": "232.9921.46"
+    },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}.tar.gz",
@@ -220,6 +228,14 @@
       "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.1.dmg",
       "build_number": "232.9559.58"
     },
+    "rust-rover": {
+      "update-channel": "RustRover EAP",
+      "url-template": "https://download.jetbrains.com/rustrover/RustRover-{build_number}.dmg",
+      "version": "2023.2",
+      "sha256": "4c7193acf07f44b91512d8b4c04c88068b8599e76150a81dfd728046910a0929",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.46.dmg",
+      "build_number": "232.9921.46"
+    },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}.dmg",
@@ -334,6 +350,14 @@
       "sha256": "422462636fc4036a2a28037519decef70f38505826b34f167020b1ffeea3a8aa",
       "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.1-aarch64.dmg",
       "build_number": "232.9559.58"
+    },
+    "rust-rover": {
+      "update-channel": "RustRover EAP",
+      "url-template": "https://download.jetbrains.com/rustrover/RustRover-{build_number}-aarch64.dmg",
+      "version": "2023.2",
+      "sha256": "7f01fef11d89c6c6c870a79007607babde40f7a958b7103d1028aa760ed713b7",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.46-aarch64.dmg",
+      "build_number": "232.9921.46"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
