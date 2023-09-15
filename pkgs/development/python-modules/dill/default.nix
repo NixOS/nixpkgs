@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = pname;
     rev = "refs/tags/dill-${version}";
-    hash = "sha256-lh1o/TqnqtYN9xTZom33y1/7ZhMEAFpheLdtalwgObQ=";
+    hash = "sha256-1cRGA5RuNjlpc3jq9SAsUYgmPauIV8zRF9SxOmveljI=";
   };
 
   nativeBuildInputs = [
