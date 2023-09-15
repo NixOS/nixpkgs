@@ -215,7 +215,6 @@
 , "pyright"
 , "react-native-cli"
 , "react-tools"
-, "redoc-cli"
 , "remod-cli"
 , "reveal.js"
 , "rimraf"
