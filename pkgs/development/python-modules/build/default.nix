@@ -13,8 +13,8 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
-, toml
 , tomli
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   passthru.tests = {
     pytest = buildPythonPackage {
       pname = "${pname}-pytest";
-      inherit version;
+      inherit src version;
       format = "other";
 
       dontBuild = true;
@@ -63,7 +63,7 @@ buildPythonPackage rec {
         pytest-xdist
         pytestCheckHook
         setuptools
-        toml
+        wheel
       ];
 
       pytestFlagsArray = [
