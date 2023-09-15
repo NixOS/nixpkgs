@@ -1,21 +1,22 @@
 { makeSetupHook
-, php
 , jq
 , moreutils
+, makeBinaryWrapper
+, php
 }:
 
 {
   composerRepositoryHook = makeSetupHook
     {
       name = "composer-repository-hook.sh";
-      propagatedBuildInputs = [ php jq moreutils ];
+      propagatedBuildInputs = [ jq moreutils php ];
       substitutions = { };
     } ./composer-repository-hook.sh;
 
   composerInstallHook = makeSetupHook
     {
       name = "composer-install-hook.sh";
-      propagatedBuildInputs = [ php jq moreutils ];
+      propagatedBuildInputs = [ jq makeBinaryWrapper moreutils php ];
       substitutions = { };
     } ./composer-install-hook.sh;
 }
