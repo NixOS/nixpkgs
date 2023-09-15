@@ -123,6 +123,7 @@ expandResponseParams() {
     local arg
     for arg in "$@"; do
         if [[ "$arg" == @* ]]; then
+            export NIX_RESPONSE_FILE_EXPANDED=1
             # phase separation makes this look useless
             # shellcheck disable=SC2157
             if [ -x "@expandResponseParams@" ]; then
