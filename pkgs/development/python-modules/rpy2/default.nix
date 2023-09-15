@@ -24,13 +24,13 @@
 }:
 
 buildPythonPackage rec {
-    version = "3.5.12";
+    version = "3.5.14";
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      hash = "sha256-7q33lP0qpUj4hWjGodJufDgQzUp2Soeyw7MdMZQtbUU=";
+      hash = "sha256-X0auMdNuEXvjZq1K4CSTwBWsa6WevjtM1yAAdTMvxIE=";
     };
 
     patches = [
