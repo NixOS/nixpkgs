@@ -39695,8 +39695,6 @@ with pkgs;
 
   beluga = callPackage ../applications/science/logic/beluga { };
 
-  boogie = dotnetPackages.Boogie;
-
   cbmc = callPackage ../applications/science/logic/cbmc { };
 
   cadical = callPackage ../applications/science/logic/cadical { };
