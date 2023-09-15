@@ -4,16 +4,19 @@
 , gsl
 , plotutils
 , postgresql
+, withPDFDoc ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
   version = "2.8.4";
 
   src = fetchurl {
-    url = "https://jmvdveer.home.xs4all.nl/${pname}-${version}.tar.gz";
+    url = "https://jmvdveer.home.xs4all.nl/algol68g-${finalAttrs.version}.tar.gz";
     hash = "sha256-WCPM0MGP4Qo2ihF8w5JHSMSl0P6N/w2dgY/3PDQlZfA=";
   };
+
+  outputs = [ "out" ] ++ lib.optional withPDFDoc "doc";
 
   patches = [
     # add PNG support
@@ -31,12 +34,12 @@ stdenv.mkDerivation rec {
       url = "https://jmvdveer.home.xs4all.nl/learning-algol-68-genie.pdf";
       hash = "sha256-QCwn1e/lVfTYTeolCFErvfMhvwCgsBnASqq2K+NYmlU=";
     };
-  in
+  in lib.optionalString withPDFDoc
     ''
-      install -m644 ${pdfdoc} $out/share/doc/${pname}/learning-algol-68-genie.pdf
+      install -m644 ${pdfdoc} ${placeholder "doc"}/share/doc/algol68g/learning-algol-68-genie.pdf
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jmvdveer.home.xs4all.nl/en.algol-68-genie.html";
     description = "Algol 68 Genie compiler-interpreter";
     longDescription = ''
@@ -48,9 +51,9 @@ stdenv.mkDerivation rec {
       regular expressions and sounds. It can be linked to GNU plotutils, the GNU
       scientific library and PostgreSQL.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "a68g";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
