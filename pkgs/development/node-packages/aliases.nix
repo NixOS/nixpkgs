@@ -111,6 +111,7 @@ mapAliases {
   inherit (pkgs) stylelint; # added 2023-09-13
   surge = pkgs.surge-cli; # Added 2023-09-08
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
+  tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31
   thelounge = pkgs.thelounge; # Added 2023-05-22
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
