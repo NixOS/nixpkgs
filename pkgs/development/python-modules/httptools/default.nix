@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pkgs
 , pythonOlder
+, substituteAll
 }:
 
 buildPythonPackage rec {
@@ -15,6 +17,19 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-n8bkCa04y9aLF3zVFY/EBCx5a4LKiNmex48HvtbGt5Y=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./use-nixpkgs-libraries.patch;
+      llhttp_include_path = "${lib.getDev pkgs.llhttp}/include";
+      http_parser_include_path = "${lib.getDev pkgs.http-parser}/include";
+    })
+  ];
+
+  buildInputs = [
+    pkgs.http-parser
+    pkgs.llhttp
+  ];
 
   # Tests are not included in pypi tarball
   doCheck = false;

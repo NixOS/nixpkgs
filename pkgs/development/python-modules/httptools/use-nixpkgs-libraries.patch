@@ -1,0 +1,31 @@
+--- a/setup.py
++++ b/setup.py
+@@ -192,21 +192,25 @@ setup(
+     license='MIT',
+     packages=['httptools', 'httptools.parser'],
+     cmdclass={
+-        'build_ext': httptools_build_ext,
++        # 'build_ext': httptools_build_ext,
+     },
+     ext_modules=[
+         Extension(
+             "httptools.parser.parser",
+             sources=[
+-                "httptools/parser/parser.pyx",
++                "httptools/parser/parser.c",
+             ],
++            libraries=["llhttp"],
++            include_dirs=["@llhttp_include_path@"],
+             extra_compile_args=CFLAGS,
+         ),
+         Extension(
+             "httptools.parser.url_parser",
+             sources=[
+-                "httptools/parser/url_parser.pyx",
++                "httptools/parser/url_parser.c",
+             ],
++            libraries=["http_parser"],
++            include_dirs=["@http_parser_include_path@"],
+             extra_compile_args=CFLAGS,
+         ),
+     ],
