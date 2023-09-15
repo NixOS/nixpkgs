@@ -2,16 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , python
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20221110.1";
-  format = "setuptools";
+  version = "20230521.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fD6JHHD42JGONidvIQoZWbt7rfOydvRxkZhv/PW2o5A=";
+    hash = "sha256-EEeKYeYnxbjLdpH39+v3IQhFSFMWST0310DCl/ttGEU=";
   };
 
   postPatch = ''
@@ -25,6 +29,10 @@ buildPythonPackage rec {
     # some sql tests fail against sqlite engine
     sed -i '/from .sql import/d' tests/__init__.py
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [ "pydal" ];
 
