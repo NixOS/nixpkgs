@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "maya";
-  version = "0.3.3";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1x88k4irpckvd7jf2yvqjw1s52hjqbxym1r1d928yb3fkj7rvlxs";
+    sha256 = "sha256-f1PgbVoSNhPc58Jwy8ZHZDppQlkNunoZ7DYZTQM4w/Q=";
   };
 
   patches = [
