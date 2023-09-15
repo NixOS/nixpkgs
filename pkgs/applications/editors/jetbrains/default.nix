@@ -17,8 +17,6 @@
 , openssl
 , expat
 , libxcrypt-legacy
-, audit
-, linux-pam
 , vmopts ? null
 }:
 
@@ -312,8 +310,6 @@ let
         libdbusmenu
         openssl.out
         libxcrypt-legacy
-        audit
-        linux-pam
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
@@ -332,7 +328,6 @@ let
             --replace-needed libcrypto.so.10 libcrypto.so
 
           autoPatchelf $PWD/bin
-          autoPatchelf $PWD/plugins
         )
       '';
     });
