@@ -454,8 +454,6 @@ in with passthru; stdenv.mkDerivation {
     done
     touch $out/lib/${libPrefix}/test/__init__.py
 
-    ln -s "$out/include/${executable}m" "$out/include/${executable}"
-
     # Determinism: Windows installers were not deterministic.
     # We're also not interested in building Windows installers.
     find "$out" -name 'wininst*.exe' | xargs -r rm -f
@@ -483,6 +481,9 @@ in with passthru; stdenv.mkDerivation {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+    '' + lib.optionalString (pythonOlder "3.8") ''
+    # This is gone in Python >= 3.8
+    ln -s "$out/include/${executable}m" "$out/include/${executable}"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''

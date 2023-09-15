@@ -187,12 +187,13 @@ in let
     lldb = callPackage ../common/lldb.nix {
       patches =
         let
-          resourceDirPatch = callPackage ({ runCommand, libclang }: (runCommand "resource-dir.patch"
-            {
-              clangLibDir = "${libclang.lib}/lib";
-            } ''
-            substitute '${./lldb/resource-dir.patch}' "$out" --subst-var clangLibDir
-          '')) { };
+          resourceDirPatch = callPackage
+            ({ substituteAll, libclang }: substituteAll
+              {
+                src = ./lldb/resource-dir.patch;
+                clangLibDir = "${libclang.lib}/lib";
+              })
+            { };
         in
         [
           ./lldb/procfs.patch
@@ -213,7 +214,7 @@ in let
             && !stdenv.targetPlatform.isAarch64
             && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
         ) ./lldb/cpu_subtype_arm64e_replacement.patch;
-      inherit llvm_meta release_version;
+      inherit llvm_meta;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -223,7 +224,7 @@ in let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools-unwrapped = callPackage ./bintools {};
+    bintools-unwrapped = callPackage ../common/bintools.nix { };
 
     bintoolsNoLibc = wrapBintoolsWith {
       bintools = tools.bintools-unwrapped;

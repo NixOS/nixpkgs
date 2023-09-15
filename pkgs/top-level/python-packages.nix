@@ -1695,6 +1695,8 @@ self: super: with self; {
 
   cacheyou = callPackage ../development/python-modules/cacheyou { };
 
+  cachier = callPackage ../development/python-modules/cachier { };
+
   cachy = callPackage ../development/python-modules/cachy { };
 
   cadquery = callPackage ../development/python-modules/cadquery {
@@ -2429,10 +2431,10 @@ self: super: with self; {
   cython = callPackage ../development/python-modules/Cython { };
 
   cython_3 = self.cython.overridePythonAttrs (old: rec {
-    version = "3.0.0";
+    version = "3.0.2";
     src = old.src.override {
       inherit version;
-      hash = "sha256-NQsY+Wc+YxAdu/z3dO4vV8IKxGNtJVdB12ynkBaxvYI=";
+      hash = "sha256-lZSBjcqLsirmWAxSItorxcwyM0NQvS0pSgDYZpvMYbU=";
     };
     patches = [ ];
   });
@@ -9531,6 +9533,8 @@ self: super: with self; {
   pymodbus = callPackage ../development/python-modules/pymodbus { };
 
   pymongo = callPackage ../development/python-modules/pymongo { };
+
+  pymongo-inmemory = callPackage ../development/python-modules/pymongo-inmemory { };
 
   pymoo = callPackage ../development/python-modules/pymoo { };
 

@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , nixosTests
 }:
 
@@ -17,9 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rrn+ZTAsFs7UTP4xQL3Cy8G6RG7vwT0wMKnXHHIkB90=";
 
-  checkFlags = [
-    # https://github.com/containers/aardvark-dns/issues/379
-    "--skip=test::test::tests::test_backend_network_scoped_custom_dns_server"
+  patches = [
+    (fetchpatch { # https://github.com/containers/aardvark-dns/issues/379
+      url = "https://github.com/containers/aardvark-dns/commit/b13f0434f410934b515f086334414c6f5f55096e.diff";
+      hash = "sha256-6XReIShEe8+WKc5jK5NzCNMEd4INdOn9Sf8UrQLbj+s=";
+    })
   ];
 
   passthru.tests = { inherit (nixosTests) podman; };

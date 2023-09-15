@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "ruff-lsp";
   version = "0.0.39";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

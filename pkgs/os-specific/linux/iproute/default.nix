@@ -27,9 +27,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure = ''
+  postPatch = ''
     # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
+
+    substituteInPlace Makefile \
+      --replace "CC := gcc" "CC ?= $CC"
   '';
 
   outputs = [ "out" "dev" ];
@@ -43,6 +46,8 @@ stdenv.mkDerivation rec {
     "SHARED_LIBS=n"
     # all build .so plugins:
     "TC_CONFIG_NO_XT=y"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "HOSTCC=$(CC_FOR_BUILD)"
   ];
 
   buildFlags = [

@@ -47,102 +47,43 @@ let
   inherit (lib) optionals optional;
 in
 
-optionals (is49 || is6) [
-  ./9/fix-struct-redefinition-on-glibc-2.36.patch
-] ++ optionals (is49 || (is6 && !stdenv.targetPlatform.isRedox)) [
-  ./use-source-date-epoch.patch
-] ++ optionals (is6 && !stdenv.targetPlatform.isRedox) [
-  ./6/0001-Fix-build-for-glibc-2.31.patch
-] ++ optionals (!atLeast6) [
-  ./parallel-bconfig.patch
-] ++ optionals (is49) [
-  (./. + "/${lib.versions.major version}.${lib.versions.minor version}/parallel-strsignal.patch")
-  (./. + "/${lib.versions.major version}.${lib.versions.minor version}/libsanitizer.patch")
-  (fetchpatch {
-    name = "avoid-ustat-glibc-2.28.patch";
-    url = "https://gitweb.gentoo.org/proj/gcc-patches.git/plain/4.9.4/gentoo/100_all_avoid-ustat-glibc-2.28.patch?id=55fcb515620a8f7d3bb77eba938aa0fcf0d67c96";
-    sha256 = "0b32sb4psv5lq0ij9fwhi1b4pjbwdjnv24nqprsk14dsc6xmi1g0";
-  })
-] ++ optionals (is7) [
-  # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
-  (./. + "/${majorVersion}/riscv-pthread-reentrant.patch")
-  # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
-  (./. + "/${majorVersion}/riscv-no-relax.patch")
-  # Fix for asan w/glibc-2.34. Although there's no upstream backport to v7,
-  # the patch from gcc 8 seems to work perfectly fine.
-  (./. + "/${majorVersion}/gcc8-asan-glibc-2.34.patch")
-  (./. + "/${majorVersion}/0001-Fix-build-for-glibc-2.31.patch")
-] ++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
+#
+#  Patches below are organized into three general categories:
+#  1. Patches relevant to gcc>=12 on every platform
+#  2. Patches relevant to gcc>=12 on specific platforms
+#  3. Patches relevant only to gcc<12
+#
+
+
+## 1. Patches relevant to gcc>=12 on every platform ####################################
+
+[]
 ++ optional (atLeast6 && !atLeast12) ./fix-bug-80431.patch
-++ optional (is7 || is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
 ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
-++ optional (atLeast7 && !atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
-++ optional (noSysDirs) (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)
-++ optionals (is6 && langAda) [
-  ./gnat-cflags.patch
-  ./6/gnat-glibc234.patch
-] ++ optional (noSysDirs && atLeast10 && !atLeast13 && (is10 || (!atLeast12 -> hostPlatform.isRiscV))) ./no-sys-dirs-riscv.patch
-++ optional (noSysDirs && is13) ./13/no-sys-dirs-riscv.patch
-++ optional (noSysDirs && is9 && hostPlatform.isRiscV) ./no-sys-dirs-riscv-gcc9.patch
-++ optionals (langAda || atLeast12) [
-  ./gnat-cflags-11.patch
-] ++ optionals (langAda && (is9 || is10)) [
-  ./gnat-cflags.patch
-] ++ optionals atLeast12 [
-  ./gcc-12-gfortran-driving.patch
-  ./ppc-musl.patch
-] ++ optionals is12 [
-  # backport ICE fix on ccache code
-  ./12/lambda-ICE-PR109241.patch
-]
-# We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
-# a foreign one: https://github.com/iains/gcc-12-branch/issues/18
-++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
-  "13" = [ (fetchpatch {
-    name = "gcc-13-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
-    sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
-  }) ];
-  "12" = [ (fetchurl {
-    name = "gcc-12-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/f1188b90d610e2ed170b22512ff7435ba5c891e2/gcc/gcc-12.3.0.diff";
-    sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
-  }) ];
-}."${majorVersion}" or [])
+++ optionals (noSysDirs) (
+  [(if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)] ++
+  ({
+    "13" = [ ./13/no-sys-dirs-riscv.patch ];
+    "12" = [ ./no-sys-dirs-riscv.patch ];
+    "11" = [ ./no-sys-dirs-riscv.patch ];
+    "10" = [ ./no-sys-dirs-riscv.patch ];
+    "9"  = [ ./no-sys-dirs-riscv-gcc9.patch ];
+  }."${majorVersion}" or [])
+)
+++ optional (atLeast12 && langAda) ./gnat-cflags-11.patch
+++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
+++ optional atLeast7 ./ppc-musl.patch
+++ optional is12 ./12/lambda-ICE-PR109241.patch # backport ICE fix on ccache code
 ++ optional (atLeast9 && langD) ./libphobos.patch
-++ optional (is7 && hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
-  url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
-  sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
-})
-++ optional (!atLeast12 && langFortran) ./gfortran-driving.patch
-++ optional (!atLeast49 && hostPlatform.isDarwin) ./gfortran-darwin-NXConstStr.patch
-++ optionals (is49) [
-  # glibc-2.26
-  ./struct-ucontext.patch
-  ./struct-sigaltstack-4.9.patch
-]
-# TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
-++ optional (atLeast7 && !atLeast12 && targetPlatform.libc == "musl" && targetPlatform.isPower) ./ppc-musl.patch
-++ optional ((is6 || is7) && targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
-  url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
-  sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
-})
-++ optional ((is6 || is7 || is8) && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
-++ optional (is6 && langGo) ./gogcc-workaround-glibc-2.36.patch
-# TODO: deduplicate this with copy above -- leaving duplicated for now in order to avoid changing eval results by reordering
-++ optionals (is11 && stdenv.isDarwin) [
-  (fetchpatch {
-    # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
-    # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.4.0
-    url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
-    hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
-  })
-]
-# https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
-++ optional (is11 && stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
+
+
+
+## 2. Patches relevant to gcc>=12 on specific platforms ####################################
+
+### Musl+Go+gcc12
 
 # backport fixes to build gccgo with musl libc
-++ optionals (atLeast12 && langGo && stdenv.hostPlatform.isMusl) [
+++ optionals (stdenv.hostPlatform.isMusl && langGo && atLeast12) [
   (fetchpatch {
     excludes = [ "gcc/go/gofrontend/MERGE" ];
     url = "https://github.com/gcc-mirror/gcc/commit/cf79b1117bd177d3d4c6ed24b6fa243c3628ac2d.diff";
@@ -179,16 +120,143 @@ optionals (is49 || is6) [
   })
 ]
 
+
+## Darwin
+
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
 # Use absolute path in GNAT dylib install names on Darwin
 ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./gnat-darwin-dylib-install-name.patch
 
+# We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
+# a foreign one: https://github.com/iains/gcc-12-branch/issues/18
+++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
+  "13" = [ (fetchpatch {
+    name = "gcc-13-darwin-aarch64-support.patch";
+    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
+    sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
+  }) ];
+  "12" = [ (fetchurl {
+    name = "gcc-12-darwin-aarch64-support.patch";
+    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/f1188b90d610e2ed170b22512ff7435ba5c891e2/gcc/gcc-12.3.0.diff";
+    sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
+  }) ];
+  "11" = [ (fetchpatch {
+    # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
+    # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.4.0
+    url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
+    hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
+  }) ];
+}.${majorVersion} or [])
+
+
+## Windows
+
 # Obtain latest patch with ../update-mcfgthread-patches.sh
 ++ optional (atLeast6 && !atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
   (./. + "/${majorVersion}/Added-mcf-thread-model-support-from-mcfgthread.patch")
 
+
+
+
+##############################################################################
+##
+##  3. Patches relevant only to gcc<12
+##
+##  Above this point are patches which might potentially be applied
+##  to gcc version 12 or newer.  Below this point are patches which
+##  will *only* be used for gcc versions older than gcc12.
+##
+##############################################################################
+
+
+
+
+## gcc 11.0 and older ##############################################################################
+
+# https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
+++ optional (is11 && stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
+
+# openjdk build fails without this on -march=opteron; is upstream in gcc12
+++ optionals (is11) [ ./11/gcc-issue-103910.patch ]
+
+
+
+## gcc 10.0 and older ##############################################################################
+
+++ optional (langAda && (is9 || is10)) ./gnat-cflags.patch
+++ optional (is10 && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
+  url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
+  sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
+})
+
+
+## gcc 9.0 and older ##############################################################################
+
+++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
+++ optional (atLeast7 && !atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
+
+
+## gcc 8.0 and older ##############################################################################
+
+# for 49 this is applied later
+++ optional (atLeast49 && !is49 && !atLeast9) ./libsanitizer-no-cyclades-9.patch
+++ optional (is7 || is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
+
+
+## gcc 7.0 and older ##############################################################################
+
+++ optional (is7 && hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
+  url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
+  sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
+})
+++ optionals (is7) [
+  # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
+  (./. + "/${majorVersion}/riscv-pthread-reentrant.patch")
+  # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
+  (./. + "/${majorVersion}/riscv-no-relax.patch")
+  # Fix for asan w/glibc-2.34. Although there's no upstream backport to v7,
+  # the patch from gcc 8 seems to work perfectly fine.
+  (./. + "/${majorVersion}/gcc8-asan-glibc-2.34.patch")
+  (./. + "/${majorVersion}/0001-Fix-build-for-glibc-2.31.patch")
+]
+++ optional ((is6 || is7) && targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
+  url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
+  sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
+})
+++ optional ((is6 || is7 || is8) && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
+
+
+
+## gcc 6.0 and older ##############################################################################
+
+++ optional (is6 && langGo) ./gogcc-workaround-glibc-2.36.patch
+++ optional (is49 || is6) ./9/fix-struct-redefinition-on-glibc-2.36.patch
+++ optional (is49 || (is6 && !stdenv.targetPlatform.isRedox)) ./use-source-date-epoch.patch
+++ optional (is6 && !stdenv.targetPlatform.isRedox) ./6/0001-Fix-build-for-glibc-2.31.patch
+++ optionals (is6 && langAda) [
+  ./gnat-cflags.patch
+  ./6/gnat-glibc234.patch
+]
+
+## gcc 4.9 and older ##############################################################################
+
+++ optional (!atLeast6) ./parallel-bconfig.patch
+++ optionals (is49) [
+  (./. + "/${lib.versions.major version}.${lib.versions.minor version}/parallel-strsignal.patch")
+  (./. + "/${lib.versions.major version}.${lib.versions.minor version}/libsanitizer.patch")
+  (fetchpatch {
+    name = "avoid-ustat-glibc-2.28.patch";
+    url = "https://gitweb.gentoo.org/proj/gcc-patches.git/plain/4.9.4/gentoo/100_all_avoid-ustat-glibc-2.28.patch?id=55fcb515620a8f7d3bb77eba938aa0fcf0d67c96";
+    sha256 = "0b32sb4psv5lq0ij9fwhi1b4pjbwdjnv24nqprsk14dsc6xmi1g0";
+  })
+  # has to be applied after "avoid-ustat-glibc-2.28.patch"
+  ./libsanitizer-no-cyclades-9.patch
+  # glibc-2.26
+  ./struct-ucontext.patch
+  ./struct-sigaltstack-4.9.patch
+]
 # Retpoline patches pulled from the branch hjl/indirect/gcc-4_9-branch (by H.J. Lu, the author of GCC upstream retpoline commits)
 ++ optionals is49
   (builtins.map ({commit, sha256}: fetchpatch {url = "https://github.com/hjl-tools/gcc/commit/${commit}.patch"; inherit sha256;})
@@ -206,7 +274,6 @@ optionals (is49 || is6) [
    { commit = "1e961ed49b18e176c7457f53df2433421387c23b"; sha256 = "04dnqqs4qsvz4g8cq6db5id41kzys7hzhcaycwmc9rpqygs2ajwz"; }
    { commit = "e137c72d099f9b3b47f4cc718aa11eab14df1a9c"; sha256 = "1ms0dmz74yf6kwgjfs4d2fhj8y6mcp2n184r3jk44wx2xc24vgb2"; }])
 
-++ optional (atLeast49 && !atLeast9) ./libsanitizer-no-cyclades-9.patch
 ++ optional (is49 && !atLeast6) [
   # gcc-11 compatibility
   (fetchpatch {
@@ -217,14 +284,11 @@ optionals (is49 || is6) [
   })
 ]
 
-# openjdk build fails without this on -march=opteron; is upstream in gcc12
-++ optionals (is11) [ ./11/gcc-issue-103910.patch ]
 
-++ optional (is10 && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
-  url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
-  sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
-})
-++ lib.optionals is48 [
+## gcc 4.8 only ##############################################################################
+
+++ optional (!atLeast49 && hostPlatform.isDarwin) ./gfortran-darwin-NXConstStr.patch
+++ optionals is48 [
   (fetchpatch {
     name = "libc_name_p.diff"; # needed to build with gcc6
     url = "https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=ec1cc0263f1";
