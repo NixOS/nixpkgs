@@ -5391,6 +5391,8 @@ with pkgs;
 
   blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
 
+  catdvi = callPackage ../tools/typesetting/tex/catdvi { };
+
   dblatex = callPackage ../tools/typesetting/tex/dblatex { };
 
   dblatexFull = dblatex.override { enableAllFeatures = true; };
@@ -20395,7 +20397,7 @@ with pkgs;
 
   symfony-cli = callPackage ../development/tools/symfony-cli { };
 
-  swiftshader = callPackage ../development/libraries/swiftshader { stdenv = gcc10StdenvCompat; };
+  swiftshader = callPackage ../development/libraries/swiftshader { };
 
   systemfd = callPackage ../development/tools/systemfd { };
 
