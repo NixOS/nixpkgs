@@ -4790,6 +4790,8 @@ with pkgs;
 
   swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
 
+  swhkd = callPackage ../tools/wayland/swhkd { };
+
   swww = callPackage ../tools/wayland/swww { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
