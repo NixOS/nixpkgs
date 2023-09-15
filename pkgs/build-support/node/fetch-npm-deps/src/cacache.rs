@@ -1,3 +1,4 @@
+use base64::prelude::{Engine, BASE64_STANDARD};
 use digest::{Digest, Update};
 use serde::{Deserialize, Serialize};
 use sha1::Sha1;
@@ -52,14 +53,14 @@ impl Cache {
         let (algo, hash, integrity) = if let Some(integrity) = integrity {
             let (algo, hash) = integrity.split_once('-').unwrap();
 
-            (algo.to_string(), base64::decode(hash)?, integrity)
+            (algo.to_string(), BASE64_STANDARD.decode(hash)?, integrity)
         } else {
             let hash = Sha512::new().chain(data).finalize();
 
             (
                 String::from("sha512"),
                 hash.to_vec(),
-                format!("sha512-{}", base64::encode(hash)),
+                format!("sha512-{}", BASE64_STANDARD.encode(hash)),
             )
         };
 
