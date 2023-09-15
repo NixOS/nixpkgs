@@ -1,36 +1,49 @@
-{ lib, stdenv, fetchFromGitHub
-, libX11 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinywm";
-  version = "2014-04-22";
+  version = "1.1-unstable-2014-04-22";
 
   src = fetchFromGitHub {
     owner = "mackstann";
-    repo = pname;
+    repo = "tinywm";
     rev = "9d05612f41fdb8bc359f1fd9cc930bf16315abb1";
-    sha256 = "1s7r4f2d3lk1i8h089v2vyrr02hh0y9i3ihl9kqgk9s87hqw8q5b";
+    hash = "sha256-q2DEMTxIp/nwTBTGEZMHEAqQs99iJwQgimHS0YQj+eg=";
   };
 
   buildInputs = [ libX11 ];
 
+  strictDeps = true;
+
   dontConfigure = true;
 
   buildPhase = ''
+    runHook preBuild
+
     $CC -Wall -pedantic -I${libX11}/include tinywm.c -L${libX11}/lib -lX11 -o tinywm
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    install -dm755 $out/bin $out/share/doc/${pname}-${version}
+    runHook preInstall
+
+    install -dm755 $out/bin $out/share/doc/tinywm-${finalAttrs.version}
     install -m755 tinywm -t $out/bin/
     # The annotated source code is a piece of documentation
-    install -m644 annotated.c README -t $out/share/doc/${pname}-${version}
+    install -m644 annotated.c README -t $out/share/doc/tinywm-${finalAttrs.version}
+
+    runHook postInstall
   '';
 
-  meta = with lib;{
+  meta = {
+    homepage = "http://incise.org/tinywm.html";
     description = "A tiny window manager for X11";
     longDescription = ''
-
       TinyWM is a tiny window manager that I created as an exercise in
       minimalism. It is also maybe helpful in learning some of the very basics
       of creating a window manager. It is only around 50 lines of C. There is
@@ -44,9 +57,9 @@ stdenv.mkDerivation rec {
         keybinding in there somewhere)
       - Focus windows with the mouse pointer (X does this on its own)
     '';
-    homepage = "http://incise.org/tinywm.html";
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = libX11.meta.platforms;
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
+    mainProgram = "tinywm";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (libX11.meta) platforms;
   };
-}
+})
