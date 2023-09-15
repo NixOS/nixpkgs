@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.11.3";
+  version = "2.16.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = pname;
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-4GDur8S19i8pZkywKHZUelmd2e0jZmC5HzF7o2esDl4=";
+    hash = "sha256-GP1sL2cqZ8ucrCpigwR7HxgeQT+RnZjIIt7gx/3GtIE=";
   };
 
   nativeBuildInputs = [
