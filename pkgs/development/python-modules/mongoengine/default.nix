@@ -1,19 +1,19 @@
 { lib
+, blinker
 , buildPythonPackage
 , fetchFromGitHub
-, pymongo
-, isPy27
-, six
-, blinker
-, nose
 , pillow
-, coverage
+, pymongo
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mongoengine";
   version = "0.27.0";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
@@ -24,31 +24,26 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pymongo
-    six
   ];
 
   nativeCheckInputs = [
-    nose
-    pillow
-    coverage
     blinker
+    pillow
+    pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "coverage==4.2" "coverage" \
-      --replace "pymongo>=3.4,<=4.0" "pymongo"
-  '';
-
-  # tests require mongodb running in background
+  # Tests require mongodb running in background
   doCheck = false;
 
-  pythonImportsCheck = [ "mongoengine" ];
+  pythonImportsCheck = [
+    "mongoengine"
+  ];
 
   meta = with lib; {
-    description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB";
+    description = "Object-Document Mapper for working with MongoDB";
     homepage = "http://mongoengine.org/";
+    changelog = "https://github.com/MongoEngine/mongoengine/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }
