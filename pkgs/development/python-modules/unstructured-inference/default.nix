@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "unstructured-inference";
-  version = "0.5.22";
+  version = "0.5.28";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-inference";
     rev = "refs/tags/${version}";
-    hash = "sha256-YMPChP8/KB/UioavIa0pdj0wH9bTkN8frFmkQZ3bUPc=";
+    hash = "sha256-98TThX3mBInw/bnydWfgpKSANOt6OcxOdRq01nm13nA=";
   };
 
   postPatch = ''
