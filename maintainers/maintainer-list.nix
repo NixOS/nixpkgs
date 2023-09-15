@@ -8308,6 +8308,12 @@
     githubId = 546087;
     name = "Kristoffer K. Føllesdal";
   };
+  khaneliman = {
+    email = "khaneliman12@gmail.com";
+    github = "khaneliman";
+    githubId = 1778670;
+    name = "Austin Horstman";
+  };
   kho-dialga = {
     email = "ivandashenyou@gmail.com";
     github = "Kho-Dialga";
