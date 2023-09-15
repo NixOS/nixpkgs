@@ -7,6 +7,8 @@
 , lib
 # List of derivations to be included
 , storePaths
+# Whether or not to compress the resulting image with zstd
+, compressImage ? false, zstd
 # Shell commands to populate the ./files directory.
 # All files in that directory are copied to the root of the FS.
 , populateImageCommands ? ""
@@ -19,27 +21,45 @@ let
   sdClosureInfo = pkgs.buildPackages.closureInfo { rootPaths = storePaths; };
 in
 pkgs.stdenv.mkDerivation {
-  name = "btrfs-fs.img";
+  name = "btrfs-fs.img${lib.optionalString compressImage ".zst"}";
 
-  nativeBuildInputs = [ btrfs-progs ];
+  nativeBuildInputs = [ btrfs-progs ] ++ lib.optional compressImage zstd;
 
   buildCommand =
     ''
+      ${if compressImage then "img=temp.img" else "img=$out"}
+
       set -x
       (
           mkdir -p ./files
           ${populateImageCommands}
       )
 
-      mkdir -p ./files/nix/store
-      cp ${sdClosureInfo}/registration ./files/nix-path-registration
+      mkdir -p ./rootImage/nix/store
 
-      # Add the closures of the top-level store objects.
-      for p in $(cat ${sdClosureInfo}/store-paths); do
-        echo cp -r $p "./files/nix/store"
-      done
+      xargs -I % cp -a --reflink=auto % -t ./rootImage/nix/store/ < ${sdClosureInfo}/store-paths
+      (
+        GLOBIGNORE=".:.."
+        shopt -u dotglob
 
-      touch $out
-      mkfs.btrfs -L ${volumeLabel} -U ${uuid} -r ./files --shrink $out
+        for f in ./files/*; do
+            cp -a --reflink=auto -t ./rootImage/ "$f"
+        done
+      )
+
+      cp ${sdClosureInfo}/registration ./rootImage/nix-path-registration
+
+      touch $img
+      mkfs.btrfs -L ${volumeLabel} -U ${uuid} -r ./rootImage --shrink $img
+
+      if ! btrfs check $img; then
+        echo "--- 'btrfs check' failed for BTRFS image ---"
+        return 1
+      fi
+
+      if [ ${builtins.toString compressImage} ]; then
+        echo "Compressing image"
+        zstd -v --no-progress ./$img -o $out
+      fi
     '';
 }
