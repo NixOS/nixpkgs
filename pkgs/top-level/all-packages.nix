@@ -32812,8 +32812,6 @@ with pkgs;
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
-  smallwm = callPackage ../applications/window-managers/smallwm { };
-
   smooth = callPackage ../development/libraries/smooth { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
