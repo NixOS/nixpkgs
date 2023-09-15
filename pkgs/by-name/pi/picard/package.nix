@@ -11,6 +11,9 @@
   enablePlayback ? true,
   gst_all_1,
 
+  enableReplayGain ? false,
+  rsgain,
+
   writableTmpDirAsHomeHook,
 }:
 
@@ -110,6 +113,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ''
   + lib.optionalString (pyqt5.multimediaEnabled) ''
     makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  ''
+  + lib.optionalString enableReplayGain ''
+    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ rsgain ]})
   '';
 
   meta = {
