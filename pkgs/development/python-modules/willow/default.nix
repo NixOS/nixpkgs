@@ -1,34 +1,70 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
+
+# build-system
+, flit-core
 
 # dependencies
 , filetype
-, defusedxml,
+, defusedxml
+
+# tests
+, numpy
+, opencv4
+, pillow
+, pytestCheckHook
+, wand
 }:
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "1.6.2";
+  format = "pyproject";
 
   disabled = pythonOlder "2.7";
 
-  src = fetchPypi {
-    pname = "Willow";
-    inherit version;
-    hash = "sha256-t6SQkRATP9seIodZLgZzzCVeAobhzVNCfuaN8ckiDEw=";
+  src = fetchFromGitHub {
+    owner = "wagtail";
+    repo = "Willow";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dW2FVN3/mBAhVQ094uBsnXzdyTRKgHUDx0SWLm3g374=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     filetype
     defusedxml
   ];
 
-  # Test data is not included
-  # https://github.com/torchbox/Willow/issues/34
-  doCheck = false;
+  passthru.optional-dependencies = {
+    heif = [
+      # TODO: pillow-heif
+    ];
+  };
+
+  nativeCheckInputs = [
+    numpy
+    opencv4
+    pytestCheckHook
+    pillow
+    wand
+  ];
+
+  disabledTests = [
+    # pillow-heif missing
+    "test_avif"
+    "test_heic"
+    "test_heif"
+    "test_save_as_avif"
+    "test_save_as_heif"
+    "test_save_as_heic"
+    "test_detect_faces"
+  ];
 
   meta = with lib; {
     description = "A Python image library that sits on top of Pillow, Wand and OpenCV";
