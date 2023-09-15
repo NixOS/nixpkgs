@@ -19,9 +19,14 @@ maven.buildMavenPackage rec {
   buildOffline = true;
   mvnDepsParameters = "-Dmaven.gitcommitid.skip=true";
   mvnParameters = "-Dmaven.gitcommitid.skip=true -DskipTests";
-  #manualMvnArtifactIds = [
+
+  # not needed for lemminx because we will disable tests as they are depending
+  # on the .git folder which makes the package not deterministic. Just here
+  # to showcase the usage.
+
+  #manualMvnArtifacts = [
   #  "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
-  #  "org.junit.platform:junit-platform-launcher:1.9.3"
+  #  "org.junit.platfo:rm:junit-platform-launcher:1.9.3"
   #];
 
   installPhase = ''
