@@ -46,6 +46,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # pygments 2.16 compat
+    # https://github.com/Textualize/rich/issues/3088
+    "test_card_render"
+    "test_markdown_render"
+    "test_markdown_render"
+    "test_python_render"
+    "test_python_render_simple"
+    "test_python_render_simple_passing_lexer_instance"
+    "test_python_render_indent_guides"
+    "test_option_no_wrap"
+    "test_syntax_highlight_ranges"
+  ];
+
   pythonImportsCheck = [
     "rich"
   ];
