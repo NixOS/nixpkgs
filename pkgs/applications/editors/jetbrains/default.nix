@@ -328,6 +328,10 @@ let
             --replace-needed libcrypto.so.10 libcrypto.so
 
           autoPatchelf $PWD/bin
+
+          interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+          patchelf --set-interpreter $interp $PWD/plugins/intellij-rust/bin/linux/x86-64/intellij-rust-native-helper
+          chmod +x $PWD/plugins/intellij-rust/bin/linux/x86-64/intellij-rust-native-helper
         )
       '';
     });
