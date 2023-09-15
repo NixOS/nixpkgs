@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "catppuccin";
-  version = "1.1.1";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mHNuV3yIuFL2cixDOr+//+/b9iD2fN82cfLzZkegxKc=";
+    hash = "sha256-iRQF9U6QvbyOSdp0OALc/Efl4IL1w17WGOZRbhzlqGA=";
   };
 
   propagatedBuildInputs = [ pygments ];
