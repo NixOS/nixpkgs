@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "torchlibrosa";
-  version = "0.0.9";
+  version = "0.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+LzejKvLlJIIwWm9rYPCWQDSueIwnG5gbkwNE+wbv0A=";
+    hash = "sha256-Yqi+7fnJtBQaBiNN8/ECKfe6huZ2eMzuAkiexO8EQCg=";
   };
 
   propagatedBuildInputs = [
