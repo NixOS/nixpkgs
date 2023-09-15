@@ -1,665 +1,665 @@
 {
-  version = "115.2.1";
+  version = "115.2.2";
   sources = [
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/af/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/af/thunderbird-115.2.2.tar.bz2";
       locale = "af";
       arch = "linux-x86_64";
-      sha256 = "6ec790ea389d3aacb87ce92f4eea013c3c09906678f7e7be2d89197ea1c94644";
+      sha256 = "abca901bd8ab959c56701ed2a1333cdc9e1c616755f7af66bfd2843beb150fbb";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ar/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ar/thunderbird-115.2.2.tar.bz2";
       locale = "ar";
       arch = "linux-x86_64";
-      sha256 = "bdb690846921d78fbc18e76834be7f75eb2530c95fb6bf3475b1b2014c7ed53b";
+      sha256 = "3b370800cf3020dd665438142b2510e1b93443fcdfb9afae4306fe783d65941d";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ast/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ast/thunderbird-115.2.2.tar.bz2";
       locale = "ast";
       arch = "linux-x86_64";
-      sha256 = "0b358b5fd62e8a01af76be648d49cbcfe2688e811fbb074d0a5c9c2836707dbb";
+      sha256 = "8877c0424559e17fdb8b7ebc543308c51325cd8ccfbcfb22de69a91cfb7da45c";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/be/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/be/thunderbird-115.2.2.tar.bz2";
       locale = "be";
       arch = "linux-x86_64";
-      sha256 = "c497f4b6793b6284b4a543757a972cb32bd0b719f4616aed114d775c0d87e82b";
+      sha256 = "0efdf2e14de556028e1518123d2879e9a544f9db4abb81a45acbffe24c1b57a8";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/bg/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/bg/thunderbird-115.2.2.tar.bz2";
       locale = "bg";
       arch = "linux-x86_64";
-      sha256 = "e5742af97828bd26a12d95bb776530a15bedac21ac3ca3539420ea86cdae7bec";
+      sha256 = "2090a1df798386de4f7ce018b440e682c0ee002cff6b6cb9e0fc4e8f2354ad2e";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/br/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/br/thunderbird-115.2.2.tar.bz2";
       locale = "br";
       arch = "linux-x86_64";
-      sha256 = "4a67429467160111eb2ad764369ca47840fcd5edde69cd005468d490c514734e";
+      sha256 = "031139a2b4e02e9948c4ef2511e51007dabdaa427f87cc5ebc37213c066417d9";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ca/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ca/thunderbird-115.2.2.tar.bz2";
       locale = "ca";
       arch = "linux-x86_64";
-      sha256 = "91c1e37ab9093230f09ff3cec1409bf1eaf4eacd679120307d360a8dbdfe82b0";
+      sha256 = "9486b45ff6aa2249a68889fc8c14c2eeb6f4157404aa58b6c57d42d2c7224b3a";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/cak/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/cak/thunderbird-115.2.2.tar.bz2";
       locale = "cak";
       arch = "linux-x86_64";
-      sha256 = "de2547de53b17451589ed4403ae494b4aac566d5e1066446c1c713c71484dabd";
+      sha256 = "e25b0ef1ca7825088a9d824333b7e3c15c0f34d91e24f2a6fb95ca321cb35fd6";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/cs/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/cs/thunderbird-115.2.2.tar.bz2";
       locale = "cs";
       arch = "linux-x86_64";
-      sha256 = "220d9281f262bc77abcfd1c24b14e872c9673c8e8ad708895a1556a41db70c0a";
+      sha256 = "66ff84c6eff82053899a5fb73d60b6dbe9a804a29d0a4c3e534b18b4f336d4a6";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/cy/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/cy/thunderbird-115.2.2.tar.bz2";
       locale = "cy";
       arch = "linux-x86_64";
-      sha256 = "80896fe06303e1001ceb9aefb8144205ea023dc7ce32e90b2c7b1f0e03331a7b";
+      sha256 = "c67d74d7647dfef7bfa623f343a98d91921788c317a3ce6e0bcb9589c7dc8231";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/da/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/da/thunderbird-115.2.2.tar.bz2";
       locale = "da";
       arch = "linux-x86_64";
-      sha256 = "cea678e0ca28e77f58c86d2a117f5a5655b4287fbd482106c2a57aa165e79936";
+      sha256 = "b3a297d57b2052d0a97279933a545602bb123c66501751a65cc73c8140fc78f7";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/de/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/de/thunderbird-115.2.2.tar.bz2";
       locale = "de";
       arch = "linux-x86_64";
-      sha256 = "eae1b45086b49401b06c14f583b1cd6202f020b947c704853abfbe26465841b8";
+      sha256 = "43ffd505825af80846b644a36ef0a1254d8bed9c5a707aff633770f86c2be8a0";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/dsb/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/dsb/thunderbird-115.2.2.tar.bz2";
       locale = "dsb";
       arch = "linux-x86_64";
-      sha256 = "1bfccacdc02b717aa13a533349061f785c6b4549e670b17ed62cb6061e5d49a4";
+      sha256 = "312109b1bfdc949873f3f7ed2e7ec58cbe6945c35ae5058d382e874bf458a2ae";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/el/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/el/thunderbird-115.2.2.tar.bz2";
       locale = "el";
       arch = "linux-x86_64";
-      sha256 = "d49552c27e69a837b80ab1f43f933bb0110f94a247868b646396b2f608cd29ea";
+      sha256 = "ed5705d70b211e293c13728ae66da78e7c217f5e06c48d4954a7dfe18e5029af";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/en-CA/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/en-CA/thunderbird-115.2.2.tar.bz2";
       locale = "en-CA";
       arch = "linux-x86_64";
-      sha256 = "e57f4f4845e9835120c45d5e4bfed35b3cece1b1c9a00eaf0b242a6fca3f6c00";
+      sha256 = "a51444f889c9602749b92fcde62c162f109908de9f30e01e96d1a15aed7eced2";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/en-GB/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/en-GB/thunderbird-115.2.2.tar.bz2";
       locale = "en-GB";
       arch = "linux-x86_64";
-      sha256 = "86deb32983d72697bb8c5fa565845f77a428eb9c629fc06820c2100409193ec8";
+      sha256 = "a03bba9d46dab2e6582dc6e25a603db7a9343b042eb499b4fc47c355a7624fa5";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/en-US/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/en-US/thunderbird-115.2.2.tar.bz2";
       locale = "en-US";
       arch = "linux-x86_64";
-      sha256 = "48548474044abe48f1b6820ca50a2b675749c488079cdd1503bd7b9f47f6051c";
+      sha256 = "ffaee7ade088747636abf9ef9edafacc95591c1c317e39847a6dace08a863561";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/es-AR/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/es-AR/thunderbird-115.2.2.tar.bz2";
       locale = "es-AR";
       arch = "linux-x86_64";
-      sha256 = "974af79f910fb3699e7af2d48358eae6aac08353884e212a6a7245491b0269fd";
+      sha256 = "e694f9aa4a95e633fd0efec32e7bad139de2d17eddfe16b6cf68c583dae3f0c0";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/es-ES/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/es-ES/thunderbird-115.2.2.tar.bz2";
       locale = "es-ES";
       arch = "linux-x86_64";
-      sha256 = "4b60facead7af5009a4954b8521c7a158594ee15c89b0e814ea4c7d33e7742ec";
+      sha256 = "3e62ec94a4882ff37796b0fb40d5da0f06f1f68d0f930ee5724d0a8be3e6ef90";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/es-MX/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/es-MX/thunderbird-115.2.2.tar.bz2";
       locale = "es-MX";
       arch = "linux-x86_64";
-      sha256 = "747153c08c152417758d462fd42728ad4d9de0c854feda1d804fd34b31774e28";
+      sha256 = "b13f28b18f02119ed631f0dd7dc92e1e52053370987009846e01dcf63735f5dd";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/et/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/et/thunderbird-115.2.2.tar.bz2";
       locale = "et";
       arch = "linux-x86_64";
-      sha256 = "53fe77007f0a854adf954776647eb0fb735c77b06206eb445ae4cf67e509ca08";
+      sha256 = "9941b5a3a35ae4059f16feb5471d08199a54cbde85751098ae612c806fcf8b5c";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/eu/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/eu/thunderbird-115.2.2.tar.bz2";
       locale = "eu";
       arch = "linux-x86_64";
-      sha256 = "cad749208fe180b60f8547cb954f3a3a2f6d51b512c83f46b40746eedc63a8a6";
+      sha256 = "b7246ce71436f1894cc8440388e826d2b84d57e5b3666be6fa369ca80eac6aff";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/fi/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/fi/thunderbird-115.2.2.tar.bz2";
       locale = "fi";
       arch = "linux-x86_64";
-      sha256 = "b99125795824bd70039f5980d96ca92f51e056f37de47ded35acfc92efe6211e";
+      sha256 = "baac69f0a0c19ac5ca4ca541a67369dd94793929eaedd9e061f5edee39715864";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/fr/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/fr/thunderbird-115.2.2.tar.bz2";
       locale = "fr";
       arch = "linux-x86_64";
-      sha256 = "aa4693b642cd707a04b67665cb07f628428ce25005f695d6014d0017ff7399a1";
+      sha256 = "2b19d69fdf5fa542e513920b0e9f0616b74d6490dcd24e0f6fb6a50948cf7c2a";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/fy-NL/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/fy-NL/thunderbird-115.2.2.tar.bz2";
       locale = "fy-NL";
       arch = "linux-x86_64";
-      sha256 = "8503e7f85f973b81c3626a0681224b884d4f162f1acdc244d86032b9ab7ef60b";
+      sha256 = "56abf13ec4453ad693e825e771fc02bd6d8ea87d795d9d5025c737f6fc57058c";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ga-IE/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ga-IE/thunderbird-115.2.2.tar.bz2";
       locale = "ga-IE";
       arch = "linux-x86_64";
-      sha256 = "fe9ad8c381eb589bfe7a1e1e566c0753c4c40e58057b74896d93251c52774846";
+      sha256 = "640c68609d56c0a838305510ba208a9d9ce216dcb5fdec7126587ac418d8c067";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/gd/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/gd/thunderbird-115.2.2.tar.bz2";
       locale = "gd";
       arch = "linux-x86_64";
-      sha256 = "7da47060bcff9482022734422473f5cfc7ab6cb6d06394001b643e02ae847cf3";
+      sha256 = "c068ac36f73cfb2add5531e72e0268ec1d7d62505371fb0c7691655311fc26de";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/gl/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/gl/thunderbird-115.2.2.tar.bz2";
       locale = "gl";
       arch = "linux-x86_64";
-      sha256 = "ff2aab5cac9e412b51eec3824dbfa91304f0ef11a799a523b2d004de9eb5c56d";
+      sha256 = "5ea2c1bbd289d4a04306b247d773ee7fd30b93999c93b1a013a3b91ffcf5d843";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/he/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/he/thunderbird-115.2.2.tar.bz2";
       locale = "he";
       arch = "linux-x86_64";
-      sha256 = "0315c9082a2fc8142d80fd5d9214df15b09439ce032c9b14b67e294937e85883";
+      sha256 = "0b343990193d616856c61d27655560e69114a41302806fccb688bc39e74c3ee0";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/hr/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/hr/thunderbird-115.2.2.tar.bz2";
       locale = "hr";
       arch = "linux-x86_64";
-      sha256 = "fc3a825581d3076686529053e82fd42c8e5ef424828d608d62d0c31ac45e0115";
+      sha256 = "7a2b5b4dbdbf7ce166ee378d55d3862fdbfccc1a4508cad6f042bbee4967e648";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/hsb/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/hsb/thunderbird-115.2.2.tar.bz2";
       locale = "hsb";
       arch = "linux-x86_64";
-      sha256 = "0163507ddbba36493633ba57ff84cffd5bee36e1c1ed716b083a3e042a7d5999";
+      sha256 = "624e6b231cd4b662c995237fa5c17e744106eca90cf6936877741ddb936a6880";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/hu/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/hu/thunderbird-115.2.2.tar.bz2";
       locale = "hu";
       arch = "linux-x86_64";
-      sha256 = "c44f49d00e3e03027f3fdf407613bc052346b47a899a905709bd415cd6b5616d";
+      sha256 = "8b9a914ddcc8d86986d258e106584a7104b15d4e6be54c3f39df773cf0cc7aae";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/hy-AM/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/hy-AM/thunderbird-115.2.2.tar.bz2";
       locale = "hy-AM";
       arch = "linux-x86_64";
-      sha256 = "0a95d0f1fb25e2d53cf6f622cff4950b9b2c08b755775ffeb9b9e0e02c8fd84b";
+      sha256 = "a1090c31b81ad89734fefffe63b4c01c2a49bab91cf94d32c0ca429f9ae2409f";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/id/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/id/thunderbird-115.2.2.tar.bz2";
       locale = "id";
       arch = "linux-x86_64";
-      sha256 = "f687ad0c797c23213e9d3f99ba598f82dd4412e85eb0056be68d35bca519ebef";
+      sha256 = "31ac099a9049edb6e74d5e4443b11668a5cab97d82470d08df84f8dc9930b882";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/is/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/is/thunderbird-115.2.2.tar.bz2";
       locale = "is";
       arch = "linux-x86_64";
-      sha256 = "d3dfe00ead9922d045b7b16da29dfdbd33241df64cf229acaf9b336baf33d966";
+      sha256 = "c11befb7b259e6883b85730a1a423745782c80fd6d49ae1754d66789c553c2e8";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/it/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/it/thunderbird-115.2.2.tar.bz2";
       locale = "it";
       arch = "linux-x86_64";
-      sha256 = "ad6f0d910ec164069f3df453f7d505d79281955d2770511b7b2f5e537264e935";
+      sha256 = "8e2f30430057194862d93e9fd076b42ac33499ba2fa38c3330070b872faf4693";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ja/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ja/thunderbird-115.2.2.tar.bz2";
       locale = "ja";
       arch = "linux-x86_64";
-      sha256 = "0c73f8e985c1f5cad17dc743cb7896886e75daf6bfa06bd6dc45115f5972fc65";
+      sha256 = "36058ca20592a045a25621b3cb6e085fd7e4c79fb4d85e8851b1bc9429d7b987";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ka/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ka/thunderbird-115.2.2.tar.bz2";
       locale = "ka";
       arch = "linux-x86_64";
-      sha256 = "a03164ab8a35f690d06f2874e6f9d8a09aa1c08c2bd237760f7491f851f9c118";
+      sha256 = "1187cd5eac5511f48d93e053dd391b0b484d2ed8c925f4acd267e1253938812d";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/kab/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/kab/thunderbird-115.2.2.tar.bz2";
       locale = "kab";
       arch = "linux-x86_64";
-      sha256 = "221400b62e8114d50168cd90919dc86c7134f2817486bb79eb4306148a7f5d0a";
+      sha256 = "1058188515e686ec4a2cdf19bd18333b6786a66c8fba768c39435a9b53f6f17c";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/kk/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/kk/thunderbird-115.2.2.tar.bz2";
       locale = "kk";
       arch = "linux-x86_64";
-      sha256 = "2a71a2b04d17867ca11f14c4abe26080ea53fe292f9ef48652b3faade0d7dd10";
+      sha256 = "cd305ce3935fbb6b028f7eacb978bc05ebe068c90c67e35f8cb020a4546e50bb";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ko/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ko/thunderbird-115.2.2.tar.bz2";
       locale = "ko";
       arch = "linux-x86_64";
-      sha256 = "bcff9316fd5e0bffed71ef0e6700e0ed3ea889ed8378015225edbaa1d7a2d241";
+      sha256 = "a54216fc0f6d5e73c830a8d2af6b8b67f76469c5312b18aaa90c5561d2400dcb";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/lt/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/lt/thunderbird-115.2.2.tar.bz2";
       locale = "lt";
       arch = "linux-x86_64";
-      sha256 = "15314e896b9b01771a85da9dbf00c8005ffc29cd998ad2173c4702817faf7257";
+      sha256 = "9cec3ecea52bf0de2be0afece9f93a83cd89c81a0fa5531aac5d0143c19e3eb5";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/lv/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/lv/thunderbird-115.2.2.tar.bz2";
       locale = "lv";
       arch = "linux-x86_64";
-      sha256 = "6443c684e6d9b94609585e24d69393923ac9022d6465b6075c02f0d13c575860";
+      sha256 = "1d40bf00bfceb69058995d1b31d7eb1b95522b9c873c2e353bf91eeabc0fd4e9";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ms/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ms/thunderbird-115.2.2.tar.bz2";
       locale = "ms";
       arch = "linux-x86_64";
-      sha256 = "6ca9aa994e4783c9f4fea81e32e154e427698dd334ac46e0bf7a96c8fe4f2cab";
+      sha256 = "bf2257ee492c4b20dd2c393e783398379361fce3d6eb0e3c697dcc3e5c7692be";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/nb-NO/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/nb-NO/thunderbird-115.2.2.tar.bz2";
       locale = "nb-NO";
       arch = "linux-x86_64";
-      sha256 = "ce379df01e38b254eb03fdb1b652abd4b0b3f4e233273b1d67e5d6e251fa57cf";
+      sha256 = "8d10ff20e72063014de0af53284b6394dd137303de181a5568085b63e3556530";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/nl/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/nl/thunderbird-115.2.2.tar.bz2";
       locale = "nl";
       arch = "linux-x86_64";
-      sha256 = "17f72bc671926c1c1a30df4cfc221046c3b3678e7c6653dd704d4f1db72bcda4";
+      sha256 = "afe6d63a0394d2130b31501c8ed3a7f2d0f1f063eefc737679ba4eb22e7f9f94";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/nn-NO/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/nn-NO/thunderbird-115.2.2.tar.bz2";
       locale = "nn-NO";
       arch = "linux-x86_64";
-      sha256 = "2c2de12ce1a45f83ae2fafdf908364b8a7f69c63030b126d893df516f593cf3e";
+      sha256 = "68e99bf9cf99fa8d8528dc7c18dc482922541ecbfad39251a1ae49dc8f73c0a2";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/pa-IN/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/pa-IN/thunderbird-115.2.2.tar.bz2";
       locale = "pa-IN";
       arch = "linux-x86_64";
-      sha256 = "a5495c9469b0d2436b467133d2368754377aec509ce8d21749e58028a67a9815";
+      sha256 = "d112133d7f9dc5d70bda58261f5b17fadd1da8ceb33f68ff98764658030266e2";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/pl/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/pl/thunderbird-115.2.2.tar.bz2";
       locale = "pl";
       arch = "linux-x86_64";
-      sha256 = "20f91a27f13c2e806308382bf19e8748e4c7a419b89a6e9738d277c077c8c34d";
+      sha256 = "a670c46af55bb5c01cca9763fdc51c7ba883f3e61419e49313de79030ee8f300";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/pt-BR/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/pt-BR/thunderbird-115.2.2.tar.bz2";
       locale = "pt-BR";
       arch = "linux-x86_64";
-      sha256 = "4303cedc8d80bfcfd6127271feccae6a2da8c18a53f839fbb1e0c4cb72d2fb79";
+      sha256 = "94a4c6dc574ced2f5c8853fb8aa5028bd633372119875a84039b40945cd062af";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/pt-PT/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/pt-PT/thunderbird-115.2.2.tar.bz2";
       locale = "pt-PT";
       arch = "linux-x86_64";
-      sha256 = "c68eb14f000af4fe8cf6f18536f30713c69589ca0cb82c8fa439790181acf74f";
+      sha256 = "510052bca71d439273e6101dc45a0dc5d5a0d0d73ca7d10799b60983ca8dad8b";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/rm/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/rm/thunderbird-115.2.2.tar.bz2";
       locale = "rm";
       arch = "linux-x86_64";
-      sha256 = "529a5c074528740afa763143889449324abc72195a2838440da4e392c2dc1c73";
+      sha256 = "9cbf37597f5273d45e7f82fd6a63c4664621886c5b517b139ba32cc92ed699ad";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ro/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ro/thunderbird-115.2.2.tar.bz2";
       locale = "ro";
       arch = "linux-x86_64";
-      sha256 = "166d54a779379219be0ffef97a7332acd25e9575ebfc66b0178d9c77d37679a9";
+      sha256 = "3824fb33a770c42cfb737b1ad2389df31d898f64f5464ef92b65446d84526276";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/ru/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/ru/thunderbird-115.2.2.tar.bz2";
       locale = "ru";
       arch = "linux-x86_64";
-      sha256 = "4e8f8bb50fa3d6f4c307398fa99839bd788751f7cc26353295440936c81824a4";
+      sha256 = "25d898a873fac3aeedd635e35caccb012e2cfcbb3eb9d9b04e32fba331409fc4";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/sk/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/sk/thunderbird-115.2.2.tar.bz2";
       locale = "sk";
       arch = "linux-x86_64";
-      sha256 = "874e16d287596fc666d949c438dcbcc8582bccc8003add0c9482636843ffed50";
+      sha256 = "6efd3f4af7de7c11c5a028a5be5de0459067cd455c237ed1df860b1bb2c2a70b";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/sl/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/sl/thunderbird-115.2.2.tar.bz2";
       locale = "sl";
       arch = "linux-x86_64";
-      sha256 = "93c789e5f3568ed79c22bf8371a2f9e7727411458c0ccb310d31904010d07936";
+      sha256 = "87bdfa7acdaaeb4082190296f16540153696c3521ebdbf83b05e98b34d97423b";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/sq/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/sq/thunderbird-115.2.2.tar.bz2";
       locale = "sq";
       arch = "linux-x86_64";
-      sha256 = "89ada58e070ae1d1bdd4047f4747c6773a3c8252a48bbf388afd9d129b63b7eb";
+      sha256 = "da6c4f5552bc8a13503af5228cc8197f76d4045ccf44d40839d46dbd3021cf8f";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/sr/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/sr/thunderbird-115.2.2.tar.bz2";
       locale = "sr";
       arch = "linux-x86_64";
-      sha256 = "54d54e961b0c809851d37a0b2b6ab2d7825ea8a88cccf62634db428d90cb9d9e";
+      sha256 = "3f816d3718af424ce1ad395ae26899ee6a81d0b9cbc351b24284774f243f8a62";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/sv-SE/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/sv-SE/thunderbird-115.2.2.tar.bz2";
       locale = "sv-SE";
       arch = "linux-x86_64";
-      sha256 = "701106273782a6ff8ebba63cbc9dc1df05ae0c4b364cc82d616b3e048fabf8e7";
+      sha256 = "961695ad2889a4be8e0efc67537fbea786f72d9d0f900bc64346857249d74fde";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/th/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/th/thunderbird-115.2.2.tar.bz2";
       locale = "th";
       arch = "linux-x86_64";
-      sha256 = "a34d9c972c80a69b8cc192c935159da5a1e88c8c2e01b5cac01abe733f712225";
+      sha256 = "24b1c5b1560f6e4e9ccfb9d2913e94c817b5bcf460d08f6a26fe75e3bd84c75d";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/tr/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/tr/thunderbird-115.2.2.tar.bz2";
       locale = "tr";
       arch = "linux-x86_64";
-      sha256 = "93fd8e3850cb40ed2ac0c993f55a452e3194dc6215d8c6ab43c7f3068f57cbc6";
+      sha256 = "7a45630926c83121d5b39705a45fc6534616df0a822c6f61c3d89bf8c5681563";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/uk/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/uk/thunderbird-115.2.2.tar.bz2";
       locale = "uk";
       arch = "linux-x86_64";
-      sha256 = "d9cfecd9aaf80b581e668b336a610f9ffda776f2cfd8e1978ffba537132791d6";
+      sha256 = "940ef8d84557c312b632b67f01f3b68dc1701a159caea8de34b4b950da05c8d9";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/uz/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/uz/thunderbird-115.2.2.tar.bz2";
       locale = "uz";
       arch = "linux-x86_64";
-      sha256 = "359f77b6ed2568c8d9a10dbd456951e2a2b096236b427fd620066446be53d66a";
+      sha256 = "1fd5533ac342d1a32d37428458fb2a08a99cf366b04cbb55acd745b8f931ba79";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/vi/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/vi/thunderbird-115.2.2.tar.bz2";
       locale = "vi";
       arch = "linux-x86_64";
-      sha256 = "2e37b18097f59fce9534be9821bdc79a239974d467feabc48bde776805bab188";
+      sha256 = "1156dd69b7ab889c2e812096e3f8a16d85d11e88b730e35aa6c6d4213410b874";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/zh-CN/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/zh-CN/thunderbird-115.2.2.tar.bz2";
       locale = "zh-CN";
       arch = "linux-x86_64";
-      sha256 = "49180a51d7026b31b1c14af7b8e815dc2b6623bd99b6c3411d18c1dca66add87";
+      sha256 = "e02ee486284735cf17e44fd15145265948e1548ba257be502f59662f81132278";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-x86_64/zh-TW/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-x86_64/zh-TW/thunderbird-115.2.2.tar.bz2";
       locale = "zh-TW";
       arch = "linux-x86_64";
-      sha256 = "b226e792329bae5ed8edc5466e90e72d11b43c7cfc54f2a8e53db9c63fd27fee";
+      sha256 = "1e0f7a45a93457c7a07366435df7e85c4a0f40dca7ab5a189495087aad11f0da";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/af/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/af/thunderbird-115.2.2.tar.bz2";
       locale = "af";
       arch = "linux-i686";
-      sha256 = "fb3587f7848c53ee10d728c9c3040adef397e067369b31e501bea11b09d95fc4";
+      sha256 = "3ee2902b72a9df7b2445fd4e729f8654493cb4b8052433dfd86dfecc26f3678b";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ar/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ar/thunderbird-115.2.2.tar.bz2";
       locale = "ar";
       arch = "linux-i686";
-      sha256 = "13319f60bda98502f1fb406e1c56c4b2cae88641ce1c3d53898eb7badd4af68d";
+      sha256 = "8a882924914f3d7c7483ef778dfee8763102de06944f31b750fe95b7830da1a8";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ast/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ast/thunderbird-115.2.2.tar.bz2";
       locale = "ast";
       arch = "linux-i686";
-      sha256 = "f10a1a374e1c80de4543eaed5fd98d3e8d39e1b98857fdd87f1529b3a83dedaf";
+      sha256 = "5a8feb49d844362b8938aaeca6d42a7d385cddfe8cfdb9e90b4fd304260895c0";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/be/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/be/thunderbird-115.2.2.tar.bz2";
       locale = "be";
       arch = "linux-i686";
-      sha256 = "1511a9cf5d53dc8b6a838d4c953952a4509ea2263270a18b29c0c4df28c6600d";
+      sha256 = "b0376f86764c564d2fddc6a7c868924f14ea1378c8b503b651eaff83bfbcfdbe";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/bg/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/bg/thunderbird-115.2.2.tar.bz2";
       locale = "bg";
       arch = "linux-i686";
-      sha256 = "a4b33808d5341f0540d66937c079e353bc4a5c0c7c8b35e7bf66c1bdb8c20107";
+      sha256 = "dd6c5ff2a77340e03dff6779f620e5c0df5a51b1c0fcd4171e4436d301dcf1a2";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/br/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/br/thunderbird-115.2.2.tar.bz2";
       locale = "br";
       arch = "linux-i686";
-      sha256 = "0b1190344a4f4dcfb01fd64964ba8a2232dfd9227fb398e13b7baab4554a8b82";
+      sha256 = "7a6283099532171a9f695a1a84315c334f87391f20f41421caa13a82c6ffdce6";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ca/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ca/thunderbird-115.2.2.tar.bz2";
       locale = "ca";
       arch = "linux-i686";
-      sha256 = "4112b6ec01b39725499c30893a997442e52dbe7b1fad6cd64594d35317bcad18";
+      sha256 = "46cf076753e50dae6295a50f0fe55fdf1462fdde5f17eef865adfa2413b76c4a";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/cak/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/cak/thunderbird-115.2.2.tar.bz2";
       locale = "cak";
       arch = "linux-i686";
-      sha256 = "c3eae6316d335e32a17f71b0add30025cce22bdf0abe8edcb73b0eb0af2a17b6";
+      sha256 = "af4a0806d404938b720af1c50331d8b20c049251629ce8e6040d54f0da3d6e4a";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/cs/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/cs/thunderbird-115.2.2.tar.bz2";
       locale = "cs";
       arch = "linux-i686";
-      sha256 = "f899c88f7cb5a110ed1ed5046c36310f2e17729cc05b4d95171bf62664df2ca0";
+      sha256 = "7f0af85bea543efd7ab154e42bd8aa077c96d8878f6850f0844daa3168af03b1";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/cy/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/cy/thunderbird-115.2.2.tar.bz2";
       locale = "cy";
       arch = "linux-i686";
-      sha256 = "844fbca12ab0f78de1b9429cfccaaa0271d947da07a8b0c6aed70aa6633b5524";
+      sha256 = "7c0992c257089531ec5b080f736bd10df364cf03f271e85d72398b28bbf5ea6a";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/da/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/da/thunderbird-115.2.2.tar.bz2";
       locale = "da";
       arch = "linux-i686";
-      sha256 = "a59d61fc65a39f10091ff3cbe257a3b622d215d95209330d32e3ef97dd963be0";
+      sha256 = "18c73fdedad32683ff300d7ff0518ebc800bdab42bb54bd09820d9783770417f";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/de/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/de/thunderbird-115.2.2.tar.bz2";
       locale = "de";
       arch = "linux-i686";
-      sha256 = "ac42777c5bb9e1f7c7590717619740445850b63622f9d1af88c3d9843319d5ff";
+      sha256 = "a344a7de24b1c83882b395cd82dd1a9e6241b4b549a21290dea9efec9640caf4";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/dsb/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/dsb/thunderbird-115.2.2.tar.bz2";
       locale = "dsb";
       arch = "linux-i686";
-      sha256 = "9febe2ce5ab23b3d8497d7cf2c5421a982d21869ac7fe0eab7335438cf3fb94b";
+      sha256 = "88f81c3fe9096d84fe3461b1cd22b1df94fe4863ec2f10853f6ca69cbe4d812e";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/el/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/el/thunderbird-115.2.2.tar.bz2";
       locale = "el";
       arch = "linux-i686";
-      sha256 = "7d45f83c8c7e0ced8fa58df73eb14415363164330a654002c515c84319379532";
+      sha256 = "e620620d471704ff8c7a4783f797a5df5150adf0bd359fa032c46336f4a608a2";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/en-CA/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/en-CA/thunderbird-115.2.2.tar.bz2";
       locale = "en-CA";
       arch = "linux-i686";
-      sha256 = "9f8e56de6d247a252f8223b7c9429172962842fb0cd3eaa52f49d6e696dfddfe";
+      sha256 = "f1e138849aa3fa71f23ce33710e7f547857b37cc66ba85853d3037e7f6c83c48";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/en-GB/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/en-GB/thunderbird-115.2.2.tar.bz2";
       locale = "en-GB";
       arch = "linux-i686";
-      sha256 = "d59b7ebb6909e93aca5fe399ac5b2ac233029226815c043f560866e10ea3545e";
+      sha256 = "4425e8e5af32d72844504db55cd60ebcd730614e6e8edfe65c177aa2e8937d50";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/en-US/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/en-US/thunderbird-115.2.2.tar.bz2";
       locale = "en-US";
       arch = "linux-i686";
-      sha256 = "c89893ba01b8c640334f37db0e9e820b6ba325f53acdae02000065b59d101bfc";
+      sha256 = "c31a3a9f85d2d22812846dc91fecd7cca9801542cf5fcc68266ae44801df7575";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/es-AR/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/es-AR/thunderbird-115.2.2.tar.bz2";
       locale = "es-AR";
       arch = "linux-i686";
-      sha256 = "67d197d6ada39affc46f7c521919b5da03900440372d7abcc831bf15edb4d262";
+      sha256 = "34a1296b1ddc22ea34c1996759cc74551533841e9802014085b18dd9e0cd1d5f";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/es-ES/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/es-ES/thunderbird-115.2.2.tar.bz2";
       locale = "es-ES";
       arch = "linux-i686";
-      sha256 = "cbc292554f79d7305986b3c4f16d24dbe419124f3a8856e6d2867c58caf80eea";
+      sha256 = "57b0bdac83109b513858ff30598bb64d113a5bff0bd77f0f0b5f2946f8ed89c5";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/es-MX/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/es-MX/thunderbird-115.2.2.tar.bz2";
       locale = "es-MX";
       arch = "linux-i686";
-      sha256 = "3824a6943995fa80ea4595c01c435564ef5376ed5fe907f0404c504debbfc440";
+      sha256 = "e251157e06a0c380075a00f8690d387718bd553ec2aabf8c81c1951b141c2651";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/et/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/et/thunderbird-115.2.2.tar.bz2";
       locale = "et";
       arch = "linux-i686";
-      sha256 = "c72f92ee061195146aa35385ffe4b3b681171ba063b370486c7b135251451906";
+      sha256 = "b4043ffdc9f5454a799243d5657860bbeb870d7343be0fc3c197527e4b20892c";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/eu/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/eu/thunderbird-115.2.2.tar.bz2";
       locale = "eu";
       arch = "linux-i686";
-      sha256 = "3455543dcde9a967ebe0dc87cd0596d117e908c0381b6199b9d9fb64d75e380e";
+      sha256 = "001662ce9fc1a7c9ab82ed4f0dbbc49d0fa0c6d5b3ae93573dbfd44af0e12a33";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/fi/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/fi/thunderbird-115.2.2.tar.bz2";
       locale = "fi";
       arch = "linux-i686";
-      sha256 = "b5f18535ee98887b1e6b93024b91d77ff2d8ff59928c4c5b2904876c5dab7ad8";
+      sha256 = "c0c368797911327088819de0c1e6e6dbf6f7ccee871c11695ce64cacdd56341d";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/fr/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/fr/thunderbird-115.2.2.tar.bz2";
       locale = "fr";
       arch = "linux-i686";
-      sha256 = "050c5358b73082fa114f99bdb9d54836b5975ded395765f106c927773745be08";
+      sha256 = "cd444fbdd2febd5aeee98ba4f4db737b3e6cd7a85b9cb456da179bd4cb9f67dd";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/fy-NL/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/fy-NL/thunderbird-115.2.2.tar.bz2";
       locale = "fy-NL";
       arch = "linux-i686";
-      sha256 = "f4ccecff5d4d010ac40af03dd76ec7871d2c0c283c6dc1681e1d5031689932ae";
+      sha256 = "43203b502f5231c0caca6ea389a79558d5faa74f3b6256c3fe11c2392fbe45a2";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ga-IE/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ga-IE/thunderbird-115.2.2.tar.bz2";
       locale = "ga-IE";
       arch = "linux-i686";
-      sha256 = "e6fb715a504f7aba1de93242426865865f798407003cb2c079d1094da485d019";
+      sha256 = "0a86e1f993cc9f6cb9d19a481e028458287e765786bb5eb26fa1f45c253ef8e5";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/gd/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/gd/thunderbird-115.2.2.tar.bz2";
       locale = "gd";
       arch = "linux-i686";
-      sha256 = "a20d5c75be76a003a468fe7ead078365e9677fbb43417ba477a436c21a449089";
+      sha256 = "3331e8a202a131e4b2ebaa5990d5b4976df286287eb1d22381ddac30368584da";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/gl/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/gl/thunderbird-115.2.2.tar.bz2";
       locale = "gl";
       arch = "linux-i686";
-      sha256 = "0f75721665a6845a400bfc72ade60e0402c616f8b9ee7dbdbf3897685f783f64";
+      sha256 = "ddf7a4655bb5992c064d26b8f6c2ebd68b57f8a08168699f385848ef8471b600";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/he/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/he/thunderbird-115.2.2.tar.bz2";
       locale = "he";
       arch = "linux-i686";
-      sha256 = "1afd6199288e0d7607cbac0b8d3e40a07654b3ea0b9e57ee97d8bbbf1eac2677";
+      sha256 = "d792d930eba7c959cae93726c56bbe172e372067d0cae36519b060d996e33ace";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/hr/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/hr/thunderbird-115.2.2.tar.bz2";
       locale = "hr";
       arch = "linux-i686";
-      sha256 = "b13dc3ecaff878dd98f4f92f82174865c3c0d7fd2f15fd076acda4c0d70f4f14";
+      sha256 = "4e18f2e41e066226f90bc324d0353e0cfe50e8b6a819e8e15e2a9c11ca15520a";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/hsb/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/hsb/thunderbird-115.2.2.tar.bz2";
       locale = "hsb";
       arch = "linux-i686";
-      sha256 = "32268a1d36f4415ce049a0b5b2e991f2c37b54d8d81cc182d5b02729ceb2f726";
+      sha256 = "f4a2d7b3f45b8fc238e62acec32a2f5512834933246f4f9c49eb8d77437e4fd7";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/hu/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/hu/thunderbird-115.2.2.tar.bz2";
       locale = "hu";
       arch = "linux-i686";
-      sha256 = "967d072185910d87469ff7281a8fa3ad1892beeb27a86a318c72b1134a2ce924";
+      sha256 = "73ea347abc31da1cadabef37698debe1656f57c40014ffeb6bc66293c21cb85e";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/hy-AM/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/hy-AM/thunderbird-115.2.2.tar.bz2";
       locale = "hy-AM";
       arch = "linux-i686";
-      sha256 = "54eade63c8ba6e63e29e2aeafd198e16e0a9bcd8367ecaad955e73cf22002d4e";
+      sha256 = "5829588a384a770ab25008ccb16ee082c880d8e99082ab9df59c4d92e21aafd6";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/id/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/id/thunderbird-115.2.2.tar.bz2";
       locale = "id";
       arch = "linux-i686";
-      sha256 = "b7d17f5cc4948b8050ab4f85b2dd88b02062018b0509a8e27ba6fe5acbaf341a";
+      sha256 = "77a6b3c5ba1454fe8e8a93b463b6cbe841da25ba352ed1eeba7bb5f32108cc18";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/is/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/is/thunderbird-115.2.2.tar.bz2";
       locale = "is";
       arch = "linux-i686";
-      sha256 = "08f74ad24fe7dd1d00ed601f515a6c82d1dfea7ffd5563f779f2e6ebd3f9190f";
+      sha256 = "aeede33f1040ee9e9647df43bc88bf848017a91e2fb8ad42f5c109b42aa0f533";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/it/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/it/thunderbird-115.2.2.tar.bz2";
       locale = "it";
       arch = "linux-i686";
-      sha256 = "12cdb822aadfb11d79d601e31d5720f7774548235657fefdf18fa2207d369ad3";
+      sha256 = "7cfd1ad0a4ad00bcb16539a8ff1a4b54447901501f05cba812245c70b8044d5c";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ja/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ja/thunderbird-115.2.2.tar.bz2";
       locale = "ja";
       arch = "linux-i686";
-      sha256 = "3b00e0c2d3b9ab061c4de168d23695bfb6e49f1b8046f6754dc1077f86266a7e";
+      sha256 = "d9d8c0983592c4e44374739d089759c13cdd7d6b912efbab5972a97ec43ec00f";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ka/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ka/thunderbird-115.2.2.tar.bz2";
       locale = "ka";
       arch = "linux-i686";
-      sha256 = "70393907a7eda66aab103a9f2706a294c59ee52e033fa87792329924be704867";
+      sha256 = "c3ac587b9d0cdfd74babff266f81538cdd701b75ecae61b9c0f7cbf499e16423";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/kab/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/kab/thunderbird-115.2.2.tar.bz2";
       locale = "kab";
       arch = "linux-i686";
-      sha256 = "f04d2b5a1741b6b65b811a449dfc0339230f8f2637d08bf63f199cb7e99a906c";
+      sha256 = "dfcff22ad267fafaea7d2e8892e50d24dbe191d3133ba927d2077b306a92d5c8";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/kk/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/kk/thunderbird-115.2.2.tar.bz2";
       locale = "kk";
       arch = "linux-i686";
-      sha256 = "1f2d3a7294e0c8eedb91426a9ba8e2090d11831dec33370434bcfa14651f88e0";
+      sha256 = "6ab9f8ca37108634778631d0f4a4231a9fd6c1a96e1b8fe48bd976ae6c4176be";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ko/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ko/thunderbird-115.2.2.tar.bz2";
       locale = "ko";
       arch = "linux-i686";
-      sha256 = "47489d0a9e881d72c743c1473f9eed91ecafe19cdb04a4540216d57a37bc2682";
+      sha256 = "679d3f285efe8e3cfef0d6aac96e56638705f479cdd7a85decbc3376f684a362";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/lt/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/lt/thunderbird-115.2.2.tar.bz2";
       locale = "lt";
       arch = "linux-i686";
-      sha256 = "9eccde306860618c5aadf17653d52a69977769a72e673079353a7ad84565cce4";
+      sha256 = "31c5bc57a65c371d13d6ecae2d9806462614cb0f25ae02385d64ad9b78e03e16";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/lv/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/lv/thunderbird-115.2.2.tar.bz2";
       locale = "lv";
       arch = "linux-i686";
-      sha256 = "efac6139ebe47ff35c78ae395a0ff80537439634ba9aa335b570aaa5ba54004e";
+      sha256 = "4d6dc7af4709b1fcd30bade79462faba7f97b63969be5d03b0bd06de4b5b3545";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ms/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ms/thunderbird-115.2.2.tar.bz2";
       locale = "ms";
       arch = "linux-i686";
-      sha256 = "d762e502c2781b99a4bdcddfd30b1e999399750f62bc2763b21116162adb32c1";
+      sha256 = "a7a735fb888d4e1c93d5593c88e8c14080c3b05460c6b6b2ffedcc1ab5c1a53d";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/nb-NO/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/nb-NO/thunderbird-115.2.2.tar.bz2";
       locale = "nb-NO";
       arch = "linux-i686";
-      sha256 = "f0712444626fc5a6401726060abf0e30178db0c534734eab9b60058f9244af67";
+      sha256 = "47df0274374aea382dcae2a0d083fb36fc666500b320a0e3eb97f056e0fb02fa";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/nl/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/nl/thunderbird-115.2.2.tar.bz2";
       locale = "nl";
       arch = "linux-i686";
-      sha256 = "4e810fef142b55b598db29a22d9ef92dacb0fa123cc6ce88a160dd1109ad7209";
+      sha256 = "95c73823294cc2d9348ff4855d8bba4aed0a61d430ddaabaae90be250d198e1b";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/nn-NO/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/nn-NO/thunderbird-115.2.2.tar.bz2";
       locale = "nn-NO";
       arch = "linux-i686";
-      sha256 = "8c9b298d607e2fef12f66461199f40bb6a4ee6757992b120adc510fe45d8361c";
+      sha256 = "9b170811ddd271db68c417650da56d9eb61e976e20a6787b5505497e3acc588d";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/pa-IN/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/pa-IN/thunderbird-115.2.2.tar.bz2";
       locale = "pa-IN";
       arch = "linux-i686";
-      sha256 = "fe8855b2f96dd55077d3e53fba76201fd2368cc0b9444f1a7f85c16654ea21a1";
+      sha256 = "a25dc5ebf2ba028f5f9a5e23eb90e0862ead94c5d8476d2f3429d640c36a75a3";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/pl/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/pl/thunderbird-115.2.2.tar.bz2";
       locale = "pl";
       arch = "linux-i686";
-      sha256 = "e9920c0f562a8cef6f56b51aa4cd030b376d6deb62fe4bf11e66cf9ce236b111";
+      sha256 = "dba916bca6c19c0771b7ef35199c89e77864f200df4ae40b15c3483ba3f02b2b";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/pt-BR/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/pt-BR/thunderbird-115.2.2.tar.bz2";
       locale = "pt-BR";
       arch = "linux-i686";
-      sha256 = "f66aae8b75b0dd15ce5abac37e3de2fe83ce7924e55fc1c90283f8de07977d43";
+      sha256 = "2d3583f7062659a8642ee952205235abcde36e86918e905be85a1070ead65f88";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/pt-PT/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/pt-PT/thunderbird-115.2.2.tar.bz2";
       locale = "pt-PT";
       arch = "linux-i686";
-      sha256 = "8e9da0def94d0fc3b7687bbcd3748aa885b639f3e83e91fe6ea650227867da1f";
+      sha256 = "c09cffe7f7043f6c757e478e46c30ada218999437d9e9748bb1ade9891365195";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/rm/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/rm/thunderbird-115.2.2.tar.bz2";
       locale = "rm";
       arch = "linux-i686";
-      sha256 = "859662bca36ee2c4de55e2e0af726d7128aa44893d530ebdab5e333f4553e46d";
+      sha256 = "4a1853d5c7915181e949ee64611ea34525bc41fb72f16b02b083d81265d7bab9";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ro/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ro/thunderbird-115.2.2.tar.bz2";
       locale = "ro";
       arch = "linux-i686";
-      sha256 = "bb16aacc8b52072704a34e804e4d2e4994675eec30240f9b983f238f737a7a67";
+      sha256 = "397379badeb37e27123c5316422567e7b2bcf1c3033a85d8549866f06090d2e0";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/ru/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/ru/thunderbird-115.2.2.tar.bz2";
       locale = "ru";
       arch = "linux-i686";
-      sha256 = "78c2091a6a1f2273b65981b15c3ae0378f21d5765e1551c12512d3087c26ec7f";
+      sha256 = "e23ceab86e0cce57522bea456f396fdf96bdca1b30eee4d7a2999709383544ae";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/sk/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/sk/thunderbird-115.2.2.tar.bz2";
       locale = "sk";
       arch = "linux-i686";
-      sha256 = "594f9964622f0522b4f5b1243267d61bc5de5653bb142b6d3a764fcb1bac2be2";
+      sha256 = "87027b9270956fffa744d5d35b96094265a735eb7c361fd3badd2012b34e13ff";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/sl/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/sl/thunderbird-115.2.2.tar.bz2";
       locale = "sl";
       arch = "linux-i686";
-      sha256 = "c3e24b9ba8ef644861d273800cb7aed8919e3c2f1b2a0efd5f1890e33e56c758";
+      sha256 = "cb65c05b17419a69b0835a7be064e40c6cd29a114b28e5682cf5df2d6ff07c22";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/sq/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/sq/thunderbird-115.2.2.tar.bz2";
       locale = "sq";
       arch = "linux-i686";
-      sha256 = "622d9491a1110aa2f11a3dc6d077e86457cf60a19453a0079b1ca3a286e868e1";
+      sha256 = "0a04b9f2de594d18a39ed04dbf503c50afe5281100c04887eb1d907c5268edb5";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/sr/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/sr/thunderbird-115.2.2.tar.bz2";
       locale = "sr";
       arch = "linux-i686";
-      sha256 = "0596e88774c17abce15c323c0362f6389896df72918f49622df28608ea3b56f7";
+      sha256 = "30f05101328e20f56c0e45505a6b579f19aa6fe8e88014be5f1b201dd19b8567";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/sv-SE/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/sv-SE/thunderbird-115.2.2.tar.bz2";
       locale = "sv-SE";
       arch = "linux-i686";
-      sha256 = "23cf02ad134bef3cc39768c7d6ce2ed6f87b747994088bdd3ca379a141582c22";
+      sha256 = "1bd3ece9bc7d4c51d2f25d221eda2105e1f8ddd1071391a27d2875cd246f331f";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/th/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/th/thunderbird-115.2.2.tar.bz2";
       locale = "th";
       arch = "linux-i686";
-      sha256 = "60d8f78e48e10a36ea20fd5be8e5764d08ac9e36e5a987a219c84b87ab23493b";
+      sha256 = "6a448f673b6c4991faf6d6142a1557b2bd9f9c2f9cd540a7d48b5d27ac7d0419";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/tr/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/tr/thunderbird-115.2.2.tar.bz2";
       locale = "tr";
       arch = "linux-i686";
-      sha256 = "09aaaaed57d6103e24404fff59e6778e3f3ef69c023ecb662c1e6a4352a05ca7";
+      sha256 = "87844be2d24111a275eb6e557cae904167c0c817bd98d8af8d198c4ca126950d";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/uk/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/uk/thunderbird-115.2.2.tar.bz2";
       locale = "uk";
       arch = "linux-i686";
-      sha256 = "a521e012e982119f868034bc7ce46932c3bc76141fc8ca1b0c2b2655b8bbaaa7";
+      sha256 = "4ea9214c1ca561dabc43be1a55d9e8bb56dad60b116f0e8814a2fa0dac2d740c";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/uz/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/uz/thunderbird-115.2.2.tar.bz2";
       locale = "uz";
       arch = "linux-i686";
-      sha256 = "6a8c808ee0ab90432d1e999a4f165819e37a0b9d842af35f59acd714be2d2992";
+      sha256 = "ca6a23a0234a15e05f5ffd627102bfd357882f8187e4ee5568173a926c186163";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/vi/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/vi/thunderbird-115.2.2.tar.bz2";
       locale = "vi";
       arch = "linux-i686";
-      sha256 = "8c1ba2d937f48aca65d33d3dd9d0f3eda8f648b8c999d2d48328786a3c3e3b83";
+      sha256 = "14ce4927f2695c6c7e1b35f9f0e00600861c8cf05351da21e3c19aa8f6243b2a";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/zh-CN/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/zh-CN/thunderbird-115.2.2.tar.bz2";
       locale = "zh-CN";
       arch = "linux-i686";
-      sha256 = "36bcd384a63637e94f85705815d2e814e8302df093b384837a066451f90b5001";
+      sha256 = "014933d85792304b836d67bd449b85be0a17be014f842f9fcb1cf7a2e3077329";
     }
-    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.1/linux-i686/zh-TW/thunderbird-115.2.1.tar.bz2";
+    { url = "http://archive.mozilla.org/pub/thunderbird/releases/115.2.2/linux-i686/zh-TW/thunderbird-115.2.2.tar.bz2";
       locale = "zh-TW";
       arch = "linux-i686";
-      sha256 = "082b2eb7a452172102a762ce90d03e3d5a1171ff652a9d4e5a0ea84c6ded624e";
+      sha256 = "339fa1de720d6d24b778757fe4dc0d5a7b663e7ce608600f78821199dc596441";
     }
     ];
 }

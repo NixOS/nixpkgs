@@ -45,12 +45,12 @@ let
 
   isCross = stdenv.buildPlatform != stdenv.targetPlatform;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "go";
   version = "1.18.10";
 
   src = fetchurl {
-    url = "https://go.dev/dl/go${version}.src.tar.gz";
+    url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
     sha256 = "sha256-nO3MpYhF3wyUdK4AJ0xEqVyd+u+xMvxZkhwox8EG+OY=";
   };
 
@@ -152,13 +152,13 @@ stdenv.mkDerivation rec {
   '' + (if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then ''
     mv bin/*_*/* bin
     rmdir bin/*_*
-    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
-      rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
+    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
+      rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
     ''}
   '' else lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
     rm -rf bin/*_*
-    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
-      rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
+    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
+      rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
     ''}
   '');
 
@@ -177,15 +177,20 @@ stdenv.mkDerivation rec {
     inherit goBootstrap skopeoTest;
     tests = {
       skopeo = testers.testVersion { package = skopeoTest; };
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "go version";
+        version = "go${finalAttrs.version}";
+      };
     };
   };
 
   meta = with lib; {
-    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor version}";
+    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
     description = "The Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
     platforms = platforms.darwin ++ platforms.linux;
   };
-}
+})
