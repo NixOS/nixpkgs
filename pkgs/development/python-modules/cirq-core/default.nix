@@ -32,36 +32,24 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "setuptools";
 
-  # Upstream package is broken on Python 3.11 https://github.com/quantumlib/Cirq/issues/6018
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5j4hbG95KRfRQTyyZgoNp/eHIcy0FphyEhbYnzyUMO4=";
+    hash = "sha256-KEei5PJ0ammsduZVmMh2vaW3f58DYI4BCrFCl/SjUoo=";
   };
 
   sourceRoot = "${src.name}/${pname}";
 
-  patches = [
-    # https://github.com/quantumlib/Cirq/pull/5991
-    (fetchpatch {
-      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-cirq/cirq-pr5991-np1.24.patch?rev=8";
-      stripLen = 1;
-      hash = "sha256-d2FpaxM1PsPWT9ZM9v2gVrnLCy9zmvkkyAVgo85eL3U=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "matplotlib~=3.0" "matplotlib" \
-      --replace "networkx~=2.4" "networkx" \
-      --replace "numpy>=1.16,<1.24" "numpy"
-  '';
+      --replace "matplotlib~=3.0" "matplotlib"
+   '';
 
   propagatedBuildInputs = [
     duet
