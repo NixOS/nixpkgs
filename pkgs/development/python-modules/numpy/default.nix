@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchPypi
-, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
@@ -41,24 +40,17 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.25.1";
+  version = "1.25.2";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-mjqfOmFIDMCGEXtCaovYaGnCE/xAcuYG8BxOS2brkr8=";
+    hash = "sha256-/WCOGcjXxVAh3/1Dv+VJL6uMwQXMiYb4E/jDwEizh2A=";
   };
 
   patches = [
-    # f2py.f90mod_rules generates code with invalid function pointer conversions, which are
-    # clang 16 makes an error by default.
-    (fetchpatch {
-      url = "https://github.com/numpy/numpy/commit/609fee4324f3521d81a3454f5fcc33abb0d3761e.patch";
-      hash = "sha256-6Dbmf/RWvQJPTIjvchVaywHGcKCsgap/0wAp5WswuCo=";
-    })
-
     # Disable `numpy/core/tests/test_umath.py::TestComplexFunctions::test_loss_of_precision[complex256]`
     # on x86_64-darwin because it fails under Rosetta 2 due to issues with trig functions and
     # 80-bit long double complex numbers.
