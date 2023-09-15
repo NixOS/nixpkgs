@@ -17,7 +17,7 @@
 }:
 buildPythonPackage rec {
   pname = "sapi-python-client";
-  version = "0.5.0";
+  version = "0.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "keboola";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-79v9quhzeNRXcm6Z7BhD76lTZtw+Z0T1yK3zhrdreXw=";
+    hash = "sha256-74sChw6eMkBtfHV6hiaaLNOr/J0Sa73LB93Z8muLaiI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
