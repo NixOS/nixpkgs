@@ -86,7 +86,7 @@ Most other fetchers return a directory rather than a single file.
 ## `fetchDebianPatch` {#fetchdebianpatch}
 
 A wrapper around `fetchpatch`, which takes:
-- `patch` and `hash`: the patch's filename without the `.patch` suffix,
+- `patch` and `hash`: the patch's filename,
   and its hash after normalization by `fetchpatch` ;
 - `pname`: the Debian source package's name ;
 - `version`: the upstream version number ;
@@ -110,7 +110,7 @@ buildPythonPackage rec {
     (fetchDebianPatch {
       inherit pname version;
       debianRevision = "5";
-      name = "Add-quotes-to-SOAPAction-header-in-SoapClient";
+      name = "Add-quotes-to-SOAPAction-header-in-SoapClient.patch";
       hash = "sha256-xA8Wnrpr31H8wy3zHSNfezFNjUJt1HbSXn3qUMzeKc0=";
     })
   ];
