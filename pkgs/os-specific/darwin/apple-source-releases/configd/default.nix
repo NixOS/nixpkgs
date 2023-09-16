@@ -1,5 +1,19 @@
-{ lib, stdenv, runCommand, appleDerivation', launchd, bootstrap_cmds, swift-corelibs-foundation, xnu, xpc, ppp, IOKit, eap8021x, Security
-, headersOnly ? false }:
+{ lib
+, runCommand
+, appleDerivation'
+, stdenvBootstrap
+, bootstrap_cmds
+, CF
+, swift-corelibs-foundation
+, launchd
+, ppp
+, xpc
+, IOKit
+, eap8021x
+, Security
+, xnu
+, headersOnly ? false
+}:
 
 let
   privateHeaders = runCommand "swift-corelibs-foundation-private" { } ''
@@ -9,11 +23,11 @@ let
       $out/include/CoreFoundation
   '';
 in
-appleDerivation' stdenv {
-  meta.broken = stdenv.cc.nativeLibc;
+appleDerivation' stdenvBootstrap {
+  meta.broken = stdenvBootstrap.cc.nativeLibc;
 
   nativeBuildInputs = lib.optionals (!headersOnly) [ bootstrap_cmds ];
-  buildInputs = lib.optionals (!headersOnly) [ privateHeaders launchd ppp xpc IOKit eap8021x ];
+  buildInputs = lib.optionals (!headersOnly) [ CF privateHeaders launchd ppp xpc IOKit eap8021x ];
 
   propagatedBuildInputs = lib.optionals (!headersOnly) [ Security ];
 
