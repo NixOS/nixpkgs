@@ -123,14 +123,20 @@ in {
     ubootExtlinux = let
       sdImage = "${sd}/sd-image/${sd.imageName}";
       mutableImage = "/tmp/linked-image.qcow2";
-
-      machineConfig = pythonDict {
-        bios = "${pkgs.ubootQemuX86}/u-boot.rom";
-        qemuFlags = "-m 768 -machine type=pc,accel=tcg -drive file=${mutableImage},if=ide,format=qcow2";
-      };
     in makeTest {
       name = "boot-uboot-extlinux";
-      nodes = { };
+      meta = with maintainers; {
+        maintainers = [ raitobezarius ];
+      };
+      nodes.machine = { ... }: {
+        virtualisation = {
+          firmware = "uboot";
+          diskImage = null;
+          qemu.options = [
+            "-drive file=${mutableImage},if=ide,format=qcow2"
+          ];
+        };
+      };
       testScript = ''
         import os
 
@@ -138,7 +144,7 @@ in {
         if os.system("qemu-img create -f qcow2 -F raw -b ${sdImage} ${mutableImage}") != 0:
             raise RuntimeError("Could not create mutable linked image")
 
-        machine = create_machine(${machineConfig})
+        os.environ['NIX_DISK_IMAGE'] = "${mutableImage}"
         machine.start()
         machine.wait_for_unit("multi-user.target")
         machine.succeed("nix store verify -r --no-trust --option experimental-features nix-command /run/current-system")
