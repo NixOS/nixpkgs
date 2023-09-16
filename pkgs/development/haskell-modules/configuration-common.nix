@@ -2767,6 +2767,7 @@ self: super: {
   # Tests fail due to the newly-build fourmolu not being in PATH
   # https://github.com/fourmolu/fourmolu/issues/231
   fourmolu_0_14_0_0 = dontCheck super.fourmolu_0_14_0_0;
+  fourmolu_0_13_1_0 = dontCheck super.fourmolu_0_13_1_0;
 
   # Merged upstream, but never released. Allows both intel and aarch64 darwin to build.
   # https://github.com/vincenthz/hs-gauge/pull/106

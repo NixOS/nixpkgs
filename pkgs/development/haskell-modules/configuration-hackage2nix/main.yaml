@@ -122,6 +122,7 @@ extra-packages:
   - ormolu == 0.5.2.0                   # 2023-08-08: for hls on ghc 9.0 and 9.2
   - fourmolu == 0.9.0.0                 # 2022-09-21: for hls on ghc 8.10
   - fourmolu == 0.10.1.0                # 2023-04-18: for hls on ghc 9.0 and 9.2
+  - fourmolu == 0.13.*                  # 2023-09-16: latest version compatible with hls 2.2.* on ghc 9.6
   - mod == 0.1.2.2                      # needed for hls on ghc 8.10
   - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
