@@ -8,11 +8,27 @@ with lib;
 let
 
   mkRulesTypeOption = type: mkOption {
-    # This option is experimental and subject to breaking changes without notice.
+    # These options are experimental and subject to breaking changes without notice.
     description = lib.mdDoc ''
       PAM `${type}` rules for this service.
     '';
-    type = types.listOf types.str;
+    type = types.listOf (types.submodule {
+      options = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = lib.mdDoc ''
+            Whether this rule is added to the PAM service config file.
+          '';
+        };
+        text = mkOption {
+          type = types.str;
+          description = lib.mdDoc ''
+            Text of the rule (without `service` or `type` fields).
+          '';
+        };
+      };
+    });
   };
 
   parentConfig = config;
@@ -503,8 +519,9 @@ let
 
       text = let
         formatRules = type: pipe cfg.rules.${type} [
+          (filter (rule: rule.enable))
           (map (rule: concatStringsSep " "
-            [ type (removeSuffix "\n" rule) ]
+            [ type (removeSuffix "\n" rule.text) ]
           ))
           (concatStringsSep "\n")
         ];
@@ -526,81 +543,83 @@ let
       # Samba stuff to the Samba module.  This requires that the PAM
       # module provides the right hooks.
       rules = {
-        account =
-          optional use_ldap ''
+        account = [
+          { enable = use_ldap; text = ''
             sufficient ${pam_ldap}/lib/security/pam_ldap.so
-          '' ++
-          optional cfg.mysqlAuth ''
+          ''; }
+          { enable = cfg.mysqlAuth; text = ''
             sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
-          '' ++
-          optional config.services.kanidm.enablePam ''
+          ''; }
+          { enable = config.services.kanidm.enablePam; text = ''
             sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user
-          '' ++
-          optional config.services.sssd.enable ''
+          ''; }
+          { enable = config.services.sssd.enable; text = ''
             ${if cfg.sssdStrictAccess then "[default=bad success=ok user_unknown=ignore]" else "sufficient"} ${pkgs.sssd}/lib/security/pam_sss.so
-          '' ++
-          optional config.security.pam.krb5.enable ''
+          ''; }
+          { enable = config.security.pam.krb5.enable; text = ''
             sufficient ${pam_krb5}/lib/security/pam_krb5.so
-          '' ++
-          optional cfg.googleOsLoginAccountVerification ''
+          ''; }
+          { enable = cfg.googleOsLoginAccountVerification; text = ''
             [success=ok ignore=ignore default=die] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
-          '' ++
-          optional cfg.googleOsLoginAccountVerification ''
+          ''; }
+          { enable = cfg.googleOsLoginAccountVerification; text = ''
             [success=ok default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so
-          '' ++
-          optional config.services.homed.enable ''
+          ''; }
+          { enable = config.services.homed.enable; text = ''
             sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
-          '' ++
+          ''; }
           # The required pam_unix.so module has to come after all the sufficient modules
           # because otherwise, the account lookup will fail if the user does not exist
           # locally, for example with MySQL- or LDAP-auth.
-          singleton ''
+          { text = ''
             required pam_unix.so
-          '';
+          ''; }
+        ];
 
-        auth =
-          optional cfg.googleOsLoginAuthentication ''
+        auth = [
+          { enable = cfg.googleOsLoginAuthentication; text = ''
             [success=done perm_denied=die default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
-          '' ++
-          optional cfg.rootOK ''
+          ''; }
+          { enable = cfg.rootOK; text = ''
             sufficient pam_rootok.so
-          '' ++
-          optional cfg.requireWheel ''
+          ''; }
+          { enable = cfg.requireWheel; text = ''
             required pam_wheel.so use_uid
-          '' ++
-          optional cfg.logFailures ''
+          ''; }
+          { enable = cfg.logFailures; text = ''
             required pam_faillock.so
-          '' ++
-          optional cfg.mysqlAuth ''
+          ''; }
+          { enable = cfg.mysqlAuth; text = ''
             sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
-          '' ++
-          optional (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth) ''
+          ''; }
+          { enable = config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth; text = ''
             sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=${lib.concatStringsSep ":" config.services.openssh.authorizedKeysFiles}
-          '' ++
-          (let p11 = config.security.pam.p11; in optional cfg.p11Auth ''
+          ''; }
+          (let p11 = config.security.pam.p11; in { enable = cfg.p11Auth; text = ''
             ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so
-          '') ++
-          (let u2f = config.security.pam.u2f; in optional cfg.u2fAuth ''
+          ''; })
+          (let u2f = config.security.pam.u2f; in { enable = cfg.u2fAuth; text = ''
             ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"} ${optionalString (u2f.origin != null) "origin=${u2f.origin}"}
-          '') ++
-          optional cfg.usbAuth ''
+          ''; })
+          { enable = cfg.usbAuth; text = ''
             sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so
-          '' ++
-          (let ussh = config.security.pam.ussh; in optional (config.security.pam.ussh.enable && cfg.usshAuth) ''
+          ''; }
+          (let ussh = config.security.pam.ussh; in { enable = config.security.pam.ussh.enable && cfg.usshAuth; text = ''
             ${ussh.control} ${pkgs.pam_ussh}/lib/security/pam_ussh.so ${optionalString (ussh.caFile != null) "ca_file=${ussh.caFile}"} ${optionalString (ussh.authorizedPrincipals != null) "authorized_principals=${ussh.authorizedPrincipals}"} ${optionalString (ussh.authorizedPrincipalsFile != null) "authorized_principals_file=${ussh.authorizedPrincipalsFile}"} ${optionalString (ussh.group != null) "group=${ussh.group}"}
-          '') ++
-          (let oath = config.security.pam.oath; in optional cfg.oathAuth ''
+          ''; })
+          (let oath = config.security.pam.oath; in { enable = cfg.oathAuth; text = ''
             requisite ${pkgs.oath-toolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}
-          '') ++
-          (let yubi = config.security.pam.yubico; in optional cfg.yubicoAuth ''
+          ''; })
+          (let yubi = config.security.pam.yubico; in { enable = cfg.yubicoAuth; text = ''
             ${yubi.control} ${pkgs.yubico-pam}/lib/security/pam_yubico.so mode=${toString yubi.mode} ${optionalString (yubi.challengeResponsePath != null) "chalresp_path=${yubi.challengeResponsePath}"} ${optionalString (yubi.mode == "client") "id=${toString yubi.id}"} ${optionalString yubi.debug "debug"}
-          '') ++
-          (let dp9ik = config.security.pam.dp9ik; in optional dp9ik.enable ''
+          ''; })
+          (let dp9ik = config.security.pam.dp9ik; in { enable = dp9ik.enable; text = ''
             ${dp9ik.control} ${pkgs.pam_dp9ik}/lib/security/pam_p9.so ${dp9ik.authserver}
-          '') ++
-          optional cfg.fprintAuth ''
+          ''; })
+          { enable = cfg.fprintAuth; text = ''
             sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so
-          '' ++
+          ''; }
+        ] ++
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
           # after it succeeds. Certain modules need to run after pam_unix
@@ -620,202 +639,205 @@ let
               || cfg.failDelay.enable
               || cfg.duoSecurity.enable
               || cfg.zfs))
-            (
-              optional config.services.homed.enable ''
+            [
+              { enable = config.services.homed.enable; text = ''
                 optional ${config.systemd.package}/lib/security/pam_systemd_home.so
-              '' ++
-              optional cfg.unixAuth ''
+              ''; }
+              { enable = cfg.unixAuth; text = ''
                 optional pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
-              '' ++
-              optional config.security.pam.enableEcryptfs ''
+              ''; }
+              { enable = config.security.pam.enableEcryptfs; text = ''
                 optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap
-              '' ++
-              optional config.security.pam.enableFscrypt ''
+              ''; }
+              { enable = config.security.pam.enableFscrypt; text = ''
                 optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
-              '' ++
-              optional cfg.zfs ''
+              ''; }
+              { enable = cfg.zfs; text = ''
                 optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
-              '' ++
-              optional cfg.pamMount ''
+              ''; }
+              { enable = cfg.pamMount; text = ''
                 optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
-              '' ++
-              optional cfg.enableKwallet ''
+              ''; }
+              { enable = cfg.enableKwallet; text = ''
                 optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5
-              '' ++
-              optional cfg.enableGnomeKeyring ''
+              ''; }
+              { enable = cfg.enableGnomeKeyring; text = ''
                 optional ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so
-              '' ++
-              optional cfg.gnupg.enable ''
+              ''; }
+              { enable = cfg.gnupg.enable; text = ''
                 optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.storeOnly "store-only"}
-              '' ++
-              optional cfg.failDelay.enable ''
+              ''; }
+              { enable = cfg.failDelay.enable; text = ''
                 optional ${pkgs.pam}/lib/security/pam_faildelay.so delay=${toString cfg.failDelay.delay}
-              '' ++
-              optional cfg.googleAuthenticator.enable ''
+              ''; }
+              { enable = cfg.googleAuthenticator.enable; text = ''
                 required ${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so no_increment_hotp
-              '' ++
-              optional cfg.duoSecurity.enable ''
+              ''; }
+              { enable = cfg.duoSecurity.enable; text = ''
                 required ${pkgs.duo-unix}/lib/security/pam_duo.so
-              ''
-            )) ++
-          optional config.services.homed.enable ''
+              ''; }
+            ]) ++ [
+          { enable = config.services.homed.enable; text = ''
             sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
-          '' ++
-          optional cfg.unixAuth ''
+          ''; }
+          { enable = cfg.unixAuth; text = ''
             sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth try_first_pass
-          '' ++
-          optional cfg.otpwAuth ''
+          ''; }
+          { enable = cfg.otpwAuth; text = ''
             sufficient ${pkgs.otpw}/lib/security/pam_otpw.so
-          '' ++
-          optional use_ldap ''
+          ''; }
+          { enable = use_ldap; text = ''
             sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass
-          '' ++
-          optional config.services.kanidm.enablePam ''
+          ''; }
+          { enable = config.services.kanidm.enablePam; text = ''
             sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user use_first_pass
-          '' ++
-          optional config.services.sssd.enable ''
+          ''; }
+          { enable = config.services.sssd.enable; text = ''
             sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_first_pass
-          '' ++
-          optional config.security.pam.krb5.enable ''
+          ''; }
+          { enable = config.security.pam.krb5.enable; text = ''
             [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
-          '' ++
-          optional config.security.pam.krb5.enable ''
+          ''; }
+          { enable = config.security.pam.krb5.enable; text = ''
             [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
-          '' ++
-          optional config.security.pam.krb5.enable ''
+          ''; }
+          { enable = config.security.pam.krb5.enable; text = ''
             sufficient ${pam_ccreds}/lib/security/pam_ccreds.so action=store use_first_pass
-          '' ++
-          singleton ''
+          ''; }
+          { text = ''
             required pam_deny.so
-          '';
+          ''; }
+        ];
 
-        password =
-          optional config.services.homed.enable ''
+        password = [
+          { enable = config.services.homed.enable; text = ''
             sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
-          '' ++
-          singleton ''
+          ''; }
+          { text = ''
             sufficient pam_unix.so nullok yescrypt
-          '' ++
-          optional config.security.pam.enableEcryptfs ''
+          ''; }
+          { enable = config.security.pam.enableEcryptfs; text = ''
             optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
-          '' ++
-          optional config.security.pam.enableFscrypt ''
+          ''; }
+          { enable = config.security.pam.enableFscrypt; text = ''
             optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
-          '' ++
-          optional cfg.zfs ''
+          ''; }
+          { enable = cfg.zfs; text = ''
             optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
-          '' ++
-          optional cfg.pamMount ''
+          ''; }
+          { enable = cfg.pamMount; text = ''
             optional ${pkgs.pam_mount}/lib/security/pam_mount.so
-          '' ++
-          optional use_ldap ''
+          ''; }
+          { enable = use_ldap; text = ''
             sufficient ${pam_ldap}/lib/security/pam_ldap.so
-          '' ++
-          optional cfg.mysqlAuth ''
+          ''; }
+          { enable = cfg.mysqlAuth; text = ''
             sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
-          '' ++
-          optional config.services.kanidm.enablePam ''
+          ''; }
+          { enable = config.services.kanidm.enablePam; text = ''
             sufficient ${pkgs.kanidm}/lib/pam_kanidm.so
-          '' ++
-          optional config.services.sssd.enable ''
+          ''; }
+          { enable = config.services.sssd.enable; text = ''
             sufficient ${pkgs.sssd}/lib/security/pam_sss.so
-          '' ++
-          optional config.security.pam.krb5.enable ''
+          ''; }
+          { enable = config.security.pam.krb5.enable; text = ''
             sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
-          '' ++
-          optional cfg.enableGnomeKeyring ''
+          ''; }
+          { enable = cfg.enableGnomeKeyring; text = ''
             optional ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so use_authtok
-          '';
+          ''; }
+        ];
 
-        session =
-          optional cfg.setEnvironment ''
+        session = [
+          { enable = cfg.setEnvironment; text = ''
             required pam_env.so conffile=/etc/pam/environment readenv=0
-          '' ++
-          singleton ''
+          ''; }
+          { text = ''
             required pam_unix.so
-          '' ++
-          optional cfg.setLoginUid ''
+          ''; }
+          { enable = cfg.setLoginUid; text = ''
             ${if config.boot.isContainer then "optional" else "required"} pam_loginuid.so
-          '' ++
-          optional cfg.ttyAudit.enable ''
+          ''; }
+          { enable = cfg.ttyAudit.enable; text = ''
             required ${pkgs.pam}/lib/security/pam_tty_audit.so ${optionalString cfg.ttyAudit.openOnly "open_only"} ${optionalString (cfg.ttyAudit.enablePattern != null) "enable=${cfg.ttyAudit.enablePattern}"} ${optionalString (cfg.ttyAudit.disablePattern != null) "disable=${cfg.ttyAudit.disablePattern}"}
-          '' ++
-          optional config.services.homed.enable ''
+          ''; }
+          { enable = config.services.homed.enable; text = ''
             required ${config.systemd.package}/lib/security/pam_systemd_home.so
-          '' ++
-          optional cfg.makeHomeDir ''
+          ''; }
+          { enable = cfg.makeHomeDir; text = ''
             required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=${config.security.pam.makeHomeDir.umask}
-          '' ++
-          optional cfg.updateWtmp ''
+          ''; }
+          { enable = cfg.updateWtmp; text = ''
             required ${pkgs.pam}/lib/security/pam_lastlog.so silent
-          '' ++
-          optional config.security.pam.enableEcryptfs ''
+          ''; }
+          { enable = config.security.pam.enableEcryptfs; text = ''
             optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
-          '' ++
-          optional config.security.pam.enableFscrypt ''
-            # Work around https://github.com/systemd/systemd/issues/8598
-            # Skips the pam_fscrypt module for systemd-user sessions which do not have a password
-            # anyways.
-            # See also https://github.com/google/fscrypt/issues/95
+          ''; }
+          # Work around https://github.com/systemd/systemd/issues/8598
+          # Skips the pam_fscrypt module for systemd-user sessions which do not have a password
+          # anyways.
+          # See also https://github.com/google/fscrypt/issues/95
+          { enable = config.security.pam.enableFscrypt; text = ''
             [success=1 default=ignore] pam_succeed_if.so service = systemd-user
-          '' ++
-          optional config.security.pam.enableFscrypt ''
+          ''; }
+          { enable = config.security.pam.enableFscrypt; text = ''
             optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
-          '' ++
-          optional cfg.zfs ''
+          ''; }
+          { enable = cfg.zfs; text = ''
             [success=1 default=ignore] pam_succeed_if.so service = systemd-user
-          '' ++
-          optional cfg.zfs ''
+          ''; }
+          { enable = cfg.zfs; text = ''
             optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes} ${optionalString config.security.pam.zfs.noUnmount "nounmount"}
-          '' ++
-          optional cfg.pamMount ''
+          ''; }
+          { enable = cfg.pamMount; text = ''
             optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
-          '' ++
-          optional use_ldap ''
+          ''; }
+          { enable = use_ldap; text = ''
             optional ${pam_ldap}/lib/security/pam_ldap.so
-          '' ++
-          optional cfg.mysqlAuth ''
+          ''; }
+          { enable = cfg.mysqlAuth; text = ''
             optional ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
-          '' ++
-          optional config.services.kanidm.enablePam ''
+          ''; }
+          { enable = config.services.kanidm.enablePam; text = ''
             optional ${pkgs.kanidm}/lib/pam_kanidm.so
-          '' ++
-          optional config.services.sssd.enable ''
+          ''; }
+          { enable = config.services.sssd.enable; text = ''
             optional ${pkgs.sssd}/lib/security/pam_sss.so
-          '' ++
-          optional config.security.pam.krb5.enable ''
+          ''; }
+          { enable = config.security.pam.krb5.enable; text = ''
             optional ${pam_krb5}/lib/security/pam_krb5.so
-          '' ++
-          optional cfg.otpwAuth ''
+          ''; }
+          { enable = cfg.otpwAuth; text = ''
             optional ${pkgs.otpw}/lib/security/pam_otpw.so
-          '' ++
-          optional cfg.startSession ''
+          ''; }
+          { enable = cfg.startSession; text = ''
             optional ${config.systemd.package}/lib/security/pam_systemd.so
-          '' ++
-          optional cfg.forwardXAuth ''
+          ''; }
+          { enable = cfg.forwardXAuth; text = ''
             optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99
-          '' ++
-          optional (cfg.limits != []) ''
+          ''; }
+          { enable = cfg.limits != []; text = ''
             required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf cfg.limits}
-          '' ++
-          optional (cfg.showMotd && (config.users.motd != null || config.users.motdFile != null)) ''
+          ''; }
+          { enable = cfg.showMotd && (config.users.motd != null || config.users.motdFile != null); text = ''
             optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}
-          '' ++
-          optional (cfg.enableAppArmor && config.security.apparmor.enable) ''
+          ''; }
+          { enable = cfg.enableAppArmor && config.security.apparmor.enable; text = ''
             optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug
-          '' ++
-          optional cfg.enableKwallet ''
+          ''; }
+          { enable = cfg.enableKwallet; text = ''
             optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5
-          '' ++
-          optional cfg.enableGnomeKeyring ''
+          ''; }
+          { enable = cfg.enableGnomeKeyring; text = ''
             optional ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
-          '' ++
-          optional cfg.gnupg.enable ''
+          ''; }
+          { enable = cfg.gnupg.enable; text = ''
             optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.noAutostart " no-autostart"}
-          '' ++
-          optional config.virtualisation.lxc.lxcfs.enable ''
+          ''; }
+          { enable = config.virtualisation.lxc.lxcfs.enable; text = ''
             optional ${pkgs.lxc}/lib/security/pam_cgfs.so -c all
-          '';
+          ''; }
+        ];
       };
     };
 
