@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to communicate with Ring Door Bell";
     homepage = "https://github.com/tchellomello/python-ring-doorbell";
+    changelog = "https://github.com/tchellomello/python-ring-doorbell/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ graham33 ];
   };
