@@ -475,6 +475,11 @@ in {
       CONFIG_USB_XHCI_HCD=y
       CONFIG_EFI_SECURE_BOOT=y
       CONFIG_CMD_EFIDEBUG=y
+      CONFIG_BOOTSTD_FULL=y
+      CONFIG_BOOTMETH_GLOBAL=y
+      CONFIG_BOOTSTD_BOOTCOMMAND=y
+      CONFIG_BOOTMETH_EXTLINUX=y
+      CONFIG_BOOTMETH_DISTRO=y
     '';
     extraMeta.platforms = [ "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
@@ -491,6 +496,11 @@ in {
       CONFIG_EFI_SECURE_BOOT=y
       CONFIG_CMD_EFIDEBUG=y
       CONFIG_EFI_VARIABLE_FILE_STORE=y
+      CONFIG_BOOTSTD_FULL=y
+      CONFIG_BOOTMETH_GLOBAL=y
+      CONFIG_BOOTSTD_BOOTCOMMAND=y
+      CONFIG_BOOTMETH_EXTLINUX=y
+      CONFIG_BOOTMETH_DISTRO=y
     '';
     extraMeta.platforms = [ "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
