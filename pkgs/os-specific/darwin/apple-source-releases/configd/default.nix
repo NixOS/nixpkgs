@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, appleDerivation', launchd, bootstrap_cmds, swift-corelibs-foundation, xnu, xpc, ppp, IOKit, eap8021x, Security
+{ lib, stdenvBootstrap, stdenvNoCC, appleDerivation', CF, launchd, bootstrap_cmds, swift-corelibs-foundation, xnu, xpc, ppp, IOKit, eap8021x, Security
 , headersOnly ? false }:
 
 let
@@ -25,11 +25,11 @@ let
     '';
   };
 in
-appleDerivation' stdenv {
-  meta.broken = stdenv.cc.nativeLibc;
+appleDerivation' stdenvBootstrap {
+  meta.broken = stdenvBootstrap.cc.nativeLibc;
 
   nativeBuildInputs = lib.optionals (!headersOnly) [ bootstrap_cmds ];
-  buildInputs = lib.optionals (!headersOnly) [ privateHeaders launchd ppp xpc IOKit eap8021x ];
+  buildInputs = lib.optionals (!headersOnly) [ CF privateHeaders launchd ppp xpc IOKit eap8021x ];
 
   propagatedBuildInputs = lib.optionals (!headersOnly) [ Security ];
 
