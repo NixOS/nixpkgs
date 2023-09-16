@@ -36,11 +36,11 @@ let
       meta.description = "Release-critical packages from the python package sets";
       constituents = [
         jobs.remarshal.x86_64-linux                     # Used in pkgs.formats helper
-        jobs.python39Packages.buildcatrust.x86_64-linux # Used in pkgs.cacert
-        jobs.python39Packages.colorama.x86_64-linux     # Used in nixos test-driver
-        jobs.python39Packages.ptpython.x86_64-linux     # Used in nixos test-driver
-        jobs.python39Packages.requests.x86_64-linux     # Almost ubiquous package
-        jobs.python39Packages.sphinx.x86_64-linux       # Document creation for many packages
+        jobs.python311Packages.buildcatrust.x86_64-linux # Used in pkgs.cacert
+        jobs.python311Packages.colorama.x86_64-linux     # Used in nixos test-driver
+        jobs.python311Packages.ptpython.x86_64-linux     # Used in nixos test-driver
+        jobs.python311Packages.requests.x86_64-linux     # Almost ubiquous package
+        jobs.python311Packages.sphinx.x86_64-linux       # Document creation for many packages
       ];
     };
 
