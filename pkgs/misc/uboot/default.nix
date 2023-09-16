@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , bc
+, perl
 , bison
 , dtc
 , fetchFromGitHub
@@ -71,6 +72,7 @@ let
       ]))
       swig
       which # for scripts/dtc-version.sh
+      perl # for OID registry built in lib/Makefile
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -439,6 +441,24 @@ in {
     '';
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
+  };
+
+  securebootUbootQemuX86 = buildUBoot {
+    defconfig = "qemu-x86_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+      CONFIG_FIT_SIGNATURE=y
+      CONFIG_EFI_SECURE_BOOT=y
+      CONFIG_CMD_EFIDEBUG=y
+      CONFIG_EFI_VARIABLE_FILE_STORE=y
+      CONFIG_CMD_BOOTEFI_BOOTMGR=y
+    '';
+    extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
+    passthru.firmware = "u-boot.rom";
   };
 
   ubootRaspberryPi = buildUBoot {
