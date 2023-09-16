@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "types-mock";
-  version = "5.1.0.1";
+  version = "5.1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8H1Z3lDqgWq0A7pOJG/4CwCSY7N3vD93Tf3r8LQD+2A=";
+    sha256 = "sha256-3kjTdm5OMDTv2LJtqeCeSQjzHlMTel/i778fur7haZY=";
   };
 
   meta = {
