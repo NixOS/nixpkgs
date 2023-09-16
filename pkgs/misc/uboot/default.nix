@@ -35,6 +35,7 @@ let
     version ? null
   , src ? null
   , filesToInstall
+  , pythonScriptsToInstall ? { }
   , installDir ? "$out"
   , defconfig
   , extraConfig ? ""
@@ -56,6 +57,10 @@ let
     ] ++ extraPatches;
 
     postPatch = ''
+      ${lib.concatMapStrings (script: ''
+        substituteInPlace ${script} \
+        --replace "#!/usr/bin/env python3" "#!${pythonScriptsToInstall.${script}}/bin/python3"
+      '') (builtins.attrNames pythonScriptsToInstall)}
       patchShebangs tools
       patchShebangs arch/arm/mach-rockchip
     '';
@@ -110,12 +115,12 @@ let
       runHook preInstall
 
       mkdir -p ${installDir}
-      cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
+      cp ${lib.concatStringsSep " " (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)} ${installDir}
 
       mkdir -p "$out/nix-support"
       ${lib.concatMapStrings (file: ''
         echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
-      '') filesToInstall}
+      '') (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)}
 
       runHook postInstall
     '';
@@ -128,7 +133,7 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]));
+  } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" ]));
 in {
   inherit buildUBoot;
 
