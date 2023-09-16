@@ -7063,9 +7063,13 @@ self: super: with self; {
 
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
 
-  mypy-boto3-ebs = callPackage ../development/python-modules/mypy-boto3-ebs { };
+  inherit (callPackage ../development/python-modules/mypy-boto3 { })
+    
+    mypy-boto3-ebs
+    
+    mypy-boto3-s3
 
-  mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
+  ;
 
   mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
