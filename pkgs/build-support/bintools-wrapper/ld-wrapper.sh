@@ -258,10 +258,13 @@ PATH="$path_backup"
 
 if (( "${NIX_RESPONSE_FILE_EXPANDED:-0}" >= 1
     || "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    @prog@ @<(printf "%q\n" \
-        ${extraBefore+"${extraBefore[@]}"} \
-        ${params+"${params[@]}"} \
-        ${extraAfter+"${extraAfter[@]}"})
+    responseFile=$(mktemp --tmpdir ld-params.XXXXXX)
+    trap 'rm -f -- "$responseFile"' EXIT
+    printf "%q\n" \
+       ${extraBefore+"${extraBefore[@]}"} \
+       ${params+"${params[@]}"} \
+       ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
+    @prog@ "@$responseFile"
 else
     @prog@ \
         ${extraBefore+"${extraBefore[@]}"} \
