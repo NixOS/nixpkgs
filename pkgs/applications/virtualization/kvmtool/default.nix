@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     description = "A lightweight tool for hosting KVM guests";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/tree/README";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [ astro mfrw ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "nvramtool";
   };
