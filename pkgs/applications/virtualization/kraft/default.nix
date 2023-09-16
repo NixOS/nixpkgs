@@ -36,7 +36,7 @@ buildGoModule rec {
     description = "Build and use highly customized and ultra-lightweight unikernel VMs";
     homepage = "https://github.com/unikraft/kraftkit";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya mfrw ];
     mainProgram = "kraft";
     broken = stdenv.isDarwin; # > machine/platform/iterator_v1alpha1.go:32:34: undefined: hostSupportedStrategies
   };
