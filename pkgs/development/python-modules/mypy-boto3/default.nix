@@ -37,7 +37,7 @@ let
         description = "Type annotations for boto3 ${serviceName}";
         homepage = "https://github.com/youtype/mypy_boto3_builder";
         license = with licenses; [ mit ];
-        maintainers = with maintainers; [ fab ];
+        maintainers = with maintainers; [ fab mbalatsko ];
       };
     };
 in
