@@ -43,6 +43,7 @@ writeScript "update-${attrPath}" ''
   gpgv --keyring="$GNUPGHOME"/pubring.kbx "$HOME"/shasums.asc "$HOME"/shasums
 
   hash=$(grep '\.source\.tar\.xz$' "$HOME"/shasums | grep '^[^ ]*' -o)
+  sriHash=$(nix-hash --type sha512 --to-sri "$hash")
 
   update-source-version ${attrPath} "$version" "$hash" "" --version-key=${versionKey}
 ''
