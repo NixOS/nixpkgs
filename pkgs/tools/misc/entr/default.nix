@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
 
+  TARGET_OS = stdenv.hostPlatform.uname.system;
+
   meta = with lib; {
     homepage = "https://eradman.com/entrproject/";
     description = "Run arbitrary commands when files change";
