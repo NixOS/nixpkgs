@@ -10918,9 +10918,7 @@ with pkgs;
     electron = electron_22;
   };
 
-  mosh = callPackage ../tools/networking/mosh {
-    protobuf = protobuf3_21;
-  };
+  mosh = callPackage ../tools/networking/mosh { };
 
   motrix = callPackage ../tools/networking/motrix { };
 
