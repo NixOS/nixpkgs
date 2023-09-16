@@ -35,8 +35,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonpath_ng" ];
 
   meta = with lib; {
-    description = "JSONPath implementation for Python";
+    description = "JSONPath implementation";
     homepage = "https://github.com/h2non/jsonpath-ng";
+    changelog = "https://github.com/h2non/jsonpath-ng/blob/v${version}/History.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
