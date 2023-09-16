@@ -1,16 +1,39 @@
-{ appleDerivation', lib, stdenv, stdenvNoCC, buildPackages
-, bootstrap_cmds, bison, flex
-, gnum4, unifdef, perl, python3
+{ lib
+, pkgsBuildBuild
+, buildPackages
+, appleDerivation'
+, stdenvNoCC
+, stdenv
+, bison
+, flex
+, gnum4
+, unifdef
+, perl
+, python3
+, bootstrap_cmds
 , headersOnly ? true
 }:
 
 appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
-  let arch = if stdenv.isx86_64 then "x86_64" else "arm64";
+  let
+    inherit (stdenv) hostPlatform targetPlatform;
+    arch = stdenv.hostPlatform.darwinArch;
+    targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+
+    # Take advantage of the fact that every clang is a cross-compiler. mig doesn’t need to be able to
+    # link, so there’s no need to re-wrap the clang.
+    migcc = stdenvNoCC.mkDerivation {
+      name = "migcc";
+      version = lib.getVersion pkgsBuildBuild.clang;
+      buildCommand = ''
+        mkdir -p $out/bin
+        ln -s '${pkgsBuildBuild.clang.cc}/bin/clang' "$out/bin/${stdenvNoCC.targetPlatform.config}-cc"
+      '';
+    };
   in
   {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-  nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python3 ];
+  nativeBuildInputs = [ bison flex gnum4 unifdef perl python3 bootstrap_cmds migcc ];
 
   patches = lib.optionals stdenv.isx86_64 [ ./python3.patch ];
 
@@ -56,27 +79,39 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
       --replace '--def $<' '> $@; echo'
   '';
 
-  PLATFORM = "MacOSX";
-  SDKVERSION = "10.11";
-  CC = "${stdenv.cc.targetPrefix or ""}cc";
-  CXX = "${stdenv.cc.targetPrefix or ""}c++";
-  MIG = "mig";
-  MIGCOM = "migcom";
-  STRIP = "${stdenv.cc.bintools.targetPrefix or ""}strip";
-  RANLIB = "${stdenv.cc.bintools.targetPrefix or ""}ranlib";
-  NM = "${stdenv.cc.bintools.targetPrefix or ""}nm";
-  UNIFDEF = "unifdef";
-  DSYMUTIL = "dsymutil";
-  HOST_OS_VERSION = "10.10";
-  HOST_CC = "${buildPackages.stdenv.cc.targetPrefix or ""}cc";
-  HOST_FLEX = "flex";
-  HOST_BISON = "bison";
-  HOST_GM4 = "m4";
-  MIGCC = "cc";
-  ARCHS = arch;
-  ARCH_CONFIGS = arch;
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env = {
+    PLATFORM = "MacOSX";
+    SDKVERSION = "10.11";
+    MIG = "mig";
+    MIGCOM = "migcom";
+    UNIFDEF = "unifdef";
+    DSYMUTIL = "dsymutil";
+    HOST_OS_VERSION = "10.10";
+    HOST_FLEX = "flex";
+    HOST_BISON = "bison";
+    HOST_GM4 = "m4";
+    MIGCC = "${stdenvNoCC.targetPlatform.config}-cc";
+    ARCHS = arch;
+    ARCH_CONFIGS = arch;
+    CC = "${targetPrefix}cc";
+    CXX = "${targetPrefix}c++";
+    STRIP = "${targetPrefix}strip";
+    RANLIB = "${targetPrefix}ranlib";
+    NM = "${targetPrefix}nm";
+    HOST_CC = "${targetPrefix}cc";
+    HOST_LD = "${targetPrefix}ld";
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+  } // lib.optionalAttrs headersOnly {
+    HOST_CODESIGN = "echo";
+    HOST_CODESIGN_ALLOCATE = "echo";
+    LIPO = "echo";
+    LIBTOOL = "echo";
+    CTFCONVERT = "echo";
+    CTFMERGE = "echo";
+    CTFINSERT = "echo";
+    NMEDIT = "echo";
+    IIG = "echo";
+  };
 
   preBuild = let macosVersion =
     "10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11" +
@@ -151,14 +186,4 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   '';
 
   appleHeaders = builtins.readFile (./. + "/headers-${arch}.txt");
-} // lib.optionalAttrs headersOnly {
-  HOST_CODESIGN = "echo";
-  HOST_CODESIGN_ALLOCATE = "echo";
-  LIPO = "echo";
-  LIBTOOL = "echo";
-  CTFCONVERT = "echo";
-  CTFMERGE = "echo";
-  CTFINSERT = "echo";
-  NMEDIT = "echo";
-  IIG = "echo";
 })
