@@ -39,6 +39,7 @@ let
   , pythonScriptsToInstall ? { }
   , installDir ? "$out"
   , defconfig
+  , efiVariableSeed ? null
   , extraConfig ? ""
   , extraPatches ? []
   , extraMakeFlags ? []
@@ -108,6 +109,10 @@ let
       make ${defconfig}
 
       cat $extraConfigPath >> .config
+      ${lib.optionalString (efiVariableSeed != null) ''
+        echo "CONFIG_EFI_VARIABLES_PRESEED=y" >> .config
+        cp ${efiVariableSeed} ubootefi.var
+      ''}
 
       runHook postConfigure
     '';
