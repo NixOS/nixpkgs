@@ -3108,7 +3108,8 @@
     "peco_opower" = ps: with ps; [
     ];
     "pegel_online" = ps: with ps; [
-    ]; # missing inputs: aiopegelonline
+      aiopegelonline
+    ];
     "pencom" = ps: with ps; [
       pencompy
     ];
@@ -5357,6 +5358,7 @@
     "panel_custom"
     "panel_iframe"
     "peco"
+    "pegel_online"
     "persistent_notification"
     "person"
     "philips_js"
