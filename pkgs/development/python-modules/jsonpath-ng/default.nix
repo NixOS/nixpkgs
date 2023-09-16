@@ -4,12 +4,13 @@
 , ply
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "jsonpath-ng";
   version = "1.6.0";
-  format = "pyproject";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ply
+    setuptools
   ];
 
   nativeCheckInputs = [
