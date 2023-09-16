@@ -11043,8 +11043,6 @@ with pkgs;
 
   neo-cowsay = callPackage ../tools/misc/neo-cowsay { };
 
-  neofetch = callPackage ../tools/misc/neofetch { };
-
   nerdfix = callPackage ../tools/text/nerdfix { };
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
