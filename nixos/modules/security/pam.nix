@@ -11,20 +11,41 @@ let
     # These options are experimental and subject to breaking changes without notice.
     description = lib.mdDoc ''
       PAM `${type}` rules for this service.
+
+      Attribute keys are the name of each rule.
     '';
-    type = types.listOf (types.submodule ({ config, ... }: {
+    type = types.attrsOf (types.submodule ({ name, config, ... }: {
       options = {
         name = mkOption {
           type = types.str;
           description = lib.mdDoc ''
             Name of this rule.
           '';
+          internal = true;
+          readOnly = true;
         };
         enable = mkOption {
           type = types.bool;
           default = true;
           description = lib.mdDoc ''
             Whether this rule is added to the PAM service config file.
+          '';
+        };
+        order = mkOption {
+          type = types.int;
+          description = lib.mdDoc ''
+            Order of this rule in the service file. Rules are arranged in ascending order of this value.
+
+            ::: {.warning}
+            The `order` values for the built-in rules are subject to change. If you assign a constant value to this option, a system update could silently reorder your rule. You could be locked out of your system, or your system could be left wide open. When using this option, set it to a relative offset from another rule's `order` value:
+
+            ```nix
+            {
+              security.pam.services.login.rules.auth.foo.order =
+                config.security.pam.services.login.rules.auth.unix.order + 10;
+            }
+            ```
+            :::
           '';
         };
         control = mkOption {
@@ -60,6 +81,7 @@ let
         };
       };
       config = {
+        inherit name;
         # Formats an attrset of settings as args for use as `module-arguments`.
         args = concatLists (flip mapAttrsToList config.settings (name: value:
           if isBool value
@@ -557,13 +579,21 @@ let
       limits = mkDefault config.security.pam.loginLimits;
 
       text = let
+        ensureUniqueOrder = type: rules:
+          let
+            checkPair = a: b: assert assertMsg (a.order != b.order) "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})"; b;
+            checked = zipListsWith checkPair rules (drop 1 rules);
+          in take 1 rules ++ checked;
         # Formats a string for use in `module-arguments`. See `man pam.conf`.
         formatModuleArgument = token:
           if hasInfix " " token
           then "[${replaceStrings ["]"] ["\\]"] token}]"
           else token;
         formatRules = type: pipe cfg.rules.${type} [
+          attrValues
           (filter (rule: rule.enable))
+          (sort (a: b: a.order < b.order))
+          (ensureUniqueOrder type)
           (map (rule: concatStringsSep " " (
             [ type rule.control rule.modulePath ]
             ++ map formatModuleArgument rule.args
@@ -587,8 +617,14 @@ let
       # !!! TODO: move the LDAP stuff to the LDAP module, and the
       # Samba stuff to the Samba module.  This requires that the PAM
       # module provides the right hooks.
-      rules = {
-        account = [
+      rules = let
+        autoOrderRules = flip pipe [
+          (imap1 (index: rule: rule // { order = mkDefault (10000 + index * 100); } ))
+          (map (rule: nameValuePair rule.name (removeAttrs rule [ "name" ])))
+          listToAttrs
+        ];
+      in {
+        account = autoOrderRules [
           { name = "ldap"; enable = use_ldap; control = "sufficient"; modulePath = "${pam_ldap}/lib/security/pam_ldap.so"; }
           { name = "mysql"; enable = cfg.mysqlAuth; control = "sufficient"; modulePath = "${pkgs.pam_mysql}/lib/security/pam_mysql.so"; settings = {
             config_file = "/etc/security/pam_mysql.conf";
@@ -607,7 +643,7 @@ let
           { name = "unix"; control = "required"; modulePath = "pam_unix.so"; }
         ];
 
-        auth = [
+        auth = autoOrderRules ([
           { name = "oslogin_login"; enable = cfg.googleOsLoginAuthentication; control = "[success=done perm_denied=die default=ignore]"; modulePath = "${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so"; }
           { name = "rootok"; enable = cfg.rootOK; control = "sufficient"; modulePath = "pam_rootok.so"; }
           { name = "wheel"; enable = cfg.requireWheel; control = "required"; modulePath = "pam_wheel.so"; settings = {
@@ -730,9 +766,9 @@ let
             use_first_pass = true;
           }; }
           { name = "deny"; control = "required"; modulePath = "pam_deny.so"; }
-        ];
+        ]);
 
-        password = [
+        password = autoOrderRules [
           { name = "systemd_home"; enable = config.services.homed.enable; control = "sufficient"; modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so"; }
           { name = "unix"; control = "sufficient"; modulePath = "pam_unix.so"; settings = {
             nullok = true;
@@ -758,7 +794,7 @@ let
           }; }
         ];
 
-        session = [
+        session = autoOrderRules [
           { name = "env"; enable = cfg.setEnvironment; control = "required"; modulePath = "pam_env.so"; settings = {
             conffile = "/etc/pam/environment";
             readenv = 0;
