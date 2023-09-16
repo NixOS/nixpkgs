@@ -1291,6 +1291,8 @@ with pkgs;
 
   mokutil = callPackage ../tools/security/mokutil { };
 
+  mpsolve = libsForQt5.callPackage ../applications/science/math/mpsolve { };
+
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit lib writeText; inherit (emacs.pkgs) inherit-local; };
 
   nix-gitignore = callPackage ../build-support/nix-gitignore { };
@@ -15511,8 +15513,6 @@ with pkgs;
   alan_2 = callPackage ../development/compilers/alan/2.nix { };
 
   alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
-
-  algol68g = callPackage ../development/compilers/algol68g { };
 
   ante = callPackage ../development/compilers/ante { };
 
