@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pot";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = version;
-    hash = "sha256-PvbqPGT8BTHEufYp+TUSd0tTSBnTBDIYHxaeI7FEVDE=";
+    hash = "sha256-KVrm7KEpIIahd/QU1HUJ2VkfECttcY5pRCHsYHS5svM=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
