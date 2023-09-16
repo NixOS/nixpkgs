@@ -456,6 +456,8 @@ in {
       CONFIG_USB_EHCI_HCD=y
       CONFIG_USB_EHCI_GENERIC=y
       CONFIG_USB_XHCI_HCD=y
+      CONFIG_EFI_SECURE_BOOT=y
+      CONFIG_CMD_EFIDEBUG=y
     '';
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
