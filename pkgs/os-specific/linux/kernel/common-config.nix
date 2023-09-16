@@ -1012,6 +1012,7 @@ let
 
       X86_AMD_PLATFORM_DEVICE = yes;
       X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
+      X86_PLATFORM_DRIVERS_HP = whenAtLeast "6.1" yes;
 
       LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
 
