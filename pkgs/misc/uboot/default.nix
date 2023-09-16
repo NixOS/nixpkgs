@@ -441,6 +441,7 @@ in {
     '';
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
+    passthru.firmware = "u-boot.rom";
   };
 
   securebootUbootQemuX86 = buildUBoot {
