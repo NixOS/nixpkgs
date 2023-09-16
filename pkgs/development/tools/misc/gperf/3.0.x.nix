@@ -10,7 +10,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  patches = [ ./gperf-ar-fix.patch ];
+  patches = [
+    ./gperf-ar-fix.patch
+    # Clang 16 defaults to C++17, which does not allow `register` as a storage class specifier.
+    ./gperf-c++17-register-fix.patch
+  ];
+
+  # Replace the conditional inclusion of `string.h` on VMS with unconditional inclusion on all
+  # platforms. Otherwise, clang 16 fails to build gperf due to use of undeclared library functions.
+  postPatch = ''
+    sed '/#ifdef VMS/{N;N;N;N;N;s/.*/#include <string.h>/}' -i lib/getopt.c
+  '';
+
   meta = {
     description = "Perfect hash function generator";
 
