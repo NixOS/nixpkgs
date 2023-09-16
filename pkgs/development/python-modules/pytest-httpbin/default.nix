@@ -37,6 +37,11 @@ buildPythonPackage rec {
     requests
   ];
 
+  disabledTests = [
+    # incompatible with flask 2.3
+    "test_redirect_location_is_https_for_secure_server"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
