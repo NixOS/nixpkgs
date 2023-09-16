@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Run migrations for the Refinery ORM for Rust via the CLI";
     homepage = "https://github.com/rust-db/refinery";
+    changelog = "https://github.com/rust-db/refinery/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ lucperkins ];
   };
