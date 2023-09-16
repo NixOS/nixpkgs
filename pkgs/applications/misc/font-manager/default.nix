@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "FontManager";
-    repo = "master";
+    repo = "font-manager";
     rev = version;
-    sha256 = "sha256-M13Q9d2cKhc0tudkvw0zgqPAFTlmXwK+LltXeuDPWxo=";
+    hash = "sha256-M13Q9d2cKhc0tudkvw0zgqPAFTlmXwK+LltXeuDPWxo=";
   };
 
   nativeBuildInputs = [
