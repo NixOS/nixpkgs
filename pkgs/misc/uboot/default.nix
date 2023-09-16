@@ -50,6 +50,9 @@ let
 
     patches = [
       ./0001-configs-rpi-allow-for-bigger-kernels.patch
+      # https://lists.denx.de/pipermail/u-boot/2023-September/530643.html
+      # Fix zboot with initrds
+      ./extlinux-zboot.patch
     ] ++ extraPatches;
 
     postPatch = ''

@@ -1,0 +1,26 @@
+From e37e55509c7a5ddbcf66b100a6a1c042a7113f98 Mon Sep 17 00:00:00 2001
+From: Raito Bezarius <masterancpp@gmail.com>
+Date: Sat, 16 Sep 2023 14:54:28 +0200
+Subject: [PATCH] boot/pxe-utils: populate initrd_filesize for extlinux boot
+
+Currently, it seems like the initrd_filesize is uninitialized...
+---
+ boot/pxe_utils.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/boot/pxe_utils.c b/boot/pxe_utils.c
+index d13c47dd94..fa5e88ab95 100644
+--- a/boot/pxe_utils.c
++++ b/boot/pxe_utils.c
+@@ -556,6 +556,8 @@ static int label_boot(struct pxe_context *ctx, struct pxe_label *label)
+ 		}
+ 
+ 		initrd_addr_str = env_get("ramdisk_addr_r");
++		/* Copy the actual initrd size inside the initrd_filesize */
++		snprintf(initrd_filesize, sizeof(initrd_filesize), "%lx", size);
+ 		size = snprintf(initrd_str, sizeof(initrd_str), "%s:%lx",
+ 				initrd_addr_str, size);
+ 		if (size >= sizeof(initrd_str))
+-- 
+2.42.0
+

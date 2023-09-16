@@ -130,11 +130,25 @@ in {
       };
       nodes.machine = { ... }: {
         virtualisation = {
-          firmware = "uboot";
+          useDefaultFilesystems = false;
           diskImage = null;
+          firmware = "uboot";
+          qemu.drives = [{
+            name = "sdcard-root";
+            file = mutableImage;
+            driveExtraOpts.cache = "writeback";
+            driveExtraOpts.werror = "report";
+            deviceExtraOpts.bootindex = "1";
+          }];
           qemu.options = [
-            "-drive file=${mutableImage},if=ide,format=qcow2"
+            "--accel tcg,thread=multi"
           ];
+          fileSystems = {
+            "/" = {
+              device = "/dev/disk/by-label/NIXOS_SD";
+              fsType = "ext4";
+            };
+          };
         };
       };
       testScript = ''
@@ -144,7 +158,6 @@ in {
         if os.system("qemu-img create -f qcow2 -F raw -b ${sdImage} ${mutableImage}") != 0:
             raise RuntimeError("Could not create mutable linked image")
 
-        os.environ['NIX_DISK_IMAGE'] = "${mutableImage}"
         machine.start()
         machine.wait_for_unit("multi-user.target")
         machine.succeed("nix store verify -r --no-trust --option experimental-features nix-command /run/current-system")
