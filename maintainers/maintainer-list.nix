@@ -9088,6 +9088,12 @@
     githubId = 845652;
     name = "Kier Davis";
   };
+  kilianar = {
+    email = "mail@kilianar.de";
+    github = "kilianar";
+    githubId = 105428155;
+    name = "kilianar";
+  };
   kilimnik = {
     email = "mail@kilimnik.de";
     github = "kilimnik";
