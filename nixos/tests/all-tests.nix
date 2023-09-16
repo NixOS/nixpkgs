@@ -424,6 +424,7 @@ in {
   kubo = runTest ./kubo.nix;
   ladybird = handleTest ./ladybird.nix {};
   languagetool = handleTest ./languagetool.nix {};
+  lantern = handleTest ./lantern.nix {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
   lemmy = handleTest ./lemmy.nix {};
