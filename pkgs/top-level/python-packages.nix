@@ -7065,6 +7065,8 @@ self: super: with self; {
 
   inherit (callPackage ../development/python-modules/mypy-boto3 { })
 
+    mypy-boto3-cognito-idp
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
