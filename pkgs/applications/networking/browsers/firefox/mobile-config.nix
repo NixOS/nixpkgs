@@ -5,7 +5,7 @@ let
     owner = "postmarketOS";
     repo = "mobile-config-firefox";
     rev = "ff2f07873f4ebc6e220da0e9b9f04c69f451edda";
-    sha256 = "sha256-8wRz8corz00+0qROMiOmZAddM4tjfmE91bx0+P8JNx4=";
+    hash = "sha256-8wRz8corz00+0qROMiOmZAddM4tjfmE91bx0+P8JNx4=";
   };
   userChrome = runCommand "userChrome.css" {} ''
     cat ${pkg}/src/userChrome/*.css > $out
