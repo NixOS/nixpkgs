@@ -1,21 +1,24 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , flask
 , flask-migrate
 , ldap3
+, pytestCheckHook
 }:
 buildPythonPackage rec {
   pname = "automx2";
-  version = "2022.1";
+  version = "unstable-2023-08-23";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-My0YT5FLYjXSRKC0oUYNybewv6CIKr93tqMZ2fYY+5I=";
+  src = fetchFromGitHub {
+    owner = "rseichter";
+    repo = pname;
+    rev = "f3e3fc8e769c3799361001d51b7d9335a6a9d1a8";
+    hash = "sha256-NkeazjjGDYUXfoydvEfww6e7SkSZ8rMRlML+oOaf374=";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +27,7 @@ buildPythonPackage rec {
     ldap3
   ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "automx2" ];
 
   meta = with lib; {
