@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "kraftkit";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
     rev = "v${version}";
-    hash = "sha256-3dI3F1cCeLEOd+zusWUDZWLrVaaKHXzwOL/mF/yPZC8=";
+    hash = "sha256-qO7kGkqAIuEtu25uWhqu5t3yecpYQHEIp/Ky9e8VkWY=";
   };
 
-  vendorHash = "sha256-4zciooCUNVLTQ/0tctqV3hExR5vRY5VumHzGtL8xdws=";
+  vendorHash = "sha256-Ijhwu17j2iOVekAn9iHVV849ZMrGxgnnZ8DLREeSIzA=";
 
   ldflags = [
     "-s"
@@ -35,6 +35,7 @@ buildGoModule rec {
   meta = {
     description = "Build and use highly customized and ultra-lightweight unikernel VMs";
     homepage = "https://github.com/unikraft/kraftkit";
+    changelog = "https://github.com/unikraft/kraftkit/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dit7ya mfrw ];
     mainProgram = "kraft";
