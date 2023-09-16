@@ -44,12 +44,12 @@ let
 
   isCross = stdenv.buildPlatform != stdenv.targetPlatform;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "go";
   version = "1.21.1";
 
   src = fetchurl {
-    url = "https://go.dev/dl/go${version}.src.tar.gz";
+    url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
     hash = "sha256-v6Nr916aHpy725q8+dFwfkeb06B4gKiuNWTK7lcRy5k=";
   };
 
@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{share,bin}
-    tar -C $out/share -x -z -f "pkg/distpack/go${version}.$GOOS-$GOARCH.tar.gz"
+    tar -C $out/share -x -z -f "pkg/distpack/go${finalAttrs.version}.$GOOS-$GOARCH.tar.gz"
     ln -s $out/share/go/bin/* $out/bin
     runHook postInstall
   '';
@@ -147,15 +147,20 @@ stdenv.mkDerivation rec {
     inherit goBootstrap skopeoTest;
     tests = {
       skopeo = testers.testVersion { package = skopeoTest; };
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "go version";
+        version = "go${finalAttrs.version}";
+      };
     };
   };
 
   meta = with lib; {
-    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor version}";
+    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
     description = "The Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
     platforms = platforms.darwin ++ platforms.linux;
   };
-}
+})

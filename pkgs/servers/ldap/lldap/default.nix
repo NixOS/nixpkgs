@@ -40,24 +40,17 @@ let
 
   commonDerivationAttrs = rec {
     pname = "lldap";
-    version = "0.4.3";
+    version = "0.5.0";
 
     src = fetchFromGitHub {
       owner = "lldap";
       repo = "lldap";
       rev = "v${version}";
-      hash = "sha256-FAUTykFh2eGVpx6LrCjV9xWbBPH8pCgAJv3vOXFMFZ4=";
+      hash = "sha256-2MEfwppkS9l3iHPNlkJB4tJnma0xMi0AckLv6wpzy1Y=";
     };
-
-    postPatch = ''
-      ln -s --force ${./Cargo.lock} Cargo.lock
-    '';
 
     # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
     cargoLock = {
-      # 0.4.3 has been tagged before the actual Cargo.lock bump, resulting in an inconsitent lock file.
-      # To work around this, the Cargo.lock below is from the commit right after the tag:
-      # https://github.com/lldap/lldap/commit/7b4188a376baabda48d88fdca3a10756da48adda
       lockFile = ./Cargo.lock;
       outputHashes = {
         "lber-0.4.1" = "sha256-2rGTpg8puIAXggX9rEbXPdirfetNOHWfFc80xqzPMT4=";
@@ -88,18 +81,14 @@ let
 
 in rustPlatform.buildRustPackage (commonDerivationAttrs // {
 
-  cargoBuildFlags = [ "-p" "lldap" "-p" "migration-tool" "-p" "lldap_set_password" ];
+  cargoBuildFlags = [ "-p" "lldap" "-p" "lldap_migration_tool" "-p" "lldap_set_password" ];
 
   patches = [
     ./static-frontend-path.patch
   ];
 
-  postPatch = commonDerivationAttrs.postPatch + ''
+  postPatch = ''
     substituteInPlace server/src/infra/tcp_server.rs --subst-var-by frontend '${frontend}'
-  '';
-
-  postInstall = ''
-    mv $out/bin/migration-tool $out/bin/lldap_migration_tool
   '';
 
   passthru = {

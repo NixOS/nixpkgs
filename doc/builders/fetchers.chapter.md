@@ -86,7 +86,7 @@ Most other fetchers return a directory rather than a single file.
 ## `fetchDebianPatch` {#fetchdebianpatch}
 
 A wrapper around `fetchpatch`, which takes:
-- `patch` and `hash`: the patch's filename without the `.patch` suffix,
+- `patch` and `hash`: the patch's filename,
   and its hash after normalization by `fetchpatch` ;
 - `pname`: the Debian source package's name ;
 - `version`: the upstream version number ;
@@ -110,7 +110,7 @@ buildPythonPackage rec {
     (fetchDebianPatch {
       inherit pname version;
       debianRevision = "5";
-      name = "Add-quotes-to-SOAPAction-header-in-SoapClient";
+      name = "Add-quotes-to-SOAPAction-header-in-SoapClient.patch";
       hash = "sha256-xA8Wnrpr31H8wy3zHSNfezFNjUJt1HbSXn3qUMzeKc0=";
     })
   ];
@@ -228,7 +228,7 @@ Otherwise, the builder will run, but fail with a message explaining to the user 
 requireFile {
   name = "jdk-${version}_linux-x64_bin.tar.gz";
   url = "https://www.oracle.com/java/technologies/javase-jdk11-downloads.html";
-  sha256 = "94bd34f85ee38d3ef59e5289ec7450b9443b924c55625661fffe66b03f2c8de2";
+  hash = "sha256-lL00+F7jjT71nlKJ7HRQuUQ7kkxVYlZh//5msD8sjeI=";
 }
 ```
 results in this error message:

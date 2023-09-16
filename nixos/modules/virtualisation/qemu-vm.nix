@@ -647,7 +647,7 @@ in
         import pkgs.path { system = "x86_64-darwin"; }
       '';
       description = lib.mdDoc ''
-        pkgs set to use for the host-specific packages of the vm runner.
+        Package set to use for the host-specific packages of the VM runner.
         Changing this to e.g. a Darwin package set allows running NixOS VMs on Darwin.
       '';
     };

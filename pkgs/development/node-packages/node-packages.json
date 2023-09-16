@@ -202,7 +202,6 @@
 , "postcss-cli"
 , "prebuild-install"
 , "prettier"
-, "prettier_d_slim"
 , "prettier-plugin-toml"
 , "prisma"
 , "@prisma/language-server"
@@ -216,7 +215,6 @@
 , "pyright"
 , "react-native-cli"
 , "react-tools"
-, "redoc-cli"
 , "remod-cli"
 , "reveal.js"
 , "rimraf"
@@ -237,7 +235,6 @@
 , "svelte-language-server"
 , "svgo"
 , "tailwindcss"
-, {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
 , "teck-programmer"
 , "tern"
 , "textlint"

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils }:
+{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "parallel";
@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl procps ];
+
+  postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace Makefile.in \
+      --replace '$(DESTDIR)$(bindir)/parallel --shell-completion' '${lib.getExe buildPackages.parallel} --shell-completion'
+  '';
 
   preInstall = ''
     patchShebangs ./src/parallel
@@ -48,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub vrthra tomberek ];
+    mainProgram = "parallel";
   };
 }
