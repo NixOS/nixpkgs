@@ -43,6 +43,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/kraanzu/dooit";
     changelog = "https://github.com/kraanzu/dooit/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ wesleyjrz ];
+    maintainers = with maintainers; [ khaneliman wesleyjrz ];
   };
 }
