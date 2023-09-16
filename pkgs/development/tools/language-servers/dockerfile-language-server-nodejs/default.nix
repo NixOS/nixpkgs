@@ -14,6 +14,10 @@ buildNpmPackage rec {
     hash = "sha256-uwwwF1eMoSA2C5h56BBllTZW8zRHueNeVwhwtycrNfA=";
   };
 
+  preBuild = ''
+    npm run prepublishOnly
+  '';
+
   npmDepsHash = "sha256-lI+tkUBR0rmWcU57jU0y7XaMK3JADNU7fcbCxMmz/7s=";
 
   meta = {
@@ -22,6 +26,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/rcjsuen/dockerfile-language-server-nodejs";
     license = lib.licenses.mit;
     mainProgram = "docker-langserver";
-    maintainers = with lib.maintainers; [ rvolosatovs ];
+    maintainers = with lib.maintainers; [ rvolosatovs net-mist ];
   };
 }
