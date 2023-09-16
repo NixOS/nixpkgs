@@ -17,6 +17,13 @@ let
           hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
+      urllib3 = prev.urllib3.overridePythonAttrs (prev: {
+        format = "setuptools";
+        src = prev.src.override {
+          version = "1.26.16";
+          hash = "sha256-jxNfZQJ1a95rKpsomJ31++h8mXDOyqaQQe3M5/BYmxQ=";
+        };
+      });
     });
   };
 
@@ -37,7 +44,9 @@ with py.pkgs; buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
       --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1' \
-      --replace 'awscrt>=0.16.4,<=0.16.16' 'awscrt>=0.16.4'
+      --replace 'awscrt>=0.16.4,<=0.16.16' 'awscrt>=0.16.4' \
+      --replace 'docutils>=0.10,<0.20' 'docutils>=0.10' \
+      --replace 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
 
     substituteInPlace requirements-base.txt \
       --replace "wheel==0.38.4" "wheel>=0.38.4" \
