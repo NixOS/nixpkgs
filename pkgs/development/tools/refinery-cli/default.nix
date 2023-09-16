@@ -1,4 +1,4 @@
-{ fetchCrate, lib, openssl, pkg-config, rustPlatform }:
+{ fetchCrate, lib, stdenv, openssl, pkg-config, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "refinery-cli";
@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   meta = with lib; {
     description = "Run migrations for the Refinery ORM for Rust via the CLI";
