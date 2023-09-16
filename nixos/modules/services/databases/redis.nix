@@ -349,6 +349,7 @@ in {
           redisConfRun = "/run/${redisName name}/nixos.conf";
           redisConfStore = redisConfig conf.settings;
         in ''
+          mkdir -p "$(dirname "${redisConfVar}")" "$(dirname "${redisConfRun}")"
           touch "${redisConfVar}" "${redisConfRun}"
           chown '${conf.user}' "${redisConfVar}" "${redisConfRun}"
           chmod 0600 "${redisConfVar}" "${redisConfRun}"
