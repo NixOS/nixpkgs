@@ -4,6 +4,7 @@
 , rustPlatform
 , fetchFromGitHub
 , substituteAll
+, just
 , pkg-config
 , wrapGAppsHook4
 , cairo
@@ -48,6 +49,11 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace .cargo-checksum.json \
       --replace $oldHash $(sha256sum build.rs | cut -d " " -f 1)
     popd
+
+    substituteInPlace justfile \
+      --replace "{{ env_var('DESTDIR') }}/usr" "${placeholder "out"}"
+    # buildRustPackage takes care of installing the binary
+    sed -i "#/bin/celeste#d" justfile
   '';
 
   # Cargo.lock is outdated
@@ -66,6 +72,7 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
+    just
     pkg-config
     rustPlatform.bindgenHook
     wrapGAppsHook4
@@ -88,6 +95,10 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator-gtk3 ]}"
       --prefix PATH : "${lib.makeBinPath [ rclone ]}"
     )
+  '';
+
+  postInstall = ''
+    just install
   '';
 
   meta = {
