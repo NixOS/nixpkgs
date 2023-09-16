@@ -1,0 +1,40 @@
+diff --git a/keylime-agent/tests/actions/local_action_stand_alone.py b/keylime-agent/tests/actions/local_action_stand_alone.py
+index 50f5a57..b832c3a 100755
+--- a/keylime-agent/tests/actions/local_action_stand_alone.py
++++ b/keylime-agent/tests/actions/local_action_stand_alone.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python3
++#!/usr/bin/env python3
+ '''
+ SPDX-License-Identifier: Apache-2.0
+ Copyright 2021 Keylime Authors
+diff --git a/keylime-agent/tests/actions/shim.py b/keylime-agent/tests/actions/shim.py
+index 0d030cc..fa6eed2 100755
+--- a/keylime-agent/tests/actions/shim.py
++++ b/keylime-agent/tests/actions/shim.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python3
++#!/usr/bin/env python3
+ '''
+ SPDX-License-Identifier: Apache-2.0
+ Copyright 2021 Keylime Authors
+diff --git a/keylime-agent/tests/unzipped/local_action_rev_script1.py b/keylime-agent/tests/unzipped/local_action_rev_script1.py
+index 40b6da1..60ba437 100755
+--- a/keylime-agent/tests/unzipped/local_action_rev_script1.py
++++ b/keylime-agent/tests/unzipped/local_action_rev_script1.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python3
++#!/usr/bin/env python3
+ '''
+ SPDX-License-Identifier: Apache-2.0
+ Copyright 2021 Keylime Authors
+diff --git a/keylime-agent/tests/unzipped/local_action_rev_script2.py b/keylime-agent/tests/unzipped/local_action_rev_script2.py
+index 40b6da1..60ba437 100755
+--- a/keylime-agent/tests/unzipped/local_action_rev_script2.py
++++ b/keylime-agent/tests/unzipped/local_action_rev_script2.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python3
++#!/usr/bin/env python3
+ '''
+ SPDX-License-Identifier: Apache-2.0
+ Copyright 2021 Keylime Authors
