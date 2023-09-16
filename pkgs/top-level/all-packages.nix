@@ -7358,8 +7358,6 @@ with pkgs;
 
   dcfldd = callPackage ../tools/system/dcfldd { };
 
-  debianutils = callPackage ../tools/misc/debianutils { };
-
   debian-devscripts = callPackage ../tools/misc/debian-devscripts { };
 
   debian-goodies = callPackage ../applications/misc/debian-goodies { };
