@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature enableTiny "tiny")
   ];
 
-  postInstall = ''
+  postInstall = if enableTiny then null else ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
   '';
 
