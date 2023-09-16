@@ -1,9 +1,9 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flask
 , mock
-, pdm-pep517
+, flit-core
 , pytestCheckHook
 , pythonOlder
 , sqlalchemy
@@ -11,19 +11,20 @@
 
 buildPythonPackage rec {
   pname = "flask-sqlalchemy";
-  version = "3.0.3";
+  version = "3.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    pname = "Flask-SQLAlchemy";
-    inherit version;
-    hash = "sha256-J2QzXzydfr3J7WBEr6+Yqun6UNegdM71Xd4wfslZA+w=";
+  src = fetchFromGitHub {
+    owner = "pallets-eco";
+    repo = "flask-sqlalchemy";
+    rev = "refs/tags/${version}";
+    hash = "sha256-KsQalqv6oY0+f6TazjzEOLrNjhNQKDYLy1uhBWaRzzg=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    flit-core
   ];
 
   propagatedBuildInputs = [
