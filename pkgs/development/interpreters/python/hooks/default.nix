@@ -91,12 +91,13 @@ in {
       inherit (pythonForBuild.pkgs) installer;
     };
 
-  pytestCheckHook = callPackage ({ makePythonHook, pytest }:
+  pytestCheckHook = callPackage ({ makePythonHook, pytest, which }:
     makePythonHook {
       name = "pytest-check-hook";
-      propagatedBuildInputs = [ pytest ];
+      propagatedBuildInputs = [ pytest which ];
       substitutions = {
         inherit pythonCheckInterpreter;
+        pytestPython = pytest.pythonModule;
       };
     } ./pytest-check-hook.sh) {};
 
