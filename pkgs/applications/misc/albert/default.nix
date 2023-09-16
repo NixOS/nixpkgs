@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.22.0";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-x5H7z0rwunfMwtihXEerc47Sdkl6IvSHfavXzXMLse0=";
+    sha256 = "sha256-M5wMi/yH5c08Y7tpHpOulcz0utnnduGsR5z3EHeBecM=";
     fetchSubmodules = true;
   };
 
@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/albertlauncher/albert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes synthetica ];
+    mainProgram = "albert";
     platforms = platforms.linux;
   };
 })
