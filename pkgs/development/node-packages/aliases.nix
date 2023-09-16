@@ -98,9 +98,11 @@ mapAliases {
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   parcel-bundler = parcel; # added 2023-09-04
+  prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
   inherit (pkgs) quicktype; # added 2023-09-09
   inherit (pkgs) react-static; # added 2023-08-21
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
+  inherit (pkgs) redoc-cli; # added 2023-09-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18

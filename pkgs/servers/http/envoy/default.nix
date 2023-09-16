@@ -80,8 +80,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-+8MnbcFUyAE2122VA5olWAW8ZgjGweumRI62bxi9KOI=";
-      aarch64-linux = "sha256-4PH8rgsHxEwtx8RQGjLbAxHpLfWVqRLOvSX9sqQoy4Y=";
+      x86_64-linux = "sha256-MvY4cLdLOeb7+Zt7Oz7Kzz1+dsUceemP/V02egvHg+M=";
+      aarch64-linux = "sha256-U5mnAq8RHDygxiYeNc0HDeOgoaGyrd0MPjHKdyUkM0A=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -97,7 +97,7 @@ buildBazelPackage rec {
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
 
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
@@ -133,7 +133,7 @@ buildBazelPackage rec {
         -e 's,__NIXSHELL__,${stdenv.shellPackage},' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
     '';
     installPhase = ''
       install -Dm0755 bazel-bin/source/exe/envoy-static $out/bin/envoy

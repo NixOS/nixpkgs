@@ -7407,6 +7407,8 @@ with pkgs;
 
   deluge-2_x = deluge;
 
+  der-ascii = callPackage ../tools/security/der-ascii { };
+
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
 
   dfc  = callPackage ../tools/system/dfc { };
@@ -12674,7 +12676,7 @@ with pkgs;
 
   recoll = libsForQt5.callPackage ../applications/search/recoll { };
 
-  redoc-cli = nodePackages.redoc-cli;
+  redoc-cli = callPackage ../development/tools/redoc-cli { };
 
   reflex = callPackage ../development/tools/reflex { };
 
