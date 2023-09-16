@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-n66Bv8xB/0KMJYoMILxsaKoaX+E0OFGI3QGqhxKTFUQ=";
+    hash = "sha256-n66Bv8xB/0KMJYoMILxsaKoaX+E0OFGI3QGqhxKTFUQ=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
