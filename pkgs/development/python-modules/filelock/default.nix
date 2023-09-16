@@ -30,6 +30,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "filelock"
+  ];
+
   meta = with lib; {
     changelog = "https://github.com/tox-dev/py-filelock/releases/tag/${version}";
     description = "A platform independent file lock for Python";
