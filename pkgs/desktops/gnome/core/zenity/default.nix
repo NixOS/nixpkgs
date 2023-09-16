@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, help2man
 , meson
 , ninja
 , pkg-config
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    help2man
     meson
     ninja
     pkg-config
