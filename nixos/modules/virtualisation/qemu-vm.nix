@@ -885,8 +885,8 @@ in
     virtualisation.uboot = {
       package = mkOption {
         type = types.package;
-        default = pkgs.ubootQemuX86;
-        description = lib.mdDoc "U-Boot firmware package, defaults to QEMU x86 one";
+        default = pkgs.ubootQemuX8664;
+        description = lib.mdDoc "U-Boot firmware package, defaults to QEMU x86_64 one";
       };
 
       firmware = mkOption {
