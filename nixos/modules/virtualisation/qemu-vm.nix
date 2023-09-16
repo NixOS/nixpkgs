@@ -898,7 +898,21 @@ in
           lib.mdDoc ''
             Firmware binary for U-Boot, defaults to the name declared by the package.
             '';
-      };
+        };
+
+        efiVariableSeed = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "./uefivar.bin";
+          description =
+            lib.mdDoc ''
+              This is a seed variable file for UEFI variables loaded by U-Boot.
+              This can be used to bootstrap Secure Boot keys for example.
+
+              The format is a U-Boot specific one which can be assembled via
+              U-Boot tools' efivar.py tool.
+            '';
+        };
     };
 
     virtualisation.useDefaultFilesystems =
@@ -1145,9 +1159,16 @@ in
       (mkIf (cfg.bios != null) [
         "-bios ${cfg.bios}/bios.bin"
       ])
-      (mkIf (cfg.firmware == "uboot") [
-        "-bios ${cfg.uboot.package}/${cfg.uboot.firmware}"
-      ])
+      (mkIf (cfg.firmware == "uboot") (
+        let
+          ubootPackage = if cfg.uboot.efiVariableSeed != null then cfg.uboot.package.override {
+            inherit (cfg.uboot) efiVariableSeed;
+          } else cfg.uboot.package;
+        in
+        [
+        "-bios ${ubootPackage}/${cfg.uboot.firmware}"
+        ]
+      ))
       (mkIf (!cfg.graphics) [
         "-nographic"
       ])
