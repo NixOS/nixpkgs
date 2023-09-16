@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version format;
