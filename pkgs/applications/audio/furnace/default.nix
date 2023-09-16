@@ -18,18 +18,22 @@
 , libjack2
 , withGUI ? true
 , Cocoa
+, portaudio
+, alsa-lib
+# Use GLES instead of GL
+, withGLES ? stdenv.hostPlatform.isAarch
 }:
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6pre9";
+  version = "0.6pre16";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-i7/NN179Wyr1FqNlgryyFtishFr5EY1HI6BRQKby/6E=";
+    sha256 = "sha256-n66Bv8xB/0KMJYoMILxsaKoaX+E0OFGI3QGqhxKTFUQ=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -53,8 +57,12 @@ stdenv.mkDerivation rec {
     rtmidi
     SDL2
     zlib
+    portaudio
   ] ++ lib.optionals withJACK [
     libjack2
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
+    alsa-lib
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
@@ -67,7 +75,12 @@ stdenv.mkDerivation rec {
     "-DSYSTEM_RTMIDI=ON"
     "-DSYSTEM_SDL2=ON"
     "-DSYSTEM_ZLIB=ON"
+    "-DSYSTEM_PORTAUDIO=ON"
     "-DWITH_JACK=${if withJACK then "ON" else "OFF"}"
+    "-DWITH_PORTAUDIO=ON"
+    "-DWITH_RENDER_SDL=ON"
+    "-DWITH_RENDER_OPENGL=ON"
+    "-DUSE_GLES=${lib.boolToString withGLES}"
     "-DWARNINGS_ARE_ERRORS=ON"
   ];
 
