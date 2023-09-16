@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cairo";
-  version = "1.17.6";
+  version = "1.17.9-unstable-2023-09-07";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "cairo";
     repo = "cairo";
-    rev = finalAttrs.version;
-    hash = "sha256-RIWtQ/n4SjaB2SDVn0CVp5ydmVYA5oyQkCAwrkdF4EE=";
+    rev = "7380d3dd7d5128db20f0be063b086519ed555327";
+    hash = "sha256-DE/YYwl1Zkr34BMKzjz4apXVEc2fli3f4/ZmXagQHJc=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -78,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=true"
     "-Dspectre=disabled" # only useful for tests
     "-Dsymbol-lookup=disabled"
-    "-Dtee=enabled" # used by firefox
     "-Dtests=disabled"
     (lib.mesonEnable "xlib" x11Support)
     (lib.mesonEnable "xcb" xcbSupport)
