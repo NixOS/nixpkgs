@@ -448,6 +448,15 @@
     githubId = 315003;
     name = "Adam Saponara";
   };
+  adtya = {
+    email = "adtya@adtya.xyz";
+    github = "adtya";
+    githubId = 22346805;
+    name = "Adithya Nair";
+    keys = [{
+      fingerprint = "51E4 F5AB 1B82 BE45 B422  9CC2 43A5 E25A A5A2 7849";
+    }];
+  };
   aerialx = {
     email = "aaron+nixos@aaronlindsay.com";
     github = "AerialX";
@@ -9087,6 +9096,12 @@
     github = "kierdavis";
     githubId = 845652;
     name = "Kier Davis";
+  };
+  kilianar = {
+    email = "mail@kilianar.de";
+    github = "kilianar";
+    githubId = 105428155;
+    name = "kilianar";
   };
   kilimnik = {
     email = "mail@kilimnik.de";
