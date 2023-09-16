@@ -16,6 +16,7 @@
 , openssl
 , swig
 , which
+, python3
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareAllwinnerH616
@@ -157,6 +158,10 @@ in {
       "tools/mkenvimage"
       "tools/mkimage"
     ];
+
+    pythonScriptsToInstall = {
+      "tools/efivar.py" = (python3.withPackages (ps: [ ps.pyopenssl ]));
+    };
   };
 
   ubootA20OlinuxinoLime = buildUBoot {
