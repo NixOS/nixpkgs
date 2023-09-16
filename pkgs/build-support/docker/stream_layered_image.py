@@ -326,7 +326,7 @@ def main():
     )
 
     mtime = (
-        datetime.fromisoformat(conf["mtime"]) 
+        datetime.fromisoformat(conf["mtime"])
             if conf.get("mtime") # if mtime is specified and not falsey
             else created
     )
