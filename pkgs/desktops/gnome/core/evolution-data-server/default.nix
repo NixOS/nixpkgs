@@ -51,13 +51,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.49.3";
+  version = "3.50.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchzip {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZhvSPatxG/gjXqtKeFXEpZ4jA9psTKkhl9U9xTKb7hY=";
+    sha256 = "JquiDXvQ0BTtC9YtX2fP9nUqK6FqvzyDHwlGdvPtsHU=";
 
     postFetch = ''
       # Very dirty hack to make update script happy.
