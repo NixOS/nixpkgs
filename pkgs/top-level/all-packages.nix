@@ -10918,9 +10918,7 @@ with pkgs;
     electron = electron_22;
   };
 
-  mosh = callPackage ../tools/networking/mosh {
-    protobuf = protobuf3_21;
-  };
+  mosh = callPackage ../tools/networking/mosh { };
 
   motrix = callPackage ../tools/networking/motrix { };
 
@@ -15421,8 +15419,6 @@ with pkgs;
   oksh = callPackage ../shells/oksh { };
 
   loksh = callPackage ../shells/loksh { };
-
-  pash = callPackage ../shells/pash { };
 
   scponly = callPackage ../shells/scponly { };
 
