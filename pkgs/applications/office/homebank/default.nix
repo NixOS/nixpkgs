@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   pname = "homebank";
-  version = "5.6.6";
+  version = "5.7";
   src = fetchurl {
     url = "http://homebank.free.fr/public/sources/homebank-${version}.tar.gz";
-    hash = "sha256-ZW/N8YUU8r7SYY/+hqVYrqYW/KQqtuChfQJxXftl3A4=";
+    hash = "sha256-xDiVzDeeA+KuLESj911LBq8hgDlltrxSA051xUOD2Ro=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook intltool ];
