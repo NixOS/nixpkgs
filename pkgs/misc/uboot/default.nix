@@ -466,22 +466,33 @@ in {
     passthru.firmware = "u-boot.rom";
   };
 
-  securebootUbootQemuX86 = buildUBoot {
-    defconfig = "qemu-x86_defconfig";
+  ubootQemuX8664 = buildUBoot {
+    defconfig = "qemu-x86_64_defconfig";
     extraConfig = ''
       CONFIG_USB_UHCI_HCD=y
       CONFIG_USB_EHCI_HCD=y
       CONFIG_USB_EHCI_GENERIC=y
       CONFIG_USB_XHCI_HCD=y
-      CONFIG_FIT_SIGNATURE=y
+      CONFIG_EFI_SECURE_BOOT=y
+      CONFIG_CMD_EFIDEBUG=y
+    '';
+    extraMeta.platforms = [ "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
+    passthru.firmware = "u-boot.rom";
+  };
+
+  securebootUbootQemuX8664 = buildUBoot {
+    defconfig = "qemu-x86_64_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
       CONFIG_EFI_SECURE_BOOT=y
       CONFIG_CMD_EFIDEBUG=y
       CONFIG_EFI_VARIABLE_FILE_STORE=y
-      CONFIG_CMD_BOOTEFI_BOOTMGR=y
-      CONFIG_X86_RUN_64BIT=y
-      CONFIG_SPL_BSS_MAX_SIZE=0x100000
     '';
-    extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
+    extraMeta.platforms = [ "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
     passthru.firmware = "u-boot.rom";
   };
