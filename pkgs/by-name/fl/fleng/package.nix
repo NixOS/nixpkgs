@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fleng";
-  version = "15";
+  version = "16";
 
   src = fetchurl {
     url = "http://www.call-with-current-continuation.org/fleng/fleng-${finalAttrs.version}.tgz";
-    hash = "sha256-gLRaLty7dxpcmIJEBn7mF/RMFhjCuAYl16FR70FYZWA=";
+    hash = "sha256-TzHO2bRnuysUhAWQbU+ZG0HOvLWyMsHABwm3Qb2Z/3A=";
   };
 
   doCheck = true;
