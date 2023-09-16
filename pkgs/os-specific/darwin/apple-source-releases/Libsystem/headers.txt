@@ -460,13 +460,6 @@ corpses/task_corpse.h
 cpio.h
 crt_externs.h
 ctype.h
-curses.h
-cursesapp.h
-cursesf.h
-cursesm.h
-cursesp.h
-cursesw.h
-cursslk.h
 db.h
 default_pager/default_pager_types.h
 device/device.defs
@@ -503,14 +496,11 @@ dns_sd.h
 dns_util.h
 err.h
 errno.h
-eti.h
-etip.h
 execinfo.h
 fcntl.h
 fenv.h
 fmtmsg.h
 fnmatch.h
-form.h
 fsproperties.h
 fstab.h
 fts.h
@@ -948,7 +938,6 @@ math.h
 membership.h
 membershipPriv.h
 memory.h
-menu.h
 miscfs/devfs/devfs.h
 miscfs/specfs/specdev.h
 miscfs/union/union.h
@@ -958,9 +947,6 @@ monitor.h
 mpool.h
 msgcat.h
 nameser.h
-nc_tparm.h
-ncurses.h
-ncurses_dll.h
 ndbm.h
 net/bpf.h
 net/dlil.h
@@ -1352,7 +1338,6 @@ osfmk/vm/vm_protos.h
 osfmk/vm/vm_shared_region.h
 osfmk/voucher/ipc_pthread_priority_types.h
 osfmk/x86_64/machine_kpc.h
-panel.h
 paths.h
 pexpert/boot.h
 pexpert/i386/boot.h
@@ -1678,12 +1663,8 @@ sys/xattr.h
 sysexits.h
 syslog.h
 tar.h
-term.h
-term_entry.h
-termcap.h
 termios.h
 thread_data.h
-tic.h
 time.h
 timeconv.h
 ttyent.h
@@ -1692,7 +1673,6 @@ tzlink.h
 tzlink_internal.h
 ucontext.h
 ulimit.h
-unctrl.h
 unistd.h
 util.h
 utime.h

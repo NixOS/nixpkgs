@@ -1,9 +1,10 @@
-{ lib, stdenv, buildPackages, fetchzip, fetchFromGitHub
+{ lib, stdenvNoCC, buildPackages, fetchzip, fetchFromGitHub
 , appleDerivation', AvailabilityVersions, xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libmalloc, libplatform, libpthread
 , mDNSResponder, launchd, libutilHeaders, hfsHeaders, darwin-stubs
 , headersOnly ? false
+, withCsu ? !headersOnly
 , withLibresolv ? !headersOnly
 }:
 
@@ -29,7 +30,7 @@ let
     hash = "sha256-tXLW/TNsluhO1X9Rv3FANyzyOe5TE/hZz0gVo7JGvHA=";
   };
 in
-appleDerivation' stdenv {
+appleDerivation' stdenvNoCC {
   dontBuild = true;
   dontFixup = true;
 
@@ -62,7 +63,7 @@ appleDerivation' stdenv {
       --replace-fail 'MAC_OS_X_VERSION_MAX_ALLOWED MAC_OS_VERSION_14_0' 'MAC_OS_X_VERSION_MAX_ALLOWED __MAC_10_12_4'
 
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} \
-               ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
+               ${libclosure} ${CarbonHeaders} ${libdispatch} \
                ${CommonCrypto} ${copyfile} ${removefile} ${libresolvHeaders} \
                ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
                ${libutilHeaders} ${libmalloc} ${libpthread} ${hfsHeaders}; do
@@ -121,10 +122,6 @@ appleDerivation' stdenv {
     #endif  /* __TARGETCONDITIONALS__ */
     EOF
   '' + lib.optionalString (!headersOnly) ''
-
-    # The startup object files
-    cp ${Csu}/lib/* $out/lib
-
     cp -vr \
       ${darwin-stubs}/usr/lib/libSystem.B.tbd \
       ${darwin-stubs}/usr/lib/system \
@@ -138,18 +135,12 @@ appleDerivation' stdenv {
     for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
       ln -s libSystem.tbd $out/lib/lib$name.tbd
     done
+  '' + lib.optionalString withCsu ''
+    # The startup object files
+    cp ${Csu}/lib/* $out/lib
   '' + lib.optionalString withLibresolv ''
-
     # This probably doesn't belong here, but we want to stay similar to glibc, which includes resolv internally...
-    cp ${libresolv}/lib/libresolv.9.dylib $out/lib/libresolv.9.dylib
-    resolv_libSystem=$(${stdenv.cc.bintools.targetPrefix}otool -L "$out/lib/libresolv.9.dylib" | tail -n +3 | grep -o "$NIX_STORE.*-\S*") || true
-    echo $libs
-
-    chmod +w $out/lib/libresolv.9.dylib
-    ${stdenv.cc.bintools.targetPrefix}install_name_tool \
-      -id $out/lib/libresolv.9.dylib \
-      -change "$resolv_libSystem" /usr/lib/libSystem.dylib \
-      $out/lib/libresolv.9.dylib
+    ln -s ${lib.getLib libresolv}/lib/libresolv.9.dylib $out/lib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
   '';
 
