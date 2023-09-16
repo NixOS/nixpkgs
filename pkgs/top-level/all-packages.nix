@@ -18563,6 +18563,8 @@ with pkgs;
 
   emmet-ls = callPackage ../development/tools/language-servers/emmet-ls { };
 
+  emmet-language-server = callPackage ../development/tools/language-servers/emmet-language-server { };
+
   fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
 
   fortran-language-server = python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server { };
