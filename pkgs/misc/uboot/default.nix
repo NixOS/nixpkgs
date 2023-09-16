@@ -458,6 +458,8 @@ in {
       CONFIG_USB_XHCI_HCD=y
       CONFIG_EFI_SECURE_BOOT=y
       CONFIG_CMD_EFIDEBUG=y
+      CONFIG_X86_RUN_64BIT=y
+      CONFIG_SPL_BSS_MAX_SIZE=0x100000
     '';
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
@@ -476,6 +478,8 @@ in {
       CONFIG_CMD_EFIDEBUG=y
       CONFIG_EFI_VARIABLE_FILE_STORE=y
       CONFIG_CMD_BOOTEFI_BOOTMGR=y
+      CONFIG_X86_RUN_64BIT=y
+      CONFIG_SPL_BSS_MAX_SIZE=0x100000
     '';
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
