@@ -265,7 +265,7 @@ in
           version = "boot";
         };
 
-        binutils = (import ../../build-support/bintools-wrapper) {
+        binutils = lib.makeOverridable (import ../../build-support/bintools-wrapper) {
           name = "bootstrap-stage0-binutils-wrapper";
 
           nativeTools = false;
@@ -301,6 +301,11 @@ in
 
         sigtool = bootstrapTools;
       } // lib.optionalAttrs (! useAppleSDKLibs) {
+        Csu = bootstrapTools // {
+          name = "bootstrap-stage0-Csu";
+          passthru.isFromBootstrapFiles = true;
+        };
+
         Libsystem = self.stdenv.mkDerivation {
           name = "bootstrap-stage0-Libsystem";
           buildCommand = ''
@@ -316,12 +321,21 @@ in
               ln -s libSystem.tbd $out/lib/lib$name.tbd
             done
 
-            ln -s ${bootstrapTools}/lib/*.o $out/lib
+            ln -s ${selfDarwin.libresolv}/lib/* $out/lib
 
-            ln -s ${bootstrapTools}/lib/libresolv.9.dylib $out/lib
-            ln -s libresolv.9.dylib $out/lib/libresolv.dylib
+            ln -s ${selfDarwin.Csu}/lib/*.o $out/lib
 
             ln -s ${bootstrapTools}/include-Libsystem $out/include
+          '';
+          passthru.isFromBootstrapFiles = true;
+        };
+
+        libresolv = self.stdenv.mkDerivation {
+          name = "bootstrap-stage0-libresolv";
+          buildCommand = ''
+            mkdir -p $out/lib
+            ln -s ${bootstrapTools}/lib/libresolv.9.dylib $out/lib
+            ln -s libresolv.9.dylib $out/lib/libresolv.dylib
           '';
           passthru.isFromBootstrapFiles = true;
         };
@@ -428,7 +442,7 @@ in
       binutils-unwrapped cctools print-reexports rewrite-tbd sigtool
     ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isFromBootstrapFiles (with prevStage.darwin; [ Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all isFromBootstrapFiles (with prevStage.darwin; [ Libsystem libresolv ]);
     assert    useAppleSDKLibs  -> lib.all        isFromNixpkgs (with prevStage.darwin; [ Libsystem ]);
     assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd xnu ]);
     assert (with prevStage.darwin; (! useAppleSDKLibs) -> CF == null);
@@ -541,10 +555,10 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
       binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool
     ]);
-    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ configd libresolv ]);
     assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
-    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd xnu ]);
+    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF libobjc]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ Libsystem dyld launchd xnu ]);
 
     assert lib.all isFromBootstrapFiles (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
@@ -590,7 +604,7 @@ in
       darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (prevStage.darwin)
           CF Libsystem binutils-unwrapped cctools cctools-port configd darwin-stubs dyld
-          launchd libclosure libdispatch libobjc locale objc4 postLinkSignHook
+          launchd libclosure libdispatch libobjc libresolv locale objc4 postLinkSignHook
           print-reexports rewrite-tbd signingUtils sigtool;
       });
 
@@ -641,10 +655,10 @@ in
       binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool
     ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ configd libresolv ]);
     assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
-    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd xnu ]);
+    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF libobjc ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ Libsystem dyld launchd xnu ]);
 
     assert lib.all isFromBootstrapFiles (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
@@ -667,7 +681,8 @@ in
       darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (prevStage.darwin)
           CF Libsystem configd darwin-stubs dyld launchd libclosure libdispatch libobjc
-          locale objc4 postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
+          libresolv locale objc4 postLinkSignHook print-reexports rewrite-tbd signingUtils
+          sigtool;
 
         # Avoid building unnecessary Python dependencies due to building LLVM manpages.
         cctools-llvm = superDarwin.cctools-llvm.override { enableManpages = false; };
@@ -739,10 +754,10 @@ in
       binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool
     ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ configd libresolv ]);
     assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
-    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF libobjc ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ Libsystem dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
@@ -780,7 +795,8 @@ in
       llvmPackages = super.llvmPackages // (
         let
           tools = super.llvmPackages.tools.extend (_: _: {
-            inherit (prevStage.llvmPackages) clang-unwrapped clangNoCompilerRtWithLibc libclang libllvm llvm;
+            inherit (prevStage.llvmPackages)
+              clang-unwrapped clangNoCompilerRt clangNoCompilerRtWithLibc libclang libllvm llvm;
           });
 
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
@@ -840,10 +856,10 @@ in
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ configd ]);
-    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ libresolv ]);
     assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
-    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF libobjc ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ Libsystem dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
@@ -870,7 +886,7 @@ in
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin)
-          Libsystem configd darwin-stubs launchd locale print-reexports rewrite-tbd
+          Libsystem configd darwin-stubs launchd libresolv locale print-reexports rewrite-tbd
           signingUtils sigtool;
 
         # Rewrap binutils so it uses the rebuilt Libsystem.
@@ -890,7 +906,7 @@ in
       llvmPackages = super.llvmPackages // (
         let
           tools = super.llvmPackages.tools.extend (_: _: {
-            inherit (prevStage.llvmPackages) clang-unwrapped clangNoCompilerRtWithLibc libclang libllvm llvm;
+            inherit (prevStage.llvmPackages) clang-unwrapped clangNoCompilerRt clangNoCompilerRtWithLibc libclang libllvm llvm;
             clang = prevStage.stdenv.cc;
           });
 
@@ -967,10 +983,10 @@ in
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ configd ]);
-    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ libresolv ]);
     assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
-    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF libobjc ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ Libsystem dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm
@@ -1000,7 +1016,7 @@ in
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin)
           CF Libsystem binutils binutils-unwrapped cctools cctools-llvm cctools-port configd
-          darwin-stubs dyld launchd libclosure libdispatch libobjc libtapi locale objc4
+          darwin-stubs dyld launchd libresolv libclosure libdispatch libobjc libtapi locale objc4
           postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
       });
 
@@ -1048,10 +1064,10 @@ in
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ configd ]);
-    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ Libsystem ]);
+    assert (! useAppleSDKLibs) -> lib.all        isBuiltByNixpkgsCompiler (with prevStage.darwin; [ libresolv ]);
     assert (! useAppleSDKLibs) -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF ]);
-    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF libobjc ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ Libsystem dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
@@ -1101,7 +1117,9 @@ in
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin) dyld CF Libsystem darwin-stubs
           # CF dependencies - don’t rebuild them.
-          libobjc objc4;
+          libobjc objc4
+          # Libsystem dependencies - don’t rebuild them.
+          libresolv;
 
         # rewrite-tbd is also needed to build Darwin frameworks, so it’s built using the
         # previous stage’s fetchFromGitHub to avoid an infinite recursion (same as above).
@@ -1215,10 +1233,10 @@ in
       binutils-unwrapped cctools libtapi locale print-reexports rewrite-tbd sigtool
     ]);
 
-    assert (! useAppleSDKLibs) -> lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [ Libsystem configd ]);
+    assert (! useAppleSDKLibs) -> lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [ configd libresolv ]);
     assert (! useAppleSDKLibs) -> lib.all            isFromNixpkgs (with prevStage.darwin; [ CF ]);
-    assert    useAppleSDKLibs  -> lib.all            isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc ]);
-    assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd libclosure libdispatch xnu ]);
+    assert    useAppleSDKLibs  -> lib.all            isFromNixpkgs (with prevStage.darwin; [ CF libobjc ]);
+    assert lib.all isFromNixpkgs (with prevStage.darwin; [ Libsystem dyld launchd libclosure libdispatch xnu ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.llvmPackages; [
       clang-unwrapped libclang libllvm llvm compiler-rt libcxx libcxxabi
@@ -1345,6 +1363,7 @@ in
         cctools-llvm
         cctools-port
         dyld
+        libresolv
         libtapi
         locale
       ]
@@ -1363,7 +1382,7 @@ in
 
         darwin = super.darwin.overrideScope (_: _: {
           inherit (prevStage.darwin)
-            CF ICU Libsystem darwin-stubs dyld locale libobjc libtapi rewrite-tbd xnu;
+            CF ICU Libsystem darwin-stubs dyld locale libobjc libresolv libtapi rewrite-tbd xnu;
         } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
           inherit (prevStage.darwin) binutils binutils-unwrapped cctools-llvm cctools-port;
         });
