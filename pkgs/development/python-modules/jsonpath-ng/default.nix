@@ -1,38 +1,41 @@
 { lib
 , buildPythonPackage
-, decorator
 , fetchFromGitHub
 , ply
 , pytestCheckHook
-, six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jsonpath-ng";
   version = "1.6.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "h2non";
     repo = pname;
-    # missing tag https://github.com/h2non/jsonpath-ng/issues/114
     rev = "refs/tags/v${version}";
     hash = "sha256-q4kIH/2+VKdlSa+IhJ3ymHpc5gmml9lW4aJS477/YSo=";
   };
 
   propagatedBuildInputs = [
-    decorator
     ply
-    six
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTestPaths = [
     # Exclude tests that require oslotest
     "tests/test_jsonpath_rw_ext.py"
   ];
 
-  pythonImportsCheck = [ "jsonpath_ng" ];
+  pythonImportsCheck = [
+    "jsonpath_ng"
+  ];
 
   meta = with lib; {
     description = "JSONPath implementation";
