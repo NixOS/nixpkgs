@@ -9053,6 +9053,8 @@ self: super: with self; {
 
   pydata-sphinx-theme = callPackage ../development/python-modules/pydata-sphinx-theme { };
 
+  pydateinfer = callPackage ../development/python-modules/pydateinfer { };
+
   pydbus = callPackage ../development/python-modules/pydbus { };
 
   pydeck = callPackage ../development/python-modules/pydeck { };
