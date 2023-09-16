@@ -1,20 +1,23 @@
 { lib
-, fetchPypi
+, astroid
 , buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
 , setuptools-scm
 , six
-, astroid
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "2.2.1";
+  version = "2.4.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RiIRCypvMLd+FHOv+ql+cRvC8H0/EISEIP8YmO2+lPM=";
+    hash = "sha256-LgFxuZGyyVmsxsSTGASSNoRKXaHWW6JnLEiAwciUg04=";
   };
 
   nativeBuildInputs = [
@@ -35,16 +38,13 @@ buildPythonPackage rec {
     "test_slices"
   ];
 
-  disabledTestPaths = [
-    # incompatible with astroid 2.11.0, pins <= 2.5.3
-    "tests/test_astroid.py"
+  pythonImportsCheck = [
+    "asttokens"
   ];
 
-  pythonImportsCheck = [ "asttokens" ];
-
   meta = with lib; {
-    homepage = "https://github.com/gristlabs/asttokens";
     description = "Annotate Python AST trees with source text and token information";
+    homepage = "https://github.com/gristlabs/asttokens";
     license = licenses.asl20;
     maintainers = with maintainers; [ leenaars ];
   };
