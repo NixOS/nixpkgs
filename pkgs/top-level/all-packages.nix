@@ -21614,6 +21614,8 @@ with pkgs;
 
   gettext = callPackage ../development/libraries/gettext { };
 
+  gettext-pseudolocale = callPackage ../development/libraries/gettext-pseudolocale { };
+
   gf2x = callPackage ../development/libraries/gf2x { };
 
   gd = callPackage ../development/libraries/gd {
