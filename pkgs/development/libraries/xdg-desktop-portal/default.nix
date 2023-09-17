@@ -6,6 +6,7 @@
 , docbook_xml_dtd_412
 , docbook_xml_dtd_43
 , docbook_xsl
+, docutils
 , systemdMinimal
 , geoclue2
 , glib
@@ -30,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.17.0";
+  version = "1.17.2";
 
   outputs = [ "out" "installedTests" ];
 
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = finalAttrs.version;
-    sha256 = "sha256-OGf2ohP/Qd+ff3KfJYoHu9wbCAUXCP3wm/utjqkgccE=";
+    sha256 = "sha256-ZNIGnoDw6bBf4k+PeBckGMFxnDfR3oVbj3cqdLY3M+Q=";
   };
 
   patches = [
@@ -52,12 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
+
+    # `XDG_DESKTOP_PORTAL_DIR` originally was used for upstream tests. But we are making use
+    # of this in the NixOS module, this actually blocks any configs from being loaded since
+    # configs are not expected to be placed in a portal implementation or even under the
+    # `share/xdg-desktop-portal/portals/` path.
+    ./separate-env-for-portal-config.patch
   ];
 
   nativeBuildInputs = [
     docbook_xml_dtd_412
     docbook_xml_dtd_43
     docbook_xsl
+    docutils # for rst2man
     libxml2
     meson
     ninja
