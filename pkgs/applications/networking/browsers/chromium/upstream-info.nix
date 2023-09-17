@@ -27,11 +27,11 @@
   };
   stable = {
     chromedriver = {
-      sha256_darwin = "0gzx3zka8i2ngsdiqp8sr0v6ir978vywa1pj7j08vsf8kmb93iiy";
+      sha256_darwin = "0phhcqid7wjw923qdi65zql3fid25swwszksgnw3b8fgz67jn955";
       sha256_darwin_aarch64 =
-        "18iyapwjg0yha8qgbw7f605n0j54nd36shv3497bd84lc9k74b14";
-      sha256_linux = "0d8mqzjc11g1bvxvffk0xyhxfls2ycl7ym4ssyjq752g2apjblhp";
-      version = "116.0.5845.96";
+        "00fwq8slvjm6c7krgwjd4mxhkkrp23n4icb63qlvi2hy06gfj4l6";
+      sha256_linux = "0ws8ch1j2hzp483vr0acvam1zxmzg9d37x6gqdwiqwgrk6x5pvkh";
+      version = "117.0.5938.88";
     };
     deps = {
       gn = {
