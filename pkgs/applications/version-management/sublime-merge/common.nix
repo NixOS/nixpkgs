@@ -8,9 +8,10 @@
 let
   pnameBase = "sublime-merge";
   packageAttribute = "sublime-merge${lib.optionalString dev "-dev"}";
-  binaries = [ "sublime_merge" "crash_reporter" "git-credential-sublime" "ssh-askpass-sublime" ];
+  binaries = [ "sublime_merge" crashHandlerBinary "git-credential-sublime" "ssh-askpass-sublime" ];
   primaryBinary = "sublime_merge";
   primaryBinaryAliases = [ "smerge" ];
+  crashHandlerBinary = if lib.versionAtLeast buildVersion "2086" then "crash_handler" else "crash_reporter";
   downloadUrl = arch: "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
   versionFile = builtins.toString ./default.nix;
