@@ -8314,6 +8314,8 @@ self: super: with self; {
 
   pyre-extensions = callPackage ../development/python-modules/pyre-extensions { };
 
+  pyrender = callPackage ../development/python-modules/pyrender { };
+
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
