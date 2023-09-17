@@ -431,6 +431,7 @@ in {
   kubo = import ./kubo { inherit recurseIntoAttrs runTest; };
   ladybird = handleTest ./ladybird.nix {};
   languagetool = handleTest ./languagetool.nix {};
+  lanraragi = handleTest ./lanraragi.nix {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
   lemmy = handleTest ./lemmy.nix {};
