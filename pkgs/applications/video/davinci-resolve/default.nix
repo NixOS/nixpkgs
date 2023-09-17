@@ -22,6 +22,7 @@
 , aprutil
 , makeDesktopItem
 , copyDesktopItems
+, jq
 
 , studioVariant ? false
 }:
@@ -56,18 +57,17 @@ let
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-          nativeBuildInputs = [ curl ];
+          nativeBuildInputs = [ curl jq ];
 
           # ENV VARS
           SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
           # Get linux.downloadId from HTTP response on https://www.blackmagicdesign.com/products/davinciresolve
-          DOWNLOADID =
-            if studioVariant
-            then "2cdeb3d6ccfb4e65add749acb36e659b"
-            else "cebf954f05a74eaeae6b6b14bcca7971";
           REFERID = "263d62f31cbb49e0868005059abcb0c9";
-          SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
+          DOWNLOADSURL = "https://www.blackmagicdesign.com/api/support/us/downloads.json";
+          SITEURL = "https://www.blackmagicdesign.com/api/register/us/download";
+          PRODUCT = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
+          VERSION = version;
 
           USERAGENT = builtins.concatStringsSep " " [
             "User-Agent: Mozilla/5.0 (X11; Linux ${stdenv.hostPlatform.linuxArch})"
@@ -85,10 +85,16 @@ let
             "street" = "Hogeweide 346";
             "state" = "Province of Utrecht";
             "city" = "Utrecht";
-            "product" = "DaVinci Resolve${if studioVariant then " Studio" else ""}";
+            "product" = PRODUCT;
           };
 
         } ''
+        DOWNLOADID=$(
+          curl --silent --compressed "$DOWNLOADSURL" \
+            | jq --raw-output '.downloads[] | select(.name | test("^'"$PRODUCT $VERSION"'( Update)?$")) | .urls.Linux[0].downloadId'
+        )
+        echo "downloadid is $DOWNLOADID"
+        test -n "$DOWNLOADID"
         RESOLVEURL=$(curl \
           --silent \
           --header 'Host: www.blackmagicdesign.com' \
@@ -103,7 +109,7 @@ let
           --header 'Cookie: _ga=GA1.2.1849503966.1518103294; _gid=GA1.2.953840595.1518103294' \
           --data-ascii "$REQJSON" \
           --compressed \
-          "$SITEURL")
+          "$SITEURL/$DOWNLOADID")
 
         curl \
           --retry 3 --retry-delay 3 \
