@@ -65,6 +65,9 @@ in let
     llef = callPackage ../common/lldb-plugins/llef.nix {};
   });
 
+  isDarwinCross = stdenv.hostPlatform.isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform);
+  stdenvNoCF = if stdenv.hostPlatform.isDarwin then darwin.stdenvNoCF else stdenv;
+
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
     major = lib.versions.major release_version;
@@ -299,9 +302,13 @@ in let
 
     compiler-rt-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
-               then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
-               else stdenv;
+      # Build compiler-rt without CF to prevent an infinite recursion when cross-compiling to Darwin.
+      stdenv = if isDarwinCross
+        then overrideCC stdenvNoCF buildLlvmTools.clangNoCompilerRtWithLibc
+        # The native build requires CF to enable santizers on Darwin.
+        else if stdenv.hostPlatform.useLLVM or false || stdenv.isDarwin
+        then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
+        else stdenv;
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
@@ -352,7 +359,7 @@ in let
       #
       # We cannot use `clangNoLibcxx` because that contains `compiler-rt` which,
       # on macOS, depends on `libcxxabi`, thus forming a cycle.
-      stdenv_ = overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc;
+      stdenv_ = overrideCC stdenvNoCF buildLlvmTools.clangNoCompilerRtWithLibc;
     in callPackage ./libcxxabi {
       stdenv = stdenv_;
       inherit llvm_meta cxx-headers;
@@ -363,12 +370,12 @@ in let
     # stdenv's compiler.
     libcxx = callPackage ./libcxx {
       inherit llvm_meta;
-      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+      stdenv = overrideCC stdenvNoCF buildLlvmTools.clangNoLibcxx;
     };
 
     libunwind = callPackage ./libunwind {
       inherit llvm_meta;
-      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+      stdenv = overrideCC stdenvNoCF buildLlvmTools.clangNoLibcxx;
     };
 
     openmp = callPackage ./openmp {
