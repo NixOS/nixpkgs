@@ -125,8 +125,8 @@ rec {
     aurPatches = fetchFromGitHub {
       owner = "archlinux-jerry";
       repo = "nvidia-340xx";
-      rev = "f472f9297fe2ae285b954cd3f88abd8e2e255e4f";
-      hash = "sha256-tMA69Wlhi14DMS3O3nfwMX3EiT8pKa6McLxFpAayoEI=";
+      rev = "fa434fb5da47e9423db2b19577817eb8c65d2f4e";
+      hash = "sha256-KeMTYHGuZSAPGnYaERZSMu/4lWyB25ZCIv4nJhXxABY=";
     };
     patchset = [
       "0001-kernel-5.7.patch"
@@ -142,6 +142,7 @@ rec {
       "0011-kernel-6.0.patch"
       "0012-kernel-6.2.patch"
       "0013-kernel-6.3.patch"
+      "0014-kernel-6.5.patch"
     ];
   in generic {
     version = "340.108";
@@ -151,7 +152,7 @@ rec {
     persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
     useGLVND = false;
 
-    broken = kernel.kernelAtLeast "6.4";
+    broken = kernel.kernelAtLeast "6.6";
     patches = map (patch: "${aurPatches}/${patch}") patchset;
   };
 }
