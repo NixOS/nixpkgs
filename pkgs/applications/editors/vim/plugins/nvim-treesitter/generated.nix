@@ -314,12 +314,12 @@
   };
   cue = buildGrammar {
     language = "cue";
-    version = "0.0.0+rev=0deecf4";
+    version = "0.0.0+rev=2df92e6";
     src = fetchFromGitHub {
       owner = "eonpatapon";
       repo = "tree-sitter-cue";
-      rev = "0deecf48944aa54bb73e5383ba8acfbf9f2c44b4";
-      hash = "sha256-myHuYl3JfJ/JvVKM9toprsZ+RJ7L2G0LpzcNTmPTfHE=";
+      rev = "2df92e6755337e9234ad18ffef37f35d95e2ba9d";
+      hash = "sha256-RsWbGMC2RXfZlZnkXJclMwiGecZ8Sc1OPkG+mmE5r6Q=";
     };
     meta.homepage = "https://github.com/eonpatapon/tree-sitter-cue";
   };
@@ -1131,12 +1131,12 @@
   };
   lalrpop = buildGrammar {
     language = "lalrpop";
-    version = "0.0.0+rev=b7431e4";
+    version = "0.0.0+rev=06ae1b6";
     src = fetchFromGitHub {
       owner = "traxys";
       repo = "tree-sitter-lalrpop";
-      rev = "b7431e4b64183a5d0d094895a4cd5daf51ed3103";
-      hash = "sha256-P7A/MFmnCHq5rn+QSogbRD3joT7OxC+F9v2oMQ+DZBE=";
+      rev = "06ae1b6c26e23c77c7fb86d51dddad62b42e66b0";
+      hash = "sha256-kYJDTT4gsiRhOzAuRdLY5IxtnqNDBABbxgtAMm9L9qw=";
     };
     meta.homepage = "https://github.com/traxys/tree-sitter-lalrpop";
   };
@@ -1321,12 +1321,12 @@
   };
   nickel = buildGrammar {
     language = "nickel";
-    version = "0.0.0+rev=e1d9337";
+    version = "0.0.0+rev=b759233";
     src = fetchFromGitHub {
       owner = "nickel-lang";
       repo = "tree-sitter-nickel";
-      rev = "e1d9337864d209898a08c26b8cd4c2dd14c15148";
-      hash = "sha256-RcVBptlJ4lYwdDo64pwzxx5z90yqS96Dhyuj4VZWOiM=";
+      rev = "b759233581fd8bae239e905c67a9ba453205da78";
+      hash = "sha256-4OrdtlpSsHTY/BmxRr0cKwTFfUSv+KN9IYDjfpdGIfg=";
     };
     meta.homepage = "https://github.com/nickel-lang/tree-sitter-nickel";
   };
@@ -2064,12 +2064,12 @@
   };
   t32 = buildGrammar {
     language = "t32";
-    version = "0.0.0+rev=c17070b";
+    version = "0.0.0+rev=5e6ce99";
     src = fetchFromGitLab {
       owner = "xasc";
       repo = "tree-sitter-t32";
-      rev = "c17070b014d02319b4cc335d28651926b0ee5ed6";
-      hash = "sha256-j1r++0Nff/slHJvOad289kFzlBIN2uuuEYrHJOGmTEc=";
+      rev = "5e6ce99611b2fef9b4d812e43898b176185c61ed";
+      hash = "sha256-3gRMvJh8vVr7E2b0/RDGqjrlhzjZciWgOYbE+e3dkeE=";
     };
     meta.homepage = "https://gitlab.com/xasc/tree-sitter-t32.git";
   };
@@ -2368,12 +2368,12 @@
   };
   wing = buildGrammar {
     language = "wing";
-    version = "0.0.0+rev=899ebde";
+    version = "0.0.0+rev=430ec75";
     src = fetchFromGitHub {
       owner = "winglang";
       repo = "wing";
-      rev = "899ebde73fac14dafc76a28d2bb6885d7bc5825e";
-      hash = "sha256-fAaA9XhnFILa/5P1ZufQufwuksXx4DbePTfb/WWyRsk=";
+      rev = "430ec7527a3eee00719ce9735854177629410f63";
+      hash = "sha256-vfmpob+2yh/Lnhc6b+Lz0nB7bwk2tMbbIFs1iASj19M=";
     };
     location = "libs/tree-sitter-wing";
     generate = true;
