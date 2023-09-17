@@ -6,6 +6,7 @@
 , gfortran
 , hypothesis
 , pytestCheckHook
+, pytest-xdist
 , typing-extensions
 , blas
 , lapack
@@ -94,10 +95,14 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    # Parallelises tests a bit
+    pytest-xdist
     hypothesis
     typing-extensions
   ];
 
+  # Getting import errors without this. A common issue in Nixpkgs, investigated
+  # at: https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
     cd "$out"
   '';
@@ -134,10 +139,6 @@ in buildPythonPackage rec {
     blasImplementation = blas.implementation;
     inherit cfg;
   };
-
-  # Disable test
-  # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";
