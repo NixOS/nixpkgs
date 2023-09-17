@@ -34,10 +34,6 @@ let
       NET_SCH_DEFAULT = yes;
       DEFAULT_FQ_PIE = yes;
 
-      # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
-      FUTEX = yes;
-      FUTEX_PI = yes;
-
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
 
