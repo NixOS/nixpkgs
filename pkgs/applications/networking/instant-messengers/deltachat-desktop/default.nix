@@ -33,16 +33,16 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.40.3";
+  version = "1.40.4";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-UVsjka/ptUiSN9aqRESdFZA3uh+FJnJot/YXWUPCJtc=";
+    hash = "sha256-cNCM0McWBmHUUutMDa/Cy0qOxhx4NJnhjrW++HRl/nU=";
   };
 
-  npmDepsHash = "sha256-r0IUQNZJEpY8VE0G/WLdygup32iQ6DxfGkvOgFi7R4k=";
+  npmDepsHash = "sha256-CoWa0l2If+SGqD47nP91qsvUlTzOEWP5or5zNUdV7P0=";
 
   nativeBuildInputs = [
     makeWrapper

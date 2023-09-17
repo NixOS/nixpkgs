@@ -629,22 +629,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cocoa"
-version = "0.25.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6140449f97a6e97f9511815c5632d84c8aacf8ac271ad77c559218161a1373c"
-dependencies = [
- "bitflags 1.3.2",
- "block",
- "cocoa-foundation",
- "core-foundation",
- "core-graphics 0.23.1",
- "foreign-types 0.5.0",
- "libc",
- "objc",
-]
-
-[[package]]
 name = "cocoa-foundation"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3760,7 +3744,6 @@ dependencies = [
  "tiny_http",
  "walkdir",
  "window-shadows",
- "window-vibrancy",
  "windows 0.44.0",
  "zip",
 ]
@@ -5080,7 +5063,7 @@ dependencies = [
  "bitflags 1.3.2",
  "cairo-rs",
  "cc",
- "cocoa 0.24.1",
+ "cocoa",
  "core-foundation",
  "core-graphics 0.22.3",
  "crossbeam-channel",
@@ -5157,7 +5140,7 @@ dependencies = [
  "anyhow",
  "base64 0.21.3",
  "bytes",
- "cocoa 0.24.1",
+ "cocoa",
  "dirs-next",
  "embed_plist",
  "encoding_rs",
@@ -5375,7 +5358,7 @@ version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b7aa256a1407a3a091b5d843eccc1a5042289baf0a43d1179d9f0fcfea37c1b"
 dependencies = [
- "cocoa 0.24.1",
+ "cocoa",
  "gtk",
  "percent-encoding",
  "rand 0.8.5",
@@ -6280,22 +6263,10 @@ version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "29d30320647cfc3dc45554c8ad825b84831def81f967a2f7589931328ff9b16d"
 dependencies = [
- "cocoa 0.24.1",
+ "cocoa",
  "objc",
  "raw-window-handle",
  "windows-sys 0.42.0",
-]
-
-[[package]]
-name = "window-vibrancy"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1c0a73f45692662acb5dfe1ac22f33fbd5b3db2f1ef413985b480e655b61f5ee"
-dependencies = [
- "cocoa 0.25.0",
- "objc",
- "raw-window-handle",
- "windows-sys 0.48.0",
 ]
 
 [[package]]
@@ -6665,7 +6636,7 @@ checksum = "33748f35413c8a98d45f7a08832d848c0c5915501803d1faade5a4ebcd258cea"
 dependencies = [
  "base64 0.13.1",
  "block",
- "cocoa 0.24.1",
+ "cocoa",
  "core-graphics 0.22.3",
  "crossbeam-channel",
  "dunce",

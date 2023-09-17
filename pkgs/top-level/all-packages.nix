@@ -2624,8 +2624,6 @@ with pkgs;
 
   flix = callPackage ../development/compilers/flix { };
 
-  fleng = callPackage ../development/compilers/fleng { };
-
   fsrx = callPackage ../tools/misc/fsrx { };
 
   fsuae = callPackage ../applications/emulators/fs-uae { };
@@ -11027,8 +11025,6 @@ with pkgs;
   navi = callPackage ../applications/misc/navi { };
 
   navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
-
-  nawk = callPackage ../tools/text/nawk { };
 
   nbd = callPackage ../tools/networking/nbd { };
   xnbd = callPackage ../tools/networking/xnbd { };
@@ -39696,8 +39692,6 @@ with pkgs;
   };
 
   beluga = callPackage ../applications/science/logic/beluga { };
-
-  boogie = dotnetPackages.Boogie;
 
   cbmc = callPackage ../applications/science/logic/cbmc { };
 
