@@ -1476,31 +1476,6 @@ self: super: {
     });
   };
 
-  jsaddle-webkit2gtk =
-    appendPatches [
-      (pkgs.fetchpatch {
-        name = "jsaddle-webkit2gtk-ghc-9.2.patch";
-        url = "https://github.com/ghcjs/jsaddle/commit/d2ce9e6be1dcba0ab417314a0b848012d1a47e03.diff";
-        stripLen = 1;
-        includes = [ "jsaddle-webkit2gtk.cabal" ];
-        sha256 = "16pcs3l7s8shhcnrhi80bwjgy7w23csd9b8qpmc5lnxn4wxr4c2r";
-      })
-      (pkgs.fetchpatch {
-        name = "jsaddle-webkit2gtk-ghc-9.6.patch";
-        url = "https://github.com/ghcjs/jsaddle/commit/99b23dac8b4c5b23f5ed7963e681a46c1abdd1a5.patch";
-        sha256 = "02rdifap9vzf6bhjp5siw68ghjrxh2phzd0kwjihf3hxi4a2xlp3";
-        stripLen = 1;
-        includes = [ "jsaddle-webkit2gtk.cabal" ];
-      })
-    ]
-    (overrideCabal (old: {
-      postPatch = old.postPatch or "" + ''
-        sed -i 's/aeson.*,/aeson,/' jsaddle-webkit2gtk.cabal
-        sed -i 's/text.*,/text,/' jsaddle-webkit2gtk.cabal
-      '';
-    })
-    super.jsaddle-webkit2gtk);
-
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
     postPatch = old.postPatch or "" + ''
