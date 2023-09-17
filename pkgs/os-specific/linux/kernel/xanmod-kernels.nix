@@ -30,10 +30,6 @@ let
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;
 
-      # FQ-PIE Packet Scheduling
-      NET_SCH_DEFAULT = yes;
-      DEFAULT_FQ_PIE = yes;
-
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
 
