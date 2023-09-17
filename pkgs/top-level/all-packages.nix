@@ -23279,6 +23279,8 @@ with pkgs;
 
   onedrive = callPackage ../applications/networking/sync/onedrive { };
 
+  onedriver = callPackage ../applications/networking/onedriver { };
+
   oneko = callPackage ../applications/misc/oneko { };
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
