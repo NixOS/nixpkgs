@@ -224,6 +224,8 @@ buildFHSEnv {
     ''
   }";
 
+  passthru = { inherit davinci; };
+
   meta = with lib; {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
