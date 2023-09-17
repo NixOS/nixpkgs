@@ -109,7 +109,6 @@ in buildPythonPackage {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
     pytest-xdist
   ];
@@ -130,6 +129,10 @@ in buildPythonPackage {
   preConfigure = ''
     # Helps parallelization a bit
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
+    # We default openblas to build with 64 threads
+    # if a machine has more than 64 threads, it will segfault
+    # see https://github.com/xianyi/OpenBLAS/issues/2993
+    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
     # We download manually the datasets and this variable tells the pooch
     # library where these files are cached. See also:
     # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
@@ -159,43 +162,18 @@ in buildPythonPackage {
   #
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    # Adapted from pytestCheckHook because scipy uses a custom check phase.
-    # It needs to pass `$args` as a Python list to `scipy.test` rather than as
-    # arguments to pytest on the command-line.
-    args=""
-    if [ -n "$disabledTests" ]; then
-      disabledTestsString=$(_pytestComputeDisabledTestsString "''${disabledTests[@]}")
-      args+="'-k','$disabledTestsString'"
-    fi
-
-    if [ -n "''${disabledTestPaths-}" ]; then
-        eval "disabledTestPaths=($disabledTestPaths)"
-    fi
-
-    for path in ''${disabledTestPaths[@]}; do
-      if [ ! -e "$path" ]; then
-        echo "Disabled tests path \"$path\" does not exist. Aborting"
-        exit 1
-      fi
-      args+="''${args:+,}'--ignore=\"$path\"'"
-    done
-    args+="''${args:+,}$(printf \'%s\', "''${pytestFlagsArray[@]}")"
-    args=''${args%,}
-
-    pushd "$out"
-    export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
-    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test(
-        'fast',
-        verbose=10,
-        extra_argv=[$args],
-        parallel=$NIX_BUILD_CORES
-    ) != True)"
-    popd
-    runHook postCheck
+  # Getting import errors without this. A common issue in Nixpkgs, investigated
+  # at: https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    cd $out
+    # TODO: Remove, here for debugging only
+    python -m pytest --markers
   '';
+  pytestFlagsArray = [
+    "-m" "not\\ slow" # fast test suite
+    # TODO: Remove, here for debugging only
+    "--durations=40"
+  ];
 
   requiredSystemFeatures = [ "big-parallel" ]; # the tests need lots of CPU time
 
