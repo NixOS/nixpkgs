@@ -1,4 +1,4 @@
-{ buildVersion, x64sha256, dev ? false }:
+{ buildVersion, aarch64sha256, x64sha256, dev ? false }:
 
 { fetchurl, lib, stdenv, xorg, glib, libGL, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
@@ -85,6 +85,10 @@ in let
 
     passthru = {
       sources = {
+        "aarch64-linux" = fetchurl {
+          url = downloadUrl "arm64";
+          sha256 = aarch64sha256;
+        };
         "x86_64-linux" = fetchurl {
           url = downloadUrl "x64";
           sha256 = x64sha256;
@@ -146,6 +150,6 @@ in stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ zookatron ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 })
