@@ -77,7 +77,9 @@ stdenv.mkDerivation rec {
     description = "Manage Zigbee network with ConBee, ConBee II or RaspBee hardware";
     homepage = "https://www.dresden-elektronik.com/wireless/software/deconz.html";
     license = licenses.unfree;
-    platforms = with platforms; linux;
+    platforms = with platforms; [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "deCONZ";
   };
 }
