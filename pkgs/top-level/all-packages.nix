@@ -32488,8 +32488,6 @@ with pkgs;
 
   gnomecast = callPackage ../applications/video/gnomecast { };
 
-  celluloid = callPackage ../applications/video/celluloid { };
-
   gnome-recipes = callPackage ../applications/misc/gnome-recipes {
     inherit (gnome) gnome-autoar;
   };
