@@ -2148,27 +2148,6 @@ self: super: {
     sha256 = "sha256-AVQLvul3ufxGQyoXud05qauclNanf6kunip0oJ/9lWQ=";
   }) (dontCheck super.yi-language);
 
-  # 2022-03-16: Upstream is not bumping bounds https://github.com/ghcjs/jsaddle/issues/123
-  # 2023-07-14: Upstream is also not releasing fixes.
-  jsaddle = appendPatch
-    (fetchpatch {
-      name = "jsaddle-casemapping.patch";
-      url = "https://github.com/ghcjs/jsaddle/commit/f90df85fec84fcc4927bfb67452e31342f5aec1f.patch";
-      sha256 = "sha256-xCtDxpjZbus8VSeBUEV0OnJlcQKjeL1PbYSHnhpFuyI=";
-      relative = "jsaddle";
-    })
-    (overrideCabal (drv: {
-    # lift conditional version constraint on ref-tf
-    postPatch = ''
-      sed -i 's/ref-tf.*,/ref-tf,/' jsaddle.cabal
-      sed -i 's/attoparsec.*,/attoparsec,/' jsaddle.cabal
-      sed -i 's/time.*,/time,/' jsaddle.cabal
-      sed -i 's/vector.*,/vector,/' jsaddle.cabal
-      sed -i 's/(!name)/(! name)/' src/Language/Javascript/JSaddle/Object.hs
-    '' + (drv.postPatch or "");
-    })
-    (doJailbreak super.jsaddle));
-
   # Tests need to lookup target triple x86_64-unknown-linux
   # https://github.com/llvm-hs/llvm-hs/issues/334
   llvm-hs = overrideCabal {
