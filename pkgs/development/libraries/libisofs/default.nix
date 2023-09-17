@@ -1,15 +1,28 @@
-{ lib, stdenv, fetchurl, acl, attr, libiconv, zlib }:
+{ lib
+, stdenv
+, fetchFromGitea
+, acl
+, attr
+, autoreconfHook
+, libiconv
+, zlib
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libisofs";
   version = "1.5.6.pl01";
 
-  outputs = [ "out" "dev" ];
-
-  src = fetchurl {
-    url = "http://files.libburnia-project.org/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-rB/TONZBdEyh+xVnkXGIt5vIwlBoMt1WiF/smGVrnyU=";
+  src = fetchFromGitea {
+    domain = "dev.lovelyhq.com";
+    owner = "libburnia";
+    repo = "libisofs";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-U5We19f/X1UKYFacCRl+XRXn67W8cYOBORb2uEjanT4=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     acl
@@ -20,13 +33,16 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  outputs = [ "out" "dev" ];
+
   enableParallelBuilding = true;
 
-  meta = with lib; {
-    homepage = "http://libburnia-project.org/";
+  meta = {
+    homepage = "https://dev.lovelyhq.com/libburnia/web/wiki";
     description = "A library to create an ISO-9660 filesystem with extensions like RockRidge or Joliet";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbradar vrthra ];
-    platforms = with platforms; unix;
+    changelog = "https://dev.lovelyhq.com/libburnia/libisofs/src/tag/${finalAttrs.src.rev}/ChangeLog";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ abbradar AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
