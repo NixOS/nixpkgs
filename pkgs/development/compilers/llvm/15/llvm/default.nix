@@ -227,6 +227,8 @@ in stdenv.mkDerivation (rec {
       --replace "PassBuilderCallbacksTest.cpp" ""
     rm unittests/IR/PassBuilderCallbacksTest.cpp
     rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
+    # timing-based tests are trouble
+    rm utils/lit/tests/googletest-timeout.py
   '' + optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${../../TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
