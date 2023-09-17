@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "gprof2dot";
-  version = "2021.02.21";
+  version = "2022.07.29";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jrfonseca";
     repo = "gprof2dot";
-    rev = version;
-    sha256 = "1jjhsjf5fdi1fkn7mvhnzkh6cynl8gcjrygd3cya5mmda3akhzic";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-nIsBO6KTyG2VZZRXrkU/T/a9Ki1x6hda5Vv3rZv/mJM=";
   };
 
   makeWrapperArgs = [
