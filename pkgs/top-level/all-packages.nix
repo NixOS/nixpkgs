@@ -4016,8 +4016,6 @@ with pkgs;
 
   pdepend = callPackage ../development/php-packages/pdepend { };
 
-  platformsh = callPackage ../misc/platformsh { };
-
   inherd-quake = callPackage ../applications/misc/inherd-quake {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
