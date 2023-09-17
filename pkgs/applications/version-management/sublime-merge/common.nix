@@ -15,7 +15,15 @@ let
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
   versionFile = builtins.toString ./default.nix;
 
-  libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango curl ];
+  neededLibraries = [
+    xorg.libX11
+    glib
+    gtk3
+    cairo
+    pango
+    curl
+  ];
+
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" "/bin/true=${coreutils}/bin/true" ];
 in let
   binaryPackage = stdenv.mkDerivation rec {
@@ -35,7 +43,7 @@ in let
       for binary in ${ builtins.concatStringsSep " " binaries }; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
           $binary
       done
 
@@ -109,7 +117,7 @@ in stdenv.mkDerivation (rec {
   passthru = {
     updateScript =
       let
-        script = writeShellScript "${pnameBase}-update-script" ''
+        script = writeShellScript "${packageAttribute}-update-script" ''
           set -o errexit
           PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
 
