@@ -6,18 +6,20 @@
 , cacert
 , openssl
 , darwin
+, testers
+, dioxus-cli
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-4BIuD/rrA398hPEoNt5PwWylPAR0fA1UKc90xyH5Fd0=";
+    hash = "sha256-h2l6SHty06nLNbdlnSzH7I4XY53yyxNbx663cHYmPG0=";
   };
 
-  cargoHash = "sha256-ok+fjvwz4k0/M5j7wut2A2AK6tuO3UfZtgoCXaCaHXY=";
+  cargoHash = "sha256-3pFkEC1GAJmTqXAymX4WRIq7EEtY17u1TCg+OhqL3bA=";
 
   nativeBuildInputs = [ pkg-config cacert ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
@@ -32,10 +34,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=server::web::proxy::test::add_proxy_trailing_slash"
   ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/dx --version | grep "dioxus ${version}"
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = dioxus-cli;
+    command = "${meta.mainProgram} --version";
+    inherit version;
+  };
 
   meta = with lib; {
     homepage = "https://dioxuslabs.com";
