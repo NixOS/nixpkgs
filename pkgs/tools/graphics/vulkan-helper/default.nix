@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-usbYNalA0r09LXR6eV2e/T1eMNV4LnhzYLzPJQ6XNKQ=";
   };
 
-  cargoSha256 = "sha256-s5QytuNhjZQhIDJtpeAW3J4op1t4nC+xD2i7Zf5mzfw=";
+  cargoSha256 = "sha256-fgB0vlbOhzGV1Sj180GCuTGZlVpAUlBUMAfsrG2FiuA=";
 
   nativeBuildInputs = [
     addOpenGLRunpath
