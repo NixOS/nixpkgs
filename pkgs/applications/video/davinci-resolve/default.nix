@@ -111,14 +111,17 @@ let
       # The unpack phase won't generate a directory
       sourceRoot = ".";
 
-      installPhase = ''
+      installPhase = let
+        appimageName = "DaVinci_Resolve_${version}_Linux.run";
+      in ''
         runHook preInstall
 
         export HOME=$PWD/home
         mkdir -p $HOME
 
         mkdir -p $out
-        appimage-run ./DaVinci_Resolve_${version}_Linux.run -i -y -n -C $out
+        test -e ${lib.escapeShellArg appimageName}
+        appimage-run ${lib.escapeShellArg appimageName} -i -y -n -C $out
 
         mkdir -p $out/{configs,DolbyVision,easyDCP,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
         runHook postInstall
