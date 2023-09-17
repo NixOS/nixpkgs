@@ -51,13 +51,16 @@ in lib.init bootStages ++ [
         hostPlatform = crossSystem;
         targetPlatform = crossSystem;
 
-        # Prior overrides are surely not valid as packages built with this run on
-        # a different platform, and so are disabled.
-        overrides = _: _: {};
-        extraBuildInputs = [ ] # Old ones run on wrong platform
-           ++ lib.optionals hostPlatform.isDarwin [ buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation ]
-           ;
-        allowedRequisites = null;
+      # Prior overrides are surely not valid as packages built with this run on
+      # a different platform, and so are disabled.
+      overrides = _: _: {};
+      extraBuildInputs = [ ] # Old ones run on wrong platform
+         ++ lib.optionals hostPlatform.isDarwin [
+           buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation
+           buildPackages.targetPackages.darwin.apple_sdk.sdkRoot
+         ]
+         ;
+      allowedRequisites = null;
 
         hasCC = !targetPlatform.isGhcjs;
 
