@@ -74,23 +74,23 @@ let
   ];
 
   buildType = if debugBuild then "Debug" else "Release";
-platform = {
-  "aarch64-linux" = "linuxarm64";
-  "x86_64-linux" = "linux64";
-}.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-arches = {
-  "linuxarm64" = {
-    depsArch = "arm64";
-    projectArch = "arm64";
-    targetArch = "arm64";
-  };
-  "linux64" = {
-    depsArch = "amd64";
-    projectArch = "x86_64";
-    targetArch = "x86_64";
-  };
-}.${platform};
-inherit (arches) depsArch projectArch targetArch;
+  platform = {
+    "aarch64-linux" = "linuxarm64";
+    "x86_64-linux" = "linux64";
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  arches = {
+    "linuxarm64" = {
+      depsArch = "arm64";
+      projectArch = "arm64";
+      targetArch = "arm64";
+    };
+    "linux64" = {
+      depsArch = "amd64";
+      projectArch = "x86_64";
+      targetArch = "x86_64";
+    };
+  }.${platform};
+  inherit (arches) depsArch projectArch targetArch;
 
 in
 stdenv.mkDerivation rec {
@@ -110,18 +110,20 @@ stdenv.mkDerivation rec {
     inherit rev;
     hash = "sha256-8zsgcWl0lZtC1oud5IlkUdeXxJUlHoRfw8t0FrZUQec=";
   };
-  cef-bin = let
+  cef-bin =
+    let
       # `cef_binary_${CEF_VERSION}_linux64_minimal`, where CEF_VERSION is from $src/CMakeLists.txt
-    name = "cef_binary_111.2.1+g870da30+chromium-111.0.5563.64_${platform}_minimal";
-    hash = {
-      "linuxarm64" = "sha256-gCDIfWsysXE8lHn7H+YM3Jag+mdbWwTQpJf0GKdXEVs=";
-      "linux64" = "sha256-r+zXTmDN5s/bYLvbCnHufYdXIqQmCDlbWgs5pdOpLTw=";
-    }.${platform};
-    urlName = builtins.replaceStrings ["+"] ["%2B"] name;
-  in fetchzip {
-    url = "https://cef-builds.spotifycdn.com/${urlName}.tar.bz2";
-    inherit name hash;
-  };
+      name = "cef_binary_111.2.1+g870da30+chromium-111.0.5563.64_${platform}_minimal";
+      hash = {
+        "linuxarm64" = "sha256-gCDIfWsysXE8lHn7H+YM3Jag+mdbWwTQpJf0GKdXEVs=";
+        "linux64" = "sha256-r+zXTmDN5s/bYLvbCnHufYdXIqQmCDlbWgs5pdOpLTw=";
+      }.${platform};
+      urlName = builtins.replaceStrings [ "+" ] [ "%2B" ] name;
+    in
+    fetchzip {
+      url = "https://cef-builds.spotifycdn.com/${urlName}.tar.bz2";
+      inherit name hash;
+    };
   clang-fmt = fetchurl {
     url = "https://storage.googleapis.com/chromium-clang-format/dd736afb28430c9782750fc0fd5f0ed497399263";
     hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";

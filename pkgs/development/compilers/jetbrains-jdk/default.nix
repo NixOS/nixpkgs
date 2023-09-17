@@ -9,6 +9,7 @@
 , unzip
 , rsync
 , debugBuild ? false
+, withJcef ? true
 
 , libXdamage
 , libXxf86vm
@@ -29,6 +30,8 @@
 
 # TODO respect $NIX_BUILD_CORES
 
+assert debugBuild -> withJcef;
+
 let
   arch = {
     "aarch64-linux" = "aarch64";
@@ -37,7 +40,7 @@ let
   cpu = stdenv.hostPlatform.parsed.cpu.name;
 in
 openjdk17.overrideAttrs (oldAttrs: rec {
-  pname = "jetbrains-jdk-jcef";
+  pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
   javaVersion = "17.0.8";
   build = "1000.8";
   # To get the new tag:
@@ -61,13 +64,12 @@ openjdk17.overrideAttrs (oldAttrs: rec {
 
   patches = [ ];
 
-  # Configure is done in build phase
-  configurePhase = "true";
+  dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${jetbrains.jcef} jcef_linux_${arch}
+    ${lib.optionalString withJcef "cp -r ${jetbrains.jcef} jcef_linux_${arch}"}
 
     sed \
         -e "s/OPENJDK_TAG=.*/OPENJDK_TAG=${openjdkTag}/" \
@@ -81,7 +83,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
 
     patchShebangs .
-    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${if debugBuild then "fd" else "jcef"}
+    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")}
 
     runHook postBuild
   '';
@@ -90,7 +92,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     let
       buildType = if debugBuild then "fastdebug" else "release";
       debugSuffix = if debugBuild then "-fastdebug" else "";
-      jcefSuffix = if debugBuild then "" else "_jcef";
+      jcefSuffix = if debugBuild || !withJcef then "" else "_jcef";
       jbrsdkDir = "jbrsdk${jcefSuffix}-${javaVersion}-linux-${arch}${debugSuffix}-b${build}";
     in
     ''
@@ -100,7 +102,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
       mv build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir} build/linux-${cpu}-server-${buildType}/images/jdk
     '' + oldAttrs.installPhase + "runHook postInstall";
 
-  postInstall = ''
+  postInstall = lib.optionalString withJcef ''
     chmod +x $out/lib/openjdk/lib/chrome-sandbox
   '';
 
