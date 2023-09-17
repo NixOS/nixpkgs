@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "14.0.0";
+  version = "14.1.0";
   disabled = pythonOlder "3.8";
 
   format = "pyproject";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    hash = "sha256-rMHp0diXvWIOyucuTAXO/IOljKhDYOZKtkih5+rUJCM=";
+    hash = "sha256-LQXhdzocw01URrmpDayK9rpsArvM/E44AE8Eok9DBwk=";
   };
 
   nativeBuildInputs = [
