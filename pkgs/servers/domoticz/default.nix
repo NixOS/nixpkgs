@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DUSE_BUILTIN_MQTT=false"
     "-DUSE_BUILTIN_LUA=false"
     "-DUSE_BUILTIN_SQLITE=false"

@@ -38,7 +38,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytest ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_GUDHI_PYTHON=ON"
     "-DPython_ADDITIONAL_VERSIONS=3"
   ];

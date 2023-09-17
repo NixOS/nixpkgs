@@ -58,9 +58,7 @@ stdenv.mkDerivation rec {
     qttools
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   meta = with lib; {
     homepage = "https://phonon.kde.org/";

@@ -45,7 +45,6 @@ in stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DPARAVIEW_ENABLE_FFMPEG=ON"
     "-DPARAVIEW_ENABLE_GDAL=ON"
     "-DPARAVIEW_ENABLE_MOTIONFX=ON"

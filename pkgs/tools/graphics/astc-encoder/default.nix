@@ -40,8 +40,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = isaFlags ++ [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DASTCENC_UNIVERSAL_BUILD=OFF"
   ];
 

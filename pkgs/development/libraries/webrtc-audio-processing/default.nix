@@ -1,36 +1,34 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchFromGitLab
 , darwin
 , abseil-cpp
 , meson
 , ninja
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "webrtc-audio-processing";
-  version = "1.0";
+  version = "1.3";
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/archive/v${version}/webrtc-audio-processing-v${version}.tar.gz";
-    sha256 = "sha256-dqRy1OfOG9TX2cgCD8cowU44zVanns/nPYZrilPfuiU=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pulseaudio";
+    repo = "webrtc-audio-processing";
+    rev = "v${version}";
+    hash = "sha256-8CDt4kMt2Owzyv22dqWIcFuHeg4Y3FxB405cLw3FZ+g=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
+    pkg-config
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     abseil-cpp
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
+  ];
 
-  patchPhase = ''
-    # this is just incorrect upstream
-    # see https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/4
-    substituteInPlace meson.build \
-      --replace "absl_flags_registry" "absl_flags_reflection"
-    '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace webrtc/base/checks.cc --replace 'defined(__UCLIBC__)' 1
-  '';
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";

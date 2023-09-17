@@ -22,7 +22,7 @@
 , libsndfile
 , vulkan-headers
 , vulkan-loader
-, webrtc-audio-processing
+, webrtc-audio-processing_1
 , ncurses
 , readline # meson can't find <7 as those versions don't have a .pc file
 , lilv
@@ -42,10 +42,11 @@
 , bluez
 , sbc
 , libfreeaptx
-, ldacbt
 , liblc3
 , fdk_aac
 , libopus
+, ldacbtSupport ? bluezSupport && lib.meta.availableOn stdenv.hostPlatform ldacbt
+, ldacbt
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , nativeModemManagerSupport ? true
@@ -70,12 +71,15 @@
 , ffado
 }:
 
+# Bluetooth codec only makes sense if general bluetooth enabled
+assert ldacbtSupport -> bluezSupport;
+
 let
   mesonEnableFeature = b: if b then "enabled" else "disabled";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.79";
+    version = "0.3.80";
 
     outputs = [
       "out"
@@ -93,7 +97,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-pqs991pMqz3IQE+NUk0VNzZS4ExwfoZqBQDWBSGdWcs=";
+      sha256 = "sha256-6Ka83Bqd/nsfp8rv0GTBerpGP226MeZvC5u/j62FzP0=";
     };
 
     patches = [
@@ -138,13 +142,14 @@ let
       udev
       vulkan-headers
       vulkan-loader
-      webrtc-audio-processing
+      webrtc-audio-processing_1
       tinycompress
     ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
     ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt liblc3 sbc fdk_aac libopus ]
+    ++ lib.optionals bluezSupport [ bluez libfreeaptx liblc3 sbc fdk_aac libopus ]
+    ++ lib.optional ldacbtSupport ldacbt
     ++ lib.optional nativeModemManagerSupport modemmanager
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi
@@ -184,6 +189,7 @@ let
       # source code is not easily obtainable
       "-Dbluez5-codec-lc3plus=disabled"
       "-Dbluez5-codec-lc3=${mesonEnableFeature bluezSupport}"
+      "-Dbluez5-codec-ldac=${mesonEnableFeature ldacbtSupport}"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
       "-Draop=${mesonEnableFeature raopSupport}"

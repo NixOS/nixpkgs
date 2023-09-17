@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-k+rG5AZjz47Q6bpVcTK7r4s7Avg3O+1iw+skK+cn0rk=";
   };
 
-  cmakeFlags = lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   nativeBuildInputs = [
     cmake

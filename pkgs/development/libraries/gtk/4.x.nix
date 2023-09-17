@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPackages
 , substituteAll
 , fetchurl
 , pkg-config
@@ -7,6 +8,7 @@
 , graphene
 , gi-docgen
 , meson
+, mesonEmulatorHook
 , ninja
 , python3
 , makeWrapper
@@ -45,6 +47,7 @@
 , wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
+, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , cups
 , AppKit
 , Cocoa
@@ -99,6 +102,8 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+  ] ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner
   ] ++ setupHooks;
@@ -190,6 +195,10 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+    # this conditional gates the installation of share/gsettings-schemas/.../glib-2.0/schemas/gschemas.compiled.
+    substituteInPlace meson.build \
+      --replace 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
+
     files=(
       build-aux/meson/gen-demo-header.py
       demos/gtk-demo/geninclude.py

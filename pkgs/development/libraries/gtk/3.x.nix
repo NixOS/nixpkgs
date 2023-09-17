@@ -24,6 +24,7 @@
 , gobject-introspection
 , buildPackages
 , withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , fribidi
 , xorg
 , libepoxy
@@ -110,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     # For xmllint
     libxml2
-  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals ((withIntrospection || compileSchemas) && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner
@@ -182,6 +183,10 @@ stdenv.mkDerivation (finalAttrs: {
     # See https://github.com/NixOS/nixpkgs/issues/132259
     substituteInPlace meson.build \
       --replace "x11_enabled = false" ""
+
+    # this conditional gates the installation of share/gsettings-schemas/.../glib-2.0/schemas/gschemas.compiled.
+    substituteInPlace meson.build \
+      --replace 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
 
     files=(
       build-aux/meson/post-install.py

@@ -97,7 +97,6 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     # The non-free (Debian) packages uses this directory structure so do the same when compiling
     # from source so we can easily merge them.
     "-DCMAKE_INSTALL_LIBDIR=lib/${system}-gnu"

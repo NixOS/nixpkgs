@@ -51,9 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     python.pkgs.numpy
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ] ++ lib.optionals usePython [
+  cmakeFlags = lib.optionals usePython [
     "-DUSE_PYTHON_CONFIG=ON"
   ];
 
