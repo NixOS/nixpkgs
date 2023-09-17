@@ -51,6 +51,9 @@ default-package-overrides:
   # ghc-lib-parser-ex >= 9.6, but LTS-21 contains ghc-lib-parser-ex-9.4
   - stylish-haskell < 0.14.5.0
 
+  # 2023-09-17: reflex-dom 0.6.3.0 is broken https://github.com/reflex-frp/reflex-dom/issues/462
+  - reflex-dom < 0.6.2.0
+
   # Only an older version of dependent-sum-template is compatible with ghc 9.4
   # https://github.com/obsidiansystems/dependent-sum-template/issues/5
   - dependent-sum-template < 0.1.2
