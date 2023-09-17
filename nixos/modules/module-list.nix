@@ -499,6 +499,7 @@
   ./services/games/quake3-server.nix
   ./services/games/teeworlds.nix
   ./services/games/terraria.nix
+  ./services/games/xonotic.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/argonone.nix
