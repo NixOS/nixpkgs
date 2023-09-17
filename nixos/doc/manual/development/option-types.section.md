@@ -35,6 +35,19 @@ merging is handled.
 :   One element of the list *`l`*, e.g. `types.enum [ "left" "right" ]`.
     Multiple definitions cannot be merged.
 
+`types.enumAttrs` *`attrs`*
+
+:   A type that accepts the attribute names of *`attrs`*, and returns an option value
+    that corresponds to the attribute value, e.g. `types.enumAttrs { "key" = "value"; ... }`,
+    `"key"` is a valid definition, and the option value would be `"value"`.
+
+`types.enumWith` *`keyValues`*
+
+:   A type that accepts the attribute `key` of attribute sets in list *`keyValues`*,
+    and returns an option value that corresponds to the attribute `value`,
+    e.g. `types.enumWith [ { key = "foo"; value = "bar"; } ... ]`,
+    `"foo"` is a valid definition, and the option value would be `"bar"`.
+
 `types.anything`
 
 :   A type that accepts any value and recursively merges attribute sets

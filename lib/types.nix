@@ -24,18 +24,24 @@ let
     count
     elemAt
     filter
+    findFirst
     foldl'
     head
     imap1
     last
     length
+    subtractLists
     tail
     ;
   inherit (lib.attrsets)
     attrNames
+    catAttrs
     filterAttrs
     hasAttr
+    keyValuePair
     mapAttrs
+    mapAttrsToList
+    nameValuePair
     optionalAttrs
     zipAttrsWith
     ;
@@ -58,12 +64,16 @@ let
     ;
   inherit (lib.trivial)
     boolToString
+    concat
     ;
 
   inherit (lib.modules)
     mergeDefinitions
     fixupOptionType
     mergeOptionDecls
+    ;
+  inherit (lib.generators)
+    toPretty
     ;
   outer_types =
 rec {
@@ -819,35 +829,69 @@ rec {
       };
 
     # A value from a set of allowed ones.
-    enum = values:
+    enum = values':
       let
-        inherit (lib.lists) unique;
-        show = v:
-               if builtins.isString v then ''"${v}"''
-          else if builtins.isInt v then builtins.toString v
-          else if builtins.isBool v then boolToString v
-          else ''<${builtins.typeOf v}>'';
+        values =
+          assert lib.assertMsg (isList values')
+            "enum: `values'` is not a list: ${builtins.typeOf values'}: ${toPretty {} values'}";
+          values';
+      in
+      enumWith (map (v: keyValuePair v v) values);
+
+    # A type that accepts the attribute names of `attrs`,
+    # and returns an option value that corresponds to the attribute value
+    enumAttrs = attrs':
+      let
+        attrs =
+          assert lib.assertMsg (isAttrs attrs')
+            "enumAttrs: `attrs'` is not an attribute set: ${builtins.typeOf attrs'}: ${toPretty {} attrs'}";
+          attrs';
+      in
+      enumWith (mapAttrsToList keyValuePair attrs);
+
+    # A type that accepts the attribute `key` of attribute sets in list `keyValues`,
+    # and returns an option value that corresponds to the attribute `value`,
+    enumWith = keyValues':
+      let
+        keyValues =
+          assert lib.assertMsg (isList keyValues')
+            "enumWith: `keyValues'` is not a list: ${builtins.typeOf keyValues'}: ${toPretty {} keyValues'}";
+          assert lib.assertMsg (all (v: v ? key && v ? value) keyValues')
+            "enumWith: Some attrset in list `keyValues'` is missing `key` or `value` attribute: ${toPretty {} keyValues'}";
+          keyValues';
       in
       mkOptionType rec {
-        name = "enum";
+        name = "enumWith";
         description =
+          let
+            show = v:
+              if isString v then ''"${v}"''
+              else if isInt v then toString v
+              else if isBool v then boolToString v
+              else "<${builtins.typeOf v}>";
+            showkeyValues = v:
+              if v.key == v.value
+              then show v.key
+              else "${show v.key}(${show v.value})";
+          in
           # Length 0 or 1 enums may occur in a design pattern with type merging
           # where an "interface" module declares an empty enum and other modules
           # provide implementations, each extending the enum with their own
           # identifier.
-          if values == [] then
+          if keyValues == [] then
             "impossible (empty enum)"
-          else if builtins.length values == 1 then
-            "value ${show (builtins.head values)} (singular enum)"
+          else if length keyValues == 1 then
+            "value ${showkeyValues (head keyValues)} (singular enum)"
           else
-            "one of ${concatMapStringsSep ", " show values}";
+            "one of ${concatMapStringsSep ", " showkeyValues keyValues}";
         descriptionClass =
-          if builtins.length values < 2
+          if length keyValues < 2
           then "noun"
           else "conjunction";
-        check = flip elem values;
-        merge = mergeEqualOption;
-        functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
+        check = flip elem (catAttrs "key" keyValues);
+        merge = loc: defs:
+          (findFirst (v: v.key == (mergeEqualOption loc defs)) {} keyValues).value;
+        functor = (defaultFunctor name) // { type = enumWith; payload = keyValues; binOp = concat; };
       };
 
     # Either value of type `t1` or `t2`.

@@ -444,6 +444,24 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
 checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
 
+# types.enum
+checkConfigOutput '^"foo"$' config.enumString ./enum.nix
+checkConfigOutput '^42$' config.enumInt ./enum.nix
+checkConfigError 'The option .multiple. has conflicting definition values' config.multiple ./enum.nix
+checkConfigOutput '^42$' config.merge ./enum.nix
+checkConfigOutput '^42$' config.priorities ./enum.nix
+checkConfigError 'enum: `values'\''` is not a list' config.string ./enum.nix
+
+# types.enumWith
+checkConfigOutput '^"f"$' config.enumString ./enumWith.nix
+checkConfigOutput '^24$' config.enumInt ./enumWith.nix
+checkConfigError 'The option .multiple. has conflicting definition values' config.multiple ./enumWith.nix
+checkConfigOutput '^24$' config.merge ./enumWith.nix
+checkConfigOutput '^24$' config.priorities ./enumWith.nix
+checkConfigError 'enumAttrs: `attrs'\''` is not an attribute set' config.stringAttrs ./enumWith.nix
+checkConfigError 'enumWith: `keyValues'\''` is not a list' config.string ./enumWith.nix
+checkConfigError 'enumWith: Some attrset in list `keyValues'\''` is missing `key` or `value` attribute' config.missing ./enumWith.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
