@@ -25708,6 +25708,8 @@ with pkgs;
 
   vulkan-cts = callPackage ../tools/graphics/vulkan-cts { };
 
+  vulkan-helper = callPackage ../tools/graphics/vulkan-helper { };
+
   vulkan-extension-layer = callPackage ../tools/graphics/vulkan-extension-layer { };
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
   vulkan-loader = callPackage ../development/libraries/vulkan-loader { inherit (darwin) moltenvk; };
