@@ -17,12 +17,12 @@
 , meta ? {}
 , passthru ? {}
 , extraBwrapArgs ? []
-, unshareUser ? true
-, unshareIpc ? true
-, unsharePid ? true
+, unshareUser ? false
+, unshareIpc ? false
+, unsharePid ? false
 , unshareNet ? false
-, unshareUts ? true
-, unshareCgroup ? true
+, unshareUts ? false
+, unshareCgroup ? false
 , dieWithParent ? true
 , ...
 } @ args:

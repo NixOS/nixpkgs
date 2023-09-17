@@ -2,34 +2,28 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, tailwindcss
 , oniguruma
 , stdenv
 , darwin
-, tailwindcss
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oranda";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "oranda";
     rev = "v${version}";
-    hash = "sha256-v/4FPDww142V5mx+pHhaHkDiIUN70dwei8mTeZELztc=";
+    hash = "sha256-PHaqWKsZyNZnEAzEWMzJK6MD0b4O6pkYQG403ONIj0w=";
   };
 
-  cargoHash = "sha256-Q5EY9PB50DxFXFTPiv3RktI37b2TCDqLVNISxixnspY=";
-
-  patches = [
-    # oranda-generate-css which is used in the build script tries to download
-    # tailwindcss from the internet, so we have to patch it to use the
-    # tailwindcss from nixpkgs
-    ./tailwind.patch
-  ];
+  cargoHash = "sha256-zV7vG1mcgVusWCa4jKNLD+SqzReLZQRotk6nvzPYCU4=";
 
   nativeBuildInputs = [
     pkg-config
+    tailwindcss
   ];
 
   buildInputs = [
@@ -46,7 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
-    TAILWINDCSS = lib.getExe tailwindcss;
+    ORANDA_USE_TAILWIND_BINARY = true;
   } // lib.optionalAttrs stdenv.isDarwin {
     # without this, tailwindcss fails with OpenSSL configuration error
     OPENSSL_CONF = "";
