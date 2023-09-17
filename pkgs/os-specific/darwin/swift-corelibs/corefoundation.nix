@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeSetupHook, cmake, pkg-config, launchd, libdispatch, python3Minimal, libxml2, objc4, icu }:
+{ lib
+, stdenvNoCF
+, fetchurl
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, python3Minimal
+, launchd
+, libdispatch
+, libxml2
+, objc4
+, icu
+, enableShared ? !stdenvNoCF.hostPlatform.isStatic
+}:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -8,9 +22,10 @@ let
     url    = "https://raw.githubusercontent.com/apple/swift-corelibs-foundation/9a5d8420f7793e63a8d5ec1ede516c4ebec939f0/CoreFoundation/Base.subproj/CFSystemDirectories.c";
     sha256 = "0krfyghj4f096arvvpf884ra5czqlmbrgf8yyc0b3avqmb613pcc";
   };
+
 in
 
-stdenv.mkDerivation {
+stdenvNoCF.mkDerivation {
   pname = "swift-corefoundation";
   version = "unstable-2018-09-14";
 
