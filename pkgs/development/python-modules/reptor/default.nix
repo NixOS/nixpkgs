@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.2";
+  version = "0.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-Pkz0snlYMd+xn7fJKVdO8M8wA7ABSq8R6i6UN+bwx6Y=";
+    hash = "sha256-3FRMdiSKWlEUmggtSDea9w386uwAn/VUzXiD1xRNuxQ=";
   };
 
   nativeBuildInputs = [
