@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "repro-get";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "repro-get";
     rev = "v${version}";
-    sha256 = "sha256-Ij74EQz5NreOhjz6XPAriYUb5iNT4E+w5vO5uzjzFR4=";
+    sha256 = "sha256-qLu9SZuHCkKAOhzrBPEEev1iD5mcIBvrbXspHtifsq4=";
   };
 
-  vendorHash = "sha256-Tev6MaquEup5EN7aeIA1wzc08kqLtvLuUz7U8o7CW04=";
+  vendorHash = "sha256-clpQLRozXFeUGrItL2pfNft2hUNyuyeCP9oMQxagAWs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
