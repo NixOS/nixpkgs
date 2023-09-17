@@ -44,35 +44,36 @@
 assert !stdenv.isDarwin;
 # I can't test darwin
 
-let rpath = lib.makeLibraryPath [
-  glib
-  nss
-  nspr
-  atk
-  at-spi2-atk
-  libdrm
-  expat
-  libxcb
-  libxkbcommon
-  libX11
-  libXcomposite
-  libXdamage
-  libXext
-  libXfixes
-  libXrandr
-  mesa
-  gtk3
-  pango
-  cairo
-  alsa-lib
-  dbus
-  at-spi2-core
-  cups
-  libxshmfence
-  udev
-];
+let
+  rpath = lib.makeLibraryPath [
+    glib
+    nss
+    nspr
+    atk
+    at-spi2-atk
+    libdrm
+    expat
+    libxcb
+    libxkbcommon
+    libX11
+    libXcomposite
+    libXdamage
+    libXext
+    libXfixes
+    libXrandr
+    mesa
+    gtk3
+    pango
+    cairo
+    alsa-lib
+    dbus
+    at-spi2-core
+    cups
+    libxshmfence
+    udev
+  ];
 
-buildType = if debugBuild then "Debug" else "Release";
+  buildType = if debugBuild then "Debug" else "Release";
 platform = {
   "aarch64-linux" = "linuxarm64";
   "x86_64-linux" = "linux64";
@@ -91,13 +92,14 @@ arches = {
 }.${platform};
 inherit (arches) depsArch projectArch targetArch;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "1ac1c682c497f2b864f86050796461f22935ea64";
+  rev = "9f8d4fb20b4658db6b2b6bc08e5dd0d8c7340290";
   # This is the commit number
   # Currently from the branch: https://github.com/JetBrains/jcef/tree/232
   # Run `git rev-list --count HEAD`
-  version = "672";
+  version = "675";
 
   nativeBuildInputs = [ cmake python3 jdk17 git rsync ant ninja ];
   buildInputs = [ libX11 libXdamage nss nspr ];
@@ -106,9 +108,10 @@ in stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-3HuW8upR/bZoK8euVti2KpCZh9xxfqgyHmgoG1NjxOI=";
+    hash = "sha256-8zsgcWl0lZtC1oud5IlkUdeXxJUlHoRfw8t0FrZUQec=";
   };
   cef-bin = let
+      # `cef_binary_${CEF_VERSION}_linux64_minimal`, where CEF_VERSION is from $src/CMakeLists.txt
     name = "cef_binary_111.2.1+g870da30+chromium-111.0.5563.64_${platform}_minimal";
     hash = {
       "linuxarm64" = "sha256-gCDIfWsysXE8lHn7H+YM3Jag+mdbWwTQpJf0GKdXEVs=";
@@ -228,7 +231,9 @@ in stdenv.mkDerivation rec {
     mkdir lib
     cp -R "$OUT_NATIVE_DIR"/* lib
 
-    mkdir $out
+    mkdir -p $out/jmods
+
+    bash "$JB_TOOLS_DIR"/common/create_version_file.sh $out
 
     runHook postInstall
   '';
@@ -237,11 +242,11 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     cd $unpacked/gluegen
-    jmod create --class-path gluegen-rt.jar --libs lib $out/gluegen.rt.jmod
+    jmod create --class-path gluegen-rt.jar --libs lib $out/jmods/gluegen.rt.jmod
     cd ../jogl
-    jmod create --module-path . --class-path jogl-all.jar --libs lib $out/jogl.all.jmod
+    jmod create --module-path . --class-path jogl-all.jar --libs lib $out/jmods/jogl.all.jmod
     cd ../jcef
-    jmod create --module-path . --class-path jcef.jar --libs lib $out/jcef.jmod
+    jmod create --module-path . --class-path jcef.jar --libs lib $out/jmods/jcef.jmod
   '';
 
   meta = {
