@@ -1,60 +1,50 @@
 { lib
-, stdenv
-, fetchurl
-, makeBinaryWrapper
+, fetchFromGitHub
 , installShellFiles
 , php
 , nix-update-script
 , testers
-, castor
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+php.buildComposerProject (finalAttrs: {
   pname = "castor";
   version = "0.8.0";
 
-
-  src = fetchurl {
-    url = "https://github.com/jolicode/castor/releases/download/v${finalAttrs.version}/castor.linux-amd64.phar";
-    hash = "sha256-0lnn4mS1/DgUoRoMFvCjwQ0j9CX9XWlskbtX9roFCfc=";
+  src = fetchFromGitHub {
+    owner = "jolicode";
+    repo = "castor";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rJz4BY74BI8gyT4ZlABc4PA+SCsd8guM0m2MTej350g=";
   };
 
-  dontUnpack = true;
+  vendorHash = "sha256-Jh4mNNYEM9sy0Dp+dZtD+xrMICjAuspe9D9BDXcfUPM=";
 
-  nativeBuildInputs = [ makeBinaryWrapper installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/castor/castor.phar
-    makeWrapper ${php}/bin/php $out/bin/castor \
-      --add-flags "$out/libexec/castor/castor.phar"
-    runHook postInstall
-  '';
-
-  # castor requires to be initialized to generate completion files
+  # install shell completions
   postInstall = ''
-    echo "yes" | ${php}/bin/php $src
+    echo "yes" | ${php}/bin/php $out/share/php/castor/bin/castor
     installShellCompletion --cmd castor \
-      --bash <($out/bin/castor completion bash) \
-      --fish <($out/bin/castor completion fish) \
-      --zsh <($out/bin/castor completion zsh)
+      --bash <(${php}/bin/php $out/share/php/castor/bin/castor completion bash) \
+      --fish <(${php}/bin/php $out/share/php/castor/bin/castor completion fish) \
+      --zsh <(${php}/bin/php $out/share/php/castor/bin/castor completion zsh)
   '';
 
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      inherit (finalAttrs) version;
-      package = castor;
       command = "castor --version";
+      package = php.packages.castor;
+      version = "v${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/jolicode/castor/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "DX oriented task runner and command launcher built with PHP";
     homepage = "https://github.com/jolicode/castor";
-    changelog = "https://github.com/jolicode/castor/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
+    mainProgram = "castor";
   };
 })
