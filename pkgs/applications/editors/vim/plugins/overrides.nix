@@ -1475,6 +1475,10 @@ self: super: {
     dependencies = with self; [ denops-vim ];
   };
 
+  vim-sensible = super.vim-sensible.overrideAttrs {
+    patches = [ ./patches/vim-sensible/fix-nix-store-path-regex.patch ];
+  };
+
   vim-snipmate = super.vim-snipmate.overrideAttrs {
     dependencies = with self; [ vim-addon-mw-utils tlib_vim ];
   };
