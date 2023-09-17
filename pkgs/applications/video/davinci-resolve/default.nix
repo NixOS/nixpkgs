@@ -28,7 +28,7 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve";
-      version = "18.5.1";
+      version = "18.6";
 
       nativeBuildInputs = [
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
@@ -47,7 +47,7 @@ let
         rec {
           outputHashMode = "recursive";
           outputHashAlgo = "sha256";
-          outputHash = "sha256-AZ869hA/WeCf3sxhdDOzD/q30P1NaD18TheBtS1ammQ=";
+          outputHash = "sha256-Rxe5ZiLpZbEf6yh7vdIrdjULqE8gyPRarMDDZiWwJCE=";
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -57,7 +57,7 @@ let
           SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
           # Get linux.downloadId from HTTP response on https://www.blackmagicdesign.com/products/davinciresolve
-          DOWNLOADID = "defc1c6789b7475b9ee4a42daf9ba61d";
+          DOWNLOADID = "cebf954f05a74eaeae6b6b14bcca7971";
           REFERID = "263d62f31cbb49e0868005059abcb0c9";
           SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
@@ -201,6 +201,7 @@ buildFHSEnv {
     xorg.libXinerama
     xorg.libXrandr
     xorg.libXrender
+    xorg.libXt
     xorg.libXtst
     xorg.libXxf86vm
     xorg.libxcb
