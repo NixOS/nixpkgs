@@ -59,7 +59,7 @@ buildNpmPackage rec {
     makeWrapper '${electron_25}/bin/electron' $out/bin/webcord \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}" \
+      --add-flags "--ozone-platform-hint=auto" \
       --add-flags $out/lib/node_modules/webcord/
 
     runHook postInstall
