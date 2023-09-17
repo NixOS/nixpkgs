@@ -9439,6 +9439,8 @@ self: super: with self; {
 
   pykaleidescape = callPackage ../development/python-modules/pykaleidescape { };
 
+  pykalman = callPackage ../development/python-modules/pykalman { };
+
   pykdl = callPackage ../development/python-modules/pykdl { };
 
   pykdtree = callPackage ../development/python-modules/pykdtree {
