@@ -216,6 +216,7 @@ in {
   darling = handleTest ./darling.nix {};
   dae = handleTest ./dae.nix {};
   dconf = handleTest ./dconf.nix {};
+  deconz = handleTest ./deconz.nix {};
   deepin = handleTest ./deepin.nix {};
   deluge = handleTest ./deluge.nix {};
   dendrite = handleTest ./matrix/dendrite.nix {};
