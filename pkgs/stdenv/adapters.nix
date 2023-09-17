@@ -141,8 +141,6 @@ rec {
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
   makeStaticDarwin = stdenv: stdenv.override (old: {
-    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
-    extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
     mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
     (mkDerivationSuper args).overrideAttrs (finalAttrs: {
       NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "")
