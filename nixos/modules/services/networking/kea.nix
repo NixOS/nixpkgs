@@ -9,8 +9,35 @@ with lib;
 let
   cfg = config.services.kea;
 
+  jsonWithKeaIncludes = {}: {
+
+    type = with lib; with types; let
+      valueType = nullOr (oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (attrsOf valueType)
+        (listOf valueType)
+        (listOf keyAttrs)
+      ]) // {
+        description = "Kea JSON value";
+      };
+    in valueType;
+
+    generate = name: value: pkgs.callPackage ({ runCommand, jq, gnused }: runCommand name {
+      nativeBuildInputs = [ jq gnused ];
+      value = builtins.toJSON value;
+      passAsFile = [ "value" ];
+    } ''
+      jq . "$valuePath" | \
+        sed -r -e 's@["]__keaInclude ([^"]+)["]@<?include "\1"?>@g'> $out
+    '') {};
+  };
+
   xor = x: y: (!x && y) || (x && !y);
-  format = pkgs.formats.json {};
+  format = jsonWithKeaIncludes {};
 
   chooseNotNull = x: y: if x != null then x else y;
 
