@@ -22667,8 +22667,6 @@ with pkgs;
 
   libbson = callPackage ../development/libraries/libbson { };
 
-  libburn = callPackage ../development/libraries/libburn { };
-
   libbytesize = callPackage ../development/libraries/libbytesize { };
 
   libcaca = callPackage ../development/libraries/libcaca { };
