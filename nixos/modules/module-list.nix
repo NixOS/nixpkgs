@@ -1251,6 +1251,7 @@
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix
   ./services/web-apps/meme-bingo-web.nix
+  ./services/web-apps/microbin/default.nix
   ./services/web-apps/miniflux.nix
   ./services/web-apps/monica.nix
   ./services/web-apps/moodle.nix
