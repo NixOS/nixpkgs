@@ -23,6 +23,7 @@ let
     sha256 = "0krfyghj4f096arvvpf884ra5czqlmbrgf8yyc0b3avqmb613pcc";
   };
 
+  inherit (stdenvNoCF.cc.bintools) targetPrefix;
 in
 
 stdenvNoCF.mkDerivation {
@@ -89,15 +90,13 @@ stdenvNoCF.mkDerivation {
     "-DINCLUDE_OBJC=1"
   ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DCF_ENABLE_LIBDISPATCH=OFF"
-  ];
+  cmakeFlags = [ "-DCF_ENABLE_LIBDISPATCH=OFF" ]
+    ++ lib.optionals enableShared [ "-DBUILD_SHARED_LIBS=ON" ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    install_name_tool -id '@rpath/CoreFoundation.framework/Versions/A/CoreFoundation' \
+  postInstall = lib.optionalString enableShared ''
+    ${targetPrefix}install_name_tool -id '@rpath/CoreFoundation.framework/Versions/A/CoreFoundation' \
       "$out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
   '';
 }
