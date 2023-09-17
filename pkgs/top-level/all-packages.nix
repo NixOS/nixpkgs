@@ -23358,8 +23358,6 @@ with pkgs;
 
   libinstpatch = callPackage ../development/libraries/audio/libinstpatch { };
 
-  libisofs = callPackage ../development/libraries/libisofs { };
-
   libisoburn = callPackage ../development/libraries/libisoburn { };
 
   libipt = callPackage ../development/libraries/libipt { };
