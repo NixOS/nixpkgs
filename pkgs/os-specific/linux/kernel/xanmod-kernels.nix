@@ -26,9 +26,6 @@ let
     };
 
     structuredExtraConfig = with lib.kernel; {
-      # AMD P-state driver
-      X86_AMD_PSTATE = lib.mkOverride 60 yes;
-
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;
