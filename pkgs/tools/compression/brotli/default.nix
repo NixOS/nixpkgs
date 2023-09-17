@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , staticOnly ? stdenv.hostPlatform.isStatic
 , testers
@@ -18,6 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-MvceRcle2dSkkucC2PlsCizsIf8iv95d8Xjqew266wc=";
   };
+
+  patches = [
+    # revert runpath change, breaks curl on darwin:
+    #   https://github.com/NixOS/nixpkgs/pull/254532#issuecomment-1722337476
+    (fetchpatch {
+      name = "revert-runpath.patch";
+      url = "https://github.com/google/brotli/commit/f842c1bcf9264431cd3b15429a72b7dafbe80509.patch";
+      hash = "sha256-W3LY3EjoHP74YsKOOcYQrzo+f0HbooOvEbnOibtN6TM=";
+      revert = true;
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
