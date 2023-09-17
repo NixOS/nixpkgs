@@ -20,8 +20,10 @@
 , Cocoa
 , portaudio
 , alsa-lib
-# Use GLES instead of GL
-, withGLES ? stdenv.hostPlatform.isAarch
+# Enable GL/GLES rendering
+, withGL ? !stdenv.hostPlatform.isDarwin
+# Use GLES instead of GL, some platforms have better support for one than the other
+, preferGLES ? stdenv.hostPlatform.isAarch
 }:
 
 stdenv.mkDerivation rec {
@@ -79,16 +81,11 @@ stdenv.mkDerivation rec {
     "-DWITH_JACK=${if withJACK then "ON" else "OFF"}"
     "-DWITH_PORTAUDIO=ON"
     "-DWITH_RENDER_SDL=ON"
-    "-DWITH_RENDER_OPENGL=ON"
-    "-DUSE_GLES=${lib.boolToString withGLES}"
+    "-DWITH_RENDER_OPENGL=${lib.boolToString withGL}"
     "-DWARNINGS_ARE_ERRORS=ON"
+  ] ++ lib.optionals withGL [
+    "-DUSE_GLES=${lib.boolToString preferGLES}"
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    # Needed with GCC 12 but breaks on darwin (with clang) or aarch64 (old gcc)
-    "-Wno-error=mismatched-new-delete"
-    "-Wno-error=use-after-free"
-  ]);
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
