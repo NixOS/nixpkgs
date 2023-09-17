@@ -48,7 +48,7 @@ let
       (attrNames deprecatedAliases);
 
     "invalid aliases" = attrNames (filterAttrs
-      (k: v: licenses.${v}.deprecated or true)
+      (_: v: licenses.${v}.deprecated or true)
       deprecatedAliases);
   };
 
