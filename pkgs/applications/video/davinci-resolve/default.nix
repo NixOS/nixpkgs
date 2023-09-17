@@ -22,12 +22,14 @@
 , aprutil
 , makeDesktopItem
 , copyDesktopItems
+
+, studioVariant ? false
 }:
 
 let
   davinci = (
     stdenv.mkDerivation rec {
-      pname = "davinci-resolve";
+      pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
       version = "18.6";
 
       nativeBuildInputs = [
@@ -47,7 +49,10 @@ let
         rec {
           outputHashMode = "recursive";
           outputHashAlgo = "sha256";
-          outputHash = "sha256-Rxe5ZiLpZbEf6yh7vdIrdjULqE8gyPRarMDDZiWwJCE=";
+          outputHash =
+            if studioVariant
+            then "sha256-QjjVb9IdZ1Vcyw/O3tP9cjxVTfRGC29tkp3KReyz63I="
+            else "sha256-Rxe5ZiLpZbEf6yh7vdIrdjULqE8gyPRarMDDZiWwJCE=";
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -57,7 +62,10 @@ let
           SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
           # Get linux.downloadId from HTTP response on https://www.blackmagicdesign.com/products/davinciresolve
-          DOWNLOADID = "cebf954f05a74eaeae6b6b14bcca7971";
+          DOWNLOADID =
+            if studioVariant
+            then "2cdeb3d6ccfb4e65add749acb36e659b"
+            else "cebf954f05a74eaeae6b6b14bcca7971";
           REFERID = "263d62f31cbb49e0868005059abcb0c9";
           SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
@@ -77,7 +85,7 @@ let
             "street" = "Hogeweide 346";
             "state" = "Province of Utrecht";
             "city" = "Utrecht";
-            "product" = "DaVinci Resolve";
+            "product" = "DaVinci Resolve${if studioVariant then " Studio" else ""}";
           };
 
         } ''
@@ -112,7 +120,7 @@ let
       sourceRoot = ".";
 
       installPhase = let
-        appimageName = "DaVinci_Resolve_${version}_Linux.run";
+        appimageName = "DaVinci_Resolve_${lib.optionalString studioVariant "Studio_"}${version}_Linux.run";
       in ''
         runHook preInstall
 
@@ -165,7 +173,7 @@ let
   );
 in
 buildFHSEnv {
-  name = "davinci-resolve";
+  name = davinci.pname;
   targetPkgs = pkgs: with pkgs; [
     alsa-lib
     aprutil
@@ -215,6 +223,10 @@ buildFHSEnv {
     xorg.xcbutilwm
     xorg.xkeyboardconfig
     zlib
+  ];
+
+  extraBwrapArgs = lib.optionals studioVariant [
+    "--bind \"$HOME\"/.local/share/DaVinciResolve/license ${davinci}/.license"
   ];
 
   runScript = "${bash}/bin/bash ${
