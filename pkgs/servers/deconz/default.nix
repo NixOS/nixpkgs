@@ -11,6 +11,7 @@
 , makeWrapper
 , gzip
 , gnutar
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -72,6 +73,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) deconz; };
+  };
 
   meta = with lib; {
     description = "Manage Zigbee network with ConBee, ConBee II or RaspBee hardware";
