@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "89luca89";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    sha256 = "sha256-ss8049D6n1V/gDzEMjywDnoke5s2we9j3mO8yta72UA=";
+    hash = "sha256-ss8049D6n1V/gDzEMjywDnoke5s2we9j3mO8yta72UA=";
   };
 
   dontConfigure = true;
