@@ -2,14 +2,12 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 
 # build-system
 , setuptools
 , types-psutil
 , types-setuptools
-, types-typed-ast
 
 # propagates
 , mypy-extensions
@@ -32,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.4.1";
+  version = "1.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,23 +39,14 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2PeE/L9J6J0IuUpHZasemM8xxefNJrdzYnutgJjevWQ=";
+    hash = "sha256-qs+axm2+UWNuWzLW8CI4qBV7k7Ra8gBajid8mYKDsso=";
   };
-
-  patches = [
-    (fetchpatch {
-      # pytest 7.4 compat
-      url = "https://github.com/python/mypy/commit/0a020fa73cf5339a80d81c5b44e17116a5c5307e.patch";
-      hash = "sha256-3HQPo+V7T8Gr92clXAt5QJUJPmhjnGjQgFq0qR0whfw=";
-    })
-  ];
 
   nativeBuildInputs = [
     mypy-extensions
     setuptools
     types-psutil
     types-setuptools
-    types-typed-ast
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
