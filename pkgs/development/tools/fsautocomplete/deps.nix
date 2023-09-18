@@ -13,7 +13,7 @@
   (fetchNuGet { pname = "DiffPlex"; version = "1.7.1"; sha256 = "1q78r70pirgb7j5wkh454ws237lihh0fig212cpbj02cz53c2h6j"; })
   (fetchNuGet { pname = "dotnet-reportgenerator-globaltool"; version = "5.0.2"; sha256 = "0grzjd6h82f3whx8iax23v9dvq5c5qvqraadnrpkxsfc8p1z0ynh"; })
   (fetchNuGet { pname = "DotNet.ReproducibleBuilds"; version = "1.1.1"; sha256 = "0wa0xwbwv1lzjmqwg1vq06vrpb9kkbv3xw5nq50savj0dzhqakzq"; })
-  (fetchNuGet { pname = "Expecto"; version = "9.0.4"; sha256 = "0wvxd5blm70k40kn5gzfp65wzzpp2bwf5lpagb73wqjna97fcrkg"; })
+  (fetchNuGet { pname = "Expecto"; version = "10.1.0"; sha256 = "127yy5i0p2lybhm5xcy2wa6j1rcahk61mb1nbym687b23pgizrq9"; })
   (fetchNuGet { pname = "Expecto.Diff"; version = "9.0.4"; sha256 = "06g6nbr5kdr7hyayh24ry6xfghxpcfkqc8kma5qa5lcvhmy56f7j"; })
   (fetchNuGet { pname = "fake-cli"; version = "5.23.0"; sha256 = "1bmw5kyc9q1sqd08pamibgk0qm5xwylawc5nfrnfx3pl1pifd71y"; })
   (fetchNuGet { pname = "Fake.Api.GitHub"; version = "5.20.4"; sha256 = "1hgzqin7bm5fm0n97w7s9cq3zcxyncjmd6xk2da3p12wi7kghx0v"; })
@@ -208,5 +208,5 @@
   (fetchNuGet { pname = "System.Threading.Tasks.Dataflow"; version = "6.0.0"; sha256 = "1b4vyjdir9kdkiv2fqqm4f76h0df68k8gcd7jb2b38zgr2vpnk3c"; })
   (fetchNuGet { pname = "System.Threading.Tasks.Extensions"; version = "4.5.4"; sha256 = "0y6ncasgfcgnjrhynaf0lwpkpkmv4a07sswwkwbwb5h7riisj153"; })
   (fetchNuGet { pname = "System.Windows.Extensions"; version = "7.0.0"; sha256 = "11r9f0v7qp365bdpq5ax023yra4qvygljz18dlqs650d44iay669"; })
-  (fetchNuGet { pname = "YoloDev.Expecto.TestSdk"; version = "0.13.3"; sha256 = "0y9bhgws3m2idj8cr53rn0155wwi6nhgbp6hmci0gc2w7fp3387c"; })
+  (fetchNuGet { pname = "YoloDev.Expecto.TestSdk"; version = "0.14.2"; sha256 = "1877gr3f8wl1x3njhgss9psxm21xpqv6cpg625f2mvvak79fzrra"; })
 ]
