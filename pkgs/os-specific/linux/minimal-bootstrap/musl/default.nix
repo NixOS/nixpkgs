@@ -8,7 +8,6 @@
 , gnumake
 , gnugrep
 , gnused
-, gawk
 , gnutar
 , gzip
 }:
@@ -30,7 +29,6 @@ bash.runCommand "${pname}-${version}" {
     gnumake
     gnused
     gnugrep
-    gawk
     gnutar
     gzip
   ];

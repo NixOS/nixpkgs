@@ -148,12 +148,10 @@ lib.makeScope
       bash = bash_2_05;
       tinycc = tinycc-mes;
       gnused = gnused-mes;
-      gawk = gawk-mes;
     };
 
     musl = callPackage ./musl {
       gcc = gcc46;
-      gawk = gawk-mes;
     };
 
     stage0-posix = callPackage ./stage0-posix { };

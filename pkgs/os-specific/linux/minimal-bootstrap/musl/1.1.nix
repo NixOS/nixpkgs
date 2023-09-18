@@ -8,7 +8,6 @@
 , gnupatch
 , gnused
 , gnugrep
-, gawk
 , gnutar
 , gzip
 }:
@@ -74,7 +73,6 @@ bash.runCommand "${pname}-${version}" {
     gnupatch
     gnused
     gnugrep
-    gawk
     gnutar
     gzip
   ];
