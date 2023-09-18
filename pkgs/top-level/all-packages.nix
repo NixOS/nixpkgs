@@ -2778,8 +2778,6 @@ with pkgs;
 
   uae = callPackage ../applications/emulators/uae { };
 
-  uxn = callPackage ../applications/emulators/uxn { };
-
   vbam = callPackage ../applications/emulators/vbam { };
 
   vice = callPackage ../applications/emulators/vice { };
@@ -4013,10 +4011,6 @@ with pkgs;
   passExtensions = recurseIntoAttrs pass.extensions;
 
   pbpctrl = callPackage ../applications/audio/pbpctrl { };
-
-  pdepend = callPackage ../development/php-packages/pdepend { };
-
-  platformsh = callPackage ../misc/platformsh { };
 
   inherd-quake = callPackage ../applications/misc/inherd-quake {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -7358,8 +7352,6 @@ with pkgs;
 
   dcfldd = callPackage ../tools/system/dcfldd { };
 
-  debianutils = callPackage ../tools/misc/debianutils { };
-
   debian-devscripts = callPackage ../tools/misc/debian-devscripts { };
 
   debian-goodies = callPackage ../applications/misc/debian-goodies { };
@@ -9715,8 +9707,6 @@ with pkgs;
   kaniko = callPackage ../applications/networking/cluster/kaniko { };
 
   katana = callPackage ../tools/security/katana { };
-
-  katriawm = callPackage ../applications/window-managers/katriawm { };
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
@@ -25710,6 +25700,8 @@ with pkgs;
 
   vulkan-cts = callPackage ../tools/graphics/vulkan-cts { };
 
+  vulkan-helper = callPackage ../tools/graphics/vulkan-helper { };
+
   vulkan-extension-layer = callPackage ../tools/graphics/vulkan-extension-layer { };
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
   vulkan-loader = callPackage ../development/libraries/vulkan-loader { inherit (darwin) moltenvk; };
@@ -27296,12 +27288,14 @@ with pkgs;
     postgresql_13
     postgresql_14
     postgresql_15
+    postgresql_16
 
     postgresql_11_jit
     postgresql_12_jit
     postgresql_13_jit
     postgresql_14_jit
     postgresql_15_jit
+    postgresql_16_jit
   ;
   postgresql = postgresql_14.override { this = postgresql; };
   postgresql_jit = postgresql_14_jit.override { this = postgresql_jit; };
@@ -27311,11 +27305,13 @@ with pkgs;
   postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
   postgresql13Packages = recurseIntoAttrs postgresql_13.pkgs;
   postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
+  postgresql16Packages = recurseIntoAttrs postgresql_16.pkgs;
   postgresql11JitPackages = recurseIntoAttrs postgresql_11_jit.pkgs;
   postgresql12JitPackages = recurseIntoAttrs postgresql_12_jit.pkgs;
   postgresql13JitPackages = recurseIntoAttrs postgresql_13_jit.pkgs;
   postgresql14JitPackages = recurseIntoAttrs postgresql_14_jit.pkgs;
   postgresql15JitPackages = recurseIntoAttrs postgresql_15_jit.pkgs;
+  postgresql16JitPackages = recurseIntoAttrs postgresql_16_jit.pkgs;
   postgresql14Packages = postgresqlPackages;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
@@ -30213,6 +30209,7 @@ with pkgs;
 
   inherit (callPackages ../data/fonts/pretendard { })
     pretendard
+    pretendard-gov
     pretendard-jp
     pretendard-std;
 
@@ -32486,8 +32483,6 @@ with pkgs;
   gmtp = callPackage ../applications/misc/gmtp { };
 
   gnomecast = callPackage ../applications/video/gnomecast { };
-
-  celluloid = callPackage ../applications/video/celluloid { };
 
   gnome-recipes = callPackage ../applications/misc/gnome-recipes {
     inherit (gnome) gnome-autoar;
@@ -40527,6 +40522,8 @@ with pkgs;
 
   faustPhysicalModeling = callPackage ../applications/audio/faustPhysicalModeling  { };
 
+  flashprint = libsForQt5.callPackage ../applications/misc/flashprint { };
+
   flockit = callPackage ../tools/backup/flockit { };
 
   fahclient = callPackage ../applications/science/misc/foldingathome/client.nix { };
@@ -40658,6 +40655,8 @@ with pkgs;
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
   infnoise = callPackage ../misc/drivers/infnoise { };
+
+  itamae = callPackage ../tools/admin/itamae { };
 
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };

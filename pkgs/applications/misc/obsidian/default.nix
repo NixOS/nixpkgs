@@ -12,7 +12,7 @@
 let
   inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
-  version = "1.4.11";
+  version = "1.4.13";
   appname = "Obsidian";
   meta = with lib; {
     description = "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
@@ -25,7 +25,7 @@ let
   filename = if stdenv.isDarwin then "Obsidian-${version}-universal.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    sha256 = if stdenv.isDarwin then "sha256-bJLWXdeVzbVrb8jmIRpyQG6a5H1jMydhO9ioHOGk3Ms=" else "sha256-Z4DojO90PAlGGsItcZugPsi+48UPnOjvCn2BIzrDQpc=";
+    sha256 = if stdenv.isDarwin then "sha256-FMaEq99D8bCQF91drHrB5icXyQIdnWIwhAM9yuG97aA=" else "sha256-TWDmoXpBhBrrdbqS6dbFq4BxC2Bshap3gbnB4/ONrQE=";
   };
 
   icon = fetchurl {
