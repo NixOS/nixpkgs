@@ -162,6 +162,10 @@ lib.makeScope
 
     tinycc-bootstrappable = lib.recurseIntoAttrs (callPackage ./tinycc/bootstrappable.nix { });
     tinycc-mes = lib.recurseIntoAttrs (callPackage ./tinycc/mes.nix { });
+    tinycc-musl = lib.recurseIntoAttrs (callPackage ./tinycc/musl.nix {
+      bash = bash_2_05;
+      musl = musl11;
+    });
 
     xz = callPackage ./xz {
       bash = bash_2_05;
@@ -194,6 +198,7 @@ lib.makeScope
       echo ${mes.compiler.tests.get-version}
       echo ${musl.tests.hello-world}
       echo ${tinycc-mes.compiler.tests.chain}
+      echo ${tinycc-musl.compiler.tests.hello-world}
       echo ${xz.tests.get-version}
       mkdir ''${out}
     '';
