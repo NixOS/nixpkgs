@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pot";
-  version = "2.3.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = version;
-    hash = "sha256-KVrm7KEpIIahd/QU1HUJ2VkfECttcY5pRCHsYHS5svM=";
+    hash = "sha256-n12uO5QbD/HgD5Rq5d+TQ8j8Gn5hl6wTi27TqFmunIM=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-iHFzv8dMC0TT6PtMJmL0EufZ8TnbyjmsoBH3Z8U48D0=";
+    outputHash = "sha256-/5bB4czTPS3ZM9f7NBIHbwd95BqY2dRwKaBOWVsef04=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
