@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "APE codec and decompressor";
     platforms = platforms.linux;
+    mainProgram = "mac";
     # This is not considered a GPL license, but it seems rather free although
     # it's not standard, see a quote of it:
     # https://github.com/NixOS/nixpkgs/pull/171682#issuecomment-1120260551
