@@ -1646,6 +1646,7 @@ mapAliases ({
   slurm-llnl = slurm; # renamed July 2017
   slurm-llnl-full = slurm-full; # renamed July 2017
   smbclient = throw "'smbclient' has been renamed to/replaced by 'samba'"; # Converted to throw 2022-02-22
+  smesh = throw "'smesh' has been removed as it's unmaintained and depends on opencascade-oce, which is also unmaintained"; # Added 2023-09-18
   smugline = throw "smugline has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries"; # Added 2020-11-04
   snack = throw "snack has been removed: broken for 5+ years"; # Added 2022-04-21
   soldat-unstable = opensoldat; # Added 2022-07-02

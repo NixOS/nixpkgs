@@ -13266,10 +13266,6 @@ with pkgs;
 
   smenu = callPackage ../tools/misc/smenu { };
 
-  smesh = callPackage ../development/libraries/smesh {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   boost-sml = callPackage ../development/libraries/boost-ext/boost-sml { };
 
   smu = callPackage ../tools/text/smu { };
