@@ -6,7 +6,7 @@ expected_lines = {
     "auth required pam_deny.so",
     "auth sufficient @@pam_ccreds@@/lib/security/pam_ccreds.so action=store use_first_pass",
     "auth sufficient pam_rootok.so",
-    "auth sufficient pam_unix.so   likeauth try_first_pass",
+    "auth sufficient pam_unix.so likeauth try_first_pass",
     "password sufficient @@pam_krb5@@/lib/security/pam_krb5.so use_first_pass",
     "password sufficient pam_unix.so nullok yescrypt",
     "session optional @@pam_krb5@@/lib/security/pam_krb5.so",
