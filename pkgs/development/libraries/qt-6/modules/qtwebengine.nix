@@ -93,7 +93,6 @@
 
 qtModule {
   pname = "qtwebengine";
-  qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
     bison
     coreutils
@@ -201,6 +200,11 @@ qtModule {
   ];
 
   propagatedBuildInputs = [
+    qtdeclarative
+    qtwebchannel
+    qtwebsockets
+    qtpositioning
+
     # Image formats
     libjpeg
     libpng

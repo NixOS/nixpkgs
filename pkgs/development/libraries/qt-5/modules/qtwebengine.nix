@@ -31,7 +31,6 @@
 
 qtModule {
   pname = "qtwebengine";
-  qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison flex git gperf ninja pkg-config python which gn nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
@@ -127,6 +126,8 @@ qtModule {
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
+    qtdeclarative qtquickcontrols qtlocation qtwebchannel
+
     # Image formats
     libjpeg libpng libtiff libwebp
 

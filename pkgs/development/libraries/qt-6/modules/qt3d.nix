@@ -7,6 +7,5 @@
 
 qtModule {
   pname = "qt3d";
-  qtInputs = [ qtbase qtdeclarative qtmultimedia ];
-  propagatedBuildInputs = [ assimp ];
+  propagatedBuildInputs = [ qtbase qtdeclarative qtmultimedia assimp ];
 }
