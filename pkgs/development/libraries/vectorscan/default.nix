@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       code will be abstracted away.
     '';
     homepage = "https://www.vectorcamp.gr/vectorscan/";
-    changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG-vectorscan.md";
     platforms = platforms.unix;
     license = with licenses; [ bsd3 /* and */ bsd2 /* and */ licenses.boost ];
     maintainers = with maintainers; [ tnias vlaci ];
