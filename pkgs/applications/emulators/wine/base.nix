@@ -94,7 +94,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
   ])
   ++ lib.optionals (x11Support) (with pkgs.xorg; [
-     libX11 libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
+     libX11 libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext libXfixes
   ])
   ++ lib.optionals waylandSupport (with pkgs; [
      wayland libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
