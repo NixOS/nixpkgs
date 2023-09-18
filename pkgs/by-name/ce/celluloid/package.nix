@@ -16,15 +16,15 @@
 , wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "celluloid";
-  version = "0.25";
+  version = "0.26";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
-    rev = "v${version}";
-    hash = "sha256-GCRpcC/olMUbMG2fadNcXTKF/Zl0+GY2+eSRLQhnWxI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-npaagLlkwDe0r0hqj7buM4B9sbLCX1sR2yFXXj+obdE=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +49,13 @@ stdenv.mkDerivation rec {
     patchShebangs meson-post-install.py src/generate-authors.py
   '';
 
+  strictDeps = true;
+
   doCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/celluloid-player/celluloid";
     description = "Simple GTK frontend for the mpv video player";
     longDescription = ''
@@ -61,8 +63,10 @@ stdenv.mkDerivation rec {
       Celluloid interacts with mpv via the client API exported by libmpv,
       allowing access to mpv's powerful playback capabilities.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/celluloid-player/celluloid/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "celluloid";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

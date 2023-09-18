@@ -2778,8 +2778,6 @@ with pkgs;
 
   uae = callPackage ../applications/emulators/uae { };
 
-  uxn = callPackage ../applications/emulators/uxn { };
-
   vbam = callPackage ../applications/emulators/vbam { };
 
   vice = callPackage ../applications/emulators/vice { };
@@ -9709,8 +9707,6 @@ with pkgs;
   kaniko = callPackage ../applications/networking/cluster/kaniko { };
 
   katana = callPackage ../tools/security/katana { };
-
-  katriawm = callPackage ../applications/window-managers/katriawm { };
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
@@ -32486,8 +32482,6 @@ with pkgs;
   gmtp = callPackage ../applications/misc/gmtp { };
 
   gnomecast = callPackage ../applications/video/gnomecast { };
-
-  celluloid = callPackage ../applications/video/celluloid { };
 
   gnome-recipes = callPackage ../applications/misc/gnome-recipes {
     inherit (gnome) gnome-autoar;
