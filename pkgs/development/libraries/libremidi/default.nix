@@ -1,12 +1,13 @@
-{ alsa-lib
+{ lib
+, stdenv
+, fetchFromGitHub
+
+, alsa-lib
 , cmake
 , CoreAudio
 , CoreFoundation
 , CoreMIDI
 , CoreServices
-, fetchFromGitHub
-, lib
-, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +23,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optional stdenv.isLinux alsa-lib
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
     CoreAudio
     CoreFoundation
     CoreMIDI
@@ -34,11 +36,11 @@ stdenv.mkDerivation rec {
     cp -r $src/include $out
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A modern C++ MIDI real-time & file I/O library";
     homepage = "https://github.com/jcelerier/libremidi";
-    maintainers = [ lib.maintainers.paveloom ];
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.all;
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ paveloom ];
   };
 }
