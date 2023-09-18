@@ -1,22 +1,54 @@
-{ lib, stdenv, fetchurl, acl, attr, zlib, libburn, libisofs }:
+{ lib
+, stdenv
+, fetchFromGitea
+, acl
+, attr
+, autoreconfHook
+, libburn
+, libisofs
+, pkg-config
+, zlib
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libisoburn";
   version = "1.5.6";
 
-  src = fetchurl {
-    url = "http://files.libburnia-project.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-K4Cm9z3WM6XSQ/rL6XoV5cmgdkSl4aJCwhm5N1pF9xs=";
+  src = fetchFromGitea {
+    domain = "dev.lovelyhq.com";
+    owner = "libburnia";
+    repo = "libisoburn";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-16qNVlWFVXfvbte5EgP/u193wK2GV/r22hVX0SZWr+0=";
   };
 
-  buildInputs = [ attr zlib libburn libisofs ];
-  propagatedBuildInputs = [ acl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  meta = with lib; {
+  buildInputs = [
+    attr
+    zlib
+    libburn
+    libisofs
+  ];
+
+  propagatedBuildInputs = [
+    acl
+  ];
+
+  outputs = [ "out" "lib" "dev" "info" "man" ];
+
+  strictDeps = true;
+
+  meta = {
     homepage = "http://libburnia-project.org/";
     description = "Enables creation and expansion of ISO-9660 filesystems on CD/DVD/BD ";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ vrthra ];
-    platforms = with platforms; linux;
+    changelog = "https://dev.lovelyhq.com/libburnia/libisoburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "osirrox";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (libisofs.meta) platforms;
   };
-}
+})
