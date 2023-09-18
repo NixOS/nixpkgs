@@ -221,6 +221,7 @@ let
       homepage = "https://www.openssl.org/";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
+      mainProgram = "openssl";
       pkgConfigModules = [
         "libcrypto"
         "libssl"
