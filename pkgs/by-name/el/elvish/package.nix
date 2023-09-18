@@ -1,13 +1,12 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, runCommand
+, callPackage
 }:
 
 let
   pname = "elvish";
   version = "0.19.2";
-  shellPath = "/bin/elvish";
 in
 buildGoModule {
   inherit pname version;
@@ -32,26 +31,12 @@ buildGoModule {
   strictDeps = true;
 
   doCheck = false;
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out${shellPath} -c "
-      fn expect {|key expected|
-        var actual = \$buildinfo[\$key]
-        if (not-eq \$actual \$expected) {
-          fail '\$buildinfo['\$key']: expected '(to-string \$expected)', got '(to-string \$actual)
-        }
-      }
-
-      expect version ${version}
-    "
-
-    runHook postInstallCheck
-  '';
 
   passthru = {
-    inherit shellPath;
+    shellPath = "/bin/elvish";
+    tests = {
+      expectVersion = callPackage ./tests/expect-version.nix { };
+    };
   };
 
   meta = {
@@ -63,6 +48,6 @@ buildGoModule {
       status, it is already suitable for most daily interactive use.
     '';
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ vrthra AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
