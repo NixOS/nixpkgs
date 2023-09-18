@@ -13,6 +13,7 @@
 , substituteAll
 , which
 , z3
+, darwin
 }:
 
 stdenv.mkDerivation (rec {
@@ -34,7 +35,8 @@ stdenv.mkDerivation (rec {
     hash = "sha256-pUW9YVaujs/y00/SiPqDgK4wvVsaM7QUp/65k0t7Yr0=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper which python3 ];
+  nativeBuildInputs = [ cmake makeWrapper which python3 ]
+    ++ lib.optionals (stdenv.isDarwin) [ darwin.cctools ];
   buildInputs = [ libxml2 z3 ];
 
   # Sandbox disallows network access, so disabling problematic networking tests
@@ -49,6 +51,11 @@ stdenv.mkDerivation (rec {
         rev = "1a727c27aa36c602b24bf170a301aec8686b88e8"; # unstable-2023-03-07
         hash = "sha256-/FWBSxZESwj/QvdNK5BI2EfonT64DP1eGBZR4O8uJww=";
       };
+    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    (substituteAll {
+      src = ./fix-darwin-build.patch;
+      libSystem = darwin.Libsystem;
     })
   ];
 
@@ -81,7 +88,8 @@ stdenv.mkDerivation (rec {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
 
-  doCheck = true;
+  # make: *** [Makefile:222: test-full-programs-release] Killed: 9
+  doCheck = !stdenv.isDarwin;
 
   installPhase = "make config=release prefix=$out "
     + lib.optionalString stdenv.isDarwin ("bits=64 " + (lib.optionalString (!lto) "lto=no "))
@@ -102,6 +110,6 @@ stdenv.mkDerivation (rec {
     homepage = "https://www.ponylang.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ kamilchm patternspandemic redvers ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
   };
 })
