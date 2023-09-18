@@ -19,15 +19,23 @@ in
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = with pkgs.libsForQt5; [];
+      default = with pkgs.libsForQt5; [
+        dolphin-plugins
+        kio-extras
+        kdegraphics-thumbnailers
+      ];
       defaultText = literalExpression ''
-        with pkgs.libsForQt5; [];
+        with pkgs.libsForQt5; [
+          dolphin-plugins
+          kio-extras
+          kdegraphics-thumbnailers
+        ];
       '';
       description = lib.mdDoc ''
         Extra packages that enhance Dolphin's functionality.
 
-        This option reduces the clutter in environment.systemPackages, and also
-        serves as the documentation for possible optional packages.
+        These packages are not strictly needed to resolve any UI inconsistency,
+        but are nice to have in most cases.
       '';
       example = literalExpression ''
         with pkgs.libsForQt5; [
