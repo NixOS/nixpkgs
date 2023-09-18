@@ -78,7 +78,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
   ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
-  ++ lib.optional (xineramaSupport && !waylandSupport) pkgs.xorg.libXinerama
+  ++ lib.optional (xineramaSupport && x11Support) pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
   ++ lib.optional vulkanSupport          (if stdenv.isDarwin then moltenvk else pkgs.vulkan-loader)
   ++ lib.optional sdlSupport             pkgs.SDL2
@@ -93,7 +93,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration PCSC Security
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
   ])
-  ++ lib.optionals (stdenv.isLinux && !waylandSupport) (with pkgs.xorg; [
+  ++ lib.optionals (x11Support) (with pkgs.xorg; [
      libX11 libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
   ])
   ++ lib.optionals waylandSupport (with pkgs; [

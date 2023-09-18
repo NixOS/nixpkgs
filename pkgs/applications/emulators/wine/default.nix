@@ -37,6 +37,7 @@
   usbSupport ? false,
   mingwSupport ? wineRelease != "stable",
   waylandSupport ? wineRelease == "wayland",
+  x11Support ? stdenv.isLinux,
   embedInstallers ? false, # The Mono and Gecko MSI installers
   moltenvk ? darwin.moltenvk # Allow users to override MoltenVK easily
 }:
@@ -51,7 +52,7 @@ let wine-build = build: release:
             v4lSupport saneSupport gphoto2Support krb5Support fontconfigSupport
             alsaSupport pulseaudioSupport xineramaSupport gtkSupport openclSupport
             tlsSupport openglSupport gstreamerSupport udevSupport vulkanSupport
-            sdlSupport usbSupport mingwSupport waylandSupport embedInstallers;
+            sdlSupport usbSupport mingwSupport waylandSupport x11Support embedInstallers;
         };
         inherit moltenvk;
       });
