@@ -649,15 +649,15 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
-  nixos-modules = {
+  module-system = {
     members = [
       ericson2314
       infinisil
       qyliss
       roberth
     ];
-    scope = "Maintain nixpkgs module system internals.";
-    shortName = "NixOS Modules / internals";
+    scope = "Maintain Nixpkgs module system";
+    shortName = "Module system";
     enableFeatureFreezePing = true;
   };
 
