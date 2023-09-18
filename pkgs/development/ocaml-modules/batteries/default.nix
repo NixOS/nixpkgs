@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildDunePackage, ocaml, qtest, qcheck, num, camlp-streams
-, doCheck ? lib.versionAtLeast ocaml.version "4.08" && !stdenv.isAarch64
+, doCheck ? lib.versionAtLeast ocaml.version "4.08"
 }:
 
 buildDunePackage rec {
