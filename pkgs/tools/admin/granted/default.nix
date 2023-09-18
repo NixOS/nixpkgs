@@ -62,10 +62,5 @@ buildGoModule rec {
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ maintainers.ivankovnatsky ];
-    # Could not figure out how to use this application without any hustle. Weird
-    # linking of binary, aliases for god knows what.
-    # https://docs.commonfate.io/granted/usage/assuming-roles.
-    # Will mark as broken until maybe someone fixes it. Switched to aws-sso.
-    broken = true;
   };
 }
