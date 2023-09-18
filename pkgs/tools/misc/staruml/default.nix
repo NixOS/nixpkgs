@@ -24,13 +24,12 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "6.0.0";
+  version = "6.0.1";
   pname = "staruml";
 
-  src =
-    fetchurl {
+  src = fetchurl {
       url = "https://files.staruml.io/releases-v6/StarUML_${version}_amd64.deb";
-      sha256 = "sha256-g35d9YcZrP4D8X9NU84Fz0qmb/2lUUOuZ30iIwgThA0=";
+      sha256 = "sha256-LxulOfYjdJrDjRL661S0W9slIXvhLc+kXZN6e3TfXVs=";
     };
 
   nativeBuildInputs = [ wrapGAppsHook dpkg ];
