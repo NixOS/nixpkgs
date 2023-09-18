@@ -1,23 +1,28 @@
 { lib
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
 , flask
 , itsdangerous
 , wtforms
 , email-validator
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "flask-wtf";
   version = "1.1.1";
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "Flask-WTF";
     inherit version;
     hash = "sha256-QcQkTprmJtY77UKuR4W5Bme4hbFTXVpAleH2MGDRKqk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     flask
@@ -31,6 +36,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {
