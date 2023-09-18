@@ -40,13 +40,13 @@ assert blas.isILP64 == false;
 
 stdenv.mkDerivation rec {
   pname = "arrayfire";
-  version = "3.9.0-pre";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "d2a66367d859cdb554f2374e29d39c88d5fff978";
-    hash = "sha256-9r1w0U9MvhduHwBpEWpqkrQPawd94EY3FAqSJghi09I=";
+    rev = "v3.9.0";
+    hash = "sha256-80fxdkaeAQ5u0X/UGPaI/900cdkZ/vXNcOn5tkZ+C3Y=";
   };
 
   # We cannot use the clfft from Nixpkgs because ArrayFire maintain a fork
