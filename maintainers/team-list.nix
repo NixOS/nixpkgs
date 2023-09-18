@@ -651,9 +651,7 @@ with lib.maintainers; {
 
   module-system = {
     members = [
-      ericson2314
       infinisil
-      qyliss
       roberth
     ];
     scope = "Maintain Nixpkgs module system";
