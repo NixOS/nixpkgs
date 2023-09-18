@@ -23,12 +23,12 @@ let
     cups
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "6.0.1";
   pname = "staruml";
 
   src = fetchurl {
-      url = "https://files.staruml.io/releases-v6/StarUML_${version}_amd64.deb";
+      url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
       sha256 = "sha256-LxulOfYjdJrDjRL661S0W9slIXvhLc+kXZN6e3TfXVs=";
     };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ kashw2 ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
