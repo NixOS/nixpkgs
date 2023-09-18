@@ -1087,6 +1087,7 @@ in {
                 description = "Synapse Matrix worker ${name}";
                 # make sure the main process starts first for potential database migrations
                 after = [ "matrix-synapse.service" ];
+                requires = [ "matrix-synapse.service" ];
                 serviceConfig = {
                   ExecStart = ''
                     ${cfg.package}/bin/synapse_worker \
