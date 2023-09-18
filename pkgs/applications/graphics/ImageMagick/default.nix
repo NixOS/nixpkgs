@@ -30,6 +30,7 @@
 , Foundation
 , testers
 , imagemagick
+, perlPackages
 , python3
 }:
 
@@ -125,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
+    inherit (perlPackages) ImageMagick;
     inherit (python3.pkgs) img2pdf;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
