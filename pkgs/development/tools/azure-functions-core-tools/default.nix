@@ -10,22 +10,20 @@
   curl,
   zlib,
   libuuid,
-  dotnetbuildhelpers,
-  dotnetCorePackages,
   openssl,
 }: let
   platforms = {
     "aarch64-darwin" = {
       platformStr = "osx-arm64";
-      hash = "sha512-Jpj/jmDoc01f1LqcdtszZHOG87jy7p3INajhN0taVzVX6l7WnrxY9Y8VLffBffWuNJ9LZjpGVDLt4/JqyALWrw==";
+      hash = "sha256-yp3VTt5m8KuACjrBIotfQ5ZdgMvfwYIFaqY2475pHRs=";
     };
     "x86_64-darwin" = {
       platformStr = "osx-x64";
-      hash = "sha512-mHOEnSxcA3x2LK3rhte5eMP97mf0q8BkbS54gGFGz91ufigWmTRrSlGVr3An/1iLlA5/k+AHJU4olWbL2Qlr0A==";
+      hash = "sha256-bTHh0mwGbe6JVsR8rDHGpGJ2+AipHb8NIBIW7iiuz6I=";
     };
     "x86_64-linux" = {
       platformStr = "linux-x64";
-      hash = "sha512-d2Ym8kofv/ik4m94D0gz3LcOQxWIDaGmXTmv4XX2zYztH/4wXC2JRr8vIpqwwX86gy3apUmTc3rCyc5Zrz2Sig==";
+      hash = "sha256-5R4/hCxCz6KfBl9Zbei+iFty5S2MOYt9hMvPMjCzL54=";
     };
   };
 
@@ -33,7 +31,7 @@
 in
   stdenv.mkDerivation rec {
     pname = "azure-functions-core-tools";
-    version = "4.0.5095";
+    version = "4.0.5348";
 
     src = fetchurl {
       url = "https://github.com/Azure/${pname}/releases/download/${version}/Azure.Functions.Cli.${platformInfo.platformStr}.${version}.zip";
@@ -43,12 +41,10 @@ in
     nativeBuildInputs = [
       unzip
       makeWrapper
-      dotnetbuildhelpers
       icu
       libunwind
       curl
       zlib
-      dotnetCorePackages.sdk_6_0
     ];
 
     libPath = lib.makeLibraryPath [
@@ -92,7 +88,7 @@ in
         binaryNativeCode
       ];
       license = licenses.mit;
-      maintainers = with maintainers; [];
+      maintainers = with maintainers; [ mdarocha ];
       platforms = ["x86_64-linux" "aarch64-darwin" "x86_64-darwin"];
     };
   }
