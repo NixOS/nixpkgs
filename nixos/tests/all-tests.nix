@@ -660,6 +660,7 @@ in {
   postgis = handleTest ./postgis.nix {};
   apache_datasketches = handleTest ./apache_datasketches.nix {};
   postgresql = handleTest ./postgresql.nix {};
+  postgresql-ensure = handleTest ./postgresql-ensure.nix {};
   postgresql-jit = handleTest ./postgresql-jit.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
   powerdns = handleTest ./powerdns.nix {};

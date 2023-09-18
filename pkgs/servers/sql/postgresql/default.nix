@@ -284,6 +284,7 @@ let
 
       tests = {
         postgresql = nixosTests.postgresql-wal-receiver.${thisAttr};
+        postgresql-ensure = nixosTests.postgresql-ensure.${thisAttr};
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
         postgresql-jit = nixosTests.postgresql-jit.${thisAttr};
