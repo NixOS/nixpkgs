@@ -36,6 +36,7 @@ let
             ${cfg.globalConfig}
           }
           ${cfg.extraConfig}
+          ${concatMapStringsSep "\n" mkVHostConf virtualHosts}
         '';
 
         Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; } ''
@@ -340,7 +341,6 @@ in
       groups = config.users.groups;
     }) acmeHosts;
 
-    services.caddy.extraConfig = concatMapStringsSep "\n" mkVHostConf virtualHosts;
     services.caddy.globalConfig = ''
       ${optionalString (cfg.email != null) "email ${cfg.email}"}
       ${optionalString (cfg.acmeCA != null) "acme_ca ${cfg.acmeCA}"}
