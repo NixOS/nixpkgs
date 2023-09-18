@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "4.3.1";
+  version = "4.3.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-pa1zzu0ITJObzhSmohjgiGTCoautXrY+SQQ3hxEtQcE=";
+    hash = "sha256-dxyI9ypZZBouTUF72wzvi7j+CeoQ9JNSiXrVeV7ForY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -92,7 +92,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [ leenaars antonmosich ];
     mainProgram = "todo";
   };
 }
