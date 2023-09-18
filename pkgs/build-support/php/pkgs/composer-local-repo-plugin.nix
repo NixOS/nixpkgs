@@ -1,7 +1,7 @@
-{ callPackage, stdenvNoCC, lib, fetchFromGitHub, makeBinaryWrapper }:
+{ callPackage, stdenvNoCC, lib, fetchFromGitHub, makeBinaryWrapper, php81 }:
 
 let
-  composer = callPackage ./composer-phar.nix { };
+  composer = callPackage ./composer-phar.nix { php = php81; };
 
   composerKeys = stdenvNoCC.mkDerivation (finalComposerKeysAttrs: {
     pname = "composer-keys";
