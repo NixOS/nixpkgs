@@ -11894,6 +11894,8 @@ self: super: with self; {
 
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
 
+  simple-websocket = callPackage ../development/python-modules/simple-websocket { };
+
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
 
   simplisafe-python = callPackage ../development/python-modules/simplisafe-python { };
