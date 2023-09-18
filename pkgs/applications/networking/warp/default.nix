@@ -15,6 +15,8 @@
 , glib
 , gtk4
 , libadwaita
+, Security
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
@@ -57,6 +59,9 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    Foundation
   ];
 
   meta = {
@@ -64,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/app/app.drey.Warp";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }
