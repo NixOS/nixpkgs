@@ -120,6 +120,9 @@ let
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
     '';
 
+    # Silence the depreciation warning from SqlAlchemy
+    SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
     # TimeoutErrors on slow machines -> aarch64
     doCheck = !stdenv.isAarch64;
 

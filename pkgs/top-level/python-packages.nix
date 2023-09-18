@@ -4122,6 +4122,8 @@ self: super: with self; {
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
+  fschat = callPackage ../development/python-modules/fschat { };
+
   fsspec = callPackage ../development/python-modules/fsspec { };
 
   fst-pso = callPackage ../development/python-modules/fst-pso { };
@@ -4190,6 +4192,8 @@ self: super: with self; {
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
 
   garminconnect = callPackage ../development/python-modules/garminconnect { };
+
+  garth = callPackage ../development/python-modules/garth { };
 
   gassist-text = callPackage ../development/python-modules/gassist-text { };
 
@@ -5877,6 +5881,8 @@ self: super: with self; {
   langcodes = callPackage ../development/python-modules/langcodes { };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
+
+  langid = callPackage ../development/python-modules/langid { };
 
   langsmith = callPackage ../development/python-modules/langsmith { };
 
@@ -8311,6 +8317,8 @@ self: super: with self; {
   pyrdfa3 = callPackage ../development/python-modules/pyrdfa3 { };
 
   pyre-extensions = callPackage ../development/python-modules/pyre-extensions { };
+
+  pyrender = callPackage ../development/python-modules/pyrender { };
 
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
@@ -11887,6 +11895,8 @@ self: super: with self; {
   simple-rlp = callPackage ../development/python-modules/simple-rlp { };
 
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
+
+  simple-websocket = callPackage ../development/python-modules/simple-websocket { };
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
 

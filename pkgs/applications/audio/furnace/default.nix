@@ -18,18 +18,24 @@
 , libjack2
 , withGUI ? true
 , Cocoa
+, portaudio
+, alsa-lib
+# Enable GL/GLES rendering
+, withGL ? !stdenv.hostPlatform.isDarwin
+# Use GLES instead of GL, some platforms have better support for one than the other
+, preferGLES ? stdenv.hostPlatform.isAarch
 }:
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6pre9";
+  version = "0.6pre16";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-i7/NN179Wyr1FqNlgryyFtishFr5EY1HI6BRQKby/6E=";
+    hash = "sha256-n66Bv8xB/0KMJYoMILxsaKoaX+E0OFGI3QGqhxKTFUQ=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -53,8 +59,12 @@ stdenv.mkDerivation rec {
     rtmidi
     SDL2
     zlib
+    portaudio
   ] ++ lib.optionals withJACK [
     libjack2
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
+    alsa-lib
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
@@ -67,15 +77,15 @@ stdenv.mkDerivation rec {
     "-DSYSTEM_RTMIDI=ON"
     "-DSYSTEM_SDL2=ON"
     "-DSYSTEM_ZLIB=ON"
+    "-DSYSTEM_PORTAUDIO=ON"
     "-DWITH_JACK=${if withJACK then "ON" else "OFF"}"
+    "-DWITH_PORTAUDIO=ON"
+    "-DWITH_RENDER_SDL=ON"
+    "-DWITH_RENDER_OPENGL=${lib.boolToString withGL}"
     "-DWARNINGS_ARE_ERRORS=ON"
+  ] ++ lib.optionals withGL [
+    "-DUSE_GLES=${lib.boolToString preferGLES}"
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    # Needed with GCC 12 but breaks on darwin (with clang) or aarch64 (old gcc)
-    "-Wno-error=mismatched-new-delete"
-    "-Wno-error=use-after-free"
-  ]);
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
