@@ -108,14 +108,13 @@ lib.makeScope
 
     gnused = callPackage ./gnused {
       bash = bash_2_05;
-      gcc = gcc2;
-      glibc = glibc22;
+      tinycc = tinycc-musl;
+      musl = musl11;
       gnused = gnused-mes;
     };
-    gnused-mes = callPackage ./gnused {
+    gnused-mes = callPackage ./gnused/mes.nix {
       bash = bash_2_05;
       tinycc = tinycc-mes;
-      mesBootstrap = true;
     };
 
     gnutar = callPackage ./gnutar {
