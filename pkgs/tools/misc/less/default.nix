@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ eelco dtzWill ];
+    mainProgram = "less";
   };
 }
